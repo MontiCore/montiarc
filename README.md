@@ -6,15 +6,18 @@ tool-chain. This is:
 * languages/
   * common
   * montiarc-fe
-
-    Contains MontiArcLanguage and MontiArcLanguageFamily
+        
+        Contains MontiArcLanguage and MontiArcLanguageFamily
+        
   * montiarcautomaton-fe
-    
-    Contains MontiArcAutomatonLanguageFamily
+        
+        Contains MontiArcAutomatonLanguageFamily
+        
   * montiarc-behavior-fe
   * io-automata-fe
-  
-    Contains IOAutomatonLanguage
+        
+        Contains IOAutomatonLanguage
+        
   * ...
 * generators/
   * ma2java
@@ -23,9 +26,18 @@ tool-chain. This is:
 * libraries/
   * simulator-rte
 * applications/
-  * ma-bumperbot  # Example using MontiArcLanguage and ma2java
-  * maa-bumperbot # MAA Example to generate
-  * ma-simulator  # Example setup to execute ma2java and running the simulator
+  * ma-bumperbot
+        
+        Example using MontiArcLanguage and ma2java
+        
+  * maa-bumperbot
+        
+        MAA Example to generate
+        
+  * ma-simulator
+        
+        Example setup to execute ma2java and running the simulator
+        
 
 ## Frontend / Languages
 
