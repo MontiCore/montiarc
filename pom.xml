@@ -112,8 +112,8 @@
   </mailingLists>
 
   <issueManagement>
-    <system>Trac</system>
-    <url>https://sselab.de/lab2/private/trac/MontiArc4/</url>
+    <system>GitLab</system>
+    <url>https://git.rwth-aachen.de/montiarc/core/issues</url>
   </issueManagement>
 
   <!-- == DEPENDENCIES ==================================================== -->
@@ -260,11 +260,6 @@
   </dependencyManagement>
 
   <!-- == BUILD INFRASTRUCTURE ============================================ -->
-
-  <scm>
-    <connection>scm:svn:https://sselab.de/lab2/private/svn/MontiArc4/tags/montiarc-@{project.version}</connection>
-    <developerConnection>scm:svn:https://sselab.de/lab2/private/svn/MontiArc4/tags/montiarc-@{project.version}</developerConnection>
-  </scm>
 
   <ciManagement>
     <system>Jenkins CI</system>
@@ -419,4 +414,19 @@
     </site>
   </distributionManagement>
 
+    <!-- == DEPENDENCY & PLUGIN REPOSITORIES ================================= -->
+
+  <repositories>
+    <repository>
+      <id>montiarc</id>
+      <url>https://nexus.se.rwth-aachen.de/content/groups/montiarc/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>montiarc</id>
+      <url>https://nexus.se.rwth-aachen.de/content/groups/montiarc/</url>
+    </pluginRepository>
+  </pluginRepositories>
+  
 </project>
