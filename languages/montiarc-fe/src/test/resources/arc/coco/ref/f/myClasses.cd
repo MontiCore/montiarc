@@ -1,0 +1,11 @@
+package f;
+
+classdiagram myClasses {
+
+
+    enum Foo {
+        Bar,
+        
+        Moep;
+    }
+}

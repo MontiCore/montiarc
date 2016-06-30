@@ -1,0 +1,8 @@
+classdiagram myTypes {
+
+  public class DefinedType {}
+  
+  public class SubType extends SuperType {}
+  
+  public class SuperType {}
+}

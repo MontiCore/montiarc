@@ -1,0 +1,6 @@
+package nfp;
+
+tagschema PowerConsumptionTagSchema {
+	tagtype TestingLoadTime: Time for ComponentInstance;
+	tagtype ExecutionTime: Time for ComponentInstance;
+}

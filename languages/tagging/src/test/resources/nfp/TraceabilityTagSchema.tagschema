@@ -1,0 +1,6 @@
+package de.monticore.lang.montiarc.tag.drawing;
+
+tagschema TraceabilityTagSchema {
+	tagtype IsTraceable for Component;
+	tagtype Traceable for ComponentInstance;
+}

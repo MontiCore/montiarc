@@ -1,0 +1,27 @@
+package mawithcd;
+
+classdiagram Units {
+  class Quantity {
+    private double value;
+  }
+  
+  class Unit {
+    private double prefix;
+  }
+  
+  class Dimension {
+    private double exponent = 0;
+    private double prefix = 1;
+  }
+  
+  association Quantity -> Unit;
+  
+  association Unit (amountOfSubstance) -> Dimension;
+  association Unit (angle) -> Dimension;
+  association Unit (electricCurrent) -> Dimension;
+  association Unit (length) -> Dimension;
+  association Unit (luminousIntensity) -> Dimension;
+  association Unit (mass) -> Dimension;
+  association Unit (temperature) -> Dimension;
+  association Unit (time) -> Dimension;
+}

@@ -1,0 +1,18 @@
+package superclass;
+
+classdiagram Data {
+
+  interface Traceable {
+  }
+
+  abstract class MyMessage implements Traceable {
+    private String content;
+    private long timestamp; 
+    
+    public String toString();
+  }
+  
+  class MyError extends MyMessage {
+    private int code;
+  }
+}

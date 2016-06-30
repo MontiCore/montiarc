@@ -1,0 +1,3 @@
+component OtherCompInDefaultPackage {
+    component CompInDefaultPackage;
+}

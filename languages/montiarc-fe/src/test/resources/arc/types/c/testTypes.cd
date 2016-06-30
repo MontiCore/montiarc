@@ -1,0 +1,40 @@
+package c;
+
+classdiagram testTypes {
+
+  public class TypeWithFields {
+	public int testInt = 1;
+	public boolean testBool = true;
+
+	private int privateVar = 0;
+	
+	public java.lang.String toString() {
+	  return "Here is TypeWithFields";
+	}
+  }
+  
+  public class SuperType {}
+  
+  public class SubTypeOne extends SuperType {
+    public int myField;
+  }
+  
+  public interface InterfaceTypeOne {}
+  public interface InterfaceTypeTwo {}
+  public interface InterfaceTypeThree extends InterfaceTypeTwo {}
+  
+  public class SubTypeTwo extends SuperType implements InterfaceTypeOne, InterfaceTypeThree {}
+  
+  public enum EnumType {
+        ON,
+        OFF,
+        INACTIVE;
+  }
+  
+  public class GenericClassType<T> {
+    public T genericField;
+  }
+  
+  public class GenericInterfaceType<T> {}
+  
+}

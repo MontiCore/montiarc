@@ -1,0 +1,85 @@
+classdiagram types {
+  
+  public class ChangeCmd {
+    public static final int CLOSE = 0;
+    public static final int OPEN = 1;
+    protected int command;
+    
+    public java.lang.String toString() {
+      return "ChangeCmd command = " + (command == CLOSE ? "close" : "")
+        + (command == OPEN ? "open" : "");
+    }
+  }
+
+  // can be extended by button commands.
+  public class ButtonCmd {
+    protected boolean pressed;
+    
+    public java.lang.String toString() {
+      return "ButtonCmd pressed = " + pressed;
+    }
+  }
+  
+  public class OpenCmd extends ButtonCmd {
+    public java.lang.String toString() {
+      return super.toString().replace("ButtonCmd", "OpenCmd");
+    }
+  }
+  
+  public class CloseCmd extends ButtonCmd {
+    public java.lang.String toString() {
+      return super.toString().replace("ButtonCmd", "CloseCmd");
+    }
+  }
+  
+  public class StatusMsg {
+    public static final int CLOSED = 0;
+    public static final int OPENED = 1;
+    public final static int PARTIAL = 2;
+    public final static int ERROR = 3;
+    public static final int ARMED = 4;
+    
+    protected int status;
+    
+    public java.lang.String toString() {
+      return "StatusMsg status = " + (status == CLOSED ? "closed" : "")
+        + (status == OPENED ? "opened" : "") + (status == ARMED ? "armed" : "")
+        + (status == PARTIAL ? "partial" : "")
+        + (status == ERROR ? "error" : "");
+    }
+  }
+  
+  public class DoorStat {
+    public static final int CLOSED = 0;
+    public static final int OPENED = 1;
+    public static final int BLOCKED = 2;
+    public static final int ERROR = 3;
+    //...
+    
+    protected int status;
+    
+    public java.lang.String toString() {
+      return "DoorStat status = " + (status == CLOSED ? "closed" : "")
+        + (status == OPENED ? "opened" : "")
+        + (status == BLOCKED ? "blocked" : "")
+        + (status == ERROR ? "error" : "");
+    }
+  }
+  
+  public class LockStatus {
+    public static final int CLOSED = 0;
+    public static final int OPENED = 1;
+    public static final int PARTIAL = 2;
+    public static final int ERROR = 3;
+    
+    protected int status;
+    
+    public java.lang.String toString() {
+      return "LockStatus status = " + (status == CLOSED ? "closed" : "")
+        + (status == OPENED ? "opened" : "")
+        + (status == PARTIAL ? "partial" : "")
+        + (status == ERROR ? "error" : "");
+    }
+  }
+
+}

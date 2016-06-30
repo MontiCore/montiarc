@@ -1,0 +1,8 @@
+package nfp;
+
+tagschema PowerConsumptionTagSchema {
+	tagtype PowerConsumption: Power for ComponentInstance;
+	tagtype PowerTester: String for Port;
+	tagtype PowerId: Number for Component;
+	tagtype PowerBoolean: Boolean for Connector;
+}

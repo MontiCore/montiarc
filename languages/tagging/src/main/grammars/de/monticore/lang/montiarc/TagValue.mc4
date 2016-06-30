@@ -1,0 +1,55 @@
+package de.monticore.lang.montiarc;
+
+/**
+ * Basic grammar to tag non-functional properties
+ * grammar to create only parsers for tag values
+ *
+ * @author Michael von Wenckstern
+ */
+grammar TagValue extends de.monticore.common.Common {
+
+  interface TagValue;
+  ast TagValue =
+    method public String getValueKind() {
+      return "undefined";
+    };
+
+  StringTagValue implements TagValue = String;
+  ast StringTagValue =
+    method public String getValueKind() {
+      return "StringValue";
+    };
+
+  NumericTagValue implements TagValue = NumericLiteral;
+  ast NumericTagValue =
+    method public String getValueKind() {
+      return "NumericValue";
+    };
+
+  BooleanTagValue implements TagValue = (t:"true" | f:"false"); // cannot use true or True, that's why we use t, similar for f
+  ast BooleanTagValue =
+    method public String getValueKind() {
+      return "BooleanValue";
+    };
+
+  UnitTagValue implements TagValue = NumericLiteral unit:Name;
+  ast UnitTagValue =
+    method public String getValueKind() {
+      return "UnitValue";
+    };
+
+   ComplexTag implements TagValue = Name "{" (InnerTag || ";")+ "}";
+   ast ComplexTag =
+     method public String getValueKind() {
+       return "ComplexTag";
+     };
+
+   InnerTag = Name ITagValue;
+
+   fragment token IWSS = (' ' | '\t' | '\r' | '\n');
+
+   token ITagValue = ('=' IWSS* IRecursion) | ITagToken | ('=' IWSS* String IWSS* ';');
+   fragment token IRecursion = '{' (~('{' | '}' | '"') | String | IRecursion)+ '}';
+   fragment token ITagToken = '=' (~('"' | '{' | '}' | ';'))+ ';';
+
+}

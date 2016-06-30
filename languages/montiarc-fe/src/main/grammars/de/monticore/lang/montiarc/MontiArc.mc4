@@ -1,0 +1,234 @@
+package de.monticore.lang.montiarc;
+
+/**
+ * Grammar for MontiArc. Extends common components with
+ * behavior information and configurations.
+ *
+ * @author Arne Haber, Robert Heim, Michael von Wenckstern
+ */
+grammar MontiArc extends de.monticore.lang.montiarc.Common {
+
+  /** ASTMACompilationUnit represents the complete component
+   * @attribute package          The package declaration of this component
+   * @attribute importStatements List of imported elements
+   * @attribute Component the root component of the component
+   */
+  MACompilationUnit =
+    ("package" package:(Name& || ".")+ ";")? 
+    (ImportStatement)*
+    Component;
+
+  /* ======================================================*/
+  /* ============= From OLD ARCD Grammar ==================*/
+  /* ======================================================*/
+
+  /**
+  * A component may contain arbitrary many Elements. 
+  * This interface may be used as an extension point to 
+  * enrich components with further elements.
+  */
+  interface Element;
+  
+  /**
+  * A component is a unit of computation or a data store.  
+  * The size of a component may scale from a single 
+  * procedure to a whole application. A component may be 
+  * either decomposed to subcomponents or is atomic. 
+  *
+  * @attribute stereotype an optional stereotype
+  * @attribute name type name of this component
+  * @attribute head is used to set generic types, a  
+  *   configuration and a parent component
+  * @attribute instanceName if this optional name is given, 
+  *   a subcomponent is automatically created that 
+  *   instantiates this inner component type. This is only 
+  *   allowed for inner component definitions. 
+  * @attribute body contains the architectural elements 
+  *   inherited by this component
+  */
+  Component@! implements Element =
+    Stereotype?
+    "component" Name 
+    head:ComponentHead
+    (instanceName:Name actualTypeArgument:TypeArguments?)?
+    body:ComponentBody;
+
+
+  /**
+  * A components head is used to define generic type 
+  * parameters that may be used as port types in the 
+  * component, to define configuration parameters that may 
+  * be used to configure the component, and to set the  
+  * parent component of this component.
+  *
+  * @attribute genericTypeParameters a list of type  
+  *   parameters that may be used as port types in the 
+  *   component
+  * @attribute parameters a list of Parameters that 
+  *   define a configurable component. If a configurable
+  *   component is referenced, these parameters have to be 
+  *   set.
+  * @attribute superComponent the type of the super 
+  *   component
+  */
+  ComponentHead =
+    (genericTypeParameters:TypeParameters)? 
+    ("(" (Parameter || ",")+ ")")?
+    ("extends" superComponent:ReferenceType)?;
+  
+  /**
+  * The body contains architectural elements of 
+  * this component.
+  *
+  * @attribute elements list of architectural elements
+  */
+  ComponentBody =
+    "{"
+      Element*
+    "}";
+    
+  /**
+  * An Interface defines an interface of a component 
+  * containing in- and outgoing ports.
+  * 
+  * @attribute stereotype an optional stereotype
+  * @attribute ports a list of ports that are contained in 
+  *   this interface
+  */
+  Interface implements Element =
+    Stereotype?
+    ("port"|"ports") ports:(Port || ",")+ ";";
+  
+ /**
+  * An incoming port is used to receive messages, an 
+  * outgoing port is used to send messages of a specific 
+  * type.
+  *
+  * @attribute stereotype an optional stereotype
+  * @attribute incoming true, if this is an incoming port
+  * @attribute outgoing true, if this is an outgoing port
+  * @attribute type the message type of this port
+  * @attribute name an optional name of this port
+  */
+  Port =
+    Stereotype?
+    (incoming:["in"] | outgoing:["out"])
+    Type Name?;
+    
+  /**
+  * Sets the timing of a component.
+  *
+  * @attribute stereotype optional stereotype
+  * @attribute instant a timed component
+  * @attribute delayed a timed component with delay
+  * @attribute causalsync a causal synchronous component
+  * @attribute sync a synchronous component
+  * TODO move to sub language?!
+  */
+  MontiArcTiming implements MontiArcConfig  =
+    "timing" Stereotype?
+    (["instant"] | ["delayed"] | ["untimed"] | ["causalsync"] | ["sync"]) ";";
+
+   
+  
+  /**
+  * A subcomponent is used to create one or more instances
+  *  of another component. This way the hierarchical  
+  * structure of a component is defined.
+  *
+  * @attribute stereotype an optional stereotype
+  * @attribute type the type of the instantiated component
+  * @attribute arguments list of configuration parameters
+  *   that are to be set, if the instantiated component is 
+  *   configurable.
+  * @attribute instances list of instances that should be 
+  *   created
+  */
+  SubComponent implements Element =
+    Stereotype?
+    "component"
+    type:ReferenceType 
+    ("(" arguments:(Expression || ",")+ ")" )?
+    instances:(SubComponentInstance || ",")* ";";
+
+    
+  /**
+  * A subcomponent instance binds the name of an instance 
+  * with an optional list of simple connectors used to 
+  * connect this instance with other subcomponents/ports.
+  * Simple connectors directly connect outgoing ports of the
+  * corresponding subcomponent declaration with one or more target ports.
+  *
+  * @attribute name the name of this instance
+  * @attribute connectors list of simple connectors
+  */
+  // TODO better/more intuitive name? e.g. "refConnector" (not really good...)
+  SubComponentInstance = 
+    Name
+    ("[" connectors:(SimpleConnector || ";")+ "]")?;
+
+  /**
+  * A connector connects one source port with one or many 
+  * target ports.
+  *
+  * @attribute source source port or component instance 
+  *   name
+  * @attribute targets a list of target ports or component 
+  *   instance names
+  */
+  Connector implements Element=
+    Stereotype?
+    "connect" source:QualifiedName "->"
+    targets:(QualifiedName || ",")+ ";";
+
+  /**
+  * A simple way to connect ports.
+  *
+  * @attribute source the source port or component instance
+  *   name
+  * @attribute targets a list of target port or component 
+  *   instance names
+  */
+  SimpleConnector = 
+    Stereotype? source:QualifiedName "->" targets:(QualifiedName || ",")+;
+
+  /* ======================================================*/
+  /* ============ From OLD MARC Grammar ==================*/
+  /* ======================================================*/
+
+  /**
+  * MontiArc components may contain arbitrary many 
+  * configurations. These configurations have to 
+  * implement this interface.
+  */
+  interface MontiArcConfig extends Element;
+        
+  /**
+  * An invariant constrains the behavior of a component.
+  *
+  * @attribute kind the optional kind of this invariant.
+  * @attribute name name of the invariant
+  * @attribute invariantExpression the invariant defined 
+  *   in the language 'kind'
+  */
+  MontiArcInvariant implements Element =
+    (kind:Name)? "inv" Name ":"
+    invariantExpression:InvariantContent ";";
+ 
+  /**
+  * AutoConnect is used to connect ports automatically.
+  *
+  * @attribute stereotype optional stereotype
+  * @attribute type autoconnect unambigous ports with the 
+  *   same type
+  * @attribute port autoconnect unambigous ports with the 
+  *   same name and compatible type}
+  * @attribute off do not use autoconnection (default)
+  */
+  MontiArcAutoConnect implements MontiArcConfig = 
+    "autoconnect" Stereotype?
+    (["type"] | ["port"] | ["off"]) ";";
+     
+   
+
+}

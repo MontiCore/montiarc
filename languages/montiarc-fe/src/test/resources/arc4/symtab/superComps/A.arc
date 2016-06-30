@@ -1,0 +1,6 @@
+package superComps;
+
+component A {
+
+
+}

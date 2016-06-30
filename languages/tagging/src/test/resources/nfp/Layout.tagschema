@@ -1,0 +1,8 @@
+package de.monticore.lang.montiarc.tag.drawing;
+
+tagschema LayoutTagSchema {
+	tagtype ComponentLayout for ComponentInstance is
+	{ id = ${id:int}, pos = (${x:double}, ${x:double}), size = (${width:double}, ${height:double}), layoutPosition = ${layoutPosition:int},
+  	  h-space = ${reservedHorizontalSpace:double} \(, ${isOnTop:trueIfPresent} \)\? };
+	tagtype Traceable for ComponentInstance;
+}
