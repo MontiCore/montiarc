@@ -418,14 +418,14 @@
 
   <repositories>
     <repository>
-      <id>montiarc</id>
-      <url>https://nexus.se.rwth-aachen.de/content/groups/montiarc/</url>
+      <id>se-nexus</id>
+      <url>https://nexus.se.rwth-aachen.de/content/groups/se/</url>
     </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>
-      <id>montiarc</id>
-      <url>https://nexus.se.rwth-aachen.de/content/groups/montiarc/</url>
+      <id>se-nexus</id>
+      <url>https://nexus.se.rwth-aachen.de/content/groups/se/</url>
     </pluginRepository>
   </pluginRepositories>
   
