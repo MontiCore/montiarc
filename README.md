@@ -32,7 +32,7 @@ tool-chain. This is:
         
   * maa-bumperbot
         
-        MAA Example to generate
+        MAA Example using MontiArcAutomatonLanguageFamily and maa2java
         
   * ma-simulator
         
