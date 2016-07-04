@@ -15,11 +15,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.ModelingLanguageFamily;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
+import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcLanguage;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Scope;
@@ -42,6 +44,35 @@ public class AggregationTest extends AbstractSymTabTest {
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
+  }
+  
+  @Test
+  public void testComponentWithCDType() {
+    Scope symTab = createSymTab("src/test/resources");
+    
+    CDSymbol types = symTab.<CDSymbol> resolve("mawithcd.Types", CDSymbol.KIND).orElse(null);
+    assertNotNull(types);
+    
+    ComponentSymbol component = symTab
+        .<ComponentSymbol> resolve("mawithcd.ComponentWithCDType", ComponentSymbol.KIND)
+        .orElse(null);
+    assertNotNull(component);
+  }
+  
+  @Ignore("using a component with a formal type parameter with a class diagram type leads to the " +
+          "expanded component symbol not being created and to the message that the full " +
+          "information of the actual type parameter couldn't be loaded")
+  @Test
+  public void testFormalTypeParameterComponentWithCDType() {
+    Scope symTab = createSymTab("src/test/resources");
+    
+    CDSymbol types = symTab.<CDSymbol> resolve("mawithcd.Types", CDSymbol.KIND).orElse(null);
+    assertNotNull(types);
+    
+    ComponentSymbol component = symTab
+        .<ComponentSymbol> resolve("mawithcd.FTPComponentWithCDType", ComponentSymbol.KIND)
+        .orElse(null);
+    assertNotNull(component);
   }
   
   @Test
