@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 import de.monticore.ModelingLanguageFamily;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.java.lang.JavaDSLLanguage;
-import de.monticore.lang.montiarc.montiarc._symboltable.MaWithCdLanguageFamily;
+import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcLanguageFamily;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Scope;
 
@@ -22,9 +22,7 @@ import de.monticore.symboltable.Scope;
  */
 public class AbstractSymtabTest {
   protected static Scope createSymTab(Path modelPath) {
-    ModelingLanguageFamily fam = new MaWithCdLanguageFamily();
-    fam.addModelingLanguage(new JavaDSLLanguage());
-    
+    ModelingLanguageFamily fam = new MontiArcLanguageFamily();
     final ModelPath mp = new ModelPath(modelPath, Paths.get("src/main/resources/defaultTypes"));
     GlobalScope scope = new GlobalScope(mp, fam);
     

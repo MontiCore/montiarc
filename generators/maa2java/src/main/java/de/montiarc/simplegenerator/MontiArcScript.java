@@ -24,7 +24,7 @@ import de.monticore.ModelingLanguageFamily;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.java.lang.JavaDSLLanguage;
-import de.monticore.lang.montiarc.montiarc._symboltable.MaWithCdLanguageFamily;
+import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcLanguageFamily;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcLanguage;
@@ -93,9 +93,7 @@ public class MontiArcScript extends Script implements GroovyRunner {
     p.add(Paths.get("src/main/resources/defaultTypes"));
     final ModelPath mp = new ModelPath(p);
     
-    ModelingLanguageFamily fam = new MaWithCdLanguageFamily();
-    fam.addModelingLanguage(new JavaDSLLanguage());
-    
+    ModelingLanguageFamily fam = new MontiArcLanguageFamily();
     GlobalScope gs = new GlobalScope(mp, fam);
     
     return gs;

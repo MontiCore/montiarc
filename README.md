@@ -48,5 +48,5 @@ language family that contains MontiArc as well as class diagrams.
 The plain MontiArc language is defined in MontiArcLanguage. It does not
 contain class diagrams.
 
-The language family MontiArcLanguageFamily aggregates MontiArcLanguage
-and CD4AnalysisLanguage.
+The language family MontiArcLanguageFamily aggregates MontiArcLanguage,
+CD4AnalysisLanguage and JavaDSLLanguage.
