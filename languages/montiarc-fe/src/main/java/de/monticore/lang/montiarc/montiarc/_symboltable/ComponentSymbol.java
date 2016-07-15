@@ -21,7 +21,7 @@ import com.google.common.collect.ImmutableList;
 import de.monticore.lang.montiarc.MontiArcConstants;
 import de.monticore.lang.montiarc.helper.SymbolPrinter;
 import de.monticore.lang.montiarc.helper.Timing;
-import de.monticore.lang.montiarc.tagging._symboltable.TaggingScopeSpanningSymbol;
+import de.monticore.symboltable.CommonScopeSpanningSymbol;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.symboltable.types.JAttributeSymbol;
@@ -33,7 +33,7 @@ import de.se_rwth.commons.logging.Log;
  *
  * @author Robert Heim
  */
-public class ComponentSymbol extends TaggingScopeSpanningSymbol {
+public class ComponentSymbol extends CommonScopeSpanningSymbol {
 
   public static final ComponentKind KIND = new ComponentKind();
   private final List<AComponentImplementationSymbol> implementations = new ArrayList<>();
@@ -248,19 +248,6 @@ public class ComponentSymbol extends TaggingScopeSpanningSymbol {
 
   public boolean hasPorts() {
     return !getPorts().isEmpty();
-  }
-
-  /**
-   * Adds the stereotype key=value to this entry's map of stereotypes
-   *
-   * @param key   the stereotype's key
-   * @param value the stereotype's value
-   */
-  public void addStereotype(String key, @Nullable String value) {
-    if (value != null && value.isEmpty()) {
-      value = null;
-    }
-    referencedComponent.orElse(this).stereotype.put(key, Optional.ofNullable(value));
   }
 
   /**
@@ -551,6 +538,7 @@ public class ComponentSymbol extends TaggingScopeSpanningSymbol {
     this.imports = imports;
   }
 
+  @Deprecated
   public static ComponentBuilder builder() {
     return ComponentBuilder.getInstance();
   }

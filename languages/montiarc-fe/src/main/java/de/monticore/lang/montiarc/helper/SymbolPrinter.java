@@ -8,9 +8,8 @@ import de.monticore.lang.expression.symboltable.ValueSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ExpandedComponentInstanceSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
-import de.monticore.lang.montiarc.tagging._symboltable.IsTaggable;
+import de.monticore.lang.montiarc.trafos.expandcomponents.ExpandedComponentInstanceSymbol;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.TypeSymbol;
@@ -106,8 +105,6 @@ public class SymbolPrinter {
     ip.print(printTypeParameters(port.getTypeReference().getActualTypeArguments()));
     ip.print(" ");
     ip.print(port.getName());
-
-    printTags(port, ip);
   }
 
   public static String printPort(PortSymbol port) {
@@ -120,8 +117,6 @@ public class SymbolPrinter {
     ip.print(con.getSource());
     ip.print(" -> ");
     ip.print(con.getTarget());
-
-    printTags(con, ip);
   }
 
   public static String printConnector(ConnectorSymbol con) {
@@ -192,7 +187,6 @@ public class SymbolPrinter {
       ip.print(")");
     }
     ip.println(" {");
-    printTags(cmp, ip);
 
     ip.indent();
 
@@ -222,20 +216,6 @@ public class SymbolPrinter {
     return ip.getContent();
   }
 
-  public static void printTags(IsTaggable hasTags, IndentPrinter ip) {
-    if (!hasTags.getTags().isEmpty()) {
-      ip.println("/* tags: ");
-      ip.indent();
-      ip.indent();
-      ip.print(hasTags.getTags().stream().map(t -> t.toString()).
-          collect(Collectors.joining("\n")));
-      ip.print("  */");
-      ip.unindent();
-      ip.unindent();
-      ip.println();
-    }
-  }
-
   public static void printExpandedComponentInstance(ExpandedComponentInstanceSymbol inst, IndentPrinter ip, boolean skipPackageImport) {
     if (!skipPackageImport) {
       ComponentSymbol cmp = inst.getComponentType().getReferencedSymbol();
@@ -252,7 +232,6 @@ public class SymbolPrinter {
     ip.print("component /*instance*/ " + inst.getName());
 
     ip.println(" {");
-    printTags(inst, ip);
 
     ip.indent();
 

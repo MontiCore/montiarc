@@ -1,4 +1,4 @@
-package de.monticore.lang.montiarc.montiarc._symboltable;
+package de.monticore.lang.montiarc.trafos.expandcomponents;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,7 +7,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import de.monticore.lang.montiarc.helper.SymbolPrinter;
-import de.monticore.lang.montiarc.tagging._symboltable.TaggingScopeSpanningSymbol;
+import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbolReference;
+import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
+import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
+import de.monticore.symboltable.CommonScopeSpanningSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 
 /**
@@ -65,7 +68,7 @@ import de.monticore.symboltable.types.references.ActualTypeArgument;
  *         standard symbol table mechanism
  */
 public class ExpandedComponentInstanceSymbol
-    extends TaggingScopeSpanningSymbol {
+    extends CommonScopeSpanningSymbol {
 
   public static final ExpandedComponentInstanceKind KIND = new ExpandedComponentInstanceKind();
 

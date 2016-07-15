@@ -65,8 +65,7 @@ import de.se_rwth.commons.logging.Log;
 public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
 
   private String compilationUnitPackage = "";
-  private MontiArcExpandedComponentInstanceSymbolCreator instanceSymbolCreator
-      = new MontiArcExpandedComponentInstanceSymbolCreator();
+  
   // extra stack of components that is used to determine which components are inner components.
   private Stack<ComponentSymbol> componentStack = new Stack<>();
   private List<ImportStatement> currentImports = new ArrayList<>();
@@ -109,13 +108,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
 
     // artifact scope
     removeCurrentScope();
-
-    // creates all instances which are created through the top level component
-    System.out.println("endVisit of " + node.getComponent().getSymbol().get().getFullName());
-    //    new Error().printStackTrace();
-    instanceSymbolCreator.createInstances(
-        (ComponentSymbol) (Log.errorIfNull(node.getComponent().getSymbol().orElse(null)))
-    );
   }
 
   @Override
@@ -276,7 +268,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     // stereotype
     if (node.getStereotype().isPresent()) {
       for (ASTStereoValue st : node.getStereotype().get().getValues()) {
-        component.addStereotype(st.getName(), st.getValue());
+        component.addStereotype(st.getName(), Optional.of(st.getValue()));
       }
     }
 

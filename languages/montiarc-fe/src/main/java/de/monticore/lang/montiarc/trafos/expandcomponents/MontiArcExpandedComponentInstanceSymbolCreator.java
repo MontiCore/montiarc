@@ -1,8 +1,11 @@
-package de.monticore.lang.montiarc.montiarc._symboltable;
+package de.monticore.lang.montiarc.trafos.expandcomponents;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
+import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
+import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbolReference;
 import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.resolving.ResolvingFilter;

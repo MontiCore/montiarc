@@ -26,6 +26,7 @@ public class ConnectorBuilder {
     return this;
   }
 
+  @Deprecated
   public ConnectorSymbol build() {
     if (source.isPresent() && target.isPresent()) {
       ConnectorSymbol con = new ConnectorSymbol(this.target.get());

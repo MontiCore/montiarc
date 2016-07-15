@@ -1,4 +1,4 @@
-package de.monticore.lang.montiarc.montiarc._symboltable;
+package de.monticore.lang.montiarc.trafos.expandcomponents;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,6 +11,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbolReference;
+import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorBuilder;
+import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
+import de.monticore.lang.montiarc.montiarc._symboltable.PortBuilder;
+import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.resolving.ResolvingFilter;

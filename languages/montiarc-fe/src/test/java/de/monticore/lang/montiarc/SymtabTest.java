@@ -10,7 +10,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import javax.sound.sampled.Port;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,7 +24,6 @@ import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbolReference;
 import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ExpandedComponentInstanceSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -43,78 +41,35 @@ public class SymtabTest extends AbstractSymtabTest {
     // ensure an empty log
     Log.getFindings().clear();
   }
-
+  
   @Test
   public void testResolveJavaDefaultTypes() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
-
+    
     Optional<JTypeSymbol> javaType = symTab.resolve("String", JTypeSymbol.KIND);
     assertFalse(
         "java.lang types may not be resolvable without qualification in general (e.g., global scope).",
         javaType.isPresent());
-
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
+        
+    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "a.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
-
+    
     // java.lang.*
     javaType = comp.getSpannedScope().resolve("String", JTypeSymbol.KIND);
     assertTrue("java.lang types must be resolvable without qualification within components.",
         javaType.isPresent());
-
+        
     // java.util.*
     javaType = comp.getSpannedScope().resolve("Set", JTypeSymbol.KIND);
     assertTrue("java.util types must be resolvable without qualification within components.",
         javaType.isPresent());
   }
-
-  @Test
-  public void testConnectors() {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
-    ComponentSymbol cs = symTab.<ComponentSymbol>resolve("a.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
-    assertNotNull(cs);
-
-    ConnectorSymbol conn = cs.getConnectors().iterator().next();
-    assertEquals(conn.getComponent().get(), cs);
-
-    PortSymbol source = conn.getSourcePort();
-    assertNotNull(source);
-    assertTrue(source.isIncoming());
-    assertEquals(source.getName(), "sIn");
-    assertEquals(source.getTypeReference().getName(), "String");
-    assertEquals(source.getComponent().get(), cs);
-
-    PortSymbol target = conn.getTargetPort();
-    assertNotNull(target);
-    assertTrue(target.isIncoming());
-    assertEquals(target.getName(), "sIn");
-    assertEquals(target.getTypeReference().getName(), "String");
-    assertEquals(target.getComponent().get().getFullName(), "a.ComponentWithNamedInnerComponent.NamedInnerComponent");
-
-    ConnectorSymbol conn2 = symTab.<ConnectorSymbol>resolve("a.componentWithNamedInnerComponent.sOut", ConnectorSymbol.KIND).orElse(null);
-    assertNotNull(conn2);
-    ExpandedComponentInstanceSymbol inst = symTab.<ExpandedComponentInstanceSymbol>resolve("a.componentWithNamedInnerComponent", ExpandedComponentInstanceSymbol.KIND).orElse(null);
-    assertNotNull(inst);
-    assertEquals(conn2.getComponentInstance().get(), inst);
-    source = conn2.getSourcePort();
-    assertNotNull(source);
-    assertFalse(source.isIncoming());
-    assertEquals(source.getName(), "sOut");
-    assertEquals(source.getTypeReference().getName(), "String");
-    assertEquals(source.getComponentInstance().get().getFullName(), "a.componentWithNamedInnerComponent.instance");
-
-    target = conn2.getTargetPort();
-    assertNotNull(target);
-    assertFalse(target.isIncoming());
-    assertEquals(target.getName(), "sOut");
-    assertEquals(target.getTypeReference().getName(), "String");
-    assertEquals(target.getComponentInstance().get(), inst);
-  }
-
+  
   @Test
   public void testComponentWithNamedInnerComponent() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
+    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "a.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
     assertEquals("a", comp.getPackageName());
@@ -124,16 +79,16 @@ public class SymtabTest extends AbstractSymtabTest {
     assertEquals(0, comp.getConfigParameters().size());
     assertEquals(1, comp.getAllIncomingPorts().size());
     assertEquals(1, comp.getAllOutgoingPorts().size());
-
+    
     // ensures that inner component definitions can be loaded with the model loader, so we can
     // resolve references to them of sub components, see ModelNameCalculator.
     assertEquals(1, comp.getSubComponents().size());
     ComponentInstanceSymbol subComp = comp.getSubComponents().iterator().next();
     assertEquals("a.ComponentWithNamedInnerComponent.instance", subComp.getFullName());
     assertEquals("instance", subComp.getName());
-
+    
     assertEquals(1, comp.getInnerComponents().size());
-
+    
     ComponentSymbol inner = comp.getInnerComponent("NamedInnerComponent").orElse(null);
     assertNotNull(inner);
     ComponentSymbolReference compRefToInner = subComp.getComponentType();
@@ -150,13 +105,13 @@ public class SymtabTest extends AbstractSymtabTest {
     assertEquals(1, compRefToInner.getAllIncomingPorts().size());
     assertEquals(1, inner.getAllOutgoingPorts().size());
     assertEquals(1, compRefToInner.getAllOutgoingPorts().size());
-
+    
     assertEquals(2, comp.getConnectors().size());
     ConnectorSymbol conn = comp.getConnector("instance.sIn").orElse(null);
     assertNotNull(conn);
     assertEquals("sIn", conn.getSource());
     assertEquals("instance.sIn", conn.getTarget());
-
+    
     conn = comp.getConnector("sOut").orElse(null);
     assertNotNull(conn);
     assertEquals("instance.sOut", conn.getSource());
@@ -164,17 +119,17 @@ public class SymtabTest extends AbstractSymtabTest {
     assertEquals(
         "Connectors should not be added to both, the connector-defining-component AND the target-component, but only to the source",
         0, inner.getConnectors().size());
-
-    ComponentSymbol innerComp = symTab.<ComponentSymbol>resolve(
+        
+    ComponentSymbol innerComp = symTab.<ComponentSymbol> resolve(
         "a.ComponentWithNamedInnerComponent.NamedInnerComponent", ComponentSymbol.KIND)
         .orElse(null);
     assertNotNull(innerComp);
   }
-
+  
   @Test
   public void testCompWithCfgArgs() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
+    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "a.CompWithCfgArgs", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
     assertEquals("a", comp.getPackageName());
@@ -184,22 +139,22 @@ public class SymtabTest extends AbstractSymtabTest {
     assertEquals(1, comp.getConfigParameters().size());
     assertEquals(0, comp.getFormalTypeParameters().size());
   }
-
+  
   /**
    * Test for ticket #21.
    */
   @Test
   public void testCompWithGenericsAndInnerGenericComponent() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
+    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "a.GenericCompWithInnerGenericComp", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
   }
-
+  
   @Test
   public void testNamedInnerComponent() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
+    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "a.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
     ComponentInstanceSymbol instance = (ComponentInstanceSymbol) comp.getSpannedScope()
@@ -211,38 +166,38 @@ public class SymtabTest extends AbstractSymtabTest {
     assertEquals("a.ComponentWithNamedInnerComponent.NamedInnerComponent",
         instance.getComponentType().getFullName());
   }
-
+  
   @Ignore("ValueSymbol?!")
   @Test
   public void testParameterSymtab() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
+    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "params.UsingSCWithParams", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
-
+    
     assertEquals(0, Log.getErrorCount());
     // TODO portusage coco
     // assertEquals(1, Log.getFindings().stream().filter(f -> f.isWarning()).count());
     assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());
-
+    
     ComponentInstanceSymbol delay = (ComponentInstanceSymbol) comp.getSpannedScope()
         .resolve("deleteTempFile", ComponentInstanceSymbol.KIND).orElse(null);
     assertNotNull(delay);
     assertEquals("deleteTempFile", delay.getName());
-
+    
     assertEquals(1, delay.getConfigArguments().size());
     assertEquals("1", delay.getConfigArguments().get(0).getValue());
     assertEquals(ValueSymbol.Kind.Value,
         delay.getConfigArguments().get(0).getKind());
   }
-
+  
   @Test
   public void testParameterSymtab2() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
+    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "params.UsingComplexParams", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
-
+    
     assertEquals(0, Log.getErrorCount());
     Assert.assertEqualErrorCounts(new ArrayList<Finding>(),
         Log.getFindings().stream().filter(f -> f.isWarning()).collect(Collectors.toList()));
@@ -251,7 +206,7 @@ public class SymtabTest extends AbstractSymtabTest {
         .resolve("cp", ComponentInstanceSymbol.KIND).orElse(null);
     assertNotNull(delay);
     assertEquals("cp", delay.getName());
-
+    
     assertEquals(2, delay.getConfigArguments().size());
     // TODO add space between "]{" when using next javaDSL version
     assertEquals("new int[]{1, 2, 3}",
@@ -276,22 +231,22 @@ public class SymtabTest extends AbstractSymtabTest {
     // assertEquals("java.lang.Integer",
     // typeRef.getTypeParameters().get(1).getTypeParameters().get(0).getType().getName());
   }
-
+  
   @Test
   public void testParameterSymtab3() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
+    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "params.UsingComplexGenericParams", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
-
+    
     assertEquals(0, Log.getErrorCount());
     assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());
-
+    
     ComponentInstanceSymbol delay = (ComponentInstanceSymbol) comp.getSpannedScope()
         .resolve("cp", ComponentInstanceSymbol.KIND).orElse(null);
     assertNotNull(delay);
     assertEquals("cp", delay.getName());
-
+    
     assertEquals(2, delay.getConfigArguments().size());
     // TODO add space between "]{" when using newer javaDSL
     assertEquals("new int[]{1, 2, 3}", delay.getConfigArguments().get(0).getValue());
@@ -303,7 +258,7 @@ public class SymtabTest extends AbstractSymtabTest {
     // delay.getConfigArguments().get(0).getConstructorArguments().get(1).getValue());
     // assertEquals("3",
     // delay.getConfigArguments().get(0).getConstructorArguments().get(2).getValue());
-
+    
     assertEquals("new HashMap<List<K>, List<V>>()", delay.getConfigArguments().get(1).getValue());
     // TODO value symbol
     // assertEquals(Kind.ConstructorCall, delay.getConfigArguments().get(1).getKind());
@@ -314,82 +269,83 @@ public class SymtabTest extends AbstractSymtabTest {
     // typeRef.getTypeParameters().get(0).getTypeParameters().get(0).getType().getName());
     // assertEquals("V",
     // typeRef.getTypeParameters().get(1).getTypeParameters().get(0).getType().getName());
-
+    
   }
-
+  
   @Test
   public void testPortStereoType() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
-    PortSymbol port = symTab.<PortSymbol>resolve("a.Sub1.integerIn", PortSymbol.KIND).orElse(null);
+    PortSymbol port = symTab.<PortSymbol> resolve("a.Sub1.integerIn", PortSymbol.KIND).orElse(null);
     assertNotNull(port);
-
+    
     assertEquals(3, port.getStereotype().size());
     assertEquals("held", port.getStereotype().get("disabled").get());
     assertEquals("1", port.getStereotype().get("initialOutput").get());
     assertFalse(port.getStereotype().get("ignoreWarning").isPresent());
   }
-
+  
   @Test
   public void testConnectorStereoType() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
-    ConnectorSymbol connector = symTab.<ConnectorSymbol>resolve("a.Sub1.stringOut", ConnectorSymbol.KIND).orElse(null);
+    ConnectorSymbol connector = symTab
+        .<ConnectorSymbol> resolve("a.Sub1.stringOut", ConnectorSymbol.KIND).orElse(null);
     assertNotNull(connector);
-
+    
     assertEquals(1, connector.getStereotype().size());
     assertFalse(connector.getStereotype().get("conStereo").isPresent());
   }
-
+  
   @Test
   public void testComponentEntryIsDelayed() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
-    ComponentSymbol parent = symTab.<ComponentSymbol>resolve(
+    ComponentSymbol parent = symTab.<ComponentSymbol> resolve(
         "timing.Timing", ComponentSymbol.KIND).orElse(null);
     assertNotNull(parent);
-
+    
     assertEquals(0, Log.getErrorCount());
     assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());
-
+    
     ComponentSymbol child = parent.getInnerComponent("TimedInner").orElse(null);
     assertNotNull(child);
     assertFalse(child.hasDelay());
-
+    
     child = parent.getInnerComponent("TimedDelayingInner").orElse(null);
     assertNotNull(child);
     assertTrue(child.hasDelay());
-
+    
     child = parent.getInnerComponent("TimeSyncInner").orElse(null);
     assertNotNull(child);
     assertFalse(child.hasDelay());
-
+    
     child = parent.getInnerComponent("TimeCausalSyncInner").orElse(null);
     assertNotNull(child);
     assertTrue(child.hasDelay());
-
+    
     child = parent.getInnerComponent("UntimedInner").orElse(null);
     assertNotNull(child);
     assertFalse(child.hasDelay());
   }
-
+  
   @Ignore("TODO ocl invariants?")
   @Test
   public void testAdaptOCLFieldToPort() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
-    ComponentSymbol parent = symTab.<ComponentSymbol>resolve(
+    ComponentSymbol parent = symTab.<ComponentSymbol> resolve(
         "ocl.OCLFieldToPort", ComponentSymbol.KIND).orElse(null);
     assertNotNull(parent);
-
+    
     assertEquals(0, Log.getErrorCount());
     assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());
   }
-
+  
   @Ignore("TODO ocl invariants?")
   @Test
   public void testAdaptOCLFieldToArcdField() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
-    ComponentSymbol parent = symTab.<ComponentSymbol>resolve(
+    ComponentSymbol parent = symTab.<ComponentSymbol> resolve(
         "ocl.OCLFieldToArcField", ComponentSymbol.KIND).orElse(null);
     assertNotNull(parent);
-
+    
     assertEquals(0, Log.getErrorCount());
     assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());
   }

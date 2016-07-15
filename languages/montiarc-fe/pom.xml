@@ -29,19 +29,6 @@
       <classifier>${grammars.classifier}</classifier>
     </dependency>
 	
-	<dependency>
-      <groupId>montiarc.languages</groupId>
-      <artifactId>tagging</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>montiarc.languages</groupId>
-      <artifactId>tagging</artifactId>
-      <classifier>${grammars.classifier}</classifier>
-	  <version>${project.version}</version>
-    </dependency>
-    
     <dependency>
       <groupId>de.se_rwth.commons</groupId>
       <artifactId>se-commons-logging</artifactId>
@@ -158,59 +145,6 @@
             <goals>
               <goal>single</goal>
             </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>de.se_rwth.maven</groupId>
-        <artifactId>se-groovy-maven-plugin</artifactId>
-        <configuration>
-          <baseClass>de.monticore.lang.montiarc.tagging.generator.TaggingScript</baseClass>
-          <arguments>
-            <out>
-              ${basedir}/target/generated-sources/monticore/sourcecode
-            </out>
-            <modelPath>
-              ${basedir}/src/main/tagschemas/ <!--  ${basedir}/src/test/tagschemas/ TODO: test should be generated in generated-test-sources //-->
-          </modelPath>
-          </arguments>
-          <script>de/monticore/lang/montiarc/tagging.groovy</script>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>de.monticore.lang</groupId>
-            <artifactId>tagging</artifactId>
-            <version>${project.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>de.se_rwth.commons</groupId>
-            <artifactId>se-commons-utilities</artifactId>
-            <version>${se-commons.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.9.1</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>add-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>${basedir}/target/generated-sources/templateClasses/</source>
-              </sources>
-            </configuration>
           </execution>
         </executions>
       </plugin>

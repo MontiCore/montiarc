@@ -6,13 +6,15 @@
 
 package de.monticore.lang.montiarc.montiarc._symboltable;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
 import de.monticore.lang.montiarc.helper.SymbolPrinter;
-import de.monticore.lang.montiarc.tagging._symboltable.TaggingSymbol;
+import de.monticore.lang.montiarc.trafos.expandcomponents.ExpandedComponentInstanceSymbol;
+import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
 
@@ -21,7 +23,7 @@ import de.monticore.symboltable.types.references.JTypeReference;
  *
  * @author Arne Haber, Robert Heim
  */
-public class PortSymbol extends TaggingSymbol {
+public class PortSymbol extends CommonSymbol {
   public static final PortKind KIND = PortKind.INSTANCE;
 
   private final Map<String, Optional<String>> stereotype = new HashMap<>();
