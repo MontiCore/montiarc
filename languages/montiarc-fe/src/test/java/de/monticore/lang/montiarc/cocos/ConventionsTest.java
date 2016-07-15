@@ -9,11 +9,12 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import de.se_rwth.commons.logging.Log;
 import org.antlr.v4.runtime.RecognitionException;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import de.se_rwth.commons.logging.Log;
 
 /**
  * @author Arne Haber

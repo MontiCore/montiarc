@@ -12,14 +12,15 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import de.monticore.lang.montiarc.AbstractSymtabTest;
 import de.monticore.lang.montiarc.common._ast.ASTParameter;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JAttributeSymbol;
 import de.se_rwth.commons.logging.Log;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  * TODO: Write me!

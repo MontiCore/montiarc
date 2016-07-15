@@ -190,10 +190,7 @@ public class AutoConnection {
         }
         // create connector entry and add to matched
         if (matched) {
-          ConnectorSymbol conEntry = ConnectorSymbol.builder()
-              .setSource(sender).setTarget(receiver).build();
-          conEntry.setSource(sender);
-          conEntry.setTarget(receiver);
+          ConnectorSymbol conEntry = new ConnectorSymbol(sender, receiver);
           matches.add(conEntry);
         }
       }

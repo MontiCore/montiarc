@@ -14,6 +14,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Test;
+
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.lang.montiarc.AbstractSymtabTest;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
@@ -21,7 +23,6 @@ import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.Scope;
-import org.junit.Test;
 
 /**
  * Created by MichaelvonWenckstern on 13.06.2016.
@@ -79,8 +80,8 @@ public class ComponentBuilderTest extends AbstractSymtabTest {
     assertFalse(cmp.getConnector("gen.nt").isPresent());
 
     addConnectors(cmp,
-        ConnectorSymbol.builder().setSource("incoming").setTarget("gen.incoming").build(),
-        ConnectorSymbol.builder().setSource("nt").setTarget("gen.nt").build());
+        new ConnectorSymbol("incoming", "gen.incoming"),
+        new ConnectorSymbol("Int", "gen.nt"));
 
     assertTrue(cmp.getConnector("gen.incoming").isPresent());
     assertTrue(cmp.getConnector("gen.nt").isPresent());

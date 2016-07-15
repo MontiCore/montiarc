@@ -5,15 +5,11 @@
  */
 package de.monticore.lang.montiarc.cocos;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.stream.Collectors;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcCoCoChecker;
 import de.se_rwth.commons.logging.Log;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  * @author (last commit) Crispin Kirchner

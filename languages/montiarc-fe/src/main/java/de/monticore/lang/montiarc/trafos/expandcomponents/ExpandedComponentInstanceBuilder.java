@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbolReference;
-import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorBuilder;
 import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortBuilder;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
@@ -45,12 +44,16 @@ public class ExpandedComponentInstanceBuilder {
     return ret;
   }
 
+  private static ConnectorSymbol cloneConnector(ConnectorSymbol s) {
+    return new ConnectorSymbol(s.getSource(), s.getTarget());
+  }
+
   public static ExpandedComponentInstanceSymbol clone(ExpandedComponentInstanceSymbol inst) {
     return new ExpandedComponentInstanceBuilder().setName(inst.getName())
         .setSymbolReference(inst.getComponentType())
         //.addPorts(inst.getPorts().stream().map(p -> PortBuilder.clone(p)).collect(Collectors.toList()))
         .addPorts(inst.getPorts()) // is cloned in build method
-        .addConnectors(inst.getConnectors().stream().map(c -> ConnectorBuilder.clone(c)).collect(Collectors.toList()))
+        .addConnectors(inst.getConnectors().stream().map(c -> cloneConnector(c)).collect(Collectors.toList()))
         .addSubComponents(inst.getSubComponents().stream().map(s -> ExpandedComponentInstanceBuilder.clone(s)).collect(Collectors.toList()))
         .build();
   }
@@ -231,7 +234,7 @@ public class ExpandedComponentInstanceBuilder {
       resolvingFilters.stream().forEachOrdered(f -> scope.addResolver(f));
 
       ports.stream().forEachOrdered(p -> scope.add(PortBuilder.clone(p))); // must be cloned since we change it if it has generics
-      connectors.stream().forEachOrdered(c -> scope.add(ConnectorBuilder.clone(c)));
+      connectors.stream().forEachOrdered(c -> scope.add(cloneConnector(c)));
       subComponents.stream().forEachOrdered(s -> scope.add(s));
 
       sym.setActualTypeArguments(actualTypeArguments.values().stream().collect(Collectors.toList()));

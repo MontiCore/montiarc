@@ -8,7 +8,6 @@ package de.monticore.lang.montiarc.montiarc._symboltable;
 import static com.google.common.base.Preconditions.checkArgument;
 import static de.monticore.symboltable.Symbols.sortSymbolsByPosition;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,6 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
+
 import de.monticore.lang.montiarc.MontiArcConstants;
 import de.monticore.lang.montiarc.helper.SymbolPrinter;
 import de.monticore.lang.montiarc.helper.Timing;

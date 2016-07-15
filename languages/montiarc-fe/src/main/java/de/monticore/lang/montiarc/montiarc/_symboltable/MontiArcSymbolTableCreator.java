@@ -143,9 +143,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     for (ASTQualifiedName target : node.getTargets()) {
       String targetName = target.toString();
 
-      ConnectorSymbol sym = new ConnectorSymbol(targetName);
-      sym.setSource(sourceName);
-      sym.setTarget(targetName);
+      ConnectorSymbol sym = new ConnectorSymbol(sourceName, targetName);
 
       // stereotype
       if (node.getStereotype().isPresent()) {
@@ -217,9 +215,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       String sourceName = c.getSource().toString();
       for (ASTQualifiedName target : c.getTargets()) {
         String targetName = target.toString();
-        ConnectorSymbol sym = new ConnectorSymbol(sourceName + "->" + targetName);
-        sym.setSource(sourceName);
-        sym.setTarget(targetName);
+        ConnectorSymbol sym = new ConnectorSymbol(sourceName, targetName);
         addToScope(sym);
       }
     }

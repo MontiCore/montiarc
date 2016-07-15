@@ -7,9 +7,10 @@ package de.monticore.lang.montiarc.cocos;
 
 import static org.junit.Assert.assertEquals;
 
-import de.se_rwth.commons.logging.Log;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import de.se_rwth.commons.logging.Log;
 
 /**
  * Test checks the cocos ${DefaultParameterReferencingVariable} and

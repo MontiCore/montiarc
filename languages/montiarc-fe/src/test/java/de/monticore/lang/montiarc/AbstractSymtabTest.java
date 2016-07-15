@@ -9,8 +9,8 @@ import java.nio.file.Paths;
 
 import de.monticore.ModelingLanguageFamily;
 import de.monticore.io.paths.ModelPath;
-import de.monticore.java.lang.JavaDSLLanguage;
-import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcLanguage;
+import de.monticore.lang.montiarc.montiarc._symboltable.JavaHelper;
+import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcLanguageFamily;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Scope;
 
@@ -21,13 +21,12 @@ import de.monticore.symboltable.Scope;
  */
 public class AbstractSymtabTest {
   protected static Scope createSymTab(String modelPath) {
-    ModelingLanguageFamily fam = new ModelingLanguageFamily();
-    fam.addModelingLanguage(new MontiArcLanguage());
-    // TODO should we use JavaDSLLanguage or add the resolvers in MALang?
-    fam.addModelingLanguage(new JavaDSLLanguage());
+    ModelingLanguageFamily fam = new MontiArcLanguageFamily();
     // TODO how to add java default types?
-    final ModelPath mp = new ModelPath(Paths.get(modelPath), Paths.get("src/main/resources/defaultTypes"));
+    final ModelPath mp = new ModelPath(Paths.get(modelPath),
+        Paths.get("src/main/resources/defaultTypes"));
     GlobalScope scope = new GlobalScope(mp, fam);
+    JavaHelper.addJavaPrimitiveTypes(scope);
     return scope;
   }
 }

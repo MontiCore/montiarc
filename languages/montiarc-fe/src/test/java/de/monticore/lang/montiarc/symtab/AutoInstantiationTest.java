@@ -10,6 +10,9 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.Collection;
 
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import de.monticore.lang.montiarc.AbstractSymtabTest;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
@@ -17,8 +20,6 @@ import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  * TODO

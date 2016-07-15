@@ -9,6 +9,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Test;
+
 import de.monticore.lang.expression.symboltable.ValueSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
@@ -17,7 +19,6 @@ import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JAttributeSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
-import org.junit.Test;
 
 /**
  * TODO: Write me!
@@ -263,8 +264,7 @@ public class SymtabTestArcd extends AbstractSymtabTest {
     assertEquals(2, comp.getConnectors().size());
     ConnectorSymbol connector = comp.getConnector("innerComponent.strIn").orElse(null);
     assertEquals("innerComponent.strIn", connector.getName());
-    assertEquals("a.ComponentWithInnerComponent.strIn->innerComponent.strIn",
-        connector.getFullName());
+    assertEquals("a.ComponentWithInnerComponent.innerComponent.strIn", connector.getFullName());
 
     // inner
     ComponentSymbol inner = comp.getInnerComponent("InnerComponent").orElse(null);

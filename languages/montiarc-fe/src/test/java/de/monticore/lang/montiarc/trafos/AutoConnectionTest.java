@@ -9,12 +9,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.junit.Test;
+
 import de.monticore.lang.montiarc.AbstractSymtabTest;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
-import org.junit.Test;
 
 public class AutoConnectionTest extends AbstractSymtabTest {
 
