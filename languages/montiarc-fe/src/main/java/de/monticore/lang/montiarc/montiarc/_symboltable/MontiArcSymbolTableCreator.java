@@ -19,7 +19,6 @@ import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.lang.expression.symboltable.ValueSymbol;
 import de.monticore.lang.expression.symboltable.ValueSymbol.Kind;
 import de.monticore.lang.montiarc.common._ast.ASTParameter;
-import de.monticore.lang.montiarc.helper.ArcTypePrinter;
 import de.monticore.lang.montiarc.helper.Timing;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponentHead;
@@ -45,6 +44,7 @@ import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.symboltable.types.references.TypeReference;
 import de.monticore.types.JTypesHelper;
 import de.monticore.types.TypesHelper;
+import de.monticore.types.TypesPrinter;
 import de.monticore.types.types._ast.ASTComplexReferenceType;
 import de.monticore.types.types._ast.ASTImportStatement;
 import de.monticore.types.types._ast.ASTQualifiedName;
@@ -113,7 +113,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   @Override
   public void visit(ASTPort node) {
     ASTType astType = node.getType();
-    String typeName = ArcTypePrinter.printTypeWithoutTypeArgumentsAndDimension(astType);
+    String typeName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astType);
     
     String name = node.getName().orElse(StringTransformations.uncapitalize(typeName));
     PortSymbol sym = new PortSymbol(name);
@@ -164,7 +164,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   
   @Override
   public void visit(ASTSubComponent node) {
-    String referencedCompName = ArcTypePrinter
+    String referencedCompName = TypesPrinter
         .printTypeWithoutTypeArgumentsAndDimension(node.getType());
     
     // String refCompPackage = Names.getQualifier(referencedCompName);
@@ -255,7 +255,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     // super component
     if (node.getHead().getSuperComponent().isPresent()) {
       ASTReferenceType superCompRef = node.getHead().getSuperComponent().get();
-      String superCompName = ArcTypePrinter.printTypeWithoutTypeArgumentsAndDimension(superCompRef);
+      String superCompName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(superCompRef);
       
       ComponentSymbolReference ref = new ComponentSymbolReference(superCompName,
           currentScope().get());
@@ -297,7 +297,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       final String paramName = astParameter.getName();
       int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(astParameter.getType());
       JTypeReference<? extends JTypeSymbol> paramTypeSymbol = new JavaTypeSymbolReference(
-          ArcTypePrinter.printTypeWithoutTypeArgumentsAndDimension(astParameter
+          TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astParameter
               .getType()),
           currentScope().get(), dimension);
       
@@ -370,7 +370,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
               : astWildcardType.getUpperBound().get();
           int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(typeBound);
           JTypeReference<? extends JTypeSymbol> typeBoundSymbolReference = new JavaTypeSymbolReference(
-              ArcTypePrinter.printTypeWithoutTypeArgumentsAndDimension(typeBound),
+              TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(typeBound),
               currentScope().get(), dimension);
           ActualTypeArgument actualTypeArgument = new ActualTypeArgument(lowerBound, !lowerBound,
               typeBoundSymbolReference);
@@ -390,7 +390,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         ASTType astTypeNoBound = (ASTType) astTypeArgument;
         int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(astTypeNoBound);
         JTypeReference<? extends JTypeSymbol> typeArgumentSymbolReference = new JavaTypeSymbolReference(
-            ArcTypePrinter.printTypeWithoutTypeArgumentsAndDimension(astTypeNoBound),
+            TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astTypeNoBound),
             currentScope().get(), dimension);
         
         addTypeArgumentsToTypeSymbol(typeArgumentSymbolReference, astTypeNoBound);

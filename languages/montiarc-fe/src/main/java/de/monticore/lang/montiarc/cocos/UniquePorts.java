@@ -8,10 +8,10 @@ package de.monticore.lang.montiarc.cocos;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.monticore.lang.montiarc.helper.ArcTypePrinter;
 import de.monticore.lang.montiarc.montiarc._ast.ASTInterface;
 import de.monticore.lang.montiarc.montiarc._ast.ASTPort;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTInterfaceCoCo;
+import de.monticore.types.TypesPrinter;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
 
@@ -36,10 +36,7 @@ public class UniquePorts implements MontiArcASTInterfaceCoCo {
       }
       else {
         // calc implicit name
-        String implicitName = ArcTypePrinter.printType(port.getType());
-        // TODO use symTab
-        // PortSymbol entry = ((PortSymbol) port.getSymbol().get());
-        // String implicitName = entry.getTypeReference().getReferencedSymbol().getName();
+        String implicitName = TypesPrinter.printType(port.getType());
         name = StringTransformations.uncapitalize(implicitName);
       }
       if (usedNames.contains(name)) {

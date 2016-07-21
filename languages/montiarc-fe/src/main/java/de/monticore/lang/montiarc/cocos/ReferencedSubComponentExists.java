@@ -7,11 +7,11 @@ package de.monticore.lang.montiarc.cocos;
 
 import java.util.Optional;
 
-import de.monticore.lang.montiarc.helper.ArcTypePrinter;
 import de.monticore.lang.montiarc.montiarc._ast.ASTSubComponent;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTSubComponentCoCo;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.symboltable.Scope;
+import de.monticore.types.TypesPrinter;
 import de.se_rwth.commons.logging.Log;
 
 /**
@@ -26,7 +26,7 @@ public class ReferencedSubComponentExists implements MontiArcASTSubComponentCoCo
    */
   @Override
   public void check(ASTSubComponent node) {
-    String referenceName = ArcTypePrinter.printTypeWithoutTypeArgumentsAndDimension(node.getType());
+    String referenceName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(node.getType());
     
     Scope scope = node.getEnclosingScope().get();
     
