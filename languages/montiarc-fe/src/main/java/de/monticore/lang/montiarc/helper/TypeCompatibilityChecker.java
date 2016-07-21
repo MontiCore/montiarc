@@ -16,7 +16,7 @@ import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
 
 /**
- * Checks type compatibility of {@link ArcTypeReference}s.
+ * Checks type compatibility of {@link JTypeReference}s.
  *
  * @author ahaber, Robert Heim
  */
@@ -34,7 +34,7 @@ public class TypeCompatibilityChecker {
   }
 
   /**
-   * Checks compatibility of {@link ArcTypeReference}s. The sourceTypeFomalTypeParameters list all
+   * Checks compatibility of {@link JTypeReference}s. The sourceTypeFomalTypeParameters list all
    * type parameters, while the sourceTypeArguments define the current binding of them. E.g., a
    * generic source Type {@code A<X, Y>} could be bound to
    * <code>{@code A<List<Optional<Integer>>, String>}</code>. For a targetType to match, it must

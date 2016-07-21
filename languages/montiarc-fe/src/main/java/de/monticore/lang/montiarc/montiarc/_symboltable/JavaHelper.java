@@ -98,8 +98,8 @@ public class JavaHelper {
    *
    * @param astInterfaceTypeList
    */
-  // TODO this is implemented in JavaDSL, but reimplemented because of ArcTypeSymbol. This should
-  // somehow be extracted and implemented only once
+  // TODO this is implemented in JavaDSL, but reimplemented here because of ArcTypeSymbol. This should
+  // be extracted to JTypesHelper in mc.types and both should reuse it.
   protected static void addInterfacesToType(JavaTypeSymbol arcTypeSymbol,
       List<ASTType> astInterfaceTypeList, Scope currentScope) {
     for (ASTType astInterfaceType : astInterfaceTypeList) {

@@ -223,7 +223,7 @@ public class SymtabTest extends AbstractSymtabTest {
     // assertEquals("new HashMap<List<String>, List<Integer>>()",
     // delay.getConfigArguments().get(1).getValue());
     // assertEquals(Kind.ConstructorCall, delay.getConfigArguments().get(1).getKind());
-    // ArcTypeReference typeRef = delay.getConfigArguments().get(1).getType();
+    // JTypeReference<? extends JTypeSymbol> typeRef = delay.getConfigArguments().get(1).getType();
     // assertEquals("java.util.List", typeRef.getTypeParameters().get(0).getType().getName());
     // assertEquals("java.util.List", typeRef.getTypeParameters().get(1).getType().getName());
     // assertEquals("java.lang.String",

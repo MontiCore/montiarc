@@ -65,7 +65,6 @@ public class GeneratorHelper {
   }
   
   public static String printType(JTypeReference<?> typeRef) {
-    // return ArcTypePrinter.printType((ASTType) typeRef.getAstNode().get());
     if (typeRef.getReferencedSymbol().isFormalTypeParameter()) {
       return typeRef.getName();
     }
