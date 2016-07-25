@@ -42,9 +42,10 @@ import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.CommonJTypeReference;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.symboltable.types.references.TypeReference;
-import de.monticore.types.JTypesHelper;
+import de.monticore.types.JTypeSymbolsHelper;
 import de.monticore.types.TypesHelper;
 import de.monticore.types.TypesPrinter;
+import de.monticore.types.JTypeSymbolsHelper.JTypeReferenceFactory;
 import de.monticore.types.types._ast.ASTComplexReferenceType;
 import de.monticore.types.types._ast.ASTImportStatement;
 import de.monticore.types.types._ast.ASTQualifiedName;
@@ -138,8 +139,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   private void addTypeArgumentsToTypeSymbol(JTypeReference<? extends JTypeSymbol> typeRef, ASTType astType) {
-    JTypesHelper.addTypeArgumentsToTypeSymbol(typeRef, astType, currentScope().get(),
-        new JTypesHelper.CommonJTypeReferenceFactory());
+    JTypeSymbolsHelper.addTypeArgumentsToTypeSymbol(typeRef, astType, currentScope().get(),
+        new JTypeSymbolsHelper.CommonJTypeReferenceFactory());
   }
   
   @Override
@@ -174,7 +175,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         referencedCompName,
         currentScope().get());
     // actual type arguments
-    addTypeArgumentsToTypeSymbol(componentTypeReference, node.getType());
+    addTypeArgumentsToComponent(componentTypeReference, node.getType());
     
     // ref.setPackageName(refCompPackage);
     
@@ -261,7 +262,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
           currentScope().get());
       ref.setAccessModifier(BasicAccessModifier.PUBLIC);
       // actual type arguments
-      addTypeArgumentsToTypeSymbol(ref, superCompRef);
+      addTypeArgumentsToComponent(ref, superCompRef);
       
       component.setSuperComponent(Optional.of(ref));
     }
@@ -337,7 +338,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
             .orElse(StringTransformations.uncapitalize(component.getName()));
         
         if (node.getActualTypeArgument().isPresent()) {
-          setActualTypeArguments(refEntry, node.getActualTypeArgument().get().getTypeArguments());
+          setActualTypeArgumentsOfCompRef(refEntry, node.getActualTypeArgument().get().getTypeArguments());
         }
         
         ComponentInstanceSymbol instanceSymbol = new ComponentInstanceSymbol(instanceName,
@@ -351,7 +352,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     }
   }
   
-  private void setActualTypeArguments(ComponentSymbolReference typeReference,
+  private void setActualTypeArgumentsOfCompRef(ComponentSymbolReference typeReference,
       List<ASTTypeArgument> astTypeArguments) {
     List<ActualTypeArgument> actualTypeArguments = new ArrayList<>();
     for (ASTTypeArgument astTypeArgument : astTypeArguments) {
@@ -404,15 +405,18 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     }
     typeReference.setActualTypeArguments(actualTypeArguments);
   }
+
+  protected JTypeReferenceFactory<JavaTypeSymbolReference> typeRefFactory = (name, scope,
+      dim) -> new JavaTypeSymbolReference(name, scope, dim);
   
-  private void addTypeArgumentsToTypeSymbol(ComponentSymbolReference typeReference,
+  private void addTypeArgumentsToComponent(ComponentSymbolReference typeReference,
       ASTType astType) {
     if (astType instanceof ASTSimpleReferenceType) {
       ASTSimpleReferenceType astSimpleReferenceType = (ASTSimpleReferenceType) astType;
       if (!astSimpleReferenceType.getTypeArguments().isPresent()) {
         return;
       }
-      setActualTypeArguments(typeReference,
+      setActualTypeArgumentsOfCompRef(typeReference,
           astSimpleReferenceType.getTypeArguments().get().getTypeArguments());
     }
     else if (astType instanceof ASTComplexReferenceType) {
