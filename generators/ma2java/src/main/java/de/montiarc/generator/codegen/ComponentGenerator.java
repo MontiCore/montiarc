@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import templates.mc.umlp.arc.factory.ComponentFactoryTemplate;
-import templates.mc.umlp.arc.implementation.ComponentTemplate;
-import templates.mc.umlp.arc.interfaces.ComponentInterfaceTemplate;
+import setup.GeneratorConfig;
+import _templates.mc.umlp.arc.factory.ComponentFactory;
+import _templates.mc.umlp.arc.implementation.Component;
+import _templates.mc.umlp.arc.interfaces.ComponentInterface;
 
 import com.google.common.collect.Sets;
 
 import de.montiarc.generator.MontiArcGeneratorConstants;
-import de.monticore.generating.GeneratorConfig;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.generating.MyGeneratorEngine;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
@@ -184,12 +184,12 @@ public class ComponentGenerator {
   public static void generate(GlobalExtensionManagement glex, ASTComponent compAst,
       ComponentSymbol compSym, File outputDirectory, Optional<String> hwcPath) {
     final GeneratorSetup setup = new GeneratorSetup(outputDirectory);
-    setup.setGlex(glex);
     GeneratorHelper helper = new GeneratorHelper();
-    final MyGeneratorEngine generator = new MyGeneratorEngine(setup);
     glex.setGlobalValue(MontiArcGeneratorConstants.TIME_PARADIGM_STORAGE_KEY,
         compSym.getBehaviorKind());
-    GeneratorConfig.setGeneratorEngine(generator);
+    setup.setGlex(glex);
+    GeneratorConfig.init(setup);
+    MyGeneratorEngine generator = GeneratorConfig.getGeneratorEngine();
     generateComponentInterface(generator, compAst, compSym, helper);
     generateComponent(generator, compAst, compSym, helper);
     generateComponentFactory(generator, compAst, compSym, helper, hwcPath);
@@ -214,13 +214,13 @@ public class ComponentGenerator {
     String superInterface = getSuperInterface(compSym);
     String portInterfaces = getPortInterfaces(compSym);
     List<PortSymbol> ports = (List<PortSymbol>) compSym.getPorts();
-    List<JTypeSymbol> typeParams = compSym.getFormalTypeParameters();
     String formalTypeParams = SymbolPrinter.printFormalTypeParameters(compSym
         .getFormalTypeParameters());
     // component needs an additional port for receiving ticks
     boolean needsAdditionalPort = compSym.getAllIncomingPorts().isEmpty();
-    ComponentInterfaceTemplate.generateToFile(filePath, compAst, _package,
-        interfaceName, ports, superInterface, portInterfaces, needsAdditionalPort, formalTypeParams, helper,
+    ComponentInterface.generate(filePath, compAst, _package,
+        interfaceName, ports, superInterface, portInterfaces, needsAdditionalPort,
+        formalTypeParams, helper,
         comments);
     Log.trace(LOGGER_NAME, String.format("Generated java interface %s for component-model %s.",
         interfaceName, compSym.getFullName()));
@@ -259,7 +259,7 @@ public class ComponentGenerator {
         + printFormalTypeParametersWithoutBounds(compSym);
     String formalTypeParams = SymbolPrinter.printFormalTypeParameters(compSym
         .getFormalTypeParameters());
-    ComponentTemplate.generateToFile(filePath, compAst,
+    Component.generate(filePath, compAst,
         compSym, _package, comments, modifier, prefix, superComponent,
         fqCompInterfaceWithTypeParameters, helper, new PortHelper(), timingParadigm,
         formalTypeParams);
@@ -289,7 +289,7 @@ public class ComponentGenerator {
     boolean existHWC = GeneratorHelper.existsHandwrittenClass(handwrittenPath,
         compSym.getFullName());
     
-    ComponentFactoryTemplate.generateToFile(filePath, compAst, _package, factoryName,
+    ComponentFactory.generate(filePath, compAst, _package, factoryName,
         compSym, configParameters, helper, existHWC);
     
     for (ComponentSymbol inner : compSym.getInnerComponents()) {

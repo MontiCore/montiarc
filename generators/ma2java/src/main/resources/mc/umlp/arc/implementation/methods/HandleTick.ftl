@@ -11,7 +11,7 @@ ${tc.params("de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol co
         triggerTimeSync();
     </#if>    
     <#list compSym.getOutgoingPorts() as port>
-        ${tc.includeArgs("templates.mc.umlp.arc.implementation.methods.HandleTickPorts", [helper.printType(port.getTypeReference()), port.getName()])}
+        ${_templates.mc.umlp.arc.implementation.methods.HandleTickPorts.generate(helper.printType(port.getTypeReference()), port.getName())}
     </#list>
     <#if compSym.getSuperComponent().isPresent()>
         super.handleTick();

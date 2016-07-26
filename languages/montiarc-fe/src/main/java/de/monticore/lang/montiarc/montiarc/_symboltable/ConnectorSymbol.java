@@ -1,6 +1,7 @@
 package de.monticore.lang.montiarc.montiarc._symboltable;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 
@@ -9,16 +10,21 @@ import javax.annotation.Nullable;
 import de.monticore.lang.montiarc.helper.SymbolPrinter;
 import de.monticore.lang.montiarc.montiarc._ast.ASTConnector;
 import de.monticore.symboltable.CommonSymbol;
+import de.se_rwth.commons.Joiners;
+import de.se_rwth.commons.Splitters;
+import de.se_rwth.commons.logging.Log;
 
 /**
- * Symbol for {@link ASTConnector}s. The name of a connector symbol equals its target and vice
- * versa. This is valid since data for a port may only result from a single source. <br/>
+ * Symbol for {@link ASTConnector}s. The name of a connector symbol equals its
+ * target and vice versa. This is valid since data for a port may only result
+ * from a single source. <br/>
  * <br/>
- * The port names (source and target of the connector) must be set <b>relative to the component
- * scope</b> that the connector is defined in. This means that the sourceName may be any in port of
- * the component itself (e.g., "myInPort") or an out port of any subcomponent (e.g.,
- * "subComponent.someOutPort"). The targetName is either a out port of the component itself( e.g.,
- * "myOutPort") or any of the sub components in ports (e.g., "subComponent.someInPort").
+ * The port names (source and target of the connector) must be set <b>relative
+ * to the component scope</b> that the connector is defined in. This means that
+ * the sourceName may be any in port of the component itself (e.g., "myInPort")
+ * or an out port of any subcomponent (e.g., "subComponent.someOutPort"). The
+ * targetName is either a out port of the component itself( e.g., "myOutPort")
+ * or any of the sub components in ports (e.g., "subComponent.someInPort").
  * 
  * @author Arne Haber, Michael von Wenckstern, Robert Heim
  */
@@ -36,10 +42,10 @@ public class ConnectorSymbol extends CommonSymbol {
   /**
    * Creates a ConnectorSymbol.
    * 
-   * @param sourceName the relative name of the source port (e.g., "subComponent.someOutPort" or
-   * "myInPort").
-   * @param targetName relative name of the target port (e.g., "subComponent.someInPort" or
-   * "myOutPort").
+   * @param sourceName the relative name of the source port (e.g.,
+   * "subComponent.someOutPort" or "myInPort").
+   * @param targetName relative name of the target port (e.g.,
+   * "subComponent.someInPort" or "myOutPort").
    * @return
    */
   public ConnectorSymbol(String sourceName, String targetName) {
@@ -66,6 +72,67 @@ public class ConnectorSymbol extends CommonSymbol {
    */
   public String getTarget() {
     return getName();
+  }
+  
+  public Optional<PortSymbol> getTargetPort() {
+    return this.getPort(this.getTarget());
+  }
+  
+  public Optional<PortSymbol> getSourcePort() {
+    return this.getPort(this.getSource());
+  }
+  
+  protected Optional<PortSymbol> getPort(String name) {
+    if (this.getEnclosingScope() == null) {
+      Log.warn("Connector does not belong to a component, cannot resolve port");
+      return null;
+    }
+    if (!this.getEnclosingScope().getSpanningSymbol().isPresent()) {
+      Log.warn("Connector is not embedded in component symbol or expanded component instance symbol, cannot resolve port");
+      return null;
+    }
+    
+    // (1) try to load Component.Port or ExpandedComponentInstance.Port
+    String fullSource = Joiners.DOT.join(this.getPackageName(),
+        this.getEnclosingScope().getSpanningSymbol().get().getName(), name);
+    Optional<PortSymbol> port = this.getEnclosingScope().<PortSymbol> resolve(fullSource,
+        PortSymbol.KIND);
+    if (port.isPresent()) {
+      return port;
+    }
+    
+    if (!(this.getEnclosingScope().getSpanningSymbol().get() instanceof ComponentSymbol)) {
+      Log.warn("Connector is not embedded in component symbol, cannot resolve port");
+      return Optional.empty();
+    }
+    ComponentSymbol cmp = (ComponentSymbol) this.getEnclosingScope().getSpanningSymbol().get();
+    
+    // (2) try to load Component.instance.Port
+    Iterator<String> parts = Splitters.DOT.split(name).iterator();
+    if (!parts.hasNext()) {
+      Log.warn("name of connector's source/target is empty, cannot resolve port");
+      return Optional.empty();
+    }
+    String instance = parts.next();
+    if (!parts.hasNext()) {
+      Log.warn("name of connector's source/target does has two parts: instance.port, cannot resolve port");
+      return Optional.empty();
+    }
+    String instancePort = parts.next();
+    Optional<ComponentInstanceSymbol> inst = cmp.getSpannedScope()
+        .<ComponentInstanceSymbol> resolveLocally(instance, ComponentInstanceSymbol.KIND);
+    if (!inst.isPresent()) {
+      Log.warn(String.format("Could not find instance %s in component %s, cannot resolve port",
+          instance, cmp.getFullName()));
+      return Optional.empty();
+    }
+    port = inst.get().getComponentType().getReferencedSymbol().getSpannedScope()
+        .resolveLocally(instancePort, PortSymbol.KIND);
+    if (port.isPresent()) {
+      return port;
+    }
+    
+    return Optional.empty();
   }
   
   /**
