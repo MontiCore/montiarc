@@ -13,6 +13,7 @@ import de.monticore.symboltable.CommonSymbol;
 import de.se_rwth.commons.Joiners;
 import de.se_rwth.commons.Splitters;
 import de.se_rwth.commons.logging.Log;
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Symbol for {@link ASTConnector}s. The name of a connector symbol equals its
@@ -83,56 +84,19 @@ public class ConnectorSymbol extends CommonSymbol {
   }
   
   protected Optional<PortSymbol> getPort(String name) {
-    if (this.getEnclosingScope() == null) {
-      Log.warn("Connector does not belong to a component, cannot resolve port");
-      return null;
-    }
-    if (!this.getEnclosingScope().getSpanningSymbol().isPresent()) {
-      Log.warn("Connector is not embedded in component symbol or expanded component instance symbol, cannot resolve port");
-      return null;
-    }
-    
-    // (1) try to load Component.Port or ExpandedComponentInstance.Port
-    String fullSource = Joiners.DOT.join(this.getPackageName(),
-        this.getEnclosingScope().getSpanningSymbol().get().getName(), name);
-    Optional<PortSymbol> port = this.getEnclosingScope().<PortSymbol> resolve(fullSource,
-        PortSymbol.KIND);
-    if (port.isPresent()) {
-      return port;
-    }
-    
-    if (!(this.getEnclosingScope().getSpanningSymbol().get() instanceof ComponentSymbol)) {
-      Log.warn("Connector is not embedded in component symbol, cannot resolve port");
-      return Optional.empty();
-    }
     ComponentSymbol cmp = (ComponentSymbol) this.getEnclosingScope().getSpanningSymbol().get();
     
-    // (2) try to load Component.instance.Port
+    //connector's source and target always have the format: instance.port
     Iterator<String> parts = Splitters.DOT.split(name).iterator();
-    if (!parts.hasNext()) {
-      Log.warn("name of connector's source/target is empty, cannot resolve port");
-      return Optional.empty();
-    }
     String instance = parts.next();
-    if (!parts.hasNext()) {
-      Log.warn("name of connector's source/target does has two parts: instance.port, cannot resolve port");
-      return Optional.empty();
-    }
     String instancePort = parts.next();
+    
     Optional<ComponentInstanceSymbol> inst = cmp.getSpannedScope()
         .<ComponentInstanceSymbol> resolveLocally(instance, ComponentInstanceSymbol.KIND);
-    if (!inst.isPresent()) {
-      Log.warn(String.format("Could not find instance %s in component %s, cannot resolve port",
-          instance, cmp.getFullName()));
-      return Optional.empty();
-    }
-    port = inst.get().getComponentType().getReferencedSymbol().getSpannedScope()
+    Optional<PortSymbol> port = inst.get().getComponentType().getReferencedSymbol()
+        .getSpannedScope()
         .resolveLocally(instancePort, PortSymbol.KIND);
-    if (port.isPresent()) {
-      return port;
-    }
-    
-    return Optional.empty();
+    return port;
   }
   
   /**
