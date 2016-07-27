@@ -86,17 +86,26 @@ public class ConnectorSymbol extends CommonSymbol {
   protected Optional<PortSymbol> getPort(String name) {
     ComponentSymbol cmp = (ComponentSymbol) this.getEnclosingScope().getSpanningSymbol().get();
     
-    //connector's source and target always have the format: instance.port
-    Iterator<String> parts = Splitters.DOT.split(name).iterator();
-    String instance = parts.next();
-    String instancePort = parts.next();
+    // Case 1: componentinstance.port
+    if(name.contains(".")){
+      Iterator<String> parts = Splitters.DOT.split(name).iterator();
+      
+      String instance = parts.next();
+      String instancePort = parts.next();
+      
+      Optional<ComponentInstanceSymbol> inst = cmp.getSpannedScope()
+          .<ComponentInstanceSymbol> resolveLocally(instance, ComponentInstanceSymbol.KIND);
+      Optional<PortSymbol> port = inst.get().getComponentType().getReferencedSymbol()
+          .getSpannedScope()
+          .resolveLocally(instancePort, PortSymbol.KIND);
+      return port;  
+    }
+    // Case 2: port
+    else{
+//      String fqn = Joiners.DOT.join(this.getPackageName(), this.getEnclosingScope().getSpanningSymbol().get().getName(), name);
+      return this.getEnclosingScope().<PortSymbol>resolveLocally(name, PortSymbol.KIND);
+    }
     
-    Optional<ComponentInstanceSymbol> inst = cmp.getSpannedScope()
-        .<ComponentInstanceSymbol> resolveLocally(instance, ComponentInstanceSymbol.KIND);
-    Optional<PortSymbol> port = inst.get().getComponentType().getReferencedSymbol()
-        .getSpannedScope()
-        .resolveLocally(instancePort, PortSymbol.KIND);
-    return port;
   }
   
   /**

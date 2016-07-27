@@ -69,7 +69,9 @@ public class ComponentBuilderTest extends AbstractSymtabTest {
     ComponentSymbol cmp = symTab.<ComponentSymbol>resolve(
         "a.TypesTest", ComponentSymbol.KIND).orElse(null);
     assertNotNull(cmp);
-
+    ConnectorSymbol s = cmp.getConnector("gen.incoming").get();
+    assertTrue(s.getSourcePort().isPresent());
+    assertTrue(s.getTargetPort().isPresent());
     assertTrue(cmp.getConnector("gen.incoming").isPresent());
     assertTrue(cmp.getConnector("gen.nt").isPresent());
 
