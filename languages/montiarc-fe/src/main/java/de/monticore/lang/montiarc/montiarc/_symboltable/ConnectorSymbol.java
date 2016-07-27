@@ -102,7 +102,6 @@ public class ConnectorSymbol extends CommonSymbol {
     }
     // Case 2: port
     else{
-//      String fqn = Joiners.DOT.join(this.getPackageName(), this.getEnclosingScope().getSpanningSymbol().get().getName(), name);
       return this.getEnclosingScope().<PortSymbol>resolveLocally(name, PortSymbol.KIND);
     }
     
