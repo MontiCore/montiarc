@@ -1,0 +1,13 @@
+package invalid;
+
+automaton OutputValueListContainsWrongType {
+
+  output Boolean b;
+   
+  state S;
+  initial S;
+    
+  S -> S / {b = [true, "string", true]};    
+
+
+}

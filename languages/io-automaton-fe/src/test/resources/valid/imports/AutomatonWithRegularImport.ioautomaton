@@ -1,0 +1,13 @@
+package valid.imports;
+
+import java.util.List;
+import java.util.Set;
+import valid.imports.Test;
+
+automaton AutomatonWithRegularImport{
+	input int i;
+	output int o;
+	
+	state S;
+	initial S;
+}

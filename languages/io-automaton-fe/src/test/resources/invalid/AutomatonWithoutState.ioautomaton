@@ -1,0 +1,7 @@
+package invalid;
+
+automaton AutomatonWithoutState {
+
+    output int i;
+    input int x;		
+}

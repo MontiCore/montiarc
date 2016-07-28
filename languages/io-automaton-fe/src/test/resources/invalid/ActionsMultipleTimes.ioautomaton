@@ -1,0 +1,15 @@
+package invalid;
+
+automaton ActionsMultipleTimes {
+
+    input int i;
+    
+    output int a;
+    output int a;
+    
+    output int j;
+    output double j;
+
+	state Idle;	
+	initial Idle;
+}

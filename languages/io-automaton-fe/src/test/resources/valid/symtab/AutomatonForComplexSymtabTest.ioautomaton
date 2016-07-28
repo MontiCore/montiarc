@@ -1,0 +1,17 @@
+package valid.symtab;
+
+import java.util.List;
+import java.util.Set;
+
+automaton AutomatonForComplexSymtabTest{
+
+    input List<Set<Integer>[][]>[][][] in;
+    
+    variable List<Integer> x;
+    
+    output int who_cares;
+    
+    state Useless;
+    initial Useless;
+
+}

@@ -1,0 +1,19 @@
+package valid.namecompletion;
+
+import valid.namecompletion.Distance; // tries to load this as CD type!
+import valid.namecompletion.Command;
+
+automaton CompleteHandcraftedJavaWithErrors {
+  input Distance distance;
+  output Command command;
+  
+  state Okay;
+  initial Okay / {Distance.CLOSE};
+  // Can not assign Distance to any sink 
+  
+  Okay -> Okay {new Command()};
+  // Can not read Command from any source
+  
+  Okay -> Okay {Command.STOP()};
+  // Can not read Command from any source
+}

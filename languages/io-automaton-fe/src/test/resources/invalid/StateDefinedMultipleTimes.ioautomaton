@@ -1,0 +1,16 @@
+package invalid;
+
+automaton StateDefinedMultipleTimes{
+
+    input int a;
+    output int b;
+    
+    state A, B, C;
+    
+    initial A;
+    
+    state B, C;
+    
+    A->B;
+    A->C;
+}
