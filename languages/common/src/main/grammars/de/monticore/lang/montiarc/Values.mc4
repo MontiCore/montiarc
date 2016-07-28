@@ -1,0 +1,24 @@
+package de.monticore.lang.montiarc;
+
+/**
+ * Grammar for value elements used by de.monticore.lang.montiarc.Common.
+ */
+component grammar Values extends de.monticore.common.Common {
+
+  /**
+  * Use this interface to embedd values.
+  * It has to be implemented by all values and additionally servers
+  * as an extension point to add futher values to sublanguages.
+  */ 
+  interface Value;
+
+  /**
+  * A signed literal value.
+  * @example "Any String", -3, 17.3
+  *
+  * @attribute value the concrete literal value
+  */
+  LiteralValue implements Value =
+        value:SignedLiteral;
+
+}
