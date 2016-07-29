@@ -11,6 +11,10 @@
   </parent>
 
   <artifactId>montiarcautomaton-fe</artifactId>
+  
+  <properties>    
+    <monticore.java.version>4.3.4-SNAPSHOT</monticore.java.version> <!-- TODO remove overwriting: 4.3.3-SNAPSHOT -->
+  </properties>
 
   <!-- == PROJECT DEPENDENCIES ============================================= -->
   <dependencies>
@@ -18,15 +22,11 @@
     <dependency>
       <groupId>montiarc.languages</groupId>
       <artifactId>io-automaton-fe</artifactId>
-      <scope>system</scope>
-      <systemPath>D:\RWTH\Informatik\Bachelorarbeit\I3\gitlab\core\languages\io-automaton-fe\target\io-automaton-fe-4.1.2-SNAPSHOT.jar</systemPath>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>de.monticore.lang</groupId>
+      <groupId>montiarc.languages</groupId>
       <artifactId>io-automaton-fe</artifactId>
-      <scope>system</scope>
-      <systemPath>D:\RWTH\Informatik\Bachelorarbeit\I3\gitlab\core\languages\io-automaton-fe\target\io-automaton-fe-4.1.2-SNAPSHOT-grammars.jar</systemPath>
       <version>${project.version}</version>
       <classifier>${grammars.classifier}</classifier>
     </dependency>
@@ -107,6 +107,14 @@
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>de.monticore.java</artifactId>
+      <version>${monticore.java.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>de.monticore.java</artifactId>
+      <version>${monticore.java.version}</version>
+      <classifier>${grammars.classifier}</classifier>
     </dependency>
 
     <!-- .. Test Libraries ............................................... -->
