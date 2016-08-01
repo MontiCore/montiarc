@@ -7,6 +7,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Optional;
 
+import de.monticore.ast.ASTNode;
 import de.monticore.automaton.ioautomaton._ast.ASTAlternative;
 import de.monticore.automaton.ioautomaton._ast.ASTAutomaton;
 import de.monticore.automaton.ioautomaton._ast.ASTAutomatonContent;
@@ -32,6 +33,8 @@ import de.monticore.automaton.ioautomatonjava._visitor.IOAutomatonJavaVisitor;
 import de.monticore.common.common._ast.ASTStereoValue;
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.javadsl._ast.ASTPrimaryExpression;
+import de.monticore.literals.literals._ast.ASTBooleanLiteral;
+import de.monticore.literals.literals._ast.ASTLiteral;
 import de.monticore.symboltable.ArtifactScope;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.symboltable.MutableScope;
@@ -224,6 +227,11 @@ public class IOAutomatonJavaSymbolTableCreator extends de.monticore.symboltable.
   
   @Override
   public void visit(ASTPrimaryExpression node) {
+    node.setEnclosingScope(currentScope().get());
+  }
+  
+  @Override
+  public void visit(ASTBooleanLiteral node) {
     node.setEnclosingScope(currentScope().get());
   }
   

@@ -2,12 +2,11 @@ package de.monticore.automaton.ioautomatonjava.cocos.correctness;
 
 import java.util.Optional;
 import de.monticore.automaton.ioautomaton.TypeCompatibilityChecker;
-import de.monticore.automaton.ioautomaton._ast.ASTAutomaton;
 import de.monticore.automaton.ioautomaton._ast.ASTIOAssignment;
 import de.monticore.automaton.ioautomaton._ast.ASTTransition;
 import de.monticore.automaton.ioautomaton._ast.ASTValuationExt;
-import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTAutomatonCoCo;
-import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
+import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTTransitionCoCo;
+import de.monticore.automaton.ioautomaton._symboltable.TransitionSymbol;
 import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
 import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol.Direction;
 import de.monticore.automaton.ioautomatonjava._ast.ASTValuation;
@@ -25,43 +24,35 @@ import de.se_rwth.commons.logging.Log;
  * @version $Revision$, $Date$
  * @since $Version$
  */
-public class StimulusTypeDoesNotFitInputType implements IOAutomatonASTAutomatonCoCo {
+public class StimulusTypeDoesNotFitInputType implements IOAutomatonASTTransitionCoCo {
   
   @Override
-  public void check(ASTAutomaton node) {
-    
-    // For each Stimulus, compare the type of the expression with the type of
-    // the field assigned
-    if (node.getAutomatonContent().getTransitions() != null) {
-      for (ASTTransition t : node.getAutomatonContent().getTransitions()) {
-        if (t.getStimulus().isPresent()) {
-          for (ASTIOAssignment assign : t.getStimulus().get().getIOAssignments()) {
-            Optional<String> currentNameToResolve = assign.getName();
-            if (currentNameToResolve.isPresent()) {
-              // Get IOFieldEntry
-              Scope automatonScope = ((AutomatonSymbol) node.getSymbol().get()).getSpannedScope();
-              Optional<VariableSymbol> symbol = automatonScope.resolve(currentNameToResolve.get(), VariableSymbol.KIND);
-              
-              if (symbol.isPresent()) {
-                if (symbol.get().getDirection() == Direction.Output) {
-                  Log.error("0xAA405 Did not find matching Variable or Input with name " + currentNameToResolve.get(), assign.get_SourcePositionStart());
-                }
-                else {
-                  // We now have the field with the type of the variable/input
-                  try {
-                    if (assign.valueListIsPresent()) {
-                      for (ASTValuationExt val : assign.getValueList().get().getAllValuations()) {
-                        JTypeReference<JTypeSymbol> varType = symbol.get().getTypeReference();
-                        
-                        if (!TypeCompatibilityChecker.doTypesMatch(((ASTValuation)val).getExpression(), varType)) {
-                          Log.error("0xAA405 Type of Variable/Input " + currentNameToResolve + " in the stimulus does not match the type of its assigned expression.", val.get_SourcePositionStart());
-                        }
-                      }
+  public void check(ASTTransition node) {
+    if (node.stimulusIsPresent()) {
+      for (ASTIOAssignment assign : node.getStimulus().get().getIOAssignments()) {
+        if (assign.nameIsPresent()) {
+          String currentNameToResolve = assign.getName().get();
+          
+          Scope transitionScope = ((TransitionSymbol) node.getSymbol().get()).getSpannedScope();
+          Optional<VariableSymbol> symbol = transitionScope.resolve(currentNameToResolve, VariableSymbol.KIND);
+          
+          if (symbol.isPresent()) {
+            if (symbol.get().getDirection() == Direction.Output) {
+              Log.error("0xAA440 Did not find matching Variable or Input with name " + currentNameToResolve, assign.get_SourcePositionStart());
+            }
+            else {
+              // We now have the field with the type of the variable/input
+              try {
+                if (assign.valueListIsPresent()) {
+                  JTypeReference<JTypeSymbol> varType = symbol.get().getTypeReference();
+                  for (ASTValuationExt val : assign.getValueList().get().getAllValuations()) {                        
+                    if (!TypeCompatibilityChecker.doTypesMatch(((ASTValuation)val).getExpression(), varType)) {
+                      Log.error("0xAA441 Type of Variable/Input " + currentNameToResolve + " in the stimulus does not match the type of its assigned expression.", val.get_SourcePositionStart());
                     }
-                  } catch (FailedLoadingSymbol e) {
-                    Log.error("0xAA405 Could not resolve type for checking the stimulus.", assign.get_SourcePositionStart());
                   }
                 }
+              } catch (FailedLoadingSymbol e) {
+                Log.error("0xAA442 Could not resolve type for checking the stimulus.", assign.get_SourcePositionStart());
               }
             }
           }

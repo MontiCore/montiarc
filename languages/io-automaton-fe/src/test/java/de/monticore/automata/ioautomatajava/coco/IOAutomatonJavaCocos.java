@@ -28,7 +28,6 @@ import de.monticore.automaton.ioautomaton.cocos.uniqueness.VariableAndIOsHaveSam
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.VariableDefinedMultipleTimes;
 import de.monticore.automaton.ioautomatonjava._cocos.IOAutomatonJavaCoCoChecker;
 import de.monticore.automaton.ioautomatonjava.cocos.conventions.OutputInExpression;
-import de.monticore.automaton.ioautomatonjava.cocos.conventions.OutputInExpression;
 import de.monticore.automaton.ioautomatonjava.cocos.conventions.UseOfForbiddenExpression;
 import de.monticore.automaton.ioautomatonjava.cocos.correctness.GuardIsNotBoolean;
 import de.monticore.automaton.ioautomatonjava.cocos.correctness.InitialReactionTypeDoesNotFitOutputType;
@@ -71,7 +70,9 @@ public class IOAutomatonJavaCocos {
         .addCoCo(new StimulusTypeDoesNotFitInputType())
         .addCoCo(new InitialReactionTypeDoesNotFitOutputType())
         .addCoCo(new ReactionTypeDoesNotFitOutputType())
-        .addCoCo(new InitialValueDoesNotFit())
+        .addCoCo((IOAutomatonASTInputDeclarationCoCo)new InitialValueDoesNotFit())
+        .addCoCo((IOAutomatonASTVariableDeclarationCoCo)new InitialValueDoesNotFit())
+        .addCoCo((IOAutomatonASTOutputDeclarationCoCo)new InitialValueDoesNotFit())
         
         // UNIQUENESS OF NAMES
         .addCoCo(new StateDefinedMultipleTimesStereotypesDontMatch())

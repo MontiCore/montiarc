@@ -15,6 +15,7 @@ import de.monticore.java.typeresolvers.JavaDSLTypeResolver;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.se_rwth.commons.SourcePosition;
+import de.se_rwth.commons.logging.Log;
 
 /**
  * Context condition for checking, if every guard of a transition can be
@@ -35,11 +36,10 @@ public class GuardIsNotBoolean implements IOAutomatonASTAutomatonCoCo {
           SourcePosition pos = guard.get_SourcePositionStart();
           ASTExpression expr = ((ASTGuardExpression)guard.getGuardExpression()).getExpression();
           
-          
           // TODO
 //          STEntry ctype = checker.getType(expr);
 //          if (!(ctype instanceof JavaTypeEntry)) {
-//            Log.error("0xAA401 The guard of transition '" + transition + "' can not be evaluated to a JavaTypeEntry.", pos);
+//            Log.error("0xAA400 The guard of transition '" + transition + "' can not be evaluated to a JavaTypeEntry.", pos);
 //          }
 //          else {
 //            JavaTypeEntry jtype = (JavaTypeEntry) ctype;

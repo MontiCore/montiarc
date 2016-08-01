@@ -2,18 +2,19 @@ package de.monticore.automaton.ioautomatonjava.cocos.correctness;
 
 import java.util.Optional;
 
-import de.monticore.automaton.ioautomaton._ast.ASTAutomaton;
+import de.monticore.automaton.ioautomaton.TypeCompatibilityChecker;
 import de.monticore.automaton.ioautomaton._ast.ASTIOAssignment;
 import de.monticore.automaton.ioautomaton._ast.ASTTransition;
 import de.monticore.automaton.ioautomaton._ast.ASTValuationExt;
-import de.monticore.automaton.ioautomaton._ast.ASTValueList;
-import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTAutomatonCoCo;
-import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
+import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTTransitionCoCo;
+import de.monticore.automaton.ioautomaton._symboltable.TransitionSymbol;
 import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
 import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol.Direction;
+import de.monticore.automaton.ioautomatonjava._ast.ASTValuation;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.references.FailedLoadingSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
+import de.monticore.symboltable.types.references.JTypeReference;
 import de.se_rwth.commons.logging.Log;
 
 /**
@@ -26,44 +27,36 @@ import de.se_rwth.commons.logging.Log;
  * @since   $Version$
  *
  */
-public class ReactionTypeDoesNotFitOutputType implements IOAutomatonASTAutomatonCoCo {
+public class ReactionTypeDoesNotFitOutputType implements IOAutomatonASTTransitionCoCo {
 
   @Override
-  public void check(ASTAutomaton node) {
-    // For each Reaction, compare the type of the expression with the type of
-    // the field assigned
-    if (node.getAutomatonContent().getTransitions() != null) {
-      for (ASTTransition t : node.getAutomatonContent().getTransitions()) {
-        if (t.getReaction().isPresent()) {
-          for (ASTIOAssignment assign : t.getReaction().get().getIOAssignments()) {
-            Optional<String> currentNameToResolve = assign.getName();
-            if (currentNameToResolve.isPresent()) {
-              // Get IOFieldEntry
-              Scope automatonScope = ((AutomatonSymbol) node.getSymbol().get()).getSpannedScope();
-              Optional<VariableSymbol> symbol = automatonScope.resolve(currentNameToResolve.get(), VariableSymbol.KIND);
-              
-              if (symbol.isPresent()) {
-                if (symbol.get().getDirection() == Direction.Input) {
-                  Log.error("0xAA404 Did not find matching Variable or Output with name " + currentNameToResolve.get(), assign.get_SourcePositionStart());
-                }
-                else {
-                  // We now have the field with the type of the variable/output
-                  // Get the type
-                  try {
-                    JTypeSymbol type =  symbol.get().getTypeReference().getReferencedSymbol();
-                    if (assign.getValueList().isPresent()) {
-                      ASTValueList vl = assign.getValueList().get();
-                      for (ASTValuationExt n : vl.getValuations()) {
-                        // TODO
-//                      if (!ExpressionHelper.compareExpressionTypeWithType((ASTExpression) n, type, node, checker, this.getResolver().getModelloader(), this.deserializers)) {
-//                        addReport("Type of Variable/Output " + currentNameToResolve + " in the reaction does not match the type of its assigned expression.", n.get_SourcePositionStart());
-//                      }
-                      }
+  public void check(ASTTransition node) {
+    if (node.reactionIsPresent()) {
+      for (ASTIOAssignment assign : node.getReaction().get().getIOAssignments()) {
+        if (assign.nameIsPresent()) {
+          String currentNameToResolve = assign.getName().get();
+          
+          Scope transitionScope = ((TransitionSymbol) node.getSymbol().get()).getSpannedScope();
+          Optional<VariableSymbol> symbol = transitionScope.resolve(currentNameToResolve, VariableSymbol.KIND);
+          
+          if (symbol.isPresent()) {
+            if (symbol.get().getDirection() == Direction.Input) {
+              Log.error("0xAA430 Did not find matching Variable or Output with name " + currentNameToResolve, assign.get_SourcePositionStart());
+            }
+            else {
+              // We now have the field with the type of the variable/output
+              try {
+                if (assign.valueListIsPresent()) {
+                  JTypeReference<JTypeSymbol> varType = symbol.get().getTypeReference();
+                  for (ASTValuationExt val : assign.getValueList().get().getAllValuations()) {
+                    if (!TypeCompatibilityChecker.doTypesMatch(((ASTValuation) val).getExpression(), varType)) {
+                      Log.error("0xAA431 Type of Variable/Output " + currentNameToResolve + " in the reaction does not match the type of its assigned expression.", val.get_SourcePositionStart());
                     }
-                  } catch (FailedLoadingSymbol e) {
-                    Log.error("0xAA404 Could not resolve type for checking the reaction.", assign.get_SourcePositionStart());
-                  }                  
+                  }
                 }
+              }
+              catch (FailedLoadingSymbol e) {
+                Log.error("0xAA432 Could not resolve type for checking the reaction.", assign.get_SourcePositionStart());
               }
             }
           }

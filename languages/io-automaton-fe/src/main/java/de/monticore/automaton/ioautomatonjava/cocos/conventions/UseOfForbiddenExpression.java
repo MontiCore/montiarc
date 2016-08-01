@@ -1,6 +1,5 @@
 package de.monticore.automaton.ioautomatonjava.cocos.conventions;
 
-import de.monticore.automaton.ioautomaton.ExpressionHelper;
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.javadsl._cocos.JavaDSLASTExpressionCoCo;
 import de.se_rwth.commons.logging.Log;
