@@ -5,7 +5,7 @@
  */
 package de.monticore.lang.expression.symboltable;
 
-import de.monticore.lang.montiarc.common._ast.ASTValue;
+import de.monticore.lang.montiarc.values._ast.ASTValue;
 import de.monticore.symboltable.types.references.TypeReference;
 
 /**
