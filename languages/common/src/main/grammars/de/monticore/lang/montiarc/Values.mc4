@@ -1,7 +1,10 @@
 package de.monticore.lang.montiarc;
 
 /**
- * Grammar for value elements used by de.monticore.lang.montiarc.Common.
+ * Temporary grammar for value elements that should be imported from somewhere else in future.
+ *
+ * TODO This grammar should not be a part of the montiarc project. Move it to some expression 
+ * 	    language (e.g. JavaDSL).
  */
 component grammar Values extends de.monticore.common.Common {
 
