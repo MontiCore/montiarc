@@ -6,6 +6,7 @@
 package de.monticore.lang.montiarc.montiarc._symboltable;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
@@ -80,6 +81,12 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       final ResolverConfiguration resolverConfig,
       final MutableScope enclosingScope) {
     super(resolverConfig, enclosingScope);
+  }
+  
+  public MontiArcSymbolTableCreator(
+      final ResolverConfiguration resolverConfig,
+      final Deque<MutableScope> scopeStack) {
+    super(resolverConfig, scopeStack);
   }
   
   @Override
