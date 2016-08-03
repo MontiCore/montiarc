@@ -16,6 +16,8 @@ import de.monticore.common.common._ast.ASTStereoValue;
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.java.symboltable.JavaSymbolFactory;
+import de.monticore.java.symboltable.JavaSymbolTableCreator;
+import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.lang.expression.symboltable.ValueSymbol;
 import de.monticore.lang.expression.symboltable.ValueSymbol.Kind;
@@ -35,6 +37,7 @@ import de.monticore.symboltable.ArtifactScope;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.ResolverConfiguration;
+import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import de.monticore.symboltable.types.JAttributeSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -54,6 +57,8 @@ import de.monticore.types.types._ast.ASTReferenceType;
 import de.monticore.types.types._ast.ASTSimpleReferenceType;
 import de.monticore.types.types._ast.ASTType;
 import de.monticore.types.types._ast.ASTTypeArgument;
+import de.monticore.types.types._ast.ASTTypeParameters;
+import de.monticore.types.types._ast.ASTTypeVariableDeclaration;
 import de.monticore.types.types._ast.ASTWildcardType;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.StringTransformations;
@@ -75,8 +80,11 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   
   private AutoConnection autoConnectionTrafo = new AutoConnection();
   
-  private JavaSymbolFactory jSymbolFactory = new JavaSymbolFactory();
-  
+  private final static JavaSymbolFactory jSymbolFactory = new JavaSymbolFactory();
+
+  private final static JTypeReferenceFactory<JavaTypeSymbolReference> jTypeRefFactory = (name,
+      scope, dim) -> new JavaTypeSymbolReference(name, scope, dim);
+
   public MontiArcSymbolTableCreator(
       final ResolverConfiguration resolverConfig,
       final MutableScope enclosingScope) {
@@ -254,7 +262,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     component.setPackageName(componentPackageName);
     
     // generic type parameters
-    JavaHelper.addTypeParametersToType(component, node.getHead().getGenericTypeParameters(),
+    addTypeParametersToComponent(component, node.getHead().getGenericTypeParameters(),
         currentScope().get());
     
     // parameters
@@ -436,5 +444,43 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       }
     }
     
+  }
+  
+  /**
+   * Adds the TypeParameters to the ComponentSymbol if it declares TypeVariables. Since the
+   * restrictions on TypeParameters may base on the JavaDSL its the actual recursive definition of
+   * bounds is respected and its implementation within the JavaDSL is reused. Example:
+   * <p>
+   * component Bla<T, S extends SomeClass<T> & SomeInterface>
+   * </p>
+   * T and S are added to Bla.
+   *
+   * @param componentSymbol
+   * @param optionalTypeParameters
+   * @return currentScope
+   * @see JTypeSymbolsHelper
+   */
+  protected static List<JTypeSymbol> addTypeParametersToComponent(
+      ComponentSymbol componentSymbol, Optional<ASTTypeParameters> optionalTypeParameters,
+      Scope currentScope) {
+    if (optionalTypeParameters.isPresent()) {
+      // component has type parameters -> translate AST to Java Symbols and add these to the
+      // componentSymbol.
+      ASTTypeParameters astTypeParameters = optionalTypeParameters.get();
+      for (ASTTypeVariableDeclaration astTypeParameter : astTypeParameters
+          .getTypeVariableDeclarations()) {
+        // TypeParameters/TypeVariables are seen as type declarations.
+        JavaTypeSymbol javaTypeVariableSymbol = jSymbolFactory
+            .createTypeVariable(astTypeParameter.getName());
+        
+        List<ASTType> types = new ArrayList<ASTType>(astTypeParameter.getUpperBounds());
+        // reuse JavaDSL
+        JTypeSymbolsHelper.addInterfacesToType(javaTypeVariableSymbol, types, currentScope,
+            jTypeRefFactory);
+        
+        componentSymbol.addFormalTypeParameter(javaTypeVariableSymbol);
+      }
+    }
+    return componentSymbol.getFormalTypeParameters();
   }
 }
