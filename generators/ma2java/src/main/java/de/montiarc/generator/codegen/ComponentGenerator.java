@@ -22,7 +22,7 @@ import com.google.common.collect.Sets;
 
 import de.montiarc.generator.MontiArcGeneratorConstants;
 import de.monticore.generating.GeneratorSetup;
-import de.monticore.generating.MyGeneratorEngine;
+import de.monticore.generating.ExtendedGeneratorEngine;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.io.paths.IterablePath;
 import de.monticore.lang.montiarc.helper.SymbolPrinter;
@@ -189,10 +189,9 @@ public class ComponentGenerator {
         compSym.getBehaviorKind());
     setup.setGlex(glex);
     GeneratorConfig.init(setup);
-    MyGeneratorEngine generator = GeneratorConfig.getGeneratorEngine();
-    generateComponentInterface(generator, compAst, compSym, helper);
-    generateComponent(generator, compAst, compSym, helper);
-    generateComponentFactory(generator, compAst, compSym, helper, hwcPath);
+    generateComponentInterface(compAst, compSym, helper);
+    generateComponent(compAst, compSym, helper);
+    generateComponentFactory(compAst, compSym, helper, hwcPath);
   }
   
   /**
@@ -204,7 +203,7 @@ public class ComponentGenerator {
    * @param compSym
    * @param helper
    */
-  private static void generateComponentInterface(MyGeneratorEngine generator, ASTComponent compAst,
+  private static void generateComponentInterface(ASTComponent compAst,
       ComponentSymbol compSym, GeneratorHelper helper) {
     final String comments = GeneratorHelper.getCommentAsString(compAst.get_PreComments());
     
@@ -225,7 +224,7 @@ public class ComponentGenerator {
     Log.trace(LOGGER_NAME, String.format("Generated java interface %s for component-model %s.",
         interfaceName, compSym.getFullName()));
     for (ComponentSymbol inner : compSym.getInnerComponents()) {
-      generateComponentInterface(generator, (ASTComponent) inner.getAstNode().get(), inner, helper);
+      generateComponentInterface((ASTComponent) inner.getAstNode().get(), inner, helper);
     }
   }
   
@@ -237,7 +236,7 @@ public class ComponentGenerator {
     return compSym.getPackageName() + "." + MontiArcGeneratorConstants.INTERFACES_PACKAGE;
   }
   
-  private static void generateComponent(MyGeneratorEngine generator, ASTComponent compAst,
+  private static void generateComponent(ASTComponent compAst,
       ComponentSymbol compSym, GeneratorHelper helper) {
     String comments = GeneratorHelper.getCommentAsString(compAst.get_PreComments());
     final String _package = compSym.getPackageName();
@@ -267,11 +266,11 @@ public class ComponentGenerator {
         String.format("Generated java class %s for component-model %s.", compName,
             compSym.getFullName()));
     for (ComponentSymbol inner : compSym.getInnerComponents()) {
-      generateComponent(generator, (ASTComponent) inner.getAstNode().get(), inner, helper);
+      generateComponent((ASTComponent) inner.getAstNode().get(), inner, helper);
     }
   }
   
-  private static void generateComponentFactory(MyGeneratorEngine generator, ASTComponent compAst,
+  private static void generateComponentFactory(ASTComponent compAst,
       ComponentSymbol compSym, GeneratorHelper helper, Optional<String> hwcPath) {
     final String comments = GeneratorHelper.getCommentAsString(compAst.get_PreComments());
     final String _package = compSym.getPackageName() + "."
@@ -293,7 +292,7 @@ public class ComponentGenerator {
         compSym, configParameters, helper, existHWC);
     
     for (ComponentSymbol inner : compSym.getInnerComponents()) {
-      generateComponentFactory(generator, (ASTComponent) inner.getAstNode().get(), inner, helper,
+      generateComponentFactory((ASTComponent) inner.getAstNode().get(), inner, helper,
           hwcPath);
     }
   }
