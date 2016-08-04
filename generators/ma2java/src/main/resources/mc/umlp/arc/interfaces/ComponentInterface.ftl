@@ -15,11 +15,11 @@ package ${_package};
 public interface ${name}${formalTypeArgs} extends ${superInterface} ${portInterfaces} {
 
 <#list ports as port>
-  ${tc.includeArgs("templates.mc.umlp.arc.interfaces.PortInterfaces", [port, helper.printType(port.getTypeReference()), port.getName()])}
+  ${_templates.mc.umlp.arc.interfaces.PortInterfaces.generate(port, helper.printType(port.getTypeReference()), port.getName())}
 </#list>
 
 <#if needsTimingPort>
-${tc.include("templates.mc.umlp.arc.interfaces.PortTimeInInterface")}
+${_templates.mc.umlp.arc.interfaces.PortTimeInInterface.generate()}
 </#if>
 
 }

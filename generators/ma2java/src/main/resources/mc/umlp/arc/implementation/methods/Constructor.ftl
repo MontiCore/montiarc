@@ -3,7 +3,7 @@ ${tc.params("de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol co
     public ${prefix}${compSym.getName()}(${helper.printConfigParameters(compSym.getConfigParameters())}) {
         super(${helper.printSuperComponentConfigParametersNamesForSuperCall(compSym)});
         <#list compSym.getConfigParameters() as configParam>
-          ${tc.includeArgs("templates.mc.umlp.arc.implementation.methods.ConstructorParameters", [configParam.getName()])}
+          ${_templates.mc.umlp.arc.implementation.methods.ConstructorParameters.generate(configParam.getName())}
         </#list>
         <#-- ${op.includeTemplates(constructorHook, ast)} -->
     }
