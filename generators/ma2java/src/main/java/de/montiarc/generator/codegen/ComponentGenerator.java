@@ -6,6 +6,7 @@
 package de.montiarc.generator.codegen;
 
 import java.io.File;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import setup.GeneratorConfig;
+import _templates._setup.GeneratorConfig;
 import _templates.mc.umlp.arc.factory.ComponentFactory;
 import _templates.mc.umlp.arc.implementation.Component;
 import _templates.mc.umlp.arc.interfaces.ComponentInterface;
