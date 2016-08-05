@@ -130,20 +130,6 @@ public class AggregationTest extends AbstractSymTabTest {
     assertTrue(typeSymbol instanceof CDTypeSymbol);
   }
   
-  /**
-   * Adds a formal type parameter to a CDTypeSymbol. As long as this test succeeds, it is justified
-   * to delegate the methods related to type parameters in Cd2MaTypeAdaper.
-   */
-  @Test
-  public void testCDTypeParameters() {
-    CDTypeSymbol listSymbol = new CDTypeSymbol("List");
-    CDTypeSymbol integerSymbol = new CDTypeSymbol("Integer");
-    integerSymbol.setFormalTypeParameter(true);
-    
-    listSymbol.addFormalTypeParameter(integerSymbol);
-    assertTrue(listSymbol.isGeneric());
-  }
-  
   @Test
   public void testSuperClass() {
     Scope scope = createSymTab("src/test/resources");
