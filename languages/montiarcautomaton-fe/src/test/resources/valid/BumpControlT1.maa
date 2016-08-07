@@ -6,11 +6,13 @@ component BumpControlT1 {
 
   implementation BumpControl {
     automaton BumpControl{
+     
+    
       state Idle, Driving, Backing, Turning;
 
       initial Idle;
 
-      Idle -> Driving [distance < 2] / {};
+      Idle -> Driving [distance < 2];
     }
   }
 }
