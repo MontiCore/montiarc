@@ -7,10 +7,8 @@
 package de.monticore.lang.montiarc.montiarcautomaton._symboltable;
 
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
-import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.SymbolKind;
 
 public class MontiArcAutomatonModelNameCalculator extends de.monticore.CommonModelNameCalculator {
