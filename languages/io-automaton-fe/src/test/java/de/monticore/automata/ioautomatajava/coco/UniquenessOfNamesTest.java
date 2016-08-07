@@ -27,7 +27,7 @@ public class UniquenessOfNamesTest extends AbstractCocoTest {
   @Test
   public void testStateDefinedMultipleTimesStereotypesDontMatch() {
     ASTIOAutomatonNode node = getAstNode("src/test/resources/", "invalid.StateDefinedMultipleTimesStereotypesDontMatch");
-    checkInvalid(node, new ExpectedErrorInfo(4, "xAA330", "xAA340", "xAA341"));
+    checkInvalid(node, new ExpectedErrorInfo(4, "xAA330", "xAA341"));
   }
   
   @Test

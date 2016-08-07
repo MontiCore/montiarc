@@ -26,7 +26,7 @@ public class UseOfUndeclaredField implements JavaDSLASTPrimaryExpressionCoCo, IO
       Scope scope = node.getEnclosingScope().get();
       boolean found = scope.resolve(node.getName().get(), VariableSymbol.KIND).isPresent();
       if (!found) {
-        Log.error("0xAA340 " + node.getName().get() + " is used as a field, but is not declared as such.", node.get_SourcePositionStart());
+        Log.error("0xAA230 " + node.getName().get() + " is used as a field, but is not declared as such.", node.get_SourcePositionStart());
       }
     }
   }
@@ -37,7 +37,7 @@ public class UseOfUndeclaredField implements JavaDSLASTPrimaryExpressionCoCo, IO
       Scope scope = node.getEnclosingScope().get();
       boolean found = scope.resolve(node.getName().get(), VariableSymbol.KIND).isPresent();
       if (!found) {
-        Log.error("0xAA341 " + node.getName().get() + " is used as a field, but is not declared as such.", node.get_SourcePositionStart());
+        Log.error("0xAA231 " + node.getName().get() + " is used as a field, but is not declared as such.", node.get_SourcePositionStart());
       }
     }
   }

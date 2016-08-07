@@ -47,10 +47,10 @@ public class ReactionTypeDoesNotFitOutputType implements IOAutomatonASTTransitio
               // We now have the field with the type of the variable/output
               try {
                 if (assign.valueListIsPresent()) {
-                  JTypeReference<JTypeSymbol> varType = symbol.get().getTypeReference();
+                  JTypeReference<? extends JTypeSymbol> varType = symbol.get().getTypeReference();
                   for (ASTValuationExt val : assign.getValueList().get().getAllValuations()) {
                     if (!TypeCompatibilityChecker.doTypesMatch(((ASTValuation) val).getExpression(), varType)) {
-                      Log.error("0xAA431 Type of Variable/Output " + currentNameToResolve + " in the reaction does not match the type of its assigned expression.", val.get_SourcePositionStart());
+                      Log.error("0xAA431 Type of Variable/Output \"" + currentNameToResolve + "\" in the reaction does not match the type of its assigned expression.", val.get_SourcePositionStart());
                     }
                   }
                 }

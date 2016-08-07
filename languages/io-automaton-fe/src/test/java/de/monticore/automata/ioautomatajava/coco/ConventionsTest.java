@@ -1,7 +1,5 @@
 package de.monticore.automata.ioautomatajava.coco;
 
-import java.util.Arrays;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -65,6 +63,7 @@ public class ConventionsTest extends AbstractCocoTest {
    */
   @Test
   public void testForbiddenExprInstanceOf() {
+    // failed because exression type resolver tried to resolve storage as JavaTypeSymbol but its VariableSymbol
     ASTIOAutomatonNode node = getAstNode("src/test/resources/", "invalid.InstanceOfAndObjectInstantiation");
   // 1 Error because the models contains an ASTInstanceOfExpression
     checkInvalid(node, new ExpectedErrorInfo(1, "xAA1B0"));
@@ -93,7 +92,7 @@ public class ConventionsTest extends AbstractCocoTest {
   @Test
   public void testValueListContainsWrongType() {
     ASTIOAutomatonNode node = getAstNode("src/test/resources/", "invalid.OutputValueListContainsWrongType");
-    checkInvalid(node, new ExpectedErrorInfo(2, "xAA180", "xAA404")); // TODO xAA404
+    checkInvalid(node, new ExpectedErrorInfo(2, "xAA431", "xAA110"));
 
   }
 }

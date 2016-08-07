@@ -59,7 +59,7 @@ public class InitialValueDoesNotFit implements IOAutomatonASTInputDeclarationCoC
   
   private boolean doTypesMatch(ASTVariable var, ASTValuationExt valuation) {
     VariableSymbol varSymbol = (VariableSymbol) var.getSymbol().get();
-    JTypeReference<JTypeSymbol> varType = varSymbol.getTypeReference();
+    JTypeReference<? extends JTypeSymbol> varType = varSymbol.getTypeReference();
     
     return TypeCompatibilityChecker.doTypesMatch(valuation.getExpression(), varType);
   }

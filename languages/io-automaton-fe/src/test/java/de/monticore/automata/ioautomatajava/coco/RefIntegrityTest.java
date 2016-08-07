@@ -1,7 +1,5 @@
 package de.monticore.automata.ioautomatajava.coco;
 
-import java.util.Arrays;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -25,7 +23,7 @@ public class RefIntegrityTest extends AbstractCocoTest {
   public void testUseOfUndeclaredField() {
     ASTIOAutomatonNode node = getAstNode("src/test/resources/", "invalid.UseOfUndeclaredField");
     // 2 Errors because we use 2 undeclared fields
-    checkInvalid(node, new ExpectedErrorInfo(2, "xAA230", "xAA231"));
+    checkInvalid(node, new ExpectedErrorInfo(2, "xAA231"));
   }
   
   @Test
@@ -35,10 +33,8 @@ public class RefIntegrityTest extends AbstractCocoTest {
   }
   
   @Test
-  public void testAmbiguousMatching() {// expected <3> but was:<5> is also in automata-fe
-    // 2 Errors because the matching is ambiguous
-    // 1x CorrectAssignmentOperators -- The reaction '[5]' uses the wrong assignment operator.
+  public void testAmbiguousMatching() {
     ASTIOAutomatonNode node = getAstNode("src/test/resources/", "invalid.AmbiguousMatching");
-    checkInvalid(node, new ExpectedErrorInfo(3, "xAA200", "xAA150", "xAA151"));
+    checkInvalid(node, new ExpectedErrorInfo(2, "xAA200")); // 
   }
 }

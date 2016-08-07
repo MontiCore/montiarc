@@ -20,6 +20,7 @@ import de.monticore.automaton.ioautomaton._ast.ASTTransition;
 import de.monticore.automaton.ioautomaton._ast.ASTVariable;
 import de.monticore.automaton.ioautomaton._ast.ASTVariableDeclaration;
 import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
+import de.monticore.automaton.ioautomaton._symboltable.IOAutomatonSymbolTableCreator;
 import de.monticore.automaton.ioautomaton._symboltable.StateSymbol;
 import de.monticore.automaton.ioautomaton._symboltable.StateSymbolReference;
 import de.monticore.automaton.ioautomaton._symboltable.TransitionSymbol;
@@ -29,10 +30,13 @@ import de.monticore.automaton.ioautomaton._visitor.CommonIOAutomatonDelegatorVis
 import de.monticore.automaton.ioautomaton._visitor.IOAutomatonDelegatorVisitor;
 import de.monticore.automaton.ioautomaton._visitor.IOAutomatonVisitor;
 import de.monticore.automaton.ioautomatonjava._ast.ASTIOACompilationUnit;
+import de.monticore.automaton.ioautomatonjava._visitor.CommonIOAutomatonJavaDelegatorVisitor;
+import de.monticore.automaton.ioautomatonjava._visitor.IOAutomatonJavaDelegatorVisitor;
 import de.monticore.automaton.ioautomatonjava._visitor.IOAutomatonJavaVisitor;
 import de.monticore.common.common._ast.ASTStereoValue;
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.javadsl._ast.ASTPrimaryExpression;
+import de.monticore.java.symboltable.JavaSymbolTableCreator;
 import de.monticore.literals.literals._ast.ASTBooleanLiteral;
 import de.monticore.literals.literals._ast.ASTLiteral;
 import de.monticore.symboltable.ArtifactScope;
@@ -57,24 +61,27 @@ public class IOAutomatonJavaSymbolTableCreator extends de.monticore.symboltable.
   private List<ImportStatement> currentImports = new ArrayList<>();
   
   // TODO doc
-  private final IOAutomatonDelegatorVisitor visitor = new CommonIOAutomatonDelegatorVisitor();
+  private final IOAutomatonJavaDelegatorVisitor visitor = new CommonIOAutomatonJavaDelegatorVisitor();
   
   public IOAutomatonJavaSymbolTableCreator(final ResolverConfiguration resolverConfig, final MutableScope enclosingScope) {
     super(resolverConfig, enclosingScope);
-    initSuperSTC();
+    initSuperSTC(resolverConfig);
   }
   
   public IOAutomatonJavaSymbolTableCreator(final ResolverConfiguration resolverConfig, final Deque<MutableScope> scopeStack) {
     super(resolverConfig, scopeStack);
-    initSuperSTC();
+    initSuperSTC(resolverConfig);
   }
   
-  private void initSuperSTC() {
+  private void initSuperSTC(ResolverConfiguration resolverConfig) {
     // TODO doc
-    // visitor.set_de_monticore_automaton_ioautomaton__visitor_IOAutomatonVisitor(de.monticore.automaton.ioautomaton._visitor.IOAutomatonSymbolTableCreator(resolverConfig,
-    // scopeStack));
-    // visitor.set_de_monticore_common_common__visitor_CommonVisitor(de.monticore.common.common._visitor.CommonSymbolTableCreator(resolverConfig,
-    // scopeStack));
+//    visitor.set_de_monticore_automaton_ioautomaton__visitor_IOAutomatonVisitor(IOAutomatonSymbolTableCreator(resolverConfig, scopeStack));
+    visitor.set_de_monticore_java_javadsl__visitor_JavaDSLVisitor(new JavaSymbolTableCreatorFix(resolverConfig, scopeStack));
+    visitor.set_de_monticore_automaton_ioautomaton__visitor_IOAutomatonVisitor(new IOAutomatonSymbolTableCreator(resolverConfig, scopeStack));
+    visitor.set_de_monticore_automaton_ioautomatonjava__visitor_IOAutomatonJavaVisitor(this);
+    visitor.set_de_monticore_literals_literals__visitor_LiteralsVisitor(new LiteralsSymbolTableCreatorFix(resolverConfig, scopeStack));
+    visitor.set_de_monticore_types_types__visitor_TypesVisitor(new TypesSymbolTableCreatorFix(resolverConfig, scopeStack));
+//    visitor.set_de_monticore_common_common__visitor_CommonVisitor(new CommonSymbolTableCreator(resolverConfig, scopeStack));
   }
   
   /**
@@ -86,11 +93,16 @@ public class IOAutomatonJavaSymbolTableCreator extends de.monticore.symboltable.
    */
   public Scope createFromAST(de.monticore.automaton.ioautomatonjava._ast.ASTIOACompilationUnit rootNode) {
     Log.errorIfNull(rootNode, "0xA7004_904 Error by creating of the IOAutomatonSymbolTableCreatorTOP symbol table: top ast node is null");
-    rootNode.accept(this);
+    rootNode.accept(realThis);
     return getFirstCreatedScope();
   }
   
-  private IOAutomatonJavaVisitor realThis = this;
+  @Override
+  public MutableScope getFirstCreatedScope() {
+    return super.getFirstCreatedScope();
+  }
+  
+  private IOAutomatonJavaVisitor realThis = visitor;
   
   public IOAutomatonJavaVisitor getRealThis() {
     return realThis;
@@ -117,7 +129,8 @@ public class IOAutomatonJavaSymbolTableCreator extends de.monticore.symboltable.
       imports.add(importStatement);
     }
     // add default java imports
-    JavaHelper.addJavaDefaultImports(imports);
+//    JavaHelper.addJavaDefaultImports(imports); //not needed here because java default types are already imported in JavaDSL
+    imports.add(new ImportStatement("java.lang.String", true)); // string is missing 
     ArtifactScope artifactScope = new ArtifactScope(Optional.of(currentScope().get()), compilationUnitPackage, imports);
     this.currentImports = imports;
     putOnStack(artifactScope); // introduces new scope
@@ -128,129 +141,17 @@ public class IOAutomatonJavaSymbolTableCreator extends de.monticore.symboltable.
     removeCurrentScope();
   }
   
-  @Override
-  public void visit(ASTAutomaton node) {
-    AutomatonSymbol automaton = new AutomatonSymbol(node.getName());
-    automaton.setImports(currentImports);
-    if (node.getStereotype().isPresent()) {
-      for (ASTStereoValue value : node.getStereotype().get().getValues()) {
-        automaton.addStereoValue(value.getName());
-      }
-    }
-    addToScopeAndLinkWithNode(automaton, node); // introduces new scope
-  }
+
   
-  @Override
-  public void endVisit(ASTAutomaton node) {
-    removeCurrentScope();
-  }
+//  @Override
+//  public void visit(ASTPrimaryExpression node) {
+//    node.setEnclosingScope(currentScope().get());
+//  }
+//  
+//  @Override
+//  public void visit(ASTBooleanLiteral node) {
+//    node.setEnclosingScope(currentScope().get());
+//  }
   
-  @Override
-  public void visit(ASTVariable node) {
-  }
   
-  @Override
-  public void visit(ASTState node) {
-    StateSymbol state = new StateSymbol(node.getName());
-    if (node.getStereotype().isPresent()) {
-      for (ASTStereoValue value : node.getStereotype().get().getValues()) {
-        state.addStereoValue(value.getName());
-      }
-    }
-    addToScopeAndLinkWithNode(state, node);
-  }
-  
-  @Override
-  public void visit(ASTInitialStateDeclaration node) {
-    MutableScope scope = currentScope().get();
-    for (String name : node.getNames()) {
-      scope.<StateSymbol> resolve(name, StateSymbol.KIND).ifPresent(c -> c.setInitial(true));
-    }
-  }
-  
-  @Override
-  public void visit(ASTTransition node) {
-    // get target name, if there is no get source name (loop to itself)
-    String targetName = node.getTarget().orElse(node.getSource());
-    
-    StateSymbolReference source = new StateSymbolReference(node.getSource(), currentScope().get());
-    StateSymbolReference target = new StateSymbolReference(targetName, currentScope().get());
-    
-    TransitionSymbol transition = new TransitionSymbol(node.getSource() + " -> " + targetName);
-    transition.setSource(source);
-    transition.setTarget(target);
-    
-    transition.setGuard(node.getGuard().isPresent());
-    transition.setReaction(node.getReaction().isPresent());
-    transition.setStimulus(node.getStimulus().isPresent());
-    
-    addToScopeAndLinkWithNode(transition, node); // introduces new scope
-  }
-  
-  @Override
-  public void endVisit(ASTTransition node) {
-    removeCurrentScope();
-  }
-  
-  @Override
-  public void visit(ASTVariableDeclaration node) {
-    JTypeReference<JTypeSymbol> typeRef = getTyperef(node.getType());
-    for (ASTVariable astVar : node.getVariables()) {
-      VariableSymbol varSymbol = new VariableSymbol(astVar.getName());
-      varSymbol.setTypeReference(typeRef);
-      varSymbol.setDirection(Direction.Variable);
-      addToScopeAndLinkWithNode(varSymbol, astVar);
-    }
-  }
-  
-  @Override
-  public void visit(ASTInputDeclaration node) {
-    JTypeReference<JTypeSymbol> type = getTyperef(node.getType());
-    for (ASTVariable astVar : node.getVariables()) {
-      VariableSymbol varSymbol = new VariableSymbol(astVar.getName());
-      varSymbol.setTypeReference(type);
-      varSymbol.setDirection(Direction.Input);
-      addToScopeAndLinkWithNode(varSymbol, astVar);
-    }
-  }
-  
-  @Override
-  public void visit(ASTOutputDeclaration node) {
-    JTypeReference<JTypeSymbol> type = getTyperef(node.getType());
-    for (ASTVariable astVar : node.getVariables()) {
-      VariableSymbol varSymbol = new VariableSymbol(astVar.getName());
-      varSymbol.setTypeReference(type);
-      varSymbol.setDirection(Direction.Output);
-      addToScopeAndLinkWithNode(varSymbol, astVar);
-    }
-  }
-  
-  @Override
-  public void visit(ASTPrimaryExpression node) {
-    node.setEnclosingScope(currentScope().get());
-  }
-  
-  @Override
-  public void visit(ASTBooleanLiteral node) {
-    node.setEnclosingScope(currentScope().get());
-  }
-  
-  @Override
-  public void visit(ASTIOAssignment node) {
-    node.setEnclosingScope(currentScope().get());
-  }
-  
-  private JTypeReference<JTypeSymbol> getTyperef(ASTType astType) {
-    String typeName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astType);
-    JTypeReference<JTypeSymbol> typeRef = new CommonJTypeReference<JTypeSymbol>(typeName, JTypeSymbol.KIND, currentScope().get());
-    typeRef.setDimension(TypesHelper.getArrayDimensionIfArrayOrZero(astType));
-    
-    addTypeArgumentsToTypeSymbol(typeRef, astType);
-    
-    return typeRef;
-  }
-  
-  private void addTypeArgumentsToTypeSymbol(JTypeReference<? extends JTypeSymbol> typeRef, ASTType astType) {
-    JTypeSymbolsHelper.addTypeArgumentsToTypeSymbol(typeRef, astType, currentScope().get(), new JTypeSymbolsHelper.CommonJTypeReferenceFactory());
-  }
 }

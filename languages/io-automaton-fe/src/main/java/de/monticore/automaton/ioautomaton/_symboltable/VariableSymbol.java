@@ -11,7 +11,7 @@ public class VariableSymbol extends VariableSymbolTOP {
     Output
   }
 
-  private JTypeReference<JTypeSymbol> typeReference;
+  private JTypeReference<? extends JTypeSymbol> typeReference;
   private Direction direction;
   
   public VariableSymbol(String name) {
@@ -19,11 +19,11 @@ public class VariableSymbol extends VariableSymbolTOP {
     direction = Direction.Variable;
   }
   
-  public JTypeReference<JTypeSymbol> getTypeReference() {
+  public JTypeReference<? extends JTypeSymbol> getTypeReference() {
     return this.typeReference;
   }
 
-  public void setTypeReference(JTypeReference<JTypeSymbol> typeReference) {
+  public void setTypeReference(JTypeReference<? extends JTypeSymbol> typeReference) {
     this.typeReference = typeReference;
   }
   

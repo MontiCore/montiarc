@@ -128,7 +128,7 @@ public class AbstractCocoTest extends AbstractSymtabTest {
         
         // check that all expected error codes are present
         Set<String> actualErrorCodes = collectErrorCodes(findingsString);
-        assertTrue(actualErrorCodes.containsAll(expectedErrorCodes));
+        assertTrue("Missing errors: found " + actualErrorCodes + " instead of " + expectedErrorCodes, actualErrorCodes.containsAll(expectedErrorCodes));
         
         // check that no additional error codes are present
         Set<String> unexpectedErrorCodes = new HashSet<>(actualErrorCodes);

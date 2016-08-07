@@ -42,6 +42,8 @@ public class IOAutomatonJavaLanguage extends IOAutomatonJavaLanguageTOP {
     addResolver(new InitialStateDeclarationResolvingFilter());
     addResolver(new TransitionResolvingFilter());
     addResolver(new GuardResolvingFilter());
+    
+    addResolver(new Variable2FieldResolvingFilter());
   }
   
 }
