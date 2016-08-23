@@ -44,21 +44,19 @@ public class MontiArcAutomatonSymbolTableCreator extends CommonSymbolTableCreato
   MontiArcBehaviorSymbolTableCreator behaviorSTC;
   
   private void initSuperSTC(ResolverConfiguration resolverConfig) {
-    // TODO doc
-//       visitor.set_de_monticore_lang_montiarc_montiarcautomaton__visitor_MontiArcAutomatonVisitor(new MontiArcAutomatonSymbolTableCreator(resolverConfig, scopeStack));
-      maSTC = new MontiArcSymbolTableCreator(resolverConfig, scopeStack);
-      automatonSTC = new IOAutomatonJavaSymbolTableCreator(resolverConfig, scopeStack);
-      behaviorSTC = new MontiArcBehaviorSymbolTableCreator(resolverConfig, scopeStack);
-      
-      visitor.set_de_monticore_lang_montiarc_montiarcautomaton__visitor_MontiArcAutomatonVisitor(this);
-       visitor.set_de_monticore_lang_montiarc_montiarc__visitor_MontiArcVisitor(maSTC);   
-//    visitor.set_de_monticore_lang_montiarc_montiarcbehavior__visitor_MontiArcBehaviorVisitor(new de.monticore.lang.montiarc.montiarcbehavior._visitor.MontiArcSymbolTableCreator(resolverConfig, scopeStack));
-       visitor.set_de_monticore_automaton_ioautomatonjava__visitor_IOAutomatonJavaVisitor(automatonSTC);
-       
-       // TODO that is very ugly: why need behavior visitor to get access to the MAA visitor??
-       visitor.set_de_monticore_lang_montiarc_montiarcbehavior__visitor_MontiArcBehaviorVisitor(behaviorSTC);
+    maSTC = new MontiArcSymbolTableCreator(resolverConfig, scopeStack);
+    automatonSTC = new IOAutomatonJavaSymbolTableCreator(resolverConfig, scopeStack);
+    behaviorSTC = new MontiArcBehaviorSymbolTableCreator(resolverConfig, scopeStack);
+    
+    visitor.set_de_monticore_lang_montiarc_montiarcautomaton__visitor_MontiArcAutomatonVisitor(this);
+    visitor.set_de_monticore_lang_montiarc_montiarc__visitor_MontiArcVisitor(maSTC);
+    visitor.set_de_monticore_automaton_ioautomatonjava__visitor_IOAutomatonJavaVisitor(automatonSTC);
+    
+    // TODO that is very ugly: why need behavior visitor to get access to the
+    // MAA visitor??
+    visitor.set_de_monticore_lang_montiarc_montiarcbehavior__visitor_MontiArcBehaviorVisitor(behaviorSTC);
   }
-
+  
   /**
   * Creates the symbol table starting from the <code>rootNode</code> and
   * returns the first scope that was created.
@@ -89,17 +87,5 @@ public class MontiArcAutomatonSymbolTableCreator extends CommonSymbolTableCreato
       visitor.setRealThis(realThis);
     }
   }
-  
-
-//  @Override
-//  public void visit(ASTContentAutomaton node) {
-//    node.setName(behaviorSTC.getName());
-//    automatonSTC.getRealThis().visit((ASTAutomaton) node);
-//  }
-//  
-//  @Override
-//  public void endVisit(ASTContentAutomaton node) {
-//    automatonSTC.getRealThis().endVisit((ASTAutomaton) node);
-//  }
 
 }
