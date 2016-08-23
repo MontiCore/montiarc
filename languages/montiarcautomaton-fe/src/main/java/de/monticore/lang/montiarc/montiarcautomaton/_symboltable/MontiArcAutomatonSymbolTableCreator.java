@@ -15,7 +15,6 @@ import de.monticore.automaton.ioautomaton._ast.ASTAutomatonContext;
 import de.monticore.automaton.ioautomatonjava._symboltable.IOAutomatonJavaSymbolTableCreator;
 import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcSymbolTableCreator;
 import de.monticore.lang.montiarc.montiarcautomaton._ast.ASTBehaviorEmbedding;
-import de.monticore.lang.montiarc.montiarcautomaton._ast.ASTContentAutomaton;
 import de.monticore.lang.montiarc.montiarcautomaton._visitor.CommonMontiArcAutomatonDelegatorVisitor;
 import de.monticore.symboltable.CommonSymbolTableCreator;
 import de.monticore.symboltable.MutableScope;
@@ -47,7 +46,7 @@ public class MontiArcAutomatonSymbolTableCreator extends CommonSymbolTableCreato
   private void initSuperSTC(ResolverConfiguration resolverConfig) {
     // TODO doc
 //       visitor.set_de_monticore_lang_montiarc_montiarcautomaton__visitor_MontiArcAutomatonVisitor(new MontiArcAutomatonSymbolTableCreator(resolverConfig, scopeStack));
-      maSTC =new MontiArcSymbolTableCreator(resolverConfig, scopeStack);
+      maSTC = new MontiArcSymbolTableCreator(resolverConfig, scopeStack);
       automatonSTC = new IOAutomatonJavaSymbolTableCreator(resolverConfig, scopeStack);
       behaviorSTC = new MontiArcBehaviorSymbolTableCreator(resolverConfig, scopeStack);
       
@@ -92,15 +91,15 @@ public class MontiArcAutomatonSymbolTableCreator extends CommonSymbolTableCreato
   }
   
 
-  @Override
-  public void visit(ASTContentAutomaton node) {
-    node.setName(behaviorSTC.getName());
-    automatonSTC.visit((ASTAutomaton) node);
-  }
-  
-  @Override
-  public void endVisit(ASTContentAutomaton node) {
-    automatonSTC.endVisit((ASTAutomaton) node);
-  }
+//  @Override
+//  public void visit(ASTContentAutomaton node) {
+//    node.setName(behaviorSTC.getName());
+//    automatonSTC.getRealThis().visit((ASTAutomaton) node);
+//  }
+//  
+//  @Override
+//  public void endVisit(ASTContentAutomaton node) {
+//    automatonSTC.getRealThis().endVisit((ASTAutomaton) node);
+//  }
 
 }

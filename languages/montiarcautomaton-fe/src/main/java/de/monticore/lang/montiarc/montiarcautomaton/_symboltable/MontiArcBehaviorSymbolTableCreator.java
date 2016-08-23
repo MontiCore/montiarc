@@ -39,6 +39,7 @@ public class MontiArcBehaviorSymbolTableCreator extends de.monticore.symboltable
   @Override
   public void endVisit(ASTBehaviorImplementation node) {
     name = null;
+    setEnclosingScopeOfNodes(node);
   }
   
   public String getName() {

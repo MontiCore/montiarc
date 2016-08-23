@@ -24,7 +24,7 @@ import de.se_rwth.commons.logging.Log;
 
 public class AbstractCocoTest extends AbstractSymtabTest {
   
-  protected static ASTMontiArcBehaviorNode getAstNode(String modelPath, String model) {
+  protected static ASTMontiArcNode getAstNode(String modelPath, String model) {
     // ensure an empty log
     Log.getFindings().clear();
     
@@ -33,14 +33,14 @@ public class AbstractCocoTest extends AbstractSymtabTest {
         model, ComponentSymbol.KIND).orElse(null);
     assertNotNull("Could not resolve model " + model, comp);
     
-    return (ASTMontiArcBehaviorNode) comp.getAstNode().get();
+    return (ASTMontiArcNode) comp.getAstNode().get();
   }
   
   /**
    * Checks all cocos on the given model
    */
   protected static void runCheckerWithSymTab(String modelPath, String model) {
-    ASTMontiArcBehaviorNode node = getAstNode(modelPath, model);
+    ASTMontiArcNode node = getAstNode(modelPath, model);
     
     MontiArcAutomatonCocos.createChecker().checkAll(node);
   }
@@ -58,7 +58,7 @@ public class AbstractCocoTest extends AbstractSymtabTest {
    * Checks the given cocos on the given model and expects the given errors. Use this for checking
    * invalid models and verifying that the right number and type of errors are present.
    */
-  protected static void checkInvalid(MontiArcAutomatonCoCoChecker cocos, ASTMontiArcBehaviorNode node,
+  protected static void checkInvalid(MontiArcAutomatonCocoCheckerFix cocos, ASTMontiArcNode node,
       ExpectedErrorInfo expectedErrors) {
     
     cocos.checkAll(node);
@@ -69,7 +69,7 @@ public class AbstractCocoTest extends AbstractSymtabTest {
    * Checks the given cocos on the given model and expects the given errors. Use this for checking
    * invalid models and verifying that the right number and type of errors are present.
    */
-  protected static void checkInvalid(ASTMontiArcBehaviorNode node,
+  protected static void checkInvalid(ASTMontiArcNode node,
       ExpectedErrorInfo expectedErrors) {
     checkInvalid(MontiArcAutomatonCocos.createChecker(), node, expectedErrors);
   }

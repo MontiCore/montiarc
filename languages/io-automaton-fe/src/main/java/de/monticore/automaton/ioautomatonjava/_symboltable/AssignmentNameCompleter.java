@@ -42,6 +42,7 @@ public class AssignmentNameCompleter implements IOAutomatonJavaVisitor {
   
   @Override
   public void visit(ASTInitialStateDeclaration node) {
+    // set missing assignment names in all blocks of all initial state declarations
     if (node.blockIsPresent()) {
       for (ASTIOAssignment assign : node.getBlock().get().getIOAssignments()) {
         if (!assign.nameIsPresent()) {
@@ -61,6 +62,7 @@ public class AssignmentNameCompleter implements IOAutomatonJavaVisitor {
   
   @Override
   public void visit(ASTTransition node) {
+    // set missing assignment names of all stimuli of all transitions
     if (node.stimulusIsPresent()) {
       for (ASTIOAssignment assign : node.getStimulus().get().getIOAssignments()) {
         if (!assign.nameIsPresent()) {
@@ -76,6 +78,8 @@ public class AssignmentNameCompleter implements IOAutomatonJavaVisitor {
         }
       }
     }
+
+    // set missing assignment names of all reactions of all transitions
     if (node.reactionIsPresent()) {
       for (ASTIOAssignment assign : node.getReaction().get().getIOAssignments()) {
         if (!assign.nameIsPresent()) {
@@ -127,7 +131,14 @@ public class AssignmentNameCompleter implements IOAutomatonJavaVisitor {
       return Optional.empty();
     }
   }
-    
+  
+  /**
+   * Returns the valuation of the assignment. If there are multiple, retrun the
+   * first one.
+   * 
+   * @param assignment
+   * @return
+   */
   private ASTValuationExt getFirstAssigntElement(ASTIOAssignment assignment) {
     ASTValueList valueList = null;
     if (assignment.alternativeIsPresent()) {
@@ -138,6 +149,11 @@ public class AssignmentNameCompleter implements IOAutomatonJavaVisitor {
     return valueList.getAllValuations().get(0);
   }
   
+  /**
+   * 
+   * @param assignmentType
+   * @return
+   */
   private Set<String> findInputFor(JTypeReference<? extends JTypeSymbol> assignmentType) {
     Set<String> names = new HashSet<>();
     for (ASTInputDeclaration dec : context.getInputDeclarations()) {
@@ -152,6 +168,7 @@ public class AssignmentNameCompleter implements IOAutomatonJavaVisitor {
   }
   
   private Set<String> findVariableFor(JTypeReference<? extends JTypeSymbol> assignmentType) {
+    Object a=ScopeHelper.resolve(context.getEnclosingScope().get(), VariableSymbol.KIND);
     Set<String> names = new HashSet<>();
     for (ASTVariableDeclaration dec : context.getVariableDeclarations()) {
       for (ASTVariable var : dec.getVariables()) {

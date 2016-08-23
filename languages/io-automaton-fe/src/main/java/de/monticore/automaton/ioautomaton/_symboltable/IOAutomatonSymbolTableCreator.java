@@ -17,6 +17,7 @@ import de.monticore.automaton.ioautomaton._ast.ASTInputDeclaration;
 import de.monticore.automaton.ioautomaton._ast.ASTOutputDeclaration;
 import de.monticore.automaton.ioautomaton._ast.ASTState;
 import de.monticore.automaton.ioautomaton._ast.ASTTransition;
+import de.monticore.automaton.ioautomaton._ast.ASTValuationExt;
 import de.monticore.automaton.ioautomaton._ast.ASTVariable;
 import de.monticore.automaton.ioautomaton._ast.ASTVariableDeclaration;
 import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
@@ -134,6 +135,7 @@ public class IOAutomatonSymbolTableCreator extends de.monticore.symboltable.Comm
     node.accept(new AssignmentNameCompleter(node.getAutomatonContext()));
     
     removeCurrentScope();
+    setEnclosingScopeOfNodes(node);
   }
   
   @Override
@@ -216,15 +218,10 @@ public class IOAutomatonSymbolTableCreator extends de.monticore.symboltable.Comm
     }
   }
   
-//  @Override
-//  public void visit(ASTPrimaryExpression node) {
-//    node.setEnclosingScope(currentScope().get());
-//  }
-//  
-//  @Override
-//  public void visit(ASTBooleanLiteral node) {
-//    node.setEnclosingScope(currentScope().get());
-//  }
+  @Override
+  public void visit(ASTValuationExt node) {
+    node.setEnclosingScope(currentScope().get());
+  }
   
   @Override
   public void visit(ASTIOAssignment node) {

@@ -84,6 +84,13 @@
       <version>${monticore.java.version}</version>
       <classifier>${grammars.classifier}</classifier>
     </dependency>
+    
+    <dependency><!-- TODO remove -->
+      <groupId>de.monticore</groupId>
+      <artifactId>de.monticore.java</artifactId>
+      <version>${monticore.java.version}</version>
+      <classifier>sources</classifier>
+    </dependency>
 
     <!-- .. Test Libraries ............................................... -->
     <dependency>

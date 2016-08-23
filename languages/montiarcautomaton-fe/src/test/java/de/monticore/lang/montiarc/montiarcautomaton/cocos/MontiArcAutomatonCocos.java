@@ -5,6 +5,7 @@ import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTInitialStateDecla
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTInputDeclarationCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTOutputDeclarationCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTTransitionCoCo;
+import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTValuationExtCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTVariableDeclarationCoCo;
 import de.monticore.automaton.ioautomaton.cocos.conventions.AutomatonHasNoInitialState;
 import de.monticore.automaton.ioautomaton.cocos.conventions.AutomatonHasNoInput;
@@ -26,6 +27,7 @@ import de.monticore.automaton.ioautomaton.cocos.uniqueness.StateDefinedMultipleT
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.StateDefinedMultipleTimesStereotypesDontMatch;
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.VariableAndIOsHaveSameName;
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.VariableDefinedMultipleTimes;
+import de.monticore.automaton.ioautomatonjava._cocos.IOAutomatonJavaASTValuationCoCo;
 import de.monticore.automaton.ioautomatonjava.cocos.conventions.OutputInExpression;
 import de.monticore.automaton.ioautomatonjava.cocos.conventions.UseOfForbiddenExpression;
 import de.monticore.automaton.ioautomatonjava.cocos.correctness.GuardIsNotBoolean;
@@ -39,13 +41,13 @@ import de.monticore.lang.montiarc.cocos.MontiArcCoCos;
 import de.monticore.lang.montiarc.montiarcautomaton._cocos.MontiArcAutomatonCoCoChecker;
 
 public class MontiArcAutomatonCocos {
-  public static MontiArcAutomatonCoCoChecker createChecker() {
-    MontiArcAutomatonCoCoChecker checker = new MontiArcAutomatonCoCoChecker();
+  public static MontiArcAutomatonCocoCheckerFix createChecker() {
+    MontiArcAutomatonCocoCheckerFix checker = new MontiArcAutomatonCocoCheckerFix();
     checker.addChecker(MontiArcCoCos.createChecker());
     
     addIOAutomatonCocos(checker);    
     
-    return checker
+    return (MontiArcAutomatonCocoCheckerFix)checker
         .addCoCo(new AutomatonHasInput())
         .addCoCo(new AutomatonHasOutput())
         .addCoCo(new AutomatonHasVariable());
@@ -72,8 +74,8 @@ public class MontiArcAutomatonCocos {
     
     // REFERENTIAL INTEGRITY
     .addCoCo(new DeclaredInitialStateDoesNotExist())
-    .addCoCo((JavaDSLASTPrimaryExpressionCoCo)new UseOfUndeclaredField())
-    .addCoCo((IOAutomatonASTIOAssignmentCoCo)new UseOfUndeclaredField())
+//  .addCoCo((IOAutomatonJavaASTValuationCoCo)new UseOfUndeclaredField()) // TODO is problem of java dsl
+//  .addCoCo((IOAutomatonASTIOAssignmentCoCo)new UseOfUndeclaredField()) // TODO is problem of java dsl
     .addCoCo(new UseOfUndefinedState())
     .addCoCo(new AssignmentHasNoName())
     

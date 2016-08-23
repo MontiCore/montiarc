@@ -30,6 +30,7 @@ import de.monticore.automaton.ioautomaton._visitor.CommonIOAutomatonDelegatorVis
 import de.monticore.automaton.ioautomaton._visitor.IOAutomatonDelegatorVisitor;
 import de.monticore.automaton.ioautomaton._visitor.IOAutomatonVisitor;
 import de.monticore.automaton.ioautomatonjava._ast.ASTIOACompilationUnit;
+import de.monticore.automaton.ioautomatonjava._ast.ASTValuation;
 import de.monticore.automaton.ioautomatonjava._visitor.CommonIOAutomatonJavaDelegatorVisitor;
 import de.monticore.automaton.ioautomatonjava._visitor.IOAutomatonJavaDelegatorVisitor;
 import de.monticore.automaton.ioautomatonjava._visitor.IOAutomatonJavaVisitor;
@@ -76,11 +77,11 @@ public class IOAutomatonJavaSymbolTableCreator extends de.monticore.symboltable.
   private void initSuperSTC(ResolverConfiguration resolverConfig) {
     // TODO doc
 //    visitor.set_de_monticore_automaton_ioautomaton__visitor_IOAutomatonVisitor(IOAutomatonSymbolTableCreator(resolverConfig, scopeStack));
-    visitor.set_de_monticore_java_javadsl__visitor_JavaDSLVisitor(new JavaSymbolTableCreatorFix(resolverConfig, scopeStack));
+//    visitor.set_de_monticore_java_javadsl__visitor_JavaDSLVisitor(new JavaSymbolTableCreatorFix(resolverConfig, scopeStack));
     visitor.set_de_monticore_automaton_ioautomaton__visitor_IOAutomatonVisitor(new IOAutomatonSymbolTableCreator(resolverConfig, scopeStack));
     visitor.set_de_monticore_automaton_ioautomatonjava__visitor_IOAutomatonJavaVisitor(this);
-    visitor.set_de_monticore_literals_literals__visitor_LiteralsVisitor(new LiteralsSymbolTableCreatorFix(resolverConfig, scopeStack));
-    visitor.set_de_monticore_types_types__visitor_TypesVisitor(new TypesSymbolTableCreatorFix(resolverConfig, scopeStack));
+//    visitor.set_de_monticore_literals_literals__visitor_LiteralsVisitor(new LiteralsSymbolTableCreatorFix(resolverConfig, scopeStack));
+//    visitor.set_de_monticore_types_types__visitor_TypesVisitor(new TypesSymbolTableCreatorFix(resolverConfig, scopeStack));
 //    visitor.set_de_monticore_common_common__visitor_CommonVisitor(new CommonSymbolTableCreator(resolverConfig, scopeStack));
   }
   
@@ -139,8 +140,13 @@ public class IOAutomatonJavaSymbolTableCreator extends de.monticore.symboltable.
   @Override
   public void endVisit(ASTIOACompilationUnit node) {
     removeCurrentScope();
+    setEnclosingScopeOfNodes(node);
   }
   
+  @Override
+  public void visit(ASTValuation node) {
+    node.setEnclosingScope(currentScope().get());
+  }
 
   
 //  @Override

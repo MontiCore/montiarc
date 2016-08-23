@@ -5,6 +5,7 @@ import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTInitialStateDecla
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTInputDeclarationCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTOutputDeclarationCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTTransitionCoCo;
+import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTValuationExtCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTVariableDeclarationCoCo;
 import de.monticore.automaton.ioautomaton.cocos.conventions.AutomatonHasNoInitialState;
 import de.monticore.automaton.ioautomaton.cocos.conventions.AutomatonHasNoInput;
@@ -26,6 +27,7 @@ import de.monticore.automaton.ioautomaton.cocos.uniqueness.StateDefinedMultipleT
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.StateDefinedMultipleTimesStereotypesDontMatch;
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.VariableAndIOsHaveSameName;
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.VariableDefinedMultipleTimes;
+import de.monticore.automaton.ioautomatonjava._cocos.IOAutomatonJavaASTValuationCoCo;
 import de.monticore.automaton.ioautomatonjava._cocos.IOAutomatonJavaCoCoChecker;
 import de.monticore.automaton.ioautomatonjava.cocos.conventions.OutputInExpression;
 import de.monticore.automaton.ioautomatonjava.cocos.conventions.UseOfForbiddenExpression;
@@ -60,8 +62,8 @@ public class IOAutomatonJavaCocos {
         
         // REFERENTIAL INTEGRITY
         .addCoCo(new DeclaredInitialStateDoesNotExist())
-        .addCoCo((JavaDSLASTPrimaryExpressionCoCo)new UseOfUndeclaredField())
-        .addCoCo((IOAutomatonASTIOAssignmentCoCo)new UseOfUndeclaredField())
+//        .addCoCo((IOAutomatonJavaASTValuationCoCo)new UseOfUndeclaredField()) // TODO is problem of java dsl
+//        .addCoCo((IOAutomatonASTIOAssignmentCoCo)new UseOfUndeclaredField()) // TODO is problem of java dsl
         .addCoCo(new UseOfUndefinedState())
         .addCoCo(new AssignmentHasNoName())
         
