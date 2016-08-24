@@ -1,16 +1,10 @@
 package de.monticore.automaton.ioautomaton;
 
-import java.nio.file.ClosedDirectoryStreamException;
-import java.security.GeneralSecurityException;
 import java.util.Optional;
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.java.types.ASTExpressionHelper;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.java.types.JavaDSLHelper;
-import de.monticore.symboltable.Symbol;
-import de.monticore.symboltable.types.CommonJTypeScope;
-import de.monticore.symboltable.types.CommonJTypeSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.CommonJTypeReference;
 import de.monticore.symboltable.types.references.JTypeReference;
@@ -36,7 +30,7 @@ public class TypeCompatibilityChecker {
   public static boolean doTypesMatch(ASTExpression expr, JTypeReference<? extends JTypeSymbol> targetType) {
     Optional<? extends JavaTypeSymbolReference> exprType = getExpressionType(expr);
     if (!exprType.isPresent()) {
-      Log.info("can't resolve type of expression: " + expr, "TypeCompatibilityChecker");
+      Log.info("Can't resolve type of expression: " + expr, "TypeCompatibilityChecker");
       return false;
     }
     return doTypesMatch(exprType.get(), targetType);

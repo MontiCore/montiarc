@@ -2,7 +2,9 @@ package de.monticore.lang.montiarc.montiarcautomaton._symboltable;
 
 import java.util.Deque;
 
+import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
 import de.monticore.lang.montiarc.montiarcbehavior._ast.ASTBehaviorImplementation;
+import de.monticore.lang.montiarc.montiarcbehavior._ast.ASTMontiArcBehaviorNode;
 import de.monticore.lang.montiarc.montiarcbehavior._visitor.CommonMontiArcBehaviorDelegatorVisitor;
 import de.monticore.lang.montiarc.montiarcbehavior._visitor.MontiArcBehaviorVisitor;
 import de.monticore.symboltable.MutableScope;
@@ -29,20 +31,32 @@ public class MontiArcBehaviorSymbolTableCreator extends de.monticore.symboltable
     }
   }
   
-  private String name;
+  private String automatonName;
   
   @Override
   public void visit(ASTBehaviorImplementation node) {
-    name = node.getName();
+    automatonName = node.getName();
   }
   
   @Override
   public void endVisit(ASTBehaviorImplementation node) {
-    name = null;
+    automatonName = null;
     setEnclosingScopeOfNodes(node);
   }
   
-  public String getName() {
-    return name;
+  @Override
+  public void visit(ASTMontiArcBehaviorNode node) {
+    AutomatonSymbol automaton = new AutomatonSymbol(automatonName);
+    addToScopeAndLinkWithNode(automaton, node); // introduces new scope
+  }
+  
+  @Override
+  public void endVisit(ASTMontiArcBehaviorNode node) {
+    // symbol for automaton is complete, so we can reconstruct the missing
+    // assignment names
+//    node.accept(new AssignmentNameCompleter(node.getAutomatonContext())); // TODO
+    
+    removeCurrentScope();
+    setEnclosingScopeOfNodes(node);
   }
 }

@@ -60,6 +60,16 @@ public class SymTabTest extends AbstractSymtabTest {
     JavaFieldSymbol field2 = symTab.<JavaFieldSymbol> resolve("valid.bumperbot.datatypes.MotorCommand.STOP", JavaFieldSymbol.KIND).orElse(null);
     assertNotNull(field2);
   }
+
+  
+  @Test
+  public void testScopeHelper() {
+    Scope symTab = createSymTab("src/test/resources/");
+    ComponentSymbol symbol = symTab.<ComponentSymbol> resolve("valid.bumperbot.BumpControl", ComponentSymbol.KIND).orElse(null);
+    assertNotNull(symbol);
+    
+    Object a=symbol.getSpannedScope().resolve("distance", VariableSymbol.KIND);
+  }
   
   protected static ASTMontiArcNode getAstNode(String modelPath, String model) {
     // ensure an empty log

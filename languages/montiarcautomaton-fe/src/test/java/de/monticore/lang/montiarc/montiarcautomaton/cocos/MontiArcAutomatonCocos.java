@@ -48,9 +48,13 @@ public class MontiArcAutomatonCocos {
     addIOAutomatonCocos(checker);    
     
     return (MontiArcAutomatonCocoCheckerFix)checker
-        .addCoCo(new AutomatonHasInput())
-        .addCoCo(new AutomatonHasOutput())
-        .addCoCo(new AutomatonHasVariable());
+        .addCoCo(new de.monticore.lang.montiarc.montiarcautomaton.cocos.AutomatonUppercase())
+        
+//        .addCoCo(new AutomatonHasInput())// can be omitted because AutomatonContext is not allowed due to grammar
+//        .addCoCo(new AutomatonHasOutput())// can be omitted because AutomatonContext is not allowed due to grammar
+//        .addCoCo(new AutomatonHasVariable())// can be omitted because AutomatonContext is not allowed due to grammar
+        
+        ;
   }
   
   private static MontiArcAutomatonCoCoChecker addIOAutomatonCocos(MontiArcAutomatonCoCoChecker checker) {
@@ -64,13 +68,11 @@ public class MontiArcAutomatonCocos {
     .addCoCo((IOAutomatonASTInitialStateDeclarationCoCo)new ReactionWithAlternatives())
     .addCoCo((IOAutomatonASTTransitionCoCo)new ReactionWithAlternatives())
     .addCoCo(new UseOfForbiddenExpression())
-//    .addCoCo(new AutomatonHasNoOutput())
-//    .addCoCo(new AutomatonHasNoInput())
     .addCoCo(new AutomatonUppercase())
     .addCoCo(new StateUppercase())
-    .addCoCo((IOAutomatonASTInputDeclarationCoCo)new DeclarationNamesLowerCase())
-    .addCoCo((IOAutomatonASTOutputDeclarationCoCo)new DeclarationNamesLowerCase())
-    .addCoCo((IOAutomatonASTVariableDeclarationCoCo)new DeclarationNamesLowerCase())
+    .addCoCo((IOAutomatonASTInputDeclarationCoCo)new DeclarationNamesLowerCase()) // TODO symboltable implementation needed
+    .addCoCo((IOAutomatonASTOutputDeclarationCoCo)new DeclarationNamesLowerCase()) // TODO symboltable implementation needed
+    .addCoCo((IOAutomatonASTVariableDeclarationCoCo)new DeclarationNamesLowerCase()) // TODO symboltable implementation needed
     
     // REFERENTIAL INTEGRITY
     .addCoCo(new DeclaredInitialStateDoesNotExist())
@@ -84,17 +86,18 @@ public class MontiArcAutomatonCocos {
     .addCoCo(new StimulusTypeDoesNotFitInputType())
     .addCoCo(new InitialReactionTypeDoesNotFitOutputType())
     .addCoCo(new ReactionTypeDoesNotFitOutputType())
-    .addCoCo((IOAutomatonASTInputDeclarationCoCo)new InitialValueDoesNotFit())
-    .addCoCo((IOAutomatonASTVariableDeclarationCoCo)new InitialValueDoesNotFit())
-    .addCoCo((IOAutomatonASTOutputDeclarationCoCo)new InitialValueDoesNotFit())
+    .addCoCo((IOAutomatonASTInputDeclarationCoCo)new InitialValueDoesNotFit()) // TODO symboltable implementation needed
+    .addCoCo((IOAutomatonASTVariableDeclarationCoCo)new InitialValueDoesNotFit()) // TODO symboltable implementation needed
+    .addCoCo((IOAutomatonASTOutputDeclarationCoCo)new InitialValueDoesNotFit()) // TODO symboltable implementation needed
     
     // UNIQUENESS OF NAMES
     .addCoCo(new StateDefinedMultipleTimesStereotypesDontMatch())
-//    .addCoCo(new OutputsDefinedMultipleTimes())
-//    .addCoCo(new InputsDefinedMultipleTimes())
-//    .addCoCo(new VariableDefinedMultipleTimes())
-//    .addCoCo(new VariableAndIOsHaveSameName())
+    .addCoCo(new OutputsDefinedMultipleTimes())
+    .addCoCo(new InputsDefinedMultipleTimes())
+    .addCoCo(new VariableDefinedMultipleTimes())
+    .addCoCo(new VariableAndIOsHaveSameName())
     .addCoCo(new InitialDeclaredMultipleTimes())
-    .addCoCo(new StateDefinedMultipleTimes());
+    .addCoCo(new StateDefinedMultipleTimes())
+    ;
   }
 }

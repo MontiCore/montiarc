@@ -4,23 +4,20 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import de.monticore.automaton.ioautomaton.ScopeHelper;
 import de.monticore.automaton.ioautomaton.TypeCompatibilityChecker;
-import de.monticore.automaton.ioautomaton._ast.ASTAutomatonContext;
 import de.monticore.automaton.ioautomaton._ast.ASTConstantsIOAutomaton;
 import de.monticore.automaton.ioautomaton._ast.ASTIOAssignment;
 import de.monticore.automaton.ioautomaton._ast.ASTInitialStateDeclaration;
-import de.monticore.automaton.ioautomaton._ast.ASTInputDeclaration;
-import de.monticore.automaton.ioautomaton._ast.ASTOutputDeclaration;
 import de.monticore.automaton.ioautomaton._ast.ASTTransition;
 import de.monticore.automaton.ioautomaton._ast.ASTValuationExt;
 import de.monticore.automaton.ioautomaton._ast.ASTValueList;
-import de.monticore.automaton.ioautomaton._ast.ASTVariable;
-import de.monticore.automaton.ioautomaton._ast.ASTVariableDeclaration;
 import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
-import de.monticore.automaton.ioautomaton._visitor.IOAutomatonVisitor;
+import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol.Direction;
 import de.monticore.automaton.ioautomatonjava._visitor.IOAutomatonJavaVisitor;
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
+import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.se_rwth.commons.logging.Log;
@@ -28,16 +25,12 @@ import de.se_rwth.commons.logging.Log;
 /**
  * Computes the missing assignment names in reactions, stimuli and initial state
  * declarations.
- * 
- * TODO may not work in monti arc automaton because
- * input/output/variable declarations are missing (emulated by resolving
- * adapters)
  */
 public class AssignmentNameCompleter implements IOAutomatonJavaVisitor {
-  private final ASTAutomatonContext context;
+  private final Scope automatonScope;
 
-  public AssignmentNameCompleter(ASTAutomatonContext context) {
-    this.context = context;
+  public AssignmentNameCompleter(Scope automatonScope) {
+    this.automatonScope = automatonScope;
   }
   
   @Override
@@ -97,9 +90,6 @@ public class AssignmentNameCompleter implements IOAutomatonJavaVisitor {
     }
   }
 
-  
-  
-  
   private Optional<String> findFor(ASTIOAssignment assignment, boolean forSource) {
     ASTExpression expr = getFirstAssigntElement(assignment).getExpression();
     Optional<? extends JavaTypeSymbolReference> assignmentType = TypeCompatibilityChecker.getExpressionType(expr);
@@ -112,12 +102,12 @@ public class AssignmentNameCompleter implements IOAutomatonJavaVisitor {
     // find all type compatible sink/source names
     Set<String> names;
     if (forSource) {
-      names = findInputFor(assignmentType.get());
+      names = findVariableNameFor(assignmentType.get(), Direction.Input);
     }
     else {
-      names = findOutputFor(assignmentType.get());
+      names = findVariableNameFor(assignmentType.get(), Direction.Output);
     }
-    names.addAll(findVariableFor(assignmentType.get()));
+    names.addAll(findVariableNameFor(assignmentType.get(), Direction.Variable));
     
     if (names.isEmpty()) {
       info("No sink for type '" + assignmentType.get().getName() + "'.");
@@ -133,7 +123,7 @@ public class AssignmentNameCompleter implements IOAutomatonJavaVisitor {
   }
   
   /**
-   * Returns the valuation of the assignment. If there are multiple, retrun the
+   * Returns the valuation of the assignment. If there are multiple, return the
    * first one.
    * 
    * @param assignment
@@ -150,50 +140,24 @@ public class AssignmentNameCompleter implements IOAutomatonJavaVisitor {
   }
   
   /**
+   * Find all names of variables/inputs/outputs that match to the given type.
    * 
    * @param assignmentType
+   * @param varDirection
    * @return
    */
-  private Set<String> findInputFor(JTypeReference<? extends JTypeSymbol> assignmentType) {
+  private Set<String> findVariableNameFor(JTypeReference<? extends JTypeSymbol> assignmentType, Direction varDirection) {
     Set<String> names = new HashSet<>();
-    for (ASTInputDeclaration dec : context.getInputDeclarations()) {
-      for (ASTVariable var : dec.getVariables()) {
-        VariableSymbol varSymbol = (VariableSymbol)var.getSymbol().get();
+    for (VariableSymbol varSymbol : ScopeHelper.<VariableSymbol> resolveManyDown(automatonScope, VariableSymbol.KIND)) {
+      if (varSymbol.getDirection() == varDirection) {
         if (TypeCompatibilityChecker.doTypesMatch(assignmentType, varSymbol.getTypeReference())) {
-          names.add(var.getName());
+          names.add(varSymbol.getName());
         }
       }
     }
     return names;
   }
-  
-  private Set<String> findVariableFor(JTypeReference<? extends JTypeSymbol> assignmentType) {
-    Object a=ScopeHelper.resolve(context.getEnclosingScope().get(), VariableSymbol.KIND);
-    Set<String> names = new HashSet<>();
-    for (ASTVariableDeclaration dec : context.getVariableDeclarations()) {
-      for (ASTVariable var : dec.getVariables()) {
-        VariableSymbol varSymbol = (VariableSymbol) var.getSymbol().get();
-        if (TypeCompatibilityChecker.doTypesMatch(assignmentType, varSymbol.getTypeReference())) {
-          names.add(var.getName());
-        }
-      }
-    }
-    return names;
-  }
-  
-  private Set<String> findOutputFor(JTypeReference<? extends JTypeSymbol> assignmentType) {
-    Set<String> names = new HashSet<>();
-    for (ASTOutputDeclaration dec : context.getOutputDeclarations()) {
-      for (ASTVariable var : dec.getVariables()) {
-        VariableSymbol varSymbol = (VariableSymbol) var.getSymbol().get();
-        if (TypeCompatibilityChecker.doTypesMatch(assignmentType, varSymbol.getTypeReference())) {
-          names.add(var.getName());
-        }
-      }
-    }
-    return names;
-  }
-  
+
   private static void info(String msg) {
     Log.info(msg, "AssignmentNameCompleter -");
   }

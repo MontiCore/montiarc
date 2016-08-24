@@ -132,7 +132,8 @@ public class IOAutomatonSymbolTableCreator extends de.monticore.symboltable.Comm
   public void endVisit(ASTAutomaton node) {
     // symbol for automaton is complete, so we can reconstruct the missing
     // assignment names
-    node.accept(new AssignmentNameCompleter(node.getAutomatonContext()));
+//    node.accept(new AssignmentNameCompleter(node.getAutomatonContext()));
+    node.accept(new AssignmentNameCompleter(node.getEnclosingScope().get()));
     
     removeCurrentScope();
     setEnclosingScopeOfNodes(node);

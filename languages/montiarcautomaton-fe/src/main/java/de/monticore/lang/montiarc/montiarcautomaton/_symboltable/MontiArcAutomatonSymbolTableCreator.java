@@ -51,9 +51,6 @@ public class MontiArcAutomatonSymbolTableCreator extends CommonSymbolTableCreato
     visitor.set_de_monticore_lang_montiarc_montiarcautomaton__visitor_MontiArcAutomatonVisitor(this);
     visitor.set_de_monticore_lang_montiarc_montiarc__visitor_MontiArcVisitor(maSTC);
     visitor.set_de_monticore_automaton_ioautomatonjava__visitor_IOAutomatonJavaVisitor(automatonSTC);
-    
-    // TODO that is very ugly: why need behavior visitor to get access to the
-    // MAA visitor??
     visitor.set_de_monticore_lang_montiarc_montiarcbehavior__visitor_MontiArcBehaviorVisitor(behaviorSTC);
   }
   

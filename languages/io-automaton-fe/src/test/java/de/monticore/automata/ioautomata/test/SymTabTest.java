@@ -1,14 +1,18 @@
 package de.monticore.automata.ioautomata.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Optional;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.monticore.automaton.ioautomaton.ScopeHelper;
 import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
 import de.monticore.automaton.ioautomaton._symboltable.StateSymbol;
+import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
 import de.monticore.automaton.ioautomatonjava._symboltable.IOAutomatonJavaLanguage;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -35,5 +39,13 @@ public class SymTabTest extends AbstractSymtabTest {
     AutomatonSymbol symbol = symTab.<AutomatonSymbol>resolve("invalid.OutputInExpression", AutomatonSymbol.KIND).orElse(null);
     StateSymbol s = symbol.getSpannedScope().<StateSymbol>resolve("S1", StateSymbol.KIND).orElse(null);
     symbol = null;
+  }
+  
+  @Test
+  public void testScopeHelper() {
+    Scope symTab = createSymTab("src/test/resources/");
+    AutomatonSymbol symbol = symTab.<AutomatonSymbol> resolve("valid.bumperbot.BumpControl", AutomatonSymbol.KIND).orElse(null);
+    assertNotNull(symbol);
+    assertEquals(5, ScopeHelper.resolveManyDown(symTab, VariableSymbol.KIND).size());
   }
 }
