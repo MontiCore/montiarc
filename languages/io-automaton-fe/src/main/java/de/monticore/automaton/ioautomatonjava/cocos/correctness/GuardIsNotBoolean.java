@@ -1,12 +1,12 @@
 package de.monticore.automaton.ioautomatonjava.cocos.correctness;
 
-import de.monticore.automaton.ioautomaton._ast.ASTAutomaton;
-import de.monticore.automaton.ioautomaton._ast.ASTGuard;
-import de.monticore.automaton.ioautomaton._ast.ASTTransition;
-import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTAutomatonCoCo;
-import de.monticore.automaton.ioautomatonjava._ast.ASTGuardExpression;
-import de.monticore.java.javadsl._ast.ASTExpression;
-import de.se_rwth.commons.SourcePosition;
+import java.util.Optional;
+
+import de.monticore.automaton.ioautomaton.TypeCompatibilityChecker;
+import de.monticore.automaton.ioautomaton._ast.ASTGuardExpressionExt;
+import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTGuardExpressionExtCoCo;
+import de.monticore.java.symboltable.JavaTypeSymbolReference;
+import de.se_rwth.commons.logging.Log;
 
 /**
  * Context condition for checking, if every guard of a transition can be
@@ -16,30 +16,18 @@ import de.se_rwth.commons.SourcePosition;
  * @version $Revision$, $Date$
  * @since $Version$
  */
-public class GuardIsNotBoolean implements IOAutomatonASTAutomatonCoCo {
-  
+public class GuardIsNotBoolean implements IOAutomatonASTGuardExpressionExtCoCo {
+
   @Override
-  public void check(ASTAutomaton node) {
-    if (node.getAutomatonContent().getTransitions() != null) {
-      for (ASTTransition transition : node.getAutomatonContent().getTransitions()) {
-        if (transition.getGuard().isPresent()) {
-          ASTGuard guard = transition.getGuard().get();
-          SourcePosition pos = guard.get_SourcePositionStart();
-          ASTExpression expr = ((ASTGuardExpression)guard.getGuardExpression()).getExpression();
-          
-          // TODO
-//          STEntry ctype = checker.getType(expr);
-//          if (!(ctype instanceof JavaTypeEntry)) {
-//            Log.error("0xAA400 The guard of transition '" + transition + "' can not be evaluated to a JavaTypeEntry.", pos);
-//          }
-//          else {
-//            JavaTypeEntry jtype = (JavaTypeEntry) ctype;
-//            if (!jtype.getName().equalsIgnoreCase("boolean")) {
-//              Log.error("0xAA401 The guard of transition " + transition + " does not evaluate to a boolean, but instead to " + jtype.getName(), pos);
-//            }
-//          }
-        }
+  public void check(ASTGuardExpressionExt node) {
+    Optional<? extends JavaTypeSymbolReference> typeRef = TypeCompatibilityChecker.getExpressionType(node.getExpression());
+    if (typeRef.isPresent()) {
+      if (!typeRef.get().getName().equalsIgnoreCase("boolean")) {
+        Log.error("0xAA400 Guard does not evaluate to a boolean, but instead to " + typeRef.get().getName() + ".", node.get_SourcePositionStart());
       }
+    }
+    else {
+      Log.error("0xAA401 Could not resolve type of guard.", node.get_SourcePositionStart());
     }
   }
   

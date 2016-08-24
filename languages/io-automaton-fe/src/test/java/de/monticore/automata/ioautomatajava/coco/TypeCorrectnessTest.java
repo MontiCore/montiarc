@@ -13,7 +13,6 @@ public class TypeCorrectnessTest extends AbstractCocoTest {
     Log.enableFailQuick(false);
   }
   
-  @Ignore
   @Test
   public void testGuardNotBool() {
     ASTIOAutomatonNode node = getAstNode("src/test/resources/", "invalid.GuardIsNotBoolean");

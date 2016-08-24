@@ -9,7 +9,7 @@ import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTTransitionCoCo;
 import de.monticore.automaton.ioautomaton._symboltable.TransitionSymbol;
 import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
 import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol.Direction;
-import de.monticore.automaton.ioautomatonjava._ast.ASTValuation;
+import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.references.FailedLoadingSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -45,8 +45,12 @@ public class StimulusTypeDoesNotFitInputType implements IOAutomatonASTTransition
               try {
                 if (assign.valueListIsPresent()) {
                   JTypeReference<? extends JTypeSymbol> varType = symbol.get().getTypeReference();
-                  for (ASTValuationExt val : assign.getValueList().get().getAllValuations()) {                        
-                    if (!TypeCompatibilityChecker.doTypesMatch(((ASTValuation)val).getExpression(), varType)) {
+                  for (ASTValuationExt val : assign.getValueList().get().getAllValuations()) {     
+                    Optional<? extends JavaTypeSymbolReference> exprType = TypeCompatibilityChecker.getExpressionType(val.getExpression());
+                    if (!exprType.isPresent()) {
+                      Log.error("0xAA443 Could not resolve type of expression for checking the stimulus.", assign.get_SourcePositionStart());
+                    }
+                    else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType)) {
                       Log.error("0xAA441 Type of Variable/Input " + currentNameToResolve + " in the stimulus does not match the type of its assigned expression.", val.get_SourcePositionStart());
                     }
                   }

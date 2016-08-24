@@ -1,5 +1,7 @@
 package de.monticore.automaton.ioautomatonjava.cocos.correctness;
 
+import java.util.Optional;
+
 import de.monticore.automaton.ioautomaton.TypeCompatibilityChecker;
 import de.monticore.automaton.ioautomaton._ast.ASTInputDeclaration;
 import de.monticore.automaton.ioautomaton._ast.ASTOutputDeclaration;
@@ -10,6 +12,7 @@ import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTInputDeclarationC
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTOutputDeclarationCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTVariableDeclarationCoCo;
 import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
+import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.se_rwth.commons.logging.Log;
@@ -60,7 +63,12 @@ public class InitialValueDoesNotFit implements IOAutomatonASTInputDeclarationCoC
   private boolean doTypesMatch(ASTVariable var, ASTValuationExt valuation) {
     VariableSymbol varSymbol = (VariableSymbol) var.getSymbol().get();
     JTypeReference<? extends JTypeSymbol> varType = varSymbol.getTypeReference();
-    
-    return TypeCompatibilityChecker.doTypesMatch(valuation.getExpression(), varType);
+    Optional<? extends JavaTypeSymbolReference> exprType = TypeCompatibilityChecker.getExpressionType(valuation.getExpression());
+    if (!exprType.isPresent()) {
+      Log.error("0xAA423  Could not resolve type of expression for checking the initial value " + var.getName() + ".", var.get_SourcePositionStart());
+      return true;
+    } else {
+      return TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType);
+    }
   }
 }
