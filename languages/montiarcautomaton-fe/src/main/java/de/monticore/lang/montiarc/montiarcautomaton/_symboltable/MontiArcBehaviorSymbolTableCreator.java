@@ -19,6 +19,7 @@ public class MontiArcBehaviorSymbolTableCreator extends de.monticore.symboltable
   
   private MontiArcBehaviorVisitor realThis = this;
   
+  @Override
   public MontiArcBehaviorVisitor getRealThis() {
     return realThis;
   }
@@ -51,12 +52,7 @@ public class MontiArcBehaviorSymbolTableCreator extends de.monticore.symboltable
   }
   
   @Override
-  public void endVisit(ASTMontiArcBehaviorNode node) {
-    // symbol for automaton is complete, so we can reconstruct the missing
-    // assignment names
-//    node.accept(new AssignmentNameCompleter(node.getAutomatonContext())); // TODO
-    
+  public void endVisit(ASTMontiArcBehaviorNode node) {    
     removeCurrentScope();
-    setEnclosingScopeOfNodes(node);
   }
 }

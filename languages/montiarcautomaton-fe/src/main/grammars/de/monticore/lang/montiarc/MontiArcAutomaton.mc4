@@ -4,7 +4,5 @@ grammar MontiArcAutomaton extends de.monticore.lang.montiarc.MontiArcBehavior, d
   
   start MACompilationUnit;
   
-  BehaviorEmbedding = AutomatonContent; 
-  
-  //ContentAutomaton extends Automaton = AutomatonContent;
+  BehaviorEmbedding = AutomatonCore; 
 }

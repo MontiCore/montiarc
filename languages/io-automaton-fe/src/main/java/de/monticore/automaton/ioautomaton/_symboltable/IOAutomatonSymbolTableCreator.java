@@ -1,16 +1,11 @@
 package de.monticore.automaton.ioautomaton._symboltable;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
-import java.util.Optional;
 
-import de.monticore.ast.ASTNode;
-import de.monticore.automaton.ioautomaton._ast.ASTAlternative;
 import de.monticore.automaton.ioautomaton._ast.ASTAutomaton;
-import de.monticore.automaton.ioautomaton._ast.ASTAutomatonContent;
+import de.monticore.automaton.ioautomaton._ast.ASTAutomatonCore;
 import de.monticore.automaton.ioautomaton._ast.ASTIOAssignment;
 import de.monticore.automaton.ioautomaton._ast.ASTInitialStateDeclaration;
 import de.monticore.automaton.ioautomaton._ast.ASTInputDeclaration;
@@ -20,42 +15,23 @@ import de.monticore.automaton.ioautomaton._ast.ASTTransition;
 import de.monticore.automaton.ioautomaton._ast.ASTValuationExt;
 import de.monticore.automaton.ioautomaton._ast.ASTVariable;
 import de.monticore.automaton.ioautomaton._ast.ASTVariableDeclaration;
-import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
-import de.monticore.automaton.ioautomaton._symboltable.StateSymbol;
-import de.monticore.automaton.ioautomaton._symboltable.StateSymbolReference;
-import de.monticore.automaton.ioautomaton._symboltable.TransitionSymbol;
-import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
 import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol.Direction;
 import de.monticore.automaton.ioautomaton._visitor.CommonIOAutomatonDelegatorVisitor;
 import de.monticore.automaton.ioautomaton._visitor.IOAutomatonDelegatorVisitor;
 import de.monticore.automaton.ioautomaton._visitor.IOAutomatonVisitor;
-import de.monticore.automaton.ioautomatonjava._ast.ASTIOACompilationUnit;
 import de.monticore.automaton.ioautomatonjava._symboltable.AssignmentNameCompleter;
-import de.monticore.automaton.ioautomatonjava._visitor.CommonIOAutomatonJavaDelegatorVisitor;
-import de.monticore.automaton.ioautomatonjava._visitor.IOAutomatonJavaDelegatorVisitor;
-import de.monticore.automaton.ioautomatonjava._visitor.IOAutomatonJavaVisitor;
 import de.monticore.common.common._ast.ASTStereoValue;
-import de.monticore.java.javadsl._ast.ASTExpression;
-import de.monticore.java.javadsl._ast.ASTPrimaryExpression;
-import de.monticore.java.symboltable.JavaSymbolTableCreator;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.literals.literals._ast.ASTBooleanLiteral;
-import de.monticore.literals.literals._ast.ASTLiteral;
-import de.monticore.symboltable.ArtifactScope;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.ResolverConfiguration;
 import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.Symbols;
 import de.monticore.symboltable.types.JTypeSymbol;
-import de.monticore.symboltable.types.references.CommonJTypeReference;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.types.JTypeSymbolsHelper;
 import de.monticore.types.TypesHelper;
 import de.monticore.types.TypesPrinter;
-import de.monticore.types.types._ast.ASTImportStatement;
 import de.monticore.types.types._ast.ASTType;
-import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 
 public class IOAutomatonSymbolTableCreator extends de.monticore.symboltable.CommonSymbolTableCreator implements IOAutomatonVisitor {
@@ -104,6 +80,7 @@ public class IOAutomatonSymbolTableCreator extends de.monticore.symboltable.Comm
   
  private IOAutomatonVisitor realThis = this;
   
+  @Override
   public IOAutomatonVisitor getRealThis() {
     return realThis;
   }
@@ -129,13 +106,20 @@ public class IOAutomatonSymbolTableCreator extends de.monticore.symboltable.Comm
   }
   
   @Override
-  public void endVisit(ASTAutomaton node) {
-    // symbol for automaton is complete, so we can reconstruct the missing
-    // assignment names
-//    node.accept(new AssignmentNameCompleter(node.getAutomatonContext()));
-    node.accept(new AssignmentNameCompleter(node.getEnclosingScope().get()));
-    
+  public void endVisit(ASTAutomaton node) {    
     removeCurrentScope();
+  }
+  
+  @Override
+  public void visit(ASTAutomatonCore node) {
+    // needed here, else setEnclosingScopeOfNodes will not work
+    node.setEnclosingScope(currentScope().get());
+  }
+  
+  @Override
+  public void endVisit(ASTAutomatonCore node) {
+    // automaton core loaded, so we can reconstruct the missing assignment names
+    node.accept(new AssignmentNameCompleter(currentScope().get()));
     setEnclosingScopeOfNodes(node);
   }
   

@@ -8,9 +8,10 @@ component grammar IOAutomaton extends de.monticore.lang.montiarc.Values {
      * @attribute EmbeddedAutomaton: The automaton, embedded in the automaton keyword and the brackets
      */
     Automaton@! = Stereotype? "automaton" Name "{"
-      AutomatonContext 
-      AutomatonContent
+      AutomatonCore
     "}";
+    
+    AutomatonCore@! = AutomatonContext AutomatonContent;
     
      external GuardExpression;
      external Valuation;

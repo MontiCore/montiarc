@@ -6,21 +6,18 @@
 
 package de.monticore.lang.montiarc.montiarcautomaton._symboltable;
 
-import de.se_rwth.commons.logging.Log;
-import de.monticore.lang.montiarc.montiarcautomaton._visitor.MontiArcAutomatonVisitor;
-import de.monticore.lang.montiarc.montiarcbehavior._ast.ASTBehaviorImplementation;
-import de.monticore.lang.montiarc.montiarcautomaton._visitor.MontiArcAutomatonDelegatorVisitor;
-import de.monticore.automaton.ioautomaton._ast.ASTAutomaton;
-import de.monticore.automaton.ioautomaton._ast.ASTAutomatonContext;
+import java.util.Deque;
+
 import de.monticore.automaton.ioautomatonjava._symboltable.IOAutomatonJavaSymbolTableCreator;
 import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcSymbolTableCreator;
-import de.monticore.lang.montiarc.montiarcautomaton._ast.ASTBehaviorEmbedding;
 import de.monticore.lang.montiarc.montiarcautomaton._visitor.CommonMontiArcAutomatonDelegatorVisitor;
+import de.monticore.lang.montiarc.montiarcautomaton._visitor.MontiArcAutomatonDelegatorVisitor;
+import de.monticore.lang.montiarc.montiarcautomaton._visitor.MontiArcAutomatonVisitor;
 import de.monticore.symboltable.CommonSymbolTableCreator;
 import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.ResolverConfiguration;
 import de.monticore.symboltable.Scope;
-import java.util.Deque;
+import de.se_rwth.commons.logging.Log;
 
 public class MontiArcAutomatonSymbolTableCreator extends CommonSymbolTableCreator
          implements MontiArcAutomatonVisitor {
@@ -67,12 +64,14 @@ public class MontiArcAutomatonSymbolTableCreator extends CommonSymbolTableCreato
     return getFirstCreatedScope();
   }
 
+  @Override
   public MutableScope getFirstCreatedScope() {
     return maSTC.getFirstCreatedScope();
   }
   
   private MontiArcAutomatonVisitor realThis = visitor;
 
+  @Override
   public MontiArcAutomatonVisitor getRealThis() {
     return realThis;
   }

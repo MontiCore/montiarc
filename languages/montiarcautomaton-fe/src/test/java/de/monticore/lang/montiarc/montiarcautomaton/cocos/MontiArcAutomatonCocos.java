@@ -76,8 +76,7 @@ public class MontiArcAutomatonCocos {
     
     // REFERENTIAL INTEGRITY
     .addCoCo(new DeclaredInitialStateDoesNotExist())
-    .addCoCo((IOAutomatonJavaASTValuationCoCo)new UseOfUndeclaredField()) // TODO is problem of java dsl
-    .addCoCo((IOAutomatonASTIOAssignmentCoCo)new UseOfUndeclaredField()) // TODO is problem of java dsl
+    .addCoCo((IOAutomatonASTIOAssignmentCoCo)new UseOfUndeclaredField())
     .addCoCo(new UseOfUndefinedState())
     .addCoCo(new AssignmentHasNoName())
     
