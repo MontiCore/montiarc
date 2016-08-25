@@ -23,7 +23,7 @@ public class RefIntegrityTest extends AbstractCocoTest {
   public void testUseOfUndeclaredField() {
     ASTIOAutomatonNode node = getAstNode("src/test/resources/", "invalid.UseOfUndeclaredField");
     // 2 Errors because we use 2 undeclared fields
-    checkInvalid(node, new ExpectedErrorInfo(2, "xAA231"));
+    checkInvalid(node, new ExpectedErrorInfo(2, "xAA230"));
   }
   
   @Test
