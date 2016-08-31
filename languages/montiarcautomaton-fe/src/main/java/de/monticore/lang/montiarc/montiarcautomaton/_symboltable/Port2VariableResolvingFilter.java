@@ -3,9 +3,9 @@ package de.monticore.lang.montiarc.montiarcautomaton._symboltable;
 import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.Symbol;
-import de.monticore.symboltable.resolving.CommonAdaptedResolvingFilter;
+import de.monticore.symboltable.resolving.TransitiveAdaptedResolvingFilter;
 
-public class Port2VariableResolvingFilter extends CommonAdaptedResolvingFilter<VariableSymbol> {
+public class Port2VariableResolvingFilter extends TransitiveAdaptedResolvingFilter<VariableSymbol> {
 
   public Port2VariableResolvingFilter() {
     super(PortSymbol.KIND, VariableSymbol.class, VariableSymbol.KIND);

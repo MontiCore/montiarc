@@ -85,7 +85,7 @@
       <classifier>${grammars.classifier}</classifier>
     </dependency>
     
-    <dependency><!-- TODO remove -->
+    <!-- TODO remove --><dependency>
       <groupId>de.monticore</groupId>
       <artifactId>de.monticore.java</artifactId>
       <version>${monticore.java.version}</version>

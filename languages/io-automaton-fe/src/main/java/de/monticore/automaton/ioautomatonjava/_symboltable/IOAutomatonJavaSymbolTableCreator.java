@@ -77,7 +77,7 @@ public class IOAutomatonJavaSymbolTableCreator extends de.monticore.symboltable.
   
   @Override
   public void visit(ASTIOACompilationUnit node) {
-    Log.debug("Building Symboltable for Automaton: " + node.getAutomaton().getName(), IOAutomatonJavaSymbolTableCreator.class.getSimpleName());
+    Log.debug("Building Symboltable for IOAutomatonJava: " + node.getAutomaton().getName(), IOAutomatonJavaSymbolTableCreator.class.getSimpleName());
     String compilationUnitPackage = Names.getQualifiedName(node.getPackage());
     
     // imports

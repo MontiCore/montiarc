@@ -1,10 +1,7 @@
 package de.monticore.automata.ioautomata.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-
-import java.util.Optional;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,9 +10,7 @@ import de.monticore.automaton.ioautomaton.ScopeHelper;
 import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
 import de.monticore.automaton.ioautomaton._symboltable.StateSymbol;
 import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
-import de.monticore.automaton.ioautomatonjava._symboltable.IOAutomatonJavaLanguage;
 import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 
 public class SymTabTest extends AbstractSymtabTest { 
@@ -35,7 +30,7 @@ public class SymTabTest extends AbstractSymtabTest {
 //    assertFalse(
 //        "java.lang types may not be resolvable without qualification in general (e.g., global scope).",
 //        javaType.isPresent());
-    
+
     AutomatonSymbol symbol = symTab.<AutomatonSymbol>resolve("invalid.OutputInExpression", AutomatonSymbol.KIND).orElse(null);
     StateSymbol s = symbol.getSpannedScope().<StateSymbol>resolve("S1", StateSymbol.KIND).orElse(null);
     symbol = null;

@@ -2,22 +2,15 @@ package de.monticore.lang.montiarc.montiarcautomaton;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
-import java.util.Optional;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
 import de.monticore.java.symboltable.JavaFieldSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbol;
-import de.monticore.lang.montiarc.montiarc._ast.ASTMACompilationUnit;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
-import de.monticore.lang.montiarc.montiarcautomaton._parser.MontiArcAutomatonParser;
 import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 import de.se_rwth.commons.logging.Log;
@@ -27,16 +20,7 @@ public class SymTabTest extends AbstractSymtabTest {
   public static void setUp() {
     Log.enableFailQuick(false);
   }
-  
-  @Test
-  public void test() throws IOException {
-    MontiArcAutomatonParser a = new MontiArcAutomatonParser();
-    Optional<ASTMACompilationUnit> model= a.parse("src/test/resources/valid/BumpControlT1.maa");
-    assertNotNull(model.orElse(null));
     
-    ASTMontiArcNode node = getAstNode("src/test/resources/", "valid.BumpControlT1");
-  }
-  
   @Test
   public void testBumperbot() {
     ASTMontiArcNode node = getAstNode("src/test/resources/", "valid.bumperbot.BumpControl");

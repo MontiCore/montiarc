@@ -6,12 +6,18 @@ import de.monticore.java.symboltable.JavaFieldSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.resolving.SymbolAdapter;
+import de.monticore.symboltable.types.JTypeSymbol;
+import de.monticore.symboltable.types.references.JTypeReference;
 
 public class Variable2FieldAdapter extends JavaFieldSymbol implements SymbolAdapter<VariableSymbol> {
   private VariableSymbol adaptee;
+  
+  private static JavaTypeSymbolReference createReference(JTypeReference<? extends JTypeSymbol> reference) {
+    return new JavaTypeSymbolReference(reference.getName(), reference.getEnclosingScope(), reference.getDimension());
+  }
 
   public Variable2FieldAdapter(VariableSymbol adaptee) {
-    super(adaptee.getName(), JavaFieldSymbol.KIND, (JavaTypeSymbolReference) adaptee.getTypeReference());
+    super(adaptee.getName(), JavaFieldSymbol.KIND, createReference(adaptee.getTypeReference()));
     this.adaptee = adaptee;
   }
 

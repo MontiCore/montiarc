@@ -4,10 +4,10 @@ import com.google.common.base.Preconditions;
 
 import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.symboltable.Symbol;
-import de.monticore.symboltable.resolving.CommonAdaptedResolvingFilter;
+import de.monticore.symboltable.resolving.TransitiveAdaptedResolvingFilter;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 
-public class CDTypeSymbol2JavaTypeFilter extends CommonAdaptedResolvingFilter<JavaTypeSymbol> {
+public class CDTypeSymbol2JavaTypeFilter extends TransitiveAdaptedResolvingFilter<JavaTypeSymbol> {
 
   public CDTypeSymbol2JavaTypeFilter() {
     super(CDTypeSymbol.KIND, JavaTypeSymbol.class, JavaTypeSymbol.KIND);

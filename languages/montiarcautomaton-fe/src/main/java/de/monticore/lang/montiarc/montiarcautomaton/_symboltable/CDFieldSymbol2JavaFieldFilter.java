@@ -4,10 +4,10 @@ import com.google.common.base.Preconditions;
 
 import de.monticore.java.symboltable.JavaFieldSymbol;
 import de.monticore.symboltable.Symbol;
-import de.monticore.symboltable.resolving.CommonAdaptedResolvingFilter;
+import de.monticore.symboltable.resolving.TransitiveAdaptedResolvingFilter;
 import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
 
-public class CDFieldSymbol2JavaFieldFilter extends CommonAdaptedResolvingFilter<JavaFieldSymbol> {
+public class CDFieldSymbol2JavaFieldFilter extends TransitiveAdaptedResolvingFilter<JavaFieldSymbol> {
 
   public CDFieldSymbol2JavaFieldFilter() {
     super(CDFieldSymbol.KIND, JavaFieldSymbol.class, JavaFieldSymbol.KIND);

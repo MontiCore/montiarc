@@ -1,6 +1,9 @@
 package de.monticore.automaton.ioautomatonjava.cocos.integrity;
 
 import de.monticore.automaton.ioautomaton._ast.ASTIOAssignment;
+import de.monticore.automaton.ioautomaton._ast.ASTInputDeclaration;
+import de.monticore.automaton.ioautomaton._ast.ASTOutputDeclaration;
+import de.monticore.automaton.ioautomaton._ast.ASTVariableDeclaration;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTIOAssignmentCoCo;
 import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
 import de.monticore.symboltable.Scope;
@@ -28,9 +31,6 @@ public class UseOfUndeclaredField implements IOAutomatonASTIOAssignmentCoCo {
       if (!found) {
         Log.error("0xAA230 " + node.getName().get() + " is used as a field, but is not declared as such.", node.get_SourcePositionStart());
       }
-    }
-    else {
-      Log.error("0xAA231 Could not find field name. AssignmentNameCompleter may not used.", node.get_SourcePositionStart());
     }
   }
   
