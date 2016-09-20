@@ -3,6 +3,8 @@ package de.monticore.lang.montiarc.tagging._symboltable;
 import java.util.Collection;
 
 import de.monticore.symboltable.CommonScopeSpanningSymbol;
+import de.monticore.symboltable.CommonSymbol;
+import de.monticore.symboltable.Scopes;
 import de.monticore.symboltable.SymbolKind;
 
 /**
@@ -28,6 +30,7 @@ public class TaggingScopeSpanningSymbol extends CommonScopeSpanningSymbol
    *
    * @return all tags of the components
    */
+  @Override
   public Collection<TagSymbol> getTags() {
     return getMutableSpannedScope().<TagSymbol>resolveLocally(TagSymbol.KIND);
   }
@@ -38,6 +41,7 @@ public class TaggingScopeSpanningSymbol extends CommonScopeSpanningSymbol
    * getTags(PowerConsumption.TAGKIND)
    * --> methodology is the same as in PN's resolve function
    */
+  @Override
   public <T extends TagSymbol> Collection<T> getTags(final TagKind tagKind) {
     return getMutableSpannedScope().<T>resolveLocally(tagKind);
   }
@@ -47,8 +51,9 @@ public class TaggingScopeSpanningSymbol extends CommonScopeSpanningSymbol
    *
    * @param tag the tag symbol which should be added
    */
-  public void addTag(final TagSymbol tag) {
-    if (!getMutableSpannedScope().getSymbols().contains(tag)) {
+  @Override
+  public void addTag(final TagSymbol tag) {    
+    if (!Scopes.getAllEncapsulatedSymbols(getMutableSpannedScope()).contains(tag)) {
       getMutableSpannedScope().add(tag);
     }
   }
@@ -58,6 +63,7 @@ public class TaggingScopeSpanningSymbol extends CommonScopeSpanningSymbol
    *
    * @param tags
    */
+  @Override
   public void addTags(final TagSymbol... tags) {
     for (final TagSymbol tag : tags) {
       addTag(tag);
@@ -69,6 +75,7 @@ public class TaggingScopeSpanningSymbol extends CommonScopeSpanningSymbol
    *
    * @param tags
    */
+  @Override
   public void addTags(Iterable<? extends TagSymbol> tags) {
     for (TagSymbol tag : tags) {
       addTag(tag);

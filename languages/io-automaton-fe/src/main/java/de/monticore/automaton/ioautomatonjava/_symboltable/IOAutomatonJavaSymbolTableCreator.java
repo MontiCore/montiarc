@@ -88,8 +88,8 @@ public class IOAutomatonJavaSymbolTableCreator extends de.monticore.symboltable.
       imports.add(importStatement);
     }
     // add default java imports
-//    JavaHelper.addJavaDefaultImports(imports); //not needed here because java default types are already imported in JavaDSL
-    imports.add(new ImportStatement("java.lang.String", true)); // string is missing 
+    JavaHelper.addJavaDefaultImports(imports); //not needed here because java default types are already imported in JavaDSL
+    //imports.add(new ImportStatement("java.lang.String", true)); // string is missing 
     ArtifactScope artifactScope = new ArtifactScope(Optional.of(currentScope().get()), compilationUnitPackage, imports);
     this.currentImports = imports;
     putOnStack(artifactScope); // introduces new scope

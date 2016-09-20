@@ -155,7 +155,7 @@ component grammar IOAutomaton extends de.monticore.lang.montiarc.Values {
     Alternative = "alt{" ValueList ("," ValueList)* "}";
     
     /**
-     * A row of valuations separated by a ",", e.g. "a.getX() : B.fetch().KIND : ++a%2"
+     * A row of valuations separated by a ",", e.g. "a.getX() , B.fetch().KIND , ++a%2"
      * @attribute Valuation: The valuation
      */    
     ValueList	
