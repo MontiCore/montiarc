@@ -1,6 +1,7 @@
 package de.monticore.lang.montiarc.montiarc._symboltable;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 
@@ -9,16 +10,22 @@ import javax.annotation.Nullable;
 import de.monticore.lang.montiarc.helper.SymbolPrinter;
 import de.monticore.lang.montiarc.montiarc._ast.ASTConnector;
 import de.monticore.symboltable.CommonSymbol;
+import de.se_rwth.commons.Joiners;
+import de.se_rwth.commons.Splitters;
+import de.se_rwth.commons.logging.Log;
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
- * Symbol for {@link ASTConnector}s. The name of a connector symbol equals its target and vice
- * versa. This is valid since data for a port may only result from a single source. <br/>
+ * Symbol for {@link ASTConnector}s. The name of a connector symbol equals its
+ * target and vice versa. This is valid since data for a port may only result
+ * from a single source. <br/>
  * <br/>
- * The port names (source and target of the connector) must be set <b>relative to the component
- * scope</b> that the connector is defined in. This means that the sourceName may be any in port of
- * the component itself (e.g., "myInPort") or an out port of any subcomponent (e.g.,
- * "subComponent.someOutPort"). The targetName is either a out port of the component itself( e.g.,
- * "myOutPort") or any of the sub components in ports (e.g., "subComponent.someInPort").
+ * The port names (source and target of the connector) must be set <b>relative
+ * to the component scope</b> that the connector is defined in. This means that
+ * the sourceName may be any in port of the component itself (e.g., "myInPort")
+ * or an out port of any subcomponent (e.g., "subComponent.someOutPort"). The
+ * targetName is either a out port of the component itself( e.g., "myOutPort")
+ * or any of the sub components in ports (e.g., "subComponent.someInPort").
  * 
  * @author Arne Haber, Michael von Wenckstern, Robert Heim
  */
@@ -36,10 +43,10 @@ public class ConnectorSymbol extends CommonSymbol {
   /**
    * Creates a ConnectorSymbol.
    * 
-   * @param sourceName the relative name of the source port (e.g., "subComponent.someOutPort" or
-   * "myInPort").
-   * @param targetName relative name of the target port (e.g., "subComponent.someInPort" or
-   * "myOutPort").
+   * @param sourceName the relative name of the source port (e.g.,
+   * "subComponent.someOutPort" or "myInPort").
+   * @param targetName relative name of the target port (e.g.,
+   * "subComponent.someInPort" or "myOutPort").
    * @return
    */
   public ConnectorSymbol(String sourceName, String targetName) {
@@ -66,6 +73,38 @@ public class ConnectorSymbol extends CommonSymbol {
    */
   public String getTarget() {
     return getName();
+  }
+  
+  public Optional<PortSymbol> getTargetPort() {
+    return this.getPort(this.getTarget());
+  }
+  
+  public Optional<PortSymbol> getSourcePort() {
+    return this.getPort(this.getSource());
+  }
+  
+  protected Optional<PortSymbol> getPort(String name) {
+    ComponentSymbol cmp = (ComponentSymbol) this.getEnclosingScope().getSpanningSymbol().get();
+    
+    // Case 1: componentinstance.port
+    if(name.contains(".")){
+      Iterator<String> parts = Splitters.DOT.split(name).iterator();
+      
+      String instance = parts.next();
+      String instancePort = parts.next();
+      
+      Optional<ComponentInstanceSymbol> inst = cmp.getSpannedScope()
+          .<ComponentInstanceSymbol> resolveLocally(instance, ComponentInstanceSymbol.KIND);
+      Optional<PortSymbol> port = inst.get().getComponentType().getReferencedSymbol()
+          .getSpannedScope()
+          .resolveLocally(instancePort, PortSymbol.KIND);
+      return port;  
+    }
+    // Case 2: port
+    else{
+      return this.getEnclosingScope().<PortSymbol>resolveLocally(name, PortSymbol.KIND);
+    }
+    
   }
   
   /**

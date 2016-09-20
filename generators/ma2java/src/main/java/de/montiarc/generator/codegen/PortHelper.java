@@ -14,16 +14,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import javax.management.InstanceNotFoundException;
-import javax.xml.stream.events.Characters;
-
-import org.omg.CosNaming.NameHelper;
-
 import de.montiarc.generator.MontiArcGeneratorConstants;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.generating.templateengine.StringHookPoint;
 import de.monticore.generating.templateengine.TemplateHookPoint;
-import de.monticore.lang.montiarc.helper.ArcTypePrinter;
+import de.monticore.lang.montiarc.helper.SymbolPrinter;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
 import de.monticore.lang.montiarc.montiarc._ast.ASTConnector;
 import de.monticore.lang.montiarc.montiarc._ast.ASTPort;
@@ -32,6 +27,7 @@ import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbolReference;
 import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
+import de.monticore.types.TypesPrinter;
 import de.monticore.types.types._ast.ASTQualifiedName;
 import de.se_rwth.commons.StringTransformations;
 
@@ -53,14 +49,14 @@ public class PortHelper {
       
       sb.append(className);
       sb.append("<");
-      sb.append(ArcTypePrinter.printType(port.getType()));
+      sb.append(TypesPrinter.printType(port.getType()));
       sb.append(">");
     }
     return sb.toString();
   }
   
   private static String printName(ASTPort port) {
-    String type = ArcTypePrinter.printType(port.getType());
+    String type = TypesPrinter.printType(port.getType());
     return port.getName().isPresent()
         ? port.getName().get()
         : uncapitalize(type);
@@ -170,14 +166,14 @@ public class PortHelper {
     return Optional.empty();
   }
   
-  public static boolean needsEncapsulation(ConnectorSymbol connector) {
+  public static boolean needsEncapsulation(ConnectorSymbol connector, ComponentSymbol comp) {
     boolean needEncapsulation = false;
-    Optional<ComponentSymbol> cmp = connector.getComponent();
-    if (cmp.isPresent()) {
-      ComponentSymbol comp = cmp.get();
-      if (comp.isDecomposed() && connector.getSourcePort().getName().equals("")) {
+    connector.getSource();
+    connector.getTargetPort().get().isIncoming();
+    if (connector.getSourcePort().isPresent()) {
+      if (comp.isDecomposed() && connector.getSourcePort().get().getName().equals("")) {
         int amount = 0;
-        String senderPort = connector.getSourcePort().getFullName();
+        String senderPort = connector.getSourcePort().get().getFullName();
         for (ConnectorSymbol cs : comp.getConnectors()) {
           if (connector.getSource().equals(senderPort)) {
             amount += 1;
@@ -190,7 +186,6 @@ public class PortHelper {
           needEncapsulation = true;
         }
       }
-      
     }
     return needEncapsulation;
   }
@@ -278,7 +273,7 @@ public class PortHelper {
     for (ConnectorSymbol cs : compSym.getConnectors()) {
       if (cs.getTarget().equals(portSym.getName())) {
         String instanceName = cs.getSource().substring(0, cs.getSource().lastIndexOf("."));
-        String portName = cs.getSource().substring(cs.getSource().lastIndexOf(".")+1);
+        String portName = cs.getSource().substring(cs.getSource().lastIndexOf(".") + 1);
         sender = instanceName + ".get" + StringTransformations.capitalize(portName) + "()";
         break;
       }
@@ -308,12 +303,12 @@ public class PortHelper {
     return sender;
   }
   
-  private static String printGetterForSender(PortSymbol portSym, ComponentSymbol compSym){
+  private static String printGetterForSender(PortSymbol portSym, ComponentSymbol compSym) {
     String getter = null;
     for (ConnectorSymbol cs : compSym.getConnectors()) {
       if (cs.getTarget().equals(portSym.getName())) {
         String instanceName = cs.getSource().substring(0, cs.getSource().lastIndexOf("."));
-        String portName = cs.getSource().substring(cs.getSource().lastIndexOf(".")+1);
+        String portName = cs.getSource().substring(cs.getSource().lastIndexOf(".") + 1);
         getter = instanceName + ".set" + StringTransformations.capitalize(portName);
         break;
       }
@@ -389,7 +384,7 @@ public class PortHelper {
     }
     else {
       StringBuilder type = new StringBuilder();
-      type.append(ArcTypePrinter.printType(port.getType()));
+      type.append(TypesPrinter.printType(port.getType()));
       
       Optional<String> setSubCompPort = comp.isAtomic()
           ? resolveSetSender(portName, comp)

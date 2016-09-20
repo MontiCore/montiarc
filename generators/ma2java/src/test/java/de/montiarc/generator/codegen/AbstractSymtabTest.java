@@ -29,6 +29,7 @@ public class AbstractSymtabTest {
     
     final ModelPath mp = new ModelPath(modelPath, Paths.get("src/main/resources/defaultTypes"));
     GlobalScope scope = new GlobalScope(mp, fam);
+    JavaHelper.addJavaPrimitiveTypes(scope);
     return scope;
   }
   
@@ -41,7 +42,7 @@ public class AbstractSymtabTest {
     
     final ModelPath mp = new ModelPath(modelPath);
     GlobalScope scope = new GlobalScope(mp, fam);
-    JavaHelper.addJavaDefaultTypes(scope);
+    JavaHelper.addJavaPrimitiveTypes(scope);
     
     return scope;
   }

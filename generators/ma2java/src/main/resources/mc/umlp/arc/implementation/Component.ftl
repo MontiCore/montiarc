@@ -17,34 +17,33 @@ public ${modifier} class ${prefix}${compSym.getName()}${typeParameters} <#t>
     implements ${_package}.interfaces.I${compSym.getName()}${helper.printFormalTypeParameters(compSym.getFormalTypeParameters())}, ${glex.getGlobalValue("ISimComponent")} <#t>
 {
     <#-- all templates that are embedded into generated components -->
-    <#-- ${op.includeTemplates(subcomponentAttributes, ast.getSubComponentInstances())} -->
     
     <#list compSym.getSubComponents() as subcomponent>
-       ${tc.includeArgs("templates.mc.umlp.arc.implementation.SubcomponentAttributes", [helper.getSubcomponentInterface(subcomponent), subcomponent.getName()])}
+       ${_templates.mc.umlp.arc.implementation.SubcomponentAttributes.generate(helper.getSubcomponentInterface(subcomponent), subcomponent.getName())}
     </#list>
     
     <#list compSym.getPorts() as portSym>
-       ${tc.includeArgs("templates.mc.umlp.arc.implementation.port.PortAttributes", [portHelper.getPortType(glex, portSym, compSym), portHelper.getPortName(compSym, portSym)])}
-       ${tc.includeArgs("templates.mc.umlp.arc.implementation.port.PortAttributesGetter", [portHelper.getPortReturnType(glex, portSym), portHelper.getPortReturnValue(compSym, portSym), portSym, compSym])}
-       ${tc.includeArgs("templates.mc.umlp.arc.implementation.port.PortAttributesSetter", [portSym, compSym, portHelper, helper])}
-       ${tc.includeArgs("templates.mc.umlp.arc.implementation.port.PortInDelegate", [compSym, portSym, helper])}
-       ${tc.includeArgs("templates.mc.umlp.arc.implementation.port.PortOutDelegate", [compSym, portSym, helper])}
-       ${tc.includeArgs("templates.mc.umlp.arc.implementation.port.TimeSyncMessageBuffer", [portSym, helper])}
-       ${tc.includeArgs("templates.mc.umlp.arc.implementation.port.SimplePortInDelegate", [portSym, portHelper.isSingleIn(compSym), helper])}
+       ${_templates.mc.umlp.arc.implementation.port.PortAttributes.generate(portHelper.getPortType(glex, portSym, compSym), portHelper.getPortName(compSym, portSym))}
+       ${_templates.mc.umlp.arc.implementation.port.PortAttributesGetter.generate(portHelper.getPortReturnType(glex, portSym), portHelper.getPortReturnValue(compSym, portSym), portSym, compSym)}
+       ${_templates.mc.umlp.arc.implementation.port.PortAttributesSetter.generate(portSym, compSym, portHelper, helper)}
+       ${_templates.mc.umlp.arc.implementation.port.PortInDelegate.generate(compSym, portSym, helper)}
+       ${_templates.mc.umlp.arc.implementation.port.PortOutDelegate.generate(compSym, portSym, helper)}
+       ${_templates.mc.umlp.arc.implementation.port.TimeSyncMessageBuffer.generate(portSym, helper)}
+       ${_templates.mc.umlp.arc.implementation.port.SimplePortInDelegate.generate(portSym, portHelper.isSingleIn(compSym), helper)}
     </#list>
     
     <#list compSym.getConfigParameters() as configParam>
-      ${tc.includeArgs("templates.mc.umlp.arc.implementation.ConfigurationParameters", [helper.printType(configParam.getType()), configParam.getName()])}
+      ${_templates.mc.umlp.arc.implementation.ConfigurationParameters.generate(helper.printType(configParam.getType()), configParam.getName())}
     </#list>
     
-    ${tc.includeArgs("templates.mc.umlp.arc.implementation.port.PortTimeIn", [compSym, helper])}
-    ${tc.includeArgs("templates.mc.umlp.arc.implementation.methods.Constructor", [compSym, helper, prefix])}
-    ${tc.includeArgs("templates.mc.umlp.arc.implementation.methods.GetLocalTime", [compSym, helper])}
-    ${tc.includeArgs("templates.mc.umlp.arc.implementation.methods.HandleMessage", [compSym, helper])}
-    ${tc.includeArgs("templates.mc.umlp.arc.implementation.methods.HandleTimeSyncMessage", [compSym, helper])}
-    ${tc.includeArgs("templates.mc.umlp.arc.implementation.methods.HandleTick", [compSym, helper])}
-    ${tc.includeArgs("templates.mc.umlp.arc.implementation.methods.Setup", [compSym, helper, portHelper])}
-    ${tc.includeArgs("templates.mc.umlp.arc.implementation.methods.TimeSyncTimeIncreased", [compSym, helper])}
+    ${_templates.mc.umlp.arc.implementation.port.PortTimeIn.generate(compSym, helper)}
+    ${_templates.mc.umlp.arc.implementation.methods.Constructor.generate(compSym, helper, prefix)}
+    ${_templates.mc.umlp.arc.implementation.methods.GetLocalTime.generate(compSym, helper)}
+    ${_templates.mc.umlp.arc.implementation.methods.HandleMessage.generate(compSym, helper)}
+    ${_templates.mc.umlp.arc.implementation.methods.HandleTimeSyncMessage.generate(compSym, helper)}
+    ${_templates.mc.umlp.arc.implementation.methods.HandleTick.generate(compSym, helper)}
+    ${_templates.mc.umlp.arc.implementation.methods.Setup.generate(compSym, helper, portHelper)}
+    ${_templates.mc.umlp.arc.implementation.methods.TimeSyncTimeIncreased.generate(compSym, helper)}
     
 
     <#if compSym.isDecomposed()>

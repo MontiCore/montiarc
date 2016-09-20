@@ -50,3 +50,7 @@ contain class diagrams.
 
 The language family MontiArcLanguageFamily aggregates MontiArcLanguage,
 CD4AnalysisLanguage and JavaDSLLanguage.
+
+
+# copyright to be added soon.
+

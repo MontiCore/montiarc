@@ -6,6 +6,7 @@
 package de.montiarc.generator.codegen;
 
 import java.io.File;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -13,16 +14,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import templates.mc.umlp.arc.factory.ComponentFactoryTemplate;
-import templates.mc.umlp.arc.implementation.ComponentTemplate;
-import templates.mc.umlp.arc.interfaces.ComponentInterfaceTemplate;
+import _templates._setup.GeneratorConfig;
+import _templates.mc.umlp.arc.factory.ComponentFactory;
+import _templates.mc.umlp.arc.implementation.Component;
+import _templates.mc.umlp.arc.interfaces.ComponentInterface;
 
 import com.google.common.collect.Sets;
 
 import de.montiarc.generator.MontiArcGeneratorConstants;
-import de.monticore.generating.GeneratorConfig;
 import de.monticore.generating.GeneratorSetup;
-import de.monticore.generating.MyGeneratorEngine;
+import de.monticore.generating.ExtendedGeneratorEngine;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.io.paths.IterablePath;
 import de.monticore.lang.montiarc.helper.SymbolPrinter;
@@ -184,15 +185,14 @@ public class ComponentGenerator {
   public static void generate(GlobalExtensionManagement glex, ASTComponent compAst,
       ComponentSymbol compSym, File outputDirectory, Optional<String> hwcPath) {
     final GeneratorSetup setup = new GeneratorSetup(outputDirectory);
-    setup.setGlex(glex);
     GeneratorHelper helper = new GeneratorHelper();
-    final MyGeneratorEngine generator = new MyGeneratorEngine(setup);
     glex.setGlobalValue(MontiArcGeneratorConstants.TIME_PARADIGM_STORAGE_KEY,
         compSym.getBehaviorKind());
-    GeneratorConfig.setGeneratorEngine(generator);
-    generateComponentInterface(generator, compAst, compSym, helper);
-    generateComponent(generator, compAst, compSym, helper);
-    generateComponentFactory(generator, compAst, compSym, helper, hwcPath);
+    setup.setGlex(glex);
+    GeneratorConfig.init(setup);
+    generateComponentInterface(compAst, compSym, helper);
+    generateComponent(compAst, compSym, helper);
+    generateComponentFactory(compAst, compSym, helper, hwcPath);
   }
   
   /**
@@ -204,7 +204,7 @@ public class ComponentGenerator {
    * @param compSym
    * @param helper
    */
-  private static void generateComponentInterface(MyGeneratorEngine generator, ASTComponent compAst,
+  private static void generateComponentInterface(ASTComponent compAst,
       ComponentSymbol compSym, GeneratorHelper helper) {
     final String comments = GeneratorHelper.getCommentAsString(compAst.get_PreComments());
     
@@ -214,18 +214,18 @@ public class ComponentGenerator {
     String superInterface = getSuperInterface(compSym);
     String portInterfaces = getPortInterfaces(compSym);
     List<PortSymbol> ports = (List<PortSymbol>) compSym.getPorts();
-    List<JTypeSymbol> typeParams = compSym.getFormalTypeParameters();
     String formalTypeParams = SymbolPrinter.printFormalTypeParameters(compSym
         .getFormalTypeParameters());
     // component needs an additional port for receiving ticks
     boolean needsAdditionalPort = compSym.getAllIncomingPorts().isEmpty();
-    ComponentInterfaceTemplate.generateToFile(filePath, compAst, _package,
-        interfaceName, ports, superInterface, portInterfaces, needsAdditionalPort, formalTypeParams, helper,
+    ComponentInterface.generate(filePath, compAst, _package,
+        interfaceName, ports, superInterface, portInterfaces, needsAdditionalPort,
+        formalTypeParams, helper,
         comments);
     Log.trace(LOGGER_NAME, String.format("Generated java interface %s for component-model %s.",
         interfaceName, compSym.getFullName()));
     for (ComponentSymbol inner : compSym.getInnerComponents()) {
-      generateComponentInterface(generator, (ASTComponent) inner.getAstNode().get(), inner, helper);
+      generateComponentInterface((ASTComponent) inner.getAstNode().get(), inner, helper);
     }
   }
   
@@ -237,7 +237,7 @@ public class ComponentGenerator {
     return compSym.getPackageName() + "." + MontiArcGeneratorConstants.INTERFACES_PACKAGE;
   }
   
-  private static void generateComponent(MyGeneratorEngine generator, ASTComponent compAst,
+  private static void generateComponent(ASTComponent compAst,
       ComponentSymbol compSym, GeneratorHelper helper) {
     String comments = GeneratorHelper.getCommentAsString(compAst.get_PreComments());
     final String _package = compSym.getPackageName();
@@ -259,7 +259,7 @@ public class ComponentGenerator {
         + printFormalTypeParametersWithoutBounds(compSym);
     String formalTypeParams = SymbolPrinter.printFormalTypeParameters(compSym
         .getFormalTypeParameters());
-    ComponentTemplate.generateToFile(filePath, compAst,
+    Component.generate(filePath, compAst,
         compSym, _package, comments, modifier, prefix, superComponent,
         fqCompInterfaceWithTypeParameters, helper, new PortHelper(), timingParadigm,
         formalTypeParams);
@@ -267,11 +267,11 @@ public class ComponentGenerator {
         String.format("Generated java class %s for component-model %s.", compName,
             compSym.getFullName()));
     for (ComponentSymbol inner : compSym.getInnerComponents()) {
-      generateComponent(generator, (ASTComponent) inner.getAstNode().get(), inner, helper);
+      generateComponent((ASTComponent) inner.getAstNode().get(), inner, helper);
     }
   }
   
-  private static void generateComponentFactory(MyGeneratorEngine generator, ASTComponent compAst,
+  private static void generateComponentFactory(ASTComponent compAst,
       ComponentSymbol compSym, GeneratorHelper helper, Optional<String> hwcPath) {
     final String comments = GeneratorHelper.getCommentAsString(compAst.get_PreComments());
     final String _package = compSym.getPackageName() + "."
@@ -289,11 +289,11 @@ public class ComponentGenerator {
     boolean existHWC = GeneratorHelper.existsHandwrittenClass(handwrittenPath,
         compSym.getFullName());
     
-    ComponentFactoryTemplate.generateToFile(filePath, compAst, _package, factoryName,
+    ComponentFactory.generate(filePath, compAst, _package, factoryName,
         compSym, configParameters, helper, existHWC);
     
     for (ComponentSymbol inner : compSym.getInnerComponents()) {
-      generateComponentFactory(generator, (ASTComponent) inner.getAstNode().get(), inner, helper,
+      generateComponentFactory((ASTComponent) inner.getAstNode().get(), inner, helper,
           hwcPath);
     }
   }
