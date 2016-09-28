@@ -1,14 +1,10 @@
 package de.monticore.automaton.ioautomaton.cocos.uniqueness;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import de.monticore.automaton.ioautomaton._ast.ASTAutomatonContent;
-import de.monticore.automaton.ioautomaton._ast.ASTInputDeclaration;
 import de.monticore.automaton.ioautomaton._ast.ASTState;
 import de.monticore.automaton.ioautomaton._ast.ASTStateDeclaration;
-import de.monticore.automaton.ioautomaton._ast.ASTVariable;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTAutomatonContentCoCo;
 import de.se_rwth.commons.logging.Log;
 
@@ -16,7 +12,7 @@ import de.se_rwth.commons.logging.Log;
  * Context condition for checking, if a state is defined multiple times with the
  * same stereotypes.
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class StateDefinedMultipleTimes implements IOAutomatonASTAutomatonContentCoCo {
   

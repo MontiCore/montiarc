@@ -8,7 +8,7 @@ import de.se_rwth.commons.logging.Log;
  * Context condition for checking, if all states of an IO-Automaton start with
  * an Uppercase letter.
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class StateUppercase implements IOAutomatonASTStateCoCo {
   

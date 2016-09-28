@@ -3,20 +3,19 @@ package de.monticore.automaton.ioautomaton.cocos.conventions;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.monticore.automaton.ioautomaton._ast.ASTAutomatonContent;
 import de.monticore.automaton.ioautomaton._ast.ASTBlock;
 import de.monticore.automaton.ioautomaton._ast.ASTIOAssignment;
 import de.monticore.automaton.ioautomaton._ast.ASTTransition;
-import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTAutomatonContentCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTTransitionCoCo;
 import de.se_rwth.commons.logging.Log;
+
 
 /**
  * Context condition for checking, if there is not more than one assignment for
  * each variable or port in a reaction of a transition. E.g. Transition S [true]
  * {v = 1} / {x = 1, x = 5} does not have a valid reaction.
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class MultipleAssignmentsSameIdentifier implements IOAutomatonASTTransitionCoCo {
   

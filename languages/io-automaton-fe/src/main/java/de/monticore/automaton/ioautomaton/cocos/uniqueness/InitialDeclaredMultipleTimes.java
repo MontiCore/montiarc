@@ -1,6 +1,7 @@
 package de.monticore.automaton.ioautomaton.cocos.uniqueness;
 
 import java.util.HashSet;
+
 import de.monticore.automaton.ioautomaton._ast.ASTAutomatonContent;
 import de.monticore.automaton.ioautomaton._ast.ASTInitialStateDeclaration;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTAutomatonContentCoCo;
@@ -10,7 +11,7 @@ import de.se_rwth.commons.logging.Log;
  * Context condition for checking, if a state has been defined as an initial
  * state multiple times. This looks like: state A; initial A; initial A;
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class InitialDeclaredMultipleTimes implements IOAutomatonASTAutomatonContentCoCo {
   

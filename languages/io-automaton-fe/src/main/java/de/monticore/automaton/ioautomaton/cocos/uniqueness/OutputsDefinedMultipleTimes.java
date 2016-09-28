@@ -1,6 +1,7 @@
 package de.monticore.automaton.ioautomaton.cocos.uniqueness;
 
 import java.util.HashSet;
+
 import de.monticore.automaton.ioautomaton._ast.ASTAutomatonContext;
 import de.monticore.automaton.ioautomaton._ast.ASTOutputDeclaration;
 import de.monticore.automaton.ioautomaton._ast.ASTVariable;
@@ -11,7 +12,7 @@ import de.se_rwth.commons.logging.Log;
  * Context condition for checking, if an output field is defined multiple times,
  * but with different stereotypes.
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class OutputsDefinedMultipleTimes implements IOAutomatonASTAutomatonContextCoCo {
   

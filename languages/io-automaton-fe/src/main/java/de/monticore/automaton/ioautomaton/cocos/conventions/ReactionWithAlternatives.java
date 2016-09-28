@@ -11,7 +11,7 @@ import de.se_rwth.commons.logging.Log;
  * Context condition for checking, if a reaction of a transition contains an
  * alternative. This would be something like A->B [...] {...} / {b = alt{1,2,3}}
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class ReactionWithAlternatives implements IOAutomatonASTInitialStateDeclarationCoCo, IOAutomatonASTTransitionCoCo {
   

@@ -3,7 +3,7 @@ package de.monticore.lang.montiarc.montiarcautomaton;
 import java.nio.file.Paths;
 
 import de.monticore.ModelingLanguageFamily;
-import de.monticore.automaton.ioautomatonjava._symboltable.JavaHelper;
+import de.monticore.automaton.ioautomaton.JavaHelper;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcAutomatonLanguageFamily;
 import de.monticore.symboltable.GlobalScope;

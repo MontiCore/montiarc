@@ -9,7 +9,7 @@ import de.se_rwth.commons.logging.Log;
  * be the case, if the {@link IOSymTabCreator} could not calculate a unique
  * match for a IOAssignment.
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class AssignmentHasNoName implements IOAutomatonASTIOAssignmentCoCo{  
 

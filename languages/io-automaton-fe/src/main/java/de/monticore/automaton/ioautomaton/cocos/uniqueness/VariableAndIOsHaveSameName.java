@@ -16,7 +16,7 @@ import de.se_rwth.commons.logging.Log;
  * output or input field. Since inputs and outputs can always be told apart from
  * their position (stimulus or reaction), it is not the case for lokal fields.
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class VariableAndIOsHaveSameName implements IOAutomatonASTAutomatonContextCoCo {
   

@@ -8,7 +8,7 @@ import de.se_rwth.commons.logging.Log;
  * Context condition for checking, if all expressions used are allowed
  * expressions.
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class UseOfForbiddenExpression implements JavaDSLASTExpressionCoCo {
 

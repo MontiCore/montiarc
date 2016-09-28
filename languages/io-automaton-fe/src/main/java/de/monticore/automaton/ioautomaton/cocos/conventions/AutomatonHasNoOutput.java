@@ -7,7 +7,7 @@ import de.se_rwth.commons.logging.Log;
 /**
  * Context condition for checking, if an IO-Automaton has no output fields.
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class AutomatonHasNoOutput implements IOAutomatonASTAutomatonContextCoCo {
   

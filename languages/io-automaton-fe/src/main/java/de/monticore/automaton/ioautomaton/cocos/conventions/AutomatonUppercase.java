@@ -8,7 +8,7 @@ import de.se_rwth.commons.logging.Log;
  * Context condition for checking, if the name of an IO-Automaton starts with an
  * uppercase letter.
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class AutomatonUppercase implements IOAutomatonASTAutomatonCoCo {
   

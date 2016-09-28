@@ -8,7 +8,7 @@ import de.se_rwth.commons.logging.Log;
  * Context condition for checking, if an IO-Automaton has no initial
  * states.
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class AutomatonHasNoInitialState implements IOAutomatonASTAutomatonContentCoCo {
   

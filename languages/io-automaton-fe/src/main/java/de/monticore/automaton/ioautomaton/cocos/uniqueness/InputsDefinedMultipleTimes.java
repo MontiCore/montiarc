@@ -1,6 +1,7 @@
 package de.monticore.automaton.ioautomaton.cocos.uniqueness;
 
 import java.util.HashSet;
+
 import de.monticore.automaton.ioautomaton._ast.ASTAutomatonContext;
 import de.monticore.automaton.ioautomaton._ast.ASTInputDeclaration;
 import de.monticore.automaton.ioautomaton._ast.ASTVariable;
@@ -11,7 +12,7 @@ import de.se_rwth.commons.logging.Log;
  * Context condition for checking, if an input field has been defined multiple
  * times with different types.
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class InputsDefinedMultipleTimes implements IOAutomatonASTAutomatonContextCoCo {
   

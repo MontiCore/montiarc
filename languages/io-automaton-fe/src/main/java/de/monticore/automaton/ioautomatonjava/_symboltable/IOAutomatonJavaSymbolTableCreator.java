@@ -5,6 +5,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Optional;
 
+import de.monticore.automaton.ioautomaton.JavaHelper;
 import de.monticore.automaton.ioautomaton._symboltable.IOAutomatonSymbolTableCreator;
 import de.monticore.automaton.ioautomatonjava._ast.ASTIOACompilationUnit;
 import de.monticore.automaton.ioautomatonjava._ast.ASTValuation;
@@ -88,8 +89,8 @@ public class IOAutomatonJavaSymbolTableCreator extends de.monticore.symboltable.
       imports.add(importStatement);
     }
     // add default java imports
-    JavaHelper.addJavaDefaultImports(imports); //not needed here because java default types are already imported in JavaDSL
-    //imports.add(new ImportStatement("java.lang.String", true)); // string is missing 
+    JavaHelper.addJavaDefaultImports(imports);
+    
     ArtifactScope artifactScope = new ArtifactScope(Optional.of(currentScope().get()), compilationUnitPackage, imports);
     this.currentImports = imports;
     putOnStack(artifactScope); // introduces new scope

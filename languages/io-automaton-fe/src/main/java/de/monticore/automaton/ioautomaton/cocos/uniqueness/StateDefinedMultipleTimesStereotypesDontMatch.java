@@ -15,7 +15,7 @@ import de.se_rwth.commons.logging.Log;
  * Context condition for checking, if states have been defined multiple times
  * with different stereotypes.
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class StateDefinedMultipleTimesStereotypesDontMatch implements IOAutomatonASTAutomatonContentCoCo {
   

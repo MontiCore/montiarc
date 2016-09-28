@@ -10,7 +10,7 @@ import de.se_rwth.commons.logging.Log;
 /**
  * Context condition for checking, if a correct assignment operation is used.
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class CorrectAssignmentOperators implements IOAutomatonASTAutomatonContentCoCo {
   

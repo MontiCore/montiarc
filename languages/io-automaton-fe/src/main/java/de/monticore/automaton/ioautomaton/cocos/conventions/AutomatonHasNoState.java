@@ -7,7 +7,7 @@ import de.se_rwth.commons.logging.Log;
 /**
  * Context condition for checking, if an IO-Automaton has no states.
  * 
- * @author Gerrit
+ * @author Gerrit Leonhardt
  */
 public class AutomatonHasNoState implements IOAutomatonASTAutomatonContentCoCo {
   
