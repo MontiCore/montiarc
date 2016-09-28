@@ -125,6 +125,8 @@ public class IOAutomatonSymbolTableCreator extends de.monticore.symboltable.Comm
   
   @Override
   public void visit(ASTVariable node) {
+    MutableScope scope = currentScope().get();
+    scope.<VariableSymbol> resolveMany(node.getName(), VariableSymbol.KIND).forEach(c -> c.setInitializationAST(node.getValuation()));
   }
   
   @Override
@@ -142,7 +144,7 @@ public class IOAutomatonSymbolTableCreator extends de.monticore.symboltable.Comm
   public void visit(ASTInitialStateDeclaration node) {
     MutableScope scope = currentScope().get();
     for (String name : node.getNames()) {
-      scope.<StateSymbol> resolve(name, StateSymbol.KIND).ifPresent(c -> c.setInitial(true));
+      scope.<StateSymbol> resolveMany(name, StateSymbol.KIND).forEach(c -> {c.setInitial(true); c.setInitialReactionAST(node.getBlock());});
     }
   }
   
@@ -158,9 +160,9 @@ public class IOAutomatonSymbolTableCreator extends de.monticore.symboltable.Comm
     transition.setSource(source);
     transition.setTarget(target);
     
-    transition.setGuard(node.getGuard().isPresent());
-    transition.setReaction(node.getReaction().isPresent());
-    transition.setStimulus(node.getStimulus().isPresent());
+    transition.setGuardAST(node.getGuard());
+    transition.setReactionAST(node.getReaction());
+    transition.setStimulusAST(node.getStimulus());
     
     addToScopeAndLinkWithNode(transition, node); // introduces new scope
   }
@@ -204,12 +206,12 @@ public class IOAutomatonSymbolTableCreator extends de.monticore.symboltable.Comm
   }
   
   @Override
-  public void visit(ASTValuationExt node) {
+  public void visit(ASTIOAssignment node) {
     node.setEnclosingScope(currentScope().get());
   }
-  
+
   @Override
-  public void visit(ASTIOAssignment node) {
+  public void visit(ASTValuationExt node) {
     node.setEnclosingScope(currentScope().get());
   }
   

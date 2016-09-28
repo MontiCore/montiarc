@@ -5,7 +5,13 @@ import de.monticore.lang.montiarc.montiarcautomaton._cocos.MontiArcAutomatonCoCo
 
 public class MontiArcAutomatonCocoCheckerFix extends MontiArcAutomatonCoCoChecker {
   
+  // TODO We need this fix because we want to check a ASTComponent which is a
+  // ASTMontiArc and not a ASTMontiArcAutomaton. Therefore we can't use {@link
+  // #checkAll(de.monticore.lang.montiarc.montiarcautomaton._ast.ASTMontiArcAutomatonNode)}
+  // due to wrong type.
+  
   public void checkAll(ASTMontiArcNode node) {
     node.accept(getRealThis());
   }
+  
 }

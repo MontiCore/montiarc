@@ -7,27 +7,60 @@ import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.java.types.JavaDSLHelper;
 import de.monticore.symboltable.types.JTypeSymbol;
-import de.monticore.symboltable.types.references.CommonJTypeReference;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.se_rwth.commons.logging.Log;
 
+/**
+ * Handles type conversion and resolves types of java expressions.
+ * 
+ * @author Gerrit Leonhardt
+ */
 public class TypeCompatibilityChecker {
-  private static JavaDSLHelper helper = new JavaDSLHelper();
+  private static final JavaDSLHelper helper = new JavaDSLHelper();
   
+  /**
+   * Checks whether there exists a assignment conversion from <tt>from</tt> type
+   * to <tt>target</tt> type.
+   * 
+   * @param from
+   * @param target
+   * @return
+   */
   public static boolean doTypesMatch(JTypeReference<? extends JTypeSymbol> from, JTypeReference<? extends JTypeSymbol> target) {
-    // TODO io automaton currently uses JType instead of JavaType, but type helper only implemented for JavaType
-    if (target instanceof CommonJTypeReference<?>) { // existsAssignment conversion only implemented for JavaType not CommonJType
+    // TODO io automaton currently uses JType instead of JavaType, but type
+    // helper is only implemented for JavaType, so conversion is required
+    if (target instanceof JTypeReference<?> && !(target instanceof JavaTypeSymbolReference)) {
       target = new JavaTypeSymbolReference(target.getName(), target.getEnclosingScope(), target.getDimension());
     }
+    if (from instanceof JTypeReference<?> && !(from instanceof JavaTypeSymbolReference)) {
+      from = new JavaTypeSymbolReference(from.getName(), from.getEnclosingScope(), from.getDimension());
+    }
+    
+    // existsAssignment conversion only implemented for JavaType not CommonJType
     return helper.existsAssignmentConversion((JavaTypeSymbolReference) from, (JavaTypeSymbolReference) target);
   }
   
+  /**
+   * Resolves the type of the given java expression. If it is not possible to
+   * resolve the type, return {@link Optional#empty()}.
+   * 
+   * @param expr the java expression
+   * @return
+   */
   public static Optional<? extends JavaTypeSymbolReference> getExpressionType(ASTExpression expr) {
     HCJavaDSLTypeResolver typeResolver = new HCJavaDSLTypeResolver(helper);
     expr.accept(typeResolver);
     return typeResolver.getResult();
   }
   
+  /**
+   * Checks whether there exists a assignment conversion from the expression
+   * type to <tt>target</tt> type.
+   * 
+   * @param from
+   * @param target
+   * @return
+   */
   public static boolean doTypesMatch(ASTExpression expr, JTypeReference<? extends JTypeSymbol> targetType) {
     Optional<? extends JavaTypeSymbolReference> exprType = getExpressionType(expr);
     if (!exprType.isPresent()) {

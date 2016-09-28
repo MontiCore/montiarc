@@ -1,17 +1,12 @@
 package de.monticore.lang.montiarc.montiarcautomaton.cocos;
 
-import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTIOAssignmentCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTInitialStateDeclarationCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTInputDeclarationCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTOutputDeclarationCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTTransitionCoCo;
-import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTValuationExtCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTVariableDeclarationCoCo;
 import de.monticore.automaton.ioautomaton.cocos.conventions.AutomatonHasNoInitialState;
-import de.monticore.automaton.ioautomaton.cocos.conventions.AutomatonHasNoInput;
-import de.monticore.automaton.ioautomaton.cocos.conventions.AutomatonHasNoOutput;
 import de.monticore.automaton.ioautomaton.cocos.conventions.AutomatonHasNoState;
-import de.monticore.automaton.ioautomaton.cocos.conventions.AutomatonUppercase;
 import de.monticore.automaton.ioautomaton.cocos.conventions.CorrectAssignmentOperators;
 import de.monticore.automaton.ioautomaton.cocos.conventions.DeclarationNamesLowerCase;
 import de.monticore.automaton.ioautomaton.cocos.conventions.MultipleAssignmentsSameIdentifier;
@@ -27,7 +22,6 @@ import de.monticore.automaton.ioautomaton.cocos.uniqueness.StateDefinedMultipleT
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.StateDefinedMultipleTimesStereotypesDontMatch;
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.VariableAndIOsHaveSameName;
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.VariableDefinedMultipleTimes;
-import de.monticore.automaton.ioautomatonjava._cocos.IOAutomatonJavaASTValuationCoCo;
 import de.monticore.automaton.ioautomatonjava.cocos.conventions.OutputInExpression;
 import de.monticore.automaton.ioautomatonjava.cocos.conventions.UseOfForbiddenExpression;
 import de.monticore.automaton.ioautomatonjava.cocos.correctness.GuardIsNotBoolean;
@@ -36,28 +30,36 @@ import de.monticore.automaton.ioautomatonjava.cocos.correctness.InitialValueDoes
 import de.monticore.automaton.ioautomatonjava.cocos.correctness.ReactionTypeDoesNotFitOutputType;
 import de.monticore.automaton.ioautomatonjava.cocos.correctness.StimulusTypeDoesNotFitInputType;
 import de.monticore.automaton.ioautomatonjava.cocos.integrity.UseOfUndeclaredField;
-import de.monticore.java.javadsl._cocos.JavaDSLASTPrimaryExpressionCoCo;
 import de.monticore.lang.montiarc.cocos.MontiArcCoCos;
 import de.monticore.lang.montiarc.montiarcautomaton._cocos.MontiArcAutomatonCoCoChecker;
+import de.monticore.lang.montiarc.montiarcautomaton.cocos.conventions.AutomatonHasInput;
+import de.monticore.lang.montiarc.montiarcautomaton.cocos.conventions.AutomatonHasOutput;
+import de.monticore.lang.montiarc.montiarcautomaton.cocos.conventions.AutomatonUppercase;
+import de.monticore.lang.montiarc.montiarcautomaton.cocos.conventions.MultipleBehaviorImplementation;
 
 public class MontiArcAutomatonCocos {
   public static MontiArcAutomatonCocoCheckerFix createChecker() {
     MontiArcAutomatonCocoCheckerFix checker = new MontiArcAutomatonCocoCheckerFix();
     checker.addChecker(MontiArcCoCos.createChecker());
     
-    addIOAutomatonCocos(checker);    
+    // ass all required IO-Automaton cocos
+    createIOAutomatonJavaChecker(checker);
     
+    // add all MontiArcAutomaton specific cocos
     return (MontiArcAutomatonCocoCheckerFix)checker
-        .addCoCo(new de.monticore.lang.montiarc.montiarcautomaton.cocos.AutomatonUppercase())
-        
-//        .addCoCo(new AutomatonHasInput())// can be omitted because AutomatonContext is not allowed due to grammar
-//        .addCoCo(new AutomatonHasOutput())// can be omitted because AutomatonContext is not allowed due to grammar
-//        .addCoCo(new AutomatonHasVariable())// can be omitted because AutomatonContext is not allowed due to grammar
-        
+        .addCoCo(new AutomatonUppercase())        
+        .addCoCo(new AutomatonHasInput())
+        .addCoCo(new AutomatonHasOutput())
+        .addCoCo(new AutomatonUppercase())
+        .addCoCo(new MultipleBehaviorImplementation())
         ;
   }
   
-  private static MontiArcAutomatonCoCoChecker addIOAutomatonCocos(MontiArcAutomatonCoCoChecker checker) {
+  /**
+   * Adds all IO-Automaton cocos used for MontiArcAutomaton.
+   * @return
+   */
+  private static MontiArcAutomatonCoCoChecker createIOAutomatonJavaChecker(MontiArcAutomatonCoCoChecker checker) {
     return checker
     // CONVENTIONS
     .addCoCo(new AutomatonHasNoState())
@@ -68,7 +70,6 @@ public class MontiArcAutomatonCocos {
     .addCoCo((IOAutomatonASTInitialStateDeclarationCoCo)new ReactionWithAlternatives())
     .addCoCo((IOAutomatonASTTransitionCoCo)new ReactionWithAlternatives())
     .addCoCo(new UseOfForbiddenExpression())
-    .addCoCo(new AutomatonUppercase())
     .addCoCo(new StateUppercase())
     .addCoCo((IOAutomatonASTInputDeclarationCoCo)new DeclarationNamesLowerCase()) // TODO symboltable implementation needed
     .addCoCo((IOAutomatonASTOutputDeclarationCoCo)new DeclarationNamesLowerCase()) // TODO symboltable implementation needed
@@ -76,7 +77,7 @@ public class MontiArcAutomatonCocos {
     
     // REFERENTIAL INTEGRITY
     .addCoCo(new DeclaredInitialStateDoesNotExist())
-    .addCoCo((IOAutomatonASTIOAssignmentCoCo)new UseOfUndeclaredField())
+    .addCoCo(new UseOfUndeclaredField())
     .addCoCo(new UseOfUndefinedState())
     .addCoCo(new AssignmentHasNoName())
     

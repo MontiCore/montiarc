@@ -1,0 +1,14 @@
+package invalid;
+
+component UniquePorts {
+  port
+    in Integer a,
+    out Integer a;
+  
+  implementation UniquePorts {  
+  	state Start;
+    initial Start;
+
+    Start -> Start;
+  }
+}

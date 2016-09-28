@@ -13,11 +13,9 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
+import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarcautomaton.AbstractSymtabTest;
-import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
-import de.monticore.lang.montiarc.montiarcautomaton._cocos.MontiArcAutomatonCoCoChecker;
-import de.monticore.lang.montiarc.montiarcbehavior._ast.ASTMontiArcBehaviorNode;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;

@@ -1,0 +1,31 @@
+package invalid;
+
+component InvalidAutomatonBehaviorImpl {
+  port
+    in Integer a;
+
+  implementation InvalidAutomatonBehaviorImpl {
+  	variable int c;
+  
+  	state Start;
+    initial Start;
+
+    Start -> Start [c < 2];
+  }
+  
+  implementation DuplicatedAutomatonImpl {  
+  	state Start;
+    initial Start;
+
+    Start;
+  }
+  
+  implementation lowercaseName {
+  	variable int c;
+  
+  	state Start;
+    initial Start;
+
+    Start -> Start [c < 2];
+  }
+}

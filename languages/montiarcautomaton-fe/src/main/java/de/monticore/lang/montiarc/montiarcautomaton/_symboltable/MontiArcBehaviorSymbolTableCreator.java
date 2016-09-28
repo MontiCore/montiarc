@@ -4,7 +4,6 @@ import java.util.Deque;
 
 import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
 import de.monticore.lang.montiarc.montiarcbehavior._ast.ASTBehaviorImplementation;
-import de.monticore.lang.montiarc.montiarcbehavior._ast.ASTMontiArcBehaviorNode;
 import de.monticore.lang.montiarc.montiarcbehavior._visitor.CommonMontiArcBehaviorDelegatorVisitor;
 import de.monticore.lang.montiarc.montiarcbehavior._visitor.MontiArcBehaviorVisitor;
 import de.monticore.symboltable.MutableScope;
@@ -32,27 +31,15 @@ public class MontiArcBehaviorSymbolTableCreator extends de.monticore.symboltable
     }
   }
   
-  private String automatonName;
   
   @Override
   public void visit(ASTBehaviorImplementation node) {
-    automatonName = node.getName();
-  }
-  
-  @Override
-  public void endVisit(ASTBehaviorImplementation node) {
-    automatonName = null;
-    setEnclosingScopeOfNodes(node);
-  }
-  
-  @Override
-  public void visit(ASTMontiArcBehaviorNode node) {
-    AutomatonSymbol automaton = new AutomatonSymbol(automatonName);
+    AutomatonSymbol automaton = new AutomatonSymbol(node.getName());
     addToScopeAndLinkWithNode(automaton, node); // introduces new scope
   }
   
   @Override
-  public void endVisit(ASTMontiArcBehaviorNode node) {    
+  public void endVisit(ASTBehaviorImplementation node) {
     removeCurrentScope();
   }
 }

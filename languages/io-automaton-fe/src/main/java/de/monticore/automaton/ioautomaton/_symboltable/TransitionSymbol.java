@@ -1,21 +1,23 @@
 package de.monticore.automaton.ioautomaton._symboltable;
 
-import de.monticore.automaton.ioautomaton._symboltable.StateSymbolReference;
-import de.monticore.automaton.ioautomaton._symboltable.TransitionSymbolTOP;
+import java.util.Optional;
+
+import de.monticore.automaton.ioautomaton._ast.ASTBlock;
+import de.monticore.automaton.ioautomaton._ast.ASTGuard;
 
 public class TransitionSymbol extends TransitionSymbolTOP {
 
   private StateSymbolReference source;
   private StateSymbolReference target;
-  private boolean hasGuard;
-  private boolean hasStimulus;
-  private boolean hasReaction;
+  private Optional<ASTGuard> guard;
+  private Optional<ASTBlock> stimulus;
+  private Optional<ASTBlock> reaction;
 
   public TransitionSymbol(String name) {
     super(name);
-    this.hasGuard = false;
-    this.hasStimulus = false;
-    this.hasReaction = false;
+    this.guard = Optional.empty();
+    this.stimulus = Optional.empty();
+    this.reaction = Optional.empty();
   }
   
   public StateSymbolReference getSource() {
@@ -34,28 +36,28 @@ public class TransitionSymbol extends TransitionSymbolTOP {
     this.target = target;
   }
 
-  public void setGuard(boolean b){
-    this.hasGuard = b;
+  public void setGuardAST(Optional<ASTGuard> guard){
+    this.guard = guard;
   }
   
-  public boolean hasGuard(){
-    return this.hasGuard;
+  public Optional<ASTGuard> getGuardAST(){
+    return this.guard;
+  }
+
+  public void setStimulusAST(Optional<ASTBlock> block){
+    this.stimulus = block;
   }
   
-  public void setStimulus(boolean b){
-    this.hasStimulus = b;
+  public Optional<ASTBlock> getStimulusAST(){
+    return this.stimulus;
+  }
+
+  public void setReactionAST(Optional<ASTBlock> block){
+    this.reaction = block;
   }
   
-  public boolean hasStimulus(){
-    return this.hasStimulus;
-  }
-  
-  public void setReaction(boolean b){
-    this.hasReaction = b;
-  }
-  
-  public boolean hasReaction(){
-    return this.hasReaction;
+  public Optional<ASTBlock> getReactionAST(){
+    return this.reaction;
   }
   
   @Override

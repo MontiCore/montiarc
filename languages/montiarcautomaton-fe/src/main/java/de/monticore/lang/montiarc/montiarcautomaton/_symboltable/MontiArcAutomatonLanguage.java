@@ -27,10 +27,12 @@ public class MontiArcAutomatonLanguage extends MontiArcAutomatonLanguageTOP {
     // resolver for montiarc automaton:
     addResolver(new BehaviorEmbeddingResolvingFilter());
     addResolver(new Port2VariableResolvingFilter());
+    
+    // TODO currently required to resolve types of expressions with cd in MontiArcAutomaton
     addResolver(new CDTypeSymbol2JavaTypeFilter());
     addResolver(new CDFieldSymbol2JavaFieldFilter());
     
-    // following resolver are from montiarc:    
+    // following resolver are copied from montiarc:    
     addResolver(new CommonResolvingFilter<ComponentSymbol>(ComponentSymbol.KIND));
     addResolver(new CommonResolvingFilter<ComponentInstanceSymbol>(ComponentInstanceSymbol.KIND));
     addResolver(new CommonResolvingFilter<PortSymbol>(PortSymbol.KIND));

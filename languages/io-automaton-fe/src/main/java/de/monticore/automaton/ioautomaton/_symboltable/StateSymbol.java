@@ -2,26 +2,37 @@ package de.monticore.automaton.ioautomaton._symboltable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import de.monticore.automaton.ioautomaton._symboltable.StateSymbolTOP;
+import de.monticore.automaton.ioautomaton._ast.ASTBlock;
 
 public class StateSymbol extends StateSymbolTOP {
 
   private List<String> stereoValues; 
+  private Optional<ASTBlock> initialReaction;
   private boolean isInitial;
   
   public StateSymbol(String name) {
     super(name);
     this.stereoValues = new ArrayList<>();
+    this.initialReaction = Optional.empty();
     this.isInitial = false;
   }
   
-  public void setInitial(boolean initial) {
-    isInitial = initial;
+  public void setInitial(boolean isInitial) {
+    this.isInitial = isInitial;
+  }
+  
+  public void setInitialReactionAST(Optional<ASTBlock> reaction) {
+    initialReaction = reaction;
   }
   
   public boolean isInitial() {
-    return isInitial;
+    return initialReaction.isPresent();
+  }
+  
+  public Optional<ASTBlock> getInitialReactionAST() {
+    return initialReaction;
   }
 
   public List<String> getStereoValues() {
