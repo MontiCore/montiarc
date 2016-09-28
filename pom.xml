@@ -27,9 +27,9 @@
     <cd4a.version>1.3.6.2</cd4a.version>
 
     <!-- .. SE-Libraries ..................................................... -->
-    <monticore.version>4.4.2-SNAPSHOT</monticore.version>
+    <monticore.version>4.4.3-SNAPSHOT</monticore.version>
     <mc.grammars.assembly.version>0.0.6-SNAPSHOT</mc.grammars.assembly.version>
-    <se-commons.version>1.7.6</se-commons.version>
+    <se-commons.version>1.7.7-SNAPSHOT</se-commons.version>
 
     <!-- generator -->
     <groovy.version>2.3.0</groovy.version>
@@ -43,7 +43,7 @@
 
 
     <!-- .. Plugins ....................................................... -->
-    <monticore.plugin>4.4.2-SNAPSHOT</monticore.plugin>
+    <monticore.plugin>4.4.3-SNAPSHOT</monticore.plugin>
     <assembly.plugin>2.5.4</assembly.plugin>
     <compiler.plugin>3.3</compiler.plugin>
     <se-groovy.maven.version>1.2.2</se-groovy.maven.version>
