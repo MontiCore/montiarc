@@ -48,7 +48,7 @@ public class TaggingScopeSpanningSymbol extends CommonScopeSpanningSymbol
    * @param tag the tag symbol which should be added
    */
   public void addTag(final TagSymbol tag) {
-    if (!getMutableSpannedScope().getSymbols().contains(tag)) {
+    if (!getMutableSpannedScope().getSymbols().containsKey(tag.getName())) {
       getMutableSpannedScope().add(tag);
     }
   }

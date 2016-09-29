@@ -64,7 +64,7 @@ public class TaggingSymbol extends CommonSymbol implements IsTaggable {
    * @param tag the tag symbol which should be added
    */
   public void addTag(final TagSymbol tag) {
-    if (!getScope().getSymbols().contains(tag)) {
+    if (!getScope().getSymbols().containsKey(tag.getName())) {
       getScope().add(tag);
     }
   }
