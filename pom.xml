@@ -43,7 +43,7 @@
 
 
     <!-- .. Plugins ....................................................... -->
-    <monticore.plugin>4.4.2-SNAPSHOT</monticore.plugin>
+    <monticore.plugin>4.4.2</monticore.plugin>
     <assembly.plugin>2.5.4</assembly.plugin>
     <compiler.plugin>3.3</compiler.plugin>
     <se-groovy.maven.version>1.2.2</se-groovy.maven.version>
