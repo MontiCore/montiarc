@@ -5,7 +5,7 @@ import java.util.Deque;
 import java.util.List;
 
 import de.monticore.automaton.ioautomaton._ast.ASTAutomaton;
-import de.monticore.automaton.ioautomaton._ast.ASTAutomatonCore;
+import de.monticore.automaton.ioautomaton._ast.ASTAutomatonBody;
 import de.monticore.automaton.ioautomaton._ast.ASTIOAssignment;
 import de.monticore.automaton.ioautomaton._ast.ASTInitialStateDeclaration;
 import de.monticore.automaton.ioautomaton._ast.ASTInputDeclaration;
@@ -111,13 +111,13 @@ public class IOAutomatonSymbolTableCreator extends de.monticore.symboltable.Comm
   }
   
   @Override
-  public void visit(ASTAutomatonCore node) {
+  public void visit(ASTAutomatonBody node) {
     // needed here, else setEnclosingScopeOfNodes will not work
     node.setEnclosingScope(currentScope().get());
   }
   
   @Override
-  public void endVisit(ASTAutomatonCore node) {
+  public void endVisit(ASTAutomatonBody node) {
     setEnclosingScopeOfNodes(node);
     // automaton core loaded & all enclosing scopes set, so we can reconstruct the missing assignment names
     node.accept(new AssignmentNameCompleter(currentScope().get()));

@@ -1,4 +1,4 @@
-package de.monticore.automata.ioautomatajava.coco;
+package de.monticore.automaton.ioautomatonjava.cocos;
 
 import org.junit.BeforeClass;
 import org.junit.Test;

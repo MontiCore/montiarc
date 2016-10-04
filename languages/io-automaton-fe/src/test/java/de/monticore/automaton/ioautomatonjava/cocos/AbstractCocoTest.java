@@ -1,11 +1,9 @@
-package de.monticore.automata.ioautomatajava.coco;
+package de.monticore.automaton.ioautomatonjava.cocos;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,9 +13,8 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
-import de.monticore.automata.ioautomata.test.AbstractSymtabTest;
+import de.monticore.automaton.ioautomaton.AbstractSymtabTest;
 import de.monticore.automaton.ioautomaton._ast.ASTIOAutomatonNode;
-import de.monticore.automaton.ioautomaton._cocos.IOAutomatonCoCoChecker;
 import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
 import de.monticore.automaton.ioautomatonjava._cocos.IOAutomatonJavaCoCoChecker;
 import de.monticore.symboltable.Scope;

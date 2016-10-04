@@ -1,4 +1,4 @@
-package de.monticore.automata.ioautomatajava.coco;
+package de.monticore.automaton.ioautomatonjava.cocos;
 
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTIOAssignmentCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTInitialStateDeclarationCoCo;

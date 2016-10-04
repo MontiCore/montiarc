@@ -1,4 +1,4 @@
-package de.monticore.automata.ioautomata.test;
+package de.monticore.automaton.ioautomaton;
 
 import java.nio.file.Paths;
 
