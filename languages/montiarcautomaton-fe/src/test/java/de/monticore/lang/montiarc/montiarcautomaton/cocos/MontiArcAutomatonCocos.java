@@ -42,7 +42,7 @@ public class MontiArcAutomatonCocos {
     MontiArcAutomatonCocoCheckerFix checker = new MontiArcAutomatonCocoCheckerFix();
     checker.addChecker(MontiArcCoCos.createChecker());
     
-    // ass all required IO-Automaton cocos
+    // add all required IO-Automaton cocos
     createIOAutomatonJavaChecker(checker);
     
     // add all MontiArcAutomaton specific cocos
