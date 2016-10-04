@@ -12,9 +12,10 @@
 
   <artifactId>io-automaton-fe</artifactId>
   
-  <properties>    
-    <monticore.java.version>4.3.6-SNAPSHOT</monticore.java.version> <!-- TODO remove overwriting: 4.3.3-SNAPSHOT -->
-    <monticore.version>4.4.2-SNAPSHOT</monticore.version> <!-- TODO remove overwriting: 4.3.3-SNAPSHOT -->
+  <properties><!-- TODO overwrites montiarc-core version numbers. Can be omitted if montiarc uses these versions -->
+    <monticore.java.version>4.3.6-SNAPSHOT</monticore.java.version>
+    <monticore.version>4.4.3-SNAPSHOT</monticore.version>
+    <se-commons.version>1.7.7-SNAPSHOT</se-commons.version>
   </properties>
 
   <!-- == PROJECT DEPENDENCIES ============================================= -->
