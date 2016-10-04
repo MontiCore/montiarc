@@ -5,7 +5,6 @@ import java.util.Collection;
 import de.monticore.symboltable.CommonScope;
 import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.MutableScope;
-import de.monticore.symboltable.Scopes;
 import de.monticore.symboltable.SymbolKind;
 import de.monticore.symboltable.resolving.ResolvingFilter;
 
@@ -45,7 +44,6 @@ public class TaggingSymbol extends CommonSymbol implements IsTaggable {
    *
    * @return all tags of the components
    */
-  @Override
   public Collection<TagSymbol> getTags() {
     return getScope().<TagSymbol>resolveLocally(TagSymbol.KIND);
   }
@@ -56,7 +54,6 @@ public class TaggingSymbol extends CommonSymbol implements IsTaggable {
    * getTags(PowerConsumption.TAGKIND)
    * --> methodology is the same as in PN's resolve function
    */
-  @Override
   public <T extends TagSymbol> Collection<T> getTags(final TagKind tagKind) {
     return getScope().<T>resolveLocally(tagKind);
   }
@@ -66,9 +63,8 @@ public class TaggingSymbol extends CommonSymbol implements IsTaggable {
    *
    * @param tag the tag symbol which should be added
    */
-  @Override
   public void addTag(final TagSymbol tag) {
-    if (!Scopes.getAllEncapsulatedSymbols(getScope()).contains(tag)) {
+    if (!getScope().getSymbols().containsKey(tag.getName())) {
       getScope().add(tag);
     }
   }
@@ -78,7 +74,6 @@ public class TaggingSymbol extends CommonSymbol implements IsTaggable {
    *
    * @param tags
    */
-  @Override
   public void addTags(final TagSymbol... tags) {
     for (final TagSymbol tag : tags) {
       addTag(tag);
@@ -90,7 +85,6 @@ public class TaggingSymbol extends CommonSymbol implements IsTaggable {
    *
    * @param tags
    */
-  @Override
   public void addTags(Iterable<? extends TagSymbol> tags) {
     for (TagSymbol tag : tags) {
       addTag(tag);
