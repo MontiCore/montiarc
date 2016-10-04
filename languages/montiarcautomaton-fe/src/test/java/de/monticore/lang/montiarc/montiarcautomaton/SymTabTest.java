@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
 import de.monticore.java.symboltable.JavaFieldSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
@@ -22,9 +21,9 @@ public class SymTabTest extends AbstractSymtabTest {
   }
     
   @Test
-  public void testBumperbot() {
+  public void testParseBumperbot() {
     ASTMontiArcNode node = getAstNode("src/test/resources/", "valid.bumperbot.BumpControl");
-    node = null;
+    assertNotNull(node);
   }
   
   @Test
@@ -43,16 +42,6 @@ public class SymTabTest extends AbstractSymtabTest {
     assertNotNull(field1);
     JavaFieldSymbol field2 = symTab.<JavaFieldSymbol> resolve("valid.bumperbot.datatypes.MotorCommand.STOP", JavaFieldSymbol.KIND).orElse(null);
     assertNotNull(field2);
-  }
-
-  
-  @Test
-  public void testScopeHelper() {
-    Scope symTab = createSymTab("src/test/resources/");
-    ComponentSymbol symbol = symTab.<ComponentSymbol> resolve("valid.bumperbot.BumpControl", ComponentSymbol.KIND).orElse(null);
-    assertNotNull(symbol);
-    
-    Object a=symbol.getSpannedScope().resolve("distance", VariableSymbol.KIND);
   }
   
   protected static ASTMontiArcNode getAstNode(String modelPath, String model) {

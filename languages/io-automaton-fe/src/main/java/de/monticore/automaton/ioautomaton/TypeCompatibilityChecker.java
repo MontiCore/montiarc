@@ -27,7 +27,7 @@ public class TypeCompatibilityChecker {
    * @return
    */
   public static boolean doTypesMatch(JTypeReference<? extends JTypeSymbol> from, JTypeReference<? extends JTypeSymbol> target) {
-    // TODO io automaton currently uses JType instead of JavaType, but type
+    // io-automaton currently uses JType instead of JavaType, but type
     // helper is only implemented for JavaType, so conversion is required
     if (target instanceof JTypeReference<?> && !(target instanceof JavaTypeSymbolReference)) {
       target = new JavaTypeSymbolReference(target.getName(), target.getEnclosingScope(), target.getDimension());
@@ -37,6 +37,7 @@ public class TypeCompatibilityChecker {
     }
     
     // existsAssignment conversion only implemented for JavaType not CommonJType
+    // TODO Don't use JavaDSLHelper for type checking because we ant to check JTypes.
     return helper.existsAssignmentConversion((JavaTypeSymbolReference) from, (JavaTypeSymbolReference) target);
   }
   
@@ -48,6 +49,10 @@ public class TypeCompatibilityChecker {
    * @return
    */
   public static Optional<? extends JavaTypeSymbolReference> getExpressionType(ASTExpression expr) {
+    // TODO Don't use HCJavaDSLTypeResolver here because we want to resolve
+    // JTypes instead of JavaTypes. Because HCJavaDSLTypeResolver is implemented
+    // in JavaDSL, additional adapter may required e.g. CD2Java to use CD types
+    // within Java expressions.
     HCJavaDSLTypeResolver typeResolver = new HCJavaDSLTypeResolver(helper);
     expr.accept(typeResolver);
     return typeResolver.getResult();

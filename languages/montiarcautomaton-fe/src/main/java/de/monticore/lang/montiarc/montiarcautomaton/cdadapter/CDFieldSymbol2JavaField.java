@@ -1,4 +1,4 @@
-package de.monticore.lang.montiarc.montiarcautomaton._symboltable;
+package de.monticore.lang.montiarc.montiarcautomaton.cdadapter;
 
 import java.util.Optional;
 
@@ -13,6 +13,9 @@ import de.monticore.symboltable.types.JAttributeSymbolKind;
 import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
 import de.monticore.umlcd4a.symboltable.references.CDTypeSymbolReference;
 
+// TODO required for resolving types of an expression that uses cd stuff. See
+// de.monticore.automaton.ioautomaton.TypeCompatibilityChecker for further
+// information.
 public class CDFieldSymbol2JavaField extends JavaFieldSymbol implements SymbolAdapter<CDFieldSymbol> {
   private final CDFieldSymbol adaptee;
   

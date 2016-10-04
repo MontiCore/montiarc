@@ -9,7 +9,7 @@ component grammar IOAutomaton extends de.monticore.lang.montiarc.Values {
      * @attribute AutomatonCore: The automaton body
      */
     Automaton@! = Stereotype? "automaton" Name "{"
-      AutomatonCore
+      AutomatonBody
     "}";
     
     /**
@@ -17,7 +17,7 @@ component grammar IOAutomaton extends de.monticore.lang.montiarc.Values {
      * @attribute AutomatonContext: Declaration of all Inputs/Outputs/Variables
      * @attribute AutomatonContent: Declaration of all States/Transitions
      */
-    AutomatonCore@! = AutomatonContext AutomatonContent;
+    AutomatonBody@! = AutomatonContext AutomatonContent;
     
     external GuardExpression;
     

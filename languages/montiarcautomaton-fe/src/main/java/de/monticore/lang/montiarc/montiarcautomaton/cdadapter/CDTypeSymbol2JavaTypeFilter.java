@@ -1,4 +1,4 @@
-package de.monticore.lang.montiarc.montiarcautomaton._symboltable;
+package de.monticore.lang.montiarc.montiarcautomaton.cdadapter;
 
 import com.google.common.base.Preconditions;
 
@@ -7,6 +7,9 @@ import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.resolving.TransitiveAdaptedResolvingFilter;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 
+//TODO required for resolving types of an expression that uses cd stuff. See
+//de.monticore.automaton.ioautomaton.TypeCompatibilityChecker for further
+//information.
 public class CDTypeSymbol2JavaTypeFilter extends TransitiveAdaptedResolvingFilter<JavaTypeSymbol> {
 
   public CDTypeSymbol2JavaTypeFilter() {

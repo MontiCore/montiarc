@@ -1,21 +1,18 @@
-package de.monticore.lang.montiarc.montiarcautomaton._symboltable;
+package de.monticore.lang.montiarc.montiarcautomaton.cdadapter;
 
-import java.util.List;
 import java.util.Optional;
 
 import de.monticore.ast.ASTNode;
-import de.monticore.java.symboltable.JavaFieldSymbol;
-import de.monticore.java.symboltable.JavaMethodSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbol;
-import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.SymbolKind;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.symboltable.resolving.SymbolAdapter;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 
+//TODO required for resolving types of an expression that uses cd stuff. See
+//de.monticore.automaton.ioautomaton.TypeCompatibilityChecker for further
+//information.
 public class CDTypeSymbol2JavaType extends JavaTypeSymbol implements SymbolAdapter<CDTypeSymbol> {
   
   private final CDTypeSymbol adaptee;
