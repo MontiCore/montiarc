@@ -1,0 +1,11 @@
+package valid.bumperbot;
+
+classdiagram Types {
+
+public enum MotorCmd {
+  FORWARD,
+  BACKWARD,
+  STOP;  
+}
+
+}

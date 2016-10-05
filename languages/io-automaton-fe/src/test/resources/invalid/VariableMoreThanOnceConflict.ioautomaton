@@ -1,0 +1,13 @@
+package invalid;
+
+automaton VariableMoreThanOnceConflict{
+
+    input int i;
+    output int j;
+    
+    variable int a;
+    variable double a;
+    
+    state S;
+    initial S;
+}

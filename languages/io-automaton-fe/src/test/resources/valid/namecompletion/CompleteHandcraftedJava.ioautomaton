@@ -1,0 +1,18 @@
+package valid.namecompletion;
+
+import valid.namecompletion.Distance; // tries to load this as CD type!
+import valid.namecompletion.Command;
+
+automaton CompleteHandcraftedJava {
+  input Distance distance;
+  output Command command;
+  
+  state Okay;
+  initial Okay;
+  // initial Okay / {Command.createStop()};
+  
+  Okay -> Okay {Distance.CLOSE};
+  // Okay -> Stopped {Distance.CLOSE} / {Command.createStop()};
+  // What would be the purpose of object-pattern matching for inputs?
+  // will be translated to == on object code - whatever this implies  
+}

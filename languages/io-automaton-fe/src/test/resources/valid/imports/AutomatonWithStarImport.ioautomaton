@@ -1,0 +1,12 @@
+package valid.imports;
+
+import valid.imports.*;
+
+automaton AutomatonWithStarImport{
+
+	input Test a;
+	output Double b;
+	
+	state S;
+	initial S;
+}

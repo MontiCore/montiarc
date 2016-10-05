@@ -1,0 +1,8 @@
+package invalid;
+
+automaton NoInitialState {
+    input int a;
+    output int b;
+    
+    state S;   
+}

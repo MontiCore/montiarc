@@ -1,0 +1,13 @@
+package invalid;
+
+automaton InitialValueFit {
+
+	input int a=5, b="Wrong";
+	
+	variable int c="Wrong";
+	
+	output int d="Wrong", e=5; 
+	
+	state Idle;	
+	initial Idle;
+}

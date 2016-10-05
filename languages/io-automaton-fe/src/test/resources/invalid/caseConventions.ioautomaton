@@ -1,0 +1,11 @@
+package invalid;
+
+automaton caseConventions{
+    input int A;
+    output int B;
+    variable int C;
+    
+    state idle;
+    initial idle;
+    
+}

@@ -1,0 +1,20 @@
+package valid.ForCorrectnessTest;
+
+import java.util.List;
+import valid.ForCorrectnessTest.Test;
+
+automaton CorrectModel{
+
+    input List<Integer> inInt;
+    
+    variable List<Integer> var;
+    variable Test t;
+    variable Integer i = 5;   
+    
+    output boolean out;
+    
+    state Start;
+    initial Start;
+    
+    Start [inInt.size() == var.size()] {inInt = var|2 , var = inInt} / {out = (inInt.size()==var.size())};
+}
