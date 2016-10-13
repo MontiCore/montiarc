@@ -1,0 +1,30 @@
+package valid.bumperbot;
+
+import valid.bumperbot.Types.MotorCmd;
+import valid.bumperbot.TimerCmd;
+
+automaton BumpControl{
+	input Boolean bump;
+	input TimerSignal ts;
+	
+	output TimerCmd tc;
+	output MotorCmd rMotor, lMotor;
+	
+	state Idle, Driving, Backing, Turning;
+	initial Idle / {rMotor = MotorCmd.STOP, lMotor = MotorCmd.STOP};
+	
+	Idle -> Driving {bump == true} 
+	     / {rMotor = MotorCmd.FORWARD, lMotor = MotorCmd.FORWARD};
+	     
+	Driving -> Backing {bump == true} 
+	     / {rMotor = MotorCmd.BACKWARD, 
+	        lMotor = MotorCmd.BACKWARD, 
+	        tc = TimerCmd.DOUBLE_DELAY};
+	     
+	Backing -> Turning {ts == TimerSignal.ALERT} 
+      / {rMotor = MotorCmd.FORWARD, 
+        tc = TimerCmd.SINGLE_DELAY};
+        
+	Turning -> Driving {ts == TimerSignal.ALERT} 
+	   / {lMotor = MotorCmd.FORWARD};
+}

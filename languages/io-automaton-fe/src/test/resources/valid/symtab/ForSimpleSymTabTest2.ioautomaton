@@ -1,0 +1,6 @@
+package valid.symtab;
+
+automaton ForSimpleSymTabTest2{	
+	state S1, S2;
+	initial S1;
+}

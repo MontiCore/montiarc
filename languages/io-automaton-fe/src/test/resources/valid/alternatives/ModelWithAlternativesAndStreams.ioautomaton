@@ -1,0 +1,15 @@
+package valid.alternatives;
+
+import java.util.List;
+import valid.corecctness.Test;
+
+automaton ModelWithAlternativesAndStreams{
+
+    input int i;
+    output int o;
+    
+    state Start;
+    initial Start / {o = [1,2,3]};
+    
+    Start {i = alt{1,2,3}};
+}

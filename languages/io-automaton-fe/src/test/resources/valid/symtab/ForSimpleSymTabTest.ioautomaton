@@ -1,0 +1,15 @@
+package valid.symtab;
+
+automaton ForSimpleSymTabTest{
+
+	input int i1;
+	
+	variable double v1;
+	
+	output boolean o1;
+	
+	state S1, S2;
+	initial S1;
+	
+	S1 -> S2;
+}

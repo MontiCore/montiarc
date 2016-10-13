@@ -1,0 +1,11 @@
+package invalid;
+
+automaton ReactionAndActionDontFit{
+    input int i;    
+    output int a;
+    
+    state A;   
+    initial A;
+    
+    A / {a = false};
+}
