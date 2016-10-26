@@ -1,12 +1,12 @@
 ${tc.params("de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol compSym", "de.montiarc.generator.codegen.GeneratorHelper helper")}
 
-<#if !glex.getGlobalValue("TIME_PARADIGM_STORAGE_KEY").isTimeSynchronous() && compSym.isAtomic()>
+<#if !glex.getGlobalVar("TIME_PARADIGM_STORAGE_KEY").isTimeSynchronous() && compSym.isAtomic()>
     /*
      * (non-Javadoc)
-     * @see ${glex.getGlobalValue("IComponent")}#handleMessage(${glex.getGlobalValue("IInPort")}, sim.generic.Message<?>)
+     * @see ${glex.getGlobalVar("IComponent")}#handleMessage(${glex.getGlobalVar("IInPort")}, sim.generic.Message<?>)
      */
     @Override
-    public void handleMessage(${glex.getGlobalValue("IInPort")}<?> port, sim.generic.Message<?> message) {
+    public void handleMessage(${glex.getGlobalVar("IInPort")}<?> port, sim.generic.Message<?> message) {
 <#if compSym.getSuperComponent().isPresent()>
         super.handleMessage(port, message);
 </#if>        

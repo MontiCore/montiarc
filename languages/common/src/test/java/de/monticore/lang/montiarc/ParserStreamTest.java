@@ -47,7 +47,9 @@ public class ParserStreamTest {
 
   @Test
   public void testTag() throws RecognitionException, IOException {
-    test("stream");
+    StreamParser parser = new StreamParser();
+    parser.parse_String("src/test/resources/Test1.stream");
+//    test("stream");
   }
 
   private void test(String fileEnding) throws IOException {

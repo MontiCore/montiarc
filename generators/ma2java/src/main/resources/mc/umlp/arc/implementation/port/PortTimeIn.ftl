@@ -2,9 +2,9 @@ ${tc.params("de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol co
 
     <#if helper.noIncomingPorts(compSym)>
     <#if compSym.isAtomic()>
-    private ${glex.getGlobalValue("IInSimPort")}<Object> _${glex.getGlobalValue("CODEGEN_TIME_IN_PORTNAME")};
+    private ${glex.getGlobalVar("IInSimPort")}<Object> _${glex.getGlobalVar("CODEGEN_TIME_IN_PORTNAME")};
     <#elseif compSym.isDecomposed() && !helper.getAdditionalReceiverPort(compSym)??>
-    private sim.port.IForwardPort<Object> _${glex.getGlobalValue("CODEGEN_TIME_IN_PORTNAME")};
+    private sim.port.IForwardPort<Object> _${glex.getGlobalVar("CODEGEN_TIME_IN_PORTNAME")};
     </#if>
     
     @Override
@@ -12,7 +12,7 @@ ${tc.params("de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol co
     <#if compSym.isAtomic() || !helper.getAdditionalReceiverPort(compSym)?? >
         return _sourceTickPort;
     <#else>
-        return ${helper.getAdditionalReceiverPort(compSym)?uncap_first}._get${glex.getGlobalValue("CODEGEN_TIME_IN_PORTNAME")?cap_first}();
+        return ${helper.getAdditionalReceiverPort(compSym)?uncap_first}._get${glex.getGlobalVar("CODEGEN_TIME_IN_PORTNAME")?cap_first}();
     </#if>
     }
     

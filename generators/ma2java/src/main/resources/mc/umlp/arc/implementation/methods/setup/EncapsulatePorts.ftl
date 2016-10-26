@@ -2,6 +2,6 @@ ${tc.params("de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol co
 
 <#if portHelper.needsEncapsulation(connectorSym, compSym)>
   <#if connectorSym.getTargetPort().get().getName() != "">
-    this.${generatorHelper.printType(connectorSym.getSourcePort().get().getReferenceType())?uncap_first}.add((${glex.getGlobalValue("IInSimPort")}) ${generatorHelper.printType(connectorSym.getTargetPort().get().getReferenceType())?uncap_first}get${connectorSym.getTargetPort().get().getName()?cap_first}());
+    this.${generatorHelper.printType(connectorSym.getSourcePort().get().getReferenceType())?uncap_first}.add((${glex.getGlobalVar("IInSimPort")}) ${generatorHelper.printType(connectorSym.getTargetPort().get().getReferenceType())?uncap_first}get${connectorSym.getTargetPort().get().getName()?cap_first}());
   </#if>
 </#if>

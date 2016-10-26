@@ -76,7 +76,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
     else {
       Log.errorIfNull(parameterType);
       checkArgument(parameterType.isParameter(), "Only parameters can be added.");
-      spannedScope.add(parameterType);
+      getMutableSpannedScope().add(parameterType);
     }
   }
 
@@ -227,7 +227,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
     }
     else {
       checkArgument(formalTypeParameter.isFormalTypeParameter());
-      spannedScope.add(formalTypeParameter);
+      getMutableSpannedScope().add(formalTypeParameter);
     }
   }
 
@@ -436,7 +436,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
       return referencedComponent.get().getConfigParameters();
     }
     else {
-      final Collection<JAttributeSymbol> resolvedAttributes = spannedScope
+      final Collection<JAttributeSymbol> resolvedAttributes = getSpannedScope()
           .resolveLocally(JAttributeSymbol.KIND);
       final List<JAttributeSymbol> parameters = sortSymbolsByPosition(resolvedAttributes.stream()
           .filter(JAttributeSymbol::isParameter).collect(Collectors.toList()));

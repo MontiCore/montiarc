@@ -1,9 +1,9 @@
 ${tc.params("de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol compSym", "de.montiarc.generator.codegen.GeneratorHelper helper")}
 
-<#if glex.getGlobalValue("TIME_PARADIGM_STORAGE_KEY").isTimeSynchronous()>
+<#if glex.getGlobalVar("TIME_PARADIGM_STORAGE_KEY").isTimeSynchronous()>
     /*
      * (non-Javadoc)
-     * @see ${glex.getGlobalValue("ATimedComponent")}#timeStep()
+     * @see ${glex.getGlobalVar("ATimedComponent")}#timeStep()
      */
     @Override
     protected void timeStep() {

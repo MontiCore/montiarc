@@ -1,13 +1,13 @@
 ${tc.params("de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol compSym", "de.montiarc.generator.codegen.GeneratorHelper generatorHelper", "de.montiarc.generator.codegen.PortHelper portHelper")}
 
     /* (non-Javadoc)
-     * @see ${glex.getGlobalValue("IComponent")}#setup(${glex.getGlobalValue("IScheduler")}, ${glex.getGlobalValue("ISimulationErrorHandler")})
+     * @see ${glex.getGlobalVar("IComponent")}#setup(${glex.getGlobalVar("IScheduler")}, ${glex.getGlobalVar("ISimulationErrorHandler")})
      */
     @Override
 <#if compSym.isDecomposed()>    
     @SuppressWarnings("rawtypes")
 </#if>    
-    public void setup(${glex.getGlobalValue("IScheduler")} scheduler, ${glex.getGlobalValue("ISimulationErrorHandler")} errorHandler) {
+    public void setup(${glex.getGlobalVar("IScheduler")} scheduler, ${glex.getGlobalVar("ISimulationErrorHandler")} errorHandler) {
 <#if (compSym.isAtomic() && portHelper.isSingleIn(compSym)) || compSym.getSuperComponent().isPresent()>        
         super.setup(scheduler, errorHandler);
 </#if>	

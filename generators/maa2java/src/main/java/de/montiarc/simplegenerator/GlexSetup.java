@@ -26,14 +26,14 @@ public class GlexSetup {
    */
   public static GlobalExtensionManagement create() {
     GlobalExtensionManagement glex = new GlobalExtensionManagement();
-    glex.addGlobalValue("MontiArcGeneratorVersion", MontiArcGeneratorConstants.VERSION);
+    glex.defineGlobalVar("MontiArcGeneratorVersion", MontiArcGeneratorConstants.VERSION);
     Date now = new Date(System.currentTimeMillis());
-    glex.addGlobalValue("TIME_NOW", DateFormat.getDateTimeInstance().format(now));
-    glex.addGlobalValue("AComponent", MontiArcGeneratorConstants.ABSTRACT_COMPONENT_NAME);
-    glex.addGlobalValue("TIME_PARADIGM_STORAGE_KEY",
+    glex.defineGlobalVar("TIME_NOW", DateFormat.getDateTimeInstance().format(now));
+    glex.defineGlobalVar("AComponent", MontiArcGeneratorConstants.ABSTRACT_COMPONENT_NAME);
+    glex.defineGlobalVar("TIME_PARADIGM_STORAGE_KEY",
         MontiArcGeneratorConstants.TIME_PARADIGM_STORAGE_KEY);
         
-    glex.addGlobalValue("CODEGEN_TIME_IN_PORTNAME",
+    glex.defineGlobalVar("CODEGEN_TIME_IN_PORTNAME",
         MontiArcGeneratorConstants.CODEGEN_TIME_IN_PORTNAME);
     return glex;
   }

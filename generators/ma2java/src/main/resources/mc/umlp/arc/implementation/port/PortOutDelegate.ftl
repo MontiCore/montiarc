@@ -6,7 +6,7 @@ ${tc.params("de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol co
      * ${portSym.getName()?uncap_first}.
      */
     protected void send${portSym.getName()?cap_first}(final ${helper.printType(portSym.getTypeReference())} message) {
-    <#if glex.getGlobalValue("TIME_PARADIGM_STORAGE_KEY").isTimeSynchronous()>
+    <#if glex.getGlobalVar("TIME_PARADIGM_STORAGE_KEY").isTimeSynchronous()>
         if (${portSym.getName()}Buffer != null) {
             getErrorHandler().addReport(new sim.error.ArcSimProblemReport(
                             sim.error.ArcSimProblemReport.Type.WARNING,

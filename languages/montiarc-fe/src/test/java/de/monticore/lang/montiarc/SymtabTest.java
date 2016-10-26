@@ -209,7 +209,7 @@ public class SymtabTest extends AbstractSymtabTest {
     
     assertEquals(2, delay.getConfigArguments().size());
     // TODO add space between "]{" when using next javaDSL version
-    assertEquals("new int[]{1, 2, 3}",
+    assertEquals("new int[] {1, 2, 3}",
         delay.getConfigArguments().get(0).getValue());
     // assertEquals("new int[] {1, 2, 3}", delay.getConfigArguments().get(0).getValue());
     // TODO value symbol
@@ -249,7 +249,7 @@ public class SymtabTest extends AbstractSymtabTest {
     
     assertEquals(2, delay.getConfigArguments().size());
     // TODO add space between "]{" when using newer javaDSL
-    assertEquals("new int[]{1, 2, 3}", delay.getConfigArguments().get(0).getValue());
+    assertEquals("new int[] {1, 2, 3}", delay.getConfigArguments().get(0).getValue());
     // TODO value symbol
     // assertEquals(Kind.ConstructorCall, delay.getConfigArguments().get(0).getKind());
     // assertEquals("1",
