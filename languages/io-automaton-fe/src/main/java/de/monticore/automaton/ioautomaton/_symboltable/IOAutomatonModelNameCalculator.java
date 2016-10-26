@@ -7,10 +7,8 @@
 package de.monticore.automaton.ioautomaton._symboltable;
 
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
-import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.SymbolKind;
 
 public class IOAutomatonModelNameCalculator extends de.monticore.CommonModelNameCalculator {
@@ -28,14 +26,8 @@ public class IOAutomatonModelNameCalculator extends de.monticore.CommonModelName
       if (StateSymbol.KIND.isKindOf(kind)) {
         calculatedModelNames.addAll(calculateModelNameForState(name));
       }
-      if (InitialStateDeclarationSymbol.KIND.isKindOf(kind)) {
-        calculatedModelNames.addAll(calculateModelNameForInitialStateDeclaration(name));
-      }
       if (TransitionSymbol.KIND.isKindOf(kind)) {
         calculatedModelNames.addAll(calculateModelNameForTransition(name));
-      }
-      if (GuardSymbol.KIND.isKindOf(kind)) {
-        calculatedModelNames.addAll(calculateModelNameForGuard(name));
       }
 
     return calculatedModelNames;

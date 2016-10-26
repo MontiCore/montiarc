@@ -5,10 +5,6 @@
 
 package de.monticore.automaton.ioautomaton._symboltable;
 
-import static de.monticore.symboltable.Symbols.sortSymbolsByPosition;
-
-import java.util.Collection;
-
 public class TransitionSymbolTOP extends TransitionSymbolEMPTY {
 
   public TransitionSymbolTOP(String name) {
@@ -26,11 +22,6 @@ public class TransitionSymbolTOP extends TransitionSymbolEMPTY {
 
 
 
-
-
-  public Collection<GuardSymbol> getGuard() {
-    return sortSymbolsByPosition(getSpannedScope().resolveLocally(GuardSymbol.KIND));
-  }
 
 
 

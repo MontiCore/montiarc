@@ -4,16 +4,13 @@ import java.util.Optional;
 
 import de.monticore.ast.ASTNode;
 import de.monticore.automaton.ioautomaton._symboltable.AutomatonResolvingFilter;
-import de.monticore.automaton.ioautomaton._symboltable.GuardResolvingFilter;
 import de.monticore.automaton.ioautomaton._symboltable.IOAutomatonModelNameCalculator;
-import de.monticore.automaton.ioautomaton._symboltable.InitialStateDeclarationResolvingFilter;
 import de.monticore.automaton.ioautomaton._symboltable.StateResolvingFilter;
 import de.monticore.automaton.ioautomaton._symboltable.TransitionResolvingFilter;
 import de.monticore.automaton.ioautomaton._symboltable.VariableResolvingFilter;
 import de.monticore.modelloader.ModelingLanguageModelLoader;
 import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.ResolverConfiguration;
-import de.monticore.symboltable.SymbolTableCreator;
 
 public class IOAutomatonJavaLanguage extends IOAutomatonJavaLanguageTOP {
   public static final String FILE_ENDING = "ioautomaton";
@@ -39,9 +36,7 @@ public class IOAutomatonJavaLanguage extends IOAutomatonJavaLanguageTOP {
     addResolver(new VariableResolvingFilter());
     addResolver(new AutomatonResolvingFilter());
     addResolver(new StateResolvingFilter());
-    addResolver(new InitialStateDeclarationResolvingFilter());
     addResolver(new TransitionResolvingFilter());
-    addResolver(new GuardResolvingFilter());
     
     addResolver(new Variable2FieldResolvingFilter());
   }

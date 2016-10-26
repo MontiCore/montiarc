@@ -1,11 +1,9 @@
 package de.monticore.automaton.ioautomatonjava.cocos;
 
-import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTIOAssignmentCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTInitialStateDeclarationCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTInputDeclarationCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTOutputDeclarationCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTTransitionCoCo;
-import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTValuationExtCoCo;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTVariableDeclarationCoCo;
 import de.monticore.automaton.ioautomaton.cocos.conventions.AutomatonHasNoInitialState;
 import de.monticore.automaton.ioautomaton.cocos.conventions.AutomatonHasNoInput;
@@ -19,7 +17,7 @@ import de.monticore.automaton.ioautomaton.cocos.conventions.ReactionWithAlternat
 import de.monticore.automaton.ioautomaton.cocos.conventions.StateUppercase;
 import de.monticore.automaton.ioautomaton.cocos.intergrity.AssignmentHasNoName;
 import de.monticore.automaton.ioautomaton.cocos.intergrity.DeclaredInitialStateDoesNotExist;
-import de.monticore.automaton.ioautomaton.cocos.intergrity.UseOfUndefinedState;
+import de.monticore.automaton.ioautomaton.cocos.intergrity.UseOfUndeclaredState;
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.InitialDeclaredMultipleTimes;
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.InputsDefinedMultipleTimes;
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.OutputsDefinedMultipleTimes;
@@ -27,7 +25,6 @@ import de.monticore.automaton.ioautomaton.cocos.uniqueness.StateDefinedMultipleT
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.StateDefinedMultipleTimesStereotypesDontMatch;
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.VariableAndIOsHaveSameName;
 import de.monticore.automaton.ioautomaton.cocos.uniqueness.VariableDefinedMultipleTimes;
-import de.monticore.automaton.ioautomatonjava._cocos.IOAutomatonJavaASTValuationCoCo;
 import de.monticore.automaton.ioautomatonjava._cocos.IOAutomatonJavaCoCoChecker;
 import de.monticore.automaton.ioautomatonjava.cocos.conventions.OutputInExpression;
 import de.monticore.automaton.ioautomatonjava.cocos.conventions.UseOfForbiddenExpression;
@@ -37,7 +34,6 @@ import de.monticore.automaton.ioautomatonjava.cocos.correctness.InitialValueDoes
 import de.monticore.automaton.ioautomatonjava.cocos.correctness.ReactionTypeDoesNotFitOutputType;
 import de.monticore.automaton.ioautomatonjava.cocos.correctness.StimulusTypeDoesNotFitInputType;
 import de.monticore.automaton.ioautomatonjava.cocos.integrity.UseOfUndeclaredField;
-import de.monticore.java.javadsl._cocos.JavaDSLASTPrimaryExpressionCoCo;
 
 public class IOAutomatonJavaCocos {
 
@@ -62,8 +58,8 @@ public class IOAutomatonJavaCocos {
         
         // REFERENTIAL INTEGRITY
         .addCoCo(new DeclaredInitialStateDoesNotExist())
-        .addCoCo((IOAutomatonASTIOAssignmentCoCo)new UseOfUndeclaredField())
-        .addCoCo(new UseOfUndefinedState())
+        .addCoCo(new UseOfUndeclaredField())
+        .addCoCo(new UseOfUndeclaredState())
         .addCoCo(new AssignmentHasNoName())
         
         // TYPE CORRECTNESS

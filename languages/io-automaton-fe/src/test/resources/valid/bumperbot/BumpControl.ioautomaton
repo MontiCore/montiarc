@@ -1,30 +1,18 @@
 package valid.bumperbot;
 
-import valid.bumperbot.Types.MotorCmd;
-import valid.bumperbot.TimerCmd;
+automaton BumpControl {
+    input Double distance;
+    input TimerSignal signal;
+    output TimerCmd timer;
+    output MotorCmd right;
+    output MotorCmd left;
+	   
+    state Idle, Driving, Backing, Turning;
 
-automaton BumpControl{
-	input Boolean bump;
-	input TimerSignal ts;
-	
-	output TimerCmd tc;
-	output MotorCmd rMotor, lMotor;
-	
-	state Idle, Driving, Backing, Turning;
-	initial Idle / {rMotor = MotorCmd.STOP, lMotor = MotorCmd.STOP};
-	
-	Idle -> Driving {bump == true} 
-	     / {rMotor = MotorCmd.FORWARD, lMotor = MotorCmd.FORWARD};
-	     
-	Driving -> Backing {bump == true} 
-	     / {rMotor = MotorCmd.BACKWARD, 
-	        lMotor = MotorCmd.BACKWARD, 
-	        tc = TimerCmd.DOUBLE_DELAY};
-	     
-	Backing -> Turning {ts == TimerSignal.ALERT} 
-      / {rMotor = MotorCmd.FORWARD, 
-        tc = TimerCmd.SINGLE_DELAY};
-        
-	Turning -> Driving {ts == TimerSignal.ALERT} 
-	   / {lMotor = MotorCmd.FORWARD};
+    initial Idle / {right = MotorCmd.STOP, left = MotorCmd.STOP};
+
+    Idle -> Driving  / {right = MotorCmd.FORWARD, left = MotorCmd.FORWARD};
+    Driving -> Backing [distance < 5] / {right = MotorCmd.BACKWARD, left = MotorCmd.BACKWARD, timer = TimerCmd.SINGLE};
+    Backing -> Turning {signal == TimerSignal.ALERT} / {right = MotorCmd.BACKWARD, left = MotorCmd.FORWARD, timer = TimerCmd.DOUBLE};
+    Turning -> Driving {signal == TimerSignal.ALERT} / {left = MotorCmd.FORWARD, right = MotorCmd.FORWARD};
 }

@@ -17,10 +17,6 @@ public class MontiArcAutomatonModelNameCalculator extends de.monticore.CommonMod
   public Set<String> calculateModelNames(final String name, final SymbolKind kind) {
     final Set<String> calculatedModelNames = new LinkedHashSet<>();
 
-      if (BehaviorEmbeddingSymbol.KIND.isKindOf(kind)) {
-        calculatedModelNames.addAll(calculateModelNameForBehaviorEmbedding(name));
-      }
-
     return calculatedModelNames;
   }
 

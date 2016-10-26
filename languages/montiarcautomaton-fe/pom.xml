@@ -12,9 +12,6 @@
 
   <artifactId>montiarcautomaton-fe</artifactId>
   
-  <properties><!-- TODO overwrites montiarc-core version numbers. Can be omitted if montiarc uses at least these versions -->
-    <monticore.java.version>4.3.6-SNAPSHOT</monticore.java.version>
-  </properties>
 
   <!-- == PROJECT DEPENDENCIES ============================================= -->
   <dependencies>
@@ -107,13 +104,11 @@
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>de.monticore.java</artifactId>
-      <version>${monticore.java.version}</version>
     </dependency>
     
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>de.monticore.java</artifactId>
-      <version>${monticore.java.version}</version>
       <classifier>${grammars.classifier}</classifier>
     </dependency>
 

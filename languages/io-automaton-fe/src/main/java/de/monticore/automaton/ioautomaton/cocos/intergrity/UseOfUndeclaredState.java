@@ -18,7 +18,7 @@ import de.se_rwth.commons.logging.Log;
  * @since   $Version$
  *
  */
-public class UseOfUndefinedState implements IOAutomatonASTAutomatonContentCoCo {
+public class UseOfUndeclaredState implements IOAutomatonASTAutomatonContentCoCo {
 
   @Override
   public void check(ASTAutomatonContent node) {
