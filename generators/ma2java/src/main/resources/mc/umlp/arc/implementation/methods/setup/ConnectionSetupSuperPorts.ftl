@@ -2,5 +2,5 @@ ${tc.params("de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol co
 
 <#list portHelper.getIncomingPortsOfSuperComponentToConnect(compSym) as port>
     
-    ((${glex.getGlobalValue("IInSimPort")}) this.get${port.getName()?cap_first}()).setConnected();
+    ((${glex.getGlobalVar("IInSimPort")}) this.get${port.getName()?cap_first}()).setConnected();
 </#list>    

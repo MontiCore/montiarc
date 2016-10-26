@@ -2,12 +2,12 @@ ${tc.params("de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol co
 
 <#if compSym.isAtomic()>
     /* (non-Javadoc)
-     * @see ${glex.getGlobalValue("AComponent")}#handleTick()
+     * @see ${glex.getGlobalVar("AComponent")}#handleTick()
      */
     @Override
     public void handleTick() {
         <#-- ${op.includeTemplates(handleTickStartHook, ast)}-->
-    <#if glex.getGlobalValue("TIME_PARADIGM_STORAGE_KEY").isTimeSynchronous()>
+    <#if glex.getGlobalVar("TIME_PARADIGM_STORAGE_KEY").isTimeSynchronous()>
         triggerTimeSync();
     </#if>    
     <#list compSym.getOutgoingPorts() as port>
@@ -15,7 +15,7 @@ ${tc.params("de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol co
     </#list>
     <#if compSym.getSuperComponent().isPresent()>
         super.handleTick();
-    <#elseif glex.getGlobalValue("TIME_PARADIGM_STORAGE_KEY").isTimed()>
+    <#elseif glex.getGlobalVar("TIME_PARADIGM_STORAGE_KEY").isTimed()>
         incLocalTime();
         timeStep();
     </#if>

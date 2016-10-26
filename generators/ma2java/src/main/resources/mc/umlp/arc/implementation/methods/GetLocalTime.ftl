@@ -2,7 +2,7 @@ ${tc.params("de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol co
 
 <#if compSym.isDecomposed()&&compSym.getBehaviorKind().isTimed()>
     /* (non-Javadoc)
-     * @see ${glex.getGlobalValue("IComponent")}#getLocalTime()
+     * @see ${glex.getGlobalVar("IComponent")}#getLocalTime()
      */
     @Override
     public int getLocalTime() {

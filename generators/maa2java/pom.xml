@@ -23,12 +23,6 @@
     </dependency>
 
     <dependency>
-      <groupId>de.monticore.dex</groupId>
-      <artifactId>dex-gtr</artifactId>
-      <version>4.0.0</version>
-    </dependency>
-
-    <dependency>
       <groupId>montiarc.libraries</groupId>
       <artifactId>simulator-rte</artifactId>
       <version>${project.version}</version>

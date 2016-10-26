@@ -2,5 +2,5 @@ ${tc.params("de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol co
 
         this.${subComponent.getName()?uncap_first} = ${factoryName}.create(${helper.printConfigParametersNames(subComponent.getComponentType().getConfigParameters())});
         this.${subComponent.getName()?uncap_first}.setup(scheduler, errorHandler);
-        ((${glex.getGlobalValue("ISimComponent")}) this.${subComponent.getName()?uncap_first}).setComponentName(
+        ((${glex.getGlobalVar("ISimComponent")}) this.${subComponent.getName()?uncap_first}).setComponentName(
             "${subComponent.getComponentType().getFullName()} ${subComponent.getName()?uncap_first} in ${compSym.getName()}");

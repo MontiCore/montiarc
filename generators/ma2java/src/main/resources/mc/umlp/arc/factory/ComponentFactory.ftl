@@ -55,9 +55,9 @@ public class ${factoryName} {
        doCreate(${helper.printConfigParameters(configParams)}) {<#lt>
     <#if compSym.isAtomic()>
       <#if hwcExists>
-    return new ${compSym.getName()}${glex.getGlobalValue("DEFAULT_ATOMIC_COMPONENT_IMPL_POSTFIX")}(${helper.printConfigParameterNames(configParams)});
+    return new ${compSym.getName()}${glex.getGlobalVar("DEFAULT_ATOMIC_COMPONENT_IMPL_POSTFIX")}(${helper.printConfigParameterNames(configParams)});
       <#else>
-      throw new sim.error.NotImplementedYetException("Behavior implementation ${compSym.getName()}${glex.getGlobalValue("DEFAULT_ATOMIC_COMPONENT_IMPL_POSTFIX")} does not exist. Either create it or subtype the factory "
+      throw new sim.error.NotImplementedYetException("Behavior implementation ${compSym.getName()}${glex.getGlobalVar("DEFAULT_ATOMIC_COMPONENT_IMPL_POSTFIX")} does not exist. Either create it or subtype the factory "
           + "${factoryName} and overwrite its doCreate method to inject instances of your preferred behavior implementation for component ${ast.getName()}.");
       </#if>
     <#else>

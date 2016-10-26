@@ -2,7 +2,7 @@
 
     /*
      * (non-Javadoc)
-     * @see ${glex.getGlobalValue("IComponent")}#checkConstraints()
+     * @see ${glex.getGlobalVar("IComponent")}#checkConstraints()
      */
     @Override
     public void checkConstraints() {
@@ -13,7 +13,7 @@
                 new sim.error.ArcSimProblemReport(
                     sim.error.ArcSimProblemReport.Type.ERROR, 
                     "Injured constraint ${inv.getName()}",
-                    <#if glex.getGlobalValue("TIME_PARADIGM_STORAGE_KEY").isTimed()>
+                    <#if glex.getGlobalVar("TIME_PARADIGM_STORAGE_KEY").isTimed()>
                         getLocalTime(), 
                     </#if>
                     getComponentName()

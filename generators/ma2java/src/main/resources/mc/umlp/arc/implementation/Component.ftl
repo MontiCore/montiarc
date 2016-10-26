@@ -14,7 +14,7 @@ package ${_package};
  */
 public ${modifier} class ${prefix}${compSym.getName()}${typeParameters} <#t>
     extends ${superComponent} <#t>
-    implements ${_package}.interfaces.I${compSym.getName()}${helper.printFormalTypeParameters(compSym.getFormalTypeParameters())}, ${glex.getGlobalValue("ISimComponent")} <#t>
+    implements ${_package}.interfaces.I${compSym.getName()}${helper.printFormalTypeParameters(compSym.getFormalTypeParameters())}, ${glex.getGlobalVar("ISimComponent")} <#t>
 {
     <#-- all templates that are embedded into generated components -->
     
@@ -49,10 +49,10 @@ public ${modifier} class ${prefix}${compSym.getName()}${typeParameters} <#t>
     <#if compSym.isDecomposed()>
     /*
      * (non-Javadoc)
-     * @see ${glex.getGlobalValue("IComponent")}#handleMessage(${glex.getGlobalValue("IInPort")}, sim.generic.Message<?>)
+     * @see ${glex.getGlobalVar("IComponent")}#handleMessage(${glex.getGlobalVar("IInPort")}, sim.generic.Message<?>)
      */
     @Override
-    public void handleMessage(${glex.getGlobalValue("IInPort")}<?> port, sim.generic.Message<?> message) {
+    public void handleMessage(${glex.getGlobalVar("IInPort")}<?> port, sim.generic.Message<?> message) {
         <#if compSym.getSuperComponent().isPresent()>
         super.handleMessage(port, message);
         <#else>
@@ -62,7 +62,7 @@ public ${modifier} class ${prefix}${compSym.getName()}${typeParameters} <#t>
 
     /*
      * (non-Javadoc)
-     * @see ${glex.getGlobalValue("AComponent")}#handleTick()
+     * @see ${glex.getGlobalVar("AComponent")}#handleTick()
      */
     @Override
     public void handleTick() {
@@ -73,10 +73,10 @@ public ${modifier} class ${prefix}${compSym.getName()}${typeParameters} <#t>
         </#if>
     }
     
-    <#if glex.getGlobalValue("TIME_PARADIGM_STORAGE_KEY").isTimed()>
+    <#if glex.getGlobalVar("TIME_PARADIGM_STORAGE_KEY").isTimed()>
     /*
      * (non-Javadoc)
-     * @see ${glex.getGlobalValue("ISimComponent")}#timeStep()
+     * @see ${glex.getGlobalVar("ISimComponent")}#timeStep()
      */    
     @Override
     protected void timeStep() {
@@ -91,7 +91,7 @@ public ${modifier} class ${prefix}${compSym.getName()}${typeParameters} <#t>
     
      /*
      * Has no function as it is not part of the MontiArc4 language.  
-     * @see ${glex.getGlobalValue("IComponent")}#checkConstraints()
+     * @see ${glex.getGlobalVar("IComponent")}#checkConstraints()
      */
     @Override
     public void checkConstraints() {

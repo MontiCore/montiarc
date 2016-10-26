@@ -44,8 +44,8 @@ public class PortHelper {
     StringBuilder sb = new StringBuilder();
     if (isComponentAtomic) {
       String className = port.isIncoming()
-          ? (String) glex.getGlobalValue(getter ? "IInPort" : "IInSimPort")
-          : (String) glex.getGlobalValue("IOutPort");
+          ? (String) glex.getGlobalVar(getter ? "IInPort" : "IInSimPort")
+          : (String) glex.getGlobalVar("IOutPort");
       
       sb.append(className);
       sb.append("<");
@@ -113,14 +113,14 @@ public class PortHelper {
     else if (compSym.isAtomic()) {
       String classname;
       if (portSym.isIncoming()) {
-        classname = (String) glex.getGlobalValue("IInSimPort");
+        classname = (String) glex.getGlobalVar("IInSimPort");
         type.append(classname);
         type.append("<");
         type.append(GeneratorHelper.printType(portSym.getTypeReference()));
         type.append(">");
       }
       else if (portSym.isOutgoing()) {
-        classname = (String) glex.getGlobalValue("IOutPort");
+        classname = (String) glex.getGlobalVar("IOutPort");
         type.append(classname);
         type.append("<");
         type.append(GeneratorHelper.printType(portSym.getTypeReference()));
@@ -145,7 +145,7 @@ public class PortHelper {
           }
         }
         if (receiverAmount > 1 || receiverAmount == 0) {
-          String classname = (String) glex.getGlobalValue("IForwardPort");
+          String classname = (String) glex.getGlobalVar("IForwardPort");
           type.append(classname);
           type.append("<");
           type.append(GeneratorHelper.printType(portSym.getTypeReference()));
@@ -209,10 +209,10 @@ public class PortHelper {
     StringBuilder type = new StringBuilder();
     String classname;
     if (portSym.isIncoming()) {
-      classname = (String) glex.getGlobalValue("IInPort");
+      classname = (String) glex.getGlobalVar("IInPort");
     }
     else {
-      classname = (String) glex.getGlobalValue("IOutPort");
+      classname = (String) glex.getGlobalVar("IOutPort");
     }
     type.append(classname);
     type.append("<");
