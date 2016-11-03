@@ -85,29 +85,7 @@ component grammar IOAutomaton extends de.monticore.lang.montiarc.Values {
     /**
      * The Value for empty data
      */
-    //NoData implements Value = "--";
-    
-    
-    
-    // Following Rules are copied from:
-    // https://sselab.de/lab2/private/svn/MontiCore/trunk/mclang/common-values/src/main/grammars/de/monticore/lang/common/CommonValues.mc
-    
-    /**
-     * Use this interface to embedd values.
-     * It has to be implemented by all values and additionally servers
-     * as an extension point to add futher values to sublanguages.
-     */ 
-    //interface Value;
-
-    /**
-     * A signed literal value.
-     * @example "Any String", -3, 17.3
-     *
-     * @attribute value the concrete literal value
-     */
-  	//LiteralValue implements Value = value:SignedLiteral;
-    
-    
+    NoData implements Value = "--";    
     
     // Following Rules are copied from:
     // https://sselab.de/lab2/private/svn/project/trunk/core/languages/behavior-base-fe/src/main/grammars/de/montiarcautomaton/core/languages/behaviorbase/BehaviorBase.mc

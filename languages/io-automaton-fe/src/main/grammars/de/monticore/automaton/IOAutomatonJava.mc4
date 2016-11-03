@@ -11,7 +11,10 @@ grammar IOAutomatonJava extends de.monticore.java.JavaDSL, de.monticore.automato
     ("package" package:(Name& || ".")+ ";")? 
     (ImportStatement)*
     Automaton;
-    
-     GuardExpression = Expression;
-     Valuation = Expression;
+  
+  // use Java expressions for guards
+  GuardExpression = Expression;
+  
+  // use Java expressions for valuations
+  Valuation = Expression;
 }

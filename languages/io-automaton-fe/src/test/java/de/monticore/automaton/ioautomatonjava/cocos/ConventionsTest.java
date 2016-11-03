@@ -38,8 +38,7 @@ public class ConventionsTest extends AbstractCocoTest {
   }
   
   @Test
-  public void testIllegalExpression() {
-    
+  public void testIllegalExpression() {    
     // As class instantiation expressions are not prohibited anymore, this does
     // not yield errors
     checkValid("src/test/resources/", "invalid.IllegalExpressions");

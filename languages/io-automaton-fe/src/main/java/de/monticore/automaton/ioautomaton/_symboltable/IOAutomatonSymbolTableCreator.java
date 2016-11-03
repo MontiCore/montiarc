@@ -151,6 +151,7 @@ public class IOAutomatonSymbolTableCreator extends de.monticore.symboltable.Comm
   @Override
   public void visit(ASTTransition node) {
     // get target name, if there is no get source name (loop to itself)
+    // TODO what about same transitions with other stimulus? -> name clash
     String targetName = node.getTarget().orElse(node.getSource());
     
     StateSymbolReference source = new StateSymbolReference(node.getSource(), currentScope().get());
@@ -217,7 +218,6 @@ public class IOAutomatonSymbolTableCreator extends de.monticore.symboltable.Comm
   
   private JavaTypeSymbolReference getTyperef(ASTType astType) {
     String typeName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astType);
-//    JTypeReference<JTypeSymbol> typeRef = new CommonJTypeReference<JTypeSymbol>(typeName, JTypeSymbol.KIND, currentScope().get());
     JavaTypeSymbolReference typeRef = new JavaTypeSymbolReference(typeName, currentScope().get(), 0);
     typeRef.setDimension(TypesHelper.getArrayDimensionIfArrayOrZero(astType));
     

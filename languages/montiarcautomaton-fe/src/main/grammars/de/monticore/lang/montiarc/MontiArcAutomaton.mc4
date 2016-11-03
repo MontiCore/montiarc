@@ -2,7 +2,9 @@ package de.monticore.lang.montiarc;
 
 grammar MontiArcAutomaton extends de.monticore.lang.montiarc.MontiArcBehavior, de.monticore.automaton.IOAutomatonJava {
   
+  // use MA compilation unit as start
   start MACompilationUnit;
   
+  // IO-Automaton body is uased as behavior embedding
   BehaviorEmbedding = AutomatonBody; 
 }

@@ -9,6 +9,7 @@ import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Scope;
 
 public class AbstractSymtabTest {
+  
   protected static Scope createSymTab(String modelPath) {
     ModelingLanguageFamily fam = new IOAutomatonJavaLanguageFamily();
     final ModelPath mp = new ModelPath(Paths.get(modelPath), Paths.get("src/main/resources/defaultTypes"));

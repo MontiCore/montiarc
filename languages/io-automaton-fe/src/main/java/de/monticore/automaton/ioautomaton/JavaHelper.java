@@ -8,10 +8,8 @@ import de.monticore.symboltable.ImportStatement;
 
 /**
  * TODO This class should be part of JavaDSL or a respective lib that provides
- * default types (e.g., primitives, java.lang.* and java.util.*). Copied from
- * MontiArc.
- * 
- * @author Robert Heim
+ * default types (e.g., primitives, java.lang.* and java.util.*).
+ * Copied from MontiArc.
  */
 public class JavaHelper {
   private final static JavaSymbolFactory jSymbolFactory = new JavaSymbolFactory();

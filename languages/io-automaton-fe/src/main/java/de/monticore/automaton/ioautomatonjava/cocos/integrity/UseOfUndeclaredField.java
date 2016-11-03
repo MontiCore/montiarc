@@ -13,10 +13,7 @@ import de.se_rwth.commons.logging.Log;
  * Context condition for checking, if a variable is used inside an automaton
  * which has not been defined in an {@link ASTInputDeclaration}, {@link ASTVariableDeclaration} or {@link ASTOutputDeclaration}.
  *
- * @author  (last commit) $Author$
- * @version $Revision$,
- *          $Date$
- * @since   $Version$
+ * @author Gerrit Leonhardt
  *
  */
 public class UseOfUndeclaredField implements IOAutomatonASTIOAssignmentCoCo {

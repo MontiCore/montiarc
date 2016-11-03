@@ -1,7 +1,5 @@
 package de.monticore.lang.montiarc.montiarcautomaton._symboltable;
 
-import org.antlr.v4.parse.ATNBuilder.subrule_return;
-
 import de.monticore.ast.ASTNode;
 import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
@@ -11,6 +9,11 @@ import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.se_rwth.commons.logging.Log;
 
+/**
+ * Adapter maps {@link PortSymbol} to {@link VariableSymbol}.
+ * 
+ * @author Gerrit Leonhardt
+ */
 public class Port2VariableAdapter extends VariableSymbol implements SymbolAdapter<PortSymbol> {
   private final PortSymbol adaptee;
 
@@ -18,13 +21,8 @@ public class Port2VariableAdapter extends VariableSymbol implements SymbolAdapte
     super(adaptee.getName());
     
     // set variable symbol attributes
-    super.setTypeReference((JTypeReference<JTypeSymbol>) adaptee.getTypeReference());
+    super.setTypeReference(adaptee.getTypeReference());
     super.setDirection(adaptee.isIncoming() ? Direction.Input : Direction.Output);
-    // TODO is this correct?
-//    super.setEnclosingScope((MutableScope) adaptee.getEnclosingScope());
-//    super.setAstNode(adaptee.getAstNode().orElse(null));
-//    super.setFullName(adaptee.getFullName());
-//    super.setPackageName(adaptee.getPackageName());
     
     this.adaptee = adaptee;
   }

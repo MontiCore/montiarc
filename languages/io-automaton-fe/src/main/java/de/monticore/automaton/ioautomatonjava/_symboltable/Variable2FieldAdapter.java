@@ -9,8 +9,14 @@ import de.monticore.symboltable.resolving.SymbolAdapter;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
 
+/**
+ * Variable to field adapter for accessing variables/inputs/outputs as Java
+ * fields inside Java expressions.
+ * 
+ * @author Gerrit
+ */
 public class Variable2FieldAdapter extends JavaFieldSymbol implements SymbolAdapter<VariableSymbol> {
-  private VariableSymbol adaptee;
+  private final VariableSymbol adaptee;
   
   private static JavaTypeSymbolReference createReference(JTypeReference<? extends JTypeSymbol> reference) {
     return new JavaTypeSymbolReference(reference.getName(), reference.getEnclosingScope(), reference.getDimension());
