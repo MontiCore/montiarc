@@ -32,7 +32,7 @@ import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbolReference;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
-import de.monticore.symboltable.types.JAttributeSymbol;
+import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.se_rwth.commons.Names;
@@ -280,7 +280,7 @@ public class ComponentGenerator {
     final String compName = compSym.getName();
     final String factoryName = compName + "Factory";
     final Path filePath = Paths.get(path, factoryName + ".java");
-    List<JAttributeSymbol> configParameters = compSym.getConfigParameters();
+    List<JFieldSymbol> configParameters = compSym.getConfigParameters();
     IterablePath handwrittenPath = HANDWRITTEN_CODE_PATH;
     if (hwcPath.isPresent()) {
       handwrittenPath = IterablePath.from(

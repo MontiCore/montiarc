@@ -6,7 +6,7 @@
 package de.monticore.lang.montiarc.montiarc._symboltable;
 
 import de.monticore.symboltable.resolving.CommonResolvingFilter;
-import de.monticore.symboltable.types.JAttributeSymbol;
+import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JMethodSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 
@@ -33,7 +33,7 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
     addResolver(new CommonResolvingFilter<ConnectorSymbol>(ConnectorSymbol.KIND));
     
     addResolver(CommonResolvingFilter.create(JTypeSymbol.KIND));
-    addResolver(CommonResolvingFilter.create(JAttributeSymbol.KIND));
+    addResolver(CommonResolvingFilter.create(JFieldSymbol.KIND));
     addResolver(CommonResolvingFilter.create(JMethodSymbol.KIND));
     
     setModelNameCalculator(new MontiArcModelNameCalculator());

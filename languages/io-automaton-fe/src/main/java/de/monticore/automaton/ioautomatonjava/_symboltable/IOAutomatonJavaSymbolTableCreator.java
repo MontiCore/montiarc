@@ -15,7 +15,7 @@ import de.monticore.automaton.ioautomatonjava._visitor.IOAutomatonJavaVisitor;
 import de.monticore.symboltable.ArtifactScope;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.symboltable.MutableScope;
-import de.monticore.symboltable.ResolverConfiguration;
+import de.monticore.symboltable.ResolvingConfiguration;
 import de.monticore.symboltable.Scope;
 import de.monticore.types.types._ast.ASTImportStatement;
 import de.se_rwth.commons.Names;
@@ -28,17 +28,17 @@ public class IOAutomatonJavaSymbolTableCreator extends de.monticore.symboltable.
   // TODO doc
   private final IOAutomatonJavaDelegatorVisitor visitor = new CommonIOAutomatonJavaDelegatorVisitor();
   
-  public IOAutomatonJavaSymbolTableCreator(final ResolverConfiguration resolverConfig, final MutableScope enclosingScope) {
+  public IOAutomatonJavaSymbolTableCreator(final ResolvingConfiguration resolverConfig, final MutableScope enclosingScope) {
     super(resolverConfig, enclosingScope);
     initSuperSTC(resolverConfig);
   }
   
-  public IOAutomatonJavaSymbolTableCreator(final ResolverConfiguration resolverConfig, final Deque<MutableScope> scopeStack) {
+  public IOAutomatonJavaSymbolTableCreator(final ResolvingConfiguration resolverConfig, final Deque<MutableScope> scopeStack) {
     super(resolverConfig, scopeStack);
     initSuperSTC(resolverConfig);
   }
   
-  private void initSuperSTC(ResolverConfiguration resolverConfig) {
+  private void initSuperSTC(ResolvingConfiguration resolverConfig) {
     visitor.set_de_monticore_automaton_ioautomaton__visitor_IOAutomatonVisitor(new IOAutomatonSymbolTableCreator(resolverConfig, scopeStack));
     visitor.set_de_monticore_automaton_ioautomatonjava__visitor_IOAutomatonJavaVisitor(this);
   }

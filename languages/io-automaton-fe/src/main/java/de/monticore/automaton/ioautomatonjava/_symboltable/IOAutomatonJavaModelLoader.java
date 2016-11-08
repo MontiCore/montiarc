@@ -18,7 +18,7 @@ public class IOAutomatonJavaModelLoader extends IOAutomatonJavaModelLoaderTOP {
   
   @Override
   protected void createSymbolTableFromAST(final de.monticore.automaton.ioautomatonjava._ast.ASTIOACompilationUnit ast, final String modelName,
-    final MutableScope enclosingScope, final ResolverConfiguration resolverConfiguration) {
+    final MutableScope enclosingScope, final ResolvingConfiguration resolverConfiguration) {
     final IOAutomatonJavaSymbolTableCreator symbolTableCreator =
             getModelingLanguage().getSymbolTableCreator(resolverConfiguration, enclosingScope).orElse(null);
 

@@ -7,12 +7,12 @@ import de.monticore.lang.montiarc.montiarcbehavior._ast.ASTBehaviorImplementatio
 import de.monticore.lang.montiarc.montiarcbehavior._visitor.CommonMontiArcBehaviorDelegatorVisitor;
 import de.monticore.lang.montiarc.montiarcbehavior._visitor.MontiArcBehaviorVisitor;
 import de.monticore.symboltable.MutableScope;
-import de.monticore.symboltable.ResolverConfiguration;
+import de.monticore.symboltable.ResolvingConfiguration;
 
 public class MontiArcBehaviorSymbolTableCreator extends de.monticore.symboltable.CommonSymbolTableCreator implements MontiArcBehaviorVisitor {
   private final MontiArcBehaviorVisitor visitor = new CommonMontiArcBehaviorDelegatorVisitor();
   
-  public MontiArcBehaviorSymbolTableCreator(ResolverConfiguration resolverConfig, Deque<MutableScope> scopeStack) {
+  public MontiArcBehaviorSymbolTableCreator(ResolvingConfiguration resolverConfig, Deque<MutableScope> scopeStack) {
     super(resolverConfig, scopeStack);
   }
   

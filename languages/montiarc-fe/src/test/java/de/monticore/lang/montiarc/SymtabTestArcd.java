@@ -17,7 +17,7 @@ import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.types.JAttributeSymbol;
+import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 
 /**
@@ -115,20 +115,20 @@ public class SymtabTestArcd extends AbstractSymtabTest {
     // check that configuration parameters reference the correct paramter types/names in
     // the referenced component type
     assertEquals(3, compWithArgsType.getConfigParameters().size());
-    JAttributeSymbol cfgField1 = compWithArgsType.getConfigParameters().get(0);
+    JFieldSymbol cfgField1 = compWithArgsType.getConfigParameters().get(0);
     assertEquals("a", cfgField1.getName());
     assertEquals("int", cfgField1.getType().getName());
     assertEquals(0, cfgField1.getType().getReferencedSymbol().getFormalTypeParameters().size());
     assertEquals(0, cfgField1.getType().getDimension());
 
-    JAttributeSymbol cfgField2 = compWithArgsType.getConfigParameters().get(1);
+    JFieldSymbol cfgField2 = compWithArgsType.getConfigParameters().get(1);
     assertEquals("foo", cfgField2.getName());
     assertEquals("String", cfgField2.getType().getName());
     assertEquals("java.lang.String", cfgField2.getType().getReferencedSymbol().getFullName());
     assertEquals(0, cfgField2.getType().getReferencedSymbol().getFormalTypeParameters().size());
     assertEquals(0, cfgField2.getType().getDimension());
 
-    JAttributeSymbol cfgField3 = compWithArgsType.getConfigParameters().get(2);
+    JFieldSymbol cfgField3 = compWithArgsType.getConfigParameters().get(2);
     assertEquals("iArray", cfgField3.getName());
     assertEquals("int", cfgField3.getType().getName());
     assertEquals(0, cfgField3.getType().getReferencedSymbol().getFormalTypeParameters().size());

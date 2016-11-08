@@ -12,7 +12,7 @@ public class Port2VariableResolvingFilter extends TransitiveAdaptedResolvingFilt
   }
 
   @Override
-  protected Symbol createAdapter(Symbol s) {    
+  public Symbol translate(Symbol s) {    
     return new Port2VariableAdapter((PortSymbol) s);
   }
   
