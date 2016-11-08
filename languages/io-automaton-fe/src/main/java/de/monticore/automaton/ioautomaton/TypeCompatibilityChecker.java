@@ -15,7 +15,8 @@ import de.se_rwth.commons.logging.Log;
  * 
  * @author Gerrit Leonhardt
  */
-public class TypeCompatibilityChecker {  
+public class TypeCompatibilityChecker {
+  
   /**
    * Checks whether there exists a assignment conversion from <tt>from</tt> type
    * to <tt>target</tt> type.

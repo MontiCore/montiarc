@@ -15,7 +15,7 @@ import de.monticore.lang.montiarc.montiarcautomaton._visitor.MontiArcAutomatonDe
 import de.monticore.lang.montiarc.montiarcautomaton._visitor.MontiArcAutomatonVisitor;
 import de.monticore.symboltable.CommonSymbolTableCreator;
 import de.monticore.symboltable.MutableScope;
-import de.monticore.symboltable.ResolverConfiguration;
+import de.monticore.symboltable.ResolvingConfiguration;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 
@@ -26,12 +26,12 @@ public class MontiArcAutomatonSymbolTableCreator extends CommonSymbolTableCreato
   private final MontiArcAutomatonDelegatorVisitor visitor = new CommonMontiArcAutomatonDelegatorVisitor();
 
   public MontiArcAutomatonSymbolTableCreator(
-    final ResolverConfiguration resolverConfig, final MutableScope enclosingScope) {
+    final ResolvingConfiguration resolverConfig, final MutableScope enclosingScope) {
     super(resolverConfig, enclosingScope);
     initSuperSTC(resolverConfig);
   }
 
-  public MontiArcAutomatonSymbolTableCreator(final ResolverConfiguration resolverConfig, final Deque<MutableScope> scopeStack) {
+  public MontiArcAutomatonSymbolTableCreator(final ResolvingConfiguration resolverConfig, final Deque<MutableScope> scopeStack) {
     super(resolverConfig, scopeStack);
     initSuperSTC(resolverConfig);
   }
@@ -40,7 +40,7 @@ public class MontiArcAutomatonSymbolTableCreator extends CommonSymbolTableCreato
   IOAutomatonJavaSymbolTableCreator automatonSTC;
   MontiArcBehaviorSymbolTableCreator behaviorSTC;
   
-  private void initSuperSTC(ResolverConfiguration resolverConfig) {
+  private void initSuperSTC(ResolvingConfiguration resolverConfig) {
     maSTC = new MontiArcSymbolTableCreator(resolverConfig, scopeStack);
     automatonSTC = new IOAutomatonJavaSymbolTableCreator(resolverConfig, scopeStack);
     behaviorSTC = new MontiArcBehaviorSymbolTableCreator(resolverConfig, scopeStack);

@@ -17,7 +17,7 @@ public class CDTypeSymbol2JavaTypeFilter extends TransitiveAdaptedResolvingFilte
   }
 
   @Override
-  protected Symbol createAdapter(Symbol adaptee) {
+  public Symbol translate(Symbol adaptee) {
     Preconditions.checkArgument(adaptee instanceof CDTypeSymbol);
     return new CDTypeSymbol2JavaType((CDTypeSymbol)adaptee);
   }

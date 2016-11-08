@@ -1,5 +1,5 @@
 ${tc.params("String _package", "String factoryName", "de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol compSym", 
-"java.util.List<de.monticore.symboltable.types.JAttributeSymbol> configParams", "de.montiarc.generator.codegen.GeneratorHelper helper", "boolean hwcExists")}
+"java.util.List<de.monticore.symboltable.types.JFieldSymbol> configParams", "de.montiarc.generator.codegen.GeneratorHelper helper", "boolean hwcExists")}
 
 package ${_package};
 

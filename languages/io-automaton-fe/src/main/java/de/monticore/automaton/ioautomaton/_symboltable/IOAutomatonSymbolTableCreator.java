@@ -24,7 +24,7 @@ import de.monticore.common.common._ast.ASTStereoValue;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.symboltable.MutableScope;
-import de.monticore.symboltable.ResolverConfiguration;
+import de.monticore.symboltable.ResolvingConfiguration;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
@@ -41,17 +41,17 @@ public class IOAutomatonSymbolTableCreator extends de.monticore.symboltable.Comm
   // TODO doc
   private final IOAutomatonDelegatorVisitor visitor = new CommonIOAutomatonDelegatorVisitor();
   
-  public IOAutomatonSymbolTableCreator(final ResolverConfiguration resolverConfig, final MutableScope enclosingScope) {
+  public IOAutomatonSymbolTableCreator(final ResolvingConfiguration resolverConfig, final MutableScope enclosingScope) {
     super(resolverConfig, enclosingScope);
     initSuperSTC(resolverConfig);
   }
   
-  public IOAutomatonSymbolTableCreator(final ResolverConfiguration resolverConfig, final Deque<MutableScope> scopeStack) {
+  public IOAutomatonSymbolTableCreator(final ResolvingConfiguration resolverConfig, final Deque<MutableScope> scopeStack) {
     super(resolverConfig, scopeStack);
     initSuperSTC(resolverConfig);
   }
   
-  private void initSuperSTC(ResolverConfiguration resolverConfig) {
+  private void initSuperSTC(ResolvingConfiguration resolverConfig) {
     // TODO doc
 //    visitor.set_de_monticore_automaton_ioautomaton__visitor_IOAutomatonVisitor(IOAutomatonSymbolTableCreator(resolverConfig, scopeStack));
 //    visitor.set_de_monticore_java_javadsl__visitor_JavaDSLVisitor(new JavaSymbolTableCreatorFix(resolverConfig, scopeStack));

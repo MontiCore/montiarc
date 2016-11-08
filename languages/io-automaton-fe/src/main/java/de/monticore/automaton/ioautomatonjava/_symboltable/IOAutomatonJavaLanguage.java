@@ -10,7 +10,7 @@ import de.monticore.automaton.ioautomaton._symboltable.TransitionResolvingFilter
 import de.monticore.automaton.ioautomaton._symboltable.VariableResolvingFilter;
 import de.monticore.modelloader.ModelingLanguageModelLoader;
 import de.monticore.symboltable.MutableScope;
-import de.monticore.symboltable.ResolverConfiguration;
+import de.monticore.symboltable.ResolvingConfiguration;
 
 public class IOAutomatonJavaLanguage extends IOAutomatonJavaLanguageTOP {
   public static final String FILE_ENDING = "ioautomaton";
@@ -27,7 +27,7 @@ public class IOAutomatonJavaLanguage extends IOAutomatonJavaLanguageTOP {
   
   @Override
   public Optional<IOAutomatonJavaSymbolTableCreator> getSymbolTableCreator(
-      ResolverConfiguration resolverConfiguration, MutableScope enclosingScope) {
+      ResolvingConfiguration resolverConfiguration, MutableScope enclosingScope) {
     return Optional.of(new IOAutomatonJavaSymbolTableCreator(resolverConfiguration, enclosingScope));
   }
   

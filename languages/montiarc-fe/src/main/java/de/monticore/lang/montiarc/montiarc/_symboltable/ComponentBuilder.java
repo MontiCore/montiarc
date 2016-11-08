@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import de.monticore.lang.montiarc.helper.SymbolPrinter;
 import de.monticore.symboltable.MutableScope;
-import de.monticore.symboltable.types.JAttributeSymbol;
+import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 
@@ -181,36 +181,36 @@ public class ComponentBuilder {
 
   ////////////////////////// config parameters //////////////////////////////////////////////
 
-  public static ComponentBuilder addConfigParameter(ComponentSymbol cs, JAttributeSymbol configParameter) {
+  public static ComponentBuilder addConfigParameter(ComponentSymbol cs, JFieldSymbol configParameter) {
     ((MutableScope) cs.getSpannedScope()).add(configParameter);
     return getInstance();
   }
 
-  public static ComponentBuilder addConfigParameters(ComponentSymbol cs, JAttributeSymbol... configParameter) {
-    for (JAttributeSymbol c : configParameter) {
+  public static ComponentBuilder addConfigParameters(ComponentSymbol cs, JFieldSymbol... configParameter) {
+    for (JFieldSymbol c : configParameter) {
       addConfigParameter(cs, c);
     }
     return getInstance();
   }
 
-  public static ComponentBuilder addConfigParameters(ComponentSymbol cs, Collection<JAttributeSymbol> configParameter) {
+  public static ComponentBuilder addConfigParameters(ComponentSymbol cs, Collection<JFieldSymbol> configParameter) {
     configParameter.stream().forEachOrdered(c -> addConfigParameter(cs, c));
     return getInstance();
   }
 
-  public static ComponentBuilder removeConfigParameter(ComponentSymbol cs, JAttributeSymbol configParameter) {
+  public static ComponentBuilder removeConfigParameter(ComponentSymbol cs, JFieldSymbol configParameter) {
     ((MutableScope) cs.getSpannedScope()).remove(configParameter);
     return getInstance();
   }
 
-  public static ComponentBuilder removeConfigParameters(ComponentSymbol cs, JAttributeSymbol... configParameter) {
-    for (JAttributeSymbol c : configParameter) {
+  public static ComponentBuilder removeConfigParameters(ComponentSymbol cs, JFieldSymbol... configParameter) {
+    for (JFieldSymbol c : configParameter) {
       removeConfigParameter(cs, c);
     }
     return getInstance();
   }
 
-  public static ComponentBuilder removeConfigParameters(ComponentSymbol cs, Collection<JAttributeSymbol> configParameter) {
+  public static ComponentBuilder removeConfigParameters(ComponentSymbol cs, Collection<JFieldSymbol> configParameter) {
     configParameter.stream().forEachOrdered(c -> removeConfigParameter(cs, c));
     return getInstance();
   }
