@@ -10,9 +10,13 @@ public class BumpcontrolTest extends AbstractCocoTest {
   public static void setUp() {
     Log.enableFailQuick(false);
   }
-  
+
   @Test
   public void testBumpcontrol() {
     checkValid("src/test/resources/", "valid.bumperbot.BumpControl");
+  }
+  @Test
+  public void testBumpspeed() {
+    checkValid("src/test/resources/", "valid.bumperbot.BumpSpeed");
   }
 }

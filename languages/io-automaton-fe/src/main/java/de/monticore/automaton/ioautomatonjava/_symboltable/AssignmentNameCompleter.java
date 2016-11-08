@@ -148,7 +148,12 @@ public class AssignmentNameCompleter implements IOAutomatonJavaVisitor {
    */
   private Set<String> findVariableNameFor(JTypeReference<? extends JTypeSymbol> assignmentType, Direction varDirection) {
     Set<String> names = new HashSet<>();
-    for (VariableSymbol varSymbol : ScopeHelper.<VariableSymbol> resolveManyDown(automatonScope, VariableSymbol.KIND)) {
+    // TODO BUG!: Might return an empty list when resolving transitive adapted
+    // symbols. So assignment name completer in not working!
+    // reason:
+    // Collection<Symbol> filter(ResolvingInfo resolvingInfo,
+    // List<Symbol> symbols) is not correctly implemented
+    for (VariableSymbol varSymbol : ScopeHelper.<VariableSymbol> resolveMany(automatonScope, VariableSymbol.KIND)) {
       if (varSymbol.getDirection() == varDirection) {
         if (TypeCompatibilityChecker.doTypesMatch(assignmentType, varSymbol.getTypeReference())) {
           names.add(varSymbol.getName());

@@ -1,6 +1,7 @@
 package de.monticore.automaton.ioautomatonjava.cocos.correctness;
 
 import java.util.Optional;
+
 import de.monticore.automaton.ioautomaton.TypeCompatibilityChecker;
 import de.monticore.automaton.ioautomaton._ast.ASTIOAssignment;
 import de.monticore.automaton.ioautomaton._ast.ASTTransition;
@@ -51,7 +52,8 @@ public class StimulusTypeDoesNotFitInputType implements IOAutomatonASTTransition
                       Log.error("0xAA443 Could not resolve type of expression for checking the stimulus.", assign.get_SourcePositionStart());
                     }
                     else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType)) {
-                      Log.error("0xAA441 Type of Variable/Input " + currentNameToResolve + " in the stimulus does not match the type of its assigned expression.", val.get_SourcePositionStart());
+                      Log.error("0xAA441 Type of Variable/Input " + currentNameToResolve + " in the stimulus does not match the type of its assigned expression. Type " + 
+                          exprType.get().getName() + " can not cast to type " + varType.getName() + ".", val.get_SourcePositionStart());
                     }
                   }
                 }
