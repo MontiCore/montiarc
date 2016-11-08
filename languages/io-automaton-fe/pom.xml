@@ -13,7 +13,7 @@
   <artifactId>io-automaton-fe</artifactId>
   
   <properties><!-- TODO overwrites montiarc-core version numbers. Can be omitted if montiarc uses at least these versions -->
-    <monticore.java.version>4.3.6-SNAPSHOT</monticore.java.version> <!-- is required for expression resolver -->
+    <monticore.java.version>4.3.7-SNAPSHOT</monticore.java.version> <!-- is required for expression resolver -->
   </properties>
 
   <!-- == PROJECT DEPENDENCIES ============================================= -->

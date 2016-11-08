@@ -24,7 +24,7 @@ import de.monticore.lang.montiarc.helper.Timing;
 import de.monticore.symboltable.CommonScopeSpanningSymbol;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.symboltable.modifiers.AccessModifier;
-import de.monticore.symboltable.types.JAttributeSymbol;
+import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 
@@ -70,7 +70,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   /**
    * @param parameterType configuration parameter to add
    */
-  public void addConfigParameter(JAttributeSymbol parameterType) {
+  public void addConfigParameter(JFieldSymbol parameterType) {
     if (referencedComponent.isPresent())
       referencedComponent.get().addConfigParameter(parameterType);
     else {
@@ -431,15 +431,15 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   /**
    * @return configParameters
    */
-  public List<JAttributeSymbol> getConfigParameters() {
+  public List<JFieldSymbol> getConfigParameters() {
     if (referencedComponent.isPresent()) {
       return referencedComponent.get().getConfigParameters();
     }
     else {
-      final Collection<JAttributeSymbol> resolvedAttributes = getSpannedScope()
-          .resolveLocally(JAttributeSymbol.KIND);
-      final List<JAttributeSymbol> parameters = sortSymbolsByPosition(resolvedAttributes.stream()
-          .filter(JAttributeSymbol::isParameter).collect(Collectors.toList()));
+      final Collection<JFieldSymbol> resolvedAttributes = getSpannedScope()
+          .resolveLocally(JFieldSymbol.KIND);
+      final List<JFieldSymbol> parameters = sortSymbolsByPosition(resolvedAttributes.stream()
+          .filter(JFieldSymbol::isParameter).collect(Collectors.toList()));
       return parameters;
     }
   }
@@ -448,7 +448,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
    * @return List of configuration parameters that are to be set during instantiation with the given
    * visibility
    */
-  public Collection<JAttributeSymbol> getConfigParameters(AccessModifier visibility) {
+  public Collection<JFieldSymbol> getConfigParameters(AccessModifier visibility) {
     // no need to check for reference, as getParameres() does so.
     return getConfigParameters().stream()
         .filter(s -> s.getAccessModifier().includes(visibility))

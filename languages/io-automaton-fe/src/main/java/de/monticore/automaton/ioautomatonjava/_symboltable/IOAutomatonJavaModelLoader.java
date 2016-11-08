@@ -1,12 +1,8 @@
 package de.monticore.automaton.ioautomatonjava._symboltable;
 
-import java.util.Collection;
-
-import de.monticore.automaton.ioautomaton._ast.ASTAutomaton;
-import de.monticore.io.paths.ModelPath;
 import de.monticore.symboltable.ArtifactScope;
 import de.monticore.symboltable.MutableScope;
-import de.monticore.symboltable.ResolverConfiguration;
+import de.monticore.symboltable.ResolvingConfiguration;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 
