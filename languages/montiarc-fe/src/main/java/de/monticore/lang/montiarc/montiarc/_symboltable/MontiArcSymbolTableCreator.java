@@ -35,10 +35,10 @@ import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.ArtifactScope;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.symboltable.MutableScope;
-import de.monticore.symboltable.ResolverConfiguration;
+import de.monticore.symboltable.ResolvingConfiguration;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
-import de.monticore.symboltable.types.JAttributeSymbol;
+import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.TypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
@@ -85,13 +85,13 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       scope, dim) -> new JavaTypeSymbolReference(name, scope, dim);
 
   public MontiArcSymbolTableCreator(
-      final ResolverConfiguration resolverConfig,
+      final ResolvingConfiguration resolverConfig,
       final MutableScope enclosingScope) {
     super(resolverConfig, enclosingScope);
   }
   
   public MontiArcSymbolTableCreator(
-      final ResolverConfiguration resolverConfig,
+      final ResolvingConfiguration resolverConfig,
       final Deque<MutableScope> scopeStack) {
     super(resolverConfig, scopeStack);
   }
@@ -317,7 +317,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
           currentScope().get(), dimension);
       
       addTypeArgumentsToTypeSymbol(paramTypeSymbol, astParameter.getType());
-      final JAttributeSymbol parameterSymbol = jSymbolFactory.createFormalParameterSymbol(paramName,
+      final JFieldSymbol parameterSymbol = jSymbolFactory.createFormalParameterSymbol(paramName,
           (JavaTypeSymbolReference) paramTypeSymbol);
       componentSymbol.addConfigParameter(parameterSymbol);
     }
