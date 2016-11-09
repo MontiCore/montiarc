@@ -1,0 +1,12 @@
+package robotmodels.time;
+
+classdiagram types {
+
+    enum TimerCmd {
+        SINGLE, DOUBLE; 
+    }
+    
+    enum TimerSignal {
+        ALERT, SLEEP;
+    }
+}

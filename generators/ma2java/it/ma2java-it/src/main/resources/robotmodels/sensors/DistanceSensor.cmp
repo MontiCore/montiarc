@@ -1,0 +1,6 @@
+package robotmodels.sensors;
+
+abstract component DistanceSensor {
+    port
+        out Double distance;
+}

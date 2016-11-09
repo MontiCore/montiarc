@@ -1,0 +1,14 @@
+package robotmodels.data;
+
+import java.lang.String;
+import java.util.List;
+import java.util.ArrayList;
+
+classdiagram types {
+  
+enum BufferCommand {
+    STORE,
+    EMIT,
+    STORE_EMIT;
+}
+}

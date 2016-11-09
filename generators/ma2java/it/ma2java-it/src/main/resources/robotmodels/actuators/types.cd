@@ -1,0 +1,11 @@
+package robotmodels.actuators;
+
+classdiagram types {
+    enum MotorCommand {
+        FORWARD, 
+        BACKWARD,
+        LEFTTURN,
+        RIGHTTURN, 
+        STOP;
+    }
+}

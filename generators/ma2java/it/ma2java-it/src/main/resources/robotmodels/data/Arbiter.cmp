@@ -1,0 +1,24 @@
+package robotmodels.data;
+
+component Arbiter<T> {
+
+  port
+    in Boolean arbiterMode,
+    in T in1Left,
+    in T in1Right,
+    in T in2Left,
+    in T in2Right,
+    out T outLeft,
+    out T outRight;
+
+
+  automaton BumpControl {
+    state Arbiting;
+    initial Arbiting;
+      
+      Arbiting -> Arbiting {arbiterMode == true} / {outLeft= in1Left, outRight= in1Right};
+      
+      Arbiting -> Arbiting {arbiterMode == false} / {outLeft= in2Left, outRight= in2Right};
+  }
+  
+}

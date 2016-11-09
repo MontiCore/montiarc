@@ -1,0 +1,10 @@
+package architecture;
+
+import robotmodels.actuators.types.MotorCommand;
+
+classdiagram datatypes {
+    
+    class SensorData {
+        int distance;
+    }
+}

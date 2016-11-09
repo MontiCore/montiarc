@@ -1,0 +1,8 @@
+package robotmodels.sensors;
+
+abstract component ColorSensor {
+    port
+        out Integer r,
+        out Integer g,
+        out Integer b;
+}
