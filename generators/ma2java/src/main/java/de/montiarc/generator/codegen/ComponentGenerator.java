@@ -6,7 +6,6 @@
 package de.montiarc.generator.codegen;
 
 import java.io.File;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -14,16 +13,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.google.common.collect.Sets;
+
 import _templates._setup.GeneratorConfig;
 import _templates.mc.umlp.arc.factory.ComponentFactory;
 import _templates.mc.umlp.arc.implementation.Component;
 import _templates.mc.umlp.arc.interfaces.ComponentInterface;
-
-import com.google.common.collect.Sets;
-
 import de.montiarc.generator.MontiArcGeneratorConstants;
 import de.monticore.generating.GeneratorSetup;
-import de.monticore.generating.ExtendedGeneratorEngine;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.io.paths.IterablePath;
 import de.monticore.lang.montiarc.helper.SymbolPrinter;
@@ -32,7 +29,7 @@ import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbolReference;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
-import de.monticore.symboltable.types.JAttributeSymbol;
+import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.se_rwth.commons.Names;
@@ -280,7 +277,7 @@ public class ComponentGenerator {
     final String compName = compSym.getName();
     final String factoryName = compName + "Factory";
     final Path filePath = Paths.get(path, factoryName + ".java");
-    List<JAttributeSymbol> configParameters = compSym.getConfigParameters();
+    List<JFieldSymbol> configParameters = compSym.getConfigParameters();
     IterablePath handwrittenPath = HANDWRITTEN_CODE_PATH;
     if (hwcPath.isPresent()) {
       handwrittenPath = IterablePath.from(

@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import jline.internal.Log;
 import de.montiarc.generator.MontiArcGeneratorConstants;
 import de.monticore.ast.ASTNode;
 import de.monticore.ast.Comment;
@@ -27,7 +26,7 @@ import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbolReference;
 import de.monticore.symboltable.ImportStatement;
-import de.monticore.symboltable.types.JAttributeSymbol;
+import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.TypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
@@ -35,7 +34,7 @@ import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.symboltable.types.references.TypeReference;
 import de.monticore.types.TypesPrinter;
 import de.se_rwth.commons.Names;
-import de.se_rwth.commons.StringTransformations;
+import jline.internal.Log;
 
 /**
  * Common helper methods for generator.
@@ -260,9 +259,9 @@ public class GeneratorHelper {
         .collect(Collectors.joining(",")) + ">";
   }
   
-  public static String printConfigParameters(List<JAttributeSymbol> configParams) {
+  public static String printConfigParameters(List<JFieldSymbol> configParams) {
     String ret = "";
-    for (JAttributeSymbol p : configParams) {
+    for (JFieldSymbol p : configParams) {
       ret += printType(p.getType()) + " " + p.getName() + ", ";
     }
     
@@ -272,9 +271,9 @@ public class GeneratorHelper {
     return ret;
   }
   
-  public static String printConfigParametersNames(List<JAttributeSymbol> configParams) {
+  public static String printConfigParametersNames(List<JFieldSymbol> configParams) {
     String ret = "";
-    for (JAttributeSymbol p : configParams) {
+    for (JFieldSymbol p : configParams) {
       ret += p.getName() + ", ";
     }
     
@@ -296,9 +295,9 @@ public class GeneratorHelper {
   public static String printSuperComponentConfigParametersNamesForSuperCall(ComponentSymbol comp) {
     Optional<ComponentSymbolReference> superC = comp.getSuperComponent();
     String ret = "";
-    List<JAttributeSymbol> toPrint = new ArrayList<>();
+    List<JFieldSymbol> toPrint = new ArrayList<>();
     if (superC.isPresent()) {
-      List<JAttributeSymbol> compConfigParams = comp.getConfigParameters();
+      List<JFieldSymbol> compConfigParams = comp.getConfigParameters();
       for (int i = 0; i < superC.get().getConfigParameters().size(); i++) {
         toPrint.add(compConfigParams.get(i));
       }

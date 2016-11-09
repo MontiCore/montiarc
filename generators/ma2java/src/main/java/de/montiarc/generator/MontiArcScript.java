@@ -118,6 +118,10 @@ public class MontiArcScript extends Script implements GroovyRunner {
     ComponentGenerator.generate(glex, ast, comp, outputDirectory, hwcPath);
   }
   
+  public void generate(final List<File> modelPaths, File outputDirectory){
+    generate(modelPaths, outputDirectory, Optional.empty());
+  }
+  
   public void generate(final List<File> modelPaths, File outputDirectory,
       Optional<String> hwcPath) {
     for (File modelPath : modelPaths) {
