@@ -120,6 +120,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     putOnStack(artifactScope);
   }
   
+  @Override
   public void endVisit(ASTMACompilationUnit node) {
     // artifact scope
     removeCurrentScope();

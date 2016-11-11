@@ -16,7 +16,6 @@ import de.se_rwth.commons.logging.Log;
  * @author Gerrit Leonhardt
  */
 public class TypeCompatibilityChecker {
-  private static final JavaDSLHelper helper = new JavaDSLHelper();
   
   /**
    * Checks whether there exists a assignment conversion from <tt>from</tt> type
@@ -38,7 +37,7 @@ public class TypeCompatibilityChecker {
     
     // existsAssignment conversion only implemented for JavaType not CommonJType
     // TODO Don't use JavaDSLHelper for type checking because we ant to check JTypes.
-    return helper.existsAssignmentConversion((JavaTypeSymbolReference) from, (JavaTypeSymbolReference) target);
+    return JavaDSLHelper.assignmentConversionAvailable((JavaTypeSymbolReference) from, (JavaTypeSymbolReference) target);
   }
   
   /**
@@ -53,7 +52,7 @@ public class TypeCompatibilityChecker {
     // JTypes instead of JavaTypes. Because HCJavaDSLTypeResolver is implemented
     // in JavaDSL, additional adapter may required e.g. CD2Java to use CD types
     // within Java expressions.
-    HCJavaDSLTypeResolver typeResolver = new HCJavaDSLTypeResolver(helper);
+    HCJavaDSLTypeResolver typeResolver = new HCJavaDSLTypeResolver();
     expr.accept(typeResolver);
     return typeResolver.getResult();
   }

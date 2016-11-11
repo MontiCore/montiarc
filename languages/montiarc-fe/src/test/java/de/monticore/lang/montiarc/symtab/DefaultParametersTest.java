@@ -19,7 +19,7 @@ import de.monticore.lang.montiarc.AbstractSymtabTest;
 import de.monticore.lang.montiarc.common._ast.ASTParameter;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.types.JAttributeSymbol;
+import de.monticore.symboltable.types.JFieldSymbol;
 import de.se_rwth.commons.logging.Log;
 
 /**
@@ -46,8 +46,8 @@ public class DefaultParametersTest extends AbstractSymtabTest {
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "features.DefaultParameters", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
-    List<JAttributeSymbol> params = comp.getConfigParameters();
-    for (JAttributeSymbol param : params) {
+    List<JFieldSymbol> params = comp.getConfigParameters();
+    for (JFieldSymbol param : params) {
       if (param.getAstNode().isPresent()) {
         ASTParameter p = (ASTParameter) param.getAstNode().get();
         if (p.getName().equals("offset")) {

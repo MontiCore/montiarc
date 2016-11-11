@@ -12,7 +12,7 @@ public class Variable2FieldResolvingFilter extends TransitiveAdaptedResolvingFil
   }
 
   @Override
-  protected Symbol createAdapter(Symbol s) {    
+  public Symbol translate(Symbol s) {    
     return new Variable2FieldAdapter((VariableSymbol) s);
   }
   

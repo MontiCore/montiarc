@@ -6,9 +6,9 @@
 
 package de.monticore.lang.montiarc.montiarcautomaton._symboltable;
 
-import de.monticore.symboltable.MutableScope;
-import de.monticore.symboltable.ResolverConfiguration;
 import de.monticore.symboltable.ArtifactScope;
+import de.monticore.symboltable.MutableScope;
+import de.monticore.symboltable.ResolvingConfiguration;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 
@@ -20,7 +20,7 @@ public class MontiArcAutomatonModelLoader extends de.monticore.modelloader.Model
 
   @Override
   protected void createSymbolTableFromAST(final de.monticore.lang.montiarc.montiarc._ast.ASTMACompilationUnit ast, final String modelName,
-    final MutableScope enclosingScope, final ResolverConfiguration resolverConfiguration) {
+    final MutableScope enclosingScope, final ResolvingConfiguration resolverConfiguration) {
     final MontiArcAutomatonSymbolTableCreator symbolTableCreator =
             getModelingLanguage().getSymbolTableCreator(resolverConfiguration, enclosingScope).orElse(null);
 
