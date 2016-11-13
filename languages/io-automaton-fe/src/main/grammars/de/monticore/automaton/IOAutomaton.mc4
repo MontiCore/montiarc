@@ -130,7 +130,7 @@ component grammar IOAutomaton extends de.monticore.lang.montiarc.Values {
      */ 
     IOAssignment = (Name operator:[Single:"="|Double:"=="])? (Alternative | ValueList);
     
-    Alternative = "alt{" ValueList ("," ValueList)* "}";
+    Alternative = "alt" "{" ValueList ("," ValueList)* "}";
     
     /**
      * A row of valuations separated by a ",", e.g. "a.getX() , B.fetch().KIND , ++a%2"

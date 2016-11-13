@@ -65,12 +65,12 @@ public class MontiArcAutomatonCocos {
     .addCoCo((IOAutomatonASTInitialStateDeclarationCoCo)new ReactionWithAlternatives())
     .addCoCo((IOAutomatonASTTransitionCoCo)new ReactionWithAlternatives())
     .addCoCo(new UseOfForbiddenExpression())
-//    .addCoCo(new AutomatonHasNoOutput())
-//    .addCoCo(new AutomatonHasNoInput())
-//    .addCoCo(new AutomatonUppercase())
+//    .addCoCo(new AutomatonHasNoOutput()) not in use for maa
+//    .addCoCo(new AutomatonHasNoInput()) not in use for maa
+//    .addCoCo(new AutomatonUppercase()) not in use for maa
     .addCoCo(new StateUppercase())
-//    .addCoCo((IOAutomatonASTInputDeclarationCoCo)new DeclarationNamesLowerCase())
-//    .addCoCo((IOAutomatonASTOutputDeclarationCoCo)new DeclarationNamesLowerCase())
+//    .addCoCo((IOAutomatonASTInputDeclarationCoCo)new DeclarationNamesLowerCase()) not in use for maa
+//    .addCoCo((IOAutomatonASTOutputDeclarationCoCo)new DeclarationNamesLowerCase()) not in use for maa
     .addCoCo((IOAutomatonASTVariableDeclarationCoCo)new DeclarationNamesLowerCase())
     
     // REFERENTIAL INTEGRITY
@@ -84,14 +84,14 @@ public class MontiArcAutomatonCocos {
     .addCoCo(new StimulusTypeDoesNotFitInputType())
     .addCoCo(new InitialReactionTypeDoesNotFitOutputType())
     .addCoCo(new ReactionTypeDoesNotFitOutputType())
-//    .addCoCo((IOAutomatonASTInputDeclarationCoCo)new InitialValueDoesNotFit()) // todo: delete it for inputs
+//    .addCoCo((IOAutomatonASTInputDeclarationCoCo)new InitialValueDoesNotFit()) not in use for maa
     .addCoCo((IOAutomatonASTVariableDeclarationCoCo)new InitialValueDoesNotFit())
-//    .addCoCo((IOAutomatonASTOutputDeclarationCoCo)new InitialValueDoesNotFit())// todo: delete it for outputs
+//    .addCoCo((IOAutomatonASTOutputDeclarationCoCo)new InitialValueDoesNotFit()) not in use for maa
     
     // UNIQUENESS OF NAMES
     .addCoCo(new StateDefinedMultipleTimesStereotypesDontMatch())
-//    .addCoCo(new OutputsDefinedMultipleTimes())
-//    .addCoCo(new InputsDefinedMultipleTimes())
+//    .addCoCo(new OutputsDefinedMultipleTimes()) not in use for maa
+//    .addCoCo(new InputsDefinedMultipleTimes()) not in use for maa
     .addCoCo(new VariableDefinedMultipleTimes())
     .addCoCo(new VariableAndIOsHaveSameName())
     .addCoCo(new InitialDeclaredMultipleTimes())
