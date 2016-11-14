@@ -13,7 +13,7 @@ public class OutputInExpression implements JavaDSLASTPrimaryExpressionCoCo {
 
   @Override
   public void check(ASTPrimaryExpression node) {
-    if (node.nameIsPresent()) {
+    if (node.nameIsPresent() && node.getEnclosingScope().isPresent()) {
       Scope scope = node.getEnclosingScope().get();
       Optional<VariableSymbol> found = scope.resolve(node.getName().get(), VariableSymbol.KIND);
       if (found.isPresent() && found.get().getDirection() == Direction.Output) {

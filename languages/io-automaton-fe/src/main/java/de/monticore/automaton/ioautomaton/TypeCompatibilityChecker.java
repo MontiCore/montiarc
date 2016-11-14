@@ -52,8 +52,12 @@ public class TypeCompatibilityChecker {
     // JTypes instead of JavaTypes. Because HCJavaDSLTypeResolver is implemented
     // in JavaDSL, additional adapter may required e.g. CD2Java to use CD types
     // within Java expressions.
+    Log.debug("Resolve type of java expression.", "TypeCompatibilityChecker");
     HCJavaDSLTypeResolver typeResolver = new HCJavaDSLTypeResolver();
     expr.accept(typeResolver);
+    if (!typeResolver.getResult().isPresent()) {
+      Log.info("Can't resolve type of expression: " + expr, "TypeCompatibilityChecker");
+    }
     return typeResolver.getResult();
   }
   
@@ -68,7 +72,6 @@ public class TypeCompatibilityChecker {
   public static boolean doTypesMatch(ASTExpression expr, JTypeReference<? extends JTypeSymbol> targetType) {
     Optional<? extends JavaTypeSymbolReference> exprType = getExpressionType(expr);
     if (!exprType.isPresent()) {
-      Log.info("Can't resolve type of expression: " + expr, "TypeCompatibilityChecker");
       return false;
     }
     return doTypesMatch(exprType.get(), targetType);

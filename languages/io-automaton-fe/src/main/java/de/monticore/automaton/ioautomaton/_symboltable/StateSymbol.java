@@ -28,7 +28,7 @@ public class StateSymbol extends StateSymbolTOP {
   }
   
   public boolean isInitial() {
-    return initialReaction.isPresent();
+    return isInitial;
   }
   
   public Optional<ASTBlock> getInitialReactionAST() {

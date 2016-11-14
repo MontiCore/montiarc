@@ -19,10 +19,10 @@ public class MultipleBehaviorImplementation implements MontiArcASTComponentBodyC
     for (ASTElement element : node.getElements()) {
       if (element instanceof ASTBehaviorImplementation) {
         ++counter;
+        if (counter > 1) {
+          Log.error("0xAB140 Multiple behavior implementations found.", element.get_SourcePositionStart());
+        }
       }
-    }
-    if (counter > 1) {
-      Log.error("0xAB140 Multiple behavior implementations found.");
     }
   }
   

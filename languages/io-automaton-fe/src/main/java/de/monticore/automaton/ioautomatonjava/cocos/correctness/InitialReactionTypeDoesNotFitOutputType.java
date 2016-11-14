@@ -49,7 +49,8 @@ public class InitialReactionTypeDoesNotFitOutputType implements IOAutomatonASTIn
                     Log.error("0xAA412 Could not resolve type of expression for checking the initial reaction.", assign.get_SourcePositionStart());
                   }
                   else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType)) {
-                    Log.error("0xAA411 Type of Variable/Output " + currentNameToResolve + " in the initial state declaration does not match the type of its assigned expression.", val.get_SourcePositionStart());
+                    Log.error("0xAA411 Type of Variable/Output " + currentNameToResolve + " in the initial state declaration does not match the type of its assigned expression. Type " + 
+                          exprType.get().getName() + " can not cast to type " + varType.getName() + ".", val.get_SourcePositionStart());
                   }
                 }
               }

@@ -54,7 +54,8 @@ public class ReactionTypeDoesNotFitOutputType implements IOAutomatonASTTransitio
                       Log.error("0xAA433 Could not resolve type of expression for checking the reaction.", assign.get_SourcePositionStart());
                     }
                     else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType)) {
-                      Log.error("0xAA431 Type of Variable/Output \"" + currentNameToResolve + "\" in the reaction does not match the type of its assigned expression.", val.get_SourcePositionStart());
+                      Log.error("0xAA431 Type of Variable/Output \"" + currentNameToResolve + "\" in the reaction does not match the type of its assigned expression. Type " + 
+                          exprType.get().getName() + " can not cast to type " + varType.getName() + ".", val.get_SourcePositionStart());
                     }
                   }
                 }

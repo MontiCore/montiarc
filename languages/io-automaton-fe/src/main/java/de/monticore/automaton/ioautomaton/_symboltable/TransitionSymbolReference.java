@@ -5,12 +5,11 @@
 
 package de.monticore.automaton.ioautomaton._symboltable;
 
-import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.MutableScope;
+import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.symboltable.references.CommonSymbolReference;
 import de.monticore.symboltable.references.SymbolReference;
-import java.util.Collection;
 
 /**
  * Represents a reference of {@link TransitionSymbol}.
@@ -87,12 +86,6 @@ public class TransitionSymbolReference extends TransitionSymbol implements Symbo
   /*
   * Methods of TransitionSymbol class
   */
-
-
-  @Override
-  public Collection<GuardSymbol> getGuard() {
-    return getReferencedSymbol().getGuard();
-  }
 
 
 }

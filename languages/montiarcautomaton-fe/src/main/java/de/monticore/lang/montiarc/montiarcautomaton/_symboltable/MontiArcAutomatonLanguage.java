@@ -25,7 +25,6 @@ public class MontiArcAutomatonLanguage extends MontiArcAutomatonLanguageTOP {
     super.initResolvingFilters();
 
     // resolver for montiarc automaton:
-    addResolver(new BehaviorEmbeddingResolvingFilter());
     addResolver(new Port2VariableResolvingFilter());
     
     // following resolver are copied from montiarc:    

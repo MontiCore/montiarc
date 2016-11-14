@@ -12,9 +12,9 @@ import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTAutomatonContextC
 import de.se_rwth.commons.logging.Log;
 
 /**
- * Context condition for checking, if a lokal field has the same name as an
+ * Context condition for checking, if a local field has the same name as an
  * output or input field. Since inputs and outputs can always be told apart from
- * their position (stimulus or reaction), it is not the case for lokal fields.
+ * their position (stimulus or reaction), it is not the case for local fields.
  * 
  * @author Gerrit Leonhardt
  */
