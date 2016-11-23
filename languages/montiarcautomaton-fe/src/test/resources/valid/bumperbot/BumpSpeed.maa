@@ -1,6 +1,6 @@
 package valid.bumperbot;
 
-import valid.bumperbot.datatypes.SpeedCmd;
+import valid.bumperbot.Datatypes.SpeedCmd;
 
 component BumpSpeed(Integer defaultSpeed) {
   port

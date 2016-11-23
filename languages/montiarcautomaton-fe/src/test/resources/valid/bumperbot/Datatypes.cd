@@ -1,6 +1,6 @@
 package valid.bumperbot;
 
-classdiagram datatypes {
+classdiagram Datatypes {
   enum MotorCommand {FORWARD, BACKWARD, LEFTTURN, RIGHTTURN, STOP;}
   enum TimerCmd {SINGLE, DOUBLE; }
   enum TimerSignal {ALERT, SLEEP; }
