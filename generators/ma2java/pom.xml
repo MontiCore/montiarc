@@ -73,7 +73,7 @@
 					<baseClass>de.monticore.templateclassgenerator.TemplateClassGeneratorScript</baseClass>
 					<arguments>
 						<out>${TCGTargetPath}</out>
-						<modelPath>${templatePath}</modelPath>
+						<templatepath>${templatePath}</templatepath>
 					</arguments>
 					<script>de/monticore/templateclassgenerator/templateclassgenerator.groovy</script>
 				</configuration>
