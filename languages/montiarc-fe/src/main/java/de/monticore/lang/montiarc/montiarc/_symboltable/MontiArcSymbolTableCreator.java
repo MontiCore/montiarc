@@ -134,6 +134,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     String name = node.getName().orElse(StringTransformations.uncapitalize(typeName));
     PortSymbol sym = new PortSymbol(name);
     
+    //TODO use MAJTypeReference instead of CommonJTypeReference
     JTypeReference<JTypeSymbol> typeRef = new CommonJTypeReference<JTypeSymbol>(typeName,
         JTypeSymbol.KIND, currentScope().get());
     typeRef.setDimension(TypesHelper.getArrayDimensionIfArrayOrZero(astType));
