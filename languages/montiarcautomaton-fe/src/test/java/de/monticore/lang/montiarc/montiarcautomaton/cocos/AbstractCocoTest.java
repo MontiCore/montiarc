@@ -52,6 +52,10 @@ public class AbstractCocoTest extends AbstractSymtabTest {
         new ExpectedErrorInfo());
   }
   
+  protected static void checkValidCD4A() {
+    new ExpectedErrorInfo().checkFindings(Log.getFindings());
+  }
+  
   /**
    * Checks the given cocos on the given model and expects the given errors. Use this for checking
    * invalid models and verifying that the right number and type of errors are present.
