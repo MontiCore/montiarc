@@ -17,6 +17,7 @@
   <modules>
     <module>ma2java</module>
     <module>maa2java</module>
+	<module>cd2pojo</module>
   </modules>
 
 </project>
