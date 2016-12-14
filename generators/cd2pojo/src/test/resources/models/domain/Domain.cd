@@ -1,0 +1,120 @@
+package domain;
+
+/**
+ * Example CD
+ * @version: 1.0, 27.10.2016
+ */
+classdiagram Domain {
+
+  /*******************
+   *   Straßennetz   *
+   *******************/
+
+  interface Mega;
+  
+  class A implements Mega;
+  
+  class B extends A;
+
+  interface Z;
+
+  class C extends A implements Z;
+
+  class StreetNetwork;
+  association [1] StreetNetwork -> Node [*];
+  association [1] StreetNetwork -> Connection [0..1];
+
+  // Knoten auf Straßennetz
+  class Node {
+    String id;
+  }
+  association [1] Node -> Point [1];
+
+  class Point {
+    double x;
+    double y;
+  }
+
+  // gerichtete, gewichtete Kante im Straßennetz
+  class Connection {
+    double weight;
+  }
+  association [*] Connection (outgoing) <-> (src) Node [1];
+  association [*] Connection (incoming) <-> (target) Node [1];
+
+  // Pfad auf dm Straßennetz
+  class Path;
+  association [1] Path -> Connection [*];
+
+  /*******************
+   *       LTS       *
+   *******************/
+
+  class LTS {
+    String id;
+  }
+  association [1] LTS -> (coordinator) Participant [0..1]; // (Optionale) Zuweisung eines koordinierenden Teilnehmers
+
+  class Position {
+    double positionOnConnection;
+  }
+  association [1] Position -> Connection [1];
+
+  class Participant {
+    String id;
+    double width;
+    double height;
+    Position position;
+    double velocity; // aktuelle Geschwindigkeit 
+  }
+  association [1] Participant -> (entourage) Participant [*]; // Individuelles Umfeld
+  association [1] Participant -> LTS [*]; // LTS-Zugehöorigkeit(en) oder keine
+  association [1] Participant -> Kinodynamic [1]; // erweitertes kinodynamisches Modell
+  association [1] Participant -> (intentionPath) Path [1]; // geplanter oder wahscheinlister Pfad auf dem Stassennetz (Fahrvorhaben)
+  association [1] Participant -> (preceptedPath) Path [1]; // Vom Kollektiv oder Koordinator vorgegebener Pfad (Fahrvorgabe)
+  association [1] Participant -> (possiblePaths) Path [*]; // Mögliche Pfade auf dem Straßennetz
+  association [1] Participant -> (interaction) InteractionMode [1]; // (Interaktionsfähigkeit)
+  association [1] Participant -> PlanState [1]; // Planungsvorgang
+  association [1] Participant -> ComputingCapacity[1]; // Rechenkapazität
+
+  enum PlanState {
+    IDLE, PLANNING, DONE;
+  }
+
+  enum InteractionMode {
+    PASSIVE, ACTIVE;
+  }
+
+  // extension point for advanced kinodynamic models
+  class Kinodynamic;
+
+  // extension point for defining the computing capacity
+  class ComputingCapacity; 
+
+  /*******************
+   *  Communication  *
+   *******************/
+
+  class CommunicationChannel {
+    double latency;
+    double bandwidth;
+  }
+  association [1] CommunicationChannel -> (type) ChannelType [1];
+  association [1] CommunicationChannel -> Message [*]; // Übertragung von Nachrichten
+
+  enum ChannelType {
+    UMTS, WLAN;
+  }
+
+  class Message {
+    String content;
+    
+  }
+  association [1] Message -> (reciepients) Participant [*]; // Empfängerliste
+  association [1] Message -> MessageType [1];
+
+  enum MessageType {
+    P2P, BROADCAST;
+  }
+  
+}
