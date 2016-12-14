@@ -1,6 +1,6 @@
 package robotmodels.sensors;
 
-abstract component DistanceSensor {
+component DistanceSensor {
     port
         out Double distance;
 }

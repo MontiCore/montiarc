@@ -5,7 +5,7 @@ package robotmodels.sensors;
  * is considered switched off. After being pressed, active becomes true 
  * and holds until the button is pressed again.
  */
-abstract component Button {
+component Button {
     port 
         out Boolean active;
 }

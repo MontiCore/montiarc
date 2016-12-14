@@ -1,6 +1,6 @@
 package robotmodels.sensors;
 
-abstract component ColorSensor {
+component ColorSensor {
     port
         out Integer r,
         out Integer g,

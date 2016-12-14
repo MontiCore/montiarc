@@ -5,7 +5,7 @@ import robotmodels.data.types.BufferCommand;
 /**
  * A Buffer that stores single elements of type T. 
  */
-abstract component Buffer<T>{
+component Buffer<T>{
 
 	port
 		in T value,

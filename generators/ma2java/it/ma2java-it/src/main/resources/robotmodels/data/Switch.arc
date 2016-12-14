@@ -15,18 +15,4 @@ component Switch <T>{
     	
     	out T outPort;
     	
-    	automaton {
-    	
-    		state
-    			Port1, Port2;
-    			
-    			initial Port1;
-    			
-    			Port1 -> Port2 {choosePort == false} / {outPort = inPort2};
-    			Port1 / {outPort = inPort1};
-    			Port2 -> Port1 {choosePort == true} / {outPort = inPort1};
-    			Port2 / {outPort = inPort2};
-    		
-    	}
-
 }

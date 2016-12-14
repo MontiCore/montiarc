@@ -2,7 +2,7 @@ package robotmodels.time;
 
 import robotmodels.time.types.*;
 
-abstract component Timer[long delay] {
+component Timer(Long delay) {
     port
         in TimerCmd timerCmd,
         out TimerSignal timerSignal;

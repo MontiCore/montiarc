@@ -5,7 +5,7 @@ package robotmodels.io;
  * parameters.
  * See: Logger.cmp
  */
-abstract component Logger<T>[String prefix]{
+component Logger<T>(String prefix){
     port
         in T message;
 }

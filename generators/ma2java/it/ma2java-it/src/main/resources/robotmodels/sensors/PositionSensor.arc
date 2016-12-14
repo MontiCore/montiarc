@@ -1,6 +1,6 @@
 package robotmodels.sensors;
 
-abstract component PositionSensor {
+component PositionSensor {
     port
         out Float x,
         out Float y,
