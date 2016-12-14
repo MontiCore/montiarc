@@ -1,8 +1,8 @@
 package valid.bumperbot;
 
-import valid.bumperbot.datatypes.MotorCommand;
-import valid.bumperbot.datatypes.TimerSignal;
-import valid.bumperbot.datatypes.TimerCmd;
+import valid.bumperbot.Datatypes.MotorCommand;
+import valid.bumperbot.Datatypes.TimerSignal;
+import valid.bumperbot.Datatypes.TimerCmd;
 
 component BumpControl {
   port
