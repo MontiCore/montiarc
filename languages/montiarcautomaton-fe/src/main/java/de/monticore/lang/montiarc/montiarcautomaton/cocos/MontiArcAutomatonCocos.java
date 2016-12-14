@@ -34,15 +34,15 @@ import de.monticore.lang.montiarc.montiarcautomaton.cocos.conventions.AutomatonU
 import de.monticore.lang.montiarc.montiarcautomaton.cocos.conventions.MultipleBehaviorImplementation;
 
 public class MontiArcAutomatonCocos {
-  public static MontiArcAutomatonCocoCheckerFix createChecker() {
-    MontiArcAutomatonCocoCheckerFix checker = new MontiArcAutomatonCocoCheckerFix();
+  public static MontiArcAutomatonCoCoChecker createChecker() {
+    MontiArcAutomatonCoCoChecker checker = new MontiArcAutomatonCoCoChecker();
     checker.addChecker(MontiArcCoCos.createChecker());
     
     // add all required IO-Automaton cocos
     createIOAutomatonJavaChecker(checker);
     
     // add all MontiArcAutomaton specific cocos
-    return (MontiArcAutomatonCocoCheckerFix)checker
+    return checker
         .addCoCo(new AutomatonUppercase()) // reimplement AutomatonUppercase
         .addCoCo(new AutomatonHasInput()) // inputs forbidden
         .addCoCo(new AutomatonHasOutput()) // outputs forbidden

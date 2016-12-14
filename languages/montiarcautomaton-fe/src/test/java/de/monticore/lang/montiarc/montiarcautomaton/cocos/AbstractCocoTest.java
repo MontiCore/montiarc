@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarcautomaton.AbstractSymtabTest;
+import de.monticore.lang.montiarc.montiarcautomaton._cocos.MontiArcAutomatonCoCoChecker;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
@@ -52,11 +53,15 @@ public class AbstractCocoTest extends AbstractSymtabTest {
         new ExpectedErrorInfo());
   }
   
+  protected static void checkValidCD4A() {
+    new ExpectedErrorInfo().checkFindings(Log.getFindings());
+  }
+  
   /**
    * Checks the given cocos on the given model and expects the given errors. Use this for checking
    * invalid models and verifying that the right number and type of errors are present.
    */
-  protected static void checkInvalid(MontiArcAutomatonCocoCheckerFix cocos, ASTMontiArcNode node,
+  protected static void checkInvalid(MontiArcAutomatonCoCoChecker cocos, ASTMontiArcNode node,
       ExpectedErrorInfo expectedErrors) {
     
     cocos.checkAll(node);
