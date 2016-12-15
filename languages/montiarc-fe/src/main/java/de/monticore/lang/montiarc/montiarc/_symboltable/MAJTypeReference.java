@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import de.monticore.lang.montiarc.adapter.CDTypeSymbol2JavaType;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.SymbolKind;
 import de.monticore.symboltable.modifiers.AccessModifier;
@@ -22,11 +21,15 @@ import de.monticore.symboltable.types.references.CommonJTypeReference;
 import de.se_rwth.commons.logging.Log;
 
 /**
- * TODO: Write me!
+ * When resolving to JTypeSymbol method loadReferencedSymbol() of
+ * CommonJTypeReference resolves single. As we use an adapter for
+ * CDTypeSymbols2JavaTypeSymbols, resolving to CDTypeSymbols throws an error, as
+ * there are two possible matching symbol kinds (CDTypeSymbol and Adapter
+ * CDTypeSymbol2JavaType). In order to resolve many symbols in
+ * loadReferencedSymbol() is overridden in this class.
  *
- * @author (last commit) $Author$
+ * @author Jerome Pfeiffer
  * @version $Revision$, $Date$
- * @since TODO: add version number
  */
 public class MAJTypeReference extends CommonJTypeReference<JTypeSymbol> {
   
@@ -86,13 +89,7 @@ public class MAJTypeReference extends CommonJTypeReference<JTypeSymbol> {
     if (!foundSymbols.isEmpty()) {
       Log.debug("Loaded full information of '" + referencedName + "' successfully.",
           SymbolReference.class.getSimpleName());
-      for (JTypeSymbol foundSymbol : foundSymbols) {
-        JTypeSymbol fS = foundSymbol;
-        if(foundSymbol instanceof CDTypeSymbol2JavaType)
-        resolvedSymbol = Optional.of(foundSymbol);
-      }
-      
-//      resolvedSymbol = Optional.of(foundSymbols.iterator().next());
+      resolvedSymbol = Optional.of(foundSymbols.iterator().next());
     }
     else {
       Log.warn("0xA1038 " + SymbolReference.class.getSimpleName()

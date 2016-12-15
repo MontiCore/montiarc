@@ -40,6 +40,7 @@ public class SymtabTest extends AbstractSymtabTest {
   public static void setUp() {
     // ensure an empty log
     Log.getFindings().clear();
+    Log.enableFailQuick(false);
   }
   
   @Test
@@ -64,6 +65,7 @@ public class SymtabTest extends AbstractSymtabTest {
     javaType = comp.getSpannedScope().resolve("Set", JTypeSymbol.KIND);
     assertTrue("java.util types must be resolvable without qualification within components.",
         javaType.isPresent());
+    
   }
   
   @Test

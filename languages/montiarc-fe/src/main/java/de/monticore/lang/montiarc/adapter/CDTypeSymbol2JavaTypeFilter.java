@@ -7,9 +7,14 @@ import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.resolving.TransitiveAdaptedResolvingFilter;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 
-//TODO required for resolving types of an expression that uses cd stuff. See
-//de.monticore.automaton.ioautomaton.TypeCompatibilityChecker for further
-//information.
+/**
+ * CDTypeSymbol2JavaTypeSymbol resolving filter.
+ *
+ * @author  (last commit) $Author$
+ * @version $Revision$,
+ *          $Date$
+ *
+ */
 public class CDTypeSymbol2JavaTypeFilter extends TransitiveAdaptedResolvingFilter<JavaTypeSymbol> {
 
   public CDTypeSymbol2JavaTypeFilter() {

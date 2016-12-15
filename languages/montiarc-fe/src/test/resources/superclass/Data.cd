@@ -1,5 +1,7 @@
 package superclass;
 
+import java.lang.*;
+
 classdiagram Data {
 
   interface Traceable {

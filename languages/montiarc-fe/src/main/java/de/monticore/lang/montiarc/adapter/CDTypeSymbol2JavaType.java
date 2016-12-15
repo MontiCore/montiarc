@@ -24,9 +24,15 @@ import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 import de.monticore.umlcd4a.symboltable.CDTypes;
 import de.monticore.umlcd4a.symboltable.references.CDTypeSymbolReference;
 
-//TODO required for resolving types of an expression that uses cd stuff. See
-//de.monticore.automaton.ioautomaton.TypeCompatibilityChecker for further
-//information.
+
+/**
+ * Adapts CDTypeSymbols to JavaTypeSymbols
+ *
+ * @author  (last commit) $Author$
+ * @version $Revision$,
+ *          $Date$
+ *
+ */
 public class CDTypeSymbol2JavaType extends JavaTypeSymbol implements SymbolAdapter<CDTypeSymbol> {
   
   private final CDTypeSymbol adaptee;
@@ -123,31 +129,56 @@ public class CDTypeSymbol2JavaType extends JavaTypeSymbol implements SymbolAdapt
     List<CDFieldSymbol> fieldsToAdapt = adaptee.getFields();
     List<JavaFieldSymbol> adaptedFields = new ArrayList<>();
     for (CDFieldSymbol fieldToAdapt : fieldsToAdapt) {
-      JavaFieldSymbol field = new JavaFieldSymbol(fieldToAdapt.getName(),
-          (JAttributeSymbolKind) fieldToAdapt.getKind(),
-          convertToJavaTypeReference(fieldToAdapt.getType()));
-      field.setFullName(fieldToAdapt.getFullName());
-      adaptedFields.add(field);      
+      JavaTypeSymbolReference javaRef = getJavaRefFromCDRef(fieldToAdapt.getType(),
+          fieldToAdapt.getEnclosingScope());      
+      adaptedFields
+          .add(getJavaFieldFromCDField(fieldToAdapt, javaRef));
     }
     return adaptedFields;
   }
   
-//  /**
-//   * @see de.monticore.symboltable.types.CommonJTypeSymbol#getMethods()
-//   */
-//  @Override
-//  public List<JavaMethodSymbol> getMethods() {
-//    List<CDMethodSymbol> methodsToAdapt = adaptee.getMethods();
-//    List<JavaMethodSymbol> adaptedMethods = new ArrayList<>();
-//    for (CDMethodSymbol methToAdapt : methodsToAdapt) {
-//      JavaMethodSymbol javaMethod = new JavaMethodSymbol(methToAdapt.getName(),
-//          (JMethodSymbolKind) methToAdapt.getKind());
-//      javaMethod.setFullName(methToAdapt.getFullName());
-//      javaMethod.setReturnType(convertToJavaTypeReference(methToAdapt.getReturnType()));
-//      adaptedMethods.add(javaMethod);
-//    }
-//    return adaptedMethods;
-//  }
+  /**
+   * @see de.monticore.symboltable.types.CommonJTypeSymbol#getField(java.lang.String)
+   */
+  @Override
+  public Optional<JavaFieldSymbol> getField(String attributeName) {
+    Optional<CDFieldSymbol> field = adaptee.getField(attributeName);
+    if (field.isPresent()) {
+      JavaTypeSymbolReference javaRef = getJavaRefFromCDRef(field.get().getType(),
+          field.get().getEnclosingScope());
+      
+      return Optional.of(getJavaFieldFromCDField(field.get(), javaRef));
+      
+    }
+    return Optional.empty();
+  }
+  
+  public JavaFieldSymbol getJavaFieldFromCDField(CDFieldSymbol cdField,
+      JavaTypeSymbolReference javaRef) {
+    JavaFieldSymbol field = new JavaFieldSymbol(cdField.getName(),
+        (JAttributeSymbolKind) cdField.getKind(),
+        javaRef);
+    
+    field.setFullName(cdField.getFullName());
+    return field;
+  }
+  
+  /**
+   * @see de.monticore.symboltable.types.CommonJTypeSymbol#getMethods()
+   */
+  @Override
+  public List<JavaMethodSymbol> getMethods() {
+    List<CDMethodSymbol> methodsToAdapt = adaptee.getMethods();
+    List<JavaMethodSymbol> adaptedMethods = new ArrayList<>();
+    for (CDMethodSymbol methToAdapt : methodsToAdapt) {
+      JavaMethodSymbol javaMethod = new JavaMethodSymbol(methToAdapt.getName(),
+          (JMethodSymbolKind) methToAdapt.getKind());
+      javaMethod.setFullName(methToAdapt.getFullName());
+      javaMethod.setReturnType(getJavaRefFromCDRef(methToAdapt.getReturnType(), methToAdapt.getEnclosingScope()));
+      adaptedMethods.add(javaMethod);
+    }
+    return adaptedMethods;
+  }
   
   /**
    * @see de.monticore.symboltable.types.CommonJTypeSymbol#getSuperClass()
@@ -250,6 +281,28 @@ public class CDTypeSymbol2JavaType extends JavaTypeSymbol implements SymbolAdapt
     javaSymbolRef.setActualTypeArguments(cdRef.getActualTypeArguments());
     javaSymbolRef.setAccessModifier(cdRef.getAccessModifier());
     return javaSymbolRef;
+  }
+  
+  private JavaTypeSymbolReference getJavaRefFromCDRef(CDTypeSymbolReference cdField,
+      Scope enclosingScope) {
+    JavaTypeSymbolReference ref = null;
+    
+    // check if field type is a cd type
+    if (cdField.existsReferencedSymbol()) {
+      ref = convertToJavaTypeReference(cdField);
+    }
+    // try to resolve as java type
+    else {
+      Optional<JavaTypeSymbol> sym = enclosingScope
+          .<JavaTypeSymbol> resolve(cdField.getName(), JavaTypeSymbol.KIND);
+      if (sym.isPresent()) {
+        Scope definingScope = sym.get().getSpannedScope();
+        String name = sym.get().getName();
+        ref = new JavaTypeSymbolReference(name, definingScope, cdField.getDimension());
+      }
+    }
+    
+    return ref;
   }
   
 }

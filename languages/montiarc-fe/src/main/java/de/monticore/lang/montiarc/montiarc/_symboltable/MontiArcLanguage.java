@@ -5,10 +5,8 @@
  */
 package de.monticore.lang.montiarc.montiarc._symboltable;
 
+import de.monticore.lang.montiarc.adapter.CDTypeSymbol2JavaTypeFilter;
 import de.monticore.symboltable.resolving.CommonResolvingFilter;
-import de.monticore.symboltable.types.JFieldSymbol;
-import de.monticore.symboltable.types.JMethodSymbol;
-import de.monticore.symboltable.types.JTypeSymbol;
 
 /**
  * The MontiArc Language
@@ -27,14 +25,15 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
   protected void initResolvingFilters() {
     super.initResolvingFilters();
     // is done in generated TOP-language addResolver(new
-    // CommonResolvingFilter<ComponentSymbol>(ComponentSymbol.class, ComponentSymbol.KIND));
+    // CommonResolvingFilter<ComponentSymbol>(ComponentSymbol.class,
+    // ComponentSymbol.KIND));
     addResolver(new CommonResolvingFilter<ComponentInstanceSymbol>(ComponentInstanceSymbol.KIND));
     addResolver(new CommonResolvingFilter<PortSymbol>(PortSymbol.KIND));
     addResolver(new CommonResolvingFilter<ConnectorSymbol>(ConnectorSymbol.KIND));
+    //TODO enable to resolve type arguments of subcomponents
+    addResolver(new CDTypeSymbol2JavaTypeFilter());
     
-    addResolver(CommonResolvingFilter.create(JTypeSymbol.KIND));
-    addResolver(CommonResolvingFilter.create(JFieldSymbol.KIND));
-    addResolver(CommonResolvingFilter.create(JMethodSymbol.KIND));
+
     
     setModelNameCalculator(new MontiArcModelNameCalculator());
   }

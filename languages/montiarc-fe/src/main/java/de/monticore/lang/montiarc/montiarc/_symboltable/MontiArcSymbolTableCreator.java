@@ -42,7 +42,6 @@ import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.TypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
-import de.monticore.symboltable.types.references.CommonJTypeReference;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.symboltable.types.references.TypeReference;
 import de.monticore.types.JTypeSymbolsHelper;
@@ -135,8 +134,10 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     PortSymbol sym = new PortSymbol(name);
     
     //TODO use MAJTypeReference instead of CommonJTypeReference
-    JTypeReference<JTypeSymbol> typeRef = new CommonJTypeReference<JTypeSymbol>(typeName,
-        JTypeSymbol.KIND, currentScope().get());
+//    JTypeReference<JTypeSymbol> typeRef = new CommonJTypeReference<JTypeSymbol>(typeName,
+//        JTypeSymbol.KIND, currentScope().get());
+    JTypeReference<JTypeSymbol> typeRef = new MAJTypeReference(typeName, JTypeSymbol.KIND, currentScope().get());
+    
     typeRef.setDimension(TypesHelper.getArrayDimensionIfArrayOrZero(astType));
     
     addTypeArgumentsToTypeSymbol(typeRef, astType);
