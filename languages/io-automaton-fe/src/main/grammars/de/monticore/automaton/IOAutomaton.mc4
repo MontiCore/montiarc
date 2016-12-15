@@ -84,6 +84,8 @@ component grammar IOAutomaton extends de.monticore.lang.montiarc.Values {
     
     /**
      * The Value for empty data
+     * TODO: currently can not be used to assign/compare inputs/outputs/variables with -- because of wrong derivation.
+     * NoData should implement literal value.
      */
     NoData implements Value = "--";    
     

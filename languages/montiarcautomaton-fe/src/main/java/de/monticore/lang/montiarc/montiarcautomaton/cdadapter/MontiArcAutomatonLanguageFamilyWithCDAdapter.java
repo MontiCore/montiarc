@@ -4,11 +4,13 @@ import de.monticore.ModelingLanguageFamily;
 import de.monticore.automaton.ioautomatonjava._symboltable.IOAutomatonJavaLanguage;
 import de.monticore.java.lang.JavaDSLLanguage;
 import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcAutomatonLanguage;
-import de.monticore.umlcd4a.CD4AnalysisLanguage;
+import de.monticore.lang.montiarc.montiarcautomaton.cdcococheck.CD4ALanguage;
 
-//TODO required for resolving types of an expression that uses cd stuff. See
-//de.monticore.automaton.ioautomaton.TypeCompatibilityChecker for further
-//information.
+// TODO required for resolving types of an expression that uses cd stuff. See
+// de.monticore.automaton.ioautomaton.TypeCompatibilityChecker for further
+// information.
+// This class also adds a modified version of CD4ALanguage as modeling language
+// that performs on-the-fly coco checks. For further information see: CD4ALanguage
 public class MontiArcAutomatonLanguageFamilyWithCDAdapter extends ModelingLanguageFamily {
   public MontiArcAutomatonLanguageFamilyWithCDAdapter() {
     addModelingLanguage(new MontiArcAutomatonLanguage() {
@@ -21,7 +23,12 @@ public class MontiArcAutomatonLanguageFamilyWithCDAdapter extends ModelingLangua
         addResolver(new CDFieldSymbol2JavaFieldFilter());
       }
     });
-    addModelingLanguage(new CD4AnalysisLanguage());
+    
+    // Use CD4ALanguage instead of CD4AnalysisLanguage. see CD4ALanguage.
+    // Required for on-the-fly coco checks.
+    addModelingLanguage(new CD4ALanguage());
+    // addModelingLanguage(new CD4AnalysisLanguage());
+    
     addModelingLanguage(new JavaDSLLanguage());
     addModelingLanguage(new IOAutomatonJavaLanguage());
   }
