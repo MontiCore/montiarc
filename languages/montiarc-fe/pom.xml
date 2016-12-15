@@ -155,7 +155,7 @@
           </execution>
         </executions>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -177,6 +177,7 @@
                   <type>jar</type>
                   <overWrite>false</overWrite>
                   <outputDirectory>${project.build.directory}/generated-test-sources/defaultTypes</outputDirectory>
+                  <destFileName>javaLib.jar</destFileName>
                 </artifactItem>
               </artifactItems>
             </configuration>
