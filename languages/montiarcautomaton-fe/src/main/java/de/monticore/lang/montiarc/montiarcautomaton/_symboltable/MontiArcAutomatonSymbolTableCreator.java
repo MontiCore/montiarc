@@ -11,11 +11,10 @@ import java.util.Deque;
 import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
 import de.monticore.automaton.ioautomatonjava._symboltable.IOAutomatonJavaSymbolTableCreator;
 import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcSymbolTableCreator;
-import de.monticore.lang.montiarc.montiarcautomaton._ast.ASTBehaviorEmbedding;
+import de.monticore.lang.montiarc.montiarcautomaton._ast.ASTAutomatonDefinition;
 import de.monticore.lang.montiarc.montiarcautomaton._visitor.CommonMontiArcAutomatonDelegatorVisitor;
 import de.monticore.lang.montiarc.montiarcautomaton._visitor.MontiArcAutomatonDelegatorVisitor;
 import de.monticore.lang.montiarc.montiarcautomaton._visitor.MontiArcAutomatonVisitor;
-import de.monticore.lang.montiarc.montiarcbehavior._ast.ASTBehaviorImplementation;
 import de.monticore.symboltable.CommonSymbolTableCreator;
 import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.ResolvingConfiguration;
@@ -88,13 +87,13 @@ public class MontiArcAutomatonSymbolTableCreator extends CommonSymbolTableCreato
   }
   
   @Override
-  public void visit(ASTBehaviorEmbedding node) {
+  public void visit(ASTAutomatonDefinition node) {
     AutomatonSymbol automaton = new AutomatonSymbol(node.getName());
     addToScopeAndLinkWithNode(automaton, node); // introduces new scope
   }
   
   @Override
-  public void endVisit(ASTBehaviorEmbedding node) {
+  public void endVisit(ASTAutomatonDefinition node) {
     removeCurrentScope();
   }
 

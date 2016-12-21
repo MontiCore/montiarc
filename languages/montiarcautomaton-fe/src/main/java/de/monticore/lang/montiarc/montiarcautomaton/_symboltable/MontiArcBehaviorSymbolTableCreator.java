@@ -2,8 +2,6 @@ package de.monticore.lang.montiarc.montiarcautomaton._symboltable;
 
 import java.util.Deque;
 
-import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
-import de.monticore.lang.montiarc.montiarcbehavior._ast.ASTBehaviorImplementation;
 import de.monticore.lang.montiarc.montiarcbehavior._visitor.CommonMontiArcBehaviorDelegatorVisitor;
 import de.monticore.lang.montiarc.montiarcbehavior._visitor.MontiArcBehaviorVisitor;
 import de.monticore.symboltable.MutableScope;
