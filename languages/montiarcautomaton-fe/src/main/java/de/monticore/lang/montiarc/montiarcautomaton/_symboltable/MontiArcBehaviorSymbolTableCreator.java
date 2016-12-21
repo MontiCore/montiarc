@@ -32,14 +32,4 @@ public class MontiArcBehaviorSymbolTableCreator extends de.monticore.symboltable
   }
   
   
-  @Override
-  public void visit(ASTBehaviorImplementation node) {
-    AutomatonSymbol automaton = new AutomatonSymbol(node.getName());
-    addToScopeAndLinkWithNode(automaton, node); // introduces new scope
-  }
-  
-  @Override
-  public void endVisit(ASTBehaviorImplementation node) {
-    removeCurrentScope();
-  }
 }

@@ -1,7 +1,7 @@
 package de.monticore.lang.montiarc.montiarcautomaton.cocos.conventions;
 
-import de.monticore.lang.montiarc.montiarcbehavior._ast.ASTBehaviorImplementation;
-import de.monticore.lang.montiarc.montiarcbehavior._cocos.MontiArcBehaviorASTBehaviorImplementationCoCo;
+import de.monticore.lang.montiarc.montiarcautomaton._ast.ASTBehaviorEmbedding;
+import de.monticore.lang.montiarc.montiarcautomaton._cocos.MontiArcAutomatonASTBehaviorEmbeddingCoCo;
 import de.se_rwth.commons.logging.Log;
 
 /**
@@ -10,11 +10,11 @@ import de.se_rwth.commons.logging.Log;
  * 
  * @author Gerrit Leonhardt
  */
-public class AutomatonUppercase implements MontiArcBehaviorASTBehaviorImplementationCoCo {
+public class AutomatonUppercase implements MontiArcAutomatonASTBehaviorEmbeddingCoCo {
 
 
   @Override
-  public void check(ASTBehaviorImplementation node) {
+  public void check(ASTBehaviorEmbedding node) {
     if (!Character.isUpperCase(node.getName().charAt(0))) {
       Log.error("0xAB130 The name of the automaton should start with an uppercase letter.", node.get_SourcePositionStart());
     }    
