@@ -7,6 +7,7 @@ import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcModelNameCalculator;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
+import de.monticore.lang.montiarc.montiarcautomaton._parser.MontiArcAutomatonParser;
 import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.ResolvingConfiguration;
 import de.monticore.symboltable.resolving.CommonResolvingFilter;
