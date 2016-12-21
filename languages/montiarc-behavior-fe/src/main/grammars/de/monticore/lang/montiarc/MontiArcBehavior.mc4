@@ -7,9 +7,7 @@ component grammar MontiArcBehavior extends de.monticore.lang.montiarc.MontiArc{
    * External to embed languages that allow implementing
    * component behavior.
    */
-  external BehaviorEmbedding;
-  
-  BehaviorImplementation implements Element = behavior:BehaviorEmbedding; 
-   
+  interface BehaviorEmbedding extends Element;
+     
 
 }
