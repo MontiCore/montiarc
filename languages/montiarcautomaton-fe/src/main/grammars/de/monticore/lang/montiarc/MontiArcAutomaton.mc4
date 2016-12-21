@@ -4,12 +4,8 @@ grammar MontiArcAutomaton extends de.monticore.lang.montiarc.MontiArcBehavior, d
   
   // use MA compilation unit as start
   start MACompilationUnit;
-  
-  //external AdditionalBehaviorEmbedding;
-  
-  // IO-Automaton body is used as behavior embedding
-  BehaviorEmbedding = "automaton" Name "{" AutomatonBody "}";
-  
-  
+    
+  // IO-Automaton body is used as behavior embedding  
+  AutomatonDefinition implements BehaviorEmbedding = "automaton" Name "{" AutomatonBody "}";  
    
 }
