@@ -5,7 +5,7 @@ component AutomatonHasInOutputsVariables {
     in Integer a,
     out Integer b;
 
-  implementation AutomatonHasInOutputsVariables {
+  automaton AutomatonHasInOutputsVariables {
   	variable int c;
   	input int a; // io-inputs not allowed in maa
   	output int d; // io-outputs no allowed in maa

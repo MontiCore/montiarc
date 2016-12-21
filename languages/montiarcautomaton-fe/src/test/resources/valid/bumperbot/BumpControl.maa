@@ -12,7 +12,7 @@ component BumpControl {
     out MotorCommand right,
     out MotorCommand left;
 
-  implementation BumpControl {
+  automaton BumpControl {
     state Idle, Driving, Backing, Turning;
 
     initial Idle / {right = MotorCommand.STOP, left = MotorCommand.STOP};

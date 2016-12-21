@@ -9,7 +9,7 @@ component BumpSpeed(Integer defaultSpeed) {
     out Integer speed,
     out String log;
 
-  implementation BumpSpeed {
+  automaton BumpSpeed {
     state Static, Dynamic;
 
     initial Dynamic;

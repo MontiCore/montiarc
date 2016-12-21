@@ -5,7 +5,7 @@ component UniquePorts {
     in Integer a,
     out Integer a;
   
-  implementation UniquePorts {  
+  automaton UniquePorts {  
   	state Start;
     initial Start;
 

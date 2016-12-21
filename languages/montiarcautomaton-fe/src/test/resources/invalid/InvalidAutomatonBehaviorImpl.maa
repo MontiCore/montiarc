@@ -4,7 +4,7 @@ component InvalidAutomatonBehaviorImpl {
   port
     in Integer a;
 
-  implementation InvalidAutomatonBehaviorImpl {
+  automaton InvalidAutomatonBehaviorImpl {
   	variable int c;
   
   	state Start;
@@ -13,14 +13,14 @@ component InvalidAutomatonBehaviorImpl {
     Start -> Start [c < 2];
   }
   
-  implementation DuplicatedAutomatonImpl {  
+  automaton DuplicatedAutomatonImpl {  
   	state Start;
     initial Start;
 
     Start;
   }
   
-  implementation lowercaseName {
+  automaton lowercaseName {
   	variable int c;
   
   	state Start;
