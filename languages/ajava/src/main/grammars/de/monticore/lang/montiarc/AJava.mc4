@@ -1,0 +1,9 @@
+package de.monticore.lang.montiarc;
+
+grammar AJava extends de.monticore.lang.montiarc.MontiArcAutomaton {
+  
+  start MACompilationUnit;
+    
+  AJavaDefinition implements BehaviorEmbedding = "compute" "{" Statement+ "}";
+    
+}
