@@ -1,10 +1,18 @@
 package de.monticore.lang.montiarc.ajava;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Collection;
+import java.util.Optional;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.monticore.automaton.ioautomaton.ScopeHelper;
+import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
+import de.monticore.java.symboltable.JavaMethodSymbol;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.symboltable.Scope;
@@ -18,18 +26,35 @@ public class SymTabTest extends AbstractSymtabTest {
   public static void setUp() {
     Log.enableFailQuick(false);
   }
-
+  
   @Test
   public void testAutomatonEmbedding() {
     ASTMontiArcNode node = getAstNode(MODELPATH, "valid.bumperbot.BumpControl");
     assertNotNull(node);
+    Scope symtab = createSymTab(MODELPATH);
+    Optional<ComponentSymbol> oBControl = symtab
+        .<ComponentSymbol> resolve("valid.bumperbot.BumpControl", ComponentSymbol.KIND);
+    assertTrue(oBControl.isPresent());
+    ComponentSymbol bControl = oBControl.get();
+    Collection<AutomatonSymbol> automatons = ScopeHelper.resolveManyDown(bControl.getSpannedScope(),
+        AutomatonSymbol.KIND);
+    assertTrue(automatons.size() == 1);
   }
   
   @Test
-   public void testAJavaEmbedding() {
-     ASTMontiArcNode node = getAstNode(MODELPATH, "valid.Foo");
-     assertNotNull(node);
-   }
+  public void testAJavaEmbedding() {
+    ASTMontiArcNode node = getAstNode(MODELPATH, "valid.Foo");
+    assertNotNull(node);
+    Scope symtab = createSymTab(MODELPATH);
+    Optional<ComponentSymbol> oFoo = symtab.<ComponentSymbol> resolve("valid.Foo",
+        ComponentSymbol.KIND);
+    assertTrue(oFoo.isPresent());
+    ComponentSymbol foo = oFoo.get();
+    Collection<JavaMethodSymbol> aJavaDef = ScopeHelper.resolveManyDown(foo.getSpannedScope(),
+        JavaMethodSymbol.KIND);
+    assertTrue(aJavaDef.size() == 1);
+    assertEquals("increaseHulu", aJavaDef.iterator().next().getName());
+  }
   
   protected static ASTMontiArcNode getAstNode(String modelPath, String model) {
     // ensure an empty log

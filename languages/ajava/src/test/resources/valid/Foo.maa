@@ -5,7 +5,7 @@ component Foo {
     in double distance,
     out String hulu;
 
-  compute {
+  compute increaseHulu {
     hulu++;
   }
 }
