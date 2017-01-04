@@ -7,8 +7,7 @@ import java.util.Deque;
 import java.util.List;
 
 import de.monticore.automaton.ioautomatonjava._symboltable.IOAutomatonJavaSymbolTableCreator;
-import de.monticore.java.javadsl._ast.ASTStatement;
-import de.monticore.java.symboltable.JavaMethodSymbol;
+import de.monticore.java.javadsl._ast.ASTBlockStatement;
 import de.monticore.lang.montiarc.ajava._ast.ASTAJavaDefinition;
 import de.monticore.lang.montiarc.ajava._visitor.AJavaDelegatorVisitor;
 import de.monticore.lang.montiarc.ajava._visitor.AJavaVisitor;
@@ -16,6 +15,7 @@ import de.monticore.lang.montiarc.ajava._visitor.CommonAJavaDelegatorVisitor;
 import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcSymbolTableCreator;
 import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcAutomatonSymbolTableCreator;
 import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcBehaviorSymbolTableCreator;
+import de.monticore.symboltable.CommonScope;
 import de.monticore.symboltable.CommonSymbolTableCreator;
 import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.ResolvingConfiguration;
@@ -103,8 +103,8 @@ public class AJavaSymbolTableCreator extends CommonSymbolTableCreator
   
   @Override
   public void visit(ASTAJavaDefinition node) {
-    JavaMethodSymbol automaton = new JavaMethodSymbol(node.getName(), JavaMethodSymbol.KIND);
-    addToScopeAndLinkWithNode(automaton, node); // introduces new scope
+    AJavaDefinitionSymbol ajavaDef = new AJavaDefinitionSymbol(node.getName());
+    addToScopeAndLinkWithNode(ajavaDef, node);
   }
   
   @Override
