@@ -7,6 +7,7 @@ package de.monticore.lang.montiarc.ajava._symboltable;
 
 import java.util.Deque;
 
+import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.javadsl._ast.ASTPrimaryExpression;
 import de.monticore.java.symboltable.JavaSymbolTableCreator;
@@ -50,7 +51,7 @@ public class ExtendedJavaSymbolTableCreator extends JavaSymbolTableCreator{
   @Override
   public void visit(ASTPrimaryExpression node) {
     super.visit(node);
-    if(node.getName().isPresent()){
+    if(node.getName().isPresent() && Character.isLowerCase(node.getName().get().charAt(0))){
       SimpleVariableSymbol variable = new SimpleVariableSymbol(node.getName().get());
       addToScopeAndLinkWithNode(variable, node);
     }

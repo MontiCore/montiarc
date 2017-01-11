@@ -23,7 +23,6 @@ import de.se_rwth.commons.logging.Log;
 public class AJavaSymbolTableCreator extends CommonSymbolTableCreator
     implements AJavaVisitor {
   
-  // TODO doc
   private final AJavaDelegatorVisitor visitor = new CommonAJavaDelegatorVisitor();
   
   public AJavaSymbolTableCreator(
