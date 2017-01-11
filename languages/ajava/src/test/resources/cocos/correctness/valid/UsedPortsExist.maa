@@ -1,0 +1,12 @@
+package cocos.correctness.valid;
+
+component UsedPortsExist {
+  port
+    in double distance,
+    out String hulu;
+
+  compute IncreaseHulu {    
+    distance++;
+    hulu = distance;
+  }
+}
