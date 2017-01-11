@@ -34,6 +34,4 @@ public class AJavaDefinitionSymbol extends CommonScopeSpanningSymbol {
     super(name, KIND);
   }
   
-  private List<JTypeReference<JTypeSymbol>> typeReferences;
-  
 }

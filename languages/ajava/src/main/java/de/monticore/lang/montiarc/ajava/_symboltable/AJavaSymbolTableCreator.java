@@ -4,10 +4,9 @@
 package de.monticore.lang.montiarc.ajava._symboltable;
 
 import java.util.Deque;
-import java.util.List;
 
 import de.monticore.automaton.ioautomatonjava._symboltable.IOAutomatonJavaSymbolTableCreator;
-import de.monticore.java.javadsl._ast.ASTBlockStatement;
+import de.monticore.java.symboltable.JavaSymbolTableCreator;
 import de.monticore.lang.montiarc.ajava._ast.ASTAJavaDefinition;
 import de.monticore.lang.montiarc.ajava._visitor.AJavaDelegatorVisitor;
 import de.monticore.lang.montiarc.ajava._visitor.AJavaVisitor;
@@ -15,7 +14,6 @@ import de.monticore.lang.montiarc.ajava._visitor.CommonAJavaDelegatorVisitor;
 import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcSymbolTableCreator;
 import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcAutomatonSymbolTableCreator;
 import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcBehaviorSymbolTableCreator;
-import de.monticore.symboltable.CommonScope;
 import de.monticore.symboltable.CommonSymbolTableCreator;
 import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.ResolvingConfiguration;
@@ -50,13 +48,17 @@ public class AJavaSymbolTableCreator extends CommonSymbolTableCreator
   
   MontiArcBehaviorSymbolTableCreator behaviorSTC;
   
+  JavaSymbolTableCreator javaSTC;
+  
   private void initSuperSTC(ResolvingConfiguration resolverConfig) {
     maaSTC = new MontiArcAutomatonSymbolTableCreator(resolverConfig, scopeStack);
     maSTC = new MontiArcSymbolTableCreator(resolverConfig, scopeStack);
     automatonSTC = new IOAutomatonJavaSymbolTableCreator(resolverConfig, scopeStack);
     behaviorSTC = new MontiArcBehaviorSymbolTableCreator(resolverConfig, scopeStack);
+    javaSTC = new ExtendedJavaSymbolTableCreator(resolverConfig, scopeStack);
     
     visitor.set_de_monticore_lang_montiarc_ajava__visitor_AJavaVisitor(this);
+    visitor.set_de_monticore_java_javadsl__visitor_JavaDSLVisitor(javaSTC);
     visitor
         .set_de_monticore_lang_montiarc_montiarcautomaton__visitor_MontiArcAutomatonVisitor(maaSTC);
     visitor.set_de_monticore_lang_montiarc_montiarc__visitor_MontiArcVisitor(maSTC);
@@ -108,7 +110,7 @@ public class AJavaSymbolTableCreator extends CommonSymbolTableCreator
   }
   
   @Override
-  public void endVisit(ASTAJavaDefinition node) {
+  public void endVisit(ASTAJavaDefinition node){
     removeCurrentScope();
   }
   

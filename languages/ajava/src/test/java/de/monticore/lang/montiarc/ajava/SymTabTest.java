@@ -13,6 +13,7 @@ import org.junit.Test;
 import de.monticore.automaton.ioautomaton.ScopeHelper;
 import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
 import de.monticore.java.symboltable.JavaMethodSymbol;
+import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.lang.montiarc.ajava._symboltable.AJavaDefinitionKind;
 import de.monticore.lang.montiarc.ajava._symboltable.AJavaDefinitionSymbol;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
@@ -53,8 +54,11 @@ public class SymTabTest extends AbstractSymtabTest {
         ComponentSymbol.KIND);
     assertTrue(oFoo.isPresent());
     ComponentSymbol foo = oFoo.get();
-    Optional<AJavaDefinitionSymbol> aJavaDef = foo.getSpannedScope().<AJavaDefinitionSymbol> resolve("increaseHulu", AJavaDefinitionSymbol.KIND);
+    Optional<AJavaDefinitionSymbol> aJavaDef = foo.getSpannedScope()
+        .<AJavaDefinitionSymbol> resolve("increaseHulu", AJavaDefinitionSymbol.KIND);
     assertTrue(aJavaDef.isPresent());
+//    Optional<JavaTypeSymbol> jSymbol = aJavaDef.get().getSpannedScope().<JavaTypeSymbol>resolve("hulu", JavaTypeSymbol.KIND);
+//    assertTrue(jSymbol.isPresent());
   }
   
   protected static ASTMontiArcNode getAstNode(String modelPath, String model) {

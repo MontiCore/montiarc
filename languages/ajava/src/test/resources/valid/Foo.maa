@@ -5,9 +5,8 @@ component Foo {
     in double distance,
     out String hulu;
 
-  compute increaseHulu {
-    if(distance == 0){
-      hulu++;
-    }
+  compute increaseHulu {    
+    distance++;
+    hulu = distance;
   }
 }

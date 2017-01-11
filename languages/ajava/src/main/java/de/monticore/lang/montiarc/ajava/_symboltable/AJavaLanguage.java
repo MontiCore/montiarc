@@ -36,6 +36,7 @@ public class AJavaLanguage extends AJavaLanguageTOP {
     addResolver(new CommonResolvingFilter<PortSymbol>(PortSymbol.KIND));
     addResolver(new CommonResolvingFilter<ConnectorSymbol>(ConnectorSymbol.KIND));
     addResolver(new CommonResolvingFilter<>(AJavaDefinitionSymbol.KIND));
+    addResolver(new CommonResolvingFilter<>(SimpleVariableSymbol.KIND));
     
     addResolver(CommonResolvingFilter.create(JTypeSymbol.KIND));
     addResolver(CommonResolvingFilter.create(JFieldSymbol.KIND));
