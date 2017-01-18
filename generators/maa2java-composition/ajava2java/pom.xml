@@ -12,62 +12,137 @@
   
   <artifactId>ajava2java</artifactId>
   
-
   <!-- == PROJECT DEPENDENCIES ============================================= -->
 
   <dependencies>
-    
+    <dependency>
+      <groupId>montiarc.languages</groupId>
+      <artifactId>montiarc-fe</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>montiarc.languages</groupId>
+      <artifactId>ajava</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>de.se_rwth.commons</groupId>
+      <artifactId>se-commons-groovy</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>monticore-templateclassgenerator</artifactId>
+      <version>${monticore.version}</version>
+    </dependency>
+
     <!-- MontiCore Dependencies -->
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>monticore-runtime</artifactId>
-      <version>${monticore.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>${logback.version}</version>
+      <groupId>de.monticore</groupId>
+      <artifactId>monticore-grammar</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>de.monticore.lang</groupId>
-      <artifactId>cd4analysis</artifactId>
-      <version>${cd4a.version}</version>
+      <groupId>de.monticore</groupId>
+      <artifactId>de.monticore.java</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>de.monticore</groupId>
+        <artifactId>cd2pojo</artifactId>
+        <version>1.0.2</version>
     </dependency>
 
     <!-- .. Test Libraries ............................................... -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>monticore-runtime</artifactId>
-      <version>${monticore.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
 
-  </dependencies>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>runtime</scope>
+    </dependency>
 
-  <!-- == PROJECT BUILD SETTINGS =========================================== -->
+  </dependencies>
 
   <build>
     <plugins>
-      <!-- use java 1.8 beacuse default is 1.5 -->
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${compiler.plugin}</version>
+        <groupId>de.se_rwth.maven</groupId>
+        <artifactId>se-groovy-maven-plugin</artifactId>
         <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
+          <baseClass>de.monticore.templateclassgenerator.TemplateClassGeneratorScript</baseClass>
+          <arguments>
+            <out>${basedir}/target/generated-sources/templateClasses</out>
+            <templatepath>${basedir}/src/main/resources/</templatepath>
+          </arguments>
+          <script>de/monticore/templateclassgenerator/templateclassgenerator.groovy</script>
         </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>execute</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>de.monticore</groupId>
+            <artifactId>monticore-templateclassgenerator</artifactId>
+            <version>${monticore.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>de.se_rwth.commons</groupId>
+            <artifactId>se-commons-utilities</artifactId>
+            <version>${se-commons.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.12</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${basedir}/target/generated-sources/templateClasses/</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
+    <resources>
+      <resource>
+        <directory>${basedir}/target/generated-sources/templateClasses/</directory>
+      </resource>
+      <resource>
+        <directory>${basedir}/src/main/resources/</directory>
+      </resource>
+    </resources>
+    
   </build>
+
 
 </project>
