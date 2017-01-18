@@ -47,8 +47,8 @@ public class VariableSymbol extends VariableSymbolTOP {
     return direction;
   }
   
-  @Override
-  public String toString() {
-    return direction.name() + " " + typeReference.getName() + " " + getName();
-  }
+//  @Override
+//  public String toString() {
+//    return direction.name() + " " + typeReference.getName() + " " + getName();
+//  }
 }
