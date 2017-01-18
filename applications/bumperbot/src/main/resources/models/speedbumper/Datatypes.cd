@@ -1,0 +1,5 @@
+package speedbumper;
+
+classdiagram Datatypes {
+  enum SpeedCmd {Static, Dynamic;}
+}

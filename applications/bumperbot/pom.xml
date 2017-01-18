@@ -1,0 +1,142 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- == PROJECT COORDINATES ============================================= -->
+	<parent>
+		<groupId>montiarc.applications</groupId>
+		<artifactId>applications</artifactId>
+		<version>4.1.2-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>bumperbot</artifactId>
+
+
+
+	<!-- == PROJECT DEPENDENCIES ============================================= -->
+
+	<dependencies>
+
+		<dependency>
+			<groupId>montiarc.languages</groupId>
+			<artifactId>montiarc-fe</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>montiarc.languages</groupId>
+			<artifactId>montiarcautomaton-fe</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>montiarc.libraries</groupId>
+			<artifactId>simulator-rte</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>de.se_rwth.commons</groupId>
+			<artifactId>se-commons-groovy</artifactId>
+		</dependency>
+
+		<!-- MontiCore Dependencies -->
+		<dependency>
+			<groupId>de.monticore</groupId>
+			<artifactId>monticore-runtime</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>de.monticore</groupId>
+			<artifactId>monticore-grammar</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>de.monticore</groupId>
+			<artifactId>de.monticore.java</artifactId>
+		</dependency>
+
+		<!-- PLATFORM SPECIFIC API ================================= -->
+		<dependency>
+			<groupId>lejos.nxt</groupId>
+			<artifactId>classes</artifactId>
+			<version>0.9.1-beta</version>
+		</dependency>
+
+
+		<!-- .. Test Libraries ............................................... -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>de.monticore</groupId>
+			<artifactId>monticore-runtime</artifactId>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>de.se_rwth.maven</groupId>
+				<artifactId>se-groovy-maven-plugin</artifactId>
+				<configuration>
+					<baseClass>de.montiarcautomaton.lejosgenerator.LejosGeneratorScript</baseClass>
+					<arguments>
+						<out>${basedir}/target/generated-sources/</out>
+						<modelPath>${basedir}/src/main/resources/models</modelPath>
+					</arguments>
+					<script>de/montiarcautomaton/lejosgenerator/lejosgenerator.groovy</script>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>montiarc.generators.maa2java-composition</groupId>
+						<artifactId>automaton2java</artifactId>
+						<version>4.1.2-SNAPSHOT</version>
+					</dependency>
+					<dependency>
+						<groupId>de.se_rwth.commons</groupId>
+						<artifactId>se-commons-utilities</artifactId>
+						<version>${se-commons.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.12</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${basedir}/target/generated-sources/</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

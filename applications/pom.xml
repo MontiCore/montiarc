@@ -13,5 +13,9 @@
   <groupId>montiarc.applications</groupId>
   <artifactId>applications</artifactId>
   <packaging>pom</packaging>
+  
+  <modules>
+    <module>bumperbot</module>
+  </modules>
 
 </project>
