@@ -1,0 +1,16 @@
+package invalid;
+
+component UseOfValuelists {
+  port
+    in Integer i,
+    out Integer o;
+
+  automaton UseOfValuelists {    
+    variable int v;
+    
+    state A, B;
+    initial A;
+    
+    A -> B {i == [1,v]};
+  }
+}
