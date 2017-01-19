@@ -92,12 +92,12 @@
 				<groupId>de.se_rwth.maven</groupId>
 				<artifactId>se-groovy-maven-plugin</artifactId>
 				<configuration>
-					<baseClass>de.montiarcautomaton.lejosgenerator.LejosGeneratorScript</baseClass>
+					<baseClass>de.montiarcautomaton.generator.codegen.MAAGeneratorScript</baseClass>
 					<arguments>
 						<out>${basedir}/target/generated-sources/</out>
 						<modelPath>${basedir}/src/main/resources/models</modelPath>
 					</arguments>
-					<script>de/montiarcautomaton/lejosgenerator/lejosgenerator.groovy</script>
+					<script>de/montiarcautomaton/generator/maagenerator.groovy</script>
 				</configuration>
 				<executions>
 					<execution>
@@ -109,7 +109,7 @@
 				<dependencies>
 					<dependency>
 						<groupId>montiarc.generators.maa2java-composition</groupId>
-						<artifactId>automaton2java</artifactId>
+						<artifactId>component2java</artifactId>
 						<version>4.1.2-SNAPSHOT</version>
 					</dependency>
 					<dependency>
