@@ -4,12 +4,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 
-import _templates.mc.montiarcautomaton.lejos.lib.AtomicComponent;
-import _templates.mc.montiarcautomaton.lejos.lib.AutomatonImpl;
-import _templates.mc.montiarcautomaton.lejos.lib.ComponentInput;
-import _templates.mc.montiarcautomaton.lejos.lib.ComponentResult;
-import _templates.mc.montiarcautomaton.lejos.lib.ComposedComponent;
-import _templates.mc.montiarcautomaton.lejos.lib.Depoly;
+import _templates.mc.montiarcautomaton.lejos.lib.AutomatonImplMain;
 import de.montiarcautomaton.lejosgenerator.helper.AutomatonHelper;
 import de.montiarcautomaton.lejosgenerator.helper.ComponentHelper;
 import de.monticore.ModelingLanguageFamily;
@@ -66,24 +61,11 @@ public class LejosGenerator {
     String model = packageName + "." + simpleName;
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(model, ComponentSymbol.KIND).get();
     
-    final ComponentHelper compHelper = new ComponentHelper(comp);
     Path filePath;
     
-    
-    // gen component input
-    String inputName = comp.getName() + "Input";
-    filePath = getPath(targetPath, packageName, inputName);
-    // pass all arguments instead of comp for better readability in the template
-    ComponentInput.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(), comp.getImports(),
-        comp.getName(), inputName, comp.getIncomingPorts());
-    
-    // gen component result
     String resultName = comp.getName() + "Result";
-    filePath = getPath(targetPath, packageName, resultName);
-    // pass all arguments instead of comp for better readability in the template
-    ComponentResult.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(), comp.getImports(),
-        comp.getName(), resultName, comp.getOutgoingPorts());
-
+    String inputName = comp.getName() + "Input";
+    
     // gen behavior implementations
     String implName = comp.getName() + "Impl";
     Collection<AutomatonSymbol> automatons = ScopeHelper.<AutomatonSymbol> resolveManyDown(comp.getSpannedScope(), AutomatonSymbol.KIND);
@@ -94,28 +76,8 @@ public class LejosGenerator {
       AutomatonHelper helper = new AutomatonHelper(automaton, comp);
       filePath = getPath(targetPath, packageName, implName);
       // pass all arguments instead of comp for better readability in the template
-      AutomatonImpl.generate(filePath, automaton.getAstNode().get(), helper, comp.getPackageName(), comp.getImports(), 
+      AutomatonImplMain.generate(filePath, automaton.getAstNode().get(), helper, comp.getPackageName(), comp.getImports(), 
           comp.getName(), resultName, inputName, implName, comp.getIncomingPorts(), helper.getVariables(), helper.getStates(), comp.getConfigParameters());
-    }
-    
-    // gen component
-    filePath = getPath(targetPath, packageName, comp.getName());
-    if (comp.isAtomic()) {
-      // pass all arguments instead of comp for better readability in the template
-      AtomicComponent.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(), comp.getImports(), comp.getName(), 
-          resultName, inputName, implName, comp.getIncomingPorts(), comp.getOutgoingPorts(), comp.getConfigParameters());
-    }
-    else {
-      // pass all arguments instead of comp for better readability in the template
-      ComposedComponent.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(), comp.getImports(), comp.getName(), 
-          comp.getIncomingPorts(), comp.getOutgoingPorts(), comp.getSubComponents(), comp.getConnectors());
-    }
-    
-    // gen depoly
-    if (compHelper.isDepoly()) {
-      String depolyName = "Depoly" + comp.getName();
-      filePath = getPath(targetPath, packageName, depolyName);
-      Depoly.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(), comp.getName(), depolyName);
     }
   }
   
