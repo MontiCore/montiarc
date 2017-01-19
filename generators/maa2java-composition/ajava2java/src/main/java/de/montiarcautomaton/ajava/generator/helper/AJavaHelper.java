@@ -5,6 +5,11 @@
  */
 package de.montiarcautomaton.ajava.generator.helper;
 
+import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
+import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
+import de.monticore.symboltable.types.JTypeSymbol;
+import de.monticore.symboltable.types.references.JTypeReference;
+
 /**
  * TODO: Write me!
  *
@@ -15,5 +20,29 @@ package de.montiarcautomaton.ajava.generator.helper;
  *
  */
 public class AJavaHelper {
+  
+  private final ComponentSymbol component;
+
+  public AJavaHelper(ComponentSymbol component) {
+    this.component = component;
+  }
+  
+  public String getPortTypeName(PortSymbol port) {
+    return printFqnTypeName(port.getTypeReference());
+  }
+  
+  /**
+   * Prints the type of the reference including dimensions.
+   * 
+   * @param ref
+   * @return
+   */
+  protected String printFqnTypeName(JTypeReference<? extends JTypeSymbol> ref) {
+    String name = ref.getName();
+    for (int i = 0; i < ref.getDimension(); ++i) {
+      name += "[]";
+    }
+    return name;
+  }
   
 }

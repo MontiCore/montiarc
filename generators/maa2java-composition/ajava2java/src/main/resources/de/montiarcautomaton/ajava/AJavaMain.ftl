@@ -1,6 +1,7 @@
 ${tc.params("de.montiarcautomaton.ajava.generator.helper.AJavaHelper helper", "String _package", "java.util.Collection<de.monticore.symboltable.ImportStatement> imports",
 "String name", "String resultName", "String inputName", "String implName",
 "java.util.Collection<de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol> portsIn",
+"java.util.Collection<de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol> portsOut",
 "java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams",
 "String ajava")}
 package ${_package};
@@ -38,16 +39,23 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
   @Override
   public ${resultName} compute(${inputName} input) {
     // inputs
-    <#list portsIn as port>
-  	final ${helper.getPortTypeName(port)} ${port.getName()} = input.get${port.getName()?cap_first}();
+    <#list portsIn as portIn>
+  	final ${helper.getPortTypeName(portIn)} ${portIn.getName()} = input.get${portIn.getName()?cap_first}();
   	</#list>
   
     final ${resultName} result = new ${resultName}();
     
-    //print methodbody here
+    <#list portsOut as portOut>
+    ${helper.getPortTypeName(portOut)} ${portOut.getName()} = result.get${portOut.getName()?cap_first}();
+    </#list>
+    
+    <#-- print methodbody here -->
     ${ajava}
     
-    //add always all outgoing values to result
+    <#-- add always all outgoing values to result -->
+    <#list portsOut as portOut>
+    result.set${portOut.getName()?cap_first}(${portOut.getName()});
+    </#list>
     
     
     return result;

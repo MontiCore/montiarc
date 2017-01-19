@@ -52,9 +52,11 @@ public class AJavaMainImpl extends AJavaMain {
         sb.append(printer.prettyprint(s));
       }
       
-      generate(filepath, node, new AJavaHelper(), comp.getPackageName(), comp.getImports(),
+      AJavaHelper helper = new AJavaHelper(comp);
+      
+      generate(filepath, node, helper, comp.getPackageName(), comp.getImports(),
           ajavaDef.getName(), resultName, inputName,
-          implName, comp.getIncomingPorts(), comp.getConfigParameters(), sb.toString());
+          implName, comp.getIncomingPorts(), comp.getOutgoingPorts(), comp.getConfigParameters(), sb.toString());
       
     }
   }
