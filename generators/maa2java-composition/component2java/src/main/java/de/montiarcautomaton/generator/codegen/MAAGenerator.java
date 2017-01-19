@@ -17,8 +17,8 @@ import de.monticore.automaton.ioautomaton.JavaHelper;
 import de.monticore.automaton.ioautomaton.ScopeHelper;
 import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
 import de.monticore.io.paths.ModelPath;
+import de.monticore.lang.montiarc.ajava._symboltable.AJavaLanguageFamily;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcAutomatonLanguageFamily;
 import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Scope;
@@ -34,7 +34,7 @@ import de.se_rwth.commons.Names;
 public class MAAGenerator {
   
   protected static Scope createSymTab(String modelPath) {
-    ModelingLanguageFamily fam = new MontiArcAutomatonLanguageFamily();
+    ModelingLanguageFamily fam = new AJavaLanguageFamily();
     final ModelPath mp = new ModelPath(Paths.get(modelPath), Paths.get("src/main/resources/defaultTypes"));
     GlobalScope scope = new GlobalScope(mp, fam);
     JavaHelper.addJavaPrimitiveTypes(scope);
@@ -89,6 +89,7 @@ public class MAAGenerator {
 
     // gen behavior implementations
     String implName = comp.getName() + "Impl";
+    filePath = getPath(targetPath, packageName, implName);
     Collection<AutomatonSymbol> automatons = ScopeHelper.<AutomatonSymbol> resolveManyDown(comp.getSpannedScope(), AutomatonSymbol.KIND);
     if (automatons.size() > 1) {
       throw new RuntimeException("Only one automaton per component supported.");

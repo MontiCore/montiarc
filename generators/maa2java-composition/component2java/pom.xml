@@ -52,6 +52,12 @@
       <artifactId>ajava2java</artifactId>
       <version>${project.version}</version>
     </dependency>
+    
+    <dependency>
+      <groupId>montiarc.generators.maa2java-composition</groupId>
+      <artifactId>automaton2java</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
 
     <!-- MontiCore Dependencies -->

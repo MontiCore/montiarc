@@ -71,7 +71,7 @@ public class ${name} implements IComponent {
   	</#list>
   }
 
-  <#if behaviorEmbedding.isPresent()>
+  <#-- <#if behaviorEmbedding.isPresent()> -->
   @Override
   public void compute() {
     // collect current input port values
@@ -88,7 +88,7 @@ public class ${name} implements IComponent {
       Log.error("${name}", e);
     }
   }
-  </#if>
+  <#-- </#if> -->
 
   @Override
   public void update() {

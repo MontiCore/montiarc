@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import _templates.de.montiarcautomaton.ajava.AJavaMainFactory;
+import _templates.mc.montiarcautomaton.lejos.lib.AutomatonImplMainFactory;
+import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
 import de.monticore.lang.montiarc.ajava._symboltable.AJavaDefinitionSymbol;
 import de.monticore.symboltable.SymbolKind;
 import de.monticore.templateclassgenerator.util.GeneratorInterface;
@@ -28,6 +30,7 @@ public class BehaviorGeneratorsMap {
   private static Map<SymbolKind, GeneratorInterface> createMap() {
     Map<SymbolKind, GeneratorInterface> result = new HashMap<>();
     result.put(AJavaDefinitionSymbol.KIND, AJavaMainFactory.create());
+    result.put(AutomatonSymbol.KIND, AutomatonImplMainFactory.create());
     return result;
   }
 }
