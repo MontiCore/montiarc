@@ -49,10 +49,10 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
     ${helper.getPortTypeName(portOut)} ${portOut.getName()} = result.get${portOut.getName()?cap_first}();
     </#list>
     
-    <#-- print methodbody here -->
+    <#-- print java statements here -->
     ${ajava}
     
-    <#-- add always all outgoing values to result -->
+    <#-- always add all outgoing values to result -->
     <#list portsOut as portOut>
     result.set${portOut.getName()?cap_first}(${portOut.getName()});
     </#list>
