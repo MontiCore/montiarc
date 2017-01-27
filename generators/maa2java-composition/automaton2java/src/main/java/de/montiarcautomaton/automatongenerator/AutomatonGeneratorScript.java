@@ -1,4 +1,4 @@
-package de.montiarcautomaton.lejosgenerator;
+package de.montiarcautomaton.automatongenerator;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 
-import de.montiarcautomaton.lejosgenerator.cocos.MontiArcAutomatonCocos;
+import de.montiarcautomaton.automatongenerator.cocos.MontiArcAutomatonCocos;
 import de.monticore.ModelingLanguageFamily;
 import de.monticore.automaton.ioautomaton.JavaHelper;
 import de.monticore.cd2pojo.POJOGenerator;
@@ -26,7 +26,7 @@ import de.se_rwth.commons.groovy.GroovyRunner;
 import de.se_rwth.commons.logging.Log;
 import groovy.lang.Script;
 
-public class LejosGeneratorScript extends Script implements GroovyRunner {
+public class AutomatonGeneratorScript extends Script implements GroovyRunner {
   
   protected static final String[] DEFAULT_IMPORTS = {};
   
@@ -39,25 +39,25 @@ public class LejosGeneratorScript extends Script implements GroovyRunner {
   @Override
   public void run(String script, Configuration configuration) {    
     GroovyInterpreter.Builder builder = GroovyInterpreter.newInterpreter()
-        .withScriptBaseClass(LejosGeneratorScript.class)
+        .withScriptBaseClass(AutomatonGeneratorScript.class)
         .withImportCustomizer(new ImportCustomizer().addStarImports(DEFAULT_IMPORTS));
     
     // configuration
-    LejosConfiguration config = LejosConfiguration
+    AutomatonGeneratorConfiguration config = AutomatonGeneratorConfiguration
         .withConfiguration(configuration);
     
     // we add the configuration object as property with a special property
     // name
-    builder.addVariable(LejosConfiguration.CONFIGURATION_PROPERTY, config);
+    builder.addVariable(AutomatonGeneratorConfiguration.CONFIGURATION_PROPERTY, config);
     
     config.getAllValues().forEach((key, value) -> builder.addVariable(key, value));
     
     // after adding everything we override a couple of known variable
     // bindings
     // to have them properly typed in the script
-    builder.addVariable(LejosConfiguration.Options.MODELPATH.toString(),
+    builder.addVariable(AutomatonGeneratorConfiguration.Options.MODELPATH.toString(),
         config.getModelPath());
-    builder.addVariable(LejosConfiguration.Options.OUT.toString(),
+    builder.addVariable(AutomatonGeneratorConfiguration.Options.OUT.toString(),
         config.getOut());
     GroovyInterpreter g = builder.build();
     g.evaluate(script);
@@ -87,7 +87,7 @@ public class LejosGeneratorScript extends Script implements GroovyRunner {
    */
   public void generate(String simpleName, String packageName, String modelPath, String fqnModelName, String targetPath) {      
     // generate
-    LejosGenerator.generateModel(simpleName, packageName, modelPath, fqnModelName, targetPath);
+    AutomatonGenerator.generateModel(simpleName, packageName, modelPath, fqnModelName, targetPath);
   }
   
   /**

@@ -1,4 +1,4 @@
-package de.montiarcautomaton.lejosgenerator.cocos;
+package de.montiarcautomaton.automatongenerator.cocos;
 
 import de.monticore.automaton.ioautomaton._ast.ASTInitialStateDeclaration;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTInitialStateDeclarationCoCo;

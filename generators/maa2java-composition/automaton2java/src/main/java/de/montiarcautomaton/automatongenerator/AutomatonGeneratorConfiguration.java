@@ -1,4 +1,4 @@
-package de.montiarcautomaton.lejosgenerator;
+package de.montiarcautomaton.automatongenerator;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -13,7 +13,7 @@ import de.se_rwth.commons.configuration.Configuration;
 import de.se_rwth.commons.configuration.ConfigurationContributorChainBuilder;
 import de.se_rwth.commons.configuration.DelegatingConfigurationContributor;
 
-public class LejosConfiguration implements Configuration {
+public class AutomatonGeneratorConfiguration implements Configuration {
   public static final String CONFIGURATION_PROPERTY = "_configuration";
   public static final String DEFAULT_OUTPUT_DIRECTORY = "out";
   
@@ -49,14 +49,14 @@ public class LejosConfiguration implements Configuration {
   /**
    * Factory method for {@link TemplateClassGeneratorConfiguration}.
    */
-  public static LejosConfiguration withConfiguration(Configuration configuration) {
-    return new LejosConfiguration(configuration);
+  public static AutomatonGeneratorConfiguration withConfiguration(Configuration configuration) {
+    return new AutomatonGeneratorConfiguration(configuration);
   }
   
   /**
    * Constructor for {@link TemplateClassGeneratorConfiguration}
    */
-  private LejosConfiguration(Configuration internal) {
+  private AutomatonGeneratorConfiguration(Configuration internal) {
     this.configuration = ConfigurationContributorChainBuilder.newChain()
         .add(DelegatingConfigurationContributor.with(internal))
         .build();

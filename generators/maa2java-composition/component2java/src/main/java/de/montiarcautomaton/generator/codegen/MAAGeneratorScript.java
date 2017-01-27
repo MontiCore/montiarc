@@ -13,6 +13,7 @@ import de.monticore.ModelingLanguageFamily;
 import de.monticore.automaton.ioautomaton.JavaHelper;
 import de.monticore.cd2pojo.POJOGenerator;
 import de.monticore.io.paths.ModelPath;
+import de.monticore.lang.montiarc.ajava._symboltable.AJavaLanguageFamily;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcAutomatonLanguage;
@@ -32,14 +33,14 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
   
   protected static final String[] DEFAULT_IMPORTS = {};
   
-  protected static final String LOG = "LejosScript";
+  protected static final String LOG = "MAAGeneratorScript";
   
   /**
    * @see de.se_rwth.commons.groovy.GroovyRunner#run(java.lang.String,
-   *      de.se_rwth.commons.configuration.Configuration)
+   * de.se_rwth.commons.configuration.Configuration)
    */
   @Override
-  public void run(String script, Configuration configuration) {    
+  public void run(String script, Configuration configuration) {
     GroovyInterpreter.Builder builder = GroovyInterpreter.newInterpreter()
         .withScriptBaseClass(MAAGeneratorScript.class)
         .withImportCustomizer(new ImportCustomizer().addStarImports(DEFAULT_IMPORTS));
@@ -65,29 +66,19 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
     g.evaluate(script);
   }
   
-  private static GlobalScope initSymTab(String modelPath) {
-    // TODO remove usage of cd adapter. See MontiArcAutomatonLanguageFamilyWithCDAdapter.
-//     ModelingLanguageFamily fam = new MontiArcAutomatonLanguageFamily();
-    ModelingLanguageFamily fam = new MontiArcAutomatonLanguageFamilyWithCDAdapter();
-    final ModelPath mp = new ModelPath(Paths.get(modelPath), Paths.get("src/main/resources/defaultTypes"));
-    GlobalScope scope = new GlobalScope(mp, fam);
-    JavaHelper.addJavaPrimitiveTypes(scope);
-    return scope;
-  }
-  
   /**
    * Generates lejos code for the given model.
    * 
    * @param simpleName the simple model name e.g. BumperControl
-   * @param packageName the package name e.g.
-   *          bumperbot
+   * @param packageName the package name e.g. bumperbot
    * @param modelPath Path of models e.g. src/main/resources/models
    * @param fqnModelName full qualified name of model e.g.
-   *          /bumperbot/BumpControl.maa
-   * @param targetPath Path where the models should be generated to
-   *          e.g. target/generated-source/
+   * /bumperbot/BumpControl.maa
+   * @param targetPath Path where the models should be generated to e.g.
+   * target/generated-source/
    */
-  public void generate(String simpleName, String packageName, String modelPath, String fqnModelName, String targetPath) {      
+  public void generate(String simpleName, String packageName, String modelPath, String fqnModelName,
+      String targetPath) {
     // generate
     MAAGenerator.generateModel(simpleName, packageName, modelPath, fqnModelName, targetPath);
   }
@@ -96,73 +87,68 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
    * Checks all cocos of the given model.
    * 
    * @param simpleName the simple model name e.g. BumperControl
-   * @param packageName the package name e.g.
-   *          bumperbot
+   * @param packageName the package name e.g. bumperbot
    * @param modelPath Path of models e.g. src/main/resources/models
    */
-  public void cocoCheck(String simpleName, String packageName, String modelPath) {   
+  public void cocoCheck(String simpleName, String packageName, String modelPath) {
     // check cocos
-    GlobalScope globalScope = initSymTab(modelPath); 
+    GlobalScope globalScope = initSymTab(modelPath);
     String model = Names.getQualifiedName(packageName, simpleName);
     Optional<ComponentSymbol> compSym = globalScope.resolve(model, ComponentSymbol.KIND);
     if (!compSym.isPresent()) {
       error("Could not load model " + model);
     }
     ComponentSymbol comp = compSym.get();
-    ASTMontiArcNode ast = (ASTMontiArcNode) comp.getAstNode().get();  
+    ASTMontiArcNode ast = (ASTMontiArcNode) comp.getAstNode().get();
     MontiArcAutomatonCocos.createChecker().checkAll(ast);
   }
   
   /**
-   * Gets called by Groovy Script. Generates Template Classes for all templates
-   * in {@code modelPath} to {@code targetFilepath}
+   * Gets called by Groovy Script. Generates component artifacts for each
+   * component in {@code modelPath} to {@code targetFilepath}
    * 
    * @param modelPath
    * @param fqnTemplateName
    */
   public void generate(File modelPath, File targetFilepath) {
     File fqnMP = Paths.get(modelPath.getAbsolutePath()).toFile();
-    List<String> foundModels = Modelfinder.getModelsInModelPath(fqnMP, MontiArcAutomatonLanguage.FILE_ENDING);
+    List<String> foundModels = Modelfinder.getModelsInModelPath(fqnMP,
+        MontiArcAutomatonLanguage.FILE_ENDING);
     // gen maa
     for (String model : foundModels) {
       String simpleName = Names.getSimpleName(model);
       String packageName = Names.getQualifier(model);
-      String modelName = Names.getFileName(Names.getPathFromQualifiedName(model) + File.separator + simpleName, MontiArcAutomatonLanguage.FILE_ENDING);
+      String modelName = Names.getFileName(
+          Names.getPathFromQualifiedName(model) + File.separator + simpleName,
+          MontiArcAutomatonLanguage.FILE_ENDING);
       Log.info("Check model: " + modelName, "LejosGeneratorScript");
-      //TODO enable
-//      cocoCheck(simpleName, packageName, modelPath.getAbsolutePath());
+      // TODO enable
+      // cocoCheck(simpleName, packageName, modelPath.getAbsolutePath());
       Log.info("Generate model: " + modelName, "LejosGeneratorScript");
-      generate(simpleName, packageName, modelPath.getAbsolutePath(), modelName, targetFilepath.getAbsolutePath());
+      generate(simpleName, packageName, modelPath.getAbsolutePath(), modelName,
+          targetFilepath.getAbsolutePath());
     }
     
     // gen cd
     foundModels = Modelfinder.getModelsInModelPath(fqnMP, CD4AnalysisLanguage.FILE_ENDING);
-    for (String model :  foundModels) {
+    for (String model : foundModels) {
       String simpleName = Names.getSimpleName(model);
       String packageName = Names.getQualifier(model);
-      String modelName = Names.getFileName(Names.getPathFromQualifiedName(model) + File.separator + simpleName, CD4AnalysisLanguage.FILE_ENDING);
       
-      // TODO replace with DexPojo generator
       Path outDir = Paths.get(targetFilepath.getAbsolutePath());
-      new POJOGenerator(outDir, Paths.get(fqnMP.getAbsolutePath()), model, Names.getQualifiedName(packageName, simpleName)).generate();
-      
-      // DexPojo generator:
-//      Multimap<String, String> generatorArguments = ArrayListMultimap.create();
-//      generatorArguments.put("modelPath", fqnMP.getAbsolutePath());
-//      generatorArguments.put("out", targetFilepath.getAbsolutePath());
-//      // generatorArguments.put("targetPath", "test/source");
-//      // generatorArguments.put("templatePath", "test/source");
-//      // TODO shouldn't it "modelName" or "model" instead of "fqnMP.getAbsolutePath() + File.separator + modelName"?
-//      generatorArguments.put("model", fqnMP.getAbsolutePath() + File.separator + modelName);
-//      
-//      ConfigurationPropertiesMapContributor propertiesContributor = ConfigurationPropertiesMapContributor
-//          .fromSplitMap(generatorArguments);
-//          
-//      Configuration configuration = ConfigurationContributorChainBuilder.newChain()
-//          .add(propertiesContributor).build();
-//      new DexPojoScript().run(Optional.of(configuration));
+      new POJOGenerator(outDir, Paths.get(fqnMP.getAbsolutePath()), model,
+          Names.getQualifiedName(packageName, simpleName)).generate();
     }
     
+  }
+  
+  private static GlobalScope initSymTab(String modelPath) {
+    ModelingLanguageFamily fam = new AJavaLanguageFamily();
+    final ModelPath mp = new ModelPath(Paths.get(modelPath),
+        Paths.get("src/main/resources/defaultTypes"));
+    GlobalScope scope = new GlobalScope(mp, fam);
+    JavaHelper.addJavaPrimitiveTypes(scope);
+    return scope;
   }
   
   // #######################

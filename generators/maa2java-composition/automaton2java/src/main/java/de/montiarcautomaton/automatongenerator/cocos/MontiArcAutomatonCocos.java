@@ -1,4 +1,4 @@
-package de.montiarcautomaton.lejosgenerator.cocos;
+package de.montiarcautomaton.automatongenerator.cocos;
 
 import de.monticore.lang.montiarc.montiarcautomaton._cocos.MontiArcAutomatonCoCoChecker;
 

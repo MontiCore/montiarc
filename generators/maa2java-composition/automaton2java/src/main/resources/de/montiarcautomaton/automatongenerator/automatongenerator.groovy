@@ -1,12 +1,12 @@
-package de.montiarcautomaton.lejosgenerator
+package de.montiarcautomaton.automatongenerator
 
 info("--------------------------------")
-info("LeJOS Generator")
+info("Automaton Generator")
 info("--------------------------------")
 debug("Model path     : " + modelPath)
 debug("Output dir     : " + out.getAbsolutePath())
 debug("--------------------------------")
 generate(modelPath, out)
 info("--------------------------------")
-info("LeJOS Generator END")
+info("Automaton Generator END")
 info("--------------------------------")

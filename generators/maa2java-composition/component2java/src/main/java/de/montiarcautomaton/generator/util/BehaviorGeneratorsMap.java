@@ -6,11 +6,10 @@
 package de.montiarcautomaton.generator.util;
 
 import java.util.HashMap;
-
 import java.util.Map;
 
 import _templates.de.montiarcautomaton.ajava.AJavaMainFactory;
-import _templates.mc.montiarcautomaton.lejos.lib.AutomatonImplMainFactory;
+import _templates.mc.montiarcautomaton.automaton.lib.AutomatonImplMainFactory;
 import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
 import de.monticore.lang.montiarc.ajava._symboltable.AJavaDefinitionSymbol;
 import de.monticore.symboltable.SymbolKind;

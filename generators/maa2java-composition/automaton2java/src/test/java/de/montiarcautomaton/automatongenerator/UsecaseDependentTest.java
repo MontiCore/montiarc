@@ -1,4 +1,4 @@
-package de.montiarcautomaton.lejosgenerator;
+package de.montiarcautomaton.automatongenerator;
 
 import org.junit.BeforeClass;
 import org.junit.Test;

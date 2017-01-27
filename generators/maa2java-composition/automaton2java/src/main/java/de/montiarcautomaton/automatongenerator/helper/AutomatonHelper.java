@@ -1,4 +1,4 @@
-package de.montiarcautomaton.lejosgenerator.helper;
+package de.montiarcautomaton.automatongenerator.helper;
 
 import java.util.ArrayList;
 import java.util.Collection;

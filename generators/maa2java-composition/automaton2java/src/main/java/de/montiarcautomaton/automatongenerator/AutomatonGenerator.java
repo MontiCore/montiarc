@@ -1,19 +1,19 @@
-package de.montiarcautomaton.lejosgenerator;
+package de.montiarcautomaton.automatongenerator;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 
-import _templates.mc.montiarcautomaton.lejos.lib.AutomatonImplMain;
-import de.montiarcautomaton.lejosgenerator.helper.AutomatonHelper;
-import de.montiarcautomaton.lejosgenerator.helper.ComponentHelper;
+import _templates.mc.montiarcautomaton.automaton.lib.AutomatonImplMain;
+import de.montiarcautomaton.automatongenerator.helper.AutomatonHelper;
 import de.monticore.ModelingLanguageFamily;
+import de.monticore.ast.ASTNode;
 import de.monticore.automaton.ioautomaton.JavaHelper;
-import de.monticore.automaton.ioautomaton.ScopeHelper;
 import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcAutomatonLanguageFamily;
+import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.Names;
@@ -23,11 +23,12 @@ import de.se_rwth.commons.Names;
  * 
  * @author Gerrit Leonhardt
  */
-public class LejosGenerator {
+public class AutomatonGenerator {
   
   protected static Scope createSymTab(String modelPath) {
     ModelingLanguageFamily fam = new MontiArcAutomatonLanguageFamily();
-    final ModelPath mp = new ModelPath(Paths.get(modelPath), Paths.get("src/main/resources/defaultTypes"));
+    final ModelPath mp = new ModelPath(Paths.get(modelPath),
+        Paths.get("src/main/resources/defaultTypes"));
     GlobalScope scope = new GlobalScope(mp, fam);
     JavaHelper.addJavaPrimitiveTypes(scope);
     return scope;
@@ -35,6 +36,7 @@ public class LejosGenerator {
   
   /**
    * Computes the target path of the generated java file.
+   * 
    * @param targetPath the path of the target folder
    * @param packageName the package name of the model
    * @param name the model name
@@ -48,37 +50,42 @@ public class LejosGenerator {
    * Generates lejos code for the given model.
    * 
    * @param simpleName the simple model name e.g. BumperControl
-   * @param packageName the package name e.g.
-   *          bumperbot
+   * @param packageName the package name e.g. bumperbot
    * @param modelPath Path of models e.g. src/main/resources/models
    * @param fqnModelName full qualified name of model e.g.
-   *          /bumperbot/BumpControl.maa
-   * @param targetPath Path where the models should be generated to
-   *          e.g. target/generated-source/
+   * /bumperbot/BumpControl.maa
+   * @param targetPath Path where the models should be generated to e.g.
+   * target/generated-source/
    */
-  public static void generateModel(String simpleName, String packageName, String modelPath, String fqnModelName, String targetPath) {
+  public static void generateModel(String simpleName, String packageName, String modelPath,
+      String fqnModelName, String targetPath) {
     Scope symTab = createSymTab(modelPath);
     String model = packageName + "." + simpleName;
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(model, ComponentSymbol.KIND).get();
-    
-    Path filePath;
-    
-    String resultName = comp.getName() + "Result";
-    String inputName = comp.getName() + "Input";
-    
-    // gen behavior implementations
     String implName = comp.getName() + "Impl";
-    Collection<AutomatonSymbol> automatons = ScopeHelper.<AutomatonSymbol> resolveManyDown(comp.getSpannedScope(), AutomatonSymbol.KIND);
-    if (automatons.size() > 1) {
-      throw new RuntimeException("Only one automaton per component supported.");
-    }
-    for (AutomatonSymbol automaton : automatons) {
+    Path filePath = getPath(targetPath, packageName, implName);
+    
+    doGenerate(filePath, comp.getAstNode().get(), comp);
+  }
+  
+  public static void doGenerate(Path filepath, ASTNode node, CommonSymbol symbol) {
+    if (symbol.getKind().isKindOf(ComponentSymbol.KIND)) {
+      ComponentSymbol comp = (ComponentSymbol) symbol;
+      Collection<AutomatonSymbol> ajava = comp.getSpannedScope()
+          .<AutomatonSymbol> resolveLocally(AutomatonSymbol.KIND);
+      AutomatonSymbol automaton = ajava.iterator().next();
+      
+      String inputName = comp.getName() + "Input";
+      String resultName = comp.getName() + "Result";
+      String implName = comp.getName() + "Impl";
       AutomatonHelper helper = new AutomatonHelper(automaton, comp);
-      filePath = getPath(targetPath, packageName, implName);
-      // pass all arguments instead of comp for better readability in the template
-      AutomatonImplMain.generate(filePath, automaton.getAstNode().get(), helper, comp.getPackageName(), comp.getImports(), 
-          comp.getName(), resultName, inputName, implName, comp.getIncomingPorts(), helper.getVariables(), helper.getStates(), comp.getConfigParameters());
+      
+      AutomatonImplMain.generate(filepath, node, helper, comp.getPackageName(), comp.getImports(),
+          comp.getName(),
+          resultName, inputName, implName, comp.getIncomingPorts(), helper.getVariables(),
+          helper.getStates(), comp.getConfigParameters());
     }
+    
   }
   
 }

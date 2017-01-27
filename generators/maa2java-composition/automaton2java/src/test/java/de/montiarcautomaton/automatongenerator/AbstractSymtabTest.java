@@ -1,4 +1,4 @@
-package de.montiarcautomaton.lejosgenerator;
+package de.montiarcautomaton.automatongenerator;
 
 
 import java.nio.file.Paths;
