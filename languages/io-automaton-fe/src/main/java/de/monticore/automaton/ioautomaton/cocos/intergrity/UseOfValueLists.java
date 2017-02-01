@@ -1,4 +1,4 @@
-package de.montiarcautomaton.automatongenerator.cocos;
+package de.monticore.automaton.ioautomaton.cocos.intergrity;
 
 import de.monticore.automaton.ioautomaton._ast.ASTValueList;
 import de.monticore.automaton.ioautomaton._cocos.IOAutomatonASTValueListCoCo;

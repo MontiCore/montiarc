@@ -35,7 +35,7 @@ import de.monticore.automaton.ioautomatonjava.cocos.correctness.ReactionTypeDoes
 import de.monticore.automaton.ioautomatonjava.cocos.correctness.StimulusTypeDoesNotFitInputType;
 import de.monticore.automaton.ioautomatonjava.cocos.integrity.UseOfUndeclaredField;
 
-public class IOAutomatonJavaCocos {
+public class IOAutomatonJavaTestCocos {
 
   public static IOAutomatonJavaCoCoChecker createChecker() {
     return new IOAutomatonJavaCoCoChecker()
