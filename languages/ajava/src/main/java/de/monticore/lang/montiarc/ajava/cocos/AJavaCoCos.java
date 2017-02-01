@@ -9,6 +9,8 @@ import de.monticore.lang.montiarc.ajava._cocos.AJavaCoCoChecker;
 import de.monticore.lang.montiarc.ajava.cocos.conventions.AJavaDefinitionUpperCaseCoCo;
 import de.monticore.lang.montiarc.ajava.cocos.conventions.MultipleBehaviorImplementation;
 import de.monticore.lang.montiarc.ajava.cocos.correctness.UsedPortsExistCoCo;
+import de.monticore.lang.montiarc.cocos.MontiArcCoCos;
+import de.monticore.lang.montiarc.montiarcautomaton.cocos.MontiArcAutomatonCocos;
 
 /**
  * Bundle of CoCos for the AJava language.
@@ -22,6 +24,8 @@ public class AJavaCoCos {
     .addCoCo(new UsedPortsExistCoCo())
     .addCoCo(new AJavaDefinitionUpperCaseCoCo())
     .addCoCo(new MultipleBehaviorImplementation());
+    
+    checker.addChecker(MontiArcAutomatonCocos.createChecker());
     
     return checker;
   }

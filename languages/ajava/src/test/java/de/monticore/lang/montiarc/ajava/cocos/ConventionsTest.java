@@ -30,4 +30,5 @@ public class ConventionsTest extends AbstractCocoTest {
     checkInvalid(getAstNode("src/test/resources", "cocos.conventions.invalid.AJavaDefinitionUpperCase"), new ExpectedErrorInfo(1, "xAA310"));
   }
   
+  
 }

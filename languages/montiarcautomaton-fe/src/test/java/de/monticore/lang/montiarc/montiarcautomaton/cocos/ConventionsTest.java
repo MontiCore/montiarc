@@ -36,6 +36,11 @@ public class ConventionsTest extends AbstractCocoTest {
     new ExpectedErrorInfo(1, "xC4A05").checkFindings(Log.getFindings());
   }
   
+  @Test
+  public void testImplementationInNonAtomicComponent() {
+    checkInvalid(getAstNode("src/test/resources", "invalid.ImplementationInNonAtomicComponent"), new ExpectedErrorInfo(1, "xAB141"));
+  }
+  
   @Ignore
   @Test
   public void testInvalidCDImplicit() {

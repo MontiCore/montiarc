@@ -41,7 +41,7 @@ public class AbstractCocoTest extends AbstractSymtabTest {
     protected static void runCheckerWithSymTab(String modelPath, String model) {
       ASTIOAutomatonNode node = getAstNode(modelPath, model);
       
-      IOAutomatonJavaCocos.createChecker().checkAll(node);
+      IOAutomatonJavaTestCocos.createChecker().checkAll(node);
     }
     
     /**
@@ -49,7 +49,7 @@ public class AbstractCocoTest extends AbstractSymtabTest {
      * valid models.
      */
     protected static void checkValid(String modelPath, String model) {
-      checkInvalid(IOAutomatonJavaCocos.createChecker(), getAstNode(modelPath, model),
+      checkInvalid(IOAutomatonJavaTestCocos.createChecker(), getAstNode(modelPath, model),
           new ExpectedErrorInfo());
     }
     
@@ -70,7 +70,7 @@ public class AbstractCocoTest extends AbstractSymtabTest {
      */
     protected static void checkInvalid(ASTIOAutomatonNode node,
         ExpectedErrorInfo expectedErrors) {
-      checkInvalid(IOAutomatonJavaCocos.createChecker(), node, expectedErrors);
+      checkInvalid(IOAutomatonJavaTestCocos.createChecker(), node, expectedErrors);
     }
     
     protected static class ExpectedErrorInfo {
