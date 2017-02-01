@@ -13,9 +13,12 @@ import de.monticore.ModelingLanguageFamily;
 import de.monticore.automaton.ioautomaton.JavaHelper;
 import de.monticore.cd2pojo.POJOGenerator;
 import de.monticore.io.paths.ModelPath;
+import de.monticore.lang.montiarc.ajava._cocos.AJavaCoCoChecker;
 import de.monticore.lang.montiarc.ajava._symboltable.AJavaLanguageFamily;
+import de.monticore.lang.montiarc.ajava.cocos.AJavaCoCos;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
+import de.monticore.lang.montiarc.montiarcautomaton._cocos.MontiArcAutomatonCoCoChecker;
 import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcAutomatonLanguage;
 import de.monticore.lang.montiarc.montiarcautomaton.cdadapter.MontiArcAutomatonLanguageFamilyWithCDAdapter;
 import de.monticore.lang.montiarc.montiarcautomaton.cocos.MontiArcAutomatonCocos;
@@ -79,6 +82,9 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
    */
   public void generate(String simpleName, String packageName, String modelPath, String fqnModelName,
       String targetPath) {
+    //check cocos
+    cocoCheck(simpleName, packageName, modelPath);
+    
     // generate
     MAAGenerator.generateModel(simpleName, packageName, modelPath, fqnModelName, targetPath);
   }
@@ -100,7 +106,7 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
     }
     ComponentSymbol comp = compSym.get();
     ASTMontiArcNode ast = (ASTMontiArcNode) comp.getAstNode().get();
-    MontiArcAutomatonCocos.createChecker().checkAll(ast);
+    AJavaCoCos.createChecker().checkAll(ast);
   }
   
   /**

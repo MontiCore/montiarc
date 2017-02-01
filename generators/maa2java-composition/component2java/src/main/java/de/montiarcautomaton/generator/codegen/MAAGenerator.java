@@ -53,7 +53,7 @@ public class MAAGenerator {
   }
   
   /**
-   * Generates lejos code for the given model.
+   * Generates maa code for the given model.
    * 
    * @param simpleName the simple model name e.g. BumperControl
    * @param packageName the package name e.g.

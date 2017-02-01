@@ -15,7 +15,7 @@ public class UsecaseDependentTest extends AbstractCocoTest {
   @Test
   public void testNondeterminism() {
     ASTMontiArcNode node = getAstNode("src/test/resources/", "invalid.Nondeterminism");
-    checkInvalid(node, new ExpectedErrorInfo(2, "xAC100", "xAC110"));
+    checkInvalid(node, new ExpectedErrorInfo(3, "xAC100", "xAC110", "xAA440"));
   }
 
   @Test

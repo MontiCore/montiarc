@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 
-import de.montiarcautomaton.automatongenerator.cocos.MontiArcAutomatonCocos;
 import de.monticore.ModelingLanguageFamily;
 import de.monticore.automaton.ioautomaton.JavaHelper;
 import de.monticore.cd2pojo.POJOGenerator;
@@ -17,6 +16,7 @@ import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcAutomatonLanguage;
 import de.monticore.lang.montiarc.montiarcautomaton.cdadapter.MontiArcAutomatonLanguageFamilyWithCDAdapter;
+import de.monticore.lang.montiarc.montiarcautomaton.cocos.MontiArcAutomatonCocos;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.umlcd4a.CD4AnalysisLanguage;
 import de.se_rwth.commons.Names;
@@ -85,7 +85,10 @@ public class AutomatonGeneratorScript extends Script implements GroovyRunner {
    * @param targetPath Path where the models should be generated to
    *          e.g. target/generated-source/
    */
-  public void generate(String simpleName, String packageName, String modelPath, String fqnModelName, String targetPath) {      
+  public void generate(String simpleName, String packageName, String modelPath, String fqnModelName, String targetPath) {
+    //check cocos
+    cocoCheck(simpleName, packageName, modelPath);
+    
     // generate
     AutomatonGenerator.generateModel(simpleName, packageName, modelPath, fqnModelName, targetPath);
   }

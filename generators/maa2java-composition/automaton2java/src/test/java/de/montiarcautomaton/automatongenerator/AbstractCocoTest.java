@@ -1,6 +1,7 @@
 package de.montiarcautomaton.automatongenerator;
 
 import static org.junit.Assert.assertEquals;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -13,10 +14,10 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
-import de.montiarcautomaton.automatongenerator.cocos.MontiArcAutomatonCocos;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarcautomaton._cocos.MontiArcAutomatonCoCoChecker;
+import de.monticore.lang.montiarc.montiarcautomaton.cocos.MontiArcAutomatonCocos;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;

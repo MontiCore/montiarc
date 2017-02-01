@@ -77,7 +77,10 @@ public class AJavaGeneratorScript extends Script implements GroovyRunner {
    * @param targetPath Path where the models should be generated to
    *          e.g. target/generated-source/
    */
-  public void generate(String simpleName, String packageName, String modelPath, String fqnModelName, String targetPath) {      
+  public void generate(String simpleName, String packageName, String modelPath, String fqnModelName, String targetPath) {
+    //check cocos
+    cocoCheck(simpleName, packageName, modelPath);
+    
     // generate
     AJavaGenerator.generateModel(simpleName, packageName, modelPath, fqnModelName, targetPath);
   }
