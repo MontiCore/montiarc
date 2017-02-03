@@ -47,6 +47,11 @@
     </dependency>
 
     <dependency>
+      <groupId>de.monticore.lang</groupId>
+      <artifactId>cd4analysis</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>monticore-grammar</artifactId>
       <classifier>${grammars.classifier}</classifier>

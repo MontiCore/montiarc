@@ -210,13 +210,6 @@ public class CDTypeSymbol2JavaType extends JavaTypeSymbol implements SymbolAdapt
     return adaptee.isClass();
   }
   
-  /**
-   * @see de.monticore.symboltable.types.CommonJTypeSymbol#isEnum()
-   */
-  @Override
-  public boolean isEnum() {
-    return adaptee.isEnum();
-  }
   
   /**
    * @see de.monticore.symboltable.types.CommonJTypeSymbol#isFinal()

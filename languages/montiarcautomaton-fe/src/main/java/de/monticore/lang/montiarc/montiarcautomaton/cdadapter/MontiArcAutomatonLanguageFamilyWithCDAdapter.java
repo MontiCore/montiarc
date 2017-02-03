@@ -3,6 +3,8 @@ package de.monticore.lang.montiarc.montiarcautomaton.cdadapter;
 import de.monticore.ModelingLanguageFamily;
 import de.monticore.automaton.ioautomatonjava._symboltable.IOAutomatonJavaLanguage;
 import de.monticore.java.lang.JavaDSLLanguage;
+import de.monticore.lang.montiarc.adapter.CDFieldSymbol2JavaFieldFilter;
+import de.monticore.lang.montiarc.adapter.CDTypeSymbol2JavaTypeFilter;
 import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcAutomatonLanguage;
 import de.monticore.lang.montiarc.montiarcautomaton.cdcococheck.CD4ALanguage;
 

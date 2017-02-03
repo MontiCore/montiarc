@@ -1,4 +1,4 @@
-package de.monticore.lang.montiarc.montiarcautomaton.cdadapter;
+package de.monticore.lang.montiarc.adapter;
 
 import com.google.common.base.Preconditions;
 
