@@ -24,7 +24,7 @@ public class AJavaMainImpl extends AJavaMain {
    * de.monticore.ast.ASTNode, de.monticore.symboltable.CommonSymbol)
    */
   @Override
-  public void doGenerate(Path filepath, ASTNode node, CommonSymbol symbol) {
+  public void generate(Path filepath, ASTNode node, CommonSymbol symbol) {
     AJavaGenerator.doGenerate(filepath, node, symbol);
   }
   
