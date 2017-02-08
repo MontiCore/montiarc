@@ -105,11 +105,11 @@ public class MAAGenerator {
     }
     
     ASTComponent compAST = (ASTComponent) comp.getAstNode().get();
-    Optional<Class<?>> behaviorEmbedding = getBehaviorClass(compAST);
+    Optional<ASTBehaviorEmbedding> behaviorEmbedding = getBehaviorEmbedding(compAST);
     if (behaviorEmbedding.isPresent()) {
       for (Entry<Class<?>, GeneratorInterface> e : BehaviorGeneratorsMap.behaviorGenerators
           .entrySet()) {
-        if(e.getKey().equals(behaviorEmbedding.get())){
+        if(e.getKey().equals(behaviorEmbedding.get().getClass())){
           e.getValue().generate(filePath, compAST, comp);
         }
       }
@@ -143,11 +143,11 @@ public class MAAGenerator {
     }
   }
   
-  private static Optional<Class<?>> getBehaviorClass(ASTComponent cmp) {
+  private static Optional<ASTBehaviorEmbedding> getBehaviorEmbedding(ASTComponent cmp) {
     List<ASTElement> elements = cmp.getBody().getElements();
     for (ASTElement e : elements) {
       if (e instanceof ASTBehaviorEmbedding) {
-        return Optional.of(e.getClass());
+        return Optional.of((ASTBehaviorEmbedding) e);
       }
     }
     return Optional.empty();

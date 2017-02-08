@@ -10,8 +10,8 @@ import java.util.Map;
 
 import _templates.de.montiarcautomaton.ajava.AJavaMainFactory;
 import _templates.mc.montiarcautomaton.automaton.lib.AutomatonImplMainFactory;
-import de.monticore.automaton.ioautomaton._ast.ASTAutomaton;
 import de.monticore.lang.montiarc.ajava._ast.ASTAJavaDefinition;
+import de.monticore.lang.montiarc.montiarcautomaton._ast.ASTAutomatonDefinition;
 import de.monticore.templateclassgenerator.util.GeneratorInterface;
 
 /**
@@ -28,7 +28,7 @@ public class BehaviorGeneratorsMap {
   private static Map<Class<?>, GeneratorInterface> createMap() {
     Map<Class<?>, GeneratorInterface> result = new HashMap<>();
     result.put(ASTAJavaDefinition.class, AJavaMainFactory.create());
-    result.put(ASTAutomaton.class, AutomatonImplMainFactory.create());
+    result.put(ASTAutomatonDefinition.class, AutomatonImplMainFactory.create());
     return result;
   }
 }
