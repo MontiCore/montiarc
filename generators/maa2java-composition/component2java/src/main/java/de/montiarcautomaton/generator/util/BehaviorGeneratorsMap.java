@@ -10,9 +10,8 @@ import java.util.Map;
 
 import _templates.de.montiarcautomaton.ajava.AJavaMainFactory;
 import _templates.mc.montiarcautomaton.automaton.lib.AutomatonImplMainFactory;
-import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
-import de.monticore.lang.montiarc.ajava._symboltable.AJavaDefinitionSymbol;
-import de.monticore.symboltable.SymbolKind;
+import de.monticore.automaton.ioautomaton._ast.ASTAutomaton;
+import de.monticore.lang.montiarc.ajava._ast.ASTAJavaDefinition;
 import de.monticore.templateclassgenerator.util.GeneratorInterface;
 
 /**
@@ -24,12 +23,12 @@ import de.monticore.templateclassgenerator.util.GeneratorInterface;
  */
 public class BehaviorGeneratorsMap {
   
-  public static final Map<SymbolKind, GeneratorInterface> behaviorGenerators = createMap();
+  public static final Map<Class<?>, GeneratorInterface> behaviorGenerators = createMap();
   
-  private static Map<SymbolKind, GeneratorInterface> createMap() {
-    Map<SymbolKind, GeneratorInterface> result = new HashMap<>();
-    result.put(AJavaDefinitionSymbol.KIND, AJavaMainFactory.create());
-    result.put(AutomatonSymbol.KIND, AutomatonImplMainFactory.create());
+  private static Map<Class<?>, GeneratorInterface> createMap() {
+    Map<Class<?>, GeneratorInterface> result = new HashMap<>();
+    result.put(ASTAJavaDefinition.class, AJavaMainFactory.create());
+    result.put(ASTAutomaton.class, AutomatonImplMainFactory.create());
     return result;
   }
 }
