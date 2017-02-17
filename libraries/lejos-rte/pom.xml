@@ -1,0 +1,130 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+
+  <!-- == PROJECT COORDINATES ============================================= -->
+
+  <parent>
+    <groupId>montiarc.libraries</groupId>
+    <artifactId>libraries</artifactId>
+    <version>4.1.2-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>lejos-rte</artifactId>
+
+
+  <!-- == PROJECT DEPENDENCIES ============================================= -->
+  <dependencies>
+
+    <dependency>
+      <groupId>de.se_rwth.commons</groupId>
+      <artifactId>se-commons-logging</artifactId>
+    </dependency>
+
+    <!-- .. Test Libraries ............................................... -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.10.19</version>
+    </dependency>
+
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>cd2pojo</artifactId>
+      <version>1.0.3-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>montiarc.libraries</groupId>
+      <artifactId>maa-rte</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- PLATFORM SPECIFIC API ================================= -->
+    <dependency>
+      <groupId>lejos.nxt</groupId>
+      <artifactId>classes</artifactId>
+      <version>0.9.1-beta</version>
+    </dependency>
+
+  </dependencies>
+
+  <!-- == PROJECT BUILD SETTINGS =========================================== -->
+
+  <build>
+    <plugins>
+      <!-- Source Jar -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>de.se_rwth.maven</groupId>
+        <artifactId>se-groovy-maven-plugin</artifactId>
+        <configuration>
+          <baseClass>de.montiarcautomaton.generator.codegen.MAAGeneratorScript</baseClass>
+          <arguments>
+            <out>${basedir}/target/generated-sources/</out>
+            <modelPath>${basedir}/src/main/resources/</modelPath>
+          </arguments>
+          <script>de/montiarcautomaton/generator/maagenerator.groovy</script>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>execute</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>montiarc.generators.maa2java-composition</groupId>
+            <artifactId>component2java</artifactId>
+            <version>4.1.2-SNAPSHOT</version>
+          </dependency>
+          <dependency>
+            <groupId>de.se_rwth.commons</groupId>
+            <artifactId>se-commons-utilities</artifactId>
+            <version>${se-commons.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.12</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${basedir}/target/generated-sources/</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    <resources>
+      <resource>
+        <directory>${basedir}/src/main/resources/</directory>
+      </resource>
+    </resources>
+  </build>
+
+</project>
