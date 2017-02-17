@@ -46,7 +46,7 @@ public class MAAGenerator {
   protected static Scope createSymTab(String modelPath) {
     ModelingLanguageFamily fam = new AJavaLanguageFamily();
     final ModelPath mp = new ModelPath(Paths.get(modelPath),
-        Paths.get("src/main/resources/defaultTypes"),Paths.get("target/librarymodels/"));
+        Paths.get("src/main/resources/defaultTypes"), Paths.get("target/librarymodels/"));
     GlobalScope scope = new GlobalScope(mp, fam);
     JavaHelper.addJavaPrimitiveTypes(scope);
     return scope;
@@ -101,9 +101,14 @@ public class MAAGenerator {
         comp.getName(), resultName, comp.getOutgoingPorts());
     
     // gen behavior implementations
+    boolean existsHWC = false;
     String implName = comp.getName() + "Impl";
-    IterablePath hwcPath = IterablePath.from(new File("src/main/java"), "java");
-    boolean existsHWC = TransformationHelper.existsHandwrittenClass(hwcPath, packageName+"."+implName);    
+    File possibleHwc = new File("src/main/java");
+    if(possibleHwc.exists()){
+    IterablePath hwcPath = IterablePath.from(possibleHwc, "java");
+    existsHWC=TransformationHelper.existsHandwrittenClass(hwcPath, packageName+"."+implName);
+    }
+         
     filePath = getPath(targetPath, packageName, implName);
     Collection<AutomatonSymbol> automatons = ScopeHelper
         .<AutomatonSymbol> resolveManyDown(comp.getSpannedScope(), AutomatonSymbol.KIND);
