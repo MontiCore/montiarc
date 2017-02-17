@@ -103,12 +103,13 @@ public class MAAGenerator {
     // gen behavior implementations
     boolean existsHWC = false;
     String implName = comp.getName() + "Impl";
-    File possibleHwc = Paths.get("src/main/java").toFile();
-    if(possibleHwc.exists()){
-    IterablePath hwcPath = IterablePath.from(possibleHwc, "java");
-    existsHWC=TransformationHelper.existsHandwrittenClass(hwcPath, packageName+"."+implName);
+    File possibleHwc = Paths.get("src"+File.separator+"main"+File.separator+"java").toFile();
+    if (possibleHwc.exists()) {
+      IterablePath hwcPath = IterablePath.from(possibleHwc, "java");
+      existsHWC = TransformationHelper.existsHandwrittenClass(hwcPath,
+          packageName + "." + implName);
     }
-         
+    
     filePath = getPath(targetPath, packageName, implName);
     Collection<AutomatonSymbol> automatons = ScopeHelper
         .<AutomatonSymbol> resolveManyDown(comp.getSpannedScope(), AutomatonSymbol.KIND);
@@ -121,13 +122,15 @@ public class MAAGenerator {
     if (behaviorEmbedding.isPresent()) {
       for (Entry<Class<?>, GeneratorInterface> e : BehaviorGeneratorsMap.behaviorGenerators
           .entrySet()) {
-        if(e.getKey().equals(behaviorEmbedding.get().getClass())){
+        if (e.getKey().equals(behaviorEmbedding.get().getClass())) {
           e.getValue().generate(filePath, compAST, comp);
         }
       }
-    }else if(!existsHWC) {
-      //default implementation
-      AbstractAtomicComponent.generate(filePath, compAST, compHelper, packageName, implName, inputName, resultName, comp.getConfigParameters());      
+    }
+    else if (!existsHWC) {
+      // default implementation
+      AbstractAtomicComponent.generate(filePath, compAST, compHelper, packageName, implName,
+          inputName, resultName, comp.getConfigParameters());
     }
     
     // gen component
