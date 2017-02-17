@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
@@ -43,10 +44,11 @@ import de.se_rwth.commons.Names;
  */
 public class MAAGenerator {
   
-  protected static Scope createSymTab(String modelPath) {
+  protected static Scope createSymTab(Path... modelPaths) {
     ModelingLanguageFamily fam = new AJavaLanguageFamily();
-    final ModelPath mp = new ModelPath(Paths.get(modelPath),
-        Paths.get("src/main/resources/defaultTypes"), Paths.get("target/librarymodels/"));
+    List<Path> mps = new ArrayList<>(Arrays.asList(modelPaths));
+    mps.add(Paths.get("src/main/resources/defaultTypes"));
+    final ModelPath mp = new ModelPath(mps);
     GlobalScope scope = new GlobalScope(mp, fam);
     JavaHelper.addJavaPrimitiveTypes(scope);
     return scope;
@@ -78,7 +80,8 @@ public class MAAGenerator {
    */
   public static void generateModel(String simpleName, String packageName, String modelPath,
       String fqnModelName, String targetPath, File hwcPath) {
-    Scope symTab = createSymTab(modelPath);
+    
+    Scope symTab = createSymTab(Paths.get(modelPath), Paths.get(getBasedirFromModelAndTargetPath(modelPath, targetPath)+"target/librarymodels/"));
     String model = packageName + "." + simpleName;
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(model, ComponentSymbol.KIND).get();
     
@@ -167,6 +170,29 @@ public class MAAGenerator {
       }
     }
     return Optional.empty();
+  }
+  
+  /**
+   * Compares the two paths and returns the common path. The common path is the
+   * basedir.
+   * 
+   * @param modelPath
+   * @param targetPath
+   * @return
+   */
+  private static String getBasedirFromModelAndTargetPath(String modelPath, String targetPath) {
+    String basedir = "";
+    
+    for (int i = 0; i < modelPath.length(); i++) {
+      if (modelPath.charAt(i) == targetPath.charAt(i)) {
+        basedir += modelPath.charAt(i);
+      }
+      else {
+        break;
+      }
+      
+    }
+    return basedir;
   }
   
 }
