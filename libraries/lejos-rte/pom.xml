@@ -119,6 +119,24 @@
           </execution>
         </executions>
       </plugin>
+      <!-- Jar Configuration -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.3.2</version>
+        <executions>
+          <execution>
+            <id>librarymodels</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>${librarymodels.classifier}</classifier>
+              <classesDirectory>${basedir}/src/main/resources/</classesDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
     <resources>
       <resource>
