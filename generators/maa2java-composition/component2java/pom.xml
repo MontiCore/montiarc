@@ -47,12 +47,6 @@
     </dependency>
 
     <dependency>
-      <groupId>montiarc.libraries</groupId>
-      <artifactId>lejos-rte</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>de.se_rwth.commons</groupId>
       <artifactId>se-commons-groovy</artifactId>
     </dependency>
