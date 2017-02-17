@@ -103,7 +103,7 @@ public class MAAGenerator {
     // gen behavior implementations
     boolean existsHWC = false;
     String implName = comp.getName() + "Impl";
-    File possibleHwc = new File("src/main/java");
+    File possibleHwc = Paths.get("src/main/java").toFile();
     if(possibleHwc.exists()){
     IterablePath hwcPath = IterablePath.from(possibleHwc, "java");
     existsHWC=TransformationHelper.existsHandwrittenClass(hwcPath, packageName+"."+implName);

@@ -127,10 +127,10 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
       String modelName = Names.getFileName(
           Names.getPathFromQualifiedName(model) + File.separator + simpleName,
           MontiArcAutomatonLanguage.FILE_ENDING);
-      Log.info("Check model: " + modelName, "LejosGeneratorScript");
+      Log.info("Check model: " + modelName, "MAAGeneratorScript");
       // TODO enable
       // cocoCheck(simpleName, packageName, modelPath.getAbsolutePath());
-      Log.info("Generate model: " + modelName, "LejosGeneratorScript");
+      Log.info("Generate model: " + modelName, "MAAGeneratorScript");
       generate(simpleName, packageName, modelPath.getAbsolutePath(), modelName,
           targetFilepath.getAbsolutePath());
     }
