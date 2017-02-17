@@ -1,12 +1,15 @@
 package de.montiarcautomaton.generator.codegen;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 
+import _templates.de.montiarcautomaton.lib.AbstractAtomicComponent;
 import _templates.de.montiarcautomaton.lib.AtomicComponent;
 import _templates.de.montiarcautomaton.lib.ComponentInput;
 import _templates.de.montiarcautomaton.lib.ComponentResult;
@@ -18,6 +21,8 @@ import de.monticore.ModelingLanguageFamily;
 import de.monticore.automaton.ioautomaton.JavaHelper;
 import de.monticore.automaton.ioautomaton.ScopeHelper;
 import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
+import de.monticore.codegen.mc2cd.TransformationHelper;
+import de.monticore.io.paths.IterablePath;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.lang.montiarc.ajava._parser.AJavaAntlrParser.BehaviorEmbedding_eofContext;
 import de.monticore.lang.montiarc.ajava._symboltable.AJavaLanguageFamily;
@@ -41,7 +46,7 @@ public class MAAGenerator {
   protected static Scope createSymTab(String modelPath) {
     ModelingLanguageFamily fam = new AJavaLanguageFamily();
     final ModelPath mp = new ModelPath(Paths.get(modelPath),
-        Paths.get("src/main/resources/defaultTypes"));
+        Paths.get("src/main/resources/defaultTypes"),Paths.get("target/librarymodels/"));
     GlobalScope scope = new GlobalScope(mp, fam);
     JavaHelper.addJavaPrimitiveTypes(scope);
     return scope;
@@ -97,6 +102,8 @@ public class MAAGenerator {
     
     // gen behavior implementations
     String implName = comp.getName() + "Impl";
+    IterablePath hwcPath = IterablePath.from(new File("src/main/java"), "java");
+    boolean existsHWC = TransformationHelper.existsHandwrittenClass(hwcPath, packageName+"."+implName);    
     filePath = getPath(targetPath, packageName, implName);
     Collection<AutomatonSymbol> automatons = ScopeHelper
         .<AutomatonSymbol> resolveManyDown(comp.getSpannedScope(), AutomatonSymbol.KIND);
@@ -113,6 +120,9 @@ public class MAAGenerator {
           e.getValue().generate(filePath, compAST, comp);
         }
       }
+    }else if(!existsHWC) {
+      //default implementation
+      AbstractAtomicComponent.generate(filePath, compAST, compHelper, packageName, implName, inputName, resultName, comp.getConfigParameters());      
     }
     
     // gen component

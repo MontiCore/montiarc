@@ -1,6 +1,7 @@
 package de.montiarcautomaton.generator.helper;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
@@ -10,6 +11,7 @@ import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
+import de.monticore.types.TypesHelper;
 
 /**
  * Helper class used in the template to generate target code of atomic or
@@ -101,6 +103,10 @@ public class ComponentHelper {
    */
   protected String printFqnTypeName(JTypeReference<? extends JTypeSymbol> ref) {
     String name = ref.getName();
+    Optional<JTypeSymbol> sym = ref.getEnclosingScope().<JTypeSymbol>resolve(ref.getName(), JTypeSymbol.KIND);
+    if(sym.isPresent()){
+      name = sym.get().getFullName();
+    }
     for (int i = 0; i < ref.getDimension(); ++i) {
       name += "[]";
     }

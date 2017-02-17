@@ -22,6 +22,11 @@
       <version>${project.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>monticore-emf-runtime</artifactId>
+      <version>${monticore.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>montiarc.languages</groupId>
@@ -32,6 +37,18 @@
     <dependency>
       <groupId>montiarc.libraries</groupId>
       <artifactId>simulator-rte</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>montiarc.libraries</groupId>
+      <artifactId>maa-rte</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>montiarc.libraries</groupId>
+      <artifactId>lejos-rte</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -52,7 +69,7 @@
       <artifactId>ajava2java</artifactId>
       <version>${project.version}</version>
     </dependency>
-    
+
     <dependency>
       <groupId>montiarc.generators.maa2java-composition</groupId>
       <artifactId>automaton2java</artifactId>
@@ -100,6 +117,25 @@
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.emf</groupId>
+      <artifactId>org.eclipse.emf.compare</artifactId>
+      <scope>test</scope>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.emf</groupId>
+      <artifactId>org.eclipse.emf.compare.match</artifactId>
+      <scope>test</scope>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.emf</groupId>
+      <artifactId>org.eclipse.emf.compare.diff</artifactId>
+      <scope>test</scope>
+      <version>1.2.0</version>
     </dependency>
 
   </dependencies>
