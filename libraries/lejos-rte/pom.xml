@@ -79,6 +79,7 @@
           <arguments>
             <out>${basedir}/target/generated-sources/</out>
             <modelPath>${basedir}/src/main/resources/</modelPath>
+            <hwc>${basedir}/src/main/java</hwc>
           </arguments>
           <script>de/montiarcautomaton/generator/maagenerator.groovy</script>
         </configuration>
