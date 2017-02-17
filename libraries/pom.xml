@@ -16,6 +16,8 @@
 
   <modules>
     <module>simulator-rte</module>
+	<module>lejos-rte</module>
+	<module>maa-rte</module>
   </modules>
 
 </project>
