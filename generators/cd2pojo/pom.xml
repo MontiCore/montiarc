@@ -25,6 +25,7 @@
     <!-- .. Plugins ....................................................... -->
     <assembly.plugin>2.5.4</assembly.plugin>
     <compiler.plugin>3.3</compiler.plugin>
+    <se-commons.version>1.7.7</se-commons.version>
 
     <!-- Classifiers -->
 
@@ -61,6 +62,12 @@
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>${logback.version}</version>
+    </dependency>
+	
+	<dependency>
+      <groupId>de.se_rwth.commons</groupId>
+      <artifactId>se-commons-groovy</artifactId>
+      <version>${se-commons.version}</version>
     </dependency>
 
     <dependency>
