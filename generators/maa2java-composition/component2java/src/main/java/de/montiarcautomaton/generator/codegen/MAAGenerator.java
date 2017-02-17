@@ -74,9 +74,10 @@ public class MAAGenerator {
    * /bumperbot/BumpControl.maa
    * @param targetPath Path where the models should be generated to e.g.
    * target/generated-source/
+   * @param hwcPath
    */
   public static void generateModel(String simpleName, String packageName, String modelPath,
-      String fqnModelName, String targetPath) {
+      String fqnModelName, String targetPath, File hwcPath) {
     Scope symTab = createSymTab(modelPath);
     String model = packageName + "." + simpleName;
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(model, ComponentSymbol.KIND).get();
@@ -103,12 +104,9 @@ public class MAAGenerator {
     // gen behavior implementations
     boolean existsHWC = false;
     String implName = comp.getName() + "Impl";
-    File possibleHwc = Paths.get("src"+File.separator+"main"+File.separator+"java").toFile();
-    if (possibleHwc.exists()) {
-      IterablePath hwcPath = IterablePath.from(possibleHwc, "java");
-      existsHWC = TransformationHelper.existsHandwrittenClass(hwcPath,
-          packageName + "." + implName);
-    }
+    
+    existsHWC = TransformationHelper.existsHandwrittenClass(IterablePath.from(hwcPath, "java"),
+        packageName + "." + implName);
     
     filePath = getPath(targetPath, packageName, implName);
     Collection<AutomatonSymbol> automatons = ScopeHelper

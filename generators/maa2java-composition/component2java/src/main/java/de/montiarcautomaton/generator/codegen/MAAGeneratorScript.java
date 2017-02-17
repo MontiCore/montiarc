@@ -65,6 +65,9 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
         config.getModelPath());
     builder.addVariable(MAAConfiguration.Options.OUT.toString(),
         config.getOut());
+    builder.addVariable(MAAConfiguration.Options.HANDWRITTENCODEPATH.toString(),
+        config.getHWCPath());
+    
     GroovyInterpreter g = builder.build();
     g.evaluate(script);
   }
@@ -79,14 +82,15 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
    * /bumperbot/BumpControl.maa
    * @param targetPath Path where the models should be generated to e.g.
    * target/generated-source/
+   * @param hwcPath 
    */
   public void generate(String simpleName, String packageName, String modelPath, String fqnModelName,
-      String targetPath) {
-    //check cocos
+      String targetPath, File hwcPath) {
+    // check cocos
     cocoCheck(simpleName, packageName, modelPath);
     
     // generate
-    MAAGenerator.generateModel(simpleName, packageName, modelPath, fqnModelName, targetPath);
+    MAAGenerator.generateModel(simpleName, packageName, modelPath, fqnModelName, targetPath, hwcPath);
   }
   
   /**
@@ -116,7 +120,7 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
    * @param modelPath
    * @param fqnTemplateName
    */
-  public void generate(File modelPath, File targetFilepath) {
+  public void generate(File modelPath, File targetFilepath, File hwcPath) {
     File fqnMP = Paths.get(modelPath.getAbsolutePath()).toFile();
     List<String> foundModels = Modelfinder.getModelsInModelPath(fqnMP,
         MontiArcAutomatonLanguage.FILE_ENDING);
@@ -132,7 +136,7 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
       // cocoCheck(simpleName, packageName, modelPath.getAbsolutePath());
       Log.info("Generate model: " + modelName, "MAAGeneratorScript");
       generate(simpleName, packageName, modelPath.getAbsolutePath(), modelName,
-          targetFilepath.getAbsolutePath());
+          targetFilepath.getAbsolutePath(), hwcPath);
     }
     
     // gen cd

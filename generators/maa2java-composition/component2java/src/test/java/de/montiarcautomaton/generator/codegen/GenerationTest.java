@@ -36,7 +36,7 @@ public class GenerationTest {
   @Test
   public void testGeneration() {
     MAAGeneratorScript script = new MAAGeneratorScript();
-    script.generate(Paths.get(MODELPATH).toFile(), Paths.get(TARGETPATH).toFile());
+    script.generate(Paths.get(MODELPATH).toFile(), Paths.get(TARGETPATH).toFile(), Paths.get("src/main/java").toFile());
   }
   
 }

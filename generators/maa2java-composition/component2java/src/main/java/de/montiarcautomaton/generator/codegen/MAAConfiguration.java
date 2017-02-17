@@ -16,6 +16,8 @@ import de.se_rwth.commons.configuration.DelegatingConfigurationContributor;
 public class MAAConfiguration implements Configuration {
   public static final String CONFIGURATION_PROPERTY = "_configuration";
   public static final String DEFAULT_OUTPUT_DIRECTORY = "out";
+  public static final String DEFAULT_HWC_DIRECTORY = "src";
+  
   
 
   
@@ -24,7 +26,7 @@ public class MAAConfiguration implements Configuration {
    */
   public enum Options {
     
-    MODELPATH("modelPath"), MODELPATH_SHORT("mp"),
+    MODELPATH("modelPath"), MODELPATH_SHORT("mp"), HANDWRITTENCODEPATH("handwrittenCode"), HANDWRITTENCODEPATH_SHORT("hwc"),
     OUT("out"), OUT_SHORT("o");
     
     String name;
@@ -211,6 +213,20 @@ public class MAAConfiguration implements Configuration {
       return mp.toFile();
     }
     return null;
+  }
+  
+  public File getHWCPath() {
+    Optional<String> hwcPath = getAsString(Options.HANDWRITTENCODEPATH);
+    if(hwcPath.isPresent()){
+      Path hwc = Paths.get(hwcPath.get());
+      return hwc.toFile();
+    }
+    hwcPath = getAsString(Options.HANDWRITTENCODEPATH_SHORT);
+    if(hwcPath.isPresent()){
+      Path hwc = Paths.get(hwcPath.get());
+      return hwc.toFile();
+    }
+    return Paths.get(DEFAULT_HWC_DIRECTORY).toFile();
   }
   
 
