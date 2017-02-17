@@ -37,6 +37,13 @@
 
     <dependency>
       <groupId>montiarc.libraries</groupId>
+      <artifactId>lejos-rte</artifactId>
+      <version>${project.version}</version>
+      <classifier>${librarymodels.classifier}</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>montiarc.libraries</groupId>
       <artifactId>maa-rte</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -89,6 +96,28 @@
 
   <build>
     <plugins>
+      <!-- DEPENDENCY PLUGIN -->
+      <!-- Reason: Unpack sources files of dependencies with classifier 'models' 
+        to output directory -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.10</version>
+        <executions>
+          <execution>
+            <id>unpack-dependencies</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeClassifiers>${librarymodels.classifier}</includeClassifiers>
+              <outputDirectory>${basedir}/target/${librarymodels.classifier}/</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <groupId>de.se_rwth.maven</groupId>
         <artifactId>se-groovy-maven-plugin</artifactId>
@@ -137,6 +166,9 @@
           </execution>
         </executions>
       </plugin>
+
+
+
     </plugins>
   </build>
 
