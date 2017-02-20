@@ -59,9 +59,6 @@ public class AggregationTest extends AbstractSymTabTest {
     assertNotNull(component);
   }
   
-  @Ignore("using a component with a formal type parameter with a class diagram type leads to the " +
-          "expanded component symbol not being created and to the message that the full " +
-          "information of the actual type parameter couldn't be loaded")
   @Test
   public void testFormalTypeParameterComponentWithCDType() {
     Scope symTab = createSymTab("src/test/resources");
