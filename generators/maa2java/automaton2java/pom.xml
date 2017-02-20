@@ -5,8 +5,8 @@
   <!-- == PROJECT COORDINATES ============================================= -->
 
   <parent>
-    <groupId>montiarc.generators.maa2java-composition</groupId>
-    <artifactId>maa2java-composition</artifactId>
+    <groupId>montiarc.generators.maa2java</groupId>
+    <artifactId>maa2java</artifactId>
     <version>4.1.2-SNAPSHOT</version>
   </parent>
   

@@ -138,7 +138,7 @@
         </executions>
         <dependencies>
           <dependency>
-            <groupId>montiarc.generators.maa2java-composition</groupId>
+            <groupId>montiarc.generators.maa2java</groupId>
             <artifactId>component2java</artifactId>
             <version>4.1.2-SNAPSHOT</version>
           </dependency>
