@@ -201,7 +201,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     List<ValueSymbol<TypeReference<TypeSymbol>>> configArgs = new ArrayList<>();
     for (ASTExpression arg : node.getArguments()) {
       String value = new JavaDSLPrettyPrinter(new IndentPrinter()).prettyprint(arg);
-      value = value.replace("\"", "\\\"").replace("\n", "");
       configArgs.add(new ValueSymbol<>(value, Kind.Expression));
     }
     
@@ -216,7 +215,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     else {
       // auto instance because instance name is missing
       createInstance(StringTransformations.uncapitalize(simpleCompName), node,
-          componentTypeReference, new ArrayList<>(), new ArrayList<>());
+          componentTypeReference, configArgs, new ArrayList<>());
     }
     
     node.setEnclosingScope(currentScope().get());
