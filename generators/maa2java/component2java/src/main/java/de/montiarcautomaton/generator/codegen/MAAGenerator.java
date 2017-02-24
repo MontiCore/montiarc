@@ -128,15 +128,17 @@ public class MAAGenerator {
         }
       }
     }
-    else if (!existsHWC) {
-      // default implementation
-      AbstractAtomicComponent.generate(filePath, compAST, compHelper, packageName, implName,
-          inputName, resultName, comp.getConfigParameters());
-    }
     
     // gen component
     filePath = getPath(targetPath, packageName, comp.getName());
     if (comp.isAtomic()) {
+      
+      // default implementation
+      if (!existsHWC) {
+        AbstractAtomicComponent.generate(filePath, compAST, compHelper, packageName, implName,
+            inputName, resultName, comp.getConfigParameters());
+      }
+      
       // pass all arguments instead of comp for better readability in the
       // template
       AtomicComponent.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(),

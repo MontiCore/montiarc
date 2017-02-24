@@ -9,6 +9,7 @@ public class ${deployName} {
     final ${name} cmp = new ${name}();
     
     cmp.init();
+    cmp.update();
     
     long time;
     
