@@ -8,7 +8,7 @@
   <parent>
     <groupId>montiarc.libraries</groupId>
     <artifactId>libraries</artifactId>
-    <version>4.1.2</version>
+    <version>4.1.3-SNAPSHOT</version>
   </parent>
 
   <artifactId>lejos-rte</artifactId>
@@ -37,7 +37,7 @@
 
     <dependency>
       <groupId>montiarc.generators</groupId>
-      <version>4.1.2</version>
+      <version>${project.version}</version>
       <artifactId>cd2pojo</artifactId>
     </dependency>
 
