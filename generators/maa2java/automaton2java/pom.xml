@@ -7,153 +7,154 @@
   <parent>
     <groupId>montiarc.generators.maa2java</groupId>
     <artifactId>maa2java</artifactId>
-    <version>4.1.2-SNAPSHOT</version>
+    <version>4.1.2</version>
   </parent>
-  
+
   <artifactId>automaton2java</artifactId>
-  
 
-<dependencies>
 
-		<dependency>
-			<groupId>montiarc.languages</groupId>
-			<artifactId>montiarc-fe</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+  <dependencies>
 
-		<dependency>
-			<groupId>montiarc.languages</groupId>
-			<artifactId>io-automaton-fe</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+    <dependency>
+      <groupId>montiarc.languages</groupId>
+      <artifactId>montiarc-fe</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
-		<dependency>
-			<groupId>montiarc.languages</groupId>
-			<artifactId>montiarcautomaton-fe</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+    <dependency>
+      <groupId>montiarc.languages</groupId>
+      <artifactId>io-automaton-fe</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
-		<dependency>
-			<groupId>montiarc.libraries</groupId>
-			<artifactId>simulator-rte</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+    <dependency>
+      <groupId>montiarc.languages</groupId>
+      <artifactId>montiarcautomaton-fe</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
-		<dependency>
-			<groupId>de.se_rwth.commons</groupId>
-			<artifactId>se-commons-groovy</artifactId>
-		</dependency>
+    <dependency>
+      <groupId>montiarc.libraries</groupId>
+      <artifactId>simulator-rte</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
-		<dependency>
-			<groupId>de.monticore</groupId>
-			<artifactId>monticore-templateclassgenerator</artifactId>
-			<version>${monticore.version}</version>
-		</dependency>
+    <dependency>
+      <groupId>de.se_rwth.commons</groupId>
+      <artifactId>se-commons-groovy</artifactId>
+    </dependency>
 
-		<!-- MontiCore Dependencies -->
-		<dependency>
-			<groupId>de.monticore</groupId>
-			<artifactId>monticore-runtime</artifactId>
-		</dependency>
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>monticore-templateclassgenerator</artifactId>
+      <version>${monticore.version}</version>
+    </dependency>
 
-		<dependency>
-			<groupId>de.monticore</groupId>
-			<artifactId>monticore-grammar</artifactId>
-		</dependency>
+    <!-- MontiCore Dependencies -->
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>monticore-runtime</artifactId>
+    </dependency>
 
-		<dependency>
-			<groupId>de.monticore</groupId>
-			<artifactId>de.monticore.java</artifactId>
-		</dependency>
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>monticore-grammar</artifactId>
+    </dependency>
 
-		<dependency>
-		    <groupId>de.monticore</groupId>
-		    <artifactId>cd2pojo</artifactId>
-		    <version>1.0.2</version>
-		</dependency>
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>javaDSL</artifactId>
+      <version>${javadsl.version}</version>
+    </dependency>
 
-		<!-- .. Test Libraries ............................................... -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>cd2pojo</artifactId>
+      <version>1.0.2</version>
+    </dependency>
 
-		<dependency>
-			<groupId>de.monticore</groupId>
-			<artifactId>monticore-runtime</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
+    <!-- .. Test Libraries ............................................... -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
 
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>monticore-runtime</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
 
-	</dependencies>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>runtime</scope>
+    </dependency>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>de.se_rwth.maven</groupId>
-				<artifactId>se-groovy-maven-plugin</artifactId>
-				<configuration>
-					<baseClass>de.monticore.templateclassgenerator.TemplateClassGeneratorScript</baseClass>
-					<arguments>
-						<out>${basedir}/target/generated-sources/templateClasses</out>
-						<templatepath>${basedir}/src/main/resources/</templatepath>
-					</arguments>
-					<script>de/monticore/templateclassgenerator/templateclassgenerator.groovy</script>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>execute</goal>
-						</goals>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>de.monticore</groupId>
-						<artifactId>monticore-templateclassgenerator</artifactId>
-						<version>${monticore.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>de.se_rwth.commons</groupId>
-						<artifactId>se-commons-utilities</artifactId>
-						<version>${se-commons.version}</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.12</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>${basedir}/target/generated-sources/templateClasses/</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-		<resources>
-			<resource>
-				<directory>${basedir}/target/generated-sources/templateClasses/</directory>
-			</resource>
-			<resource>
-				<directory>${basedir}/src/main/resources/</directory>
-			</resource>
-		</resources>
-		
-	</build>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>de.se_rwth.maven</groupId>
+        <artifactId>se-groovy-maven-plugin</artifactId>
+        <configuration>
+          <baseClass>de.monticore.templateclassgenerator.TemplateClassGeneratorScript</baseClass>
+          <arguments>
+            <out>${basedir}/target/generated-sources/templateClasses</out>
+            <templatepath>${basedir}/src/main/resources/</templatepath>
+          </arguments>
+          <script>de/monticore/templateclassgenerator/templateclassgenerator.groovy</script>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>execute</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>de.monticore</groupId>
+            <artifactId>monticore-templateclassgenerator</artifactId>
+            <version>${monticore.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>de.se_rwth.commons</groupId>
+            <artifactId>se-commons-utilities</artifactId>
+            <version>${se-commons.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.12</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${basedir}/target/generated-sources/templateClasses/</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    <resources>
+      <resource>
+        <directory>${basedir}/target/generated-sources/templateClasses/</directory>
+      </resource>
+      <resource>
+        <directory>${basedir}/src/main/resources/</directory>
+      </resource>
+    </resources>
+
+  </build>
 
 </project>

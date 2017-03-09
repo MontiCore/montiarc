@@ -8,7 +8,7 @@
   <parent>
     <groupId>montiarc.libraries</groupId>
     <artifactId>libraries</artifactId>
-    <version>4.1.2-SNAPSHOT</version>
+    <version>4.1.2</version>
   </parent>
 
   <artifactId>lejos-rte</artifactId>
@@ -36,9 +36,9 @@
     </dependency>
 
     <dependency>
-      <groupId>de.monticore</groupId>
+      <groupId>montiarc.generators</groupId>
+      <version>4.1.2</version>
       <artifactId>cd2pojo</artifactId>
-      <version>1.0.3-SNAPSHOT</version>
     </dependency>
 
     <dependency>
@@ -66,11 +66,6 @@
 
   <build>
     <plugins>
-      <!-- Source Jar -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-      </plugin>
       <plugin>
         <groupId>de.se_rwth.maven</groupId>
         <artifactId>se-groovy-maven-plugin</artifactId>
@@ -92,9 +87,9 @@
         </executions>
         <dependencies>
           <dependency>
-            <groupId>montiarc.generators.maa2java-composition</groupId>
+            <groupId>montiarc.generators.maa2java</groupId>
             <artifactId>component2java</artifactId>
-            <version>4.1.2-SNAPSHOT</version>
+            <version>${project.version}</version>
           </dependency>
           <dependency>
             <groupId>de.se_rwth.commons</groupId>

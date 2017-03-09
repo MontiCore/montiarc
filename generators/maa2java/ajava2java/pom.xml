@@ -7,11 +7,11 @@
   <parent>
     <groupId>montiarc.generators.maa2java</groupId>
     <artifactId>maa2java</artifactId>
-    <version>4.1.2-SNAPSHOT</version>
+    <version>4.1.2</version>
   </parent>
-  
+
   <artifactId>ajava2java</artifactId>
-  
+
   <!-- == PROJECT DEPENDENCIES ============================================= -->
 
   <dependencies>
@@ -51,13 +51,14 @@
 
     <dependency>
       <groupId>de.monticore</groupId>
-      <artifactId>de.monticore.java</artifactId>
+      <artifactId>javaDSL</artifactId>
+      <version>${javadsl.version}</version>
     </dependency>
 
     <dependency>
-        <groupId>de.monticore</groupId>
-        <artifactId>cd2pojo</artifactId>
-        <version>1.0.2</version>
+      <groupId>de.monticore</groupId>
+      <artifactId>cd2pojo</artifactId>
+      <version>1.0.2</version>
     </dependency>
 
     <!-- .. Test Libraries ............................................... -->
@@ -141,7 +142,7 @@
         <directory>${basedir}/src/main/resources/</directory>
       </resource>
     </resources>
-    
+
   </build>
 
 

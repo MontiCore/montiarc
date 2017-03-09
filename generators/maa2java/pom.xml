@@ -5,9 +5,9 @@
   <!-- == PROJECT COORDINATES ============================================= -->
 
   <parent>
-    <groupId>montiarc</groupId>
-    <artifactId>montiarc-core</artifactId>
-    <version>4.1.2-SNAPSHOT</version>
+    <groupId>montiarc.generators</groupId>
+    <artifactId>generators</artifactId>
+    <version>4.1.2</version>
   </parent>
 
   <groupId>montiarc.generators.maa2java</groupId>
@@ -17,7 +17,7 @@
   <modules>
     <module>automaton2java</module>
     <module>ajava2java</module>
-	<module>component2java</module>
+    <module>component2java</module>
   </modules>
 
 </project>

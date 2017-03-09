@@ -7,14 +7,14 @@
   <parent>
     <groupId>montiarc.languages</groupId>
     <artifactId>languages</artifactId>
-    <version>4.1.2-SNAPSHOT</version>
+    <version>4.1.2</version>
   </parent>
 
   <artifactId>montiarcautomaton-fe</artifactId>
 
   <!-- == PROJECT DEPENDENCIES ============================================= -->
   <dependencies>
-  
+
     <dependency>
       <groupId>montiarc.languages</groupId>
       <artifactId>io-automaton-fe</artifactId>
@@ -26,7 +26,7 @@
       <version>${project.version}</version>
       <classifier>${grammars.classifier}</classifier>
     </dependency>
-  
+
     <dependency>
       <groupId>montiarc.languages</groupId>
       <artifactId>montiarc-fe</artifactId>
@@ -38,7 +38,7 @@
       <classifier>${grammars.classifier}</classifier>
       <version>${project.version}</version>
     </dependency>
-    
+
     <dependency>
       <groupId>montiarc.languages</groupId>
       <artifactId>montiarc-behavior-fe</artifactId>
@@ -60,7 +60,7 @@
       <groupId>montiarc.languages</groupId>
       <artifactId>common</artifactId>
       <version>${project.version}</version>
-    <classifier>${grammars.classifier}</classifier>
+      <classifier>${grammars.classifier}</classifier>
     </dependency>
     <dependency>
       <groupId>de.se_rwth.commons</groupId>
@@ -102,12 +102,14 @@
 
     <dependency>
       <groupId>de.monticore</groupId>
-      <artifactId>de.monticore.java</artifactId>
+      <artifactId>javaDSL</artifactId>
+      <version>${javadsl.version}</version>
     </dependency>
-    
+
     <dependency>
       <groupId>de.monticore</groupId>
-      <artifactId>de.monticore.java</artifactId>
+      <artifactId>javaDSL</artifactId>
+      <version>${javadsl.version}</version>
       <classifier>${grammars.classifier}</classifier>
     </dependency>
 
@@ -188,37 +190,38 @@
       </plugin>
     </plugins>
     <pluginManagement>
-    	<plugins>
-    		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-    		<plugin>
-    			<groupId>org.eclipse.m2e</groupId>
-    			<artifactId>lifecycle-mapping</artifactId>
-    			<version>1.0.0</version>
-    			<configuration>
-    				<lifecycleMappingMetadata>
-    					<pluginExecutions>
-    						<pluginExecution>
-    							<pluginExecutionFilter>
-    								<groupId>de.monticore.mojo</groupId>
-    								<artifactId>
-    									monticore-maven-plugin
-    								</artifactId>
-    								<versionRange>
-    									[4.4.1-SNAPSHOT,)
-    								</versionRange>
-    								<goals>
-    									<goal>generate</goal>
-    								</goals>
-    							</pluginExecutionFilter>
-    							<action>
-    								<ignore></ignore>
-    							</action>
-    						</pluginExecution>
-    					</pluginExecutions>
-    				</lifecycleMappingMetadata>
-    			</configuration>
-    		</plugin>
-    	</plugins>
+      <plugins>
+        <!--This plugin's configuration is used to store Eclipse m2e settings 
+          only. It has no influence on the Maven build itself. -->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>de.monticore.mojo</groupId>
+                    <artifactId>
+                      monticore-maven-plugin
+                    </artifactId>
+                    <versionRange>
+                      [4.4.1-SNAPSHOT,)
+                    </versionRange>
+                    <goals>
+                      <goal>generate</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore></ignore>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
     </pluginManagement>
   </build>
 

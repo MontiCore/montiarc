@@ -7,7 +7,7 @@
   <parent>
     <groupId>montiarc.generators.maa2java</groupId>
     <artifactId>maa2java</artifactId>
-    <version>4.1.2-SNAPSHOT</version>
+    <version>4.1.2</version>
   </parent>
 
   <artifactId>component2java</artifactId>
@@ -59,13 +59,13 @@
 
     <!-- MAA Generators -->
     <dependency>
-      <groupId>montiarc.generators.maa2java-composition</groupId>
+      <groupId>montiarc.generators.maa2java</groupId>
       <artifactId>ajava2java</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>montiarc.generators.maa2java-composition</groupId>
+      <groupId>montiarc.generators.maa2java</groupId>
       <artifactId>automaton2java</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -84,7 +84,8 @@
 
     <dependency>
       <groupId>de.monticore</groupId>
-      <artifactId>de.monticore.java</artifactId>
+      <artifactId>javaDSL</artifactId>
+      <version>${javadsl.version}</version>
     </dependency>
 
     <dependency>

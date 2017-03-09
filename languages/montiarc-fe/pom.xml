@@ -7,7 +7,7 @@
   <parent>
     <groupId>montiarc.languages</groupId>
     <artifactId>languages</artifactId>
-    <version>4.1.2-SNAPSHOT</version>
+    <version>4.1.2</version>
   </parent>
 
   <artifactId>montiarc-fe</artifactId>
@@ -27,13 +27,6 @@
       <artifactId>common</artifactId>
       <version>${project.version}</version>
       <classifier>${grammars.classifier}</classifier>
-    </dependency>
-
-    <dependency>
-      <groupId>de.monticore</groupId>
-      <artifactId>de.monticore.javaLib</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-      <classifier>models</classifier>
     </dependency>
 
     <dependency>
@@ -81,7 +74,8 @@
 
     <dependency>
       <groupId>de.monticore</groupId>
-      <artifactId>de.monticore.java</artifactId>
+      <artifactId>javaDSL</artifactId>
+      <version>${javadsl.version}</version>
     </dependency>
 
     <!-- .. Test Libraries ............................................... -->
@@ -155,36 +149,6 @@
           </execution>
         </executions>
       </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.10</version>
-        <executions>
-          <execution>
-            <id>copy</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>de.monticore</groupId>
-                  <artifactId>de.monticore.javaLib</artifactId>
-                  <classifier>models</classifier>
-                  <version>0.0.1-SNAPSHOT</version>
-                  <type>jar</type>
-                  <overWrite>false</overWrite>
-                  <outputDirectory>${project.build.directory}/generated-test-sources/defaultTypes</outputDirectory>
-                  <destFileName>javaLib.jar</destFileName>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
     </plugins>
   </build>
 

@@ -6,7 +6,7 @@
   <parent>
     <groupId>montiarc.applications</groupId>
     <artifactId>applications</artifactId>
-    <version>4.1.2-SNAPSHOT</version>
+    <version>4.1.2</version>
   </parent>
 
   <artifactId>bumperbot</artifactId>
@@ -66,7 +66,7 @@
 
     <dependency>
       <groupId>de.monticore</groupId>
-      <artifactId>de.monticore.java</artifactId>
+      <artifactId>javaDSL</artifactId>
     </dependency>
 
 
@@ -140,7 +140,7 @@
           <dependency>
             <groupId>montiarc.generators.maa2java</groupId>
             <artifactId>component2java</artifactId>
-            <version>4.1.2-SNAPSHOT</version>
+            <version>${project.version}</version>
           </dependency>
           <dependency>
             <groupId>de.se_rwth.commons</groupId>
