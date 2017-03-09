@@ -130,7 +130,6 @@ public class MAAGenerator {
     }
     
     // gen component
-    filePath = getPath(targetPath, packageName, comp.getName());
     if (comp.isAtomic()) {
       
       // default implementation
@@ -139,6 +138,7 @@ public class MAAGenerator {
             inputName, resultName, comp.getConfigParameters());
       }
       
+      filePath = getPath(targetPath, packageName, comp.getName());
       // pass all arguments instead of comp for better readability in the
       // template
       AtomicComponent.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(),
