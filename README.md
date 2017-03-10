@@ -24,6 +24,8 @@ tool-chain. This is:
   * maa2java
   * ...
 * libraries/
+  * maa-rte
+  * lejos-rte
   * simulator-rte
 * applications/
   * ma-bumperbot
