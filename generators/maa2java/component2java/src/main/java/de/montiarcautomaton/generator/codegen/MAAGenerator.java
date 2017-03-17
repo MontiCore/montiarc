@@ -135,7 +135,7 @@ public class MAAGenerator {
     if (comp.isAtomic()) {
       
       // default implementation
-      if (!existsHWC) {
+      if (!existsHWC && !behaviorEmbedding.isPresent()) {
         Path implPath = getPath(targetPath, packageName, implName);
         AbstractAtomicComponent.generate(implPath, compAST, compHelper, packageName, implName,
             inputName, resultName, comp.getConfigParameters());
