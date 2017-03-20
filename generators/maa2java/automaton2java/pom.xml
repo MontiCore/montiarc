@@ -7,7 +7,7 @@
   <parent>
     <groupId>montiarc.generators.maa2java</groupId>
     <artifactId>maa2java</artifactId>
-    <version>4.1.3</version>
+    <version>4.1.4-SNAPSHOT</version>
   </parent>
 
   <artifactId>automaton2java</artifactId>
