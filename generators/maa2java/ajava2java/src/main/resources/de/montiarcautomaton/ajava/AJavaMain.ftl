@@ -3,6 +3,7 @@ ${tc.params("de.montiarcautomaton.ajava.generator.helper.AJavaHelper helper", "S
 "java.util.Collection<de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol> portsIn",
 "java.util.Collection<de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol> portsOut",
 "java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams",
+"java.util.Collection<de.monticore.lang.montiarc.montiarc._symboltable.ComponentVariableSymbol> compVariables",
 "String ajava")}
 package ${_package};
 
@@ -16,7 +17,10 @@ import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 
 public class ${implName} implements IComputable<${inputName}, ${resultName}> {
   
-  
+  //component variables
+  <#list compVariables as compVariable>
+    private ${helper.printVariableTypeName(compVariable)} ${compVariable.getName()};
+  </#list>
   
   // config parameters
   <#list configParams as param>

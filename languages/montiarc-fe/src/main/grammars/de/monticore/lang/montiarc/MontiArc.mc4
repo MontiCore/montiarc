@@ -191,6 +191,14 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common {
   */
   SimpleConnector = 
     Stereotype? source:QualifiedName "->" targets:(QualifiedName || ",")+;
+    
+  /**
+  * A variable can be used in the behavior implementation of a component.
+  */
+  ComponentVariableDeclaration implements Element = "var"? ComponentVariable ("," ComponentVariable)* ";";
+  
+  ComponentVariable = Type Name;
+  
 
   /* ======================================================*/
   /* ============ From OLD MARC Grammar ==================*/

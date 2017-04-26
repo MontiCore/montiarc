@@ -377,6 +377,16 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
     return getAllPorts().stream().filter(p -> p.isIncoming() == isIncoming)
         .collect(Collectors.toList());
   }
+  
+  public Collection<ComponentVariableSymbol> getComponentVariables() {
+    return referencedComponent.orElse(this).getSpannedScope()
+        .<ComponentVariableSymbol> resolveLocally(ComponentVariableSymbol.KIND);
+  }
+  
+  public Optional<ComponentVariableSymbol> getComponentVariable(String name) {
+    return getComponentVariables().stream().filter(v -> v.getName().equals(name)).findFirst();
+  }
+  
 
   /**
    * @return super component of this component, empty optional, if it does not have a super

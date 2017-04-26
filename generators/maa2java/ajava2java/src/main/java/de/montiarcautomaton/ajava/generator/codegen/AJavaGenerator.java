@@ -21,6 +21,7 @@ import de.monticore.lang.montiarc.ajava._ast.ASTAJavaDefinition;
 import de.monticore.lang.montiarc.ajava._symboltable.AJavaDefinitionSymbol;
 import de.monticore.lang.montiarc.ajava._symboltable.AJavaLanguageFamily;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
+import de.monticore.lang.montiarc.montiarc._symboltable.ComponentVariableSymbol;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.GlobalScope;
@@ -75,9 +76,11 @@ public class AJavaGenerator {
       
       AJavaHelper helper = new AJavaHelper(comp);
       
+      Collection<ComponentVariableSymbol> vars = comp.getComponentVariables();
+      
       AJavaMain.generate(filepath, node, helper, comp.getPackageName(), comp.getImports(),
           ajavaDef.getName(), resultName, inputName,
-          implName, comp.getIncomingPorts(), comp.getOutgoingPorts(), comp.getConfigParameters(), sb.toString());
+          implName, comp.getIncomingPorts(), comp.getOutgoingPorts(), comp.getConfigParameters(),comp.getComponentVariables(), sb.toString());
       
     }
   }

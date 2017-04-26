@@ -6,6 +6,7 @@
 package de.montiarcautomaton.ajava.generator.helper;
 
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
+import de.monticore.lang.montiarc.montiarc._symboltable.ComponentVariableSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
@@ -29,6 +30,10 @@ public class AJavaHelper {
   
   public String getPortTypeName(PortSymbol port) {
     return printFqnTypeName(port.getTypeReference());
+  }
+  
+  public String printVariableTypeName(ComponentVariableSymbol var) {
+    return printFqnTypeName(var.getTypeReference());
   }
   
   /**

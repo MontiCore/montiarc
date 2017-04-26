@@ -24,6 +24,7 @@ import de.monticore.lang.montiarc.common._ast.ASTParameter;
 import de.monticore.lang.montiarc.helper.Timing;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponentHead;
+import de.monticore.lang.montiarc.montiarc._ast.ASTComponentVariable;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMACompilationUnit;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcAutoConnect;
 import de.monticore.lang.montiarc.montiarc._ast.ASTPort;
@@ -151,6 +152,23 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         sym.addStereotype(st.getName(), st.getValue());
       }
     }
+    
+    addToScopeAndLinkWithNode(sym, node);
+  }
+  
+  @Override
+  public void visit(ASTComponentVariable node) {
+    ASTType astType = node.getType();
+    String typeName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astType);
+    
+    String name = node.getName();
+    ComponentVariableSymbol sym = new ComponentVariableSymbol(name);
+    
+    JTypeReference<JTypeSymbol> typeRef = new MAJTypeReference(typeName, JTypeSymbol.KIND,  currentScope().get());
+    
+    typeRef.setDimension(TypesHelper.getArrayDimensionIfArrayOrZero(astType));
+    
+    sym.setTypeReference(typeRef);
     
     addToScopeAndLinkWithNode(sym, node);
   }

@@ -30,6 +30,7 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
     addResolver(new CommonResolvingFilter<ComponentInstanceSymbol>(ComponentInstanceSymbol.KIND));
     addResolver(new CommonResolvingFilter<PortSymbol>(PortSymbol.KIND));
     addResolver(new CommonResolvingFilter<ConnectorSymbol>(ConnectorSymbol.KIND));
+    addResolver(new CommonResolvingFilter<ComponentVariableSymbol>(ComponentVariableSymbol.KIND));
     //TODO enable to resolve type arguments of subcomponents
     addResolver(new CDTypeSymbol2JavaTypeFilter());
     

@@ -5,6 +5,7 @@ import java.util.Optional;
 import de.monticore.lang.montiarc.ajava._parser.AJavaParser;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
+import de.monticore.lang.montiarc.montiarc._symboltable.ComponentVariableSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcModelNameCalculator;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
@@ -35,6 +36,7 @@ public class AJavaLanguage extends AJavaLanguageTOP {
     addResolver(new CommonResolvingFilter<ComponentInstanceSymbol>(ComponentInstanceSymbol.KIND));
     addResolver(new CommonResolvingFilter<PortSymbol>(PortSymbol.KIND));
     addResolver(new CommonResolvingFilter<ConnectorSymbol>(ConnectorSymbol.KIND));
+    addResolver(new CommonResolvingFilter<ComponentVariableSymbol>(ComponentVariableSymbol.KIND));
     addResolver(new CommonResolvingFilter<>(AJavaDefinitionSymbol.KIND));
     addResolver(new CommonResolvingFilter<>(SimpleVariableSymbol.KIND));
     
