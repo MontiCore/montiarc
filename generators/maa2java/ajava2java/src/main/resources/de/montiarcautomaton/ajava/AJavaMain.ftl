@@ -19,7 +19,11 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
   
   //component variables
   <#list compVariables as compVariable>
-    private ${helper.printVariableTypeName(compVariable)} ${compVariable.getName()};
+    private ${helper.printVariableTypeName(compVariable)} ${compVariable.getName()} 
+      <#if helper.hasInitialValue(compVariable)>
+         = ${helper.getInitialValue(compVariable)}
+      </#if> 
+    ;
   </#list>
   
   // config parameters
