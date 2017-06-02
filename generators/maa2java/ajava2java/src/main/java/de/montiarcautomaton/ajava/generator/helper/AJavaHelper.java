@@ -58,21 +58,6 @@ public class AJavaHelper {
     return name;
   }
   
-  public boolean hasInitialValue(ComponentVariableSymbol var) {
-    if(var.getAstNode().isPresent()) {
-      return ((ASTComponentVariable)var.getAstNode().get()).getInitialValue().isPresent();
-    }
-    return false;
-  }
-  
-  public String getInitialValue(ComponentVariableSymbol var) {
-    if(var.getAstNode().isPresent()){
-      ASTLiteralValue val = ((ASTComponentVariable) var.getAstNode().get()).getInitialValue().get().getValue();
-      LiteralsPrettyPrinterConcreteVisitor visitor = new LiteralsPrettyPrinterConcreteVisitor(new IndentPrinter());
-      return visitor.prettyprint(val.getValue());
-    }
-    return "";
-  }
   
   public String printInit(ASTVariableInitialization init) {
     String ret = "";

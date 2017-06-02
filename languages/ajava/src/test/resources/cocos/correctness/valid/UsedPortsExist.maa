@@ -6,7 +6,6 @@ component UsedPortsExist {
     out String hulu;
 
   compute IncreaseHulu {    
-    distance++;
     hulu = distance;
   }
 }

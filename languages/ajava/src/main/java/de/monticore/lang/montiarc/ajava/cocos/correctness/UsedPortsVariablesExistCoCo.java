@@ -69,9 +69,10 @@ public class UsedPortsVariablesExistCoCo
                 i.get_SourcePositionStart());
           }
           
-          if(port.isPresent()) {
-            if(port.get().isIncoming()) {
-              Log.error("0xAA331 Port "+ port.get().getName() +" is incoming, and thus must not be changed",
+          if (port.isPresent()) {
+            if (port.get().isIncoming()) {
+              Log.error("0xAA331 Port " + port.get().getName()
+                  + " is incoming, and thus must not be changed",
                   i.get_SourcePositionStart());
             }
           }
@@ -102,17 +103,10 @@ public class UsedPortsVariablesExistCoCo
             .<JavaFieldSymbol> resolveLocally(varName, JavaFieldSymbol.KIND);
         Optional<ComponentVariableSymbol> compVar = cmp.getSpannedScope()
             .<ComponentVariableSymbol> resolve(varName, ComponentVariableSymbol.KIND);
-        if (!port.isPresent() && !compVar.isPresent() && definedField.isPresent()) {
+        if (!port.isPresent() && !compVar.isPresent() && !definedField.isPresent()) {
           Log.error("0xAA330 Used variable " + varName
               + " in ajava definition is not a port, component variable or locally defined variable.",
               ajavaDef.getAstNode().get().get_SourcePositionStart());
-        }
-        
-        if(port.isPresent()) {
-          if(port.get().isIncoming()) {
-            Log.error("0xAA331 Port "+ port.get().getName() +" is incoming, and thus must not be changed",
-                var.getAstNode().get().get_SourcePositionStart());
-          }
         }
       }
     }

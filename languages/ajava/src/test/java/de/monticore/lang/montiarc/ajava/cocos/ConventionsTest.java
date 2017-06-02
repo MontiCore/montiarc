@@ -9,6 +9,8 @@ import org.junit.Before;
 
 import org.junit.Test;
 
+import de.monticore.lang.montiarc.ajava.cocos.AbstractCocoTest.ExpectedErrorInfo;
+import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.se_rwth.commons.logging.Log;
 
 /**
