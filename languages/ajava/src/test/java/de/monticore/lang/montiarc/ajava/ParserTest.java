@@ -57,8 +57,8 @@ public class ParserTest {
   
   
   @Test
-  public void testParser() {
-    
+  public void testCompWithInitMethod() {
+    test("/valid/CompWithVariableAndPortInit.maa", true);
   }
   
 }
