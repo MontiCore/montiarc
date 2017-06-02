@@ -113,7 +113,7 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common {
   Port =
     Stereotype?
     (incoming:["in"] | outgoing:["out"])
-    Type Name? InitialValue?;
+    Type Name?;
     
   /**
   * Sets the timing of a component.
@@ -197,12 +197,8 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common {
   */
   ComponentVariableDeclaration implements Element = "var"? ComponentVariable ("," ComponentVariable)* ";";
   
-  ComponentVariable = Type Name InitialValue?;
+  ComponentVariable = Type Name;
   
-  /**
-  * Defines the initial value of a element e.g. port.
-  */
-  InitialValue = "=" value:LiteralValue;
   
 
   /* ======================================================*/
