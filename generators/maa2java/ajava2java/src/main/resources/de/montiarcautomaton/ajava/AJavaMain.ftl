@@ -4,7 +4,7 @@ ${tc.params("de.montiarcautomaton.ajava.generator.helper.AJavaHelper helper", "S
 "java.util.Collection<de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol> portsOut",
 "java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams",
 "java.util.Collection<de.monticore.lang.montiarc.montiarc._symboltable.ComponentVariableSymbol> compVariables",
-"String ajava")}
+"String ajava", "java.util.List<de.monticore.lang.montiarc.ajava._ast.ASTVariableInitialization> initializations")}
 package ${_package};
 
 import ${_package}.${resultName};
@@ -40,6 +40,18 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
   @Override
   public ${resultName} getInitialValues() {
     final ${resultName} result = new ${resultName}();
+    
+    <#list portsOut as portOut>
+    ${helper.getPortTypeName(portOut)} ${portOut.getName()};
+    </#list>
+        
+    <#list initializations as init>
+      ${helper.printInit(init)}
+    </#list>
+
+    <#list portsOut as portOut>
+    result.set${portOut.getName()?cap_first}(${portOut.getName()});
+    </#list>
 
     return result;
   }

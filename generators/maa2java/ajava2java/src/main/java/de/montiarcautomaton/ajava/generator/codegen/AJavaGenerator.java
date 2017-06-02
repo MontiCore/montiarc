@@ -7,7 +7,10 @@ package de.montiarcautomaton.ajava.generator.codegen;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 import _templates.de.montiarcautomaton.ajava.AJavaMain;
 import de.montiarcautomaton.ajava.generator.helper.AJavaHelper;
@@ -18,8 +21,12 @@ import de.monticore.io.paths.ModelPath;
 import de.monticore.java.javadsl._ast.ASTBlockStatement;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.lang.montiarc.ajava._ast.ASTAJavaDefinition;
+import de.monticore.lang.montiarc.ajava._ast.ASTComponentInitialization;
+import de.monticore.lang.montiarc.ajava._ast.ASTVariableInitialization;
 import de.monticore.lang.montiarc.ajava._symboltable.AJavaDefinitionSymbol;
 import de.monticore.lang.montiarc.ajava._symboltable.AJavaLanguageFamily;
+import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
+import de.monticore.lang.montiarc.montiarc._ast.ASTElement;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentVariableSymbol;
 import de.monticore.prettyprint.IndentPrinter;
@@ -66,6 +73,14 @@ public class AJavaGenerator {
       String resultName = comp.getName() + "Result";
       String implName = comp.getName() + "Impl";
       
+      Optional<ASTComponentInitialization> init = getComponentInitialization(comp);
+      List<ASTVariableInitialization> varInits = new ArrayList<>();
+      
+      if(init.isPresent()){
+        varInits = init.get().getVariableInitializations();
+      }
+      
+      
       JavaDSLPrettyPrinter printer = new JavaDSLPrettyPrinter(new IndentPrinter());
       ASTAJavaDefinition ajavaNode = (ASTAJavaDefinition) ajavaDef.getAstNode().get();
       
@@ -80,10 +95,27 @@ public class AJavaGenerator {
       
       AJavaMain.generate(filepath, node, helper, comp.getPackageName(), comp.getImports(),
           ajavaDef.getName(), resultName, inputName,
-          implName, comp.getIncomingPorts(), comp.getOutgoingPorts(), comp.getConfigParameters(),comp.getComponentVariables(), sb.toString());
+          implName, comp.getIncomingPorts(), comp.getOutgoingPorts(), comp.getConfigParameters(),comp.getComponentVariables(), sb.toString(), varInits);
       
     }
   }
+  
+  private static Optional<ASTComponentInitialization> getComponentInitialization(ComponentSymbol comp) {
+    Optional<ASTComponentInitialization> ret = Optional.empty();
+    Optional<ASTNode> ast = comp.getAstNode();
+    if(ast.isPresent()) {
+      ASTComponent compAST = (ASTComponent) ast.get();
+      for(ASTElement e : compAST.getBody().getElements()) {
+        if(e instanceof ASTComponentInitialization) {
+          ret = Optional.of((ASTComponentInitialization) e);
+          
+        }
+      }
+    }    
+    return ret;
+  }
+  
+  
   
   /**
    * Computes the target path of the generated java file.

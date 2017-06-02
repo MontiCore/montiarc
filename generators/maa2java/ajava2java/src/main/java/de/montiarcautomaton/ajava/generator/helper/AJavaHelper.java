@@ -5,6 +5,8 @@
  */
 package de.montiarcautomaton.ajava.generator.helper;
 
+import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
+import de.monticore.lang.montiarc.ajava._ast.ASTVariableInitialization;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponentVariable;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentVariableSymbol;
@@ -15,6 +17,7 @@ import de.monticore.literals.prettyprint.LiteralsPrettyPrinterConcreteVisitor;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
+import de.se_rwth.commons.Names;
 
 /**
  * TODO: Write me!
@@ -69,6 +72,20 @@ public class AJavaHelper {
       return visitor.prettyprint(val.getValue());
     }
     return "";
+  }
+  
+  public String printInit(ASTVariableInitialization init) {
+    String ret = "";
+    JavaDSLPrettyPrinter printer = new JavaDSLPrettyPrinter(new IndentPrinter());
+    String name = Names.getQualifiedName(init.getQualifiedName().getParts());
+    ret += name;
+    ret+= " = ";
+    ret+= printer.prettyprint(init.getValue());
+    ret+= ";";
+    
+    return ret;
+    
+    
   }
 }
 
