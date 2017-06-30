@@ -44,6 +44,28 @@ public class ComponentHelper {
     return instance.getComponentType().getName();
   }
   
+  public boolean isIncomingPort(ComponentSymbol cmp, ConnectorSymbol conn, boolean isSource, String portName) {
+    String subCompName = getConnectorComponentName(conn, isSource);
+    String portNameUnqualified = getConnectorPortName(conn, isSource);
+    Optional<PortSymbol> port = Optional.empty();
+    // port is of subcomponent
+    if(portName.contains(".")) {
+      Optional<ComponentInstanceSymbol> subCompInstance = cmp.getSpannedScope().<ComponentInstanceSymbol> resolve(subCompName, ComponentInstanceSymbol.KIND);
+      Optional<ComponentSymbol> subComp = subCompInstance.get().getComponentType().getReferencedComponent();
+      port =  subComp.get().getSpannedScope().<PortSymbol> resolve(portNameUnqualified, PortSymbol.KIND);  
+    }
+    else {
+      port = cmp.getSpannedScope().<PortSymbol> resolve(portName, PortSymbol.KIND);  
+    }
+    
+    
+    if(port.isPresent()) {
+      return port.get().isIncoming();
+    }
+    
+    return false;
+  }
+  
   /**
    * Returns the component name of a connection.
    * 
@@ -59,7 +81,11 @@ public class ComponentHelper {
     else {
       name = conn.getTarget();
     }
-    return name.split("\\.")[0];
+    if(name.contains(".")) {
+      return name.split("\\.")[0];
+    }
+    return "this";
+    
   }
   
   /**
@@ -77,7 +103,11 @@ public class ComponentHelper {
     else {
       name = conn.getTarget();
     }
-    return name.split("\\.")[1];
+    
+    if(name.contains(".")) {
+      return name.split("\\.")[1];
+    }
+    return name;
   }
   
   /**

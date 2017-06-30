@@ -81,7 +81,8 @@ public class MAAGenerator {
   public static void generateModel(String simpleName, String packageName, String modelPath,
       String fqnModelName, String targetPath, File hwcPath) {
     
-    Scope symTab = createSymTab(Paths.get(modelPath), Paths.get(getBasedirFromModelAndTargetPath(modelPath, targetPath)+"target/librarymodels/"));
+    Scope symTab = createSymTab(Paths.get(modelPath), Paths
+        .get(getBasedirFromModelAndTargetPath(modelPath, targetPath) + "target/librarymodels/"));
     String model = packageName + "." + simpleName;
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(model, ComponentSymbol.KIND).get();
     
@@ -130,7 +131,7 @@ public class MAAGenerator {
     }
     
     filePath = getPath(targetPath, packageName, comp.getName());
-
+    
     // gen component
     if (comp.isAtomic()) {
       
@@ -140,7 +141,7 @@ public class MAAGenerator {
         AbstractAtomicComponent.generate(implPath, compAST, compHelper, packageName, implName,
             inputName, resultName, comp.getConfigParameters());
       }
-
+      
       // pass all arguments instead of comp for better readability in the
       // template
       AtomicComponent.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(),
@@ -152,7 +153,7 @@ public class MAAGenerator {
       // pass all arguments instead of comp for better readability in the
       // template
       
-      ComposedComponent.generate(filePath, comp.getAstNode().get(), compHelper,
+      ComposedComponent.generate(filePath, comp.getAstNode().get(), compHelper, comp,
           comp.getPackageName(), comp.getImports(), comp.getName(),
           comp.getIncomingPorts(), comp.getOutgoingPorts(), comp.getSubComponents(),
           comp.getConnectors());

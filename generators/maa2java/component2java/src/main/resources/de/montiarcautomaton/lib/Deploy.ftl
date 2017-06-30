@@ -8,16 +8,16 @@ public class ${deployName} {
   public static void main(String[] args) {
     final ${name} cmp = new ${name}();
     
+    cmp.setUp();
     cmp.init();
-    cmp.update();
-    
+           
     long time;
-    
+     
     while (!Thread.interrupted()) {
       time = System.currentTimeMillis();
       cmp.compute();
       cmp.update();
-      while ((System.currentTimeMillis() - time) < CYCLE_TIME) {
+      while((System.currentTimeMillis()-time) < CYCLE_TIME){
         Thread.yield();
       }
     }

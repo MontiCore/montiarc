@@ -1,4 +1,4 @@
-${tc.params("de.montiarcautomaton.generator.helper.ComponentHelper helper", "String _package", "java.util.Collection<de.monticore.symboltable.ImportStatement> imports", "String name",
+${tc.params("de.montiarcautomaton.generator.helper.ComponentHelper helper", "de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol compSym", "String _package", "java.util.Collection<de.monticore.symboltable.ImportStatement> imports", "String name",
 "java.util.Collection<de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol> portsIn", "java.util.Collection<de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol> portsOut",
 "java.util.Collection<de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol> subComponents", "java.util.Collection<de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol> connectors")}
 package ${_package};
@@ -48,7 +48,7 @@ public class ${name} implements IComponent {
   
   // subcomponents
   <#list subComponents as component>
-  private final ${helper.getSubComponentTypeName(component)} ${component.getName()}; 
+  private ${helper.getSubComponentTypeName(component)} ${component.getName()}; 
   </#list>
 
   // subcomponent getter
@@ -60,16 +60,35 @@ public class ${name} implements IComponent {
   </#list>
   
   public ${name}() {
-    // instantiate all subcomponents
-  	<#list subComponents as component>
-  	this.${component.getName()} = new ${helper.getSubComponentTypeName(component)}(<#list helper.getParamValues(component) as param>${param}<#sep>, </#list>); 
-  	</#list>
-  	
-  	// set up output ports
-  	<#list portsOut as port>
-  	this.${port.getName()} = new Port<${helper.getPortTypeName(port)}>();
-  	</#list>
   }
+  
+  @Override
+  public void setUp() {
+     // instantiate all subcomponents
+    <#list subComponents as component>
+    this.${component.getName()} = new ${helper.getSubComponentTypeName(component)}(<#list helper.getParamValues(component) as param>${param}<#sep>, </#list>); 
+    </#list>
+    
+    //set up all sub components  
+    <#list subComponents as component>    
+    this.${component.getName()}.setUp();
+    </#list>
+    
+    // set up output ports
+    <#list portsOut as port>
+    this.${port.getName()} = new Port<${helper.getPortTypeName(port)}>();
+    </#list>
+    
+    // propagate children's output ports to own output ports
+    <#list connectors as conn>
+      <#if !helper.isIncomingPort(compSym,conn, false, conn.getTarget())>
+        ${helper.getConnectorComponentName(conn, false)}.setPort${helper.getConnectorPortName(conn, false)?cap_first}(${helper.getConnectorComponentName(conn, true)}.getPort${helper.getConnectorPortName(conn, true)?cap_first}());
+      </#if>
+    </#list>
+    
+  }
+  
+  
 
   @Override
   public void init() {
@@ -78,9 +97,12 @@ public class ${name} implements IComponent {
   	if (this.${port.getName()} == null) {this.${port.getName()} = Port.EMPTY;}
   	</#list>
   	
-  	// set up connectors
+  	// connect outputs of children with inputs of children, by giving 
+  	// the inputs a reference to the sending ports 
   	<#list connectors as conn>
-  	${helper.getConnectorComponentName(conn, false)}.setPort${helper.getConnectorPortName(conn, false)?cap_first}(${helper.getConnectorComponentName(conn, true)}.getPort${helper.getConnectorPortName(conn, true)?cap_first}());
+  	  <#if helper.isIncomingPort(compSym,conn, false, conn.getTarget())>
+  	    ${helper.getConnectorComponentName(conn, false)}.setPort${helper.getConnectorPortName(conn, false)?cap_first}(${helper.getConnectorComponentName(conn, true)}.getPort${helper.getConnectorPortName(conn, true)?cap_first}());
+  	  </#if>
   	</#list>
   	
   	// init all subcomponents

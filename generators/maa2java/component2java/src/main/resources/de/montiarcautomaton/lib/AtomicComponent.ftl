@@ -44,11 +44,16 @@ public class ${name} implements IComponent {
   
   public ${name}(<#list configParams as param>${helper.getParamTypeName(param)} ${param.getName()}<#sep>, </#list>) {
     behaviorImpl = new ${implName}(<#list configParams as param>${param.getName()}<#sep>, </#list>);
+  }
+  
+  @Override
+  public void setUp() {
+    // set up output ports
+    <#list portsOut as port>
+    this.${port.getName()} = new Port<${helper.getPortTypeName(port)}>();
+    </#list>
     
-  	// set up output ports
-  	<#list portsOut as port>
-  	this.${port.getName()} = new Port<${helper.getPortTypeName(port)}>();
-  	</#list>
+    this.initialize();
   }
 
   @Override
@@ -57,12 +62,9 @@ public class ${name} implements IComponent {
   	<#list portsIn as port>
   	if (this.${port.getName()} == null) {this.${port.getName()} = Port.EMPTY;}
   	</#list>
+  	
   
-    // get initial values from behavior implementation
-    final ${resultName} result = behaviorImpl.getInitialValues();
-    
-    // set results to ports
-    setResult(result);
+
   }
   
   private void setResult(${resultName} result) {
@@ -96,6 +98,14 @@ public class ${name} implements IComponent {
   	<#list portsOut as port>
   	this.${port.getName()}.update();
   	</#list>
+  }
+  
+  private void initialize() {
+     // get initial values from behavior implementation
+    final ${resultName} result = behaviorImpl.getInitialValues();
+    
+    // set results to ports
+    setResult(result);
   }
   
 }

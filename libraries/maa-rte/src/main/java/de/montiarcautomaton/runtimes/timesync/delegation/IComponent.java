@@ -9,6 +9,12 @@ package de.montiarcautomaton.runtimes.timesync.delegation;
 public interface IComponent {
   
   /**
+   * First method to be called. Creates members (e.g., ports). Propagated to
+   * subcomponents.
+   */
+  public void setUp();
+  
+  /**
    * Second method to be called. Connects ports of subcomponents to another.
    * Requires that these were created in the subcomponents before (see
    * {@code setUp()}). Propagated to subcomponents.
