@@ -4,10 +4,10 @@ grammar AJava extends de.monticore.lang.montiarc.MontiArcAutomaton {
   
   start MACompilationUnit;
   
-  ComponentInitialization implements Element = "init" "{" VariableInitialization+ "}";
+  ComponentInitialization implements Element = "init" "{" VariableInitialization* "}";
   
   VariableInitialization = QualifiedName "=" value:Expression ";";
     
-  AJavaDefinition implements BehaviorEmbedding = "compute" Name "{" BlockStatement+ "}";
+  AJavaDefinition implements BehaviorEmbedding = "compute" Name "{" BlockStatement* "}";
     
 }
