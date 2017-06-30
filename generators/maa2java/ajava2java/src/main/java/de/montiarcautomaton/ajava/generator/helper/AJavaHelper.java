@@ -5,6 +5,8 @@
  */
 package de.montiarcautomaton.ajava.generator.helper;
 
+import java.util.Optional;
+
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.lang.montiarc.ajava._ast.ASTVariableInitialization;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponentVariable;
@@ -15,6 +17,7 @@ import de.monticore.lang.montiarc.values._ast.ASTLiteralValue;
 import de.monticore.literals.LiteralsNodeIdentHelper;
 import de.monticore.literals.prettyprint.LiteralsPrettyPrinterConcreteVisitor;
 import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.se_rwth.commons.Names;
@@ -44,20 +47,9 @@ public class AJavaHelper {
     return printFqnTypeName(var.getTypeReference());
   }
   
-  /**
-   * Prints the type of the reference including dimensions.
-   * 
-   * @param ref
-   * @return
-   */
-  protected String printFqnTypeName(JTypeReference<? extends JTypeSymbol> ref) {
-    String name = ref.getName();
-    for (int i = 0; i < ref.getDimension(); ++i) {
-      name += "[]";
-    }
-    return name;
+  public String getParamTypeName(JFieldSymbol param) {
+    return printFqnTypeName(param.getType());
   }
-  
   
   public String printInit(ASTVariableInitialization init) {
     String ret = "";
@@ -72,5 +64,24 @@ public class AJavaHelper {
     
     
   }
+  
+  /**
+   * Prints the type of the reference including dimensions.
+   * 
+   * @param ref
+   * @return
+   */
+  protected String printFqnTypeName(JTypeReference<? extends JTypeSymbol> ref) {
+    String name = ref.getName();
+    Optional<JTypeSymbol> sym = ref.getEnclosingScope().<JTypeSymbol>resolve(ref.getName(), JTypeSymbol.KIND);
+    if(sym.isPresent()){
+      name = sym.get().getFullName();
+    }
+    for (int i = 0; i < ref.getDimension(); ++i) {
+      name += "[]";
+    }
+    return name;
+  }
+  
 }
 

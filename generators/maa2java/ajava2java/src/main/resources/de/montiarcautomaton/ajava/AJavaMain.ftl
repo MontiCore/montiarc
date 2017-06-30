@@ -37,6 +37,7 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
   public ${resultName} getInitialValues() {
     final ${resultName} result = new ${resultName}();
     
+    try {
     <#list portsOut as portOut>
     ${helper.getPortTypeName(portOut)} ${portOut.getName()};
     </#list>
@@ -48,6 +49,9 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
     <#list portsOut as portOut>
     result.set${portOut.getName()?cap_first}(${portOut.getName()});
     </#list>
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
 
     return result;
   }
