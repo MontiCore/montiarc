@@ -39,7 +39,7 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
     
     try {
     <#list portsOut as portOut>
-    ${helper.getPortTypeName(portOut)} ${portOut.getName()};
+    ${helper.getPortTypeName(portOut)} ${portOut.getName()} = null;
     </#list>
         
     <#list initializations as init>
