@@ -6,14 +6,14 @@
 
   <groupId>montiarc</groupId>
   <artifactId>montiarc-core</artifactId>
-  <version>4.1.5</version>
+  <version>4.1.6-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <!-- == PROJECT MODULES ================================================= -->
 
   <modules>
     <module>languages</module>
-	<module>generators</module>
+	  <module>generators</module>
     <module>libraries</module>
     <module>applications</module>
   </modules>
