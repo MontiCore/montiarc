@@ -18,10 +18,8 @@
     <module>common</module>
 	<module>tagging</module>
     <module>montiarc-fe</module>
-	<module>montiarc-behavior-fe</module>
 	<module>montiarcautomaton-fe</module>
 	<module>io-automaton-fe</module>
-	<module>ajava</module>
   </modules>
 
 </project>
