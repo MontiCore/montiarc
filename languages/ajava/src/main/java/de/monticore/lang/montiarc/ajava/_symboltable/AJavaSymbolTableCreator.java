@@ -7,10 +7,10 @@ import java.util.Deque;
 
 import de.monticore.automaton.ioautomatonjava._symboltable.IOAutomatonJavaSymbolTableCreator;
 import de.monticore.java.symboltable.JavaSymbolTableCreator;
-import de.monticore.lang.montiarc.ajava._ast.ASTAJavaDefinition;
-import de.monticore.lang.montiarc.ajava._visitor.AJavaDelegatorVisitor;
-import de.monticore.lang.montiarc.ajava._visitor.AJavaVisitor;
-import de.monticore.lang.montiarc.ajava._visitor.CommonAJavaDelegatorVisitor;
+import de.monticore.lang.montiarc.javap._ast.ASTAJavaDefinition;
+import de.monticore.lang.montiarc.javap._visitor.AJavaDelegatorVisitor;
+import de.monticore.lang.montiarc.javap._visitor.AJavaVisitor;
+import de.monticore.lang.montiarc.javap._visitor.CommonAJavaDelegatorVisitor;
 import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcSymbolTableCreator;
 import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcAutomatonSymbolTableCreator;
 import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcBehaviorSymbolTableCreator;

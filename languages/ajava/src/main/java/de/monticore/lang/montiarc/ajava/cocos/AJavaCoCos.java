@@ -5,11 +5,11 @@
  */
 package de.monticore.lang.montiarc.ajava.cocos;
 
-import de.monticore.lang.montiarc.ajava._cocos.AJavaCoCoChecker;
-import de.monticore.lang.montiarc.ajava.cocos.conventions.AJavaDefinitionUpperCaseCoCo;
-import de.monticore.lang.montiarc.ajava.cocos.conventions.MultipleBehaviorImplementation;
-import de.monticore.lang.montiarc.ajava.cocos.correctness.UsedPortsVariablesExistCoCo;
 import de.monticore.lang.montiarc.cocos.MontiArcCoCos;
+import de.monticore.lang.montiarc.cocos.MultipleBehaviorImplementation;
+import de.monticore.lang.montiarc.cocos.javap.AJavaDefinitionUpperCaseCoCo;
+import de.monticore.lang.montiarc.cocos.javap.UsedPortsVariablesExistCoCo;
+import de.monticore.lang.montiarc.javap._cocos.AJavaCoCoChecker;
 import de.monticore.lang.montiarc.montiarcautomaton.cocos.MontiArcAutomatonCocos;
 
 /**

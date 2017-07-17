@@ -2,7 +2,7 @@ package de.monticore.lang.montiarc.ajava._symboltable;
 
 import java.util.Optional;
 
-import de.monticore.lang.montiarc.ajava._parser.AJavaParser;
+import de.monticore.lang.montiarc.javap._parser.AJavaParser;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentVariableSymbol;

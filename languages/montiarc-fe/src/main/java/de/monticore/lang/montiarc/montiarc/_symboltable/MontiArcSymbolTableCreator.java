@@ -14,6 +14,7 @@ import java.util.Stack;
 import de.monticore.ast.ASTNode;
 import de.monticore.common.common._ast.ASTStereoValue;
 import de.monticore.java.javadsl._ast.ASTExpression;
+import de.monticore.java.javadsl._ast.ASTPrimaryExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.java.symboltable.JavaSymbolFactory;
 import de.monticore.java.symboltable.JavaTypeSymbol;
@@ -25,6 +26,7 @@ import de.monticore.lang.montiarc.helper.Timing;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponentHead;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponentVariable;
+import de.monticore.lang.montiarc.montiarc._ast.ASTJavaPBehavior;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMACompilationUnit;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcAutoConnect;
 import de.monticore.lang.montiarc.montiarc._ast.ASTPort;
@@ -501,5 +503,33 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       }
     }
     return componentSymbol.getFormalTypeParameters();
+  }
+  
+  /***************************************
+   * Java/P integration
+   ***************************************/
+  
+  @Override
+  public void visit(ASTJavaPBehavior node) {
+	String name = node.getName().orElse("JavaP");
+	JavaBehaviorSymbol ajavaDef = new JavaBehaviorSymbol(name);
+    addToScopeAndLinkWithNode(ajavaDef, node);
+  }
+  
+  @Override
+  public void endVisit(ASTJavaPBehavior node){
+    removeCurrentScope();
+  }
+  
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#visit(de.monticore.java.javadsl._ast.ASTPrimaryExpression)
+   */
+  @Override
+  public void visit(ASTPrimaryExpression node) {
+    super.visit(node);
+    if (node.getName().isPresent() && Character.isLowerCase(node.getName().get().charAt(0))){
+      JavaVariableReferenceSymbol variable = new JavaVariableReferenceSymbol(node.getName().get());
+      addToScopeAndLinkWithNode(variable, node);
+    }
   }
 }

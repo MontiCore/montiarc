@@ -7,11 +7,14 @@ package de.monticore.lang.montiarc.montiarc._symboltable;
 
 import de.monticore.lang.montiarc.adapter.CDTypeSymbol2JavaTypeFilter;
 import de.monticore.symboltable.resolving.CommonResolvingFilter;
+import de.monticore.symboltable.types.JFieldSymbol;
+import de.monticore.symboltable.types.JMethodSymbol;
+import de.monticore.symboltable.types.JTypeSymbol;
 
 /**
  * The MontiArc Language
  *
- * @author Robert Heim
+ * @author Robert Heim, Andreas Wortmann
  */
 public class MontiArcLanguage extends MontiArcLanguageTOP {
   
@@ -31,6 +34,14 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
     addResolver(new CommonResolvingFilter<PortSymbol>(PortSymbol.KIND));
     addResolver(new CommonResolvingFilter<ConnectorSymbol>(ConnectorSymbol.KIND));
     addResolver(new CommonResolvingFilter<ComponentVariableSymbol>(ComponentVariableSymbol.KIND));
+    
+    // Java/P
+    addResolver(new CommonResolvingFilter<>(JavaBehaviorSymbol.KIND));
+    addResolver(new CommonResolvingFilter<>(JavaVariableReferenceSymbol.KIND));
+    addResolver(CommonResolvingFilter.create(JTypeSymbol.KIND));
+    addResolver(CommonResolvingFilter.create(JFieldSymbol.KIND));
+    addResolver(CommonResolvingFilter.create(JMethodSymbol.KIND));
+    
     //TODO enable to resolve type arguments of subcomponents
     addResolver(new CDTypeSymbol2JavaTypeFilter());
     

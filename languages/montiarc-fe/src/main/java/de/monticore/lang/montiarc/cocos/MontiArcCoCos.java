@@ -5,6 +5,7 @@
  */
 package de.monticore.lang.montiarc.cocos;
 
+import de.monticore.lang.montiarc.cocos.javap.UsedPortsVariablesExistCoCo;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTConnectorCoCo;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcCoCoChecker;
@@ -12,10 +13,10 @@ import de.monticore.lang.montiarc.montiarc._cocos.MontiArcCoCoChecker;
 /**
  * Bundle of CoCos for the MontiArc language.
  *
- * @author Robert Heim
+ * @author Robert Heim, Andreas Wortmann
  */
 public class MontiArcCoCos {
-  public static MontiArcCoCoChecker createChecker() {
+	public static MontiArcCoCoChecker createChecker() {
     return new MontiArcCoCoChecker()
         .addCoCo(new UniqueConstraint())
         .addCoCo(new UniquePorts())
@@ -33,6 +34,8 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointCorrectlyQualified())
         .addCoCo(new InPortUniqueSender())
         .addCoCo(new SimpleConnectorSourceExists())
-        .addCoCo(new ReferencedSubComponentExists());
+        .addCoCo(new ReferencedSubComponentExists())
+        .addCoCo(new UsedPortsVariablesExistCoCo())
+        .addCoCo(new MultipleBehaviorImplementation());
   }
 }

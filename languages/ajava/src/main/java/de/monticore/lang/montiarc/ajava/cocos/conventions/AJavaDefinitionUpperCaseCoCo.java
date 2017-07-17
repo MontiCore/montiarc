@@ -5,8 +5,8 @@
  */
 package de.monticore.lang.montiarc.ajava.cocos.conventions;
 
-import de.monticore.lang.montiarc.ajava._ast.ASTAJavaDefinition;
-import de.monticore.lang.montiarc.ajava._cocos.AJavaASTAJavaDefinitionCoCo;
+import de.monticore.lang.montiarc.javap._ast.ASTAJavaDefinition;
+import de.monticore.lang.montiarc.javap._cocos.AJavaASTAJavaDefinitionCoCo;
 import de.se_rwth.commons.logging.Log;
 
 /**

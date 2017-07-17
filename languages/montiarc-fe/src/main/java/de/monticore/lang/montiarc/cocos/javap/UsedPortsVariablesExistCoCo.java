@@ -3,25 +3,21 @@
  *
  * http://www.se-rwth.de/
  */
-package de.monticore.lang.montiarc.ajava.cocos.correctness;
+package de.monticore.lang.montiarc.cocos.javap;
 
 import java.util.Collection;
 import java.util.Optional;
 
-import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.EObjectOutputStream.Check;
-
-import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
 import de.monticore.java.symboltable.JavaFieldSymbol;
-import de.monticore.lang.expression.symboltable.ValueSymbol;
-import de.monticore.lang.montiarc.ajava._symboltable.AJavaDefinitionSymbol;
-import de.monticore.lang.montiarc.ajava._symboltable.SimpleVariableSymbol;
-import de.monticore.lang.montiarc.javap._ast.ASTComponentInitialization;
-import de.monticore.lang.montiarc.javap._ast.ASTVariableInitialization;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
 import de.monticore.lang.montiarc.montiarc._ast.ASTElement;
+import de.monticore.lang.montiarc.montiarc._ast.ASTJavaPInitializer;
+import de.monticore.lang.montiarc.montiarc._ast.ASTVariableInitialization;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTComponentCoCo;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentVariableSymbol;
+import de.monticore.lang.montiarc.montiarc._symboltable.JavaBehaviorSymbol;
+import de.monticore.lang.montiarc.montiarc._symboltable.JavaVariableReferenceSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.se_rwth.commons.Names;
@@ -31,9 +27,7 @@ import de.se_rwth.commons.logging.Log;
  * Checks whether all used ports in the java expression exist in the component
  * definition.
  *
- * @author (last commit) $Author$
- * @version $Revision$, $Date$
- * @since TODO: add version number
+ * @author Andreas Wortmann
  */
 public class UsedPortsVariablesExistCoCo
     implements MontiArcASTComponentCoCo {
@@ -57,8 +51,8 @@ public class UsedPortsVariablesExistCoCo
   
   private void checkAJavaInitialization(ASTComponent node, ComponentSymbol cmp) {
     for (ASTElement e : node.getBody().getElements()) {
-      if (e instanceof ASTComponentInitialization) {
-        ASTComponentInitialization init = (ASTComponentInitialization) e;
+      if (e instanceof ASTJavaPInitializer) {
+    	  ASTJavaPInitializer init = (ASTJavaPInitializer) e;
         for (ASTVariableInitialization i : init.getVariableInitializations()) {
           String name = Names.getQualifiedName(i.getQualifiedName().getParts());
           Optional<PortSymbol> port = cmp.getSpannedScope().<PortSymbol> resolve(name,
@@ -86,20 +80,14 @@ public class UsedPortsVariablesExistCoCo
   }
   
   private void checkAJavaDefinition(ASTComponent node, ComponentSymbol cmp) {
-    Collection<AJavaDefinitionSymbol> ajavaDefinitions = cmp.getSpannedScope()
-        .resolveLocally(AJavaDefinitionSymbol.KIND);
+    Collection<JavaBehaviorSymbol> ajavaDefinitions = cmp.getSpannedScope()
+        .resolveLocally(JavaBehaviorSymbol.KIND);
     
-    if (ajavaDefinitions.size() > 1) {
-      Log.error(
-          "0xAA320 There must not be more than one ajava definitions in a component definition.",
-          node.get_SourcePositionStart());
-    }
-    
-    if (ajavaDefinitions.size() == 1) {
-      AJavaDefinitionSymbol ajavaDef = ajavaDefinitions.iterator().next();
-      Collection<SimpleVariableSymbol> usedVars = ajavaDef.getSpannedScope()
-          .resolveLocally(SimpleVariableSymbol.KIND);
-      for (SimpleVariableSymbol var : usedVars) {
+    if (ajavaDefinitions.size() == 1) { // else: MultipleBehaviorImplementation catches this
+      JavaBehaviorSymbol ajavaDef = ajavaDefinitions.iterator().next();
+      Collection<JavaVariableReferenceSymbol> usedVars = ajavaDef.getSpannedScope()
+          .resolveLocally(JavaVariableReferenceSymbol.KIND);
+      for (JavaVariableReferenceSymbol var : usedVars) {
         String varName = var.getName();
         Optional<PortSymbol> port = cmp.getSpannedScope().<PortSymbol> resolve(varName,
             PortSymbol.KIND);

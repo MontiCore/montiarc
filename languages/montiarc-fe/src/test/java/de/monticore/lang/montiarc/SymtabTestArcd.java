@@ -98,7 +98,7 @@ public class SymtabTestArcd extends AbstractSymtabTest {
     // assertEquals(ValueSymbol.Kind.Value, arg1.getKind());
 
     ValueSymbol<?> arg2 = compWithArgsRef.getConfigArguments().get(1);
-    assertEquals("\\\"Hallo\\\"", arg2.getValue());
+    assertEquals("\"Hallo\"", arg2.getValue());
     // TODO proper setting of Kind? currently everything is an expression as we extend JavaDSL
     // instead of CommonValues
     // assertEquals(ValueEntry.Kind.Value, arg2.getKind());
