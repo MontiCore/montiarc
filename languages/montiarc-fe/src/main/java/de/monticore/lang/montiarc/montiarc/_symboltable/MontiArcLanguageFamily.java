@@ -13,7 +13,26 @@ import de.monticore.umlcd4a.CD4AnalysisLanguage;
 public class MontiArcLanguageFamily extends ModelingLanguageFamily {
   public MontiArcLanguageFamily() {
     addModelingLanguage(new MontiArcLanguage());
-    addModelingLanguage(new CD4AnalysisLanguage());
     addModelingLanguage(new JavaDSLLanguage());
+    
+    // Use CD4ALanguage instead of CD4AnalysisLanguage. see CD4ALanguage.
+    // Required for on-the-fly coco checks.
+//    addModelingLanguage(new CD4ALanguage());
+    
+     addModelingLanguage(new CD4AnalysisLanguage());
+    
   }
+  
+  // public MontiArcAutomatonLanguageFamilyWithCDAdapter() {
+  // addModelingLanguage(new MontiArcAutomatonLanguage() {
+  // @Override
+  // protected void initResolvingFilters() {
+  // super.initResolvingFilters();
+  //
+  // // TODO currently required to resolve types of expressions with cd in MontiArcAutomaton
+  // addResolver(new CDTypeSymbol2JavaTypeFilter());
+  // addResolver(new CDFieldSymbol2JavaFieldFilter());
+  // }
+  // });
+  
 }
