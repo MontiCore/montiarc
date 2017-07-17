@@ -5,6 +5,8 @@
  */
 package de.monticore.lang.montiarc.cocos;
 
+import de.monticore.lang.montiarc.cocos.automaton.AutomatonUppercase;
+import de.monticore.lang.montiarc.cocos.automaton.ImplementationInNonAtomicComponent;
 import de.monticore.lang.montiarc.cocos.javap.UsedPortsVariablesExistCoCo;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTConnectorCoCo;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
@@ -33,9 +35,13 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointCorrectlyQualified())
         .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointCorrectlyQualified())
         .addCoCo(new InPortUniqueSender())
+        /* Java/P Cocos */
         .addCoCo(new SimpleConnectorSourceExists())
         .addCoCo(new ReferencedSubComponentExists())
         .addCoCo(new UsedPortsVariablesExistCoCo())
-        .addCoCo(new MultipleBehaviorImplementation());
+        .addCoCo(new MultipleBehaviorImplementation())
+        /* Automaton Cocos */
+        .addCoCo(new ImplementationInNonAtomicComponent())
+        .addCoCo(new AutomatonUppercase());
   }
 }

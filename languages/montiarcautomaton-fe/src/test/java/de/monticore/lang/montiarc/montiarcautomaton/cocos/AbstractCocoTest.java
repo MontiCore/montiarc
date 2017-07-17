@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
+import de.monticore.lang.montiarc.cocos.automaton.MontiArcAutomatonCocos;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarcautomaton.AbstractSymtabTest;
