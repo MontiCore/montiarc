@@ -14,12 +14,12 @@ public class BumperbotTest extends AbstractCocoTest {
   @Test
   public void testBumperbot() {
     // bumperbot must be valid
-    checkValid("src/test/resources/", "valid.bumperbot.BumpControl");
+    checkValid("src/test/resources/", "automaton.valid.bumperbot.BumpControl");
   }
   
   @Test
   public void testBumperbotSpeed() {
     // bumperbot must be valid
-    checkValid("src/test/resources/", "valid.bumperbot.BumpSpeed");
+    checkValid("src/test/resources/", "automaton.valid.bumperbot.BumpSpeed");
   }
 }

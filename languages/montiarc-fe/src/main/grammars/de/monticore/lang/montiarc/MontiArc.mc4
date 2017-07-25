@@ -4,7 +4,7 @@ package de.monticore.lang.montiarc;
  * Grammar for MontiArc. Extends common components with
  * behavior information and configurations.
  *
- * @author Arne Haber, Robert Heim, Michael von Wenckstern
+ * @author Arne Haber, Robert Heim, Andreas Wortmann
  */
 grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.JavaDSL {
 

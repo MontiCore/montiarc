@@ -1,5 +1,7 @@
 package de.monticore.lang.montiarc.automaton.cocos;
 
+//XXX: @JP: Evtl. ist diese Klassre reundant
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -14,7 +16,9 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Lists;
 
 import de.monticore.lang.montiarc.automaton.AbstractSymtabTest;
+import de.monticore.lang.montiarc.cocos.MontiArcCoCos;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
+import de.monticore.lang.montiarc.montiarc._cocos.MontiArcCoCoChecker;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Finding;
@@ -40,7 +44,7 @@ public class AbstractCocoTest extends AbstractSymtabTest {
   protected static void runCheckerWithSymTab(String modelPath, String model) {
     ASTMontiArcNode node = getAstNode(modelPath, model);
     
-    MontiArcAutomatonCocos.createChecker().checkAll(node);
+    MontiArcCoCos.createChecker().checkAll(node);
   }
   
   /**
@@ -48,7 +52,7 @@ public class AbstractCocoTest extends AbstractSymtabTest {
    * valid models.
    */
   protected static void checkValid(String modelPath, String model) {
-    checkInvalid(MontiArcAutomatonCocos.createChecker(), getAstNode(modelPath, model),
+    checkInvalid(MontiArcCoCos.createChecker(), getAstNode(modelPath, model),
         new ExpectedErrorInfo());
   }
   
@@ -60,7 +64,7 @@ public class AbstractCocoTest extends AbstractSymtabTest {
    * Checks the given cocos on the given model and expects the given errors. Use this for checking
    * invalid models and verifying that the right number and type of errors are present.
    */
-  protected static void checkInvalid(MontiArcAutomatonCoCoChecker cocos, ASTMontiArcNode node,
+  protected static void checkInvalid(MontiArcCoCoChecker cocos, ASTMontiArcNode node,
       ExpectedErrorInfo expectedErrors) {
     
     cocos.checkAll(node);
@@ -73,7 +77,7 @@ public class AbstractCocoTest extends AbstractSymtabTest {
    */
   protected static void checkInvalid(ASTMontiArcNode node,
       ExpectedErrorInfo expectedErrors) {
-    checkInvalid(MontiArcAutomatonCocos.createChecker(), node, expectedErrors);
+    checkInvalid(MontiArcCoCos.createChecker(), node, expectedErrors);
   }
   
   protected static class ExpectedErrorInfo {

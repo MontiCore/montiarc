@@ -4,9 +4,9 @@ component InvalidAutomatonBehaviorImpl {
   port
     in Integer a;
 
+  var int c;
+
   automaton InvalidAutomatonBehaviorImpl {
-  	variable int c;
-  
   	state Start;
     initial Start;
 
@@ -21,8 +21,6 @@ component InvalidAutomatonBehaviorImpl {
   }
   
   automaton lowercaseName {
-  	variable int c;
-  
   	state Start;
     initial Start;
 
