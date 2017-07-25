@@ -22,7 +22,7 @@ public class SymTabTest extends AbstractSymtabTest {
   
   @Test
   public void testParseBumperbot() {
-    ASTMontiArcNode node = getAstNode("src/test/resources/", "valid.bumperbot.BumpControl");
+    ASTMontiArcNode node = getAstNode("src/test/resources/", "automaton.valid.bumperbot.BumpControl");
     assertNotNull(node);
   }
   
@@ -30,11 +30,11 @@ public class SymTabTest extends AbstractSymtabTest {
   public void testCDType2JavaType() {
     Scope symTab = createSymTab("src/test/resources/");
     CDTypeSymbol type1 = symTab
-        .<CDTypeSymbol> resolve("valid.bumperbot.Datatypes.MotorCommand", CDTypeSymbol.KIND)
+        .<CDTypeSymbol> resolve("automaton.valid.bumperbot.Datatypes.MotorCommand", CDTypeSymbol.KIND)
         .orElse(null);
     assertNotNull(type1);
     JavaTypeSymbol type2 = symTab
-        .<JavaTypeSymbol> resolve("valid.bumperbot.Datatypes.MotorCommand", JavaTypeSymbol.KIND)
+        .<JavaTypeSymbol> resolve("automaton.valid.bumperbot.Datatypes.MotorCommand", JavaTypeSymbol.KIND)
         .orElse(null);
     assertNotNull(type2);
   }
@@ -43,11 +43,11 @@ public class SymTabTest extends AbstractSymtabTest {
   public void testCDField2JavaField() {
     Scope symTab = createSymTab("src/test/resources/");
     CDFieldSymbol field1 = symTab
-        .<CDFieldSymbol> resolve("valid.bumperbot.Datatypes.MotorCommand.STOP", CDFieldSymbol.KIND)
+        .<CDFieldSymbol> resolve("automaton.valid.bumperbot.Datatypes.MotorCommand.STOP", CDFieldSymbol.KIND)
         .orElse(null);
     assertNotNull(field1);
     JavaFieldSymbol field2 = symTab.<JavaFieldSymbol> resolve(
-        "valid.bumperbot.Datatypes.MotorCommand.STOP", JavaFieldSymbol.KIND).orElse(null);
+        "automaton.valid.bumperbot.Datatypes.MotorCommand.STOP", JavaFieldSymbol.KIND).orElse(null);
     assertNotNull(field2);
   }
   

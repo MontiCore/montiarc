@@ -4,9 +4,9 @@ component LowerCaseAutomaton {
   port
     in Integer a;
   
-  automaton lowercaseName {
-  	variable int c;
+  var int c;
   
+  automaton lowercaseName {
   	state Start;
     initial Start;
 

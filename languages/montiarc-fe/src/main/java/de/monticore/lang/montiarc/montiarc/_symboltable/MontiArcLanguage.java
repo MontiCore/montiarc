@@ -45,8 +45,6 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
     //TODO enable to resolve type arguments of subcomponents
     addResolver(new CDTypeSymbol2JavaTypeFilter());
     
-
-    
     setModelNameCalculator(new MontiArcModelNameCalculator());
   }
   

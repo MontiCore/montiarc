@@ -31,7 +31,7 @@ public class CorrectMAASubComponentInstantiation implements MontiArcASTComponent
    * Checks whether the arguments of the passed subcomponent are consistent
    */
   private void checkArguments(ComponentSymbol cmp) {
-    
+    //XXX @JP: Was soll diese Klasse?
     
   }
   

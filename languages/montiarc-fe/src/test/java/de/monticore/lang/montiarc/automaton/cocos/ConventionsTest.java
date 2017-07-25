@@ -17,23 +17,23 @@ public class ConventionsTest extends AbstractCocoTest {
   
   @Test
   @Ignore //XXX: Invalid as both error cases are prevented by the new grammar
-  public void testInitialStateNotDefined() {
+  public void testAutomatonHasInOutputsVariables() {
     ASTMontiArcNode node = getAstNode("src/test/resources/", "automaton.invalid.AutomatonHasInOutputsVariables");
     checkInvalid(node, new ExpectedErrorInfo(2, "xAB110", "xAB120"));
   }
 
   @Test
-  public void testAutomatonBehaviorImplementation() {
-    ASTMontiArcNode node = getAstNode("src/test/resources/", "automaton.invalid.InvalidAutomatonBehaviorImpl");
+  public void testMutipleBehaviors() {
+    ASTMontiArcNode node = getAstNode("src/test/resources/", "automaton.invalid.MutipleBehaviors");
     checkInvalid(node, new ExpectedErrorInfo(3, "xAB140", "xAB130"));
   }
   
   @Test
-  public void testInvalidCDExplicit() {
+  public void testLowerCaseEnumeration() {
     Log.getFindings().clear();
     // loads the CD explicitly and checks its cocos
     Scope symTab = createSymTab("src/test/resources/");
-    symTab.<CDFieldSymbol> resolve("automaton.invalid.InvalidDatatypes.invalidType.A", CDFieldSymbol.KIND).orElse(null);
+    symTab.<CDFieldSymbol> resolve("automaton.invalid.LowerCaseEnumeration.lowerCaseEnumeration.A", CDFieldSymbol.KIND).orElse(null);
     new ExpectedErrorInfo(1, "xC4A05").checkFindings(Log.getFindings());
   }
   

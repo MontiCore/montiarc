@@ -6,7 +6,6 @@
 package de.monticore.lang.montiarc.cocos.intralanguage;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;

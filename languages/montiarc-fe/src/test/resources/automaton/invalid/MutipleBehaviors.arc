@@ -1,6 +1,6 @@
 package automaton.invalid;
 
-component InvalidAutomatonBehaviorImpl {
+component MutipleBehaviors {
   port
     in Integer a;
 

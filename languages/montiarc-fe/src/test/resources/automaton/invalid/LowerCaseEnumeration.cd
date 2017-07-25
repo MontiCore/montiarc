@@ -1,0 +1,5 @@
+package automaton.invalid;
+
+classdiagram LowerCaseEnumeration {
+  enum lowerCaseEnumeration {A, B, C;} // lower case name
+}
