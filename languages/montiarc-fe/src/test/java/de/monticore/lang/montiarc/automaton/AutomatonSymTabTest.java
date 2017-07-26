@@ -14,7 +14,7 @@ import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 
-public class SymTabTest extends AbstractSymtabTest {
+public class AutomatonSymTabTest extends AbstractSymtabTest {
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
@@ -29,26 +29,26 @@ public class SymTabTest extends AbstractSymtabTest {
   @Test
   public void testCDType2JavaType() {
     Scope symTab = createSymTab("src/test/resources/");
-    CDTypeSymbol type1 = symTab
+    CDTypeSymbol cdType = symTab
         .<CDTypeSymbol> resolve("automaton.valid.bumperbot.Datatypes.MotorCommand", CDTypeSymbol.KIND)
         .orElse(null);
-    assertNotNull(type1);
-    JavaTypeSymbol type2 = symTab
+    assertNotNull(cdType);
+    JavaTypeSymbol javaType = symTab
         .<JavaTypeSymbol> resolve("automaton.valid.bumperbot.Datatypes.MotorCommand", JavaTypeSymbol.KIND)
         .orElse(null);
-    assertNotNull(type2);
+    assertNotNull(javaType);
   }
   
   @Test
   public void testCDField2JavaField() {
     Scope symTab = createSymTab("src/test/resources/");
-    CDFieldSymbol field1 = symTab
+    CDFieldSymbol cdField = symTab
         .<CDFieldSymbol> resolve("automaton.valid.bumperbot.Datatypes.MotorCommand.STOP", CDFieldSymbol.KIND)
         .orElse(null);
-    assertNotNull(field1);
-    JavaFieldSymbol field2 = symTab.<JavaFieldSymbol> resolve(
+    assertNotNull(cdField);
+    JavaFieldSymbol javaField = symTab.<JavaFieldSymbol> resolve(
         "automaton.valid.bumperbot.Datatypes.MotorCommand.STOP", JavaFieldSymbol.KIND).orElse(null);
-    assertNotNull(field2);
+    assertNotNull(javaField);
   }
   
   protected static ASTMontiArcNode getAstNode(String modelPath, String model) {

@@ -1,5 +1,5 @@
 package bumperbot.library;
-classdiagram types {
+classdiagram Types {
 
     enum MotorCmd {
         FORWARD, BACKWARD, STOP;

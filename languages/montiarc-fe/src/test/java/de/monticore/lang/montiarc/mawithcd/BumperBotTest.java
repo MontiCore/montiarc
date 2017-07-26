@@ -13,6 +13,7 @@ import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
+import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 
 /**
  * TODO: Write me!
