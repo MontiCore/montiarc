@@ -40,8 +40,9 @@ public class MontiArcCoCos {
         .addCoCo(new ReferencedSubComponentExists())
         .addCoCo(new UsedPortsVariablesExistCoCo())
         .addCoCo(new MultipleBehaviorImplementation())
-        /* Automaton Cocos */
+        /* MontiArcAutomaton Cocos */
         .addCoCo(new ImplementationInNonAtomicComponent())
         .addCoCo(new AutomatonUppercase());
+    	// @JP: AutomatonCoCos fehlen
   }
 }

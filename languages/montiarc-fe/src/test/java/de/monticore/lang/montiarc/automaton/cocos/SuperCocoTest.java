@@ -12,7 +12,7 @@ import de.se_rwth.commons.logging.Log;
  * 
  * @author Gerrit Leonhardt
  */
-public class SuperCocoTest extends AbstractCocoTest {
+public class SuperCocoTest extends AutomatonAbstractCocoTest {
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);

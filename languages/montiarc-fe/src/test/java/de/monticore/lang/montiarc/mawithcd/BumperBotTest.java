@@ -6,6 +6,7 @@
 package de.monticore.lang.montiarc.mawithcd;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -37,13 +38,15 @@ public class BumperBotTest extends AbstractSymTabTest {
     assertNotNull(motorSymbol);
 
     PortSymbol commandPort = motorSymbol.getIncomingPort("command").orElse(null);
-    
+     
     assertNotNull(commandPort);
     
     JTypeSymbol typeSymbol = commandPort
         .getTypeReference()
         .getReferencedSymbol();
     
-//    assertTrue(typeSymbol instanceof Cd2MaTypeAdapter);
+    assertNotNull(typeSymbol);
+
+    //assertTrue(typeSymbol instanceof Cd2MaTypeAdapter);
   }
 }

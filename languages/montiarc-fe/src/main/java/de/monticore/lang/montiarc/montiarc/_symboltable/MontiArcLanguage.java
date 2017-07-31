@@ -5,6 +5,7 @@
  */
 package de.monticore.lang.montiarc.montiarc._symboltable;
 
+import de.monticore.lang.montiarc.adapter.CDFieldSymbol2JavaFieldFilter;
 import de.monticore.lang.montiarc.adapter.CDTypeSymbol2JavaTypeFilter;
 import de.monticore.symboltable.resolving.CommonResolvingFilter;
 import de.monticore.symboltable.types.JFieldSymbol;
@@ -38,15 +39,15 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
     // Java/P
     addResolver(new CommonResolvingFilter<>(JavaBehaviorSymbol.KIND));
     addResolver(new CommonResolvingFilter<>(JavaVariableReferenceSymbol.KIND));
+    
     addResolver(CommonResolvingFilter.create(JTypeSymbol.KIND));
     addResolver(CommonResolvingFilter.create(JFieldSymbol.KIND));
     addResolver(CommonResolvingFilter.create(JMethodSymbol.KIND));
     
     //TODO enable to resolve type arguments of subcomponents
     addResolver(new CDTypeSymbol2JavaTypeFilter());
-    
+    addResolver(new CDFieldSymbol2JavaFieldFilter());
 
-    
     setModelNameCalculator(new MontiArcModelNameCalculator());
   }
   

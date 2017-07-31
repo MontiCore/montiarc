@@ -3,10 +3,10 @@ package automaton.invalid;
 component LowerCaseAutomaton {
   port
     in Integer a;
+    
+  var int c;
   
   automaton lowercaseName {
-  	variable int c;
-  
   	state Start;
     initial Start;
 

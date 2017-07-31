@@ -24,7 +24,7 @@ import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 
-public class AbstractCocoTest extends AbstractSymtabTest {
+public class AutomatonAbstractCocoTest extends AbstractSymtabTest {
   
   protected static ASTMontiArcNode getAstNode(String modelPath, String model) {
     // ensure an empty log

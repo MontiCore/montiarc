@@ -18,10 +18,6 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.Ja
     (ImportStatement)*
     Component;
 
-  /* ======================================================*/
-  /* ============= From OLD ARCD Grammar ==================*/
-  /* ======================================================*/
-
   /**
   * A component may contain arbitrary many Elements. 
   * This interface may be used as an extension point to 
@@ -198,10 +194,6 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.Ja
   ComponentVariableDeclaration implements Element = "var"? ComponentVariable ("," ComponentVariable)* ";";
   
   ComponentVariable = Type Name;
-
-  /* ======================================================*/
-  /* ============ From OLD MARC Grammar ==================*/
-  /* ======================================================*/
 
   /**
   * MontiArc components may contain arbitrary many 
