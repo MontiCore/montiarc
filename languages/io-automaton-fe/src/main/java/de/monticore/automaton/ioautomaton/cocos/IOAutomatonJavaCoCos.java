@@ -52,12 +52,7 @@ public class IOAutomatonJavaCoCos {
         .addCoCo((IOAutomatonASTInitialStateDeclarationCoCo)new ReactionWithAlternatives())
         .addCoCo((IOAutomatonASTTransitionCoCo)new ReactionWithAlternatives())
         .addCoCo(new UseOfForbiddenExpression())
-//        .addCoCo(new AutomatonHasNoOutput()) not in use for maa
-//        .addCoCo(new AutomatonHasNoInput()) not in use for maa
-//        .addCoCo(new AutomatonUppercase()) not in use for maa
         .addCoCo(new StateUppercase())
-//        .addCoCo((IOAutomatonASTInputDeclarationCoCo)new DeclarationNamesLowerCase()) not in use for maa
-//        .addCoCo((IOAutomatonASTOutputDeclarationCoCo)new DeclarationNamesLowerCase()) not in use for maa
         .addCoCo((IOAutomatonASTVariableDeclarationCoCo)new DeclarationNamesLowerCase())
         
         // REFERENTIAL INTEGRITY
@@ -71,14 +66,10 @@ public class IOAutomatonJavaCoCos {
         .addCoCo(new StimulusTypeDoesNotFitInputType())
         .addCoCo(new InitialReactionTypeDoesNotFitOutputType())
         .addCoCo(new ReactionTypeDoesNotFitOutputType())
-//        .addCoCo((IOAutomatonASTInputDeclarationCoCo)new InitialValueDoesNotFit()) not in use for maa
         .addCoCo((IOAutomatonASTVariableDeclarationCoCo)new InitialValueDoesNotFit())
-//        .addCoCo((IOAutomatonASTOutputDeclarationCoCo)new InitialValueDoesNotFit()) not in use for maa
         
         // UNIQUENESS OF NAMES
         .addCoCo(new StateDefinedMultipleTimesStereotypesDontMatch())
-//        .addCoCo(new OutputsDefinedMultipleTimes()) not in use for maa
-//        .addCoCo(new InputsDefinedMultipleTimes()) not in use for maa
         .addCoCo(new VariableDefinedMultipleTimes())
         .addCoCo(new VariableAndIOsHaveSameName())
         .addCoCo(new InitialDeclaredMultipleTimes())

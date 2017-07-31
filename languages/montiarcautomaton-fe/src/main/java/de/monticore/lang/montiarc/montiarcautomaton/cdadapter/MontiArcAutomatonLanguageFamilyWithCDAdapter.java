@@ -5,8 +5,8 @@ import de.monticore.automaton.ioautomatonjava._symboltable.IOAutomatonJavaLangua
 import de.monticore.java.lang.JavaDSLLanguage;
 import de.monticore.lang.montiarc.adapter.CDFieldSymbol2JavaFieldFilter;
 import de.monticore.lang.montiarc.adapter.CDTypeSymbol2JavaTypeFilter;
+import de.monticore.lang.montiarc.helper.CD4ALanguage;
 import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcAutomatonLanguage;
-import de.monticore.lang.montiarc.montiarcautomaton.cdcococheck.CD4ALanguage;
 
 // TODO required for resolving types of an expression that uses cd stuff. See
 // de.monticore.automaton.ioautomaton.TypeCompatibilityChecker for further

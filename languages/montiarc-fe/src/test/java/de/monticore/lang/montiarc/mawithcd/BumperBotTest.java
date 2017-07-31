@@ -8,12 +8,15 @@ package de.monticore.lang.montiarc.mawithcd;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
+import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
+import de.se_rwth.commons.logging.Log;
 
 /**
  * TODO: Write me!
@@ -24,6 +27,13 @@ import de.monticore.symboltable.types.JTypeSymbol;
  */
 public class BumperBotTest extends AbstractSymTabTest {
   
+	@Before
+	public void setup() {
+		Log.getFindings().clear();
+		Log.enableFailQuick(false);
+	}
+
+	
   /**
    * This test crashes.
    */

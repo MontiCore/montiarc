@@ -193,7 +193,8 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.Ja
   */
   ComponentVariableDeclaration implements Element = "var"? ComponentVariable ("," ComponentVariable)* ";";
   
-  ComponentVariable = Type Name;
+  ComponentVariable = Type Name ("=" Valuation)?;
+  //@JP: Auch gut (auch für Ports): var Int summandA, summandB;
 
   /**
   * MontiArc components may contain arbitrary many 

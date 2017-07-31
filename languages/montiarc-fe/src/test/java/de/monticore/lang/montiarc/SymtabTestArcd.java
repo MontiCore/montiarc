@@ -102,9 +102,10 @@ public class SymtabTestArcd extends AbstractSymtabTest {
     // TODO proper setting of Kind? currently everything is an expression as we extend JavaDSL
     // instead of CommonValues
     // assertEquals(ValueEntry.Kind.Value, arg2.getKind());
-    //
+    
+    String spacelessArg3 = "new Integer[]{1, 2, 3}".replace(" ", "");
     ValueSymbol<?> arg3 = compWithArgsRef.getConfigArguments().get(2);
-    assertEquals("new Integer[]{1, 2, 3}", arg3.getValue());
+    assertEquals(spacelessArg3, arg3.getValue().replace(" ", ""));
     // TODO proper setting of Kind? currently everything is an expression as we extend JavaDSL
     // instead of CommonValues
     // assertEquals(ValueEntry.Kind.ConstructorCall, arg3.getKind());

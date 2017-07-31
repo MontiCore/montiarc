@@ -7,9 +7,34 @@ package de.monticore.lang.montiarc.cocos;
 
 import de.monticore.lang.montiarc.cocos.automaton.AutomatonUppercase;
 import de.monticore.lang.montiarc.cocos.automaton.ImplementationInNonAtomicComponent;
+import de.monticore.lang.montiarc.cocos.automaton.conventions.AutomatonHasNoInitialState;
+import de.monticore.lang.montiarc.cocos.automaton.conventions.AutomatonHasNoState;
+import de.monticore.lang.montiarc.cocos.automaton.conventions.CorrectAssignmentOperators;
+import de.monticore.lang.montiarc.cocos.automaton.conventions.MultipleAssignmentsSameIdentifier;
+import de.monticore.lang.montiarc.cocos.automaton.conventions.OutputInExpression;
+import de.monticore.lang.montiarc.cocos.automaton.conventions.ReactionWithAlternatives;
+import de.monticore.lang.montiarc.cocos.automaton.conventions.StateUppercase;
+import de.monticore.lang.montiarc.cocos.automaton.conventions.UseOfForbiddenExpression;
+import de.monticore.lang.montiarc.cocos.automaton.correctness.GuardIsNotBoolean;
+import de.monticore.lang.montiarc.cocos.automaton.correctness.InitialReactionTypeDoesNotFitOutputType;
+import de.monticore.lang.montiarc.cocos.automaton.correctness.InitialValueDoesNotFit;
+import de.monticore.lang.montiarc.cocos.automaton.correctness.ReactionTypeDoesNotFitOutputType;
+import de.monticore.lang.montiarc.cocos.automaton.correctness.StimulusTypeDoesNotFitInputType;
+import de.monticore.lang.montiarc.cocos.automaton.integrity.AssignmentHasNoName;
+import de.monticore.lang.montiarc.cocos.automaton.integrity.DeclaredInitialStateDoesNotExist;
+import de.monticore.lang.montiarc.cocos.automaton.integrity.MultipleInitialStates;
+import de.monticore.lang.montiarc.cocos.automaton.integrity.UseOfAlternatives;
+import de.monticore.lang.montiarc.cocos.automaton.integrity.UseOfUndeclaredField;
+import de.monticore.lang.montiarc.cocos.automaton.integrity.UseOfUndeclaredState;
+import de.monticore.lang.montiarc.cocos.automaton.integrity.UseOfValueLists;
+import de.monticore.lang.montiarc.cocos.automaton.uniqueness.InitialDeclaredMultipleTimes;
+import de.monticore.lang.montiarc.cocos.automaton.uniqueness.StateDefinedMultipleTimes;
+import de.monticore.lang.montiarc.cocos.automaton.uniqueness.StateDefinedMultipleTimesStereotypesDontMatch;
 import de.monticore.lang.montiarc.cocos.javap.UsedPortsVariablesExistCoCo;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTConnectorCoCo;
+import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTInitialStateDeclarationCoCo;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
+import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTTransitionCoCo;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcCoCoChecker;
 
 /**
@@ -35,14 +60,50 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointCorrectlyQualified())
         .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointCorrectlyQualified())
         .addCoCo(new InPortUniqueSender())
-        /* Java/P Cocos */
+        
+        /// Java/P Cocos ///////////////////////////////////////////////////////////// 
         .addCoCo(new SimpleConnectorSourceExists())
         .addCoCo(new ReferencedSubComponentExists())
         .addCoCo(new UsedPortsVariablesExistCoCo())
         .addCoCo(new MultipleBehaviorImplementation())
         /* MontiArcAutomaton Cocos */
+        .addCoCo(new ComponentVariableNameIsLowerCase())
+        
+        /// Automaton Cocos ///////////////////////////////////////////////////////////// 
         .addCoCo(new ImplementationInNonAtomicComponent())
-        .addCoCo(new AutomatonUppercase());
-    	// @JP: AutomatonCoCos fehlen
+        .addCoCo(new AutomatonUppercase())
+        
+    	// CONVENTIONS
+        .addCoCo(new AutomatonHasNoState())
+        .addCoCo(new AutomatonHasNoInitialState())
+        .addCoCo(new CorrectAssignmentOperators())
+        .addCoCo(new MultipleAssignmentsSameIdentifier())
+        .addCoCo(new OutputInExpression())
+        .addCoCo((MontiArcASTInitialStateDeclarationCoCo)new ReactionWithAlternatives())
+        .addCoCo((MontiArcASTTransitionCoCo)new ReactionWithAlternatives())
+        .addCoCo(new UseOfForbiddenExpression())
+        .addCoCo(new StateUppercase())
+        
+        // REFERENTIAL INTEGRITY
+        .addCoCo(new DeclaredInitialStateDoesNotExist())
+        .addCoCo(new UseOfUndeclaredField())
+        .addCoCo(new UseOfUndeclaredState())
+        .addCoCo(new AssignmentHasNoName())
+        
+        // TYPE CORRECTNESS
+        .addCoCo(new GuardIsNotBoolean())
+        .addCoCo(new StimulusTypeDoesNotFitInputType())
+        .addCoCo(new InitialReactionTypeDoesNotFitOutputType())
+        .addCoCo(new ReactionTypeDoesNotFitOutputType())
+        .addCoCo(new InitialValueDoesNotFit())
+        
+        // UNIQUENESS OF NAMES
+        .addCoCo(new StateDefinedMultipleTimesStereotypesDontMatch())
+        .addCoCo(new ComponentVariableDefinedMultipleTimes())
+        .addCoCo(new InitialDeclaredMultipleTimes())
+        .addCoCo(new StateDefinedMultipleTimes())
+        .addCoCo(new MultipleInitialStates())
+        .addCoCo(new UseOfAlternatives())
+        .addCoCo(new UseOfValueLists());
   }
 }
