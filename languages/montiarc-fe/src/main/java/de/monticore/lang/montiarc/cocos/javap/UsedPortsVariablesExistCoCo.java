@@ -15,7 +15,7 @@ import de.monticore.lang.montiarc.montiarc._ast.ASTJavaPInitializer;
 import de.monticore.lang.montiarc.montiarc._ast.ASTVariableInitialization;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTComponentCoCo;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentVariableSymbol;
+import de.monticore.lang.montiarc.montiarc._symboltable.VariableSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.JavaBehaviorSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.JavaVariableReferenceSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
@@ -57,8 +57,8 @@ public class UsedPortsVariablesExistCoCo
           String name = Names.getQualifiedName(i.getQualifiedName().getParts());
           Optional<PortSymbol> port = cmp.getSpannedScope().<PortSymbol> resolve(name,
               PortSymbol.KIND);
-          Optional<ComponentVariableSymbol> compVar = cmp.getSpannedScope()
-              .<ComponentVariableSymbol> resolve(name, ComponentVariableSymbol.KIND);
+          Optional<VariableSymbol> compVar = cmp.getSpannedScope()
+              .<VariableSymbol> resolve(name, VariableSymbol.KIND);
           Optional<JFieldSymbol> cmpParameter = cmp.getConfigParameters().stream()
               .filter(p -> p.getName().equals(name)).findFirst();
           if (!port.isPresent() && !compVar.isPresent() && !cmpParameter.isPresent()) {
@@ -93,8 +93,8 @@ public class UsedPortsVariablesExistCoCo
             PortSymbol.KIND);
         Optional<JavaFieldSymbol> definedField = ajavaDef.getSpannedScope()
             .<JavaFieldSymbol> resolveLocally(varName, JavaFieldSymbol.KIND);
-        Optional<ComponentVariableSymbol> compVar = cmp.getSpannedScope()
-            .<ComponentVariableSymbol> resolve(varName, ComponentVariableSymbol.KIND);
+        Optional<VariableSymbol> compVar = cmp.getSpannedScope()
+            .<VariableSymbol> resolve(varName, VariableSymbol.KIND);
         Optional<JFieldSymbol> cmpParameter = cmp.getConfigParameters().stream()
             .filter(p -> p.getName().equals(varName)).findFirst();
         if (!port.isPresent() && !compVar.isPresent() && !definedField.isPresent() && !cmpParameter.isPresent()) {

@@ -191,9 +191,14 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.Ja
   /**
   * A variable can be used in the behavior implementation of a component.
   */
-  ComponentVariableDeclaration implements Element = "var"? ComponentVariable ("," ComponentVariable)* ";";
+  ComponentVariableDeclaration implements Element = "var"? Variable ("," Variable)* ";";
   
-  ComponentVariable = Type Name ("=" Valuation)?;
+  /**
+   * A component variable
+   * @attribute Name: The name of the variable
+   */
+  Variable@! = Type Name; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
+  
   //@JP: Auch gut (auch für Ports): var Int summandA, summandB;
 
   /**
@@ -363,40 +368,7 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.Ja
    * NoData should implement literal value.
    */
   NoData implements Value = "--";    
-  
-  /**
-   * Declaration of the variables used in the stimuli
-   * @attribute Type: The type of the variable, e.g. "int"
-   * @attribute Variable: The variable
-   */     
-  // InputDeclaration = "input" Type Variable ("," Variable)* ";";
-  // @JP: This rule is not necessary anymore, as automate operate within 
-  // components only. Hence, they operate on ports. 
-  
-  /**
-   * Declaration of the variables used in the reaction
-   * @attribute Type: The type of the variable, e.g. "int"
-   * @attribute Variable: The variable
-   */
-  // OutputDeclaration = "output" Type Variable ("," Variable)* ";";
-  // @JP: This rule is not necessary anymore, as automate operate within 
-  // components only. Hence, they operate on ports.
-  
-  /**
-   * Declaration of local variable used in stimulus, guard and output.
-   * @attribute Type: The type of the variable, e.g. "int"
-   * @attribute Variable: The variable which should be a local variable.
-   *
-   */ 
-  // VariableDeclaration = "variable" Type Variable ("," Variable)* ";";
-  // @JP: This rule is not necessary anymore, as automate operate within 
-  // components only. Hence, they operate on the component's variables.
-  
-  /**
-   * A automaton variable
-   * @attribute Name: The name of the variable
-   */
-  Variable@! = Name ("=" Valuation)?;
+ 
      
   /**
    * A block containing a row of assignments, e.g. "a = 5 , b = Q.fetchX()"

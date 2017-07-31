@@ -378,13 +378,13 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
         .collect(Collectors.toList());
   }
   
-  public Collection<ComponentVariableSymbol> getComponentVariables() {
+  public Collection<VariableSymbol> getVariables() {
     return referencedComponent.orElse(this).getSpannedScope()
-        .<ComponentVariableSymbol> resolveLocally(ComponentVariableSymbol.KIND);
+        .<VariableSymbol> resolveLocally(VariableSymbol.KIND);
   }
   
-  public Optional<ComponentVariableSymbol> getComponentVariable(String name) {
-    return getComponentVariables().stream().filter(v -> v.getName().equals(name)).findFirst();
+  public Optional<VariableSymbol> getVariable(String name) {
+    return getVariables().stream().filter(v -> v.getName().equals(name)).findFirst();
   }
   
 

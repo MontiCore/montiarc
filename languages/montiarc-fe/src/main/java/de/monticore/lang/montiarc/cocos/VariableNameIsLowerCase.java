@@ -1,7 +1,7 @@
 package de.monticore.lang.montiarc.cocos;
 
-import de.monticore.lang.montiarc.montiarc._ast.ASTComponentVariable;
-import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTComponentVariableCoCo;
+import de.monticore.lang.montiarc.montiarc._ast.ASTVariable;
+import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTVariableCoCo;
 import de.se_rwth.commons.logging.Log;
 
 /**
@@ -10,10 +10,10 @@ import de.se_rwth.commons.logging.Log;
  * 
  * @author Gerrit Leonhardt, Andreas Wortmann
  */
-public class ComponentVariableNameIsLowerCase implements MontiArcASTComponentVariableCoCo {
+public class VariableNameIsLowerCase implements MontiArcASTVariableCoCo {
 
   @Override
-  public void check(ASTComponentVariable var) {
+  public void check(ASTVariable var) {
       if (!Character.isLowerCase(var.getName().charAt(0))) {
         Log.warn("0xAA160 The name of variable " + var.getName() + " should start with a lowercase letter.", var.get_SourcePositionStart());
       }

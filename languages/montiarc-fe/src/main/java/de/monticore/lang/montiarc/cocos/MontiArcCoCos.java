@@ -17,7 +17,6 @@ import de.monticore.lang.montiarc.cocos.automaton.conventions.StateUppercase;
 import de.monticore.lang.montiarc.cocos.automaton.conventions.UseOfForbiddenExpression;
 import de.monticore.lang.montiarc.cocos.automaton.correctness.GuardIsNotBoolean;
 import de.monticore.lang.montiarc.cocos.automaton.correctness.InitialReactionTypeDoesNotFitOutputType;
-import de.monticore.lang.montiarc.cocos.automaton.correctness.InitialValueDoesNotFit;
 import de.monticore.lang.montiarc.cocos.automaton.correctness.ReactionTypeDoesNotFitOutputType;
 import de.monticore.lang.montiarc.cocos.automaton.correctness.StimulusTypeDoesNotFitInputType;
 import de.monticore.lang.montiarc.cocos.automaton.integrity.AssignmentHasNoName;
@@ -67,7 +66,7 @@ public class MontiArcCoCos {
         .addCoCo(new UsedPortsVariablesExistCoCo())
         .addCoCo(new MultipleBehaviorImplementation())
         /* MontiArcAutomaton Cocos */
-        .addCoCo(new ComponentVariableNameIsLowerCase())
+        .addCoCo(new VariableNameIsLowerCase())
         
         /// Automaton Cocos ///////////////////////////////////////////////////////////// 
         .addCoCo(new ImplementationInNonAtomicComponent())
@@ -95,11 +94,10 @@ public class MontiArcCoCos {
         .addCoCo(new StimulusTypeDoesNotFitInputType())
         .addCoCo(new InitialReactionTypeDoesNotFitOutputType())
         .addCoCo(new ReactionTypeDoesNotFitOutputType())
-        .addCoCo(new InitialValueDoesNotFit())
         
         // UNIQUENESS OF NAMES
         .addCoCo(new StateDefinedMultipleTimesStereotypesDontMatch())
-        .addCoCo(new ComponentVariableDefinedMultipleTimes())
+        .addCoCo(new VariableDefinedMultipleTimes())
         .addCoCo(new InitialDeclaredMultipleTimes())
         .addCoCo(new StateDefinedMultipleTimes())
         .addCoCo(new MultipleInitialStates())

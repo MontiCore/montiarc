@@ -25,7 +25,6 @@ import de.monticore.lang.montiarc.common._ast.ASTParameter;
 import de.monticore.lang.montiarc.helper.Timing;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponentHead;
-import de.monticore.lang.montiarc.montiarc._ast.ASTComponentVariable;
 import de.monticore.lang.montiarc.montiarc._ast.ASTJavaPBehavior;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMACompilationUnit;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcAutoConnect;
@@ -33,6 +32,7 @@ import de.monticore.lang.montiarc.montiarc._ast.ASTPort;
 import de.monticore.lang.montiarc.montiarc._ast.ASTSimpleConnector;
 import de.monticore.lang.montiarc.montiarc._ast.ASTSubComponent;
 import de.monticore.lang.montiarc.montiarc._ast.ASTSubComponentInstance;
+import de.monticore.lang.montiarc.montiarc._ast.ASTVariable;
 import de.monticore.lang.montiarc.trafos.AutoConnection;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.ArtifactScope;
@@ -156,12 +156,12 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   @Override
-  public void visit(ASTComponentVariable node) {
+  public void visit(ASTVariable node) {
     ASTType astType = node.getType();
     String typeName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astType);
     
     String name = node.getName();
-    ComponentVariableSymbol sym = new ComponentVariableSymbol(name);
+    VariableSymbol sym = new VariableSymbol(name);
     
     JTypeReference<JTypeSymbol> typeRef = new MAJTypeReference(typeName, JTypeSymbol.KIND,  currentScope().get());
     
