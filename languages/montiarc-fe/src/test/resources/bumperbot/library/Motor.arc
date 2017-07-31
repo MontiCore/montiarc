@@ -1,6 +1,6 @@
 package bumperbot.library;
 
-import bumperbot.library.types.*; 
+import bumperbot.library.Types.*; 
  
 component Motor(String name, String typ = "BACK") {
     port
