@@ -18,17 +18,17 @@ public class ConventionsTest extends AutomatonAbstractCocoTest {
   }
   
   @Test
-  public void testAutomatonBehaviorImplementation() {
-    ASTMontiArcNode node = getAstNode("src/test/resources/", "automaton.invalid.InvalidAutomatonBehaviorImpl");
+  public void testMutipleBehaviors() {
+    ASTMontiArcNode node = getAstNode("src/test/resources/", "automaton.invalid.MutipleBehaviors");
     checkInvalid(node, new ExpectedErrorInfo(3, "xAB140", "xAB130"));
   }
   
   @Test
-  public void testInvalidCDExplicit() {
+  public void testLowerCaseEnumeration() {
     Log.getFindings().clear();
     // loads the CD explicitly and checks its cocos
     Scope symTab = createSymTab("src/test/resources/");
-    CDFieldSymbol symbol = symTab.<CDFieldSymbol> resolve("automaton.invalid.InvalidDatatypes.invalidType.A", CDFieldSymbol.KIND).orElse(null);
+    symTab.<CDFieldSymbol> resolve("automaton.invalid.LowerCaseEnumeration.lowerCaseEnumeration.A", CDFieldSymbol.KIND).orElse(null);
     new ExpectedErrorInfo(1, "xC4A05").checkFindings(Log.getFindings());
     // @JP: Was sollte xC4A05 tun und wieso tut es das nicht?
   }

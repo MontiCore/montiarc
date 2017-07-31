@@ -44,6 +44,12 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
     addResolver(CommonResolvingFilter.create(JFieldSymbol.KIND));
     addResolver(CommonResolvingFilter.create(JMethodSymbol.KIND));
     
+    // I/O Automaton
+    addResolver(new VariableResolvingFilter());
+    addResolver(new StateResolvingFilter());
+    addResolver(new TransitionResolvingFilter());
+    addResolver(new Variable2FieldResolvingFilter());
+    
     //TODO enable to resolve type arguments of subcomponents
     addResolver(new CDTypeSymbol2JavaTypeFilter());
     addResolver(new CDFieldSymbol2JavaFieldFilter());
