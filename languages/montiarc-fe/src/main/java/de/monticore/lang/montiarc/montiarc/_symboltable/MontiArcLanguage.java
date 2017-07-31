@@ -37,22 +37,22 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
     addResolver(new CommonResolvingFilter<VariableSymbol>(VariableSymbol.KIND));
     
     // Java/P
-//    addResolver(new CommonResolvingFilter<>(JavaBehaviorSymbol.KIND));
-//    addResolver(new CommonResolvingFilter<>(JavaVariableReferenceSymbol.KIND));
+    addResolver(new CommonResolvingFilter<>(JavaBehaviorSymbol.KIND));
+    addResolver(new CommonResolvingFilter<>(JavaVariableReferenceSymbol.KIND));
     
     addResolver(CommonResolvingFilter.create(JTypeSymbol.KIND));
-//    addResolver(CommonResolvingFilter.create(JFieldSymbol.KIND));
-//    addResolver(CommonResolvingFilter.create(JMethodSymbol.KIND));
+    addResolver(CommonResolvingFilter.create(JFieldSymbol.KIND));
+    addResolver(CommonResolvingFilter.create(JMethodSymbol.KIND));
 //    
 //    // I/O Automaton
-//    addResolver(new VariableResolvingFilter());
-//    addResolver(new StateResolvingFilter());
-//    addResolver(new TransitionResolvingFilter());
-//    addResolver(new Variable2FieldResolvingFilter());
+    addResolver(new VariableResolvingFilter());
+    addResolver(new StateResolvingFilter());
+    addResolver(new TransitionResolvingFilter());
+    addResolver(new Variable2FieldResolvingFilter());
     
     //TODO enable to resolve type arguments of subcomponents
     addResolver(new CDTypeSymbol2JavaTypeFilter());
-//    addResolver(new CDFieldSymbol2JavaFieldFilter());
+    addResolver(new CDFieldSymbol2JavaFieldFilter());
 
     setModelNameCalculator(new MontiArcModelNameCalculator());
   }
