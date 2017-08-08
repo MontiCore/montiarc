@@ -6,6 +6,7 @@
 package de.monticore.lang.montiarc.montiarc._symboltable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 import java.util.Optional;
@@ -23,16 +24,24 @@ import de.monticore.lang.expression.symboltable.ValueSymbol;
 import de.monticore.lang.expression.symboltable.ValueSymbol.Kind;
 import de.monticore.lang.montiarc.common._ast.ASTParameter;
 import de.monticore.lang.montiarc.helper.Timing;
+import de.monticore.lang.montiarc.montiarc._ast.ASTAutomaton;
+import de.monticore.lang.montiarc.montiarc._ast.ASTAutomatonBehavior;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponentHead;
+import de.monticore.lang.montiarc.montiarc._ast.ASTIOAssignment;
+import de.monticore.lang.montiarc.montiarc._ast.ASTInitialStateDeclaration;
 import de.monticore.lang.montiarc.montiarc._ast.ASTJavaPBehavior;
+import de.monticore.lang.montiarc.montiarc._ast.ASTJavaPInitializer;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMACompilationUnit;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcAutoConnect;
 import de.monticore.lang.montiarc.montiarc._ast.ASTPort;
 import de.monticore.lang.montiarc.montiarc._ast.ASTSimpleConnector;
+import de.monticore.lang.montiarc.montiarc._ast.ASTState;
 import de.monticore.lang.montiarc.montiarc._ast.ASTSubComponent;
 import de.monticore.lang.montiarc.montiarc._ast.ASTSubComponentInstance;
+import de.monticore.lang.montiarc.montiarc._ast.ASTTransition;
 import de.monticore.lang.montiarc.montiarc._ast.ASTVariable;
+import de.monticore.lang.montiarc.montiarc._ast.ASTVariableInitialization;
 import de.monticore.lang.montiarc.trafos.AutoConnection;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.ArtifactScope;
@@ -74,7 +83,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   
   private String compilationUnitPackage = "";
   
-  // extra stack of components that is used to determine which components are inner components.
+  // extra stack of components that is used to determine which components are
+  // inner components.
   private Stack<ComponentSymbol> componentStack = new Stack<>();
   
   private List<ImportStatement> currentImports = new ArrayList<>();
@@ -82,10 +92,10 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   private AutoConnection autoConnectionTrafo = new AutoConnection();
   
   private final static JavaSymbolFactory jSymbolFactory = new JavaSymbolFactory();
-
+  
   private final static JTypeReferenceFactory<JavaTypeSymbolReference> jTypeRefFactory = (name,
       scope, dim) -> new JavaTypeSymbolReference(name, scope, dim);
-
+  
   public MontiArcSymbolTableCreator(
       final ResolvingConfiguration resolverConfig,
       final MutableScope enclosingScope) {
@@ -136,7 +146,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     String name = node.getName().orElse(StringTransformations.uncapitalize(typeName));
     PortSymbol sym = new PortSymbol(name);
     
-    JTypeReference<JTypeSymbol> typeRef = new MAJTypeReference(typeName, JTypeSymbol.KIND, currentScope().get());
+    JTypeReference<JTypeSymbol> typeRef = new MAJTypeReference(typeName, JTypeSymbol.KIND,
+        currentScope().get());
     
     typeRef.setDimension(TypesHelper.getArrayDimensionIfArrayOrZero(astType));
     
@@ -163,16 +174,21 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     String name = node.getName();
     VariableSymbol sym = new VariableSymbol(name);
     
-    JTypeReference<JTypeSymbol> typeRef = new MAJTypeReference(typeName, JTypeSymbol.KIND,  currentScope().get());
+    JTypeReference<JTypeSymbol> typeRef = new MAJTypeReference(typeName, JTypeSymbol.KIND,
+        currentScope().get());
     
     typeRef.setDimension(TypesHelper.getArrayDimensionIfArrayOrZero(astType));
     
     sym.setTypeReference(typeRef);
     
+    // TODO initialize variable in init() block
+    
     addToScopeAndLinkWithNode(sym, node);
   }
   
-  private void addTypeArgumentsToTypeSymbol(JTypeReference<? extends JTypeSymbol> typeRef, ASTType astType) {
+
+  private void addTypeArgumentsToTypeSymbol(JTypeReference<? extends JTypeSymbol> typeRef,
+      ASTType astType) {
     JTypeSymbolsHelper.addTypeArgumentsToTypeSymbol(typeRef, astType, currentScope().get(),
         new JTypeSymbolsHelper.CommonJTypeReferenceFactory());
   }
@@ -213,7 +229,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     // ref.setPackageName(refCompPackage);
     
-    // TODO internal representation of ValueSymbol ? that was heavily based on CommonValues
+    // TODO internal representation of ValueSymbol ? that was heavily based on
+    // CommonValues
     // language and its expressions, but we use JavaDSL.
     List<ValueSymbol<TypeReference<TypeSymbol>>> configArgs = new ArrayList<>();
     for (ASTExpression arg : node.getArguments()) {
@@ -356,8 +373,10 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     removeCurrentScope();
     
-    // for inner components the symbol must be fully created to reference it. Hence, in endVisit we
-    // can reference it and put the instance of the inner component into its parent scope.
+    // for inner components the symbol must be fully created to reference it.
+    // Hence, in endVisit we
+    // can reference it and put the instance of the inner component into its
+    // parent scope.
     
     if (component.isInnerComponent()) {
       String referencedComponentTypeName = component.getFullName();
@@ -371,7 +390,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
             .orElse(StringTransformations.uncapitalize(component.getName()));
         
         if (node.getActualTypeArgument().isPresent()) {
-          setActualTypeArgumentsOfCompRef(refEntry, node.getActualTypeArgument().get().getTypeArguments());
+          setActualTypeArgumentsOfCompRef(refEntry,
+              node.getActualTypeArgument().get().getTypeArguments());
         }
         
         ComponentInstanceSymbol instanceSymbol = new ComponentInstanceSymbol(instanceName,
@@ -438,7 +458,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     }
     typeReference.setActualTypeArguments(actualTypeArguments);
   }
-
+  
   protected JTypeReferenceFactory<JavaTypeSymbolReference> typeRefFactory = (name, scope,
       dim) -> new JavaTypeSymbolReference(name, scope, dim);
   
@@ -457,17 +477,19 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       for (ASTSimpleReferenceType astSimpleReferenceType : astComplexReferenceType
           .getSimpleReferenceTypes()) {
         // TODO
-        /* ASTComplexReferenceType represents types like class or interface types which always have
-         * ASTSimpleReferenceType as qualification. For example: a.b.c<Arg>.d.e<Arg> */
+        /* ASTComplexReferenceType represents types like class or interface
+         * types which always have ASTSimpleReferenceType as qualification. For
+         * example: a.b.c<Arg>.d.e<Arg> */
       }
     }
     
   }
   
   /**
-   * Adds the TypeParameters to the ComponentSymbol if it declares TypeVariables. Since the
-   * restrictions on TypeParameters may base on the JavaDSL its the actual recursive definition of
-   * bounds is respected and its implementation within the JavaDSL is reused. Example:
+   * Adds the TypeParameters to the ComponentSymbol if it declares
+   * TypeVariables. Since the restrictions on TypeParameters may base on the
+   * JavaDSL its the actual recursive definition of bounds is respected and its
+   * implementation within the JavaDSL is reused. Example:
    * <p>
    * component Bla<T, S extends SomeClass<T> & SomeInterface>
    * </p>
@@ -482,7 +504,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       ComponentSymbol componentSymbol, Optional<ASTTypeParameters> optionalTypeParameters,
       Scope currentScope) {
     if (optionalTypeParameters.isPresent()) {
-      // component has type parameters -> translate AST to Java Symbols and add these to the
+      // component has type parameters -> translate AST to Java Symbols and add
+      // these to the
       // componentSymbol.
       ASTTypeParameters astTypeParameters = optionalTypeParameters.get();
       for (ASTTypeVariableDeclaration astTypeParameter : astTypeParameters
@@ -508,13 +531,13 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   
   @Override
   public void visit(ASTJavaPBehavior node) {
-	String name = node.getName().orElse("JavaP");
-	JavaBehaviorSymbol ajavaDef = new JavaBehaviorSymbol(name);
+    String name = node.getName().orElse("JavaP");
+    JavaBehaviorSymbol ajavaDef = new JavaBehaviorSymbol(name);
     addToScopeAndLinkWithNode(ajavaDef, node);
   }
   
   @Override
-  public void endVisit(ASTJavaPBehavior node){
+  public void endVisit(ASTJavaPBehavior node) {
     removeCurrentScope();
   }
   
@@ -524,9 +547,108 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   @Override
   public void visit(ASTPrimaryExpression node) {
     super.visit(node);
-    if (node.getName().isPresent() && Character.isLowerCase(node.getName().get().charAt(0))){
+    if (node.getName().isPresent() && Character.isLowerCase(node.getName().get().charAt(0))) {
       JavaVariableReferenceSymbol variable = new JavaVariableReferenceSymbol(node.getName().get());
       addToScopeAndLinkWithNode(variable, node);
     }
   }
+  
+  /***************************************
+   * I/O Automaton integration
+   ***************************************/
+  
+  /**
+   * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#visit(de.monticore.lang.montiarc.montiarc._ast.ASTAutomatonBehavior)
+   */
+  @Override
+  public void visit(ASTAutomatonBehavior node) {
+    if (node.getName().isPresent()) {
+      AutomatonSymbol aut = new AutomatonSymbol(node.getName().get());
+      addToScopeAndLinkWithNode(aut, node);
+    }
+    
+  }
+  
+  /**
+   * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#endVisit(de.monticore.lang.montiarc.montiarc._ast.ASTAutomatonBehavior)
+   */
+  @Override
+  public void endVisit(ASTAutomatonBehavior node) {
+    removeCurrentScope();
+  }
+  
+  /**
+   * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#visit(de.monticore.lang.montiarc.montiarc._ast.ASTAutomaton)
+   */
+  @Override
+  public void visit(ASTAutomaton node) {
+    node.setEnclosingScope(currentScope().get());
+  }
+  
+  @Override
+  public void endVisit(ASTAutomaton node) {
+    setEnclosingScopeOfNodes(node);
+    // automaton core loaded & all enclosing scopes set, so we can reconstruct
+    // the missing assignment names
+    node.accept(new AssignmentNameCompleter(currentScope().get()));
+  }
+  
+  /**
+   * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#visit(de.monticore.lang.montiarc.montiarc._ast.ASTState)
+   */
+  @Override
+  public void visit(ASTState node) {
+    StateSymbol state = new StateSymbol(node.getName());
+    if (node.getStereotype().isPresent()) {
+      for (ASTStereoValue value : node.getStereotype().get().getValues()) {
+        state.addStereoValue(value.getName());
+      }
+    }
+    addToScopeAndLinkWithNode(state, node);
+  }
+  
+  /**
+   * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#visit(de.monticore.lang.montiarc.montiarc._ast.ASTInitialStateDeclaration)
+   */
+  @Override
+  public void visit(ASTInitialStateDeclaration node) {
+    MutableScope scope = currentScope().get();
+    for (String name : node.getNames()) {
+      scope.<StateSymbol> resolveMany(name, StateSymbol.KIND).forEach(c -> {
+        c.setInitial(true);
+        c.setInitialReactionAST(node.getBlock());
+      });
+    }
+  }
+  
+  @Override
+  public void visit(ASTTransition node) {
+    // get target name, if there is no get source name (loop to itself)
+    // TODO what about same transitions with other stimulus? -> name clash
+    String targetName = node.getTarget().orElse(node.getSource());
+    
+    StateSymbolReference source = new StateSymbolReference(node.getSource(), currentScope().get());
+    StateSymbolReference target = new StateSymbolReference(targetName, currentScope().get());
+    
+    TransitionSymbol transition = new TransitionSymbol(node.getSource() + " -> " + targetName);
+    transition.setSource(source);
+    transition.setTarget(target);
+    
+    transition.setGuardAST(node.getGuard());
+    transition.setReactionAST(node.getReaction());
+    transition.setStimulusAST(node.getStimulus());
+    
+    addToScopeAndLinkWithNode(transition, node); // introduces new scope
+  }
+  
+  @Override
+  public void endVisit(ASTTransition node) {
+    removeCurrentScope();
+  }
+  
+  @Override
+  public void visit(ASTIOAssignment node) {
+    node.setEnclosingScope(currentScope().get());
+  }
+  
 }

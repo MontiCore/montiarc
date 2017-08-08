@@ -7,7 +7,7 @@ import javap.valid.bumperbot.Datatypes.TimerCmd;
 component ComponentWithAJavaAndAutomaton {
 
   port
-    in Double distance,
+    in Integer distance,
     in TimerSignal signal,
     out TimerCmd timer,
     out MotorCommand right,

@@ -9,8 +9,8 @@ import de.monticore.lang.montiarc.montiarc._ast.ASTIOAssignment;
 import de.monticore.lang.montiarc.montiarc._ast.ASTInitialStateDeclaration;
 import de.monticore.lang.montiarc.montiarc._ast.ASTValuation;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTInitialStateDeclarationCoCo;
+import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.VariableSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.VariableSymbol.Direction;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.se_rwth.commons.logging.Log;
@@ -34,29 +34,35 @@ public class InitialReactionTypeDoesNotFitOutputType implements MontiArcASTIniti
         if (assign.getName().isPresent()) {
           String currentNameToResolve = assign.getName().get();
           
-          Optional<VariableSymbol> symbol = node.getEnclosingScope().get().resolve(currentNameToResolve, VariableSymbol.KIND);
-          
-          if (symbol.isPresent()) {
-            if (symbol.get().getDirection() == Direction.Input) {
+          Optional<VariableSymbol> varSymbol = node.getEnclosingScope().get().resolve(currentNameToResolve, VariableSymbol.KIND);
+          Optional<PortSymbol> portSymbol = node.getEnclosingScope().get().resolve(currentNameToResolve, PortSymbol.KIND);
+          if (portSymbol.isPresent()) {
+            if (portSymbol.get().isIncoming()) {
               Log.error("0xAA410 Did not find matching Variable or Output with name " + currentNameToResolve, assign.get_SourcePositionStart());
             }
             else {
-              // We now have the field with the type of the variable/output
-              if (assign.valueListIsPresent()) {
-                JTypeReference<? extends JTypeSymbol> varType = symbol.get().getTypeReference();
-                for (ASTValuation val : assign.getValueList().get().getAllValuations()) {
-                  Optional<? extends JavaTypeSymbolReference> exprType = TypeCompatibilityChecker.getExpressionType((ASTExpression) val);
-                  if (!exprType.isPresent()) {
-                    Log.error("0xAA412 Could not resolve type of expression for checking the initial reaction.", assign.get_SourcePositionStart());
-                  }
-                  else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType)) {
-                    Log.error("0xAA411 Type of Variable/Output " + currentNameToResolve + " in the initial state declaration does not match the type of its assigned expression. Type " + 
-                          exprType.get().getName() + " can not cast to type " + varType.getName() + ".", val.get_SourcePositionStart());
-                  }
-                }
-              }
+              checkAssignment(assign, portSymbol.get().getTypeReference(), currentNameToResolve);
             }
           }
+          else if(varSymbol.isPresent()) {
+            checkAssignment(assign, varSymbol.get().getTypeReference(), currentNameToResolve);
+          }
+        }
+      }
+    }
+  }
+  
+  private void checkAssignment(ASTIOAssignment assign, JTypeReference<? extends JTypeSymbol> typeRef, String currentNameToResolve) {
+    if (assign.valueListIsPresent()) {
+      JTypeReference<? extends JTypeSymbol> varType = typeRef;
+      for (ASTValuation val : assign.getValueList().get().getAllValuations()) {
+        Optional<? extends JavaTypeSymbolReference> exprType = TypeCompatibilityChecker.getExpressionType(val.getExpression());
+        if (!exprType.isPresent()) {
+          Log.error("0xAA412 Could not resolve type of expression for checking the initial reaction.", assign.get_SourcePositionStart());
+        }
+        else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType)) {
+          Log.error("0xAA411 Type of Variable/Output " + currentNameToResolve + " in the initial state declaration does not match the type of its assigned expression. Type " + 
+                exprType.get().getName() + " can not cast to type " + varType.getName() + ".", val.get_SourcePositionStart());
         }
       }
     }

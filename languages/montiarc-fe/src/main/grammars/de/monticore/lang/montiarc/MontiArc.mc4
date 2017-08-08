@@ -250,7 +250,8 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.Ja
         VariableInitialization* 
       "}";
   
-  VariableInitialization = QualifiedName "=" value:Expression ";";
+  // @AW: Umbenennen auf JavaPInitialisation, da hier auch Ports initialisiert werden können.
+  VariableInitialization = QualifiedName "=" Valuation ";";
     
   JavaPBehavior implements BehaviorElement 
     = "compute" Name? "{" 
@@ -269,30 +270,7 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.Ja
    
   // IO-Automaton body is used as behavior embedding  
   AutomatonBehavior implements BehaviorElement = "automaton" Name? "{" Automaton "}"; 
-  // @JO: War "AutomatonDefinition" 
-
-  /**
-   * An Automaton only AutomatonCore to simplify later embedding
-   * @attribute Stereotype: The optional stereotype of the automaton, 
-   *                        e.g. <<Public>>
-   * @attribute Name: The name of the automaton
-   * @attribute AutomatonCore: The automaton body
-   */
-  // Automaton@! = Stereotype? "automaton" Name "{"
-  //  AutomatonBody
-  // "}";
-  // @JP: This rule is not necessary anymore, as automata operate within 
-  // components only. Hence, there are no stand-alone automata anymore.
-    
-  /**
-   * This is the body of the automaton
-   * @attribute AutomatonContext: Declaration of all Inputs/Outputs/Variables
-   * @attribute AutomatonContent: Declaration of all States/Transitions
-   */
-  // AutomatonBody@! = AutomatonContext AutomatonContent;
-  // @JP: This rule is not necessary anymore, as automata operate within 
-  // components only. Hence, there are no stand-alone automata anymore.
-    
+      
   interface GuardExpression;
   
   JavaGuardExpression implements GuardExpression = Expression; // use at least Java expressions for guards
