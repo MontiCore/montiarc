@@ -14,16 +14,16 @@ component MutipleBehaviors {
   }
   
   automaton DuplicatedAutomatonImpl {  
-  	state Start;
-    initial Start;
+  	state Beginn;
+    initial Beginn;
 
-    Start;
+    Beginn;
   }
   
   automaton lowercaseName {
-  	state Start;
-    initial Start;
+  	state Anfang;
+    initial Anfang;
 
-    Start -> Start [c < 2];
+    Anfang -> Anfang [a > 2];
   }
 }

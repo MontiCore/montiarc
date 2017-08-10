@@ -1,13 +1,12 @@
 package de.monticore.lang.montiarc.montiarc._symboltable;
 
 import java.util.ArrayList;
-
 import java.util.List;
 
-import de.monticore.symboltable.CommonSymbol;
+import de.monticore.symboltable.CommonScopeSpanningSymbol;
 import de.monticore.symboltable.ImportStatement;
 
-public class AutomatonSymbol extends CommonSymbol {
+public class AutomatonSymbol extends CommonScopeSpanningSymbol {
   private List<String> stereoValues; 
   private List<ImportStatement> imports;
   

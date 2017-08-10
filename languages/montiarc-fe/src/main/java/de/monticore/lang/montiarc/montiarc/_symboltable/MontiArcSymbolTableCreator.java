@@ -6,7 +6,6 @@
 package de.monticore.lang.montiarc.montiarc._symboltable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +30,6 @@ import de.monticore.lang.montiarc.montiarc._ast.ASTComponentHead;
 import de.monticore.lang.montiarc.montiarc._ast.ASTIOAssignment;
 import de.monticore.lang.montiarc.montiarc._ast.ASTInitialStateDeclaration;
 import de.monticore.lang.montiarc.montiarc._ast.ASTJavaPBehavior;
-import de.monticore.lang.montiarc.montiarc._ast.ASTJavaPInitializer;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMACompilationUnit;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcAutoConnect;
 import de.monticore.lang.montiarc.montiarc._ast.ASTPort;
@@ -41,7 +39,6 @@ import de.monticore.lang.montiarc.montiarc._ast.ASTSubComponent;
 import de.monticore.lang.montiarc.montiarc._ast.ASTSubComponentInstance;
 import de.monticore.lang.montiarc.montiarc._ast.ASTTransition;
 import de.monticore.lang.montiarc.montiarc._ast.ASTVariable;
-import de.monticore.lang.montiarc.montiarc._ast.ASTVariableInitialization;
 import de.monticore.lang.montiarc.trafos.AutoConnection;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.ArtifactScope;
@@ -186,7 +183,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     addToScopeAndLinkWithNode(sym, node);
   }
   
-
   private void addTypeArgumentsToTypeSymbol(JTypeReference<? extends JTypeSymbol> typeRef,
       ASTType astType) {
     JTypeSymbolsHelper.addTypeArgumentsToTypeSymbol(typeRef, astType, currentScope().get(),
@@ -477,19 +473,17 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       for (ASTSimpleReferenceType astSimpleReferenceType : astComplexReferenceType
           .getSimpleReferenceTypes()) {
         // TODO
-        /* ASTComplexReferenceType represents types like class or interface
-         * types which always have ASTSimpleReferenceType as qualification. For
-         * example: a.b.c<Arg>.d.e<Arg> */
+        /* ASTComplexReferenceType represents types like class or interface types which always have
+         * ASTSimpleReferenceType as qualification. For example: a.b.c<Arg>.d.e<Arg> */
       }
     }
     
   }
   
   /**
-   * Adds the TypeParameters to the ComponentSymbol if it declares
-   * TypeVariables. Since the restrictions on TypeParameters may base on the
-   * JavaDSL its the actual recursive definition of bounds is respected and its
-   * implementation within the JavaDSL is reused. Example:
+   * Adds the TypeParameters to the ComponentSymbol if it declares TypeVariables. Since the
+   * restrictions on TypeParameters may base on the JavaDSL its the actual recursive definition of
+   * bounds is respected and its implementation within the JavaDSL is reused. Example:
    * <p>
    * component Bla<T, S extends SomeClass<T> & SomeInterface>
    * </p>
@@ -549,7 +543,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     super.visit(node);
     if (node.getName().isPresent() && Character.isLowerCase(node.getName().get().charAt(0))) {
       JavaVariableReferenceSymbol variable = new JavaVariableReferenceSymbol(node.getName().get());
-      addToScopeAndLinkWithNode(variable, node);
+      addToScopeAndLinkWithNode(variable, node); // TODO Warum ist hier kein Type gesetzt? (zb int)
     }
   }
   
@@ -574,7 +568,9 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
    */
   @Override
   public void endVisit(ASTAutomatonBehavior node) {
-    removeCurrentScope();
+    if (node.getName().isPresent()) {
+      removeCurrentScope();
+    }
   }
   
   /**

@@ -6,6 +6,7 @@ import org.junit.Test;
 import de.se_rwth.commons.logging.Log;
 
 public class BumperbotTest extends AutomatonAbstractCocoTest {
+ 
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
