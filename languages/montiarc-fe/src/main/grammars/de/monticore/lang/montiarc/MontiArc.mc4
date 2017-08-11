@@ -197,7 +197,8 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.Ja
    * A component variable
    * @attribute Name: The name of the variable
    */
-  Variable@! = Type Name; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
+//  Variable@! = Type Name; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
+  Variable = Type Name; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
   
   //@JP: Auch gut (auch für Ports): var Int summandA, summandB;
 
