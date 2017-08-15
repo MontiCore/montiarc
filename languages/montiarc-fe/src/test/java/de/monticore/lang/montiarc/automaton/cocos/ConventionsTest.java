@@ -1,7 +1,5 @@
 package de.monticore.lang.montiarc.automaton.cocos;
 
-import static org.junit.Assert.assertNotNull;
-
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;

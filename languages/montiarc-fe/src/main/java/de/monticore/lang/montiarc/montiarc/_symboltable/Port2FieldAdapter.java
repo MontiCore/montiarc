@@ -14,9 +14,8 @@ import de.monticore.symboltable.types.references.JTypeReference;
  * 
  * @author Gerrit Leonhard, Andreas Wortmann
  */
-public class Variable2FieldAdapter extends JavaFieldSymbol
-    implements SymbolAdapter<VariableSymbol> {
-  private final VariableSymbol adaptee;
+public class Port2FieldAdapter extends JavaFieldSymbol implements SymbolAdapter<PortSymbol> {
+  private final PortSymbol adaptee;
   
   private static JavaTypeSymbolReference createReference(
       JTypeReference<? extends JTypeSymbol> reference) {
@@ -24,13 +23,13 @@ public class Variable2FieldAdapter extends JavaFieldSymbol
         reference.getDimension());
   }
   
-  public Variable2FieldAdapter(VariableSymbol adaptee) {
+  public Port2FieldAdapter(PortSymbol adaptee) {
     super(adaptee.getName(), JavaFieldSymbol.KIND, createReference(adaptee.getTypeReference()));
     this.adaptee = adaptee;
   }
   
   @Override
-  public VariableSymbol getAdaptee() {
+  public PortSymbol getAdaptee() {
     return adaptee;
   }
   
@@ -63,17 +62,4 @@ public class Variable2FieldAdapter extends JavaFieldSymbol
     adaptee.setAstNode(node);
     super.setAstNode(node);
   }
-  
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("var2field ");
-    if (null != super.getType()) {
-      sb.append(super.getType().getName());
-      sb.append(" ");
-    }
-    sb.append(this.getName());
-    return sb.toString();
-  }
-  
 }
