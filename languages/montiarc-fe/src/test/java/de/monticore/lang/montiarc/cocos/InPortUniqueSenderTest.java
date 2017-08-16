@@ -23,13 +23,13 @@ public class InPortUniqueSenderTest extends AbstractCoCoTest {
   
   @Test
   public void testValid() {
-    checkValid("arc4/coco", "valid.InPortUniqueSender");
+    checkValid("contextconditions", "valid.InPortUniqueSender");
   }
   
   @Test
   public void testInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
-        getAstNode("arc4/coco", "invalid.InPortAmbiguousSender"),
+        getAstNode("contextconditions", "invalid.InPortAmbiguousSender"),
         new ExpectedErrorInfo(2, "x2BD7E"));
   }
 }

@@ -18,28 +18,23 @@ import de.se_rwth.commons.logging.Log;
 
 public class BumperBotTest extends AbstractSymTabTest {
   
-	@Before
-	public void setup() {
-		Log.getFindings().clear();
-		Log.enableFailQuick(false);
-	}
-
-	
-  /**
-   * This test crashes.
-   */
-  //@Ignore
+  @Before
+  public void setup() {
+    Log.getFindings().clear();
+    Log.enableFailQuick(false);
+  }
+  
   @Test
   public void test() {
     Scope symbolTable = createSymTab("src/test/resources");
-    ComponentSymbol motorSymbol= symbolTable
-        .<ComponentSymbol>resolve("bumperbot.library.Motor", ComponentSymbol.KIND)
+    ComponentSymbol motorSymbol = symbolTable
+        .<ComponentSymbol> resolve("bumperbot.library.Motor", ComponentSymbol.KIND)
         .orElse(null);
     
     assertNotNull(motorSymbol);
-
+    
     PortSymbol commandPort = motorSymbol.getIncomingPort("command").orElse(null);
-     
+    
     assertNotNull(commandPort);
     
     JTypeSymbol typeSymbol = commandPort
@@ -47,7 +42,5 @@ public class BumperBotTest extends AbstractSymTabTest {
         .getReferencedSymbol();
     
     assertNotNull(typeSymbol);
-
-    //assertTrue(typeSymbol instanceof Cd2MaTypeAdapter);
   }
 }

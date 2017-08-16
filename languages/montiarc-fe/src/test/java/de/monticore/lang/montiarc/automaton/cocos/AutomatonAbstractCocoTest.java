@@ -1,6 +1,5 @@
 package de.monticore.lang.montiarc.automaton.cocos;
 
-
 //XXX: https://git.rwth-aachen.de/montiarc/core/issues/46
 
 //TODO: @JP: Evtl. ist diese Klassre reundant
@@ -74,6 +73,7 @@ public class AutomatonAbstractCocoTest extends AbstractSymtabTest {
     
     expectedErrors.checkFindings(Log.getFindings());
   }
+  
   /**
    * Checks the given cocos on the given model and expects the given errors. Use this for checking
    * invalid models and verifying that the right number and type of errors are present.
@@ -94,7 +94,7 @@ public class AutomatonAbstractCocoTest extends AbstractSymtabTest {
      * Raises an error if the given error codes don't match the convention for error codes in test
      * cases (no leading zero, capital hexadecimal digits)
      */
-    protected static void checkExpectedErrorCodes(String ...errorCodes) {
+    protected static void checkExpectedErrorCodes(String... errorCodes) {
       
       for (String errorCode : errorCodes) {
         if (!ERROR_CODE_PATTERN.matcher(errorCode).matches()) {
@@ -119,8 +119,7 @@ public class AutomatonAbstractCocoTest extends AbstractSymtabTest {
     public ExpectedErrorInfo() {
     }
     
-    
-    public ExpectedErrorInfo(int numExpectedFindings, String ...expectedErrorCodes) {
+    public ExpectedErrorInfo(int numExpectedFindings, String... expectedErrorCodes) {
       checkExpectedErrorCodes(expectedErrorCodes);
       
       this.numExpectedFindings = numExpectedFindings;
@@ -135,7 +134,8 @@ public class AutomatonAbstractCocoTest extends AbstractSymtabTest {
       
       // check that all expected error codes are present
       Set<String> actualErrorCodes = collectErrorCodes(findingsString);
-      assertTrue("Missing errors: found " + actualErrorCodes + " instead of " + expectedErrorCodes, actualErrorCodes.containsAll(expectedErrorCodes));
+      assertTrue("Missing errors: found " + actualErrorCodes + " instead of " + expectedErrorCodes,
+          actualErrorCodes.containsAll(expectedErrorCodes));
       
       // check that no additional error codes are present
       Set<String> unexpectedErrorCodes = new HashSet<>(actualErrorCodes);

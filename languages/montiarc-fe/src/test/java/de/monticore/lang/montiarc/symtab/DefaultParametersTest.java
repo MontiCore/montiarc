@@ -35,7 +35,7 @@ public class DefaultParametersTest extends AbstractSymtabTest {
 
   @Test
   public void testSubcomponentWithInstanceName() {
-    Scope symTab = createSymTab("src/test/resources/arc4/symtab");
+    Scope symTab = createSymTab("src/test/resources/symboltable");
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "features.DefaultParameters", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);

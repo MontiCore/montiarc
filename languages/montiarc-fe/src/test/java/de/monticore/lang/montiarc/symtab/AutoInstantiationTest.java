@@ -42,7 +42,7 @@ public class AutoInstantiationTest extends AbstractSymtabTest {
    */
   @Test
   public void testSubcomponentWithInstanceName() {
-    Scope symTab = createSymTab("src/test/resources/arc4/symtab");
+    Scope symTab = createSymTab("src/test/resources/symboltable");
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "instantiation.BWithSubAWithInstanceName", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -59,7 +59,7 @@ public class AutoInstantiationTest extends AbstractSymtabTest {
 
   @Test
   public void testSubcomponentWithoutInstanceName() {
-    Scope symTab = createSymTab("src/test/resources/arc4/symtab");
+    Scope symTab = createSymTab("src/test/resources/symboltable");
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "instantiation.BWithSubAWithoutInstanceName", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -75,7 +75,7 @@ public class AutoInstantiationTest extends AbstractSymtabTest {
 
   @Test
   public void testPortWithName() {
-    Scope symTab = createSymTab("src/test/resources/arc4/symtab");
+    Scope symTab = createSymTab("src/test/resources/symboltable");
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "instantiation.ComponentWithPortName", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -91,7 +91,7 @@ public class AutoInstantiationTest extends AbstractSymtabTest {
 
   @Test
   public void testPortWithoutName() {
-    Scope symTab = createSymTab("src/test/resources/arc4/symtab");
+    Scope symTab = createSymTab("src/test/resources/symboltable");
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "instantiation.ComponentWithoutPortName", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -110,7 +110,7 @@ public class AutoInstantiationTest extends AbstractSymtabTest {
    */
   @Test
   public void testInnerComponentWithFormalTypeParameters() {
-    Scope symTab = createSymTab("src/test/resources/arc4/symtab");
+    Scope symTab = createSymTab("src/test/resources/symboltable");
     ComponentSymbol component = symTab
         .<ComponentSymbol>resolve(
             "instantiation.InnerComponentWithFormalTypeParameters", ComponentSymbol.KIND)

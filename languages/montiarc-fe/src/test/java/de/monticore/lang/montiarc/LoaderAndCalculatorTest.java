@@ -43,7 +43,7 @@ public class LoaderAndCalculatorTest extends AbstractSymtabTest {
   // TODO MvW check if bug is in ModelLoader or in SymbolTable resolve
   @Test
   public void testModelLoader() {
-    Scope scope = createSymTab("src/test/resources/arc4/symtab/modelloader");
+    Scope scope = createSymTab("src/test/resources/symboltable/modelloader");
     Optional<ComponentSymbol> sym = scope
         .<ComponentSymbol> resolve("industry.PIController", ComponentSymbol.KIND);
     assertTrue(sym.isPresent());
@@ -58,7 +58,7 @@ public class LoaderAndCalculatorTest extends AbstractSymtabTest {
   // resolves also to the same ComponentSymbol even both are in different packages
   @Test
   public void testSymbolTableResolve() {
-    Scope scope = createSymTab("src/test/resources/arc4/symtab/modelloader");
+    Scope scope = createSymTab("src/test/resources/symboltable/modelloader");
     
     Optional<ComponentSymbol> sym3 = getGlobalScope(scope)
         .<ComponentSymbol> resolveDown("industry.PIController", ComponentSymbol.KIND);

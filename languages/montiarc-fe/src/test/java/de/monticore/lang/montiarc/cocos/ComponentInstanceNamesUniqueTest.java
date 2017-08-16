@@ -23,8 +23,8 @@ public class ComponentInstanceNamesUniqueTest extends AbstractCoCoTest {
   
   @Test
   public void testValid() {
-    checkValid("arc4/coco", "valid.ComponentInstanceNamesUnique");
-    // runCheckerWithSymTab("arc4/coco", "valid.ComponentInstanceNamesUnique");
+    checkValid("contextconditions", "valid.ComponentInstanceNamesUnique");
+    // runCheckerWithSymTab("contextconditions", "valid.ComponentInstanceNamesUnique");
     // assertEquals(
     // Log.getFindings().stream().map(f -> f.buildMsg()).collect(Collectors.joining("\n")),
     // 0, Log.getFindings().size());
@@ -33,10 +33,10 @@ public class ComponentInstanceNamesUniqueTest extends AbstractCoCoTest {
   @Test
   public void testInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentInstanceNamesAreUnique()),
-        getAstNode("arc4/coco", "invalid.ComponentInstanceNamesNotUnique"),
+        getAstNode("contextconditions", "invalid.ComponentInstanceNamesNotUnique"),
         new ExpectedErrorInfo(2, "xAC010"));
     
-//    runCheckerWithSymTab("arc4/coco", "invalid.ComponentInstanceNamesNotUnique");
+//    runCheckerWithSymTab("contextconditions", "invalid.ComponentInstanceNamesNotUnique");
 //    assertEquals(
 //        Log.getFindings().stream().map(f -> f.buildMsg()).collect(Collectors.joining("\n")),
 //        2, Log.getFindings().size());

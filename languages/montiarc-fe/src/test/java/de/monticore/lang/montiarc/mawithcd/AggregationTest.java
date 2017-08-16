@@ -20,7 +20,6 @@ import org.junit.Test;
 
 import de.monticore.ModelingLanguageFamily;
 import de.monticore.io.paths.ModelPath;
-import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.GlobalScope;
@@ -32,7 +31,6 @@ import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.umlcd4a.CD4AnalysisLanguage;
 import de.monticore.umlcd4a.symboltable.CDSymbol;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
-import de.monticore.umlcd4a.symboltable.references.CDTypeSymbolReference;
 import de.se_rwth.commons.logging.Log;
 
 /**

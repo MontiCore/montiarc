@@ -28,14 +28,14 @@ public class DefaultParametersTest extends AbstractCoCoTest {
 
   @Test
   public void testDefaultParametersHaveCorrectOrder() {
-    runCheckerWithSymTab("arc4/coco", "valid.DefaultParametersHaveRightOrder");
+    runCheckerWithSymTab("contextconditions", "valid.DefaultParametersHaveRightOrder");
     assertEquals(0, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xAC005"))
         .count());
   }
 
   @Test
   public void testDefaultParameterHaveWrongOrder() {
-    runCheckerWithSymTab("arc4/coco", "invalid.DefaultParametersHaveWrongOrder");
+    runCheckerWithSymTab("contextconditions", "invalid.DefaultParametersHaveWrongOrder");
     assertEquals(1, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xAC005"))
         .count());
   }

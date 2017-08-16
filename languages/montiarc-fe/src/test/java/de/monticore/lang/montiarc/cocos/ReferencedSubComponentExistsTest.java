@@ -24,7 +24,7 @@ public class ReferencedSubComponentExistsTest extends AbstractCoCoTest {
   
   @Test
   public void testValid() {
-    checkValid("arc4/coco", "valid.ReferencedSubComponentExists");
+    checkValid("contextconditions", "valid.ReferencedSubComponentExists");
   }
   
   @Test
@@ -34,7 +34,7 @@ public class ReferencedSubComponentExistsTest extends AbstractCoCoTest {
   public void testInvalid() {
     MontiArcCoCoChecker coco = new MontiArcCoCoChecker()
         .addCoCo(new ReferencedSubComponentExists());
-    ASTMontiArcNode node = getAstNode("arc4/coco", "invalid.NonExistantReferencedSubComponent");
+    ASTMontiArcNode node = getAstNode("contextconditions", "invalid.NonExistantReferencedSubComponent");
     
     checkInvalid(coco, node, new ExpectedErrorInfo(2, "x069B7"));
   }

@@ -23,9 +23,9 @@ public class TopLevelComponentHasNoInstanceNameTest extends AbstractCoCoTest {
   
   @Test
   public void testValid() {
-    checkValid("arc4/coco", "valid.TopLevelComponentHasNoInstanceName");
+    checkValid("contextconditions", "valid.TopLevelComponentHasNoInstanceName");
     
-    // runCheckerWithSymTab("arc4/coco", "valid.TopLevelComponentHasNoInstanceName");
+    // runCheckerWithSymTab("contextconditions", "valid.TopLevelComponentHasNoInstanceName");
     //
     // String findings = Log.getFindings().stream().map(f -> f.buildMsg())
     // .collect(Collectors.joining("\n"));
@@ -36,10 +36,10 @@ public class TopLevelComponentHasNoInstanceNameTest extends AbstractCoCoTest {
   @Test
   public void testInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new TopLevelComponentHasNoInstanceName()),
-        getAstNode("arc4/coco", "invalid.TopLevelComponentHasInstanceName"),
+        getAstNode("contextconditions", "invalid.TopLevelComponentHasInstanceName"),
         new ExpectedErrorInfo(1, "x3F207"));
     
-//    runCheckerWithSymTab("arc4/coco", "invalid.TopLevelComponentHasInstanceName");
+//    runCheckerWithSymTab("contextconditions", "invalid.TopLevelComponentHasInstanceName");
 //    
 //    String findings = Log.getFindings().stream().map(f -> f.buildMsg())
 //        .collect(Collectors.joining("\n"));

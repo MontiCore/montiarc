@@ -22,18 +22,18 @@ public class SimpleConnectorSourceExistsTest extends AbstractCoCoTest {
   
   @Test
   public void testValid() {
-    checkValid("arc4/coco", "valid.SimpleConnectorSourceExists");
+    checkValid("contextconditions", "valid.SimpleConnectorSourceExists");
   }
   
   @Test
   public void testValidExternal() {
-    checkValid("arc4/coco", "valid.SimpleConnectorSourceExistsExternal");
+    checkValid("contextconditions", "valid.SimpleConnectorSourceExistsExternal");
   }
   
   @Test
   public void testInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SimpleConnectorSourceExists()),
-        getAstNode("arc4/coco", "invalid.SimpleConnectorSourceNonExistant"),
+        getAstNode("contextconditions", "invalid.SimpleConnectorSourceNonExistant"),
         new ExpectedErrorInfo(1, "xF4D71"));
   }
 }

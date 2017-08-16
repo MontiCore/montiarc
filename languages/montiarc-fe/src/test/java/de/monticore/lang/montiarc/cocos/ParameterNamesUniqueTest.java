@@ -23,8 +23,8 @@ public class ParameterNamesUniqueTest extends AbstractCoCoTest {
 
   @Test
   public void testValid() {
-    checkValid("arc4/coco", "valid.ParameterNamesUnique");
-//    runCheckerWithSymTab("arc4/coco", "valid.ParameterNamesUnique");
+    checkValid("contextconditions", "valid.ParameterNamesUnique");
+//    runCheckerWithSymTab("contextconditions", "valid.ParameterNamesUnique");
 //
 //    String findings = Log.getFindings().stream().map(f -> f.buildMsg())
 //        .collect(Collectors.joining("\n"));
@@ -35,10 +35,10 @@ public class ParameterNamesUniqueTest extends AbstractCoCoTest {
   @Test
   public void testInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ParameterNamesAreUnique()),
-        getAstNode("arc4/coco", "invalid.ParameterNamesNotUnique"),
+        getAstNode("contextconditions", "invalid.ParameterNamesNotUnique"),
         new ExpectedErrorInfo(1, "xC4A61"));
     
-//    runCheckerWithSymTab("arc4/coco", "invalid.ParameterNamesNotUnique");
+//    runCheckerWithSymTab("contextconditions", "invalid.ParameterNamesNotUnique");
 //
 //    String findings = Log.getFindings().stream().map(f -> f.buildMsg())
 //        .collect(Collectors.joining("\n"));

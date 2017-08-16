@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2015 RWTH Aachen. All rights reserved.
- *
- * http://www.se-rwth.de/
- */
 package de.monticore.lang.montiarc;
 
 import java.nio.file.Paths;
@@ -14,11 +9,6 @@ import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcLanguageFamily;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Scope;
 
-/**
- * Common methods for symboltable tests
- *
- * @author Robert Heim
- */
 public class AbstractSymtabTest {
   protected static Scope createSymTab(String modelPath) {
     ModelingLanguageFamily fam = new MontiArcLanguageFamily();
