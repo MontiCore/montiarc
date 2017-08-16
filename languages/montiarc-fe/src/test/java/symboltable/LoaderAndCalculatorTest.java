@@ -10,13 +10,12 @@ import java.util.Set;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.AbstractSymtabTest;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcModelNameCalculator;
 import de.monticore.symboltable.Scope;
 
-public class LoaderAndCalculatorTest extends AbstractSymtabTest {
+public class LoaderAndCalculatorTest extends AbstractSymboltableTest {
   
   private final String MODEL_PATH = "src/test/resources/symboltable/modelloader";
   

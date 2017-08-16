@@ -1,4 +1,4 @@
-package de.monticore.lang.montiarc;
+package symboltable;
 
 import java.nio.file.Paths;
 
@@ -9,7 +9,7 @@ import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcLanguageFamily;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Scope;
 
-public class AbstractSymtabTest {
+public abstract class AbstractSymboltableTest {
   protected static Scope createSymTab(String modelPath) {
     ModelingLanguageFamily fam = new MontiArcLanguageFamily();
     // TODO how to add java default types?

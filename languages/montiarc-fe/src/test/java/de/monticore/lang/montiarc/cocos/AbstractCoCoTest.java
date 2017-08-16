@@ -18,18 +18,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import de.monticore.lang.montiarc.AbstractSymtabTest;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcCoCoChecker;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
+import symboltable.AbstractSymboltableTest;
 
 /**
  * @author (last commit) Crispin Kirchner
  */
-public class AbstractCoCoTest extends AbstractSymtabTest {
+public class AbstractCoCoTest extends AbstractSymboltableTest {
   
   private static final String MODEL_PATH = "src/test/resources/";
   

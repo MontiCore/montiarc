@@ -15,14 +15,13 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.AbstractSymtabTest;
 import de.monticore.lang.montiarc.common._ast.ASTParameter;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.se_rwth.commons.logging.Log;
 
-public class DefaultParametersTest extends AbstractSymtabTest {
+public class DefaultParametersTest extends AbstractSymboltableTest {
 
   public static final boolean ENABLE_FAIL_QUICK = true;
   

@@ -1,4 +1,4 @@
-package de.monticore.lang.montiarc.symtab;
+package symboltable;
 
 import static de.monticore.lang.montiarc.montiarc._symboltable.ComponentBuilder.addConnectors;
 import static de.monticore.lang.montiarc.montiarc._symboltable.ComponentBuilder.addInnerComponents;
@@ -17,18 +17,19 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.lang.montiarc.AbstractSymtabTest;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.Scope;
 
-public class ComponentBuilderTest extends AbstractSymtabTest {
+public class ComponentBuilderTest extends AbstractSymboltableTest {
 
+  private final String MODEL_PATH = "src/test/resources/arc/symtab";
+  
   @Test
   public void testPorts() throws Exception {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = createSymTab(MODEL_PATH);
     ComponentSymbol cmp = symTab.<ComponentSymbol>resolve(
         "a.TypesTest", ComponentSymbol.KIND).orElse(null);
     assertNotNull(cmp);
@@ -62,7 +63,7 @@ public class ComponentBuilderTest extends AbstractSymtabTest {
 
   @Test
   public void testConnectors() throws Exception {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = createSymTab(MODEL_PATH);
     ComponentSymbol cmp = symTab.<ComponentSymbol>resolve(
         "a.TypesTest", ComponentSymbol.KIND).orElse(null);
     assertNotNull(cmp);
@@ -88,7 +89,7 @@ public class ComponentBuilderTest extends AbstractSymtabTest {
 
   @Test
   public void testInnerComponents() throws Exception {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = createSymTab(MODEL_PATH);
     ComponentSymbol cmp = symTab.<ComponentSymbol>resolve(
         "a.TypesTest", ComponentSymbol.KIND).orElse(null);
     assertNotNull(cmp);
@@ -117,7 +118,7 @@ public class ComponentBuilderTest extends AbstractSymtabTest {
 
   @Test
   public void testSubComponents() throws Exception {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = createSymTab(MODEL_PATH);
     ComponentSymbol cmp = symTab.<ComponentSymbol>resolve(
         "a.TypesTest", ComponentSymbol.KIND).orElse(null);
     assertNotNull(cmp);

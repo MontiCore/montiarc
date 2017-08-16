@@ -29,13 +29,14 @@ import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
+import symboltable.AbstractSymboltableTest;
 
 /**
  * Tests for symbol table of MontiArc.
  *
  * @author Robert Heim
  */
-public class SymtabTest extends AbstractSymtabTest {
+public class SymtabTest extends AbstractSymboltableTest {
   @BeforeClass
   public static void setUp() {
     // ensure an empty log

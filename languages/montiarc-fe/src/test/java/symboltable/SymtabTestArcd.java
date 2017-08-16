@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package de.monticore.lang.montiarc;
+package symboltable;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -21,15 +21,15 @@ import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 
 /**
- * TODO: Write me!
- *
  * @author Robert Heim
  */
-public class SymtabTestArcd extends AbstractSymtabTest {
+public class SymtabTestArcd extends AbstractSymboltableTest {
 
+  private final String MODEL_PATH = "src/test/resources/symboltable";
+  
   @Test
   public void testCompWithGenericPorts() {
-    Scope symTab = createSymTab("src/test/resources/arcd/symtab/genericPorts");
+    Scope symTab = createSymTab(MODEL_PATH + "/genericPorts");
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.CompWithGenericPorts", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -66,7 +66,7 @@ public class SymtabTestArcd extends AbstractSymtabTest {
 
   @Test
   public void testCompWithGenericsAndInnerGenericComponent() {
-    Scope symTab = createSymTab("src/test/resources/arcd/symtab/genericPorts");
+    Scope symTab = createSymTab(MODEL_PATH + "/genericPorts");
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.GenericCompWithInnerGenericComp", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -74,7 +74,7 @@ public class SymtabTestArcd extends AbstractSymtabTest {
 
   @Test
   public void testCompWithCfgsAndInnerCfgComponent() {
-    Scope symTab = createSymTab("src/test/resources/arcd/symtab/configs");
+    Scope symTab = createSymTab(MODEL_PATH + "/configs");
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.ConfigurableComponentWithInnerCfgComp", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -82,7 +82,7 @@ public class SymtabTestArcd extends AbstractSymtabTest {
 
   @Test
   public void testReferencingCompsWithCfg() {
-    Scope symTab = createSymTab("src/test/resources/arcd/symtab/configs");
+    Scope symTab = createSymTab(MODEL_PATH + "/configs");
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.ReferencingCompsWithCfg", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -138,7 +138,7 @@ public class SymtabTestArcd extends AbstractSymtabTest {
 
   @Test
   public void testReferencingCompsWithExpression() {
-    Scope symTab = createSymTab("src/test/resources/arcd/symtab/configs");
+    Scope symTab = createSymTab(MODEL_PATH + "/configs");
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.ReferencingCompsWithExpression", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -175,7 +175,7 @@ public class SymtabTestArcd extends AbstractSymtabTest {
   //
   @Test
   public void testImportedReferences() {
-    Scope symTab = createSymTab("src/test/resources/arcd/symtab/importedReferences");
+    Scope symTab = createSymTab(MODEL_PATH + "/importedReferences");
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.SimpleComponent", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -223,7 +223,7 @@ public class SymtabTestArcd extends AbstractSymtabTest {
 
   @Test
   public void testSuperComponents() {
-    Scope symTab = createSymTab("src/test/resources/arcd/symtab/superComponents");
+    Scope symTab = createSymTab(MODEL_PATH + "/superComponents");
     ComponentSymbol subB = symTab.<ComponentSymbol>resolve(
         "a.SubB", ComponentSymbol.KIND).orElse(null);
     assertNotNull(subB);
@@ -244,7 +244,7 @@ public class SymtabTestArcd extends AbstractSymtabTest {
 
   @Test
   public void testInnerComponents() {
-    Scope symTab = createSymTab("src/test/resources/arcd/symtab/innerComps");
+    Scope symTab = createSymTab(MODEL_PATH + "/innerComps");
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.ComponentWithInnerComponent", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -311,7 +311,7 @@ public class SymtabTestArcd extends AbstractSymtabTest {
 
   @Test
   public void testInnerComponents2() {
-    Scope symTab = createSymTab("src/test/resources/arcd/symtab/innerComps");
+    Scope symTab = createSymTab(MODEL_PATH + "/innerComps");
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "b.InnerComponents", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
