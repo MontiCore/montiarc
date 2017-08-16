@@ -13,9 +13,9 @@ import de.monticore.common.common._ast.ASTStereotype;
 import de.monticore.types.types._ast.ASTTypeArguments;
 
 /**
- * TODO: Write me!
+ * Repräsentation einer Komponenten
  *
- * @author Robert Heim, Michael von Wenckstern
+ * @author Robert Heim, Michael von Wenckstern, Andreas Wortmann
  */
 public class ASTComponent extends ASTComponentTOP {
   /**

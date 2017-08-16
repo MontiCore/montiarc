@@ -8,8 +8,6 @@ package de.monticore.lang.montiarc.montiarc._symboltable;
 import de.monticore.symboltable.CommonSymbol;
 
 /**
- * TODO Do we really need this?
- *
  * @author Robert Heim
  */
 public abstract class AComponentImplementationSymbol extends CommonSymbol {

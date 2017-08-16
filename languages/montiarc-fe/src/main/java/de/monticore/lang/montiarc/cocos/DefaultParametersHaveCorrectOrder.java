@@ -18,9 +18,7 @@ import de.se_rwth.commons.logging.Log;
  * E.g.: Wrong: A[int x = 5, int y]
  * Right: B[int x, int y = 5]
  *
- * @author (last commit) $Author$
- * @version $Revision$, $Date$
- * @since TODO: add version number
+ * @author Andreas Wortmann
  */
 public class DefaultParametersHaveCorrectOrder
     implements MontiArcASTComponentHeadCoCo {

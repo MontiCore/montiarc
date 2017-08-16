@@ -6,6 +6,9 @@ import de.monticore.java.symboltable.JavaSymbolFactory;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.ImportStatement;
 
+//XXX: https://git.rwth-aachen.de/montiarc/core/issues/43
+
+
 /**
  * TODO This class should be part of JavaDSL or a respective lib that provides
  * default types (e.g., primitives, java.lang.* and java.util.*).

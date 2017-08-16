@@ -16,6 +16,8 @@ import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.se_rwth.commons.logging.Log;
 
+//XXX: https://git.rwth-aachen.de/montiarc/core/issues/42
+
 /**
  * Implementation of R7
  *

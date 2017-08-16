@@ -9,6 +9,9 @@ import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTComponentCoCo;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 
+// XXX: https://git.rwth-aachen.de/montiarc/core/issues/41
+
+
 /**
  * TODO: Write me!
  *
@@ -31,7 +34,7 @@ public class CorrectMAASubComponentInstantiation implements MontiArcASTComponent
    * Checks whether the arguments of the passed subcomponent are consistent
    */
   private void checkArguments(ComponentSymbol cmp) {
-    //XXX @JP: Was soll diese Klasse?
+    //TODO @JP: Was soll diese Klasse?
     
   }
   

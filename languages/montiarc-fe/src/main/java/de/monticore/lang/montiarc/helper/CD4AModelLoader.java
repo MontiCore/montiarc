@@ -8,8 +8,6 @@ import de.monticore.umlcd4a.CD4AnalysisModelLoader;
 import de.monticore.umlcd4a.cd4analysis._ast.ASTCDCompilationUnit;
 
 
-// TODO Required for performing CoCo checks of CD4A models whenever they are
-// loaded. Remove this class if there is a more elegant way in the future.
 public class CD4AModelLoader extends CD4AnalysisModelLoader {
 
   public CD4AModelLoader(CD4AnalysisLanguage language) {

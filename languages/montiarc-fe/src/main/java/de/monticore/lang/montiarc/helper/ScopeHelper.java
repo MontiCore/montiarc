@@ -8,7 +8,11 @@ import de.monticore.symboltable.Scopes;
 import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.SymbolKind;
 
-// TODO remove this class. Currently required because of missing functionality in the Scope class
+//XXX: https://git.rwth-aachen.de/montiarc/core/issues/44
+
+// TODO remove this class. Currently required because of missing functionality
+// in the Scope class
+
 public class ScopeHelper {
   
   /**

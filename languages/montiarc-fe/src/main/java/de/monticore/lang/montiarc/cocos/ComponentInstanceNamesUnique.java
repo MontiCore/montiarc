@@ -16,9 +16,9 @@ import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 
 /**
- * TODO: Write me!
+ * Checks whether names of subcomponent instances of a composed component are unique
  *
- * @author Robert Heim
+ * @author Robert Heim, Andreas Wortmann
  */
 public class ComponentInstanceNamesUnique implements MontiArcASTComponentCoCo {
 

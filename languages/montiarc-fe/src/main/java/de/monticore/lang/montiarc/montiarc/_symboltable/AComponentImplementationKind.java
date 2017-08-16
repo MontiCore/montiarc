@@ -6,8 +6,6 @@
 package de.monticore.lang.montiarc.montiarc._symboltable;
 
 /**
- * TODO Do we really need this?
- *
  * @author Robert Heim
  */
 public class AComponentImplementationKind
