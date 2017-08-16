@@ -8,6 +8,8 @@ import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 
+//XXX: https://git.rwth-aachen.de/montiarc/core/issues/48
+
 /**
  * Created by Michael von Wenckstern on 13.06.2016.
  *

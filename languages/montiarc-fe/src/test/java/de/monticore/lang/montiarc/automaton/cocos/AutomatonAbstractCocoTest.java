@@ -1,6 +1,9 @@
 package de.monticore.lang.montiarc.automaton.cocos;
 
-//XXX: @JP: Evtl. ist diese Klassre reundant
+
+//XXX: https://git.rwth-aachen.de/montiarc/core/issues/46
+
+//TODO: @JP: Evtl. ist diese Klassre reundant
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

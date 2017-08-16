@@ -28,6 +28,8 @@ import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 
+//XXX: https://git.rwth-aachen.de/montiarc/core/issues/49
+
 /**
  * Symbol for component definitions.
  *

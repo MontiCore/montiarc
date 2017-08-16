@@ -20,6 +20,8 @@ import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.se_rwth.commons.logging.Log;
 
+//XXX: https://git.rwth-aachen.de/montiarc/core/issues/47
+
 /**
  * Computes the missing assignment names in reactions, stimuli and initial state
  * declarations.
