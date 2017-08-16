@@ -7,7 +7,6 @@ package de.monticore.lang.montiarc.javap;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -28,13 +27,13 @@ public class ParserTest {
   
   @Test
   public void testAJava() {
-    test("/valid/Foo.maa", true);
+    test("/javap/valid/Foo.arc", true);
   }
   
   
   @Test
   public void testAutomaton() {
-    test("/valid/bumperbot/Bumpcontrol.maa", true);
+    test("/javap/valid/bumperbot/BumpControl.arc", true);
   }
   
   private void test(String modelName, boolean containsAJava){
@@ -43,7 +42,7 @@ public class ParserTest {
       Optional<ASTMACompilationUnit> cu = parser.parseMACompilationUnit(MODELPATH+modelName);
       assertTrue(cu.isPresent());
     }
-    catch (IOException e) {
+    catch (Exception e) {
       e.printStackTrace();
     }
   }
@@ -51,7 +50,7 @@ public class ParserTest {
   
   @Test
   public void testCompWithInitMethod() {
-    test("javap//valid/CompWithVariableAndPortInit.maa", true);
+    test("/javap/valid/CompWithVariableAndPortInit.arc", true);
   }
   
 }

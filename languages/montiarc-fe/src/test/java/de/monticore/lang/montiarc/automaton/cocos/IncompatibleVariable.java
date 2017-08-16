@@ -21,7 +21,7 @@ public class IncompatibleVariable extends AutomatonAbstractCocoTest {
     checkInvalid(node, new ExpectedErrorInfo(1, "xAA431"));
   }
   
-  @Ignore
+  @Ignore("@JP, BS: Bitte angucken, warum das (anscheinend  in der JavaDSL) nicht funktioniert.")
   @Test
   public void testIncompatibleVariableAssignmentGenericTypesDiffer() {
     ASTMontiArcNode node = getAstNode("src/test/resources/",
