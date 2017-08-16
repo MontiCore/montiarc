@@ -1,4 +1,4 @@
-package mawithcd;
+package aggregation;
 
 component GenericTransformer<T> {
   port in  T tIn,

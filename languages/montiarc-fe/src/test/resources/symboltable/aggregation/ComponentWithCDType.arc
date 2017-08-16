@@ -1,4 +1,4 @@
-package mawithcd;
+package aggregation;
 
 component ComponentWithCDType {
   port in  Car cIn,

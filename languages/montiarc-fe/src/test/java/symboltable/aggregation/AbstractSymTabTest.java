@@ -1,4 +1,4 @@
-package de.monticore.lang.montiarc.mawithcd;
+package symboltable.aggregation;
 
 import java.nio.file.Paths;
 

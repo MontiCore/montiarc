@@ -1,4 +1,4 @@
-package mawithcd;
+package aggregation;
 
 component FTPComponentWithCDType {
   port in  Car cIn,

@@ -1,4 +1,4 @@
-package de.monticore.lang.montiarc;
+package symboltable;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -10,15 +10,15 @@ import java.util.Set;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import de.monticore.lang.montiarc.AbstractSymtabTest;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcModelNameCalculator;
 import de.monticore.symboltable.Scope;
 
-/**
- * Created by Michael von Wenckstern on 04.06.2016.
- */
 public class LoaderAndCalculatorTest extends AbstractSymtabTest {
+  
+  private final String MODEL_PATH = "src/test/resources/symboltable/modelloader";
   
   private static Scope getGlobalScope(final Scope scope) {
     Scope s = scope;
@@ -43,7 +43,7 @@ public class LoaderAndCalculatorTest extends AbstractSymtabTest {
   // TODO MvW check if bug is in ModelLoader or in SymbolTable resolve
   @Test
   public void testModelLoader() {
-    Scope scope = createSymTab("src/test/resources/symboltable/modelloader");
+    Scope scope = createSymTab(MODEL_PATH);
     Optional<ComponentSymbol> sym = scope
         .<ComponentSymbol> resolve("industry.PIController", ComponentSymbol.KIND);
     assertTrue(sym.isPresent());
@@ -58,7 +58,7 @@ public class LoaderAndCalculatorTest extends AbstractSymtabTest {
   // resolves also to the same ComponentSymbol even both are in different packages
   @Test
   public void testSymbolTableResolve() {
-    Scope scope = createSymTab("src/test/resources/symboltable/modelloader");
+    Scope scope = createSymTab(MODEL_PATH);
     
     Optional<ComponentSymbol> sym3 = getGlobalScope(scope)
         .<ComponentSymbol> resolveDown("industry.PIController", ComponentSymbol.KIND);

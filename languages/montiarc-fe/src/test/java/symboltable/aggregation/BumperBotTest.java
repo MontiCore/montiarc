@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package de.monticore.lang.montiarc.mawithcd;
+package symboltable.aggregation;
 
 import static org.junit.Assert.assertNotNull;
 

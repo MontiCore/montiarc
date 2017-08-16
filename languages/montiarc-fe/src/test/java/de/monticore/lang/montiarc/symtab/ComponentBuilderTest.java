@@ -24,9 +24,6 @@ import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.Scope;
 
-/**
- * Created by MichaelvonWenckstern on 13.06.2016.
- */
 public class ComponentBuilderTest extends AbstractSymtabTest {
 
   @Test

@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package de.monticore.lang.montiarc.symtab;
+package symboltable;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -22,6 +22,8 @@ import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
 
 public class AutoInstantiationTest extends AbstractSymtabTest {
+  
+  private final String MODEL_PATH = "src/test/resources/symboltable";
 
   @BeforeClass
   public static void setUp() {
@@ -42,7 +44,7 @@ public class AutoInstantiationTest extends AbstractSymtabTest {
    */
   @Test
   public void testSubcomponentWithInstanceName() {
-    Scope symTab = createSymTab("src/test/resources/symboltable");
+    Scope symTab = createSymTab(MODEL_PATH);
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "instantiation.BWithSubAWithInstanceName", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -59,7 +61,7 @@ public class AutoInstantiationTest extends AbstractSymtabTest {
 
   @Test
   public void testSubcomponentWithoutInstanceName() {
-    Scope symTab = createSymTab("src/test/resources/symboltable");
+    Scope symTab = createSymTab(MODEL_PATH);
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "instantiation.BWithSubAWithoutInstanceName", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -75,7 +77,7 @@ public class AutoInstantiationTest extends AbstractSymtabTest {
 
   @Test
   public void testPortWithName() {
-    Scope symTab = createSymTab("src/test/resources/symboltable");
+    Scope symTab = createSymTab(MODEL_PATH);
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "instantiation.ComponentWithPortName", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -91,7 +93,7 @@ public class AutoInstantiationTest extends AbstractSymtabTest {
 
   @Test
   public void testPortWithoutName() {
-    Scope symTab = createSymTab("src/test/resources/symboltable");
+    Scope symTab = createSymTab(MODEL_PATH);
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "instantiation.ComponentWithoutPortName", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -110,7 +112,7 @@ public class AutoInstantiationTest extends AbstractSymtabTest {
    */
   @Test
   public void testInnerComponentWithFormalTypeParameters() {
-    Scope symTab = createSymTab("src/test/resources/symboltable");
+    Scope symTab = createSymTab(MODEL_PATH);
     ComponentSymbol component = symTab
         .<ComponentSymbol>resolve(
             "instantiation.InnerComponentWithFormalTypeParameters", ComponentSymbol.KIND)

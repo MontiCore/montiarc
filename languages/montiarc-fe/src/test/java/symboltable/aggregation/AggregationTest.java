@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package de.monticore.lang.montiarc.mawithcd;
+package symboltable.aggregation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -34,10 +34,12 @@ import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 
 /**
- * @author (last commit) Crispin Kirchner
+ * @author Crispin Kirchner, Andreas Wortmann
  * @version $Revision$, $Date$
  */
 public class AggregationTest extends AbstractSymTabTest {
+  
+  private final String MODEL_PATH = "src/test/resources/symboltable";
   
   @BeforeClass
   public static void setUp() {
@@ -46,57 +48,57 @@ public class AggregationTest extends AbstractSymTabTest {
   
   @Test
   public void testComponentWithCDType() {
-    Scope symTab = createSymTab("src/test/resources");
+    Scope symTab = createSymTab(MODEL_PATH);
     
-    CDSymbol types = symTab.<CDSymbol> resolve("mawithcd.Types", CDSymbol.KIND).orElse(null);
+    CDSymbol types = symTab.<CDSymbol> resolve("aggregation.Types", CDSymbol.KIND).orElse(null);
     assertNotNull(types);
     
     ComponentSymbol component = symTab
-        .<ComponentSymbol> resolve("mawithcd.ComponentWithCDType", ComponentSymbol.KIND)
+        .<ComponentSymbol> resolve("aggregation.ComponentWithCDType", ComponentSymbol.KIND)
         .orElse(null);
     assertNotNull(component);
   }
   
   @Test
   public void testFormalTypeParameterComponentWithCDType() {
-    Scope symTab = createSymTab("src/test/resources");
+    Scope symTab = createSymTab(MODEL_PATH);
     
-    CDSymbol types = symTab.<CDSymbol> resolve("mawithcd.Types", CDSymbol.KIND).orElse(null);
+    CDSymbol types = symTab.<CDSymbol> resolve("aggregation.Types", CDSymbol.KIND).orElse(null);
     assertNotNull(types);
     
     ComponentSymbol component = symTab
-        .<ComponentSymbol> resolve("mawithcd.FTPComponentWithCDType", ComponentSymbol.KIND)
+        .<ComponentSymbol> resolve("aggregation.FTPComponentWithCDType", ComponentSymbol.KIND)
         .orElse(null);
     assertNotNull(component);
   }
   
   @Test
   public void testCD() {
-    final ModelPath modelPath = new ModelPath(Paths.get("src/test/resources"));
+    final ModelPath modelPath = new ModelPath(Paths.get(MODEL_PATH));
     
     ModelingLanguageFamily family = new ModelingLanguageFamily();
     CD4AnalysisLanguage lang = new CD4AnalysisLanguage();
     family.addModelingLanguage(lang);
     GlobalScope scope = new GlobalScope(modelPath, family);
     
-    Optional<CDSymbol> cd = scope.<CDSymbol> resolve("mawithcd.Units",
+    Optional<CDSymbol> cd = scope.<CDSymbol> resolve("aggregation.Units",
         CDSymbol.KIND);
     assertTrue(cd.isPresent());
-    Optional<CDTypeSymbol> quantity = scope.<CDTypeSymbol> resolve("mawithcd.Units.Quantity",
+    Optional<CDTypeSymbol> quantity = scope.<CDTypeSymbol> resolve("aggregation.Units.Quantity",
         CDTypeSymbol.KIND);
     assertTrue(quantity.isPresent());
-    Optional<JTypeSymbol> quantityAsJType = scope.<JTypeSymbol> resolve("mawithcd.Units.Quantity",
+    Optional<JTypeSymbol> quantityAsJType = scope.<JTypeSymbol> resolve("aggregation.Units.Quantity",
         JTypeSymbol.KIND);
     assertTrue(quantityAsJType.isPresent());
   }
   
   @Test
   public void testCDusingMAWithCD() {
-    Scope symTab = createSymTab("src/test/resources");
-    Optional<CDSymbol> cd = symTab.<CDSymbol> resolve("mawithcd.Units",
+    Scope symTab = createSymTab(MODEL_PATH);
+    Optional<CDSymbol> cd = symTab.<CDSymbol> resolve("aggregation.Units",
         CDSymbol.KIND);
     assertTrue(cd.isPresent());
-    Optional<CDTypeSymbol> quantity = symTab.<CDTypeSymbol> resolve("mawithcd.Units.Quantity",
+    Optional<CDTypeSymbol> quantity = symTab.<CDTypeSymbol> resolve("aggregation.Units.Quantity",
         CDTypeSymbol.KIND);
     assertTrue(quantity.isPresent());
   }
@@ -107,10 +109,10 @@ public class AggregationTest extends AbstractSymTabTest {
    * Room { int x; int y; } }
    */
   public void test() {
-    Scope symTab = createSymTab("src/test/resources");
+    Scope symTab = createSymTab(MODEL_PATH);
     
     ComponentSymbol simulationSymbol = symTab
-        .<ComponentSymbol> resolve("mawithcd.Simulation", ComponentSymbol.KIND)
+        .<ComponentSymbol> resolve("aggregation.Simulation", ComponentSymbol.KIND)
         .orElse(null);
     assertNotNull(simulationSymbol);
     
@@ -125,7 +127,7 @@ public class AggregationTest extends AbstractSymTabTest {
   
   @Test
   public void testSuperClass() {
-    Scope scope = createSymTab("src/test/resources");
+    Scope scope = createSymTab("src/test/resources/symboltable");
     
     ComponentSymbol simulationComponent = scope
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
@@ -173,7 +175,7 @@ public class AggregationTest extends AbstractSymTabTest {
   
   @Test
   public void testFields() {
-    Scope scope = createSymTab("src/test/resources");
+    Scope scope = createSymTab("src/test/resources/symboltable");
     
     ComponentSymbol simulationSymbol = scope
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
@@ -202,7 +204,7 @@ public class AggregationTest extends AbstractSymTabTest {
   @Ignore
   @Test
   public void testMethod() {
-    Scope symTab = createSymTab("src/test/resources");
+    Scope symTab = createSymTab(MODEL_PATH);
     
     ComponentSymbol simulationSymbol = symTab
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
@@ -224,7 +226,7 @@ public class AggregationTest extends AbstractSymTabTest {
   
   @Test
   public void testInterface() {
-    Scope scope = createSymTab("src/test/resources");
+    Scope scope = createSymTab("src/test/resources/symboltable");
     
     ComponentSymbol simulationSymbol = scope
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
@@ -249,7 +251,7 @@ public class AggregationTest extends AbstractSymTabTest {
   
   @Test
   public void testKind() {
-    Scope scope = createSymTab("src/test/resources");
+    Scope scope = createSymTab("src/test/resources/symboltable");
     
     ComponentSymbol simulationSymbol = scope
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)

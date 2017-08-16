@@ -1,4 +1,4 @@
-package mawithcd;
+package aggregation;
 
 component CarTransformer {
   port in  Car tIn,

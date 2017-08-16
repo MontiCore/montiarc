@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package de.monticore.lang.montiarc.symtab;
+package symboltable;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -25,6 +25,8 @@ import de.se_rwth.commons.logging.Log;
 public class DefaultParametersTest extends AbstractSymtabTest {
 
   public static final boolean ENABLE_FAIL_QUICK = true;
+  
+  private final String MODEL_PATH = "src/test/resources/symboltable";
 
   @BeforeClass
   public static void setUp() {
@@ -35,7 +37,8 @@ public class DefaultParametersTest extends AbstractSymtabTest {
 
   @Test
   public void testSubcomponentWithInstanceName() {
-    Scope symTab = createSymTab("src/test/resources/symboltable");
+    Scope symTab = createSymTab(MODEL_PATH);
+    
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "features.DefaultParameters", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
