@@ -12,7 +12,7 @@ import de.monticore.java.symboltable.JavaFieldSymbol;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
 import de.monticore.lang.montiarc.montiarc._ast.ASTElement;
 import de.monticore.lang.montiarc.montiarc._ast.ASTJavaPInitializer;
-import de.monticore.lang.montiarc.montiarc._ast.ASTVariableInitialization;
+import de.monticore.lang.montiarc.montiarc._ast.ASTValueInitialization;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTComponentCoCo;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.VariableSymbol;
@@ -53,7 +53,7 @@ public class UsedPortsVariablesExistCoCo
     for (ASTElement e : node.getBody().getElements()) {
       if (e instanceof ASTJavaPInitializer) {
     	  ASTJavaPInitializer init = (ASTJavaPInitializer) e;
-        for (ASTVariableInitialization i : init.getVariableInitializations()) {
+        for (ASTValueInitialization i : init.getValueInitializations()) {
           String name = Names.getQualifiedName(i.getQualifiedName().getParts());
           Optional<PortSymbol> port = cmp.getSpannedScope().<PortSymbol> resolve(name,
               PortSymbol.KIND);

@@ -197,7 +197,6 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.Ja
    * A component variable
    * @attribute Name: The name of the variable
    */
-//  Variable@! = Type Name; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
   Variable = Type Name; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
   
   //@JP: Auch gut (auch für Ports): var Int summandA, summandB;
@@ -248,17 +247,15 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.Ja
    
   JavaPInitializer implements InitializerElement 
     = "init" Name? "{" 
-        VariableInitialization* 
+        ValueInitialization* 
       "}";
   
-  // @AW: Umbenennen auf JavaPInitialisation, da hier auch Ports initialisiert werden können.
-  VariableInitialization = QualifiedName "=" Valuation ";";
+  ValueInitialization = QualifiedName "=" Valuation ";";
     
   JavaPBehavior implements BehaviorElement 
     = "compute" Name? "{" 
         BlockStatement* 
       "}"; 
-  // @JP: War "AJavaDefinition"
 
 
   /*************************************************************************
@@ -279,17 +276,7 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.Ja
   interface Valuation; 
   
   JavaValuation implements Valuation = Expression; // use at least Java expressions for valuations
-  
-  /**
-   * The declaration of Inputs/Outputs/Variables
-   * @attribute InputDeclaration: Declaration of inputs, which are used in a transition as Stimuli-Variables
-   * @attribute OutputDeclaration: Declaration of outputs, which are used in a transition as Reaction-Variables
-   * @attribute VariableDeclaration: Declaration of variables, which can be used in stimuli, reactions and guards
-   */
-  // AutomatonContext = ( InputDeclaration | OutputDeclaration | VariableDeclaration )*; 
-  // @JP: This rule is not necessary anymore, as automata operate within 
-  // components only. Hence, there are no stand-alone automata anymore.
-  
+    
   /**
    * The declaration of states and transitions defining the "real" automaton
    * @attribute StateDeclaration: Declaration of the state Names
