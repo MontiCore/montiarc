@@ -21,7 +21,7 @@ import de.se_rwth.commons.logging.Log;
  *
  * @author Arne Haber, Robert Heim
  */
-public class UniquePorts implements MontiArcASTInterfaceCoCo {
+public class PortNamesAreUnique implements MontiArcASTInterfaceCoCo {
 
   /**
    * @see de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTInterfaceCoCo#check(de.monticore.lang.montiarc.montiarc._ast.ASTInterface)

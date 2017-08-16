@@ -16,7 +16,7 @@ import de.se_rwth.commons.logging.Log;
  *
  * @author Robert Heim
  */
-public class ComponentCapitalized implements MontiArcASTComponentCoCo {
+public class ComponentNameIsCapitalized implements MontiArcASTComponentCoCo {
 
   /**
    * @see de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTComponentCoCo#check(de.monticore.lang.montiarc.montiarc._ast.ASTComponent)

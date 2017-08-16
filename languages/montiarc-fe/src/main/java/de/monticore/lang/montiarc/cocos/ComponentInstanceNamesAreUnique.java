@@ -20,7 +20,7 @@ import de.se_rwth.commons.logging.Log;
  *
  * @author Robert Heim, Andreas Wortmann
  */
-public class ComponentInstanceNamesUnique implements MontiArcASTComponentCoCo {
+public class ComponentInstanceNamesAreUnique implements MontiArcASTComponentCoCo {
 
   /**
    * @see de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTComponentCoCo#check(de.monticore.lang.montiarc.montiarc._ast.ASTComponent)

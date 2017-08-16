@@ -34,7 +34,7 @@ public class ParameterNamesUniqueTest extends AbstractCoCoTest {
 
   @Test
   public void testInvalid() {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ParameterNamesUnique()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ParameterNamesAreUnique()),
         getAstNode("arc4/coco", "invalid.ParameterNamesNotUnique"),
         new ExpectedErrorInfo(1, "xC4A61"));
     

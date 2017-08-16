@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
-import de.monticore.lang.montiarc.cocos.ComponentCapitalized;
+import de.monticore.lang.montiarc.cocos.ComponentNameIsCapitalized;
 import de.monticore.lang.montiarc.cocos.PackageLowerCase;
 import de.monticore.symboltable.SymbolKind;
 import de.se_rwth.commons.Joiners;
@@ -17,7 +17,7 @@ import de.se_rwth.commons.Splitters;
  * Helps loading inner components, by mapping their full-qualified names to the full-qualified name
  * of the most outer component of the file the inner one is defined in. This way the SymTab knows
  * which file to load. By convention, package names must be lower-case (see {@link PackageLowerCase}
- * ) and component names must start upper-case (see {@link ComponentCapitalized}). This ensures,
+ * ) and component names must start upper-case (see {@link ComponentNameIsCapitalized}). This ensures,
  * that we can calculate the most outer component, by searching for the first upper-case part of a
  * full-qualified name, e.g.:<br/>
  * a.b.C.D.E -> a.b.C

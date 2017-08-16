@@ -16,7 +16,7 @@ import de.se_rwth.commons.logging.Log;
 /**
  * @author Crispin Kirchner
  */
-public class ParameterNamesUnique implements MontiArcASTComponentHeadCoCo {
+public class ParameterNamesAreUnique implements MontiArcASTComponentHeadCoCo {
 
   /**
    * @see de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTComponentHeadCoCo#check(de.monticore.lang.montiarc.montiarc._ast.ASTComponentHead)

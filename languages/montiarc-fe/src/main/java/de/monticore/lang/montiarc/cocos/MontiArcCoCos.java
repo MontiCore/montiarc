@@ -29,7 +29,7 @@ import de.monticore.lang.montiarc.cocos.automaton.integrity.UseOfValueLists;
 import de.monticore.lang.montiarc.cocos.automaton.uniqueness.InitialDeclaredMultipleTimes;
 import de.monticore.lang.montiarc.cocos.automaton.uniqueness.StateDefinedMultipleTimes;
 import de.monticore.lang.montiarc.cocos.automaton.uniqueness.StateDefinedMultipleTimesStereotypesDontMatch;
-import de.monticore.lang.montiarc.cocos.javap.UsedPortsVariablesExistCoCo;
+import de.monticore.lang.montiarc.cocos.javap.UsedPortsAndVariablesExist;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTConnectorCoCo;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTInitialStateDeclarationCoCo;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
@@ -45,25 +45,25 @@ public class MontiArcCoCos {
 	public static MontiArcCoCoChecker createChecker() {
     return new MontiArcCoCoChecker()
         .addCoCo(new UniqueConstraint())
-        .addCoCo(new UniquePorts())
-        .addCoCo(new ComponentInstanceNamesUnique())
+        .addCoCo(new PortNamesAreUnique())
+        .addCoCo(new ComponentInstanceNamesAreUnique())
         .addCoCo(new PortUsage())
         .addCoCo(new SubComponentsConnected())
         .addCoCo(new PackageLowerCase())
-        .addCoCo(new ComponentCapitalized())
+        .addCoCo(new ComponentNameIsCapitalized())
         .addCoCo(new DefaultParametersHaveCorrectOrder())
         .addCoCo(new ComponentWithTypeParametersHasInstance())
         .addCoCo(new TypeParameterNamesUnique())
-        .addCoCo(new ParameterNamesUnique())
+        .addCoCo(new ParameterNamesAreUnique())
         .addCoCo(new TopLevelComponentHasNoInstanceName())
-        .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointCorrectlyQualified())
-        .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointCorrectlyQualified())
+        .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
+        .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo(new InPortUniqueSender())
         
         /// Java/P Cocos ///////////////////////////////////////////////////////////// 
         .addCoCo(new SimpleConnectorSourceExists())
         .addCoCo(new ReferencedSubComponentExists())
-        .addCoCo(new UsedPortsVariablesExistCoCo())
+        .addCoCo(new UsedPortsAndVariablesExist())
         .addCoCo(new MultipleBehaviorImplementation())
         /* MontiArcAutomaton Cocos */
         .addCoCo(new VariableNameIsLowerCase())

@@ -29,7 +29,7 @@ import de.se_rwth.commons.logging.Log;
  *
  * @author Andreas Wortmann
  */
-public class UsedPortsVariablesExistCoCo
+public class UsedPortsAndVariablesExist
     implements MontiArcASTComponentCoCo {
   
   /**

@@ -19,7 +19,7 @@ import de.se_rwth.commons.logging.Log;
  * 
  * Implementation of CO1 and CO2
  */
-public class ConnectorEndPointCorrectlyQualified
+public class ConnectorEndPointIsCorrectlyQualified
     implements MontiArcASTSimpleConnectorCoCo, MontiArcASTConnectorCoCo {
   
   private void checkEndpointCorrectlyQualified(ASTQualifiedName name,

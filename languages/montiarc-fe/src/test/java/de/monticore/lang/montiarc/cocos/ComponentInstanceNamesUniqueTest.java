@@ -32,7 +32,7 @@ public class ComponentInstanceNamesUniqueTest extends AbstractCoCoTest {
   
   @Test
   public void testInvalid() {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentInstanceNamesUnique()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentInstanceNamesAreUnique()),
         getAstNode("arc4/coco", "invalid.ComponentInstanceNamesNotUnique"),
         new ExpectedErrorInfo(2, "xAC010"));
     
