@@ -16,6 +16,8 @@ import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
 
+//XXX: https://git.rwth-aachen.de/montiarc/core/issues/53
+
 /**
  * @author Arne Haber
  * @date 08.02.2010
