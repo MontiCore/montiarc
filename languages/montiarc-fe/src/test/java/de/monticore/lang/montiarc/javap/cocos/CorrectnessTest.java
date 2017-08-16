@@ -11,13 +11,6 @@ import org.junit.Test;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.se_rwth.commons.logging.Log;
 
-/**
- * TODO: Write me!
- *
- * @author (last commit) $Author$
- * @version $Revision$, $Date$
- * @since TODO: add version number
- */
 public class CorrectnessTest extends AbstractCocoTest {
   
   @Before

@@ -9,15 +9,6 @@ import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.SymbolKind;
 import de.monticore.symboltable.Symbols;
 
-/**
- * TODO: Write me!
- *
- * @author  (last commit) $Author$
- * @version $Revision$,
- *          $Date$
- * @since   TODO: add version number
- *
- */
 public class JavaVariableReferenceSymbol extends CommonSymbol{
 
   public static final JavaVariableReferenceKind KIND = new JavaVariableReferenceKind();

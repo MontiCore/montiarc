@@ -22,13 +22,6 @@ import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.se_rwth.commons.logging.Log;
 
-/**
- * TODO: Write me!
- *
- * @author (last commit) $Author$
- * @version $Revision$, $Date$
- * @since TODO: add version number
- */
 public class DefaultParametersTest extends AbstractSymtabTest {
 
   public static final boolean ENABLE_FAIL_QUICK = true;

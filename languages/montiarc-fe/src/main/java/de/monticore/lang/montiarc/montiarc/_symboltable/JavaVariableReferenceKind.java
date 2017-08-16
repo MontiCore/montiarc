@@ -7,18 +7,9 @@ package de.monticore.lang.montiarc.montiarc._symboltable;
 
 import de.monticore.symboltable.SymbolKind;
 
-/**
- * TODO: Write me!
- *
- * @author  (last commit) $Author$
- * @version $Revision$,
- *          $Date$
- * @since   TODO: add version number
- *
- */
 public class JavaVariableReferenceKind implements SymbolKind{
-  private static final String NAME = "de.monticore.lang.montiarc.ajava._symboltable.SimpleVariableKind";
-
+  private static final String NAME = JavaVariableReferenceKind.class.getName();
+  
   @Override
   public String getName() {
     return NAME;

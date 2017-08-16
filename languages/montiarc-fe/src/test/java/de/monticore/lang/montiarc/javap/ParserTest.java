@@ -17,13 +17,6 @@ import de.monticore.lang.montiarc.montiarc._ast.ASTMACompilationUnit;
 import de.monticore.lang.montiarc.montiarc._parser.MontiArcParser;
 import de.se_rwth.commons.logging.Log;
 
-/**
- * TODO: Write me!
- *
- * @author (last commit) $Author$
- * @version $Revision$, $Date$
- * @since TODO: add version number
- */
 public class ParserTest {
   
   private static final String MODELPATH = "src/test/resources";

@@ -11,8 +11,6 @@ import de.monticore.lang.montiarc.montiarc._visitor.MontiArcInheritanceVisitor;
 import de.se_rwth.commons.logging.Log;
 
 /**
- * TODO MvW<-RH: Implement as trafo
- *
  * @author Robert Heim
  */
 public class ExpandComponentsTrafo implements MontiArcInheritanceVisitor {

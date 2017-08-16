@@ -16,9 +16,7 @@ import de.se_rwth.commons.logging.Log;
  * Test checks the cocos ${DefaultParameterReferencingVariable} and
  * ${DefaultParametersHaveCorrectOrder}
  *
- * @author (last commit) $Author$
- * @version $Revision$, $Date$
- * @since TODO: add version number
+ * @author Robert Heim
  */
 public class DefaultParametersTest extends AbstractCoCoTest {
 

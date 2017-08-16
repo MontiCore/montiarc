@@ -22,6 +22,7 @@ import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.lang.expression.symboltable.ValueSymbol;
 import de.monticore.lang.expression.symboltable.ValueSymbol.Kind;
 import de.monticore.lang.montiarc.common._ast.ASTParameter;
+import de.monticore.lang.montiarc.helper.JavaHelper;
 import de.monticore.lang.montiarc.helper.Timing;
 import de.monticore.lang.montiarc.montiarc._ast.ASTAutomaton;
 import de.monticore.lang.montiarc.montiarc._ast.ASTAutomatonBehavior;
@@ -71,8 +72,10 @@ import de.se_rwth.commons.Names;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
 
+//XXX: https://git.rwth-aachen.de/montiarc/core/issues/52
+
 /**
- * Visitor that creats the symboltable of a MontiArc AST.
+ * Visitor that creates the symboltable of a MontiArc AST.
  *
  * @author Robert Heim
  */
@@ -226,8 +229,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     // ref.setPackageName(refCompPackage);
     
     // TODO internal representation of ValueSymbol ? that was heavily based on
-    // CommonValues
-    // language and its expressions, but we use JavaDSL.
+    // CommonValues language and its expressions, but we use JavaDSL.
     List<ValueSymbol<TypeReference<TypeSymbol>>> configArgs = new ArrayList<>();
     for (ASTExpression arg : node.getArguments()) {
       String value = new JavaDSLPrettyPrinter(new IndentPrinter()).prettyprint(arg);

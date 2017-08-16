@@ -12,6 +12,8 @@ import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JMethodSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 
+//XXX: https://git.rwth-aachen.de/montiarc/core/issues/51
+
 /**
  * The MontiArc Language
  *
@@ -43,8 +45,9 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
     addResolver(CommonResolvingFilter.create(JTypeSymbol.KIND));
     addResolver(CommonResolvingFilter.create(JFieldSymbol.KIND));
     addResolver(CommonResolvingFilter.create(JMethodSymbol.KIND));
-//    
-//    // I/O Automaton
+
+    
+    // I/O Automaton
     addResolver(new StateResolvingFilter());
     addResolver(new TransitionResolvingFilter());
     addResolver(new Variable2FieldResolvingFilter());

@@ -21,13 +21,6 @@ import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
 
-/**
- * TODO
- *
- * @author (last commit) $Author$
- * @version $Revision$, $Date$
- * @since TODO: add version number
- */
 public class AutoInstantiationTest extends AbstractSymtabTest {
 
   @BeforeClass

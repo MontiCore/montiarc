@@ -16,11 +16,9 @@ import org.junit.Test;
 import de.se_rwth.commons.logging.Log;
 
 /**
- * TODO: Write me!
+ * Tests various forms of component uniqueness
  *
- * @author (last commit) $Author$
- * @version $Revision$, $Date$
- * @since TODO: add version number
+ * @author Robert Heim
  */
 public class UniquenessTest extends AbstractCoCoTest {
 
