@@ -1,4 +1,4 @@
-package de.monticore.lang.montiarc.javap;
+package infrastructure;
 
 import java.nio.file.Paths;
 
@@ -9,7 +9,7 @@ import de.monticore.symboltable.Scope;
 import montiarc._symboltable.MontiArcLanguageFamily;
 import montiarc.helper.JavaHelper;
 
-public class AbstractSymtabTest {
+public class AJavaBaseTest {
   protected static Scope createSymTab(String modelPath) {
     ModelingLanguageFamily fam = new MontiArcLanguageFamily();
     final ModelPath mp = new ModelPath(Paths.get(modelPath), Paths.get("src/main/resources/defaultTypes"));

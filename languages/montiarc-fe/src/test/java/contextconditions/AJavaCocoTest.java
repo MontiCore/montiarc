@@ -1,4 +1,4 @@
-package de.monticore.lang.montiarc.javap.cocos;
+package contextconditions;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -13,16 +13,16 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
-import de.monticore.lang.montiarc.javap.AbstractSymtabTest;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AJavaBaseTest;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.MontiArcCoCos;
 
-public class AbstractCocoTest extends AbstractSymtabTest {
+public class AJavaCocoTest extends AJavaBaseTest {
   
   protected static ASTMontiArcNode getAstNode(String modelPath, String model) {
     // ensure an empty log

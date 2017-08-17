@@ -1,6 +1,6 @@
-package javap.valid;
+package contextconditions.valid;
 
-component Foo {
+component DistanceLogger {
   port
     in double distance,
     out String hulu;

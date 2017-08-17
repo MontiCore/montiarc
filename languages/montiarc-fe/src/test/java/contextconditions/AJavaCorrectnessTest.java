@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package de.monticore.lang.montiarc.javap.cocos;
+package contextconditions;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import org.junit.Test;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMontiArcNode;
 
-public class CorrectnessTest extends AbstractCocoTest {
+public class AJavaCorrectnessTest extends AJavaCocoTest {
   
   @Before
   public void setup(){
@@ -20,23 +20,23 @@ public class CorrectnessTest extends AbstractCocoTest {
   
   @Test
   public void testUsedPortsExist() {
-    checkValid("src/test/resources/", "javap.cocos.correctness.valid.UsedPortsExist");
+    checkValid("src/test/resources/", "contextconditions.valid.UsedPortsExist");
   }
   
   @Test
   public void testNewVariableDecl() {    
-    checkValid("src/test/resources/", "javap.cocos.correctness.valid.NewVarDecl");
+    checkValid("src/test/resources/", "contextconditions.valid.NewVarDecl");
   }
   
   @Test
   public void testUsedPortsNotExist() {
-    ASTMontiArcNode node = getAstNode("src/test/resources/", "javap.cocos.correctness.invalid.UsedPortsNotExist");
+    ASTMontiArcNode node = getAstNode("src/test/resources/", "contextconditions.invalid.UsedPortsNotExist");
     checkInvalid(node, new ExpectedErrorInfo(2, "xAA330"));
   }
   
   @Test
   public void testComponentWithAJavaAndAutomaton() {
-    ASTMontiArcNode node = getAstNode("src/test/resources/","javap.cocos.correctness.invalid.ComponentWithAJavaAndAutomaton");
+    ASTMontiArcNode node = getAstNode("src/test/resources/","contextconditions.invalid.ComponentWithAJavaAndAutomaton");
     checkInvalid(node, new ExpectedErrorInfo(1, "xAB140"));
   }
   

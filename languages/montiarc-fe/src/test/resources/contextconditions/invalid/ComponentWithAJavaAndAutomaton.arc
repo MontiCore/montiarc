@@ -1,8 +1,8 @@
-package javap.cocos.correctness.invalid;
+package contextconditions.invalid;
 
-import javap.valid.bumperbot.Datatypes.MotorCommand;
-import javap.valid.bumperbot.Datatypes.TimerSignal;
-import javap.valid.bumperbot.Datatypes.TimerCmd;
+import contextconditions.valid.Datatypes.MotorCommand;
+import contextconditions.valid.Datatypes.TimerSignal;
+import contextconditions.valid.Datatypes.TimerCmd;
 
 component ComponentWithAJavaAndAutomaton {
 

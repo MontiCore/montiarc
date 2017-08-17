@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package de.monticore.lang.montiarc.javap;
+package contextconditions;
 
 import static org.junit.Assert.assertTrue;
 
@@ -16,7 +16,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
 
-public class ParserTest {
+public class AJavaParserTest {
   
   private static final String MODELPATH = "src/test/resources";
   
@@ -33,7 +33,7 @@ public class ParserTest {
   
   @Test
   public void testAutomaton() {
-    test("/javap/valid/bumperbot/BumpControl.arc", true);
+    test("/contextconditions/valid/BumpControl.arc", true);
   }
   
   private void test(String modelName, boolean containsAJava){
@@ -50,7 +50,7 @@ public class ParserTest {
   
   @Test
   public void testCompWithInitMethod() {
-    test("/javap/valid/CompWithVariableAndPortInit.arc", true);
+    test("/contextconditions/valid/CompWithVariableAndPortInit.arc", true);
   }
   
 }

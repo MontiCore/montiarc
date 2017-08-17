@@ -1,4 +1,4 @@
-package javap.valid;
+package contextconditions.valid;
 
 component CompWithVariableAndPortInit {
 

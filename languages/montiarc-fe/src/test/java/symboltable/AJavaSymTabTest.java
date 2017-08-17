@@ -1,4 +1,4 @@
-package de.monticore.lang.montiarc.javap;
+package symboltable;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -11,11 +11,12 @@ import org.junit.Test;
 
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AJavaBaseTest;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.JavaBehaviorSymbol;
 
-public class SymTabTest extends AbstractSymtabTest {
+public class AJavaSymTabTest extends AJavaBaseTest {
   
   public static final String MODELPATH = "src/test/resources";
   
@@ -27,11 +28,11 @@ public class SymTabTest extends AbstractSymtabTest {
   @Test
   @Ignore // This test operates a no longer existing symbol
   public void testAutomatonEmbedding() {
-    ASTMontiArcNode node = getAstNode(MODELPATH, "javap.valid.bumperbot.BumpControl");
+    ASTMontiArcNode node = getAstNode(MODELPATH, "contextconditions.valid.BumpControl");
     assertNotNull(node);
     Scope symtab = createSymTab(MODELPATH);
     Optional<ComponentSymbol> oBControl = symtab
-        .<ComponentSymbol> resolve("javap.valid.bumperbot.BumpControl", ComponentSymbol.KIND);
+        .<ComponentSymbol> resolve("contextconditions.valid.BumpControl", ComponentSymbol.KIND);
     assertTrue(oBControl.isPresent());
     ComponentSymbol bControl = oBControl.get();
 //    Collection<AutomatonSymbol> automatons = ScopeHelper.resolveManyDown(bControl.getSpannedScope(),
@@ -41,10 +42,10 @@ public class SymTabTest extends AbstractSymtabTest {
   
   @Test
   public void testAJavaEmbedding() {
-    ASTMontiArcNode node = getAstNode(MODELPATH, "javap.valid.Foo");
+    ASTMontiArcNode node = getAstNode(MODELPATH, "contextconditions.valid.DistanceLogger");
     assertNotNull(node);
     Scope symtab = createSymTab(MODELPATH);
-    Optional<ComponentSymbol> oFoo = symtab.<ComponentSymbol> resolve("javap.valid.Foo",
+    Optional<ComponentSymbol> oFoo = symtab.<ComponentSymbol> resolve("contextconditions.valid.DistanceLogger",
         ComponentSymbol.KIND);
     assertTrue(oFoo.isPresent());
     ComponentSymbol foo = oFoo.get();

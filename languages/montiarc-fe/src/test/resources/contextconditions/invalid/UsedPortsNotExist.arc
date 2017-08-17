@@ -1,4 +1,4 @@
-package javap.cocos.correctness.invalid;
+package contextconditions.invalid;
 
 component UsedPortsNotExist {
   port

@@ -1,4 +1,4 @@
-package javap.cocos.correctness.valid;
+package contextconditions.valid;
 
 component NewVarDecl {
   port
