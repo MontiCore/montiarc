@@ -5,12 +5,13 @@
  */
 package contextconditions;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
+import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.DefaultParametersHaveCorrectOrder;
 
 /**
  * Test checks the cocos ${DefaultParameterReferencingVariable} and
@@ -27,17 +28,31 @@ public class DefaultParametersTest extends AbstractCoCoTest {
   }
 
   @Test
-  public void testDefaultParametersHaveCorrectOrder() {
-    runCheckerWithSymTab("contextconditions", "valid.DefaultParametersHaveRightOrder");
-    assertEquals(0, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xAC005"))
-        .count());
+  public void testDefaultParametersHaveCorrectOrder() {  
+    checkValid("contextconditions", "valid.DefaultParametersHaveRightOrder");
   }
 
   @Test
   public void testDefaultParameterHaveWrongOrder() {
-    runCheckerWithSymTab("contextconditions", "invalid.DefaultParametersHaveWrongOrder");
-    assertEquals(1, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xAC005"))
-        .count());
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersHaveCorrectOrder()),
+        getAstNode("contextconditions", "invalid.DefaultParametersHaveWrongOrder"),
+        new ExpectedErrorInfo(1, "xAC005"));
+  }
+  
+  @Ignore("TODO Ticket #56: Coco schreiben, CoCo im Parameter initialisieren, Fehlercode anpassen.")
+  @Test
+  public void testWrongDefaultParameterType() {
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersHaveCorrectOrder()),
+        getAstNode("contextconditions", "invalid.WrongDefaultParameterType"),
+        new ExpectedErrorInfo(1, "xAC005"));
+    
+  }
+  
+  @Test
+  public void testComplexInvalidParametersOrder() {
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersHaveCorrectOrder()),
+        getAstNode("contextconditions", "invalid.ComplexInvalidParametersOrder"),
+        new ExpectedErrorInfo(1, "xAC005"));
   }
 
 }
