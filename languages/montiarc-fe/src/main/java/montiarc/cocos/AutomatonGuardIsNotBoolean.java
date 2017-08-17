@@ -16,7 +16,7 @@ import montiarc.helper.TypeCompatibilityChecker;
  *
  * @author Andreas Wortmann
  */
-public class GuardIsNotBoolean implements MontiArcASTGuardExpressionCoCo {
+public class AutomatonGuardIsNotBoolean implements MontiArcASTGuardExpressionCoCo {
 
   @Override
   public void check(ASTGuardExpression node) {

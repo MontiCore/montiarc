@@ -10,7 +10,7 @@ import montiarc._cocos.MontiArcASTStateCoCo;
  * 
  * @author Gerrit Leonhardt, Andreas Wortmann
  */
-public class StateUppercase implements MontiArcASTStateCoCo {
+public class AutomatonStateUppercase implements MontiArcASTStateCoCo {
   
   @Override
   public void check(ASTState node) {

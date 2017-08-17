@@ -11,7 +11,7 @@ import montiarc._ast.ASTValueList;
 import montiarc._cocos.MontiArcASTValueListCoCo;
 import montiarc._symboltable.PortSymbol;
 
-public class OutputInExpression implements MontiArcASTValueListCoCo {
+public class AutomatonOutputInExpression implements MontiArcASTValueListCoCo {
   
   @Override
   public void check(ASTValueList node) {
@@ -23,7 +23,7 @@ public class OutputInExpression implements MontiArcASTValueListCoCo {
           Optional<PortSymbol> found = scope.resolve(expr.get().getName().get(), PortSymbol.KIND);
           if (found.isPresent() && found.get().isOutgoing()) {
             Log.error("0xAA1A0 Port " + found.get().getName()
-                + " is an Ouput and not allowed in Expressions.", node.get_SourcePositionStart());
+                + " is an outgoing port and not allowed in expressions.", node.get_SourcePositionStart());
           }
         }
       }

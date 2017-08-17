@@ -13,7 +13,7 @@ import montiarc._cocos.MontiArcASTAutomatonCoCo;
  * 
  * @author Gerrit Leonhardt, Andreas Wortmann
  */
-public class InitialDeclaredMultipleTimes implements MontiArcASTAutomatonCoCo {
+public class AutomatonInitialDeclaredMultipleTimes implements MontiArcASTAutomatonCoCo {
   
   @Override
   public void check(ASTAutomaton node) {

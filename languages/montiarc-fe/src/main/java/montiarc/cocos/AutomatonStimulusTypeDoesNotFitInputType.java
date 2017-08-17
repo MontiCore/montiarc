@@ -24,7 +24,7 @@ import montiarc.helper.TypeCompatibilityChecker;
  *
  * @author Andreas Wortmann
  */
-public class StimulusTypeDoesNotFitInputType implements MontiArcASTTransitionCoCo {
+public class AutomatonStimulusTypeDoesNotFitInputType implements MontiArcASTTransitionCoCo {
   
   @Override
   public void check(ASTTransition node) {

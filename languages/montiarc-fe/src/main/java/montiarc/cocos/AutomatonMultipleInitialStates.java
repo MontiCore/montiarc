@@ -9,7 +9,7 @@ import montiarc._cocos.MontiArcASTInitialStateDeclarationCoCo;
  *
  * @author Gerrit Leonhardt, Andreas Wortmann
  */
-public class MultipleInitialStates implements MontiArcASTInitialStateDeclarationCoCo {
+public class AutomatonMultipleInitialStates implements MontiArcASTInitialStateDeclarationCoCo {
 
   @Override
   public void check(ASTInitialStateDeclaration node) {

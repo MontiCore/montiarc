@@ -52,30 +52,30 @@ public class MontiArcCoCos {
         .addCoCo(new AutomatonHasNoInitialState())
         .addCoCo(new CorrectAssignmentOperators())
         .addCoCo(new MultipleAssignmentsSameIdentifier())
-        .addCoCo(new OutputInExpression())
-        .addCoCo((MontiArcASTInitialStateDeclarationCoCo)new ReactionWithAlternatives())
-        .addCoCo((MontiArcASTTransitionCoCo)new ReactionWithAlternatives())
+        .addCoCo(new AutomatonOutputInExpression())
+        .addCoCo((MontiArcASTInitialStateDeclarationCoCo)new AutomatonReactionWithAlternatives())
+        .addCoCo((MontiArcASTTransitionCoCo)new AutomatonReactionWithAlternatives())
         .addCoCo(new UseOfForbiddenExpression())
-        .addCoCo(new StateUppercase())
+        .addCoCo(new AutomatonStateUppercase())
         
         // REFERENTIAL INTEGRITY
-        .addCoCo(new DeclaredInitialStateDoesNotExist())
+        .addCoCo(new AutomatonDeclaredInitialStateDoesNotExist())
         .addCoCo(new UseOfUndeclaredField())
         .addCoCo(new UseOfUndeclaredState())
         .addCoCo(new AssignmentHasNoName())
         
         // TYPE CORRECTNESS
-        .addCoCo(new GuardIsNotBoolean())
-        .addCoCo(new StimulusTypeDoesNotFitInputType())
-        .addCoCo(new InitialReactionTypeDoesNotFitOutputType())
-        .addCoCo(new ReactionTypeDoesNotFitOutputType())
+        .addCoCo(new AutomatonGuardIsNotBoolean())
+        .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
+        .addCoCo(new AutomatonInitialReactionTypeDoesNotFitOutputType())
+        .addCoCo(new AutomatonReactionTypeDoesNotFitOutputType())
         
         // UNIQUENESS OF NAMES
-        .addCoCo(new StateDefinedMultipleTimesStereotypesDontMatch())
+        .addCoCo(new AutomatonStateDefinedMultipleTimesStereotypesDontMatch())
         .addCoCo(new VariableDefinedMultipleTimes())
-        .addCoCo(new InitialDeclaredMultipleTimes())
-        .addCoCo(new StateDefinedMultipleTimes())
-        .addCoCo(new MultipleInitialStates())
+        .addCoCo(new AutomatonInitialDeclaredMultipleTimes())
+        .addCoCo(new AutomatonStateDefinedMultipleTimes())
+        .addCoCo(new AutomatonMultipleInitialStates())
         .addCoCo(new UseOfAlternatives())
         .addCoCo(new UseOfValueLists());
   }

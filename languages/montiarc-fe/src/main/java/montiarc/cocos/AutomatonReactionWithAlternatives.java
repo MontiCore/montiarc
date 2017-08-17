@@ -13,7 +13,7 @@ import montiarc._cocos.MontiArcASTTransitionCoCo;
  * 
  * @author Gerrit Leonhardt, Andreas Wortmann
  */
-public class ReactionWithAlternatives implements MontiArcASTInitialStateDeclarationCoCo, MontiArcASTTransitionCoCo {
+public class AutomatonReactionWithAlternatives implements MontiArcASTInitialStateDeclarationCoCo, MontiArcASTTransitionCoCo {
   
   @Override
   public void check(ASTTransition node) {

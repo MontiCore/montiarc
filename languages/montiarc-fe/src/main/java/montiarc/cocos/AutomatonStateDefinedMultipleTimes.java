@@ -14,7 +14,7 @@ import montiarc._cocos.MontiArcASTAutomatonCoCo;
  * 
  * @author Gerrit Leonhardt, Andreas Wortmann
  */
-public class StateDefinedMultipleTimes implements MontiArcASTAutomatonCoCo {
+public class AutomatonStateDefinedMultipleTimes implements MontiArcASTAutomatonCoCo {
   
   @Override
   public void check(ASTAutomaton node) {

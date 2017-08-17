@@ -17,7 +17,7 @@ import montiarc._cocos.MontiArcASTAutomatonCoCo;
  * 
  * @author Gerrit Leonhardt, Andreas Wortmann
  */
-public class StateDefinedMultipleTimesStereotypesDontMatch implements MontiArcASTAutomatonCoCo {
+public class AutomatonStateDefinedMultipleTimesStereotypesDontMatch implements MontiArcASTAutomatonCoCo {
   
   @Override
   public void check(ASTAutomaton node) { // Collect all states

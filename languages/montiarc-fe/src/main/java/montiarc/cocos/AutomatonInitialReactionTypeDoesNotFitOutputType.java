@@ -25,7 +25,7 @@ import montiarc.helper.TypeCompatibilityChecker;
  * @version $Revision$, $Date$
  * @since $Version$
  */
-public class InitialReactionTypeDoesNotFitOutputType implements MontiArcASTInitialStateDeclarationCoCo {
+public class AutomatonInitialReactionTypeDoesNotFitOutputType implements MontiArcASTInitialStateDeclarationCoCo {
   
   @Override
   public void check(ASTInitialStateDeclaration node) {

@@ -23,7 +23,7 @@ import montiarc.helper.TypeCompatibilityChecker;
  *
  * @author Andreas Wortmann
  */
-public class ReactionTypeDoesNotFitOutputType implements MontiArcASTTransitionCoCo {
+public class AutomatonReactionTypeDoesNotFitOutputType implements MontiArcASTTransitionCoCo {
   
   @Override
   public void check(ASTTransition node) {

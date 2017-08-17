@@ -16,7 +16,7 @@ import montiarc._cocos.MontiArcASTAutomatonCoCo;
  *
  * @author Andreas Wortmann
  */
-public class DeclaredInitialStateDoesNotExist implements MontiArcASTAutomatonCoCo {
+public class AutomatonDeclaredInitialStateDoesNotExist implements MontiArcASTAutomatonCoCo {
   
   @Override
   public void check(ASTAutomaton node) {
