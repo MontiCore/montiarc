@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package symboltable.aggregation;
+package symboltable;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -16,7 +16,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 
-public class BumperBotTest extends AbstractSymTabTest {
+public class BumperBotTest extends AbstractSymboltableTest {
   
   @Before
   public void setup() {

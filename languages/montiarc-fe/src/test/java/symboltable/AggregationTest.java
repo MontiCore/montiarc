@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package symboltable.aggregation;
+package symboltable;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -37,7 +37,7 @@ import montiarc._symboltable.PortSymbol;
  * @author Crispin Kirchner, Andreas Wortmann
  * @version $Revision$, $Date$
  */
-public class AggregationTest extends AbstractSymTabTest {
+public class AggregationTest extends AbstractSymboltableTest {
   
   private final String MODEL_PATH = "src/test/resources/symboltable";
   
