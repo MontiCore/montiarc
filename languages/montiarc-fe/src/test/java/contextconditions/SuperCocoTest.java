@@ -3,8 +3,8 @@ package contextconditions;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMontiArcNode;
 
 /**
  * Tests some cocos from IOAutomaton and MontiArc to ensure that they are also

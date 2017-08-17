@@ -9,10 +9,10 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.cocos.ReferencedSubComponentExists;
-import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
-import de.monticore.lang.montiarc.montiarc._cocos.MontiArcCoCoChecker;
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.ReferencedSubComponentExists;
 
 /**
  * @author Crispin Kirchner

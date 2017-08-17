@@ -4,9 +4,9 @@ import java.nio.file.Paths;
 
 import de.monticore.ModelingLanguageFamily;
 import de.monticore.io.paths.ModelPath;
-import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcLanguageFamily;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Scope;
+import montiarc._symboltable.MontiArcLanguageFamily;
 
 public abstract class AbstractSymTabTest {
   

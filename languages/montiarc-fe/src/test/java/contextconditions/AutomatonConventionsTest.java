@@ -4,10 +4,10 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.monticore.symboltable.Scope;
 import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMontiArcNode;
 
 public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
   @BeforeClass

@@ -9,11 +9,11 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.JavaBehaviorSymbol;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMontiArcNode;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.JavaBehaviorSymbol;
 
 public class SymTabTest extends AbstractSymtabTest {
   

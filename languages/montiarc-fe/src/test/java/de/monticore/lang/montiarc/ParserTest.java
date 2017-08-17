@@ -24,9 +24,9 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.montiarc._ast.ASTMACompilationUnit;
-import de.monticore.lang.montiarc.montiarc._parser.MontiArcParser;
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMACompilationUnit;
+import montiarc._parser.MontiArcParser;
 
 /**
  * @author Robert Heim

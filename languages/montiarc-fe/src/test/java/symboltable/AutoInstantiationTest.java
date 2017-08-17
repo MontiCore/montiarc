@@ -13,12 +13,12 @@ import java.util.Collection;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
+import montiarc._symboltable.ComponentInstanceSymbol;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.PortSymbol;
 
 public class AutoInstantiationTest extends AbstractSymboltableTest {
   

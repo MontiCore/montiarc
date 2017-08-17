@@ -16,10 +16,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.monticore.lang.montiarc.common._ast.ASTParameter;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.se_rwth.commons.logging.Log;
+import montiarc._symboltable.ComponentSymbol;
 
 public class DefaultParametersTest extends AbstractSymboltableTest {
 

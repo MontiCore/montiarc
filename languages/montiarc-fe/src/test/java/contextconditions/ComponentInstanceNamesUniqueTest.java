@@ -8,9 +8,9 @@ package contextconditions;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.cocos.ComponentInstanceNamesAreUnique;
-import de.monticore.lang.montiarc.montiarc._cocos.MontiArcCoCoChecker;
 import de.se_rwth.commons.logging.Log;
+import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.ComponentInstanceNamesAreUnique;
 
 /**
  * @author Robert Heim, Crispin Kirchner

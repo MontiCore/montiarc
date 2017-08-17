@@ -12,13 +12,13 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import de.monticore.lang.expression.symboltable.ValueSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
+import montiarc._symboltable.ComponentInstanceSymbol;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.ConnectorSymbol;
+import montiarc._symboltable.PortSymbol;
 
 /**
  * @author Robert Heim

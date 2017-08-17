@@ -20,15 +20,15 @@ import org.junit.Test;
 
 import de.monticore.cocos.helper.Assert;
 import de.monticore.lang.expression.symboltable.ValueSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbolReference;
-import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
+import montiarc._symboltable.ComponentInstanceSymbol;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.ComponentSymbolReference;
+import montiarc._symboltable.ConnectorSymbol;
+import montiarc._symboltable.PortSymbol;
 import symboltable.AbstractSymboltableTest;
 
 /**

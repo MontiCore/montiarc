@@ -12,9 +12,9 @@ import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.montiarc._ast.ASTMACompilationUnit;
-import de.monticore.lang.montiarc.montiarc._parser.MontiArcParser;
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMACompilationUnit;
+import montiarc._parser.MontiArcParser;
 
 public class ParserTest {
   

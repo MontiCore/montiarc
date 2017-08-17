@@ -11,10 +11,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.ConnectorSymbol;
 import symboltable.AbstractSymboltableTest;
 
 public class AutoConnectionTest extends AbstractSymboltableTest {

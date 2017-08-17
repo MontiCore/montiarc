@@ -8,8 +8,8 @@ package de.monticore.lang.montiarc.javap.cocos;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMontiArcNode;
 
 public class CorrectnessTest extends AbstractCocoTest {
   

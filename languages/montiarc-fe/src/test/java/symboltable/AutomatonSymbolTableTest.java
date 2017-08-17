@@ -7,13 +7,13 @@ import org.junit.Test;
 
 import de.monticore.java.symboltable.JavaFieldSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbol;
-import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.symboltable.Scope;
 import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AutomatonBaseTest;
+import montiarc._ast.ASTMontiArcNode;
+import montiarc._symboltable.ComponentSymbol;
 
 public class AutomatonSymbolTableTest extends AutomatonBaseTest {
   @BeforeClass

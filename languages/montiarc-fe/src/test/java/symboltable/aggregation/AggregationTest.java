@@ -20,8 +20,6 @@ import org.junit.Test;
 
 import de.monticore.ModelingLanguageFamily;
 import de.monticore.io.paths.ModelPath;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JMethodSymbol;
@@ -32,6 +30,8 @@ import de.monticore.umlcd4a.CD4AnalysisLanguage;
 import de.monticore.umlcd4a.symboltable.CDSymbol;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 import de.se_rwth.commons.logging.Log;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.PortSymbol;
 
 /**
  * @author Crispin Kirchner, Andreas Wortmann

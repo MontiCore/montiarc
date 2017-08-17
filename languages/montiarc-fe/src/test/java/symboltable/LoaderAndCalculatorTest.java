@@ -10,10 +10,10 @@ import java.util.Set;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcModelNameCalculator;
 import de.monticore.symboltable.Scope;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.ConnectorSymbol;
+import montiarc._symboltable.MontiArcModelNameCalculator;
 
 public class LoaderAndCalculatorTest extends AbstractSymboltableTest {
   

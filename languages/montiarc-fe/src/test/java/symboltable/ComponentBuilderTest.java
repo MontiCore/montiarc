@@ -1,14 +1,14 @@
 package symboltable;
 
-import static de.monticore.lang.montiarc.montiarc._symboltable.ComponentBuilder.addConnectors;
-import static de.monticore.lang.montiarc.montiarc._symboltable.ComponentBuilder.addInnerComponents;
-import static de.monticore.lang.montiarc.montiarc._symboltable.ComponentBuilder.addPort;
-import static de.monticore.lang.montiarc.montiarc._symboltable.ComponentBuilder.addPorts;
-import static de.monticore.lang.montiarc.montiarc._symboltable.ComponentBuilder.addSubComponent;
-import static de.monticore.lang.montiarc.montiarc._symboltable.ComponentBuilder.removeConnectors;
-import static de.monticore.lang.montiarc.montiarc._symboltable.ComponentBuilder.removeInnerComponents;
-import static de.monticore.lang.montiarc.montiarc._symboltable.ComponentBuilder.removePorts;
-import static de.monticore.lang.montiarc.montiarc._symboltable.ComponentBuilder.removeSubComponent;
+import static montiarc._symboltable.ComponentBuilder.addConnectors;
+import static montiarc._symboltable.ComponentBuilder.addInnerComponents;
+import static montiarc._symboltable.ComponentBuilder.addPort;
+import static montiarc._symboltable.ComponentBuilder.addPorts;
+import static montiarc._symboltable.ComponentBuilder.addSubComponent;
+import static montiarc._symboltable.ComponentBuilder.removeConnectors;
+import static montiarc._symboltable.ComponentBuilder.removeInnerComponents;
+import static montiarc._symboltable.ComponentBuilder.removePorts;
+import static montiarc._symboltable.ComponentBuilder.removeSubComponent;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -17,11 +17,11 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.Scope;
+import montiarc._symboltable.ComponentInstanceSymbol;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.ConnectorSymbol;
+import montiarc._symboltable.PortSymbol;
 
 public class ComponentBuilderTest extends AbstractSymboltableTest {
 

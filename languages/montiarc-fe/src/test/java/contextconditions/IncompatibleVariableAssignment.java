@@ -4,8 +4,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMontiArcNode;
 
 public class IncompatibleVariableAssignment extends AutomatonAbstractCocoTest {
   

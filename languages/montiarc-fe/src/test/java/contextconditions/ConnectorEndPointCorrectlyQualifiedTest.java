@@ -8,11 +8,11 @@ package contextconditions;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.cocos.ConnectorEndPointIsCorrectlyQualified;
-import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTConnectorCoCo;
-import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
-import de.monticore.lang.montiarc.montiarc._cocos.MontiArcCoCoChecker;
 import de.se_rwth.commons.logging.Log;
+import montiarc._cocos.MontiArcASTConnectorCoCo;
+import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
+import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.ConnectorEndPointIsCorrectlyQualified;
 
 /**
  * @author Crispin Kirchner

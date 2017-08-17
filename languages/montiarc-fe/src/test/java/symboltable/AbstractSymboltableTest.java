@@ -4,10 +4,10 @@ import java.nio.file.Paths;
 
 import de.monticore.ModelingLanguageFamily;
 import de.monticore.io.paths.ModelPath;
-import de.monticore.lang.montiarc.helper.JavaHelper;
-import de.monticore.lang.montiarc.montiarc._symboltable.MontiArcLanguageFamily;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Scope;
+import montiarc._symboltable.MontiArcLanguageFamily;
+import montiarc.helper.JavaHelper;
 
 public abstract class AbstractSymboltableTest {
   protected static Scope createSymTab(String modelPath) {
