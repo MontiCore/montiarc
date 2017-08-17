@@ -1,19 +1,14 @@
 package symboltable;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
-import java.util.Set;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.symboltable.Scope;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.ConnectorSymbol;
-import montiarc._symboltable.MontiArcModelNameCalculator;
 
 public class LoaderAndCalculatorTest extends AbstractSymboltableTest {
   
@@ -27,19 +22,6 @@ public class LoaderAndCalculatorTest extends AbstractSymboltableTest {
     return s;
   }
   
-  @Ignore("TODO MvW<-RH documentation of ModelLoader and clarify issue #2")
-  @Test
-  public void testModelNameCalculator() {
-    MontiArcModelNameCalculator calculator = new MontiArcModelNameCalculator();
-    Set<String> models = calculator.calculateModelNames("industry2.turbineController.piController",
-        ConnectorSymbol.KIND);
-    System.out.println(models);
-    assertEquals(models.size(), 2);
-    assertTrue(models.contains("Industry2"));
-    assertTrue(models.contains("industry2.TurbineController"));
-  }
-  
-  // TODO MvW check if bug is in ModelLoader or in SymbolTable resolve
   @Test
   public void testModelLoader() {
     Scope scope = createSymTab(MODEL_PATH);
