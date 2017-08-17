@@ -1,6 +1,6 @@
-package bumperbot.library;
+package contextconditions.valid;
 
-import bumperbot.library.Types.*; 
+import contextconditions.valid.Types.*; 
  
 component Motor(String name, String typ = "BACK") {
     port

@@ -16,7 +16,7 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.JavaBehaviorSymbol;
 
-public class AJavaSymTabTest extends AJavaBaseTest {
+public class AJavaSymbolTableTest extends AJavaBaseTest {
   
   public static final String MODELPATH = "src/test/resources";
   
@@ -34,7 +34,7 @@ public class AJavaSymTabTest extends AJavaBaseTest {
     Optional<ComponentSymbol> oBControl = symtab
         .<ComponentSymbol> resolve("contextconditions.valid.BumpControl", ComponentSymbol.KIND);
     assertTrue(oBControl.isPresent());
-    ComponentSymbol bControl = oBControl.get();
+//    ComponentSymbol bControl = oBControl.get();
 //    Collection<AutomatonSymbol> automatons = ScopeHelper.resolveManyDown(bControl.getSpannedScope(),
 //        AutomatonSymbol.KIND);
 //    assertTrue(automatons.size() == 1);

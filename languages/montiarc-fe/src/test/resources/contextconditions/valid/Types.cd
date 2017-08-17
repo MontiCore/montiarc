@@ -1,4 +1,5 @@
-package bumperbot.library;
+package contextconditions.valid;
+
 classdiagram Types {
 
     enum MotorCmd {

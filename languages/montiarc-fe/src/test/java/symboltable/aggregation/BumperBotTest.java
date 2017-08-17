@@ -28,7 +28,7 @@ public class BumperBotTest extends AbstractSymTabTest {
   public void test() {
     Scope symbolTable = createSymTab("src/test/resources");
     ComponentSymbol motorSymbol = symbolTable
-        .<ComponentSymbol> resolve("bumperbot.library.Motor", ComponentSymbol.KIND)
+        .<ComponentSymbol> resolve("contextconditions.valid.Motor", ComponentSymbol.KIND)
         .orElse(null);
     
     assertNotNull(motorSymbol);
