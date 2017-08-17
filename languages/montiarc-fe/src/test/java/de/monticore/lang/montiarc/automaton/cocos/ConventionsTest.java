@@ -4,6 +4,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import contextconditions.AutomatonAbstractCocoTest;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.monticore.symboltable.Scope;
 import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
@@ -17,7 +18,7 @@ public class ConventionsTest extends AutomatonAbstractCocoTest {
   
   @Test
   public void testMutipleBehaviors() {
-    ASTMontiArcNode node = getAstNode("src/test/resources/", "automaton.invalid.MutipleBehaviors");
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "automaton.invalid.MutipleBehaviors");
     checkInvalid(node, new ExpectedErrorInfo(3, "xAB140", "xAB130"));
   }
   
@@ -25,7 +26,7 @@ public class ConventionsTest extends AutomatonAbstractCocoTest {
   public void testLowerCaseEnumeration() {
     Log.getFindings().clear();
     // loads the CD explicitly and checks its cocos
-    Scope symTab = createSymTab("src/test/resources/");
+    Scope symTab = createSymTab(MODEL_PATH);
     symTab.<CDFieldSymbol> resolve("automaton.invalid.LowerCaseEnumeration.lowerCaseEnumeration.A", CDFieldSymbol.KIND).orElse(null);
     new ExpectedErrorInfo(1, "xC4A05").checkFindings(Log.getFindings());
     // @JP: Was sollte xC4A05 tun und wieso tut es das nicht?
@@ -42,7 +43,7 @@ public class ConventionsTest extends AutomatonAbstractCocoTest {
     // TODO symbols are only loaded if they are resolved. Therefore it is not
     // easily possible to perform CoCo checks to detect errors in CDs that are
     // imported in the given MAA model.
-    ASTMontiArcNode node = getAstNode("src/test/resources/", "automaton.invalid.InvalidCD");
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "automaton.invalid.InvalidCD");
     checkInvalid(node, new ExpectedErrorInfo(1, "xC4A05"));
     // @JP: Fehlercodes zu Konstantes machen
   }

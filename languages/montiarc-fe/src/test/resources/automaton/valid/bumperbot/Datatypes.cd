@@ -1,8 +1,0 @@
-package automaton.valid.bumperbot;
-
-classdiagram Datatypes {
-  enum MotorCommand {FORWARD, BACKWARD, LEFTTURN, RIGHTTURN, STOP;}
-  enum TimerCmd {SINGLE, DOUBLE; }
-  enum TimerSignal {ALERT, SLEEP; }
-  enum SpeedCmd {Static, Dynamic; }
-}

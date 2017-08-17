@@ -3,6 +3,7 @@ package de.monticore.lang.montiarc.automaton.cocos;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import contextconditions.AutomatonAbstractCocoTest;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.se_rwth.commons.logging.Log;
 
