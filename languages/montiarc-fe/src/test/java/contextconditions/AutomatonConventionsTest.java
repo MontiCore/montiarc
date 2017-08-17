@@ -1,16 +1,15 @@
-package de.monticore.lang.montiarc.automaton.cocos;
+package contextconditions;
 
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import contextconditions.AutomatonAbstractCocoTest;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.monticore.symboltable.Scope;
 import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
 import de.se_rwth.commons.logging.Log;
 
-public class ConventionsTest extends AutomatonAbstractCocoTest {
+public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
@@ -18,7 +17,7 @@ public class ConventionsTest extends AutomatonAbstractCocoTest {
   
   @Test
   public void testMutipleBehaviors() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH, "automaton.invalid.MutipleBehaviors");
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.MutipleBehaviors");
     checkInvalid(node, new ExpectedErrorInfo(3, "xAB140", "xAB130"));
   }
   
@@ -27,14 +26,14 @@ public class ConventionsTest extends AutomatonAbstractCocoTest {
     Log.getFindings().clear();
     // loads the CD explicitly and checks its cocos
     Scope symTab = createSymTab(MODEL_PATH);
-    symTab.<CDFieldSymbol> resolve("automaton.invalid.LowerCaseEnumeration.lowerCaseEnumeration.A", CDFieldSymbol.KIND).orElse(null);
+    symTab.<CDFieldSymbol> resolve("contextconditions.invalid.LowerCaseEnumeration.lowerCaseEnumeration.A", CDFieldSymbol.KIND).orElse(null);
     new ExpectedErrorInfo(1, "xC4A05").checkFindings(Log.getFindings());
     // @JP: Was sollte xC4A05 tun und wieso tut es das nicht?
   }
   
   @Test
   public void testImplementationInNonAtomicComponent() {
-    checkInvalid(getAstNode("src/test/resources", "automaton.invalid.ImplementationInNonAtomicComponent"), new ExpectedErrorInfo(1, "xAB141"));
+    checkInvalid(getAstNode("src/test/resources", "contextconditions.invalid.ImplementationInNonAtomicComponent"), new ExpectedErrorInfo(1, "xAB141"));
   }
   
   @Ignore
@@ -43,7 +42,7 @@ public class ConventionsTest extends AutomatonAbstractCocoTest {
     // TODO symbols are only loaded if they are resolved. Therefore it is not
     // easily possible to perform CoCo checks to detect errors in CDs that are
     // imported in the given MAA model.
-    ASTMontiArcNode node = getAstNode(MODEL_PATH, "automaton.invalid.InvalidCD");
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.InvalidCD");
     checkInvalid(node, new ExpectedErrorInfo(1, "xC4A05"));
     // @JP: Fehlercodes zu Konstantes machen
   }

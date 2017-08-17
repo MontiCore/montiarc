@@ -8,7 +8,7 @@ component ImplementationInNonAtomicComponent {
     in Integer a,
     out Integer b;
     
-  component C;
+  component BumpThroughPut c;
   
   connect a -> c.i;
   connect c.o -> b;

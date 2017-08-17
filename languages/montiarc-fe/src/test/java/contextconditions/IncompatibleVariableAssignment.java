@@ -1,10 +1,9 @@
-package de.monticore.lang.montiarc.automaton.cocos;
+package contextconditions;
 
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import contextconditions.AutomatonAbstractCocoTest;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.se_rwth.commons.logging.Log;
 
@@ -18,7 +17,7 @@ public class IncompatibleVariableAssignment extends AutomatonAbstractCocoTest {
   @Test
   public void testIncompatibleVariableAssignment() {
     ASTMontiArcNode node = getAstNode(MODEL_PATH,
-        "automaton.invalid.IncompatibleVariableAssignment");
+        "contextconditions.invalid.IncompatibleVariableAssignment");
     checkInvalid(node, new ExpectedErrorInfo(1, "xAA431"));
   }
   
@@ -26,7 +25,7 @@ public class IncompatibleVariableAssignment extends AutomatonAbstractCocoTest {
   @Test
   public void testIncompatibleVariableAssignmentGenericTypesDiffer() {
     ASTMontiArcNode node = getAstNode(MODEL_PATH,
-        "automaton.invalid.IncompatibleVariableAssignmentGenericTypesDiffer");
+        "contextconditions.invalid.IncompatibleVariableAssignmentGenericTypesDiffer");
     checkInvalid(node, new ExpectedErrorInfo(1, "xAA431"));
   }
   

@@ -1,4 +1,4 @@
-package de.monticore.lang.montiarc.automaton;
+package symboltable;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -13,8 +13,9 @@ import de.monticore.symboltable.Scope;
 import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AutomatonBaseTest;
 
-public class AutomatonSymTabTest extends AbstractSymtabTest {
+public class AutomatonSymbolTableTest extends AutomatonBaseTest {
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
@@ -22,7 +23,7 @@ public class AutomatonSymTabTest extends AbstractSymtabTest {
   
   @Test
   public void testParseBumperbot() {
-    ASTMontiArcNode node = getAstNode("src/test/resources/", "automaton.valid.bumperbot.BumpControl");
+    ASTMontiArcNode node = getAstNode("src/test/resources/", "contextconditions.valid.BumpControl");
     assertNotNull(node);
   }
   
@@ -30,11 +31,11 @@ public class AutomatonSymTabTest extends AbstractSymtabTest {
   public void testCDType2JavaType() {
     Scope symTab = createSymTab("src/test/resources/");
     CDTypeSymbol cdType = symTab
-        .<CDTypeSymbol> resolve("automaton.valid.bumperbot.Datatypes.MotorCommand", CDTypeSymbol.KIND)
+        .<CDTypeSymbol> resolve("contextconditions.valid.Datatypes.MotorCommand", CDTypeSymbol.KIND)
         .orElse(null);
     assertNotNull(cdType);
     JavaTypeSymbol javaType = symTab
-        .<JavaTypeSymbol> resolve("automaton.valid.bumperbot.Datatypes.MotorCommand", JavaTypeSymbol.KIND)
+        .<JavaTypeSymbol> resolve("contextconditions.valid.Datatypes.MotorCommand", JavaTypeSymbol.KIND)
         .orElse(null);
     assertNotNull(javaType);
   }
@@ -43,11 +44,11 @@ public class AutomatonSymTabTest extends AbstractSymtabTest {
   public void testCDField2JavaField() {
     Scope symTab = createSymTab("src/test/resources/");
     CDFieldSymbol cdField = symTab
-        .<CDFieldSymbol> resolve("automaton.valid.bumperbot.Datatypes.MotorCommand.STOP", CDFieldSymbol.KIND)
+        .<CDFieldSymbol> resolve("contextconditions.valid.Datatypes.MotorCommand.STOP", CDFieldSymbol.KIND)
         .orElse(null);
     assertNotNull(cdField);
     JavaFieldSymbol javaField = symTab.<JavaFieldSymbol> resolve(
-        "automaton.valid.bumperbot.Datatypes.MotorCommand.STOP", JavaFieldSymbol.KIND).orElse(null);
+        "contextconditions.valid.Datatypes.MotorCommand.STOP", JavaFieldSymbol.KIND).orElse(null);
     assertNotNull(javaField);
   }
   

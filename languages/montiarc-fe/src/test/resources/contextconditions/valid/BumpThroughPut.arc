@@ -1,4 +1,4 @@
-package automaton.valid;
+package contextconditions.valid;
 
 component BumpThroughPut {
 

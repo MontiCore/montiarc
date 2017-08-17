@@ -1,9 +1,8 @@
-package de.monticore.lang.montiarc.automaton.cocos;
+package contextconditions;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import contextconditions.AutomatonAbstractCocoTest;
 import de.se_rwth.commons.logging.Log;
 
 public class BumperbotTest extends AutomatonAbstractCocoTest {
@@ -16,12 +15,12 @@ public class BumperbotTest extends AutomatonAbstractCocoTest {
   @Test
   public void testBumperbot() {
     // bumperbot must be valid
-    checkValid(MODEL_PATH, "automaton.valid.bumperbot.BumpControl");
+    checkValid(MODEL_PATH, "contextconditions.valid.BumpControl");
   }
   
   @Test
   public void testBumperbotSpeed() {
     // bumperbot must be valid
-    checkValid(MODEL_PATH, "automaton.valid.bumperbot.BumpSpeed");
+    checkValid(MODEL_PATH, "contextconditions.valid.BumpSpeed");
   }
 }

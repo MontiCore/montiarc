@@ -1,8 +1,8 @@
 package contextconditions.valid;
 
-import automaton.valid.bumperbot.Datatypes.MotorCommand;
-import automaton.valid.bumperbot.Datatypes.TimerSignal;
-import automaton.valid.bumperbot.Datatypes.TimerCmd;
+import contextconditions.valid.Datatypes.MotorCommand;
+import contextconditions.valid.Datatypes.TimerSignal;
+import contextconditions.valid.Datatypes.TimerCmd;
 
 component BumpControl {
   port

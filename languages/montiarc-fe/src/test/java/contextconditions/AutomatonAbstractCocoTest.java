@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 
-import de.monticore.lang.montiarc.automaton.AbstractSymtabTest;
 import de.monticore.lang.montiarc.cocos.MontiArcCoCos;
 import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcCoCoChecker;
@@ -25,8 +24,9 @@ import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AutomatonBaseTest;
 
-public class AutomatonAbstractCocoTest extends AbstractSymtabTest {
+public class AutomatonAbstractCocoTest extends AutomatonBaseTest {
   
   protected final String MODEL_PATH = "src/test/resources/";
   
