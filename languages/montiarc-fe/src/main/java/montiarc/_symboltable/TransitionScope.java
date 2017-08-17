@@ -15,4 +15,8 @@ public class TransitionScope extends de.monticore.symboltable.CommonScope {
   public TransitionScope(Optional<MutableScope> enclosingScope) {
     super(enclosingScope, true);
   }
+
+  public TransitionScope() {
+    super(Optional.empty());
+  }
 }
