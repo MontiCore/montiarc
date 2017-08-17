@@ -8,9 +8,9 @@ package montiarc.cocos;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.monticore.lang.montiarc.common._ast.ASTParameter;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponentHead;
+import montiarc._ast.ASTParameter;
 import montiarc._cocos.MontiArcASTComponentHeadCoCo;
 
 /**

@@ -5,7 +5,7 @@
  *
  * @author Arne Haber, Robert Heim, Andreas Wortmann
  */
-grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.JavaDSL {
+grammar MontiArc extends de.monticore.java.JavaDSL {
 
   /** ASTMACompilationUnit represents the complete component
    * @attribute package          The package declaration of this component
@@ -16,6 +16,9 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.Ja
     ("package" package:(Name& || ".")+ ";")? 
     (ImportStatement)*
     Component;
+    
+   // TODO where should invariant binding take place?
+  InvariantContent = BlockStatement | Expression;
 
   /**
   * A component may contain arbitrary many Elements. 
@@ -23,7 +26,7 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.Ja
   * enrich components with further elements.
   */
   interface Element;
-  
+
   /**
   * A component is a unit of computation or a data store.  
   * The size of a component may scale from a single 
@@ -47,7 +50,29 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.Ja
     head:ComponentHead
     (instanceName:Name actualTypeArgument:TypeArguments?)?
     body:ComponentBody;
+    
+  /**
+  * Use this interface to embed values.
+  * It has to be implemented by all values and additionally servers
+  * as an extension point to add further values to sub-languages.
+  */ 
+  interface Value;
 
+  /**
+  * A signed literal value.
+  * @example "Any String", -3, 17.3
+  *
+  * @attribute value the concrete literal value
+  */
+  LiteralValue implements Value = value:SignedLiteral;
+
+  /**
+  * Parameters are used in configurable components.
+  *
+  * @attribute Type the type of the parameter
+  * @attribute name the name of the parameter
+  */
+  Parameter = Type Name ("=" defaultValue:LiteralValue)?;
 
   /**
   * A components head is used to define generic type 
@@ -355,5 +380,28 @@ grammar MontiArc extends de.monticore.lang.montiarc.Common, de.monticore.java.Ja
    */    
   ValueList   
       = (("[" Valuation ("," Valuation )* "]") | Valuation); 
+      
+
+  /*************************************************************************
+   * Stereotypes
+   ************************************************************************/
+
+  /** 
+   * ASTStereotype represents Stereotypes in the UML/P
+   * @attribute values List of Values of this Stereotype
+   */
+   Stereotype =
+        "<<" values:(StereoValue || ",")+ ">" ">" 
+            // It is not possible to define ">>".
+            // Parsing generic typs like "List<List<String>>" leads to problems.
+            {((_input.LT(-2).getLine()==_input.LT(-1).getLine()) && (_input.LT(-1).getCharPositionInLine()==_input.LT(-2).getCharPositionInLine()+1))}?;
+    
+  /** 
+   * ASTStereoValue represents a Value of a Stereotype in the UML/P
+   * @attribute name  Name of the Stereotype-Value
+   * @attribute source Source of the Stereotype (String including '"';
+   *                   use getValue() for decoded String)
+   */
+   StereoValue = Name& ("=" source:String)?;
    
 }

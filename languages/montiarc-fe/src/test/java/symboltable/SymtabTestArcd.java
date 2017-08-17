@@ -11,7 +11,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.monticore.lang.expression.symboltable.ValueSymbol;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -19,6 +18,7 @@ import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
+import montiarc._symboltable.ValueSymbol;
 
 /**
  * @author Robert Heim

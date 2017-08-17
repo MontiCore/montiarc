@@ -1,7 +1,0 @@
-package invalid;
-
-component AutomatonWithoutState {
-
-  automaton AutomatonWithoutState {
-  }
-}

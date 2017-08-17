@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import de.monticore.common.common._ast.ASTStereotype;
+import montiarc._ast.ASTStereotype;
 import de.monticore.types.types._ast.ASTTypeArguments;
 import montiarc._ast.ASTComponentBody;
 import montiarc._ast.ASTComponentHead;

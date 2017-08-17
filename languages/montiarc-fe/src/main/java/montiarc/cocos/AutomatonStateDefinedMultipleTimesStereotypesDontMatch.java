@@ -3,12 +3,12 @@ package montiarc.cocos;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.monticore.common.common._ast.ASTStereoValue;
-import de.monticore.common.common._ast.ASTStereotype;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTAutomaton;
 import montiarc._ast.ASTState;
 import montiarc._ast.ASTStateDeclaration;
+import montiarc._ast.ASTStereoValue;
+import montiarc._ast.ASTStereotype;
 import montiarc._cocos.MontiArcASTAutomatonCoCo;
 
 /**

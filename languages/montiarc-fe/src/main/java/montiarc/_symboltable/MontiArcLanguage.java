@@ -5,14 +5,12 @@
  */
 package montiarc._symboltable;
 
-import de.monticore.lang.montiarc.adapter.CDFieldSymbol2JavaFieldFilter;
-import de.monticore.lang.montiarc.adapter.CDTypeSymbol2JavaTypeFilter;
 import de.monticore.symboltable.resolving.CommonResolvingFilter;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JMethodSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
-import montiarc._symboltable.MontiArcLanguageTOP;
-import montiarc._symboltable.MontiArcModelLoader;
+import montiarc._symboltable.adapters.CDFieldSymbol2JavaFieldFilter;
+import montiarc._symboltable.adapters.CDTypeSymbol2JavaTypeFilter;
 
 //XXX: https://git.rwth-aachen.de/montiarc/core/issues/51
 

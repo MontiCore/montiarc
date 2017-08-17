@@ -1,5 +1,0 @@
-package invalid;
-
-classdiagram InvalidDatatypes {
-  enum invalidType {A, B, C;} // lower case name
-}
