@@ -6,7 +6,6 @@ import java.util.Set;
 
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.lang.montiarc.helper.ScopeHelper;
 import de.monticore.lang.montiarc.helper.TypeCompatibilityChecker;
 import de.monticore.lang.montiarc.montiarc._ast.ASTConstantsMontiArc;
 import de.monticore.lang.montiarc.montiarc._ast.ASTIOAssignment;
@@ -162,16 +161,14 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
     // List<Symbol> symbols) is not correctly implemented
     
     if (direction == Direction.VARIABLE) {
-      for (VariableSymbol varSymbol : ScopeHelper.<VariableSymbol> resolveMany(automatonScope,
-          VariableSymbol.KIND)) {
+      for (VariableSymbol varSymbol : automatonScope.<VariableSymbol> resolveLocally(VariableSymbol.KIND)) {
         if (TypeCompatibilityChecker.doTypesMatch(assignmentType, varSymbol.getTypeReference())) {
           names.add(varSymbol.getName());
         }
       }
     }
     else {
-      for (PortSymbol portSymbol : ScopeHelper.<PortSymbol> resolveMany(automatonScope,
-          PortSymbol.KIND)) {
+      for (PortSymbol portSymbol : automatonScope.<PortSymbol> resolveLocally(PortSymbol.KIND)) {
         if (TypeCompatibilityChecker.doTypesMatch(assignmentType, portSymbol.getTypeReference())) {
           if ((direction == Direction.OUTPUT && portSymbol.isOutgoing()) || (direction == Direction.INPUT && portSymbol.isIncoming())) {
             names.add(portSymbol.getName());
