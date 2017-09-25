@@ -8,13 +8,9 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import de.monticore.symboltable.CommonSymbol;
-import de.se_rwth.commons.Joiners;
 import de.se_rwth.commons.Splitters;
-import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTConnector;
 import montiarc.helper.SymbolPrinter;
-
-import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Symbol for {@link ASTConnector}s. The name of a connector symbol equals its

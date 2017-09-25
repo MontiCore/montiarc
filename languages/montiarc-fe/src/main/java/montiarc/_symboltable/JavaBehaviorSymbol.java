@@ -5,12 +5,7 @@
  */
 package montiarc._symboltable;
 
-import java.util.List;
-
 import de.monticore.symboltable.CommonScopeSpanningSymbol;
-import de.monticore.symboltable.SymbolKind;
-import de.monticore.symboltable.types.JTypeSymbol;
-import de.monticore.symboltable.types.references.JTypeReference;
 
 /**
  * Represents the AJava definition within a component definition. Is scope

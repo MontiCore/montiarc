@@ -4,8 +4,6 @@ import java.util.Optional;
 
 import montiarc._ast.ASTBlock;
 import montiarc._ast.ASTGuard;
-import montiarc._symboltable.StateSymbolReference;
-import montiarc._symboltable.TransitionSymbolTOP;
 
 public class TransitionSymbol extends TransitionSymbolTOP {
 

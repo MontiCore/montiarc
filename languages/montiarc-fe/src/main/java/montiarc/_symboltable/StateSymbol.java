@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import montiarc._ast.ASTBlock;
-import montiarc._symboltable.StateSymbolTOP;
 
 
 public class StateSymbol extends StateSymbolTOP {

@@ -3,21 +3,21 @@
  *
  * http://www.se-rwth.de/
  */
-package de.monticore.lang.montiarc.cocos.javap;
+package montiarc.cocos;
 
 import java.util.Optional;
 
-import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
-import de.monticore.lang.montiarc.montiarc._ast.ASTElement;
-import de.monticore.lang.montiarc.montiarc._ast.ASTJavaPInitializer;
-import de.monticore.lang.montiarc.montiarc._ast.ASTVariableInitialization;
-import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTComponentCoCo;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.VariableSymbol;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTElement;
+import montiarc._ast.ASTJavaPInitializer;
+import montiarc._ast.ASTValueInitialization;
+import montiarc._cocos.MontiArcASTComponentCoCo;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.PortSymbol;
+import montiarc._symboltable.VariableSymbol;
 
 /**
  * Checks whether all used ports in the ajava initialisation exist in the
@@ -26,7 +26,7 @@ import de.se_rwth.commons.logging.Log;
  *
  * @author Andreas Wortmann
  */
-public class UsedPortsVariablesExistCoCo
+public class UsedPortsAndVariablesExist
     implements MontiArcASTComponentCoCo {
   
   /**
@@ -49,7 +49,7 @@ public class UsedPortsVariablesExistCoCo
     for (ASTElement e : node.getBody().getElements()) {
       if (e instanceof ASTJavaPInitializer) {
         ASTJavaPInitializer init = (ASTJavaPInitializer) e;
-        for (ASTVariableInitialization i : init.getVariableInitializations()) {
+        for (ASTValueInitialization i : init.getValueInitializations()) {
           String name = Names.getQualifiedName(i.getQualifiedName().getParts());
           Optional<PortSymbol> port = cmp.getSpannedScope().<PortSymbol> resolve(name,
               PortSymbol.KIND);

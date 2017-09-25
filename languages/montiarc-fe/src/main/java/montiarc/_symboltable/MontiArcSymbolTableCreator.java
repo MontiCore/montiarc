@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package de.monticore.lang.montiarc.montiarc._symboltable;
+package montiarc._symboltable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,35 +13,12 @@ import java.util.Optional;
 import java.util.Stack;
 
 import de.monticore.ast.ASTNode;
-import de.monticore.common.common._ast.ASTStereoValue;
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.javadsl._ast.ASTPrimaryExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.java.symboltable.JavaSymbolFactory;
 import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.lang.expression.symboltable.ValueSymbol;
-import de.monticore.lang.expression.symboltable.ValueSymbol.Kind;
-import de.monticore.lang.montiarc.common._ast.ASTParameter;
-import de.monticore.lang.montiarc.helper.Timing;
-import de.monticore.lang.montiarc.montiarc._ast.ASTAutomaton;
-import de.monticore.lang.montiarc.montiarc._ast.ASTAutomatonBehavior;
-import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
-import de.monticore.lang.montiarc.montiarc._ast.ASTComponentHead;
-import de.monticore.lang.montiarc.montiarc._ast.ASTIOAssignment;
-import de.monticore.lang.montiarc.montiarc._ast.ASTInitialStateDeclaration;
-import de.monticore.lang.montiarc.montiarc._ast.ASTJavaPBehavior;
-import de.monticore.lang.montiarc.montiarc._ast.ASTMACompilationUnit;
-import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcAutoConnect;
-import de.monticore.lang.montiarc.montiarc._ast.ASTPort;
-import de.monticore.lang.montiarc.montiarc._ast.ASTSimpleConnector;
-import de.monticore.lang.montiarc.montiarc._ast.ASTState;
-import de.monticore.lang.montiarc.montiarc._ast.ASTSubComponent;
-import de.monticore.lang.montiarc.montiarc._ast.ASTSubComponentInstance;
-import de.monticore.lang.montiarc.montiarc._ast.ASTTransition;
-import de.monticore.lang.montiarc.montiarc._ast.ASTVariable;
-import de.monticore.lang.montiarc.montiarc._ast.ASTVariableInitialization;
-import de.monticore.lang.montiarc.trafos.AutoConnection;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.ArtifactScope;
 import de.monticore.symboltable.ImportStatement;
@@ -72,6 +49,31 @@ import de.monticore.types.types._ast.ASTWildcardType;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTAutomaton;
+import montiarc._ast.ASTAutomatonBehavior;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTComponentHead;
+import montiarc._ast.ASTConnector;
+import montiarc._ast.ASTIOAssignment;
+import montiarc._ast.ASTInitialStateDeclaration;
+import montiarc._ast.ASTJavaPBehavior;
+import montiarc._ast.ASTMACompilationUnit;
+import montiarc._ast.ASTMontiArcAutoConnect;
+import montiarc._ast.ASTParameter;
+import montiarc._ast.ASTPort;
+import montiarc._ast.ASTSimpleConnector;
+import montiarc._ast.ASTState;
+import montiarc._ast.ASTStereoValue;
+import montiarc._ast.ASTSubComponent;
+import montiarc._ast.ASTSubComponentInstance;
+import montiarc._ast.ASTTransition;
+import montiarc._ast.ASTValueInitialization;
+import montiarc._ast.ASTVariable;
+import montiarc._symboltable.ValueSymbol.Kind;
+import montiarc.helper.JavaHelper;
+import montiarc.helper.Timing;
+import montiarc.trafos.AutoConnection;
+
 
 /**
  * Visitor that creats the symboltable of a MontiArc AST.
@@ -190,7 +192,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   @Override
-  public void visit(de.monticore.lang.montiarc.montiarc._ast.ASTConnector node) {
+  public void visit(ASTConnector node) {
     String sourceName = node.getSource().toString();
     
     for (ASTQualifiedName target : node.getTargets()) {
@@ -535,7 +537,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     removeCurrentScope();
   }
   
-  public void visit(ASTVariableInitialization init) {
+  public void visit(ASTValueInitialization init) {
     Scope enclosingScope = currentScope().get();
     String qualifiedName = init.getQualifiedName().toString();
     Optional<VariableSymbol> var = enclosingScope

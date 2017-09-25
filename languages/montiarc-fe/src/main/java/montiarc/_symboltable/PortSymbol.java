@@ -4,7 +4,7 @@
  * http://www.se-rwth.de/
  */
 
-package de.monticore.lang.montiarc.montiarc._symboltable;
+package montiarc._symboltable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,10 +12,10 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import de.monticore.lang.montiarc.helper.SymbolPrinter;
 import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
+import montiarc.helper.SymbolPrinter;
 
 /**
  * Symboltable entry for ports.

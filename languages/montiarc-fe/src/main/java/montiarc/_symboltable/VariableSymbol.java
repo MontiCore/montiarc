@@ -1,6 +1,6 @@
 package montiarc._symboltable;
 
-import de.monticore.lang.montiarc.montiarc._ast.ASTValuation;
+import montiarc._ast.ASTValuation;
 import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;

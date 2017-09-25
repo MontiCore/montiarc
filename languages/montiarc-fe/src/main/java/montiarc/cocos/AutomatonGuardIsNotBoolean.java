@@ -2,7 +2,6 @@ package montiarc.cocos;
 
 import java.util.Optional;
 
-import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTGuardExpression;

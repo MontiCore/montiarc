@@ -15,13 +15,9 @@ import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.symboltable.resolving.SymbolAdapter;
 import de.monticore.symboltable.types.JAttributeSymbolKind;
 import de.monticore.symboltable.types.JMethodSymbolKind;
-import de.monticore.symboltable.types.references.CommonJTypeReference;
-import de.monticore.types.JTypeSymbolsHelper;
 import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
 import de.monticore.umlcd4a.symboltable.CDMethodSymbol;
-import de.monticore.umlcd4a.symboltable.CDSymbol;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
-import de.monticore.umlcd4a.symboltable.CDTypes;
 import de.monticore.umlcd4a.symboltable.references.CDTypeSymbolReference;
 
 

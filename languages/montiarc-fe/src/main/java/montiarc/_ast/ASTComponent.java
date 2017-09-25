@@ -9,16 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import montiarc._ast.ASTStereotype;
 import de.monticore.types.types._ast.ASTTypeArguments;
-import montiarc._ast.ASTComponentBody;
-import montiarc._ast.ASTComponentHead;
-import montiarc._ast.ASTComponentTOP;
-import montiarc._ast.ASTConnector;
-import montiarc._ast.ASTElement;
-import montiarc._ast.ASTInterface;
-import montiarc._ast.ASTPort;
-import montiarc._ast.ASTSubComponent;
 
 /**
  * Repräsentation einer Komponenten

@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import montiarc._ast.ASTValueListTOP;
-
 public class ASTValueList extends ASTValueListTOP {
   
   public ASTValueList() {

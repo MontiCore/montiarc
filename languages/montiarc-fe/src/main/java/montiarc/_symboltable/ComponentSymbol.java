@@ -25,7 +25,6 @@ import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcConstants;
-import montiarc._symboltable.ComponentKind;
 import montiarc.helper.SymbolPrinter;
 import montiarc.helper.Timing;
 
@@ -551,8 +550,4 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
     this.imports = imports;
   }
 
-  @Deprecated
-  public static ComponentBuilder builder() {
-    return ComponentBuilder.getInstance();
-  }
 }

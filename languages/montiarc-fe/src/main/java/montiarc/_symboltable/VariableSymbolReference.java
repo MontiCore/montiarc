@@ -3,14 +3,11 @@
  *
  * http://www.se-rwth.de/
  */
-package de.monticore.lang.montiarc.montiarc._symboltable;
+package montiarc._symboltable;
 
-import de.monticore.lang.montiarc.montiarc._ast.ASTValuation;
-import de.monticore.symboltable.CommonSymbol;
+import montiarc._ast.ASTValuation;
 import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.SymbolKind;
-import de.monticore.symboltable.Symbols;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.symboltable.references.CommonSymbolReference;
 import de.monticore.symboltable.references.SymbolReference;
