@@ -1,0 +1,407 @@
+
+/**
+ * Grammar for MontiArc. Extends common components with
+ * behavior information and configurations.
+ *
+ * @author Arne Haber, Robert Heim, Andreas Wortmann
+ */
+grammar MontiArc extends de.monticore.java.JavaDSL {
+
+  /** ASTMACompilationUnit represents the complete component
+   * @attribute package          The package declaration of this component
+   * @attribute importStatements List of imported elements
+   * @attribute Component the root component of the component
+   */
+  MACompilationUnit =
+    ("package" package:(Name& || ".")+ ";")? 
+    (ImportStatement)*
+    Component;
+    
+   // TODO where should invariant binding take place?
+  InvariantContent = BlockStatement | Expression;
+
+  /**
+  * A component may contain arbitrary many Elements. 
+  * This interface may be used as an extension point to 
+  * enrich components with further elements.
+  */
+  interface Element;
+
+  /**
+  * A component is a unit of computation or a data store.  
+  * The size of a component may scale from a single 
+  * procedure to a whole application. A component may be 
+  * either decomposed to subcomponents or is atomic. 
+  *
+  * @attribute stereotype an optional stereotype
+  * @attribute name type name of this component
+  * @attribute head is used to set generic types, a  
+  *   configuration and a parent component
+  * @attribute instanceName if this optional name is given, 
+  *   a subcomponent is automatically created that 
+  *   instantiates this inner component type. This is only 
+  *   allowed for inner component definitions. 
+  * @attribute body contains the architectural elements 
+  *   inherited by this component
+  */
+  Component@! implements Element =
+    Stereotype?
+    "component" Name 
+    head:ComponentHead
+    (instanceName:Name actualTypeArgument:TypeArguments?)?
+    body:ComponentBody;
+    
+  /**
+  * Use this interface to embed values.
+  * It has to be implemented by all values and additionally servers
+  * as an extension point to add further values to sub-languages.
+  */ 
+  interface Value;
+
+  /**
+  * A signed literal value.
+  * @example "Any String", -3, 17.3
+  *
+  * @attribute value the concrete literal value
+  */
+  LiteralValue implements Value = value:SignedLiteral;
+
+  /**
+  * Parameters are used in configurable components.
+  *
+  * @attribute Type the type of the parameter
+  * @attribute name the name of the parameter
+  */
+  Parameter = Type Name ("=" defaultValue:LiteralValue)?;
+
+  /**
+  * A components head is used to define generic type 
+  * parameters that may be used as port types in the 
+  * component, to define configuration parameters that may 
+  * be used to configure the component, and to set the  
+  * parent component of this component.
+  *
+  * @attribute genericTypeParameters a list of type  
+  *   parameters that may be used as port types in the 
+  *   component
+  * @attribute parameters a list of Parameters that 
+  *   define a configurable component. If a configurable
+  *   component is referenced, these parameters have to be 
+  *   set.
+  * @attribute superComponent the type of the super 
+  *   component
+  */
+  ComponentHead =
+    (genericTypeParameters:TypeParameters)? 
+    ("(" (Parameter || ",")+ ")")?
+    ("extends" superComponent:ReferenceType)?;
+  
+  /**
+  * The body contains architectural elements of 
+  * this component.
+  *
+  * @attribute elements list of architectural elements
+  */
+  ComponentBody =
+    "{"
+      Element*
+    "}";
+    
+  /**
+  * An Interface defines an interface of a component 
+  * containing in- and outgoing ports.
+  * 
+  * @attribute stereotype an optional stereotype
+  * @attribute ports a list of ports that are contained in 
+  *   this interface
+  */
+  Interface implements Element =
+    Stereotype?
+    ("port"|"ports") ports:(Port || ",")+ ";";
+  
+ /**
+  * An incoming port is used to receive messages, an 
+  * outgoing port is used to send messages of a specific 
+  * type.
+  *
+  * @attribute stereotype an optional stereotype
+  * @attribute incoming true, if this is an incoming port
+  * @attribute outgoing true, if this is an outgoing port
+  * @attribute type the message type of this port
+  * @attribute name an optional name of this port
+  */
+  Port =
+    Stereotype?
+    (incoming:["in"] | outgoing:["out"])
+    Type Name?;
+    
+  /**
+  * Sets the timing of a component.
+  *
+  * @attribute stereotype optional stereotype
+  * @attribute instant a timed component
+  * @attribute delayed a timed component with delay
+  * @attribute causalsync a causal synchronous component
+  * @attribute sync a synchronous component
+  * TODO move to sub language?!
+  */
+  MontiArcTiming implements MontiArcConfig  =
+    "timing" Stereotype?
+    (["instant"] | ["delayed"] | ["untimed"] | ["causalsync"] | ["sync"]) ";";
+
+   
+  
+  /**
+  * A subcomponent is used to create one or more instances
+  *  of another component. This way the hierarchical  
+  * structure of a component is defined.
+  *
+  * @attribute stereotype an optional stereotype
+  * @attribute type the type of the instantiated component
+  * @attribute arguments list of configuration parameters
+  *   that are to be set, if the instantiated component is 
+  *   configurable.
+  * @attribute instances list of instances that should be 
+  *   created
+  */
+  SubComponent implements Element =
+    Stereotype?
+    "component"
+    type:ReferenceType 
+    ("(" arguments:(Expression || ",")+ ")" )?
+    instances:(SubComponentInstance || ",")* ";";
+
+    
+  /**
+  * A subcomponent instance binds the name of an instance 
+  * with an optional list of simple connectors used to 
+  * connect this instance with other subcomponents/ports.
+  * Simple connectors directly connect outgoing ports of the
+  * corresponding subcomponent declaration with one or more target ports.
+  *
+  * @attribute name the name of this instance
+  * @attribute connectors list of simple connectors
+  */
+  // TODO better/more intuitive name? e.g. "refConnector" (not really good...)
+  SubComponentInstance = 
+    Name
+    ("[" connectors:(SimpleConnector || ";")+ "]")?;
+
+  /**
+  * A connector connects one source port with one or many 
+  * target ports.
+  *
+  * @attribute source source port or component instance 
+  *   name
+  * @attribute targets a list of target ports or component 
+  *   instance names
+  */
+  Connector implements Element=
+    Stereotype?
+    "connect" source:QualifiedName "->"
+    targets:(QualifiedName || ",")+ ";";
+
+  /**
+  * A simple way to connect ports.
+  *
+  * @attribute source the source port or component instance
+  *   name
+  * @attribute targets a list of target port or component 
+  *   instance names
+  */
+  SimpleConnector = 
+    Stereotype? source:QualifiedName "->" targets:(QualifiedName || ",")+;
+    
+  /**
+  * A variable can be used in the behavior implementation of a component.
+  */
+  ComponentVariableDeclaration implements Element = "var"? Variable ("," Variable)* ";";
+  
+  /**
+   * A component variable
+   * @attribute Name: The name of the variable
+   */
+  Variable = Type Name; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
+  
+  //@JP: Auch gut (auch für Ports): var Int summandA, summandB;
+
+  /**
+  * MontiArc components may contain arbitrary many 
+  * configurations. These configurations have to 
+  * implement this interface.
+  */
+  interface MontiArcConfig extends Element;
+        
+  /**
+  * An invariant constrains the behavior of a component.
+  *
+  * @attribute kind the optional kind of this invariant.
+  * @attribute name name of the invariant
+  * @attribute invariantExpression the invariant defined 
+  *   in the language 'kind'
+  */
+  MontiArcInvariant implements Element =
+    (kind:Name)? "inv" Name ":"
+    invariantExpression:InvariantContent ";";
+ 
+  /**
+   * AutoConnect is used to connect ports automatically.
+   *
+   * @attribute stereotype optional stereotype
+   * @attribute type autoconnect unambigous ports with the 
+   *   same type
+   * @attribute port autoconnect unambigous ports with the 
+   *   same name and compatible type}
+   * @attribute off do not use autoconnection (default)
+   */
+  MontiArcAutoConnect implements MontiArcConfig = 
+    "autoconnect" Stereotype?
+    (["type"] | ["port"] | ["off"]) ";";
+    
+  interface InitializerElement extends Element;
+  interface BehaviorElement extends Element;
+  
+  /*************************************************************************
+   * AJAva
+   *
+   * Rules for integrating Java/P into MontiArc. This includes an 
+   * initializer block as well as a behavior block
+   *
+   ************************************************************************/
+   
+  JavaPInitializer implements InitializerElement 
+    = "init" Name? "{" 
+        ValueInitialization* 
+      "}";
+  
+  ValueInitialization = QualifiedName "=" Valuation ";";
+    
+  JavaPBehavior implements BehaviorElement 
+    = "compute" Name? "{" 
+        BlockStatement* 
+      "}"; 
+
+
+  /*************************************************************************
+   * I/O Automata
+   *
+   * Rules for integrating I/O Automata into MontiArc. This includes an 
+   * initializer block as well as a behavior block
+   *
+   ************************************************************************/
+   
+  // IO-Automaton body is used as behavior embedding  
+  AutomatonBehavior implements BehaviorElement = "automaton" Name? "{" Automaton "}"; 
+      
+  interface GuardExpression;
+  
+  JavaGuardExpression implements GuardExpression = Expression; // use at least Java expressions for guards
+  
+  interface Valuation; 
+  
+  JavaValuation implements Valuation = Expression; // use at least Java expressions for valuations
+    
+  /**
+   * The declaration of states and transitions defining the "real" automaton
+   * @attribute StateDeclaration: Declaration of the state Names
+   * @attribute InitialStateDeclaration: Defines which states are initial states and their initial reaction
+   * @attribute TransitionDeclaration: Declares the transition with guards, stimuli and reactions
+   */
+  Automaton = ( StateDeclaration | InitialStateDeclaration | Transition )*;    
+  
+  /**
+   * Declaration of the automaton states
+   * @attribute State: A state of the automaton
+   */
+  StateDeclaration = "state" State ( "," State )* ";" ;
+  
+  /**
+   * A single State
+   * @attribute Stereotype: The optional stereotype of the state, e.g. <<Public>>
+   * @attribute Name: The name of the state
+   */
+  State@! = Stereotype? Name;
+  
+  /**
+   * Declaration of the states which the automaton starts in
+   * @attribute Name: The name of the state, should be one defined in the StateDeclaration
+   * @attribute Block: The initial output
+   */
+  InitialStateDeclaration@! = "initial" Name ("," Name)* ("/" Block)? ";";
+
+  /**
+   * The declarations of a single Transition
+   * @attribute source: The source state name of the transition
+   * @attribute target: The target state name of the transition
+   * @attribute Guard: The transition is only active when the guard is true
+   * @attribute stimulus: The trigger of the transition
+   * @attribute reaction: What is done when the transition is taken
+   */
+  Transition@! = source:Name ("->" target:Name)? 
+                              Guard?
+                              stimulus:Block? 
+                              ("/" reaction:Block)? ";";
+
+  /**
+   * Defines the Guard of a transition
+   * @attribute kind: The name of the guard kind.
+   *                  At the moment this is only "java" but there maybe more later on
+   * @attribute guardExpression: The expression which should be true for the transition to be active
+   */
+  Guard@! = 
+      "[" (kind:Name ":")? 
+      GuardExpression "]";
+  
+  /**
+   * The Value for empty data
+   * TODO: currently can not be used to assign/compare inputs/outputs/variables with -- because of wrong derivation.
+   * NoData should implement literal value.
+   */
+  NoData implements Value = "--";    
+ 
+     
+  /**
+   * A block containing a row of assignments, e.g. "a = 5 , b = Q.fetchX()"
+   * @attribute IOAssignment: The assignment
+   */ 
+  Block= "{" IOAssignment ("," IOAssignment)* "}";
+  
+  /**
+   * A assignment of the form "var =/== x"
+   * @attribute Name: The name of the variable that gets assigned
+   */ 
+  IOAssignment = (Name operator:[Single:"="|Double:"=="])? (Alternative | ValueList);
+  
+  Alternative = "alt" "{" ValueList ("," ValueList)* "}";
+  
+  /**
+   * A row of valuations separated by a ",", e.g. "a.getX() , B.fetch().KIND , ++a%2"
+   * @attribute Valuation: The valuation
+   */    
+  ValueList   
+      = (("[" Valuation ("," Valuation )* "]") | Valuation); 
+      
+
+  /*************************************************************************
+   * Stereotypes
+   ************************************************************************/
+
+  /** 
+   * ASTStereotype represents Stereotypes in the UML/P
+   * @attribute values List of Values of this Stereotype
+   */
+   Stereotype =
+        "<<" values:(StereoValue || ",")+ ">" ">" 
+            // It is not possible to define ">>".
+            // Parsing generic typs like "List<List<String>>" leads to problems.
+            {((_input.LT(-2).getLine()==_input.LT(-1).getLine()) && (_input.LT(-1).getCharPositionInLine()==_input.LT(-2).getCharPositionInLine()+1))}?;
+    
+  /** 
+   * ASTStereoValue represents a Value of a Stereotype in the UML/P
+   * @attribute name  Name of the Stereotype-Value
+   * @attribute source Source of the Stereotype (String including '"';
+   *                   use getValue() for decoded String)
+   */
+   StereoValue = Name& ("=" source:String)?;
+   
+}

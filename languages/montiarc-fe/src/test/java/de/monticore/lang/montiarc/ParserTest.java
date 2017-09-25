@@ -24,29 +24,32 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.monticore.lang.montiarc.montiarc._ast.ASTMACompilationUnit;
-import de.monticore.lang.montiarc.montiarc._parser.MontiArcParser;
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMACompilationUnit;
+import montiarc._parser.MontiArcParser;
 
 /**
  * @author Robert Heim
  */
 public class ParserTest {
   public static final boolean ENABLE_FAIL_QUICK = true;
+  
+  private static final String MODEL_PATH = "src/test/resources";
+  
   private static List<String> expectedParseErrorModels = Arrays.asList(
-      "src/test/resources/arc/context/a/CG12false.arc",
+      MODEL_PATH + "/arc/context/a/CG12false.arc",
 
       // "component" is a keyword and may not be used as component name
-      "src/test/resources/arc/context/a/component.arc",
+      MODEL_PATH + "/arc/context/a/component.arc",
 
       // "connect" is a keyword
-      "src/test/resources/arc/context/a/S2.arc",
+      MODEL_PATH + "/arc/context/a/S2.arc",
 
       // TODO we do not support OCL Expressions yet
-      "src/test/resources/arc/prettyPrint/example1/StatusControl.arc",
+      MODEL_PATH + "/arc/prettyPrint/example1/StatusControl.arc",
 
       // TODO we do not support OCL Expressions yet
-      "src/test/resources/arc/symtab/ocl/OCLFieldToPort.arc")
+      MODEL_PATH + "/arc/symtab/ocl/OCLFieldToPort.arc")
 
       .stream().map(s -> Paths.get(s).toString())
       .collect(Collectors.toList());
