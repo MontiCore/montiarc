@@ -26,7 +26,7 @@ import de.se_rwth.commons.logging.Log;
  */
 public class ParserTest {
   
-  private static final String MODELPATH = "src/test/resources";
+  private static final String MODELPATH = "src/test/resources/javap";
   
   @Before
   public void setup() {
@@ -58,7 +58,7 @@ public class ParserTest {
   
   @Test
   public void testCompWithInitMethod() {
-    test("javap//valid/CompWithVariableAndPortInit.maa", true);
+    test("/valid/CompWithVariableAndPortInit.maa", true);
   }
   
 }

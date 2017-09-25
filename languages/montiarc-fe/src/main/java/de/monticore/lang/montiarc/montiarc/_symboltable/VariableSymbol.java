@@ -1,5 +1,6 @@
 package de.monticore.lang.montiarc.montiarc._symboltable;
 
+import de.monticore.lang.montiarc.montiarc._ast.ASTValuation;
 import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
@@ -10,12 +11,22 @@ public class VariableSymbol extends CommonSymbol {
   
   private JTypeReference<? extends JTypeSymbol> typeReference;
   
+  private ASTValuation valuation;
+  
   public VariableSymbol(String name) {
     super(name, KIND);
   }
   
   public void setTypeReference(JTypeReference<? extends JTypeSymbol> typeReference) {
     this.typeReference = typeReference;
+  }
+  
+  public void setValuation(ASTValuation valuation) {
+    this.valuation = valuation;
+  }
+
+  public ASTValuation getValuation() {
+    return this.valuation;
   }
   
   public JTypeReference<? extends JTypeSymbol> getTypeReference() {

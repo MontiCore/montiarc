@@ -6,6 +6,7 @@
 package de.monticore.lang.montiarc.montiarc._symboltable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +40,7 @@ import de.monticore.lang.montiarc.montiarc._ast.ASTSubComponent;
 import de.monticore.lang.montiarc.montiarc._ast.ASTSubComponentInstance;
 import de.monticore.lang.montiarc.montiarc._ast.ASTTransition;
 import de.monticore.lang.montiarc.montiarc._ast.ASTVariable;
+import de.monticore.lang.montiarc.montiarc._ast.ASTVariableInitialization;
 import de.monticore.lang.montiarc.trafos.AutoConnection;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.ArtifactScope;
@@ -178,8 +180,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     sym.setTypeReference(typeRef);
     
-    // TODO initialize variable in init() block
-    
     addToScopeAndLinkWithNode(sym, node);
   }
   
@@ -225,9 +225,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     // ref.setPackageName(refCompPackage);
     
-    // TODO internal representation of ValueSymbol ? that was heavily based on
-    // CommonValues
-    // language and its expressions, but we use JavaDSL.
     List<ValueSymbol<TypeReference<TypeSymbol>>> configArgs = new ArrayList<>();
     for (ASTExpression arg : node.getArguments()) {
       String value = new JavaDSLPrettyPrinter(new IndentPrinter()).prettyprint(arg);
@@ -472,18 +469,21 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       ASTComplexReferenceType astComplexReferenceType = (ASTComplexReferenceType) astType;
       for (ASTSimpleReferenceType astSimpleReferenceType : astComplexReferenceType
           .getSimpleReferenceTypes()) {
-        // TODO
-        /* ASTComplexReferenceType represents types like class or interface types which always have
-         * ASTSimpleReferenceType as qualification. For example: a.b.c<Arg>.d.e<Arg> */
+        /* ASTComplexReferenceType represents types like class or interface
+         * types which always have ASTSimpleReferenceType as qualification. For
+         * example: a.b.c<Arg>.d.e<Arg> */
+        setActualTypeArgumentsOfCompRef(typeReference,
+            astSimpleReferenceType.getTypeArguments().get().getTypeArguments());
       }
     }
     
   }
   
   /**
-   * Adds the TypeParameters to the ComponentSymbol if it declares TypeVariables. Since the
-   * restrictions on TypeParameters may base on the JavaDSL its the actual recursive definition of
-   * bounds is respected and its implementation within the JavaDSL is reused. Example:
+   * Adds the TypeParameters to the ComponentSymbol if it declares
+   * TypeVariables. Since the restrictions on TypeParameters may base on the
+   * JavaDSL its the actual recursive definition of bounds is respected and its
+   * implementation within the JavaDSL is reused. Example:
    * <p>
    * component Bla<T, S extends SomeClass<T> & SomeInterface>
    * </p>
@@ -535,15 +535,52 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     removeCurrentScope();
   }
   
+  public void visit(ASTVariableInitialization init) {
+    Scope enclosingScope = currentScope().get();
+    String qualifiedName = init.getQualifiedName().toString();
+    Optional<VariableSymbol> var = enclosingScope
+        .<VariableSymbol> resolve(qualifiedName, VariableSymbol.KIND);
+    if (var.isPresent()) {
+      var.get().setValuation(init.getValuation());
+    }
+    
+  }
+  
   /**
+   * Create reference to existing symbols.
+   * 
    * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#visit(de.monticore.java.javadsl._ast.ASTPrimaryExpression)
    */
   @Override
   public void visit(ASTPrimaryExpression node) {
     super.visit(node);
-    if (node.getName().isPresent() && Character.isLowerCase(node.getName().get().charAt(0))) {
-      JavaVariableReferenceSymbol variable = new JavaVariableReferenceSymbol(node.getName().get());
-      addToScopeAndLinkWithNode(variable, node); // TODO Warum ist hier kein Type gesetzt? (zb int)
+    if (node.getName().isPresent() &&
+        Character.isLowerCase(node.getName().get().charAt(0))) {
+      String name = node.getName().get();
+      Scope enclosingScope = currentScope().get().getEnclosingScope().get();
+      Optional<PortSymbol> port = enclosingScope.resolve(name, PortSymbol.KIND);
+      Optional<VariableSymbol> var = enclosingScope.resolve(name, VariableSymbol.KIND);
+      Collection<JFieldSymbol> field = enclosingScope.resolveMany(name, JFieldSymbol.KIND);
+      
+      if (port.isPresent()) {
+        PortSymbolReference portRef = new PortSymbolReference(name, currentScope().get());
+        addToScopeAndLinkWithNode(portRef, node);
+      }
+      else if (var.isPresent()) {
+        VariableSymbolReference varReference = new VariableSymbolReference(node.getName().get(),
+            currentScope().get());
+        varReference.setTypeReference(var.get().getTypeReference());
+        addToScopeAndLinkWithNode(varReference, node);
+      }
+      else if (!field.isEmpty()) {
+        addToScopeAndLinkWithNode(field.stream().findFirst().get(), node);
+      }
+      else {
+        Log.error("0xAA330 Used variable " + name
+            + " in ajava definition is not a port, component variable or locally defined variable.",
+            node.get_SourcePositionStart());
+        
+      }
     }
   }
   

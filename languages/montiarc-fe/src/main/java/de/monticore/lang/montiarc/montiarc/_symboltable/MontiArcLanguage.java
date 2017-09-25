@@ -38,7 +38,6 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
     
     // Java/P
     addResolver(new CommonResolvingFilter<>(JavaBehaviorSymbol.KIND));
-    addResolver(new CommonResolvingFilter<>(JavaVariableReferenceSymbol.KIND));
     
     addResolver(CommonResolvingFilter.create(JTypeSymbol.KIND));
     addResolver(CommonResolvingFilter.create(JFieldSymbol.KIND));

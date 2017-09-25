@@ -13,7 +13,6 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import de.monticore.lang.montiarc.helper.SymbolPrinter;
-import de.monticore.lang.montiarc.trafos.expandcomponents.ExpandedComponentInstanceSymbol;
 import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
@@ -47,9 +46,6 @@ public class PortSymbol extends CommonSymbol {
     super(name, KIND);
   }
 
-  public static PortBuilder builder() {
-    return new PortBuilder();
-  }
 
   /**
    * @param isIncoming incoming = true, outgoing = false
@@ -104,23 +100,6 @@ public class PortSymbol extends CommonSymbol {
     return Optional.of((ComponentSymbol) this.getEnclosingScope().getSpanningSymbol().get());
   }
 
-  /**
-   * returns the expanded component instance which defines the connector
-   * this is independent from the component to which the source and target ports
-   * belong to
-   *
-   * @return is optional, b/c a connector can belong to a component symbol or to
-   * an expanded component instance symbol
-   */
-  public Optional<ExpandedComponentInstanceSymbol> getComponentInstance() {
-    if (!this.getEnclosingScope().getSpanningSymbol().isPresent()) {
-      return Optional.empty();
-    }
-    if (!(this.getEnclosingScope().getSpanningSymbol().get() instanceof ExpandedComponentInstanceSymbol)) {
-      return Optional.empty();
-    }
-    return Optional.of((ExpandedComponentInstanceSymbol) this.getEnclosingScope().getSpanningSymbol().get());
-  }
 
   /**
    * Adds the stereotype key=value to this entry's map of stereotypes

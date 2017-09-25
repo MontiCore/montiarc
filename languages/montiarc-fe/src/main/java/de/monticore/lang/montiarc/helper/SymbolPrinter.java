@@ -9,7 +9,6 @@ import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
-import de.monticore.lang.montiarc.trafos.expandcomponents.ExpandedComponentInstanceSymbol;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.TypeSymbol;
@@ -216,42 +215,4 @@ public class SymbolPrinter {
     return ip.getContent();
   }
 
-  public static void printExpandedComponentInstance(ExpandedComponentInstanceSymbol inst, IndentPrinter ip, boolean skipPackageImport) {
-    if (!skipPackageImport) {
-      ComponentSymbol cmp = inst.getComponentType().getReferencedSymbol();
-      if (cmp.getPackageName() != null &&
-          !cmp.getPackageName().isEmpty()) {
-        ip.print("package ");
-        ip.print(cmp.getPackageName());
-        ip.println(";");
-      }
-      if (cmp.getImports() != null) {
-        cmp.getImports().stream().forEachOrdered(a -> ip.println("import " + a.getStatement() + (a.isStar() ? ".*" : "") + ";"));
-      }
-    }
-    ip.print("component /*instance*/ " + inst.getName());
-
-    ip.println(" {");
-
-    ip.indent();
-
-    printPorts(inst.getPorts(), ip);
-
-    inst.getSubComponents().stream().forEachOrdered(a -> printExpandedComponentInstance(a, ip, true));
-
-    inst.getConnectors().stream().forEachOrdered(a -> {
-      ip.print("connect ");
-      printConnector(a, ip);
-      ip.println(";");
-    });
-
-    ip.unindent();
-    ip.println("}");
-  }
-
-  public static String printExpandedComponentInstance(ExpandedComponentInstanceSymbol inst) {
-    IndentPrinter ip = new IndentPrinter();
-    printExpandedComponentInstance(inst, ip, false);
-    return ip.getContent();
-  }
 }

@@ -5,27 +5,24 @@
  */
 package de.monticore.lang.montiarc.cocos.javap;
 
-import java.util.Collection;
 import java.util.Optional;
 
-import de.monticore.java.symboltable.JavaFieldSymbol;
 import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
 import de.monticore.lang.montiarc.montiarc._ast.ASTElement;
 import de.monticore.lang.montiarc.montiarc._ast.ASTJavaPInitializer;
 import de.monticore.lang.montiarc.montiarc._ast.ASTVariableInitialization;
 import de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTComponentCoCo;
 import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.VariableSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.JavaBehaviorSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.JavaVariableReferenceSymbol;
 import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
+import de.monticore.lang.montiarc.montiarc._symboltable.VariableSymbol;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 
 /**
- * Checks whether all used ports in the java expression exist in the component
- * definition.
+ * Checks whether all used ports in the ajava initialisation exist in the
+ * component definition. SymboltableCreator already ensures that used ports and
+ * variables in the ajava behavior are consistent.
  *
  * @author Andreas Wortmann
  */
@@ -46,13 +43,12 @@ public class UsedPortsVariablesExistCoCo
     
     checkAJavaInitialization(node, cmp);
     
-    checkAJavaDefinition(node, cmp);
   }
   
   private void checkAJavaInitialization(ASTComponent node, ComponentSymbol cmp) {
     for (ASTElement e : node.getBody().getElements()) {
       if (e instanceof ASTJavaPInitializer) {
-    	  ASTJavaPInitializer init = (ASTJavaPInitializer) e;
+        ASTJavaPInitializer init = (ASTJavaPInitializer) e;
         for (ASTVariableInitialization i : init.getVariableInitializations()) {
           String name = Names.getQualifiedName(i.getQualifiedName().getParts());
           Optional<PortSymbol> port = cmp.getSpannedScope().<PortSymbol> resolve(name,
@@ -62,9 +58,9 @@ public class UsedPortsVariablesExistCoCo
           Optional<JFieldSymbol> cmpParameter = cmp.getConfigParameters().stream()
               .filter(p -> p.getName().equals(name)).findFirst();
           if (!port.isPresent() && !compVar.isPresent() && !cmpParameter.isPresent()) {
-              Log.error("0xAA329 Used variable " + name
-                  + " in ajava initialization is not a port, component variable or locally defined variable.",
-                  i.get_SourcePositionStart());
+            Log.error("0xAA329 Used variable " + name
+                + " in ajava initialization is not a port, component variable or locally defined variable.",
+                i.get_SourcePositionStart());
           }
           
           if (port.isPresent()) {
@@ -74,33 +70,6 @@ public class UsedPortsVariablesExistCoCo
                   i.get_SourcePositionStart());
             }
           }
-        }
-      }
-    }
-  }
-  
-  private void checkAJavaDefinition(ASTComponent node, ComponentSymbol cmp) {
-    Collection<JavaBehaviorSymbol> ajavaDefinitions = cmp.getSpannedScope()
-        .resolveLocally(JavaBehaviorSymbol.KIND);
-    
-    if (ajavaDefinitions.size() == 1) { // else: MultipleBehaviorImplementation catches this
-      JavaBehaviorSymbol ajavaDef = ajavaDefinitions.iterator().next();
-      Collection<JavaVariableReferenceSymbol> usedVars = ajavaDef.getSpannedScope()
-          .resolveLocally(JavaVariableReferenceSymbol.KIND);
-      for (JavaVariableReferenceSymbol var : usedVars) {
-        String varName = var.getName();
-        Optional<PortSymbol> port = cmp.getSpannedScope().<PortSymbol> resolve(varName,
-            PortSymbol.KIND);
-        Optional<JavaFieldSymbol> definedField = ajavaDef.getSpannedScope()
-            .<JavaFieldSymbol> resolveLocally(varName, JavaFieldSymbol.KIND);
-        Optional<VariableSymbol> compVar = cmp.getSpannedScope()
-            .<VariableSymbol> resolve(varName, VariableSymbol.KIND);
-        Optional<JFieldSymbol> cmpParameter = cmp.getConfigParameters().stream()
-            .filter(p -> p.getName().equals(varName)).findFirst();
-        if (!port.isPresent() && !compVar.isPresent() && !definedField.isPresent() && !cmpParameter.isPresent()) {
-          Log.error("0xAA330 Used variable " + varName
-              + " in ajava definition is not a port, component variable or locally defined variable.",
-              ajavaDef.getAstNode().get().get_SourcePositionStart());
         }
       }
     }
