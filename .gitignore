@@ -3,3 +3,7 @@ target
 .settings
 .classpath
 /applications/bumperbot/.gitignore
+
+\.idea/
+
+*.iml
