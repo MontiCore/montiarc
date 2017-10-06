@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.ComponentNameIsCapitalized;
 import org.antlr.v4.runtime.RecognitionException;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -29,36 +32,54 @@ public class ConventionsTest extends AbstractCoCoTest {
     Log.enableFailQuick(false);
   }
 
-  @Ignore("implement coco")
+  @Ignore("Symboltable throws an exception on creation, as the name of the component artifact " +
+          "starts with a lowercase letter. The node of the model can then not be resolved in " +
+          "getASTNode().")
   @Test
   public void testComponentConventions()
       throws RecognitionException, IOException {
-    // runChecker("arc/coco/conventions/conv/violatesComponentNaming.arc");
-    assertEquals(1, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
-        .count());
+    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv" +
+            ".ViolatesComponentNaming");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ComponentNameIsCapitalized());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "0xAC004"));
     // runChecker("arc/coco/conventions/conv/InnerViolatesComponentNaming.arc");
-    assertEquals(2, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
-        .count());
+//    assertEquals(2, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
+//        .count());
   }
 
   @Ignore("implement coco")
   @Test
+  /*
+    Checks whether all references of components start with a lower-case letter
+   */
   public void testReferenceConventions() {
-    runCheckerWithSymTab("arc/coco/conventions", "conv.ReferencesViolateNamingConventions");
-    assertEquals(2, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
-        .count());
+//    runCheckerWithSymTab("arc/coco/conventions", "conv.ReferencesViolateNamingConventions");
+    //TODO Add CoCo for checking whether references of components start with a lower case letter
+    //TODO Insert error codes and Coco name
+    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.ReferencesViolateNamingConventions");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ComponentNameIsCapitalized());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "0x"));
   }
 
   @Ignore("implement coco")
   @Test
+  /*
+   * Checks whether all port names in the port definition start with a lower case letter
+   */
   public void testPortConvention() {
     // runChecker("arc/coco/conventions/conv/PortViolatesNamingConventions.arc");
-    assertEquals(1, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
-        .count());
+    //TODO Implement CoCo
+    //TODO Add error code
+    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.ReferencesViolateNamingConventions");
+//    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo();
+    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "0x"));
   }
 
   @Ignore("implement coco")
   @Test
+  /*
+   * 
+   */
   public void testImportConvention() {
     // runChecker("arc/coco/conventions/conv/UnuniqueImports.arc");
     assertEquals(2, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
