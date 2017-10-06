@@ -38,14 +38,12 @@ public class SymtabTestArcd extends AbstractSymboltableTest {
     JTypeSymbol typeSymbol = comp.getFormalTypeParameters().get(0);
     assertEquals("K", typeSymbol.getName());
     assertTrue(typeSymbol.isFormalTypeParameter());
-    // TODO super type of type variables?!
-    // assertEquals(1, typeSymbol.getSuperTypes().size());
+     assertEquals(1, typeSymbol.getSuperTypes().size());
 
     typeSymbol = comp.getFormalTypeParameters().get(1);
     assertEquals("V", typeSymbol.getName());
     assertTrue(typeSymbol.isFormalTypeParameter());
-    // TODO super type of type variables?!
-    // assertEquals(1, typeSymbol.getSuperTypes().size());
+     assertEquals(1, typeSymbol.getSuperTypes().size());
 
     typeSymbol = comp.getFormalTypeParameters().get(2);
     assertEquals("W", typeSymbol.getName());
@@ -191,10 +189,9 @@ public class SymtabTestArcd extends AbstractSymboltableTest {
 
     ComponentInstanceSymbol myC = comp.getSubComponent("myC").orElse(null);
     assertNotNull(myC);
-    // TODO type arguments
-    // assertEquals(1, myC.getComponentType().getActualTypeArguments().size());
-    // assertEquals("String",
-    // myC.getComponentType().getActualTypeArguments().get(0).getType().getName());
+     assertEquals(1, myC.getComponentType().getActualTypeArguments().size());
+     assertEquals("String",
+     myC.getComponentType().getActualTypeArguments().get(0).getType().getName());
 
     ComponentSymbol myCType = myC.getComponentType().getReferencedComponent().orElse(null);
     assertNotNull(myCType);
