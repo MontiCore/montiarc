@@ -1,6 +1,6 @@
 ${tc.params("de.montiarcautomaton.generator.helper.ComponentHelper helper", "String _package", "java.util.Collection<de.monticore.symboltable.ImportStatement> imports",
 "String name", "String resultName", 
-"java.util.Collection<de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol> portsOut")}
+"java.util.Collection<montiarc._symboltable.PortSymbol> portsOut")}
 package ${_package};
 
 <#list imports as import>

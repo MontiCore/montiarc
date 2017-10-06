@@ -37,6 +37,8 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
     addResolver(new CommonResolvingFilter<PortSymbol>(PortSymbol.KIND));
     addResolver(new CommonResolvingFilter<ConnectorSymbol>(ConnectorSymbol.KIND));
     addResolver(new CommonResolvingFilter<VariableSymbol>(VariableSymbol.KIND));
+    addResolver(new CommonResolvingFilter<VariableSymbol>(AutomatonSymbol.KIND));
+    
     
     // Java/P
     addResolver(new CommonResolvingFilter<>(JavaBehaviorSymbol.KIND));

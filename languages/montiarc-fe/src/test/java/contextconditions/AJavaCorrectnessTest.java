@@ -6,6 +6,7 @@
 package contextconditions;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
@@ -34,6 +35,7 @@ public class AJavaCorrectnessTest extends AJavaCocoTest {
     checkInvalid(node, new ExpectedErrorInfo(2, "xAA330"));
   }
   
+  @Ignore
   @Test
   public void testComponentWithAJavaAndAutomaton() {
     ASTMontiArcNode node = getAstNode("src/test/resources/","contextconditions.invalid.ComponentWithAJavaAndAutomaton");

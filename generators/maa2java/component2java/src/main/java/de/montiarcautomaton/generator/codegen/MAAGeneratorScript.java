@@ -1,7 +1,6 @@
 package de.montiarcautomaton.generator.codegen;
 
 import java.io.File;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -10,18 +9,8 @@ import java.util.Optional;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 
 import de.monticore.ModelingLanguageFamily;
-import de.monticore.automaton.ioautomaton.JavaHelper;
 import de.monticore.cd2pojo.POJOGenerator;
 import de.monticore.io.paths.ModelPath;
-import de.monticore.lang.montiarc.ajava._cocos.AJavaCoCoChecker;
-import de.monticore.lang.montiarc.ajava._symboltable.AJavaLanguageFamily;
-import de.monticore.lang.montiarc.ajava.cocos.AJavaCoCos;
-import de.monticore.lang.montiarc.montiarc._ast.ASTMontiArcNode;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarcautomaton._cocos.MontiArcAutomatonCoCoChecker;
-import de.monticore.lang.montiarc.montiarcautomaton._symboltable.MontiArcAutomatonLanguage;
-import de.monticore.lang.montiarc.montiarcautomaton.cdadapter.MontiArcAutomatonLanguageFamilyWithCDAdapter;
-import de.monticore.lang.montiarc.montiarcautomaton.cocos.MontiArcAutomatonCocos;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.templateclassgenerator.Modelfinder;
 import de.monticore.umlcd4a.CD4AnalysisLanguage;
@@ -31,6 +20,12 @@ import de.se_rwth.commons.groovy.GroovyInterpreter;
 import de.se_rwth.commons.groovy.GroovyRunner;
 import de.se_rwth.commons.logging.Log;
 import groovy.lang.Script;
+import montiarc._ast.ASTMontiArcNode;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.MontiArcLanguage;
+import montiarc._symboltable.MontiArcLanguageFamily;
+import montiarc.cocos.MontiArcCoCos;
+import montiarc.helper.JavaHelper;
 
 public class MAAGeneratorScript extends Script implements GroovyRunner {
   
@@ -110,7 +105,7 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
     }
     ComponentSymbol comp = compSym.get();
     ASTMontiArcNode ast = (ASTMontiArcNode) comp.getAstNode().get();
-    AJavaCoCos.createChecker().checkAll(ast);
+    MontiArcCoCos.createChecker().checkAll(ast);
   }
   
   /**
@@ -123,14 +118,14 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
   public void generate(File modelPath, File targetFilepath, File hwcPath) {
     File fqnMP = Paths.get(modelPath.getAbsolutePath()).toFile();
     List<String> foundModels = Modelfinder.getModelsInModelPath(fqnMP,
-        MontiArcAutomatonLanguage.FILE_ENDING);
+        MontiArcLanguage.FILE_ENDING);
     // gen maa
     for (String model : foundModels) {
       String simpleName = Names.getSimpleName(model);
       String packageName = Names.getQualifier(model);
       String modelName = Names.getFileName(
           Names.getPathFromQualifiedName(model) + File.separator + simpleName,
-          MontiArcAutomatonLanguage.FILE_ENDING);
+          MontiArcLanguage.FILE_ENDING);
       Log.info("Check model: " + modelName, "MAAGeneratorScript");
       // TODO enable
       // cocoCheck(simpleName, packageName, modelPath.getAbsolutePath());
@@ -153,7 +148,7 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
   }
   
   private static GlobalScope initSymTab(String modelPath) {
-    ModelingLanguageFamily fam = new AJavaLanguageFamily();
+    ModelingLanguageFamily fam = new MontiArcLanguageFamily();
     final ModelPath mp = new ModelPath(Paths.get(modelPath),
         Paths.get("src/main/resources/defaultTypes"));
     GlobalScope scope = new GlobalScope(mp, fam);

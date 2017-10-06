@@ -19,7 +19,7 @@ import montiarc._symboltable.PortSymbol;
 //XXX: https://git.rwth-aachen.de/montiarc/core/issues/42
 
 /**
- * Implementation of R7
+ * Implementation of R7: The source port of a simple connector must exist in the subcomponents type
  *
  * @author Crispin Kirchner
  */

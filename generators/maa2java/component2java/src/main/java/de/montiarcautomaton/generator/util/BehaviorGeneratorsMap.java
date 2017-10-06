@@ -6,13 +6,14 @@
 package de.montiarcautomaton.generator.util;
 
 import java.util.HashMap;
+
 import java.util.Map;
 
-import _templates.de.montiarcautomaton.ajava.AJavaMainFactory;
-import _templates.mc.montiarcautomaton.automaton.lib.AutomatonImplMainFactory;
-import de.monticore.lang.montiarc.ajava._ast.ASTAJavaDefinition;
-import de.monticore.lang.montiarc.montiarcautomaton._ast.ASTAutomatonDefinition;
+import _templates.de.montiarcautomaton.lib.ajava.AJavaMainFactory;
+import _templates.de.montiarcautomaton.lib.automaton.AutomatonImplMainFactory;
 import de.monticore.templateclassgenerator.util.GeneratorInterface;
+import montiarc._ast.ASTAutomatonBehavior;
+import montiarc._ast.ASTJavaPBehavior;
 
 /**
  * Maps SymbolKinds to a certain generator interface that generates code for
@@ -27,8 +28,8 @@ public class BehaviorGeneratorsMap {
   
   private static Map<Class<?>, GeneratorInterface> createMap() {
     Map<Class<?>, GeneratorInterface> result = new HashMap<>();
-    result.put(ASTAJavaDefinition.class, AJavaMainFactory.create());
-    result.put(ASTAutomatonDefinition.class, AutomatonImplMainFactory.create());
+    result.put(ASTJavaPBehavior.class, AJavaMainFactory.create());
+    result.put(ASTAutomatonBehavior.class, AutomatonImplMainFactory.create());
     return result;
   }
 }

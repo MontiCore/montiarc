@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import _templates.de.montiarcautomaton.ajava.AJavaMain;
-import de.montiarcautomaton.ajava.generator.helper.AJavaHelper;
+import de.montiarcautomaton.automatongenerator.helper.AJavaHelper;
 import de.monticore.ModelingLanguageFamily;
 import de.monticore.ast.ASTNode;
 import de.monticore.automaton.ioautomaton.JavaHelper;

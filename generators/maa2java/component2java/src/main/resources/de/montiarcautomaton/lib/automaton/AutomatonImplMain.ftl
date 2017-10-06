@@ -1,7 +1,7 @@
-${tc.params("de.montiarcautomaton.automatongenerator.helper.AutomatonHelper helper", "String _package", "java.util.Collection<de.monticore.symboltable.ImportStatement> imports",
+${tc.params("de.montiarcautomaton.generator.helper.AutomatonHelper helper", "String _package", "java.util.Collection<de.monticore.symboltable.ImportStatement> imports",
 "String name", "String resultName", "String inputName", "String implName",
-"java.util.Collection<de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol> portsIn",
-"java.util.Collection<de.monticore.automaton.ioautomaton._symboltable.VariableSymbol> variables", "java.util.Collection<de.monticore.automaton.ioautomaton._symboltable.StateSymbol> states",
+"java.util.Collection<montiarc._symboltable.PortSymbol> portsIn",
+"java.util.Collection<montiarc._symboltable.VariableSymbol> variables", "java.util.Collection<montiarc._symboltable.StateSymbol> states",
 "java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams")}
 package ${_package};
 
