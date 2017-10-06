@@ -5,7 +5,8 @@
  */
 package montiarc._symboltable;
 
-import montiarc._ast.ASTValuation;
+import java.util.Optional;
+
 import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.modifiers.AccessModifier;
@@ -13,6 +14,7 @@ import de.monticore.symboltable.references.CommonSymbolReference;
 import de.monticore.symboltable.references.SymbolReference;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
+import montiarc._ast.ASTValuation;
 
 /**
  * TODO: Write me!
@@ -98,7 +100,7 @@ public class VariableSymbolReference extends VariableSymbol implements SymbolRef
    * @see de.monticore.lang.montiarc.montiarc._symboltable.VariableSymbol#setValuation(de.monticore.lang.montiarc.montiarc._ast.ASTValuation)
    */
   @Override
-  public void setValuation(ASTValuation valuation) {
+  public void setValuation(Optional<ASTValuation> valuation) {
     getReferencedSymbol().setValuation(valuation);
   }
   
@@ -106,7 +108,7 @@ public class VariableSymbolReference extends VariableSymbol implements SymbolRef
    * @see de.monticore.lang.montiarc.montiarc._symboltable.VariableSymbol#getValuation()
    */
   @Override
-  public ASTValuation getValuation() {
+  public Optional<ASTValuation> getValuation() {
    return getReferencedSymbol().getValuation();
   }
   

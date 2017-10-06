@@ -19,23 +19,20 @@ import _templates.de.montiarcautomaton.lib.Deploy;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.montiarcautomaton.generator.util.BehaviorGeneratorsMap;
 import de.monticore.ModelingLanguageFamily;
-import de.monticore.automaton.ioautomaton.JavaHelper;
-import de.monticore.automaton.ioautomaton.ScopeHelper;
-import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
 import de.monticore.codegen.mc2cd.TransformationHelper;
 import de.monticore.io.paths.IterablePath;
 import de.monticore.io.paths.ModelPath;
-import de.monticore.lang.montiarc.ajava._parser.AJavaAntlrParser.BehaviorEmbedding_eofContext;
-import de.monticore.lang.montiarc.ajava._symboltable.AJavaLanguageFamily;
-import de.monticore.lang.montiarc.montiarc._ast.ASTComponent;
-import de.monticore.lang.montiarc.montiarc._ast.ASTElement;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarcbehavior._ast.ASTBehaviorEmbedding;
-import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Scope;
 import de.monticore.templateclassgenerator.util.GeneratorInterface;
 import de.se_rwth.commons.Names;
+import montiarc._ast.ASTBehaviorElement;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTElement;
+import montiarc._symboltable.AutomatonSymbol;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.MontiArcLanguageFamily;
+import montiarc.helper.JavaHelper;
 
 /**
  * This class generates code for an maa model.
@@ -45,7 +42,7 @@ import de.se_rwth.commons.Names;
 public class MAAGenerator {
   
   protected static Scope createSymTab(Path... modelPaths) {
-    ModelingLanguageFamily fam = new AJavaLanguageFamily();
+    ModelingLanguageFamily fam = new MontiArcLanguageFamily();
     List<Path> mps = new ArrayList<>(Arrays.asList(modelPaths));
     mps.add(Paths.get("src/main/resources/defaultTypes"));
     final ModelPath mp = new ModelPath(mps);
@@ -113,14 +110,13 @@ public class MAAGenerator {
         packageName + "." + implName);
     
     filePath = getPath(targetPath, packageName, implName);
-    Collection<AutomatonSymbol> automatons = ScopeHelper
-        .<AutomatonSymbol> resolveManyDown(comp.getSpannedScope(), AutomatonSymbol.KIND);
+    Collection<AutomatonSymbol> automatons = comp.getSpannedScope().resolveLocally(AutomatonSymbol.KIND);
     if (automatons.size() > 1) {
       throw new RuntimeException("Only one automaton per component supported.");
     }
     
     ASTComponent compAST = (ASTComponent) comp.getAstNode().get();
-    Optional<ASTBehaviorEmbedding> behaviorEmbedding = getBehaviorEmbedding(compAST);
+    Optional<ASTBehaviorElement> behaviorEmbedding = getBehaviorEmbedding(compAST);
     if (behaviorEmbedding.isPresent()) {
       for (Entry<Class<?>, GeneratorInterface> e : BehaviorGeneratorsMap.behaviorGenerators
           .entrySet()) {
@@ -168,11 +164,11 @@ public class MAAGenerator {
     }
   }
   
-  private static Optional<ASTBehaviorEmbedding> getBehaviorEmbedding(ASTComponent cmp) {
+  private static Optional<ASTBehaviorElement> getBehaviorEmbedding(ASTComponent cmp) {
     List<ASTElement> elements = cmp.getBody().getElements();
     for (ASTElement e : elements) {
-      if (e instanceof ASTBehaviorEmbedding) {
-        return Optional.of((ASTBehaviorEmbedding) e);
+      if (e instanceof ASTBehaviorElement) {
+        return Optional.of((ASTBehaviorElement) e);
       }
     }
     return Optional.empty();

@@ -74,7 +74,6 @@ import montiarc.helper.JavaHelper;
 import montiarc.helper.Timing;
 import montiarc.trafos.AutoConnection;
 
-
 /**
  * Visitor that creats the symboltable of a MontiArc AST.
  *
@@ -543,7 +542,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     Optional<VariableSymbol> var = enclosingScope
         .<VariableSymbol> resolve(qualifiedName, VariableSymbol.KIND);
     if (var.isPresent()) {
-      var.get().setValuation(init.getValuation());
+      var.get().setValuation(Optional.of(init.getValuation()));
     }
     
   }
@@ -607,9 +606,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
    */
   @Override
   public void endVisit(ASTAutomatonBehavior node) {
-    if (node.getName().isPresent()) {
-      removeCurrentScope();
-    }
+    removeCurrentScope();
   }
   
   /**

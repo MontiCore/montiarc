@@ -28,11 +28,11 @@
       <version>${monticore.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>montiarc.languages</groupId>
-      <artifactId>ajava</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+<!--     <dependency> -->
+<!--       <groupId>montiarc.languages</groupId> -->
+<!--       <artifactId>ajava</artifactId> -->
+<!--       <version>${project.version}</version> -->
+<!--     </dependency> -->
 
     <dependency>
       <groupId>montiarc.libraries</groupId>
@@ -58,17 +58,17 @@
     </dependency>
 
     <!-- MAA Generators -->
-    <dependency>
-      <groupId>montiarc.generators.maa2java</groupId>
-      <artifactId>ajava2java</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+<!--     <dependency> -->
+<!--       <groupId>montiarc.generators.maa2java</groupId> -->
+<!--       <artifactId>ajava2java</artifactId> -->
+<!--       <version>${project.version}</version> -->
+<!--     </dependency> -->
 
-    <dependency>
-      <groupId>montiarc.generators.maa2java</groupId>
-      <artifactId>automaton2java</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+<!--     <dependency> -->
+<!--       <groupId>montiarc.generators.maa2java</groupId> -->
+<!--       <artifactId>automaton2java</artifactId> -->
+<!--       <version>${project.version}</version> -->
+<!--     </dependency> -->
 
 
     <!-- MontiCore Dependencies -->
