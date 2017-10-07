@@ -10,6 +10,13 @@ public class StateKind implements SymbolKind {
 
   public static final StateKind KIND = new StateKind();
 
+  private static final String NAME = StateKind.class.getName();
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
   protected StateKind(){
     
   }

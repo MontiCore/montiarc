@@ -8,7 +8,14 @@ import de.monticore.symboltable.SymbolKind;
 public class VariableKind implements SymbolKind {
   
   public static final VariableKind INSTANCE = new VariableKind();
-  
+
+  private static final String NAME = VariableKind.class.getName();
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
   protected VariableKind() {
   }
   

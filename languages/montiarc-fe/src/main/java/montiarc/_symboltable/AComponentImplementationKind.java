@@ -13,6 +13,13 @@ public class AComponentImplementationKind
 
   public static final AComponentImplementationKind INSTANCE = new AComponentImplementationKind();
 
+  private static final String NAME = AComponentImplementationKind.class.getName();
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
   protected AComponentImplementationKind() {
   }
 

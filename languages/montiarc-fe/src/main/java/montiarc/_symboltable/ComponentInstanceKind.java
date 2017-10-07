@@ -15,6 +15,13 @@ public class ComponentInstanceKind
 
   public static final ComponentInstanceKind INSTANCE = new ComponentInstanceKind();
 
+  private static final String NAME = ComponentInstanceKind.class.getName();
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
   protected ComponentInstanceKind() {
   }
 

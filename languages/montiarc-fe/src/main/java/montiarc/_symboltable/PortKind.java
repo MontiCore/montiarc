@@ -7,6 +7,13 @@ public class PortKind implements de.monticore.symboltable.SymbolKind {
 
   public static final PortKind INSTANCE = new PortKind();
 
+  private static final String NAME = PortKind.class.getName();
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
   protected PortKind() {
   }
 

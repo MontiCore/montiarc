@@ -10,6 +10,12 @@ public class AutomatonKind implements SymbolKind {
 
   public static final AutomatonKind KIND = new AutomatonKind();
 
+  private static final String NAME = AutomatonKind.class.getName();
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
 
   @Override
   public boolean isKindOf(SymbolKind kind) {

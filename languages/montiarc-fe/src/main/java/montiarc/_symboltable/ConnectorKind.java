@@ -7,6 +7,13 @@ public class ConnectorKind implements de.monticore.symboltable.SymbolKind {
 
   public static final ConnectorKind INSTANCE = new ConnectorKind();
 
+  private static final String NAME = ConnectorKind.class.getName();
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
   protected ConnectorKind() {
   }
 
