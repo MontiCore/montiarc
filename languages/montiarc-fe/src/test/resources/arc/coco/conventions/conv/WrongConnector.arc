@@ -13,16 +13,16 @@ component WrongConnector {
     }
     
     component Inner 
-        myInner [myInner.sOutInner -> sOut];
+        myInner [myInner.sOutInner -> sOut]; // Source is qualified in the connector definition
     
     component Inner
-        myInner2 [sOutInner -> myInner.sth.sInInner],
+        myInner2 [sOutInner -> myInner.sth.sInInner], //myInner has no subcomponent sth with port sInInner
         myInner3,
         myInner4;
 
-    connect myInner3.bla.sOutInner -> myInner2.sInInner;
+    connect myInner3.bla.sOutInner -> myInner2.sInInner;  // myInner3 has no subcomponent with name "bla" and port "sOutInner"
     
-    connect myInner4.sOutInner -> myInner3.bla.sInInner;
+    connect myInner4.sOutInner -> myInner3.bla.sInInner;  //myInner3 has no subcomponent with name "bla" and port "sInInner"
     
     connect sIn -> myInner4.sInInner;
     

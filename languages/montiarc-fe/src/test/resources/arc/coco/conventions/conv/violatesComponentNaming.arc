@@ -1,6 +1,6 @@
 package conv;
 
-component violatesComponentNaming {
+component violatesComponentNaming {  // Name of the component is not capitalized
     port 
         in String s1;
     component IsCorrect {
