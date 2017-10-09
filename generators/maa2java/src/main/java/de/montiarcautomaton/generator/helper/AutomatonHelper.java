@@ -1,4 +1,4 @@
-package de.montiarcautomaton.automatongenerator.helper;
+package de.montiarcautomaton.generator.helper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,17 +6,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import de.monticore.automaton.ioautomaton.ScopeHelper;
-import de.monticore.automaton.ioautomaton._ast.ASTIOAssignment;
-import de.monticore.automaton.ioautomaton._symboltable.AutomatonSymbol;
-import de.monticore.automaton.ioautomaton._symboltable.StateSymbol;
-import de.monticore.automaton.ioautomaton._symboltable.TransitionSymbol;
-import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol;
-import de.monticore.automaton.ioautomaton._symboltable.VariableSymbol.Direction;
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
 import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.symboltable.resolving.ResolvingInfo;
+import montiarc._ast.ASTIOAssignment;
+import montiarc._symboltable.AutomatonSymbol;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.MontiArcLanguage;
+import montiarc._symboltable.StateSymbol;
+import montiarc._symboltable.TransitionSymbol;
+import montiarc._symboltable.VariableSymbol;
 
 /**
  * Helper class used in the template to generate target code of the automaton
@@ -32,11 +32,10 @@ public class AutomatonHelper extends ComponentHelper {
   public AutomatonHelper(AutomatonSymbol automaton, ComponentSymbol component) {
     super(component);
     
-    this.states = ScopeHelper.resolveManyDown(automaton.getEnclosingScope(), StateSymbol.KIND);
-    this.transitions = ScopeHelper.resolveManyDown(automaton.getEnclosingScope(), TransitionSymbol.KIND);
+    this.states = automaton.getSpannedScope().resolveLocally(StateSymbol.KIND);
+    this.transitions = automaton.getSpannedScope().resolveLocally(TransitionSymbol.KIND);
     
-    final Set<VariableSymbol> vars = ScopeHelper.resolveManyDown(component.getEnclosingScope(), VariableSymbol.KIND);
-    this.variables = vars.stream().filter((symbol) -> symbol.getDirection() == Direction.Variable).collect(Collectors.toList());
+    this.variables = component.getEnclosingScope().resolveLocally(VariableSymbol.KIND);
   }
   
   /**
@@ -150,8 +149,8 @@ public class AutomatonHelper extends ComponentHelper {
    * @return
    */
   public String getVariableInitialization(VariableSymbol symbol) {
-    if (symbol.getInitializationAST().isPresent()) {
-      return printExpression(symbol.getInitializationAST().get().getExpression());
+    if (symbol.getValuation().isPresent()) {
+      return printExpression(symbol.getValuation().get().getExpression());
     }
     else {
       return null;
