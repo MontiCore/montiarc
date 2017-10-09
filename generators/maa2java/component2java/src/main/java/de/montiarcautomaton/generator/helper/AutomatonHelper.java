@@ -9,9 +9,11 @@ import java.util.stream.Collectors;
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.symboltable.resolving.ResolvingInfo;
 import montiarc._ast.ASTIOAssignment;
 import montiarc._symboltable.AutomatonSymbol;
 import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.MontiArcLanguage;
 import montiarc._symboltable.StateSymbol;
 import montiarc._symboltable.TransitionSymbol;
 import montiarc._symboltable.VariableSymbol;
@@ -30,11 +32,10 @@ public class AutomatonHelper extends ComponentHelper {
   public AutomatonHelper(AutomatonSymbol automaton, ComponentSymbol component) {
     super(component);
     
-    this.states = automaton.getEnclosingScope().resolveLocally(StateSymbol.KIND);
-    this.transitions = automaton.getEnclosingScope().resolveLocally(TransitionSymbol.KIND);
+    this.states = automaton.getSpannedScope().resolveLocally(StateSymbol.KIND);
+    this.transitions = automaton.getSpannedScope().resolveLocally(TransitionSymbol.KIND);
     
     this.variables = component.getEnclosingScope().resolveLocally(VariableSymbol.KIND);
-//    this.variables = vars.stream().filter((symbol) -> symbol.getDirection() == Direction.Variable).collect(Collectors.toList());
   }
   
   /**
