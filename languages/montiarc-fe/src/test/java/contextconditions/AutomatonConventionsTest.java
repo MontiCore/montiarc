@@ -16,11 +16,17 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
   }
   
   @Test
-  public void testMutipleBehaviors() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.MutipleBehaviors");
-    checkInvalid(node, new ExpectedErrorInfo(3, "xAB140", "xAB130"));
+  public void testMultipleBehaviorsImplemented() {
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.MultipleBehaviors");
+    checkInvalid(node, new ExpectedErrorInfo(2, "xAB140"));
   }
-  
+
+  @Test
+  public void testLowerCaseAutomatonName() {
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.LowerCaseAutomaton");
+    checkInvalid(node, new ExpectedErrorInfo(1, "xAB130"));
+  }
+
   @Test
   public void testLowerCaseEnumeration() {
     Log.getFindings().clear();

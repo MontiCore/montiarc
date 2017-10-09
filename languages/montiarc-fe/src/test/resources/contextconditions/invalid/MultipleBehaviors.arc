@@ -1,6 +1,6 @@
 package contextconditions.invalid;
 
-component MutipleBehaviors {
+component MultipleBehaviors {
   port
     in Integer a;
 
@@ -19,8 +19,8 @@ component MutipleBehaviors {
 
     Beginn;
   }
-  
-  automaton lowercaseName {
+
+  automaton AnotherAutomatonImpl {
   	state Anfang;
     initial Anfang;
 

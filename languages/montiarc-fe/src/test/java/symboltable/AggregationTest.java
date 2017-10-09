@@ -201,7 +201,6 @@ public class AggregationTest extends AbstractSymboltableTest {
     assertTrue(msgsType.getField("timestamp").isPresent());
   }
   
-  @Ignore
   @Test
   public void testMethod() {
     Scope symTab = createSymTab(MODEL_PATH);
