@@ -57,6 +57,10 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTTransitionCoCo)new AutomatonReactionWithAlternatives())
         .addCoCo(new UseOfForbiddenExpression())
         .addCoCo(new AutomatonStateUppercase())
+        .addCoCo(new PortNameIsLowerCase())
+        .addCoCo(new OuterComponentIsUnnamed())
+        .addCoCo(new ConnectorSourceAndTargetDiffer())
+        .addCoCo(new ImportsAreUnique())
         
         // REFERENTIAL INTEGRITY
         .addCoCo(new AutomatonDeclaredInitialStateDoesNotExist())

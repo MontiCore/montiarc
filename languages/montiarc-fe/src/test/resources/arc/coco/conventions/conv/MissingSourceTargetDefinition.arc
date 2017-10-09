@@ -10,13 +10,15 @@ component MissingSourceTargetDefinition {
     component CorrectComp cc;
     
     
-    connect sIn -> ccWrong;
+    connect sIn -> ccWrong;  // No target port "ccWrong" in MissingSourceTargetDefinition
     
-    connect sInWrong -> cc; 
+    connect sInWrong -> cc; // No input port "sInWrong" in MissingSourceTargetDefinition
+                            // TODO: Can not connect to cc.stringIn as there is no autoconnect?
     
-    connect cc -> sOutWrong;
+    connect cc -> sOutWrong; // No target port "sOutWrong" in MisingSourceTargetDefinition
+                             // TODO: Can not connect from cc.stringOut as there is no autoconnect?
     
-    connect ccWrong -> sOut;
+    connect ccWrong -> sOut; // No souce port "ccWrong" in component MissingSourceTargetDefinition
     
     // correct connectors
     connect sIn -> cc.stringIn;
