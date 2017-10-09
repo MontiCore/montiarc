@@ -63,6 +63,7 @@ import montiarc._ast.ASTParameter;
 import montiarc._ast.ASTPort;
 import montiarc._ast.ASTSimpleConnector;
 import montiarc._ast.ASTState;
+import montiarc._ast.ASTStateDeclaration;
 import montiarc._ast.ASTStereoValue;
 import montiarc._ast.ASTSubComponent;
 import montiarc._ast.ASTSubComponentInstance;
@@ -640,6 +641,15 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   /**
+   * @see montiarc._visitor.MontiArcVisitor#endVisit(montiarc._ast.ASTState)
+   */
+  @Override
+  public void endVisit(ASTState node) {
+    super.endVisit(node);
+  }
+  
+  
+  /**
    * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#visit(de.monticore.lang.montiarc.montiarc._ast.ASTInitialStateDeclaration)
    */
   @Override
@@ -681,6 +691,22 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   @Override
   public void visit(ASTIOAssignment node) {
     node.setEnclosingScope(currentScope().get());
+  }
+  
+  /**
+   * @see montiarc._symboltable.MontiArcSymbolTableCreatorTOP#visit(montiarc._ast.ASTStateDeclaration)
+   */
+  @Override
+  public void visit(ASTStateDeclaration ast) {
+    // to prevent creation of unnecessary scope we override with nothing
+  }
+  
+  /**
+   * @see montiarc._symboltable.MontiArcSymbolTableCreatorTOP#endVisit(montiarc._ast.ASTStateDeclaration)
+   */
+  @Override
+  public void endVisit(ASTStateDeclaration ast) {
+    // to prevent deletion of not existing scope we override with nothing
   }
   
 }

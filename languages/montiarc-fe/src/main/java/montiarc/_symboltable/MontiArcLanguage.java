@@ -37,7 +37,7 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
     addResolver(new CommonResolvingFilter<PortSymbol>(PortSymbol.KIND));
     addResolver(new CommonResolvingFilter<ConnectorSymbol>(ConnectorSymbol.KIND));
     addResolver(new CommonResolvingFilter<VariableSymbol>(VariableSymbol.KIND));
-    addResolver(new CommonResolvingFilter<VariableSymbol>(AutomatonSymbol.KIND));
+    addResolver(new CommonResolvingFilter<AutomatonSymbol>(AutomatonSymbol.KIND));
     
     
     // Java/P
@@ -49,7 +49,7 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
 
     
     // I/O Automaton
-    addResolver(new StateResolvingFilter());
+    addResolver(new CommonResolvingFilter<StateSymbol>(StateSymbol.KIND));
     addResolver(new TransitionResolvingFilter());
     addResolver(new Variable2FieldResolvingFilter());
     addResolver(new Port2FieldResolvingFilter());
