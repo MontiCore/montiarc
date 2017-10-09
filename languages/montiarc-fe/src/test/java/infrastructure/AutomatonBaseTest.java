@@ -12,8 +12,6 @@ import montiarc.helper.JavaHelper;
 
 public abstract class AutomatonBaseTest {
   protected static Scope createSymTab(String modelPath) {
-    // TODO remove usage of cd adapter. See MontiArcAutomatonLanguageFamilyWithCDAdapter.
-    // ModelingLanguageFamily fam = new MontiArcAutomatonLanguageFamily();
     ModelingLanguageFamily fam = new MontiArcLanguageFamily();
     final ModelPath mp = new ModelPath(Paths.get(modelPath), Paths.get("src/main/resources/defaultTypes"));
     GlobalScope scope = new GlobalScope(mp, fam);
