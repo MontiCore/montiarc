@@ -189,9 +189,9 @@ public class SymtabTestArcd extends AbstractSymboltableTest {
 
     ComponentInstanceSymbol myC = comp.getSubComponent("myC").orElse(null);
     assertNotNull(myC);
-     assertEquals(1, myC.getComponentType().getActualTypeArguments().size());
-     assertEquals("String",
-     myC.getComponentType().getActualTypeArguments().get(0).getType().getName());
+    assertEquals(1, myC.getComponentType().getActualTypeArguments().size());
+    assertEquals("String",
+    myC.getComponentType().getActualTypeArguments().get(0).getType().getName());
 
     ComponentSymbol myCType = myC.getComponentType().getReferencedComponent().orElse(null);
     assertNotNull(myCType);

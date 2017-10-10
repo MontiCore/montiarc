@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import de.monticore.symboltable.ImportStatement;
 import de.monticore.symboltable.Scope;
-import montiarc._ast.ASTMACompilationUnit;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.MontiArcArtifactScope;
@@ -92,25 +92,21 @@ public class ConventionsTest extends AbstractCoCoTest {
     MontiArcArtifactScope arcArtifactScope = (MontiArcArtifactScope) node.getEnclosingScope().get();
     Scope symTab = AbstractSymboltableTest.createSymTab("src/test/resources/" + "arc/coco/conventions");
     //TODO: Wie erreiche ich eine Node für das Artefakt?
-    if(symTab.getAstNode().isPresent()) {
-
-    }
-//    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());
-//    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC0002", "xC0002"));
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC0002", "xC0002"));
   }
 
-  @Ignore("implement coco")
+  @Ignore("Duplicate of ConnectorEndpointCorrectlyQualifiedTest.java")
   @Test
   /*
    * Checks whether
    */
   public void testWrongConnector() {
     // runChecker("arc/coco/conventions/conv/WrongConnector.arc");
-    //TODO Add correct error code
-    //TODO Implement CoCo
+    //TODO Remove duplicate test?
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.WrongConnector");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetDiffer());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xC1002"));
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker();
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xC0007"));
   }
 
 
@@ -121,20 +117,18 @@ public class ConventionsTest extends AbstractCoCoTest {
   public void testConnectorSourceAndTargetDifferentComponent() {
     //TODO Add correct error code
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.ConnectorSourceAndTargetSameComponent");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetDiffer());
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetComponentDiffer());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC1001"));
   }
 
-  @Ignore("implement coco")
   @Test
   /*
     Checks whether the source and target of a connect statement exist.
-    TODO: Also check for missing autoconnect and
    */
   public void testMissingSourceAndTargetDefinition() {
-    runCheckerWithSymTab("arc/coco/conventions", "conv.MissingSourceTargetDefinition");
-    assertEquals(4, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
-        .count());
+    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.MissingSourceTargetDefinition");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExist());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xC0001","xC0002"));
   }
 
   @Test

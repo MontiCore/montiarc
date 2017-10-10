@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public class ConnectorSourceAndTargetDiffer implements MontiArcASTComponentCoCo {
+public class ConnectorSourceAndTargetComponentDiffer implements MontiArcASTComponentCoCo {
 
     /**
      * @see montiarc._cocos.MontiArcASTComponentCoCo#check(montiarc._ast.ASTComponent)
