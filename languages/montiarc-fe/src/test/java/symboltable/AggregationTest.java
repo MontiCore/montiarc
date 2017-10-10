@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
+
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -34,6 +35,7 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 
 /**
+ *
  * @author Crispin Kirchner, Andreas Wortmann
  * @version $Revision$, $Date$
  */
@@ -105,8 +107,8 @@ public class AggregationTest extends AbstractSymboltableTest {
   
   @Test
   /**
-   * A.arc: import Domain; component A { ports in Room r; } Domain.cd: classdiagram Domain { class
-   * Room { int x; int y; } }
+   * Doesn't actually test anything that isn't already covered by other tests.
+   * TODO: Remove?!
    */
   public void test() {
     Scope symTab = createSymTab(MODEL_PATH);
@@ -121,11 +123,16 @@ public class AggregationTest extends AbstractSymboltableTest {
     
     JTypeReference<? extends JTypeSymbol> ref = speed.getTypeReference();
     assertTrue(ref.existsReferencedSymbol());
-//    JTypeSymbol typeSymbol = ref.getReferencedSymbol();
-//    assertTrue(typeSymbol instanceof CDTypeSymbol);
+    JTypeSymbol typeSymbol = ref.getReferencedSymbol();
+    assertTrue(typeSymbol instanceof CDTypeSymbol);
   }
   
   @Test
+  /**
+   * Tests wether SuperClasses get properly embedded in the symbol table, by
+   * checking the types of the incoming and outgoing ports of the superclass.Simulation
+   * component.
+   */
   public void testSuperClass() {
     Scope scope = createSymTab("src/test/resources/symboltable");
     
@@ -133,7 +140,8 @@ public class AggregationTest extends AbstractSymboltableTest {
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
         .orElse(null);
     assertNotNull(simulationComponent);
-    
+
+    //Incoming Port
     ComponentSymbol errorComponent = simulationComponent
         .getInnerComponent("ErrorFilter")
         .orElse(null);
@@ -145,13 +153,16 @@ public class AggregationTest extends AbstractSymboltableTest {
     JTypeReference<?> messageTypeRef = messagePort.getTypeReference();
     assertTrue(messageTypeRef.existsReferencedSymbol());
     assertTrue(messageTypeRef instanceof CommonJTypeReference);
-    
+    assertEquals("MyMessage", messageTypeRef.getName());
     JTypeSymbol messageType = messageTypeRef.getReferencedSymbol();
-//    assertTrue(messageType instanceof CDTypeSymbol);
+    //We will not check the type of the referenced symbol, since resolveMany() doesn't care what gets returned
+    assertEquals("MyMessage", messageType.getName());
+    assertEquals("superclass.Data.MyMessage", messageType.getFullName());
     assertTrue(messageType.isAbstract());
     assertFalse(messageType.isInterface());
     assertFalse(messageType.isInnerType());
-    
+
+    //Outgoing Port
     PortSymbol errorPort = errorComponent
         .getOutgoingPort("errors")
         .orElse(null);
@@ -159,21 +170,24 @@ public class AggregationTest extends AbstractSymboltableTest {
     
     JTypeReference<?> errorTypeRef = errorPort.getTypeReference();
     assertTrue(errorTypeRef.existsReferencedSymbol());
-    
+    assertTrue(errorTypeRef instanceof  CommonJTypeReference);
     JTypeSymbol errorType = errorTypeRef.getReferencedSymbol();
-//    assertTrue(errorType instanceof CDTypeSymbol);
-    
     messageTypeRef = errorType.getSuperClass().orElse(null);
-//    assertTrue(messageTypeRef instanceof CDTypeSymbolReference);
     assertEquals("MyMessage", messageTypeRef.getName());
     assertTrue(messageTypeRef.existsReferencedSymbol());
-    
     messageType = messageTypeRef.getReferencedSymbol();
     assertEquals("superclass.Data.MyMessage", messageType.getFullName());
     assertEquals("MyMessage", messageType.getName());
+    assertTrue(messageType.isAbstract());
+    assertFalse(messageType.isInterface());
+    assertFalse(messageType.isInnerType());
+
   }
   
   @Test
+  /**
+   * Tests whether Fields are properly embedded in the symbol table.
+   */
   public void testFields() {
     Scope scope = createSymTab("src/test/resources/symboltable");
     
@@ -202,6 +216,9 @@ public class AggregationTest extends AbstractSymboltableTest {
   }
   
   @Test
+  /**
+   * Tests wether we can get methods from the symbol table
+   */
   public void testMethod() {
     Scope symTab = createSymTab(MODEL_PATH);
     
@@ -224,6 +241,9 @@ public class AggregationTest extends AbstractSymboltableTest {
   }
   
   @Test
+  /**
+   * Tests wether we can get Interfaces from the symbol table.
+   */
   public void testInterface() {
     Scope scope = createSymTab("src/test/resources/symboltable");
     
@@ -250,6 +270,9 @@ public class AggregationTest extends AbstractSymboltableTest {
   
   @Test
   public void testKind() {
+    /**
+     * Tests whether referenced symbols have the correct KIND.
+     */
     Scope scope = createSymTab("src/test/resources/symboltable");
     
     ComponentSymbol simulationSymbol = scope
