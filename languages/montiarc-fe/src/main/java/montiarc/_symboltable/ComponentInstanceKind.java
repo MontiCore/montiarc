@@ -5,15 +5,14 @@
  */
 package montiarc._symboltable;
 
+import de.monticore.symboltable.SymbolKind;
+
 /**
  * Symbol kind of component instances.
  *
  * @author Robert Heim
  */
-public class ComponentInstanceKind
-    implements de.monticore.symboltable.SymbolKind {
-
-  public static final ComponentInstanceKind INSTANCE = new ComponentInstanceKind();
+public class ComponentInstanceKind implements SymbolKind {
 
   private static final String NAME = ComponentInstanceKind.class.getName();
 
@@ -22,7 +21,8 @@ public class ComponentInstanceKind
     return NAME;
   }
 
-  protected ComponentInstanceKind() {
+  @Override
+  public boolean isKindOf(SymbolKind kind) {
+    return NAME.equals(kind.getName()) || SymbolKind.super.isKindOf(kind);
   }
-
 }

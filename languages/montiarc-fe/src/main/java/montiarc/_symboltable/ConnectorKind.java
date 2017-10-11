@@ -3,9 +3,9 @@
 
 package montiarc._symboltable;
 
-public class ConnectorKind implements de.monticore.symboltable.SymbolKind {
+import de.monticore.symboltable.SymbolKind;
 
-  public static final ConnectorKind INSTANCE = new ConnectorKind();
+public class ConnectorKind implements SymbolKind {
 
   private static final String NAME = ConnectorKind.class.getName();
 
@@ -14,7 +14,9 @@ public class ConnectorKind implements de.monticore.symboltable.SymbolKind {
     return NAME;
   }
 
-  protected ConnectorKind() {
+  @Override
+  public boolean isKindOf(SymbolKind kind) {
+    return NAME.equals(kind.getName()) || SymbolKind.super.isKindOf(kind);
   }
 
 }

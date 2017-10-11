@@ -6,8 +6,6 @@ package montiarc._symboltable;
 import de.monticore.symboltable.SymbolKind;
 
 public class VariableKind implements SymbolKind {
-  
-  public static final VariableKind INSTANCE = new VariableKind();
 
   private static final String NAME = VariableKind.class.getName();
 
@@ -16,7 +14,8 @@ public class VariableKind implements SymbolKind {
     return NAME;
   }
 
-  protected VariableKind() {
+  @Override
+  public boolean isKindOf(SymbolKind kind) {
+    return NAME.equals(kind.getName()) || SymbolKind.super.isKindOf(kind);
   }
-  
 }

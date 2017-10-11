@@ -3,9 +3,9 @@
 
 package montiarc._symboltable;
 
-public class PortKind implements de.monticore.symboltable.SymbolKind {
+import de.monticore.symboltable.SymbolKind;
 
-  public static final PortKind INSTANCE = new PortKind();
+public class PortKind implements SymbolKind {
 
   private static final String NAME = PortKind.class.getName();
 
@@ -14,7 +14,8 @@ public class PortKind implements de.monticore.symboltable.SymbolKind {
     return NAME;
   }
 
-  protected PortKind() {
+  @Override
+  public boolean isKindOf(SymbolKind kind) {
+    return NAME.equals(kind.getName()) || SymbolKind.super.isKindOf(kind);
   }
-
 }
