@@ -9,9 +9,14 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import de.monticore.java.javadsl._ast.ASTCompilationUnit;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.symboltable.Scope;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTMACompilationUnit;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcASTConnectorCoCo;
+import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.MontiArcArtifactScope;
 import montiarc.cocos.*;
@@ -77,23 +82,19 @@ public class ConventionsTest extends AbstractCoCoTest {
     checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xC0001"));
   }
 
-  @Ignore("implement coco")
+
   @Test
   /*
    * Checks whether there is a redundant import statements.
    * For example
    *  import a.*;
    *  import a.*;
-   * TODO: For statements "import a.List;" and "import a.*;" is the first one ununique and should it generate a finding? Update Test?
    */
   public void testImportConvention() {
     //TODO Add correct error code
-    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.UnuniqueImports");
-    MontiArcArtifactScope arcArtifactScope = (MontiArcArtifactScope) node.getEnclosingScope().get();
-    Scope symTab = AbstractSymboltableTest.createSymTab("src/test/resources/" + "arc/coco/conventions");
-    //TODO: Wie erreiche ich eine Node für das Artefakt?
+    ASTComponent node = (ASTComponent) getAstNode("arc/coco/conventions", "conv.UnuniqueImports");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC0002", "xC0002"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC000A", "xC000A"));
   }
 
   @Ignore("Duplicate of ConnectorEndpointCorrectlyQualifiedTest.java")
@@ -102,11 +103,12 @@ public class ConventionsTest extends AbstractCoCoTest {
    * Checks whether
    */
   public void testWrongConnector() {
-    // runChecker("arc/coco/conventions/conv/WrongConnector.arc");
     //TODO Remove duplicate test?
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.WrongConnector");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker();
-    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xC0007"));
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+            .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
+            .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xDB61C"));
   }
 
 
