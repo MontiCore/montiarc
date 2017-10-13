@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.PortUsage;
 import org.junit.Test;
 
 import de.monticore.symboltable.Scope;
@@ -107,6 +109,8 @@ public class AutoConnectionTest extends AbstractSymboltableTest {
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.AutoConnectType2", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
+
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
 
     // 1 duplicate autoconnection matches
     // 3 unused ports due to failed autoconnection

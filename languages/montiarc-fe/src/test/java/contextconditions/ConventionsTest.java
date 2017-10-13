@@ -134,20 +134,28 @@ public class ConventionsTest extends AbstractCoCoTest {
   }
 
   @Test
-  public void testUnusedPorts() {
-    runCheckerWithSymTab("arc/coco/conventions", "conv.UnusedPorts");
-    Collection<String> findings = Log.getFindings().stream().map(f -> f.buildMsg())
-        .filter(s -> s.contains("xAC006") || s.contains("xAC007"))
-        .collect(Collectors.toList());
-    assertEquals(findings.stream().collect(Collectors.joining("\n")), 3, findings.size());
-
-    findings = Log.getFindings().stream().map(f -> f.buildMsg())
-        .filter(s -> s.contains("xAC008") || s.contains("xAC009"))
-        .collect(Collectors.toList());
-    assertEquals(findings.stream().collect(Collectors.joining("\n")), 3, findings.size());
+  /*
+    Checks whether the source and target of a connect statement exist.
+   */
+  public void testMissingSourceAndTargetDefinitionInSubcomponent() {
+    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.MissingSourceTargetDefinitionInSubcomponent");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExist());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xC0001","xC0002"));
   }
 
+  @Test
+  public void testUnusedPorts() {
+    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.UnusedPorts");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xAC006", "xAC007"));
 
+    cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xAC009"));
+
+    //TODO: Modify test model to check for xAC008?
+  }
+
+  @Ignore("Duplicate of TopLevelComponentHasNoInstanceNameTest.java")
   @Test
   /*
    * Checks that the outer component definition has no instance name.
@@ -159,6 +167,7 @@ public class ConventionsTest extends AbstractCoCoTest {
     checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xC0003"));
   }
 
+  @Ignore("Duplicate of TopLevelComponentHasNoInstanceNameTest.java")
   @Test
   /*
    * Checks that outer component definitions with no instance name are not flagged.
