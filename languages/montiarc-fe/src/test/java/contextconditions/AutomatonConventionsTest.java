@@ -1,18 +1,21 @@
 package contextconditions;
 
+import de.monticore.symboltable.ImportStatement;
+import de.monticore.symboltable.Scope;
+import de.monticore.symboltable.types.JTypeSymbol;
+import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
+import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
+import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMontiArcNode;
 import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.adapters.CDTypeSymbol2JavaType;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.monticore.symboltable.Scope;
-import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
-import de.se_rwth.commons.logging.Log;
-import montiarc._ast.ASTMontiArcNode;
-
+import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
-
-import static org.junit.Assert.assertTrue;
 
 public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
   @BeforeClass
@@ -52,5 +55,37 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
     // easily possible to perform CoCo checks to detect errors in CDs that are
     // imported in the given MAA model.
     //Todo: Just rewrite this. Contextconditions/invalid/InvalidCD.arc
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.InvalidCD");
+    ComponentSymbol sym = (ComponentSymbol) node.getSymbol().orElse(null);
+    Scope symTab = createSymTab(MODEL_PATH);
+    if (sym == null){
+      System.out.println("NULL OH NO!");
+    } else{
+      List<ImportStatement> imports = sym.getImports();
+
+
+        Optional<JTypeSymbol> symbol = symTab.<JTypeSymbol> resolve("Car", JTypeSymbol.KIND);
+        if (symbol.isPresent()){
+          System.out.println("yay");
+        }
+        symbol = symTab.<JTypeSymbol> resolve("MyError", JTypeSymbol.KIND);
+        if (symbol.isPresent()){
+          System.out.println("yay2");
+        }
+
+      Optional<CDTypeSymbol2JavaType> data = symTab.<CDTypeSymbol2JavaType> resolve("symboltable.aggregation.Types.",CDTypeSymbol2JavaType.KIND);
+      if (data.isPresent()){
+        System.out.println("bla");
+      }
+
+       Optional<CDTypeSymbol2JavaType> data2 = symTab.<CDTypeSymbol2JavaType> resolve("Types", CDTypeSymbol2JavaType.KIND);
+
+        if (data2.isPresent()){
+          System.out.println("bla2");
+        }
+
+
+    }
+
   }
 }
