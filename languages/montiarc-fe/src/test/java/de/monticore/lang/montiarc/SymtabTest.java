@@ -61,7 +61,7 @@ public class SymtabTest extends AbstractSymboltableTest {
     javaType = comp.getSpannedScope().resolve("String", JTypeSymbol.KIND);
     assertTrue("java.lang types must be resolvable without qualification within components.",
         javaType.isPresent());
-        
+
     // java.util.*
     javaType = comp.getSpannedScope().resolve("Set", JTypeSymbol.KIND);
     assertTrue("java.util types must be resolvable without qualification within components.",
