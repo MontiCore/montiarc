@@ -79,7 +79,7 @@ public class ConventionsTest extends AbstractCoCoTest {
     //TODO Add correct error code
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.PortViolatesNamingConventions");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortNameIsLowerCase());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xC0001"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xC0003"));
   }
 
 
@@ -94,7 +94,7 @@ public class ConventionsTest extends AbstractCoCoTest {
     //TODO Add correct error code
     ASTComponent node = (ASTComponent) getAstNode("arc/coco/conventions", "conv.UnuniqueImports");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC000A", "xC000A"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC0004"));
   }
 
   @Ignore("Duplicate of ConnectorEndpointCorrectlyQualifiedTest.java")

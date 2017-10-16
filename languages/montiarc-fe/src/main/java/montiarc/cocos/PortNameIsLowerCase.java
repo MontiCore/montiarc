@@ -19,7 +19,7 @@ public class PortNameIsLowerCase implements MontiArcASTPortCoCo {
         if(node.getName().isPresent()) {
             if(!Character.isLowerCase(node.getName().get().charAt(0))){
                 //TODO: Add error Code
-                Log.error("0xC0001: The name of the port should start with a lowercase letter.",
+                Log.error("0xC0003: The name of the port should start with a lowercase letter.",
                         node.get_SourcePositionStart());
             }
         }

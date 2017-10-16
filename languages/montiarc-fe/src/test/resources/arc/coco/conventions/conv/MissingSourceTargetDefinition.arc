@@ -6,7 +6,7 @@ component MissingSourceTargetDefinition {
         in String sIn,
         out String sOut,
         out String sOut2;
-        
+
     component CorrectComp cc;
     
     

@@ -40,7 +40,8 @@ public class ImportsAreUnique implements MontiArcASTComponentCoCo {
                 statement += ".*";
             }
             if(checked.contains(statement)){
-                Log.error(String.format("0xC000A The import statement " + statement + " is declared more than once.", node.getName()));
+                Log.error(String.format("0xC0004 The import statement " + statement + " is " +
+                        "declared more than once.", node.getName()));
             } else {
                 checked.add(statement);
             }
