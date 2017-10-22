@@ -9,8 +9,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import contextconditions.AbstractCoCoTest;
+import de.monticore.ast.ASTNode;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTMACompilationUnit;
+import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.PortUsage;
+import montiarc.cocos.SubComponentsConnected;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.monticore.symboltable.Scope;
@@ -19,8 +26,16 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
 import symboltable.AbstractSymboltableTest;
 
-public class AutoConnectionTest extends AbstractSymboltableTest {
+public class AutoConnectionTest extends AbstractCoCoTest {
 
+  @BeforeClass
+  public static void setUp() {
+    Log.enableFailQuick(false);
+  }
+
+  /*
+    This test tests whether the "autoconnect port" statement is working as intended.
+   */
   @Test
   public void testAutoconnectPort() {
     Scope symTab = createSymTab("src/test/resources/arc/transformations");
@@ -28,11 +43,16 @@ public class AutoConnectionTest extends AbstractSymboltableTest {
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.AutoConnectPorts", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
+    assertEquals(3, Log.getFindings().size());
     // 3 autoconnections failed cause of missing partners
     // 5 unused ports remaining
-    // TODO implement PortUsage Coco
-    // assertEquals(8, Log.getFindings().size());
-    assertEquals(3, Log.getFindings().size());
+
+    MontiArcCoCoChecker coCoChecker = new MontiArcCoCoChecker().addCoCo(new PortUsage());
+    ASTMontiArcNode node = (ASTMontiArcNode) comp.getAstNode().get();
+
+    checkInvalid(coCoChecker, node, new ExpectedErrorInfo(1, "xAC007"));
+    coCoChecker = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
+    checkInvalid(coCoChecker, node, new ExpectedErrorInfo(4, "xAC008", "xAC009"));
 
     Collection<ConnectorSymbol> connectors = comp.getConnectors();
     List<String> connectorNames = new ArrayList<String>();
@@ -110,7 +130,10 @@ public class AutoConnectionTest extends AbstractSymboltableTest {
         "a.AutoConnectType2", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
 
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
+//    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
+//    ASTMontiArcNode node = (ASTComponent) comp.getAstNode().get();
+//
+//    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xAC006"));
 
     // 1 duplicate autoconnection matches
     // 3 unused ports due to failed autoconnection
