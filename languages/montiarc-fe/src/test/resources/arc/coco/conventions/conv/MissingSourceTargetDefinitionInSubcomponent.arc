@@ -16,25 +16,15 @@ component MissingSourceTargetDefinitionInSubcomponent {
         
     component CorrectComp cc;
     
-    connect sIn -> inner.sInnerIn;
+    connect sIn -> inner.sInnerIn; //correct
 
-    connect sIn -> inner.sInnerInWrong;
+    connect sIn -> inner.sInnerInWrong; //incorrect
 
-    connect inner.sInnerOutWrong -> sOut;
+    connect inner.sInnerOutWrong -> sOut; //incorrect
 
-    connect inner.sInnerOut -> cc.stringIn;
-
-    /*
-    connect sIn -> ccWrong;  // No target port "ccWrong" in MissingSourceTargetDefinition
-    
-    connect sInWrong -> cc; // No input port "sInWrong" in MissingSourceTargetDefinition
-    
-    connect cc -> sOutWrong; // No target port "sOutWrong" in MisingSourceTargetDefinition
-    
-    connect ccWrong -> sOut; // No souce port "ccWrong" in component MissingSourceTargetDefinition
-    */
+    connect inner.sInnerOut -> cc.stringIn; //correct
 
     // correct connectors
     //connect sIn -> cc.stringIn;
-    connect cc.stringOut -> sOut2; 
+    connect cc.stringOut -> sOut2; //correct
 }

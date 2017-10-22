@@ -6,19 +6,13 @@ package contextconditions;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
-import de.monticore.java.javadsl._ast.ASTCompilationUnit;
-import de.monticore.symboltable.ImportStatement;
-import de.monticore.symboltable.Scope;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._ast.ASTMontiArcNode;
-import montiarc._cocos.MontiArcASTConnectorCoCo;
-import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc._symboltable.MontiArcArtifactScope;
+import montiarc._parser.MontiArcParser;
 import montiarc.cocos.*;
 import org.antlr.v4.runtime.RecognitionException;
 import org.junit.BeforeClass;
@@ -26,7 +20,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
-import symboltable.AbstractSymboltableTest;
 
 //XXX: https://git.rwth-aachen.de/montiarc/core/issues/53
 
@@ -41,16 +34,24 @@ public class ConventionsTest extends AbstractCoCoTest {
     Log.enableFailQuick(false);
   }
 
-  @Ignore("Symboltable throws an exception on creation, as the name of the component artifact " +
-          "starts with a lowercase letter. The node of the model can then not be resolved in " +
-          "getASTNode().")
+  @Ignore("First part of the test is working, but in real application the unresolvable " +
+          "ComponentSymbol would lead to errors in other context conditions.")
   @Test
   public void testComponentConventions()
       throws RecognitionException, IOException {
-    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv" +
-            ".ViolatesComponentNaming");
+
+    MontiArcParser parser = new MontiArcParser();
+    Optional<ASTMACompilationUnit> node =
+      parser.parse("src/test/resources/arc/coco/conventions/conv/violatesComponentNaming.arc");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ComponentNameIsCapitalized());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "0xAC004"));
+    if(node.isPresent())
+    {
+      cocos.checkAll((ASTMontiArcNode) node.get());
+      assertEquals(1, Log.getFindings().size());
+    } else {
+      Log.error("No test model.");
+    }
+
     // runChecker("arc/coco/conventions/conv/InnerViolatesComponentNaming.arc");
 //    assertEquals(2, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
 //        .count());
@@ -97,21 +98,6 @@ public class ConventionsTest extends AbstractCoCoTest {
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC0004"));
   }
 
-  @Ignore("Duplicate of ConnectorEndpointCorrectlyQualifiedTest.java")
-  @Test
-  /*
-   * Checks whether
-   */
-  public void testWrongConnector() {
-    //TODO Remove duplicate test?
-    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.WrongConnector");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
-            .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
-            .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xDB61C"));
-  }
-
-
   @Test
   /*
     Checks whether there are connectors in a component that wrongly connect ports of the same component
@@ -140,7 +126,7 @@ public class ConventionsTest extends AbstractCoCoTest {
   public void testMissingSourceAndTargetDefinitionInSubcomponent() {
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.MissingSourceTargetDefinitionInSubcomponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExist());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xC0001","xC0002"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC0001","xC0002"));
   }
 
   @Test
@@ -154,28 +140,4 @@ public class ConventionsTest extends AbstractCoCoTest {
 
     //TODO: Modify test model to check for xAC008?
   }
-
-  @Ignore("Duplicate of TopLevelComponentHasNoInstanceNameTest.java")
-  @Test
-  /*
-   * Checks that the outer component definition has no instance name.
-   */
-  public void testOuterComponentWithInstanceName() {
-    //TODO Add correct error code
-    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.OuterComponentWithInstanceName");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new OuterComponentIsUnnamed());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xC0003"));
-  }
-
-  @Ignore("Duplicate of TopLevelComponentHasNoInstanceNameTest.java")
-  @Test
-  /*
-   * Checks that outer component definitions with no instance name are not flagged.
-   */
-  public void testOuterComponentWithoutInstanceName() {
-    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.OuterComponentWithoutInstanceName");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new OuterComponentIsUnnamed());
-    checkInvalid(cocos, node, new ExpectedErrorInfo());
-  }
-
 }

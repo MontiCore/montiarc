@@ -5,6 +5,7 @@
  */
 package contextconditions;
 
+import montiarc._ast.ASTMontiArcNode;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -25,27 +26,21 @@ public class TopLevelComponentHasNoInstanceNameTest extends AbstractCoCoTest {
   @Test
   public void testValid() {
     checkValid("contextconditions", "valid.TopLevelComponentHasNoInstanceName");
-    
-    // runCheckerWithSymTab("contextconditions", "valid.TopLevelComponentHasNoInstanceName");
-    //
-    // String findings = Log.getFindings().stream().map(f -> f.buildMsg())
-    // .collect(Collectors.joining("\n"));
-    //
-    // assertEquals(findings, 0, Log.getFindings().size());
+
   }
-  
+
+  /*
+   * Checks that the outer component definition has no instance name.
+   */
   @Test
   public void testInvalid() {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new TopLevelComponentHasNoInstanceName()),
+
+    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.OuterComponentWithInstanceName");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new TopLevelComponentHasNoInstanceName());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "x3F207"));
+
+    checkInvalid(cocos,
         getAstNode("contextconditions", "invalid.TopLevelComponentHasInstanceName"),
         new ExpectedErrorInfo(1, "x3F207"));
-    
-//    runCheckerWithSymTab("contextconditions", "invalid.TopLevelComponentHasInstanceName");
-//    
-//    String findings = Log.getFindings().stream().map(f -> f.buildMsg())
-//        .collect(Collectors.joining("\n"));
-//    
-//    assertEquals(findings, 1, Log.getFindings().size());
-//    assertTrue(findings.contains("x3F207"));
   }
 }

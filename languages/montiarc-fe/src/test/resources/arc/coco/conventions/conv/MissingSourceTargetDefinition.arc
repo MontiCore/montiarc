@@ -9,12 +9,11 @@ component MissingSourceTargetDefinition {
 
     component CorrectComp cc;
     
-    
     connect sIn -> ccWrong;  // No target port "ccWrong" in MissingSourceTargetDefinition
     
-    connect sInWrong -> cc; // No input port "sInWrong" in MissingSourceTargetDefinition
+    connect sInWrong -> cc.stringIn; // No input port "sInWrong" in MissingSourceTargetDefinition
     
-    connect cc -> sOutWrong; // No target port "sOutWrong" in MisingSourceTargetDefinition
+    connect cc.stringOut -> sOutWrong; // No target port "sOutWrong" in MisingSourceTargetDefinition
     
     connect ccWrong -> sOut; // No souce port "ccWrong" in component MissingSourceTargetDefinition
     
