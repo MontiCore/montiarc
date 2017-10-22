@@ -16,7 +16,10 @@ import montiarc._symboltable.ComponentSymbol;
 
 /**
  * Implements R3 and R4 from AHs PhD thesis
- * 
+ *
+ * This CoCo is not activated, since the symbol table will error out if the sub component does not exist.
+ * Should only be activated if the symbol table is modified to not give out an error anymore.
+ *
  * @author Crispin Kirchner
  */
 public class ReferencedSubComponentExists implements MontiArcASTSubComponentCoCo {
