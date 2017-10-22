@@ -34,44 +34,6 @@ public class ConventionsTest extends AbstractCoCoTest {
     Log.enableFailQuick(false);
   }
 
-  @Ignore("First part of the test is working, but in real application the unresolvable " +
-          "ComponentSymbol would lead to errors in other context conditions.")
-  @Test
-  public void testComponentConventions()
-      throws RecognitionException, IOException {
-
-    MontiArcParser parser = new MontiArcParser();
-    Optional<ASTMACompilationUnit> node =
-      parser.parse("src/test/resources/arc/coco/conventions/conv/violatesComponentNaming.arc");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ComponentNameIsCapitalized());
-    if(node.isPresent())
-    {
-      cocos.checkAll((ASTMontiArcNode) node.get());
-      assertEquals(1, Log.getFindings().size());
-    } else {
-      Log.error("No test model.");
-    }
-
-    // runChecker("arc/coco/conventions/conv/InnerViolatesComponentNaming.arc");
-//    assertEquals(2, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
-//        .count());
-  }
-
-  @Ignore("implement coco")
-  @Test
-  /*
-    Checks whether all references of components start with a lower-case letter
-   */
-  public void testReferenceConventions() {
-//    runCheckerWithSymTab("arc/coco/conventions", "conv.ReferencesViolateNamingConventions");
-    //TODO Add CoCo for checking whether references of components start with a lower case letter
-    //TODO Insert error codes and Coco name
-    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.ReferencesViolateNamingConventions");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ComponentNameIsCapitalized());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "0x"));
-  }
-
-
   @Test
   /*
    * Checks whether all port names in the port definition start with a lower case letter
