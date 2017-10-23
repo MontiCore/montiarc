@@ -8,8 +8,13 @@ component BumpSpeed(Integer defaultSpeed) {
     in Integer distance,
     out Integer speed;
 
-  automaton BumpSpeed {    
-    variable int count255 = 0;
+  var Integer count255;
+  
+  init {
+    count255 = 0;
+  }
+
+  automaton BumpSpeed {
     
     state Static, Dynamic;
     initial Dynamic;
