@@ -58,7 +58,7 @@ public class PortUsage implements MontiArcASTComponentCoCo {
 
       remainingPorts.removeAll(connectorSources);
       if (!remainingPorts.isEmpty()) {
-        remainingPorts.forEach(p -> Log.error(String.format("0xAC006 Port %s is not used!", p)));
+        remainingPorts.forEach(p -> Log.error(String.format("0xMA057 Port %s is not used!", p)));
       }
 
       // --------- OUT PORTS ----------
@@ -75,7 +75,7 @@ public class PortUsage implements MontiArcASTComponentCoCo {
 
       remainingPorts.removeAll(connectorTargets);
       if (!remainingPorts.isEmpty()) {
-        remainingPorts.forEach(p -> Log.error(String.format("0xAC007 Port %s is not used!", p),
+        remainingPorts.forEach(p -> Log.error(String.format("0xMA058 Port %s is not used!", p),
             node.get_SourcePositionStart()));
       }
     }

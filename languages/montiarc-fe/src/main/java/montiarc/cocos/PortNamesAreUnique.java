@@ -40,7 +40,7 @@ public class PortNamesAreUnique implements MontiArcASTInterfaceCoCo {
         name = StringTransformations.uncapitalize(implicitName);
       }
       if (usedNames.contains(name)) {
-        Log.error(String.format("0xAC002 The name of port '%s' is ambiguos!", name),
+        Log.error(String.format("0xMA053 The name of port '%s' is ambiguos!", name),
             port.get_SourcePositionStart());
       }
       usedNames.add(name);

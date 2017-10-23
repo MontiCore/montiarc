@@ -37,6 +37,6 @@ public class ReferencedSubComponentExistsTest extends AbstractCoCoTest {
         .addCoCo(new ReferencedSubComponentExists());
     ASTMontiArcNode node = getAstNode("contextconditions", "invalid.NonExistantReferencedSubComponent");
     
-    checkInvalid(coco, node, new ExpectedErrorInfo(2, "x069B7"));
+    checkInvalid(coco, node, new ExpectedErrorInfo(2, "xMA004"));
   }
 }

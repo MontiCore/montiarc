@@ -37,7 +37,7 @@ public class AutomatonInitialReactionTypeDoesNotFitOutputType implements MontiAr
           Optional<PortSymbol> portSymbol = node.getEnclosingScope().get().resolve(currentNameToResolve, PortSymbol.KIND);
           if (portSymbol.isPresent()) {
             if (portSymbol.get().isIncoming()) {
-              Log.error("0xAA410 Did not find matching Variable or Output with name " + currentNameToResolve, assign.get_SourcePositionStart());
+              Log.error("0xMA038 Did not find matching Variable or Output with name " + currentNameToResolve, assign.get_SourcePositionStart());
             }
             else {
               checkAssignment(assign, portSymbol.get().getTypeReference(), currentNameToResolve);
@@ -57,10 +57,10 @@ public class AutomatonInitialReactionTypeDoesNotFitOutputType implements MontiAr
       for (ASTValuation val : assign.getValueList().get().getAllValuations()) {
         Optional<? extends JavaTypeSymbolReference> exprType = TypeCompatibilityChecker.getExpressionType(val.getExpression());
         if (!exprType.isPresent()) {
-          Log.error("0xAA412 Could not resolve type of expression for checking the initial reaction.", assign.get_SourcePositionStart());
+          Log.error("0xMA040 Could not resolve type of expression for checking the initial reaction.", assign.get_SourcePositionStart());
         }
         else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType)) {
-          Log.error("0xAA411 Type of Variable/Output " + currentNameToResolve + " in the initial state declaration does not match the type of its assigned expression. Type " + 
+          Log.error("0xMA039 Type of Variable/Output " + currentNameToResolve + " in the initial state declaration does not match the type of its assigned expression. Type " +
                 exprType.get().getName() + " can not cast to type " + varType.getName() + ".", val.get_SourcePositionStart());
         }
       }

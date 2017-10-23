@@ -51,12 +51,12 @@ public class ConnectorSourceAndTargetExist implements MontiArcASTComponentCoCo {
           .<PortSymbol> resolve(connectorTarget, PortSymbol.KIND);
       
       if(!source.isPresent()) {
-        Log.error(String.format("0xC0001 source port "+connectorSource+" of connector "+cs.getName()+" does not exist.",
+        Log.error(String.format("0xMA066 source port "+connectorSource+" of connector "+cs.getName()+" does not exist.",
             cs.getFullName()), cs.getSourcePosition());
       }
       
       if(!target.isPresent()) {
-        Log.error(String.format("0xC0002 target port "+connectorTarget+" of connector "+cs.getName()+" does not exist.",
+        Log.error(String.format("0xMA067 target port "+connectorTarget+" of connector "+cs.getName()+" does not exist.",
             cs.getFullName()), cs.getSourcePosition());
       }
       

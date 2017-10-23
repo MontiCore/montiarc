@@ -31,7 +31,7 @@ public class UniquenessTest extends AbstractCoCoTest {
   @Test
   public void testPortNamingUnique() throws RecognitionException, IOException {
     runCheckerWithSymTab("arc/coco/uniqueness", "a.E1");
-    assertEquals(2, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xAC002"))
+    assertEquals(2, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xMA053"))
         .count());
   }
 
@@ -40,13 +40,13 @@ public class UniquenessTest extends AbstractCoCoTest {
       throws RecognitionException, IOException {
     runCheckerWithSymTab("arc/coco/uniqueness", "a.E1_2");
     assertEquals(1,
-        Log.getFindings().stream().filter(f -> f.buildMsg().contains("xAC002")).count());
+        Log.getFindings().stream().filter(f -> f.buildMsg().contains("xMA053")).count());
   }
 
   @Test
   public void testUniqueConstraints() throws RecognitionException, IOException {
     runCheckerWithSymTab("arc/coco/uniqueness", "a.UniqueConstraint");
-    assertEquals(2, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xAC001"))
+    assertEquals(2, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xMA052"))
         .count());
   }
 

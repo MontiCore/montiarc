@@ -34,7 +34,7 @@ public class ConnectorEndPointIsCorrectlyQualified
    */
   private void checkSimpleConnectorSourceUnqualified(ASTQualifiedName name) {
     checkEndpointCorrectlyQualified(name, i -> i == 1,
-        "0x44B7E Simple connector source \"%s\" must only consist of a port name.");
+        "0xMA008 Simple connector source \"%s\" must only consist of a port name.");
   }
   
   /**
@@ -42,7 +42,7 @@ public class ConnectorEndPointIsCorrectlyQualified
    */
   private void checkEndPointMaximallyTwiceQualified(ASTQualifiedName name) {
     checkEndpointCorrectlyQualified(name, i -> i <= 2 && i > 0,
-        "0xDB61C Connector end point \"%s\" must only consist of an optional component name and a port name");
+        "0xMA070 Connector end point \"%s\" must only consist of an optional component name and a port name");
   }
   
   /**

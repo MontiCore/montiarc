@@ -31,13 +31,13 @@ public class ComponentWithTypeParametersHasInstanceTest
   
   public void testInvalid(String componentName) {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
-        getAstNode("contextconditions", "invalid." + componentName), new ExpectedErrorInfo(1, "x79C00"));
+        getAstNode("contextconditions", "invalid." + componentName), new ExpectedErrorInfo(1, "xMA009"));
     
 //    runCheckerWithSymTab("contextconditions", "invalid." + componentName);
 //    String findings = Log.getFindings().stream().map(f -> f.buildMsg())
 //        .collect(Collectors.joining("\n"));
 //    assertEquals(findings, 1, Log.getFindings().size());
-//    assertTrue(findings.contains("x79C00"));
+//    assertTrue(findings.contains("xMA009"));
   }
   
   @Test

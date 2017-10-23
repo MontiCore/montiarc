@@ -18,7 +18,7 @@ public class IncompatibleVariableAssignment extends AutomatonAbstractCocoTest {
   public void testIncompatibleVariableAssignment() {
     ASTMontiArcNode node = getAstNode(MODEL_PATH,
         "contextconditions.invalid.IncompatibleVariableAssignment");
-    checkInvalid(node, new ExpectedErrorInfo(1, "xAA431"));
+    checkInvalid(node, new ExpectedErrorInfo(1, "xMA042"));
   }
   
   @Ignore("@JP, BS: Bitte angucken, warum das (anscheinend  in der JavaDSL) nicht funktioniert.")
@@ -26,7 +26,7 @@ public class IncompatibleVariableAssignment extends AutomatonAbstractCocoTest {
   public void testIncompatibleVariableAssignmentGenericTypesDiffer() {
     ASTMontiArcNode node = getAstNode(MODEL_PATH,
         "contextconditions.invalid.IncompatibleVariableAssignmentGenericTypesDiffer");
-    checkInvalid(node, new ExpectedErrorInfo(1, "xAA431"));
+    checkInvalid(node, new ExpectedErrorInfo(1, "xMA042"));
   }
   
 }

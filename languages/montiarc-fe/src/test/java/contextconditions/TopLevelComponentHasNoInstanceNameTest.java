@@ -38,7 +38,7 @@ public class TopLevelComponentHasNoInstanceNameTest extends AbstractCoCoTest {
   public void testInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new TopLevelComponentHasNoInstanceName()),
         getAstNode("contextconditions", "invalid.TopLevelComponentHasInstanceName"),
-        new ExpectedErrorInfo(1, "x3F207"));
+        new ExpectedErrorInfo(1, "xMA007"));
     
 //    runCheckerWithSymTab("contextconditions", "invalid.TopLevelComponentHasInstanceName");
 //    
@@ -46,6 +46,6 @@ public class TopLevelComponentHasNoInstanceNameTest extends AbstractCoCoTest {
 //        .collect(Collectors.joining("\n"));
 //    
 //    assertEquals(findings, 1, Log.getFindings().size());
-//    assertTrue(findings.contains("x3F207"));
+//    assertTrue(findings.contains("xMA007"));
   }
 }

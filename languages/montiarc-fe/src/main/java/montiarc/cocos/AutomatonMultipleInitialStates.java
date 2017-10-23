@@ -14,7 +14,7 @@ public class AutomatonMultipleInitialStates implements MontiArcASTInitialStateDe
   @Override
   public void check(ASTInitialStateDeclaration node) {
     if (node.getNames().size() > 1) {
-      Log.error("0xAC110 Multiple initial states are not supported.", node.get_SourcePositionStart());
+      Log.error("0xMA063 Multiple initial states are not supported.", node.get_SourcePositionStart());
     }
   }
 }

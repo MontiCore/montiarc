@@ -64,7 +64,7 @@ public class SubComponentsConnected implements MontiArcASTComponentCoCo {
         remainingSubIn.removeAll(outerSubSimpleConnectorTargets);
         if (!remainingSubIn.isEmpty()) {
           remainingSubIn.forEach(p -> Log.error(
-              String.format("0xAC008 Port %s of subcomponent %s is not used!", p,
+              String.format("0xMA059 Port %s of subcomponent %s is not used!", p,
                   sub.getFullName()),
               node.get_SourcePositionStart()));
         }
@@ -94,7 +94,7 @@ public class SubComponentsConnected implements MontiArcASTComponentCoCo {
         remainingSubOut.removeAll(outerSubSimpleConnectorSources);
         if (!remainingSubOut.isEmpty()) {
           remainingSubOut.forEach(p -> Log.error(
-              String.format("0xAC009 Port %s of subcomponent %s is not used!", p,
+              String.format("0xMA060 Port %s of subcomponent %s is not used!", p,
                   sub.getFullName()),
               node.get_SourcePositionStart()));
         }

@@ -20,7 +20,7 @@ public class AutomatonReactionWithAlternatives implements MontiArcASTInitialStat
     if (node.reactionIsPresent()) {
       for (ASTIOAssignment assign : node.getReaction().get().getIOAssignments()) {
         if (assign.alternativeIsPresent()) {
-          Log.error("0xAA180 There are alternative values in a reaction.", assign.getAlternative().get().get_SourcePositionStart());
+          Log.error("0xMA020 There are alternative values in a reaction.", assign.getAlternative().get().get_SourcePositionStart());
         }
       }
     }
@@ -31,7 +31,7 @@ public class AutomatonReactionWithAlternatives implements MontiArcASTInitialStat
     if (node.blockIsPresent()) {
       for (ASTIOAssignment assign : node.getBlock().get().getIOAssignments()) {
         if (assign.alternativeIsPresent()) {
-          Log.error("0xAA181 There are alternative values in a reaction.", assign.getAlternative().get().get_SourcePositionStart());
+          Log.error("0xMA020 There are alternative values in a reaction.", assign.getAlternative().get().get_SourcePositionStart());
         }
       }
     }

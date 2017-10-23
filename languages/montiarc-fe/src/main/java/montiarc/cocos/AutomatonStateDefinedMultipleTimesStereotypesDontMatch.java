@@ -46,7 +46,7 @@ public class AutomatonStateDefinedMultipleTimesStereotypesDontMatch implements M
                 }
               }
               if (!found) {
-                Log.error("0xAA340 The state " + current.getName() + " is defined more than once with different stereotypes.", current.get_SourcePositionStart());
+                Log.error("0xMA033 The state " + current.getName() + " is defined more than once with different stereotypes.", current.get_SourcePositionStart());
               }
             }
             
@@ -55,7 +55,7 @@ public class AutomatonStateDefinedMultipleTimesStereotypesDontMatch implements M
             // This means one of both/both are null or one has more stereotypes
             // than another
             if ((currentStereotype != null && checkMeStereotype == null) || (currentStereotype == null && checkMeStereotype != null)) {
-              Log.error("0xAA341 The state " + current.getName() + " is defined more than once with different stereotypes.", current.get_SourcePositionStart());
+              Log.error("0xMA034 The state " + current.getName() + " is defined more than once with different stereotypes.", current.get_SourcePositionStart());
             }
           }
         }

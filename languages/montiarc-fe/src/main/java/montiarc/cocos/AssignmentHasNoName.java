@@ -16,7 +16,7 @@ public class AssignmentHasNoName implements MontiArcASTIOAssignmentCoCo {
   @Override
   public void check(ASTIOAssignment node) {
     if (!node.nameIsPresent()) {
-      Log.error("0xAA200 Could not find a unique matching type for the assignment '" + node + "'.", node.get_SourcePositionStart());
+      Log.error("0xMA024 Could not find a unique matching type for the assignment '" + node + "'.", node.get_SourcePositionStart());
     }    
   }
   
