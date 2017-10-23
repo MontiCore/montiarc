@@ -6,11 +6,17 @@
 package _templates.de.montiarcautomaton.lib.automaton;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 import de.montiarcautomaton.generator.helper.AutomatonHelper;
+import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.monticore.ast.ASTNode;
 import de.monticore.symboltable.CommonSymbol;
+import montiarc._ast.ASTJavaPInitializer;
+import montiarc._ast.ASTValueInitialization;
 import montiarc._symboltable.AutomatonSymbol;
 import montiarc._symboltable.ComponentSymbol;
 
@@ -38,11 +44,19 @@ public class AutomatonImplMainImpl extends AutomatonImplMain {
       String resultName = comp.getName() + "Result";
       String implName = comp.getName() + "Impl";
       AutomatonHelper helper = new AutomatonHelper(automaton, comp);
+      ComponentHelper compHelper = new ComponentHelper(comp);
+      
+      Optional<ASTJavaPInitializer> init = ComponentHelper.getComponentInitialization(comp);
+      List<ASTValueInitialization> varInits = new ArrayList<>();
+      
+      if (init.isPresent()) {
+        varInits = init.get().getValueInitializations();
+      }
       
       AutomatonImplMain.generate(filepath, node, helper, comp.getPackageName(), comp.getImports(),
           comp.getName(),
-          resultName, inputName, implName, comp.getIncomingPorts(), helper.getVariables(),
-          helper.getStates(), comp.getConfigParameters());
+          resultName, inputName, implName, comp.getIncomingPorts(), compHelper, comp.getVariables(),
+          helper.getStates(), comp.getConfigParameters(), varInits);
     }
   }
   

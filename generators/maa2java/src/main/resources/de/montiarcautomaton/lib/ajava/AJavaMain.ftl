@@ -1,4 +1,4 @@
-${tc.params("de.montiarcautomaton.generator.helper.AJavaHelper helper", "String _package", "java.util.Collection<de.monticore.symboltable.ImportStatement> imports",
+${tc.params("de.montiarcautomaton.generator.helper.ComponentHelper helper", "String _package", "java.util.Collection<de.monticore.symboltable.ImportStatement> imports",
 "String name", "String resultName", "String inputName", "String implName",
 "java.util.Collection<montiarc._symboltable.PortSymbol> portsIn",
 "java.util.Collection<montiarc._symboltable.PortSymbol> portsOut",
