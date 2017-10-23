@@ -1,8 +1,10 @@
 ${tc.params("de.montiarcautomaton.generator.helper.AutomatonHelper helper", "String _package", "java.util.Collection<de.monticore.symboltable.ImportStatement> imports",
 "String name", "String resultName", "String inputName", "String implName",
 "java.util.Collection<montiarc._symboltable.PortSymbol> portsIn",
+"de.montiarcautomaton.generator.helper.ComponentHelper compHelper",
 "java.util.Collection<montiarc._symboltable.VariableSymbol> variables", "java.util.Collection<montiarc._symboltable.StateSymbol> states",
-"java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams")}
+"java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams",
+"java.util.List<montiarc._ast.ASTValueInitialization> initializations")}
 package ${_package};
 
 import ${_package}.${resultName};
@@ -23,7 +25,7 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
   
   // variables
   <#list variables as variable>
-  private ${helper.getVariableTypeName(variable)} ${variable.getName()};
+  private ${compHelper.printVariableTypeName(variable)} ${variable.getName()};
   </#list>
   
   // config parameters
@@ -42,8 +44,8 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
     final ${resultName} result = new ${resultName}();
     
     // variable initialization
-    <#list variables as variable>
-    ${variable.getName()} = ${helper.getVariableInitialization(variable)!};
+    <#list initializations as init>
+      ${helper.printInit(init)}
     </#list>
 
     // initial reaction

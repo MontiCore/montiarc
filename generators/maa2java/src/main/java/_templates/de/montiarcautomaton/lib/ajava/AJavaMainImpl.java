@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import de.montiarcautomaton.generator.helper.AJavaHelper;
+import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.monticore.ast.ASTNode;
 import de.monticore.java.javadsl._ast.ASTBlockStatement;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
@@ -24,7 +24,6 @@ import montiarc._ast.ASTJavaPInitializer;
 import montiarc._ast.ASTValueInitialization;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.JavaBehaviorSymbol;
-import montiarc._symboltable.VariableSymbol;
 
 /**
  * Implementation of the generator interface for AJava.
@@ -50,7 +49,7 @@ public class AJavaMainImpl extends AJavaMain {
       String resultName = comp.getName() + "Result";
       String implName = comp.getName() + "Impl";
       
-      Optional<ASTJavaPInitializer> init = getComponentInitialization(comp);
+      Optional<ASTJavaPInitializer> init = ComponentHelper.getComponentInitialization(comp);
       List<ASTValueInitialization> varInits = new ArrayList<>();
       
       if (init.isPresent()) {
@@ -65,7 +64,7 @@ public class AJavaMainImpl extends AJavaMain {
         sb.append(printer.prettyprint(s));
       }
       
-      AJavaHelper helper = new AJavaHelper(comp);
+      ComponentHelper helper = new ComponentHelper(comp);
       
       AJavaMain.generate(filepath, node, helper, comp.getPackageName(), comp.getImports(),
           ajavaDef.getName(), resultName, inputName,
@@ -74,19 +73,6 @@ public class AJavaMainImpl extends AJavaMain {
       
     }
   }
-  private static Optional<ASTJavaPInitializer> getComponentInitialization(ComponentSymbol comp) {
-    Optional<ASTJavaPInitializer> ret = Optional.empty();
-    Optional<ASTNode> ast = comp.getAstNode();
-    if(ast.isPresent()) {
-      ASTComponent compAST = (ASTComponent) ast.get();
-      for(ASTElement e : compAST.getBody().getElements()) {
-        if(e instanceof ASTJavaPInitializer) {
-          ret = Optional.of((ASTJavaPInitializer) e);
-          
-        }
-      }
-    }    
-    return ret;
-  }
+
   
 }

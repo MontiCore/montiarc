@@ -138,8 +138,8 @@
         </executions>
         <dependencies>
           <dependency>
-            <groupId>montiarc.generators.maa2java</groupId>
-            <artifactId>component2java</artifactId>
+            <groupId>montiarc.generators</groupId>
+            <artifactId>maa2java</artifactId>
             <version>${project.version}</version>
           </dependency>
           <dependency>

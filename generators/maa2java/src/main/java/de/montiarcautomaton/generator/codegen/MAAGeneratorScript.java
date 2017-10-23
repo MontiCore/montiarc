@@ -82,7 +82,7 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
   public void generate(String simpleName, String packageName, String modelPath, String fqnModelName,
       String targetPath, File hwcPath) {
     // check cocos
-    cocoCheck(simpleName, packageName, modelPath);
+    cocoCheck(simpleName, packageName, modelPath, targetPath);
     
     // generate
     MAAGenerator.generateModel(simpleName, packageName, modelPath, fqnModelName, targetPath, hwcPath);
@@ -94,10 +94,11 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
    * @param simpleName the simple model name e.g. BumperControl
    * @param packageName the package name e.g. bumperbot
    * @param modelPath Path of models e.g. src/main/resources/models
+   * @param targetPath 
    */
-  public void cocoCheck(String simpleName, String packageName, String modelPath) {
+  public void cocoCheck(String simpleName, String packageName, String modelPath, String targetPath) {
     // check cocos
-    GlobalScope globalScope = initSymTab(modelPath);
+    GlobalScope globalScope = initSymTab(modelPath, targetPath);
     String model = Names.getQualifiedName(packageName, simpleName);
     Optional<ComponentSymbol> compSym = globalScope.resolve(model, ComponentSymbol.KIND);
     if (!compSym.isPresent()) {
@@ -147,10 +148,11 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
     
   }
   
-  private static GlobalScope initSymTab(String modelPath) {
+  private static GlobalScope initSymTab(String modelPath, String targetPath) {
     ModelingLanguageFamily fam = new MontiArcLanguageFamily();
     final ModelPath mp = new ModelPath(Paths.get(modelPath),
-        Paths.get("src/main/resources/defaultTypes"));
+        Paths.get("src/main/resources/defaultTypes"), Paths
+        .get(getBasedirFromModelAndTargetPath(modelPath, targetPath) + "target/librarymodels/"));
     GlobalScope scope = new GlobalScope(mp, fam);
     JavaHelper.addJavaPrimitiveTypes(scope);
     return scope;
@@ -207,5 +209,28 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
   public Object run() {
     return true;
   }
+ 
   
+  /**
+   * Compares the two paths and returns the common path. The common path is the
+   * basedir.
+   * 
+   * @param modelPath
+   * @param targetPath
+   * @return
+   */
+  private static String getBasedirFromModelAndTargetPath(String modelPath, String targetPath) {
+    String basedir = "";
+    
+    for (int i = 0; i < modelPath.length(); i++) {
+      if (modelPath.charAt(i) == targetPath.charAt(i)) {
+        basedir += modelPath.charAt(i);
+      }
+      else {
+        break;
+      }
+      
+    }
+    return basedir;
+  }
 }
