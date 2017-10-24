@@ -1,18 +1,21 @@
 package contextconditions;
 
+import de.monticore.symboltable.ImportStatement;
+import de.monticore.symboltable.Scope;
+import de.monticore.symboltable.types.JTypeSymbol;
+import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
+import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
+import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMontiArcNode;
 import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.adapters.CDTypeSymbol2JavaType;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.monticore.symboltable.Scope;
-import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
-import de.se_rwth.commons.logging.Log;
-import montiarc._ast.ASTMontiArcNode;
-
+import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
-
-import static org.junit.Assert.assertTrue;
 
 public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
   @BeforeClass
@@ -48,9 +51,10 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
   @Ignore
   @Test
   public void testInvalidCDImplicit() {
-    // TODO symbols are only loaded if they are resolved. Therefore it is not
-    // easily possible to perform CoCo checks to detect errors in CDs that are
-    // imported in the given MAA model.
-    //Todo: Just rewrite this. Contextconditions/invalid/InvalidCD.arc
+    //Todo: Star imports?
+    ASTMontiArcNode node = getAstNode(MODEL_PATH,"contextconditions.invalid.InvalidCD");
+    checkInvalid(node, new ExpectedErrorInfo(1,"xAF099"));
+
+    checkValid(MODEL_PATH,"contextconditions.valid.BumpControl");
   }
 }
