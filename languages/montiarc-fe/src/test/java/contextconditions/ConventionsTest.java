@@ -39,7 +39,6 @@ public class ConventionsTest extends AbstractCoCoTest {
    * Checks whether all port names in the port definition start with a lower case letter
    */
   public void testPortConvention() {
-    //TODO Add correct error code
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.PortViolatesNamingConventions");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortNameIsLowerCase());
     checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xC0003"));
@@ -54,7 +53,6 @@ public class ConventionsTest extends AbstractCoCoTest {
    *  import a.*;
    */
   public void testImportConvention() {
-    //TODO Add correct error code
     ASTComponent node = (ASTComponent) getAstNode("arc/coco/conventions", "conv.UnuniqueImports");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC0004"));
@@ -65,10 +63,9 @@ public class ConventionsTest extends AbstractCoCoTest {
     Checks whether there are connectors in a component that wrongly connect ports of the same component
    */
   public void testConnectorSourceAndTargetDifferentComponent() {
-    //TODO Add correct error code
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.ConnectorSourceAndTargetSameComponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetComponentDiffer());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC1001"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC0005"));
   }
 
   @Test
@@ -78,7 +75,7 @@ public class ConventionsTest extends AbstractCoCoTest {
   public void testMissingSourceAndTargetDefinition() {
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.MissingSourceTargetDefinition");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExist());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xC0001","xC0002"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xC0001", "xC0002"));
   }
 
   @Test
@@ -88,7 +85,7 @@ public class ConventionsTest extends AbstractCoCoTest {
   public void testMissingSourceAndTargetDefinitionInSubcomponent() {
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.MissingSourceTargetDefinitionInSubcomponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExist());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC0001","xC0002"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC0001", "xC0002"));
   }
 
   @Test
@@ -98,8 +95,6 @@ public class ConventionsTest extends AbstractCoCoTest {
     checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xAC006", "xAC007"));
 
     cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xAC009"));
-
-    //TODO: Modify test model to check for xAC008?
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xAC008", "xAC009"));
   }
 }
