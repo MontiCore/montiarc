@@ -1,6 +1,7 @@
 package contextconditions.invalid;
 
 import doesnotexist.invalidType;
+import java.lang.String;
 
 component InvalidCD {
   port

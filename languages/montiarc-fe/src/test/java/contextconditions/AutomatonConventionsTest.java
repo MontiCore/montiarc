@@ -51,41 +51,10 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
   @Ignore
   @Test
   public void testInvalidCDImplicit() {
-    // TODO symbols are only loaded if they are resolved. Therefore it is not
-    // easily possible to perform CoCo checks to detect errors in CDs that are
-    // imported in the given MAA model.
-    //Todo: Just rewrite this. Contextconditions/invalid/InvalidCD.arc
-    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.InvalidCD");
-    ComponentSymbol sym = (ComponentSymbol) node.getSymbol().orElse(null);
-    Scope symTab = createSymTab(MODEL_PATH);
-    if (sym == null){
-      System.out.println("NULL OH NO!");
-    } else{
-      List<ImportStatement> imports = sym.getImports();
+    //Todo: Star imports?
+    ASTMontiArcNode node = getAstNode(MODEL_PATH,"contextconditions.invalid.InvalidCD");
+    checkInvalid(node, new ExpectedErrorInfo(1,"xAF099"));
 
-
-        Optional<JTypeSymbol> symbol = symTab.<JTypeSymbol> resolve("Car", JTypeSymbol.KIND);
-        if (symbol.isPresent()){
-          System.out.println("yay");
-        }
-        symbol = symTab.<JTypeSymbol> resolve("MyError", JTypeSymbol.KIND);
-        if (symbol.isPresent()){
-          System.out.println("yay2");
-        }
-
-      Optional<CDTypeSymbol2JavaType> data = symTab.<CDTypeSymbol2JavaType> resolve("symboltable.aggregation.Types.",CDTypeSymbol2JavaType.KIND);
-      if (data.isPresent()){
-        System.out.println("bla");
-      }
-
-       Optional<CDTypeSymbol2JavaType> data2 = symTab.<CDTypeSymbol2JavaType> resolve("Types", CDTypeSymbol2JavaType.KIND);
-
-        if (data2.isPresent()){
-          System.out.println("bla2");
-        }
-
-
-    }
-
+    checkValid(MODEL_PATH,"contextconditions.valid.BumpControl");
   }
 }
