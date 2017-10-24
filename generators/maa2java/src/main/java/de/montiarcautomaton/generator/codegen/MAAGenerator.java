@@ -44,7 +44,6 @@ public class MAAGenerator {
   protected static Scope createSymTab(Path... modelPaths) {
     ModelingLanguageFamily fam = new MontiArcLanguageFamily();
     List<Path> mps = new ArrayList<>(Arrays.asList(modelPaths));
-    mps.add(Paths.get("src/main/resources/defaultTypes"));
     final ModelPath mp = new ModelPath(mps);
     GlobalScope scope = new GlobalScope(mp, fam);
     JavaHelper.addJavaPrimitiveTypes(scope);
@@ -78,9 +77,10 @@ public class MAAGenerator {
   public static void generateModel(String simpleName, String packageName, String modelPath,
       String fqnModelName, String targetPath, File hwcPath) {
     
-    Scope symTab = createSymTab(Paths.get(modelPath), Paths
-        .get(getBasedirFromModelAndTargetPath(modelPath, targetPath) + "target/librarymodels/"));
+    String basedir = getBasedirFromModelAndTargetPath(modelPath, targetPath);
+    Scope symTab = createSymTab(Paths.get(modelPath),Paths.get(basedir + "src/main/resources/defaultTypes"), Paths.get(basedir + "target/librarymodels/"));
     String model = packageName + "." + simpleName;
+
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(model, ComponentSymbol.KIND).get();
     
     final ComponentHelper compHelper = new ComponentHelper(comp);
