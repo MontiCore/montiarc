@@ -1,21 +1,11 @@
 package contextconditions;
 
-import de.monticore.symboltable.ImportStatement;
 import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
-import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMontiArcNode;
-import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.adapters.CDTypeSymbol2JavaType;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-
-import javax.swing.text.html.Option;
-import java.util.List;
-import java.util.Optional;
 
 public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
   @BeforeClass
