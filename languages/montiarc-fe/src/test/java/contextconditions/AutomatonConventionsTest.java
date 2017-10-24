@@ -22,7 +22,7 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
   }
   
   @Test
-  //This is something provided by the JavaDSL. Why is it checked here?
+  @Ignore("Already checked by the JavaDSL in MontiCore")
   public void testLowerCaseEnumeration() {
     Log.getFindings().clear();
     // loads the CD explicitly and checks its cocos
