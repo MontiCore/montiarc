@@ -15,9 +15,7 @@
 		<module>languages</module>
 		<module>generators</module> 
 		<module>libraries</module>
-		<!--
 		<module>applications</module>
-		-->
 	</modules>
 
 	<!-- == PROJECT PROPERTIES ============================================== -->
