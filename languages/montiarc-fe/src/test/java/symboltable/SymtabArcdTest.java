@@ -9,6 +9,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import de.se_rwth.commons.logging.Log;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.monticore.symboltable.Scope;
@@ -23,10 +25,15 @@ import montiarc._symboltable.ValueSymbol;
 /**
  * @author Robert Heim
  */
-public class SymtabTestArcd extends AbstractSymboltableTest {
+public class SymtabArcdTest extends AbstractSymboltableTest {
 
   private final String MODEL_PATH = "src/test/resources/symboltable";
-  
+
+  @BeforeClass
+  public static void setUp() {
+    Log.enableFailQuick(false);
+  }
+
   @Test
   public void testCompWithGenericPorts() {
     Scope symTab = createSymTab(MODEL_PATH + "/genericPorts");
@@ -106,7 +113,7 @@ public class SymtabTestArcd extends AbstractSymboltableTest {
     assertEquals(spacelessArg3, arg3.getValue().replace(" ", ""));
     // TODO proper setting of Kind? currently everything is an expression as we extend JavaDSL
     // instead of CommonValues
-    // assertEquals(ValueEntry.Kind.ConstructorCall, arg3.getKind());
+//     assertEquals(ValueEntry.Kind.ConstructorCall, arg3.getKind());
 
     ComponentSymbol compWithArgsType = compWithArgsRef.getComponentType().getReferencedComponent()
         .orElse(null);
@@ -149,9 +156,9 @@ public class SymtabTestArcd extends AbstractSymboltableTest {
     assertEquals("2*1*5+1", arg1.getValue());
     // internal representation of expressions
     assertEquals(ValueSymbol.Kind.Expression, arg1.getKind());
-    // assertEquals(4, arg1.getConstructorArguments().size());
+//     assertEquals(4, arg1.getConstructorArguments().size());
     // assertEquals("2", arg1.getConstructorArguments().get(0).getValue());
-    // assertEquals(ValueSymbol.Kind.Value, arg1.getConstructorArguments().get(0).getKind());
+//     assertEquals(ValueSymbol.Kind.Value, arg1.getConstructorArguments().get(0).getKind());
     // assertEquals("1", arg1.getConstructorArguments().get(1).getValue());
     // assertEquals(ValueSymbol.Kind.Value, arg1.getConstructorArguments().get(1).getKind());
     // assertEquals("5", arg1.getConstructorArguments().get(2).getValue());
@@ -407,7 +414,7 @@ public class SymtabTestArcd extends AbstractSymboltableTest {
   //
   // initSymtabForRoot(tool, "a.ComponentWithInnerComponent");
   //
-  // Set<ISTEntry> manuallyLoaded = InterfaceLoader.loadExported(modelLoader,
+//   Set<ISTEntry> manuallyLoaded = InterfaceLoader.loadExported(modelLoader,
   // "a.ComponentWithInnerComponent",
   // ArcdConstants.ST_KIND_PROTECTED, deserializers, ComponentEntry.KIND);
   // assertEquals(1, manuallyLoaded.size());
