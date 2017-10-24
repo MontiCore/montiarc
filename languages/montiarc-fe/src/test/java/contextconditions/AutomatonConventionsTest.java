@@ -48,9 +48,8 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
     checkInvalid(getAstNode("src/test/resources", "contextconditions.invalid.ImplementationInNonAtomicComponent"), new ExpectedErrorInfo(1, "xAB141"));
   }
   
-  @Ignore
   @Test
-  public void testInvalidCDImplicit() {
+  public void testInvalidImports() {
     //Todo: Star imports?
     ASTMontiArcNode node = getAstNode(MODEL_PATH,"contextconditions.invalid.InvalidCD");
     checkInvalid(node, new ExpectedErrorInfo(1,"xAF099"));
