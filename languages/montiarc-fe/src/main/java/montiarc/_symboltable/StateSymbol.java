@@ -12,7 +12,7 @@ public class StateSymbol extends StateSymbolTOP {
   private List<String> stereoValues; 
   private Optional<ASTBlock> initialReaction;
   private boolean isInitial;
-  public static final StateKind KIND = StateKind.KIND;
+  public static final StateKind KIND = new StateKind();
 
   
   public StateSymbol(String name) {

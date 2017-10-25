@@ -21,7 +21,7 @@ import montiarc.helper.SymbolPrinter;
  */
 public class ComponentInstanceSymbol extends CommonScopeSpanningSymbol {
 
-  public static final ComponentInstanceKind KIND = ComponentInstanceKind.INSTANCE;
+  public static final ComponentInstanceKind KIND = new ComponentInstanceKind();
 
   private final ComponentSymbolReference componentType;
 

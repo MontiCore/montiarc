@@ -5,11 +5,12 @@
  */
 package contextconditions;
 
-import montiarc._ast.ASTMontiArcNode;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcASTConnectorCoCo;
 import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -66,6 +67,7 @@ public class ConnectorEndPointCorrectlyQualifiedTest extends AbstractCoCoTest {
     Checks multiple instances of wrong connectors with connectors piercing through interfaces and
      qualified simple connector sources.
    */
+  @Ignore
   @Test
   public void testMultipleWrongConnectors(){
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.WrongConnector");

@@ -10,7 +10,7 @@ public class AutomatonSymbol extends CommonScopeSpanningSymbol {
   private List<String> stereoValues; 
   private List<ImportStatement> imports;
   
-  public static final AutomatonKind KIND = AutomatonKind.KIND;
+  public static final AutomatonKind KIND = new AutomatonKind();
 
 
   public AutomatonSymbol(String name) {

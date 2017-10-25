@@ -5,11 +5,12 @@
  */
 package contextconditions;
 
-import montiarc._ast.ASTMontiArcNode;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.TopLevelComponentHasNoInstanceName;
 
@@ -33,6 +34,7 @@ public class TopLevelComponentHasNoInstanceNameTest extends AbstractCoCoTest {
    * Checks that the outer component definition has no instance name.
    */
   @Test
+  @Ignore
   public void testInvalid() {
 
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.OuterComponentWithInstanceName");

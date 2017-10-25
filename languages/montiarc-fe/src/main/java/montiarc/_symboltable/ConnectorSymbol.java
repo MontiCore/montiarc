@@ -28,7 +28,7 @@ import montiarc.helper.SymbolPrinter;
  */
 public class ConnectorSymbol extends CommonSymbol {
   
-  public static final ConnectorKind KIND = ConnectorKind.INSTANCE;
+  public static final ConnectorKind KIND = new ConnectorKind();
   
   private final Map<String, Optional<String>> stereotype = new HashMap<>();
   

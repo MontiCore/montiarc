@@ -23,7 +23,7 @@ import montiarc.helper.SymbolPrinter;
  * @author Arne Haber, Robert Heim
  */
 public class PortSymbol extends CommonSymbol {
-  public static final PortKind KIND = PortKind.INSTANCE;
+  public static final PortKind KIND = new PortKind();
 
   private final Map<String, Optional<String>> stereotype = new HashMap<>();
 

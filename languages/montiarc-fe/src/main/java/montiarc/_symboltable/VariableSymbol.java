@@ -9,7 +9,7 @@ import montiarc._ast.ASTValuation;
 
 public class VariableSymbol extends CommonSymbol {
   
-  public static final VariableKind KIND = VariableKind.INSTANCE;
+  public static final VariableKind KIND = new VariableKind();
   
   private JTypeReference<? extends JTypeSymbol> typeReference;
   

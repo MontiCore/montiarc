@@ -6,6 +6,7 @@
 package montiarc._symboltable;
 
 import de.monticore.symboltable.resolving.CommonResolvingFilter;
+
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JMethodSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;

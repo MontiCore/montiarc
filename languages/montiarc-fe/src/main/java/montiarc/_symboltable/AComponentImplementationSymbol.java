@@ -12,7 +12,7 @@ import de.monticore.symboltable.CommonSymbol;
  */
 public abstract class AComponentImplementationSymbol extends CommonSymbol {
 
-  public static final AComponentImplementationKind KIND = AComponentImplementationKind.INSTANCE;
+  public static final AComponentImplementationKind KIND = new AComponentImplementationKind();
 
   /**
    * Constructor for de.monticore.lang.montiarc.montiarc._symboltable.AComponentImplementationSymbol
