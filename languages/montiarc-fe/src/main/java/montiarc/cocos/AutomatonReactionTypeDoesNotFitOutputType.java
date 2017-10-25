@@ -38,7 +38,7 @@ public class AutomatonReactionTypeDoesNotFitOutputType implements MontiArcASTTra
               PortSymbol.KIND);
           if (pSymbol.isPresent()) {
             if (pSymbol.get().isIncoming()) {
-              Log.error("0xAA430 Did not find matching Variable or Output with name "
+              Log.error("0xMA041 Did not find matching Variable or Output with name "
                   + currentNameToResolve, assign.get_SourcePositionStart());
             }
             else {
@@ -62,11 +62,11 @@ public class AutomatonReactionTypeDoesNotFitOutputType implements MontiArcASTTra
             .getExpressionType(val.getExpression());
         if (!exprType.isPresent()) {
           Log.error(
-              "0xAA433 Could not resolve type of expression for checking the reaction.",
+              "0xMA044 Could not resolve type of expression for checking the reaction.",
               assign.get_SourcePositionStart());
         }
         else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType)) {
-          Log.error("0xAA431 Type of Variable/Output \"" + currentNameToResolve
+          Log.error("0xMA042 Type of Variable/Output \"" + currentNameToResolve
               + "\" in the reaction does not match the type of its assigned expression. Type "
               +
               exprType.get().getName() + " can not cast to type " + varType.getName()
@@ -75,7 +75,7 @@ public class AutomatonReactionTypeDoesNotFitOutputType implements MontiArcASTTra
       }
     }
     catch (Exception e) {
-      Log.error("0xAA432 Could not resolve type for checking the reaction.",
+      Log.error("0xMA043 Could not resolve type for checking the reaction.",
           assign.get_SourcePositionStart());
     }
   }

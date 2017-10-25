@@ -33,7 +33,7 @@ public class UniqueConstraint implements MontiArcASTComponentCoCo {
         .collect(Collectors.toList())) {
 
       if (usedNames.contains(inv.getName())) {
-        Log.error(String.format("0xAC001 The name of constraint '%s' is ambiguos!", inv.getName()),
+        Log.error(String.format("0xMA052 The name of constraint '%s' is ambiguos!", inv.getName()),
             inv.get_SourcePositionStart());
       }
 

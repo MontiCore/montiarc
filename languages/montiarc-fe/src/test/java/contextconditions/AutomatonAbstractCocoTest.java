@@ -86,7 +86,7 @@ public class AutomatonAbstractCocoTest extends AutomatonBaseTest {
   }
   
   protected static class ExpectedErrorInfo {
-    private static final Pattern ERROR_CODE_PATTERN = Pattern.compile("x[0-9A-F]{5}");
+    private static final Pattern ERROR_CODE_PATTERN = Pattern.compile("xMA[0-9]{3}");
     
     private int numExpectedFindings = 0;
     

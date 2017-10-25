@@ -14,7 +14,7 @@ public class UseOfAlternatives implements MontiArcASTAlternativeCoCo {
   @Override
   public void check(ASTAlternative node) {
     if (node.getValueLists().size() > 1) {
-      Log.error("0xAC100 Multiple alternatives are not supported.", node.get_SourcePositionStart());
+      Log.error("0xMA062 Multiple alternatives are not supported.", node.get_SourcePositionStart());
     }
   }
 }

@@ -35,7 +35,7 @@ public class ConnectorEndPointCorrectlyQualifiedTest extends AbstractCoCoTest {
         new MontiArcCoCoChecker()
             .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified()),
         getAstNode("contextconditions", "invalid.SimpleConnectorSourceFullyQualified"),
-        new ExpectedErrorInfo(1, "x44B7E"));
+        new ExpectedErrorInfo(1, "xMA008"));
   }
   
   @Test
@@ -49,7 +49,7 @@ public class ConnectorEndPointCorrectlyQualifiedTest extends AbstractCoCoTest {
         new MontiArcCoCoChecker()
             .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified()),
         getAstNode("contextconditions", "invalid.ConnectorPiercingOutwardsThroughInterface"),
-        new ExpectedErrorInfo(1, "xDB61C"));
+        new ExpectedErrorInfo(1, "xMA070"));
   }
   
   @Test
@@ -58,6 +58,6 @@ public class ConnectorEndPointCorrectlyQualifiedTest extends AbstractCoCoTest {
         new MontiArcCoCoChecker()
             .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified()),
         getAstNode("contextconditions", "invalid.ConnectorPiercingInwardsThroughInterface"),
-        new ExpectedErrorInfo(1, "xDB61C"));
+        new ExpectedErrorInfo(1, "xMA070"));
   }
 }

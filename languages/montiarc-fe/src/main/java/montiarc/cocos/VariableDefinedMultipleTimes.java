@@ -25,7 +25,7 @@ public class VariableDefinedMultipleTimes implements MontiArcASTComponentCoCo {
 				ASTComponentVariableDeclaration decl = (ASTComponentVariableDeclaration) e;
 				for (ASTVariable var : decl.getVariables()) {
 					if (names.contains(var.getName())) {
-						Log.error("0xAA360 Variable " + var.getName() + " is defined more than once.",
+						Log.error("0xMA035 Variable " + var.getName() + " is defined more than once.",
 								var.get_SourcePositionStart());
 					} else {
 						names.add(var.getName());

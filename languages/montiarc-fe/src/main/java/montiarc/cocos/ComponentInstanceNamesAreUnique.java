@@ -37,7 +37,7 @@ public class ComponentInstanceNamesAreUnique implements MontiArcASTComponentCoCo
             ? subComp.getAstNode().get().get_SourcePositionStart()
             : SourcePosition.getDefaultSourcePosition();
 
-        Log.error(String.format("0xAC010 The subcomponent instance %s is not unique",
+        Log.error(String.format("0xMA061 The subcomponent instance %s is not unique",
             subComp.getFullName()), pos);
       }
       else {

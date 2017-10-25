@@ -33,10 +33,10 @@ public class UseOfUndeclaredState implements MontiArcASTAutomatonCoCo {
       String targetName = transition.getTarget().orElse(sourceName);
       
       if (!names.contains(sourceName)) {
-        Log.error("0xAA220 The source " + sourceName + " in " + sourceName + "->" + targetName + " was not defined as a state.", transition.get_SourcePositionStart());
+        Log.error("0xMA026 The source " + sourceName + " in " + sourceName + "->" + targetName + " was not defined as a state.", transition.get_SourcePositionStart());
       }
       if (!names.contains(targetName)) {
-        Log.error("0xAA221 The target " + targetName + " in " + sourceName + "->" + targetName + " was not defined as a state.", transition.get_SourcePositionStart());
+        Log.error("0xMA027 The target " + targetName + " in " + sourceName + "->" + targetName + " was not defined as a state.", transition.get_SourcePositionStart());
       }
     }
   }

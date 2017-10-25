@@ -21,7 +21,7 @@ public class MultipleBehaviorImplementation implements MontiArcASTComponentCoCo 
       if (element instanceof ASTBehaviorElement) {
         ++counter;
         if (counter > 1) {
-          Log.error("0xAB140 Multiple behavior implementations found.",
+          Log.error("0xMA050 Multiple behavior implementations found.",
               element.get_SourcePositionStart());
         }
       }

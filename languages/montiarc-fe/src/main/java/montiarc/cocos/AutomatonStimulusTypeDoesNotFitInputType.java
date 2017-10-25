@@ -38,7 +38,7 @@ public class AutomatonStimulusTypeDoesNotFitInputType implements MontiArcASTTran
           
           if (portSymbol.isPresent()) {
             if (portSymbol.get().isOutgoing()) {
-              Log.error("0xAA440 Did not find matching Variable or Input with name " + currentNameToResolve, assign.get_SourcePositionStart());
+              Log.error("0xMA045 Did not find matching Variable or Input with name " + currentNameToResolve, assign.get_SourcePositionStart());
             }
             else {
               checkAssignment(assign, portSymbol.get().getTypeReference(), currentNameToResolve);
@@ -58,16 +58,16 @@ public class AutomatonStimulusTypeDoesNotFitInputType implements MontiArcASTTran
         for (ASTValuation val : assign.getValueList().get().getAllValuations()) {     
           Optional<? extends JavaTypeSymbolReference> exprType = TypeCompatibilityChecker.getExpressionType(val.getExpression());
           if (!exprType.isPresent()) {
-            Log.error("0xAA443 Could not resolve type of expression for checking the stimulus.", assign.get_SourcePositionStart());
+            Log.error("0xMA048 Could not resolve type of expression for checking the stimulus.", assign.get_SourcePositionStart());
           }
           else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType)) {
-            Log.error("0xAA441 Type of Variable/Input " + currentNameToResolve + " in the stimulus does not match the type of its assigned expression. Type " + 
+            Log.error("0xMA046 Type of Variable/Input " + currentNameToResolve + " in the stimulus does not match the type of its assigned expression. Type " +
                 exprType.get().getName() + " can not cast to type " + varType.getName() + ".", val.get_SourcePositionStart());
           }
         }
       }
     } catch (FailedLoadingSymbol e) {
-      Log.error("0xAA442 Could not resolve type for checking the stimulus.", assign.get_SourcePositionStart());
+      Log.error("0xMA047 Could not resolve type for checking the stimulus.", assign.get_SourcePositionStart());
     }
   }
   

@@ -48,7 +48,7 @@ public class ComponentWithTypeParametersHasInstance
     for (ComponentSymbol notInstantiatedInnerComponent : notInstantiatedInnerComponents) {
       Log.error(
           String.format(
-              "0x79C00 Inner component \"%s\" must have an instance defining its formal type parameters.",
+              "0xMA009 Inner component \"%s\" must have an instance defining its formal type parameters.",
               notInstantiatedInnerComponent.getName()),
           notInstantiatedInnerComponent.getSourcePosition());
     }

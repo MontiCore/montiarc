@@ -24,7 +24,7 @@ public class ComponentNameIsCapitalized implements MontiArcASTComponentCoCo {
   @Override
   public void check(ASTComponent node) {
     if (!Character.isUpperCase(node.getName().charAt(0))) {
-      Log.error("0xAC004 Component names must be start in upper-case",
+      Log.error("0xMA055 Component names must be start in upper-case",
           node.get_SourcePositionStart());
     }
   }

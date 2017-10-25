@@ -17,7 +17,7 @@ public class AutomatonHasNoInitialState implements MontiArcASTAutomatonCoCo {
     boolean hasStates = !node.getStateDeclarations().isEmpty();
     boolean hasNoInitialStates = node.getInitialStateDeclarations().isEmpty();
     if (hasStates && hasNoInitialStates) {
-      Log.error("0xAA100 The automaton has no initial states.", node.get_SourcePositionStart());
+      Log.error("0xMA013 The automaton has no initial states.", node.get_SourcePositionStart());
     }
   }
   

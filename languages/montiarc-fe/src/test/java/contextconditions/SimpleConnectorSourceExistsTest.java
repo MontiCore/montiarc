@@ -35,6 +35,6 @@ public class SimpleConnectorSourceExistsTest extends AbstractCoCoTest {
   public void testInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SimpleConnectorSourceExists()),
         getAstNode("contextconditions", "invalid.SimpleConnectorSourceNonExistant"),
-        new ExpectedErrorInfo(1, "xF4D71"));
+        new ExpectedErrorInfo(1, "xMA072"));
   }
 }

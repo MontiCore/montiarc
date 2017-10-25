@@ -36,7 +36,7 @@ public class SimpleConnectorSourceExists implements MontiArcASTComponentCoCo {
     ComponentSymbol symbol = (ComponentSymbol) node.getSymbol().orElse(null);
     
     if (null == symbol) {
-      Log.error(String.format("0x9AF6C ASTComponent node \"%s\" has no symbol. Did you forget to "
+      Log.error(String.format("0xMA010 ASTComponent node \"%s\" has no symbol. Did you forget to "
           + "run the SymbolTableCreator before checking cocos?", node.getName()));
       return;
     }
@@ -58,12 +58,12 @@ public class SimpleConnectorSourceExists implements MontiArcASTComponentCoCo {
         Optional<PortSymbol> outgoingPort = sourceComponent.getOutgoingPort(sourcePort);
         
         if (!outgoingPort.isPresent()) {
-          Log.error(String.format("0xF4D71 Out port \"%s\" is not present in component \"%s\".",
+          Log.error(String.format("0xMA072 Out port \"%s\" is not present in component \"%s\".",
               sourcePort, sourceComponent.getName()),
               connectorSymbol.getSourcePosition());
         }
       }
     }
   }
-  
+
 }

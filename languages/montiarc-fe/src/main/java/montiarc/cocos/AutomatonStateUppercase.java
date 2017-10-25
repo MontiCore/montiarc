@@ -15,7 +15,7 @@ public class AutomatonStateUppercase implements MontiArcASTStateCoCo {
   @Override
   public void check(ASTState node) {
     if (!Character.isUpperCase(node.getName().charAt(0))) {
-      Log.error("0xAA190 The name of state " + node.getName() + " should start with an uppercase letter.", node.get_SourcePositionStart());
+      Log.error("0xMA021 The name of state " + node.getName() + " should start with an uppercase letter.", node.get_SourcePositionStart());
     }
   }
   

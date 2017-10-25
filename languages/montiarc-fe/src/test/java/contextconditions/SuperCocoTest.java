@@ -23,14 +23,14 @@ public class SuperCocoTest extends AutomatonAbstractCocoTest {
     // test if IO-Automaton cocos are working by testing the
     // AutomatonWithoutState coco
     ASTMontiArcNode node = getAstNode("src/test/resources/", "contextconditions.invalid.AutomatonWithoutState");
-    checkInvalid(node, new ExpectedErrorInfo(1, "xAA130"));
+    checkInvalid(node, new ExpectedErrorInfo(1, "xMA014"));
   }
   
   @Test
   public void testMontiArcCocos() {
     // test if MontiArc cocos are working by testing the UniquePorts coco
     ASTMontiArcNode node = getAstNode("src/test/resources/", "contextconditions.invalid.UniquePorts");
-    checkInvalid(node, new ExpectedErrorInfo(1, "xAC002"));
+    checkInvalid(node, new ExpectedErrorInfo(1, "xMA053"));
   }
   
 }

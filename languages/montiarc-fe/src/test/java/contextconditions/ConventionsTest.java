@@ -93,12 +93,12 @@ public class ConventionsTest extends AbstractCoCoTest {
   public void testUnusedPorts() {
     runCheckerWithSymTab("arc/coco/conventions", "conv.UnusedPorts");
     Collection<String> findings = Log.getFindings().stream().map(f -> f.buildMsg())
-        .filter(s -> s.contains("xAC006") || s.contains("xAC007"))
+        .filter(s -> s.contains("xMA057") || s.contains("xMA058"))
         .collect(Collectors.toList());
     assertEquals(findings.stream().collect(Collectors.joining("\n")), 3, findings.size());
 
     findings = Log.getFindings().stream().map(f -> f.buildMsg())
-        .filter(s -> s.contains("xAC008") || s.contains("xAC009"))
+        .filter(s -> s.contains("xMA059") || s.contains("xMA060"))
         .collect(Collectors.toList());
     assertEquals(findings.stream().collect(Collectors.joining("\n")), 3, findings.size());
   }

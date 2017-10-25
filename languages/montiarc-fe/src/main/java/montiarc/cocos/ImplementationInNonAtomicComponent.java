@@ -26,7 +26,7 @@ public class ImplementationInNonAtomicComponent implements MontiArcASTComponentC
 	public void check(ASTComponent node) {
 		ComponentSymbol cs = (ComponentSymbol) node.getSymbol().get();
 		if (cs.isDecomposed() && hasBehavior(node)) {
-			Log.error("0xAB141 There must not be a behavior embedding in composed components.",
+			Log.error("0xMA051 There must not be a behavior embedding in composed components.",
 					node.get_SourcePositionStart());
 		}
 

@@ -37,7 +37,7 @@ public class ParameterNamesUniqueTest extends AbstractCoCoTest {
   public void testInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ParameterNamesAreUnique()),
         getAstNode("contextconditions", "invalid.ParameterNamesNotUnique"),
-        new ExpectedErrorInfo(1, "xC4A61"));
+        new ExpectedErrorInfo(1, "xMA069"));
     
 //    runCheckerWithSymTab("contextconditions", "invalid.ParameterNamesNotUnique");
 //
@@ -45,6 +45,6 @@ public class ParameterNamesUniqueTest extends AbstractCoCoTest {
 //        .collect(Collectors.joining("\n"));
 //
 //    assertEquals(findings, 1, Log.getFindings().size());
-//    assertTrue(findings.contains("xC4A61"));
+//    assertTrue(findings.contains("xMA069"));
   }
 }

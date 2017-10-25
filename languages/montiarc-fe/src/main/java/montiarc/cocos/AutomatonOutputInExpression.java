@@ -21,7 +21,7 @@ public class AutomatonOutputInExpression implements MontiArcASTValueListCoCo {
           Scope scope = expr.get().getEnclosingScope().get();
           Optional<PortSymbol> found = scope.resolve(expr.get().getName().get(), PortSymbol.KIND);
           if (found.isPresent() && found.get().isOutgoing()) {
-            Log.error("0xAA1A0 Port " + found.get().getName()
+            Log.error("0xMA022 Port " + found.get().getName()
                 + " is an outgoing port and not allowed in expressions.", node.get_SourcePositionStart());
           }
         }

@@ -18,22 +18,23 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
   @Test
   public void testMutipleBehaviors() {
     ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.MutipleBehaviors");
-    checkInvalid(node, new ExpectedErrorInfo(3, "xAB140", "xAB130"));
+    checkInvalid(node, new ExpectedErrorInfo(3, "xMA050", "xMA049"));
   }
   
   @Test
+  @Ignore("Already checked by the JavaDSL in MontiCore")
   public void testLowerCaseEnumeration() {
     Log.getFindings().clear();
     // loads the CD explicitly and checks its cocos
     Scope symTab = createSymTab(MODEL_PATH);
     symTab.<CDFieldSymbol> resolve("contextconditions.invalid.LowerCaseEnumeration.lowerCaseEnumeration.A", CDFieldSymbol.KIND).orElse(null);
     new ExpectedErrorInfo(1, "xC4A05").checkFindings(Log.getFindings());
-    // @JP: Was sollte xC4A05 tun und wieso tut es das nicht?
+    // Not a MontiArc error, so different error code.
   }
   
   @Test
   public void testImplementationInNonAtomicComponent() {
-    checkInvalid(getAstNode("src/test/resources", "contextconditions.invalid.ImplementationInNonAtomicComponent"), new ExpectedErrorInfo(1, "xAB141"));
+    checkInvalid(getAstNode("src/test/resources", "contextconditions.invalid.ImplementationInNonAtomicComponent"), new ExpectedErrorInfo(1, "xMA051"));
   }
   
   @Ignore
@@ -43,7 +44,7 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
     // easily possible to perform CoCo checks to detect errors in CDs that are
     // imported in the given MAA model.
     ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.InvalidCD");
-    checkInvalid(node, new ExpectedErrorInfo(1, "xC4A05"));
+    checkInvalid(node, new ExpectedErrorInfo(1, "xMA068"));
     // @JP: Fehlercodes zu Konstantes machen
   }
 }

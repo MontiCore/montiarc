@@ -21,7 +21,7 @@ public class AutomatonInitialDeclaredMultipleTimes implements MontiArcASTAutomat
     for (ASTInitialStateDeclaration decl : node.getInitialStateDeclarations()) {
       for (String name : decl.getNames()) {
         if (names.contains(name)) {
-          Log.error("0xAA300 The state " + name + " is defined multiple times as initial state.", node.get_SourcePositionStart());
+          Log.error("0xMA029 The state " + name + " is defined multiple times as initial state.", node.get_SourcePositionStart());
         } else {
           names.add(name);
         }

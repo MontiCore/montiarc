@@ -22,7 +22,7 @@ public class AutomatonStateDefinedMultipleTimes implements MontiArcASTAutomatonC
     for (ASTStateDeclaration decl : node.getStateDeclarations()) {
       for (ASTState state : decl.getStates()) {
         if (names.contains(state.getName())) {
-          Log.error("0xAA330 State " + state.getName() + " is defined more than once.", state.get_SourcePositionStart());
+          Log.error("0xMA031 State " + state.getName() + " is defined more than once.", state.get_SourcePositionStart());
         } else {
           names.add(state.getName());
         }
