@@ -110,6 +110,7 @@ public class AggregationTest extends AbstractSymboltableTest {
    * Doesn't actually test anything that isn't already covered by other tests.
    * TODO: Remove?!
    */
+  @Ignore
   public void test() {
     Scope symTab = createSymTab(MODEL_PATH);
     

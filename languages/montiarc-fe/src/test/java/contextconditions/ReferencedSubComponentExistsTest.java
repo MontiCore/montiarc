@@ -36,6 +36,7 @@ better error message. For now we just check that we give out the rudimentary err
 xA1038, which tells us that the non-existant component could not be loaded, but doesn't
 provide more detail.
  */
+  @Ignore
   public void testInvalid() {
     Log.getFindings().clear();
     ASTMontiArcNode node = getAstNode("contextconditions", "invalid.NonExistantReferencedSubComponent");
