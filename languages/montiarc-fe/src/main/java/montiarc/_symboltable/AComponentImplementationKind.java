@@ -5,15 +5,22 @@
  */
 package montiarc._symboltable;
 
+import de.monticore.symboltable.SymbolKind;
+
 /**
  * @author Robert Heim
  */
-public class AComponentImplementationKind
-    implements de.monticore.symboltable.SymbolKind {
+public class AComponentImplementationKind implements SymbolKind {
 
-  public static final AComponentImplementationKind INSTANCE = new AComponentImplementationKind();
+  private static final String NAME = AComponentImplementationKind.class.getName();
 
-  protected AComponentImplementationKind() {
+  @Override
+  public String getName() {
+    return NAME;
   }
 
+  @Override
+  public boolean isKindOf(SymbolKind kind) {
+    return NAME.equals(kind.getName()) || SymbolKind.super.isKindOf(kind);
+  }
 }
