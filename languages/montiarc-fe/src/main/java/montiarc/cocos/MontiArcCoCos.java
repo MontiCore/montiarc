@@ -34,10 +34,9 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo(new InPortUniqueSender())
-        
-        /// Java/P Cocos ///////////////////////////////////////////////////////////// 
+        .addCoCo(new ImportsValid())
+        /// Java/P Cocos /////////////////////////////////////////////////////////////
         .addCoCo(new SimpleConnectorSourceExists())
-        .addCoCo(new ReferencedSubComponentExists())
         .addCoCo(new UsedPortsAndVariablesExist())
         .addCoCo(new MultipleBehaviorImplementation())
         /* MontiArcAutomaton Cocos */
