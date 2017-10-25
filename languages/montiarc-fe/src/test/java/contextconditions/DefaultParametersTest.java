@@ -36,7 +36,7 @@ public class DefaultParametersTest extends AbstractCoCoTest {
   public void testDefaultParameterHaveWrongOrder() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersHaveCorrectOrder()),
         getAstNode("contextconditions", "invalid.DefaultParametersHaveWrongOrder"),
-        new ExpectedErrorInfo(1, "xAC005"));
+        new ExpectedErrorInfo(1, "xMA056"));
   }
   
   @Ignore("TODO Ticket #56: Coco schreiben, CoCo im Parameter initialisieren, Fehlercode anpassen.")
@@ -44,7 +44,7 @@ public class DefaultParametersTest extends AbstractCoCoTest {
   public void testWrongDefaultParameterType() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersHaveCorrectOrder()),
         getAstNode("contextconditions", "invalid.WrongDefaultParameterType"),
-        new ExpectedErrorInfo(1, "xAC005"));
+        new ExpectedErrorInfo(1, "xMA056"));
     
   }
   
@@ -52,7 +52,7 @@ public class DefaultParametersTest extends AbstractCoCoTest {
   public void testComplexInvalidParametersOrder() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersHaveCorrectOrder()),
         getAstNode("contextconditions", "invalid.ComplexInvalidParametersOrder"),
-        new ExpectedErrorInfo(1, "xAC005"));
+        new ExpectedErrorInfo(1, "xMA056"));
   }
 
 }

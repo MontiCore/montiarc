@@ -29,7 +29,7 @@ public class ParameterNamesAreUnique implements MontiArcASTComponentHeadCoCo {
     for (ASTParameter parameter : parameters) {
 
       if (parameterNames.contains(parameter.getName())) {
-        Log.error(String.format("0xC4A61 Parameter name \"%s\" not unique", parameter.getName()),
+        Log.error(String.format("0xMA069 Parameter name \"%s\" not unique", parameter.getName()),
             parameter.get_SourcePositionStart());
       }
 

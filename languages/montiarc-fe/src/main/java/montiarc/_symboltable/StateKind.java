@@ -8,10 +8,15 @@ import de.monticore.symboltable.SymbolKind;
 
 public class StateKind implements SymbolKind {
 
-  public static final StateKind KIND = new StateKind();
+  private static final String NAME = StateKind.class.getName();
 
-  protected StateKind(){
-    
+  @Override
+  public String getName() {
+    return NAME;
   }
 
+  @Override
+  public boolean isKindOf(SymbolKind kind) {
+    return NAME.equals(kind.getName()) || SymbolKind.super.isKindOf(kind);
+  }
 }

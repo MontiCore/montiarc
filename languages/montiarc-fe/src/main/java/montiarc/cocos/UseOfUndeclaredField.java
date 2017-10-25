@@ -25,7 +25,7 @@ public class UseOfUndeclaredField implements MontiArcASTIOAssignmentCoCo {
       boolean isVariable = scope.resolve(node.getName().get(), VariableSymbol.KIND).isPresent();
       boolean isPort = scope.resolve(node.getName().get(), PortSymbol.KIND).isPresent();
       if (!isVariable && !isPort) {
-        Log.error("0xAA230 " + node.getName().get() + " is used as a field, but is not declared as such.", node.get_SourcePositionStart());
+        Log.error("0xMA028 " + node.getName().get() + " is used as a field, but is not declared as such.", node.get_SourcePositionStart());
       }
     }
   }

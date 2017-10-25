@@ -32,14 +32,14 @@ public class AJavaCorrectnessTest extends AJavaCocoTest {
   @Test
   public void testUsedPortsNotExist() {
     ASTMontiArcNode node = getAstNode("src/test/resources/", "contextconditions.invalid.UsedPortsNotExist");
-    checkInvalid(node, new ExpectedErrorInfo(2, "xAA329"));
+    checkInvalid(node, new ExpectedErrorInfo(2, "xMA030"));
   }
   
   @Ignore
   @Test
   public void testComponentWithAJavaAndAutomaton() {
     ASTMontiArcNode node = getAstNode("src/test/resources/","contextconditions.invalid.ComponentWithAJavaAndAutomaton");
-    checkInvalid(node, new ExpectedErrorInfo(1, "xAB140"));
+    checkInvalid(node, new ExpectedErrorInfo(1, "xMA050"));
   }
   
 }

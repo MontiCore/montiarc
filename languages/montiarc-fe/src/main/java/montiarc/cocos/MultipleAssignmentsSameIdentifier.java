@@ -29,7 +29,7 @@ public class MultipleAssignmentsSameIdentifier implements MontiArcASTTransitionC
         if (assignment.getName().isPresent()) {
           if (usedNames.contains(assignment.getName().get())) {
             // An assignment was already defined
-            Log.error("0xAA170 There are multiple I/O-Assignments for port or variable " + assignment.getName().get() + " in transition " + node.toString() + ".", reaction.get_SourcePositionStart());
+            Log.error("0xMA019 There are multiple I/O-Assignments for port or variable " + assignment.getName().get() + " in transition " + node.toString() + ".", reaction.get_SourcePositionStart());
           }
           else {
             // No assignment for port/var assignment.getName() defined yet.

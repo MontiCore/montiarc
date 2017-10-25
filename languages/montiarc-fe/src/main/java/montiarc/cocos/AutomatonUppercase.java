@@ -19,7 +19,7 @@ public class AutomatonUppercase implements MontiArcASTBehaviorElementCoCo {
 			ASTAutomatonBehavior ast = (ASTAutomatonBehavior) node;
 			if (ast.getName().isPresent()) {
 				if (!Character.isUpperCase(ast.getName().get().charAt(0))) {
-					Log.error("0xAB130 The name of the automaton should start with an uppercase letter.",
+					Log.error("0xMA049 The name of the automaton should start with an uppercase letter.",
 							node.get_SourcePositionStart());
 				}
 			}

@@ -36,7 +36,7 @@ public class UsedPortsAndVariablesExist
   public void check(ASTComponent node) {
     ComponentSymbol cmp = (ComponentSymbol) node.getSymbol().orElse(null);
     if (null == cmp) {
-      Log.error(String.format("0x9AF6C ASTComponent node \"%s\" has no symbol. Did you forget to "
+      Log.error(String.format("0xMA010 ASTComponent node \"%s\" has no symbol. Did you forget to "
           + "run the SymbolTableCreator before checking cocos?", node.getName()));
       return;
     }
@@ -58,14 +58,14 @@ public class UsedPortsAndVariablesExist
           Optional<JFieldSymbol> cmpParameter = cmp.getConfigParameters().stream()
               .filter(p -> p.getName().equals(name)).findFirst();
           if (!port.isPresent() && !compVar.isPresent() && !cmpParameter.isPresent()) {
-            Log.error("0xAA329 Used variable " + name
+            Log.error("0xMA030 Used variable " + name
                 + " in ajava initialization is not a port, component variable or locally defined variable.",
                 i.get_SourcePositionStart());
           }
           
           if (port.isPresent()) {
             if (port.get().isIncoming()) {
-              Log.error("0xAA331 Port " + port.get().getName()
+              Log.error("0xMA032 Port " + port.get().getName()
                   + " is incoming, and thus must not be changed",
                   i.get_SourcePositionStart());
             }

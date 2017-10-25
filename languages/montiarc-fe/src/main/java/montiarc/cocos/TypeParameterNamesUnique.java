@@ -34,7 +34,7 @@ public class TypeParameterNamesUnique implements MontiArcASTComponentHeadCoCo {
 
       if (typeParameterNames.contains(typeParameter.getName())) {
         Log.error(String.format(
-            "0x35F1A The formal type parameter name \"%s\" is not unique",
+            "0xMA006 The formal type parameter name \"%s\" is not unique",
             typeParameter.getName()), typeParameter.get_SourcePositionStart());
       }
 

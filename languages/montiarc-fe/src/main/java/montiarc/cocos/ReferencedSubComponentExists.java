@@ -37,7 +37,7 @@ public class ReferencedSubComponentExists implements MontiArcASTSubComponentCoCo
         .<ComponentSymbol> resolve(referenceName, ComponentSymbol.KIND);
     
     if (!componentSymbol.isPresent()) {
-      Log.error(String.format("0x069B7 Type \"%s\" could not be resolved", referenceName),
+      Log.error(String.format("0xMA004 Type \"%s\" could not be resolved", referenceName),
           node.get_SourcePositionStart());
     }
   }

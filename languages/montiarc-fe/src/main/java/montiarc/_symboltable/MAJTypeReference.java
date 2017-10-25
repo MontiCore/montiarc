@@ -74,7 +74,7 @@ public class MAJTypeReference extends CommonJTypeReference<JTypeSymbol> {
    */
   @Override
   protected Optional<JTypeSymbol> loadReferencedSymbol() {
-    checkArgument(!isNullOrEmpty(referencedName), " 0xA4070 Symbol name may not be null or empty.");
+    checkArgument(!isNullOrEmpty(referencedName), " 0xMA012 Symbol name may not be null or empty.");
     Log.errorIfNull(referencedKind);
     
     Log.debug("Load full information of '" + referencedName + "' (Kind " + referencedKind.getName()
@@ -92,11 +92,11 @@ public class MAJTypeReference extends CommonJTypeReference<JTypeSymbol> {
       resolvedSymbol = Optional.of(foundSymbols.iterator().next());
     }
     else {
-      Log.warn("0xA1038 " + SymbolReference.class.getSimpleName()
+      Log.warn("0xMA011 " + SymbolReference.class.getSimpleName()
           + " Could not load full information of '" +
           referencedName + "' (Kind " + referencedKind.getName() + ").");
     }
-    
+
     return resolvedSymbol;
   }
   

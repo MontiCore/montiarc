@@ -19,5 +19,4 @@ public class TransitionKind implements SymbolKind {
   public boolean isKindOf(SymbolKind kind) {
     return NAME.equals(kind.getName()) || SymbolKind.super.isKindOf(kind);
   }
-
 }

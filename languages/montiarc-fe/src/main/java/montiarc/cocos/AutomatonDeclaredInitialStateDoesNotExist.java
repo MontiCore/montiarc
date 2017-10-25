@@ -38,7 +38,7 @@ public class AutomatonDeclaredInitialStateDoesNotExist implements MontiArcASTAut
     // can't find one
     for (String initialName : initialNames) {
       if (!stateNames.contains(initialName)) {
-        Log.error("0xAA210 State " + initialName + " is labeled as initial but is not definied as state.", node.get_SourcePositionStart());      
+        Log.error("0xMA025 State " + initialName + " is labeled as initial but is not definied as state.", node.get_SourcePositionStart());
       }
     }
   }

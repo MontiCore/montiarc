@@ -35,7 +35,7 @@ public class ComponentInstanceNamesUniqueTest extends AbstractCoCoTest {
   public void testInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentInstanceNamesAreUnique()),
         getAstNode("contextconditions", "invalid.ComponentInstanceNamesNotUnique"),
-        new ExpectedErrorInfo(2, "xAC010"));
+        new ExpectedErrorInfo(2, "xMA061"));
     
 //    runCheckerWithSymTab("contextconditions", "invalid.ComponentInstanceNamesNotUnique");
 //    assertEquals(

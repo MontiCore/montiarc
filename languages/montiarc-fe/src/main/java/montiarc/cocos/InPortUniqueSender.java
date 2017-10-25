@@ -51,7 +51,7 @@ public class InPortUniqueSender implements MontiArcASTComponentCoCo {
       String targetString = target.toString();
       
       if (connectorTargets.contains(targetString)) {
-        Log.error(String.format("0x2BD7E target port \"%s\" already in use.", target.toString()),
+        Log.error(String.format("0xMA005 target port \"%s\" already in use.", target.toString()),
             target.get_SourcePositionStart());
       }
       else {

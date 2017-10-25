@@ -14,9 +14,9 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
   }
   
   @Test
-  public void testMultipleBehaviorsImplemented() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.MultipleBehaviors");
-    checkInvalid(node, new ExpectedErrorInfo(2, "xAB140"));
+  public void testMutipleBehaviors() {
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.MutipleBehaviors");
+    checkInvalid(node, new ExpectedErrorInfo(3, "xMA050", "xMA049"));
   }
 
   @Test
@@ -26,16 +26,18 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
   }
 
   @Test
+  @Ignore("Already checked by the JavaDSL in MontiCore")
   public void testLowerCaseEnumeration() {
     Log.getFindings().clear();
     Scope symTab = createSymTab(MODEL_PATH);
     symTab.<CDFieldSymbol> resolve("contextconditions.invalid.LowerCaseEnumeration.lowerCaseEnumeration.A", CDFieldSymbol.KIND).orElse(null);
     new ExpectedErrorInfo(1, "xC4A05").checkFindings(Log.getFindings());
+    // Not a MontiArc error, so different error code.
   }
 
   @Test
   public void testImplementationInNonAtomicComponent() {
-    checkInvalid(getAstNode("src/test/resources", "contextconditions.invalid.ImplementationInNonAtomicComponent"), new ExpectedErrorInfo(1, "xAB141"));
+    checkInvalid(getAstNode("src/test/resources", "contextconditions.invalid.ImplementationInNonAtomicComponent"), new ExpectedErrorInfo(1, "xMA051"));
   }
   
   @Test

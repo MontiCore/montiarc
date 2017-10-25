@@ -150,9 +150,10 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
   
   private static GlobalScope initSymTab(String modelPath, String targetPath) {
     ModelingLanguageFamily fam = new MontiArcLanguageFamily();
+    String basedir = getBasedirFromModelAndTargetPath(modelPath, targetPath);
     final ModelPath mp = new ModelPath(Paths.get(modelPath),
-        Paths.get("src/main/resources/defaultTypes"), Paths
-        .get(getBasedirFromModelAndTargetPath(modelPath, targetPath) + "target/librarymodels/"));
+        Paths.get(basedir +"src/main/resources/defaultTypes"), Paths
+        .get(basedir + "target/librarymodels/"));
     GlobalScope scope = new GlobalScope(mp, fam);
     JavaHelper.addJavaPrimitiveTypes(scope);
     return scope;

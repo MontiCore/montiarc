@@ -15,10 +15,10 @@ public class UseOfForbiddenExpression implements JavaDSLASTExpressionCoCo {
   @Override
   public void check(ASTExpression node) {
     // if (node.getCreator().isPresent()) {
-    // Log.error("0xAA10C Expression contains forbidden expression: class instantiation expression", exp.get_SourcePositionStart());
+    // Log.error("0xMA023 Expression contains forbidden expression: class instantiation expression", exp.get_SourcePositionStart());
     // }
     if (node.instanceofTypeIsPresent()) {
-      Log.error("0xAA1B0 Expression contains forbidden expression: instanceOf expression", node.get_SourcePositionStart());
+      Log.error("0xMA023 Expression contains forbidden expression: instanceOf expression", node.get_SourcePositionStart());
     }
   }
 }

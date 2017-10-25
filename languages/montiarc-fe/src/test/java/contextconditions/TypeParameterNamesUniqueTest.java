@@ -32,6 +32,12 @@ public class TypeParameterNamesUniqueTest extends AbstractCoCoTest {
   public void testInvalidModel() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new TypeParameterNamesUnique()),
         getAstNode("contextconditions", "invalid.TypeParameterNamesNotUnique"),
-        new ExpectedErrorInfo(1, "x35F1A"));
+        new ExpectedErrorInfo(1, "xMA006"));
+    
+//    runCheckerWithSymTab("contextconditions", "invalid.TypeParameterNamesNotUnique");
+//    String findings = Log.getFindings().stream().map(f -> f.buildMsg())
+//        .collect(Collectors.joining("\n"));
+//    assertEquals(findings, 1, Log.getFindings().size());
+//    assertTrue(findings.contains("xMA006"));
   }
 }

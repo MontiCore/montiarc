@@ -447,7 +447,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         actualTypeArguments.add(new ActualTypeArgument(typeArgumentSymbolReference));
       }
       else {
-        Log.error("0xU0401 Unknown type argument " + astTypeArgument + " of type "
+        Log.error("xMA073 Unknown type argument " + astTypeArgument + " of type "
             + typeReference);
       }
     }
@@ -578,7 +578,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         addToScopeAndLinkWithNode(field.stream().findFirst().get(), node);
       }
       else {
-        Log.error("0xAA329 Used variable " + name
+        Log.error("0xMA030 Used variable " + name
             + " in ajava definition is not a port, component variable or locally defined variable.",
             node.get_SourcePositionStart());
         

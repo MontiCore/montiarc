@@ -23,19 +23,20 @@ public class AutomatonGuardIsNotBoolean implements MontiArcASTGuardExpressionCoC
 		  doCheck((ASTJavaGuardExpression) node);
 	  }
 	  else {
-		  Log.error("0xAA401 Could not resolve type of guard.", node.get_SourcePositionStart());
+		  Log.error("0xMA037 Could not resolve type of guard.", node.get_SourcePositionStart());
 	  }
   }
-  
+
+
   public void doCheck(ASTJavaGuardExpression node) {
     Optional<? extends JavaTypeSymbolReference> typeRef = TypeCompatibilityChecker.getExpressionType(node.getExpression());
     if (typeRef.isPresent()) {
       if (!typeRef.get().getName().equalsIgnoreCase("boolean")) {
-        Log.error("0xAA400 Guard does not evaluate to a boolean, but instead to " + typeRef.get().getName() + ".", node.get_SourcePositionStart());
+        Log.error("0xMA036 Guard does not evaluate to a boolean, but instead to " + typeRef.get().getName() + ".", node.get_SourcePositionStart());
       }
     }
     else {
-      Log.error("0xAA401 Could not resolve type of guard.", node.get_SourcePositionStart());
+      Log.error("0xMA037 Could not resolve type of guard.", node.get_SourcePositionStart());
     }
   }
   
