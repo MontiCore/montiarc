@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
+import montiarc._symboltable.AutomatonKind;
+import montiarc._symboltable.AutomatonSymbol;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -26,22 +28,21 @@ public class AJavaSymbolTableTest extends AJavaBaseTest {
   }
   
   @Test
-  @Ignore // This test operates a no longer existing symbol
-  public void testAutomatonEmbedding() {
+  public void testAutomatonEmbeddingInSymTab() {
     ASTMontiArcNode node = getAstNode(MODELPATH, "contextconditions.valid.BumpControl");
     assertNotNull(node);
     Scope symtab = createSymTab(MODELPATH);
     Optional<ComponentSymbol> oBControl = symtab
         .<ComponentSymbol> resolve("contextconditions.valid.BumpControl", ComponentSymbol.KIND);
     assertTrue(oBControl.isPresent());
-//    ComponentSymbol bControl = oBControl.get();
-//    Collection<AutomatonSymbol> automatons = ScopeHelper.resolveManyDown(bControl.getSpannedScope(),
-//        AutomatonSymbol.KIND);
-//    assertTrue(automatons.size() == 1);
+    ComponentSymbol bControl = oBControl.get();
+    Optional<AutomatonSymbol>  autSymbol = bControl.getSpannedScope().<AutomatonSymbol>
+            resolve("BumpControl", AutomatonSymbol.KIND);
+    assertTrue(autSymbol.isPresent());
   }
-  
+
   @Test
-  public void testAJavaEmbedding() {
+  public void testAJavaFunctionEmbeddingInSymTab() {
     ASTMontiArcNode node = getAstNode(MODELPATH, "contextconditions.valid.DistanceLogger");
     assertNotNull(node);
     Scope symtab = createSymTab(MODELPATH);

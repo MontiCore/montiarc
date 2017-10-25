@@ -12,6 +12,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.TypeParameterNamesUnique;
 
+
 /**
  * @author (last commit) Crispin Kirchner
  */
@@ -23,17 +24,12 @@ public class TypeParameterNamesUniqueTest extends AbstractCoCoTest {
   }
   
   @Test
-  public void testValid() {
+  public void testValidModel() {
     checkValid("contextconditions", "valid.TypeParameterNamesUnique");
-    
-    // runCheckerWithSymTab("contextconditions", "valid.TypeParameterNamesUnique");
-    // assertEquals(
-    // Log.getFindings().stream().map(f -> f.buildMsg()).collect(Collectors.joining("\n")),
-    // 0, Log.getFindings().size());
   }
   
   @Test
-  public void testInvalid() {
+  public void testInvalidModel() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new TypeParameterNamesUnique()),
         getAstNode("contextconditions", "invalid.TypeParameterNamesNotUnique"),
         new ExpectedErrorInfo(1, "xMA006"));
