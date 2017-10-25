@@ -1,7 +1,8 @@
 package valid;
 
 component ReferencedSubComponentExists {
-  port out String sout1,
+  port in String s1,
+  	   out String sout1,
        out String sout2;
 
   component CorrectCompInValid;

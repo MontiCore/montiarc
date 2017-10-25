@@ -5,6 +5,7 @@
  */
 package contextconditions;
 
+import montiarc._ast.ASTMontiArcNode;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -59,5 +60,18 @@ public class ConnectorEndPointCorrectlyQualifiedTest extends AbstractCoCoTest {
             .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified()),
         getAstNode("contextconditions", "invalid.ConnectorPiercingInwardsThroughInterface"),
         new ExpectedErrorInfo(1, "xMA070"));
+  }
+
+  /*
+    Checks multiple instances of wrong connectors with connectors piercing through interfaces and
+     qualified simple connector sources.
+   */
+  @Test
+  public void testMultipleWrongConnectors(){
+    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.WrongConnector");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+            .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
+            .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "x44B7E","xDB61C"));
   }
 }

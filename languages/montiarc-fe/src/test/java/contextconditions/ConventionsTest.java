@@ -6,9 +6,14 @@ package contextconditions;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTMACompilationUnit;
+import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc._parser.MontiArcParser;
+import montiarc.cocos.*;
 import org.antlr.v4.runtime.RecognitionException;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -29,64 +34,48 @@ public class ConventionsTest extends AbstractCoCoTest {
     Log.enableFailQuick(false);
   }
 
-  @Ignore("implement coco")
   @Test
-  public void testComponentConventions()
-      throws RecognitionException, IOException {
-    // runChecker("arc/coco/conventions/conv/violatesComponentNaming.arc");
-    assertEquals(1, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
-        .count());
-    // runChecker("arc/coco/conventions/conv/InnerViolatesComponentNaming.arc");
-    assertEquals(2, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
-        .count());
-  }
-
-  @Ignore("implement coco")
-  @Test
-  public void testReferenceConventions() {
-    runCheckerWithSymTab("arc/coco/conventions", "conv.ReferencesViolateNamingConventions");
-    assertEquals(2, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
-        .count());
-  }
-
-  @Ignore("implement coco")
-  @Test
+  /*
+   * Checks whether all port names in the port definition start with a lower case letter
+   */
   public void testPortConvention() {
-    // runChecker("arc/coco/conventions/conv/PortViolatesNamingConventions.arc");
-    assertEquals(1, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
-        .count());
+    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.PortViolatesNamingConventions");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortNameIsLowerCase());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xC0003"));
   }
 
-  @Ignore("implement coco")
+
   @Test
+  /*
+   * Checks whether there is a redundant import statements.
+   * For example
+   *  import a.*;
+   *  import a.*;
+   */
   public void testImportConvention() {
-    // runChecker("arc/coco/conventions/conv/UnuniqueImports.arc");
-    assertEquals(2, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
-        .count());
+    ASTComponent node = (ASTComponent) getAstNode("arc/coco/conventions", "conv.UnuniqueImports");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC0004"));
   }
 
-  @Ignore("implement coco")
   @Test
-  public void testWrongConnector() {
-    // runChecker("arc/coco/conventions/conv/WrongConnector.arc");
-    assertEquals(4, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
-        .count());
-  }
-
-  @Ignore("implement coco")
-  @Test
+  /*
+    Checks whether there are connectors in a component that wrongly connect ports of the same component
+   */
   public void testConnectorSourceAndTargetDifferentComponent() {
-    // runChecker("arc/coco/conventions/conv/ConnectorSourceAndTargetSameComponent.arc");
-    assertEquals(2, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
-        .count());
+    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.ConnectorSourceAndTargetSameComponent");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetComponentDiffer());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC0005"));
   }
 
-  @Ignore("implement coco")
   @Test
+  /*
+    Checks whether the source and target of a connect statement exist.
+   */
   public void testMissingSourceAndTargetDefinition() {
-    runCheckerWithSymTab("arc/coco/conventions", "conv.MissingSourceTargetDefinition");
-    assertEquals(4, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
-        .count());
+    ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.MissingSourceTargetDefinitionInSubcomponent");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExist());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xC0001", "xC0002"));
   }
 
   @Test
@@ -101,14 +90,5 @@ public class ConventionsTest extends AbstractCoCoTest {
         .filter(s -> s.contains("xMA059") || s.contains("xMA060"))
         .collect(Collectors.toList());
     assertEquals(findings.stream().collect(Collectors.joining("\n")), 3, findings.size());
-  }
-
-  @Ignore("implement coco")
-  @Test
-  public void testOuterComponentWithInstanceName() {
-    // runChecker("arc/coco/conventions/conv/OuterComponentWithInstanceName.arc");
-    assertEquals(1, Log.getFindings().stream().filter(f -> f.buildMsg().contains("xTODO"))
-        .count());
-  }
 
 }

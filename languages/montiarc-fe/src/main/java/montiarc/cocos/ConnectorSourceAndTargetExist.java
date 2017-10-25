@@ -44,12 +44,10 @@ public class ConnectorSourceAndTargetExist implements MontiArcASTComponentCoCo {
     for (ConnectorSymbol cs : connectors) {
       String connectorSource = cs.getSource();
       String connectorTarget = cs.getTarget();
-      
-      Optional<PortSymbol> source = componentSymbol.getSpannedScope()
-          .<PortSymbol> resolve(connectorSource, PortSymbol.KIND);
-      Optional<PortSymbol> target = componentSymbol.getSpannedScope()
-          .<PortSymbol> resolve(connectorTarget, PortSymbol.KIND);
-      
+
+      Optional<PortSymbol> source = cs.getSourcePort();
+      Optional<PortSymbol> target = cs.getTargetPort();
+
       if(!source.isPresent()) {
         Log.error(String.format("0xMA066 source port "+connectorSource+" of connector "+cs.getName()+" does not exist.",
             cs.getFullName()), cs.getSourcePosition());

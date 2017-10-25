@@ -1,6 +1,6 @@
 package conv;
 
-component OuterComponentWithInstanceName notAllowed {
+component OuterComponentWithInstanceName notAllowed { // Outer component can not have a instance name
 
     autoconnect port;
     
