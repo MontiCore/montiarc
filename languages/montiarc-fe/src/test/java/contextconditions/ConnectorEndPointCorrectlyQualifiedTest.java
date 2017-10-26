@@ -67,13 +67,12 @@ public class ConnectorEndPointCorrectlyQualifiedTest extends AbstractCoCoTest {
     Checks multiple instances of wrong connectors with connectors piercing through interfaces and
      qualified simple connector sources.
    */
-  @Ignore
   @Test
   public void testMultipleWrongConnectors(){
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.WrongConnector");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
             .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
             .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "x44B7E","xDB61C"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA008","xMA070"));
   }
 }
