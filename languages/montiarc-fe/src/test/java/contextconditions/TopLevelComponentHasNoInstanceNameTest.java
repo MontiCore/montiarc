@@ -34,12 +34,11 @@ public class TopLevelComponentHasNoInstanceNameTest extends AbstractCoCoTest {
    * Checks that the outer component definition has no instance name.
    */
   @Test
-  @Ignore
   public void testInvalid() {
 
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.OuterComponentWithInstanceName");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new TopLevelComponentHasNoInstanceName());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "x3F207"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA007"));
 
     checkInvalid(cocos,
         getAstNode("contextconditions", "invalid.TopLevelComponentHasInstanceName"),

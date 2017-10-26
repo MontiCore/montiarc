@@ -34,7 +34,6 @@ public class AutoConnectionTest extends AbstractCoCoTest {
   /*
     This test tests whether the "autoconnect port" statement is working as intended.
    */
-  @Ignore
   @Test
   public void testAutoconnectPort() {
     Scope symTab = createSymTab("src/test/resources/arc/transformations");
@@ -49,9 +48,9 @@ public class AutoConnectionTest extends AbstractCoCoTest {
     MontiArcCoCoChecker coCoChecker = new MontiArcCoCoChecker().addCoCo(new PortUsage());
     ASTMontiArcNode node = (ASTMontiArcNode) comp.getAstNode().get();
 
-    checkInvalid(coCoChecker, node, new ExpectedErrorInfo(1, "xAC007"));
+    checkInvalid(coCoChecker, node, new ExpectedErrorInfo(1, "xMA058"));
     coCoChecker = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
-    checkInvalid(coCoChecker, node, new ExpectedErrorInfo(4, "xAC008", "xAC009"));
+    checkInvalid(coCoChecker, node, new ExpectedErrorInfo(4, "xMA059", "xMA060"));
 
     Collection<ConnectorSymbol> connectors = comp.getConnectors();
     List<String> connectorNames = new ArrayList<String>();
@@ -94,7 +93,6 @@ public class AutoConnectionTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore
   public void testAutoconnectType1() {
     Scope symTab = createSymTab("src/test/resources/arc/transformations");
     Log.getFindings().clear();
@@ -108,9 +106,9 @@ public class AutoConnectionTest extends AbstractCoCoTest {
     // 8 still unused ports
     ASTMontiArcNode node = (ASTMontiArcNode) comp.getAstNode().get();
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xAC007"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA058"));
     cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(6, "xAC008", "xAC009"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(6, "xMA059", "xMA060"));
 
     Collection<ConnectorSymbol> connectors = comp.getConnectors();
     List<String> connectorNames = new ArrayList<String>();
@@ -127,7 +125,6 @@ public class AutoConnectionTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore
   public void testAutoconnectType2() {
     Scope symTab = createSymTab("src/test/resources/arc/transformations");
     Log.getFindings().clear();
@@ -141,9 +138,9 @@ public class AutoConnectionTest extends AbstractCoCoTest {
     // 3 unused ports due to failed autoconnection
     ASTMontiArcNode node = (ASTComponent) comp.getAstNode().get();
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xAC006"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA057"));
     cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xAC008"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA059"));
 
     Collection<ConnectorSymbol> connectors = comp.getConnectors();
     List<String> connectorNames = new ArrayList<String>();
@@ -218,7 +215,6 @@ public class AutoConnectionTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore
   public void testAutoconnectGenericPorts() {
     Scope symTab = createSymTab("src/test/resources/arc/transformations");
     Log.getFindings().clear();
@@ -237,7 +233,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
 
     ASTMontiArcNode node = (ASTComponent) comp.getAstNode().get();
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xAC008", "xAC009"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA059", "xMA060"));
 
     assertEquals(2, connectors.size());
     assertTrue(connectorNames.contains("strIn -> myGenericStr.myStrIn"));
@@ -247,7 +243,6 @@ public class AutoConnectionTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore
   public void testAutoconnectArrayTypes() {
     Scope symTab = createSymTab("src/test/resources/arc/transformations");
     Log.getFindings().clear();
@@ -266,7 +261,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
 
     ASTMontiArcNode node = (ASTComponent) comp.getAstNode().get();
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xAC008", "xAC009"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA059", "xMA060"));
 
     assertEquals(2, connectors.size());
     assertTrue(connectorNames.contains("strIn -> ref.strIn1"));

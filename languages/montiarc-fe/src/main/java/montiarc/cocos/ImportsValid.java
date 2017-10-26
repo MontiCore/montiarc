@@ -35,7 +35,7 @@ public class ImportsValid implements MontiArcASTComponentCoCo {
 
 
         if (!cdsym.isPresent() && !compsym.isPresent() && typesym.isEmpty()){
-          Log.error("0xAF099 Import " + i.getStatement()+ " does not exist.");
+          Log.error("0xMA076 Import " + i.getStatement()+ " does not exist.");
         }
       }
     }
