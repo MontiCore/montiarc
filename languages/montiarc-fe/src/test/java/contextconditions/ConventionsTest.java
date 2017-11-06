@@ -17,10 +17,8 @@ import montiarc.cocos.PortNameIsLowerCase;
 import montiarc.cocos.PortUsage;
 import montiarc.cocos.SubComponentsConnected;
 
-//XXX: https://git.rwth-aachen.de/montiarc/core/issues/53
-
 /**
- * @author Arne Haber
+ * @author Arne Haber, Michael Mutert
  * @date 08.02.2010
  */
 public class ConventionsTest extends AbstractCoCoTest {
@@ -36,7 +34,7 @@ public class ConventionsTest extends AbstractCoCoTest {
   public void testPortConvention() {
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.PortViolatesNamingConventions");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortNameIsLowerCase());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA073"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA077"));
   }
 
   @Test
