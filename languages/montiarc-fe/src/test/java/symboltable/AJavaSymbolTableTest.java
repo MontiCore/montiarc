@@ -5,16 +5,14 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
-import montiarc._symboltable.AutomatonKind;
-import montiarc._symboltable.AutomatonSymbol;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AJavaBaseTest;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc._symboltable.AutomatonSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.JavaBehaviorSymbol;
 

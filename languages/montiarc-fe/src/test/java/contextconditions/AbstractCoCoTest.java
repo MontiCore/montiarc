@@ -89,13 +89,26 @@ public class AbstractCoCoTest extends AbstractSymboltableTest {
   }
   
   protected static class ExpectedErrorInfo {
-    private static final Pattern ERROR_CODE_PATTERN = Pattern.compile("xMA[0-9]{3}");
+    private static Pattern ERROR_CODE_PATTERN = Pattern.compile("xMA[0-9]{3}");
     
     private int numExpectedFindings = 0;
     
     private HashSet<String> expectedErrorCodes = new HashSet<>();
     
     private Predicate<String> containsExpectedErrorCode;
+    
+    /**
+     * Only use for checking of non MontiArc Errors! 
+     * 
+     * @param eRROR_CODE_PATTERN the eRROR_CODE_PATTERN to set
+     */
+    protected static void setERROR_CODE_PATTERN(Pattern eRROR_CODE_PATTERN) {
+      ERROR_CODE_PATTERN = eRROR_CODE_PATTERN;
+    }
+    
+    protected static void reset() {
+      ERROR_CODE_PATTERN = Pattern.compile("xMA[0-9]{3}");
+    }
     
     /**
      * Raises an error if the given error codes don't match the convention for error codes in test

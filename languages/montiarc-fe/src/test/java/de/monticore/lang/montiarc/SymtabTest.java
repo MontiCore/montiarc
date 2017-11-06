@@ -196,6 +196,9 @@ public class SymtabTest extends AbstractSymboltableTest {
         delay.getConfigArguments().get(0).getKind());
   }
   
+  /**
+   * TODO: ValueSymbol?!
+   */
   @Test
   public void testComplexParametersSymtab() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
@@ -235,6 +238,9 @@ public class SymtabTest extends AbstractSymboltableTest {
     // typeRef.getTypeParameters().get(1).getTypeParameters().get(0).getType().getName());
   }
   
+  /**
+   * TODO: ValueSymbol!?
+   */
   @Test
   public void testGenericParametersSymtab3() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");

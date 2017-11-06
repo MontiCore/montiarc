@@ -12,7 +12,6 @@ import montiarc.helper.JavaHelper;
 public abstract class AbstractSymboltableTest {
   protected static Scope createSymTab(String modelPath) {
     ModelingLanguageFamily fam = new MontiArcLanguageFamily();
-    // TODO how to add java default types?
     final ModelPath mp = new ModelPath(Paths.get(modelPath),
         Paths.get("src/main/resources/defaultTypes"));
     GlobalScope scope = new GlobalScope(mp, fam);

@@ -375,57 +375,5 @@ public class SymtabArcdTest extends AbstractSymboltableTest {
     assertEquals("b.SimpleComponentWithAutomaton", refType.getFullName());
 
   }
-  //
-  // @Test
-  // public void testNamedInnerComponent() {
-  // ArcdTestTool tool = createTestToolWithoutJava(new String[] {
-  // INPUT_TEST_FOLDER + "/arcd/symtab/innerComps/a/ComponentWithNamedInnerComponent.arcd" },
-  // INPUT_TEST_FOLDER + "/arcd/symtab/innerComps");
-  // assertTrue(tool.run());
-  // assertEquals(0, handler.getErrors().size());
-  // assertEquals(0, handler.getWarnings().size());
-  //
-  // ArchitectureDiagramRoot root = (ArchitectureDiagramRoot) initSymtabForRoot(tool,
-  // "a.ComponentWithNamedInnerComponent");
-  // try {
-  // NameSpace ns = getNameSpaceFor(root.getAst().getType());
-  // ComponentReferenceEntry ref = (ComponentReferenceEntry) resolver.resolve("instance",
-  // ComponentReferenceEntry.KIND, ns);
-  // assertTrue(ref != null);
-  // assertEquals("instance", ref.getName());
-  // assertEquals("a.ComponentWithNamedInnerComponent.NamedInnerComponent",
-  // ref.getComponentType().getName());
-  // }
-  // catch (AmbigousException e) {
-  // fail(e.getMessage());
-  // }
-  //
-  //
-  // }
-  //
-  // @Test
-  // public void testLoadManually() {
-  // ArcdTestTool tool = createTestToolWithoutJava(new String[] {INPUT_TEST_FOLDER +
-  // "/arcd/symtab/innerComps/a/ComponentWithInnerComponent.arcd" },
-  // INPUT_TEST_FOLDER + "/arcd/symtab/innerComps");
-  // assertTrue(tool.run());
-  // assertEquals(0, handler.getErrors().size());
-  // assertEquals(0, handler.getWarnings().size());
-  //
-  // initSymtabForRoot(tool, "a.ComponentWithInnerComponent");
-  //
-//   Set<ISTEntry> manuallyLoaded = InterfaceLoader.loadExported(modelLoader,
-  // "a.ComponentWithInnerComponent",
-  // ArcdConstants.ST_KIND_PROTECTED, deserializers, ComponentEntry.KIND);
-  // assertEquals(1, manuallyLoaded.size());
-  // ComponentEntry protectedEntry = (ComponentEntry) manuallyLoaded.iterator().next();
-  //
-  // // check, if protected information is available
-  // assertEquals(2, protectedEntry.getSubComponents().size());
-  // assertEquals(1, protectedEntry.getInnerComponents().size());
-  // assertEquals("a.ComponentWithInnerComponent.InnerComponent",
-  // protectedEntry.getInnerComponents().get(0).getName());
-  // assertEquals(2, protectedEntry.getConnectors().size());
-  //
-  // }
+
 }

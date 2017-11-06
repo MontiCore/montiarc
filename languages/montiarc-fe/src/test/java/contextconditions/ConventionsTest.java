@@ -3,20 +3,19 @@
  */
 package contextconditions;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Collection;
-import java.util.stream.Collectors;
-
-import montiarc.cocos.*;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.ConnectorSourceAndTargetComponentDiffer;
+import montiarc.cocos.ConnectorSourceAndTargetExist;
+import montiarc.cocos.ImportsAreUnique;
+import montiarc.cocos.PortNameIsLowerCase;
+import montiarc.cocos.PortUsage;
+import montiarc.cocos.SubComponentsConnected;
 
 //XXX: https://git.rwth-aachen.de/montiarc/core/issues/53
 
