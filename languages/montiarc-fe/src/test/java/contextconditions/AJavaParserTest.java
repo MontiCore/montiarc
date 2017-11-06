@@ -41,7 +41,7 @@ public class AJavaParserTest {
   
   @Test
   public void testAutomaton() {
-    test("contextconditions/valid/Bumpcontrol.maa", true);
+    test("contextconditions/valid/BumpControl.arc", true);
   }
   
   private void test(String modelName, boolean containsAJava){
