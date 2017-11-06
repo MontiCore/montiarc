@@ -1,12 +1,10 @@
 package contextconditions;
 
-import de.monticore.symboltable.Scope;
-import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMontiArcNode;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
 
 public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
   @BeforeClass
@@ -25,17 +23,6 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
     ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.LowerCaseAutomaton");
     checkInvalid(node, new ExpectedErrorInfo(1, "xMA049"));
   }
-
-  @Test
-  @Ignore("MontiCore error code that is not compatible with the new MontiArc error code pattern " +
-      "MAXXX")
-  public void testLowerCaseEnumeration() {
-    Log.getFindings().clear();
-    Scope symTab = createSymTab(MODEL_PATH);
-    symTab.<CDFieldSymbol> resolve("contextconditions.invalid.LowerCaseEnumeration.lowerCaseEnumeration.A", CDFieldSymbol.KIND).orElse(null);
-    new ExpectedErrorInfo(1, "xC4A05").checkFindings(Log.getFindings());
-  }
-
 
   @Test
   public void testImplementationInNonAtomicComponent() {
