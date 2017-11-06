@@ -35,7 +35,6 @@ public class AJavaCorrectnessTest extends AJavaCocoTest {
     checkInvalid(node, new ExpectedErrorInfo(2, "xMA030"));
   }
   
-  @Ignore
   @Test
   public void testComponentWithAJavaAndAutomaton() {
     ASTMontiArcNode node = getAstNode("src/test/resources/","contextconditions.invalid.ComponentWithAJavaAndAutomaton");

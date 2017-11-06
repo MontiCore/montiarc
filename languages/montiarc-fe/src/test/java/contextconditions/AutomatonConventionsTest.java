@@ -31,7 +31,7 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
   
   @Test
   public void testInvalidImports() {
-    //Todo: Star imports?
+    //TODO: Star imports?
     ASTMontiArcNode node = getAstNode(MODEL_PATH,"contextconditions.invalid.InvalidCD");
     checkInvalid(node, new ExpectedErrorInfo(1,"xMA076"));
 

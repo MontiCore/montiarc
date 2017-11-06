@@ -529,11 +529,13 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   public void visit(ASTJavaPBehavior node) {
     String name = node.getName().orElse("JavaP");
     JavaBehaviorSymbol ajavaDef = new JavaBehaviorSymbol(name);
+    node.setEnclosingScope(currentScope().get());
     addToScopeAndLinkWithNode(ajavaDef, node);
   }
   
   @Override
   public void endVisit(ASTJavaPBehavior node) {
+    setEnclosingScopeOfNodes(node);
     removeCurrentScope();
   }
   
@@ -561,6 +563,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       String name = node.getName().get();
       Scope enclosingScope = currentScope().get().getEnclosingScope().get();
       Optional<PortSymbol> port = enclosingScope.resolve(name, PortSymbol.KIND);
+      Optional<PortSymbol> port1 = enclosingScope.resolveDown(name, PortSymbol.KIND);
+      Optional<PortSymbol> port2 = enclosingScope.resolveLocally(name, PortSymbol.KIND);
       Optional<VariableSymbol> var = enclosingScope.resolve(name, VariableSymbol.KIND);
       Collection<JFieldSymbol> field = enclosingScope.resolveMany(name, JFieldSymbol.KIND);
       
@@ -595,10 +599,9 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
    */
   @Override
   public void visit(ASTAutomatonBehavior node) {
-    if (node.getName().isPresent()) {
-      AutomatonSymbol aut = new AutomatonSymbol(node.getName().get());
-      addToScopeAndLinkWithNode(aut, node);
-    }
+    String name = node.getName().orElse("Automaton");
+    AutomatonSymbol aut = new AutomatonSymbol(name);
+    addToScopeAndLinkWithNode(aut, node);
     
   }
   
@@ -647,7 +650,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   public void endVisit(ASTState node) {
     super.endVisit(node);
   }
-  
   
   /**
    * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#visit(de.monticore.lang.montiarc.montiarc._ast.ASTInitialStateDeclaration)
