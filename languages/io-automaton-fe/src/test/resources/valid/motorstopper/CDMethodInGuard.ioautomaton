@@ -1,0 +1,29 @@
+package valid.motorstopper;
+
+import valid.motorstopper.Types.*;
+
+automaton CDMethodInGuard {
+
+  input Data data;
+  output boolean isSafe;
+  
+  state A,B,C;    
+  initial A;
+  
+  // vv Error: void method does not evaluate to boolean vv
+  A [ data.getValue()*2 ];
+  
+  // vv Error: void method does not evaluate to boolean vv
+  A -> B [ data.noOp() ];
+  
+  // vv Error: method foo() does not exist vv 
+  A -> C[ data.foo() ];   
+  
+  // vv Error: method foo() and bar() do not exist vv
+  A [ data.foo(data.bar()) ];    
+  
+  // vv Both should yield errors as foo() & bar() do not exist vv
+  A [ data.getValue() > 0 && data.foo() < 100] / {true};
+  A [ data.foo() && data.bar() ];
+  
+}

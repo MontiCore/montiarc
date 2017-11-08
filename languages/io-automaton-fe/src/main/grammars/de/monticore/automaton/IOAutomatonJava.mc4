@@ -1,0 +1,20 @@
+package de.monticore.automaton;
+
+grammar IOAutomatonJava extends de.monticore.java.JavaDSL, de.monticore.automaton.IOAutomaton {
+	
+  /** CompilationUnit represents the complete component
+   * @attribute package          The package declaration of this component
+   * @attribute importStatements List of imported elements
+   * @attribute Component the root component of the component
+   */
+  IOACompilationUnit =
+    ("package" package:(Name& || ".")+ ";")? 
+    (ImportStatement)*
+    Automaton;
+  
+  // use Java expressions for guards
+  GuardExpression = Expression;
+  
+  // use Java expressions for valuations
+  Valuation = Expression;
+}

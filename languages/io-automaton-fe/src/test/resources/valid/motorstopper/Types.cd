@@ -1,0 +1,27 @@
+package valid.motorstopper;
+
+import java.lang.Boolean;
+
+classdiagram Types {
+
+public class Data {
+
+    public static Data getZero() {
+        return new Data(0);
+    }
+    
+    public Data(int value) {
+        this.value = value;
+    }
+    
+    private int value;
+    
+    public int getValue() { 
+        return this.value; 
+    }
+    
+    public void noOp() {
+    }
+}
+
+}

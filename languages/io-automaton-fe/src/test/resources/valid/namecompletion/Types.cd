@@ -1,0 +1,23 @@
+package valid.namecompletion;
+
+classdiagram Types {
+
+public enum Distance {
+  CLOSE,
+  DISTANT;
+}
+
+public class Command {
+  
+  private String value;
+  
+  public Command(String value) {
+    this.value = value;
+  }
+  
+  public static Command STOP() {
+    return new Command("STOP");
+  }
+}
+
+}

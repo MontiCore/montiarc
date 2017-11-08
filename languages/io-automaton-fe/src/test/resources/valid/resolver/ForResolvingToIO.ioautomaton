@@ -1,0 +1,18 @@
+package valid.resolver;
+
+import valid.resolver.Test;
+import java.util.List;
+
+automaton ForResolvingToIO{
+    
+    //Java basic type
+    input int basic;    
+    
+    //output
+    output int useless;
+    
+    //states
+    state Who_Cares;
+    initial Who_Cares;
+    
+}

@@ -1,0 +1,28 @@
+package valid.qualification;
+
+import java.util.List;
+import valid.ForQualificationTest.Test;
+
+automaton ForComplexQualificationTest{
+
+    //Imported Java-owned types
+    input List<String> a;
+    
+    //Implicit java-owned types
+    input Integer i;    
+    output int b;
+    
+    //Self written types
+    variable Test t;
+    
+    //Arrays
+    variable Double[][] d;
+    
+    //States to avoid coco error
+    state A, B;    
+    initial A;
+    
+    A;
+    A->B;
+    B->A;
+}

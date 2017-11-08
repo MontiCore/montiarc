@@ -1,0 +1,16 @@
+package valid.symtab;
+
+automaton ForStateCreationTest{
+    
+	//in, var and out dont matter
+    input int a;
+    output int b;
+    
+    
+    //states
+    state A, B, C;
+    initial B;
+    initial C / {b=0};
+    
+    
+}

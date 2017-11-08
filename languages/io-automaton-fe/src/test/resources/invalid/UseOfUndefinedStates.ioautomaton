@@ -1,0 +1,18 @@
+package invalid;
+
+automaton UseOfUndefinedStates{
+
+    input int a;
+    output int b;
+    
+    state A,B;
+    
+    initial A;
+    
+    A->B;
+    A->C;
+    D->B;
+    C->D;
+    D;
+
+}

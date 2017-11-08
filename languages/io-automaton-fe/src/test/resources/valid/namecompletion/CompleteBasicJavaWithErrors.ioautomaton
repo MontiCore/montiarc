@@ -1,0 +1,26 @@
+package valid.namecompletion;
+
+
+automaton CompleteBasicJavaWithErrors {
+  input int distance;
+  output boolean command;
+  output char flag;
+  variable char temp;
+  
+  state Okay, Stopped;
+  initial Okay / {'f', 3};
+  // ambiguous assignment for char 'f'
+  // can not assign int 3 to any output or variable
+  
+  Okay -> Okay {'g'};
+  // there is no source to read char 'g' from
+  
+  Okay -> Stopped {true} / {17+4, 'f'};
+  // you can not read boolean true from any of the sources
+  // you can not assign int 17+4 to any of the sinks 
+  // ambiguous assignment for char 'f'
+  
+  Okay -> Stopped / {'f', 'g'};
+  // ambiguous assignment for char 'f'
+  // ambiguous assignment for char 'g'
+}

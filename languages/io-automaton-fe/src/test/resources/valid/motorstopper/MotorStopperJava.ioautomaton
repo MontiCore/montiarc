@@ -1,0 +1,15 @@
+package valid.motorstopper;
+
+import valid.motorstopper.JavaCmd;
+
+automaton MotorStopperJava {
+
+  output JavaCmd cmd;
+
+  state Stopping;
+    
+  initial Stopping / {JavaCmd.STOP};
+      
+  Stopping -> Stopping / {JavaCmd.STOP};
+    
+}
