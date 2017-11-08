@@ -447,7 +447,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         actualTypeArguments.add(new ActualTypeArgument(typeArgumentSymbolReference));
       }
       else {
-        Log.error("xMA073 Unknown type argument " + astTypeArgument + " of type "
+        Log.error("0xMA073 Unknown type argument " + astTypeArgument + " of type "
             + typeReference);
       }
     }
