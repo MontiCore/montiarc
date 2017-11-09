@@ -15,7 +15,7 @@ import montiarc._cocos.MontiArcASTComponentCoCo;
  * 
  * @author Gerrit Leonhardt, Andreas Wortmann
  */
-public class VariableDefinedMultipleTimes implements MontiArcASTComponentCoCo {
+public class AutomatonVariableDefinedMultipleTimes implements MontiArcASTComponentCoCo {
 
 	@Override
 	public void check(ASTComponent node) {
