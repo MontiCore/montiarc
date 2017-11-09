@@ -78,7 +78,6 @@ public class MontiArcCoCos {
         .addCoCo(new VariableDefinedMultipleTimes())
         .addCoCo(new AutomatonInitialDeclaredMultipleTimes())
         .addCoCo(new AutomatonStateDefinedMultipleTimes())
-        .addCoCo(new AutomatonMultipleInitialStates())
         .addCoCo(new UseOfAlternatives())
         .addCoCo(new UseOfValueLists());
   }
