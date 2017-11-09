@@ -14,7 +14,7 @@ import javax.jws.WebParam;
 
 public class AutomatonUniquenessOfNamesTest extends AutomatonAbstractCocoTest {
 
-  private final String MODEL_PATH = "src/test/resources/contextconditions/";
+  private final String MODEL_PATH = super.MODEL_PATH + "contextconditions/";
 
   @BeforeClass
   public static void setUp() {
@@ -40,12 +40,10 @@ public class AutomatonUniquenessOfNamesTest extends AutomatonAbstractCocoTest {
     checkInvalid(node, new ExpectedErrorInfo(4, "xMA031", "xMA034"));
   }
 
-  //TODO: Was mit input/output machen? Wenn als Port abgebildet in MAA, dann sollte das durch andere CoCos, die sich um Ports kümmern, abgedeckt sein.
-  @Ignore
   @Test
   public void testVariableConflictIO() {
     ASTMontiArcNode node = getAstNode(MODEL_PATH, "invalid.NameConflictVariableAndIO");
-    checkInvalid(node, new ExpectedErrorInfo(5, "xAA310", "xAA320", "xAA350", "xAA351", "xMA035"));
+    checkInvalid(node, new ExpectedErrorInfo(6, "xMA035", "xMA053", "xMA063", "xMA065"));
   }
   
   @Test

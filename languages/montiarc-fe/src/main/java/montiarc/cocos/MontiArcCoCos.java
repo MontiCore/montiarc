@@ -20,7 +20,6 @@ public class MontiArcCoCos {
 	public static MontiArcCoCoChecker createChecker() {
     return new MontiArcCoCoChecker()
         .addCoCo(new UniqueConstraint())
-        .addCoCo(new PortNamesAreUnique())
         .addCoCo(new ComponentInstanceNamesAreUnique())
         .addCoCo(new PortUsage())
         .addCoCo(new SubComponentsConnected())
@@ -75,10 +74,10 @@ public class MontiArcCoCos {
         
         // UNIQUENESS OF NAMES
         .addCoCo(new AutomatonStateDefinedMultipleTimesStereotypesDontMatch())
-        .addCoCo(new AutomatonVariableDefinedMultipleTimes())
         .addCoCo(new AutomatonInitialDeclaredMultipleTimes())
         .addCoCo(new AutomatonStateDefinedMultipleTimes())
         .addCoCo(new UseOfAlternatives())
-        .addCoCo(new UseOfValueLists());
+        .addCoCo(new UseOfValueLists())
+        .addCoCo(new IdentifiersAreUnique());
   }
 }

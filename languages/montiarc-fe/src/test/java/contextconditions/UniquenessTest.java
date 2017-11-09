@@ -7,13 +7,13 @@ package contextconditions;
 
 import java.io.IOException;
 
+import montiarc.cocos.IdentifiersAreUnique;
 import org.antlr.v4.runtime.RecognitionException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc.cocos.PortNamesAreUnique;
 import montiarc.cocos.UniqueConstraint;
 
 /**
@@ -31,14 +31,14 @@ public class UniquenessTest extends AbstractCoCoTest {
   
   @Test
   public void testPortNamingUnique() throws RecognitionException, IOException {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new PortNamesAreUnique()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         getAstNode("arc/coco/uniqueness", "a.E1"), new ExpectedErrorInfo(2, "xMA053"));
   }
   
   @Test
   public void testPortImplicitNamingOneExplicitNamed()
       throws RecognitionException, IOException {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new PortNamesAreUnique()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         getAstNode("arc/coco/uniqueness", "a.E1_2"), new ExpectedErrorInfo(1, "xMA053"));
   }
   
