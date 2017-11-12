@@ -1,6 +1,7 @@
 package contextconditions;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
@@ -37,4 +38,27 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
 
     checkValid(MODEL_PATH,"contextconditions.valid.BumpControl");
   }
+
+  @Test
+  public void testAutomatonHasStates() {
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.AutomatonWithoutState");
+    checkInvalid(node, new ExpectedErrorInfo(1, "xMA014"));
+  }
+
+  @Ignore
+  @Test
+  //Todo: CoCo is not working. Needs to check if output ports are only used as the left side of an assignment.
+  public void testOutputInExpression() {
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.AutomatonOutputInExpression");
+    checkInvalid(node, new ExpectedErrorInfo(4, "xMA022"));
+  }
+
+  @Test
+  public void testReactionsWithAlternatives() {
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.AutomatonReactionWithAlternatives");
+    //Both errors have the same meaning?
+    checkInvalid(node, new ExpectedErrorInfo(2, "xMA020", "xMA062"));
+  }
+
+
 }

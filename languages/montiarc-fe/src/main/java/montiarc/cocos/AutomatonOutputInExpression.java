@@ -11,10 +11,11 @@ import montiarc._cocos.MontiArcASTValueListCoCo;
 import montiarc._symboltable.PortSymbol;
 
 public class AutomatonOutputInExpression implements MontiArcASTValueListCoCo {
-  
+
   @Override
   public void check(ASTValueList node) {
     for (ASTValuation val : node.getAllValuations()) {
+      System.out.println(val.getExpression().comparisonIsPresent());
       Optional<ASTPrimaryExpression> expr = val.getExpression().getPrimaryExpression();
       if (expr.isPresent()) {
         if (expr.get().nameIsPresent() && expr.get().getEnclosingScope().isPresent()) {
@@ -28,5 +29,5 @@ public class AutomatonOutputInExpression implements MontiArcASTValueListCoCo {
       }
     }
   }
-  
+
 }
