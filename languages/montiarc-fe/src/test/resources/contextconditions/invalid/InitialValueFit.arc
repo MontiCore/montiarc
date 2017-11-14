@@ -2,18 +2,19 @@ package invalid;
 
 component InitialValueFit {
 
-//	port
-//		in Integer a=5,
-//		in Integer b="Wrong",
-//		out Integer d="Wrong",
-//		out Integer e=5;
+	port
+		in Integer a,
+		in Integer b,
+		out Integer d,
+		out Integer e;
 
-	var Integer c="Wrong";
-	var Integer f=2;
+	var Integer c;
+	var Integer f;
 
 	automaton InitialValueFitAutomaton {
 
 		state Idle;
-		initial Idle;
+		initial Idle / {c="Wrong",f=2,d="Wrong",e=5,g="Not declared"};
 	}
+
 }

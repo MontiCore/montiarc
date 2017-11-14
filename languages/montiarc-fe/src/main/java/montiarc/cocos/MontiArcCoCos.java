@@ -62,7 +62,6 @@ public class MontiArcCoCos {
         
         // REFERENTIAL INTEGRITY
         .addCoCo(new AutomatonDeclaredInitialStateDoesNotExist())
-        .addCoCo(new UseOfUndeclaredField())
         .addCoCo(new UseOfUndeclaredState())
         .addCoCo(new AssignmentHasNoName())
         

@@ -37,21 +37,10 @@ public class AutomatonTypeCorrectnessTest extends AutomatonAbstractCocoTest {
     checkInvalid(node, new ExpectedErrorInfo(1, "xMA042"));
   }
 
-  /*
-    TODO:
-    Are initialization values for variables allowed? From the grammar it appears that this is not the case.
-    The original test did also check whether inport/output default values were typed correctly. There should not be any default values for ports.
-
-    Conclusion: This test should be obsolete, as the checked values are no longer allowed.
-   */
-  @Ignore
   @Test
   public void testInitialValueFit() {
     ASTMontiArcNode node = getAstNode(MODEL_PATH + "contextconditions/", "invalid.InitialValueFit");
-    // input int a=5, b="Wrong";
-    // variable int c="Wrong";
-    // output int d="Wrong", e=5; 
-    checkInvalid(node, new ExpectedErrorInfo(3, "xAA420", "xAA421", "xAA422"));
+    checkInvalid(node, new ExpectedErrorInfo(3, "xMA038", "xMA039"));
   }
   
 }
