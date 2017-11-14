@@ -40,4 +40,5 @@ component NameConflictVariableAndIO {
 		initial A;
 
 	}
+
 }

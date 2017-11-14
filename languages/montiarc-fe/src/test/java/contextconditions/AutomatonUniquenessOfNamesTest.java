@@ -43,7 +43,7 @@ public class AutomatonUniquenessOfNamesTest extends AutomatonAbstractCocoTest {
   @Test
   public void testVariableConflictIO() {
     ASTMontiArcNode node = getAstNode(MODEL_PATH, "invalid.NameConflictVariableAndIO");
-    checkInvalid(node, new ExpectedErrorInfo(6, "xMA035", "xMA053", "xMA063", "xMA065"));
+    checkInvalid(node, new ExpectedErrorInfo(6,  "xMA035", "xMA053"));
   }
   
   @Test

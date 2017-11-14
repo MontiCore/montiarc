@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc.cocos.UniqueConstraint;
 
 /**
  * Tests various forms of component uniqueness
@@ -44,7 +43,7 @@ public class UniquenessTest extends AbstractCoCoTest {
   
   @Test
   public void testUniqueConstraints() throws RecognitionException, IOException {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new UniqueConstraint()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         getAstNode("arc/coco/uniqueness", "a.UniqueConstraint"),
         new ExpectedErrorInfo(2, "xMA052"));
   }
