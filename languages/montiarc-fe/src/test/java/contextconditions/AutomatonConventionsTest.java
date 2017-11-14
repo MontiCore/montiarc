@@ -45,13 +45,6 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
     checkInvalid(node, new ExpectedErrorInfo(1, "xMA014"));
   }
 
-  @Ignore
-  @Test
-  //Todo: CoCo is not working. Needs to check if output ports are only used as the left side of an assignment.
-  public void testOutputInExpression() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.AutomatonOutputInExpression");
-    checkInvalid(node, new ExpectedErrorInfo(4, "xMA022"));
-  }
 
   @Test
   public void testReactionsWithAlternatives() {
