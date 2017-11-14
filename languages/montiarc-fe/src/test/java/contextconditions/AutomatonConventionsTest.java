@@ -60,5 +60,44 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
     checkInvalid(node, new ExpectedErrorInfo(2, "xMA020", "xMA062"));
   }
 
+  @Test
+  public void testForbiddenExprInstanceOf() {
+    // failed because exression type resolver tried to resolve storage as JavaTypeSymbol but its VariableSymbol
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.InstanceOfAndObjectInstantiation");
+    // 1 Error because the models contains an ASTInstanceOfExpression
+    checkInvalid(node, new ExpectedErrorInfo(1, "xMA023"));
+  }
 
+  @Test
+  public void testMultipleAssignmentsSameIdentifier() {
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.MultipleOutputsSamePort");
+    // {v=2, y=1, v=3, o = 3, o = 4, x = 1, x = 5} => 3: for v,for x, for o
+    checkInvalid(node, new ExpectedErrorInfo(3, "xMA019"));
+  }
+
+  @Test
+  public void testAutomatonHasNoInitialStates() {
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.NoInitialState");
+    // automaton has states but no initial state -> exactly 1 error.
+    checkInvalid(node, new ExpectedErrorInfo(1, "xMA013"));
+  }
+
+  @Test
+  public void testAutomatonHasCorrectAssignments(){
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.AutomatonWithWrongAssignments");
+    checkInvalid(node, new ExpectedErrorInfo(4, "xMA017", "xMA016"));
+  }
+
+
+  @Test
+  public void testOutputContainsWrongType() {
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.OutputContainsWrongType");
+    checkInvalid(node, new ExpectedErrorInfo(1, "xMA042"));
+  }
+
+  @Test
+  public void testValueListOutput() {
+    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.OutputValueList");
+    checkInvalid(node, new ExpectedErrorInfo(1,  "xMA064"));
+  }
 }
