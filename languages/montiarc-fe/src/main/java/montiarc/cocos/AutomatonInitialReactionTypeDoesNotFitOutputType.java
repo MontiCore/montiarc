@@ -45,6 +45,8 @@ public class AutomatonInitialReactionTypeDoesNotFitOutputType implements MontiAr
           }
           else if(varSymbol.isPresent()) {
             checkAssignment(assign, varSymbol.get().getTypeReference(), currentNameToResolve);
+          } else {
+            Log.error("0xMA038 Did not find matching Variable or Output with name " + currentNameToResolve, assign.get_SourcePositionStart());
           }
         }
       }
