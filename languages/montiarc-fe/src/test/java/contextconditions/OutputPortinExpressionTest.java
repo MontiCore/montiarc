@@ -13,7 +13,6 @@ public class OutputPortinExpressionTest extends AutomatonAbstractCocoTest {
   }
 
   @Test
-  //Todo: CoCo is not working. Needs to check if output ports are only used as the left side of an assignment.
   public void testAutomatonOutputInExpression() {
     ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.AutomatonOutputInExpression");
     checkInvalid(node, new ExpectedErrorInfo(4, "xMA022"));
