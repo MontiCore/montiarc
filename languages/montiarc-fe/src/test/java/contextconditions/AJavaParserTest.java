@@ -58,7 +58,7 @@ public class AJavaParserTest {
   
   @Test
   public void testCompWithInitMethod() {
-    test("contextconditions/CompWithVariableAndPortInit.maa", true);
+    test("contextconditions/valid/CompWithVariableAndPortInit.arc", true);
   }
   
 }
