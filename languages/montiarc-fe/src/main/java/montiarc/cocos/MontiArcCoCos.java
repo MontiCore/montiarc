@@ -19,8 +19,6 @@ import montiarc._cocos.MontiArcCoCoChecker;
 public class MontiArcCoCos {
 	public static MontiArcCoCoChecker createChecker() {
     return new MontiArcCoCoChecker()
-        .addCoCo(new UniqueConstraint())
-        .addCoCo(new PortNamesAreUnique())
         .addCoCo(new ComponentInstanceNamesAreUnique())
         .addCoCo(new PortUsage())
         .addCoCo(new SubComponentsConnected())
@@ -63,7 +61,6 @@ public class MontiArcCoCos {
         
         // REFERENTIAL INTEGRITY
         .addCoCo(new AutomatonDeclaredInitialStateDoesNotExist())
-        .addCoCo(new UseOfUndeclaredField())
         .addCoCo(new UseOfUndeclaredState())
         .addCoCo(new AssignmentHasNoName())
         
@@ -75,11 +72,10 @@ public class MontiArcCoCos {
         
         // UNIQUENESS OF NAMES
         .addCoCo(new AutomatonStateDefinedMultipleTimesStereotypesDontMatch())
-        .addCoCo(new VariableDefinedMultipleTimes())
         .addCoCo(new AutomatonInitialDeclaredMultipleTimes())
         .addCoCo(new AutomatonStateDefinedMultipleTimes())
-        .addCoCo(new AutomatonMultipleInitialStates())
         .addCoCo(new UseOfAlternatives())
-        .addCoCo(new UseOfValueLists());
+        .addCoCo(new UseOfValueLists())
+        .addCoCo(new IdentifiersAreUnique());
   }
 }
