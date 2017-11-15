@@ -35,7 +35,7 @@ public class AJavaParserTest {
   
   @Test
   public void testAJava() {
-//    test("/valid/Foo.maa", true);
+    test("contextconditions/valid/Foo.arc", true);
   }
   
   

@@ -16,21 +16,15 @@ import montiarc.cocos.ParameterNamesAreUnique;
  * @author Crispin Kirchner
  */
 public class ParameterNamesUniqueTest extends AbstractCoCoTest {
+	
   @BeforeClass
   public static void setUp() {
-    Log.getFindings().clear();
     Log.enableFailQuick(false);
   }
 
   @Test
   public void testValid() {
     checkValid("contextconditions", "valid.ParameterNamesUnique");
-//    runCheckerWithSymTab("contextconditions", "valid.ParameterNamesUnique");
-//
-//    String findings = Log.getFindings().stream().map(f -> f.buildMsg())
-//        .collect(Collectors.joining("\n"));
-//
-//    assertEquals(findings, 0, Log.getFindings().size());
   }
 
   @Test
@@ -39,12 +33,5 @@ public class ParameterNamesUniqueTest extends AbstractCoCoTest {
         getAstNode("contextconditions", "invalid.ParameterNamesNotUnique"),
         new ExpectedErrorInfo(1, "xMA069"));
     
-//    runCheckerWithSymTab("contextconditions", "invalid.ParameterNamesNotUnique");
-//
-//    String findings = Log.getFindings().stream().map(f -> f.buildMsg())
-//        .collect(Collectors.joining("\n"));
-//
-//    assertEquals(findings, 1, Log.getFindings().size());
-//    assertTrue(findings.contains("xMA069"));
   }
 }

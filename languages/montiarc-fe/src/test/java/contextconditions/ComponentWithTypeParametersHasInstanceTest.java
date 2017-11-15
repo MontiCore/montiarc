@@ -20,7 +20,6 @@ public class ComponentWithTypeParametersHasInstanceTest
   
   @Before
   public void setup() {
-    Log.getFindings().clear();
     Log.enableFailQuick(false);
   }
   
@@ -33,11 +32,6 @@ public class ComponentWithTypeParametersHasInstanceTest
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
         getAstNode("contextconditions", "invalid." + componentName), new ExpectedErrorInfo(1, "xMA009"));
     
-//    runCheckerWithSymTab("contextconditions", "invalid." + componentName);
-//    String findings = Log.getFindings().stream().map(f -> f.buildMsg())
-//        .collect(Collectors.joining("\n"));
-//    assertEquals(findings, 1, Log.getFindings().size());
-//    assertTrue(findings.contains("xMA009"));
   }
   
   @Test

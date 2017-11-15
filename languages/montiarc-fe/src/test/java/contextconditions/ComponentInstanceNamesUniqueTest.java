@@ -25,11 +25,7 @@ public class ComponentInstanceNamesUniqueTest extends AbstractCoCoTest {
   @Test
   public void testValid() {
     checkValid("contextconditions", "valid.ComponentInstanceNamesUnique");
-    // runCheckerWithSymTab("contextconditions", "valid.ComponentInstanceNamesUnique");
-    // assertEquals(
-    // Log.getFindings().stream().map(f -> f.buildMsg()).collect(Collectors.joining("\n")),
-    // 0, Log.getFindings().size());
-  }
+      }
   
   @Test
   public void testInvalid() {
@@ -37,9 +33,5 @@ public class ComponentInstanceNamesUniqueTest extends AbstractCoCoTest {
         getAstNode("contextconditions", "invalid.ComponentInstanceNamesNotUnique"),
         new ExpectedErrorInfo(2, "xMA061"));
     
-//    runCheckerWithSymTab("contextconditions", "invalid.ComponentInstanceNamesNotUnique");
-//    assertEquals(
-//        Log.getFindings().stream().map(f -> f.buildMsg()).collect(Collectors.joining("\n")),
-//        2, Log.getFindings().size());
   }
 }
