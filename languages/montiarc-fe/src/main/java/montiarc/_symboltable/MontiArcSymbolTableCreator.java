@@ -49,6 +49,7 @@ import de.monticore.types.types._ast.ASTWildcardType;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcConstants;
 import montiarc._ast.ASTAutomaton;
 import montiarc._ast.ASTAutomatonBehavior;
 import montiarc._ast.ASTComponent;
@@ -57,6 +58,7 @@ import montiarc._ast.ASTConnector;
 import montiarc._ast.ASTIOAssignment;
 import montiarc._ast.ASTInitialStateDeclaration;
 import montiarc._ast.ASTJavaPBehavior;
+import montiarc._ast.ASTJavaValuation;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._ast.ASTMontiArcAutoConnect;
 import montiarc._ast.ASTParameter;
@@ -68,8 +70,10 @@ import montiarc._ast.ASTStereoValue;
 import montiarc._ast.ASTSubComponent;
 import montiarc._ast.ASTSubComponentInstance;
 import montiarc._ast.ASTTransition;
+import montiarc._ast.ASTValuation;
 import montiarc._ast.ASTValueInitialization;
 import montiarc._ast.ASTVariable;
+import montiarc._ast.MontiArcPackage;
 import montiarc._symboltable.ValueSymbol.Kind;
 import montiarc.helper.JavaHelper;
 import montiarc.helper.Timing;
@@ -661,6 +665,23 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       scope.<StateSymbol> resolveMany(name, StateSymbol.KIND).forEach(c -> {
         c.setInitial(true);
         c.setInitialReactionAST(node.getBlock());
+        if (node.getBlock().isPresent()) {
+          for (ASTIOAssignment assign : node.getBlock().get().getIOAssignments()) {
+            if (assign.getOperator() == MontiArcPackage.ASTIOAssignment_Operator)
+              if (assign.getName().isPresent()) {
+                Optional<VariableSymbol> var = currentScope().get()
+                    .<VariableSymbol> resolve(assign.getName().get(), VariableSymbol.KIND);
+                if (var.isPresent()) {
+                  if (assign.getValueList().isPresent()
+                      && !assign.getValueList().get().getAllValuations().isEmpty()) {
+                    //This only covers the case "var i = somevalue"
+                    ASTValuation v = assign.getValueList().get().getAllValuations().get(0);
+                    var.get().setValuation(Optional.of(v));
+                  }
+                }
+              }
+          }
+        }
       });
     }
   }
