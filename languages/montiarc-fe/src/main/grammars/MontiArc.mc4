@@ -262,7 +262,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   interface BehaviorElement extends Element;
   
   /*************************************************************************
-   * AJAva
+   * AJava
    *
    * Rules for integrating Java/P into MontiArc. This includes an 
    * initializer block as well as a behavior block

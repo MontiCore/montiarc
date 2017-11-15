@@ -63,8 +63,22 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
     if (node.stimulusIsPresent()) {
       for (ASTIOAssignment assign : node.getStimulus().get().getIOAssignments()) {
         if (!assign.nameIsPresent()) {
+          Optional<String> sourceName = Optional.empty();
+          ASTExpression expr = getFirstAssigntElement(assign).getExpression();
+          if (expr.getCallExpression().isPresent()) {
+            if (expr.getCallExpression().get().getExpression().isPresent()) {
+              if (expr.getCallExpression().get().getExpression().get().getPrimaryExpression()
+                  .isPresent()) {
+                sourceName = expr.getCallExpression().get().getExpression().get()
+                    .getPrimaryExpression().get().getName();
+              }
+            }
+          }
+          
           // no assignment name found, so compute one based on value type
-          Optional<String> sourceName = findFor(assign, true);
+          if (!sourceName.isPresent()) {
+            sourceName = findFor(assign, true);
+          }
           if (sourceName.isPresent()) {
             assign.setName(sourceName.get());
             assign.setOperator(ASTConstantsMontiArc.DOUBLE);
@@ -80,8 +94,21 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
     if (node.reactionIsPresent()) {
       for (ASTIOAssignment assign : node.getReaction().get().getIOAssignments()) {
         if (!assign.nameIsPresent()) {
+          Optional<String> sinkName = Optional.empty();
+          ASTExpression expr = getFirstAssigntElement(assign).getExpression();
+          if (expr.getCallExpression().isPresent()) {
+            if (expr.getCallExpression().get().getExpression().isPresent()) {
+              if (expr.getCallExpression().get().getExpression().get().getPrimaryExpression()
+                  .isPresent()) {
+                sinkName = expr.getCallExpression().get().getExpression().get()
+                    .getPrimaryExpression().get().getName();
+              }
+            }
+          }
           // no assignment name found, so compute one based on value type
-          Optional<String> sinkName = findFor(assign, false);
+          if (!sinkName.isPresent()) {
+            sinkName = findFor(assign, false);
+          }
           if (sinkName.isPresent()) {
             assign.setName(sinkName.get());
             assign.setOperator(ASTConstantsMontiArc.SINGLE);
@@ -98,6 +125,7 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
     ASTExpression expr = getFirstAssigntElement(assignment).getExpression();
     Optional<? extends JavaTypeSymbolReference> assignmentType = TypeCompatibilityChecker
         .getExpressionType(expr);
+    ;
     
     if (!assignmentType.isPresent()) {
       info("no type of expression '" + expr + "' found.");
@@ -106,6 +134,7 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
     
     // find all type compatible sink/source names
     Set<String> names;
+    
     if (forSource) {
       names = findVariableNameFor(assignmentType.get(), Direction.INPUT);
     }
@@ -174,9 +203,10 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
       for (PortSymbol portSymbol : automatonScope.<PortSymbol> resolveLocally(
           PortSymbol.KIND)) {
         if (TypeCompatibilityChecker.doTypesMatch(assignmentType, portSymbol.getTypeReference())) {
-          if ((direction == Direction.OUTPUT && portSymbol.isOutgoing()) || (direction == Direction.INPUT && portSymbol.isIncoming())) {
+          if ((direction == Direction.OUTPUT && portSymbol.isOutgoing())
+              || (direction == Direction.INPUT && portSymbol.isIncoming())) {
             names.add(portSymbol.getName());
-          } 
+          }
         }
       }
     }

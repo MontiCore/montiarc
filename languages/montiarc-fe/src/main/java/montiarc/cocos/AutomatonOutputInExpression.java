@@ -3,6 +3,7 @@ package montiarc.cocos;
 import java.util.Optional;
 
 import de.monticore.java.javadsl._ast.ASTPrimaryExpression;
+import de.monticore.java.javadsl._visitor.JavaDSLVisitor;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTValuation;

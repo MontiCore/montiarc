@@ -1,4 +1,4 @@
-package automaton.invalid;
+package contextconditions.invalid;
 
 import contextconditions.valid.Datatypes.MotorCommand;
 import contextconditions.valid.Datatypes.TimerSignal;

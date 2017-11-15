@@ -43,4 +43,5 @@ public class BumperBotTest extends AbstractSymboltableTest {
     
     assertNotNull(typeSymbol);
   }
+  
 }
