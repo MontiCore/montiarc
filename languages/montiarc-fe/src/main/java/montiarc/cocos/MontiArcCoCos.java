@@ -37,6 +37,7 @@ public class MontiArcCoCos {
         .addCoCo(new SimpleConnectorSourceExists())
         .addCoCo(new UsedPortsAndVariablesExist())
         .addCoCo(new MultipleBehaviorImplementation())
+        .addCoCo(new InitBlockOnlyOnEmbeddedAJava())
         /* MontiArcAutomaton Cocos */
         .addCoCo(new VariableNameIsLowerCase())
         
