@@ -11,9 +11,5 @@ component InitBlockWithoutAJava {
 		stringVariable = "Test String";
 	}
 
-	init {
-
-	}
-
 	//Error: Component has at least one init block, but it does not vontain an AJava compute method
 }

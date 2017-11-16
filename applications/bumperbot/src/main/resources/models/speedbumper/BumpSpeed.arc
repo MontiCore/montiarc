@@ -9,15 +9,11 @@ component BumpSpeed(Integer defaultSpeed) {
     out Integer speed;
 
   var Integer count255;
-  
-  init {
-    count255 = 0;
-  }
 
   automaton BumpSpeed {
     
     state Static, Dynamic;
-    initial Dynamic;
+    initial Dynamic / {count255=0};
 
 	Dynamic -> Static {cmd == SpeedCmd.Static} / {speed = defaultSpeed, count255=0};
 	
