@@ -25,6 +25,6 @@ component ComponentWithAJavaAndAutomaton {
   }
   
   compute IncreaseDistance {
-    distance--;
+    Integer test = 1;
   }
 }
