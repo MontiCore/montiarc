@@ -192,7 +192,7 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
     // List<Symbol> symbols) is not correctly implemented
     
     if (direction == Direction.VARIABLE) {
-      for (VariableSymbol varSymbol : automatonScope.<VariableSymbol> resolveLocally(
+      for (VariableSymbol varSymbol : automatonScope.getEnclosingScope().get().<VariableSymbol> resolveLocally(
           VariableSymbol.KIND)) {
         if (TypeCompatibilityChecker.doTypesMatch(assignmentType, varSymbol.getTypeReference())) {
           names.add(varSymbol.getName());
@@ -200,7 +200,7 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
       }
     }
     else {
-      for (PortSymbol portSymbol : automatonScope.<PortSymbol> resolveLocally(
+      for (PortSymbol portSymbol : automatonScope.getEnclosingScope().get().<PortSymbol> resolveLocally(
           PortSymbol.KIND)) {
         if (TypeCompatibilityChecker.doTypesMatch(assignmentType, portSymbol.getTypeReference())) {
           if ((direction == Direction.OUTPUT && portSymbol.isOutgoing())
