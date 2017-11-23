@@ -235,37 +235,25 @@ public class TypeCompatibilityChecker {
           }
         }
       }
+      //checks primitive datatypes such as int vs Integer
+      if(!result) {
+        if (targetType instanceof JTypeReference<?> && !(targetType instanceof JavaTypeSymbolReference)) {
+          targetType = new JavaTypeSymbolReference(targetType.getName(), targetType.getEnclosingScope(),
+              targetType.getDimension());
+        }
+        if (sourceType instanceof JTypeReference<?> && !(sourceType instanceof JavaTypeSymbolReference)) {
+          sourceType = new JavaTypeSymbolReference(sourceType.getName(), sourceType.getEnclosingScope(),
+              targetType.getDimension());
+        }
+        
+        return JavaDSLHelper.assignmentConversionAvailable((JavaTypeSymbolReference) sourceType,
+            (JavaTypeSymbolReference) targetType);
+      }
+      
     }
     return result;
   }
   
-//  /**
-//   * Checks whether there exists a assignment conversion from <tt>from</tt> type
-//   * to <tt>target</tt> type.
-//   * 
-//   * @param from
-//   * @param target
-//   * @return
-//   */
-//  public static boolean doTypesMatch(JTypeReference<? extends JTypeSymbol> from,
-//      JTypeReference<? extends JTypeSymbol> target) {
-//    // io-automaton currently uses JType instead of JavaType, but type
-//    // helper is only implemented for JavaType, so conversion is required
-//    if (target instanceof JTypeReference<?> && !(target instanceof JavaTypeSymbolReference)) {
-//      target = new JavaTypeSymbolReference(target.getName(), target.getEnclosingScope(),
-//          target.getDimension());
-//    }
-//    if (from instanceof JTypeReference<?> && !(from instanceof JavaTypeSymbolReference)) {
-//      from = new JavaTypeSymbolReference(from.getName(), from.getEnclosingScope(),
-//          target.getDimension());
-//    }
-//    
-//    // existsAssignment conversion only implemented for JavaType not CommonJType
-//    // TODO Don't use JavaDSLHelper for type checking because we want to check
-//    // JTypes.
-//    return JavaDSLHelper.assignmentConversionAvailable((JavaTypeSymbolReference) from,
-//        (JavaTypeSymbolReference) target);
-//  }
   
   /**
    * Resolves the type of the given java expression. If it is not possible to
