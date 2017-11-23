@@ -35,7 +35,7 @@ public class AutomatonHelper extends ComponentHelper {
     this.states = automaton.getSpannedScope().resolveLocally(StateSymbol.KIND);
     this.transitions = automaton.getSpannedScope().resolveLocally(TransitionSymbol.KIND);
     
-    this.variables = component.getEnclosingScope().resolveLocally(VariableSymbol.KIND);
+    this.variables = component.getSpannedScope().resolveLocally(VariableSymbol.KIND);
   }
   
   /**
@@ -159,6 +159,15 @@ public class AutomatonHelper extends ComponentHelper {
   
   public String getVariableTypeName(VariableSymbol symbol) {
     return printFqnTypeName(symbol.getTypeReference());
+  }
+  
+  public boolean isPort(String name) {
+    for(VariableSymbol var : variables) {
+      if(var.getName().equals(name) || var.getFullName().equals(name)){
+        return false;
+      }
+    }
+    return true;
   }
   
   /**

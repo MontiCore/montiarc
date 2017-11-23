@@ -46,17 +46,10 @@ public class AutomatonImplMainImpl extends AutomatonImplMain {
       AutomatonHelper helper = new AutomatonHelper(automaton, comp);
       ComponentHelper compHelper = new ComponentHelper(comp);
       
-      Optional<ASTJavaPInitializer> init = ComponentHelper.getComponentInitialization(comp);
-      List<ASTValueInitialization> varInits = new ArrayList<>();
-      
-      if (init.isPresent()) {
-        varInits = init.get().getValueInitializations();
-      }
-      
       AutomatonImplMain.generate(filepath, node, helper, comp.getPackageName(), comp.getImports(),
           comp.getName(),
           resultName, inputName, implName, comp.getIncomingPorts(), compHelper, comp.getVariables(),
-          helper.getStates(), comp.getConfigParameters(), varInits);
+          helper.getStates(), comp.getConfigParameters());
     }
   }
   

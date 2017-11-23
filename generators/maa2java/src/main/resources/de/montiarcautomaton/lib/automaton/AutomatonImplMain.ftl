@@ -3,8 +3,7 @@ ${tc.params("de.montiarcautomaton.generator.helper.AutomatonHelper helper", "Str
 "java.util.Collection<montiarc._symboltable.PortSymbol> portsIn",
 "de.montiarcautomaton.generator.helper.ComponentHelper compHelper",
 "java.util.Collection<montiarc._symboltable.VariableSymbol> variables", "java.util.Collection<montiarc._symboltable.StateSymbol> states",
-"java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams",
-"java.util.List<montiarc._ast.ASTValueInitialization> initializations")}
+"java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams")}
 package ${_package};
 
 import ${_package}.${resultName};
@@ -43,14 +42,14 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
   public ${resultName} getInitialValues() {
     final ${resultName} result = new ${resultName}();
     
-    // variable initialization
-    <#list initializations as init>
-      ${helper.printInit(init)}
-    </#list>
 
     // initial reaction
     <#list helper.getInitialReaction(helper.getInitialState()) as assignment>
-    result.set${assignment.getLeft()?cap_first}(${assignment.getRight()});
+    <#if helper.isPort(assignment.getLeft())>
+      result.set${assignment.getLeft()?cap_first}(${assignment.getRight()});
+    <#else>
+      ${assignment.getLeft()} = ${assignment.getRight()};
+    </#if>
     </#list>
     
     // initial state
