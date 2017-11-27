@@ -23,12 +23,10 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc.helper.TypeCompatibilityChecker;
 
 /**
- * TODO JP Ensures that parameters in the component's head are defined in the
- * right order. It is not allowed to define a normal parameter after a
- * declaration of a default parameter. E.g.: Wrong: A[int x = 5, int y] Right:
- * B[int x, int y = 5]
+ * Ensures that default values of parameters in the component's head are
+ * correctly assigned.
  *
- * @author Andreas Wortmann
+ * @author Jerome Pfeiffer
  */
 public class DefaultParametersCorrectlyAssigned
     implements MontiArcASTComponentCoCo {
@@ -48,16 +46,21 @@ public class DefaultParametersCorrectlyAssigned
             TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(param
                 .getType()),
             comp.getSpannedScope(), dimension);
-
+        
         HCJavaDSLTypeResolver javaTypeResolver = new HCJavaDSLTypeResolver();
         param.getDefaultValue().get().getValue().accept(javaTypeResolver);
         Optional<JavaTypeSymbolReference> result = javaTypeResolver.getResult();
         if (!result.isPresent()) {
-          Log.error("0xMA059 Could not resolve type of default parameter value for comparing it with the referenced parameter type.", param.getDefaultValue().get().get_SourcePositionStart());
+          Log.error(
+              "0xMA059 Could not resolve type of default parameter value for comparing it with the referenced parameter type.",
+              param.getDefaultValue().get().get_SourcePositionStart());
         }
         else if (!TypeCompatibilityChecker.doTypesMatch(result.get(), paramTypeSymbol)) {
-          Log.error("0xMA061 Type of parameter " + param.getName() + " in the parameter declaration does not match the type of its assigned value. Type " +
-              paramTypeSymbol.getName() + " can not cast to type " + result.get().getName() + ".", param.get_SourcePositionStart());
+          Log.error("0xMA061 Type of parameter " + param.getName()
+              + " in the parameter declaration does not match the type of its assigned value. Type "
+              +
+              paramTypeSymbol.getName() + " can not cast to type " + result.get().getName() + ".",
+              param.get_SourcePositionStart());
         }
       }
     }
