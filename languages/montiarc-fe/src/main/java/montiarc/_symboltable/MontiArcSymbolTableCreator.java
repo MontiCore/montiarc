@@ -235,8 +235,9 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     List<ValueSymbol<TypeReference<TypeSymbol>>> configArgs = new ArrayList<>();
     for (ASTExpression arg : node.getArguments()) {
-      String value = new JavaDSLPrettyPrinter(new IndentPrinter()).prettyprint(arg);
-      configArgs.add(new ValueSymbol<>(value, Kind.Expression));
+      arg.setEnclosingScope(currentScope().get());
+      setEnclosingScopeOfNodes(arg);
+      configArgs.add(new ValueSymbol<>(arg, Kind.Expression));
     }
     
     // instances
@@ -347,10 +348,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       final ASTComponentHead astMethod) {
     for (ASTParameter astParameter : astMethod.getParameters()) {
       final String paramName = astParameter.getName();
-      astParameter.setEnclosingScope(currentScope().get());  
-      if(astParameter.getDefaultValue().isPresent()) {
-        astParameter.getDefaultValue().get().getValue().setEnclosingScope(currentScope().get());
-      }
+      astParameter.setEnclosingScope(currentScope().get());
+      setEnclosingScopeOfNodes(astParameter);
       int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(astParameter.getType());
       JTypeReference<? extends JTypeSymbol> paramTypeSymbol = new JavaTypeSymbolReference(
           TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astParameter
@@ -721,6 +720,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   public void visit(ASTIOAssignment node) {
     node.setEnclosingScope(currentScope().get());
   }
+  
   
   /**
    * @see montiarc._symboltable.MontiArcSymbolTableCreatorTOP#visit(montiarc._ast.ASTStateDeclaration)

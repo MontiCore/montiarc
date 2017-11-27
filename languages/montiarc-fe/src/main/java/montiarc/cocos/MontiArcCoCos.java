@@ -22,6 +22,7 @@ public class MontiArcCoCos {
         .addCoCo(new ComponentInstanceNamesAreUnique())
         .addCoCo(new PortUsage())
         .addCoCo(new SubComponentsConnected())
+        .addCoCo(new SubcomponentParametersCorrectlyAssigned())
         .addCoCo(new PackageLowerCase())
         .addCoCo(new ComponentNameIsCapitalized())
         .addCoCo(new DefaultParametersHaveCorrectOrder())

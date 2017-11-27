@@ -1,6 +1,7 @@
-package contextconditions.valid;
+package contextconditions.invalid;
 
-import contextconditions.valid.Types.*; 
+import contextconditions.valid.Types.*;
+import contextconditions.valid.Motor;
  
 component Navi {
 
