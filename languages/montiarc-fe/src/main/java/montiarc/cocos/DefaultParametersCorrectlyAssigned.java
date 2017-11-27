@@ -6,16 +6,17 @@
 package montiarc.cocos;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.literals.literals._ast.ASTSignedLiteral;
+import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.types.TypesHelper;
 import de.monticore.types.TypesPrinter;
+import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
-import montiarc._ast.ASTLiteralValue;
 import montiarc._ast.ASTParameter;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ComponentSymbol;
@@ -47,14 +48,16 @@ public class DefaultParametersCorrectlyAssigned
             TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(param
                 .getType()),
             comp.getSpannedScope(), dimension);
-        //Scope fehlt??
-        Optional<? extends JavaTypeSymbolReference> defaultValType = TypeCompatibilityChecker
-            .getExpressionType(param.getDefaultValue().get().getExpression());
-        if (!defaultValType.isPresent()) {
-          
+
+        HCJavaDSLTypeResolver javaTypeResolver = new HCJavaDSLTypeResolver();
+        param.getDefaultValue().get().getValue().accept(javaTypeResolver);
+        Optional<JavaTypeSymbolReference> result = javaTypeResolver.getResult();
+        if (!result.isPresent()) {
+          Log.error("0xMA059 Could not resolve type of default parameter value for comparing it with the referenced parameter type.", param.getDefaultValue().get().get_SourcePositionStart());
         }
-        else if (!TypeCompatibilityChecker.doTypesMatch(defaultValType.get(), paramTypeSymbol)) {
-          
+        else if (!TypeCompatibilityChecker.doTypesMatch(result.get(), paramTypeSymbol)) {
+          Log.error("0xMA061 Type of parameter " + param.getName() + " in the parameter declaration does not match the type of its assigned value. Type " +
+              paramTypeSymbol.getName() + " can not cast to type " + result.get().getName() + ".", param.get_SourcePositionStart());
         }
       }
     }

@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
 import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.DefaultParametersCorrectlyAssigned;
 import montiarc.cocos.DefaultParametersHaveCorrectOrder;
 
 /**
@@ -39,12 +40,11 @@ public class DefaultParametersTest extends AbstractCoCoTest {
         new ExpectedErrorInfo(1, "xMA056"));
   }
   
-//  @Ignore("TODO Ticket #56: Coco schreiben, CoCo im Parameter initialisieren, Fehlercode anpassen.")
   @Test
   public void testWrongDefaultParameterType() {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersHaveCorrectOrder()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersCorrectlyAssigned()),
         getAstNode("contextconditions", "invalid.WrongDefaultParameterType"),
-        new ExpectedErrorInfo(1, "xMA056"));
+        new ExpectedErrorInfo(1, "xMA061"));
     
   }
   

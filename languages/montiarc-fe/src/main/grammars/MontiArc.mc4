@@ -72,7 +72,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   * @attribute Type the type of the parameter
   * @attribute name the name of the parameter
   */
-  Parameter = Type Name ("=" defaultValue:Valuation)?;
+  Parameter = Type Name ("=" defaultValue:LiteralValue)?;
 
   /**
   * A components head is used to define generic type 

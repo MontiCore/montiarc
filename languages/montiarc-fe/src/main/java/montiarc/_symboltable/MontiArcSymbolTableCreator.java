@@ -347,6 +347,10 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       final ASTComponentHead astMethod) {
     for (ASTParameter astParameter : astMethod.getParameters()) {
       final String paramName = astParameter.getName();
+      astParameter.setEnclosingScope(currentScope().get());  
+      if(astParameter.getDefaultValue().isPresent()) {
+        astParameter.getDefaultValue().get().getValue().setEnclosingScope(currentScope().get());
+      }
       int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(astParameter.getType());
       JTypeReference<? extends JTypeSymbol> paramTypeSymbol = new JavaTypeSymbolReference(
           TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astParameter
