@@ -39,7 +39,7 @@ public class DefaultParametersTest extends AbstractCoCoTest {
         new ExpectedErrorInfo(1, "xMA056"));
   }
   
-  @Ignore("TODO Ticket #56: Coco schreiben, CoCo im Parameter initialisieren, Fehlercode anpassen.")
+//  @Ignore("TODO Ticket #56: Coco schreiben, CoCo im Parameter initialisieren, Fehlercode anpassen.")
   @Test
   public void testWrongDefaultParameterType() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersHaveCorrectOrder()),
