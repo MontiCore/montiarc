@@ -21,6 +21,7 @@ import org.junit.Test;
 import de.monticore.cocos.helper.Assert;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
+import de.monticore.types.TypesPrinter;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._symboltable.ComponentInstanceSymbol;
@@ -29,6 +30,7 @@ import montiarc._symboltable.ComponentSymbolReference;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.ValueSymbol;
+import montiarc.helper.SymbolPrinter;
 import symboltable.AbstractSymboltableTest;
 
 /**
@@ -217,7 +219,7 @@ public class SymtabTest extends AbstractSymboltableTest {
     
     assertEquals(2, delay.getConfigArguments().size());
     assertEquals("new int[] {1, 2, 3}",
-        delay.getConfigArguments().get(0).getValue());
+        SymbolPrinter.printConfigArgument(delay.getConfigArguments().get(0)));
     // TODO value symbol
     // assertEquals(ValueSymbol.Kind.ConstructorCall, delay.getConfigArguments().get(0).getKind());
     // assertEquals("1",
@@ -257,7 +259,7 @@ public class SymtabTest extends AbstractSymboltableTest {
     assertEquals("cp", delay.getName());
     
     assertEquals(2, delay.getConfigArguments().size());
-    assertEquals("new int[] {1, 2, 3}", delay.getConfigArguments().get(0).getValue());
+    assertEquals("new int[] {1, 2, 3}", SymbolPrinter.printConfigArgument(delay.getConfigArguments().get(0)));
     // TODO value symbol
     // assertEquals(Kind.ConstructorCall, delay.getConfigArguments().get(0).getKind());
     // assertEquals("1",
@@ -267,7 +269,7 @@ public class SymtabTest extends AbstractSymboltableTest {
     // assertEquals("3",
     // delay.getConfigArguments().get(0).getConstructorArguments().get(2).getValue());
     
-    assertEquals("new HashMap<List<K>, List<V>>()", delay.getConfigArguments().get(1).getValue());
+    assertEquals("new HashMap<List<K>, List<V>>()", SymbolPrinter.printConfigArgument(delay.getConfigArguments().get(1)));
     // TODO value symbol
     // assertEquals(Kind.ConstructorCall, delay.getConfigArguments().get(1).getKind());
     // ArcdTypeReferenceEntry typeRef = delay.getConfigArguments().get(1).getType();

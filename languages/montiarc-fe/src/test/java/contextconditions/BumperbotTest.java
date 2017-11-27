@@ -30,7 +30,8 @@ public class BumperbotTest extends AutomatonAbstractCocoTest {
   
   @Test
   public void testNavi() {
-    checkValid(MODEL_PATH, "contextconditions.valid.Navi");
+    
+    checkInvalid(getAstNode("src/test/resources", "contextconditions.invalid.Navi"), new ExpectedErrorInfo(1, "xMA064"));
     
   }
 }

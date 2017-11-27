@@ -5,6 +5,7 @@
  */
 package montiarc._symboltable;
 
+import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.symboltable.types.references.TypeReference;
 import montiarc._ast.ASTValue;
 
@@ -69,7 +70,7 @@ public class ValueSymbol<T extends TypeReference<?>> {
   /**
    * Concrete value of the argument.
    */
-  protected String value;
+  protected ASTExpression value;
   
   /**
    * Creates a new {@link ValueSymbol} that represents a value or variable.
@@ -77,7 +78,7 @@ public class ValueSymbol<T extends TypeReference<?>> {
    * @param value value of the argument
    * @param kind kind of the {@link ValueSymbol}.
    */
-  public ValueSymbol(final String value, final Kind kind) {
+  public ValueSymbol(final ASTExpression value, final Kind kind) {
     this(null, value, kind);
   }
   
@@ -88,7 +89,7 @@ public class ValueSymbol<T extends TypeReference<?>> {
    * @param type type that contains the enum value/static field
    * @param value enum value name or static field name
    */
-  public ValueSymbol(final T type, final String value) {
+  public ValueSymbol(final T type, final ASTExpression value) {
     this(type, value, Kind.ReferenceType);
   }
   
@@ -99,7 +100,7 @@ public class ValueSymbol<T extends TypeReference<?>> {
    * @param value value of this {@link ValueSymbol}
    * @param kind kind ot his {@link ValueSymbol}
    */
-  public ValueSymbol(final T type, final String value, final Kind kind) {
+  public ValueSymbol(final T type, final ASTExpression value, final Kind kind) {
     this.type = type;
     this.value = value;
     this.kind = kind;
@@ -122,7 +123,7 @@ public class ValueSymbol<T extends TypeReference<?>> {
   /**
    * @return the value
    */
-  public String getValue() {
+  public ASTExpression getValue() {
     return value;
   }
   

@@ -4,12 +4,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.TypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.symboltable.types.references.TypeReference;
+import de.monticore.types.TypesPrinter;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
@@ -127,7 +129,14 @@ public class SymbolPrinter {
   public static String printConfigArguments(List<ValueSymbol<TypeReference<TypeSymbol>>> config) {
     if (config.isEmpty())
       return "";
-    return "(" + config.stream().map(a -> a.getValue()).collect(Collectors.joining(",")) + ")";
+    JavaDSLPrettyPrinter javaPrinter = new JavaDSLPrettyPrinter(new IndentPrinter());
+    return "(" + config.stream().map(a -> javaPrinter.prettyprint(a.getValue())).collect(Collectors.joining(",")) + ")";
+  }
+  
+  public static String printConfigArgument(ValueSymbol<TypeReference<TypeSymbol>> config) {
+
+    JavaDSLPrettyPrinter javaPrinter = new JavaDSLPrettyPrinter(new IndentPrinter());
+    return javaPrinter.prettyprint(config.getValue());
   }
 
   public static void printComponentInstance(ComponentInstanceSymbol inst, IndentPrinter ip) {
