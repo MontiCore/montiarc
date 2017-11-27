@@ -181,6 +181,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     JTypeReference<JTypeSymbol> typeRef = new MAJTypeReference(typeName, JTypeSymbol.KIND,
         currentScope().get());
+    addTypeArgumentsToTypeSymbol(typeRef, astType);
+
     
     typeRef.setDimension(TypesHelper.getArrayDimensionIfArrayOrZero(astType));
     

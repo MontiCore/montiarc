@@ -30,7 +30,7 @@ public class AutomatonInitialReactionTypeDoesNotFitOutputType implements MontiAr
   public void check(ASTInitialStateDeclaration node) {
     if (node.getBlock().isPresent()) {
       for (ASTIOAssignment assign : node.getBlock().get().getIOAssignments()) {
-        if (assign.getName().isPresent()) {
+        if (assign.nameIsPresent()) {
           String currentNameToResolve = assign.getName().get();
           
           Optional<VariableSymbol> varSymbol = node.getEnclosingScope().get().resolve(currentNameToResolve, VariableSymbol.KIND);
