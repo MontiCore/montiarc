@@ -20,6 +20,7 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.VariableSymbol;
+import montiarc.helper.SymbolPrinter;
 
 /**
  * Helper class used in the template to generate target code of atomic or
@@ -63,7 +64,7 @@ public class ComponentHelper {
   }
   
   public Collection<String> getParamValues(ComponentInstanceSymbol param) {
-    return param.getConfigArguments().stream().map(symbol -> symbol.getValue()).collect(Collectors.toList());
+    return param.getConfigArguments().stream().map(symbol -> SymbolPrinter.printConfigArgument(symbol)).collect(Collectors.toList());
   }
   
   public String getSubComponentTypeName(ComponentInstanceSymbol instance) {
