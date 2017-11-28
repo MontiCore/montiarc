@@ -81,7 +81,9 @@ public class AutomatonConventionsTest extends AutomatonAbstractCocoTest {
     checkInvalid(node, new ExpectedErrorInfo(4, "xMA017", "xMA016"));
   }
 
-
+  @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
+      + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
+      + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testOutputContainsWrongType() {
     ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.OutputContainsWrongType");

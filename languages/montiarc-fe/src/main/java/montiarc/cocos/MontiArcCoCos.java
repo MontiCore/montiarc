@@ -17,7 +17,7 @@ import montiarc._cocos.MontiArcCoCoChecker;
  * @author Robert Heim, Andreas Wortmann
  */
 public class MontiArcCoCos {
-	public static MontiArcCoCoChecker createChecker() {
+  public static MontiArcCoCoChecker createChecker() {
     return new MontiArcCoCoChecker()
         .addCoCo(new ComponentInstanceNamesAreUnique())
         .addCoCo(new PortUsage())
@@ -35,7 +35,8 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo(new InPortUniqueSender())
         .addCoCo(new ImportsValid())
-        /// Java/P Cocos /////////////////////////////////////////////////////////////
+        /// Java/P Cocos
+        /// /////////////////////////////////////////////////////////////
         .addCoCo(new SimpleConnectorSourceExists())
         .addCoCo(new InputPortChangedInCompute())
         .addCoCo(new UsedPortsAndVariablesExist())
@@ -45,18 +46,19 @@ public class MontiArcCoCos {
         /* MontiArcAutomaton Cocos */
         .addCoCo(new VariableNameIsLowerCase())
         
-        /// Automaton Cocos ///////////////////////////////////////////////////////////// 
+        /// Automaton Cocos
+        /// /////////////////////////////////////////////////////////////
         .addCoCo(new ImplementationInNonAtomicComponent())
         .addCoCo(new AutomatonUppercase())
         
-    	// CONVENTIONS
+        // CONVENTIONS
         .addCoCo(new AutomatonHasNoState())
         .addCoCo(new AutomatonHasNoInitialState())
         .addCoCo(new CorrectAssignmentOperators())
         .addCoCo(new MultipleAssignmentsSameIdentifier())
         .addCoCo(new AutomatonOutputInExpression())
-        .addCoCo((MontiArcASTInitialStateDeclarationCoCo)new AutomatonReactionWithAlternatives())
-        .addCoCo((MontiArcASTTransitionCoCo)new AutomatonReactionWithAlternatives())
+        .addCoCo((MontiArcASTInitialStateDeclarationCoCo) new AutomatonReactionWithAlternatives())
+        .addCoCo((MontiArcASTTransitionCoCo) new AutomatonReactionWithAlternatives())
         .addCoCo(new UseOfForbiddenExpression())
         .addCoCo(new AutomatonStateUppercase())
         .addCoCo(new PortNameIsLowerCase())
@@ -71,9 +73,11 @@ public class MontiArcCoCos {
         
         // TYPE CORRECTNESS
         .addCoCo(new AutomatonGuardIsNotBoolean())
-        .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
-        .addCoCo(new AutomatonInitialReactionTypeDoesNotFitOutputType())
-        .addCoCo(new AutomatonReactionTypeDoesNotFitOutputType())
+        // TODO Kann mit der Aktualisierung auf neue JavaDSL-Version aktiviert
+        // werden
+        // .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
+        // .addCoCo(new AutomatonInitialReactionTypeDoesNotFitOutputType())
+        // .addCoCo(new AutomatonReactionTypeDoesNotFitOutputType())
         
         // UNIQUENESS OF NAMES
         .addCoCo(new AutomatonStateDefinedMultipleTimesStereotypesDontMatch())

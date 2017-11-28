@@ -18,6 +18,9 @@ public class IncompatibleVariableAssignmentTest extends AutomatonAbstractCocoTes
    * Tests the checking of compatible variables in CoCo
    * AutomatonReactionTypeDoesNotFitOutputType
    */
+  @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
+      + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
+      + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testIncompatibleVariableAssignment() {
     ASTMontiArcNode node = getAstNode(MODEL_PATH,
