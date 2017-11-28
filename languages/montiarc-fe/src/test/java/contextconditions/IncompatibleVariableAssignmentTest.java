@@ -13,9 +13,10 @@ public class IncompatibleVariableAssignmentTest extends AutomatonAbstractCocoTes
   public static void setUp() {
     Log.enableFailQuick(false);
   }
-
+  
   /**
-   * Tests the checking of compatible variables in CoCo AutomatonReactionTypeDoesNotFitOutputType
+   * Tests the checking of compatible variables in CoCo
+   * AutomatonReactionTypeDoesNotFitOutputType
    */
   @Test
   public void testIncompatibleVariableAssignment() {
@@ -24,7 +25,19 @@ public class IncompatibleVariableAssignmentTest extends AutomatonAbstractCocoTes
     checkInvalid(node, new ExpectedErrorInfo(1, "xMA042"));
   }
   
-  @Ignore("@JP, BS: Bitte angucken, warum das (anscheinend  in der JavaDSL) nicht funktioniert.")
+  @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
+      + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
+      + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
+  @Test
+  public void testIncompatibleVariableAssignmentGenericTypesDifferSimple() {
+    ASTMontiArcNode node = getAstNode(MODEL_PATH,
+        "contextconditions.invalid.IncompatibleVariableAssignmentGenericTypesDifferSimple");
+    checkInvalid(node, new ExpectedErrorInfo(1, "xMA042"));
+  }
+  
+  @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
+      + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
+      + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testIncompatibleVariableAssignmentGenericTypesDiffer() {
     ASTMontiArcNode node = getAstNode(MODEL_PATH,
@@ -33,4 +46,3 @@ public class IncompatibleVariableAssignmentTest extends AutomatonAbstractCocoTes
   }
   
 }
-
