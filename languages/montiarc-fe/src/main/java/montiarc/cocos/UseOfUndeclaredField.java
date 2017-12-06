@@ -30,7 +30,7 @@ public class UseOfUndeclaredField implements MontiArcASTIOAssignmentCoCo {
       boolean foundPort = scope.resolve(node.getName().get(), PortSymbol.KIND).isPresent();
       if (!foundVar) {
     	  if(!foundPort) {
-    		  Log.error("xMA023: variable " + node.getName().get() + " is used as a field, but is not declared as such.", node.get_SourcePositionStart());
+    		  Log.error("0xMA023: variable " + node.getName().get() + " is used as a field, but is not declared as such.", node.get_SourcePositionStart());
     	      
     	  }
         }
