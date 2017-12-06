@@ -1,9 +1,0 @@
-package invalid;
-
-automaton AutomatonWithoutInitialState {
-    
-    input int x;
-    output int i;
-    
-    state A;		
-}
