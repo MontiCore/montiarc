@@ -50,7 +50,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
     // 5 unused ports remaining
 
     MontiArcCoCoChecker coCoChecker = new MontiArcCoCoChecker().addCoCo(new PortUsage());
-    ASTMontiArcNode node = (ASTMontiArcNode) comp.getAstNode().get();
+    ASTMontiArcNode node = getAstNode("arc/transformations", "a.AutoConnectPorts");
 
     checkInvalid(coCoChecker, node, new ExpectedErrorInfo(1, "xMA058"));
     coCoChecker = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
@@ -108,7 +108,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
     assertEquals(5, Log.getFindings().size());
 
     // 8 still unused ports
-    ASTMontiArcNode node = (ASTMontiArcNode) comp.getAstNode().get();
+    ASTMontiArcNode node = getAstNode("arc/transformations", "a.AutoConnectType");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA058"));
     cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
@@ -140,7 +140,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
     assertEquals(1, Log.getFindings().size());
 
     // 3 unused ports due to failed autoconnection
-    ASTMontiArcNode node = (ASTComponent) comp.getAstNode().get();
+    ASTMontiArcNode node = getAstNode("arc/transformations", "a.AutoConnectType2");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA057"));
     cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
@@ -235,7 +235,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
     // 3 warnings (1x unable to autoconnect, 2x unused ports)
     assertEquals(1, Log.getFindings().stream().filter(f -> f.isWarning()).count());
 
-    ASTMontiArcNode node = (ASTComponent) comp.getAstNode().get();
+    ASTMontiArcNode node = getAstNode("arc/transformations", "a.AutoConnectGenericPorts");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA059", "xMA060"));
 
