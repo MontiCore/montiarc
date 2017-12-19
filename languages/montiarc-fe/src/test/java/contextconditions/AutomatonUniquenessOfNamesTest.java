@@ -6,15 +6,15 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.AutomatonInitialDeclaredMultipleTimes;
 import montiarc.cocos.AutomatonStateDefinedMultipleTimes;
+import montiarc.cocos.MontiArcCoCos;
+
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.jws.WebParam;
 
-public class AutomatonUniquenessOfNamesTest extends AutomatonAbstractCocoTest {
-
-  private final String MODEL_PATH = super.MODEL_PATH + "contextconditions/";
+public class AutomatonUniquenessOfNamesTest extends AbstractCoCoTest {
 
   @BeforeClass
   public static void setUp() {
@@ -23,32 +23,32 @@ public class AutomatonUniquenessOfNamesTest extends AutomatonAbstractCocoTest {
 
   @Test
   public void testDoubleDefinitionOfInitials() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH, "invalid.DoubleDefinitionOfSameInitial");
-    checkInvalid(node, new ExpectedErrorInfo(2, "xMA029"));
+    ASTMontiArcNode node = getAstNode("contextconditions", "invalid.DoubleDefinitionOfSameInitial");
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA029"));
   }
 
   @Test
   public void testStateDefinedMultipleTimes() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH, "invalid.StateDefinedMultipleTimes");
+    ASTMontiArcNode node = getAstNode("contextconditions", "invalid.StateDefinedMultipleTimes");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new AutomatonStateDefinedMultipleTimes());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA031"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA031"));
   }
   
   @Test
   public void testStateDefinedMultipleTimesStereotypesDontMatch() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH, "invalid.StateDefinedMultipleTimesStereotypesDontMatch");
-    checkInvalid(node, new ExpectedErrorInfo(4, "xMA031", "xMA034"));
+    ASTMontiArcNode node = getAstNode("contextconditions", "invalid.StateDefinedMultipleTimesStereotypesDontMatch");
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(4, "xMA031", "xMA034"));
   }
 
   @Test
   public void testVariableConflictIO() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH, "invalid.NameConflictVariableAndIO");
-    checkInvalid(node, new ExpectedErrorInfo(6,  "xMA035", "xMA053"));
+    ASTMontiArcNode node = getAstNode("contextconditions", "invalid.NameConflictVariableAndIO");
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(6,  "xMA035", "xMA053"));
   }
   
   @Test
   public void testVariableMoreThanOnceConflict() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH, "invalid.VariableMoreThanOnceConflict");
-    checkInvalid(node, new ExpectedErrorInfo(1, "xMA035"));
+    ASTMontiArcNode node = getAstNode("contextconditions", "invalid.VariableMoreThanOnceConflict");
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA035"));
   }
 }

@@ -16,6 +16,7 @@ import org.junit.Test;
 import contextconditions.AbstractCoCoTest;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcTool;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -26,9 +27,12 @@ import montiarc.cocos.SubComponentsConnected;
 
 public class AutoConnectionTest extends AbstractCoCoTest {
 
+  private static MontiArcTool tool;
+  
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
+    tool = new MontiArcTool();
   }
 
   /*
@@ -36,7 +40,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
    */
   @Test
   public void testAutoconnectPort() {
-    Scope symTab = createSymTab("src/test/resources/arc/transformations");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/transformations");
     Log.getFindings().clear();
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.AutoConnectPorts", ComponentSymbol.KIND).orElse(null);
@@ -72,7 +76,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
 
   @Test
   public void testAutoconnectPortPartiallyConnected() {
-    Scope symTab = createSymTab("src/test/resources/arc/transformations");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/transformations");
     Log.getFindings().clear();
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.AutoconnectPortPartiallyConnected", ComponentSymbol.KIND).orElse(null);
@@ -94,7 +98,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
 
   @Test
   public void testAutoconnectType1() {
-    Scope symTab = createSymTab("src/test/resources/arc/transformations");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/transformations");
     Log.getFindings().clear();
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.AutoConnectType", ComponentSymbol.KIND).orElse(null);
@@ -126,7 +130,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
 
   @Test
   public void testAutoconnectType2() {
-    Scope symTab = createSymTab("src/test/resources/arc/transformations");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/transformations");
     Log.getFindings().clear();
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.AutoConnectType2", ComponentSymbol.KIND).orElse(null);
@@ -157,7 +161,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
 
   @Test
   public void testAutoconnectGenericType() {
-    Scope symTab = createSymTab("src/test/resources/arc/transformations");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/transformations");
     Log.getFindings().clear();
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.AutoConnectGenericUsage", ComponentSymbol.KIND).orElse(null);
@@ -176,7 +180,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
 
   @Test
   public void testAutoconnectGenericInnerComponentType() {
-    Scope symTab = createSymTab("src/test/resources/arc/transformations");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/transformations");
     Log.getFindings().clear();
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.AutoConnectGenericInnerComponent", ComponentSymbol.KIND).orElse(null);
@@ -197,7 +201,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
 
   @Test
   public void testAutoconnectGenericTypeInHierarchie() {
-    Scope symTab = createSymTab("src/test/resources/arc/transformations");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/transformations");
     Log.getFindings().clear();
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.AutoConnectGenericUsageHierarchie", ComponentSymbol.KIND).orElse(null);
@@ -216,7 +220,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
 
   @Test
   public void testAutoconnectGenericPorts() {
-    Scope symTab = createSymTab("src/test/resources/arc/transformations");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/transformations");
     Log.getFindings().clear();
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.AutoConnectGenericPorts", ComponentSymbol.KIND).orElse(null);
@@ -244,7 +248,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
 
   @Test
   public void testAutoconnectArrayTypes() {
-    Scope symTab = createSymTab("src/test/resources/arc/transformations");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/transformations");
     Log.getFindings().clear();
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.AutoConnectArrayTypes", ComponentSymbol.KIND).orElse(null);
@@ -272,7 +276,7 @@ public class AutoConnectionTest extends AbstractCoCoTest {
 
   @Test
   public void testAutoconnectPortAndType() {
-    Scope symTab = createSymTab("src/test/resources/arc/transformations");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/transformations");
     Log.getFindings().clear();
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "a.AutoConnectPortAndType", ComponentSymbol.KIND).orElse(null);

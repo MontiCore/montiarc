@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc.cocos.MontiArcCoCos;
 
 /**
  * Tests some cocos from IOAutomaton and MontiArc to ensure that they are also
@@ -12,7 +13,7 @@ import montiarc._ast.ASTMontiArcNode;
  * 
  * @author Gerrit Leonhardt
  */
-public class SuperCocoTest extends AutomatonAbstractCocoTest {
+public class SuperCocoTest extends AbstractCoCoTest {
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
@@ -22,15 +23,15 @@ public class SuperCocoTest extends AutomatonAbstractCocoTest {
   public void testIOAutomatonCocos() {
     // test if IO-Automaton cocos are working by testing the
     // AutomatonWithoutState coco
-    ASTMontiArcNode node = getAstNode("src/test/resources/", "contextconditions.invalid.AutomatonWithoutState");
-    checkInvalid(node, new ExpectedErrorInfo(1, "xMA014"));
+    ASTMontiArcNode node = getAstNode("", "contextconditions.invalid.AutomatonWithoutState");
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA014"));
   }
   
   @Test
   public void testMontiArcCocos() {
     // test if MontiArc cocos are working by testing the UniquePorts coco
-    ASTMontiArcNode node = getAstNode("src/test/resources/", "contextconditions.invalid.UniquePorts");
-    checkInvalid(node, new ExpectedErrorInfo(1, "xMA053"));
+    ASTMontiArcNode node = getAstNode("", "contextconditions.invalid.UniquePorts");
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA053"));
   }
   
 }

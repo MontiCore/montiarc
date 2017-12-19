@@ -9,6 +9,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.nio.file.Paths;
+
 import de.se_rwth.commons.logging.Log;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,6 +20,7 @@ import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
+import montiarc.MontiArcTool;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
@@ -28,20 +31,22 @@ import montiarc.helper.SymbolPrinter;
 /**
  * @author Robert Heim
  */
-public class SymtabArcdTest extends AbstractSymboltableTest {
+public class SymtabArcdTest {
 
   private final String MODEL_PATH = "src/test/resources/symboltable";
+  
+  private static MontiArcTool tool;
 
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
+    tool = new MontiArcTool();
+   
   }
 
   @Test
   public void testCompWithGenericPorts() {
-    Scope symTab = createSymTab(MODEL_PATH + "/genericPorts");
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
-        "a.CompWithGenericPorts", ComponentSymbol.KIND).orElse(null);
+    ComponentSymbol comp = tool.getComponentSymbol("a.CompWithGenericPorts", Paths.get(MODEL_PATH + "/genericPorts").toFile()).orElse(null);
     assertNotNull(comp);
     assertEquals(3, comp.getFormalTypeParameters().size());
 
@@ -74,26 +79,24 @@ public class SymtabArcdTest extends AbstractSymboltableTest {
 
   @Test
   public void testCompWithGenericsAndInnerGenericComponent() {
-    Scope symTab = createSymTab(MODEL_PATH + "/genericPorts");
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
-        "a.GenericCompWithInnerGenericComp", ComponentSymbol.KIND).orElse(null);
+    ComponentSymbol comp = tool.getComponentSymbol(
+        "a.GenericCompWithInnerGenericComp", Paths.get(MODEL_PATH + "/genericPorts").toFile()).orElse(null);
     assertNotNull(comp);
   }
 
   @Test
   public void testCompWithCfgsAndInnerCfgComponent() {
-    Scope symTab = createSymTab(MODEL_PATH + "/configs");
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
-        "a.ConfigurableComponentWithInnerCfgComp", ComponentSymbol.KIND).orElse(null);
+    ComponentSymbol comp = tool.getComponentSymbol(
+        "a.ConfigurableComponentWithInnerCfgComp", Paths.get(MODEL_PATH + "/configs").toFile()).orElse(null);
     assertNotNull(comp);
   }
 
   @Test
   public void testReferencingCompsWithCfg() {
-    Scope symTab = createSymTab(MODEL_PATH + "/configs");
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
-        "a.ReferencingCompsWithCfg", ComponentSymbol.KIND).orElse(null);
+    ComponentSymbol comp = tool.getComponentSymbol(
+        "a.ReferencingCompsWithCfg", Paths.get(MODEL_PATH + "/configs").toFile()).orElse(null);
     assertNotNull(comp);
+
 
     ComponentInstanceSymbol compWithArgsRef = comp.getSubComponent("cfg").orElse(null);
     assertNotNull(compWithArgsRef);
@@ -147,9 +150,8 @@ public class SymtabArcdTest extends AbstractSymboltableTest {
 
   @Test
   public void testReferencingCompsWithExpression() {
-    Scope symTab = createSymTab(MODEL_PATH + "/configs");
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
-        "a.ReferencingCompsWithExpression", ComponentSymbol.KIND).orElse(null);
+    ComponentSymbol comp = tool.getComponentSymbol(
+        "a.ReferencingCompsWithExpression", Paths.get(MODEL_PATH + "/configs").toFile()).orElse(null);
     assertNotNull(comp);
     ComponentInstanceSymbol compWithArgsRef = comp.getSubComponent("cfg").orElse(null);
     assertNotNull(compWithArgsRef);
@@ -185,9 +187,8 @@ public class SymtabArcdTest extends AbstractSymboltableTest {
   //
   @Test
   public void testImportedReferences() {
-    Scope symTab = createSymTab(MODEL_PATH + "/importedReferences");
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
-        "a.SimpleComponent", ComponentSymbol.KIND).orElse(null);
+    ComponentSymbol comp = tool.getComponentSymbol(
+        "a.SimpleComponent", Paths.get(MODEL_PATH + "/importedReferences").toFile()).orElse(null);
     assertNotNull(comp);
 
     assertEquals("6 instances (3 named and 3 auto-instances) should be present!", 6,
@@ -232,9 +233,8 @@ public class SymtabArcdTest extends AbstractSymboltableTest {
 
   @Test
   public void testSuperComponents() {
-    Scope symTab = createSymTab(MODEL_PATH + "/superComponents");
-    ComponentSymbol subB = symTab.<ComponentSymbol>resolve(
-        "a.SubB", ComponentSymbol.KIND).orElse(null);
+    ComponentSymbol subB = tool.getComponentSymbol(
+        "a.SubB", Paths.get(MODEL_PATH + "/superComponents").toFile()).orElse(null);
     assertNotNull(subB);
 
     assertNotNull(subB);
@@ -253,9 +253,8 @@ public class SymtabArcdTest extends AbstractSymboltableTest {
 
   @Test
   public void testInnerComponents() {
-    Scope symTab = createSymTab(MODEL_PATH + "/innerComps");
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
-        "a.ComponentWithInnerComponent", ComponentSymbol.KIND).orElse(null);
+    ComponentSymbol comp = tool.getComponentSymbol(
+        "a.ComponentWithInnerComponent", Paths.get(MODEL_PATH + "/innerComps").toFile()).orElse(null);
     assertNotNull(comp);
     assertEquals("1 auto-instance and 1 named subcomponent", 2, comp
         .getSubComponents().size());
@@ -320,9 +319,8 @@ public class SymtabArcdTest extends AbstractSymboltableTest {
 
   @Test
   public void testInnerComponents2() {
-    Scope symTab = createSymTab(MODEL_PATH + "/innerComps");
-    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
-        "b.InnerComponents", ComponentSymbol.KIND).orElse(null);
+    ComponentSymbol comp = tool.getComponentSymbol(
+        "b.InnerComponents", Paths.get(MODEL_PATH + "/innerComps").toFile()).orElse(null);
     assertNotNull(comp);
 
     assertEquals("3 named subcomponents and 1 auto-instance", 4, comp

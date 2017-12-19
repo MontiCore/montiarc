@@ -1,13 +1,15 @@
 package contextconditions;
 
 import montiarc._ast.ASTMontiArcNode;
+import montiarc.cocos.MontiArcCoCos;
+
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
 
-public class AutomatonTypeCorrectnessTest extends AutomatonAbstractCocoTest {
+public class AutomatonTypeCorrectnessTest extends AbstractCoCoTest {
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
@@ -15,8 +17,8 @@ public class AutomatonTypeCorrectnessTest extends AutomatonAbstractCocoTest {
   
   @Test
   public void testGuardNotBool() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH + "contextconditions/", "invalid.GuardIsNotBoolean");
-    checkInvalid(node, new ExpectedErrorInfo(3, "xMA036"));
+    ASTMontiArcNode node = getAstNode("contextconditions/", "invalid.GuardIsNotBoolean");
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(3, "xMA036"));
   }
   
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
@@ -24,8 +26,8 @@ public class AutomatonTypeCorrectnessTest extends AutomatonAbstractCocoTest {
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testStimulusAndEventDontFit() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH + "contextconditions/", "invalid.StimulusAndEventDontFit");
-    checkInvalid(node, new ExpectedErrorInfo(2, "xMA046"));
+    ASTMontiArcNode node = getAstNode("contextconditions/", "invalid.StimulusAndEventDontFit");
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA046"));
   }
   
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
@@ -33,8 +35,8 @@ public class AutomatonTypeCorrectnessTest extends AutomatonAbstractCocoTest {
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testInitialReactionAndActionDontFit() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH + "contextconditions/", "invalid.InitialReactionAndActionDontFit");
-    checkInvalid(node, new ExpectedErrorInfo(2, "xMA039"));
+    ASTMontiArcNode node = getAstNode("contextconditions/", "invalid.InitialReactionAndActionDontFit");
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA039"));
   }
   
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
@@ -42,8 +44,8 @@ public class AutomatonTypeCorrectnessTest extends AutomatonAbstractCocoTest {
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testReactionAndActionFit() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH + "contextconditions/", "invalid.ReactionAndActionDontFit");
-    checkInvalid(node, new ExpectedErrorInfo(1, "xMA042"));
+    ASTMontiArcNode node = getAstNode("contextconditions/", "invalid.ReactionAndActionDontFit");
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA042"));
   }
 
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
@@ -51,8 +53,8 @@ public class AutomatonTypeCorrectnessTest extends AutomatonAbstractCocoTest {
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testInitialValueFit() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH + "contextconditions/", "invalid.InitialValueFit");
-    checkInvalid(node, new ExpectedErrorInfo(3, "xMA038", "xMA039"));
+    ASTMontiArcNode node = getAstNode("contextconditions/", "invalid.InitialValueFit");
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(3, "xMA038", "xMA039"));
   }
   
 }

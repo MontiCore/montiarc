@@ -5,17 +5,14 @@
  */
 package contextconditions;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc.cocos.MontiArcCoCos;
 
-public class AJavaCorrectnessTest extends AJavaCocoTest {
-
-  protected final String MODEL_PATH = "src/test/resources/";
+public class AJavaCorrectnessTest extends AbstractCoCoTest {
 
   @Before
   public void setup(){
@@ -24,30 +21,32 @@ public class AJavaCorrectnessTest extends AJavaCocoTest {
   
   @Test
   public void testUsedPortsExist() {
-    checkValid(MODEL_PATH, "contextconditions.valid.UsedPortsExist");
+    checkValid("", "contextconditions.valid.UsedPortsExist");
   }
   
   @Test
   public void testNewVariableDecl() {    
-    checkValid(MODEL_PATH, "contextconditions.valid.NewVarDecl");
+    checkValid("", "contextconditions.valid.NewVarDecl");
   }
   
   @Test
   public void testUsedPortsNotExist() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.UsedPortsNotExist");
-    checkInvalid(node, new ExpectedErrorInfo(2, "xMA030"));
+    ASTMontiArcNode node = getAstNode("", "contextconditions.invalid.UsedPortsNotExist");
+    ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(2, "xMA030");
+    // error occurs in symboltable only. Therefore no CoCo check via checkInvalid
+    expectedErrors.checkExpectedPresent(Log.getFindings(), "");
   }
   
   @Test
   public void testComponentWithAJavaAndAutomaton() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH,"contextconditions.invalid.ComponentWithAJavaAndAutomaton");
-    checkInvalid(node, new ExpectedErrorInfo(1, "xMA050"));
+    ASTMontiArcNode node = getAstNode("","contextconditions.invalid.ComponentWithAJavaAndAutomaton");
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA050"));
   }
 
   @Test
   public void testChangeOfIncomingPort() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH + "contextconditions", "invalid.ChangesIncomingPortInCompute");
-    checkInvalid(node, new ExpectedErrorInfo(4, "xMA078"));
+    ASTMontiArcNode node = getAstNode("" + "contextconditions", "invalid.ChangesIncomingPortInCompute");
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(4, "xMA078"));
   }
   
 }

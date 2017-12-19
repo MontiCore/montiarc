@@ -16,19 +16,23 @@ import org.junit.Test;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcTool;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 
-public class AutoInstantiationTest extends AbstractSymboltableTest {
+public class AutoInstantiationTest {
   
   private final String MODEL_PATH = "src/test/resources/symboltable";
+  
+  private static MontiArcTool tool;
 
   @BeforeClass
   public static void setUp() {
     // ensure an empty log
     Log.getFindings().clear();
     Log.enableFailQuick(false);
+    tool = new MontiArcTool();
   }
 
   /**
@@ -43,7 +47,7 @@ public class AutoInstantiationTest extends AbstractSymboltableTest {
    */
   @Test
   public void testSubcomponentWithInstanceName() {
-    Scope symTab = createSymTab(MODEL_PATH);
+    Scope symTab = tool.createSymbolTable(MODEL_PATH);
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "instantiation.BWithSubAWithInstanceName", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -60,7 +64,7 @@ public class AutoInstantiationTest extends AbstractSymboltableTest {
 
   @Test
   public void testSubcomponentWithoutInstanceName() {
-    Scope symTab = createSymTab(MODEL_PATH);
+    Scope symTab = tool.createSymbolTable(MODEL_PATH);
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "instantiation.BWithSubAWithoutInstanceName", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -76,7 +80,7 @@ public class AutoInstantiationTest extends AbstractSymboltableTest {
 
   @Test
   public void testPortWithName() {
-    Scope symTab = createSymTab(MODEL_PATH);
+    Scope symTab = tool.createSymbolTable(MODEL_PATH);
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "instantiation.ComponentWithPortName", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -92,7 +96,7 @@ public class AutoInstantiationTest extends AbstractSymboltableTest {
 
   @Test
   public void testPortWithoutName() {
-    Scope symTab = createSymTab(MODEL_PATH);
+    Scope symTab = tool.createSymbolTable(MODEL_PATH);
     ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         "instantiation.ComponentWithoutPortName", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -111,7 +115,7 @@ public class AutoInstantiationTest extends AbstractSymboltableTest {
    */
   @Test
   public void testInnerComponentWithFormalTypeParameters() {
-    Scope symTab = createSymTab(MODEL_PATH);
+    Scope symTab = tool.createSymbolTable(MODEL_PATH);
     ComponentSymbol component = symTab
         .<ComponentSymbol>resolve(
             "instantiation.InnerComponentWithFormalTypeParameters", ComponentSymbol.KIND)

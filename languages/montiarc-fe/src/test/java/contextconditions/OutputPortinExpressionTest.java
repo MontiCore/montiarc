@@ -2,11 +2,13 @@ package contextconditions;
 
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc.cocos.MontiArcCoCos;
+
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class OutputPortinExpressionTest extends AutomatonAbstractCocoTest {
+public class OutputPortinExpressionTest extends AbstractCoCoTest {
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
@@ -14,12 +16,12 @@ public class OutputPortinExpressionTest extends AutomatonAbstractCocoTest {
 
   @Test
   public void testAutomatonOutputInExpression() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH, "contextconditions.invalid.AutomatonOutputInExpression");
-    checkInvalid(node, new ExpectedErrorInfo(4, "xMA022"));
+    ASTMontiArcNode node = getAstNode("", "contextconditions.invalid.AutomatonOutputInExpression");
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(4, "xMA022"));
   }
 
   @Test
   public void testAJavaOutputInExpression() {
-    checkValid(MODEL_PATH, "contextconditions.valid.AJavaOutputInExpression");
+    checkValid("", "contextconditions.valid.AJavaOutputInExpression");
   }
 }

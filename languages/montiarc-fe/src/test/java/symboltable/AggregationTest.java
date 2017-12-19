@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.ModelingLanguageFamily;
@@ -30,6 +29,7 @@ import de.monticore.umlcd4a.CD4AnalysisLanguage;
 import de.monticore.umlcd4a.symboltable.CDSymbol;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcTool;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 
@@ -37,18 +37,21 @@ import montiarc._symboltable.PortSymbol;
  * @author Crispin Kirchner, Andreas Wortmann
  * @version $Revision$, $Date$
  */
-public class AggregationTest extends AbstractSymboltableTest {
+public class AggregationTest {
   
   private final String MODEL_PATH = "src/test/resources/symboltable";
   
+  private static MontiArcTool tool;
+  
   @BeforeClass
   public static void setUp() {
+    tool = new MontiArcTool();
     Log.enableFailQuick(false);
   }
   
   @Test
   public void testComponentWithCDType() {
-    Scope symTab = createSymTab(MODEL_PATH);
+    Scope symTab = tool.createSymbolTable(MODEL_PATH);
     
     CDSymbol types = symTab.<CDSymbol> resolve("aggregation.Types", CDSymbol.KIND).orElse(null);
     assertNotNull(types);
@@ -61,7 +64,7 @@ public class AggregationTest extends AbstractSymboltableTest {
   
   @Test
   public void testFormalTypeParameterComponentWithCDType() {
-    Scope symTab = createSymTab(MODEL_PATH);
+    Scope symTab = tool.createSymbolTable(MODEL_PATH);
     
     CDSymbol types = symTab.<CDSymbol> resolve("aggregation.Types", CDSymbol.KIND).orElse(null);
     assertNotNull(types);
@@ -95,7 +98,7 @@ public class AggregationTest extends AbstractSymboltableTest {
   
   @Test
   public void testCDusingMAWithCD() {
-    Scope symTab = createSymTab(MODEL_PATH);
+    Scope symTab = tool.createSymbolTable(MODEL_PATH);
     Optional<CDSymbol> cd = symTab.<CDSymbol> resolve("aggregation.Units",
         CDSymbol.KIND);
     assertTrue(cd.isPresent());
@@ -111,7 +114,7 @@ public class AggregationTest extends AbstractSymboltableTest {
    * superclass.Simulation component.
    */
   public void testSuperClass() {
-    Scope scope = createSymTab("src/test/resources/symboltable");
+    Scope scope = tool.createSymbolTable("src/test/resources/symboltable");
     
     ComponentSymbol simulationComponent = scope
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
@@ -167,7 +170,7 @@ public class AggregationTest extends AbstractSymboltableTest {
    * Tests whether Fields are properly embedded in the symbol table.
    */
   public void testFields() {
-    Scope scope = createSymTab("src/test/resources/symboltable");
+    Scope scope = tool.createSymbolTable("src/test/resources/symboltable");
     
     ComponentSymbol simulationSymbol = scope
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
@@ -198,7 +201,7 @@ public class AggregationTest extends AbstractSymboltableTest {
    * Tests wether we can get methods from the symbol table
    */
   public void testMethod() {
-    Scope symTab = createSymTab(MODEL_PATH);
+    Scope symTab = tool.createSymbolTable(MODEL_PATH);
     
     ComponentSymbol simulationSymbol = symTab
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
@@ -223,7 +226,7 @@ public class AggregationTest extends AbstractSymboltableTest {
    * Tests wether we can get Interfaces from the symbol table.
    */
   public void testInterface() {
-    Scope scope = createSymTab("src/test/resources/symboltable");
+    Scope scope = tool.createSymbolTable("src/test/resources/symboltable");
     
     ComponentSymbol simulationSymbol = scope
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
@@ -252,7 +255,7 @@ public class AggregationTest extends AbstractSymboltableTest {
   @Test
   public void testKind() {
     
-    Scope scope = createSymTab("src/test/resources/symboltable");
+    Scope scope = tool.createSymbolTable("src/test/resources/symboltable");
     
     ComponentSymbol simulationSymbol = scope
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)

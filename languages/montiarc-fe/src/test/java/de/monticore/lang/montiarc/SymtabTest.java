@@ -21,9 +21,9 @@ import org.junit.Test;
 import de.monticore.cocos.helper.Assert;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
-import de.monticore.types.TypesPrinter;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcTool;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ComponentSymbolReference;
@@ -31,24 +31,27 @@ import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.ValueSymbol;
 import montiarc.helper.SymbolPrinter;
-import symboltable.AbstractSymboltableTest;
 
 /**
  * Tests for symbol table of MontiArc.
  *
  * @author Robert Heim
  */
-public class SymtabTest extends AbstractSymboltableTest {
+public class SymtabTest {
+  
+  private static MontiArcTool tool;
+  
   @BeforeClass
   public static void setUp() {
     // ensure an empty log
     Log.getFindings().clear();
     Log.enableFailQuick(false);
+    tool = new MontiArcTool();
   }
   
   @Test
   public void testResolveJavaDefaultTypes() {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
     
     Optional<JTypeSymbol> javaType = symTab.resolve("String", JTypeSymbol.KIND);
     assertFalse(
@@ -73,7 +76,7 @@ public class SymtabTest extends AbstractSymboltableTest {
   
   @Test
   public void testComponentWithNamedInnerComponent() {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "a.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -133,7 +136,7 @@ public class SymtabTest extends AbstractSymboltableTest {
   
   @Test
   public void testCompWithCfgArgs() {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "a.CompWithCfgArgs", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -150,7 +153,7 @@ public class SymtabTest extends AbstractSymboltableTest {
    */
   @Test
   public void testCompWithGenericsAndInnerGenericComponent() {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "a.GenericCompWithInnerGenericComp", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -158,7 +161,7 @@ public class SymtabTest extends AbstractSymboltableTest {
   
   @Test
   public void testNamedInnerComponent() {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "a.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -175,7 +178,7 @@ public class SymtabTest extends AbstractSymboltableTest {
   @Ignore("ValueSymbol?!")
   @Test
   public void testParametersSymtab() {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "params.UsingSCWithParams", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -203,7 +206,7 @@ public class SymtabTest extends AbstractSymboltableTest {
    */
   @Test
   public void testComplexParametersSymtab() {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "params.UsingComplexParams", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -245,7 +248,7 @@ public class SymtabTest extends AbstractSymboltableTest {
    */
   @Test
   public void testGenericParametersSymtab3() {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "params.UsingComplexGenericParams", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -284,7 +287,7 @@ public class SymtabTest extends AbstractSymboltableTest {
   
   @Test
   public void testPortStereoType() {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
     PortSymbol port = symTab.<PortSymbol> resolve("a.Sub1.integerIn", PortSymbol.KIND).orElse(null);
     assertNotNull(port);
     
@@ -296,7 +299,7 @@ public class SymtabTest extends AbstractSymboltableTest {
   
   @Test
   public void testConnectorStereoType() {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
     ConnectorSymbol connector = symTab
         .<ConnectorSymbol> resolve("a.Sub1.stringOut", ConnectorSymbol.KIND).orElse(null);
     assertNotNull(connector);
@@ -307,7 +310,7 @@ public class SymtabTest extends AbstractSymboltableTest {
   
   @Test
   public void testComponentEntryIsDelayed() {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol parent = symTab.<ComponentSymbol> resolve(
         "timing.Timing", ComponentSymbol.KIND).orElse(null);
     assertNotNull(parent);
@@ -339,7 +342,7 @@ public class SymtabTest extends AbstractSymboltableTest {
   @Ignore("TODO ocl invariants?")
   @Test
   public void testAdaptOCLFieldToPort() {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol parent = symTab.<ComponentSymbol> resolve(
         "ocl.OCLFieldToPort", ComponentSymbol.KIND).orElse(null);
     assertNotNull(parent);
@@ -351,7 +354,7 @@ public class SymtabTest extends AbstractSymboltableTest {
   @Ignore("TODO ocl invariants?")
   @Test
   public void testAdaptOCLFieldToArcdField() {
-    Scope symTab = createSymTab("src/test/resources/arc/symtab");
+    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol parent = symTab.<ComponentSymbol> resolve(
         "ocl.OCLFieldToArcField", ComponentSymbol.KIND).orElse(null);
     assertNotNull(parent);

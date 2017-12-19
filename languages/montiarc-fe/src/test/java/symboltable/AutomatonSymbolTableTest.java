@@ -11,14 +11,18 @@ import de.monticore.symboltable.Scope;
 import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 import de.se_rwth.commons.logging.Log;
-import infrastructure.AutomatonBaseTest;
+import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._symboltable.ComponentSymbol;
 
-public class AutomatonSymbolTableTest extends AutomatonBaseTest {
+public class AutomatonSymbolTableTest {
+  
+  private static MontiArcTool tool;
+  
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
+    tool = new MontiArcTool();
   }
   
   @Test
@@ -29,7 +33,7 @@ public class AutomatonSymbolTableTest extends AutomatonBaseTest {
   
   @Test
   public void testCDType2JavaType() {
-    Scope symTab = createSymTab("src/test/resources/");
+    Scope symTab = tool.createSymbolTable("src/test/resources/");
     CDTypeSymbol cdType = symTab
         .<CDTypeSymbol> resolve("contextconditions.valid.Datatypes.MotorCommand", CDTypeSymbol.KIND)
         .orElse(null);
@@ -42,7 +46,7 @@ public class AutomatonSymbolTableTest extends AutomatonBaseTest {
   
   @Test
   public void testCDField2JavaField() {
-    Scope symTab = createSymTab("src/test/resources/");
+    Scope symTab = tool.createSymbolTable("src/test/resources/");
     CDFieldSymbol cdField = symTab
         .<CDFieldSymbol> resolve("contextconditions.valid.Datatypes.MotorCommand.STOP", CDFieldSymbol.KIND)
         .orElse(null);
@@ -56,7 +60,7 @@ public class AutomatonSymbolTableTest extends AutomatonBaseTest {
     // ensure an empty log
     Log.getFindings().clear();
     
-    Scope symTab = createSymTab(modelPath);
+    Scope symTab = tool.createSymbolTable(modelPath);
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(model, ComponentSymbol.KIND)
         .orElse(null);
     assertNotNull("Could not resolve model " + model, comp);

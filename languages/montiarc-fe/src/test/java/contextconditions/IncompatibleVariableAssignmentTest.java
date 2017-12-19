@@ -6,8 +6,9 @@ import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc.cocos.MontiArcCoCos;
 
-public class IncompatibleVariableAssignmentTest extends AutomatonAbstractCocoTest {
+public class IncompatibleVariableAssignmentTest extends AbstractCoCoTest {
   
   @BeforeClass
   public static void setUp() {
@@ -23,9 +24,9 @@ public class IncompatibleVariableAssignmentTest extends AutomatonAbstractCocoTes
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testIncompatibleVariableAssignment() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH,
+    ASTMontiArcNode node = getAstNode("",
         "contextconditions.invalid.IncompatibleVariableAssignment");
-    checkInvalid(node, new ExpectedErrorInfo(1, "xMA042"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA042"));
   }
   
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
@@ -33,9 +34,9 @@ public class IncompatibleVariableAssignmentTest extends AutomatonAbstractCocoTes
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testIncompatibleVariableAssignmentGenericTypesDifferSimple() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH,
+    ASTMontiArcNode node = getAstNode("",
         "contextconditions.invalid.IncompatibleVariableAssignmentGenericTypesDifferSimple");
-    checkInvalid(node, new ExpectedErrorInfo(1, "xMA042"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA042"));
   }
   
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
@@ -43,9 +44,9 @@ public class IncompatibleVariableAssignmentTest extends AutomatonAbstractCocoTes
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testIncompatibleVariableAssignmentGenericTypesDiffer() {
-    ASTMontiArcNode node = getAstNode(MODEL_PATH,
+    ASTMontiArcNode node = getAstNode("",
         "contextconditions.invalid.IncompatibleVariableAssignmentGenericTypesDiffer");
-    checkInvalid(node, new ExpectedErrorInfo(1, "xMA042"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA042"));
   }
   
 }

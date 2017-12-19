@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -21,22 +22,23 @@ import java.util.stream.Collectors;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc.cocos.MontiArcCoCos;
-import symboltable.AbstractSymboltableTest;
 
 /**
  * @author (last commit) Crispin Kirchner
  */
-public class AbstractCoCoTest extends AbstractSymboltableTest {
+public class AbstractCoCoTest {
   
   private static final String MODEL_PATH = "src/test/resources/";
   
+  private static final MontiArcTool MONTIARCTOOL = new MontiArcTool();
+  
   protected static ASTMontiArcNode getAstNode(String modelPath, String model) {
     
-    Scope symTab = createSymTab(MODEL_PATH + modelPath);
+    Scope symTab = MONTIARCTOOL.createSymbolTable(MODEL_PATH + modelPath);
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         model, ComponentSymbol.KIND).orElse(null);
     assertNotNull("Could not resolve model " + model, comp);
@@ -54,7 +56,7 @@ public class AbstractCoCoTest extends AbstractSymboltableTest {
     
     ASTMontiArcNode node = getAstNode(modelPath, model);
     
-    MontiArcCoCos.createChecker().checkAll(node);
+    MONTIARCTOOL.checkCoCos(node);
   }
   
   /**
@@ -63,7 +65,7 @@ public class AbstractCoCoTest extends AbstractSymboltableTest {
    */
   protected static void checkValid(String modelPath, String model) {
     Log.getFindings().clear();
-    MontiArcCoCos.createChecker().checkAll(getAstNode(modelPath, model));
+    MONTIARCTOOL.checkCoCos(getAstNode(modelPath, model));
     new ExpectedErrorInfo().checkOnlyExpectedPresent(Log.getFindings());
   }
   
@@ -77,7 +79,7 @@ public class AbstractCoCoTest extends AbstractSymboltableTest {
     
     // check whether all the expected errors are present when using all cocos
     Log.getFindings().clear();
-    MontiArcCoCos.createChecker().checkAll(node);
+    MONTIARCTOOL.checkCoCos(node);
     expectedErrors.checkExpectedPresent(Log.getFindings(), "Got no findings when checking all "
         + "cocos. Did you forget to add the new coco to MontiArcCocos?");
     
