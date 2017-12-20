@@ -6,7 +6,7 @@
   <parent>
     <groupId>montiarc.applications</groupId>
     <artifactId>applications</artifactId>
-    <version>4.1.6-SNAPSHOT</version>
+	<version>4.2.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>bumperbot</artifactId>
@@ -20,12 +20,6 @@
     <dependency>
       <groupId>montiarc.languages</groupId>
       <artifactId>montiarc-fe</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>montiarc.languages</groupId>
-      <artifactId>montiarcautomaton-fe</artifactId>
       <version>${project.version}</version>
     </dependency>
 

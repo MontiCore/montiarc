@@ -1,7 +1,8 @@
 
 /**
- * Grammar for MontiArc. Extends common components with
- * behavior information and configurations.
+ * Grammar for MontiArc. Comprises the definition of component & connector 
+ * architecture in form of component models. By default, MontiArc supports the
+ * definition of component behavior in form of AJava and I/O-omega automata.
  *
  * @author Arne Haber, Robert Heim, Andreas Wortmann
  */
@@ -10,7 +11,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   /** ASTMACompilationUnit represents the complete component
    * @attribute package          The package declaration of this component
    * @attribute importStatements List of imported elements
-   * @attribute Component the root component of the component
+   * @attribute component The outermost component model defined in this compilation unit
    */
   MACompilationUnit =
     ("package" package:(Name& || ".")+ ";")? 
@@ -53,7 +54,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
     
   /**
   * Use this interface to embed values.
-  * It has to be implemented by all values and additionally servers
+  * It has to be implemented by all values and additionally serves
   * as an extension point to add further values to sub-languages.
   */ 
   interface Value;
