@@ -40,7 +40,7 @@ import montiarc.helper.JavaHelper;
  */
 public class MontiArcTool {
   
-  private ModelingLanguageFamily family;
+  protected ModelingLanguageFamily family;
   
   private MontiArcCoCoChecker checker;
   
@@ -51,6 +51,15 @@ public class MontiArcTool {
    */
   public MontiArcTool() {
     family = new MontiArcLanguageFamily();
+    checker = MontiArcCoCos.createChecker();
+    isSymTabInitialized = false;
+  }
+  
+  /**
+   * Constructor for montiarc.MontiArcTool
+   */
+  public MontiArcTool(ModelingLanguageFamily fam) {
+    this.family = fam;
     checker = MontiArcCoCos.createChecker();
     isSymTabInitialized = false;
   }
@@ -140,10 +149,5 @@ public class MontiArcTool {
   public Scope createSymbolTable(String string) {
     return createSymbolTable(Paths.get(string).toFile());
   }
-  
-  protected void setFamily(ModelingLanguageFamily fam) {
-    this.family = fam;
-  }
-  
   
 }
