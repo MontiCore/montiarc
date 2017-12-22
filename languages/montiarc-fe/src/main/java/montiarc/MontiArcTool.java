@@ -35,12 +35,12 @@ import montiarc.helper.JavaHelper;
 /**
  * MontiArcTool
  *
- * @author Pfeiffer
+ * @author Pfeiffer, Wortmann
  * @version $Revision$, $Date$
  */
 public class MontiArcTool {
   
-  private ModelingLanguageFamily fam;
+  private ModelingLanguageFamily family;
   
   private MontiArcCoCoChecker checker;
   
@@ -50,7 +50,7 @@ public class MontiArcTool {
    * Constructor for montiarc.MontiArcTool
    */
   public MontiArcTool() {
-    fam = new MontiArcLanguageFamily();
+    family = new MontiArcLanguageFamily();
     checker = MontiArcCoCos.createChecker();
     isSymTabInitialized = false;
   }
@@ -59,7 +59,7 @@ public class MontiArcTool {
    * Constructor for montiarc.MontiArcTool
    */
   public MontiArcTool(ModelingLanguageFamily fam, MontiArcCoCoChecker checker) {
-    this.fam = fam;
+    this.family = fam;
     this.checker = checker;
     isSymTabInitialized = false;
   }
@@ -124,7 +124,7 @@ public class MontiArcTool {
     p.add(Paths.get("src/main/resources/defaultTypes"));
     final ModelPath mp = new ModelPath(p);
     
-    GlobalScope gs = new GlobalScope(mp, fam);
+    GlobalScope gs = new GlobalScope(mp, family);
     JavaHelper.addJavaPrimitiveTypes(gs);
     isSymTabInitialized = true;
     return gs;
@@ -139,6 +139,10 @@ public class MontiArcTool {
    */
   public Scope createSymbolTable(String string) {
     return createSymbolTable(Paths.get(string).toFile());
+  }
+  
+  protected void setFamily(ModelingLanguageFamily fam) {
+    this.family = fam;
   }
   
   
