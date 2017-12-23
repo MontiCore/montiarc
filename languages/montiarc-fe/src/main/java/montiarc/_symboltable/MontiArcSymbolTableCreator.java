@@ -80,7 +80,7 @@ import montiarc.helper.Timing;
 import montiarc.trafos.AutoConnection;
 
 /**
- * Visitor that creats the symboltable of a MontiArc AST.
+ * Visitor that creates the symboltable of a MontiArc AST.
  *
  * @author Robert Heim, Andreas Wortmann
  */
