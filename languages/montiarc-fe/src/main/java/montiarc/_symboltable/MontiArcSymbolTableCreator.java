@@ -82,19 +82,19 @@ import montiarc.trafos.AutoConnection;
 /**
  * Visitor that creats the symboltable of a MontiArc AST.
  *
- * @author Robert Heim
+ * @author Robert Heim, Andreas Wortmann
  */
 public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   
-  private String compilationUnitPackage = "";
+  protected String compilationUnitPackage = "";
   
   // extra stack of components that is used to determine which components are
   // inner components.
-  private Stack<ComponentSymbol> componentStack = new Stack<>();
+  protected Stack<ComponentSymbol> componentStack = new Stack<>();
   
-  private List<ImportStatement> currentImports = new ArrayList<>();
+  protected List<ImportStatement> currentImports = new ArrayList<>();
   
-  private AutoConnection autoConnectionTrafo = new AutoConnection();
+  protected AutoConnection autoConnectionTrafo = new AutoConnection();
   
   private final static JavaSymbolFactory jSymbolFactory = new JavaSymbolFactory();
   
@@ -344,7 +344,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     autoConnectionTrafo.transform(node, componentStack.peek());
   }
   
-  private void setParametersOfComponent(final ComponentSymbol componentSymbol,
+  protected void setParametersOfComponent(final ComponentSymbol componentSymbol,
       final ASTComponentHead astMethod) {
     for (ASTParameter astParameter : astMethod.getParameters()) {
       final String paramName = astParameter.getName();
@@ -466,7 +466,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   protected JTypeReferenceFactory<JavaTypeSymbolReference> typeRefFactory = (name, scope,
       dim) -> new JavaTypeSymbolReference(name, scope, dim);
   
-  private void addTypeArgumentsToComponent(ComponentSymbolReference typeReference,
+  protected void addTypeArgumentsToComponent(ComponentSymbolReference typeReference,
       ASTType astType) {
     if (astType instanceof ASTSimpleReferenceType) {
       ASTSimpleReferenceType astSimpleReferenceType = (ASTSimpleReferenceType) astType;
