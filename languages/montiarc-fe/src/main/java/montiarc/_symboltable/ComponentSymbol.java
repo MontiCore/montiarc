@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.monticore.symboltable.CommonScopeSpanningSymbol;
 import de.monticore.symboltable.ImportStatement;
+import de.monticore.symboltable.SymbolKind;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -53,6 +54,10 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
 
   public ComponentSymbol(String name) {
     super(name, KIND);
+  }
+  
+  public ComponentSymbol(String name, SymbolKind kind) {
+    super(name, kind);
   }
 
   /**
