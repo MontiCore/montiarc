@@ -3,8 +3,7 @@ package invalid;
 component AmbiguousMatching {
 
     port in String i; 
-    var int s;   
-      
+    port out int s;      
     port out int a;
 
 automaton AmbiguousMatching {

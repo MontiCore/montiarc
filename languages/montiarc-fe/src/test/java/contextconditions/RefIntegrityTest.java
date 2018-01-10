@@ -35,7 +35,6 @@ public class RefIntegrityTest extends AbstractCoCoTest {
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(6, "xMA026", "xMA027")); 
   }
   
-  @Ignore //stimulis are not being read
   @Test
   public void testAmbiguousMatching() {
 	  ASTMontiArcNode node = getAstNode("contextconditions", "invalid.AmbiguousMatching");
