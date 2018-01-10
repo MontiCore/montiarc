@@ -130,7 +130,6 @@ public class MontiArcTool {
       p.add(Paths.get(mP.getAbsolutePath()));
     }
     
-    p.add(Paths.get("src/main/resources/defaultTypes"));
     final ModelPath mp = new ModelPath(p);
     
     GlobalScope gs = new GlobalScope(mp, family);

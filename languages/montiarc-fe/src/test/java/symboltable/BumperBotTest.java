@@ -31,7 +31,7 @@ public class BumperBotTest {
   
   @Test
   public void test() {
-    ComponentSymbol motorSymbol = tool.getComponentSymbol("contextconditions.valid.Motor", Paths.get("src/test/resources").toFile())
+    ComponentSymbol motorSymbol = tool.getComponentSymbol("contextconditions.valid.Motor", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile())
         .orElse(null);
     
     assertNotNull(motorSymbol);

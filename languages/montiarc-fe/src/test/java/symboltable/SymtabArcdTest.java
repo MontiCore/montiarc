@@ -46,7 +46,7 @@ public class SymtabArcdTest {
 
   @Test
   public void testCompWithGenericPorts() {
-    ComponentSymbol comp = tool.getComponentSymbol("a.CompWithGenericPorts", Paths.get(MODEL_PATH + "/genericPorts").toFile()).orElse(null);
+    ComponentSymbol comp = tool.getComponentSymbol("a.CompWithGenericPorts", Paths.get(MODEL_PATH + "/genericPorts").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
     assertNotNull(comp);
     assertEquals(3, comp.getFormalTypeParameters().size());
 
@@ -94,7 +94,7 @@ public class SymtabArcdTest {
   @Test
   public void testReferencingCompsWithCfg() {
     ComponentSymbol comp = tool.getComponentSymbol(
-        "a.ReferencingCompsWithCfg", Paths.get(MODEL_PATH + "/configs").toFile()).orElse(null);
+        "a.ReferencingCompsWithCfg", Paths.get(MODEL_PATH + "/configs").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
     assertNotNull(comp);
 
 

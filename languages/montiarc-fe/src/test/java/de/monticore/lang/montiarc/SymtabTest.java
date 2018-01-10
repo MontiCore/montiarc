@@ -10,6 +10,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,7 +52,7 @@ public class SymtabTest {
   
   @Test
   public void testResolveJavaDefaultTypes() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
+    Scope symTab = tool.createSymbolTable(Paths.get("src/test/resources/arc/symtab").toFile(), Paths.get("src/main/resources/defaultTypes").toFile());
     
     Optional<JTypeSymbol> javaType = symTab.resolve("String", JTypeSymbol.KIND);
     assertFalse(
