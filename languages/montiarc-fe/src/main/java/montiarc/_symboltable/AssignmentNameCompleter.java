@@ -184,7 +184,7 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
    */
   private Set<String> findVariableNameFor(JTypeReference<? extends JTypeSymbol> assignmentType,
       Direction direction) {
-    Set<String> names = new HashSet<>();
+     Set<String> names = new HashSet<>();
     // TODO BUG!: Might return an empty list when resolving transitive adapted
     // symbols. So assignment name completer in not working!
     // reason:
