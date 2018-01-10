@@ -3,8 +3,6 @@ package de.montiarcautomaton.generator.codegen;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
@@ -18,12 +16,8 @@ import _templates.de.montiarcautomaton.lib.ComposedComponent;
 import _templates.de.montiarcautomaton.lib.Deploy;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.montiarcautomaton.generator.util.BehaviorGeneratorsMap;
-import de.monticore.ModelingLanguageFamily;
 import de.monticore.codegen.mc2cd.TransformationHelper;
 import de.monticore.io.paths.IterablePath;
-import de.monticore.io.paths.ModelPath;
-import de.monticore.symboltable.GlobalScope;
-import de.monticore.symboltable.Scope;
 import de.monticore.templateclassgenerator.util.GeneratorInterface;
 import de.se_rwth.commons.Names;
 import montiarc._ast.ASTBehaviorElement;
@@ -31,25 +25,14 @@ import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTElement;
 import montiarc._symboltable.AutomatonSymbol;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.MontiArcLanguageFamily;
-import montiarc.helper.JavaHelper;
 
 /**
  * This class generates code for an maa model.
  * 
- * @author Gerrit Leonhardt
+ * @author Andreas Wortmann, Jerome Pfeiffer, Gerrit Leonhardt
  */
 public class MAAGenerator {
-  
-  protected static Scope createSymTab(Path... modelPaths) {
-    ModelingLanguageFamily fam = new MontiArcLanguageFamily();
-    List<Path> mps = new ArrayList<>(Arrays.asList(modelPaths));
-    final ModelPath mp = new ModelPath(mps);
-    GlobalScope scope = new GlobalScope(mp, fam);
-    JavaHelper.addJavaPrimitiveTypes(scope);
-    return scope;
-  }
-  
+   
   /**
    * Computes the target path of the generated java file.
    * 
@@ -74,21 +57,19 @@ public class MAAGenerator {
    * target/generated-source/
    * @param hwcPath
    */
-  public static void generateModel(String simpleName, String packageName, String modelPath,
-      String fqnModelName, String targetPath, File hwcPath) {
+  public static void generateModel(File targetPath, File hwcPath, ComponentSymbol compSym) {
     
-    String basedir = getBasedirFromModelAndTargetPath(modelPath, targetPath);
-    Scope symTab = createSymTab(Paths.get(modelPath),Paths.get(basedir + "src/main/resources/defaultTypes"), Paths.get(basedir + "target/librarymodels/"));
-    String model = packageName + "." + simpleName;
-
-    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(model, ComponentSymbol.KIND).get();
+    ComponentSymbol comp = compSym;
+    
+    String packageName = comp.getPackageName();
+    String targetPathName = targetPath.getAbsolutePath();
     
     final ComponentHelper compHelper = new ComponentHelper(comp);
     Path filePath;
     
     // gen component input
     String inputName = comp.getName() + "Input";
-    filePath = getPath(targetPath, packageName, inputName);
+    filePath = getPath(targetPathName, packageName, inputName);
     // pass all arguments instead of comp for better readability in the template
     ComponentInput.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(),
         comp.getImports(),
@@ -96,7 +77,7 @@ public class MAAGenerator {
     
     // gen component result
     String resultName = comp.getName() + "Result";
-    filePath = getPath(targetPath, packageName, resultName);
+    filePath = getPath(targetPathName, packageName, resultName);
     // pass all arguments instead of comp for better readability in the template
     ComponentResult.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(),
         comp.getImports(),
@@ -109,7 +90,7 @@ public class MAAGenerator {
     existsHWC = TransformationHelper.existsHandwrittenClass(IterablePath.from(hwcPath, "java"),
         packageName + "." + implName);
     
-    filePath = getPath(targetPath, packageName, implName);
+    filePath = getPath(targetPathName, packageName, implName);
     Collection<AutomatonSymbol> automatons = comp.getSpannedScope().resolveLocally(AutomatonSymbol.KIND);
     if (automatons.size() > 1) {
       throw new RuntimeException("Only one automaton per component supported.");
@@ -126,14 +107,14 @@ public class MAAGenerator {
       }
     }
     
-    filePath = getPath(targetPath, packageName, comp.getName());
+    filePath = getPath(targetPathName, packageName, comp.getName());
     
     // gen component
     if (comp.isAtomic()) {
       
       // default implementation
       if (!existsHWC && !behaviorEmbedding.isPresent()) {
-        Path implPath = getPath(targetPath, packageName, implName);
+        Path implPath = getPath(targetPathName, packageName, implName);
         AbstractAtomicComponent.generate(implPath, compAST, compHelper, packageName, implName,
             inputName, resultName, comp.getConfigParameters());
       }
@@ -158,7 +139,7 @@ public class MAAGenerator {
     // gen deploy
     if (compHelper.isDeploy()) {
       String deployName = "Deploy" + comp.getName();
-      filePath = getPath(targetPath, packageName, deployName);
+      filePath = getPath(targetPathName, packageName, deployName);
       Deploy.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(),
           comp.getName(), deployName);
     }
@@ -172,29 +153,6 @@ public class MAAGenerator {
       }
     }
     return Optional.empty();
-  }
-  
-  /**
-   * Compares the two paths and returns the common path. The common path is the
-   * basedir.
-   * 
-   * @param modelPath
-   * @param targetPath
-   * @return
-   */
-  private static String getBasedirFromModelAndTargetPath(String modelPath, String targetPath) {
-    String basedir = "";
-    
-    for (int i = 0; i < modelPath.length(); i++) {
-      if (modelPath.charAt(i) == targetPath.charAt(i)) {
-        basedir += modelPath.charAt(i);
-      }
-      else {
-        break;
-      }
-      
-    }
-    return basedir;
   }
   
 }
