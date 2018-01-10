@@ -14,7 +14,7 @@ component ReferencingComp (int[] configIntArray, String[][] configStringArray){
     component CompWithArrays(configIntArray, configStringArray) ref;
     
     connect intArrayIn -> ref.intArrayIn;
-    connect stringArrayIn -> ref.stringArrayIn; //=> ports not compatible because of different array dimensions
+    connect stringArrayIn -> ref.stringArrayIn; //=> port not compatible because of different array dimensions
     connect intNoArrayIn -> ref.intNoArrayIn;
     connect enumArrayIn -> ref.enumArrayIn;
     connect ref.shortArrayOut -> shortArrayOut;

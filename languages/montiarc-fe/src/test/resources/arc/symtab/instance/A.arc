@@ -1,7 +1,7 @@
 package instance;
 
 component A {
-  ports in Integer portA1,
+  port in Integer portA1,
         in Integer portA2,
         out Integer portA3;
 

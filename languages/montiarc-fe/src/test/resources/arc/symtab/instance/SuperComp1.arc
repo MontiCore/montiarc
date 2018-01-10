@@ -1,7 +1,7 @@
 package instance;
 
 component SuperComp1 extends D {
-  ports in Integer port1,
+  port in Integer port1,
         out Boolean port2;
 
   component A a1;

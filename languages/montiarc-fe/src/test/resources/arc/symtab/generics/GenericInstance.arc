@@ -2,7 +2,7 @@ package generics;
 
 component GenericInstance {
   component Generic<T extends Number> {
-    ports in T in1,
+    port in T in1,
           in T in2,
           out T out1;
 

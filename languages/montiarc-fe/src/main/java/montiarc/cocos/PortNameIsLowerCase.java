@@ -10,17 +10,17 @@ import montiarc._cocos.MontiArcASTPortCoCo;
  * @author Michael Mutert
  */
 public class PortNameIsLowerCase implements MontiArcASTPortCoCo {
-
-    /**
-     * @see montiarc._cocos.MontiArcASTMACompilationUnitCoCo#check(montiarc._ast.ASTMACompilationUnit)
-     */
-    @Override
-    public void check(ASTPort node) {
-        if(node.getName().isPresent()) {
-            if(!Character.isLowerCase(node.getName().get().charAt(0))){
-                Log.error("0xMA077: The name of the port should start with a lowercase letter.",
-                        node.get_SourcePositionStart());
-            }
-        }
+  
+  /**
+   * @see montiarc._cocos.MontiArcASTMACompilationUnitCoCo#check(montiarc._ast.ASTMACompilationUnit)
+   */
+  @Override
+  public void check(ASTPort node) {
+    for (String name : node.getNames()) {
+      if (!Character.isLowerCase(name.charAt(0))) {
+        Log.error("0xMA077: The name of the port should start with a lowercase letter.",
+            node.get_SourcePositionStart());
+      }
     }
+  }
 }

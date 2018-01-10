@@ -148,27 +148,34 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     ASTType astType = node.getType();
     String typeName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astType);
     
-    String name = node.getName().orElse(StringTransformations.uncapitalize(typeName));
-    PortSymbol sym = new PortSymbol(name);
+    List<String> names = node.getNames();
     
-    JTypeReference<JTypeSymbol> typeRef = new MAJTypeReference(typeName, JTypeSymbol.KIND,
-        currentScope().get());
-    
-    typeRef.setDimension(TypesHelper.getArrayDimensionIfArrayOrZero(astType));
-    
-    addTypeArgumentsToTypeSymbol(typeRef, astType);
-    
-    sym.setTypeReference(typeRef);
-    sym.setDirection(node.isIncoming());
-    
-    // stereotype
-    if (node.getStereotype().isPresent()) {
-      for (ASTStereoValue st : node.getStereotype().get().getValues()) {
-        sym.addStereotype(st.getName(), st.getValue());
-      }
+    if(names.isEmpty()) {
+      names.add(StringTransformations.uncapitalize(typeName));
     }
     
-    addToScopeAndLinkWithNode(sym, node);
+    for (String name : names) {
+      PortSymbol sym = new PortSymbol(name);
+      
+      JTypeReference<JTypeSymbol> typeRef = new MAJTypeReference(typeName, JTypeSymbol.KIND,
+          currentScope().get());
+      
+      typeRef.setDimension(TypesHelper.getArrayDimensionIfArrayOrZero(astType));
+      
+      addTypeArgumentsToTypeSymbol(typeRef, astType);
+      
+      sym.setTypeReference(typeRef);
+      sym.setDirection(node.isIncoming());
+      
+      // stereotype
+      if (node.getStereotype().isPresent()) {
+        for (ASTStereoValue st : node.getStereotype().get().getValues()) {
+          sym.addStereotype(st.getName(), st.getValue());
+        }
+      }
+      
+      addToScopeAndLinkWithNode(sym, node);
+    }
   }
   
   @Override
@@ -182,7 +189,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     JTypeReference<JTypeSymbol> typeRef = new MAJTypeReference(typeName, JTypeSymbol.KIND,
         currentScope().get());
     addTypeArgumentsToTypeSymbol(typeRef, astType);
-
     
     typeRef.setDimension(TypesHelper.getArrayDimensionIfArrayOrZero(astType));
     
@@ -679,7 +685,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
                 if (var.isPresent()) {
                   if (assign.getValueList().isPresent()
                       && !assign.getValueList().get().getAllValuations().isEmpty()) {
-                    //This only covers the case "var i = somevalue"
+                    // This only covers the case "var i = somevalue"
                     ASTValuation v = assign.getValueList().get().getAllValuations().get(0);
                     var.get().setValuation(Optional.of(v));
                   }
@@ -720,7 +726,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   public void visit(ASTIOAssignment node) {
     node.setEnclosingScope(currentScope().get());
   }
-  
   
   /**
    * @see montiarc._symboltable.MontiArcSymbolTableCreatorTOP#visit(montiarc._ast.ASTStateDeclaration)

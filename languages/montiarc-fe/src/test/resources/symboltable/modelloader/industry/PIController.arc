@@ -1,6 +1,6 @@
 package industry;
 
 component PIController {
-  ports in Integer rotorSpeed,
+  port in Integer rotorSpeed,
         out Integer desiredAngle;
 }

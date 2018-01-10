@@ -1,7 +1,7 @@
 package instance;
 
 component D extends C {
-  ports in Integer portD1,
+  port in Integer portD1,
         in Integer portD2,
         out Integer portD3;
 
