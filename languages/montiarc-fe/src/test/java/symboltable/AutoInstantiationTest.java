@@ -93,6 +93,28 @@ public class AutoInstantiationTest {
       assertEquals("x", p.getName());
     }
   }
+  
+  @Test
+  public void testSimplifiedPortDefinition() {
+    Scope symTab = tool.createSymbolTable(MODEL_PATH);
+    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
+        "instantiation.ComponentWithSimplifiedPortDef", ComponentSymbol.KIND).orElse(null);
+    assertNotNull(comp);
+    assertEquals(6, comp.getPorts().size());
+    assertEquals(5, comp.getAllIncomingPorts().size());
+    assertEquals(1, comp.getAllOutgoingPorts().size());
+  }
+  
+  @Test
+  public void testSimplifiedPortDefinition2() {
+    Scope symTab = tool.createSymbolTable(MODEL_PATH);
+    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
+        "instantiation.ComponentWithSimplifiedPortDef2", ComponentSymbol.KIND).orElse(null);
+    assertNotNull(comp);
+    assertEquals(6, comp.getPorts().size());
+    assertEquals(5, comp.getAllIncomingPorts().size());
+    assertEquals(1, comp.getAllOutgoingPorts().size());
+  }
 
   @Test
   public void testPortWithoutName() {
