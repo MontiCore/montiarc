@@ -201,7 +201,7 @@ public class AggregationTest {
    * Tests wether we can get methods from the symbol table
    */
   public void testMethod() {
-    Scope symTab = tool.createSymbolTable(MODEL_PATH);
+    Scope symTab = tool.createSymbolTable(Paths.get(MODEL_PATH).toFile(), Paths.get("src/main/resources/defaultTypes").toFile());
     
     ComponentSymbol simulationSymbol = symTab
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
