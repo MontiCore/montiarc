@@ -118,7 +118,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   */
   Interface implements Element =
     Stereotype?
-    ("port"|"ports") ports:(Port || ",")+ ";";
+    "port" ports:(Port || ",")+ ";";
   
  /**
   * An incoming port is used to receive messages, an 
@@ -134,7 +134,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   Port =
     Stereotype?
     (incoming:["in"] | outgoing:["out"])
-    Type Name?;
+    Type (Name ("," Name)*)?;
     
   /**
   * Sets the timing of a component.
