@@ -3,7 +3,7 @@ package components;
 component E {
 
 
-  ports
+  port
     in Integer eIn,
     in Integer eIn2;
     

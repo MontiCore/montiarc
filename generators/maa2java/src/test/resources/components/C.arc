@@ -3,7 +3,7 @@ package components;
 
 component C {
 
-  ports
+  port
     in Integer cIn,
     in Integer cIn2;
     

@@ -3,7 +3,7 @@ package components;
 component D {
 
 
-  ports
+  port
     out Integer dOut,
     out Integer dOut2;
     

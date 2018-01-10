@@ -2,7 +2,7 @@ package ajava;
 
 component CompWithVariable {
 
-  ports
+  port
     in Boolean b,
     out String s;
 

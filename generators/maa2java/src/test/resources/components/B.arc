@@ -4,7 +4,7 @@ package components;
 component B {
 
 
-  ports
+  port
     out Integer bOut,
     out Integer bOut2;
     
