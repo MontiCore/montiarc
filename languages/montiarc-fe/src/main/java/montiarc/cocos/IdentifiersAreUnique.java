@@ -27,7 +27,9 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
       if (e instanceof ASTComponentVariableDeclaration) {
         ASTComponentVariableDeclaration decl = (ASTComponentVariableDeclaration) e;
         for (ASTVariable var : decl.getVariables()) {
-          checkList(names, var.getName(), "0xMA035", "port", e);
+          for (String name : var.getNames()) {
+            checkList(names, name, "0xMA035", "port", e);
+          }
         }
       }
       

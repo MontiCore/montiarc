@@ -222,9 +222,8 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
    * A component variable
    * @attribute Name: The name of the variable
    */
-  Variable = Type Name; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
+  Variable = Type (Name ("," Name)*)?; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
   
-  //@JP: Auch gut (auch für Ports): var Int summandA, summandB;
 
   /**
   * MontiArc components may contain arbitrary many 

@@ -150,7 +150,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     List<String> names = node.getNames();
     
-    if(names.isEmpty()) {
+    if (names.isEmpty()) {
       names.add(StringTransformations.uncapitalize(typeName));
     }
     
@@ -183,18 +183,24 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     ASTType astType = node.getType();
     String typeName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astType);
     
-    String name = node.getName();
-    VariableSymbol sym = new VariableSymbol(name);
+    List<String> names = node.getNames();
     
-    JTypeReference<JTypeSymbol> typeRef = new MAJTypeReference(typeName, JTypeSymbol.KIND,
-        currentScope().get());
-    addTypeArgumentsToTypeSymbol(typeRef, astType);
-    
-    typeRef.setDimension(TypesHelper.getArrayDimensionIfArrayOrZero(astType));
-    
-    sym.setTypeReference(typeRef);
-    
-    addToScopeAndLinkWithNode(sym, node);
+    if (names.isEmpty()) {
+      names.add(StringTransformations.uncapitalize(typeName));
+    }
+    for (String name : names) {
+      VariableSymbol sym = new VariableSymbol(name);
+      
+      JTypeReference<JTypeSymbol> typeRef = new MAJTypeReference(typeName, JTypeSymbol.KIND,
+          currentScope().get());
+      addTypeArgumentsToTypeSymbol(typeRef, astType);
+      
+      typeRef.setDimension(TypesHelper.getArrayDimensionIfArrayOrZero(astType));
+      
+      sym.setTypeReference(typeRef);
+      
+      addToScopeAndLinkWithNode(sym, node);
+    }
   }
   
   private void addTypeArgumentsToTypeSymbol(JTypeReference<? extends JTypeSymbol> typeRef,

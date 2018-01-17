@@ -115,6 +115,7 @@ public class AutoInstantiationTest {
     assertEquals(5, comp.getAllIncomingPorts().size());
     assertEquals(1, comp.getAllOutgoingPorts().size());
   }
+  
 
   @Test
   public void testPortWithoutName() {
@@ -132,6 +133,25 @@ public class AutoInstantiationTest {
     }
   }
 
+  @Test
+  public void testSimplifiedVariableDefinition() {
+    Scope symTab = tool.createSymbolTable(MODEL_PATH);
+    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
+        "instantiation.ComponentWithSimplifiedVariableDef", ComponentSymbol.KIND).orElse(null);
+    assertNotNull(comp);
+    assertEquals(6, comp.getVariables().size());
+  }
+  
+  @Test
+  public void testSimplifiedVariableDefinition2() {
+    Scope symTab = tool.createSymbolTable(MODEL_PATH);
+    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
+        "instantiation.ComponentWithSimplifiedVariableDef2", ComponentSymbol.KIND).orElse(null);
+    assertNotNull(comp);
+    assertEquals(6, comp.getVariables().size());
+  }
+  
+  
   /**
    * Assure that an inner component with formal type parameters is not auto-instantiated
    */
