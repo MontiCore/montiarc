@@ -98,6 +98,10 @@ public class MontiArcTool {
       Log.error("Symtab has to be initialized before checking CoCos");
       return false;
     }
+    if(!node.getSymbol().isPresent()) {
+      Log.error("Symtab is not linked with passed node! Call getSymbol() or getASTNode() for getting the ast.");
+    }
+    
     checker.checkAll(node);
     if (Log.getErrorCount() != 0) {
       return false;

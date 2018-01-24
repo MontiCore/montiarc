@@ -17,16 +17,20 @@ import de.monticore.symboltable.ImportStatement;
 public class JavaHelper {
   private final static JavaSymbolFactory jSymbolFactory = new JavaSymbolFactory();
   
+  private static final String[] primitiveTypes = {"boolean", "byte", "char", "double", "float", "int", "long", "short"};
+  
   // TODO this should be part of JavaDSL / JavaLib
   public static void addJavaPrimitiveTypes(GlobalScope globalScope) {
-    globalScope.add(jSymbolFactory.createClassSymbol("boolean"));
-    globalScope.add(jSymbolFactory.createClassSymbol("byte"));
-    globalScope.add(jSymbolFactory.createClassSymbol("char"));
-    globalScope.add(jSymbolFactory.createClassSymbol("double"));
-    globalScope.add(jSymbolFactory.createClassSymbol("float"));
-    globalScope.add(jSymbolFactory.createClassSymbol("int"));
-    globalScope.add(jSymbolFactory.createClassSymbol("long"));
-    globalScope.add(jSymbolFactory.createClassSymbol("short"));
+    for(String primType: primitiveTypes) {
+      globalScope.add(jSymbolFactory.createClassSymbol(primType));
+    }
+  }
+  
+  /**
+   * @return primitivetypes
+   */
+  public static String[] getPrimitivetypes() {
+    return primitiveTypes;
   }
   
   /**
