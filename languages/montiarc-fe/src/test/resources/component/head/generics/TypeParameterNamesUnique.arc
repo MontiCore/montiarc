@@ -1,4 +1,4 @@
-package valid;
+package component.head.generics;
 
 component TypeParameterNamesUnique<S, T> {
 }
