@@ -24,6 +24,6 @@ public class VariableInitializationTest extends AbstractCoCoTest{
   public void testInitBlockWithoutBehaviour(){
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new InitBlockOnlyOnEmbeddedAJava()),
         getAstNode("contextconditions", "invalid.InitBlockWithoutAJava"),
-        new ExpectedErrorInfo(1, "xMA063"));
+        new AbstractCoCoTestExpectedErrorInfo(1, "xMA063"));
   }
 }

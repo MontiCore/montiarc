@@ -31,21 +31,21 @@ public class UniquenessTest extends AbstractCoCoTest {
   @Test
   public void testPortNamingUnique() throws RecognitionException, IOException {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
-        getAstNode("arc/coco/uniqueness", "a.E1"), new ExpectedErrorInfo(2, "xMA053"));
+        getAstNode("arc/coco/uniqueness", "a.E1"), new AbstractCoCoTestExpectedErrorInfo(2, "xMA053"));
   }
   
   @Test
   public void testPortImplicitNamingOneExplicitNamed()
       throws RecognitionException, IOException {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
-        getAstNode("arc/coco/uniqueness", "a.E1_2"), new ExpectedErrorInfo(1, "xMA053"));
+        getAstNode("arc/coco/uniqueness", "a.E1_2"), new AbstractCoCoTestExpectedErrorInfo(1, "xMA053"));
   }
   
   @Test
   public void testUniqueConstraints() throws RecognitionException, IOException {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         getAstNode("arc/coco/uniqueness", "a.UniqueConstraint"),
-        new ExpectedErrorInfo(2, "xMA052"));
+        new AbstractCoCoTestExpectedErrorInfo(2, "xMA052"));
   }
   
 }

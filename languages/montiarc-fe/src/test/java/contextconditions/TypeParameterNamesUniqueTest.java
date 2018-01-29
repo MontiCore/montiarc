@@ -32,6 +32,6 @@ public class TypeParameterNamesUniqueTest extends AbstractCoCoTest {
   public void testInvalidModel() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new TypeParameterNamesUnique()),
         getAstNode("contextconditions", "invalid.TypeParameterNamesNotUnique"),
-        new ExpectedErrorInfo(1, "xMA006"));
+        new AbstractCoCoTestExpectedErrorInfo(1, "xMA006"));
   }
 }

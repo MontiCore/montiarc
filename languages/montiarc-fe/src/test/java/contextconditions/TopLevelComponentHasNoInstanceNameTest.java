@@ -32,7 +32,7 @@ public class TopLevelComponentHasNoInstanceNameTest extends AbstractCoCoTest {
   public void testInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new TopLevelComponentHasNoInstanceName()),
         getAstNode("contextconditions", "invalid.TopLevelComponentHasInstanceName"),
-        new ExpectedErrorInfo(1, "xMA007"));
+        new AbstractCoCoTestExpectedErrorInfo(1, "xMA007"));
     
   }
 }
