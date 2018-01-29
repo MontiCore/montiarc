@@ -11,7 +11,7 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc.cocos.MontiArcCoCos;
 
 /**
- * This class checks all context conditions related to assignments
+ * This class checks all context conditions related to automaton assignments
  *
  * @author Andreas Wortmann
  */
@@ -51,9 +51,17 @@ public class AssignmentTests extends AbstractCoCoTest {
   }
   
   @Test
-  public void testValueListOutput() {
+  public void testValueListAssignment() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ValueListAssignment");
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new AbstractCoCoTestExpectedErrorInfo(1, "xMA064"));
   }
+  
+  @Test
+  public void testMultipleAssignmentsToSamePort() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "MultipleAssignmentsToSamePort");
+    // {v=2, y=1, v=3, o = 3, o = 4, x = 1, x = 5} => 3: for v,for x, for o
+    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(3, "xMA019"));
+  }
+
 }

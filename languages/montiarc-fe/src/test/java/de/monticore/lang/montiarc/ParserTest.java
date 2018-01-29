@@ -46,7 +46,7 @@ public class ParserTest {
       MODEL_PATH + "/arc/context/a/S2.arc",
       
       // Multiple inheritance is not supported
-      MODEL_PATH + "/contextconditions/invalid/MultipleInheritance.arc",
+      MODEL_PATH + "/component/head/inheritance/MultipleInheritance.arc",
 
       // TODO we do not support OCL Expressions yet
       MODEL_PATH + "/arc/prettyPrint/example1/StatusControl.arc",

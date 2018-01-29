@@ -1,4 +1,8 @@
 package component.head.generics;
 
-component TypeParameterNamesAbiguous<T, T> {
+/**
+ * Invalid model. The names of type parameters are ambiguous.
+ */
+component TypeParameterNamesAbiguous<T, T> 
+{
 }

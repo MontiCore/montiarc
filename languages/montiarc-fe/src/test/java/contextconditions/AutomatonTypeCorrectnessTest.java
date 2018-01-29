@@ -15,12 +15,6 @@ public class AutomatonTypeCorrectnessTest extends AbstractCoCoTest {
     Log.enableFailQuick(false);
   }
   
-  @Test
-  public void testGuardNotBool() {
-    ASTMontiArcNode node = getAstNode("contextconditions/", "invalid.GuardIsNotBoolean");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(3, "xMA036"));
-  }
-  
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
       + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")

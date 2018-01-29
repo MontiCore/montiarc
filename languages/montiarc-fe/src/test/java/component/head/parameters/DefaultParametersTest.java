@@ -23,6 +23,7 @@ import montiarc.cocos.DefaultParametersHaveCorrectOrder;
 public class DefaultParametersTest extends AbstractCoCoTest {
 
   private static final String MP = "";
+  
   private static final String PACKAGE = "component.head.parameters";
   
   @BeforeClass

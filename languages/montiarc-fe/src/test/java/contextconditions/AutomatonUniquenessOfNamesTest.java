@@ -21,24 +21,11 @@ public class AutomatonUniquenessOfNamesTest extends AbstractCoCoTest {
     Log.enableFailQuick(false);
   }
 
-  @Test
-  public void testDoubleDefinitionOfInitials() {
-    ASTMontiArcNode node = getAstNode("contextconditions", "invalid.DoubleDefinitionOfSameInitial");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA029"));
-  }
-
-  @Test
-  public void testStateDefinedMultipleTimes() {
-    ASTMontiArcNode node = getAstNode("contextconditions", "invalid.StateDefinedMultipleTimes");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new AutomatonStateDefinedMultipleTimes());
-    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA031"));
-  }
   
-  @Test
-  public void testStateDefinedMultipleTimesStereotypesDontMatch() {
-    ASTMontiArcNode node = getAstNode("contextconditions", "invalid.StateDefinedMultipleTimesStereotypesDontMatch");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(4, "xMA031", "xMA034"));
-  }
+
+
+  
+ 
 
   @Test
   public void testVariableConflictIO() {

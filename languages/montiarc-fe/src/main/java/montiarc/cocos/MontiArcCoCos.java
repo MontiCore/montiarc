@@ -35,8 +35,10 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo(new InPortUniqueSender())
         .addCoCo(new ImportsValid())
-        /// Java/P Cocos
+        
+        /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
+        .addCoCo(new AJavaBehaviorNameIsUppercase())
         .addCoCo(new SimpleConnectorSourceExists())
         .addCoCo(new InputPortChangedInCompute())
         .addCoCo(new UsedPortsAndVariablesExist())
@@ -49,9 +51,9 @@ public class MontiArcCoCos {
         /// Automaton Cocos
         /// /////////////////////////////////////////////////////////////
         .addCoCo(new ImplementationInNonAtomicComponent())
-        .addCoCo(new AutomatonUppercase())
         
         // CONVENTIONS
+        .addCoCo(new AutomatonBehaviorNameIsUppercase())
         .addCoCo(new AutomatonHasNoState())
         .addCoCo(new AutomatonHasNoInitialState())
         .addCoCo(new CorrectAssignmentOperators())

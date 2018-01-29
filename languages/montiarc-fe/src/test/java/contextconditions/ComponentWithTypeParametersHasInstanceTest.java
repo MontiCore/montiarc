@@ -34,10 +34,7 @@ public class ComponentWithTypeParametersHasInstanceTest
     
   }
   
-  @Test
-  public void testInvalidComponentWithTypeParametersLacksInstance() {
-    testInvalid("ComponentWithTypeParametersLacksInstance");
-  }
+ 
   
   @Test
   public void testInvalidNestedComponentWithTypeParameterLacksInstance() {
