@@ -3,26 +3,25 @@
  *
  * http://www.se-rwth.de/
  */
-package contextconditions;
+package component.body.subcomponents;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import contextconditions.AbstractCoCoTest;
+import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
 
 /**
- * TODO: Write me!
+ * This class checks all context conditions related to subcomponents
  *
- * @author  (last commit) $Author$
- * @version $Revision$,
- *          $Date$
- * @since   TODO: add version number
+ * @author Andreas Wortmann
  *
  */
-public class SubcomponentParametersCorrectlyAssignedTest extends AbstractCoCoTest{
+public class SubComponentsTest extends AbstractCoCoTest{
   
   @BeforeClass
   public static void setUp() {
@@ -30,14 +29,9 @@ public class SubcomponentParametersCorrectlyAssignedTest extends AbstractCoCoTes
   }
   
   @Test
-  public void testValid() {
-    
-  }
-  
-  @Test
-  public void testInvalid() {
+  public void testSubcomponentParametersCorrectlyAssigned() {
     ASTMontiArcNode node = getAstNode("contextconditions",
         "invalid.SubcomponentParametersNotCorrectlyAssigned");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()), node, new ExpectedErrorInfo(1, "xMA064"));
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()), node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA064"));
   }
 }
