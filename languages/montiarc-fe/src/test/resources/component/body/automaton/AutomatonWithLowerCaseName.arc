@@ -1,12 +1,12 @@
-package contextconditions.invalid;
+package component.body.automaton;
 
-component LowerCaseAutomaton {
+component AutomatonWithLowerCaseName {
   port
     in Integer a;
     
   var int c;
   
-  automaton lowercaseName {
+  automaton lowerCaseName {
   	state Start;
     initial Start;
 

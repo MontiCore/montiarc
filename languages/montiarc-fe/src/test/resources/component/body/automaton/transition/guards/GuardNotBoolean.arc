@@ -1,8 +1,8 @@
-package invalid;
+package component.body.automaton.transition.guards;
 
-import invalid.Test;
+import component.body.automaton.transition.guards.Number;
 
-component GuardIsNotBoolean {
+component GuardNotBoolean {
 
 	port
 		in Integer i1, //FULL type
@@ -11,9 +11,7 @@ component GuardIsNotBoolean {
 
 	var Integer i2; //QUALIFIED type
 
-	automaton GuardIsNotBooleanAutomaton{
-
-
+	automaton GuardIsNotBooleanAutomaton {
 		state A,B;
 		initial A;
 

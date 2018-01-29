@@ -1,4 +1,4 @@
-package contextconditions.invalid;
+package component.body.automaton;
 
 component AutomatonWithoutState {
 

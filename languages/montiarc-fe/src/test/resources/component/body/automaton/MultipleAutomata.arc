@@ -1,6 +1,6 @@
-package contextconditions.invalid;
+package component.body.automaton;
 
-component MultipleBehaviors {
+component MultipleAutomata {
   port
     in Integer a;
 
