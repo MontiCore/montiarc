@@ -60,6 +60,17 @@ public class ComponentHelper {
     return printFqnTypeName(param.getType());
   }
 
+  /**
+   * Calculates the values of the parameters of a {@link ComponentInstanceSymbol}. This takes default values for parameters into account and adds them as required.
+   * Default values are only added from left to right in order.
+   * <br/>
+   * Example:
+   *
+   * For a component with parameters <code>String stringParam, Integer integerParam = 2, Object objectParam = new Object()</code> that is instanciated with parameters <code>"Test String", 5</code> this method adds <code>new Object()</code> as the last parameter.
+   *
+   * @param param The {@link ComponentInstanceSymbol} for which the parameters should be calculated.
+   * @return The parameters.
+   */
   public Collection<String> getParamValues(ComponentInstanceSymbol param) {
     final List<ValueSymbol<TypeReference<TypeSymbol>>> configArguments = param.getConfigArguments();
     JavaDSLPrettyPrinter printer = new JavaDSLPrettyPrinter(new IndentPrinter());
@@ -73,12 +84,14 @@ public class ComponentHelper {
     // Append the default parameter values for as many as there are left
     final List<JFieldSymbol> configParameters = param.getComponentType().getConfigParameters();
 
-    // 1. Calculate the number of missing parameters
+    // Calculate the number of missing parameters
     int numberOfMissingParameters = configParameters.size() - configArguments.size();
+
+    // Get the AST node of the component and the list of parameters in the AST
     final ASTComponent astNode = (ASTComponent) param.getComponentType().getReferencedSymbol().getAstNode().get();
     final List<ASTParameter> parameters = astNode.getHead().getParameters();
 
-    // Retrieve the parameters
+    // Retrieve the parameters from the node and add them to the list
     for(int counter = 0; counter < numberOfMissingParameters; counter++) {
       // Fill up from the last parameter
       final ASTParameter astParameter = parameters.get(parameters.size() - 1 - counter);
@@ -87,8 +100,6 @@ public class ComponentHelper {
     }
 
     return outputParameters;
-
-//    return configArguments.stream().map(symbol -> SymbolPrinter.printConfigArgument(symbol)).collect(Collectors.toList());
   }
 
   public String getSubComponentTypeName(ComponentInstanceSymbol instance) {
