@@ -1,4 +1,4 @@
-package contextconditions.valid;
+package component.body.ajava;
 
 component UsedPortsAndParametersExist(String s) {
   port

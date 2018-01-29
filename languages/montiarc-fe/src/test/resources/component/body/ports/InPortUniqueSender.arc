@@ -1,5 +1,8 @@
-package valid;
+package component.body.ports;
 
+/**
+ * Valid model.
+ */
 component InPortUniqueSender {
   
   component A {

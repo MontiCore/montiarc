@@ -13,8 +13,10 @@ import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
+import montiarc.cocos.InPortUniqueSender;
 import montiarc.cocos.MontiArcCoCos;
 
 /**
@@ -75,6 +77,18 @@ public class PortTests extends AbstractCoCoTest {
         .getReferencedSymbol();
     
     assertNotNull(typeSymbol);
+  }
+  
+  @Test
+  public void testInPortAmbiguousSender() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "InPortAmbiguousSender");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
+        node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA005"));
+  }
+  
+  @Test
+  public void testInPortUniqueSender() {
+    checkValid(MP, PACKAGE + "." + "InPortUniqueSender");
   }
   
 }

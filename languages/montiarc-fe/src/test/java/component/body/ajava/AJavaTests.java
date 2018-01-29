@@ -1,10 +1,5 @@
 package component.body.ajava;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.util.Optional;
-
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -12,10 +7,8 @@ import org.junit.Test;
 import contextconditions.AbstractCoCoTest;
 import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 import de.se_rwth.commons.logging.Log;
-import montiarc._ast.ASTMACompilationUnit;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc._parser.MontiArcParser;
 import montiarc.cocos.AtMostOneInitBlock;
 import montiarc.cocos.InitBlockOnlyOnEmbeddedAJava;
 import montiarc.cocos.MontiArcCoCos;
@@ -107,8 +100,8 @@ public class AJavaTests extends AbstractCoCoTest {
   }
   
   @Test
-  public void testUsedPortsExist() {
-    checkValid(MP, PACKAGE + "." + "UsedPortsExist");
+  public void testUsedPortsAndParametersExist() {
+    checkValid(MP, PACKAGE + "." + "UsedPortsAndParametersExist");
   }
   
   @Ignore("@JP: Currently throws two times 0xMA030 - one for variable j and one for sum. Both errors are wrong.")

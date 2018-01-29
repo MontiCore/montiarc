@@ -1,5 +1,8 @@
-package invalid;
+package component.body.ports;
 
+/**
+ * Invalid model. Muliple connectors send to rootOut.
+ */
 component InPortAmbiguousSender {
   port out rootOut;
 
