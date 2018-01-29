@@ -34,7 +34,7 @@ public class ConventionsTest extends AbstractCoCoTest {
   public void testPortConvention() {
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.PortViolatesNamingConventions");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortNameIsLowerCase());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA077"));
+    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA077"));
   }
 
   @Test
@@ -43,7 +43,7 @@ public class ConventionsTest extends AbstractCoCoTest {
   public void testImportConvention() {
     ASTComponent node = (ASTComponent) getAstNode("arc/coco/conventions", "conv.UnuniqueImports");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA074"));
+    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA074"));
   }
 
   @Test
@@ -54,7 +54,7 @@ public class ConventionsTest extends AbstractCoCoTest {
         "conv.ConnectorSourceAndTargetSameComponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetComponentDiffer());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA075"));
+    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA075"));
   }
 
   @Test
@@ -64,16 +64,16 @@ public class ConventionsTest extends AbstractCoCoTest {
         "conv.MissingSourceTargetDefinitionInSubcomponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetExist());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA066", "xMA067"));
+    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA066", "xMA067"));
   }
 
   @Test
   public void testUnusedPorts() {
     ASTMontiArcNode node = getAstNode("arc/coco/conventions", "conv.UnusedPorts");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA057", "xMA058"));
+    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(3, "xMA057", "xMA058"));
 
     cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA059", "xMA060"));
+    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(4, "xMA059", "xMA060"));
   }
 }

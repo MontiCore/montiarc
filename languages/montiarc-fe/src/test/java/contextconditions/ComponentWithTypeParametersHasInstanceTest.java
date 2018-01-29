@@ -30,7 +30,7 @@ public class ComponentWithTypeParametersHasInstanceTest
   
   public void testInvalid(String componentName) {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
-        getAstNode("contextconditions", "invalid." + componentName), new ExpectedErrorInfo(1, "xMA009"));
+        getAstNode("contextconditions", "invalid." + componentName), new AbstractCoCoTestExpectedErrorInfo(1, "xMA009"));
     
   }
   

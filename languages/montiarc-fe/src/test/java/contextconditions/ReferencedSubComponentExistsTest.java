@@ -39,10 +39,10 @@ public class ReferencedSubComponentExistsTest extends AbstractCoCoTest {
     Log.getFindings().clear();
     getAstNode("contextconditions",
         "invalid.NonExistantReferencedSubComponent");
-    ExpectedErrorInfo.setERROR_CODE_PATTERN(Pattern.compile("x[0-9A-F]{5}"));
-    ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xA1038");
+    AbstractCoCoTestExpectedErrorInfo.setERROR_CODE_PATTERN(Pattern.compile("x[0-9A-F]{5}"));
+    AbstractCoCoTestExpectedErrorInfo errors = new AbstractCoCoTestExpectedErrorInfo(2, "xA1038");
     errors.checkExpectedPresent(Log.getFindings(), "No errors found!");
-    ExpectedErrorInfo.reset();
+    AbstractCoCoTestExpectedErrorInfo.reset();
   }
   
 }

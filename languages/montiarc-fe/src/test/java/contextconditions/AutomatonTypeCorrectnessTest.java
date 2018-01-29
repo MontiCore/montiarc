@@ -18,7 +18,7 @@ public class AutomatonTypeCorrectnessTest extends AbstractCoCoTest {
   @Test
   public void testGuardNotBool() {
     ASTMontiArcNode node = getAstNode("contextconditions/", "invalid.GuardIsNotBoolean");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(3, "xMA036"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(3, "xMA036"));
   }
   
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
@@ -27,7 +27,7 @@ public class AutomatonTypeCorrectnessTest extends AbstractCoCoTest {
   @Test
   public void testStimulusAndEventDontFit() {
     ASTMontiArcNode node = getAstNode("contextconditions/", "invalid.StimulusAndEventDontFit");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA046"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA046"));
   }
   
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
@@ -36,7 +36,7 @@ public class AutomatonTypeCorrectnessTest extends AbstractCoCoTest {
   @Test
   public void testInitialReactionAndActionDontFit() {
     ASTMontiArcNode node = getAstNode("contextconditions/", "invalid.InitialReactionAndActionDontFit");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA039"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA039"));
   }
   
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
@@ -45,7 +45,7 @@ public class AutomatonTypeCorrectnessTest extends AbstractCoCoTest {
   @Test
   public void testReactionAndActionFit() {
     ASTMontiArcNode node = getAstNode("contextconditions/", "invalid.ReactionAndActionDontFit");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA042"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA042"));
   }
 
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
@@ -54,7 +54,7 @@ public class AutomatonTypeCorrectnessTest extends AbstractCoCoTest {
   @Test
   public void testInitialValueFit() {
     ASTMontiArcNode node = getAstNode("contextconditions/", "invalid.InitialValueFit");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(3, "xMA038", "xMA039"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(3, "xMA038", "xMA039"));
   }
   
 }

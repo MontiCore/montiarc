@@ -19,6 +19,6 @@ public class AJavaAtMostOneInitBlockTest extends AbstractCoCoTest {
   public void testAtMostOneInitBlock(){
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new AtMostOneInitBlock());
     ASTMontiArcNode node = getAstNode("contextconditions", "invalid.MoreThanOneInitBlock");
-    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA078"));
+    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA078"));
   }
 }

@@ -28,7 +28,7 @@ public class BumperbotTest extends AbstractCoCoTest {
   @Test
   public void testNavi() {
     
-    checkInvalid(MontiArcCoCos.createChecker(),getAstNode("", "contextconditions.invalid.Navi"), new ExpectedErrorInfo(1, "xMA064"));
+    checkInvalid(MontiArcCoCos.createChecker(),getAstNode("", "contextconditions.invalid.Navi"), new AbstractCoCoTestExpectedErrorInfo(1, "xMA064"));
     
   }
 }

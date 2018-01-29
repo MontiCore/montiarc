@@ -17,7 +17,7 @@ public class OutputPortinExpressionTest extends AbstractCoCoTest {
   @Test
   public void testAutomatonOutputInExpression() {
     ASTMontiArcNode node = getAstNode("", "contextconditions.invalid.AutomatonOutputInExpression");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(4, "xMA022"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(4, "xMA022"));
   }
 
   @Test

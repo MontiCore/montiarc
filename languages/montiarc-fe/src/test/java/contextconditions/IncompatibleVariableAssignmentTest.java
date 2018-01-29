@@ -26,7 +26,7 @@ public class IncompatibleVariableAssignmentTest extends AbstractCoCoTest {
   public void testIncompatibleVariableAssignment() {
     ASTMontiArcNode node = getAstNode("",
         "contextconditions.invalid.IncompatibleVariableAssignment");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA042"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA042"));
   }
   
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
@@ -36,7 +36,7 @@ public class IncompatibleVariableAssignmentTest extends AbstractCoCoTest {
   public void testIncompatibleVariableAssignmentGenericTypesDifferSimple() {
     ASTMontiArcNode node = getAstNode("",
         "contextconditions.invalid.IncompatibleVariableAssignmentGenericTypesDifferSimple");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA042"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA042"));
   }
   
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
@@ -46,7 +46,7 @@ public class IncompatibleVariableAssignmentTest extends AbstractCoCoTest {
   public void testIncompatibleVariableAssignmentGenericTypesDiffer() {
     ASTMontiArcNode node = getAstNode("",
         "contextconditions.invalid.IncompatibleVariableAssignmentGenericTypesDiffer");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA042"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA042"));
   }
   
 }
