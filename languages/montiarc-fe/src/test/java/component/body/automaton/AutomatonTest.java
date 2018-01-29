@@ -10,6 +10,11 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc.cocos.MontiArcCoCos;
 
+/**
+ * This class checks all context conditions directly related automata (not their sub-elements)
+ *
+ * @author Andreas Wortmann
+ */
 public class AutomatonTest extends AbstractCoCoTest {
   
   private static final String MP = "";

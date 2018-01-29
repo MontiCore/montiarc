@@ -19,7 +19,6 @@ import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
  * This class checks all context conditions related to subcomponents
  *
  * @author Andreas Wortmann
- *
  */
 public class SubComponentsTest extends AbstractCoCoTest{
   

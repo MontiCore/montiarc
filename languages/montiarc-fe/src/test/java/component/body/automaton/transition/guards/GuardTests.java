@@ -9,6 +9,11 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc.cocos.MontiArcCoCos;
 
+/**
+ * This class checks all context conditions related to automaton guards
+ *
+ * @author Andreas Wortmann
+ */
 public class GuardTests extends AbstractCoCoTest {
   
   private static final String MP = "";
