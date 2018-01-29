@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package de.monticore.lang.montiarc;
+package parser;
 
 import static org.junit.Assert.assertTrue;
 
