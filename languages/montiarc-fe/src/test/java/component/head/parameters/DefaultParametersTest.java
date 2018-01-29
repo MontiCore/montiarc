@@ -5,13 +5,25 @@
  */
 package component.head.parameters;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.nio.file.Paths;
+import java.util.List;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import contextconditions.AbstractCoCoTest;
 import contextconditions.AbstractCoCoTestExpectedErrorInfo;
+import de.monticore.symboltable.types.JFieldSymbol;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcTool;
+import montiarc._ast.ASTParameter;
 import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.DefaultParametersCorrectlyAssigned;
 import montiarc.cocos.DefaultParametersHaveCorrectOrder;
 
@@ -21,7 +33,7 @@ import montiarc.cocos.DefaultParametersHaveCorrectOrder;
  * @author Robert Heim, Andreas Wortmann
  */
 public class DefaultParametersTest extends AbstractCoCoTest {
-
+  
   private static final String MP = "";
   
   private static final String PACKAGE = "component.head.parameters";
@@ -31,12 +43,12 @@ public class DefaultParametersTest extends AbstractCoCoTest {
     Log.getFindings().clear();
     Log.enableFailQuick(false);
   }
-
+  
   @Test
-  public void testDefaultParametersInCorrectOrder() {  
+  public void testDefaultParametersInCorrectOrder() {
     checkValid(MP, PACKAGE + "." + "DefaultParametersInCorrectOrder");
   }
-
+  
   @Test
   public void testDefaultParametersInIncorrectOrder() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersHaveCorrectOrder()),
@@ -50,5 +62,30 @@ public class DefaultParametersTest extends AbstractCoCoTest {
         getAstNode("", PACKAGE + "." + "DefaultParameterWrongType"),
         new AbstractCoCoTestExpectedErrorInfo(1, "xMA061"));
   }
-
+  
+  @Test
+  public void testValidDefaultParameters() {
+    MontiArcTool tool = new MontiArcTool();
+    String modelPath = "src/test/resources/";
+    ComponentSymbol comp = tool
+        .getComponentSymbol("component.head.parameters.ValidDefaultParameters", Paths.get(modelPath).toFile())
+        .orElse(null);
+    assertNotNull(comp);
+    
+    List<JFieldSymbol> params = comp.getConfigParameters();
+    for (JFieldSymbol param : params) {
+      if (param.getAstNode().isPresent()) {
+        ASTParameter p = (ASTParameter) param.getAstNode().get();
+        if (p.getName().equals("offset")) {
+          assertTrue(p.getDefaultValue().isPresent());
+          assertEquals(5, p.getDefaultValue().get());
+        }
+        else {
+          assertFalse(p.getDefaultValue().isPresent());
+        }
+      }
+      
+    }
+  }
+  
 }

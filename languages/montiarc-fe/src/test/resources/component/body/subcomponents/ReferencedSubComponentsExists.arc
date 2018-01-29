@@ -1,5 +1,8 @@
 package component.body.subcomponents;
 
+/**
+ * Valid model.
+ */
 component ReferencedSubComponentsExists {
   port 
     in String s1,

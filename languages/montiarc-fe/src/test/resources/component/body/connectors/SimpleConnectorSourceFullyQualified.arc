@@ -1,5 +1,8 @@
-package invalid;
+package component.body.connectors;
 
+/**
+ * Valid model.
+ */
 component SimpleConnectorSourceFullyQualified {
   component A {
     port out String aOut;

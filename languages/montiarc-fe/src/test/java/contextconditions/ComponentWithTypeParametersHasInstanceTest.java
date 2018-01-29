@@ -23,10 +23,6 @@ public class ComponentWithTypeParametersHasInstanceTest
     Log.enableFailQuick(false);
   }
   
-  @Test
-  public void testValid() {
-    checkValid("contextconditions", "valid.ComponentWithTypeParametersHasInstance");
-  }
   
   public void testInvalid(String componentName) {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),

@@ -1,8 +1,8 @@
-package contextconditions.valid;
+package component.body.automaton;
 
-import contextconditions.valid.Datatypes.SpeedCmd;
+import types.Datatypes.SpeedCmd;
 
-component BumpSpeed(Integer defaultSpeed) {
+component ValidAutomaton(Integer defaultSpeed) {
   port
     in SpeedCmd cmd,
     in Integer distance,

@@ -55,5 +55,10 @@ public class AutomatonTest extends AbstractCoCoTest {
     // automaton has states but no initial state -> exactly 1 error.
     checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA013"));
   }
+  
+  @Test
+  public void testValidAutomaton() {
+    checkValid(MP, PACKAGE + "." + "ValidAutomaton");
+  }
 
 }

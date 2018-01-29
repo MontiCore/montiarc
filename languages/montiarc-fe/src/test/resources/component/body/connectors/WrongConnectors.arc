@@ -1,6 +1,9 @@
-package conv;
+package component.body.connectors;
 
-component WrongConnector {
+/**
+ * Invalid model. See below.
+ */
+component WrongConnectors {
     port 
         in String sIn,
         out String sOut,
@@ -16,7 +19,7 @@ component WrongConnector {
         myInner [myInner.sOutInner -> sOut]; // Source is qualified in the connector definition
     
     component Inner
-        myInner2 [sOutInner -> myInner.sth.sInInner], //myInner has no subcomponent sth with port sInInner
+        myInner2 [sOutInner -> myInner.sth.sInInner], // myInner has no subcomponent sth with port sInInner
         myInner3,
         myInner4;
 
@@ -29,5 +32,4 @@ component WrongConnector {
     connect sIn -> myInner.sInInner;
     connect sIn -> myInner3.sInInner;
     connect myInner3.sOutInner -> sOut2;
-    
 }

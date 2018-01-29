@@ -1,12 +1,20 @@
 package component.body.ports;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.nio.file.Paths;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import contextconditions.AbstractCoCoTest;
 import contextconditions.AbstractCoCoTestExpectedErrorInfo;
+import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.PortSymbol;
 import montiarc.cocos.MontiArcCoCos;
 
 /**
@@ -17,6 +25,7 @@ import montiarc.cocos.MontiArcCoCos;
 public class PortTests extends AbstractCoCoTest {
   
   private static final String MP = "";
+  
   private static final String PACKAGE = "component.body.ports";
   
   @BeforeClass
@@ -24,26 +33,48 @@ public class PortTests extends AbstractCoCoTest {
     Log.enableFailQuick(false);
   }
   
-
   @Test
   public void testInexistingPortType() {
-    //TODO: Star imports?
+    // TODO: Star imports?
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "InexistingPortType");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new AbstractCoCoTestExpectedErrorInfo(1,"xMA076"));
-
-    checkValid("","contextconditions.valid.BumpControl");
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new AbstractCoCoTestExpectedErrorInfo(1, "xMA076"));
+    
+    checkValid("", "contextconditions.valid.BumpControl");
   }
   
   @Test
   public void testBumpControl() {
-    checkValid(MP, PACKAGE + "." +"BumpControl");
+    checkValid(MP, PACKAGE + "." + "BumpControl");
   }
   
   @Test
   public void testNonUniquePortNames() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "NonUniquePortNames");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(3, "xMA053"));
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new AbstractCoCoTestExpectedErrorInfo(3, "xMA053"));
   }
-
+  
+  @Test
+  public void testPortTypeResolving() {
+    MontiArcTool tool = new MontiArcTool();
+    ComponentSymbol motorSymbol = tool
+        .getComponentSymbol("component.body.ports.PortTypeResolving",
+            Paths.get("src/test/resources").toFile(),
+            Paths.get("src/main/resources/defaultTypes").toFile())
+        .orElse(null);
+    
+    assertNotNull(motorSymbol);
+    
+    PortSymbol commandPort = motorSymbol.getIncomingPort("command").orElse(null);
+    
+    assertNotNull(commandPort);
+    
+    JTypeSymbol typeSymbol = commandPort
+        .getTypeReference()
+        .getReferencedSymbol();
+    
+    assertNotNull(typeSymbol);
+  }
   
 }

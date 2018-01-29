@@ -33,5 +33,11 @@ public class BodyTests extends AbstractCoCoTest {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ComponentWithAJavaAndAutomaton");
     checkInvalid(MontiArcCoCos.createChecker(), node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA050"));
   }
-
+  
+  @Test
+  public void testAmbiguousPortAndVariableNames() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "AmbiguousPortAndVariableNames");
+    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(6,  "xMA035", "xMA053"));
+  }
+  
 }

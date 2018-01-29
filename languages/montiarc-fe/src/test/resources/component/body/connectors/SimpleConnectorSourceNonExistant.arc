@@ -1,5 +1,8 @@
-package invalid;
+package component.body.connectors;
 
+/**
+ * Invalid model. Port aOut does not exist.
+ */
 component SimpleConnectorSourceNonExistant {
   component A {
   }

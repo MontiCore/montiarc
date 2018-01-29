@@ -1,5 +1,8 @@
-package invalid;
+package component.body.connectors;
 
+/**
+ * Invalid model. Connector pierces through A.
+ */
 component ConnectorPiercingOutwardsThroughInterface {
   component A {
     component Inner {
@@ -11,5 +14,5 @@ component ConnectorPiercingOutwardsThroughInterface {
     port in String bIn;
   }
   
-  connect a.inner.innerOut -> b.bIn; 
+  connect a.inner.innerOut -> b.bIn; // Error
 }

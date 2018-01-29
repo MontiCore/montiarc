@@ -1,6 +1,9 @@
-package invalid;
+package component.body;
 
-component NameConflictVariableAndIO {
+/**
+ * Invalid model. Various name clashes.
+ */
+component AmbiguousPortAndVariableNames {
 
 	// Multiple declarations of a
 	port in Integer a;

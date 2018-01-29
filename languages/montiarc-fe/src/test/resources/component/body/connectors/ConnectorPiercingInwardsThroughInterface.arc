@@ -1,4 +1,4 @@
-package invalid;
+package component.body.connectors;
 
 component ConnectorPiercingInwardsThroughInterface {
   component A {

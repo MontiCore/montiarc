@@ -25,10 +25,6 @@ public class ConnectorEndPointCorrectlyQualifiedTest extends AbstractCoCoTest {
     Log.enableFailQuick(false);
   }
   
-  @Test
-  public void testSimpleConnectorSourceValid() {
-    checkValid("contextconditions", "valid.SimpleConnectorSourceUnqualified");
-  }
   
   @Test
   public void testSimpleConnectorSourceInvalid() {

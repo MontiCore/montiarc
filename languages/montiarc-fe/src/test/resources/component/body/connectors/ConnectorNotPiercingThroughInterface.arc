@@ -1,5 +1,8 @@
-package valid;
+package component.body.connectors;
 
+/**
+ * Valid model.
+ */
 component ConnectorNotPiercingThroughInterface {
   component A {
     port in String aIn;

@@ -1,7 +1,10 @@
-package contextconditions.valid;
+package component.body.subcomponents;
 
-import contextconditions.valid.Types.*; 
- 
+import valid.Datatypes.*; 
+
+/**
+ * Valid model. Used by Navi.
+ */
 component Motor(String name, String typ = "BACK") {
     port
         in Integer speed,

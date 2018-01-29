@@ -1,5 +1,8 @@
-package valid;
+package component.body.subcomponents;
 
+/**
+ * Valid model.
+ */
 component ComponentWithTypeParametersHasInstance {
   autoconnect type;
   

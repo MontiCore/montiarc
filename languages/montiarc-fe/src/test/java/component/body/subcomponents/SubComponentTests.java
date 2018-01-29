@@ -17,6 +17,7 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.ComponentInstanceNamesAreUnique;
 import montiarc.cocos.ComponentWithTypeParametersHasInstance;
+import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
 
 /**
@@ -25,7 +26,7 @@ import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
  *
  * @author Andreas Wortmann
  */
-public class SubComponentsTest extends AbstractCoCoTest {
+public class SubComponentTests extends AbstractCoCoTest {
   
   private static final String MP = "";
   
@@ -79,5 +80,23 @@ public class SubComponentsTest extends AbstractCoCoTest {
     AbstractCoCoTestExpectedErrorInfo errors = new AbstractCoCoTestExpectedErrorInfo(2, "xA1038");
     errors.checkExpectedPresent(Log.getFindings(), "No errors found!");
     AbstractCoCoTestExpectedErrorInfo.reset();
+  }
+  
+  @Test
+  public void testWrongSubComponentArgument() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "WrongSubComponentArgument");
+    checkInvalid(MontiArcCoCos.createChecker(), node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA064"));
+  }
+  
+  @Test
+  public void testComponentWithTypeParametersHasInstance() {
+    checkValid(MP, PACKAGE + "." + "ComponentWithTypeParametersHasInstance");
+  }
+  
+  @Test
+  public void testInvalidNestedComponentWithTypeParameterLacksInstance() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "NestedComponentWithTypeParameterLacksInstance");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
+        node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA009"));
   }
 }
