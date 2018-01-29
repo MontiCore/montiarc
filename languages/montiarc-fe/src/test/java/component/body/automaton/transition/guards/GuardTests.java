@@ -17,6 +17,7 @@ import montiarc.cocos.MontiArcCoCos;
 public class GuardTests extends AbstractCoCoTest {
   
   private static final String MP = "";
+  
   private static final String PACKAGE = "component.body.automaton.transition.guards";
   
   @BeforeClass
@@ -32,7 +33,16 @@ public class GuardTests extends AbstractCoCoTest {
   @Test
   public void testGuardNotBoolean() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "GuardNotBoolean");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(3, "xMA036"));
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new AbstractCoCoTestExpectedErrorInfo(3, "xMA036"));
+  }
+  
+  @Test
+  public void testGuardWithInstanceOfExpression() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "GuardWithInstanceOfExpression");
+    // 1 Error because the models contains an ASTInstanceOfExpression
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new AbstractCoCoTestExpectedErrorInfo(1, "xMA023"));
   }
   
 }
