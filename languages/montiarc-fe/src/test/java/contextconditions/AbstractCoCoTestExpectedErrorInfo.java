@@ -29,11 +29,11 @@ public class AbstractCoCoTestExpectedErrorInfo {
      * 
      * @param eRROR_CODE_PATTERN the eRROR_CODE_PATTERN to set
      */
-    protected static void setERROR_CODE_PATTERN(Pattern eRROR_CODE_PATTERN) {
+    public static void setERROR_CODE_PATTERN(Pattern eRROR_CODE_PATTERN) {
       ERROR_CODE_PATTERN = eRROR_CODE_PATTERN;
     }
     
-    protected static void reset() {
+    public static void reset() {
       ERROR_CODE_PATTERN = Pattern.compile("xMA[0-9]{3}");
     }
     

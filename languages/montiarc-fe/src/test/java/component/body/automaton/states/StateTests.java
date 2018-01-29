@@ -46,4 +46,10 @@ public class StateTests extends AbstractCoCoTest {
     checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(4, "xMA031", "xMA034"));
   }
   
+  @Test
+  public void testUndefinedInitialState() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "UndefinedInitialState");
+    checkInvalid(MontiArcCoCos.createChecker(), node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA025"));
+  }
+  
 }

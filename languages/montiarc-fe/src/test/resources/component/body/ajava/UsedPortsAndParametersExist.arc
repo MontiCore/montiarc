@@ -1,6 +1,6 @@
 package contextconditions.valid;
 
-component UsedPortsExist(String s) {
+component UsedPortsAndParametersExist(String s) {
   port
     in double distance,
     out String hulu;

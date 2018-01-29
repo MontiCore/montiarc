@@ -1,4 +1,4 @@
-package abp;
+package architectures.abp
 
 component ABP {
   port

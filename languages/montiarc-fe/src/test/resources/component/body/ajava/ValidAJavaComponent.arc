@@ -1,6 +1,9 @@
-package contextconditions.valid;
+package component.body.ajava;
 
-component CompWithVariableAndPortInit {
+/**
+ * Valid model.
+ */
+component ValidAJavaComponent {
 
   port
     in Integer i,
@@ -13,7 +16,7 @@ component CompWithVariableAndPortInit {
     counter = 0;
   }
   
-  compute calculateSomething {
+  compute CalculateSomething {
     counter++;
     o = i + counter;    
   }

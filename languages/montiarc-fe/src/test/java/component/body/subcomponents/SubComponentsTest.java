@@ -5,6 +5,8 @@
  */
 package component.body.subcomponents;
 
+import java.util.regex.Pattern;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -54,5 +56,28 @@ public class SubComponentsTest extends AbstractCoCoTest {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ComponentWithTypeParametersLacksInstance");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
         node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA009"));
+  }
+  
+  @Test
+  public void testReferencedSubComponentsExists() {
+    checkValid(MP, PACKAGE + "." + "ReferencedSubComponentsExists");
+  }
+  
+  @Test
+  /**
+   * Symbol table already throws an exception, therefore the coco is never
+   * checked. A fix" + would be to stop the symbol table from throwing the
+   * exception, in order to have a" + better error message. For now we just
+   * check that we give out the rudimentary error xA1038, which tells us that
+   * the non-existent component could not be loaded, but doesn't provide more
+   * detail.
+   */
+  public void testInexistingSubComponent() {
+    Log.getFindings().clear();
+    getAstNode(MP, PACKAGE + "." + "InexistingSubComponent");
+    AbstractCoCoTestExpectedErrorInfo.setERROR_CODE_PATTERN(Pattern.compile("x[0-9A-F]{5}"));
+    AbstractCoCoTestExpectedErrorInfo errors = new AbstractCoCoTestExpectedErrorInfo(2, "xA1038");
+    errors.checkExpectedPresent(Log.getFindings(), "No errors found!");
+    AbstractCoCoTestExpectedErrorInfo.reset();
   }
 }
