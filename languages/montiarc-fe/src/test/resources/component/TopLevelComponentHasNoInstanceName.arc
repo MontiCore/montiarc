@@ -1,4 +1,4 @@
-package valid;
+package component;
 
 component TopLevelComponentHasNoInstanceName {
 }

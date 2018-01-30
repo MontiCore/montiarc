@@ -13,6 +13,7 @@ import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.ConnectorSourceAndTargetComponentDiffer;
 import montiarc.cocos.ImportsAreUnique;
 import montiarc.cocos.MontiArcCoCos;
+import montiarc.cocos.TopLevelComponentHasNoInstanceName;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -73,6 +74,21 @@ public class ComponentTests extends AbstractCoCoTest {
     JavaFieldSymbol javaField = symTab.<JavaFieldSymbol> resolve(
         "types.Datatypes.MotorCommand.STOP", JavaFieldSymbol.KIND).orElse(null);
     assertNotNull(javaField);
+  }
+  
+  @Test
+  public void testValid() {
+    checkValid("", "component.TopLevelComponentHasNoInstanceName");
+    
+  }
+  
+  @Test
+  public void testInvalid() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "TopLevelComponentHasInstanceName");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new TopLevelComponentHasNoInstanceName()),
+        node,
+        new AbstractCoCoTestExpectedErrorInfo(1, "xMA007"));
+    
   }
   
 }
