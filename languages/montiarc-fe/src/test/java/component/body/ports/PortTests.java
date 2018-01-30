@@ -18,6 +18,9 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc.cocos.InPortUniqueSender;
 import montiarc.cocos.MontiArcCoCos;
+import montiarc.cocos.PortNameIsLowerCase;
+import montiarc.cocos.PortUsage;
+import montiarc.cocos.SubComponentsConnected;
 
 /**
  * This class checks all context conditions directly related to port definitions
@@ -42,7 +45,7 @@ public class PortTests extends AbstractCoCoTest {
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new AbstractCoCoTestExpectedErrorInfo(1, "xMA076"));
     
-    checkValid("", "contextconditions.valid.BumpControl");
+    checkValid("", PACKAGE + "." + "BumpControl");
   }
   
   @Test
@@ -89,6 +92,25 @@ public class PortTests extends AbstractCoCoTest {
   @Test
   public void testInPortUniqueSender() {
     checkValid(MP, PACKAGE + "." + "InPortUniqueSender");
+  }
+  
+  @Test
+  /* Checks whether all port names in the port definition start with a lower
+   * case letter */
+  public void testPortWithUpperCaseName() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "PortWithUpperCaseName");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortNameIsLowerCase());
+    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA077"));
+  }
+  
+  @Test
+  public void testUnconnectedPorts() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "UnconnectedPorts");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
+    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(3, "xMA057", "xMA058"));
+
+    cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
+    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(4, "xMA059", "xMA060"));
   }
   
 }

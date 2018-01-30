@@ -1,9 +1,8 @@
-package conv;
+package component.body.connectors;
 
 component MissingSourceTargetDefinitionInSubcomponent {
 
     component Inner {
-
         port
             in String sInnerIn,
             out String sInnerOut;
@@ -16,15 +15,13 @@ component MissingSourceTargetDefinitionInSubcomponent {
         
     component CorrectComp cc;
     
-    connect sIn -> inner.sInnerIn; //correct
+    connect sIn -> inner.sInnerIn; // Correct
 
-    connect sIn -> inner.sInnerInWrong; //incorrect
+    connect sIn -> inner.sInnerInWrong; //Error: sInnerInWrong does not exist
 
     connect inner.sInnerOutWrong -> sOut; //incorrect
 
-    connect inner.sInnerOut -> cc.stringIn; //correct
+    connect inner.sInnerOut -> cc.stringIn; //Error: stringIn does not exist
 
-    // correct connectors
-    //connect sIn -> cc.stringIn;
     connect cc.stringOut -> sOut2; //correct
 }

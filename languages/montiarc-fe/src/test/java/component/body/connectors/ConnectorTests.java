@@ -16,6 +16,8 @@ import montiarc._cocos.MontiArcASTConnectorCoCo;
 import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.ConnectorEndPointIsCorrectlyQualified;
+import montiarc.cocos.ConnectorSourceAndTargetComponentDiffer;
+import montiarc.cocos.ConnectorSourceAndTargetExist;
 import montiarc.cocos.SimpleConnectorSourceExists;
 
 /**
@@ -56,10 +58,6 @@ public class ConnectorTests extends AbstractCoCoTest {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SimpleConnectorSourceExists()),
         node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA072"));
   }
-  
-  
-  
-  // -------------------
   
   @Test
   public void testSimpleConnectorSourceInvalid() {
@@ -102,5 +100,24 @@ public class ConnectorTests extends AbstractCoCoTest {
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified());
     checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(4, "xMA008", "xMA070"));
+  }
+  
+  @Test
+  /* Checks whether there are connectors in a component that wrongly connect
+   * ports of the same component */
+  public void testConnectorSourceAndTargetDifferentComponent() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ConnectorSourceAndTargetSameComponent");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+        .addCoCo(new ConnectorSourceAndTargetComponentDiffer());
+    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA075"));
+  }
+  
+  @Test
+  /* Checks whether the source and target of a connect statement exist. */
+  public void testMissingSourceAndTargetDefinition() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "MissingSourceTargetDefinitionInSubcomponent");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+        .addCoCo(new ConnectorSourceAndTargetExist());
+    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA066", "xMA067"));
   }
 }

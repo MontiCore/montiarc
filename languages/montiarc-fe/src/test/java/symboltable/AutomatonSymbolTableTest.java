@@ -26,12 +26,6 @@ public class AutomatonSymbolTableTest {
   }
   
   @Test
-  public void testParseBumperbot() {
-    ASTMontiArcNode node = getAstNode("src/test/resources/", "contextconditions.valid.BumpControl");
-    assertNotNull(node);
-  }
-  
-  @Test
   public void testCDType2JavaType() {
     Scope symTab = tool.createSymbolTable("src/test/resources/");
     CDTypeSymbol cdType = symTab
