@@ -1,23 +1,23 @@
 package de.montiarcautomaton.generator.helper;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import de.monticore.ast.ASTNode;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.TypeSymbol;
+import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.symboltable.types.references.TypeReference;
+import de.monticore.types.types._ast.ASTTypeVariableDeclaration;
 import de.se_rwth.commons.Names;
 import montiarc._ast.*;
 import montiarc._symboltable.*;
-import montiarc.helper.SymbolPrinter;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Helper class used in the template to generate target code of atomic or
@@ -29,17 +29,41 @@ public class ComponentHelper {
   public static String DEPLOY_STEREOTYPE = "deploy";
 
   private final ComponentSymbol component;
+  protected final ASTComponent componentNode;
 
   public ComponentHelper(ComponentSymbol component) {
     this.component = component;
+    if((component.getAstNode().isPresent()) && (component.getAstNode().get() instanceof ASTComponent)) {
+      componentNode = (ASTComponent) component.getAstNode().get();
+    } else {
+      componentNode = null;
+    }
   }
 
   public String getPortTypeName(PortSymbol port) {
-    return printFqnTypeName(port.getTypeReference());
+//    ASTComponent comp = null;
+//
+//    final Optional<? extends ScopeSpanningSymbol> spanningSymbol = port.getEnclosingScope().getSpanningSymbol();
+//    if(spanningSymbol.isPresent() && spanningSymbol.get() instanceof ComponentSymbol) {
+//      final ComponentSymbol symbol = (ComponentSymbol) spanningSymbol.get();
+//      final Optional<ASTNode> astNode = symbol.getAstNode();
+//      if(astNode.isPresent()) {
+//        return getPortTypeName((ASTComponent) astNode.get(), port);
+//      }
+//    }
+    return getPortTypeName(componentNode, port);
   }
 
-  public String printVariableTypeName(VariableSymbol var) {
-    return printFqnTypeName(var.getTypeReference());
+  public String getPortTypeName(ASTComponent comp, PortSymbol port) {
+    return printFqnTypeName(comp, port.getTypeReference());
+  }
+
+  public String getVariableTypeName(VariableSymbol var) {
+    return getVariableTypeName(componentNode, var);
+  }
+
+  public String getVariableTypeName(ASTComponent comp, VariableSymbol var) {
+    return printFqnTypeName(comp, var.getTypeReference());
   }
 
   public String printInit(ASTValueInitialization init) {
@@ -57,7 +81,11 @@ public class ComponentHelper {
   }
 
   public String getParamTypeName(JFieldSymbol param) {
-    return printFqnTypeName(param.getType());
+    return getParamTypeName(componentNode, param);
+  }
+
+  public String getParamTypeName(ASTComponent comp, JFieldSymbol param) {
+    return printFqnTypeName(comp, param.getType());
   }
 
   /**
@@ -103,7 +131,28 @@ public class ComponentHelper {
   }
 
   public String getSubComponentTypeName(ComponentInstanceSymbol instance) {
-    return instance.getComponentType().getName();
+    // Get the usual name of the class
+    final String className = instance.getComponentType().getName();
+    StringBuilder genericParameters = new StringBuilder();
+
+    final Optional<ASTNode> astNode = instance.getComponentType().getReferencedSymbol().getAstNode();
+    if (astNode.isPresent()) {
+      ComponentHelper subCompHelper = new ComponentHelper(instance.getComponentType().getReferencedSymbol());
+      if (subCompHelper.isGeneric()) {
+        // Append the generic parameters
+        genericParameters.append("<");
+        final List<ActualTypeArgument> actualTypeArguments = instance.getComponentType().getActualTypeArguments();
+        for (ActualTypeArgument typeArgument : actualTypeArguments) {
+          genericParameters.append(typeArgument.getType().getName());
+          if(actualTypeArguments.indexOf(typeArgument) < actualTypeArguments.size() - 1) {
+            genericParameters.append(", ");
+          }
+        }
+
+        genericParameters.append(">");
+      }
+    }
+    return className + genericParameters;
   }
 
   public boolean isIncomingPort(ComponentSymbol cmp, ConnectorSymbol conn, boolean isSource, String portName) {
@@ -193,8 +242,11 @@ public class ComponentHelper {
    * @param ref
    * @return
    */
-  protected String printFqnTypeName(JTypeReference<? extends JTypeSymbol> ref) {
+  protected String printFqnTypeName(ASTComponent comp, JTypeReference<? extends JTypeSymbol> ref) {
     String name = ref.getName();
+    if(isGenericTypeName(comp, name)){
+      return name;
+    }
     Collection<JTypeSymbol> sym = ref.getEnclosingScope().<JTypeSymbol>resolveMany(ref.getName(), JTypeSymbol.KIND);
     if(!sym.isEmpty()){
       name = sym.iterator().next().getFullName();
@@ -203,6 +255,29 @@ public class ComponentHelper {
       name += "[]";
     }
     return name;
+  }
+
+  /**
+   * Checks whether the given typeName for the component comp is a generic parameter.
+   *
+   * @param comp
+   * @param typeName
+   * @return
+   */
+  private boolean isGenericTypeName(ASTComponent comp, String typeName) {
+    if(comp == null) {
+      return false;
+    }
+    if(comp.getHead().getGenericTypeParameters().isPresent()) {
+      List<ASTTypeVariableDeclaration> parameterList = comp.getHead().getGenericTypeParameters().get().getTypeVariableDeclarations();
+      for(ASTTypeVariableDeclaration type : parameterList)
+      {
+        if (type.getName().equals(typeName)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   public static Optional<ASTJavaPInitializer> getComponentInitialization(ComponentSymbol comp) {
@@ -218,5 +293,20 @@ public class ComponentHelper {
       }
     }
     return ret;
+  }
+
+  public boolean isGeneric(){
+    return componentNode.getHead().getGenericTypeParameters().isPresent();
+  }
+
+  public List<String> getGenericParameters(){
+    List<String> output = new ArrayList<>();
+    if(componentNode.getHead().getGenericTypeParameters().isPresent()) {
+      List<ASTTypeVariableDeclaration> parameterList = componentNode.getHead().getGenericTypeParameters().get().getTypeVariableDeclarations();
+      for (ASTTypeVariableDeclaration variableDeclaration : parameterList) {
+        output.add(variableDeclaration.getName());
+      }
+    }
+    return output;
   }
 }
