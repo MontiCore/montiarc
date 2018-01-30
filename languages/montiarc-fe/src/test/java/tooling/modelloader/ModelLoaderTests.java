@@ -1,4 +1,4 @@
-package symboltable;
+package tooling.modelloader;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -14,9 +14,9 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTool;
 import montiarc._symboltable.ComponentSymbol;
 
-public class LoaderAndCalculatorTest {
+public class ModelLoaderTests {
   
-  private final String MODEL_PATH = "src/test/resources/symboltable/modelloader";
+  private final String MP = "src/test/resources/";
   public static final boolean ENABLE_FAIL_QUICK = true;
 
   private static MontiArcTool tool;
@@ -38,10 +38,10 @@ public class LoaderAndCalculatorTest {
   
   @Test
   public void testModelLoader() {
-    Optional<ComponentSymbol> sym = tool.getComponentSymbol("industry.PIController", Paths.get(MODEL_PATH).toFile());
+    Optional<ComponentSymbol> sym = tool.getComponentSymbol("tooling.modelloader.industry.PIController", Paths.get(MP).toFile());
     assertTrue(sym.isPresent());
     
-    Optional<ComponentSymbol> sym2 = tool.getComponentSymbol("industry2.PIController", Paths.get(MODEL_PATH).toFile());
+    Optional<ComponentSymbol> sym2 = tool.getComponentSymbol("tooling.modelloader.industry2.PIController", Paths.get(MP).toFile());
     assertTrue(sym2.isPresent());
     
     assertTrue(sym.get() != sym2.get());
@@ -50,18 +50,18 @@ public class LoaderAndCalculatorTest {
   // resolves also to the same ComponentSymbol even both are in different packages
   @Test
   public void testSymbolTableResolve() {
-    Scope scope = tool.createSymbolTable(MODEL_PATH);
+    Scope scope = tool.createSymbolTable(MP);
     
     Optional<ComponentSymbol> sym3 = getGlobalScope(scope)
-        .<ComponentSymbol> resolveDown("industry.PIController", ComponentSymbol.KIND);
+        .<ComponentSymbol> resolveDown("tooling.modelloader.industry.PIController", ComponentSymbol.KIND);
     assertFalse("resolveDown may not load any model from ModelLoader", sym3.isPresent());
     
     Optional<ComponentSymbol> sym = scope
-        .<ComponentSymbol> resolve("industry.PIController", ComponentSymbol.KIND);
+        .<ComponentSymbol> resolve("tooling.modelloader.industry.PIController", ComponentSymbol.KIND);
     assertTrue(sym.isPresent());
     
     Optional<ComponentSymbol> sym2 = getGlobalScope(scope)
-        .<ComponentSymbol> resolveDown("industry2.PIController", ComponentSymbol.KIND);
+        .<ComponentSymbol> resolveDown("tooling.modelloader.industry2.PIController", ComponentSymbol.KIND);
     assertFalse(sym2.isPresent());
     
   }
