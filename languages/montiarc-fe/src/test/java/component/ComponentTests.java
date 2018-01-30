@@ -77,18 +77,16 @@ public class ComponentTests extends AbstractCoCoTest {
   }
   
   @Test
-  public void testValid() {
+  public void testTopLevelComponentHasNoInstanceName() {
     checkValid("", "component.TopLevelComponentHasNoInstanceName");
-    
   }
   
   @Test
-  public void testInvalid() {
+  public void testTopLevelComponentHasInstanceName() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "TopLevelComponentHasInstanceName");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new TopLevelComponentHasNoInstanceName()),
         node,
         new AbstractCoCoTestExpectedErrorInfo(1, "xMA007"));
-    
   }
   
 }

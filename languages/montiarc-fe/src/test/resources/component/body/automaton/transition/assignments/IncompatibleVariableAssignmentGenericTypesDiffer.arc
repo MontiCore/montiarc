@@ -1,8 +1,8 @@
-package contextconditions.invalid;
+package component.body.automaton.transition.assignments;
 
-import contextconditions.valid.Datatypes.MotorCommand;
-import contextconditions.valid.Datatypes.TimerSignal;
-import contextconditions.valid.Datatypes.TimerCmd;
+import types.Datatypes.MotorCommand;
+import types.Datatypes.TimerSignal;
+import types.Datatypes.TimerCmd;
 import java.util.HashMap;
 
 component IncompatibleVariableAssignmentGenericTypesDiffer {

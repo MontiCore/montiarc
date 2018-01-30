@@ -1,8 +1,8 @@
-package contextconditions.invalid;
+package component.body.automaton.transition.assignments;
 
-import contextconditions.valid.Datatypes.MotorCommand;
-import contextconditions.valid.Datatypes.TimerSignal;
-import contextconditions.valid.Datatypes.TimerCmd;
+import types.Datatypes.MotorCommand;
+import types.Datatypes.TimerSignal;
+import types.Datatypes.TimerCmd;
 import java.util.HashMap;
 
 component IncompatibleVariableAssignmentGenericTypesDifferSimple {
@@ -11,10 +11,7 @@ component IncompatibleVariableAssignmentGenericTypesDifferSimple {
 
   automaton BumpControl {
     state Idle;
-
     initial Idle / {stateChanges.put("foo", 5)};
-
     Idle -> Idle / {stateChanges.put("asd", 4)};
-
   }
 }

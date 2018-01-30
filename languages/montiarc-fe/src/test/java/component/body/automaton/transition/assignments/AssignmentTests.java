@@ -61,25 +61,60 @@ public class AssignmentTests extends AbstractCoCoTest {
   public void testMultipleAssignmentsToSamePort() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "MultipleAssignmentsToSamePort");
     // {v=2, y=1, v=3, o = 3, o = 4, x = 1, x = 5} => 3: for v,for x, for o
-    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(3, "xMA019"));
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new AbstractCoCoTestExpectedErrorInfo(3, "xMA019"));
   }
   
   @Test
   public void testAmbiguousMatching() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "AmbiguousMatching");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA024"));
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new AbstractCoCoTestExpectedErrorInfo(2, "xMA024"));
   }
   
   @Test
   public void testAssigningUndefinedVariables() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "AssigningUndefinedVariables");
     // 2 Errors because we use 2 undeclared fields
-    checkInvalid(MontiArcCoCos.createChecker(), node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA023"));
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new AbstractCoCoTestExpectedErrorInfo(2, "xMA023"));
   }
   
   @Test
   public void testValidAssignmentMatching() {
     checkValid(MP, PACKAGE + "." + "ValidAssignmentMatching");
   }
-
+  
+  /**
+   * Tests the checking of compatible variables in CoCo AutomatonReactionTypeDoesNotFitOutputType
+   */
+  @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
+      + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
+      + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
+  @Test
+  public void testIncompatibleVariableAssignment() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "IncompatibleVariableAssignment");
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new AbstractCoCoTestExpectedErrorInfo(1, "xMA042"));
+  }
+  
+  @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
+      + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
+      + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
+  @Test
+  public void testIncompatibleVariableAssignmentGenericTypesDifferSimple() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "IncompatibleVariableAssignmentGenericTypesDifferSimple");
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new AbstractCoCoTestExpectedErrorInfo(1, "xMA042"));
+  }
+  
+  @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
+      + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
+      + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
+  @Test
+  public void testIncompatibleVariableAssignmentGenericTypesDiffer() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "IncompatibleVariableAssignmentGenericTypesDiffer");
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new AbstractCoCoTestExpectedErrorInfo(1, "xMA042"));
+  }
 }
