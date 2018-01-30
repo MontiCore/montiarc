@@ -6,6 +6,8 @@ import de.monticore.symboltable.Scope;
 import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
+import infrastructure.ExpectedErrorInfo;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTMontiArcNode;
@@ -20,9 +22,6 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import contextconditions.AbstractCoCoTest;
-import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 
 /**
  * This class checks all context conditions related the combination of elements in component bodies
@@ -48,7 +47,7 @@ public class ComponentTests extends AbstractCoCoTest {
   public void testRedundantImports() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "RedundantImports");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());
-    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA074"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA074"));
   }
   
   @Test
@@ -86,7 +85,7 @@ public class ComponentTests extends AbstractCoCoTest {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "TopLevelComponentHasInstanceName");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new TopLevelComponentHasNoInstanceName()),
         node,
-        new AbstractCoCoTestExpectedErrorInfo(1, "xMA007"));
+        new ExpectedErrorInfo(1, "xMA007"));
   }
   
 }

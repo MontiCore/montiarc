@@ -3,25 +3,14 @@
  *
  * http://www.se-rwth.de/
  */
-package contextconditions;
+package infrastructure;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import de.monticore.symboltable.Scope;
-import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
@@ -29,7 +18,9 @@ import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 
 /**
- * @author (last commit) Crispin Kirchner
+ * Base class for all tests that do more than just parsing
+ * 
+ * @author (last commit) Crispin Kirchner, Andreas Wortmann
  */
 public class AbstractCoCoTest {
   
@@ -67,7 +58,7 @@ public class AbstractCoCoTest {
   protected static void checkValid(String modelPath, String model) {
     Log.getFindings().clear();
     MONTIARCTOOL.checkCoCos(getAstNode(modelPath, model));
-    new AbstractCoCoTestExpectedErrorInfo().checkOnlyExpectedPresent(Log.getFindings());
+    new ExpectedErrorInfo().checkOnlyExpectedPresent(Log.getFindings());
   }
   
   /**
@@ -76,7 +67,7 @@ public class AbstractCoCoTest {
    * errors are present.
    */
   protected static void checkInvalid(MontiArcCoCoChecker cocos, ASTMontiArcNode node,
-      AbstractCoCoTestExpectedErrorInfo expectedErrors) {
+      ExpectedErrorInfo expectedErrors) {
     
     // check whether all the expected errors are present when using all cocos
     Log.getFindings().clear();

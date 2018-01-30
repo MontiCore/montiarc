@@ -7,10 +7,10 @@ import java.nio.file.Paths;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import contextconditions.AbstractCoCoTest;
-import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
+import infrastructure.ExpectedErrorInfo;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -43,7 +43,7 @@ public class PortTests extends AbstractCoCoTest {
     // TODO: Star imports?
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "InexistingPortType");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new AbstractCoCoTestExpectedErrorInfo(1, "xMA076"));
+        new ExpectedErrorInfo(1, "xMA076"));
     
     checkValid("", PACKAGE + "." + "BumpControl");
   }
@@ -57,7 +57,7 @@ public class PortTests extends AbstractCoCoTest {
   public void testNonUniquePortNames() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "NonUniquePortNames");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new AbstractCoCoTestExpectedErrorInfo(3, "xMA053"));
+        new ExpectedErrorInfo(3, "xMA053"));
   }
   
   @Test
@@ -86,7 +86,7 @@ public class PortTests extends AbstractCoCoTest {
   public void testInPortAmbiguousSender() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "InPortAmbiguousSender");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
-        node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA005"));
+        node, new ExpectedErrorInfo(2, "xMA005"));
   }
   
   @Test
@@ -100,17 +100,17 @@ public class PortTests extends AbstractCoCoTest {
   public void testPortWithUpperCaseName() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "PortWithUpperCaseName");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortNameIsLowerCase());
-    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA077"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA077"));
   }
   
   @Test
   public void testUnconnectedPorts() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "UnconnectedPorts");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
-    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(3, "xMA057", "xMA058"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA057", "xMA058"));
 
     cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
-    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(4, "xMA059", "xMA060"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA059", "xMA060"));
   }
   
 }

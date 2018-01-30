@@ -3,9 +3,9 @@ package component.body.automaton.transition.guards;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import contextconditions.AbstractCoCoTest;
-import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
+import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc.cocos.MontiArcCoCos;
 
@@ -34,7 +34,7 @@ public class GuardTests extends AbstractCoCoTest {
   public void testGuardNotBoolean() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "GuardNotBoolean");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new AbstractCoCoTestExpectedErrorInfo(3, "xMA036"));
+        new ExpectedErrorInfo(3, "xMA036"));
   }
   
   @Test
@@ -42,13 +42,13 @@ public class GuardTests extends AbstractCoCoTest {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "GuardWithInstanceOfExpression");
     // 1 Error because the models contains an ASTInstanceOfExpression
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new AbstractCoCoTestExpectedErrorInfo(1, "xMA023"));
+        new ExpectedErrorInfo(1, "xMA023"));
   }
   
   @Test
   public void testGuardUsesOutgoingPort() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "GuardUsesOutgoingPort");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(4, "xMA022"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(4, "xMA022"));
   }
   
 }

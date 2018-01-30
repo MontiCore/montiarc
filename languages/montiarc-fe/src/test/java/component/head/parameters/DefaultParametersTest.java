@@ -16,10 +16,10 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import contextconditions.AbstractCoCoTest;
-import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
+import infrastructure.ExpectedErrorInfo;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTParameter;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -53,14 +53,14 @@ public class DefaultParametersTest extends AbstractCoCoTest {
   public void testDefaultParametersInIncorrectOrder() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersHaveCorrectOrder()),
         getAstNode(MP, PACKAGE + "." + "DefaultParametersInIncorrectOrder"),
-        new AbstractCoCoTestExpectedErrorInfo(1, "xMA056"));
+        new ExpectedErrorInfo(1, "xMA056"));
   }
   
   @Test
   public void testWrongDefaultParameterType() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersCorrectlyAssigned()),
         getAstNode("", PACKAGE + "." + "DefaultParameterWrongType"),
-        new AbstractCoCoTestExpectedErrorInfo(1, "xMA061"));
+        new ExpectedErrorInfo(1, "xMA061"));
   }
   
   @Test

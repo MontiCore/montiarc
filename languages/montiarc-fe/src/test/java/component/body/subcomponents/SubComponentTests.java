@@ -10,9 +10,9 @@ import java.util.regex.Pattern;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import contextconditions.AbstractCoCoTest;
-import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
+import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.ComponentInstanceNamesAreUnique;
@@ -41,7 +41,7 @@ public class SubComponentTests extends AbstractCoCoTest {
   public void testSubcomponentParametersOfWrongType() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "SubcomponentParametersOfWrongType");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
-        node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA064"));
+        node, new ExpectedErrorInfo(1, "xMA064"));
   }
   
   @Test
@@ -49,14 +49,14 @@ public class SubComponentTests extends AbstractCoCoTest {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ComponentInstanceNamesAmbiguous");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentInstanceNamesAreUnique()),
         node,
-        new AbstractCoCoTestExpectedErrorInfo(2, "xMA061"));
+        new ExpectedErrorInfo(2, "xMA061"));
   }
   
   @Test
   public void testComponentWithTypeParametersLacksInstance() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ComponentWithTypeParametersLacksInstance");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
-        node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA009"));
+        node, new ExpectedErrorInfo(1, "xMA009"));
   }
   
   @Test
@@ -76,16 +76,16 @@ public class SubComponentTests extends AbstractCoCoTest {
   public void testInexistingSubComponent() {
     Log.getFindings().clear();
     getAstNode(MP, PACKAGE + "." + "InexistingSubComponent");
-    AbstractCoCoTestExpectedErrorInfo.setERROR_CODE_PATTERN(Pattern.compile("x[0-9A-F]{5}"));
-    AbstractCoCoTestExpectedErrorInfo errors = new AbstractCoCoTestExpectedErrorInfo(2, "xA1038");
+    ExpectedErrorInfo.setERROR_CODE_PATTERN(Pattern.compile("x[0-9A-F]{5}"));
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xA1038");
     errors.checkExpectedPresent(Log.getFindings(), "No errors found!");
-    AbstractCoCoTestExpectedErrorInfo.reset();
+    ExpectedErrorInfo.reset();
   }
   
   @Test
   public void testWrongSubComponentArgument() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "WrongSubComponentArgument");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA064"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA064"));
   }
   
   @Test
@@ -97,6 +97,6 @@ public class SubComponentTests extends AbstractCoCoTest {
   public void testInvalidNestedComponentWithTypeParameterLacksInstance() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "NestedComponentWithTypeParameterLacksInstance");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
-        node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA009"));
+        node, new ExpectedErrorInfo(1, "xMA009"));
   }
 }

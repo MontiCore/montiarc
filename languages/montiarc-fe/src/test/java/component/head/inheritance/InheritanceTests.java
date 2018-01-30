@@ -5,8 +5,8 @@ import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import contextconditions.AbstractCoCoTest;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
 import montiarc._parser.MontiArcParser;
 
 /**

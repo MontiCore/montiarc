@@ -9,10 +9,10 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import contextconditions.AbstractCoCoTest;
-import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
+import infrastructure.ExpectedErrorInfo;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -59,14 +59,14 @@ public class AJavaTests extends AbstractCoCoTest {
   public void testAJavaComputeBlockNameIsLowerCase() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "AJavaComputeBlockNameIsLowerCase");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new AbstractCoCoTestExpectedErrorInfo(1, "xMA174"));
+        new ExpectedErrorInfo(1, "xMA174"));
   }
   
   @Test
   public void testChangeIncomingPortInCompute() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ChangeIncomingPortInCompute");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new AbstractCoCoTestExpectedErrorInfo(4, "xMA078"));
+        new ExpectedErrorInfo(4, "xMA078"));
   }
   
   @Ignore("@JP: Hier sollten drei Fehler entstehen (siehe Model). Bitte einbauen")
@@ -74,14 +74,14 @@ public class AJavaTests extends AbstractCoCoTest {
   public void testWrongPortUsage() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "WrongPortUsage");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new AbstractCoCoTestExpectedErrorInfo(1, "xMA030", "xMA078"));
+        new ExpectedErrorInfo(1, "xMA030", "xMA078"));
   }
   
   @Ignore("@JP: Laut Konsole entsteht hier 2x Fehler 0xMA030. Wieso wird das nicht geprüft?")
   @Test
   public void testUsingInexistingPort() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "UsingInexistingPort");
-    AbstractCoCoTestExpectedErrorInfo expectedErrors = new AbstractCoCoTestExpectedErrorInfo(2,
+    ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(2,
         "xMA030");
     // error occurs in symboltable only. Therefore no CoCo check via
     // checkInvalid
@@ -93,14 +93,14 @@ public class AJavaTests extends AbstractCoCoTest {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "InitBlockWithoutComputeBlock");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new InitBlockOnlyOnEmbeddedAJava()),
         node,
-        new AbstractCoCoTestExpectedErrorInfo(1, "xMA063"));
+        new ExpectedErrorInfo(1, "xMA063"));
   }
   
   @Test
   public void testTwoInitBlocks() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "TwoInitBlocks");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new AtMostOneInitBlock()), node,
-        new AbstractCoCoTestExpectedErrorInfo(1, "xMA078"));
+        new ExpectedErrorInfo(1, "xMA078"));
   }
   
   @Test

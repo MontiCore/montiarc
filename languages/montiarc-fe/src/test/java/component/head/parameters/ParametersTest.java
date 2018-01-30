@@ -8,9 +8,9 @@ package component.head.parameters;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import contextconditions.AbstractCoCoTest;
-import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
+import infrastructure.ExpectedErrorInfo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.ParameterNamesAreUnique;
 
@@ -38,7 +38,7 @@ public class ParametersTest extends AbstractCoCoTest {
   public void testParameterNamesUniqueTestInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ParameterNamesAreUnique()),
         getAstNode(MP, PACKAGE + "." + "ParameterAmbiguous"),
-        new AbstractCoCoTestExpectedErrorInfo(1, "xMA069"));
+        new ExpectedErrorInfo(1, "xMA069"));
     
   }
 }

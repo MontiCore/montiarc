@@ -4,9 +4,9 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import contextconditions.AbstractCoCoTest;
-import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
+import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.AutomatonStateDefinedMultipleTimes;
@@ -31,26 +31,26 @@ public class StateTests extends AbstractCoCoTest {
   @Test
   public void testDoubleDefinitionOfSameInitial() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "DoubleDefinitionOfSameInitial");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA029"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA029"));
   }
   
   @Test
   public void testStateDefinedMultipleTimes() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "StateDefinedMultipleTimes");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new AutomatonStateDefinedMultipleTimes());
-    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA031"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA031"));
   }
   
   @Test
   public void testConflictingStereotypes() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ConflictingStereotypes");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(4, "xMA031", "xMA034"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(4, "xMA031", "xMA034"));
   }
   
   @Test
   public void testUndefinedInitialState() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "UndefinedInitialState");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA025"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA025"));
   }
   
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
@@ -59,7 +59,7 @@ public class StateTests extends AbstractCoCoTest {
   @Test
   public void testInvalidInitialAssignment() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "InvalidInitialAssignment");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA039"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA039"));
   }
   
 }

@@ -4,9 +4,9 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import contextconditions.AbstractCoCoTest;
-import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
+import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc.cocos.MontiArcCoCos;
 
@@ -32,7 +32,7 @@ public class StimuliTests extends AbstractCoCoTest {
   @Test
   public void testMultipleAssignmentTypeConflics() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "MultipleAssignmentTypeConflics");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA046"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA046"));
   }
 
 }

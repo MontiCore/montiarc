@@ -8,9 +8,9 @@ package component.body.connectors;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import contextconditions.AbstractCoCoTest;
-import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
+import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcASTConnectorCoCo;
 import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
@@ -56,7 +56,7 @@ public class ConnectorTests extends AbstractCoCoTest {
   public void testSimpleConnectorSourceNonExistant() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "SimpleConnectorSourceNonExistant");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SimpleConnectorSourceExists()),
-        node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA072"));
+        node, new ExpectedErrorInfo(1, "xMA072"));
   }
   
   @Test
@@ -65,7 +65,7 @@ public class ConnectorTests extends AbstractCoCoTest {
     checkInvalid(
         new MontiArcCoCoChecker()
             .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified()),
-        node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA008"));
+        node, new ExpectedErrorInfo(1, "xMA008"));
   }
   
   @Test
@@ -79,7 +79,7 @@ public class ConnectorTests extends AbstractCoCoTest {
     checkInvalid(
         new MontiArcCoCoChecker()
             .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified()),
-        node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA070"));
+        node, new ExpectedErrorInfo(1, "xMA070"));
   }
   
   @Test
@@ -88,7 +88,7 @@ public class ConnectorTests extends AbstractCoCoTest {
     checkInvalid(
         new MontiArcCoCoChecker()
             .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified()),
-        node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA070"));
+        node, new ExpectedErrorInfo(1, "xMA070"));
   }
   
   /* Checks multiple instances of wrong connectors with connectors piercing
@@ -99,7 +99,7 @@ public class ConnectorTests extends AbstractCoCoTest {
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified());
-    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(4, "xMA008", "xMA070"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA008", "xMA070"));
   }
   
   @Test
@@ -109,7 +109,7 @@ public class ConnectorTests extends AbstractCoCoTest {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ConnectorSourceAndTargetSameComponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetComponentDiffer());
-    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA075"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA075"));
   }
   
   @Test
@@ -118,6 +118,6 @@ public class ConnectorTests extends AbstractCoCoTest {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "MissingSourceTargetDefinitionInSubcomponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetExist());
-    checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA066", "xMA067"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA066", "xMA067"));
   }
 }

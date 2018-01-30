@@ -1,4 +1,4 @@
-package contextconditions;
+package infrastructure;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 
-public class AbstractCoCoTestExpectedErrorInfo {
+public class ExpectedErrorInfo {
     private static Pattern ERROR_CODE_PATTERN = Pattern.compile("xMA[0-9]{3}");
     
     private int numExpectedFindings = 0;
@@ -79,11 +79,11 @@ public class AbstractCoCoTestExpectedErrorInfo {
       };
     }
     
-    public AbstractCoCoTestExpectedErrorInfo() {
+    public ExpectedErrorInfo() {
       this(0);
     }
     
-    public AbstractCoCoTestExpectedErrorInfo(int numExpectedFindings, String... expectedErrorCodes) {
+    public ExpectedErrorInfo(int numExpectedFindings, String... expectedErrorCodes) {
       checkExpectedErrorCodes(expectedErrorCodes);
       
       this.numExpectedFindings = numExpectedFindings;

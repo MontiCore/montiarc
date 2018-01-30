@@ -9,10 +9,10 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import contextconditions.AbstractCoCoTest;
-import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
+import infrastructure.ExpectedErrorInfo;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._symboltable.AutomatonSymbol;
@@ -37,32 +37,32 @@ public class AutomatonTest extends AbstractCoCoTest {
   @Test
   public void testMutipleBehaviors() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "MultipleAutomata");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA050"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(2, "xMA050"));
   }
   
   @Test
   public void testImplementationInNonAtomicComponent() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "AutomatonInComposedComponent");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA051"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA051"));
   }
 
   @Test
   public void testLowerCaseAutomatonName() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "AutomatonWithLowerCaseName");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA015"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA015"));
   }
 
   @Test
   public void testAutomatonHasStates() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "AutomatonWithoutState");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA014"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA014"));
   }
 
   @Test
   public void testAutomatonHasNoInitialStates() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "AutomatonWithoutInitialState");
     // automaton has states but no initial state -> exactly 1 error.
-    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA013"));
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA013"));
   }
   
   @Test

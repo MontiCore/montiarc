@@ -3,9 +3,9 @@ package component.body.invariants;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import contextconditions.AbstractCoCoTest;
-import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
+import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.IdentifiersAreUnique;
@@ -32,7 +32,7 @@ public class InvariantTests extends AbstractCoCoTest {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "AmbiguousInvariantNames");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         node,
-        new AbstractCoCoTestExpectedErrorInfo(2, "xMA052"));
+        new ExpectedErrorInfo(2, "xMA052"));
   }
     
 }

@@ -8,9 +8,9 @@ package component.head.generics;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import contextconditions.AbstractCoCoTest;
-import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
+import infrastructure.ExpectedErrorInfo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.TypeParameterNamesUnique;
 
@@ -39,6 +39,6 @@ public class GenericsTest extends AbstractCoCoTest {
   public void testTypeParameterNamesUniqueInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new TypeParameterNamesUnique()),
         getAstNode(MP, PACKAGE + "." + "TypeParameterNamesAbiguous"),
-        new AbstractCoCoTestExpectedErrorInfo(1, "xMA006"));
+        new ExpectedErrorInfo(1, "xMA006"));
   }
 }

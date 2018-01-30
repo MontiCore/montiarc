@@ -3,9 +3,9 @@ package component.body.automaton.transition;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import contextconditions.AbstractCoCoTest;
-import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
+import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc.cocos.MontiArcCoCos;
 
@@ -27,6 +27,6 @@ public class TransitionTests extends AbstractCoCoTest {
   @Test
   public void testUsingUndefinedStates() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "UsingUndefinedStates");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new AbstractCoCoTestExpectedErrorInfo(6, "xMA026", "xMA027"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(6, "xMA026", "xMA027"));
   }
 }
