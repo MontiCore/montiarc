@@ -1,5 +1,8 @@
-package a;
+package component.body.autoconnect;
 
+/**
+ * Valid model.
+ */
 component ArrayComp {
     port
         in String[] strIn1,

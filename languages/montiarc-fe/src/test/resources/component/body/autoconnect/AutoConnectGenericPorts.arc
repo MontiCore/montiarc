@@ -1,6 +1,6 @@
-package a;
+package component.body.autoconnect;
 
-import testtypes.*;
+import component.body.autoconnect.datatypes.*;
 
 component AutoConnectGenericPorts {
     

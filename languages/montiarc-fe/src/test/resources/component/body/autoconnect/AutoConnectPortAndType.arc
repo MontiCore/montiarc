@@ -1,4 +1,4 @@
-package a;
+package component.body.autoconnect;
 
 component AutoConnectPortAndType {
 

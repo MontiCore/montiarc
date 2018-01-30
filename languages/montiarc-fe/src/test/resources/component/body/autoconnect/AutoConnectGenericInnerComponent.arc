@@ -1,7 +1,10 @@
-package a;
+package component.body.autoconnect;
 
-import testtypes.*;
+import component.body.autoconnect.datatypes.*;
 
+/**
+ * Valid model.
+ */
 component AutoConnectGenericInnerComponent {
     
     autoconnect type;

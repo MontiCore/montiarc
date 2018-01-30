@@ -1,6 +1,9 @@
-package a;
+package component.body.autoconnect;
 
-component AutoConnectGenericUsageHierarchie {
+/**
+ * Valid model.
+ */
+component AutoConnectGenericUsageHierarchy {
     
     autoconnect type;
     

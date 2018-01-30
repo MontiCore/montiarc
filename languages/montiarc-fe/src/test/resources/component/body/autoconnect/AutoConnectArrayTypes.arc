@@ -1,7 +1,10 @@
-package a;
+package component.body.autoconnect;
 
-import testtypes.*;
+import component.body.autoconnect.ArrayComp;
 
+/**
+ * Valid model.
+ */
 component AutoConnectArrayTypes {
     
     autoconnect type;

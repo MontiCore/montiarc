@@ -24,8 +24,7 @@ import contextconditions.AbstractCoCoTest;
 import contextconditions.AbstractCoCoTestExpectedErrorInfo;
 
 /**
- * This class checks all context conditions related the combination of elements in component
- * bodies
+ * This class checks all context conditions related the combination of elements in component bodies
  *
  * @author Andreas Wortmann
  */
@@ -35,7 +34,7 @@ public class ComponentTests extends AbstractCoCoTest {
   
   private static final String PACKAGE = "component";
   
-private static MontiArcTool tool;
+  private static MontiArcTool tool;
   
   @BeforeClass
   public static void setUp() {
@@ -44,8 +43,7 @@ private static MontiArcTool tool;
   }
   
   @Test
-  /* Checks whether there is a redundant import statements. For example import
-   * a.*; import a.*; */
+  /* Checks whether there is a redundant import statements. For example import a.*; import a.*; */
   public void testRedundantImports() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "RedundantImports");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());

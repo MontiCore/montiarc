@@ -1,6 +1,9 @@
-package a;
+package component.body.autoconnect;
 
-component AutoConnectType2 {
+/**
+ * Invalid model. Duplicate matches for String and Booleans.
+ */
+component DuplicateAutoconnectMatches {
     autoconnect type;
     
     port 

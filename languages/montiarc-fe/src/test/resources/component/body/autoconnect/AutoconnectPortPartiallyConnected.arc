@@ -1,7 +1,10 @@
-package a;
+package component.body.autoconnect;
 
-import d.E;
+import component.body.autoconnect.dummycomponents.E;
 
+/**
+ * Valid model.
+ */
 component AutoconnectPortPartiallyConnected {
     autoconnect port;
     
@@ -13,5 +16,4 @@ component AutoconnectPortPartiallyConnected {
     
     connect sIn -> e1.sIn;
     connect e1.sOut -> e2.sIn;
-    
 }

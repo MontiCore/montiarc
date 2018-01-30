@@ -1,7 +1,11 @@
-package a;
+package component.body.autoconnect;
 
-import d.*;
+import component.body.autoconnect.dummycomponents.*;
 
+/**
+ * Invalid model. Various duplicate autoconnection matches and unused 
+ * ports.
+ */
 component AutoConnectType {
     autoconnect type;
     
