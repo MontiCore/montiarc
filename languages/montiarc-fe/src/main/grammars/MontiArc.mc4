@@ -8,15 +8,16 @@
  */
 grammar MontiArc extends de.monticore.java.JavaDSL {
 
-  /** ASTMACompilationUnit represents the complete component
-   * @attribute package          The package declaration of this component
-   * @attribute importStatements List of imported elements
+  /** ASTMACompilationUnit represents the entire content of a MontiArc model artifact
+   * @attribute package          The package declaration of the component model
+   * @attribute importStatements List of imported elements (data types and component types)
    * @attribute component The outermost component model defined in this compilation unit
    */
   MACompilationUnit =
-    ("package" package:(Name& || ".")+ ";")? 
-    (ImportStatement)*
-    Component;
+    ("package" package:(Name& || ".")+ ";")?  // optional package declaration
+    (ImportStatement)*                        // import statements
+    Component                                 // single outermost component declaration 
+    EOF;                                      // and nothing (end of file) afterwards
     
    // TODO where should invariant binding take place?
   InvariantContent = BlockStatement | Expression;
