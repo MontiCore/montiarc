@@ -2,6 +2,9 @@ package component.body.automaton;
 
 import types.Datatypes.SpeedCmd;
 
+/**
+ * Valid model.
+ */
 component ValidAutomaton(Integer defaultSpeed) {
   port
     in SpeedCmd cmd,

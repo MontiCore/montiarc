@@ -1,5 +1,8 @@
 package component.body.automaton;
 
+/**
+ * Invalid model. Components may contain one behavior automaton at most
+ */
 component MultipleAutomata {
   port
     in Integer a;

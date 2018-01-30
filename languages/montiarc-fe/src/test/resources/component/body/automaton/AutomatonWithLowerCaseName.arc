@@ -1,5 +1,8 @@
 package component.body.automaton;
 
+/**
+ * Invalid model. Automata must have an name staring upper case.
+ */
 component AutomatonWithLowerCaseName {
   port
     in Integer a;

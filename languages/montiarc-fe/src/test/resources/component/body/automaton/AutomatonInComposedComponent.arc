@@ -2,6 +2,9 @@ package component.body.automaton;
 
 import contextconditions.valid.BumpThroughPut;
 
+/**
+ * Invalid model. Component components may not have automata.
+ */
 component AutomatonInComposedComponent {
 
   port
