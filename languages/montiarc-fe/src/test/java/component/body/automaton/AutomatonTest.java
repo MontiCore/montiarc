@@ -1,13 +1,22 @@
 package component.body.automaton;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Optional;
+
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import contextconditions.AbstractCoCoTest;
 import contextconditions.AbstractCoCoTestExpectedErrorInfo;
+import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc._symboltable.AutomatonSymbol;
+import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.MontiArcCoCos;
 
 /**
@@ -59,6 +68,24 @@ public class AutomatonTest extends AbstractCoCoTest {
   @Test
   public void testValidAutomaton() {
     checkValid(MP, PACKAGE + "." + "ValidAutomaton");
+  }
+  
+  @Test
+  public void testResolveBumpControlBehavior() {
+    MontiArcTool tool = new MontiArcTool();
+    String modelPath = "src/test/resources";
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "BumpControl");
+    assertNotNull(node);
+    
+    Scope symtab = tool.createSymbolTable(modelPath);
+    Optional<ComponentSymbol> oBControl = symtab
+        .<ComponentSymbol> resolve(PACKAGE + "." + "BumpControl", ComponentSymbol.KIND);
+    assertTrue(oBControl.isPresent());
+    
+    ComponentSymbol bControl = oBControl.get();
+    Optional<AutomatonSymbol>  autSymbol = bControl.getSpannedScope().<AutomatonSymbol>
+            resolve("BumpControl", AutomatonSymbol.KIND);
+    assertTrue(autSymbol.isPresent());
   }
 
 }

@@ -1,14 +1,23 @@
 package component.body.ajava;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Optional;
+
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import contextconditions.AbstractCoCoTest;
 import contextconditions.AbstractCoCoTestExpectedErrorInfo;
+import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.JavaBehaviorSymbol;
 import montiarc.cocos.AtMostOneInitBlock;
 import montiarc.cocos.InitBlockOnlyOnEmbeddedAJava;
 import montiarc.cocos.MontiArcCoCos;
@@ -109,5 +118,24 @@ public class AJavaTests extends AbstractCoCoTest {
   public void testComplexCodeExample() {
     checkValid(MP, PACKAGE + "." + "ComplexCodeExample");
   }
+  
+  @Test
+  public void testResolveDistanceLoggerBehavior() {
+    MontiArcTool tool = new MontiArcTool();
+    String modelPath = "src/test/resources";
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "DistanceLogger");
+    assertNotNull(node);
+    
+    Scope symtab = tool.createSymbolTable(modelPath);
+    Optional<ComponentSymbol> oFoo = symtab.<ComponentSymbol> resolve(PACKAGE + "." + "DistanceLogger",
+        ComponentSymbol.KIND);
+    assertTrue(oFoo.isPresent());
+    
+    ComponentSymbol foo = oFoo.get();
+    Optional<JavaBehaviorSymbol> aJavaDef = foo.getSpannedScope()
+        .<JavaBehaviorSymbol> resolve("increaseHulu", JavaBehaviorSymbol.KIND);
+    assertTrue(aJavaDef.isPresent());
+  }
+  
   
 }

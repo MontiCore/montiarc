@@ -1,5 +1,8 @@
-package contextconditions.valid;
+package component.body.ajava;
 
+/**
+ * Valid model.
+ */
 component DistanceLogger {
   port
     in double distance,
