@@ -8,7 +8,7 @@ import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 </#list>
 import de.montiarcautomaton.runtimes.timesync.implementation.IResult;
 
-public class ${resultName} implements IResult { 
+public class ${resultName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> implements IResult {
   // variables  
   <#list portsOut as port>
   private ${helper.getPortTypeName(port)} ${port.getName()};

@@ -15,7 +15,7 @@ import de.montiarcautomaton.runtimes.timesync.delegation.Port;
 import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 import de.montiarcautomaton.runtimes.Log;
 
-public class ${name} implements IComponent {
+public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> implements IComponent {
   // port fields
   <#list portsIn as port>
   private Port<${helper.getPortTypeName(port)}> ${port.getName()};
