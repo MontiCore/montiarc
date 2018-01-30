@@ -4,6 +4,7 @@ import javap.valid.bumperbot.Datatypes.MotorCommand;
 import javap.valid.bumperbot.Datatypes.TimerSignal;
 import javap.valid.bumperbot.Datatypes.TimerCmd;
 
+// TODO: Unused
 component ComponentWithAutomaton {
   port
     in Double distance,

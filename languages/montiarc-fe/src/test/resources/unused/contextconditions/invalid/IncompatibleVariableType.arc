@@ -2,6 +2,7 @@ package contextconditions.invalid;
 
 import java.util.HashMap;
 
+// TODO: Unused?
 component IncompatibleVariableType {
 
   port in String s;

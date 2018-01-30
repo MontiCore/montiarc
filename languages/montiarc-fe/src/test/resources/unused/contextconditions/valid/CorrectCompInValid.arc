@@ -1,5 +1,6 @@
 package valid;
 
+// TODO: Unused?
 component CorrectCompInValid {
 
     port

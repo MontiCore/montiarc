@@ -2,6 +2,7 @@ package contextconditions.valid;
 
 import contextconditions.valid.BumpThroughPut;
 
+// TODO: Unused?
 component ImportComponent {
 
     port

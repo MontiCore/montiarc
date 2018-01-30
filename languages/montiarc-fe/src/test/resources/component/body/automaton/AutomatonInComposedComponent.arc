@@ -1,6 +1,6 @@
 package component.body.automaton;
 
-import contextconditions.valid.BumpThroughPut;
+import component.body.automaton.BumpThroughPut;
 
 /**
  * Invalid model. Component components may not have automata.
