@@ -1,6 +1,7 @@
 package component.body.automaton.states;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import contextconditions.AbstractCoCoTest;
@@ -50,6 +51,15 @@ public class StateTests extends AbstractCoCoTest {
   public void testUndefinedInitialState() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "UndefinedInitialState");
     checkInvalid(MontiArcCoCos.createChecker(), node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA025"));
+  }
+  
+  @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
+      + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
+      + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
+  @Test
+  public void testInvalidInitialAssignment() {
+    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "InvalidInitialAssignment");
+    checkInvalid(MontiArcCoCos.createChecker(),node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA039"));
   }
   
 }
