@@ -60,7 +60,7 @@ public class AutoConnectTest extends AbstractCoCoTest {
     // 5 unused ports remaining
     
     MontiArcCoCoChecker coCoChecker = new MontiArcCoCoChecker().addCoCo(new PortUsage());
-    ASTMontiArcNode node = getAstNode("arc/transformations", "a.AutoConnectPorts");
+    ASTMontiArcNode node = getAstNode("", PACKAGE + "." + "AutoConnectPorts");
     
     checkInvalid(coCoChecker, node, new AbstractCoCoTestExpectedErrorInfo(1, "xMA058"));
     coCoChecker = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
