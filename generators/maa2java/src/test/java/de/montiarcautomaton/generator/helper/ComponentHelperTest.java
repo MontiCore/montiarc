@@ -1,9 +1,14 @@
 package de.montiarcautomaton.generator.helper;
 
 import de.monticore.symboltable.Scope;
+import de.monticore.symboltable.Symbol;
+import de.monticore.symboltable.types.JFieldSymbol;
 import montiarc.MontiArcTool;
+import montiarc._ast.ASTComponent;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.PortSymbol;
+import montiarc._symboltable.VariableSymbol;
 import org.junit.Test;
 
 import java.nio.file.Paths;
@@ -44,5 +49,74 @@ public class ComponentHelperTest {
     assertEquals("\"3rd\"", paramValues.get(0));
     assertEquals("3", paramValues.get(1));
     assertEquals("new Integer(7)", paramValues.get(2));
+  }
+
+  @Test
+  public void getPortTypeName() {
+    MontiArcTool tool = new MontiArcTool();
+    final Scope symbolTable = tool.createSymbolTable("src/test/resources/components/helper/ComponentWithGenerics.arc");
+    ComponentSymbol comp = tool.getComponentSymbol("components.helper.ComponentWithGenerics", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+    assertNotNull(comp);
+
+    ComponentHelper helper = new ComponentHelper(comp);
+    ASTComponent compNode = (ASTComponent) comp.getAstNode().get();
+
+    Optional<PortSymbol> portSymbol = comp.getSpannedScope().resolve("inT", PortSymbol.KIND);
+    assertTrue(portSymbol.isPresent());
+
+    String portTypeName = helper.getPortTypeName(compNode, portSymbol.get());
+    assertEquals("T", portTypeName);
+
+    portTypeName = helper.getPortTypeName(portSymbol.get());
+    assertEquals("T", portTypeName);
+
+    portSymbol = comp.getSpannedScope().resolve("outK", PortSymbol.KIND);
+    assertTrue(portSymbol.isPresent());
+
+    portTypeName = helper.getPortTypeName(compNode, portSymbol.get());
+    assertEquals("K", portTypeName);
+
+    portTypeName = helper.getPortTypeName(portSymbol.get());
+    assertEquals("K", portTypeName);
+  }
+
+  @Test
+  public void testVariableTypeName() {
+    MontiArcTool tool = new MontiArcTool();
+    ComponentSymbol comp = tool.getComponentSymbol("components.helper.ComponentWithGenericVariables", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+    assertNotNull(comp);
+
+    ComponentHelper helper = new ComponentHelper(comp);
+    ASTComponent compNode = (ASTComponent) comp.getAstNode().get();
+
+    Optional<VariableSymbol> variableSymbol = comp.getSpannedScope().resolve("varWithTypeT", VariableSymbol.KIND);
+    assertTrue(variableSymbol.isPresent());
+    String variableTypName = helper.getVariableTypeName(variableSymbol.get());
+    assertEquals("T", variableTypName);
+
+    variableSymbol = comp.getSpannedScope().resolve("varWithTypeKextendsNumber", VariableSymbol.KIND);
+    assertTrue(variableSymbol.isPresent());
+    variableTypName = helper.getVariableTypeName(variableSymbol.get());
+    assertEquals("K", variableTypName);
+  }
+
+  @Test
+  public void getParamTypeName() {
+    MontiArcTool tool = new MontiArcTool();
+    ComponentSymbol comp = tool.getComponentSymbol("components.helper.ComponentWithGenericParameters", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+    assertNotNull(comp);
+
+    ComponentHelper helper = new ComponentHelper(comp);
+    ASTComponent compNode = (ASTComponent) comp.getAstNode().get();
+
+    final List<JFieldSymbol> configParameters = comp.getConfigParameters();
+
+    JFieldSymbol parameter = configParameters.get(0);
+    String parameterType = helper.getParamTypeName(parameter);
+    assertEquals("T", parameterType);
+
+    parameter = configParameters.get(1);
+    parameterType = helper.getParamTypeName(parameter);
+    assertEquals("K", parameterType);
   }
 }

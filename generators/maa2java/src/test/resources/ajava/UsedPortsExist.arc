@@ -2,8 +2,8 @@ package ajava;
 
 component UsedPortsExist {
   port
-    in double distance,
-    out double hulu;
+    in Double distance,
+    out Double hulu;
 
   compute IncreaseHulu {    
     hulu = distance+2;
