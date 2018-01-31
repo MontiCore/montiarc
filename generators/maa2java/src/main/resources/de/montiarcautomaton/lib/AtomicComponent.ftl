@@ -25,7 +25,7 @@ import de.montiarcautomaton.runtimes.Log;
 
 public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> implements IComponent {
   
-  //component variables
+  // component variables
   <#list variables as var>
     private ${helper.getVariableTypeName(var)} ${var.getName()};
   </#list>
@@ -64,6 +64,10 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   
   public ${name}(<#list configParams as param>${helper.getParamTypeName(param)} ${param.getName()}<#sep>, </#list>) {
     behaviorImpl = new ${implName}(<#list configParams as param>${param.getName()}<#sep>, </#list>);
+    // config parameters
+  <#list configParams as param>
+    this.${param.getName()} = ${param.getName()};
+  </#list>
   }
   
   @Override
@@ -82,9 +86,6 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   	<#list portsIn as port>
   	if (this.${port.getName()} == null) {this.${port.getName()} = Port.EMPTY;}
   	</#list>
-  	
-  
-
   }
   
   private void setResult(${resultName}<#if helper.isGeneric()> < <#list helper.getGenericParameters() as param>${param}<#sep>,</#list> > </#if> result) {
@@ -97,7 +98,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   @Override
   public void compute() {
     // collect current input port values
-    final ${inputName} input = new ${inputName}(<#list portsIn as port>this.${port.getName()}.getCurrentValue()<#sep>, </#list>);
+    final ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> input = new ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>(<#list portsIn as port>this.${port.getName()}.getCurrentValue()<#sep>, </#list>);
     //Logger.log("${name}", "compute(" + input.toString() + ")");
     
     try {

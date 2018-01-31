@@ -21,13 +21,12 @@ import de.monticore.types.types._ast.ASTTypesNode;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
-import montiarc._ast.ASTComponentVariableDeclaration;
 import montiarc._ast.ASTElement;
 import montiarc._ast.ASTJavaPInitializer;
 import montiarc._ast.ASTParameter;
 import montiarc._ast.ASTPort;
 import montiarc._ast.ASTValueInitialization;
-import montiarc._ast.ASTVariable;
+import montiarc._ast.ASTVariableDeclaration;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
@@ -96,7 +95,7 @@ public class ComponentHelper {
   }
   
   public String getVariableTypeName(VariableSymbol var) {
-    Optional<ASTType> optVarType = findVariableTypeByName(var.getFullName());
+    Optional<ASTType> optVarType = findVariableTypeByName(var.getName());
     if (optVarType.isPresent())  {
       return printTypeName(optVarType.get());
     }
@@ -108,8 +107,8 @@ public class ComponentHelper {
   
   private Optional<ASTType> findVariableTypeByName(String name) {
     for (ASTElement e : componentNode.getBody().getElements()) {
-      if (e instanceof ASTVariable) {
-        ASTComponentVariableDeclaration variableDeclaration = (ASTComponentVariableDeclaration) e;
+      if (e instanceof ASTVariableDeclaration) {
+        ASTVariableDeclaration variableDeclaration = (ASTVariableDeclaration) e;
         if (variableDeclaration.getNames().contains(name)) {
           return Optional.of(variableDeclaration.getType());
         }
