@@ -43,39 +43,6 @@ public class SymtabArcdTest {
   }
 
   @Test
-  public void testCompWithGenericPorts() {
-    ComponentSymbol comp = tool.getComponentSymbol("a.CompWithGenericPorts", Paths.get(MODEL_PATH + "/genericPorts").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
-    assertNotNull(comp);
-    assertEquals(3, comp.getFormalTypeParameters().size());
-
-    JTypeSymbol typeSymbol = comp.getFormalTypeParameters().get(0);
-    assertEquals("K", typeSymbol.getName());
-    assertTrue(typeSymbol.isFormalTypeParameter());
-     assertEquals(1, typeSymbol.getSuperTypes().size());
-
-    typeSymbol = comp.getFormalTypeParameters().get(1);
-    assertEquals("V", typeSymbol.getName());
-    assertTrue(typeSymbol.isFormalTypeParameter());
-     assertEquals(1, typeSymbol.getSuperTypes().size());
-
-    typeSymbol = comp.getFormalTypeParameters().get(2);
-    assertEquals("W", typeSymbol.getName());
-    assertTrue(typeSymbol.isFormalTypeParameter());
-    assertEquals(0, typeSymbol.getSuperTypes().size());
-
-    PortSymbol myKInput = comp.getIncomingPort("myKInput").orElse(null);
-    assertNotNull(myKInput);
-    assertEquals("K", myKInput.getTypeReference().getName());
-    PortSymbol myWInput = comp.getIncomingPort("myWInput").orElse(null);
-    assertNotNull(myWInput);
-    assertEquals("W", myWInput.getTypeReference().getName());
-    PortSymbol myVInput = comp.getOutgoingPort("myVOutput").orElse(null);
-    assertNotNull(myVInput);
-    assertEquals("V", myVInput.getTypeReference().getName());
-
-  }
-
-  @Test
   public void testCompWithGenericsAndInnerGenericComponent() {
     ComponentSymbol comp = tool.getComponentSymbol(
         "a.GenericCompWithInnerGenericComp", Paths.get(MODEL_PATH + "/genericPorts").toFile()).orElse(null);

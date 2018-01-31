@@ -1,5 +1,8 @@
-package a;
+package component.body.ports;
 
+/**
+ * Valid model.
+ */
 component CompWithGenericPorts<K extends Number, V extends Iterable, W> {
 
     port
