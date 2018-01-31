@@ -5,21 +5,14 @@
  */
 package component.head.name;
 
-import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTool;
-import montiarc._ast.ASTMACompilationUnit;
-import montiarc._parser.MontiArcParser;
-import montiarc._symboltable.ComponentKind;
-import montiarc._symboltable.ComponentSymbol;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import javax.swing.text.html.Option;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 
 import static org.junit.Assert.fail;
 
@@ -31,7 +24,7 @@ import static org.junit.Assert.fail;
  * @since 4.2.0
  */
 public class NameTest {
-  private static final String PATH = "src/test/resources/component/head/name/";
+  private static final String PATH = "src/test/resources/";
 
   @BeforeClass
   public static void setUp() {
@@ -42,17 +35,19 @@ public class NameTest {
   public void testNameClashNotPermitted() {
     // given
     MontiArcTool tool = new MontiArcTool();
-    final Path filePath = Paths.get(PATH + "nameclash/NameClashA.arc");
+    final Path filePath = Paths.get(PATH);
     final File file = filePath.toFile();
 
     // when
-    final Optional<ComponentSymbol> rootSym = tool
-        .getComponentSymbol("component.head.name.nameclash.NameClashA", file);
-
-    // then
-    if (rootSym.get().getSuperComponent().equals(Optional.empty())) {
+    try {
+      tool.getComponentSymbol("component.head.name.nameclash.NameClashA", file);
+    }
+    catch (Exception e) {
       return;
     }
-    fail("NameClashB.arc should not be parseable.");
+
+    // then
+    fail(
+        "NameClashB.arc should not be parseable because 'component.head.name.nameclash.NameClashA' is ambiguous.");
   }
 }
