@@ -41,4 +41,9 @@ public class GenericsTest extends AbstractCoCoTest {
         getAstNode(MP, PACKAGE + "." + "TypeParameterNamesAbiguous"),
         new ExpectedErrorInfo(1, "xMA006"));
   }
+  
+  @Test
+  public void testGarage() {
+    checkValid(MP, PACKAGE + "." + "Garage");
+  }
 }

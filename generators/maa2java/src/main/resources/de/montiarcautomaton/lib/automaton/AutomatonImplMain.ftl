@@ -32,12 +32,12 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
   
   // variables
   <#list variables as variable>
-  private ${compHelper.getVariableTypeName(variable)} ${variable.getName()};
+  private ${compHelper.printVariableTypeName(variable)} ${variable.getName()};
   </#list>
   
   // config parameters
   <#list configParams as param>
-  private final ${helper.getParamTypeName(param)} ${param.getName()};
+  private final ${helper.printParamTypeName(param)} ${param.getName()};
   </#list>
   
   public ${implName}(<#list configParams as param>${helper.getParamTypeName(param)} ${param.getName()}<#sep>, </#list>) {

@@ -1,7 +1,16 @@
 package de.montiarcautomaton.generator.helper;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.Test;
+
 import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.types.JFieldSymbol;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTComponent;
@@ -9,15 +18,6 @@ import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.VariableSymbol;
-
-import org.junit.Ignore;
-import org.junit.Test;
-
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.Assert.*;
 
 public class ComponentHelperTest {
 
@@ -66,19 +66,19 @@ public class ComponentHelperTest {
     Optional<PortSymbol> portSymbol = comp.getSpannedScope().resolve("inT", PortSymbol.KIND);
     assertTrue(portSymbol.isPresent());
 
-    String portTypeName = helper.getPortTypeName(compNode, portSymbol.get());
+    String portTypeName = helper.printPortTypeName(portSymbol.get());
     assertEquals("T", portTypeName);
 
-    portTypeName = helper.getPortTypeName(portSymbol.get());
+    portTypeName = helper.printPortTypeName(portSymbol.get());
     assertEquals("T", portTypeName);
 
     portSymbol = comp.getSpannedScope().resolve("outK", PortSymbol.KIND);
     assertTrue(portSymbol.isPresent());
 
-    portTypeName = helper.getPortTypeName(compNode, portSymbol.get());
+    portTypeName = helper.printPortTypeName(portSymbol.get());
     assertEquals("K", portTypeName);
 
-    portTypeName = helper.getPortTypeName(portSymbol.get());
+    portTypeName = helper.printPortTypeName(portSymbol.get());
     assertEquals("K", portTypeName);
   }
 
@@ -95,19 +95,19 @@ public class ComponentHelperTest {
     Optional<PortSymbol> portSymbol = comp.getSpannedScope().resolve("motor", PortSymbol.KIND);
     assertTrue(portSymbol.isPresent());
 
-    String portTypeName = helper.getPortTypeName(compNode, portSymbol.get());
+    String portTypeName = helper.printPortTypeName(portSymbol.get());
     assertEquals("HashBasedTable<Boolean,Double[],List<String>>[]", portTypeName);
 
-    portTypeName = helper.getPortTypeName(portSymbol.get());
+    portTypeName = helper.printPortTypeName(portSymbol.get());
     assertEquals("HashBasedTable<Boolean,Double[],List<String>>[]", portTypeName);
 
-    portSymbol = comp.getSpannedScope().resolve("outK", PortSymbol.KIND);
+    portSymbol = comp.getSpannedScope().resolve("wheels", PortSymbol.KIND);
     assertTrue(portSymbol.isPresent());
 
-    portTypeName = helper.getPortTypeName(compNode, portSymbol.get());
+    portTypeName = helper.printPortTypeName(portSymbol.get());
     assertEquals("List<com.google.common.collect.ImmutableMap<Boolean,Double>[]>", portTypeName);
 
-    portTypeName = helper.getPortTypeName(portSymbol.get());
+    portTypeName = helper.printPortTypeName(portSymbol.get());
     assertEquals("List<com.google.common.collect.ImmutableMap<Boolean,Double>[]>", portTypeName);
   }
   
@@ -122,12 +122,12 @@ public class ComponentHelperTest {
 
     Optional<VariableSymbol> variableSymbol = comp.getSpannedScope().resolve("varWithTypeT", VariableSymbol.KIND);
     assertTrue(variableSymbol.isPresent());
-    String variableTypName = helper.getVariableTypeName(variableSymbol.get());
+    String variableTypName = helper.printVariableTypeName(variableSymbol.get());
     assertEquals("T", variableTypName);
 
     variableSymbol = comp.getSpannedScope().resolve("varWithTypeKextendsNumber", VariableSymbol.KIND);
     assertTrue(variableSymbol.isPresent());
-    variableTypName = helper.getVariableTypeName(variableSymbol.get());
+    variableTypName = helper.printVariableTypeName(variableSymbol.get());
     assertEquals("K", variableTypName);
   }
 

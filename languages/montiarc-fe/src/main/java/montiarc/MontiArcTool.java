@@ -142,7 +142,6 @@ public class MontiArcTool {
     return gs;
   }
   
-  
   /**
    * Create symbol table from String
    * 

@@ -10,6 +10,7 @@ ${tc.params(
 	"java.util.Collection<montiarc._symboltable.PortSymbol> portsIn", 
 	"java.util.Collection<montiarc._symboltable.PortSymbol> portsOut",
 	"java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams")}
+	
 package ${_package};
 
 import ${_package}.${inputName};
@@ -27,21 +28,21 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   
   // component variables
   <#list variables as var>
-    private ${helper.getVariableTypeName(var)} ${var.getName()};
+  private ${helper.printVariableTypeName(var)} ${var.getName()};
   </#list>
   
   // config parameters
   <#list configParams as param>
-  private final ${helper.getParamTypeName(param)} ${param.getName()};
+  private final ${helper.printParamTypeName(param)} ${param.getName()};
   </#list>
   
   // port fields
   <#list portsIn as port>
-  private Port<${helper.getPortTypeName(port)}> ${port.getName()};
+  private Port<${helper.printPortTypeName(port)}> ${port.getName()};
   </#list>
   
   <#list portsOut as port>
-  private Port<${helper.getPortTypeName(port)}> ${port.getName()};
+  private Port<${helper.printPortTypeName(port)}> ${port.getName()};
   </#list>
   
   // port setter

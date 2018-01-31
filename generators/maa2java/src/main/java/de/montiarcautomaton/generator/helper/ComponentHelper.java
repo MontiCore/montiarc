@@ -22,6 +22,7 @@ import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTElement;
+import montiarc._ast.ASTInterface;
 import montiarc._ast.ASTJavaPInitializer;
 import montiarc._ast.ASTParameter;
 import montiarc._ast.ASTPort;
@@ -35,8 +36,7 @@ import montiarc._symboltable.ValueSymbol;
 import montiarc._symboltable.VariableSymbol;
 
 /**
- * Helper class used in the template to generate target code of atomic or
- * composed components.
+ * Helper class used in the template to generate target code of atomic or composed components.
  *
  * @author Gerrit Leonhardt
  */
@@ -63,7 +63,8 @@ public class ComponentHelper {
     }
   }
   
-
+  // TODO: Wer nutzt die und warum? Kann die raus?
+  @Deprecated
   public String getPortTypeName(PortSymbol port) {
     // ASTComponent comp = null;
     //
@@ -82,27 +83,45 @@ public class ComponentHelper {
     ASTTypesNode astTypeNode = (ASTTypesNode) astPort.getType();
     String portTypeName = visitor.prettyprint(astTypeNode);
     return portTypeName;
-//    return getPortTypeName(componentNode, port);
+    // return getPortTypeName(componentNode, port);
   }
   
   // TODO: Wer nutzt die und warum? Kann die raus?
+  @Deprecated
   public String getPortTypeName(ASTComponent comp, PortSymbol port) {
-//    
-//    ASTTypesNode astTypeNode = (ASTTypesNode) comp.getPorts().getType();
-//    String portTypeName = visitor.prettyprint();
-//    return portTypeName;
+    //
+    // ASTTypesNode astTypeNode = (ASTTypesNode) comp.getPorts().getType();
+    // String portTypeName = visitor.prettyprint();
+    // return portTypeName;
     return printFqnTypeName(comp, port.getTypeReference());
   }
   
-  public String getVariableTypeName(VariableSymbol var) {
-    Optional<ASTType> optVarType = findVariableTypeByName(var.getName());
-    if (optVarType.isPresent())  {
-      return printTypeName(optVarType.get());
+  // TODO @MP in Templates übernehmen
+  public String printPortTypeName(PortSymbol var) {
+    String name = var.getName();
+    Optional<ASTType> optType = findPortTypeByName(name);
+    return printTypeName(optType);
+  }
+  
+  private Optional<ASTType> findPortTypeByName(String name) {
+    for (ASTElement e : componentNode.getBody().getElements()) {
+      if (e instanceof ASTInterface) {
+        ASTInterface itf = (ASTInterface) e;
+        for (ASTPort port : itf.getPorts()) {
+          if (port.getNames().contains(name)) {
+            return Optional.of(port.getType());
+          }
+        }
+      }
     }
-    else {
-      Log.error("XX");
-      return "TYPE-NOT-FOUND";
-    }
+    return Optional.empty();
+  }
+  
+  // TODO @MP in Templates übernehmen
+  public String printVariableTypeName(VariableSymbol var) {
+    String name = var.getName();
+    Optional<ASTType> optType = findVariableTypeByName(name);
+    return printTypeName(optType);
   }
   
   private Optional<ASTType> findVariableTypeByName(String name) {
@@ -117,11 +136,30 @@ public class ComponentHelper {
     return Optional.empty();
   }
   
-  private String printTypeName(ASTTypesNode type) {
-    String typeName = visitor.prettyprint(type);
-    return typeName;
+  public String printParamTypeName(JFieldSymbol param) {
+    String name = param.getName();
+    Optional<ASTType> optType = findParamTypeByName(name);
+    return printTypeName(optType);
   }
   
+  private Optional<ASTType> findParamTypeByName(String name) {
+    for (ASTParameter p : componentNode.getHead().getParameters()) {
+        if (name.equals(p.getName())) {
+          return Optional.of(p.getType());
+        }
+    }
+    return Optional.empty();
+  }
+  
+  private String printTypeName(Optional<ASTType> optType) {
+    if (optType.isPresent()) {
+      return visitor.prettyprint(optType.get()).replaceAll(" ", "");
+    }
+    else {
+      Log.error("XX");
+      return "TYPE-NOT-FOUND";
+    }
+  }
   
   public String getVariableTypeName(ASTComponent comp, VariableSymbol var) {
     return printFqnTypeName(comp, var.getTypeReference());
@@ -149,17 +187,15 @@ public class ComponentHelper {
   }
   
   /**
-   * Calculates the values of the parameters of a
-   * {@link ComponentInstanceSymbol}. This takes default values for parameters
-   * into account and adds them as required. Default values are only added from
-   * left to right in order. <br/>
+   * Calculates the values of the parameters of a {@link ComponentInstanceSymbol}. This takes
+   * default values for parameters into account and adds them as required. Default values are only
+   * added from left to right in order. <br/>
    * Example: For a component with parameters
    * <code>String stringParam, Integer integerParam = 2, Object objectParam = new Object()</code>
-   * that is instanciated with parameters <code>"Test String", 5</code> this
-   * method adds <code>new Object()</code> as the last parameter.
+   * that is instanciated with parameters <code>"Test String", 5</code> this method adds
+   * <code>new Object()</code> as the last parameter.
    *
-   * @param param The {@link ComponentInstanceSymbol} for which the parameters
-   * should be calculated.
+   * @param param The {@link ComponentInstanceSymbol} for which the parameters should be calculated.
    * @return The parameters.
    */
   public Collection<String> getParamValues(ComponentInstanceSymbol param) {
@@ -330,8 +366,7 @@ public class ComponentHelper {
   }
   
   /**
-   * Checks whether the given typeName for the component comp is a generic
-   * parameter.
+   * Checks whether the given typeName for the component comp is a generic parameter.
    *
    * @param comp
    * @param typeName

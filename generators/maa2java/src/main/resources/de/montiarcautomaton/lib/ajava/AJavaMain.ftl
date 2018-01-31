@@ -19,12 +19,12 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
   
   //component variables
   <#list compVariables as compVariable>
-    private ${helper.getVariableTypeName(compVariable)} ${compVariable.getName()};
+    private ${helper.printVariableTypeName(compVariable)} ${compVariable.getName()};
   </#list>
   
   // config parameters
   <#list configParams as param>
-  private final ${helper.getParamTypeName(param)} ${param.getName()};
+  private final ${helper.printParamTypeName(param)} ${param.getName()};
   </#list>
   
   public ${implName}(<#list configParams as param>${helper.getParamTypeName(param)} ${param.getName()}<#sep>, </#list>) {
