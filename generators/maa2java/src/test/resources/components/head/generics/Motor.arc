@@ -1,14 +1,14 @@
 package components.head.generics;
 
+import com.google.common.collect.HashBasedTable;
+
 /**
  * Valid model. It generates generic Ports with full qualified Names, Arrays, imports and sub-Generics 
  */
-component Car<X>(X xParameter) {
+component Motor<X>(X xParameter) {
   port 
   	in List<com.google.common.collect.ImmutableMap<Boolean,Double>[]> wheels,
-  	out com.google.common.collect.HashBasedTable<Boolean,Double[],List<String>>[] motor;
-  
-  component Motor<X>(xParameter) m;
-  connect wheels -> m.wheels;
-  connect m.motor -> motor;
+  	out HashBasedTable<Boolean,Double[],List<String>>[] motor;
+  	
+  java.util.List<X> xList; 
 }

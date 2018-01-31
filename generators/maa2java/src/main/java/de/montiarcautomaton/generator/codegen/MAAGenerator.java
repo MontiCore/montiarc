@@ -143,10 +143,18 @@ public class MAAGenerator {
       // pass all arguments instead of comp for better readability in the
       // template
       
-      ComposedComponent.generate(filePath, comp.getAstNode().get(), compHelper, comp,
-          comp.getPackageName(), comp.getImports(), comp.getName(),
-          comp.getIncomingPorts(), comp.getOutgoingPorts(), comp.getSubComponents(),
-          comp.getConnectors());
+      ComposedComponent.generate(filePath, 
+          comp.getAstNode().get(), 
+          compHelper, 
+          comp,
+          comp.getPackageName(), 
+          comp.getImports(), 
+          comp.getName(),
+          comp.getIncomingPorts(), 
+          comp.getOutgoingPorts(), 
+          comp.getSubComponents(),
+          comp.getConnectors(),
+          comp.getConfigParameters());
     }
     
     // gen deploy

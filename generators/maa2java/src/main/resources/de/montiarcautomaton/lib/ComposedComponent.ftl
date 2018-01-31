@@ -7,7 +7,7 @@ ${tc.params(
   "java.util.Collection<montiarc._symboltable.PortSymbol> portsIn", 
   "java.util.Collection<montiarc._symboltable.PortSymbol> portsOut",
   "java.util.Collection<montiarc._symboltable.ComponentInstanceSymbol> subComponents", 
-  "java.util.Collection<montiarc._symboltable.ConnectorSymbol> connectors"),
+  "java.util.Collection<montiarc._symboltable.ConnectorSymbol> connectors",
   "java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams")}
   
 package ${_package};
@@ -19,9 +19,9 @@ import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
 import de.montiarcautomaton.runtimes.timesync.delegation.Port;
 
-public class ${name} implements IComponent {
+public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> implements IComponent {
+ 
   // port fields
-  
   <#list portsIn as port>
   private Port<${helper.getPortTypeName(port)}> ${port.getName()};
   
@@ -73,7 +73,7 @@ public class ${name} implements IComponent {
   public void setUp() {
      // instantiate all subcomponents
     <#list subComponents as component>
-    this.${component.getName()} = new ${helper.getSubComponentTypeName(component)}(<#list helper.getParamValues(component) as param>${param}<#sep>, </#list>); 
+    this.${component.getName()} = new ${helper.getSubComponentTypeName(component)}(<#list helper.getParamValues(component) as param>this.${param}<#sep>, </#list>); 
     </#list>
     
     //set up all sub components  
