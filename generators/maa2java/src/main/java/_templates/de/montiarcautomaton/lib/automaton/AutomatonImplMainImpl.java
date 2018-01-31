@@ -28,6 +28,7 @@ import montiarc._symboltable.ComponentSymbol;
  */
 public class AutomatonImplMainImpl extends AutomatonImplMain {
   
+  
   /**
    * @see _templates.mc.montiarcautomaton.lejos.lib.AutomatonImplMain#doGenerate(java.nio.file.Path,
    * de.monticore.ast.ASTNode, de.monticore.symboltable.CommonSymbol)
@@ -45,10 +46,11 @@ public class AutomatonImplMainImpl extends AutomatonImplMain {
       String implName = comp.getName() + "Impl";
       AutomatonHelper helper = new AutomatonHelper(automaton, comp);
       ComponentHelper compHelper = new ComponentHelper(comp);
-      
+
       AutomatonImplMain.generate(filepath, node, helper, comp.getPackageName(), comp.getImports(),
           comp.getName(),
-          resultName, inputName, implName, comp.getIncomingPorts(), compHelper, comp.getVariables(),
+          resultName, inputName, implName,          
+          comp.getIncomingPorts(), compHelper, comp.getVariables(),
           helper.getStates(), comp.getConfigParameters());
     }
   }

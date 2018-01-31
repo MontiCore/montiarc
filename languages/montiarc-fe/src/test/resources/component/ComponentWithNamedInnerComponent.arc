@@ -1,4 +1,4 @@
-package a;
+package component;
 
 component ComponentWithNamedInnerComponent {
     
@@ -14,5 +14,4 @@ component ComponentWithNamedInnerComponent {
     
     connect sIn -> instance.sIn;
     connect instance.sOut -> sOut;
-
 }

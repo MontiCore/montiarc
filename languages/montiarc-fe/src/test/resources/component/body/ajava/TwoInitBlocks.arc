@@ -5,8 +5,8 @@ package component.body.ajava;
  */
 component TwoInitBlocks {
 
-	var Integer testVariable;
-	var Integer testVariable2;
+	Integer testVariable;
+	Integer testVariable2;
 
 	init Block1 {
 		testVariable = 10;

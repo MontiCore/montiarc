@@ -6,8 +6,8 @@ package component.body.ajava;
  */
 component InitBlockWithoutComputeBlock {
 
-	var Integer integerVariable;
-	var String stringVariable;
+	Integer integerVariable;
+	String stringVariable;
 
 	init {
 		integerVariable = 10;

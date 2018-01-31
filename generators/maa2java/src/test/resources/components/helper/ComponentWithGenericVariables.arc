@@ -7,6 +7,6 @@ package components.helper;
 */
 component ComponentWithGenericVariables<T, K extends Number> {
 
-  var T varWithTypeT;
-  var K varWithTypeKextendsNumber;
+  T varWithTypeT;
+  K varWithTypeKextendsNumber;
 }

@@ -215,16 +215,12 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   SimpleConnector = 
     Stereotype? source:QualifiedName "->" targets:(QualifiedName || ",")+;
     
-  /**
-  * A variable can be used in the behavior implementation of a component.
-  */
-  ComponentVariableDeclaration implements Element = "var"? Variable ("," Variable)* ";";
   
   /**
    * A component variable
    * @attribute Name: The name of the variable
    */
-  Variable = Type (Name ("," Name)*)?; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
+  VariableDeclaration implements Element = Type (Name ("," Name)*)? ";" ; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
   
 
   /**

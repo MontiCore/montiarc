@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 component IncompatibleVariableAssignmentGenericTypesDifferSimple {
   
-  var HashMap<String, Integer> stateChanges;
+  HashMap<String, Integer> stateChanges;
 
   automaton BumpControl {
     state Idle;

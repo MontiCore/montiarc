@@ -9,6 +9,8 @@ import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.VariableSymbol;
+
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.nio.file.Paths;
@@ -80,6 +82,35 @@ public class ComponentHelperTest {
     assertEquals("K", portTypeName);
   }
 
+  @Test
+  public void getPortGenerics() {
+    MontiArcTool tool = new MontiArcTool();
+    final Scope symbolTable = tool.createSymbolTable("src/test/resources/components/head/generics/Car.arc");
+    ComponentSymbol comp = tool.getComponentSymbol("components.head.generics.Car", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+    assertNotNull(comp);
+
+    ComponentHelper helper = new ComponentHelper(comp);
+    ASTComponent compNode = (ASTComponent) comp.getAstNode().get();
+    
+    Optional<PortSymbol> portSymbol = comp.getSpannedScope().resolve("motor", PortSymbol.KIND);
+    assertTrue(portSymbol.isPresent());
+
+    String portTypeName = helper.getPortTypeName(compNode, portSymbol.get());
+    assertEquals("HashBasedTable<Boolean,Double[],List<String>>[]", portTypeName);
+
+    portTypeName = helper.getPortTypeName(portSymbol.get());
+    assertEquals("HashBasedTable<Boolean,Double[],List<String>>[]", portTypeName);
+
+    portSymbol = comp.getSpannedScope().resolve("outK", PortSymbol.KIND);
+    assertTrue(portSymbol.isPresent());
+
+    portTypeName = helper.getPortTypeName(compNode, portSymbol.get());
+    assertEquals("List<com.google.common.collect.ImmutableMap<Boolean,Double>[]>", portTypeName);
+
+    portTypeName = helper.getPortTypeName(portSymbol.get());
+    assertEquals("List<com.google.common.collect.ImmutableMap<Boolean,Double>[]>", portTypeName);
+  }
+  
   @Test
   public void testVariableTypeName() {
     MontiArcTool tool = new MontiArcTool();

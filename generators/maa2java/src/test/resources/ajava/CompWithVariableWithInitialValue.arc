@@ -6,7 +6,7 @@ component CompWithVariableWithInitialValue {
     in Boolean b,
     out String s;
 
-  var Integer counter;
+  Integer counter;
   
   init {
     counter = 0;

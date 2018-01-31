@@ -7,10 +7,10 @@ component AmbiguousPortAndVariableNames {
 
 	// Multiple declarations of a
 	port in Integer a;
-	var Integer a;
+	Integer a;
 
 	// Multiple declarations of b
-	var Double b;
+	Double b;
 	port out Double b;
 
 	// Multiple declarations of c
@@ -28,13 +28,11 @@ component AmbiguousPortAndVariableNames {
 		out Integer e,
 		out Integer e;
 
-	//Multiple declarations of f
-	var
-		Integer f,
-		Integer f;
+	// Multiple declarations of f
+	Integer f, f;
 
 	//Allowed:
-	var Integer allowedIdentifier;
+	Integer allowedIdentifier;
 	port in Integer anotherIdentifier;
 
 	automaton NameConflictVariableAndIOAutomaton{

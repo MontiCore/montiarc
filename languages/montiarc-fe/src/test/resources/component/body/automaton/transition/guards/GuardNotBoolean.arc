@@ -9,7 +9,7 @@ component GuardNotBoolean {
 		in Test i3, //Self written JavaType
 		out Integer outInt;
 
-	var Integer i2; //QUALIFIED type
+	Integer i2; //QUALIFIED type
 
 	automaton GuardIsNotBooleanAutomaton {
 		state A,B;

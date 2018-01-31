@@ -7,7 +7,7 @@ component AutomatonWithLowerCaseName {
   port
     in Integer a;
     
-  var int c;
+  int c;
   
   automaton lowerCaseName {
   	state Start;

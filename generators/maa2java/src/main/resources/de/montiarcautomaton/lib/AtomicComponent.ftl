@@ -1,7 +1,15 @@
-${tc.params("de.montiarcautomaton.generator.helper.ComponentHelper helper", "String _package", "java.util.Collection<de.monticore.symboltable.ImportStatement> imports",
-"String name", "String resultName", "String inputName", "String implName", 
-"java.util.Collection<montiarc._symboltable.PortSymbol> portsIn", "java.util.Collection<montiarc._symboltable.PortSymbol> portsOut",
-"java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams")}
+${tc.params(
+	"de.montiarcautomaton.generator.helper.ComponentHelper helper", 
+	"String _package", 
+	"java.util.Collection<de.monticore.symboltable.ImportStatement> imports",
+	"String name", 
+	"String resultName", 
+	"String inputName", 
+	"String implName", 
+	"java.util.Collection<montiarc._symboltable.VariableSymbol> variables", 
+	"java.util.Collection<montiarc._symboltable.PortSymbol> portsIn", 
+	"java.util.Collection<montiarc._symboltable.PortSymbol> portsOut",
+	"java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams")}
 package ${_package};
 
 import ${_package}.${inputName};
@@ -16,10 +24,22 @@ import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 import de.montiarcautomaton.runtimes.Log;
 
 public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> implements IComponent {
+  
+  //component variables
+  <#list variables as var>
+    private ${helper.getVariableTypeName(var)} ${var.getName()};
+  </#list>
+  
+  // config parameters
+  <#list configParams as param>
+  private final ${helper.getParamTypeName(param)} ${param.getName()};
+  </#list>
+  
   // port fields
   <#list portsIn as port>
   private Port<${helper.getPortTypeName(port)}> ${port.getName()};
   </#list>
+  
   <#list portsOut as port>
   private Port<${helper.getPortTypeName(port)}> ${port.getName()};
   </#list>
@@ -67,7 +87,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
 
   }
   
-  private void setResult(${resultName} result) {
+  private void setResult(${resultName}<#if helper.isGeneric()> < <#list helper.getGenericParameters() as param>${param}<#sep>,</#list> > </#if> result) {
   	<#list portsOut as port>
   	this.${port.getName()}.setNextValue(result.get${port.getName()?cap_first}());
   	</#list>

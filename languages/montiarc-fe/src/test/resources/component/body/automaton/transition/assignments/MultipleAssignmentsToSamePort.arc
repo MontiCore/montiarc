@@ -8,7 +8,7 @@ component MultipleAssignmentsToSamePort {
         out int x,
         out int y;
 
-    var int v;
+    int v;
 
     automaton MultipleAssignmentsToSamePort {
         state S;

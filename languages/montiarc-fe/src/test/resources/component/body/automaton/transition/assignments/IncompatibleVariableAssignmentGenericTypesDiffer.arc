@@ -13,7 +13,7 @@ component IncompatibleVariableAssignmentGenericTypesDiffer {
     out MotorCommand right,
     out MotorCommand left;
     
-  var HashMap<String, Integer> stateChanges;
+  HashMap<String, Integer> stateChanges;
 
   automaton BumpControl {
     state Idle, Driving, Backing, Turning;
