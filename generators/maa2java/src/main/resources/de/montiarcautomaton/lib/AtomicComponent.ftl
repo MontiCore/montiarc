@@ -60,10 +60,10 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   </#list>
   
   // the components behavior implementation
-  private final IComputable<${inputName}, ${resultName}> behaviorImpl;
+  private final IComputable<${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>, ${resultName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>> behaviorImpl;
   
   public ${name}(<#list configParams as param>${helper.getParamTypeName(param)} ${param.getName()}<#sep>, </#list>) {
-    behaviorImpl = new ${implName}(<#list configParams as param>${param.getName()}<#sep>, </#list>);
+    behaviorImpl = new ${implName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>(<#list configParams as param>${param.getName()}<#sep>, </#list>);
     // config parameters
   <#list configParams as param>
     this.${param.getName()} = ${param.getName()};
@@ -103,7 +103,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
     
     try {
       // perform calculations
-      final ${resultName} result = behaviorImpl.compute(input);
+      final ${resultName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> result = behaviorImpl.compute(input);
       
       // set results to ports
       setResult(result);
@@ -123,7 +123,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   
   private void initialize() {
      // get initial values from behavior implementation
-    final ${resultName} result = behaviorImpl.getInitialValues();
+    final ${resultName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> result = behaviorImpl.getInitialValues();
     
     // set results to ports
     setResult(result);
