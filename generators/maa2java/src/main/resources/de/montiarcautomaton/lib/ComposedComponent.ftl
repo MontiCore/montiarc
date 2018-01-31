@@ -73,7 +73,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   public void setUp() {
      // instantiate all subcomponents
     <#list subComponents as component>
-    this.${component.getName()} = new ${helper.getSubComponentTypeName(component)}(<#list helper.getParamValues(component) as param>this.${param}<#sep>, </#list>); 
+    this.${component.getName()} = new ${helper.getSubComponentTypeName(component)}(<#list helper.getParamValues(component) as param>${param}<#sep>, </#list>); 
     </#list>
     
     //set up all sub components  

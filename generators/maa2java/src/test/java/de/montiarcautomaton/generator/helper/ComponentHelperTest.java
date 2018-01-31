@@ -96,10 +96,10 @@ public class ComponentHelperTest {
     assertTrue(portSymbol.isPresent());
 
     String portTypeName = helper.printPortTypeName(portSymbol.get());
-    assertEquals("HashBasedTable<Boolean,Double[],List<String>>[]", portTypeName);
+    assertEquals("com.google.common.collect.HashBasedTable<Boolean,Double[],List<String>>[]", portTypeName);
 
     portTypeName = helper.printPortTypeName(portSymbol.get());
-    assertEquals("HashBasedTable<Boolean,Double[],List<String>>[]", portTypeName);
+    assertEquals("com.google.common.collect.HashBasedTable<Boolean,Double[],List<String>>[]", portTypeName);
 
     portSymbol = comp.getSpannedScope().resolve("wheels", PortSymbol.KIND);
     assertTrue(portSymbol.isPresent());
