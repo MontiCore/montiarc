@@ -23,8 +23,6 @@ import montiarc._symboltable.PortSymbol;
 
 public class AutoInstantiationTest {
   
-  private final String MODEL_PATH = "src/test/resources/symboltable";
-  
   private final String MP = "src/test/resources/";
   
   private static final String PACKAGE = "component.body.autoinstantiate";

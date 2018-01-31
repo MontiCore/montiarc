@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Optional;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.symboltable.Scope;

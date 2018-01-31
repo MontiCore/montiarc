@@ -5,13 +5,20 @@
  */
 package component.head.parameters;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
+import montiarc.MontiArcTool;
 import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.ParameterNamesAreUnique;
 
 /**
@@ -40,5 +47,15 @@ public class ParametersTest extends AbstractCoCoTest {
         getAstNode(MP, PACKAGE + "." + "ParameterAmbiguous"),
         new ExpectedErrorInfo(1, "xMA069"));
     
+  }
+  
+  @Test
+  public void testComponentWithParameters() {
+    String unqualifiedComponentName = "ComponentWithParameters";
+    ComponentSymbol comp = this.loadComponent(MP, PACKAGE, unqualifiedComponentName);
+    
+    assertFalse(comp.isInnerComponent());
+    assertEquals(1, comp.getConfigParameters().size());
+    assertEquals(0, comp.getFormalTypeParameters().size());
   }
 }
