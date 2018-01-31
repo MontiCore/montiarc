@@ -1,6 +1,8 @@
 package component.body.ports;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Paths;
 
@@ -95,8 +97,7 @@ public class PortTests extends AbstractCoCoTest {
   }
   
   @Test
-  /* Checks whether all port names in the port definition start with a lower
-   * case letter */
+  /* Checks whether all port names in the port definition start with a lower case letter */
   public void testPortWithUpperCaseName() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "PortWithUpperCaseName");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortNameIsLowerCase());
@@ -108,9 +109,45 @@ public class PortTests extends AbstractCoCoTest {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "UnconnectedPorts");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
     checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA057", "xMA058"));
-
+    
     cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
     checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA059", "xMA060"));
+  }
+  
+  @Test
+  public void testCompWithGenericPorts() {
+    ComponentSymbol comp = new MontiArcTool().getComponentSymbol(PACKAGE + "." + "CompWithGenericPorts",
+        Paths.get("src/test/resources").toFile(),
+        Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+    
+    assertNotNull(comp);
+    assertEquals(3, comp.getFormalTypeParameters().size());
+    
+    JTypeSymbol typeSymbol = comp.getFormalTypeParameters().get(0);
+    assertEquals("K", typeSymbol.getName());
+    assertTrue(typeSymbol.isFormalTypeParameter());
+    assertEquals(1, typeSymbol.getSuperTypes().size());
+    
+    typeSymbol = comp.getFormalTypeParameters().get(1);
+    assertEquals("V", typeSymbol.getName());
+    assertTrue(typeSymbol.isFormalTypeParameter());
+    assertEquals(1, typeSymbol.getSuperTypes().size());
+    
+    typeSymbol = comp.getFormalTypeParameters().get(2);
+    assertEquals("W", typeSymbol.getName());
+    assertTrue(typeSymbol.isFormalTypeParameter());
+    assertEquals(0, typeSymbol.getSuperTypes().size());
+    
+    PortSymbol myKInput = comp.getIncomingPort("myKInput").orElse(null);
+    assertNotNull(myKInput);
+    assertEquals("K", myKInput.getTypeReference().getName());
+    PortSymbol myWInput = comp.getIncomingPort("myWInput").orElse(null);
+    assertNotNull(myWInput);
+    assertEquals("W", myWInput.getTypeReference().getName());
+    PortSymbol myVInput = comp.getOutgoingPort("myVOutput").orElse(null);
+    assertNotNull(myVInput);
+    assertEquals("V", myVInput.getTypeReference().getName());
+    
   }
   
 }
