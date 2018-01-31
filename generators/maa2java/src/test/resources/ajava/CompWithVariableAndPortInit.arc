@@ -6,7 +6,7 @@ component CompWithVariableAndPortInit {
     in Integer i,
     out Integer o;
     
-  var Integer counter;
+  Integer counter;
     
   init {
     o = new Integer(-1);

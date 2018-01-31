@@ -9,6 +9,7 @@ import java.util.List;
 
 import java.util.Optional;
 
+import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -48,7 +49,9 @@ public class DefaultParametersCorrectlyAssigned
             comp.getSpannedScope(), dimension);
         
         HCJavaDSLTypeResolver javaTypeResolver = new HCJavaDSLTypeResolver();
-        param.getDefaultValue().get().getValue().accept(javaTypeResolver);
+        ASTExpression expression = param.getDefaultValue().get().getExpression();
+        // param.getDefaultValue().get().getValue().accept(javaTypeResolver);
+        expression.accept(javaTypeResolver);
         Optional<JavaTypeSymbolReference> result = javaTypeResolver.getResult();
         if (!result.isPresent()) {
           Log.error(

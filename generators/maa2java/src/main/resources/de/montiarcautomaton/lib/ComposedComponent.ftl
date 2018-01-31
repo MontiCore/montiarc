@@ -1,6 +1,15 @@
-${tc.params("de.montiarcautomaton.generator.helper.ComponentHelper helper", "montiarc._symboltable.ComponentSymbol compSym", "String _package", "java.util.Collection<de.monticore.symboltable.ImportStatement> imports", "String name",
-"java.util.Collection<montiarc._symboltable.PortSymbol> portsIn", "java.util.Collection<montiarc._symboltable.PortSymbol> portsOut",
-"java.util.Collection<montiarc._symboltable.ComponentInstanceSymbol> subComponents", "java.util.Collection<montiarc._symboltable.ConnectorSymbol> connectors")}
+${tc.params(
+  "de.montiarcautomaton.generator.helper.ComponentHelper helper", 
+  "montiarc._symboltable.ComponentSymbol compSym", 
+  "String _package", 
+  "java.util.Collection<de.monticore.symboltable.ImportStatement> imports", 
+  "String name",
+  "java.util.Collection<montiarc._symboltable.PortSymbol> portsIn", 
+  "java.util.Collection<montiarc._symboltable.PortSymbol> portsOut",
+  "java.util.Collection<montiarc._symboltable.ComponentInstanceSymbol> subComponents", 
+  "java.util.Collection<montiarc._symboltable.ConnectorSymbol> connectors",
+  "java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams")}
+  
 package ${_package};
 
 <#list imports as import>
@@ -10,40 +19,36 @@ import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
 import de.montiarcautomaton.runtimes.timesync.delegation.Port;
 
-public class ${name} implements IComponent {
+public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> implements IComponent {
+ 
   // port fields
   <#list portsIn as port>
   private Port<${helper.getPortTypeName(port)}> ${port.getName()};
+  
+  public Port<${helper.getPortTypeName(port)}> getPort${port.getName()?cap_first} () {
+    return this.${port.getName()};
+  }
+  
+  public void setPort${port.getName()?cap_first} (Port<${helper.getPortTypeName(port)}> port) {
+    this.${port.getName()} = port;
+  }
   </#list>
+  
   <#list portsOut as port>
   private Port<${helper.getPortTypeName(port)}> ${port.getName()};
-  </#list>
   
-  // port setter
-  <#list portsIn as port>
-  public void setPort${port.getName()?cap_first} (Port<${helper.getPortTypeName(port)}> port) {
-  	this.${port.getName()} = port;
-  }
-  
-  </#list>
-  <#list portsOut as port>
-  public void setPort${port.getName()?cap_first} (Port<${helper.getPortTypeName(port)}> port) {
-  	this.${port.getName()} = port;
-  }
-  
-  </#list>
-  // port getter
-  <#list portsIn as port>
   public Port<${helper.getPortTypeName(port)}> getPort${port.getName()?cap_first} () {
-  	return this.${port.getName()};
+    return this.${port.getName()};
   }
   
+  public void setPort${port.getName()?cap_first} (Port<${helper.getPortTypeName(port)}> port) {
+    this.${port.getName()} = port;
+  }
   </#list>
-  <#list portsOut as port>
-  public Port<${helper.getPortTypeName(port)}> getPort${port.getName()?cap_first} () {
-  	return this.${port.getName()};
-  }
   
+  // config parameters
+  <#list configParams as param>
+  private final ${helper.printParamTypeName(param)} ${param.getName()};
   </#list>
   
   // subcomponents
@@ -56,10 +61,12 @@ public class ${name} implements IComponent {
   public ${helper.getSubComponentTypeName(component)} getComponent${component.getName()?cap_first}() {
   	return this.${component.getName()};
   }
-  
   </#list>
   
-  public ${name}() {
+  public ${name}(<#list configParams as param>${helper.getParamTypeName(param)} ${param.getName()}<#sep>, </#list>) {
+  <#list configParams as param>
+    this.${param.getName()} = ${param.getName()};
+  </#list>
   }
   
   @Override

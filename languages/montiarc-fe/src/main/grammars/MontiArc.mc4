@@ -8,15 +8,16 @@
  */
 grammar MontiArc extends de.monticore.java.JavaDSL {
 
-  /** ASTMACompilationUnit represents the complete component
-   * @attribute package          The package declaration of this component
-   * @attribute importStatements List of imported elements
+  /** ASTMACompilationUnit represents the entire content of a MontiArc model artifact
+   * @attribute package          The package declaration of the component model
+   * @attribute importStatements List of imported elements (data types and component types)
    * @attribute component The outermost component model defined in this compilation unit
    */
   MACompilationUnit =
-    ("package" package:(Name& || ".")+ ";")? 
-    (ImportStatement)*
-    Component;
+    ("package" package:(Name& || ".")+ ";")?  // optional package declaration
+    (ImportStatement)*                        // import statements
+    Component                                 // single outermost component declaration 
+    EOF;                                      // and nothing (end of file) afterwards
     
    // TODO where should invariant binding take place?
   InvariantContent = BlockStatement | Expression;
@@ -73,7 +74,8 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   * @attribute Type the type of the parameter
   * @attribute name the name of the parameter
   */
-  Parameter = Type Name ("=" defaultValue:LiteralValue)?;
+  // Parameter = Type Name ("=" defaultValue:LiteralValue)?;
+  Parameter = Type Name ("=" defaultValue:Valuation)?;
 
   /**
   * A components head is used to define generic type 
@@ -213,16 +215,12 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   SimpleConnector = 
     Stereotype? source:QualifiedName "->" targets:(QualifiedName || ",")+;
     
-  /**
-  * A variable can be used in the behavior implementation of a component.
-  */
-  ComponentVariableDeclaration implements Element = "var"? Variable ("," Variable)* ";";
   
   /**
    * A component variable
    * @attribute Name: The name of the variable
    */
-  Variable = Type (Name ("," Name)*)?; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
+  VariableDeclaration implements Element = Type (Name ("," Name)*)? ";" ; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
   
 
   /**

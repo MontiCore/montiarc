@@ -165,6 +165,7 @@ public class TypeCompatibilityChecker {
   public static boolean doTypesMatch(JTypeReference<? extends JTypeSymbol> sourceType, 
       JTypeReference<? extends JTypeSymbol> targetType) {
     boolean result = false;
+
     if (sourceType.getReferencedSymbol().getFullName()
         .equals(targetType.getReferencedSymbol().getFullName()) &&
         sourceType.getDimension() == targetType.getDimension() &&

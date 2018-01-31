@@ -24,7 +24,7 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
   
   // config parameters
   <#list configParams as param>
-  private final ${helper.getParamTypeName(param)} ${param.getName()};
+  private final ${helper.printParamTypeName(param)} ${param.getName()};
   </#list>
   
   public ${implName}(<#list configParams as param>${helper.getParamTypeName(param)} ${param.getName()}<#sep>, </#list>) {

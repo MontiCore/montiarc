@@ -11,22 +11,20 @@ import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Paths;
 
-import de.se_rwth.commons.logging.Log;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
+import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTool;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.ValueSymbol;
-import montiarc.helper.SymbolPrinter;
 
 /**
  * @author Robert Heim
@@ -42,39 +40,6 @@ public class SymtabArcdTest {
     Log.enableFailQuick(false);
     tool = new MontiArcTool();
    
-  }
-
-  @Test
-  public void testCompWithGenericPorts() {
-    ComponentSymbol comp = tool.getComponentSymbol("a.CompWithGenericPorts", Paths.get(MODEL_PATH + "/genericPorts").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
-    assertNotNull(comp);
-    assertEquals(3, comp.getFormalTypeParameters().size());
-
-    JTypeSymbol typeSymbol = comp.getFormalTypeParameters().get(0);
-    assertEquals("K", typeSymbol.getName());
-    assertTrue(typeSymbol.isFormalTypeParameter());
-     assertEquals(1, typeSymbol.getSuperTypes().size());
-
-    typeSymbol = comp.getFormalTypeParameters().get(1);
-    assertEquals("V", typeSymbol.getName());
-    assertTrue(typeSymbol.isFormalTypeParameter());
-     assertEquals(1, typeSymbol.getSuperTypes().size());
-
-    typeSymbol = comp.getFormalTypeParameters().get(2);
-    assertEquals("W", typeSymbol.getName());
-    assertTrue(typeSymbol.isFormalTypeParameter());
-    assertEquals(0, typeSymbol.getSuperTypes().size());
-
-    PortSymbol myKInput = comp.getIncomingPort("myKInput").orElse(null);
-    assertNotNull(myKInput);
-    assertEquals("K", myKInput.getTypeReference().getName());
-    PortSymbol myWInput = comp.getIncomingPort("myWInput").orElse(null);
-    assertNotNull(myWInput);
-    assertEquals("W", myWInput.getTypeReference().getName());
-    PortSymbol myVInput = comp.getOutgoingPort("myVOutput").orElse(null);
-    assertNotNull(myVInput);
-    assertEquals("V", myVInput.getTypeReference().getName());
-
   }
 
   @Test

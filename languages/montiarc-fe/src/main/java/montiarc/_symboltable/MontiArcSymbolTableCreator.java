@@ -15,11 +15,9 @@ import java.util.Stack;
 import de.monticore.ast.ASTNode;
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.javadsl._ast.ASTPrimaryExpression;
-import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.java.symboltable.JavaSymbolFactory;
 import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.ArtifactScope;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.symboltable.MutableScope;
@@ -49,7 +47,6 @@ import de.monticore.types.types._ast.ASTWildcardType;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcConstants;
 import montiarc._ast.ASTAutomaton;
 import montiarc._ast.ASTAutomatonBehavior;
 import montiarc._ast.ASTComponent;
@@ -58,7 +55,6 @@ import montiarc._ast.ASTConnector;
 import montiarc._ast.ASTIOAssignment;
 import montiarc._ast.ASTInitialStateDeclaration;
 import montiarc._ast.ASTJavaPBehavior;
-import montiarc._ast.ASTJavaValuation;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._ast.ASTMontiArcAutoConnect;
 import montiarc._ast.ASTParameter;
@@ -72,7 +68,7 @@ import montiarc._ast.ASTSubComponentInstance;
 import montiarc._ast.ASTTransition;
 import montiarc._ast.ASTValuation;
 import montiarc._ast.ASTValueInitialization;
-import montiarc._ast.ASTVariable;
+import montiarc._ast.ASTVariableDeclaration;
 import montiarc._ast.MontiArcPackage;
 import montiarc._symboltable.ValueSymbol.Kind;
 import montiarc.helper.JavaHelper;
@@ -95,6 +91,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   protected List<ImportStatement> currentImports = new ArrayList<>();
   
   protected AutoConnection autoConnectionTrafo = new AutoConnection();
+  
+  private ASTComponent currentComponent;
   
   private final static JavaSymbolFactory jSymbolFactory = new JavaSymbolFactory();
   
@@ -179,7 +177,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   @Override
-  public void visit(ASTVariable node) {
+  public void visit(ASTVariableDeclaration node) {
     ASTType astType = node.getType();
     String typeName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astType);
     
@@ -295,6 +293,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   
   @Override
   public void visit(ASTComponent node) {
+    this.currentComponent = node;
     String componentName = node.getName();
     
     String componentPackageName = "";
@@ -492,9 +491,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       ASTComplexReferenceType astComplexReferenceType = (ASTComplexReferenceType) astType;
       for (ASTSimpleReferenceType astSimpleReferenceType : astComplexReferenceType
           .getSimpleReferenceTypes()) {
-        /* ASTComplexReferenceType represents types like class or interface
-         * types which always have ASTSimpleReferenceType as qualification. For
-         * example: a.b.c<Arg>.d.e<Arg> */
+        /* ASTComplexReferenceType represents types like class or interface types which always have
+         * ASTSimpleReferenceType as qualification. For example: a.b.c<Arg>.d.e<Arg> */
         setActualTypeArgumentsOfCompRef(typeReference,
             astSimpleReferenceType.getTypeArguments().get().getTypeArguments());
       }
@@ -503,10 +501,9 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   /**
-   * Adds the TypeParameters to the ComponentSymbol if it declares
-   * TypeVariables. Since the restrictions on TypeParameters may base on the
-   * JavaDSL its the actual recursive definition of bounds is respected and its
-   * implementation within the JavaDSL is reused. Example:
+   * Adds the TypeParameters to the ComponentSymbol if it declares TypeVariables. Since the
+   * restrictions on TypeParameters may base on the JavaDSL its the actual recursive definition of
+   * bounds is respected and its implementation within the JavaDSL is reused. Example:
    * <p>
    * component Bla<T, S extends SomeClass<T> & SomeInterface>
    * </p>
@@ -584,8 +581,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       String name = node.getName().get();
       Scope enclosingScope = currentScope().get().getEnclosingScope().get();
       Optional<PortSymbol> port = enclosingScope.resolve(name, PortSymbol.KIND);
-      Optional<PortSymbol> port1 = enclosingScope.resolveDown(name, PortSymbol.KIND);
-      Optional<PortSymbol> port2 = enclosingScope.resolveLocally(name, PortSymbol.KIND);
+      // Optional<PortSymbol> port1 = enclosingScope.resolveDown(name, PortSymbol.KIND);
+      // Optional<PortSymbol> port2 = enclosingScope.resolveLocally(name, PortSymbol.KIND);
       Optional<VariableSymbol> var = enclosingScope.resolve(name, VariableSymbol.KIND);
       Collection<JFieldSymbol> field = enclosingScope.resolveMany(name, JFieldSymbol.KIND);
       
@@ -602,13 +599,32 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       else if (!field.isEmpty()) {
         addToScopeAndLinkWithNode(field.stream().findFirst().get(), node);
       }
+      else if (isConfigurationArgument(node.getName().get())) {
+        // In this case, everything is fine. As configuration arguments (aka. parameters) don't 
+        // have their own symbols, nothing to do here.
+      }
       else {
-        Log.error("0xMA030 Used variable " + name
+        Log.error("0xMA258 Used variable " + name
             + " in ajava definition is not a port, component variable or locally defined variable.",
             node.get_SourcePositionStart());
         
       }
     }
+  }
+  
+  /**
+   * Checks whether the passed name references to a configuration parameter
+   * 
+   * @param name Name of the parameter to look up
+   * @return true, iff the currently processed node has a parameter of the passed name
+   */
+  private boolean isConfigurationArgument(String name) {
+    for (ASTParameter param : this.currentComponent.getHead().getParameters()) {
+      if (name.equals(param.getName())) {
+        return true;
+      }
+    }
+    return false;
   }
   
   /***************************************

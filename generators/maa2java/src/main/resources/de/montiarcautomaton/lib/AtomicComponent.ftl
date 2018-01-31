@@ -1,7 +1,16 @@
-${tc.params("de.montiarcautomaton.generator.helper.ComponentHelper helper", "String _package", "java.util.Collection<de.monticore.symboltable.ImportStatement> imports",
-"String name", "String resultName", "String inputName", "String implName", 
-"java.util.Collection<montiarc._symboltable.PortSymbol> portsIn", "java.util.Collection<montiarc._symboltable.PortSymbol> portsOut",
-"java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams")}
+${tc.params(
+	"de.montiarcautomaton.generator.helper.ComponentHelper helper", 
+	"String _package", 
+	"java.util.Collection<de.monticore.symboltable.ImportStatement> imports",
+	"String name", 
+	"String resultName", 
+	"String inputName", 
+	"String implName", 
+	"java.util.Collection<montiarc._symboltable.VariableSymbol> variables", 
+	"java.util.Collection<montiarc._symboltable.PortSymbol> portsIn", 
+	"java.util.Collection<montiarc._symboltable.PortSymbol> portsOut",
+	"java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams")}
+	
 package ${_package};
 
 import ${_package}.${inputName};
@@ -15,13 +24,25 @@ import de.montiarcautomaton.runtimes.timesync.delegation.Port;
 import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 import de.montiarcautomaton.runtimes.Log;
 
-public class ${name} implements IComponent {
+public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> implements IComponent {
+  
+  // component variables
+  <#list variables as var>
+  private ${helper.printVariableTypeName(var)} ${var.getName()};
+  </#list>
+  
+  // config parameters
+  <#list configParams as param>
+  private final ${helper.printParamTypeName(param)} ${param.getName()};
+  </#list>
+  
   // port fields
   <#list portsIn as port>
-  private Port<${helper.getPortTypeName(port)}> ${port.getName()};
+  private Port<${helper.printPortTypeName(port)}> ${port.getName()};
   </#list>
+  
   <#list portsOut as port>
-  private Port<${helper.getPortTypeName(port)}> ${port.getName()};
+  private Port<${helper.printPortTypeName(port)}> ${port.getName()};
   </#list>
   
   // port setter
@@ -40,10 +61,14 @@ public class ${name} implements IComponent {
   </#list>
   
   // the components behavior implementation
-  private final IComputable<${inputName}, ${resultName}> behaviorImpl;
+  private final IComputable<${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>, ${resultName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>> behaviorImpl;
   
   public ${name}(<#list configParams as param>${helper.getParamTypeName(param)} ${param.getName()}<#sep>, </#list>) {
-    behaviorImpl = new ${implName}(<#list configParams as param>${param.getName()}<#sep>, </#list>);
+    behaviorImpl = new ${implName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>(<#list configParams as param>${param.getName()}<#sep>, </#list>);
+    // config parameters
+  <#list configParams as param>
+    this.${param.getName()} = ${param.getName()};
+  </#list>
   }
   
   @Override
@@ -62,12 +87,9 @@ public class ${name} implements IComponent {
   	<#list portsIn as port>
   	if (this.${port.getName()} == null) {this.${port.getName()} = Port.EMPTY;}
   	</#list>
-  	
-  
-
   }
   
-  private void setResult(${resultName} result) {
+  private void setResult(${resultName}<#if helper.isGeneric()> < <#list helper.getGenericParameters() as param>${param}<#sep>,</#list> > </#if> result) {
   	<#list portsOut as port>
   	this.${port.getName()}.setNextValue(result.get${port.getName()?cap_first}());
   	</#list>
@@ -77,12 +99,12 @@ public class ${name} implements IComponent {
   @Override
   public void compute() {
     // collect current input port values
-    final ${inputName} input = new ${inputName}(<#list portsIn as port>this.${port.getName()}.getCurrentValue()<#sep>, </#list>);
+    final ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> input = new ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>(<#list portsIn as port>this.${port.getName()}.getCurrentValue()<#sep>, </#list>);
     //Logger.log("${name}", "compute(" + input.toString() + ")");
     
     try {
       // perform calculations
-      final ${resultName} result = behaviorImpl.compute(input);
+      final ${resultName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> result = behaviorImpl.compute(input);
       
       // set results to ports
       setResult(result);
@@ -102,7 +124,7 @@ public class ${name} implements IComponent {
   
   private void initialize() {
      // get initial values from behavior implementation
-    final ${resultName} result = behaviorImpl.getInitialValues();
+    final ${resultName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> result = behaviorImpl.getInitialValues();
     
     // set results to ports
     setResult(result);

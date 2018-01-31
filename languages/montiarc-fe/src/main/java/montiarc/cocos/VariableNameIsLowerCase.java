@@ -1,8 +1,8 @@
 package montiarc.cocos;
 
 import de.se_rwth.commons.logging.Log;
-import montiarc._ast.ASTVariable;
-import montiarc._cocos.MontiArcASTVariableCoCo;
+import montiarc._ast.ASTVariableDeclaration;
+import montiarc._cocos.MontiArcASTVariableDeclarationCoCo;
 
 /**
  * Context condition for checking, if all fields of an IO-Automaton start with a
@@ -10,13 +10,13 @@ import montiarc._cocos.MontiArcASTVariableCoCo;
  * 
  * @author Gerrit Leonhardt, Andreas Wortmann
  */
-public class VariableNameIsLowerCase implements MontiArcASTVariableCoCo {
+public class VariableNameIsLowerCase implements MontiArcASTVariableDeclarationCoCo {
 
   @Override
-  public void check(ASTVariable var) {
-    for(String name : var.getNames())
+  public void check(ASTVariableDeclaration varDecl) {
+    for (String name : varDecl.getNames())
       if (!Character.isLowerCase(name.charAt(0))) {
-        Log.warn("0xMA018 The name of variable " + name + " should start with a lowercase letter.", var.get_SourcePositionStart());
+        Log.warn("0xMA018 The name of variable " + name + " should start with a lowercase letter.", varDecl.get_SourcePositionStart());
       }
   }
 }

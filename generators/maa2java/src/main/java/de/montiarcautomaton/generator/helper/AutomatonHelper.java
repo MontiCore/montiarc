@@ -10,6 +10,7 @@ import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.resolving.ResolvingInfo;
+import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTIOAssignment;
 import montiarc._symboltable.AutomatonSymbol;
 import montiarc._symboltable.ComponentSymbol;
@@ -155,10 +156,6 @@ public class AutomatonHelper extends ComponentHelper {
     else {
       return null;
     }
-  }
-  
-  public String getVariableTypeName(VariableSymbol symbol) {
-    return printFqnTypeName(symbol.getTypeReference());
   }
   
   public boolean isPort(String name) {

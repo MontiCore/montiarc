@@ -32,7 +32,7 @@ import montiarc._symboltable.ComponentSymbol;
  * @author Andreas Wortmann, Jerome Pfeiffer, Gerrit Leonhardt
  */
 public class MAAGenerator {
-   
+  
   /**
    * Computes the target path of the generated java file.
    * 
@@ -91,7 +91,8 @@ public class MAAGenerator {
         packageName + "." + implName);
     
     filePath = getPath(targetPathName, packageName, implName);
-    Collection<AutomatonSymbol> automatons = comp.getSpannedScope().resolveLocally(AutomatonSymbol.KIND);
+    Collection<AutomatonSymbol> automatons = comp.getSpannedScope()
+        .resolveLocally(AutomatonSymbol.KIND);
     if (automatons.size() > 1) {
       throw new RuntimeException("Only one automaton per component supported.");
     }
@@ -119,21 +120,41 @@ public class MAAGenerator {
             inputName, resultName, comp.getConfigParameters());
       }
       
+      
+      
       // pass all arguments instead of comp for better readability in the
       // template
-      AtomicComponent.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(),
-          comp.getImports(), comp.getName(),
-          resultName, inputName, implName, comp.getIncomingPorts(), comp.getOutgoingPorts(),
+      AtomicComponent.generate(
+          filePath,
+          comp.getAstNode().get(),
+          compHelper,
+          comp.getPackageName(),
+          comp.getImports(),
+          comp.getName(),
+          resultName,
+          inputName, 
+          implName, 
+          comp.getVariables(),
+          comp.getIncomingPorts(), 
+          comp.getOutgoingPorts(),
           comp.getConfigParameters());
     }
     else {
       // pass all arguments instead of comp for better readability in the
       // template
       
-      ComposedComponent.generate(filePath, comp.getAstNode().get(), compHelper, comp,
-          comp.getPackageName(), comp.getImports(), comp.getName(),
-          comp.getIncomingPorts(), comp.getOutgoingPorts(), comp.getSubComponents(),
-          comp.getConnectors());
+      ComposedComponent.generate(filePath, 
+          comp.getAstNode().get(), 
+          compHelper, 
+          comp,
+          comp.getPackageName(), 
+          comp.getImports(), 
+          comp.getName(),
+          comp.getIncomingPorts(), 
+          comp.getOutgoingPorts(), 
+          comp.getSubComponents(),
+          comp.getConnectors(),
+          comp.getConfigParameters());
     }
     
     // gen deploy

@@ -19,6 +19,4 @@ component ComponentWithAllowedSelfLoop {
     
     connect sIn -> i.sIn;
     connect i.intOut -> intOut, i.intIn; 
-    
-
 }

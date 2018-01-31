@@ -1,9 +1,17 @@
-${tc.params("de.montiarcautomaton.generator.helper.AutomatonHelper helper", "String _package", "java.util.Collection<de.monticore.symboltable.ImportStatement> imports",
-"String name", "String resultName", "String inputName", "String implName",
-"java.util.Collection<montiarc._symboltable.PortSymbol> portsIn",
-"de.montiarcautomaton.generator.helper.ComponentHelper compHelper",
-"java.util.Collection<montiarc._symboltable.VariableSymbol> variables", "java.util.Collection<montiarc._symboltable.StateSymbol> states",
-"java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams")}
+${tc.params(
+	"de.montiarcautomaton.generator.helper.AutomatonHelper helper", 
+	"String _package", 
+	"java.util.Collection<de.monticore.symboltable.ImportStatement> imports",
+	"String name", 
+	"String resultName", 
+	"String inputName", 
+	"String implName", 
+	"java.util.Collection<montiarc._symboltable.PortSymbol> portsIn",
+	"de.montiarcautomaton.generator.helper.ComponentHelper compHelper",
+	"java.util.Collection<montiarc._symboltable.VariableSymbol> variables", 
+	"java.util.Collection<montiarc._symboltable.StateSymbol> states",
+	"java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams")}
+	
 package ${_package};
 
 import ${_package}.${resultName};
@@ -14,7 +22,7 @@ import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 
 import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 
-public class ${implName} implements IComputable<${inputName}, ${resultName}> {
+public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParameters() as param>${param}<#sep>,</#list> > </#if> implements IComputable<${inputName}, ${resultName}> {
   private static enum State {
     <#list states><#items as state>${state.getName()}<#sep>, </#sep></#items>;</#list>
   }
@@ -29,7 +37,7 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
   
   // config parameters
   <#list configParams as param>
-  private final ${helper.getParamTypeName(param)} ${param.getName()};
+  private final ${helper.printParamTypeName(param)} ${param.getName()};
   </#list>
   
   public ${implName}(<#list configParams as param>${helper.getParamTypeName(param)} ${param.getName()}<#sep>, </#list>) {
