@@ -8,7 +8,7 @@ component BumpSpeed(Integer defaultSpeed) {
     in Integer distance,
     out Integer speed;
 
-  var Integer count255;
+  Integer count255;
 
   automaton BumpSpeed {
     
