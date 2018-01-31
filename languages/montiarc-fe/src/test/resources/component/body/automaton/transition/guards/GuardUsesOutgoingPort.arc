@@ -5,7 +5,7 @@ package component.body.automaton.transition.guards;
  */
 component GuardUsesOutgoingPort {
 
-  var int v;
+  int v;
 
   port 
     in int i,

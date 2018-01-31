@@ -3,6 +3,7 @@ package de.montiarcautomaton.generator.codegen;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
@@ -23,6 +24,7 @@ import de.se_rwth.commons.Names;
 import montiarc._ast.ASTBehaviorElement;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTElement;
+import montiarc._ast.ASTVariable;
 import montiarc._symboltable.AutomatonSymbol;
 import montiarc._symboltable.ComponentSymbol;
 
@@ -32,7 +34,7 @@ import montiarc._symboltable.ComponentSymbol;
  * @author Andreas Wortmann, Jerome Pfeiffer, Gerrit Leonhardt
  */
 public class MAAGenerator {
-   
+  
   /**
    * Computes the target path of the generated java file.
    * 
@@ -91,7 +93,8 @@ public class MAAGenerator {
         packageName + "." + implName);
     
     filePath = getPath(targetPathName, packageName, implName);
-    Collection<AutomatonSymbol> automatons = comp.getSpannedScope().resolveLocally(AutomatonSymbol.KIND);
+    Collection<AutomatonSymbol> automatons = comp.getSpannedScope()
+        .resolveLocally(AutomatonSymbol.KIND);
     if (automatons.size() > 1) {
       throw new RuntimeException("Only one automaton per component supported.");
     }
@@ -119,11 +122,23 @@ public class MAAGenerator {
             inputName, resultName, comp.getConfigParameters());
       }
       
+      
+      
       // pass all arguments instead of comp for better readability in the
       // template
-      AtomicComponent.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(),
-          comp.getImports(), comp.getName(),
-          resultName, inputName, implName, comp.getIncomingPorts(), comp.getOutgoingPorts(),
+      AtomicComponent.generate(
+          filePath,
+          comp.getAstNode().get(),
+          compHelper,
+          comp.getPackageName(),
+          comp.getImports(),
+          comp.getName(),
+          resultName,
+          inputName, 
+          implName, 
+          comp.getVariables(),
+          comp.getIncomingPorts(), 
+          comp.getOutgoingPorts(),
           comp.getConfigParameters());
     }
     else {

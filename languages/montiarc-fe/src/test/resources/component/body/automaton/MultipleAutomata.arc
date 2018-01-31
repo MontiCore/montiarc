@@ -7,7 +7,7 @@ component MultipleAutomata {
   port
     in Integer a;
 
-  var int c;
+  int c;
 
   automaton InvalidAutomatonBehaviorImpl {
   	state Start;

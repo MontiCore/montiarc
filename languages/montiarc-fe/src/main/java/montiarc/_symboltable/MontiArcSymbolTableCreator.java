@@ -15,11 +15,9 @@ import java.util.Stack;
 import de.monticore.ast.ASTNode;
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.javadsl._ast.ASTPrimaryExpression;
-import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.java.symboltable.JavaSymbolFactory;
 import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.ArtifactScope;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.symboltable.MutableScope;
@@ -49,7 +47,6 @@ import de.monticore.types.types._ast.ASTWildcardType;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcConstants;
 import montiarc._ast.ASTAutomaton;
 import montiarc._ast.ASTAutomatonBehavior;
 import montiarc._ast.ASTComponent;
@@ -58,7 +55,6 @@ import montiarc._ast.ASTConnector;
 import montiarc._ast.ASTIOAssignment;
 import montiarc._ast.ASTInitialStateDeclaration;
 import montiarc._ast.ASTJavaPBehavior;
-import montiarc._ast.ASTJavaValuation;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._ast.ASTMontiArcAutoConnect;
 import montiarc._ast.ASTParameter;
@@ -72,7 +68,7 @@ import montiarc._ast.ASTSubComponentInstance;
 import montiarc._ast.ASTTransition;
 import montiarc._ast.ASTValuation;
 import montiarc._ast.ASTValueInitialization;
-import montiarc._ast.ASTVariable;
+import montiarc._ast.ASTVariableDeclaration;
 import montiarc._ast.MontiArcPackage;
 import montiarc._symboltable.ValueSymbol.Kind;
 import montiarc.helper.JavaHelper;
@@ -179,7 +175,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   @Override
-  public void visit(ASTVariable node) {
+  public void visit(ASTVariableDeclaration node) {
     ASTType astType = node.getType();
     String typeName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astType);
     

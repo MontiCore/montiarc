@@ -11,7 +11,7 @@ component InvalidInitialAssignment {
 		out Integer i,
 		out Boolean s;
 
-	var Integer v;
+	Integer v;
 
 	automaton {
 		state A,B;

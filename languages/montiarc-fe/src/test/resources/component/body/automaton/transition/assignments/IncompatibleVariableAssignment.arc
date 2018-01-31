@@ -14,7 +14,7 @@ component IncompatibleVariableAssignment {
     out MotorCommand right,
     out MotorCommand left;
     
-  var Integer stateChanges;
+  Integer stateChanges;
 
   automaton BumpControl {
     state Idle, Driving, Backing, Turning;

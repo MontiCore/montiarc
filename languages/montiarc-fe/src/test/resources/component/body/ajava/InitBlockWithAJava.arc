@@ -5,7 +5,7 @@ package component.body.ajava;
  */
 component InitBlockWithAJava {
 
-	var Integer integerVariable;
+	Integer integerVariable;
 
 	init {
 		integerVariable = 10;

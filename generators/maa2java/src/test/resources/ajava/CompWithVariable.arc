@@ -6,7 +6,7 @@ component CompWithVariable {
     in Boolean b,
     out String s;
 
-  var Integer counter;
+  Integer counter;
   
   compute Count {
     counter+=1;

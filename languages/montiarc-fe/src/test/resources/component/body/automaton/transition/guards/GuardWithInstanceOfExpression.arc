@@ -6,7 +6,7 @@ component GuardWithInstanceOfExpression {
         in Integer[] values,
         out Integer result;
 
-    var Integer storage;
+    Integer storage;
 
     automaton InstanceOfAndObjectInstantiation{
     	state S4;

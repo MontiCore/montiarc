@@ -5,7 +5,7 @@ package component.body.ajava;
  */
 component InvalidInitBlockAssigment {
 
-	var Integer i;
+	Integer i;
 
 	init {
 		i = "yo";

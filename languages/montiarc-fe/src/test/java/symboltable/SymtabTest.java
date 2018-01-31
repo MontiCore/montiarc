@@ -50,35 +50,6 @@ public class SymtabTest {
     tool = new MontiArcTool();
   }
   
-  @Test
-  public void testResolveJavaDefaultTypes() {
-    Scope symTab = tool.createSymbolTable(Paths.get("src/test/resources/arc/symtab").toFile(), Paths.get("src/main/resources/defaultTypes").toFile());
-    
-    Optional<JTypeSymbol> javaType = symTab.resolve("String", JTypeSymbol.KIND);
-    assertFalse(
-        "java.lang types may not be resolvable without qualification in general (e.g., global scope).",
-        javaType.isPresent());
-        
-    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        "a.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
-    assertNotNull(comp);
-    
-    // java.lang.*
-    javaType = comp.getSpannedScope().resolve("String", JTypeSymbol.KIND);
-    assertTrue("java.lang types must be resolvable without qualification within components.",
-        javaType.isPresent());
-
-    // java.util.*
-    javaType = comp.getSpannedScope().resolve("Set", JTypeSymbol.KIND);
-    assertTrue("java.util types must be resolvable without qualification within components.",
-        javaType.isPresent());
-    
-  }
-  
-  
-  
- 
-  
   /**
    * Test for ticket #21.
    */
@@ -88,22 +59,6 @@ public class SymtabTest {
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "a.GenericCompWithInnerGenericComp", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
-  }
-  
-  @Test
-  public void testNamedInnerComponent() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
-    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        "a.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
-    assertNotNull(comp);
-    ComponentInstanceSymbol instance = (ComponentInstanceSymbol) comp.getSpannedScope()
-        .resolve("instance", ComponentInstanceSymbol.KIND).orElse(null);
-    assertNotNull(instance);
-    assertEquals("instance", instance.getName());
-    assertEquals("NamedInnerComponent",
-        instance.getComponentType().getName());
-    assertEquals("a.ComponentWithNamedInnerComponent.NamedInnerComponent",
-        instance.getComponentType().getFullName());
   }
   
   @Ignore("ValueSymbol?!")

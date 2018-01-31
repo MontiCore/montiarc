@@ -9,7 +9,7 @@ component AssigningUndefinedVariables {
      in int a,
      out int c;
 
-   var int b;
+   int b;
  
     automaton UseOfUndeclaredField {
         state A,B;

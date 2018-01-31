@@ -7,12 +7,11 @@ import de.monticore.types.TypesPrinter;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
-import montiarc._ast.ASTComponentVariableDeclaration;
 import montiarc._ast.ASTElement;
 import montiarc._ast.ASTInterface;
 import montiarc._ast.ASTMontiArcInvariant;
 import montiarc._ast.ASTPort;
-import montiarc._ast.ASTVariable;
+import montiarc._ast.ASTVariableDeclaration;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 
 public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
@@ -24,12 +23,10 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
     for (ASTElement e : node.getBody().getElements()) {
       
       // Check variable declarations
-      if (e instanceof ASTComponentVariableDeclaration) {
-        ASTComponentVariableDeclaration decl = (ASTComponentVariableDeclaration) e;
-        for (ASTVariable var : decl.getVariables()) {
-          for (String name : var.getNames()) {
-            checkList(names, name, "0xMA035", "port", e);
-          }
+      if (e instanceof ASTVariableDeclaration) {
+        ASTVariableDeclaration decl = (ASTVariableDeclaration) e;
+        for (String variableName : decl.getNames()) {
+          checkList(names, variableName, "0xMA035", "port", e);
         }
       }
       
