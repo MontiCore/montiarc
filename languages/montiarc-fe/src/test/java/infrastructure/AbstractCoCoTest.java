@@ -31,7 +31,7 @@ public class AbstractCoCoTest {
   
   protected static ASTMontiArcNode getAstNode(String modelPath, String model) {
     File f = Paths.get(MODEL_PATH + modelPath).toFile();
-    Scope symTab = MONTIARCTOOL.createSymbolTable(f,Paths.get("src/main/resources/defaultTypes").toFile());
+    Scope symTab = MONTIARCTOOL.initSymbolTable(f,Paths.get("src/main/resources/defaultTypes").toFile());
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         model, ComponentSymbol.KIND).orElse(null);
     assertNotNull("Could not resolve model " + model, comp);
@@ -84,7 +84,7 @@ public class AbstractCoCoTest {
   }
   
   protected ComponentSymbol loadComponent(String modelPath, String packageName, String unqualifiedComponentName) {
-    Scope symTab = new MontiArcTool().createSymbolTable("src/test/resources/" + modelPath);
+    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources/" + modelPath);
     String qualifiedName = packageName + "." + unqualifiedComponentName;
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         qualifiedName, ComponentSymbol.KIND).orElse(null);

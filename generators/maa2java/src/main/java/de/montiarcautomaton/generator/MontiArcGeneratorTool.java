@@ -60,9 +60,9 @@ public class MontiArcGeneratorTool extends MontiArcTool{
         MontiArcLanguage.FILE_ENDING);
 
     // 1. create symboltable
-    Log.info("Creating symboltable", "MontiArcGeneratorTool");
+    Log.info("Initializing symboltable", "MontiArcGeneratorTool");
     String basedir = getBasedirFromModelAndTargetPath(modelPath.getAbsolutePath(), target.getAbsolutePath());
-    Scope symTab = createSymbolTable(modelPath, Paths.get(basedir + DEFAULT_TYPES_FOLDER).toFile(), Paths.get(basedir + LIBRARY_MODELS_FOLDER).toFile());
+    Scope symTab = initSymbolTable(modelPath, Paths.get(basedir + DEFAULT_TYPES_FOLDER).toFile(), Paths.get(basedir + LIBRARY_MODELS_FOLDER).toFile());
     
     for (String model : foundModels) {
       String qualifiedModelName = Names.getQualifier(model) + "." + Names.getSimpleName(model);

@@ -44,21 +44,21 @@ public class SymtabArcdTest {
 
   @Test
   public void testCompWithGenericsAndInnerGenericComponent() {
-    ComponentSymbol comp = tool.getComponentSymbol(
+    ComponentSymbol comp = tool.loadComponentSymbolWithoutCocos(
         "a.GenericCompWithInnerGenericComp", Paths.get(MODEL_PATH + "/genericPorts").toFile()).orElse(null);
     assertNotNull(comp);
   }
 
   @Test
   public void testCompWithCfgsAndInnerCfgComponent() {
-    ComponentSymbol comp = tool.getComponentSymbol(
+    ComponentSymbol comp = tool.loadComponentSymbolWithoutCocos(
         "a.ConfigurableComponentWithInnerCfgComp", Paths.get(MODEL_PATH + "/configs").toFile()).orElse(null);
     assertNotNull(comp);
   }
 
   @Test
   public void testReferencingCompsWithCfg() {
-    ComponentSymbol comp = tool.getComponentSymbol(
+    ComponentSymbol comp = tool.loadComponentSymbolWithoutCocos(
         "a.ReferencingCompsWithCfg", Paths.get(MODEL_PATH + "/configs").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
     assertNotNull(comp);
 
@@ -115,7 +115,7 @@ public class SymtabArcdTest {
 
   @Test
   public void testReferencingCompsWithExpression() {
-    ComponentSymbol comp = tool.getComponentSymbol(
+    ComponentSymbol comp = tool.loadComponentSymbolWithoutCocos(
         "a.ReferencingCompsWithExpression", Paths.get(MODEL_PATH + "/configs").toFile()).orElse(null);
     assertNotNull(comp);
     ComponentInstanceSymbol compWithArgsRef = comp.getSubComponent("cfg").orElse(null);
@@ -152,7 +152,7 @@ public class SymtabArcdTest {
   //
   @Test
   public void testImportedReferences() {
-    ComponentSymbol comp = tool.getComponentSymbol(
+    ComponentSymbol comp = tool.loadComponentSymbolWithoutCocos(
         "a.SimpleComponent", Paths.get(MODEL_PATH + "/importedReferences").toFile()).orElse(null);
     assertNotNull(comp);
 
@@ -198,7 +198,7 @@ public class SymtabArcdTest {
 
   @Test
   public void testSuperComponents() {
-    ComponentSymbol subB = tool.getComponentSymbol(
+    ComponentSymbol subB = tool.loadComponentSymbolWithoutCocos(
         "a.SubB", Paths.get(MODEL_PATH + "/superComponents").toFile()).orElse(null);
     assertNotNull(subB);
 
@@ -218,7 +218,7 @@ public class SymtabArcdTest {
 
   @Test
   public void testInnerComponents() {
-    ComponentSymbol comp = tool.getComponentSymbol(
+    ComponentSymbol comp = tool.loadComponentSymbolWithoutCocos(
         "a.ComponentWithInnerComponent", Paths.get(MODEL_PATH + "/innerComps").toFile()).orElse(null);
     assertNotNull(comp);
     assertEquals("1 auto-instance and 1 named subcomponent", 2, comp
@@ -284,7 +284,7 @@ public class SymtabArcdTest {
 
   @Test
   public void testInnerComponents2() {
-    ComponentSymbol comp = tool.getComponentSymbol(
+    ComponentSymbol comp = tool.loadComponentSymbolWithoutCocos(
         "b.InnerComponents", Paths.get(MODEL_PATH + "/innerComps").toFile()).orElse(null);
     assertNotNull(comp);
 

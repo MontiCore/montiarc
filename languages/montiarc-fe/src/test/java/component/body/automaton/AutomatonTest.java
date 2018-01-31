@@ -76,7 +76,7 @@ public class AutomatonTest extends AbstractCoCoTest {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "BumpControl");
     assertNotNull(node);
     
-    Scope symtab = tool.createSymbolTable(modelPath);
+    Scope symtab = tool.initSymbolTable(modelPath);
     Optional<ComponentSymbol> oBControl = symtab
         .<ComponentSymbol> resolve(PACKAGE + "." + "BumpControl", ComponentSymbol.KIND);
     assertTrue(oBControl.isPresent());

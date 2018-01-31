@@ -161,7 +161,7 @@ public class SubComponentTests extends AbstractCoCoTest {
         "Connectors should not be added to both, the connector-defining-component AND the target-component, but only to the source",
         0, inner.getConnectors().size());
     
-    Scope symTab = new MontiArcTool().createSymbolTable("src/test/resources/");
+    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources/");
     ComponentSymbol innerComp = symTab.<ComponentSymbol> resolve(
         PACKAGE + "." + "ComponentWithNamedInnerComponent.NamedInnerComponent", ComponentSymbol.KIND)
         .orElse(null);

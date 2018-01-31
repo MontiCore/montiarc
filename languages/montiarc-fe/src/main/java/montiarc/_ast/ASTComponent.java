@@ -45,11 +45,11 @@ public class ASTComponent extends ASTComponentTOP {
     return ret;
   }
   
-  public List<ASTVariable> getVariables() {
-    List<ASTVariable> ret = new ArrayList<>();
+  public List<ASTVariableDeclaration> getVariables() {
+    List<ASTVariableDeclaration> ret = new ArrayList<>();
     for(ASTElement element : this.getBody().getElements()) {
-      if(element instanceof ASTComponentVariableDeclaration) {
-        ret.addAll(((ASTComponentVariableDeclaration) element).getVariables());
+      if(element instanceof ASTVariableDeclaration) {
+        ret.add((ASTVariableDeclaration) element);
       }
     }
     return ret;

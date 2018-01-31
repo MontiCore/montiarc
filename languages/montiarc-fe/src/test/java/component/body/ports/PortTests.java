@@ -66,7 +66,7 @@ public class PortTests extends AbstractCoCoTest {
   public void testPortTypeResolving() {
     MontiArcTool tool = new MontiArcTool();
     ComponentSymbol motorSymbol = tool
-        .getComponentSymbol("component.body.ports.PortTypeResolving",
+        .loadComponentSymbolWithoutCocos("component.body.ports.PortTypeResolving",
             Paths.get("src/test/resources").toFile(),
             Paths.get("src/main/resources/defaultTypes").toFile())
         .orElse(null);
@@ -116,7 +116,7 @@ public class PortTests extends AbstractCoCoTest {
   
   @Test
   public void testCompWithGenericPorts() {
-    ComponentSymbol comp = new MontiArcTool().getComponentSymbol(PACKAGE + "." + "CompWithGenericPorts",
+    ComponentSymbol comp = new MontiArcTool().loadComponentSymbolWithoutCocos(PACKAGE + "." + "CompWithGenericPorts",
         Paths.get("src/test/resources").toFile(),
         Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
     

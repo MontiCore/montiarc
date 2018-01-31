@@ -52,7 +52,7 @@ public class SymtabTest {
   
   @Test
   public void testResolveJavaDefaultTypes() {
-    Scope symTab = tool.createSymbolTable(Paths.get("src/test/resources/").toFile(), Paths.get("src/main/resources/defaultTypes").toFile());
+    Scope symTab = tool.initSymbolTable(Paths.get("src/test/resources/").toFile(), Paths.get("src/main/resources/defaultTypes").toFile());
     
     Optional<JTypeSymbol> javaType = symTab.resolve("String", JTypeSymbol.KIND);
     assertFalse(
@@ -84,7 +84,7 @@ public class SymtabTest {
    */
   @Test
   public void testCompWithGenericsAndInnerGenericComponent() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
+    Scope symTab = tool.initSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "a.GenericCompWithInnerGenericComp", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -94,7 +94,7 @@ public class SymtabTest {
   @Ignore("ValueSymbol?!")
   @Test
   public void testParametersSymtab() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
+    Scope symTab = tool.initSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "params.UsingSCWithParams", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -122,7 +122,7 @@ public class SymtabTest {
    */
   @Test
   public void testComplexParametersSymtab() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
+    Scope symTab = tool.initSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "params.UsingComplexParams", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -164,7 +164,7 @@ public class SymtabTest {
    */
   @Test
   public void testGenericParametersSymtab3() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
+    Scope symTab = tool.initSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "params.UsingComplexGenericParams", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -203,7 +203,7 @@ public class SymtabTest {
   
   @Test
   public void testPortStereoType() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
+    Scope symTab = tool.initSymbolTable("src/test/resources/arc/symtab");
     PortSymbol port = symTab.<PortSymbol> resolve("a.Sub1.integerIn", PortSymbol.KIND).orElse(null);
     assertNotNull(port);
     
@@ -215,7 +215,7 @@ public class SymtabTest {
   
   @Test
   public void testConnectorStereoType() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
+    Scope symTab = tool.initSymbolTable("src/test/resources/arc/symtab");
     ConnectorSymbol connector = symTab
         .<ConnectorSymbol> resolve("a.Sub1.stringOut", ConnectorSymbol.KIND).orElse(null);
     assertNotNull(connector);
@@ -226,7 +226,7 @@ public class SymtabTest {
   
   @Test
   public void testComponentEntryIsDelayed() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
+    Scope symTab = tool.initSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol parent = symTab.<ComponentSymbol> resolve(
         "timing.Timing", ComponentSymbol.KIND).orElse(null);
     assertNotNull(parent);
@@ -258,7 +258,7 @@ public class SymtabTest {
   @Ignore("TODO ocl invariants?")
   @Test
   public void testAdaptOCLFieldToPort() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
+    Scope symTab = tool.initSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol parent = symTab.<ComponentSymbol> resolve(
         "ocl.OCLFieldToPort", ComponentSymbol.KIND).orElse(null);
     assertNotNull(parent);
@@ -270,7 +270,7 @@ public class SymtabTest {
   @Ignore("TODO ocl invariants?")
   @Test
   public void testAdaptOCLFieldToArcdField() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
+    Scope symTab = tool.initSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol parent = symTab.<ComponentSymbol> resolve(
         "ocl.OCLFieldToArcField", ComponentSymbol.KIND).orElse(null);
     assertNotNull(parent);
