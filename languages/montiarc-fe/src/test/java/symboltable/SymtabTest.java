@@ -52,7 +52,7 @@ public class SymtabTest {
   
   @Test
   public void testResolveJavaDefaultTypes() {
-    Scope symTab = tool.createSymbolTable(Paths.get("src/test/resources/arc/symtab").toFile(), Paths.get("src/main/resources/defaultTypes").toFile());
+    Scope symTab = tool.createSymbolTable(Paths.get("src/test/resources/").toFile(), Paths.get("src/main/resources/defaultTypes").toFile());
     
     Optional<JTypeSymbol> javaType = symTab.resolve("String", JTypeSymbol.KIND);
     assertFalse(
@@ -60,7 +60,7 @@ public class SymtabTest {
         javaType.isPresent());
         
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        "a.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
+        "component.body.subcomponents.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
     
     // java.lang.*
@@ -75,79 +75,9 @@ public class SymtabTest {
     
   }
   
-  @Test
-  public void testComponentWithNamedInnerComponent() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
-    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        "a.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
-    assertNotNull(comp);
-    assertEquals("a", comp.getPackageName());
-    assertEquals("ComponentWithNamedInnerComponent", comp.getName());
-    assertEquals("a.ComponentWithNamedInnerComponent", comp.getFullName());
-    assertFalse(comp.isInnerComponent());
-    assertEquals(0, comp.getConfigParameters().size());
-    assertEquals(1, comp.getAllIncomingPorts().size());
-    assertEquals(1, comp.getAllOutgoingPorts().size());
-    
-    // ensures that inner component definitions can be loaded with the model loader, so we can
-    // resolve references to them of sub components, see ModelNameCalculator.
-    assertEquals(1, comp.getSubComponents().size());
-    ComponentInstanceSymbol subComp = comp.getSubComponents().iterator().next();
-    assertEquals("a.ComponentWithNamedInnerComponent.instance", subComp.getFullName());
-    assertEquals("instance", subComp.getName());
-    
-    assertEquals(1, comp.getInnerComponents().size());
-    
-    ComponentSymbol inner = comp.getInnerComponent("NamedInnerComponent").orElse(null);
-    assertNotNull(inner);
-    ComponentSymbolReference compRefToInner = subComp.getComponentType();
-    assertTrue(compRefToInner.getReferencedComponent().isPresent());
-    assertTrue(inner == compRefToInner.getReferencedComponent().get());
-    assertEquals("NamedInnerComponent", inner.getName());
-    assertEquals("NamedInnerComponent", compRefToInner.getName());
-    assertEquals("a.ComponentWithNamedInnerComponent.NamedInnerComponent", inner.getFullName());
-    assertEquals("a.ComponentWithNamedInnerComponent.NamedInnerComponent",
-        compRefToInner.getFullName());
-    assertTrue(inner.isInnerComponent());
-    assertTrue(compRefToInner.isInnerComponent());
-    assertEquals(1, inner.getAllIncomingPorts().size());
-    assertEquals(1, compRefToInner.getAllIncomingPorts().size());
-    assertEquals(1, inner.getAllOutgoingPorts().size());
-    assertEquals(1, compRefToInner.getAllOutgoingPorts().size());
-    
-    assertEquals(2, comp.getConnectors().size());
-    ConnectorSymbol conn = comp.getConnector("instance.sIn").orElse(null);
-    assertNotNull(conn);
-    assertEquals("sIn", conn.getSource());
-    assertEquals("instance.sIn", conn.getTarget());
-    
-    conn = comp.getConnector("sOut").orElse(null);
-    assertNotNull(conn);
-    assertEquals("instance.sOut", conn.getSource());
-    assertEquals("sOut", conn.getTarget());
-    assertEquals(
-        "Connectors should not be added to both, the connector-defining-component AND the target-component, but only to the source",
-        0, inner.getConnectors().size());
-        
-    ComponentSymbol innerComp = symTab.<ComponentSymbol> resolve(
-        "a.ComponentWithNamedInnerComponent.NamedInnerComponent", ComponentSymbol.KIND)
-        .orElse(null);
-    assertNotNull(innerComp);
-  }
   
-  @Test
-  public void testCompWithCfgArgs() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
-    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        "a.CompWithCfgArgs", ComponentSymbol.KIND).orElse(null);
-    assertNotNull(comp);
-    assertEquals("a", comp.getPackageName());
-    assertEquals("CompWithCfgArgs", comp.getName());
-    assertEquals("a.CompWithCfgArgs", comp.getFullName());
-    assertFalse(comp.isInnerComponent());
-    assertEquals(1, comp.getConfigParameters().size());
-    assertEquals(0, comp.getFormalTypeParameters().size());
-  }
+  
+ 
   
   /**
    * Test for ticket #21.
@@ -159,22 +89,7 @@ public class SymtabTest {
         "a.GenericCompWithInnerGenericComp", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
   }
-  
-  @Test
-  public void testNamedInnerComponent() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
-    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        "a.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
-    assertNotNull(comp);
-    ComponentInstanceSymbol instance = (ComponentInstanceSymbol) comp.getSpannedScope()
-        .resolve("instance", ComponentInstanceSymbol.KIND).orElse(null);
-    assertNotNull(instance);
-    assertEquals("instance", instance.getName());
-    assertEquals("NamedInnerComponent",
-        instance.getComponentType().getName());
-    assertEquals("a.ComponentWithNamedInnerComponent.NamedInnerComponent",
-        instance.getComponentType().getFullName());
-  }
+ 
   
   @Ignore("ValueSymbol?!")
   @Test

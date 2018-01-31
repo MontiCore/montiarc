@@ -1,14 +1,13 @@
 package component.body;
 
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc.cocos.MontiArcCoCos;
-
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
 
 /**
  * This class checks all context conditions related the combination of elements in component

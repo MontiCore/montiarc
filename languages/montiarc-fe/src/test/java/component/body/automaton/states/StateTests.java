@@ -38,7 +38,7 @@ public class StateTests extends AbstractCoCoTest {
   public void testStateDefinedMultipleTimes() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "StateDefinedMultipleTimes");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new AutomatonStateDefinedMultipleTimes());
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA031"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA031"));
   }
   
   @Test

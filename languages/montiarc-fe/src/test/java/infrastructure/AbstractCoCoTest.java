@@ -5,6 +5,7 @@
  */
 package infrastructure;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
@@ -80,6 +81,20 @@ public class AbstractCoCoTest {
     cocos.checkAll(node);
     expectedErrors.checkOnlyExpectedPresent(Log.getFindings(), "Got no findings when checking only "
         + "the given coco. Did you pass an empty coco checker?");
+  }
+  
+  protected ComponentSymbol loadComponent(String modelPath, String packageName, String unqualifiedComponentName) {
+    Scope symTab = new MontiArcTool().createSymbolTable("src/test/resources/" + modelPath);
+    String qualifiedName = packageName + "." + unqualifiedComponentName;
+    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
+        qualifiedName, ComponentSymbol.KIND).orElse(null);
+    assertNotNull(comp);
+    
+    assertEquals(packageName, comp.getPackageName());
+    assertEquals(unqualifiedComponentName, comp.getName());
+    assertEquals(qualifiedName, comp.getFullName());
+    
+    return comp;
   }
 
 }

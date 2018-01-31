@@ -11,22 +11,20 @@ import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Paths;
 
-import de.se_rwth.commons.logging.Log;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
+import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTool;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.ValueSymbol;
-import montiarc.helper.SymbolPrinter;
 
 /**
  * @author Robert Heim

@@ -1,7 +1,9 @@
-package a;
+package component.body.subcomponents;
 
+/**
+ * Valid model.
+ */
 component ComponentWithNamedInnerComponent {
-    
     port 
         in String sIn,
         out String sOut;
@@ -14,5 +16,4 @@ component ComponentWithNamedInnerComponent {
     
     connect sIn -> instance.sIn;
     connect instance.sOut -> sOut;
-
 }

@@ -1,5 +1,10 @@
 package component;
 
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import de.monticore.java.symboltable.JavaFieldSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.symboltable.Scope;
@@ -9,19 +14,10 @@ import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc.MontiArcTool;
-import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc.cocos.ConnectorSourceAndTargetComponentDiffer;
 import montiarc.cocos.ImportsAreUnique;
-import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.TopLevelComponentHasNoInstanceName;
-
-import static org.junit.Assert.assertNotNull;
-
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
 
 /**
  * This class checks all context conditions related the combination of elements in component bodies

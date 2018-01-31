@@ -5,16 +5,27 @@
  */
 package component.body.subcomponents;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.regex.Pattern;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
+import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc._symboltable.ComponentInstanceSymbol;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.ComponentSymbolReference;
+import montiarc._symboltable.ConnectorSymbol;
 import montiarc.cocos.ComponentInstanceNamesAreUnique;
 import montiarc.cocos.ComponentWithTypeParametersHasInstance;
 import montiarc.cocos.MontiArcCoCos;
@@ -98,5 +109,62 @@ public class SubComponentTests extends AbstractCoCoTest {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "NestedComponentWithTypeParameterLacksInstance");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
         node, new ExpectedErrorInfo(1, "xMA009"));
+  }
+  
+  @Test
+  public void testComponentWithNamedInnerComponent() {
+    String unqualifiedComponentName = "ComponentWithNamedInnerComponent";
+    ComponentSymbol comp = this.loadComponent(MP, PACKAGE, unqualifiedComponentName);
+
+    assertFalse(comp.isInnerComponent());
+    assertEquals(0, comp.getConfigParameters().size());
+    assertEquals(1, comp.getAllIncomingPorts().size());
+    assertEquals(1, comp.getAllOutgoingPorts().size());
+    
+    // ensures that inner component definitions can be loaded with the model loader, so we can
+    // resolve references to them of sub components, see ModelNameCalculator.
+    assertEquals(1, comp.getSubComponents().size());
+    ComponentInstanceSymbol subComp = comp.getSubComponents().iterator().next();
+    assertEquals(PACKAGE + "." + "ComponentWithNamedInnerComponent.instance", subComp.getFullName());
+    assertEquals("instance", subComp.getName());
+    
+    assertEquals(1, comp.getInnerComponents().size());
+    
+    ComponentSymbol inner = comp.getInnerComponent("NamedInnerComponent").orElse(null);
+    assertNotNull(inner);
+    ComponentSymbolReference compRefToInner = subComp.getComponentType();
+    assertTrue(compRefToInner.getReferencedComponent().isPresent());
+    assertTrue(inner == compRefToInner.getReferencedComponent().get());
+    assertEquals("NamedInnerComponent", inner.getName());
+    assertEquals("NamedInnerComponent", compRefToInner.getName());
+    assertEquals(PACKAGE + "." + "ComponentWithNamedInnerComponent.NamedInnerComponent", inner.getFullName());
+    assertEquals(PACKAGE + "." + "ComponentWithNamedInnerComponent.NamedInnerComponent",
+        compRefToInner.getFullName());
+    assertTrue(inner.isInnerComponent());
+    assertTrue(compRefToInner.isInnerComponent());
+    assertEquals(1, inner.getAllIncomingPorts().size());
+    assertEquals(1, compRefToInner.getAllIncomingPorts().size());
+    assertEquals(1, inner.getAllOutgoingPorts().size());
+    assertEquals(1, compRefToInner.getAllOutgoingPorts().size());
+    
+    assertEquals(2, comp.getConnectors().size());
+    ConnectorSymbol conn = comp.getConnector("instance.sIn").orElse(null);
+    assertNotNull(conn);
+    assertEquals("sIn", conn.getSource());
+    assertEquals("instance.sIn", conn.getTarget());
+    
+    conn = comp.getConnector("sOut").orElse(null);
+    assertNotNull(conn);
+    assertEquals("instance.sOut", conn.getSource());
+    assertEquals("sOut", conn.getTarget());
+    assertEquals(
+        "Connectors should not be added to both, the connector-defining-component AND the target-component, but only to the source",
+        0, inner.getConnectors().size());
+    
+    Scope symTab = new MontiArcTool().createSymbolTable("src/test/resources/");
+    ComponentSymbol innerComp = symTab.<ComponentSymbol> resolve(
+        PACKAGE + "." + "ComponentWithNamedInnerComponent.NamedInnerComponent", ComponentSymbol.KIND)
+        .orElse(null);
+    assertNotNull(innerComp);
   }
 }
