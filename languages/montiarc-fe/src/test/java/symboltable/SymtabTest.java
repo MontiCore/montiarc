@@ -52,7 +52,7 @@ public class SymtabTest {
   
   @Test
   public void testResolveJavaDefaultTypes() {
-    Scope symTab = tool.createSymbolTable(Paths.get("src/test/resources/arc/symtab").toFile(), Paths.get("src/main/resources/defaultTypes").toFile());
+    Scope symTab = tool.createSymbolTable(Paths.get("src/test/resources/").toFile(), Paths.get("src/main/resources/defaultTypes").toFile());
     
     Optional<JTypeSymbol> javaType = symTab.resolve("String", JTypeSymbol.KIND);
     assertFalse(
@@ -60,7 +60,7 @@ public class SymtabTest {
         javaType.isPresent());
         
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        "a.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
+        "component.body.subcomponents.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
     
     // java.lang.*
@@ -89,22 +89,7 @@ public class SymtabTest {
         "a.GenericCompWithInnerGenericComp", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
   }
-  
-  @Test
-  public void testNamedInnerComponent() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
-    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        "a.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
-    assertNotNull(comp);
-    ComponentInstanceSymbol instance = (ComponentInstanceSymbol) comp.getSpannedScope()
-        .resolve("instance", ComponentInstanceSymbol.KIND).orElse(null);
-    assertNotNull(instance);
-    assertEquals("instance", instance.getName());
-    assertEquals("NamedInnerComponent",
-        instance.getComponentType().getName());
-    assertEquals("a.ComponentWithNamedInnerComponent.NamedInnerComponent",
-        instance.getComponentType().getFullName());
-  }
+ 
   
   @Ignore("ValueSymbol?!")
   @Test
