@@ -3,7 +3,6 @@ package de.montiarcautomaton.generator.codegen;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
@@ -24,7 +23,6 @@ import de.se_rwth.commons.Names;
 import montiarc._ast.ASTBehaviorElement;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTElement;
-import montiarc._ast.ASTVariable;
 import montiarc._symboltable.AutomatonSymbol;
 import montiarc._symboltable.ComponentSymbol;
 
