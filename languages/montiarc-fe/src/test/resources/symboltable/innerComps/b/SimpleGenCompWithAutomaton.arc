@@ -1,6 +1,6 @@
 package b;
 
-component SimpleGenCompWithAutomatonAndPorts<T, K> {
+component SimpleGenCompWithAutomaton<T, K> {
     port 
         in T tIn,
         in K kIn,

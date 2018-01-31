@@ -50,6 +50,35 @@ public class SymtabTest {
     tool = new MontiArcTool();
   }
   
+  @Test
+  public void testResolveJavaDefaultTypes() {
+    Scope symTab = tool.createSymbolTable(Paths.get("src/test/resources/").toFile(), Paths.get("src/main/resources/defaultTypes").toFile());
+    
+    Optional<JTypeSymbol> javaType = symTab.resolve("String", JTypeSymbol.KIND);
+    assertFalse(
+        "java.lang types may not be resolvable without qualification in general (e.g., global scope).",
+        javaType.isPresent());
+        
+    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
+        "component.body.subcomponents.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
+    assertNotNull(comp);
+    
+    // java.lang.*
+    javaType = comp.getSpannedScope().resolve("String", JTypeSymbol.KIND);
+    assertTrue("java.lang types must be resolvable without qualification within components.",
+        javaType.isPresent());
+
+    // java.util.*
+    javaType = comp.getSpannedScope().resolve("Set", JTypeSymbol.KIND);
+    assertTrue("java.util types must be resolvable without qualification within components.",
+        javaType.isPresent());
+    
+  }
+  
+  
+  
+ 
+  
   /**
    * Test for ticket #21.
    */
@@ -60,6 +89,7 @@ public class SymtabTest {
         "a.GenericCompWithInnerGenericComp", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
   }
+ 
   
   @Ignore("ValueSymbol?!")
   @Test
