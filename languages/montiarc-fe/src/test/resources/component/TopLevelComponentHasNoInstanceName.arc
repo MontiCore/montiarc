@@ -1,4 +1,0 @@
-package component;
-
-component TopLevelComponentHasNoInstanceName {
-}

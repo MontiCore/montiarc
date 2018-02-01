@@ -60,7 +60,7 @@ public class SymtabTest {
         javaType.isPresent());
         
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        "component.body.subcomponents.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
+        "components.body.subcomponents.ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
     
     // java.lang.*
@@ -74,22 +74,6 @@ public class SymtabTest {
         javaType.isPresent());
     
   }
-  
-  
-  
- 
-  
-  /**
-   * Test for ticket #21.
-   */
-  @Test
-  public void testCompWithGenericsAndInnerGenericComponent() {
-    Scope symTab = tool.createSymbolTable("src/test/resources/arc/symtab");
-    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        "a.GenericCompWithInnerGenericComp", ComponentSymbol.KIND).orElse(null);
-    assertNotNull(comp);
-  }
- 
   
   @Ignore("ValueSymbol?!")
   @Test

@@ -1,5 +1,0 @@
-package b;
-
-component SimpleComponentWithAutomaton {
-
-}

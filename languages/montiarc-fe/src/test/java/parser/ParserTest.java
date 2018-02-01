@@ -46,7 +46,7 @@ public class ParserTest {
       MODEL_PATH + "/arc/context/a/S2.arc",
       
       // Multiple inheritance is not supported
-      MODEL_PATH + "/component/head/inheritance/MultipleInheritance.arc",
+      MODEL_PATH + "/components/head/inheritance/MultipleInheritance.arc",
       
       // The name of the component is not identical to the name of the file
       MODEL_PATH + "/arc/context/a/R3.arc",
@@ -55,7 +55,7 @@ public class ParserTest {
       MODEL_PATH + "/arc/context/a/S3.arc",
       
    // The name of the component is not identical to the name of the file
-      MODEL_PATH + "/component/head/name/NameClashB.arc",
+      MODEL_PATH + "/components/head/name/NameClashB.arc",
 
       // The package declaration of the component must not differ from the package of the component file.
       MODEL_PATH + "/arc/context/a/S4.arc",
