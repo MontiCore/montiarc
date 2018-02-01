@@ -1,5 +1,8 @@
-package ocl;
+package components.body.invariants;
 
+/**
+ * Valid model.
+ */
 component OCLFieldToPort {
   port in String switchStatus; 
   

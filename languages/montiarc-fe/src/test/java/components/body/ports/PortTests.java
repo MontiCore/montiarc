@@ -1,6 +1,7 @@
 package components.body.ports;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -9,6 +10,7 @@ import java.nio.file.Paths;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
@@ -148,6 +150,18 @@ public class PortTests extends AbstractCoCoTest {
     assertNotNull(myVInput);
     assertEquals("V", myVInput.getTypeReference().getName());
 
+  }
+  
+  @Test
+  public void testPortsWithStereotypes() {
+    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources/");
+    PortSymbol port = symTab.<PortSymbol> resolve(PACKAGE + "." + "PortsWithStereotypes.integerIn", PortSymbol.KIND).orElse(null);
+    assertNotNull(port);
+
+    assertEquals(3, port.getStereotype().size());
+    assertEquals("held", port.getStereotype().get("disabled").get());
+    assertEquals("1", port.getStereotype().get("initialOutput").get());
+    assertFalse(port.getStereotype().get("ignoreWarning").isPresent());
   }
 
 }

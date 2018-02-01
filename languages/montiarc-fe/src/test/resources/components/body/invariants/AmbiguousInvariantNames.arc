@@ -1,5 +1,8 @@
 package components.body.invariants;
 
+/**
+ * Invalid model. Multiple invariants of the same name.
+ */
 component AmbiguousInvariantNames {
     port
         in String sIn;

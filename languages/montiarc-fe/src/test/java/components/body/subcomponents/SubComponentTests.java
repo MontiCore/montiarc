@@ -11,15 +11,20 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import de.monticore.cocos.helper.Assert;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JFieldSymbol;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
@@ -36,6 +41,7 @@ import montiarc.cocos.ComponentInstanceNamesAreUnique;
 import montiarc.cocos.ComponentWithTypeParametersHasInstance;
 import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
+import montiarc.helper.SymbolPrinter;
 
 /**
  * This class checks all context conditions related to the definition of
@@ -455,6 +461,74 @@ public class SubComponentTests extends AbstractCoCoTest {
     assertNotNull(refType);
     assertEquals("SimpleComponentWithAutomaton", refType.getName());
     assertEquals(PACKAGE + "." + "SimpleComponentWithAutomaton", refType.getFullName());
-
   }
+  
+  @Ignore("ValueSymbol?!")
+  @Test
+  public void testUsingSCWithParams() {
+    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources/");
+    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
+        PACKAGE + "." + "UsingSCWithParams", ComponentSymbol.KIND).orElse(null);
+    assertNotNull(comp);
+
+    //assertEquals(0, Log.getErrorCount());
+    // TODO portusage coco
+    // assertEquals(1, Log.getFindings().stream().filter(f -> f.isWarning()).count());
+    assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());
+
+    ComponentInstanceSymbol delay = (ComponentInstanceSymbol) comp.getSpannedScope()
+        .resolve("deleteTempFile", ComponentInstanceSymbol.KIND).orElse(null);
+    assertNotNull(delay);
+    assertEquals("deleteTempFile", delay.getName());
+
+    assertEquals(1, delay.getConfigArguments().size());
+    assertEquals("1", delay.getConfigArguments().get(0).getValue());
+
+    //Is an expression since there is no value symbol.
+    assertEquals(ValueSymbol.Kind.Value,
+        delay.getConfigArguments().get(0).getKind());
+  }
+  
+  /**
+   * TODO: ValueSymbol?!
+   */
+  @Test
+  public void testUsingComplexParams() {
+    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources/");
+    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
+        PACKAGE + "." + "UsingComplexParams", ComponentSymbol.KIND).orElse(null);
+    assertNotNull(comp);
+
+    assertEquals(0, Log.getErrorCount());
+    Assert.assertEqualErrorCounts(new ArrayList<Finding>(),
+        Log.getFindings().stream().filter(f -> f.isWarning()).collect(Collectors.toList()));
+
+    ComponentInstanceSymbol delay = (ComponentInstanceSymbol) comp.getSpannedScope()
+        .resolve("cp", ComponentInstanceSymbol.KIND).orElse(null);
+    assertNotNull(delay);
+    assertEquals("cp", delay.getName());
+
+    assertEquals(2, delay.getConfigArguments().size());
+    assertEquals("new int[] {1, 2, 3}",
+        SymbolPrinter.printConfigArgument(delay.getConfigArguments().get(0)));
+    // TODO value symbol
+    // assertEquals(ValueSymbol.Kind.ConstructorCall, delay.getConfigArguments().get(0).getKind());
+    // assertEquals("1",
+    // delay.getConfigArguments().get(0).getConstructorArguments().get(0).getValue());
+    // assertEquals("2",
+    // delay.getConfigArguments().get(0).getConstructorArguments().get(1).getValue());
+    // assertEquals("3",
+    // delay.getConfigArguments().get(0).getConstructorArguments().get(2).getValue());
+    // assertEquals("new HashMap<List<String>, List<Integer>>()",
+    // delay.getConfigArguments().get(1).getValue());
+    // assertEquals(Kind.ConstructorCall, delay.getConfigArguments().get(1).getKind());
+    // JTypeReference<? extends JTypeSymbol> typeRef = delay.getConfigArguments().get(1).getType();
+    // assertEquals("java.util.List", typeRef.getTypeParameters().get(0).getType().getName());
+    // assertEquals("java.util.List", typeRef.getTypeParameters().get(1).getType().getName());
+    // assertEquals("java.lang.String",
+    // typeRef.getTypeParameters().get(0).getTypeParameters().get(0).getType().getName());
+    // assertEquals("java.lang.Integer",
+    // typeRef.getTypeParameters().get(1).getTypeParameters().get(0).getType().getName());
+  }
+  
 }

@@ -1,5 +1,8 @@
-package timing;
+package components.body.timing;
 
+/**
+ * Invalid model. Variable names 'a' and 'string' used twice.
+ */
 component Timing {
     
     component TimedInner {

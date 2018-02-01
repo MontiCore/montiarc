@@ -5,24 +5,30 @@
  */
 package components.body.connectors;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
+import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcASTConnectorCoCo;
 import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc._symboltable.ConnectorSymbol;
 import montiarc.cocos.ConnectorEndPointIsCorrectlyQualified;
 import montiarc.cocos.ConnectorSourceAndTargetComponentDiffer;
 import montiarc.cocos.ConnectorSourceAndTargetExist;
 import montiarc.cocos.SimpleConnectorSourceExists;
 
 /**
- * This class checks all context conditions directly related to connector
- * definitions
+ * This class checks all context conditions directly related to connector definitions
  *
  * @author Andreas Wortmann
  */
@@ -75,7 +81,8 @@ public class ConnectorTests extends AbstractCoCoTest {
   
   @Test
   public void testConnectorSourceInvalid() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ConnectorPiercingOutwardsThroughInterface");
+    ASTMontiArcNode node = getAstNode(MP,
+        PACKAGE + "." + "ConnectorPiercingOutwardsThroughInterface");
     checkInvalid(
         new MontiArcCoCoChecker()
             .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified()),
@@ -84,15 +91,16 @@ public class ConnectorTests extends AbstractCoCoTest {
   
   @Test
   public void testConnectorTargetInvalid() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ConnectorPiercingInwardsThroughInterface");
+    ASTMontiArcNode node = getAstNode(MP,
+        PACKAGE + "." + "ConnectorPiercingInwardsThroughInterface");
     checkInvalid(
         new MontiArcCoCoChecker()
             .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified()),
         node, new ExpectedErrorInfo(1, "xMA070"));
   }
   
-  /* Checks multiple instances of wrong connectors with connectors piercing
-   * through interfaces and qualified simple connector sources. */
+  /* Checks multiple instances of wrong connectors with connectors piercing through interfaces and
+   * qualified simple connector sources. */
   @Test
   public void testMultipleWrongConnectors() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "WrongConnectors");
@@ -103,8 +111,8 @@ public class ConnectorTests extends AbstractCoCoTest {
   }
   
   @Test
-  /* Checks whether there are connectors in a component that wrongly connect
-   * ports of the same component */
+  /* Checks whether there are connectors in a component that wrongly connect ports of the same
+   * component */
   public void testConnectorSourceAndTargetDifferentComponent() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ConnectorSourceAndTargetSameComponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
@@ -115,9 +123,23 @@ public class ConnectorTests extends AbstractCoCoTest {
   @Test
   /* Checks whether the source and target of a connect statement exist. */
   public void testMissingSourceAndTargetDefinition() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "MissingSourceTargetDefinitionInSubcomponent");
+    ASTMontiArcNode node = getAstNode(MP,
+        PACKAGE + "." + "MissingSourceTargetDefinitionInSubcomponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetExist());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA066", "xMA067"));
+  }
+  
+  @Test
+  public void testConnectorsWithStereotypes() {
+    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources/");
+    ConnectorSymbol connector = symTab
+        .<ConnectorSymbol> resolve(PACKAGE + "." + "ConnectorsWithStereotypes.myOut",
+            ConnectorSymbol.KIND)
+        .orElse(null);
+    assertNotNull(connector);
+    
+    assertEquals(1, connector.getStereotype().size());
+    assertFalse(connector.getStereotype().get("realNews").isPresent());
   }
 }
