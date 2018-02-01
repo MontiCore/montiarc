@@ -38,10 +38,10 @@ public class ModelLoaderTests {
   
   @Test
   public void testModelLoader() {
-    Optional<ComponentSymbol> sym = tool.getComponentSymbol("tooling.modelloader.industry.PIController", Paths.get(MP).toFile());
+    Optional<ComponentSymbol> sym = tool.loadComponentSymbolWithoutCocos("tooling.modelloader.industry.PIController", Paths.get(MP).toFile());
     assertTrue(sym.isPresent());
     
-    Optional<ComponentSymbol> sym2 = tool.getComponentSymbol("tooling.modelloader.industry2.PIController", Paths.get(MP).toFile());
+    Optional<ComponentSymbol> sym2 = tool.loadComponentSymbolWithoutCocos("tooling.modelloader.industry2.PIController", Paths.get(MP).toFile());
     assertTrue(sym2.isPresent());
     
     assertTrue(sym.get() != sym2.get());
@@ -50,7 +50,7 @@ public class ModelLoaderTests {
   // resolves also to the same ComponentSymbol even both are in different packages
   @Test
   public void testSymbolTableResolve() {
-    Scope scope = tool.createSymbolTable(MP);
+    Scope scope = tool.initSymbolTable(MP);
     
     Optional<ComponentSymbol> sym3 = getGlobalScope(scope)
         .<ComponentSymbol> resolveDown("tooling.modelloader.industry.PIController", ComponentSymbol.KIND);

@@ -44,6 +44,16 @@ public class ASTComponent extends ASTComponentTOP {
     }
     return ret;
   }
+  
+  public List<ASTVariableDeclaration> getVariables() {
+    List<ASTVariableDeclaration> ret = new ArrayList<>();
+    for(ASTElement element : this.getBody().getElements()) {
+      if(element instanceof ASTVariableDeclaration) {
+        ret.add((ASTVariableDeclaration) element);
+      }
+    }
+    return ret;
+  }
 
   // do not use symbol table, since symbol table must not be created
   public List<ASTConnector> getConnectors() {

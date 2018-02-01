@@ -33,36 +33,36 @@ import montiarc.cocos.DefaultParametersHaveCorrectOrder;
  * @author Robert Heim, Andreas Wortmann
  */
 public class DefaultParametersTest extends AbstractCoCoTest {
-  
+
   private static final String MP = "";
-  
+
   private static final String PACKAGE = "components.head.parameters";
-  
+
   @BeforeClass
   public static void setUp() {
     Log.getFindings().clear();
     Log.enableFailQuick(false);
   }
-  
+
   @Test
   public void testDefaultParametersInCorrectOrder() {
     checkValid(MP, PACKAGE + "." + "DefaultParametersInCorrectOrder");
   }
-  
+
   @Test
   public void testDefaultParametersInIncorrectOrder() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersHaveCorrectOrder()),
         getAstNode(MP, PACKAGE + "." + "DefaultParametersInIncorrectOrder"),
         new ExpectedErrorInfo(1, "xMA056"));
   }
-  
+
   @Test
   public void testWrongDefaultParameterType() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersCorrectlyAssigned()),
         getAstNode("", PACKAGE + "." + "DefaultParameterWrongType"),
         new ExpectedErrorInfo(1, "xMA061"));
   }
-  
+
   @Test
   public void testValidDefaultParameters() {
     MontiArcTool tool = new MontiArcTool();
@@ -71,7 +71,7 @@ public class DefaultParametersTest extends AbstractCoCoTest {
         .getComponentSymbol("components.head.parameters.ValidDefaultParameters", Paths.get(modelPath).toFile())
         .orElse(null);
     assertNotNull(comp);
-    
+
     List<JFieldSymbol> params = comp.getConfigParameters();
     for (JFieldSymbol param : params) {
       if (param.getAstNode().isPresent()) {
@@ -84,8 +84,8 @@ public class DefaultParametersTest extends AbstractCoCoTest {
           assertFalse(p.getDefaultValue().isPresent());
         }
       }
-      
+
     }
   }
-  
+
 }

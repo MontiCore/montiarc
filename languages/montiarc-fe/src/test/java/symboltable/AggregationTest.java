@@ -51,7 +51,7 @@ public class AggregationTest {
   
   @Test
   public void testComponentWithCDType() {
-    Scope symTab = tool.createSymbolTable(MODEL_PATH);
+    Scope symTab = tool.initSymbolTable(MODEL_PATH);
     
     CDSymbol types = symTab.<CDSymbol> resolve("aggregation.Types", CDSymbol.KIND).orElse(null);
     assertNotNull(types);
@@ -64,7 +64,7 @@ public class AggregationTest {
   
   @Test
   public void testFormalTypeParameterComponentWithCDType() {
-    Scope symTab = tool.createSymbolTable(MODEL_PATH);
+    Scope symTab = tool.initSymbolTable(MODEL_PATH);
     
     CDSymbol types = symTab.<CDSymbol> resolve("aggregation.Types", CDSymbol.KIND).orElse(null);
     assertNotNull(types);
@@ -98,7 +98,7 @@ public class AggregationTest {
   
   @Test
   public void testCDusingMAWithCD() {
-    Scope symTab = tool.createSymbolTable(MODEL_PATH);
+    Scope symTab = tool.initSymbolTable(MODEL_PATH);
     Optional<CDSymbol> cd = symTab.<CDSymbol> resolve("aggregation.Units",
         CDSymbol.KIND);
     assertTrue(cd.isPresent());
@@ -114,7 +114,7 @@ public class AggregationTest {
    * superclass.Simulation component.
    */
   public void testSuperClass() {
-    Scope scope = tool.createSymbolTable("src/test/resources/symboltable");
+    Scope scope = tool.initSymbolTable("src/test/resources/symboltable");
     
     ComponentSymbol simulationComponent = scope
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
@@ -170,7 +170,7 @@ public class AggregationTest {
    * Tests whether Fields are properly embedded in the symbol table.
    */
   public void testFields() {
-    Scope scope = tool.createSymbolTable("src/test/resources/symboltable");
+    Scope scope = tool.initSymbolTable("src/test/resources/symboltable");
     
     ComponentSymbol simulationSymbol = scope
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
@@ -201,7 +201,7 @@ public class AggregationTest {
    * Tests wether we can get methods from the symbol table
    */
   public void testMethod() {
-    Scope symTab = tool.createSymbolTable(Paths.get(MODEL_PATH).toFile(), Paths.get("src/main/resources/defaultTypes").toFile());
+    Scope symTab = tool.initSymbolTable(Paths.get(MODEL_PATH).toFile(), Paths.get("src/main/resources/defaultTypes").toFile());
     
     ComponentSymbol simulationSymbol = symTab
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
@@ -226,7 +226,7 @@ public class AggregationTest {
    * Tests wether we can get Interfaces from the symbol table.
    */
   public void testInterface() {
-    Scope scope = tool.createSymbolTable("src/test/resources/symboltable");
+    Scope scope = tool.initSymbolTable("src/test/resources/symboltable");
     
     ComponentSymbol simulationSymbol = scope
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
@@ -255,7 +255,7 @@ public class AggregationTest {
   @Test
   public void testKind() {
     
-    Scope scope = tool.createSymbolTable("src/test/resources/symboltable");
+    Scope scope = tool.initSymbolTable("src/test/resources/symboltable");
     
     ComponentSymbol simulationSymbol = scope
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)

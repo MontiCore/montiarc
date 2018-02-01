@@ -24,8 +24,8 @@ public class ComponentHelperTest {
   @Test
   public void getParamValues() {
     MontiArcTool tool = new MontiArcTool();
-    final Scope symbolTable = tool.createSymbolTable("src/test/resources/components/helper/ComposedTestComponent.arc");
-    ComponentSymbol comp = tool.getComponentSymbol("components.helper.ComposedTestComponent", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+    final Scope symbolTable = tool.initSymbolTable("src/test/resources/components/helper/ComposedTestComponent.arc");
+    ComponentSymbol comp = tool.loadComponentSymbolWithCocos("components.helper.ComposedTestComponent", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
     assertNotNull(comp);
 
 
@@ -56,8 +56,8 @@ public class ComponentHelperTest {
   @Test
   public void getPortTypeName() {
     MontiArcTool tool = new MontiArcTool();
-    final Scope symbolTable = tool.createSymbolTable("src/test/resources/components/helper/ComponentWithGenerics.arc");
-    ComponentSymbol comp = tool.getComponentSymbol("components.helper.ComponentWithGenerics", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+    final Scope symbolTable = tool.initSymbolTable("src/test/resources/components/helper/ComponentWithGenerics.arc");
+    ComponentSymbol comp = tool.loadComponentSymbolWithCocos("components.helper.ComponentWithGenerics", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
     assertNotNull(comp);
 
     ComponentHelper helper = new ComponentHelper(comp);
@@ -85,8 +85,8 @@ public class ComponentHelperTest {
   @Test
   public void getPortGenerics() {
     MontiArcTool tool = new MontiArcTool();
-    final Scope symbolTable = tool.createSymbolTable("src/test/resources/components/head/generics/Car.arc");
-    ComponentSymbol comp = tool.getComponentSymbol("components.head.generics.Car", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+    final Scope symbolTable = tool.initSymbolTable("src/test/resources/components/head/generics/Car.arc");
+    ComponentSymbol comp = tool.loadComponentSymbolWithCocos("components.head.generics.Car", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
     assertNotNull(comp);
 
     ComponentHelper helper = new ComponentHelper(comp);
@@ -114,7 +114,7 @@ public class ComponentHelperTest {
   @Test
   public void testVariableTypeName() {
     MontiArcTool tool = new MontiArcTool();
-    ComponentSymbol comp = tool.getComponentSymbol("components.helper.ComponentWithGenericVariables", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+    ComponentSymbol comp = tool.loadComponentSymbolWithCocos("components.helper.ComponentWithGenericVariables", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
     assertNotNull(comp);
 
     ComponentHelper helper = new ComponentHelper(comp);
@@ -134,7 +134,7 @@ public class ComponentHelperTest {
   @Test
   public void getParamTypeName() {
     MontiArcTool tool = new MontiArcTool();
-    ComponentSymbol comp = tool.getComponentSymbol("components.helper.ComponentWithGenericParameters", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+    ComponentSymbol comp = tool.loadComponentSymbolWithCocos("components.helper.ComponentWithGenericParameters", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
     assertNotNull(comp);
 
     ComponentHelper helper = new ComponentHelper(comp);

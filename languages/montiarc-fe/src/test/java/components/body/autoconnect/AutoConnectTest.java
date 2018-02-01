@@ -43,7 +43,7 @@ public class AutoConnectTest extends AbstractCoCoTest {
   }
   
   private Scope loadSymtab() {
-   return tool.createSymbolTable(Paths.get(MP).toFile(),
+   return tool.initSymbolTable(Paths.get(MP).toFile(),
        Paths.get("src/main/resources/defaultTypes").toFile()); 
   }
   

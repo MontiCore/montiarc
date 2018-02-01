@@ -126,7 +126,7 @@ public class AJavaTests extends AbstractCoCoTest {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "DistanceLogger");
     assertNotNull(node);
     
-    Scope symtab = tool.createSymbolTable(modelPath);
+    Scope symtab = tool.initSymbolTable(modelPath);
     Optional<ComponentSymbol> oFoo = symtab.<ComponentSymbol> resolve(PACKAGE + "." + "DistanceLogger",
         ComponentSymbol.KIND);
     assertTrue(oFoo.isPresent());

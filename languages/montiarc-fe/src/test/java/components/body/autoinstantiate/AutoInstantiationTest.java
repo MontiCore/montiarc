@@ -38,7 +38,7 @@ public class AutoInstantiationTest {
   }
   
   private ComponentSymbol loadComponent(String unqualifiedComponentName) {
-    Scope symTab = tool.createSymbolTable(MP);
+    Scope symTab = tool.initSymbolTable(MP);
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         PACKAGE + "." + unqualifiedComponentName, ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
