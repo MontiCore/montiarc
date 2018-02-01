@@ -1,5 +1,8 @@
-package aggregation;
+package types;
 
+/**
+ * Valid model. 
+ */
 component ComponentWithCDType {
   port in  Car cIn,
        out Car cOut;

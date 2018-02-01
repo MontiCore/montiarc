@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package symboltable;
+package types;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -35,43 +35,39 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 
 /**
- * @author Crispin Kirchner, Andreas Wortmann
- * @version $Revision$, $Date$
+ * This class checks all context conditions directly related to types (e.g., aggregation etc)
+ *
+ * @author Andreas Wortmann
  */
-public class AggregationTest extends AbstractCoCoTest {
+public class TypeTests extends AbstractCoCoTest {
   
-  private final String MODEL_PATH = "src/test/resources/symboltable";
-  
-  private static MontiArcTool tool;
+  private static final String PACKAGE = "types";
   
   @BeforeClass
   public static void setUp() {
-    tool = new MontiArcTool();
     Log.enableFailQuick(false);
   }
   
   @Test
   public void testComponentWithCDType() {
-    Scope symTab = tool.initSymbolTable(MODEL_PATH);
-    
-    CDSymbol types = symTab.<CDSymbol> resolve("aggregation.Types", CDSymbol.KIND).orElse(null);
+    Scope symTab = this.loadDefaultSymbolTable();
+    CDSymbol types = symTab.<CDSymbol> resolve(PACKAGE + "." + "Types", CDSymbol.KIND).orElse(null);
     assertNotNull(types);
     
     ComponentSymbol component = symTab
-        .<ComponentSymbol> resolve("aggregation.ComponentWithCDType", ComponentSymbol.KIND)
+        .<ComponentSymbol> resolve(PACKAGE + "." + "ComponentWithCDType", ComponentSymbol.KIND)
         .orElse(null);
     assertNotNull(component);
   }
   
   @Test
-  public void testFormalTypeParameterComponentWithCDType() {
-    Scope symTab = tool.initSymbolTable(MODEL_PATH);
-    
-    CDSymbol types = symTab.<CDSymbol> resolve("aggregation.Types", CDSymbol.KIND).orElse(null);
+  public void testFTPComponentWithCDType() {
+    Scope symTab = this.loadDefaultSymbolTable();
+    CDSymbol types = symTab.<CDSymbol> resolve(PACKAGE + "." + "Types", CDSymbol.KIND).orElse(null);
     assertNotNull(types);
     
     ComponentSymbol component = symTab
-        .<ComponentSymbol> resolve("aggregation.FTPComponentWithCDType", ComponentSymbol.KIND)
+        .<ComponentSymbol> resolve(PACKAGE + "." + "FTPComponentWithCDType", ComponentSymbol.KIND)
         .orElse(null);
     assertNotNull(component);
   }
@@ -85,40 +81,40 @@ public class AggregationTest extends AbstractCoCoTest {
     family.addModelingLanguage(lang);
     GlobalScope scope = new GlobalScope(modelPath, family);
     
-    Optional<CDSymbol> cd = scope.<CDSymbol> resolve("aggregation.Units",
+    Optional<CDSymbol> cd = scope.<CDSymbol> resolve(PACKAGE + "." + "Units",
         CDSymbol.KIND);
     assertTrue(cd.isPresent());
-    Optional<CDTypeSymbol> quantity = scope.<CDTypeSymbol> resolve("aggregation.Units.Quantity",
+    Optional<CDTypeSymbol> quantity = scope.<CDTypeSymbol> resolve(PACKAGE + "." + "Units.Quantity",
         CDTypeSymbol.KIND);
     assertTrue(quantity.isPresent());
     Optional<JTypeSymbol> quantityAsJType = scope.<JTypeSymbol> resolve(
-        "aggregation.Units.Quantity",
+        PACKAGE + "." + "Units.Quantity",
         JTypeSymbol.KIND);
     assertTrue(quantityAsJType.isPresent());
   }
   
   @Test
   public void testCDusingMAWithCD() {
-    Scope symTab = tool.initSymbolTable(MODEL_PATH);
-    Optional<CDSymbol> cd = symTab.<CDSymbol> resolve("aggregation.Units",
+    Scope symTab = this.loadDefaultSymbolTable();
+    Optional<CDSymbol> cd = symTab.<CDSymbol> resolve(PACKAGE + "." + "Units",
         CDSymbol.KIND);
     assertTrue(cd.isPresent());
-    Optional<CDTypeSymbol> quantity = symTab.<CDTypeSymbol> resolve("aggregation.Units.Quantity",
+    Optional<CDTypeSymbol> quantity = symTab.<CDTypeSymbol> resolve(PACKAGE + "." + "Units.Quantity",
         CDTypeSymbol.KIND);
     assertTrue(quantity.isPresent());
   }
   
   @Test
   /**
-   * Tests wether SuperClasses get properly embedded in the symbol table, by
+   * Tests whether SuperClasses get properly embedded in the symbol table, by
    * checking the types of the incoming and outgoing ports of the
    * superclass.Simulation component.
    */
   public void testSuperClass() {
-    Scope scope = tool.initSymbolTable("src/test/resources/symboltable");
+    Scope scope = this.loadDefaultSymbolTable();
     
     ComponentSymbol simulationComponent = scope
-        .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
+        .<ComponentSymbol> resolve(PACKAGE + "." + "Simulation", ComponentSymbol.KIND)
         .orElse(null);
     assertNotNull(simulationComponent);
     
@@ -139,7 +135,7 @@ public class AggregationTest extends AbstractCoCoTest {
     // We will not check the type of the referenced symbol, since resolveMany()
     // doesn't care what gets returned
     assertEquals("MyMessage", messageType.getName());
-    assertEquals("superclass.Data.MyMessage", messageType.getFullName());
+    assertEquals(PACKAGE + "." + "SimulationData.MyMessage", messageType.getFullName());
     assertTrue(messageType.isAbstract());
     assertFalse(messageType.isInterface());
     assertFalse(messageType.isInnerType());
@@ -158,7 +154,7 @@ public class AggregationTest extends AbstractCoCoTest {
     assertEquals("MyMessage", messageTypeRef.getName());
     assertTrue(messageTypeRef.existsReferencedSymbol());
     messageType = messageTypeRef.getReferencedSymbol();
-    assertEquals("superclass.Data.MyMessage", messageType.getFullName());
+    assertEquals(PACKAGE + "." + "SimulationData.MyMessage", messageType.getFullName());
     assertEquals("MyMessage", messageType.getName());
     assertTrue(messageType.isAbstract());
     assertFalse(messageType.isInterface());
@@ -171,10 +167,10 @@ public class AggregationTest extends AbstractCoCoTest {
    * Tests whether Fields are properly embedded in the symbol table.
    */
   public void testFields() {
-    Scope scope = tool.initSymbolTable("src/test/resources/symboltable");
+    Scope scope = this.loadDefaultSymbolTable();
     
     ComponentSymbol simulationSymbol = scope
-        .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
+        .<ComponentSymbol> resolve(PACKAGE + "." + "Simulation", ComponentSymbol.KIND)
         .orElse(null);
     assertNotNull(simulationSymbol);
     
@@ -199,13 +195,13 @@ public class AggregationTest extends AbstractCoCoTest {
   
   @Test
   /**
-   * Tests wether we can get methods from the symbol table
+   * Tests whether we can get methods from the symbol table
    */
   public void testMethod() {
-    Scope symTab = tool.initSymbolTable(Paths.get(MODEL_PATH).toFile(), Paths.get(FAKE_JAVA_TYPES_PATH).toFile());
+    Scope symTab = this.loadDefaultSymbolTable();
     
     ComponentSymbol simulationSymbol = symTab
-        .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
+        .<ComponentSymbol> resolve(PACKAGE + "." + "Simulation", ComponentSymbol.KIND)
         .orElse(null);
     assertNotNull(simulationSymbol);
     
@@ -224,13 +220,13 @@ public class AggregationTest extends AbstractCoCoTest {
   
   @Test
   /**
-   * Tests wether we can get Interfaces from the symbol table.
+   * Tests whether we can get Interfaces from the symbol table.
    */
   public void testInterface() {
-    Scope scope = tool.initSymbolTable("src/test/resources/symboltable");
+    Scope scope = this.loadDefaultSymbolTable();
     
     ComponentSymbol simulationSymbol = scope
-        .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
+        .<ComponentSymbol> resolve(PACKAGE + "." + "Simulation", ComponentSymbol.KIND)
         .orElse(null);
     assertNotNull(simulationSymbol);
     
@@ -255,11 +251,10 @@ public class AggregationTest extends AbstractCoCoTest {
    */
   @Test
   public void testKind() {
-    
-    Scope scope = tool.initSymbolTable("src/test/resources/symboltable");
+    Scope scope = this.loadDefaultSymbolTable();
     
     ComponentSymbol simulationSymbol = scope
-        .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)
+        .<ComponentSymbol> resolve(PACKAGE + "." + "Simulation", ComponentSymbol.KIND)
         .orElse(null);
     assertNotNull(simulationSymbol);
     

@@ -59,10 +59,7 @@ public class GenericsTest extends AbstractCoCoTest {
    */
   @Test
   public void testGenericParametersSymtab3() {
-    Scope symTab = MONTIARCTOOL.initSymbolTable("src/test/resources/arc/symtab");
-    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        "params.UsingComplexGenericParams", ComponentSymbol.KIND).orElse(null);
-    assertNotNull(comp);
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "UsingComplexGenericParams");
 
     assertEquals(0, Log.getErrorCount());
     assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());

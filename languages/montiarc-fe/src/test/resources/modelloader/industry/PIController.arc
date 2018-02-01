@@ -1,4 +1,4 @@
-package tooling.modelloader.industry;
+package modelloader.industry;
 
 /**
  * Valid model.

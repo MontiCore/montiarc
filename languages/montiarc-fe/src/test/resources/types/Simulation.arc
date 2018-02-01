@@ -1,6 +1,9 @@
-package superclass;
+package types;
 
-import superclass.Data.*;
+/**
+ * Valid model. 
+ */
+import types.SimulationData.*;
 
 component Simulation {
   port in MyMessage msgs;

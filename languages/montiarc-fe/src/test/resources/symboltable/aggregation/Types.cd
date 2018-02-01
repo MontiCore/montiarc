@@ -1,5 +1,0 @@
-package aggregation;
-
-classdiagram Types {
-  class Car {}
-}

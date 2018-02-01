@@ -1,5 +1,8 @@
-package aggregation;
+package types;
 
+/**
+ * Valid model. 
+ */
 component FTPComponentWithCDType {
   port in  Car cIn,
        out Car cOut;

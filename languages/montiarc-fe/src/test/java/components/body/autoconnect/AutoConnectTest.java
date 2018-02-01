@@ -271,7 +271,7 @@ public class AutoConnectTest extends AbstractCoCoTest {
   
 //  @Test
 //  public void testAutoconnectArrayTypes() {
-//    Scope symTab = tool.createSymbolTable(Paths.get("src/test/resources/arc/transformations").toFile(), Paths.get("src/main/resources/defaultTypes").toFile());
+//    Scope symTab = tool.createSymbolTable(Paths.get(MODEL_PATH + "/arc/transformations").toFile(), Paths.get("src/main/resources/defaultTypes").toFile());
 //    Log.getFindings().clear();
 //    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
 //        "a.AutoConnectArrayTypes", ComponentSymbol.KIND).orElse(null);

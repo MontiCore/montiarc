@@ -92,7 +92,7 @@ public class ParserTest {
 
   private void test(String fileEnding) throws IOException {
     ParseTest parserTest = new ParseTest("." + fileEnding);
-    Files.walkFileTree(Paths.get("src/test/resources"), parserTest);
+    Files.walkFileTree(Paths.get(MODEL_PATH), parserTest);
 
     if (!parserTest.getModelsInError().isEmpty()) {
       Log.debug("Models in error", "ParserTest");

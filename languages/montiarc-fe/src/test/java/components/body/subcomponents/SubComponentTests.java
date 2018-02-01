@@ -287,9 +287,7 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testImportedReferences() {
-    ComponentSymbol comp = MONTIARCTOOL.loadComponentSymbolWithoutCocos(
-        PACKAGE + "." + "ComplexComponent", Paths.get("src/test/resources/").toFile()).orElse(null);
-    assertNotNull(comp);
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComplexComponent");
 
     assertEquals("6 instances (3 named and 3 auto-instances) should be present!", 6,
         comp.getSubComponents().size());

@@ -70,12 +70,10 @@ public class AutomatonTest extends AbstractCoCoTest {
   
   @Test
   public void testResolveBumpControlBehavior() {
-    MontiArcTool tool = new MontiArcTool();
-    String modelPath = "src/test/resources";
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "BumpControl");
     assertNotNull(node);
     
-    Scope symtab = tool.initSymbolTable(modelPath);
+    Scope symtab = this.loadDefaultSymbolTable();
     Optional<ComponentSymbol> oBControl = symtab
         .<ComponentSymbol> resolve(PACKAGE + "." + "BumpControl", ComponentSymbol.KIND);
     assertTrue(oBControl.isPresent());

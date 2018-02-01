@@ -4,7 +4,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.nio.file.Paths;
 import java.util.Optional;
 
 import org.junit.BeforeClass;
@@ -19,7 +18,6 @@ import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
-import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
@@ -35,12 +33,9 @@ public class ComponentTests extends AbstractCoCoTest {
   
   private static final String PACKAGE = "components";
   
-  private static MontiArcTool tool;
-  
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
-    tool = new MontiArcTool();
   }
   
   @Test
@@ -91,8 +86,7 @@ public class ComponentTests extends AbstractCoCoTest {
   
   @Test
   public void testResolveJavaDefaultTypes() {
-    Scope symTab = tool.initSymbolTable(Paths.get("src/test/resources").toFile(),
-        Paths.get(FAKE_JAVA_TYPES_PATH).toFile());
+    Scope symTab = this.loadDefaultSymbolTable();
     
     Optional<JTypeSymbol> javaType = symTab.resolve("String", JTypeSymbol.KIND);
     assertFalse(
