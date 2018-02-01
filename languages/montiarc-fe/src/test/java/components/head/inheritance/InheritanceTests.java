@@ -46,7 +46,7 @@ public class InheritanceTests extends AbstractCoCoTest {
   
   @Test
   public void testSuperComponents() {
-    ComponentSymbol subB = new MontiArcTool().getComponentSymbol(
+    ComponentSymbol subB = new MontiArcTool().loadComponentSymbolWithoutCocos(
         PACKAGE + "." + "SubB", Paths.get("src/test/resources/").toFile()).orElse(null);
     assertNotNull(subB);
 

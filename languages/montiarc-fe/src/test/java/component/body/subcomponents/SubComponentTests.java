@@ -41,7 +41,7 @@ public class SubComponentTests extends AbstractCoCoTest {
   
   private static final String MP = "";
   
-  private static final String PACKAGE = "component.body.subcomponents";
+  private static final String PACKAGE = "components.body.subcomponents";
   
   @BeforeClass
   public static void setUp() {

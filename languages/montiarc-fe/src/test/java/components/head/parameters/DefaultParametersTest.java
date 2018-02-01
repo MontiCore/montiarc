@@ -68,7 +68,7 @@ public class DefaultParametersTest extends AbstractCoCoTest {
     MontiArcTool tool = new MontiArcTool();
     String modelPath = "src/test/resources/";
     ComponentSymbol comp = tool
-        .getComponentSymbol("components.head.parameters.ValidDefaultParameters", Paths.get(modelPath).toFile())
+        .loadComponentSymbolWithCocos("components.head.parameters.ValidDefaultParameters", Paths.get(modelPath).toFile())
         .orElse(null);
     assertNotNull(comp);
 

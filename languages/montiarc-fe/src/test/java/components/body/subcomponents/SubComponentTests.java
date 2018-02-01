@@ -55,7 +55,6 @@ public class SubComponentTests extends AbstractCoCoTest {
   }
 
   @Test
-<<<<<<< HEAD:languages/montiarc-fe/src/test/java/components/body/subcomponents/SubComponentTests.java
   public void testSubcomponentParametersOfWrongType() {
     ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "SubcomponentParametersOfWrongType");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
@@ -68,11 +67,6 @@ public class SubComponentTests extends AbstractCoCoTest {
   @Test
   public void testGenericCompWithInnerGenericComp() {
     ComponentSymbol comp = this.loadComponent(MP, PACKAGE, "GenericCompWithInnerGenericComp");
-=======
-  public void testCompWithGenericsAndInnerGenericComponent() {
-    ComponentSymbol comp = tool.loadComponentSymbolWithoutCocos(
-        "a.GenericCompWithInnerGenericComp", Paths.get(MODEL_PATH + "/genericPorts").toFile()).orElse(null);
->>>>>>> 5ed5bce8bc803b13d10e36439a7f6d71d39037a9:languages/montiarc-fe/src/test/java/symboltable/SymtabArcdTest.java
     assertNotNull(comp);
   }
 
@@ -188,7 +182,7 @@ public class SubComponentTests extends AbstractCoCoTest {
         "Connectors should not be added to both, the connector-defining-component AND the target-component, but only to the source",
         0, inner.getConnectors().size());
 
-    Scope symTab = new MontiArcTool().createSymbolTable("src/test/resources/");
+    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources/");
     ComponentSymbol innerComp = symTab.<ComponentSymbol> resolve(
         PACKAGE + "." + "ComponentWithNamedInnerComponent.NamedInnerComponent", ComponentSymbol.KIND)
         .orElse(null);
@@ -198,14 +192,9 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testReferencingCompsWithCfg() {
-<<<<<<< HEAD:languages/montiarc-fe/src/test/java/components/body/subcomponents/SubComponentTests.java
-    ComponentSymbol comp = new MontiArcTool().getComponentSymbol(
+    ComponentSymbol comp = new MontiArcTool().loadComponentSymbolWithCocos(
         PACKAGE + "." + "ReferencingCompsWithCfg",
         Paths.get("src/test/resources/").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
-=======
-    ComponentSymbol comp = tool.loadComponentSymbolWithoutCocos(
-        "a.ReferencingCompsWithCfg", Paths.get(MODEL_PATH + "/configs").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
->>>>>>> 5ed5bce8bc803b13d10e36439a7f6d71d39037a9:languages/montiarc-fe/src/test/java/symboltable/SymtabArcdTest.java
     assertNotNull(comp);
 
 
@@ -261,13 +250,8 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testReferencingCompsWithExpression() {
-<<<<<<< HEAD:languages/montiarc-fe/src/test/java/components/body/subcomponents/SubComponentTests.java
-    ComponentSymbol comp = new MontiArcTool().getComponentSymbol(
+    ComponentSymbol comp = new MontiArcTool().loadComponentSymbolWithoutCocos(
         PACKAGE + "." + "ReferencingCompsWithExpression", Paths.get("src/test/resources/").toFile()).orElse(null);
-=======
-    ComponentSymbol comp = tool.loadComponentSymbolWithoutCocos(
-        "a.ReferencingCompsWithExpression", Paths.get(MODEL_PATH + "/configs").toFile()).orElse(null);
->>>>>>> 5ed5bce8bc803b13d10e36439a7f6d71d39037a9:languages/montiarc-fe/src/test/java/symboltable/SymtabArcdTest.java
     assertNotNull(comp);
     ComponentInstanceSymbol compWithArgsRef = comp.getSubComponent("cfg").orElse(null);
     assertNotNull(compWithArgsRef);
@@ -302,13 +286,8 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testImportedReferences() {
-<<<<<<< HEAD:languages/montiarc-fe/src/test/java/components/body/subcomponents/SubComponentTests.java
-    ComponentSymbol comp = new MontiArcTool().getComponentSymbol(
+    ComponentSymbol comp = new MontiArcTool().loadComponentSymbolWithoutCocos(
         PACKAGE + "." + "ComplexComponent", Paths.get("src/test/resources/").toFile()).orElse(null);
-=======
-    ComponentSymbol comp = tool.loadComponentSymbolWithoutCocos(
-        "a.SimpleComponent", Paths.get(MODEL_PATH + "/importedReferences").toFile()).orElse(null);
->>>>>>> 5ed5bce8bc803b13d10e36439a7f6d71d39037a9:languages/montiarc-fe/src/test/java/symboltable/SymtabArcdTest.java
     assertNotNull(comp);
 
     assertEquals("6 instances (3 named and 3 auto-instances) should be present!", 6,
@@ -347,44 +326,14 @@ public class SubComponentTests extends AbstractCoCoTest {
     ComponentSymbol qfc2Type = qfc2.getComponentType().getReferencedComponent().orElse(null);
     assertNotNull("Full-qualified usage of a component instead of importing it must be possible.",
         qfc2Type);
-<<<<<<< HEAD:languages/montiarc-fe/src/test/java/components/body/subcomponents/SubComponentTests.java
     assertEquals("Sub5", qfc2Type.getName());
     assertEquals(PACKAGE + "._subcomponents." + "Sub5", qfc2Type.getFullName());
-=======
-    assertEquals("QFComponent2", qfc2Type.getName());
-    assertEquals("d.QFComponent2", qfc2Type.getFullName());
-  }
-
-  @Test
-  public void testSuperComponents() {
-    ComponentSymbol subB = tool.loadComponentSymbolWithoutCocos(
-        "a.SubB", Paths.get(MODEL_PATH + "/superComponents").toFile()).orElse(null);
-    assertNotNull(subB);
-
-    assertNotNull(subB);
-    assertTrue(subB.getIncomingPort("anotherIn").isPresent());
-    assertTrue(subB.getOutgoingPort("anotherOut").isPresent());
-    assertTrue(subB.getOutgoingPort("anotherOut2").isPresent());
-
-    // inherited
-    assertNotNull(subB.getSpannedScope().resolve("myInput", PortSymbol.KIND));
-    assertEquals(2, subB.getAllIncomingPorts().size());
-
-    assertNotNull(subB.getSpannedScope().resolve("myOutput", PortSymbol.KIND));
-    assertNotNull(subB.getSpannedScope().resolve("myOutput519", PortSymbol.KIND));
-    assertEquals(4, subB.getAllOutgoingPorts().size());
->>>>>>> 5ed5bce8bc803b13d10e36439a7f6d71d39037a9:languages/montiarc-fe/src/test/java/symboltable/SymtabArcdTest.java
   }
 
   @Test
   public void testInnerComponents() {
-<<<<<<< HEAD:languages/montiarc-fe/src/test/java/components/body/subcomponents/SubComponentTests.java
-    ComponentSymbol comp = new MontiArcTool().getComponentSymbol(
+    ComponentSymbol comp = new MontiArcTool().loadComponentSymbolWithoutCocos(
         PACKAGE + "." + "ComponentWithInnerComponent", Paths.get("src/test/resources/").toFile()).orElse(null);
-=======
-    ComponentSymbol comp = tool.loadComponentSymbolWithoutCocos(
-        "a.ComponentWithInnerComponent", Paths.get(MODEL_PATH + "/innerComps").toFile()).orElse(null);
->>>>>>> 5ed5bce8bc803b13d10e36439a7f6d71d39037a9:languages/montiarc-fe/src/test/java/symboltable/SymtabArcdTest.java
     assertNotNull(comp);
     assertEquals("1 auto-instance and 1 named subcomponent", 2, comp
         .getSubComponents().size());
@@ -449,13 +398,8 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testInnerComponents2() {
-<<<<<<< HEAD:languages/montiarc-fe/src/test/java/components/body/subcomponents/SubComponentTests.java
-    ComponentSymbol comp = new MontiArcTool().getComponentSymbol(
+    ComponentSymbol comp = new MontiArcTool().loadComponentSymbolWithoutCocos(
         PACKAGE + "." + "InnerComponents", Paths.get("src/test/resources/").toFile()).orElse(null);
-=======
-    ComponentSymbol comp = tool.loadComponentSymbolWithoutCocos(
-        "b.InnerComponents", Paths.get(MODEL_PATH + "/innerComps").toFile()).orElse(null);
->>>>>>> 5ed5bce8bc803b13d10e36439a7f6d71d39037a9:languages/montiarc-fe/src/test/java/symboltable/SymtabArcdTest.java
     assertNotNull(comp);
 
     assertEquals("3 named subcomponents and 1 auto-instance", 4, comp

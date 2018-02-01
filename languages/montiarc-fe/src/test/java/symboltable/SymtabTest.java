@@ -143,47 +143,7 @@ public class SymtabTest {
     // typeRef.getTypeParameters().get(1).getTypeParameters().get(0).getType().getName());
   }
 
-  /**
-   * TODO: ValueSymbol!?
-   */
-  @Test
-  public void testGenericParametersSymtab3() {
-    Scope symTab = tool.initSymbolTable("src/test/resources/arc/symtab");
-    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        "params.UsingComplexGenericParams", ComponentSymbol.KIND).orElse(null);
-    assertNotNull(comp);
 
-    assertEquals(0, Log.getErrorCount());
-    assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());
-
-    ComponentInstanceSymbol delay = (ComponentInstanceSymbol) comp.getSpannedScope()
-        .resolve("cp", ComponentInstanceSymbol.KIND).orElse(null);
-    assertNotNull(delay);
-    assertEquals("cp", delay.getName());
-
-    assertEquals(2, delay.getConfigArguments().size());
-    assertEquals("new int[] {1, 2, 3}", SymbolPrinter.printConfigArgument(delay.getConfigArguments().get(0)));
-    // TODO value symbol
-    // assertEquals(Kind.ConstructorCall, delay.getConfigArguments().get(0).getKind());
-    // assertEquals("1",
-    // delay.getConfigArguments().get(0).getConstructorArguments().get(0).getValue());
-    // assertEquals("2",
-    // delay.getConfigArguments().get(0).getConstructorArguments().get(1).getValue());
-    // assertEquals("3",
-    // delay.getConfigArguments().get(0).getConstructorArguments().get(2).getValue());
-
-    assertEquals("new HashMap<List<K>, List<V>>()", SymbolPrinter.printConfigArgument(delay.getConfigArguments().get(1)));
-    // TODO value symbol
-    // assertEquals(Kind.ConstructorCall, delay.getConfigArguments().get(1).getKind());
-    // ArcdTypeReferenceEntry typeRef = delay.getConfigArguments().get(1).getType();
-    // assertEquals("java.util.List", typeRef.getTypeParameters().get(0).getType().getName());
-    // assertEquals("java.util.List", typeRef.getTypeParameters().get(1).getType().getName());
-    // assertEquals("K",
-    // typeRef.getTypeParameters().get(0).getTypeParameters().get(0).getType().getName());
-    // assertEquals("V",
-    // typeRef.getTypeParameters().get(1).getTypeParameters().get(0).getType().getName());
-
-  }
 
   @Test
   public void testPortStereoType() {
