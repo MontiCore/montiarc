@@ -11,7 +11,6 @@ import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
-import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
@@ -24,8 +23,6 @@ import montiarc.cocos.IdentifiersAreUnique;
  */
 public class InvariantTests extends AbstractCoCoTest {
   
-  private static final String MP = "";
-  
   private static final String PACKAGE = "components.body.invariants";
   
   @BeforeClass
@@ -36,7 +33,7 @@ public class InvariantTests extends AbstractCoCoTest {
   @Test
   public void testInexistingPortType() {
     // TODO: Star imports?
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "AmbiguousInvariantNames");
+    ASTMontiArcNode node = getAstNode(PACKAGE + "." + "AmbiguousInvariantNames");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         node,
         new ExpectedErrorInfo(2, "xMA052"));
@@ -45,7 +42,7 @@ public class InvariantTests extends AbstractCoCoTest {
   @Ignore("TODO ocl invariants?")
   @Test
   public void testAdaptOCLFieldToPort() {
-    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources/");
+    Scope symTab = this.loadDefaultSymbolTable();
     ComponentSymbol parent = symTab.<ComponentSymbol> resolve(
         PACKAGE + "." + "OCLFieldToPort", ComponentSymbol.KIND).orElse(null);
     assertNotNull(parent);
@@ -57,7 +54,7 @@ public class InvariantTests extends AbstractCoCoTest {
   @Ignore("TODO ocl invariants?")
   @Test
   public void testAdaptOCLFieldToArcdField() {
-    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources/");
+    Scope symTab = this.loadDefaultSymbolTable();
     ComponentSymbol parent = symTab.<ComponentSymbol> resolve(
         PACKAGE + "." + "OCLFieldToArcField", ComponentSymbol.KIND).orElse(null);
     assertNotNull(parent);

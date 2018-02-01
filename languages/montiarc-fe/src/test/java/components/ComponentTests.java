@@ -55,7 +55,7 @@ public class ComponentTests extends AbstractCoCoTest {
   
   @Test
   public void testCDType2JavaType() {
-    Scope symTab = tool.initSymbolTable("src/test/resources/");
+    Scope symTab = this.loadDefaultSymbolTable();
     CDTypeSymbol cdType = symTab
         .<CDTypeSymbol> resolve("types.Datatypes.MotorCommand", CDTypeSymbol.KIND)
         .orElse(null);
@@ -68,7 +68,7 @@ public class ComponentTests extends AbstractCoCoTest {
   
   @Test
   public void testCDField2JavaField() {
-    Scope symTab = tool.initSymbolTable("src/test/resources/");
+    Scope symTab = this.loadDefaultSymbolTable();
     CDFieldSymbol cdField = symTab
         .<CDFieldSymbol> resolve("types.Datatypes.MotorCommand.STOP", CDFieldSymbol.KIND)
         .orElse(null);

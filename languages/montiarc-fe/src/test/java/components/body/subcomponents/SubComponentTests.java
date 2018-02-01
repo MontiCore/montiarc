@@ -51,10 +51,8 @@ import montiarc.helper.SymbolPrinter;
  */
 public class SubComponentTests extends AbstractCoCoTest {
 
-  private static final String MP = "";
-
   private static final String PACKAGE = "components.body.subcomponents";
-
+  
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
@@ -62,7 +60,7 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testSubcomponentParametersOfWrongType() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "SubcomponentParametersOfWrongType");
+    ASTMontiArcNode node = getAstNode(PACKAGE + "." + "SubcomponentParametersOfWrongType");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
         node, new ExpectedErrorInfo(1, "xMA064"));
   }
@@ -72,19 +70,19 @@ public class SubComponentTests extends AbstractCoCoTest {
    */
   @Test
   public void testGenericCompWithInnerGenericComp() {
-    ComponentSymbol comp = this.loadComponent(MP, PACKAGE, "GenericCompWithInnerGenericComp");
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "GenericCompWithInnerGenericComp");
     assertNotNull(comp);
   }
 
   @Test
   public void testConfigurableComponentWithInnerCfgComp() {
-    ComponentSymbol comp = this.loadComponent(MP, PACKAGE, "ConfigurableComponentWithInnerCfgComp");
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ConfigurableComponentWithInnerCfgComp");
     assertNotNull(comp);
   }
 
   @Test
   public void testComponentInstanceNamesAmbiguous() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ComponentInstanceNamesAmbiguous");
+    ASTMontiArcNode node = getAstNode(PACKAGE + "." + "ComponentInstanceNamesAmbiguous");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentInstanceNamesAreUnique()),
         node,
         new ExpectedErrorInfo(2, "xMA061"));
@@ -92,14 +90,14 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testComponentWithTypeParametersLacksInstance() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ComponentWithTypeParametersLacksInstance");
+    ASTMontiArcNode node = getAstNode(PACKAGE + "." + "ComponentWithTypeParametersLacksInstance");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
         node, new ExpectedErrorInfo(1, "xMA009"));
   }
 
   @Test
   public void testReferencedSubComponentsExists() {
-    checkValid(MP, PACKAGE + "." + "ReferencedSubComponentsExists");
+    checkValid(PACKAGE + "." + "ReferencedSubComponentsExists");
   }
 
   @Test
@@ -113,7 +111,7 @@ public class SubComponentTests extends AbstractCoCoTest {
    */
   public void testInexistingSubComponent() {
     Log.getFindings().clear();
-    getAstNode(MP, PACKAGE + "." + "InexistingSubComponent");
+    getAstNode(PACKAGE + "." + "InexistingSubComponent");
     ExpectedErrorInfo.setERROR_CODE_PATTERN(Pattern.compile("x[0-9A-F]{5}"));
     ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xA1038");
     errors.checkExpectedPresent(Log.getFindings(), "No errors found!");
@@ -122,18 +120,18 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testWrongSubComponentArgument() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "WrongSubComponentArgument");
+    ASTMontiArcNode node = getAstNode(PACKAGE + "." + "WrongSubComponentArgument");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA064"));
   }
 
   @Test
   public void testComponentWithTypeParametersHasInstance() {
-    checkValid(MP, PACKAGE + "." + "ComponentWithTypeParametersHasInstance");
+    checkValid(PACKAGE + "." + "ComponentWithTypeParametersHasInstance");
   }
 
   @Test
   public void testInvalidNestedComponentWithTypeParameterLacksInstance() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "NestedComponentWithTypeParameterLacksInstance");
+    ASTMontiArcNode node = getAstNode(PACKAGE + "." + "NestedComponentWithTypeParameterLacksInstance");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
         node, new ExpectedErrorInfo(1, "xMA009"));
   }
@@ -141,7 +139,7 @@ public class SubComponentTests extends AbstractCoCoTest {
   @Test
   public void testComponentWithNamedInnerComponent() {
     String unqualifiedComponentName = "ComponentWithNamedInnerComponent";
-    ComponentSymbol comp = this.loadComponent(MP, PACKAGE, unqualifiedComponentName);
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, unqualifiedComponentName);
 
     assertFalse(comp.isInnerComponent());
     assertEquals(0, comp.getConfigParameters().size());
@@ -188,7 +186,7 @@ public class SubComponentTests extends AbstractCoCoTest {
         "Connectors should not be added to both, the connector-defining-component AND the target-component, but only to the source",
         0, inner.getConnectors().size());
 
-    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources/");
+    Scope symTab = this.loadDefaultSymbolTable();
     ComponentSymbol innerComp = symTab.<ComponentSymbol> resolve(
         PACKAGE + "." + "ComponentWithNamedInnerComponent.NamedInnerComponent", ComponentSymbol.KIND)
         .orElse(null);
@@ -200,9 +198,8 @@ public class SubComponentTests extends AbstractCoCoTest {
   public void testReferencingCompsWithCfg() {
     ComponentSymbol comp = new MontiArcTool().loadComponentSymbolWithCocos(
         PACKAGE + "." + "ReferencingCompsWithCfg",
-        Paths.get("src/test/resources/").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+        Paths.get(MODEL_PATH).toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
     assertNotNull(comp);
-
 
     ComponentInstanceSymbol compWithArgsRef = comp.getSubComponent("cfg").orElse(null);
     assertNotNull(compWithArgsRef);
@@ -256,9 +253,7 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testReferencingCompsWithExpression() {
-    ComponentSymbol comp = new MontiArcTool().loadComponentSymbolWithoutCocos(
-        PACKAGE + "." + "ReferencingCompsWithExpression", Paths.get("src/test/resources/").toFile()).orElse(null);
-    assertNotNull(comp);
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ReferencingCompsWithExpression");
     ComponentInstanceSymbol compWithArgsRef = comp.getSubComponent("cfg").orElse(null);
     assertNotNull(compWithArgsRef);
 
@@ -338,9 +333,7 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testInnerComponents() {
-    ComponentSymbol comp = new MontiArcTool().loadComponentSymbolWithoutCocos(
-        PACKAGE + "." + "ComponentWithInnerComponent", Paths.get("src/test/resources/").toFile()).orElse(null);
-    assertNotNull(comp);
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComponentWithInnerComponent");
     assertEquals("1 auto-instance and 1 named subcomponent", 2, comp
         .getSubComponents().size());
     assertEquals(1, comp.getInnerComponents().size());
@@ -404,9 +397,7 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testInnerComponents2() {
-    ComponentSymbol comp = new MontiArcTool().loadComponentSymbolWithoutCocos(
-        PACKAGE + "." + "InnerComponents", Paths.get("src/test/resources/").toFile()).orElse(null);
-    assertNotNull(comp);
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "InnerComponents");
 
     assertEquals("3 named subcomponents and 1 auto-instance", 4, comp
         .getSubComponents().size());
@@ -466,7 +457,7 @@ public class SubComponentTests extends AbstractCoCoTest {
   @Ignore("ValueSymbol?!")
   @Test
   public void testUsingSCWithParams() {
-    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources/");
+    Scope symTab = this.loadDefaultSymbolTable();
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         PACKAGE + "." + "UsingSCWithParams", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
@@ -494,7 +485,7 @@ public class SubComponentTests extends AbstractCoCoTest {
    */
   @Test
   public void testUsingComplexParams() {
-    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources/");
+    Scope symTab = this.loadDefaultSymbolTable();
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         PACKAGE + "." + "UsingComplexParams", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);

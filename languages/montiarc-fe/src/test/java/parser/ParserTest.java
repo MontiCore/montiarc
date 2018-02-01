@@ -54,7 +54,7 @@ public class ParserTest {
       // The name of the component is not identical to the name of the file
       MODEL_PATH + "/arc/context/a/S3.arc",
       
-   // The name of the component is not identical to the name of the file
+      // The name of the component is not identical to the name of the file
       MODEL_PATH + "/components/head/name/NameClashB.arc",
 
       // The package declaration of the component must not differ from the package of the component file.
@@ -64,7 +64,11 @@ public class ParserTest {
       MODEL_PATH + "/arc/prettyPrint/example1/StatusControl.arc",
 
       // TODO we do not support OCL Expressions yet
-      MODEL_PATH + "/arc/symtab/ocl/OCLFieldToPort.arc")
+      MODEL_PATH + "/components/body/invariants/OCLFieldToField.arc",
+      
+      // TODO we do not support OCL Expressions yet
+      MODEL_PATH + "/components/body/invariants/OCLFieldToPort.arc"
+      )
 
       .stream().map(s -> Paths.get(s).toString())
       .collect(Collectors.toList());

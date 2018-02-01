@@ -132,7 +132,7 @@ public class ConnectorTests extends AbstractCoCoTest {
   
   @Test
   public void testConnectorsWithStereotypes() {
-    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources/");
+    Scope symTab = this.loadDefaultSymbolTable();
     ConnectorSymbol connector = symTab
         .<ConnectorSymbol> resolve(PACKAGE + "." + "ConnectorsWithStereotypes.myOut",
             ConnectorSymbol.KIND)

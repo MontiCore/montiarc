@@ -13,7 +13,6 @@ import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
-import montiarc.MontiArcTool;
 
 /**
  * This class checks all context conditions related to component names
@@ -23,7 +22,6 @@ import montiarc.MontiArcTool;
  * @since 4.2.0
  */
 public class NameTests extends AbstractCoCoTest {
-  private static final String MP = "src/test/resources/";
   
   private static final String PACKAGE = "components.head.name";
   
@@ -37,12 +35,11 @@ public class NameTests extends AbstractCoCoTest {
     Log.getFindings().clear();
     
     // given
-    MontiArcTool tool = new MontiArcTool();
     String qualifiedName = PACKAGE + "." + "NameClashB";
     
     // when
     try {
-      tool.parse(MP + PACKAGE.replace(".", "/") + "/NameClashB.arc");
+      MONTIARCTOOL.parse(MODEL_PATH + PACKAGE.replace(".", "/") + "/NameClashB.arc");
       assertEquals(1, Log.getErrorCount());
       return;
     }

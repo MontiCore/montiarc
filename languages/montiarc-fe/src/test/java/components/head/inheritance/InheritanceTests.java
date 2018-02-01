@@ -5,14 +5,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.nio.file.Paths;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
-import montiarc.MontiArcTool;
 import montiarc._parser.MontiArcParser;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
@@ -24,7 +21,6 @@ import montiarc._symboltable.PortSymbol;
  */
 public class InheritanceTests extends AbstractCoCoTest {
   
-  private static final String MP = "";
   private static final String PACKAGE = "components.head.inheritance";
   
   @BeforeClass
@@ -46,8 +42,7 @@ public class InheritanceTests extends AbstractCoCoTest {
   
   @Test
   public void testSuperComponents() {
-    ComponentSymbol subB = new MontiArcTool().loadComponentSymbolWithoutCocos(
-        PACKAGE + "." + "SubB", Paths.get("src/test/resources/").toFile()).orElse(null);
+    ComponentSymbol subB = this.loadComponentSymbol(PACKAGE, "SubB");
     assertNotNull(subB);
 
     assertNotNull(subB);

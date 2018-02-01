@@ -16,7 +16,8 @@ import montiarc._symboltable.ComponentSymbol;
 
 public class ModelLoaderTests {
   
-  private final String MP = "src/test/resources/";
+  private final String MODEL_PATH = "src/test/resources/";
+  
   public static final boolean ENABLE_FAIL_QUICK = true;
 
   private static MontiArcTool tool;
@@ -38,10 +39,10 @@ public class ModelLoaderTests {
   
   @Test
   public void testModelLoader() {
-    Optional<ComponentSymbol> sym = tool.loadComponentSymbolWithoutCocos("tooling.modelloader.industry.PIController", Paths.get(MP).toFile());
+    Optional<ComponentSymbol> sym = tool.loadComponentSymbolWithoutCocos("tooling.modelloader.industry.PIController", Paths.get(MODEL_PATH).toFile());
     assertTrue(sym.isPresent());
     
-    Optional<ComponentSymbol> sym2 = tool.loadComponentSymbolWithoutCocos("tooling.modelloader.industry2.PIController", Paths.get(MP).toFile());
+    Optional<ComponentSymbol> sym2 = tool.loadComponentSymbolWithoutCocos("tooling.modelloader.industry2.PIController", Paths.get(MODEL_PATH).toFile());
     assertTrue(sym2.isPresent());
     
     assertTrue(sym.get() != sym2.get());
@@ -50,7 +51,7 @@ public class ModelLoaderTests {
   // resolves also to the same ComponentSymbol even both are in different packages
   @Test
   public void testSymbolTableResolve() {
-    Scope scope = tool.initSymbolTable(MP);
+    Scope scope = tool.initSymbolTable(MODEL_PATH);
     
     Optional<ComponentSymbol> sym3 = getGlobalScope(scope)
         .<ComponentSymbol> resolveDown("tooling.modelloader.industry.PIController", ComponentSymbol.KIND);

@@ -16,29 +16,24 @@ import org.junit.Test;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcTool;
+import infrastructure.AbstractCoCoTest;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 
-public class AutoInstantiationTest {
-  
-  private final String MP = "src/test/resources/";
+public class AutoInstantiationTest extends AbstractCoCoTest {
   
   private static final String PACKAGE = "components.body.autoinstantiate";
-  
-  private static MontiArcTool tool;
   
   @BeforeClass
   public static void setUp() {
     // ensure an empty log
     Log.getFindings().clear();
     Log.enableFailQuick(false);
-    tool = new MontiArcTool();
   }
   
   private ComponentSymbol loadComponent(String unqualifiedComponentName) {
-    Scope symTab = tool.initSymbolTable(MP);
+    Scope symTab = this.loadDefaultSymbolTable();
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         PACKAGE + "." + unqualifiedComponentName, ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);

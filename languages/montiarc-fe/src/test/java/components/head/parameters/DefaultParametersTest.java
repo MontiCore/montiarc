@@ -10,7 +10,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.junit.BeforeClass;
@@ -65,11 +64,7 @@ public class DefaultParametersTest extends AbstractCoCoTest {
 
   @Test
   public void testValidDefaultParameters() {
-    MontiArcTool tool = new MontiArcTool();
-    String modelPath = "src/test/resources/";
-    ComponentSymbol comp = tool
-        .loadComponentSymbolWithCocos("components.head.parameters.ValidDefaultParameters", Paths.get(modelPath).toFile())
-        .orElse(null);
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ValidDefaultParameters") ;
     assertNotNull(comp);
 
     List<JFieldSymbol> params = comp.getConfigParameters();

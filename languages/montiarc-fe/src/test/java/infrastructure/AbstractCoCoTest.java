@@ -11,6 +11,8 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.nio.file.Paths;
 
+import org.junit.Before;
+
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTool;
@@ -23,11 +25,11 @@ import montiarc._symboltable.ComponentSymbol;
  * 
  * @author (last commit) Crispin Kirchner, Andreas Wortmann
  */
-public class AbstractCoCoTest {
+public abstract class AbstractCoCoTest {
   
-  private static final String MODEL_PATH = "src/test/resources/";
+  protected static final String MODEL_PATH = "src/test/resources/";
   
-  private static final MontiArcTool MONTIARCTOOL = new MontiArcTool();
+  protected static final MontiArcTool MONTIARCTOOL = new MontiArcTool();
   
   protected static ASTMontiArcNode getAstNode(String modelPath, String model) {
     File f = Paths.get(MODEL_PATH + modelPath).toFile();
@@ -38,6 +40,20 @@ public class AbstractCoCoTest {
     
     return (ASTMontiArcNode) comp.getAstNode().get();
   }
+  
+  protected static ASTMontiArcNode getAstNode(String qualifiedModelName) {
+    return getAstNode("", qualifiedModelName);
+  }
+  
+  @Before
+  public void cleanUpLog() {
+    Log.getFindings().clear();
+  }
+  
+  protected Scope loadDefaultSymbolTable() {
+    return MONTIARCTOOL.initSymbolTable(Paths.get(MODEL_PATH).toFile(),
+        Paths.get("src/main/resources/defaultTypes").toFile()); 
+   }
   
   /**
    * Checks all cocos on the given model. Don't use for writing new test cases, use checkValid and
@@ -62,6 +78,10 @@ public class AbstractCoCoTest {
     new ExpectedErrorInfo().checkOnlyExpectedPresent(Log.getFindings());
   }
   
+  protected static void checkValid(String model) {
+    checkValid("", model);
+  }
+  
   /**
    * Runs coco checks on the model with two different coco sets: Once with all cocos, checking that
    * the expected errors are present; once only with the given cocos, checking that no addditional
@@ -83,8 +103,8 @@ public class AbstractCoCoTest {
         + "the given coco. Did you pass an empty coco checker?");
   }
   
-  protected ComponentSymbol loadComponent(String modelPath, String packageName, String unqualifiedComponentName) {
-    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources/" + modelPath);
+  protected ComponentSymbol loadComponentSymbol(String modelPath, String packageName, String unqualifiedComponentName) {
+    Scope symTab = new MontiArcTool().initSymbolTable(MODEL_PATH + modelPath);
     String qualifiedName = packageName + "." + unqualifiedComponentName;
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         qualifiedName, ComponentSymbol.KIND).orElse(null);
@@ -95,6 +115,10 @@ public class AbstractCoCoTest {
     assertEquals(qualifiedName, comp.getFullName());
     
     return comp;
+  }
+  
+  protected ComponentSymbol loadComponentSymbol(String packageName, String unqualifiedComponentName) {
+    return this.loadComponentSymbol("", packageName, unqualifiedComponentName);
   }
 
 }

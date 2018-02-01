@@ -52,7 +52,7 @@ public class ParametersTest extends AbstractCoCoTest {
   @Test
   public void testComponentWithParameters() {
     String unqualifiedComponentName = "ComponentWithParameters";
-    ComponentSymbol comp = this.loadComponent(MP, PACKAGE, unqualifiedComponentName);
+    ComponentSymbol comp = this.loadComponentSymbol(MP, PACKAGE, unqualifiedComponentName);
     
     assertFalse(comp.isInnerComponent());
     assertEquals(1, comp.getConfigParameters().size());
