@@ -16,7 +16,6 @@ import montiarc.cocos.MontiArcCoCos;
  */
 public class TransitionTests extends AbstractCoCoTest {
   
-  private static final String MP = "";
   private static final String PACKAGE = "components.body.automaton.transition";
   
   @BeforeClass
@@ -26,7 +25,7 @@ public class TransitionTests extends AbstractCoCoTest {
   
   @Test
   public void testUsingUndefinedStates() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "UsingUndefinedStates");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UsingUndefinedStates");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(6, "xMA026", "xMA027"));
   }
 }

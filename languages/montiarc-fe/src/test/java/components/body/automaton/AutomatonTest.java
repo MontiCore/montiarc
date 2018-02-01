@@ -25,7 +25,6 @@ import montiarc.cocos.MontiArcCoCos;
  */
 public class AutomatonTest extends AbstractCoCoTest {
   
-  private static final String MP = "";
   private static final String PACKAGE = "components.body.automaton";
   
   @BeforeClass
@@ -35,45 +34,45 @@ public class AutomatonTest extends AbstractCoCoTest {
   
   @Test
   public void testMutipleBehaviors() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "MultipleAutomata");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MultipleAutomata");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(2, "xMA050"));
   }
   
   @Test
   public void testImplementationInNonAtomicComponent() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "AutomatonInComposedComponent");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AutomatonInComposedComponent");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA051"));
   }
 
   @Test
   public void testLowerCaseAutomatonName() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "AutomatonWithLowerCaseName");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AutomatonWithLowerCaseName");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA015"));
   }
 
   @Test
   public void testAutomatonHasStates() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "AutomatonWithoutState");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AutomatonWithoutState");
     checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA014"));
   }
 
   @Test
   public void testAutomatonHasNoInitialStates() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "AutomatonWithoutInitialState");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AutomatonWithoutInitialState");
     // automaton has states but no initial state -> exactly 1 error.
     checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA013"));
   }
   
   @Test
   public void testValidAutomaton() {
-    checkValid(MP, PACKAGE + "." + "ValidAutomaton");
+    checkValid(PACKAGE + "." + "ValidAutomaton");
   }
   
   @Test
   public void testResolveBumpControlBehavior() {
     MontiArcTool tool = new MontiArcTool();
     String modelPath = "src/test/resources";
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "BumpControl");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "BumpControl");
     assertNotNull(node);
     
     Scope symtab = tool.initSymbolTable(modelPath);

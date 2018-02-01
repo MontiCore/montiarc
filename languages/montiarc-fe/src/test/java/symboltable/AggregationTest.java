@@ -29,6 +29,7 @@ import de.monticore.umlcd4a.CD4AnalysisLanguage;
 import de.monticore.umlcd4a.symboltable.CDSymbol;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.AbstractCoCoTest;
 import montiarc.MontiArcTool;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
@@ -37,7 +38,7 @@ import montiarc._symboltable.PortSymbol;
  * @author Crispin Kirchner, Andreas Wortmann
  * @version $Revision$, $Date$
  */
-public class AggregationTest {
+public class AggregationTest extends AbstractCoCoTest {
   
   private final String MODEL_PATH = "src/test/resources/symboltable";
   
@@ -201,7 +202,7 @@ public class AggregationTest {
    * Tests wether we can get methods from the symbol table
    */
   public void testMethod() {
-    Scope symTab = tool.initSymbolTable(Paths.get(MODEL_PATH).toFile(), Paths.get("src/main/resources/defaultTypes").toFile());
+    Scope symTab = tool.initSymbolTable(Paths.get(MODEL_PATH).toFile(), Paths.get(FAKE_JAVA_TYPES_PATH).toFile());
     
     ComponentSymbol simulationSymbol = symTab
         .<ComponentSymbol> resolve("superclass.Simulation", ComponentSymbol.KIND)

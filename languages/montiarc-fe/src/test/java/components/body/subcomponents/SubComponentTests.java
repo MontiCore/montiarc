@@ -60,7 +60,7 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testSubcomponentParametersOfWrongType() {
-    ASTMontiArcNode node = getAstNode(PACKAGE + "." + "SubcomponentParametersOfWrongType");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentParametersOfWrongType");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
         node, new ExpectedErrorInfo(1, "xMA064"));
   }
@@ -82,7 +82,7 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testComponentInstanceNamesAmbiguous() {
-    ASTMontiArcNode node = getAstNode(PACKAGE + "." + "ComponentInstanceNamesAmbiguous");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ComponentInstanceNamesAmbiguous");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentInstanceNamesAreUnique()),
         node,
         new ExpectedErrorInfo(2, "xMA061"));
@@ -90,7 +90,7 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testComponentWithTypeParametersLacksInstance() {
-    ASTMontiArcNode node = getAstNode(PACKAGE + "." + "ComponentWithTypeParametersLacksInstance");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ComponentWithTypeParametersLacksInstance");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
         node, new ExpectedErrorInfo(1, "xMA009"));
   }
@@ -111,7 +111,7 @@ public class SubComponentTests extends AbstractCoCoTest {
    */
   public void testInexistingSubComponent() {
     Log.getFindings().clear();
-    getAstNode(PACKAGE + "." + "InexistingSubComponent");
+    loadComponentAST(PACKAGE + "." + "InexistingSubComponent");
     ExpectedErrorInfo.setERROR_CODE_PATTERN(Pattern.compile("x[0-9A-F]{5}"));
     ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xA1038");
     errors.checkExpectedPresent(Log.getFindings(), "No errors found!");
@@ -120,7 +120,7 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testWrongSubComponentArgument() {
-    ASTMontiArcNode node = getAstNode(PACKAGE + "." + "WrongSubComponentArgument");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongSubComponentArgument");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA064"));
   }
 
@@ -131,7 +131,7 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testInvalidNestedComponentWithTypeParameterLacksInstance() {
-    ASTMontiArcNode node = getAstNode(PACKAGE + "." + "NestedComponentWithTypeParameterLacksInstance");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "NestedComponentWithTypeParameterLacksInstance");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
         node, new ExpectedErrorInfo(1, "xMA009"));
   }
@@ -196,9 +196,9 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testReferencingCompsWithCfg() {
-    ComponentSymbol comp = new MontiArcTool().loadComponentSymbolWithCocos(
+    ComponentSymbol comp = MONTIARCTOOL.loadComponentSymbolWithCocos(
         PACKAGE + "." + "ReferencingCompsWithCfg",
-        Paths.get(MODEL_PATH).toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+        Paths.get(MODEL_PATH).toFile(), Paths.get(FAKE_JAVA_TYPES_PATH).toFile()).orElse(null);
     assertNotNull(comp);
 
     ComponentInstanceSymbol compWithArgsRef = comp.getSubComponent("cfg").orElse(null);
@@ -287,7 +287,7 @@ public class SubComponentTests extends AbstractCoCoTest {
 
   @Test
   public void testImportedReferences() {
-    ComponentSymbol comp = new MontiArcTool().loadComponentSymbolWithoutCocos(
+    ComponentSymbol comp = MONTIARCTOOL.loadComponentSymbolWithoutCocos(
         PACKAGE + "." + "ComplexComponent", Paths.get("src/test/resources/").toFile()).orElse(null);
     assertNotNull(comp);
 

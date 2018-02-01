@@ -62,7 +62,7 @@ public class SubComponentTests extends AbstractCoCoTest {
   
   @Test
   public void testComponentEntryIsDelayed() {
-    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources");
+    Scope symTab = MONTIARCTOOL.initSymbolTable("src/test/resources");
     ComponentSymbol parent = symTab.<ComponentSymbol> resolve(
         PACKAGE + "." + "Timing", ComponentSymbol.KIND).orElse(null);
     assertNotNull(parent);

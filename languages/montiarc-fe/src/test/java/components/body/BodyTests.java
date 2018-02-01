@@ -17,8 +17,6 @@ import montiarc.cocos.MontiArcCoCos;
  */
 public class BodyTests extends AbstractCoCoTest {
   
-  private static final String MP = "";
-  
   private static final String PACKAGE = "components.body";
   
   @BeforeClass
@@ -28,13 +26,13 @@ public class BodyTests extends AbstractCoCoTest {
   
   @Test
   public void testComponentWithAJavaAndAutomaton() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ComponentWithAJavaAndAutomaton");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ComponentWithAJavaAndAutomaton");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA050"));
   }
   
   @Test
   public void testAmbiguousPortAndVariableNames() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "AmbiguousPortAndVariableNames");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousPortAndVariableNames");
     checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(6,  "xMA035", "xMA053"));
   }
   

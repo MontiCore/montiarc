@@ -33,7 +33,7 @@ public class InvariantTests extends AbstractCoCoTest {
   @Test
   public void testInexistingPortType() {
     // TODO: Star imports?
-    ASTMontiArcNode node = getAstNode(PACKAGE + "." + "AmbiguousInvariantNames");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousInvariantNames");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         node,
         new ExpectedErrorInfo(2, "xMA052"));

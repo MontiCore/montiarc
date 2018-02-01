@@ -17,8 +17,6 @@ import montiarc.cocos.MontiArcCoCos;
  */
 public class StimuliTests extends AbstractCoCoTest {
   
-  private static final String MP = "";
-  
   private static final String PACKAGE = "components.body.automaton.transition.stimuli";
   
   @BeforeClass
@@ -31,7 +29,7 @@ public class StimuliTests extends AbstractCoCoTest {
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testMultipleAssignmentTypeConflics() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "MultipleAssignmentTypeConflics");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MultipleAssignmentTypeConflics");
     checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA046"));
   }
 

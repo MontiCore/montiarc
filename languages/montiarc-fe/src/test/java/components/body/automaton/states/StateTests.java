@@ -19,8 +19,6 @@ import montiarc.cocos.MontiArcCoCos;
  */
 public class StateTests extends AbstractCoCoTest {
   
-  private static final String MP = "";
-  
   private static final String PACKAGE = "components.body.automaton.states";
   
   @BeforeClass
@@ -30,26 +28,26 @@ public class StateTests extends AbstractCoCoTest {
   
   @Test
   public void testDoubleDefinitionOfSameInitial() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "DoubleDefinitionOfSameInitial");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "DoubleDefinitionOfSameInitial");
     checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA029"));
   }
   
   @Test
   public void testStateDefinedMultipleTimes() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "StateDefinedMultipleTimes");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "StateDefinedMultipleTimes");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new AutomatonStateDefinedMultipleTimes());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA031"));
   }
   
   @Test
   public void testConflictingStereotypes() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ConflictingStereotypes");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ConflictingStereotypes");
     checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(4, "xMA031", "xMA034"));
   }
   
   @Test
   public void testUndefinedInitialState() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "UndefinedInitialState");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UndefinedInitialState");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA025"));
   }
   
@@ -58,7 +56,7 @@ public class StateTests extends AbstractCoCoTest {
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testInvalidInitialAssignment() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "InvalidInitialAssignment");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "InvalidInitialAssignment");
     checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA039"));
   }
   

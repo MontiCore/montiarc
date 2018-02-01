@@ -16,7 +16,6 @@ import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
-import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcASTConnectorCoCo;
 import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
@@ -34,8 +33,6 @@ import montiarc.cocos.SimpleConnectorSourceExists;
  */
 public class ConnectorTests extends AbstractCoCoTest {
   
-  private static final String MP = "";
-  
   private static final String PACKAGE = "components.body.connectors";
   
   @BeforeClass
@@ -45,29 +42,29 @@ public class ConnectorTests extends AbstractCoCoTest {
   
   @Test
   public void testSimpleConnectorSourceExists() {
-    checkValid(MP, PACKAGE + "." + "SimpleConnectorSourceExists");
+    checkValid(PACKAGE + "." + "SimpleConnectorSourceExists");
   }
   
   @Test
   public void testSimpleConnectorSourceExistsExternal() {
-    checkValid(MP, PACKAGE + "." + "SimpleConnectorSourceExistsExternal");
+    checkValid(PACKAGE + "." + "SimpleConnectorSourceExistsExternal");
   }
   
   @Test
   public void testSimpleConnectorSourceUnqualified() {
-    checkValid(MP, PACKAGE + "." + "SimpleConnectorSourceUnqualified");
+    checkValid(PACKAGE + "." + "SimpleConnectorSourceUnqualified");
   }
   
   @Test
   public void testSimpleConnectorSourceNonExistant() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "SimpleConnectorSourceNonExistant");
+    ASTMontiArcNode node = loadComponentAST( PACKAGE + "." + "SimpleConnectorSourceNonExistant");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SimpleConnectorSourceExists()),
         node, new ExpectedErrorInfo(1, "xMA072"));
   }
   
   @Test
   public void testSimpleConnectorSourceInvalid() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "SimpleConnectorSourceFullyQualified");
+    ASTMontiArcNode node = loadComponentAST( PACKAGE + "." + "SimpleConnectorSourceFullyQualified");
     checkInvalid(
         new MontiArcCoCoChecker()
             .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified()),
@@ -76,12 +73,12 @@ public class ConnectorTests extends AbstractCoCoTest {
   
   @Test
   public void testConnectorNotPiercingThroughInterface() {
-    checkValid(MP, PACKAGE + "." + "ConnectorNotPiercingThroughInterface");
+    checkValid(PACKAGE + "." + "ConnectorNotPiercingThroughInterface");
   }
   
   @Test
   public void testConnectorSourceInvalid() {
-    ASTMontiArcNode node = getAstNode(MP,
+    ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "ConnectorPiercingOutwardsThroughInterface");
     checkInvalid(
         new MontiArcCoCoChecker()
@@ -91,7 +88,7 @@ public class ConnectorTests extends AbstractCoCoTest {
   
   @Test
   public void testConnectorTargetInvalid() {
-    ASTMontiArcNode node = getAstNode(MP,
+    ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "ConnectorPiercingInwardsThroughInterface");
     checkInvalid(
         new MontiArcCoCoChecker()
@@ -103,7 +100,7 @@ public class ConnectorTests extends AbstractCoCoTest {
    * qualified simple connector sources. */
   @Test
   public void testMultipleWrongConnectors() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "WrongConnectors");
+    ASTMontiArcNode node = loadComponentAST( PACKAGE + "." + "WrongConnectors");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified());
@@ -114,7 +111,7 @@ public class ConnectorTests extends AbstractCoCoTest {
   /* Checks whether there are connectors in a component that wrongly connect ports of the same
    * component */
   public void testConnectorSourceAndTargetDifferentComponent() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "ConnectorSourceAndTargetSameComponent");
+    ASTMontiArcNode node = loadComponentAST( PACKAGE + "." + "ConnectorSourceAndTargetSameComponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetComponentDiffer());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA075"));
@@ -123,7 +120,7 @@ public class ConnectorTests extends AbstractCoCoTest {
   @Test
   /* Checks whether the source and target of a connect statement exist. */
   public void testMissingSourceAndTargetDefinition() {
-    ASTMontiArcNode node = getAstNode(MP,
+    ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "MissingSourceTargetDefinitionInSubcomponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetExist());

@@ -33,8 +33,6 @@ import montiarc.cocos.TopLevelComponentHasNoInstanceName;
  */
 public class ComponentTests extends AbstractCoCoTest {
   
-  private static final String MP = "";
-  
   private static final String PACKAGE = "components";
   
   private static MontiArcTool tool;
@@ -48,7 +46,7 @@ public class ComponentTests extends AbstractCoCoTest {
   @Test
   /* Checks whether there is a redundant import statements. For example import a.*; import a.*; */
   public void testRedundantImports() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "RedundantImports");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "RedundantImports");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA074"));
   }
@@ -80,12 +78,12 @@ public class ComponentTests extends AbstractCoCoTest {
   
   @Test
   public void testTopLevelComponentHasNoInstanceName() {
-    checkValid("", "components.TopLevelComponentHasNoInstanceName");
+    checkValid("components.TopLevelComponentHasNoInstanceName");
   }
   
   @Test
   public void testTopLevelComponentHasInstanceName() {
-    ASTMontiArcNode node = getAstNode(MP, PACKAGE + "." + "TopLevelComponentHasInstanceName");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "TopLevelComponentHasInstanceName");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new TopLevelComponentHasNoInstanceName()),
         node,
         new ExpectedErrorInfo(1, "xMA007"));
@@ -94,7 +92,7 @@ public class ComponentTests extends AbstractCoCoTest {
   @Test
   public void testResolveJavaDefaultTypes() {
     Scope symTab = tool.initSymbolTable(Paths.get("src/test/resources").toFile(),
-        Paths.get("src/main/resources/defaultTypes").toFile());
+        Paths.get(FAKE_JAVA_TYPES_PATH).toFile());
     
     Optional<JTypeSymbol> javaType = symTab.resolve("String", JTypeSymbol.KIND);
     assertFalse(

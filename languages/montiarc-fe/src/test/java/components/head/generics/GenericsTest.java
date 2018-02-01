@@ -29,7 +29,6 @@ import montiarc.helper.SymbolPrinter;
  */
 public class GenericsTest extends AbstractCoCoTest {
   
-  private static final String MP = "";
   private static final String PACKAGE = "components.head.generics";
   
   @BeforeClass
@@ -40,19 +39,19 @@ public class GenericsTest extends AbstractCoCoTest {
   
   @Test
   public void testTypeParameterNamesUniqueValid() {
-    checkValid(MP, PACKAGE + "." + "TypeParameterNamesUnique");
+    checkValid(PACKAGE + "." + "TypeParameterNamesUnique");
   }
   
   @Test
   public void testTypeParameterNamesUniqueInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new TypeParameterNamesUnique()),
-        getAstNode(MP, PACKAGE + "." + "TypeParameterNamesAbiguous"),
+        loadComponentAST(PACKAGE + "." + "TypeParameterNamesAbiguous"),
         new ExpectedErrorInfo(1, "xMA006"));
   }
   
   @Test
   public void testGarage() {
-    checkValid(MP, PACKAGE + "." + "Garage");
+    checkValid(PACKAGE + "." + "Garage");
   }
   
   /**
@@ -60,7 +59,7 @@ public class GenericsTest extends AbstractCoCoTest {
    */
   @Test
   public void testGenericParametersSymtab3() {
-    Scope symTab = new MontiArcTool().initSymbolTable("src/test/resources/arc/symtab");
+    Scope symTab = MONTIARCTOOL.initSymbolTable("src/test/resources/arc/symtab");
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "params.UsingComplexGenericParams", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);

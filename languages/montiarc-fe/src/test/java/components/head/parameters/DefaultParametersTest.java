@@ -33,8 +33,6 @@ import montiarc.cocos.DefaultParametersHaveCorrectOrder;
  */
 public class DefaultParametersTest extends AbstractCoCoTest {
 
-  private static final String MP = "";
-
   private static final String PACKAGE = "components.head.parameters";
 
   @BeforeClass
@@ -45,20 +43,20 @@ public class DefaultParametersTest extends AbstractCoCoTest {
 
   @Test
   public void testDefaultParametersInCorrectOrder() {
-    checkValid(MP, PACKAGE + "." + "DefaultParametersInCorrectOrder");
+    checkValid(PACKAGE + "." + "DefaultParametersInCorrectOrder");
   }
 
   @Test
   public void testDefaultParametersInIncorrectOrder() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersHaveCorrectOrder()),
-        getAstNode(MP, PACKAGE + "." + "DefaultParametersInIncorrectOrder"),
+        loadComponentAST(PACKAGE + "." + "DefaultParametersInIncorrectOrder"),
         new ExpectedErrorInfo(1, "xMA056"));
   }
 
   @Test
   public void testWrongDefaultParameterType() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersCorrectlyAssigned()),
-        getAstNode("", PACKAGE + "." + "DefaultParameterWrongType"),
+        loadComponentAST(PACKAGE + "." + "DefaultParameterWrongType"),
         new ExpectedErrorInfo(1, "xMA061"));
   }
 
