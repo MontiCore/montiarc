@@ -65,7 +65,7 @@ public class InheritanceTests extends AbstractCoCoTest {
   
   @Test
   public void testConnecetingInheritedPorts() {
-    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComposedComponentUsingInheritedPorts");
+    this.loadComponentSymbol(PACKAGE, "ComposedComponentUsingInheritedPorts");
   }
 
 }
