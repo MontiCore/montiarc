@@ -6,7 +6,11 @@ import montiarc._parser.MontiArcParser;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import java.io.File;
+import java.nio.file.Paths;
 
 import static org.junit.Assert.*;
 
@@ -16,14 +20,14 @@ import static org.junit.Assert.*;
  * @author Andreas Wortmann
  */
 public class InheritanceTests extends AbstractCoCoTest {
-  
+
   private static final String PACKAGE = "components.head.inheritance";
-  
+
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
   }
-  
+
   @Test
   public void testMultipleInheritance() {
     MontiArcParser parser = new MontiArcParser();
@@ -31,11 +35,11 @@ public class InheritanceTests extends AbstractCoCoTest {
       parser.parse(PACKAGE + "." + "MultipleInheritance");
     }
     catch (Exception e) {
-        return;
+      return;
     }
     fail("Component " + PACKAGE + ".invalid.MultipleInheritance should not be parseable.");
   }
-  
+
   @Test
   public void testSuperComponents() {
     ComponentSymbol subB = this.loadComponentSymbol(PACKAGE, "SubB");
@@ -51,17 +55,40 @@ public class InheritanceTests extends AbstractCoCoTest {
     assertNotNull(subB.getSpannedScope().resolve("myOutput519", PortSymbol.KIND));
     assertEquals(4, subB.getAllOutgoingPorts().size());
   }
-  
+
   @Test
   public void testPortInheritance() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ExtendsSuperComponent");
     assertTrue(comp.getIncomingPort("inputInteger").isPresent()); // Locally defined port
-    assertNotNull(comp.getSpannedScope().resolve("inputString", PortSymbol.KIND));  // port inherited from SuperComponent
+    assertNotNull(comp.getSpannedScope()
+        .resolve("inputString", PortSymbol.KIND));  // port inherited from SuperComponent
   }
-  
+
   @Test
   public void testConnecetingInheritedPorts() {
     this.loadComponentSymbol(PACKAGE, "ComposedComponentUsingInheritedPorts");
+  }
+
+  @Test
+  @Ignore
+  public void testCircularInheritance() {
+    Log.getFindings().clear();
+
+    // given
+    final String componentName = PACKAGE + "." + "CircularInheritanceA";
+    final File modelPath = Paths.get(MODEL_PATH).toFile();
+
+    // when
+    try {
+      MONTIARCTOOL.loadComponentSymbolWithCocos(componentName, modelPath);
+    }
+    catch (StackOverflowError e) {
+      Log.error("Encountered StackOverflowError.");
+      fail(componentName + " should be rejected because of circular inheritance.");
+    }
+
+    // then
+    assertEquals(1, Log.getErrorCount());
   }
 
 }
