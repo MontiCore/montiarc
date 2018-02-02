@@ -101,6 +101,7 @@ public class MontiArcTool {
     
     checker.checkAll(node);
     if (Log.getErrorCount() != 0) {
+      Log.debug("Found " + Log.getErrorCount() + " errors in node " + node + ".", "XX");
       return false;
     }
     return true;
