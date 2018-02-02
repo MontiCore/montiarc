@@ -1,10 +1,8 @@
-package components.helper;
+package components.head.parameters;
 
-/*
-  Valid component!
-
-  @author Michael Mutert
-*/
+/**
+ * Valid model.
+ */
 component ComponentWithGenericVariables<T, K extends Number> {
 
   T varWithTypeT;

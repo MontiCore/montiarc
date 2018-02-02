@@ -13,6 +13,7 @@ import org.junit.Test;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JFieldSymbol;
+import infrastructure.AbstractCoCoTest;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTComponent;
 import montiarc._symboltable.ComponentInstanceSymbol;
@@ -20,49 +21,14 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.VariableSymbol;
 
-public class ComponentHelperTest {
+public class ComponentHelperTest extends AbstractCoCoTest {
 
-  @Test
-  public void getParamValues() {
-    MontiArcTool tool = new MontiArcTool();
-    final Scope symbolTable = tool.initSymbolTable("src/test/resources/components/helper/ComposedTestComponent.arc");
-    ComponentSymbol comp = tool.loadComponentSymbolWithCocos("components.helper.ComposedTestComponent", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
-    assertNotNull(comp);
-
-
-    ComponentHelper helper = new ComponentHelper(comp);
-
-    Optional<ComponentInstanceSymbol> subComponent = comp.getSubComponent("first");
-    assertTrue(subComponent.isPresent());
-    List<String> paramValues = (List<String>) helper.getParamValues(subComponent.get());
-    assertEquals("\"1st\"", paramValues.get(0));
-    assertEquals("5", paramValues.get(1));
-    assertEquals("new Object()", paramValues.get(2));
-
-    subComponent = comp.getSubComponent("second");
-    assertTrue(subComponent.isPresent());
-    paramValues = (List<String>) helper.getParamValues(subComponent.get());
-    assertEquals("\"2nd\"", paramValues.get(0));
-    assertEquals("42", paramValues.get(1));
-    assertEquals("new Object()", paramValues.get(2));
-
-    subComponent = comp.getSubComponent("third");
-    assertTrue(subComponent.isPresent());
-    paramValues = (List<String>) helper.getParamValues(subComponent.get());
-    assertEquals("\"3rd\"", paramValues.get(0));
-    assertEquals("3", paramValues.get(1));
-    assertEquals("new Integer(7)", paramValues.get(2));
-  }
-
+  private static final String PACKAGE = "components.head.parameters";
+  
   @Test
   public void getPortTypeName() {
-    MontiArcTool tool = new MontiArcTool();
-    final Scope symbolTable = tool.initSymbolTable("src/test/resources/components/helper/ComponentWithGenerics.arc");
-    ComponentSymbol comp = tool.loadComponentSymbolWithCocos("components.helper.ComponentWithGenerics", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
-    assertNotNull(comp);
-
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComponentWithGenerics");
     ComponentHelper helper = new ComponentHelper(comp);
-    ASTComponent compNode = (ASTComponent) comp.getAstNode().get();
 
     Optional<PortSymbol> portSymbol = comp.getSpannedScope().resolve("inT", PortSymbol.KIND);
     assertTrue(portSymbol.isPresent());
@@ -85,13 +51,8 @@ public class ComponentHelperTest {
 
   @Test
   public void getPortGenerics() {
-    MontiArcTool tool = new MontiArcTool();
-    final Scope symbolTable = tool.initSymbolTable("src/test/resources/components/head/generics/Car.arc");
-    ComponentSymbol comp = tool.loadComponentSymbolWithCocos("components.head.generics.Car", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
-    assertNotNull(comp);
-
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "Car");
     ComponentHelper helper = new ComponentHelper(comp);
-    ASTComponent compNode = (ASTComponent) comp.getAstNode().get();
     
     Optional<PortSymbol> portSymbol = comp.getSpannedScope().resolve("motor", PortSymbol.KIND);
     assertTrue(portSymbol.isPresent());
@@ -114,12 +75,8 @@ public class ComponentHelperTest {
   
   @Test
   public void testVariableTypeName() {
-    MontiArcTool tool = new MontiArcTool();
-    ComponentSymbol comp = tool.loadComponentSymbolWithCocos("components.helper.ComponentWithGenericVariables", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
-    assertNotNull(comp);
-
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComponentWithGenericVariables");
     ComponentHelper helper = new ComponentHelper(comp);
-    ASTComponent compNode = (ASTComponent) comp.getAstNode().get();
 
     Optional<VariableSymbol> variableSymbol = comp.getSpannedScope().resolve("varWithTypeT", VariableSymbol.KIND);
     assertTrue(variableSymbol.isPresent());
@@ -134,12 +91,11 @@ public class ComponentHelperTest {
 
   @Test
   public void getParamTypeName() {
+    
     MontiArcTool tool = new MontiArcTool();
-    ComponentSymbol comp = tool.loadComponentSymbolWithCocos("components.helper.ComponentWithGenericParameters", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+    ComponentSymbol comp = tool.loadComponentSymbolWithCocos("components.head.parameters.ComponentWithGenericParameters", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
     assertNotNull(comp);
-
     ComponentHelper helper = new ComponentHelper(comp);
-    ASTComponent compNode = (ASTComponent) comp.getAstNode().get();
 
     final List<JFieldSymbol> configParameters = comp.getConfigParameters();
 
