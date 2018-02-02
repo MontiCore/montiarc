@@ -1,18 +1,14 @@
 package components.head.inheritance;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import montiarc._parser.MontiArcParser;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * This class checks all context conditions related to component inheritance
@@ -29,7 +25,7 @@ public class InheritanceTests extends AbstractCoCoTest {
   }
   
   @Test
-  public void testMutipleInheritance() {
+  public void testMultipleInheritance() {
     MontiArcParser parser = new MontiArcParser();
     try {
       parser.parse(PACKAGE + "." + "MultipleInheritance");
