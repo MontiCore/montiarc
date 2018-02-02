@@ -43,9 +43,6 @@ public class InheritanceTests extends AbstractCoCoTest {
   @Test
   public void testSuperComponents() {
     ComponentSymbol subB = this.loadComponentSymbol(PACKAGE, "SubB");
-    assertNotNull(subB);
-
-    assertNotNull(subB);
     assertTrue(subB.getIncomingPort("anotherIn").isPresent());
     assertTrue(subB.getOutgoingPort("anotherOut").isPresent());
     assertTrue(subB.getOutgoingPort("anotherOut2").isPresent());
@@ -57,6 +54,18 @@ public class InheritanceTests extends AbstractCoCoTest {
     assertNotNull(subB.getSpannedScope().resolve("myOutput", PortSymbol.KIND));
     assertNotNull(subB.getSpannedScope().resolve("myOutput519", PortSymbol.KIND));
     assertEquals(4, subB.getAllOutgoingPorts().size());
+  }
+  
+  @Test
+  public void testPortInheritance() {
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ExtendsSuperComponent");
+    assertTrue(comp.getIncomingPort("inputInteger").isPresent()); // Locally defined port
+    assertNotNull(comp.getSpannedScope().resolve("inputString", PortSymbol.KIND));  // port inherited from SuperComponent
+  }
+  
+  @Test
+  public void testConnecetingInheritedPorts() {
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComposedComponentUsingInheritedPorts");
   }
 
 }

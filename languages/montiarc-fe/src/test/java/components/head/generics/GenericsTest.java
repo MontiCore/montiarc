@@ -11,11 +11,9 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
-import montiarc.MontiArcTool;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
@@ -58,7 +56,7 @@ public class GenericsTest extends AbstractCoCoTest {
    * TODO: ValueSymbol!?
    */
   @Test
-  public void testGenericParametersSymtab3() {
+  public void testUsingComplexGenericParams() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "UsingComplexGenericParams");
 
     assertEquals(0, Log.getErrorCount());
