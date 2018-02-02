@@ -1,4 +1,4 @@
-package de.montiarcautomaton.generator.helper;
+package generation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import org.junit.Test;
 
+import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JFieldSymbol;
 import montiarc.MontiArcTool;

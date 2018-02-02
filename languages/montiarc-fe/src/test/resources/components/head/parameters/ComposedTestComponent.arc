@@ -1,4 +1,4 @@
-package components.helper;
+package components.head.parameters;
 
 /**
  * Invalid model. ComponentWithDefaultParameters expects String, int,

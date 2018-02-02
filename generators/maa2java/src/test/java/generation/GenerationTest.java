@@ -3,13 +3,14 @@
  *
  * http://www.se-rwth.de/
  */
-package de.montiarcautomaton.generator.codegen;
+package generation;
 
 import java.nio.file.Paths;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import de.montiarcautomaton.generator.codegen.MAAGeneratorScript;
 import de.se_rwth.commons.logging.Log;
 
 /**

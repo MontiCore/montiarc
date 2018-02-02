@@ -10,8 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import javax.swing.plaf.metal.MetalIconFactory.FolderIcon16;
-
 import de.montiarcautomaton.generator.codegen.MAAGenerator;
 import de.monticore.cd2pojo.POJOGenerator;
 import de.monticore.symboltable.Scope;
