@@ -5,6 +5,8 @@ import montiarc._ast.ASTAutomatonBehavior;
 import montiarc._cocos.MontiArcASTAutomatonBehaviorCoCo;
 
 /**
+ * @implements [Wor16] AC6: The names of automata start with capital letters. (p. 101, Lst. 5.16)
+ * 
  * Context condition for checking, if the name of an IO-Automaton starts with an
  * uppercase letter.
  * 

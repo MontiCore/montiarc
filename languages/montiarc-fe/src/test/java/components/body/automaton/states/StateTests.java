@@ -46,6 +46,12 @@ public class StateTests extends AbstractCoCoTest {
   }
   
   @Test
+  public void testHasInitialState() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AutomatonHasNoInitialState");
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA013"));
+  }
+  
+  @Test
   public void testUndefinedInitialState() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UndefinedInitialState");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA025"));
@@ -58,6 +64,12 @@ public class StateTests extends AbstractCoCoTest {
   public void testInvalidInitialAssignment() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "InvalidInitialAssignment");
     checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA039"));
+  }
+  
+  @Test
+  public void testAutomatonStateNameUppercase() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "StateNameUppercase");
+    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA021"));
   }
   
 }
