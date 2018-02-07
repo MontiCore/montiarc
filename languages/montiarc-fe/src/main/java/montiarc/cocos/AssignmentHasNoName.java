@@ -9,13 +9,16 @@ import montiarc._ast.ASTValuation;
 import montiarc._ast.ASTValueList;
 import montiarc._cocos.MontiArcASTIOAssignmentCoCo;
 import montiarc._parser.MontiArcAntlrParser;
+import montiarc._symboltable.MontiArcSymbolTableCreator;
 
 import java.util.*;
 
 /**
  * Context condition for checking, if an IOAssignment has no name. This can only
- * be the case, if the {@link IOSymTabCreator} could not calculate a unique
+ * be the case, if the {@link MontiArcSymbolTableCreator} could not calculate a unique
  * match for a IOAssignment.
+ * 
+ * @implements [Wor16] AR5: Types of valuations and assignments without names are unambiguous. (p. 104, Lst. 5.22)
  * 
  * @author Gerrit Leonhardt, Andreas Wortmann
  */

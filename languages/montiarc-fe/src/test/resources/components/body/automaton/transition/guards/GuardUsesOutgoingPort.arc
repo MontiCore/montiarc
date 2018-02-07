@@ -2,6 +2,8 @@ package components.body.automaton.transition.guards;
 
 /**
  * Invalid model. Guards may not check values on outgoing ports.
+ *
+ * @implements [Wor16] AR2: Inputs, outputs, and variables are used correctly. (p. 103, Lst. 520)
  */
 component GuardUsesOutgoingPort {
 

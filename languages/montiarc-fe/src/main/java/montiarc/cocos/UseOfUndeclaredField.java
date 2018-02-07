@@ -8,11 +8,14 @@ import montiarc._ast.ASTIOAssignment;
 
 import java.util.Optional;
 import montiarc._ast.ASTPort;
+import montiarc._ast.ASTVariableDeclaration;
 import de.monticore.symboltable.Scope;
 
 /**
- * Context condition for checking, if a variable is used inside an automaton
- * which has not been defined in an {@link ASTInputDeclaration}, {@link ASTVariableDeclaration} or {@link ASTOutputDeclaration}.
+ * Context condition for checking, if a reference is used inside an automaton
+ * which has not been defined in an {@link ASTVariableDeclaration} or as {@link ASTPort}.
+ *
+ * @implements [Wor16] AR1: Names used in guards, valuations, and assignments exist in the automaton. (p. 102, Lst. 5.19)
  *
  * @author Gerrit Leonhardt
  *
@@ -28,9 +31,10 @@ public class UseOfUndeclaredField implements MontiArcASTIOAssignmentCoCo {
       Scope scope = node.getEnclosingScope().get();
       boolean foundVar = scope.resolve(node.getName().get(), VariableSymbol.KIND).isPresent();
       boolean foundPort = scope.resolve(node.getName().get(), PortSymbol.KIND).isPresent();
+      String refKind = foundVar ? "Variable" : "Port";
       if (!foundVar) {
     	  if(!foundPort) {
-    		  Log.error("0xMA023: variable " + node.getName().get() + " is used as a field, but is not declared as such.", node.get_SourcePositionStart());
+    		  Log.error("0xMA079: "+refKind+" " + node.getName().get() + " is used as a field, but is not declared as such.", node.get_SourcePositionStart());
     	      
     	  }
         }

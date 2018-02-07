@@ -2,6 +2,7 @@ package components.body.automaton.transition.assignments;
 
 /**
  * Invalid model. Fails matching assignment pots twice.
+ * @implements [Wor16] AR5: Types of valuations and assignments without names are unambiguous. (p. 104, Lst. 5.22)
  */
 component AmbiguousMatching {
 
