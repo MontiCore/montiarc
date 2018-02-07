@@ -95,8 +95,6 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
     
   }
   
-  
-
   @Override
   public void init() {
   	// set up unused input ports

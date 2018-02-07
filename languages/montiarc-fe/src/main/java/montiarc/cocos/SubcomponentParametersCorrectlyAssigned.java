@@ -60,12 +60,12 @@ public class SubcomponentParametersCorrectlyAssigned
               configParam.getType(),
               argType.get())) {
             Log.error("0xMA064 Type of argument " + paramIndex + " (" + argType.get().getName()
-                + ") of subcomponent" + instance.getName() + "does not fit parameter type "
+                + ") of subcomponent " + instance.getName() + " of component type '" + node.getName() + "' does not fit parameter type "
                 + configParam.getType().getName(), expr.get_SourcePositionStart());
           }
         }
         else {
-          Log.error("0xMA065 Could not find type of argument no " + paramIndex + "of subcomponent"
+          Log.error("0xMA065 Could not find type of argument no " + paramIndex + " of subcomponent"
               + instance.getName(), expr.get_SourcePositionStart());
         }
         paramIndex++;

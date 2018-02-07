@@ -12,14 +12,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.monticore.symboltable.types.JFieldSymbol;
-import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
-import montiarc.MontiArcTool;
 import montiarc._ast.ASTParameter;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
@@ -35,15 +32,26 @@ public class DefaultParametersTest extends AbstractCoCoTest {
 
   private static final String PACKAGE = "components.head.parameters";
 
-  @BeforeClass
-  public static void setUp() {
-    Log.getFindings().clear();
-    Log.enableFailQuick(false);
-  }
-
   @Test
   public void testDefaultParametersInCorrectOrder() {
     checkValid(PACKAGE + "." + "DefaultParametersInCorrectOrder");
+  }
+  
+  @Test
+  public void testComponentWithDefaultParameters() {
+    checkValid(PACKAGE + "." + "ComponentWithDefaultParameters");
+  }
+  
+  @Test
+  public void testComposedTestComponent() {
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersCorrectlyAssigned()),
+        loadComponentAST(PACKAGE + "." + "ComposedTestComponent"),
+        new ExpectedErrorInfo(1, "xMA064"));
+  }
+  
+  @Test
+  public void testComposedComponentUsingDefaultParameters() {
+    checkValid(PACKAGE + "." + "ComposedComponentUsingDefaultParameters");
   }
 
   @Test

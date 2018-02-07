@@ -26,6 +26,7 @@ import montiarc._ast.ASTInterface;
 import montiarc._ast.ASTJavaPInitializer;
 import montiarc._ast.ASTParameter;
 import montiarc._ast.ASTPort;
+import montiarc._ast.ASTValuation;
 import montiarc._ast.ASTValueInitialization;
 import montiarc._ast.ASTVariableDeclaration;
 import montiarc._symboltable.ComponentInstanceSymbol;
@@ -49,8 +50,11 @@ public class ComponentHelper {
   
   private final IndentPrinter pr = new IndentPrinter();
   
-  private final TypesPrettyPrinterConcreteVisitor visitor = new de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor(
+  private final TypesPrettyPrinterConcreteVisitor typesPrinter = new de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor(
       pr);
+  
+  private final JavaDSLPrettyPrinter javaPrinter = new JavaDSLPrettyPrinter(pr);
+
   
   public ComponentHelper(ComponentSymbol component) {
     this.component = component;
@@ -61,6 +65,18 @@ public class ComponentHelper {
     else {
       componentNode = null;
     }
+  }
+  
+  public String printInitialValue(ASTParameter parameter) {
+    String value;
+    if (parameter.getDefaultValue().isPresent()) {
+      ASTValuation defaultValue = parameter.getDefaultValue().get();
+      value = javaPrinter.prettyprint(defaultValue.getExpression());
+    }
+    else {
+      value = parameter.getName();
+    }
+    return value;
   }
   
   // TODO: Wer nutzt die und warum? Kann die raus?
@@ -81,7 +97,7 @@ public class ComponentHelper {
     
     ASTPort astPort = (ASTPort) port.getAstNode().get();
     ASTTypesNode astTypeNode = (ASTTypesNode) astPort.getType();
-    String portTypeName = visitor.prettyprint(astTypeNode);
+    String portTypeName = typesPrinter.prettyprint(astTypeNode);
     return portTypeName;
     // return getPortTypeName(componentNode, port);
   }
@@ -153,7 +169,7 @@ public class ComponentHelper {
   
   private String printTypeName(Optional<ASTType> optType) {
     if (optType.isPresent()) {
-      return visitor.prettyprint(optType.get()).replaceAll(" ", "");
+      return typesPrinter.prettyprint(optType.get()).replaceAll(" ", "");
     }
     else {
       Log.error("XX");

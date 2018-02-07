@@ -6,5 +6,6 @@ package components.head.parameters;
 component ComponentWithDefaultParameters (
   String nonDefaultString, 
   Integer defaultInt = 5, 
-  Object defaultObject = new Object()){
+  Object defaultObject = new Object())
+{
 }

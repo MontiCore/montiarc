@@ -57,7 +57,6 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   public Port<${helper.getPortTypeName(port)}> getPort${port.getName()?cap_first}() {
   	return this.${port.getName()};
   }
-  
   </#list>
   
   // the components behavior implementation
