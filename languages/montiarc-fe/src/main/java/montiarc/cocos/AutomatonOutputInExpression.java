@@ -18,9 +18,18 @@ import montiarc._symboltable.VariableSymbol;
 
 import javax.swing.text.html.Option;
 
-//public class AutomatonOutputInExpression implements MontiArcASTValueListCoCo {
 
-
+/**
+ * Checks whether output ports are used within a expression in a automaton transition.
+ * 
+ * @implements [Wor16] AR2: Inputs, outputs, and variables are used correctly. (p. 103, Lst. 520)
+ *
+ * @author  (last commit) $Author$
+ * @version $Revision$,
+ *          $Date$
+ * @since   TODO: add version number
+ *
+ */
 public class AutomatonOutputInExpression implements JavaDSLASTPrimaryExpressionCoCo {
 
   @Override

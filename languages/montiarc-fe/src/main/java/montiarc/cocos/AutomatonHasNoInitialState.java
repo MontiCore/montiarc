@@ -8,6 +8,8 @@ import montiarc._cocos.MontiArcASTAutomatonCoCo;
  * Context condition for checking, if an IO-Automaton has no initial
  * states.
  * 
+ * @implements [Wor16] AC4: The automaton has at least one initial state. (p. 99, Lst. 5.14)
+ * 
  * @author Gerrit Leonhardt, Andreas Wortmann
  */
 public class AutomatonHasNoInitialState implements MontiArcASTAutomatonCoCo {

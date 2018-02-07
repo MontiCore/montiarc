@@ -75,7 +75,7 @@ public class AssignmentTests extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AssigningUndefinedVariables");
     // 2 Errors because we use 2 undeclared fields
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(2, "xMA023"));
+        new ExpectedErrorInfo(2, "xMA079"));
   }
   
   @Test

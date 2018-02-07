@@ -1,7 +1,8 @@
 package components.body.ports;
 
 /**
- * Invalid mode. Ports should start with a lower case letter.
+ * Invalid model. Ports should start with a lower case letter.
+ * @implements [RRW14a] C2: The names of variables and ports start with lowercase letters. (p. 31, Lst. 6.5)  
  */
 component PortWithUpperCaseName {
     

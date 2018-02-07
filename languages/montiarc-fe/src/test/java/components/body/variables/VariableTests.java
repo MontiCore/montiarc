@@ -30,4 +30,9 @@ public class VariableTests extends AbstractCoCoTest {
     checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA035"));
   }
   
+  @Test
+  public void testVariableNamesAreLowerCase() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "VariableNameUpperCase");
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA018"));
+  }
 }
