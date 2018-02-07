@@ -4,6 +4,10 @@ import types.Datatypes.MotorCommand;
 import types.Datatypes.TimerSignal;
 import types.Datatypes.TimerCmd;
 
+/**
+ * Invalid model. TODO: Correct reference?
+ * @implements [Wor16] MU2:  Each atomic component contains at most one behavior model (p. 55. Lst. 4.6)
+ */
 component ComponentWithAJavaAndAutomaton {
 
   port
