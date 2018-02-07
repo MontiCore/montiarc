@@ -18,6 +18,8 @@ import montiarc._symboltable.ComponentSymbol;
 /**
  * Checks whether names of subcomponent instances of a composed component are unique
  *
+ * @implements [Hab16] B1: All names of model elements within a component namespace have to be unique. (p. 59. Lst. 3.31)
+ *
  * @author Robert Heim, Andreas Wortmann
  */
 public class ComponentInstanceNamesAreUnique implements MontiArcASTComponentCoCo {
