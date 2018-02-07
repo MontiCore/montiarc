@@ -27,6 +27,8 @@ import montiarc.helper.TypeCompatibilityChecker;
  * Ensures that default values of parameters in the component's head are
  * correctly assigned.
  *
+ * @implements [Wor16] MT7: Default values of parameters conform to their type. (p. 64, Lst. 4.22)
+ *
  * @author Jerome Pfeiffer
  */
 public class DefaultParametersCorrectlyAssigned
@@ -55,11 +57,11 @@ public class DefaultParametersCorrectlyAssigned
         Optional<JavaTypeSymbolReference> result = javaTypeResolver.getResult();
         if (!result.isPresent()) {
           Log.error(
-              "0xMA059 Could not resolve type of default parameter value for comparing it with the referenced parameter type.",
+              "0xMA068 Could not resolve type of default parameter value for comparing it with the referenced parameter type.",
               param.getDefaultValue().get().get_SourcePositionStart());
         }
         else if (!TypeCompatibilityChecker.doTypesMatch(result.get(), paramTypeSymbol)) {
-          Log.error("0xMA061 Type of parameter " + param.getName()
+          Log.error("0xMA062 Type of parameter " + param.getName()
               + " in the parameter declaration does not match the type of its assigned value. Type "
               +
               paramTypeSymbol.getName() + " can not cast to type " + result.get().getName() + ".",
