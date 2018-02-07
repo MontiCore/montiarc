@@ -36,7 +36,7 @@ public abstract class AbstractCoCoTest {
   @Before
   public void cleanUpLog() {
     Log.getFindings().clear();
-    Log.enableFailQuick(true);
+    Log.enableFailQuick(false);
   }
   
   protected ASTMontiArcNode loadComponentAST(String qualifiedModelName) {

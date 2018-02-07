@@ -22,6 +22,7 @@ import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.DefaultParametersCorrectlyAssigned;
 import montiarc.cocos.DefaultParametersHaveCorrectOrder;
+import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
 
 /**
  * This class checks all context conditions related to default parameters
@@ -44,7 +45,7 @@ public class DefaultParametersTest extends AbstractCoCoTest {
   
   @Test
   public void testComposedTestComponent() {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersCorrectlyAssigned()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
         loadComponentAST(PACKAGE + "." + "ComposedTestComponent"),
         new ExpectedErrorInfo(1, "xMA064"));
   }
