@@ -54,7 +54,6 @@ public class ComponentHelper {
       pr);
   
   private final JavaDSLPrettyPrinter javaPrinter = new JavaDSLPrettyPrinter(pr);
-
   
   public ComponentHelper(ComponentSymbol component) {
     this.component = component;
@@ -160,9 +159,9 @@ public class ComponentHelper {
   
   private Optional<ASTType> findParamTypeByName(String name) {
     for (ASTParameter p : componentNode.getHead().getParameters()) {
-        if (name.equals(p.getName())) {
-          return Optional.of(p.getType());
-        }
+      if (name.equals(p.getName())) {
+        return Optional.of(p.getType());
+      }
     }
     return Optional.empty();
   }
@@ -230,18 +229,20 @@ public class ComponentHelper {
     // Calculate the number of missing parameters
     int numberOfMissingParameters = configParameters.size() - configArguments.size();
     
-    // Get the AST node of the component and the list of parameters in the AST
-    final ASTComponent astNode = (ASTComponent) param.getComponentType().getReferencedSymbol()
-        .getAstNode().get();
-    final List<ASTParameter> parameters = astNode.getHead().getParameters();
-    
-    // Retrieve the parameters from the node and add them to the list
-    for (int counter = 0; counter < numberOfMissingParameters; counter++) {
-      // Fill up from the last parameter
-      final ASTParameter astParameter = parameters.get(parameters.size() - 1 - counter);
-      final String prettyprint = printer
-          .prettyprint(astParameter.getDefaultValue().get().getExpression());
-      outputParameters.add(outputParameters.size() - counter, prettyprint);
+    if (numberOfMissingParameters > 0) {
+      // Get the AST node of the component and the list of parameters in the AST
+      final ASTComponent astNode = (ASTComponent) param.getComponentType().getReferencedSymbol()
+          .getAstNode().get();
+      final List<ASTParameter> parameters = astNode.getHead().getParameters();
+      
+      // Retrieve the parameters from the node and add them to the list
+      for (int counter = 0; counter < numberOfMissingParameters; counter++) {
+        // Fill up from the last parameter
+        final ASTParameter astParameter = parameters.get(parameters.size() - 1 - counter);
+        final String prettyprint = printer
+            .prettyprint(astParameter.getDefaultValue().get().getExpression());
+        outputParameters.add(outputParameters.size() - counter, prettyprint);
+      }
     }
     
     return outputParameters;
