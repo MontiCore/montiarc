@@ -19,23 +19,24 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.cocos.helper.Assert;
-import de.monticore.lang.expression.symboltable.ValueSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.ComponentSymbolReference;
-import de.monticore.lang.montiarc.montiarc._symboltable.ConnectorSymbol;
-import de.monticore.lang.montiarc.montiarc._symboltable.PortSymbol;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
+import montiarc._symboltable.ComponentInstanceSymbol;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.ComponentSymbolReference;
+import montiarc._symboltable.ConnectorSymbol;
+import montiarc._symboltable.PortSymbol;
+import montiarc._symboltable.ValueSymbol;
+import symboltable.AbstractSymboltableTest;
 
 /**
  * Tests for symbol table of MontiArc.
  *
  * @author Robert Heim
  */
-public class SymtabTest extends AbstractSymtabTest {
+public class SymtabTest extends AbstractSymboltableTest {
   @BeforeClass
   public static void setUp() {
     // ensure an empty log
@@ -60,7 +61,7 @@ public class SymtabTest extends AbstractSymtabTest {
     javaType = comp.getSpannedScope().resolve("String", JTypeSymbol.KIND);
     assertTrue("java.lang types must be resolvable without qualification within components.",
         javaType.isPresent());
-        
+
     // java.util.*
     javaType = comp.getSpannedScope().resolve("Set", JTypeSymbol.KIND);
     assertTrue("java.util types must be resolvable without qualification within components.",
@@ -171,13 +172,13 @@ public class SymtabTest extends AbstractSymtabTest {
   
   @Ignore("ValueSymbol?!")
   @Test
-  public void testParameterSymtab() {
+  public void testParametersSymtab() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "params.UsingSCWithParams", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
     
-    assertEquals(0, Log.getErrorCount());
+    //assertEquals(0, Log.getErrorCount());
     // TODO portusage coco
     // assertEquals(1, Log.getFindings().stream().filter(f -> f.isWarning()).count());
     assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());
@@ -189,12 +190,17 @@ public class SymtabTest extends AbstractSymtabTest {
     
     assertEquals(1, delay.getConfigArguments().size());
     assertEquals("1", delay.getConfigArguments().get(0).getValue());
+
+    //Is an expression since there is no value symbol.
     assertEquals(ValueSymbol.Kind.Value,
         delay.getConfigArguments().get(0).getKind());
   }
   
+  /**
+   * TODO: ValueSymbol?!
+   */
   @Test
-  public void testParameterSymtab2() {
+  public void testComplexParametersSymtab() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "params.UsingComplexParams", ComponentSymbol.KIND).orElse(null);
@@ -210,12 +216,10 @@ public class SymtabTest extends AbstractSymtabTest {
     assertEquals("cp", delay.getName());
     
     assertEquals(2, delay.getConfigArguments().size());
-    // TODO add space between "]{" when using next javaDSL version
     assertEquals("new int[] {1, 2, 3}",
         delay.getConfigArguments().get(0).getValue());
-    // assertEquals("new int[] {1, 2, 3}", delay.getConfigArguments().get(0).getValue());
     // TODO value symbol
-    // assertEquals(Kind.ConstructorCall, delay.getConfigArguments().get(0).getKind());
+    // assertEquals(ValueSymbol.Kind.ConstructorCall, delay.getConfigArguments().get(0).getKind());
     // assertEquals("1",
     // delay.getConfigArguments().get(0).getConstructorArguments().get(0).getValue());
     // assertEquals("2",
@@ -234,8 +238,11 @@ public class SymtabTest extends AbstractSymtabTest {
     // typeRef.getTypeParameters().get(1).getTypeParameters().get(0).getType().getName());
   }
   
+  /**
+   * TODO: ValueSymbol!?
+   */
   @Test
-  public void testParameterSymtab3() {
+  public void testGenericParametersSymtab3() {
     Scope symTab = createSymTab("src/test/resources/arc/symtab");
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         "params.UsingComplexGenericParams", ComponentSymbol.KIND).orElse(null);
@@ -250,7 +257,6 @@ public class SymtabTest extends AbstractSymtabTest {
     assertEquals("cp", delay.getName());
     
     assertEquals(2, delay.getConfigArguments().size());
-    // TODO add space between "]{" when using newer javaDSL
     assertEquals("new int[] {1, 2, 3}", delay.getConfigArguments().get(0).getValue());
     // TODO value symbol
     // assertEquals(Kind.ConstructorCall, delay.getConfigArguments().get(0).getKind());
@@ -350,5 +356,6 @@ public class SymtabTest extends AbstractSymtabTest {
     
     assertEquals(0, Log.getErrorCount());
     assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());
+
   }
 }

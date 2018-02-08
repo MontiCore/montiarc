@@ -4,9 +4,6 @@
 package testtypes;
 
 /**
- * TODO: Write me!
- * <br>
- * <br>
  * Copyright (c) 2010 RWTH Aachen. All rights reserved.
  *
  * @author Arne Haber

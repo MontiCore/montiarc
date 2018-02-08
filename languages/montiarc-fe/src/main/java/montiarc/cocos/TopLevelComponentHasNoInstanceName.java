@@ -1,0 +1,39 @@
+/*
+ * Copyright (c) 2016 RWTH Aachen. All rights reserved.
+ *
+ * http://www.se-rwth.de/
+ */
+package montiarc.cocos;
+
+import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTComponent;
+import montiarc._cocos.MontiArcASTComponentCoCo;
+import montiarc._symboltable.ComponentSymbol;
+
+/**
+ * @author Crispin Kirchner
+ */
+public class TopLevelComponentHasNoInstanceName
+    implements MontiArcASTComponentCoCo {
+
+  /**
+   * @see montiarc._cocos.MontiArcASTComponentCoCo#check(montiarc._ast.ASTComponent)
+   */
+  @Override
+  public void check(ASTComponent node) {
+    if (!node.symbolIsPresent()) {
+      Log.error(String.format(
+          "0xMA071 Symbol of component \"%s\" is missing. " +
+              "The context condition \"%s\" can't be checked that way.",
+          node.getName(), TopLevelComponentHasNoInstanceName.class.getName()));
+    }
+
+    ComponentSymbol symbol = (ComponentSymbol) node.getSymbol().get();
+    if (!symbol.isInnerComponent() && node.instanceNameIsPresent()) {
+      Log.error(
+          String.format("0xMA007 Top level component \"%s\" has an instance name", node.getName()),
+          node.get_SourcePositionStart());
+    }
+  }
+
+}

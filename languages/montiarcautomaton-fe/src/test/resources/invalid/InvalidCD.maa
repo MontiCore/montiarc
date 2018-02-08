@@ -1,9 +1,0 @@
-package invalid;
-
-import invalid.InvalidDatatypes.invalidType;
-
-component InvalidCD {
-  port
-    in invalidType a,
-    out invalidType b;
-}

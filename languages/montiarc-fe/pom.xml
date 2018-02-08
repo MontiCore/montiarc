@@ -15,20 +15,6 @@
   <!-- == PROJECT DEPENDENCIES ============================================= -->
 
   <dependencies>
-
-    <dependency>
-      <groupId>montiarc.languages</groupId>
-      <artifactId>common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>montiarc.languages</groupId>
-      <artifactId>common</artifactId>
-      <version>${project.version}</version>
-      <classifier>${grammars.classifier}</classifier>
-    </dependency>
-
     <dependency>
       <groupId>de.se_rwth.commons</groupId>
       <artifactId>se-commons-logging</artifactId>
@@ -76,6 +62,13 @@
       <groupId>de.monticore</groupId>
       <artifactId>javaDSL</artifactId>
       <version>${javadsl.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>javaDSL</artifactId>
+      <version>${javadsl.version}</version>
+      <classifier>${grammars.classifier}</classifier>
     </dependency>
 
     <!-- .. Test Libraries ............................................... -->
