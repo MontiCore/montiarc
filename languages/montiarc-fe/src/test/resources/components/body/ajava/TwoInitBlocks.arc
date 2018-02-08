@@ -2,6 +2,8 @@ package components.body.ajava;
 
 /**
  * Invalid model. We allow only one init block per AJava component.
+ *
+ * @implements There is no AJava literature
  */
 component TwoInitBlocks {
 

@@ -1,5 +1,10 @@
 package components.body.automaton.transition.assignments;
 
+/*
+  Invalid component. Uses a ValueList in the only transition.
+
+  @implements TODO: Unreferenced in Literatur
+*/
 component ValueListAssignment {
 
     port 

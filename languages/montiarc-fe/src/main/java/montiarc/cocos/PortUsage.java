@@ -16,6 +16,8 @@ import montiarc._symboltable.PortSymbol;
  * (non-atomic) component itself while CV6 checks that a subcomponent is connected in its
  * <em>outer context</em> (i.e. the outer component).
  *
+ * @implements [Hab16] CV5: In decomposed components, all ports should be used in at least one connector. (p.71 Lst. 3.52)
+ *
  * @author ahaber, Robert Heim
  */
 public class PortUsage implements MontiArcASTComponentCoCo {
@@ -58,7 +60,7 @@ public class PortUsage implements MontiArcASTComponentCoCo {
 
       remainingPorts.removeAll(connectorSources);
       if (!remainingPorts.isEmpty()) {
-        remainingPorts.forEach(p -> Log.error(String.format("0xMA057 Port %s is not used!", p)));
+        remainingPorts.forEach(p -> Log.warn(String.format("0xMA057 Port %s is not used!", p)));
       }
 
       // --------- OUT PORTS ----------
@@ -75,7 +77,7 @@ public class PortUsage implements MontiArcASTComponentCoCo {
 
       remainingPorts.removeAll(connectorTargets);
       if (!remainingPorts.isEmpty()) {
-        remainingPorts.forEach(p -> Log.error(String.format("0xMA058 Port %s is not used!", p),
+        remainingPorts.forEach(p -> Log.warn(String.format("0xMA058 Port %s is not used!", p),
             node.get_SourcePositionStart()));
       }
     }

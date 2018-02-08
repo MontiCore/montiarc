@@ -1,10 +1,12 @@
 package components.body.ports;
 
-import doesnotexist.invalidType;
+import doesnotexist.invalidType; // Error: Import is not valid
 import java.lang.String;
 
 /**
  * Invalid model. The data type 'invalidType' does not exist.
+
+ * @implements TODO Not directly assignable to literature reference
  */
 component InexistingPortType {
   port

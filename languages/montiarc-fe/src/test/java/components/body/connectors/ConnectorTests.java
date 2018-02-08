@@ -57,7 +57,7 @@ public class ConnectorTests extends AbstractCoCoTest {
   
   @Test
   public void testSimpleConnectorSourceNonExistant() {
-    ASTMontiArcNode node = loadComponentAST( PACKAGE + "." + "SimpleConnectorSourceNonExistant");
+    ASTMontiArcNode node = loadComponentAST( PACKAGE + "." + "SimpleConnectorSourceNonExistent");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SimpleConnectorSourceExists()),
         node, new ExpectedErrorInfo(1, "xMA072"));
   }

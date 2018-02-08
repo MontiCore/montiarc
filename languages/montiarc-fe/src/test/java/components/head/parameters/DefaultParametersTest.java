@@ -66,7 +66,7 @@ public class DefaultParametersTest extends AbstractCoCoTest {
   public void testWrongDefaultParameterType() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersCorrectlyAssigned()),
         loadComponentAST(PACKAGE + "." + "DefaultParameterWrongType"),
-        new ExpectedErrorInfo(1, "xMA061"));
+        new ExpectedErrorInfo(1, "xMA062"));
   }
 
   @Test

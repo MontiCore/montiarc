@@ -29,6 +29,8 @@ import montiarc.helper.TypeCompatibilityChecker;
  * allowed to define a normal parameter after a declaration of a default parameter. E.g.: Wrong:
  * A[int x = 5, int y] Right: B[int x, int y = 5]
  *
+ * @implements TODO: Klaeren welche CoCo in der Literatur repraesentiert wird.
+ *
  * @author Andreas Wortmann
  */
 public class SubcomponentParametersCorrectlyAssigned

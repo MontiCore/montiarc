@@ -6,7 +6,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
+import montiarc.cocos.PackageLowerCase;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.java.symboltable.JavaFieldSymbol;
@@ -45,7 +47,18 @@ public class ComponentTests extends AbstractCoCoTest {
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA074"));
   }
-  
+
+  @Test
+  @Ignore("Components with upper case packages can not be resolved by the symbol table.")
+  /**
+   * This test should check whether the Context condition PackageLowerCase is working.
+   */
+  public void testPackageUpperCase() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UpperCasePackageName");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PackageLowerCase());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA054"));
+  }
+
   @Test
   public void testCDType2JavaType() {
     Scope symTab = this.loadDefaultSymbolTable();

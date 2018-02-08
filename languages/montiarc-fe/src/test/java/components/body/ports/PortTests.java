@@ -95,6 +95,10 @@ public class PortTests extends AbstractCoCoTest {
   }
 
   @Test
+  /*
+    Tests the CoCos CV5 and CV6 from the dissertation of Arne Haber.
+    These are the checks that all ports should be connected of components and subcomponents.
+   */
   public void testUnconnectedPorts() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UnconnectedPorts");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());

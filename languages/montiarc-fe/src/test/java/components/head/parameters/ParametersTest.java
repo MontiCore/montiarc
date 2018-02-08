@@ -8,6 +8,7 @@ package components.head.parameters;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import montiarc.cocos.IdentifiersAreUnique;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -16,7 +17,6 @@ import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc.cocos.ParameterNamesAreUnique;
 
 /**
  * This class tests all context conditions related to parameters
@@ -39,7 +39,7 @@ public class ParametersTest extends AbstractCoCoTest {
 
   @Test
   public void testParameterNamesUniqueTestInvalid() {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ParameterNamesAreUnique()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         loadComponentAST(PACKAGE + "." + "ParameterAmbiguous"),
         new ExpectedErrorInfo(1, "xMA069"));
     

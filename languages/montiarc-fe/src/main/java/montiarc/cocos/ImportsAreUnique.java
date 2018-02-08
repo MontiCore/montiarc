@@ -12,10 +12,11 @@ import java.util.List;
 /**
  * Ensures, that there are no duplicate import statements.
  *
+ * @implements [Hab16] CV3: Duplicated imports should be avoided. (p.71, no listing)
+ *
  * @author Michael Mutert
  */
 public class ImportsAreUnique implements MontiArcASTComponentCoCo {
-
 
     /*
         Checks for duplicate import statements in an artifact.
@@ -26,8 +27,7 @@ public class ImportsAreUnique implements MontiArcASTComponentCoCo {
         ComponentSymbol symbol = (ComponentSymbol) node.getSymbol().orElse(null);
 
         if(symbol == null){
-            Log.error(String.format("0x9AF6C ASTComponent node \"%s\" has no symbol. Did you forget to "
-                    + "run the SymbolTableCreator before checking cocos?", node.getName()));
+            Log.error(String.format("0xMA071 ASTComponent node \"%s\" has no symbol.", node.getName()));
             return;
         }
 
@@ -40,7 +40,7 @@ public class ImportsAreUnique implements MontiArcASTComponentCoCo {
                 statement += ".*";
             }
             if(checked.contains(statement)){
-                Log.error(String.format("0xMA074 The import statement " + statement + " is " +
+                Log.warn(String.format("0xMA074 The import statement " + statement + " is " +
                         "declared more than once.", node.getName()));
             } else {
                 checked.add(statement);

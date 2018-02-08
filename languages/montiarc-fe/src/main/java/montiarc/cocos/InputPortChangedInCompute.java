@@ -15,6 +15,8 @@ import java.util.Optional;
 /**
  * Context condition that checks whether an input port is changed in a AJava compute statement.
  *
+ * @implements: No AJava literature
+ *
  * @author Michael Mutert
  */
 public class InputPortChangedInCompute implements MontiArcASTJavaPBehaviorCoCo {

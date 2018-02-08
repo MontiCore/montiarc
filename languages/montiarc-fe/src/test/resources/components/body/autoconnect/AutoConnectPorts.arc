@@ -4,6 +4,9 @@ import components.body.autoconnect.dummycomponents.*;
 
 /** 
  * Invalid model. Various missing autoconnect partners.
+ *
+ * @implements [Hab16] CV5: In decomposed components, all ports should be used in at least one connector. (p.71 Lst. 3.52)
+ * @implements [Hab16] CV6: All ports of subcomponents should be used in at least one connector. (p.72 Lst. 3.53)
  */
 component AutoConnectPorts {
 	autoconnect port;

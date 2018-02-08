@@ -18,6 +18,8 @@ import montiarc._symboltable.PortSymbol;
  * (non-atomic) component itself while CV6 checks that a subcomponent is connected in its
  * <em>outer context</em> (i.e. the outer component).
  *
+ * @implements [Hab16] CV6: All ports of subcomponents should be used in at least one connector. (p.72 Lst. 3.53)
+ *
  * @author ahaber, Robert Heim
  */
 public class SubComponentsConnected implements MontiArcASTComponentCoCo {
