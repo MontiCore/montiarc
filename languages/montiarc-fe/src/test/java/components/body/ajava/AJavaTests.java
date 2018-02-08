@@ -97,7 +97,7 @@ public class AJavaTests extends AbstractCoCoTest {
   public void testTwoInitBlocks() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "TwoInitBlocks");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new AtMostOneInitBlock()), node,
-        new ExpectedErrorInfo(1, "xMA078"));
+        new ExpectedErrorInfo(1, "xMA080"));
   }
   
   @Test

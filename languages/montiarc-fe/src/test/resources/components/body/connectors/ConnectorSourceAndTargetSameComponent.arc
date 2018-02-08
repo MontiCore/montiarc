@@ -8,8 +8,10 @@ component ConnectorSourceAndTargetSameComponent {
     port
         in String s1,
         out String s2;
-        
+
+//    connect inner1.s4 -> inner1.s4; // Error: Prohibited
     connect s1 -> s2; // Error: Prohibited
+    connect s1 -> s1; // Error: Prohibited
     
     component Inner1 {
         port 
@@ -18,4 +20,5 @@ component ConnectorSourceAndTargetSameComponent {
         
         connect s3 -> s4; // Error: Prohibited
     }
+
 }

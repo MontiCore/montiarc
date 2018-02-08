@@ -52,7 +52,7 @@ public class AssignmentTests extends AbstractCoCoTest {
   public void testValueListAssignment() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ValueListAssignment");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(1, "xMA079"));
+        new ExpectedErrorInfo(1, "xMA081"));
   }
   
   @Test

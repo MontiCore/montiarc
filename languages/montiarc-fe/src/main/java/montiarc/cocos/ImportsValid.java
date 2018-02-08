@@ -15,6 +15,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Checks whether the imported files actually exist and thus make the imports valid.
+ *
+ * TODO: Star imports, see https://git.rwth-aachen.de/montiarc/core/issues/97
+ *
+ * @implements TODO Not directly assignable to literature reference
+ */
 public class ImportsValid implements MontiArcASTComponentCoCo {
 
   @Override
