@@ -45,7 +45,7 @@ public class MontiArcCoCos {
         .addCoCo(new InitBlockOnlyOnEmbeddedAJava())
         .addCoCo(new AtMostOneInitBlock())
         /* MontiArcAutomaton Cocos */
-        .addCoCo(new VariableNameIsLowerCase())
+        .addCoCo(new NamesAreLowerCase())
         
         /// Automaton Cocos
         /// /////////////////////////////////////////////////////////////
@@ -62,7 +62,6 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTTransitionCoCo) new AutomatonReactionWithAlternatives())
         .addCoCo(new UseOfForbiddenExpression())
         .addCoCo(new AutomatonStateUppercase())
-        .addCoCo(new PortNameIsLowerCase())
         .addCoCo(new ConnectorSourceAndTargetComponentDiffer())
         .addCoCo(new ConnectorSourceAndTargetExist())
         .addCoCo(new ImportsAreUnique())

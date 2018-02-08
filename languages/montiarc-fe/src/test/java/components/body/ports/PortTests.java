@@ -5,8 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.nio.file.Paths;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -15,14 +13,13 @@ import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
-import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc.cocos.InPortUniqueSender;
 import montiarc.cocos.MontiArcCoCos;
-import montiarc.cocos.PortNameIsLowerCase;
+import montiarc.cocos.NamesAreLowerCase;
 import montiarc.cocos.PortUsage;
 import montiarc.cocos.SubComponentsConnected;
 
@@ -93,7 +90,7 @@ public class PortTests extends AbstractCoCoTest {
   /* Checks whether all port names in the port definition start with a lower case letter */
   public void testPortWithUpperCaseName() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortWithUpperCaseName");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortNameIsLowerCase());
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new NamesAreLowerCase());
     checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA077"));
   }
 

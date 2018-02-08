@@ -74,7 +74,6 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   * @attribute Type the type of the parameter
   * @attribute name the name of the parameter
   */
-  // Parameter = Type Name ("=" defaultValue:LiteralValue)?;
   Parameter = Type Name ("=" defaultValue:Valuation)?;
 
   /**

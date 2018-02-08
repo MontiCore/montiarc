@@ -1,5 +1,11 @@
 package components.body.automaton.transition.guards;
 
+
+/**
+* Invalid Model: See comments below.
+* @implements [Wor16] AC5: The automaton’s valuations and assignments use only allowed Java/P modeling elements.
+* 
+*/
 component GuardWithInstanceOfExpression {
 
     port 

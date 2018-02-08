@@ -2,6 +2,8 @@ package components.body.automaton.states;
 
 /**
  * Invalid model. Initial states B and C defined twice.
+ *
+ * @implements [Wor16] AU2: Each state is declared initial at most once. (p. 97, Lst. 5.9)
  */
 component DoubleDefinitionOfSameInitial {
 

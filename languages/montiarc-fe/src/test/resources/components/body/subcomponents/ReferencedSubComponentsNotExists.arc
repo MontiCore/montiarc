@@ -6,12 +6,12 @@ package components.body.subcomponents;
  * @implements [Hab12] R4: Unqualified subcomponent types either exist in the current package 
  * or are imported using an import statement. (p. 28) 
  */
-component ReferencedSubComponentsExists {
+component ReferencedSubComponentsNotExists {
   port 
     in String s1,
     out String sout1;
 
-  component Buffer;
+  component Buffet;
   
   connect s1 -> buffer.input;
   connect buffer.output -> sout1;

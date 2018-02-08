@@ -26,6 +26,7 @@ import montiarc._ast.ASTInterface;
 import montiarc._ast.ASTJavaPInitializer;
 import montiarc._ast.ASTParameter;
 import montiarc._ast.ASTPort;
+import montiarc._ast.ASTValuation;
 import montiarc._ast.ASTValueInitialization;
 import montiarc._ast.ASTVariableDeclaration;
 import montiarc._symboltable.ComponentInstanceSymbol;
@@ -49,8 +50,10 @@ public class ComponentHelper {
   
   private final IndentPrinter pr = new IndentPrinter();
   
-  private final TypesPrettyPrinterConcreteVisitor visitor = new de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor(
+  private final TypesPrettyPrinterConcreteVisitor typesPrinter = new de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor(
       pr);
+  
+  private final JavaDSLPrettyPrinter javaPrinter = new JavaDSLPrettyPrinter(pr);
   
   public ComponentHelper(ComponentSymbol component) {
     this.component = component;
@@ -61,6 +64,18 @@ public class ComponentHelper {
     else {
       componentNode = null;
     }
+  }
+  
+  public String printInitialValue(ASTParameter parameter) {
+    String value;
+    if (parameter.getDefaultValue().isPresent()) {
+      ASTValuation defaultValue = parameter.getDefaultValue().get();
+      value = javaPrinter.prettyprint(defaultValue.getExpression());
+    }
+    else {
+      value = parameter.getName();
+    }
+    return value;
   }
   
   // TODO: Wer nutzt die und warum? Kann die raus?
@@ -81,7 +96,7 @@ public class ComponentHelper {
     
     ASTPort astPort = (ASTPort) port.getAstNode().get();
     ASTTypesNode astTypeNode = (ASTTypesNode) astPort.getType();
-    String portTypeName = visitor.prettyprint(astTypeNode);
+    String portTypeName = typesPrinter.prettyprint(astTypeNode);
     return portTypeName;
     // return getPortTypeName(componentNode, port);
   }
@@ -144,16 +159,16 @@ public class ComponentHelper {
   
   private Optional<ASTType> findParamTypeByName(String name) {
     for (ASTParameter p : componentNode.getHead().getParameters()) {
-        if (name.equals(p.getName())) {
-          return Optional.of(p.getType());
-        }
+      if (name.equals(p.getName())) {
+        return Optional.of(p.getType());
+      }
     }
     return Optional.empty();
   }
   
   private String printTypeName(Optional<ASTType> optType) {
     if (optType.isPresent()) {
-      return visitor.prettyprint(optType.get()).replaceAll(" ", "");
+      return typesPrinter.prettyprint(optType.get()).replaceAll(" ", "");
     }
     else {
       Log.error("XX");
@@ -214,18 +229,20 @@ public class ComponentHelper {
     // Calculate the number of missing parameters
     int numberOfMissingParameters = configParameters.size() - configArguments.size();
     
-    // Get the AST node of the component and the list of parameters in the AST
-    final ASTComponent astNode = (ASTComponent) param.getComponentType().getReferencedSymbol()
-        .getAstNode().get();
-    final List<ASTParameter> parameters = astNode.getHead().getParameters();
-    
-    // Retrieve the parameters from the node and add them to the list
-    for (int counter = 0; counter < numberOfMissingParameters; counter++) {
-      // Fill up from the last parameter
-      final ASTParameter astParameter = parameters.get(parameters.size() - 1 - counter);
-      final String prettyprint = printer
-          .prettyprint(astParameter.getDefaultValue().get().getExpression());
-      outputParameters.add(outputParameters.size() - counter, prettyprint);
+    if (numberOfMissingParameters > 0) {
+      // Get the AST node of the component and the list of parameters in the AST
+      final ASTComponent astNode = (ASTComponent) param.getComponentType().getReferencedSymbol()
+          .getAstNode().get();
+      final List<ASTParameter> parameters = astNode.getHead().getParameters();
+      
+      // Retrieve the parameters from the node and add them to the list
+      for (int counter = 0; counter < numberOfMissingParameters; counter++) {
+        // Fill up from the last parameter
+        final ASTParameter astParameter = parameters.get(parameters.size() - 1 - counter);
+        final String prettyprint = printer
+            .prettyprint(astParameter.getDefaultValue().get().getExpression());
+        outputParameters.add(outputParameters.size() - counter, prettyprint);
+      }
     }
     
     return outputParameters;

@@ -15,9 +15,11 @@ import montiarc._cocos.MontiArcASTConnectorCoCo;
 import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
 
 /**
- * @author Crispin Kirchner
+ * @implements [Hab16] CO1: Connectors may not pierce through component interfaces. (p. 60, Lst. 3.33)
+ * @implements [Hab16] CO2: A simple connector’s source is an outgoing port of the 
+ * referenced component type and is therefore not qualified. (p. 61, Lst. 3.34)
  * 
- * Implementation of CO1 and CO2
+ * @author Crispin Kirchner
  */
 public class ConnectorEndPointIsCorrectlyQualified
     implements MontiArcASTSimpleConnectorCoCo, MontiArcASTConnectorCoCo {

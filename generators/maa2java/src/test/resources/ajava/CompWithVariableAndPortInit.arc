@@ -13,7 +13,7 @@ component CompWithVariableAndPortInit {
     counter = 0;
   }
   
-  compute calculateSomething {
+  compute CalculateSomething {
     counter++;
     o = i + counter;    
   }

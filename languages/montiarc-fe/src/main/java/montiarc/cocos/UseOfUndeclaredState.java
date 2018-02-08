@@ -12,6 +12,8 @@ import montiarc._cocos.MontiArcASTAutomatonCoCo;
 /**
  * Context condition for checking, if every state used in a transition has been defined
  * in an {@link ASTStateDeclaration}.
+ * 
+ * @implements [Wor16] AR3: Used states exist. (p. 104, Lst. 5.21)
  *
  * @author Andreas Wortmann
  */
