@@ -1,5 +1,10 @@
 package a;
 
+/*
+ * Valid model.
+ *
+ * @author Arne Haber
+ */
 component ComponentWithoutPort {
     
     component InnerWithPort {

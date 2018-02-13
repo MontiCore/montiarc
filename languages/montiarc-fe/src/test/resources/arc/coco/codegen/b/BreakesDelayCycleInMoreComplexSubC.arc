@@ -6,7 +6,7 @@ component BreakesDelayCycleInMoreComplexSubC {
         in String sIn,
         out String sOut;
 
-    component A a1, a2;
+    component CompWithStringInputAndOutput a1, a2;
     component C;
     
     component UsingCandB;

@@ -1,6 +1,12 @@
 package a;
 import ma.sim.*;
 
+/*
+ * Invalid model. Contains three message cycles and two unused ports.
+ * TODO: This CoCo is no longer applicable. Remove model?
+ *
+ * @implements [Hab16] CG1: Communication cycles without delay should be avoided.
+ */
 component ComponentWithCycles {
     
     port 

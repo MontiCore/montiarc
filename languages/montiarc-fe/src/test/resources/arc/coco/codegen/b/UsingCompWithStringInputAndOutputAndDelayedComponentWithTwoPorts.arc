@@ -1,13 +1,13 @@
 package b;
 
-component UsingAandB {
+component UsingCompWithStringInputAndOutputAndDelayedComponentWithTwoPorts {
     port
         in String sIn,
         out String sOut;
         
-    component A;
+    component CompWithStringInputAndOutput a;
     
-    component B;
+    component DelayedComponentWithTwoPorts b;
     
     connect sIn -> b.sIn;
     connect b.sOut -> a.sIn;

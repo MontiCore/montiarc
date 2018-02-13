@@ -1,6 +1,9 @@
 package b;
 
-component B {
+/*
+ * Valid model. (in MontiArc 3)
+ */
+component DelayedComponentWithTwoPorts {
     
     timing delayed;
     

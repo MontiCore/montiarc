@@ -6,8 +6,8 @@ component BreakesDelayCycleInSubC {
         in String sIn,
         out String sOut;
 
-    component A;
-    component C;
+    component CompWithStringInputAndOutput a;
+    component CompWithTwoStringInputsAndOutput c;
     
     component UsingAandB;
     

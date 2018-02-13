@@ -1,6 +1,9 @@
 package b;
 
-component A {
+/*
+ * Valid model.
+ */
+component CompWithStringInputAndOutput {
     port
         in String sIn,
         out String sOut;

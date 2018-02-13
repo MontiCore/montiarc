@@ -1,17 +1,17 @@
 package b;
 
-component UsingAandCandB {
+component UsingMultipleComponents {
     
     port
         in String sIn1,
         in String sIn2,
         out String sOut;
         
-    component C;
+    component CompWithTwoStringInputsAndOutput c;
     
-    component B;
+    component DelayedComponentWithTwoPorts b;
     
-    component A;
+    component CompWithStringInputAndOutput a;
     
     
     connect sIn1 -> b.sIn;

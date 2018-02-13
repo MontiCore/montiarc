@@ -1,6 +1,10 @@
 package b;
 
-component C {
+/*
+ * Valid model.
+ * Formerly named 'C'
+ */
+component CompWithTwoStringInputsAndOutput {
     port
         in String sIn1,
         in String sIn2,
