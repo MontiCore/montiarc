@@ -1,8 +1,11 @@
-package a;
+package components.body.ports;
 
-import d.*;
+import types.*;
 
-component CompWithJavaTypes {
+/**
+* Valid model.
+*/
+component ComponentWithJavaTypedPorts {
     port
         in SuperType supIn1,
         in SubType subIn1,

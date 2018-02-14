@@ -1,4 +1,4 @@
-package a;
+package types;
 
 public class Student extends Person {
 

@@ -59,6 +59,13 @@ public class SubComponentTests extends AbstractCoCoTest {
     Log.enableFailQuick(false);
   }
   
+  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
+  @Test
+  public void testSubcomponentWithJavaCfgArgs() {
+    checkValid(PACKAGE + "." + "SubcomponentsWithJavaCfgArg");
+  }
+  
+  
   @Test
   public void testSubcomponentParametersOfWrongType() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentParametersOfWrongType");

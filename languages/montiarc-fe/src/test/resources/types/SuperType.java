@@ -1,4 +1,4 @@
-package d;
+package types;
 
 public class SuperType {
 

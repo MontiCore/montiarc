@@ -151,5 +151,11 @@ public class PortTests extends AbstractCoCoTest {
     assertEquals("1", port.getStereotype().get("initialOutput").get());
     assertFalse(port.getStereotype().get("ignoreWarning").isPresent());
   }
+  
+  @Test
+  public void testJavaTypedPorts() {
+    checkValid("components.body.ports.ComponentWithJavaTypedPorts");
+  }
+  
 
 }
