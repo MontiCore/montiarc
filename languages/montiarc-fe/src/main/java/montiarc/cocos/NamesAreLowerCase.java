@@ -42,5 +42,7 @@ public class NamesAreLowerCase implements MontiArcASTComponentCoCo {
       }
     }
     
+    // TODO: Auch für Parameter nachziehen -> Neue CoCo NamesCorrectlyCapitalized
+    
   }
 }

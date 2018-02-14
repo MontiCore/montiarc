@@ -19,5 +19,6 @@ public class UseOfForbiddenExpression implements JavaDSLASTExpressionCoCo {
     if (node.instanceofTypeIsPresent()) {
       Log.error("0xMA023 Expression contains forbidden expression: instanceOf expression", node.get_SourcePositionStart());
     }
+    // TODO: Auch Schleifen und anderen Kram verbieten. Siehe [Wor16].
   }
 }
