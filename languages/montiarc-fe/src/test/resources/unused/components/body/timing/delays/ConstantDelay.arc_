@@ -1,4 +1,4 @@
-package ma.sim;
+package components.body.timing.delays;
 
 /**
  * @brief adds a fix delay to a channel.

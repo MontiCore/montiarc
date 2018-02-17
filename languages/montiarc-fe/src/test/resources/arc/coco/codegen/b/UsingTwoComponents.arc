@@ -1,5 +1,8 @@
 package b;
 
+/*
+ * Formerly 'UsingCandB'
+ */
 component UsingTwoComponents {
     
     port

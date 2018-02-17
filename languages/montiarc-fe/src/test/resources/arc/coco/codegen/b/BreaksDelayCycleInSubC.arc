@@ -1,6 +1,9 @@
 package b;
 
-component BreakesDelayCycleInSubC {
+/*
+ * Valid model.
+ */
+component BreaksDelayCycleInSubC {
 
     port
         in String sIn,
@@ -9,11 +12,11 @@ component BreakesDelayCycleInSubC {
     component CompWithStringInputAndOutput a;
     component CompWithTwoStringInputsAndOutput c;
     
-    component UsingAandB;
+    component UsingCompsWithTwoPortsAndWithAndWithoutDelay using;
     
     connect sIn -> c.sIn1;
     connect c.sOut -> a.sIn;
-    connect a.sOut -> sOut, usingAandB.sIn;
-    connect usingAandB.sOut -> c.sIn2;
+    connect a.sOut -> sOut, using.sIn;
+    connect using.sOut -> c.sIn2;
     
 }

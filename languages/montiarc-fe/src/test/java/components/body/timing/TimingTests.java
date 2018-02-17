@@ -18,12 +18,12 @@ import infrastructure.AbstractCoCoTest;
 import montiarc._symboltable.ComponentSymbol;
 
 /**
- * This class checks all context conditions related to the definition of
- * subcomponents
+ * This class checks all context conditions related to the timing configuration
+ * and undelayed message cycles.
  *
  * @author Andreas Wortmann
  */
-public class SubComponentTests extends AbstractCoCoTest {
+public class TimingTests extends AbstractCoCoTest {
 
   private static final String PACKAGE = "components.body.timing";
 

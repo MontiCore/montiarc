@@ -2,7 +2,7 @@ package b;
 
 /*
  * Invalid model. Contains one communication cycle.
- * TODO: Still relevant?
+ *
  * @implements [Hab16] CG1: Communication cycles without delay should be avoided. (p. 73 Lst. 3.55)
  */
 component DoesNotBreakDelayCycleInMoreComplexSubC {

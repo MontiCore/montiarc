@@ -1,6 +1,9 @@
 package b;
 
-component UsingCompWithStringInputAndOutputAndDelayedComponentWithTwoPorts {
+/*
+ * Formerly 'UsingAandB'
+ */
+component UsingCompsWithTwoPortsAndWithAndWithoutDelay {
     port
         in String sIn,
         out String sOut;

@@ -2,6 +2,7 @@ package b;
 
 /*
  * Valid model.
+ * Formerly named 'A'
  */
 component CompWithStringInputAndOutput {
     port

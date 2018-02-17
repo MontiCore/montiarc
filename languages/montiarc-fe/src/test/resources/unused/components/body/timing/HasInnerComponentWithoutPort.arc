@@ -1,11 +1,12 @@
-package a;
+package components.body.timing;
 
 /*
  * Valid model.
+ * Original name: ComponentWithoutPort
  *
  * @author Arne Haber
  */
-component ComponentWithoutPort {
+component HasInnerComponentWithoutPort {
     
     component InnerWithPort {
         port 

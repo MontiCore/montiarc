@@ -1,7 +1,8 @@
 package b;
 
 /*
- * Valid model. (in MontiArc 3)
+ * Valid model.
+ * Formerly named 'B'
  */
 component DelayedComponentWithTwoPorts {
     

@@ -9,5 +9,4 @@ component CompWithTwoStringInputsAndOutput {
         in String sIn1,
         in String sIn2,
         out String sOut;
-
 }

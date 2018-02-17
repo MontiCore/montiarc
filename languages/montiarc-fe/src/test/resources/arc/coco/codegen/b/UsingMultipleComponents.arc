@@ -1,5 +1,8 @@
 package b;
 
+/*
+ * Formerly 'UsingAandCandB'
+ */
 component UsingMultipleComponents {
     
     port
@@ -19,6 +22,4 @@ component UsingMultipleComponents {
     connect b.sOut -> c.sIn1;
     connect a.sOut -> c.sIn2;
     connect c.sOut -> sOut;
-    
-    
 }
