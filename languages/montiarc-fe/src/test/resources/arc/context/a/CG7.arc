@@ -1,8 +1,8 @@
 package a;
 
-import myTypes.DefinedType;
+import types.TypesWithHierarchy.DefinedType;
 import y.*;
-import x.DefinedJavaTypeInX;
+import cg13.x.DefinedJavaTypeInX;
 
 component CG7 {
 

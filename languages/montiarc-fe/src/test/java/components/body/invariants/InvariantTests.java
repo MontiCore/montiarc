@@ -31,12 +31,19 @@ public class InvariantTests extends AbstractCoCoTest {
   }
   
   @Test
-  public void testInexistingPortType() {
-    // TODO: Star imports?
+  public void testAmbiguousInvariantNames() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousInvariantNames");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         node,
         new ExpectedErrorInfo(2, "xMA052"));
+  }
+
+  @Test
+  public void testAmbiguousInvariantNames2() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousInvariantNames2");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
+        node,
+        new ExpectedErrorInfo(1, "xMA052"));
   }
   
   @Ignore("TODO ocl invariants?")

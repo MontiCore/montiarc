@@ -560,5 +560,41 @@ public class SubComponentTests extends AbstractCoCoTest {
     // assertEquals("java.lang.Integer",
     // typeRef.getTypeParameters().get(1).getTypeParameters().get(0).getType().getName());
   }
-  
+
+  @Test
+  public void testHasGenericInputAndOutputPort() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "HasGenericInputAndOutputPort");
+  }
+
+  @Test
+  public void testHasPortsOfHierarchicalCDTypes() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "HasPortsOfHierarchicalCDTypes");
+  }
+
+  @Test
+  public void testHasStringInputAndIntegerOutput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "HasStringInputAndIntegerOutput");
+  }
+
+  @Test
+  public void testHasThreeGenericInAndOneOutputPort() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "HasThreeGenericInAndOneOutPort");
+  }
+
+  @Test
+  public void testIntegerInputAndBooleanOutput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "IntegerInputAndBooleanOutput");
+  }
+
+  @Test
+  public void testHasPortWithImportedType() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "HasPortWithImportedType");
+  }
+
 }
