@@ -88,6 +88,17 @@ public class ConnectorTests extends AbstractCoCoTest {
   }
   
   @Test
+  public void testConnectingInheritedPorts() {
+    checkValid(PACKAGE + "." + "ExistingPortInConnectorFromSuperComponent");
+  }
+  
+  @Test
+  public void testConnectors() {
+    String modelname = PACKAGE + "." + "ExistingReferenceInConnector";
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExist()), loadComponentAST(modelname), new ExpectedErrorInfo(4, "xMA066", "xMA067", "xMA081"));
+  }
+  
+  @Test
   public void testConnectorSourceInvalid() {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "ConnectorPiercingOutwardsThroughInterface");

@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 
 import de.monticore.symboltable.CommonSymbol;
 import de.se_rwth.commons.Splitters;
+import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTConnector;
 import montiarc.helper.SymbolPrinter;
 
@@ -93,6 +94,10 @@ public class ConnectorSymbol extends CommonSymbol {
       
       Optional<ComponentInstanceSymbol> inst = cmp.getSpannedScope()
           .<ComponentInstanceSymbol> resolveLocally(instance, ComponentInstanceSymbol.KIND);
+      if(!inst.isPresent()) {
+        Log.error("0xMA081 Instance " + instance+ " is not defined in the component type " +cmp.getName());
+        return Optional.empty();
+      }
       foundPort = inst.get().getComponentType().getReferencedSymbol()
           .getSpannedScope()
           .resolveLocally(instancePort, PortSymbol.KIND);

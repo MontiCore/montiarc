@@ -51,6 +51,16 @@ public class PortTests extends AbstractCoCoTest {
   public void testBumpControl() {
     checkValid(PACKAGE + "." + "BumpControl");
   }
+  
+  @Test
+  public void testComponentWithArrayAsPortType() {
+    checkValid(PACKAGE + "." + "ComponentWithArrayAsPortTypeParameter");
+  }
+  
+  @Test
+  public void testComponentWithArrayAsPortTypeUsage() {
+    checkValid(PACKAGE + "." + "ComponentWithArrayAsPortTypeParameterUsage");
+  }
 
   @Test
   public void testNonUniquePortNames() {
