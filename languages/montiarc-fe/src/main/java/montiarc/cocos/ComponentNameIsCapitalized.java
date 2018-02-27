@@ -17,7 +17,7 @@ import montiarc._symboltable.MontiArcModelNameCalculator;
  * @author Robert Heim
  */
 public class ComponentNameIsCapitalized implements MontiArcASTComponentCoCo {
-
+  
   /**
    * @see montiarc._cocos.MontiArcASTComponentCoCo#check(montiarc._ast.ASTComponent)
    */

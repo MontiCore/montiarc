@@ -12,17 +12,15 @@ import montiarc.helper.CD4ALanguage;
  * @author Robert Heim, Andreas Wortmann
  */
 public class MontiArcLanguageFamily extends ModelingLanguageFamily {
-	
+  
   public MontiArcLanguageFamily() {
     addModelingLanguage(new MontiArcLanguage());
     addModelingLanguage(new JavaDSLLanguage());
     // Use CD4ALanguage instead of CD4AnalysisLanguage. see CD4ALanguage.
     // Required for on-the-fly coco checks.
-
+    
     addModelingLanguage(new CD4ALanguage());
-
     
   }
-
   
 }

@@ -20,14 +20,16 @@ public class CorrectAssignmentOperators implements MontiArcASTAutomatonCoCo {
       if (transition.getStimulus().isPresent()) {
         for (ASTIOAssignment stimulus : transition.getStimulus().get().getIOAssignments()) {
           if (stimulus.getOperator() == ASTConstantsMontiArc.SINGLE) { // == expected
-            Log.error("0xMA016 The stimulus '" + stimulus + "' uses the wrong assignment operator.", stimulus.get_SourcePositionStart());
+            Log.error("0xMA016 The stimulus '" + stimulus + "' uses the wrong assignment operator.",
+                stimulus.get_SourcePositionStart());
           }
         }
       }
       if (transition.getReaction().isPresent()) {
         for (ASTIOAssignment reaction : transition.getReaction().get().getIOAssignments()) {
           if (reaction.getOperator() == ASTConstantsMontiArc.DOUBLE) { // = expected
-            Log.error("0xMA017 The reaction '" + reaction + "' uses the wrong assignment operator.", reaction.get_SourcePositionStart());
+            Log.error("0xMA017 The reaction '" + reaction + "' uses the wrong assignment operator.",
+                reaction.get_SourcePositionStart());
           }
         }
       }

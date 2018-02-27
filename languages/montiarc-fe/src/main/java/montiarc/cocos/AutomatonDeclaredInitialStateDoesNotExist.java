@@ -11,8 +11,8 @@ import montiarc._ast.ASTStateDeclaration;
 import montiarc._cocos.MontiArcASTAutomatonCoCo;
 
 /**
- * Context condition for checking, if all states, labeled as initial states
- * have been defined as states in a {@link ASTStateDeclaration}.
+ * Context condition for checking, if all states, labeled as initial states have been defined as
+ * states in a {@link ASTStateDeclaration}.
  *
  * @author Andreas Wortmann
  */
@@ -38,7 +38,9 @@ public class AutomatonDeclaredInitialStateDoesNotExist implements MontiArcASTAut
     // can't find one
     for (String initialName : initialNames) {
       if (!stateNames.contains(initialName)) {
-        Log.error("0xMA025 State " + initialName + " is labeled as initial but is not definied as state.", node.get_SourcePositionStart());
+        Log.error(
+            "0xMA025 State " + initialName + " is labeled as initial but is not definied as state.",
+            node.get_SourcePositionStart());
       }
     }
   }

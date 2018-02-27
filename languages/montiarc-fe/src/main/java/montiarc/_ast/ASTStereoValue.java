@@ -12,7 +12,7 @@ public class ASTStereoValue extends ASTStereoValueTOP {
     this.name = name;
     this.source = Optional.of(source);
   }
-
+  
   public String getValue() {
     try {
       if (source.isPresent()) {
@@ -32,4 +32,3 @@ public class ASTStereoValue extends ASTStereoValueTOP {
   }
   
 }
-

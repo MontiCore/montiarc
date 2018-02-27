@@ -18,8 +18,8 @@ import montiarc._symboltable.VariableSymbol;
 import montiarc.helper.TypeCompatibilityChecker;
 
 /**
- * Context condition for checking, if all assignments inside a stimulus of a
- * transition are type-correct.
+ * Context condition for checking, if all assignments inside a stimulus of a transition are
+ * type-correct.
  *
  * @author Andreas Wortmann
  */
@@ -33,17 +33,21 @@ public class AutomatonStimulusTypeDoesNotFitInputType implements MontiArcASTTran
           String currentNameToResolve = assign.getName().get();
           
           Scope transitionScope = ((TransitionSymbol) node.getSymbol().get()).getSpannedScope();
-          Optional<VariableSymbol> varSymbol = transitionScope.resolve(currentNameToResolve, VariableSymbol.KIND);
-          Optional<PortSymbol> portSymbol = node.getEnclosingScope().get().resolve(currentNameToResolve, PortSymbol.KIND);
+          Optional<VariableSymbol> varSymbol = transitionScope.resolve(currentNameToResolve,
+              VariableSymbol.KIND);
+          Optional<PortSymbol> portSymbol = node.getEnclosingScope().get()
+              .resolve(currentNameToResolve, PortSymbol.KIND);
           
           if (portSymbol.isPresent()) {
             if (portSymbol.get().isOutgoing()) {
-              Log.error("0xMA045 Did not find matching Variable or Input with name " + currentNameToResolve, assign.get_SourcePositionStart());
+              Log.error("0xMA045 Did not find matching Variable or Input with name "
+                  + currentNameToResolve, assign.get_SourcePositionStart());
             }
             else {
               checkAssignment(assign, portSymbol.get().getTypeReference(), currentNameToResolve);
             }
-          }else if(varSymbol.isPresent()) {
+          }
+          else if (varSymbol.isPresent()) {
             checkAssignment(assign, varSymbol.get().getTypeReference(), currentNameToResolve);
           }
         }
@@ -51,23 +55,31 @@ public class AutomatonStimulusTypeDoesNotFitInputType implements MontiArcASTTran
     }
   }
   
-  private void checkAssignment(ASTIOAssignment assign, JTypeReference<? extends JTypeSymbol> typeRef, String currentNameToResolve) {
+  private void checkAssignment(ASTIOAssignment assign,
+      JTypeReference<? extends JTypeSymbol> typeRef, String currentNameToResolve) {
     try {
       if (assign.valueListIsPresent()) {
         JTypeReference<? extends JTypeSymbol> varType = typeRef;
-        for (ASTValuation val : assign.getValueList().get().getAllValuations()) {     
-          Optional<? extends JavaTypeSymbolReference> exprType = TypeCompatibilityChecker.getExpressionType(val.getExpression());
+        for (ASTValuation val : assign.getValueList().get().getAllValuations()) {
+          Optional<? extends JavaTypeSymbolReference> exprType = TypeCompatibilityChecker
+              .getExpressionType(val.getExpression());
           if (!exprType.isPresent()) {
-            Log.error("0xMA048 Could not resolve type of expression for checking the stimulus.", assign.get_SourcePositionStart());
+            Log.error("0xMA048 Could not resolve type of expression for checking the stimulus.",
+                assign.get_SourcePositionStart());
           }
           else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType)) {
-            Log.error("0xMA046 Type of Variable/Input " + currentNameToResolve + " in the stimulus does not match the type of its assigned expression. Type " +
-                exprType.get().getName() + " can not cast to type " + varType.getName() + ".", val.get_SourcePositionStart());
+            Log.error(
+                "0xMA046 Type of Variable/Input " + currentNameToResolve
+                    + " in the stimulus does not match the type of its assigned expression. Type " +
+                    exprType.get().getName() + " can not cast to type " + varType.getName() + ".",
+                val.get_SourcePositionStart());
           }
         }
       }
-    } catch (FailedLoadingSymbol e) {
-      Log.error("0xMA047 Could not resolve type for checking the stimulus.", assign.get_SourcePositionStart());
+    }
+    catch (FailedLoadingSymbol e) {
+      Log.error("0xMA047 Could not resolve type for checking the stimulus.",
+          assign.get_SourcePositionStart());
     }
   }
   

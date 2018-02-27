@@ -20,41 +20,41 @@ import montiarc._ast.ASTMontiArcTiming;
  * @author Arne Haber, Robert Heim
  */
 public enum Timing {
-
+  
   /**
    * Component is not aware of time progress.
    */
   UNTIMED("untimed"),
-
+  
   /**
    * Component is aware of time progress and might react to time events.
    */
   INSTANT("instant"),
-
+  
   /**
    * Timed component that produces a delay (= needs computation time).
    *
    * @since 2.5.0
    */
   DELAYED("delayed"),
-
+  
   /**
    * Component is aware of time progress and might react to time events. At max one message per
    * time-slice allowed.
    */
   TIME_SYNCHRONOUS("synchronous"),
-
+  
   /**
    * Time synchronous component with causal behavior, i.e., at least one time frame delayed.
    */
   CAUSAL_SYNCHRONOUS("causal synchronous");
-
+  
   private final String toString;
-
+  
   private Timing(String str) {
     this.toString = str;
   }
-
+  
   /**
    * @param component ast node of the component
    * @return {@link Timing} of the given component, or
@@ -85,7 +85,7 @@ public enum Timing {
     }
     return result;
   }
-
+  
   /**
    * @param paradigm String representation of a {@link Timing}. Must not be null.
    * @return {@link Timing} created from the given string.
@@ -94,7 +94,7 @@ public enum Timing {
   public static Timing createBehaviorKind(String paradigm) {
     checkNotNull(paradigm);
     Timing timeParadigm = MontiArcConstants.DEFAULT_TIME_PARADIGM;
-
+    
     if (paradigm.equals(TIME_SYNCHRONOUS.toString())) {
       timeParadigm = TIME_SYNCHRONOUS;
     }
@@ -112,12 +112,12 @@ public enum Timing {
     }
     return timeParadigm;
   }
-
+  
   @Override
   public String toString() {
     return toString;
   }
-
+  
   /**
    * @return true, if this paradigm is timed or time-synchronous, else false.
    */
@@ -129,14 +129,14 @@ public enum Timing {
       return true;
     }
   }
-
+  
   /**
    * @return true, if the component produces an initial delay.
    */
   public boolean isDelaying() {
     return this == DELAYED || this == CAUSAL_SYNCHRONOUS;
   }
-
+  
   public boolean isTimeSynchronous() {
     return this == TIME_SYNCHRONOUS || this == CAUSAL_SYNCHRONOUS;
   }

@@ -6,7 +6,6 @@
 package montiarc.cocos;
 
 import java.util.List;
-
 import java.util.Optional;
 
 import de.monticore.java.javadsl._ast.ASTExpression;
@@ -24,11 +23,9 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc.helper.TypeCompatibilityChecker;
 
 /**
- * Ensures that default values of parameters in the component's head are
- * correctly assigned.
+ * Ensures that default values of parameters in the component's head are correctly assigned.
  *
  * @implements [Wor16] MT7: Default values of parameters conform to their type. (p. 64, Lst. 4.22)
- *
  * @author Jerome Pfeiffer
  */
 public class DefaultParametersCorrectlyAssigned

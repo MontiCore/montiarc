@@ -6,32 +6,25 @@ import java.util.Optional;
 import de.monticore.ast.ASTNode;
 import de.monticore.java.javadsl._ast.ASTPrimaryExpression;
 import de.monticore.java.javadsl._cocos.JavaDSLASTPrimaryExpressionCoCo;
-import de.monticore.java.javadsl._visitor.JavaDSLVisitor;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.ScopeSpanningSymbol;
 import de.se_rwth.commons.logging.Log;
-import montiarc._ast.*;
-import montiarc._cocos.MontiArcASTValueListCoCo;
+import montiarc._ast.ASTAutomatonBehavior;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTElement;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
-import montiarc._symboltable.VariableSymbol;
-
-import javax.swing.text.html.Option;
-
 
 /**
  * Checks whether output ports are used within a expression in a automaton transition.
  * 
  * @implements [Wor16] AR2: Inputs, outputs, and variables are used correctly. (p. 103, Lst. 520)
- *
- * @author  (last commit) $Author$
- * @version $Revision$,
- *          $Date$
- * @since   TODO: add version number
- *
+ * @author (last commit) $Author$
+ * @version $Revision$, $Date$
+ * @since TODO: add version number
  */
 public class AutomatonOutputInExpression implements JavaDSLASTPrimaryExpressionCoCo {
-
+  
   @Override
   public void check(ASTPrimaryExpression node) {
     if (node.nameIsPresent() && node.getEnclosingScope().isPresent()) {
@@ -46,7 +39,10 @@ public class AutomatonOutputInExpression implements JavaDSLASTPrimaryExpressionC
             if (elem instanceof ASTAutomatonBehavior) {
               Optional<PortSymbol> found = scope.resolve(node.getName().get(), PortSymbol.KIND);
               if (found.isPresent() && found.get().isOutgoing()) {
-                Log.error("0xMA022 Field " + found.get().getName() + " is an Ouput and not allowed in Expressions.", node.get_SourcePositionStart());
+                Log.error(
+                    "0xMA022 Field " + found.get().getName()
+                        + " is an Ouput and not allowed in Expressions.",
+                    node.get_SourcePositionStart());
               }
             }
           }
@@ -55,6 +51,3 @@ public class AutomatonOutputInExpression implements JavaDSLASTPrimaryExpressionC
     }
   }
 }
-
-
-

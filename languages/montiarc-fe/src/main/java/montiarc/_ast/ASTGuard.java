@@ -4,20 +4,21 @@
 package montiarc._ast;
 
 public class ASTGuard extends ASTGuardTOP {
-
+  
   /**
    * Constructor for montiarc._ast.ASTGuard
+   * 
    * @param kind
    * @param guardExpression
    */
   public ASTGuard(String kind, ASTGuardExpression guardExpression) {
     super(kind, guardExpression);
   }
-
+  
   public ASTGuard() {
     super();
   }
-
+  
   public String getName() {
     String syntheticName = "[Guard] @ " + this.get_SourcePositionStart();
     return syntheticName;

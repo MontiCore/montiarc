@@ -6,7 +6,6 @@
 package montiarc._symboltable;
 
 import de.monticore.symboltable.resolving.CommonResolvingFilter;
-
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JMethodSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -31,34 +30,33 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
   @Override
   protected void initResolvingFilters() {
     super.initResolvingFilters();
-    // is done in generated TOP-language addResolver(new
+    // is done in generated TOP-language addResolvingFilter(new
     // CommonResolvingFilter<ComponentSymbol>(ComponentSymbol.class,
     // ComponentSymbol.KIND));
-    addResolver(new CommonResolvingFilter<ComponentInstanceSymbol>(ComponentInstanceSymbol.KIND));
-    addResolver(new CommonResolvingFilter<PortSymbol>(PortSymbol.KIND));
-    addResolver(new CommonResolvingFilter<ConnectorSymbol>(ConnectorSymbol.KIND));
-    addResolver(new CommonResolvingFilter<VariableSymbol>(VariableSymbol.KIND));
-    addResolver(new CommonResolvingFilter<AutomatonSymbol>(AutomatonSymbol.KIND));
-    
+    addResolvingFilter(
+        new CommonResolvingFilter<ComponentInstanceSymbol>(ComponentInstanceSymbol.KIND));
+    addResolvingFilter(new CommonResolvingFilter<PortSymbol>(PortSymbol.KIND));
+    addResolvingFilter(new CommonResolvingFilter<ConnectorSymbol>(ConnectorSymbol.KIND));
+    addResolvingFilter(new CommonResolvingFilter<VariableSymbol>(VariableSymbol.KIND));
+    addResolvingFilter(new CommonResolvingFilter<AutomatonSymbol>(AutomatonSymbol.KIND));
     
     // Java/P
-    addResolver(new CommonResolvingFilter<>(JavaBehaviorSymbol.KIND));
+    addResolvingFilter(new CommonResolvingFilter<>(JavaBehaviorSymbol.KIND));
     
-    addResolver(CommonResolvingFilter.create(JTypeSymbol.KIND));
-    addResolver(CommonResolvingFilter.create(JFieldSymbol.KIND));
-    addResolver(CommonResolvingFilter.create(JMethodSymbol.KIND));
-
+    addResolvingFilter(new CommonResolvingFilter<JTypeSymbol>(JTypeSymbol.KIND));
+    addResolvingFilter(new CommonResolvingFilter<JFieldSymbol>(JFieldSymbol.KIND));
+    addResolvingFilter(new CommonResolvingFilter<JMethodSymbol>(JMethodSymbol.KIND));
     
     // I/O Automaton
-    addResolver(new CommonResolvingFilter<StateSymbol>(StateSymbol.KIND));
-    addResolver(new TransitionResolvingFilter());
-    addResolver(new Variable2FieldResolvingFilter());
-    addResolver(new Port2FieldResolvingFilter());
+    addResolvingFilter(new CommonResolvingFilter<StateSymbol>(StateSymbol.KIND));
+    addResolvingFilter(new TransitionResolvingFilter());
+    addResolvingFilter(new Variable2FieldResolvingFilter());
+    addResolvingFilter(new Port2FieldResolvingFilter());
     
-    //TODO enable to resolve type arguments of subcomponents
-    addResolver(new CDTypeSymbol2JavaTypeFilter());
-    addResolver(new CDFieldSymbol2JavaFieldFilter());
-
+    // TODO enable to resolve type arguments of subcomponents
+    addResolvingFilter(new CDTypeSymbol2JavaTypeFilter());
+    addResolvingFilter(new CDFieldSymbol2JavaFieldFilter());
+    
     setModelNameCalculator(new MontiArcModelNameCalculator());
   }
   

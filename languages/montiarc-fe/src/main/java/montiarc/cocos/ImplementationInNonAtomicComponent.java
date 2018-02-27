@@ -18,27 +18,27 @@ import montiarc._symboltable.ComponentSymbol;
  * @author Andreas Wortmann
  */
 public class ImplementationInNonAtomicComponent implements MontiArcASTComponentCoCo {
-
-	/**
-	 * @see montiarc._cocos.MontiArcASTComponentCoCo#check(montiarc._ast.ASTComponent)
-	 */
-	@Override
-	public void check(ASTComponent node) {
-		ComponentSymbol cs = (ComponentSymbol) node.getSymbol().get();
-		if (cs.isDecomposed() && hasBehavior(node)) {
-			Log.error("0xMA051 There must not be a behavior embedding in composed components.",
-					node.get_SourcePositionStart());
-		}
-
-	}
-
-	public boolean hasBehavior(ASTComponent node) {
-		for (ASTElement e : node.getBody().getElements()) {
-			if (e instanceof ASTBehaviorElement) {
-				return true;
-			}
-		}
-		return false;
-	}
-
+  
+  /**
+   * @see montiarc._cocos.MontiArcASTComponentCoCo#check(montiarc._ast.ASTComponent)
+   */
+  @Override
+  public void check(ASTComponent node) {
+    ComponentSymbol cs = (ComponentSymbol) node.getSymbol().get();
+    if (cs.isDecomposed() && hasBehavior(node)) {
+      Log.error("0xMA051 There must not be a behavior embedding in composed components.",
+          node.get_SourcePositionStart());
+    }
+    
+  }
+  
+  public boolean hasBehavior(ASTComponent node) {
+    for (ASTElement e : node.getBody().getElements()) {
+      if (e instanceof ASTBehaviorElement) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
 }

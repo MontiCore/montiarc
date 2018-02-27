@@ -10,7 +10,6 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.SymbolKind;
@@ -21,12 +20,11 @@ import de.monticore.symboltable.types.references.CommonJTypeReference;
 import de.se_rwth.commons.logging.Log;
 
 /**
- * When resolving to JTypeSymbol method loadReferencedSymbol() of
- * CommonJTypeReference resolves single. As we use an adapter for
- * CDTypeSymbols2JavaTypeSymbols, resolving to CDTypeSymbols throws an error, as
- * there are two possible matching symbol kinds (CDTypeSymbol and Adapter
- * CDTypeSymbol2JavaType). In order to resolve many symbols in
- * loadReferencedSymbol() is overridden in this class.
+ * When resolving to JTypeSymbol method loadReferencedSymbol() of CommonJTypeReference resolves
+ * single. As we use an adapter for CDTypeSymbols2JavaTypeSymbols, resolving to CDTypeSymbols throws
+ * an error, as there are two possible matching symbol kinds (CDTypeSymbol and Adapter
+ * CDTypeSymbol2JavaType). In order to resolve many symbols in loadReferencedSymbol() is overridden
+ * in this class.
  *
  * @author Jerome Pfeiffer
  * @version $Revision$, $Date$
@@ -39,13 +37,10 @@ public class MAJTypeReference extends CommonJTypeReference<JTypeSymbol> {
   
   private SymbolKind referencedKind;
   
-  private Predicate predicate = x -> true;
-  
   private AccessModifier accessModifier = AccessModifier.ALL_INCLUSION;
   
   /**
-   * Constructor for
-   * de.monticore.lang.montiarc.montiarc._symboltable.MAJTypeReference
+   * Constructor for de.monticore.lang.montiarc.montiarc._symboltable.MAJTypeReference
    * 
    * @param referencedSymbolName
    * @param referencedSymbolKind
@@ -96,7 +91,7 @@ public class MAJTypeReference extends CommonJTypeReference<JTypeSymbol> {
           + " Could not load full information of '" +
           referencedName + "' (Kind " + referencedKind.getName() + ").");
     }
-
+    
     return resolvedSymbol;
   }
   

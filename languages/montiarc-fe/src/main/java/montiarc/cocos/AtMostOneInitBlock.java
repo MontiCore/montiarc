@@ -13,12 +13,15 @@ public class AtMostOneInitBlock implements MontiArcASTComponentCoCo {
   @Override
   public void check(ASTComponent node) {
     int initCount = 0;
-
+    
     for (ASTElement element : node.getBody().getElements()) {
-      if(element instanceof ASTJavaPInitializer) {
-        if(initCount >= 1) {
-          Log.error("0xMA080 There is more than one AJava init block in the component" + node.getName(), element.get_SourcePositionStart());
-        } else {
+      if (element instanceof ASTJavaPInitializer) {
+        if (initCount >= 1) {
+          Log.error(
+              "0xMA080 There is more than one AJava init block in the component" + node.getName(),
+              element.get_SourcePositionStart());
+        }
+        else {
           initCount++;
         }
       }

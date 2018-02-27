@@ -6,14 +6,15 @@ import java.util.Optional;
 
 import montiarc._ast.ASTBlock;
 
-
 public class StateSymbol extends StateSymbolTOP {
-
-  private List<String> stereoValues; 
+  
+  private List<String> stereoValues;
+  
   private Optional<ASTBlock> initialReaction;
+  
   private boolean isInitial;
+  
   public static final StateKind KIND = new StateKind();
-
   
   public StateSymbol(String name) {
     super(name);
@@ -37,21 +38,21 @@ public class StateSymbol extends StateSymbolTOP {
   public Optional<ASTBlock> getInitialReactionAST() {
     return initialReaction;
   }
-
+  
   public List<String> getStereoValues() {
     return this.stereoValues;
   }
   
   public void addStereoValue(String stereoValue) {
-    this.stereoValues.add(stereoValue);   
+    this.stereoValues.add(stereoValue);
   }
   
   @Override
-  public String toString(){
+  public String toString() {
     String stereo = "";
     String sep = "";
-    if(this.getStereoValues() != null){
-      for(String s : this.stereoValues){
+    if (this.getStereoValues() != null) {
+      for (String s : this.stereoValues) {
         stereo += sep + s;
         sep = ",";
       }
@@ -59,9 +60,9 @@ public class StateSymbol extends StateSymbolTOP {
       sep = "";
     }
     String initial = "";
-    if(this.isInitial){
-      initial = "initial ";      
-    }    
+    if (this.isInitial) {
+      initial = "initial ";
+    }
     return stereo + initial + this.getName();
   }
 }

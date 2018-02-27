@@ -17,5 +17,5 @@ public class UseOfValueLists implements MontiArcASTValueListCoCo {
     if (!node.getValuation().isPresent() && !node.getValuations().isEmpty()) {
       Log.error("0xMA081 Value lists are not supported.", node.get_SourcePositionStart());
     }
-  }  
+  }
 }

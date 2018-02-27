@@ -37,21 +37,28 @@ import montiarc.helper.Timing;
  * @author Robert Heim
  */
 public class ComponentSymbol extends CommonScopeSpanningSymbol {
-
+  
   public static final ComponentKind KIND = new ComponentKind();
+  
   private final List<AComponentImplementationSymbol> implementations = new ArrayList<>();
+  
   private final Map<String, Optional<String>> stereotype = new HashMap<>();
+  
   private boolean isInnerComponent = false;
-
+  
   private Optional<ComponentSymbolReference> superComponent = Optional.empty();
+  
   private Timing timing = MontiArcConstants.DEFAULT_TIME_PARADIGM;
+  
   private boolean delayed = false;
+  
   // when "this" not actually is a component, but a reference to a component, this optional
   // attribute is set by the symbol-table creator to the referenced component and must be used for
   // implementation.
   private Optional<ComponentSymbol> referencedComponent = Optional.empty();
+  
   private List<ImportStatement> imports;
-
+  
   public ComponentSymbol(String name) {
     super(name, KIND);
   }
@@ -59,21 +66,21 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   public ComponentSymbol(String name, SymbolKind kind) {
     super(name, kind);
   }
-
+  
   /**
    * @return referencedComponent
    */
   public Optional<ComponentSymbol> getReferencedComponent() {
     return this.referencedComponent;
   }
-
+  
   /**
    * @param referencedComponent the referencedComponent to set
    */
   public void setReferencedComponent(Optional<ComponentSymbol> referencedComponent) {
     this.referencedComponent = referencedComponent;
   }
-
+  
   /**
    * @param parameterType configuration parameter to add
    */
@@ -86,7 +93,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
       getMutableSpannedScope().add(parameterType);
     }
   }
-
+  
   /**
    * @param target target of the connector to get
    * @return a connector with the given target, absent optional, if it does not exist
@@ -100,15 +107,15 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
     }
     return Optional.empty();
   }
-
+  
   /**
    * @return connectors of this component
    */
   public Collection<ConnectorSymbol> getConnectors() {
     return referencedComponent.orElse(this)
-        .getSpannedScope().<ConnectorSymbol>resolveLocally(ConnectorSymbol.KIND);
+        .getSpannedScope().<ConnectorSymbol> resolveLocally(ConnectorSymbol.KIND);
   }
-
+  
   /**
    * @param visibility visibility
    * @return connectors with the given visibility
@@ -119,7 +126,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
         .filter(c -> c.getAccessModifier().includes(visibility))
         .collect(Collectors.toList());
   }
-
+  
   /**
    * Checks, if this component has a connector with the given receiver name.
    *
@@ -132,7 +139,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
         .filter(c -> c.getName().equals(receiver))
         .findAny().isPresent();
   }
-
+  
   /**
    * Checks, if this component has one or more connectors with the given sender.
    *
@@ -146,28 +153,28 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
         .filter(c -> c.getSource().equals(sender))
         .findAny().isPresent();
   }
-
+  
   /**
    * @param impl the implementation to add
    */
   public void addImplementation(AComponentImplementationSymbol impl) {
     referencedComponent.orElse(this).implementations.add(impl);
   }
-
+  
   /**
    * @return implementations
    */
   public List<AComponentImplementationSymbol> getImplementations() {
     return ImmutableList.copyOf(referencedComponent.orElse(this).implementations);
   }
-
+  
   public Optional<AComponentImplementationSymbol> getImplementation(String name) {
     // no check for reference required
     return getImplementations().stream()
         .filter(i -> i.getName().equals(name))
         .findFirst();
   }
-
+  
   /**
    * @param visibility visibility
    * @return implementations with the given visibility
@@ -178,15 +185,15 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
         .filter(s -> s.getAccessModifier().includes(visibility))
         .collect(Collectors.toList());
   }
-
+  
   /**
    * @return innerComponents
    */
   public Collection<ComponentSymbol> getInnerComponents() {
     return referencedComponent.orElse(this).getSpannedScope()
-        .<ComponentSymbol>resolveLocally(ComponentSymbol.KIND);
+        .<ComponentSymbol> resolveLocally(ComponentSymbol.KIND);
   }
-
+  
   /**
    * @param name inner component name
    * @return inner component with the given name, empty Optional, if it does not exist
@@ -197,7 +204,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
         .filter(c -> c.getName().equals(name))
         .findFirst();
   }
-
+  
   /**
    * @param visibility visibility
    * @return inner components with the given visibility
@@ -208,14 +215,14 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
         .filter(s -> s.getAccessModifier().includes(visibility))
         .collect(Collectors.toList());
   }
-
+  
   /**
    * @return true, if this is an inner component, else false.
    */
   public boolean isInnerComponent() {
     return referencedComponent.orElse(this).isInnerComponent;
   }
-
+  
   /**
    * Sets, if this is an inner component or not.
    *
@@ -224,7 +231,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   public void setIsInnerComponent(boolean isInnerComponent) {
     referencedComponent.orElse(this).isInnerComponent = isInnerComponent;
   }
-
+  
   /**
    * @param typeParameter generic type parameter to add
    */
@@ -237,26 +244,26 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
       getMutableSpannedScope().add(formalTypeParameter);
     }
   }
-
+  
   public List<JTypeSymbol> getFormalTypeParameters() {
-    final Collection<JTypeSymbol> resolvedTypes =
-        referencedComponent.orElse(this).getSpannedScope().resolveLocally(JTypeSymbol.KIND);
+    final Collection<JTypeSymbol> resolvedTypes = referencedComponent.orElse(this).getSpannedScope()
+        .resolveLocally(JTypeSymbol.KIND);
     return resolvedTypes.stream().filter(JTypeSymbol::isFormalTypeParameter)
         .collect(Collectors.toList());
   }
-
+  
   public boolean hasFormalTypeParameters() {
     return !getFormalTypeParameters().isEmpty();
   }
-
+  
   public boolean hasConfigParameters() {
     return !getConfigParameters().isEmpty();
   }
-
+  
   public boolean hasPorts() {
     return !getPorts().isEmpty();
   }
-
+  
   /**
    * Ports of this component.
    *
@@ -264,20 +271,20 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
    */
   public Collection<PortSymbol> getPorts() {
     return referencedComponent.orElse(this).getSpannedScope()
-        .<PortSymbol>resolveLocally(PortSymbol.KIND);
+        .<PortSymbol> resolveLocally(PortSymbol.KIND);
   }
-
+  
   /**
    * @return incomingPorts of this component
    */
   public Collection<PortSymbol> getIncomingPorts() {
     return referencedComponent.orElse(this).getSpannedScope()
-        .<PortSymbol>resolveLocally(PortSymbol.KIND)
+        .<PortSymbol> resolveLocally(PortSymbol.KIND)
         .stream()
         .filter(p -> p.isIncoming())
         .collect(Collectors.toList());
   }
-
+  
   /**
    * @param name port name
    * @return incoming port with the given name, empty optional, if it does not exist
@@ -288,7 +295,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
         .filter(p -> p.getName().equals(name))
         .findFirst();
   }
-
+  
   /**
    * @param visibility
    * @return incoming ports with the given visibility
@@ -299,29 +306,29 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
         .filter(s -> s.getAccessModifier().includes(visibility))
         .collect(Collectors.toList());
   }
-
+  
   /**
    * @return outgoingPorts of this component
    */
   public Collection<PortSymbol> getOutgoingPorts() {
     return referencedComponent.orElse(this).getSpannedScope()
-        .<PortSymbol>resolveLocally(PortSymbol.KIND)
+        .<PortSymbol> resolveLocally(PortSymbol.KIND)
         .stream()
         .filter(p -> p.isOutgoing())
         .collect(Collectors.toList());
   }
-
+  
   /**
    * Returns a list of all incoming ports that also contains ports from a super component.
    *
-   * @param loader        used to load full version of super component (if needed)
+   * @param loader used to load full version of super component (if needed)
    * @param deserializers used to load full version of super component (if needed)
    * @return list of all incoming ports.
    */
   public List<PortSymbol> getAllIncomingPorts() {
     return referencedComponent.orElse(this).getAllPorts(true);
   }
-
+  
   /**
    * @param name port name
    * @return outgoing port with the given name, empty optional, if it does not exist
@@ -332,7 +339,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
         .filter(p -> p.getName().equals(name))
         .findFirst();
   }
-
+  
   /**
    * @param visibility visibility
    * @return outgoing ports with the given visibility
@@ -343,24 +350,24 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
         .filter(s -> s.getAccessModifier().includes(visibility))
         .collect(Collectors.toList());
   }
-
+  
   /**
    * Returns a list of all outgoing ports that also contains ports from a super component.
    *
-   * @param loader        used to load full version of super component (if needed)
+   * @param loader used to load full version of super component (if needed)
    * @param deserializers used to load full version of super component (if needed)
    * @return list of all outgoing ports.
    */
   public List<PortSymbol> getAllOutgoingPorts() {
     return referencedComponent.orElse(this).getAllPorts(false);
   }
-
+  
   protected List<PortSymbol> getAllPorts() {
     List<PortSymbol> result = new ArrayList<PortSymbol>();
-
+    
     // own ports
     result.addAll(getPorts());
-
+    
     // ports from super components
     Optional<ComponentSymbolReference> superCompOpt = getSuperComponent();
     if (superCompOpt.isPresent()) {
@@ -379,7 +386,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
     }
     return result;
   }
-
+  
   private List<PortSymbol> getAllPorts(boolean isIncoming) {
     return getAllPorts().stream().filter(p -> p.isIncoming() == isIncoming)
         .collect(Collectors.toList());
@@ -394,7 +401,6 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
     return getVariables().stream().filter(v -> v.getName().equals(name)).findFirst();
   }
   
-
   /**
    * @return super component of this component, empty optional, if it does not have a super
    * component
@@ -407,14 +413,14 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
       return superComponent;
     }
   }
-
+  
   /**
    * @param superComponent the super component to set
    */
   public void setSuperComponent(Optional<ComponentSymbolReference> superComponent) {
     referencedComponent.orElse(this).superComponent = superComponent;
   }
-
+  
   /**
    * @return subComponents
    */
@@ -422,7 +428,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
     return referencedComponent.orElse(this).getSpannedScope()
         .resolveLocally(ComponentInstanceSymbol.KIND);
   }
-
+  
   /**
    * @param name subcomponent instance name
    * @return subcomponent with the given name, empty optional, if it does not exist
@@ -433,7 +439,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
         .filter(p -> p.getName().equals(name))
         .findFirst();
   }
-
+  
   /**
    * @param visibility visibility
    * @return subcomponents with the given visibility
@@ -444,7 +450,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
         .filter(s -> s.getAccessModifier().includes(visibility))
         .collect(Collectors.toList());
   }
-
+  
   /**
    * @return configParameters
    */
@@ -460,7 +466,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
       return parameters;
     }
   }
-
+  
   /**
    * @return List of configuration parameters that are to be set during instantiation with the given
    * visibility
@@ -471,7 +477,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
         .filter(s -> s.getAccessModifier().includes(visibility))
         .collect(Collectors.toList());
   }
-
+  
   /**
    * Sets, if the component has a delay.
    *
@@ -480,38 +486,38 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   public void setDelayed(boolean delayed) {
     referencedComponent.orElse(this).delayed = delayed;
   }
-
+  
   /**
    * @return true, if the component has a delay, else false.
    */
   public boolean hasDelay() {
     return referencedComponent.orElse(this).delayed;
   }
-
+  
   /**
    * Adds the stereotype key=value to this entry's map of stereotypes
    *
-   * @param key      the stereotype's key
+   * @param key the stereotype's key
    * @param optional the stereotype's value
    */
   public void addStereotype(String key, Optional<String> optional) {
     referencedComponent.orElse(this).stereotype.put(key, optional);
   }
-
+  
   /**
    * @return map representing the stereotype of this component
    */
   public Map<String, Optional<String>> getStereotype() {
     return referencedComponent.orElse(this).stereotype;
   }
-
+  
   /**
    * @return the timing
    */
   public Timing getBehaviorKind() {
     return referencedComponent.orElse(this).timing;
   }
-
+  
   /**
    * @param timing the timing to set
    */
@@ -521,20 +527,20 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
       referencedComponent.orElse(this).setDelayed(true);
     }
   }
-
+  
   public boolean isDecomposed() {
     return !isAtomic();
   }
-
+  
   public boolean isAtomic() {
     return getSubComponents().isEmpty();
   }
-
+  
   @Override
   public String toString() {
     return SymbolPrinter.printComponent(this);
   }
-
+  
   /**
    * TODO reuse ArtifactScope? see TODO in {@link #setImports(List)}
    *
@@ -543,7 +549,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   public List<ImportStatement> getImports() {
     return this.imports;
   }
-
+  
   /**
    * TODO could we get these somehow from the ArtifactScope? there the imports are private, but we
    * want (some?) imports to be printed in a generated java file, when e.g. aggregated with Java and
@@ -554,5 +560,5 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   public void setImports(List<ImportStatement> imports) {
     this.imports = imports;
   }
-
+  
 }

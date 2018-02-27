@@ -17,8 +17,8 @@ import montiarc._symboltable.VariableSymbol;
 import montiarc.helper.TypeCompatibilityChecker;
 
 /**
- * Context condition for checking, if all assignments inside a reaction of a
- * transition are type-correct.
+ * Context condition for checking, if all assignments inside a reaction of a transition are
+ * type-correct.
  *
  * @author Andreas Wortmann
  */

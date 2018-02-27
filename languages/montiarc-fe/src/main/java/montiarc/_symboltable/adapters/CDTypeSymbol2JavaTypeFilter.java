@@ -10,20 +10,18 @@ import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 /**
  * CDTypeSymbol2JavaTypeSymbol resolving filter.
  *
- * @author  (last commit) $Author$
- * @version $Revision$,
- *          $Date$
- *
+ * @author (last commit) $Author$
+ * @version $Revision$, $Date$
  */
 public class CDTypeSymbol2JavaTypeFilter extends TransitiveAdaptedResolvingFilter<JavaTypeSymbol> {
-
+  
   public CDTypeSymbol2JavaTypeFilter() {
     super(CDTypeSymbol.KIND, JavaTypeSymbol.class, JavaTypeSymbol.KIND);
   }
-
+  
   @Override
   public Symbol translate(Symbol adaptee) {
     Preconditions.checkArgument(adaptee instanceof CDTypeSymbol);
-    return new CDTypeSymbol2JavaType((CDTypeSymbol)adaptee);
+    return new CDTypeSymbol2JavaType((CDTypeSymbol) adaptee);
   }
 }

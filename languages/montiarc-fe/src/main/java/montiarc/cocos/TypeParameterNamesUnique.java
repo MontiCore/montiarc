@@ -18,7 +18,7 @@ import montiarc._cocos.MontiArcASTComponentHeadCoCo;
  * @author (last commit) Crispin Kirchner
  */
 public class TypeParameterNamesUnique implements MontiArcASTComponentHeadCoCo {
-
+  
   /**
    * @see montiarc._cocos.MontiArcASTComponentCoCo#check(montiarc._ast.ASTComponent)
    */
@@ -28,20 +28,20 @@ public class TypeParameterNamesUnique implements MontiArcASTComponentHeadCoCo {
     if (typeParameters == null) {
       return;
     }
-
+    
     List<String> typeParameterNames = new ArrayList<>();
     for (ASTTypeVariableDeclaration typeParameter : typeParameters.getTypeVariableDeclarations()) {
-
+      
       if (typeParameterNames.contains(typeParameter.getName())) {
         Log.error(String.format(
             "0xMA006 The formal type parameter name \"%s\" is not unique",
             typeParameter.getName()), typeParameter.get_SourcePositionStart());
       }
-
+      
       else {
         typeParameterNames.add(typeParameter.getName());
       }
     }
   }
-
+  
 }
