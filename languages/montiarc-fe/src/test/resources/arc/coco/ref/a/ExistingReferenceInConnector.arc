@@ -5,7 +5,7 @@ component ExistingReferenceInConnector {
         in String strIn,
         out String strOut;
         
-    component CorrectCompInA ccia [stringOut -> wrongTarget.strIn];
+    component ValidComponentInPackage1 ccia [stringOut -> wrongTarget.strIn];
     
     connect strIn -> cciaWrong.stringIn;
     connect cciaWrong.stringOut -> strOut;

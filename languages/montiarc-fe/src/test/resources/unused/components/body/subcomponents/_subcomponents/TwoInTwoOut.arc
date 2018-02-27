@@ -1,5 +1,9 @@
-package b;
+package components._subcomponents;
 
+/*
+ * Valid model.
+ * Original Name: TwoInTwoOut
+ */
 component TwoInTwoOut {
     
     port

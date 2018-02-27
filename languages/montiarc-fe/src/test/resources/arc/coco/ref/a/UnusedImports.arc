@@ -1,7 +1,7 @@
 package a;
 
 // unused imports
-import a.CorrectCompInA;
+import a.ValidComponentInPackage1;
 import b.GenericComponent;
 import c.CorrectCompInC;
 import java.math.BigDecimal;
@@ -30,7 +30,7 @@ component UnusedImports(Map m, java.util.Set s) extends b.GenericComponent<java.
         out String strOut2;
     
     component CorrectCompInB ccib;
-    component a.CorrectCompInA ccia;
+    component a.ValidComponentInPackage1 ccia;
     
     component b.SimpleGenericComponent<PrintStream, BigInteger> generic1;
     component b.SimpleGenericComponent<java.io.IOException, BigInteger> generic2;

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.symboltable.Scope;
@@ -57,6 +58,14 @@ public class PortTests extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "NonUniquePortNames");
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new ExpectedErrorInfo(3, "xMA053"));
+  }
+
+  @Test
+  @Ignore("Fix UniqueIdentifiers.java CoCo")
+  public void testPortNameAmbiguous() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortNameAmbiguous");
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new ExpectedErrorInfo(1, "xMA053"));
   }
 
   @Test

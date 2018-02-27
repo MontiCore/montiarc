@@ -1,5 +1,8 @@
 package a;
 
+/*
+ *
+ */
 component NameSpaceHidingSuper {
 
     port

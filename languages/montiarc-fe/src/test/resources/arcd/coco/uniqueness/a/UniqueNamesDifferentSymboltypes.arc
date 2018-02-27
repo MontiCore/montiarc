@@ -6,8 +6,8 @@ component UniqueNamesDifferentSymboltypes<myName>(int myName) {
         in String myName,
         out String myOtherName;
         
-    component CorrectCompInA myName;
-    component CorrectCompInA myOtherName;
+    component ValidComponentInPackage1 myName;
+    component ValidComponentInPackage1 myOtherName;
     
     component InnerComp {
         // myName is not unique in this component, but myOtherName is => 2 errors
@@ -15,7 +15,7 @@ component UniqueNamesDifferentSymboltypes<myName>(int myName) {
             in String myName,
             out String myOtherName;
             
-        component CorrectCompInA myName;
+        component ValidComponentInPackage1 myName;
     }
     
     component InnerComp;

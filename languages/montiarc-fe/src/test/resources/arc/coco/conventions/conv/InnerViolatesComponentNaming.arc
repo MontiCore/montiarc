@@ -1,10 +1,16 @@
 package conv;
 
+/*
+ * Invalid model.
+ * Component names have to start with a capital letter
+ *
+ * @implements TODO
+ */
 component InnerViolatesComponentNaming {
     
     port 
         in String s1;
-    component violates { // Inner component does not start with a capital letter
+    component violates { // Component name does not start with a capital letter
         port 
             in String s2;
     }

@@ -10,7 +10,7 @@ component ExistingPortInConnector {
         out String strOut3,
         out String strOut4;
         
-    component CorrectCompInA ccia [stringOutWrong -> strOut1];
+    component ValidComponentInPackage1 ccia [stringOutWrong -> strOut1];
     
     component CorrectCompInB ccib;
     

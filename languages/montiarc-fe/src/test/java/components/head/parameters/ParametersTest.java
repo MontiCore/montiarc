@@ -38,11 +38,27 @@ public class ParametersTest extends AbstractCoCoTest {
   }
 
   @Test
+  /*
+   * Tests [Hab16] B1: All names of model elements within a component
+   *                    namespace have to be unique. (p. 59. Lst. 3.31)
+   */
   public void testParameterNamesUniqueTestInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         loadComponentAST(PACKAGE + "." + "ParameterAmbiguous"),
         new ExpectedErrorInfo(1, "xMA069"));
     
+  }
+
+  @Test
+  /*
+   * Tests [Hab16] B1: All names of model elements within a component
+   *                    namespace have to be unique. (p. 59. Lst. 3.31)
+   */
+  public void testConfigurationParametersNotUnique() {
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
+        loadComponentAST(PACKAGE + "." + "ConfigurationParametersNotUnique"),
+        new ExpectedErrorInfo(2, "xMA069"));
+
   }
   
   @Test

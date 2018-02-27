@@ -9,7 +9,7 @@ component ExistingReferencedComponents {
         out String sout2,
         out String sout3;
         
-    component CorrectCompInA ccia;
+    component ValidComponentInPackage1 ccia;
     
     component b.CorrectCompInB ccib;
     
