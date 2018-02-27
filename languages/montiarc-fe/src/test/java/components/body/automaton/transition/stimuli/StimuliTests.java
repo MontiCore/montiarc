@@ -23,14 +23,14 @@ public class StimuliTests extends AbstractCoCoTest {
   public static void setUp() {
     Log.enableFailQuick(false);
   }
-
+  
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
       + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testMultipleAssignmentTypeConflics() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MultipleAssignmentTypeConflics");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA046"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(2, "xMA046"));
   }
-
+  
 }

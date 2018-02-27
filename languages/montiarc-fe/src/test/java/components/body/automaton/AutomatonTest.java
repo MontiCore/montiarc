@@ -12,7 +12,6 @@ import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
-import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._symboltable.AutomatonSymbol;
 import montiarc._symboltable.ComponentSymbol;
@@ -43,24 +42,24 @@ public class AutomatonTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AutomatonInComposedComponent");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA051"));
   }
-
+  
   @Test
   public void testLowerCaseAutomatonName() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AutomatonWithLowerCaseName");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA015"));
   }
-
+  
   @Test
   public void testAutomatonHasStates() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AutomatonWithoutState");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA014"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA014"));
   }
-
+  
   @Test
   public void testAutomatonHasNoInitialStates() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AutomatonWithoutInitialState");
     // automaton has states but no initial state -> exactly 1 error.
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA013"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA013"));
   }
   
   @Test
@@ -79,9 +78,9 @@ public class AutomatonTest extends AbstractCoCoTest {
     assertTrue(oBControl.isPresent());
     
     ComponentSymbol bControl = oBControl.get();
-    Optional<AutomatonSymbol>  autSymbol = bControl.getSpannedScope().<AutomatonSymbol>
-            resolve("BumpControl", AutomatonSymbol.KIND);
+    Optional<AutomatonSymbol> autSymbol = bControl.getSpannedScope()
+        .<AutomatonSymbol> resolve("BumpControl", AutomatonSymbol.KIND);
     assertTrue(autSymbol.isPresent());
   }
-
+  
 }

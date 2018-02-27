@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
-import montiarc.cocos.PackageLowerCase;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -24,6 +23,7 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.ImportsAreUnique;
+import montiarc.cocos.PackageLowerCase;
 import montiarc.cocos.TopLevelComponentHasNoInstanceName;
 
 /**
@@ -47,7 +47,7 @@ public class ComponentTests extends AbstractCoCoTest {
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA074"));
   }
-
+  
   @Test
   @Ignore("Components with upper case packages can not be resolved by the symbol table.")
   /**
@@ -58,7 +58,7 @@ public class ComponentTests extends AbstractCoCoTest {
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PackageLowerCase());
     checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA054"));
   }
-
+  
   @Test
   public void testCDType2JavaType() {
     Scope symTab = this.loadDefaultSymbolTable();

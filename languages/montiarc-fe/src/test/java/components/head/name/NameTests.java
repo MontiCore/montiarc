@@ -46,7 +46,7 @@ public class NameTests extends AbstractCoCoTest {
     catch (Exception e) {
       fail(e.toString());
     }
-
+    
     // then
     fail("NameClashB.arc should not be parseable because '" + qualifiedName + "' is ambiguous.");
   }

@@ -46,7 +46,7 @@ public class GuardTests extends AbstractCoCoTest {
   @Test
   public void testGuardUsesOutgoingPort() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "GuardUsesOutgoingPort");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(4, "xMA022"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(4, "xMA022"));
   }
   
 }

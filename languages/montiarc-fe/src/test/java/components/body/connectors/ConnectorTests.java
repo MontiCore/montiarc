@@ -57,14 +57,14 @@ public class ConnectorTests extends AbstractCoCoTest {
   
   @Test
   public void testSimpleConnectorSourceNonExistant() {
-    ASTMontiArcNode node = loadComponentAST( PACKAGE + "." + "SimpleConnectorSourceNonExistent");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SimpleConnectorSourceNonExistent");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SimpleConnectorSourceExists()),
         node, new ExpectedErrorInfo(1, "xMA072"));
   }
   
   @Test
   public void testSimpleConnectorSourceInvalid() {
-    ASTMontiArcNode node = loadComponentAST( PACKAGE + "." + "SimpleConnectorSourceFullyQualified");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SimpleConnectorSourceFullyQualified");
     checkInvalid(
         new MontiArcCoCoChecker()
             .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified()),
@@ -100,7 +100,7 @@ public class ConnectorTests extends AbstractCoCoTest {
    * qualified simple connector sources. */
   @Test
   public void testMultipleWrongConnectors() {
-    ASTMontiArcNode node = loadComponentAST( PACKAGE + "." + "WrongConnectors");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongConnectors");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified());
@@ -111,7 +111,8 @@ public class ConnectorTests extends AbstractCoCoTest {
   /* Checks whether there are connectors in a component that wrongly connect ports of the same
    * component */
   public void testConnectorSourceAndTargetDifferentComponent() {
-    ASTMontiArcNode node = loadComponentAST( PACKAGE + "." + "ConnectorSourceAndTargetSameComponent");
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "ConnectorSourceAndTargetSameComponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetComponentDiffer());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA075"));

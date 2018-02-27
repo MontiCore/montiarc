@@ -29,20 +29,21 @@ public class StateTests extends AbstractCoCoTest {
   @Test
   public void testDoubleDefinitionOfSameInitial() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "DoubleDefinitionOfSameInitial");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA029"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(2, "xMA029"));
   }
   
   @Test
   public void testStateDefinedMultipleTimes() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "StateDefinedMultipleTimes");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new AutomatonStateDefinedMultipleTimes());
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+        .addCoCo(new AutomatonStateDefinedMultipleTimes());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA031"));
   }
   
   @Test
   public void testConflictingStereotypes() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ConflictingStereotypes");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(4, "xMA031", "xMA034"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(4, "xMA031", "xMA034"));
   }
   
   @Test
@@ -63,13 +64,13 @@ public class StateTests extends AbstractCoCoTest {
   @Test
   public void testInvalidInitialAssignment() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "InvalidInitialAssignment");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA039"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(2, "xMA039"));
   }
   
   @Test
   public void testAutomatonStateNameUppercase() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "StateNameUppercase");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(1, "xMA021"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA021"));
   }
   
 }

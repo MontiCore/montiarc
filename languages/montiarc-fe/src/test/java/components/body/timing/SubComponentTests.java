@@ -18,15 +18,14 @@ import infrastructure.AbstractCoCoTest;
 import montiarc._symboltable.ComponentSymbol;
 
 /**
- * This class checks all context conditions related to the definition of
- * subcomponents
+ * This class checks all context conditions related to the definition of subcomponents
  *
  * @author Andreas Wortmann
  */
 public class SubComponentTests extends AbstractCoCoTest {
-
+  
   private static final String PACKAGE = "components.body.timing";
-
+  
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
@@ -38,26 +37,26 @@ public class SubComponentTests extends AbstractCoCoTest {
     
     assertEquals(0, Log.getErrorCount());
     assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());
-
+    
     ComponentSymbol child = parent.getInnerComponent("TimedInner").orElse(null);
     assertNotNull(child);
     assertFalse(child.hasDelay());
-
+    
     child = parent.getInnerComponent("TimedDelayingInner").orElse(null);
     assertNotNull(child);
     assertTrue(child.hasDelay());
-
+    
     child = parent.getInnerComponent("TimeSyncInner").orElse(null);
     assertNotNull(child);
     assertFalse(child.hasDelay());
-
+    
     child = parent.getInnerComponent("TimeCausalSyncInner").orElse(null);
     assertNotNull(child);
     assertTrue(child.hasDelay());
-
+    
     child = parent.getInnerComponent("UntimedInner").orElse(null);
     assertNotNull(child);
     assertFalse(child.hasDelay());
   }
-
+  
 }
