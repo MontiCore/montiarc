@@ -91,6 +91,13 @@ public class PortTests extends AbstractCoCoTest {
   }
 
   @Test
+  public void testPortsWithAmbiguousSenders() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortsWithAmbiguousSenders");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
+        node, new ExpectedErrorInfo(4, "xMA005"));
+  }
+
+  @Test
   public void testInPortUniqueSender() {
     checkValid(PACKAGE + "." + "InPortUniqueSender");
   }
@@ -115,6 +122,20 @@ public class PortTests extends AbstractCoCoTest {
 
     cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
     checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA059", "xMA060"));
+  }
+
+  @Test
+  /*
+    Tests the CoCos CV5 and CV6 from the dissertation of Arne Haber.
+    These are the checks that all ports should be connected of components and subcomponents.
+   */
+  public void testUnconnectedPorts2() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UnconnectedPorts2");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA057", "xMA058"));
+
+    cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA059", "xMA060"));
   }
 
   @Test

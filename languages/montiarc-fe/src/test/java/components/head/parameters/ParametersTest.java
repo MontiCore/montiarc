@@ -50,6 +50,14 @@ public class ParametersTest extends AbstractCoCoTest {
   }
 
   @Test
+  public void testParameterAmbiguous2() {
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
+        loadComponentAST(PACKAGE + "." + "ParameterAmbiguous2"),
+        new ExpectedErrorInfo(1, "xMA069"));
+
+  }
+
+  @Test
   /*
    * Tests [Hab16] B1: All names of model elements within a component
    *                    namespace have to be unique. (p. 59. Lst. 3.31)
@@ -69,5 +77,10 @@ public class ParametersTest extends AbstractCoCoTest {
     assertFalse(comp.isInnerComponent());
     assertEquals(1, comp.getConfigParameters().size());
     assertEquals(0, comp.getFormalTypeParameters().size());
+  }
+
+  @Test
+  public void testCompWithIntegerParameter() {
+    checkValid(PACKAGE + "." + "CompWithIntegerParameter");
   }
 }

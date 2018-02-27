@@ -1,15 +1,15 @@
 package a;
 
-import x.R2RefQualifiedImported;
+import components.body.subcomponents._subcomponents.HasPortWithImportedType;
 import y.*;
 
 
 component R2 {
   
   component R2RefSamePackage;
-  component R2RefQualifiedImported;
+  component HasPortWithImportedType;
   component R2RefPackageImported;
-  component z.R2RefFQ;
+  component components.body.subcomponents._subcomponents.AtomicComponent;
   component x.UndefinedReferenceFQ;
   component UndefinedReference;
 }
