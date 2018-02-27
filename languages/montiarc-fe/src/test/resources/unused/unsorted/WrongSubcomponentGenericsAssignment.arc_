@@ -13,7 +13,7 @@ import components.body.subcomponents._subcomponents.HasGenericInputAndOutputPort
                               have to be assigned. (p.66, Lst.3.44)
  *
  * TODO Add Test
- * TODO which package? components.body.ports, components.head.generics or types?
+ * TODO which package? components.body.subcomoonents?
  */
 component WrongSubcomponentGenericsAssignment {
   

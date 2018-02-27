@@ -8,7 +8,7 @@ package a;
  * @implements TODO
  *
  * TODO Add Test
- * TODO which package? components.body.ports, components.head.generics or types?
+ * TODO components.body.ports
  */
 component GenericPortsWithoutTypeParams {
   

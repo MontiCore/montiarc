@@ -49,6 +49,14 @@ public class ComponentTests extends AbstractCoCoTest {
   }
 
   @Test
+  /* Checks whether there is a redundant import statements. For example import a.*; import a.*; */
+  public void testRedundantImports2() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "RedundantImports2");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA074"));
+  }
+
+  @Test
   @Ignore("Components with upper case packages can not be resolved by the symbol table.")
   /**
    * This test should check whether the Context condition PackageLowerCase is working.

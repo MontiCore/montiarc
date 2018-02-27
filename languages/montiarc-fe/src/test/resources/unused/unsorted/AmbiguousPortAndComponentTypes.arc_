@@ -15,5 +15,5 @@ component AmbiguousPortAndComponentTypes {
   
   port in AmbiguousModel;
   
-  component AmbiguousModel;
+  component AmbiguousModel; //Name clash
 }

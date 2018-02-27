@@ -23,7 +23,7 @@ component wrongCapitalization { // ERROR: Component names have to start with a c
     out String out2;
   
   
-  component x.EmptyReference BigRef,
+  component components.body.subcomponents._subcomponents.HasStringInputAndOutput BigRef,
       // ERROR: Subcomponent names have to start with a lowercase letter
                              smallRef;
   

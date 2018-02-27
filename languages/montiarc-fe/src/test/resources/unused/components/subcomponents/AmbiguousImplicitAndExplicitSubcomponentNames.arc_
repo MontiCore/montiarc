@@ -14,10 +14,10 @@ package components.body.subcomponents;
  */
 component AmbiguousImplicitAndExplicitSubcomponentNames {
 
-  component x.EmptyReference;
+  component components.body.subcomponents._subcomponents.HasStringInputAndOutput;
       // Warning: Implicit naming should be used for unique subcomponent types only
-  component x.EmptyReference;
-      // ERROR: The component 'AmbiguousImplicitAndExplicitSubcomponentNames' already contains a reference named 'emptyReference'!
+  component components.body.subcomponents._subcomponents.HasStringInputAndOutput;
+      // ERROR: The component 'AmbiguousImplicitAndExplicitSubcomponentNames' already contains a reference named 'hasStringInputAndOutput'!
       // Warning: Implicit naming should be used for unique subcomponent types only
   
   component components.body.subcomponents._subcomponents.HasPortWithImportedType someName;
