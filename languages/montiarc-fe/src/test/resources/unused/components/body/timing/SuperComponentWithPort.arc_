@@ -1,9 +1,0 @@
-package components.body.timing;
-
-/*
- * Valid model.
- */
-component SuperComponentWithPort {
-    
-    port in String strIn;
-}

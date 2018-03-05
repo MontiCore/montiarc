@@ -1,0 +1,29 @@
+package components.body.timing;
+
+import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
+import components.body.subcomponents._subcomponents.HasTwoStringInAndOneStringOut;
+import components.body.timing.DelayedComponentWithTwoPorts;
+
+/*
+ * Formerly 'UsingAandCandB'
+ */
+component UsingMultipleComponents {
+    
+    port
+        in String sIn1,
+        in String sIn2,
+        out String sOut;
+        
+    component HasTwoStringInAndOneStringOut c;
+    
+    component DelayedComponentWithTwoPorts b;
+    
+    component HasStringInputAndOutput a;
+    
+    
+    connect sIn1 -> b.sIn;
+    connect sIn2 -> a.pIn;
+    connect b.sOut -> c.sIn1;
+    connect a.pOut -> c.sIn2;
+    connect c.sOut -> sOut;
+}

@@ -8,6 +8,7 @@ package components.body.ports;
  * @implements [Wor16] MU1: The name of each component variable is unique among ports, variables, and configuration parameters. (p. 54 Lst. 4.5)
  */
 component PortNameAmbiguous(int foo) {
+    // Parameter name is not unique
     
     port
       in String foo; // Port name is not unique

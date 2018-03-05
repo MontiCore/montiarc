@@ -131,12 +131,22 @@ public class ConnectorTests extends AbstractCoCoTest {
   
   @Test
   /* Checks whether the source and target of a connect statement exist. */
-  public void testMissingSourceAndTargetDefinition() {
+  public void testMissingSourceAndTargetDefinitionInSubcomponent() {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "MissingSourceTargetDefinitionInSubcomponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetExist());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA066", "xMA067"));
+  }
+
+  @Test
+  /* Checks whether the source and target of a connect statement exist. */
+  public void testMissingSourceAndTargetDefinition() {
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "MissingSourceTargetDefinition");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+        .addCoCo(new ConnectorSourceAndTargetExist());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA066", "xMA067"));
   }
 
   @Test

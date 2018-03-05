@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -89,6 +90,14 @@ public class SubComponentTests extends AbstractCoCoTest {
         node,
         new ExpectedErrorInfo(2, "xMA061"));
   }
+
+  @Test
+  public void testAmbiguousImplicitAndExplicitSubcomponentNames() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousImplicitAndExplicitSubcomponentNames");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentInstanceNamesAreUnique()),
+        node,
+        new ExpectedErrorInfo(3, "xMA061"));
+  }
   
   @Test
   public void testComponentWithTypeParametersLacksInstance() {
@@ -96,6 +105,14 @@ public class SubComponentTests extends AbstractCoCoTest {
         PACKAGE + "." + "ComponentWithTypeParametersLacksInstance");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
         node, new ExpectedErrorInfo(1, "xMA009"));
+  }
+
+  @Test
+  public void testInnerViolatesComponentNaming() {
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "InnerViolatesComponentNaming");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
+        node, new ExpectedErrorInfo(1, "xMA055"));
   }
   
   @Test
@@ -143,6 +160,12 @@ public class SubComponentTests extends AbstractCoCoTest {
   @Test
   public void testComponentWithTypeParametersHasInstance() {
     checkValid(PACKAGE + "." + "ComponentWithTypeParametersHasInstance");
+  }
+
+  @Test
+  @Ignore("Errors thrown by symbol table")
+  public void testUniqueInnerCompDefinition() {
+    checkValid(PACKAGE + "." + "UniqueInnerCompDefinition");
   }
   
   @Test
@@ -580,6 +603,12 @@ public class SubComponentTests extends AbstractCoCoTest {
   }
 
   @Test
+  public void testHasStringInputAndOutput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "HasStringInputAndOutput");
+  }
+
+  @Test
   public void testHasThreeGenericInAndOneOutputPort() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
                    "HasThreeGenericInAndOneOutPort");
@@ -595,6 +624,12 @@ public class SubComponentTests extends AbstractCoCoTest {
   public void testHasPortWithImportedType() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
                    "HasPortWithImportedType");
+  }
+
+  @Test
+  public void testHasTwoStringInAndOneStrinOut() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "HasTwoStringInAndOneStringOut");
   }
 
 }

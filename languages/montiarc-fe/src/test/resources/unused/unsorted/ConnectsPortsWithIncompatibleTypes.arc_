@@ -1,4 +1,4 @@
-package a;
+package components.body.connectors;
 
 import components.body.subcomponents._subcomponents.HasGenericInputAndOutputPort;
 import components.body.subcomponents._subcomponents.HasPortsOfHierachicalCDTypes;
@@ -14,7 +14,6 @@ import components.body.subcomponents._subcomponents.HasPortsOfHierachicalCDTypes
                              port is identical or a supertype of the source
                              port type. (p.66, Lst. 3.43)
  * TODO Add Test
- * TODO Correct package: types or components.body.connectors?
  */
 component ConnectsPortsWithIncompatibleTypes {
   port

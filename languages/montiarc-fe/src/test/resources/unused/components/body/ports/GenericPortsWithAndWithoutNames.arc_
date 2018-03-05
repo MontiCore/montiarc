@@ -8,7 +8,9 @@ package components.body.ports;
  * @implements [Hab16] CV7: Avoid using implicit and explicit names for
  *                            elements with the same type. (p. 72, Lst. 3.54)
  * @implements TODO: Missing literatur for explicit naming of generic ports
+ * TODO Prohibit implicit naming of (generic) ports? Where?
  * TODO Add Test
+ * TODO CV7 CoCo and Test
  */
 component GenericPortsWithAndWithoutNames<T> {
   

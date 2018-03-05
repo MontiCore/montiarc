@@ -60,4 +60,15 @@ public class TimingTests extends AbstractCoCoTest {
     assertFalse(child.hasDelay());
   }
 
+  @Test
+  public void testDelayedComponentWithTwoPorts() {
+    checkValid(PACKAGE + "." + "DelayedComponentWithTwoPorts");
+    ComponentSymbol parent = this.loadComponentSymbol(PACKAGE, "DelayedComponentWithTwoPorts");
+    assertTrue(parent.hasDelay());
+  }
+
+  @Test
+  public void testUsingCompsWithTwoPortsAndWithAndWithoutDelay() {
+    checkValid(PACKAGE + "." + "UsingCompsWithTwoPortsAndWithAndWithoutDelay");
+  }
 }

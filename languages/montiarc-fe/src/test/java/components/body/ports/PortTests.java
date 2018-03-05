@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import de.monticore.symboltable.types.references.ActualTypeArgument;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,6 +24,8 @@ import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.NamesAreLowerCase;
 import montiarc.cocos.PortUsage;
 import montiarc.cocos.SubComponentsConnected;
+
+import java.util.Optional;
 
 /**
  * This class checks all context conditions directly related to port definitions
@@ -61,11 +64,19 @@ public class PortTests extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("Fix UniqueIdentifiers.java CoCo")
+  @Ignore("TODO: Fix UniqueIdentifiers.java CoCo")
   public void testPortNameAmbiguous() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortNameAmbiguous");
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new ExpectedErrorInfo(1, "xMA053"));
+  }
+
+  @Test
+  @Ignore("TODO: Fix UniqueIdentifiers.java CoCo")
+  public void testImplicitAndExplicitPortNaming() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ImplicitAndExplicitPortNaming");
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new ExpectedErrorInfo(3, "xMA053"));
   }
 
   @Test
@@ -93,6 +104,14 @@ public class PortTests extends AbstractCoCoTest {
   @Test
   public void testPortsWithAmbiguousSenders() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortsWithAmbiguousSenders");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
+        node, new ExpectedErrorInfo(4, "xMA005"));
+  }
+
+  @Test
+  @Ignore("See UniquenessConnectors.arc_")
+  public void testUniquenessConnectors() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UniquenessConnectors");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
         node, new ExpectedErrorInfo(4, "xMA005"));
   }

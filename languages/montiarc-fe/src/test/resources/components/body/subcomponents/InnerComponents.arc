@@ -17,4 +17,8 @@ component InnerComponents {
          }
          component InnerInner ref1;
     }
+
+    component InnerWithoutPorts {
+      //Empty body
+    }
 }
