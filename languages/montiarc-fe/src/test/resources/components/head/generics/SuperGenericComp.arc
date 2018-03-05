@@ -1,4 +1,4 @@
-package generics;
+package components.head.generics;
 
 component SuperGenericComp<T, K extends Number> {
 

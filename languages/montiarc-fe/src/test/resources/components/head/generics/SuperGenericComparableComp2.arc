@@ -1,4 +1,4 @@
-package generics;
+package components.head.generics;
 
 component SuperGenericComparableComp2<K, T extends Comparable<T>> {
 

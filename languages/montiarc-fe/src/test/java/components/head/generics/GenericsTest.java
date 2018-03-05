@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
@@ -17,6 +18,7 @@ import infrastructure.ExpectedErrorInfo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
+import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.TypeParameterNamesUnique;
 import montiarc.helper.SymbolPrinter;
 
@@ -50,6 +52,39 @@ public class GenericsTest extends AbstractCoCoTest {
   @Test
   public void testGarage() {
     checkValid(PACKAGE + "." + "Garage");
+  }
+  
+  @Test
+  public void testSubCompExtendsGenericComparableCompValid() {
+    checkValid(PACKAGE + "." + "SubCompExtendsGenericComparableCompValid");
+  }
+  
+  @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
+  @Test
+  public void testSubCompExtendsGenericCompInvalid0(){
+    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid0"), new ExpectedErrorInfo());
+  }
+  
+  @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
+  @Test
+  public void testSubCompExtendsGenericCompInvalid1(){
+    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid1"), new ExpectedErrorInfo());
+  }
+  
+  @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
+  @Test
+  public void testSubCompExtendsGenericCompInvalid2(){
+    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid2"), new ExpectedErrorInfo());
+  }
+  
+  @Test
+  public void testSubCompExtendsGenericCompValid() {
+    checkValid(PACKAGE + "." + "SubCompExtendsGenericCompValid");
+  }
+  
+  @Test
+  public void SubSubCompExtendsGenericComparableCompValid() {
+    checkValid(PACKAGE + "." + "SubSubCompExtendsGenericComparableCompValid"); 
   }
   
   /**

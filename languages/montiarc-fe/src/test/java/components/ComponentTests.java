@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import montiarc.cocos.PackageLowerCase;
@@ -57,6 +58,15 @@ public class ComponentTests extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UpperCasePackageName");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PackageLowerCase());
     checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA054"));
+  }
+  
+  @Test
+  public void testImportComponentFromJar() {
+     Scope symtab = MONTIARCTOOL.initSymbolTable(Paths.get(MODEL_PATH).toFile(),
+        Paths.get(FAKE_JAVA_TYPES_PATH).toFile(), Paths.get(MODEL_PATH+"components/componentInJar.jar").toFile());
+     Optional<ComponentSymbol> comp = symtab.<ComponentSymbol> resolve("components.ComponentFromJar", ComponentSymbol.KIND);
+     assertTrue(comp.isPresent());
+     assertTrue(comp.get().getSubComponent("cmp").isPresent()); 
   }
 
   @Test
