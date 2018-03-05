@@ -12,12 +12,13 @@ import montiarc._ast.ASTStereotype;
 import montiarc._cocos.MontiArcASTAutomatonCoCo;
 
 /**
- * Context condition for checking, if states have been defined multiple times
- * with different stereotypes.
+ * Context condition for checking, if states have been defined multiple times with different
+ * stereotypes.
  * 
  * @author Gerrit Leonhardt, Andreas Wortmann
  */
-public class AutomatonStateDefinedMultipleTimesStereotypesDontMatch implements MontiArcASTAutomatonCoCo {
+public class AutomatonStateDefinedMultipleTimesStereotypesDontMatch
+    implements MontiArcASTAutomatonCoCo {
   
   @Override
   public void check(ASTAutomaton node) { // Collect all states
@@ -36,7 +37,8 @@ public class AutomatonStateDefinedMultipleTimesStereotypesDontMatch implements M
           // Check if the stereotypes match
           ASTStereotype currentStereotype = current.getStereotype().orElse(null);
           ASTStereotype checkMeStereotype = checkMe.getStereotype().orElse(null);
-          if (currentStereotype != null && checkMeStereotype != null && currentStereotype.getValues().size() == checkMeStereotype.getValues().size()) {
+          if (currentStereotype != null && checkMeStereotype != null
+              && currentStereotype.getValues().size() == checkMeStereotype.getValues().size()) {
             for (ASTStereoValue valueCurrent : currentStereotype.getValues()) {
               boolean found = false;
               for (ASTStereoValue valueToCheck : checkMeStereotype.getValues()) {
@@ -46,7 +48,10 @@ public class AutomatonStateDefinedMultipleTimesStereotypesDontMatch implements M
                 }
               }
               if (!found) {
-                Log.error("0xMA033 The state " + current.getName() + " is defined more than once with different stereotypes.", current.get_SourcePositionStart());
+                Log.error(
+                    "0xMA033 The state " + current.getName()
+                        + " is defined more than once with different stereotypes.",
+                    current.get_SourcePositionStart());
               }
             }
             
@@ -54,8 +59,12 @@ public class AutomatonStateDefinedMultipleTimesStereotypesDontMatch implements M
           else {
             // This means one of both/both are null or one has more stereotypes
             // than another
-            if ((currentStereotype != null && checkMeStereotype == null) || (currentStereotype == null && checkMeStereotype != null)) {
-              Log.error("0xMA034 The state " + current.getName() + " is defined more than once with different stereotypes.", current.get_SourcePositionStart());
+            if ((currentStereotype != null && checkMeStereotype == null)
+                || (currentStereotype == null && checkMeStereotype != null)) {
+              Log.error(
+                  "0xMA034 The state " + current.getName()
+                      + " is defined more than once with different stereotypes.",
+                  current.get_SourcePositionStart());
             }
           }
         }

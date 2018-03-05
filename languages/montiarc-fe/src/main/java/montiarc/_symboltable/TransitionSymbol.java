@@ -6,13 +6,17 @@ import montiarc._ast.ASTBlock;
 import montiarc._ast.ASTGuard;
 
 public class TransitionSymbol extends TransitionSymbolTOP {
-
+  
   private StateSymbolReference source;
+  
   private StateSymbolReference target;
+  
   private Optional<ASTGuard> guard;
+  
   private Optional<ASTBlock> stimulus;
+  
   private Optional<ASTBlock> reaction;
-
+  
   public TransitionSymbol(String name) {
     super(name);
     this.guard = Optional.empty();
@@ -23,40 +27,40 @@ public class TransitionSymbol extends TransitionSymbolTOP {
   public StateSymbolReference getSource() {
     return this.source;
   }
-
+  
   public void setSource(StateSymbolReference source) {
     this.source = source;
   }
-
+  
   public StateSymbolReference getTarget() {
     return this.target;
   }
-
+  
   public void setTarget(StateSymbolReference target) {
     this.target = target;
   }
-
-  public void setGuardAST(Optional<ASTGuard> guard){
+  
+  public void setGuardAST(Optional<ASTGuard> guard) {
     this.guard = guard;
   }
   
-  public Optional<ASTGuard> getGuardAST(){
+  public Optional<ASTGuard> getGuardAST() {
     return this.guard;
   }
-
-  public void setStimulusAST(Optional<ASTBlock> block){
+  
+  public void setStimulusAST(Optional<ASTBlock> block) {
     this.stimulus = block;
   }
   
-  public Optional<ASTBlock> getStimulusAST(){
+  public Optional<ASTBlock> getStimulusAST() {
     return this.stimulus;
   }
-
-  public void setReactionAST(Optional<ASTBlock> block){
+  
+  public void setReactionAST(Optional<ASTBlock> block) {
     this.reaction = block;
   }
   
-  public Optional<ASTBlock> getReactionAST(){
+  public Optional<ASTBlock> getReactionAST() {
     return this.reaction;
   }
   

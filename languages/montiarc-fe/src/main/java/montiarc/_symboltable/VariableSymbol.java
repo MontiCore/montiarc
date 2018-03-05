@@ -26,7 +26,7 @@ public class VariableSymbol extends CommonSymbol {
   public void setValuation(Optional<ASTValuation> valuation) {
     this.valuation = valuation;
   }
-
+  
   public Optional<ASTValuation> getValuation() {
     return this.valuation;
   }

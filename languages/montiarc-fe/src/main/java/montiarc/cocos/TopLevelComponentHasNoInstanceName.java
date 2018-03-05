@@ -11,12 +11,13 @@ import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ComponentSymbol;
 
 /**
- * @implements [Hab16] B2: Top-level component type definitions do not have instance names. (p. 59. Lst. 3.32)
+ * @implements [Hab16] B2: Top-level component type definitions do not have instance names. (p. 59.
+ * Lst. 3.32)
  * @author Crispin Kirchner
  */
 public class TopLevelComponentHasNoInstanceName
     implements MontiArcASTComponentCoCo {
-
+  
   /**
    * @see montiarc._cocos.MontiArcASTComponentCoCo#check(montiarc._ast.ASTComponent)
    */
@@ -28,7 +29,7 @@ public class TopLevelComponentHasNoInstanceName
               "The context condition \"%s\" can't be checked that way.",
           node.getName(), TopLevelComponentHasNoInstanceName.class.getName()));
     }
-
+    
     ComponentSymbol symbol = (ComponentSymbol) node.getSymbol().get();
     if (!symbol.isInnerComponent() && node.instanceNameIsPresent()) {
       Log.error(
@@ -36,5 +37,5 @@ public class TopLevelComponentHasNoInstanceName
           node.get_SourcePositionStart());
     }
   }
-
+  
 }

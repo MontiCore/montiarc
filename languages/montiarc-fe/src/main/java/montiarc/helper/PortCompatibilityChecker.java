@@ -27,6 +27,7 @@ public class PortCompatibilityChecker {
    * <br>
    * This type-check would allow a typed based auto-connection of {@code aOut} with {@code p} in the
    * following example:
+   * 
    * <pre>
    * component A {
    *   port out Int aOut;
@@ -36,15 +37,15 @@ public class PortCompatibilityChecker {
    * }
    * </pre>
    *
-   * @param sourcePort                     the port that outputs data
-   * @param sourceFormalTypeParameters     the defined formal type parameters of the component that the
-   *                                       sourcePort is defined in. They define additional valid types that might be bound by the
-   *                                       sourceTypeArguments. This list might be empty.
-   * @param sourceTypeArguments            Defines the current bindings for the formal type-parameters. This
-   *                                       list might be empty.
-   * @param targetPort                     the port that receives data
+   * @param sourcePort the port that outputs data
+   * @param sourceFormalTypeParameters the defined formal type parameters of the component that the
+   * sourcePort is defined in. They define additional valid types that might be bound by the
+   * sourceTypeArguments. This list might be empty.
+   * @param sourceTypeArguments Defines the current bindings for the formal type-parameters. This
+   * list might be empty.
+   * @param targetPort the port that receives data
    * @param targetTypeFormalTypeParameters analog to source, but for the target port.
-   * @param targetTypeArguments            analog to source, but for the target port.
+   * @param targetTypeArguments analog to source, but for the target port.
    * @return
    */
   public static boolean doPortTypesMatch(PortSymbol sourcePort,
@@ -60,5 +61,5 @@ public class PortCompatibilityChecker {
         sourceTypeArguments, targetPort.getTypeReference(), targetTypeFormalTypeParameters,
         targetTypeArguments);
   }
-
+  
 }

@@ -10,8 +10,7 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc.cocos.MontiArcCoCos;
 
 /**
- * This class checks all context conditions related the combination of elements in component
- * bodies
+ * This class checks all context conditions related the combination of elements in component bodies
  *
  * @author Andreas Wortmann
  */
@@ -27,7 +26,7 @@ public class VariableTests extends AbstractCoCoTest {
   @Test
   public void testAmbiguousVariableNames() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousVariableNames");
-    checkInvalid(MontiArcCoCos.createChecker(),node, new ExpectedErrorInfo(2, "xMA035"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(2, "xMA035"));
   }
   
   @Test

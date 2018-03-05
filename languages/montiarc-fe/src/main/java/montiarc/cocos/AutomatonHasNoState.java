@@ -8,7 +8,6 @@ import montiarc._cocos.MontiArcASTAutomatonCoCo;
  * Context condition for checking, if an IO-Automaton has no states.
  * 
  * @implements [Wor16] AC3: The automaton has at least one state. (p. 99, Lst. 5.13)
- * 
  * @author Gerrit Leonhardt, Andreas Wortmann
  */
 public class AutomatonHasNoState implements MontiArcASTAutomatonCoCo {

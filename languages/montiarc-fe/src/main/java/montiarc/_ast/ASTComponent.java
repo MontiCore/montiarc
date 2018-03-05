@@ -23,7 +23,7 @@ public class ASTComponent extends ASTComponentTOP {
   public ASTComponent() {
     super();
   }
-
+  
   protected ASTComponent(
       ASTStereotype stereotype,
       String name,
@@ -33,7 +33,7 @@ public class ASTComponent extends ASTComponentTOP {
       ASTComponentBody body) {
     super(stereotype, name, head, instanceName, actualTypeArgument, body);
   }
-
+  
   // do not use symbol table, since symbol table must not be created
   public List<ASTPort> getPorts() {
     List<ASTPort> ret = new ArrayList<>();
@@ -47,29 +47,29 @@ public class ASTComponent extends ASTComponentTOP {
   
   public List<ASTVariableDeclaration> getVariables() {
     List<ASTVariableDeclaration> ret = new ArrayList<>();
-    for(ASTElement element : this.getBody().getElements()) {
-      if(element instanceof ASTVariableDeclaration) {
+    for (ASTElement element : this.getBody().getElements()) {
+      if (element instanceof ASTVariableDeclaration) {
         ret.add((ASTVariableDeclaration) element);
       }
     }
     return ret;
   }
-
+  
   // do not use symbol table, since symbol table must not be created
   public List<ASTConnector> getConnectors() {
-    return this.getBody().getElements().stream().filter(a -> a instanceof ASTConnector).
-        map(a -> (ASTConnector) a).collect(Collectors.toList());
+    return this.getBody().getElements().stream().filter(a -> a instanceof ASTConnector)
+        .map(a -> (ASTConnector) a).collect(Collectors.toList());
   }
-
+  
   // do not use symbol table, since symbol table must not be created
   public List<ASTSubComponent> getSubComponents() {
-    return this.getBody().getElements().stream().filter(a -> a instanceof ASTSubComponent).
-        map(a -> (ASTSubComponent) a).collect(Collectors.toList());
+    return this.getBody().getElements().stream().filter(a -> a instanceof ASTSubComponent)
+        .map(a -> (ASTSubComponent) a).collect(Collectors.toList());
   }
-
+  
   // do not use symbol table, since symbol table must not be created
   public List<ASTComponent> getInnerComponents() {
-    return this.getBody().getElements().stream().filter(a -> a instanceof ASTComponent).
-        map(a -> (ASTComponent) a).collect(Collectors.toList());
+    return this.getBody().getElements().stream().filter(a -> a instanceof ASTComponent)
+        .map(a -> (ASTComponent) a).collect(Collectors.toList());
   }
 }

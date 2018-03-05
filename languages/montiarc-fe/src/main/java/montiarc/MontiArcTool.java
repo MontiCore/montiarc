@@ -108,10 +108,9 @@ public class MontiArcTool {
   }
   
   /**
-   * Loads a ComponentSymbol with the passed componentName. The componentName is
-   * the full qualified name of the component model. Modelpaths are folders
-   * relative to the project path and containing the packages the models are
-   * located in. When the ComponentSymbol is resolvable it is returned.
+   * Loads a ComponentSymbol with the passed componentName. The componentName is the full qualified
+   * name of the component model. Modelpaths are folders relative to the project path and containing
+   * the packages the models are located in. When the ComponentSymbol is resolvable it is returned.
    * Otherwise the optional is empty.
    * 
    * @param componentName
@@ -136,10 +135,9 @@ public class MontiArcTool {
   }
   
   /**
-   * Loads the AST of the passed model with name componentName. The
-   * componentName is the fully qualified. Modelpaths are folders relative to
-   * the project path and containing the packages the models are located in.
-   * When the ComponentSymbol is resolvable it is returned. Otherwise the
+   * Loads the AST of the passed model with name componentName. The componentName is the fully
+   * qualified. Modelpaths are folders relative to the project path and containing the packages the
+   * models are located in. When the ComponentSymbol is resolvable it is returned. Otherwise the
    * optional is empty.
    * 
    * @param modelPath
@@ -161,11 +159,10 @@ public class MontiArcTool {
   }
   
   /**
-   * Initializes the Symboltable by introducing scopes for the passed
-   * modelpaths. It does not create the symbol table! Symbols for models within
-   * the modelpaths are not added to the symboltable until resolve() is called.
-   * Modelpaths are relative to the project path and do contain all the packages
-   * the models are located in. E.g. if model with fqn a.b.C lies in folder
+   * Initializes the Symboltable by introducing scopes for the passed modelpaths. It does not create
+   * the symbol table! Symbols for models within the modelpaths are not added to the symboltable
+   * until resolve() is called. Modelpaths are relative to the project path and do contain all the
+   * packages the models are located in. E.g. if model with fqn a.b.C lies in folder
    * src/main/resources/models/a/b/C.arc, the modelpath is src/main/resources.
    * 
    * @param modelPaths
@@ -186,11 +183,10 @@ public class MontiArcTool {
   }
   
   /**
-   * Initializes the Symboltable by introducing scopes for the passed
-   * modelpaths. It does not create the symbol table! Symbols for models within
-   * the modelpaths are not added to the symboltable until resolve() is called.
-   * Modelpaths are relative to the project path and do contain all the packages
-   * the models are located in. E.g. if model with fqn a.b.C lies in folder
+   * Initializes the Symboltable by introducing scopes for the passed modelpaths. It does not create
+   * the symbol table! Symbols for models within the modelpaths are not added to the symboltable
+   * until resolve() is called. Modelpaths are relative to the project path and do contain all the
+   * packages the models are located in. E.g. if model with fqn a.b.C lies in folder
    * src/main/resources/models/a/b/C.arc, the modelpath is src/main/resources.
    * 
    * @param string

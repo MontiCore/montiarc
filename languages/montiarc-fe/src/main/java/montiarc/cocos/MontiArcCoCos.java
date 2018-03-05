@@ -72,7 +72,6 @@ public class MontiArcCoCos {
         .addCoCo(new UseOfUndeclaredField())
         .addCoCo(new AssignmentHasNoName())
         
-        
         // TYPE CORRECTNESS
         .addCoCo(new AutomatonGuardIsNotBoolean())
         // TODO Kann mit der Aktualisierung auf neue JavaDSL-Version aktiviert

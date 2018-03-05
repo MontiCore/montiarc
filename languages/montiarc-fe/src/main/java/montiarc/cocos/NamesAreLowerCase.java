@@ -1,7 +1,5 @@
 package montiarc.cocos;
 
-import java.util.List;
-
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTPort;
@@ -9,15 +7,12 @@ import montiarc._ast.ASTVariableDeclaration;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 
 /**
- * @implements [RRW14a] C2: The names of variables and ports start with lowercase letters. (p. 31, Lst. 6.5)
- * 
- * Context condition for checking, if all fields of an IO-Automaton start with a
- * lower case letter.
- * 
+ * @implements [RRW14a] C2: The names of variables and ports start with lowercase letters. (p. 31,
+ * Lst. 6.5) Context condition for checking, if all fields of an IO-Automaton start with a lower
+ * case letter.
  * @author Gerrit Leonhardt, Andreas Wortmann
  */
 public class NamesAreLowerCase implements MontiArcASTComponentCoCo {
-  
   
   /**
    * @see montiarc._cocos.MontiArcASTComponentCoCo#check(montiarc._ast.ASTComponent)
@@ -33,7 +28,7 @@ public class NamesAreLowerCase implements MontiArcASTComponentCoCo {
         }
     }
     
-    for(ASTPort port : node.getPorts()) {
+    for (ASTPort port : node.getPorts()) {
       for (String name : port.getNames()) {
         if (!Character.isLowerCase(name.charAt(0))) {
           Log.error("0xMA077: The name of the port should start with a lowercase letter.",

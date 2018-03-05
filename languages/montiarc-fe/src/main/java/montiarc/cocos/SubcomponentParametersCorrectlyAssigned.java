@@ -15,7 +15,6 @@ import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.TypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.symboltable.types.references.TypeReference;
-import de.monticore.types.types._ast.ASTTypeVariableDeclaration;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
 import montiarc._cocos.MontiArcASTComponentCoCo;
@@ -30,7 +29,6 @@ import montiarc.helper.TypeCompatibilityChecker;
  * A[int x = 5, int y] Right: B[int x, int y = 5]
  *
  * @implements TODO: Klaeren welche CoCo in der Literatur repraesentiert wird.
- *
  * @author Andreas Wortmann
  */
 public class SubcomponentParametersCorrectlyAssigned
@@ -62,7 +60,8 @@ public class SubcomponentParametersCorrectlyAssigned
               configParam.getType(),
               argType.get())) {
             Log.error("0xMA064 Type of argument " + paramIndex + " (" + argType.get().getName()
-                + ") of subcomponent " + instance.getName() + " of component type '" + node.getName() + "' does not fit parameter type "
+                + ") of subcomponent " + instance.getName() + " of component type '"
+                + node.getName() + "' does not fit parameter type "
                 + configParam.getType().getName(), expr.get_SourcePositionStart());
           }
         }
@@ -75,7 +74,8 @@ public class SubcomponentParametersCorrectlyAssigned
     }
   }
   
-  public boolean isGenericConfigParameter(ComponentInstanceSymbol instance, JTypeReference<?> configParam) {
+  public boolean isGenericConfigParameter(ComponentInstanceSymbol instance,
+      JTypeReference<?> configParam) {
     ComponentSymbol instanceType = instance.getComponentType().getReferencedComponent().get();
     List<JTypeSymbol> typeGenericTypeParams = instanceType.getFormalTypeParameters();
     for (JTypeSymbol typeGenericTypeParam : typeGenericTypeParams) {

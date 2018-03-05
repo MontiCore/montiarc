@@ -22,8 +22,7 @@ import montiarc.cocos.InitBlockOnlyOnEmbeddedAJava;
 import montiarc.cocos.MontiArcCoCos;
 
 /**
- * This class checks all context conditions related the definition of AJava
- * behavior
+ * This class checks all context conditions related the definition of AJava behavior
  *
  * @author Andreas Wortmann
  */
@@ -77,7 +76,7 @@ public class AJavaTests extends AbstractCoCoTest {
   @Ignore("@JP: Laut Konsole entsteht hier 2x Fehler 0xMA030. Wieso wird das nicht geprüft?")
   @Test
   public void testUsingInexistingPort() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UsingInexistingPort");
+    loadComponentAST(PACKAGE + "." + "UsingInexistingPort");
     ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(2,
         "xMA030");
     // error occurs in symboltable only. Therefore no CoCo check via
@@ -122,7 +121,8 @@ public class AJavaTests extends AbstractCoCoTest {
     assertNotNull(node);
     
     Scope symtab = this.loadDefaultSymbolTable();
-    Optional<ComponentSymbol> oFoo = symtab.<ComponentSymbol> resolve(PACKAGE + "." + "DistanceLogger",
+    Optional<ComponentSymbol> oFoo = symtab.<ComponentSymbol> resolve(
+        PACKAGE + "." + "DistanceLogger",
         ComponentSymbol.KIND);
     assertTrue(oFoo.isPresent());
     
@@ -131,6 +131,5 @@ public class AJavaTests extends AbstractCoCoTest {
         .<JavaBehaviorSymbol> resolve("increaseHulu", JavaBehaviorSymbol.KIND);
     assertTrue(aJavaDef.isPresent());
   }
-  
   
 }

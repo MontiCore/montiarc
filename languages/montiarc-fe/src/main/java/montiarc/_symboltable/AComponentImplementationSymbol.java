@@ -11,9 +11,9 @@ import de.monticore.symboltable.CommonSymbol;
  * @author Robert Heim
  */
 public abstract class AComponentImplementationSymbol extends CommonSymbol {
-
+  
   public static final AComponentImplementationKind KIND = new AComponentImplementationKind();
-
+  
   /**
    * Constructor for de.monticore.lang.montiarc.montiarc._symboltable.AComponentImplementationSymbol
    *
@@ -22,5 +22,5 @@ public abstract class AComponentImplementationSymbol extends CommonSymbol {
   public AComponentImplementationSymbol(String name) {
     super(name, KIND);
   }
-
+  
 }

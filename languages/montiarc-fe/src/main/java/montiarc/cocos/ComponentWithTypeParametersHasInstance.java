@@ -22,29 +22,29 @@ import montiarc._symboltable.ComponentSymbol;
  */
 public class ComponentWithTypeParametersHasInstance
     implements MontiArcASTComponentCoCo {
-
+  
   /**
    * @see montiarc._cocos.MontiArcASTComponentCoCo#check(montiarc._ast.ASTComponent)
    */
   @Override
   public void check(ASTComponent node) {
     ComponentSymbol componentSymbol = (ComponentSymbol) node.getSymbol().get();
-
+    
     Collection<ComponentInstanceSymbol> subComponents = componentSymbol.getSubComponents();
-
+    
     Set<ComponentSymbol> instantiatedInnerComponents = subComponents
         .stream()
         .map(instanceSymbol -> instanceSymbol.getComponentType().getReferencedSymbol())
         .filter(symbol -> symbol.hasFormalTypeParameters())
         .collect(Collectors.toSet());
-
+    
     List<ComponentSymbol> notInstantiatedInnerComponents = componentSymbol
         .getInnerComponents()
         .stream()
         .filter(symbol -> symbol.hasFormalTypeParameters())
         .filter(innerComponent -> !instantiatedInnerComponents.contains(innerComponent))
         .collect(Collectors.toList());
-
+    
     for (ComponentSymbol notInstantiatedInnerComponent : notInstantiatedInnerComponents) {
       Log.error(
           String.format(
