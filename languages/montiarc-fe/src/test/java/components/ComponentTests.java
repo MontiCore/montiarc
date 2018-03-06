@@ -4,8 +4,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.nio.file.Paths;
 import java.util.Optional;
 
+import montiarc.cocos.PackageLowerCase;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,7 +25,6 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.ImportsAreUnique;
-import montiarc.cocos.PackageLowerCase;
 import montiarc.cocos.TopLevelComponentHasNoInstanceName;
 
 /**
@@ -47,7 +48,7 @@ public class ComponentTests extends AbstractCoCoTest {
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA074"));
   }
-  
+
   @Test
   @Ignore("Components with upper case packages can not be resolved by the symbol table.")
   /**
@@ -59,6 +60,15 @@ public class ComponentTests extends AbstractCoCoTest {
     checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA054"));
   }
   
+  @Test
+  public void testImportComponentFromJar() {
+     Scope symtab = MONTIARCTOOL.initSymbolTable(Paths.get(MODEL_PATH).toFile(),
+        Paths.get(FAKE_JAVA_TYPES_PATH).toFile(), Paths.get(MODEL_PATH+"components/componentInJar.jar").toFile());
+     Optional<ComponentSymbol> comp = symtab.<ComponentSymbol> resolve("components.ComponentFromJar", ComponentSymbol.KIND);
+     assertTrue(comp.isPresent());
+     assertTrue(comp.get().getSubComponent("cmp").isPresent()); 
+  }
+
   @Test
   public void testCDType2JavaType() {
     Scope symTab = this.loadDefaultSymbolTable();

@@ -54,4 +54,14 @@ public class ParametersTest extends AbstractCoCoTest {
     assertEquals(1, comp.getConfigParameters().size());
     assertEquals(0, comp.getFormalTypeParameters().size());
   }
+  
+  @Test
+  public void testEnumAsTypeArgument() {
+    checkValid(PACKAGE+"."+"EnumAsTypeArg");
+  }
+  
+  @Test
+  public void testEnumFromCDAsTypeArgument() {
+    checkValid(PACKAGE+"."+"EnumFromCDAsTypeArg");
+  }
 }

@@ -1,22 +1,18 @@
 package components.head.inheritance;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.nio.file.Paths;
-
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import montiarc._parser.MontiArcParser;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import java.io.File;
+import java.nio.file.Paths;
+
+import static org.junit.Assert.*;
 
 /**
  * This class checks all context conditions related to component inheritance
@@ -63,14 +59,26 @@ public class InheritanceTests extends AbstractCoCoTest {
   @Test
   public void testPortInheritance() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ExtendsSuperComponent");
-    assertTrue(comp.getIncomingPort("inputInteger").isPresent()); // Locally defined port
+    assertTrue(comp.getIncomingPort("inputInteger").isPresent()); // Locally
+                                                                  // defined
+                                                                  // port
     assertNotNull(comp.getSpannedScope()
-        .resolve("inputString", PortSymbol.KIND)); // port inherited from SuperComponent
+        .resolve("inputString", PortSymbol.KIND)); // port inherited from
+                                                   // SuperComponent
   }
   
   @Test
   public void testConnecetingInheritedPorts() {
     this.loadComponentSymbol(PACKAGE, "ComposedComponentUsingInheritedPorts");
+  }
+  
+  @Test
+  public void testContainer() {
+    ComponentSymbol cont = this.loadComponentSymbol(PACKAGE, "Container");
+    assertEquals(2, cont.getInnerComponents().size());
+    ComponentSymbol inner2 = cont.getInnerComponents().stream()
+        .filter(i -> i.getName().equals("InnerComponent2")).findFirst().get();
+    assertEquals(inner2.getSuperComponent().get().getName(), "InnerComponent1");
   }
   
   @Test
