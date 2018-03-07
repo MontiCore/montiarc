@@ -38,6 +38,7 @@ import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.ValueSymbol;
 import montiarc.cocos.ComponentInstanceNamesAreUnique;
 import montiarc.cocos.ComponentWithTypeParametersHasInstance;
+import montiarc.cocos.InnerComponentNotExtendsDefiningComponent;
 import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.ReferencedSubComponentExists;
 import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
@@ -69,6 +70,12 @@ public class SubComponentTests extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentParametersOfWrongType");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
         node, new ExpectedErrorInfo(1, "xMA064"));
+  }
+  
+  @Test
+  public void testInnerComponentExtendsDefiningComponent() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "InnerComponentExtendsDefiningComponent");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new InnerComponentNotExtendsDefiningComponent()), node, new ExpectedErrorInfo(1, "xMA083"));
   }
   
   /**
