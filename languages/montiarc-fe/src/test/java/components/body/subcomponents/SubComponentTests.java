@@ -42,10 +42,12 @@ import montiarc.cocos.InnerComponentNotExtendsDefiningComponent;
 import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.ReferencedSubComponentExists;
 import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
+import montiarc.cocos.SubcomponentReferenceCycle;
 import montiarc.helper.SymbolPrinter;
 
 /**
- * This class checks all context conditions related to the definition of subcomponents
+ * This class checks all context conditions related to the definition of
+ * subcomponents
  *
  * @author Andreas Wortmann
  */
@@ -64,7 +66,6 @@ public class SubComponentTests extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "SubcomponentsWithJavaCfgArg");
   }
   
-  
   @Test
   public void testSubcomponentParametersOfWrongType() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentParametersOfWrongType");
@@ -74,8 +75,10 @@ public class SubComponentTests extends AbstractCoCoTest {
   
   @Test
   public void testInnerComponentExtendsDefiningComponent() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "InnerComponentExtendsDefiningComponent");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new InnerComponentNotExtendsDefiningComponent()), node, new ExpectedErrorInfo(1, "xMA083"));
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "InnerComponentExtendsDefiningComponent");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new InnerComponentNotExtendsDefiningComponent()),
+        node, new ExpectedErrorInfo(1, "xMA083"));
   }
   
   /**
@@ -85,6 +88,12 @@ public class SubComponentTests extends AbstractCoCoTest {
   public void testGenericCompWithInnerGenericComp() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "GenericCompWithInnerGenericComp");
     assertNotNull(comp);
+  }
+  
+  @Test
+  public void testSubcomponentReferenceCycles() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentReferenceCycleA");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle()), node, new ExpectedErrorInfo(1, "xMA086"));
   }
   
   @Test
@@ -116,9 +125,9 @@ public class SubComponentTests extends AbstractCoCoTest {
   }
   
   /**
-   * SymbolTable already tries to resolve the non existing subcomponent. If it does not exist symbol
-   * table creator throws an error. Therefore the coco ReferencedSubComponentExists is never
-   * executed.
+   * SymbolTable already tries to resolve the non existing subcomponent. If it
+   * does not exist symbol table creator throws an error. Therefore the coco
+   * ReferencedSubComponentExists is never executed.
    */
   @Ignore
   @Test
@@ -130,10 +139,12 @@ public class SubComponentTests extends AbstractCoCoTest {
   
   @Test
   /**
-   * Symbol table already throws an exception, therefore the coco is never checked. A fix" + would
-   * be to stop the symbol table from throwing the exception, in order to have a" + better error
-   * message. For now we just check that we give out the rudimentary error xA1038, which tells us
-   * that the non-existent component could not be loaded, but doesn't provide more detail.
+   * Symbol table already throws an exception, therefore the coco is never
+   * checked. A fix" + would be to stop the symbol table from throwing the
+   * exception, in order to have a" + better error message. For now we just
+   * check that we give out the rudimentary error xA1038, which tells us that
+   * the non-existent component could not be loaded, but doesn't provide more
+   * detail.
    */
   public void testInexistingSubComponent() {
     Log.getFindings().clear();

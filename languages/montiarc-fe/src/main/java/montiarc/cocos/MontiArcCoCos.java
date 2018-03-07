@@ -35,6 +35,7 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo(new InPortUniqueSender())
         .addCoCo(new ImportsValid())
+        .addCoCo(new SubcomponentReferenceCycle())
         
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
