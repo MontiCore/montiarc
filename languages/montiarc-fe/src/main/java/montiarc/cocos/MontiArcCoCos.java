@@ -27,6 +27,7 @@ public class MontiArcCoCos {
         .addCoCo(new ComponentNameIsCapitalized())
         .addCoCo(new DefaultParametersHaveCorrectOrder())
         .addCoCo(new DefaultParametersCorrectlyAssigned())
+        .addCoCo(new NumberOfConfigurationParametersCorrect())
         .addCoCo(new ComponentWithTypeParametersHasInstance())
         .addCoCo(new TypeParameterNamesUnique())
         .addCoCo(new TopLevelComponentHasNoInstanceName())
