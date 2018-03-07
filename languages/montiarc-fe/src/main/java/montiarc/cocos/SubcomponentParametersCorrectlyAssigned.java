@@ -42,7 +42,7 @@ public class SubcomponentParametersCorrectlyAssigned
   public void check(ASTComponent node) {
     ComponentSymbol symb = (ComponentSymbol) node.getSymbol().get();
     for (ComponentInstanceSymbol instance : symb.getSubComponents()) {
-      ComponentSymbol instanceType = instance.getComponentType().getReferencedComponent().get();
+      ComponentSymbol instanceType = instance.getComponentType().getReferencedSymbol();
       int paramIndex = 0;
       for (ValueSymbol<TypeReference<TypeSymbol>> arg : instance.getConfigArguments()) {
         ASTExpression expr = arg.getValue();

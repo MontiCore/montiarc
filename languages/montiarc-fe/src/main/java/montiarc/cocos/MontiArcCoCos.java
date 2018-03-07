@@ -65,6 +65,7 @@ public class MontiArcCoCos {
         .addCoCo(new AutomatonStateUppercase())
         .addCoCo(new ConnectorSourceAndTargetComponentDiffer())
         .addCoCo(new ConnectorSourceAndTargetExist())
+        .addCoCo(new ConnectorSourceAndTargetTypeFit())
         .addCoCo(new ImportsAreUnique())
         
         // REFERENTIAL INTEGRITY
