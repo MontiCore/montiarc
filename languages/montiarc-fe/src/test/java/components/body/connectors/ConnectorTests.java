@@ -24,6 +24,7 @@ import montiarc._symboltable.ConnectorSymbol;
 import montiarc.cocos.ConnectorEndPointIsCorrectlyQualified;
 import montiarc.cocos.ConnectorSourceAndTargetComponentDiffer;
 import montiarc.cocos.ConnectorSourceAndTargetExist;
+import montiarc.cocos.ConnectorSourceAndTargetTypeFit;
 import montiarc.cocos.SimpleConnectorSourceExists;
 
 /**
@@ -54,6 +55,13 @@ public class ConnectorTests extends AbstractCoCoTest {
   @Test
   public void testSimpleConnectorSourceUnqualified() {
     checkValid(PACKAGE + "." + "SimpleConnectorSourceUnqualified");
+  }
+  
+  
+  @Test
+  public void testConnectorSourceAndTargetTypeNotMatch() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ConnectorSourceAndTargetTypeNotMatch");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetTypeFit()), node, new ExpectedErrorInfo(1, "xMA084"));
   }
   
   @Test
