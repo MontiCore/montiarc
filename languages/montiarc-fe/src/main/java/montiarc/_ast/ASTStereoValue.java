@@ -4,13 +4,21 @@ import java.util.Optional;
 
 public class ASTStereoValue extends ASTStereoValueTOP {
   
-  public ASTStereoValue() {
+  /**
+   * Constructor for montiarc._ast.ASTStereoValue
+   */
+  protected ASTStereoValue() {
     super();
   }
   
-  public ASTStereoValue(String name, String source) {
-    this.name = name;
-    this.source = Optional.of(source);
+  /**
+   * Constructor for montiarc._ast.ASTStereoValue
+   * 
+   * @param name
+   * @param source
+   */
+  protected ASTStereoValue(String name, Optional<String> source) {
+    super(name, source);
   }
   
   public String getValue() {

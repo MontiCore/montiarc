@@ -23,8 +23,8 @@ public class AutomatonStateDefinedMultipleTimesStereotypesDontMatch
   @Override
   public void check(ASTAutomaton node) { // Collect all states
     List<ASTState> allStates = new ArrayList<ASTState>();
-    for (ASTStateDeclaration stateDecl : node.getStateDeclarations()) {
-      allStates.addAll(stateDecl.getStates());
+    for (ASTStateDeclaration stateDecl : node.getStateDeclarationList()) {
+      allStates.addAll(stateDecl.getStateList());
     }
     
     // Check for each state, if in the following states there is one with the
@@ -35,13 +35,14 @@ public class AutomatonStateDefinedMultipleTimesStereotypesDontMatch
         if (allStates.get(j).getName().equals(current.getName())) {
           ASTState checkMe = allStates.get(j);
           // Check if the stereotypes match
-          ASTStereotype currentStereotype = current.getStereotype().orElse(null);
-          ASTStereotype checkMeStereotype = checkMe.getStereotype().orElse(null);
+          ASTStereotype currentStereotype = current.getStereotypeOpt().orElse(null);
+          ASTStereotype checkMeStereotype = checkMe.getStereotypeOpt().orElse(null);
           if (currentStereotype != null && checkMeStereotype != null
-              && currentStereotype.getValues().size() == checkMeStereotype.getValues().size()) {
-            for (ASTStereoValue valueCurrent : currentStereotype.getValues()) {
+              && currentStereotype.getValuesList().size() == checkMeStereotype.getValuesList()
+                  .size()) {
+            for (ASTStereoValue valueCurrent : currentStereotype.getValuesList()) {
               boolean found = false;
-              for (ASTStereoValue valueToCheck : checkMeStereotype.getValues()) {
+              for (ASTStereoValue valueToCheck : checkMeStereotype.getValuesList()) {
                 if (valueCurrent.getName().equals(valueToCheck.getName())) {
                   found = true;
                   break;

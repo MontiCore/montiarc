@@ -14,7 +14,7 @@ public class AutomatonHasNoState implements MontiArcASTAutomatonCoCo {
   
   @Override
   public void check(ASTAutomaton node) {
-    if (node.getStateDeclarations().isEmpty()) {
+    if (node.getStateDeclarationList().isEmpty()) {
       Log.error("0xMA014 The automaton has no states.", node.get_SourcePositionStart());
     }
   }

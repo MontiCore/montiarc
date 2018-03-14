@@ -31,7 +31,7 @@ public class TopLevelComponentHasNoInstanceName
     }
     
     ComponentSymbol symbol = (ComponentSymbol) node.getSymbol().get();
-    if (!symbol.isInnerComponent() && node.instanceNameIsPresent()) {
+    if (!symbol.isInnerComponent() && node.isInstanceNamePresent()) {
       Log.error(
           String.format("0xMA007 Top level component \"%s\" has an instance name", node.getName()),
           node.get_SourcePositionStart());

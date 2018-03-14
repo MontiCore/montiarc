@@ -8,8 +8,8 @@ package montiarc.cocos;
 import java.util.List;
 import java.util.Optional;
 
-import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
+import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.TypeSymbol;

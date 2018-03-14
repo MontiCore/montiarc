@@ -3,6 +3,8 @@
 
 package montiarc._ast;
 
+import java.util.Optional;
+
 public class ASTGuard extends ASTGuardTOP {
   
   /**
@@ -11,8 +13,9 @@ public class ASTGuard extends ASTGuardTOP {
    * @param kind
    * @param guardExpression
    */
-  public ASTGuard(String kind, ASTGuardExpression guardExpression) {
+  protected ASTGuard(Optional<String> kind, ASTGuardExpression guardExpression) {
     super(kind, guardExpression);
+    // TODO Auto-generated constructor stub
   }
   
   public ASTGuard() {

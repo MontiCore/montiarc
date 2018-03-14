@@ -51,15 +51,15 @@ public class AutoConnection {
     ASTConnector astConnector = MontiArcNodeFactory.createASTConnector();
     
     ASTQualifiedName source = TypesNodeFactory.createASTQualifiedName();
-    source.setParts(Splitters.DOT.splitToList(conEntry.getSource()));
+    source.setPartList(Splitters.DOT.splitToList(conEntry.getSource()));
     
     List<ASTQualifiedName> targets = new ArrayList<>();
     ASTQualifiedName target = TypesNodeFactory.createASTQualifiedName();
-    target.setParts(Splitters.DOT.splitToList(conEntry.getTarget()));
+    target.setPartList(Splitters.DOT.splitToList(conEntry.getTarget()));
     targets.add(target);
     
     astConnector.setSource(source);
-    astConnector.setTargets(targets);
+    astConnector.setTargetsList(targets);
     
     Optional<ASTMontiArcAutoConnect> auto = resolveAutoconnect(node);
     if (auto.isPresent()) {
@@ -67,7 +67,7 @@ public class AutoConnection {
       astConnector.set_SourcePositionEnd(auto.get().get_SourcePositionEnd());
     }
     // add node to arc elements
-    node.getBody().getElements().add(astConnector);
+    node.getBody().getElementList().add(astConnector);
   }
   
   /**
@@ -76,7 +76,7 @@ public class AutoConnection {
    * exist.
    */
   public static Optional<ASTMontiArcAutoConnect> resolveAutoconnect(ASTComponent comp) {
-    for (ASTElement element : comp.getBody().getElements()) {
+    for (ASTElement element : comp.getBody().getElementList()) {
       if (element instanceof ASTMontiArcAutoConnect) {
         return Optional.of((ASTMontiArcAutoConnect) element);
       }

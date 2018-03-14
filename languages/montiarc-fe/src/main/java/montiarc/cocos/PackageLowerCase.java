@@ -26,7 +26,7 @@ public class PackageLowerCase implements MontiArcASTMACompilationUnitCoCo {
    */
   @Override
   public void check(ASTMACompilationUnit node) {
-    String pack = Names.getQualifiedName(node.getPackage());
+    String pack = Names.getQualifiedName(node.getPackageList());
     if (pack.toUpperCase().equals(pack)) {
       Log.error("0xMA054 The package must be lower case", node.get_SourcePositionStart());
     }

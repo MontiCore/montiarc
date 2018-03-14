@@ -24,13 +24,14 @@ public class TypeParameterNamesUnique implements MontiArcASTComponentHeadCoCo {
    */
   @Override
   public void check(ASTComponentHead node) {
-    ASTTypeParameters typeParameters = node.getGenericTypeParameters().orElse(null);
+    ASTTypeParameters typeParameters = node.getGenericTypeParametersOpt().orElse(null);
     if (typeParameters == null) {
       return;
     }
     
     List<String> typeParameterNames = new ArrayList<>();
-    for (ASTTypeVariableDeclaration typeParameter : typeParameters.getTypeVariableDeclarations()) {
+    for (ASTTypeVariableDeclaration typeParameter : typeParameters
+        .getTypeVariableDeclarationList()) {
       
       if (typeParameterNames.contains(typeParameter.getName())) {
         Log.error(String.format(

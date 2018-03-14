@@ -18,7 +18,7 @@ public class MultipleBehaviorImplementation implements MontiArcASTComponentCoCo 
   @Override
   public void check(ASTComponent node) {
     int counter = 0;
-    for (ASTElement element : node.getBody().getElements()) {
+    for (ASTElement element : node.getBody().getElementList()) {
       if (element instanceof ASTBehaviorElement) {
         ++counter;
         if (counter > 1) {

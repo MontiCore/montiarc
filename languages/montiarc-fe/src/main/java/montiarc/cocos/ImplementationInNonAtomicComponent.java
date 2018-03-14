@@ -33,7 +33,7 @@ public class ImplementationInNonAtomicComponent implements MontiArcASTComponentC
   }
   
   public boolean hasBehavior(ASTComponent node) {
-    for (ASTElement e : node.getBody().getElements()) {
+    for (ASTElement e : node.getBody().getElementList()) {
       if (e instanceof ASTBehaviorElement) {
         return true;
       }

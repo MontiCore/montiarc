@@ -5,7 +5,7 @@
  */
 package montiarc._symboltable;
 
-import de.monticore.java.javadsl._ast.ASTExpression;
+import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.types.references.TypeReference;
 import montiarc._ast.ASTValue;
 

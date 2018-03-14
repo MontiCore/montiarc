@@ -8,9 +8,9 @@ package montiarc.cocos;
 import java.util.List;
 import java.util.Optional;
 
-import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
+import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.types.TypesHelper;
@@ -36,11 +36,11 @@ public class DefaultParametersCorrectlyAssigned
    */
   @Override
   public void check(ASTComponent node) {
-    List<ASTParameter> params = node.getHead().getParameters();
+    List<ASTParameter> params = node.getHead().getParameterList();
     ComponentSymbol comp = (ComponentSymbol) node.getSymbol().get();
     for (ASTParameter param : params) {
       
-      if (param.getDefaultValue().isPresent()) {
+      if (param.isDefaultValuePresent()) {
         int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(param.getType());
         JTypeReference<? extends JTypeSymbol> paramTypeSymbol = new JavaTypeSymbolReference(
             TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(param
@@ -48,14 +48,14 @@ public class DefaultParametersCorrectlyAssigned
             comp.getSpannedScope(), dimension);
         
         HCJavaDSLTypeResolver javaTypeResolver = new HCJavaDSLTypeResolver();
-        ASTExpression expression = param.getDefaultValue().get().getExpression();
+        ASTExpression expression = param.getDefaultValue().getExpression();
         // param.getDefaultValue().get().getValue().accept(javaTypeResolver);
         expression.accept(javaTypeResolver);
         Optional<JavaTypeSymbolReference> result = javaTypeResolver.getResult();
         if (!result.isPresent()) {
           Log.error(
               "0xMA068 Could not resolve type of default parameter value for comparing it with the referenced parameter type.",
-              param.getDefaultValue().get().get_SourcePositionStart());
+              param.getDefaultValue().get_SourcePositionStart());
         }
         else if (!TypeCompatibilityChecker.doTypesMatch(result.get(), paramTypeSymbol)) {
           Log.error("0xMA062 Type of parameter " + param.getName()

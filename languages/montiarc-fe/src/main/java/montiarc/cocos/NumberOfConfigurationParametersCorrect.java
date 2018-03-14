@@ -17,14 +17,12 @@ import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ComponentSymbol;
 
 /**
- * This coco compares the number of arguments passed to the subcomponent with
- * the parameters of the instantiated type. It considers default parameters that
- * are optional when instantiating a component. Type and Ordering is checked in
- * other cocos.
+ * This coco compares the number of arguments passed to the subcomponent with the parameters of the
+ * instantiated type. It considers default parameters that are optional when instantiating a
+ * component. Type and Ordering is checked in other cocos.
  * 
- * @implements [Wor16] MR1: Arguments of configuration parameters with default
- * values may be omitted during subcomponent declaration. (p. 58, Lst. 4.11)
- * 
+ * @implements [Wor16] MR1: Arguments of configuration parameters with default values may be omitted
+ * during subcomponent declaration. (p. 58, Lst. 4.11)
  * @author Jerome Pfeiffer
  * @version $Revision$, $Date$
  */
@@ -43,11 +41,11 @@ public class NumberOfConfigurationParametersCorrect implements MontiArcASTCompon
           ComponentSymbol.KIND);
       if (subcompSym.isPresent()) {
         ASTComponent subcompType = (ASTComponent) subcompSym.get().getAstNode().get();
-        List<ASTParameter> params = subcompType.getHead().getParameters();
+        List<ASTParameter> params = subcompType.getHead().getParameterList();
         int numberOfNecessaryConfigParams = params.size() - getNumberOfDefaultParameters(params);
-        if (numberOfNecessaryConfigParams != sub.getArguments().size()) {
+        if (numberOfNecessaryConfigParams != sub.getArgumentsList().size()) {
           Log.error(String.format("0xMA082 Subcomponent of type \"%s\" is instantiated with "
-              + sub.getArguments().size() + " arguments but requires "
+              + sub.getArgumentsList().size() + " arguments but requires "
               + numberOfNecessaryConfigParams + " arguments by type definition.", type),
               sub.get_SourcePositionStart());
         }
@@ -63,7 +61,7 @@ public class NumberOfConfigurationParametersCorrect implements MontiArcASTCompon
     int counter = 0;
     
     for (ASTParameter param : params) {
-      if (param.getDefaultValue().isPresent()) {
+      if (param.isDefaultValuePresent()) {
         counter++;
       }
     }

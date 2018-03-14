@@ -12,7 +12,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.symboltable.types.JFieldSymbol;
@@ -57,7 +56,7 @@ public class DefaultParametersTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "ComposedComponentUsingDefaultParameters");
   }
   
-//  @Ignore("Why check all cocos in invalid?")
+  // @Ignore("Why check all cocos in invalid?")
   @Test
   public void testComposedComponentUsingDefaultParametersInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new NumberOfConfigurationParametersCorrect()),
@@ -89,11 +88,11 @@ public class DefaultParametersTest extends AbstractCoCoTest {
       if (param.getAstNode().isPresent()) {
         ASTParameter p = (ASTParameter) param.getAstNode().get();
         if (p.getName().equals("offset")) {
-          assertTrue(p.getDefaultValue().isPresent());
-          assertEquals(5, p.getDefaultValue().get());
+          assertTrue(p.isDefaultValuePresent());
+          assertEquals(5, p.getDefaultValue());
         }
         else {
-          assertFalse(p.getDefaultValue().isPresent());
+          assertFalse(p.isDefaultValuePresent());
         }
       }
       

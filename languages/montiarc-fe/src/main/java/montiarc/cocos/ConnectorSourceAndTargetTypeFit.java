@@ -27,9 +27,9 @@ import montiarc.helper.TypeCompatibilityChecker;
 /**
  * Checks whether source and target type of connected ports match.
  * 
- * @implements [Hab16] R8: The target port in a connection has to be compatible
- * to the source port, i.e., the type of the target port is identical or a
- * supertype of the source port type. (p. 66, lst. 3.43)
+ * @implements [Hab16] R8: The target port in a connection has to be compatible to the source port,
+ * i.e., the type of the target port is identical or a supertype of the source port type. (p. 66,
+ * lst. 3.43)
  * @author Jerome Pfeiffer
  * @version $Revision$, $Date$
  */
@@ -69,12 +69,11 @@ public class ConnectorSourceAndTargetTypeFit implements MontiArcASTComponentCoCo
       
       if (targetType.getReferencedSymbol().isFormalTypeParameter()) {
         ASTConnector c = (ASTConnector) connector.getAstNode().get();
-        ASTQualifiedName targetFQN = c.getTargets().stream()
+        ASTQualifiedName targetFQN = c.getTargetsList().stream()
             .filter(n -> n.toString().equals(connector.getTarget()))
             .findFirst().get();
         targetParams = getActualTypeArgumentsFromPortOfConnector(c, compSym, targetFQN);
       }
-      
       
       if (!TypeCompatibilityChecker.doTypesMatch(sourceType, sourceTypeFormalParams,
           sourceParams.stream()
@@ -89,10 +88,11 @@ public class ConnectorSourceAndTargetTypeFit implements MontiArcASTComponentCoCo
   }
   
   private List<ActualTypeArgument> getActualTypeArgumentsFromPortOfConnector(
-      ASTConnector connector, ComponentSymbol definingComponent, ASTQualifiedName nameOfConnectorEndpoint) {
+      ASTConnector connector, ComponentSymbol definingComponent,
+      ASTQualifiedName nameOfConnectorEndpoint) {
     List<ActualTypeArgument> params = new ArrayList<>();
-    if (nameOfConnectorEndpoint.getParts().size() > 1) {
-      String compName = nameOfConnectorEndpoint.getParts().get(0);
+    if (nameOfConnectorEndpoint.getPartList().size() > 1) {
+      String compName = nameOfConnectorEndpoint.getPartList().get(0);
       params = definingComponent.getSpannedScope()
           .<ComponentInstanceSymbol> resolve(compName, ComponentInstanceSymbol.KIND).get()
           .getComponentType().getActualTypeArguments();

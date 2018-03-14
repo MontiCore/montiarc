@@ -1,7 +1,8 @@
 package montiarc.cocos;
 
-import de.monticore.java.javadsl._ast.ASTExpression;
-import de.monticore.java.javadsl._cocos.JavaDSLASTExpressionCoCo;
+import de.monticore.mcexpressions._ast.ASTExpression;
+import de.monticore.mcexpressions._ast.ASTInstanceofExpression;
+import de.monticore.mcexpressions._cocos.MCExpressionsASTExpressionCoCo;
 import de.se_rwth.commons.logging.Log;
 
 /**
@@ -11,11 +12,11 @@ import de.se_rwth.commons.logging.Log;
  * modeling elements.
  * @author Gerrit Leonhardt
  */
-public class UseOfForbiddenExpression implements JavaDSLASTExpressionCoCo {
+public class UseOfForbiddenExpression implements MCExpressionsASTExpressionCoCo {
   
   @Override
   public void check(ASTExpression node) {
-    if (node.instanceofTypeIsPresent()) {
+    if (node instanceof ASTInstanceofExpression) {
       Log.error("0xMA023 Expression contains forbidden expression: instanceOf expression",
           node.get_SourcePositionStart());
     }

@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.references.FailedLoadingSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.se_rwth.commons.logging.Log;
@@ -27,10 +26,10 @@ public class AutomatonStimulusTypeDoesNotFitInputType implements MontiArcASTTran
   
   @Override
   public void check(ASTTransition node) {
-    if (node.stimulusIsPresent()) {
-      for (ASTIOAssignment assign : node.getStimulus().get().getIOAssignments()) {
-        if (assign.nameIsPresent()) {
-          String currentNameToResolve = assign.getName().get();
+    if (node.isStimulusPresent()) {
+      for (ASTIOAssignment assign : node.getStimulus().getIOAssignmentList()) {
+        if (assign.isNamePresent()) {
+          String currentNameToResolve = assign.getName();
           
           Scope transitionScope = ((TransitionSymbol) node.getSymbol().get()).getSpannedScope();
           Optional<VariableSymbol> varSymbol = transitionScope.resolve(currentNameToResolve,
@@ -57,29 +56,23 @@ public class AutomatonStimulusTypeDoesNotFitInputType implements MontiArcASTTran
   
   private void checkAssignment(ASTIOAssignment assign,
       JTypeReference<? extends JTypeSymbol> typeRef, String currentNameToResolve) {
-    try {
-      if (assign.valueListIsPresent()) {
-        JTypeReference<? extends JTypeSymbol> varType = typeRef;
-        for (ASTValuation val : assign.getValueList().get().getAllValuations()) {
-          Optional<? extends JavaTypeSymbolReference> exprType = TypeCompatibilityChecker
-              .getExpressionType(val.getExpression());
-          if (!exprType.isPresent()) {
-            Log.error("0xMA048 Could not resolve type of expression for checking the stimulus.",
-                assign.get_SourcePositionStart());
-          }
-          else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType)) {
-            Log.error(
-                "0xMA046 Type of Variable/Input " + currentNameToResolve
-                    + " in the stimulus does not match the type of its assigned expression. Type " +
-                    exprType.get().getName() + " can not cast to type " + varType.getName() + ".",
-                val.get_SourcePositionStart());
-          }
+    if (assign.isValueListPresent()) {
+      JTypeReference<? extends JTypeSymbol> varType = typeRef;
+      for (ASTValuation val : assign.getValueList().getAllValuations()) {
+        Optional<? extends JavaTypeSymbolReference> exprType = TypeCompatibilityChecker
+            .getExpressionType(val.getExpression());
+        if (!exprType.isPresent()) {
+          Log.error("0xMA048 Could not resolve type of expression for checking the stimulus.",
+              assign.get_SourcePositionStart());
+        }
+        else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType)) {
+          Log.error(
+              "0xMA046 Type of Variable/Input " + currentNameToResolve
+                  + " in the stimulus does not match the type of its assigned expression. Type " +
+                  exprType.get().getName() + " can not cast to type " + varType.getName() + ".",
+              val.get_SourcePositionStart());
         }
       }
-    }
-    catch (FailedLoadingSymbol e) {
-      Log.error("0xMA047 Could not resolve type for checking the stimulus.",
-          assign.get_SourcePositionStart());
     }
   }
   

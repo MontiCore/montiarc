@@ -22,16 +22,16 @@ public class UseOfUndeclaredState implements MontiArcASTAutomatonCoCo {
   public void check(ASTAutomaton node) {
     // Collect defined States
     HashSet<String> names = new HashSet<>();
-    for (ASTStateDeclaration stateDecl : node.getStateDeclarations()) {
-      for (ASTState state : stateDecl.getStates()) {
+    for (ASTStateDeclaration stateDecl : node.getStateDeclarationList()) {
+      for (ASTState state : stateDecl.getStateList()) {
         names.add(state.getName());
       }
     }
     
     // Check transitions
-    for (ASTTransition transition : node.getTransitions()) {
+    for (ASTTransition transition : node.getTransitionList()) {
       String sourceName = transition.getSource();
-      String targetName = transition.getTarget().orElse(sourceName);
+      String targetName = transition.getTargetOpt().orElse(sourceName);
       
       if (!names.contains(sourceName)) {
         Log.error("0xMA026 The source " + sourceName + " in " + sourceName + "->" + targetName

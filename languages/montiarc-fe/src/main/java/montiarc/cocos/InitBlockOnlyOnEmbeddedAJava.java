@@ -21,7 +21,7 @@ public class InitBlockOnlyOnEmbeddedAJava implements MontiArcASTComponentCoCo {
     boolean hasBehaviour = false;
     
     // Save the init block if there is one and determine whether there is a behaviour
-    for (ASTElement element : node.getBody().getElements()) {
+    for (ASTElement element : node.getBody().getElementList()) {
       if (element instanceof ASTJavaPInitializer) {
         init = (ASTJavaPInitializer) element;
       }

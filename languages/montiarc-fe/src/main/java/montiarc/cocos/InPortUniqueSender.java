@@ -63,7 +63,7 @@ public class InPortUniqueSender implements MontiArcASTComponentCoCo {
     
     private void checkConnectors() {
       for (ASTConnector connector : node.getConnectors()) {
-        for (ASTQualifiedName target : connector.getTargets()) {
+        for (ASTQualifiedName target : connector.getTargetsList()) {
           checkTarget(target);
         }
       }
@@ -71,9 +71,9 @@ public class InPortUniqueSender implements MontiArcASTComponentCoCo {
     
     private void checkSimpleConnectors() {
       for (ASTSubComponent subComponent : node.getSubComponents()) {
-        for (ASTSubComponentInstance instance : subComponent.getInstances()) {
-          for (ASTSimpleConnector connector : instance.getConnectors()) {
-            for (ASTQualifiedName target : connector.getTargets()) {
+        for (ASTSubComponentInstance instance : subComponent.getInstancesList()) {
+          for (ASTSimpleConnector connector : instance.getConnectorsList()) {
+            for (ASTQualifiedName target : connector.getTargetsList()) {
               checkTarget(target);
             }
           }

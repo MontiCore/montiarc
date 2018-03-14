@@ -24,8 +24,8 @@ public class UseOfUndeclaredField implements MontiArcASTIOAssignmentCoCo {
     // only check left side of IOAssignment, right side is implicitly checked
     // when resolving type of the valuations
     
-    if (node.nameIsPresent()) {
-      String name = node.getName().get();
+    if (node.isNamePresent()) {
+      String name = node.getName();
       Scope scope = node.getEnclosingScope().get();
       boolean foundVar = scope.resolve(name, VariableSymbol.KIND).isPresent();
       boolean foundPort = scope.resolve(name, PortSymbol.KIND).isPresent();

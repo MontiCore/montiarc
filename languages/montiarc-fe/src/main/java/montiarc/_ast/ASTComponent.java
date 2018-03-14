@@ -7,6 +7,7 @@ package montiarc._ast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import de.monticore.types.types._ast.ASTTypeArguments;
@@ -24,12 +25,22 @@ public class ASTComponent extends ASTComponentTOP {
     super();
   }
   
+  /**
+   * Constructor for montiarc._ast.ASTComponent
+   * 
+   * @param stereotype
+   * @param name
+   * @param head
+   * @param instanceName
+   * @param actualTypeArgument
+   * @param body
+   */
   protected ASTComponent(
-      ASTStereotype stereotype,
+      Optional<ASTStereotype> stereotype,
       String name,
       ASTComponentHead head,
-      String instanceName,
-      ASTTypeArguments actualTypeArgument,
+      Optional<String> instanceName,
+      Optional<ASTTypeArguments> actualTypeArgument,
       ASTComponentBody body) {
     super(stereotype, name, head, instanceName, actualTypeArgument, body);
   }
@@ -37,9 +48,9 @@ public class ASTComponent extends ASTComponentTOP {
   // do not use symbol table, since symbol table must not be created
   public List<ASTPort> getPorts() {
     List<ASTPort> ret = new ArrayList<>();
-    for (ASTElement element : this.getBody().getElements()) {
+    for (ASTElement element : this.getBody().getElementList()) {
       if (element instanceof ASTInterface) {
-        ret.addAll(((ASTInterface) element).getPorts());
+        ret.addAll(((ASTInterface) element).getPortsList());
       }
     }
     return ret;
@@ -47,7 +58,7 @@ public class ASTComponent extends ASTComponentTOP {
   
   public List<ASTVariableDeclaration> getVariables() {
     List<ASTVariableDeclaration> ret = new ArrayList<>();
-    for (ASTElement element : this.getBody().getElements()) {
+    for (ASTElement element : this.getBody().getElementList()) {
       if (element instanceof ASTVariableDeclaration) {
         ret.add((ASTVariableDeclaration) element);
       }
@@ -57,19 +68,19 @@ public class ASTComponent extends ASTComponentTOP {
   
   // do not use symbol table, since symbol table must not be created
   public List<ASTConnector> getConnectors() {
-    return this.getBody().getElements().stream().filter(a -> a instanceof ASTConnector)
+    return this.getBody().getElementList().stream().filter(a -> a instanceof ASTConnector)
         .map(a -> (ASTConnector) a).collect(Collectors.toList());
   }
   
   // do not use symbol table, since symbol table must not be created
   public List<ASTSubComponent> getSubComponents() {
-    return this.getBody().getElements().stream().filter(a -> a instanceof ASTSubComponent)
+    return this.getBody().getElementList().stream().filter(a -> a instanceof ASTSubComponent)
         .map(a -> (ASTSubComponent) a).collect(Collectors.toList());
   }
   
   // do not use symbol table, since symbol table must not be created
   public List<ASTComponent> getInnerComponents() {
-    return this.getBody().getElements().stream().filter(a -> a instanceof ASTComponent)
+    return this.getBody().getElementList().stream().filter(a -> a instanceof ASTComponent)
         .map(a -> (ASTComponent) a).collect(Collectors.toList());
   }
 }

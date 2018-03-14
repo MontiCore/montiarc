@@ -19,6 +19,9 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
     Component                                 // single outermost component declaration 
     EOF;                                      // and nothing (end of file) afterwards
     
+  //Only required until ImportStatement in Types.mc4 uses Name& instead of Name  
+  ImportStatement = "import" import:(Name& || ".")+ ("." Star:["*"])? ";" ;
+    
    // TODO where should invariant binding take place?
   InvariantContent = BlockStatement | Expression;
 
@@ -46,7 +49,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   * @attribute body contains the architectural elements 
   *   inherited by this component
   */
-  Component@! implements Element =
+  symbol scope Component implements Element =
     Stereotype?
     "component" Name 
     head:ComponentHead
@@ -317,14 +320,14 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
    * @attribute Stereotype: The optional stereotype of the state, e.g. <<Public>>
    * @attribute Name: The name of the state
    */
-  State@! = Stereotype? Name;
+  symbol State = Stereotype? Name;
   
   /**
    * Declaration of the states which the automaton starts in
    * @attribute Name: The name of the state, should be one defined in the StateDeclaration
    * @attribute Block: The initial output
    */
-  InitialStateDeclaration@! = "initial" Name ("," Name)* ("/" Block)? ";";
+  InitialStateDeclaration = "initial" Name ("," Name)* ("/" Block)? ";";
 
   /**
    * The declarations of a single Transition
@@ -334,7 +337,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
    * @attribute stimulus: The trigger of the transition
    * @attribute reaction: What is done when the transition is taken
    */
-  Transition@! = source:Name ("->" target:Name)? 
+  Transition = source:Name ("->" target:Name)? 
                               Guard?
                               stimulus:Block? 
                               ("/" reaction:Block)? ";";
@@ -345,7 +348,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
    *                  At the moment this is only "java" but there maybe more later on
    * @attribute guardExpression: The expression which should be true for the transition to be active
    */
-  Guard@! = 
+  Guard = 
       "[" (kind:Name ":")? 
       GuardExpression "]";
   

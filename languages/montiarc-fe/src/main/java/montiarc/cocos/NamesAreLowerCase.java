@@ -20,7 +20,7 @@ public class NamesAreLowerCase implements MontiArcASTComponentCoCo {
   @Override
   public void check(ASTComponent node) {
     for (ASTVariableDeclaration varDecl : node.getVariables()) {
-      for (String name : varDecl.getNames())
+      for (String name : varDecl.getNameList())
         if (!Character.isLowerCase(name.charAt(0))) {
           Log.warn(
               "0xMA018 The name of variable " + name + " should start with a lowercase letter.",
@@ -29,7 +29,7 @@ public class NamesAreLowerCase implements MontiArcASTComponentCoCo {
     }
     
     for (ASTPort port : node.getPorts()) {
-      for (String name : port.getNames()) {
+      for (String name : port.getNameList()) {
         if (!Character.isLowerCase(name.charAt(0))) {
           Log.error("0xMA077: The name of the port should start with a lowercase letter.",
               node.get_SourcePositionStart());

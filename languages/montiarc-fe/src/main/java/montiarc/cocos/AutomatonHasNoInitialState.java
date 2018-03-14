@@ -14,8 +14,8 @@ public class AutomatonHasNoInitialState implements MontiArcASTAutomatonCoCo {
   
   @Override
   public void check(ASTAutomaton node) {
-    boolean hasStates = !node.getStateDeclarations().isEmpty();
-    boolean hasNoInitialStates = node.getInitialStateDeclarations().isEmpty();
+    boolean hasStates = !node.getStateDeclarationList().isEmpty();
+    boolean hasNoInitialStates = node.getInitialStateDeclarationList().isEmpty();
     if (hasStates && hasNoInitialStates) {
       Log.error("0xMA013 The automaton has no initial states.", node.get_SourcePositionStart());
     }

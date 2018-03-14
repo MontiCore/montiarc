@@ -1,25 +1,36 @@
 package montiarc._ast;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.google.common.collect.Lists;
 
 public class ASTValueList extends ASTValueListTOP {
   
-  public ASTValueList() {
+  /**
+   * Constructor for montiarc._ast.ASTValueList
+   */
+  protected ASTValueList() {
     super();
   }
   
-  public ASTValueList(java.util.List<ASTValuation> valuations, ASTValuation valuation) {
+  /**
+   * Constructor for montiarc._ast.ASTValueList
+   * 
+   * @param valuations
+   * @param valuation
+   */
+  protected ASTValueList(List<ASTValuation> valuations, Optional<ASTValuation> valuation) {
     super(valuations, valuation);
   }
   
   public List<ASTValuation> getAllValuations() {
-    if (valuationIsPresent()) {
-      return Lists.newArrayList(getValuation().get());
+    if (isValuationPresent()) {
+      return Lists.newArrayList(getValuation());
     }
     else {
-      return getValuations();
+      return getValuationList();
     }
   }
+  
 }

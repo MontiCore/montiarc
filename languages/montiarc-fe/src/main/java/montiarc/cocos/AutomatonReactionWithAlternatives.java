@@ -18,11 +18,11 @@ public class AutomatonReactionWithAlternatives
   
   @Override
   public void check(ASTTransition node) {
-    if (node.reactionIsPresent()) {
-      for (ASTIOAssignment assign : node.getReaction().get().getIOAssignments()) {
-        if (assign.alternativeIsPresent()) {
+    if (node.isReactionPresent()) {
+      for (ASTIOAssignment assign : node.getReaction().getIOAssignmentList()) {
+        if (assign.isAlternativePresent()) {
           Log.error("0xMA020 There are alternative values in a reaction.",
-              assign.getAlternative().get().get_SourcePositionStart());
+              assign.getAlternative().get_SourcePositionStart());
         }
       }
     }
@@ -30,11 +30,11 @@ public class AutomatonReactionWithAlternatives
   
   @Override
   public void check(ASTInitialStateDeclaration node) {
-    if (node.blockIsPresent()) {
-      for (ASTIOAssignment assign : node.getBlock().get().getIOAssignments()) {
-        if (assign.alternativeIsPresent()) {
+    if (node.isBlockPresent()) {
+      for (ASTIOAssignment assign : node.getBlock().getIOAssignmentList()) {
+        if (assign.isAlternativePresent()) {
           Log.error("0xMA020 There are alternative values in a reaction.",
-              assign.getAlternative().get().get_SourcePositionStart());
+              assign.getAlternative().get_SourcePositionStart());
         }
       }
     }

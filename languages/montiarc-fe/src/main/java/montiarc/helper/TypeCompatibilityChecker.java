@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.java.types.JavaDSLHelper;
+import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;

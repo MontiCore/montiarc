@@ -27,12 +27,12 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
   public void check(ASTComponent node) {
     HashSet<String> names = new HashSet<>();
     
-    for (ASTElement e : node.getBody().getElements()) {
+    for (ASTElement e : node.getBody().getElementList()) {
       
       // Check variable declarations
       if (e instanceof ASTVariableDeclaration) {
         ASTVariableDeclaration decl = (ASTVariableDeclaration) e;
-        for (String variableName : decl.getNames()) {
+        for (String variableName : decl.getNameList()) {
           checkList(names, variableName, "0xMA035", "variable", e);
         }
       }
@@ -40,8 +40,8 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
       // Check port names
       else if (e instanceof ASTInterface) {
         ASTInterface decl = (ASTInterface) e;
-        for (ASTPort port : decl.getPorts()) {
-          List<String> portInstanceNames = port.getNames();
+        for (ASTPort port : decl.getPortsList()) {
+          List<String> portInstanceNames = port.getNameList();
           if (portInstanceNames.isEmpty()) {
             String implicitName = TypesPrinter.printType(port.getType());
             portInstanceNames.add(StringTransformations.uncapitalize(implicitName));
@@ -61,7 +61,7 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
     }
     
     // Configuration Parameters
-    List<ASTParameter> parameters = node.getHead().getParameters();
+    List<ASTParameter> parameters = node.getHead().getParameterList();
     for (ASTParameter parameter : parameters) {
       checkList(names, parameter.getName(), "0xMA069", "configuration parameter", parameter);
     }

@@ -4,7 +4,9 @@
 package montiarc._ast;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+
+import de.se_rwth.commons.Names;
 
 public class ASTInitialStateDeclaration extends ASTInitialStateDeclarationTOP {
   
@@ -12,14 +14,18 @@ public class ASTInitialStateDeclaration extends ASTInitialStateDeclarationTOP {
     super();
   }
   
-  public ASTInitialStateDeclaration(List<String> names, ASTBlock block) {
+  /**
+   * Constructor for montiarc._ast.ASTInitialStateDeclaration
+   * 
+   * @param names
+   * @param block
+   */
+  protected ASTInitialStateDeclaration(List<String> names, Optional<ASTBlock> block) {
     super(names, block);
   }
   
   public String getName() {
-    String syntheticName = this.getNames().stream().map(Object::toString)
-        .collect(Collectors.joining("."));
-    return syntheticName;
+    return Names.getQualifiedName(getNameList());
   }
   
 }

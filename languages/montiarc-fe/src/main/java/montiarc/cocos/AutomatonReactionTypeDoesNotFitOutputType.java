@@ -26,10 +26,10 @@ public class AutomatonReactionTypeDoesNotFitOutputType implements MontiArcASTTra
   
   @Override
   public void check(ASTTransition node) {
-    if (node.reactionIsPresent()) {
-      for (ASTIOAssignment assign : node.getReaction().get().getIOAssignments()) {
-        if (assign.nameIsPresent()) {
-          String currentNameToResolve = assign.getName().get();
+    if (node.isReactionPresent()) {
+      for (ASTIOAssignment assign : node.getReaction().getIOAssignmentList()) {
+        if (assign.isNamePresent()) {
+          String currentNameToResolve = assign.getName();
           
           Scope transitionScope = ((TransitionSymbol) node.getSymbol().get()).getSpannedScope();
           Optional<VariableSymbol> vSymbol = transitionScope.resolve(currentNameToResolve,
@@ -57,7 +57,7 @@ public class AutomatonReactionTypeDoesNotFitOutputType implements MontiArcASTTra
       JTypeReference<? extends JTypeSymbol> typeRef, String currentNameToResolve) {
     JTypeReference<? extends JTypeSymbol> varType = typeRef;
     try {
-      for (ASTValuation val : assign.getValueList().get().getAllValuations()) {
+      for (ASTValuation val : assign.getValueList().getAllValuations()) {
         Optional<? extends JavaTypeSymbolReference> exprType = TypeCompatibilityChecker
             .getExpressionType(val.getExpression());
         if (!exprType.isPresent()) {
