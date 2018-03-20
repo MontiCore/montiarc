@@ -45,7 +45,7 @@ public class NumberOfConfigurationParametersCorrect implements MontiArcASTCompon
         ASTComponent subcompType = (ASTComponent) subcompSym.get().getAstNode().get();
         List<ASTParameter> params = subcompType.getHead().getParameters();
         int numberOfNecessaryConfigParams = params.size() - getNumberOfDefaultParameters(params);
-        if (numberOfNecessaryConfigParams != sub.getArguments().size()) {
+        if (numberOfNecessaryConfigParams > sub.getArguments().size() || sub.getArguments().size() > params.size()) {
           Log.error(String.format("0xMA082 Subcomponent of type \"%s\" is instantiated with "
               + sub.getArguments().size() + " arguments but requires "
               + numberOfNecessaryConfigParams + " arguments by type definition.", type),
