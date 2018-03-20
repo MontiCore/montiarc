@@ -27,6 +27,7 @@ public class MontiArcCoCos {
         .addCoCo(new ComponentNameIsCapitalized())
         .addCoCo(new DefaultParametersHaveCorrectOrder())
         .addCoCo(new DefaultParametersCorrectlyAssigned())
+        .addCoCo(new NumberOfConfigurationParametersCorrect())
         .addCoCo(new ComponentWithTypeParametersHasInstance())
         .addCoCo(new TypeParameterNamesUnique())
         .addCoCo(new TopLevelComponentHasNoInstanceName())
@@ -34,6 +35,7 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo(new InPortUniqueSender())
         .addCoCo(new ImportsValid())
+        .addCoCo(new SubcomponentReferenceCycle())
         
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
@@ -64,6 +66,7 @@ public class MontiArcCoCos {
         .addCoCo(new AutomatonStateUppercase())
         .addCoCo(new ConnectorSourceAndTargetComponentDiffer())
         .addCoCo(new ConnectorSourceAndTargetExist())
+        .addCoCo(new ConnectorSourceAndTargetTypeFit())
         .addCoCo(new ImportsAreUnique())
         
         // REFERENTIAL INTEGRITY
@@ -71,7 +74,7 @@ public class MontiArcCoCos {
         .addCoCo(new UseOfUndeclaredState())
         .addCoCo(new UseOfUndeclaredField())
         .addCoCo(new AssignmentHasNoName())
-        
+        .addCoCo(new InnerComponentNotExtendsDefiningComponent())
         
         // TYPE CORRECTNESS
         .addCoCo(new AutomatonGuardIsNotBoolean())

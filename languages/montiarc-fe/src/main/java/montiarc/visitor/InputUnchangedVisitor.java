@@ -1,11 +1,11 @@
 package montiarc.visitor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.javadsl._ast.ASTPrimaryExpression;
 import montiarc._visitor.MontiArcVisitor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Visitor that is used to check whether input ports are changed in a compute block.
@@ -13,12 +13,12 @@ import java.util.List;
  * @author Michael Mutert
  */
 public class InputUnchangedVisitor implements MontiArcVisitor {
-
+  
   private List<String> possiblePorts = new ArrayList<>();
-
+  
   @Override
   public void visit(ASTExpression node) {
-
+    
     // Check if the current expression is a 'regular' assignment,
     // i.e. =, +=, -=
     if (node.getLeftExpression().isPresent() && node.getRightExpression().isPresent()) {
@@ -35,12 +35,13 @@ public class InputUnchangedVisitor implements MontiArcVisitor {
         }
       }
     }
-
+    
     // Check if the current expressiosn is a prefix/suffix operator,
     // i.e. ++, --
     if (node.getSuffixOp().isPresent()) {
       if (node.getExpression().get().getPrimaryExpression().isPresent()) {
-        ASTPrimaryExpression primaryExpression = node.getExpression().get().getPrimaryExpression().get();
+        ASTPrimaryExpression primaryExpression = node.getExpression().get().getPrimaryExpression()
+            .get();
         if (primaryExpression.getName().isPresent()) {
           possiblePorts.add(primaryExpression.getName().get());
         }
@@ -48,14 +49,15 @@ public class InputUnchangedVisitor implements MontiArcVisitor {
     }
     if (node.getPrefixOp().isPresent()) {
       if (node.getExpression().get().getPrimaryExpression().isPresent()) {
-        ASTPrimaryExpression primaryExpression = node.getExpression().get().getPrimaryExpression().get();
+        ASTPrimaryExpression primaryExpression = node.getExpression().get().getPrimaryExpression()
+            .get();
         if (primaryExpression.getName().isPresent()) {
           possiblePorts.add(primaryExpression.getName().get());
         }
       }
     }
   }
-
+  
   public List<String> getPossiblePorts() {
     return possiblePorts;
   }

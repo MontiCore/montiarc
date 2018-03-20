@@ -28,7 +28,8 @@ public class MontiArcParser extends MontiArcParserTOP {
       String packageDeclaration = Names.getQualifiedName(ast.get().getPackage());
       if (!modelName.equals(simpleFileName)) {
         Log.error("0xMA256 The name of the component " + modelName
-            + " is not identical to the name of the file in file '" + filename + "' (without its fileextension).");
+            + " is not identical to the name of the file in file '" + filename
+            + "' (without its fileextension).");
       }
       if (!packageName.endsWith(packageDeclaration)) {
         Log.error("0xMA257 The package declaration " + packageDeclaration

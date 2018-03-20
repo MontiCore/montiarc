@@ -7,15 +7,14 @@ import montiarc._ast.ASTElement;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 
 /**
- * CoCo for checking whether there are more than one behavior implementations
- * defined.
+ * CoCo for checking whether there are more than one behavior implementations defined.
  *
- * @implements [Wor16] MU2: Each atomic component contains at most one behavior model. (p. 55. Lst. 4.6)
- *
+ * @implements [Wor16] MU2: Each atomic component contains at most one behavior model. (p. 55. Lst.
+ * 4.6)
  * @author Jerome Pfeiffer, Andreas Wortmann
  */
 public class MultipleBehaviorImplementation implements MontiArcASTComponentCoCo {
-	
+  
   @Override
   public void check(ASTComponent node) {
     int counter = 0;

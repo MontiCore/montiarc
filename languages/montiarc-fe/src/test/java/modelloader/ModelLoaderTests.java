@@ -12,7 +12,6 @@ import org.junit.Test;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
-import montiarc.MontiArcTool;
 import montiarc._symboltable.ComponentSymbol;
 
 public class ModelLoaderTests extends AbstractCoCoTest {
@@ -20,7 +19,7 @@ public class ModelLoaderTests extends AbstractCoCoTest {
   private static final String PACKAGE = "modelloader";
   
   public static final boolean ENABLE_FAIL_QUICK = true;
-
+  
   @Before
   public void setup() {
     Log.enableFailQuick(ENABLE_FAIL_QUICK);
@@ -36,10 +35,12 @@ public class ModelLoaderTests extends AbstractCoCoTest {
   
   @Test
   public void testModelLoader() {
-    Optional<ComponentSymbol> sym = MONTIARCTOOL.loadComponentSymbolWithoutCocos(PACKAGE + "." + "industry.PIController", Paths.get(MODEL_PATH).toFile());
+    Optional<ComponentSymbol> sym = MONTIARCTOOL.loadComponentSymbolWithoutCocos(
+        PACKAGE + "." + "industry.PIController", Paths.get(MODEL_PATH).toFile());
     assertTrue(sym.isPresent());
     
-    Optional<ComponentSymbol> sym2 = MONTIARCTOOL.loadComponentSymbolWithoutCocos(PACKAGE + "." + "industry2.PIController", Paths.get(MODEL_PATH).toFile());
+    Optional<ComponentSymbol> sym2 = MONTIARCTOOL.loadComponentSymbolWithoutCocos(
+        PACKAGE + "." + "industry2.PIController", Paths.get(MODEL_PATH).toFile());
     assertTrue(sym2.isPresent());
     
     assertTrue(sym.get() != sym2.get());
@@ -51,7 +52,8 @@ public class ModelLoaderTests extends AbstractCoCoTest {
     Scope scope = MONTIARCTOOL.initSymbolTable(MODEL_PATH);
     
     Optional<ComponentSymbol> sym3 = getGlobalScope(scope)
-        .<ComponentSymbol> resolveDown(PACKAGE + "." + "industry.PIController", ComponentSymbol.KIND);
+        .<ComponentSymbol> resolveDown(PACKAGE + "." + "industry.PIController",
+            ComponentSymbol.KIND);
     assertFalse("resolveDown may not load any model from ModelLoader", sym3.isPresent());
     
     Optional<ComponentSymbol> sym = scope
@@ -59,7 +61,8 @@ public class ModelLoaderTests extends AbstractCoCoTest {
     assertTrue(sym.isPresent());
     
     Optional<ComponentSymbol> sym2 = getGlobalScope(scope)
-        .<ComponentSymbol> resolveDown(PACKAGE + "." + "industry2.PIController", ComponentSymbol.KIND);
+        .<ComponentSymbol> resolveDown(PACKAGE + "." + "industry2.PIController",
+            ComponentSymbol.KIND);
     assertFalse(sym2.isPresent());
     
   }

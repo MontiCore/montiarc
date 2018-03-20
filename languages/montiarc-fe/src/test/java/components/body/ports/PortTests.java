@@ -33,27 +33,37 @@ import java.util.Optional;
  * @author Andreas Wortmann
  */
 public class PortTests extends AbstractCoCoTest {
-
+  
   private static final String PACKAGE = "components.body.ports";
-
+  
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
   }
-
+  
   @Test
   public void testInexistingPortType() {
     // TODO: Star imports?
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "InexistingPortType");
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new ExpectedErrorInfo(1, "xMA076"));
-
+    
+    checkValid(PACKAGE + "." + "BumpControl");
+  }
+  
+  @Test
+  public void testBumpControl() {
     checkValid(PACKAGE + "." + "BumpControl");
   }
 
   @Test
-  public void testBumpControl() {
-    checkValid(PACKAGE + "." + "BumpControl");
+  public void testComponentWithArrayAsPortType() {
+    checkValid(PACKAGE + "." + "ComponentWithArrayAsPortTypeParameter");
+  }
+  
+  @Test
+  public void testComponentWithArrayAsPortTypeUsage() {
+    checkValid(PACKAGE + "." + "ComponentWithArrayAsPortTypeParameterUsage");
   }
 
   @Test
@@ -62,7 +72,7 @@ public class PortTests extends AbstractCoCoTest {
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new ExpectedErrorInfo(3, "xMA053"));
   }
-
+  
   @Test
   @Ignore("TODO: Fix UniqueIdentifiers.java CoCo")
   public void testPortNameAmbiguous() {
@@ -82,25 +92,25 @@ public class PortTests extends AbstractCoCoTest {
   @Test
   public void testPortTypeResolving() {
     ComponentSymbol motorSymbol = this.loadComponentSymbol(PACKAGE, "PortTypeResolving");
-
+    
     PortSymbol commandPort = motorSymbol.getIncomingPort("command").orElse(null);
-
+    
     assertNotNull(commandPort);
-
+    
     JTypeSymbol typeSymbol = commandPort
         .getTypeReference()
         .getReferencedSymbol();
-
+    
     assertNotNull(typeSymbol);
   }
-
+  
   @Test
   public void testInPortAmbiguousSender() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "InPortAmbiguousSender");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
         node, new ExpectedErrorInfo(2, "xMA005"));
   }
-
+  
   @Test
   public void testPortsWithAmbiguousSenders() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortsWithAmbiguousSenders");
@@ -130,7 +140,7 @@ public class PortTests extends AbstractCoCoTest {
   public void testInPortUniqueSender() {
     checkValid(PACKAGE + "." + "InPortUniqueSender");
   }
-
+  
   @Test
   @Ignore("TODO: Currently no errors found even though it is an invalid model")
   public void testGenericPortsWithoutTypeParams() {
@@ -144,21 +154,19 @@ public class PortTests extends AbstractCoCoTest {
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new NamesAreLowerCase());
     checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA077"));
   }
-
+  
   @Test
-  /*
-    Tests the CoCos CV5 and CV6 from the dissertation of Arne Haber.
-    These are the checks that all ports should be connected of components and subcomponents.
-   */
+  /* Tests the CoCos CV5 and CV6 from the dissertation of Arne Haber. These are the checks that all
+   * ports should be connected of components and subcomponents. */
   public void testUnconnectedPorts() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UnconnectedPorts");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
     checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA057", "xMA058"));
-
+    
     cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
     checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA059", "xMA060"));
   }
-
+  
   @Test
   /*
     Tests the CoCos CV5 and CV6 from the dissertation of Arne Haber.
@@ -177,22 +185,22 @@ public class PortTests extends AbstractCoCoTest {
   public void testCompWithGenericPorts() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "CompWithGenericPorts");
     assertEquals(3, comp.getFormalTypeParameters().size());
-
+    
     JTypeSymbol typeSymbol = comp.getFormalTypeParameters().get(0);
     assertEquals("K", typeSymbol.getName());
     assertTrue(typeSymbol.isFormalTypeParameter());
     assertEquals(1, typeSymbol.getSuperTypes().size());
-
+    
     typeSymbol = comp.getFormalTypeParameters().get(1);
     assertEquals("V", typeSymbol.getName());
     assertTrue(typeSymbol.isFormalTypeParameter());
     assertEquals(1, typeSymbol.getSuperTypes().size());
-
+    
     typeSymbol = comp.getFormalTypeParameters().get(2);
     assertEquals("W", typeSymbol.getName());
     assertTrue(typeSymbol.isFormalTypeParameter());
     assertEquals(0, typeSymbol.getSuperTypes().size());
-
+    
     PortSymbol myKInput = comp.getIncomingPort("myKInput").orElse(null);
     assertNotNull(myKInput);
     assertEquals("K", myKInput.getTypeReference().getName());
@@ -202,19 +210,25 @@ public class PortTests extends AbstractCoCoTest {
     PortSymbol myVInput = comp.getOutgoingPort("myVOutput").orElse(null);
     assertNotNull(myVInput);
     assertEquals("V", myVInput.getTypeReference().getName());
-
+    
   }
   
   @Test
   public void testPortsWithStereotypes() {
     Scope symTab = this.loadDefaultSymbolTable();
-    PortSymbol port = symTab.<PortSymbol> resolve(PACKAGE + "." + "PortsWithStereotypes.integerIn", PortSymbol.KIND).orElse(null);
+    PortSymbol port = symTab
+        .<PortSymbol> resolve(PACKAGE + "." + "PortsWithStereotypes.integerIn", PortSymbol.KIND)
+        .orElse(null);
     assertNotNull(port);
-
+    
     assertEquals(3, port.getStereotype().size());
     assertEquals("held", port.getStereotype().get("disabled").get());
     assertEquals("1", port.getStereotype().get("initialOutput").get());
     assertFalse(port.getStereotype().get("ignoreWarning").isPresent());
   }
 
+  @Test
+  public void testJavaTypedPorts() {
+    checkValid("components.body.ports.ComponentWithJavaTypedPorts");
+  }
 }

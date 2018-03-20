@@ -19,25 +19,25 @@ import montiarc._ast.ASTValuation;
 /**
  * TODO: Write me!
  *
- * @author  (last commit) $Author$
- * @version $Revision$,
- *          $Date$
- * @since   TODO: add version number
- *
+ * @author (last commit) $Author$
+ * @version $Revision$, $Date$
+ * @since TODO: add version number
  */
-public class VariableSymbolReference extends VariableSymbol implements SymbolReference<VariableSymbol>{
-
+public class VariableSymbolReference extends VariableSymbol
+    implements SymbolReference<VariableSymbol> {
+  
   protected final SymbolReference<VariableSymbol> reference;
-
+  
   /**
    * Constructor for de.monticore.lang.montiarc.montiarc._symboltable.VariableSymbolReference
+   * 
    * @param name
    */
   public VariableSymbolReference(String name, final Scope definingScopeOfReference) {
     super(name);
     reference = new CommonSymbolReference<>(name, VariableSymbol.KIND, definingScopeOfReference);
   }
-
+  
   /**
    * @see de.monticore.symboltable.references.SymbolReference#getReferencedSymbol()
    */
@@ -45,7 +45,7 @@ public class VariableSymbolReference extends VariableSymbol implements SymbolRef
   public VariableSymbol getReferencedSymbol() {
     return reference.getReferencedSymbol();
   }
-
+  
   /**
    * @see de.monticore.symboltable.references.SymbolReference#existsReferencedSymbol()
    */
@@ -53,7 +53,7 @@ public class VariableSymbolReference extends VariableSymbol implements SymbolRef
   public boolean existsReferencedSymbol() {
     return reference.existsReferencedSymbol();
   }
-
+  
   /**
    * @see de.monticore.symboltable.references.SymbolReference#isReferencedSymbolLoaded()
    */
@@ -61,42 +61,40 @@ public class VariableSymbolReference extends VariableSymbol implements SymbolRef
   public boolean isReferencedSymbolLoaded() {
     return reference.isReferencedSymbolLoaded();
   }
-
-  /*
-   * Methods of Symbol interface
-   */
-
-   @Override
-   public String getName() {
-     return getReferencedSymbol().getName();
-   }
-
-   @Override
-   public String getFullName() {
-     return getReferencedSymbol().getFullName();
-   }
-
-   @Override
-   public Scope getEnclosingScope() {
-     return getReferencedSymbol().getEnclosingScope();
-   }
-
-   @Override
-   public void setEnclosingScope(MutableScope scope) {
-     getReferencedSymbol().setEnclosingScope(scope);
-   }
-
-   @Override
-   public AccessModifier getAccessModifier() {
-     return getReferencedSymbol().getAccessModifier();
-   }
-
-   @Override
-   public void setAccessModifier(AccessModifier accessModifier) {
-     getReferencedSymbol().setAccessModifier(accessModifier);
-   }
-   
-   /**
+  
+  /* Methods of Symbol interface */
+  
+  @Override
+  public String getName() {
+    return getReferencedSymbol().getName();
+  }
+  
+  @Override
+  public String getFullName() {
+    return getReferencedSymbol().getFullName();
+  }
+  
+  @Override
+  public Scope getEnclosingScope() {
+    return getReferencedSymbol().getEnclosingScope();
+  }
+  
+  @Override
+  public void setEnclosingScope(MutableScope scope) {
+    getReferencedSymbol().setEnclosingScope(scope);
+  }
+  
+  @Override
+  public AccessModifier getAccessModifier() {
+    return getReferencedSymbol().getAccessModifier();
+  }
+  
+  @Override
+  public void setAccessModifier(AccessModifier accessModifier) {
+    getReferencedSymbol().setAccessModifier(accessModifier);
+  }
+  
+  /**
    * @see de.monticore.lang.montiarc.montiarc._symboltable.VariableSymbol#setValuation(de.monticore.lang.montiarc.montiarc._ast.ASTValuation)
    */
   @Override
@@ -109,7 +107,7 @@ public class VariableSymbolReference extends VariableSymbol implements SymbolRef
    */
   @Override
   public Optional<ASTValuation> getValuation() {
-   return getReferencedSymbol().getValuation();
+    return getReferencedSymbol().getValuation();
   }
   
   /**
@@ -117,7 +115,7 @@ public class VariableSymbolReference extends VariableSymbol implements SymbolRef
    */
   @Override
   public void setTypeReference(JTypeReference<? extends JTypeSymbol> typeReference) {
-   getReferencedSymbol().setTypeReference(typeReference);
+    getReferencedSymbol().setTypeReference(typeReference);
   }
   
   /**
@@ -125,7 +123,7 @@ public class VariableSymbolReference extends VariableSymbol implements SymbolRef
    */
   @Override
   public JTypeReference<? extends JTypeSymbol> getTypeReference() {
-   return getReferencedSymbol().getTypeReference();
+    return getReferencedSymbol().getTypeReference();
   }
-
+  
 }

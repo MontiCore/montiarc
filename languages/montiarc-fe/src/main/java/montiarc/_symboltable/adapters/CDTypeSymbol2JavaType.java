@@ -20,14 +20,11 @@ import de.monticore.umlcd4a.symboltable.CDMethodSymbol;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 import de.monticore.umlcd4a.symboltable.references.CDTypeSymbolReference;
 
-
 /**
  * Adapts CDTypeSymbols to JavaTypeSymbols
  *
- * @author  (last commit) $Author$
- * @version $Revision$,
- *          $Date$
- *
+ * @author (last commit) $Author$
+ * @version $Revision$, $Date$
  */
 public class CDTypeSymbol2JavaType extends JavaTypeSymbol implements SymbolAdapter<CDTypeSymbol> {
   
@@ -126,7 +123,7 @@ public class CDTypeSymbol2JavaType extends JavaTypeSymbol implements SymbolAdapt
     List<JavaFieldSymbol> adaptedFields = new ArrayList<>();
     for (CDFieldSymbol fieldToAdapt : fieldsToAdapt) {
       JavaTypeSymbolReference javaRef = getJavaRefFromCDRef(fieldToAdapt.getType(),
-          fieldToAdapt.getEnclosingScope());      
+          fieldToAdapt.getEnclosingScope());
       adaptedFields
           .add(getJavaFieldFromCDField(fieldToAdapt, javaRef));
     }
@@ -170,7 +167,8 @@ public class CDTypeSymbol2JavaType extends JavaTypeSymbol implements SymbolAdapt
       JavaMethodSymbol javaMethod = new JavaMethodSymbol(methToAdapt.getName(),
           (JMethodSymbolKind) methToAdapt.getKind());
       javaMethod.setFullName(methToAdapt.getFullName());
-      javaMethod.setReturnType(getJavaRefFromCDRef(methToAdapt.getReturnType(), methToAdapt.getEnclosingScope()));
+      javaMethod.setReturnType(
+          getJavaRefFromCDRef(methToAdapt.getReturnType(), methToAdapt.getEnclosingScope()));
       adaptedMethods.add(javaMethod);
     }
     return adaptedMethods;
@@ -205,7 +203,6 @@ public class CDTypeSymbol2JavaType extends JavaTypeSymbol implements SymbolAdapt
   public boolean isClass() {
     return adaptee.isClass();
   }
-  
   
   /**
    * @see de.monticore.symboltable.types.CommonJTypeSymbol#isFinal()

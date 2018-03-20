@@ -60,38 +60,37 @@ public class ParserTest {
       
       // TODO we do not support OCL Expressions yet
       MODEL_PATH + "/arc/prettyPrint/example1/StatusControl.arc",
-
+      
       // TODO we do not support OCL Expressions yet
       MODEL_PATH + "/components/body/invariants/OCLFieldToField.arc",
       
       // TODO we do not support OCL Expressions yet
-      MODEL_PATH + "/components/body/invariants/OCLFieldToPort.arc"
-      )
-
+      MODEL_PATH + "/components/body/invariants/OCLFieldToPort.arc")
+      
       .stream().map(s -> Paths.get(s).toString())
       .collect(Collectors.toList());
-
+  
   @BeforeClass
   public static void setUp() {
     // ensure an empty log
     Log.getFindings().clear();
     Log.enableFailQuick(ENABLE_FAIL_QUICK);
   }
-
+  
   @Test
   public void testArc() throws RecognitionException, IOException {
     test("arc");
   }
-
+  
   @Test
   public void testArcD() throws RecognitionException, IOException {
     test("arcd");
   }
-
+  
   private void test(String fileEnding) throws IOException {
     ParseTest parserTest = new ParseTest("." + fileEnding);
     Files.walkFileTree(Paths.get(MODEL_PATH), parserTest);
-
+    
     if (!parserTest.getModelsInError().isEmpty()) {
       Log.debug("Models in error", "ParserTest");
       for (String model : parserTest.getModelsInError()) {
@@ -101,11 +100,11 @@ public class ParserTest {
     Log.info("Count of tested models: " + parserTest.getTestCount(), "ParserTest");
     Log.info("Count of correctly parsed models: "
         + (parserTest.getTestCount() - parserTest.getModelsInError().size()), "ParserTest");
-
+    
     assertTrue("There were models that could not be parsed", parserTest.getModelsInError()
         .isEmpty());
   }
-
+  
   /**
    * Visits files of the given file ending and checks whether they are parsable.
    *
@@ -113,43 +112,43 @@ public class ParserTest {
    * @see Files#walkFileTree(Path, java.nio.file.FileVisitor)
    */
   private static class ParseTest extends SimpleFileVisitor<Path> {
-
+    
     private String fileEnding;
-
+    
     private List<String> modelsInError = new ArrayList<>();
-
+    
     private int testCount = 0;
-
+    
     public ParseTest(String fileEnding) {
       super();
       this.fileEnding = fileEnding;
     }
-
+    
     /**
      * @return testCount
      */
     public int getTestCount() {
       return this.testCount;
     }
-
+    
     /**
      * @return modelsInError
      */
     public List<String> getModelsInError() {
       return this.modelsInError;
     }
-
+    
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
         throws IOException {
       if (file.toFile().isFile()
           && (file.toString().toLowerCase().endsWith(fileEnding))) {
-
+        
         Log.debug("Parsing file " + file.toString(), "ParserTest");
         testCount++;
         Optional<ASTMACompilationUnit> maModel = Optional.empty();
         boolean expectingError = ParserTest.expectedParseErrorModels.contains(file.toString());
-
+        
         MontiArcParser parser = new MontiArcParser();
         try {
           if (expectingError) {
@@ -174,7 +173,7 @@ public class ParserTest {
       return FileVisitResult.CONTINUE;
     }
   }
-
+  
   ;
-
+  
 }

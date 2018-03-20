@@ -16,28 +16,32 @@ import de.monticore.umlcd4a.symboltable.references.CDTypeSymbolReference;
 // TODO required for resolving types of an expression that uses cd stuff. See
 // de.monticore.automaton.ioautomaton.TypeCompatibilityChecker for further
 // information.
-public class CDFieldSymbol2JavaField extends JavaFieldSymbol implements SymbolAdapter<CDFieldSymbol> {
+public class CDFieldSymbol2JavaField extends JavaFieldSymbol
+    implements SymbolAdapter<CDFieldSymbol> {
   private final CDFieldSymbol adaptee;
   
   private static JavaTypeSymbolReference createReference(CDTypeSymbolReference cdReference) {
-    return new JavaTypeSymbolReference(cdReference.getName(), cdReference.getEnclosingScope(), cdReference.getDimension());
+    return new JavaTypeSymbolReference(cdReference.getName(), cdReference.getEnclosingScope(),
+        cdReference.getDimension());
   }
-
+  
   public CDFieldSymbol2JavaField(CDFieldSymbol adaptee) {
-    super(adaptee.getName(), (JAttributeSymbolKind)adaptee.getKind(), createReference(adaptee.getType()));
-
+    super(adaptee.getName(), (JAttributeSymbolKind) adaptee.getKind(),
+        createReference(adaptee.getType()));
+    
     this.adaptee = adaptee;
   }
-
+  
   @Override
   public CDFieldSymbol getAdaptee() {
     return adaptee;
   }
-
+  
   @Override
   public String getFullName() {
     return adaptee.getFullName();
   }
+  
   @Override
   public AccessModifier getAccessModifier() {
     return adaptee.getAccessModifier();

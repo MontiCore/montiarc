@@ -39,23 +39,30 @@ import montiarc.helper.Timing;
 public class ComponentSymbol extends CommonScopeSpanningSymbol {
 
   public static final ComponentKind KIND = new ComponentKind();
+
   private final List<AComponentImplementationSymbol> implementations = new ArrayList<>();
+
   private final Map<String, Optional<String>> stereotype = new HashMap<>();
+
   private boolean isInnerComponent = false;
 
   private Optional<ComponentSymbolReference> superComponent = Optional.empty();
+
   private Timing timing = MontiArcConstants.DEFAULT_TIME_PARADIGM;
+
   private boolean delayed = false;
+
   // when "this" not actually is a component, but a reference to a component, this optional
   // attribute is set by the symbol-table creator to the referenced component and must be used for
   // implementation.
   private Optional<ComponentSymbol> referencedComponent = Optional.empty();
+
   private List<ImportStatement> imports;
 
   public ComponentSymbol(String name) {
     super(name, KIND);
   }
-  
+
   public ComponentSymbol(String name, SymbolKind kind) {
     super(name, kind);
   }
@@ -239,8 +246,8 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   }
 
   public List<JTypeSymbol> getFormalTypeParameters() {
-    final Collection<JTypeSymbol> resolvedTypes =
-        referencedComponent.orElse(this).getSpannedScope().resolveLocally(JTypeSymbol.KIND);
+    final Collection<JTypeSymbol> resolvedTypes = referencedComponent.orElse(this).getSpannedScope()
+        .resolveLocally(JTypeSymbol.KIND);
     return resolvedTypes.stream().filter(JTypeSymbol::isFormalTypeParameter)
         .collect(Collectors.toList());
   }
@@ -265,6 +272,18 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   public Collection<PortSymbol> getPorts() {
     return referencedComponent.orElse(this).getSpannedScope()
         .<PortSymbol>resolveLocally(PortSymbol.KIND);
+  }
+
+  /**
+   * Finds a port with a given name.
+   *
+   * @param name Name of the searched port
+   * @return {@link PortSymbol} with the given name. {@link Optional#empty()} if not found
+   */
+  public Optional<PortSymbol> getPort(String name) {
+    return getPorts().stream()
+        .filter(p -> p.getName().equals(name))
+        .findFirst();
   }
 
   /**
@@ -384,16 +403,15 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
     return getAllPorts().stream().filter(p -> p.isIncoming() == isIncoming)
         .collect(Collectors.toList());
   }
-  
+
   public Collection<VariableSymbol> getVariables() {
     return referencedComponent.orElse(this).getSpannedScope()
-        .<VariableSymbol> resolveLocally(VariableSymbol.KIND);
+        .<VariableSymbol>resolveLocally(VariableSymbol.KIND);
   }
-  
+
   public Optional<VariableSymbol> getVariable(String name) {
     return getVariables().stream().filter(v -> v.getName().equals(name)).findFirst();
   }
-  
 
   /**
    * @return super component of this component, empty optional, if it does not have a super

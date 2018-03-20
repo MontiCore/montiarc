@@ -20,9 +20,9 @@ import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.VariableSymbol;
 
 /**
- * Checks whether all used ports in the ajava initialisation exist in the
- * component definition. SymboltableCreator already ensures that used ports and
- * variables in the ajava behavior are consistent.
+ * Checks whether all used ports in the ajava initialisation exist in the component definition.
+ * SymboltableCreator already ensures that used ports and variables in the ajava behavior are
+ * consistent.
  *
  * @author Andreas Wortmann
  */

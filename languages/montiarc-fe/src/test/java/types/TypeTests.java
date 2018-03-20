@@ -30,7 +30,6 @@ import de.monticore.umlcd4a.symboltable.CDSymbol;
 import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
-import montiarc.MontiArcTool;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 
@@ -99,16 +98,16 @@ public class TypeTests extends AbstractCoCoTest {
     Optional<CDSymbol> cd = symTab.<CDSymbol> resolve(PACKAGE + "." + "Units",
         CDSymbol.KIND);
     assertTrue(cd.isPresent());
-    Optional<CDTypeSymbol> quantity = symTab.<CDTypeSymbol> resolve(PACKAGE + "." + "Units.Quantity",
+    Optional<CDTypeSymbol> quantity = symTab.<CDTypeSymbol> resolve(
+        PACKAGE + "." + "Units.Quantity",
         CDTypeSymbol.KIND);
     assertTrue(quantity.isPresent());
   }
   
   @Test
   /**
-   * Tests whether SuperClasses get properly embedded in the symbol table, by
-   * checking the types of the incoming and outgoing ports of the
-   * superclass.Simulation component.
+   * Tests whether SuperClasses get properly embedded in the symbol table, by checking the types of
+   * the incoming and outgoing ports of the superclass.Simulation component.
    */
   public void testSuperClass() {
     Scope scope = this.loadDefaultSymbolTable();

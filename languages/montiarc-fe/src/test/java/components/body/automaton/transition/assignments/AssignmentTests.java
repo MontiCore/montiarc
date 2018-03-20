@@ -101,7 +101,8 @@ public class AssignmentTests extends AbstractCoCoTest {
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testIncompatibleVariableAssignmentGenericTypesDifferSimple() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "IncompatibleVariableAssignmentGenericTypesDifferSimple");
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "IncompatibleVariableAssignmentGenericTypesDifferSimple");
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new ExpectedErrorInfo(1, "xMA042"));
   }
@@ -111,7 +112,8 @@ public class AssignmentTests extends AbstractCoCoTest {
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testIncompatibleVariableAssignmentGenericTypesDiffer() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "IncompatibleVariableAssignmentGenericTypesDiffer");
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "IncompatibleVariableAssignmentGenericTypesDiffer");
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new ExpectedErrorInfo(1, "xMA042"));
   }

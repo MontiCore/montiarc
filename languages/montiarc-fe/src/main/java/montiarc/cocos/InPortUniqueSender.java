@@ -18,9 +18,10 @@ import montiarc._ast.ASTSubComponentInstance;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 
 /**
- * @implements [Hab16] R1: Each outgoing port of a component type definition is used at most once as target of a connector. (p. 63, Lst. 3.36)
- * @implements [Hab16] R2: Each incoming port of a subcomponent is used at most once as target of a connector. (p. 62, Lst. 3.37)
- * 
+ * @implements [Hab16] R1: Each outgoing port of a component type definition is used at most once as
+ * target of a connector. (p. 63, Lst. 3.36)
+ * @implements [Hab16] R2: Each incoming port of a subcomponent is used at most once as target of a
+ * connector. (p. 62, Lst. 3.37)
  * @author Crispin Kirchner
  */
 public class InPortUniqueSender implements MontiArcASTComponentCoCo {

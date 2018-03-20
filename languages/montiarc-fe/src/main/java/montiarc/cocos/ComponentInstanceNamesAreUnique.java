@@ -18,12 +18,12 @@ import montiarc._symboltable.ComponentSymbol;
 /**
  * Checks whether names of subcomponent instances of a composed component are unique
  *
- * @implements [Hab16] B1: All names of model elements within a component namespace have to be unique. (p. 59. Lst. 3.31)
- *
+ * @implements [Hab16] B1: All names of model elements within a component namespace have to be
+ * unique. (p. 59. Lst. 3.31)
  * @author Robert Heim, Andreas Wortmann
  */
 public class ComponentInstanceNamesAreUnique implements MontiArcASTComponentCoCo {
-
+  
   /**
    * @see montiarc._cocos.MontiArcASTComponentCoCo#check(montiarc._ast.ASTComponent)
    */
@@ -32,13 +32,13 @@ public class ComponentInstanceNamesAreUnique implements MontiArcASTComponentCoCo
     ComponentSymbol comp = (ComponentSymbol) node.getSymbol().get();
     List<String> names = new ArrayList<>();
     for (ComponentInstanceSymbol subComp : comp.getSubComponents()) {
-
+      
       if (names.contains(subComp.getFullName())) {
-
+        
         SourcePosition pos = subComp.getAstNode().isPresent()
             ? subComp.getAstNode().get().get_SourcePositionStart()
             : SourcePosition.getDefaultSourcePosition();
-
+        
         Log.error(String.format("0xMA061 The subcomponent instance %s is not unique",
             subComp.getFullName()), pos);
       }
@@ -46,6 +46,6 @@ public class ComponentInstanceNamesAreUnique implements MontiArcASTComponentCoCo
         names.add(subComp.getFullName());
       }
     }
-
+    
   }
 }

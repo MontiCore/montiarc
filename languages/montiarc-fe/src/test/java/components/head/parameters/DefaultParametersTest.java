@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.symboltable.types.JFieldSymbol;
@@ -22,6 +23,7 @@ import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.DefaultParametersCorrectlyAssigned;
 import montiarc.cocos.DefaultParametersHaveCorrectOrder;
+import montiarc.cocos.NumberOfConfigurationParametersCorrect;
 import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
 
 /**
@@ -30,9 +32,9 @@ import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
  * @author Robert Heim, Andreas Wortmann
  */
 public class DefaultParametersTest extends AbstractCoCoTest {
-
+  
   private static final String PACKAGE = "components.head.parameters";
-
+  
   @Test
   public void testDefaultParametersInCorrectOrder() {
     checkValid(PACKAGE + "." + "DefaultParametersInCorrectOrder");
@@ -54,26 +56,34 @@ public class DefaultParametersTest extends AbstractCoCoTest {
   public void testComposedComponentUsingDefaultParameters() {
     checkValid(PACKAGE + "." + "ComposedComponentUsingDefaultParameters");
   }
-
+  
+//  @Ignore("Why check all cocos in invalid?")
+  @Test
+  public void testComposedComponentUsingDefaultParametersInvalid() {
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new NumberOfConfigurationParametersCorrect()),
+        loadComponentAST(PACKAGE + "." + "ComposedComponentUsingDefaultParametersInvalid"),
+        new ExpectedErrorInfo(2, "xMA082"));
+  }
+  
   @Test
   public void testDefaultParametersInIncorrectOrder() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersHaveCorrectOrder()),
         loadComponentAST(PACKAGE + "." + "DefaultParametersInIncorrectOrder"),
         new ExpectedErrorInfo(1, "xMA056"));
   }
-
+  
   @Test
   public void testWrongDefaultParameterType() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new DefaultParametersCorrectlyAssigned()),
         loadComponentAST(PACKAGE + "." + "DefaultParameterWrongType"),
         new ExpectedErrorInfo(1, "xMA062"));
   }
-
+  
   @Test
   public void testValidDefaultParameters() {
-    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ValidDefaultParameters") ;
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ValidDefaultParameters");
     assertNotNull(comp);
-
+    
     List<JFieldSymbol> params = comp.getConfigParameters();
     for (JFieldSymbol param : params) {
       if (param.getAstNode().isPresent()) {
@@ -86,8 +96,8 @@ public class DefaultParametersTest extends AbstractCoCoTest {
           assertFalse(p.getDefaultValue().isPresent());
         }
       }
-
+      
     }
   }
-
+  
 }

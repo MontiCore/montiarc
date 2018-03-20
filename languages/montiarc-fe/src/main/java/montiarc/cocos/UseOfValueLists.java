@@ -14,8 +14,11 @@ public class UseOfValueLists implements MontiArcASTValueListCoCo {
   
   @Override
   public void check(ASTValueList node) {
-    if (!node.getValuation().isPresent() && !node.getValuations().isEmpty()) {
+    final boolean isSingleValue = node.getValuation().isPresent();
+    final boolean isNonEmptyValueList = !node.getValuations().isEmpty();
+
+    if (!isSingleValue && isNonEmptyValueList) {
       Log.error("0xMA081 Value lists are not supported.", node.get_SourcePositionStart());
     }
-  }  
+  }
 }

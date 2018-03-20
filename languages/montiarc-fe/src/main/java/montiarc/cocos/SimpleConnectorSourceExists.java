@@ -23,7 +23,7 @@ import montiarc._symboltable.PortSymbol;
  *
  * @author Crispin Kirchner
  * @implements [Hab16] R7: The source port of a simple connector must exist in the subcomponents
-type. (p. 65 Lst 3.42)
+ * type. (p. 65 Lst 3.42)
  */
 public class SimpleConnectorSourceExists implements MontiArcASTComponentCoCo {
   
@@ -67,5 +67,5 @@ public class SimpleConnectorSourceExists implements MontiArcASTComponentCoCo {
       }
     }
   }
-
+  
 }

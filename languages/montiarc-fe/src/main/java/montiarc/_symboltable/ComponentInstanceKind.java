@@ -13,14 +13,14 @@ import de.monticore.symboltable.SymbolKind;
  * @author Robert Heim
  */
 public class ComponentInstanceKind implements SymbolKind {
-
+  
   private static final String NAME = ComponentInstanceKind.class.getName();
-
+  
   @Override
   public String getName() {
     return NAME;
   }
-
+  
   @Override
   public boolean isKindOf(SymbolKind kind) {
     return NAME.equals(kind.getName()) || SymbolKind.super.isKindOf(kind);

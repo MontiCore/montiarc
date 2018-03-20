@@ -22,8 +22,7 @@ import montiarc.helper.TypeCompatibilityChecker;
 //XXX: https://git.rwth-aachen.de/montiarc/core/issues/47
 
 /**
- * Computes the missing assignment names in reactions, stimuli and initial state
- * declarations.
+ * Computes the missing assignment names in reactions, stimuli and initial state declarations.
  */
 public class AssignmentNameCompleter implements MontiArcVisitor {
   private final Scope automatonScope;
@@ -157,8 +156,7 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
   }
   
   /**
-   * Returns the valuation of the assignment. If there are multiple, return the
-   * first one.
+   * Returns the valuation of the assignment. If there are multiple, return the first one.
    * 
    * @param assignment
    * @return
@@ -184,7 +182,7 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
    */
   private Set<String> findVariableNameFor(JTypeReference<? extends JTypeSymbol> assignmentType,
       Direction direction) {
-     Set<String> names = new HashSet<>();
+    Set<String> names = new HashSet<>();
     // TODO BUG!: Might return an empty list when resolving transitive adapted
     // symbols. So assignment name completer in not working!
     // reason:
@@ -192,16 +190,18 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
     // List<Symbol> symbols) is not correctly implemented
     
     if (direction == Direction.VARIABLE) {
-      for (VariableSymbol varSymbol : automatonScope.getEnclosingScope().get().<VariableSymbol> resolveLocally(
-          VariableSymbol.KIND)) {
+      for (VariableSymbol varSymbol : automatonScope.getEnclosingScope().get()
+          .<VariableSymbol> resolveLocally(
+              VariableSymbol.KIND)) {
         if (TypeCompatibilityChecker.doTypesMatch(assignmentType, varSymbol.getTypeReference())) {
           names.add(varSymbol.getName());
         }
       }
     }
     else {
-      for (PortSymbol portSymbol : automatonScope.getEnclosingScope().get().<PortSymbol> resolveLocally(
-          PortSymbol.KIND)) {
+      for (PortSymbol portSymbol : automatonScope.getEnclosingScope().get()
+          .<PortSymbol> resolveLocally(
+              PortSymbol.KIND)) {
         if (TypeCompatibilityChecker.doTypesMatch(assignmentType, portSymbol.getTypeReference())) {
           if ((direction == Direction.OUTPUT && portSymbol.isOutgoing())
               || (direction == Direction.INPUT && portSymbol.isIncoming())) {

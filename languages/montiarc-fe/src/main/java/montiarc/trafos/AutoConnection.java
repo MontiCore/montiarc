@@ -43,24 +43,24 @@ import montiarc.helper.PortCompatibilityChecker;
  * @since 1.0.0 (14.11.2012)
  */
 public class AutoConnection {
-
+  
   private Stack<List<AutoconnectMode>> modeStack = new Stack<List<AutoconnectMode>>();
-
+  
   public static void addConnectorToAST(ASTComponent node, ConnectorSymbol conEntry) {
     // create ast node
     ASTConnector astConnector = MontiArcNodeFactory.createASTConnector();
-
+    
     ASTQualifiedName source = TypesNodeFactory.createASTQualifiedName();
     source.setParts(Splitters.DOT.splitToList(conEntry.getSource()));
-
+    
     List<ASTQualifiedName> targets = new ArrayList<>();
     ASTQualifiedName target = TypesNodeFactory.createASTQualifiedName();
     target.setParts(Splitters.DOT.splitToList(conEntry.getTarget()));
     targets.add(target);
-
+    
     astConnector.setSource(source);
     astConnector.setTargets(targets);
-
+    
     Optional<ASTMontiArcAutoConnect> auto = resolveAutoconnect(node);
     if (auto.isPresent()) {
       astConnector.set_SourcePositionStart(auto.get().get_SourcePositionStart());
@@ -69,7 +69,7 @@ public class AutoConnection {
     // add node to arc elements
     node.getBody().getElements().add(astConnector);
   }
-
+  
   /**
    * @param comp used component node.
    * @return searches the autoconnect statement in the given comp ast. returns empty, if it does not
@@ -83,11 +83,11 @@ public class AutoConnection {
     }
     return Optional.empty();
   }
-
+  
   public void transformAtStart(ASTComponent node, ComponentSymbol currentComp) {
     modeStack.push(new ArrayList<>());
   }
-
+  
   public void transform(ASTMontiArcAutoConnect node, ComponentSymbol currentComp) {
     List<AutoconnectMode> modes = modeStack.peek();
     // add current mode
@@ -101,7 +101,7 @@ public class AutoConnection {
       modes.add(AutoconnectMode.OFF);
     }
   }
-
+  
   public void transformAtEnd(ASTComponent node, ComponentSymbol currentComp) {
     List<AutoconnectMode> allModes = this.modeStack.peek();
     if (allModes.isEmpty()) {
@@ -114,13 +114,13 @@ public class AutoConnection {
     }
     this.modeStack.pop();
   }
-
+  
   /**
    * Creates further connectors depending on the auto connect mode (type, port, off).
    *
    * @param currentComponent symbol table entry of the currently processed component
-   * @param node             component node in the AST
-   * @param mode             auto connection mode
+   * @param node component node in the AST
+   * @param mode auto connection mode
    */
   private void createAutoconnections(ComponentSymbol currentComponent, ASTComponent node,
       AutoconnectMode mode) {
@@ -135,12 +135,12 @@ public class AutoConnection {
       for (Entry<String, PorWithGenericBindings> senderEntry : unusedSenders.entrySet()) {
         String sender = senderEntry.getKey();
         int indexSender = sender.indexOf('.');
-
+        
         boolean matched = false;
-
+        
         PorWithGenericBindings senderPort = senderEntry.getValue();
         PorWithGenericBindings receiverPort = receiverEntry.getValue();
-
+        
         boolean portTypesMatch = PortCompatibilityChecker.doPortTypesMatch(senderPort.port,
             senderPort.formalTypeParameters, senderPort.typeArguments, receiverPort.port,
             receiverPort.formalTypeParameters, receiverPort.typeArguments);
@@ -148,26 +148,26 @@ public class AutoConnection {
         if (portTypesMatch) {
           if (indexSender == -1 && indexReceiver != -1) {
             String receiverPortName = receiver.substring(indexReceiver + 1);
-
+            
             if (mode == AutoconnectMode.AUTOCONNECT_PORT && receiverPortName.equals(sender)) {
               matched = true;
             }
             else if (mode == AutoconnectMode.AUTOCONNECT_TYPE) {
               matched = true;
             }
-
+            
           }
           // sender from a reference, receiver from current component
           else if (indexSender != -1 && indexReceiver == -1) {
             String senderPortName = sender.substring(indexSender + 1);
-
+            
             if (mode == AutoconnectMode.AUTOCONNECT_PORT && senderPortName.equals(receiver)) {
               matched = true;
             }
             else if (mode == AutoconnectMode.AUTOCONNECT_TYPE) {
               matched = true;
             }
-
+            
           }
           // both from referenced components
           else if (indexSender != -1 && indexReceiver != -1) {
@@ -184,7 +184,7 @@ public class AutoConnection {
               else if (mode == AutoconnectMode.AUTOCONNECT_TYPE) {
                 matched = true;
               }
-
+              
             }
           }
         }
@@ -194,15 +194,15 @@ public class AutoConnection {
           matches.add(conEntry);
         }
       }
-
+      
       if (matches.size() == 1) {
         ConnectorSymbol created = matches.iterator().next();
         // add symbol to components scope
         ((MutableScope) currentComponent.getSpannedScope()).add(created);
-
+        
         // add to ast
         addConnectorToAST(node, created);
-
+        
         Log.info(node.get_SourcePositionStart() + " Created connector '" + created + "'.",
             "AutoConnection");
       }
@@ -220,7 +220,7 @@ public class AutoConnection {
       }
     }
   }
-
+  
   /**
    * Finds all incoming ports of a given component (and all referenced components) which are not
    * connected.
@@ -241,7 +241,7 @@ public class AutoConnection {
                 new ArrayList<>()));
       }
     }
-
+    
     // check subcomponents incoming ports, b/c they must receive data to do their calculations
     for (ComponentInstanceSymbol ref : currentComponent.getSubComponents()) {
       String name = ref.getName();
@@ -261,7 +261,7 @@ public class AutoConnection {
     }
     return unusedReceivers;
   }
-
+  
   /**
    * Finds all outgoing ports of a given component (and all referenced components) which are not
    * connected.
@@ -283,7 +283,7 @@ public class AutoConnection {
                 new ArrayList<>()));
       }
     }
-
+    
     // check subcomponents outputs as they send data to the current component
     for (ComponentInstanceSymbol ref : currentComponent.getSubComponents()) {
       String name = ref.getName();
@@ -303,14 +303,14 @@ public class AutoConnection {
     }
     return unusedSenders;
   }
-
+  
   private static class PorWithGenericBindings {
     PortSymbol port;
-
+    
     List<JTypeSymbol> formalTypeParameters;
-
+    
     List<JTypeReference<? extends JTypeSymbol>> typeArguments;
-
+    
     public PorWithGenericBindings(
         PortSymbol port,
         List<JTypeSymbol> formalTypeParameters,
@@ -320,12 +320,12 @@ public class AutoConnection {
       this.formalTypeParameters = formalTypeParameters;
       this.typeArguments = typeArguments;
     }
-
+    
     public static PorWithGenericBindings create(PortSymbol port,
         List<JTypeSymbol> formalTypeParameters,
         List<JTypeReference<? extends JTypeSymbol>> typeArguments) {
       return new PorWithGenericBindings(port, formalTypeParameters, typeArguments);
     }
-
+    
   }
 }

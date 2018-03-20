@@ -41,17 +41,15 @@ public class TypeCompatibilityChecker {
   }
   
   /**
-   * Checks compatibility of {@link JTypeReference}s. The
-   * sourceTypeFomalTypeParameters list all type parameters, while the
-   * sourceTypeArguments define the current binding of them. E.g., a generic
-   * source Type {@code A<X, Y>} could be bound to
-   * <code>{@code A<List<Optional<Integer>>, String>}</code>. For a targetType
-   * to match, it must recursively match all generic bindings. In the example,
-   * the first recursion would check that formal type-parameters of {@code List}
-   * are bound to the same type argument (here {@code Optional}) for both, the
-   * source and the target type. The second recursion would check
-   * {@code Optional}'s type arguments to be {@code Integer}. Then, the the
-   * other type-arguments of {@code A} (here {@code Y}) are checked.
+   * Checks compatibility of {@link JTypeReference}s. The sourceTypeFomalTypeParameters list all
+   * type parameters, while the sourceTypeArguments define the current binding of them. E.g., a
+   * generic source Type {@code A<X, Y>} could be bound to
+   * <code>{@code A<List<Optional<Integer>>, String>}</code>. For a targetType to match, it must
+   * recursively match all generic bindings. In the example, the first recursion would check that
+   * formal type-parameters of {@code List} are bound to the same type argument (here
+   * {@code Optional}) for both, the source and the target type. The second recursion would check
+   * {@code Optional}'s type arguments to be {@code Integer}. Then, the the other type-arguments of
+   * {@code A} (here {@code Y}) are checked.
    *
    * @param sourceType
    * @param sourceTypeFormalTypeParameters
@@ -155,17 +153,17 @@ public class TypeCompatibilityChecker {
   }
   
   /**
-   * Checks whether there exists a assignment conversion from <tt>from</tt> type
-   * to <tt>target</tt> type.
+   * Checks whether there exists a assignment conversion from <tt>from</tt> type to <tt>target</tt>
+   * type.
    * 
    * @param from
    * @param target
    * @return
    */
-  public static boolean doTypesMatch(JTypeReference<? extends JTypeSymbol> sourceType, 
+  public static boolean doTypesMatch(JTypeReference<? extends JTypeSymbol> sourceType,
       JTypeReference<? extends JTypeSymbol> targetType) {
     boolean result = false;
-
+    
     if (sourceType.getReferencedSymbol().getFullName()
         .equals(targetType.getReferencedSymbol().getFullName()) &&
         sourceType.getDimension() == targetType.getDimension() &&
@@ -236,14 +234,18 @@ public class TypeCompatibilityChecker {
           }
         }
       }
-      //checks primitive datatypes such as int vs Integer
-      if(!result) {
-        if (targetType instanceof JTypeReference<?> && !(targetType instanceof JavaTypeSymbolReference)) {
-          targetType = new JavaTypeSymbolReference(targetType.getName(), targetType.getEnclosingScope(),
+      // checks primitive datatypes such as int vs Integer
+      if (!result) {
+        if (targetType instanceof JTypeReference<?>
+            && !(targetType instanceof JavaTypeSymbolReference)) {
+          targetType = new JavaTypeSymbolReference(targetType.getName(),
+              targetType.getEnclosingScope(),
               targetType.getDimension());
         }
-        if (sourceType instanceof JTypeReference<?> && !(sourceType instanceof JavaTypeSymbolReference)) {
-          sourceType = new JavaTypeSymbolReference(sourceType.getName(), sourceType.getEnclosingScope(),
+        if (sourceType instanceof JTypeReference<?>
+            && !(sourceType instanceof JavaTypeSymbolReference)) {
+          sourceType = new JavaTypeSymbolReference(sourceType.getName(),
+              sourceType.getEnclosingScope(),
               targetType.getDimension());
         }
         
@@ -255,10 +257,9 @@ public class TypeCompatibilityChecker {
     return result;
   }
   
-  
   /**
-   * Resolves the type of the given java expression. If it is not possible to
-   * resolve the type, return {@link Optional#empty()}.
+   * Resolves the type of the given java expression. If it is not possible to resolve the type,
+   * return {@link Optional#empty()}.
    * 
    * @param expr the java expression
    * @return
@@ -278,8 +279,8 @@ public class TypeCompatibilityChecker {
   }
   
   /**
-   * Checks whether there exists a assignment conversion from the expression
-   * type to <tt>target</tt> type.
+   * Checks whether there exists a assignment conversion from the expression type to <tt>target</tt>
+   * type.
    * 
    * @param from
    * @param target

@@ -17,16 +17,16 @@ import montiarc.cocos.PackageLowerCase;
  * Helps loading inner components, by mapping their full-qualified names to the full-qualified name
  * of the most outer component of the file the inner one is defined in. This way the SymTab knows
  * which file to load. By convention, package names must be lower-case (see {@link PackageLowerCase}
- * ) and component names must start upper-case (see {@link ComponentNameIsCapitalized}). This ensures,
- * that we can calculate the most outer component, by searching for the first upper-case part of a
- * full-qualified name, e.g.:<br/>
+ * ) and component names must start upper-case (see {@link ComponentNameIsCapitalized}). This
+ * ensures, that we can calculate the most outer component, by searching for the first upper-case
+ * part of a full-qualified name, e.g.:<br/>
  * a.b.C.D.E -> a.b.C
  *
  * @author Robert Heim, Michael von Wenckstern
  */
 public class MontiArcModelNameCalculator
     extends de.monticore.CommonModelNameCalculator {
-    
+  
   @Override
   public Set<String> calculateModelNames(final String name, final SymbolKind kind) {
     final Set<String> calculatedModelNames = new LinkedHashSet<>();

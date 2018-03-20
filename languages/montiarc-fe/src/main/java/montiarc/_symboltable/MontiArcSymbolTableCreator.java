@@ -600,7 +600,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         addToScopeAndLinkWithNode(field.stream().findFirst().get(), node);
       }
       else if (isConfigurationArgument(node.getName().get())) {
-        // In this case, everything is fine. As configuration arguments (aka. parameters) don't 
+        // In this case, everything is fine. As configuration arguments (aka. parameters) don't
         // have their own symbols, nothing to do here.
       }
       else {

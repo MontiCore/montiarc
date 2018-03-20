@@ -6,22 +6,19 @@ import montiarc._cocos.MontiArcASTAutomatonBehaviorCoCo;
 
 /**
  * @implements [Wor16] AC6: The names of automata start with capital letters. (p. 101, Lst. 5.16)
- * 
- * Context condition for checking, if the name of an IO-Automaton starts with an
- * uppercase letter.
- * 
+ * Context condition for checking, if the name of an IO-Automaton starts with an uppercase letter.
  * @author Gerrit Leonhardt, Andreas Wortmann
  */
 public class AutomatonBehaviorNameIsUppercase implements MontiArcASTAutomatonBehaviorCoCo {
-
-	@Override
-	public void check(ASTAutomatonBehavior node) {
-		if (node.getName().isPresent()) {
-			if (!Character.isUpperCase(node.getName().get().charAt(0))) {
-				Log.error("0xMA015 The name of the automaton should start with an uppercase letter.",
-						node.get_SourcePositionStart());
-			}
-		}
-	}
-
+  
+  @Override
+  public void check(ASTAutomatonBehavior node) {
+    if (node.getName().isPresent()) {
+      if (!Character.isUpperCase(node.getName().get().charAt(0))) {
+        Log.error("0xMA015 The name of the automaton should start with an uppercase letter.",
+            node.get_SourcePositionStart());
+      }
+    }
+  }
+  
 }

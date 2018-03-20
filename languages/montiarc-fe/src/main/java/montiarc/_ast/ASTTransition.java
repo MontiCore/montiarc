@@ -15,11 +15,12 @@ public class ASTTransition extends ASTTransitionTOP {
       ASTGuard guard,
       ASTBlock stimulus,
       ASTBlock reaction) {
-    super(source,target,guard,stimulus,reaction);
+    super(source, target, guard, stimulus, reaction);
   }
-
+  
   public String getName() {
-    String syntheticName = this.getSource() + "-" + this.getTarget() + "@" + this.get_SourcePositionStart(); 
+    String syntheticName = this.getSource() + "-" + this.getTarget() + "@"
+        + this.get_SourcePositionStart();
     return syntheticName;
   }
   

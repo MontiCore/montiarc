@@ -24,7 +24,6 @@ import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
-import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentInstanceSymbol;
@@ -35,9 +34,11 @@ import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.ValueSymbol;
 import montiarc.cocos.ComponentInstanceNamesAreUnique;
 import montiarc.cocos.ComponentWithTypeParametersHasInstance;
+import montiarc.cocos.InnerComponentNotExtendsDefiningComponent;
 import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.ReferencedSubComponentExists;
 import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
+import montiarc.cocos.SubcomponentReferenceCycle;
 import montiarc.helper.SymbolPrinter;
 
 import static org.junit.Assert.*;
@@ -57,11 +58,25 @@ public class SubComponentTests extends AbstractCoCoTest {
     Log.enableFailQuick(false);
   }
   
+  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
+  @Test
+  public void testSubcomponentWithJavaCfgArgs() {
+    checkValid(PACKAGE + "." + "SubcomponentsWithJavaCfgArg");
+  }
+  
   @Test
   public void testSubcomponentParametersOfWrongType() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentParametersOfWrongType");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
         node, new ExpectedErrorInfo(1, "xMA064"));
+  }
+  
+  @Test
+  public void testInnerComponentExtendsDefiningComponent() {
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "InnerComponentExtendsDefiningComponent");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new InnerComponentNotExtendsDefiningComponent()),
+        node, new ExpectedErrorInfo(1, "xMA083"));
   }
   
   /**
@@ -71,6 +86,12 @@ public class SubComponentTests extends AbstractCoCoTest {
   public void testGenericCompWithInnerGenericComp() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "GenericCompWithInnerGenericComp");
     assertNotNull(comp);
+  }
+  
+  @Test
+  public void testSubcomponentReferenceCycles() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentReferenceCycleA");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle()), node, new ExpectedErrorInfo(1, "xMA086"));
   }
   
   @Test

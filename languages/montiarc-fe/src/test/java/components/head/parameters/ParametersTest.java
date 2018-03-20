@@ -8,7 +8,6 @@ package components.head.parameters;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import montiarc.cocos.IdentifiersAreUnique;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -17,6 +16,7 @@ import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
+import montiarc.cocos.IdentifiersAreUnique;
 
 /**
  * This class tests all context conditions related to parameters
@@ -24,19 +24,19 @@ import montiarc._symboltable.ComponentSymbol;
  * @author Crispin Kirchner, Andreas Wortmann
  */
 public class ParametersTest extends AbstractCoCoTest {
-	
+  
   private static final String PACKAGE = "components.head.parameters";
   
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
   }
-
+  
   @Test
   public void testParameterNamesUniqueTestValid() {
     checkValid(PACKAGE + "." + "ParameterNamesUnique");
   }
-
+  
   @Test
   /*
    * Tests [Hab16] B1: All names of model elements within a component
@@ -77,6 +77,16 @@ public class ParametersTest extends AbstractCoCoTest {
     assertFalse(comp.isInnerComponent());
     assertEquals(1, comp.getConfigParameters().size());
     assertEquals(0, comp.getFormalTypeParameters().size());
+  }
+  
+  @Test
+  public void testEnumAsTypeArgument() {
+    checkValid(PACKAGE+"."+"EnumAsTypeArg");
+  }
+  
+  @Test
+  public void testEnumFromCDAsTypeArgument() {
+    checkValid(PACKAGE+"."+"EnumFromCDAsTypeArg");
   }
 
   @Test

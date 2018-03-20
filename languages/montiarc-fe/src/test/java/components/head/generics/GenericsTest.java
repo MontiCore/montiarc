@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
@@ -17,6 +18,7 @@ import infrastructure.ExpectedErrorInfo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
+import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.TypeParameterNamesUnique;
 import montiarc.helper.SymbolPrinter;
 
@@ -65,23 +67,57 @@ public class GenericsTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "Garage");
   }
   
+  @Test
+  public void testSubCompExtendsGenericComparableCompValid() {
+    checkValid(PACKAGE + "." + "SubCompExtendsGenericComparableCompValid");
+  }
+  
+  @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
+  @Test
+  public void testSubCompExtendsGenericCompInvalid0(){
+    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid0"), new ExpectedErrorInfo());
+  }
+  
+  @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
+  @Test
+  public void testSubCompExtendsGenericCompInvalid1(){
+    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid1"), new ExpectedErrorInfo());
+  }
+  
+  @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
+  @Test
+  public void testSubCompExtendsGenericCompInvalid2(){
+    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid2"), new ExpectedErrorInfo());
+  }
+  
+  @Test
+  public void testSubCompExtendsGenericCompValid() {
+    checkValid(PACKAGE + "." + "SubCompExtendsGenericCompValid");
+  }
+  
+  @Test
+  public void SubSubCompExtendsGenericComparableCompValid() {
+    checkValid(PACKAGE + "." + "SubSubCompExtendsGenericComparableCompValid"); 
+  }
+  
   /**
    * TODO: ValueSymbol!?
    */
   @Test
   public void testUsingComplexGenericParams() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "UsingComplexGenericParams");
-
+    
     assertEquals(0, Log.getErrorCount());
     assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());
-
+    
     ComponentInstanceSymbol delay = (ComponentInstanceSymbol) comp.getSpannedScope()
         .resolve("cp", ComponentInstanceSymbol.KIND).orElse(null);
     assertNotNull(delay);
     assertEquals("cp", delay.getName());
-
+    
     assertEquals(2, delay.getConfigArguments().size());
-    assertEquals("new int[] {1, 2, 3}", SymbolPrinter.printConfigArgument(delay.getConfigArguments().get(0)));
+    assertEquals("new int[] {1, 2, 3}",
+        SymbolPrinter.printConfigArgument(delay.getConfigArguments().get(0)));
     // TODO value symbol
     // assertEquals(Kind.ConstructorCall, delay.getConfigArguments().get(0).getKind());
     // assertEquals("1",
@@ -90,8 +126,9 @@ public class GenericsTest extends AbstractCoCoTest {
     // delay.getConfigArguments().get(0).getConstructorArguments().get(1).getValue());
     // assertEquals("3",
     // delay.getConfigArguments().get(0).getConstructorArguments().get(2).getValue());
-
-    assertEquals("new HashMap<List<K>, List<V>>()", SymbolPrinter.printConfigArgument(delay.getConfigArguments().get(1)));
+    
+    assertEquals("new HashMap<List<K>, List<V>>()",
+        SymbolPrinter.printConfigArgument(delay.getConfigArguments().get(1)));
     // TODO value symbol
     // assertEquals(Kind.ConstructorCall, delay.getConfigArguments().get(1).getKind());
     // ArcdTypeReferenceEntry typeRef = delay.getConfigArguments().get(1).getType();
