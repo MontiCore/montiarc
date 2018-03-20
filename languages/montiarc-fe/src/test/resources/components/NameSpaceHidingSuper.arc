@@ -1,7 +1,9 @@
-package a;
+package components;
+
+import components.body.ports.ImplicitAndExplicitPortNaming;
 
 /*
- *
+ * Valid model.
  */
 component NameSpaceHidingSuper {
 

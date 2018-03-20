@@ -1,21 +1,18 @@
 package components.body.ports;
 
 /*
- * Valid model with warnings.
+ * Invalid model.
  *
  * Formerly named "CG5<T>" in MontiArc3.
  *
  * @implements [Hab16] CV7: Avoid using implicit and explicit names for
  *                            elements with the same type. (p. 72, Lst. 3.54)
- * @implements TODO: Missing literatur for explicit naming of generic ports
- * TODO Prohibit implicit naming of (generic) ports? Where?
- * TODO Add Test
- * TODO CV7 CoCo and Test
+ * TODO Implement CV7 CoCo and adjust test
  */
 component GenericPortsWithAndWithoutNames<T> {
   
   port 
-    in T, //WARNING: Generic ports should be named explicit!
+    in T,
           //WARNING: The type 'T' is not unique, so the implicit port name 't' should not be used
     out T named,
     out String;

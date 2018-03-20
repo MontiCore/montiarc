@@ -10,7 +10,6 @@ import java.lang.Boolean;
  *                          respectively target must correspond to a port
  *                          name of the referenced subcomponent determined
  *                          by the first part. (p.64 Lst. 3.41)
- * TODO Add test
  */
 component ConnectsNonExistingPorts2 {
   

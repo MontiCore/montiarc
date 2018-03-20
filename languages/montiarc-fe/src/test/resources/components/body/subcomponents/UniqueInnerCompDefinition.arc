@@ -1,3 +1,4 @@
+//package components;
 package components.body.subcomponents;
 
 /*
@@ -6,7 +7,6 @@ package components.body.subcomponents;
  * Formerly named "CG9" in MontiArc3 with 6 errors
  *
  * @implements TODO
- * TODO Add test; Errors are thrown by the symbol table
  */
 component UniqueInnerCompDefinition {
     

@@ -5,11 +5,6 @@
  */
 package components.body.subcomponents;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -44,6 +39,8 @@ import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.ReferencedSubComponentExists;
 import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
 import montiarc.helper.SymbolPrinter;
+
+import static org.junit.Assert.*;
 
 /**
  * This class checks all context conditions related to the definition of
@@ -114,7 +111,7 @@ public class SubComponentTests extends AbstractCoCoTest {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
         node, new ExpectedErrorInfo(1, "xMA055"));
   }
-  
+
   @Test
   public void testReferencedSubComponentsExists() {
     checkValid(PACKAGE + "." + "ReferencedSubComponentsExists");
@@ -156,6 +153,18 @@ public class SubComponentTests extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongSubComponentArgument");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA064"));
   }
+
+  @Test
+  /*
+    TODO: Throws Symboltable error in other CoCo before starting to check the CoCo that throws the expected error. testAmbiguousImplicitAndExplicitSubcomponentNames() checks only the ComponentInstanceNameUnique-CoCo.
+    TODO: Adjust after implementing CoCo [Hab16] CV7
+   */
+  @Ignore("See comment above.")
+  public void testUniquenessReferences() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UniquenessReferences");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA061");
+    checkInvalid(MontiArcCoCos.createChecker(), node, errors);
+  }
   
   @Test
   public void testComponentWithTypeParametersHasInstance() {
@@ -163,9 +172,25 @@ public class SubComponentTests extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("Errors thrown by symbol table")
   public void testUniqueInnerCompDefinition() {
-    checkValid(PACKAGE + "." + "UniqueInnerCompDefinition");
+    try {
+      checkValid(PACKAGE + "." + "UniqueInnerCompDefinition");
+    } catch (de.monticore.symboltable.resolving.ResolvedSeveralEntriesException e) {
+      assert e.toString().contains("xA4095");
+      return;
+    }
+    fail();
+  }
+
+  @Test
+  public void testValidAndInvalidSubcomponents() {
+    try {
+      checkValid(PACKAGE + "." + "ValidAndInvalidSubcomponents");
+    } catch (de.monticore.symboltable.references.FailedLoadingSymbol e) {
+      assert e.toString().contains("'components.body.subcomponents.UndefinedReferenceFQ'");
+      return;
+    }
+    fail();
   }
   
   @Test

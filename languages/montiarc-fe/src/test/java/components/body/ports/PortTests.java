@@ -117,8 +117,24 @@ public class PortTests extends AbstractCoCoTest {
   }
 
   @Test
+  @Ignore("TODO Adjust error and count after implementing CV7")
+  public void testGenericPortsWithAndWithoutNames() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "GenericPortsWithAndWithoutNames");
+    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo();
+        //TODO Adjust error and count after implementing CV7
+    checkInvalid(MontiArcCoCos.createChecker(),
+        node, expectedErrors);
+  }
+
+  @Test
   public void testInPortUniqueSender() {
     checkValid(PACKAGE + "." + "InPortUniqueSender");
+  }
+
+  @Test
+  @Ignore("TODO: Currently no errors found even though it is an invalid model")
+  public void testGenericPortsWithoutTypeParams() {
+    checkValid(PACKAGE + "." + "GenericPortsWithoutTypeParams");
   }
 
   @Test

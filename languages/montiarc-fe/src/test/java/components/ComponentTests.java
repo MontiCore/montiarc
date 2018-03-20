@@ -1,11 +1,13 @@
 package components;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Optional;
 
+import de.monticore.ast.ASTNode;
+import de.monticore.java.symboltable.JavaTypeSymbolReference;
+import de.monticore.java.types.HCJavaDSLTypeResolver;
+import de.monticore.symboltable.Symbol;
+import montiarc._ast.ASTPort;
+import montiarc._symboltable.PortSymbol;
 import montiarc.cocos.PackageLowerCase;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -26,6 +28,8 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.ImportsAreUnique;
 import montiarc.cocos.TopLevelComponentHasNoInstanceName;
 
+import static org.junit.Assert.*;
+
 /**
  * This class checks all context conditions related the combination of elements in component bodies
  *
@@ -41,19 +45,53 @@ public class ComponentTests extends AbstractCoCoTest {
   }
   
   @Test
-  /* Checks whether there is a redundant import statements. For example import a.*; import a.*; */
+  /*
+   * Checks whether there is a redundant import statements.
+   * For example:
+   *  import a.*;
+   *  import a.*;
+   */
   public void testRedundantImports() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "RedundantImports");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA074"));
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "."
+                                                + "RedundantImports");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+                                    .addCoCo(new ImportsAreUnique());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2,
+        "xMA074"));
   }
 
   @Test
-  /* Checks whether there is a redundant import statements. For example import a.*; import a.*; */
+  /*
+   * Checks whether there is a redundant import statements.
+   * For example:
+   *  import a.*;
+   *  import a.*;
+   */
   public void testRedundantImports2() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "RedundantImports2");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ImportsAreUnique());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA074"));
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "."
+                                                + "RedundantImports2");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+                                    .addCoCo(new ImportsAreUnique());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2,
+        "xMA074"));
+  }
+
+  @Test
+  /* Checks whether the namespace hiding is working */
+  public void testNameSpaceHiding() {
+    checkValid(PACKAGE + "." + "NameSpaceHiding"); // Components are valid
+
+    // Check that resolving 'foo' and 'sIn' result in the correct Symbols
+    // of type 'java.lang.Boolean'
+    final ComponentSymbol nameSpaceHiding = loadComponentSymbol(PACKAGE, "NameSpaceHiding");
+    final Optional<PortSymbol> sIn = nameSpaceHiding.getSpannedScope().resolve("sIn", PortSymbol.KIND);
+    assertTrue(sIn.isPresent());
+    final ASTPort astNode = (ASTPort) sIn.get().getAstNode().get();
+    final HCJavaDSLTypeResolver typesVisitor = new HCJavaDSLTypeResolver();
+    assertNotNull(astNode.getType());
+    astNode.getType().accept(typesVisitor);
+    assertTrue(typesVisitor.getResult().isPresent());
+    final JavaTypeSymbolReference javaTypeSymbolReference = typesVisitor.getResult().get();
   }
 
   @Test

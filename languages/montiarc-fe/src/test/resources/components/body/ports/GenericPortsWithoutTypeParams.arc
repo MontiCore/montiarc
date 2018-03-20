@@ -7,11 +7,11 @@ package components.body.ports;
  *
  * @implements TODO literature for import of port types
  *
- * TODO Add Test; Currently, falsely no errors logged
+ * TODO Enable Test; Problem: Currently no errors logged
  */
 component GenericPortsWithoutTypeParams {
   
   port 
-    in T somePort, //Component GenericPortsWithoutTypeParams has no generic type parameter T
+    in Tiger somePort, //Component GenericPortsWithoutTypeParams has no generic type parameter T
     out V anotherPort; //Component GenericPortsWithoutTypeParams has no generic type parameter V
 }

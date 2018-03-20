@@ -9,7 +9,6 @@ import java.lang.String;
  *
  * @implements [Hab16] CO1: Connectors may not pierce through component interfaces.
                   (p. 60, Lst. 3.33)
- * TODO Add test
  */
 component WrongConnectors2 {
 

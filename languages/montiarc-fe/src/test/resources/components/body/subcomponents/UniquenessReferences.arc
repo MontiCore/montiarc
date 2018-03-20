@@ -1,4 +1,6 @@
 package components.body.subcomponents;
+
+import components.body.subcomponents._subcomponents.package1.ValidComponentInPackage1;
 import components.body.subcomponents._subcomponents.package2.ValidComponentInPackage2;
 import components.body.subcomponents._subcomponents.AtomicComponent;
 
@@ -12,7 +14,7 @@ import components.body.subcomponents._subcomponents.AtomicComponent;
  * @implements [Hab16] B1: All names of model elements within a component
                               namespace have to be unique (p.59)
  *
- * TODO: Add Test
+ * TODO: Adjust test for CV7
  * TODO CV7 CoCo and Test
  */
 component UniquenessReferences {

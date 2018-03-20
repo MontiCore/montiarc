@@ -10,7 +10,7 @@ import components.head.*;
     //WARNING: The imported package 'components.head.*' is never used.
 
 /*
- * Valid model with warnings.
+ * Invalid model.
  *
  * Formerly named "R4" in MontiArc3.
  *

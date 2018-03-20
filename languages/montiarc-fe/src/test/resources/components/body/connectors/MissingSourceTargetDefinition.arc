@@ -9,7 +9,6 @@ import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
  * @implements [Hab16] CO3: Unqualified sources or targets in connectors
  *                           either refer to a port or a subcomponent in
  *                           the same namespace. (p.61 Lst. 3.35)
- * TODO Add test (4 errors)
  */
 component MissingSourceTargetDefinition {
 

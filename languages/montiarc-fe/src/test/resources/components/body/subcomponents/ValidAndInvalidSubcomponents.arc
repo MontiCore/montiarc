@@ -12,9 +12,6 @@ import components.body.subcomponents._subcomponents.AtomicComponent;
  * be imported full qualified or through a package import.
  *
  * Formerly named "R2" in MontiArc3.
- *
- * TODO: Symboltable throws errors as it cannot resolve 'components.body
- *  .subcomponents.UndefinedReferenceFQ'
  */
 component ValidAndInvalidSubcomponents {
   
