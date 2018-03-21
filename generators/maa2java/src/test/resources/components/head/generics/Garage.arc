@@ -1,12 +1,13 @@
 package components.head.generics;
 
 /**
- * Valid model. It generates generic Ports with full qualified Names, Arrays, imports and sub-Generics 
+ * Valid model. 
  */
 component Garage {
+
   port 
-    in List<com.google.common.collect.ImmutableMap<Boolean,Double>[]> wheels,
-    out com.google.common.collect.HashBasedTable<Boolean,Double[],List<String>>[] motor;
+    in List<java.util.HashMap<Boolean,Double>> wheels,
+    out java.util.HashMap<Double[],List<String>>[] motor;
 
   component Car<String>("My awesome car");
   

@@ -58,19 +58,13 @@ public class ComponentHelperTest extends AbstractCoCoTest {
     assertTrue(portSymbol.isPresent());
 
     String portTypeName = helper.printPortTypeName(portSymbol.get());
-    assertEquals("com.google.common.collect.HashBasedTable<Boolean,Double[],List<String>>[]", portTypeName);
-
-    portTypeName = helper.printPortTypeName(portSymbol.get());
-    assertEquals("com.google.common.collect.HashBasedTable<Boolean,Double[],List<String>>[]", portTypeName);
+    assertEquals("java.util.HashMap<Double[],List<String>>[]", portTypeName);
 
     portSymbol = comp.getSpannedScope().resolve("wheels", PortSymbol.KIND);
     assertTrue(portSymbol.isPresent());
 
     portTypeName = helper.printPortTypeName(portSymbol.get());
-    assertEquals("List<com.google.common.collect.ImmutableMap<Boolean,Double>[]>", portTypeName);
-
-    portTypeName = helper.printPortTypeName(portSymbol.get());
-    assertEquals("List<com.google.common.collect.ImmutableMap<Boolean,Double>[]>", portTypeName);
+    assertEquals("List<java.util.HashMap<Boolean,Double>>", portTypeName);
   }
   
   @Test
