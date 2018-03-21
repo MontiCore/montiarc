@@ -15,9 +15,11 @@ import org.junit.Test;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
+import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
+import montiarc.cocos.AllGenericParametersOfSuperClassSet;
 import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.TypeParameterNamesUnique;
 import montiarc.helper.SymbolPrinter;
@@ -70,6 +72,20 @@ public class GenericsTest extends AbstractCoCoTest {
   @Test
   public void testSubCompExtendsGenericComparableCompValid() {
     checkValid(PACKAGE + "." + "SubCompExtendsGenericComparableCompValid");
+  }
+  
+  @Ignore("TODO remove when new JavaDSL is integrated") 
+  @Test
+  public void testcomponentExtendsGenericComponent() {
+    checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent");
+    checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent2");
+    checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent3");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ComponentExtendsGenericComponent4");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new AllGenericParametersOfSuperClassSet()), node, new ExpectedErrorInfo(1,"xMA087"));
+    node = loadComponentAST(PACKAGE + "." + "ComponentExtendsGenericComponent5");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new AllGenericParametersOfSuperClassSet()), node, new ExpectedErrorInfo(1,"xMA088"));
+    node = loadComponentAST(PACKAGE + "." + "ComponentExtendsGenericComponent6");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new AllGenericParametersOfSuperClassSet()), node, new ExpectedErrorInfo(1,"xMA089"));
   }
   
   @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
