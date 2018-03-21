@@ -4,7 +4,7 @@ import b.NotExistentToo;
 
 component ExistingReferencedComponents {
     
-    component CorrectCompInA ccia;
+    component ValidComponentInPackage1 ccia;
     
     component b.CorrectCompInB ccib;
     

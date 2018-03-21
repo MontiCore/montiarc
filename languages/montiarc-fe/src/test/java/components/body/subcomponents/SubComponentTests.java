@@ -5,13 +5,9 @@
  */
 package components.body.subcomponents;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -44,6 +40,8 @@ import montiarc.cocos.ReferencedSubComponentExists;
 import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
 import montiarc.cocos.SubcomponentReferenceCycle;
 import montiarc.helper.SymbolPrinter;
+
+import static org.junit.Assert.*;
 
 /**
  * This class checks all context conditions related to the definition of
@@ -110,6 +108,14 @@ public class SubComponentTests extends AbstractCoCoTest {
         node,
         new ExpectedErrorInfo(2, "xMA061"));
   }
+
+  @Test
+  public void testAmbiguousImplicitAndExplicitSubcomponentNames() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousImplicitAndExplicitSubcomponentNames");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentInstanceNamesAreUnique()),
+        node,
+        new ExpectedErrorInfo(3, "xMA061"));
+  }
   
   @Test
   public void testComponentWithTypeParametersLacksInstance() {
@@ -118,7 +124,15 @@ public class SubComponentTests extends AbstractCoCoTest {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
         node, new ExpectedErrorInfo(1, "xMA009"));
   }
-  
+
+  @Test
+  public void testInnerViolatesComponentNaming() {
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "InnerViolatesComponentNaming");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
+        node, new ExpectedErrorInfo(1, "xMA055"));
+  }
+
   @Test
   public void testReferencedSubComponentsExists() {
     checkValid(PACKAGE + "." + "ReferencedSubComponentsExists");
@@ -160,10 +174,44 @@ public class SubComponentTests extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongSubComponentArgument");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA064"));
   }
+
+  @Test
+  /*
+    TODO: Throws Symboltable error in other CoCo before starting to check the CoCo that throws the expected error. testAmbiguousImplicitAndExplicitSubcomponentNames() checks only the ComponentInstanceNameUnique-CoCo.
+    TODO: Adjust after implementing CoCo [Hab16] CV7
+   */
+  @Ignore("See comment above.")
+  public void testUniquenessReferences() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UniquenessReferences");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA061");
+    checkInvalid(MontiArcCoCos.createChecker(), node, errors);
+  }
   
   @Test
   public void testComponentWithTypeParametersHasInstance() {
     checkValid(PACKAGE + "." + "ComponentWithTypeParametersHasInstance");
+  }
+
+  @Test
+  public void testUniqueInnerCompDefinition() {
+    try {
+      checkValid(PACKAGE + "." + "UniqueInnerCompDefinition");
+    } catch (de.monticore.symboltable.resolving.ResolvedSeveralEntriesException e) {
+      assert e.toString().contains("xA4095");
+      return;
+    }
+    fail();
+  }
+
+  @Test
+  public void testValidAndInvalidSubcomponents() {
+    try {
+      checkValid(PACKAGE + "." + "ValidAndInvalidSubcomponents");
+    } catch (de.monticore.symboltable.references.FailedLoadingSymbol e) {
+      assert e.toString().contains("'components.body.subcomponents.UndefinedReferenceFQ'");
+      return;
+    }
+    fail();
   }
   
   @Test
@@ -581,5 +629,53 @@ public class SubComponentTests extends AbstractCoCoTest {
     // assertEquals("java.lang.Integer",
     // typeRef.getTypeParameters().get(1).getTypeParameters().get(0).getType().getName());
   }
-  
+
+  @Test
+  public void testHasGenericInputAndOutputPort() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "HasGenericInputAndOutputPort");
+  }
+
+  @Test
+  public void testHasPortsOfHierarchicalCDTypes() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "HasPortsOfHierarchicalCDTypes");
+  }
+
+  @Test
+  public void testHasStringInputAndIntegerOutput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "HasStringInputAndIntegerOutput");
+  }
+
+  @Test
+  public void testHasStringInputAndOutput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "HasStringInputAndOutput");
+  }
+
+  @Test
+  public void testHasThreeGenericInAndOneOutputPort() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "HasThreeGenericInAndOneOutPort");
+  }
+
+  @Test
+  public void testIntegerInputAndBooleanOutput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "IntegerInputAndBooleanOutput");
+  }
+
+  @Test
+  public void testHasPortWithImportedType() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "HasPortWithImportedType");
+  }
+
+  @Test
+  public void testHasTwoStringInAndOneStrinOut() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "HasTwoStringInAndOneStringOut");
+  }
+
 }

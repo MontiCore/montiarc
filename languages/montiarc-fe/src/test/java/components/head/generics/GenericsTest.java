@@ -45,10 +45,23 @@ public class GenericsTest extends AbstractCoCoTest {
   }
   
   @Test
+  /*
+   * Checks that generic type parameters have to be unique.
+   */
   public void testTypeParameterNamesUniqueInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new TypeParameterNamesUnique()),
         loadComponentAST(PACKAGE + "." + "TypeParameterNamesAbiguous"),
         new ExpectedErrorInfo(1, "xMA006"));
+  }
+
+  @Test
+  /*
+   * Checks that generic type parameters have to be unique.
+   */
+  public void testTypeParametersNotUnique() {
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new TypeParameterNamesUnique()),
+        loadComponentAST(PACKAGE + "." + "TypeParametersNotUnique"),
+        new ExpectedErrorInfo(2, "xMA006"));
   }
   
   @Test

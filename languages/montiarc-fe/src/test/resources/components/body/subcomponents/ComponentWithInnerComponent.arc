@@ -1,5 +1,7 @@
 package components.body.subcomponents;
 
+import components.body.subcomponents._subcomponents.AtomicComponent;
+
 /**
  * Valid model. Used by 
  */
@@ -9,7 +11,7 @@ component ComponentWithInnerComponent {
         in String strIn,
         out String strOut;
 
-    component Ref myReference;
+    component AtomicComponent myReference;
 
     component InnerComponent {
     
@@ -17,14 +19,14 @@ component ComponentWithInnerComponent {
             in String strIn,
             out String strOut;
 
-        component Ref myReference;
+        component AtomicComponent myReference;
         
         component InnerInnerComponent {
             port
                 in String strIn,
                 out String strOut;
 
-           component Ref myReference;
+           component AtomicComponent myReference;
         }
 
         connect innerInnerComponent.strOut -> strOut; 

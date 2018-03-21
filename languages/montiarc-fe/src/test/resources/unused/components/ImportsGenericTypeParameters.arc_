@@ -1,0 +1,27 @@
+package a;
+
+import types.T; //ERROR: The type 'T' must not be imported!
+            //        All unqualified used types 'T' in the generic component
+            //        'a.ImportsGenericTypeParameters' will be interpreted as a generic type.
+import types.K; //ERROR: The type 'K' must not be imported!
+            //        All unqualified used types 'K' in the generic component
+            //        'a.ImportsGenericTypeParameters' will be interpreted as a generic type.
+
+/*
+ * Invalid model. 
+ * Generic types should not be imported. 2 errors
+ *
+ * Formerly named "CG6<K,T>" in MontiArc3.
+ *
+ * @implements TODO: No literature reference
+ * TODO Add Test
+ */
+component ImportsGenericTypeParameters<K, T> {
+  
+  port 
+    in T someName, 
+    in types.T correct,
+    out types.K correctOut,
+    out K anotherK;
+
+}

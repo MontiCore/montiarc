@@ -1,7 +1,7 @@
 package a;
 
 // unused imports
-import a.CorrectCompInA;
+import a.ValidComponentInPackage1;
 import b.GenericComponent;
 import java.math.BigDecimal;
 import java.io.Serializable;
@@ -25,7 +25,7 @@ component UnusedImports <T extends Float, G extends java.util.Set> (Boolean m, j
         out java.math.BigDecimal bigDec;
     
     component CorrectCompInB ccib;
-    component a.CorrectCompInA ccia;
+    component a.ValidComponentInPackage1 ccia;
     
     component b.GenericComponent<Number, Integer> generic1;
     component b.GenericComponent<java.io.IOException, Integer> generic2;

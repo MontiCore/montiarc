@@ -1,0 +1,19 @@
+package components; // TODO: Correct package
+
+// import AmbiguousModel;
+
+/*
+ * Invalid model.
+ * All port and component types have to be unique in the whole system.
+ *
+ * Formerly named "CG8" in MontiArc3.
+ *
+ * @implements TODO No literature reference
+ * TODO: Add Test
+ */
+component AmbiguousPortAndComponentTypes {
+  
+  port in AmbiguousModel;
+  
+  component AmbiguousModel; //Name clash
+}

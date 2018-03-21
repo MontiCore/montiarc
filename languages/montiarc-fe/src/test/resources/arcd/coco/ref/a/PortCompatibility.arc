@@ -10,9 +10,9 @@ component PortCompatibility {
         out Integer intOut1,
         out Integer intOut2;
     
-    component CorrectCompInA ccia [stringOut -> intOut1];
+    component ValidComponentInPackage1 ccia [stringOut -> intOut1];
     
-    component CorrectCompInA ccia2;
+    component ValidComponentInPackage1 ccia2;
     
     connect intIn -> ccia.stringIn, ccia2.stringIn;
     
