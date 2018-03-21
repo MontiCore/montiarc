@@ -5,7 +5,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import de.monticore.symboltable.types.references.ActualTypeArgument;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.symboltable.Scope;
@@ -22,6 +24,8 @@ import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.NamesAreLowerCase;
 import montiarc.cocos.PortUsage;
 import montiarc.cocos.SubComponentsConnected;
+
+import java.util.Optional;
 
 /**
  * This class checks all context conditions directly related to port definitions
@@ -70,6 +74,22 @@ public class PortTests extends AbstractCoCoTest {
   }
   
   @Test
+  @Ignore("TODO: Fix UniqueIdentifiers.java CoCo")
+  public void testPortNameAmbiguous() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortNameAmbiguous");
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new ExpectedErrorInfo(1, "xMA053"));
+  }
+
+  @Test
+  @Ignore("TODO: Fix UniqueIdentifiers.java CoCo")
+  public void testImplicitAndExplicitPortNaming() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ImplicitAndExplicitPortNaming");
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new ExpectedErrorInfo(3, "xMA053"));
+  }
+
+  @Test
   public void testPortTypeResolving() {
     ComponentSymbol motorSymbol = this.loadComponentSymbol(PACKAGE, "PortTypeResolving");
     
@@ -92,10 +112,41 @@ public class PortTests extends AbstractCoCoTest {
   }
   
   @Test
+  public void testPortsWithAmbiguousSenders() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortsWithAmbiguousSenders");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
+        node, new ExpectedErrorInfo(4, "xMA005"));
+  }
+
+  @Test
+  @Ignore("See UniquenessConnectors.arc_")
+  public void testUniquenessConnectors() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UniquenessConnectors");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
+        node, new ExpectedErrorInfo(4, "xMA005"));
+  }
+
+  @Test
+  @Ignore("TODO Adjust error and count after implementing CV7")
+  public void testGenericPortsWithAndWithoutNames() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "GenericPortsWithAndWithoutNames");
+    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo();
+        //TODO Adjust error and count after implementing CV7
+    checkInvalid(MontiArcCoCos.createChecker(),
+        node, expectedErrors);
+  }
+
+  @Test
   public void testInPortUniqueSender() {
     checkValid(PACKAGE + "." + "InPortUniqueSender");
   }
   
+  @Test
+  @Ignore("TODO: Currently no errors found even though it is an invalid model")
+  public void testGenericPortsWithoutTypeParams() {
+    checkValid(PACKAGE + "." + "GenericPortsWithoutTypeParams");
+  }
+
   @Test
   /* Checks whether all port names in the port definition start with a lower case letter */
   public void testPortWithUpperCaseName() {
@@ -116,6 +167,20 @@ public class PortTests extends AbstractCoCoTest {
     checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA059", "xMA060"));
   }
   
+  @Test
+  /*
+    Tests the CoCos CV5 and CV6 from the dissertation of Arne Haber.
+    These are the checks that all ports should be connected of components and subcomponents.
+   */
+  public void testUnconnectedPorts2() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UnconnectedPorts2");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA057", "xMA058"));
+
+    cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA059", "xMA060"));
+  }
+
   @Test
   public void testCompWithGenericPorts() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "CompWithGenericPorts");

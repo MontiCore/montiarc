@@ -10,6 +10,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.symboltable.Scope;
@@ -136,6 +137,17 @@ public class ConnectorTests extends AbstractCoCoTest {
         .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified());
     checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA008", "xMA070"));
   }
+
+  /* Checks multiple instances of wrong connectors with connectors piercing through interfaces and
+   * qualified simple connector sources. */
+  @Test
+  public void testMultipleWrongConnectors2() {
+    ASTMontiArcNode node = loadComponentAST( PACKAGE + "." + "WrongConnectors2");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+        .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
+        .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2,"xMA070"));
+  }
   
   @Test
   /* Checks whether there are connectors in a component that wrongly connect
@@ -150,12 +162,33 @@ public class ConnectorTests extends AbstractCoCoTest {
   
   @Test
   /* Checks whether the source and target of a connect statement exist. */
-  public void testMissingSourceAndTargetDefinition() {
+  public void testMissingSourceAndTargetDefinitionInSubcomponent() {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "MissingSourceTargetDefinitionInSubcomponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetExist());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA066", "xMA067"));
+  }
+
+  @Test
+  /* Checks whether the source and target of a connect statement exist. */
+  public void testMissingSourceAndTargetDefinition() {
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "MissingSourceTargetDefinition");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+        .addCoCo(new ConnectorSourceAndTargetExist());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA066", "xMA067"));
+  }
+
+  @Test
+  @Ignore("The missing subcomponents throw an exeption in the symbol table creation.")
+  /* Checks whether the source and target of a connect statement exist. */
+  public void testConnectorReferenceDoesNotExist() {
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "ConnectorReferenceDoesNotExist");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+        .addCoCo(new ConnectorSourceAndTargetExist());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
   }
   
   @Test
@@ -169,5 +202,23 @@ public class ConnectorTests extends AbstractCoCoTest {
     
     assertEquals(1, connector.getStereotype().size());
     assertFalse(connector.getStereotype().get("realNews").isPresent());
+  }
+
+  @Test
+  public void testConnectsNonExistingPorts() {
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "ConnectsNonExistingPorts");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+                                    .addCoCo(new ConnectorSourceAndTargetExist());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA066", "xMA067"));
+  }
+
+  @Test
+  public void testConnectsNonExistingPorts2() {
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "ConnectsNonExistingPorts2");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+                                    .addCoCo(new ConnectorSourceAndTargetExist());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
   }
 }

@@ -67,9 +67,7 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
     }
     
   }
-  
-  // TODO: Parameters
-  
+
   public void checkList(HashSet<String> names, String name, String errorCode, String type,
       ASTNode e) {
     if (names.contains(name)) {
