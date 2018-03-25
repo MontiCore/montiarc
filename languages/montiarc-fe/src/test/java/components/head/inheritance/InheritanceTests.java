@@ -2,15 +2,22 @@ package components.head.inheritance;
 
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
+import infrastructure.ExpectedErrorInfo;
+import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._parser.MontiArcParser;
+import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
+import montiarc.cocos.ConfigurationParametersCorrectlyInherited;
+import montiarc.cocos.MontiArcCoCos;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Collection;
 
 import static org.junit.Assert.*;
 
@@ -65,6 +72,7 @@ public class InheritanceTests extends AbstractCoCoTest {
     assertNotNull(comp.getSpannedScope()
         .resolve("inputString", PortSymbol.KIND)); // port inherited from
                                                    // SuperComponent
+    checkValid(PACKAGE + "." + "ExtendsSuperComponent");
   }
   
   @Test
@@ -102,5 +110,71 @@ public class InheritanceTests extends AbstractCoCoTest {
     // then
     assertEquals(1, Log.getErrorCount());
   }
-  
+
+  @Test
+  /*
+   *  Checks that a component extending another component with configuration
+   *  parameters provides at least as many parameters.
+   *
+   * @implements [Hab16] R14: Components that inherit from a parametrized
+   *    component provide configuration parameters with
+   *    the same types, but are allowed to provide more
+   *    parameters. (p.69 Lst. 3.49)
+   */
+  public void testTooFewConfigurationParameters() {
+    final ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "TooFewConfigurationParameters");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA084");
+    checkInvalid(MontiArcCoCos.createChecker(), node, errors);
+  }
+
+  @Test
+  /*
+   *  Checks that a component extending another component with configuration
+   *  parameters provides at least as many parameters.
+   *
+   * @implements [Hab16] R14: Components that inherit from a parametrized
+   *    component provide configuration parameters with
+   *    the same types, but are allowed to provide more
+   *    parameters. (p.69 Lst. 3.49)
+   */
+  public void testParameterTypesNotMatching() {
+    final ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ParameterTypesNotMatching");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA084");
+    checkInvalid(MontiArcCoCos.createChecker(), node, errors);
+  }
+
+  @Test
+  /*
+   *  Checks that a component extending another component with configuration
+   *  parameters provides at least as many parameters.
+   *
+   * @implements [Hab16] R14: Components that inherit from a parametrized
+   *    component provide configuration parameters with
+   *    the same types, but are allowed to provide more
+   *    parameters. (p.69 Lst. 3.49)
+   */
+  public void testMissingOptionalParameters() {
+    final ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MissingOptionalParameter");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA084");
+    checkInvalid(MontiArcCoCos.createChecker(), node, errors);
+  }
+
+  @Test
+  public void testHasRequiredAndOptionalConfigParameters() {
+    checkValid(PACKAGE + "." + "HasRequiredAndOptionalConfigParameters");
+  }
+
+  @Test
+  public void testSubCompAndOptionalConfigParameters() {
+    checkValid(PACKAGE + "." + "SubCompAndOptionalConfigParameters");
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "SubCompAndOptionalConfigParameters");
+  }
+
+  @Test
+  public void testExtendsSubCompAndOptionalConfigParameters() {
+    final ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ExtendsSubCompAndOptionalConfigParameters");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA084");
+    final MontiArcCoCoChecker montiArcCoCoChecker = new MontiArcCoCoChecker().addCoCo(new ConfigurationParametersCorrectlyInherited());
+    checkInvalid(montiArcCoCoChecker, node, errors);
+  }
 }
