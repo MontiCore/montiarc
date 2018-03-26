@@ -499,9 +499,9 @@ public class SubComponentTests extends AbstractCoCoTest {
   public void testInnerComponents2() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "InnerComponents");
     
-    assertEquals("3 named subcomponents and 1 auto-instance", 4, comp
+    assertEquals("3 named subcomponents and 1 auto-instance", 5, comp
         .getSubComponents().size());
-    assertEquals(1, comp.getInnerComponents().size());
+    assertEquals(2, comp.getInnerComponents().size());
     
     // usage of external component type as sub component in same package
     ComponentInstanceSymbol instance = comp.getSubComponent("ref").orElse(null);
@@ -678,4 +678,16 @@ public class SubComponentTests extends AbstractCoCoTest {
                    "HasTwoStringInAndOneStringOut");
   }
 
+  @Test
+  public void testSimpleGenericComponent() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+                   "SimpleGenericComponent");
+  }
+
+  @Test
+  public void testSubcomponentsWithGenericTypeParams() {
+    final ASTMontiArcNode astNode = loadComponentAST(PACKAGE + "." + "SubcomponentsWithGenericTypeParams");
+    final ExpectedErrorInfo expectedErrorInfo = new ExpectedErrorInfo(3, "xMA085");
+    checkInvalid(MontiArcCoCos.createChecker(), astNode, expectedErrorInfo);
+  }
 }

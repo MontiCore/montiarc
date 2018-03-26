@@ -75,6 +75,7 @@ public class MontiArcCoCos {
         .addCoCo(new AutomatonDeclaredInitialStateDoesNotExist())
         .addCoCo(new UseOfUndeclaredState())
         .addCoCo(new UseOfUndeclaredField())
+        .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
         .addCoCo(new AssignmentHasNoName())
         .addCoCo(new InnerComponentNotExtendsDefiningComponent())
         
