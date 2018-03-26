@@ -15,8 +15,11 @@ import java.util.stream.Collectors;
 
 /**
  * @implements [Wor16] AU1: The name of each state is unique. (p. 97. Lst. 5.8)
- * @implements [Wor16] AU3: The names of all inputs, outputs, and variables are unique. (p. 98. Lst.
- * 5.10)
+ * @implements [Wor16] AU3: The names of all inputs, outputs, and variables
+ *    are unique. (p. 98. Lst. 5.10)
+ * @implements [Hab16] B1: All names of model elements within a component
+ *    namespace have to be unique. (p. 59. Lst. 3.31)
+ * @author (last commit) Michael Mutert
  */
 public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
 
@@ -31,7 +34,6 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
         ASTVariableDeclaration decl = (ASTVariableDeclaration) e;
         for (String variableName : decl.getNames()) {
           names.add(new Identifier(variableName, IdentifierTypes.VARIABLE, e));
-//          checkList(names, variableName, "0xMA035", "variable", e);
         }
       }
 
@@ -46,7 +48,6 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
           }
           for (String name : portInstanceNames) {
             names.add(new Identifier(name, IdentifierTypes.PORT, e));
-//            checkList(names, name, "0xMA053", "port", e);
           }
         }
       }
@@ -56,7 +57,6 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
         ASTMontiArcInvariant invariant = (ASTMontiArcInvariant) e;
         String name = invariant.getName();
         names.add(new Identifier(name, IdentifierTypes.INVARIANT, e));
-//        checkList(names, name, "0xMA052", "invariant", e);
       }
     }
 
@@ -65,8 +65,6 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
     for (ASTParameter parameter : parameters) {
       names.add(new Identifier(parameter.getName(),
           IdentifierTypes.CONFIG_PARAMETER, parameter));
-//      checkList(names, parameter.getName(), "0xMA069",
-//        "configuration parameter", parameter);
     }
 
     Set<Identifier> nameDuplicates = new HashSet<>();
