@@ -51,7 +51,7 @@ public class ComponentHelperTest extends AbstractCoCoTest {
 
   @Test
   public void getPortGenerics() {
-    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "Car");
+    ComponentSymbol comp = this.loadComponentSymbol("components.head.generics", "Car");
     ComponentHelper helper = new ComponentHelper(comp);
     
     Optional<PortSymbol> portSymbol = comp.getSpannedScope().resolve("motor", PortSymbol.KIND);
