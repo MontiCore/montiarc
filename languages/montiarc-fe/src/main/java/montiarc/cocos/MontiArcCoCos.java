@@ -76,6 +76,7 @@ public class MontiArcCoCos {
         .addCoCo(new UseOfUndeclaredState())
         .addCoCo(new UseOfUndeclaredField())
         .addCoCo(new AssignmentHasNoName())
+        .addCoCo(new ConfigurationParametersCorrectlyInherited())
         .addCoCo(new InnerComponentNotExtendsDefiningComponent())
         
         // TYPE CORRECTNESS
