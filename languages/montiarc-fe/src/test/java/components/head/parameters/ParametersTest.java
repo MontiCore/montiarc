@@ -45,7 +45,7 @@ public class ParametersTest extends AbstractCoCoTest {
   public void testParameterNamesUniqueTestInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         loadComponentAST(PACKAGE + "." + "ParameterAmbiguous"),
-        new ExpectedErrorInfo(1, "xMA069"));
+        new ExpectedErrorInfo(2, "xMA069"));
     
   }
 
@@ -53,7 +53,7 @@ public class ParametersTest extends AbstractCoCoTest {
   public void testParameterAmbiguous2() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         loadComponentAST(PACKAGE + "." + "ParameterAmbiguous2"),
-        new ExpectedErrorInfo(1, "xMA069"));
+        new ExpectedErrorInfo(2, "xMA069"));
 
   }
 
@@ -65,7 +65,7 @@ public class ParametersTest extends AbstractCoCoTest {
   public void testConfigurationParametersNotUnique() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         loadComponentAST(PACKAGE + "." + "ConfigurationParametersNotUnique"),
-        new ExpectedErrorInfo(2, "xMA069"));
+        new ExpectedErrorInfo(3, "xMA069"));
 
   }
   

@@ -14,7 +14,7 @@ import montiarc.cocos.MontiArcCoCos;
  *
  * @author Andreas Wortmann
  */
-public class VariableTests extends AbstractCoCoTest {
+public class VariableTest extends AbstractCoCoTest {
   
   private static final String PACKAGE = "components.body.variables";
   
@@ -26,7 +26,7 @@ public class VariableTests extends AbstractCoCoTest {
   @Test
   public void testAmbiguousVariableNames() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousVariableNames");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(2, "xMA035"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(4, "xMA035"));
   }
   
   @Test
