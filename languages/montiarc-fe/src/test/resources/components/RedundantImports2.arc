@@ -3,7 +3,7 @@ package components;
 import components.*; // The current package 'components' should not be imported!
 
 import components.DefinedJavaTypeSamePackage; // Duplicate import
-  // The model 'a.DefinedJavaTypeSamePackage' is in the current package
+  // The model 'components.DefinedJavaTypeSamePackage' is in the current package
   //  so it must not be imported!
 
 import java.lang.String;
