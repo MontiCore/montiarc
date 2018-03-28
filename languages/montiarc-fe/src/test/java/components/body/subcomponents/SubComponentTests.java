@@ -33,6 +33,7 @@ import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.ValueSymbol;
 import montiarc.cocos.ComponentInstanceNamesAreUnique;
+import montiarc.cocos.ComponentNameIsCapitalized;
 import montiarc.cocos.ComponentWithTypeParametersHasInstance;
 import montiarc.cocos.InnerComponentNotExtendsDefiningComponent;
 import montiarc.cocos.MontiArcCoCos;
@@ -129,7 +130,7 @@ public class SubComponentTests extends AbstractCoCoTest {
   public void testInnerViolatesComponentNaming() {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "InnerViolatesComponentNaming");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentNameIsCapitalized()),
         node, new ExpectedErrorInfo(1, "xMA055"));
   }
 
@@ -499,7 +500,7 @@ public class SubComponentTests extends AbstractCoCoTest {
   public void testInnerComponents2() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "InnerComponents");
     
-    assertEquals("3 named subcomponents and 1 auto-instance", 5, comp
+    assertEquals("3 named subcomponents and 1 auto-instance", 4, comp
         .getSubComponents().size());
     assertEquals(2, comp.getInnerComponents().size());
     

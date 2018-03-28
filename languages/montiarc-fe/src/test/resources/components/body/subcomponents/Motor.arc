@@ -1,6 +1,6 @@
 package components.body.subcomponents;
 
-import valid.Datatypes.*; 
+import types.Datatypes.*; 
 
 /**
  * Valid model. Used by Navi.
@@ -8,5 +8,5 @@ import valid.Datatypes.*;
 component Motor(String name, String typ = "BACK") {
     port
         in Integer speed,
-        in MotorCmd command;
+        in MotorCommand command;
 }

@@ -37,7 +37,7 @@ public class ConnectorSourceAndTargetComponentDiffer implements MontiArcASTCompo
           if (source.get().getEnclosingScope().equals(target.get().getEnclosingScope())) {
             Log.error(
                 "0xMA075 Source and target port of connector are ports from the same component.",
-                node.get_SourcePositionStart());
+                source.get().getAstNode().get().get_SourcePositionStart());
           }
         
       }

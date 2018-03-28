@@ -52,10 +52,6 @@ public class NumberOfConfigurationParametersCorrect implements MontiArcASTCompon
               sub.get_SourcePositionStart());
         }
       }
-      else {
-        Log.error(String.format("0xMA004 Type \"%s\" could not be resolved", type),
-            sub.get_SourcePositionStart());
-      }
     }
   }
   
