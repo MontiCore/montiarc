@@ -7,7 +7,7 @@ package components.body.ports;
  * @implements [Hab16] R2: Each incoming port of a subcomponent is used at most once as target of a connector. (p. 62, Lst. 3.37)
  */
 component InPortAmbiguousSender {
-  port out rootOut;
+  port out String rootOut;
 
   component A {
     port out String aOut;
