@@ -35,7 +35,7 @@ import montiarc.cocos.SimpleConnectorSourceExists;
  *
  * @author Andreas Wortmann
  */
-public class ConnectorTests extends AbstractCoCoTest {
+public class ConnectorTest extends AbstractCoCoTest {
   
   private static final String PACKAGE = "components.body.connectors";
   

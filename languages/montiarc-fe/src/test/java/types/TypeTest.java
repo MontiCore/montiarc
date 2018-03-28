@@ -38,7 +38,7 @@ import montiarc._symboltable.PortSymbol;
  *
  * @author Andreas Wortmann
  */
-public class TypeTests extends AbstractCoCoTest {
+public class TypeTest extends AbstractCoCoTest {
   
   private static final String PACKAGE = "types";
   

@@ -24,7 +24,7 @@ import montiarc._cocos.MontiArcCoCoChecker;
  * @version 4.2.0, 30.01.2018
  * @since 4.2.0
  */
-public class NameTests extends AbstractCoCoTest {
+public class NameTest extends AbstractCoCoTest {
   
   private static final String PACKAGE = "components.head.name";
   

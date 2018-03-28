@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
  *
  * @author Andreas Wortmann
  */
-public class InheritanceTests extends AbstractCoCoTest {
+public class InheritanceTest extends AbstractCoCoTest {
   
   private static final String PACKAGE = "components.head.inheritance";
   

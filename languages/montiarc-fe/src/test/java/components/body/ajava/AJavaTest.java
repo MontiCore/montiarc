@@ -26,7 +26,7 @@ import montiarc.cocos.MontiArcCoCos;
  *
  * @author Andreas Wortmann
  */
-public class AJavaTests extends AbstractCoCoTest {
+public class AJavaTest extends AbstractCoCoTest {
   
   private static final String PACKAGE = "components.body.ajava";
   

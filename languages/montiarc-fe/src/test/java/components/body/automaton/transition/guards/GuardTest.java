@@ -14,7 +14,7 @@ import montiarc.cocos.MontiArcCoCos;
  *
  * @author Andreas Wortmann
  */
-public class GuardTests extends AbstractCoCoTest {
+public class GuardTest extends AbstractCoCoTest {
   
   private static final String PACKAGE = "components.body.automaton.transition.guards";
   

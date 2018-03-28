@@ -50,7 +50,7 @@ import static org.junit.Assert.*;
  *
  * @author Andreas Wortmann
  */
-public class SubComponentTests extends AbstractCoCoTest {
+public class SubComponentTest extends AbstractCoCoTest {
   
   private static final String PACKAGE = "components.body.subcomponents";
   
