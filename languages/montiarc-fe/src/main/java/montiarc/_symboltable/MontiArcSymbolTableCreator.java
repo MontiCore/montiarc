@@ -250,8 +250,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       configArgs.add(new ValueSymbol<>(arg, Kind.Expression));
     }
     
-    // instances
-    
+    // instances    
     if (!node.getInstances().isEmpty()) {
       // create instances of the referenced components.
       for (ASTSubComponentInstance i : node.getInstances()) {
@@ -417,6 +416,19 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         
         addToScope(instanceSymbol);
       }
+      
+      // check whether there are already instances of the inner component type
+      // defined in the component type. We then have to set the referenced
+      // component.
+      Collection<ComponentInstanceSymbol> instances = component.getEnclosingScope()
+          .resolveLocally(ComponentInstanceSymbol.KIND);
+      if (!instances.isEmpty()) {
+        for (ComponentInstanceSymbol instance : instances) {
+          if (instance.getComponentType().getName().equals(component.getName())) {
+            instance.getComponentType().setReferencedComponent(Optional.of(component));
+          }
+        }
+      }
     }
   }
   
@@ -491,8 +503,9 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       ASTComplexReferenceType astComplexReferenceType = (ASTComplexReferenceType) astType;
       for (ASTSimpleReferenceType astSimpleReferenceType : astComplexReferenceType
           .getSimpleReferenceTypes()) {
-        /* ASTComplexReferenceType represents types like class or interface types which always have
-         * ASTSimpleReferenceType as qualification. For example: a.b.c<Arg>.d.e<Arg> */
+        /* ASTComplexReferenceType represents types like class or interface
+         * types which always have ASTSimpleReferenceType as qualification. For
+         * example: a.b.c<Arg>.d.e<Arg> */
         setActualTypeArgumentsOfCompRef(typeReference,
             astSimpleReferenceType.getTypeArguments().get().getTypeArguments());
       }
@@ -501,9 +514,10 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   /**
-   * Adds the TypeParameters to the ComponentSymbol if it declares TypeVariables. Since the
-   * restrictions on TypeParameters may base on the JavaDSL its the actual recursive definition of
-   * bounds is respected and its implementation within the JavaDSL is reused. Example:
+   * Adds the TypeParameters to the ComponentSymbol if it declares
+   * TypeVariables. Since the restrictions on TypeParameters may base on the
+   * JavaDSL its the actual recursive definition of bounds is respected and its
+   * implementation within the JavaDSL is reused. Example:
    * <p>
    * component Bla<T, S extends SomeClass<T> & SomeInterface>
    * </p>
@@ -581,8 +595,10 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       String name = node.getName().get();
       Scope enclosingScope = currentScope().get().getEnclosingScope().get();
       Optional<PortSymbol> port = enclosingScope.resolve(name, PortSymbol.KIND);
-      // Optional<PortSymbol> port1 = enclosingScope.resolveDown(name, PortSymbol.KIND);
-      // Optional<PortSymbol> port2 = enclosingScope.resolveLocally(name, PortSymbol.KIND);
+      // Optional<PortSymbol> port1 = enclosingScope.resolveDown(name,
+      // PortSymbol.KIND);
+      // Optional<PortSymbol> port2 = enclosingScope.resolveLocally(name,
+      // PortSymbol.KIND);
       Optional<VariableSymbol> var = enclosingScope.resolve(name, VariableSymbol.KIND);
       Collection<JFieldSymbol> field = enclosingScope.resolveMany(name, JFieldSymbol.KIND);
       
@@ -600,7 +616,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         addToScopeAndLinkWithNode(field.stream().findFirst().get(), node);
       }
       else if (isConfigurationArgument(node.getName().get())) {
-        // In this case, everything is fine. As configuration arguments (aka. parameters) don't
+        // In this case, everything is fine. As configuration arguments (aka.
+        // parameters) don't
         // have their own symbols, nothing to do here.
       }
       else {
@@ -616,7 +633,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
    * Checks whether the passed name references to a configuration parameter
    * 
    * @param name Name of the parameter to look up
-   * @return true, iff the currently processed node has a parameter of the passed name
+   * @return true, iff the currently processed node has a parameter of the
+   * passed name
    */
   private boolean isConfigurationArgument(String name) {
     for (ASTParameter param : this.currentComponent.getHead().getParameters()) {
@@ -764,5 +782,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   public void endVisit(ASTStateDeclaration ast) {
     // to prevent deletion of not existing scope we override with nothing
   }
+  
   
 }

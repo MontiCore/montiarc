@@ -1,5 +1,7 @@
 package components.body.connectors;
 
+import types.CorrectComp;
+
 /**
 * Invalid model. See comments below.
 *

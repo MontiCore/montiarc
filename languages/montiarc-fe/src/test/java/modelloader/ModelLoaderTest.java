@@ -14,7 +14,7 @@ import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import montiarc._symboltable.ComponentSymbol;
 
-public class ModelLoaderTests extends AbstractCoCoTest {
+public class ModelLoaderTest extends AbstractCoCoTest {
   
   private static final String PACKAGE = "modelloader";
   

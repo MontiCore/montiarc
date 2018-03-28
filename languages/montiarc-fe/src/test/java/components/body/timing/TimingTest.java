@@ -23,7 +23,7 @@ import montiarc._symboltable.ComponentSymbol;
  *
  * @author Andreas Wortmann
  */
-public class TimingTests extends AbstractCoCoTest {
+public class TimingTest extends AbstractCoCoTest {
 
   private static final String PACKAGE = "components.body.timing";
 

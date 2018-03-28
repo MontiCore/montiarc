@@ -15,7 +15,7 @@ import montiarc.cocos.MontiArcCoCos;
  *
  * @author Andreas Wortmann
  */
-public class StimuliTests extends AbstractCoCoTest {
+public class StimuliTest extends AbstractCoCoTest {
   
   private static final String PACKAGE = "components.body.automaton.transition.stimuli";
   
