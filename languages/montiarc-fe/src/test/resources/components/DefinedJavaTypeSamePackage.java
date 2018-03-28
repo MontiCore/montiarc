@@ -1,4 +1,4 @@
-package a;
+package components;
 
 public class DefinedJavaTypeSamePackage {
 

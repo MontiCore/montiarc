@@ -38,7 +38,8 @@ public class MontiArcCoCos {
         .addCoCo(new InPortUniqueSender())
         .addCoCo(new ImportsValid())
         .addCoCo(new SubcomponentReferenceCycle())
-        
+        .addCoCo(new ReferencedSubComponentExists())
+
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
         .addCoCo(new AJavaBehaviorNameIsUppercase())

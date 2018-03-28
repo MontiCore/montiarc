@@ -1,6 +1,7 @@
 package components.body.autoconnect;
 
 import components.body.autoconnect.datatypes.*;
+import types.GenericType;
 
 component AutoConnectGenericPorts {
     
