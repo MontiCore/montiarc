@@ -92,6 +92,12 @@
       <artifactId>cd2pojo</artifactId>
       <version>1.0.2</version>
     </dependency>
+    
+    <dependency>
+				<groupId>de.monticore</groupId>
+				<artifactId>de.monticore.java.lib</artifactId>
+				<classifier>models</classifier>
+			</dependency>
 
     <!-- .. Test Libraries ............................................... -->
     <dependency>
@@ -180,6 +186,24 @@
               <sources>
                 <source>${basedir}/target/generated-sources/templateClasses/</source>
               </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.10</version>
+        <executions>
+          <execution>
+            <id>unpack-dependencies</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeClassifiers>models</includeClassifiers>
+              <outputDirectory>${basedir}/target/javaLib</outputDirectory>
             </configuration>
           </execution>
         </executions>
