@@ -1,25 +1,28 @@
 package components.head.inheritance;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.Optional;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._parser.MontiArcParser;
-import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
+import montiarc.cocos.CircularInheritance;
 import montiarc.cocos.ConfigurationParametersCorrectlyInherited;
 import montiarc.cocos.MontiArcCoCos;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.Collection;
-
-import static org.junit.Assert.*;
 
 /**
  * This class checks all context conditions related to component inheritance
@@ -90,25 +93,18 @@ public class InheritanceTest extends AbstractCoCoTest {
   }
   
   @Test
-  @Ignore
   public void testCircularInheritance() {
-    Log.getFindings().clear();
-    
-    // given
     final String componentName = PACKAGE + "." + "CircularInheritanceA";
-    final File modelPath = Paths.get(MODEL_PATH).toFile();
-    
-    // when
-    try {
-      MONTIARCTOOL.loadComponentSymbolWithCocos(componentName, modelPath);
-    }
-    catch (StackOverflowError e) {
-      Log.error("Encountered StackOverflowError.");
-      fail(componentName + " should be rejected because of circular inheritance.");
-    }
-    
-    // then
-    assertEquals(1, Log.getErrorCount());
+    ASTMontiArcNode node = loadComponentAST(componentName);
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new CircularInheritance()), node, new ExpectedErrorInfo(1, "xMA090"));
+  }
+  
+  @Test
+  public void testTransitiveCircularInheritance() {
+    final String componentName = PACKAGE + "." + "TransitiveCircularInheritanceA";
+    ASTMontiArcNode node = loadComponentAST(componentName);
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new CircularInheritance()), node, new ExpectedErrorInfo(1, "xMA090"));
+
   }
 
   @Test
