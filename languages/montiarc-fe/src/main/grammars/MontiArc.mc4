@@ -15,12 +15,12 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
    */
   MACompilationUnit =
     ("package" package:(Name& || ".")+ ";")?  // optional package declaration
-    (ImportStatement)*                        // import statements
+    (ImportStatementLOCAL)*                        // import statements
     Component                                 // single outermost component declaration 
     EOF;                                      // and nothing (end of file) afterwards
     
   //Only required until ImportStatement in Types.mc4 uses Name& instead of Name  
-  //ImportStatement = "import" import:(Name& || ".")+ ("." Star:["*"])? ";" ;
+  ImportStatementLOCAL = "import" import:(Name || ".")+ ("." Star:["*"])? ";" ;
     
    // TODO where should invariant binding take place?
   InvariantContent = BlockStatement | Expression;

@@ -33,7 +33,6 @@ import de.monticore.types.JTypeSymbolsHelper.JTypeReferenceFactory;
 import de.monticore.types.TypesHelper;
 import de.monticore.types.TypesPrinter;
 import de.monticore.types.types._ast.ASTComplexReferenceType;
-import de.monticore.types.types._ast.ASTImportStatement;
 import de.monticore.types.types._ast.ASTQualifiedName;
 import de.monticore.types.types._ast.ASTReferenceType;
 import de.monticore.types.types._ast.ASTSimpleReferenceType;
@@ -51,6 +50,7 @@ import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTComponentHead;
 import montiarc._ast.ASTConnector;
 import montiarc._ast.ASTIOAssignment;
+import montiarc._ast.ASTImportStatementLOCAL;
 import montiarc._ast.ASTInitialStateDeclaration;
 import montiarc._ast.ASTJavaPBehavior;
 import montiarc._ast.ASTMACompilationUnit;
@@ -116,7 +116,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     // imports
     List<ImportStatement> imports = new ArrayList<>();
-    for (ASTImportStatement astImportStatement : compilationUnit.getImportStatementList()) {
+    for (ASTImportStatementLOCAL astImportStatement : compilationUnit.getImportStatementLOCALList()) {
       String qualifiedImport = Names.getQualifiedName(astImportStatement.getImportList());
       ImportStatement importStatement = new ImportStatement(qualifiedImport,
           astImportStatement.isStar());
