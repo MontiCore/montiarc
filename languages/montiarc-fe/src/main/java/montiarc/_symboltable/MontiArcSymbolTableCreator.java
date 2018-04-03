@@ -315,19 +315,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     // parameters
     setParametersOfComponent(component, node.getHead());
     
-    // super component
-    if (node.getHead().getSuperComponent().isPresent()) {
-      ASTReferenceType superCompRef = node.getHead().getSuperComponent().get();
-      String superCompName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(superCompRef);
-      
-      ComponentSymbolReference ref = new ComponentSymbolReference(superCompName,
-          currentScope().get());
-      ref.setAccessModifier(BasicAccessModifier.PUBLIC);
-      // actual type arguments
-      addTypeArgumentsToComponent(ref, superCompRef);
-      
-      component.setSuperComponent(Optional.of(ref));
-    }
     
     // stereotype
     if (node.getStereotype().isPresent()) {
@@ -384,6 +371,21 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   public void endVisit(ASTComponent node) {
     ComponentSymbol component = componentStack.pop();
     autoConnectionTrafo.transformAtEnd(node, component);
+    
+    // super component
+    if (node.getHead().getSuperComponent().isPresent()) {
+      ASTReferenceType superCompRef = node.getHead().getSuperComponent().get();
+      String superCompName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(superCompRef);
+      
+      ComponentSymbolReference ref = new ComponentSymbolReference(superCompName,
+          currentScope().get());
+      ref.setAccessModifier(BasicAccessModifier.PUBLIC);
+      // actual type arguments
+      addTypeArgumentsToComponent(ref, superCompRef);
+      
+      component.setSuperComponent(Optional.of(ref));
+    }
+    
     
     removeCurrentScope();
     
