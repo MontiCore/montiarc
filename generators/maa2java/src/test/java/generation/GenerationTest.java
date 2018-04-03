@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.montiarcautomaton.generator.codegen.MAAGeneratorScript;
+import de.montiarcautomaton.generator.MontiArcGeneratorTool;
 import de.se_rwth.commons.logging.Log;
 
 /**
@@ -36,7 +36,7 @@ public class GenerationTest {
   
   @Test
   public void testGeneration() {
-    MAAGeneratorScript script = new MAAGeneratorScript();
+    MontiArcGeneratorTool script = new MontiArcGeneratorTool();
     script.generate(Paths.get(MODELPATH).toFile(), Paths.get(TARGETPATH).toFile(), Paths.get("src/main/java").toFile());
   }
   

@@ -13,9 +13,12 @@ import org.junit.Test;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JFieldSymbol;
+import de.monticore.types.types._ast.ASTType;
+import de.monticore.umlcd4a.cocos.mcg2ebnf.AssociationNoStereotypesCoCo;
 import infrastructure.AbstractCoCoTest;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTPort;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
@@ -46,7 +49,14 @@ public class ComponentHelperTest extends AbstractCoCoTest {
     assertEquals("K", portTypeName);
 
     portTypeName = helper.printPortTypeName(portSymbol.get());
-    assertEquals("K", portTypeName);
+    assertEquals("K", portTypeName);    
+  }
+  
+  @Test
+  public void testAutoboxing() {
+    String datatype = "Map<List<int>[],Set<double[]>>";
+    String result = ComponentHelper.autobox(datatype);
+    assertEquals("Map<List<Integer>[],Set<Double[]>>", result);
   }
 
   @Test

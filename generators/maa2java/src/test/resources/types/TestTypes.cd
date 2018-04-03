@@ -1,0 +1,12 @@
+package types;
+
+/**
+* This model contains valid classdiagram types for test purposes.
+*/
+classdiagram TestTypes {
+    
+  enum Foo {
+    Bar, Moep;
+  }
+
+}

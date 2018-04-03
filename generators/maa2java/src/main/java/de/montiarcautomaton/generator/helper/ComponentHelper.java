@@ -1,7 +1,10 @@
 package de.montiarcautomaton.generator.helper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +29,8 @@ import montiarc._ast.ASTInterface;
 import montiarc._ast.ASTJavaPInitializer;
 import montiarc._ast.ASTParameter;
 import montiarc._ast.ASTPort;
+import montiarc._ast.ASTSubComponent;
+import montiarc._ast.ASTSubComponentInstance;
 import montiarc._ast.ASTValuation;
 import montiarc._ast.ASTValueInitialization;
 import montiarc._ast.ASTVariableDeclaration;
@@ -37,7 +42,8 @@ import montiarc._symboltable.ValueSymbol;
 import montiarc._symboltable.VariableSymbol;
 
 /**
- * Helper class used in the template to generate target code of atomic or composed components.
+ * Helper class used in the template to generate target code of atomic or
+ * composed components.
  *
  * @author Gerrit Leonhardt
  */
@@ -96,9 +102,51 @@ public class ComponentHelper {
     
     ASTPort astPort = (ASTPort) port.getAstNode().get();
     ASTTypesNode astTypeNode = (ASTTypesNode) astPort.getType();
-    String portTypeName = typesPrinter.prettyprint(astTypeNode);
+    String portTypeName = autobox(typesPrinter.prettyprint(astTypeNode));
     return portTypeName;
     // return getPortTypeName(componentNode, port);
+  }
+  
+  
+  private static HashMap<String,String> PRIMITIVE_TYPES =new HashMap<String, String>() {
+    {
+            put("int","Integer");
+            put("double","Double");
+            put("boolean", "Boolean");
+            put("byte", "Byte");
+            put("char","Character");
+            put("long", "Long");
+            put("float", "Float");
+            put("short", "Short");
+    }
+    };
+  
+  /**
+   * TODO: Write me!
+   * 
+   * @param prettyprint
+   * @return
+   */
+  public static String autobox(String datatype) {
+    
+    String[] tokens = datatype.split("\\b");
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < tokens.length; i++) {
+      if (PRIMITIVE_TYPES.containsKey(tokens[i])) {
+        tokens[i] = autoboxType(tokens[i]);
+      }
+      sb.append(tokens[i]);
+    }
+    return sb.toString();
+    
+  }
+  
+  private static String autoboxType(String datatype) {
+    String autoBoxedTypeName = datatype;
+    if(PRIMITIVE_TYPES.containsKey(datatype)) {
+      autoBoxedTypeName = PRIMITIVE_TYPES.get(datatype);
+    }
+    return autoBoxedTypeName;
   }
   
   // TODO: Wer nutzt die und warum? Kann die raus?
@@ -168,7 +216,7 @@ public class ComponentHelper {
   
   private String printTypeName(Optional<ASTType> optType) {
     if (optType.isPresent()) {
-      return typesPrinter.prettyprint(optType.get()).replaceAll(" ", "");
+      return autobox(typesPrinter.prettyprint(optType.get()).replaceAll(" ", ""));
     }
     else {
       Log.error("XX");
@@ -202,15 +250,17 @@ public class ComponentHelper {
   }
   
   /**
-   * Calculates the values of the parameters of a {@link ComponentInstanceSymbol}. This takes
-   * default values for parameters into account and adds them as required. Default values are only
-   * added from left to right in order. <br/>
+   * Calculates the values of the parameters of a
+   * {@link ComponentInstanceSymbol}. This takes default values for parameters
+   * into account and adds them as required. Default values are only added from
+   * left to right in order. <br/>
    * Example: For a component with parameters
    * <code>String stringParam, Integer integerParam = 2, Object objectParam = new Object()</code>
-   * that is instanciated with parameters <code>"Test String", 5</code> this method adds
-   * <code>new Object()</code> as the last parameter.
+   * that is instanciated with parameters <code>"Test String", 5</code> this
+   * method adds <code>new Object()</code> as the last parameter.
    *
-   * @param param The {@link ComponentInstanceSymbol} for which the parameters should be calculated.
+   * @param param The {@link ComponentInstanceSymbol} for which the parameters
+   * should be calculated.
    * @return The parameters.
    */
   public Collection<String> getParamValues(ComponentInstanceSymbol param) {
@@ -220,7 +270,7 @@ public class ComponentHelper {
     List<String> outputParameters = new ArrayList<>();
     for (ValueSymbol<TypeReference<TypeSymbol>> configArgument : configArguments) {
       final String prettyprint = printer.prettyprint(configArgument.getValue());
-      outputParameters.add(prettyprint);
+      outputParameters.add(autobox(prettyprint));
     }
     
     // Append the default parameter values for as many as there are left
@@ -249,31 +299,15 @@ public class ComponentHelper {
   }
   
   public String getSubComponentTypeName(ComponentInstanceSymbol instance) {
-    // Get the usual name of the class
-    final String className = instance.getComponentType().getName();
-    StringBuilder genericParameters = new StringBuilder();
     
-    final Optional<ASTNode> astNode = instance.getComponentType().getReferencedSymbol()
-        .getAstNode();
-    if (astNode.isPresent()) {
-      ComponentHelper subCompHelper = new ComponentHelper(
-          instance.getComponentType().getReferencedSymbol());
-      if (subCompHelper.isGeneric()) {
-        // Append the generic parameters
-        genericParameters.append("<");
-        final List<ActualTypeArgument> actualTypeArguments = instance.getComponentType()
-            .getActualTypeArguments();
-        for (ActualTypeArgument typeArgument : actualTypeArguments) {
-          genericParameters.append(typeArgument.getType().getName());
-          if (actualTypeArguments.indexOf(typeArgument) < actualTypeArguments.size() - 1) {
-            genericParameters.append(", ");
-          }
-        }
-        
-        genericParameters.append(">");
-      }
+    if (instance.getComponentType().getAstNode().isPresent()) {
+      return typesPrinter
+          .prettyprint((ASTTypesNode) instance.getComponentType().getAstNode().get());
     }
-    return className + genericParameters;
+    else {
+      return instance.getComponentType().getName();
+    }
+    
   }
   
   public boolean isIncomingPort(ComponentSymbol cmp, ConnectorSymbol conn, boolean isSource,
@@ -379,11 +413,12 @@ public class ComponentHelper {
     for (int i = 0; i < ref.getDimension(); ++i) {
       name += "[]";
     }
-    return name;
+    return autobox(name);
   }
   
   /**
-   * Checks whether the given typeName for the component comp is a generic parameter.
+   * Checks whether the given typeName for the component comp is a generic
+   * parameter.
    *
    * @param comp
    * @param typeName

@@ -117,7 +117,7 @@ public class MAAGenerator {
       if (!existsHWC && !behaviorEmbedding.isPresent()) {
         Path implPath = getPath(targetPathName, packageName, implName);
         AbstractAtomicComponent.generate(implPath, compAST, compHelper, packageName, implName,
-            inputName, resultName, comp.getConfigParameters());
+            inputName, resultName, comp.getConfigParameters(), comp.getImports());
       }
       
       

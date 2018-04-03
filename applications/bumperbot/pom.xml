@@ -62,6 +62,12 @@
       <groupId>de.monticore</groupId>
       <artifactId>javaDSL</artifactId>
     </dependency>
+    
+     <dependency>
+		<groupId>de.monticore</groupId>
+		<artifactId>de.monticore.java.lib</artifactId>
+		<classifier>models</classifier>
+	</dependency>
 
 
 
@@ -105,7 +111,7 @@
               <goal>unpack-dependencies</goal>
             </goals>
             <configuration>
-              <includeClassifiers>${librarymodels.classifier}</includeClassifiers>
+              <includeClassifiers>${librarymodels.classifier}, models</includeClassifiers>
               <outputDirectory>${basedir}/target/${librarymodels.classifier}/</outputDirectory>
             </configuration>
           </execution>
@@ -160,7 +166,6 @@
           </execution>
         </executions>
       </plugin>
-
 
 
     </plugins>

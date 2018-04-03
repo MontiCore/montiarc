@@ -32,7 +32,7 @@ import montiarc._symboltable.MontiArcLanguage;
  */
 public class MontiArcGeneratorTool extends MontiArcTool{
   
-  private static final String DEFAULT_TYPES_FOLDER = "src/main/resources/defaultTypes";
+  private static final String DEFAULT_TYPES_FOLDER = "target/javaLib/";
   private static final String LIBRARY_MODELS_FOLDER = "target/librarymodels/";
   
   /**
