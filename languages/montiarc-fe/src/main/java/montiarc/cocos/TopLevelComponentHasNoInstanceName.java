@@ -23,7 +23,7 @@ public class TopLevelComponentHasNoInstanceName
    */
   @Override
   public void check(ASTComponent node) {
-    if (!node.symbolIsPresent()) {
+    if (!node.isPresentSymbol()) {
       Log.error(String.format(
           "0xMA071 Symbol of component \"%s\" is missing. " +
               "The context condition \"%s\" can't be checked that way.",
@@ -31,7 +31,7 @@ public class TopLevelComponentHasNoInstanceName
     }
     
     ComponentSymbol symbol = (ComponentSymbol) node.getSymbol().get();
-    if (!symbol.isInnerComponent() && node.isInstanceNamePresent()) {
+    if (!symbol.isInnerComponent() && node.isPresentInstanceName()) {
       Log.error(
           String.format("0xMA007 Top level component \"%s\" has an instance name", node.getName()),
           node.get_SourcePositionStart());

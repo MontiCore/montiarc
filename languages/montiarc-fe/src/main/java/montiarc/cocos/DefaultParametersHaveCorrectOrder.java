@@ -33,10 +33,10 @@ public class DefaultParametersHaveCorrectOrder
     for (ASTParameter param : params) {
       
       if (!foundDefaultParameter) {
-        foundDefaultParameter = param.isDefaultValuePresent();
+        foundDefaultParameter = param.isPresentDefaultValue();
       }
       else {
-        if (foundDefaultParameter && !param.isDefaultValuePresent()) {
+        if (foundDefaultParameter && !param.isPresentDefaultValue()) {
           Log.error("0xMA056 There are non default parameters after a default parameter",
               node.get_SourcePositionStart());
         }

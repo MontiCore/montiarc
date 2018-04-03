@@ -25,7 +25,7 @@ public class ASTValueList extends ASTValueListTOP {
   }
   
   public List<ASTValuation> getAllValuations() {
-    if (isValuationPresent()) {
+    if (isPresentValuation()) {
       return Lists.newArrayList(getValuation());
     }
     else {

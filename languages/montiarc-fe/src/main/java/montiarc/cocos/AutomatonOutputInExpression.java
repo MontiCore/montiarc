@@ -23,7 +23,7 @@ public class AutomatonOutputInExpression implements MontiArcASTTransitionCoCo {
   
   @Override
   public void check(ASTTransition node) {
-    if (node.isGuardPresent()) {
+    if (node.isPresentGuard()) {
       Scope scope = node.getEnclosingScope().get();
       ASTExpression exp = node.getGuard().getGuardExpression().getExpression();
 //      TODO@AB

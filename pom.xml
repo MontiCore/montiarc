@@ -23,26 +23,26 @@
 	<properties>
 
 		<!-- DSLs -->
-		<javadsl.version>4.3.9.1</javadsl.version> 
-		<cd4a.version>1.3.10</cd4a.version> <!-- Was 1.3.8 -->
+		<javadsl.version>4.3.11</javadsl.version> 
+		<cd4a.version>1.3.13</cd4a.version> <!-- Was 1.3.8 -->
 
 		<!-- .. SE-Libraries ..................................................... -->
-		<monticore.version>4.5.3</monticore.version> 
-		<mc.grammars.assembly.version>0.0.6</mc.grammars.assembly.version>
-		<se-commons.version>1.7.7</se-commons.version> 
+		<monticore.version>5.0.0</monticore.version> 
+		<mc.grammars.assembly.version>0.0.8</mc.grammars.assembly.version>
+		<se-commons.version>1.7.8</se-commons.version> 
 
 		<!-- generator -->
 		<groovy.version>2.3.0</groovy.version>
 
 		<!-- .. SE-Libraries ..................................................... -->
-		<antlr.version>4.5.1</antlr.version>
+		<antlr.version>4.7.1</antlr.version>
 		<guava.version>18.0</guava.version>
 		<jsr305.version>3.0.0</jsr305.version>
 		<junit.version>4.12</junit.version>
 		<logback.version>1.1.2</logback.version>
 
 		<!-- .. Plugins ....................................................... -->
-		<monticore.plugin>4.5.2</monticore.plugin>
+		<monticore.plugin>5.0.0</monticore.plugin>
 		<assembly.plugin>2.5.4</assembly.plugin>
 		<compiler.plugin>3.3</compiler.plugin>
 		<se-groovy.maven.version>1.2.3</se-groovy.maven.version>

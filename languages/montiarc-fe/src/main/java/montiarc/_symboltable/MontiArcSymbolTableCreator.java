@@ -67,7 +67,6 @@ import montiarc._ast.ASTTransition;
 import montiarc._ast.ASTValuation;
 import montiarc._ast.ASTValueInitialization;
 import montiarc._ast.ASTVariableDeclaration;
-import montiarc._ast.MontiArcPackage;
 import montiarc._symboltable.ValueSymbol.Kind;
 import montiarc.helper.JavaHelper;
 import montiarc.helper.Timing;
@@ -164,7 +163,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       sym.setDirection(node.isIncoming());
       
       // stereotype
-      if (node.isStereotypePresent()) {
+      if (node.isPresentStereotype()) {
         for (ASTStereoValue st : node.getStereotype().getValuesList()) {
           sym.addStereotype(st.getName(), st.getValue());
         }
@@ -215,7 +214,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       ConnectorSymbol sym = new ConnectorSymbol(sourceName, targetName);
       
       // stereotype
-      if (node.isStereotypePresent()) {
+      if (node.isPresentStereotype()) {
         for (ASTStereoValue st : node.getStereotype().getValuesList()) {
           sym.addStereotype(st.getName(), st.getValue());
         }
@@ -315,7 +314,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     setParametersOfComponent(component, node.getHead());
     
     // super component
-    if (node.getHead().isSuperComponentPresent()) {
+    if (node.getHead().isPresentSuperComponent()) {
       ASTReferenceType superCompRef = node.getHead().getSuperComponent();
       String superCompName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(superCompRef);
       
@@ -329,7 +328,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     }
     
     // stereotype
-    if (node.isStereotypePresent()) {
+    if (node.isPresentStereotype()) {
       for (ASTStereoValue st : node.getStereotype().getValuesList()) {
         component.addStereotype(st.getName(), Optional.of(st.getValue()));
       }
@@ -373,7 +372,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   private boolean needsInstanceCreation(ASTComponent node, ComponentSymbol symbol) {
-    boolean instanceNameGiven = node.isInstanceNamePresent();
+    boolean instanceNameGiven = node.isPresentInstanceName();
     boolean autoCreationPossible = symbol.getFormalTypeParameters().size() == 0;
     
     return instanceNameGiven || autoCreationPossible;
@@ -402,7 +401,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         String instanceName = node.getInstanceNameOpt()
             .orElse(StringTransformations.uncapitalize(component.getName()));
         
-        if (node.isActualTypeArgumentPresent()) {
+        if (node.isPresentActualTypeArgument()) {
           setActualTypeArgumentsOfCompRef(refEntry,
               node.getActualTypeArgument().getTypeArgumentList());
         }
@@ -426,12 +425,12 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         ASTWildcardType astWildcardType = (ASTWildcardType) astTypeArgument;
         
         // Three cases can occur here: lower bound, upper bound, no bound
-        if (astWildcardType.isLowerBoundPresent() || astWildcardType.isUpperBoundPresent()) {
+        if (astWildcardType.isPresentLowerBound() || astWildcardType.isPresentUpperBound()) {
           // We have a bound.
           // Examples: Set<? extends Number>, Set<? super Integer>
           
           // new bound
-          boolean lowerBound = astWildcardType.isLowerBoundPresent();
+          boolean lowerBound = astWildcardType.isPresentLowerBound();
           ASTType typeBound = lowerBound
               ? astWildcardType.getLowerBound()
               : astWildcardType.getUpperBound();
@@ -479,7 +478,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       ASTType astType) {
     if (astType instanceof ASTSimpleReferenceType) {
       ASTSimpleReferenceType astSimpleReferenceType = (ASTSimpleReferenceType) astType;
-      if (!astSimpleReferenceType.isTypeArgumentsPresent()) {
+      if (!astSimpleReferenceType.isPresentTypeArguments()) {
         return;
       }
       setActualTypeArgumentsOfCompRef(typeReference,
@@ -671,7 +670,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   @Override
   public void visit(ASTState node) {
     StateSymbol state = new StateSymbol(node.getName());
-    if (node.isStereotypePresent()) {
+    if (node.isPresentStereotype()) {
       for (ASTStereoValue value : node.getStereotype().getValuesList()) {
         state.addStereoValue(value.getName());
       }
@@ -697,21 +696,20 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       scope.<StateSymbol> resolveMany(name, StateSymbol.KIND).forEach(c -> {
         c.setInitial(true);
         c.setInitialReactionAST(node.getBlockOpt());
-        if (node.isBlockPresent()) {
+        if (node.isPresentBlock()) {
           for (ASTIOAssignment assign : node.getBlock().getIOAssignmentList()) {
-            if (assign.getOperator() == MontiArcPackage.ASTIOAssignment_Operator)
-              if (assign.isNamePresent()) {
-                Optional<VariableSymbol> var = currentScope().get()
-                    .<VariableSymbol> resolve(assign.getName(), VariableSymbol.KIND);
-                if (var.isPresent()) {
-                  if (assign.isValueListPresent()
-                      && !assign.getValueList().getAllValuations().isEmpty()) {
-                    // This only covers the case "var i = somevalue"
-                    ASTValuation v = assign.getValueList().getAllValuations().get(0);
-                    var.get().setValuation(Optional.of(v));
-                  }
+            if (assign.isPresentName()) {
+              Optional<VariableSymbol> var = currentScope().get()
+                  .<VariableSymbol> resolve(assign.getName(), VariableSymbol.KIND);
+              if (var.isPresent()) {
+                if (assign.isPresentValueList()
+                    && !assign.getValueList().getAllValuations().isEmpty()) {
+                  // This only covers the case "var i = somevalue"
+                  ASTValuation v = assign.getValueList().getAllValuations().get(0);
+                  var.get().setValuation(Optional.of(v));
                 }
               }
+            }
           }
         }
       });

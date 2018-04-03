@@ -61,7 +61,7 @@ public class NumberOfConfigurationParametersCorrect implements MontiArcASTCompon
     int counter = 0;
     
     for (ASTParameter param : params) {
-      if (param.isDefaultValuePresent()) {
+      if (param.isPresentDefaultValue()) {
         counter++;
       }
     }

@@ -28,9 +28,9 @@ public class AutomatonInitialReactionTypeDoesNotFitOutputType
   
   @Override
   public void check(ASTInitialStateDeclaration node) {
-    if (node.isBlockPresent()) {
+    if (node.isPresentBlock()) {
       for (ASTIOAssignment assign : node.getBlock().getIOAssignmentList()) {
-        if (assign.isNamePresent()) {
+        if (assign.isPresentName()) {
           String currentNameToResolve = assign.getName();
           
           Optional<VariableSymbol> varSymbol = node.getEnclosingScope().get()
@@ -60,7 +60,7 @@ public class AutomatonInitialReactionTypeDoesNotFitOutputType
   
   private void checkAssignment(ASTIOAssignment assign,
       JTypeReference<? extends JTypeSymbol> typeRef, String currentNameToResolve) {
-    if (assign.isValueListPresent()) {
+    if (assign.isPresentValueList()) {
       JTypeReference<? extends JTypeSymbol> varType = typeRef;
       for (ASTValuation val : assign.getValueList().getAllValuations()) {
         Optional<? extends JavaTypeSymbolReference> exprType = TypeCompatibilityChecker

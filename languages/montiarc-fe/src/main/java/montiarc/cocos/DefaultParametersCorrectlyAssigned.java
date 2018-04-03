@@ -40,7 +40,7 @@ public class DefaultParametersCorrectlyAssigned
     ComponentSymbol comp = (ComponentSymbol) node.getSymbol().get();
     for (ASTParameter param : params) {
       
-      if (param.isDefaultValuePresent()) {
+      if (param.isPresentDefaultValue()) {
         int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(param.getType());
         JTypeReference<? extends JTypeSymbol> paramTypeSymbol = new JavaTypeSymbolReference(
             TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(param

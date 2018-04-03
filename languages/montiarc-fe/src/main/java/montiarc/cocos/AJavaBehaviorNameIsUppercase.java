@@ -13,7 +13,7 @@ public class AJavaBehaviorNameIsUppercase implements MontiArcASTJavaPBehaviorCoC
   
   @Override
   public void check(ASTJavaPBehavior node) {
-    if (node.isNamePresent()) {
+    if (node.isPresentName()) {
       if (!Character.isUpperCase(node.getName().charAt(0))) {
         Log.error(
             "0xMA174 The name of the AJava compute block '" + node.getName()

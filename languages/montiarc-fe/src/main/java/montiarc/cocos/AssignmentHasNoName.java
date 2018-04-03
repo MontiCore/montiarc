@@ -28,7 +28,7 @@ public class AssignmentHasNoName implements MontiArcASTIOAssignmentCoCo {
   
   @Override
   public void check(ASTIOAssignment node) {
-    if (!node.isNamePresent()) {
+    if (!node.isPresentName()) {
       // TODO: Add case for function calls on classes
       boolean errorFlag = true;
       // Check the ValueList, as there might be an expression which contains the name, for example

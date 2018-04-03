@@ -26,9 +26,9 @@ public class AutomatonReactionTypeDoesNotFitOutputType implements MontiArcASTTra
   
   @Override
   public void check(ASTTransition node) {
-    if (node.isReactionPresent()) {
+    if (node.isPresentReaction()) {
       for (ASTIOAssignment assign : node.getReaction().getIOAssignmentList()) {
-        if (assign.isNamePresent()) {
+        if (assign.isPresentName()) {
           String currentNameToResolve = assign.getName();
           
           Scope transitionScope = ((TransitionSymbol) node.getSymbol().get()).getSpannedScope();

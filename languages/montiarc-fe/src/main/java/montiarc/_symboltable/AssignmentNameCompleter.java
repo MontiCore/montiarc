@@ -40,9 +40,9 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
   public void visit(ASTInitialStateDeclaration node) {
     // set missing assignment names in all blocks of all initial state
     // declarations
-    if (node.isBlockPresent()) {
+    if (node.isPresentBlock()) {
       for (ASTIOAssignment assign : node.getBlock().getIOAssignmentList()) {
-        if (!assign.isNamePresent()) {
+        if (!assign.isPresentName()) {
           // no assignment name found, so compute one based on value type
           Optional<String> sinkName = findFor(assign, false);
           if (sinkName.isPresent()) {
@@ -60,9 +60,9 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
   @Override
   public void visit(ASTTransition node) {
     // set missing assignment names of all stimuli of all transitions
-    if (node.isStimulusPresent()) {
+    if (node.isPresentStimulus()) {
       for (ASTIOAssignment assign : node.getStimulus().getIOAssignmentList()) {
-        if (!assign.isNamePresent()) {
+        if (!assign.isPresentName()) {
           Optional<String> sourceName = Optional.empty();
           ASTExpression expr = getFirstAssigntElement(assign).getExpression();
           if (expr instanceof ASTCallExpression) {
@@ -85,9 +85,9 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
     }
     
     // set missing assignment names of all reactions of all transitions
-    if (node.isReactionPresent()) {
+    if (node.isPresentReaction()) {
       for (ASTIOAssignment assign : node.getReaction().getIOAssignmentList()) {
-        if (!assign.isNamePresent()) {
+        if (!assign.isPresentName()) {
           Optional<String> sinkName = Optional.empty();
           ASTExpression expr = getFirstAssigntElement(assign).getExpression();
           // if (expr instanceof ASTCallExpression) { TODO@AB
@@ -158,7 +158,7 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
    */
   private ASTValuation getFirstAssigntElement(ASTIOAssignment assignment) {
     ASTValueList valueList = null;
-    if (assignment.isAlternativePresent()) {
+    if (assignment.isPresentAlternative()) {
       valueList = assignment.getAlternative().getValueListList().get(0);
     }
     else {

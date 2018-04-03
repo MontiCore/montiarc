@@ -14,7 +14,7 @@ public class UseOfValueLists implements MontiArcASTValueListCoCo {
   
   @Override
   public void check(ASTValueList node) {
-    final boolean isSingleValue = node.isValuationPresent();
+    final boolean isSingleValue = node.isPresentValuation();
     final boolean isNonEmptyValueList = !node.getValuationList().isEmpty();
     
     if (!isSingleValue && isNonEmptyValueList) {

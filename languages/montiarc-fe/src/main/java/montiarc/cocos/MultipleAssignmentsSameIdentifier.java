@@ -20,12 +20,12 @@ public class MultipleAssignmentsSameIdentifier implements MontiArcASTTransitionC
   
   @Override
   public void check(ASTTransition node) {
-    if (node.isReactionPresent()) {
+    if (node.isPresentReaction()) {
       ASTBlock reaction = node.getReaction();
       
       List<String> usedNames = new ArrayList<>();
       for (ASTIOAssignment assignment : reaction.getIOAssignmentList()) {
-        if (assignment.isNamePresent()) {
+        if (assignment.isPresentName()) {
           if (usedNames.contains(assignment.getName())) {
             // An assignment was already defined
             Log.error(

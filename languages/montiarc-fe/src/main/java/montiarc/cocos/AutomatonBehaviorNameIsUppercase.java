@@ -13,7 +13,7 @@ public class AutomatonBehaviorNameIsUppercase implements MontiArcASTAutomatonBeh
   
   @Override
   public void check(ASTAutomatonBehavior node) {
-    if (node.isNamePresent()) {
+    if (node.isPresentName()) {
       if (!Character.isUpperCase(node.getName().charAt(0))) {
         Log.error("0xMA015 The name of the automaton should start with an uppercase letter.",
             node.get_SourcePositionStart());

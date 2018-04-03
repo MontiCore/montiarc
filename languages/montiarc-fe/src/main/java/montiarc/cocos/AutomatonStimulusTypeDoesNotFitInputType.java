@@ -26,9 +26,9 @@ public class AutomatonStimulusTypeDoesNotFitInputType implements MontiArcASTTran
   
   @Override
   public void check(ASTTransition node) {
-    if (node.isStimulusPresent()) {
+    if (node.isPresentStimulus()) {
       for (ASTIOAssignment assign : node.getStimulus().getIOAssignmentList()) {
-        if (assign.isNamePresent()) {
+        if (assign.isPresentName()) {
           String currentNameToResolve = assign.getName();
           
           Scope transitionScope = ((TransitionSymbol) node.getSymbol().get()).getSpannedScope();
@@ -56,7 +56,7 @@ public class AutomatonStimulusTypeDoesNotFitInputType implements MontiArcASTTran
   
   private void checkAssignment(ASTIOAssignment assign,
       JTypeReference<? extends JTypeSymbol> typeRef, String currentNameToResolve) {
-    if (assign.isValueListPresent()) {
+    if (assign.isPresentValueList()) {
       JTypeReference<? extends JTypeSymbol> varType = typeRef;
       for (ASTValuation val : assign.getValueList().getAllValuations()) {
         Optional<? extends JavaTypeSymbolReference> exprType = TypeCompatibilityChecker

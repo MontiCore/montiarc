@@ -88,11 +88,11 @@ public class DefaultParametersTest extends AbstractCoCoTest {
       if (param.getAstNode().isPresent()) {
         ASTParameter p = (ASTParameter) param.getAstNode().get();
         if (p.getName().equals("offset")) {
-          assertTrue(p.isDefaultValuePresent());
+          assertTrue(p.isPresentDefaultValue());
           assertEquals(5, p.getDefaultValue());
         }
         else {
-          assertFalse(p.isDefaultValuePresent());
+          assertFalse(p.isPresentDefaultValue());
         }
       }
       

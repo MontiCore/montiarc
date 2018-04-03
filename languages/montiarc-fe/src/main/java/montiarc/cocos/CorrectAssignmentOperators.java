@@ -17,7 +17,7 @@ public class CorrectAssignmentOperators implements MontiArcASTAutomatonCoCo {
   @Override
   public void check(ASTAutomaton node) {
     for (ASTTransition transition : node.getTransitionList()) {
-      if (transition.isStimulusPresent()) {
+      if (transition.isPresentStimulus()) {
         for (ASTIOAssignment stimulus : transition.getStimulus().getIOAssignmentList()) {
           if (stimulus.getOperator() == ASTConstantsMontiArc.SINGLE) { // == expected
             Log.error("0xMA016 The stimulus '" + stimulus + "' uses the wrong assignment operator.",
@@ -25,7 +25,7 @@ public class CorrectAssignmentOperators implements MontiArcASTAutomatonCoCo {
           }
         }
       }
-      if (transition.isReactionPresent()) {
+      if (transition.isPresentReaction()) {
         for (ASTIOAssignment reaction : transition.getReaction().getIOAssignmentList()) {
           if (reaction.getOperator() == ASTConstantsMontiArc.DOUBLE) { // = expected
             Log.error("0xMA017 The reaction '" + reaction + "' uses the wrong assignment operator.",
