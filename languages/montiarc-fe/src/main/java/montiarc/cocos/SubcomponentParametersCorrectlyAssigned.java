@@ -15,8 +15,11 @@ import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.TypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.symboltable.types.references.TypeReference;
+import de.monticore.types.TypesPrinter;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTParameter;
+import montiarc._ast.ASTSubComponent;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
@@ -24,10 +27,8 @@ import montiarc._symboltable.ValueSymbol;
 import montiarc.helper.TypeCompatibilityChecker;
 
 /**
- * TODO JP Ensures that parameters in the component's head are defined in the
- * right order. It is not allowed to define a normal parameter after a
- * declaration of a default parameter. E.g.: Wrong: A[int x = 5, int y] Right:
- * B[int x, int y = 5]
+ * Ensures that the arguments assigned to the subcomponent instance fit the
+ * components parameters.
  *
  * @implements TODO: Klaeren welche CoCo in der Literatur repraesentiert wird.
  * @author Andreas Wortmann
@@ -41,6 +42,9 @@ public class SubcomponentParametersCorrectlyAssigned
   @Override
   public void check(ASTComponent node) {
     ComponentSymbol symb = (ComponentSymbol) node.getSymbol().get();
+    
+    // Check whether the types of the arguments fit the types of the
+    // subcomponent's parameters
     for (ComponentInstanceSymbol instance : symb.getSubComponents()) {
       ComponentSymbol instanceType = instance.getComponentType().getReferencedSymbol();
       int paramIndex = 0;
@@ -56,8 +60,27 @@ public class SubcomponentParametersCorrectlyAssigned
             // instantiated (e.g., <java.lang.String>), resolve the latter and
             // compare this to
             // argType.get())
-            if (isGenericConfigParameter(instance, configParam.getType())) {
+            if (configParam.getType().getReferencedSymbol().isGeneric()) {
               return;
+              // case 1: Generic arguments inherited from component types
+              // generic config parameter (e.g. "component <T> B(T t) { subcomponent
+              // A(5, t) }")
+//              if (argType.get().getReferencedSymbol().isGeneric()) {
+//                List<? extends JTypeReference<? extends JTypeSymbol>> upperBounds = configParam
+//                    .getType().getReferencedSymbol().getInterfaces();
+//                if (!upperBounds.isEmpty()) {
+//                  int indexGenericParameter = 
+//                }
+//                else {
+//                  return;
+//                }
+//              }
+              // case 2: Generic arguments set in instantiation (e.g.
+              // "subcomponent A(6, "Foo")")
+//              else {
+//                
+//              }
+              
             }
             
             if (!TypeCompatibilityChecker.doTypesMatch(
@@ -79,15 +102,4 @@ public class SubcomponentParametersCorrectlyAssigned
     }
   }
   
-  public boolean isGenericConfigParameter(ComponentInstanceSymbol instance,
-      JTypeReference<?> configParam) {
-    ComponentSymbol instanceType = instance.getComponentType().getReferencedComponent().get();
-    List<JTypeSymbol> typeGenericTypeParams = instanceType.getFormalTypeParameters();
-    for (JTypeSymbol typeGenericTypeParam : typeGenericTypeParams) {
-      if (configParam.getName().equals(typeGenericTypeParam.getName())) {
-        return true;
-      }
-    }
-    return false;
-  }
 }
