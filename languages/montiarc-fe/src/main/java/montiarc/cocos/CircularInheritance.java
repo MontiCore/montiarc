@@ -30,11 +30,11 @@ public class CircularInheritance implements MontiArcASTComponentCoCo {
   public void check(ASTComponent node) {
     ComponentSymbol compSym = (ComponentSymbol) node.getSymbol().get();
     List<String> superCompNames = new ArrayList<>();
-    superCompNames.add(node.getName());
+    superCompNames.add(compSym.getPackageName()+ "."+ node.getName());
     if (compSym.getSuperComponent().isPresent()) {
       Optional<ComponentSymbolReference> superComp = compSym.getSuperComponent();
       while (superComp.isPresent()) {
-            String name = superComp.get().getName();
+            String name = superComp.get().getPackageName()+"."+superComp.get().getName();
             if (superCompNames.contains(name)) {
               Log.error("0xMA090 Circular inheritance detected between components "
                   + compSym.getName() + " and " + superComp.get().getName());
