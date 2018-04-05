@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -32,14 +33,6 @@ import montiarc._symboltable.ComponentSymbolReference;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.ValueSymbol;
-import montiarc.cocos.ComponentInstanceNamesAreUnique;
-import montiarc.cocos.ComponentNameIsCapitalized;
-import montiarc.cocos.ComponentWithTypeParametersHasInstance;
-import montiarc.cocos.InnerComponentNotExtendsDefiningComponent;
-import montiarc.cocos.MontiArcCoCos;
-import montiarc.cocos.ReferencedSubComponentExists;
-import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
-import montiarc.cocos.SubcomponentReferenceCycle;
 import montiarc.helper.SymbolPrinter;
 
 import static org.junit.Assert.*;
@@ -105,17 +98,17 @@ public class SubComponentTest extends AbstractCoCoTest {
   @Test
   public void testComponentInstanceNamesAmbiguous() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ComponentInstanceNamesAmbiguous");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentInstanceNamesAreUnique()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         node,
-        new ExpectedErrorInfo(2, "xMA061"));
+        new ExpectedErrorInfo(4, "xMA061"));
   }
 
   @Test
   public void testAmbiguousImplicitAndExplicitSubcomponentNames() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousImplicitAndExplicitSubcomponentNames");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentInstanceNamesAreUnique()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         node,
-        new ExpectedErrorInfo(3, "xMA061"));
+        new ExpectedErrorInfo(6, "xMA061"));
   }
   
   @Test

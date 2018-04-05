@@ -34,6 +34,10 @@ component AmbiguousPortAndVariableNames {
 	// Multiple declarations of f
 	Integer f, f;
 
+  // Multiple declarations of 'string'
+  port in String string;
+  port out String;
+
 	//Allowed:
 	Integer allowedIdentifier;
 	port in Integer anotherIdentifier;

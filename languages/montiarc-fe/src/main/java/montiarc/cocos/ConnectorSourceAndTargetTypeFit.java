@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import de.monticore.symboltable.resolving.ResolvedSeveralEntriesException;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
@@ -44,9 +45,15 @@ public class ConnectorSourceAndTargetTypeFit implements MontiArcASTComponentCoCo
     ComponentSymbol compSym = (ComponentSymbol) node.getSymbol().get();
     
     for (ConnectorSymbol connector : compSym.getConnectors()) {
-      Optional<PortSymbol> sourcePort =connector.getSourcePort();
-      Optional<PortSymbol> targetPort =connector.getTargetPort();
-      
+      Optional<PortSymbol> sourcePort = null;
+      Optional<PortSymbol> targetPort = null;
+      try {
+        sourcePort = connector.getSourcePort();
+        targetPort = connector.getTargetPort();
+      } catch (ResolvedSeveralEntriesException e) {
+        break;
+      }
+
       if (sourcePort.isPresent() && targetPort.isPresent()) {
         PortSymbol source = sourcePort.get();
         PortSymbol target = targetPort.get();

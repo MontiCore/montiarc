@@ -8,6 +8,7 @@ package montiarc.cocos;
 import java.util.Collection;
 import java.util.Optional;
 
+import de.monticore.symboltable.resolving.ResolvedSeveralEntriesException;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
 import montiarc._cocos.MontiArcASTComponentCoCo;
@@ -51,10 +52,16 @@ public class ConnectorSourceAndTargetExist implements MontiArcASTComponentCoCo {
     for (ConnectorSymbol cs : connectors) {
       String connectorSource = cs.getSource();
       String connectorTarget = cs.getTarget();
-      
-      Optional<PortSymbol> source = cs.getSourcePort();
-      Optional<PortSymbol> target = cs.getTargetPort();
-      
+
+      Optional<PortSymbol> source = null;
+      Optional<PortSymbol> target = null;
+      try {
+        source = cs.getSourcePort();
+        target = cs.getTargetPort();
+      } catch (ResolvedSeveralEntriesException e) {
+        break;
+      }
+
       if (!source.isPresent()) {
         Log.error(String.format(
             "0xMA066 source port " + connectorSource + " of connector " + cs.getName()

@@ -28,6 +28,8 @@ component AmbiguousImplicitAndExplicitSubcomponentNames {
   
   component components.body.subcomponents._subcomponents
               .HasPortWithImportedType someName;
+      // ERROR: The component 'AmbiguousImplicitAndExplicitSubcomponentNames'
+      //          already contains a reference named 'someName'!
       // Warning: Implicit naming should be used for unique subcomponent types only
 
   component components.body.subcomponents._subcomponents
@@ -38,6 +40,8 @@ component AmbiguousImplicitAndExplicitSubcomponentNames {
   
   component components.body.subcomponents._subcomponents
               .HasPortsOfHierarchicalCDTypes hasPortsOfHierarchicalCDTypes;
+      // ERROR: The component already contains a reference named
+      //          'hasPortsOfHierachicalCDTypes'!
 
   component components.body.subcomponents._subcomponents.HasPortsOfHierarchicalCDTypes;
       // ERROR: The component 'AmbiguousImplicitAndExplicitSubcomponentNames' already

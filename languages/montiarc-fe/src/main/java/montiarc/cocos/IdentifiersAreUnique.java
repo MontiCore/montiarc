@@ -1,31 +1,33 @@
 package montiarc.cocos;
 
-import de.monticore.ast.ASTNode;
 import de.monticore.types.TypesPrinter;
+import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.*;
 import montiarc._cocos.MontiArcASTComponentCoCo;
+import montiarc._symboltable.ComponentInstanceSymbol;
+import montiarc._symboltable.ComponentSymbol;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
+ * @author (last commit) Michael Mutert
  * @implements [Wor16] AU1: The name of each state is unique. (p. 97. Lst. 5.8)
  * @implements [Wor16] AU3: The names of all inputs, outputs, and variables
- *    are unique. (p. 98. Lst. 5.10)
+ * are unique. (p. 98. Lst. 5.10)
  * @implements [Hab16] B1: All names of model elements within a component
- *    namespace have to be unique. (p. 59. Lst. 3.31)
- * @author (last commit) Michael Mutert
+ * namespace have to be unique. (p. 59. Lst. 3.31)
  */
 public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
 
   @Override
   public void check(ASTComponent node) {
     ArrayList<Identifier> names = new ArrayList<>();
+    ComponentSymbol comp = (ComponentSymbol) node.getSymbol().get();
 
     for (ASTElement e : node.getBody().getElements()) {
 
@@ -33,7 +35,7 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
       if (e instanceof ASTVariableDeclaration) {
         ASTVariableDeclaration decl = (ASTVariableDeclaration) e;
         for (String variableName : decl.getNames()) {
-          names.add(new Identifier(variableName, IdentifierTypes.VARIABLE, e));
+          names.add(new Identifier(variableName, IdentifierTypes.VARIABLE, e.get_SourcePositionStart()));
         }
       }
 
@@ -47,7 +49,7 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
             portInstanceNames.add(StringTransformations.uncapitalize(implicitName));
           }
           for (String name : portInstanceNames) {
-            names.add(new Identifier(name, IdentifierTypes.PORT, e));
+            names.add(new Identifier(name, IdentifierTypes.PORT, e.get_SourcePositionStart()));
           }
         }
       }
@@ -56,15 +58,27 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
       else if (e instanceof ASTMontiArcInvariant) {
         ASTMontiArcInvariant invariant = (ASTMontiArcInvariant) e;
         String name = invariant.getName();
-        names.add(new Identifier(name, IdentifierTypes.INVARIANT, e));
+        names.add(new Identifier(name, IdentifierTypes.INVARIANT, e.get_SourcePositionStart()));
       }
+    }
+
+    // Component Instances
+    for (ComponentInstanceSymbol subComp : comp.getSubComponents()) {
+
+      SourcePosition pos
+          = subComp.getAstNode().isPresent()
+                ? subComp.getAstNode().get().get_SourcePositionStart()
+                : SourcePosition.getDefaultSourcePosition();
+
+      names.add(new Identifier(subComp.getName(),
+          IdentifierTypes.SUBCOMPONENTINSTANCE, pos));
     }
 
     // Configuration Parameters
     List<ASTParameter> parameters = node.getHead().getParameters();
     for (ASTParameter parameter : parameters) {
       names.add(new Identifier(parameter.getName(),
-          IdentifierTypes.CONFIG_PARAMETER, parameter));
+          IdentifierTypes.CONFIG_PARAMETER, parameter.get_SourcePositionStart()));
     }
 
     Set<Identifier> nameDuplicates = new HashSet<>();
@@ -93,20 +107,23 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
           errorCode = "0xMA052";
           type = "invariant";
           break;
+        case SUBCOMPONENTINSTANCE:
+          errorCode = "0xMA061";
+          type = "subcomponent instance";
+          break;
         case VARIABLE:
-          errorCode = "0xMA035";
           type = "variable";
           break;
       }
 
       Log.error(String.format("%s The name of %s '%s' is ambiguous.",
           errorCode, type, nameDuplicate.getName()),
-          nameDuplicate.getNode().get_SourcePositionStart());
+          nameDuplicate.getSourcePosition());
     }
   }
 
   private enum IdentifierTypes {
-      CONFIG_PARAMETER, PORT, INVARIANT, VARIABLE
+    CONFIG_PARAMETER, PORT, INVARIANT, SUBCOMPONENTINSTANCE, VARIABLE
   }
 
   /**
@@ -114,22 +131,18 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
    */
   private class Identifier {
 
-    private final ASTNode astNode;
     private final IdentifierTypes type;
-
-    public String getName() {
-      return name;
-    }
-
+    private final SourcePosition sourcePosition;
     private final String name;
 
     /**
-     * @param name    The identifier
-     * @param type    Type of the identifier
-     * @param astNode ASTNode that contains the definition of the identifier
+     * @param name           The identifier
+     * @param type           Type of the identifier
+     * @param sourcePosition SourcePosition that is the position of the
+     *                       element in the model.
      */
-    public Identifier(String name, IdentifierTypes type, ASTNode astNode) {
-      this.astNode = astNode;
+    public Identifier(String name, IdentifierTypes type, SourcePosition sourcePosition) {
+      this.sourcePosition = sourcePosition;
       this.type = type;
       this.name = name;
     }
@@ -138,8 +151,12 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
       return type;
     }
 
-    public ASTNode getNode() {
-      return astNode;
+    public SourcePosition getSourcePosition() {
+      return sourcePosition;
+    }
+
+    public String getName() {
+      return name;
     }
   }
 
