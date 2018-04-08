@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import montiarc._cocos.MontiArcASTComponentCoCo;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -148,7 +149,7 @@ public class PortTest extends AbstractCoCoTest {
   /* Checks whether all port names in the port definition start with a lower case letter */
   public void testPortWithUpperCaseName() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortWithUpperCaseName");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new NamesCorrectlyCapitalized());
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized());
     checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA077"));
   }
   

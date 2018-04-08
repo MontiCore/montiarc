@@ -46,7 +46,8 @@ public class NamesCorrectlyCapitalized
       for (String name : varDecl.getNames())
         if (!Character.isLowerCase(name.charAt(0))) {
           Log.warn(
-              "0xMA018 The name of variable " + name + " should start with a lowercase letter.",
+              String.format("0xMA018 The name of variable '%s' should " +
+                                "start with a lowercase letter.", name),
               varDecl.get_SourcePositionStart());
         }
     }
@@ -54,7 +55,9 @@ public class NamesCorrectlyCapitalized
     for (ASTPort port : node.getPorts()) {
       for (String name : port.getNames()) {
         if (!Character.isLowerCase(name.charAt(0))) {
-          Log.error("0xMA077: The name of the port should start with a lowercase letter.",
+          Log.error(String.format("0xMA077: The name of the port '%s' " +
+                                      "should start with a lowercase letter.",
+              name),
               port.get_SourcePositionStart());
         }
       }

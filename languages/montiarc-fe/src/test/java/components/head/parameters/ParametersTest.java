@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc.cocos.NamesCorrectlyCapitalized;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -100,7 +101,8 @@ public class ParametersTest extends AbstractCoCoTest {
   public void testParameterNameCapitalized() {
     ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA092");
     MontiArcCoCoChecker cocos
-        = new MontiArcCoCoChecker().addCoCo(new NamesCorrectlyCapitalized());
+        = new MontiArcCoCoChecker().addCoCo((MontiArcASTComponentCoCo)
+                                                new NamesCorrectlyCapitalized());
     final ASTMontiArcNode node
         = loadComponentAST(PACKAGE + "." + "ParameterNameCapitalized");
     checkInvalid(cocos, node, errors);
