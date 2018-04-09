@@ -99,17 +99,17 @@ public class SubComponentTest extends AbstractCoCoTest {
   @Test
   public void testComponentInstanceNamesAmbiguous() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ComponentInstanceNamesAmbiguous");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentInstanceNamesAreUnique()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         node,
-        new ExpectedErrorInfo(2, "xMA061"));
+        new ExpectedErrorInfo(4, "xMA061"));
   }
 
   @Test
   public void testAmbiguousImplicitAndExplicitSubcomponentNames() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousImplicitAndExplicitSubcomponentNames");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentInstanceNamesAreUnique()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         node,
-        new ExpectedErrorInfo(3, "xMA061"));
+        new ExpectedErrorInfo(6, "xMA061"));
   }
   
   @Test
