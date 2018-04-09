@@ -32,7 +32,15 @@ public class BodyTest extends AbstractCoCoTest {
   @Test
   public void testAmbiguousPortAndVariableNames() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousPortAndVariableNames");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(12, "xMA035", "xMA053"));
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(14,
+        "xMA035", "xMA053"));
+  }
+
+  @Test
+  public void testAmbiguousIdentifiers() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousIdentifiers");
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new ExpectedErrorInfo(3, "xMA061", "xMA053"));
   }
   
 }
