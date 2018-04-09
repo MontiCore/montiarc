@@ -37,13 +37,14 @@ public class StateTests extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "StateDefinedMultipleTimes");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new AutomatonStateDefinedMultipleTimes());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA031"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA031"));
   }
   
   @Test
   public void testConflictingStereotypes() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ConflictingStereotypes");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(4, "xMA031", "xMA034"));
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new ExpectedErrorInfo(6,"xMA031", "xMA034"));
   }
   
   @Test
