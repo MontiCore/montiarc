@@ -5,11 +5,7 @@
  */
 package montiarc.cocos;
 
-import montiarc._cocos.MontiArcASTConnectorCoCo;
-import montiarc._cocos.MontiArcASTInitialStateDeclarationCoCo;
-import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
-import montiarc._cocos.MontiArcASTTransitionCoCo;
-import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc._cocos.*;
 
 /**
  * Bundle of CoCos for the MontiArc language.
@@ -23,7 +19,7 @@ public class MontiArcCoCos {
         .addCoCo(new SubComponentsConnected())
         .addCoCo(new SubcomponentParametersCorrectlyAssigned())
         .addCoCo(new PackageLowerCase())
-        .addCoCo(new ComponentNameIsCapitalized())
+        .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new DefaultParametersHaveCorrectOrder())
         .addCoCo(new DefaultParametersCorrectlyAssigned())
         .addCoCo(new NumberOfConfigurationParametersCorrect())
@@ -42,7 +38,7 @@ public class MontiArcCoCos {
 
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
-        .addCoCo(new AJavaBehaviorNameIsUppercase())
+        .addCoCo((MontiArcASTJavaPBehaviorCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new SimpleConnectorSourceExists())
         .addCoCo(new InputPortChangedInCompute())
         .addCoCo(new UsedPortsAndVariablesExist())
@@ -50,23 +46,24 @@ public class MontiArcCoCos {
         .addCoCo(new InitBlockOnlyOnEmbeddedAJava())
         .addCoCo(new AtMostOneInitBlock())
         /* MontiArcAutomaton Cocos */
-        .addCoCo(new NamesAreLowerCase())
         
         /// Automaton Cocos
         /// /////////////////////////////////////////////////////////////
         .addCoCo(new ImplementationInNonAtomicComponent())
         
         // CONVENTIONS
-        .addCoCo(new AutomatonBehaviorNameIsUppercase())
+        .addCoCo((MontiArcASTAutomatonBehaviorCoCo)
+                     new NamesCorrectlyCapitalized())
         .addCoCo(new AutomatonHasNoState())
         .addCoCo(new AutomatonHasNoInitialState())
         .addCoCo(new CorrectAssignmentOperators())
         .addCoCo(new MultipleAssignmentsSameIdentifier())
         .addCoCo(new AutomatonOutputInExpression())
-        .addCoCo((MontiArcASTInitialStateDeclarationCoCo) new AutomatonReactionWithAlternatives())
+        .addCoCo((MontiArcASTInitialStateDeclarationCoCo)
+                     new AutomatonReactionWithAlternatives())
         .addCoCo((MontiArcASTTransitionCoCo) new AutomatonReactionWithAlternatives())
         .addCoCo(new UseOfForbiddenExpression())
-        .addCoCo(new AutomatonStateUppercase())
+        .addCoCo((MontiArcASTStateCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new ConnectorSourceAndTargetComponentDiffer())
         .addCoCo(new ConnectorSourceAndTargetExist())
         .addCoCo(new ConnectorSourceAndTargetTypeFit())

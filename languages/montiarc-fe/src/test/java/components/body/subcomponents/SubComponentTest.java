@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -123,7 +124,9 @@ public class SubComponentTest extends AbstractCoCoTest {
   public void testInnerViolatesComponentNaming() {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "InnerViolatesComponentNaming");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentNameIsCapitalized()),
+    checkInvalid(
+        new MontiArcCoCoChecker()
+            .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized()),
         node, new ExpectedErrorInfo(1, "xMA055"));
   }
 
