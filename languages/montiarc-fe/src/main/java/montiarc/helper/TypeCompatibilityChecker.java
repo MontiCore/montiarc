@@ -270,7 +270,7 @@ public class TypeCompatibilityChecker {
     // in JavaDSL, additional adapter may required e.g. CD2Java to use CD types
     // within Java expressions.
     Log.debug("Resolve type of java expression.", "TypeCompatibilityChecker");
-    HCJavaDSLTypeResolver typeResolver = new HCJavaDSLTypeResolver();
+    MontiArcHCJavaDSLTypeResolver typeResolver = new MontiArcHCJavaDSLTypeResolver();
     expr.accept(typeResolver);
     if (!typeResolver.getResult().isPresent()) {
       Log.info("Can't resolve type of expression: " + expr, "TypeCompatibilityChecker");

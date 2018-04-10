@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
@@ -20,6 +19,7 @@ import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTParameter;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ComponentSymbol;
+import montiarc.helper.MontiArcHCJavaDSLTypeResolver;
 import montiarc.helper.TypeCompatibilityChecker;
 
 /**
@@ -47,7 +47,7 @@ public class DefaultParametersCorrectlyAssigned
                 .getType()),
             comp.getSpannedScope(), dimension);
         
-        HCJavaDSLTypeResolver javaTypeResolver = new HCJavaDSLTypeResolver();
+        MontiArcHCJavaDSLTypeResolver javaTypeResolver = new MontiArcHCJavaDSLTypeResolver();
         ASTExpression expression = param.getDefaultValue().getExpression();
         // param.getDefaultValue().get().getValue().accept(javaTypeResolver);
         expression.accept(javaTypeResolver);
