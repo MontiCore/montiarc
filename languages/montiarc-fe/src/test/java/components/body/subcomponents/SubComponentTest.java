@@ -184,7 +184,6 @@ public class SubComponentTest extends AbstractCoCoTest {
     checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
   
-  @Ignore
   @Test
   public void testComponentWithTypeParametersHasInstance() {
     checkValid(PACKAGE + "." + "ComponentWithTypeParametersHasInstance");

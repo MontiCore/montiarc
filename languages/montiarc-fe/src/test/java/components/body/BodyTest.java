@@ -37,7 +37,6 @@ public class BodyTest extends AbstractCoCoTest {
         "xMA035", "xMA053"));
   }
 
-  @Ignore
   @Test
   public void testAmbiguousIdentifiers() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousIdentifiers");
