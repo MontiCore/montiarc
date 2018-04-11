@@ -134,6 +134,7 @@ public class PortTest extends AbstractCoCoTest {
         node, expectedErrors);
   }
 
+  @Ignore
   @Test
   public void testInPortUniqueSender() {
     checkValid(PACKAGE + "." + "InPortUniqueSender");

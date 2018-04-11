@@ -1,6 +1,7 @@
 package components.body;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
@@ -36,6 +37,7 @@ public class BodyTest extends AbstractCoCoTest {
         "xMA035", "xMA053"));
   }
 
+  @Ignore
   @Test
   public void testAmbiguousIdentifiers() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousIdentifiers");
