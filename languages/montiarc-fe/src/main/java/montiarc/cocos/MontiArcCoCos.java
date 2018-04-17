@@ -22,7 +22,6 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new DefaultParametersHaveCorrectOrder())
         .addCoCo(new DefaultParametersCorrectlyAssigned())
-        .addCoCo(new NumberOfConfigurationParametersCorrect())
         .addCoCo(new ComponentWithTypeParametersHasInstance())
         .addCoCo(new CircularInheritance())
         .addCoCo(new InnerComponentsNotAllowed())
