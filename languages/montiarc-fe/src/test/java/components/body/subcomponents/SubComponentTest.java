@@ -626,6 +626,13 @@ public class SubComponentTest extends AbstractCoCoTest {
     // assertEquals("java.lang.Integer",
     // typeRef.getTypeParameters().get(1).getTypeParameters().get(0).getType().getName());
   }
+  
+  @Ignore("See ticket #146")
+  @Test
+  public void testUsingComplexParamsWithCoco() {
+    String path = PACKAGE + "." + "UsingComplexParams";
+    checkValid(path);
+  }
 
   @Test
   public void testHasGenericInputAndOutputPort() {
@@ -684,7 +691,7 @@ public class SubComponentTest extends AbstractCoCoTest {
   @Test
   public void testSubcomponentsWithGenericTypeParams() {
     final ASTMontiArcNode astNode = loadComponentAST(PACKAGE + "." + "SubcomponentsWithGenericTypeParams");
-    final ExpectedErrorInfo expectedErrorInfo = new ExpectedErrorInfo(3, "xMA085");
+    final ExpectedErrorInfo expectedErrorInfo = new ExpectedErrorInfo(6, "xMA085");
     checkInvalid(MontiArcCoCos.createChecker(), astNode, expectedErrorInfo);
   }
 }

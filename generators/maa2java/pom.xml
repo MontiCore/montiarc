@@ -94,10 +94,10 @@
     </dependency>
     
     <dependency>
-				<groupId>de.monticore</groupId>
-				<artifactId>de.monticore.java.lib</artifactId>
-				<classifier>models</classifier>
-			</dependency>
+		<groupId>de.monticore</groupId>
+		<artifactId>de.monticore.java.lib</artifactId>
+		<classifier>models</classifier>
+	</dependency>
 
     <!-- .. Test Libraries ............................................... -->
     <dependency>

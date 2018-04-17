@@ -26,6 +26,7 @@ public class MontiArcCoCos {
         .addCoCo(new CircularInheritance())
       //TODO remove comment when new Java DSL is integrated
 //        .addCoCo(new AllGenericParametersOfSuperClassSet()) 
+        .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
         .addCoCo(new TypeParameterNamesUnique())
         .addCoCo(new TopLevelComponentHasNoInstanceName())
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
@@ -34,7 +35,8 @@ public class MontiArcCoCos {
         .addCoCo(new ImportsValid())
         .addCoCo(new SubcomponentReferenceCycle())
         .addCoCo(new ReferencedSubComponentExists())
-
+        .addCoCo(new PortNamesAreNotJavaKeywords())
+        
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
         .addCoCo((MontiArcASTJavaPBehaviorCoCo) new NamesCorrectlyCapitalized())
