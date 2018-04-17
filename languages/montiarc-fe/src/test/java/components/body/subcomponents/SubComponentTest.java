@@ -63,7 +63,7 @@ public class SubComponentTest extends AbstractCoCoTest {
   public void testSubcomponentParametersOfWrongType() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentParametersOfWrongType");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
-        node, new ExpectedErrorInfo(1, "xMA064"));
+        node, new ExpectedErrorInfo(2, "xMA064"));
   }
   
   @Test
