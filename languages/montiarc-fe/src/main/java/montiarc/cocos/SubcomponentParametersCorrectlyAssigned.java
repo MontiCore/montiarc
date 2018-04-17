@@ -75,7 +75,7 @@ public class SubcomponentParametersCorrectlyAssigned
             if (index.isPresent()) {
               ActualTypeArgument actualTypeArg = instance.getComponentType()
                   .getActualTypeArguments().get(index.get());
-              if (TypeCompatibilityChecker.doTypesMatch(
+              if (!TypeCompatibilityChecker.doTypesMatch(
                   (JTypeReference<? extends JTypeSymbol>) actualTypeArg.getType(),
                   actualArg.get())) {
                 Log.error(
