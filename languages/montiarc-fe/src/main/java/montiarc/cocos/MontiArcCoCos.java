@@ -59,6 +59,7 @@ public class MontiArcCoCos {
         .addCoCo(new CorrectAssignmentOperators())
         .addCoCo(new MultipleAssignmentsSameIdentifier())
         .addCoCo(new AutomatonOutputInExpression())
+        .addCoCo(new AutomatonNoAssignmentToIncomingPort())
         .addCoCo((MontiArcASTInitialStateDeclarationCoCo)
                      new AutomatonReactionWithAlternatives())
         .addCoCo((MontiArcASTTransitionCoCo) new AutomatonReactionWithAlternatives())
