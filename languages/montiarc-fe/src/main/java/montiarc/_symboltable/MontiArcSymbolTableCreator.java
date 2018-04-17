@@ -14,7 +14,9 @@ import java.util.Stack;
 
 import de.monticore.ast.ASTNode;
 import de.monticore.java.javadsl._ast.ASTExpression;
+import de.monticore.java.javadsl._ast.ASTLocalVariableDeclaration;
 import de.monticore.java.javadsl._ast.ASTPrimaryExpression;
+import de.monticore.java.javadsl._ast.ASTVariableDeclarator;
 import de.monticore.java.symboltable.JavaSymbolFactory;
 import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
@@ -583,7 +585,48 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     }
     
   }
-  
+
+  /**
+   * Visits ASTLocalVariableDeclaration nodes that occur in AJava compute blocks.
+   * A new VariableSymbol is created for declared variables and added to the
+   * scope
+   *
+   * @param variableDeclaration ASTNode that is a variable declaration.
+   */
+  public void visit(ASTLocalVariableDeclaration variableDeclaration){
+    final ASTType type = variableDeclaration.getType();
+    String typeName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(type);
+
+    List<String> names = new ArrayList<>();
+
+    for (ASTVariableDeclarator astVariableDeclarator :
+        variableDeclaration.getVariableDeclarators()) {
+      final String variableName = astVariableDeclarator.getDeclaratorId().getName();
+      names.add(variableName);
+    }
+
+    if (names.isEmpty()) {
+      names.add(StringTransformations.uncapitalize(typeName));
+    }
+
+    for (String name : names) {
+      VariableSymbol variableSymbol = new VariableSymbol(name);
+
+      JTypeReference<JTypeSymbol> typeRef = new MAJTypeReference(typeName, JTypeSymbol.KIND,
+          currentScope().get());
+      addTypeArgumentsToTypeSymbol(typeRef, type);
+
+      typeRef.setDimension(TypesHelper.getArrayDimensionIfArrayOrZero(type));
+
+      variableSymbol.setTypeReference(typeRef);
+
+      addToScopeAndLinkWithNode(variableSymbol, variableDeclaration);
+    }
+
+
+  }
+
+
   /**
    * Create reference to existing symbols.
    * 
@@ -595,14 +638,14 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     if (node.getName().isPresent() &&
         Character.isLowerCase(node.getName().get().charAt(0))) {
       String name = node.getName().get();
-      Scope enclosingScope = currentScope().get().getEnclosingScope().get();
-      Optional<PortSymbol> port = enclosingScope.resolve(name, PortSymbol.KIND);
-      // Optional<PortSymbol> port1 = enclosingScope.resolveDown(name,
+      Scope searchScope = currentScope().get();
+      Optional<PortSymbol> port = searchScope.resolve(name, PortSymbol.KIND);
+      // Optional<PortSymbol> port1 = searchScope.resolveDown(name,
       // PortSymbol.KIND);
-      // Optional<PortSymbol> port2 = enclosingScope.resolveLocally(name,
+      // Optional<PortSymbol> port2 = searchScope.resolveLocally(name,
       // PortSymbol.KIND);
-      Optional<VariableSymbol> var = enclosingScope.resolve(name, VariableSymbol.KIND);
-      Collection<JFieldSymbol> field = enclosingScope.resolveMany(name, JFieldSymbol.KIND);
+      Optional<VariableSymbol> var = searchScope.resolve(name, VariableSymbol.KIND);
+      Collection<JFieldSymbol> field = searchScope.resolveMany(name, JFieldSymbol.KIND);
       
       if (port.isPresent()) {
         PortSymbolReference portRef = new PortSymbolReference(name, currentScope().get());
