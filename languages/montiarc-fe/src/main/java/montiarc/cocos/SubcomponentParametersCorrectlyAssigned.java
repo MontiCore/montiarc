@@ -13,6 +13,7 @@ import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.TypeSymbol;
+import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.symboltable.types.references.TypeReference;
 import de.monticore.types.TypesPrinter;
@@ -55,49 +56,29 @@ public class SubcomponentParametersCorrectlyAssigned
         if (actualArg.isPresent()) {
           if (paramIndex < instanceType.getConfigParameters().size()) {
             JFieldSymbol configParam = instanceType.getConfigParameters().get(paramIndex);
-            // TODO: If configParam.getType() is a generic type (e.g., <T>),
-            // then look up how it was
-            // instantiated (e.g., <java.lang.String>), resolve the latter and
-            // compare this to
-            // argType.get())
-            if (getGenericConfigParameter(instance, configParam).isPresent()) {
-              return;
-              // case 1: Generic arguments inherited from component types
-              // generic config parameter (e.g. "component <T> B(T t) {
-              // subcomponent
-              // A(5, t) }")
-//              if (actualArg.get().getReferencedSymbol().isGeneric()) {
-                // List<? extends JTypeReference<? extends JTypeSymbol>>
-                // upperBounds = configParam
-                // .getType().getReferencedSymbol().getInterfaces();
-                // if (!upperBounds.isEmpty()) {
-                // int indexGenericParameter =
-                // }
-                // else {
-                // return;
-                // }
-//              }
-              // case 2: Generic arguments set in instantiation (e.g.
-              // "subcomponent A(6, "Foo")")
-//              else {
-//                JFieldSymbol instanceConfigParam = instanceType.getConfigParameters()
-//                    .get(paramIndex);
-//                Optional<JTypeSymbol> formalTypeParam = getGenericConfigParameter(instance, instanceConfigParam); 
-//                if(formalTypeParam.isPresent()) {
-//                  for(JTypeReference<? extends JTypeSymbol> bound : formalTypeParam.get().getInterfaces()) {
-//                    if(!TypeCompatibilityChecker.doTypesMatch(bound, actualArg.get())) {
-//                      Log.error("0xMA064 Type of argument " + paramIndex + " (" + actualArg.get().getName()
-//                          + ") of subcomponent " + instance.getName() + " of component type '"
-//                          + node.getName() + "' does not fit parameter type "
-//                          + configParam.getType().getName(), expr.get_SourcePositionStart());
-//                    }
-//                  }
-//                }
-//              }
-              
-            }
+            Optional<JTypeSymbol> genericConfigParameter = getGenericConfigParameter(instance,
+                configParam);
             
-            if (!TypeCompatibilityChecker.doTypesMatch(
+            // generic config parameter (e.g. "component <T> B(T t) {
+            // subcomponent A(5, t) }")
+            if (genericConfigParameter.isPresent()) {
+              String configParamName = genericConfigParameter.get().getName();
+              int index = getIndexOfGenericTypeParam(instance, configParam);
+              
+              ActualTypeArgument actualTypeArg = instance.getComponentType()
+                  .getActualTypeArguments().get(index);
+              if (TypeCompatibilityChecker.doTypesMatch(
+                  (JTypeReference<? extends JTypeSymbol>) actualTypeArg.getType(),
+                  actualArg.get())) {
+                Log.error(
+                    "0xMA064 Type of argument " + paramIndex + " (" + actualArg.get().getName()
+                        + ") of subcomponent " + instance.getName() + " of component type '"
+                        + node.getName() + "' does not fit generic parameter type "
+                        + configParam.getType().getName() +" (instantiated with: " + actualTypeArg.getType().getName() + ")",
+                    expr.get_SourcePositionStart());
+              }
+            }
+            else if (!TypeCompatibilityChecker.doTypesMatch(
                 configParam.getType(),
                 actualArg.get())) {
               Log.error("0xMA064 Type of argument " + paramIndex + " (" + actualArg.get().getName()
@@ -116,7 +97,7 @@ public class SubcomponentParametersCorrectlyAssigned
     }
   }
   
-  public Optional<JTypeSymbol> getGenericConfigParameter(ComponentInstanceSymbol instance,
+  private Optional<JTypeSymbol> getGenericConfigParameter(ComponentInstanceSymbol instance,
       JFieldSymbol configParam) {
     ComponentSymbol instanceType = instance.getComponentType().getReferencedComponent().get();
     List<JTypeSymbol> typeGenericTypeParams = instanceType.getFormalTypeParameters();
@@ -127,6 +108,19 @@ public class SubcomponentParametersCorrectlyAssigned
     }
     return Optional.empty();
   }
-
+  
+  private int getIndexOfGenericTypeParam(ComponentInstanceSymbol instance,
+      JFieldSymbol configParam) {
+    ComponentSymbol instanceType = instance.getComponentType().getReferencedComponent().get();
+    List<JTypeSymbol> typeGenericTypeParams = instanceType.getFormalTypeParameters();
+    int index = 0;
+    for (JTypeSymbol typeGenericTypeParam : typeGenericTypeParams) {
+      if (configParam.getType().getName().equals(typeGenericTypeParam.getName())) {
+        return index;
+      }
+      index++;
+    }
+    return index;
+  }
   
 }
