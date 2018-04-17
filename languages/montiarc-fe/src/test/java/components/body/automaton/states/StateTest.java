@@ -17,7 +17,7 @@ import montiarc.cocos.MontiArcCoCos;
  *
  * @author Andreas Wortmann
  */
-public class StateTests extends AbstractCoCoTest {
+public class StateTest extends AbstractCoCoTest {
   
   private static final String PACKAGE = "components.body.automaton.states";
   

@@ -9,5 +9,5 @@ component IntegerInputAndBooleanOutput{
   
   port 
     in Integer,
-    out Boolean;
+    out Boolean bool;
 }
