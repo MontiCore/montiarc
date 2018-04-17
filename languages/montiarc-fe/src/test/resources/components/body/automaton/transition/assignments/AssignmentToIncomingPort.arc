@@ -1,6 +1,11 @@
 package components.body.automaton.transition.assignments;
 
-
+/*
+ * Invalid model.
+ * Assigns values to incoming ports in transitions
+ * @implements [Wor16] AR2: Inputs, outputs, and variables are used
+ *    correctly. (p.103, Lst 5.20)
+ */
 component AssignmentToIncomingPort {
 
   port in Integer inInteger;
