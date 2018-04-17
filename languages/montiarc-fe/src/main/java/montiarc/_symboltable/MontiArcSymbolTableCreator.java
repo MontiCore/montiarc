@@ -70,7 +70,6 @@ import montiarc._ast.ASTValuation;
 import montiarc._ast.ASTValueInitialization;
 import montiarc._ast.ASTVariableDeclaration;
 import montiarc._ast.MontiArcPackage;
-import montiarc._symboltable.ValueSymbol.Kind;
 import montiarc.helper.JavaHelper;
 import montiarc.helper.Timing;
 import montiarc.trafos.AutoConnection;
@@ -243,11 +242,11 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     // ref.setPackageName(refCompPackage);
     
-    List<ValueSymbol<TypeReference<TypeSymbol>>> configArgs = new ArrayList<>();
+    List<ASTExpression> configArgs = new ArrayList<>();
     for (ASTExpression arg : node.getArguments()) {
       arg.setEnclosingScope(currentScope().get());
       setEnclosingScopeOfNodes(arg);
-      configArgs.add(new ValueSymbol<>(arg, Kind.Expression));
+      configArgs.add(arg);
     }
     
     // instances    
@@ -271,7 +270,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
    */
   private void createInstance(String name, ASTNode node,
       ComponentSymbolReference componentTypeReference,
-      List<ValueSymbol<TypeReference<TypeSymbol>>> configArguments,
+      List<ASTExpression> configArguments,
       List<ASTSimpleConnector> connectors) {
     ComponentInstanceSymbol instance = new ComponentInstanceSymbol(name,
         componentTypeReference);

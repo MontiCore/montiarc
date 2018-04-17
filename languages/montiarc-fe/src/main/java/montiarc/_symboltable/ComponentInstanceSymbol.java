@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.symboltable.CommonScopeSpanningSymbol;
 import de.monticore.symboltable.types.TypeSymbol;
 import de.monticore.symboltable.types.references.TypeReference;
@@ -20,16 +21,16 @@ import montiarc.helper.SymbolPrinter;
  * @author Robert Heim
  */
 public class ComponentInstanceSymbol extends CommonScopeSpanningSymbol {
-  
+
   public static final ComponentInstanceKind KIND = new ComponentInstanceKind();
-  
+
   private final ComponentSymbolReference componentType;
-  
+
   /**
    * List of configuration arguments.
    */
-  private List<ValueSymbol<TypeReference<TypeSymbol>>> configArgs = new ArrayList<>();
-  
+  private List<ASTExpression> configArgs = new ArrayList<>();
+
   /**
    * Constructor for de.monticore.lang.montiarc.montiarc._symboltable.ComponentInstanceSymbol
    *
@@ -40,42 +41,42 @@ public class ComponentInstanceSymbol extends CommonScopeSpanningSymbol {
     super(name, KIND);
     this.componentType = componentType;
   }
-  
+
   /**
    * @return componentType
    */
   public ComponentSymbolReference getComponentType() {
     return this.componentType;
   }
-  
+
   /**
    * @return connectors of this component
    */
   public Collection<ConnectorSymbol> getSimpleConnectors() {
     return getSpannedScope().<ConnectorSymbol> resolveLocally(ConnectorSymbol.KIND);
   }
-  
+
   /**
    * @return List of configuration arguments
    */
-  public List<ValueSymbol<TypeReference<TypeSymbol>>> getConfigArguments() {
+  public List<ASTExpression> getConfigArguments() {
     return this.configArgs;
   }
-  
+
   /**
    * @param cfg configuration argument to add
    */
-  public void addConfigArgument(ValueSymbol<TypeReference<TypeSymbol>> cfg) {
+  public void addConfigArgument(ASTExpression cfg) {
     this.configArgs.add(cfg);
   }
-  
+
   /**
    * @param cfgList configuration arguments to set
    */
-  public void setConfigArgs(List<ValueSymbol<TypeReference<TypeSymbol>>> configArgs) {
+  public void setConfigArgs(List<ASTExpression> configArgs) {
     this.configArgs = configArgs;
   }
-  
+
   @Override
   public String toString() {
     return SymbolPrinter.printComponentInstance(this);

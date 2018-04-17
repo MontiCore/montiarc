@@ -23,7 +23,6 @@ import montiarc._ast.ASTSubComponent;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.ValueSymbol;
 import montiarc.helper.TypeCompatibilityChecker;
 
 /**
@@ -48,8 +47,8 @@ public class SubcomponentParametersCorrectlyAssigned
     for (ComponentInstanceSymbol instance : symb.getSubComponents()) {
       ComponentSymbol instanceType = instance.getComponentType().getReferencedSymbol();
       int paramIndex = 0;
-      for (ValueSymbol<TypeReference<TypeSymbol>> arg : instance.getConfigArguments()) {
-        ASTExpression expr = arg.getValue();
+      for (ASTExpression arg : instance.getConfigArguments()) {
+        ASTExpression expr = arg;
         Optional<? extends JavaTypeSymbolReference> actualArg = TypeCompatibilityChecker
             .getExpressionType(expr);
         if (actualArg.isPresent()) {
