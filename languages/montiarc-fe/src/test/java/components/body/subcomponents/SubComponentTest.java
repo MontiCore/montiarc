@@ -18,6 +18,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.cocos.helper.Assert;
+import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.Scope;
@@ -33,7 +34,6 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ComponentSymbolReference;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
-import montiarc._symboltable.ValueSymbol;
 import montiarc.helper.SymbolPrinter;
 
 import static org.junit.Assert.*;
@@ -292,15 +292,15 @@ public class SubComponentTest extends AbstractCoCoTest {
     JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(new IndentPrinter());
     
     assertEquals(3, compWithArgsRef.getConfigArguments().size());
-    ValueSymbol<?> arg1 = compWithArgsRef.getConfigArguments().get(0);
-    assertEquals("1", prettyPrinter.prettyprint(arg1.getValue()));
+    ASTExpression arg1 = compWithArgsRef.getConfigArguments().get(0);
+    assertEquals("1", prettyPrinter.prettyprint(arg1));
     // TODO proper setting of Kind? currently everything is an expression as we
     // extend JavaDSL
     // instead of CommonValues
     // assertEquals(ValueSymbol.Kind.Value, arg1.getKind());
     
-    ValueSymbol<?> arg2 = compWithArgsRef.getConfigArguments().get(1);
-    assertEquals("\"Hallo\"", prettyPrinter.prettyprint(arg2.getValue()));
+    ASTExpression arg2 = compWithArgsRef.getConfigArguments().get(1);
+    assertEquals("\"Hallo\"", prettyPrinter.prettyprint(arg2));
     // TODO proper setting of Kind? currently everything is an expression as we
     // extend JavaDSL
     // instead of CommonValues
@@ -348,12 +348,12 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertNotNull(compWithArgsRef);
     
     assertEquals(2, compWithArgsRef.getConfigArguments().size());
-    ValueSymbol<?> arg1 = compWithArgsRef.getConfigArguments().get(0);
+    ASTExpression arg1 = compWithArgsRef.getConfigArguments().get(0);
     // expressions
     JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(new IndentPrinter());
-    assertEquals("2*1*5+1", prettyPrinter.prettyprint(arg1.getValue()));
+    assertEquals("2*1*5+1", prettyPrinter.prettyprint(arg1));
     // internal representation of expressions
-    assertEquals(ValueSymbol.Kind.Expression, arg1.getKind());
+//    assertEquals(ValueSymbol.Kind.Expression, arg1.getKind());
     // assertEquals(4, arg1.getConstructorArguments().size());
     // assertEquals("2", arg1.getConstructorArguments().get(0).getValue());
     // assertEquals(ValueSymbol.Kind.Value,
@@ -368,9 +368,9 @@ public class SubComponentTest extends AbstractCoCoTest {
     // assertEquals(ValueSymbol.Kind.Value,
     // arg1.getConstructorArguments().get(3).getKind());
     
-    ValueSymbol<?> arg2 = compWithArgsRef.getConfigArguments().get(1);
-    assertEquals("new Integer(2)*5", prettyPrinter.prettyprint(arg2.getValue()));
-    assertEquals(ValueSymbol.Kind.Expression, arg2.getKind());
+    ASTExpression arg2 = compWithArgsRef.getConfigArguments().get(1);
+    assertEquals("new Integer(2)*5", prettyPrinter.prettyprint(arg2));
+//    assertEquals(ValueSymbol.Kind.Expression, arg2.getKind());
     // assertEquals(2, arg2.getConstructorArguments().size());
     // assertEquals("new Integer(2)",
     // arg2.getConstructorArguments().get(0).getValue());
@@ -573,11 +573,11 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertEquals("deleteTempFile", delay.getName());
     
     assertEquals(1, delay.getConfigArguments().size());
-    assertEquals("1", delay.getConfigArguments().get(0).getValue());
+    assertEquals("1", delay.getConfigArguments().get(0));
     
     // Is an expression since there is no value symbol.
-    assertEquals(ValueSymbol.Kind.Value,
-        delay.getConfigArguments().get(0).getKind());
+//    assertEquals(ValueSymbol.Kind.Value,
+//        delay.getConfigArguments().get(0).getKind());
   }
   
   /**

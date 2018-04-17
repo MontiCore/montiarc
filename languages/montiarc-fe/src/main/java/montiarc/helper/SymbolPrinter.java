@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -15,7 +16,6 @@ import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
-import montiarc._symboltable.ValueSymbol;
 
 /**
  * Created by Michael von Wenckstern on 20.05.2016. class for pretty printing symbols, this class
@@ -130,18 +130,18 @@ public class SymbolPrinter {
     return ip.getContent();
   }
   
-  public static String printConfigArguments(List<ValueSymbol<TypeReference<TypeSymbol>>> config) {
+  public static String printConfigArguments(List<ASTExpression> config) {
     if (config.isEmpty())
       return "";
     JavaDSLPrettyPrinter javaPrinter = new JavaDSLPrettyPrinter(new IndentPrinter());
-    return "(" + config.stream().map(a -> javaPrinter.prettyprint(a.getValue()))
+    return "(" + config.stream().map(a -> javaPrinter.prettyprint(a))
         .collect(Collectors.joining(",")) + ")";
   }
   
-  public static String printConfigArgument(ValueSymbol<TypeReference<TypeSymbol>> config) {
+  public static String printConfigArgument(ASTExpression config) {
     
     JavaDSLPrettyPrinter javaPrinter = new JavaDSLPrettyPrinter(new IndentPrinter());
-    return javaPrinter.prettyprint(config.getValue());
+    return javaPrinter.prettyprint(config);
   }
   
   public static void printComponentInstance(ComponentInstanceSymbol inst, IndentPrinter ip) {
