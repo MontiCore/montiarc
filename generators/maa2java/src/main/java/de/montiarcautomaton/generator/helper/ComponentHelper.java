@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 import de.monticore.ast.ASTNode;
+import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.types.JFieldSymbol;
@@ -38,12 +39,11 @@ import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
-import montiarc._symboltable.ValueSymbol;
+//import montiarc._symboltable.ValueSymbol;
 import montiarc._symboltable.VariableSymbol;
 
 /**
- * Helper class used in the template to generate target code of atomic or
- * composed components.
+ * Helper class used in the template to generate target code of atomic or composed components.
  *
  * @author Gerrit Leonhardt
  */
@@ -107,19 +107,18 @@ public class ComponentHelper {
     // return getPortTypeName(componentNode, port);
   }
   
-  
-  private static HashMap<String,String> PRIMITIVE_TYPES =new HashMap<String, String>() {
+  private static HashMap<String, String> PRIMITIVE_TYPES = new HashMap<String, String>() {
     {
-            put("int","Integer");
-            put("double","Double");
-            put("boolean", "Boolean");
-            put("byte", "Byte");
-            put("char","Character");
-            put("long", "Long");
-            put("float", "Float");
-            put("short", "Short");
+      put("int", "Integer");
+      put("double", "Double");
+      put("boolean", "Boolean");
+      put("byte", "Byte");
+      put("char", "Character");
+      put("long", "Long");
+      put("float", "Float");
+      put("short", "Short");
     }
-    };
+  };
   
   /**
    * TODO: Write me!
@@ -143,7 +142,7 @@ public class ComponentHelper {
   
   private static String autoboxType(String datatype) {
     String autoBoxedTypeName = datatype;
-    if(PRIMITIVE_TYPES.containsKey(datatype)) {
+    if (PRIMITIVE_TYPES.containsKey(datatype)) {
       autoBoxedTypeName = PRIMITIVE_TYPES.get(datatype);
     }
     return autoBoxedTypeName;
@@ -250,26 +249,28 @@ public class ComponentHelper {
   }
   
   /**
-   * Calculates the values of the parameters of a
-   * {@link ComponentInstanceSymbol}. This takes default values for parameters
-   * into account and adds them as required. Default values are only added from
-   * left to right in order. <br/>
+   * Calculates the values of the parameters of a {@link ComponentInstanceSymbol}. This takes
+   * default values for parameters into account and adds them as required. Default values are only
+   * added from left to right in order. <br/>
    * Example: For a component with parameters
    * <code>String stringParam, Integer integerParam = 2, Object objectParam = new Object()</code>
-   * that is instanciated with parameters <code>"Test String", 5</code> this
-   * method adds <code>new Object()</code> as the last parameter.
+   * that is instanciated with parameters <code>"Test String", 5</code> this method adds
+   * <code>new Object()</code> as the last parameter.
    *
-   * @param param The {@link ComponentInstanceSymbol} for which the parameters
-   * should be calculated.
+   * @param param The {@link ComponentInstanceSymbol} for which the parameters should be calculated.
    * @return The parameters.
    */
   public Collection<String> getParamValues(ComponentInstanceSymbol param) {
-    final List<ValueSymbol<TypeReference<TypeSymbol>>> configArguments = param.getConfigArguments();
+    // final List<ValueSymbol<TypeReference<TypeSymbol>>> configArguments =
+    // param.getConfigArguments();
+    List<ASTExpression> configArguments = param.getConfigArguments();
     JavaDSLPrettyPrinter printer = new JavaDSLPrettyPrinter(new IndentPrinter());
     
     List<String> outputParameters = new ArrayList<>();
-    for (ValueSymbol<TypeReference<TypeSymbol>> configArgument : configArguments) {
-      final String prettyprint = printer.prettyprint(configArgument.getValue());
+    // for (ValueSymbol<TypeReference<TypeSymbol>> configArgument : configArguments) {
+    for (ASTExpression configArgument : configArguments) {
+      // final String prettyprint = printer.prettyprint(configArgument.getValue());
+      final String prettyprint = printer.prettyprint(configArgument);
       outputParameters.add(autobox(prettyprint));
     }
     
@@ -417,8 +418,7 @@ public class ComponentHelper {
   }
   
   /**
-   * Checks whether the given typeName for the component comp is a generic
-   * parameter.
+   * Checks whether the given typeName for the component comp is a generic parameter.
    *
    * @param comp
    * @param typeName
