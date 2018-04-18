@@ -1,12 +1,15 @@
 package montiarc.cocos;
 
 import de.se_rwth.commons.logging.Log;
+import de.monticore.symboltable.types.JFieldSymbol;
+import de.monticore.symboltable.types.JTypeSymbol;
 import montiarc._ast.*;
 import montiarc._cocos.MontiArcASTAutomatonBehaviorCoCo;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._cocos.MontiArcASTJavaPBehaviorCoCo;
 import montiarc._cocos.MontiArcASTStateCoCo;
 import montiarc._symboltable.MontiArcModelNameCalculator;
+import montiarc._symboltable.ComponentSymbol;
 
 import java.util.List;
 
@@ -22,6 +25,11 @@ import java.util.List;
  * (p. 101, Lst. 5.16)
  * @implements [Wor16] AC8: State names begin with a capital letter.
  * (p. 101, Lst. 5.18)
+ * @implements [Hab16] CV2: Types start with an upper-case 
+ * (p. 71, lst. 3.51)
+ * @implements [Hab16] CV1: Instance names start with a lower-case letter. 
+ * (p. 71, Lst. 3.51)
+ * 
  */
 public class NamesCorrectlyCapitalized
     implements MontiArcASTComponentCoCo,
@@ -69,6 +77,16 @@ public class NamesCorrectlyCapitalized
         Log.error(String.format("0xMA092: The name of the parameter '%s' should start with a lowercase letter.", parameter.getName()),
             parameter.get_SourcePositionStart());
       }
+    }
+    
+    ComponentSymbol componentType = (ComponentSymbol) node.getSymbol().get();
+    if(!componentType.getFormalTypeParameters().isEmpty()){ 
+    	for (JTypeSymbol genType : componentType.getFormalTypeParameters()) {
+    		if(!Character.isUpperCase(genType.toString().charAt(0))){  
+    	    	  Log.error(String.format("0xMA049: Component generic parameter '%s' should start with an upper-case", genType.getName()),
+    	            node.get_SourcePositionStart());
+    	    }
+    	}
     }
 
   }

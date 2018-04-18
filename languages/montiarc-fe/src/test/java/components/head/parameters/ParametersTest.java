@@ -96,7 +96,10 @@ public class ParametersTest extends AbstractCoCoTest {
   public void testCompWithIntegerParameter() {
     checkValid(PACKAGE + "." + "CompWithIntegerParameter");
   }
-
+  
+ /*
+  * Tests [Hab16] CV1: Instance names start with a lower-case letter. (pg. 71, Lst. 3.51)
+  */
   @Test
   public void testParameterNameCapitalized() {
     ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA092");
@@ -105,6 +108,20 @@ public class ParametersTest extends AbstractCoCoTest {
                                                 new NamesCorrectlyCapitalized());
     final ASTMontiArcNode node
         = loadComponentAST(PACKAGE + "." + "ParameterNameCapitalized");
+    
     checkInvalid(cocos, node, errors);
   }
+  
+  @Test
+  /*
+   * Tests [Hab16] CV2: Types start with an upper-case letter. (pg. 71, Lst. 3.51)
+   */
+  public void testComponentTypeGenericParameterIsUpperCase() {
+	  ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ComponentWithLowerCaseGenType");
+	  MontiArcCoCoChecker cocos
+      = new MontiArcCoCoChecker().addCoCo((MontiArcASTComponentCoCo)
+                                              new NamesCorrectlyCapitalized());
+	  checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA049"));
+  }
+    
 }
