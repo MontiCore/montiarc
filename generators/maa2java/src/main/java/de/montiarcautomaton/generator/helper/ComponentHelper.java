@@ -267,9 +267,7 @@ public class ComponentHelper {
     JavaDSLPrettyPrinter printer = new JavaDSLPrettyPrinter(new IndentPrinter());
     
     List<String> outputParameters = new ArrayList<>();
-    // for (ValueSymbol<TypeReference<TypeSymbol>> configArgument : configArguments) {
     for (ASTExpression configArgument : configArguments) {
-      // final String prettyprint = printer.prettyprint(configArgument.getValue());
       final String prettyprint = printer.prettyprint(configArgument);
       outputParameters.add(autobox(prettyprint));
     }
