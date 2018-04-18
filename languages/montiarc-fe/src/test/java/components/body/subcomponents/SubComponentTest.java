@@ -296,8 +296,6 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertEquals("1", prettyPrinter.prettyprint(arg1));
     // TODO proper setting of Kind? currently everything is an expression as we
     // extend JavaDSL
-    // instead of CommonValues
-    // assertEquals(ValueSymbol.Kind.Value, arg1.getKind());
     
     ASTExpression arg2 = compWithArgsRef.getConfigArguments().get(1);
     assertEquals("\"Hallo\"", prettyPrinter.prettyprint(arg2));
@@ -306,9 +304,6 @@ public class SubComponentTest extends AbstractCoCoTest {
     // instead of CommonValues
     // assertEquals(ValueEntry.Kind.Value, arg2.getKind());
     
-    // String spacelessArg3 = "new Integer[]{1, 2, 3}".replace(" ", "");
-    // ValueSymbol<?> arg3 = compWithArgsRef.getConfigArguments().get(2);
-    // assertEquals(spacelessArg3, arg3.getValue().replace(" ", ""));
     // TODO proper setting of Kind? currently everything is an expression as we
     // extend JavaDSL
     // instead of CommonValues
@@ -353,24 +348,14 @@ public class SubComponentTest extends AbstractCoCoTest {
     JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(new IndentPrinter());
     assertEquals("2*1*5+1", prettyPrinter.prettyprint(arg1));
     // internal representation of expressions
-//    assertEquals(ValueSymbol.Kind.Expression, arg1.getKind());
     // assertEquals(4, arg1.getConstructorArguments().size());
     // assertEquals("2", arg1.getConstructorArguments().get(0).getValue());
-    // assertEquals(ValueSymbol.Kind.Value,
-    // arg1.getConstructorArguments().get(0).getKind());
     // assertEquals("1", arg1.getConstructorArguments().get(1).getValue());
-    // assertEquals(ValueSymbol.Kind.Value,
-    // arg1.getConstructorArguments().get(1).getKind());
     // assertEquals("5", arg1.getConstructorArguments().get(2).getValue());
-    // assertEquals(ValueSymbol.Kind.Value,
-    // arg1.getConstructorArguments().get(2).getKind());
     // assertEquals("1", arg1.getConstructorArguments().get(3).getValue());
-    // assertEquals(ValueSymbol.Kind.Value,
-    // arg1.getConstructorArguments().get(3).getKind());
     
     ASTExpression arg2 = compWithArgsRef.getConfigArguments().get(1);
     assertEquals("new Integer(2)*5", prettyPrinter.prettyprint(arg2));
-//    assertEquals(ValueSymbol.Kind.Expression, arg2.getKind());
     // assertEquals(2, arg2.getConstructorArguments().size());
     // assertEquals("new Integer(2)",
     // arg2.getConstructorArguments().get(0).getValue());
@@ -553,7 +538,7 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertEquals(PACKAGE + "." + "SimpleComponentWithAutomaton", refType.getFullName());
   }
   
-  @Ignore("ValueSymbol?!")
+  @Ignore
   @Test
   public void testUsingSCWithParams() {
     Scope symTab = this.loadDefaultSymbolTable();
@@ -574,15 +559,8 @@ public class SubComponentTest extends AbstractCoCoTest {
     
     assertEquals(1, delay.getConfigArguments().size());
     assertEquals("1", delay.getConfigArguments().get(0));
-    
-    // Is an expression since there is no value symbol.
-//    assertEquals(ValueSymbol.Kind.Value,
-//        delay.getConfigArguments().get(0).getKind());
   }
   
-  /**
-   * TODO: ValueSymbol?!
-   */
   @Test
   public void testUsingComplexParams() {
     Scope symTab = this.loadDefaultSymbolTable();
@@ -602,9 +580,6 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertEquals(2, delay.getConfigArguments().size());
     assertEquals("new int[] {1, 2, 3}",
         SymbolPrinter.printConfigArgument(delay.getConfigArguments().get(0)));
-    // TODO value symbol
-    // assertEquals(ValueSymbol.Kind.ConstructorCall,
-    // delay.getConfigArguments().get(0).getKind());
     // assertEquals("1",
     // delay.getConfigArguments().get(0).getConstructorArguments().get(0).getValue());
     // assertEquals("2",
