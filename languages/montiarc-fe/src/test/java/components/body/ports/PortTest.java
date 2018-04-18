@@ -63,6 +63,13 @@ public class PortTest extends AbstractCoCoTest {
   public void testComponentWithArrayAsPortTypeUsage() {
     checkValid(PACKAGE + "." + "ComponentWithArrayAsPortTypeParameterUsage");
   }
+  
+  @Test
+  public void testKeywordsAsPortName() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "KeywordAsPortName");
+    checkInvalid(MontiArcCoCos.createChecker(), node,
+        new ExpectedErrorInfo(4, "xMA087"));
+  }
 
   @Test
   public void testNonUniquePortNames() {

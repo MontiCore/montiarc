@@ -12,7 +12,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.symboltable.types.JFieldSymbol;
@@ -23,7 +22,6 @@ import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.DefaultParametersCorrectlyAssigned;
 import montiarc.cocos.DefaultParametersHaveCorrectOrder;
-import montiarc.cocos.NumberOfConfigurationParametersCorrect;
 import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
 
 /**
@@ -57,10 +55,9 @@ public class DefaultParametersTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "ComposedComponentUsingDefaultParameters");
   }
   
-//  @Ignore("Why check all cocos in invalid?")
   @Test
   public void testComposedComponentUsingDefaultParametersInvalid() {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new NumberOfConfigurationParametersCorrect()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
         loadComponentAST(PACKAGE + "." + "ComposedComponentUsingDefaultParametersInvalid"),
         new ExpectedErrorInfo(2, "xMA082"));
   }

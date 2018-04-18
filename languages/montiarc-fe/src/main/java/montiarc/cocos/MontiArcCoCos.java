@@ -22,11 +22,11 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new DefaultParametersHaveCorrectOrder())
         .addCoCo(new DefaultParametersCorrectlyAssigned())
-        .addCoCo(new NumberOfConfigurationParametersCorrect())
         .addCoCo(new ComponentWithTypeParametersHasInstance())
         .addCoCo(new CircularInheritance())
       //TODO remove comment when new Java DSL is integrated
 //        .addCoCo(new AllGenericParametersOfSuperClassSet()) 
+        .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
         .addCoCo(new TypeParameterNamesUnique())
         .addCoCo(new TopLevelComponentHasNoInstanceName())
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
@@ -35,7 +35,8 @@ public class MontiArcCoCos {
         .addCoCo(new ImportsValid())
         .addCoCo(new SubcomponentReferenceCycle())
         .addCoCo(new ReferencedSubComponentExists())
-
+        .addCoCo(new PortNamesAreNotJavaKeywords())
+        
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
         .addCoCo((MontiArcASTJavaPBehaviorCoCo) new NamesCorrectlyCapitalized())
@@ -59,6 +60,7 @@ public class MontiArcCoCos {
         .addCoCo(new CorrectAssignmentOperators())
         .addCoCo(new MultipleAssignmentsSameIdentifier())
         .addCoCo(new AutomatonOutputInExpression())
+        .addCoCo(new AutomatonNoAssignmentToIncomingPort())
         .addCoCo((MontiArcASTInitialStateDeclarationCoCo)
                      new AutomatonReactionWithAlternatives())
         .addCoCo((MontiArcASTTransitionCoCo) new AutomatonReactionWithAlternatives())

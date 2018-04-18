@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import de.monticore.ast.ASTNode;
+import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.javadsl._ast.ASTPrimaryExpression;
+import de.monticore.java.javadsl._cocos.JavaDSLASTExpressionCoCo;
 import de.monticore.java.javadsl._cocos.JavaDSLASTPrimaryExpressionCoCo;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.ScopeSpanningSymbol;
@@ -27,12 +29,15 @@ public class AutomatonOutputInExpression implements JavaDSLASTPrimaryExpressionC
   
   @Override
   public void check(ASTPrimaryExpression node) {
+    //TODO Check that nothing is writing on incoming ports
+
     if (node.nameIsPresent() && node.getEnclosingScope().isPresent()) {
       Scope scope = node.getEnclosingScope().get();
       Optional<? extends ScopeSpanningSymbol> scopeSymbol = scope.getSpanningSymbol();
       if (scopeSymbol.isPresent() && scopeSymbol.get().isKindOf(ComponentSymbol.KIND)) {
         Optional<ASTNode> nodeAST = scopeSymbol.get().getAstNode();
         if (nodeAST.isPresent()) {
+          // Component that conatins the expression somewhere
           ASTComponent compAST = (ASTComponent) nodeAST.get();
           List<ASTElement> elements = compAST.getBody().getElements();
           for (ASTElement elem : elements) {

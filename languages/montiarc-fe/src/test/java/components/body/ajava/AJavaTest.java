@@ -1,15 +1,7 @@
 package components.body.ajava;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Optional;
-
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-
 import de.monticore.symboltable.Scope;
+import de.monticore.symboltable.Symbol;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
@@ -20,6 +12,15 @@ import montiarc._symboltable.JavaBehaviorSymbol;
 import montiarc.cocos.AtMostOneInitBlock;
 import montiarc.cocos.InitBlockOnlyOnEmbeddedAJava;
 import montiarc.cocos.MontiArcCoCos;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+
+import static org.junit.Assert.*;
 
 /**
  * This class checks all context conditions related the definition of AJava behavior
@@ -131,5 +132,36 @@ public class AJavaTest extends AbstractCoCoTest {
         .<JavaBehaviorSymbol> resolve("increaseHulu", JavaBehaviorSymbol.KIND);
     assertTrue(aJavaDef.isPresent());
   }
-  
+
+  @Test
+  public void testLocalVariablesInComputeBlock() {
+    loadComponentAST(PACKAGE + "." +
+                         "LocalVariablesInComputeBlock");
+    final ComponentSymbol symbol = loadComponentSymbol(PACKAGE, "LocalVariablesInComputeBlock");
+    final Scope scope = loadDefaultSymbolTable();
+    final Optional<JavaBehaviorSymbol> aJavaComputeBlock = symbol.getSpannedScope().resolve("AJavaComputeBlock", JavaBehaviorSymbol.KIND);
+    assertTrue(aJavaComputeBlock.isPresent());
+    final Map<String, Collection<Symbol>> variables = aJavaComputeBlock.get().getSpannedScope().getLocalSymbols();
+    assertEquals(2, variables.size());
+
+    checkValid(PACKAGE + "." + "LocalVariablesInComputeBlock");
+  }
+
+  @Test
+  @Ignore("TODO: Currently forward declaration of variables is required. " +
+              "Else the symboltable cannot be built correctly and the " +
+              "variable is not found.")
+  public void testDefineComponentVarAfterCompute() {
+    loadComponentAST(PACKAGE + "." +
+                         "DefineComponentVarAfterCompute");
+
+    checkValid(PACKAGE + "." + "DefineComponentVarAfterCompute");
+  }
+
+  @Test
+  @Ignore("TODO: Should not be working, as there are variables which are " +
+              "declared more than once.")
+  public void testAmbiguousAJavaVariableNames() {
+    checkValid(PACKAGE + "." + "AmbiguousAJavaVariableNames");
+  }
 }

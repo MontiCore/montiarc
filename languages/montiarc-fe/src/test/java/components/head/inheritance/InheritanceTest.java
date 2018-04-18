@@ -5,11 +5,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.Optional;
+import java.util.Iterator;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
@@ -19,6 +18,7 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._parser.MontiArcParser;
 import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc.cocos.CircularInheritance;
 import montiarc.cocos.ConfigurationParametersCorrectlyInherited;
@@ -79,8 +79,25 @@ public class InheritanceTest extends AbstractCoCoTest {
   }
   
   @Test
-  public void testConnecetingInheritedPorts() {
-    this.loadComponentSymbol(PACKAGE, "ComposedComponentUsingInheritedPorts");
+  public void testConnectingInheritedPorts() {
+    ComponentSymbol cmp = this.loadComponentSymbol(PACKAGE, "ComposedComponentUsingInheritedPorts");
+    
+    Iterator<ConnectorSymbol> iterator = cmp.getConnectors().iterator();
+    ConnectorSymbol conn0 = iterator.next();
+    assertTrue(conn0.getSourcePort().isPresent());
+    assertTrue(conn0.getTargetPort().isPresent());
+    assertEquals("inputIntegerA", conn0.getSourcePort().get().getName());
+    assertEquals("inputInteger", conn0.getTargetPort().get().getName());
+    assertTrue(conn0.getTargetPort().get().getComponent().isPresent());
+    assertEquals("ExtendsSuperComponent", conn0.getTargetPort().get().getComponent().get().getName());
+    
+    ConnectorSymbol conn1 = iterator.next();
+    assertTrue(conn1.getSourcePort().isPresent());
+    assertTrue(conn1.getTargetPort().isPresent());
+    assertEquals("inputStringA", conn1.getSourcePort().get().getName());
+    assertEquals("inputString", conn1.getTargetPort().get().getName());
+    assertTrue(conn1.getTargetPort().get().getComponent().isPresent());
+    assertEquals("SuperComponent", conn1.getTargetPort().get().getComponent().get().getName());
   }
   
   @Test

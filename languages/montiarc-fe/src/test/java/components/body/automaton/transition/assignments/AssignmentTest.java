@@ -1,5 +1,9 @@
 package components.body.automaton.transition.assignments;
 
+import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.AutomatonNoAssignmentToIncomingPort;
+import montiarc.cocos.AutomatonOutputInExpression;
+import montiarc.cocos.CorrectAssignmentOperators;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -34,7 +38,7 @@ public class AssignmentTest extends AbstractCoCoTest {
   @Test
   public void testWrongAssignments() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongAssignments");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new CorrectAssignmentOperators()), node,
         new ExpectedErrorInfo(4, "xMA017", "xMA016"));
   }
   
@@ -116,5 +120,20 @@ public class AssignmentTest extends AbstractCoCoTest {
         PACKAGE + "." + "IncompatibleVariableAssignmentGenericTypesDiffer");
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new ExpectedErrorInfo(1, "xMA042"));
+  }
+
+  @Test
+  /*
+   * @implements [Wor16] AR2: Inputs, outputs, and variables are used
+   *    correctly. (p.103, Lst 5.20)
+   */
+  public void testAssignmentToIncomingPort() {
+    final ASTMontiArcNode astMontiArcNode
+        = loadComponentAST(PACKAGE + "." + "AssignmentToIncomingPort");
+    MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new AutomatonNoAssignmentToIncomingPort());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(2, "xMA093");
+    checkInvalid(cocos, astMontiArcNode, errors);
   }
 }
