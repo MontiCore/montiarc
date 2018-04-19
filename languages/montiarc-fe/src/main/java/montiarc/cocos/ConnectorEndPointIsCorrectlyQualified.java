@@ -22,21 +22,13 @@ import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
  * @author Crispin Kirchner
  */
 public class ConnectorEndPointIsCorrectlyQualified
-    implements MontiArcASTSimpleConnectorCoCo, MontiArcASTConnectorCoCo {
+    implements MontiArcASTConnectorCoCo {
   
   private void checkEndpointCorrectlyQualified(ASTQualifiedName name,
       Predicate<Integer> predicate, String errorMessage) {
     if (!predicate.test(name.getParts().size())) {
       Log.error(String.format(errorMessage, name.toString()), name.get_SourcePositionStart());
     }
-  }
-  
-  /**
-   * Ensure that the connector endpoint is of the form `port'
-   */
-  private void checkSimpleConnectorSourceUnqualified(ASTQualifiedName name) {
-    checkEndpointCorrectlyQualified(name, i -> i == 1,
-        "0xMA008 Simple connector source \"%s\" must only consist of a port name.");
   }
   
   /**
@@ -53,18 +45,6 @@ public class ConnectorEndPointIsCorrectlyQualified
   @Override
   public void check(ASTConnector node) {
     checkEndPointMaximallyTwiceQualified(node.getSource());
-    
-    for (ASTQualifiedName name : node.getTargets()) {
-      checkEndPointMaximallyTwiceQualified(name);
-    }
-  }
-  
-  /**
-   * @see montiarc._cocos.MontiArcASTSimpleConnectorCoCo#check(montiarc._ast.ASTSimpleConnector)
-   */
-  @Override
-  public void check(ASTSimpleConnector node) {
-    checkSimpleConnectorSourceUnqualified(node.getSource());
     
     for (ASTQualifiedName name : node.getTargets()) {
       checkEndPointMaximallyTwiceQualified(name);

@@ -30,7 +30,6 @@ public class MontiArcCoCos {
         .addCoCo(new TypeParameterNamesUnique())
         .addCoCo(new TopLevelComponentHasNoInstanceName())
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
-        .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo(new InPortUniqueSender())
         .addCoCo(new ImportsValid())
         .addCoCo(new SubcomponentReferenceCycle())
@@ -40,7 +39,6 @@ public class MontiArcCoCos {
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
         .addCoCo((MontiArcASTJavaPBehaviorCoCo) new NamesCorrectlyCapitalized())
-        .addCoCo(new SimpleConnectorSourceExists())
         .addCoCo(new InputPortChangedInCompute())
         .addCoCo(new UsedPortsAndVariablesExist())
         .addCoCo(new MultipleBehaviorImplementation())
