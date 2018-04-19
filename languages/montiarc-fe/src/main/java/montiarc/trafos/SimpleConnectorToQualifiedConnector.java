@@ -36,6 +36,10 @@ public class SimpleConnectorToQualifiedConnector {
                                        .getBuilder()
                                        .parts(parts)
                                        .build();
+    qualifiedSourceName.set_SourcePositionStart(
+        simpleConnector.getSource().get_SourcePositionStart());
+    qualifiedSourceName.set_SourcePositionEnd(
+        simpleConnector.getSource().get_SourcePositionEnd());
 
     // Build a new Connector node for the Simple connector
     final ASTConnector connector = ASTConnector
@@ -43,21 +47,26 @@ public class SimpleConnectorToQualifiedConnector {
                                    .source(qualifiedSourceName)
                                    .targets(simpleConnector.getTargets())
                                    .build();
-    connector.set_SourcePositionStart(simpleConnector.get_SourcePositionStart());
-    connector.set_SourcePositionEnd(simpleConnector.get_SourcePositionEnd());
+    connector.set_SourcePositionStart(
+        simpleConnector.get_SourcePositionStart());
+    connector.set_SourcePositionEnd(
+        simpleConnector.get_SourcePositionEnd());
 
     return connector;
   }
 
   public void transform(ASTSubComponentInstance subComponentInstance,
                         ComponentSymbol embeddingComponentSymbol){
-    final List<ASTSimpleConnector> connectors = subComponentInstance.getConnectors();
+    final List<ASTSimpleConnector> connectors
+        = subComponentInstance.getConnectors();
     for (ASTSimpleConnector simpleConnector : connectors) {
       // Create a new connector for each simple connector
-      ASTConnector connector = createASTConnector(simpleConnector, subComponentInstance);
+      ASTConnector connector
+          = createASTConnector(simpleConnector, subComponentInstance);
 
       // Add the new nodes to the AST
-      final Optional<ASTNode> optionalAstNode = embeddingComponentSymbol.getAstNode();
+      final Optional<ASTNode> optionalAstNode
+          = embeddingComponentSymbol.getAstNode();
       if(optionalAstNode.isPresent()){
         final ASTComponent astNode = (ASTComponent) optionalAstNode.get();
         astNode.getBody().getElements().add(connector);
@@ -67,5 +76,4 @@ public class SimpleConnectorToQualifiedConnector {
     // Remove simple connector nodes from the AST
     subComponentInstance.setConnectors(new ArrayList<>());
   }
-
 }

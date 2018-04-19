@@ -340,7 +340,9 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
 
     // Transform SimpleConncetors to normal qaualified connectors
     for (ASTSubComponent astSubComponent : node.getSubComponents()) {
-      simpleConnectorTrafo.transform(astSubComponent.getin);
+      for (ASTSubComponentInstance astSubComponentInstance : astSubComponent.getInstances()) {
+        simpleConnectorTrafo.transform(astSubComponentInstance, component);
+      }
     }
 
 
