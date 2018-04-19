@@ -75,6 +75,7 @@ import montiarc._ast.MontiArcPackage;
 import montiarc.helper.JavaHelper;
 import montiarc.helper.Timing;
 import montiarc.trafos.AutoConnection;
+import montiarc.trafos.SimpleConnectorToQualifiedConnector;
 
 /**
  * Visitor that creates the symboltable of a MontiArc AST.
@@ -92,6 +93,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   protected List<ImportStatement> currentImports = new ArrayList<>();
   
   protected AutoConnection autoConnectionTrafo = new AutoConnection();
+  protected SimpleConnectorToQualifiedConnector simpleConnectorTrafo
+      = new SimpleConnectorToQualifiedConnector();
   
   private ASTComponent currentComponent;
   
@@ -334,6 +337,13 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     componentStack.push(component);
     addToScopeAndLinkWithNode(component, node);
+
+    // Transform SimpleConncetors to normal qaualified connectors
+    for (ASTSubComponent astSubComponent : node.getSubComponents()) {
+      simpleConnectorTrafo.transform(astSubComponent.getin);
+    }
+
+
     autoConnectionTrafo.transformAtStart(node, component);
   }
   
