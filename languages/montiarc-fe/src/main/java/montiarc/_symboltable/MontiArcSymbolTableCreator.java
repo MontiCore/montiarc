@@ -258,13 +258,13 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     if (!node.getInstances().isEmpty()) {
       // create instances of the referenced components.
       for (ASTSubComponentInstance i : node.getInstances()) {
-        createInstance(i.getName(), i, componentTypeReference, configArgs, i.getConnectors());
+        createInstance(i.getName(), i, componentTypeReference, configArgs);
       }
     }
     else {
       // auto instance because instance name is missing
       createInstance(StringTransformations.uncapitalize(simpleCompName), node,
-          componentTypeReference, configArgs, new ArrayList<>());
+          componentTypeReference, configArgs);
     }
     
     node.setEnclosingScope(currentScope().get());
@@ -275,21 +275,12 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
    */
   private void createInstance(String name, ASTNode node,
       ComponentSymbolReference componentTypeReference,
-      List<ASTExpression> configArguments,
-      List<ASTSimpleConnector> connectors) {
+      List<ASTExpression> configArguments) {
     ComponentInstanceSymbol instance = new ComponentInstanceSymbol(name,
         componentTypeReference);
     configArguments.forEach(v -> instance.addConfigArgument(v));
     // create a subscope for the instance
     addToScopeAndLinkWithNode(instance, node);
-    for (ASTSimpleConnector c : connectors) {
-      String sourceName = c.getSource().toString();
-      for (ASTQualifiedName target : c.getTargets()) {
-        String targetName = target.toString();
-        ConnectorSymbol sym = new ConnectorSymbol(sourceName, targetName);
-        addToScope(sym);
-      }
-    }
     // remove the created instance's scope
     removeCurrentScope();
   }
