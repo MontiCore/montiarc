@@ -17,12 +17,13 @@ import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ComponentSymbol;
 
 /**
- * This coco compares the number of arguments passed to the subcomponent with the parameters of the
- * instantiated type. It considers default parameters that are optional when instantiating a
- * component. Type and Ordering is checked in other cocos.
+ * This coco compares the number of arguments passed to the subcomponent with
+ * the parameters of the instantiated type. It considers default parameters that
+ * are optional when instantiating a component. Type and Ordering is checked in
+ * other cocos.
  * 
- * @implements [Wor16] MR1: Arguments of configuration parameters with default values may be omitted
- * during subcomponent declaration. (p. 58, Lst. 4.11)
+ * @implements [Wor16] MR1: Arguments of configuration parameters with default
+ * values may be omitted during subcomponent declaration. (p. 58, Lst. 4.11)
  * @author Jerome Pfeiffer
  * @version $Revision$, $Date$
  */
@@ -43,25 +44,23 @@ public class NumberOfConfigurationParametersCorrect implements MontiArcASTCompon
         ASTComponent subcompType = (ASTComponent) subcompSym.get().getAstNode().get();
         List<ASTParameter> params = subcompType.getHead().getParameterList();
         int numberOfNecessaryConfigParams = params.size() - getNumberOfDefaultParameters(params);
-        if (numberOfNecessaryConfigParams != sub.getArgumentsList().size()) {
+        if (numberOfNecessaryConfigParams > sub.getArgumentsList().size()
+            || sub.getArgumentsList().size() > params.size()) {
           Log.error(String.format("0xMA082 Subcomponent of type \"%s\" is instantiated with "
               + sub.getArgumentsList().size() + " arguments but requires "
               + numberOfNecessaryConfigParams + " arguments by type definition.", type),
               sub.get_SourcePositionStart());
         }
       }
-      else {
-        Log.error(String.format("0xMA004 Type \"%s\" could not be resolved", type),
-            sub.get_SourcePositionStart());
-      }
     }
   }
+
   
   private int getNumberOfDefaultParameters(List<ASTParameter> params) {
     int counter = 0;
     
     for (ASTParameter param : params) {
-      if (param.isPresentDefaultValue()) {
+      if (param.getDefaultValueOpt().isPresent()) {
         counter++;
       }
     }
