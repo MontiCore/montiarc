@@ -454,7 +454,7 @@ public class SubComponentTests extends AbstractCoCoTest {
     
     assertEquals("3 named subcomponents and 1 auto-instance", 4, comp
         .getSubComponents().size());
-    assertEquals(1, comp.getInnerComponents().size());
+    assertEquals(2, comp.getInnerComponents().size());
     
     // usage of external component type as sub component in same package
     ComponentInstanceSymbol instance = comp.getSubComponent("ref").orElse(null);
