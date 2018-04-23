@@ -12,7 +12,7 @@ import components.body.subcomponents.Motor;
 component WrongSubComponentArgument {
     port
         in Integer speed,
-        in MotorCmd command;
+        in MotorCommand command;
 
   component Motor(30);  // Wrong parameter type expected String
   
