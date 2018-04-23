@@ -86,7 +86,8 @@ public class SubComponentTest extends AbstractCoCoTest {
   @Test
   public void testSubcomponentReferenceCycles() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentReferenceCycleA");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle()), node, new ExpectedErrorInfo(1, "xMA086"));
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle()), node,
+        new ExpectedErrorInfo(1, "xMA086"));
   }
   
   @Test
@@ -103,10 +104,11 @@ public class SubComponentTest extends AbstractCoCoTest {
         node,
         new ExpectedErrorInfo(4, "xMA061"));
   }
-
+  
   @Test
   public void testAmbiguousImplicitAndExplicitSubcomponentNames() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousImplicitAndExplicitSubcomponentNames");
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "AmbiguousImplicitAndExplicitSubcomponentNames");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         node,
         new ExpectedErrorInfo(6, "xMA061"));
@@ -119,7 +121,7 @@ public class SubComponentTest extends AbstractCoCoTest {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
         node, new ExpectedErrorInfo(1, "xMA009"));
   }
-
+  
   @Test
   public void testInnerViolatesComponentNaming() {
     ASTMontiArcNode node = loadComponentAST(
@@ -129,7 +131,7 @@ public class SubComponentTest extends AbstractCoCoTest {
             .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized()),
         node, new ExpectedErrorInfo(1, "xMA055"));
   }
-
+  
   @Test
   public void testReferencedSubComponentsExists() {
     checkValid(PACKAGE + "." + "ReferencedSubComponentsExists");
@@ -171,40 +173,43 @@ public class SubComponentTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongSubComponentArgument");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA064"));
   }
-
+  
   @Test
-  /*
-    TODO: Throws Symboltable error in other CoCo before starting to check the CoCo that throws the expected error. testAmbiguousImplicitAndExplicitSubcomponentNames() checks only the ComponentInstanceNameUnique-CoCo.
-    TODO: Adjust after implementing CoCo [Hab16] CV7
-   */
+  /* TODO: Throws Symboltable error in other CoCo before starting to check the
+   * CoCo that throws the expected error.
+   * testAmbiguousImplicitAndExplicitSubcomponentNames() checks only the
+   * ComponentInstanceNameUnique-CoCo. TODO: Adjust after implementing CoCo
+   * [Hab16] CV7 */
   @Ignore("See comment above.")
   public void testUniquenessReferences() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UniquenessReferences");
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA061");
     checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
-  @Ignore
+  
   @Test
   public void testComponentWithTypeParametersHasInstance() {
     checkValid(PACKAGE + "." + "ComponentWithTypeParametersHasInstance");
   }
-
+  
   @Test
   public void testUniqueInnerCompDefinition() {
     try {
       checkValid(PACKAGE + "." + "UniqueInnerCompDefinition");
-    } catch (de.monticore.symboltable.resolving.ResolvedSeveralEntriesException e) {
+    }
+    catch (de.monticore.symboltable.resolving.ResolvedSeveralEntriesException e) {
       assert e.toString().contains("xA4095");
       return;
     }
     fail();
   }
-
+  
   @Test
   public void testValidAndInvalidSubcomponents() {
     try {
       checkValid(PACKAGE + "." + "ValidAndInvalidSubcomponents");
-    } catch (de.monticore.symboltable.references.FailedLoadingSymbol e) {
+    }
+    catch (de.monticore.symboltable.references.FailedLoadingSymbol e) {
       assert e.toString().contains("'components.body.subcomponents.UndefinedReferenceFQ'");
       return;
     }
@@ -608,64 +613,65 @@ public class SubComponentTest extends AbstractCoCoTest {
     String path = PACKAGE + "." + "UsingComplexParams";
     checkValid(path);
   }
-
+  
   @Test
   public void testHasGenericInputAndOutputPort() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "HasGenericInputAndOutputPort");
+        "HasGenericInputAndOutputPort");
   }
-
+  
   @Test
   public void testHasPortsOfHierarchicalCDTypes() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "HasPortsOfHierarchicalCDTypes");
+        "HasPortsOfHierarchicalCDTypes");
   }
-
+  
   @Test
   public void testHasStringInputAndIntegerOutput() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "HasStringInputAndIntegerOutput");
+        "HasStringInputAndIntegerOutput");
   }
-
+  
   @Test
   public void testHasStringInputAndOutput() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "HasStringInputAndOutput");
+        "HasStringInputAndOutput");
   }
-
+  
   @Test
   public void testHasThreeGenericInAndOneOutputPort() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "HasThreeGenericInAndOneOutPort");
+        "HasThreeGenericInAndOneOutPort");
   }
-
+  
   @Test
   public void testIntegerInputAndBooleanOutput() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "IntegerInputAndBooleanOutput");
+        "IntegerInputAndBooleanOutput");
   }
-
+  
   @Test
   public void testHasPortWithImportedType() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "HasPortWithImportedType");
+        "HasPortWithImportedType");
   }
-
+  
   @Test
   public void testHasTwoStringInAndOneStrinOut() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "HasTwoStringInAndOneStringOut");
+        "HasTwoStringInAndOneStringOut");
   }
-
+  
   @Test
   public void testSimpleGenericComponent() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "SimpleGenericComponent");
+        "SimpleGenericComponent");
   }
-
+  
   @Test
   public void testSubcomponentsWithGenericTypeParams() {
-    final ASTMontiArcNode astNode = loadComponentAST(PACKAGE + "." + "SubcomponentsWithGenericTypeParams");
+    final ASTMontiArcNode astNode = loadComponentAST(
+        PACKAGE + "." + "SubcomponentsWithGenericTypeParams");
     final ExpectedErrorInfo expectedErrorInfo = new ExpectedErrorInfo(6, "xMA085");
     checkInvalid(MontiArcCoCos.createChecker(), astNode, expectedErrorInfo);
   }

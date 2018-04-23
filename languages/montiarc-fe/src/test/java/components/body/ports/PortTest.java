@@ -53,7 +53,7 @@ public class PortTest extends AbstractCoCoTest {
   public void testBumpControl() {
     checkValid(PACKAGE + "." + "BumpControl");
   }
-
+  
   @Test
   public void testComponentWithArrayAsPortType() {
     checkValid(PACKAGE + "." + "ComponentWithArrayAsPortTypeParameter");
@@ -70,7 +70,7 @@ public class PortTest extends AbstractCoCoTest {
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new ExpectedErrorInfo(4, "xMA087"));
   }
-
+  
   @Test
   public void testNonUniquePortNames() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "NonUniquePortNames");
@@ -85,7 +85,7 @@ public class PortTest extends AbstractCoCoTest {
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new ExpectedErrorInfo(1, "xMA053"));
   }
-
+  
   @Test
   @Ignore("TODO: Fix UniqueIdentifiers.java CoCo")
   public void testImplicitAndExplicitPortNaming() {
@@ -93,7 +93,7 @@ public class PortTest extends AbstractCoCoTest {
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new ExpectedErrorInfo(3, "xMA053"));
   }
-
+  
   @Test
   public void testPortTypeResolving() {
     ComponentSymbol motorSymbol = this.loadComponentSymbol(PACKAGE, "PortTypeResolving");
@@ -122,7 +122,7 @@ public class PortTest extends AbstractCoCoTest {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
         node, new ExpectedErrorInfo(4, "xMA005"));
   }
-
+  
   @Test
   @Ignore("See UniquenessConnectors.arc_")
   public void testUniquenessConnectors() {
@@ -130,17 +130,17 @@ public class PortTest extends AbstractCoCoTest {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
         node, new ExpectedErrorInfo(4, "xMA005"));
   }
-
+  
   @Test
   @Ignore("TODO Adjust error and count after implementing CV7")
   public void testGenericPortsWithAndWithoutNames() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "GenericPortsWithAndWithoutNames");
     final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo();
-        //TODO Adjust error and count after implementing CV7
+    // TODO Adjust error and count after implementing CV7
     checkInvalid(MontiArcCoCos.createChecker(),
         node, expectedErrors);
   }
-  @Ignore
+  
   @Test
   public void testInPortUniqueSender() {
     checkValid(PACKAGE + "." + "InPortUniqueSender");
@@ -151,18 +151,21 @@ public class PortTest extends AbstractCoCoTest {
   public void testGenericPortsWithoutTypeParams() {
     checkValid(PACKAGE + "." + "GenericPortsWithoutTypeParams");
   }
-
+  
   @Test
-  /* Checks whether all port names in the port definition start with a lower case letter */
+  /* Checks whether all port names in the port definition start with a lower
+   * case letter */
   public void testPortWithUpperCaseName() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortWithUpperCaseName");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized());
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+        .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized());
     checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA077"));
   }
   
   @Test
-  /* Tests the CoCos CV5 and CV6 from the dissertation of Arne Haber. These are the checks that all
-   * ports should be connected of components and subcomponents. */
+  /* Tests the CoCos CV5 and CV6 from the dissertation of Arne Haber. These are
+   * the checks that all ports should be connected of components and
+   * subcomponents. */
   public void testUnconnectedPorts() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UnconnectedPorts");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
@@ -173,19 +176,18 @@ public class PortTest extends AbstractCoCoTest {
   }
   
   @Test
-  /*
-    Tests the CoCos CV5 and CV6 from the dissertation of Arne Haber.
-    These are the checks that all ports should be connected of components and subcomponents.
-   */
+  /* Tests the CoCos CV5 and CV6 from the dissertation of Arne Haber. These are
+   * the checks that all ports should be connected of components and
+   * subcomponents. */
   public void testUnconnectedPorts2() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UnconnectedPorts2");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA057", "xMA058"));
-
+    
     cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA059", "xMA060"));
   }
-
+  
   @Test
   public void testCompWithGenericPorts() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "CompWithGenericPorts");
@@ -231,7 +233,7 @@ public class PortTest extends AbstractCoCoTest {
     assertEquals("1", port.getStereotype().get("initialOutput").get());
     assertFalse(port.getStereotype().get("ignoreWarning").isPresent());
   }
-
+  
   @Test
   public void testJavaTypedPorts() {
     checkValid("components.body.ports.ComponentWithJavaTypedPorts");

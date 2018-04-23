@@ -32,7 +32,6 @@ public class MontiArcCoCos {
         .addCoCo(new DefaultParametersCorrectlyAssigned())
         .addCoCo(new ComponentWithTypeParametersHasInstance())
         .addCoCo(new CircularInheritance())
-        .addCoCo(new InnerComponentsNotAllowed())
 
       //TODO remove comment when new Java DSL is integrated
 //        .addCoCo(new AllGenericParametersOfSuperClassSet()) 
