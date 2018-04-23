@@ -46,7 +46,7 @@ public class AutoConnection {
   
   private Stack<List<AutoconnectMode>> modeStack = new Stack<List<AutoconnectMode>>();
   
-  public static void addConnectorToAST(ASTComponent node, ConnectorSymbol conEntry) {
+  public static ASTConnector createASTConnector(ASTComponent node, ConnectorSymbol conEntry) {
     // create ast node
     ASTConnector astConnector = MontiArcNodeFactory.createASTConnector();
     
@@ -66,8 +66,8 @@ public class AutoConnection {
       astConnector.set_SourcePositionStart(auto.get().get_SourcePositionStart());
       astConnector.set_SourcePositionEnd(auto.get().get_SourcePositionEnd());
     }
-    // add node to arc elements
-    node.getBody().getElementList().add(astConnector);
+    
+    return astConnector;
   }
   
   /**
@@ -191,17 +191,24 @@ public class AutoConnection {
         // create connector entry and add to matched
         if (matched) {
           ConnectorSymbol conEntry = new ConnectorSymbol(sender, receiver);
+          
           matches.add(conEntry);
         }
       }
       
       if (matches.size() == 1) {
         ConnectorSymbol created = matches.iterator().next();
+        
+        ASTConnector astConnector = createASTConnector(node, created);
+        
+        // add node to arc elements
+        node.getBody().getElementList().add(astConnector);
+        
+        created.setAstNode(astConnector);
+        
         // add symbol to components scope
         ((MutableScope) currentComponent.getSpannedScope()).add(created);
-        
-        // add to ast
-        addConnectorToAST(node, created);
+
         
         Log.info(node.get_SourcePositionStart() + " Created connector '" + created + "'.",
             "AutoConnection");
@@ -329,3 +336,4 @@ public class AutoConnection {
     
   }
 }
+
