@@ -140,7 +140,7 @@ public class PortTest extends AbstractCoCoTest {
     checkInvalid(MontiArcCoCos.createChecker(),
         node, expectedErrors);
   }
-
+  @Ignore
   @Test
   public void testInPortUniqueSender() {
     checkValid(PACKAGE + "." + "InPortUniqueSender");

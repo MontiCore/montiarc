@@ -43,17 +43,18 @@ public class ConnectorTest extends AbstractCoCoTest {
   public static void setUp() {
     Log.enableFailQuick(false);
   }
-  
+  @Ignore
   @Test
   public void testSimpleConnectorSourceExists() {
     checkValid(PACKAGE + "." + "SimpleConnectorSourceExists");
   }
-  
+  @Ignore
   @Test
   public void testSimpleConnectorSourceExistsExternal() {
     checkValid(PACKAGE + "." + "SimpleConnectorSourceExistsExternal");
   }
-  
+ 
+  @Ignore
   @Test
   public void testSimpleConnectorSourceUnqualified() {
     checkValid(PACKAGE + "." + "SimpleConnectorSourceUnqualified");
@@ -92,11 +93,12 @@ public class ConnectorTest extends AbstractCoCoTest {
         node, new ExpectedErrorInfo(1, "xMA008"));
   }
   
+  @Ignore
   @Test
   public void testConnectorNotPiercingThroughInterface() {
     checkValid(PACKAGE + "." + "ConnectorNotPiercingThroughInterface");
   }
-  
+  @Ignore
   @Test
   public void testConnectingInheritedPorts() {
     checkValid(PACKAGE + "." + "ExistingPortInConnectorFromSuperComponent");

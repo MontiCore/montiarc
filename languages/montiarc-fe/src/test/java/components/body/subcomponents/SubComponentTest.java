@@ -183,7 +183,7 @@ public class SubComponentTest extends AbstractCoCoTest {
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA061");
     checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
-  
+  @Ignore
   @Test
   public void testComponentWithTypeParametersHasInstance() {
     checkValid(PACKAGE + "." + "ComponentWithTypeParametersHasInstance");

@@ -5,7 +5,15 @@
  */
 package montiarc.cocos;
 
-import montiarc._cocos.*;
+import montiarc._cocos.MontiArcASTAutomatonBehaviorCoCo;
+import montiarc._cocos.MontiArcASTComponentCoCo;
+import montiarc._cocos.MontiArcASTConnectorCoCo;
+import montiarc._cocos.MontiArcASTInitialStateDeclarationCoCo;
+import montiarc._cocos.MontiArcASTJavaPBehaviorCoCo;
+import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
+import montiarc._cocos.MontiArcASTStateCoCo;
+import montiarc._cocos.MontiArcASTTransitionCoCo;
+import montiarc._cocos.MontiArcCoCoChecker;
 
 /**
  * Bundle of CoCos for the MontiArc language.
@@ -24,6 +32,8 @@ public class MontiArcCoCos {
         .addCoCo(new DefaultParametersCorrectlyAssigned())
         .addCoCo(new ComponentWithTypeParametersHasInstance())
         .addCoCo(new CircularInheritance())
+        .addCoCo(new InnerComponentsNotAllowed())
+
       //TODO remove comment when new Java DSL is integrated
 //        .addCoCo(new AllGenericParametersOfSuperClassSet()) 
         .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
