@@ -104,7 +104,7 @@ public class ConnectorTest extends AbstractCoCoTest {
   
   @Test
   public void testConnectors() {
-    // Tests Coco ConnectorSourceAndTargetExist    
+    // Tests Coco ConnectorSourceAndTargetExist
     String modelname = PACKAGE + "." + "ExistingReferenceInConnector";
     ASTMontiArcNode node = loadComponentAST(modelname);
     checkInvalid(MontiArcCoCos.createChecker(), node,
