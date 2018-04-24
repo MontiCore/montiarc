@@ -19,6 +19,7 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.JavaBehaviorSymbol;
 import montiarc.cocos.AtMostOneInitBlock;
 import montiarc.cocos.InitBlockOnlyOnEmbeddedAJava;
+import montiarc.cocos.InputPortChangedInCompute;
 import montiarc.cocos.MontiArcCoCos;
 
 /**
@@ -58,10 +59,11 @@ public class AJavaTests extends AbstractCoCoTest {
         new ExpectedErrorInfo(1, "xMA174"));
   }
   
+  @Ignore("@JP wartet auf aktualisierung des InputUnchangedVisitor")
   @Test
   public void testChangeIncomingPortInCompute() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ChangeIncomingPortInCompute");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
+    checkInvalid(MontiArcCoCos.createChecker().addCoCo(new InputPortChangedInCompute()), node,
         new ExpectedErrorInfo(4, "xMA078"));
   }
   

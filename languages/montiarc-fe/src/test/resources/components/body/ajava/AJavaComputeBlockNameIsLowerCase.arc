@@ -9,7 +9,7 @@ component AJavaComputeBlockNameIsLowerCase {
   port
     in String sIn;
   
-  compute PrintSIn {
+  compute printSIn {
      
   }
 }
