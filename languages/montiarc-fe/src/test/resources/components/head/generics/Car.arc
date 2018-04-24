@@ -8,8 +8,8 @@ import com.google.common.collect.HashBasedTable;
  */
 component Car<X>(X xParameter) {
   port 
-  	in List<com.google.common.collect.ImmutableMap<Boolean,Double>[]> wheels,
-  	out HashBasedTable<Boolean,Double[],List<String>>[] motor;
+  	in List<java.util.HashMap<Boolean,Double>[]> wheels,
+  	out java.util.HashMap<Boolean,Double[]>[] motor;
   	
   java.util.List<X> xList; 
 }

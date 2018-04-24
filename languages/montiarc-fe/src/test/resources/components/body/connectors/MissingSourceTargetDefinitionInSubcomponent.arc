@@ -1,5 +1,7 @@
 package components.body.connectors;
 
+import types.CorrectComp;
+
 /*
  * Invalid model. As noted below, there are ports used in some connectors that do not exist.
  *
