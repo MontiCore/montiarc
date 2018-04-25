@@ -60,16 +60,10 @@ public class SubComponentsConnected implements MontiArcASTComponentCoCo {
       Collection<String> outerConnectorTargets = getTargetNames(entry.getConnectors());
       remainingSubIn.removeAll(outerConnectorTargets);
       if (!remainingSubIn.isEmpty()) {
-        Collection<String> outerSubSimpleConnectorTargets = getTargetNames(
-            entry.getSubComponents().stream()
-                .flatMap(sc -> sc.getSimpleConnectors().stream()).collect(Collectors.toList()));
-        remainingSubIn.removeAll(outerSubSimpleConnectorTargets);
-        if (!remainingSubIn.isEmpty()) {
-          remainingSubIn.forEach(p -> Log.error(
-              String.format("0xMA059 Port %s of subcomponent %s is not used!", p,
-                  sub.getFullName()),
-              node.get_SourcePositionStart()));
-        }
+        remainingSubIn.forEach(p -> Log.error(
+            String.format("0xMA059 Port %s of subcomponent %s is not used!", p,
+                sub.getFullName()),
+            node.get_SourcePositionStart()));
       }
       // ------- OUT PORTS -------
       // sub.out->outer.out
@@ -88,18 +82,10 @@ public class SubComponentsConnected implements MontiArcASTComponentCoCo {
       
       if (!remainingSubOut.isEmpty()) {
         // qualified sources of simple connectors
-        List<Object> outerSubSimpleConnectorSources = entry.getSubComponents().stream()
-            .flatMap(sc -> sc.getSimpleConnectors().stream()
-                // map connector to qualified source name
-                .map(c -> sc.getName() + "." + c.getSource()))
-            .collect(Collectors.toList());
-        remainingSubOut.removeAll(outerSubSimpleConnectorSources);
-        if (!remainingSubOut.isEmpty()) {
-          remainingSubOut.forEach(p -> Log.error(
-              String.format("0xMA060 Port %s of subcomponent %s is not used!", p,
-                  sub.getFullName()),
-              node.get_SourcePositionStart()));
-        }
+        remainingSubOut.forEach(p -> Log.error(
+            String.format("0xMA060 Port %s of subcomponent %s is not used!", p,
+                sub.getFullName()),
+            node.get_SourcePositionStart()));
       }
     }
   }

@@ -61,7 +61,6 @@ import montiarc._ast.ASTMACompilationUnit;
 import montiarc._ast.ASTMontiArcAutoConnect;
 import montiarc._ast.ASTParameter;
 import montiarc._ast.ASTPort;
-import montiarc._ast.ASTSimpleConnector;
 import montiarc._ast.ASTState;
 import montiarc._ast.ASTStateDeclaration;
 import montiarc._ast.ASTStereoValue;
@@ -75,6 +74,7 @@ import montiarc._ast.MontiArcPackage;
 import montiarc.helper.JavaHelper;
 import montiarc.helper.Timing;
 import montiarc.trafos.AutoConnection;
+import montiarc.trafos.SimpleConnectorToQualifiedConnector;
 
 /**
  * Visitor that creates the symboltable of a MontiArc AST.
@@ -92,6 +92,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   protected List<ImportStatement> currentImports = new ArrayList<>();
   
   protected AutoConnection autoConnectionTrafo = new AutoConnection();
+  protected SimpleConnectorToQualifiedConnector simpleConnectorTrafo
+      = new SimpleConnectorToQualifiedConnector();
   
   private ASTComponent currentComponent;
   
@@ -255,13 +257,13 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     if (!node.getInstances().isEmpty()) {
       // create instances of the referenced components.
       for (ASTSubComponentInstance i : node.getInstances()) {
-        createInstance(i.getName(), i, componentTypeReference, configArgs, i.getConnectors());
+        createInstance(i.getName(), i, componentTypeReference, configArgs);
       }
     }
     else {
       // auto instance because instance name is missing
       createInstance(StringTransformations.uncapitalize(simpleCompName), node,
-          componentTypeReference, configArgs, new ArrayList<>());
+          componentTypeReference, configArgs);
     }
     
     node.setEnclosingScope(currentScope().get());
@@ -272,21 +274,12 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
    */
   private void createInstance(String name, ASTNode node,
       ComponentSymbolReference componentTypeReference,
-      List<ASTExpression> configArguments,
-      List<ASTSimpleConnector> connectors) {
+      List<ASTExpression> configArguments) {
     ComponentInstanceSymbol instance = new ComponentInstanceSymbol(name,
         componentTypeReference);
     configArguments.forEach(v -> instance.addConfigArgument(v));
     // create a subscope for the instance
     addToScopeAndLinkWithNode(instance, node);
-    for (ASTSimpleConnector c : connectors) {
-      String sourceName = c.getSource().toString();
-      for (ASTQualifiedName target : c.getTargets()) {
-        String targetName = target.toString();
-        ConnectorSymbol sym = new ConnectorSymbol(sourceName, targetName);
-        addToScope(sym);
-      }
-    }
     // remove the created instance's scope
     removeCurrentScope();
   }
@@ -334,6 +327,15 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     componentStack.push(component);
     addToScopeAndLinkWithNode(component, node);
+
+    // Transform SimpleConncetors to normal qaualified connectors
+    for (ASTSubComponent astSubComponent : node.getSubComponents()) {
+      for (ASTSubComponentInstance astSubComponentInstance : astSubComponent.getInstances()) {
+        simpleConnectorTrafo.transform(astSubComponentInstance, component);
+      }
+    }
+
+
     autoConnectionTrafo.transformAtStart(node, component);
   }
   

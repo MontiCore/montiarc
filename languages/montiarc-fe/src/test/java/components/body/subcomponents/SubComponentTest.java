@@ -669,6 +669,14 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
   
   @Test
+  @Ignore("Should not pass like this, see #157")
+  public void testMultipleInstancesWithSimpleConnector() {
+    final ASTMontiArcNode astNode = loadComponentAST(PACKAGE + "." + "MultipleInstancesWithSimpleConnector");
+    final ExpectedErrorInfo expectedErrorInfo = new ExpectedErrorInfo(5, "xMA059", "xMA060");
+    checkInvalid(MontiArcCoCos.createChecker(), astNode, expectedErrorInfo);
+  }
+
+  @Test
   public void testSubcomponentsWithGenericTypeParams() {
     final ASTMontiArcNode astNode = loadComponentAST(
         PACKAGE + "." + "SubcomponentsWithGenericTypeParams");
