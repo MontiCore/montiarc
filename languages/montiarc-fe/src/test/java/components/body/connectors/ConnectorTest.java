@@ -5,28 +5,20 @@
  */
 package components.body.connectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcASTConnectorCoCo;
-import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ConnectorSymbol;
-import montiarc.cocos.ConnectorEndPointIsCorrectlyQualified;
-import montiarc.cocos.ConnectorSourceAndTargetComponentDiffer;
-import montiarc.cocos.ConnectorSourceAndTargetExist;
-import montiarc.cocos.ConnectorSourceAndTargetTypeFit;
-import montiarc.cocos.MontiArcCoCos;
+import montiarc.cocos.*;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * This class checks all context conditions directly related to connector
@@ -106,7 +98,8 @@ public class ConnectorTest extends AbstractCoCoTest {
     String modelname = PACKAGE + "." + "ExistingReferenceInConnector";
     ASTMontiArcNode node = loadComponentAST(modelname);
     final MontiArcCoCoChecker cocos
-        = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExist());
+//        = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExist());
+        = MontiArcCoCos.createChecker();
     checkInvalid(cocos, node,
         new ExpectedErrorInfo(9, "xMA066", "xMA067", "xMA090"));
   }
