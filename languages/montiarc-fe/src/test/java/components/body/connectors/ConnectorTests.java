@@ -25,6 +25,7 @@ import montiarc.cocos.ConnectorEndPointIsCorrectlyQualified;
 import montiarc.cocos.ConnectorSourceAndTargetComponentDiffer;
 import montiarc.cocos.ConnectorSourceAndTargetExist;
 import montiarc.cocos.ConnectorSourceAndTargetTypeFit;
+import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.SimpleConnectorSourceExists;
 
 /**
@@ -103,7 +104,7 @@ public class ConnectorTests extends AbstractCoCoTest {
   @Test
   public void testConnectors() {
     String modelname = PACKAGE + "." + "ExistingReferenceInConnector";
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExist()),
+    checkInvalid(MontiArcCoCos.createChecker(),
         loadComponentAST(modelname), new ExpectedErrorInfo(6, "xMA066", "xMA067", "xMA090"));
   }
   
