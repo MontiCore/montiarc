@@ -61,7 +61,6 @@ import montiarc._ast.ASTMACompilationUnit;
 import montiarc._ast.ASTMontiArcAutoConnect;
 import montiarc._ast.ASTParameter;
 import montiarc._ast.ASTPort;
-import montiarc._ast.ASTSimpleConnector;
 import montiarc._ast.ASTState;
 import montiarc._ast.ASTStateDeclaration;
 import montiarc._ast.ASTStereoValue;

@@ -71,9 +71,6 @@ public class PortUsage implements MontiArcASTComponentCoCo {
       
       remainingPorts = getNames(entry.getOutgoingPorts());
       Collection<String> connectorTargets = getTargetNames(entry.getConnectors());
-      // add simple connectors of all subcomponents that might connect the ports.
-      entry.getSubComponents()
-          .forEach(sc -> connectorTargets.addAll(getTargetNames(sc.getSimpleConnectors())));
       
       remainingPorts.removeAll(connectorTargets);
       if (!remainingPorts.isEmpty()) {

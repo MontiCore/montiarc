@@ -10,9 +10,7 @@ import java.util.function.Predicate;
 import de.monticore.types.types._ast.ASTQualifiedName;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTConnector;
-import montiarc._ast.ASTSimpleConnector;
 import montiarc._cocos.MontiArcASTConnectorCoCo;
-import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
 
 /**
  * @implements [Hab16] CO1: Connectors may not pierce through component interfaces. (p. 60, Lst.
