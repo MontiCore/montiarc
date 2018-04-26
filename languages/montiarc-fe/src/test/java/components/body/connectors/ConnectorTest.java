@@ -53,7 +53,7 @@ public class ConnectorTest extends AbstractCoCoTest {
   @Test
   public void testConnectorSourceAndTargetTypeNotMatch() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ConnectorSourceAndTargetTypeNotMatch");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetTypeFit()), node,
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit()), node,
         new ExpectedErrorInfo(1, "xMA084"));
   }
   
@@ -62,14 +62,14 @@ public class ConnectorTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "ConnectorSourceAndTargetNotExist");
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ConnectorSourceAndTargetExist());
+    checker.addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(checker, node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
   }
   
   @Test
   public void testSimpleConnectorSourceNonExistant() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SimpleConnectorSourceNonExistent");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExist()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit()),
         node, new ExpectedErrorInfo(1, "xMA066"));
   }
   
@@ -94,14 +94,13 @@ public class ConnectorTest extends AbstractCoCoTest {
   
   @Test
   public void testConnectors() {
-    // Tests Coco ConnectorSourceAndTargetExist
+    // Tests Coco ConnectorSourceAndTargetExistAndFit
     String modelname = PACKAGE + "." + "ExistingReferenceInConnector";
     ASTMontiArcNode node = loadComponentAST(modelname);
     final MontiArcCoCoChecker cocos
-//        = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExist());
-        = MontiArcCoCos.createChecker();
+        = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(cocos, node,
-        new ExpectedErrorInfo(9, "xMA066", "xMA067", "xMA090"));
+        new ExpectedErrorInfo(6, "xMA066", "xMA067", "xMA090"));
   }
   
   @Test
@@ -110,7 +109,7 @@ public class ConnectorTest extends AbstractCoCoTest {
         PACKAGE + "." + "ConnectorPiercingOutwardsThroughInterface");
     checkInvalid(
         new MontiArcCoCoChecker()
-            .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified()),
+            .addCoCo(new ConnectorEndPointIsCorrectlyQualified()),
         node, new ExpectedErrorInfo(1, "xMA070"));
   }
   
@@ -120,7 +119,7 @@ public class ConnectorTest extends AbstractCoCoTest {
         PACKAGE + "." + "ConnectorPiercingInwardsThroughInterface");
     checkInvalid(
         new MontiArcCoCoChecker()
-            .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified()),
+            .addCoCo(new ConnectorEndPointIsCorrectlyQualified()),
         node, new ExpectedErrorInfo(1, "xMA070"));
   }
   
@@ -130,7 +129,7 @@ public class ConnectorTest extends AbstractCoCoTest {
   public void testMultipleWrongConnectors() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongConnectors");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
-        .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified());
+        .addCoCo(new ConnectorEndPointIsCorrectlyQualified());
     checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA070"));
   }
   
@@ -140,7 +139,7 @@ public class ConnectorTest extends AbstractCoCoTest {
   public void testMultipleWrongConnectors2() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongConnectors2");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
-        .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified());
+        .addCoCo(new ConnectorEndPointIsCorrectlyQualified());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA070"));
   }
   
@@ -161,7 +160,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "MissingSourceTargetDefinitionInSubcomponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
-        .addCoCo(new ConnectorSourceAndTargetExist());
+        .addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA066", "xMA067"));
   }
   
@@ -171,7 +170,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "MissingSourceTargetDefinition");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
-        .addCoCo(new ConnectorSourceAndTargetExist());
+        .addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA066", "xMA067"));
   }
   
@@ -182,7 +181,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "ConnectorReferenceDoesNotExist");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
-        .addCoCo(new ConnectorSourceAndTargetExist());
+        .addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
   }
   
@@ -204,7 +203,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "ConnectsNonExistingPorts");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
-        .addCoCo(new ConnectorSourceAndTargetExist());
+        .addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA066", "xMA067"));
   }
   
@@ -213,7 +212,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "ConnectsNonExistingPorts2");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
-        .addCoCo(new ConnectorSourceAndTargetExist());
+        .addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
   }
 }
