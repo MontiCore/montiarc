@@ -10,7 +10,6 @@ import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._cocos.MontiArcASTConnectorCoCo;
 import montiarc._cocos.MontiArcASTInitialStateDeclarationCoCo;
 import montiarc._cocos.MontiArcASTJavaPBehaviorCoCo;
-import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
 import montiarc._cocos.MontiArcASTStateCoCo;
 import montiarc._cocos.MontiArcASTTransitionCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -74,8 +73,7 @@ public class MontiArcCoCos {
         .addCoCo(new UseOfForbiddenExpression())
         .addCoCo((MontiArcASTStateCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new ConnectorSourceAndTargetComponentDiffer())
-        .addCoCo(new ConnectorSourceAndTargetExist())
-        .addCoCo(new ConnectorSourceAndTargetTypeFit())
+        .addCoCo(new ConnectorSourceAndTargetExistAndFit())
         .addCoCo(new ImportsAreUnique())
         
         // REFERENTIAL INTEGRITY

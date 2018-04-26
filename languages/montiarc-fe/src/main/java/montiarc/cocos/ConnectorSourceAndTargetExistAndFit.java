@@ -5,12 +5,6 @@
  */
 package montiarc.cocos;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesException;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
@@ -26,16 +20,34 @@ import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc.helper.TypeCompatibilityChecker;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 /**
  * Checks whether source and target type of connected ports match.
- * 
- * @implements [Hab16] R8: The target port in a connection has to be compatible
- * to the source port, i.e., the type of the target port is identical or a
- * supertype of the source port type. (p. 66, lst. 3.43)
- * @author Jerome Pfeiffer
- * @version $Revision$, $Date$
+ * It also checks whether the source and target ports of the connectors
+ *  actually exist.
+ *
+ * @implements [Hab16] CO3: Unqualified sources or targets in connectors
+ *  either refer to a port or a subcomponent in the same namespace.
+ *  (p.61 Lst. 3.35)
+ * @implements [Hab16] R5: The first part of a qualified connector’s
+ *  source respectively target must correspond to a subcomponent declared
+ *  in the current component definition. (p.64 Lst. 3.40)
+ * @implements [Hab16] R6: The second part of a qualified connector’s
+ *  source respectively target must correspond to a port name of the
+ *  referenced subcomponent determined by the first part. (p.64, Lst. 3.41)
+ * @implements [Hab16] R7: The source port of a simple connector must exist
+ *  in the subcomponents type. (p.65 Lst. 3.42)
+ * @implements [Hab16] R8: The target port in a connection has to be
+ *  compatible to the source port, i.e., the type of the target port is
+ *  identical or a supertype of the source port type. (p. 66, lst. 3.43)
+ * @author Jerome Pfeiffer, Michael Mutert
  */
-public class ConnectorSourceAndTargetTypeFit implements MontiArcASTComponentCoCo {
+public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponentCoCo {
   
   /**
    * @see montiarc._cocos.MontiArcASTComponentCoCo#check(montiarc._ast.ASTComponent)
@@ -49,7 +61,24 @@ public class ConnectorSourceAndTargetTypeFit implements MontiArcASTComponentCoCo
       Optional<PortSymbol> targetPort = null;
       try {
         sourcePort = connector.getSourcePort();
+        if (!sourcePort.isPresent()) {
+          Log.error(
+              String.format("0xMA066 source port %s of connector %s does not " +
+                                "exist.",
+                  connector.getSource(),
+                  connector.getFullName()),
+              connector.getSourcePosition());
+        }
+
         targetPort = connector.getTargetPort();
+        if (!targetPort.isPresent()) {
+          Log.error(
+              String.format("0xMA067 target port %s of connector %s does not " +
+                                "exist.",
+                  connector.getTarget(),
+                  connector.getFullName()),
+              connector.getSourcePosition());
+        }
       } catch (ResolvedSeveralEntriesException e) {
         break;
       }
