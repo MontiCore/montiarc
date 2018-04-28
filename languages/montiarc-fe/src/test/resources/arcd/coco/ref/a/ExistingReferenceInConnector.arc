@@ -1,5 +1,12 @@
 package a;
 
+/*
+ * Invalid model.
+ *
+ * @implements TODO 
+ * TODO: Add Test
+ */
+
 component ExistingReferenceInConnector {
     port
         in String strIn,
