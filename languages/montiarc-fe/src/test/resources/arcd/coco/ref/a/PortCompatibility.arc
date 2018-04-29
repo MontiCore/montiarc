@@ -3,6 +3,11 @@ package a;
 import d.*;
 import b.GenericComponent;
 
+/*
+ * Valid model.
+ *
+ */
+
 component PortCompatibility {
     
     port 

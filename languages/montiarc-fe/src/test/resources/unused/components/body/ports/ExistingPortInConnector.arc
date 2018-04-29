@@ -1,9 +1,9 @@
-package a;
+package unused.components.body.ports;
 
 import b.CorrectCompInB;
 
 /*
- * Invalid model.
+ * Invalid model. See comments below.
  * @implements TODO 
  * TODO: Add Test
  */
