@@ -1,4 +1,4 @@
-package montiarc._symboltable;
+package montiarc.visitor;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -16,6 +16,8 @@ import montiarc._ast.ASTInitialStateDeclaration;
 import montiarc._ast.ASTTransition;
 import montiarc._ast.ASTValuation;
 import montiarc._ast.ASTValueList;
+import montiarc._symboltable.PortSymbol;
+import montiarc._symboltable.VariableSymbol;
 import montiarc._visitor.MontiArcVisitor;
 import montiarc.helper.TypeCompatibilityChecker;
 
