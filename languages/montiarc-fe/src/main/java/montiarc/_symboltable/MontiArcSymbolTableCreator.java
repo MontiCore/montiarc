@@ -628,52 +628,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
   }
   
-  /**
-   * Create reference to existing symbols.
-   * 
-   * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#visit(de.monticore.java.javadsl._ast.ASTPrimaryExpression)
-   */
-  @Override
-  public void visit(ASTPrimaryExpression node) {
-    super.visit(node);
-    if (node.getName().isPresent() &&
-        Character.isLowerCase(node.getName().get().charAt(0))) {
-      String name = node.getName().get();
-      Scope searchScope = currentScope().get();
-      Optional<PortSymbol> port = searchScope.resolve(name, PortSymbol.KIND);
-      // Optional<PortSymbol> port1 = searchScope.resolveDown(name,
-      // PortSymbol.KIND);
-      // Optional<PortSymbol> port2 = searchScope.resolveLocally(name,
-      // PortSymbol.KIND);
-      Optional<VariableSymbol> var = searchScope.resolve(name, VariableSymbol.KIND);
-      Collection<JFieldSymbol> field = searchScope.resolveMany(name, JFieldSymbol.KIND);
-      
-      if (port.isPresent()) {
-        PortSymbolReference portRef = new PortSymbolReference(name, currentScope().get());
-        addToScopeAndLinkWithNode(portRef, node);
-      }
-      else if (var.isPresent()) {
-        VariableSymbolReference varReference = new VariableSymbolReference(node.getName().get(),
-            currentScope().get());
-        varReference.setTypeReference(var.get().getTypeReference());
-        addToScopeAndLinkWithNode(varReference, node);
-      }
-      else if (!field.isEmpty()) {
-        addToScopeAndLinkWithNode(field.stream().findFirst().get(), node);
-      }
-      else if (isConfigurationArgument(node.getName().get())) {
-        // In this case, everything is fine. As configuration arguments (aka.
-        // parameters) don't
-        // have their own symbols, nothing to do here.
-      }
-      else {
-        Log.error("0xMA258 Used variable " + name
-            + " in ajava definition is not a port, component variable or locally defined variable.",
-            node.get_SourcePositionStart());
-        
-      }
-    }
-  }
   
   /**
    * Checks whether the passed name references to a configuration parameter

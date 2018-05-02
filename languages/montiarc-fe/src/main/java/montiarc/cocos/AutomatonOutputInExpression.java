@@ -31,28 +31,39 @@ public class AutomatonOutputInExpression implements JavaDSLASTPrimaryExpressionC
   public void check(ASTPrimaryExpression node) {
     //TODO Check that nothing is writing on incoming ports
 
+    // Transition Scope
     if (node.nameIsPresent() && node.getEnclosingScope().isPresent()) {
-      Scope scope = node.getEnclosingScope().get();
-      Optional<? extends ScopeSpanningSymbol> scopeSymbol = scope.getSpanningSymbol();
-      if (scopeSymbol.isPresent() && scopeSymbol.get().isKindOf(ComponentSymbol.KIND)) {
-        Optional<ASTNode> nodeAST = scopeSymbol.get().getAstNode();
-        if (nodeAST.isPresent()) {
-          // Component that conatins the expression somewhere
-          ASTComponent compAST = (ASTComponent) nodeAST.get();
-          List<ASTElement> elements = compAST.getBody().getElements();
-          for (ASTElement elem : elements) {
-            if (elem instanceof ASTAutomatonBehavior) {
-              Optional<PortSymbol> found = scope.resolve(node.getName().get(), PortSymbol.KIND);
-              if (found.isPresent() && found.get().isOutgoing()) {
-                Log.error(
-                    "0xMA022 Field " + found.get().getName()
-                        + " is an Ouput and not allowed in Expressions.",
-                    node.get_SourcePositionStart());
+      
+      //Automaton Scope
+      if(node.getEnclosingScope().get().getEnclosingScope().isPresent()) {
+        
+        // Component Scope
+        if(node.getEnclosingScope().get().getEnclosingScope().get().getEnclosingScope().isPresent()) {
+          Scope scope = node.getEnclosingScope().get().getEnclosingScope().get().getEnclosingScope().get();
+          Optional<? extends ScopeSpanningSymbol> scopeSymbol = scope.getSpanningSymbol();
+          if (scopeSymbol.isPresent() && scopeSymbol.get().isKindOf(ComponentSymbol.KIND)) {
+            Optional<ASTNode> nodeAST = scopeSymbol.get().getAstNode();
+            if (nodeAST.isPresent()) {
+              // Component that conatins the expression somewhere
+              ASTComponent compAST = (ASTComponent) nodeAST.get();
+              List<ASTElement> elements = compAST.getBody().getElements();
+              for (ASTElement elem : elements) {
+                if (elem instanceof ASTAutomatonBehavior) {
+                  Optional<PortSymbol> found = scope.resolve(node.getName().get(), PortSymbol.KIND);
+                  if (found.isPresent() && found.get().isOutgoing()) {
+                    Log.error(
+                        "0xMA022 Field " + found.get().getName()
+                            + " is an Ouput and not allowed in Expressions.",
+                        node.get_SourcePositionStart());
+                  }
+                }
               }
             }
           }
         }
       }
+      
+      
     }
   }
 }
