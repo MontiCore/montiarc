@@ -13,9 +13,10 @@ import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
-import montiarc._symboltable.AutomatonSymbol;
+import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.MontiArcCoCos;
+import montiarc.cocos.MultipleBehaviorImplementation;
 
 /**
  * This class checks all context conditions directly related to automata (not their sub-elements)
@@ -34,7 +35,7 @@ public class AutomatonTest extends AbstractCoCoTest {
   @Test
   public void testMutipleBehaviors() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MultipleAutomata");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(2, "xMA050"));
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new MultipleBehaviorImplementation()), node, new ExpectedErrorInfo(2, "xMA050"));
   }
   
   @Test
@@ -65,22 +66,6 @@ public class AutomatonTest extends AbstractCoCoTest {
   @Test
   public void testValidAutomaton() {
     checkValid(PACKAGE + "." + "ValidAutomaton");
-  }
-  
-  @Test
-  public void testResolveBumpControlBehavior() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "BumpControl");
-    assertNotNull(node);
-    
-    Scope symtab = this.loadDefaultSymbolTable();
-    Optional<ComponentSymbol> oBControl = symtab
-        .<ComponentSymbol> resolve(PACKAGE + "." + "BumpControl", ComponentSymbol.KIND);
-    assertTrue(oBControl.isPresent());
-    
-    ComponentSymbol bControl = oBControl.get();
-    Optional<AutomatonSymbol> autSymbol = bControl.getSpannedScope()
-        .<AutomatonSymbol> resolve("BumpControl", AutomatonSymbol.KIND);
-    assertTrue(autSymbol.isPresent());
   }
   
 }

@@ -1,26 +1,28 @@
 package components.body.ajava;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Optional;
+
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.Symbol;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.JavaBehaviorSymbol;
+import montiarc._symboltable.VariableSymbol;
 import montiarc.cocos.AtMostOneInitBlock;
 import montiarc.cocos.InitBlockOnlyOnEmbeddedAJava;
 import montiarc.cocos.MontiArcCoCos;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.junit.Assert.*;
 
 /**
  * This class checks all context conditions related the definition of AJava behavior
@@ -116,33 +118,15 @@ public class AJavaTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "ComplexCodeExample");
   }
   
-  @Test
-  public void testResolveDistanceLoggerBehavior() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "DistanceLogger");
-    assertNotNull(node);
-    
-    Scope symtab = this.loadDefaultSymbolTable();
-    Optional<ComponentSymbol> oFoo = symtab.<ComponentSymbol> resolve(
-        PACKAGE + "." + "DistanceLogger",
-        ComponentSymbol.KIND);
-    assertTrue(oFoo.isPresent());
-    
-    ComponentSymbol foo = oFoo.get();
-    Optional<JavaBehaviorSymbol> aJavaDef = foo.getSpannedScope()
-        .<JavaBehaviorSymbol> resolve("increaseHulu", JavaBehaviorSymbol.KIND);
-    assertTrue(aJavaDef.isPresent());
-  }
 
   @Test
   public void testLocalVariablesInComputeBlock() {
     loadComponentAST(PACKAGE + "." +
                          "LocalVariablesInComputeBlock");
     final ComponentSymbol symbol = loadComponentSymbol(PACKAGE, "LocalVariablesInComputeBlock");
-    final Scope scope = loadDefaultSymbolTable();
-    final Optional<JavaBehaviorSymbol> aJavaComputeBlock = symbol.getSpannedScope().resolve("AJavaComputeBlock", JavaBehaviorSymbol.KIND);
-    assertTrue(aJavaComputeBlock.isPresent());
-    final Map<String, Collection<Symbol>> variables = aJavaComputeBlock.get().getSpannedScope().getLocalSymbols();
-    assertEquals(2, variables.size());
+    Collection<VariableSymbol> foundVars = new ArrayList<>();
+    symbol.getSpannedScope().getSubScopes().forEach(s -> s.<VariableSymbol> resolveLocally(VariableSymbol.KIND).forEach(v -> foundVars.add(v)));
+    assertEquals(2, foundVars.size());
 
     checkValid(PACKAGE + "." + "LocalVariablesInComputeBlock");
   }
