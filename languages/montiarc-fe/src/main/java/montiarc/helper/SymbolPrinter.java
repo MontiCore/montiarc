@@ -160,7 +160,7 @@ public class SymbolPrinter {
   
   public static void printPorts(Collection<PortSymbol> ports, IndentPrinter ip) {
     if (!ports.isEmpty()) {
-      ip.println("ports");
+      ip.println("port");
       ip.indent();
       int i = 0;
       int s = ports.size();
