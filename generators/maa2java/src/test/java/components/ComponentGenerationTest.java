@@ -5,26 +5,25 @@
  */
 package components;
 
-import de.montiarcautomaton.generator.MontiArcGeneratorTool;
-import de.monticore.symboltable.Scope;
+import de.monticore.ModelingLanguageFamily;
+import de.monticore.io.paths.ModelPath;
+import de.monticore.java.lang.JavaDSLLanguage;
+import de.monticore.java.symboltable.JavaTypeSymbol;
+import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Symbol;
-import de.se_rwth.commons.logging.Log;
-import infrastructure.GeneratorChecker;
+import infrastructure.AbstractGeneratorTest;
 import montiarc._ast.ASTBehaviorElement;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTElement;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
-import org.junit.Before;
+import montiarc.helper.JavaHelper;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.Assert.assertTrue;
 
@@ -35,83 +34,43 @@ import static org.junit.Assert.assertTrue;
  * @version , 2018-04-27
  * @since TODO
  */
-public class ComponentGenerationTest {
+public class ComponentGenerationTest extends AbstractGeneratorTest {
 
   public static final String PACKAGE = "components";
-  public static final String FILE_PATH = "src/test/resources/";
-  public static final String TARGET_GENERATED_TEST_SOURCES = "generated-test-sources/";
-  protected static final String FAKE_JAVA_TYPES_PATH = "target/javaLib/";
   public static final String JAVA_FILE_ENDING = ".java";
-
-  @Before
-  public void setUp() throws Exception {
-    Log.getFindings().clear();
-    Log.enableFailQuick(false);
-  }
 
   @Test
   public void testExample() {
     // 1. Specify the model to check
-    final String componentName = "ComponentWithEmptyComponent";
-//    final String componentName = "EmptyComponent";
+//    final String componentName = "ComponentWithEmptyComponent";
+    final String componentName = "EmptyComponent";
     final String qualifiedName = PACKAGE + "." + componentName;
 
-    // Clear output folder
-    File outputFolder = Paths.get(TARGET_GENERATED_TEST_SOURCES).toFile();
-    if (outputFolder.exists()) {
-      try {
-        delete(outputFolder);
-      } catch (IOException e) {
-        Log.error("Could not delete output directory");
-      }
-    } else {
-      Log.info("Folder to delete does not exist", "GeneratorTest");
-    }
-
-    // 4. Generate models (at specified location)
-    MontiArcGeneratorTool generatorTool = new MontiArcGeneratorTool();
-    generatorTool.generate(
-        Paths.get(FILE_PATH).toFile(),
-        Paths.get(TARGET_GENERATED_TEST_SOURCES).toFile(),
-        Paths.get("src/main/java").toFile());
 
     // Load component symbol
-    Scope symTab = generatorTool.initSymbolTable(Paths.get(FILE_PATH).toFile(),
-        Paths.get(FILE_PATH + MontiArcGeneratorTool.DEFAULT_TYPES_FOLDER).toFile(),
-        Paths.get(FILE_PATH + MontiArcGeneratorTool.LIBRARY_MODELS_FOLDER).toFile());
-    final Optional<Symbol> comp = symTab.resolve(qualifiedName, ComponentSymbol.KIND);
-    assertTrue("Component Symbol is not present", comp.isPresent());
-    final ComponentSymbol symbol = (ComponentSymbol) comp.get();
+    final ComponentSymbol symbol = loadComponentSymbol(qualifiedName);
 
     // 5. Determine all files which have to be checked
-    List<File> filesToCheck = new ArrayList<>();
-    final Optional<String> deploy = symbol.getStereotype().get("deploy");
-
-    // Add the special deployment file
-    if (deploy != null && deploy.isPresent()) {
-      filesToCheck.add(
-          new File(TARGET_GENERATED_TEST_SOURCES + PACKAGE + "\\" +
-                       "Deploy" + componentName + JAVA_FILE_ENDING));
-    }
-
-    // Recursive check for the component and all subcomponents
-    filesToCheck.addAll(
-        determineFilesToCheck(
-            componentName,
-            qualifiedName,
-            symbol, TARGET_GENERATED_TEST_SOURCES)
-    );
+    List<File> filesToCheck = determineFilesToCheck(
+        componentName,
+        qualifiedName,
+        symbol, TARGET_GENERATED_TEST_SOURCES_DIR);
 
     // 6. Determine if all files are present
     for (File file : filesToCheck) {
-      assertTrue(file.exists());
+      assertTrue("Could not find expected generated file " + file.toString(),
+          file.exists());
     }
 
     // Invoke Java compiler to see whether they are compiling
-    GeneratorChecker.isCompiling(filesToCheck.toArray(new File[filesToCheck.size()]));
+    AbstractGeneratorTest.isCompiling(filesToCheck.toArray(new File[filesToCheck.size()]));
 
     // Parse the files with the JavaDSL
+    GlobalScope gs = initJavaDSLSymbolTable();
 
+    final Optional<Symbol> emptyComponent
+        = gs.resolve("components.EmptyComponent", JavaTypeSymbol.KIND);
+    assertTrue(emptyComponent.isPresent());
     // Collect information about expected features per file
 
     // Check if the expected features are present
@@ -130,7 +89,17 @@ public class ComponentGenerationTest {
    */
   private List<File> determineFilesToCheck(String componentName, String qualifiedName, ComponentSymbol component, String basedir) {
     List<File> filesToCheck = new ArrayList<>();
-    for (String suffix : GeneratorChecker.fileSuffixes) {
+
+    final Optional<String> deploy = component.getStereotype().get("deploy");
+
+    // Add the special deployment file
+    if (deploy != null && deploy.isPresent()) {
+      filesToCheck.add(
+          new File(TARGET_GENERATED_TEST_SOURCES_DIR + PACKAGE + "\\" +
+                       "Deploy" + componentName + JAVA_FILE_ENDING));
+    }
+
+    for (String suffix : AbstractGeneratorTest.fileSuffixes) {
       final String qualifiedFileName
           = basedir + qualifiedName.replace('.', '\\') + suffix;
       filesToCheck.add(
@@ -170,17 +139,4 @@ public class ComponentGenerationTest {
     return filesToCheck;
   }
 
-  /**
-   * Recursively deletes files from the given file object (folder)
-   * @param file {@link File} object to delete
-   * @throws IOException
-   */
-  protected void delete(File file) throws IOException {
-    if (file.isDirectory()) {
-      for (File c : file.listFiles())
-        delete(c);
-    }
-    if (!file.delete())
-      throw new FileNotFoundException("Failed to delete file: " + file);
-  }
 }
