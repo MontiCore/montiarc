@@ -3,18 +3,13 @@ package de.montiarcautomaton.generator.helper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.symboltable.resolving.ResolvingInfo;
-import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTIOAssignment;
-import montiarc._symboltable.AutomatonSymbol;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.MontiArcLanguage;
 import montiarc._symboltable.StateSymbol;
 import montiarc._symboltable.TransitionSymbol;
 import montiarc._symboltable.VariableSymbol;
@@ -27,16 +22,27 @@ import montiarc._symboltable.VariableSymbol;
  */
 public class AutomatonHelper extends ComponentHelper {
   private final Collection<StateSymbol> states;
+  
   private final Collection<VariableSymbol> variables;
+  
   private final Collection<TransitionSymbol> transitions;
   
-  public AutomatonHelper(AutomatonSymbol automaton, ComponentSymbol component) {
+  public AutomatonHelper(ComponentSymbol component) {
     super(component);
     
-    this.states = automaton.getSpannedScope().resolveLocally(StateSymbol.KIND);
-    this.transitions = automaton.getSpannedScope().resolveLocally(TransitionSymbol.KIND);
+    this.states = new ArrayList<>();
+    this.transitions = new ArrayList<>();
+    this.variables = new ArrayList<>();
+    component.getSpannedScope().getSubScopes().stream().forEach(scope -> scope
+        .<StateSymbol> resolveLocally(StateSymbol.KIND).forEach(state -> this.states.add(state)));
+    component.getSpannedScope().getSubScopes().stream()
+        .forEach(scope -> scope.<TransitionSymbol> resolveLocally(TransitionSymbol.KIND)
+            .forEach(transition -> this.transitions.add(transition)));
+    // variables can only be defined in the component's body unlike in JavaP
+    component.getSpannedScope().<VariableSymbol> resolveLocally(VariableSymbol.KIND)
+        .forEach(variable -> this.variables.add(variable));
+
     
-    this.variables = component.getSpannedScope().resolveLocally(VariableSymbol.KIND);
   }
   
   /**
@@ -111,7 +117,9 @@ public class AutomatonHelper extends ComponentHelper {
    * @return
    */
   public Collection<TransitionSymbol> getTransitions(StateSymbol state) {
-    return transitions.stream().filter((symbol) -> symbol.getSource().getReferencedSymbol() == state).collect(Collectors.toList());
+    return transitions.stream()
+        .filter((symbol) -> symbol.getSource().getReferencedSymbol() == state)
+        .collect(Collectors.toList());
   }
   
   /**
@@ -120,9 +128,12 @@ public class AutomatonHelper extends ComponentHelper {
    * @return
    */
   public StateSymbol getInitialState() {
-    List<StateSymbol> initials = states.stream().filter((state) -> state.isInitial()).collect(Collectors.toList());
+    List<StateSymbol> initials = states.stream().filter((state) -> state.isInitial())
+        .collect(Collectors.toList());
     if (initials.size() != 1) {
-      throw new RuntimeException("The generator only supports exactly one initial state. Current number is " + initials.size() + ".");
+      throw new RuntimeException(
+          "The generator only supports exactly one initial state. Current number is "
+              + initials.size() + ".");
     }
     return initials.get(0);
   }
@@ -159,8 +170,8 @@ public class AutomatonHelper extends ComponentHelper {
   }
   
   public boolean isPort(String name) {
-    for(VariableSymbol var : variables) {
-      if(var.getName().equals(name) || var.getFullName().equals(name)){
+    for (VariableSymbol var : variables) {
+      if (var.getName().equals(name) || var.getFullName().equals(name)) {
         return false;
       }
     }

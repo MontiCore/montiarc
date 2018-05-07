@@ -2,6 +2,12 @@ package a;
 
 import b.CorrectCompInB;
 
+/*
+ * Invalid model.
+ * @implements TODO 
+ * TODO: Add Test
+ */
+
 component ExistingPortInConnector {
     port 
         in String strIn,

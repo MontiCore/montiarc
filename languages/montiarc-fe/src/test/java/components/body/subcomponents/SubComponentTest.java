@@ -18,6 +18,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.cocos.helper.Assert;
+import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.Scope;
@@ -33,7 +34,6 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ComponentSymbolReference;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
-import montiarc._symboltable.ValueSymbol;
 import montiarc.helper.SymbolPrinter;
 
 import static org.junit.Assert.*;
@@ -86,7 +86,8 @@ public class SubComponentTest extends AbstractCoCoTest {
   @Test
   public void testSubcomponentReferenceCycles() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentReferenceCycleA");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle()), node, new ExpectedErrorInfo(1, "xMA086"));
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle()), node,
+        new ExpectedErrorInfo(1, "xMA086"));
   }
   
   @Test
@@ -103,10 +104,11 @@ public class SubComponentTest extends AbstractCoCoTest {
         node,
         new ExpectedErrorInfo(4, "xMA061"));
   }
-
+  
   @Test
   public void testAmbiguousImplicitAndExplicitSubcomponentNames() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousImplicitAndExplicitSubcomponentNames");
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "AmbiguousImplicitAndExplicitSubcomponentNames");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
         node,
         new ExpectedErrorInfo(6, "xMA061"));
@@ -119,7 +121,7 @@ public class SubComponentTest extends AbstractCoCoTest {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ComponentWithTypeParametersHasInstance()),
         node, new ExpectedErrorInfo(1, "xMA009"));
   }
-
+  
   @Test
   public void testInnerViolatesComponentNaming() {
     ASTMontiArcNode node = loadComponentAST(
@@ -129,7 +131,7 @@ public class SubComponentTest extends AbstractCoCoTest {
             .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized()),
         node, new ExpectedErrorInfo(1, "xMA055"));
   }
-
+  
   @Test
   public void testReferencedSubComponentsExists() {
     checkValid(PACKAGE + "." + "ReferencedSubComponentsExists");
@@ -171,12 +173,13 @@ public class SubComponentTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongSubComponentArgument");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA064"));
   }
-
+  
   @Test
-  /*
-    TODO: Throws Symboltable error in other CoCo before starting to check the CoCo that throws the expected error. testAmbiguousImplicitAndExplicitSubcomponentNames() checks only the ComponentInstanceNameUnique-CoCo.
-    TODO: Adjust after implementing CoCo [Hab16] CV7
-   */
+  /* TODO: Throws Symboltable error in other CoCo before starting to check the
+   * CoCo that throws the expected error.
+   * testAmbiguousImplicitAndExplicitSubcomponentNames() checks only the
+   * ComponentInstanceNameUnique-CoCo. TODO: Adjust after implementing CoCo
+   * [Hab16] CV7 */
   @Ignore("See comment above.")
   public void testUniquenessReferences() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UniquenessReferences");
@@ -188,23 +191,25 @@ public class SubComponentTest extends AbstractCoCoTest {
   public void testComponentWithTypeParametersHasInstance() {
     checkValid(PACKAGE + "." + "ComponentWithTypeParametersHasInstance");
   }
-
+  
   @Test
   public void testUniqueInnerCompDefinition() {
     try {
       checkValid(PACKAGE + "." + "UniqueInnerCompDefinition");
-    } catch (de.monticore.symboltable.resolving.ResolvedSeveralEntriesException e) {
+    }
+    catch (de.monticore.symboltable.resolving.ResolvedSeveralEntriesException e) {
       assert e.toString().contains("xA4095");
       return;
     }
     fail();
   }
-
+  
   @Test
   public void testValidAndInvalidSubcomponents() {
     try {
       checkValid(PACKAGE + "." + "ValidAndInvalidSubcomponents");
-    } catch (de.monticore.symboltable.references.FailedLoadingSymbol e) {
+    }
+    catch (de.monticore.symboltable.references.FailedLoadingSymbol e) {
       assert e.toString().contains("'components.body.subcomponents.UndefinedReferenceFQ'");
       return;
     }
@@ -292,23 +297,18 @@ public class SubComponentTest extends AbstractCoCoTest {
     JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(new IndentPrinter());
     
     assertEquals(3, compWithArgsRef.getConfigArguments().size());
-    ValueSymbol<?> arg1 = compWithArgsRef.getConfigArguments().get(0);
-    assertEquals("1", prettyPrinter.prettyprint(arg1.getValue()));
+    ASTExpression arg1 = compWithArgsRef.getConfigArguments().get(0);
+    assertEquals("1", prettyPrinter.prettyprint(arg1));
     // TODO proper setting of Kind? currently everything is an expression as we
     // extend JavaDSL
-    // instead of CommonValues
-    // assertEquals(ValueSymbol.Kind.Value, arg1.getKind());
     
-    ValueSymbol<?> arg2 = compWithArgsRef.getConfigArguments().get(1);
-    assertEquals("\"Hallo\"", prettyPrinter.prettyprint(arg2.getValue()));
+    ASTExpression arg2 = compWithArgsRef.getConfigArguments().get(1);
+    assertEquals("\"Hallo\"", prettyPrinter.prettyprint(arg2));
     // TODO proper setting of Kind? currently everything is an expression as we
     // extend JavaDSL
     // instead of CommonValues
     // assertEquals(ValueEntry.Kind.Value, arg2.getKind());
     
-    // String spacelessArg3 = "new Integer[]{1, 2, 3}".replace(" ", "");
-    // ValueSymbol<?> arg3 = compWithArgsRef.getConfigArguments().get(2);
-    // assertEquals(spacelessArg3, arg3.getValue().replace(" ", ""));
     // TODO proper setting of Kind? currently everything is an expression as we
     // extend JavaDSL
     // instead of CommonValues
@@ -348,29 +348,19 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertNotNull(compWithArgsRef);
     
     assertEquals(2, compWithArgsRef.getConfigArguments().size());
-    ValueSymbol<?> arg1 = compWithArgsRef.getConfigArguments().get(0);
+    ASTExpression arg1 = compWithArgsRef.getConfigArguments().get(0);
     // expressions
     JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(new IndentPrinter());
-    assertEquals("2*1*5+1", prettyPrinter.prettyprint(arg1.getValue()));
+    assertEquals("2*1*5+1", prettyPrinter.prettyprint(arg1));
     // internal representation of expressions
-    assertEquals(ValueSymbol.Kind.Expression, arg1.getKind());
     // assertEquals(4, arg1.getConstructorArguments().size());
     // assertEquals("2", arg1.getConstructorArguments().get(0).getValue());
-    // assertEquals(ValueSymbol.Kind.Value,
-    // arg1.getConstructorArguments().get(0).getKind());
     // assertEquals("1", arg1.getConstructorArguments().get(1).getValue());
-    // assertEquals(ValueSymbol.Kind.Value,
-    // arg1.getConstructorArguments().get(1).getKind());
     // assertEquals("5", arg1.getConstructorArguments().get(2).getValue());
-    // assertEquals(ValueSymbol.Kind.Value,
-    // arg1.getConstructorArguments().get(2).getKind());
     // assertEquals("1", arg1.getConstructorArguments().get(3).getValue());
-    // assertEquals(ValueSymbol.Kind.Value,
-    // arg1.getConstructorArguments().get(3).getKind());
     
-    ValueSymbol<?> arg2 = compWithArgsRef.getConfigArguments().get(1);
-    assertEquals("new Integer(2)*5", prettyPrinter.prettyprint(arg2.getValue()));
-    assertEquals(ValueSymbol.Kind.Expression, arg2.getKind());
+    ASTExpression arg2 = compWithArgsRef.getConfigArguments().get(1);
+    assertEquals("new Integer(2)*5", prettyPrinter.prettyprint(arg2));
     // assertEquals(2, arg2.getConstructorArguments().size());
     // assertEquals("new Integer(2)",
     // arg2.getConstructorArguments().get(0).getValue());
@@ -553,7 +543,7 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertEquals(PACKAGE + "." + "SimpleComponentWithAutomaton", refType.getFullName());
   }
   
-  @Ignore("ValueSymbol?!")
+  @Ignore
   @Test
   public void testUsingSCWithParams() {
     Scope symTab = this.loadDefaultSymbolTable();
@@ -573,16 +563,9 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertEquals("deleteTempFile", delay.getName());
     
     assertEquals(1, delay.getConfigArguments().size());
-    assertEquals("1", delay.getConfigArguments().get(0).getValue());
-    
-    // Is an expression since there is no value symbol.
-    assertEquals(ValueSymbol.Kind.Value,
-        delay.getConfigArguments().get(0).getKind());
+    assertEquals("1", delay.getConfigArguments().get(0));
   }
   
-  /**
-   * TODO: ValueSymbol?!
-   */
   @Test
   public void testUsingComplexParams() {
     Scope symTab = this.loadDefaultSymbolTable();
@@ -602,9 +585,6 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertEquals(2, delay.getConfigArguments().size());
     assertEquals("new int[] {1, 2, 3}",
         SymbolPrinter.printConfigArgument(delay.getConfigArguments().get(0)));
-    // TODO value symbol
-    // assertEquals(ValueSymbol.Kind.ConstructorCall,
-    // delay.getConfigArguments().get(0).getKind());
     // assertEquals("1",
     // delay.getConfigArguments().get(0).getConstructorArguments().get(0).getValue());
     // assertEquals("2",
@@ -633,64 +613,73 @@ public class SubComponentTest extends AbstractCoCoTest {
     String path = PACKAGE + "." + "UsingComplexParams";
     checkValid(path);
   }
-
+  
   @Test
   public void testHasGenericInputAndOutputPort() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "HasGenericInputAndOutputPort");
+        "HasGenericInputAndOutputPort");
   }
-
+  
   @Test
   public void testHasPortsOfHierarchicalCDTypes() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "HasPortsOfHierarchicalCDTypes");
+        "HasPortsOfHierarchicalCDTypes");
   }
-
+  
   @Test
   public void testHasStringInputAndIntegerOutput() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "HasStringInputAndIntegerOutput");
+        "HasStringInputAndIntegerOutput");
   }
-
+  
   @Test
   public void testHasStringInputAndOutput() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "HasStringInputAndOutput");
+        "HasStringInputAndOutput");
   }
-
+  
   @Test
   public void testHasThreeGenericInAndOneOutputPort() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "HasThreeGenericInAndOneOutPort");
+        "HasThreeGenericInAndOneOutPort");
   }
-
+  
   @Test
   public void testIntegerInputAndBooleanOutput() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "IntegerInputAndBooleanOutput");
+        "IntegerInputAndBooleanOutput");
   }
-
+  
   @Test
   public void testHasPortWithImportedType() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "HasPortWithImportedType");
+        "HasPortWithImportedType");
   }
-
+  
   @Test
   public void testHasTwoStringInAndOneStrinOut() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "HasTwoStringInAndOneStringOut");
+        "HasTwoStringInAndOneStringOut");
   }
-
+  
   @Test
   public void testSimpleGenericComponent() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
-                   "SimpleGenericComponent");
+        "SimpleGenericComponent");
+  }
+  
+  @Test
+  @Ignore("Should not pass like this, see #157")
+  public void testMultipleInstancesWithSimpleConnector() {
+    final ASTMontiArcNode astNode = loadComponentAST(PACKAGE + "." + "MultipleInstancesWithSimpleConnector");
+    final ExpectedErrorInfo expectedErrorInfo = new ExpectedErrorInfo(5, "xMA059", "xMA060");
+    checkInvalid(MontiArcCoCos.createChecker(), astNode, expectedErrorInfo);
   }
 
   @Test
   public void testSubcomponentsWithGenericTypeParams() {
-    final ASTMontiArcNode astNode = loadComponentAST(PACKAGE + "." + "SubcomponentsWithGenericTypeParams");
+    final ASTMontiArcNode astNode = loadComponentAST(
+        PACKAGE + "." + "SubcomponentsWithGenericTypeParams");
     final ExpectedErrorInfo expectedErrorInfo = new ExpectedErrorInfo(6, "xMA085");
     checkInvalid(MontiArcCoCos.createChecker(), astNode, expectedErrorInfo);
   }

@@ -6,18 +6,11 @@
 package _templates.de.montiarcautomaton.lib.automaton;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 import de.montiarcautomaton.generator.helper.AutomatonHelper;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.monticore.ast.ASTNode;
 import de.monticore.symboltable.CommonSymbol;
-import montiarc._ast.ASTJavaPInitializer;
-import montiarc._ast.ASTValueInitialization;
-import montiarc._symboltable.AutomatonSymbol;
 import montiarc._symboltable.ComponentSymbol;
 
 /**
@@ -37,14 +30,10 @@ public class AutomatonImplMainImpl extends AutomatonImplMain {
   public void generate(Path filepath, ASTNode node, CommonSymbol symbol) {
     if (symbol.getKind().isKindOf(ComponentSymbol.KIND)) {
       ComponentSymbol comp = (ComponentSymbol) symbol;
-      Collection<AutomatonSymbol> ajava = comp.getSpannedScope()
-          .<AutomatonSymbol> resolveLocally(AutomatonSymbol.KIND);
-      AutomatonSymbol automaton = ajava.iterator().next();
-      
       String inputName = comp.getName() + "Input";
       String resultName = comp.getName() + "Result";
       String implName = comp.getName() + "Impl";
-      AutomatonHelper helper = new AutomatonHelper(automaton, comp);
+      AutomatonHelper helper = new AutomatonHelper(comp);
       ComponentHelper compHelper = new ComponentHelper(comp);
 
       AutomatonImplMain.generate(filepath, node, helper, comp.getPackageName(), comp.getImports(),

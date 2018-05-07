@@ -5,7 +5,14 @@
  */
 package montiarc.cocos;
 
-import montiarc._cocos.*;
+import montiarc._cocos.MontiArcASTAutomatonBehaviorCoCo;
+import montiarc._cocos.MontiArcASTComponentCoCo;
+import montiarc._cocos.MontiArcASTConnectorCoCo;
+import montiarc._cocos.MontiArcASTInitialStateDeclarationCoCo;
+import montiarc._cocos.MontiArcASTJavaPBehaviorCoCo;
+import montiarc._cocos.MontiArcASTStateCoCo;
+import montiarc._cocos.MontiArcASTTransitionCoCo;
+import montiarc._cocos.MontiArcCoCoChecker;
 
 /**
  * Bundle of CoCos for the MontiArc language.
@@ -24,13 +31,13 @@ public class MontiArcCoCos {
         .addCoCo(new DefaultParametersCorrectlyAssigned())
         .addCoCo(new ComponentWithTypeParametersHasInstance())
         .addCoCo(new CircularInheritance())
+
       //TODO remove comment when new Java DSL is integrated
 //        .addCoCo(new AllGenericParametersOfSuperClassSet()) 
         .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
         .addCoCo(new TypeParameterNamesUnique())
         .addCoCo(new TopLevelComponentHasNoInstanceName())
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
-        .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo(new InPortUniqueSender())
         .addCoCo(new ImportsValid())
         .addCoCo(new SubcomponentReferenceCycle())
@@ -40,7 +47,6 @@ public class MontiArcCoCos {
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
         .addCoCo((MontiArcASTJavaPBehaviorCoCo) new NamesCorrectlyCapitalized())
-        .addCoCo(new SimpleConnectorSourceExists())
         .addCoCo(new InputPortChangedInCompute())
         .addCoCo(new UsedPortsAndVariablesExist())
         .addCoCo(new MultipleBehaviorImplementation())
@@ -67,8 +73,7 @@ public class MontiArcCoCos {
         .addCoCo(new UseOfForbiddenExpression())
         .addCoCo((MontiArcASTStateCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new ConnectorSourceAndTargetComponentDiffer())
-        .addCoCo(new ConnectorSourceAndTargetExist())
-        .addCoCo(new ConnectorSourceAndTargetTypeFit())
+        .addCoCo(new ConnectorSourceAndTargetExistAndFit())
         .addCoCo(new ImportsAreUnique())
         
         // REFERENTIAL INTEGRITY
