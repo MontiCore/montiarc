@@ -1,10 +1,13 @@
-${tc.signature("package", "kind", "type", "super", "typeHelper")}
+${tc.signature("package", "kind", "type", "super", "typeHelper", "imports")}
 
 package ${package};
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
+<#list imports as import>
+import ${import};
+</#list>
 
 public ${kind} ${type.getName()} ${super} {
 

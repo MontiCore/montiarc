@@ -26,6 +26,13 @@
       <artifactId>monticore-emf-runtime</artifactId>
       <version>${monticore.version}</version>
     </dependency>
+    
+    <dependency>
+      <groupId>montiarc.generators</groupId>
+      <artifactId>cd2pojo</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    
 
 <!--     <dependency> -->
 <!--       <groupId>montiarc.languages</groupId> -->
@@ -87,11 +94,6 @@
       <version>${javadsl.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>de.monticore</groupId>
-      <artifactId>cd2pojo</artifactId>
-      <version>1.0.2</version>
-    </dependency>
     
     <dependency>
 		<groupId>de.monticore</groupId>
