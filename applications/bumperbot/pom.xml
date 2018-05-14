@@ -6,7 +6,7 @@
   <parent>
     <groupId>montiarc.applications</groupId>
     <artifactId>applications</artifactId>
-	<version>4.2.2-SNAPSHOT</version>
+	<version>4.2.3</version>
   </parent>
 
   <artifactId>bumperbot</artifactId>
