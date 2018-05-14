@@ -6,7 +6,7 @@
 
 	<groupId>montiarc</groupId>
 	<artifactId>montiarc-core</artifactId>
-	<version>4.2.4-SNAPSHOT</version>
+	<version>4.3</version>
 	<packaging>pom</packaging>
 
 	<!-- == PROJECT MODULES ================================================= -->
