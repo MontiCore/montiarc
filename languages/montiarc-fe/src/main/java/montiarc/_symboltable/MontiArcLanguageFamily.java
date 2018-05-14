@@ -2,6 +2,9 @@ package montiarc._symboltable;
 
 import de.monticore.ModelingLanguageFamily;
 import de.monticore.java.lang.JavaDSLLanguage;
+import de.monticore.symboltable.resolving.CommonResolvingFilter;
+import de.monticore.symboltable.types.JFieldSymbol;
+import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.umlcd4a.CD4AnalysisLanguage;
 import montiarc.helper.CD4ALanguage;
 
@@ -16,10 +19,11 @@ public class MontiArcLanguageFamily extends ModelingLanguageFamily {
   public MontiArcLanguageFamily() {
     addModelingLanguage(new MontiArcLanguage());
     addModelingLanguage(new JavaDSLLanguage());
-    // Use CD4ALanguage instead of CD4AnalysisLanguage. see CD4ALanguage.
-    // Required for on-the-fly coco checks.
     
-    addModelingLanguage(new CD4ALanguage());
+    MontiArcCD4ALanguage cdlang = new MontiArcCD4ALanguage();
+    cdlang.addResolvingFilter(new CommonResolvingFilter<JTypeSymbol>(JTypeSymbol.KIND));
+    cdlang.addResolvingFilter(new CommonResolvingFilter<JFieldSymbol>(JFieldSymbol.KIND));
+    addModelingLanguage(cdlang);
     
   }
   
