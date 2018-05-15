@@ -1,6 +1,7 @@
 package components.body.automaton.transition.guards;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
@@ -28,6 +29,7 @@ public class GuardTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "GuardIsBoolean");
   }
   
+  @Ignore("see #172")
   @Test
   public void testGuardNotBoolean() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "GuardNotBoolean");
