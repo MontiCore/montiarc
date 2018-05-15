@@ -49,4 +49,9 @@ public class GuardTest extends AbstractCoCoTest {
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(4, "xMA022"));
   }
   
+  @Test
+  public void testComplexExpressionInGuard() {
+    checkValid(PACKAGE + "." + "GuardHasComplexExpressionWithCD");
+  }
+  
 }
