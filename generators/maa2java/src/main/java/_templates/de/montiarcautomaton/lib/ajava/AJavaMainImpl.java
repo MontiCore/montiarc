@@ -17,8 +17,10 @@ import de.monticore.java.javadsl._ast.ASTBlockStatement;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.CommonSymbol;
+import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTJavaPBehavior;
 import montiarc._ast.ASTJavaPInitializer;
+import montiarc._ast.ASTMontiArcNode;
 import montiarc._ast.ASTValueInitialization;
 import montiarc._symboltable.ComponentSymbol;
 
@@ -51,7 +53,7 @@ public class AJavaMainImpl extends AJavaMain {
       }
       
       BehaviorVisitor visitor = new BehaviorVisitor();
-      visitor.visit(node);
+      visitor.handle((ASTComponent)node);
       JavaDSLPrettyPrinter printer = new JavaDSLPrettyPrinter(new IndentPrinter());
       Optional<ASTJavaPBehavior> ajavaNode = visitor.getJavaPBehavior();
       

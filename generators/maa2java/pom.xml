@@ -7,9 +7,9 @@
   <parent>
     <groupId>montiarc.generators</groupId>
     <artifactId>generators</artifactId>
-	<version>4.2.2-SNAPSHOT</version>
+    <version>4.3.1-SNAPSHOT</version>
   </parent>
-<artifactId>maa2java</artifactId>
+  <artifactId>maa2java</artifactId>
 
 
   <!-- == PROJECT DEPENDENCIES ============================================= -->
@@ -26,19 +26,6 @@
       <artifactId>monticore-emf-runtime</artifactId>
       <version>${monticore.version}</version>
     </dependency>
-    
-    <dependency>
-      <groupId>montiarc.generators</groupId>
-      <artifactId>cd2pojo</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    
-
-<!--     <dependency> -->
-<!--       <groupId>montiarc.languages</groupId> -->
-<!--       <artifactId>ajava</artifactId> -->
-<!--       <version>${project.version}</version> -->
-<!--     </dependency> -->
 
     <dependency>
       <groupId>montiarc.libraries</groupId>
@@ -63,26 +50,17 @@
       <version>${monticore.version}</version>
     </dependency>
 
-    <!-- MAA Generators -->
-<!--     <dependency> -->
-<!--       <groupId>montiarc.generators.maa2java</groupId> -->
-<!--       <artifactId>ajava2java</artifactId> -->
-<!--       <version>${project.version}</version> -->
-<!--     </dependency> -->
-
-<!--     <dependency> -->
-<!--       <groupId>montiarc.generators.maa2java</groupId> -->
-<!--       <artifactId>automaton2java</artifactId> -->
-<!--       <version>${project.version}</version> -->
-<!--     </dependency> -->
-
-
     <!-- MontiCore Dependencies -->
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>monticore-runtime</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>de.monticore.java.lib</artifactId>
+      <classifier>models</classifier>
+      <version>${javalib.version}</version>
+    </dependency>
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>monticore-grammar</artifactId>
@@ -94,12 +72,17 @@
       <version>${javadsl.version}</version>
     </dependency>
 
-    
     <dependency>
-		<groupId>de.monticore</groupId>
-		<artifactId>de.monticore.java.lib</artifactId>
-		<classifier>models</classifier>
-	</dependency>
+      <groupId>montiarc.generators</groupId>
+      <artifactId>cd2pojo</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>de.monticore.java.lib</artifactId>
+      <classifier>models</classifier>
+    </dependency>
 
     <!-- .. Test Libraries ............................................... -->
     <dependency>
