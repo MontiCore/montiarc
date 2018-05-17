@@ -11,6 +11,7 @@ import java.util.List;
 
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.symboltable.CommonScopeSpanningSymbol;
+import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.types.TypeSymbol;
 import de.monticore.symboltable.types.references.TypeReference;
 import montiarc.helper.SymbolPrinter;
@@ -20,7 +21,7 @@ import montiarc.helper.SymbolPrinter;
  *
  * @author Robert Heim
  */
-public class ComponentInstanceSymbol extends CommonScopeSpanningSymbol {
+public class ComponentInstanceSymbol extends CommonSymbol {
 
   public static final ComponentInstanceKind KIND = new ComponentInstanceKind();
 
@@ -47,13 +48,6 @@ public class ComponentInstanceSymbol extends CommonScopeSpanningSymbol {
    */
   public ComponentSymbolReference getComponentType() {
     return this.componentType;
-  }
-
-  /**
-   * @return connectors of this component
-   */
-  public Collection<ConnectorSymbol> getSimpleConnectors() {
-    return getSpannedScope().<ConnectorSymbol> resolveLocally(ConnectorSymbol.KIND);
   }
 
   /**
