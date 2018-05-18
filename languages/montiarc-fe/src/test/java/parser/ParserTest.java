@@ -59,9 +59,6 @@ public class ParserTest {
       MODEL_PATH + "/components/PackageAndLocationDiffer.arc",
       
       // TODO we do not support OCL Expressions yet
-      MODEL_PATH + "/arc/prettyPrint/example1/StatusControl.arc",
-      
-      // TODO we do not support OCL Expressions yet
       MODEL_PATH + "/components/body/invariants/OCLFieldToField.arc",
       
       // TODO we do not support OCL Expressions yet

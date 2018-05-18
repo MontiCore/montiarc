@@ -1,4 +1,4 @@
-package pretty;
+package components.body.subcomponents._subcomponents;
 
 component GenericArchitectureComponent<T> {
   

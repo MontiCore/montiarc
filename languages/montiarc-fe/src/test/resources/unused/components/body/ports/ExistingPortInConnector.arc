@@ -1,6 +1,7 @@
 package unused.components.body.ports;
 
-import b.CorrectCompInB;
+import components.body.subcomponents._subcomponents.package1.ValidComponentInPackage1;
+import components.body.subcomponents._subcomponents.package2.ValidComponentInPackage2;
 
 /*
  * Invalid model. See comments below.
@@ -16,7 +17,7 @@ component ExistingPortInConnector {
         
     component ValidComponentInPackage1 ccia [stringOutWrong -> strOut1];
     
-    component CorrectCompInB ccib;
+    component ValidComponentInPackage2 ccib;
     
     connect strIn -> ccib.stringInWrong, ccia.stringIn;
     

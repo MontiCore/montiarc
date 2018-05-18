@@ -65,6 +65,15 @@ public class ConnectorTest extends AbstractCoCoTest {
     checker.addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(checker, node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
   }
+
+  @Test
+  public void testConnectorSourceAndTargetNonExistant2() {
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "ConnectorSourceAndTargetNotExist2");
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    checkInvalid(checker, node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
+  }
   
   @Test
   public void testSimpleConnectorSourceNonExistant() {
