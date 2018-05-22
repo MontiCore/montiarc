@@ -81,14 +81,16 @@ public class MontiArcCoCos {
         .addCoCo(new UseOfUndeclaredState())
         .addCoCo(new UseOfUndeclaredField())
         .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
-        .addCoCo(new AssignmentHasNoName())
+        //TODO see #171
+        //.addCoCo(new AssignmentHasNoName())
         .addCoCo(new ConfigurationParametersCorrectlyInherited())
         .addCoCo(new InnerComponentNotExtendsDefiningComponent())
         
         // TYPE CORRECTNESS
-        .addCoCo(new AutomatonGuardIsNotBoolean())
         // TODO Kann mit der Aktualisierung auf neue JavaDSL-Version aktiviert
         // werden
+        //.addCoCo(new AutomatonGuardIsNotBoolean())
+
         // .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
         // .addCoCo(new AutomatonInitialReactionTypeDoesNotFitOutputType())
         // .addCoCo(new AutomatonReactionTypeDoesNotFitOutputType())

@@ -16,8 +16,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.ImmutableList;
-
 import de.monticore.symboltable.CommonScopeSpanningSymbol;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.symboltable.SymbolKind;
@@ -39,8 +37,6 @@ import montiarc.helper.Timing;
 public class ComponentSymbol extends CommonScopeSpanningSymbol {
 
   public static final ComponentKind KIND = new ComponentKind();
-
-  private final List<AComponentImplementationSymbol> implementations = new ArrayList<>();
 
   private final Map<String, Optional<String>> stereotype = new HashMap<>();
 
@@ -152,38 +148,6 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
     return getConnectors().stream()
         .filter(c -> c.getSource().equals(sender))
         .findAny().isPresent();
-  }
-
-  /**
-   * @param impl the implementation to add
-   */
-  public void addImplementation(AComponentImplementationSymbol impl) {
-    referencedComponent.orElse(this).implementations.add(impl);
-  }
-
-  /**
-   * @return implementations
-   */
-  public List<AComponentImplementationSymbol> getImplementations() {
-    return ImmutableList.copyOf(referencedComponent.orElse(this).implementations);
-  }
-
-  public Optional<AComponentImplementationSymbol> getImplementation(String name) {
-    // no check for reference required
-    return getImplementations().stream()
-        .filter(i -> i.getName().equals(name))
-        .findFirst();
-  }
-
-  /**
-   * @param visibility visibility
-   * @return implementations with the given visibility
-   */
-  public Collection<AComponentImplementationSymbol> getImplementations(AccessModifier visibility) {
-    // no check for reference required
-    return getImplementations().stream()
-        .filter(s -> s.getAccessModifier().includes(visibility))
-        .collect(Collectors.toList());
   }
 
   /**

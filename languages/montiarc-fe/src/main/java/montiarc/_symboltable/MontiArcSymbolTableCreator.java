@@ -285,9 +285,10 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         componentTypeReference);
     configArguments.forEach(v -> instance.addConfigArgument(v));
     // create a subscope for the instance
+//    setLinkBetweenSymbolAndNode(instance, node);
     addToScopeAndLinkWithNode(instance, node);
     // remove the created instance's scope
-    removeCurrentScope();
+//    removeCurrentScope();
   }
   
   @Override
