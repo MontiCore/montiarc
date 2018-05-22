@@ -36,7 +36,7 @@ public class ParserTest {
   
   private static final String MODEL_PATH = "src/test/resources";
   
-  private static List<String> expectedParseErrorModels = Arrays.asList(
+  static List<String> expectedParseErrorModels = Arrays.asList(
       // The package name starts with an upper case letter which is not parseable
       MODEL_PATH + "/components/UpperCasePackageName.arc",
 
