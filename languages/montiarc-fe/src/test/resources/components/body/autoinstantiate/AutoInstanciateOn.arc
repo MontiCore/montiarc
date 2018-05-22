@@ -1,7 +1,11 @@
-package a;
+package components.body.autoinstantiate;
 
+/**
+ * Valid model.
+ */
 component AutoInstanciateOn {
-	
+
+	autoinstantiate on;
 	
 	port in String strIn;
         
@@ -13,7 +17,6 @@ component AutoInstanciateOn {
 	// do not create 
 	component InnerInstanciated {
 		port in String strIn2;
-
 		// create
 		component InnerInnerNotInstanciated {
 		  port in String strIn3;
@@ -47,5 +50,4 @@ component AutoInstanciateOn {
 	}
 	
 	connect strIn -> myInnerInstanciated.strIn2, innerNotInstanciated.strIn1;
-	
 }

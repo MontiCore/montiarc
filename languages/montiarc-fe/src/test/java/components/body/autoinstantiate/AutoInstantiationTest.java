@@ -137,8 +137,19 @@ public class AutoInstantiationTest extends AbstractCoCoTest {
    * Assure that an inner component with formal type parameters is not auto-instantiated
    */
   @Test
-  public void test() {
+  public void testInnerComponentWithFormalTypeParameters() {
     ComponentSymbol comp = this.loadComponent("InnerComponentWithFormalTypeParameters");
     assertEquals(0, comp.getSubComponents().size());
+  }
+
+  /**
+   * Test that auto-instantiation is working as expected
+   * TODO: Adjust expected value to 2 after researching behaviour with explicit instance present
+   */
+  @Test
+  public void testAutoInstanciateOn() {
+    ComponentSymbol comp = this.loadComponent("AutoInstanciateOn");
+
+    assertEquals(3, comp.getSubComponents().size());
   }
 }

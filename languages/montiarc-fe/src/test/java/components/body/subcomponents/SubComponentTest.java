@@ -501,7 +501,7 @@ public class SubComponentTest extends AbstractCoCoTest {
   public void testInnerComponents2() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "InnerComponents");
     
-    assertEquals("7 subcomponents expected", 7, comp
+    assertEquals("6 subcomponents expected", 6, comp
         .getSubComponents().size());
     assertEquals(7, comp.getInnerComponents().size());
     
