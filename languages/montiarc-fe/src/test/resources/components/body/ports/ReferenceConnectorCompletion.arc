@@ -1,5 +1,8 @@
-package unused.components.body.ports;
+package components.body.ports;
 
+/*
+ * Valid model
+ */
 component ReferenceConnectorCompletion {
     port
         in String strIn,

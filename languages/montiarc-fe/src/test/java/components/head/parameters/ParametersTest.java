@@ -96,6 +96,11 @@ public class ParametersTest extends AbstractCoCoTest {
   public void testCompWithIntegerParameter() {
     checkValid(PACKAGE + "." + "CompWithIntegerParameter");
   }
+
+  @Test
+  public void testCompWithInterfaceParam() {
+    checkValid(PACKAGE + "." + "CompWithInterfaceParam");
+  }
   
  /*
   * Tests [Hab16] CV1: Instance names start with a lower-case letter. (pg. 71, Lst. 3.51)

@@ -104,6 +104,14 @@ public class SubComponentTest extends AbstractCoCoTest {
         node,
         new ExpectedErrorInfo(4, "xMA061"));
   }
+
+  @Test
+  public void testConfigurableArchitectureComponent() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ConfigurableArchitectureComponent");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
+        node,
+        new ExpectedErrorInfo(3, "xMA061"));
+  }
   
   @Test
   public void testAmbiguousImplicitAndExplicitSubcomponentNames() {
@@ -135,6 +143,13 @@ public class SubComponentTest extends AbstractCoCoTest {
   @Test
   public void testReferencedSubComponentsExists() {
     checkValid(PACKAGE + "." + "ReferencedSubComponentsExists");
+  }
+
+  @Test
+  @Ignore("TODO: Throws ClassCastException in JavaDSLHelper. Root is the coco" +
+              "SubcomponentParametersCorreclyAssigned,")
+  public void testCompThatUsesCompWithInterfaceParam() {
+    checkValid(PACKAGE + "." + "CompThatUsesCompWithInterfaceParam");
   }
   
   /**
@@ -662,6 +677,14 @@ public class SubComponentTest extends AbstractCoCoTest {
         "HasTwoStringInAndOneStringOut");
   }
   
+  @Test
+  @Ignore("TODO: IndexOutOfBoundsException in TypeCompatibilityChecker." +
+              "Root: ConnectorSourceAndTargetExistAndFit")
+  public void testGenericArchitectureComponent() {
+    checkValid(PACKAGE + "." +
+        "GenericArchitectureComponent");
+  }
+
   @Test
   public void testSimpleGenericComponent() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +

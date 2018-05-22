@@ -1,4 +1,4 @@
-package unused.components.body.ports;
+package components.body.ports;
 
 import components.body.subcomponents._subcomponents.package1.ValidComponentInPackage1;
 import components.body.subcomponents._subcomponents.package2.ValidComponentInPackage2;

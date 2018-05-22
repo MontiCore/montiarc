@@ -1,4 +1,4 @@
-package components.body.autoconnect.datatypes;
+package types.database;
 
 public interface DBInterface {
 

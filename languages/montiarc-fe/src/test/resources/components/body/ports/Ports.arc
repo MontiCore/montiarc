@@ -1,4 +1,4 @@
-package unused.components.body.autoinstantiate;
+package components.body.ports;
 
 import java.util.*;
 
@@ -10,5 +10,4 @@ component Ports {
     port 
         in String p1,
         out List p2;
-
 }

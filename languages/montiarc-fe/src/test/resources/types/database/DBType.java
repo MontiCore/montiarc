@@ -1,6 +1,15 @@
-package components.body.autoconnect.datatypes;
+/**
+ *
+ */
+package types.database;
 
-public class DBType implements components.body.autoconnect.datatypes.DBInterface {
+/**
+ * Copyright (c) 2010 RWTH Aachen. All rights reserved.
+ *
+ * @author Arne Haber
+ * @date 25.06.2010
+ */
+public class DBType implements types.database.DBInterface {
 
   /* (non-Javadoc)
    * @see test.DBInterface#doFoo()

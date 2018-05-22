@@ -1,9 +1,13 @@
 package components.body.connectors;
 
 import types.*;
+import components.body.subcomponents._subcomponents.package1
+          .ValidComponentInPackage1;
 
 /**
 * Invalid model. See comments below.
+*
+* @implements TODO
 */
 component PortCompatibilityTypeInheritance {
 
@@ -51,11 +55,11 @@ component PortCompatibilityTypeInheritance {
 
   component GenericComponent<String, Integer> myGenComp;
 
-  connect strIn1 -> myGenComp.myKIn;
+  connect strIn1 -> myGenComp.myKIn1;
   connect myGenComp.myVOut -> intOut3;
 
   component GenericComponent<String, Integer> myGenComp2;
 
-  connect boolIn1 -> myGenComp2.myKIn;
+  connect boolIn1 -> myGenComp2.myKIn1;
   connect myGenComp2.myVOut -> boolOut1;
 }
