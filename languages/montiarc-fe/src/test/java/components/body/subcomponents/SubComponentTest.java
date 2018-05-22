@@ -160,9 +160,9 @@ public class SubComponentTest extends AbstractCoCoTest {
   @Ignore
   @Test
   public void testReferencedSubComponentsNotExists() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ReferencedSubComponentNotExists");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ReferencedSubComponentsNotExists");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ReferencedSubComponentExists()), node,
-        new ExpectedErrorInfo(1, "xMA004"));
+        new ExpectedErrorInfo(3, "xMA004"));
   }
   
   @Test
@@ -689,6 +689,12 @@ public class SubComponentTest extends AbstractCoCoTest {
   public void testSimpleGenericComponent() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
         "SimpleGenericComponent");
+  }
+
+  @Test
+  public void testGenericConfigurableComponent() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+        "GenericConfigurableComponent");
   }
   
   @Test
