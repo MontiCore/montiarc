@@ -31,5 +31,5 @@ component UndefinedPortTypes {
     out DefinedJavaTypeInPackage1, //Correct
 
     out types.UndefinedTypeFQ utfq;
-        //ERROR: The type 'types.UndefinedType' could not be loaded!
+        //ERROR: The type 'types.UndefinedTypeFQ' could not be loaded!
 }

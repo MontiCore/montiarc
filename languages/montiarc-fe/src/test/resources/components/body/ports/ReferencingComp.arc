@@ -1,20 +1,27 @@
-package d;
+package components.body.ports;
 
-import b.*;
+import types.*;
 
+/*
+ * Invalid model.
+ *
+ * @implements TODO
+ * TODO Add test
+ */
 component ReferencingComp (int[] configIntArray, String[][] configStringArray){
     
     port
         in int[] intArrayIn,
         in String[] stringArrayIn,
         in int intNoArrayIn,
-        in GenericClassType<String>[][][] enumArrayIn,
+        in GenericType<String>[][][] enumArrayIn,
         out short[] shortArrayOut;
         
     component CompWithArrays(configIntArray, configStringArray) ref;
     
     connect intArrayIn -> ref.intArrayIn;
-    connect stringArrayIn -> ref.stringArrayIn; //=> port not compatible because of different array dimensions
+    connect stringArrayIn -> ref.stringArrayIn;
+      //=> port not compatible because of different array dimensions
     connect intNoArrayIn -> ref.intNoArrayIn;
     connect enumArrayIn -> ref.enumArrayIn;
     connect ref.shortArrayOut -> shortArrayOut;

@@ -1,7 +1,10 @@
 package components.head.inheritance;
 
+import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
+
 /**
  * Valid model.
+ * Used as supercomponent. Untested
  */
 component SuperArchitecturalComponent {
     
@@ -10,8 +13,8 @@ component SuperArchitecturalComponent {
         out String myOutput,
         out String myOutput519;
         
-   component A myA [strOut -> myOutput];
+   component HasStringInputAndOutput myA [pOut -> myOutput];
    
-   connect myInput -> myA.strIn; 
+   connect myInput -> myA.pIn;
 
 }

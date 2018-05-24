@@ -5,6 +5,11 @@ import types.Datatypes.TimerSignal;
 import types.Datatypes.TimerCmd;
 import java.util.HashMap;
 
+/*
+ * Invalid model.
+ *
+ * @implements TODO
+ */
 component IncompatibleVariableAssignmentGenericTypesDifferSimple {
   
   HashMap<String, Integer> stateChanges;

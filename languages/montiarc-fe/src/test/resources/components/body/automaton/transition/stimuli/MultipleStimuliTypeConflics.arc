@@ -3,6 +3,8 @@ package components.body.automaton.transition.stimuli;
 /**
  * Invalid model. Cannot assign 'false' to Integer variable or 
  * '255' to a Boolean port.
+ *
+ * @implements TODO
  */
 component MultipleStimuliTypeConflics {
 

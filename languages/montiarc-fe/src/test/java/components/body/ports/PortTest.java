@@ -276,4 +276,14 @@ public class PortTest extends AbstractCoCoTest {
   public void testPorts() {
     checkValid(PACKAGE + ".Ports");
   }
+
+  @Test
+  public void testCompWithArrays() {
+    checkValid(PACKAGE + "." + "CompWithArrays");
+  }
+
+  @Test
+  public void testJavaTypesAsPortTypes() {
+    checkValid(PACKAGE + "." + "JavaTypesAsPortTypes");
+  }
 }

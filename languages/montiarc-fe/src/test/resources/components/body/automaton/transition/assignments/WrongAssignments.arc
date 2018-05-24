@@ -1,5 +1,10 @@
 package components.body.automaton.transition.assignments;
 
+/*
+ * Invalid model.
+ *
+ * @implements TODO
+ */
 component WrongAssignments {
 
     port 

@@ -75,7 +75,7 @@ public class AutoInstantiationTest extends AbstractCoCoTest {
     Collection<ComponentInstanceSymbol> subcomps = comp.getSubComponents();
     assertEquals(1, subcomps.size());
     for (ComponentInstanceSymbol s : subcomps) {
-      assertEquals("a", s.getName());
+      assertEquals("atomicComponent", s.getName());
     }
   }
   

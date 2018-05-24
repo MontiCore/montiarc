@@ -1,6 +1,8 @@
 package components.body.ajava;
 
-
+/*
+ *  Valid model.
+ */
 component LocalVariablesInComputeBlock{
 
 

@@ -5,7 +5,11 @@ import types.Datatypes.TimerSignal;
 import types.Datatypes.TimerCmd;
 import java.util.HashMap;
 
-
+/*
+ * Invalid model.
+ *
+ * @implements TODO
+ */
 component IncompatibleVariableAssignment {
   port
     in Double distance,

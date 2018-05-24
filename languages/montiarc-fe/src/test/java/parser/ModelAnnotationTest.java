@@ -17,6 +17,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 /**
  * Checks that all models have either been annotated as valid or invalid.
@@ -45,10 +46,17 @@ public class ModelAnnotationTest {
     } catch (IOException e) {
       e.printStackTrace();
     }
+
+    if (modelVisitor.todoTestCounter > 0) {
+      Log.warn(
+          String.format("There are at least %d models with missing tests.",
+          modelVisitor.todoTestCounter));
+    }
   }
 
   class FileWalker extends SimpleFileVisitor<Path>{
     private final String fileEnding;
+    private int todoTestCounter = 0;
 
     public FileWalker(String fileEnding) {
       this.fileEnding = fileEnding;
@@ -101,6 +109,9 @@ public class ModelAnnotationTest {
               String.format("Description of model %s does not state " +
                                 "whether it is valid or invalid!",
                   file.toString()));
+        }
+        if(comment.getText().toLowerCase().contains("todo add test")){
+          todoTestCounter++;
         }
       }
       return FileVisitResult.CONTINUE;

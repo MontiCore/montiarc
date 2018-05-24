@@ -696,6 +696,12 @@ public class SubComponentTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
         "GenericConfigurableComponent");
   }
+
+  @Test
+  public void testAtomicComponent() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+        "AtomicComponent");
+  }
   
   @Test
   @Ignore("Should not pass like this, see #157")
