@@ -3,7 +3,7 @@ package components.body.subcomponents;
 import components.body.subcomponents._subcomponents.*;
 
 /**
-* Invalid component. 
+* Invalid model.
 * @implements [Hab16] R9: If a generic component type is instantiated 
 * as a subcomponent, all generic parameters have to be assigned. (p. 66, lst. )
 */

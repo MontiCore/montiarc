@@ -19,7 +19,7 @@ import components.body.subcomponents._subcomponents.package2
     //WARNING: A Type with the name 'SameComponentNameInDifferentPackage' is already imported!
 
 /*
- * Invalid model
+ * Invalid model.
  *
  * Formerly named "S1" in MontiArc3.
  *

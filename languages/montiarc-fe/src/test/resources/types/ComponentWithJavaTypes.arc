@@ -1,5 +1,8 @@
 package types;
 
+/*
+ * Valid model.
+ */
 component ComponentWithJavaTypes {
     port
         in SuperType supIn1,

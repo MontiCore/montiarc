@@ -286,4 +286,9 @@ public class PortTest extends AbstractCoCoTest {
   public void testJavaTypesAsPortTypes() {
     checkValid(PACKAGE + "." + "JavaTypesAsPortTypes");
   }
+
+  @Test
+  public void testComponentForCDTypesTest() {
+    checkValid(PACKAGE + "." + "ComponentForCDTypesTest");
+  }
 }

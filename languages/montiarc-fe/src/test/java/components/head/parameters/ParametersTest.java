@@ -5,21 +5,22 @@
  */
 package components.head.parameters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-import montiarc._ast.ASTMontiArcNode;
-import montiarc._cocos.MontiArcASTComponentCoCo;
-import montiarc.cocos.NamesCorrectlyCapitalized;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
+import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.IdentifiersAreUnique;
+import montiarc.cocos.MontiArcCoCos;
+import montiarc.cocos.NamesCorrectlyCapitalized;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * This class tests all context conditions related to parameters
@@ -50,6 +51,20 @@ public class ParametersTest extends AbstractCoCoTest {
         loadComponentAST(PACKAGE + "." + "ParameterAmbiguous"),
         new ExpectedErrorInfo(2, "xMA069"));
     
+  }
+
+  @Test
+  /*
+   *
+   */
+  public void testInvalidConfigArgs() {
+    final MontiArcCoCoChecker cocos
+//        = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
+        = MontiArcCoCos.createChecker();
+    final ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "InvalidConfigArgs");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA065");
+    checkInvalid(cocos, node, errors);
   }
 
   @Test
@@ -88,6 +103,7 @@ public class ParametersTest extends AbstractCoCoTest {
   }
   
   @Test
+  @Ignore("Check generic types in CD4A or fix CDTestTypes.cd")
   public void testEnumFromCDAsTypeArgument() {
     checkValid(PACKAGE+"."+"EnumFromCDAsTypeArg");
   }
@@ -100,6 +116,17 @@ public class ParametersTest extends AbstractCoCoTest {
   @Test
   public void testCompWithInterfaceParam() {
     checkValid(PACKAGE + "." + "CompWithInterfaceParam");
+  }
+
+  @Test
+  public void testUseEnumAsTypeArg() {
+    checkValid(PACKAGE + "." + "UseEnumAsTypeArg");
+  }
+
+  @Test
+  @Ignore("Check CD4A generics")
+  public void testUseEnumAsTypeArgFromCD() {
+    checkValid(PACKAGE + "." + "UseEnumAsTypeArgFromCD");
   }
   
  /*

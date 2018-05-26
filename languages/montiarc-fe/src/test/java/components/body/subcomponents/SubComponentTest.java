@@ -206,6 +206,16 @@ public class SubComponentTest extends AbstractCoCoTest {
   public void testComponentWithTypeParametersHasInstance() {
     checkValid(PACKAGE + "." + "ComponentWithTypeParametersHasInstance");
   }
+
+  @Test
+  public void testCompWithCfg() {
+    checkValid(PACKAGE + "." + "CompWithCfg");
+  }
+
+  @Test
+  public void testCompWithCfg2() {
+    checkValid(PACKAGE + "." + "CompWithCfg2");
+  }
   
   @Test
   public void testUniqueInnerCompDefinition() {

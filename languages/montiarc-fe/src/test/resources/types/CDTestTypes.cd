@@ -1,16 +1,16 @@
-package c;
+package types;
 
-classdiagram testTypes {
+classdiagram CDTestTypes {
 
   public class TypeWithFields {
-	public int testInt = 1;
-	public boolean testBool = true;
+    public int testInt = 1;
+    public boolean testBool = true;
 
-	private int privateVar = 0;
-	
-	public java.lang.String toString() {
-	  return "Here is TypeWithFields";
-	}
+    private int privateVar = 0;
+
+//    public java.lang.String toString() {
+//      return "Here is TypeWithFields";
+//    }
   }
   
   public class SuperType {}
@@ -31,7 +31,8 @@ classdiagram testTypes {
         INACTIVE;
   }
   
-  public class GenericClassType<T> {
+  public class GenericClassType//<T>
+  {
     public T genericField;
   }
   

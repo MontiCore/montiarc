@@ -1,9 +1,10 @@
-package components.body.subcomponents;
+package components.head.parameters;
 
 import types.MyEnum;
 
 /*
- * Valid model. (in MontiArc 3)
+ * Valid model.
+ * TODO Add test
  */
 component UseEnumAsTypeArg {
     

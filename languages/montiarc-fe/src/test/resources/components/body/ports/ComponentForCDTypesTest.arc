@@ -1,7 +1,11 @@
-package c;
+package components.body.ports;
 
-import c.testTypes.*;
+import types.CDTestTypes.*;
 
+/*
+ * Valid model.
+ * TODO Add test
+ */
 component ComponentForCDTypesTest {
 	port 
 	  in TypeWithFields portInUnqualified,
