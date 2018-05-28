@@ -17,7 +17,7 @@ component ValidAJavaComponent {
   }
   
   compute CalculateSomething {
-    counter++;
+    counter+=1;
     o = i + counter;    
   }
 

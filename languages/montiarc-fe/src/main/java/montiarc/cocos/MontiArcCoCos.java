@@ -63,7 +63,6 @@ public class MontiArcCoCos {
                      new NamesCorrectlyCapitalized())
         .addCoCo(new AutomatonHasNoState())
         .addCoCo(new AutomatonHasNoInitialState())
-        .addCoCo(new CorrectAssignmentOperators())
         .addCoCo(new MultipleAssignmentsSameIdentifier())
         .addCoCo(new AutomatonOutputInExpression())
         .addCoCo(new AutomatonNoAssignmentToIncomingPort())

@@ -11,8 +11,8 @@ public class ASTGuard extends ASTGuardTOP {
    * @param kind
    * @param guardExpression
    */
-  public ASTGuard(String kind, ASTGuardExpression guardExpression) {
-    super(kind, guardExpression);
+  public ASTGuard(ASTGuardExpression guardExpression) {
+    super(guardExpression);
   }
   
   public ASTGuard() {
