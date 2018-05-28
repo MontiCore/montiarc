@@ -17,6 +17,6 @@ component GuardUsesOutgoingPort {
      state S;
      initial S;
 
-     S [i == v + i / o] {v == (o+1)*o} / {o = (v*i)+o};
+     S [i == v + i / o && v == (o+1)*o] / {o = (v*i)+o};
   }
 }

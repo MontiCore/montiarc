@@ -13,9 +13,8 @@ public class ASTTransition extends ASTTransitionTOP {
       String source,
       String target,
       ASTGuard guard,
-      ASTBlock stimulus,
       ASTBlock reaction) {
-    super(source, target, guard, stimulus, reaction);
+    super(source, target, guard, reaction);
   }
   
   public String getName() {

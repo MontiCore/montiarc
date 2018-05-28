@@ -14,7 +14,7 @@ component MultipleAssignmentsToSamePort {
         state S;
         initial S;
     
-        S [true] {v == 1} / { v=2, 
+        S [v == 1] / { v=2, 
                               y=1, 
                               v=3, 
                               o=3, 
