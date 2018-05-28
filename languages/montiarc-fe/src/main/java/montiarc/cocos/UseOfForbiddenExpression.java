@@ -19,16 +19,23 @@ public class UseOfForbiddenExpression implements JavaDSLASTExpressionCoCo {
     boolean isError = false;
     String errorMessage = "";
     if (node.instanceofTypeIsPresent()) {
+      isError = true;
       errorMessage = "instanceOf expression";
     }
     else if (node.arrayExpressionIsPresent()) {
+      isError = true;
       errorMessage = "array access expression";
     }
-    else if(node.typeCastTypeIsPresent()) {
+    else if (node.typeCastTypeIsPresent()) {
+      isError = true;
       errorMessage = "type cast expression";
     }
-    else if(node.prefixOpIsPresent()) {
-      errorMessage = "prefix expression";
+    else if (node.prefixOpIsPresent()) {
+      String prefixOp = node.getPrefixOp().get();
+      if (prefixOp.equals("--") || prefixOp.equals("++")) {
+        isError = true;
+        errorMessage = "prefix expression";
+      }
     }
     
     if (isError) {
