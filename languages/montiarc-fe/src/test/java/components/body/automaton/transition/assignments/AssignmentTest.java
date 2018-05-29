@@ -3,7 +3,6 @@ package components.body.automaton.transition.assignments;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.AutomatonNoAssignmentToIncomingPort;
 import montiarc.cocos.AutomatonOutputInExpression;
-import montiarc.cocos.CorrectAssignmentOperators;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -13,6 +12,7 @@ import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc.cocos.MontiArcCoCos;
+import montiarc.cocos.UseOfForbiddenExpression;
 
 /**
  * This class checks all context conditions related to automaton assignments
@@ -34,14 +34,7 @@ public class AssignmentTest extends AbstractCoCoTest {
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new ExpectedErrorInfo(1, "xMA020"));
   }
-  
-  @Test
-  public void testWrongAssignments() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongAssignments");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new CorrectAssignmentOperators()), node,
-        new ExpectedErrorInfo(4, "xMA017", "xMA016"));
-  }
-  
+
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
       + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
@@ -89,7 +82,8 @@ public class AssignmentTest extends AbstractCoCoTest {
   }
   
   /**
-   * Tests the checking of compatible variables in CoCo AutomatonReactionTypeDoesNotFitOutputType
+   * Tests the checking of compatible variables in CoCo
+   * AutomatonReactionTypeDoesNotFitOutputType
    */
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
       + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
@@ -122,19 +116,26 @@ public class AssignmentTest extends AbstractCoCoTest {
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new ExpectedErrorInfo(1, "xMA042"));
   }
-
+  
   @Test
-  /*
-   * @implements [Wor16] AR2: Inputs, outputs, and variables are used
-   *    correctly. (p.103, Lst 5.20)
-   */
+  /* @implements [Wor16] AR2: Inputs, outputs, and variables are used correctly.
+   * (p.103, Lst 5.20) */
   public void testAssignmentToIncomingPort() {
-    final ASTMontiArcNode astMontiArcNode
-        = loadComponentAST(PACKAGE + "." + "AssignmentToIncomingPort");
-    MontiArcCoCoChecker cocos
-        = new MontiArcCoCoChecker().addCoCo(new AutomatonNoAssignmentToIncomingPort());
-    final ExpectedErrorInfo errors
-        = new ExpectedErrorInfo(2, "xMA093");
+    final ASTMontiArcNode astMontiArcNode = loadComponentAST(
+        PACKAGE + "." + "AssignmentToIncomingPort");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+        .addCoCo(new AutomatonNoAssignmentToIncomingPort());
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA093");
+    checkInvalid(cocos, astMontiArcNode, errors);
+  }
+  
+  @Test
+  public void testUseOfForbiddenExpression() {
+    final ASTMontiArcNode astMontiArcNode = loadComponentAST(
+        PACKAGE + "." + "UseOfForbiddenExpressions");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+        .addCoCo(new UseOfForbiddenExpression());
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(5, "xMA023");
     checkInvalid(cocos, astMontiArcNode, errors);
   }
 }

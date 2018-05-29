@@ -23,7 +23,7 @@ component BumpControl {
     Idle -> Driving / {right = MotorCmd.FORWARD, left = MotorCmd.FORWARD, speedCmd = SpeedCmd.Dynamic, log = "Driving"};
     Driving -> Driving [distance >= 5] / {right = MotorCmd.FORWARD, left = MotorCmd.FORWARD, speedCmd = SpeedCmd.Dynamic};
     Driving -> Backing [distance < 5] / {right = MotorCmd.BACKWARD, left = MotorCmd.BACKWARD, timer = TimerCmd.SINGLE, log = "Backing", speedCmd = SpeedCmd.Static};
-    Backing -> Turning {signal == TimerSignal.ALERT} / {right = MotorCmd.BACKWARD, left = MotorCmd.FORWARD, timer = TimerCmd.DOUBLE, log = "Turning", speedCmd = SpeedCmd.Static};
-    Turning -> Driving {signal == TimerSignal.ALERT} / {left = MotorCmd.FORWARD, right = MotorCmd.FORWARD, log = "Driving", speedCmd = SpeedCmd.Dynamic};
+    Backing -> Turning [signal == TimerSignal.ALERT] / {right = MotorCmd.BACKWARD, left = MotorCmd.FORWARD, timer = TimerCmd.DOUBLE, log = "Turning", speedCmd = SpeedCmd.Static};
+    Turning -> Driving [signal == TimerSignal.ALERT] / {left = MotorCmd.FORWARD, right = MotorCmd.FORWARD, log = "Driving", speedCmd = SpeedCmd.Dynamic};
   }
 }

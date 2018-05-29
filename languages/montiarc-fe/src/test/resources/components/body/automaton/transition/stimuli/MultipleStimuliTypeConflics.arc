@@ -16,6 +16,6 @@ component MultipleStimuliTypeConflics {
 	automaton {
 		state A,B;
 		initial A;
-		A->B {i == false, s == 255};
+		A->B [i == false && s == 255];
 	}
 }

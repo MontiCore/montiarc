@@ -683,7 +683,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         c.setInitialReactionAST(node.getBlock());
         if (node.getBlock().isPresent()) {
           for (ASTIOAssignment assign : node.getBlock().get().getIOAssignments()) {
-            if (assign.getOperator() == MontiArcPackage.ASTIOAssignment_Operator) {
               if (assign.getName().isPresent()) {
                 Optional<VariableSymbol> var = currentScope().get()
                     .<VariableSymbol> resolve(assign.getName().get(), VariableSymbol.KIND);
@@ -695,7 +694,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
                     var.get().setValuation(Optional.of(v));
                   }
                 }
-              }
             }
           }
         }
@@ -718,7 +716,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     transition.setGuardAST(node.getGuard());
     transition.setReactionAST(node.getReaction());
-    transition.setStimulusAST(node.getStimulus());
     
     addToScopeAndLinkWithNode(transition, node); // introduces new scope
   }

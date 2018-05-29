@@ -67,15 +67,6 @@ public class IOAssignmentHelper {
     }
   }
   
-  /**
-   * Returns <tt>true</tt> if this is an assignment (== operator).
-   * 
-   * @return
-   */
-  public boolean isAssignOperator() {
-    // static not supported in FTL
-    return assignment.getOperator() == ASTConstantsMontiArc.SINGLE;
-  }
   
   /**
    * Prints the java expression of the given AST node.
