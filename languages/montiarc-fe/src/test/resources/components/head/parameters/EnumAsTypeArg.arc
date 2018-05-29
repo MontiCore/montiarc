@@ -3,10 +3,9 @@ package components.head.parameters;
 import types.MyEnum;
 
 /**
-* valid model.
+* Valid model.
 */ 
 component EnumAsTypeArg(MyEnum varName) {
     port 
         in String sIn;
-
 }

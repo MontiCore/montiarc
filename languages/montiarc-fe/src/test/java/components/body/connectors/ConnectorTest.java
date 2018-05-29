@@ -56,11 +56,27 @@ public class ConnectorTest extends AbstractCoCoTest {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit()), node,
         new ExpectedErrorInfo(1, "xMA084"));
   }
+
+  @Test
+  public void testPortCompatibilityTypeInheritance() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortCompatibilityTypeInheritance");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit()), node,
+        new ExpectedErrorInfo(9, "xMA084"));
+  }
   
   @Test
   public void testConnectorSourceAndTargetNonExistant() {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "ConnectorSourceAndTargetNotExist");
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    checkInvalid(checker, node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
+  }
+
+  @Test
+  public void testConnectorSourceAndTargetNonExistant2() {
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "ConnectorSourceAndTargetNotExist2");
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(checker, node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));

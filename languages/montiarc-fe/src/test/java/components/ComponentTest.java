@@ -9,6 +9,7 @@ import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.symboltable.Symbol;
 import montiarc._ast.ASTPort;
 import montiarc._symboltable.PortSymbol;
+import montiarc.cocos.IdentifiersAreUnique;
 import montiarc.cocos.PackageLowerCase;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -106,7 +107,18 @@ public class ComponentTest extends AbstractCoCoTest {
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PackageLowerCase());
     checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA054"));
   }
-  
+
+  /**
+   * This test should check whether the Context condition IdentifiersAreUnique is working.
+   */
+  @Test
+  public void testUniqueNamesDifferentSymboltypes() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UniqueNamesDifferentSymboltypes");
+    MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA052", "xMA053", "xMA061", "xMA069"));
+  }
+
   @Test
   public void testImportComponentFromJar() {
      Scope symtab = MONTIARCTOOL.initSymbolTable(Paths.get(MODEL_PATH).toFile(),
@@ -140,10 +152,10 @@ public class ComponentTest extends AbstractCoCoTest {
         "types.Datatypes.MotorCommand.STOP", JavaFieldSymbol.KIND).orElse(null);
     assertNotNull(javaField);
   }
-  
+
   @Test
-  public void testTopLevelComponentHasNoInstanceName() {
-    checkValid("components.TopLevelComponentHasNoInstanceName");
+  public void testStereotypes() {
+    checkValid(PACKAGE + "." + "Stereotypes");
   }
   
   @Test
@@ -164,7 +176,7 @@ public class ComponentTest extends AbstractCoCoTest {
         javaType.isPresent());
     
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        PACKAGE + "." + "ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
+        PACKAGE + ".body.subcomponents." + "ComponentWithNamedInnerComponent", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
     
     // java.lang.*

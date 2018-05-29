@@ -1,12 +1,14 @@
 package components.body.connectors.cycles;
 
+import types.CType;
+
 /**
- * Used by ABP
+ * Valid model.
  */
 component ABPReceiver {
 
     port
-        in ABPMessage abpMessage,
+        in CType abpMessage,
         out Boolean ack,
         out String message;
 }

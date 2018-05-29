@@ -104,6 +104,14 @@ public class SubComponentTest extends AbstractCoCoTest {
         node,
         new ExpectedErrorInfo(4, "xMA061"));
   }
+
+  @Test
+  public void testConfigurableArchitectureComponent() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ConfigurableArchitectureComponent");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
+        node,
+        new ExpectedErrorInfo(3, "xMA061"));
+  }
   
   @Test
   public void testAmbiguousImplicitAndExplicitSubcomponentNames() {
@@ -136,6 +144,13 @@ public class SubComponentTest extends AbstractCoCoTest {
   public void testReferencedSubComponentsExists() {
     checkValid(PACKAGE + "." + "ReferencedSubComponentsExists");
   }
+
+  @Test
+  @Ignore("TODO: Throws ClassCastException in JavaDSLHelper. Root is the coco" +
+              "SubcomponentParametersCorreclyAssigned,")
+  public void testCompThatUsesCompWithInterfaceParam() {
+    checkValid(PACKAGE + "." + "CompThatUsesCompWithInterfaceParam");
+  }
   
   /**
    * SymbolTable already tries to resolve the non existing subcomponent. If it
@@ -145,9 +160,9 @@ public class SubComponentTest extends AbstractCoCoTest {
   @Ignore
   @Test
   public void testReferencedSubComponentsNotExists() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ReferencedSubComponentNotExists");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ReferencedSubComponentsNotExists");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ReferencedSubComponentExists()), node,
-        new ExpectedErrorInfo(1, "xMA004"));
+        new ExpectedErrorInfo(3, "xMA004"));
   }
   
   @Test
@@ -190,6 +205,16 @@ public class SubComponentTest extends AbstractCoCoTest {
   @Test
   public void testComponentWithTypeParametersHasInstance() {
     checkValid(PACKAGE + "." + "ComponentWithTypeParametersHasInstance");
+  }
+
+  @Test
+  public void testCompWithCfg() {
+    checkValid(PACKAGE + "." + "CompWithCfg");
+  }
+
+  @Test
+  public void testCompWithCfg2() {
+    checkValid(PACKAGE + "." + "CompWithCfg2");
   }
   
   @Test
@@ -486,9 +511,9 @@ public class SubComponentTest extends AbstractCoCoTest {
   public void testInnerComponents2() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "InnerComponents");
     
-    assertEquals("3 named subcomponents and 1 auto-instance", 4, comp
+    assertEquals("6 subcomponents expected", 6, comp
         .getSubComponents().size());
-    assertEquals(2, comp.getInnerComponents().size());
+    assertEquals(7, comp.getInnerComponents().size());
     
     // usage of external component type as sub component in same package
     ComponentInstanceSymbol instance = comp.getSubComponent("ref").orElse(null);
@@ -663,9 +688,29 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
   
   @Test
+  @Ignore("TODO: IndexOutOfBoundsException in TypeCompatibilityChecker." +
+              "Root: ConnectorSourceAndTargetExistAndFit")
+  public void testGenericArchitectureComponent() {
+    checkValid(PACKAGE + "." +
+        "GenericArchitectureComponent");
+  }
+
+  @Test
   public void testSimpleGenericComponent() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
         "SimpleGenericComponent");
+  }
+
+  @Test
+  public void testGenericConfigurableComponent() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+        "GenericConfigurableComponent");
+  }
+
+  @Test
+  public void testAtomicComponent() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+        "AtomicComponent");
   }
   
   @Test

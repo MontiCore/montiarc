@@ -1,5 +1,10 @@
 package components.body.autoconnect;
 
+/*
+ * Valid model.
+ * Used as subcomponent in AutoConnectPortAndType
+ * TODO Add test
+ */
 component ReferencedPortAndType {
 
     port

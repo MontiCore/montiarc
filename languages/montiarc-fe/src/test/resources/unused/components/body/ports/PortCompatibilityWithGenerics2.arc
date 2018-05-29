@@ -1,5 +1,16 @@
 package components.body.ports;
 
+/*
+ * Invalid model.
+ *
+ * Formerly named "PortCompatibility2"
+ *
+ * @implements [Hab16] R8: The target port in a connection has to be compatible
+ *                           to the source port, i.e., the type of the target
+ *                           port is identical or a supertype of the source
+ *                           port type. (p.66, Lst. 3.43)
+ * TODO Add test
+ */
 component PortCompatibilityWithGenerics2<K, V> {
     port 
         in K input,
@@ -14,15 +25,15 @@ component PortCompatibilityWithGenerics2<K, V> {
     }
     
     component Inner<K> myInner1;
-    connect input -> myInner1.kInput;
-    connect myInner1.kOutput -> output;
+    connect input -> myInner1.kInput; // OK
+    connect myInner1.kOutput -> output; // OK
     
     component Inner<String> myInner2;
-    connect input -> myInner2.kInput;
-    connect myInner2.kOutput -> output2;
+    connect input -> myInner2.kInput; // ERROR
+    connect myInner2.kOutput -> output2; // ERROR
     
     component Inner<V> myInner3;
-    connect input -> myInner3.kInput;
-    connect myInner3.kOutput -> output3;
+    connect input -> myInner3.kInput; //ERROR
+    connect myInner3.kOutput -> output3; //ERROR
 
 }

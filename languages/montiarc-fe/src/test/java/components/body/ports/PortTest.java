@@ -5,7 +5,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.google.common.collect.Lists;
 import montiarc._cocos.MontiArcASTComponentCoCo;
+import montiarc._symboltable.ConnectorSymbol;
+import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,11 +22,11 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
-import montiarc.cocos.InPortUniqueSender;
-import montiarc.cocos.MontiArcCoCos;
-import montiarc.cocos.NamesCorrectlyCapitalized;
-import montiarc.cocos.PortUsage;
-import montiarc.cocos.SubComponentsConnected;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This class checks all context conditions directly related to port definitions
@@ -130,6 +133,13 @@ public class PortTest extends AbstractCoCoTest {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
         node, new ExpectedErrorInfo(4, "xMA005"));
   }
+
+  @Test
+  public void testExistingPortInConnector() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ExistingPortInConnector");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit()),
+        node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
+  }
   
   @Test
   @Ignore("TODO Adjust error and count after implementing CV7")
@@ -219,7 +229,7 @@ public class PortTest extends AbstractCoCoTest {
     assertEquals("V", myVInput.getTypeReference().getName());
     
   }
-  
+
   @Test
   public void testPortsWithStereotypes() {
     Scope symTab = this.loadDefaultSymbolTable();
@@ -227,15 +237,58 @@ public class PortTest extends AbstractCoCoTest {
         .<PortSymbol> resolve(PACKAGE + "." + "PortsWithStereotypes.integerIn", PortSymbol.KIND)
         .orElse(null);
     assertNotNull(port);
-    
+
     assertEquals(3, port.getStereotype().size());
     assertEquals("held", port.getStereotype().get("disabled").get());
     assertEquals("1", port.getStereotype().get("initialOutput").get());
     assertFalse(port.getStereotype().get("ignoreWarning").isPresent());
   }
+
+  @Test
+  @Ignore("Check whether autoconnection is working.")
+  public void testReferenceConnectorCompletion() {
+//    checkValid(PACKAGE + "." + "ReferenceConnectorCompletion");
+
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ReferenceConnectorCompletion");
+    List<String[]> expectedConnectors = Lists.newArrayList(
+        new String[]{"strIn", "simpleOne.stringIn"},
+        new String[]{"simpleOne.integerOut", "intOut"},
+        new String[]{"simpleOne.stringOut", "strOut"},
+        new String[]{"simpleTwo.integerOut", "intOut2"},
+        new String[]{"simpleTwo.integerOut", "intOut3"}
+    );
+    final Collection<ConnectorSymbol> connectors = comp.getConnectors();
+    for (String[] expectedConnector : expectedConnectors) {
+      final Optional<ConnectorSymbol> connector = comp.getConnector(expectedConnector[1]);
+      assertTrue(connector.isPresent());
+      assertEquals(expectedConnector[0],connector.get().getSource());
+      assertEquals(expectedConnector[1],connector.get().getTarget());
+    }
+
+  }
   
   @Test
   public void testJavaTypedPorts() {
-    checkValid("components.body.ports.ComponentWithJavaTypedPorts");
+    checkValid(PACKAGE + ".ComponentWithJavaTypedPorts");
+  }
+
+  @Test
+  public void testPorts() {
+    checkValid(PACKAGE + ".Ports");
+  }
+
+  @Test
+  public void testCompWithArrays() {
+    checkValid(PACKAGE + "." + "CompWithArrays");
+  }
+
+  @Test
+  public void testJavaTypesAsPortTypes() {
+    checkValid(PACKAGE + "." + "JavaTypesAsPortTypes");
+  }
+
+  @Test
+  public void testComponentForCDTypesTest() {
+    checkValid(PACKAGE + "." + "ComponentForCDTypesTest");
   }
 }
