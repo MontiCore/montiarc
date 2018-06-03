@@ -143,4 +143,14 @@ public class AssignmentTest extends AbstractCoCoTest {
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA081");
     checkInvalid(cocos, astMontiArcNode,errors);
   }
+
+  @Test
+  public void testMultipleMessagesPerCycle() {
+    final ASTMontiArcNode astMontiArcNode = loadComponentAST(PACKAGE + "." + "OneAssignmentPerCycle");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+        .addCoCo(new UseOfValueLists())
+        .addCoCo(new MultipleAssignmentsSameIdentifier());
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(4, "xMA081", "xMA019");
+    checkInvalid(cocos, astMontiArcNode,errors);
+  }
 }
