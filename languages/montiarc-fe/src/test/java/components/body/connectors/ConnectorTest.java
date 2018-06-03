@@ -167,7 +167,7 @@ public class ConnectorTest extends AbstractCoCoTest {
         PACKAGE + "." + "ConnectorSourceAndTargetSameComponent");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetComponentDiffer());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA075"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA075"));
   }
   
   @Test
