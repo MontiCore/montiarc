@@ -1,8 +1,7 @@
 package components.body.automaton.transition.assignments;
 
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc.cocos.AutomatonNoAssignmentToIncomingPort;
-import montiarc.cocos.AutomatonOutputInExpression;
+import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -11,8 +10,6 @@ import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
-import montiarc.cocos.MontiArcCoCos;
-import montiarc.cocos.UseOfForbiddenExpression;
 
 /**
  * This class checks all context conditions related to automaton assignments
@@ -137,5 +134,13 @@ public class AssignmentTest extends AbstractCoCoTest {
         .addCoCo(new UseOfForbiddenExpression());
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(5, "xMA023");
     checkInvalid(cocos, astMontiArcNode, errors);
+  }
+
+  @Test
+  public void testAssignmentOfSequences() {
+    final ASTMontiArcNode astMontiArcNode = loadComponentAST(PACKAGE + "." + "AssignmentOfSequence");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new UseOfValueLists());
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA081");
+    checkInvalid(cocos, astMontiArcNode,errors);
   }
 }
