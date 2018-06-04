@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 
 import java.util.Iterator;
 
+import montiarc.cocos.SubcomponentReferenceCycle;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -189,5 +190,12 @@ public class InheritanceTest extends AbstractCoCoTest {
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA084");
     final MontiArcCoCoChecker montiArcCoCoChecker = new MontiArcCoCoChecker().addCoCo(new ConfigurationParametersCorrectlyInherited());
     checkInvalid(montiArcCoCoChecker, node, errors);
+  }
+
+  @Test
+  public void testComponent1InCycle() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "Component1InCycle");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new CircularInheritance()), node,
+        new ExpectedErrorInfo(1, "xMA090"));
   }
 }

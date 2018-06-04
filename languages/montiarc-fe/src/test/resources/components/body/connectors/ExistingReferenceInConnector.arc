@@ -1,5 +1,7 @@
 package components.body.connectors;
 
+import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
+
 /**
 * Invalid model. See comments below.
 * @implements [Hab16] R5: The first part of a qualified connector’s source respectively
@@ -12,9 +14,9 @@ component ExistingReferenceInConnector {
         in String strIn,
         out String strOut;
         
-    component types.CorrectComp cc [stringOut -> wrongTarget.strIn]; //R6
+    component HasStringInputAndOutput cc [pOut -> wrongTarget.strIn]; //R6
     
     connect strIn -> ccWrong.stringIn; //R6
     connect ccWrong.stringOut -> strOut; //R5
-    connect strIn -> cc.stringIn;
+    connect strIn -> cc.pIn;
 }

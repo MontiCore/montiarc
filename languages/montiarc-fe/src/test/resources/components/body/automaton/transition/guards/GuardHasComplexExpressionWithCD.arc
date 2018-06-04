@@ -2,6 +2,9 @@ package components.body.automaton.transition.guards;
 
 import types.Datatypes.*;
 
+/*
+ * Valid model.
+ */
 component GuardHasComplexExpressionWithCD {
 
 	port

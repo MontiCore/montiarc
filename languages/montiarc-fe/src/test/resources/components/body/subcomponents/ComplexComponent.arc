@@ -1,11 +1,12 @@
 package components.body.subcomponents;
 
-/**
- * Valid model. 
- */
+
 import components.body.subcomponents.SimpleReferencedComponent;
 import components.body.subcomponents.SimpleReferencedComponent.*;
 
+/*
+ * Valid model.
+ */
 component ComplexComponent {
     port
         in String input,

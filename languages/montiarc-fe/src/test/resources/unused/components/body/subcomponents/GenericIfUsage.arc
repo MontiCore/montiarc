@@ -1,5 +1,11 @@
 package components.body.subcomponents;
 
+/*
+ * Invalid model.
+ *
+ * @implements TODO
+ * TODO: Add test
+ */
 component GenericIfUsage<T> {
     
     component GenericIfProvider<T> p1, p2;

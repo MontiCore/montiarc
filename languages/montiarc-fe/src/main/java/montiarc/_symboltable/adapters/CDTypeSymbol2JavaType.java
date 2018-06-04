@@ -13,6 +13,7 @@ import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.SymbolKind;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.symboltable.resolving.SymbolAdapter;
+import de.monticore.symboltable.types.CommonJTypeSymbol;
 import de.monticore.symboltable.types.JAttributeSymbolKind;
 import de.monticore.symboltable.types.JMethodSymbolKind;
 import de.monticore.umlcd4a.symboltable.CDFieldSymbol;
@@ -203,7 +204,15 @@ public class CDTypeSymbol2JavaType extends JavaTypeSymbol implements SymbolAdapt
   public boolean isClass() {
     return adaptee.isClass();
   }
-  
+
+  /**
+   * @see CommonJTypeSymbol#isEnum() ()
+   */
+  @Override
+  public boolean isEnum() {
+    return adaptee.isEnum();
+  }
+
   /**
    * @see de.monticore.symboltable.types.CommonJTypeSymbol#isFinal()
    */

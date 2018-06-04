@@ -1,5 +1,8 @@
 package b;
 
+/*
+ * Valid model.
+ */
 component SuperComponentOtherPackage {
     port
         in Integer i1,

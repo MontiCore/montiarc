@@ -1,5 +1,8 @@
 package components.head.generics;
 
+/*
+ * Valid model.
+ */
 component SuperGenericComp<T, K extends Number> {
 
     port

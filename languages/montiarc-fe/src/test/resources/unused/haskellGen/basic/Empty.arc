@@ -1,5 +1,0 @@
-package basic;
-
-component Empty {
-  
-}

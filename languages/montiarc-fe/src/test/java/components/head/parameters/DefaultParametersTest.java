@@ -78,6 +78,7 @@ public class DefaultParametersTest extends AbstractCoCoTest {
   
   @Test
   public void testValidDefaultParameters() {
+    checkValid(PACKAGE + "."  + "ValidDefaultParameters");
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ValidDefaultParameters");
     assertNotNull(comp);
     
