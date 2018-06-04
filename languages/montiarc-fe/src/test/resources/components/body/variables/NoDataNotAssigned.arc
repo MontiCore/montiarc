@@ -16,6 +16,6 @@ component NoDataNotAssigned {
 	  state S;
 	  initial S;
 
-	  S / {buffer = --};
+	  //S / {buffer = --};
 	}
 }
