@@ -88,7 +88,7 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
           // reaction
           <#list helper.getReaction(transition) as assignment>
           <#if assignment.isVariable(assignment.getLeft())>
-          ${assignment.getLeft()} = ${assignment.getRight()};
+          <#if !assignment.isCallExpression()>${assignment.getLeft()} = </#if>${assignment.getRight()};
           <#else>
           result.set${assignment.getLeft()?cap_first}(${assignment.getRight()});
           </#if>
