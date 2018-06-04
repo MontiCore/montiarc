@@ -1,4 +1,4 @@
-package types;
+package components.body.ports;
 
 import types.TypesWithHierarchy.DefinedType;
 import types.package2.*;
@@ -11,7 +11,6 @@ import types.package1.DefinedJavaTypeInPackage1;
  *
  * @implements TODO
  * TODO Add test
- * TODO Package
  */
 component UndefinedPortTypes {
 
@@ -31,5 +30,5 @@ component UndefinedPortTypes {
     out DefinedJavaTypeInPackage1, //Correct
 
     out types.UndefinedTypeFQ utfq;
-        //ERROR: The type 'types.UndefinedType' could not be loaded!
+        //ERROR: The type 'types.UndefinedTypeFQ' could not be loaded!
 }

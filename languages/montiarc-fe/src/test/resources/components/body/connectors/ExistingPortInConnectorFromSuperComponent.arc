@@ -1,9 +1,11 @@
 package components.body.connectors;
 
+import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
+
 /**
 *  Valid component. Inherits ports stringIn and stringOut from CorrectComp
 */
-component ExistingPortInConnectorFromSuperComponent extends types.CorrectComp {
+component ExistingPortInConnectorFromSuperComponent extends HasStringInputAndOutput {
     
     port
         out String stringOut2;
@@ -15,7 +17,7 @@ component ExistingPortInConnectorFromSuperComponent extends types.CorrectComp {
     }
     
     
-    connect stringIn -> inner.sIn;
-    connect inner.sOut -> stringOut2, stringOut;
+    connect pIn -> inner.sIn;
+    connect inner.sOut -> stringOut2, pOut;
 
 }

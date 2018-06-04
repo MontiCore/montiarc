@@ -11,7 +11,6 @@ package components.head.inheritance;
  *      provide configuration parameters with the same types, but are
  *      allowed to provide more parameters. (p.69 Lst. 3.49)
  * @author Michael Mutert
- * TODO Add test
  */
 component TooFewConfigurationParameters (Integer intParam)
     extends HasRequiredAndOptionalConfigParameters

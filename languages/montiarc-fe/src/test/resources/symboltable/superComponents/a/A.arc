@@ -1,11 +1,12 @@
 package a;
 
+/*
+ * Valid model.
+ * TODO Add test (symboltable)
+ */
 component A {
     
-    
-    port 
+    port
         in String strIn,
         out String strOut;
-    
-    
 }

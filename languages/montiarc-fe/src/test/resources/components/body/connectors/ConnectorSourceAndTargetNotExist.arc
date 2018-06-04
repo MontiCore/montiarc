@@ -1,6 +1,6 @@
 package components.body.connectors;
 
-import types.CorrectComp;
+import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
 
 /**
 * Invalid model. See comments below.
@@ -20,16 +20,16 @@ component ConnectorSourceAndTargetNotExist {
         out String strOut3,
         out String strOut4;
         
-    component CorrectComp cc1 [stringOutWrong -> strOut1]; // R7 source port does not exist
+    component HasStringInputAndOutput cc1 [stringOutWrong -> strOut1]; // R7 source port does not exist
     
-    component CorrectComp cc2;
+    component HasStringInputAndOutput cc2;
     
-    connect strIn -> cc2.stringInWrong, cc1.stringIn; //R6 first target port does not exist
+    connect strIn -> cc2.stringInWrong, cc1.pIn; //R6 first target port does not exist
     
     connect cc2.stringOutWrong -> strOut2; //R5 source port does not exist
     
     // correct connectors
-    connect cc1.stringOut -> strOut3;
-    connect cc2.stringOut -> strOut4;
-    connect strIn -> cc2.stringIn;
+    connect cc1.pOut -> strOut3;
+    connect cc2.pOut -> strOut4;
+    connect strIn -> cc2.pIn;
 }

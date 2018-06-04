@@ -5,82 +5,37 @@
  */
 package montiarc._symboltable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.List;
-import java.util.Optional;
-import java.util.Stack;
-
 import de.monticore.ast.ASTNode;
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.javadsl._ast.ASTLocalVariableDeclaration;
-import de.monticore.java.javadsl._ast.ASTPrimaryExpression;
 import de.monticore.java.javadsl._ast.ASTVariableDeclarator;
 import de.monticore.java.symboltable.JavaSymbolFactory;
 import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.symboltable.ArtifactScope;
-import de.monticore.symboltable.CommonScope;
-import de.monticore.symboltable.ImportStatement;
-import de.monticore.symboltable.MutableScope;
-import de.monticore.symboltable.ResolvingConfiguration;
-import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.Symbol;
+import de.monticore.symboltable.*;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
-import de.monticore.symboltable.resolving.ResolvingFilter;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.JTypeSymbolKind;
-import de.monticore.symboltable.types.TypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.CommonJTypeReference;
 import de.monticore.symboltable.types.references.JTypeReference;
-import de.monticore.symboltable.types.references.TypeReference;
 import de.monticore.types.JTypeSymbolsHelper;
 import de.monticore.types.JTypeSymbolsHelper.JTypeReferenceFactory;
 import de.monticore.types.TypesHelper;
 import de.monticore.types.TypesPrinter;
-import de.monticore.types.types._ast.ASTComplexReferenceType;
-import de.monticore.types.types._ast.ASTImportStatement;
-import de.monticore.types.types._ast.ASTQualifiedName;
-import de.monticore.types.types._ast.ASTReferenceType;
-import de.monticore.types.types._ast.ASTSimpleReferenceType;
-import de.monticore.types.types._ast.ASTType;
-import de.monticore.types.types._ast.ASTTypeArgument;
-import de.monticore.types.types._ast.ASTTypeParameters;
-import de.monticore.types.types._ast.ASTTypeVariableDeclaration;
-import de.monticore.types.types._ast.ASTWildcardType;
+import de.monticore.types.types._ast.*;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
-import montiarc._ast.ASTAutomaton;
-import montiarc._ast.ASTAutomatonBehavior;
-import montiarc._ast.ASTComponent;
-import montiarc._ast.ASTComponentHead;
-import montiarc._ast.ASTConnector;
-import montiarc._ast.ASTIOAssignment;
-import montiarc._ast.ASTInitialStateDeclaration;
-import montiarc._ast.ASTJavaPBehavior;
-import montiarc._ast.ASTMACompilationUnit;
-import montiarc._ast.ASTMontiArcAutoConnect;
-import montiarc._ast.ASTParameter;
-import montiarc._ast.ASTPort;
-import montiarc._ast.ASTState;
-import montiarc._ast.ASTStateDeclaration;
-import montiarc._ast.ASTStereoValue;
-import montiarc._ast.ASTSubComponent;
-import montiarc._ast.ASTSubComponentInstance;
-import montiarc._ast.ASTTransition;
-import montiarc._ast.ASTValuation;
-import montiarc._ast.ASTValueInitialization;
-import montiarc._ast.ASTVariableDeclaration;
-import montiarc._ast.MontiArcPackage;
+import montiarc._ast.*;
 import montiarc.helper.JavaHelper;
 import montiarc.helper.Timing;
 import montiarc.trafos.AutoConnection;
 import montiarc.trafos.SimpleConnectorToQualifiedConnector;
 import montiarc.visitor.AssignmentNameCompleter;
+
+import java.util.*;
 
 /**
  * Visitor that creates the symboltable of a MontiArc AST.
@@ -367,12 +322,20 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       componentSymbol.addConfigParameter(parameterSymbol);
     }
   }
-  
+
+  /**
+   * Determine whether the component should be instantiated.
+   * @param node ASTComponent node to analyze
+   * @param symbol Symbol of the {@param node}
+   * @return true, iff an instance should be created.
+   */
   private boolean needsInstanceCreation(ASTComponent node, ComponentSymbol symbol) {
     boolean instanceNameGiven = node.getInstanceName().isPresent();
     boolean autoCreationPossible = symbol.getFormalTypeParameters().size() == 0;
-    
-    return instanceNameGiven || autoCreationPossible;
+    boolean noParametersRequired = symbol.getConfigParameters().size() == 0;
+    //TODO: Check if the component only contains default parameters
+
+    return instanceNameGiven || (autoCreationPossible && noParametersRequired);
   }
   
   @Override
@@ -395,7 +358,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     }
     
     removeCurrentScope();
-    
+
     // for inner components the symbol must be fully created to reference it.
     // Hence, in endVisit we
     // can reference it and put the instance of the inner component into its
@@ -425,17 +388,15 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         
         addToScope(instanceSymbol);
       }
-      
+
       // check whether there are already instances of the inner component type
       // defined in the component type. We then have to set the referenced
       // component.
       Collection<ComponentInstanceSymbol> instances = component.getEnclosingScope()
           .resolveLocally(ComponentInstanceSymbol.KIND);
-      if (!instances.isEmpty()) {
-        for (ComponentInstanceSymbol instance : instances) {
-          if (instance.getComponentType().getName().equals(component.getName())) {
-            instance.getComponentType().setReferencedComponent(Optional.of(component));
-          }
+      for (ComponentInstanceSymbol instance : instances) {
+        if (instance.getComponentType().getName().equals(component.getName())) {
+          instance.getComponentType().setReferencedComponent(Optional.of(component));
         }
       }
     }
@@ -722,7 +683,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         c.setInitialReactionAST(node.getBlock());
         if (node.getBlock().isPresent()) {
           for (ASTIOAssignment assign : node.getBlock().get().getIOAssignments()) {
-            if (assign.getOperator() == MontiArcPackage.ASTIOAssignment_Operator) {
               if (assign.getName().isPresent()) {
                 Optional<VariableSymbol> var = currentScope().get()
                     .<VariableSymbol> resolve(assign.getName().get(), VariableSymbol.KIND);
@@ -734,7 +694,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
                     var.get().setValuation(Optional.of(v));
                   }
                 }
-              }
             }
           }
         }
@@ -757,7 +716,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     transition.setGuardAST(node.getGuard());
     transition.setReactionAST(node.getReaction());
-    transition.setStimulusAST(node.getStimulus());
     
     addToScopeAndLinkWithNode(transition, node); // introduces new scope
   }

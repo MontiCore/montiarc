@@ -36,7 +36,7 @@ public class ParserTest {
   
   private static final String MODEL_PATH = "src/test/resources";
   
-  private static List<String> expectedParseErrorModels = Arrays.asList(
+  static List<String> expectedParseErrorModels = Arrays.asList(
       // The package name starts with an upper case letter which is not parseable
       MODEL_PATH + "/components/UpperCasePackageName.arc",
 
@@ -57,9 +57,6 @@ public class ParserTest {
 
       // The package declaration of the component must not differ from the package of the component file.
       MODEL_PATH + "/components/PackageAndLocationDiffer.arc",
-      
-      // TODO we do not support OCL Expressions yet
-      MODEL_PATH + "/arc/prettyPrint/example1/StatusControl.arc",
       
       // TODO we do not support OCL Expressions yet
       MODEL_PATH + "/components/body/invariants/OCLFieldToField.arc",

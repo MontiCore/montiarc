@@ -1,5 +1,10 @@
 package components.body.automaton.transition.assignments;
 
+/*
+ * Invalid model.
+ *
+ * @implements TODO
+ */
 component MultipleAssignmentsToSamePort {
 
     port 
@@ -14,7 +19,7 @@ component MultipleAssignmentsToSamePort {
         state S;
         initial S;
     
-        S [true] {v == 1} / { v=2, 
+        S [v == 1] / { v=2, 
                               y=1, 
                               v=3, 
                               o=3, 

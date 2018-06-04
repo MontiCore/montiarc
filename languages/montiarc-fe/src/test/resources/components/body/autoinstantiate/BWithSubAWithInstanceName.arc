@@ -1,6 +1,6 @@
 package components.body.autoinstantiate;
 
-import components.body.autoinstantiate.A;
+import components.body.subcomponents._subcomponents.AtomicComponent;
 import java.util.*;
 
 /** 
@@ -8,6 +8,6 @@ import java.util.*;
  */
 component BWithSubAWithInstanceName {
 
-    component A y;
+    component AtomicComponent y;
 
 }

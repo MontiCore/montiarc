@@ -19,9 +19,9 @@ component GuardWithInstanceOfExpression {
     	state S1, S2;
     	initial S1 / {result = 255};
     	
-    	S1->S2 [values.length == 5] {storage == 0} / {storage = new Integer(0)};
+    	S1->S2 [values.length == 5 && storage == 0] / {storage = new Integer(0)};
     	
     	// 1 error: Guard uses instanceof expression
-    	S2->S1 [storage instanceof Object] {storage == 5} / {result = storage};
+    	S2->S1 [storage instanceof Object && storage == 5] / {result = storage};
     }
 }

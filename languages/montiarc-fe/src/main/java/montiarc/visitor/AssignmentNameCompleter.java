@@ -48,7 +48,6 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
           Optional<String> sinkName = findFor(assign, false);
           if (sinkName.isPresent()) {
             assign.setName(sinkName.get());
-            assign.setOperator(ASTConstantsMontiArc.SINGLE);
           }
           else {
             info("No sink for initial assignment '" + assign + "'.");
@@ -60,36 +59,6 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
   
   @Override
   public void visit(ASTTransition node) {
-    // set missing assignment names of all stimuli of all transitions
-    if (node.stimulusIsPresent()) {
-      for (ASTIOAssignment assign : node.getStimulus().get().getIOAssignments()) {
-        if (!assign.nameIsPresent()) {
-          Optional<String> sourceName = Optional.empty();
-          ASTExpression expr = getFirstAssigntElement(assign).getExpression();
-          if (expr.getCallExpression().isPresent()) {
-            if (expr.getCallExpression().get().getExpression().isPresent()) {
-              if (expr.getCallExpression().get().getExpression().get().getPrimaryExpression()
-                  .isPresent()) {
-                sourceName = expr.getCallExpression().get().getExpression().get()
-                    .getPrimaryExpression().get().getName();
-              }
-            }
-          }
-          
-          // no assignment name found, so compute one based on value type
-          if (!sourceName.isPresent()) {
-            sourceName = findFor(assign, true);
-          }
-          if (sourceName.isPresent()) {
-            assign.setName(sourceName.get());
-            assign.setOperator(ASTConstantsMontiArc.DOUBLE);
-          }
-          else {
-            info("No source for stimulus assignment '" + assign + "'.");
-          }
-        }
-      }
-    }
     
     // set missing assignment names of all reactions of all transitions
     if (node.reactionIsPresent()) {
@@ -112,7 +81,6 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
           }
           if (sinkName.isPresent()) {
             assign.setName(sinkName.get());
-            assign.setOperator(ASTConstantsMontiArc.SINGLE);
           }
           else {
             info("No sink for reaction assignment '" + assign + "'.");

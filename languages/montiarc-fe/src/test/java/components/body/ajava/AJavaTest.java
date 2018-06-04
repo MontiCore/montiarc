@@ -65,7 +65,7 @@ public class AJavaTest extends AbstractCoCoTest {
   public void testChangeIncomingPortInCompute() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ChangeIncomingPortInCompute");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(4, "xMA078"));
+        new ExpectedErrorInfo(2, "xMA078"));
   }
   
   @Ignore("@JP: Hier sollten drei Fehler entstehen (siehe Model). Bitte einbauen")

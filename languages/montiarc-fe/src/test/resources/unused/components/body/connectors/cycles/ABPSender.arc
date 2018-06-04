@@ -1,9 +1,10 @@
 package components.body.connectors.cycles;
 
-import ma.sim.FixDelay;
+import types.CType;
 
 /**
- * Used by ABP
+ * Valid model.
+ * TODO Add test after fixing autoconnect
  */
 component ABPSender {
 	autoconnect port;
@@ -11,15 +12,18 @@ component ABPSender {
 	port 
 		in String message,
 		in Boolean ack,
-		out ABPMessage abpMessage;
-	
-    
-    component ABPInnerSender sender {
+		out CType abpMessage;
 
-        port 
-            in String message,
-            in Boolean ack,
-            out ABPMessage abpMessage;
-        
-    }
+  component ABPInnerSender sender {
+    port
+      in String message,
+      in Boolean ack,
+      out CType abpMessage;
+  }
+
+  /* Expected connectors from autoconnect:
+  connect message -> sender.message;
+  connect ack -> sender.ack;
+  connect sender.abpMessage -> abpMessage;
+  */
 }

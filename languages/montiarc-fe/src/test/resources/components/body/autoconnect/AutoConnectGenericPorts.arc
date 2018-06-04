@@ -3,6 +3,9 @@ package components.body.autoconnect;
 import components.body.autoconnect.datatypes.*;
 import types.GenericType;
 
+/*
+ * Valid model.
+ */
 component AutoConnectGenericPorts {
     
     autoconnect type;

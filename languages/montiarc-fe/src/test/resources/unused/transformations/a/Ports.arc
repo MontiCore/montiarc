@@ -2,6 +2,9 @@ package a;
 
 import java.util.*;
 
+/*
+ * Valid model.
+ */
 component Ports {
     
     port 

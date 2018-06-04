@@ -1,7 +1,8 @@
 package components.head.inheritance;
 
 /**
- * Valid model. 
+ * Valid model.
+ * TODO Add test
  */
 component SubB extends SuperArchitecturalComponent {
     

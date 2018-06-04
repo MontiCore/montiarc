@@ -1,10 +1,10 @@
 package types;
 
-/**
- * Valid model. 
- */
 import types.SimulationData.*;
 
+/*
+ * Valid model.
+ */
 component Simulation {
   port in MyMessage msgs;
   

@@ -2,6 +2,9 @@ package components.body.automaton.transition.guards;
 
 import components.body.automaton.transition.guards.Number;
 
+/*
+ * Valid model.
+ */
 component GuardIsBoolean {
 
 	port
