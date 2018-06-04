@@ -1,4 +1,5 @@
-package a;
+package components.body.autoinstantiate;
+
 import java.util.List;
 
 /*

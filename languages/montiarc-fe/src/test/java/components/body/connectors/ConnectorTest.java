@@ -6,17 +6,21 @@
 package components.body.connectors;
 
 import de.monticore.symboltable.Scope;
+import de.monticore.symboltable.Symbol;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcASTConnectorCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -229,5 +233,29 @@ public class ConnectorTest extends AbstractCoCoTest {
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
+  }
+
+  @Test
+  public void testABP() {
+    checkValid(PACKAGE + "." + "ABP");
+  }
+
+  @Test
+  public void testABPReceiver() {
+    checkValid(PACKAGE + "." + "ABPReceiver");
+  }
+
+  @Test
+  public void testABPSender() {
+    final String modelName = "ABPSender";
+    checkValid(PACKAGE + "." + modelName);
+    final ASTMontiArcNode astMontiArcNode = loadComponentAST(PACKAGE + "." + modelName);
+    assertNotNull(astMontiArcNode);
+    final Optional<? extends Symbol> componentSymbol = astMontiArcNode.getSymbol();
+    assertTrue(componentSymbol.isPresent());
+    final ComponentSymbol symbol = (ComponentSymbol) componentSymbol.get();
+    assertTrue(symbol.getConnector("sender.message").isPresent());
+    assertTrue(symbol.getConnector("sender.ack").isPresent());
+    assertTrue(symbol.getConnector("abpMessage").isPresent());
   }
 }

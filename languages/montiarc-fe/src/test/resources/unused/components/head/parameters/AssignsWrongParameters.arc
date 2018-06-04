@@ -5,8 +5,6 @@ import components.head.parameters.CompWithIntegerParameter;
  * Invalid component.
  *
  * Formerly named "CG12" in MontiArc3.
- *
- * @implements TODO
  * TODO Add Test
  */
 component AssignsWrongParameters {

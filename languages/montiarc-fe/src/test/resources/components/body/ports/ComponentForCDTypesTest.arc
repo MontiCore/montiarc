@@ -9,11 +9,9 @@ import types.CDTestTypes.*;
 component ComponentForCDTypesTest {
 	port 
 	  in TypeWithFields portInUnqualified,
-		in c.testTypes.TypeWithFields portInQualified,
+		in types.CDTestTypes.TypeWithFields portInQualified,
 		in SubTypeOne,
 		in SubTypeTwo,
 		in InterfaceTypeThree,
-		in EnumType,
-		in GenericClassType<java.lang.String>,
-		in GenericInterfaceType<String>;
+		in EnumType;
 }

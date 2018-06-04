@@ -1,7 +1,7 @@
-package components.body.connectors.cycles;
+package components.body.connectors;
 
 /*
- * TODO Determine correctness
+ * Valid model.
  */
 component ABP {
 	

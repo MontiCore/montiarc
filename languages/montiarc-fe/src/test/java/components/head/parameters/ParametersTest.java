@@ -125,7 +125,7 @@ public class ParametersTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("Check CD4A generics")
+  @Ignore("TypeCompatibilityChecker.expressionType() returns Opt.empty() on CD Enum parameter ")
   public void testUseEnumAsTypeArgFromCD() {
     checkValid(PACKAGE + "." + "UseEnumAsTypeArgFromCD");
   }

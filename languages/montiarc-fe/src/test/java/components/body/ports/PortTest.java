@@ -127,7 +127,7 @@ public class PortTest extends AbstractCoCoTest {
   }
   
   @Test
-  @Ignore("See UniquenessConnectors.arc_")
+  @Ignore("See UniquenessConnectors.arc")
   public void testUniquenessConnectors() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UniquenessConnectors");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
@@ -139,6 +139,44 @@ public class PortTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ExistingPortInConnector");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit()),
         node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
+  }
+
+  @Test
+  @Ignore("IndexOutOfBoundsException in TypeCompatibilityChecker")
+  public void testPortCompatibilityWithGenerics() {
+    ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "PortCompatibilityWithGenerics");
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker()
+              .addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    final ExpectedErrorInfo expectedErrors
+        = new ExpectedErrorInfo(7, "xMA084");
+    checkInvalid(checker, node, expectedErrors);
+  }
+
+  @Test
+  @Ignore("IndexOutOfBoundsException in TypeCompatibilityChecker")
+  public void testPortCompatibilityWithGenerics2() {
+    ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "PortCompatibilityWithGenerics2");
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker()
+              .addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    final ExpectedErrorInfo expectedErrors
+        = new ExpectedErrorInfo(4, "xMA084");
+    checkInvalid(checker, node, expectedErrors);
+  }
+
+  @Test
+  public void testPortCompatibilityWithGenerics3() {
+    ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "PortCompatibilityWithGenerics3");
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker()
+              .addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    final ExpectedErrorInfo expectedErrors
+        = new ExpectedErrorInfo(1, "xMA084");
+    checkInvalid(checker, node, expectedErrors);
   }
   
   @Test

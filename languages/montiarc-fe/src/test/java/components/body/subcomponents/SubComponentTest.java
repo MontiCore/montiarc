@@ -731,6 +731,12 @@ public class SubComponentTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
         "AtomicComponent");
   }
+
+  @Test
+  public void testGenericIfRequired() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+        "GenericIfRequired");
+  }
   
   @Test
   @Ignore("Should not pass like this, see #157")
@@ -766,4 +772,18 @@ public class SubComponentTest extends AbstractCoCoTest {
         = new ExpectedErrorInfo(3, "xMA083");
     checkInvalid(checker, node, errors);
   }
+
+  @Test
+  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
+  public void testSubcomponentsWithWrongNumberOfCfgArgs() {
+    final ASTMontiArcNode astNode = loadComponentAST(
+        PACKAGE + "." + "SubcomponentsWithWrongNumberOfCfgArgs");
+    final ExpectedErrorInfo expectedErrorInfo
+        = new ExpectedErrorInfo(2, "xMA082");
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker()
+              .addCoCo(new SubcomponentParametersCorrectlyAssigned());
+    checkInvalid(checker, astNode, expectedErrorInfo);
+  }
+
 }
