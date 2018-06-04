@@ -5,14 +5,8 @@
  */
 package montiarc.cocos;
 
-import montiarc._cocos.MontiArcASTAutomatonBehaviorCoCo;
-import montiarc._cocos.MontiArcASTComponentCoCo;
-import montiarc._cocos.MontiArcASTConnectorCoCo;
-import montiarc._cocos.MontiArcASTInitialStateDeclarationCoCo;
-import montiarc._cocos.MontiArcASTJavaPBehaviorCoCo;
-import montiarc._cocos.MontiArcASTStateCoCo;
-import montiarc._cocos.MontiArcASTTransitionCoCo;
-import montiarc._cocos.MontiArcCoCoChecker;
+import de.monticore.java.javadsl._cocos.JavaDSLASTPrimaryExpressionCoCo;
+import montiarc._cocos.*;
 
 /**
  * Bundle of CoCos for the MontiArc language.
@@ -78,7 +72,10 @@ public class MontiArcCoCos {
         // REFERENTIAL INTEGRITY
         .addCoCo(new AutomatonDeclaredInitialStateDoesNotExist())
         .addCoCo(new UseOfUndeclaredState())
-        .addCoCo(new UseOfUndeclaredField())
+        .addCoCo((MontiArcASTIOAssignmentCoCo)
+                     new UseOfUndeclaredField())
+        .addCoCo((MontiArcASTGuardExpressionCoCo)
+                     new UseOfUndeclaredField())
         .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
         //TODO see #171
         //.addCoCo(new AssignmentHasNoName())
