@@ -135,7 +135,7 @@ public class AssignmentTest extends AbstractCoCoTest {
         PACKAGE + "." + "UseOfForbiddenExpressions");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new UseOfForbiddenExpression());
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(5, "xMA023");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA023");
     checkInvalid(cocos, astMontiArcNode, errors);
   }
 }
