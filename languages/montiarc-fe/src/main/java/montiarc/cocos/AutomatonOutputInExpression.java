@@ -21,6 +21,7 @@ import montiarc._symboltable.PortSymbol;
  * Checks whether output ports are used within a expression in a automaton transition.
  * 
  * @implements [Wor16] AR2: Inputs, outputs, and variables are used correctly. (p. 103, Lst. 520)
+ * @implements [RRW14a] T6: The direction of ports has to be respected.
  * @author (last commit) $Author$
  * @version $Revision$, $Date$
  * @since TODO: add version number
