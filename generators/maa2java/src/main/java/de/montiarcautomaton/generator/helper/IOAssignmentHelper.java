@@ -6,8 +6,6 @@ import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import montiarc._ast.ASTIOAssignment;
-import montiarc._ast.ASTJavaValuation;
-import montiarc._ast.ASTValuation;
 import montiarc._ast.ASTValueList;
 import montiarc._symboltable.VariableSymbol;
 
@@ -33,16 +31,9 @@ public class IOAssignmentHelper {
     return assignment.getName().get();
   }
   
-  public boolean isCallExpression() {
-    if (assignment.valueListIsPresent()) {
-      ASTValueList vl = assignment.getValueList().get();
-      if (vl.getValuation().isPresent()) {
-        
-        return vl.getValuation().get().getExpression().callExpressionIsPresent();
-        
-      }
-    }
-    return false;
+  public boolean isAssignment() {
+   // returns true if the assignment is a real assignment, not only a method call 
+   return assignment.isAssignment();
     
   }
   
