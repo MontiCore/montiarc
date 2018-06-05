@@ -10,7 +10,6 @@ component UseOfForbiddenExpressions {
 
     port 
         in Integer i,
-        in Double[] o,
         out String x;
         
     int y;
@@ -19,10 +18,8 @@ component UseOfForbiddenExpressions {
         state S;
         initial S;
     
-        S [o[1] == 2.0 && // forbidden array expression
-        i instanceof Integer]//forbidden instanceof expression
-        / {++y, --y,         //forbidden prefix expressions
-        (Object) o,  //forbidden cast expressions
-         x = "s"};
+        S -> S [i instanceof Integer] / {"Hi"}; //forbidden instanceof expression
+        
+        
     }
 }

@@ -9,7 +9,7 @@ import de.se_rwth.commons.logging.Log;
  * expressions.
  * 
  * @implements [Wor16] AC5: The automaton’s valuations and assignments use only
- * allowed Java/P modeling elements.
+ * allowed Java/P modeling elements (Lst. 5.15, p. 101).
  * @author Gerrit Leonhardt
  */
 public class UseOfForbiddenExpression implements JavaDSLASTExpressionCoCo {
@@ -20,22 +20,23 @@ public class UseOfForbiddenExpression implements JavaDSLASTExpressionCoCo {
     String errorMessage = "";
     if (node.instanceofTypeIsPresent()) {
       isError = true;
-      errorMessage = "instanceOf expression";
+      errorMessage = "instanceOf";
     }
-    else if (node.arrayExpressionIsPresent()) {
+    else if (node.binaryAndOpIsPresent()) {
       isError = true;
-      errorMessage = "array access expression";
+      errorMessage = "binary AND";
     }
-    else if (node.typeCastTypeIsPresent()) {
+    else if (node.binaryOrOpIsPresent()) {
       isError = true;
-      errorMessage = "type cast expression";
+      errorMessage = "binary OR";
     }
-    else if (node.prefixOpIsPresent()) {
-      String prefixOp = node.getPrefixOp().get();
-      if (prefixOp.equals("--") || prefixOp.equals("++")) {
-        isError = true;
-        errorMessage = "prefix expression";
-      }
+    else if(node.binaryXorOpIsPresent()) {
+      isError = true;
+      errorMessage = "binary XOR";
+    }
+    else if(node.booleanAndOpIsPresent() || node.booleanNotIsPresent() || node.booleanOrOpIsPresent()) {
+      isError = true;
+      errorMessage = "boolean AND/NOT/OR";
     }
     
     if (isError) {
