@@ -13,6 +13,8 @@ import montiarc._cocos.MontiArcASTTransitionCoCo;
  * Context condition for checking, if there is not more than one assignment for each variable or
  * port in a reaction of a transition. E.g. Transition S [true] {v = 1} / {x = 1, x = 5} does not
  * have a valid reaction.
+ *
+ * @implements [RRW14a] S3ts: In every cycle at most one message per port is sent (partially).
  * 
  * @author Gerrit Leonhardt, Andreas Wortmann
  */

@@ -14,6 +14,7 @@ import java.util.Optional;
  * CoCo which checks that no assignment assigns some value to an incoming port.
  * 
  * @implements [Wor16] AR2: Inputs, outputs, and variables are used correctly.
+ * @implements [RRW14a] T6: The direction of ports has to be respected.
  * (p.103, Lst 5.20)
  * @author Michael Mutert
  */

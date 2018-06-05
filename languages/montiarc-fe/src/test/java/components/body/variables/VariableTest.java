@@ -1,6 +1,7 @@
 package components.body.variables;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
@@ -33,5 +34,13 @@ public class VariableTest extends AbstractCoCoTest {
   public void testVariableNamesAreLowerCase() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "VariableNameUpperCase");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA018"));
+  }
+
+  @Ignore("NoData is forbidden by grammar, so a test is superfluous at the moment.")
+  @Test
+  public void testNoDataNotAssigned() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "NoDataNotAssigned");
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA999"));
+
   }
 }

@@ -9,7 +9,7 @@ component ConnectorSourceAndTargetSameComponent {
         in String s1,
         out String s2;
 
-//    connect inner1.s4 -> inner1.s4; // Error: Prohibited
+    connect inner1.s4 -> inner1.s4; // Error: Prohibited
     connect s1 -> s2; // Error: Prohibited
     connect s1 -> s1; // Error: Prohibited
     
