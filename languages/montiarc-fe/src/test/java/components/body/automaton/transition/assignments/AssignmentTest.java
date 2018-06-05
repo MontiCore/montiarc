@@ -1,5 +1,7 @@
 package components.body.automaton.transition.assignments;
 
+import montiarc._cocos.MontiArcASTGuardExpressionCoCo;
+import montiarc._cocos.MontiArcASTIOAssignmentCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.*;
 import org.junit.BeforeClass;
@@ -130,8 +132,9 @@ public class AssignmentTest extends AbstractCoCoTest {
   public void testUseOfForbiddenExpression() {
     final ASTMontiArcNode astMontiArcNode = loadComponentAST(
         PACKAGE + "." + "UseOfForbiddenExpressions");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
-        .addCoCo(new UseOfForbiddenExpression());
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker();
+    cocos.addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfForbiddenExpression());
+    cocos.addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfForbiddenExpression());
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA023");
     checkInvalid(cocos, astMontiArcNode, errors);
   }
