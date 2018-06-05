@@ -92,7 +92,6 @@ public class MontiArcCoCos {
         // .addCoCo(new AutomatonReactionTypeDoesNotFitOutputType())
         
         // UNIQUENESS OF NAMES
-        .addCoCo(new AutomatonStateDefinedMultipleTimesStereotypesDontMatch())
         .addCoCo(new AutomatonInitialDeclaredMultipleTimes())
         .addCoCo(new AutomatonStateDefinedMultipleTimes())
         .addCoCo(new UseOfValueLists())
