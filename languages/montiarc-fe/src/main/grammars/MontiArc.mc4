@@ -358,7 +358,9 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   Block= "{" IOAssignment ("," IOAssignment)* "}";
   
   /**
-   * A assignment of the form "var = x"
+   * A assignment of the form "var = x" or "var = [x,y,z]". The latter is 
+   * used with I/O^w output (i.e., emitting streams of messages).
+   *
    * @attribute Name: The name of the variable that gets assigned
    */ 
   IOAssignment = (Name "=")? (Alternative | ValueList);

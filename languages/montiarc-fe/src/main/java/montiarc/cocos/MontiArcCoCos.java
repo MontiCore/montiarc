@@ -63,12 +63,13 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTInitialStateDeclarationCoCo)
                      new AutomatonReactionWithAlternatives())
         .addCoCo((MontiArcASTTransitionCoCo) new AutomatonReactionWithAlternatives())
-        .addCoCo(new UseOfForbiddenExpression())
+        .addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfForbiddenExpression())
+        .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfForbiddenExpression())
         .addCoCo((MontiArcASTStateCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new ConnectorSourceAndTargetComponentDiffer())
         .addCoCo(new ConnectorSourceAndTargetExistAndFit())
         .addCoCo(new ImportsAreUnique())
-        
+
         // REFERENTIAL INTEGRITY
         .addCoCo(new AutomatonDeclaredInitialStateDoesNotExist())
         .addCoCo(new UseOfUndeclaredState())
@@ -92,7 +93,6 @@ public class MontiArcCoCos {
         // .addCoCo(new AutomatonReactionTypeDoesNotFitOutputType())
         
         // UNIQUENESS OF NAMES
-        .addCoCo(new AutomatonStateDefinedMultipleTimesStereotypesDontMatch())
         .addCoCo(new AutomatonInitialDeclaredMultipleTimes())
         .addCoCo(new AutomatonStateDefinedMultipleTimes())
         .addCoCo(new UseOfValueLists())
