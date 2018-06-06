@@ -13,14 +13,11 @@ public class TransitionSymbol extends TransitionSymbolTOP {
   
   private Optional<ASTGuard> guard;
   
-  private Optional<ASTBlock> stimulus;
-  
   private Optional<ASTBlock> reaction;
   
   public TransitionSymbol(String name) {
     super(name);
     this.guard = Optional.empty();
-    this.stimulus = Optional.empty();
     this.reaction = Optional.empty();
   }
   
@@ -48,13 +45,6 @@ public class TransitionSymbol extends TransitionSymbolTOP {
     return this.guard;
   }
   
-  public void setStimulusAST(Optional<ASTBlock> block) {
-    this.stimulus = block;
-  }
-  
-  public Optional<ASTBlock> getStimulusAST() {
-    return this.stimulus;
-  }
   
   public void setReactionAST(Optional<ASTBlock> block) {
     this.reaction = block;
