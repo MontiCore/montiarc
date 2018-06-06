@@ -52,7 +52,8 @@ public class ParametersTest extends AbstractCoCoTest {
         new ExpectedErrorInfo(2, "xMA069"));
     
   }
-
+  
+  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   @Test
   /*
    *
