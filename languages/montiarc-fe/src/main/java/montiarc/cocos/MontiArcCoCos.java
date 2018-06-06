@@ -29,7 +29,7 @@ public class MontiArcCoCos {
         .addCoCo(new DefaultParametersCorrectlyAssigned())
         .addCoCo(new ComponentWithTypeParametersHasInstance())
         .addCoCo(new CircularInheritance())
-        
+        .addCoCo(new IOAssignmentCallFollowsMethodCall())
         // TODO remove comment when new Java DSL is integrated
         // .addCoCo(new AllGenericParametersOfSuperClassSet())
          .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())

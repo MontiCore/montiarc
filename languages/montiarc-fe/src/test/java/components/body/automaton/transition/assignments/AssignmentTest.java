@@ -28,6 +28,19 @@ public class AssignmentTest extends AbstractCoCoTest {
   }
   
   @Test
+  public void testMethodCallAfterCallKeyword() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MethodCallAfterCallKeyword");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IOAssignmentCallFollowsMethodCall()), node, new ExpectedErrorInfo(1, "xMA091"));
+
+  }
+  
+  @Test
+  public void testMethodCallWithoutCallKeyword() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MethodCallWithoutCallKeyword");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IOAssignmentCallFollowsMethodCall()), node, new ExpectedErrorInfo(1, "xMA090"));
+  }
+  
+  @Test
   public void testAssignmentWithAlternatives() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AssignmentWithAlternatives");
     checkInvalid(MontiArcCoCos.createChecker(), node,
