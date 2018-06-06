@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.symboltable.types.JFieldSymbol;
@@ -43,6 +44,7 @@ public class DefaultParametersTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "ComponentWithDefaultParameters");
   }
   
+  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   @Test
   public void testComposedTestComponent() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
@@ -55,6 +57,7 @@ public class DefaultParametersTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "ComposedComponentUsingDefaultParameters");
   }
   
+  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   @Test
   public void testComposedComponentUsingDefaultParametersInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),

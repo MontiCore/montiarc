@@ -347,10 +347,8 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   
   /**
    * The Value for empty data
-   * TODO: currently can not be used to assign/compare inputs/outputs/variables with -- because of wrong derivation.
-   * NoData should implement literal value.
    */
-  NoData implements Value = "--";    
+  NoData = "--";    
  
      
   /**
@@ -374,7 +372,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
    * @attribute Valuation: The valuation
    */    
   ValueList   
-      = (("[" Valuation ("," Valuation )* "]") | Valuation); 
+      = (("[" Valuation ("," Valuation )* "]") | Valuation | NoData); 
       
 
   /*************************************************************************
