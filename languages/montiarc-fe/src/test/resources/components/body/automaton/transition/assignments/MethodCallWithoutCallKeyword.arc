@@ -1,9 +1,7 @@
 package components.body.automaton.transition.assignments;
 
 /**
- * Invalid model. Reads values from inexisting variables x,y.
- *
- * @implements [Wor16] AR1: Names used in guards, valuations, and assignments exist in the automaton. (p. 102, Lst. 5.19)
+ * Invalid model. 
  */
 component MethodCallWithoutCallKeyword {
 
@@ -16,7 +14,7 @@ component MethodCallWithoutCallKeyword {
         state A;
         initial A;
         
-        A -> A /{call c=5};
+        A -> A /{call c=5}; //wrong: there must be a method call after call keyword
     
     }
 }
