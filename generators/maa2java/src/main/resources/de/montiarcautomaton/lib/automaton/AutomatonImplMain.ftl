@@ -53,11 +53,16 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
 
     // initial reaction
     <#list helper.getInitialReaction(helper.getInitialState()) as assignment>
-    <#if helper.isPort(assignment.getLeft())>
-      result.set${assignment.getLeft()?cap_first}(${assignment.getRight()});
+    <#if assignment.isAssignment()>
+      <#if helper.isPort(assignment.getLeft())>
+        result.set${assignment.getLeft()?cap_first}(${assignment.getRight()});
+      <#else>
+        ${assignment.getLeft()} = ${assignment.getRight()};
+      </#if>
     <#else>
-      ${assignment.getLeft()} = ${assignment.getRight()};
+      ${assignment.getRight()}
     </#if>
+    
     </#list>
     
     // initial state
@@ -82,16 +87,18 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
       <#list helper.getTransitions(state) as transition>
         // transition: ${transition.toString()}
         if (${helper.getGuard(transition)!"true"}
-        <#list helper.getStimulus(transition) as assignment>
-        && <#if assignment.getRight() == "null">cmd == null<#else>${assignment.getLeft()} != null && ${assignment.getLeft()}.equals(${assignment.getRight()})</#if> <#else>&& true
-        </#list>) {
+        && true) {
           // reaction
           <#list helper.getReaction(transition) as assignment>
-          <#if assignment.isVariable(assignment.getLeft())>
-          ${assignment.getLeft()} = ${assignment.getRight()};
-          <#else>
-          result.set${assignment.getLeft()?cap_first}(${assignment.getRight()});
-          </#if>
+            <#if assignment.isAssignment()>
+              <#if assignment.isVariable(assignment.getLeft())>
+                ${assignment.getLeft()} = ${assignment.getRight()};
+              <#else>
+                result.set${assignment.getLeft()?cap_first}(${assignment.getRight()});
+              </#if>
+            <#else>
+              ${assignment.getRight()}
+            </#if>
           </#list>
           
           //Log.log("${implName}", "${transition.toString()}");

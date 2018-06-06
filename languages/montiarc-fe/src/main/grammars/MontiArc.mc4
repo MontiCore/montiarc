@@ -363,7 +363,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
    *
    * @attribute Name: The name of the variable that gets assigned
    */ 
-  IOAssignment = (Name "=")? (Alternative | ValueList);
+  IOAssignment = ((Name assignment:["="]) | (call:["call"]))? (Alternative | ValueList);
   
   Alternative = "alt" "{" ValueList ("," ValueList)* "}";
   
