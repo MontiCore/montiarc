@@ -37,7 +37,20 @@ public class UseOfUndeclaredField
     // only check left side of IOAssignment, right side is implicitly checked
     // when resolving type of the valuations
     if(node.getName().isPresent()) {
-      check(node.getName().get(), node, "assignment");
+      if (node.getEnclosingScope().isPresent()) {
+        final String name = node.getName().get();
+        Scope scope = node.getEnclosingScope().get();
+        boolean foundVar = scope.resolve(name, VariableSymbol.KIND).isPresent();
+        boolean foundPort = scope.resolve(name, PortSymbol.KIND).isPresent();
+
+        if (!foundVar && !foundPort) {
+          Log.error(
+              String.format("0xMA079: The name '%s' is used in %s, but is " +
+                                "neither declared a port, nor as a variable.",
+                  name, "assignment"),
+              node.get_SourcePositionStart());
+        }
+      }
     }
   }
 
@@ -56,10 +69,13 @@ public class UseOfUndeclaredField
       final Optional<JavaTypeSymbol> typeSymbolOpt
           = scope.resolve(name, JavaTypeSymbol.KIND);
       boolean foundEnum = false;
+      boolean foundStaticCall = false;
       if(typeSymbolOpt.isPresent()) {
         foundEnum = typeSymbolOpt.get().isEnum();
+        foundStaticCall = typeSymbolOpt.get().isClass();
       }
-      if (!foundVar && !foundPort && !foundEnum) {
+
+      if (!foundVar && !foundPort && !foundEnum && !foundStaticCall) {
         Log.error(
             String.format("0xMA079: The name '%s' is used in %s, but is " +
                               "neither declared a port, nor as a variable.",
