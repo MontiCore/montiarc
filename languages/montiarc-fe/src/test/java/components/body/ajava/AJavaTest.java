@@ -22,6 +22,7 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.VariableSymbol;
 import montiarc.cocos.AtMostOneInitBlock;
 import montiarc.cocos.InitBlockOnlyOnEmbeddedAJava;
+import montiarc.cocos.JavaPVariableIdentifiersUnique;
 import montiarc.cocos.MontiArcCoCos;
 
 /**
@@ -41,6 +42,12 @@ public class AJavaTest extends AbstractCoCoTest {
   @Test
   public void testAssignExpressionToOutgoingPort() {
     checkValid(PACKAGE + "." + "AssignExpressionToOutgoingPort");
+  }
+  
+  @Test
+  public void testJavaPVariableIdentifiersUnique() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "JavaPVariableIdentifiersUnique");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new JavaPVariableIdentifiersUnique()), node, new ExpectedErrorInfo(1,  "xMA093"));
   }
   
   @Test

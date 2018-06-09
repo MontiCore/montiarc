@@ -96,6 +96,7 @@ public class MontiArcCoCos {
         .addCoCo(new AutomatonInitialDeclaredMultipleTimes())
         .addCoCo(new AutomatonStateDefinedMultipleTimes())
         .addCoCo(new UseOfValueLists())
-        .addCoCo(new IdentifiersAreUnique());
+        .addCoCo(new IdentifiersAreUnique())
+        .addCoCo(new JavaPVariableIdentifiersUnique());
   }
 }
