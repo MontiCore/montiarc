@@ -683,6 +683,12 @@ public class SubComponentTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
         "HasStringInputAndOutput");
   }
+
+  @Test
+  public void testHasIntegerInputAndOutput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+        "HasIntegerInputAndOutput");
+  }
   
   @Test
   public void testHasThreeGenericInAndOneOutputPort() {

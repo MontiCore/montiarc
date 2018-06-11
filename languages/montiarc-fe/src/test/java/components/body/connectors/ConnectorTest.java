@@ -11,6 +11,7 @@ import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcASTBehaviorElementCoCo;
 import montiarc._cocos.MontiArcASTConnectorCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
@@ -233,6 +234,16 @@ public class ConnectorTest extends AbstractCoCoTest {
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
+  }
+
+  @Test
+  @Ignore("IndexOutOfBoundsException in TypeCompatibilityChecker")
+  // TODO: Fix error info after TypeCompatibilityChecker
+  public void testGenericIfUsage() {
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "GenericIfUsage");
+    MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
+    checkInvalid(cocos, node, new ExpectedErrorInfo());
   }
 
   @Test

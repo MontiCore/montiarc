@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.google.common.collect.Lists;
+import de.monticore.symboltable.references.FailedLoadingSymbol;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc.cocos.*;
@@ -328,5 +329,21 @@ public class PortTest extends AbstractCoCoTest {
   @Test
   public void testComponentForCDTypesTest() {
     checkValid(PACKAGE + "." + "ComponentForCDTypesTest");
+  }
+
+  @Test
+  /*
+    TODO Does not find all undefined types. Runtime exception after first one.
+   */
+  public void testUndefinedPortTypes() {
+    ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "UndefinedPortTypes");
+    MontiArcCoCoChecker cocos
+        = MontiArcCoCos.createChecker();
+    try {
+      checkInvalid(cocos, node, new ExpectedErrorInfo());
+    } catch (FailedLoadingSymbol e){
+      assertTrue(e.getMessage().contains("UndefinedType"));
+    }
   }
 }
