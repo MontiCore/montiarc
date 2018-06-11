@@ -135,7 +135,7 @@ public class ParametersTest extends AbstractCoCoTest {
   */
   @Test
   public void testParameterNameCapitalized() {
-    ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA092");
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA045");
     MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo((MontiArcASTComponentCoCo)
                                                 new NamesCorrectlyCapitalized());

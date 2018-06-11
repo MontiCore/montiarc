@@ -137,7 +137,7 @@ public class AssignmentTest extends AbstractCoCoTest {
         PACKAGE + "." + "AssignmentToIncomingPort");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new AutomatonNoAssignmentToIncomingPort());
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA093");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA034");
     checkInvalid(cocos, astMontiArcNode, errors);
   }
   
