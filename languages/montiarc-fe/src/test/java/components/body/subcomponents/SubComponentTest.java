@@ -749,4 +749,23 @@ public class SubComponentTest extends AbstractCoCoTest {
     final ExpectedErrorInfo expectedErrorInfo = new ExpectedErrorInfo(6, "xMA085");
     checkInvalid(MontiArcCoCos.createChecker(), astNode, expectedErrorInfo);
   }
+
+  @Test
+  /*
+   * Checks that the CoCo InnerComponentNotExtendsDefiningComponent is working
+   * as intended.
+   *
+   * @Implements [Hab16] R12: An inner component type definition must not
+   * extend the component type in which it is defined. (p. 68, lst. 3.47)
+   */
+  public void testOuterComponent() {
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "OuterComponent");
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker()
+              .addCoCo(new InnerComponentNotExtendsDefiningComponent());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(3, "xMA083");
+    checkInvalid(checker, node, errors);
+  }
 }
