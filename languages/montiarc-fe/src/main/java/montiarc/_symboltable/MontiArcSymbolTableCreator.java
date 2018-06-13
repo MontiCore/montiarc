@@ -745,24 +745,4 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     // to prevent deletion of not existing scope we override with nothing
   }
   
-//  /**
-//   * Default implementation to create {@link CommonJTypeReference}s using the
-//   * {@link JTypeSymbolKind}.
-//   *
-//   * @author Robert Heim
-//   */
-//  public static class MAJTypeReferenceFactory
-//      implements JTypeReferenceFactory<CommonJTypeReference<JTypeSymbol>> {
-//    @Override
-//    public CommonJTypeReference<JTypeSymbol> create(String referencedSymbolName,
-//        Scope definingScopeOfReference,
-//        int arrayDimension) {
-//      CommonJTypeReference<JTypeSymbol> tref = new MAJTypeReference(referencedSymbolName,
-//          JTypeSymbol.KIND,
-//          definingScopeOfReference);
-//      tref.setDimension(arrayDimension);
-//      return tref;
-//    }
-//  }
-  
 }
