@@ -5,10 +5,12 @@
  */
 package montiarc.cocos;
 
+import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesException;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
+import de.monticore.types.TypesHelper;
 import de.monticore.types.types._ast.ASTQualifiedName;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
@@ -27,24 +29,22 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Checks whether source and target type of connected ports match.
- * It also checks whether the source and target ports of the connectors
- *  actually exist.
+ * Checks whether source and target type of connected ports match. It also
+ * checks whether the source and target ports of the connectors actually exist.
  *
- * @implements [Hab16] CO3: Unqualified sources or targets in connectors
- *  either refer to a port or a subcomponent in the same namespace.
- *  (p.61 Lst. 3.35)
- * @implements [Hab16] R5: The first part of a qualified connector’s
- *  source respectively target must correspond to a subcomponent declared
- *  in the current component definition. (p.64 Lst. 3.40)
- * @implements [Hab16] R6: The second part of a qualified connector’s
- *  source respectively target must correspond to a port name of the
- *  referenced subcomponent determined by the first part. (p.64, Lst. 3.41)
- * @implements [Hab16] R7: The source port of a simple connector must exist
- *  in the subcomponents type. (p.65 Lst. 3.42)
- * @implements [Hab16] R8: The target port in a connection has to be
- *  compatible to the source port, i.e., the type of the target port is
- *  identical or a supertype of the source port type. (p. 66, lst. 3.43)
+ * @implements [Hab16] CO3: Unqualified sources or targets in connectors either
+ * refer to a port or a subcomponent in the same namespace. (p.61 Lst. 3.35)
+ * @implements [Hab16] R5: The first part of a qualified connector’s source
+ * respectively target must correspond to a subcomponent declared in the current
+ * component definition. (p.64 Lst. 3.40)
+ * @implements [Hab16] R6: The second part of a qualified connector’s source
+ * respectively target must correspond to a port name of the referenced
+ * subcomponent determined by the first part. (p.64, Lst. 3.41)
+ * @implements [Hab16] R7: The source port of a simple connector must exist in
+ * the subcomponents type. (p.65 Lst. 3.42)
+ * @implements [Hab16] R8: The target port in a connection has to be compatible
+ * to the source port, i.e., the type of the target port is identical or a
+ * supertype of the source port type. (p. 66, lst. 3.43)
  * @author Jerome Pfeiffer, Michael Mutert
  */
 public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponentCoCo {
@@ -64,25 +64,26 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
         if (!sourcePort.isPresent()) {
           Log.error(
               String.format("0xMA066 source port %s of connector %s does not " +
-                                "exist.",
+                  "exist.",
                   connector.getSource(),
                   connector.getFullName()),
               connector.getSourcePosition());
         }
-
+        
         targetPort = connector.getTargetPort();
         if (!targetPort.isPresent()) {
           Log.error(
               String.format("0xMA067 target port %s of connector %s does not " +
-                                "exist.",
+                  "exist.",
                   connector.getTarget(),
                   connector.getFullName()),
               connector.getSourcePosition());
         }
-      } catch (ResolvedSeveralEntriesException e) {
+      }
+      catch (ResolvedSeveralEntriesException e) {
         break;
       }
-
+      
       if (sourcePort.isPresent() && targetPort.isPresent()) {
         PortSymbol source = sourcePort.get();
         PortSymbol target = targetPort.get();
@@ -106,7 +107,8 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
         // the types
         if (sourceType.getReferencedSymbol().isFormalTypeParameter()) {
           ASTConnector c = (ASTConnector) connector.getAstNode().get();
-          sourceParams = getActualTypeArgumentsFromPortOfConnector(c, compSym, c.getSource());
+          ASTQualifiedName sourceFQN = c.getSource();
+          sourceParams = getActualTypeArgumentsFromPortOfConnector(c, compSym, sourceFQN);
         }
         
         if (targetType.getReferencedSymbol().isFormalTypeParameter()) {
@@ -127,7 +129,7 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
                   + " do not match.",
               connector.getAstNode().get().get_SourcePositionStart());
       }
-    } 
+    }
   }
   
   private List<ActualTypeArgument> getActualTypeArgumentsFromPortOfConnector(
@@ -139,6 +141,12 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
       params = definingComponent.getSpannedScope()
           .<ComponentInstanceSymbol> resolve(compName, ComponentInstanceSymbol.KIND).get()
           .getComponentType().getActualTypeArguments();
+    }
+    else {
+      params = definingComponent.getFormalTypeParameters().stream()
+          .map(ftp -> new ActualTypeArgument(
+              new JavaTypeSymbolReference(ftp.getName(), ftp.getEnclosingScope(), 0)))
+          .collect(Collectors.toList());
     }
     return params;
     

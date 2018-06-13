@@ -709,8 +709,6 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
   
   @Test
-  @Ignore("TODO: IndexOutOfBoundsException in TypeCompatibilityChecker." +
-              "Root: ConnectorSourceAndTargetExistAndFit")
   public void testGenericArchitectureComponent() {
     checkValid(PACKAGE + "." +
         "GenericArchitectureComponent");
