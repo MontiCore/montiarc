@@ -21,7 +21,6 @@ import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.se_rwth.commons.logging.Log;
-import montiarc._symboltable.MAJTypeReference;
 
 /**
  * Checks type compatibility of {@link JTypeReference}s.
@@ -95,10 +94,10 @@ public class TypeCompatibilityChecker {
       List<ActualTypeArgument> sourceParams = sourceType.getActualTypeArguments();
       List<ActualTypeArgument> targetParams = targetType.getActualTypeArguments();
       for (int i = 0; i < sourceParams.size(); i++) {
-        JTypeReference<? extends JTypeSymbol> sourceTypesCurrentTypeArgument = (MAJTypeReference) sourceParams
+        JTypeReference<? extends JTypeSymbol> sourceTypesCurrentTypeArgument = (JavaTypeSymbolReference) sourceParams
             .get(i)
             .getType();
-        JTypeReference<? extends JTypeSymbol> targetTypesCurrentTypeArgument = (MAJTypeReference) targetParams
+        JTypeReference<? extends JTypeSymbol> targetTypesCurrentTypeArgument = (JavaTypeSymbolReference) targetParams
             .get(i)
             .getType();
         if (!doTypesMatch(sourceTypesCurrentTypeArgument,
