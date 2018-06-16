@@ -27,6 +27,7 @@ import montiarc.helper.SymbolPrinter;
  * 
  * @author Arne Haber, Michael von Wenckstern, Robert Heim
  */
+@Deprecated
 public class ConnectorSymbol extends CommonSymbol {
   
   public static final ConnectorKind KIND = new ConnectorKind();
