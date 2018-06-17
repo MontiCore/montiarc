@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertTrue;
 
@@ -63,11 +64,13 @@ public class AbstractGeneratorTest {
     JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     StandardJavaFileManager fileManager
         = compiler.getStandardFileManager(null, null, null);
-    DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+    DiagnosticCollector<JavaFileObject> diagnostics
+        = new DiagnosticCollector<JavaFileObject>();
 
     Iterable<? extends JavaFileObject> compilationUnits1 =
         fileManager.getJavaFileObjectsFromFiles(Arrays.asList(files));
-    compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits1).call();
+    compiler.getTask(null, fileManager, diagnostics,
+        null, null, compilationUnits1).call();
 
     try {
       fileManager.close();
@@ -80,7 +83,11 @@ public class AbstractGeneratorTest {
           diagnostic.getLineNumber(),
           diagnostic.getSource().toUri());
     }
-    return diagnostics.getDiagnostics().size() <= 0;
+    return diagnostics.getDiagnostics()
+               .stream()
+               .filter(d -> d.getKind().equals(Diagnostic.Kind.ERROR))
+               .collect(Collectors.toList())
+               .size() <= 0;
   }
 
   @Before
@@ -113,7 +120,7 @@ public class AbstractGeneratorTest {
    * @param file {@link File} object to delete
    * @throws IOException
    */
-  protected void delete(File file) throws IOException {
+  private void delete(File file) throws IOException {
     if (file.isDirectory()) {
       for (File c : file.listFiles())
         delete(c);

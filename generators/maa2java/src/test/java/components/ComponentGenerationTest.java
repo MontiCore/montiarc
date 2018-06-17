@@ -5,26 +5,27 @@
  */
 package components;
 
-import de.monticore.ModelingLanguageFamily;
-import de.monticore.io.paths.ModelPath;
-import de.monticore.java.lang.JavaDSLLanguage;
+import de.monticore.java.javadsl._ast.ASTClassDeclaration;
 import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Symbol;
+import de.se_rwth.commons.logging.Log;
+import generation.ComponentElementsCollector;
+import generation.GeneratedComponentClassVisitor;
 import infrastructure.AbstractGeneratorTest;
 import montiarc._ast.ASTBehaviorElement;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTElement;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc.helper.JavaHelper;
 import org.junit.Test;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -46,7 +47,6 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     final String componentName = "EmptyComponent";
     final String qualifiedName = PACKAGE + "." + componentName;
 
-
     // Load component symbol
     final ComponentSymbol symbol = loadComponentSymbol(qualifiedName);
 
@@ -63,7 +63,9 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     }
 
     // Invoke Java compiler to see whether they are compiling
-    AbstractGeneratorTest.isCompiling(filesToCheck.toArray(new File[filesToCheck.size()]));
+    assertTrue(AbstractGeneratorTest.isCompiling(
+        filesToCheck.toArray(new File[filesToCheck.size()])
+    ));
 
     // Parse the files with the JavaDSL
     GlobalScope gs = initJavaDSLSymbolTable();
@@ -71,10 +73,20 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     final Optional<Symbol> emptyComponent
         = gs.resolve("components.EmptyComponent", JavaTypeSymbol.KIND);
     assertTrue(emptyComponent.isPresent());
-    // Collect information about expected features per file
+    final ASTClassDeclaration javaDSLNode
+        = (ASTClassDeclaration) emptyComponent.get().getAstNode().get();
 
-    // Check if the expected features are present
-    // Alternatively check if only expected features are present
+    // Collect information about expected features per file
+    ASTComponent compUnit = (ASTComponent) symbol.getAstNode().get();
+    ComponentElementsCollector compCollector = new ComponentElementsCollector();
+    compCollector.handle(compUnit);
+
+    // Check if all expected elements are present and no other errors occured
+    Log.getFindings().clear();
+    GeneratedComponentClassVisitor classVisitor = compCollector.getClassVisitor();
+    classVisitor.handle(javaDSLNode);
+    assertTrue(classVisitor.allExpectedPresent());
+    assertEquals(0, Log.getFindings().size());
   }
 
   /**
