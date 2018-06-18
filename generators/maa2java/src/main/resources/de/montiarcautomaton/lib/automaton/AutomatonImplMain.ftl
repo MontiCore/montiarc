@@ -60,7 +60,7 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
         ${assignment.getLeft()} = ${assignment.getRight()};
       </#if>
     <#else>
-      ${assignment.getRight()}
+      ${assignment.getRight()};
     </#if>
     
     </#list>
@@ -97,7 +97,7 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
                 result.set${assignment.getLeft()?cap_first}(${assignment.getRight()});
               </#if>
             <#else>
-              ${assignment.getRight()}
+              ${assignment.getRight()};
             </#if>
           </#list>
           
