@@ -67,7 +67,7 @@ public class NamesCorrectlyCapitalized
     final List<ASTParameter> parameters = node.getHead().getParameters();
     for (ASTParameter parameter : parameters) {
       if (!Character.isLowerCase(parameter.getName().charAt(0))) {
-        Log.error(String.format("0xMA092: The name of the parameter '%s' should start with a lowercase letter.", parameter.getName()),
+        Log.error(String.format("0xMA045: The name of the parameter '%s' should start with a lowercase letter.", parameter.getName()),
             parameter.get_SourcePositionStart());
       }
     }

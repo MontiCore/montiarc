@@ -7,10 +7,15 @@ package components.body.autoinstantiate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
+import java.util.Optional;
 
+import montiarc._ast.ASTMontiArcNode;
+import montiarc._symboltable.ConnectorSymbol;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.symboltable.Scope;
@@ -151,5 +156,42 @@ public class AutoInstantiationTest extends AbstractCoCoTest {
     ComponentSymbol comp = this.loadComponent("AutoInstanciateOn");
 
     assertEquals(3, comp.getSubComponents().size());
+  }
+
+  @Test
+  public void testListInOut() {
+    checkValid(PACKAGE + "." + "ListInOut");
+  }
+
+  @Test
+  public void testSomeComp() {
+    checkValid(PACKAGE + "." + "SomeComp");
+  }
+
+  @Test
+  @Ignore("TODO Complete test. TODO Fix autoconnection? See inner2->inner1.")
+  public void testConnectors() {
+
+    checkValid(PACKAGE + "." + "Connectors");
+
+    final ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "Connectors");
+    final ComponentSymbol comp = loadComponentSymbol(PACKAGE, "Connectors");
+
+    // inner2.i3 -> inner1.i1, inner1.i2
+    // inner2.bool -> inner1.bool;
+    Optional<ConnectorSymbol> connector = comp.getConnector("inner.i1");
+    assertTrue(connector.isPresent());
+    assertEquals("inner2.i3", connector.get().getSource());
+
+    connector = comp.getConnector("inner.i2");
+    assertTrue(connector.isPresent());
+    assertEquals("inner2.i3", connector.get().getSource());
+
+    // myInner4.s4out -> inner3.i3s1, inner3.i3s2
+    assertTrue("Missing connector to inner3.i3s1", comp.getConnector("inner3.i3s1").isPresent());
+    assertEquals("myInner4.s4out", comp.getConnector("inner3.i3s1").get().getSource());
+    assertTrue(comp.getConnector("inner3.i3s2").isPresent());
+    assertEquals("myInner4.s4out", comp.getConnector("inner3.i3s2").get().getSource());
+
   }
 }

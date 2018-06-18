@@ -1,12 +1,15 @@
-package unused.components.body.autoinstantiate;
+package components.body.autoinstantiate;
 
 import java.util.List;
+import components.body.ports.Ports;
 
-/**
- * Valid model.
+/*
+ * Invalid model.
+ * Missing connectors.
+ * TODO Fix test
  */
 component Connectors {
-    
+
     port 
         in String myInputString,
         out String stringOut,
@@ -47,7 +50,7 @@ component Connectors {
             in Integer i2,
             in String s1In,
             in String s2In,
-            in Boolean;
+            in Boolean bool;
     }
     
     component Inner2 {
@@ -56,11 +59,11 @@ component Connectors {
             out Integer i3,
             out String s1Out,
             out String s2Out,
-            out Boolean;
+            out Boolean bool;
     }
     
     // inner2.i3 -> inner1.i1, inner1.i2
-    // inner2.Boolean -> inner1.Boolean;
+    // inner2.bool -> inner1.bool;
     connect inner2 -> inner1;
     
     component Inner3 {

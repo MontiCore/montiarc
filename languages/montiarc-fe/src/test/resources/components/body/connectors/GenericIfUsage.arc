@@ -1,4 +1,7 @@
-package components.body.subcomponents;
+package components.body.connectors;
+
+import components.body.subcomponents._subcomponents.GenericIfRequired;
+import types.GenericIfProvider;
 
 /*
  * Invalid model.

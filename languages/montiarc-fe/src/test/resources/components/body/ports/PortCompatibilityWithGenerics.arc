@@ -10,7 +10,6 @@ import java.util.*;
  *                           to the source port, i.e., the type of the target
  *                           port is identical or a supertype of the source
  *                           port type. (p.66, Lst. 3.43)
- * TODO Add test
  */
 component PortCompatibilityWithGenerics {
 

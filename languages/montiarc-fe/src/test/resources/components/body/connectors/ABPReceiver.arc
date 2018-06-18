@@ -1,4 +1,4 @@
-package components.body.connectors.cycles;
+package components.body.connectors;
 
 import types.CType;
 

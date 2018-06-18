@@ -47,7 +47,7 @@ public class AJavaTest extends AbstractCoCoTest {
   @Test
   public void testJavaPVariableIdentifiersUnique() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "JavaPVariableIdentifiersUnique");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new JavaPVariableIdentifiersUnique()), node, new ExpectedErrorInfo(1,  "xMA093"));
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new JavaPVariableIdentifiersUnique()), node, new ExpectedErrorInfo(1,  "xMA016"));
   }
   
   @Test

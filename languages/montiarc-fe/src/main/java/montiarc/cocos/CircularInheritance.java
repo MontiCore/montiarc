@@ -36,7 +36,7 @@ public class CircularInheritance implements MontiArcASTComponentCoCo {
       while (superComp.isPresent()) {
             String name = superComp.get().getPackageName()+"."+superComp.get().getName();
             if (superCompNames.contains(name)) {
-              Log.error("0xMA090 Circular inheritance detected between components "
+              Log.error("0xMA017 Circular inheritance detected between components "
                   + compSym.getName() + " and " + superComp.get().getName());
               return;
             }else {

@@ -125,7 +125,7 @@ public class ParametersTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("Check CD4A generics")
+  @Ignore("TypeCompatibilityChecker.expressionType() returns Opt.empty() on CD Enum parameter ")
   public void testUseEnumAsTypeArgFromCD() {
     checkValid(PACKAGE + "." + "UseEnumAsTypeArgFromCD");
   }
@@ -135,7 +135,7 @@ public class ParametersTest extends AbstractCoCoTest {
   */
   @Test
   public void testParameterNameCapitalized() {
-    ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA092");
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA045");
     MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo((MontiArcASTComponentCoCo)
                                                 new NamesCorrectlyCapitalized());
@@ -156,5 +156,15 @@ public class ParametersTest extends AbstractCoCoTest {
                                               new NamesCorrectlyCapitalized());
 	  checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA049"));
   }
-    
+
+  @Test
+  @Ignore("TODO Activate with new MC version -> SubcomponentParametersCorrectlyAssigned disabled.")
+  public void testAssignsWrongParameters() {
+    final ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "AssignsWrongParameters");
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo expectedErrorInfo
+        = new ExpectedErrorInfo(4, "xMA064");
+    checkInvalid(checker, node, expectedErrorInfo);
+  }
 }

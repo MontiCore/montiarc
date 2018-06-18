@@ -1,10 +1,9 @@
-package components.body.connectors.cycles;
+package components.body.connectors;
 
 import types.CType;
 
 /**
  * Valid model.
- * TODO Add test after fixing autoconnect
  */
 component ABPSender {
 	autoconnect port;

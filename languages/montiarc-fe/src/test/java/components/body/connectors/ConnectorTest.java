@@ -6,17 +6,22 @@
 package components.body.connectors;
 
 import de.monticore.symboltable.Scope;
+import de.monticore.symboltable.Symbol;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcASTBehaviorElementCoCo;
 import montiarc._cocos.MontiArcASTConnectorCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -54,14 +59,14 @@ public class ConnectorTest extends AbstractCoCoTest {
   public void testConnectorSourceAndTargetTypeNotMatch() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ConnectorSourceAndTargetTypeNotMatch");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit()), node,
-        new ExpectedErrorInfo(1, "xMA084"));
+        new ExpectedErrorInfo(1, "xMA033"));
   }
 
   @Test
   public void testPortCompatibilityTypeInheritance() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortCompatibilityTypeInheritance");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit()), node,
-        new ExpectedErrorInfo(9, "xMA084"));
+        new ExpectedErrorInfo(9, "xMA033"));
   }
   
   @Test
@@ -116,7 +121,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     final MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(cocos, node,
-        new ExpectedErrorInfo(6, "xMA066", "xMA067", "xMA091"));
+        new ExpectedErrorInfo(6, "xMA066", "xMA067", "xMA008"));
   }
   
   @Test
@@ -197,7 +202,7 @@ public class ConnectorTest extends AbstractCoCoTest {
         PACKAGE + "." + "ConnectorReferenceDoesNotExist");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(7, "xMA066", "xMA067","xMA091"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(7, "xMA066", "xMA067","xMA008"));
   }
   
   @Test
@@ -229,5 +234,39 @@ public class ConnectorTest extends AbstractCoCoTest {
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
+  }
+
+  @Test
+  @Ignore("IndexOutOfBoundsException in TypeCompatibilityChecker")
+  // TODO: Fix error info after TypeCompatibilityChecker
+  public void testGenericIfUsage() {
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "GenericIfUsage");
+    MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
+    checkInvalid(cocos, node, new ExpectedErrorInfo());
+  }
+
+  @Test
+  public void testABP() {
+    checkValid(PACKAGE + "." + "ABP");
+  }
+
+  @Test
+  public void testABPReceiver() {
+    checkValid(PACKAGE + "." + "ABPReceiver");
+  }
+
+  @Test
+  public void testABPSender() {
+    final String modelName = "ABPSender";
+    checkValid(PACKAGE + "." + modelName);
+    final ASTMontiArcNode astMontiArcNode = loadComponentAST(PACKAGE + "." + modelName);
+    assertNotNull(astMontiArcNode);
+    final Optional<? extends Symbol> componentSymbol = astMontiArcNode.getSymbol();
+    assertTrue(componentSymbol.isPresent());
+    final ComponentSymbol symbol = (ComponentSymbol) componentSymbol.get();
+    assertTrue(symbol.getConnector("sender.message").isPresent());
+    assertTrue(symbol.getConnector("sender.ack").isPresent());
+    assertTrue(symbol.getConnector("abpMessage").isPresent());
   }
 }

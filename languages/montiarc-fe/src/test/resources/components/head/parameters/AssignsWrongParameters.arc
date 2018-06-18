@@ -1,12 +1,11 @@
 package components.head.parameters;
 
 import components.head.parameters.CompWithIntegerParameter;
+import components.body.subcomponents._subcomponents.AtomicComponent;
 /*
- * Invalid component.
+ * Invalid model.
  *
  * Formerly named "CG12" in MontiArc3.
- *
- * @implements TODO
  * TODO Add Test
  */
 component AssignsWrongParameters {

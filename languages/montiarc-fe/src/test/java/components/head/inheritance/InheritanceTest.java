@@ -114,14 +114,14 @@ public class InheritanceTest extends AbstractCoCoTest {
   public void testCircularInheritance() {
     final String componentName = PACKAGE + "." + "CircularInheritanceA";
     ASTMontiArcNode node = loadComponentAST(componentName);
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new CircularInheritance()), node, new ExpectedErrorInfo(1, "xMA090"));
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new CircularInheritance()), node, new ExpectedErrorInfo(1, "xMA017"));
   }
   
   @Test
   public void testTransitiveCircularInheritance() {
     final String componentName = PACKAGE + "." + "TransitiveCircularInheritanceA";
     ASTMontiArcNode node = loadComponentAST(componentName);
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new CircularInheritance()), node, new ExpectedErrorInfo(1, "xMA090"));
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new CircularInheritance()), node, new ExpectedErrorInfo(1, "xMA017"));
 
   }
 
@@ -179,6 +179,27 @@ public class InheritanceTest extends AbstractCoCoTest {
   }
 
   @Test
+  public void testSubCompCorrect1() {
+    checkValid(PACKAGE + "." + "SubCompCorrect1");
+  }
+
+  @Test
+  public void testSubCompCorrect2() {
+    checkValid(PACKAGE + "." + "SubCompCorrect2");
+  }
+
+  @Test
+  public void testSubCompCorrect3() {
+    checkValid(PACKAGE + "." + "SubCompCorrect3");
+  }
+
+  @Test
+  @Ignore("ClassCastException in TypeCompatibilityChecker")
+  public void testSubCompCorrect4() {
+    checkValid(PACKAGE + "." + "SubCompCorrect4");
+  }
+
+  @Test
   public void testSubCompAndOptionalConfigParameters() {
     checkValid(PACKAGE + "." + "SubCompAndOptionalConfigParameters");
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "SubCompAndOptionalConfigParameters");
@@ -196,6 +217,18 @@ public class InheritanceTest extends AbstractCoCoTest {
   public void testComponent1InCycle() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "Component1InCycle");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new CircularInheritance()), node,
-        new ExpectedErrorInfo(1, "xMA090"));
+        new ExpectedErrorInfo(1, "xMA017"));
+  }
+
+  @Test
+  public void testWrongParameterOrder() {
+    ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "WrongParameterOrder");
+    final MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker()
+              .addCoCo(new ConfigurationParametersCorrectlyInherited());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(2, "xMA084");
+    checkInvalid(cocos, node, errors);
   }
 }
