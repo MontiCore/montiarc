@@ -90,6 +90,7 @@ public class MontiArcCoCos {
         // .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
         // .addCoCo(new AutomatonInitialReactionTypeDoesNotFitOutputType())
         // .addCoCo(new AutomatonReactionTypeDoesNotFitOutputType())
+        .addCoCo(new AutomatonNoDataAssignedToVariable())
         
         // UNIQUENESS OF NAMES
         .addCoCo(new AutomatonInitialDeclaredMultipleTimes())
