@@ -65,7 +65,7 @@ public class AJavaTest extends AbstractCoCoTest {
   public void testAJavaComputeBlockNameIsLowerCase() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AJavaComputeBlockNameIsLowerCase");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(1, "xMA174"));
+        new ExpectedErrorInfo(1, "xMA015"));
   }
   
   @Test
