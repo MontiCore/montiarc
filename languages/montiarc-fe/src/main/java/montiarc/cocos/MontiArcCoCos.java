@@ -44,7 +44,6 @@ public class MontiArcCoCos {
         
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
-        .addCoCo((MontiArcASTJavaPBehaviorCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new InputPortChangedInCompute())
         .addCoCo(new UsedPortsAndVariablesExist())
         .addCoCo(new MultipleBehaviorImplementation())
@@ -57,7 +56,7 @@ public class MontiArcCoCos {
         .addCoCo(new ImplementationInNonAtomicComponent())
         
         // CONVENTIONS
-        .addCoCo((MontiArcASTAutomatonBehaviorCoCo) new NamesCorrectlyCapitalized())
+        .addCoCo((MontiArcASTBehaviorElementCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new AutomatonHasNoState())
         .addCoCo(new AutomatonHasNoInitialState())
         .addCoCo(new MultipleAssignmentsSameIdentifier())
