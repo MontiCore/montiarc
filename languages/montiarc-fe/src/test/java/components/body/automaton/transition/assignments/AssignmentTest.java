@@ -169,4 +169,6 @@ public class AssignmentTest extends AbstractCoCoTest {
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(4, "xMA081", "xMA019");
     checkInvalid(cocos, astMontiArcNode,errors);
   }
+
+
 }
