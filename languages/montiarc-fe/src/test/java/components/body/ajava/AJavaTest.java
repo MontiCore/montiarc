@@ -26,7 +26,8 @@ import montiarc.cocos.JavaPVariableIdentifiersUnique;
 import montiarc.cocos.MontiArcCoCos;
 
 /**
- * This class checks all context conditions related the definition of AJava behavior
+ * This class checks all context conditions related the definition of AJava
+ * behavior
  *
  * @author Andreas Wortmann
  */
@@ -47,7 +48,8 @@ public class AJavaTest extends AbstractCoCoTest {
   @Test
   public void testJavaPVariableIdentifiersUnique() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "JavaPVariableIdentifiersUnique");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new JavaPVariableIdentifiersUnique()), node, new ExpectedErrorInfo(1,  "xMA093"));
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new JavaPVariableIdentifiersUnique()), node,
+        new ExpectedErrorInfo(3, "xMA093", "xMA094", "xMA095"));
   }
   
   @Test
@@ -125,33 +127,33 @@ public class AJavaTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "ComplexCodeExample");
   }
   
-
   @Test
   public void testLocalVariablesInComputeBlock() {
     loadComponentAST(PACKAGE + "." +
-                         "LocalVariablesInComputeBlock");
+        "LocalVariablesInComputeBlock");
     final ComponentSymbol symbol = loadComponentSymbol(PACKAGE, "LocalVariablesInComputeBlock");
     Collection<VariableSymbol> foundVars = new ArrayList<>();
-    symbol.getSpannedScope().getSubScopes().forEach(s -> s.<VariableSymbol> resolveLocally(VariableSymbol.KIND).forEach(v -> foundVars.add(v)));
+    symbol.getSpannedScope().getSubScopes().forEach(
+        s -> s.<VariableSymbol> resolveLocally(VariableSymbol.KIND).forEach(v -> foundVars.add(v)));
     assertEquals(2, foundVars.size());
-
+    
     checkValid(PACKAGE + "." + "LocalVariablesInComputeBlock");
   }
-
+  
   @Test
   @Ignore("TODO: Currently forward declaration of variables is required. " +
-              "Else the symboltable cannot be built correctly and the " +
-              "variable is not found.")
+      "Else the symboltable cannot be built correctly and the " +
+      "variable is not found.")
   public void testDefineComponentVarAfterCompute() {
     loadComponentAST(PACKAGE + "." +
-                         "DefineComponentVarAfterCompute");
-
+        "DefineComponentVarAfterCompute");
+    
     checkValid(PACKAGE + "." + "DefineComponentVarAfterCompute");
   }
-
+  
   @Test
   @Ignore("TODO: Should not be working, as there are variables which are " +
-              "declared more than once.")
+      "declared more than once.")
   public void testAmbiguousAJavaVariableNames() {
     checkValid(PACKAGE + "." + "AmbiguousAJavaVariableNames");
   }
