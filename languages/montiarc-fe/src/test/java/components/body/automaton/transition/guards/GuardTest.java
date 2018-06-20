@@ -70,4 +70,14 @@ public class GuardTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "GuardHasComplexExpressionWithCD");
   }
   
+  @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
+      + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
+      + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
+  @Test
+  public void testMultipleGuardTypeConflics() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MultipleGuardTypeConflics");
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(2, "xMA046"));
+  }
+  
+  
 }
