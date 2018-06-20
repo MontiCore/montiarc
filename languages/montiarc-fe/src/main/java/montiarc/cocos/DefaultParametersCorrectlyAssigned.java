@@ -25,7 +25,10 @@ import montiarc.helper.TypeCompatibilityChecker;
 /**
  * Ensures that default values of parameters in the component's head are correctly assigned.
  *
- * @implements [Wor16] MT7: Default values of parameters conform to their type. (p. 64, Lst. 4.22)
+ * @implements [Wor16] MT7: Default values of parameters conform
+ *  to their type. (p. 64, Lst. 4.22)
+ * @implements [Wor16] MR3:  No default values for configuration
+ *  parameters of purely generic types. (p. 59, Lst. 4.13)
  * @author Jerome Pfeiffer
  */
 public class DefaultParametersCorrectlyAssigned

@@ -10,7 +10,7 @@ component UseEnumAsTypeArgFromCD {
     
     port in String sIn;
     
-    component EnumFromCDAsTypeArg(MyEnum.ON) sub;
+    component EnumFromCDAsTypeArg(EnumType.ON) sub;
     
     connect sIn -> sub.sIn;
 }    

@@ -5,9 +5,9 @@ package types;
  */
 classdiagram TypesWithHierarchy {
 
-  public class DefinedType {}
+  class DefinedType {}
   
-  public class SubType extends SuperType {}
+  class SubType extends SuperType {}
   
-  public class SuperType {}
+  class SuperType {}
 }

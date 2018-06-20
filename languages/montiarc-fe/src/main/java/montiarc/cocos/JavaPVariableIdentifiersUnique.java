@@ -39,7 +39,7 @@ public class JavaPVariableIdentifiersUnique implements MontiArcASTJavaPBehaviorC
             .<VariableSymbol> resolveLocally(VariableSymbol.KIND);
         for (VariableSymbol v : vars) {
           if (names.contains(v.getName())) {
-            Log.error("0xMA093 Duplicate local variable names " + v.getName() + ".",
+            Log.error("0xMA016 Duplicate local variable names " + v.getName() + ".",
                 v.getSourcePosition());
           }
           else {

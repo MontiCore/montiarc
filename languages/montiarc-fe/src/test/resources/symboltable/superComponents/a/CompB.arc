@@ -1,11 +1,11 @@
 package a;
 
-import b.SuperComponentOtherPackage;
+import components.body.subcomponents._subcomponents.HasIntegerInputAndOutput;
 
 /*
  * Valid model.
  */
-component CompB extends SuperComponentOtherPackage {
+component CompB extends HasIntegerInputAndOutput {
   port
     in String str,
     out Integer int3;

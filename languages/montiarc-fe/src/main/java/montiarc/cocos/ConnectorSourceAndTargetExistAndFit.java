@@ -125,7 +125,7 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
             targetType, targetTypeFormalParams, targetParams.stream()
                 .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList())))
           Log.error(
-              "0xMA084 Source and target type of connector " + connector.getName()
+              "0xMA033 Source and target type of connector " + connector.getName()
                   + " do not match.",
               connector.getAstNode().get().get_SourcePositionStart());
       }

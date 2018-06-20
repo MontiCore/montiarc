@@ -2,40 +2,28 @@ package types;
 
 classdiagram CDTestTypes {
 
-  public class TypeWithFields {
-    public int testInt = 1;
-    public boolean testBool = true;
+  class TypeWithFields {
+    int testInt = 1;
+    boolean testBool = true;
 
-    private int privateVar = 0;
-
-//    public java.lang.String toString() {
-//      return "Here is TypeWithFields";
-//    }
+    int privateVar = 0;
   }
   
-  public class SuperType {}
+  class SuperType {}
   
-  public class SubTypeOne extends SuperType {
-    public int myField;
+  class SubTypeOne extends SuperType {
+    int myField;
   }
   
-  public interface InterfaceTypeOne {}
-  public interface InterfaceTypeTwo {}
-  public interface InterfaceTypeThree extends InterfaceTypeTwo {}
+  interface InterfaceTypeOne {}
+  interface InterfaceTypeTwo {}
+  interface InterfaceTypeThree extends InterfaceTypeTwo {}
   
-  public class SubTypeTwo extends SuperType implements InterfaceTypeOne, InterfaceTypeThree {}
+  class SubTypeTwo extends SuperType implements InterfaceTypeOne, InterfaceTypeThree {}
   
-  public enum EnumType {
+  enum EnumType {
         ON,
         OFF,
         INACTIVE;
   }
-  
-  public class GenericClassType//<T>
-  {
-    public T genericField;
-  }
-  
-  public class GenericInterfaceType<T> {}
-  
 }

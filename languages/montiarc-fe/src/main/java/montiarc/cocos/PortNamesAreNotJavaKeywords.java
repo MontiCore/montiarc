@@ -83,7 +83,7 @@ public class PortNamesAreNotJavaKeywords implements MontiArcASTPortCoCo{
   public void check(ASTPort node) {
     node.getNames().forEach(s-> {
       if (isPrimitveTypeName(s)) {
-        Log.error("0xMA087 The Port name must not be a keyword, but was "+s, node.get_SourcePositionStart());
+        Log.error("0xMA028 The Port name must not be a keyword, but was "+s, node.get_SourcePositionStart());
       }
     });
   }

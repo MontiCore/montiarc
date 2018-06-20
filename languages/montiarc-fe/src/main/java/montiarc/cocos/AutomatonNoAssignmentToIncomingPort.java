@@ -32,7 +32,7 @@ public class AutomatonNoAssignmentToIncomingPort implements MontiArcASTIOAssignm
       if (resolvedSymbol.isPresent() && resolvedSymbol.get() instanceof PortSymbol) {
         final PortSymbol symbol = (PortSymbol) resolvedSymbol.get();
         if (symbol.isIncoming()) {
-          Log.error("0xMA093 Writing to incoming ports is not allowed.",
+          Log.error("0xMA034 Writing to incoming ports is not allowed.",
               node.get_SourcePositionStart());
         }
       }

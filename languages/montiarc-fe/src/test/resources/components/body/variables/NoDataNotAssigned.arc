@@ -16,6 +16,7 @@ component NoDataNotAssigned {
 	  state S;
 	  initial S;
 
-	  //S / {buffer = --};
+	  S / {buffer = --}; //invalid, since buffer is variable.
+	  S / {output = --}; //valid, since output is a port.
 	}
 }
