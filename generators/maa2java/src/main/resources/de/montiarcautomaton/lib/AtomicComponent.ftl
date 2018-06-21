@@ -39,7 +39,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   
   // port fields
   <#list portsIn as port>
-  private Port<${helper.printPortTypeName(port)}> ${port.getName()};
+  protected Port<${helper.printPortTypeName(port)}> ${port.getName()};
   </#list>
   
   <#list portsOut as port>
@@ -101,7 +101,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   @Override
   public void compute() {
     // collect current input port values
-    final ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> input = new ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>(<#list portsIn as port>this.${port.getName()}.getCurrentValue()<#sep>, </#list>);
+    final ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> input = new ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>(<#list helper.getAllInPorts() as port>this.${port.getName()}.getCurrentValue()<#sep>, </#list>);
     //Logger.log("${name}", "compute(" + input.toString() + ")");
     
     try {

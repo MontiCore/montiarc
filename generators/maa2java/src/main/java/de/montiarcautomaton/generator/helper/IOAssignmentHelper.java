@@ -22,9 +22,6 @@ public class IOAssignmentHelper {
     this.assignment = assignment;
   }
   
-  public boolean isAssignment() {
-    return assignment.isAssignment();
-  }
   
   /**
    * Returns the left hand side of an assignment/comparison.

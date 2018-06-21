@@ -18,10 +18,10 @@ public class ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParame
     super();
   </#if>}
   
-  <#if portsIn?size != 0>
+  <#if helper.getAllInPorts()?size != 0>
   public ${inputName}(<#list helper.getAllInPorts() as port>${helper.getPortTypeName(port)} ${port.getName()}<#sep>, </#list>) {
     <#if helper.hasSuperComp()>
-    super(<#list helper.getSuperInPorts() as port>${helper.getPortTypeName(port)} ${port.getName()}<#sep>, </#list>);
+    super(<#list helper.getSuperInPorts() as port>${port.getName()}<#sep>, </#list>);
     </#if>
     <#list portsIn as port>
     this.${port.getName()} = ${port.getName()};
