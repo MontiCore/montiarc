@@ -1,5 +1,9 @@
 package components.body.automaton.transition.guards;
 
+import de.monticore.java.javadsl._cocos.JavaDSLASTPrimaryExpressionCoCo;
+import montiarc._cocos.MontiArcASTGuardExpressionCoCo;
+import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.UseOfUndeclaredField;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -50,10 +54,30 @@ public class GuardTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "GuardUsesOutgoingPort");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(4, "xMA022"));
   }
+
+  @Test
+  public void testGuardUsesUndeclaredField() {
+    ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "GuardUsesUndeclaredField");
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker().addCoCo(
+            (MontiArcASTGuardExpressionCoCo) new UseOfUndeclaredField());
+    checkInvalid(checker, node, new ExpectedErrorInfo(3, "xMA079"));
+  }
   
   @Test
   public void testComplexExpressionInGuard() {
     checkValid(PACKAGE + "." + "GuardHasComplexExpressionWithCD");
   }
+  
+  @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
+      + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
+      + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
+  @Test
+  public void testMultipleGuardTypeConflics() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MultipleGuardTypeConflics");
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(2, "xMA046"));
+  }
+  
   
 }

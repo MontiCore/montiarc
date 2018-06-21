@@ -22,6 +22,7 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.VariableSymbol;
 import montiarc.cocos.AtMostOneInitBlock;
 import montiarc.cocos.InitBlockOnlyOnEmbeddedAJava;
+import montiarc.cocos.JavaPVariableIdentifiersUnique;
 import montiarc.cocos.MontiArcCoCos;
 
 /**
@@ -44,6 +45,12 @@ public class AJavaTest extends AbstractCoCoTest {
   }
   
   @Test
+  public void testJavaPVariableIdentifiersUnique() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "JavaPVariableIdentifiersUnique");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new JavaPVariableIdentifiersUnique()), node, new ExpectedErrorInfo(3, "xMA016", "xMA094", "xMA095"));
+  }
+  
+  @Test
   public void testInitBlockWithAJava() {
     checkValid(PACKAGE + "." + "InitBlockWithAJava");
   }
@@ -58,7 +65,7 @@ public class AJavaTest extends AbstractCoCoTest {
   public void testAJavaComputeBlockNameIsLowerCase() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AJavaComputeBlockNameIsLowerCase");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(1, "xMA174"));
+        new ExpectedErrorInfo(1, "xMA015"));
   }
   
   @Test

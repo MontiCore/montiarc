@@ -347,10 +347,10 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   
   /**
    * The Value for empty data
-   * TODO: currently can not be used to assign/compare inputs/outputs/variables with -- because of wrong derivation.
-   * NoData should implement literal value.
+
+
    */
-  NoData implements Value = "--";    
+  NoData = "--";    
  
      
   /**
@@ -360,10 +360,12 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   Block= "{" IOAssignment ("," IOAssignment)* "}";
   
   /**
-   * A assignment of the form "var = x"
+   * A assignment of the form "var = x" or "var = [x,y,z]". The latter is 
+   * used with I/O^w output (i.e., emitting streams of messages).
+   *
    * @attribute Name: The name of the variable that gets assigned
    */ 
-  IOAssignment = (Name assignment:["="])? (Alternative | ValueList);
+  IOAssignment = ((Name assignment:["="]) | (call:["call"]))? (Alternative | ValueList);
   
   Alternative = "alt" "{" ValueList ("," ValueList)* "}";
   
@@ -372,7 +374,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
    * @attribute Valuation: The valuation
    */    
   ValueList   
-      = (("[" Valuation ("," Valuation )* "]") | Valuation); 
+      = (("[" Valuation ("," Valuation )* "]") | Valuation | NoData); 
       
 
   /*************************************************************************

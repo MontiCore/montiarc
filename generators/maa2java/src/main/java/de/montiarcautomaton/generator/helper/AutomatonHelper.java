@@ -78,21 +78,6 @@ public class AutomatonHelper extends ComponentHelper {
     }
   }
   
-  /**
-   * Returns a collection of io comparisons of a stimulus.
-   * 
-   * @param symbol the transition
-   * @return
-   */
-  public Collection<IOAssignmentHelper> getStimulus(TransitionSymbol symbol) {
-    ArrayList<IOAssignmentHelper> assignments = new ArrayList<>();
-    if (symbol.getStimulusAST().isPresent()) {
-      for (ASTIOAssignment assignment : symbol.getStimulusAST().get().getIOAssignments()) {
-        assignments.add(new IOAssignmentHelper(assignment));
-      }
-    }
-    return assignments;
-  }
   
   /**
    * Returns a collection of io assignments of a reaction.

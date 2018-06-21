@@ -1,13 +1,16 @@
 package components.body.variables;
 
+import montiarc._cocos.MontiArcASTComponentCoCo;
+import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.*;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
-import montiarc.cocos.MontiArcCoCos;
 
 /**
  * This class checks all context conditions related the combination of elements in component bodies
@@ -26,12 +29,23 @@ public class VariableTest extends AbstractCoCoTest {
   @Test
   public void testAmbiguousVariableNames() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousVariableNames");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(4, "xMA035"));
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA035"));
   }
   
   @Test
   public void testVariableNamesAreLowerCase() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "VariableNameUpperCase");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA018"));
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA018"));
+  }
+
+  //@Ignore("NoData is forbidden by grammar, so a test is superfluous at the moment.")
+  @Test
+  public void testNoDataNotAssigned() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "NoDataNotAssigned");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new AutomatonNoDataAssignedToVariable());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA092"));
+
   }
 }

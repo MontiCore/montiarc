@@ -8,6 +8,7 @@ package components.head.generics;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,9 +20,6 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc.cocos.AllGenericParametersOfSuperClassSet;
-import montiarc.cocos.MontiArcCoCos;
-import montiarc.cocos.TypeParameterNamesUnique;
 import montiarc.helper.SymbolPrinter;
 
 /**
@@ -151,5 +149,17 @@ public class GenericsTest extends AbstractCoCoTest {
     // typeRef.getTypeParameters().get(0).getTypeParameters().get(0).getType().getName());
     // assertEquals("V",
     // typeRef.getTypeParameters().get(1).getTypeParameters().get(0).getType().getName());
+  }
+
+  @Test
+  public void testDefaultParameterForPurelyGenericType() {
+    final ASTMontiArcNode astMontiArcNode
+        = loadComponentAST(PACKAGE +
+                               ".DefaultParameterForPurelyGenericType");
+    MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new DefaultParametersCorrectlyAssigned());
+    ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA062");
+    checkInvalid(cocos, astMontiArcNode, errors);
   }
 }

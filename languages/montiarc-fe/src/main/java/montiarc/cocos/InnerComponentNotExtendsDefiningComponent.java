@@ -5,12 +5,14 @@
  */
 package montiarc.cocos;
 
-import java.util.Collection;
-
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ComponentSymbol;
+
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Deque;
 
 /**
  * @implements [Hab16] R12: An inner component type definition must not extend
@@ -27,18 +29,53 @@ public class InnerComponentNotExtendsDefiningComponent implements MontiArcASTCom
   @Override
   public void check(ASTComponent node) {
     ComponentSymbol definingComp = (ComponentSymbol) node.getSymbol().get();
-    String nameOfDefiningComp = definingComp.getName();
+
+    // Start check only at the root of the inner component hierarchy
+    // This prevents duplicate errors due to the call to this function
+    // on each inner component
+    if(definingComp.isInnerComponent()){
+      return;
+    }
     Collection<ComponentSymbol> innerComps = definingComp.getInnerComponents();
+
+    Deque<String> nameStack = new ArrayDeque<>();
+    nameStack.push(definingComp.getFullName());
     for (ComponentSymbol inner : innerComps) {
-      if (inner.getSuperComponent().isPresent()) {
-        String superOfInner = inner.getSuperComponent().get().getName();
-        if (superOfInner.equals(nameOfDefiningComp)) {
-          Log.error(String.format("0xMA083 Inner component of type extends the component type "
-              + superOfInner + " which is the same component type it is defined in."),
-              inner.getAstNode().get().get_SourcePositionStart());
-        }
+      checkInner(inner, nameStack);
+    }
+  }
+
+  /**
+   * Recursively check the inner components.
+   *
+   * @param comp Symbol of the component which should be checked
+   * @param compNameStack Stack of fully qualified component names which occur
+   *                      higher in the inner component hierarchy.
+   */
+  private void checkInner(ComponentSymbol comp, Deque<String> compNameStack){
+    if (comp.getSuperComponent().isPresent()) {
+      String superComponent = comp.getSuperComponent().get().getFullName();
+
+      // Search the stack for possible occurences of the super component
+      // fully qualified name
+      if (compNameStack.contains(superComponent)) {
+        Log.error(
+            String.format("0xMA083 Inner component of type %s extends the " +
+                              "component type %s which is the same " +
+                              "component type it is defined in.",
+                comp.getFullName(), superComponent),
+            comp.getAstNode().get().get_SourcePositionStart());
       }
     }
+    // Add the self name to the stack
+    compNameStack.push(comp.getFullName());
+
+    // Recursively check all inner components
+    for (ComponentSymbol inner : comp.getInnerComponents()) {
+      checkInner(inner, compNameStack);
+    }
+    // Remove the current name from the top of the stack
+    compNameStack.pop();
   }
   
 }

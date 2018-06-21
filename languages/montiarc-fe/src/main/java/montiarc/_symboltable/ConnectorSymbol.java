@@ -27,6 +27,7 @@ import montiarc.helper.SymbolPrinter;
  * 
  * @author Arne Haber, Michael von Wenckstern, Robert Heim
  */
+@Deprecated
 public class ConnectorSymbol extends CommonSymbol {
   
   public static final ConnectorKind KIND = new ConnectorKind();
@@ -95,7 +96,7 @@ public class ConnectorSymbol extends CommonSymbol {
       Optional<ComponentInstanceSymbol> inst = cmp.getSpannedScope()
           .<ComponentInstanceSymbol> resolveLocally(instance, ComponentInstanceSymbol.KIND);
       if(!inst.isPresent()) {
-        Log.error("0xMA091 Instance " + instance+ " is not defined in the component type " +cmp.getName());
+        Log.error("0xMA008 Instance " + instance+ " is not defined in the component type " +cmp.getName());
         return Optional.empty();
       }
       foundPort = inst.get().getComponentType().getReferencedSymbol().getAllPorts().stream().filter(p -> p.getName().equals(instancePort)).findFirst();

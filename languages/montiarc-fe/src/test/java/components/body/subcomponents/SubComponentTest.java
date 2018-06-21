@@ -5,14 +5,17 @@
  */
 package components.body.subcomponents;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import montiarc._cocos.MontiArcASTComponentCoCo;
-import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -28,15 +31,22 @@ import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ComponentSymbolReference;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
+import montiarc.cocos.ComponentWithTypeParametersHasInstance;
+import montiarc.cocos.IdentifiersAreUnique;
+import montiarc.cocos.InnerComponentNotExtendsDefiningComponent;
+import montiarc.cocos.MontiArcCoCos;
+import montiarc.cocos.NamesCorrectlyCapitalized;
+import montiarc.cocos.ReferencedSubComponentExists;
+import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
+import montiarc.cocos.SubcomponentReferenceCycle;
 import montiarc.helper.SymbolPrinter;
-
-import static org.junit.Assert.*;
 
 /**
  * This class checks all context conditions related to the definition of
@@ -59,9 +69,19 @@ public class SubComponentTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "SubcomponentsWithJavaCfgArg");
   }
   
+
+  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   @Test
   public void testSubcomponentParametersOfWrongType() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentParametersOfWrongType");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
+        node, new ExpectedErrorInfo(2, "xMA064"));
+  }
+  
+  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
+  @Test
+  public void testSubcomponentParametersOfWrongTypeWithCD() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentParametersOfWrongType2");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
         node, new ExpectedErrorInfo(2, "xMA064"));
   }
@@ -183,6 +203,7 @@ public class SubComponentTest extends AbstractCoCoTest {
     ExpectedErrorInfo.reset();
   }
   
+  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   @Test
   public void testWrongSubComponentArgument() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongSubComponentArgument");
@@ -662,6 +683,12 @@ public class SubComponentTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
         "HasStringInputAndOutput");
   }
+
+  @Test
+  public void testHasIntegerInputAndOutput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+        "HasIntegerInputAndOutput");
+  }
   
   @Test
   public void testHasThreeGenericInAndOneOutputPort() {
@@ -688,8 +715,6 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
   
   @Test
-  @Ignore("TODO: IndexOutOfBoundsException in TypeCompatibilityChecker." +
-              "Root: ConnectorSourceAndTargetExistAndFit")
   public void testGenericArchitectureComponent() {
     checkValid(PACKAGE + "." +
         "GenericArchitectureComponent");
@@ -712,6 +737,12 @@ public class SubComponentTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "_subcomponents" + "." +
         "AtomicComponent");
   }
+
+  @Test
+  public void testGenericIfRequired() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +
+        "GenericIfRequired");
+  }
   
   @Test
   @Ignore("Should not pass like this, see #157")
@@ -728,4 +759,37 @@ public class SubComponentTest extends AbstractCoCoTest {
     final ExpectedErrorInfo expectedErrorInfo = new ExpectedErrorInfo(6, "xMA085");
     checkInvalid(MontiArcCoCos.createChecker(), astNode, expectedErrorInfo);
   }
+
+  @Test
+  /*
+   * Checks that the CoCo InnerComponentNotExtendsDefiningComponent is working
+   * as intended.
+   *
+   * @Implements [Hab16] R12: An inner component type definition must not
+   * extend the component type in which it is defined. (p. 68, lst. 3.47)
+   */
+  public void testOuterComponent() {
+    ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "OuterComponent");
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker()
+              .addCoCo(new InnerComponentNotExtendsDefiningComponent());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(3, "xMA083");
+    checkInvalid(checker, node, errors);
+  }
+
+  @Test
+  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
+  public void testSubcomponentsWithWrongNumberOfCfgArgs() {
+    final ASTMontiArcNode astNode = loadComponentAST(
+        PACKAGE + "." + "SubcomponentsWithWrongNumberOfCfgArgs");
+    final ExpectedErrorInfo expectedErrorInfo
+        = new ExpectedErrorInfo(2, "xMA082");
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker()
+              .addCoCo(new SubcomponentParametersCorrectlyAssigned());
+    checkInvalid(checker, astNode, expectedErrorInfo);
+  }
+
 }

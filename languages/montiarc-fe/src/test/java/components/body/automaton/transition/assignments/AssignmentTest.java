@@ -1,8 +1,9 @@
 package components.body.automaton.transition.assignments;
 
+import montiarc._cocos.MontiArcASTGuardExpressionCoCo;
+import montiarc._cocos.MontiArcASTIOAssignmentCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc.cocos.AutomatonNoAssignmentToIncomingPort;
-import montiarc.cocos.AutomatonOutputInExpression;
+import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -11,8 +12,6 @@ import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
-import montiarc.cocos.MontiArcCoCos;
-import montiarc.cocos.UseOfForbiddenExpression;
 
 /**
  * This class checks all context conditions related to automaton assignments
@@ -26,6 +25,19 @@ public class AssignmentTest extends AbstractCoCoTest {
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
+  }
+  
+  @Test
+  public void testMethodCallAfterCallKeyword() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MethodCallAfterCallKeyword");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IOAssignmentCallFollowsMethodCall()), node, new ExpectedErrorInfo(1, "xMA091"));
+
+  }
+  
+  @Test
+  public void testMethodCallWithoutCallKeyword() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MethodCallWithoutCallKeyword");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IOAssignmentCallFollowsMethodCall()), node, new ExpectedErrorInfo(1, "xMA090"));
   }
   
   @Test
@@ -125,7 +137,7 @@ public class AssignmentTest extends AbstractCoCoTest {
         PACKAGE + "." + "AssignmentToIncomingPort");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new AutomatonNoAssignmentToIncomingPort());
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA093");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA034");
     checkInvalid(cocos, astMontiArcNode, errors);
   }
   
@@ -133,9 +145,30 @@ public class AssignmentTest extends AbstractCoCoTest {
   public void testUseOfForbiddenExpression() {
     final ASTMontiArcNode astMontiArcNode = loadComponentAST(
         PACKAGE + "." + "UseOfForbiddenExpressions");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
-        .addCoCo(new UseOfForbiddenExpression());
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(5, "xMA023");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker();
+    cocos.addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfForbiddenExpression());
+    cocos.addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfForbiddenExpression());
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA023");
     checkInvalid(cocos, astMontiArcNode, errors);
   }
+
+  @Test
+  public void testAssignmentOfSequences() {
+    final ASTMontiArcNode astMontiArcNode = loadComponentAST(PACKAGE + "." + "AssignmentOfSequence");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new UseOfValueLists());
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA081");
+    checkInvalid(cocos, astMontiArcNode,errors);
+  }
+
+  @Test
+  public void testMultipleMessagesPerCycle() {
+    final ASTMontiArcNode astMontiArcNode = loadComponentAST(PACKAGE + "." + "OneAssignmentPerCycle");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+        .addCoCo(new UseOfValueLists())
+        .addCoCo(new MultipleAssignmentsSameIdentifier());
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(4, "xMA081", "xMA019");
+    checkInvalid(cocos, astMontiArcNode,errors);
+  }
+
+
 }

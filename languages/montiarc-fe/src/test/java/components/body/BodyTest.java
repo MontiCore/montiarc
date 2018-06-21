@@ -1,5 +1,7 @@
 package components.body;
 
+import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.MultipleBehaviorImplementation;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -28,7 +30,8 @@ public class BodyTest extends AbstractCoCoTest {
   @Test
   public void testComponentWithAJavaAndAutomaton() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ComponentWithAJavaAndAutomaton");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA050"));
+    final MontiArcCoCoChecker checker = new MontiArcCoCoChecker().addCoCo(new MultipleBehaviorImplementation());
+    checkInvalid(checker, node, new ExpectedErrorInfo(1, "xMA050"));
   }
   
   @Test

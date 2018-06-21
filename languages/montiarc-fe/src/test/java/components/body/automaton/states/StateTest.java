@@ -44,7 +44,7 @@ public class StateTest extends AbstractCoCoTest {
   public void testConflictingStereotypes() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ConflictingStereotypes");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(6,"xMA031", "xMA034"));
+        new ExpectedErrorInfo(4,"xMA031"));
   }
   
   @Test

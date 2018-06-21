@@ -26,13 +26,20 @@ public class ConnectorSourceAndTargetComponentDiffer implements MontiArcASTCompo
     for (ConnectorSymbol cs : connectors) {
       String connectorSource = cs.getSource();
       String connectorTarget = cs.getTarget();
-      
+
+
       Optional<PortSymbol> source = componentSymbol.getSpannedScope()
-          .<PortSymbol> resolve(connectorSource, PortSymbol.KIND);
+          .<PortSymbol> resolveDown(connectorSource, PortSymbol.KIND);
       Optional<PortSymbol> target = componentSymbol.getSpannedScope()
-          .<PortSymbol> resolve(connectorTarget, PortSymbol.KIND);
-      
-      if (source.isPresent()) {
+          .<PortSymbol> resolveDown(connectorTarget, PortSymbol.KIND);
+
+      if (connectorSource.equals(connectorTarget)) {
+        Log.error(
+            "0xMA075 Source and target port of connector are ports from the same component1.",
+            cs.getAstNode().get().get_SourcePositionStart());
+      }
+
+      else if (source.isPresent()) {
         if (target.isPresent())
           if (source.get().getEnclosingScope().equals(target.get().getEnclosingScope())) {
             Log.error(

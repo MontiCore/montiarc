@@ -1,6 +1,0 @@
-package contextconditions.invalid;
-
-// TODO: Unused?
-classdiagram LowerCaseEnumeration {
-  enum lowerCaseEnumeration {A, B, C;} // lower case name
-}
