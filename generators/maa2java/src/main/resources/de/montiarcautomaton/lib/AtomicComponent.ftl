@@ -9,6 +9,7 @@ ${tc.params(
 	"java.util.Collection<montiarc._symboltable.VariableSymbol> variables", 
 	"java.util.Collection<montiarc._symboltable.PortSymbol> portsIn", 
 	"java.util.Collection<montiarc._symboltable.PortSymbol> portsOut",
+	"java.util.Collection<montiarc._symboltable.PortSymbol> allPortsOut",
 	"java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams")}
 	
 package ${_package};
@@ -24,7 +25,7 @@ import de.montiarcautomaton.runtimes.timesync.delegation.Port;
 import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 import de.montiarcautomaton.runtimes.Log;
 
-public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> implements IComponent {
+public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}</#if> implements IComponent {
   
   // component variables
   <#list variables as var>
@@ -38,11 +39,11 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   
   // port fields
   <#list portsIn as port>
-  private Port<${helper.printPortTypeName(port)}> ${port.getName()};
+  protected Port<${helper.printPortTypeName(port)}> ${port.getName()};
   </#list>
   
   <#list portsOut as port>
-  private Port<${helper.printPortTypeName(port)}> ${port.getName()};
+  protected Port<${helper.printPortTypeName(port)}> ${port.getName()};
   </#list>
   
   // port setter
@@ -72,6 +73,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   
   @Override
   public void setUp() {
+    <#if helper.hasSuperComp()>super.setUp();</#if>
     // set up output ports
     <#list portsOut as port>
     this.${port.getName()} = new Port<${helper.getPortTypeName(port)}>();
@@ -81,7 +83,8 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   }
 
   @Override
-  public void init() {  
+  public void init() {
+    <#if helper.hasSuperComp()>super.init();</#if>  
   	// set up unused input ports
   	<#list portsIn as port>
   	if (this.${port.getName()} == null) {this.${port.getName()} = Port.EMPTY;}
@@ -89,8 +92,8 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   }
   
   private void setResult(${resultName}<#if helper.isGeneric()> < <#list helper.getGenericParameters() as param>${param}<#sep>,</#list> > </#if> result) {
-  	<#list portsOut as port>
-  	this.${port.getName()}.setNextValue(result.get${port.getName()?cap_first}());
+  	<#list allPortsOut as port>
+  	this.getPort${port.getName()?cap_first}().setNextValue(result.get${port.getName()?cap_first}());
   	</#list>
   }
 
@@ -98,7 +101,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   @Override
   public void compute() {
     // collect current input port values
-    final ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> input = new ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>(<#list portsIn as port>this.${port.getName()}.getCurrentValue()<#sep>, </#list>);
+    final ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> input = new ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>(<#list helper.getAllInPorts() as port>this.${port.getName()}.getCurrentValue()<#sep>, </#list>);
     //Logger.log("${name}", "compute(" + input.toString() + ")");
     
     try {
@@ -115,6 +118,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
 
   @Override
   public void update() {
+    <#if helper.hasSuperComp()>super.update();</#if>
     // update computed value for next computation cycle in all outgoing ports
   	<#list portsOut as port>
   	this.${port.getName()}.update();

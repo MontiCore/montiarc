@@ -2,6 +2,7 @@ package de.montiarcautomaton.generator.helper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -430,6 +431,17 @@ public class ComponentHelper {
     return false;
   }
   
+  public boolean hasSuperComp() {
+    return component.getSuperComponent().isPresent();
+  }
+  
+  public String getSuperComponentFqn() {
+    if(component.getSuperComponent().isPresent()) {
+      return component.getSuperComponent().get().getFullName();
+    }
+    return "ERROR";
+  }
+  
   public static Optional<ASTJavaPInitializer> getComponentInitialization(ComponentSymbol comp) {
     Optional<ASTJavaPInitializer> ret = Optional.empty();
     Optional<ASTNode> ast = comp.getAstNode();
@@ -459,5 +471,20 @@ public class ComponentHelper {
       }
     }
     return output;
+  }
+  
+  public List<PortSymbol> getSuperInPorts(){
+    return component.getSuperComponent().isPresent() ? component.getSuperComponent().get().getAllIncomingPorts() : Collections.emptyList();
+  }
+  
+  public List<PortSymbol> getAllInPorts(){
+    return component.getAllIncomingPorts();
+  }
+  
+  public List<PortSymbol> getSuperOutPorts(){
+    return component.getSuperComponent().isPresent() ? component.getSuperComponent().get().getAllOutgoingPorts() : Collections.emptyList();
+  }
+  public List<PortSymbol> getAllOutPorts(){
+    return component.getAllOutgoingPorts();
   }
 }

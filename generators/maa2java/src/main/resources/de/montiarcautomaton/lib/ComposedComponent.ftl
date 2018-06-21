@@ -19,7 +19,7 @@ import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
 import de.montiarcautomaton.runtimes.timesync.delegation.Port;
 
-public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> implements IComponent {
+public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}</#if> implements IComponent {
  
   // port fields
   <#list portsIn as port>
@@ -64,6 +64,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   </#list>
   
   public ${name}(<#list configParams as param>${helper.getParamTypeName(param)} ${param.getName()}<#sep>, </#list>) {
+  <#if helper.hasSuperComp()>super();</#if>
   <#list configParams as param>
     this.${param.getName()} = ${param.getName()};
   </#list>
@@ -71,6 +72,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   
   @Override
   public void setUp() {
+    <#if helper.hasSuperComp()>super.setUp();</#if>
      // instantiate all subcomponents
     <#list subComponents as component>
     this.${component.getName()} = new ${helper.getSubComponentTypeName(component)}(<#list helper.getParamValues(component) as param>${param}<#sep>, </#list>); 
@@ -97,6 +99,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   
   @Override
   public void init() {
+    <#if helper.hasSuperComp()>super.init();</#if>
   	// set up unused input ports
   	<#list portsIn as port>
   	if (this.${port.getName()} == null) {this.${port.getName()} = Port.EMPTY;}
@@ -127,6 +130,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   @Override
   public void update() {
   	// update subcomponent instances
+  	<#if helper.hasSuperComp()>super.update();</#if>
   	<#list subComponents as component>
   	this.${component.getName()}.update(); 
   	</#list>

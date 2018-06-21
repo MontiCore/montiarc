@@ -88,6 +88,8 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
         // transition: ${transition.toString()}
         if (${helper.getGuard(transition)!"true"}
         && true) {
+
+
           // reaction
           <#list helper.getReaction(transition) as assignment>
             <#if assignment.isAssignment()>
