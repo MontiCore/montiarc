@@ -5,8 +5,12 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
+
+import com.google.common.collect.Lists;
+
 import java.util.Optional;
 
 import _templates.de.montiarcautomaton.lib.AbstractAtomicComponent;
@@ -132,6 +136,7 @@ public class MAAGenerator {
           comp.getVariables(),
           comp.getIncomingPorts(), 
           comp.getOutgoingPorts(),
+          comp.getAllOutgoingPorts(),
           comp.getConfigParameters());
     }
     else {
