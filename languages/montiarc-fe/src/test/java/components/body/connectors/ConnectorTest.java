@@ -66,7 +66,7 @@ public class ConnectorTest extends AbstractCoCoTest {
   public void testPortCompatibilityTypeInheritance() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortCompatibilityTypeInheritance");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit()), node,
-        new ExpectedErrorInfo(9, "xMA033"));
+        new ExpectedErrorInfo(8, "xMA033"));
   }
   
   @Test
@@ -237,13 +237,11 @@ public class ConnectorTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("IndexOutOfBoundsException in TypeCompatibilityChecker")
-  // TODO: Fix error info after TypeCompatibilityChecker
   public void testGenericIfUsage() {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "GenericIfUsage");
     MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
-    checkInvalid(cocos, node, new ExpectedErrorInfo());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA033"));
   }
 
   @Test

@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.symboltable.Scope;

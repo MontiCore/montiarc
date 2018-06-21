@@ -143,7 +143,6 @@ public class PortTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("IndexOutOfBoundsException in TypeCompatibilityChecker")
   public void testPortCompatibilityWithGenerics() {
     ASTMontiArcNode node
         = loadComponentAST(PACKAGE + "." + "PortCompatibilityWithGenerics");
@@ -151,12 +150,11 @@ public class PortTest extends AbstractCoCoTest {
         = new MontiArcCoCoChecker()
               .addCoCo(new ConnectorSourceAndTargetExistAndFit());
     final ExpectedErrorInfo expectedErrors
-        = new ExpectedErrorInfo(7, "xMA084");
+        = new ExpectedErrorInfo(9, "xMA033");
     checkInvalid(checker, node, expectedErrors);
   }
 
   @Test
-  @Ignore("IndexOutOfBoundsException in TypeCompatibilityChecker")
   public void testPortCompatibilityWithGenerics2() {
     ASTMontiArcNode node
         = loadComponentAST(PACKAGE + "." + "PortCompatibilityWithGenerics2");
@@ -164,7 +162,7 @@ public class PortTest extends AbstractCoCoTest {
         = new MontiArcCoCoChecker()
               .addCoCo(new ConnectorSourceAndTargetExistAndFit());
     final ExpectedErrorInfo expectedErrors
-        = new ExpectedErrorInfo(4, "xMA084");
+        = new ExpectedErrorInfo(4, "xMA033");
     checkInvalid(checker, node, expectedErrors);
   }
 

@@ -88,8 +88,6 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
         PortSymbol source = sourcePort.get();
         PortSymbol target = targetPort.get();
         
-        Collection<ComponentInstanceSymbol> subComps = compSym.getSubComponents();
-        
         JTypeReference<? extends JTypeSymbol> sourceType = source.getTypeReference();
         JTypeReference<? extends JTypeSymbol> targetType = target.getTypeReference();
         
@@ -105,18 +103,21 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
         
         // We have to load the binding of the formal type parameters to check
         // the types
-        if (sourceType.getReferencedSymbol().isFormalTypeParameter()) {
+        if (TypeCompatibilityChecker.hasNestedGenerics(sourceType)) {
           ASTConnector c = (ASTConnector) connector.getAstNode().get();
           ASTQualifiedName sourceFQN = c.getSource();
           sourceParams = getActualTypeArgumentsFromPortOfConnector(c, compSym, sourceFQN);
+          sourceTypeFormalParams = getFormalTypeParametersFromPortOfConnector(c, compSym, sourceFQN);
         }
         
-        if (targetType.getReferencedSymbol().isFormalTypeParameter()) {
+        if (TypeCompatibilityChecker.hasNestedGenerics(targetType)) {
           ASTConnector c = (ASTConnector) connector.getAstNode().get();
           ASTQualifiedName targetFQN = c.getTargets().stream()
               .filter(n -> n.toString().equals(connector.getTarget()))
               .findFirst().get();
           targetParams = getActualTypeArgumentsFromPortOfConnector(c, compSym, targetFQN);
+          targetTypeFormalParams = getFormalTypeParametersFromPortOfConnector(c, compSym, targetFQN);
+          
         }
         
         if (!TypeCompatibilityChecker.doTypesMatch(sourceType, sourceTypeFormalParams,
@@ -125,7 +126,8 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
             targetType, targetTypeFormalParams, targetParams.stream()
                 .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList())))
           Log.error(
-              "0xMA033 Source and target type of connector " + connector.getName()
+              "0xMA033 Source and target type of connector " + connector.getSource() + "->"
+                  + connector.getTarget()
                   + " do not match.",
               connector.getAstNode().get().get_SourcePositionStart());
       }
@@ -149,7 +151,22 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
           .collect(Collectors.toList());
     }
     return params;
-    
+  }
+  
+  private List<JTypeSymbol> getFormalTypeParametersFromPortOfConnector(ASTConnector connector,
+      ComponentSymbol definingComponent,
+      ASTQualifiedName nameOfConnectorEndpoint) {
+    List<JTypeSymbol> params = new ArrayList<>();
+    if (nameOfConnectorEndpoint.getParts().size() > 1) {
+      String compName = nameOfConnectorEndpoint.getParts().get(0);
+      params = definingComponent.getSpannedScope()
+          .<ComponentInstanceSymbol> resolve(compName, ComponentInstanceSymbol.KIND).get()
+          .getComponentType().getFormalTypeParameters();
+    }
+    else {
+      params = definingComponent.getFormalTypeParameters();
+    }
+    return params;
   }
   
 }
