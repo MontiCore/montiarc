@@ -5,7 +5,6 @@ import java.util.Optional;
 import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
-import montiarc._ast.ASTConstantsMontiArc;
 import montiarc._ast.ASTIOAssignment;
 import montiarc._ast.ASTValueList;
 import montiarc._symboltable.VariableSymbol;
@@ -23,9 +22,6 @@ public class IOAssignmentHelper {
     this.assignment = assignment;
   }
   
-  public boolean isAssignment() {
-    return assignment.isAssignment();
-  }
   
   /**
    * Returns the left hand side of an assignment/comparison.
@@ -36,6 +32,12 @@ public class IOAssignmentHelper {
     return assignment.getName().get();
   }
   
+  public boolean isAssignment() {
+   // returns true if the assignment is a real assignment, not only a method call 
+   return assignment.isAssignment();
+    
+  }
+  
   /**
    * Returns <tt>true</tt> if the given name is a variable name.
    * 
@@ -43,7 +45,8 @@ public class IOAssignmentHelper {
    * @return
    */
   public boolean isVariable(String name) {
-    Optional<VariableSymbol> symbol = assignment.getEnclosingScope().get().<VariableSymbol> resolve(name, VariableSymbol.KIND);
+    Optional<VariableSymbol> symbol = assignment.getEnclosingScope().get()
+        .<VariableSymbol> resolve(name, VariableSymbol.KIND);
     if (symbol.isPresent()) {
       return true;
     }
@@ -70,7 +73,6 @@ public class IOAssignmentHelper {
       }
     }
   }
-  
   
   /**
    * Prints the java expression of the given AST node.
