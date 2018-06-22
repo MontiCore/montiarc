@@ -32,7 +32,7 @@ import montiarc._symboltable.MontiArcLanguage;
  */
 public class MontiArcGeneratorTool extends MontiArcTool{
   
-  private static final String DEFAULT_TYPES_FOLDER = "src/main/resources/defaultTypes";
+  private static final String DEFAULT_TYPES_FOLDER = "target/javaLib/";
   private static final String LIBRARY_MODELS_FOLDER = "target/librarymodels/";
   
   /**
@@ -60,7 +60,7 @@ public class MontiArcGeneratorTool extends MontiArcTool{
     // 1. create symboltable
     Log.info("Initializing symboltable", "MontiArcGeneratorTool");
     String basedir = getBasedirFromModelAndTargetPath(modelPath.getAbsolutePath(), target.getAbsolutePath());
-    Scope symTab = initSymbolTable(modelPath, Paths.get(basedir + DEFAULT_TYPES_FOLDER).toFile(), Paths.get(basedir + LIBRARY_MODELS_FOLDER).toFile());
+    Scope symTab = initSymbolTable(modelPath, Paths.get(basedir + DEFAULT_TYPES_FOLDER).toFile(), Paths.get(basedir + LIBRARY_MODELS_FOLDER).toFile(), hwcPath);
     
     for (String model : foundModels) {
       String qualifiedModelName = Names.getQualifier(model) + "." + Names.getSimpleName(model);

@@ -1,0 +1,13 @@
+package types;
+
+/**
+ * Valid class diagram.
+ */
+classdiagram TypesWithHierarchy {
+
+  class DefinedType {}
+  
+  class SubType extends SuperType {}
+  
+  class SuperType {}
+}

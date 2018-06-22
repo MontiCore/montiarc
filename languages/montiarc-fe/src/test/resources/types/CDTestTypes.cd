@@ -1,0 +1,29 @@
+package types;
+
+classdiagram CDTestTypes {
+
+  class TypeWithFields {
+    int testInt = 1;
+    boolean testBool = true;
+
+    int privateVar = 0;
+  }
+  
+  class SuperType {}
+  
+  class SubTypeOne extends SuperType {
+    int myField;
+  }
+  
+  interface InterfaceTypeOne {}
+  interface InterfaceTypeTwo {}
+  interface InterfaceTypeThree extends InterfaceTypeTwo {}
+  
+  class SubTypeTwo extends SuperType implements InterfaceTypeOne, InterfaceTypeThree {}
+  
+  enum EnumType {
+        ON,
+        OFF,
+        INACTIVE;
+  }
+}

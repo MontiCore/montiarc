@@ -1,5 +1,8 @@
 package components.body.autoconnect;
 
+/*
+ * Valid model.
+ */
 component AutoConnectPortAndType {
 
     autoconnect port;

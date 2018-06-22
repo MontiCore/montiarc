@@ -1,10 +1,14 @@
 ${tc.params("de.montiarcautomaton.generator.helper.ComponentHelper helper", "String packageName", 
 "String compName", "String compInputName", "String compResultName", 
-"java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams")}
+"java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams",
+"java.util.Collection<de.monticore.symboltable.ImportStatement> imports")}
 
 package ${packageName};
 
 import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
+<#list imports as import>
+import ${import.getStatement()}<#if import.isStar()>.*</#if>;
+</#list>
 
 class ${compName} <#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> implements IComputable<${compInputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>, ${compResultName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>> {
 

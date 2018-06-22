@@ -7,9 +7,9 @@
   <parent>
     <groupId>montiarc.generators</groupId>
     <artifactId>generators</artifactId>
-	<version>4.2.0-SNAPSHOT</version>
+    <version>4.3.4-SNAPSHOT</version>
   </parent>
-<artifactId>maa2java</artifactId>
+  <artifactId>maa2java</artifactId>
 
 
   <!-- == PROJECT DEPENDENCIES ============================================= -->
@@ -26,12 +26,6 @@
       <artifactId>monticore-emf-runtime</artifactId>
       <version>${monticore.version}</version>
     </dependency>
-
-<!--     <dependency> -->
-<!--       <groupId>montiarc.languages</groupId> -->
-<!--       <artifactId>ajava</artifactId> -->
-<!--       <version>${project.version}</version> -->
-<!--     </dependency> -->
 
     <dependency>
       <groupId>montiarc.libraries</groupId>
@@ -56,26 +50,17 @@
       <version>${monticore.version}</version>
     </dependency>
 
-    <!-- MAA Generators -->
-<!--     <dependency> -->
-<!--       <groupId>montiarc.generators.maa2java</groupId> -->
-<!--       <artifactId>ajava2java</artifactId> -->
-<!--       <version>${project.version}</version> -->
-<!--     </dependency> -->
-
-<!--     <dependency> -->
-<!--       <groupId>montiarc.generators.maa2java</groupId> -->
-<!--       <artifactId>automaton2java</artifactId> -->
-<!--       <version>${project.version}</version> -->
-<!--     </dependency> -->
-
-
     <!-- MontiCore Dependencies -->
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>monticore-runtime</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>de.monticore.java.lib</artifactId>
+      <classifier>models</classifier>
+      <version>${javalib.version}</version>
+    </dependency>
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>monticore-grammar</artifactId>
@@ -88,9 +73,15 @@
     </dependency>
 
     <dependency>
-      <groupId>de.monticore</groupId>
+      <groupId>montiarc.generators</groupId>
       <artifactId>cd2pojo</artifactId>
-      <version>1.0.2</version>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>de.monticore.java.lib</artifactId>
+      <classifier>models</classifier>
     </dependency>
 
     <!-- .. Test Libraries ............................................... -->
@@ -180,6 +171,24 @@
               <sources>
                 <source>${basedir}/target/generated-sources/templateClasses/</source>
               </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.10</version>
+        <executions>
+          <execution>
+            <id>unpack-dependencies</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeClassifiers>models</includeClassifiers>
+              <outputDirectory>${basedir}/target/javaLib</outputDirectory>
             </configuration>
           </execution>
         </executions>

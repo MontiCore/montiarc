@@ -12,16 +12,13 @@ import de.monticore.types.types._ast.ASTQualifiedName;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTConnector;
-import montiarc._ast.ASTSimpleConnector;
-import montiarc._ast.ASTSubComponent;
-import montiarc._ast.ASTSubComponentInstance;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 
 /**
- * @implements [Hab16] R1: Each outgoing port of a component type definition is used at most once as
- * target of a connector. (p. 63, Lst. 3.36)
- * @implements [Hab16] R2: Each incoming port of a subcomponent is used at most once as target of a
- * connector. (p. 62, Lst. 3.37)
+ * @implements [Hab16] R1: Each outgoing port of a component type definition is
+ * used at most once as target of a connector. (p. 63, Lst. 3.36)
+ * @implements [Hab16] R2: Each incoming port of a subcomponent is used at most
+ * once as target of a connector. (p. 62, Lst. 3.37)
  * @author Crispin Kirchner
  */
 public class InPortUniqueSender implements MontiArcASTComponentCoCo {
@@ -46,7 +43,6 @@ public class InPortUniqueSender implements MontiArcASTComponentCoCo {
     
     public void check() {
       checkConnectors();
-      checkSimpleConnectors();
     }
     
     private void checkTarget(ASTQualifiedName target) {
@@ -65,18 +61,6 @@ public class InPortUniqueSender implements MontiArcASTComponentCoCo {
       for (ASTConnector connector : node.getConnectors()) {
         for (ASTQualifiedName target : connector.getTargetsList()) {
           checkTarget(target);
-        }
-      }
-    }
-    
-    private void checkSimpleConnectors() {
-      for (ASTSubComponent subComponent : node.getSubComponents()) {
-        for (ASTSubComponentInstance instance : subComponent.getInstancesList()) {
-          for (ASTSimpleConnector connector : instance.getConnectorsList()) {
-            for (ASTQualifiedName target : connector.getTargetsList()) {
-              checkTarget(target);
-            }
-          }
         }
       }
     }

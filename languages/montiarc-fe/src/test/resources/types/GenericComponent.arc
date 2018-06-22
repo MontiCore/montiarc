@@ -2,6 +2,9 @@ package types;
 
 import java.util.*;
 
+/*
+ * Valid model.
+ */
 component GenericComponent<K, V> {
 	
 	port 

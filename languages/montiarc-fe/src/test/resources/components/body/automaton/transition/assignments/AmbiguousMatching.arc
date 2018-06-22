@@ -20,6 +20,7 @@ component AmbiguousMatching {
     	
     	// Stimulus is right, because only i matches String. The rreaction is 
     	// wrong because we have more than one match for an int type
-    	Idle {"Right"} / {5};
+    	Idle [i=="Right"] / {5};
+    	
     }
 }

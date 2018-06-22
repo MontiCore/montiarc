@@ -5,11 +5,7 @@
  */
 package montiarc.cocos;
 
-import montiarc._cocos.MontiArcASTConnectorCoCo;
-import montiarc._cocos.MontiArcASTInitialStateDeclarationCoCo;
-import montiarc._cocos.MontiArcASTSimpleConnectorCoCo;
-import montiarc._cocos.MontiArcASTTransitionCoCo;
-import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc._cocos.*;
 
 /**
  * Bundle of CoCos for the MontiArc language.
@@ -19,76 +15,87 @@ import montiarc._cocos.MontiArcCoCoChecker;
 public class MontiArcCoCos {
   public static MontiArcCoCoChecker createChecker() {
     return new MontiArcCoCoChecker()
-        .addCoCo(new ComponentInstanceNamesAreUnique())
         .addCoCo(new PortUsage())
         .addCoCo(new SubComponentsConnected())
-        .addCoCo(new SubcomponentParametersCorrectlyAssigned())
+     // TODO remove comment when new Java DSL is integrated:
+        // Fails when using CD Enums due to buggy TypeCompatibilityChecker (see
+        // testSubcomponentParametersOfWrongTypeWithCD in SubcomponentTest
+        // class)
+//        .addCoCo(new SubcomponentParametersCorrectlyAssigned())
         .addCoCo(new PackageLowerCase())
-        .addCoCo(new ComponentNameIsCapitalized())
+        .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new DefaultParametersHaveCorrectOrder())
         .addCoCo(new DefaultParametersCorrectlyAssigned())
-        .addCoCo(new NumberOfConfigurationParametersCorrect())
         .addCoCo(new ComponentWithTypeParametersHasInstance())
+        .addCoCo(new CircularInheritance())
+        .addCoCo(new IOAssignmentCallFollowsMethodCall())
+        // TODO remove comment when new Java DSL is integrated
+        // .addCoCo(new AllGenericParametersOfSuperClassSet())
+         .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
         .addCoCo(new TypeParameterNamesUnique())
         .addCoCo(new TopLevelComponentHasNoInstanceName())
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
-        .addCoCo((MontiArcASTSimpleConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo(new InPortUniqueSender())
         .addCoCo(new ImportsValid())
         .addCoCo(new SubcomponentReferenceCycle())
+        .addCoCo(new ReferencedSubComponentExists())
+        .addCoCo(new PortNamesAreNotJavaKeywords())
         
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
-        .addCoCo(new AJavaBehaviorNameIsUppercase())
-        .addCoCo(new SimpleConnectorSourceExists())
         .addCoCo(new InputPortChangedInCompute())
         .addCoCo(new UsedPortsAndVariablesExist())
         .addCoCo(new MultipleBehaviorImplementation())
         .addCoCo(new InitBlockOnlyOnEmbeddedAJava())
         .addCoCo(new AtMostOneInitBlock())
         /* MontiArcAutomaton Cocos */
-        .addCoCo(new NamesAreLowerCase())
         
         /// Automaton Cocos
         /// /////////////////////////////////////////////////////////////
         .addCoCo(new ImplementationInNonAtomicComponent())
         
         // CONVENTIONS
-        .addCoCo(new AutomatonBehaviorNameIsUppercase())
+        .addCoCo((MontiArcASTBehaviorElementCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new AutomatonHasNoState())
         .addCoCo(new AutomatonHasNoInitialState())
-        .addCoCo(new CorrectAssignmentOperators())
         .addCoCo(new MultipleAssignmentsSameIdentifier())
         .addCoCo(new AutomatonOutputInExpression())
+        .addCoCo(new AutomatonNoAssignmentToIncomingPort())
         .addCoCo((MontiArcASTInitialStateDeclarationCoCo) new AutomatonReactionWithAlternatives())
         .addCoCo((MontiArcASTTransitionCoCo) new AutomatonReactionWithAlternatives())
-        .addCoCo(new UseOfForbiddenExpression())
-        .addCoCo(new AutomatonStateUppercase())
+        .addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfForbiddenExpression())
+        .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfForbiddenExpression())
+        .addCoCo((MontiArcASTStateCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new ConnectorSourceAndTargetComponentDiffer())
-        .addCoCo(new ConnectorSourceAndTargetExist())
-        .addCoCo(new ConnectorSourceAndTargetTypeFit())
+        .addCoCo(new ConnectorSourceAndTargetExistAndFit())
         .addCoCo(new ImportsAreUnique())
         
         // REFERENTIAL INTEGRITY
         .addCoCo(new AutomatonDeclaredInitialStateDoesNotExist())
         .addCoCo(new UseOfUndeclaredState())
-        .addCoCo(new UseOfUndeclaredField())
-        .addCoCo(new AssignmentHasNoName())
+        .addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfUndeclaredField())
+        .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfUndeclaredField())
+        .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
+        // TODO see #171
+        // .addCoCo(new AssignmentHasNoName())
+        .addCoCo(new ConfigurationParametersCorrectlyInherited())
         .addCoCo(new InnerComponentNotExtendsDefiningComponent())
         
         // TYPE CORRECTNESS
-        .addCoCo(new AutomatonGuardIsNotBoolean())
         // TODO Kann mit der Aktualisierung auf neue JavaDSL-Version aktiviert
         // werden
+        // .addCoCo(new AutomatonGuardIsNotBoolean())
+        
         // .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
         // .addCoCo(new AutomatonInitialReactionTypeDoesNotFitOutputType())
         // .addCoCo(new AutomatonReactionTypeDoesNotFitOutputType())
+        .addCoCo(new AutomatonNoDataAssignedToVariable())
         
         // UNIQUENESS OF NAMES
-        .addCoCo(new AutomatonStateDefinedMultipleTimesStereotypesDontMatch())
         .addCoCo(new AutomatonInitialDeclaredMultipleTimes())
         .addCoCo(new AutomatonStateDefinedMultipleTimes())
         .addCoCo(new UseOfValueLists())
-        .addCoCo(new IdentifiersAreUnique());
+        .addCoCo(new IdentifiersAreUnique())
+        .addCoCo(new JavaPVariableIdentifiersUnique());
   }
 }

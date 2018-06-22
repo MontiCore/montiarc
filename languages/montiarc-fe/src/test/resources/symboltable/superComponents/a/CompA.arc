@@ -1,5 +1,8 @@
 package a;
 
+/*
+ * Valid model.
+ */
 component CompA extends SuperComponentSamePackage {
     port
         in String sth,

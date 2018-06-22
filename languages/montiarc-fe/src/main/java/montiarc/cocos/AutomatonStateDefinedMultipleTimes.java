@@ -1,6 +1,9 @@
 package montiarc.cocos;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTAutomaton;
@@ -17,18 +20,28 @@ public class AutomatonStateDefinedMultipleTimes implements MontiArcASTAutomatonC
   
   @Override
   public void check(ASTAutomaton node) {
-    HashSet<String> names = new HashSet<>();
+
+    List<ASTState> states = new ArrayList<>();
+    Set<ASTState> duplicates = new HashSet<>();
+
     for (ASTStateDeclaration decl : node.getStateDeclarationList()) {
-      for (ASTState state : decl.getStateList()) {
-        if (names.contains(state.getName())) {
-          Log.error("0xMA031 State " + state.getName() + " is defined more than once.",
-              state.get_SourcePositionStart());
-        }
-        else {
-          names.add(state.getName());
+      states.addAll(decl.getStateList());
+    }
+
+    for (ASTState state : states) {
+      int index = states.indexOf(state);
+      for(int searchIndex = index + 1; searchIndex < states.size(); searchIndex++){
+        if(state.getName().equals(states.get(searchIndex).getName())){
+          duplicates.add(state);
+          duplicates.add(states.get(searchIndex));
         }
       }
     }
+
+    for(ASTState state : duplicates){
+      Log.error(String.format("0xMA031 State name '%s' is ambiguous.",
+          state.getName()),
+          state.get_SourcePositionStart());
+    }
   }
-  
 }

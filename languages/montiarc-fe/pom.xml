@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -7,7 +8,7 @@
 	<parent>
 		<groupId>montiarc.languages</groupId>
 		<artifactId>languages</artifactId>
-		<version>4.2.0-SNAPSHOT</version>
+		<version>4.3.4-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>montiarc-fe</artifactId>
@@ -73,6 +74,13 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>de.monticore</groupId>
+			<artifactId>de.monticore.java.lib</artifactId>
+      <version>${javalib.version}</version>      
+			<classifier>models</classifier>
+		</dependency>
+
 		<!-- .. Test Libraries ............................................... -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -97,7 +105,26 @@
 	<!-- == PROJECT BUILD SETTINGS =========================================== -->
 
 	<build>
+
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<execution>
+						<id>unpack-dependencies</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeClassifiers>${librarymodels.classifier}, models</includeClassifiers>
+							<outputDirectory>${basedir}/target/${librarymodels.classifier}/</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- MontiCore Generation -->
 			<plugin>
 				<groupId>de.monticore.mojo</groupId>

@@ -6,8 +6,8 @@ package components.head.generics;
 component Garage {
 
   port 
-    in List<java.util.HashMap<Boolean,Double>[]> wheels,
-    out java.util.HashMap<Boolean,Double[]>[] motor;
+    in List<java.util.HashMap<Boolean,Double>> wheels,
+    out java.util.HashMap<Double[],List<String>>[] motor;
 
   component Car<String>("My awesome car");
   

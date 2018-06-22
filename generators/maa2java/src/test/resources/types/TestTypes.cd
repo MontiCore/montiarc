@@ -1,0 +1,20 @@
+package types;
+import java.io.File;
+
+/**
+* This model contains valid classdiagram types for test purposes.
+*/
+classdiagram TestTypes {
+    
+  enum Foo {
+    Bar, Moep;
+  }
+  
+  public class Test{
+  	String s;
+  	File f;
+  	
+  	
+  }
+
+}

@@ -1,9 +1,0 @@
-package z;
-
-classdiagram myTypes {
-  
- public class Comp {
-   public java.lang.String test;
- }
-
-}

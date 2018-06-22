@@ -8,4 +8,5 @@ component ComponentWithDefaultParameters (
   Integer defaultInt = 5, 
   Object defaultObject = new Object())
 {
+  // Empty body
 }

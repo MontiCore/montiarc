@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.monticore.symboltable.types.JFieldSymbol;
@@ -22,7 +23,6 @@ import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.DefaultParametersCorrectlyAssigned;
 import montiarc.cocos.DefaultParametersHaveCorrectOrder;
-import montiarc.cocos.NumberOfConfigurationParametersCorrect;
 import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
 
 /**
@@ -44,6 +44,7 @@ public class DefaultParametersTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "ComponentWithDefaultParameters");
   }
   
+  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   @Test
   public void testComposedTestComponent() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
@@ -55,11 +56,10 @@ public class DefaultParametersTest extends AbstractCoCoTest {
   public void testComposedComponentUsingDefaultParameters() {
     checkValid(PACKAGE + "." + "ComposedComponentUsingDefaultParameters");
   }
-  
-  // @Ignore("Why check all cocos in invalid?")
+  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   @Test
   public void testComposedComponentUsingDefaultParametersInvalid() {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new NumberOfConfigurationParametersCorrect()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
         loadComponentAST(PACKAGE + "." + "ComposedComponentUsingDefaultParametersInvalid"),
         new ExpectedErrorInfo(2, "xMA082"));
   }
@@ -80,6 +80,7 @@ public class DefaultParametersTest extends AbstractCoCoTest {
   
   @Test
   public void testValidDefaultParameters() {
+    checkValid(PACKAGE + "."  + "ValidDefaultParameters");
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ValidDefaultParameters");
     assertNotNull(comp);
     

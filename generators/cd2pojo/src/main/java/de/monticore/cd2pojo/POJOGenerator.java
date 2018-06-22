@@ -87,6 +87,6 @@ public class POJOGenerator {
     Path filePath = Paths.get(Names.getPathFromPackage(typeHelper.printType(type)) + ".java");
     
     ge.generate("templates.type.ftl", filePath, type.getAstNode().get(), _package, kind,
-        type, _super, typeHelper);
+        type, _super, typeHelper, cdSymbol.getImports());
   }
 }

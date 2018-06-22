@@ -8,6 +8,7 @@ package components.head.generics;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -15,11 +16,10 @@ import org.junit.Test;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
+import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc.cocos.MontiArcCoCos;
-import montiarc.cocos.TypeParameterNamesUnique;
 import montiarc.helper.SymbolPrinter;
 
 /**
@@ -43,10 +43,23 @@ public class GenericsTest extends AbstractCoCoTest {
   }
   
   @Test
+  /*
+   * Checks that generic type parameters have to be unique.
+   */
   public void testTypeParameterNamesUniqueInvalid() {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new TypeParameterNamesUnique()),
         loadComponentAST(PACKAGE + "." + "TypeParameterNamesAbiguous"),
         new ExpectedErrorInfo(1, "xMA006"));
+  }
+
+  @Test
+  /*
+   * Checks that generic type parameters have to be unique.
+   */
+  public void testTypeParametersNotUnique() {
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new TypeParameterNamesUnique()),
+    	loadComponentAST(PACKAGE + "." + "TypeParametersNotUnique"),
+        new ExpectedErrorInfo(2, "xMA006"));
   }
   
   @Test
@@ -57,6 +70,20 @@ public class GenericsTest extends AbstractCoCoTest {
   @Test
   public void testSubCompExtendsGenericComparableCompValid() {
     checkValid(PACKAGE + "." + "SubCompExtendsGenericComparableCompValid");
+  }
+  
+  @Ignore("TODO remove when new JavaDSL is integrated") 
+  @Test
+  public void testcomponentExtendsGenericComponent() {
+    checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent");
+    checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent2");
+    checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent3");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ComponentExtendsGenericComponent4");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new AllGenericParametersOfSuperClassSet()), node, new ExpectedErrorInfo(1,"xMA087"));
+    node = loadComponentAST(PACKAGE + "." + "ComponentExtendsGenericComponent5");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new AllGenericParametersOfSuperClassSet()), node, new ExpectedErrorInfo(1,"xMA088"));
+    node = loadComponentAST(PACKAGE + "." + "ComponentExtendsGenericComponent6");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new AllGenericParametersOfSuperClassSet()), node, new ExpectedErrorInfo(1,"xMA089"));
   }
   
   @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
@@ -87,9 +114,6 @@ public class GenericsTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "SubSubCompExtendsGenericComparableCompValid"); 
   }
   
-  /**
-   * TODO: ValueSymbol!?
-   */
   @Test
   public void testUsingComplexGenericParams() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "UsingComplexGenericParams");
@@ -105,7 +129,7 @@ public class GenericsTest extends AbstractCoCoTest {
     assertEquals(2, delay.getConfigArguments().size());
     assertEquals("new int[] {1, 2, 3}",
         SymbolPrinter.printConfigArgument(delay.getConfigArguments().get(0)));
-    // TODO value symbol
+    
     // assertEquals(Kind.ConstructorCall, delay.getConfigArguments().get(0).getKind());
     // assertEquals("1",
     // delay.getConfigArguments().get(0).getConstructorArguments().get(0).getValue());
@@ -116,7 +140,7 @@ public class GenericsTest extends AbstractCoCoTest {
     
     assertEquals("new HashMap<List<K>, List<V>>()",
         SymbolPrinter.printConfigArgument(delay.getConfigArguments().get(1)));
-    // TODO value symbol
+    
     // assertEquals(Kind.ConstructorCall, delay.getConfigArguments().get(1).getKind());
     // ArcdTypeReferenceEntry typeRef = delay.getConfigArguments().get(1).getType();
     // assertEquals("java.util.List", typeRef.getTypeParameters().get(0).getType().getName());
@@ -125,5 +149,17 @@ public class GenericsTest extends AbstractCoCoTest {
     // typeRef.getTypeParameters().get(0).getTypeParameters().get(0).getType().getName());
     // assertEquals("V",
     // typeRef.getTypeParameters().get(1).getTypeParameters().get(0).getType().getName());
+  }
+
+  @Test
+  public void testDefaultParameterForPurelyGenericType() {
+    final ASTMontiArcNode astMontiArcNode
+        = loadComponentAST(PACKAGE +
+                               ".DefaultParameterForPurelyGenericType");
+    MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new DefaultParametersCorrectlyAssigned());
+    ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA062");
+    checkInvalid(cocos, astMontiArcNode, errors);
   }
 }

@@ -2,6 +2,7 @@ package components.body.ports;
 
 import types.GenericType;
 import types.CType;
+import types.GenericType;
 
 /**
 * Valid model.

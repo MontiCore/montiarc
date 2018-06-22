@@ -1,5 +1,5 @@
 package types;
 
-public class MyGenericImpl<T> implements MyGenericInterface<T> {
+public class MyGenericImpl<T> implements GenericInterface<T> {
 
 }

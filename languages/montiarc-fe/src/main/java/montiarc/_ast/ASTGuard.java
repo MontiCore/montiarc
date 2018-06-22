@@ -13,9 +13,8 @@ public class ASTGuard extends ASTGuardTOP {
    * @param kind
    * @param guardExpression
    */
-  protected ASTGuard(Optional<String> kind, ASTGuardExpression guardExpression) {
-    super(kind, guardExpression);
-    // TODO Auto-generated constructor stub
+  public ASTGuard(ASTGuardExpression guardExpression) {
+    super(guardExpression);
   }
   
   public ASTGuard() {

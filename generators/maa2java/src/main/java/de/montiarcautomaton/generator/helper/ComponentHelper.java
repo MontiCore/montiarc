@@ -2,18 +2,18 @@ package de.montiarcautomaton.generator.helper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 import de.monticore.ast.ASTNode;
+import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
-import de.monticore.symboltable.types.TypeSymbol;
-import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
-import de.monticore.symboltable.types.references.TypeReference;
 import de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor;
 import de.monticore.types.types._ast.ASTType;
 import de.monticore.types.types._ast.ASTTypeVariableDeclaration;
@@ -33,7 +33,6 @@ import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
-import montiarc._symboltable.ValueSymbol;
 import montiarc._symboltable.VariableSymbol;
 
 /**
@@ -96,9 +95,50 @@ public class ComponentHelper {
     
     ASTPort astPort = (ASTPort) port.getAstNode().get();
     ASTTypesNode astTypeNode = (ASTTypesNode) astPort.getType();
-    String portTypeName = typesPrinter.prettyprint(astTypeNode);
+    String portTypeName = autobox(typesPrinter.prettyprint(astTypeNode));
     return portTypeName;
     // return getPortTypeName(componentNode, port);
+  }
+  
+  private static HashMap<String, String> PRIMITIVE_TYPES = new HashMap<String, String>() {
+    {
+      put("int", "Integer");
+      put("double", "Double");
+      put("boolean", "Boolean");
+      put("byte", "Byte");
+      put("char", "Character");
+      put("long", "Long");
+      put("float", "Float");
+      put("short", "Short");
+    }
+  };
+  
+  /**
+   * TODO: Write me!
+   * 
+   * @param prettyprint
+   * @return
+   */
+  public static String autobox(String datatype) {
+    
+    String[] tokens = datatype.split("\\b");
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < tokens.length; i++) {
+      if (PRIMITIVE_TYPES.containsKey(tokens[i])) {
+        tokens[i] = autoboxType(tokens[i]);
+      }
+      sb.append(tokens[i]);
+    }
+    return sb.toString();
+    
+  }
+  
+  private static String autoboxType(String datatype) {
+    String autoBoxedTypeName = datatype;
+    if (PRIMITIVE_TYPES.containsKey(datatype)) {
+      autoBoxedTypeName = PRIMITIVE_TYPES.get(datatype);
+    }
+    return autoBoxedTypeName;
   }
   
   // TODO: Wer nutzt die und warum? Kann die raus?
@@ -168,7 +208,7 @@ public class ComponentHelper {
   
   private String printTypeName(Optional<ASTType> optType) {
     if (optType.isPresent()) {
-      return typesPrinter.prettyprint(optType.get()).replaceAll(" ", "");
+      return autobox(typesPrinter.prettyprint(optType.get()).replaceAll(" ", ""));
     }
     else {
       Log.error("XX");
@@ -214,13 +254,15 @@ public class ComponentHelper {
    * @return The parameters.
    */
   public Collection<String> getParamValues(ComponentInstanceSymbol param) {
-    final List<ValueSymbol<TypeReference<TypeSymbol>>> configArguments = param.getConfigArguments();
+    // final List<ValueSymbol<TypeReference<TypeSymbol>>> configArguments =
+    // param.getConfigArguments();
+    List<ASTExpression> configArguments = param.getConfigArguments();
     JavaDSLPrettyPrinter printer = new JavaDSLPrettyPrinter(new IndentPrinter());
     
     List<String> outputParameters = new ArrayList<>();
-    for (ValueSymbol<TypeReference<TypeSymbol>> configArgument : configArguments) {
-      final String prettyprint = printer.prettyprint(configArgument.getValue());
-      outputParameters.add(prettyprint);
+    for (ASTExpression configArgument : configArguments) {
+      final String prettyprint = printer.prettyprint(configArgument);
+      outputParameters.add(autobox(prettyprint));
     }
     
     // Append the default parameter values for as many as there are left
@@ -249,31 +291,15 @@ public class ComponentHelper {
   }
   
   public String getSubComponentTypeName(ComponentInstanceSymbol instance) {
-    // Get the usual name of the class
-    final String className = instance.getComponentType().getName();
-    StringBuilder genericParameters = new StringBuilder();
     
-    final Optional<ASTNode> astNode = instance.getComponentType().getReferencedSymbol()
-        .getAstNode();
-    if (astNode.isPresent()) {
-      ComponentHelper subCompHelper = new ComponentHelper(
-          instance.getComponentType().getReferencedSymbol());
-      if (subCompHelper.isGeneric()) {
-        // Append the generic parameters
-        genericParameters.append("<");
-        final List<ActualTypeArgument> actualTypeArguments = instance.getComponentType()
-            .getActualTypeArguments();
-        for (ActualTypeArgument typeArgument : actualTypeArguments) {
-          genericParameters.append(typeArgument.getType().getName());
-          if (actualTypeArguments.indexOf(typeArgument) < actualTypeArguments.size() - 1) {
-            genericParameters.append(", ");
-          }
-        }
-        
-        genericParameters.append(">");
-      }
+    if (instance.getComponentType().getAstNode().isPresent()) {
+      return typesPrinter
+          .prettyprint((ASTTypesNode) instance.getComponentType().getAstNode().get());
     }
-    return className + genericParameters;
+    else {
+      return instance.getComponentType().getName();
+    }
+    
   }
   
   public boolean isIncomingPort(ComponentSymbol cmp, ConnectorSymbol conn, boolean isSource,
@@ -379,7 +405,7 @@ public class ComponentHelper {
     for (int i = 0; i < ref.getDimension(); ++i) {
       name += "[]";
     }
-    return name;
+    return autobox(name);
   }
   
   /**
@@ -403,6 +429,17 @@ public class ComponentHelper {
       }
     }
     return false;
+  }
+  
+  public boolean hasSuperComp() {
+    return component.getSuperComponent().isPresent();
+  }
+  
+  public String getSuperComponentFqn() {
+    if(component.getSuperComponent().isPresent()) {
+      return component.getSuperComponent().get().getFullName();
+    }
+    return "ERROR";
   }
   
   public static Optional<ASTJavaPInitializer> getComponentInitialization(ComponentSymbol comp) {
@@ -434,5 +471,20 @@ public class ComponentHelper {
       }
     }
     return output;
+  }
+  
+  public List<PortSymbol> getSuperInPorts(){
+    return component.getSuperComponent().isPresent() ? component.getSuperComponent().get().getAllIncomingPorts() : Collections.emptyList();
+  }
+  
+  public List<PortSymbol> getAllInPorts(){
+    return component.getAllIncomingPorts();
+  }
+  
+  public List<PortSymbol> getSuperOutPorts(){
+    return component.getSuperComponent().isPresent() ? component.getSuperComponent().get().getAllOutgoingPorts() : Collections.emptyList();
+  }
+  public List<PortSymbol> getAllOutPorts(){
+    return component.getAllOutgoingPorts();
   }
 }

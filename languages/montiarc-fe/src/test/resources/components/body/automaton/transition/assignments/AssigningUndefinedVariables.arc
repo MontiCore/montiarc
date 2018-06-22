@@ -17,8 +17,8 @@ component AssigningUndefinedVariables {
         state A,B;
         initial A;
     
-        A -> B {x == "Hallo Welt", y == 5}; // x,y undefined
-        B -> A {a == 2, b == 3};
-        A -> A {a == b};
+        A -> B /{x = "Hallo Welt", y = 5}; // x,y undefined
+        B -> A [a == 2 && b == 3] / {b = System.currentTimeMillis()};
+        A -> A [a == b];
     }
 }

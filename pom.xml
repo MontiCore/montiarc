@@ -6,7 +6,7 @@
 
 	<groupId>montiarc</groupId>
 	<artifactId>montiarc-core</artifactId>
-	<version>4.2.0-SNAPSHOT</version>
+	<version>4.3.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<!-- == PROJECT MODULES ================================================= -->
@@ -40,7 +40,8 @@
 		<jsr305.version>3.0.0</jsr305.version>
 		<junit.version>4.12</junit.version>
 		<logback.version>1.1.2</logback.version>
-
+		<javalib.version>4.0.1-SNAPSHOT</javalib.version>
+		
 		<!-- .. Plugins ....................................................... -->
 		<monticore.plugin>5.0.0</monticore.plugin>
 		<assembly.plugin>2.5.4</assembly.plugin>
@@ -124,6 +125,11 @@
 				<groupId>de.se_rwth.commons</groupId>
 				<artifactId>se-commons-logging</artifactId>
 				<version>${se-commons.version}</version>
+			</dependency>
+		<dependency>
+				<groupId>de.monticore</groupId>
+				<artifactId>de.monticore.java.lib</artifactId>
+				<version>${javalib.version}</version>
 			</dependency>
 
 			<dependency>

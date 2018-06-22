@@ -36,36 +36,27 @@ public class ParserTest {
   
   private static final String MODEL_PATH = "src/test/resources";
   
-  private static List<String> expectedParseErrorModels = Arrays.asList(
+  static List<String> expectedParseErrorModels = Arrays.asList(
       // The package name starts with an upper case letter which is not parseable
       MODEL_PATH + "/components/UpperCasePackageName.arc",
-      
-      MODEL_PATH + "/arc/context/a/CG12false.arc",
-      
+
       // "component" is a keyword and may not be used as component name
-      MODEL_PATH + "/arc/context/a/component.arc",
-      
+      MODEL_PATH + "/components/head/name/component.arc",
+
       // "connect" is a keyword
-      MODEL_PATH + "/arc/context/a/S2.arc",
+      MODEL_PATH + "/components/body/IllegalUseOfKeywords.arc",
       
       // Multiple inheritance is not supported
       MODEL_PATH + "/components/head/inheritance/MultipleInheritance.arc",
       
       // The name of the component is not identical to the name of the file
-      MODEL_PATH + "/arc/context/a/R3.arc",
-      
-      // The name of the component is not identical to the name of the file
-      MODEL_PATH + "/arc/context/a/S3.arc",
+      MODEL_PATH + "/components/head/name/ComponentAndFileNameDiffer.arc",
       
       // The name of the component is not identical to the name of the file
       MODEL_PATH + "/components/head/name/NameClashB.arc",
-      
-      // The package declaration of the component must not differ from the package of the component
-      // file.
-      MODEL_PATH + "/arc/context/a/S4.arc",
-      
-      // TODO we do not support OCL Expressions yet
-      MODEL_PATH + "/arc/prettyPrint/example1/StatusControl.arc",
+
+      // The package declaration of the component must not differ from the package of the component file.
+      MODEL_PATH + "/components/PackageAndLocationDiffer.arc",
       
       // TODO we do not support OCL Expressions yet
       MODEL_PATH + "/components/body/invariants/OCLFieldToField.arc",

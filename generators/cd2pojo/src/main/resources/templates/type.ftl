@@ -1,10 +1,13 @@
-${tc.signature("package", "kind", "type", "super", "typeHelper")}
+${tc.signature("package", "kind", "type", "super", "typeHelper", "imports")}
 
 package ${package};
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
+<#list imports as import>
+import ${import};
+</#list>
 
 public ${kind} ${type.getName()} ${super} {
 
@@ -93,5 +96,13 @@ public ${kind} ${type.getName()} ${super} {
          this.${mandatoryField.name} = ${mandatoryField.name};
        </#list>
     }
+    
+    <#-- no-args constructor, if any arguments are present -->
+    <#if mandatoryFields?size != 0>
+    public ${type.getName()}() {
+      System.out.println("Warning! ${type.getName()} has been created with a zero-args constructor, therefore association cardinalities might be violated!");
+    }
+    </#if>   
+    
   </#if><#-- /class -->
 }

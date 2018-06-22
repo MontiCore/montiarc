@@ -1,5 +1,8 @@
 package components.body.ajava;
 
+/*
+ * Valid model.
+ */
 component UsedPortsAndParametersExist(String s) {
   port
     in double distance,

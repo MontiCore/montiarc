@@ -1,4 +1,0 @@
-package a;
-
-component component {   
-}

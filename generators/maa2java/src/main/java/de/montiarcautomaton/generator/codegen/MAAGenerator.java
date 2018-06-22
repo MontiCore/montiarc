@@ -1,11 +1,16 @@
 package de.montiarcautomaton.generator.codegen;
 
 import java.io.File;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
+
+import com.google.common.collect.Lists;
+
 import java.util.Optional;
 
 import _templates.de.montiarcautomaton.lib.AbstractAtomicComponent;
@@ -23,7 +28,6 @@ import de.se_rwth.commons.Names;
 import montiarc._ast.ASTBehaviorElement;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTElement;
-import montiarc._symboltable.AutomatonSymbol;
 import montiarc._symboltable.ComponentSymbol;
 
 /**
@@ -91,11 +95,6 @@ public class MAAGenerator {
         packageName + "." + implName);
     
     filePath = getPath(targetPathName, packageName, implName);
-    Collection<AutomatonSymbol> automatons = comp.getSpannedScope()
-        .resolveLocally(AutomatonSymbol.KIND);
-    if (automatons.size() > 1) {
-      throw new RuntimeException("Only one automaton per component supported.");
-    }
     
     ASTComponent compAST = (ASTComponent) comp.getAstNode().get();
     Optional<ASTBehaviorElement> behaviorEmbedding = getBehaviorEmbedding(compAST);
@@ -117,7 +116,7 @@ public class MAAGenerator {
       if (!existsHWC && !behaviorEmbedding.isPresent()) {
         Path implPath = getPath(targetPathName, packageName, implName);
         AbstractAtomicComponent.generate(implPath, compAST, compHelper, packageName, implName,
-            inputName, resultName, comp.getConfigParameters());
+            inputName, resultName, comp.getConfigParameters(), comp.getImports());
       }
       
       
@@ -137,6 +136,7 @@ public class MAAGenerator {
           comp.getVariables(),
           comp.getIncomingPorts(), 
           comp.getOutgoingPorts(),
+          comp.getAllOutgoingPorts(),
           comp.getConfigParameters());
     }
     else {

@@ -1,8 +1,0 @@
-package packed;
-
-classdiagram injar {
-  
-  public class SomeClassInJarFile {
-  
-  }
-}

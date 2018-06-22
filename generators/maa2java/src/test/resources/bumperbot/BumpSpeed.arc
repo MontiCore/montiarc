@@ -16,7 +16,7 @@ component BumpSpeed(Integer defaultSpeed) {
     state Static, Dynamic;
     initial Dynamic / {count255 = 10};
 
-    Dynamic -> Static {cmd == SpeedCmd.Static} / {speed = defaultSpeed, count255=0};
+    Dynamic -> Static [cmd == SpeedCmd.Static] / {speed = defaultSpeed, count255=0};
   }
 }
   

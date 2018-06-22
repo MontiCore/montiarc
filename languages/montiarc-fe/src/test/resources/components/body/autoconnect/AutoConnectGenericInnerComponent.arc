@@ -1,6 +1,6 @@
 package components.body.autoconnect;
 
-import components.body.autoconnect.datatypes.*;
+import types.database.*;
 
 /**
  * Valid model.
