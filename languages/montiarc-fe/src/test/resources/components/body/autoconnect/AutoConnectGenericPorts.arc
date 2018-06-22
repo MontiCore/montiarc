@@ -4,7 +4,7 @@ import components.body.autoconnect.datatypes.*;
 import types.GenericType;
 
 /*
- * Valid model.
+ * Invalid model.
  */
 component AutoConnectGenericPorts {
     
