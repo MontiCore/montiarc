@@ -5,6 +5,7 @@ import java.util.Optional;
 import de.monticore.ast.ASTNode;
 import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.mcexpressions._ast.ASTGenericInvocationSuffix;
+import de.monticore.mcexpressions._ast.ASTNameExpression;
 import de.monticore.mcexpressions._visitor.MCExpressionsVisitor;
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
@@ -93,11 +94,8 @@ public class UseOfUndeclaredField
   private class GuardVisitor implements MCExpressionsVisitor{
 
     @Override
-    public void visit(ASTGenericInvocationSuffix node){
-
-      if (node.isPresentName()) {
+    public void visit(ASTNameExpression node){
         check(node.getName(), node, "guard");
-      }
     }
   }
 

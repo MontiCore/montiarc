@@ -717,7 +717,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     for (String name : node.getNameList()) {
       scope.<StateSymbol> resolveMany(name, StateSymbol.KIND).forEach(c -> {
         c.setInitial(true);
-        c.setInitialReactionAST(Optional.of(node.getBlock()));
+        c.setInitialReactionAST(node.getBlockOpt());
         if (node.isPresentBlock()) {
           for (ASTIOAssignment assign : node.getBlock().getIOAssignmentList()) {
               if (assign.isPresentName()) {

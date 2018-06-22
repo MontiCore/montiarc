@@ -68,12 +68,10 @@ public class UseOfForbiddenExpression implements MontiArcASTIOAssignmentCoCo, Mo
 
     expression.accept(new MCExpressionsVisitor()  {
       @Override
-      public void visit(ASTExpression innerExpression) {
-        if(innerExpression instanceof ASTInstanceofExpression){
+      public void visit(ASTInstanceofExpression innerExpression) {
           Log.error("0xMA023 Expression contains forbidden expression: " +
                         "instanceof",
               innerExpression.get_SourcePositionStart());
-        }
       }
     });
   }

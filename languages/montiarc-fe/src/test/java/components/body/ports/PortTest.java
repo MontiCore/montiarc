@@ -134,47 +134,38 @@ public class PortTest extends AbstractCoCoTest {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
         node, new ExpectedErrorInfo(4, "xMA005"));
   }
-
+  
   @Test
   public void testExistingPortInConnector() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ExistingPortInConnector");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit()),
         node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
   }
-
+  
   @Test
   public void testPortCompatibilityWithGenerics() {
-    ASTMontiArcNode node
-        = loadComponentAST(PACKAGE + "." + "PortCompatibilityWithGenerics");
-    final MontiArcCoCoChecker checker
-        = new MontiArcCoCoChecker()
-              .addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    final ExpectedErrorInfo expectedErrors
-        = new ExpectedErrorInfo(9, "xMA033");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortCompatibilityWithGenerics");
+    final MontiArcCoCoChecker checker = new MontiArcCoCoChecker()
+        .addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(9, "xMA033");
     checkInvalid(checker, node, expectedErrors);
   }
-
+  
   @Test
   public void testPortCompatibilityWithGenerics2() {
-    ASTMontiArcNode node
-        = loadComponentAST(PACKAGE + "." + "PortCompatibilityWithGenerics2");
-    final MontiArcCoCoChecker checker
-        = new MontiArcCoCoChecker()
-              .addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    final ExpectedErrorInfo expectedErrors
-        = new ExpectedErrorInfo(4, "xMA033");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortCompatibilityWithGenerics2");
+    final MontiArcCoCoChecker checker = new MontiArcCoCoChecker()
+        .addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(4, "xMA033");
     checkInvalid(checker, node, expectedErrors);
   }
-
+  
   @Test
   public void testPortCompatibilityWithGenerics3() {
-    ASTMontiArcNode node
-        = loadComponentAST(PACKAGE + "." + "PortCompatibilityWithGenerics3");
-    final MontiArcCoCoChecker checker
-        = new MontiArcCoCoChecker()
-              .addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    final ExpectedErrorInfo expectedErrors
-        = new ExpectedErrorInfo(1, "xMA033");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortCompatibilityWithGenerics3");
+    final MontiArcCoCoChecker checker = new MontiArcCoCoChecker()
+        .addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(1, "xMA033");
     checkInvalid(checker, node, expectedErrors);
   }
   
@@ -266,7 +257,7 @@ public class PortTest extends AbstractCoCoTest {
     assertEquals("V", myVInput.getTypeReference().getName());
     
   }
-
+  
   @Test
   public void testPortsWithStereotypes() {
     Scope symTab = this.loadDefaultSymbolTable();
@@ -274,74 +265,65 @@ public class PortTest extends AbstractCoCoTest {
         .<PortSymbol> resolve(PACKAGE + "." + "PortsWithStereotypes.integerIn", PortSymbol.KIND)
         .orElse(null);
     assertNotNull(port);
-
+    
     assertEquals(3, port.getStereotype().size());
     assertEquals("held", port.getStereotype().get("disabled").get());
     assertEquals("1", port.getStereotype().get("initialOutput").get());
     assertFalse(port.getStereotype().get("ignoreWarning").isPresent());
   }
-
+  
   @Test
   @Ignore("Check whether autoconnection is working.")
   public void testReferenceConnectorCompletion() {
-//    checkValid(PACKAGE + "." + "ReferenceConnectorCompletion");
-
+    // checkValid(PACKAGE + "." + "ReferenceConnectorCompletion");
+    
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ReferenceConnectorCompletion");
     List<String[]> expectedConnectors = Lists.newArrayList(
-        new String[]{"strIn", "simpleOne.stringIn"},
-        new String[]{"simpleOne.integerOut", "intOut"},
-        new String[]{"simpleOne.stringOut", "strOut"},
-        new String[]{"simpleTwo.integerOut", "intOut2"},
-        new String[]{"simpleTwo.integerOut", "intOut3"}
-    );
+        new String[] { "strIn", "simpleOne.stringIn" },
+        new String[] { "simpleOne.integerOut", "intOut" },
+        new String[] { "simpleOne.stringOut", "strOut" },
+        new String[] { "simpleTwo.integerOut", "intOut2" },
+        new String[] { "simpleTwo.integerOut", "intOut3" });
     final Collection<ConnectorSymbol> connectors = comp.getConnectors();
     for (String[] expectedConnector : expectedConnectors) {
       final Optional<ConnectorSymbol> connector = comp.getConnector(expectedConnector[1]);
       assertTrue(connector.isPresent());
-      assertEquals(expectedConnector[0],connector.get().getSource());
-      assertEquals(expectedConnector[1],connector.get().getTarget());
+      assertEquals(expectedConnector[0], connector.get().getSource());
+      assertEquals(expectedConnector[1], connector.get().getTarget());
     }
-
+    
   }
   
   @Test
   public void testJavaTypedPorts() {
     checkValid(PACKAGE + ".ComponentWithJavaTypedPorts");
   }
-
+  
   @Test
   public void testPorts() {
     checkValid(PACKAGE + ".Ports");
   }
-
+  
   @Test
   public void testCompWithArrays() {
     checkValid(PACKAGE + "." + "CompWithArrays");
   }
-
+  
   @Test
   public void testJavaTypesAsPortTypes() {
     checkValid(PACKAGE + "." + "JavaTypesAsPortTypes");
   }
-
+  
   @Test
   public void testComponentForCDTypesTest() {
     checkValid(PACKAGE + "." + "ComponentForCDTypesTest");
   }
-
+  
   @Test
-  /*
-    TODO Does not find all undefined types. Runtime exception after first one.
-   */
+  /* TODO Does not find all undefined types. Runtime exception after first one. */
   public void testUndefinedPortTypes() {
-    ASTMontiArcNode node
-        = loadComponentAST(PACKAGE + "." + "UndefinedPortTypes");
-    MontiArcCoCoChecker cocos
-        = MontiArcCoCos.createChecker();
-    try {
-      checkInvalid(cocos, node, new ExpectedErrorInfo());
-    } catch (Exception e){
-      assertTrue(e.getMessage().contains("UndefinedType"));
-    }
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UndefinedPortTypes");
+    MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
+    checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA097"));
   }
 }
