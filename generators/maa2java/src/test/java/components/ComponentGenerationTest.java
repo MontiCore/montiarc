@@ -21,11 +21,13 @@ import montiarc._symboltable.ComponentSymbol;
 import org.junit.Test;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -48,7 +50,8 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     final String qualifiedName = PACKAGE + "." + componentName;
 
     // Load component symbol
-    final ComponentSymbol symbol = loadComponentSymbol(qualifiedName);
+    final ComponentSymbol symbol = generatorTool.loadComponentSymbolWithCocos(qualifiedName, Paths.get(MODEL_PATH).toFile()).orElse(null);
+    assertNotNull(symbol);
 
     // 5. Determine all files which have to be checked
     List<File> filesToCheck = determineFilesToCheck(
@@ -78,7 +81,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 
     // Collect information about expected features per file
     ASTComponent compUnit = (ASTComponent) symbol.getAstNode().get();
-    ComponentElementsCollector compCollector = new ComponentElementsCollector();
+    ComponentElementsCollector compCollector = new ComponentElementsCollector(symbol);
     compCollector.handle(compUnit);
 
     // Check if all expected elements are present and no other errors occured
@@ -87,6 +90,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     classVisitor.handle(javaDSLNode);
     assertTrue(classVisitor.allExpectedPresent());
     assertEquals(0, Log.getFindings().size());
+    Log.debug("Found no errors while checking the generated files", "ComponentGenerationTest");
   }
 
   /**

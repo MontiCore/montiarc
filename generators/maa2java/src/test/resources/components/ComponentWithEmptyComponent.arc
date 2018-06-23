@@ -6,7 +6,7 @@ import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
   port in String inString;
   port out String outString;
 
-  component EmptyComponent;
+  component EmptyComponent(5);
 
   component HasStringInputAndOutput a;
   connect a.pOut -> outString;
