@@ -1,4 +1,5 @@
-${tc.params("de.montiarcautomaton.generator.helper.ComponentHelper helper", "String _package", "String name", "String deployName")}
+${tc.signature("helper", "_package", "name", "deployName")}
+
 package ${_package};
 
 public class ${deployName} {  

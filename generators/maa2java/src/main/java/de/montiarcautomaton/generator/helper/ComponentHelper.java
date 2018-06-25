@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 import de.monticore.ast.ASTNode;
-import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
+import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -36,7 +36,8 @@ import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.VariableSymbol;
 
 /**
- * Helper class used in the template to generate target code of atomic or composed components.
+ * Helper class used in the template to generate target code of atomic or
+ * composed components.
  *
  * @author Gerrit Leonhardt
  */
@@ -67,8 +68,8 @@ public class ComponentHelper {
   
   public String printInitialValue(ASTParameter parameter) {
     String value;
-    if (parameter.getDefaultValue().isPresent()) {
-      ASTValuation defaultValue = parameter.getDefaultValue().get();
+    if (parameter.isPresentDefaultValue()) {
+      ASTValuation defaultValue = parameter.getDefaultValue();
       value = javaPrinter.prettyprint(defaultValue.getExpression());
     }
     else {
@@ -159,11 +160,11 @@ public class ComponentHelper {
   }
   
   private Optional<ASTType> findPortTypeByName(String name) {
-    for (ASTElement e : componentNode.getBody().getElements()) {
+    for (ASTElement e : componentNode.getBody().getElementList()) {
       if (e instanceof ASTInterface) {
         ASTInterface itf = (ASTInterface) e;
-        for (ASTPort port : itf.getPorts()) {
-          if (port.getNames().contains(name)) {
+        for (ASTPort port : itf.getPortsList()) {
+          if (port.getNameList().contains(name)) {
             return Optional.of(port.getType());
           }
         }
@@ -180,10 +181,10 @@ public class ComponentHelper {
   }
   
   private Optional<ASTType> findVariableTypeByName(String name) {
-    for (ASTElement e : componentNode.getBody().getElements()) {
+    for (ASTElement e : componentNode.getBody().getElementList()) {
       if (e instanceof ASTVariableDeclaration) {
         ASTVariableDeclaration variableDeclaration = (ASTVariableDeclaration) e;
-        if (variableDeclaration.getNames().contains(name)) {
+        if (variableDeclaration.getNameList().contains(name)) {
           return Optional.of(variableDeclaration.getType());
         }
       }
@@ -198,7 +199,7 @@ public class ComponentHelper {
   }
   
   private Optional<ASTType> findParamTypeByName(String name) {
-    for (ASTParameter p : componentNode.getHead().getParameters()) {
+    for (ASTParameter p : componentNode.getHead().getParameterList()) {
       if (name.equals(p.getName())) {
         return Optional.of(p.getType());
       }
@@ -223,7 +224,7 @@ public class ComponentHelper {
   public String printInit(ASTValueInitialization init) {
     String ret = "";
     JavaDSLPrettyPrinter printer = new JavaDSLPrettyPrinter(new IndentPrinter());
-    String name = Names.getQualifiedName(init.getQualifiedName().getParts());
+    String name = Names.getQualifiedName(init.getQualifiedName().getPartList());
     ret += name;
     ret += " = ";
     ret += printer.prettyprint(init.getValuation().getExpression());
@@ -242,15 +243,17 @@ public class ComponentHelper {
   }
   
   /**
-   * Calculates the values of the parameters of a {@link ComponentInstanceSymbol}. This takes
-   * default values for parameters into account and adds them as required. Default values are only
-   * added from left to right in order. <br/>
+   * Calculates the values of the parameters of a
+   * {@link ComponentInstanceSymbol}. This takes default values for parameters
+   * into account and adds them as required. Default values are only added from
+   * left to right in order. <br/>
    * Example: For a component with parameters
    * <code>String stringParam, Integer integerParam = 2, Object objectParam = new Object()</code>
-   * that is instanciated with parameters <code>"Test String", 5</code> this method adds
-   * <code>new Object()</code> as the last parameter.
+   * that is instanciated with parameters <code>"Test String", 5</code> this
+   * method adds <code>new Object()</code> as the last parameter.
    *
-   * @param param The {@link ComponentInstanceSymbol} for which the parameters should be calculated.
+   * @param param The {@link ComponentInstanceSymbol} for which the parameters
+   * should be calculated.
    * @return The parameters.
    */
   public Collection<String> getParamValues(ComponentInstanceSymbol param) {
@@ -275,14 +278,14 @@ public class ComponentHelper {
       // Get the AST node of the component and the list of parameters in the AST
       final ASTComponent astNode = (ASTComponent) param.getComponentType().getReferencedSymbol()
           .getAstNode().get();
-      final List<ASTParameter> parameters = astNode.getHead().getParameters();
+      final List<ASTParameter> parameters = astNode.getHead().getParameterList();
       
       // Retrieve the parameters from the node and add them to the list
       for (int counter = 0; counter < numberOfMissingParameters; counter++) {
         // Fill up from the last parameter
         final ASTParameter astParameter = parameters.get(parameters.size() - 1 - counter);
         final String prettyprint = printer
-            .prettyprint(astParameter.getDefaultValue().get().getExpression());
+            .prettyprint(astParameter.getDefaultValue().getExpression());
         outputParameters.add(outputParameters.size() - counter, prettyprint);
       }
     }
@@ -409,7 +412,8 @@ public class ComponentHelper {
   }
   
   /**
-   * Checks whether the given typeName for the component comp is a generic parameter.
+   * Checks whether the given typeName for the component comp is a generic
+   * parameter.
    *
    * @param comp
    * @param typeName
@@ -419,9 +423,9 @@ public class ComponentHelper {
     if (comp == null) {
       return false;
     }
-    if (comp.getHead().getGenericTypeParameters().isPresent()) {
+    if (comp.getHead().isPresentGenericTypeParameters()) {
       List<ASTTypeVariableDeclaration> parameterList = comp.getHead().getGenericTypeParameters()
-          .get().getTypeVariableDeclarations();
+          .getTypeVariableDeclarationList();
       for (ASTTypeVariableDeclaration type : parameterList) {
         if (type.getName().equals(typeName)) {
           return true;
@@ -436,7 +440,7 @@ public class ComponentHelper {
   }
   
   public String getSuperComponentFqn() {
-    if(component.getSuperComponent().isPresent()) {
+    if (component.getSuperComponent().isPresent()) {
       return component.getSuperComponent().get().getFullName();
     }
     return "ERROR";
@@ -447,7 +451,7 @@ public class ComponentHelper {
     Optional<ASTNode> ast = comp.getAstNode();
     if (ast.isPresent()) {
       ASTComponent compAST = (ASTComponent) ast.get();
-      for (ASTElement e : compAST.getBody().getElements()) {
+      for (ASTElement e : compAST.getBody().getElementList()) {
         if (e instanceof ASTJavaPInitializer) {
           ret = Optional.of((ASTJavaPInitializer) e);
           
@@ -458,14 +462,14 @@ public class ComponentHelper {
   }
   
   public boolean isGeneric() {
-    return componentNode.getHead().getGenericTypeParameters().isPresent();
+    return componentNode.getHead().isPresentGenericTypeParameters();
   }
   
   public List<String> getGenericParameters() {
     List<String> output = new ArrayList<>();
-    if (componentNode.getHead().getGenericTypeParameters().isPresent()) {
+    if (componentNode.getHead().isPresentGenericTypeParameters()) {
       List<ASTTypeVariableDeclaration> parameterList = componentNode.getHead()
-          .getGenericTypeParameters().get().getTypeVariableDeclarations();
+          .getGenericTypeParameters().getTypeVariableDeclarationList();
       for (ASTTypeVariableDeclaration variableDeclaration : parameterList) {
         output.add(variableDeclaration.getName());
       }
@@ -473,18 +477,23 @@ public class ComponentHelper {
     return output;
   }
   
-  public List<PortSymbol> getSuperInPorts(){
-    return component.getSuperComponent().isPresent() ? component.getSuperComponent().get().getAllIncomingPorts() : Collections.emptyList();
+  public List<PortSymbol> getSuperInPorts() {
+    return component.getSuperComponent().isPresent()
+        ? component.getSuperComponent().get().getAllIncomingPorts()
+        : Collections.emptyList();
   }
   
-  public List<PortSymbol> getAllInPorts(){
+  public List<PortSymbol> getAllInPorts() {
     return component.getAllIncomingPorts();
   }
   
-  public List<PortSymbol> getSuperOutPorts(){
-    return component.getSuperComponent().isPresent() ? component.getSuperComponent().get().getAllOutgoingPorts() : Collections.emptyList();
+  public List<PortSymbol> getSuperOutPorts() {
+    return component.getSuperComponent().isPresent()
+        ? component.getSuperComponent().get().getAllOutgoingPorts()
+        : Collections.emptyList();
   }
-  public List<PortSymbol> getAllOutPorts(){
+  
+  public List<PortSymbol> getAllOutPorts() {
     return component.getAllOutgoingPorts();
   }
 }

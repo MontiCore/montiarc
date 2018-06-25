@@ -1,12 +1,13 @@
 package de.montiarcautomaton.generator.helper;
 
 import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
+import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.prettyprint.IndentPrinter;
 import montiarc._ast.ASTIOAssignment;
 import montiarc._symboltable.ComponentSymbol;
@@ -88,7 +89,7 @@ public class AutomatonHelper extends ComponentHelper {
   public Collection<IOAssignmentHelper> getReaction(TransitionSymbol symbol) {
     ArrayList<IOAssignmentHelper> assignments = new ArrayList<>();
     if (symbol.getReactionAST().isPresent()) {
-      for (ASTIOAssignment assignment : symbol.getReactionAST().get().getIOAssignments()) {
+      for (ASTIOAssignment assignment : symbol.getReactionAST().get().getIOAssignmentList()) {
         assignments.add(new IOAssignmentHelper(assignment));
       }
     }
@@ -132,7 +133,7 @@ public class AutomatonHelper extends ComponentHelper {
   public Collection<IOAssignmentHelper> getInitialReaction(StateSymbol symbol) {
     ArrayList<IOAssignmentHelper> assignments = new ArrayList<>();
     if (symbol.getInitialReactionAST().isPresent()) {
-      for (ASTIOAssignment assignment : symbol.getInitialReactionAST().get().getIOAssignments()) {
+      for (ASTIOAssignment assignment : symbol.getInitialReactionAST().get().getIOAssignmentList()) {
         assignments.add(new IOAssignmentHelper(assignment));
       }
     }
