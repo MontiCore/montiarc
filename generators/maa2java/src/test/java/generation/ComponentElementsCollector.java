@@ -10,10 +10,7 @@ import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.monticore.java.javadsl._ast.*;
 import de.monticore.java.symboltable.JavaFieldSymbol;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
-import de.monticore.types.types._ast.ASTSimpleReferenceType;
-import de.monticore.types.types._ast.ASTType;
-import de.monticore.types.types._ast.ASTTypeArguments;
-import de.monticore.types.types._ast.ASTVoidType;
+import de.monticore.types.types._ast.*;
 import montiarc._ast.*;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
@@ -120,7 +117,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     classVisitor.addConstructor(builder.build());
 
     addInputAndResultConstructor(symbol);
-
+    addToString();
 
     // Implemented interfaces
     classVisitor.addImplementedInterface("IComponent");
@@ -128,7 +125,25 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     inputVisitor.addImplementedInterface("IInput");
   }
 
-  public void addInputAndResultConstructor(ComponentSymbol symbol){
+  private void addToString(){
+    ASTSimpleReferenceType stringType = ASTSimpleReferenceType.getBuilder()
+        .names(Lists.newArrayList("String"))
+        .build();
+
+    Method toString =
+        Method
+            .getBuilder()
+            .setName("toString")
+            .setReturnType(stringType) // TODO Return type
+            .addBodyElement("String result = \"[\"")
+            // TODO port body elements
+            .addBodyElement("return result+\"]\"")
+            .build();
+    this.resultVisitor.addMethod(toString);
+    this.inputVisitor.addMethod(toString);
+  }
+
+  private void addInputAndResultConstructor(ComponentSymbol symbol){
     final Constructor.Builder builder = Constructor.getBuilder();
     if(symbol.getSuperComponent().isPresent()){
       builder.addBodyElement("super();");

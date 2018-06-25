@@ -64,8 +64,10 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     final String methodName = signature.getName();
     final Optional<Method> method = getMethod(methodName);
     if(method.isPresent() && method.get().getBodyElements().size() > 0) {
-      if (!methodString.contains(method.get().getBodyElements().get(0))) {
-        Log.error("Missing statement in method bodyElements");
+      for (String s : method.get().getBodyElements()) {
+        if (!methodString.contains(s)) {
+          Log.error("Missing statement in method " + methodName + ": " + s);
+        }
       }
     }
 
