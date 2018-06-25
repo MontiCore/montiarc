@@ -1,8 +1,0 @@
-package robotmodels.actuators;
-
-import robotmodels.actuators.types.MotorCommand;
-
-abstract component Motor {
-    port
-        in MotorCommand cmd;
-}
