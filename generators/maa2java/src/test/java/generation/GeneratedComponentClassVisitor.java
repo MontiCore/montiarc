@@ -58,7 +58,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
 
   @Override
   public void visit(ASTMethodDeclaration node){
-    String methodString = PRINTER.prettyprint(node.getMethodBody().get());
+    String methodString = printWithoutWhitespace(node.getMethodBody().get());
 
     final ASTMethodSignature signature = node.getMethodSignature();
     final String methodName = signature.getName();
@@ -103,6 +103,10 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     }
   }
 
+  private String printWithoutWhitespace(ASTJavaDSLNode node){
+    return PRINTER.prettyprint(node).replaceAll("\\s", "");
+  }
+
   @Override
   public void visit(ASTConstructorDeclaration node){
     final ASTFormalParameters actualParams = node.getFormalParameters();
@@ -125,8 +129,8 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
         final ASTFormalParameterListing expectedParamList
             = constructor.getParameters().getFormalParameterListing().get();
 
-        final String actualPrint = PRINTER.prettyprint(actualParamList);
-        final String expectedPrint = PRINTER.prettyprint(expectedParamList);
+        final String actualPrint = printWithoutWhitespace(actualParamList);
+        final String expectedPrint = printWithoutWhitespace(expectedParamList);
 
         if(!actualPrint.equals(expectedPrint)){
 //        if(!actualParamList.deepEquals(expectedParamList, true)){
@@ -140,10 +144,12 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
             actualName));
       }
 
-      final String printedBody = PRINTER.prettyprint(node.getConstructorBody());
+      final String printedBody =
+          printWithoutWhitespace(node.getConstructorBody());
       for (String bodyElement : constructor.getBodyElements()) {
         if(!printedBody.contains(bodyElement)) {
-          Log.error(String.format("Missing element in constructor bodyElements: %s",
+          Log.error(
+              String.format("Missing element in constructor bodyElements: %s",
                           bodyElement));
         }
       }

@@ -8,8 +8,10 @@ package generation;
 import com.google.common.collect.Lists;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.monticore.java.javadsl._ast.*;
+import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.java.symboltable.JavaFieldSymbol;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
+import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.types._ast.*;
 import montiarc._ast.*;
 import montiarc._symboltable.ComponentSymbol;
@@ -19,6 +21,8 @@ import montiarc._visitor.MontiArcVisitor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static generation.GenerationStringConstants.BEHAVIOR_IMPL;
 
 /**
  * TODO
@@ -36,6 +40,10 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   protected GeneratedComponentClassVisitor implVisitor;
   private ComponentSymbol symbol;
   private ComponentHelper helper;
+
+
+  private final static JavaDSLPrettyPrinter PRINTER
+      = new JavaDSLPrettyPrinter(new IndentPrinter());
 
   public ComponentElementsCollector(ComponentSymbol symbol, String name) {
     this.symbol = symbol;
@@ -80,11 +88,14 @@ public class ComponentElementsCollector implements MontiArcVisitor {
                                .names(Lists.newArrayList("IComputable"))
                                .typeArguments(typeArgs)
                                .build();
-    classVisitor.addField("behaviorImpl", expectedType);
+    classVisitor.addField(GenerationStringConstants.BEHAVIOR_IMPL, expectedType);
 
     // Common methods
     // setup
     Method.Builder methodBuilder = Method.getBuilder();
+    if(symbol.getSuperComponent().isPresent()){
+      methodBuilder.addBodyElement("super.setUp();");
+    }
     methodBuilder.setName("setUp").addBodyElement("this.initialize();");
     classVisitor.addMethod(methodBuilder.build());
 
@@ -95,6 +106,24 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     classVisitor.addMethod(methodBuilder.build());
 
     methodBuilder = Method.getBuilder().setName("update");
+    classVisitor.addMethod(methodBuilder.build());
+
+    methodBuilder = Method.getBuilder().setName("setResult");
+    ASTSimpleReferenceType resultType =
+        ASTSimpleReferenceType
+            .getBuilder()
+            .names(Lists.newArrayList(componentName+"Result"))
+            .build();
+    methodBuilder.addParameter("result", resultType);
+    classVisitor.addMethod(methodBuilder.build());
+
+    methodBuilder = Method.getBuilder().setName("initialize");
+    methodBuilder.addBodyElement(
+        String.format("final %sResult result = %s.%s;",
+            componentName,
+            GenerationStringConstants.BEHAVIOR_IMPL,
+            GenerationStringConstants.METHOD_INITIAL_VALUES));
+    methodBuilder.addBodyElement("setResult(result);");
     classVisitor.addMethod(methodBuilder.build());
 
     // Constructor
@@ -112,7 +141,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       }
     }
     builder.addBodyElement(String.format("behaviorImpl=new %sImpl(%s);",
-        capitalizeFirst(componentName), ""));
+        capitalizeFirst(componentName), "")); // TODO Parameters
 
     classVisitor.addConstructor(builder.build());
 
@@ -221,6 +250,21 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         resultVisitor.addMethod(getter.setName("get" + capitalizeFirst(name)).setReturnType(type).build());
       } else if(node.isIncoming()) {
         inputVisitor.addMethod(getter.setName("get" + capitalizeFirst(name)).setReturnType(type).build());
+      }
+    }
+
+    if(node.isOutgoing()) {
+      final Method setUp = classVisitor.getMethods()
+                               .stream()
+                               .filter(m -> m.getName().equals("setUp"))
+                               .findFirst().orElse(null);
+      if (setUp != null) {
+        for (String name : names) {
+          setUp.addBodyElement("this." + name +
+                                          "=new Port<" +
+                                          PRINTER.prettyprint(type) +
+                                          ">();");
+        }
       }
     }
   }

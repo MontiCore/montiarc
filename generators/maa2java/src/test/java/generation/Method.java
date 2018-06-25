@@ -57,6 +57,10 @@ public class Method{
     return params;
   }
 
+  public void addBodyElement(String element){
+    this.bodyElements.add(element.replaceAll("\\s", ""));
+  }
+
   static class Builder{
 
     private ASTReturnType returnType;
@@ -97,12 +101,14 @@ public class Method{
     }
 
     public Builder addBodyElements(List<String> bodyElements) {
-      this.bodyElements.addAll(bodyElements);
+      for (String element : bodyElements) {
+        addBodyElement(element);
+      }
       return this;
     }
 
     public Builder addBodyElement(String element){
-      this.bodyElements.add(element);
+      this.bodyElements.add(element.replaceAll("\\s", ""));
       return this;
     }
 
