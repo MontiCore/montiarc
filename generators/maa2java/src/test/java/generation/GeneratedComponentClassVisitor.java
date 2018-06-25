@@ -12,6 +12,7 @@ import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.types._ast.ASTSimpleReferenceType;
 import de.monticore.types.types._ast.ASTType;
+import de.monticore.types.types._ast.ASTTypesNode;
 import de.se_rwth.commons.logging.Log;
 import sim.help.SynchronizedQueue;
 
@@ -32,6 +33,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
   private Set<Field> fields;
   private Set<Method> methods;
   private Set<String> interfaces;
+  private String superClass;
 
   public Set<Constructor> getConstructors() {
     return constructors;
@@ -101,8 +103,27 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
         }
       }
     }
+    final Optional<ASTType> superClass = node.getSuperClass();
+    if(this.superClass != null && !superClass.isPresent()){
+      Log.error(String.format("%s does not extend superclass %s",
+          className, this.superClass));
+    } else if(this.superClass == null && superClass.isPresent()){
+      Log.error(String.format("%s unexpectedly extends a class %s",
+          className, printWithoutWhitespace(superClass.get())));
+    } else if(this.superClass != null){
+      if(!this.superClass.equals(printWithoutWhitespace(superClass.get()))){
+        Log.error(String.format("The class %s extends the wrong class " +
+                                    "%s instead of expected class %s",
+            className,
+            printWithoutWhitespace(superClass.get()),
+            this.superClass));
+      }
+    }
   }
 
+  private String printWithoutWhitespace(ASTTypesNode node){
+    return PRINTER.prettyprint(node).replaceAll("\\s", "");
+  }
   private String printWithoutWhitespace(ASTJavaDSLNode node){
     return PRINTER.prettyprint(node).replaceAll("\\s", "");
   }
@@ -193,8 +214,8 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
    * @return true, if all elements have been found
    */
   public void allExpectedPresent(){
-    assertTrue(String.format("Did not find all required imports in %s: \n%s",
-            className, imports.toString()), imports.isEmpty());
+//    assertTrue(String.format("Did not find all required imports in %s: \n%s",
+//            className, imports.toString()), imports.isEmpty());
     assertTrue(String.format("Did not find all required fields in %s: \n%s",
         className, fields.toString()), fields.isEmpty());
     assertTrue(String.format("Did not find all required methods in %s: \n%s",
@@ -258,4 +279,11 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     this.interfaces.add(interfaceName);
   }
 
+  public void setSuperClass(String superClass) {
+    this.superClass = superClass;
+  }
+
+  public String getSuperClass() {
+    return superClass;
+  }
 }
