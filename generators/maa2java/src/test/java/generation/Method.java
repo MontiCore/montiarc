@@ -127,4 +127,13 @@ public class Method{
       return new Method(returnType, name, formalParameters, bodyElements);
     }
   }
+
+  @Override public String toString() {
+    return "Method{" +
+        "returnType=" + returnType +
+        ", name='" + name + '\'' +
+        ", params=" + params +
+        ", bodyElements=" + bodyElements +
+        '}';
+  }
 }

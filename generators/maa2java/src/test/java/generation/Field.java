@@ -30,4 +30,11 @@ class Field {
   public ASTType getType() {
     return type;
   }
+
+  @Override public String toString() {
+    return "Field{" +
+        "name='" + name + '\'' +
+        ", type=" + type +
+        '}';
+  }
 }

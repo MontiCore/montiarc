@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -73,23 +72,45 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     // Parse the files with the JavaDSL
     GlobalScope gs = initJavaDSLSymbolTable();
 
-    final Optional<Symbol> emptyComponent
-        = gs.resolve("components.EmptyComponent", JavaTypeSymbol.KIND);
-    assertTrue(emptyComponent.isPresent());
-    final ASTClassDeclaration javaDSLNode
-        = (ASTClassDeclaration) emptyComponent.get().getAstNode().get();
+    Optional<Symbol> optinalClassTypeSymbol;
+    ASTClassDeclaration javaDSLNode;
+
+    optinalClassTypeSymbol = gs.resolve("components.EmptyComponent", JavaTypeSymbol.KIND);
+    assertTrue(optinalClassTypeSymbol.isPresent());
+    javaDSLNode = (ASTClassDeclaration) optinalClassTypeSymbol.get().getAstNode().get();
 
     // Collect information about expected features per file
     ASTComponent compUnit = (ASTComponent) symbol.getAstNode().get();
-    ComponentElementsCollector compCollector = new ComponentElementsCollector(symbol);
+    ComponentElementsCollector compCollector
+        = new ComponentElementsCollector(symbol, "EmptyComponent");
     compCollector.handle(compUnit);
 
     // Check if all expected elements are present and no other errors occured
     Log.getFindings().clear();
-    GeneratedComponentClassVisitor classVisitor = compCollector.getClassVisitor();
-    classVisitor.handle(javaDSLNode);
-    assertTrue(classVisitor.allExpectedPresent());
-    assertEquals(0, Log.getFindings().size());
+    GeneratedComponentClassVisitor visitor;
+    visitor = compCollector.getClassVisitor();
+    visitor.handle(javaDSLNode);
+    visitor.allExpectedPresent();
+
+
+    // Input class
+    optinalClassTypeSymbol = gs.resolve("components.EmptyComponentInput", JavaTypeSymbol.KIND);
+    assertTrue(optinalClassTypeSymbol.isPresent());
+    javaDSLNode = (ASTClassDeclaration) optinalClassTypeSymbol.get().getAstNode().get();
+    visitor = compCollector.getInputVisitor();
+    visitor.handle(javaDSLNode);
+    visitor.allExpectedPresent();
+
+    // Result class
+    optinalClassTypeSymbol = gs.resolve("components.EmptyComponentResult", JavaTypeSymbol.KIND);
+    assertTrue(optinalClassTypeSymbol.isPresent());
+    javaDSLNode = (ASTClassDeclaration) optinalClassTypeSymbol.get().getAstNode().get();
+    visitor = compCollector.getResultVisitor();
+    visitor.handle(javaDSLNode);
+    visitor.allExpectedPresent();
+
+    // Log checking
+//    assertEquals(0, Log.getFindings().size());
     Log.debug("Found no errors while checking the generated files", "ComponentGenerationTest");
   }
 

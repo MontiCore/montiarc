@@ -16,6 +16,8 @@ import de.se_rwth.commons.logging.Log;
 
 import java.util.*;
 
+import static junit.framework.TestCase.assertTrue;
+
 /**
  * TODO
  *
@@ -24,6 +26,8 @@ import java.util.*;
  * @since TODO
  */
 public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
+
+  private final String className;
 
   Set<String> imports;
   Set<Field> fields;
@@ -38,7 +42,8 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
   private static final JavaDSLPrettyPrinter PRINTER
       = new JavaDSLPrettyPrinter(new IndentPrinter());
 
-  public GeneratedComponentClassVisitor(){
+  public GeneratedComponentClassVisitor(String className){
+    this.className = className;
     this.imports = new HashSet<>();
     this.fields = new HashSet<>();
     this.methods = new HashSet<>();
@@ -48,8 +53,8 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
   public GeneratedComponentClassVisitor(Set<String> imports,
                                         Set<Field> fields,
                                         Set<Method> methods,
-                                        Set<Constructor> constructors) {
-
+                                        Set<Constructor> constructors, String name) {
+    this.className = name;
     this.imports = imports;
     this.fields = fields;
     this.methods = methods;
@@ -74,9 +79,12 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
       }
     }
 
-    methods.removeIf(m -> methodName.equals(m.getName())
-                              && signature.getFormalParameters().deepEquals(m.getParams())
-                              && signature.getReturnType().deepEquals(m.getReturnType()));
+    final boolean removed = methods.removeIf(m -> methodName.equals(m.getName())
+        && signature.getFormalParameters().deepEquals(m.getParams())
+        && signature.getReturnType().deepEquals(m.getReturnType()));
+    if(!removed){
+      Log.error("Found unexpected method in " + this.className + ": " + methodName);
+    }
   }
 
   private Optional<Method> getMethod(String name){
@@ -107,11 +115,36 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     final ASTFormalParameters actualParams = node.getFormalParameters();
     final String actualName = node.getName();
 
-    if(getConstructor(actualName).isPresent()){
-      final Constructor constructor = getConstructor(actualName).get();
-      if(!actualParams.deepEquals(constructor.getParameters(), true)){
-        Log.error(String.format("Parameters of constructor %s do not fit the " +
-                              "expected parameters", actualName));
+    int paramSize = 0;
+    if(actualParams.getFormalParameterListing().isPresent()){
+      paramSize = actualParams.getFormalParameterListing().get().getFormalParameters().size();
+    }
+    if(getConstructor(actualName, paramSize).isPresent()){
+      final Constructor constructor = getConstructor(actualName, paramSize).get();
+      final boolean actualParamListPresent
+          = actualParams.getFormalParameterListing().isPresent();
+      final boolean expectedParamListPresent
+          = constructor.getParameters().getFormalParameterListing().isPresent();
+
+      if(actualParamListPresent && expectedParamListPresent){
+        final ASTFormalParameterListing actualParamList
+            = actualParams.getFormalParameterListing().get();
+        final ASTFormalParameterListing expectedParamList
+            = constructor.getParameters().getFormalParameterListing().get();
+
+        final String actualPrint = PRINTER.prettyprint(actualParamList);
+        final String expectedPrint = PRINTER.prettyprint(expectedParamList);
+
+        if(!actualPrint.equals(expectedPrint)){
+//        if(!actualParamList.deepEquals(expectedParamList, true)){
+          Log.error(String.format("Parameters of constructor %s do not " +
+                                      "fit the expected parameters",
+              actualName));
+        }
+      } else if(actualParamListPresent || expectedParamListPresent){
+        Log.error(String.format("Mismatch in FormalParameterListing " +
+                                    "presence for constructor %s",
+            actualName));
       }
 
       final String printedBody = PRINTER.prettyprint(node.getConstructorBody());
@@ -121,15 +154,23 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
                           bodyElement));
         }
       }
-
     }
   }
 
-  private Optional<Constructor> getConstructor(String name){
-    return constructors
-               .stream()
-               .filter(constructor -> constructor.getName().equals(name))
-               .findFirst();
+  private Optional<Constructor> getConstructor(String name, int paramCount){
+    final Optional<Constructor> result = constructors
+        .stream()
+        .filter(constructor -> constructor.getName().equals(name))
+        .findFirst();
+    if(result.isPresent()){
+      if(result.get().getParameters().getFormalParameterListing().isPresent()){
+        if(result.get().getParameters().getFormalParameterListing().get()
+            .getFormalParameters().size() != paramCount){
+          return Optional.empty();
+        }
+      }
+    }
+    return result;
   }
 
   @Override
@@ -152,12 +193,13 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
    * is present
    * @return true, if all elements have been found
    */
-  public boolean allExpectedPresent(){
-    boolean result;
-    result = imports.isEmpty();
-    result &= fields.isEmpty();
-    result &= methods.isEmpty();
-    return result;
+  public void allExpectedPresent(){
+    assertTrue(String.format("Did not find all required imports in %s: \n%s",
+            className, imports.toString()), imports.isEmpty());
+    assertTrue(String.format("Did not find all required fields in %s: \n%s",
+        className, fields.toString()), fields.isEmpty());
+    assertTrue(String.format("Did not find all required methods in %s: \n%s",
+            className, methods.toString()), methods.isEmpty());
   }
 
   public void addImport(String fullQualifiedImport){

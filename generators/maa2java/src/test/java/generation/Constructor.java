@@ -112,4 +112,12 @@ public class Constructor{
       return new Constructor(name, formalParameters, bodyElements);
     }
   }
+
+  @Override public String toString() {
+    return "Constructor{" +
+        "name='" + name + '\'' +
+        ", parameters=" + parameters +
+        ", bodyElements=" + bodyElements +
+        '}';
+  }
 }
