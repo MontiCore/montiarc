@@ -26,7 +26,7 @@ import java.util.Optional;
 /**
  * TODO
  *
- * @author (last commit)
+ * @author (last commit) Michael Mutert
  */
 public class ComponentElementsCollector implements MontiArcVisitor {
 
@@ -121,6 +121,11 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     addInputAndResultConstructor(symbol);
 
+
+    // Implemented interfaces
+    classVisitor.addImplementedInterface("IComponent");
+    resultVisitor.addImplementedInterface("IResult");
+    inputVisitor.addImplementedInterface("IInput");
   }
 
   public void addInputAndResultConstructor(ComponentSymbol symbol){

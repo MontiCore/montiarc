@@ -13,25 +13,25 @@ import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.types._ast.ASTSimpleReferenceType;
 import de.monticore.types.types._ast.ASTType;
 import de.se_rwth.commons.logging.Log;
+import sim.help.SynchronizedQueue;
 
 import java.util.*;
 
 import static junit.framework.TestCase.assertTrue;
 
 /**
- * TODO
+ * Visits the AST of Java classes and checks whether they are fulfilling the specifications.
  *
- * @author (last commit)
- * @version ,
- * @since TODO
+ * @author (last commit) Michael Mutert
  */
 public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
 
   private final String className;
 
-  Set<String> imports;
-  Set<Field> fields;
-  Set<Method> methods;
+  private Set<String> imports;
+  private Set<Field> fields;
+  private Set<Method> methods;
+  private Set<String> interfaces;
 
   public Set<Constructor> getConstructors() {
     return constructors;
@@ -48,17 +48,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     this.fields = new HashSet<>();
     this.methods = new HashSet<>();
     this.constructors = new HashSet<>();
-  }
-
-  public GeneratedComponentClassVisitor(Set<String> imports,
-                                        Set<Field> fields,
-                                        Set<Method> methods,
-                                        Set<Constructor> constructors, String name) {
-    this.className = name;
-    this.imports = imports;
-    this.fields = fields;
-    this.methods = methods;
-    this.constructors = constructors;
+    this.interfaces = new HashSet<>();
   }
 
   @Override
@@ -98,15 +88,16 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
 
   @Override
   public void visit(ASTClassDeclaration node) {
-    boolean isComponentImplemented = false;
     for (ASTType type : node.getImplementedInterfaces()) {
       if(type instanceof ASTSimpleReferenceType){
-        isComponentImplemented = ((ASTSimpleReferenceType) type).getNames()
-                  .stream().anyMatch(s -> s.equals("IComponent"));
+        boolean isComponentImplemented
+            = ((ASTSimpleReferenceType) type).getNames()
+                  .stream().anyMatch(s -> interfaces.contains(s));
+        if(!isComponentImplemented){
+          Log.error(String.format("Class %s does not implement interface %s", className,
+              ((ASTSimpleReferenceType) type).getNames()));
+        }
       }
-    }
-    if(!isComponentImplemented){
-      Log.error("Component class does not implement IComponent");
     }
   }
 
@@ -248,6 +239,15 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
 
   public Set<Method> getMethods() {
     return this.methods;
+  }
+
+  /**
+   * Add an interface to the set of expected implemented interfaces.
+   *
+   * @param interfaceName Unqualified name of the interface
+   */
+  public void addImplementedInterface(String interfaceName){
+    this.interfaces.add(interfaceName);
   }
 
 }
