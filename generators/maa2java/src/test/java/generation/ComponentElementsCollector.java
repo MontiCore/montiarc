@@ -96,9 +96,64 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   public void visit(ASTComponent node){
     // Add elements which are not found by the visitor
     HCJavaDSLTypeResolver typeResolver = new HCJavaDSLTypeResolver();
+    final String componentName = node.getName();
 
     // impl field
-    final String componentName = node.getName();
+    addImplField(componentName);
+
+    // Common methods
+    // setup
+    Method.Builder methodBuilder = Method.getBuilder();
+    if(symbol.getSuperComponent().isPresent()){
+      methodBuilder.addBodyElement("super.setUp();");
+    }
+
+    methodBuilder.setName("setUp").addBodyElement("this.initialize();");
+    classVisitor.addMethod(methodBuilder.build());
+
+    // init
+    methodBuilder = Method.getBuilder().setName("init");
+    if(symbol.getSuperComponent().isPresent()){
+      methodBuilder.addBodyElement("super.init();");
+    }
+    classVisitor.addMethod(methodBuilder.build());
+
+    // compute
+    addCompute(componentName);
+
+    // update
+    methodBuilder = Method.getBuilder().setName("update");
+    if(symbol.getSuperComponent().isPresent()){
+      methodBuilder.addBodyElement("super.update();");
+    }
+    classVisitor.addMethod(methodBuilder.build());
+
+    // setResult
+    addSetResult(componentName);
+
+    // initialize
+    addInitialize(componentName);
+
+    // Constructor
+    addConstructor(node, componentName);
+
+    addInputAndResultConstructor(symbol);
+    addToString();
+    addFixedImports(symbol);
+
+    // Implemented interfaces
+    classVisitor.addImplementedInterface("IComponent");
+    resultVisitor.addImplementedInterface("IResult");
+    inputVisitor.addImplementedInterface("IInput");
+    if(symbol.getSuperComponent().isPresent()) {
+      final String fullName = symbol.getSuperComponent().get().getFullName();
+      classVisitor.setSuperClass(fullName);
+      resultVisitor.setSuperClass(fullName + "Result");
+      inputVisitor.setSuperClass(fullName + "Input");
+    }
+  }
+
+  private void addImplField(String componentName) {
     final ASTSimpleReferenceType inputRefType
         = ASTSimpleReferenceType.getBuilder()
               .names(Lists.newArrayList(componentName + "Input"))
@@ -118,45 +173,14 @@ public class ComponentElementsCollector implements MontiArcVisitor {
                                .typeArguments(typeArgs)
                                .build();
     classVisitor.addField(GenerationStringConstants.BEHAVIOR_IMPL, expectedType);
+  }
 
-    // Common methods
-    // setup
-    Method.Builder methodBuilder = Method.getBuilder();
-    if(symbol.getSuperComponent().isPresent()){
-      methodBuilder.addBodyElement("super.setUp();");
-    }
-    methodBuilder.setName("setUp").addBodyElement("this.initialize();");
-    classVisitor.addMethod(methodBuilder.build());
-
-    // init
-    methodBuilder = Method.getBuilder().setName("init");
-    if(symbol.getSuperComponent().isPresent()){
-      methodBuilder.addBodyElement("super.init();");
-    }
-    classVisitor.addMethod(methodBuilder.build());
-
-    // compute
-    methodBuilder = Method.getBuilder().setName("compute");
-    classVisitor.addMethod(methodBuilder.build());
-
-    // update
-    methodBuilder = Method.getBuilder().setName("update");
-    if(symbol.getSuperComponent().isPresent()){
-      methodBuilder.addBodyElement("super.update();");
-    }
-    classVisitor.addMethod(methodBuilder.build());
-
-    // setResult
-    addSetResult(componentName);
-
-    // initialize
-    addInitialize(componentName);
-
-
-    // Constructor
+  private void addConstructor(ASTComponent node, String componentName) {
     final Constructor.Builder builder = Constructor.getBuilder();
     builder.setName(componentName);
+    StringBuilder parameters = new StringBuilder();
     for (ASTParameter parameter : node.getHead().getParameters()) {
+      parameters.append(parameter.getName()).append(",");
       JavaFieldSymbol typeSymbol = (JavaFieldSymbol) symbol.getSpannedScope().resolve(parameter.getName(), JavaFieldSymbol.KIND).orElse(null);
       if(typeSymbol != null) {
         final String paramTypeName = helper.getParamTypeName(typeSymbol);
@@ -167,25 +191,40 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         builder.addParameter(parameter.getName(), paramType);
       }
     }
-    builder.addBodyElement(String.format("behaviorImpl=new %sImpl(%s);",
-        capitalizeFirst(componentName), "")); // TODO Parameters
+    if(parameters.length() > 0) {
+      parameters.deleteCharAt(parameters.length() - 1);
+    }
+    builder.addBodyElement(String.format("behaviorImpl = new %sImpl(%s);",
+        capitalizeFirst(componentName), parameters.toString()));
 
     classVisitor.addConstructor(builder.build());
+  }
 
-    addInputAndResultConstructor(symbol);
-    addToString();
-    addFixedImports(symbol);
-
-    // Implemented interfaces
-    classVisitor.addImplementedInterface("IComponent");
-    resultVisitor.addImplementedInterface("IResult");
-    inputVisitor.addImplementedInterface("IInput");
-    if(symbol.getSuperComponent().isPresent()) {
-      final String fullName = symbol.getSuperComponent().get().getFullName();
-      classVisitor.setSuperClass(fullName);
-      resultVisitor.setSuperClass(fullName + "Result");
-      inputVisitor.setSuperClass(fullName + "Input");
+  private void addCompute(String componentName) {
+    Method.Builder methodBuilder;
+    methodBuilder = Method.getBuilder().setName("compute");
+    StringBuilder incomingPorts = new StringBuilder();
+    for (PortSymbol portSymbol : symbol.getIncomingPorts()) {
+      incomingPorts.append(portSymbol.getName()).append(",");
     }
+    if(incomingPorts.length() > 0){
+      incomingPorts.deleteCharAt(incomingPorts.length() - 1);
+    }
+
+    methodBuilder.addBodyElement(
+        String.format("final %sInput input = new %sInput(this.%s.getCurrentValue())",
+            componentName, componentName, incomingPorts.toString()));
+    methodBuilder.addBodyElement(
+        String.format("try {\n"
+            + "      // perform calculations\n"
+            + "      final %sResult result = behaviorImpl.compute(input);\n"
+            + "      \n"
+            + "      // set results to ports\n"
+            + "      setResult(result);\n"
+            + "    } catch (Exception e) {\n"
+            + "      Log.error(\"%s\", e);\n"
+            + "    }", componentName, componentName));
+    classVisitor.addMethod(methodBuilder.build());
   }
 
   private void addSetResult(String componentName) {
@@ -348,13 +387,14 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       }
     }
 
+    // Methods
     if(node.isOutgoing()) {
       final Optional<Method> setUp = getMethod("setUp");
       if (setUp.isPresent()) {
         for (String name : names) {
           setUp.get().addBodyElement(
               String.format("this.%s = new Port<%s>();",
-                  name, PRINTER.prettyprint(type)));
+                  name, PRINTER.prettyprint(type)), -1);
         }
       }
       final Optional<Method> update = getMethod("update");
@@ -362,6 +402,15 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         for (String name : names) {
           update.get().addBodyElement(
               String.format("this.%s.update();", name));
+        }
+      }
+    }
+    if(node.isIncoming()){
+      final Optional<Method> init = getMethod("init");
+      if (init.isPresent()) {
+        for (String name : names) {
+          init.get().addBodyElement(
+              String.format("if (this.%s == null) {this.%s = Port.EMPTY;}", name, name));
         }
       }
     }

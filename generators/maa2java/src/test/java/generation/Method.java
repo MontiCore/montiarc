@@ -61,6 +61,17 @@ public class Method{
     this.bodyElements.add(element.replaceAll("\\s", ""));
   }
 
+  public void addBodyElement(String element, int index) {
+    final int size = this.bodyElements.size();
+    if(size + index < 0){
+      throw new IndexOutOfBoundsException();
+    }
+    if(index < 0){
+      index = size + index;
+    }
+    this.bodyElements.add(index, element.replaceAll("\\s", ""));
+  }
+
   static class Builder{
 
     private ASTReturnType returnType;
