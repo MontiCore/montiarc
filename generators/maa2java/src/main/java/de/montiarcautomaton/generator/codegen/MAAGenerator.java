@@ -148,8 +148,6 @@ public class MAAGenerator {
       }
     }
     
-    filePath = getPath(targetPathName, packageName, comp.getName());
-    
     // gen component
     if (comp.isAtomic()) {
       Path implPath = getPath(targetPathName, packageName, implName);
