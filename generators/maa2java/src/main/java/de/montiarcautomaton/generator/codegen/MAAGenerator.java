@@ -152,10 +152,10 @@ public class MAAGenerator {
     
     // gen component
     if (comp.isAtomic()) {
-      
+      Path implPath = getPath(targetPathName, packageName, implName);
+
       // default implementation
       if (!existsHWC && !behaviorEmbedding.isPresent()) {
-        Path implPath = getPath(targetPathName, packageName, implName);
         generator.generate("de/montiarcautomaton/lib/AbstractAtomicComponent.ftl", implPath, compAST,
             compHelper, packageName, implName,
             inputName, resultName, comp.getConfigParameters(), comp.getImports());
@@ -163,7 +163,7 @@ public class MAAGenerator {
       
       // pass all arguments instead of comp for better readability in the
       // template
-      generator.generate("de/montiarcautomaton/lib/AtomicComponent.ftl", filePath,
+      generator.generate("de/montiarcautomaton/lib/AtomicComponent.ftl", implPath,
           comp.getAstNode().get(),
           compHelper,
           comp.getPackageName(),
