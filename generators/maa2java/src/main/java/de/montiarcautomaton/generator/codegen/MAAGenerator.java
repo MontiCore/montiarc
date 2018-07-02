@@ -149,6 +149,7 @@ public class MAAGenerator {
     }
     
     // gen component
+    filePath = getPath(targetPathName, packageName, comp.getName());
     if (comp.isAtomic()) {
       Path implPath = getPath(targetPathName, packageName, implName);
 
@@ -161,7 +162,7 @@ public class MAAGenerator {
       
       // pass all arguments instead of comp for better readability in the
       // template
-      generator.generate("de/montiarcautomaton/lib/AtomicComponent.ftl", implPath,
+      generator.generate("de/montiarcautomaton/lib/AtomicComponent.ftl", filePath,
           comp.getAstNode().get(),
           compHelper,
           comp.getPackageName(),
