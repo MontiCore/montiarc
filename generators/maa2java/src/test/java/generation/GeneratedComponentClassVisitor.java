@@ -10,9 +10,7 @@ import de.monticore.java.javadsl._ast.*;
 import de.monticore.java.javadsl._visitor.JavaDSLVisitor;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.types.types._ast.ASTSimpleReferenceType;
-import de.monticore.types.types._ast.ASTType;
-import de.monticore.types.types._ast.ASTTypesNode;
+import de.monticore.types.types._ast.*;
 import de.se_rwth.commons.logging.Log;
 import sim.help.SynchronizedQueue;
 
@@ -33,6 +31,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
   private Set<Field> fields;
   private Set<Method> methods;
   private Set<String> interfaces;
+  private Set<EnumType> enumTypes;
   private String superClass;
 
   public Set<Constructor> getConstructors() {
@@ -49,6 +48,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     this.imports = new HashSet<>();
     this.fields = new HashSet<>();
     this.methods = new HashSet<>();
+    this.enumTypes = new HashSet<>();
     this.constructors = new HashSet<>();
     this.interfaces = new HashSet<>();
   }
@@ -94,12 +94,18 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
   public void visit(ASTClassDeclaration node) {
     for (ASTType type : node.getImplementedInterfaces()) {
       if(type instanceof ASTSimpleReferenceType){
+        final ASTSimpleReferenceType refType = (ASTSimpleReferenceType) type;
+        String typeArgs = "";
+        if(refType.getTypeArguments().isPresent()){
+          typeArgs = PRINTER.prettyprint(refType.getTypeArguments().get());
+        }
+        String finalTypeArgs = typeArgs;
         boolean isComponentImplemented
-            = ((ASTSimpleReferenceType) type).getNames()
-                  .stream().anyMatch(s -> interfaces.contains(s));
+            = refType.getNames()
+                  .stream().anyMatch(s -> interfaces.contains(s + finalTypeArgs));
         if(!isComponentImplemented){
           Log.error(String.format("Class %s does not implement interface %s", className,
-              ((ASTSimpleReferenceType) type).getNames()));
+              refType.getNames()));
         }
       }
     }
@@ -208,6 +214,21 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     }
   }
 
+  @Override
+  public void visit(ASTEnumDeclaration node){
+    boolean found;
+
+    final String actualName = node.getName();
+
+    // TODO Enum contents
+
+    found = this.enumTypes.removeIf(e -> e.getName().equals(actualName));
+
+    if(!found){
+      Log.error("Found unexpected enum in " + this.className + ": " + actualName);
+    }
+  }
+
   /**
    * Check whether everything that should be present in the generated class
    * is present
@@ -220,6 +241,8 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
         className, fields.toString()), fields.isEmpty());
     assertTrue(String.format("Did not find all required methods in %s: \n%s",
             className, methods.toString()), methods.isEmpty());
+    assertTrue(String.format("Did not find all required enums in %s: \n%s",
+            className, enumTypes.toString()), enumTypes.isEmpty());
   }
 
   public void addImport(String fullQualifiedImport){
@@ -285,5 +308,14 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
 
   public String getSuperClass() {
     return superClass;
+  }
+
+  public void addImplementedInterface(String name, ASTTypeArguments typeArgs) {
+    final String printedArgs = PRINTER.prettyprint(typeArgs);
+    this.interfaces.add(name + printedArgs);
+  }
+
+  public void addEnumType(EnumType enumType){
+    this.enumTypes.add(enumType);
   }
 }

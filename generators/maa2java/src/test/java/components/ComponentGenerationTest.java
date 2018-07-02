@@ -5,9 +5,13 @@
  */
 package components;
 
+import com.google.common.base.Preconditions;
+import de.monticore.ast.ASTNode;
 import de.monticore.java.javadsl._ast.ASTClassDeclaration;
+import de.monticore.java.javadsl._visitor.JavaDSLVisitor;
 import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.symboltable.GlobalScope;
+import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.Symbol;
 import de.se_rwth.commons.logging.Log;
 import generation.ComponentElementsCollector;
@@ -42,32 +46,46 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
   public static final String JAVA_FILE_ENDING = ".java";
 
   @Test
+  /**
+   * Test whether all generated classes of the model are syntactically and
+   * semantically correct.
+   * This is done by proceeding through the following steps:
+   * 1. Run the generator (Done implicitely through setUp method)
+   * 2. Specify the model to check and load the component symbol
+   * 3. Determine which files have to be checked for the specified model
+   * 4. Assert that all expected files are present
+   * 5. Compile the files to ensure syntactic correctness
+   * 6. Initialise the JavaDSL global scope
+   * 7. Run a visitor that collects the information about expected elements
+   *    in the generated files
+   * 8. Run the visitors on all generated files and check that exactly the
+   *    expected elements are present
+   */
   public void testExample() {
-    // 1. Specify the model to check
+    // 2. Specify the model to check
 //    final String componentName = "ComponentWithEmptyComponent";
-    final String componentName = "EmptyComponent";
+//    final String componentName = "EmptyComponent";
+    final String componentName = "AtomicCompWithoutImpl";
     final String qualifiedName = PACKAGE + "." + componentName;
 
     // Load component symbol
     final ComponentSymbol symbol = generatorTool.loadComponentSymbolWithCocos(qualifiedName, Paths.get(MODEL_PATH).toFile()).orElse(null);
     assertNotNull(symbol);
 
-    // 5. Determine all files which have to be checked
+    // 3. Determine all files which have to be checked
     List<File> filesToCheck = determineFilesToCheck(
         componentName,
         qualifiedName,
         symbol, TARGET_GENERATED_TEST_SOURCES_DIR);
 
-    // 6. Determine if all files are present
+    // 4. Determine if all files are present
     for (File file : filesToCheck) {
       assertTrue("Could not find expected generated file " + file.toString(),
           file.exists());
     }
 
-    // Invoke Java compiler to see whether they are compiling
-    assertTrue(AbstractGeneratorTest.isCompiling(
-        filesToCheck.toArray(new File[filesToCheck.size()])
-    ));
+    // 5. Invoke Java compiler to see whether they are compiling
+    assertTrue(AbstractGeneratorTest.isCompiling(filesToCheck));
 
     // Parse the files with the JavaDSL
     GlobalScope gs = initJavaDSLSymbolTable();
@@ -75,43 +93,57 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     Optional<Symbol> optinalClassTypeSymbol;
     ASTClassDeclaration javaDSLNode;
 
-    optinalClassTypeSymbol = gs.resolve("components.EmptyComponent", JavaTypeSymbol.KIND);
-    assertTrue(optinalClassTypeSymbol.isPresent());
-    javaDSLNode = (ASTClassDeclaration) optinalClassTypeSymbol.get().getAstNode().get();
-
     // Collect information about expected features per file
     ASTComponent compUnit = (ASTComponent) symbol.getAstNode().get();
     ComponentElementsCollector compCollector
-        = new ComponentElementsCollector(symbol, "EmptyComponent");
+        = new ComponentElementsCollector(symbol, componentName);
     compCollector.handle(compUnit);
 
     // Check if all expected elements are present and no other errors occured
     Log.getFindings().clear();
-    GeneratedComponentClassVisitor visitor;
-    visitor = compCollector.getClassVisitor();
-    visitor.handle(javaDSLNode);
-    visitor.allExpectedPresent();
 
+    // Component class
+    runVisitorOnFile(gs, compCollector.getClassVisitor(),
+        qualifiedName);
 
     // Input class
-    optinalClassTypeSymbol = gs.resolve("components.EmptyComponentInput", JavaTypeSymbol.KIND);
-    assertTrue(optinalClassTypeSymbol.isPresent());
-    javaDSLNode = (ASTClassDeclaration) optinalClassTypeSymbol.get().getAstNode().get();
-    visitor = compCollector.getInputVisitor();
-    visitor.handle(javaDSLNode);
-    visitor.allExpectedPresent();
+    runVisitorOnFile(gs, compCollector.getInputVisitor(),
+        qualifiedName + "Input");
 
-    // Result class
-    optinalClassTypeSymbol = gs.resolve("components.EmptyComponentResult", JavaTypeSymbol.KIND);
-    assertTrue(optinalClassTypeSymbol.isPresent());
-    javaDSLNode = (ASTClassDeclaration) optinalClassTypeSymbol.get().getAstNode().get();
-    visitor = compCollector.getResultVisitor();
-    visitor.handle(javaDSLNode);
-    visitor.allExpectedPresent();
+    // Result
+    runVisitorOnFile(gs, compCollector.getResultVisitor(),
+        qualifiedName + "Result");
+
+    // Impl
+    runVisitorOnFile(gs, compCollector.getImplVisitor(),
+        qualifiedName + "Impl");
 
     // Log checking
 //    assertEquals(0, Log.getFindings().size());
     Log.debug("Found no errors while checking the generated files", "ComponentGenerationTest");
+  }
+
+  /**
+   * Run the visitor with the expected elements on the specified class.
+   * @param javaGlobalScope Scope in which the class is present
+   * @param visitor The visitor which should be run on the class
+   * @param className Name of the class to run the visitor on.
+   */
+  private void runVisitorOnFile(Scope javaGlobalScope,
+                                GeneratedComponentClassVisitor visitor,
+                                String className){
+
+    Preconditions.checkNotNull(javaGlobalScope);
+    Preconditions.checkNotNull(visitor);
+    Preconditions.checkNotNull(className);
+
+    final Symbol optinalClassTypeSymbol
+        = javaGlobalScope.resolve(className, JavaTypeSymbol.KIND).orElse(null);
+
+    assertNotNull(optinalClassTypeSymbol);
+    assertTrue(optinalClassTypeSymbol.getAstNode().isPresent());
+    visitor.handle((ASTClassDeclaration) optinalClassTypeSymbol.getAstNode().get());
+    visitor.allExpectedPresent();
   }
 
   /**
@@ -136,28 +168,25 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
                        "Deploy" + componentName + JAVA_FILE_ENDING));
     }
 
-    for (String suffix : AbstractGeneratorTest.fileSuffixes) {
-      final String qualifiedFileName
-          = basedir + qualifiedName.replace('.', '\\') + suffix;
-      filesToCheck.add(
-          new File(qualifiedFileName + JAVA_FILE_ENDING));
-    }
-
     if (component.getSubComponents().isEmpty()) {
 
       // Determine if an automaton or a compute block is present
-      final ASTComponent astNode
-          = (ASTComponent) component.getAstNode().get();
+//      final ASTComponent astNode
+//          = (ASTComponent) component.getAstNode().get();
 
-      for (ASTElement element : astNode.getBody().getElements()) {
-        if (element instanceof ASTBehaviorElement) {
-          final String qualifiedFileName
-              = basedir + qualifiedName.replace('.', '\\') + "Impl";
-          filesToCheck.add(
-              new File(qualifiedFileName + JAVA_FILE_ENDING));
-          break;
-        }
-      }
+//      for (ASTElement element : astNode.getBody().getElements()) {
+//        if (element instanceof ASTBehaviorElement) {
+//          final String qualifiedFileName
+//              = basedir + qualifiedName.replace('.', '\\') + "Impl";
+//          filesToCheck.add(
+//              new File(qualifiedFileName + JAVA_FILE_ENDING));
+//          break;
+//        }
+//      }
+
+      final String qualifiedFileName
+          = basedir + qualifiedName.replace('.', '\\') + "Impl";
+      filesToCheck.add(new File(qualifiedFileName + JAVA_FILE_ENDING));
     } else {
 
       //Recursively add files for subcomponents
@@ -171,6 +200,15 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
                 referencedSymbol, basedir));
       }
 
+    }
+
+    // TODO Add super components
+
+    for (String suffix : AbstractGeneratorTest.fileSuffixes) {
+      final String qualifiedFileName
+          = basedir + qualifiedName.replace('.', '\\') + suffix;
+      filesToCheck.add(
+          new File(qualifiedFileName + JAVA_FILE_ENDING));
     }
 
     return filesToCheck;

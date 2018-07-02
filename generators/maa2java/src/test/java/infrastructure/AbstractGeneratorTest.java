@@ -23,10 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertTrue;
@@ -59,7 +56,7 @@ public class AbstractGeneratorTest {
    * @param files Files to compile
    * @return true, if there are no compiler errors
    */
-  public static boolean isCompiling(File[] files){
+  public static boolean isCompiling(List<File> files){
 
     JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     StandardJavaFileManager fileManager
@@ -68,7 +65,7 @@ public class AbstractGeneratorTest {
         = new DiagnosticCollector<JavaFileObject>();
 
     Iterable<? extends JavaFileObject> compilationUnits1 =
-        fileManager.getJavaFileObjectsFromFiles(Arrays.asList(files));
+        fileManager.getJavaFileObjectsFromFiles(files);
     compiler.getTask(null, fileManager, diagnostics,
         null, null, compilationUnits1).call();
 
@@ -79,9 +76,9 @@ public class AbstractGeneratorTest {
     }
 
     for ( Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
-      System.out.format("Error on line %d in %s%n",
+      System.out.format("Error on line %d in %s%n %s%n",
           diagnostic.getLineNumber(),
-          diagnostic.getSource().toUri());
+          diagnostic.getSource().toUri(), diagnostic.getMessage(Locale.ENGLISH));
     }
     return diagnostics.getDiagnostics()
                .stream()
