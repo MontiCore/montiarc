@@ -1,6 +1,7 @@
 package components.body.ajava;
 
 import static org.junit.Assert.assertEquals;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -68,6 +69,7 @@ public class AJavaTest extends AbstractCoCoTest {
         new ExpectedErrorInfo(1, "xMA015"));
   }
   
+  @Ignore("@JP wartet auf aktualisierung des InputUnchangedVisitor")
   @Test
   public void testChangeIncomingPortInCompute() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ChangeIncomingPortInCompute");

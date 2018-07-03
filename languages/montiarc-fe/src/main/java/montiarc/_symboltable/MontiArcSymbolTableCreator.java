@@ -5,37 +5,76 @@
  */
 package montiarc._symboltable;
 
+
+import java.util.ArrayList;
+
+import java.util.Collection;
+import java.util.Deque;
+import java.util.List;
+import java.util.Optional;
+import java.util.Stack;
+
 import de.monticore.ast.ASTNode;
-import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.javadsl._ast.ASTLocalVariableDeclaration;
 import de.monticore.java.javadsl._ast.ASTVariableDeclarator;
 import de.monticore.java.symboltable.JavaSymbolFactory;
 import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.symboltable.*;
+import de.monticore.mcexpressions._ast.ASTExpression;
+import de.monticore.symboltable.ArtifactScope;
+import de.monticore.symboltable.CommonScope;
+import de.monticore.symboltable.ImportStatement;
+import de.monticore.symboltable.MutableScope;
+import de.monticore.symboltable.ResolvingConfiguration;
+import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
-import de.monticore.symboltable.types.JTypeSymbolKind;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
-import de.monticore.symboltable.types.references.CommonJTypeReference;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.types.JTypeSymbolsHelper;
 import de.monticore.types.JTypeSymbolsHelper.JTypeReferenceFactory;
 import de.monticore.types.TypesHelper;
 import de.monticore.types.TypesPrinter;
-import de.monticore.types.types._ast.*;
+import de.monticore.types.types._ast.ASTComplexReferenceType;
+import de.monticore.types.types._ast.ASTQualifiedName;
+import de.monticore.types.types._ast.ASTReferenceType;
+import de.monticore.types.types._ast.ASTSimpleReferenceType;
+import de.monticore.types.types._ast.ASTType;
+import de.monticore.types.types._ast.ASTTypeArgument;
+import de.monticore.types.types._ast.ASTTypeParameters;
+import de.monticore.types.types._ast.ASTTypeVariableDeclaration;
+import de.monticore.types.types._ast.ASTWildcardType;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
-import montiarc._ast.*;
+import montiarc._ast.ASTAutomaton;
+import montiarc._ast.ASTAutomatonBehavior;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTComponentHead;
+import montiarc._ast.ASTConnector;
+import montiarc._ast.ASTIOAssignment;
+import montiarc._ast.ASTImportStatementLOCAL;
+import montiarc._ast.ASTInitialStateDeclaration;
+import montiarc._ast.ASTJavaPBehavior;
+import montiarc._ast.ASTMACompilationUnit;
+import montiarc._ast.ASTMontiArcAutoConnect;
+import montiarc._ast.ASTParameter;
+import montiarc._ast.ASTPort;
+import montiarc._ast.ASTState;
+import montiarc._ast.ASTStateDeclaration;
+import montiarc._ast.ASTStereoValue;
+import montiarc._ast.ASTSubComponent;
+import montiarc._ast.ASTSubComponentInstance;
+import montiarc._ast.ASTTransition;
+import montiarc._ast.ASTValuation;
+import montiarc._ast.ASTValueInitialization;
+import montiarc._ast.ASTVariableDeclaration;
 import montiarc.helper.JavaHelper;
 import montiarc.helper.Timing;
 import montiarc.trafos.AutoConnection;
 import montiarc.trafos.SimpleConnectorToQualifiedConnector;
 import montiarc.visitor.AssignmentNameCompleter;
-
-import java.util.*;
 
 /**
  * Visitor that creates the symboltable of a MontiArc AST.
@@ -79,11 +118,12 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   public void visit(ASTMACompilationUnit compilationUnit) {
     Log.debug("Building Symboltable for Component: " + compilationUnit.getComponent().getName(),
         MontiArcSymbolTableCreator.class.getSimpleName());
-    compilationUnitPackage = Names.getQualifiedName(compilationUnit.getPackage());
+    compilationUnitPackage = Names.getQualifiedName(compilationUnit.getPackageList());
     
     // imports
     List<ImportStatement> imports = new ArrayList<>();
-    for (ASTImportStatement astImportStatement : compilationUnit.getImportStatements()) {
+    for (ASTImportStatementLOCAL astImportStatement : compilationUnit
+        .getImportStatementLOCALList()) {
       String qualifiedImport = Names.getQualifiedName(astImportStatement.getImportList());
       ImportStatement importStatement = new ImportStatement(qualifiedImport,
           astImportStatement.isStar());
@@ -110,7 +150,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     ASTType astType = node.getType();
     String typeName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astType);
     
-    List<String> names = node.getNames();
+    List<String> names = node.getNameList();
     
     if (names.isEmpty()) {
       names.add(StringTransformations.uncapitalize(typeName));
@@ -120,9 +160,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       PortSymbol sym = new PortSymbol(name);
       
       int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(astType);
-      JTypeReference<JavaTypeSymbol> typeRef = new JavaTypeSymbolReference(typeName, 
+      JTypeReference<JavaTypeSymbol> typeRef = new JavaTypeSymbolReference(typeName,
           currentScope().get(), dimension);
-      
       
       addTypeArgumentsToTypeSymbol(typeRef, astType);
       
@@ -130,8 +169,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       sym.setDirection(node.isIncoming());
       
       // stereotype
-      if (node.getStereotype().isPresent()) {
-        for (ASTStereoValue st : node.getStereotype().get().getValues()) {
+      if (node.getStereotypeOpt().isPresent()) {
+        for (ASTStereoValue st : node.getStereotypeOpt().get().getValuesList()) {
           sym.addStereotype(st.getName(), st.getValue());
         }
       }
@@ -145,7 +184,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     ASTType astType = node.getType();
     String typeName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astType);
     
-    List<String> names = node.getNames();
+    List<String> names = node.getNameList();
     
     if (names.isEmpty()) {
       names.add(StringTransformations.uncapitalize(typeName));
@@ -153,11 +192,10 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     for (String name : names) {
       VariableSymbol sym = new VariableSymbol(name);
       
-      int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(astType);      
+      int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(astType);
       JTypeReference<JavaTypeSymbol> typeRef = new JavaTypeSymbolReference(typeName,
           currentScope().get(), dimension);
       addTypeArgumentsToTypeSymbol(typeRef, astType);
-      
       
       sym.setTypeReference(typeRef);
       
@@ -175,14 +213,14 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   public void visit(ASTConnector node) {
     String sourceName = node.getSource().toString();
     
-    for (ASTQualifiedName target : node.getTargets()) {
+    for (ASTQualifiedName target : node.getTargetsList()) {
       String targetName = target.toString();
       
       ConnectorSymbol sym = new ConnectorSymbol(sourceName, targetName);
       
       // stereotype
-      if (node.getStereotype().isPresent()) {
-        for (ASTStereoValue st : node.getStereotype().get().getValues()) {
+      if (node.getStereotypeOpt().isPresent()) {
+        for (ASTStereoValue st : node.getStereotypeOpt().get().getValuesList()) {
           sym.addStereotype(st.getName(), st.getValue());
         }
       }
@@ -206,18 +244,18 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     addTypeArgumentsToComponent(componentTypeReference, node.getType());
     
     // ref.setPackageName(refCompPackage);
-    
     List<ASTExpression> configArgs = new ArrayList<>();
-    for (ASTExpression arg : node.getArguments()) {
+    
+    for (ASTExpression arg : node.getArgumentsList()) {
       arg.setEnclosingScope(currentScope().get());
       setEnclosingScopeOfNodes(arg);
       configArgs.add(arg);
     }
     
     // instances
-    if (!node.getInstances().isEmpty()) {
+    if (!node.getInstancesList().isEmpty()) {
       // create instances of the referenced components.
-      for (ASTSubComponentInstance i : node.getInstances()) {
+      for (ASTSubComponentInstance i : node.getInstancesList()) {
         createInstance(i.getName(), i, componentTypeReference, configArgs);
       }
     }
@@ -240,10 +278,10 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         componentTypeReference);
     configArguments.forEach(v -> instance.addConfigArgument(v));
     // create a subscope for the instance
-//    setLinkBetweenSymbolAndNode(instance, node);
+    // setLinkBetweenSymbolAndNode(instance, node);
     addToScopeAndLinkWithNode(instance, node);
     // remove the created instance's scope
-//    removeCurrentScope();
+    // removeCurrentScope();
   }
   
   @Override
@@ -265,15 +303,15 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     component.setPackageName(componentPackageName);
     
     // generic type parameters
-    addTypeParametersToComponent(component, node.getHead().getGenericTypeParameters(),
+    addTypeParametersToComponent(component, node.getHead().getGenericTypeParametersOpt(),
         currentScope().get());
     
     // parameters
     setParametersOfComponent(component, node.getHead());
     
     // stereotype
-    if (node.getStereotype().isPresent()) {
-      for (ASTStereoValue st : node.getStereotype().get().getValues()) {
+    if (node.getStereotypeOpt().isPresent()) {
+      for (ASTStereoValue st : node.getStereotype().getValuesList()) {
         component.addStereotype(st.getName(), Optional.of(st.getValue()));
       }
     }
@@ -291,7 +329,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     // Transform SimpleConncetors to normal qaualified connectors
     for (ASTSubComponent astSubComponent : node.getSubComponents()) {
-      for (ASTSubComponentInstance astSubComponentInstance : astSubComponent.getInstances()) {
+      for (ASTSubComponentInstance astSubComponentInstance : astSubComponent.getInstancesList()) {
         simpleConnectorTrafo.transform(astSubComponentInstance, component);
       }
     }
@@ -306,7 +344,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   
   protected void setParametersOfComponent(final ComponentSymbol componentSymbol,
       final ASTComponentHead astMethod) {
-    for (ASTParameter astParameter : astMethod.getParameters()) {
+    for (ASTParameter astParameter : astMethod.getParameterList()) {
       final String paramName = astParameter.getName();
       astParameter.setEnclosingScope(currentScope().get());
       setEnclosingScopeOfNodes(astParameter);
@@ -322,19 +360,20 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       componentSymbol.addConfigParameter(parameterSymbol);
     }
   }
-
+  
   /**
    * Determine whether the component should be instantiated.
+   * 
    * @param node ASTComponent node to analyze
    * @param symbol Symbol of the {@param node}
    * @return true, iff an instance should be created.
    */
   private boolean needsInstanceCreation(ASTComponent node, ComponentSymbol symbol) {
-    boolean instanceNameGiven = node.getInstanceName().isPresent();
+    boolean instanceNameGiven = node.getInstanceNameOpt().isPresent();
     boolean autoCreationPossible = symbol.getFormalTypeParameters().size() == 0;
     boolean noParametersRequired = symbol.getConfigParameters().size() == 0;
-    //TODO: Check if the component only contains default parameters
-
+    // TODO: Check if the component only contains default parameters
+    
     return instanceNameGiven || (autoCreationPossible && noParametersRequired);
   }
   
@@ -344,8 +383,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     autoConnectionTrafo.transformAtEnd(node, component);
     
     // super component
-    if (node.getHead().getSuperComponent().isPresent()) {
-      ASTReferenceType superCompRef = node.getHead().getSuperComponent().get();
+    if (node.getHead().isPresentSuperComponent()) {
+      ASTReferenceType superCompRef = node.getHead().getSuperComponent();
       String superCompName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(superCompRef);
       
       ComponentSymbolReference ref = new ComponentSymbolReference(superCompName,
@@ -358,7 +397,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     }
     
     removeCurrentScope();
-
+    
     // for inner components the symbol must be fully created to reference it.
     // Hence, in endVisit we
     // can reference it and put the instance of the inner component into its
@@ -372,12 +411,12 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       
       if (needsInstanceCreation(node, component)) {
         // create instance
-        String instanceName = node.getInstanceName()
+        String instanceName = node.getInstanceNameOpt()
             .orElse(StringTransformations.uncapitalize(component.getName()));
         
-        if (node.getActualTypeArgument().isPresent()) {
+        if (node.getActualTypeArgumentOpt().isPresent()) {
           setActualTypeArgumentsOfCompRef(refEntry,
-              node.getActualTypeArgument().get().getTypeArguments());
+              node.getActualTypeArgument().getTypeArgumentList());
         }
         
         ComponentInstanceSymbol instanceSymbol = new ComponentInstanceSymbol(instanceName,
@@ -388,12 +427,13 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         
         addToScope(instanceSymbol);
       }
-
+      
       // check whether there are already instances of the inner component type
       // defined in the component type. We then have to set the referenced
       // component.
       Collection<ComponentInstanceSymbol> instances = component.getEnclosingScope()
           .resolveLocally(ComponentInstanceSymbol.KIND);
+      
       for (ComponentInstanceSymbol instance : instances) {
         if (instance.getComponentType().getName().equals(component.getName())) {
           instance.getComponentType().setReferencedComponent(Optional.of(component));
@@ -410,15 +450,15 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         ASTWildcardType astWildcardType = (ASTWildcardType) astTypeArgument;
         
         // Three cases can occur here: lower bound, upper bound, no bound
-        if (astWildcardType.lowerBoundIsPresent() || astWildcardType.upperBoundIsPresent()) {
+        if (astWildcardType.isPresentLowerBound() || astWildcardType.isPresentUpperBound()) {
           // We have a bound.
           // Examples: Set<? extends Number>, Set<? super Integer>
           
           // new bound
-          boolean lowerBound = astWildcardType.lowerBoundIsPresent();
+          boolean lowerBound = astWildcardType.isPresentLowerBound();
           ASTType typeBound = lowerBound
-              ? astWildcardType.getLowerBound().get()
-              : astWildcardType.getUpperBound().get();
+              ? astWildcardType.getLowerBound()
+              : astWildcardType.getUpperBound();
           int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(typeBound);
           JTypeReference<? extends JTypeSymbol> typeBoundSymbolReference = new JavaTypeSymbolReference(
               TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(typeBound),
@@ -463,21 +503,21 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       ASTType astType) {
     if (astType instanceof ASTSimpleReferenceType) {
       ASTSimpleReferenceType astSimpleReferenceType = (ASTSimpleReferenceType) astType;
-      if (!astSimpleReferenceType.getTypeArguments().isPresent()) {
+      if (!astSimpleReferenceType.getTypeArgumentsOpt().isPresent()) {
         return;
       }
       setActualTypeArgumentsOfCompRef(typeReference,
-          astSimpleReferenceType.getTypeArguments().get().getTypeArguments());
+          astSimpleReferenceType.getTypeArguments().getTypeArgumentList());
     }
     else if (astType instanceof ASTComplexReferenceType) {
       ASTComplexReferenceType astComplexReferenceType = (ASTComplexReferenceType) astType;
       for (ASTSimpleReferenceType astSimpleReferenceType : astComplexReferenceType
-          .getSimpleReferenceTypes()) {
+          .getSimpleReferenceTypeList()) {
         /* ASTComplexReferenceType represents types like class or interface
          * types which always have ASTSimpleReferenceType as qualification. For
          * example: a.b.c<Arg>.d.e<Arg> */
         setActualTypeArgumentsOfCompRef(typeReference,
-            astSimpleReferenceType.getTypeArguments().get().getTypeArguments());
+            astSimpleReferenceType.getTypeArguments().getTypeArgumentList());
       }
     }
     
@@ -507,12 +547,12 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       // componentSymbol.
       ASTTypeParameters astTypeParameters = optionalTypeParameters.get();
       for (ASTTypeVariableDeclaration astTypeParameter : astTypeParameters
-          .getTypeVariableDeclarations()) {
+          .getTypeVariableDeclarationList()) {
         // TypeParameters/TypeVariables are seen as type declarations.
         JavaTypeSymbol javaTypeVariableSymbol = javaSymbolFactory
             .createTypeVariable(astTypeParameter.getName());
         
-        List<ASTType> types = new ArrayList<ASTType>(astTypeParameter.getUpperBounds());
+        List<ASTType> types = new ArrayList<ASTType>(astTypeParameter.getUpperBoundList());
         // reuse JavaDSL
         JTypeSymbolsHelper.addInterfacesToType(javaTypeVariableSymbol, types, currentScope,
             javaTypeRefFactory);
@@ -567,7 +607,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     List<String> names = new ArrayList<>();
     
     for (ASTVariableDeclarator astVariableDeclarator : variableDeclaration
-        .getVariableDeclarators()) {
+        .getVariableDeclaratorList()) {
       final String variableName = astVariableDeclarator.getDeclaratorId().getName();
       names.add(variableName);
     }
@@ -588,9 +628,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       
       addToScopeAndLinkWithNode(variableSymbol, variableDeclaration);
     }
-    
   }
-  
   
   /**
    * Checks whether the passed name references to a configuration parameter
@@ -600,7 +638,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
    * passed name
    */
   private boolean isConfigurationArgument(String name) {
-    for (ASTParameter param : this.currentComponent.getHead().getParameters()) {
+    for (ASTParameter param : this.currentComponent.getHead().getParameterList()) {
       if (name.equals(param.getName())) {
         return true;
       }
@@ -654,8 +692,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   @Override
   public void visit(ASTState node) {
     StateSymbol state = new StateSymbol(node.getName());
-    if (node.getStereotype().isPresent()) {
-      for (ASTStereoValue value : node.getStereotype().get().getValues()) {
+    if (node.getStereotypeOpt().isPresent()) {
+      for (ASTStereoValue value : node.getStereotype().getValuesList()) {
         state.addStereoValue(value.getName());
       }
     }
@@ -676,20 +714,20 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   @Override
   public void visit(ASTInitialStateDeclaration node) {
     MutableScope scope = currentScope().get();
-    for (String name : node.getNames()) {
+    for (String name : node.getNameList()) {
       scope.<StateSymbol> resolveMany(name, StateSymbol.KIND).forEach(c -> {
         c.setInitial(true);
-        c.setInitialReactionAST(node.getBlock());
-        if (node.getBlock().isPresent()) {
-          for (ASTIOAssignment assign : node.getBlock().get().getIOAssignments()) {
-              if (assign.getName().isPresent()) {
+        c.setInitialReactionAST(node.getBlockOpt());
+        if (node.isPresentBlock()) {
+          for (ASTIOAssignment assign : node.getBlock().getIOAssignmentList()) {
+              if (assign.isPresentName()) {
                 Optional<VariableSymbol> var = currentScope().get()
-                    .<VariableSymbol> resolve(assign.getName().get(), VariableSymbol.KIND);
+                    .<VariableSymbol> resolve(assign.getName(), VariableSymbol.KIND);
                 if (var.isPresent()) {
-                  if (assign.getValueList().isPresent()
-                      && !assign.getValueList().get().getAllValuations().isEmpty()) {
+                  if (assign.getValueListOpt().isPresent()
+                      && !assign.getValueList().getAllValuations().isEmpty()) {
                     // This only covers the case "var i = somevalue"
-                    ASTValuation v = assign.getValueList().get().getAllValuations().get(0);
+                    ASTValuation v = assign.getValueList().getAllValuations().get(0);
                     var.get().setValuation(Optional.of(v));
                   }
                 }
@@ -704,7 +742,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   public void visit(ASTTransition node) {
     // get target name, if there is no get source name (loop to itself)
     // TODO what about same transitions with other stimulus? -> name clash
-    String targetName = node.getTarget().orElse(node.getSource());
+    String targetName = node.getTargetOpt().orElse(node.getSource());
     
     StateSymbolReference source = new StateSymbolReference(node.getSource(), currentScope().get());
     StateSymbolReference target = new StateSymbolReference(targetName, currentScope().get());
@@ -713,8 +751,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     transition.setSource(source);
     transition.setTarget(target);
     
-    transition.setGuardAST(node.getGuard());
-    transition.setReactionAST(node.getReaction());
+    transition.setGuardAST(node.getGuardOpt());
+    transition.setReactionAST(node.getReactionOpt());
     
     addToScopeAndLinkWithNode(transition, node); // introduces new scope
   }

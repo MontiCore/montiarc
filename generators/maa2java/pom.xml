@@ -44,12 +44,6 @@
       <artifactId>se-commons-groovy</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>de.monticore</groupId>
-      <artifactId>monticore-templateclassgenerator</artifactId>
-      <version>${monticore.version}</version>
-    </dependency>
-
     <!-- MontiCore Dependencies -->
     <dependency>
       <groupId>de.monticore</groupId>
@@ -81,7 +75,14 @@
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>de.monticore.java.lib</artifactId>
+      <version>${javalib.version}</version>
       <classifier>models</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>monticore-generator</artifactId>
+      <version>${monticore.version}</version>
     </dependency>
 
     <!-- .. Test Libraries ............................................... -->
@@ -128,54 +129,6 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>de.se_rwth.maven</groupId>
-        <artifactId>se-groovy-maven-plugin</artifactId>
-        <configuration>
-          <baseClass>de.monticore.templateclassgenerator.TemplateClassGeneratorScript</baseClass>
-          <arguments>
-            <out>${basedir}/target/generated-sources/templateClasses</out>
-            <templatepath>${basedir}/src/main/resources/</templatepath>
-          </arguments>
-          <script>de/monticore/templateclassgenerator/templateclassgenerator.groovy</script>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>de.monticore</groupId>
-            <artifactId>monticore-templateclassgenerator</artifactId>
-            <version>${monticore.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>de.se_rwth.commons</groupId>
-            <artifactId>se-commons-utilities</artifactId>
-            <version>${se-commons.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.12</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>add-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>${basedir}/target/generated-sources/templateClasses/</source>
-              </sources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <version>2.10</version>
@@ -195,9 +148,6 @@
       </plugin>
     </plugins>
     <resources>
-      <resource>
-        <directory>${basedir}/target/generated-sources/templateClasses/</directory>
-      </resource>
       <resource>
         <directory>${basedir}/src/main/resources/</directory>
       </resource>

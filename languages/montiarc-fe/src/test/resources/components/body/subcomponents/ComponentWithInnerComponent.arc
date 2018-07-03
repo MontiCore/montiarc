@@ -35,4 +35,5 @@ component ComponentWithInnerComponent {
 
     connect strIn -> innerComponent.strIn;
     connect innerComponent.strOut -> strOut;
+
 }

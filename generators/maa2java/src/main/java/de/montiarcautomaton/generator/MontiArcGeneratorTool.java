@@ -6,14 +6,15 @@
 package de.montiarcautomaton.generator;
 
 import java.io.File;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 import de.montiarcautomaton.generator.codegen.MAAGenerator;
+import de.monticore.cd2pojo.Modelfinder;
 import de.monticore.cd2pojo.POJOGenerator;
 import de.monticore.symboltable.Scope;
-import de.monticore.templateclassgenerator.Modelfinder;
 import de.monticore.umlcd4a.CD4AnalysisLanguage;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;

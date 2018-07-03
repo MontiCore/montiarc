@@ -1,7 +1,8 @@
 package components.body.ports;
 
-import types.CType;
 import types.GenericType;
+import types.CType;
+
 
 /**
 * Valid model.

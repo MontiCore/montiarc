@@ -44,7 +44,7 @@ public class NamesCorrectlyCapitalized
     }
 
     for (ASTVariableDeclaration varDecl : node.getVariables()) {
-      for (String name : varDecl.getNames())
+      for (String name : varDecl.getNameList())
         if (!Character.isLowerCase(name.charAt(0))) {
           Log.warn(
               String.format("0xMA018 The name of variable '%s' should " +
@@ -54,7 +54,7 @@ public class NamesCorrectlyCapitalized
     }
 
     for (ASTPort port : node.getPorts()) {
-      for (String name : port.getNames()) {
+      for (String name : port.getNameList()) {
         if (!Character.isLowerCase(name.charAt(0))) {
           Log.error(String.format("0xMA077: The name of the port '%s' " +
                                       "should start with a lowercase letter.",
@@ -64,7 +64,7 @@ public class NamesCorrectlyCapitalized
       }
     }
 
-    final List<ASTParameter> parameters = node.getHead().getParameters();
+    final List<ASTParameter> parameters = node.getHead().getParameterList();
     for (ASTParameter parameter : parameters) {
       if (!Character.isLowerCase(parameter.getName().charAt(0))) {
         Log.error(String.format("0xMA045: The name of the parameter '%s' should start with a lowercase letter.", parameter.getName()),
@@ -98,12 +98,12 @@ public class NamesCorrectlyCapitalized
   public void check(ASTBehaviorElement node) {
     String name = null;
     if (node instanceof ASTJavaPBehavior) {
-      if (((ASTJavaPBehavior) node).getName().isPresent()) {
-        name = ((ASTJavaPBehavior) node).getName().get();
+      if (((ASTJavaPBehavior) node).isPresentName()) {
+        name = ((ASTJavaPBehavior) node).getName();
       }
     } else if (node instanceof ASTAutomatonBehavior) {
-      if(((ASTAutomatonBehavior) node).getName().isPresent()){
-        name = ((ASTAutomatonBehavior) node).getName().get();
+      if(((ASTAutomatonBehavior) node).isPresentName()){
+        name = ((ASTAutomatonBehavior) node).getName();
       }
     }
     if (name != null && !Character.isUpperCase(name.charAt(0))) {

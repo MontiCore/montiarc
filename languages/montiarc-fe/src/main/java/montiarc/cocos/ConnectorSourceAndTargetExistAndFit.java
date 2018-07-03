@@ -91,45 +91,52 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
         JTypeReference<? extends JTypeSymbol> sourceType = source.getTypeReference();
         JTypeReference<? extends JTypeSymbol> targetType = target.getTypeReference();
         
-        List<JTypeSymbol> sourceTypeFormalParams = sourceType.getReferencedSymbol()
-            .getFormalTypeParameters().stream()
-            .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
-        List<JTypeSymbol> targetTypeFormalParams = targetType.getReferencedSymbol()
-            .getFormalTypeParameters().stream()
-            .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
-        
-        List<ActualTypeArgument> sourceParams = sourceType.getActualTypeArguments();
-        List<ActualTypeArgument> targetParams = targetType.getActualTypeArguments();
-        
-        // We have to load the binding of the formal type parameters to check
-        // the types
-        if (TypeCompatibilityChecker.hasNestedGenerics(sourceType)) {
-          ASTConnector c = (ASTConnector) connector.getAstNode().get();
-          ASTQualifiedName sourceFQN = c.getSource();
-          sourceParams = getActualTypeArgumentsFromPortOfConnector(c, compSym, sourceFQN);
-          sourceTypeFormalParams = getFormalTypeParametersFromPortOfConnector(c, compSym, sourceFQN);
-        }
-        
-        if (TypeCompatibilityChecker.hasNestedGenerics(targetType)) {
-          ASTConnector c = (ASTConnector) connector.getAstNode().get();
-          ASTQualifiedName targetFQN = c.getTargets().stream()
-              .filter(n -> n.toString().equals(connector.getTarget()))
-              .findFirst().get();
-          targetParams = getActualTypeArgumentsFromPortOfConnector(c, compSym, targetFQN);
-          targetTypeFormalParams = getFormalTypeParametersFromPortOfConnector(c, compSym, targetFQN);
+        if (sourceType.existsReferencedSymbol() && targetType.existsReferencedSymbol()) {
+          List<JTypeSymbol> sourceTypeFormalParams = sourceType.getReferencedSymbol()
+              .getFormalTypeParameters().stream()
+              .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
+          List<JTypeSymbol> targetTypeFormalParams = targetType.getReferencedSymbol()
+              .getFormalTypeParameters().stream()
+              .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
           
+          List<ActualTypeArgument> sourceParams = sourceType.getActualTypeArguments();
+          List<ActualTypeArgument> targetParams = targetType.getActualTypeArguments();
+          
+          // We have to load the binding of the formal type parameters to check
+          // the types
+          if (TypeCompatibilityChecker.hasNestedGenerics(sourceType)) {
+            ASTConnector c = (ASTConnector) connector.getAstNode().get();
+            ASTQualifiedName sourceFQN = c.getSource();
+            sourceParams = getActualTypeArgumentsFromPortOfConnector(c, compSym, sourceFQN);
+            sourceTypeFormalParams = getFormalTypeParametersFromPortOfConnector(c, compSym,
+                sourceFQN);
+          }
+          
+          if (TypeCompatibilityChecker.hasNestedGenerics(targetType)) {
+            ASTConnector c = (ASTConnector) connector.getAstNode().get();
+            ASTQualifiedName targetFQN = c.getTargetsList().stream()
+                .filter(n -> n.toString().equals(connector.getTarget()))
+                .findFirst().get();
+            targetParams = getActualTypeArgumentsFromPortOfConnector(c, compSym, targetFQN);
+            targetTypeFormalParams = getFormalTypeParametersFromPortOfConnector(c, compSym,
+                targetFQN);
+            
+          }
+          
+          if (!TypeCompatibilityChecker.doTypesMatch(sourceType, sourceTypeFormalParams,
+              sourceParams.stream()
+                  .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList()),
+              targetType, targetTypeFormalParams, targetParams.stream()
+                  .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList())))
+            Log.error(
+                "0xMA033 Source and target type of connector " + connector.getSource() + "->"
+                    + connector.getTarget()
+                    + " do not match.",
+                connector.getAstNode().get().get_SourcePositionStart());
         }
-        
-        if (!TypeCompatibilityChecker.doTypesMatch(sourceType, sourceTypeFormalParams,
-            sourceParams.stream()
-                .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList()),
-            targetType, targetTypeFormalParams, targetParams.stream()
-                .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList())))
-          Log.error(
-              "0xMA033 Source and target type of connector " + connector.getSource() + "->"
-                  + connector.getTarget()
-                  + " do not match.",
-              connector.getAstNode().get().get_SourcePositionStart());
+        else {
+          Log.error("0xMA097 Could not load referenced Symbol.", sourcePort.get().getAstNode().get().get_SourcePositionStart());
+        }
       }
     }
   }
@@ -138,8 +145,8 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
       ASTConnector connector, ComponentSymbol definingComponent,
       ASTQualifiedName nameOfConnectorEndpoint) {
     List<ActualTypeArgument> params = new ArrayList<>();
-    if (nameOfConnectorEndpoint.getParts().size() > 1) {
-      String compName = nameOfConnectorEndpoint.getParts().get(0);
+    if (nameOfConnectorEndpoint.getPartList().size() > 1) {
+      String compName = nameOfConnectorEndpoint.getPartList().get(0);
       params = definingComponent.getSpannedScope()
           .<ComponentInstanceSymbol> resolve(compName, ComponentInstanceSymbol.KIND).get()
           .getComponentType().getActualTypeArguments();
@@ -157,8 +164,8 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
       ComponentSymbol definingComponent,
       ASTQualifiedName nameOfConnectorEndpoint) {
     List<JTypeSymbol> params = new ArrayList<>();
-    if (nameOfConnectorEndpoint.getParts().size() > 1) {
-      String compName = nameOfConnectorEndpoint.getParts().get(0);
+    if (nameOfConnectorEndpoint.getPartList().size() > 1) {
+      String compName = nameOfConnectorEndpoint.getPartList().get(0);
       params = definingComponent.getSpannedScope()
           .<ComponentInstanceSymbol> resolve(compName, ComponentInstanceSymbol.KIND).get()
           .getComponentType().getFormalTypeParameters();

@@ -22,14 +22,14 @@ public class AutomatonDeclaredInitialStateDoesNotExist implements MontiArcASTAut
   public void check(ASTAutomaton node) {
     // Collect all InitialStateNames
     List<String> initialNames = new ArrayList<String>();
-    for (ASTInitialStateDeclaration astInitialStateDecl : node.getInitialStateDeclarations()) {
-      initialNames.addAll(astInitialStateDecl.getNames());
+    for (ASTInitialStateDeclaration astInitialStateDecl : node.getInitialStateDeclarationList()) {
+      initialNames.addAll(astInitialStateDecl.getNameList());
     }
     
     // Collect all Statenames
     List<String> stateNames = new ArrayList<String>();
-    for (ASTStateDeclaration astStateDecl : node.getStateDeclarations()) {
-      for (ASTState state : astStateDecl.getStates()) {
+    for (ASTStateDeclaration astStateDecl : node.getStateDeclarationList()) {
+      for (ASTState state : astStateDecl.getStateList()) {
         stateNames.add(state.getName());
       }
     }

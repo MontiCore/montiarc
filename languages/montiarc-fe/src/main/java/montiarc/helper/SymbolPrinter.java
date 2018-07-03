@@ -1,11 +1,12 @@
 package montiarc.helper;
 
 import java.util.Collection;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
-import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
+import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.TypeSymbol;

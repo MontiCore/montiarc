@@ -59,6 +59,7 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- Java -->
 		<dependency>
 			<groupId>de.monticore</groupId>
 			<artifactId>javaDSL</artifactId>
@@ -68,13 +69,15 @@
 		<dependency>
 			<groupId>de.monticore</groupId>
 			<artifactId>javaDSL</artifactId>
-			<version>${javadsl.version}</version>
 			<classifier>${grammars.classifier}</classifier>
+			<version>${javadsl.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>de.monticore</groupId>
 			<artifactId>de.monticore.java.lib</artifactId>
+      <version>${javalib.version}</version>      
 			<classifier>models</classifier>
 		</dependency>
 

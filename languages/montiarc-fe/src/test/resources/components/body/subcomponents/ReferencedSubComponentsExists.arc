@@ -12,7 +12,6 @@ component ReferencedSubComponentsExists {
     out String sout1;
 
   component Buffer("buffer");
-  
   connect s1 -> buffer.input;
   connect buffer.output -> sout1;
 }

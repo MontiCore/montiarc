@@ -1,6 +1,7 @@
 package de.montiarcautomaton.generator.codegen;
 
 import java.io.File;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -8,7 +9,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import de.monticore.templateclassgenerator.TemplateClassGeneratorConfiguration;
 import de.se_rwth.commons.configuration.Configuration;
 import de.se_rwth.commons.configuration.ConfigurationContributorChainBuilder;
 import de.se_rwth.commons.configuration.DelegatingConfigurationContributor;

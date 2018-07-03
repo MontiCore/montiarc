@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.java.types.JavaDSLHelper;
+import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
@@ -357,7 +357,7 @@ public class TypeCompatibilityChecker {
     // in JavaDSL, additional adapter may required e.g. CD2Java to use CD types
     // within Java expressions.
     Log.debug("Resolve type of java expression.", "TypeCompatibilityChecker");
-    HCJavaDSLTypeResolver typeResolver = new HCJavaDSLTypeResolver();
+    MontiArcHCJavaDSLTypeResolver typeResolver = new MontiArcHCJavaDSLTypeResolver();
     expr.accept(typeResolver);
     if (!typeResolver.getResult().isPresent()) {
       Log.info("Can't resolve type of expression: " + expr, "TypeCompatibilityChecker");

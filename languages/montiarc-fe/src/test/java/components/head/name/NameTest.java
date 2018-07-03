@@ -5,17 +5,14 @@
  */
 package components.head.name;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.junit.BeforeClass;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import montiarc._ast.ASTMontiArcNode;
-import montiarc._cocos.MontiArcCoCoChecker;
 
 /**
  * This class checks all context conditions related to component names
@@ -41,4 +38,5 @@ public class NameTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "NameClashB");
     // checkInvalid(new MontiArcCoCoChecker, node, expectedErrors);
   }
+
 }

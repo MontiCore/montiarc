@@ -1,7 +1,5 @@
-${tc.params("de.montiarcautomaton.generator.helper.ComponentHelper helper", "String packageName", 
-"String compName", "String compInputName", "String compResultName", 
-"java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams",
-"java.util.Collection<de.monticore.symboltable.ImportStatement> imports")}
+${tc.signature("helper", "packageName", "compName", "compInputName", "compResultName", 
+"configParams", "imports")}
 
 package ${packageName};
 

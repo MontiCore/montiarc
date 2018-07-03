@@ -15,7 +15,6 @@
   <packaging>pom</packaging>
 
   <modules>
-    <!-- <module>ma2java</module> -->
 	<module>cd2pojo</module>
 	<module>maa2java</module>
   </modules>

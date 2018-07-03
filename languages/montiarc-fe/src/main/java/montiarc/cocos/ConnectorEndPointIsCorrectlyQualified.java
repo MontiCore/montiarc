@@ -24,7 +24,7 @@ public class ConnectorEndPointIsCorrectlyQualified
   
   private void checkEndpointCorrectlyQualified(ASTQualifiedName name,
       Predicate<Integer> predicate, String errorMessage) {
-    if (!predicate.test(name.getParts().size())) {
+    if (!predicate.test(name.getPartList().size())) {
       Log.error(String.format(errorMessage, name.toString()), name.get_SourcePositionStart());
     }
   }
@@ -44,7 +44,7 @@ public class ConnectorEndPointIsCorrectlyQualified
   public void check(ASTConnector node) {
     checkEndPointMaximallyTwiceQualified(node.getSource());
     
-    for (ASTQualifiedName name : node.getTargets()) {
+    for (ASTQualifiedName name : node.getTargetsList()) {
       checkEndPointMaximallyTwiceQualified(name);
     }
   }

@@ -6,14 +6,10 @@
 package montiarc._symboltable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import de.monticore.java.javadsl._ast.ASTExpression;
-import de.monticore.symboltable.CommonScopeSpanningSymbol;
+import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.CommonSymbol;
-import de.monticore.symboltable.types.TypeSymbol;
-import de.monticore.symboltable.types.references.TypeReference;
 import montiarc.helper.SymbolPrinter;
 
 /**

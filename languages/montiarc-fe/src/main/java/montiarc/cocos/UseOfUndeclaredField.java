@@ -1,13 +1,13 @@
 package montiarc.cocos;
 
+import java.util.Optional;
+
 import de.monticore.ast.ASTNode;
-import de.monticore.java.javadsl._ast.ASTExpression;
-import de.monticore.java.javadsl._ast.ASTPrimaryExpression;
-import de.monticore.java.javadsl._cocos.JavaDSLASTPrimaryExpressionCoCo;
-import de.monticore.java.javadsl._visitor.JavaDSLVisitor;
 import de.monticore.java.symboltable.JavaTypeSymbol;
+import de.monticore.mcexpressions._ast.ASTGenericInvocationSuffix;
+import de.monticore.mcexpressions._ast.ASTNameExpression;
+import de.monticore.mcexpressions._visitor.MCExpressionsVisitor;
 import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.Symbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTGuardExpression;
 import montiarc._ast.ASTIOAssignment;
@@ -17,9 +17,6 @@ import montiarc._cocos.MontiArcASTGuardExpressionCoCo;
 import montiarc._cocos.MontiArcASTIOAssignmentCoCo;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.VariableSymbol;
-
-import java.util.Collection;
-import java.util.Optional;
 
 /**
  * Context condition for checking, if a reference is used inside an automaton which has not been
@@ -36,9 +33,9 @@ public class UseOfUndeclaredField
   public void check(ASTIOAssignment node) {
     // only check left side of IOAssignment, right side is implicitly checked
     // when resolving type of the valuations
-    if(node.getName().isPresent()) {
+    if(node.isPresentName()) {
       if (node.getEnclosingScope().isPresent()) {
-        final String name = node.getName().get();
+        final String name = node.getName();
         Scope scope = node.getEnclosingScope().get();
         boolean foundVar = scope.resolve(name, VariableSymbol.KIND).isPresent();
         boolean foundPort = scope.resolve(name, PortSymbol.KIND).isPresent();
@@ -94,14 +91,11 @@ public class UseOfUndeclaredField
    * This class is used to check whether names used in GuardExpressions are
    * declared.
    */
-  private class GuardVisitor implements JavaDSLVisitor{
+  private class GuardVisitor implements MCExpressionsVisitor{
 
     @Override
-    public void visit(ASTPrimaryExpression node){
-
-      if (node.getName().isPresent()) {
-        check(node.getName().get(), node, "guard");
-      }
+    public void visit(ASTNameExpression node){
+        check(node.getName(), node, "guard");
     }
   }
 

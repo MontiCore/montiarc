@@ -59,7 +59,8 @@ public class POJOGenerator {
     _package = targetPackage.orElse(cdSymbol.getName().toLowerCase());
     
     this.typeHelper = new TypeHelper(_package);
-    this.generatorSetup = new GeneratorSetup(this.outputDir.toFile());
+    this.generatorSetup = new GeneratorSetup();
+    this.generatorSetup.setOutputDirectory(this.outputDir.toFile());
     this.ge = new GeneratorEngine(this.generatorSetup);
   }
   

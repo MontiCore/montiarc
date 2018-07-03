@@ -14,8 +14,6 @@ public class StateSymbol extends StateSymbolTOP {
   
   private boolean isInitial;
   
-  public static final StateKind KIND = new StateKind();
-  
   public StateSymbol(String name) {
     super(name);
     this.stereoValues = new ArrayList<>();

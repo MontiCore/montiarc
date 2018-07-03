@@ -50,14 +50,14 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
               + SymbolPrinter.printFormalTypeParameters(supersTypeParameters)
               + "' of the extended super component " + compSym.getSuperComponent().get().getName()
               + " have to be set.",
-              node.getHead().getSuperComponent().get().get_SourcePositionStart());
+              node.getHead().getSuperComponent().get_SourcePositionStart());
         }
         else if (supersActualTypeParams.size() != supersTypeParameters.size()) {
           Log.error("0xMA088 All type parameters "
               + SymbolPrinter.printFormalTypeParameters(supersTypeParameters)
               + " of the extended super component "
               + compSym.getSuperComponent().get().getName() + "have to be set",
-              node.getHead().getSuperComponent().get().get_SourcePositionStart());
+              node.getHead().getSuperComponent().get_SourcePositionStart());
         }
         // same length of params
         else {
@@ -78,7 +78,7 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                     Log.error("0xMA089 Parameter " + SymbolPrinter.printTypeParameters(actualArg)
                         + " is not compatible with "
                         + upperBound.getName(),
-                        node.getHead().getSuperComponent().get().get_SourcePositionStart());
+                        node.getHead().getSuperComponent().get_SourcePositionStart());
                   }
                 }
                 
@@ -92,7 +92,7 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                     Log.error("0xMA089 Parameter " + formalType.getName()
                         + " is not compatible with upper bound "
                         + upperBound.getName(),
-                        node.getHead().getSuperComponent().get().get_SourcePositionStart());
+                        node.getHead().getSuperComponent().get_SourcePositionStart());
                   }
                   else {
                     if (TypeCompatibilityChecker.doTypesMatch(formalType.getInterfaces().get(j),

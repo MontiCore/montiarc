@@ -30,14 +30,14 @@ public class AutomatonNoDataAssignedToVariable  implements MontiArcASTIOAssignme
         .get().getEnclosingScope();
     Scope componentScope = scope.get();
 
-    if (node.getAlternative().isPresent()) {
+    if (node.isPresentAlternative()) {
 
-      for (ASTValueList astValueList : node.getAlternative().get().getValueLists()) {
-        if (astValueList.getNoData().isPresent()) {
-          if (node.getName().isPresent()) {
+      for (ASTValueList astValueList : node.getAlternative().getValueListList()) {
+        if (astValueList.isPresentNoData()) {
+          if (node.isPresentName()) {
 
             Optional<VariableSymbol> varsym = componentScope.<VariableSymbol>resolve(
-                node.getName().get(), VariableSymbol.KIND);
+                node.getName(), VariableSymbol.KIND);
             if (varsym.isPresent()) {
               Log.error("0xMA092 Assignment of special value NoData (\"--\") to Variables "
                       + "is not allowed",
@@ -50,17 +50,15 @@ public class AutomatonNoDataAssignedToVariable  implements MontiArcASTIOAssignme
 
     }
     else {
-      if (node.getValueList().isPresent() && node.getValueList().get().getNoData().isPresent()) {
-        if (node.getValueList().get().getNoData().isPresent()) {
+      if (node.isPresentValueList() && node.getValueList().isPresentNoData()) {
           Optional<VariableSymbol> varsym = componentScope.<VariableSymbol>resolve(
-              node.getName().get(), VariableSymbol.KIND);
+              node.getName(), VariableSymbol.KIND);
           if (varsym.isPresent()) {
             Log.error("0xMA092 Assignment of special value NoData (\"--\") to Variables is "
                     + "not allowed",
                 node.get_SourcePositionEnd());
           }
         }
-      }
     }
 
 

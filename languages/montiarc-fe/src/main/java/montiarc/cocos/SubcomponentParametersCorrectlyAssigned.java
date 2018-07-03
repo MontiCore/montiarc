@@ -8,14 +8,12 @@ package montiarc.cocos;
 import java.util.List;
 import java.util.Optional;
 
-import de.monticore.java.javadsl._ast.ASTExpression;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
+import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
-import de.monticore.symboltable.types.TypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
-import de.monticore.symboltable.types.references.TypeReference;
 import de.monticore.types.TypesPrinter;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
@@ -110,11 +108,11 @@ public class SubcomponentParametersCorrectlyAssigned
           ComponentSymbol.KIND);
       if (subcompSym.isPresent()) {
         ASTComponent subcompType = (ASTComponent) subcompSym.get().getAstNode().get();
-        List<ASTParameter> params = subcompType.getHead().getParameters();
+        List<ASTParameter> params = subcompType.getHead().getParameterList();
         int numberOfNecessaryConfigParams = params.size() - getNumberOfDefaultParameters(params);
-        if (numberOfNecessaryConfigParams > sub.getArguments().size() || sub.getArguments().size() > params.size()) {
+        if (numberOfNecessaryConfigParams > sub.getArgumentsList().size() || sub.getArgumentsList().size() > params.size()) {
           Log.error(String.format("0xMA082 Subcomponent of type \"%s\" is instantiated with "
-              + sub.getArguments().size() + " arguments but requires "
+              + sub.getArgumentsList().size() + " arguments but requires "
               + numberOfNecessaryConfigParams + " arguments by type definition.", type),
               sub.get_SourcePositionStart());
         }
@@ -141,7 +139,7 @@ public class SubcomponentParametersCorrectlyAssigned
     int counter = 0;
     
     for (ASTParameter param : params) {
-      if (param.getDefaultValue().isPresent()) {
+      if (param.isPresentDefaultValue()) {
         counter++;
       }
     }

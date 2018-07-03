@@ -46,11 +46,11 @@ public class UsedPortsAndVariablesExist
   }
   
   private void checkAJavaInitialization(ASTComponent node, ComponentSymbol cmp) {
-    for (ASTElement e : node.getBody().getElements()) {
+    for (ASTElement e : node.getBody().getElementList()) {
       if (e instanceof ASTJavaPInitializer) {
         ASTJavaPInitializer init = (ASTJavaPInitializer) e;
-        for (ASTValueInitialization i : init.getValueInitializations()) {
-          String name = Names.getQualifiedName(i.getQualifiedName().getParts());
+        for (ASTValueInitialization i : init.getValueInitializationList()) {
+          String name = Names.getQualifiedName(i.getQualifiedName().getPartList());
           Optional<PortSymbol> port = cmp.getSpannedScope().<PortSymbol> resolve(name,
               PortSymbol.KIND);
           Optional<VariableSymbol> compVar = cmp.getSpannedScope()

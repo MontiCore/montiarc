@@ -14,7 +14,7 @@ public class AtMostOneInitBlock implements MontiArcASTComponentCoCo {
   public void check(ASTComponent node) {
     int initCount = 0;
     
-    for (ASTElement element : node.getBody().getElements()) {
+    for (ASTElement element : node.getBody().getElementList()) {
       if (element instanceof ASTJavaPInitializer) {
         if (initCount >= 1) {
           Log.error(

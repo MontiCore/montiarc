@@ -1,6 +1,5 @@
 package components.body.automaton.transition.guards;
 
-import de.monticore.java.javadsl._cocos.JavaDSLASTPrimaryExpressionCoCo;
 import montiarc._cocos.MontiArcASTGuardExpressionCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.UseOfUndeclaredField;
@@ -49,6 +48,7 @@ public class GuardTest extends AbstractCoCoTest {
         new ExpectedErrorInfo(1, "xMA023"));
   }
   
+  @Ignore("Siehe TODO in AutomatonOutputInExpression coco")
   @Test
   public void testGuardUsesOutgoingPort() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "GuardUsesOutgoingPort");

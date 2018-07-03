@@ -4,8 +4,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import de.monticore.java.javadsl._ast.ASTExpression;
+import de.monticore.commonexpressions._ast.ASTCallExpression;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
+import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
@@ -41,9 +42,9 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
   public void visit(ASTInitialStateDeclaration node) {
     // set missing assignment names in all blocks of all initial state
     // declarations
-    if (node.blockIsPresent()) {
-      for (ASTIOAssignment assign : node.getBlock().get().getIOAssignments()) {
-        if (!assign.nameIsPresent()) {
+    if (node.isPresentBlock()) {
+      for (ASTIOAssignment assign : node.getBlock().getIOAssignmentList()) {
+        if (!assign.isPresentName()) {
           // no assignment name found, so compute one based on value type
           Optional<String> sinkName = findFor(assign, false);
           if (sinkName.isPresent()) {
@@ -59,22 +60,21 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
   
   @Override
   public void visit(ASTTransition node) {
-    
     // set missing assignment names of all reactions of all transitions
-    if (node.reactionIsPresent()) {
-      for (ASTIOAssignment assign : node.getReaction().get().getIOAssignments()) {
-        if (!assign.nameIsPresent()) {
+    if (node.isPresentReaction()) {
+      for (ASTIOAssignment assign : node.getReaction().getIOAssignmentList()) {
+        if (!assign.isPresentName()) {
           Optional<String> sinkName = Optional.empty();
           ASTExpression expr = getFirstAssigntElement(assign).getExpression();
-          if (expr.getCallExpression().isPresent()) {
-            if (expr.getCallExpression().get().getExpression().isPresent()) {
-              if (expr.getCallExpression().get().getExpression().get().getPrimaryExpression()
-                  .isPresent()) {
-                sinkName = expr.getCallExpression().get().getExpression().get()
-                    .getPrimaryExpression().get().getName();
-              }
-            }
-          }
+          // if (expr instanceof ASTCallExpression) { TODO@AB
+          // if (expr.getCallExpression().get().getExpression().isPresent()) {
+          // if (expr.getCallExpression().get().getExpression().get().getPrimaryExpression()
+          // .isPresent()) {
+          // sinkName = expr.getCallExpression().get().getExpression().get()
+          // .getPrimaryExpression().get().getName();
+          // }
+          // }
+          // }
           // no assignment name found, so compute one based on value type
           if (!sinkName.isPresent()) {
             sinkName = findFor(assign, false);
@@ -133,11 +133,11 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
    */
   private ASTValuation getFirstAssigntElement(ASTIOAssignment assignment) {
     ASTValueList valueList = null;
-    if (assignment.alternativeIsPresent()) {
-      valueList = assignment.getAlternative().get().getValueLists().get(0);
+    if (assignment.isPresentAlternative()) {
+      valueList = assignment.getAlternative().getValueListList().get(0);
     }
     else {
-      valueList = assignment.getValueList().get();
+      valueList = assignment.getValueList();
     }
     return valueList.getAllValuations().get(0);
   }

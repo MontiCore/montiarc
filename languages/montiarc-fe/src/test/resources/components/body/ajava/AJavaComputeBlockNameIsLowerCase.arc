@@ -11,6 +11,6 @@ component AJavaComputeBlockNameIsLowerCase {
     in String sIn;
   
   compute printSIn {
-    System.out.println(sIn);
+     
   }
 }

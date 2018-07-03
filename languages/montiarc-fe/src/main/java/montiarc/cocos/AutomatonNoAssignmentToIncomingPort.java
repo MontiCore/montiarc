@@ -24,7 +24,7 @@ public class AutomatonNoAssignmentToIncomingPort implements MontiArcASTIOAssignm
   public void check(ASTIOAssignment node) {
     
     // It's an assignment
-    final Optional<String> identifier = node.getName();
+    final Optional<String> identifier = node.getNameOpt();
     final Optional<? extends Scope> enclosingScope = node.getEnclosingScope();
     if (enclosingScope.isPresent() && identifier.isPresent()) {
       final Optional<Symbol> resolvedSymbol = enclosingScope.get().resolve(identifier.get(),

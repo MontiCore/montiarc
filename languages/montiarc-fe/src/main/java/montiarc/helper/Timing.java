@@ -62,7 +62,7 @@ public enum Timing {
    */
   public static Timing getBehaviorKind(ASTComponent component) {
     Timing result = MontiArcConstants.DEFAULT_TIME_PARADIGM;
-    for (ASTElement elem : component.getBody().getElements()) {
+    for (ASTElement elem : component.getBody().getElementList()) {
       if (elem instanceof ASTMontiArcTiming) {
         ASTMontiArcTiming casted = (ASTMontiArcTiming) elem;
         if (casted.isDelayed()) {

@@ -5,7 +5,9 @@
  */
 package montiarc.cocos;
 
-import de.monticore.java.javadsl._ast.ASTExpression;
+
+import de.monticore.mcexpressions._ast.ASTCallExpression;
+import de.monticore.mcexpressions._ast.ASTExpression;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTIOAssignment;
 import montiarc._cocos.MontiArcASTIOAssignmentCoCo;
@@ -38,11 +40,11 @@ public class IOAssignmentCallFollowsMethodCall implements MontiArcASTIOAssignmen
   }
   
   private boolean iOAssignmentContainsMethodCall(ASTIOAssignment assignment) {
-    if (assignment.getValueList().isPresent()) {
-      if (!assignment.getValueList().get().getAllValuations().isEmpty()) {
-        ASTExpression expr = assignment.getValueList().get().getAllValuations().get(0)
+    if (assignment.isPresentValueList()) {
+      if (!assignment.getValueList().getAllValuations().isEmpty()) {
+        ASTExpression expr = assignment.getValueList().getAllValuations().get(0)
             .getExpression();
-        if (expr.callExpressionIsPresent()) {
+        if (expr instanceof ASTCallExpression) {
           return true;
         }
       }

@@ -2,10 +2,11 @@ package montiarc._symboltable;
 
 import java.util.Optional;
 
+import de.monticore.symboltable.CommonScopeSpanningSymbol;
 import montiarc._ast.ASTBlock;
 import montiarc._ast.ASTGuard;
 
-public class TransitionSymbol extends TransitionSymbolTOP {
+public class TransitionSymbol extends CommonScopeSpanningSymbol {
   
   private StateSymbolReference source;
   
@@ -15,10 +16,17 @@ public class TransitionSymbol extends TransitionSymbolTOP {
   
   private Optional<ASTBlock> reaction;
   
+  public static final TransitionKind KIND = new TransitionKind();
+  
   public TransitionSymbol(String name) {
-    super(name);
+    super(name, KIND);
     this.guard = Optional.empty();
     this.reaction = Optional.empty();
+  }
+  
+  @Override
+  protected TransitionScope createSpannedScope() {
+    return new TransitionScope();
   }
   
   public StateSymbolReference getSource() {

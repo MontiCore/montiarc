@@ -56,7 +56,6 @@ public class DefaultParametersTest extends AbstractCoCoTest {
   public void testComposedComponentUsingDefaultParameters() {
     checkValid(PACKAGE + "." + "ComposedComponentUsingDefaultParameters");
   }
-  
   @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   @Test
   public void testComposedComponentUsingDefaultParametersInvalid() {
@@ -90,11 +89,11 @@ public class DefaultParametersTest extends AbstractCoCoTest {
       if (param.getAstNode().isPresent()) {
         ASTParameter p = (ASTParameter) param.getAstNode().get();
         if (p.getName().equals("offset")) {
-          assertTrue(p.getDefaultValue().isPresent());
-          assertEquals(5, p.getDefaultValue().get());
+          assertTrue(p.isPresentDefaultValue());
+          assertEquals(5, p.getDefaultValue());
         }
         else {
-          assertFalse(p.getDefaultValue().isPresent());
+          assertFalse(p.isPresentDefaultValue());
         }
       }
       

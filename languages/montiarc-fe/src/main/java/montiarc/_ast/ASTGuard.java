@@ -3,6 +3,8 @@
 
 package montiarc._ast;
 
+import java.util.Optional;
+
 public class ASTGuard extends ASTGuardTOP {
   
   /**

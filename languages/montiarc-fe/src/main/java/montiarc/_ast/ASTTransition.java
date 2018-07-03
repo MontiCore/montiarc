@@ -3,20 +3,33 @@
 
 package montiarc._ast;
 
+import java.util.Optional;
+
 public class ASTTransition extends ASTTransitionTOP {
   
-  public ASTTransition() {
+  /**
+   * Constructor for montiarc._ast.ASTTransition
+   */
+  protected ASTTransition() {
     super();
   }
-  
-  public ASTTransition(
+
+  /**
+   * Constructor for montiarc._ast.ASTTransition
+   * @param source
+   * @param target
+   * @param guard
+   * @param stimulus
+   * @param reaction
+   */
+  protected ASTTransition(
       String source,
-      String target,
-      ASTGuard guard,
-      ASTBlock reaction) {
+      Optional<String> target,
+      Optional<ASTGuard> guard,
+      Optional<ASTBlock> reaction) {
     super(source, target, guard, reaction);
   }
-  
+
   public String getName() {
     String syntheticName = this.getSource() + "-" + this.getTarget() + "@"
         + this.get_SourcePositionStart();

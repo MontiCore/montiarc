@@ -1,33 +1,31 @@
 package de.montiarcautomaton.generator.codegen;
 
 import java.io.File;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-
-import com.google.common.collect.Lists;
-
 import java.util.Optional;
 
-import _templates.de.montiarcautomaton.lib.AbstractAtomicComponent;
-import _templates.de.montiarcautomaton.lib.AtomicComponent;
-import _templates.de.montiarcautomaton.lib.ComponentInput;
-import _templates.de.montiarcautomaton.lib.ComponentResult;
-import _templates.de.montiarcautomaton.lib.ComposedComponent;
-import _templates.de.montiarcautomaton.lib.Deploy;
+import de.montiarcautomaton.generator.helper.AutomatonHelper;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
-import de.montiarcautomaton.generator.util.BehaviorGeneratorsMap;
 import de.monticore.codegen.mc2cd.TransformationHelper;
+import de.monticore.expressions.prettyprint.MCExpressionsPrettyPrinter;
+import de.monticore.generating.GeneratorEngine;
+import de.monticore.generating.GeneratorSetup;
 import de.monticore.io.paths.IterablePath;
-import de.monticore.templateclassgenerator.util.GeneratorInterface;
+import de.monticore.java.javadsl._ast.ASTBlockStatement;
+import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
+import de.monticore.prettyprint.IndentPrinter;
 import de.se_rwth.commons.Names;
+import montiarc._ast.ASTAutomatonBehavior;
 import montiarc._ast.ASTBehaviorElement;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTElement;
+import montiarc._ast.ASTJavaPBehavior;
+import montiarc._ast.ASTJavaPInitializer;
+import montiarc._ast.ASTValueInitialization;
 import montiarc._symboltable.ComponentSymbol;
 
 /**
@@ -62,6 +60,10 @@ public class MAAGenerator {
    * @param hwcPath
    */
   public static void generateModel(File targetPath, File hwcPath, ComponentSymbol compSym) {
+    // Generator setup
+    
+    GeneratorSetup setup = new GeneratorSetup();
+    GeneratorEngine generator = new GeneratorEngine(setup);
     
     ComponentSymbol comp = compSym;
     
@@ -75,7 +77,8 @@ public class MAAGenerator {
     String inputName = comp.getName() + "Input";
     filePath = getPath(targetPathName, packageName, inputName);
     // pass all arguments instead of comp for better readability in the template
-    ComponentInput.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(),
+    generator.generate("de/montiarcautomaton/lib/ComponentInput.ftl", filePath,
+        comp.getAstNode().get(), compHelper, comp.getPackageName(),
         comp.getImports(),
         comp.getName(), inputName, comp.getIncomingPorts());
     
@@ -83,7 +86,8 @@ public class MAAGenerator {
     String resultName = comp.getName() + "Result";
     filePath = getPath(targetPathName, packageName, resultName);
     // pass all arguments instead of comp for better readability in the template
-    ComponentResult.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(),
+    generator.generate("de/montiarcautomaton/lib/ComponentResult.ftl", filePath,
+        comp.getAstNode().get(), compHelper, comp.getPackageName(),
         comp.getImports(),
         comp.getName(), resultName, comp.getOutgoingPorts());
     
@@ -96,45 +100,79 @@ public class MAAGenerator {
     
     filePath = getPath(targetPathName, packageName, implName);
     
+    /* ${tc.
+     * params("de.montiarcautomaton.generator.helper.ComponentHelper helper",
+     * "String _package",
+     * "java.util.Collection<de.monticore.symboltable.ImportStatement> imports",
+     * "String name", "String resultName", "String inputName",
+     * "String implName",
+     * "java.util.Collection<montiarc._symboltable.PortSymbol> portsIn",
+     * "java.util.Collection<montiarc._symboltable.PortSymbol> portsOut",
+     * "java.util.Collection<de.monticore.symboltable.types.JFieldSymbol> configParams"
+     * ,
+     * "java.util.Collection<montiarc._symboltable.VariableSymbol> compVariables"
+     * , "String ajava",
+     * "java.util.List<montiarc._ast.ASTValueInitialization> initializations")} */
+    
     ASTComponent compAST = (ASTComponent) comp.getAstNode().get();
     Optional<ASTBehaviorElement> behaviorEmbedding = getBehaviorEmbedding(compAST);
     if (behaviorEmbedding.isPresent()) {
-      for (Entry<Class<?>, GeneratorInterface> e : BehaviorGeneratorsMap.behaviorGenerators
-          .entrySet()) {
-        if (e.getKey().equals(behaviorEmbedding.get().getClass())) {
-          e.getValue().generate(filePath, compAST, comp);
+      if (behaviorEmbedding.get() instanceof ASTJavaPBehavior) {
+        
+        Optional<ASTJavaPInitializer> init = ComponentHelper.getComponentInitialization(comp);
+        List<ASTValueInitialization> varInits = new ArrayList<>();
+        
+        if (init.isPresent()) {
+          varInits = init.get().getValueInitializationList();
         }
+        JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(new IndentPrinter());
+        StringBuilder sb = new StringBuilder();
+        for (ASTBlockStatement s : ((ASTJavaPBehavior) behaviorEmbedding.get())
+            .getBlockStatementList()) {
+          sb.append(prettyPrinter.prettyprint(s));
+        }
+        
+        generator.generate("de/montiarcautomaton/lib/ajava/AJavaMain.ftl", filePath, compAST,
+            compHelper,
+            comp.getPackageName(), comp.getImports(), comp.getName(), resultName,
+            inputName, implName, comp.getIncomingPorts(), comp.getOutgoingPorts(),
+            comp.getConfigParameters(), comp.getVariables(), sb.toString(), varInits);
+      }
+      
+      if (behaviorEmbedding.get() instanceof ASTAutomatonBehavior) {
+        AutomatonHelper automatonHelper = new AutomatonHelper(comp);
+        generator.generate("de/montiarcautomaton/lib/automaton/AutomatonImplMain.ftl", filePath,
+            compAST, automatonHelper, comp.getPackageName(), comp.getImports(), comp.getName(),
+            resultName, inputName, implName, comp.getIncomingPorts(), compHelper,
+            comp.getVariables(), automatonHelper.getStates(), comp.getConfigParameters());
       }
     }
     
-    filePath = getPath(targetPathName, packageName, comp.getName());
-    
     // gen component
+    filePath = getPath(targetPathName, packageName, comp.getName());
     if (comp.isAtomic()) {
-      
+      Path implPath = getPath(targetPathName, packageName, implName);
+
       // default implementation
       if (!existsHWC && !behaviorEmbedding.isPresent()) {
-        Path implPath = getPath(targetPathName, packageName, implName);
-        AbstractAtomicComponent.generate(implPath, compAST, compHelper, packageName, implName,
+        generator.generate("de/montiarcautomaton/lib/AbstractAtomicComponent.ftl", implPath, compAST,
+            compHelper, packageName, implName,
             inputName, resultName, comp.getConfigParameters(), comp.getImports());
       }
       
-      
-      
       // pass all arguments instead of comp for better readability in the
       // template
-      AtomicComponent.generate(
-          filePath,
+      generator.generate("de/montiarcautomaton/lib/AtomicComponent.ftl", filePath,
           comp.getAstNode().get(),
           compHelper,
           comp.getPackageName(),
           comp.getImports(),
           comp.getName(),
           resultName,
-          inputName, 
-          implName, 
+          inputName,
+          implName,
           comp.getVariables(),
-          comp.getIncomingPorts(), 
+          comp.getIncomingPorts(),
           comp.getOutgoingPorts(),
           comp.getAllOutgoingPorts(),
           comp.getConfigParameters());
@@ -142,16 +180,15 @@ public class MAAGenerator {
     else {
       // pass all arguments instead of comp for better readability in the
       // template
-      
-      ComposedComponent.generate(filePath, 
-          comp.getAstNode().get(), 
-          compHelper, 
+      generator.generate("de/montiarcautomaton/lib/ComposedComponent.ftl", filePath,
+          comp.getAstNode().get(),
+          compHelper,
           comp,
-          comp.getPackageName(), 
-          comp.getImports(), 
+          comp.getPackageName(),
+          comp.getImports(),
           comp.getName(),
-          comp.getIncomingPorts(), 
-          comp.getOutgoingPorts(), 
+          comp.getIncomingPorts(),
+          comp.getOutgoingPorts(),
           comp.getSubComponents(),
           comp.getConnectors(),
           comp.getConfigParameters());
@@ -161,13 +198,14 @@ public class MAAGenerator {
     if (compHelper.isDeploy()) {
       String deployName = "Deploy" + comp.getName();
       filePath = getPath(targetPathName, packageName, deployName);
-      Deploy.generate(filePath, comp.getAstNode().get(), compHelper, comp.getPackageName(),
+      generator.generate("de/montiarcautomaton/lib/Deploy.ftl", filePath, comp.getAstNode().get(),
+          compHelper, comp.getPackageName(),
           comp.getName(), deployName);
     }
   }
   
   private static Optional<ASTBehaviorElement> getBehaviorEmbedding(ASTComponent cmp) {
-    List<ASTElement> elements = cmp.getBody().getElements();
+    List<ASTElement> elements = cmp.getBody().getElementList();
     for (ASTElement e : elements) {
       if (e instanceof ASTBehaviorElement) {
         return Optional.of((ASTBehaviorElement) e);

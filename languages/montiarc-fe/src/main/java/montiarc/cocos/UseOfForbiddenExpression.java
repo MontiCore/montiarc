@@ -1,8 +1,13 @@
 package montiarc.cocos;
 
-import de.monticore.java.javadsl._ast.ASTExpression;
-import de.monticore.java.javadsl._cocos.JavaDSLASTExpressionCoCo;
-import de.monticore.java.javadsl._visitor.JavaDSLVisitor;
+import de.monticore.assignmentexpressions._ast.ASTBinaryAndExpression;
+import de.monticore.assignmentexpressions._ast.ASTBinaryXorExpression;
+import de.monticore.mcexpressions._ast.ASTBinaryOrOpExpression;
+import de.monticore.mcexpressions._ast.ASTExpression;
+
+import de.monticore.mcexpressions._ast.ASTInstanceofExpression;
+import de.monticore.mcexpressions._cocos.MCExpressionsASTExpressionCoCo;
+import de.monticore.mcexpressions._visitor.MCExpressionsVisitor;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTGuardExpression;
 import montiarc._ast.ASTIOAssignment;
@@ -25,32 +30,28 @@ public class UseOfForbiddenExpression implements MontiArcASTIOAssignmentCoCo, Mo
   public void check(ASTIOAssignment astioAssignment) {
     boolean isError;
 
-    if(astioAssignment.valueListIsPresent()){
-      final ASTValueList astValueList = astioAssignment.getValueList().get();
+    if(astioAssignment.isPresentValueList()){
+      final ASTValueList astValueList = astioAssignment.getValueList();
       for (ASTValuation astValuation : astValueList.getAllValuations()) {
         ASTExpression node = astValuation.getExpression();
 
         isError = false;
         String errorMessage = "";
-        if (node.instanceofTypeIsPresent()) {
+        if (node instanceof ASTInstanceofExpression) {
           isError = true;
           errorMessage = "instanceOf";
         }
-        else if (node.binaryAndOpIsPresent()) {
+        else if (node instanceof ASTBinaryAndExpression) {
           isError = true;
           errorMessage = "binary AND";
         }
-        else if (node.binaryOrOpIsPresent()) {
+        else if (node instanceof ASTBinaryOrOpExpression) {
           isError = true;
           errorMessage = "binary OR";
         }
-        else if(node.binaryXorOpIsPresent()) {
+        else if(node instanceof ASTBinaryXorExpression) {
           isError = true;
           errorMessage = "binary XOR";
-        }
-        else if(node.booleanAndOpIsPresent() || node.booleanNotIsPresent() || node.booleanOrOpIsPresent()) {
-          isError = true;
-          errorMessage = "boolean AND/NOT/OR";
         }
 
         if (isError) {
@@ -65,14 +66,12 @@ public class UseOfForbiddenExpression implements MontiArcASTIOAssignmentCoCo, Mo
   public void check(ASTGuardExpression node) {
     final ASTExpression expression = node.getExpression();
 
-    expression.accept(new JavaDSLVisitor() {
+    expression.accept(new MCExpressionsVisitor()  {
       @Override
-      public void visit(ASTExpression innerExpression) {
-        if(innerExpression.instanceofTypeIsPresent()){
+      public void visit(ASTInstanceofExpression innerExpression) {
           Log.error("0xMA023 Expression contains forbidden expression: " +
                         "instanceof",
               innerExpression.get_SourcePositionStart());
-        }
       }
     });
   }

@@ -20,16 +20,16 @@ public class AutomatonStateDefinedMultipleTimes implements MontiArcASTAutomatonC
   
   @Override
   public void check(ASTAutomaton node) {
+
     List<ASTState> states = new ArrayList<>();
     Set<ASTState> duplicates = new HashSet<>();
 
-    for (ASTStateDeclaration decl : node.getStateDeclarations()) {
-      states.addAll(decl.getStates());
+    for (ASTStateDeclaration decl : node.getStateDeclarationList()) {
+      states.addAll(decl.getStateList());
     }
 
     for (ASTState state : states) {
       int index = states.indexOf(state);
-      boolean found = false;
       for(int searchIndex = index + 1; searchIndex < states.size(); searchIndex++){
         if(state.getName().equals(states.get(searchIndex).getName())){
           duplicates.add(state);

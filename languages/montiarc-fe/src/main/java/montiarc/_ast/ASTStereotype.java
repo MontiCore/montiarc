@@ -4,12 +4,20 @@ import java.util.List;
 
 public class ASTStereotype extends ASTStereotypeTOP {
   
-  public ASTStereotype() {
+  /**
+   * Constructor for montiarc._ast.ASTStereotype
+   */
+  protected ASTStereotype() {
     super();
   }
   
-  public ASTStereotype(List<ASTStereoValue> values) {
-    this.values = values;
+  /**
+   * Constructor for montiarc._ast.ASTStereotype
+   * 
+   * @param valuess
+   */
+  protected ASTStereotype(List<ASTStereoValue> valuess) {
+    super(valuess);
   }
   
   public boolean containsStereoValue(String name) {
@@ -17,7 +25,7 @@ public class ASTStereotype extends ASTStereotypeTOP {
   }
   
   public boolean containsStereoValue(String name, String value) {
-    for (ASTStereoValue sv : values) {
+    for (ASTStereoValue sv : getValuesList()) {
       if (sv.getName() != null && sv.getName().equals(name)
           && sv.getValue() != null && sv.getValue().equals(value)) {
         return true;
@@ -27,7 +35,7 @@ public class ASTStereotype extends ASTStereotypeTOP {
   }
   
   public ASTStereoValue getStereoValue(String name) {
-    for (ASTStereoValue sv : values) {
+    for (ASTStereoValue sv : getValuesList()) {
       if (sv.getName() != null && sv.getName().equals(name)) {
         return sv;
       }

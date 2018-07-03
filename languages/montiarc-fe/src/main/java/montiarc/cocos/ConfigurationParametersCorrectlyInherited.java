@@ -97,7 +97,7 @@ public class ConfigurationParametersCorrectlyInherited implements MontiArcASTCom
                     componentSymbol.getFullName(),
                     paramType.getReferencedSymbol().getFullName(),
                     superParameterType.getReferencedSymbol().getFullName()),
-                component.getHead().getParameters()
+                component.getHead().getParameterList()
                     .get(paramIndex).get_SourcePositionStart()
             );
           }
@@ -111,7 +111,7 @@ public class ConfigurationParametersCorrectlyInherited implements MontiArcASTCom
                       configParameters.get(paramIndex).getName(),
                       paramIndex + 1,
                       componentSymbol.getFullName()),
-                  component.getHead().getParameters()
+                  component.getHead().getParameterList()
                       .get(paramIndex).get_SourcePositionStart()
               );
             }
@@ -131,8 +131,8 @@ public class ConfigurationParametersCorrectlyInherited implements MontiArcASTCom
     if(actualComponent.getAstNode().isPresent()){
       final ASTComponent astNode
           = (ASTComponent) actualComponent.getAstNode().get();
-      if(astNode.getHead().getParameters()
-             .get(position).defaultValueIsPresent()) {
+      if(astNode.getHead().getParameterList()
+             .get(position).isPresentDefaultValue()) {
         return true;
       }
     }

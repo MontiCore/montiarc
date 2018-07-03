@@ -5,7 +5,6 @@
  */
 package montiarc.cocos;
 
-import de.monticore.java.javadsl._cocos.JavaDSLASTPrimaryExpressionCoCo;
 import montiarc._cocos.*;
 
 /**

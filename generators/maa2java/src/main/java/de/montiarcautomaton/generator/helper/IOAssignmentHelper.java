@@ -2,8 +2,9 @@ package de.montiarcautomaton.generator.helper;
 
 import java.util.Optional;
 
-import de.monticore.java.javadsl._ast.ASTExpression;
+
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
+import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.prettyprint.IndentPrinter;
 import montiarc._ast.ASTIOAssignment;
 import montiarc._ast.ASTValueList;
@@ -29,7 +30,7 @@ public class IOAssignmentHelper {
    * @return
    */
   public String getLeft() {
-    return assignment.getName().get();
+    return assignment.getName();
   }
   
   public boolean isAssignment() {
@@ -60,13 +61,13 @@ public class IOAssignmentHelper {
    * @return
    */
   public String getRight() {
-    if (assignment.alternativeIsPresent()) {
+    if (assignment.isPresentAlternative()) {
       throw new RuntimeException("Alternatives not supported.");
     }
     else {
-      final ASTValueList vl = assignment.getValueList().get();
-      if (vl.valuationIsPresent()) {
-        return printExpression(vl.getValuation().get().getExpression());
+      final ASTValueList vl = assignment.getValueList();
+      if (vl.isPresentValuation()) {
+        return printExpression(vl.getValuation().getExpression());
       }
       else {
         throw new RuntimeException("ValueLists not supported.");
