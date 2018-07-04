@@ -60,7 +60,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
 
   @Override
   public void visit(ASTMethodDeclaration node){
-    String methodString = printWithoutWhitespace(node.getMethodBody().get());
+    String methodString = printWithoutWhitespace(node.getMethodBody());
 
     final ASTMethodSignature signature = node.getMethodSignature();
     final String methodName = signature.getName();
@@ -92,24 +92,24 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
 
   @Override
   public void visit(ASTClassDeclaration node) {
-    for (ASTType type : node.getImplementedInterfaces()) {
+    for (ASTType type : node.getImplementedInterfaceList()) {
       if(type instanceof ASTSimpleReferenceType){
         final ASTSimpleReferenceType refType = (ASTSimpleReferenceType) type;
         String typeArgs = "";
-        if(refType.getTypeArguments().isPresent()){
-          typeArgs = PRINTER.prettyprint(refType.getTypeArguments().get());
+        if(refType.getTypeArgumentsOpt().isPresent()){
+          typeArgs = PRINTER.prettyprint(refType.getTypeArguments());
         }
         String finalTypeArgs = typeArgs;
         boolean isComponentImplemented
-            = refType.getNames()
+            = refType.getNameList()
                   .stream().anyMatch(s -> interfaces.contains(s + finalTypeArgs));
         if(!isComponentImplemented){
           Log.error(String.format("Class %s does not implement interface %s", className,
-              refType.getNames()));
+              refType.getNameList()));
         }
       }
     }
-    final Optional<ASTType> superClass = node.getSuperClass();
+    final Optional<ASTType> superClass = node.getSuperClassOpt();
     if(this.superClass != null && !superClass.isPresent()){
       Log.error(String.format("%s does not extend superclass %s",
           className, this.superClass));
@@ -140,21 +140,21 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     final String actualName = node.getName();
 
     int paramSize = 0;
-    if(actualParams.getFormalParameterListing().isPresent()){
-      paramSize = actualParams.getFormalParameterListing().get().getFormalParameters().size();
+    if(actualParams.getFormalParameterListingOpt().isPresent()){
+      paramSize = actualParams.getFormalParameterListing().getFormalParameterList().size();
     }
     if(getConstructor(actualName, paramSize).isPresent()){
       final Constructor constructor = getConstructor(actualName, paramSize).get();
       final boolean actualParamListPresent
-          = actualParams.getFormalParameterListing().isPresent();
+          = actualParams.getFormalParameterListingOpt().isPresent();
       final boolean expectedParamListPresent
-          = constructor.getParameters().getFormalParameterListing().isPresent();
+          = constructor.getParameters().getFormalParameterListingOpt().isPresent();
 
       if(actualParamListPresent && expectedParamListPresent){
         final ASTFormalParameterListing actualParamList
-            = actualParams.getFormalParameterListing().get();
+            = actualParams.getFormalParameterListing();
         final ASTFormalParameterListing expectedParamList
-            = constructor.getParameters().getFormalParameterListing().get();
+            = constructor.getParameters().getFormalParameterListing();
 
         final String actualPrint = printWithoutWhitespace(actualParamList);
         final String expectedPrint = printWithoutWhitespace(expectedParamList);
@@ -189,9 +189,9 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
         .filter(constructor -> constructor.getName().equals(name))
         .findFirst();
     if(result.isPresent()){
-      if(result.get().getParameters().getFormalParameterListing().isPresent()){
-        if(result.get().getParameters().getFormalParameterListing().get()
-            .getFormalParameters().size() != paramCount){
+      if(result.get().getParameters().isPresentFormalParameterListing()){
+        if(result.get().getParameters().getFormalParameterListing()
+            .getFormalParameterList().size() != paramCount){
           return Optional.empty();
         }
       }
@@ -208,7 +208,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
   @Override
   public void visit(ASTFieldDeclaration node){
     final ASTType type = node.getType();
-    for (ASTVariableDeclarator declarator : node.getVariableDeclarators()) {
+    for (ASTVariableDeclarator declarator : node.getVariableDeclaratorList()) {
       final String name = declarator.getDeclaratorId().getName();
       fields.removeIf(field -> field.getName().equals(name) && field.getType().deepEquals(type));
     }

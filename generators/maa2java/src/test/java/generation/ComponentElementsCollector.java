@@ -7,16 +7,15 @@ package generation;
 
 import com.google.common.collect.Lists;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
-import de.monticore.java.javadsl._ast.ASTConstantsJavaDSL;
 import de.monticore.java.javadsl._ast.ASTImportDeclaration;
-import de.monticore.java.javadsl._ast.ASTPrimitiveModifier;
-import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
-import de.monticore.java.symboltable.JavaFieldSymbol;
+import de.monticore.java.javadsl._ast.JavaDSLMill;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
-import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
-import de.monticore.types.types._ast.*;
+import de.monticore.types.types._ast.ASTSimpleReferenceType;
+import de.monticore.types.types._ast.ASTType;
+import de.monticore.types.types._ast.ASTTypeArgument;
+import de.monticore.types.types._ast.ASTTypeArguments;
 import montiarc._ast.*;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
@@ -35,9 +34,6 @@ import java.util.stream.Collectors;
  */
 public class ComponentElementsCollector implements MontiArcVisitor {
 
-  public static final ASTPrimitiveModifier PUBLIC_MODIFIER
-      = ASTPrimitiveModifier.getBuilder().modifier(ASTConstantsJavaDSL.PUBLIC).build();
-  public static final ASTVoidType VOID_TYPE = ASTVoidType.getBuilder().build();
   protected GeneratedComponentClassVisitor classVisitor;
   protected GeneratedComponentClassVisitor inputVisitor;
   protected GeneratedComponentClassVisitor resultVisitor;
@@ -45,9 +41,6 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   private ComponentSymbol symbol;
   private ComponentHelper helper;
 
-
-  private final static JavaDSLPrettyPrinter PRINTER
-      = new JavaDSLPrettyPrinter(new IndentPrinter());
 
   private final String componentName;
   private final String inputName;
@@ -71,7 +64,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   public void visit(ASTParameter node) {
     final String parameterName = node.getName();
     final ASTType parameterType = node.getType();
-    final Optional<ASTValuation> defaultValue = node.getDefaultValue();
+    final Optional<ASTValuation> defaultValue = node.getDefaultValueOpt();
 
     classVisitor.addField(parameterName, parameterType);
   }
@@ -163,15 +156,15 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     ArrayList<String> names = Lists.newArrayList(inputName);
     ASTTypeArgument inputArg
-        = ASTSimpleReferenceType.getBuilder().names(names).build();
+        = JavaDSLMill.simpleReferenceTypeBuilder().setNameList(names).build();
 
     names = Lists.newArrayList(resultName);
     ASTTypeArgument resultArg
-        = ASTSimpleReferenceType.getBuilder().names(names).build();
+        = JavaDSLMill.simpleReferenceTypeBuilder().setNameList(names).build();
 
     final ArrayList<ASTTypeArgument> typeArguments = Lists.newArrayList(inputArg, resultArg);
     ASTTypeArguments typeArgs
-        = ASTTypeArguments.getBuilder().typeArguments(typeArguments).build();
+        = JavaDSLMill.typeArgumentsBuilder().setTypeArgumentList(typeArguments).build();
     implVisitor.addImplementedInterface("IComputable", typeArgs);
 
     if(symbol.getSuperComponent().isPresent()) {
@@ -184,31 +177,28 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
   private void addImplField() {
     final ASTSimpleReferenceType inputRefType
-        = ASTSimpleReferenceType.getBuilder()
-              .names(Lists.newArrayList(inputName))
+        = JavaDSLMill.simpleReferenceTypeBuilder()
+              .setNameList(Lists.newArrayList(inputName))
               .build();
     ASTSimpleReferenceType resultRefType
-        = ASTSimpleReferenceType.getBuilder()
-              .names(Lists.newArrayList(resultName))
+        = JavaDSLMill.simpleReferenceTypeBuilder()
+              .setNameList(Lists.newArrayList(resultName))
               .build();
-    ASTTypeArguments typeArgs = ASTTypeArguments
-                                    .getBuilder()
-                                    .typeArguments(
+    ASTTypeArguments typeArgs = JavaDSLMill.typeArgumentsBuilder()
+                                    .setTypeArgumentList(
                                         Lists.newArrayList(inputRefType, resultRefType))
                                     .build();
-    ASTType expectedType = ASTSimpleReferenceType
-                               .getBuilder()
-                               .names(Lists.newArrayList("IComputable"))
-                               .typeArguments(typeArgs)
+    ASTType expectedType = JavaDSLMill.simpleReferenceTypeBuilder()
+                               .setNameList(Lists.newArrayList("IComputable"))
+                               .setTypeArguments(typeArgs)
                                .build();
-    classVisitor.addField(GenerationStringConstants.BEHAVIOR_IMPL, expectedType);
+    classVisitor.addField(GenerationConstants.BEHAVIOR_IMPL, expectedType);
   }
 
   private void addGetInitialValues(){
     ASTSimpleReferenceType returnType
-        = ASTSimpleReferenceType
-              .getBuilder()
-              .names(Lists.newArrayList(resultName))
+        = JavaDSLMill.simpleReferenceTypeBuilder()
+              .setNameList(Lists.newArrayList(resultName))
               .build();
     Method method = Method.getBuilder()
                         .setName("getInitialValues")
@@ -219,14 +209,12 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
   private void addImplCompute(){
     ASTSimpleReferenceType returnType
-        = ASTSimpleReferenceType
-              .getBuilder()
-              .names(Lists.newArrayList(resultName))
+        = JavaDSLMill.simpleReferenceTypeBuilder()
+              .setNameList(Lists.newArrayList(resultName))
               .build();
     ASTSimpleReferenceType paramType
-        = ASTSimpleReferenceType
-              .getBuilder()
-              .names(Lists.newArrayList(inputName))
+        = JavaDSLMill.simpleReferenceTypeBuilder()
+              .setNameList(Lists.newArrayList(inputName))
               .build();
     Method method = Method.getBuilder()
                         .setName("compute")
@@ -246,15 +234,14 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     builder.setName(componentName);
     implConstructor.setName(implName);
     StringBuilder parameters = new StringBuilder();
-    for (ASTParameter parameter : node.getHead().getParameters()) {
+    for (ASTParameter parameter : node.getHead().getParameterList()) {
       parameters.append(parameter.getName()).append(",");
       JTypeSymbol typeSymbol =
           (JTypeSymbol) symbol.getSpannedScope().resolve(parameter.getName(), JTypeSymbol.KIND).orElse(null);
       if(typeSymbol != null) {
         final String paramTypeName = helper.getParamTypeName((JFieldSymbol) typeSymbol);
-        ASTType paramType = ASTSimpleReferenceType
-                                .getBuilder()
-                                .names(Lists.newArrayList(paramTypeName))
+        ASTType paramType =JavaDSLMill.simpleReferenceTypeBuilder()
+                                .setNameList(Lists.newArrayList(paramTypeName))
                                 .build();
         builder.addParameter(parameter.getName(), paramType);
         implConstructor.addParameter(parameter.getName(), paramType);
@@ -307,9 +294,8 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     Method.Builder methodBuilder;
     methodBuilder = Method.getBuilder().setName("setResult");
     ASTSimpleReferenceType resultType =
-        ASTSimpleReferenceType
-            .getBuilder()
-            .names(Lists.newArrayList(componentName+"Result"))
+        JavaDSLMill.simpleReferenceTypeBuilder()
+            .setNameList(Lists.newArrayList(componentName+"Result"))
             .build();
     methodBuilder.addParameter("result", resultType);
     classVisitor.addMethod(methodBuilder.build());
@@ -324,8 +310,8 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     methodBuilder.addBodyElement(
         String.format("final %sResult result = %s.%s;",
             componentName,
-            GenerationStringConstants.BEHAVIOR_IMPL,
-            GenerationStringConstants.METHOD_INITIAL_VALUES));
+            GenerationConstants.BEHAVIOR_IMPL,
+            GenerationConstants.METHOD_INITIAL_VALUES));
     methodBuilder.addBodyElement("setResult(result);");
     classVisitor.addMethod(methodBuilder.build());
   }
@@ -334,9 +320,10 @@ public class ComponentElementsCollector implements MontiArcVisitor {
    * Add expected toString methods to the respective visitors
    */
   private void addToString(){
-    ASTSimpleReferenceType stringType = ASTSimpleReferenceType.getBuilder()
-        .names(Lists.newArrayList("String"))
-        .build();
+    ASTSimpleReferenceType stringType
+        = JavaDSLMill.simpleReferenceTypeBuilder()
+              .setNameList(Lists.newArrayList("String"))
+              .build();
 
     Method toString =
         Method
@@ -433,23 +420,21 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
   @Override
   public void visit(ASTPort node) {
-    final PortSymbol symbol = (PortSymbol) node.getSymbol().get();
+    final PortSymbol symbol = (PortSymbol) node.getSymbolOpt().get();
     final ASTSimpleReferenceType type = (ASTSimpleReferenceType) node.getType();
 
     // Type parameters for the Port field type
     // The type parameters consist of the type of the ASTPort type
-    final ASTTypeArguments typeArgs = ASTTypeArguments
-                                          .getBuilder()
-                                          .typeArguments(Lists.newArrayList(type))
+    final ASTTypeArguments typeArgs = JavaDSLMill.typeArgumentsBuilder()
+                                          .setTypeArgumentList(Lists.newArrayList(type))
                                           .build();
 
     // Build the AST node for the type Port<Type>
-    ASTType expectedType = ASTSimpleReferenceType
-                               .getBuilder()
-                               .names(Lists.newArrayList("Port"))
-                               .typeArguments(typeArgs)
+    ASTType expectedType = JavaDSLMill.simpleReferenceTypeBuilder()
+                               .setNameList(Lists.newArrayList("Port"))
+                               .setTypeArguments(typeArgs)
                                .build();
-    final List<String> names = node.getNames();
+    final List<String> names = node.getNameList();
     classVisitor.addFields(names, expectedType);
     if (node.isOutgoing()) {
       resultVisitor.addFields(names, type);
@@ -464,7 +449,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       Method.Builder setter
           = Method
                 .getBuilder()
-                .setReturnType(VOID_TYPE)
+                .setReturnType(GenerationConstants.VOID_TYPE)
                 .addParameter("port", expectedType)
                 .setName("setPort" + capitalizeFirst(name));
       if (node.isIncoming()) {
@@ -472,7 +457,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       } else if (node.isOutgoing()) {
         setter = Method
             .getBuilder()
-            .setReturnType(VOID_TYPE)
+            .setReturnType(GenerationConstants.VOID_TYPE)
             .addParameter(name, type)
             .setName("set" + capitalizeFirst(name));
         resultVisitor.addMethod(setter.build());
@@ -508,7 +493,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         for (String name : names) {
           setUp.get().addBodyElement(
               String.format("this.%s = new Port<%s>();",
-                  name, PRINTER.prettyprint(type)), -1);
+                  name, GenerationConstants.PRINTER.prettyprint(type)), -1);
         }
       }
       final Optional<Method> update = getMethod("update");
@@ -536,13 +521,13 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     // Add the currentState field
     final ArrayList<String> state = Lists.newArrayList("State");
     ASTSimpleReferenceType currentStateType
-        = ASTSimpleReferenceType.getBuilder().names(state).build();
+        = JavaDSLMill.simpleReferenceTypeBuilder().setNameList(state).build();
     this.implVisitor.addField("currentState", currentStateType);
   }
 
   @Override
   public void visit(ASTStateDeclaration node) {
-    final Set<String> stateNames = node.getStates().stream().map(ASTState::getName).collect(Collectors.toSet());
+    final Set<String> stateNames = node.getStateList().stream().map(ASTState::getName).collect(Collectors.toSet());
     EnumType enumType = new EnumType("State", stateNames);
 
     this.implVisitor.addEnumType(enumType);

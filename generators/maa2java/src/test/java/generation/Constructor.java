@@ -5,10 +5,7 @@
  */
 package generation;
 
-import de.monticore.java.javadsl._ast.ASTDeclaratorId;
-import de.monticore.java.javadsl._ast.ASTFormalParameter;
-import de.monticore.java.javadsl._ast.ASTFormalParameterListing;
-import de.monticore.java.javadsl._ast.ASTFormalParameters;
+import de.monticore.java.javadsl._ast.*;
 import de.monticore.types.types._ast.ASTType;
 
 import java.util.ArrayList;
@@ -63,12 +60,11 @@ public class Constructor{
     }
 
     public Builder addParameter(String identifier, ASTType type){
-      final ASTDeclaratorId id = ASTDeclaratorId.getBuilder()
-                                     .name(identifier).build();
-      final ASTFormalParameter param = ASTFormalParameter
-                                           .getBuilder()
-                                           .type(type)
-                                           .declaratorId(id)
+      final ASTDeclaratorId id = JavaDSLMill.declaratorIdBuilder()
+                                     .setName(identifier).build();
+      final ASTFormalParameter param = JavaDSLMill.formalParameterBuilder()
+                                           .setType(type)
+                                           .setDeclaratorId(id)
                                            .build();
       this.parameters.add(param);
       return this;
@@ -100,16 +96,14 @@ public class Constructor{
     public Constructor build(){
       ASTFormalParameters formalParameters;
       if(this.parameters.isEmpty()){
-        formalParameters = ASTFormalParameters.getBuilder().build();
+        formalParameters = JavaDSLMill.formalParametersBuilder().build();
       } else{
         ASTFormalParameterListing listing =
-            ASTFormalParameterListing
-                .getBuilder()
-                .formalParameters(this.parameters)
+            JavaDSLMill.formalParameterListingBuilder()
+                .setFormalParameterList(this.parameters)
                 .build();
-        formalParameters = ASTFormalParameters
-                               .getBuilder()
-                               .formalParameterListing(listing)
+        formalParameters = JavaDSLMill.formalParametersBuilder()
+                               .setFormalParameterListing(listing)
                                .build();
       }
       return new Constructor(name, formalParameters, bodyElements);
