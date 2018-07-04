@@ -46,16 +46,7 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
     // declarations
     if (node.isPresentBlock()) {
       for (ASTIOAssignment assign : node.getBlock().getIOAssignmentList()) {
-        if (!assign.isPresentName()) {
-          // no assignment name found, so compute one based on value type
-          Optional<String> sinkName = findFor(assign, false);
-          if (sinkName.isPresent()) {
-            assign.setName(sinkName.get());
-          }
-          else {
-            info("No sink for initial assignment '" + assign + "'.");
-          }
-        }
+        setNameOfAssignment(assign);
       }
     }
   }
@@ -65,30 +56,36 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
     // set missing assignment names of all reactions of all transitions
     if (node.isPresentReaction()) {
       for (ASTIOAssignment assign : node.getReaction().getIOAssignmentList()) {
-        if (!assign.isPresentName()) {
-          Optional<String> sinkName = Optional.empty();
-          ASTExpression expr = getFirstAssigntElement(assign).getExpression();
-          if (expr instanceof ASTCallExpression) {
-            if(((ASTCallExpression) expr).getExpression() instanceof ASTQualifiedNameExpression) {
-              ASTQualifiedNameExpression nameWithMethCall = ((ASTQualifiedNameExpression) ((ASTCallExpression) expr).getExpression());
-              if(nameWithMethCall.getExpression() instanceof ASTNameExpression) {
-                sinkName = Optional.of(((ASTNameExpression)nameWithMethCall.getExpression()).getName());
-              }
-              
-            }
+       setNameOfAssignment(assign);
+      }
+    }
+  }
+  
+  private void setNameOfAssignment(ASTIOAssignment assign) {
+    if (!assign.isPresentName()) {
+      Optional<String> sinkName = Optional.empty();
+      ASTExpression expr = getFirstAssigntElement(assign).getExpression();
+      if (expr instanceof ASTCallExpression) {
+        if (((ASTCallExpression) expr).getExpression() instanceof ASTQualifiedNameExpression) {
+          ASTQualifiedNameExpression nameWithMethCall = ((ASTQualifiedNameExpression) ((ASTCallExpression) expr)
+              .getExpression());
+          if (nameWithMethCall.getExpression() instanceof ASTNameExpression) {
+            sinkName = Optional
+                .of(((ASTNameExpression) nameWithMethCall.getExpression()).getName());
           }
-
-            // no assignment name found, so compute one based on value type
-            if (!sinkName.isPresent()) {
-            sinkName = findFor(assign, false);
-            }
-          if (sinkName.isPresent()) {
-            assign.setName(sinkName.get());
-          }
-          else {
-            info("No sink for reaction assignment '" + assign + "'.");
-          }
+          
         }
+      }
+      
+      // no assignment name found, so compute one based on value type
+      if (!sinkName.isPresent()) {
+        sinkName = findFor(assign, false);
+      }
+      if (sinkName.isPresent()) {
+        assign.setName(sinkName.get());
+      }
+      else {
+        info("No sink for reaction assignment '" + assign + "'.");
       }
     }
   }
