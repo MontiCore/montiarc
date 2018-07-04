@@ -97,9 +97,6 @@ public class AssignmentTest extends AbstractCoCoTest {
    * Tests the checking of compatible variables in CoCo
    * AutomatonReactionTypeDoesNotFitOutputType
    */
-  @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
-      + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
-      + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testIncompatibleVariableAssignment() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "IncompatibleVariableAssignment");
@@ -107,9 +104,9 @@ public class AssignmentTest extends AbstractCoCoTest {
         new ExpectedErrorInfo(1, "xMA042"));
   }
   
-  @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
-      + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
-      + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
+//  @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
+//      + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
+//      + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testIncompatibleVariableAssignmentGenericTypesDifferSimple() {
     ASTMontiArcNode node = loadComponentAST(

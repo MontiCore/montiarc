@@ -16,7 +16,7 @@ component IncompatibleVariableAssignmentGenericTypesDifferSimple {
 
   automaton BumpControl {
     state Idle;
-    initial Idle / {stateChanges.put("foo", 5)};
-    Idle -> Idle / {stateChanges.put("asd", 4)};
+    initial Idle / {call stateChanges.put("foo", 5)};
+    Idle -> Idle / {call stateChanges.put(4, "asd")}; //ERROR
   }
 }

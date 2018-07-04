@@ -84,11 +84,11 @@ public class MontiArcCoCos {
         // TYPE CORRECTNESS
         // TODO Kann mit der Aktualisierung auf neue JavaDSL-Version aktiviert
         // werden
-        // .addCoCo(new AutomatonGuardIsNotBoolean())
+         .addCoCo(new AutomatonGuardIsNotBoolean())
         
         // .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
-        // .addCoCo(new AutomatonInitialReactionTypeDoesNotFitOutputType())
-        // .addCoCo(new AutomatonReactionTypeDoesNotFitOutputType())
+         .addCoCo(new AutomatonInitialReactionTypeDoesNotFitOutputType())
+         .addCoCo(new AutomatonReactionTypeDoesNotFitOutputType())
         .addCoCo(new AutomatonNoDataAssignedToVariable())
         
         // UNIQUENESS OF NAMES
