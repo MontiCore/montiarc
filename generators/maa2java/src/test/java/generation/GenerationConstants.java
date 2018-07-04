@@ -1,10 +1,12 @@
 package generation;
 
+import com.google.common.collect.Lists;
 import de.monticore.java.javadsl._ast.ASTConstantsJavaDSL;
 import de.monticore.java.javadsl._ast.ASTPrimitiveModifier;
 import de.monticore.java.javadsl._ast.JavaDSLMill;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.types.types._ast.ASTSimpleReferenceType;
 import de.monticore.types.types._ast.ASTVoidType;
 
 public class GenerationConstants {
@@ -23,4 +25,9 @@ public class GenerationConstants {
 
   public final static JavaDSLPrettyPrinter PRINTER
       = new JavaDSLPrettyPrinter(new IndentPrinter());
+
+  public static final ASTSimpleReferenceType STRING_TYPE
+      = JavaDSLMill.simpleReferenceTypeBuilder()
+        .setNameList(Lists.newArrayList("String"))
+        .build();
 }

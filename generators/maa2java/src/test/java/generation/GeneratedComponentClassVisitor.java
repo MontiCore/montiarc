@@ -66,9 +66,19 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     final String methodName = signature.getName();
     final Optional<Method> method = getMethod(methodName);
     if(method.isPresent() && method.get().getBodyElements().size() > 0) {
+      int lastIndex = 0;
       for (String s : method.get().getBodyElements()) {
         if (!methodString.contains(s)) {
-          Log.error("Missing statement in method " + methodName + ": " + s);
+          Log.error("Missing statement in method " + methodName +
+                        " of class " + className + ": " + s);
+        } else {
+          int foundIndex = methodString.indexOf(s);
+          if(lastIndex >= foundIndex){
+            Log.error(String.format("Body element %s of method %s was " +
+                                        "found in the wrong order.",
+                s, methodName));
+          }
+          lastIndex = foundIndex;
         }
       }
     }
@@ -173,11 +183,22 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
 
       final String printedBody =
           printWithoutWhitespace(node.getConstructorBody());
+      int lastIndex = 0;
       for (String bodyElement : constructor.getBodyElements()) {
         if(!printedBody.contains(bodyElement)) {
           Log.error(
-              String.format("Missing element in constructor bodyElements: %s",
-                          bodyElement));
+              String.format("Missing element in constructor of class %s" +
+                                ": %s",
+                          className, bodyElement));
+        }else {
+          int foundIndex = printedBody.indexOf(bodyElement);
+          if (lastIndex >= foundIndex) {
+            Log.error(String.format("Body element %s of constructor " +
+                                        "%s was " +
+                                        "found in the wrong order.",
+                bodyElement, className));
+          }
+          lastIndex = foundIndex;
         }
       }
     }

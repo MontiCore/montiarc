@@ -119,8 +119,8 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
         qualifiedName + "Impl");
 
     // Log checking
+    Log.debug("Number of errors found: " + Log.getFindings().size(), "ComponentGenerationTest");
 //    assertEquals(0, Log.getFindings().size());
-    Log.debug("Found no errors while checking the generated files", "ComponentGenerationTest");
   }
 
   /**

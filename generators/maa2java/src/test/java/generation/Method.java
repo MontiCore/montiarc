@@ -137,7 +137,12 @@ public class Method{
       }
       return new Method(returnType, name, formalParameters, bodyElements);
     }
+    public Builder clearBodyElements(){
+      this.bodyElements = new ArrayList<>();
+      return this;
+    }
   }
+
 
   @Override public String toString() {
     return "Method{" +

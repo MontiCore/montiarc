@@ -28,7 +28,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * TODO
+ * Collects information about the generated java classes that is expected
+ * to be present.
  *
  * @author (last commit) Michael Mutert
  */
@@ -46,6 +47,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   private final String inputName;
   private final String resultName;
   private final String implName;
+  private final ASTSimpleReferenceType resultType;
 
   public ComponentElementsCollector(ComponentSymbol symbol, String name) {
     this.symbol = symbol;
@@ -58,6 +60,9 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     this.inputVisitor = new GeneratedComponentClassVisitor(inputName);
     this.implVisitor = new GeneratedComponentClassVisitor(implName);
     this.resultVisitor = new GeneratedComponentClassVisitor(resultName);
+    resultType = JavaDSLMill.simpleReferenceTypeBuilder()
+        .setNameList(Lists.newArrayList(resultName))
+        .build();
   }
 
   @Override
@@ -180,13 +185,9 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         = JavaDSLMill.simpleReferenceTypeBuilder()
               .setNameList(Lists.newArrayList(inputName))
               .build();
-    ASTSimpleReferenceType resultRefType
-        = JavaDSLMill.simpleReferenceTypeBuilder()
-              .setNameList(Lists.newArrayList(resultName))
-              .build();
     ASTTypeArguments typeArgs = JavaDSLMill.typeArgumentsBuilder()
                                     .setTypeArgumentList(
-                                        Lists.newArrayList(inputRefType, resultRefType))
+                                        Lists.newArrayList(inputRefType, resultType))
                                     .build();
     ASTType expectedType = JavaDSLMill.simpleReferenceTypeBuilder()
                                .setNameList(Lists.newArrayList("IComputable"))
@@ -196,29 +197,21 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   }
 
   private void addGetInitialValues(){
-    ASTSimpleReferenceType returnType
-        = JavaDSLMill.simpleReferenceTypeBuilder()
-              .setNameList(Lists.newArrayList(resultName))
-              .build();
     Method method = Method.getBuilder()
                         .setName("getInitialValues")
-                        .setReturnType(returnType)
+                        .setReturnType(resultType)
                         .build();
     this.implVisitor.addMethod(method);
   }
 
   private void addImplCompute(){
-    ASTSimpleReferenceType returnType
-        = JavaDSLMill.simpleReferenceTypeBuilder()
-              .setNameList(Lists.newArrayList(resultName))
-              .build();
     ASTSimpleReferenceType paramType
         = JavaDSLMill.simpleReferenceTypeBuilder()
               .setNameList(Lists.newArrayList(inputName))
               .build();
     Method method = Method.getBuilder()
                         .setName("compute")
-                        .setReturnType(returnType)
+                        .setReturnType(resultType)
                         .addParameter("input", paramType)
                         .build();
     this.implVisitor.addMethod(method);
@@ -233,6 +226,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     builder.setName(componentName);
     implConstructor.setName(implName);
+
     StringBuilder parameters = new StringBuilder();
     for (ASTParameter parameter : node.getHead().getParameterList()) {
       parameters.append(parameter.getName()).append(",");
@@ -252,6 +246,11 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     }
     builder.addBodyElement(String.format("behaviorImpl = new %sImpl(%s);",
         capitalizeFirst(componentName), parameters.toString()));
+    for (ASTParameter parameter : node.getHead().getParameterList()) {
+      builder.addBodyElement(String.format("this.%s=%s",
+          parameter.getName(), parameter.getName()));
+    }
+
 
     this.implVisitor.addConstructor(implConstructor.build());
     this.classVisitor.addConstructor(builder.build());
@@ -293,10 +292,6 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   private void addSetResult() {
     Method.Builder methodBuilder;
     methodBuilder = Method.getBuilder().setName("setResult");
-    ASTSimpleReferenceType resultType =
-        JavaDSLMill.simpleReferenceTypeBuilder()
-            .setNameList(Lists.newArrayList(componentName+"Result"))
-            .build();
     methodBuilder.addParameter("result", resultType);
     classVisitor.addMethod(methodBuilder.build());
   }
@@ -320,22 +315,30 @@ public class ComponentElementsCollector implements MontiArcVisitor {
    * Add expected toString methods to the respective visitors
    */
   private void addToString(){
-    ASTSimpleReferenceType stringType
-        = JavaDSLMill.simpleReferenceTypeBuilder()
-              .setNameList(Lists.newArrayList("String"))
-              .build();
-
-    Method toString =
+    Method.Builder toStringBuilder =
         Method
             .getBuilder()
             .setName("toString")
-            .setReturnType(stringType) // TODO Return type
-            .addBodyElement("String result = \"[\"")
-            // TODO port body elements
-            .addBodyElement("return result+\"]\"")
-            .build();
-    this.resultVisitor.addMethod(toString);
-    this.inputVisitor.addMethod(toString);
+            .setReturnType(GenerationConstants.STRING_TYPE)
+            .addBodyElement("String result = \"[\"");
+
+    for (PortSymbol portSymbol : symbol.getOutgoingPorts()) {
+      toStringBuilder.addBodyElement(
+          String.format("result += \"%s: \" + this.%s + \" \";",
+              portSymbol.getName(), portSymbol.getName()));
+    }
+    toStringBuilder.addBodyElement("return result+\"]\"");
+    this.resultVisitor.addMethod(toStringBuilder.build());
+
+    toStringBuilder.clearBodyElements();
+    toStringBuilder.addBodyElement("String result = \"[\"");
+    for (PortSymbol portSymbol : symbol.getIncomingPorts()) {
+      toStringBuilder.addBodyElement(
+          String.format("result += \"%s: \" + this.%s + \" \";",
+              portSymbol.getName(), portSymbol.getName()));
+    }
+    toStringBuilder.addBodyElement("return result+\"]\"");
+    this.inputVisitor.addMethod(toStringBuilder.build());
 
   }
 
@@ -367,7 +370,8 @@ public class ComponentElementsCollector implements MontiArcVisitor {
    *               is currently collected.
    */
   private void addInputAndResultConstructor(ComponentSymbol symbol){
-    final Constructor.Builder builder = Constructor.getBuilder();
+    Constructor.Builder builder = Constructor.getBuilder();
+
     // Add empty constructors
     if(symbol.getSuperComponent().isPresent()){
       builder.addBodyElement("super();");
@@ -401,16 +405,20 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       this.inputVisitor.addConstructor(builder.build());
     }
 
-
+    builder = Constructor.getBuilder();
     builder.setName(symbol.getName() + "Result");
     this.resultVisitor.addConstructor(builder.build());
 
-
     if(!symbol.getOutgoingPorts().isEmpty()){
+      for (PortSymbol port : symbol.getOutgoingPorts()){
+        final ASTPort astNode = (ASTPort) port.getAstNode().get();
+        final String portName = port.getName();
+        builder.addParameter(portName, astNode.getType());
 
+        builder.addBodyElement(String.format("this.%s=%s", portName, portName));
+      }
+      this.resultVisitor.addConstructor(builder.build());
     }
-
-
   }
 
   @Override

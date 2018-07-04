@@ -91,6 +91,7 @@ public class AbstractGeneratorTest {
   public void setUp() throws Exception {
     Log.getFindings().clear();
     Log.enableFailQuick(false);
+    generatorTool = new MontiArcGeneratorTool();
 
     // Clear output folder
     File outputFolder = Paths.get(TARGET_GENERATED_TEST_SOURCES_DIR).toFile();
@@ -105,7 +106,6 @@ public class AbstractGeneratorTest {
     }
 
     // 4. Generate models (at specified location)
-    generatorTool = new MontiArcGeneratorTool();
     generatorTool.generate(
         Paths.get(MODEL_PATH).toFile(),
         Paths.get(TARGET_GENERATED_TEST_SOURCES_DIR).toFile(),
