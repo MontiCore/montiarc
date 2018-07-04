@@ -112,7 +112,7 @@ public class AssignmentTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "IncompatibleVariableAssignmentGenericTypesDifferSimple");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(1, "xMA042"));
+        new ExpectedErrorInfo(2, "xMA042","xMA042"));
   }
   
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "

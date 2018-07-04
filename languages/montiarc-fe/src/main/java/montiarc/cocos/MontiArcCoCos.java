@@ -17,11 +17,11 @@ public class MontiArcCoCos {
     return new MontiArcCoCoChecker()
         .addCoCo(new PortUsage())
         .addCoCo(new SubComponentsConnected())
-     // TODO remove comment when new Java DSL is integrated:
+        // TODO remove comment when new Java DSL is integrated:
         // Fails when using CD Enums due to buggy TypeCompatibilityChecker (see
         // testSubcomponentParametersOfWrongTypeWithCD in SubcomponentTest
         // class)
-//        .addCoCo(new SubcomponentParametersCorrectlyAssigned())
+        // .addCoCo(new SubcomponentParametersCorrectlyAssigned())
         .addCoCo(new PackageLowerCase())
         .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new DefaultParametersHaveCorrectOrder())
@@ -31,7 +31,7 @@ public class MontiArcCoCos {
         .addCoCo(new IOAssignmentCallFollowsMethodCall())
         // TODO remove comment when new Java DSL is integrated
         // .addCoCo(new AllGenericParametersOfSuperClassSet())
-         .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
+        .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
         .addCoCo(new TypeParameterNamesUnique())
         .addCoCo(new TopLevelComponentHasNoInstanceName())
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
@@ -84,11 +84,12 @@ public class MontiArcCoCos {
         // TYPE CORRECTNESS
         // TODO Kann mit der Aktualisierung auf neue JavaDSL-Version aktiviert
         // werden
-         .addCoCo(new AutomatonGuardIsNotBoolean())
+        .addCoCo(new AutomatonGuardIsNotBoolean())
         
         // .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
-         .addCoCo(new AutomatonInitialReactionTypeDoesNotFitOutputType())
-         .addCoCo(new AutomatonReactionTypeDoesNotFitOutputType())
+        .addCoCo((MontiArcASTTransitionCoCo)new AutomatonReactionTypeDoesNotFitOutputType())
+        .addCoCo((MontiArcASTInitialStateDeclarationCoCo)new AutomatonReactionTypeDoesNotFitOutputType())
+
         .addCoCo(new AutomatonNoDataAssignedToVariable())
         
         // UNIQUENESS OF NAMES
