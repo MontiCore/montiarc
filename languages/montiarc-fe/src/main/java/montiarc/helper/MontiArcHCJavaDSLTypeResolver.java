@@ -33,7 +33,7 @@ public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
     setResult(null);
     String name = node.getName();
     Scope scope = node.getEnclosingScope().get();
-    String typeSymbolName = JavaDSLHelper.getEnclosingTypeSymbolName(scope);
+    String typeSymbolName = JavaDSLHelper.getEnclosingTypeSymbolName(scope); //is null as there is no enclosing JAVA type symbol
     if (null == typeSymbolName) {
       typeSymbolName = name;
     }

@@ -77,19 +77,22 @@ public class AutomatonReactionTypeDoesNotFitOutputType
     JTypeReference<? extends JTypeSymbol> varType = typeRef;
     try {
       for (ASTValuation val : assign.getValueList().getAllValuations()) {
-        Optional<? extends JavaTypeSymbolReference> exprType = TypeCompatibilityChecker
-            .getExpressionType(val.getExpression());
-        if (!exprType.isPresent()) {
-          Log.error(
-              "0xMA044 Could not resolve type of expression for checking the reaction.",
-              assign.get_SourcePositionStart());
-        }
-        else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType)) {
-          Log.error("0xMA042 Type of Variable/Output \"" + currentNameToResolve
-              + "\" in the reaction does not match the type of its assigned expression. Type "
-              +
-              exprType.get().getName() + " can not cast to type " + varType.getName()
-              + ".", val.get_SourcePositionStart());
+        // check only if assignment is assignment of form "x = foo.bar()" 
+        if (assign.isAssignment()) {
+          Optional<? extends JavaTypeSymbolReference> exprType = TypeCompatibilityChecker
+              .getExpressionType(val.getExpression());
+          if (!exprType.isPresent()) {
+            Log.error(
+                "0xMA044 Could not resolve type of expression for checking the reaction.",
+                assign.get_SourcePositionStart());
+          }
+          else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType)) {
+            Log.error("0xMA042 Type of Variable/Output \"" + currentNameToResolve
+                + "\" in the reaction does not match the type of its assigned expression. Type "
+                +
+                exprType.get().getName() + " can not cast to type " + varType.getName()
+                + ".", val.get_SourcePositionStart());
+          }
         }
       }
     }
@@ -98,5 +101,11 @@ public class AutomatonReactionTypeDoesNotFitOutputType
           assign.get_SourcePositionStart());
     }
   }
+  
+  
+  private void checkAssignedTypeFits() {
+    
+  }
+  
   
 }

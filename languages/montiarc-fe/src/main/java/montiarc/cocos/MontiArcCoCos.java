@@ -87,8 +87,8 @@ public class MontiArcCoCos {
         .addCoCo(new AutomatonGuardIsNotBoolean())
         
         // .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
-        .addCoCo((MontiArcASTTransitionCoCo)new AutomatonReactionTypeDoesNotFitOutputType())
-        .addCoCo((MontiArcASTInitialStateDeclarationCoCo)new AutomatonReactionTypeDoesNotFitOutputType())
+//        .addCoCo((MontiArcASTTransitionCoCo)new AutomatonReactionTypeDoesNotFitOutputType())
+//        .addCoCo((MontiArcASTInitialStateDeclarationCoCo)new AutomatonReactionTypeDoesNotFitOutputType())
 
         .addCoCo(new AutomatonNoDataAssignedToVariable())
         
