@@ -6,7 +6,7 @@ import types.Datatypes.TimerCmd;
 import java.util.HashMap;
 
 /*
- * Invalid model.
+ * Invalid model. 
  *
  * @implements TODO
  */
@@ -16,7 +16,7 @@ component IncompatibleVariableAssignmentGenericTypesDifferSimple {
 
   automaton BumpControl {
     state Idle;
-    initial Idle / {stateChanges.put("foo", 5)};
-    Idle -> Idle / {stateChanges.put("asd", 4)};
+    initial Idle / {call stateChanges.put(5, "foo")}; //ERROR
+    Idle -> Idle / {call stateChanges.put(4, "asd")}; //ERROR
   }
 }

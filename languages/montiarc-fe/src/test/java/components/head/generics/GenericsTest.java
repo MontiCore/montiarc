@@ -72,7 +72,6 @@ public class GenericsTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "SubCompExtendsGenericComparableCompValid");
   }
   
-  @Ignore("TODO remove when new JavaDSL is integrated") 
   @Test
   public void testcomponentExtendsGenericComponent() {
     checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent");

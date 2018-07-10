@@ -32,12 +32,16 @@ public class GuardTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "GuardIsBoolean");
   }
   
-  @Ignore("see #172")
   @Test
   public void testGuardNotBoolean() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "GuardNotBoolean");
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new ExpectedErrorInfo(3, "xMA036"));
+  }
+  
+  @Test
+  public void testGuardNotBooleanValid() {
+    checkValid(PACKAGE + "." + "GuardHasComplexExpressionWithCD");
   }
   
   @Test
