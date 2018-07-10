@@ -77,7 +77,7 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfUndeclaredField())
         .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
         // TODO see #171
-        // .addCoCo(new AssignmentHasNoName())
+         .addCoCo(new AssignmentHasNoName())
         .addCoCo(new ConfigurationParametersCorrectlyInherited())
         .addCoCo(new InnerComponentNotExtendsDefiningComponent())
         

@@ -72,7 +72,6 @@ public class AssignmentTest extends AbstractCoCoTest {
         new ExpectedErrorInfo(3, "xMA019"));
   }
   
-  @Ignore("see #171")
   @Test
   public void testAmbiguousMatching() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousMatching");
