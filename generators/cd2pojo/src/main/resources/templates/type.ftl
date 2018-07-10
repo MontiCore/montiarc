@@ -100,7 +100,6 @@ public ${kind} ${type.getName()} ${super} {
     <#-- no-args constructor, if any arguments are present -->
     <#if mandatoryFields?size != 0>
     public ${type.getName()}() {
-      System.out.println("Warning! ${type.getName()} has been created with a zero-args constructor, therefore association cardinalities might be violated!");
     }
     </#if>   
     
