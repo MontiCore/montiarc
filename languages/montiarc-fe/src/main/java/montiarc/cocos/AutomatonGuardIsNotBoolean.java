@@ -10,8 +10,8 @@ import montiarc._cocos.MontiArcASTGuardExpressionCoCo;
 import montiarc.helper.TypeCompatibilityChecker;
 
 /**
- * Context condition for checking, if every guard of a transition can be evaluated to a True or
- * False value.
+ * Context condition for checking, if every guard of a transition can be
+ * evaluated to a True or False value.
  *
  * @author Andreas Wortmann
  */
@@ -28,15 +28,21 @@ public class AutomatonGuardIsNotBoolean implements MontiArcASTGuardExpressionCoC
   }
   
   public void doCheck(ASTJavaGuardExpression node) {
-    Optional<? extends JavaTypeSymbolReference> typeRef = TypeCompatibilityChecker
-        .getExpressionType(node.getExpression());
-    if (typeRef.isPresent()) {
-      if (!typeRef.get().getName().equalsIgnoreCase("boolean")) {
-        Log.error("0xMA036 Guard does not evaluate to a boolean, but instead to "
-            + typeRef.get().getName() + ".", node.get_SourcePositionStart());
+    try {
+      Optional<? extends JavaTypeSymbolReference> typeRef = TypeCompatibilityChecker
+          .getExpressionType(node.getExpression());
+      
+      if (typeRef.isPresent()) {
+        if (!typeRef.get().getName().equalsIgnoreCase("boolean")) {
+          Log.error("0xMA036 Guard does not evaluate to a boolean, but instead to "
+              + typeRef.get().getName() + ".", node.get_SourcePositionStart());
+        }
+      }
+      else {
+        Log.error("0xMA037 Could not resolve type of guard.", node.get_SourcePositionStart());
       }
     }
-    else {
+    catch (Exception e) {
       Log.error("0xMA037 Could not resolve type of guard.", node.get_SourcePositionStart());
     }
   }

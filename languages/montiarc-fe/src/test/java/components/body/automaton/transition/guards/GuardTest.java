@@ -40,6 +40,11 @@ public class GuardTest extends AbstractCoCoTest {
   }
   
   @Test
+  public void testGuardNotBooleanValid() {
+    checkValid(PACKAGE + "." + "GuardHasComplexExpressionWithCD");
+  }
+  
+  @Test
   public void testGuardWithInstanceOfExpression() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "GuardWithInstanceOfExpression");
     // 1 Error because the models contains an ASTInstanceOfExpression

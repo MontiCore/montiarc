@@ -97,6 +97,7 @@ public class AssignmentTest extends AbstractCoCoTest {
    * Tests the checking of compatible variables in CoCo
    * AutomatonReactionTypeDoesNotFitOutputType
    */
+  @Ignore
   @Test
   public void testIncompatibleVariableAssignment() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "IncompatibleVariableAssignment");
