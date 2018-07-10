@@ -29,8 +29,7 @@ public class MontiArcCoCos {
         .addCoCo(new ComponentWithTypeParametersHasInstance())
         .addCoCo(new CircularInheritance())
         .addCoCo(new IOAssignmentCallFollowsMethodCall())
-        // TODO remove comment when new Java DSL is integrated
-        // .addCoCo(new AllGenericParametersOfSuperClassSet())
+        .addCoCo(new AllGenericParametersOfSuperClassSet())
         .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
         .addCoCo(new TypeParameterNamesUnique())
         .addCoCo(new TopLevelComponentHasNoInstanceName())
@@ -77,19 +76,19 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfUndeclaredField())
         .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
         // TODO see #171
-         .addCoCo(new AssignmentHasNoName())
+        .addCoCo(new AssignmentHasNoName())
         .addCoCo(new ConfigurationParametersCorrectlyInherited())
         .addCoCo(new InnerComponentNotExtendsDefiningComponent())
         
         // TYPE CORRECTNESS
-        // TODO Kann mit der Aktualisierung auf neue JavaDSL-Version aktiviert
-        // werden
         .addCoCo(new AutomatonGuardIsNotBoolean())
         
         // .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
-//        .addCoCo((MontiArcASTTransitionCoCo)new AutomatonReactionTypeDoesNotFitOutputType())
-//        .addCoCo((MontiArcASTInitialStateDeclarationCoCo)new AutomatonReactionTypeDoesNotFitOutputType())
-
+        // .addCoCo((MontiArcASTTransitionCoCo)new
+        // AutomatonReactionTypeDoesNotFitOutputType())
+        // .addCoCo((MontiArcASTInitialStateDeclarationCoCo)new
+        // AutomatonReactionTypeDoesNotFitOutputType())
+        
         .addCoCo(new AutomatonNoDataAssignedToVariable())
         
         // UNIQUENESS OF NAMES
