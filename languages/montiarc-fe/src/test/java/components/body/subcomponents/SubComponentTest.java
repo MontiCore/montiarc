@@ -58,18 +58,24 @@ public class SubComponentTest extends AbstractCoCoTest {
   
   private static final String PACKAGE = "components.body.subcomponents";
   
+  public class Student extends Person{
+    
+  }
+  
+  public class Person {
+    
+  }
+  
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
   }
   
-  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   @Test
   public void testSubcomponentWithJavaCfgArgs() {
     checkValid(PACKAGE + "." + "SubcomponentsWithJavaCfgArg");
   }
   
-  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   @Test
   public void testSubcomponentParametersOfWrongType() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentParametersOfWrongType");
@@ -77,7 +83,6 @@ public class SubComponentTest extends AbstractCoCoTest {
         node, new ExpectedErrorInfo(2, "xMA064"));
   }
   
-  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   @Test
   public void testSubcomponentParametersOfWrongTypeWithCD() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentParametersOfWrongType2");
@@ -165,7 +170,7 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
   
   @Test
-  @Ignore("TODO: Throws ClassCastException in JavaDSLHelper. Root is the coco" +
+  @Ignore("TODO: Throws NullPointer in TypeCompatibilityChecker. Root is the coco" +
       "SubcomponentParametersCorreclyAssigned,")
   public void testCompThatUsesCompWithInterfaceParam() {
     checkValid(PACKAGE + "." + "CompThatUsesCompWithInterfaceParam");
@@ -203,7 +208,6 @@ public class SubComponentTest extends AbstractCoCoTest {
     ExpectedErrorInfo.reset();
   }
   
-  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   @Test
   public void testWrongSubComponentArgument() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongSubComponentArgument");
@@ -257,7 +261,7 @@ public class SubComponentTest extends AbstractCoCoTest {
     }
     catch (NullPointerException e) {
     }
-    assertEquals("xA1038", 1,
+    assertEquals("xA1038", 3,
         Log.getFindings().stream().map(f -> f.buildMsg()).filter(m -> m.contains("xA1038"))
             .count());
   }
@@ -589,7 +593,7 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertEquals(PACKAGE + "." + "SimpleComponentWithAutomaton", refType.getFullName());
   }
   
-  @Ignore
+  @Ignore("Component ConstantDelay is not activated")
   @Test
   public void testUsingSCWithParams() {
     Scope symTab = this.loadDefaultSymbolTable();
@@ -653,7 +657,6 @@ public class SubComponentTest extends AbstractCoCoTest {
     // typeRef.getTypeParameters().get(1).getTypeParameters().get(0).getType().getName());
   }
   
-  @Ignore("See ticket #146")
   @Test
   public void testUsingComplexParamsWithCoco() {
     String path = PACKAGE + "." + "UsingComplexParams";
@@ -776,7 +779,7 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
   
   @Test
-  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
+//  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   public void testSubcomponentsWithWrongNumberOfCfgArgs() {
     final ASTMontiArcNode astNode = loadComponentAST(
         PACKAGE + "." + "SubcomponentsWithWrongNumberOfCfgArgs");

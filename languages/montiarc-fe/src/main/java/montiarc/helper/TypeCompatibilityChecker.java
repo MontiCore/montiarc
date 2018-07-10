@@ -104,12 +104,24 @@ public class TypeCompatibilityChecker {
         JTypeReference<? extends JTypeSymbol> sourceTypesCurrentTypeArgument = (JavaTypeSymbolReference) sourceParams
             .get(i)
             .getType();
-        List<JTypeSymbol> nextToCheckSourceTypeFormalTypeParameters = new ArrayList<>();
-        List<JTypeReference<? extends JTypeSymbol>> nextToCheckSourceTypeArguments = new ArrayList<>();
-        
         JTypeReference<? extends JTypeSymbol> targetTypesCurrentTypeArgument = (JavaTypeSymbolReference) targetParams
             .get(i)
             .getType();
+        
+        // This is the case when we resolved a type which has no actual type
+        // arguments set. E.g. when we resolve the type List<K>, the actual type
+        // argument is not set here. We then reuse the passed actual type
+        // arguments for further processing.
+        if (!sourceTypesCurrentTypeArgument.existsReferencedSymbol()) {
+          sourceTypesCurrentTypeArgument = sourceTypeArguments.get(i);
+        }
+        if (!targetTypesCurrentTypeArgument.existsReferencedSymbol()) {
+          targetTypesCurrentTypeArgument = targetTypeArguments.get(i);
+        }
+        
+        List<JTypeSymbol> nextToCheckSourceTypeFormalTypeParameters = new ArrayList<>();
+        List<JTypeReference<? extends JTypeSymbol>> nextToCheckSourceTypeArguments = new ArrayList<>();
+        
         List<JTypeSymbol> nextToCheckTargetTypeFormalTypeParameters = new ArrayList<>();
         
         List<JTypeReference<? extends JTypeSymbol>> nextToCheckTargetTypeArguments = new ArrayList<>();
@@ -211,8 +223,7 @@ public class TypeCompatibilityChecker {
         result = doTypesMatch(parent,
             parent.getReferencedSymbol().getFormalTypeParameters().stream()
                 .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-            parent.getActualTypeArguments().stream().map(a -> (JavaTypeSymbolReference) a.getType())
-                .collect(Collectors.toList()),
+            sourceTypeArguments,
             targetType,
             targetTypeFormalTypeParameters,
             targetTypeArguments);
@@ -224,9 +235,7 @@ public class TypeCompatibilityChecker {
               interf,
               interf.getReferencedSymbol().getFormalTypeParameters().stream()
                   .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-              interf.getActualTypeArguments().stream()
-                  .map(a -> (JavaTypeSymbolReference) a.getType())
-                  .collect(Collectors.toList()),
+              sourceTypeArguments,
               targetType,
               targetTypeFormalTypeParameters,
               targetTypeArguments);

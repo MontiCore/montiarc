@@ -7,6 +7,7 @@ package montiarc.cocos;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.mcexpressions._ast.ASTExpression;
@@ -26,20 +27,14 @@ import montiarc.helper.TypeCompatibilityChecker;
 
 /**
  * Ensures that the arguments assigned to the subcomponent instance fit the
- * components parameters in terms of type correctness.
- *
- *
- *
- * Furhermore, this coco compares the number of arguments passed to the subcomponent with
- * the parameters of the instantiated type. It considers default parameters that
- * are optional when instantiating a component. Type and Ordering is checked in
+ * components parameters in terms of type correctness. Furhermore, this coco
+ * compares the number of arguments passed to the subcomponent with the
+ * parameters of the instantiated type. It considers default parameters that are
+ * optional when instantiating a component. Type and Ordering is checked in
  * other cocos.
  * 
  * @implements [Wor16] MR1: Arguments of configuration parameters with default
  * values may be omitted during subcomponent declaration. (p. 58, Lst. 4.11)
- * 
- *
- *
  * @implements TODO: Klaeren welche CoCo in der Literatur repraesentiert wird.
  * @author Andreas Wortmann
  */
@@ -79,13 +74,22 @@ public class SubcomponentParametersCorrectlyAssigned
                     "0xMA064 Type of argument " + paramIndex + " (" + actualArg.get().getName()
                         + ") of subcomponent " + instance.getName() + " of component type '"
                         + node.getName() + "' does not fit generic parameter type "
-                        + configParam.getType().getName() +" (instantiated with: " + actualTypeArg.getType().getName() + ")",
+                        + configParam.getType().getName() + " (instantiated with: "
+                        + actualTypeArg.getType().getName() + ")",
                     expr.get_SourcePositionStart());
               }
             }
             else if (!TypeCompatibilityChecker.doTypesMatch(
+                actualArg.get(),
+                actualArg.get().getReferencedSymbol().getFormalTypeParameters().stream()
+                    .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+                actualArg.get().getActualTypeArguments().stream()
+                    .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList()),
                 configParam.getType(),
-                actualArg.get())) {
+                configParam.getType().getReferencedSymbol().getFormalTypeParameters().stream()
+                    .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+                configParam.getType().getActualTypeArguments().stream()
+                    .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList()))) {
               Log.error("0xMA064 Type of argument " + paramIndex + " (" + actualArg.get().getName()
                   + ") of subcomponent " + instance.getName() + " of component type '"
                   + node.getName() + "' does not fit parameter type "
@@ -110,7 +114,8 @@ public class SubcomponentParametersCorrectlyAssigned
         ASTComponent subcompType = (ASTComponent) subcompSym.get().getAstNode().get();
         List<ASTParameter> params = subcompType.getHead().getParameterList();
         int numberOfNecessaryConfigParams = params.size() - getNumberOfDefaultParameters(params);
-        if (numberOfNecessaryConfigParams > sub.getArgumentsList().size() || sub.getArgumentsList().size() > params.size()) {
+        if (numberOfNecessaryConfigParams > sub.getArgumentsList().size()
+            || sub.getArgumentsList().size() > params.size()) {
           Log.error(String.format("0xMA082 Subcomponent of type \"%s\" is instantiated with "
               + sub.getArgumentsList().size() + " arguments but requires "
               + numberOfNecessaryConfigParams + " arguments by type definition.", type),
@@ -119,7 +124,6 @@ public class SubcomponentParametersCorrectlyAssigned
       }
     }
   }
-  
   
   private Optional<Integer> getIndexOfGenericTypeParam(ComponentInstanceSymbol instance,
       JFieldSymbol configParam) {

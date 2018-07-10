@@ -11,9 +11,9 @@ import types.Student;
 component SubcomponentsWithJavaCfgArg {
         
     component ComponentWithJavaCfgArgPerson(new Person()) p1;
-    component ComponentWithJavaCfgArgPerson(new Student()) p2;
+    component ComponentWithJavaCfgArgPerson(new Student()) p2;  
     
-    component ComponentWithJavaCfgArgStudent(new Person()) p3;
+    //component ComponentWithJavaCfgArgStudent(new Person()) p3; //invalid downcast Person -> Student
     component ComponentWithJavaCfgArgStudent(new Student()) p4;
 
 }
