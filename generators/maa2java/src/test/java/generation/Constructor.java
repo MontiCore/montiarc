@@ -5,6 +5,7 @@
  */
 package generation;
 
+import com.google.common.collect.Lists;
 import de.monticore.java.javadsl._ast.*;
 import de.monticore.types.types._ast.ASTType;
 
@@ -106,14 +107,20 @@ public class Constructor{
                                .setFormalParameterListing(listing)
                                .build();
       }
-      return new Constructor(name, formalParameters, bodyElements);
+      return new Constructor(name, formalParameters, Lists.newArrayList(bodyElements));
     }
   }
 
   @Override public String toString() {
+    String parameterString = "[]";
+    if(parameters.isPresentFormalParameterListing()){
+      parameterString = parameters.getFormalParameterListing()
+                            .getFormalParameterList().toString();
+    }
+
     return "Constructor{" +
         "name='" + name + '\'' +
-        ", parameters=" + parameters +
+        ", parameters=" + parameterString +
         ", bodyElements=" + bodyElements +
         '}';
   }

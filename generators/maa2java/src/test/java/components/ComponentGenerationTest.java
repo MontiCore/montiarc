@@ -66,6 +66,10 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 //    final String componentName = "ComponentWithEmptyComponent";
 //    final String componentName = "EmptyComponent";
     final String componentName = "AtomicCompWithoutImpl";
+    executeGeneratorTest(componentName);
+  }
+
+  private void executeGeneratorTest(String componentName) {
     final String qualifiedName = PACKAGE + "." + componentName;
 
     // Load component symbol
@@ -115,12 +119,19 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
         qualifiedName + "Result");
 
     // Impl
-    runVisitorOnFile(gs, compCollector.getImplVisitor(),
-        qualifiedName + "Impl");
-
+    // Only run if the component is not composed
+    if(symbol.isAtomic()) {
+      runVisitorOnFile(gs, compCollector.getImplVisitor(),
+          qualifiedName + "Impl");
+    }
     // Log checking
     Log.debug("Number of errors found: " + Log.getFindings().size(), "ComponentGenerationTest");
 //    assertEquals(0, Log.getFindings().size());
+  }
+
+  @Test
+  public void testComponentWithEmptyComponent() {
+    executeGeneratorTest("ComponentWithEmptyComponent");
   }
 
   /**

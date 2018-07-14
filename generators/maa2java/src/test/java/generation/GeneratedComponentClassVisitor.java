@@ -10,11 +10,16 @@ import de.monticore.java.javadsl._ast.*;
 import de.monticore.java.javadsl._visitor.JavaDSLVisitor;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.types.types._ast.*;
+import de.monticore.types.types._ast.ASTSimpleReferenceType;
+import de.monticore.types.types._ast.ASTType;
+import de.monticore.types.types._ast.ASTTypeArguments;
+import de.monticore.types.types._ast.ASTTypesNode;
 import de.se_rwth.commons.logging.Log;
-import sim.help.SynchronizedQueue;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static junit.framework.TestCase.assertTrue;
 
@@ -149,12 +154,15 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     final ASTFormalParameters actualParams = node.getFormalParameters();
     final String actualName = node.getName();
 
+    boolean foundError = false;
     int paramSize = 0;
     if(actualParams.getFormalParameterListingOpt().isPresent()){
       paramSize = actualParams.getFormalParameterListing().getFormalParameterList().size();
     }
-    if(getConstructor(actualName, paramSize).isPresent()){
-      final Constructor constructor = getConstructor(actualName, paramSize).get();
+    final Optional<Constructor> constructorOptional
+        = getConstructor(actualName, paramSize);
+    if(constructorOptional.isPresent()){
+      final Constructor constructor = constructorOptional.get();
       final boolean actualParamListPresent
           = actualParams.getFormalParameterListingOpt().isPresent();
       final boolean expectedParamListPresent
@@ -174,11 +182,13 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
           Log.error(String.format("Parameters of constructor %s do not " +
                                       "fit the expected parameters",
               actualName));
+          foundError = true;
         }
       } else if(actualParamListPresent || expectedParamListPresent){
         Log.error(String.format("Mismatch in FormalParameterListing " +
                                     "presence for constructor %s",
             actualName));
+        foundError = true;
       }
 
       final String printedBody =
@@ -190,6 +200,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
               String.format("Missing element in constructor of class %s" +
                                 ": %s",
                           className, bodyElement));
+          foundError = true;
         }else {
           int foundIndex = printedBody.indexOf(bodyElement);
           if (lastIndex >= foundIndex) {
@@ -197,27 +208,38 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
                                         "%s was " +
                                         "found in the wrong order.",
                 bodyElement, className));
+            foundError = true;
           }
           lastIndex = foundIndex;
         }
       }
+
+      if(!foundError){
+        constructors.remove(constructor);
+      }
+    } else {
+      Log.error(String.format("Unexpected constructor in class %s. " +
+                                  "Signature: %s%s",
+          className,
+          className,
+          PRINTER.prettyprint(node.getFormalParameters())));
     }
   }
 
   private Optional<Constructor> getConstructor(String name, int paramCount){
-    final Optional<Constructor> result = constructors
-        .stream()
-        .filter(constructor -> constructor.getName().equals(name))
-        .findFirst();
-    if(result.isPresent()){
-      if(result.get().getParameters().isPresentFormalParameterListing()){
-        if(result.get().getParameters().getFormalParameterListing()
-            .getFormalParameterList().size() != paramCount){
-          return Optional.empty();
-        }
-      }
-    }
-    return result;
+    return constructors
+          .stream()
+          .filter(constructor -> {
+            if(!constructor.getParameters().isPresentFormalParameterListing()){
+              return paramCount == 0;
+            } else {
+              return constructor.getParameters()
+                         .getFormalParameterListing()
+                         .getFormalParameterList().size() == paramCount;
+            }
+          })
+          .filter(constructor -> constructor.getName().equals(name))
+          .findFirst();
   }
 
   @Override
@@ -262,6 +284,9 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
         className, fields.toString()), fields.isEmpty());
     assertTrue(String.format("Did not find all required methods in %s: \n%s",
             className, methods.toString()), methods.isEmpty());
+    // TODO Reenable after fixing fully qualified constructor parameters
+//    assertTrue(String.format("Did not find all required constructors in %s: \n%s",
+//            className, constructors.toString()), constructors.isEmpty());
     assertTrue(String.format("Did not find all required enums in %s: \n%s",
             className, enumTypes.toString()), enumTypes.isEmpty());
   }

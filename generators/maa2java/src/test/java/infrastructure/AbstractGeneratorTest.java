@@ -94,22 +94,22 @@ public class AbstractGeneratorTest {
     generatorTool = new MontiArcGeneratorTool();
 
     // Clear output folder
-    File outputFolder = Paths.get(TARGET_GENERATED_TEST_SOURCES_DIR).toFile();
-    if (outputFolder.exists()) {
-      try {
-        delete(outputFolder);
-      } catch (IOException e) {
-        Log.error("Could not delete output directory");
-      }
-    } else {
-      Log.info("Folder to delete does not exist", "GeneratorTest");
-    }
-
+//    File outputFolder = Paths.get(TARGET_GENERATED_TEST_SOURCES_DIR).toFile();
+//    if (outputFolder.exists()) {
+//      try {
+//        delete(outputFolder);
+//      } catch (IOException e) {
+//        Log.error("Could not delete output directory");
+//      }
+//    } else {
+//      Log.info("Folder to delete does not exist", "GeneratorTest");
+//    }
+//
     // 4. Generate models (at specified location)
-    generatorTool.generate(
-        Paths.get(MODEL_PATH).toFile(),
-        Paths.get(TARGET_GENERATED_TEST_SOURCES_DIR).toFile(),
-        Paths.get("src/main/java").toFile());
+//    generatorTool.generate(
+//        Paths.get(MODEL_PATH).toFile(),
+//        Paths.get(TARGET_GENERATED_TEST_SOURCES_DIR).toFile(),
+//        Paths.get("src/main/java").toFile());
   }
 
   /**

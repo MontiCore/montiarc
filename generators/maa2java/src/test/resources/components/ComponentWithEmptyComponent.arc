@@ -2,7 +2,7 @@ package components;
 
 import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
 
-<<deploy>> component ComponentWithEmptyComponent{
+component ComponentWithEmptyComponent(String stringParam){
   port in String inString;
   port out String outString;
 
