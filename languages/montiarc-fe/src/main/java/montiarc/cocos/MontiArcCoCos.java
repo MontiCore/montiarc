@@ -30,7 +30,6 @@ public class MontiArcCoCos {
         .addCoCo(new CircularInheritance())
         .addCoCo(new IOAssignmentCallFollowsMethodCall())
         .addCoCo(new AllGenericParametersOfSuperClassSet())
-        .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
         .addCoCo(new TypeParameterNamesUnique())
         .addCoCo(new TopLevelComponentHasNoInstanceName())
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())

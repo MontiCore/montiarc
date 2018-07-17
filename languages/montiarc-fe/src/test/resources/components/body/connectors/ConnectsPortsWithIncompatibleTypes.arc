@@ -1,7 +1,7 @@
 package components.body.connectors;
 
 import components.body.subcomponents._subcomponents.HasGenericInputAndOutputPort;
-import components.body.subcomponents._subcomponents.HasPortsOfHierachicalCDTypes;
+import components.body.subcomponents._subcomponents.HasPortsOfHierarchicalCDTypes;
 
 /*
  * Invalid model.
@@ -13,7 +13,6 @@ import components.body.subcomponents._subcomponents.HasPortsOfHierachicalCDTypes
                              to the source port, i.e., the type of the target
                              port is identical or a supertype of the source
                              port type. (p.66, Lst. 3.43)
- * TODO Add Test
  */
 component ConnectsPortsWithIncompatibleTypes {
   port
@@ -22,12 +21,15 @@ component ConnectsPortsWithIncompatibleTypes {
     out String outString,
     out String outString2;
   
-  component components.body.subcomponents._subcomponents.HasStringInputAndIntegerOutput p1;
-  component components.body.subcomponents._subcomponents.HasStringInputAndIntegerOutput p2;
-  component components.body.subcomponents._subcomponents.IntegerInputAndBooleanOutput p3;
+  component components.body.subcomponents
+    ._subcomponents.HasStringInputAndOutput p1;
+  component components.body.subcomponents
+    ._subcomponents.HasIntegerInputAndStringOutput p2;
+  component components.body.subcomponents
+    ._subcomponents.IntegerInputAndBooleanOutput p3;
   
-  component HasPortsOfHierachicalCDTypes p4;
-  component HasPortsOfHierachicalCDTypes p5;
+  component HasPortsOfHierarchicalCDTypes p4;
+  component HasPortsOfHierarchicalCDTypes p5;
   
   component HasGenericInputAndOutputPort<String> p6;
   
@@ -35,7 +37,7 @@ component ConnectsPortsWithIncompatibleTypes {
 
   component HasGenericInputAndOutputPort<Integer> p8;
 
-  component HasGenericInputAndOutputPort<String> p9;
+  component HasGenericInputAndOutputPort<Integer> p9;
   
   // correct
   connect p4.subTypeOut -> p5.superTypeIn;
@@ -45,14 +47,12 @@ component ConnectsPortsWithIncompatibleTypes {
   connect inInteger2 -> p9.tIn;  
   
   
-  connect p1.outString -> outString; 
-      // ERROR: The types 'java.lang.Integer' and 'java.lang.String' 
-      // from the ports in the connector 'p1.outString -> outString' 
-      // are not compatible!
+  connect p1.pOut -> outString;
+      // Correct
   
-  connect inInteger -> p1.inInteger; 
+  connect inInteger -> p1.pIn;
       // ERROR: The types 'java.lang.Integer' and 'java.lang.String' 
-      // from the ports in the connector 'inInteger -> p1.inInteger'
+      // from the ports in the connector 'inInteger -> p1.portIn'
       // are not compatible!
   
   connect inInteger2 -> p6.tIn; 
@@ -60,7 +60,7 @@ component ConnectsPortsWithIncompatibleTypes {
       // from the ports in the connector 'inInteger2 -> p6.tIn' 
       // are not compatible!
   
-  connect p3.Boolean -> p2.inInteger; 
+  connect p3.bool -> p2.portIn;
       // ERROR: The types 'java.lang.Boolean' and 'java.lang.String' 
       // from the ports in the connector 'p3.Boolean -> p2.inInteger' 
       // are not compatible!

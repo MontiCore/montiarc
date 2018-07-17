@@ -33,7 +33,20 @@ public class BodyTest extends AbstractCoCoTest {
     final MontiArcCoCoChecker checker = new MontiArcCoCoChecker().addCoCo(new MultipleBehaviorImplementation());
     checkInvalid(checker, node, new ExpectedErrorInfo(1, "xMA050"));
   }
-  
+
+  @Test
+  @Ignore("Waits for https://git.rwth-aachen.de/monticore/montiarc/core/issues/195")
+  /**
+   * Currently not resolvable, as the name of the artifact is lower case.
+   * Waits for the resolution of ticket https://git.rwth-aachen.de/monticore/montiarc/core/issues/195.
+   */
+  public void testWrongCapitalization() {
+    final ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "wrongCapitalization");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(); // Add error info
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    checkInvalid(checker, node, errors);
+  }
+
   @Test
   public void testAmbiguousPortAndVariableNames() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousPortAndVariableNames");
