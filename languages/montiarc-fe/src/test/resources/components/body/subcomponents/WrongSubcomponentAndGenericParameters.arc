@@ -1,7 +1,7 @@
-package a;
+package components.body.subcomponents;
 
 import java.lang.String;
-import components.body.subcomponents._subcomponents.HasGenericInputAndOutput;
+import components.body.subcomponents._subcomponents.HasGenericInputAndOutputPort;
 import components.body.subcomponents._subcomponents.SingleIntegerParameter;
 import components.body.subcomponents._subcomponents.SingleStringParameter;
 import components.body.subcomponents._subcomponents.AtomicComponent;
@@ -21,7 +21,7 @@ component WrongSubcomponentAndGenericParameters {
       //ERROR: Type 'java.lang.String' of value "5" for parameter 'x'
       //        does not match required type 'java.lang.Integer'
   
-  component HasGenericInputAndOutput<String> t1; // Correct
+  component HasGenericInputAndOutputPort<String> t1; // Correct
   component SingleStringParameter(5) t2;
       //ERROR: Type 'java.lang.Integer' of value '5' for parameter 'x'
       //        does not match required type 'java.lang.String'

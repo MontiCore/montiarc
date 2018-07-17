@@ -16,7 +16,6 @@ import components.head.*;
  *
  * @implements [Hab16] CV4: Unused direct imports should be avoided.
  *                          (p. 71)
- * TODO Add test
  */
 component UnusedImports {
   //Empty body
