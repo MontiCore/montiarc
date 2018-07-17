@@ -795,13 +795,13 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("CoCo does not check for too many actual generic type parameters")
+//  @Ignore("CoCo does not check for too many actual generic type parameters")
   public void testWrongSubcomponentGenericsAssignment() {
     final ASTMontiArcNode node
         = loadComponentAST(PACKAGE + "." +
                                "WrongSubcomponentGenericsAssignment");
     final MontiArcCoCoChecker checker = new MontiArcCoCoChecker().addCoCo(new SubcomponentGenericTypesCorrectlyAssigned());
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(3, "xMA085");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(3, "xMA085", "xMA096");
 
     checkInvalid(checker, node, errors);
   }

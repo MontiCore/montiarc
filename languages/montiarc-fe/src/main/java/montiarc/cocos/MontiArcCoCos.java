@@ -21,7 +21,7 @@ public class MontiArcCoCos {
         // Fails when using CD Enums due to buggy TypeCompatibilityChecker (see
         // testSubcomponentParametersOfWrongTypeWithCD in SubcomponentTest
         // class)
-//         .addCoCo(new SubcomponentParametersCorrectlyAssigned())
+         .addCoCo(new SubcomponentParametersCorrectlyAssigned())
         .addCoCo(new PackageLowerCase())
         .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new DefaultParametersHaveCorrectOrder())
