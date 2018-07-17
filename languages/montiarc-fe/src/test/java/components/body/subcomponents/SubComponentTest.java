@@ -772,7 +772,6 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
   
   @Test
-//  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   public void testSubcomponentsWithWrongNumberOfCfgArgs() {
     final ASTMontiArcNode astNode = loadComponentAST(
         PACKAGE + "." + "SubcomponentsWithWrongNumberOfCfgArgs");
@@ -783,19 +782,18 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("Reactivate, when SubcomponentParametersCorrectlyAssigned is enabled again")
   public void testWrongSubcomponentAndGenericParameters() {
     final ASTMontiArcNode astNode = loadComponentAST(
         PACKAGE + "." + "WrongSubcomponentAndGenericParameters");
     final ExpectedErrorInfo expectedErrorInfo
         = new ExpectedErrorInfo(3, "xMA064", "xMA085");
-    final MontiArcCoCoChecker checker
-        = MontiArcCoCos.createChecker();
+    final MontiArcCoCoChecker checker = new MontiArcCoCoChecker()
+        .addCoCo(new SubcomponentParametersCorrectlyAssigned())
+        .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned());
     checkInvalid(checker, astNode, expectedErrorInfo);
   }
 
   @Test
-//  @Ignore("CoCo does not check for too many actual generic type parameters")
   public void testWrongSubcomponentGenericsAssignment() {
     final ASTMontiArcNode node
         = loadComponentAST(PACKAGE + "." +

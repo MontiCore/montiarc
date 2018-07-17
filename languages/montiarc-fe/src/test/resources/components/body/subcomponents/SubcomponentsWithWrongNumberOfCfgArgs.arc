@@ -8,7 +8,7 @@ import components.body.subcomponents._subcomponents.*;
 * @implements [Hab16] R9: If a generic component type is instantiated 
 * as a subcomponent, all generic parameters have to be assigned. (p. 66, lst. )
 */
-component SubcomponentsWithWrongNumberOfCfgArgs(int myInt, String myString) {
+component SubcomponentsWithWrongNumberOfCfgArgs(Integer myInt, String myString) {
     port 
         in String s1;
         

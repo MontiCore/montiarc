@@ -10,12 +10,16 @@ package montiarc.helper;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.ImmutableMap;
+
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.java.types.JavaDSLHelper;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -29,6 +33,21 @@ import de.se_rwth.commons.logging.Log;
  * @author ahaber, Robert Heim
  */
 public class TypeCompatibilityChecker {
+  
+  private static BiMap<String, String> primitiveToWrappers = HashBiMap
+      .create();
+  
+  static {
+    primitiveToWrappers.put("int", "Integer");
+    primitiveToWrappers.put("double", "Double");
+    primitiveToWrappers.put("boolean", "Boolean");
+    primitiveToWrappers.put("byte", "Byte");
+    primitiveToWrappers.put("char", "Character");
+    primitiveToWrappers.put("long", "Long");
+    primitiveToWrappers.put("float", "Float");
+    primitiveToWrappers.put("short", "Short");
+  }
+  
   private static int getPositionInFormalTypeParameters(List<JTypeSymbol> formalTypeParameters,
       JTypeReference<? extends JTypeSymbol> searchedFormalTypeParameter) {
     int positionInFormal = 0;
@@ -216,8 +235,29 @@ public class TypeCompatibilityChecker {
         }
       }
       
+      // Check if source and target type are primitive type or wrapper of
+      // primitive type
+      String sourceTypeName = sourceType.getReferencedSymbol().getName();
+      String targetTypeName = targetType.getReferencedSymbol().getName();
+      if (primitiveToWrappers.containsKey(sourceTypeName)) {
+        if (primitiveToWrappers.inverse().containsKey(targetTypeName)) {
+          if (primitiveToWrappers.get(sourceTypeName)
+              .equals(targetTypeName)) {
+            result = true;
+          }
+        }
+      }
+      else if (primitiveToWrappers.containsKey(targetTypeName)) {
+        if (primitiveToWrappers.inverse().containsKey(sourceTypeName)) {
+          if (primitiveToWrappers.get(targetTypeName)
+              .equals(sourceTypeName)) {
+            result = true;
+          }
+        }
+      }
+      
       // check, if superclass from sourceType is compatible with targetType
-      if (sourceType.getReferencedSymbol().getSuperClass().isPresent()) {
+      if (!result && sourceType.getReferencedSymbol().getSuperClass().isPresent()) {
         JTypeReference<? extends JTypeSymbol> parent = sourceType.getReferencedSymbol()
             .getSuperClass().get();
         result = doTypesMatch(parent,
