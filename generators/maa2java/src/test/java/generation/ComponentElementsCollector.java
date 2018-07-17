@@ -378,18 +378,22 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     implConstructor.setName(implName);
 
     // TODO Fix symbol table for fully qualified parameter types
+
     StringBuilder parameters = new StringBuilder();
-    for (ASTParameter parameter : node.getHead().getParameterList()) {
-      parameters.append(parameter.getName()).append(",");
-      JTypeSymbol typeSymbol =
-          (JTypeSymbol) symbol.getSpannedScope().resolve(parameter.getName(), JTypeSymbol.KIND).orElse(null);
-      if(typeSymbol != null) {
-        final String paramTypeName = helper.getParamTypeName((JFieldSymbol) typeSymbol);
-        ASTType paramType =JavaDSLMill.simpleReferenceTypeBuilder()
-                                .setNameList(Lists.newArrayList(paramTypeName))
-                                .build();
-        builder.addParameter(parameter.getName(), paramType);
-        implConstructor.addParameter(parameter.getName(), paramType);
+    for (JFieldSymbol paramSymbol : this.symbol.getConfigParameters()) {
+      parameters.append(paramSymbol.getName()).append(",");
+
+      if (paramSymbol.getType().existsReferencedSymbol()) {
+        final String fullParameterTypeName
+            = paramSymbol.getType().getReferencedSymbol().getFullName();
+
+        ASTType paramType =
+            JavaDSLMill.simpleReferenceTypeBuilder()
+                .setNameList(Lists.newArrayList(fullParameterTypeName))
+                .build();
+
+        builder.addParameter(paramSymbol.getName(), paramType);
+        implConstructor.addParameter(paramSymbol.getName(), paramType);
       }
     }
     if(parameters.length() > 0) {

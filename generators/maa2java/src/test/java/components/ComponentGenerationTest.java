@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static de.montiarcautomaton.generator.MontiArcGeneratorTool.DEFAULT_TYPES_FOLDER;
+import static de.montiarcautomaton.generator.MontiArcGeneratorTool.LIBRARY_MODELS_FOLDER;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -73,7 +75,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     final String qualifiedName = PACKAGE + "." + componentName;
 
     // Load component symbol
-    final ComponentSymbol symbol = generatorTool.loadComponentSymbolWithCocos(qualifiedName, Paths.get(MODEL_PATH).toFile()).orElse(null);
+    final ComponentSymbol symbol = generatorTool.loadComponentSymbolWithCocos(qualifiedName, Paths.get(MODEL_PATH).toFile(), Paths.get(DEFAULT_TYPES_FOLDER).toFile(), Paths.get(LIBRARY_MODELS_FOLDER).toFile()).orElse(null);
     assertNotNull(symbol);
 
     // 3. Determine all files which have to be checked
