@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -38,14 +39,6 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ComponentSymbolReference;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
-import montiarc.cocos.ComponentWithTypeParametersHasInstance;
-import montiarc.cocos.IdentifiersAreUnique;
-import montiarc.cocos.InnerComponentNotExtendsDefiningComponent;
-import montiarc.cocos.MontiArcCoCos;
-import montiarc.cocos.NamesCorrectlyCapitalized;
-import montiarc.cocos.ReferencedSubComponentExists;
-import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
-import montiarc.cocos.SubcomponentReferenceCycle;
 import montiarc.helper.SymbolPrinter;
 
 /**
@@ -757,7 +750,7 @@ public class SubComponentTest extends AbstractCoCoTest {
   public void testSubcomponentsWithGenericTypeParams() {
     final ASTMontiArcNode astNode = loadComponentAST(
         PACKAGE + "." + "SubcomponentsWithGenericTypeParams");
-    final ExpectedErrorInfo expectedErrorInfo = new ExpectedErrorInfo(6, "xMA085");
+    final ExpectedErrorInfo expectedErrorInfo = new ExpectedErrorInfo(3, "xMA085");
     checkInvalid(MontiArcCoCos.createChecker(), astNode, expectedErrorInfo);
   }
   
@@ -785,5 +778,28 @@ public class SubComponentTest extends AbstractCoCoTest {
         .addCoCo(new SubcomponentParametersCorrectlyAssigned());
     checkInvalid(checker, astNode, expectedErrorInfo);
   }
-  
+
+  @Test
+  @Ignore("Reactivate, when SubcomponentParametersCorrectlyAssigned is enabled again")
+  public void testWrongSubcomponentAndGenericParameters() {
+    final ASTMontiArcNode astNode = loadComponentAST(
+        PACKAGE + "." + "WrongSubcomponentAndGenericParameters");
+    final ExpectedErrorInfo expectedErrorInfo
+        = new ExpectedErrorInfo(3, "xMA064", "xMA085");
+    final MontiArcCoCoChecker checker
+        = MontiArcCoCos.createChecker();
+    checkInvalid(checker, astNode, expectedErrorInfo);
+  }
+
+  @Test
+  @Ignore("CoCo does not check for too many actual generic type parameters")
+  public void testWrongSubcomponentGenericsAssignment() {
+    final ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." +
+                               "WrongSubcomponentGenericsAssignment");
+    final MontiArcCoCoChecker checker = new MontiArcCoCoChecker().addCoCo(new SubcomponentGenericTypesCorrectlyAssigned());
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(3, "xMA085");
+
+    checkInvalid(checker, node, errors);
+  }
 }

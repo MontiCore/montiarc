@@ -12,7 +12,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.Optional;
 
+import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ConnectorSymbol;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -193,5 +195,18 @@ public class AutoInstantiationTest extends AbstractCoCoTest {
     assertTrue(comp.getConnector("inner3.i3s2").isPresent());
     assertEquals("myInner4.s4out", comp.getConnector("inner3.i3s2").get().getSource());
 
+  }
+
+  @Test
+  @Ignore("Waits for https://git.rwth-aachen.de/monticore/montiarc/core/issues/179." +
+              "Needs adding the new CoCo and adjusting the error information.")
+  public void testAutoInstantiateWarning() {
+    final ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "AutoInstantiateWarning");
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(2, "xMA038");
+    final MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+
+    checkInvalid(checker, node, errors);
   }
 }

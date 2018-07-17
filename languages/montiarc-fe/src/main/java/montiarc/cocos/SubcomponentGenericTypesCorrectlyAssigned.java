@@ -26,7 +26,7 @@ public class SubcomponentGenericTypesCorrectlyAssigned implements MontiArcASTCom
   @Override
   public void check(ASTComponent node) {
     final ComponentSymbol componentSymbol
-        = (ComponentSymbol) node.getSymbol().get();
+        = (ComponentSymbol) node.getSymbolOpt().get();
 
     // Get all subcomponent instance symbols and run the check on them
     for (ComponentInstanceSymbol componentInstanceSymbol :

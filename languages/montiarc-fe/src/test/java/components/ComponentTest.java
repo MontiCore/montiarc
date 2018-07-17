@@ -190,5 +190,14 @@ public class ComponentTest extends AbstractCoCoTest {
         javaType.isPresent());
     
   }
-  
+
+  @Test
+  @Ignore("Waits for https://git.rwth-aachen.de/monticore/montiarc/core/issues/193")
+  public void testUnusedImports() {
+    final ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UnusedImports");
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(); //TODO Add error info
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker(); //TODO Add coco
+
+    checkInvalid(checker, node, errors);
+  }
 }

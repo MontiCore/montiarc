@@ -1,4 +1,4 @@
-package a;
+package components.head.generics;
 
 import types.T; //ERROR: The type 'T' must not be imported!
             //        All unqualified used types 'T' in the generic component
