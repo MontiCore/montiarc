@@ -5,10 +5,12 @@
  */
 package montiarc.cocos;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import de.monticore.java.symboltable.JavaFieldSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.types.JFieldSymbol;
@@ -79,21 +81,38 @@ public class SubcomponentParametersCorrectlyAssigned
                     expr.get_SourcePositionStart());
               }
             }
-            else if (!TypeCompatibilityChecker.doTypesMatch(
-                actualArg.get(),
-                actualArg.get().getReferencedSymbol().getFormalTypeParameters().stream()
-                    .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-                actualArg.get().getActualTypeArguments().stream()
-                    .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList()),
-                configParam.getType(),
-                configParam.getType().getReferencedSymbol().getFormalTypeParameters().stream()
-                    .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-                configParam.getType().getActualTypeArguments().stream()
-                    .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList()))) {
-              Log.error("0xMA064 Type of argument " + paramIndex + " (" + actualArg.get().getName()
-                  + ") of subcomponent " + instance.getName() + " of component type '"
-                  + node.getName() + "' does not fit parameter type "
-                  + configParam.getType().getName(), expr.get_SourcePositionStart());
+            else {
+              JavaTypeSymbolReference actualArgType = actualArg.get();
+              List<JTypeSymbol> actualArgTypeParams = actualArgType.getReferencedSymbol()
+                  .getFormalTypeParameters().stream()
+                  .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
+              List<JTypeReference<?>> actualArgActualParams = getSubstitutedGenericArguments(
+                  actualArg.get()
+                      .getActualTypeArguments().stream()
+                      .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList()),
+                  sym, instance);
+              
+              JTypeReference<? extends JTypeSymbol> configParamType = configParam.getType();
+              List<JTypeSymbol> confiParamTypeParams = configParamType.getReferencedSymbol()
+                  .getFormalTypeParameters().stream()
+                  .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
+              List<JTypeReference<?>> configParamActualParams = getSubstitutedGenericArguments(
+                  configParam.getType()
+                      .getActualTypeArguments().stream()
+                      .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList()),
+                  sym, instance);
+              
+              if (actualArgActualParams.size() == configParamActualParams.size()
+                  && !TypeCompatibilityChecker.doTypesMatch(
+                      actualArgType, actualArgTypeParams, actualArgActualParams, configParamType,
+                      confiParamTypeParams, configParamActualParams)) {
+                Log.error(
+                    "0xMA064 Type of argument " + paramIndex + " (" + actualArg.get().getName()
+                        + ") of subcomponent " + instance.getName() + " of component type '"
+                        + node.getName() + "' does not fit parameter type "
+                        + configParam.getType().getName(),
+                    expr.get_SourcePositionStart());
+              }
             }
           }
         }
@@ -137,6 +156,52 @@ public class SubcomponentParametersCorrectlyAssigned
       index++;
     }
     return Optional.empty();
+  }
+  
+  private List<JTypeReference<?>> getSubstitutedGenericArguments(
+      List<JTypeReference<?>> actualParams, ComponentSymbol surroundComponentSymbol,
+      ComponentInstanceSymbol instance) {
+    List<JTypeReference<?>> substitutedArgList = new ArrayList<>();
+    for (JTypeReference<?> param : actualParams) {
+      // if referenced symbol cannot be loaded we assume that it is a
+      // generic type param. Whether the type exists is checked by
+      // another coco.
+      if (!param.existsReferencedSymbol()) {
+        
+        // we try to resolve its name to a generic parameter in the
+        // instance or in the surrounding component type.
+        
+        // Check component instance type
+        for (JTypeSymbol instanceTypeFormalTypeParam : instance.getComponentType()
+            .getFormalTypeParameters()) {
+          if (param.getName().equals(instanceTypeFormalTypeParam.getName())) {
+            Optional<Integer> index = getIndexOfGenericTypeParam(instance, new JavaFieldSymbol(
+                param.getName(), JavaFieldSymbol.KIND, (JavaTypeSymbolReference) param));
+            
+            if (index.isPresent()) {
+              substitutedArgList.add((JTypeReference<?>) instance.getComponentType()
+                  .getActualTypeArguments().get(index.get()).getType());
+            }
+          }
+        }
+        
+        // Check surrounding component
+        for (JTypeSymbol compSymFormalTypeParam : surroundComponentSymbol
+            .getFormalTypeParameters()) {
+          // if this is the case the parameter is set in the component
+          // instantiation as subcomponent instance. This has to be checked
+          // there then.
+          if (param.getName().equals(compSymFormalTypeParam.getName())) {
+            return new ArrayList<>();
+          }
+        }
+      }
+      else {
+        substitutedArgList.add(param);
+      }
+      
+    }
+    return substitutedArgList;
   }
   
   private int getNumberOfDefaultParameters(List<ASTParameter> params) {

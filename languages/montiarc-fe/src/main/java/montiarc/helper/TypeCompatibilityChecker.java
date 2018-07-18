@@ -88,7 +88,6 @@ public class TypeCompatibilityChecker {
       List<JTypeSymbol> targetTypeFormalTypeParameters,
       List<JTypeReference<? extends JTypeSymbol>> targetTypeArguments) {
     
-    // TODO reuse Java type checker?
     checkNotNull(sourceType);
     checkNotNull(targetType);
     
@@ -268,6 +267,8 @@ public class TypeCompatibilityChecker {
             targetTypeFormalTypeParameters,
             targetTypeArguments);
       }
+      
+      //check, if interface from sourceType is compatible with targetType
       if (!result && !sourceType.getReferencedSymbol().getInterfaces().isEmpty()) {
         for (JTypeReference<? extends JTypeSymbol> interf : sourceType.getReferencedSymbol()
             .getInterfaces()) {

@@ -163,8 +163,6 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
   
   @Test
-  @Ignore("TODO: Throws NullPointer in TypeCompatibilityChecker. Root is the coco" +
-      "SubcomponentParametersCorreclyAssigned,")
   public void testCompThatUsesCompWithInterfaceParam() {
     checkValid(PACKAGE + "." + "CompThatUsesCompWithInterfaceParam");
   }
