@@ -53,6 +53,7 @@ public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
     Optional<PortSymbol> portSymbol = scope.<PortSymbol> resolve(typeSymbolName, PortSymbol.KIND);
     Optional<VariableSymbol> varSymbol = scope.<VariableSymbol> resolve(typeSymbolName,
         VariableSymbol.KIND);
+    Optional<JavaFieldSymbol> fieldSymbol = scope.<JavaFieldSymbol> resolve(typeSymbolName, JavaFieldSymbol.KIND);
     JavaTypeSymbolReference expType = new JavaTypeSymbolReference(typeSymbolName, scope, 0);
     
     if (portSymbol.isPresent()) {
@@ -60,6 +61,9 @@ public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
     }
     else if (varSymbol.isPresent()) {
       expType = (JavaTypeSymbolReference) varSymbol.get().getTypeReference();
+    }
+    else if(fieldSymbol.isPresent()) {
+      expType = (JavaTypeSymbolReference) fieldSymbol.get().getType();
     }
     Optional<JavaTypeSymbol> typeSymbol = Optional.ofNullable(expType.getReferencedSymbol());
     

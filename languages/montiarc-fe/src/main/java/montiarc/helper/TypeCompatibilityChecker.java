@@ -10,12 +10,16 @@ package montiarc.helper;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.ImmutableMap;
+
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.java.types.JavaDSLHelper;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -29,6 +33,21 @@ import de.se_rwth.commons.logging.Log;
  * @author ahaber, Robert Heim
  */
 public class TypeCompatibilityChecker {
+  
+  private static BiMap<String, String> primitiveToWrappers = HashBiMap
+      .create();
+  
+  static {
+    primitiveToWrappers.put("int", "Integer");
+    primitiveToWrappers.put("double", "Double");
+    primitiveToWrappers.put("boolean", "Boolean");
+    primitiveToWrappers.put("byte", "Byte");
+    primitiveToWrappers.put("char", "Character");
+    primitiveToWrappers.put("long", "Long");
+    primitiveToWrappers.put("float", "Float");
+    primitiveToWrappers.put("short", "Short");
+  }
+  
   private static int getPositionInFormalTypeParameters(List<JTypeSymbol> formalTypeParameters,
       JTypeReference<? extends JTypeSymbol> searchedFormalTypeParameter) {
     int positionInFormal = 0;
@@ -69,7 +88,6 @@ public class TypeCompatibilityChecker {
       List<JTypeSymbol> targetTypeFormalTypeParameters,
       List<JTypeReference<? extends JTypeSymbol>> targetTypeArguments) {
     
-    // TODO reuse Java type checker?
     checkNotNull(sourceType);
     checkNotNull(targetType);
     
@@ -104,12 +122,24 @@ public class TypeCompatibilityChecker {
         JTypeReference<? extends JTypeSymbol> sourceTypesCurrentTypeArgument = (JavaTypeSymbolReference) sourceParams
             .get(i)
             .getType();
-        List<JTypeSymbol> nextToCheckSourceTypeFormalTypeParameters = new ArrayList<>();
-        List<JTypeReference<? extends JTypeSymbol>> nextToCheckSourceTypeArguments = new ArrayList<>();
-        
         JTypeReference<? extends JTypeSymbol> targetTypesCurrentTypeArgument = (JavaTypeSymbolReference) targetParams
             .get(i)
             .getType();
+        
+        // This is the case when we resolved a type which has no actual type
+        // arguments set. E.g. when we resolve the type List<K>, the actual type
+        // argument is not set here. We then reuse the passed actual type
+        // arguments for further processing.
+        if (!sourceTypesCurrentTypeArgument.existsReferencedSymbol()) {
+          sourceTypesCurrentTypeArgument = sourceTypeArguments.get(i);
+        }
+        if (!targetTypesCurrentTypeArgument.existsReferencedSymbol()) {
+          targetTypesCurrentTypeArgument = targetTypeArguments.get(i);
+        }
+        
+        List<JTypeSymbol> nextToCheckSourceTypeFormalTypeParameters = new ArrayList<>();
+        List<JTypeReference<? extends JTypeSymbol>> nextToCheckSourceTypeArguments = new ArrayList<>();
+        
         List<JTypeSymbol> nextToCheckTargetTypeFormalTypeParameters = new ArrayList<>();
         
         List<JTypeReference<? extends JTypeSymbol>> nextToCheckTargetTypeArguments = new ArrayList<>();
@@ -204,19 +234,41 @@ public class TypeCompatibilityChecker {
         }
       }
       
+      // Check if source and target type are primitive type or wrapper of
+      // primitive type
+      String sourceTypeName = sourceType.getReferencedSymbol().getName();
+      String targetTypeName = targetType.getReferencedSymbol().getName();
+      if (primitiveToWrappers.containsKey(sourceTypeName)) {
+        if (primitiveToWrappers.inverse().containsKey(targetTypeName)) {
+          if (primitiveToWrappers.get(sourceTypeName)
+              .equals(targetTypeName)) {
+            result = true;
+          }
+        }
+      }
+      else if (primitiveToWrappers.containsKey(targetTypeName)) {
+        if (primitiveToWrappers.inverse().containsKey(sourceTypeName)) {
+          if (primitiveToWrappers.get(targetTypeName)
+              .equals(sourceTypeName)) {
+            result = true;
+          }
+        }
+      }
+      
       // check, if superclass from sourceType is compatible with targetType
-      if (sourceType.getReferencedSymbol().getSuperClass().isPresent()) {
+      if (!result && sourceType.getReferencedSymbol().getSuperClass().isPresent()) {
         JTypeReference<? extends JTypeSymbol> parent = sourceType.getReferencedSymbol()
             .getSuperClass().get();
         result = doTypesMatch(parent,
             parent.getReferencedSymbol().getFormalTypeParameters().stream()
                 .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-            parent.getActualTypeArguments().stream().map(a -> (JavaTypeSymbolReference) a.getType())
-                .collect(Collectors.toList()),
+            sourceTypeArguments,
             targetType,
             targetTypeFormalTypeParameters,
             targetTypeArguments);
       }
+      
+      //check, if interface from sourceType is compatible with targetType
       if (!result && !sourceType.getReferencedSymbol().getInterfaces().isEmpty()) {
         for (JTypeReference<? extends JTypeSymbol> interf : sourceType.getReferencedSymbol()
             .getInterfaces()) {
@@ -224,9 +276,7 @@ public class TypeCompatibilityChecker {
               interf,
               interf.getReferencedSymbol().getFormalTypeParameters().stream()
                   .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-              interf.getActualTypeArguments().stream()
-                  .map(a -> (JavaTypeSymbolReference) a.getType())
-                  .collect(Collectors.toList()),
+              sourceTypeArguments,
               targetType,
               targetTypeFormalTypeParameters,
               targetTypeArguments);
