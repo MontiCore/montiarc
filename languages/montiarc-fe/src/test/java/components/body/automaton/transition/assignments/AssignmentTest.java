@@ -1,9 +1,5 @@
 package components.body.automaton.transition.assignments;
 
-import montiarc._cocos.MontiArcASTGuardExpressionCoCo;
-import montiarc._cocos.MontiArcASTIOAssignmentCoCo;
-import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -12,6 +8,18 @@ import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcASTGuardExpressionCoCo;
+import montiarc._cocos.MontiArcASTIOAssignmentCoCo;
+import montiarc._cocos.MontiArcASTInitialStateDeclarationCoCo;
+import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.AutomatonNoAssignmentToIncomingPort;
+import montiarc.cocos.AutomatonReactionWithAlternatives;
+import montiarc.cocos.IOAssignmentCallFollowsMethodCall;
+import montiarc.cocos.MontiArcCoCos;
+import montiarc.cocos.MultipleAssignmentsSameIdentifier;
+import montiarc.cocos.UseOfForbiddenExpression;
+import montiarc.cocos.UseOfUndeclaredField;
+import montiarc.cocos.UseOfValueLists;
 
 /**
  * This class checks all context conditions related to automaton assignments
@@ -30,24 +38,27 @@ public class AssignmentTest extends AbstractCoCoTest {
   @Test
   public void testMethodCallAfterCallKeyword() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MethodCallAfterCallKeyword");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IOAssignmentCallFollowsMethodCall()), node, new ExpectedErrorInfo(1, "xMA091"));
-
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IOAssignmentCallFollowsMethodCall()), node,
+        new ExpectedErrorInfo(1, "xMA091"));
+    
   }
   
   @Test
   public void testMethodCallWithoutCallKeyword() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MethodCallWithoutCallKeyword");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IOAssignmentCallFollowsMethodCall()), node, new ExpectedErrorInfo(1, "xMA090"));
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IOAssignmentCallFollowsMethodCall()), node,
+        new ExpectedErrorInfo(1, "xMA090"));
   }
   
   @Test
   public void testAssignmentWithAlternatives() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AssignmentWithAlternatives");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
+    checkInvalid(new MontiArcCoCoChecker()
+        .addCoCo((MontiArcASTInitialStateDeclarationCoCo) new AutomatonReactionWithAlternatives()),
+        node,
         new ExpectedErrorInfo(1, "xMA020"));
   }
-
-
+  
   @Test
   public void testAssignmentTypeConflict() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AssignmentTypeConflict");
@@ -81,7 +92,10 @@ public class AssignmentTest extends AbstractCoCoTest {
   public void testAssigningUndefinedVariables() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AssigningUndefinedVariables");
     // 2 Errors because we use 2 undeclared fields
-    checkInvalid(MontiArcCoCos.createChecker(), node,
+    checkInvalid(
+        new MontiArcCoCoChecker().addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfUndeclaredField())
+            .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfUndeclaredField()),
+        node,
         new ExpectedErrorInfo(2, "xMA079"));
   }
   
@@ -106,7 +120,7 @@ public class AssignmentTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "IncompatibleVariableAssignmentGenericTypesDifferSimple");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(2, "xMA042","xMA042"));
+        new ExpectedErrorInfo(2, "xMA042", "xMA042"));
   }
   
   @Test
@@ -138,24 +152,25 @@ public class AssignmentTest extends AbstractCoCoTest {
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA023");
     checkInvalid(cocos, astMontiArcNode, errors);
   }
-
+  
   @Test
   public void testAssignmentOfSequences() {
-    final ASTMontiArcNode astMontiArcNode = loadComponentAST(PACKAGE + "." + "AssignmentOfSequence");
+    final ASTMontiArcNode astMontiArcNode = loadComponentAST(
+        PACKAGE + "." + "AssignmentOfSequence");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new UseOfValueLists());
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA081");
-    checkInvalid(cocos, astMontiArcNode,errors);
+    checkInvalid(cocos, astMontiArcNode, errors);
   }
-
+  
   @Test
   public void testMultipleMessagesPerCycle() {
-    final ASTMontiArcNode astMontiArcNode = loadComponentAST(PACKAGE + "." + "OneAssignmentPerCycle");
+    final ASTMontiArcNode astMontiArcNode = loadComponentAST(
+        PACKAGE + "." + "OneAssignmentPerCycle");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
         .addCoCo(new UseOfValueLists())
         .addCoCo(new MultipleAssignmentsSameIdentifier());
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(4, "xMA081", "xMA019");
-    checkInvalid(cocos, astMontiArcNode,errors);
+    checkInvalid(cocos, astMontiArcNode, errors);
   }
-
-
+  
 }
