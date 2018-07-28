@@ -11,10 +11,6 @@ import de.monticore.types.types._ast.ASTVoidType;
 
 public class GenerationConstants {
 
-  public static final String METHOD_INITIAL_VALUES = "getInitialValues()";
-  public static final String BEHAVIOR_IMPL = "behaviorImpl";
-
-
   public static final ASTPrimitiveModifier PUBLIC_MODIFIER
       = JavaDSLMill.primitiveModifierBuilder()
             .setModifier(ASTConstantsJavaDSL.PUBLIC)
@@ -25,9 +21,4 @@ public class GenerationConstants {
 
   public final static JavaDSLPrettyPrinter PRINTER
       = new JavaDSLPrettyPrinter(new IndentPrinter());
-
-  public static final ASTSimpleReferenceType STRING_TYPE
-      = JavaDSLMill.simpleReferenceTypeBuilder()
-        .setNameList(Lists.newArrayList("String"))
-        .build();
 }

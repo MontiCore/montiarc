@@ -8,8 +8,6 @@ package generation;
 import com.google.common.collect.Sets;
 import de.monticore.java.javadsl._ast.*;
 import de.monticore.java.javadsl._visitor.JavaDSLVisitor;
-import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
-import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.types._ast.ASTSimpleReferenceType;
 import de.monticore.types.types._ast.ASTType;
 import de.monticore.types.types._ast.ASTTypeArguments;
@@ -44,9 +42,6 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
   }
 
   Set<Constructor> constructors;
-
-  private static final JavaDSLPrettyPrinter PRINTER
-      = new JavaDSLPrettyPrinter(new IndentPrinter());
 
   public GeneratedComponentClassVisitor(String className){
     this.className = className;
@@ -112,7 +107,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
         final ASTSimpleReferenceType refType = (ASTSimpleReferenceType) type;
         String typeArgs = "";
         if(refType.getTypeArgumentsOpt().isPresent()){
-          typeArgs = PRINTER.prettyprint(refType.getTypeArguments());
+          typeArgs = GenerationConstants.PRINTER.prettyprint(refType.getTypeArguments());
         }
         String finalTypeArgs = typeArgs;
         boolean isComponentImplemented
@@ -143,10 +138,10 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
   }
 
   private String printWithoutWhitespace(ASTTypesNode node){
-    return PRINTER.prettyprint(node).replaceAll("\\s", "");
+    return GenerationConstants.PRINTER.prettyprint(node).replaceAll("\\s", "");
   }
   private String printWithoutWhitespace(ASTJavaDSLNode node){
-    return PRINTER.prettyprint(node).replaceAll("\\s", "");
+    return GenerationConstants.PRINTER.prettyprint(node).replaceAll("\\s", "");
   }
 
   @Override
@@ -222,7 +217,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
                                   "Signature: %s%s",
           className,
           className,
-          PRINTER.prettyprint(node.getFormalParameters())));
+          GenerationConstants.PRINTER.prettyprint(node.getFormalParameters())));
     }
   }
 
@@ -357,7 +352,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
   }
 
   public void addImplementedInterface(String name, ASTTypeArguments typeArgs) {
-    final String printedArgs = PRINTER.prettyprint(typeArgs);
+    final String printedArgs = GenerationConstants.PRINTER.prettyprint(typeArgs);
     this.interfaces.add(name + printedArgs);
   }
 
