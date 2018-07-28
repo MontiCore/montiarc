@@ -214,6 +214,7 @@ public class AutoConnectTest extends AbstractCoCoTest {
     assertTrue(connectorNames.contains("strIn -> sInner.tIn"));
     assertTrue(connectorNames.contains("sInner.tOut -> objOut"));
   }
+
   @Ignore
   @Test
   public void testAutoconnectGenericPorts() {

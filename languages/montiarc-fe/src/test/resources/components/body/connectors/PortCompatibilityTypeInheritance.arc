@@ -7,7 +7,6 @@ import components.body.subcomponents._subcomponents.package1
 /**
 * Invalid model. See comments below.
 *
-* @implements TODO
 */
 component PortCompatibilityTypeInheritance {
 

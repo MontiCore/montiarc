@@ -8,7 +8,6 @@ import java.lang.String;
  *
  * Formerly named "S2" in MontiArc3.
  *
- * @implements TODO Literature
  */
 component IllegalUseOfKeywords {
   

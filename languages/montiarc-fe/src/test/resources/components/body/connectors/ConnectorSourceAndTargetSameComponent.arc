@@ -1,8 +1,8 @@
 package components.body.connectors;
 
 /**
- * Invalid model. A connector may not connect two ports of the same
- * components.
+ * Invalid model.
+ * A connector may not connect two ports of the same components.
  */
 component ConnectorSourceAndTargetSameComponent {
     port

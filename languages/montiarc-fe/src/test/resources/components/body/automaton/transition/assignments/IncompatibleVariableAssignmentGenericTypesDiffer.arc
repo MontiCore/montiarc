@@ -8,7 +8,6 @@ import java.util.HashMap;
 /*
  * Invalid model.
  *
- * @implements TODO
  */
 component IncompatibleVariableAssignmentGenericTypesDiffer {
   port

@@ -5,7 +5,6 @@ import components.body.subcomponents._subcomponents.package2.ValidComponentInPac
 
 /*
  * Invalid model. See comments below.
- * @implements TODO 
  * TODO: Add Test
  */
 

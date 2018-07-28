@@ -6,7 +6,6 @@ package components.body.subcomponents;
  *
  * Formerly named "CG9" in MontiArc3 with 6 errors
  *
- * @implements TODO
  */
 component UniqueInnerCompDefinition {
     

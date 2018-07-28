@@ -1,8 +1,10 @@
 package components.body.automaton.states;
 
 /**
- * Invalid model. States B and C defined twice with different
- * Stereotypes.
+ * Invalid model.
+ * States B and C defined twice with different Stereotypes.
+ *
+ * @implements No literature reference
  */
 component ConflictingStereotypes {
 	automaton {

@@ -64,9 +64,11 @@ public class AJavaTest extends AbstractCoCoTest {
   
   @Test
   public void testAJavaComputeBlockNameIsLowerCase() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AJavaComputeBlockNameIsLowerCase");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(1, "xMA015"));
+    final ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "AJavaComputeBlockNameIsLowerCase");
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA015");
+    checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
   
   @Ignore("@JP wartet auf aktualisierung des InputUnchangedVisitor")

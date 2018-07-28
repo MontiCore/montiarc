@@ -91,8 +91,12 @@ public class ModelAnnotationTest {
             // Invalid model
             if(!comment.getText().toLowerCase().contains("@implements")){
               Log.warn(
-                  String.format("Model %s is declared as invalid but does not" +
-                                    "contain '@implements' tag!",
+                  String.format("Invalid Model %s does not" +
+                                    " contain a valid '@implements' tag!",
+                      file.toString()));
+            } else if(comment.getText().toLowerCase().contains("@implements TODO")){
+              Log.warn(
+                  String.format("Implements tag of invalid model %s contains a TODO",
                       file.toString()));
             }
           } else {

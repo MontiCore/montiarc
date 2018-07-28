@@ -79,7 +79,7 @@ public class GuardTest extends AbstractCoCoTest {
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
   @Test
   public void testMultipleGuardTypeConflics() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MultipleGuardTypeConflics");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MultipleGuardTypeConflicts");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(2, "xMA046"));
   }
   

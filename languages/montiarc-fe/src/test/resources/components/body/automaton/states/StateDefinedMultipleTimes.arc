@@ -1,7 +1,10 @@
 package components.body.automaton.states;
 
 /**
- * Invalid model. States B and C defined twice.
+ * Invalid model.
+ * States B and C defined twice.
+ *
+ * @implements No literature reference
  */
 component StateDefinedMultipleTimes {
 	automaton StateDefinedMultipleTimesAutomaton {

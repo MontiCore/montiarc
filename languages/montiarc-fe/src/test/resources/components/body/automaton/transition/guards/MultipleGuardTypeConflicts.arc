@@ -1,12 +1,11 @@
 package components.body.automaton.transition.guards;
 
 /**
- * Invalid model. Cannot assign 'false' to Integer variable or 
- * '255' to a Boolean port.
+ * Invalid model.
+ * Cannot assign 'false' to Integer variable or '255' to a Boolean port.
  *
- * @implements TODO
  */
-component MultipleGuardTypeConflics {
+component MultipleGuardTypeConflicts {
 
 	port
 		in Integer i,

@@ -57,13 +57,6 @@ public class AutomatonTest extends AbstractCoCoTest {
   }
   
   @Test
-  public void testAutomatonHasNoInitialStates() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AutomatonWithoutInitialState");
-    // automaton has states but no initial state -> exactly 1 error.
-    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA013"));
-  }
-  
-  @Test
   public void testValidAutomaton() {
     checkValid(PACKAGE + "." + "ValidAutomaton");
   }

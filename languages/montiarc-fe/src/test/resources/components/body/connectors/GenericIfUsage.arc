@@ -6,7 +6,6 @@ import types.GenericIfProvider;
 /*
  * Invalid model.
  *
- * @implements TODO
  * TODO: Add test
  */
 component GenericIfUsage<T> {

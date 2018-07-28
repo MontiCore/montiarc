@@ -5,7 +5,6 @@ import types.*;
 /*
  * Invalid model.
  *
- * @implements TODO
  * TODO Add test
  */
 component ReferencingComp (int[] configIntArray, String[][] configStringArray){
