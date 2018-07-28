@@ -107,9 +107,17 @@ public class SubComponentTest extends AbstractCoCoTest {
   
   @Test
   public void testSubcomponentReferenceCycles() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentReferenceCycleA");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle()), node,
-        new ExpectedErrorInfo(1, "xMA086"));
+    ASTMontiArcNode node 
+        = loadComponentAST(PACKAGE + "." + "SubcomponentReferenceCycleA");
+    ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA086");
+    final MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle());
+    checkInvalid(cocos, node, errors);
+
+    node = loadComponentAST(PACKAGE + "." + "SubcomponentReferenceCycleB");
+    errors = new ExpectedErrorInfo(1, "xMA086");
+    checkInvalid(cocos, node, errors);
   }
   
   @Test

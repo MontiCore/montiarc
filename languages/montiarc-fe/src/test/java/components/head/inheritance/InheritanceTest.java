@@ -136,8 +136,10 @@ public class InheritanceTest extends AbstractCoCoTest {
    *    parameters. (p.69 Lst. 3.49)
    */
   public void testTooFewConfigurationParameters() {
-    final ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "TooFewConfigurationParameters");
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA084");
+    final ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "TooFewConfigurationParameters");
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA084");
     checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
 

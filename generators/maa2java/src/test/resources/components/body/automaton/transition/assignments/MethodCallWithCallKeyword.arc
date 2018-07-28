@@ -1,21 +1,20 @@
 package components.body.automaton.transition.assignments;
 
 /**
- * Valid model.
+ * Valid model. 
  */
-component MethodCallAfterCallKeyword {
+component MethodCallWithCallKeyword {
 
    port 
-     in int a,
-     out Integer b,
-     out Integer c;
+     in String a,
+     out int c;
 
  
     automaton UseOfUndeclaredField {
         state A;
         initial A;
         
-        A -> A /{b = a.toString()};
+        A -> A /{call c.toString()}; 
     
     }
 }

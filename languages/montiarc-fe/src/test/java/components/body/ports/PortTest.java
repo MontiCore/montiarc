@@ -324,6 +324,18 @@ public class PortTest extends AbstractCoCoTest {
   public void testUndefinedPortTypes() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UndefinedPortTypes");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA097"));
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(3, "xMA097");
+    checkInvalid(cocos, node, errors);
+  }
+
+  @Test
+  public void testReferencingComp() {
+    final ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "ReferencingComp");
+    MontiArcCoCoChecker cocos
+        = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA033");
+    checkInvalid(cocos, node, errors);
   }
 }

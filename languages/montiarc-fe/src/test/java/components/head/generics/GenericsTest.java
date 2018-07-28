@@ -63,6 +63,11 @@ public class GenericsTest extends AbstractCoCoTest {
   }
   
   @Test
+  /*
+   * Tests [Hab16] R15: Components that inherit from a generic component
+   * have to assign concrete type arguments to all generic type parameters.
+   * (p.69, lst. 3.50)
+   */
   public void testcomponentExtendsGenericComponent() {
     checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent");
     checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent2");

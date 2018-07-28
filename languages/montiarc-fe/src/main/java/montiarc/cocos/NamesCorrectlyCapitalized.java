@@ -24,6 +24,8 @@ import java.util.List;
  * (p. 71, lst. 3.51)
  * @implements [Hab16] CV1: Instance names start with a lower-case letter.
  * (p. 71, Lst. 3.51)
+ * @implements [Wor16] MC2: Behavior model names begin with capital letters.
+ *  (p.57)
  */
 public class NamesCorrectlyCapitalized
     implements MontiArcASTComponentCoCo,
