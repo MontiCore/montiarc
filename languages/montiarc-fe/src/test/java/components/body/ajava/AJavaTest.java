@@ -71,12 +71,13 @@ public class AJavaTest extends AbstractCoCoTest {
     checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
   
-  @Ignore("@JP wartet auf aktualisierung des InputUnchangedVisitor")
   @Test
   public void testChangeIncomingPortInCompute() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ChangeIncomingPortInCompute");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(2, "xMA078"));
+    ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "ChangeIncomingPortInCompute");
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(2, "xMA078");
+    checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
   
   @Ignore("@JP: Hier sollten drei Fehler entstehen (siehe Model). Bitte einbauen")

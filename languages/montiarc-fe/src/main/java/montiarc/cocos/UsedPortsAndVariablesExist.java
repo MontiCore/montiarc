@@ -34,7 +34,7 @@ public class UsedPortsAndVariablesExist
 
   @Override
   public void check(ASTComponent node) {
-    if (node.getSymbolOpt().isPresent()) {
+    if (!node.getSymbolOpt().isPresent()) {
       Log.error(
           String.format("0xMA010 ASTComponent node \"%s\" has no " +
                             "symbol. Did you forget to run the " +
