@@ -54,7 +54,7 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
    */
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol compSym = (ComponentSymbol) node.getSymbol().get();
+    ComponentSymbol compSym = (ComponentSymbol) node.getSymbolOpt().get();
     
     for (ConnectorSymbol connector : compSym.getConnectors()) {
       Optional<PortSymbol> sourcePort = null;

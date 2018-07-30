@@ -36,7 +36,7 @@ public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
   public void handle(ASTNameExpression node) {
     setResult(null);
     String name = node.getName();
-    Scope scope = node.getEnclosingScope().get();
+    Scope scope = node.getEnclosingScopeOpt().get();
     String typeSymbolName = JavaDSLHelper.getEnclosingTypeSymbolName(scope); // is
                                                                              // null
                                                                              // as
@@ -137,7 +137,7 @@ public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
     isCallExpr = false;
     handle(node.getExpression());
     String name = node.getName();
-    Scope scope = node.getEnclosingScope().get();
+    Scope scope = node.getEnclosingScopeOpt().get();
     if (!getResult().isPresent()) {
       // expression could be a package name. try to resolve the fullname
       fullName += "." + name;

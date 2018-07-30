@@ -37,7 +37,7 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
    */
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol compSym = (ComponentSymbol) node.getSymbol().get();
+    ComponentSymbol compSym = (ComponentSymbol) node.getSymbolOpt().get();
     
     if (compSym.getSuperComponent().isPresent()) {
       List<JTypeSymbol> typeParameters = compSym.getFormalTypeParameters();

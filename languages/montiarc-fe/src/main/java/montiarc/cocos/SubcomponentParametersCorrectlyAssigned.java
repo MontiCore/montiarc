@@ -48,7 +48,7 @@ public class SubcomponentParametersCorrectlyAssigned
    */
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol sym = (ComponentSymbol) node.getSymbol().get();
+    ComponentSymbol sym = (ComponentSymbol) node.getSymbolOpt().get();
     
     // Check whether the types of the arguments fit the types of the
     // subcomponent's parameters

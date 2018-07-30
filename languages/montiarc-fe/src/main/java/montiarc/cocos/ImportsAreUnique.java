@@ -22,7 +22,7 @@ public class ImportsAreUnique implements MontiArcASTComponentCoCo {
    * the model for user convenience. */
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol symbol = (ComponentSymbol) node.getSymbol().orElse(null);
+    ComponentSymbol symbol = (ComponentSymbol) node.getSymbolOpt().orElse(null);
     
     if (symbol == null) {
       Log.error(String.format("0xMA071 ASTComponent node \"%s\" has no symbol.", node.getName()));

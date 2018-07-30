@@ -33,15 +33,15 @@ public class AutomatonOutputInExpression implements MCExpressionsASTGenericInvoc
     // TODO Check that nothing is writing on incoming ports
     
     // Transition Scope
-    if (node.isPresentName() && node.getEnclosingScope().isPresent()) {
+    if (node.isPresentName() && node.getEnclosingScopeOpt().isPresent()) {
       
       // Automaton Scope
-      if (node.getEnclosingScope().get().getEnclosingScope().isPresent()) {
+      if (node.getEnclosingScopeOpt().get().getEnclosingScope().isPresent()) {
         
         // Component Scope
-        if (node.getEnclosingScope().get().getEnclosingScope().get().getEnclosingScope()
+        if (node.getEnclosingScopeOpt().get().getEnclosingScope().get().getEnclosingScope()
             .isPresent()) {
-          Scope scope = node.getEnclosingScope().get().getEnclosingScope().get().getEnclosingScope()
+          Scope scope = node.getEnclosingScopeOpt().get().getEnclosingScope().get().getEnclosingScope()
               .get();
           Optional<? extends ScopeSpanningSymbol> scopeSymbol = scope.getSpanningSymbol();
           if (scopeSymbol.isPresent() && scopeSymbol.get().isKindOf(ComponentSymbol.KIND)) {

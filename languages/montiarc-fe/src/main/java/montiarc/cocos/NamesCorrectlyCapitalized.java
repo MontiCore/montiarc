@@ -74,7 +74,7 @@ public class NamesCorrectlyCapitalized
       }
     }
 
-    ComponentSymbol componentType = (ComponentSymbol) node.getSymbol().get();
+    ComponentSymbol componentType = (ComponentSymbol) node.getSymbolOpt().get();
     if (!componentType.getFormalTypeParameters().isEmpty()) {
       for (JTypeSymbol genType : componentType.getFormalTypeParameters()) {
         if (!Character.isUpperCase(genType.toString().charAt(0))) {

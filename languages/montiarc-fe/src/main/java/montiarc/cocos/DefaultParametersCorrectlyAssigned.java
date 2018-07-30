@@ -42,7 +42,7 @@ public class DefaultParametersCorrectlyAssigned
   @Override
   public void check(ASTComponent node) {
     List<ASTParameter> params = node.getHead().getParameterList();
-    ComponentSymbol comp = (ComponentSymbol) node.getSymbol().get();
+    ComponentSymbol comp = (ComponentSymbol) node.getSymbolOpt().get();
     for (ASTParameter param : params) {
       
       if (param.isPresentDefaultValue()) {

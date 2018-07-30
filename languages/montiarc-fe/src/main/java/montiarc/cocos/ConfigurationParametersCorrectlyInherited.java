@@ -97,9 +97,7 @@ public class ConfigurationParametersCorrectlyInherited implements MontiArcASTCom
                     "type '%s'.",
                     configParameters.get(paramIndex).getName(),
                     paramIndex + 1,
-                    componentSymbol.getFullName(),
-                    paramType.getReferencedSymbol().getFullName(),
-                    superParameterType.getReferencedSymbol().getFullName()),
+                    componentSymbol.getFullName()),
                 component.getHead().getParameterList()
                     .get(paramIndex).get_SourcePositionStart());
           }

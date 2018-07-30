@@ -32,7 +32,7 @@ public class ReferencedSubComponentExists implements MontiArcASTSubComponentCoCo
   public void check(ASTSubComponent node) {
     String referenceName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(node.getType());
     
-    Scope scope = node.getEnclosingScope().get();
+    Scope scope = node.getEnclosingScopeOpt().get();
     
     Optional<ComponentSymbol> componentSymbol = scope
         .<ComponentSymbol> resolve(referenceName, ComponentSymbol.KIND);

@@ -40,7 +40,7 @@ public class SubComponentsConnected implements MontiArcASTComponentCoCo {
   
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol entry = (ComponentSymbol) node.getSymbol().get();
+    ComponentSymbol entry = (ComponentSymbol) node.getSymbolOpt().get();
     // Implemented on the symTab as it takes auto-instantiation into account
     // which is not reflected
     // in the AST.

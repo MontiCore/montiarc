@@ -23,7 +23,7 @@ public class ImportsValid implements MontiArcASTComponentCoCo {
   
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol cmp = (ComponentSymbol) node.getSymbol().orElse(null);
+    ComponentSymbol cmp = (ComponentSymbol) node.getSymbolOpt().orElse(null);
     Scope encScope = cmp.getEnclosingScope();
     Scope spanScope = cmp.getSpannedScope();
     

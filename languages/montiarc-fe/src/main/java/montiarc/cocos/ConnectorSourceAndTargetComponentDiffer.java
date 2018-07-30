@@ -20,7 +20,7 @@ public class ConnectorSourceAndTargetComponentDiffer implements MontiArcASTCompo
    */
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol componentSymbol = (ComponentSymbol) node.getSymbol().get();
+    ComponentSymbol componentSymbol = (ComponentSymbol) node.getSymbolOpt().get();
     Collection<ConnectorSymbol> connectors = componentSymbol.getConnectors();
     
     for (ConnectorSymbol cs : connectors) {

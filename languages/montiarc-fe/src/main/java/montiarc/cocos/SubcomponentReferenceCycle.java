@@ -25,7 +25,7 @@ public class SubcomponentReferenceCycle implements MontiArcASTComponentCoCo {
    */
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol comp = (ComponentSymbol) node.getSymbol().get();
+    ComponentSymbol comp = (ComponentSymbol) node.getSymbolOpt().get();
     for(ComponentInstanceSymbol subcomp : comp.getSubComponents()) {
       for(ComponentInstanceSymbol subsubcomp : subcomp.getComponentType().getReferencedComponent().get().getSubComponents()) {
         if(comp.getName().equals(subsubcomp.getComponentType().getName())) {

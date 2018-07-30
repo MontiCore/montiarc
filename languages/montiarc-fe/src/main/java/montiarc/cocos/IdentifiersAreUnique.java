@@ -27,7 +27,7 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
   @Override
   public void check(ASTComponent node) {
     ArrayList<Identifier> names = new ArrayList<>();
-    ComponentSymbol comp = (ComponentSymbol) node.getSymbol().get();
+    ComponentSymbol comp = (ComponentSymbol) node.getSymbolOpt().get();
 
     for (ASTElement e : node.getBody().getElementList()) {
 

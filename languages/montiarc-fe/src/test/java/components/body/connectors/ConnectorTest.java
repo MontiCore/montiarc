@@ -260,7 +260,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + modelName);
     final ASTMontiArcNode astMontiArcNode = loadComponentAST(PACKAGE + "." + modelName);
     assertNotNull(astMontiArcNode);
-    final Optional<? extends Symbol> componentSymbol = astMontiArcNode.getSymbol();
+    final Optional<? extends Symbol> componentSymbol = astMontiArcNode.getSymbolOpt();
     assertTrue(componentSymbol.isPresent());
     final ComponentSymbol symbol = (ComponentSymbol) componentSymbol.get();
     assertTrue(symbol.getConnector("sender.message").isPresent());

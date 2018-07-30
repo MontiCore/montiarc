@@ -79,7 +79,7 @@ public class ModelAnnotationTest {
 
         final ASTMACompilationUnit model = astmaCompilationUnit.get();
         final List<Comment> preComments
-            = model.getComponent().get_PreComments();
+            = model.getComponent().get_PreCommentList();
         if(preComments.size() < 1){
           Log.warn(String.format("Model %s has no description!", file.toString()));
           return FileVisitResult.CONTINUE;

@@ -28,7 +28,7 @@ public class CircularInheritance implements MontiArcASTComponentCoCo {
    */
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol compSym = (ComponentSymbol) node.getSymbol().get();
+    ComponentSymbol compSym = (ComponentSymbol) node.getSymbolOpt().get();
     List<String> superCompNames = new ArrayList<>();
     superCompNames.add(compSym.getPackageName()+ "."+ node.getName());
     if (compSym.getSuperComponent().isPresent()) {

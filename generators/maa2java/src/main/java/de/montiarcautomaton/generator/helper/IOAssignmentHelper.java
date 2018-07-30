@@ -46,7 +46,7 @@ public class IOAssignmentHelper {
    * @return
    */
   public boolean isVariable(String name) {
-    Optional<VariableSymbol> symbol = assignment.getEnclosingScope().get()
+    Optional<VariableSymbol> symbol = assignment.getEnclosingScopeOpt().get()
         .<VariableSymbol> resolve(name, VariableSymbol.KIND);
     if (symbol.isPresent()) {
       return true;
