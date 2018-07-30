@@ -14,16 +14,26 @@ import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ComponentSymbol;
 
 /**
- * Checks whether the imported files actually exist and thus make the imports valid. TODO: Star
- * imports, see https://git.rwth-aachen.de/montiarc/core/issues/97
+ * Checks whether the imported files actually exist and thus make the
+ * imports valid.
+ * TODO: Star imports, see https://git.rwth-aachen.de/montiarc/core/issues/97
  *
- * @implements TODO Not directly assignable to literature reference
+ * @implements No literature reference
  */
 public class ImportsValid implements MontiArcASTComponentCoCo {
   
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol cmp = (ComponentSymbol) node.getSymbolOpt().orElse(null);
+    // Try to resolve the symbol for the component
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
+    ComponentSymbol cmp = (ComponentSymbol) node.getSymbolOpt().get();
     Scope encScope = cmp.getEnclosingScope();
     Scope spanScope = cmp.getSpannedScope();
     

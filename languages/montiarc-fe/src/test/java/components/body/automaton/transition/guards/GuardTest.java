@@ -77,11 +77,16 @@ public class GuardTest extends AbstractCoCoTest {
   @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
       + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
       + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
+  /**
+   * Aktueller Fehler der sich im Modell ergibt:
+   * ERROR ROOT - StringReader:<19,8>: 0xMA037 Could not resolve type of guard.
+   */
   @Test
   public void testMultipleGuardTypeConflics() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MultipleGuardTypeConflicts");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(2, "xMA046"));
+    final String modelName = PACKAGE + "." + "MultipleGuardTypeConflicts";
+    ASTMontiArcNode node = loadComponentAST(modelName);
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo();
+    final MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
+    checkInvalid(cocos, node, errors);
   }
-  
-  
 }

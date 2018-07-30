@@ -114,15 +114,20 @@ public class InheritanceTest extends AbstractCoCoTest {
   public void testCircularInheritance() {
     final String componentName = PACKAGE + "." + "CircularInheritanceA";
     ASTMontiArcNode node = loadComponentAST(componentName);
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new CircularInheritance()), node, new ExpectedErrorInfo(1, "xMA017"));
+    final MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new CircularInheritance());
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA017");
+    checkInvalid(cocos, node, errors);
   }
   
   @Test
   public void testTransitiveCircularInheritance() {
     final String componentName = PACKAGE + "." + "TransitiveCircularInheritanceA";
     ASTMontiArcNode node = loadComponentAST(componentName);
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new CircularInheritance()), node, new ExpectedErrorInfo(1, "xMA017"));
-
+    final MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new CircularInheritance());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA017");
+    checkInvalid(cocos, node, errors);
   }
 
   @Test

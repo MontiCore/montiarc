@@ -32,9 +32,12 @@ public class BodyTest extends AbstractCoCoTest {
   
   @Test
   public void testComponentWithAJavaAndAutomaton() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ComponentWithAJavaAndAutomaton");
-    final MontiArcCoCoChecker checker = new MontiArcCoCoChecker().addCoCo(new MultipleBehaviorImplementation());
-    checkInvalid(checker, node, new ExpectedErrorInfo(1, "xMA050"));
+    final String modelName = PACKAGE + "." + "ComponentWithAJavaAndAutomaton";
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker().addCoCo(new MultipleBehaviorImplementation());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA050");
+    checkInvalid(checker, loadComponentAST(modelName), errors);
   }
 
   @Test

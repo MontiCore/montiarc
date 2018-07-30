@@ -37,6 +37,14 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
    */
   @Override
   public void check(ASTComponent node) {
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
     ComponentSymbol compSym = (ComponentSymbol) node.getSymbolOpt().get();
     
     if (compSym.getSuperComponent().isPresent()) {

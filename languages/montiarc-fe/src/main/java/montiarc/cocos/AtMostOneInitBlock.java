@@ -7,6 +7,9 @@ import montiarc._ast.ASTJavaPInitializer;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 
 /**
+ * Ensures that there is at most one AJava initialization block in each
+ * component.
+ *
  * @implements Unreferenced in literature
  */
 public class AtMostOneInitBlock implements MontiArcASTComponentCoCo {

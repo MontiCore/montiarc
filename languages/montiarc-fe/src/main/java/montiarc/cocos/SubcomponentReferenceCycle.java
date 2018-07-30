@@ -25,6 +25,14 @@ public class SubcomponentReferenceCycle implements MontiArcASTComponentCoCo {
    */
   @Override
   public void check(ASTComponent node) {
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
     ComponentSymbol comp = (ComponentSymbol) node.getSymbolOpt().get();
     for(ComponentInstanceSymbol subcomp : comp.getSubComponents()) {
       for(ComponentInstanceSymbol subsubcomp : subcomp.getComponentType().getReferencedComponent().get().getSubComponents()) {

@@ -41,10 +41,18 @@ public class DefaultParametersCorrectlyAssigned
    */
   @Override
   public void check(ASTComponent node) {
-    List<ASTParameter> params = node.getHead().getParameterList();
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
     ComponentSymbol comp = (ComponentSymbol) node.getSymbolOpt().get();
+    List<ASTParameter> params = node.getHead().getParameterList();
+
     for (ASTParameter param : params) {
-      
       if (param.isPresentDefaultValue()) {
         int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(param.getType());
         JTypeReference<? extends JTypeSymbol> paramTypeSymbol = new JavaTypeSymbolReference(

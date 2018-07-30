@@ -6,7 +6,6 @@ import types.MyConstants;
 /*
  * Invalid model.
  *
- * TODO Add test
  */
 component InvalidConfigArgs {
 

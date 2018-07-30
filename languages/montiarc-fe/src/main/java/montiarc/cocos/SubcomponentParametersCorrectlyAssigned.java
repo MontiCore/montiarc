@@ -37,6 +37,8 @@ import montiarc.helper.TypeCompatibilityChecker;
  * 
  * @implements [Wor16] MR1: Arguments of configuration parameters with default
  * values may be omitted during subcomponent declaration. (p. 58, Lst. 4.11)
+ * @implements [Wor16] MR4: All mandatory component configuration parameters
+ *  precede the parameters with default values. (p.60 Lst. 4.14)
  * @implements TODO: Klaeren welche CoCo in der Literatur repraesentiert wird.
  * @author Andreas Wortmann
  */
@@ -48,6 +50,14 @@ public class SubcomponentParametersCorrectlyAssigned
    */
   @Override
   public void check(ASTComponent node) {
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
     ComponentSymbol sym = (ComponentSymbol) node.getSymbolOpt().get();
     
     // Check whether the types of the arguments fit the types of the

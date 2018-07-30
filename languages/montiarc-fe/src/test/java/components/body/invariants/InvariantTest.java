@@ -37,14 +37,6 @@ public class InvariantTest extends AbstractCoCoTest {
         node,
         new ExpectedErrorInfo(4, "xMA052"));
   }
-
-  @Test
-  public void testAmbiguousInvariantNames2() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousInvariantNames2");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
-        node,
-        new ExpectedErrorInfo(2, "xMA052"));
-  }
   
   @Ignore("TODO ocl invariants?")
   @Test

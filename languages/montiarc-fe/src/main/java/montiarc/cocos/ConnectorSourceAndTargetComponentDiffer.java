@@ -20,6 +20,14 @@ public class ConnectorSourceAndTargetComponentDiffer implements MontiArcASTCompo
    */
   @Override
   public void check(ASTComponent node) {
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
     ComponentSymbol componentSymbol = (ComponentSymbol) node.getSymbolOpt().get();
     Collection<ConnectorSymbol> connectors = componentSymbol.getConnectors();
     

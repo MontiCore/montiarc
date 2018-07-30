@@ -147,13 +147,11 @@ public class GenericsTest extends AbstractCoCoTest {
 
   @Test
   public void testDefaultParameterForPurelyGenericType() {
-    final ASTMontiArcNode astMontiArcNode
-        = loadComponentAST(PACKAGE +
-                               ".DefaultParameterForPurelyGenericType");
+    final String modelName = PACKAGE + ".DefaultParameterForPurelyGenericType";
     MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo(new DefaultParametersCorrectlyAssigned());
     ExpectedErrorInfo errors
         = new ExpectedErrorInfo(1, "xMA062");
-    checkInvalid(cocos, astMontiArcNode, errors);
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
 }
