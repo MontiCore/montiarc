@@ -26,7 +26,7 @@ import montiarc._parser.MontiArcParser;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.MontiArcLanguageFamily;
 import montiarc.cocos.MontiArcCoCos;
-import montiarc.helper.JavaHelper;
+import montiarc.helper.JavaDefaultTypesManager;
 
 /**
  * MontiArcTool
@@ -177,7 +177,7 @@ public class MontiArcTool {
     final ModelPath mp = new ModelPath(p);
     
     GlobalScope gs = new GlobalScope(mp, family);
-    JavaHelper.addJavaPrimitiveTypes(gs);
+    JavaDefaultTypesManager.addJavaPrimitiveTypes(gs);
     isSymTabInitialized = true;
     return gs;
   }

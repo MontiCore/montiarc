@@ -12,7 +12,7 @@ import de.monticore.symboltable.ImportStatement;
  * TODO This class should be part of JavaDSL or a respective lib that provides default types (e.g.,
  * primitives, java.lang.* and java.util.*). Copied from MontiArc.
  */
-public class JavaHelper {
+public class JavaDefaultTypesManager {
   private final static JavaSymbolFactory jSymbolFactory = new JavaSymbolFactory();
   
   private static final String[] primitiveTypes = { "boolean", "byte", "char", "double", "float",
