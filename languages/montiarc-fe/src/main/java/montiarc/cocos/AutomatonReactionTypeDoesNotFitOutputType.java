@@ -103,9 +103,5 @@ public class AutomatonReactionTypeDoesNotFitOutputType
   }
   
   
-  private void checkAssignedTypeFits() {
-    
-  }
-  
   
 }

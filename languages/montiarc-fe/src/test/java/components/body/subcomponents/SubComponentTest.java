@@ -65,6 +65,11 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
   
   @Test
+  public void testGenericSubcomponentWithGenericParameterOfSameType() {
+    checkValid(PACKAGE + "." +  "Garage");
+  }
+  
+  @Test
   public void testSubcomponentWithJavaCfgArgs() {
     checkValid(PACKAGE + "." + "SubcomponentsWithJavaCfgArg");
   }
