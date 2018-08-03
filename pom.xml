@@ -52,6 +52,7 @@
 		<!-- Classifiers -->
 		<grammars.classifier>grammars</grammars.classifier>
 		<librarymodels.classifier>librarymodels</librarymodels.classifier>
+		<testmodels.classifier>testmodels</testmodels.classifier>
 
 		<!-- .. Misc .......................................................... -->
 		<java.version>1.8</java.version>
