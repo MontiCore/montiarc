@@ -114,7 +114,6 @@ public class AssignmentTest extends AbstractCoCoTest {
         new ExpectedErrorInfo(1, "xMA042"));
   }
   
-  @Ignore("@JP: Die Parameter von Methodenaufrufen können noch nicht überprüft werden")
   @Test
   public void testIncompatibleVariableAssignmentGenericTypesDifferSimple() {
     ASTMontiArcNode node = loadComponentAST(

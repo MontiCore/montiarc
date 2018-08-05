@@ -48,7 +48,7 @@ public class TypeCompatibilityChecker {
     primitiveToWrappers.put("short", "Short");
   }
   
-  private static int getPositionInFormalTypeParameters(List<JTypeSymbol> formalTypeParameters,
+  public static int getPositionInFormalTypeParameters(List<JTypeSymbol> formalTypeParameters,
       JTypeReference<? extends JTypeSymbol> searchedFormalTypeParameter) {
     int positionInFormal = 0;
     for (JTypeSymbol formalTypeParameter : formalTypeParameters) {
