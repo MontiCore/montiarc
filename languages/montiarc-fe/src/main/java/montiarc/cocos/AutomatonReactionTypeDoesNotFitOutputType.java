@@ -84,14 +84,16 @@ public class AutomatonReactionTypeDoesNotFitOutputType
   
   private void checkTypeCorrectness(ASTIOAssignment assign,
       JTypeReference<? extends JTypeSymbol> typeRef, String currentNameToResolve) {
-    for (ASTValuation val : assign.getValueList().getAllValuations()) {
-      // check assignment
-      if (assign.isAssignment()) {
-        checkAssignedTypesFits(val, typeRef, currentNameToResolve);
-      }
-      // check call
-      else if (assign.isCall()) {
-        checkCall(val, typeRef);
+    if (assign.isPresentValueList()) {
+      for (ASTValuation val : assign.getValueList().getAllValuations()) {
+        // check assignment
+        if (assign.isAssignment()) {
+          checkAssignedTypesFits(val, typeRef, currentNameToResolve);
+        }
+        // check call
+        else if (assign.isCall()) {
+          checkCall(val, typeRef);
+        }
       }
     }
   }
@@ -105,7 +107,18 @@ public class AutomatonReactionTypeDoesNotFitOutputType
           "0xMA044 Could not resolve type of expression for checking the reaction.",
           assignment.get_SourcePositionStart());
     }
-    else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(), varType)) {
+    else if (!TypeCompatibilityChecker.doTypesMatch(exprType.get(),
+        exprType.get().getReferencedSymbol().getFormalTypeParameters().stream()
+            .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+        exprType.get().getActualTypeArguments().stream()
+            .map(a -> (JavaTypeSymbolReference) a.getType())
+            .collect(Collectors.toList()),
+        varType,
+        varType.getReferencedSymbol().getFormalTypeParameters().stream()
+            .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+        varType.getActualTypeArguments().stream()
+            .map(a -> (JavaTypeSymbolReference) a.getType())
+            .collect(Collectors.toList()))) {
       Log.error("0xMA042 Type of Variable/Output \"" + referencedName
           + "\" in the reaction does not match the type of its assigned expression. Type "
           +
@@ -129,7 +142,7 @@ public class AutomatonReactionTypeDoesNotFitOutputType
           argTypes.add(argTypeOpt.get());
         }
         else {
-          Log.error("argument Type could not be resolved");
+          Log.error("0xMA100 argument type" + e + " could not be resolved.");
         }
       }
       
@@ -137,7 +150,6 @@ public class AutomatonReactionTypeDoesNotFitOutputType
       String methName = ((ASTQualifiedNameExpression) methodCallExpr.getExpression())
           .getName();
       Optional<JavaMethodSymbol> methSym = findMethodSymbol(varType, methName);
-      
       
       // 3. Check correct method parameters to passed parameters in the method
       // call in reaction.
@@ -148,13 +160,26 @@ public class AutomatonReactionTypeDoesNotFitOutputType
             .getParameterTypes(methSym.get());
         
         if (argTypes.size() != correctParameters.size()) {
-          Log.error("Number of method parameters does not fit.");
+          Log.error("0xMA099 Number of method parameters does not fit.",
+              methSym.get().getSourcePosition());
         }
         
         // 3.1 substitute possible generic parameters
         correctParameters = substituteFormalParameters(correctParameters, varType);
         
         // 3.2 compare actual and correct method parameters with each other
+        List<JTypeSymbol> varTypeFormalTypeParams =  varType.getReferencedSymbol().getFormalTypeParameters().stream()
+            .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
+        
+        List<JTypeReference<? extends JTypeSymbol>> varTypeActualTypeArgs = varType.getActualTypeArguments().stream()
+            .map(a -> (JavaTypeSymbolReference) a.getType())
+            .collect(Collectors.toList());
+        
+        if(!TypeCompatibilityChecker.hasNestedGenerics(varType)) {
+          varTypeFormalTypeParams = new ArrayList<>();
+          varTypeActualTypeArgs = new ArrayList<>();
+        }
+        
         for (int i = 0; i < argTypes.size(); i++) {
           if (!TypeCompatibilityChecker.doTypesMatch(argTypes.get(i),
               argTypes.get(i).getReferencedSymbol().getFormalTypeParameters().stream()
@@ -163,12 +188,9 @@ public class AutomatonReactionTypeDoesNotFitOutputType
                   .map(a -> (JavaTypeSymbolReference) a.getType())
                   .collect(Collectors.toList()),
               correctParameters.get(i),
-              varType.getReferencedSymbol().getFormalTypeParameters().stream()
-                  .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-              varType.getActualTypeArguments().stream()
-                  .map(a -> (JavaTypeSymbolReference) a.getType())
-                  .collect(Collectors.toList()))) {
-            Log.error("0xMA042 Types do not fit " + argTypes.get(i).getName() + ", "
+              varTypeFormalTypeParams,
+              varTypeActualTypeArgs)) {
+            Log.error("0xMA043 Types do not fit " + argTypes.get(i).getName() + ", "
                 + correctParameters.get(i).getName());
           }
         }

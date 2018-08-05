@@ -5,8 +5,11 @@
  */
 package montiarc.cocos;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
@@ -70,11 +73,28 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                   .getInterfaces();
               for (int j = 0; j < upperBounds.size(); j++) {
                 JTypeReference<? extends JTypeSymbol> upperBound = upperBounds.get(j);
-                // Case 1 formal type parameter is instantiated in extend (A
+                // Case 1 formal type parameter is instantiated in extend
+                // (component A
                 // extends B<Integer>)
-                if (actualArg.getType().existsReferencedSymbol()) {
+                if (!((JavaTypeSymbolReference)actualArg.getType()).getReferencedSymbol().isFormalTypeParameter()) {
+                  if (upperBound.getActualTypeArguments().isEmpty() && !upperBound.getReferencedSymbol().getFormalTypeParameters().isEmpty()) {
+                    upperBound.setActualTypeArguments(supersActualTypeParams);
+                  }
                   if (!TypeCompatibilityChecker.doTypesMatch(
-                      (JTypeReference<? extends JTypeSymbol>) actualArg.getType(), upperBound)) {
+                      ((JTypeReference<? extends JTypeSymbol>) actualArg.getType()),
+                      ((JTypeReference<? extends JTypeSymbol>) actualArg.getType())
+                          .getReferencedSymbol().getFormalTypeParameters().stream()
+                          .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+                      ((JTypeReference<? extends JTypeSymbol>) actualArg.getType())
+                          .getActualTypeArguments().stream()
+                          .map(a -> (JavaTypeSymbolReference) a.getType())
+                          .collect(Collectors.toList()),
+                      upperBound,
+                      upperBound.getReferencedSymbol().getFormalTypeParameters().stream()
+                          .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+                      supersActualTypeParams.stream()
+                          .map(a -> (JavaTypeSymbolReference) a.getType())
+                          .collect(Collectors.toList()))) {
                     Log.error("0xMA089 Parameter " + SymbolPrinter.printTypeParameters(actualArg)
                         + " is not compatible with "
                         + upperBound.getName(),
@@ -82,7 +102,8 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                   }
                 }
                 
-                // Case 2 formal type parameter is passed to extend (A<K extends
+                // Case 2 formal type parameter is passed to extend (component
+                // A<K extends
                 // Number> extends B<K>)
                 else {
                   int pos = getPositionInFormalTypeParameters(typeParameters,
@@ -95,8 +116,23 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                         node.getHead().getSuperComponent().get_SourcePositionStart());
                   }
                   else {
-                    if (TypeCompatibilityChecker.doTypesMatch(formalType.getInterfaces().get(j),
-                        (JTypeReference<? extends JTypeSymbol>) actualArg.getType()))
+                    if (TypeCompatibilityChecker.doTypesMatch(
+                        formalType.getInterfaces().get(j),
+                        formalType.getInterfaces().get(j)
+                            .getReferencedSymbol().getFormalTypeParameters().stream()
+                            .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+                        formalType.getInterfaces().get(j)
+                            .getActualTypeArguments().stream()
+                            .map(a -> (JavaTypeSymbolReference) a.getType())
+                            .collect(Collectors.toList()),
+                        ((JTypeReference<? extends JTypeSymbol>) actualArg.getType()),
+                        ((JTypeReference<? extends JTypeSymbol>) actualArg.getType())
+                            .getReferencedSymbol().getFormalTypeParameters().stream()
+                            .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+                        ((JTypeReference<? extends JTypeSymbol>) actualArg.getType())
+                            .getActualTypeArguments().stream()
+                            .map(a -> (JavaTypeSymbolReference) a.getType())
+                            .collect(Collectors.toList())))
                       ;
                   }
                 }

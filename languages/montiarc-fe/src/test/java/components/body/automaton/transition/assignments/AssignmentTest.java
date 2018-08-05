@@ -119,7 +119,7 @@ public class AssignmentTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "IncompatibleVariableAssignmentGenericTypesDifferSimple");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(2, "xMA042", "xMA042"));
+        new ExpectedErrorInfo(2, "xMA043", "xMA043"));
   }
   
   @Test

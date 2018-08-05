@@ -3,6 +3,7 @@ package montiarc.visitor;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.mcexpressions._ast.ASTCallExpression;
@@ -56,7 +57,7 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
     // set missing assignment names of all reactions of all transitions
     if (node.isPresentReaction()) {
       for (ASTIOAssignment assign : node.getReaction().getIOAssignmentList()) {
-       setNameOfAssignment(assign);
+        setNameOfAssignment(assign);
       }
     }
   }
@@ -164,7 +165,18 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
       for (VariableSymbol varSymbol : automatonScope.getEnclosingScope().get()
           .<VariableSymbol> resolveLocally(
               VariableSymbol.KIND)) {
-        if (TypeCompatibilityChecker.doTypesMatch(assignmentType, varSymbol.getTypeReference())) {
+        if (TypeCompatibilityChecker.doTypesMatch(assignmentType,
+            assignmentType.getReferencedSymbol().getFormalTypeParameters().stream()
+                .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+            assignmentType.getActualTypeArguments().stream()
+                .map(a -> (JavaTypeSymbolReference) a.getType())
+                .collect(Collectors.toList()),
+            varSymbol.getTypeReference(),
+            varSymbol.getTypeReference().getReferencedSymbol().getFormalTypeParameters().stream()
+                .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+            varSymbol.getTypeReference().getActualTypeArguments().stream()
+                .map(a -> (JavaTypeSymbolReference) a.getType())
+                .collect(Collectors.toList()))) {
           names.add(varSymbol.getName());
         }
       }
@@ -173,7 +185,18 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
       for (PortSymbol portSymbol : automatonScope.getEnclosingScope().get()
           .<PortSymbol> resolveLocally(
               PortSymbol.KIND)) {
-        if (TypeCompatibilityChecker.doTypesMatch(assignmentType, portSymbol.getTypeReference())) {
+        if (TypeCompatibilityChecker.doTypesMatch(assignmentType,
+            assignmentType.getReferencedSymbol().getFormalTypeParameters().stream()
+                .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+            assignmentType.getActualTypeArguments().stream()
+                .map(a -> (JavaTypeSymbolReference) a.getType())
+                .collect(Collectors.toList()),
+            portSymbol.getTypeReference(),
+            portSymbol.getTypeReference().getReferencedSymbol().getFormalTypeParameters().stream()
+                .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+            portSymbol.getTypeReference().getActualTypeArguments().stream()
+                .map(a -> (JavaTypeSymbolReference) a.getType())
+                .collect(Collectors.toList()))) {
           if ((direction == Direction.OUTPUT && portSymbol.isOutgoing())
               || (direction == Direction.INPUT && portSymbol.isIncoming())) {
             names.add(portSymbol.getName());

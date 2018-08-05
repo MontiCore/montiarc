@@ -228,7 +228,7 @@ public class InheritanceTest extends AbstractCoCoTest {
         = new MontiArcCoCoChecker()
               .addCoCo(new ConfigurationParametersCorrectlyInherited());
     final ExpectedErrorInfo errors
-        = new ExpectedErrorInfo(2, "xMA084");
+        = new ExpectedErrorInfo(3, "xMA084");
     checkInvalid(cocos, node, errors);
   }
 }

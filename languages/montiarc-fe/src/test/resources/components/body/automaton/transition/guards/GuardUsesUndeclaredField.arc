@@ -1,5 +1,10 @@
 package components.body.automaton.transition.guards;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+
+
 /*
  * Invalid model.
  * Uses undeclared fields in guards of transitions.
@@ -8,7 +13,7 @@ package components.body.automaton.transition.guards;
  */
 component GuardUsesUndeclaredField{
 
-  var time;
+  Integer time;
   HashMap<String, String> strings;
   List<String> stringList;
 
