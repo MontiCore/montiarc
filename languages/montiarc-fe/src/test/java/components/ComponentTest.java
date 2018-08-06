@@ -9,8 +9,7 @@ import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.symboltable.Symbol;
 import montiarc._ast.ASTPort;
 import montiarc._symboltable.PortSymbol;
-import montiarc.cocos.IdentifiersAreUnique;
-import montiarc.cocos.PackageLowerCase;
+import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,8 +26,6 @@ import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc.cocos.ImportsAreUnique;
-import montiarc.cocos.TopLevelComponentHasNoInstanceName;
 
 import static org.junit.Assert.*;
 
@@ -192,11 +189,10 @@ public class ComponentTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("Waits for https://git.rwth-aachen.de/monticore/montiarc/core/issues/193")
   public void testUnusedImports() {
-    final ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UnusedImports");
-    ExpectedErrorInfo errors = new ExpectedErrorInfo(); //TODO Add error info
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker(); //TODO Add coco
+    final ASTMontiArcNode node = loadCompilationUnitAST(PACKAGE + "." + "UnusedImports");
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(3,"xMA011");
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker().addCoCo(new UnusedImports());
 
     checkInvalid(checker, node, errors);
   }
