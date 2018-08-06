@@ -58,11 +58,14 @@ public class AbstractGeneratorTest {
   /**
    * Invokes the Java compiler on the given files.
    *
-   * @param files Files to compile
+   * @param paths Files to compile
    * @return true, if there are no compiler errors
    */
-  public static boolean isCompiling(List<File> files){
-
+  public static boolean isCompiling(Set<Path> paths){
+    List<File> files = paths.stream()
+                           .filter(path -> !Files.isDirectory(path))
+                           .map(Path::toFile)
+                           .collect(Collectors.toList());
     JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     StandardJavaFileManager fileManager
         = compiler.getStandardFileManager(null, null, null);
@@ -154,6 +157,8 @@ public class AbstractGeneratorTest {
         TEST_MODEL_PATH.toFile(),
         Paths.get(TARGET_GENERATED_TEST_SOURCES_DIR).toFile(),
         Paths.get("src/main/java").toFile());
+
+    // TODO Copy Java Files from types folder
   }
 
   /**

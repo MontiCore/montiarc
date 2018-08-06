@@ -28,9 +28,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static de.montiarcautomaton.generator.MontiArcGeneratorTool.DEFAULT_TYPES_FOLDER;
 import static de.montiarcautomaton.generator.MontiArcGeneratorTool.LIBRARY_MODELS_FOLDER;
@@ -67,16 +66,13 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
    */
   public void testExample() {
     // 2. Specify the model to check
-//    final String componentName = "ComponentWithEmptyComponent";
-//    final String componentName = "EmptyComponent";
-    final String componentName = "AtomicCompWithoutImpl";
-    final String qualifiedName = PACKAGE + "." + componentName;
-    executeGeneratorTest(qualifiedName);
+    executeGeneratorTest(PACKAGE, "AtomicCompWithoutImpl");
   }
 
   @Test
   public void test() {
-    executeGeneratorTest(PACKAGE + ".body.autoconnect.ReferencedPortAndType");
+    executeGeneratorTest("components.body.autoconnect",
+        "ReferencedPortAndType");
   }
 
   @Test
@@ -99,15 +95,15 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     }
 
     @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+    public FileVisitResult visitFile(Path path, BasicFileAttributes attrs)
         throws IOException {
 
-      if(file.toFile().exists()
-             && file.toString().toLowerCase().endsWith(fileEnding)){
+      if(Files.exists(path)
+             && path.toString().toLowerCase().endsWith(fileEnding)){
 
         MontiArcParser parser = new MontiArcParser();
         final Optional<ASTMACompilationUnit> astmaCompilationUnit
-            = parser.parse(file.toString());
+            = parser.parse(path.toString());
         if(!astmaCompilationUnit.isPresent()){
           return FileVisitResult.CONTINUE;
         }
@@ -123,23 +119,28 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
         if(comment.getText().toLowerCase().contains("valid")){
           if(!comment.getText().toLowerCase().contains("invalid")){
             // Execute test
-            final String[] strings = file.toString().split("\\.");
-            executeGeneratorTest(strings[strings.length - 1]);
+            StringBuilder modelPackage = new StringBuilder();
+            for (String s : model.getPackageList()) {
+              modelPackage.append(s).append(".");
+            }
+            modelPackage.deleteCharAt(modelPackage.length() - 1);
+
+            String modelName = model.getComponent().getName();
+            executeGeneratorTest(modelPackage.toString(), modelName);
           }
         } else {
           Log.warn(
             String.format("Description of model %s does not state " +
                               "whether it is valid or invalid!",
-                file.toString()));
+                path.toString()));
         }
       }
       return FileVisitResult.CONTINUE;
     }
   }
 
-  private void executeGeneratorTest(String qualifiedName) {
-    final String[] strings = qualifiedName.split("\\.|\\\\|/");
-    String componentName = strings[strings.length - 1];
+  private void executeGeneratorTest(String packageName, String componentName) {
+    String qualifiedName = packageName + "." + componentName;
 
     // Load component symbol
     final ComponentSymbol symbol
@@ -150,16 +151,29 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
         Paths.get(LIBRARY_MODELS_FOLDER).toFile()).orElse(null);
     assertNotNull(symbol);
 
+    // Skip if it contains inner components
+    if(anyHasInnerComponent(symbol)){
+      return;
+    }
+
     // 3. Determine all files which have to be checked
-    List<File> filesToCheck = determineFilesToCheck(
+    Set<Path> filesToCheck = determineFilesToCheck(
         componentName,
         qualifiedName,
         symbol, TARGET_GENERATED_TEST_SOURCES_DIR);
 
+    try {
+      final Path generatedTypesPath
+          = Paths.get(TARGET_GENERATED_TEST_SOURCES_DIR).resolve("types");
+      filesToCheck.addAll(Files.walk(generatedTypesPath).collect(Collectors.toSet()));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
     // 4. Determine if all files are present
-    for (File file : filesToCheck) {
-      assertTrue("Could not find expected generated file " + file.toString(),
-          file.exists());
+    for (Path path : filesToCheck) {
+      assertTrue("Could not find expected generated file " + path.toString(),
+          Files.exists(path));
     }
 
     // 5. Invoke Java compiler to see whether they are compiling
@@ -203,9 +217,21 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 //    assertEquals(0, Log.getFindings().size());
   }
 
+  private boolean anyHasInnerComponent(ComponentSymbol symbol){
+    if(!symbol.getInnerComponents().isEmpty()){
+      return true;
+    }
+    for(ComponentInstanceSymbol instanceSymbol : symbol.getSubComponents()) {
+      final ComponentSymbol referencedSymbol
+          = instanceSymbol.getComponentType().getReferencedSymbol();
+      anyHasInnerComponent(referencedSymbol);
+    }
+    return false;
+  }
+
   @Test
   public void testComponentWithEmptyComponent() {
-    executeGeneratorTest("ComponentWithEmptyComponent");
+    executeGeneratorTest(PACKAGE, "ComponentWithEmptyComponent" );
   }
 
   /**
@@ -241,19 +267,22 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
    * @param basedir Location of the generated files
    * @return A list of generated files for the specified component
    */
-  private List<File> determineFilesToCheck(String componentName, String qualifiedName, ComponentSymbol component, String basedir) {
-    List<File> filesToCheck = new ArrayList<>();
+  private Set<Path> determineFilesToCheck(String componentName,
+                                          String qualifiedName,
+                                          ComponentSymbol component,
+                                          String basedir) {
+    Set<Path> filesToCheck = new HashSet<>();
 
     final Optional<String> deploy = component.getStereotype().get("deploy");
 
     // Add the special deployment file
     if (deploy != null && deploy.isPresent()) {
       filesToCheck.add(
-          new File(TARGET_GENERATED_TEST_SOURCES_DIR + PACKAGE + "\\" +
+          Paths.get(TARGET_GENERATED_TEST_SOURCES_DIR + PACKAGE + "\\" +
                        "Deploy" + componentName + JAVA_FILE_ENDING));
     }
 
-    if (component.getSubComponents().isEmpty()) {
+    if (component.isAtomic()) {
 
       // Determine if an automaton or a compute block is present
 //      final ASTComponent astNode
@@ -271,7 +300,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 
       final String qualifiedFileName
           = basedir + qualifiedName.replace('.', '\\') + "Impl";
-      filesToCheck.add(new File(qualifiedFileName + JAVA_FILE_ENDING));
+      filesToCheck.add(Paths.get(qualifiedFileName + JAVA_FILE_ENDING));
     } else {
 
       //Recursively add files for subcomponents
@@ -293,7 +322,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
       final String qualifiedFileName
           = basedir + qualifiedName.replace('.', '\\') + suffix;
       filesToCheck.add(
-          new File(qualifiedFileName + JAVA_FILE_ENDING));
+          Paths.get(qualifiedFileName + JAVA_FILE_ENDING));
     }
 
     return filesToCheck;
