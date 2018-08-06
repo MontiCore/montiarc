@@ -1,7 +1,10 @@
 package components.body;
 
+import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.IdentifiersAreUnique;
 import montiarc.cocos.MultipleBehaviorImplementation;
+import montiarc.cocos.NamesCorrectlyCapitalized;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -35,15 +38,10 @@ public class BodyTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("Waits for https://git.rwth-aachen.de/monticore/montiarc/core/issues/195")
-  /**
-   * Currently not resolvable, as the name of the artifact is lower case.
-   * Waits for the resolution of ticket https://git.rwth-aachen.de/monticore/montiarc/core/issues/195.
-   */
   public void testWrongCapitalization() {
     final ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "wrongCapitalization");
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(); // Add error info
-    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA055", "xMA077"); // Add error info
+    final MontiArcCoCoChecker checker = new MontiArcCoCoChecker().addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized());
     checkInvalid(checker, node, errors);
   }
 
@@ -57,7 +55,7 @@ public class BodyTest extends AbstractCoCoTest {
   @Test
   public void testAmbiguousIdentifiers() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousIdentifiers");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()), node,
         new ExpectedErrorInfo(3, "xMA061", "xMA053"));
   }
   

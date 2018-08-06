@@ -463,6 +463,7 @@ public class SubComponentTest extends AbstractCoCoTest {
   
   @Test
   public void testInnerComponents() {
+    checkValid(PACKAGE+".ComponentWithInnerComponent");
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComponentWithInnerComponent");
     assertEquals("1 auto-instance and 1 named subcomponent", 2, comp
         .getSubComponents().size());

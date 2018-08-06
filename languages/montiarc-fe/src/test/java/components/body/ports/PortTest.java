@@ -323,7 +323,7 @@ public class PortTest extends AbstractCoCoTest {
   /* TODO Does not find all undefined types. Runtime exception after first one. */
   public void testUndefinedPortTypes() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UndefinedPortTypes");
-    MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA097"));
   }
 }
