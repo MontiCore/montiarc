@@ -8,14 +8,12 @@ package generation;
 import com.google.common.collect.Lists;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.monticore.java.javadsl._ast.ASTImportDeclaration;
+import de.monticore.java.javadsl._ast.ASTPrimitiveModifier;
 import de.monticore.java.javadsl._ast.JavaDSLMill;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.types.JFieldSymbol;
-import de.monticore.types.types._ast.ASTSimpleReferenceType;
-import de.monticore.types.types._ast.ASTType;
-import de.monticore.types.types._ast.ASTTypeArgument;
-import de.monticore.types.types._ast.ASTTypeArguments;
+import de.monticore.types.types._ast.*;
 import montiarc._ast.*;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
@@ -72,6 +70,33 @@ public class ComponentElementsCollector implements MontiArcVisitor {
                                        .build());
     types.put("STRING_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
                                  .setNameList(Lists.newArrayList("String"))
+                                 .build());
+    types.put("CHARACTER_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+                                 .setNameList(Lists.newArrayList("Character"))
+                                 .build());
+    types.put("BOOLEAN_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+                                 .setNameList(Lists.newArrayList("Boolean"))
+                                 .build());
+    types.put("SHORT_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+                                 .setNameList(Lists.newArrayList("Short"))
+                                 .build());
+    types.put("BYTE_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+                                 .setNameList(Lists.newArrayList("Byte"))
+                                 .build());
+    types.put("INTEGER_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+                                 .setNameList(Lists.newArrayList("Integer"))
+                                 .build());
+    types.put("LONG_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+                                 .setNameList(Lists.newArrayList("Long"))
+                                 .build());
+    types.put("FLOAT_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+                                 .setNameList(Lists.newArrayList("Float"))
+                                 .build());
+    types.put("DOUBLE_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+                                 .setNameList(Lists.newArrayList("Double"))
+                                 .build());
+    types.put("OBJECT_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+                                 .setNameList(Lists.newArrayList("Object"))
                                  .build());
   }
 
@@ -616,8 +641,13 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   @Override
   public void visit(ASTPort node) {
     final PortSymbol symbol = (PortSymbol) node.getSymbolOpt().get();
-    final ASTSimpleReferenceType type = (ASTSimpleReferenceType) node.getType();
-
+    ASTType type;
+    if(node.getType() instanceof ASTPrimitiveType){
+      // Convert primitive types to their boxed types
+      type = boxPrimitiveType((ASTPrimitiveType) node.getType());
+    } else {
+      type = node.getType();
+    }
     // Type parameters for the Port field type
     // The type parameters consist of the type of the ASTPort type
     final ASTTypeArguments typeArgs = JavaDSLMill.typeArgumentsBuilder()
@@ -686,6 +716,28 @@ public class ComponentElementsCollector implements MontiArcVisitor {
                                    .build());
       }
     }
+  }
+
+  private ASTType boxPrimitiveType(ASTPrimitiveType primitiveType) {
+    ASTType result = types.get("OBJECT_TYPE");
+    if (primitiveType.isBoolean()) {
+      result = types.get("BOOLEAN_TYPE");
+    } else if(primitiveType.isByte()){
+      result = types.get("BYTE_TYPE");
+    } else if(primitiveType.isChar()){
+      result = types.get("CHARACTER_TYPE");
+    } else if(primitiveType.isDouble()){
+      result = types.get("DOUBLE_TYPE");
+    } else if(primitiveType.isFloat()){
+      result = types.get("FLOAT_TYPE");
+    } else if(primitiveType.isInt()){
+      result = types.get("INTEGER_TYPE");
+    } else if(primitiveType.isLong()){
+      result = types.get("LONG_TYPE");
+    } else if(primitiveType.isShort()){
+      result = types.get("SHORT_TYPE");
+    }
+    return result;
   }
 
 
