@@ -1,6 +1,6 @@
 package components.body.subcomponents;
 
-import types.ConstantDelay;
+import components.body.timing.delays.ConstantDelay;
 
 /**
  * Valid model. Used by UsingComplexParams

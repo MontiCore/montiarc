@@ -593,16 +593,16 @@ public class SubComponentTest extends AbstractCoCoTest {
   @Test
   public void testUsingSCWithParams() {
     Scope symTab = this.loadDefaultSymbolTable();
+    final String modelNameFq = PACKAGE + "." + "UsingSCWithParams";
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        PACKAGE + "." + "UsingSCWithParams", ComponentSymbol.KIND).orElse(null);
+        modelNameFq, ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
-    
-    // assertEquals(0, Log.getErrorCount());
-    // TODO portusage coco
-    // assertEquals(1, Log.getFindings().stream().filter(f ->
-    // f.isWarning()).count());
-    assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());
-    
+
+    final MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
+    final ASTMontiArcNode node = loadComponentAST(modelNameFq);
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA059");
+    checkInvalid(cocos, node, errors);
+
     ComponentInstanceSymbol delay = (ComponentInstanceSymbol) comp.getSpannedScope()
         .resolve("deleteTempFile", ComponentInstanceSymbol.KIND).orElse(null);
     assertNotNull(delay);
