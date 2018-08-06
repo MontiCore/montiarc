@@ -42,7 +42,7 @@ public class ModelAnnotationTest {
   public void testModelAnnotations() {
     FileWalker modelVisitor = new FileWalker(".arc");
     try {
-      Files.walkFileTree(Paths .get(MODEL_PATH), modelVisitor);
+      Files.walkFileTree(Paths.get(MODEL_PATH), modelVisitor);
     } catch (IOException e) {
       e.printStackTrace();
     }

@@ -279,9 +279,8 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
         className, fields.toString()), fields.isEmpty());
     assertTrue(String.format("Did not find all required methods in %s: \n%s",
             className, methods.toString()), methods.isEmpty());
-    // TODO Reenable after fixing fully qualified constructor parameters
-//    assertTrue(String.format("Did not find all required constructors in %s: \n%s",
-//            className, constructors.toString()), constructors.isEmpty());
+    assertTrue(String.format("Did not find all required constructors in %s: \n%s",
+            className, constructors.toString()), constructors.isEmpty());
     assertTrue(String.format("Did not find all required enums in %s: \n%s",
             className, enumTypes.toString()), enumTypes.isEmpty());
   }

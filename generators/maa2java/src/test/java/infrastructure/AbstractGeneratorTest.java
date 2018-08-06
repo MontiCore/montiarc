@@ -7,12 +7,15 @@ package infrastructure;
 
 import de.montiarcautomaton.generator.MontiArcGeneratorTool;
 import de.monticore.ModelingLanguageFamily;
+import de.monticore.ast.Comment;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.java.lang.JavaDSLLanguage;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.Symbol;
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMACompilationUnit;
+import montiarc._parser.MontiArcParser;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc.helper.JavaHelper;
 import org.junit.Before;
@@ -21,8 +24,8 @@ import javax.tools.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,10 +47,12 @@ public class AbstractGeneratorTest {
   public static final String IMPLEMENTATION_SUFFIX = "Impl";
 
   public static final String outputPath = "target/generated-test-sources/";
-  public static final String MODEL_PATH = "src/test/resources/";
   public static final String GENERATED_TEST_SOURCES = "generated-test-sources";
   public static final String TARGET_GENERATED_TEST_SOURCES_DIR
       = GENERATED_TEST_SOURCES + "/";
+  public static final Path TEST_MODEL_PATH
+      = Paths.get("target/test-models/");
+
   protected MontiArcGeneratorTool generatorTool;
 
   /**
@@ -104,35 +109,141 @@ public class AbstractGeneratorTest {
 //    } else {
 //      Log.info("Folder to delete does not exist", "GeneratorTest");
 //    }
-//
+
+    // Test models are assumed to be unpacked by Maven
+    assertTrue(Files.exists(TEST_MODEL_PATH));
+    assertTrue(Files.isDirectory(TEST_MODEL_PATH));
+
+    // Remove directories which are not whitelisted as folders with test
+    // models and files
+    List<String> allowedDirectories = new ArrayList<>();
+    allowedDirectories.add("components");
+    allowedDirectories.add("types");
+
+    final List<Path> paths
+        = Files.walk(TEST_MODEL_PATH, 1, FileVisitOption.FOLLOW_LINKS)
+              .collect(Collectors.toList());
+    for (Path path : paths) {
+      final String pathString = path.toString();
+      if(Files.isSameFile(TEST_MODEL_PATH, path)){
+        continue;
+      }
+      final String[] split = pathString.split("\\\\");
+      if(!allowedDirectories.contains(split[split.length-1])) {
+        delete(path);
+      }
+    }
+
+    // Remove invalid or unspecified models
+    InvalidFileDeleter deleter = new InvalidFileDeleter(".arc");
+    Files.walkFileTree(TEST_MODEL_PATH, deleter);
+
+    // Remove files which are declared as valid but which still generate
+    // errors in the generation process
+    List<Path> excludedModels = new ArrayList<>();
+    excludedModels.add(AbstractGeneratorTest.TEST_MODEL_PATH.resolve("components/ComponentFromJar.arc"));
+    excludedModels.add(AbstractGeneratorTest.TEST_MODEL_PATH.resolve("components/head/generics/UsingComplexGenericParams.arc"));
+    excludedModels.add(AbstractGeneratorTest.TEST_MODEL_PATH.resolve("components/head/parameters/UseEnumAsTypeArgFromCD.arc"));
+
+    for (Path resolvedPath : excludedModels) {
+      Files.deleteIfExists(resolvedPath);
+    }
+
     // 4. Generate models (at specified location)
-//    generatorTool.generate(
-//        Paths.get(MODEL_PATH).toFile(),
-//        Paths.get(TARGET_GENERATED_TEST_SOURCES_DIR).toFile(),
-//        Paths.get("src/main/java").toFile());
+    generatorTool.generate(
+        TEST_MODEL_PATH.toFile(),
+        Paths.get(TARGET_GENERATED_TEST_SOURCES_DIR).toFile(),
+        Paths.get("src/main/java").toFile());
   }
 
   /**
-   * Recursively deletes files from the given file object (folder)
-   * @param file {@link File} object to delete
-   * @throws IOException
+   * This InvalidFileDeleter is used to delete files from the test-models
+   * directory which are either declared as "invalid" or have no such
+   * declaration.
    */
-  private void delete(File file) throws IOException {
-    if (file.isDirectory()) {
-      for (File c : file.listFiles())
-        delete(c);
+  class InvalidFileDeleter extends SimpleFileVisitor<Path> {
+    private final String fileEnding;
+
+    InvalidFileDeleter(String fileEnding) {
+      this.fileEnding = fileEnding;
     }
-    if (!file.delete())
-      throw new FileNotFoundException("Failed to delete file: " + file);
+
+    @Override
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+        throws IOException {
+
+      if(Files.exists(file) && file.toString().toLowerCase().endsWith(fileEnding)){
+
+        MontiArcParser parser = new MontiArcParser();
+        final Optional<ASTMACompilationUnit> astmaCompilationUnit
+            = parser.parse(file.toString());
+        if(!astmaCompilationUnit.isPresent()){
+          // Model is not parseable -> Delete the model
+          Files.delete(file);
+          Log.debug(
+              String.format("Deleted file %s as it is not parseable.",
+                  file.toString()),
+              "AbstractGeneratorTest");
+          return FileVisitResult.CONTINUE;
+        }
+
+        final ASTMACompilationUnit model = astmaCompilationUnit.get();
+        final List<Comment> preComments
+            = model.getComponent().get_PreCommentList();
+        if(preComments.size() < 1){
+          // Delete file
+          Files.delete(file);
+          Log.debug(
+              String.format("Deleted file %s as it is neither declared " +
+                                "as valid or invalid.", file.toString()),
+              "AbstractGeneratorTest");
+          return FileVisitResult.CONTINUE;
+        }
+
+        final Comment comment = preComments.get(preComments.size() - 1);
+        if(comment.getText().toLowerCase().contains("valid")){
+          if(comment.getText().toLowerCase().contains("invalid")){
+            // Delete file
+            Files.delete(file);
+            Log.debug(
+                String.format("Deleted file %s as it is declared " +
+                                  "as invalid.", file.toString()),
+                "AbstractGeneratorTest");
+          }
+        } else {
+          Files.delete(file);
+          Log.debug(
+              String.format("Deleted file %s as it is neither declared " +
+                                "as valid or invalid.", file.toString()),
+              "AbstractGeneratorTest");
+        }
+      }
+      return FileVisitResult.CONTINUE;
+    }
   }
 
-  protected ComponentSymbol loadComponentSymbol(String qualifiedName) {
-    Scope symTab = generatorTool.initSymbolTable(Paths.get(MODEL_PATH).toFile(),
-        Paths.get(MODEL_PATH + MontiArcGeneratorTool.DEFAULT_TYPES_FOLDER).toFile(),
-        Paths.get(MODEL_PATH + MontiArcGeneratorTool.LIBRARY_MODELS_FOLDER).toFile());
-    final Optional<Symbol> comp = symTab.resolve(qualifiedName, ComponentSymbol.KIND);
-    assertTrue("Component Symbol is not present", comp.isPresent());
-    return (ComponentSymbol) comp.get();
+  /**
+   * Recousively deletes the files/directories for the given path
+   * @param path File/Directory to delete
+   */
+  private void delete(Path path){
+    try {
+      Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+          Files.delete(file);
+          return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+          Files.delete(dir);
+          return FileVisitResult.CONTINUE;
+        }
+      });
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   protected GlobalScope initJavaDSLSymbolTable() {

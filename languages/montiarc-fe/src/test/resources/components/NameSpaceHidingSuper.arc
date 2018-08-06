@@ -1,6 +1,6 @@
 package components;
 
-import components.body.ports.ImplicitAndExplicitPortNaming;
+import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
 
 /*
  * Valid model.
@@ -10,5 +10,5 @@ component NameSpaceHidingSuper {
     port
         in String sIn;
     
-    component ImplicitAndExplicitPortNaming foo;
+    component HasStringInputAndOutput foo;
 }

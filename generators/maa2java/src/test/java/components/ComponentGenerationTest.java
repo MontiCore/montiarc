@@ -6,9 +6,8 @@
 package components;
 
 import com.google.common.base.Preconditions;
-import de.monticore.ast.ASTNode;
+import de.monticore.ast.Comment;
 import de.monticore.java.javadsl._ast.ASTClassDeclaration;
-import de.monticore.java.javadsl._visitor.JavaDSLVisitor;
 import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Scope;
@@ -17,15 +16,18 @@ import de.se_rwth.commons.logging.Log;
 import generation.ComponentElementsCollector;
 import generation.GeneratedComponentClassVisitor;
 import infrastructure.AbstractGeneratorTest;
-import montiarc._ast.ASTBehaviorElement;
 import montiarc._ast.ASTComponent;
-import montiarc._ast.ASTElement;
+import montiarc._ast.ASTMACompilationUnit;
+import montiarc._parser.MontiArcParser;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
-import java.nio.file.Paths;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -68,14 +70,84 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 //    final String componentName = "ComponentWithEmptyComponent";
 //    final String componentName = "EmptyComponent";
     final String componentName = "AtomicCompWithoutImpl";
-    executeGeneratorTest(componentName);
+    final String qualifiedName = PACKAGE + "." + componentName;
+    executeGeneratorTest(qualifiedName);
   }
 
-  private void executeGeneratorTest(String componentName) {
-    final String qualifiedName = PACKAGE + "." + componentName;
+  @Test
+  public void test() {
+    executeGeneratorTest(PACKAGE + ".body.autoconnect.ReferencedPortAndType");
+  }
+
+  @Test
+  @Ignore("")
+  public void testFEModels() {
+
+    FileWalker modelVisitor = new FileWalker(".arc");
+    try {
+      Files.walkFileTree(Paths.get("target/test-models/components"), modelVisitor);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  class FileWalker extends SimpleFileVisitor<Path> {
+    private final String fileEnding;
+
+    FileWalker(String fileEnding) {
+      this.fileEnding = fileEnding;
+    }
+
+    @Override
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+        throws IOException {
+
+      if(file.toFile().exists()
+             && file.toString().toLowerCase().endsWith(fileEnding)){
+
+        MontiArcParser parser = new MontiArcParser();
+        final Optional<ASTMACompilationUnit> astmaCompilationUnit
+            = parser.parse(file.toString());
+        if(!astmaCompilationUnit.isPresent()){
+          return FileVisitResult.CONTINUE;
+        }
+
+        final ASTMACompilationUnit model = astmaCompilationUnit.get();
+        final List<Comment> preComments
+            = model.getComponent().get_PreCommentList();
+        if(preComments.size() < 1){
+          return FileVisitResult.CONTINUE;
+        }
+
+        final Comment comment = preComments.get(preComments.size() - 1);
+        if(comment.getText().toLowerCase().contains("valid")){
+          if(!comment.getText().toLowerCase().contains("invalid")){
+            // Execute test
+            final String[] strings = file.toString().split("\\.");
+            executeGeneratorTest(strings[strings.length - 1]);
+          }
+        } else {
+          Log.warn(
+            String.format("Description of model %s does not state " +
+                              "whether it is valid or invalid!",
+                file.toString()));
+        }
+      }
+      return FileVisitResult.CONTINUE;
+    }
+  }
+
+  private void executeGeneratorTest(String qualifiedName) {
+    final String[] strings = qualifiedName.split("\\.|\\\\|/");
+    String componentName = strings[strings.length - 1];
 
     // Load component symbol
-    final ComponentSymbol symbol = generatorTool.loadComponentSymbolWithCocos(qualifiedName, Paths.get(MODEL_PATH).toFile(), Paths.get(DEFAULT_TYPES_FOLDER).toFile(), Paths.get(LIBRARY_MODELS_FOLDER).toFile()).orElse(null);
+    final ComponentSymbol symbol
+        = generatorTool.loadComponentSymbolWithCocos(
+            qualifiedName,
+        TEST_MODEL_PATH.toFile(),
+        Paths.get(DEFAULT_TYPES_FOLDER).toFile(),
+        Paths.get(LIBRARY_MODELS_FOLDER).toFile()).orElse(null);
     assertNotNull(symbol);
 
     // 3. Determine all files which have to be checked

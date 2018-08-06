@@ -179,10 +179,10 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   }
 
   private void addInit() {
-    Method.Builder methodBuilder = Method.getBuilder().setName("initTypes");
+    Method.Builder methodBuilder = Method.getBuilder().setName("init");
 
     if (symbol.getSuperComponent().isPresent()) {
-      methodBuilder.addBodyElement("super.initTypes();");
+      methodBuilder.addBodyElement("super.init();");
     }
 
     // Set up unused input ports
@@ -420,17 +420,18 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     methodBuilder = Method.getBuilder().setName("compute");
 
     if (this.symbol.isAtomic()) {
-      StringBuilder incomingPorts = new StringBuilder();
+      StringBuilder inputVariable = new StringBuilder();
+      inputVariable.append("final ").append(componentName).append("Input");
+      inputVariable.append("input = new ");
+      inputVariable.append(componentName).append("Input(");
       for (PortSymbol portSymbol : symbol.getIncomingPorts()) {
-        incomingPorts.append(portSymbol.getName()).append(",");
+        inputVariable.append("this.").append(portSymbol.getName());
+        inputVariable.append(".getCurrentValue(),");
       }
-      if (incomingPorts.length() > 0) {
-        incomingPorts.deleteCharAt(incomingPorts.length() - 1);
-      }
+      inputVariable.deleteCharAt(inputVariable.length() - 1);
+      inputVariable.append(");");
+      methodBuilder.addBodyElement(inputVariable.toString());
 
-      methodBuilder.addBodyElement(
-          String.format("final %sInput input = new %sInput(this.%s.getCurrentValue())",
-              componentName, componentName, incomingPorts.toString()));
       methodBuilder.addBodyElement(
           String.format("try {\n"
                             + "      // perform calculations\n"
