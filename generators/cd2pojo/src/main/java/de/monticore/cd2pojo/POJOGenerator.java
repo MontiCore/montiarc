@@ -77,13 +77,23 @@ public class POJOGenerator {
       _super.append("extends ");
       _super.append(typeHelper.printType(type.getSuperClass().get()));
       _super.append(" ");
+    } else if (type.isInterface() && !type.getInterfaces().isEmpty()){
+      // Allows extending other interfaces
+      _super.append("extends ");
+      _super.append(typeHelper.printType(type.getInterfaces().get(0)));
+      _super.append(" ");
     }
-    type.getInterfaces().forEach(i -> {
+    if(!type.getInterfaces().isEmpty() && !type.isInterface()){
       _super.append(" ");
       _super.append("implements");
-      _super.append(" ");
-      _super.append(typeHelper.printType(i));
-    });
+      type.getInterfaces().forEach(i -> {
+        _super.append(" ");
+        _super.append(typeHelper.printType(i));
+        _super.append(",");
+      });
+      _super.deleteCharAt(_super.length() - 1);
+    }
+
     Path filePath = Paths.get(Names.getPathFromPackage(typeHelper.printType(type)) + ".java");
     
     ge.generate("templates.type.ftl", filePath, type.getAstNode().get(), _package, kind,
