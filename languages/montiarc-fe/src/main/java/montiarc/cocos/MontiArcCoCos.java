@@ -17,11 +17,7 @@ public class MontiArcCoCos {
     return new MontiArcCoCoChecker()
         .addCoCo(new PortUsage())
         .addCoCo(new SubComponentsConnected())
-        // TODO remove comment when new Java DSL is integrated:
-        // Fails when using CD Enums due to buggy TypeCompatibilityChecker (see
-        // testSubcomponentParametersOfWrongTypeWithCD in SubcomponentTest
-        // class)
-         .addCoCo(new SubcomponentParametersCorrectlyAssigned())
+        .addCoCo(new SubcomponentParametersCorrectlyAssigned())
         .addCoCo(new PackageLowerCase())
         // TODO remove when Generator works for inner Components
         .addCoCo(new NoInnerComponents())
@@ -77,7 +73,6 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfUndeclaredField())
         .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfUndeclaredField())
         .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
-        // TODO see #171
         .addCoCo(new AssignmentHasNoName())
         .addCoCo(new ConfigurationParametersCorrectlyInherited())
         .addCoCo(new InnerComponentNotExtendsDefiningComponent())
@@ -86,10 +81,10 @@ public class MontiArcCoCos {
         .addCoCo(new AutomatonGuardIsNotBoolean())
         
         // .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
-        // .addCoCo((MontiArcASTTransitionCoCo)new
-        // AutomatonReactionTypeDoesNotFitOutputType())
-        // .addCoCo((MontiArcASTInitialStateDeclarationCoCo)new
-        // AutomatonReactionTypeDoesNotFitOutputType())
+         .addCoCo((MontiArcASTTransitionCoCo)new
+         AutomatonReactionTypeDoesNotFitOutputType())
+         .addCoCo((MontiArcASTInitialStateDeclarationCoCo)new
+         AutomatonReactionTypeDoesNotFitOutputType())
         
         .addCoCo(new AutomatonNoDataAssignedToVariable())
         
