@@ -37,7 +37,7 @@ public class BodyTest extends AbstractCoCoTest {
     checkInvalid(checker, node, new ExpectedErrorInfo(1, "xMA050"));
   }
 
-  
+  @Test
   public void testWrongCapitalization() {
     final ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "wrongCapitalization");
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA055", "xMA077"); // Add error info

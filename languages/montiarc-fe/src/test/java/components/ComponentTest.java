@@ -122,7 +122,7 @@ public class ComponentTest extends AbstractCoCoTest {
         Paths.get(FAKE_JAVA_TYPES_PATH).toFile(), Paths.get(MODEL_PATH+"components/componentInJar.jar").toFile());
      Optional<ComponentSymbol> comp = symtab.<ComponentSymbol> resolve("components.ComponentFromJar", ComponentSymbol.KIND);
      assertTrue(comp.isPresent());
-     assertTrue(comp.get().getSubComponent("cmp").isPresent()); 
+     assertTrue(comp.get().getSubComponent("cmp").isPresent());
   }
 
   @Test
@@ -195,5 +195,26 @@ public class ComponentTest extends AbstractCoCoTest {
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker().addCoCo(new UnusedImports());
 
     checkInvalid(checker, node, errors);
+  }
+  
+  @Test
+  public void testAmbiguousPortAndComponentTypes() {
+    final ASTMontiArcNode node = loadCompilationUnitAST(PACKAGE +"." + "AmbiguousPortAndComponentTypes");
+    ExpectedErrorInfo errorInfo = new ExpectedErrorInfo(4, "xMA040");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new AmbiguousTypes()),node, errorInfo);
+  }
+  
+  @Test
+  public void testAmbiguousNamedCD(){
+    final ASTMontiArcNode node = loadCompilationUnitAST(PACKAGE +"." + "AmbiguousNamedCD.AmbiguousClass");
+    ExpectedErrorInfo errorInfo = new ExpectedErrorInfo(1, "xMA012");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new AmbiguousTypes()),node, errorInfo);
+  }
+  
+  @Test
+  public void testAmbiguousModel(){
+    final ASTMontiArcNode node = loadCompilationUnitAST(PACKAGE +"." + "AmbiguousModel");
+    ExpectedErrorInfo errorInfo = new ExpectedErrorInfo(1, "xMA012");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new AmbiguousTypes()),node, errorInfo);
   }
 }

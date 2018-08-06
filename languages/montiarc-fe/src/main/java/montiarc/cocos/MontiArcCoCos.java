@@ -29,6 +29,7 @@ public class MontiArcCoCos {
         .addCoCo(new IOAssignmentCallFollowsMethodCall())
         .addCoCo(new AllGenericParametersOfSuperClassSet())
         .addCoCo(new TypeParameterNamesUnique())
+        .addCoCo(new AmbiguousTypes())
         .addCoCo(new TopLevelComponentHasNoInstanceName())
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo(new InPortUniqueSender())

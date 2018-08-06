@@ -61,6 +61,7 @@ public abstract class AbstractCoCoTest {
         .addCoCo(new ReferencedSubComponentExists())
         .addCoCo(new PortNamesAreNotJavaKeywords())
         .addCoCo(new UnusedImports())
+        .addCoCo(new AmbiguousTypes())
         
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
