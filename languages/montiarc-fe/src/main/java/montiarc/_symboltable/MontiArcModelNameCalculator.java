@@ -56,7 +56,10 @@ public class MontiArcModelNameCalculator
         ret.add(Joiners.DOT.join(parts.subList(0, i + 1)));
       }
     }
-    
+    //There is no Part that starts with Uppercase. This Error is handled by NamesCorrectlyCapitalized but does not result in SymTab error
+    if(ret.isEmpty()){
+      ret.add(name);
+    }
     return Collections.unmodifiableSet(ret);
   }
   
