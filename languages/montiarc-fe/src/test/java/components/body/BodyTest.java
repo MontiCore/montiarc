@@ -1,6 +1,7 @@
 package components.body;
 
 import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.IdentifiersAreUnique;
 import montiarc.cocos.MultipleBehaviorImplementation;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -57,7 +58,7 @@ public class BodyTest extends AbstractCoCoTest {
   @Test
   public void testAmbiguousIdentifiers() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousIdentifiers");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()), node,
         new ExpectedErrorInfo(3, "xMA061", "xMA053"));
   }
   

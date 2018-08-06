@@ -136,6 +136,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         compilationUnitPackage,
         imports);
     this.currentImports = imports;
+    artifactScope.setAstNode(compilationUnit);
+    compilationUnit.setSpannedScope(artifactScope);
     putOnStack(artifactScope);
   }
   

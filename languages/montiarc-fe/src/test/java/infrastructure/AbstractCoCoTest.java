@@ -10,14 +10,22 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Optional;
 
+import de.monticore.ModelingLanguage;
+import de.monticore.symboltable.Symbol;
+import jdk.nashorn.internal.runtime.options.OptionTemplate;
+import montiarc._ast.ASTMACompilationUnit;
+import montiarc._cocos.*;
+import montiarc._symboltable.MontiArcLanguage;
+import montiarc._symboltable.MontiArcLanguageFamily;
+import montiarc.cocos.*;
 import org.junit.Before;
 
 import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMontiArcNode;
-import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 
 /**
@@ -31,7 +39,92 @@ public abstract class AbstractCoCoTest {
   
   protected static final String FAKE_JAVA_TYPES_PATH = "target/librarymodels/";
   
-  protected static final MontiArcTool MONTIARCTOOL = new MontiArcTool();
+  //TODO Remove when inner components are allowed again
+  private static final MontiArcCoCoChecker checker = new MontiArcCoCoChecker()
+    .addCoCo(new PortUsage())
+    .addCoCo(new SubComponentsConnected())
+    // TODO remove comment when new Java DSL is integrated:
+    // Fails when using CD Enums due to buggy TypeCompatibilityChecker (see
+    // testSubcomponentParametersOfWrongTypeWithCD in SubcomponentTest
+    // class)
+    .addCoCo(new SubcomponentParametersCorrectlyAssigned())
+    .addCoCo(new PackageLowerCase())
+    .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized())
+    .addCoCo(new DefaultParametersHaveCorrectOrder())
+    .addCoCo(new DefaultParametersCorrectlyAssigned())
+    .addCoCo(new ComponentWithTypeParametersHasInstance())
+    .addCoCo(new CircularInheritance())
+    .addCoCo(new IOAssignmentCallFollowsMethodCall())
+    .addCoCo(new AllGenericParametersOfSuperClassSet())
+    .addCoCo(new TypeParameterNamesUnique())
+    .addCoCo(new TopLevelComponentHasNoInstanceName())
+    .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
+    .addCoCo(new InPortUniqueSender())
+    .addCoCo(new ImportsValid())
+    .addCoCo(new SubcomponentReferenceCycle())
+    .addCoCo(new ReferencedSubComponentExists())
+    .addCoCo(new PortNamesAreNotJavaKeywords())
+    .addCoCo(new UnusedImports())
+  
+    /// AJava Cocos
+    /// /////////////////////////////////////////////////////////////
+    .addCoCo(new InputPortChangedInCompute())
+    .addCoCo(new UsedPortsAndVariablesExist())
+    .addCoCo(new MultipleBehaviorImplementation())
+    .addCoCo(new InitBlockOnlyOnEmbeddedAJava())
+    .addCoCo(new AtMostOneInitBlock())
+    /* MontiArcAutomaton Cocos */
+  
+    /// Automaton Cocos
+    /// /////////////////////////////////////////////////////////////
+    .addCoCo(new ImplementationInNonAtomicComponent())
+  
+    // CONVENTIONS
+    .addCoCo((MontiArcASTBehaviorElementCoCo) new NamesCorrectlyCapitalized())
+    .addCoCo(new AutomatonHasNoState())
+    .addCoCo(new AutomatonHasNoInitialState())
+    .addCoCo(new MultipleAssignmentsSameIdentifier())
+    .addCoCo(new AutomatonOutputInExpression())
+    .addCoCo(new AutomatonNoAssignmentToIncomingPort())
+    .addCoCo((MontiArcASTInitialStateDeclarationCoCo) new AutomatonReactionWithAlternatives())
+    .addCoCo((MontiArcASTTransitionCoCo) new AutomatonReactionWithAlternatives())
+    .addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfForbiddenExpression())
+    .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfForbiddenExpression())
+    .addCoCo((MontiArcASTStateCoCo) new NamesCorrectlyCapitalized())
+    .addCoCo(new ConnectorSourceAndTargetComponentDiffer())
+    .addCoCo(new ConnectorSourceAndTargetExistAndFit())
+    .addCoCo(new ImportsAreUnique())
+  
+    // REFERENTIAL INTEGRITY
+    .addCoCo(new AutomatonDeclaredInitialStateDoesNotExist())
+    .addCoCo(new UseOfUndeclaredState())
+    .addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfUndeclaredField())
+    .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfUndeclaredField())
+    .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
+    // TODO see #171
+    .addCoCo(new AssignmentHasNoName())
+    .addCoCo(new ConfigurationParametersCorrectlyInherited())
+    .addCoCo(new InnerComponentNotExtendsDefiningComponent())
+  
+    // TYPE CORRECTNESS
+    .addCoCo(new AutomatonGuardIsNotBoolean())
+  
+    // .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
+    // .addCoCo((MontiArcASTTransitionCoCo)new
+    // AutomatonReactionTypeDoesNotFitOutputType())
+    // .addCoCo((MontiArcASTInitialStateDeclarationCoCo)new
+    // AutomatonReactionTypeDoesNotFitOutputType())
+  
+    .addCoCo(new AutomatonNoDataAssignedToVariable())
+  
+    // UNIQUENESS OF NAMES
+    .addCoCo(new AutomatonInitialDeclaredMultipleTimes())
+    .addCoCo(new AutomatonStateDefinedMultipleTimes())
+    .addCoCo(new UseOfValueLists())
+    .addCoCo(new IdentifiersAreUnique())
+    .addCoCo(new JavaPVariableIdentifiersUnique());;
+  
+  protected static final MontiArcTool MONTIARCTOOL = new MontiArcTool(new MontiArcLanguageFamily(),checker);
   
   @Before
   public void cleanUpLog() {
@@ -45,10 +138,11 @@ public abstract class AbstractCoCoTest {
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         qualifiedModelName, ComponentSymbol.KIND).orElse(null);
     assertNotNull("Could not resolve model " + qualifiedModelName, comp);
-    
-    return (ASTMontiArcNode) comp.getAstNode().get();
+    ASTMontiArcNode node = (ASTMontiArcNode) comp.getAstNode().orElse(null);
+    assertNotNull("Could not find ASTComponent for model "+qualifiedModelName,node);
+    return node;
   }
-  
+
   protected ComponentSymbol loadComponentSymbol(String packageName,
       String unqualifiedComponentName) {
     Scope symTab = MONTIARCTOOL.initSymbolTable(MODEL_PATH);
@@ -64,6 +158,14 @@ public abstract class AbstractCoCoTest {
     return comp;
   }
   
+  protected ASTMontiArcNode loadCompilationUnitAST(String qualifiedModelName){
+    Symbol comp = loadComponentAST(qualifiedModelName).getSymbolOpt().orElse(null);
+    assertNotNull("Could not resolve model " + qualifiedModelName, comp);
+    ASTMontiArcNode node  =  (ASTMontiArcNode) comp.getEnclosingScope().getAstNode().orElse(null);
+    assertNotNull("Could not find ASTMACompilationUnit for model "+qualifiedModelName,node);
+    return node;
+  }
+  
   protected Scope loadDefaultSymbolTable() {
     return MONTIARCTOOL.initSymbolTable(Paths.get(MODEL_PATH).toFile(),
         Paths.get(FAKE_JAVA_TYPES_PATH).toFile());
@@ -75,7 +177,7 @@ public abstract class AbstractCoCoTest {
    */
   protected void checkValid(String model) {
     Log.getFindings().clear();
-    MONTIARCTOOL.checkCoCos(loadComponentAST(model));
+    MONTIARCTOOL.checkCoCos(loadCompilationUnitAST(model));
     new ExpectedErrorInfo().checkOnlyExpectedPresent(Log.getFindings());
   }
   

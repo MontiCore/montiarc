@@ -23,6 +23,8 @@ public class MontiArcCoCos {
         // class)
          .addCoCo(new SubcomponentParametersCorrectlyAssigned())
         .addCoCo(new PackageLowerCase())
+        // TODO remove when Generator works for inner Components
+        .addCoCo(new NoInnerComponents())
         .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new DefaultParametersHaveCorrectOrder())
         .addCoCo(new DefaultParametersCorrectlyAssigned())
@@ -38,6 +40,7 @@ public class MontiArcCoCos {
         .addCoCo(new SubcomponentReferenceCycle())
         .addCoCo(new ReferencedSubComponentExists())
         .addCoCo(new PortNamesAreNotJavaKeywords())
+        .addCoCo(new UnusedImports())
         
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
