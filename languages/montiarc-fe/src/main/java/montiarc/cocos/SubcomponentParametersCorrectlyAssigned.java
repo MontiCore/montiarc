@@ -71,7 +71,25 @@ public class SubcomponentParametersCorrectlyAssigned
                   .getActualTypeArguments().get(index.get());
               if (!TypeCompatibilityChecker.doTypesMatch(
                   (JTypeReference<? extends JTypeSymbol>) actualTypeArg.getType(),
-                  actualArg.get())) {
+                  ((JTypeReference<? extends JTypeSymbol>) actualTypeArg.getType())
+                      .getReferencedSymbol().getFormalTypeParameters().stream()
+                      .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+                  ((JTypeReference<? extends JTypeSymbol>) actualTypeArg.getType())
+                      .getActualTypeArguments().stream()
+                      .map(a -> (JavaTypeSymbolReference) a.getType())
+                      .collect(Collectors.toList()),
+                  actualArg.get(),
+                  actualArg.get().getReferencedSymbol().getFormalTypeParameters().stream()
+                      .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+                  actualArg.get().getActualTypeArguments().stream()
+                      .map(a -> (JavaTypeSymbolReference) a.getType())
+                      .collect(Collectors.toList()))
+              // doTypesMatch(
+              // (JTypeReference<? extends JTypeSymbol>)
+              // actualTypeArg.getType(),
+              // actualArg.get())
+              
+              ) {
                 Log.error(
                     "0xMA064 Type of argument " + paramIndex + " (" + actualArg.get().getName()
                         + ") of subcomponent " + instance.getName() + " of component type '"

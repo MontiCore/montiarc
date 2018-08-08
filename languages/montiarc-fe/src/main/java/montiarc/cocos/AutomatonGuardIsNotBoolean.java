@@ -39,7 +39,9 @@ public class AutomatonGuardIsNotBoolean implements MontiArcASTGuardExpressionCoC
         }
       }
       else {
-        Log.error("0xMA037 Could not resolve type of guard.", node.get_SourcePositionStart());
+        Log.error(
+            "0xMA037 Could not resolve type of guard. Do all types of used variables/ports fit?",
+            node.get_SourcePositionStart());
       }
     }
     catch (Exception e) {

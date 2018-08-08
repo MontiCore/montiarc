@@ -7,6 +7,7 @@ package montiarc.cocos;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.mcexpressions._ast.ASTExpression;
@@ -23,12 +24,13 @@ import montiarc.helper.MontiArcHCJavaDSLTypeResolver;
 import montiarc.helper.TypeCompatibilityChecker;
 
 /**
- * Ensures that default values of parameters in the component's head are correctly assigned.
+ * Ensures that default values of parameters in the component's head are
+ * correctly assigned.
  *
- * @implements [Wor16] MT7: Default values of parameters conform
- *  to their type. (p. 64, Lst. 4.22)
- * @implements [Wor16] MR3:  No default values for configuration
- *  parameters of purely generic types. (p. 59, Lst. 4.13)
+ * @implements [Wor16] MT7: Default values of parameters conform to their type.
+ * (p. 64, Lst. 4.22)
+ * @implements [Wor16] MR3: No default values for configuration parameters of
+ * purely generic types. (p. 59, Lst. 4.13)
  * @author Jerome Pfeiffer
  */
 public class DefaultParametersCorrectlyAssigned
@@ -60,7 +62,18 @@ public class DefaultParametersCorrectlyAssigned
               "0xMA068 Could not resolve type of default parameter value for comparing it with the referenced parameter type.",
               param.getDefaultValue().get_SourcePositionStart());
         }
-        else if (!TypeCompatibilityChecker.doTypesMatch(result.get(), paramTypeSymbol)) {
+        else if (!TypeCompatibilityChecker.doTypesMatch(result.get(),
+            result.get().getReferencedSymbol().getFormalTypeParameters().stream()
+                .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+            result.get().getActualTypeArguments().stream()
+                .map(a -> (JavaTypeSymbolReference) a.getType())
+                .collect(Collectors.toList()),
+            paramTypeSymbol,
+            paramTypeSymbol.getReferencedSymbol().getFormalTypeParameters().stream()
+                .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+            paramTypeSymbol.getActualTypeArguments().stream()
+                .map(a -> (JavaTypeSymbolReference) a.getType())
+                .collect(Collectors.toList()))) {
           Log.error("0xMA062 Type of parameter " + param.getName()
               + " in the parameter declaration does not match the type of its assigned value. Type "
               +

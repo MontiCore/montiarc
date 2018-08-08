@@ -114,13 +114,12 @@ public class AssignmentTest extends AbstractCoCoTest {
         new ExpectedErrorInfo(1, "xMA042"));
   }
   
-  @Ignore("@JP: Die Parameter von Methodenaufrufen können noch nicht überprüft werden")
   @Test
   public void testIncompatibleVariableAssignmentGenericTypesDifferSimple() {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "IncompatibleVariableAssignmentGenericTypesDifferSimple");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(2, "xMA042", "xMA042"));
+        new ExpectedErrorInfo(2, "xMA043", "xMA043"));
   }
   
   @Test

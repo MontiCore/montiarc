@@ -70,7 +70,7 @@ import montiarc._ast.ASTTransition;
 import montiarc._ast.ASTValuation;
 import montiarc._ast.ASTValueInitialization;
 import montiarc._ast.ASTVariableDeclaration;
-import montiarc.helper.JavaHelper;
+import montiarc.helper.JavaDefaultTypesManager;
 import montiarc.helper.Timing;
 import montiarc.trafos.AutoConnection;
 import montiarc.trafos.SimpleConnectorToQualifiedConnector;
@@ -129,7 +129,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
           astImportStatement.isStar());
       imports.add(importStatement);
     }
-    JavaHelper.addJavaDefaultImports(imports);
+    JavaDefaultTypesManager.addJavaDefaultImports(imports);
     
     ArtifactScope artifactScope = new MontiArcArtifactScope(
         Optional.empty(),
