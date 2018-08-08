@@ -19,6 +19,8 @@ public class MontiArcCoCos {
         .addCoCo(new SubComponentsConnected())
         .addCoCo(new SubcomponentParametersCorrectlyAssigned())
         .addCoCo(new PackageLowerCase())
+        // TODO remove when Generator works for inner Components
+        .addCoCo(new NoInnerComponents())
         .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new DefaultParametersHaveCorrectOrder())
         .addCoCo(new DefaultParametersCorrectlyAssigned())
@@ -27,6 +29,7 @@ public class MontiArcCoCos {
         .addCoCo(new IOAssignmentCallFollowsMethodCall())
         .addCoCo(new AllGenericParametersOfSuperClassSet())
         .addCoCo(new TypeParameterNamesUnique())
+        .addCoCo(new AmbiguousTypes())
         .addCoCo(new TopLevelComponentHasNoInstanceName())
         .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
         .addCoCo(new InPortUniqueSender())
@@ -34,6 +37,7 @@ public class MontiArcCoCos {
         .addCoCo(new SubcomponentReferenceCycle())
         .addCoCo(new ReferencedSubComponentExists())
         .addCoCo(new PortNamesAreNotJavaKeywords())
+        .addCoCo(new UnusedImports())
         
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////

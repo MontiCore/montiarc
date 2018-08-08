@@ -1,6 +1,7 @@
-package components; // TODO: Correct package
+package components;
 
 // import AmbiguousModel;
+import components.AmbiguousNamedCD.AmbiguousClass;
 
 /*
  * Invalid model.
@@ -9,11 +10,12 @@ package components; // TODO: Correct package
  * Formerly named "CG8" in MontiArc3.
  *
  * @implements TODO No literature reference
- * TODO: Add Test
  */
 component AmbiguousPortAndComponentTypes {
   
-  port in AmbiguousModel;
+  port in AmbiguousModel,
+    out AmbiguousClass;
   
   component AmbiguousModel; //Name clash
+  component AmbiguousClass;
 }

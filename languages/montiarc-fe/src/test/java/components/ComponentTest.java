@@ -9,8 +9,7 @@ import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.symboltable.Symbol;
 import montiarc._ast.ASTPort;
 import montiarc._symboltable.PortSymbol;
-import montiarc.cocos.IdentifiersAreUnique;
-import montiarc.cocos.PackageLowerCase;
+import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,8 +26,6 @@ import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc.cocos.ImportsAreUnique;
-import montiarc.cocos.TopLevelComponentHasNoInstanceName;
 
 import static org.junit.Assert.*;
 
@@ -125,7 +122,7 @@ public class ComponentTest extends AbstractCoCoTest {
         Paths.get(FAKE_JAVA_TYPES_PATH).toFile(), Paths.get(MODEL_PATH+"components/componentInJar.jar").toFile());
      Optional<ComponentSymbol> comp = symtab.<ComponentSymbol> resolve("components.ComponentFromJar", ComponentSymbol.KIND);
      assertTrue(comp.isPresent());
-     assertTrue(comp.get().getSubComponent("cmp").isPresent()); 
+     assertTrue(comp.get().getSubComponent("cmp").isPresent());
   }
 
   @Test
@@ -192,12 +189,32 @@ public class ComponentTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("Waits for https://git.rwth-aachen.de/monticore/montiarc/core/issues/193")
   public void testUnusedImports() {
-    final ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UnusedImports");
-    ExpectedErrorInfo errors = new ExpectedErrorInfo(); //TODO Add error info
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker(); //TODO Add coco
+    final ASTMontiArcNode node = loadCompilationUnitAST(PACKAGE + "." + "UnusedImports");
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(3,"xMA011");
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker().addCoCo(new UnusedImports());
 
     checkInvalid(checker, node, errors);
+  }
+  
+  @Test
+  public void testAmbiguousPortAndComponentTypes() {
+    final ASTMontiArcNode node = loadCompilationUnitAST(PACKAGE +"." + "AmbiguousPortAndComponentTypes");
+    ExpectedErrorInfo errorInfo = new ExpectedErrorInfo(4, "xMA040");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new AmbiguousTypes()),node, errorInfo);
+  }
+  
+  @Test
+  public void testAmbiguousNamedCD(){
+    final ASTMontiArcNode node = loadCompilationUnitAST(PACKAGE +"." + "AmbiguousNamedCD.AmbiguousClass");
+    ExpectedErrorInfo errorInfo = new ExpectedErrorInfo(1, "xMA012");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new AmbiguousTypes()),node, errorInfo);
+  }
+  
+  @Test
+  public void testAmbiguousModel(){
+    final ASTMontiArcNode node = loadCompilationUnitAST(PACKAGE +"." + "AmbiguousModel");
+    ExpectedErrorInfo errorInfo = new ExpectedErrorInfo(1, "xMA012");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new AmbiguousTypes()),node, errorInfo);
   }
 }

@@ -22,11 +22,14 @@ component ComponentWithInnerComponent {
         component AtomicComponent myReference;
         
         component InnerInnerComponent {
+            component SimpleReferencedComponent comp;
+
             port
                 in String strIn,
                 out String strOut;
 
-           component AtomicComponent myReference;
+            connect strIn -> comp.input;
+            connect comp.output -> strOut;
         }
 
         connect innerInnerComponent.strOut -> strOut; 

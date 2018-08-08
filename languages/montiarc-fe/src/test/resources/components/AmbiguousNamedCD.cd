@@ -1,0 +1,6 @@
+package components;
+
+classdiagram AmbiguousNamedCD {
+  class AmbiguousClass{}
+
+}

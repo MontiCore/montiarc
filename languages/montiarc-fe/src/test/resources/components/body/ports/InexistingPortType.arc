@@ -1,7 +1,6 @@
 package components.body.ports;
 
 import doesnotexist.invalidType; // Error: Import is not valid
-import java.lang.String;
 
 /**
  * Invalid model. The data type 'invalidType' does not exist.

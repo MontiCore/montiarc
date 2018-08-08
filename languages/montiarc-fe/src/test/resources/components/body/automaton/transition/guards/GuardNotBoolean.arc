@@ -1,6 +1,5 @@
 package components.body.automaton.transition.guards;
 
-import components.body.automaton.transition.guards.Number;
 
 /*
  * Invalid model.
