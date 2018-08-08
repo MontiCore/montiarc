@@ -12,6 +12,6 @@ component ValidAssignmentMatching {
   
   automaton AmbiguousMatching {
     state Idle; 
-    initial Idle / {motorCommand = MotorCommand.FORWARD};
+    initial Idle / {MotorCommand.FORWARD};
   }
 }
