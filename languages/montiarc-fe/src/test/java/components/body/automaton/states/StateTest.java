@@ -27,31 +27,34 @@ public class StateTest extends AbstractCoCoTest {
   }
   
   @Test
+  /*
+   * Tests [Wor16] AU2: Each state is declared initial at most once.
+   *  (p. 97, Lst. 5.9)
+   */
   public void testDoubleDefinitionOfSameInitial() {
-    ASTMontiArcNode node
-        = loadComponentAST(PACKAGE + "." + "DoubleDefinitionOfSameInitial");
+    final String qualifiedModelName = PACKAGE + "." + "DoubleDefinitionOfSameInitial";
     final ExpectedErrorInfo errors
         = new ExpectedErrorInfo(2, "xMA029");
-    checkInvalid(MontiArcCoCos.createChecker(), node, errors);
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
   
   @Test
   public void testStateDefinedMultipleTimes() {
-    final ASTMontiArcNode node
-        = loadComponentAST(PACKAGE + "." + "StateDefinedMultipleTimes");
+    final String qualifiedModelName = PACKAGE + "." + "StateDefinedMultipleTimes";
     final MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo(new AutomatonStateDefinedMultipleTimes());
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(4, "xMA031");
-    checkInvalid(cocos, node, errors);
+    checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
   }
   
   @Test
   public void testConflictingStereotypes() {
-    final ASTMontiArcNode node
-        = loadComponentAST(PACKAGE + "." + "ConflictingStereotypes");
+    final String qualifiedModelName = PACKAGE + "." + "ConflictingStereotypes";
     final ExpectedErrorInfo errors
         = new ExpectedErrorInfo(4, "xMA031");
-    checkInvalid(MontiArcCoCos.createChecker(), node, errors);
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
   
   @Test
@@ -68,33 +71,36 @@ public class StateTest extends AbstractCoCoTest {
   }
   
   @Test
+  /*
+   * Tests [Wor16] AR3: Used states exist (p. 104. Lst. 5.21)
+   */
   public void testUndefinedInitialState() {
-    final ASTMontiArcNode node
-        = loadComponentAST(PACKAGE + "." + "UndefinedInitialState");
+    final String qualifiedModelName = PACKAGE + "." + "UndefinedInitialState";
     final ExpectedErrorInfo errors
         = new ExpectedErrorInfo(1, "xMA025");
-    checkInvalid(MontiArcCoCos.createChecker(), node, errors);
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
-  
-  @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
-      + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
-      + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
+
   @Test
   public void testInvalidInitialAssignment() {
     final ASTMontiArcNode node
         = loadComponentAST(PACKAGE + "." + "InvalidInitialAssignment");
     final ExpectedErrorInfo errors
-        = new ExpectedErrorInfo(2, "xMA039");
+        = new ExpectedErrorInfo(2, "xMA042");
     checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
   
   @Test
+  /**
+   * Tests CoCo [Wor16] AC8.
+   */
   public void testAutomatonStateNameUppercase() {
-    final ASTMontiArcNode node
-        = loadComponentAST(PACKAGE + "." + "StateNameUppercase");
+    final String qualifiedModelName = PACKAGE + "." + "StateNameUppercase";
     final ExpectedErrorInfo errors
         = new ExpectedErrorInfo(1, "xMA021");
-    checkInvalid(MontiArcCoCos.createChecker(), node, errors);
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
   
 }

@@ -3,9 +3,8 @@ package components.body.autoconnect.dummycomponents;
 /*
  * Valid model.
  * Used as subcomponent in autoconnection test
- * TODO Add test or remove or refactor
  */
-component B {
+component DummyComponent2 {
     
   port
     in String strIn,

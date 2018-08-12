@@ -124,7 +124,6 @@ public class AJavaTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "UsedPortsAndParametersExist");
   }
   
-  @Ignore("@JP: Currently throws two times 0xMA030 - one for variable j and one for sum. Both errors are wrong.")
   @Test
   public void testComplexCodeExample() {
     checkValid(PACKAGE + "." + "ComplexCodeExample");

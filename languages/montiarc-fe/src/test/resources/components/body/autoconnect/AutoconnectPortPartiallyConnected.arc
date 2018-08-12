@@ -1,6 +1,6 @@
 package components.body.autoconnect;
 
-import components.body.autoconnect.dummycomponents.E;
+import components.body.autoconnect.dummycomponents.DummyComponent5;
 
 /**
  * Valid model.
@@ -12,7 +12,7 @@ component AutoconnectPortPartiallyConnected {
         in String sIn,
         out String sOut;
     
-    component E e1, e2;
+    component DummyComponent5 e1, e2;
     
     connect sIn -> e1.sIn;
     connect e1.sOut -> e2.sIn;

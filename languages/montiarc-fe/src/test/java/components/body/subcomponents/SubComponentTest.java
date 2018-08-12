@@ -101,24 +101,22 @@ public class SubComponentTest extends AbstractCoCoTest {
   
   @Test
   public void testSubcomponentReferenceCycles() {
-    ASTMontiArcNode node 
-        = loadComponentAST(PACKAGE + "." + "SubcomponentReferenceCycleA");
+    String qualifiedModelName = PACKAGE + "." + "SubcomponentReferenceCycleA";
     ExpectedErrorInfo errors
         = new ExpectedErrorInfo(1, "xMA086");
     final MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle());
-    checkInvalid(cocos, node, errors);
+    checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
 
-    node = loadComponentAST(PACKAGE + "." + "SubcomponentReferenceCycleB");
     errors = new ExpectedErrorInfo(1, "xMA086");
-    checkInvalid(cocos, node, errors);
+    qualifiedModelName = PACKAGE + "." + "SubcomponentReferenceCycleB";
+    checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
   }
   
   @Test
   public void testConfigurableComponentWithInnerCfgComp() {
-    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE,
-        "ConfigurableComponentWithInnerCfgComp");
-    assertNotNull(comp);
+    final String name = PACKAGE + "." + "ConfigurableComponentWithInnerCfgComp";
+    checkValid(name);
   }
   
   @Test
@@ -812,5 +810,38 @@ public class SubComponentTest extends AbstractCoCoTest {
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(3, "xMA085", "xMA096");
 
     checkInvalid(checker, node, errors);
+  }
+
+  @Test
+  public void testReferenceCycle() {
+    final String qualifiedModelName = PACKAGE + "." + "ReferenceCycle";
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle());
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(5, "xMA086");
+
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
+  }
+
+  @Test
+  public void testReferenceCycle2() {
+    final String qualifiedModelName = PACKAGE + "." + "ReferenceCycle2";
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle());
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA086");
+
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
+  }
+
+  @Test
+  // TODO Redundanzen zwischen CoCos prüfen
+  public void testSubcomponentsWithCfgArgsAndTypeParams() {
+    final String qualifiedModelName
+        = PACKAGE + "." + "SubcomponentsWithCfgArgsAndTypeParams";
+    final MontiArcCoCoChecker checker
+        = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(9, "xMA082", "xMA085", "xMA096");
+
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
 }

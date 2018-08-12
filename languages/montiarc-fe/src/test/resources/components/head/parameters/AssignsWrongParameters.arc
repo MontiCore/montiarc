@@ -6,7 +6,9 @@ import components.body.subcomponents._subcomponents.AtomicComponent;
  * Invalid model.
  *
  * Formerly named "CG12" in MontiArc3.
- * TODO Add Test
+ *
+ * @implements No literature reference
+ * TODO Review literature
  */
 component AssignsWrongParameters {
 

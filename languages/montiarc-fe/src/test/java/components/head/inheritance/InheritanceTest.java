@@ -186,6 +186,12 @@ public class InheritanceTest extends AbstractCoCoTest {
   }
 
   @Test
+  @Ignore("Check validity: Inheritance of subcomponents?")
+  public void testSubB() {
+    checkValid(PACKAGE + "." + "SubB");
+  }
+
+  @Test
   public void testSubCompCorrect1() {
     checkValid(PACKAGE + "." + "SubCompCorrect1");
   }

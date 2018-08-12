@@ -33,10 +33,17 @@ public class GuardTest extends AbstractCoCoTest {
   }
   
   @Test
+  /*
+   * Tests
+   * [Wor16] AT1: Guard expressions evaluate to a Boolean truth value.
+   *  (p.105, Lst. 5.23)
+   */
   public void testGuardNotBoolean() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "GuardNotBoolean");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(3, "xMA036"));
+    final String qualifiedModelName = PACKAGE + "." + "GuardNotBoolean";
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(3, "xMA036");
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
   
   @Test
@@ -55,8 +62,11 @@ public class GuardTest extends AbstractCoCoTest {
   @Ignore("Siehe TODO in AutomatonOutputInExpression coco")
   @Test
   public void testGuardUsesOutgoingPort() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "GuardUsesOutgoingPort");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(4, "xMA022"));
+    final String qualifiedModelName = PACKAGE + "." + "GuardUsesOutgoingPort";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(4, "xMA022");
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
 
   @Test
@@ -73,19 +83,12 @@ public class GuardTest extends AbstractCoCoTest {
   public void testComplexExpressionInGuard() {
     checkValid(PACKAGE + "." + "GuardHasComplexExpressionWithCD");
   }
-  
-  @Ignore("@JP: Kann mit der Aktualisierung auf neue JavaDSL-Version "
-      + "aktiviert werden (inkl. CoCos AutomatonReactionTypeDoesNotFitOutputType"
-      + " und AutomatonInitialReactionTypeDoesNotFitOutputType)")
-  /**
-   * Aktueller Fehler der sich im Modell ergibt:
-   * ERROR ROOT - StringReader:<19,8>: 0xMA037 Could not resolve type of guard.
-   */
+
   @Test
   public void testMultipleGuardTypeConflics() {
     final String modelName = PACKAGE + "." + "MultipleGuardTypeConflicts";
     ASTMontiArcNode node = loadComponentAST(modelName);
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo();
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1,"xMA037");
     final MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
     checkInvalid(cocos, node, errors);
   }

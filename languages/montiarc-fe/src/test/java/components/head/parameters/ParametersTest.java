@@ -101,6 +101,19 @@ public class ParametersTest extends AbstractCoCoTest {
   }
 
   @Test
+  @Ignore("Qualified enum type which is used as a component argument can" +
+              "not be found.")
+  /*
+   * java.lang.AssertionError: 0xA1038 SymbolReference Could not load full
+   * information of 'types' (Kind de.monticore.java.symboltable.JavaTypeSymbolKind).
+   * StringReader:<10,40>: 0xMA065 Could not find type of argument no 0 of
+   * subcomponent sub
+   */
+  public void testUseEnumAsTypeArgQualified() {
+    checkValid(PACKAGE + "." + "UseEnumAsTypeArgQualified");
+  }
+
+  @Test
   @Ignore("TypeCompatibilityChecker.expressionType() returns Opt.empty() on CD Enum parameter ")
   public void testUseEnumAsTypeArgFromCD() {
     checkValid(PACKAGE + "." + "UseEnumAsTypeArgFromCD");

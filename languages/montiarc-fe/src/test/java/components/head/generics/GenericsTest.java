@@ -95,12 +95,25 @@ public class GenericsTest extends AbstractCoCoTest {
   @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
   @Test
   public void testSubCompExtendsGenericCompInvalid2(){
-    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid2"), new ExpectedErrorInfo());
+    final String qualifiedModelName = PACKAGE + "." + "SubCompExtendsGenericCompInvalid2";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo();
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), expectedErrors);
   }
   
   @Test
   public void testSubCompExtendsGenericCompValid() {
     checkValid(PACKAGE + "." + "SubCompExtendsGenericCompValid");
+  }
+
+  @Test
+  public void testSuperGenericComparableComp() {
+    checkValid(PACKAGE + "." + "SuperGenericComparableComp");
+  }
+
+  @Test
+  public void testSuperGenericComparableComp2() {
+    checkValid(PACKAGE + "." + "SuperGenericComparableComp2");
   }
   
   @Test

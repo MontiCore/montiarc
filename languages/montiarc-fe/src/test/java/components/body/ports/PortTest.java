@@ -70,9 +70,11 @@ public class PortTest extends AbstractCoCoTest {
   
   @Test
   public void testKeywordsAsPortName() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "KeywordAsPortName");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(4, "xMA028"));
+    final String qualifiedModelName = PACKAGE + "." + "KeywordAsPortName";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(4, "xMA028");
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
   
   @Test

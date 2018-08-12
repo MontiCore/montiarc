@@ -324,4 +324,34 @@ public class AutoConnectTest extends AbstractCoCoTest {
     assertTrue(connectorNames.contains("c -> ref.c"));
     assertTrue(connectorNames.contains("ref.x -> y"));
   }
+
+  @Test
+  public void testReferencedPortAndType() {
+    checkValid(PACKAGE + "." + "ReferencedPortAndType");
+  }
+
+  @Test
+  public void testDummyComponent1() {
+    checkValid(PACKAGE + ".dummycomponents." + "DummyComponent1");
+  }
+
+  @Test
+  public void testDummyComponent2() {
+    checkValid(PACKAGE + ".dummycomponents." + "DummyComponent2");
+  }
+
+  @Test
+  public void testDummyComponent3() {
+    checkValid(PACKAGE + ".dummycomponents." + "DummyComponent3");
+  }
+
+  @Test
+  public void testDummyComponent4() {
+    checkValid(PACKAGE + ".dummycomponents." + "DummyComponent4");
+  }
+
+  @Test
+  public void testDummyComponent5() {
+    checkValid(PACKAGE + ".dummycomponents." + "DummyComponent5");
+  }
 }
