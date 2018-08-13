@@ -8,9 +8,7 @@ package components.head.generics;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import montiarc.cocos.*;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
@@ -20,6 +18,10 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
+import montiarc.cocos.AllGenericParametersOfSuperClassSet;
+import montiarc.cocos.DefaultParametersCorrectlyAssigned;
+import montiarc.cocos.MontiArcCoCos;
+import montiarc.cocos.TypeParameterNamesUnique;
 import montiarc.helper.SymbolPrinter;
 
 /**
@@ -85,22 +87,19 @@ public class GenericsTest extends AbstractCoCoTest {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new AllGenericParametersOfSuperClassSet()), node, new ExpectedErrorInfo(1,"xMA089"));
   }
   
-  @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
   @Test
   public void testSubCompExtendsGenericCompInvalid0(){
-    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid0"), new ExpectedErrorInfo());
+    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid0"), new ExpectedErrorInfo(1, "xMA087"));
   }
   
-  @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
   @Test
   public void testSubCompExtendsGenericCompInvalid1(){
-    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid1"), new ExpectedErrorInfo());
+    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid1"), new ExpectedErrorInfo(1, "xMA088"));
   }
   
-  @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
   @Test
   public void testSubCompExtendsGenericCompInvalid2(){
-    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid2"), new ExpectedErrorInfo());
+    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid2"), new ExpectedErrorInfo(1, "xMA089"));
   }
   
   @Test
