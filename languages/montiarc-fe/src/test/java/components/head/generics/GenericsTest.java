@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
@@ -100,6 +101,12 @@ public class GenericsTest extends AbstractCoCoTest {
   @Test
   public void testSubCompExtendsGenericCompInvalid2(){
     checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid2"), new ExpectedErrorInfo(1, "xMA089"));
+  }
+  
+  @Ignore("Wartet auf update des JTypeSymbolsHelper")
+  @Test
+  public void testAssignsWrongComplexTypeArgToSuperComp() {
+    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "AssignsWrongComplexTypeArgToSuperComp") , new ExpectedErrorInfo(1, "xMA089"));
   }
   
   @Test
