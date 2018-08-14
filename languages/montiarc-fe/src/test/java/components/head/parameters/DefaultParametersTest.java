@@ -44,12 +44,9 @@ public class DefaultParametersTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "ComponentWithDefaultParameters");
   }
   
-  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   @Test
   public void testComposedTestComponent() {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
-        loadComponentAST(PACKAGE + "." + "ComposedTestComponent"),
-        new ExpectedErrorInfo(1, "xMA064"));
+    checkValid(PACKAGE + "." + "ComposedTestComponent");
   }
   
   @Test

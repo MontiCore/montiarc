@@ -12,11 +12,11 @@ import montiarc._cocos.MontiArcASTMACompilationUnitCoCo;
 import montiarc._symboltable.MontiArcModelNameCalculator;
 
 /**
- * Ensures, that packages of components are lower-case. This is required for inner components, see
- * {@link MontiArcModelNameCalculator}.
+ * Ensures, that packages of components are lower-case. This is required
+ * for inner components, see {@link MontiArcModelNameCalculator}.
  *
- * @implements TODO: Hat keine Referenz in den Arbeiten. Noch sinnvoll? Artefakte mit package Namen,
- * die nicht lower case sind, koennen nicht resolvt werden.
+ * @implements No literature reference
+ * TODO: Hat keine Referenz in den Arbeiten. Noch sinnvoll? Artefakte mit Paketnamen, die nicht lower case sind, koennen nicht resolvt werden.
  * @author Robert Heim
  */
 public class PackageLowerCase implements MontiArcASTMACompilationUnitCoCo {
@@ -28,7 +28,8 @@ public class PackageLowerCase implements MontiArcASTMACompilationUnitCoCo {
   public void check(ASTMACompilationUnit node) {
     String pack = Names.getQualifiedName(node.getPackageList());
     if (pack.toUpperCase().equals(pack)) {
-      Log.error("0xMA054 The package must be lower case", node.get_SourcePositionStart());
+      Log.error("0xMA054 The package must be lower case",
+          node.get_SourcePositionStart());
     }
   }
   

@@ -10,6 +10,8 @@ import montiarc._cocos.MontiArcASTTransitionCoCo;
 /**
  * Context condition for checking, if a reaction of a transition contains an alternative. This would
  * be something like A->B [...] {...} / {b = alt{1,2,3}}
+ *
+ * @implements No literature reference
  * 
  * @author Gerrit Leonhardt, Andreas Wortmann
  */

@@ -13,9 +13,10 @@ import montiarc._symboltable.PortSymbol;
 import montiarc.visitor.InputUnchangedVisitor;
 
 /**
- * Context condition that checks whether an input port is changed in a AJava compute statement.
+ * Context condition that checks whether an input port is changed in a
+ * AJava compute statement.
  *
- * @implements: No AJava literature
+ * @implements: No literature reference, AJava CoCo
  * @author Michael Mutert
  */
 public class InputPortChangedInCompute implements MontiArcASTJavaPBehaviorCoCo {
@@ -30,7 +31,7 @@ public class InputPortChangedInCompute implements MontiArcASTJavaPBehaviorCoCo {
     possiblePorts = visitor.getPossiblePorts();
     
     // Try to resolve the names of possible ports
-    Scope enclosingScope = node.getEnclosingScope().get();
+    Scope enclosingScope = node.getEnclosingScopeOpt().get();
     
     for (String possiblePort : possiblePorts) {
       Optional<Symbol> portSymbol = enclosingScope.resolve(possiblePort,
@@ -41,7 +42,8 @@ public class InputPortChangedInCompute implements MontiArcASTJavaPBehaviorCoCo {
         ASTPort port = (ASTPort) portSymbol.get().getAstNode().get();
         if (port.isIncoming()) {
           Log.error(
-              "0xMA078 The incoming port " + possiblePort + " was changed in a compute statement.",
+              String.format("0xMA078 The incoming port %s was changed " +
+                                "in a compute statement.", possiblePort),
               node.get_SourcePositionStart());
         }
       }

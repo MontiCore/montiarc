@@ -114,15 +114,20 @@ public class InheritanceTest extends AbstractCoCoTest {
   public void testCircularInheritance() {
     final String componentName = PACKAGE + "." + "CircularInheritanceA";
     ASTMontiArcNode node = loadComponentAST(componentName);
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new CircularInheritance()), node, new ExpectedErrorInfo(1, "xMA017"));
+    final MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new CircularInheritance());
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA017");
+    checkInvalid(cocos, node, errors);
   }
   
   @Test
   public void testTransitiveCircularInheritance() {
     final String componentName = PACKAGE + "." + "TransitiveCircularInheritanceA";
     ASTMontiArcNode node = loadComponentAST(componentName);
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new CircularInheritance()), node, new ExpectedErrorInfo(1, "xMA017"));
-
+    final MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new CircularInheritance());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA017");
+    checkInvalid(cocos, node, errors);
   }
 
   @Test
@@ -136,8 +141,10 @@ public class InheritanceTest extends AbstractCoCoTest {
    *    parameters. (p.69 Lst. 3.49)
    */
   public void testTooFewConfigurationParameters() {
-    final ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "TooFewConfigurationParameters");
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA084");
+    final ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "TooFewConfigurationParameters");
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA084");
     checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
 
@@ -176,6 +183,12 @@ public class InheritanceTest extends AbstractCoCoTest {
   @Test
   public void testHasRequiredAndOptionalConfigParameters() {
     checkValid(PACKAGE + "." + "HasRequiredAndOptionalConfigParameters");
+  }
+
+  @Test
+  @Ignore("Check validity: Inheritance of subcomponents?")
+  public void testSubB() {
+    checkValid(PACKAGE + "." + "SubB");
   }
 
   @Test

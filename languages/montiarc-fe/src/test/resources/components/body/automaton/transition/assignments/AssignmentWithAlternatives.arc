@@ -3,7 +3,7 @@ package components.body.automaton.transition.assignments;
 /*
  * Invalid model.
  *
- * @implements No literature.
+ * @implements No literature reference
  */
 component AssignmentWithAlternatives {
     port 

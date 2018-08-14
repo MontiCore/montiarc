@@ -64,17 +64,20 @@ public class AJavaTest extends AbstractCoCoTest {
   
   @Test
   public void testAJavaComputeBlockNameIsLowerCase() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AJavaComputeBlockNameIsLowerCase");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(1, "xMA015"));
+    final ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "AJavaComputeBlockNameIsLowerCase");
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA015");
+    checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
   
-  @Ignore("@JP wartet auf aktualisierung des InputUnchangedVisitor")
   @Test
   public void testChangeIncomingPortInCompute() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ChangeIncomingPortInCompute");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(2, "xMA078"));
+    ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "ChangeIncomingPortInCompute");
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(2, "xMA078");
+    checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
   
   @Ignore("@JP: Hier sollten drei Fehler entstehen (siehe Model). Bitte einbauen")
@@ -121,7 +124,6 @@ public class AJavaTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "UsedPortsAndParametersExist");
   }
   
-  @Ignore("@JP: Currently throws two times 0xMA030 - one for variable j and one for sum. Both errors are wrong.")
   @Test
   public void testComplexCodeExample() {
     checkValid(PACKAGE + "." + "ComplexCodeExample");

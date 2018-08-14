@@ -68,20 +68,11 @@ public class ConnectorTest extends AbstractCoCoTest {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit()), node,
         new ExpectedErrorInfo(8, "xMA033"));
   }
-  
-  @Test
-  public void testConnectorSourceAndTargetNonExistant() {
-    ASTMontiArcNode node = loadComponentAST(
-        PACKAGE + "." + "ConnectorSourceAndTargetNotExist");
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    checkInvalid(checker, node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
-  }
 
   @Test
   public void testConnectorSourceAndTargetNonExistant2() {
     ASTMontiArcNode node = loadComponentAST(
-        PACKAGE + "." + "ConnectorSourceAndTargetNotExist2");
+        PACKAGE + "." + "ConnectorSourceAndTargetNotExist");
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(checker, node, new ExpectedErrorInfo(3, "xMA066", "xMA067"));
@@ -260,7 +251,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + modelName);
     final ASTMontiArcNode astMontiArcNode = loadComponentAST(PACKAGE + "." + modelName);
     assertNotNull(astMontiArcNode);
-    final Optional<? extends Symbol> componentSymbol = astMontiArcNode.getSymbol();
+    final Optional<? extends Symbol> componentSymbol = astMontiArcNode.getSymbolOpt();
     assertTrue(componentSymbol.isPresent());
     final ComponentSymbol symbol = (ComponentSymbol) componentSymbol.get();
     assertTrue(symbol.getConnector("sender.message").isPresent());

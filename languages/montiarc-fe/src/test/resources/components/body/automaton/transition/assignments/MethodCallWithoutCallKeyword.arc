@@ -1,7 +1,9 @@
 package components.body.automaton.transition.assignments;
 
 /**
- * Invalid model. 
+ * Invalid model.
+ *
+ * @implements No literature reference
  */
 component MethodCallWithoutCallKeyword {
 

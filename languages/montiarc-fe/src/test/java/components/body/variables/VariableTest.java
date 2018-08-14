@@ -27,10 +27,21 @@ public class VariableTest extends AbstractCoCoTest {
   }
   
   @Test
+  /*
+   * Tests
+   * [Wor16] AU3: The names of all inputs, outputs, and variables
+   * are unique. (p. 98. Lst. 5.10)
+   * [Hab16] B1: All names of model elements within a component
+   * namespace have to be unique. (p. 59. Lst. 3.31)
+   * [Wor16] MU1: The name of each component variable is unique
+   *  among ports, variables, and configuration parameters. (p. 54 Lst. 4.5)
+   */
   public void testAmbiguousVariableNames() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousVariableNames");
+    final String qualifiedModelName = PACKAGE + "." + "AmbiguousVariableNames";
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA035"));
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(4, "xMA035");
+    checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
   }
   
   @Test

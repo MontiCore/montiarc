@@ -5,8 +5,6 @@
  */
 package montiarc.cocos;
 
-import java.util.Optional;
-
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
@@ -19,30 +17,33 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.VariableSymbol;
 
+import java.util.Optional;
+
 /**
- * Checks whether all used ports in the ajava initialisation exist in the component definition.
- * SymboltableCreator already ensures that used ports and variables in the ajava behavior are
- * consistent.
+ * Checks whether all used ports in the ajava initialisation exist in the
+ * component definition.
+ * SymboltableCreator already ensures that used ports and variables in the
+ * ajava behavior are consistent.
+ *
+ * @implements No literature reference
  *
  * @author Andreas Wortmann
  */
 public class UsedPortsAndVariablesExist
     implements MontiArcASTComponentCoCo {
-  
-  /**
-   * @see de.monticore.lang.montiarc.montiarc._cocos.MontiArcASTComponentBodyCoCo#check(de.monticore.lang.montiarc.montiarc._ast.ASTComponentBody)
-   */
+
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol cmp = (ComponentSymbol) node.getSymbol().orElse(null);
-    if (null == cmp) {
-      Log.error(String.format("0xMA010 ASTComponent node \"%s\" has no symbol. Did you forget to "
-          + "run the SymbolTableCreator before checking cocos?", node.getName()));
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
       return;
     }
-    
+    ComponentSymbol cmp = (ComponentSymbol) node.getSymbolOpt().get();
     checkAJavaInitialization(node, cmp);
-    
   }
   
   private void checkAJavaInitialization(ASTComponent node, ComponentSymbol cmp) {
@@ -58,15 +59,19 @@ public class UsedPortsAndVariablesExist
           Optional<JFieldSymbol> cmpParameter = cmp.getConfigParameters().stream()
               .filter(p -> p.getName().equals(name)).findFirst();
           if (!port.isPresent() && !compVar.isPresent() && !cmpParameter.isPresent()) {
-            Log.error("0xMA030 Used variable " + name
-                + " in ajava initialization is not a port, component variable or locally defined variable.",
+            Log.error(String.format("0xMA030 Used variable %s in AJava " +
+                                        "initialization is not a port, " +
+                                        "component variable or locally " +
+                                        "defined variable.", name),
                 i.get_SourcePositionStart());
           }
           
           if (port.isPresent()) {
             if (port.get().isIncoming()) {
-              Log.error("0xMA032 Port " + port.get().getName()
-                  + " is incoming, and thus must not be changed",
+              Log.error(
+                  String.format("0xMA032 Port %s is incoming, " +
+                                    "and thus must not be changed",
+                      port.get().getName()),
                   i.get_SourcePositionStart());
             }
           }

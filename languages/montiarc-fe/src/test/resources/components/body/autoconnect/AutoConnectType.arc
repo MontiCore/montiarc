@@ -16,13 +16,13 @@ component AutoConnectType {
         out String strOut2,
         out Integer intOut;
     
-    component A;
+    component DummyComponent1 a;
     
-    component B;
+    component DummyComponent2 b;
     
-    component C;
+    component DummyComponent3 c;
     
-    component D;
+    component DummyComponent4 d;
     
     connect strIn -> a.strIn;
     connect c.bb -> d.bool;

@@ -1,8 +1,10 @@
 package components.body.automaton.states;
 
 /**
- * Invalid model. The state I is referenced as an initial state, but
- * wasn't defined.
+ * Invalid model.
+ * The state I is referenced as an initial state, but wasn't defined.
+ *
+ * @implements [Wor16] AR3: Used states exist (p. 104. Lst. 5.21)
  */
 component UndefinedInitialState {
     port 

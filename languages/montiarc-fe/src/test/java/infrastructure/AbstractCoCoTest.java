@@ -40,7 +40,7 @@ public abstract class AbstractCoCoTest {
   protected static final String FAKE_JAVA_TYPES_PATH = "target/librarymodels/";
   
   //TODO Remove when inner components are allowed again
-  private static final MontiArcCoCoChecker checker = new MontiArcCoCoChecker()
+    private static final MontiArcCoCoChecker checker = new MontiArcCoCoChecker()
     .addCoCo(new PortUsage())
         .addCoCo(new SubComponentsConnected())
         .addCoCo(new SubcomponentParametersCorrectlyAssigned())
@@ -93,7 +93,6 @@ public abstract class AbstractCoCoTest {
         .addCoCo(new ImportsAreUnique())
         
         // REFERENTIAL INTEGRITY
-        .addCoCo(new AutomatonDeclaredInitialStateDoesNotExist())
         .addCoCo(new UseOfUndeclaredState())
         .addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfUndeclaredField())
         .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfUndeclaredField())

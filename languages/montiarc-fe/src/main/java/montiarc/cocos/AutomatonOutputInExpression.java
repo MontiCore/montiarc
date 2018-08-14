@@ -23,8 +23,6 @@ import montiarc._symboltable.PortSymbol;
  * (p. 103, Lst. 520)
  * @implements [RRW14a] T6: The direction of ports has to be respected.
  * @author (last commit) $Author$
- * @version $Revision$, $Date$
- * @since TODO: add version number
  */
 public class AutomatonOutputInExpression implements MCExpressionsASTGenericInvocationSuffixCoCo {
   
@@ -33,21 +31,21 @@ public class AutomatonOutputInExpression implements MCExpressionsASTGenericInvoc
     // TODO Check that nothing is writing on incoming ports
     
     // Transition Scope
-    if (node.isPresentName() && node.getEnclosingScope().isPresent()) {
+    if (node.isPresentName() && node.getEnclosingScopeOpt().isPresent()) {
       
       // Automaton Scope
-      if (node.getEnclosingScope().get().getEnclosingScope().isPresent()) {
+      if (node.getEnclosingScopeOpt().get().getEnclosingScope().isPresent()) {
         
         // Component Scope
-        if (node.getEnclosingScope().get().getEnclosingScope().get().getEnclosingScope()
+        if (node.getEnclosingScopeOpt().get().getEnclosingScope().get().getEnclosingScope()
             .isPresent()) {
-          Scope scope = node.getEnclosingScope().get().getEnclosingScope().get().getEnclosingScope()
+          Scope scope = node.getEnclosingScopeOpt().get().getEnclosingScope().get().getEnclosingScope()
               .get();
           Optional<? extends ScopeSpanningSymbol> scopeSymbol = scope.getSpanningSymbol();
           if (scopeSymbol.isPresent() && scopeSymbol.get().isKindOf(ComponentSymbol.KIND)) {
             Optional<ASTNode> nodeAST = scopeSymbol.get().getAstNode();
             if (nodeAST.isPresent()) {
-              // Component that conatins the expression somewhere
+              // Component that contains the expression somewhere
               ASTComponent compAST = (ASTComponent) nodeAST.get();
               List<ASTElement> elements = compAST.getBody().getElementList();
               for (ASTElement elem : elements) {

@@ -4,7 +4,7 @@ import components.body.subcomponents.NotExistentToo;
 import components.body.subcomponents._subcomponents.*;
 
 /**
- * Valid model. 
+ * Invalid model.
  * @implements [Hab12] R3: Full qualified subcomponent types exist in the named package. (p. 28)
  * @implements [Hab12] R4: Unqualified subcomponent types either exist in the current package 
  * or are imported using an import statement. (p. 28) 

@@ -1,8 +1,9 @@
 package components.head.inheritance;
 
+import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
 /**
- * Valid model.
- * TODO Add test
+ * Invalid model.
+ * TODO Check Validity: Inheritance of subcomponents?
  */
 component SubB extends SuperArchitecturalComponent {
     
@@ -11,11 +12,11 @@ component SubB extends SuperArchitecturalComponent {
         out String anotherOut,
         out String anotherOut2;    
     
-    component A anotherA [strOut->anotherOut2];
-    component A yetAnotherA ;
+    component HasStringInputAndOutput anotherA [pOut -> anotherOut2];
+    component HasStringInputAndOutput yetAnotherA ;
     
-    connect myA.strOut -> anotherOut;
-    connect anotherIn -> anotherA.strIn; 
+    connect myA.pOut -> anotherOut;
+    connect anotherIn -> anotherA.pIn;
     
-    connect yetAnotherA.strOut -> myOutput519;
+    connect yetAnotherA.pOut -> myOutput519;
 }

@@ -3,9 +3,7 @@ package montiarc.visitor;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.monticore.mcexpressions._ast.ASTExpression;
-import de.monticore.mcexpressions._ast.ASTPrefixExpression;
-import de.monticore.mcexpressions._ast.ASTSuffixExpression;
+import de.monticore.mcexpressions._ast.*;
 import montiarc._visitor.MontiArcVisitor;
 
 /**
@@ -16,9 +14,41 @@ import montiarc._visitor.MontiArcVisitor;
 public class InputUnchangedVisitor implements MontiArcVisitor {
   
   private List<String> possiblePorts = new ArrayList<>();
-  
+
   @Override
-  public void visit(ASTExpression node) {
+  public void visit(ASTAssignmentExpression node) {
+    final ASTExpression leftExpression = node.getLeftExpression();
+    final ASTExpression rightExpression = node.getRightExpression();
+    if(node.getAssignmentOpt().isPresent()){
+      final String operator = node.getAssignmentOpt().get();
+
+      if(leftExpression instanceof ASTNameExpression){
+        final String name = ((ASTNameExpression) leftExpression).getName();
+        possiblePorts.add(name);
+      }
+    }
+  }
+
+  @Override
+  public void visit(ASTSuffixExpression node) {
+    final ASTExpression expression = node.getExpression();
+    if(expression instanceof ASTNameExpression){
+      final String name = ((ASTNameExpression) expression).getName();
+      possiblePorts.add(name);
+    }
+  }
+
+  @Override
+  public void visit(ASTPrefixExpression node) {
+    final ASTExpression expression = node.getExpression();
+    if(expression instanceof ASTNameExpression){
+      final String name = ((ASTNameExpression) expression).getName();
+      possiblePorts.add(name);
+    }
+  }
+
+//  @Override
+//  public void visit(ASTExpression node) {
 //  TODO@AB  
 //    // Check if the current expression is a 'regular' assignment,
 //    // i.e. =, +=, -=
@@ -36,7 +66,7 @@ public class InputUnchangedVisitor implements MontiArcVisitor {
 //        }
 //      }
 //    }
-//    
+
 //    // Check if the current expressiosn is a prefix/suffix operator,
 //    // i.e. ++, --
 //    if (node instanceof ASTSuffixExpression) {
@@ -57,7 +87,7 @@ public class InputUnchangedVisitor implements MontiArcVisitor {
 //        }
 //      }
 //    }
-  }
+//  }
   
   public List<String> getPossiblePorts() {
     return possiblePorts;

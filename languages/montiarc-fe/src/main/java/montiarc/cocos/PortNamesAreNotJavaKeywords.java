@@ -16,6 +16,11 @@ import montiarc._ast.ASTVariableDeclaration;
 import montiarc._cocos.MontiArcASTPortCoCo;
 import montiarc._cocos.MontiArcASTVariableDeclarationCoCo;
 
+/**
+ * Checks that the identifiers of ports are not Java keywords.
+ *
+ * @implements No literature reference
+ */
 public class PortNamesAreNotJavaKeywords implements MontiArcASTPortCoCo{
   
   private static Set<String> KEYWORDS = new HashSet<String>() {

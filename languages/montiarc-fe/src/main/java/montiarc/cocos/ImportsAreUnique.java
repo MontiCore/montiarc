@@ -22,12 +22,15 @@ public class ImportsAreUnique implements MontiArcASTComponentCoCo {
    * the model for user convenience. */
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol symbol = (ComponentSymbol) node.getSymbol().orElse(null);
-    
-    if (symbol == null) {
-      Log.error(String.format("0xMA071 ASTComponent node \"%s\" has no symbol.", node.getName()));
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
       return;
     }
+    ComponentSymbol symbol = (ComponentSymbol) node.getSymbolOpt().get();
     
     List<ImportStatement> imports = symbol.getImports();
     List<String> checked = new ArrayList<>();

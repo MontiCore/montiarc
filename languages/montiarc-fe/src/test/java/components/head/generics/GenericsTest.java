@@ -41,16 +41,6 @@ public class GenericsTest extends AbstractCoCoTest {
   public void testTypeParameterNamesUniqueValid() {
     checkValid(PACKAGE + "." + "TypeParameterNamesUnique");
   }
-  
-  @Test
-  /*
-   * Checks that generic type parameters have to be unique.
-   */
-  public void testTypeParameterNamesUniqueInvalid() {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new TypeParameterNamesUnique()),
-        loadComponentAST(PACKAGE + "." + "TypeParameterNamesAbiguous"),
-        new ExpectedErrorInfo(1, "xMA006"));
-  }
 
   @Test
   /*
@@ -73,6 +63,11 @@ public class GenericsTest extends AbstractCoCoTest {
   }
   
   @Test
+  /*
+   * Tests [Hab16] R15: Components that inherit from a generic component
+   * have to assign concrete type arguments to all generic type parameters.
+   * (p.69, lst. 3.50)
+   */
   public void testcomponentExtendsGenericComponent() {
     checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent");
     checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent2");
@@ -100,12 +95,25 @@ public class GenericsTest extends AbstractCoCoTest {
   @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
   @Test
   public void testSubCompExtendsGenericCompInvalid2(){
-    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid2"), new ExpectedErrorInfo());
+    final String qualifiedModelName = PACKAGE + "." + "SubCompExtendsGenericCompInvalid2";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo();
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), expectedErrors);
   }
   
   @Test
   public void testSubCompExtendsGenericCompValid() {
     checkValid(PACKAGE + "." + "SubCompExtendsGenericCompValid");
+  }
+
+  @Test
+  public void testSuperGenericComparableComp() {
+    checkValid(PACKAGE + "." + "SuperGenericComparableComp");
+  }
+
+  @Test
+  public void testSuperGenericComparableComp2() {
+    checkValid(PACKAGE + "." + "SuperGenericComparableComp2");
   }
   
   @Test
@@ -152,13 +160,11 @@ public class GenericsTest extends AbstractCoCoTest {
 
   @Test
   public void testDefaultParameterForPurelyGenericType() {
-    final ASTMontiArcNode astMontiArcNode
-        = loadComponentAST(PACKAGE +
-                               ".DefaultParameterForPurelyGenericType");
+    final String modelName = PACKAGE + ".DefaultParameterForPurelyGenericType";
     MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo(new DefaultParametersCorrectlyAssigned());
     ExpectedErrorInfo errors
         = new ExpectedErrorInfo(1, "xMA062");
-    checkInvalid(cocos, astMontiArcNode, errors);
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
 }

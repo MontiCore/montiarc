@@ -1,10 +1,10 @@
 package components.head.parameters;
 
 /*
- * Invalid model
+ * Invalid model.
+ * Name of the second parameter does not start with a lower case letter.
  *
- * @implements TODO
- * TODO Add test
+ * @implements No literature reference
  */
  component ParameterNameCapitalized(String correctParam, Integer IncorrectParam){
     // Empty body

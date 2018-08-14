@@ -8,6 +8,12 @@ import types.package1.DefinedJavaTypeInPackage1;
  * Invalid model.
  *
  * Formerly named "CG7" in MontiArc3.
+ *
+ *
+ * @implements [Hab16] R8: The target port in a connection has to be compatible
+ * to the source port, i.e., the type of the target port is identical or a
+ * supertype of the source port type. (p. 66, lst. 3.43)
+ * TODO Review literature
  */
 component UndefinedPortTypes {
 

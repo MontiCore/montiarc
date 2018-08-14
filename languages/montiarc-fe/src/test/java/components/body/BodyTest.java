@@ -32,9 +32,12 @@ public class BodyTest extends AbstractCoCoTest {
   
   @Test
   public void testComponentWithAJavaAndAutomaton() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ComponentWithAJavaAndAutomaton");
-    final MontiArcCoCoChecker checker = new MontiArcCoCoChecker().addCoCo(new MultipleBehaviorImplementation());
-    checkInvalid(checker, node, new ExpectedErrorInfo(1, "xMA050"));
+    final String modelName = PACKAGE + "." + "ComponentWithAJavaAndAutomaton";
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker().addCoCo(new MultipleBehaviorImplementation());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA050");
+    checkInvalid(checker, loadComponentAST(modelName), errors);
   }
 
   @Test
@@ -46,10 +49,22 @@ public class BodyTest extends AbstractCoCoTest {
   }
 
   @Test
+  /*
+   * Tests
+   * [Wor16] AU3: The names of all inputs, outputs, and variables
+   *  are unique. (p. 98. Lst. 5.10)
+   * [Hab16] B1: All names of model elements within a component
+   *  namespace have to be unique. (p. 59. Lst. 3.31)
+   * [Wor16] MU1: The name of each component variable is unique
+   *  among ports, variables, and configuration parameters. (p. 54 Lst. 4.5)
+   */
   public void testAmbiguousPortAndVariableNames() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousPortAndVariableNames");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(14,
-        "xMA035", "xMA053"));
+    final String qualifiedModelName = PACKAGE + "." + "AmbiguousPortAndVariableNames";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(14,
+        "xMA035", "xMA053");
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
   
   @Test

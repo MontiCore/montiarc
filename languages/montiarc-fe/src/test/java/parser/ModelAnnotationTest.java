@@ -79,7 +79,7 @@ public class ModelAnnotationTest {
 
         final ASTMACompilationUnit model = astmaCompilationUnit.get();
         final List<Comment> preComments
-            = model.getComponent().get_PreComments();
+            = model.getComponent().get_PreCommentList();
         if(preComments.size() < 1){
           Log.warn(String.format("Model %s has no description!", file.toString()));
           return FileVisitResult.CONTINUE;
@@ -91,8 +91,12 @@ public class ModelAnnotationTest {
             // Invalid model
             if(!comment.getText().toLowerCase().contains("@implements")){
               Log.warn(
-                  String.format("Model %s is declared as invalid but does not" +
-                                    "contain '@implements' tag!",
+                  String.format("Invalid Model %s does not" +
+                                    " contain a valid '@implements' tag!",
+                      file.toString()));
+            } else if(comment.getText().toLowerCase().contains("@implements TODO")){
+              Log.warn(
+                  String.format("Implements tag of invalid model %s contains a TODO",
                       file.toString()));
             }
           } else {

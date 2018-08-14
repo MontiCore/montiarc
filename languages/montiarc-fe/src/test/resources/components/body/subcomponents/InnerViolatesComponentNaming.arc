@@ -4,7 +4,7 @@ package components.body.subcomponents;
  * Invalid model.
  * Component names have to start with a capital letter
  *
- * @implements No Literature
+ * @implements No literature reference
  */
 component InnerViolatesComponentNaming {
     

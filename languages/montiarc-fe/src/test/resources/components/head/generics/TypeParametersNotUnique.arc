@@ -5,7 +5,7 @@ package components.head.generics;
  * The generic type parameters K and T are ambiguous.
  * Produces two errors.
  *
- * @implements TODO
+ * @implements No literature reference
  */
 component TypeParametersNotUnique<K, K, V, T, T> {
   // Empty body
