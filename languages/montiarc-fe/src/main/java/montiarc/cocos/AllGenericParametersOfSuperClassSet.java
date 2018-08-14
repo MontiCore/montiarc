@@ -84,8 +84,10 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                 // Case 1 formal type parameter is instantiated in extend
                 // (component A
                 // extends B<Integer>)
-                if (!((JavaTypeSymbolReference)actualArg.getType()).getReferencedSymbol().isFormalTypeParameter()) {
-                  if (upperBound.getActualTypeArguments().isEmpty() && !upperBound.getReferencedSymbol().getFormalTypeParameters().isEmpty()) {
+                if (!((JavaTypeSymbolReference) actualArg.getType()).getReferencedSymbol()
+                         .isFormalTypeParameter()) {
+                  if (upperBound.getActualTypeArguments().isEmpty()
+                          && !upperBound.getReferencedSymbol().getFormalTypeParameters().isEmpty()) {
                     upperBound.setActualTypeArguments(supersActualTypeParams);
                   }
                   if (!TypeCompatibilityChecker.doTypesMatch(
@@ -109,30 +111,17 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                         node.getHead().getSuperComponent().get_SourcePositionStart());
                   }
                 }
-                
+
                 // Case 2 formal type parameter is passed to extend (component
                 // A<K extends
                 // Number> extends B<K>)
                 else {
                   int pos = getPositionInFormalTypeParameters(typeParameters,
                       (JTypeReference<? extends JTypeSymbol>) actualArg.getType());
-                  JTypeSymbol formalType = typeParameters.get(pos);
-                  if (formalType.getInterfaces().isEmpty()) {
-                    Log.error("0xMA089 Parameter " + formalType.getName()
-                        + " is not compatible with upper bound "
-                        + upperBound.getName(),
-                        node.getHead().getSuperComponent().get_SourcePositionStart());
-                  }
-                  else {
-                    if (TypeCompatibilityChecker.doTypesMatch(
-                        formalType.getInterfaces().get(j),
-                        formalType.getInterfaces().get(j)
-                            .getReferencedSymbol().getFormalTypeParameters().stream()
-                            .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-                        formalType.getInterfaces().get(j)
-                            .getActualTypeArguments().stream()
-                            .map(a -> (JavaTypeSymbolReference) a.getType())
-                            .collect(Collectors.toList()),
+
+                  JTypeSymbol formalType = supersTypeParameters.get(pos);
+                  if (!formalType.getInterfaces().isEmpty()) {
+                    if (!TypeCompatibilityChecker.doTypesMatch(
                         ((JTypeReference<? extends JTypeSymbol>) actualArg.getType()),
                         ((JTypeReference<? extends JTypeSymbol>) actualArg.getType())
                             .getReferencedSymbol().getFormalTypeParameters().stream()
@@ -140,8 +129,20 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                         ((JTypeReference<? extends JTypeSymbol>) actualArg.getType())
                             .getActualTypeArguments().stream()
                             .map(a -> (JavaTypeSymbolReference) a.getType())
-                            .collect(Collectors.toList())))
-                      ;
+                            .collect(Collectors.toList()),
+                        formalType.getInterfaces().get(j),
+                        formalType.getInterfaces().get(j)
+                            .getReferencedSymbol().getFormalTypeParameters().stream()
+                            .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+                        formalType.getInterfaces().get(j)
+                            .getActualTypeArguments().stream()
+                            .map(a -> (JavaTypeSymbolReference) a.getType())
+                            .collect(Collectors.toList()))) {
+                      Log.error("0xMA089 Parameter " + formalType.getName()
+                                    + " is not compatible with upper bound "
+                                    + upperBound.getName(),
+                          node.getHead().getSuperComponent().get_SourcePositionStart());
+                    }
                   }
                 }
               }
