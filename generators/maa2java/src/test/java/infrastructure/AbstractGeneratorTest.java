@@ -104,7 +104,7 @@ public class AbstractGeneratorTest {
     generatorTool = new MontiArcGeneratorTool();
 
     // Clear output folder
-    delete(TARGET_GENERATED_TEST_SOURCES_DIR);
+//    delete(TARGET_GENERATED_TEST_SOURCES_DIR);
 
     // Test models are assumed to be unpacked by Maven
     assertTrue(Files.exists(TEST_MODEL_PATH));
@@ -148,12 +148,11 @@ public class AbstractGeneratorTest {
     }
 
     // 4. Generate models (at specified location)
-    generatorTool.generate(
-        TEST_MODEL_PATH.toFile(),
-        TARGET_GENERATED_TEST_SOURCES_DIR.toFile(),
-        Paths.get("src/main/java").toFile());
+//    generatorTool.generate(
+//        TEST_MODEL_PATH.toFile(),
+//        TARGET_GENERATED_TEST_SOURCES_DIR.toFile(),
+//        Paths.get("src/main/java").toFile());
 
-    // TODO Copy Java Files from types folder
     Files.walkFileTree(TEST_MODEL_PATH, new SimpleFileVisitor<Path>(){
       @Override
       public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {

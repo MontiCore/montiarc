@@ -8,11 +8,11 @@ package generation;
 import com.google.common.collect.Lists;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.monticore.java.javadsl._ast.ASTImportDeclaration;
-import de.monticore.java.javadsl._ast.ASTPrimitiveModifier;
 import de.monticore.java.javadsl._ast.JavaDSLMill;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.types.JFieldSymbol;
+import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.types.types._ast.*;
 import montiarc._ast.*;
 import montiarc._symboltable.ComponentInstanceSymbol;
@@ -39,7 +39,6 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   private ComponentSymbol symbol;
   private ComponentHelper helper;
 
-
   private final String componentName;
   private final String inputName;
   private final String resultName;
@@ -62,12 +61,39 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
   private void initTypes() {
     types = new HashMap<>();
-    types.put("INPUT_CLASS_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
-                                      .setNameList(Lists.newArrayList(inputName))
-                                      .build());
-    types.put("RESULT_CLASS_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
-                                       .setNameList(Lists.newArrayList(resultName))
-                                       .build());
+
+    if(!symbol.getFormalTypeParameters().isEmpty()) {
+      ASTTypeArgumentsBuilder typeArgumentsBuilder = JavaDSLMill.typeArgumentsBuilder();
+      for (JTypeSymbol typeSymbol : symbol.getFormalTypeParameters()) {
+        final ASTSimpleReferenceType typeParam
+            = JavaDSLMill
+                  .simpleReferenceTypeBuilder()
+                  .addName(typeSymbol.getName())
+                  .build();
+        typeArgumentsBuilder.addTypeArgument(typeParam);
+      }
+
+      types.put("INPUT_CLASS_TYPE",
+          JavaDSLMill.simpleReferenceTypeBuilder()
+              .setNameList(Lists.newArrayList(inputName))
+              .setTypeArguments(typeArgumentsBuilder.build())
+              .build());
+      types.put("RESULT_CLASS_TYPE",
+          JavaDSLMill.simpleReferenceTypeBuilder()
+              .setNameList(Lists.newArrayList(resultName))
+              .setTypeArguments(typeArgumentsBuilder.build())
+              .build());
+    } else {
+      types.put("INPUT_CLASS_TYPE",
+          JavaDSLMill.simpleReferenceTypeBuilder()
+              .setNameList(Lists.newArrayList(inputName))
+              .build());
+      types.put("RESULT_CLASS_TYPE",
+          JavaDSLMill.simpleReferenceTypeBuilder()
+              .setNameList(Lists.newArrayList(resultName))
+              .build());
+    }
+
     types.put("STRING_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
                                  .setNameList(Lists.newArrayList("String"))
                                  .build());
@@ -353,17 +379,17 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     if (!symbol.isAtomic()) {
       return;
     }
+    ASTTypeArgumentsBuilder typeArgs
+        = JavaDSLMill.typeArgumentsBuilder();
 
-    ASTTypeArguments typeArgs
-        = JavaDSLMill.typeArgumentsBuilder()
-              .setTypeArgumentList(
-                  Lists.newArrayList(
-                      this.types.get("INPUT_CLASS_TYPE"),
-                      this.types.get("RESULT_CLASS_TYPE")))
-              .build();
+    typeArgs.setTypeArgumentList(
+        Lists.newArrayList(
+            this.types.get("INPUT_CLASS_TYPE"),
+            this.types.get("RESULT_CLASS_TYPE")));
+
     ASTType expectedType = JavaDSLMill.simpleReferenceTypeBuilder()
                                .setNameList(Lists.newArrayList("IComputable"))
-                               .setTypeArguments(typeArgs)
+                               .setTypeArguments(typeArgs.build())
                                .build();
     classVisitor.addField("behaviorImpl", expectedType);
   }
@@ -423,8 +449,18 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     // Expect impl instance of not decomposed
     if (this.symbol.isAtomic()) {
-      builder.addBodyElement(String.format("behaviorImpl = new %sImpl(%s);",
-          capitalizeFirst(componentName), parameters.toString()));
+      StringBuilder implAssignment = new StringBuilder("behaviorImpl = new ");
+      implAssignment.append(capitalizeFirst(componentName)).append("Impl");
+      if (!symbol.getFormalTypeParameters().isEmpty()) {
+        implAssignment.append("<");
+        for (JTypeSymbol typeSymbol : symbol.getFormalTypeParameters()) {
+          implAssignment.append(typeSymbol.getName()).append(",");
+        }
+        implAssignment.deleteCharAt(implAssignment.length() - 1);
+        implAssignment.append(">");
+      }
+      implAssignment.append("(").append(parameters.toString()).append(");");
+      builder.addBodyElement(implAssignment.toString());
     }
 
     for (ASTParameter parameter : node.getHead().getParameterList()) {
@@ -486,6 +522,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     }
     Method.Builder methodBuilder;
     methodBuilder = Method.getBuilder().setName("setResult");
+
     methodBuilder.addParameter("result", this.types.get("RESULT_CLASS_TYPE"));
     classVisitor.addMethod(methodBuilder.build());
   }

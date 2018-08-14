@@ -5,6 +5,7 @@
  */
 package generation;
 
+import de.monticore.types.types._ast.ASTSimpleReferenceType;
 import de.monticore.types.types._ast.ASTType;
 
 /**
@@ -32,9 +33,17 @@ class Field {
   }
 
   @Override public String toString() {
+    String typeString = type.toString();
+    if(type instanceof ASTSimpleReferenceType){
+      final ASTSimpleReferenceType type = (ASTSimpleReferenceType) this.type;
+      typeString += type.getNameList();
+      if(type.getTypeArgumentsOpt().isPresent()){
+        typeString += "TypeArguments: " + type.getTypeArguments().toString();
+      }
+    }
     return "Field{" +
         "name='" + name + '\'' +
-        ", type=" + type +
+        ", type=" + typeString +
         '}';
   }
 }
