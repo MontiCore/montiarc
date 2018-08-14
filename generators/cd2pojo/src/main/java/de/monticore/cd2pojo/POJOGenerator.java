@@ -2,6 +2,8 @@ package de.monticore.cd2pojo;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import de.monticore.ModelingLanguageFamily;
@@ -95,8 +97,23 @@ public class POJOGenerator {
     }
 
     Path filePath = Paths.get(Names.getPathFromPackage(typeHelper.printType(type)) + ".java");
-    
+
+    // Hack to at least correctly generate java.lang.*
+    // Will not work with packages that start with upper case letters
+    List<String> imports = new ArrayList<>();
+    for (String anImport : cdSymbol.getImports()) {
+      final String[] split = anImport.split("\\.");
+      if(split.length > 0){
+        final char firstOfLastElement = split[split.length - 1].charAt(0);
+        if(Character.isLowerCase(firstOfLastElement)){
+          imports.add(anImport + ".*");
+        } else{
+          imports.add(anImport);
+        }
+      }
+    }
+
     ge.generate("templates.type.ftl", filePath, type.getAstNode().get(), _package, kind,
-        type, _super, typeHelper, cdSymbol.getImports());
+        type, _super, typeHelper, imports);
   }
 }

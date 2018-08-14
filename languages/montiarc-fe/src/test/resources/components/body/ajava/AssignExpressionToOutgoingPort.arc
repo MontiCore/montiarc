@@ -1,7 +1,7 @@
 package components.body.ajava;
 
 /**
- * Valid model.
+ * Invalid model.
  */
 component AssignExpressionToOutgoingPort {
   

@@ -1,7 +1,8 @@
 package components.body.ajava;
 
 /**
- * Valid model.
+ * Invalid model.
+ * TODO Add test
  */
 component DistanceLogger {
   port

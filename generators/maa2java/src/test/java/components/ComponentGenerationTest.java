@@ -24,11 +24,13 @@ import montiarc._symboltable.ComponentSymbol;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static de.montiarcautomaton.generator.MontiArcGeneratorTool.DEFAULT_TYPES_FOLDER;
@@ -164,7 +166,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 
     try {
       final Path generatedTypesPath
-          = Paths.get(TARGET_GENERATED_TEST_SOURCES_DIR).resolve("types");
+          = TARGET_GENERATED_TEST_SOURCES_DIR.resolve("types");
       filesToCheck.addAll(Files.walk(generatedTypesPath).collect(Collectors.toSet()));
     } catch (IOException e) {
       e.printStackTrace();
@@ -177,7 +179,11 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     }
 
     // 5. Invoke Java compiler to see whether they are compiling
-    assertTrue(AbstractGeneratorTest.isCompiling(filesToCheck));
+    final boolean compiling = AbstractGeneratorTest.isCompiling(filesToCheck);
+    assertTrue(
+        String.format("The generated files for model %s are not " +
+                          "compiling without errors", qualifiedName),
+        compiling);
 
     // Parse the files with the JavaDSL
     GlobalScope gs = initJavaDSLSymbolTable();
@@ -270,7 +276,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
   private Set<Path> determineFilesToCheck(String componentName,
                                           String qualifiedName,
                                           ComponentSymbol component,
-                                          String basedir) {
+                                          Path basedir) {
     Set<Path> filesToCheck = new HashSet<>();
 
     final Optional<String> deploy = component.getStereotype().get("deploy");
@@ -278,7 +284,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     // Add the special deployment file
     if (deploy != null && deploy.isPresent()) {
       filesToCheck.add(
-          Paths.get(TARGET_GENERATED_TEST_SOURCES_DIR + PACKAGE + "\\" +
+          TARGET_GENERATED_TEST_SOURCES_DIR.resolve(PACKAGE + "\\" +
                        "Deploy" + componentName + JAVA_FILE_ENDING));
     }
 
@@ -299,8 +305,8 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 //      }
 
       final String qualifiedFileName
-          = basedir + qualifiedName.replace('.', '\\') + "Impl";
-      filesToCheck.add(Paths.get(qualifiedFileName + JAVA_FILE_ENDING));
+          = qualifiedName.replace('.', '\\') + "Impl";
+      filesToCheck.add(basedir.resolve(qualifiedFileName + JAVA_FILE_ENDING));
     } else {
 
       //Recursively add files for subcomponents
@@ -320,9 +326,9 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 
     for (String suffix : AbstractGeneratorTest.fileSuffixes) {
       final String qualifiedFileName
-          = basedir + qualifiedName.replace('.', '\\') + suffix;
+          = qualifiedName.replace('.', '\\') + suffix;
       filesToCheck.add(
-          Paths.get(qualifiedFileName + JAVA_FILE_ENDING));
+          basedir.resolve(qualifiedFileName + JAVA_FILE_ENDING));
     }
 
     return filesToCheck;

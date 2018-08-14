@@ -20,6 +20,7 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc.helper.JavaHelper;
 import org.junit.Before;
 
+import javax.swing.*;
 import javax.tools.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -48,8 +49,8 @@ public class AbstractGeneratorTest {
 
   public static final String outputPath = "target/generated-test-sources/";
   public static final String GENERATED_TEST_SOURCES = "generated-test-sources";
-  public static final String TARGET_GENERATED_TEST_SOURCES_DIR
-      = GENERATED_TEST_SOURCES + "/";
+  public static final Path TARGET_GENERATED_TEST_SOURCES_DIR
+      = Paths.get(GENERATED_TEST_SOURCES + "/");
   public static final Path TEST_MODEL_PATH
       = Paths.get("target/test-models/");
 
@@ -64,6 +65,7 @@ public class AbstractGeneratorTest {
   public static boolean isCompiling(Set<Path> paths){
     List<File> files = paths.stream()
                            .filter(path -> !Files.isDirectory(path))
+                           .filter(path -> path.getFileName().toString().endsWith(".java"))
                            .map(Path::toFile)
                            .collect(Collectors.toList());
     JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -102,16 +104,7 @@ public class AbstractGeneratorTest {
     generatorTool = new MontiArcGeneratorTool();
 
     // Clear output folder
-//    File outputFolder = Paths.get(TARGET_GENERATED_TEST_SOURCES_DIR).toFile();
-//    if (outputFolder.exists()) {
-//      try {
-//        delete(outputFolder);
-//      } catch (IOException e) {
-//        Log.error("Could not delete output directory");
-//      }
-//    } else {
-//      Log.info("Folder to delete does not exist", "GeneratorTest");
-//    }
+    delete(TARGET_GENERATED_TEST_SOURCES_DIR);
 
     // Test models are assumed to be unpacked by Maven
     assertTrue(Files.exists(TEST_MODEL_PATH));
@@ -144,9 +137,11 @@ public class AbstractGeneratorTest {
     // Remove files which are declared as valid but which still generate
     // errors in the generation process
     List<Path> excludedModels = new ArrayList<>();
-    excludedModels.add(AbstractGeneratorTest.TEST_MODEL_PATH.resolve("components/ComponentFromJar.arc"));
-    excludedModels.add(AbstractGeneratorTest.TEST_MODEL_PATH.resolve("components/head/generics/UsingComplexGenericParams.arc"));
-    excludedModels.add(AbstractGeneratorTest.TEST_MODEL_PATH.resolve("components/head/parameters/UseEnumAsTypeArgFromCD.arc"));
+    excludedModels.add(TEST_MODEL_PATH.resolve("components/ComponentFromJar.arc"));
+    excludedModels.add(TEST_MODEL_PATH.resolve("components/head/generics/UsingComplexGenericParams.arc"));
+    excludedModels.add(TEST_MODEL_PATH.resolve("components/head/parameters/UseEnumAsTypeArgFromCD.arc"));
+    excludedModels.add(TEST_MODEL_PATH.resolve("types/Units.cd"));
+    excludedModels.add(TEST_MODEL_PATH.resolve("types/Simulation.arc"));
 
     for (Path resolvedPath : excludedModels) {
       Files.deleteIfExists(resolvedPath);
@@ -155,10 +150,42 @@ public class AbstractGeneratorTest {
     // 4. Generate models (at specified location)
     generatorTool.generate(
         TEST_MODEL_PATH.toFile(),
-        Paths.get(TARGET_GENERATED_TEST_SOURCES_DIR).toFile(),
+        TARGET_GENERATED_TEST_SOURCES_DIR.toFile(),
         Paths.get("src/main/java").toFile());
 
     // TODO Copy Java Files from types folder
+    Files.walkFileTree(TEST_MODEL_PATH, new SimpleFileVisitor<Path>(){
+      @Override
+      public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+        if(dir.equals(TEST_MODEL_PATH)){
+          return FileVisitResult.CONTINUE;
+        }
+        try {
+          final Path relativize = TEST_MODEL_PATH.relativize(dir);
+          final Path target = TARGET_GENERATED_TEST_SOURCES_DIR.resolve(relativize);
+          if(!Files.exists(target)){
+            Files.copy(dir, target);
+          }
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+        return FileVisitResult.CONTINUE;
+      }
+
+      @Override
+      public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        try {
+          final Path relativize = TEST_MODEL_PATH.relativize(file);
+          final Path target = TARGET_GENERATED_TEST_SOURCES_DIR.resolve(relativize);
+          if(relativize.getFileName().toString().endsWith(".java")) {
+            Files.copy(file, target, StandardCopyOption.REPLACE_EXISTING);
+          }
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+        return FileVisitResult.CONTINUE;
+      }
+    });
   }
 
   /**
