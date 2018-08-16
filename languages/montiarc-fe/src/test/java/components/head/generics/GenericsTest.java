@@ -28,9 +28,9 @@ import montiarc.helper.SymbolPrinter;
  * @author Crispin Kirchner, Andreas Wortmann
  */
 public class GenericsTest extends AbstractCoCoTest {
-  
+
   private static final String PACKAGE = "components.head.generics";
-  
+
   @BeforeClass
   public static void setUp() {
     Log.getFindings().clear();
@@ -80,27 +80,52 @@ public class GenericsTest extends AbstractCoCoTest {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new AllGenericParametersOfSuperClassSet()), node, new ExpectedErrorInfo(1,"xMA089"));
   }
   
-  @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
   @Test
+  /*
+   * Tests [Hab16] R15
+   */
   public void testSubCompExtendsGenericCompInvalid0(){
-    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid0"), new ExpectedErrorInfo());
+    final String qualifiedModelName = PACKAGE + "." + "SubCompExtendsGenericCompInvalid0";
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA087");
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
   
-  @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
   @Test
+  /*
+   * Tests [Hab16] R15
+   */
   public void testSubCompExtendsGenericCompInvalid1(){
-    checkInvalid(MontiArcCoCos.createChecker(), loadComponentAST(PACKAGE + "." + "SubCompExtendsGenericCompInvalid1"), new ExpectedErrorInfo());
+    final String qualifiedModelName = PACKAGE + "." + "SubCompExtendsGenericCompInvalid1";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA088");
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
   
-  @Ignore("TODO implement coco! Check model for expected errors and coco reference.")
   @Test
+  /*
+   * Tests [Hab16] R15
+   */
   public void testSubCompExtendsGenericCompInvalid2(){
     final String qualifiedModelName = PACKAGE + "." + "SubCompExtendsGenericCompInvalid2";
     final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
-    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo();
+    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(1, "xMA089");
     checkInvalid(checker, loadComponentAST(qualifiedModelName), expectedErrors);
   }
-  
+
+  @Ignore("Wartet auf update des JTypeSymbolsHelper")
+  @Test
+  public void testAssignsWrongComplexTypeArgToSuperComp() {
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final String qualifiedModelName = PACKAGE + "." + "AssignsWrongComplexTypeArgToSuperComp";
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA089");
+    checkInvalid(checker, loadComponentAST(qualifiedModelName) , errors);
+  }
+
+
   @Test
   public void testSubCompExtendsGenericCompValid() {
     checkValid(PACKAGE + "." + "SubCompExtendsGenericCompValid");
