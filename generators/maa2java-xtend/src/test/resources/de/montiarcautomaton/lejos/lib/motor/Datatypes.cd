@@ -1,0 +1,5 @@
+package de.montiarcautomaton.lejos.lib.motor;
+
+classdiagram Datatypes {
+  enum MotorCmd {FORWARD, BACKWARD, STOP;}
+}
