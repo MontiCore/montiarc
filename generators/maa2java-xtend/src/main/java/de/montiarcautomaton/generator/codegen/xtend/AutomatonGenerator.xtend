@@ -7,8 +7,15 @@
  *******************************************************************************/
 package de.montiarcautomaton.generator.codegen.xtend
 
+import montiarc._symboltable.ComponentSymbol
 
 class AutomatonGenerator extends BehaviorGenerator {
-    
-    
+
+  override String generateCompute(ComponentSymbol comp) {
+    return ''''''
+  }
+
+  override String generateGetInitialValues(ComponentSymbol comp) {
+    return ''''''
+  }
 }

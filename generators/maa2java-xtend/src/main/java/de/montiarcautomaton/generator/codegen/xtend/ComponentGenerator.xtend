@@ -7,22 +7,44 @@
  *******************************************************************************/
 package de.montiarcautomaton.generator.codegen.xtend
 
-import java.io.File
-import montiarc._symboltable.ComponentSymbol
-import montiarc._ast.ASTBehaviorElement
 import de.montiarcautomaton.generator.helper.ComponentHelper
+import de.monticore.ast.ASTCNode
+import java.io.File
+import montiarc._ast.ASTAutomatonBehavior
+import montiarc._ast.ASTBehaviorElement
+import montiarc._ast.ASTComponent
+import montiarc._ast.ASTJavaPBehavior
+import montiarc._symboltable.ComponentSymbol
 
 class ComponentGenerator {
 
   def generateAll(File targetPath, File hwcPath, ComponentSymbol compSym) {
   }
 
+  def dispatch generateBehavior(ASTJavaPBehavior ajava, ComponentSymbol comp) {
+    return JavaPGenerator.newInstance.generate(comp)
+  }
+
+  def dispatch generateBehavior(ASTAutomatonBehavior automaton, ComponentSymbol comp) {
+    return AutomatonGenerator.newInstance.generate(comp)
+  }
+
+  def generateBehaviorImplementation(ComponentSymbol comp) {
+    var compAST = comp.astNode.get as ASTComponent
+    for (element : compAST.body.elementList) {
+      if (element instanceof ASTBehaviorElement) {
+        return generateBehavior(element as ASTCNode, comp)
+      }
+    }
+
+  }
+
   def generateInput(ComponentSymbol comp) {
     return '''
       package «comp.packageName»;
       
-      «FOR import : comp.imports»
-        import «import»;
+      «FOR _import : comp.imports»
+        import «_import»;
       «ENDFOR»
       
       class «comp.name»Input 
@@ -76,8 +98,8 @@ class ComponentGenerator {
     return '''
       package «comp.packageName»;
       
-      «FOR import : comp.imports»
-        import «import»;
+      «FOR _import : comp.imports»
+        import «_import»;
       «ENDFOR»
       
       class «comp.name»Output 
@@ -127,9 +149,6 @@ class ComponentGenerator {
     '''
   }
 
-  def generateBehavior(ASTBehaviorElement behavior) {
-  }
-
   def generateDeploy(ComponentSymbol comp) {
     var name = comp.name;
     return '''
@@ -165,8 +184,8 @@ class ComponentGenerator {
       
       import «comp.packageName».«comp.name»Input;
       import «comp.packageName».«comp.name»Result;
-      «FOR import : comp.imports»
-        import «import.statement»«IF import.isStar».*«ENDIF»;
+      «FOR _import : comp.imports»
+        import «_import.statement»«IF _import.isStar».*«ENDIF»;
       «ENDFOR»
       import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
       import de.montiarcautomaton.runtimes.timesync.delegation.Port;
@@ -222,7 +241,7 @@ class ComponentGenerator {
           // config parameters
           «FOR param : comp.configParameters»
         this.«param.name» = «param.name»;
-          «ENDFOR»
+        «ENDFOR»
         }
         
         @Override
@@ -304,8 +323,8 @@ class ComponentGenerator {
     return '''
       package «comp.packageName»;
       
-      «FOR import : comp.imports»
-        import «import.statement»«IF import.isStar».*«ENDIF»;
+      «FOR _import : comp.imports»
+        import «_import.statement»«IF _import.isStar».*«ENDIF»;
       «ENDFOR»
       
       import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
@@ -319,16 +338,16 @@ class ComponentGenerator {
        
         // port fields
         «FOR port : comp.ports»»
-          protected Port<«port.typeReference.name»> «port.name»;
-           p// port setter
-           ppublic void setPort«port.name.toFirstUpper»(Port<«port.typeReference.name»> port) {
-           p  this.«port.name» = port;
-           p}
-          
-            // port getter
-            public Port<«port.typeReference.name»> getPort«port.name.toFirstUpper»() {
-              return this.«port.name»;
-            }
+            protected Port<«port.typeReference.name»> «port.name»;
+           p p// port setter
+           p ppublic void setPort«port.name.toFirstUpper»(Port<«port.typeReference.name»> port) {
+           p p  this.«port.name» = port;
+           p p}
+           p
+           p  // port getter
+           p  public Port<«port.typeReference.name»> getPort«port.name.toFirstUpper»() {
+           p    return this.«port.name»;
+           p  }
         «ENDFOR»   
       
         
@@ -344,50 +363,50 @@ class ComponentGenerator {
       
         // subcomponent getter
         «FOR subcomp : comp.subComponents»
-        public «subcomp.componentType.name» getComponent«subcomp.name.toFirstUpper»() {
-          return this.«subcomp.name»;
-        }
+          public «subcomp.componentType.name» getComponent«subcomp.name.toFirstUpper»() {
+            return this.«subcomp.name»;
+          }
         «ENDFOR»
-                
+        
         public «comp.name»(«FOR param : comp.configParameters SEPARATOR ','»«param.type.name» «param.name»«ENDFOR») {
           «IF comp.superComponent.present»
-          super();
+            super();
           «ENDIF»
           «FOR param : comp.configParameters»
-           this.«param.name» = «param.name»;
+            this.«param.name» = «param.name»;
           «ENDFOR»
         }
-
+      
         @Override
         public void setUp() {
-          «IF comp.superComponent.present»
+        «IF comp.superComponent.present»
           super.setUp();
-          «ENDIF»
-          // instantiate all subcomponents
-          «FOR subcomponent : comp.subComponents»
+        «ENDIF»
+        // instantiate all subcomponents
+        «FOR subcomponent : comp.subComponents»
           this.«subcomponent.name» = new «subcomponent.componentType.name»(
           «FOR param : helper.getParamValues(subcomponent) SEPARATOR ','»
-          «param»
+            «param»
           «ENDFOR»);
           
           )
-          «ENDFOR»
-
+        «ENDFOR»
+      
           //set up all sub components  
           «FOR subcomponent : comp.subComponents»
-          this.«subcomponent.name».setUp();
+        this.«subcomponent.name».setUp();
           «ENDFOR»
           
           // set up output ports
           «FOR portOut : comp.outgoingPorts»
-          this.«portOut.name» = new Port<«portOut.typeReference.name»>();
+        this.«portOut.name» = new Port<«portOut.typeReference.name»>();
           «ENDFOR»
           
           // propagate children's output ports to own output ports
           «FOR connector : comp.connectors»
-          «IF !helper.isIncomingPort(comp,connector, false, connector.target)»
-            «helper.getConnectorComponentName(connector,false)».setPort(«helper.getConnectorPortName(connector,false).toFirstUpper»(«helper.getConnectorComponentName(connector, true)».getPort«helper.getConnectorPortName(connector, true).toFirstUpper»());
-          «ENDIF»
+        «IF !helper.isIncomingPort(comp,connector, false, connector.target)»
+          «helper.getConnectorComponentName(connector,false)».setPort(«helper.getConnectorPortName(connector,false).toFirstUpper»(«helper.getConnectorComponentName(connector, true)».getPort«helper.getConnectorPortName(connector, true).toFirstUpper»());
+        «ENDIF»
           «ENDFOR»
           
         }
@@ -403,27 +422,27 @@ class ComponentGenerator {
             this.«portIn.name» = Port.EMPTY;
           }
         «ENDFOR»
-          
-          // connect outputs of children with inputs of children, by giving 
-          // the inputs a reference to the sending ports
-          «FOR connector : comp.connectors»
+        
+        // connect outputs of children with inputs of children, by giving 
+        // the inputs a reference to the sending ports
+        «FOR connector : comp.connectors»
           «IF helper.isIncomingPort(comp, connector, false, connector.target)»
-          	«helper.getConnectorComponentName(connector, false)».setPort«helper.getConnectorPortName(connector, false).toFirstUpper»(«helper.getConnectorComponentName(connector,true)».getPort«helper.getConnectorPortName(connector, true).toFirstUpper»());
+            «helper.getConnectorComponentName(connector, false)».setPort«helper.getConnectorPortName(connector, false).toFirstUpper»(«helper.getConnectorComponentName(connector,true)».getPort«helper.getConnectorPortName(connector, true).toFirstUpper»());
           «ENDIF»
-          «ENDFOR» 
-          
-          // init all subcomponents
-          
-          «FOR subcomponent : comp.subComponents»
+        «ENDFOR» 
+        
+        // init all subcomponents
+        
+        «FOR subcomponent : comp.subComponents»
           this.«subcomponent.name».init();
-          «ENDFOR»
+        «ENDFOR»
         }
       
         @Override
         public void compute() {
           // trigger computation in all subcomponent instances
           «FOR subcomponent : comp.subComponents»
-          this.«subcomponent.name».compute();
+            this.«subcomponent.name».compute();
           «ENDFOR»
         }
       
@@ -431,10 +450,10 @@ class ComponentGenerator {
         public void update() {
           // update subcomponent instances
           «IF comp.superComponent.present»
-          super.update();
+            super.update();
           «ENDIF»
           «FOR subcomponent : comp.subComponents»
-          this.«subcomponent.name».update();
+            this.«subcomponent.name».update();
           «ENDFOR»
         }
         
