@@ -11,6 +11,10 @@ import montiarc._symboltable.ComponentSymbol
 
 class JavaPGenerator extends BehaviorGenerator {
 
+  override String hook(ComponentSymbol comp) {
+    return ''''''
+  }
+
   override String generateCompute(ComponentSymbol comp) {
     return ''''''
   }

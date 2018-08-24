@@ -22,6 +22,8 @@ abstract class BehaviorGenerator {
   
   def String generateGetInitialValues(ComponentSymbol comp);
 
+  def String hook(ComponentSymbol comp);
+
   def String generate(ComponentSymbol comp) {
     return '''
       package «comp.packageName»;
@@ -46,6 +48,8 @@ abstract class BehaviorGenerator {
           private final «param.type.name» «param.name»; 
         «ENDFOR»
         
+        
+        «hook(comp)»
         
         «generateConstructor(comp)»
         
