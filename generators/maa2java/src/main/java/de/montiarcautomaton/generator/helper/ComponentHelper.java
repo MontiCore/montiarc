@@ -467,7 +467,7 @@ public class ComponentHelper {
   
   public List<String> getGenericParameters() {
     List<String> output = new ArrayList<>();
-    if (componentNode.getHead().isPresentGenericTypeParameters()) {
+    if (isGeneric()) {
       List<ASTTypeVariableDeclaration> parameterList = componentNode.getHead()
           .getGenericTypeParameters().getTypeVariableDeclarationList();
       for (ASTTypeVariableDeclaration variableDeclaration : parameterList) {

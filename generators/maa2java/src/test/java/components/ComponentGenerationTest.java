@@ -230,7 +230,9 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     for(ComponentInstanceSymbol instanceSymbol : symbol.getSubComponents()) {
       final ComponentSymbol referencedSymbol
           = instanceSymbol.getComponentType().getReferencedSymbol();
-      anyHasInnerComponent(referencedSymbol);
+      if(anyHasInnerComponent(referencedSymbol)) {
+        return true;
+      }
     }
     return false;
   }

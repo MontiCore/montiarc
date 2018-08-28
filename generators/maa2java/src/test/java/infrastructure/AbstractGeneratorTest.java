@@ -11,19 +11,14 @@ import de.monticore.ast.Comment;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.java.lang.JavaDSLLanguage;
 import de.monticore.symboltable.GlobalScope;
-import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.Symbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
-import montiarc._symboltable.ComponentSymbol;
 import montiarc.helper.JavaHelper;
 import org.junit.Before;
 
-import javax.swing.*;
 import javax.tools.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -55,19 +50,63 @@ public class AbstractGeneratorTest {
       = Paths.get("target/test-models/");
 
   protected MontiArcGeneratorTool generatorTool;
+  protected static final ArrayList<Path> EXCLUDED_MODELS = new ArrayList<>();
+
+  /*
+   * Add excluded models to list
+   */
+  static {
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH
+                            .resolve("components/ComponentFromJar.arc"));
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH
+                            .resolve("components/head/generics/" +
+                                         "UsingComplexGenericParams.arc"));
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH
+                            .resolve("components/head/parameters/" +
+                                         "UseEnumAsTypeArgFromCD.arc"));
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH.resolve("types/Units.cd"));
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH.resolve("types/Simulation.arc"));
+
+    // Reason: Assignment Matching Trafo is missing
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH
+                            .resolve("components/body/automaton/" +
+                                         "transition/assignments/" +
+                                         "ValidAssignmentMatching.arc"));
+
+    /*
+     * Reason: Conflict between port named "input" and parameter "input"
+     * of the compute method in Impl class
+     */
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH
+                            .resolve("components/body/automaton/" +
+                                         "transition/guards/" +
+                                         "GuardHasComplexExpressionWithCD.arc"));
+
+    /*
+     * Reason: Conflict between port named "input" and parameter "input"
+     * of the compute method in Impl class
+     */
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH
+                            .resolve("components/body/automaton/" +
+                                         "transition/guards/GuardIsBoolean.arc"));
+
+  }
 
   /**
    * Invokes the Java compiler on the given files.
+   * Only checks java Files.
    *
    * @param paths Files to compile
    * @return true, if there are no compiler errors
    */
   public static boolean isCompiling(Set<Path> paths){
+    // Remove directories, non java files and convert to File objects
     List<File> files = paths.stream()
                            .filter(path -> !Files.isDirectory(path))
                            .filter(path -> path.getFileName().toString().endsWith(".java"))
                            .map(Path::toFile)
                            .collect(Collectors.toList());
+
     JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     StandardJavaFileManager fileManager
         = compiler.getStandardFileManager(null, null, null);
@@ -112,6 +151,28 @@ public class AbstractGeneratorTest {
 
     // Remove directories which are not whitelisted as folders with test
     // models and files
+    removeNonWhitelistedDirs();
+
+    // Remove invalid or unspecified models
+    InvalidFileDeleter deleter = new InvalidFileDeleter(".arc");
+    Files.walkFileTree(TEST_MODEL_PATH, deleter);
+
+    // Remove files which are declared as valid but which still generate
+    // errors in the generation process
+    for (Path resolvedPath : EXCLUDED_MODELS) {
+      Files.deleteIfExists(resolvedPath);
+    }
+
+    // Generate models (at specified location)
+//    generatorTool.generate(
+//        TEST_MODEL_PATH.toFile(),
+//        TARGET_GENERATED_TEST_SOURCES_DIR.toFile(),
+//        Paths.get("src/main/java").toFile());
+
+    copyJavaTypesToOutput();
+  }
+
+  private void removeNonWhitelistedDirs() throws IOException {
     List<String> allowedDirectories = new ArrayList<>();
     allowedDirectories.add("components");
     allowedDirectories.add("types");
@@ -129,30 +190,9 @@ public class AbstractGeneratorTest {
         delete(path);
       }
     }
+  }
 
-    // Remove invalid or unspecified models
-    InvalidFileDeleter deleter = new InvalidFileDeleter(".arc");
-    Files.walkFileTree(TEST_MODEL_PATH, deleter);
-
-    // Remove files which are declared as valid but which still generate
-    // errors in the generation process
-    List<Path> excludedModels = new ArrayList<>();
-    excludedModels.add(TEST_MODEL_PATH.resolve("components/ComponentFromJar.arc"));
-    excludedModels.add(TEST_MODEL_PATH.resolve("components/head/generics/UsingComplexGenericParams.arc"));
-    excludedModels.add(TEST_MODEL_PATH.resolve("components/head/parameters/UseEnumAsTypeArgFromCD.arc"));
-    excludedModels.add(TEST_MODEL_PATH.resolve("types/Units.cd"));
-    excludedModels.add(TEST_MODEL_PATH.resolve("types/Simulation.arc"));
-
-    for (Path resolvedPath : excludedModels) {
-      Files.deleteIfExists(resolvedPath);
-    }
-
-    // 4. Generate models (at specified location)
-//    generatorTool.generate(
-//        TEST_MODEL_PATH.toFile(),
-//        TARGET_GENERATED_TEST_SOURCES_DIR.toFile(),
-//        Paths.get("src/main/java").toFile());
-
+  private void copyJavaTypesToOutput() throws IOException {
     Files.walkFileTree(TEST_MODEL_PATH, new SimpleFileVisitor<Path>(){
       @Override
       public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {

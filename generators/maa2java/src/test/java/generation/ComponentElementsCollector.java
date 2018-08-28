@@ -10,7 +10,7 @@ import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.monticore.java.javadsl._ast.ASTImportDeclaration;
 import de.monticore.java.javadsl._ast.JavaDSLMill;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
-import de.monticore.mcexpressions._ast.ASTExpression;
+import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.types.types._ast.*;
@@ -23,6 +23,8 @@ import montiarc._visitor.MontiArcVisitor;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static generation.GenerationConstants.PRINTER;
 
 /**
  * Collects information about the generated java classes that is expected
@@ -129,7 +131,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   @Override
   public void visit(ASTParameter node) {
     final String parameterName = node.getName();
-    final ASTType parameterType = node.getType();
+    final ASTType parameterType = boxPrimitiveType(node.getType());
     final Optional<ASTValuation> defaultValue = node.getDefaultValueOpt();
 
     classVisitor.addField(parameterName, parameterType);
@@ -146,7 +148,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
    *  - Field for the behavior implementation
    *  - Information about standard methods
    *    - setUp
-   *    - initTypes
+   *    - init
    *    - initialize
    *    - setResult
    *    - compute
@@ -177,7 +179,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     Method.Builder methodBuilder;
 
-    // initTypes
+    // init
     addInit();
 
     // compute
@@ -258,10 +260,10 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       }
     }
 
-    // initTypes subcomponents
+    // init subcomponents
     for (ComponentInstanceSymbol subCompInstance : this.symbol.getSubComponents()) {
       methodBuilder.addBodyElement(
-          String.format("this.%s.initTypes();", subCompInstance.getName()));
+          String.format("this.%s.init();", subCompInstance.getName()));
     }
 
     classVisitor.addMethod(methodBuilder.build());
@@ -277,25 +279,26 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     methodBuilder.setName("setUp");
 
+    // Decomposed components require additional statements
     if (this.symbol.isDecomposed()) {
       for (ComponentInstanceSymbol subCompInstance : this.symbol.getSubComponents()) {
-        StringBuilder parameterString = new StringBuilder();
-        for (ASTExpression astExpression : subCompInstance.getConfigArguments()) {
-          parameterString.append(GenerationConstants.PRINTER.prettyprint(astExpression))
-              .append(",");
-        }
-        if (parameterString.length() > 0) {
-          parameterString.deleteCharAt(parameterString.length() - 1);
-        }
+
+        String parameterString = subCompInstance.getConfigArguments()
+            .stream()
+            .map(PRINTER::prettyprint)
+            .collect(Collectors.joining(", "));
+
         // TODO Add parameters
         methodBuilder.addBodyElement(
             String.format("this.%s = new %s(%s)",
                 subCompInstance.getName(),
                 helper.getSubComponentTypeName(subCompInstance),
-                parameterString.toString())
+                parameterString)
         );
       }
 
+      // There should be a line present for each subcomponent which calls
+      // the subcomponents setUp method
       for (ComponentInstanceSymbol subCompInstance : this.symbol.getSubComponents()) {
         methodBuilder.addBodyElement(
             String.format("this.%s.setUp();", subCompInstance.getName()));
@@ -307,7 +310,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       methodBuilder.addBodyElement(
           String.format("this.%s = new Port<%s>();",
               outPort.getName(),
-              GenerationConstants.PRINTER.prettyprint(astPort.getType())));
+              PRINTER.prettyprint(boxPrimitiveType(astPort.getType()))));
     }
 
 
@@ -483,26 +486,46 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     if (this.symbol.isAtomic()) {
       StringBuilder inputVariable = new StringBuilder();
       inputVariable.append("final ").append(componentName).append("Input");
-      inputVariable.append("input = new ");
-      inputVariable.append(componentName).append("Input(");
-      for (PortSymbol portSymbol : symbol.getIncomingPorts()) {
-        inputVariable.append("this.").append(portSymbol.getName());
-        inputVariable.append(".getCurrentValue(),");
+
+      if (!this.symbol.getFormalTypeParameters().isEmpty()) {
+        inputVariable.append(getTypeParameterList());
       }
-      inputVariable.deleteCharAt(inputVariable.length() - 1);
+
+      inputVariable.append("input = new ");
+      inputVariable.append(componentName).append("Input");
+
+      // Generic Type arguments
+      if(!this.symbol.getFormalTypeParameters().isEmpty()){
+        inputVariable.append(getTypeParameterList());
+      }
+
+      inputVariable.append("(");
+      final String paramList
+          = symbol.getIncomingPorts()
+                .stream()
+                .map(p -> "this." + p.getName() + ".getCurrentValue()")
+                .collect(Collectors.joining(", "));
+      inputVariable.append(paramList);
       inputVariable.append(");");
       methodBuilder.addBodyElement(inputVariable.toString());
 
-      methodBuilder.addBodyElement(
-          String.format("try {\n"
-                            + "      // perform calculations\n"
-                            + "      final %sResult result = behaviorImpl.compute(input);\n"
-                            + "      \n"
-                            + "      // set results to ports\n"
-                            + "      setResult(result);\n"
-                            + "    } catch (Exception e) {\n"
-                            + "      Log.error(\"%s\", e);\n"
-                            + "    }", componentName, componentName));
+      StringBuilder tryBlock = new StringBuilder();
+      tryBlock
+          .append("try {")
+          .append("// perform calculations")
+          .append("final ").append(componentName).append("Result");
+      if (!this.symbol.getFormalTypeParameters().isEmpty()) {
+        tryBlock.append(getTypeParameterList());
+      }
+      tryBlock.append("result = behaviorImpl.compute(input);");
+      tryBlock.append("// set results to ports");
+      tryBlock.append("setResult(result);");
+      tryBlock.append("} catch (Exception e) { ");
+      tryBlock.append("Log.error(")
+          .append("\"").append(componentName).append("\"")
+          .append(", e);}");
+      methodBuilder.addBodyElement(tryBlock.toString());
+
     } else {
       for (ComponentInstanceSymbol subCompInstance : this.symbol.getSubComponents()) {
         methodBuilder.addBodyElement(
@@ -510,6 +533,19 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       }
     }
     classVisitor.addMethod(methodBuilder.build());
+  }
+
+  private String getTypeParameterList() {
+    StringBuilder typeParamList = new StringBuilder();
+    typeParamList.append("<");
+    final String typeParameterList
+        = this.symbol.getFormalTypeParameters()
+              .stream()
+              .map(Symbol::getName)
+              .collect(Collectors.joining(", "));
+    typeParamList.append(typeParameterList);
+    typeParamList.append(">");
+    return typeParamList.toString();
   }
 
   /**
@@ -537,11 +573,15 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     }
     Method.Builder methodBuilder;
     methodBuilder = Method.getBuilder().setName("initialize");
-    methodBuilder.addBodyElement(
-        String.format("final %sResult result = %s.%s;",
-            componentName,
-            "behaviorImpl",
-            "getInitialValues()"));
+    final StringBuilder resultString = new StringBuilder();
+    resultString.append("final ").append(componentName).append("Result");
+    if(!this.symbol.getFormalTypeParameters().isEmpty()){
+      resultString.append(getTypeParameterList());
+    }
+    resultString
+        .append(" result = ")
+        .append("behaviorImpl").append(".").append("getInitialValues()").append(";");
+    methodBuilder.addBodyElement(resultString.toString());
     methodBuilder.addBodyElement("setResult(result);");
     classVisitor.addMethod(methodBuilder.build());
   }
@@ -678,13 +718,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   @Override
   public void visit(ASTPort node) {
     final PortSymbol symbol = (PortSymbol) node.getSymbolOpt().get();
-    ASTType type;
-    if(node.getType() instanceof ASTPrimitiveType){
-      // Convert primitive types to their boxed types
-      type = boxPrimitiveType((ASTPrimitiveType) node.getType());
-    } else {
-      type = node.getType();
-    }
+    ASTType type = boxPrimitiveType(node.getType());
     // Type parameters for the Port field type
     // The type parameters consist of the type of the ASTPort type
     final ASTTypeArguments typeArgs = JavaDSLMill.typeArgumentsBuilder()
@@ -710,24 +744,25 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     // Add expectations for setter and getter methods
     // Setter
     for (String name : names) {
-      Method.Builder setter
-          = Method
-                .getBuilder()
-                .setReturnType(GenerationConstants.VOID_TYPE)
-                .addParameter("port", expectedType)
-                .setName("setPort" + capitalizeFirst(name));
       if (this.symbol.isDecomposed() || node.isIncoming()) {
+        Method.Builder setter
+            = Method
+                  .getBuilder()
+                  .setReturnType(GenerationConstants.VOID_TYPE)
+                  .addParameter("port", expectedType)
+                  .setName("setPort" + capitalizeFirst(name));
         classVisitor.addMethod(setter.build());
       }
 
       // Different object, due to naming differences between component
       // class and result class
       if (node.isOutgoing()) {
-        setter = Method
-                     .getBuilder()
-                     .setReturnType(GenerationConstants.VOID_TYPE)
-                     .addParameter(name, type)
-                     .setName("set" + capitalizeFirst(name));
+        Method.Builder setter
+            = Method
+                  .getBuilder()
+                  .setReturnType(GenerationConstants.VOID_TYPE)
+                  .addParameter(name, type)
+                  .setName("set" + capitalizeFirst(name));
         resultVisitor.addMethod(setter.build());
       }
     }
@@ -755,28 +790,55 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     }
   }
 
-  private ASTType boxPrimitiveType(ASTPrimitiveType primitiveType) {
-    ASTType result = types.get("OBJECT_TYPE");
-    if (primitiveType.isBoolean()) {
-      result = types.get("BOOLEAN_TYPE");
-    } else if(primitiveType.isByte()){
-      result = types.get("BYTE_TYPE");
-    } else if(primitiveType.isChar()){
-      result = types.get("CHARACTER_TYPE");
-    } else if(primitiveType.isDouble()){
-      result = types.get("DOUBLE_TYPE");
-    } else if(primitiveType.isFloat()){
-      result = types.get("FLOAT_TYPE");
-    } else if(primitiveType.isInt()){
-      result = types.get("INTEGER_TYPE");
-    } else if(primitiveType.isLong()){
-      result = types.get("LONG_TYPE");
-    } else if(primitiveType.isShort()){
-      result = types.get("SHORT_TYPE");
-    }
-    return result;
-  }
+  private ASTType boxPrimitiveType(ASTType type){
+    if(type instanceof ASTPrimitiveArrayType){
+      // Box the inner type of a primitive array type
+      final ASTPrimitiveArrayType primitiveArrayType = (ASTPrimitiveArrayType) type;
+      ASTType boxedType = boxPrimitiveType(primitiveArrayType.getComponentType());
+      return JavaDSLMill.primitiveArrayTypeBuilder()
+          .setDimensions(primitiveArrayType.getDimensions())
+          .setComponentType(boxedType)
+          .build();
 
+    } else if(type instanceof ASTSimpleReferenceType){
+      final ASTSimpleReferenceType simpleReferenceType = (ASTSimpleReferenceType) type;
+      ASTSimpleReferenceTypeBuilder resultSimpleRef
+          = JavaDSLMill.simpleReferenceTypeBuilder();
+      resultSimpleRef.addAllNames(simpleReferenceType.getNameList());
+      if (simpleReferenceType.getTypeArgumentsOpt().isPresent()) {
+        final ASTTypeArgumentsBuilder typeArgumentsBuilder = JavaDSLMill.typeArgumentsBuilder();
+        for (ASTTypeArgument typeArgument : simpleReferenceType.getTypeArguments().getTypeArgumentList()) {
+          ASTType boxedTypeArg = boxPrimitiveType((ASTType) typeArgument);
+          typeArgumentsBuilder.addTypeArgument(boxedTypeArg);
+        }
+        resultSimpleRef.setTypeArguments(typeArgumentsBuilder.build());
+      }
+      return resultSimpleRef.build();
+
+    } else if(type instanceof ASTPrimitiveType){
+      ASTPrimitiveType primitiveType = (ASTPrimitiveType) type;
+      ASTType result = types.get("OBJECT_TYPE");
+      if (primitiveType.isBoolean()) {
+        result = types.get("BOOLEAN_TYPE");
+      } else if(primitiveType.isByte()){
+        result = types.get("BYTE_TYPE");
+      } else if(primitiveType.isChar()){
+        result = types.get("CHARACTER_TYPE");
+      } else if(primitiveType.isDouble()){
+        result = types.get("DOUBLE_TYPE");
+      } else if(primitiveType.isFloat()){
+        result = types.get("FLOAT_TYPE");
+      } else if(primitiveType.isInt()){
+        result = types.get("INTEGER_TYPE");
+      } else if(primitiveType.isLong()){
+        result = types.get("LONG_TYPE");
+      } else if(primitiveType.isShort()){
+        result = types.get("SHORT_TYPE");
+      }
+      return result;
+    }
+    return type;
+  }
 
   @Override
   public void visit(ASTAutomaton node) {
