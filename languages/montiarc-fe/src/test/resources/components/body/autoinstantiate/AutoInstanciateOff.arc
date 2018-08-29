@@ -1,10 +1,12 @@
-package unused.components.body.autoinstantiate;
+package components.body.autoinstantiate;
 
 /**
  * Valid model.
  */
 component AutoInstanciateOff {
-	
+
+	autoinstantiate off;
+
 	port 
         in String strIn;
 	

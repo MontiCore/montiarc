@@ -29,33 +29,31 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 
 public class AutoInstantiationTest extends AbstractCoCoTest {
-  
+
   private static final String PACKAGE = "components.body.autoinstantiate";
-  
+
   @BeforeClass
   public static void setUp() {
     // ensure an empty log
     Log.getFindings().clear();
     Log.enableFailQuick(false);
   }
-  
+
   private ComponentSymbol loadComponent(String unqualifiedComponentName) {
     Scope symTab = this.loadDefaultSymbolTable();
-    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
+    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         PACKAGE + "." + unqualifiedComponentName, ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
     return comp;
   }
-  
+
   /**
    * There is only one Subcomponent instance symbol not 2 like there was in MontiArc 3.<br>
-   * 
    * <pre>
    * comp B {
    *   comp A x;
    * }
    * </pre>
-   * 
    * MontiArc3 subInstances: {a, x} <br>
    * MontiArc4 subInstances: {x}
    */
@@ -70,9 +68,9 @@ public class AutoInstantiationTest extends AbstractCoCoTest {
     for (ComponentInstanceSymbol s : subcomps) {
       assertEquals("y", s.getName());
     }
-    
+
   }
-  
+
   @Test
   public void testBWithSubAWithoutInstanceName() {
     ComponentSymbol comp = this.loadComponent("BWithSubAWithoutInstanceName");
@@ -85,7 +83,7 @@ public class AutoInstantiationTest extends AbstractCoCoTest {
       assertEquals("atomicComponent", s.getName());
     }
   }
-  
+
   @Test
   public void testComponentWithPortName() {
     ComponentSymbol comp = this.loadComponent("ComponentWithPortName");
@@ -98,7 +96,7 @@ public class AutoInstantiationTest extends AbstractCoCoTest {
       assertEquals("x", p.getName());
     }
   }
-  
+
   @Test
   public void testComponentWithSimplifiedPortDef() {
     ComponentSymbol comp = this.loadComponent("ComponentWithSimplifiedPortDef");
@@ -106,7 +104,7 @@ public class AutoInstantiationTest extends AbstractCoCoTest {
     assertEquals(5, comp.getAllIncomingPorts().size());
     assertEquals(1, comp.getAllOutgoingPorts().size());
   }
-  
+
   @Test
   public void testComponentWithSimplifiedPortDef2() {
     ComponentSymbol comp = this.loadComponent("ComponentWithSimplifiedPortDef2");
@@ -114,7 +112,7 @@ public class AutoInstantiationTest extends AbstractCoCoTest {
     assertEquals(5, comp.getAllIncomingPorts().size());
     assertEquals(1, comp.getAllOutgoingPorts().size());
   }
-  
+
   @Test
   public void testComponentWithoutPortName() {
     ComponentSymbol comp = this.loadComponent("ComponentWithoutPortName");
@@ -127,19 +125,19 @@ public class AutoInstantiationTest extends AbstractCoCoTest {
       assertEquals("string", StringTransformations.uncapitalize(p.getTypeReference().getName()));
     }
   }
-  
+
   @Test
   public void testComponentWithSimplifiedVariableDef() {
     ComponentSymbol comp = this.loadComponent("ComponentWithSimplifiedVariableDef");
     assertEquals(6, comp.getVariables().size());
   }
-  
+
   @Test
   public void testComponentWithSimplifiedVariableDef2() {
     ComponentSymbol comp = this.loadComponent("ComponentWithSimplifiedVariableDef2");
     assertEquals(6, comp.getVariables().size());
   }
-  
+
   /**
    * Assure that an inner component with formal type parameters is not auto-instantiated
    */
@@ -157,6 +155,15 @@ public class AutoInstantiationTest extends AbstractCoCoTest {
     ComponentSymbol comp = this.loadComponent("AutoInstanciateOn");
 
     assertEquals(2, comp.getSubComponents().size());
+  }
+
+  @Test
+  public void testAutoInstantiateOff() {
+    ComponentSymbol comp = this.loadComponent("AutoInstanciateOff");
+
+    assertEquals(1, comp.getSubComponents().size());
+    ComponentInstanceSymbol subcoInstance = comp.getSubComponents().iterator().next();
+    assertEquals(1, subcoInstance.getComponentType().getReferencedSymbol().getSubComponents().size());
   }
 
   @Test
@@ -197,15 +204,40 @@ public class AutoInstantiationTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("Waits for https://git.rwth-aachen.de/monticore/montiarc/core/issues/179." +
-              "Needs adding the new CoCo and adjusting the error information.")
   public void testAutoInstantiateWarning() {
+    Log.getFindings().clear();
     final ASTMontiArcNode node
         = loadComponentAST(PACKAGE + "." + "AutoInstantiateWarning");
     final ExpectedErrorInfo errors
         = new ExpectedErrorInfo(2, "xMA038");
     final MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-
-    checkInvalid(checker, node, errors);
+    checker.checkAll(node);
+    errors.checkExpectedPresent(Log.getFindings(), "");
   }
+
+
+  @Test
+  public void testNamedInnerComponentCompletionAutoInstOff() {
+    checkValid(PACKAGE + "." + "NamedInnerComponentCompletionAutoInstOff");
+    final ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "NamedInnerComponentCompletionAutoInstOff");
+    assertTrue(node.getSymbolOpt().isPresent());
+
+    ComponentSymbol componentSymbol= (ComponentSymbol) node.getSymbolOpt().get();
+    assertEquals(2, componentSymbol.getInnerComponents().size());
+    assertEquals(1, componentSymbol.getSubComponents().size());
+  }
+
+  @Test
+  public void testNamedInnerComponentCompletionAutoInstOn() {
+    final ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "NamedInnerComponentCompletionAutoInstOn");
+    checkValid(PACKAGE + "." + "NamedInnerComponentCompletionAutoInstOn");
+    assertTrue(node.getSymbolOpt().isPresent());
+
+    ComponentSymbol componentSymbol= (ComponentSymbol) node.getSymbolOpt().get();
+    assertEquals(2, componentSymbol.getInnerComponents().size());
+    assertEquals(2, componentSymbol.getSubComponents().size());
+  }
+
 }

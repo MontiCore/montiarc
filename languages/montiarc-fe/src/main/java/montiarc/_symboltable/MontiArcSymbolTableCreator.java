@@ -391,7 +391,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
           .anyMatch(i -> c.getName().equals(i.getComponentType().getName())));
       componentSymbols.forEach(componentSymbol -> {
         if (componentSymbol.hasConfigParameters() || componentSymbol.hasFormalTypeParameters()) {
-          Log.error("0xMA2413");
+          Log.error(String.format("0xMA038 It was not possible to automatically create an instance of component %s because it has generic or constuctor parameters", componentSymbol.getName()));
         }
         else {
           ComponentSymbolReference symbolReference = new ComponentSymbolReference(
@@ -418,7 +418,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
 
       if (node.getInstanceNameOpt().isPresent()) {
         if(component.hasFormalTypeParameters() || component.hasConfigParameters()){
-
+          Log.error(String.format("0xMA038 It was not possible to automatically create an instance of component %s because it has generic or constuctor parameters", component.getName()));
         }else {
           // create instance
           String instanceName = node.getInstanceNameOpt().get();
