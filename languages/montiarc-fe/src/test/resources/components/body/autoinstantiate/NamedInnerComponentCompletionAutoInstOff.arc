@@ -1,9 +1,11 @@
-package unused.components.body.autoinstantiate;
+package components.body.autoinstantiate;
 
 /**
  * Valid model.
  */
-component NamedInnerComponentCompletionAutoInstOn {
+component NamedInnerComponentCompletionAutoInstOff {
+
+    autoinstantiate off;
 
     port 
         in String sIn,
@@ -20,6 +22,6 @@ component NamedInnerComponentCompletionAutoInstOn {
             in String;
     }
     
-    connect sIn -> na.sIn, otherNotNamedInnerComponent;
+    connect sIn -> na.sIn;
     connect na.sOut1 -> sOut1;
 }
