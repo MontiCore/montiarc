@@ -450,17 +450,12 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       parameters.deleteCharAt(parameters.length() - 1);
     }
 
-    // Expect impl instance of not decomposed
+    // Expect impl instance if not decomposed
     if (this.symbol.isAtomic()) {
       StringBuilder implAssignment = new StringBuilder("behaviorImpl = new ");
       implAssignment.append(capitalizeFirst(componentName)).append("Impl");
       if (!symbol.getFormalTypeParameters().isEmpty()) {
-        implAssignment.append("<");
-        for (JTypeSymbol typeSymbol : symbol.getFormalTypeParameters()) {
-          implAssignment.append(typeSymbol.getName()).append(",");
-        }
-        implAssignment.deleteCharAt(implAssignment.length() - 1);
-        implAssignment.append(">");
+        implAssignment.append(getTypeParameterList());
       }
       implAssignment.append("(").append(parameters.toString()).append(");");
       builder.addBodyElement(implAssignment.toString());
@@ -744,13 +739,15 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     // Add expectations for setter and getter methods
     // Setter
     for (String name : names) {
+      final String portNameCapitalized = capitalizeFirst(name);
       if (this.symbol.isDecomposed() || node.isIncoming()) {
         Method.Builder setter
             = Method
                   .getBuilder()
                   .setReturnType(GenerationConstants.VOID_TYPE)
                   .addParameter("port", expectedType)
-                  .setName("setPort" + capitalizeFirst(name));
+                  .addBodyElement("this." + name + " = port;")
+                  .setName("setPort" + portNameCapitalized);
         classVisitor.addMethod(setter.build());
       }
 
@@ -762,7 +759,8 @@ public class ComponentElementsCollector implements MontiArcVisitor {
                   .getBuilder()
                   .setReturnType(GenerationConstants.VOID_TYPE)
                   .addParameter(name, type)
-                  .setName("set" + capitalizeFirst(name));
+                  .addBodyElement("return this." + name + ";")
+                  .setName("set" + portNameCapitalized);
         resultVisitor.addMethod(setter.build());
       }
     }

@@ -82,10 +82,12 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
         }
       }
     }
-
+    String printedParameters = printWithoutWhitespace(signature.getFormalParameters());
+    String printedReturnType = printWithoutWhitespace(signature.getReturnType());
     final boolean removed = methods.removeIf(m -> methodName.equals(m.getName())
-        && signature.getFormalParameters().deepEquals(m.getParams())
-        && signature.getReturnType().deepEquals(m.getReturnType()));
+        && printedParameters.equals(printWithoutWhitespace(m.getParams()))
+        && printedReturnType.equals(printWithoutWhitespace(m.getReturnType()))
+    );
     if(!removed){
       Log.error("Found unexpected method in " + this.className + ": " + methodName);
     }
@@ -248,7 +250,17 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     final ASTType type = node.getType();
     for (ASTVariableDeclarator declarator : node.getVariableDeclaratorList()) {
       final String name = declarator.getDeclaratorId().getName();
-      fields.removeIf(field -> field.getName().equals(name) && field.getType().deepEquals(type));
+      final String printedType = printWithoutWhitespace(type);
+      final boolean removed
+          = fields.removeIf(
+              field -> field.getName().equals(name)
+                           && printWithoutWhitespace(field.getType()).equals(printedType));
+      if(!removed){
+        Log.error(
+            String.format("Found unexpected field in %s: %s",
+                this.className,
+                declarator.getDeclaratorId().getName()));
+      }
     }
   }
 
