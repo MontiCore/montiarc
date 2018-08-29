@@ -3,17 +3,17 @@ package components.body.subcomponents;
 /**
  * Valid model.
  *
- * Subcomponent count: 6
+ * Subcomponent count: 5
  */
 component InnerComponents {
   component SimpleComponentWithAutomaton ref;
   component Inner ref1;
 
-  // Instance created
+  // Instance not created because instance of this type already exists
   component Inner {
     component SimpleComponentWithAutomaton ref;
 
-    // TODO: Instance created?
+    // Instance not created because instance of this type already exists
     component InnerInner {
       component SimpleComponentWithAutomaton ref;
     }

@@ -537,7 +537,7 @@ public class SubComponentTest extends AbstractCoCoTest {
   public void testInnerComponents2() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "InnerComponents");
     
-    assertEquals("6 subcomponents expected", 6, comp
+    assertEquals("6 subcomponents expected", 5, comp
         .getSubComponents().size());
     assertEquals(7, comp.getInnerComponents().size());
     
@@ -556,7 +556,7 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertNotNull(inner);
     assertEquals("Inner", inner.getName());
     assertEquals(PACKAGE + "." + "InnerComponents.Inner", inner.getFullName());
-    assertEquals("1 auto-instance and 2 named subcomponents", 3, inner.getSubComponents().size());
+    assertEquals("2 named subcomponents", 2, inner.getSubComponents().size());
     
     // usage of external component type as sub component in same package in
     // inner component

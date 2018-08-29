@@ -151,13 +151,12 @@ public class AutoInstantiationTest extends AbstractCoCoTest {
 
   /**
    * Test that auto-instantiation is working as expected
-   * TODO: Adjust expected value to 2 after researching behaviour with explicit instance present
    */
   @Test
   public void testAutoInstanciateOn() {
     ComponentSymbol comp = this.loadComponent("AutoInstanciateOn");
 
-    assertEquals(3, comp.getSubComponents().size());
+    assertEquals(2, comp.getSubComponents().size());
   }
 
   @Test
