@@ -10,7 +10,7 @@ component ReferenceCycle {
     port
         in Integer portIn;
     
-    component Inner1 {
+    component Inner1 inner1{
         port 
             in Integer portIn;
             

@@ -257,6 +257,17 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   MontiArcAutoConnect implements MontiArcConfig = 
     "autoconnect" Stereotype?
     (["type"] | ["port"] | ["off"]) ";";
+
+  /**
+     * AutoInstantiate is used to create instances of
+     * inner classes if automatically if there is no instance.
+     *
+     * @attribute on use autoinstantiate (default)
+     * @attribute off do not use autoinstantiate
+     */
+  MontiArcAutoInstantiate implements MontiArcConfig =
+     "autoinstantiate" Stereotype?
+     (["on"] | ["off"]) ";";
     
   interface InitializerElement extends Element;
   interface BehaviorElement extends Element;

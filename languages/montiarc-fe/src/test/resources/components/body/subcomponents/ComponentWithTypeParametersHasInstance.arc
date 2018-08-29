@@ -9,9 +9,11 @@ component ComponentWithTypeParametersHasInstance {
   port in String pIn,
        out Integer pOut;
 
-  component Inner<T> inner<String> {
+  component Inner<T> {
     port in T tIn;
     port out Integer tOut;
   }
+
+  component Inner<String>;
   
 }

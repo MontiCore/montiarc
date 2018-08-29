@@ -8,7 +8,7 @@ package components.body.subcomponents;
  */
 component ComponentInstanceNamesAmbiguous {
  
-  component Inner {}
+  component Inner inner{}
   component Inner inner;
   
   component Inner2 i {}
