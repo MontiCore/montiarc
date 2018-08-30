@@ -50,7 +50,6 @@ public class AJavaTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("Waiting for InputUnchangedVisitor")
   public void testDistanceLogger() {
     final String qualifiedModelName = PACKAGE + "." + "DistanceLogger";
     final MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
