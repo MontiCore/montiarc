@@ -221,7 +221,7 @@ public class ComponentHelper {
     return printFqnTypeName(comp, var.getTypeReference());
   }
   
-  public String printInit(ASTValueInitialization init) {
+  public static String printInit(ASTValueInitialization init) {
     String ret = "";
     JavaDSLPrettyPrinter printer = new JavaDSLPrettyPrinter(new IndentPrinter());
     String name = Names.getQualifiedName(init.getQualifiedName().getPartList());
@@ -496,4 +496,5 @@ public class ComponentHelper {
   public List<PortSymbol> getAllOutPorts() {
     return component.getAllOutgoingPorts();
   }
+
 }
