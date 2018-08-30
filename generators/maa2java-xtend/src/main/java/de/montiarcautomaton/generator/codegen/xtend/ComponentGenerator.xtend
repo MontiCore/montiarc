@@ -10,15 +10,41 @@ package de.montiarcautomaton.generator.codegen.xtend
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import de.monticore.ast.ASTCNode
 import java.io.File
+import java.io.PrintWriter
 import montiarc._ast.ASTAutomatonBehavior
 import montiarc._ast.ASTBehaviorElement
 import montiarc._ast.ASTComponent
 import montiarc._ast.ASTJavaPBehavior
 import montiarc._symboltable.ComponentSymbol
+import java.nio.file.Paths
+import java.io.FileWriter
+import de.monticore.io.FileReaderWriter
+import java.nio.file.Path
 
 class ComponentGenerator {
 
-  def generateAll(File targetPath, File hwcPath, ComponentSymbol compSym) {
+  def generateAll(File targetPath, ComponentSymbol comp) {
+    toFile(targetPath, comp.name + "Input", generateInput(comp));
+    toFile(targetPath, comp.name + "Result", generateResult(comp));
+    if (comp.isAtomic) {
+      toFile(targetPath, comp.name, generateAtomicComponent(comp));
+      toFile(targetPath, comp.name + "Impl", generateBehaviorImplementation(comp));
+    } else {
+      toFile(targetPath, comp.name, generateComposedComponent(comp));
+    }
+
+    if (comp.getStereotype().containsKey("deploy")) {
+      toFile(targetPath, "Deploy" + comp.name, generateDeploy(comp));
+
+    }
+
+  }
+
+  def toFile(File targetPath, String name, String content) {
+    var Path path = Paths.get(targetPath.absolutePath + "\\" + name + ".java")
+    var FileReaderWriter writer = new FileReaderWriter()
+    println("Writing to file " + path + ".");
+    writer.storeInFile(path, content)
   }
 
   def dispatch generateBehavior(ASTJavaPBehavior ajava, ComponentSymbol comp) {
@@ -319,7 +345,7 @@ class ComponentGenerator {
   }
 
   def generateComposedComponent(ComponentSymbol comp) {
-    var helper = ComponentHelper.newInstance;
+    var helper = new ComponentHelper(comp);
     return '''
       package «comp.packageName»;
       
@@ -331,7 +357,6 @@ class ComponentGenerator {
       import de.montiarcautomaton.runtimes.timesync.delegation.Port;
       
       public class «comp.name»
-      public class ${name}
       «IF !comp.formalTypeParameters.empty» < «FOR generic : comp.formalTypeParameters SEPARATOR ','» «generic.name» «ENDFOR»>«ENDIF»
       «IF comp.superComponent.present» extends «comp.superComponent.get.fullName»Input«ENDIF»
       implements IComponent {

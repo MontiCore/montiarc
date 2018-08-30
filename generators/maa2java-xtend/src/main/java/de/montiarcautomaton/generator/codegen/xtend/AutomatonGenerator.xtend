@@ -41,7 +41,7 @@ class AutomatonGenerator extends BehaviorGenerator {
   override String generateCompute(ComponentSymbol comp) {
     var resultName = comp.name + "Result"
     var ASTAutomaton automaton = null
-    var AutomatonHelper helper = AutomatonHelper.newInstance
+    var AutomatonHelper helper = new AutomatonHelper(comp)
     for (ASTElement element : (comp.astNode.get as ASTComponent).body.elementList) {
       if(element instanceof ASTAutomatonBehavior) {
         automaton = element.automaton
@@ -95,7 +95,7 @@ class AutomatonGenerator extends BehaviorGenerator {
   override String generateGetInitialValues(ComponentSymbol comp) {
     var resultName = comp.name + "Result"
     var ASTAutomaton automaton = null
-    var AutomatonHelper helper = AutomatonHelper.newInstance
+    var AutomatonHelper helper = new AutomatonHelper(comp)
     for (ASTElement element : (comp.astNode.get as ASTComponent).body.elementList) {
       if(element instanceof ASTAutomatonBehavior) {
         automaton = element.automaton
@@ -109,7 +109,7 @@ class AutomatonGenerator extends BehaviorGenerator {
         
     
         // initial reaction
-        «FOR assignment : helper.getInitialReaction(automaton.getInitialStateDeclaration(0).symbolOpt.get as StateSymbol)»
+        «FOR assignment : helper.getInitialReaction(helper.initialState)»
           «IF assignment.isAssignment»
             «IF helper.isPort(assignment.left)»
               result.set«assignment.left.toFirstUpper»(«assignment.right»);
