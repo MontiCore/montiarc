@@ -2,15 +2,15 @@ package components.body.subcomponents;
 
 /**
 * Invalid model. See comments below.
-* @implements R13: Subcomponent reference cycles are forbidden. (p. 68, lst. 3.48)
-* TODO Add test
+* @implements [Hab16] R13: Subcomponent reference cycles are forbidden. (
+*  p. 68, lst. 3.48)
 */
 component ReferenceCycle {
 
     port
         in Integer portIn;
     
-    component Inner1 {
+    component Inner1 inner1{
         port 
             in Integer portIn;
             

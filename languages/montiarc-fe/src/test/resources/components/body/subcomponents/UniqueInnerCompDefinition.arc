@@ -6,7 +6,9 @@ package components.body.subcomponents;
  *
  * Formerly named "CG9" in MontiArc3 with 6 errors
  *
- * @implements TODO
+ * @implements [Hab16] B1: All names of model elements within a component
+ * namespace have to be unique. (p. 59. Lst. 3.31)
+ * TODO Review literature
  */
 component UniqueInnerCompDefinition {
     

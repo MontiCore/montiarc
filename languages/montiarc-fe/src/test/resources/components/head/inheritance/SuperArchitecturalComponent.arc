@@ -4,7 +4,7 @@ import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
 
 /**
  * Valid model.
- * Used as supercomponent. Untested
+ * Used as supercomponent.
  */
 component SuperArchitecturalComponent {
     

@@ -20,7 +20,15 @@ public class ConnectorSourceAndTargetComponentDiffer implements MontiArcASTCompo
    */
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol componentSymbol = (ComponentSymbol) node.getSymbol().get();
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
+    ComponentSymbol componentSymbol = (ComponentSymbol) node.getSymbolOpt().get();
     Collection<ConnectorSymbol> connectors = componentSymbol.getConnectors();
     
     for (ConnectorSymbol cs : connectors) {
@@ -35,7 +43,8 @@ public class ConnectorSourceAndTargetComponentDiffer implements MontiArcASTCompo
 
       if (connectorSource.equals(connectorTarget)) {
         Log.error(
-            "0xMA075 Source and target port of connector are ports from the same component1.",
+            "0xMA075 Source and target port of connector are ports " +
+                "from the same component.",
             cs.getAstNode().get().get_SourcePositionStart());
       }
 
@@ -43,7 +52,8 @@ public class ConnectorSourceAndTargetComponentDiffer implements MontiArcASTCompo
         if (target.isPresent())
           if (source.get().getEnclosingScope().equals(target.get().getEnclosingScope())) {
             Log.error(
-                "0xMA075 Source and target port of connector are ports from the same component.",
+                "0xMA075 Source and target port of connector are " +
+                    "ports from the same component.",
                 source.get().getAstNode().get().get_SourcePositionStart());
           }
         

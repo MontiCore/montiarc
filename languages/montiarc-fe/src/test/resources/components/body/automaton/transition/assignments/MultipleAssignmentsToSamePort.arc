@@ -3,7 +3,8 @@ package components.body.automaton.transition.assignments;
 /*
  * Invalid model.
  *
- * @implements TODO
+ * @implements [RRW14a] S3ts: In every cycle at most one message per port
+ * is sent (partially).
  */
 component MultipleAssignmentsToSamePort {
 

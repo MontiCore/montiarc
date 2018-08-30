@@ -12,8 +12,7 @@ component InPortUniqueSender {
   component B {
     port in String bIn;
   }
-  
-  connect a.aOut -> b.bIn;
+
   
   component B myB;
   

@@ -4,7 +4,6 @@ import types.MyEnum;
 
 /*
  * Valid model.
- * TODO Add test
  */
 component UseEnumAsTypeArg {
     

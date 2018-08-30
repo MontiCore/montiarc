@@ -6,7 +6,8 @@ import types.MyConstants;
 /*
  * Invalid model.
  *
- * TODO Add test
+ * @implements No literature reference
+ * TODO Review literature
  */
 component InvalidConfigArgs {
 

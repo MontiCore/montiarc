@@ -24,7 +24,7 @@ component AutoConnectPorts {
 
 		 data unconnected
 	*/
-	component A;
+	component DummyComponent1 a;
 
 	/*
 		 in: strIn (String), intIn (Integer)
@@ -32,13 +32,13 @@ component AutoConnectPorts {
 
 		 strIn unconnected
 	*/
-	component B;
+	component DummyComponent2 b;
 
 	/*
 		in: intIn (Integer)
 		out: bb (bool)
 	*/
-	component C;
+	component DummyComponent3 c;
 
 	/*
 		in: dataSthElse (String), myInt, bool
@@ -47,7 +47,7 @@ component AutoConnectPorts {
 		dataSthElse unconnected
 		sthElse unconnected
 	*/
-	component D;
+	component DummyComponent4 d;
 
 	connect strIn -> a.strIn;
 	connect c.bb -> d.bool;

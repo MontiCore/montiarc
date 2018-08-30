@@ -1,7 +1,8 @@
 package components.body.automaton.transition;
 
 /**
- * Invalid model. Uses undefined states C, D.
+ * Invalid model.
+ * Uses undefined states C, D.
  *
  * @implements [Wor16] AR3: Used states exist (p. 104. Lst. 5.21)
  */

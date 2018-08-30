@@ -34,9 +34,9 @@ public class UseOfUndeclaredField
     // only check left side of IOAssignment, right side is implicitly checked
     // when resolving type of the valuations
     if(node.isPresentName()) {
-      if (node.getEnclosingScope().isPresent()) {
+      if (node.getEnclosingScopeOpt().isPresent()) {
         final String name = node.getName();
-        Scope scope = node.getEnclosingScope().get();
+        Scope scope = node.getEnclosingScopeOpt().get();
         boolean foundVar = scope.resolve(name, VariableSymbol.KIND).isPresent();
         boolean foundPort = scope.resolve(name, PortSymbol.KIND).isPresent();
 
@@ -59,8 +59,8 @@ public class UseOfUndeclaredField
    * @param usage Environment in which the field is used (used in the log)
    */
   private void check(String name, ASTNode node, String usage) {
-    if (node.getEnclosingScope().isPresent()) {
-      Scope scope = node.getEnclosingScope().get();
+    if (node.getEnclosingScopeOpt().isPresent()) {
+      Scope scope = node.getEnclosingScopeOpt().get();
       boolean foundVar = scope.resolve(name, VariableSymbol.KIND).isPresent();
       boolean foundPort = scope.resolve(name, PortSymbol.KIND).isPresent();
       final Optional<JavaTypeSymbol> typeSymbolOpt

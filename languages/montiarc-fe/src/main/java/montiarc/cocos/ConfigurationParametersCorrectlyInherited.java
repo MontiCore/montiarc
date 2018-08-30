@@ -43,7 +43,7 @@ public class ConfigurationParametersCorrectlyInherited implements MontiArcASTCom
   @Override
   public void check(ASTComponent component) {
     // Try to resolve the symbol for the component
-    final Optional<? extends Symbol> componentSymbolOpt = component.getSymbol();
+    final Optional<? extends Symbol> componentSymbolOpt = component.getSymbolOpt();
     if (componentSymbolOpt.isPresent()
         && componentSymbolOpt.get() instanceof ComponentSymbol) {
       ComponentSymbol componentSymbol = (ComponentSymbol) componentSymbolOpt.get();
@@ -56,8 +56,10 @@ public class ConfigurationParametersCorrectlyInherited implements MontiArcASTCom
           .getSuperComponent();
       
       if (superComponentOpt.isPresent()) {
-        final ComponentSymbol referencedSymbol = superComponentOpt.get().getReferencedSymbol();
-        final List<JFieldSymbol> superConfigParameters = referencedSymbol.getConfigParameters();
+        final ComponentSymbol referencedSymbol
+            = superComponentOpt.get().getReferencedSymbol();
+        final List<JFieldSymbol> superConfigParameters
+            = referencedSymbol.getConfigParameters();
         
         final int numInheritedParams = superConfigParameters.size();
         if (configParameters.size() < numInheritedParams) {
@@ -72,21 +74,24 @@ public class ConfigurationParametersCorrectlyInherited implements MontiArcASTCom
         for (int paramIndex = 0; paramIndex < Math.min(numInheritedParams,
             configParameters.size()); paramIndex++) {
           
-          final JTypeReference<? extends JTypeSymbol> superParameterType = superConfigParameters
-              .get(paramIndex).getType();
-          final JTypeReference<? extends JTypeSymbol> paramType = configParameters.get(paramIndex)
-              .getType();
+          final JTypeReference<? extends JTypeSymbol> superParameterType
+              = superConfigParameters.get(paramIndex).getType();
+          final JTypeReference<? extends JTypeSymbol> paramType
+              = configParameters.get(paramIndex).getType();
           
           // Check type correctness
           if (!TypeCompatibilityChecker.doTypesMatch(superParameterType,
-              superParameterType.getReferencedSymbol().getFormalTypeParameters().stream()
-                  .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+              superParameterType.getReferencedSymbol().getFormalTypeParameters()
+                  .stream()
+                  .map(p -> (JTypeSymbol) p)
+                  .collect(Collectors.toList()),
               superParameterType.getActualTypeArguments().stream()
                   .map(a -> (JavaTypeSymbolReference) a.getType())
                   .collect(Collectors.toList()),
               paramType,
               paramType.getReferencedSymbol().getFormalTypeParameters().stream()
-                  .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+                  .map(p -> (JTypeSymbol) p)
+                  .collect(Collectors.toList()),
               paramType.getActualTypeArguments().stream()
                   .map(a -> (JavaTypeSymbolReference) a.getType())
                   .collect(Collectors.toList()))) {

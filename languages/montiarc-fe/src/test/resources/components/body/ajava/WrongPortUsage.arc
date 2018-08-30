@@ -1,7 +1,8 @@
 package components.body.ajava;
 
 /**
- * Invalid model. Bad usage of ports (see below)
+ * Invalid model.
+ * Bad usage of ports (see below)
  *
  * @implements: There is no AJava literature
  */

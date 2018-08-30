@@ -3,6 +3,8 @@ package components.head.parameters;
 /*
  * Invalid model. (in MontiArc 3)
  * Enum MyEnum is not imported
+ *
+ * @implements No literature reference
  * TODO Add test
  */
 component UseEnumAsTypeArgNotImported {

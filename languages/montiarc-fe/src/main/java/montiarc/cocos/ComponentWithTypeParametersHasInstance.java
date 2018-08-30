@@ -17,8 +17,12 @@ import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 
 /**
+ * Inner components that have formal type parameters have to be explicitly
+ * instantiated and with that have actual type parameters assigned.
+ *
+ * @implements No literature reference
+ *
  * @author (last commit) Crispin Kirchner
- * @version $Revision$, $Date$
  */
 public class ComponentWithTypeParametersHasInstance
     implements MontiArcASTComponentCoCo {
@@ -28,27 +32,36 @@ public class ComponentWithTypeParametersHasInstance
    */
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol componentSymbol = (ComponentSymbol) node.getSymbol().get();
-    
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
+
+    ComponentSymbol componentSymbol = (ComponentSymbol) node.getSymbolOpt().get();
     Collection<ComponentInstanceSymbol> subComponents = componentSymbol.getSubComponents();
     
     Set<ComponentSymbol> instantiatedInnerComponents = subComponents
         .stream()
         .map(instanceSymbol -> instanceSymbol.getComponentType().getReferencedSymbol())
-        .filter(symbol -> symbol.hasFormalTypeParameters())
+        .filter(ComponentSymbol::hasFormalTypeParameters)
         .collect(Collectors.toSet());
     
     List<ComponentSymbol> notInstantiatedInnerComponents = componentSymbol
         .getInnerComponents()
         .stream()
-        .filter(symbol -> symbol.hasFormalTypeParameters())
+        .filter(ComponentSymbol::hasFormalTypeParameters)
         .filter(innerComponent -> !instantiatedInnerComponents.contains(innerComponent))
         .collect(Collectors.toList());
     
     for (ComponentSymbol notInstantiatedInnerComponent : notInstantiatedInnerComponents) {
       Log.error(
           String.format(
-              "0xMA009 Inner component \"%s\" must have an instance defining its formal type parameters.",
+              "0xMA009 Inner component \"%s\" must have an instance " +
+                  "defining its formal type parameters.",
               notInstantiatedInnerComponent.getName()),
           notInstantiatedInnerComponent.getSourcePosition());
     }

@@ -5,7 +5,7 @@ package components.body.automaton.transition.guards;
  * Invalid model.
  *
  * @implements [Wor16] AT1: Guard expressions evaluate to a Boolean truth
-      value. (p.105, Lst. 5.23)
+ *  value. (p.105, Lst. 5.23)
  */
 component GuardNotBoolean {
 

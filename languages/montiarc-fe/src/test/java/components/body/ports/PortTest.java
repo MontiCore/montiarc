@@ -70,9 +70,11 @@ public class PortTest extends AbstractCoCoTest {
   
   @Test
   public void testKeywordsAsPortName() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "KeywordAsPortName");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(4, "xMA028"));
+    final String qualifiedModelName = PACKAGE + "." + "KeywordAsPortName";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(4, "xMA028");
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
   
   @Test
@@ -83,19 +85,26 @@ public class PortTest extends AbstractCoCoTest {
   }
   
   @Test
-  @Ignore("TODO: Fix UniqueIdentifiers.java CoCo")
   public void testPortNameAmbiguous() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortNameAmbiguous");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(1, "xMA053"));
+    final String modelName = PACKAGE + "." + "PortNameAmbiguous";
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(3, "xMA053", "xMA061", "xMA069");
+    final MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
   @Test
-  @Ignore("TODO: Fix UniqueIdentifiers.java CoCo")
+  /**
+   * TODO: CV7 Error Codes
+   */
   public void testImplicitAndExplicitPortNaming() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ImplicitAndExplicitPortNaming");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(3, "xMA053"));
+    final String modelName = PACKAGE + "." + "ImplicitAndExplicitPortNaming";
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(6, "xMA053");
+    final MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
   @Test
@@ -324,6 +333,18 @@ public class PortTest extends AbstractCoCoTest {
   public void testUndefinedPortTypes() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UndefinedPortTypes");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA097"));
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(3, "xMA097");
+    checkInvalid(cocos, node, errors);
+  }
+
+  @Test
+  public void testReferencingComp() {
+    final ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "ReferencingComp");
+    MontiArcCoCoChecker cocos
+        = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA033");
+    checkInvalid(cocos, node, errors);
   }
 }

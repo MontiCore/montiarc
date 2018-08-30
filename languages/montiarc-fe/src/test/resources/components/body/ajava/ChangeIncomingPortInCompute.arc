@@ -1,9 +1,11 @@
 package components.body.ajava;
 
 /**
- * Invalid model. Cannot change values on incoming ports.
+ * Invalid model.
+ * Cannot change values on incoming ports.
+ * Test model for InputPortChangedInCompute
  *
- * @implements There is no AJava Literature. Test model for InputPortChangedInCompute
+ * @implements No literature reference, AJava CoCo
  */
 component ChangeIncomingPortInCompute {
 

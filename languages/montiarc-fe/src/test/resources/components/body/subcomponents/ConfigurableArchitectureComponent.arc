@@ -3,12 +3,11 @@ package components.body.subcomponents;
 import components.body.subcomponents._subcomponents.ConfigurableBasicComponent;
 import types.*;
 /**
- * 
- * Invalid model. Multiple subcomponent instances of the same name.
+ * Invalid model.
+ * Multiple subcomponent instances of the same name.
  *
  * @implements [Hab16] B1: All names of model elements within a component 
  * namespace have to be unique. (p. 59. Lst. 3.31)
- * @TODO Add test
  */
  
 component ConfigurableArchitectureComponent(Person x, int y, String z) {

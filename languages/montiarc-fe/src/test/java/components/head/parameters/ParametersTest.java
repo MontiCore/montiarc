@@ -41,18 +41,6 @@ public class ParametersTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "ParameterNamesUnique");
   }
   
-  @Test
-  /*
-   * Tests [Hab16] B1: All names of model elements within a component
-   *                    namespace have to be unique. (p. 59. Lst. 3.31)
-   */
-  public void testParameterNamesUniqueTestInvalid() {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
-        loadComponentAST(PACKAGE + "." + "ParameterAmbiguous"),
-        new ExpectedErrorInfo(2, "xMA069"));
-    
-  }
-  
   @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   @Test
   /*
@@ -69,23 +57,11 @@ public class ParametersTest extends AbstractCoCoTest {
   }
 
   @Test
-  public void testParameterAmbiguous2() {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
-        loadComponentAST(PACKAGE + "." + "ParameterAmbiguous2"),
-        new ExpectedErrorInfo(2, "xMA069"));
-
-  }
-
-  @Test
-  /*
-   * Tests [Hab16] B1: All names of model elements within a component
-   *                    namespace have to be unique. (p. 59. Lst. 3.31)
-   */
-  public void testConfigurationParametersNotUnique() {
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
-        loadComponentAST(PACKAGE + "." + "ConfigurationParametersNotUnique"),
-        new ExpectedErrorInfo(3, "xMA069"));
-
+  public void testParameterAmbiguous() {
+    final String modelName = PACKAGE + "." + "ParameterAmbiguous";
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA069");
+    final MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
   @Test
@@ -125,6 +101,19 @@ public class ParametersTest extends AbstractCoCoTest {
   }
 
   @Test
+  @Ignore("Qualified enum type which is used as a component argument can" +
+              "not be found.")
+  /*
+   * java.lang.AssertionError: 0xA1038 SymbolReference Could not load full
+   * information of 'types' (Kind de.monticore.java.symboltable.JavaTypeSymbolKind).
+   * StringReader:<10,40>: 0xMA065 Could not find type of argument no 0 of
+   * subcomponent sub
+   */
+  public void testUseEnumAsTypeArgQualified() {
+    checkValid(PACKAGE + "." + "UseEnumAsTypeArgQualified");
+  }
+
+  @Test
   @Ignore("TypeCompatibilityChecker.expressionType() returns Opt.empty() on CD Enum parameter ")
   public void testUseEnumAsTypeArgFromCD() {
     checkValid(PACKAGE + "." + "UseEnumAsTypeArgFromCD");
@@ -135,14 +124,12 @@ public class ParametersTest extends AbstractCoCoTest {
   */
   @Test
   public void testParameterNameCapitalized() {
-    ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA045");
+    final String modelName = PACKAGE + "." + "ParameterNameCapitalized";
     MontiArcCoCoChecker cocos
-        = new MontiArcCoCoChecker().addCoCo((MontiArcASTComponentCoCo)
-                                                new NamesCorrectlyCapitalized());
-    final ASTMontiArcNode node
-        = loadComponentAST(PACKAGE + "." + "ParameterNameCapitalized");
-    
-    checkInvalid(cocos, node, errors);
+        = new MontiArcCoCoChecker()
+              .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized());
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA045");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
   @Test
@@ -150,21 +137,22 @@ public class ParametersTest extends AbstractCoCoTest {
    * Tests [Hab16] CV2: Types start with an upper-case letter. (pg. 71, Lst. 3.51)
    */
   public void testComponentTypeGenericParameterIsUpperCase() {
-	  ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ComponentWithLowerCaseGenType");
-	  MontiArcCoCoChecker cocos
-      = new MontiArcCoCoChecker().addCoCo((MontiArcASTComponentCoCo)
-                                              new NamesCorrectlyCapitalized());
-	  checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA049"));
+    final String modelName = PACKAGE + "." + "ComponentWithLowerCaseGenType";
+    MontiArcCoCoChecker cocos
+      = new MontiArcCoCoChecker()
+            .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA049");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
 
   @Test
   @Ignore("TODO Activate with new MC version -> SubcomponentParametersCorrectlyAssigned disabled.")
   public void testAssignsWrongParameters() {
-    final ASTMontiArcNode node
-        = loadComponentAST(PACKAGE + "." + "AssignsWrongParameters");
+    final String modelName = PACKAGE + "." + "AssignsWrongParameters";
     final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
     final ExpectedErrorInfo expectedErrorInfo
         = new ExpectedErrorInfo(4, "xMA064");
-    checkInvalid(checker, node, expectedErrorInfo);
+    checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
   }
 }

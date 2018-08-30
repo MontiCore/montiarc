@@ -23,14 +23,16 @@ public class TopLevelComponentHasNoInstanceName
    */
   @Override
   public void check(ASTComponent node) {
-    if (!node.isPresentSymbol()) {
-      Log.error(String.format(
-          "0xMA071 Symbol of component \"%s\" is missing. " +
-              "The context condition \"%s\" can't be checked that way.",
-          node.getName(), TopLevelComponentHasNoInstanceName.class.getName()));
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
     }
     
-    ComponentSymbol symbol = (ComponentSymbol) node.getSymbol().get();
+    ComponentSymbol symbol = (ComponentSymbol) node.getSymbolOpt().get();
     if (!symbol.isInnerComponent() && node.isPresentInstanceName()) {
       Log.error(
           String.format("0xMA007 Top level component \"%s\" has an instance name", node.getName()),

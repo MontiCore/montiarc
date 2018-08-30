@@ -1,8 +1,11 @@
 package components.body.subcomponents;
 
 /**
- * Invalid model. Inner components get instantiated automatically.
+ * Invalid model.
+ * Inner components get instantiated automatically.
  * Hence, they cannot yield generic type parameters.
+ *
+ * @implements No literature reference
  */
 component ComponentWithTypeParametersLacksInstance {
   

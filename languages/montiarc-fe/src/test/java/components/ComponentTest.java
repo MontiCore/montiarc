@@ -100,9 +100,12 @@ public class ComponentTest extends AbstractCoCoTest {
    * This test should check whether the Context condition PackageLowerCase is working.
    */
   public void testPackageUpperCase() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UpperCasePackageName");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PackageLowerCase());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA054"));
+    final String modelName = PACKAGE + "." + "UpperCasePackageName";
+    MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new PackageLowerCase());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA054");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
 
   /**
@@ -110,10 +113,11 @@ public class ComponentTest extends AbstractCoCoTest {
    */
   @Test
   public void testUniqueNamesDifferentSymboltypes() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UniqueNamesDifferentSymboltypes");
+    final String modelName = PACKAGE + "." + "UniqueNamesDifferentSymboltypes";
     MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(4, "xMA052", "xMA053", "xMA061", "xMA069"));
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(4, "xMA052", "xMA053", "xMA061", "xMA069");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
 
   @Test

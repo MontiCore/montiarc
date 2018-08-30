@@ -2,7 +2,8 @@ package components.body.ports;
 
 /**
  * Invalid model.
- * @implements PortNamesAreNotJavaKeywords
+ * Uses Java keywords as identifiers for ports
+ * @implements No literature reference
  */
 component KeywordAsPortName {
   
@@ -10,7 +11,4 @@ component KeywordAsPortName {
    out String goto,
    in Int<int>,
    out Class;
-   
-  
-   
 }

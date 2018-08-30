@@ -21,13 +21,23 @@ import java.util.Set;
  * are unique. (p. 98. Lst. 5.10)
  * @implements [Hab16] B1: All names of model elements within a component
  * namespace have to be unique. (p. 59. Lst. 3.31)
+ * @implementst [Wor16] MU1: The name of each component variable is unique
+ *  among ports, variables, and configuration parameters. (p.54, Lst. 4.5)
  */
 public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
 
   @Override
   public void check(ASTComponent node) {
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
     ArrayList<Identifier> names = new ArrayList<>();
-    ComponentSymbol comp = (ComponentSymbol) node.getSymbol().get();
+    ComponentSymbol comp = (ComponentSymbol) node.getSymbolOpt().get();
 
     for (ASTElement e : node.getBody().getElementList()) {
 
@@ -92,34 +102,32 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
     }
 
     for (Identifier nameDuplicate : nameDuplicates) {
-      String errorCode = "0xMA035";
-      String type = "identifier";
       switch (nameDuplicate.getType()) {
         case CONFIG_PARAMETER:
-          errorCode = "0xMA069";
-          type = "configuration parameter";
+          logError(nameDuplicate, "0xMA069", "configuration parameter");
           break;
         case PORT:
-          errorCode = "0xMA053";
-          type = "port";
+          logError(nameDuplicate, "0xMA053", "port");
           break;
         case INVARIANT:
-          errorCode = "0xMA052";
-          type = "invariant";
+          logError(nameDuplicate, "0xMA052", "invariant");
           break;
         case SUBCOMPONENTINSTANCE:
-          errorCode = "0xMA061";
-          type = "subcomponent instance";
+          logError(nameDuplicate, "0xMA061", "subcomponent instance");
           break;
         case VARIABLE:
-          type = "variable";
+          logError(nameDuplicate, "0xMA035", "variable");
           break;
+        default:
+          logError(nameDuplicate, "0xMA035", "identifier");
       }
-
-      Log.error(String.format("%s The name of %s '%s' is ambiguous.",
-          errorCode, type, nameDuplicate.getName()),
-          nameDuplicate.getSourcePosition());
     }
+  }
+
+  private void logError(Identifier nameDuplicate, String errorCode, String type) {
+    Log.error(String.format("%s The name of %s '%s' is ambiguous.",
+        errorCode, type, nameDuplicate.getName()),
+        nameDuplicate.getSourcePosition());
   }
 
   private enum IdentifierTypes {

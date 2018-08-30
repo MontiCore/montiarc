@@ -37,7 +37,15 @@ public class PortUsage implements MontiArcASTComponentCoCo {
   
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol entry = (ComponentSymbol) node.getSymbol().get();
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
+    ComponentSymbol entry = (ComponentSymbol) node.getSymbolOpt().get();
     
     // %%%%%%%%%%%%%%%% CV5 %%%%%%%%%%%%%%%%
     if (entry.isDecomposed()) {

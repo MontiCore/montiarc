@@ -5,7 +5,7 @@ import doesnotexist.invalidType; // Error: Import is not valid
 /**
  * Invalid model. The data type 'invalidType' does not exist.
 
- * @implements TODO Not directly assignable to literature reference
+ * @implements No literature reference
  */
 component InexistingPortType {
   port

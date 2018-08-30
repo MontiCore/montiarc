@@ -7,10 +7,10 @@ import components.DefinedJavaTypeSamePackage; // Duplicate import
   //  so it must not be imported!
 
 import java.lang.String;
-import java.lang.String; // The model 'java.lang.String' is imported more then once!
+import java.lang.String; // The model 'java.lang.String' is imported more than once!
 
 import java.io.*;
-import java.io.*; // WARNING: The package 'java.io' is imported more then once!
+import java.io.*; // WARNING: The package 'java.io' is imported more than once!
 
 import components.body.subcomponents._subcomponents.package1
           .SameComponentNameInDifferentPackage;

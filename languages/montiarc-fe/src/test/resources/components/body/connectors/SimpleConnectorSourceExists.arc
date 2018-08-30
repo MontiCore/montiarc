@@ -4,7 +4,7 @@ package components.body.connectors;
  * Valid model.
  */
 component SimpleConnectorSourceExists {
-  component A {
+  component A a{
     port out String aOut;
   }
   
@@ -12,7 +12,7 @@ component SimpleConnectorSourceExists {
     port in String bIn1,
          in String bIn2;
   }
-  
+
   connect a.aOut -> b.bIn1;
   
   component A myA [aOut -> b.bIn2];

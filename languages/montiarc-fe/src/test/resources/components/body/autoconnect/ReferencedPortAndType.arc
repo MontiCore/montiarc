@@ -2,14 +2,13 @@ package components.body.autoconnect;
 
 /*
  * Valid model.
- * Used as subcomponent in AutoConnectPortAndType
- * TODO Add test
+ * Used as a subcomponent in AutoConnectPortAndType.
  */
 component ReferencedPortAndType {
 
-    port
-        in Integer a,
-        in Integer b,
-        in Integer c,
-        out String x;
+  port
+    in Integer a,
+    in Integer b,
+    in Integer c,
+    out String x;
 }

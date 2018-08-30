@@ -34,33 +34,35 @@ public class AutomatonTest extends AbstractCoCoTest {
   
   @Test
   public void testMutipleBehaviors() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MultipleAutomata");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new MultipleBehaviorImplementation()), node, new ExpectedErrorInfo(2, "xMA050"));
+    final String modelName = PACKAGE + "." + "MultipleAutomata";
+    final MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new MultipleBehaviorImplementation());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(2, "xMA050");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
   @Test
   public void testImplementationInNonAtomicComponent() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AutomatonInComposedComponent");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA051"));
+    final String modelName = PACKAGE + "." + "AutomatonInComposedComponent";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA051");
+    checkInvalid(checker, loadComponentAST(modelName), errors);
   }
   
   @Test
   public void testLowerCaseAutomatonName() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AutomatonWithLowerCaseName");
-    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA015"));
+    final String modelName = PACKAGE + "." + "AutomatonWithLowerCaseName";
+    final MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA015");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
   @Test
   public void testAutomatonHasStates() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AutomatonWithoutState");
     checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA014"));
-  }
-  
-  @Test
-  public void testAutomatonHasNoInitialStates() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AutomatonWithoutInitialState");
-    // automaton has states but no initial state -> exactly 1 error.
-    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA013"));
   }
   
   @Test

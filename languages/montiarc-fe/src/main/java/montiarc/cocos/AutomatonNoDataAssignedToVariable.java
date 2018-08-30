@@ -26,7 +26,7 @@ public class AutomatonNoDataAssignedToVariable  implements MontiArcASTIOAssignme
   @Override public void check(ASTIOAssignment node) {
 
     ArrayList<ASTValuation> valuations = new ArrayList<>();
-    Optional<? extends Scope> scope = node.getEnclosingScope().get().getEnclosingScope()
+    Optional<? extends Scope> scope = node.getEnclosingScopeOpt().get().getEnclosingScope()
         .get().getEnclosingScope();
     Scope componentScope = scope.get();
 

@@ -20,10 +20,12 @@ import java.util.List;
  * (p. 101, Lst. 5.16)
  * @implements [Wor16] AC8: State names begin with a capital letter.
  * (p. 101, Lst. 5.18)
- * @implements [Hab16] CV2: Types start with an upper-case
+ * @implements [Hab16] CV2: Types start with an upper-case letter.
  * (p. 71, lst. 3.51)
  * @implements [Hab16] CV1: Instance names start with a lower-case letter.
  * (p. 71, Lst. 3.51)
+ * @implements [Wor16] MC2: Behavior model names begin with capital letters.
+ *  (p.57)
  */
 public class NamesCorrectlyCapitalized
     implements MontiArcASTComponentCoCo,
@@ -72,7 +74,15 @@ public class NamesCorrectlyCapitalized
       }
     }
 
-    ComponentSymbol componentType = (ComponentSymbol) node.getSymbol().get();
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
+    ComponentSymbol componentType = (ComponentSymbol) node.getSymbolOpt().get();
     if (!componentType.getFormalTypeParameters().isEmpty()) {
       for (JTypeSymbol genType : componentType.getFormalTypeParameters()) {
         if (!Character.isUpperCase(genType.toString().charAt(0))) {

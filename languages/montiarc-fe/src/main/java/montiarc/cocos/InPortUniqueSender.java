@@ -22,48 +22,26 @@ import montiarc._cocos.MontiArcASTComponentCoCo;
  * @author Crispin Kirchner
  */
 public class InPortUniqueSender implements MontiArcASTComponentCoCo {
-  
-  /**
-   * @see montiarc._cocos.MontiArcASTComponentCoCo#check(montiarc._ast.ASTComponent)
-   */
+
+
   @Override
   public void check(ASTComponent node) {
-    InPortUniqueSenderCheck check = new InPortUniqueSenderCheck(node);
-    check.check();
-  }
-  
-  private class InPortUniqueSenderCheck {
-    private List<String> connectorTargets = new ArrayList<>();
-    
-    private ASTComponent node;
-    
-    public InPortUniqueSenderCheck(ASTComponent node) {
-      this.node = node;
-    }
-    
-    public void check() {
-      checkConnectors();
-    }
-    
-    private void checkTarget(ASTQualifiedName target) {
-      String targetString = target.toString();
-      
-      if (connectorTargets.contains(targetString)) {
-        Log.error(String.format("0xMA005 target port \"%s\" already in use.", target.toString()),
-            target.get_SourcePositionStart());
-      }
-      else {
-        connectorTargets.add(targetString);
-      }
-    }
-    
-    private void checkConnectors() {
-      for (ASTConnector connector : node.getConnectors()) {
-        for (ASTQualifiedName target : connector.getTargetsList()) {
-          checkTarget(target);
+    List<String> connectorTargets = new ArrayList<>();
+    String targetString;
+
+    for (ASTConnector connector : node.getConnectors()) {
+      for (ASTQualifiedName target : connector.getTargetsList()) {
+        targetString = target.toString();
+        if (connectorTargets.contains(targetString)) {
+          Log.error(
+              String.format("0xMA005 target port \"%s\" already in use.",
+                  targetString),
+              target.get_SourcePositionStart());
+        }
+        else {
+          connectorTargets.add(targetString);
         }
       }
     }
   }
-  
 }
