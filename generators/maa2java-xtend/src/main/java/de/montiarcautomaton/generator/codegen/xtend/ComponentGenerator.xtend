@@ -9,26 +9,30 @@ package de.montiarcautomaton.generator.codegen.xtend
 
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import de.monticore.ast.ASTCNode
+import de.monticore.codegen.mc2cd.TransformationHelper
+import de.monticore.io.FileReaderWriter
+import de.monticore.io.paths.IterablePath
 import java.io.File
-import java.io.PrintWriter
+import java.nio.file.Path
+import java.nio.file.Paths
 import montiarc._ast.ASTAutomatonBehavior
 import montiarc._ast.ASTBehaviorElement
 import montiarc._ast.ASTComponent
 import montiarc._ast.ASTJavaPBehavior
 import montiarc._symboltable.ComponentSymbol
-import java.nio.file.Paths
-import java.io.FileWriter
-import de.monticore.io.FileReaderWriter
-import java.nio.file.Path
 
 class ComponentGenerator {
 
-  def generateAll(File targetPath, ComponentSymbol comp) {
+  def generateAll(File targetPath, File hwc, ComponentSymbol comp) {
+    var boolean existsHWCClass = TransformationHelper.existsHandwrittenClass(IterablePath.from(hwc, ".java"), comp.packageName+ "." + comp.name);
+    
     toFile(targetPath, comp.name + "Input", generateInput(comp));
     toFile(targetPath, comp.name + "Result", generateResult(comp));
     if (comp.isAtomic) {
       toFile(targetPath, comp.name, generateAtomicComponent(comp));
-      toFile(targetPath, comp.name + "Impl", generateBehaviorImplementation(comp));
+      if(!existsHWCClass) {
+        toFile(targetPath, comp.name + "Impl", generateBehaviorImplementation(comp));
+      }
     } else {
       toFile(targetPath, comp.name, generateComposedComponent(comp));
     }
@@ -57,12 +61,68 @@ class ComponentGenerator {
 
   def generateBehaviorImplementation(ComponentSymbol comp) {
     var compAST = comp.astNode.get as ASTComponent
+    var boolean hasBehavior = false
     for (element : compAST.body.elementList) {
       if (element instanceof ASTBehaviorElement) {
+        hasBehavior = true;
         return generateBehavior(element as ASTCNode, comp)
       }
     }
+    
+    if(!hasBehavior) {
+      return generateAbstractAtomicImplementation(comp)
+    }
 
+  }
+  
+  def generateAbstractAtomicImplementation(ComponentSymbol comp) {
+    var ComponentHelper helper = new ComponentHelper(comp);
+    return 
+    '''
+    package «comp.packageName»;
+    
+    import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
+    «FOR _import : comp.imports»
+      import «_import.statement»«IF _import.isStar».*«ENDIF»;
+    «ENDFOR»
+    
+    class «comp.name»Impl 
+    «IF helper.isGeneric»
+      «FOR generic : helper.genericParameters SEPARATOR ','»
+        «generic»
+      «ENDFOR»
+    «ENDIF» 
+    implements IComputable<«comp.name»Input, «comp.name»Result> {
+    
+      public «comp.name»(«FOR param : comp.configParameters SEPARATOR ','» «param.type.name» «param.name» «ENDFOR») {
+        throw new Error("Invoking constructor on abstract implementation «comp.packageName».«comp.name»");
+      }
+    
+      public «comp.name»Result
+      «IF helper.isGeneric»
+        «FOR generic : helper.genericParameters SEPARATOR ','»
+          «generic»
+        «ENDFOR»
+      «ENDIF» getInitialValues() {
+        throw new Error("Invoking getInitialValues() on abstract implementation «comp.packageName».«comp.name»");
+      }
+     public «comp.name»Result
+          «IF helper.isGeneric»
+            «FOR generic : helper.genericParameters SEPARATOR ','»
+              «generic»
+            «ENDFOR»
+          «ENDIF»
+          compute(«comp.name»Input
+          «IF helper.isGeneric»
+            «FOR generic : helper.genericParameters SEPARATOR ','»
+              «generic»
+            «ENDFOR»
+          «ENDIF» input) {
+        throw new Error("Invoking compute() on abstract implementation «comp.packageName».«comp.name»");
+    }
+    
+    }
+    '''
   }
 
   def generateInput(ComponentSymbol comp) {

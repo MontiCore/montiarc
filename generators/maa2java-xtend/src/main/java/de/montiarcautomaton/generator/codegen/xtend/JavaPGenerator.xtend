@@ -7,20 +7,18 @@
  *******************************************************************************/
 package de.montiarcautomaton.generator.codegen.xtend
 
-import montiarc._symboltable.ComponentSymbol
 import de.montiarcautomaton.generator.helper.ComponentHelper
-import java.util.Optional
-import montiarc._ast.ASTJavaPInitializer
-import java.util.Arrays
-import java.util.Collections
-import montiarc._ast.ASTBehaviorElement
-import java.util.List
-import montiarc._ast.ASTElement
-import montiarc._ast.ASTComponent
-import montiarc._ast.ASTJavaPBehavior
+import de.monticore.java.javadsl._ast.ASTBlockStatement
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter
 import de.monticore.prettyprint.IndentPrinter
-import de.monticore.java.javadsl._ast.ASTBlockStatement
+import java.util.Collections
+import java.util.List
+import java.util.Optional
+import montiarc._ast.ASTComponent
+import montiarc._ast.ASTElement
+import montiarc._ast.ASTJavaPBehavior
+import montiarc._ast.ASTJavaPInitializer
+import montiarc._symboltable.ComponentSymbol
 
 class JavaPGenerator extends BehaviorGenerator {
 
@@ -29,9 +27,21 @@ class JavaPGenerator extends BehaviorGenerator {
   }
 
   override String generateCompute(ComponentSymbol comp) {
+    var ComponentHelper helper = new ComponentHelper(comp);
     return '''
       @Override
-      public «comp.name»Result compute(«comp.name»Input input) {
+      public «comp.name»Result
+                «IF helper.isGeneric»
+                  «FOR generic : helper.genericParameters SEPARATOR ','»
+                    «generic»
+                  «ENDFOR»
+                «ENDIF»
+                compute(«comp.name»Input
+                «IF helper.isGeneric»
+                  «FOR generic : helper.genericParameters SEPARATOR ','»
+                    «generic»
+                  «ENDFOR»
+                «ENDIF» input)
         // inputs
         «FOR portIn : comp.incomingPorts»
           final «portIn.typeReference.referencedSymbol.fullName» «portIn.name» = input.get«portIn.name.toFirstUpper»();
@@ -78,9 +88,16 @@ class JavaPGenerator extends BehaviorGenerator {
   }
 
   override String generateGetInitialValues(ComponentSymbol comp) {
+    var ComponentHelper helper = new ComponentHelper(comp)
     return '''
       @Override
-       public «comp.name»Result getInitialValues() {
+       public «comp.name»Result 
+       public «comp.name»Result
+             «IF helper.isGeneric»
+               «FOR generic : helper.genericParameters SEPARATOR ','»
+                 «generic»
+               «ENDFOR»
+             «ENDIF» getInitialValues() {
          final «comp.name»Result result = new «comp.name»Result();
          
          try {

@@ -5,6 +5,7 @@
  */
 package de.montiarcautomaton.generator.codegen.xtend
 
+import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
 
 /**
@@ -25,6 +26,7 @@ abstract class BehaviorGenerator {
   def String hook(ComponentSymbol comp);
 
   def String generate(ComponentSymbol comp) {
+    var ComponentHelper helper = new ComponentHelper(comp)
     return '''
       package «comp.packageName»;
       
@@ -36,7 +38,13 @@ abstract class BehaviorGenerator {
       
       import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
       
-      public class «comp.name»Impl implements IComputable<«comp.name»Input, «comp.name»Result> {
+      public class «comp.name»Impl
+      «IF helper.isGeneric»
+        «FOR generic : helper.genericParameters SEPARATOR ','»
+          «generic»
+        «ENDFOR»
+      «ENDIF» 
+      implements IComputable<«comp.name»Input, «comp.name»Result> {
         
         //component variables
         «FOR compVar : comp.variables»

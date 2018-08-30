@@ -49,8 +49,19 @@ class AutomatonGenerator extends BehaviorGenerator {
     }
     return 
     '''
-      @Override
-      public «resultName» compute(«comp.name»Input input) {
+    @Override
+    public «comp.name»Result
+          «IF helper.isGeneric»
+            «FOR generic : helper.genericParameters SEPARATOR ','»
+              «generic»
+            «ENDFOR»
+          «ENDIF»
+          compute(«comp.name»Input
+          «IF helper.isGeneric»
+            «FOR generic : helper.genericParameters SEPARATOR ','»
+              «generic»
+            «ENDFOR»
+          «ENDIF» input)
         // inputs
         «FOR inPort : comp.incomingPorts»
         final «inPort.typeReference.name» «inPort.name» = input.get«inPort.name.toFirstUpper»();
@@ -104,7 +115,13 @@ class AutomatonGenerator extends BehaviorGenerator {
     return 
     '''
       @Override
-      public «resultName» getInitialValues() {
+      public «resultName» 
+            «IF helper.isGeneric»
+              «FOR generic : helper.genericParameters SEPARATOR ','»
+                «generic»
+              «ENDFOR»
+            «ENDIF» 
+      getInitialValues() {
         final «resultName» result = new «resultName»();
         
     
