@@ -82,46 +82,34 @@ class ComponentGenerator {
     package «comp.packageName»;
     
     import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
-    «FOR _import : comp.imports»
-      import «_import.statement»«IF _import.isStar».*«ENDIF»;
-    «ENDFOR»
+    «printImports(comp)»
     
-    class «comp.name»Impl 
-    «IF helper.isGeneric»
-      «FOR generic : helper.genericParameters SEPARATOR ','»
-        «generic»
-      «ENDFOR»
-    «ENDIF» 
+    class «comp.name»Impl«printGenerics(comp)»     
     implements IComputable<«comp.name»Input, «comp.name»Result> {
     
       public «comp.name»(«FOR param : comp.configParameters SEPARATOR ','» «param.type.name» «param.name» «ENDFOR») {
         throw new Error("Invoking constructor on abstract implementation «comp.packageName».«comp.name»");
       }
     
-      public «comp.name»Result
-      «IF helper.isGeneric»
-        «FOR generic : helper.genericParameters SEPARATOR ','»
-          «generic»
-        «ENDFOR»
-      «ENDIF» getInitialValues() {
+      public «comp.name»Result«printGenerics(comp)» getInitialValues() {
         throw new Error("Invoking getInitialValues() on abstract implementation «comp.packageName».«comp.name»");
       }
-     public «comp.name»Result
-          «IF helper.isGeneric»
-            «FOR generic : helper.genericParameters SEPARATOR ','»
-              «generic»
-            «ENDFOR»
-          «ENDIF»
-          compute(«comp.name»Input
-          «IF helper.isGeneric»
-            «FOR generic : helper.genericParameters SEPARATOR ','»
-              «generic»
-            «ENDFOR»
-          «ENDIF» input) {
+     public «comp.name»Result«printGenerics(comp)» compute(«comp.name»Input«printGenerics(comp)» input) {
         throw new Error("Invoking compute() on abstract implementation «comp.packageName».«comp.name»");
     }
     
     }
+    '''
+  }
+  
+  def printGenerics(ComponentSymbol comp) {
+    var ComponentHelper helper = new ComponentHelper(comp)
+    return '''
+    «IF helper.isGeneric»
+      «FOR generic : helper.genericParameters SEPARATOR ','»
+        «generic»
+      «ENDFOR»
+    «ENDIF»
     '''
   }
 
@@ -129,12 +117,9 @@ class ComponentGenerator {
     return '''
       package «comp.packageName»;
       
-      «FOR _import : comp.imports»
-        import «_import»;
-      «ENDFOR»
+      «printImports(comp)»
       
-      class «comp.name»Input 
-      «IF !comp.formalTypeParameters.empty» < «FOR generic : comp.formalTypeParameters SEPARATOR ','» «generic.name» «ENDFOR»>«ENDIF»
+      class «comp.name»Input«printGenerics(comp)»      
       «IF comp.superComponent.present» extends «comp.superComponent.get.fullName»Input«ENDIF»
       implements IInput 
        {
@@ -184,12 +169,10 @@ class ComponentGenerator {
     return '''
       package «comp.packageName»;
       
-      «FOR _import : comp.imports»
-        import «_import»;
-      «ENDFOR»
+      «printImports(comp)»
       
-      class «comp.name»Output 
-      «IF !comp.formalTypeParameters.empty» < «FOR generic : comp.formalTypeParameters SEPARATOR ','» «generic.name» «ENDFOR»>«ENDIF»
+      class «comp.name»Output«printGenerics(comp)»
+      
       «IF comp.superComponent.present» extends «comp.superComponent.get.fullName»Input«ENDIF»
       implements IOutput 
        {
@@ -268,18 +251,15 @@ class ComponentGenerator {
     return '''
       package «comp.packageName»;
       
+      «printImports(comp)»
       import «comp.packageName».«comp.name»Input;
       import «comp.packageName».«comp.name»Result;
-      «FOR _import : comp.imports»
-        import «_import.statement»«IF _import.isStar».*«ENDIF»;
-      «ENDFOR»
       import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
       import de.montiarcautomaton.runtimes.timesync.delegation.Port;
       import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
       import de.montiarcautomaton.runtimes.Log;
       
-      public class ${name} 
-      «IF !comp.formalTypeParameters.empty» < «FOR generic : comp.formalTypeParameters SEPARATOR ','» «generic.name» «ENDFOR»>«ENDIF»
+      public class ${name}«printGenerics(comp)»      
       «IF comp.superComponent.present» extends «comp.superComponent.get.fullName»Input«ENDIF»
       implements IComponent {
         
@@ -314,15 +294,13 @@ class ComponentGenerator {
         
         // the components behavior implementation
         private final IComputable
-        <«comp.name»Input«IF comp.hasFormalTypeParameters» <«FOR generics : comp.formalTypeParameters SEPARATOR ','»«generics.name»«ENDFOR»>«ENDIF»,
-        «comp.name»Output«IF comp.hasFormalTypeParameters» <«FOR generics : comp.formalTypeParameters SEPARATOR ','»«generics.name»«ENDFOR»>«ENDIF»>
+        <«comp.name»Input«printGenerics(comp)», «comp.name»Output«printGenerics(comp)»>
         behaviorImpl;      
       
         
         public «comp.name»(«FOR param : comp.configParameters SEPARATOR ','» «param.type.name» «param.name»«ENDFOR») {
-          behaviorImpl = new «comp.name»Impl
-        «IF comp.hasFormalTypeParameters» <«FOR generics : comp.formalTypeParameters SEPARATOR ','»«generics.name»«ENDFOR»«ENDIF»
-          «IF comp.hasConfigParameters» («FOR param : comp.configParameters SEPARATOR ','» «param.name» «ENDFOR») «ENDIF»;
+          behaviorImpl = new «comp.name»Impl«printGenerics(comp)»(
+          «IF comp.hasConfigParameters» «FOR param : comp.configParameters SEPARATOR ','» «param.name» «ENDFOR» «ENDIF»);
           
           // config parameters
           «FOR param : comp.configParameters»
@@ -356,7 +334,7 @@ class ComponentGenerator {
         «ENDFOR»
         }
         
-       private void setResult(«comp.name»Result«IF comp.hasFormalTypeParameters» <«FOR generics : comp.formalTypeParameters SEPARATOR ','»«generics.name»«ENDFOR»>«ENDIF» result) {
+       private void setResult(«comp.name»Result«printGenerics(comp)» result) {
        «FOR portOut : comp.outgoingPorts»
         this.getPort«portOut.name.toFirstUpper»().setNextValue(result.get«portOut.name.toFirstUpper»());
        «ENDFOR»
@@ -366,14 +344,12 @@ class ComponentGenerator {
         @Override
         public void compute() {
           // collect current input port values
-        final «comp.name»Input«IF comp.hasFormalTypeParameters» <«FOR generics : comp.formalTypeParameters SEPARATOR ','»«generics.name»«ENDFOR»>«ENDIF» input = new «comp.name»Input«IF comp.hasFormalTypeParameters» <«FOR generics : comp.formalTypeParameters SEPARATOR ','»«generics.name»«ENDFOR»>«ENDIF»
-        input = new «comp.name»Input «IF comp.hasFormalTypeParameters» <«FOR generics : comp.formalTypeParameters SEPARATOR ','»«generics.name»«ENDFOR»>«ENDIF» input = new «comp.name»Input«IF comp.hasFormalTypeParameters» <«FOR generics : comp.formalTypeParameters SEPARATOR ','»«generics.name»«ENDFOR»>«ENDIF»
+        final «comp.name»Input«printGenerics(comp)» input = new «comp.name»Input«printGenerics(comp)»
         («FOR inPort : comp.incomingPorts SEPARATOR ','»this.«inPort.name».getCurrentValue()«ENDFOR»);
         
         try {
         // perform calculations
-          final «comp.name»Result«IF comp.hasFormalTypeParameters» <«FOR generics : comp.formalTypeParameters SEPARATOR ','»«generics.name»«ENDFOR»>«ENDIF» input = new «comp.name»Input«IF comp.hasFormalTypeParameters» <«FOR generics : comp.formalTypeParameters SEPARATOR ','»«generics.name»«ENDFOR»>«ENDIF» result =
-          behaviorImpl.compute(input); 
+          final «comp.name»Result«printGenerics(comp)» result = behaviorImpl.compute(input); 
           
           // set results to ports
           setResult(result);
@@ -394,8 +370,7 @@ class ComponentGenerator {
         
         private void initialize() {
            // get initial values from behavior implementation
-           final «comp.name»Result
-        «IF comp.hasFormalTypeParameters» <«FOR generics : comp.formalTypeParameters SEPARATOR ','»«generics.name»«ENDFOR»>«ENDIF» input = new «comp.name»Input«IF comp.hasFormalTypeParameters» <«FOR generics : comp.formalTypeParameters SEPARATOR ','»«generics.name»«ENDFOR»>«ENDIF»
+           final «comp.name»Result«printGenerics(comp)» result = new «comp.name»Result«printGenerics(comp)»();
         result = behaviorImpl.getInitialValues();
         
         // set results to ports
@@ -409,30 +384,27 @@ class ComponentGenerator {
     return '''
       package «comp.packageName»;
       
-      «FOR _import : comp.imports»
-        import «_import.statement»«IF _import.isStar».*«ENDIF»;
-      «ENDFOR»
+      «printImports(comp)»
       
       import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
       import de.montiarcautomaton.runtimes.timesync.delegation.Port;
       
-      public class «comp.name»
-      «IF !comp.formalTypeParameters.empty» < «FOR generic : comp.formalTypeParameters SEPARATOR ','» «generic.name» «ENDFOR»>«ENDIF»
+      public class «comp.name»«printGenerics(comp)»
       «IF comp.superComponent.present» extends «comp.superComponent.get.fullName»Input«ENDIF»
       implements IComponent {
        
         // port fields
         «FOR port : comp.ports»»
             protected Port<«port.typeReference.name»> «port.name»;
-           p p// port setter
-           p ppublic void setPort«port.name.toFirstUpper»(Port<«port.typeReference.name»> port) {
-           p p  this.«port.name» = port;
-           p p}
-           p
-           p  // port getter
-           p  public Port<«port.typeReference.name»> getPort«port.name.toFirstUpper»() {
-           p    return this.«port.name»;
-           p  }
+           // port setter
+           public void setPort«port.name.toFirstUpper»(Port<«port.typeReference.name»> port) {
+             this.«port.name» = port;
+           }
+           
+           // port getter
+           public Port<«port.typeReference.name»> getPort«port.name.toFirstUpper»() {
+             return this.«port.name»;
+           }
         «ENDFOR»   
       
         
@@ -545,4 +517,12 @@ class ComponentGenerator {
     '''
   }
 
+  def printImports(ComponentSymbol comp) {
+    return 
+    '''
+    «FOR _import : comp.imports»
+      import «_import.statement»«IF _import.isStar».*«ENDIF»;
+    «ENDFOR»
+    '''
+  }
 }
