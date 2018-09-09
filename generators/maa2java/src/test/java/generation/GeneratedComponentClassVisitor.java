@@ -171,15 +171,29 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
         final ASTFormalParameterListing expectedParamList
             = constructor.getParameters().getFormalParameterListing();
 
-        final String actualPrint = printWithoutWhitespace(actualParamList);
-        final String expectedPrint = printWithoutWhitespace(expectedParamList);
-
-        if(!actualPrint.equals(expectedPrint)){
-//        if(!actualParamList.deepEquals(expectedParamList, true)){
-          Log.error(String.format("Parameters of constructor %s do not " +
-                                      "fit the expected parameters",
-              actualName));
-          foundError = true;
+        final int actualParamListSize = actualParamList.getFormalParameterList().size();
+        final int expectedParamListSize = expectedParamList.getFormalParameterList().size();
+        if(actualParamListSize == expectedParamListSize){
+          for (int index = 0; index < actualParamListSize; index++) {
+            final String actualPrint
+                = printWithoutWhitespace(actualParamList.getFormalParameter(index));
+            final String expectedPrint
+                = printWithoutWhitespace(expectedParamList.getFormalParameter(index));
+            if(!actualPrint.contains(expectedPrint)){
+              Log.error(String.format("Parameters of constructor %s do not " +
+                                          "fit the expected parameters." +
+                                          "Expected parameter: %s, " +
+                                          "Actual parameter: %s",
+                  actualName, expectedPrint, actualPrint));
+              foundError = true;
+            }
+          }
+        } else {
+          Log.error(
+              String.format("The number of expected parameters (%d) " +
+                                "does not match the number of actual " +
+                                "parameters (%d) of constructor '%s'",
+                  expectedParamListSize, actualParamListSize, actualName));
         }
       } else if(actualParamListPresent || expectedParamListPresent){
         Log.error(String.format("Mismatch in FormalParameterListing " +

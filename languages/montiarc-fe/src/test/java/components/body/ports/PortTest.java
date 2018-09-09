@@ -270,6 +270,7 @@ public class PortTest extends AbstractCoCoTest {
   }
   
   @Test
+  // TODO Fix test. Model uses types like PrintStream and System which are not imported. Test is not executing any CoCos
   public void testPortsWithStereotypes() {
     Scope symTab = this.loadDefaultSymbolTable();
     PortSymbol port = symTab

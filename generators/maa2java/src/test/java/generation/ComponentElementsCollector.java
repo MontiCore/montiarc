@@ -11,7 +11,6 @@ import de.monticore.java.javadsl._ast.ASTImportDeclaration;
 import de.monticore.java.javadsl._ast.JavaDSLMill;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.symboltable.Symbol;
-import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.types.types._ast.*;
 import montiarc._ast.*;
@@ -65,10 +64,10 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     types = new HashMap<>();
 
     if(!symbol.getFormalTypeParameters().isEmpty()) {
-      ASTTypeArgumentsBuilder typeArgumentsBuilder = JavaDSLMill.typeArgumentsBuilder();
+      ASTTypeArgumentsBuilder typeArgumentsBuilder = MontiArcMill.typeArgumentsBuilder();
       for (JTypeSymbol typeSymbol : symbol.getFormalTypeParameters()) {
         final ASTSimpleReferenceType typeParam
-            = JavaDSLMill
+            = MontiArcMill
                   .simpleReferenceTypeBuilder()
                   .addName(typeSymbol.getName())
                   .build();
@@ -76,54 +75,54 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       }
 
       types.put("INPUT_CLASS_TYPE",
-          JavaDSLMill.simpleReferenceTypeBuilder()
+          MontiArcMill.simpleReferenceTypeBuilder()
               .setNameList(Lists.newArrayList(inputName))
               .setTypeArguments(typeArgumentsBuilder.build())
               .build());
       types.put("RESULT_CLASS_TYPE",
-          JavaDSLMill.simpleReferenceTypeBuilder()
+          MontiArcMill.simpleReferenceTypeBuilder()
               .setNameList(Lists.newArrayList(resultName))
               .setTypeArguments(typeArgumentsBuilder.build())
               .build());
     } else {
       types.put("INPUT_CLASS_TYPE",
-          JavaDSLMill.simpleReferenceTypeBuilder()
+          MontiArcMill.simpleReferenceTypeBuilder()
               .setNameList(Lists.newArrayList(inputName))
               .build());
       types.put("RESULT_CLASS_TYPE",
-          JavaDSLMill.simpleReferenceTypeBuilder()
+          MontiArcMill.simpleReferenceTypeBuilder()
               .setNameList(Lists.newArrayList(resultName))
               .build());
     }
 
-    types.put("STRING_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+    types.put("STRING_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
                                  .setNameList(Lists.newArrayList("String"))
                                  .build());
-    types.put("CHARACTER_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+    types.put("CHARACTER_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
                                  .setNameList(Lists.newArrayList("Character"))
                                  .build());
-    types.put("BOOLEAN_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+    types.put("BOOLEAN_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
                                  .setNameList(Lists.newArrayList("Boolean"))
                                  .build());
-    types.put("SHORT_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+    types.put("SHORT_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
                                  .setNameList(Lists.newArrayList("Short"))
                                  .build());
-    types.put("BYTE_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+    types.put("BYTE_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
                                  .setNameList(Lists.newArrayList("Byte"))
                                  .build());
-    types.put("INTEGER_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+    types.put("INTEGER_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
                                  .setNameList(Lists.newArrayList("Integer"))
                                  .build());
-    types.put("LONG_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+    types.put("LONG_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
                                  .setNameList(Lists.newArrayList("Long"))
                                  .build());
-    types.put("FLOAT_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+    types.put("FLOAT_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
                                  .setNameList(Lists.newArrayList("Float"))
                                  .build());
-    types.put("DOUBLE_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+    types.put("DOUBLE_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
                                  .setNameList(Lists.newArrayList("Double"))
                                  .build());
-    types.put("OBJECT_TYPE", JavaDSLMill.simpleReferenceTypeBuilder()
+    types.put("OBJECT_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
                                  .setNameList(Lists.newArrayList("Object"))
                                  .build());
   }
@@ -219,7 +218,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     final ArrayList<ASTTypeArgument> typeArguments = Lists.newArrayList(inputArg, resultArg);
     ASTTypeArguments typeArgs
-        = JavaDSLMill.typeArgumentsBuilder().setTypeArgumentList(typeArguments).build();
+        = MontiArcMill.typeArgumentsBuilder().setTypeArgumentList(typeArguments).build();
     implVisitor.addImplementedInterface("IComputable", typeArgs);
 
     // Add super classes to the signatures
@@ -421,34 +420,47 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
   /**
    * Add expected constructor to the class visitor.
+   * Add the constructor to the impl visitor in case it is applicable.
    */
   private void addConstructors(ASTComponent node) {
     final Constructor.Builder builder = Constructor.getBuilder();
-    Constructor.Builder implConstructor = Constructor.getBuilder();
+    final Constructor.Builder implConstructorBuilder = Constructor.getBuilder();
 
     builder.setName(componentName);
-    implConstructor.setName(implName);
+    implConstructorBuilder.setName(implName);
 
-    StringBuilder parameters = new StringBuilder();
-    for (JFieldSymbol paramSymbol : this.symbol.getConfigParameters()) {
-      parameters.append(paramSymbol.getName()).append(",");
-
-      if (paramSymbol.getType().existsReferencedSymbol()) {
-        final String fullParameterTypeName
-            = paramSymbol.getType().getReferencedSymbol().getFullName();
-
-        ASTType paramType =
-            JavaDSLMill.simpleReferenceTypeBuilder()
-                .setNameList(Lists.newArrayList(fullParameterTypeName))
-                .build();
-
-        builder.addParameter(paramSymbol.getName(), paramType);
-        implConstructor.addParameter(paramSymbol.getName(), paramType);
-      }
+    String paramNamesListString =
+        node.getHead().getParameterList()
+            .stream()
+            .map(ASTParameter::getName)
+            .collect(Collectors.joining(", "));
+    for (ASTParameter astParameter : node.getHead().getParameterList()) {
+      final String parameterName = astParameter.getName();
+      ASTType paramType = boxPrimitiveType(astParameter.getType());
+      builder.addParameter(parameterName, paramType);
+      implConstructorBuilder.addParameter(parameterName, paramType);
     }
-    if (parameters.length() > 0) {
-      parameters.deleteCharAt(parameters.length() - 1);
-    }
+
+
+//    for (JFieldSymbol paramSymbol : this.symbol.getConfigParameters()) {
+//      parameterBuilder.append(paramSymbol.getName()).append(",");
+//
+//      if (paramSymbol.getType().existsReferencedSymbol()) {
+//        final String fullParameterTypeName
+//            = paramSymbol.getType().getReferencedSymbol().getFullName();
+//
+//        ASTType paramType =
+//            JavaDSLMill.simpleReferenceTypeBuilder()
+//                .setNameList(Lists.newArrayList(fullParameterTypeName))
+//                .build();
+//
+//        builder.addParameter(paramSymbol.getName(), paramType);
+//        implConstructorBuilder.addParameter(paramSymbol.getName(), paramType);
+//      }
+//    }
+//    if (parameterBuilder.length() > 0) {
+//      parameterBuilder.deleteCharAt(parameterBuilder.length() - 1);
+//    }
 
     // Expect impl instance if not decomposed
     if (this.symbol.isAtomic()) {
@@ -457,17 +469,17 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       if (!symbol.getFormalTypeParameters().isEmpty()) {
         implAssignment.append(getTypeParameterList());
       }
-      implAssignment.append("(").append(parameters.toString()).append(");");
+      implAssignment.append("(").append(paramNamesListString).append(");");
       builder.addBodyElement(implAssignment.toString());
     }
 
     for (ASTParameter parameter : node.getHead().getParameterList()) {
-      builder.addBodyElement(String.format("this.%s=%s",
-          parameter.getName(), parameter.getName()));
+      builder.addBodyElement(
+          String.format("this.%s=%s", parameter.getName(), parameter.getName()));
     }
 
 
-    this.implVisitor.addConstructor(implConstructor.build());
+    this.implVisitor.addConstructor(implConstructorBuilder.build());
     this.classVisitor.addConstructor(builder.build());
   }
 
@@ -790,30 +802,34 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
   private ASTType boxPrimitiveType(ASTType type){
     if(type instanceof ASTPrimitiveArrayType){
-      // Box the inner type of a primitive array type
+      // Box the type of a primitive array type
       final ASTPrimitiveArrayType primitiveArrayType = (ASTPrimitiveArrayType) type;
       ASTType boxedType = boxPrimitiveType(primitiveArrayType.getComponentType());
-      return JavaDSLMill.primitiveArrayTypeBuilder()
+      return MontiArcMill.primitiveArrayTypeBuilder()
           .setDimensions(primitiveArrayType.getDimensions())
           .setComponentType(boxedType)
           .build();
 
     } else if(type instanceof ASTSimpleReferenceType){
+      // Box all type parameters of the reference type
       final ASTSimpleReferenceType simpleReferenceType = (ASTSimpleReferenceType) type;
-      ASTSimpleReferenceTypeBuilder resultSimpleRef
-          = JavaDSLMill.simpleReferenceTypeBuilder();
-      resultSimpleRef.addAllNames(simpleReferenceType.getNameList());
+      ASTSimpleReferenceTypeBuilder resultSimpleRefTypeBuilder
+          = MontiArcMill.simpleReferenceTypeBuilder();
+      resultSimpleRefTypeBuilder.addAllNames(simpleReferenceType.getNameList());
+
       if (simpleReferenceType.getTypeArgumentsOpt().isPresent()) {
-        final ASTTypeArgumentsBuilder typeArgumentsBuilder = JavaDSLMill.typeArgumentsBuilder();
+        final ASTTypeArgumentsBuilder typeArgumentsBuilder = MontiArcMill.typeArgumentsBuilder();
         for (ASTTypeArgument typeArgument : simpleReferenceType.getTypeArguments().getTypeArgumentList()) {
+          // Recoursively box type arguments
           ASTType boxedTypeArg = boxPrimitiveType((ASTType) typeArgument);
           typeArgumentsBuilder.addTypeArgument(boxedTypeArg);
         }
-        resultSimpleRef.setTypeArguments(typeArgumentsBuilder.build());
+        resultSimpleRefTypeBuilder.setTypeArguments(typeArgumentsBuilder.build());
       }
-      return resultSimpleRef.build();
+      return resultSimpleRefTypeBuilder.build();
 
     } else if(type instanceof ASTPrimitiveType){
+      // Base case: Box primitive types
       ASTPrimitiveType primitiveType = (ASTPrimitiveType) type;
       ASTType result = types.get("OBJECT_TYPE");
       if (primitiveType.isBoolean()) {

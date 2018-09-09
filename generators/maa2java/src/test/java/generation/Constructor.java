@@ -114,8 +114,7 @@ public class Constructor{
   @Override public String toString() {
     String parameterString = "[]";
     if(parameters.isPresentFormalParameterListing()){
-      parameterString = parameters.getFormalParameterListing()
-                            .getFormalParameterList().toString();
+      parameterString = GenerationConstants.PRINTER.prettyprint(parameters.getFormalParameterListing());
     }
 
     return "Constructor{" +

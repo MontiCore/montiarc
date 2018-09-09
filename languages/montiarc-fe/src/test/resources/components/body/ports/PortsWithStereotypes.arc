@@ -1,7 +1,8 @@
 package components.body.ports;
 
 /**
- * Valid model. 
+ * Invalid model.
+ * TODO: Fix test. Model was intended as a valid model, but is missing imports for some types
  */
 component PortsWithStereotypes {
 

@@ -14,7 +14,7 @@ import de.monticore.symboltable.GlobalScope;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
-import montiarc.helper.JavaHelper;
+import montiarc.helper.JavaDefaultTypesManager;
 import org.junit.Before;
 
 import javax.tools.*;
@@ -39,6 +39,8 @@ public class AbstractGeneratorTest {
   public static final String[] fileSuffixes = new String[]{
     "Result", "Input", ""
   };
+
+  private static final boolean REGENERATE = true;
 
   public static final String IMPLEMENTATION_SUFFIX = "Impl";
 
@@ -90,6 +92,11 @@ public class AbstractGeneratorTest {
                             .resolve("components/body/automaton/" +
                                          "transition/guards/GuardIsBoolean.arc"));
 
+    /*
+     * Reason: Declared as valid, but missing type imports (System, PrintStream).
+     */
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH
+                            .resolve("components/body/ports/PortsWithStereoTypes.arc"));
   }
 
   /**
@@ -143,7 +150,9 @@ public class AbstractGeneratorTest {
     generatorTool = new MontiArcGeneratorTool();
 
     // Clear output folder
-//    delete(TARGET_GENERATED_TEST_SOURCES_DIR);
+    if (REGENERATE) {
+      delete(TARGET_GENERATED_TEST_SOURCES_DIR);
+    }
 
     // Test models are assumed to be unpacked by Maven
     assertTrue(Files.exists(TEST_MODEL_PATH));
@@ -164,10 +173,12 @@ public class AbstractGeneratorTest {
     }
 
     // Generate models (at specified location)
-//    generatorTool.generate(
-//        TEST_MODEL_PATH.toFile(),
-//        TARGET_GENERATED_TEST_SOURCES_DIR.toFile(),
-//        Paths.get("src/main/java").toFile());
+    if (REGENERATE) {
+      generatorTool.generate(
+          TEST_MODEL_PATH.toFile(),
+          TARGET_GENERATED_TEST_SOURCES_DIR.toFile(),
+          Paths.get("src/main/java").toFile());
+    }
 
     copyJavaTypesToOutput();
   }
@@ -327,7 +338,7 @@ public class AbstractGeneratorTest {
     ModelPath modelPath = new ModelPath(paths);
 
     GlobalScope gs = new GlobalScope(modelPath, family);
-    JavaHelper.addJavaPrimitiveTypes(gs);
+    JavaDefaultTypesManager.addJavaPrimitiveTypes(gs);
     return gs;
   }
 }
