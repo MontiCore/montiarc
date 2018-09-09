@@ -10,7 +10,8 @@ import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
 import de.montiarcautomaton.runtimes.timesync.delegation.Port;
 
-public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}</#if> implements IComponent {
+
+public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}<#if helper.superCompGeneric()><<#list helper.getSuperCompActualTypeArguments() as typeArg>${typeArg}<#sep>, </#sep></#list>></#if></#if> implements IComponent {
  
   // port fields
   <#list portsIn as port>

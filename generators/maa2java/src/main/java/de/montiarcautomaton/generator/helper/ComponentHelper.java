@@ -13,6 +13,7 @@ import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
+import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor;
 import de.monticore.types.types._ast.ASTType;
@@ -29,11 +30,8 @@ import montiarc._ast.ASTPort;
 import montiarc._ast.ASTValuation;
 import montiarc._ast.ASTValueInitialization;
 import montiarc._ast.ASTVariableDeclaration;
-import montiarc._symboltable.ComponentInstanceSymbol;
-import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.ConnectorSymbol;
-import montiarc._symboltable.PortSymbol;
-import montiarc._symboltable.VariableSymbol;
+import montiarc._symboltable.*;
+import montiarc.helper.SymbolPrinter;
 
 /**
  * Helper class used in the template to generate target code of atomic or
@@ -115,10 +113,10 @@ public class ComponentHelper {
   };
   
   /**
-   * TODO: Write me!
+   * Boxes datatype if applicable.
    * 
-   * @param prettyprint
-   * @return
+   * @param datatype String representation of the datatype to box.
+   * @return The boxed datatype.
    */
   public static String autobox(String datatype) {
     
@@ -334,7 +332,7 @@ public class ComponentHelper {
    * Returns the component name of a connection.
    *
    * @param conn the connection
-   * @param isSource <tt>true</tt> for siurce component, else <tt>false>tt>
+   * @param isSource <tt>true</tt> for source component, else <tt>false>tt>
    * @return
    */
   public String getConnectorComponentName(ConnectorSymbol conn, boolean isSource) {
@@ -356,7 +354,7 @@ public class ComponentHelper {
    * Returns the port name of a connection.
    *
    * @param conn the connection
-   * @param isSource <tt>true</tt> for siurce component, else <tt>false>tt>
+   * @param isSource <tt>true</tt> for source component, else <tt>false>tt>
    * @return
    */
   public String getConnectorPortName(ConnectorSymbol conn, boolean isSource) {
@@ -444,6 +442,31 @@ public class ComponentHelper {
       return component.getSuperComponent().get().getFullName();
     }
     return "ERROR";
+  }
+
+  public boolean superCompGeneric(){
+    if(component.getSuperComponent().isPresent()){
+      final ComponentSymbolReference componentSymbolReference = component.getSuperComponent().get();
+      return componentSymbolReference.hasActualTypeArguments();
+    }
+    return false;
+  }
+
+  /**
+   *
+   * @return A list of String represenations of the actual type arguments
+   * assigned to the super component
+   */
+  public List<String> getSuperCompActualTypeArguments() {
+    final List<String> paramList = new ArrayList<>();
+    if(component.getSuperComponent().isPresent()) {
+      final ComponentSymbolReference componentSymbolReference = component.getSuperComponent().get();
+      final List<ActualTypeArgument> actualTypeArgs = componentSymbolReference.getActualTypeArguments();
+      for (ActualTypeArgument actualTypeArg : actualTypeArgs) {
+        paramList.add(SymbolPrinter.printTypeParameters(actualTypeArg));
+      }
+    }
+    return paramList;
   }
   
   public static Optional<ASTJavaPInitializer> getComponentInitialization(ComponentSymbol comp) {

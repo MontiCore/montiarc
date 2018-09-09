@@ -8,7 +8,7 @@ import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 </#list>
 import de.montiarcautomaton.runtimes.timesync.implementation.IInput;
 
-public class ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}Input</#if> implements IInput {
+public class ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}Input<#if helper.superCompGeneric()><<#list helper.getSuperCompActualTypeArguments() as typeArg>${typeArg}<#sep>, </#sep></#list>></#if></#if> implements IInput {
   // variables  
   <#list portsIn as port>
   private ${helper.getPortTypeName(port)} ${port.getName()};
