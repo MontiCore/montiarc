@@ -156,7 +156,7 @@ public class PortTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortCompatibilityWithGenerics");
     final MontiArcCoCoChecker checker = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(9, "xMA033");
+    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(11, "xMA033");
     checkInvalid(checker, node, expectedErrors);
   }
   

@@ -53,11 +53,11 @@ public class TypeCompatibilityChecker {
     int positionInFormal = 0;
     for (JTypeSymbol formalTypeParameter : formalTypeParameters) {
       if (formalTypeParameter.getName().equals(searchedFormalTypeParameter.getName())) {
-        break;
+        return positionInFormal;
       }
       positionInFormal++;
     }
-    return positionInFormal;
+    return -1;
   }
   
   /**
@@ -96,7 +96,7 @@ public class TypeCompatibilityChecker {
       // bind the generic to the actual type
       int positionInFormal = getPositionInFormalTypeParameters(sourceTypeFormalTypeParameters,
           sourceType);
-      if (!sourceTypeArguments.isEmpty()) {
+      if (!sourceTypeArguments.isEmpty() && positionInFormal!=-1) {
         sourceType = sourceTypeArguments.get(positionInFormal);
       }
     }
@@ -104,7 +104,7 @@ public class TypeCompatibilityChecker {
       // bind the generic to the actual type
       int positionInFormal = getPositionInFormalTypeParameters(targetTypeFormalTypeParameters,
           targetType);
-      if (!targetTypeArguments.isEmpty()) {
+      if (!targetTypeArguments.isEmpty()&& positionInFormal!=-1) {
         targetType = targetTypeArguments.get(positionInFormal);
       }
     }
@@ -126,14 +126,15 @@ public class TypeCompatibilityChecker {
             .get(i)
             .getType();
         
-        // This is the case when we resolved a type which has no actual type
-        // arguments set. E.g. when we resolve the type List<K>, the actual type
-        // argument is not set here. We then reuse the passed actual type
-        // arguments for further processing.
-        if (!sourceTypesCurrentTypeArgument.existsReferencedSymbol()) {
+        // // This is the case when we resolved a type which has no actual type
+        // // arguments set. E.g. when we resolve the type List<K>, the actual
+        // type
+        // // argument is not set here. We then reuse the passed actual type
+        // // arguments for further processing.
+        if (sourceTypesCurrentTypeArgument.getReferencedSymbol().isFormalTypeParameter()) {
           sourceTypesCurrentTypeArgument = sourceTypeArguments.get(i);
         }
-        if (!targetTypesCurrentTypeArgument.existsReferencedSymbol()) {
+        if (targetTypesCurrentTypeArgument.getReferencedSymbol().isFormalTypeParameter()) {
           targetTypesCurrentTypeArgument = targetTypeArguments.get(i);
         }
         
@@ -274,11 +275,7 @@ public class TypeCompatibilityChecker {
         for (JTypeReference<? extends JTypeSymbol> interf : sourceType.getReferencedSymbol()
             .getInterfaces()) {
           List<JTypeReference<?>> interfacesActualArgs = sourceTypeArguments;
-          if (!interf.getActualTypeArguments().isEmpty() && interf.getActualTypeArguments().stream()
-              .anyMatch(a -> ((JTypeReference<?>) a.getType()).existsReferencedSymbol())
-              && !interf.getActualTypeArguments().stream()
-                  .anyMatch(a -> ((JTypeReference<?>) a.getType()).getReferencedSymbol()
-                      .isFormalTypeParameter())) {
+          if (!interf.getActualTypeArguments().isEmpty()) {
             interfacesActualArgs = interf.getActualTypeArguments().stream()
                 .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList());
           }

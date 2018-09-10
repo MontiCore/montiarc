@@ -6,8 +6,11 @@
 package montiarc.cocos;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.google.common.collect.Lists;
 
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -120,6 +123,8 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                       (JTypeReference<? extends JTypeSymbol>) actualArg.getType());
 
                   JTypeSymbol formalType = supersTypeParameters.get(pos);
+                  List<JTypeReference<? extends JTypeSymbol>> formalTypeArgs = new ArrayList<>();
+                  formalTypeArgs.add((JTypeReference<? extends JTypeSymbol>) actualArg.getType());
                   if (!formalType.getInterfaces().isEmpty()) {
                     if (!TypeCompatibilityChecker.doTypesMatch(
                         ((JTypeReference<? extends JTypeSymbol>) actualArg.getType()),
@@ -134,10 +139,7 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                         formalType.getInterfaces().get(j)
                             .getReferencedSymbol().getFormalTypeParameters().stream()
                             .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-                        formalType.getInterfaces().get(j)
-                            .getActualTypeArguments().stream()
-                            .map(a -> (JavaTypeSymbolReference) a.getType())
-                            .collect(Collectors.toList()))) {
+                            formalTypeArgs )) {
                       Log.error("0xMA089 Parameter " + formalType.getName()
                                     + " is not compatible with upper bound "
                                     + upperBound.getName(),

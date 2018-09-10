@@ -281,7 +281,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
 
     // generic type parameters
     addTypeParametersToComponent(component, node.getHead().getGenericTypeParametersOpt(),
-        currentScope().get());
+        component.getSpannedScope());
 
     // parameters
     setParametersOfComponent(component, node.getHead());
