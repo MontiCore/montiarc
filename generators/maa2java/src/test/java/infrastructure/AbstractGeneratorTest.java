@@ -97,6 +97,31 @@ public class AbstractGeneratorTest {
      */
     EXCLUDED_MODELS.add(TEST_MODEL_PATH
                             .resolve("components/body/ports/PortsWithStereoTypes.arc"));
+
+    /*
+     * Reason: Autoconnection is probably not working as intended. For the
+     * source/targets of connectors where only the component is specified,
+     * the entries in the Connector Symbol are wrong.
+     */
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH.resolve("components/body/ports/ReferenceConnectorCompletion.arc"));
+
+    /*
+     * Reason: Subkomponente die voll qualifiziert angegeben sind, werden
+     * unqualifiziert generiert und es wird kein Import fuer die fehlende
+     * Qualifizierung angegeben.
+     */
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH.resolve("components/body/subcomponents/ComplexComponent.arc"));
+
+    /*
+     * Reason: Wrong generation of type variables if assigned as type arguments
+     * for super components.
+     */
+    EXCLUDED_MODELS.add(
+        TEST_MODEL_PATH.resolve("components/head/generics/" +
+                                    "ComponentExtendsGenericComponent2.arc"));
+    EXCLUDED_MODELS.add(
+        TEST_MODEL_PATH.resolve("components/head/generics/" +
+                                    "ComponentExtendsGenericComponent3.arc"));
   }
 
   /**

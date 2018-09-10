@@ -7,20 +7,29 @@ package generation;
 
 import com.google.common.collect.Lists;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
+import de.monticore.ast.ASTNode;
 import de.monticore.java.javadsl._ast.ASTImportDeclaration;
+import de.monticore.java.javadsl._ast.ASTPrimitiveModifier;
 import de.monticore.java.javadsl._ast.JavaDSLMill;
+import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
+import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.types.JTypeSymbol;
+import de.monticore.symboltable.types.TypeSymbol;
+import de.monticore.symboltable.types.references.ActualTypeArgument;
+import de.monticore.symboltable.types.references.JTypeReference;
+import de.monticore.symboltable.types.references.TypeReference;
+import de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor;
 import de.monticore.types.types._ast.*;
 import montiarc._ast.*;
-import montiarc._symboltable.ComponentInstanceSymbol;
-import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.ConnectorSymbol;
-import montiarc._symboltable.PortSymbol;
+import montiarc._symboltable.*;
 import montiarc._visitor.MontiArcVisitor;
+import montiarc.helper.SymbolPrinter;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static generation.GenerationConstants.PRINTER;
@@ -287,7 +296,6 @@ public class ComponentElementsCollector implements MontiArcVisitor {
             .map(PRINTER::prettyprint)
             .collect(Collectors.joining(", "));
 
-        // TODO Add parameters
         methodBuilder.addBodyElement(
             String.format("this.%s = new %s(%s)",
                 subCompInstance.getName(),
@@ -437,7 +445,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     for (ASTParameter astParameter : node.getHead().getParameterList()) {
       final String parameterName = astParameter.getName();
       ASTType paramType = boxPrimitiveType(astParameter.getType());
-      builder.addParameter(parameterName, paramType);
+      builder.addParameter(parameterName, eraseTypes(paramType));
       implConstructorBuilder.addParameter(parameterName, paramType);
     }
 
@@ -481,6 +489,16 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     this.implVisitor.addConstructor(implConstructorBuilder.build());
     this.classVisitor.addConstructor(builder.build());
+  }
+
+  private ASTType eraseTypes(ASTType paramType) {
+    if(paramType instanceof ASTSimpleReferenceType){
+      final ASTSimpleReferenceType simpleRefParamType = (ASTSimpleReferenceType) paramType;
+      if(simpleRefParamType.getTypeArgumentsOpt().isPresent()){
+        simpleRefParamType.setTypeArgumentsAbsent();
+      }
+    }
+    return paramType;
   }
 
   /**
@@ -648,77 +666,240 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   }
 
   /**
+   * Prints a type reference with dimension and type arguments.
+   *
+   * @param reference The type reference to print
+   * @return The printed type reference
+   */
+  private String printTypeReference(TypeReference<? extends TypeSymbol> reference){
+    StringBuilder result = new StringBuilder(reference.getName());
+    if(!reference.getActualTypeArguments().isEmpty()) {
+      result.append("<");
+      result.append(reference.getActualTypeArguments()
+                        .stream()
+                        .map(this::printTypeArgument)
+                        .collect(Collectors.joining(", ")));
+      result.append(">");
+    }
+    for (int i = 0; i < reference.getDimension(); i++) {
+      result.append("[]");
+    }
+    return result.toString();
+  }
+
+  /**
+   * Prints an actual type argument.
+   * @param arg The actual type argument to print
+   * @return The printed actual type argument
+   */
+  private String printTypeArgument(ActualTypeArgument arg){
+    return printTypeReference(arg.getType());
+  }
+
+  /**
+   * Prints a list of actual type arguments.
+   * @param typeArguments The actual type arguments to print
+   * @return The printed actual type arguments
+   */
+  private String printTypeArguments(List<ActualTypeArgument> typeArguments){
+    if(typeArguments.size() > 0) {
+      StringBuilder result = new StringBuilder("<");
+      result.append(
+          typeArguments.stream()
+              .map(this::printTypeArgument)
+              .collect(Collectors.joining(", ")));
+      result.append(">");
+      return result.toString();
+    }
+    return "";
+  }
+
+  /**
+   * Determines the name of the type of the port represented by its symbol.
+   * This takes in to account whether the port is inherited and possible required
+   * renamings due to generic type parameters and their actual arguments.
+   *
+   * @param portSymbol Symbol of the port for which the type name should be determined.
+   * @return The String representation of the type of the port.
+   */
+  private String determinePortTypeName(PortSymbol portSymbol){
+    final JTypeReference<? extends JTypeSymbol> typeReference = portSymbol.getTypeReference();
+    if(!typeReference.existsReferencedSymbol()){
+      return ""; // TODO Better error handling
+    }
+
+    if(!this.symbol.getSuperComponent().isPresent()){
+      // A. Component has no super component
+      //    Therefore, there are no special cases and the name can be used from
+      //    the typeReference, even if it is a generic type parameter of the
+      //    defining component
+//      return printTypeReference(typeReference);
+      // TODO: This is a temporary workaround until MC 5.0.0.1 is used that fixes the JTypeSymbolsHelper
+      TypesPrettyPrinterConcreteVisitor typesPrinter =
+          new TypesPrettyPrinterConcreteVisitor(new IndentPrinter());
+      final ASTPort astNode = (ASTPort) portSymbol.getAstNode().get();
+      return ComponentHelper.autobox(typesPrinter.prettyprint(astNode.getType()));
+
+    } else {
+      // B. Component has a super component
+      if(this.symbol.getIncomingPorts().contains(portSymbol)) {
+        // B.1 Port is defined in the extending component
+        //     There are no special cases, as in A
+//        return printTypeReference(typeReference);
+        // TODO: This is a temporary workaround until MC 5.0.0.1 is used that fixes the JTypeSymbolsHelper
+        TypesPrettyPrinterConcreteVisitor typesPrinter =
+            new TypesPrettyPrinterConcreteVisitor(new IndentPrinter());
+        final ASTPort astNode = (ASTPort) portSymbol.getAstNode().get();
+        return ComponentHelper.autobox(typesPrinter.prettyprint(astNode.getType()));
+
+      } else {
+        // B.2 Port is inherited from the super component (it is not necessarily
+        //      defined exactly in the super component)
+        final ComponentSymbolReference superCompReference = this.symbol.getSuperComponent().get();
+        final ComponentSymbol superCompSymbol = superCompReference.getReferencedSymbol();
+
+
+        // B.2.1 The type or a type parameter of the port is a generic type
+        //        parameter of the super component
+        final List<Object> superFormalParamNames =
+            superCompSymbol.getFormalTypeParameters().stream()
+                .map((Function<JTypeSymbol, Object>) Symbol::getName)
+                .collect(Collectors.toList());
+        if(superFormalParamNames.contains(typeReference.getName())){
+          // B.2.1 The type of the port (without type arguments) is a generic type
+          //        parameter of the super component
+          // Determine the index and replace the type parameter with the
+          // actual type argument
+          final int index = superFormalParamNames.indexOf(typeReference.getName());
+          final ActualTypeArgument actualTypeArgument =
+              superCompReference.getActualTypeArguments().get(index);
+          final String printedTypeArgument = printTypeArgument(actualTypeArgument);
+          return printedTypeArgument + printTypeArguments(typeReference.getActualTypeArguments());
+
+        } else if(false) {
+          // B.2.1 The type arguments of the port contain a generic type of the super component
+          // TODO Recursive replacement of the type parameter with the actual argument
+          return "";
+        } else {
+          // B.2.2 Port is not using a generic type parameter as its type
+//          return printTypeReference(typeReference);
+          // TODO: This is a temporary workaround until MC 5.0.0.1 is used that fixes the JTypeSymbolsHelper
+          TypesPrettyPrinterConcreteVisitor typesPrinter =
+              new TypesPrettyPrinterConcreteVisitor(new IndentPrinter());
+          final ASTPort astNode = (ASTPort) portSymbol.getAstNode().get();
+          return ComponentHelper.autobox(typesPrinter.prettyprint(astNode.getType()));
+        }
+      }
+    }
+  }
+
+  /**
    * Adds expected constructors to the Input and Result visitors from the
    * given ComponentSymbol
    */
   private void addInputAndResultConstructor() {
-    Constructor.Builder builder = Constructor.getBuilder();
+    Constructor.Builder inputConstructorBuilder = Constructor.getBuilder();
 
-    // Add empty constructors
+    // Add default constructor as expected constructor
     if (symbol.getSuperComponent().isPresent()) {
-      builder.addBodyElement("super();");
+      inputConstructorBuilder.addBodyElement("super();");
     }
-    builder.setName(symbol.getName() + "Input");
-    this.inputVisitor.addConstructor(builder.build());
-    // Add parameterized constructors
-    for (PortSymbol inPort : this.symbol.getIncomingPorts()) {
-      ASTSimpleReferenceType type
-          = JavaDSLMill.simpleReferenceTypeBuilder()
-                .addAllNames(Lists.newArrayList(helper.getPortTypeName(inPort).split("\\.")))
-                .build();
-      builder.addParameter(inPort.getName(), type);
-    }
+    inputConstructorBuilder.setName(symbol.getName() + "Input");
+    this.inputVisitor.addConstructor(inputConstructorBuilder.build());
 
-    if (!symbol.getIncomingPorts().isEmpty()) {
-      for (PortSymbol port : symbol.getIncomingPorts()) {
-        final ASTPort astNode = (ASTPort) port.getAstNode().get();
-        final String portName = port.getName();
-//        builder.addParameter(portName, astNode.getType());
+    // Add parameterized constructors which have a parameter for each incoming
+    // port and a call to the super component, if present, with the input ports
+    // inherited from the super component.
+    // This constructor is only expected if the number of incoming ports,
+    // inherited and not inherited is greater than 0.
+    final Collection<PortSymbol> incomingPorts = this.symbol.getAllIncomingPorts();
 
-        builder.addBodyElement(String.format("this.%s=%s", portName, portName));
+    if (!incomingPorts.isEmpty()) {
+      inputConstructorBuilder = Constructor.getBuilder();
+      inputConstructorBuilder.setName(symbol.getName() + "Input");
+
+      for (PortSymbol inPort : incomingPorts) {
+        ASTSimpleReferenceType type
+            = JavaDSLMill.simpleReferenceTypeBuilder()
+                  .addAllNames(Lists.newArrayList(
+                      ComponentHelper.autobox(determinePortTypeName(inPort)).split("\\.")))
+                  .build();
+        inputConstructorBuilder.addParameter(inPort.getName(), type);
       }
 
-      // TODO Call to super class.
+      // Adds expected call to the constructor of the super components *Input
+      // constructor with parameters for all inherited ports
       if (symbol.getSuperComponent().isPresent()) {
+        final ComponentSymbol superSymbol = symbol.getSuperComponent().get();
         StringBuilder superCall = new StringBuilder("super(");
-//        final ComponentSymbol superSymbol = symbol.getSuperComponent().get().getReferencedSymbol();
-//        for (PortSymbol superInPort : superSymbol.getIncomingPorts()) {
-//          superCall.append(superInPort.getName()).append(",");
-//        }
-//        if(superCall.charAt(superCall.length() - 1) == 'c'){
-//          superCall.deleteCharAt(superCall.length() - 1);
-//        }
+        final List<PortSymbol> superCompAllIncomingPorts = superSymbol.getAllIncomingPorts();
+        final String superCallParameters =
+            superCompAllIncomingPorts
+                .stream()
+                .map(CommonSymbol::getName)
+                .collect(Collectors.joining(", "));
+        superCall.append(superCallParameters);
         superCall.append(")");
-//        builder.addBodyElement(superCall.toString();
+        inputConstructorBuilder.addBodyElement(superCall.toString());
       }
 
-      this.inputVisitor.addConstructor(builder.build());
+      // Add the expected initializers for all incoming ports that are not inherited
+      for (PortSymbol port : symbol.getIncomingPorts()) {
+        final String portName = port.getName();
+        inputConstructorBuilder.addBodyElement(
+            String.format("this.%s=%s", portName, portName));
+      }
+
+      this.inputVisitor.addConstructor(inputConstructorBuilder.build());
     }
 
-    builder = Constructor.getBuilder();
-    builder.setName(symbol.getName() + "Result");
-    this.resultVisitor.addConstructor(builder.build());
+    Constructor.Builder resultConstructorBuilder = Constructor.getBuilder();
+    resultConstructorBuilder.setName(symbol.getName() + "Result");
+    this.resultVisitor.addConstructor(resultConstructorBuilder.build());
 
-    if (!symbol.getOutgoingPorts().isEmpty()) {
-      builder = Constructor.getBuilder();
-      builder.setName(symbol.getName() + "Result");
-      for (PortSymbol port : symbol.getOutgoingPorts()) {
-        final ASTPort astNode = (ASTPort) port.getAstNode().get();
-        final String portName = port.getName();
-//        builder.addParameter(portName, astNode.getType());
-
-        builder.addBodyElement(String.format("this.%s=%s", portName, portName));
-      }
+    // Add parameterized constructors which have a parameter for each outgoing
+    // port and a call to the super component, if present, with the output ports
+    // inherited from the super component.
+    // This constructor is only expected if the number of outgoing ports,
+    // inherited and not inherited is greater than 0.
+    if (!symbol.getAllOutgoingPorts().isEmpty()) {
+      resultConstructorBuilder = Constructor.getBuilder();
+      resultConstructorBuilder.setName(symbol.getName() + "Result");
 
       for (PortSymbol outPort : this.symbol.getOutgoingPorts()) {
         ASTSimpleReferenceType type
             = JavaDSLMill.simpleReferenceTypeBuilder()
-                  .addAllNames(Lists.newArrayList(helper.getPortTypeName(outPort).split("\\.")))
+                  .addAllNames(Lists.newArrayList(
+                      ComponentHelper.autobox(determinePortTypeName(outPort)).split("\\.")))
                   .build();
-        builder.addParameter(outPort.getName(), type);
+        resultConstructorBuilder.addParameter(outPort.getName(), type);
       }
 
-      this.resultVisitor.addConstructor(builder.build());
+      // Adds expected call to the constructor of the super components *Input
+      // constructor with parameters for all inherited ports
+      if (symbol.getSuperComponent().isPresent()) {
+        final ComponentSymbol superSymbol = symbol.getSuperComponent().get();
+
+        StringBuilder superCall = new StringBuilder("super(");
+        final List<PortSymbol> superCompAllOutgoingPorts = superSymbol.getAllOutgoingPorts();
+        final String superCallParameters =
+            superCompAllOutgoingPorts
+                .stream()
+                .map(CommonSymbol::getName)
+                .collect(Collectors.joining(", "));
+        superCall.append(superCallParameters).append(")");
+
+        inputConstructorBuilder.addBodyElement(superCall.toString());
+      }
+
+      // Add the expected initializers for all outgoing ports that are not inherited
+      for (PortSymbol port : symbol.getOutgoingPorts()) {
+        final String portName = port.getName();
+        resultConstructorBuilder.addBodyElement(
+            String.format("this.%s=%s", portName, portName));
+      }
+
+      this.resultVisitor.addConstructor(resultConstructorBuilder.build());
     }
   }
 

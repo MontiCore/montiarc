@@ -51,6 +51,14 @@ public class Constructor{
 
   static class Builder{
 
+    public List<ASTFormalParameter> getParameters() {
+      return parameters;
+    }
+
+    public List<String> getBodyElements() {
+      return bodyElements;
+    }
+
     private String name;
     private List<ASTFormalParameter> parameters;
     private List<String> bodyElements;
@@ -91,6 +99,16 @@ public class Constructor{
 
     public Builder setName(String name){
       this.name = name;
+      return this;
+    }
+
+    public Builder clearBodyElements(){
+      this.bodyElements = new ArrayList<>();
+      return this;
+    }
+
+    public Builder clearParameters(){
+      this.parameters = new ArrayList<>();
       return this;
     }
 

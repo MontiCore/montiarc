@@ -93,9 +93,7 @@ public class ComponentHelper {
     // }
     
     ASTPort astPort = (ASTPort) port.getAstNode().get();
-    ASTTypesNode astTypeNode = (ASTTypesNode) astPort.getType();
-    String portTypeName = autobox(typesPrinter.prettyprint(astTypeNode));
-    return portTypeName;
+    return autobox(typesPrinter.prettyprint(astPort.getType()));
     // return getPortTypeName(componentNode, port);
   }
   
