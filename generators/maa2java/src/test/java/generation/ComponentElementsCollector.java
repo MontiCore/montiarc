@@ -181,6 +181,9 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     // impl field
     addImplField();
 
+    // Component variables
+    addComponentVariableFields();
+
     // Common methods
     // setup
     addSetUp();
@@ -241,6 +244,19 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     }
   }
 
+  /**
+   * Adds fields for component variables to the set of expected fields
+   */
+  private void addComponentVariableFields() {
+    for (VariableSymbol variableSymbol : this.symbol.getVariables()) {
+      if(variableSymbol.getAstNode().isPresent()) {
+        final ASTVariableDeclaration astNode = (ASTVariableDeclaration) variableSymbol.getAstNode().get();
+        Field field = new Field(variableSymbol.getName(), boxPrimitiveType(astNode.getType()));
+        classVisitor.addField(field);
+      }
+    }
+  }
+
   private void addInit() {
     Method.Builder methodBuilder = Method.getBuilder().setName("init");
 
@@ -293,6 +309,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     if (this.symbol.isDecomposed()) {
       for (ComponentInstanceSymbol subCompInstance : this.symbol.getSubComponents()) {
 
+        // TODO: Default parameters are missing in the parameters
         String parameterString = subCompInstance.getConfigArguments()
             .stream()
             .map(PRINTER::prettyprint)

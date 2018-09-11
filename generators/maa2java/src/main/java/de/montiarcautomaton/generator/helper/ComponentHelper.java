@@ -600,6 +600,8 @@ public class ComponentHelper {
         final String printedTypeArg = SymbolPrinter.printTypeParameters(actualTypeArg);
         if(printedTypeArg.startsWith(componentPrefix)) {
           paramList.add(printedTypeArg.substring(componentPrefix.length()));
+        } else {
+          paramList.add(printedTypeArg);
         }
       }
     }

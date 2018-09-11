@@ -10,16 +10,14 @@ import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.monticore.java.javadsl._ast.*;
 import de.monticore.java.javadsl._visitor.JavaDSLVisitor;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
-import de.monticore.types.types._ast.ASTSimpleReferenceType;
-import de.monticore.types.types._ast.ASTType;
-import de.monticore.types.types._ast.ASTTypeArguments;
-import de.monticore.types.types._ast.ASTTypesNode;
+import de.monticore.types.types._ast.*;
 import de.se_rwth.commons.logging.Log;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static junit.framework.TestCase.assertTrue;
 
@@ -126,22 +124,73 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     }
     final Optional<ASTType> superClass = node.getSuperClassOpt();
     if(this.superClass != null && !superClass.isPresent()){
+      // Case 1: There is an expected super class but no super class in the generated code
       Log.error(String.format("%s does not extend superclass %s",
           className, this.superClass));
+
     } else if(this.superClass == null && superClass.isPresent()){
+      // Case 2: No expected super class but a super class in the code
       Log.error(String.format("%s unexpectedly extends a class %s",
           className, printWithoutWhitespace(superClass.get())));
+
     } else if(this.superClass != null){
-      String superClassString = this.superClass;
-      if(this.superClassTypeArgs != null) {
-        superClassString += ComponentHelper.printTypeArguments(this.superClassTypeArgs);
-      }
-      if(!superClassString.equals(printWithoutWhitespace(superClass.get()))){
+      // Case 3: Expected super class and generated super class
+      ComponentHelper.printTypeArguments(this.superClassTypeArgs);
+      final ASTSimpleReferenceType superClassType = (ASTSimpleReferenceType) superClass.get();
+
+      final String superClassFqn =
+          superClassType.getNameList().stream().collect(Collectors.joining("."));
+      if(!this.superClass.equals(superClassFqn)){
+        // Case 3.1: Names of the expected and actual classes without type arguments
+        //            do not match
         Log.error(String.format("The class %s extends the wrong class " +
                                     "%s instead of expected class %s",
+            className, superClassFqn, this.superClass));
+
+      } else if(!this.superClassTypeArgs.isEmpty() && !superClassType.getTypeArgumentsOpt().isPresent()) {
+        // Case 3.2: Expected type arguments but found none
+        Log.error(String.format("Expected type arguments '%s' in class '%s' " +
+                                    "for super class '%s', but found none.",
+            ComponentHelper.printTypeArguments(this.superClassTypeArgs),
             className,
-            printWithoutWhitespace(superClass.get()),
-            superClassString));
+            superClassFqn));
+
+      } else if(this.superClassTypeArgs.isEmpty() && superClassType.getTypeArgumentsOpt().isPresent()) {
+        // Case 3.3: Expected no type arguments, but there are generated type arguments
+        Log.error(String.format("Expected no type arguments " +
+                                    "for super class '%s' in class '%s', but found '%s'.",
+            className,
+            superClassFqn,
+            GenerationConstants.PRINTER.prettyprint(superClassType.getTypeArguments())));
+
+      } else if(!this.superClassTypeArgs.isEmpty() && superClassType.getTypeArgumentsOpt().isPresent()){
+        // Case 3.4: Expected type arguments and actual type arguments generated
+        final List<ASTTypeArgument> actualSuperTypeArgList =
+            superClassType.getTypeArguments().getTypeArgumentList();
+        if(this.superClassTypeArgs.size() != actualSuperTypeArgList.size()){
+          Log.error(String.format("Expected %d type arguments for super " +
+                                      "class '%s' of class '%s', but found '%d'.",
+              this.superClassTypeArgs.size(),
+              this.superClass,
+              this.className,
+              actualSuperTypeArgList.size()));
+        }
+        // Check that the parameters match
+        for (ActualTypeArgument superClassTypeArg : this.superClassTypeArgs) {
+          int index = this.superClassTypeArgs.indexOf(superClassTypeArg);
+          final ASTTypeArgument astTypeArgument = actualSuperTypeArgList.get(index);
+          final String printedSuperTypeArg = printWithoutWhitespace(astTypeArgument);
+          final String printedExpectedTypeArg = ComponentHelper.printTypeArgument(superClassTypeArg);
+          if(!printedSuperTypeArg.contains(printedExpectedTypeArg)){
+            Log.error(String.format("Actual type argument '%s' for super " +
+                                        "class '%s' of class '%s' does not " +
+                                        "match the expected type '%s'.",
+                printedSuperTypeArg,
+                this.superClass,
+                this.className,
+                printedExpectedTypeArg));
+          }
+        }
       }
     }
   }
