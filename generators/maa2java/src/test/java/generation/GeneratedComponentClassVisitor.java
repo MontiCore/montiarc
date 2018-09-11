@@ -6,8 +6,10 @@
 package generation;
 
 import com.google.common.collect.Sets;
+import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.monticore.java.javadsl._ast.*;
 import de.monticore.java.javadsl._visitor.JavaDSLVisitor;
+import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.types.types._ast.ASTSimpleReferenceType;
 import de.monticore.types.types._ast.ASTType;
 import de.monticore.types.types._ast.ASTTypeArguments;
@@ -36,6 +38,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
   private Set<String> interfaces;
   private Set<EnumType> enumTypes;
   private String superClass;
+  private List<ActualTypeArgument> superClassTypeArgs;
 
   public Set<Constructor> getConstructors() {
     return constructors;
@@ -129,12 +132,16 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
       Log.error(String.format("%s unexpectedly extends a class %s",
           className, printWithoutWhitespace(superClass.get())));
     } else if(this.superClass != null){
-      if(!this.superClass.equals(printWithoutWhitespace(superClass.get()))){
+      String superClassString = this.superClass;
+      if(this.superClassTypeArgs != null) {
+        superClassString += ComponentHelper.printTypeArguments(this.superClassTypeArgs);
+      }
+      if(!superClassString.equals(printWithoutWhitespace(superClass.get()))){
         Log.error(String.format("The class %s extends the wrong class " +
                                     "%s instead of expected class %s",
             className,
             printWithoutWhitespace(superClass.get()),
-            this.superClass));
+            superClassString));
       }
     }
   }
@@ -370,6 +377,14 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
 
   public void setSuperClass(String superClass) {
     this.superClass = superClass;
+  }
+
+  /*
+   *
+   */
+  public void setSuperClass(String superClass, List<ActualTypeArgument> typeArgs){
+    setSuperClass(superClass);
+    this.superClassTypeArgs = typeArgs;
   }
 
   public String getSuperClass() {

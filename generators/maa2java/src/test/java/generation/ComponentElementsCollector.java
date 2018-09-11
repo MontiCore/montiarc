@@ -233,9 +233,11 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     // Add super classes to the signatures
     if (symbol.getSuperComponent().isPresent()) {
       final String fullName = symbol.getSuperComponent().get().getFullName();
-      classVisitor.setSuperClass(fullName);
-      resultVisitor.setSuperClass(fullName + "Result");
-      inputVisitor.setSuperClass(fullName + "Input");
+      final List<ActualTypeArgument> superTypeArguments =
+          symbol.getSuperComponent().get().getActualTypeArguments();
+      classVisitor.setSuperClass(fullName, superTypeArguments);
+      resultVisitor.setSuperClass(fullName + "Result", superTypeArguments);
+      inputVisitor.setSuperClass(fullName + "Input", superTypeArguments);
     }
   }
 
@@ -526,7 +528,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
       inputVariable.append("(");
       final String paramList
-          = symbol.getIncomingPorts()
+          = symbol.getAllIncomingPorts()
                 .stream()
                 .map(p -> "this." + p.getName() + ".getCurrentValue()")
                 .collect(Collectors.joining(", "));
@@ -855,6 +857,10 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     Constructor.Builder resultConstructorBuilder = Constructor.getBuilder();
     resultConstructorBuilder.setName(symbol.getName() + "Result");
+    // Add default constructor as expected constructor
+    if (symbol.getSuperComponent().isPresent()) {
+      resultConstructorBuilder.addBodyElement("super();");
+    }
     this.resultVisitor.addConstructor(resultConstructorBuilder.build());
 
     // Add parameterized constructors which have a parameter for each outgoing
@@ -866,7 +872,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       resultConstructorBuilder = Constructor.getBuilder();
       resultConstructorBuilder.setName(symbol.getName() + "Result");
 
-      for (PortSymbol outPort : this.symbol.getOutgoingPorts()) {
+      for (PortSymbol outPort : this.symbol.getAllOutgoingPorts()) {
         ASTSimpleReferenceType type
             = JavaDSLMill.simpleReferenceTypeBuilder()
                   .addAllNames(Lists.newArrayList(
