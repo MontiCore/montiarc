@@ -6,15 +6,20 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import de.monticore.ast.ASTNode;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
+import de.monticore.symboltable.types.TypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
+import de.monticore.symboltable.types.references.TypeReference;
 import de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor;
 import de.monticore.types.types._ast.ASTType;
 import de.monticore.types.types._ast.ASTTypeVariableDeclaration;
@@ -92,11 +97,141 @@ public class ComponentHelper {
     // }
     // }
     
-    ASTPort astPort = (ASTPort) port.getAstNode().get();
-    return autobox(typesPrinter.prettyprint(astPort.getType()));
+//    ASTPort astPort = (ASTPort) port.getAstNode().get();
+//    return autobox(typesPrinter.prettyprint(astPort.getType()));
     // return getPortTypeName(componentNode, port);
+    return determinePortTypeName(port);
   }
-  
+
+  /**
+   * Determines the name of the type of the port represented by its symbol.
+   * This takes in to account whether the port is inherited and possible required
+   * renamings due to generic type parameters and their actual arguments.
+   *
+   * @param portSymbol Symbol of the port for which the type name should be determined.
+   * @return The String representation of the type of the port.
+   */
+  private String determinePortTypeName(PortSymbol portSymbol){
+    final JTypeReference<? extends JTypeSymbol> typeReference = portSymbol.getTypeReference();
+    if(!typeReference.existsReferencedSymbol()){
+      return ""; // TODO Better error handling
+    }
+
+    if(!this.component.getSuperComponent().isPresent()){
+      // A. Component has no super component
+      //    Therefore, there are no special cases and the name can be used from
+      //    the typeReference, even if it is a generic type parameter of the
+      //    defining component
+//      return printTypeReference(typeReference);
+      // TODO: This is a temporary workaround until MC 5.0.0.1 is used that fixes the JTypeSymbolsHelper
+      TypesPrettyPrinterConcreteVisitor typesPrinter =
+          new TypesPrettyPrinterConcreteVisitor(new IndentPrinter());
+      final ASTPort astNode = (ASTPort) portSymbol.getAstNode().get();
+      return ComponentHelper.autobox(typesPrinter.prettyprint(astNode.getType()));
+
+    } else {
+      // B. Component has a super component
+      if(this.component.getIncomingPorts().contains(portSymbol)) {
+        // B.1 Port is defined in the extending component
+        //     There are no special cases, as in A
+//        return printTypeReference(typeReference);
+        // TODO: This is a temporary workaround until MC 5.0.0.1 is used that fixes the JTypeSymbolsHelper
+        TypesPrettyPrinterConcreteVisitor typesPrinter =
+            new TypesPrettyPrinterConcreteVisitor(new IndentPrinter());
+        final ASTPort astNode = (ASTPort) portSymbol.getAstNode().get();
+        return ComponentHelper.autobox(typesPrinter.prettyprint(astNode.getType()));
+
+      } else {
+        // B.2 Port is inherited from the super component (it is not necessarily
+        //      defined exactly in the super component)
+        final ComponentSymbolReference superCompReference = this.component.getSuperComponent().get();
+        final ComponentSymbol superCompSymbol = superCompReference.getReferencedSymbol();
+
+
+        // B.2.1 The type or a type parameter of the port is a generic type
+        //        parameter of the super component
+        final List<Object> superFormalParamNames =
+            superCompSymbol.getFormalTypeParameters().stream()
+                .map((Function<JTypeSymbol, Object>) Symbol::getName)
+                .collect(Collectors.toList());
+        if(superFormalParamNames.contains(typeReference.getName())){
+          // B.2.1 The type of the port (without type arguments) is a generic type
+          //        parameter of the super component
+          // Determine the index and replace the type parameter with the
+          // actual type argument
+          final int index = superFormalParamNames.indexOf(typeReference.getName());
+          final ActualTypeArgument actualTypeArgument =
+              superCompReference.getActualTypeArguments().get(index);
+          final String printedTypeArgument = printTypeArgument(actualTypeArgument);
+          return printedTypeArgument + printTypeArguments(typeReference.getActualTypeArguments());
+
+        } else if(false) {
+          // B.2.1 The type arguments of the port contain a generic type of the super component
+          // TODO Recursive replacement of the type parameter with the actual argument
+          return "";
+        } else {
+          // B.2.2 Port is not using a generic type parameter as its type
+//          return printTypeReference(typeReference);
+          // TODO: This is a temporary workaround until MC 5.0.0.1 is used that fixes the JTypeSymbolsHelper
+          TypesPrettyPrinterConcreteVisitor typesPrinter =
+              new TypesPrettyPrinterConcreteVisitor(new IndentPrinter());
+          final ASTPort astNode = (ASTPort) portSymbol.getAstNode().get();
+          return ComponentHelper.autobox(typesPrinter.prettyprint(astNode.getType()));
+        }
+      }
+    }
+  }
+
+
+  /**
+   * Prints a type reference with dimension and type arguments.
+   *
+   * @param reference The type reference to print
+   * @return The printed type reference
+   */
+  public static String printTypeReference(TypeReference<? extends TypeSymbol> reference){
+    StringBuilder result = new StringBuilder(reference.getName());
+    if(!reference.getActualTypeArguments().isEmpty()) {
+      result.append("<");
+      result.append(reference.getActualTypeArguments()
+                        .stream()
+                        .map(ComponentHelper::printTypeArgument)
+                        .collect(Collectors.joining(", ")));
+      result.append(">");
+    }
+    for (int i = 0; i < reference.getDimension(); i++) {
+      result.append("[]");
+    }
+    return result.toString();
+  }
+
+  /**
+   * Prints an actual type argument.
+   * @param arg The actual type argument to print
+   * @return The printed actual type argument
+   */
+  public static String printTypeArgument(ActualTypeArgument arg){
+    return printTypeReference(arg.getType());
+  }
+
+  /**
+   * Prints a list of actual type arguments.
+   * @param typeArguments The actual type arguments to print
+   * @return The printed actual type arguments
+   */
+  public static String printTypeArguments(List<ActualTypeArgument> typeArguments){
+    if(typeArguments.size() > 0) {
+      StringBuilder result = new StringBuilder("<");
+      result.append(
+          typeArguments.stream()
+              .map(ComponentHelper::printTypeArgument)
+              .collect(Collectors.joining(", ")));
+      result.append(">");
+      return result.toString();
+    }
+    return "";
+  }
+
   private static HashMap<String, String> PRIMITIVE_TYPES = new HashMap<String, String>() {
     {
       put("int", "Integer");
@@ -460,8 +595,12 @@ public class ComponentHelper {
     if(component.getSuperComponent().isPresent()) {
       final ComponentSymbolReference componentSymbolReference = component.getSuperComponent().get();
       final List<ActualTypeArgument> actualTypeArgs = componentSymbolReference.getActualTypeArguments();
+      String componentPrefix = this.component.getFullName() + ".";
       for (ActualTypeArgument actualTypeArg : actualTypeArgs) {
-        paramList.add(SymbolPrinter.printTypeParameters(actualTypeArg));
+        final String printedTypeArg = SymbolPrinter.printTypeParameters(actualTypeArg);
+        if(printedTypeArg.startsWith(componentPrefix)) {
+          paramList.add(printedTypeArg.substring(componentPrefix.length()));
+        }
       }
     }
     return paramList;
