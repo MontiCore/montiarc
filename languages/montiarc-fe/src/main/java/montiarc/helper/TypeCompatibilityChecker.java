@@ -131,10 +131,10 @@ public class TypeCompatibilityChecker {
         // type
         // // argument is not set here. We then reuse the passed actual type
         // // arguments for further processing.
-        if (sourceTypesCurrentTypeArgument.getReferencedSymbol().isFormalTypeParameter()) {
+        if (!sourceTypesCurrentTypeArgument.existsReferencedSymbol() || sourceTypesCurrentTypeArgument.getReferencedSymbol().isFormalTypeParameter()) {
           sourceTypesCurrentTypeArgument = sourceTypeArguments.get(i);
         }
-        if (targetTypesCurrentTypeArgument.getReferencedSymbol().isFormalTypeParameter()) {
+        if (!targetTypesCurrentTypeArgument.existsReferencedSymbol() ||targetTypesCurrentTypeArgument.getReferencedSymbol().isFormalTypeParameter()) {
           targetTypesCurrentTypeArgument = targetTypeArguments.get(i);
         }
         
@@ -275,7 +275,7 @@ public class TypeCompatibilityChecker {
         for (JTypeReference<? extends JTypeSymbol> interf : sourceType.getReferencedSymbol()
             .getInterfaces()) {
           List<JTypeReference<?>> interfacesActualArgs = sourceTypeArguments;
-          if (!interf.getActualTypeArguments().isEmpty()) {
+          if (!interf.getActualTypeArguments().isEmpty() && !hasNestedGenerics(interf)) {
             interfacesActualArgs = interf.getActualTypeArguments().stream()
                 .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList());
           }
