@@ -19,7 +19,7 @@ public class ${resultName}<#if helper.isGeneric()><<#list helper.getGenericParam
   
   <#if helper.getAllOutPorts()?size != 0>
   public ${resultName}(<#list helper.getAllOutPorts() as port>${helper.getPortTypeName(port)} ${port.getName()}<#sep>, </#list>) {
-    <#if helper.hasSuperComp()>super(<#list helper.getAllOutPorts() as port>${port.getName()}<#sep>, </#list>);</#if>
+    <#if helper.hasSuperComp()>super(<#list helper.getSuperOutPorts() as port>${port.getName()}<#sep>, </#list>);</#if>
     <#list portsOut as port>
     this.${port.getName()} = ${port.getName()};
     </#list>

@@ -13,6 +13,8 @@ import de.monticore.types.types._ast.ASTVoidType;
 import java.util.ArrayList;
 import java.util.List;
 
+import static generation.GenerationConstants.PRINTER;
+
 /**
  * TODO
  *
@@ -21,12 +23,12 @@ import java.util.List;
  * @since TODO
  */
 public class Method{
-  private final ASTReturnType returnType;
+  private final String returnType;
   private final String name;
   private final ASTFormalParameters params;
   private List<String> bodyElements;
 
-  public Method(ASTReturnType returnType, String name,
+  public Method(String returnType, String name,
                 ASTFormalParameters params, List<String> bodyElements) {
     this.returnType = returnType;
     this.name = name;
@@ -38,7 +40,7 @@ public class Method{
     return new Builder();
   }
 
-  public ASTReturnType getReturnType() {
+  public String getReturnType() {
     return returnType;
   }
 
@@ -71,7 +73,7 @@ public class Method{
 
   static class Builder{
 
-    private ASTReturnType returnType;
+    private String returnType;
     private String name;
     private List<ASTFormalParameter> parameters;
     private List<String> bodyElements;
@@ -81,7 +83,7 @@ public class Method{
       this.parameters = new ArrayList<>();
     }
 
-    public Builder setReturnType(ASTReturnType returnType) {
+    public Builder setReturnType(String returnType) {
       this.returnType = returnType;
       return this;
     }
@@ -133,7 +135,7 @@ public class Method{
                                .build();
       }
       if(returnType == null){
-        returnType = GenerationConstants.VOID_TYPE;
+        returnType = "void";
       }
       return new Method(returnType, name, formalParameters, bodyElements);
     }
@@ -148,7 +150,7 @@ public class Method{
     return "Method{" +
         "returnType=" + returnType +
         ", name='" + name + '\'' +
-        ", params=" + params +
+        ", params=" + PRINTER.prettyprint(params) +
         ", bodyElements=" + bodyElements +
         '}';
   }

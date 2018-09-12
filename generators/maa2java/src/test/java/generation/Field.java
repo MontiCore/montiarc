@@ -17,9 +17,9 @@ import de.monticore.types.types._ast.ASTType;
  */
 class Field {
   private final String name;
-  private final ASTType type;
+  private final String type;
 
-  Field(String name, ASTType type) {
+  Field(String name, String type) {
     this.name = name;
     this.type = type;
   }
@@ -28,22 +28,14 @@ class Field {
     return name;
   }
 
-  public ASTType getType() {
+  public String getType() {
     return type;
   }
 
   @Override public String toString() {
-    String typeString = type.toString();
-    if(type instanceof ASTSimpleReferenceType){
-      final ASTSimpleReferenceType type = (ASTSimpleReferenceType) this.type;
-      typeString += type.getNameList();
-      if(type.getTypeArgumentsOpt().isPresent()){
-        typeString += "TypeArguments: " + type.getTypeArguments().toString();
-      }
-    }
     return "Field{" +
         "name='" + name + '\'' +
-        ", type=" + typeString +
+        ", type=" + type +
         '}';
   }
 }

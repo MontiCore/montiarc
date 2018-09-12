@@ -1,14 +1,10 @@
 package de.montiarcautomaton.generator.helper;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.google.common.base.Strings;
 import de.monticore.ast.ASTNode;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.mcexpressions._ast.ASTExpression;
@@ -100,7 +96,7 @@ public class ComponentHelper {
 //    ASTPort astPort = (ASTPort) port.getAstNode().get();
 //    return autobox(typesPrinter.prettyprint(astPort.getType()));
     // return getPortTypeName(componentNode, port);
-    return determinePortTypeName(port);
+    return determinePortTypeName(this.component, port);
   }
 
   /**
@@ -111,13 +107,13 @@ public class ComponentHelper {
    * @param portSymbol Symbol of the port for which the type name should be determined.
    * @return The String representation of the type of the port.
    */
-  private String determinePortTypeName(PortSymbol portSymbol){
+  public static String determinePortTypeName(ComponentSymbol componentSymbol, PortSymbol portSymbol){
     final JTypeReference<? extends JTypeSymbol> typeReference = portSymbol.getTypeReference();
     if(!typeReference.existsReferencedSymbol()){
       return ""; // TODO Better error handling
     }
 
-    if(!this.component.getSuperComponent().isPresent()){
+    if(!componentSymbol.getSuperComponent().isPresent()){
       // A. Component has no super component
       //    Therefore, there are no special cases and the name can be used from
       //    the typeReference, even if it is a generic type parameter of the
@@ -128,10 +124,11 @@ public class ComponentHelper {
           new TypesPrettyPrinterConcreteVisitor(new IndentPrinter());
       final ASTPort astNode = (ASTPort) portSymbol.getAstNode().get();
       return ComponentHelper.autobox(typesPrinter.prettyprint(astNode.getType()));
+      // End of temp workaround
 
     } else {
       // B. Component has a super component
-      if(this.component.getIncomingPorts().contains(portSymbol)) {
+      if(componentSymbol.getPorts().contains(portSymbol)) {
         // B.1 Port is defined in the extending component
         //     There are no special cases, as in A
 //        return printTypeReference(typeReference);
@@ -140,44 +137,83 @@ public class ComponentHelper {
             new TypesPrettyPrinterConcreteVisitor(new IndentPrinter());
         final ASTPort astNode = (ASTPort) portSymbol.getAstNode().get();
         return ComponentHelper.autobox(typesPrinter.prettyprint(astNode.getType()));
+        // End of temp workaround
 
       } else {
         // B.2 Port is inherited from the super component (it is not necessarily
         //      defined exactly in the super component)
-        final ComponentSymbolReference superCompReference = this.component.getSuperComponent().get();
-        final ComponentSymbol superCompSymbol = superCompReference.getReferencedSymbol();
-
 
         // B.2.1 The type or a type parameter of the port is a generic type
-        //        parameter of the super component
-        final List<Object> superFormalParamNames =
-            superCompSymbol.getFormalTypeParameters().stream()
-                .map((Function<JTypeSymbol, Object>) Symbol::getName)
-                .collect(Collectors.toList());
-        if(superFormalParamNames.contains(typeReference.getName())){
-          // B.2.1 The type of the port (without type arguments) is a generic type
-          //        parameter of the super component
-          // Determine the index and replace the type parameter with the
-          // actual type argument
-          final int index = superFormalParamNames.indexOf(typeReference.getName());
-          final ActualTypeArgument actualTypeArgument =
-              superCompReference.getActualTypeArguments().get(index);
-          final String printedTypeArgument = printTypeArgument(actualTypeArgument);
-          return printedTypeArgument + printTypeArguments(typeReference.getActualTypeArguments());
+        //        parameter of a super component
 
-        } else if(false) {
-          // B.2.1 The type arguments of the port contain a generic type of the super component
-          // TODO Recursive replacement of the type parameter with the actual argument
-          return "";
-        } else {
-          // B.2.2 Port is not using a generic type parameter as its type
-//          return printTypeReference(typeReference);
-          // TODO: This is a temporary workaround until MC 5.0.0.1 is used that fixes the JTypeSymbolsHelper
-          TypesPrettyPrinterConcreteVisitor typesPrinter =
-              new TypesPrettyPrinterConcreteVisitor(new IndentPrinter());
-          final ASTPort astNode = (ASTPort) portSymbol.getAstNode().get();
-          return ComponentHelper.autobox(typesPrinter.prettyprint(astNode.getType()));
+        // Build the super component hierarchy stack up to the point where
+        // the port is defined
+        Deque<ComponentSymbolReference> superComponentStack = new ArrayDeque<>();
+        ComponentSymbol currentComponent = componentSymbol;
+        while(currentComponent != null &&
+                  currentComponent.getSuperComponent().isPresent() &&
+                  !currentComponent.getPorts().contains(portSymbol)){
+          superComponentStack.push(currentComponent.getSuperComponent().get());
+          currentComponent = superComponentStack.peek();
         }
+
+        // TODO Implement the following algorithm:
+        // Starting with the topmost element of the stack
+        // Check if the type of the port is a generic type
+        // if that is the case, replace the type with the actual type argument and
+        //   remove the first item from the stack
+        // if it is not a generic type, return the type of the port
+        //    this also applies if the actual type that is assigned to a type
+        //    parameter in the chain is no longer a generic type parameter
+
+        // TODO: Replace the generic type parameters in each step for each possible depth in the type
+        //    i.e. List<Map<String,K>>
+        String currentPortType = typeReference.getName();
+        for (ComponentSymbolReference symbol : superComponentStack) {
+          currentComponent = symbol.getReferencedSymbol();
+          final List<String> superFormalParamNames =
+            currentComponent.getFormalTypeParameters().stream()
+                .map(Symbol::getName)
+                .collect(Collectors.toList());
+          if(superFormalParamNames.contains(currentPortType)) {
+            final int index = superFormalParamNames.indexOf(currentPortType);
+            // Replace the type parameter with the actual type argument
+            final ActualTypeArgument actualTypeArg = symbol.getActualTypeArguments().get(index);
+            currentPortType = printTypeArgument(actualTypeArg);
+          } else {
+            return currentPortType;
+          }
+        }
+        return currentPortType;
+//        final List<String> superFormalParamNames =
+//            superCompSymbol.getFormalTypeParameters().stream()
+//                .map(Symbol::getName)
+//                .collect(Collectors.toList());
+//        if(superFormalParamNames.contains(typeReference.getName())){
+//          // B.2.1 The type of the port (without type arguments) is a generic type
+//          //        parameter of the super component
+//          // Determine the index and replace the type parameter with the
+//          // actual type argument
+//          final int index = superFormalParamNames.indexOf(typeReference.getName());
+//          final ActualTypeArgument actualTypeArgument =
+//              superCompReference.getActualTypeArguments().get(index);
+//          final String printedTypeArgument = printTypeArgument(actualTypeArgument);
+//          return printedTypeArgument + printTypeArguments(typeReference.getActualTypeArguments());
+//
+//        } else if(false) {
+//          // B.2.1 The type arguments of the port contain a generic type of the super component
+//          // TODO Recursive replacement of the type parameter with the actual argument
+//          return "";
+//        } else {
+//          // B.2.2 Port is not using a generic type parameter as its type
+////          return printTypeReference(typeReference);
+//          // TODO: This is a temporary workaround until MC 5.0.0.1 is used that fixes the JTypeSymbolsHelper
+//          TypesPrettyPrinterConcreteVisitor typesPrinter =
+//              new TypesPrettyPrinterConcreteVisitor(new IndentPrinter());
+//          final ASTPort astNode = (ASTPort) portSymbol.getAstNode().get();
+//          return ComponentHelper.autobox(typesPrinter.prettyprint(astNode.getType()));
+//          // End of temp workaround
+//        }
       }
     }
   }
@@ -426,14 +462,20 @@ public class ComponentHelper {
   
   public String getSubComponentTypeName(ComponentInstanceSymbol instance) {
     
-    if (instance.getComponentType().getAstNode().isPresent()) {
-      return typesPrinter
-          .prettyprint((ASTTypesNode) instance.getComponentType().getAstNode().get());
+//    if (instance.getComponentType().getAstNode().isPresent()) {
+//      return typesPrinter
+//          .prettyprint((ASTTypesNode) instance.getComponentType().getAstNode().get());
+//    }
+//    else {
+//      return instance.getComponentType().getName();
+//    }
+    String result = "";
+    final ComponentSymbolReference componentTypeReference = instance.getComponentType();
+    result += componentTypeReference.getFullName();
+    if (componentTypeReference.hasActualTypeArguments()){
+      result += printTypeArguments(componentTypeReference.getActualTypeArguments());
     }
-    else {
-      return instance.getComponentType().getName();
-    }
-    
+    return result;
   }
   
   public boolean isIncomingPort(ComponentSymbol cmp, ConnectorSymbol conn, boolean isSource,

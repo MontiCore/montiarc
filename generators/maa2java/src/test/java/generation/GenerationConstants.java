@@ -19,6 +19,8 @@ public class GenerationConstants {
   public static final ASTVoidType VOID_TYPE
       = JavaDSLMill.voidTypeBuilder().build();
 
+  public static final String VOID_STRING = "void";
+
   public final static JavaDSLPrettyPrinter PRINTER
       = new JavaDSLPrettyPrinter(new IndentPrinter());
 }

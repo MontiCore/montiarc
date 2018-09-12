@@ -87,7 +87,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     String printedReturnType = printWithoutWhitespace(signature.getReturnType());
     final boolean removed = methods.removeIf(m -> methodName.equals(m.getName())
         && printedParameters.equals(printWithoutWhitespace(m.getParams()))
-        && printedReturnType.equals(printWithoutWhitespace(m.getReturnType()))
+        && printedReturnType.endsWith(m.getReturnType().replace(" ", ""))
     );
     if(!removed){
       Log.error("Found unexpected method in " + this.className + ": " + methodName);
@@ -324,7 +324,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
       final boolean removed
           = fields.removeIf(
               field -> field.getName().equals(name)
-                           && printWithoutWhitespace(field.getType()).equals(printedType));
+                           && printedType.endsWith(field.getType().replace(" ", "")));
       if(!removed){
         Log.error(
             String.format("Found unexpected field in %s: %s",
@@ -384,7 +384,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
    * @param names Names of the fields
    * @param type Type of the field
    */
-  public void addFields(List<String> names, ASTType type) {
+  public void addFields(List<String> names, String type) {
     for (String name : names) {
       addField(new Field(name, type));
     }
@@ -395,7 +395,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
    * @param name Name of the field
    * @param type Type of the field
    */
-  public void addField(String name, ASTType type){
+  public void addField(String name, String type){
     this.fields.add(new Field(name, type));
   }
 

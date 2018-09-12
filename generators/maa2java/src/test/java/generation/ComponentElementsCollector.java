@@ -28,7 +28,9 @@ import montiarc._symboltable.*;
 import montiarc._visitor.MontiArcVisitor;
 import montiarc.helper.SymbolPrinter;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -142,7 +144,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     final ASTType parameterType = boxPrimitiveType(node.getType());
     final Optional<ASTValuation> defaultValue = node.getDefaultValueOpt();
 
-    classVisitor.addField(parameterName, parameterType);
+    classVisitor.addField(parameterName, PRINTER.prettyprint(parameterType));
   }
 
   @Override
@@ -251,7 +253,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     for (VariableSymbol variableSymbol : this.symbol.getVariables()) {
       if(variableSymbol.getAstNode().isPresent()) {
         final ASTVariableDeclaration astNode = (ASTVariableDeclaration) variableSymbol.getAstNode().get();
-        Field field = new Field(variableSymbol.getName(), boxPrimitiveType(astNode.getType()));
+        Field field = new Field(variableSymbol.getName(), PRINTER.prettyprint(boxPrimitiveType(astNode.getType())));
         classVisitor.addField(field);
       }
     }
@@ -378,18 +380,21 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     classVisitor.addMethod(methodBuilder.build());
   }
 
+  /**
+   * TODO Add documentation
+   */
   private void addSubcomponents() {
-    if (symbol.getSubComponents().isEmpty()) {
-      return;
-    }
-
     for (ComponentInstanceSymbol instanceSymbol : symbol.getSubComponents()) {
       final ComponentSymbol componentSymbol
           = instanceSymbol.getComponentType().getReferencedSymbol();
-      final String componentName = componentSymbol.getName();
-      final ASTSimpleReferenceType fieldType
-          = JavaDSLMill.simpleReferenceTypeBuilder().addName(componentName).build();
-      this.classVisitor.addField(instanceSymbol.getName(), fieldType);
+      String componentTypeString = componentSymbol.getName();
+
+      if(instanceSymbol.getComponentType().hasActualTypeArguments()) {
+        final String printedTypeArguments =
+            ComponentHelper.printTypeArguments(instanceSymbol.getComponentType().getActualTypeArguments());
+        componentTypeString += printedTypeArguments;
+      }
+      this.classVisitor.addField(instanceSymbol.getName(), componentTypeString);
 
       // Add getter
       final Method.Builder builder = Method.getBuilder();
@@ -397,7 +402,8 @@ public class ComponentElementsCollector implements MontiArcVisitor {
           String.format("getComponent%s",
               capitalizeFirst(instanceSymbol.getName())));
       builder.addBodyElement("return this." + instanceSymbol.getName());
-      builder.setReturnType(fieldType);
+
+      builder.setReturnType(componentTypeString);
       this.classVisitor.addMethod(builder.build());
     }
 
@@ -420,13 +426,13 @@ public class ComponentElementsCollector implements MontiArcVisitor {
                                .setNameList(Lists.newArrayList("IComputable"))
                                .setTypeArguments(typeArgs.build())
                                .build();
-    classVisitor.addField("behaviorImpl", expectedType);
+    classVisitor.addField("behaviorImpl", PRINTER.prettyprint(expectedType));
   }
 
   private void addGetInitialValues() {
     Method method = Method.getBuilder()
                         .setName("getInitialValues")
-                        .setReturnType(this.types.get("RESULT_CLASS_TYPE"))
+                        .setReturnType(PRINTER.prettyprint(this.types.get("RESULT_CLASS_TYPE")))
                         .build();
     this.implVisitor.addMethod(method);
   }
@@ -439,7 +445,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     ASTType paramType = this.types.get("INPUT_CLASS_TYPE");
     Method method = Method.getBuilder()
                         .setName("compute")
-                        .setReturnType(this.types.get("RESULT_CLASS_TYPE"))
+                        .setReturnType(PRINTER.prettyprint(this.types.get("RESULT_CLASS_TYPE")))
                         .addParameter("input", paramType)
                         .build();
     this.implVisitor.addMethod(method);
@@ -638,7 +644,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         Method
             .getBuilder()
             .setName("toString")
-            .setReturnType(this.types.get("STRING_TYPE"))
+            .setReturnType(PRINTER.prettyprint(this.types.get("STRING_TYPE")))
             .addBodyElement("String result = \"[\"");
 
     for (PortSymbol portSymbol : symbol.getOutgoingPorts()) {
@@ -685,134 +691,6 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   }
 
   /**
-   * Prints a type reference with dimension and type arguments.
-   *
-   * @param reference The type reference to print
-   * @return The printed type reference
-   */
-  private String printTypeReference(TypeReference<? extends TypeSymbol> reference){
-    StringBuilder result = new StringBuilder(reference.getName());
-    if(!reference.getActualTypeArguments().isEmpty()) {
-      result.append("<");
-      result.append(reference.getActualTypeArguments()
-                        .stream()
-                        .map(this::printTypeArgument)
-                        .collect(Collectors.joining(", ")));
-      result.append(">");
-    }
-    for (int i = 0; i < reference.getDimension(); i++) {
-      result.append("[]");
-    }
-    return result.toString();
-  }
-
-  /**
-   * Prints an actual type argument.
-   * @param arg The actual type argument to print
-   * @return The printed actual type argument
-   */
-  private String printTypeArgument(ActualTypeArgument arg){
-    return printTypeReference(arg.getType());
-  }
-
-  /**
-   * Prints a list of actual type arguments.
-   * @param typeArguments The actual type arguments to print
-   * @return The printed actual type arguments
-   */
-  private String printTypeArguments(List<ActualTypeArgument> typeArguments){
-    if(typeArguments.size() > 0) {
-      StringBuilder result = new StringBuilder("<");
-      result.append(
-          typeArguments.stream()
-              .map(this::printTypeArgument)
-              .collect(Collectors.joining(", ")));
-      result.append(">");
-      return result.toString();
-    }
-    return "";
-  }
-
-  /**
-   * Determines the name of the type of the port represented by its symbol.
-   * This takes in to account whether the port is inherited and possible required
-   * renamings due to generic type parameters and their actual arguments.
-   *
-   * @param portSymbol Symbol of the port for which the type name should be determined.
-   * @return The String representation of the type of the port.
-   */
-  private String determinePortTypeName(PortSymbol portSymbol){
-    final JTypeReference<? extends JTypeSymbol> typeReference = portSymbol.getTypeReference();
-    if(!typeReference.existsReferencedSymbol()){
-      return ""; // TODO Better error handling
-    }
-
-    if(!this.symbol.getSuperComponent().isPresent()){
-      // A. Component has no super component
-      //    Therefore, there are no special cases and the name can be used from
-      //    the typeReference, even if it is a generic type parameter of the
-      //    defining component
-//      return printTypeReference(typeReference);
-      // TODO: This is a temporary workaround until MC 5.0.0.1 is used that fixes the JTypeSymbolsHelper
-      TypesPrettyPrinterConcreteVisitor typesPrinter =
-          new TypesPrettyPrinterConcreteVisitor(new IndentPrinter());
-      final ASTPort astNode = (ASTPort) portSymbol.getAstNode().get();
-      return ComponentHelper.autobox(typesPrinter.prettyprint(astNode.getType()));
-
-    } else {
-      // B. Component has a super component
-      if(this.symbol.getIncomingPorts().contains(portSymbol)) {
-        // B.1 Port is defined in the extending component
-        //     There are no special cases, as in A
-//        return printTypeReference(typeReference);
-        // TODO: This is a temporary workaround until MC 5.0.0.1 is used that fixes the JTypeSymbolsHelper
-        TypesPrettyPrinterConcreteVisitor typesPrinter =
-            new TypesPrettyPrinterConcreteVisitor(new IndentPrinter());
-        final ASTPort astNode = (ASTPort) portSymbol.getAstNode().get();
-        return ComponentHelper.autobox(typesPrinter.prettyprint(astNode.getType()));
-
-      } else {
-        // B.2 Port is inherited from the super component (it is not necessarily
-        //      defined exactly in the super component)
-        final ComponentSymbolReference superCompReference = this.symbol.getSuperComponent().get();
-        final ComponentSymbol superCompSymbol = superCompReference.getReferencedSymbol();
-
-
-        // B.2.1 The type or a type parameter of the port is a generic type
-        //        parameter of the super component
-        final List<Object> superFormalParamNames =
-            superCompSymbol.getFormalTypeParameters().stream()
-                .map((Function<JTypeSymbol, Object>) Symbol::getName)
-                .collect(Collectors.toList());
-        if(superFormalParamNames.contains(typeReference.getName())){
-          // B.2.1 The type of the port (without type arguments) is a generic type
-          //        parameter of the super component
-          // Determine the index and replace the type parameter with the
-          // actual type argument
-          final int index = superFormalParamNames.indexOf(typeReference.getName());
-          final ActualTypeArgument actualTypeArgument =
-              superCompReference.getActualTypeArguments().get(index);
-          final String printedTypeArgument = printTypeArgument(actualTypeArgument);
-          return printedTypeArgument + printTypeArguments(typeReference.getActualTypeArguments());
-
-        } else if(false) {
-          // B.2.1 The type arguments of the port contain a generic type of the super component
-          // TODO Recursive replacement of the type parameter with the actual argument
-          return "";
-        } else {
-          // B.2.2 Port is not using a generic type parameter as its type
-//          return printTypeReference(typeReference);
-          // TODO: This is a temporary workaround until MC 5.0.0.1 is used that fixes the JTypeSymbolsHelper
-          TypesPrettyPrinterConcreteVisitor typesPrinter =
-              new TypesPrettyPrinterConcreteVisitor(new IndentPrinter());
-          final ASTPort astNode = (ASTPort) portSymbol.getAstNode().get();
-          return ComponentHelper.autobox(typesPrinter.prettyprint(astNode.getType()));
-        }
-      }
-    }
-  }
-
-  /**
    * Adds expected constructors to the Input and Result visitors from the
    * given ComponentSymbol
    */
@@ -841,7 +719,8 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         ASTSimpleReferenceType type
             = JavaDSLMill.simpleReferenceTypeBuilder()
                   .addAllNames(Lists.newArrayList(
-                      ComponentHelper.autobox(determinePortTypeName(inPort)).split("\\.")))
+                      ComponentHelper.autobox(
+                          ComponentHelper.determinePortTypeName(this.symbol, inPort)).split("\\.")))
                   .build();
         inputConstructorBuilder.addParameter(inPort.getName(), type);
       }
@@ -893,7 +772,8 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         ASTSimpleReferenceType type
             = JavaDSLMill.simpleReferenceTypeBuilder()
                   .addAllNames(Lists.newArrayList(
-                      ComponentHelper.autobox(determinePortTypeName(outPort)).split("\\.")))
+                      ComponentHelper.autobox(
+                          ComponentHelper.determinePortTypeName(this.symbol, outPort)).split("\\.")))
                   .build();
         resultConstructorBuilder.addParameter(outPort.getName(), type);
       }
@@ -929,7 +809,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   @Override
   public void visit(ASTPort node) {
     final PortSymbol symbol = (PortSymbol) node.getSymbolOpt().get();
-    ASTType type = boxPrimitiveType(node.getType());
+    final ASTType type = boxPrimitiveType(node.getType());
     // Type parameters for the Port field type
     // The type parameters consist of the type of the ASTPort type
     final ASTTypeArguments typeArgs = JavaDSLMill.typeArgumentsBuilder()
@@ -944,12 +824,13 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     final List<String> names = node.getNameList();
 
     // Add fields for the ports to the visitors
-    classVisitor.addFields(names, expectedType);
+    classVisitor.addFields(names, PRINTER.prettyprint(expectedType));
+    final String printedType = PRINTER.prettyprint(type);
     if (node.isOutgoing()) {
-      resultVisitor.addFields(names, type);
+      resultVisitor.addFields(names, printedType);
     }
     if (node.isIncoming()) {
-      inputVisitor.addFields(names, type);
+      inputVisitor.addFields(names, printedType);
     }
 
     // Add expectations for setter and getter methods
@@ -960,7 +841,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         Method.Builder setter
             = Method
                   .getBuilder()
-                  .setReturnType(GenerationConstants.VOID_TYPE)
+                  .setReturnType(GenerationConstants.VOID_STRING)
                   .addParameter("port", expectedType)
                   .addBodyElement("this." + name + " = port;")
                   .setName("setPort" + portNameCapitalized);
@@ -973,7 +854,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         Method.Builder setter
             = Method
                   .getBuilder()
-                  .setReturnType(GenerationConstants.VOID_TYPE)
+                  .setReturnType(GenerationConstants.VOID_STRING)
                   .addParameter(name, type)
                   .addBodyElement("return this." + name + ";")
                   .setName("set" + portNameCapitalized);
@@ -988,17 +869,17 @@ public class ComponentElementsCollector implements MontiArcVisitor {
               .getBuilder()
               .setName("getPort" + capitalizeFirst(name))
               .addBodyElement(String.format("return this.%s;", name))
-              .setReturnType(expectedType);
+              .setReturnType(PRINTER.prettyprint(expectedType));
       classVisitor.addMethod(getter.build());
       if (node.isOutgoing()) {
         resultVisitor.addMethod(getter
                                     .setName("get" + capitalizeFirst(name))
-                                    .setReturnType(type)
+                                    .setReturnType(printedType)
                                     .build());
       } else if (node.isIncoming()) {
         inputVisitor.addMethod(getter
                                    .setName("get" + capitalizeFirst(name))
-                                   .setReturnType(type)
+                                   .setReturnType(printedType)
                                    .build());
       }
     }
@@ -1061,10 +942,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   @Override
   public void visit(ASTAutomaton node) {
     // Add the currentState field
-    final ArrayList<String> state = Lists.newArrayList("State");
-    ASTSimpleReferenceType currentStateType
-        = JavaDSLMill.simpleReferenceTypeBuilder().setNameList(state).build();
-    this.implVisitor.addField("currentState", currentStateType);
+    this.implVisitor.addField("currentState", "State");
   }
 
   @Override
