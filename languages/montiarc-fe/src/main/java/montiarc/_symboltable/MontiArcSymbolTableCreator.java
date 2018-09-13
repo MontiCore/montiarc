@@ -25,12 +25,7 @@ import de.monticore.java.symboltable.JavaSymbolFactory;
 import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.mcexpressions._ast.ASTExpression;
-import de.monticore.symboltable.ArtifactScope;
-import de.monticore.symboltable.CommonScope;
-import de.monticore.symboltable.ImportStatement;
-import de.monticore.symboltable.MutableScope;
-import de.monticore.symboltable.ResolvingConfiguration;
-import de.monticore.symboltable.Scope;
+import de.monticore.symboltable.*;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -602,6 +597,12 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   
   @Override
   public void visit(ASTJavaPBehavior node) {
+    // Add the presence of a behavior element to the component symbol
+    if(currentScope().isPresent()){
+      if(currentScope().get().getSpanningSymbol().isPresent()){
+        ((ComponentSymbol) currentSymbol().get()).setHasBehavior(true);
+      }
+    }
     createScope(node);
   }
   
@@ -668,6 +669,12 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
    */
   @Override
   public void visit(ASTAutomatonBehavior node) {
+    // Add the presence of a behavior element to the component symbol
+    if(currentScope().isPresent()){
+      if(currentScope().get().getSpanningSymbol().isPresent()){
+        ((ComponentSymbol) currentSymbol().get()).setHasBehavior(true);
+      }
+    }
     createScope(node);
   }
   

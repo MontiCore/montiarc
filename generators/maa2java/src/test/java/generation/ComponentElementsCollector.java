@@ -110,10 +110,12 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   @Override
   public void visit(ASTParameter node) {
     final String parameterName = node.getName();
-    final ASTType parameterType = boxPrimitiveType(node.getType());
     final Optional<ASTValuation> defaultValue = node.getDefaultValueOpt();
-
-    classVisitor.addField(parameterName, PRINTER.prettyprint(parameterType));
+    final String type = PRINTER.prettyprint(boxPrimitiveType(node.getType()));
+    classVisitor.addField(parameterName, type);
+    if(this.symbol.isAtomic() && this.symbol.hasBehavior()){
+      implVisitor.addField(parameterName, type);
+    }
   }
 
   @Override
@@ -222,8 +224,12 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     for (VariableSymbol variableSymbol : this.symbol.getVariables()) {
       if(variableSymbol.getAstNode().isPresent()) {
         final ASTVariableDeclaration astNode = (ASTVariableDeclaration) variableSymbol.getAstNode().get();
-        Field field = new Field(variableSymbol.getName(), PRINTER.prettyprint(boxPrimitiveType(astNode.getType())));
+        final String fieldTypeString = PRINTER.prettyprint(boxPrimitiveType(astNode.getType()));
+        Field field = new Field(variableSymbol.getName(), fieldTypeString);
         classVisitor.addField(field);
+        if(this.symbol.isAtomic() && this.symbol.hasBehavior()){
+          implVisitor.addField(field);
+        }
       }
     }
   }

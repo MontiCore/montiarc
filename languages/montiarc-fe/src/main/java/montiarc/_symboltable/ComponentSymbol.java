@@ -24,8 +24,13 @@ import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcConstants;
+import montiarc._ast.ASTBehaviorElement;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTElement;
 import montiarc.helper.SymbolPrinter;
 import montiarc.helper.Timing;
+
+import javax.swing.text.html.Option;
 
 //XXX: https://git.rwth-aachen.de/montiarc/core/issues/49
 
@@ -197,7 +202,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   }
 
   /**
-   * @param typeParameter generic type parameter to add
+   * @param formalTypeParameter generic type parameter to add
    */
   public void addFormalTypeParameter(JTypeSymbol formalTypeParameter) {
     if (referencedComponent.isPresent()) {
@@ -226,6 +231,27 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
 
   public boolean hasPorts() {
     return !getPorts().isEmpty();
+  }
+
+  private boolean hasBehavior;
+
+  /**
+   * Checks whether there is a behavior element defined in the model represented
+   * by the symbol.
+   *
+   * @return true, if there is a behavior element defined in the model.
+   */
+  public boolean hasBehavior(){
+    return hasBehavior;
+  }
+
+  /**
+   * Setter for the value of hasBehavior.
+   *
+   * @param hasBehavior The value to set
+   */
+  public void setHasBehavior(boolean hasBehavior){
+    this.hasBehavior = hasBehavior;
   }
 
   /**
@@ -297,8 +323,6 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   /**
    * Returns a list of all incoming ports that also contains ports from a super component.
    *
-   * @param loader        used to load full version of super component (if needed)
-   * @param deserializers used to load full version of super component (if needed)
    * @return list of all incoming ports.
    */
   public List<PortSymbol> getAllIncomingPorts() {
@@ -330,8 +354,6 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   /**
    * Returns a list of all outgoing ports that also contains ports from a super component.
    *
-   * @param loader        used to load full version of super component (if needed)
-   * @param deserializers used to load full version of super component (if needed)
    * @return list of all outgoing ports.
    */
   public List<PortSymbol> getAllOutgoingPorts() {
@@ -495,7 +517,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   }
 
   /**
-   * @param timing the timing to set
+   * @param behaviorKind the timing to set
    */
   public void setBehaviorKind(Timing behaviorKind) {
     referencedComponent.orElse(this).timing = behaviorKind;
