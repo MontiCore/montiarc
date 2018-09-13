@@ -265,17 +265,17 @@ class ComponentGenerator {
         
         // component variables
         «FOR v : comp.variables»
-          private «v.typeReference.name» «v.name»; 
+          «printMember(v.typeReference.name, v.name, "protected")»
         «ENDFOR»
         
         // config parameters
         «FOR param : comp.configParameters»
-          private final «param.type.name» «param.name»;
+          «printMember(param.type.name, param.name, "private final")»
         «ENDFOR»
         
         // port fields
         «FOR port : comp.ports»
-          protected Port<«port.typeReference.name»> «port.name»;
+          «printMember(port.name, "Port<" + port.typeReference.name +">" , "protected")»
         «ENDFOR»      
       
         // port setter
@@ -434,66 +434,10 @@ class ComponentGenerator {
           «ENDFOR»
         }
       
-        @Override
-        public void setUp() {
-        «IF comp.superComponent.present»
-          super.setUp();
-        «ENDIF»
-        // instantiate all subcomponents
-        «FOR subcomponent : comp.subComponents»
-          this.«subcomponent.name» = new «subcomponent.componentType.name»(
-          «FOR param : helper.getParamValues(subcomponent) SEPARATOR ','»
-            «param»
-          «ENDFOR»);
-          
-          )
-        «ENDFOR»
-      
-          //set up all sub components  
-          «FOR subcomponent : comp.subComponents»
-        this.«subcomponent.name».setUp();
-          «ENDFOR»
-          
-          // set up output ports
-          «FOR portOut : comp.outgoingPorts»
-        this.«portOut.name» = new Port<«portOut.typeReference.name»>();
-          «ENDFOR»
-          
-          // propagate children's output ports to own output ports
-          «FOR connector : comp.connectors»
-        «IF !helper.isIncomingPort(comp,connector, false, connector.target)»
-          «helper.getConnectorComponentName(connector,false)».setPort(«helper.getConnectorPortName(connector,false).toFirstUpper»(«helper.getConnectorComponentName(connector, true)».getPort«helper.getConnectorPortName(connector, true).toFirstUpper»());
-        «ENDIF»
-          «ENDFOR»
-          
-        }
+        «printInit(comp)»
+        «printSetup(comp)»
+        «printUpdate(comp)»
         
-        @Override
-        public void init() {
-        «IF comp.superComponent.present»
-          super.init();
-        «ENDIF»
-        // set up unused input ports
-        «FOR portIn : comp.incomingPorts»
-          if (this.«portIn.name» == null) {
-            this.«portIn.name» = Port.EMPTY;
-          }
-        «ENDFOR»
-        
-        // connect outputs of children with inputs of children, by giving 
-        // the inputs a reference to the sending ports
-        «FOR connector : comp.connectors»
-          «IF helper.isIncomingPort(comp, connector, false, connector.target)»
-            «helper.getConnectorComponentName(connector, false)».setPort«helper.getConnectorPortName(connector, false).toFirstUpper»(«helper.getConnectorComponentName(connector,true)».getPort«helper.getConnectorPortName(connector, true).toFirstUpper»());
-          «ENDIF»
-        «ENDFOR» 
-        
-        // init all subcomponents
-        
-        «FOR subcomponent : comp.subComponents»
-          this.«subcomponent.name».init();
-        «ENDFOR»
-        }
       
         @Override
         public void compute() {
@@ -503,17 +447,124 @@ class ComponentGenerator {
           «ENDFOR»
         }
       
-        @Override
-        public void update() {
-          // update subcomponent instances
-          «IF comp.superComponent.present»
-            super.update();
-          «ENDIF»
-          «FOR subcomponent : comp.subComponents»
-            this.«subcomponent.name».update();
-          «ENDFOR»
-        }
         
+        
+    '''
+  }
+  
+  def printMember(String type, String name, String visibility) {
+    return 
+    '''
+    «visibility» «type» «name»;
+    '''
+  }
+  
+  def printGetter(String type, String name, String methodPostfix) {
+    return 
+    '''
+    public «type» get«methodPostfix»() {
+      return this.«name»;
+    }
+    '''
+  }
+  
+  def printSetter(String type, String name,  String methodPostfix) {
+    return 
+    '''
+    public void set«methodPostfix»(«type» «name») {
+      this.«name» = «name»;
+    }
+    '''
+  }
+  
+  def printInit(ComponentSymbol comp) {
+    var helper = new ComponentHelper(comp);
+    return 
+    '''
+    @Override
+      public void init() {
+      «IF comp.superComponent.present»
+        super.init();
+      «ENDIF»
+      // set up unused input ports
+      «FOR portIn : comp.incomingPorts»
+        if (this.«portIn.name» == null) {
+          this.«portIn.name» = Port.EMPTY;
+        }
+      «ENDFOR»
+      
+      // connect outputs of children with inputs of children, by giving 
+      // the inputs a reference to the sending ports
+      «FOR connector : comp.connectors»
+        «IF helper.isIncomingPort(comp, connector, false, connector.target)»
+          «helper.getConnectorComponentName(connector, false)».setPort«helper.getConnectorPortName(connector, false).toFirstUpper»(«helper.getConnectorComponentName(connector,true)».getPort«helper.getConnectorPortName(connector, true).toFirstUpper»());
+        «ENDIF»
+      «ENDFOR» 
+      
+      // init all subcomponents
+      
+      «FOR subcomponent : comp.subComponents»
+        this.«subcomponent.name».init();
+      «ENDFOR»
+      }
+    '''
+  }
+  
+  def printUpdate(ComponentSymbol comp) {
+    return 
+    '''
+    @Override
+      public void update() {
+        // update subcomponent instances
+        «IF comp.superComponent.present»
+          super.update();
+        «ENDIF»
+        «FOR subcomponent : comp.subComponents»
+          this.«subcomponent.name».update();
+        «ENDFOR»
+      }
+    '''
+  }
+  
+  
+  def printSetup(ComponentSymbol comp) {
+    var helper = new ComponentHelper(comp);
+    
+    return 
+    '''
+    @Override
+      public void setUp() {
+      «IF comp.superComponent.present»
+        super.setUp();
+      «ENDIF»
+      // instantiate all subcomponents
+      «FOR subcomponent : comp.subComponents»
+        this.«subcomponent.name» = new «subcomponent.componentType.name»(
+        «FOR param : helper.getParamValues(subcomponent) SEPARATOR ','»
+          «param»
+        «ENDFOR»);
+        
+        )
+      «ENDFOR»
+    
+        //set up all sub components  
+        «FOR subcomponent : comp.subComponents»
+      this.«subcomponent.name».setUp();
+        «ENDFOR»
+        
+        // set up output ports
+        «FOR portOut : comp.outgoingPorts»
+      this.«portOut.name» = new Port<«portOut.typeReference.name»>();
+        «ENDFOR»
+        
+        // propagate children's output ports to own output ports
+        «FOR connector : comp.connectors»
+      «IF !helper.isIncomingPort(comp,connector, false, connector.target)»
+        «helper.getConnectorComponentName(connector,false)».setPort(«helper.getConnectorPortName(connector,false).toFirstUpper»(«helper.getConnectorComponentName(connector, true)».getPort«helper.getConnectorPortName(connector, true).toFirstUpper»());
+      «ENDIF»
+        «ENDFOR»
+        
+      }
     '''
   }
 
