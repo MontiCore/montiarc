@@ -63,8 +63,7 @@
 		<dependency>
 			<groupId>de.monticore</groupId>
 			<artifactId>javaDSL</artifactId>
-			<version>${javadsl.version}</version>
-		</dependency>
+			</dependency>
 
 		<dependency>
 			<groupId>de.monticore</groupId>

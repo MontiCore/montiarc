@@ -232,7 +232,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "GenericIfUsage");
     MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA033"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA033"));
   }
 
   @Test

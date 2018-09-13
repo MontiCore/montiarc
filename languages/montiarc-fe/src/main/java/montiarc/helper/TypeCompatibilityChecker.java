@@ -131,10 +131,10 @@ public class TypeCompatibilityChecker {
         // type
         // // argument is not set here. We then reuse the passed actual type
         // // arguments for further processing.
-        if (!sourceTypesCurrentTypeArgument.existsReferencedSymbol() || sourceTypesCurrentTypeArgument.getReferencedSymbol().isFormalTypeParameter()) {
+        if (sourceTypesCurrentTypeArgument.getReferencedSymbol().isFormalTypeParameter() && sourceTypeArguments.size() > i) {
           sourceTypesCurrentTypeArgument = sourceTypeArguments.get(i);
         }
-        if (!targetTypesCurrentTypeArgument.existsReferencedSymbol() ||targetTypesCurrentTypeArgument.getReferencedSymbol().isFormalTypeParameter()) {
+        if (targetTypesCurrentTypeArgument.getReferencedSymbol().isFormalTypeParameter() && targetTypeArguments.size() > i) {
           targetTypesCurrentTypeArgument = targetTypeArguments.get(i);
         }
         

@@ -1,19 +1,30 @@
 package components.body;
 
-import montiarc._cocos.MontiArcASTComponentCoCo;
-import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc.cocos.IdentifiersAreUnique;
-import montiarc.cocos.MultipleBehaviorImplementation;
-import montiarc.cocos.NamesCorrectlyCapitalized;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.Optional;
+
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
+import de.monticore.java.JavaDSLTool;
+import de.monticore.java.javadsl._parser.JavaDSLParser;
+import de.monticore.java.lang.JavaDSLLanguage;
+import de.monticore.java.symboltable.JavaTypeSymbol;
+import de.monticore.java.symboltable.JavaTypeSymbolReference;
+import de.monticore.symboltable.Scope;
+import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
+import junit.framework.Assert;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcASTComponentCoCo;
+import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.IdentifiersAreUnique;
 import montiarc.cocos.MontiArcCoCos;
+import montiarc.cocos.MultipleBehaviorImplementation;
+import montiarc.cocos.NamesCorrectlyCapitalized;
 
 /**
  * This class checks all context conditions related the combination of elements
@@ -28,6 +39,27 @@ public class BodyTest extends AbstractCoCoTest {
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
+  }
+  
+  @Test
+  public void testJavaDSL() {
+    String model = "java.util.Collection";
+    Scope s = JavaDSLTool.createSymbolTable(new JavaDSLLanguage(), JavaDSLTool.parse("target/librarymodels/java/util/Collection.java", new JavaDSLParser()));
+    Optional<JavaTypeSymbol> jt = s.<JavaTypeSymbol> resolve(model, JavaTypeSymbol.KIND);
+    
+    if(jt.isPresent()) {
+      System.out.println("Successfully resolved: " + jt.get().getName());
+      
+      JavaTypeSymbolReference iter = jt.get().getInterfaces().get(0);
+      ActualTypeArgument arg = iter.getActualTypeArguments().get(0);
+      JavaTypeSymbol argType = (JavaTypeSymbol) arg.getType().getReferencedSymbol();
+      
+      assertNotNull(argType);
+      System.out.println("Name of actual arg's type: "+ argType.getName());
+      
+    }
+    
+    
   }
   
   @Test
