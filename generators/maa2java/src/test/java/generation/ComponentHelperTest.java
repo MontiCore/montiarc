@@ -57,6 +57,10 @@ public class ComponentHelperTest extends AbstractCoCoTest {
     String datatype = "Map<List<int>[],Set<double[]>>";
     String result = ComponentHelper.autobox(datatype);
     assertEquals("Map<List<Integer>[],Set<Double[]>>", result);
+
+    datatype = "new HashMap<List<int>[],Set<double[]>>()";
+    result = ComponentHelper.autobox(datatype);
+    assertEquals("new HashMap<List<Integer>[],Set<Double[]>>()", result);
   }
 
   @Test

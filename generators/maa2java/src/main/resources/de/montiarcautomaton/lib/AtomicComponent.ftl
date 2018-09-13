@@ -55,8 +55,9 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   
   // the components behavior implementation
   private final IComputable<${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>, ${resultName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>> behaviorImpl;
-  
+
   public ${name}(<#list configParams as param>${helper.getParamTypeName(param)} ${param.getName()}<#sep>, </#list>) {
+    <#if helper.hasSuperComp()>super(<#list helper.getInheritedParams() as inhParam>${inhParam}<#sep>, </#sep></#list>);</#if>
     behaviorImpl = new ${implName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>(<#list configParams as param>${param.getName()}<#sep>, </#list>);
     // config parameters
   <#list configParams as param>

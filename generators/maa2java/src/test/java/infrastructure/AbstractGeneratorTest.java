@@ -122,6 +122,12 @@ public class AbstractGeneratorTest {
     EXCLUDED_MODELS.add(
         TEST_MODEL_PATH.resolve("components/head/generics/" +
                                     "ComponentExtendsGenericComponent3.arc"));
+
+    /*
+     * Reason: It is not clear how the name space hiding of components is suppoesed
+     * to be transfered to Java generation
+     */
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH.resolve("components/NameSpaceHiding.arc"));
   }
 
   /**

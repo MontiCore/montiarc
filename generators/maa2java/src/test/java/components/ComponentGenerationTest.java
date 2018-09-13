@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 
 import static de.montiarcautomaton.generator.MontiArcGeneratorTool.DEFAULT_TYPES_FOLDER;
 import static de.montiarcautomaton.generator.MontiArcGeneratorTool.LIBRARY_MODELS_FOLDER;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -147,7 +148,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 
     // Load component symbol
     final ComponentSymbol symbol
-        = generatorTool.loadComponentSymbolWithCocos(
+        = generatorTool.loadComponentSymbolWithoutCocos(
             qualifiedName,
         TEST_MODEL_PATH.toFile(),
         Paths.get(DEFAULT_TYPES_FOLDER).toFile(),
@@ -181,10 +182,10 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 
     // 5. Invoke Java compiler to see whether they are compiling
     final boolean compiling = AbstractGeneratorTest.isCompiling(filesToCheck);
-//    assertTrue(
-//        String.format("The generated files for model %s are not " +
-//                          "compiling without errors", qualifiedName),
-//        compiling);
+    assertTrue(
+        String.format("The generated files for model %s are not " +
+                          "compiling without errors", qualifiedName),
+        compiling);
 
     // Parse the files with the JavaDSL
     GlobalScope gs = initJavaDSLSymbolTable();
@@ -218,7 +219,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     }
     // Log checking
     Log.debug("Number of errors found: " + Log.getFindings().size(), "ComponentGenerationTest");
-//    assertEquals(0, Log.getFindings().size());
+    assertEquals(0, Log.getFindings().size());
   }
 
   private boolean anyHasInnerComponent(ComponentSymbol symbol){

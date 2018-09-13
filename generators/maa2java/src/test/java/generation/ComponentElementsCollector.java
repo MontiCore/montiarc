@@ -105,37 +105,6 @@ public class ComponentElementsCollector implements MontiArcVisitor {
               .setNameList(Lists.newArrayList(resultName))
               .build());
     }
-
-    types.put("STRING_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
-                                 .setNameList(Lists.newArrayList("String"))
-                                 .build());
-    types.put("CHARACTER_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
-                                 .setNameList(Lists.newArrayList("Character"))
-                                 .build());
-    types.put("BOOLEAN_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
-                                 .setNameList(Lists.newArrayList("Boolean"))
-                                 .build());
-    types.put("SHORT_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
-                                 .setNameList(Lists.newArrayList("Short"))
-                                 .build());
-    types.put("BYTE_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
-                                 .setNameList(Lists.newArrayList("Byte"))
-                                 .build());
-    types.put("INTEGER_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
-                                 .setNameList(Lists.newArrayList("Integer"))
-                                 .build());
-    types.put("LONG_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
-                                 .setNameList(Lists.newArrayList("Long"))
-                                 .build());
-    types.put("FLOAT_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
-                                 .setNameList(Lists.newArrayList("Float"))
-                                 .build());
-    types.put("DOUBLE_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
-                                 .setNameList(Lists.newArrayList("Double"))
-                                 .build());
-    types.put("OBJECT_TYPE", MontiArcMill.simpleReferenceTypeBuilder()
-                                 .setNameList(Lists.newArrayList("Object"))
-                                 .build());
   }
 
   @Override
@@ -307,14 +276,15 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     methodBuilder.setName("setUp");
 
-    // Decomposed components require additional statements
+    // Decomposed components require additional statements for instantiating the
+    // supcomponents
     if (this.symbol.isDecomposed()) {
       for (ComponentInstanceSymbol subCompInstance : this.symbol.getSubComponents()) {
 
         // TODO: Default parameters are missing in the parameters
         String parameterString = subCompInstance.getConfigArguments()
             .stream()
-            .map(PRINTER::prettyprint)
+            .map(p -> ComponentHelper.autobox(PRINTER.prettyprint(p)))
             .collect(Collectors.joining(", "));
 
         methodBuilder.addBodyElement(
@@ -644,7 +614,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         Method
             .getBuilder()
             .setName("toString")
-            .setReturnType(PRINTER.prettyprint(this.types.get("STRING_TYPE")))
+            .setReturnType(PRINTER.prettyprint(GenerationConstants.types.get("STRING_TYPE")))
             .addBodyElement("String result = \"[\"");
 
     for (PortSymbol portSymbol : symbol.getOutgoingPorts()) {
@@ -856,7 +826,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
                   .getBuilder()
                   .setReturnType(GenerationConstants.VOID_STRING)
                   .addParameter(name, type)
-                  .addBodyElement("return this." + name + ";")
+                  .addBodyElement("this." + name + " = " + name + ";")
                   .setName("set" + portNameCapitalized);
         resultVisitor.addMethod(setter.build());
       }
@@ -916,23 +886,23 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     } else if(type instanceof ASTPrimitiveType){
       // Base case: Box primitive types
       ASTPrimitiveType primitiveType = (ASTPrimitiveType) type;
-      ASTType result = types.get("OBJECT_TYPE");
+      ASTType result = GenerationConstants.types.get("OBJECT_TYPE");
       if (primitiveType.isBoolean()) {
-        result = types.get("BOOLEAN_TYPE");
+        result = GenerationConstants.types.get("BOOLEAN_TYPE");
       } else if(primitiveType.isByte()){
-        result = types.get("BYTE_TYPE");
+        result = GenerationConstants.types.get("BYTE_TYPE");
       } else if(primitiveType.isChar()){
-        result = types.get("CHARACTER_TYPE");
+        result = GenerationConstants.types.get("CHARACTER_TYPE");
       } else if(primitiveType.isDouble()){
-        result = types.get("DOUBLE_TYPE");
+        result = GenerationConstants.types.get("DOUBLE_TYPE");
       } else if(primitiveType.isFloat()){
-        result = types.get("FLOAT_TYPE");
+        result = GenerationConstants.types.get("FLOAT_TYPE");
       } else if(primitiveType.isInt()){
-        result = types.get("INTEGER_TYPE");
+        result = GenerationConstants.types.get("INTEGER_TYPE");
       } else if(primitiveType.isLong()){
-        result = types.get("LONG_TYPE");
+        result = GenerationConstants.types.get("LONG_TYPE");
       } else if(primitiveType.isShort()){
-        result = types.get("SHORT_TYPE");
+        result = GenerationConstants.types.get("SHORT_TYPE");
       }
       return result;
     }

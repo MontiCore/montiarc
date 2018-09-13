@@ -54,9 +54,9 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   	return this.${component.getName()};
   }
   </#list>
-  
+
   public ${name}(<#list configParams as param>${helper.getParamTypeName(param)} ${param.getName()}<#sep>, </#list>) {
-  <#if helper.hasSuperComp()>super();</#if>
+  <#if helper.hasSuperComp()>super(<#list helper.getInheritedParams() as inhParam>${inhParam}<#sep>, </#sep></#list>);</#if>
   <#list configParams as param>
     this.${param.getName()} = ${param.getName()};
   </#list>

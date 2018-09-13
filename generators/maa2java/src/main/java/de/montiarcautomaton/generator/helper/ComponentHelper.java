@@ -680,7 +680,22 @@ public class ComponentHelper {
     }
     return output;
   }
-  
+
+  public List<String> getInheritedParams(){
+    List<String> result = new ArrayList<>();
+    final List<JFieldSymbol> configParameters = component.getConfigParameters();
+    if(component.getSuperComponent().isPresent()){
+      final ComponentSymbolReference superCompReference = component.getSuperComponent().get();
+      final List<JFieldSymbol> superConfigParams = superCompReference.getReferencedSymbol().getConfigParameters();
+      if(!configParameters.isEmpty()){
+        for (int i = 0; i < superConfigParams.size(); i++) {
+          result.add(configParameters.get(i).getName());
+        }
+      }
+    }
+    return result;
+  }
+
   public List<PortSymbol> getSuperInPorts() {
     return component.getSuperComponent().isPresent()
         ? component.getSuperComponent().get().getAllIncomingPorts()
