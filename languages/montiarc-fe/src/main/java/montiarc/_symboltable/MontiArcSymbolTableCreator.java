@@ -5,7 +5,12 @@
  */
 package montiarc._symboltable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.List;
+import java.util.Optional;
+import java.util.Stack;
 
 import de.monticore.ast.ASTNode;
 import de.monticore.java.javadsl._ast.ASTLocalVariableDeclaration;
@@ -41,7 +46,29 @@ import de.monticore.types.types._ast.ASTWildcardType;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.StringTransformations;
 import de.se_rwth.commons.logging.Log;
-import montiarc._ast.*;
+import montiarc._ast.ASTAutomaton;
+import montiarc._ast.ASTAutomatonBehavior;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTComponentHead;
+import montiarc._ast.ASTConnector;
+import montiarc._ast.ASTIOAssignment;
+import montiarc._ast.ASTImportStatementLOCAL;
+import montiarc._ast.ASTInitialStateDeclaration;
+import montiarc._ast.ASTJavaPBehavior;
+import montiarc._ast.ASTMACompilationUnit;
+import montiarc._ast.ASTMontiArcAutoConnect;
+import montiarc._ast.ASTMontiArcAutoInstantiate;
+import montiarc._ast.ASTParameter;
+import montiarc._ast.ASTPort;
+import montiarc._ast.ASTState;
+import montiarc._ast.ASTStateDeclaration;
+import montiarc._ast.ASTStereoValue;
+import montiarc._ast.ASTSubComponent;
+import montiarc._ast.ASTSubComponentInstance;
+import montiarc._ast.ASTTransition;
+import montiarc._ast.ASTValuation;
+import montiarc._ast.ASTValueInitialization;
+import montiarc._ast.ASTVariableDeclaration;
 import montiarc.helper.JavaDefaultTypesManager;
 import montiarc.helper.Timing;
 import montiarc.trafos.AutoConnection;
@@ -347,21 +374,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     }
   }
 
-  /**
-   * Determine whether the component should be instantiated.
-   *
-   * @param node   ASTComponent node to analyze
-   * @param symbol Symbol of the {@param node}
-   * @return true, iff an instance should be created.
-   */
-  private boolean needsInstanceCreation(ASTComponent node, ComponentSymbol symbol) {
-    boolean instanceNameGiven = node.getInstanceNameOpt().isPresent();
-    boolean autoCreationPossible = symbol.getFormalTypeParameters().size() == 0;
-    boolean noParametersRequired = symbol.getConfigParameters().size() == 0;
-    // TODO: Check if the component only contains default parameters
-
-    return instanceNameGiven || (autoCreationPossible && noParametersRequired);
-  }
 
   @Override
   public void endVisit(ASTComponent node) {
@@ -639,21 +651,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     }
   }
 
-  /**
-   * Checks whether the passed name references to a configuration parameter
-   *
-   * @param name Name of the parameter to look up
-   * @return true, iff the currently processed node has a parameter of the
-   * passed name
-   */
-  private boolean isConfigurationArgument(String name) {
-    for (ASTParameter param : this.currentComponent.getHead().getParameterList()) {
-      if (name.equals(param.getName())) {
-        return true;
-      }
-    }
-    return false;
-  }
 
   /***************************************
    * I/O Automaton integration
