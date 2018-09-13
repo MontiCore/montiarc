@@ -1,23 +1,11 @@
 package components.body;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.util.Optional;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.monticore.java.JavaDSLTool;
-import de.monticore.java.javadsl._parser.JavaDSLParser;
-import de.monticore.java.lang.JavaDSLLanguage;
-import de.monticore.java.symboltable.JavaTypeSymbol;
-import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
-import junit.framework.Assert;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;

@@ -10,17 +10,14 @@ package montiarc.helper;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.google.common.collect.ImmutableMap;
 
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
-import de.monticore.java.types.JavaDSLHelper;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
@@ -96,7 +93,7 @@ public class TypeCompatibilityChecker {
       // bind the generic to the actual type
       int positionInFormal = getPositionInFormalTypeParameters(sourceTypeFormalTypeParameters,
           sourceType);
-      if (!sourceTypeArguments.isEmpty() && positionInFormal!=-1) {
+      if (!sourceTypeArguments.isEmpty() && positionInFormal != -1) {
         sourceType = sourceTypeArguments.get(positionInFormal);
       }
     }
@@ -104,7 +101,7 @@ public class TypeCompatibilityChecker {
       // bind the generic to the actual type
       int positionInFormal = getPositionInFormalTypeParameters(targetTypeFormalTypeParameters,
           targetType);
-      if (!targetTypeArguments.isEmpty()&& positionInFormal!=-1) {
+      if (!targetTypeArguments.isEmpty() && positionInFormal != -1) {
         targetType = targetTypeArguments.get(positionInFormal);
       }
     }
@@ -131,10 +128,12 @@ public class TypeCompatibilityChecker {
         // type
         // // argument is not set here. We then reuse the passed actual type
         // // arguments for further processing.
-        if (sourceTypesCurrentTypeArgument.getReferencedSymbol().isFormalTypeParameter() && sourceTypeArguments.size() > i) {
+        if (sourceTypesCurrentTypeArgument.getReferencedSymbol().isFormalTypeParameter()
+            && sourceTypeArguments.size() > i) {
           sourceTypesCurrentTypeArgument = sourceTypeArguments.get(i);
         }
-        if (targetTypesCurrentTypeArgument.getReferencedSymbol().isFormalTypeParameter() && targetTypeArguments.size() > i) {
+        if (targetTypesCurrentTypeArgument.getReferencedSymbol().isFormalTypeParameter()
+            && targetTypeArguments.size() > i) {
           targetTypesCurrentTypeArgument = targetTypeArguments.get(i);
         }
         
@@ -306,10 +305,6 @@ public class TypeCompatibilityChecker {
    * @return
    */
   public static Optional<? extends JavaTypeSymbolReference> getExpressionType(ASTExpression expr) {
-    // TODO Don't use HCJavaDSLTypeResolver here because we want to resolve
-    // JTypes instead of JavaTypes. Because HCJavaDSLTypeResolver is implemented
-    // in JavaDSL, additional adapter may required e.g. CD2Java to use CD types
-    // within Java expressions.
     Log.debug("Resolve type of java expression.", "TypeCompatibilityChecker");
     MontiArcHCJavaDSLTypeResolver typeResolver = new MontiArcHCJavaDSLTypeResolver();
     expr.accept(typeResolver);
@@ -344,6 +339,14 @@ public class TypeCompatibilityChecker {
             .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList()));
   }
   
+  /**
+   * Checks whether the passed type has nested type parameters (e.g.
+   * List<Optional<T>> would return true, but List<Optional<String>> would
+   * return false)
+   * 
+   * @param type
+   * @return
+   */
   public static boolean hasNestedGenerics(JTypeReference<? extends JTypeSymbol> type) {
     boolean result = false;
     if (type.getReferencedSymbol().isFormalTypeParameter()) {
