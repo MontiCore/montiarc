@@ -42,27 +42,6 @@ public class BodyTest extends AbstractCoCoTest {
   }
   
   @Test
-  public void testJavaDSL() {
-    String model = "java.util.Collection";
-    Scope s = JavaDSLTool.createSymbolTable(new JavaDSLLanguage(), JavaDSLTool.parse("target/librarymodels/java/util/Collection.java", new JavaDSLParser()));
-    Optional<JavaTypeSymbol> jt = s.<JavaTypeSymbol> resolve(model, JavaTypeSymbol.KIND);
-    
-    if(jt.isPresent()) {
-      System.out.println("Successfully resolved: " + jt.get().getName());
-      
-      JavaTypeSymbolReference iter = jt.get().getInterfaces().get(0);
-      ActualTypeArgument arg = iter.getActualTypeArguments().get(0);
-      JavaTypeSymbol argType = (JavaTypeSymbol) arg.getType().getReferencedSymbol();
-      
-      assertNotNull(argType);
-      System.out.println("Name of actual arg's type: "+ argType.getName());
-      
-    }
-    
-    
-  }
-  
-  @Test
   public void testComponentWithAJavaAndAutomaton() {
     final String modelName = PACKAGE + "." + "ComponentWithAJavaAndAutomaton";
     final MontiArcCoCoChecker checker
