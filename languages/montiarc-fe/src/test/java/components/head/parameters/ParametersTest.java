@@ -15,6 +15,8 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.IdentifiersAreUnique;
 import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.NamesCorrectlyCapitalized;
+import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
+
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -41,15 +43,10 @@ public class ParametersTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "ParameterNamesUnique");
   }
   
-  @Ignore("TODO Activate with new MC version -> requires correct type checking.")
   @Test
-  /*
-   *
-   */
   public void testInvalidConfigArgs() {
     final MontiArcCoCoChecker cocos
-//        = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
-        = MontiArcCoCos.createChecker();
+        = new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned());
     final ASTMontiArcNode node
         = loadComponentAST(PACKAGE + "." + "InvalidConfigArgs");
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA065");
@@ -147,12 +144,11 @@ public class ParametersTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("TODO Activate with new MC version -> SubcomponentParametersCorrectlyAssigned disabled.")
   public void testAssignsWrongParameters() {
     final String modelName = PACKAGE + "." + "AssignsWrongParameters";
     final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
     final ExpectedErrorInfo expectedErrorInfo
-        = new ExpectedErrorInfo(4, "xMA064");
+        = new ExpectedErrorInfo(4, "xMA064", "xMA082");
     checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
   }
 }

@@ -11,6 +11,7 @@ import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc.cocos.AutomatonOutputInExpression;
 import montiarc.cocos.MontiArcCoCos;
 
 /**
@@ -63,7 +64,7 @@ public class GuardTest extends AbstractCoCoTest {
   @Test
   public void testGuardUsesOutgoingPort() {
     final String qualifiedModelName = PACKAGE + "." + "GuardUsesOutgoingPort";
-    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker().addCoCo(new AutomatonOutputInExpression());
     final ExpectedErrorInfo errors
         = new ExpectedErrorInfo(4, "xMA022");
     checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);

@@ -215,16 +215,12 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
   
   @Test
-  /* TODO: Throws Symboltable error in other CoCo before starting to check the
-   * CoCo that throws the expected error.
-   * testAmbiguousImplicitAndExplicitSubcomponentNames() checks only the
-   * ComponentInstanceNameUnique-CoCo. TODO: Adjust after implementing CoCo
+  /* TODO: Adjust after implementing CoCo
    * [Hab16] CV7 */
-  @Ignore("See comment above.")
   public void testUniquenessReferences() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UniquenessReferences");
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA061");
-    checkInvalid(MontiArcCoCos.createChecker(), node, errors);
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(4, "xMA061");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()), node, errors);
   }
   
   @Test
@@ -594,7 +590,6 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertEquals(PACKAGE + "." + "SimpleComponentWithAutomaton", refType.getFullName());
   }
   
-  @Ignore("Component ConstantDelay is not activated")
   @Test
   public void testUsingSCWithParams() {
     Scope symTab = this.loadDefaultSymbolTable();
@@ -613,8 +608,13 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertNotNull(delay);
     assertEquals("deleteTempFile", delay.getName());
     
+    IndentPrinter printer = new IndentPrinter();
+    JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(printer);
+    delay.getConfigArguments().get(0).accept(prettyPrinter);
+    
+    
     assertEquals(1, delay.getConfigArguments().size());
-    assertEquals("1", delay.getConfigArguments().get(0));
+    assertEquals("1", printer.getContent());
   }
   
   @Test
@@ -749,7 +749,6 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
   
   @Test
-  @Ignore("Should not pass like this, see #157")
   public void testMultipleInstancesWithSimpleConnector() {
     final ASTMontiArcNode astNode = loadComponentAST(
         PACKAGE + "." + "MultipleInstancesWithSimpleConnector");

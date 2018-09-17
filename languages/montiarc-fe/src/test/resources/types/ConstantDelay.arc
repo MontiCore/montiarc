@@ -1,4 +1,4 @@
-package components.body.timing.delays;
+package types;
 
 /**
  * @brief adds a fix delay to a channel.
@@ -19,8 +19,7 @@ package components.body.timing.delays;
  */
 component ConstantDelay<T>(int delay) {
   
-  timing delayed;
-  
+ 
   port 
     in T portIn,
     out T portOut;

@@ -80,19 +80,19 @@ public class ConfigurationParametersCorrectlyInherited implements MontiArcASTCom
               = configParameters.get(paramIndex).getType();
           
           // Check type correctness
-          if (!TypeCompatibilityChecker.doTypesMatch(superParameterType,
-              superParameterType.getReferencedSymbol().getFormalTypeParameters()
-                  .stream()
-                  .map(p -> (JTypeSymbol) p)
-                  .collect(Collectors.toList()),
-              superParameterType.getActualTypeArguments().stream()
-                  .map(a -> (JavaTypeSymbolReference) a.getType())
-                  .collect(Collectors.toList()),
+          if (!TypeCompatibilityChecker.doTypesMatch(
               paramType,
               paramType.getReferencedSymbol().getFormalTypeParameters().stream()
                   .map(p -> (JTypeSymbol) p)
                   .collect(Collectors.toList()),
               paramType.getActualTypeArguments().stream()
+                  .map(a -> (JavaTypeSymbolReference) a.getType())
+                  .collect(Collectors.toList()), superParameterType,
+              superParameterType.getReferencedSymbol().getFormalTypeParameters()
+                  .stream()
+                  .map(p -> (JTypeSymbol) p)
+                  .collect(Collectors.toList()),
+              superParameterType.getActualTypeArguments().stream()
                   .map(a -> (JavaTypeSymbolReference) a.getType())
                   .collect(Collectors.toList()))) {
             Log.error(

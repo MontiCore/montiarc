@@ -1,20 +1,13 @@
 package components.body.automaton;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Optional;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.MultipleBehaviorImplementation;
 

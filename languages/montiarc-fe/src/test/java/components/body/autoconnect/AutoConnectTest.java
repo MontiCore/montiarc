@@ -34,7 +34,6 @@ public class AutoConnectTest extends AbstractCoCoTest {
   }
   
   /* This test tests whether the "autoconnect port" statement is working as intended. */
-  @Ignore
   @Test
   public void testAutoconnectPort() {
     Scope symTab = loadDefaultSymbolTable();
@@ -70,7 +69,8 @@ public class AutoConnectTest extends AbstractCoCoTest {
     assertTrue(connectorNames.contains("d.strOut -> strOut"));
     
   }
-  @Ignore
+  
+  
   @Test
   public void testAutoconnectPortPartiallyConnected() {
     Scope symTab = loadDefaultSymbolTable();
@@ -92,7 +92,7 @@ public class AutoConnectTest extends AbstractCoCoTest {
     assertTrue(connectorNames.contains("e2.sOut -> sOut"));
     
   }
-  @Ignore
+  
   @Test
   public void testAutoconnectType() {
     Scope symTab = loadDefaultSymbolTable();
@@ -124,7 +124,8 @@ public class AutoConnectTest extends AbstractCoCoTest {
     assertTrue(connectorNames.contains("intIn -> b.intIn"));
     assertTrue(connectorNames.contains("a.data -> d.dataSthElse"));
   }
-  @Ignore
+  
+  @Ignore("Inner components are deactivated")
   @Test
   public void testDuplicateAutoconnectMatches() {
     Scope symTab = loadDefaultSymbolTable();
@@ -155,7 +156,7 @@ public class AutoConnectTest extends AbstractCoCoTest {
     assertTrue(connectorNames.contains("inner.myBoolean -> boolOut2"));
     assertTrue(connectorNames.contains("inner.myDouble -> doubleOut"));
   }
-  @Ignore
+  
   @Test
   public void testAutoconnectGenericType() {
     Scope symTab = loadDefaultSymbolTable();
@@ -174,7 +175,8 @@ public class AutoConnectTest extends AbstractCoCoTest {
     assertTrue(connectorNames.contains("strIn -> myGeneric.myStrIn"));
     assertTrue(connectorNames.contains("myGeneric.myStrOut -> strOut"));
   }
-  @Ignore
+  
+  @Ignore("Inner components are deactivated")
   @Test
   public void testAutoconnectGenericInnerComponentType() {
     Scope symTab = loadDefaultSymbolTable();
@@ -195,7 +197,8 @@ public class AutoConnectTest extends AbstractCoCoTest {
     assertTrue(connectorNames.contains("intIn -> a.myStrIn"));
     assertTrue(connectorNames.contains("a.myStrOut -> intOut"));
   }
-  @Ignore
+  
+  @Ignore("Inner components are deactivated")
   @Test
   public void testAutoconnectGenericTypeInHierarchy() {
     Scope symTab = loadDefaultSymbolTable();
@@ -215,7 +218,6 @@ public class AutoConnectTest extends AbstractCoCoTest {
     assertTrue(connectorNames.contains("sInner.tOut -> objOut"));
   }
 
-  @Ignore
   @Test
   public void testAutoconnectGenericPorts() {
     Scope symTab = loadDefaultSymbolTable();
@@ -243,7 +245,6 @@ public class AutoConnectTest extends AbstractCoCoTest {
     assertFalse(connectorNames.contains("strIn -> myGenericInt.myStrIn"));
     assertFalse(connectorNames.contains("myGenericInt.myStrOut -> strOut"));
   }
-  @Ignore
   @Test
   public void testAutoconnectArrayTypes() {
     Scope symTab = loadDefaultSymbolTable();
@@ -300,7 +301,6 @@ public class AutoConnectTest extends AbstractCoCoTest {
   // assertFalse(connectorNames.contains("strIn -> ref.strIn2"));
   // assertFalse(connectorNames.contains("ref.strOut2 -> strOut"));
   // }
-  @Ignore
   @Test
   public void testAutoconnectPortAndType() {
     Scope symTab = loadDefaultSymbolTable();

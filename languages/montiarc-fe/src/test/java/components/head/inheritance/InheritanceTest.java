@@ -207,7 +207,6 @@ public class InheritanceTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("ClassCastException in TypeCompatibilityChecker")
   public void testSubCompCorrect4() {
     checkValid(PACKAGE + "." + "SubCompCorrect4");
   }

@@ -51,7 +51,6 @@ public class VariableTest extends AbstractCoCoTest {
     checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA018"));
   }
 
-  //@Ignore("NoData is forbidden by grammar, so a test is superfluous at the moment.")
   @Test
   public void testNoDataNotAssigned() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "NoDataNotAssigned");

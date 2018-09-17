@@ -1,5 +1,7 @@
 package components.body.subcomponents;
 
+import types.ConstantDelay;
+
 /**
  * Valid model. Used by UsingComplexParams
  */

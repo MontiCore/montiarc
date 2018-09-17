@@ -6,11 +6,8 @@
 package montiarc.cocos;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.google.common.collect.Lists;
 
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -119,7 +116,7 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                 // A<K extends
                 // Number> extends B<K>)
                 else {
-                  int pos = getPositionInFormalTypeParameters(typeParameters,
+                  int pos = TypeCompatibilityChecker.getPositionInFormalTypeParameters(typeParameters,
                       (JTypeReference<? extends JTypeSymbol>) actualArg.getType());
 
                   JTypeSymbol formalType = supersTypeParameters.get(pos);
@@ -155,17 +152,5 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
       
     }
     
-  }
-  
-  private int getPositionInFormalTypeParameters(List<JTypeSymbol> formalTypeParameters,
-      JTypeReference<? extends JTypeSymbol> searchedFormalTypeParameter) {
-    int positionInFormal = 0;
-    for (JTypeSymbol formalTypeParameter : formalTypeParameters) {
-      if (formalTypeParameter.getName().equals(searchedFormalTypeParameter.getName())) {
-        break;
-      }
-      positionInFormal++;
-    }
-    return positionInFormal;
   }
 }
