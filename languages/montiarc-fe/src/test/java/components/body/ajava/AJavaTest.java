@@ -2,18 +2,14 @@ package components.body.ajava;
 
 import static org.junit.Assert.assertEquals;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.monticore.symboltable.Scope;
+import de.monticore.ast.ASTNode;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
@@ -128,6 +124,13 @@ public class AJavaTest extends AbstractCoCoTest {
   }
   
   @Test
+  public void testDuplicateLocalVariables() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "DuplicateLocalVariables");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new JavaPVariableIdentifiersUnique()), node, new ExpectedErrorInfo(4, "xMA095"));
+    
+  }
+  
+  @Test
   public void testLocalVariablesInComputeBlock() {
     loadComponentAST(PACKAGE + "." +
         "LocalVariablesInComputeBlock");
@@ -135,7 +138,7 @@ public class AJavaTest extends AbstractCoCoTest {
     Collection<VariableSymbol> foundVars = new ArrayList<>();
     symbol.getSpannedScope().getSubScopes().forEach(
         s -> s.<VariableSymbol> resolveLocally(VariableSymbol.KIND).forEach(v -> foundVars.add(v)));
-    assertEquals(2, foundVars.size());
+    assertEquals(1, foundVars.size());
     
     checkValid(PACKAGE + "." + "LocalVariablesInComputeBlock");
   }
@@ -151,6 +154,6 @@ public class AJavaTest extends AbstractCoCoTest {
   @Test
   public void testAmbiguousAJavaVariableNames() {
     ASTMontiArcNode ast = loadComponentAST(PACKAGE + "." + "AmbiguousAJavaVariableNames");
-    checkInvalid(MontiArcCoCos.createChecker(), ast, new ExpectedErrorInfo(2, "xMA095", "xMA016"));
+    checkInvalid(MontiArcCoCos.createChecker(), ast, new ExpectedErrorInfo(1, "xMA016"));
   }
 }
