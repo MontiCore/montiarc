@@ -167,7 +167,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       JTypeReference<JavaTypeSymbol> typeRef = new JavaTypeSymbolReference(typeName,
           currentScope().get(), dimension);
 
-      addTypeArgumentsToTypeSymbol(typeRef, astType);
+      addTypeArgumentsToTypeSymbol(typeRef, astType, currentScope().get());
 
       sym.setTypeReference(typeRef);
       sym.setDirection(node.isIncoming());
@@ -199,7 +199,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(astType);
       JTypeReference<JavaTypeSymbol> typeRef = new JavaTypeSymbolReference(typeName,
           currentScope().get(), dimension);
-      addTypeArgumentsToTypeSymbol(typeRef, astType);
+      addTypeArgumentsToTypeSymbol(typeRef, astType, currentScope().get());
 
       sym.setTypeReference(typeRef);
 
@@ -208,8 +208,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
 
   private void addTypeArgumentsToTypeSymbol(JTypeReference<? extends JTypeSymbol> typeRef,
-      ASTType astType) {
-    JTypeSymbolsHelper.addTypeArgumentsToTypeSymbol(typeRef, astType, currentScope().get(),
+      ASTType astType, Scope definingScope) {
+    JTypeSymbolsHelper.addTypeArgumentsToTypeSymbol(typeRef, astType, definingScope,
         javaTypeRefFactory);
   }
 
@@ -365,9 +365,9 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       JTypeReference<? extends JTypeSymbol> paramTypeSymbol = new JavaTypeSymbolReference(
           TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astParameter
               .getType()),
-          currentScope().get(), dimension);
+          componentSymbol.getSpannedScope(), dimension);
 
-      addTypeArgumentsToTypeSymbol(paramTypeSymbol, astParameter.getType());
+      addTypeArgumentsToTypeSymbol(paramTypeSymbol, astParameter.getType(), componentSymbol.getSpannedScope());
       final JFieldSymbol parameterSymbol = javaSymbolFactory.createFormalParameterSymbol(paramName,
           (JavaTypeSymbolReference) paramTypeSymbol);
       componentSymbol.addConfigParameter(parameterSymbol);
@@ -488,7 +488,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
               typeBoundSymbolReference);
 
           // init bound
-          addTypeArgumentsToTypeSymbol(typeBoundSymbolReference, typeBound);
+          addTypeArgumentsToTypeSymbol(typeBoundSymbolReference, typeBound, currentScope().get());
 
           actualTypeArguments.add(actualTypeArgument);
         }
@@ -505,7 +505,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
             TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astTypeNoBound),
             currentScope().get(), dimension);
 
-        addTypeArgumentsToTypeSymbol(typeArgumentSymbolReference, astTypeNoBound);
+        addTypeArgumentsToTypeSymbol(typeArgumentSymbolReference, astTypeNoBound, currentScope().get());
 
         actualTypeArguments.add(new ActualTypeArgument(typeArgumentSymbolReference));
       }
@@ -643,7 +643,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(type);
       JTypeReference<JavaTypeSymbol> typeRef = new JavaTypeSymbolReference(typeName,
           currentScope().get(), dimension);
-      addTypeArgumentsToTypeSymbol(typeRef, type);
+      addTypeArgumentsToTypeSymbol(typeRef, type, currentScope().get());
 
       variableSymbol.setTypeReference(typeRef);
 
