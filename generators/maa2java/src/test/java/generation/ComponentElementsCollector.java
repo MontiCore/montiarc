@@ -7,31 +7,21 @@ package generation;
 
 import com.google.common.collect.Lists;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
-import de.monticore.ast.ASTNode;
 import de.monticore.java.javadsl._ast.ASTImportDeclaration;
-import de.monticore.java.javadsl._ast.ASTPrimitiveModifier;
 import de.monticore.java.javadsl._ast.JavaDSLMill;
-import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
-import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.Symbol;
+import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
-import de.monticore.symboltable.types.TypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
-import de.monticore.symboltable.types.references.JTypeReference;
-import de.monticore.symboltable.types.references.TypeReference;
-import de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor;
 import de.monticore.types.types._ast.*;
 import montiarc._ast.*;
 import montiarc._symboltable.*;
 import montiarc._visitor.MontiArcVisitor;
-import montiarc.helper.SymbolPrinter;
 
-import java.awt.*;
 import java.util.*;
-import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static generation.GenerationConstants.PRINTER;
@@ -288,10 +278,36 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       for (ComponentInstanceSymbol subCompInstance : this.symbol.getSubComponents()) {
 
         // TODO: Default parameters are missing in the parameters
-        String parameterString = subCompInstance.getConfigArguments()
+        final List<ASTExpression> configArguments = subCompInstance.getConfigArguments();
+        String parameterString = configArguments
             .stream()
             .map(p -> ComponentHelper.autobox(PRINTER.prettyprint(p)))
             .collect(Collectors.joining(", "));
+
+        // Determine the length of the parameter list of the subcomponent to check
+        // whether it is necessary to add default values
+        final List<ASTExpression> defaultValues = new ArrayList<>();
+        final ComponentSymbolReference subCompType = subCompInstance.getComponentType();
+        final ComponentSymbol subCompSymbol = subCompType.getReferencedSymbol();
+        final List<JFieldSymbol> subCompConfigParams = subCompSymbol.getConfigParameters();
+        if(configArguments.size() < subCompConfigParams.size()){
+          int offset = configArguments.size();
+          final List<ASTParameter> compParamList =
+              ((ASTComponent) subCompSymbol.getAstNode().get()).getHead().getParameterList();
+          for (int i = 0; i < subCompConfigParams.size() - configArguments.size(); i++) {
+            final ASTParameter astParameter = compParamList.get(offset + i);
+            if(astParameter.getDefaultValueOpt().isPresent()){
+              defaultValues.add(astParameter.getDefaultValue().getExpression());
+            }
+          }
+
+          parameterString += ", ";
+          parameterString += defaultValues
+                                 .stream()
+                                 .map(p -> ComponentHelper.autobox(PRINTER.prettyprint(p)))
+                                 .collect(Collectors.joining(", "));
+        }
+
 
         methodBuilder.addBodyElement(
             String.format("this.%s = new %s(%s)",

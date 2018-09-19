@@ -185,35 +185,6 @@ public class ComponentHelper {
           }
         }
         return currentPortType;
-//        final List<String> superFormalParamNames =
-//            superCompSymbol.getFormalTypeParameters().stream()
-//                .map(Symbol::getName)
-//                .collect(Collectors.toList());
-//        if(superFormalParamNames.contains(typeReference.getName())){
-//          // B.2.1 The type of the port (without type arguments) is a generic type
-//          //        parameter of the super component
-//          // Determine the index and replace the type parameter with the
-//          // actual type argument
-//          final int index = superFormalParamNames.indexOf(typeReference.getName());
-//          final ActualTypeArgument actualTypeArgument =
-//              superCompReference.getActualTypeArguments().get(index);
-//          final String printedTypeArgument = printTypeArgument(actualTypeArgument);
-//          return printedTypeArgument + printTypeArguments(typeReference.getActualTypeArguments());
-//
-//        } else if(false) {
-//          // B.2.1 The type arguments of the port contain a generic type of the super component
-//          // TODO Recursive replacement of the type parameter with the actual argument
-//          return "";
-//        } else {
-//          // B.2.2 Port is not using a generic type parameter as its type
-////          return printTypeReference(typeReference);
-//          // TODO: This is a temporary workaround until MC 5.0.0.1 is used that fixes the JTypeSymbolsHelper
-//          TypesPrettyPrinterConcreteVisitor typesPrinter =
-//              new TypesPrettyPrinterConcreteVisitor(new IndentPrinter());
-//          final ASTPort astNode = (ASTPort) portSymbol.getAstNode().get();
-//          return ComponentHelper.autobox(typesPrinter.prettyprint(astNode.getType()));
-//          // End of temp workaround
-//        }
       }
     }
   }
