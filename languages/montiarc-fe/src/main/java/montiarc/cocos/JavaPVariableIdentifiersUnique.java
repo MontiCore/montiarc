@@ -23,7 +23,6 @@ import montiarc._symboltable.VariableSymbol;
  * behavior.
  *
  * @implements No literature reference, AJava CoCo
- *
  * @author Jerome Pfeiffer
  * @version $Revision$, $Date$
  */
@@ -35,21 +34,30 @@ public class JavaPVariableIdentifiersUnique implements MontiArcASTJavaPBehaviorC
   @Override
   public void check(ASTJavaPBehavior node) {
     List<String> names = new ArrayList<>();
-    if (node.getEnclosingScopeOpt().isPresent()) {
-      for (Scope sub : node.getEnclosingScopeOpt().get().getSubScopes()) {
-        Collection<VariableSymbol> vars = sub
-            .resolveLocally(VariableSymbol.KIND);
-        for (VariableSymbol v : vars) {
-          if (names.contains(v.getName())) {
-            Log.error("0xMA016 Duplicate local variable names " + v.getName() + ".",
-                v.getSourcePosition());
-          }
-          else {
-            names.add(v.getName());
-            checkPortOrVariableWithNameAlreadyExists(v);
-          }
+    if (node.isPresentSpannedScope()) {
+      checkScope(node.getSpannedScope().get());
+    }
+  }
+  
+  private void checkScope(Scope s) {
+    List<String> names = new ArrayList<>();
+    Collection<VariableSymbol> vars = s
+        .resolveLocally(VariableSymbol.KIND);
+    names = new ArrayList<>();
+    for (VariableSymbol v : vars) {
+      if (names.contains(v.getName())) {
+        Log.error("0xMA016 Duplicate local variable names " + v.getName() + ".",
+            v.getSourcePosition());
+      }
+      else {
+        names.add(v.getName());
+        if (s.getEnclosingScope().isPresent()) {
+          checkPortOrVariabelWithNameAlreadyExists(v, s.getEnclosingScope().get());
         }
       }
+    }
+    for (Scope sub : s.getSubScopes()) {
+      checkScope(sub);
     }
   }
   
@@ -59,30 +67,28 @@ public class JavaPVariableIdentifiersUnique implements MontiArcASTJavaPBehaviorC
    * 
    * @param v Symbol of the variable which should be checked
    */
-  private void checkPortOrVariableWithNameAlreadyExists(VariableSymbol v) {
-    Optional<PortSymbol> port = v.getEnclosingScope().resolve(v.getName(),
+  private void checkPortOrVariabelWithNameAlreadyExists(VariableSymbol v, Scope s) {
+    Collection<PortSymbol> ports = s.resolveMany(v.getName(),
         PortSymbol.KIND);
-    Collection<VariableSymbol> var = v.getEnclosingScope().resolveMany(v.getName(),
+    Collection<VariableSymbol> vars = s.resolveMany(v.getName(),
         VariableSymbol.KIND);
-
-    SourcePosition astSource;
-    if(v.getAstNode().isPresent()) {
-      astSource = v.getAstNode().get().get_SourcePositionStart();
-    } else{
-      astSource = SourcePosition.getDefaultSourcePosition();
-    }
-    if (port.isPresent()) {
+    
+    if (ports.size() > 0) {
       Log.warn(
           "0xMA094 There already exists a port with name " + v.getName()
               + " in the component definition.",
-          astSource);
+          v.getAstNode().get().get_SourcePositionStart());
     }
     
-    if (var.size() > 1) {
+    if (vars.size() > 0) {
       Log.warn(
           "0xMA095 There already exists a variable with name " + v.getName()
               + " in the component definition.",
-          astSource);
+          v.getAstNode().get().get_SourcePositionStart());
+    }
+    
+    if (s.getEnclosingScope().isPresent() && !s.getEnclosingScope().get().isShadowingScope()) {
+      checkPortOrVariabelWithNameAlreadyExists(v, s.getEnclosingScope().get());
     }
     
   }

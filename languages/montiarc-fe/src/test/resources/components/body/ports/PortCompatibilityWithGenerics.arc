@@ -89,7 +89,7 @@ component PortCompatibilityWithGenerics {
   connect in1 -> myGenComp2.myListMapKVIn1, myGenComp2.myListMapKVIn2;
     // compatible List<Map<List<String>, Integer>> -> List<Map<List<String>,Integer>>
   connect in2 -> myGenComp2.myListMapKKIn1, myGenComp2.myListMapKKIn2;
-    // compatible List<Map<List<String>, List<String>>> -> List<Map<List<String>,List<String>>>
+    // incompatible List<Map<List<String>, List<String>>> -> List<Map<List<String>, Integer>>
   connect myGenComp2.myVOut -> out1;
     // compatible Integer -> Integer
   connect myGenComp2.myListKOut -> out2;

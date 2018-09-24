@@ -8,9 +8,7 @@ package components.head.generics;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import montiarc.cocos.*;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
@@ -20,6 +18,10 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
+import montiarc.cocos.AllGenericParametersOfSuperClassSet;
+import montiarc.cocos.DefaultParametersCorrectlyAssigned;
+import montiarc.cocos.MontiArcCoCos;
+import montiarc.cocos.TypeParameterNamesUnique;
 import montiarc.helper.SymbolPrinter;
 
 /**
@@ -115,7 +117,6 @@ public class GenericsTest extends AbstractCoCoTest {
     checkInvalid(checker, loadComponentAST(qualifiedModelName), expectedErrors);
   }
 
-  @Ignore("Wartet auf update des JTypeSymbolsHelper")
   @Test
   public void testAssignsWrongComplexTypeArgToSuperComp() {
     final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();

@@ -116,10 +116,12 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                 // A<K extends
                 // Number> extends B<K>)
                 else {
-                  int pos = getPositionInFormalTypeParameters(typeParameters,
+                  int pos = TypeCompatibilityChecker.getPositionInFormalTypeParameters(typeParameters,
                       (JTypeReference<? extends JTypeSymbol>) actualArg.getType());
 
                   JTypeSymbol formalType = supersTypeParameters.get(pos);
+                  List<JTypeReference<? extends JTypeSymbol>> formalTypeArgs = new ArrayList<>();
+                  formalTypeArgs.add((JTypeReference<? extends JTypeSymbol>) actualArg.getType());
                   if (!formalType.getInterfaces().isEmpty()) {
                     if (!TypeCompatibilityChecker.doTypesMatch(
                         ((JTypeReference<? extends JTypeSymbol>) actualArg.getType()),
@@ -134,10 +136,7 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                         formalType.getInterfaces().get(j)
                             .getReferencedSymbol().getFormalTypeParameters().stream()
                             .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-                        formalType.getInterfaces().get(j)
-                            .getActualTypeArguments().stream()
-                            .map(a -> (JavaTypeSymbolReference) a.getType())
-                            .collect(Collectors.toList()))) {
+                            formalTypeArgs )) {
                       Log.error("0xMA089 Parameter " + formalType.getName()
                                     + " is not compatible with upper bound "
                                     + upperBound.getName(),
@@ -153,17 +152,5 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
       
     }
     
-  }
-  
-  private int getPositionInFormalTypeParameters(List<JTypeSymbol> formalTypeParameters,
-      JTypeReference<? extends JTypeSymbol> searchedFormalTypeParameter) {
-    int positionInFormal = 0;
-    for (JTypeSymbol formalTypeParameter : formalTypeParameters) {
-      if (formalTypeParameter.getName().equals(searchedFormalTypeParameter.getName())) {
-        break;
-      }
-      positionInFormal++;
-    }
-    return positionInFormal;
   }
 }

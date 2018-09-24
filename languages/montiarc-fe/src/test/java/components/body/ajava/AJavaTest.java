@@ -2,18 +2,14 @@ package components.body.ajava;
 
 import static org.junit.Assert.assertEquals;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.monticore.symboltable.Scope;
+import de.monticore.ast.ASTNode;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
@@ -27,7 +23,8 @@ import montiarc.cocos.JavaPVariableIdentifiersUnique;
 import montiarc.cocos.MontiArcCoCos;
 
 /**
- * This class checks all context conditions related the definition of AJava behavior
+ * This class checks all context conditions related the definition of AJava
+ * behavior
  *
  * @author Andreas Wortmann
  */
@@ -48,7 +45,8 @@ public class AJavaTest extends AbstractCoCoTest {
   @Test
   public void testJavaPVariableIdentifiersUnique() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "JavaPVariableIdentifiersUnique");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new JavaPVariableIdentifiersUnique()), node, new ExpectedErrorInfo(3, "xMA016", "xMA094", "xMA095"));
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new JavaPVariableIdentifiersUnique()), node,
+        new ExpectedErrorInfo(3, "xMA016", "xMA094", "xMA095"));
   }
   
   @Test
@@ -56,7 +54,6 @@ public class AJavaTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "InitBlockWithAJava");
   }
   
-  @Ignore("@JP: Sollte nach dem Umstieg auf die neue MontiArc-Version behoben werden.")
   @Test
   public void testInvalidInitBlockAssigment() {
     checkValid(PACKAGE + "." + "InvalidInitBlockAssigment");
@@ -64,19 +61,16 @@ public class AJavaTest extends AbstractCoCoTest {
   
   @Test
   public void testAJavaComputeBlockNameIsLowerCase() {
-    final ASTMontiArcNode node
-        = loadComponentAST(PACKAGE + "." + "AJavaComputeBlockNameIsLowerCase");
-    final ExpectedErrorInfo errors
-        = new ExpectedErrorInfo(1, "xMA015");
+    final ASTMontiArcNode node = loadComponentAST(
+        PACKAGE + "." + "AJavaComputeBlockNameIsLowerCase");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA015");
     checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
   
   @Test
   public void testChangeIncomingPortInCompute() {
-    ASTMontiArcNode node
-        = loadComponentAST(PACKAGE + "." + "ChangeIncomingPortInCompute");
-    final ExpectedErrorInfo errors
-        = new ExpectedErrorInfo(2, "xMA078");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ChangeIncomingPortInCompute");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA078");
     checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
   
@@ -85,7 +79,7 @@ public class AJavaTest extends AbstractCoCoTest {
   public void testWrongPortUsage() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongPortUsage");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(1, "xMA030", "xMA078"));
+        new ExpectedErrorInfo(3, "xMA030", "xMA078"));
   }
   
   @Ignore("@JP: Laut Konsole entsteht hier 2x Fehler 0xMA030. Wieso wird das nicht geprüft?")
@@ -129,34 +123,37 @@ public class AJavaTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "ComplexCodeExample");
   }
   
-
+  @Test
+  public void testDuplicateLocalVariables() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "DuplicateLocalVariables");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new JavaPVariableIdentifiersUnique()), node, new ExpectedErrorInfo(4, "xMA095"));
+    
+  }
+  
   @Test
   public void testLocalVariablesInComputeBlock() {
     loadComponentAST(PACKAGE + "." +
-                         "LocalVariablesInComputeBlock");
+        "LocalVariablesInComputeBlock");
     final ComponentSymbol symbol = loadComponentSymbol(PACKAGE, "LocalVariablesInComputeBlock");
     Collection<VariableSymbol> foundVars = new ArrayList<>();
-    symbol.getSpannedScope().getSubScopes().forEach(s -> s.<VariableSymbol> resolveLocally(VariableSymbol.KIND).forEach(v -> foundVars.add(v)));
-    assertEquals(2, foundVars.size());
-
+    symbol.getSpannedScope().getSubScopes().forEach(
+        s -> s.<VariableSymbol> resolveLocally(VariableSymbol.KIND).forEach(v -> foundVars.add(v)));
+    assertEquals(1, foundVars.size());
+    
     checkValid(PACKAGE + "." + "LocalVariablesInComputeBlock");
   }
-
+  
   @Test
-  @Ignore("TODO: Currently forward declaration of variables is required. " +
-              "Else the symboltable cannot be built correctly and the " +
-              "variable is not found.")
   public void testDefineComponentVarAfterCompute() {
     loadComponentAST(PACKAGE + "." +
-                         "DefineComponentVarAfterCompute");
-
+        "DefineComponentVarAfterCompute");
+    
     checkValid(PACKAGE + "." + "DefineComponentVarAfterCompute");
   }
-
+  
   @Test
-  @Ignore("TODO: Should not be working, as there are variables which are " +
-              "declared more than once.")
   public void testAmbiguousAJavaVariableNames() {
-    checkValid(PACKAGE + "." + "AmbiguousAJavaVariableNames");
+    ASTMontiArcNode ast = loadComponentAST(PACKAGE + "." + "AmbiguousAJavaVariableNames");
+    checkInvalid(MontiArcCoCos.createChecker(), ast, new ExpectedErrorInfo(1, "xMA016"));
   }
 }

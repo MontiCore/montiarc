@@ -207,7 +207,6 @@ public class InheritanceTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("ClassCastException in TypeCompatibilityChecker")
   public void testSubCompCorrect4() {
     checkValid(PACKAGE + "." + "SubCompCorrect4");
   }
@@ -244,4 +243,10 @@ public class InheritanceTest extends AbstractCoCoTest {
         = new ExpectedErrorInfo(3, "xMA084");
     checkInvalid(cocos, node, errors);
   }
+  
+  @Test
+  public void testExtendGenericComponentWithGenericConfigArg() {
+    checkValid(PACKAGE + "." + "ExtendGenericComponentWithGenericConfigArg"); 
+  }
+  
 }

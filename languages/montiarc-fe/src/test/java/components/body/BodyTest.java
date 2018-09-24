@@ -1,19 +1,18 @@
 package components.body;
 
-import montiarc._cocos.MontiArcASTComponentCoCo;
-import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc.cocos.IdentifiersAreUnique;
-import montiarc.cocos.MultipleBehaviorImplementation;
-import montiarc.cocos.NamesCorrectlyCapitalized;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcASTComponentCoCo;
+import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.cocos.IdentifiersAreUnique;
 import montiarc.cocos.MontiArcCoCos;
+import montiarc.cocos.MultipleBehaviorImplementation;
+import montiarc.cocos.NamesCorrectlyCapitalized;
 
 /**
  * This class checks all context conditions related the combination of elements

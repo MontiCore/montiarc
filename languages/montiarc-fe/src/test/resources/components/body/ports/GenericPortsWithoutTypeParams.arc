@@ -12,6 +12,6 @@ package components.body.ports;
 component GenericPortsWithoutTypeParams {
   
   port 
-    in Tiger somePort, //Component GenericPortsWithoutTypeParams has no generic type parameter T
+    in T somePort, //Component GenericPortsWithoutTypeParams has no generic type parameter T
     out V anotherPort; //Component GenericPortsWithoutTypeParams has no generic type parameter V
 }

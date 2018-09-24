@@ -167,6 +167,13 @@ public class ConnectorTest extends AbstractCoCoTest {
   }
   
   @Test
+  public void testConnectorSourceAndTargetFromSameInnerComponent() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ConnectorSourceAndTargetFromSameInnerComponent");
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetComponentDiffer());
+    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA075"));
+  }
+  
+  @Test
   /* Checks whether the source and target of a connect statement exist. */
   public void testMissingSourceAndTargetDefinitionInSubcomponent() {
     ASTMontiArcNode node = loadComponentAST(
@@ -232,7 +239,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "GenericIfUsage");
     MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
-    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA033"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA033"));
   }
 
   @Test
