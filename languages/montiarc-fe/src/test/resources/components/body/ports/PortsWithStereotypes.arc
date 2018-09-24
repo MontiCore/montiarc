@@ -1,8 +1,10 @@
 package components.body.ports;
 
+import java.lang.System;
+import java.io.PrintStream;
+
 /**
- * Invalid model.
- * TODO: Fix test. Model was intended as a valid model, but is missing imports for some types
+ * Valid model.
  */
 component PortsWithStereotypes {
 
