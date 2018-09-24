@@ -27,10 +27,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static de.montiarcautomaton.generator.MontiArcGeneratorTool.DEFAULT_TYPES_FOLDER;
@@ -67,19 +64,31 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
    * 8. Run the visitors on all generated files and check that exactly the
    *    expected elements are present
    */
-  public void testExample() {
+  public void testGuardIsBoolean() {
     // 2. Specify the model to check
-    executeGeneratorTest(PACKAGE, "AtomicCompWithoutImpl");
+    executeGeneratorTest("components.body.automaton.transition.guards", "GuardIsBoolean");
   }
 
   @Test
+  @Ignore
+  public void testComplexComponent() {
+    executeGeneratorTest(PACKAGE + ".body.subcomponents", "ComplexComponent");
+  }
+
+  @Test
+  @Ignore
   public void test() {
-    executeGeneratorTest("components.head.generics",
-        "SubSubCompExtendsGenericComparableCompValid");
+    executeGeneratorTest("components.head.parameters",
+        "ComposedComponentUsingDefaultParameters");
   }
 
   @Test
-  @Ignore("")
+  @Ignore
+  public void testComponentExtendsGenericComponent3() {
+    executeGeneratorTest("components.head.generics", "ComponentExtendsGenericComponent3");
+  }
+
+  @Test
   public void testFEModels() {
 
     FileWalker modelVisitor = new FileWalker(".arc");
@@ -153,9 +162,11 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
         TEST_MODEL_PATH.toFile(),
         Paths.get(DEFAULT_TYPES_FOLDER).toFile(),
         Paths.get(LIBRARY_MODELS_FOLDER).toFile()).orElse(null);
-    assertNotNull(symbol);
+    assertNotNull("Could not load component symbol for which the " +
+                      "generator test should be executed.", symbol);
 
     // Skip if it contains inner components
+    // TODO Remove when generation of inner components is to be implemented again and implementation of expected elements and files is present
     if(anyHasInnerComponent(symbol)){
       return;
     }
