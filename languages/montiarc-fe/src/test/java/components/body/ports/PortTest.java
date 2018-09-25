@@ -199,13 +199,6 @@ public class PortTest extends AbstractCoCoTest {
   }
   
   
-  /**
-   * TODO: Currently no errors found even though it is an invalid model
-   */
-  @Test
-  public void testGenericPortsWithoutTypeParams() {
-    checkValid(PACKAGE + "." + "GenericPortsWithoutTypeParams");
-  }
   
   @Test
   /* Checks whether all port names in the port definition start with a lower
