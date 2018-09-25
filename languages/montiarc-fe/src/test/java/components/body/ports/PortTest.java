@@ -85,6 +85,12 @@ public class PortTest extends AbstractCoCoTest {
   }
   
   @Test
+  public void testFormalTypeParametersNotExist() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortTypesNotExist");
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(2, "xMA101"));
+  }
+  
+  @Test
   public void testPortNameAmbiguous() {
     final String modelName = PACKAGE + "." + "PortNameAmbiguous";
     final ExpectedErrorInfo errors
