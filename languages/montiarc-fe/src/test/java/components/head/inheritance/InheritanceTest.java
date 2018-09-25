@@ -236,5 +236,20 @@ public class InheritanceTest extends AbstractCoCoTest {
   public void testExtendGenericComponentWithGenericConfigArg() {
     checkValid(PACKAGE + "." + "ExtendGenericComponentWithGenericConfigArg"); 
   }
+
+  @Test
+  public void testSubSubNestedGenericPortType() {
+    checkValid(PACKAGE + "." + "SubSubNestedGenericPortType");
+  }
+
+  @Test
+  public void testSubNestedGenericPortType() {
+    checkValid(PACKAGE + "." + "SubNestedGenericPortType");
+  }
+
+  @Test
+  public void testNestedGenericPortType() {
+    checkValid(PACKAGE + "." + "NestedGenericPortType");
+  }
   
 }
