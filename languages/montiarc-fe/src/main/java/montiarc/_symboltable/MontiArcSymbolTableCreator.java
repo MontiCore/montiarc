@@ -392,7 +392,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       // actual type arguments
       addTypeArgumentsToComponent(ref, superCompRef);
       
-      component.setSuperComponent(Optional.of(ref));
+      component.setSuperComponent(ref);
     }
     
     if (autoinstantiate.pop()) {
@@ -405,7 +405,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       componentSymbols.forEach(componentSymbol -> {
         if (componentSymbol.hasConfigParameters() || componentSymbol.hasFormalTypeParameters()) {
           Log.error(String.format(
-              "0xMA038 It was not possible to automatically create an instance of component %s because it has generic or constuctor parameters",
+              "0xMA038 It was not possible to automatically create an instance " +
+                  "of component %s because it has generic type or component parameters",
               componentSymbol.getName()));
         }
         else {
