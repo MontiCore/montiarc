@@ -42,7 +42,7 @@ public abstract class AbstractCoCoTest {
   // TODO Remove when inner components are allowed again
   private static final MontiArcCoCoChecker checker = new MontiArcCoCoChecker()
       .addCoCo(new PortUsage())
-      .addCoCo(new UsedTypesExist())
+      .addCoCo(new UsedPortAndVarTypesExist())
       .addCoCo(new SubComponentsConnected())
       .addCoCo(new SubcomponentParametersCorrectlyAssigned())
       .addCoCo(new PackageLowerCase())

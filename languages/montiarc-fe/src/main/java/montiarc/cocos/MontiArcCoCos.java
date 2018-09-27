@@ -16,7 +16,7 @@ public class MontiArcCoCos {
   public static MontiArcCoCoChecker createChecker() {
     return new MontiArcCoCoChecker()
         .addCoCo(new PortUsage())
-        .addCoCo(new UsedTypesExist())
+        .addCoCo(new UsedPortAndVarTypesExist())
         .addCoCo(new SubComponentsConnected())
         .addCoCo(new SubcomponentParametersCorrectlyAssigned())
         .addCoCo(new PackageLowerCase())

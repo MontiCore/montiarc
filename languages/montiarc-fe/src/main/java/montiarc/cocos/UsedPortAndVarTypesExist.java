@@ -13,13 +13,12 @@ import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.VariableSymbol;
 
 /**
- * Checks whether the used formal type parameters, e.g. as type of a port, are
- * declared in the head of the component.
+ * Checks whether types of ports and variables exist.
  *
  * @author Pfeiffer
  * @version $Revision$, $Date$
  */
-public class UsedTypesExist implements MontiArcASTComponentCoCo {
+public class UsedPortAndVarTypesExist implements MontiArcASTComponentCoCo {
   
   /**
    * @see montiarc._cocos.MontiArcASTComponentCoCo#check(montiarc._ast.ASTComponent)
