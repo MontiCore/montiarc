@@ -148,8 +148,6 @@ public class AssignmentTest extends AbstractCoCoTest {
   }
   
   @Test
-  @Ignore("TODO Fix UseOfForbiddenExpression CoCo. Currently only finds " +
-              "errors regarding the use of 'instanceof'.")
   public void testUseOfForbiddenExpressions() {
     final ASTMontiArcNode astMontiArcNode = loadComponentAST(
         PACKAGE + "." + "UseOfForbiddenExpressions");
