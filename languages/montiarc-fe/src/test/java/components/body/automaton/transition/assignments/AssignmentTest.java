@@ -1,7 +1,6 @@
 package components.body.automaton.transition.assignments;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;

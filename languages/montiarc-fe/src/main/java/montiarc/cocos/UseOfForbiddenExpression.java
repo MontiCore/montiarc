@@ -87,7 +87,7 @@ public class UseOfForbiddenExpression
        */
       @Override
       public void visit(ASTBinaryAndOpExpression node) {
-        Log.error("0xMA023 Expression contains forbidden expression: binary XOR" +
+        Log.error("0xMA023 Expression contains forbidden expression: binary AND" +
             "binary AND",
             node.get_SourcePositionStart());
       }
@@ -97,7 +97,7 @@ public class UseOfForbiddenExpression
        */
       @Override
       public void visit(ASTBinaryXorOpExpression node) {
-        Log.error("0xMA023 Expression contains forbidden expression: ",
+        Log.error("0xMA023 Expression contains forbidden expression: binary XOR",
             node.get_SourcePositionStart());
       }
     });
