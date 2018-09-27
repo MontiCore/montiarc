@@ -1,33 +1,68 @@
 package generation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import de.montiarcautomaton.generator.helper.ComponentHelper;
+import de.monticore.symboltable.types.JFieldSymbol;
+import infrastructure.AbstractCoCoTest;
+import montiarc.MontiArcTool;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.PortSymbol;
+import montiarc._symboltable.VariableSymbol;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Test;
-
-import de.montiarcautomaton.generator.helper.ComponentHelper;
-import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.types.JFieldSymbol;
-import de.monticore.types.types._ast.ASTType;
-import de.monticore.umlcd4a.cocos.mcg2ebnf.AssociationNoStereotypesCoCo;
-import infrastructure.AbstractCoCoTest;
-import montiarc.MontiArcTool;
-import montiarc._ast.ASTComponent;
-import montiarc._ast.ASTPort;
-import montiarc._symboltable.ComponentInstanceSymbol;
-import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.PortSymbol;
-import montiarc._symboltable.VariableSymbol;
+import static org.junit.Assert.*;
 
 public class ComponentHelperTest extends AbstractCoCoTest {
 
   private static final String PACKAGE = "components.head.parameters";
-  
+
+  @Test
+  @Ignore("TODO Fix Java Types in the test symbol table. They appear to be missing or wrongly added. Then uncomment all lines")
+  public void determinePortTypeName() {
+
+    ComponentSymbol comp;
+    Optional<PortSymbol> portSymbolOpt;
+    String printedPortType;
+
+//    comp = this.loadComponentSymbol(
+//        "components.head.inheritance",
+//        "SubSubNestedGenericPortType",
+//        "target/test-models/");
+//    ComponentHelper helper = new ComponentHelper(comp);
+//    portSymbolOpt = comp.getIncomingPort("nestedGenericInPort", true);
+//    assertTrue("Could not find expected port", portSymbolOpt.isPresent());
+//    printedPortType = ComponentHelper.determinePortTypeName(comp, portSymbolOpt.get());
+//    assertEquals("List<Map<String, String>>", printedPortType);
+//
+//    ComponentSymbol subComponentSymbol = this.loadComponentSymbol(
+//        "components.head.inheritance",
+//        "SubNestedGenericPortType",
+//        "target/test-models/");
+
+//    portSymbolOpt = comp.getIncomingPort("nestedGenericInPort", true);
+//    assertTrue("Could not find expected port", portSymbolOpt.isPresent());
+//    printedPortType = ComponentHelper.determinePortTypeName(comp, portSymbolOpt.get());
+//    assertEquals("List<Map<String, K>>", printedPortType);
+
+    comp = this.loadComponentSymbol(
+        "components.head.generics",
+        "SubCompExtendsGenericCompValid",
+        "target/test-models/");
+
+    portSymbolOpt = comp.getIncomingPort("tIn", true);
+    assertTrue("Could not find expected port", portSymbolOpt.isPresent());
+    printedPortType = ComponentHelper.determinePortTypeName(comp, portSymbolOpt.get());
+    assertEquals("String", printedPortType);
+    portSymbolOpt = comp.getOutgoingPort("kOut", true);
+    assertTrue("Could not find expected port", portSymbolOpt.isPresent());
+    printedPortType = ComponentHelper.determinePortTypeName(comp, portSymbolOpt.get());
+    assertEquals("Integer", printedPortType);
+  }
+
   @Test
   public void getPortTypeName() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComponentWithGenerics");
@@ -51,7 +86,7 @@ public class ComponentHelperTest extends AbstractCoCoTest {
     portTypeName = helper.printPortTypeName(portSymbol.get());
     assertEquals("K", portTypeName);    
   }
-  
+
   @Test
   public void testAutoboxing() {
     String datatype = "Map<List<int>[],Set<double[]>>";

@@ -55,13 +55,18 @@ public class AbstractGeneratorTest {
   protected static final ArrayList<Path> EXCLUDED_MODELS = new ArrayList<>();
 
   /*
-   * Add excluded models to list
+   * Add excluded models to list.
+   * These are models that are valid, but due to different problems/bugs to not
+   * generate correctly.
    */
   static {
+    /*
+     * Requires different symbol table setup that includes a new model path.
+     */
     EXCLUDED_MODELS.add(TEST_MODEL_PATH
                             .resolve("components/ComponentFromJar.arc"));
 
-    /**
+    /*
      * Reason: NullPointerException in TypeCompatibilityChecker
      */
     EXCLUDED_MODELS.add(TEST_MODEL_PATH
@@ -70,7 +75,11 @@ public class AbstractGeneratorTest {
 //    EXCLUDED_MODELS.add(TEST_MODEL_PATH
 //                            .resolve("components/head/parameters/" +
 //                                         "UseEnumAsTypeArgFromCD.arc"));
+    /*
+     * Associations in CD files will not be generated correctly
+     */
     EXCLUDED_MODELS.add(TEST_MODEL_PATH.resolve("types/Units.cd"));
+
     EXCLUDED_MODELS.add(TEST_MODEL_PATH.resolve("types/Simulation.arc"));
 
     // Reason: Assignment Matching Trafo is missing
@@ -112,7 +121,8 @@ public class AbstractGeneratorTest {
 
   /**
    * Invokes the Java compiler on the given files.
-   * Only checks java Files.
+   * Only checks java files. Paths from the argument corresponding to directories
+   * will be disregarded.
    *
    * @param paths Files to compile
    * @return true, if there are no compiler errors
@@ -194,6 +204,12 @@ public class AbstractGeneratorTest {
     copyJavaTypesToOutput();
   }
 
+  /**
+   * Removes directories from the unpacked test models which are not whitelisted.
+   * This eliminates unparseable files and unintended files passed to the generator.
+   *
+   * @throws IOException
+   */
   private void removeNonWhitelistedDirs() throws IOException {
     List<String> allowedDirectories = new ArrayList<>();
     allowedDirectories.add("components");
@@ -214,6 +230,12 @@ public class AbstractGeneratorTest {
     }
   }
 
+  /**
+   * Copies java types to the output directory.
+   * They are required to compile the generated files of the components.
+   *
+   * @throws IOException
+   */
   private void copyJavaTypesToOutput() throws IOException {
     Files.walkFileTree(TEST_MODEL_PATH, new SimpleFileVisitor<Path>(){
       @Override
@@ -339,6 +361,10 @@ public class AbstractGeneratorTest {
     }
   }
 
+  /**
+   * Initialize the Symbol table of the generated java files.
+   * @return
+   */
   protected GlobalScope initJavaDSLSymbolTable() {
     ModelingLanguageFamily family = new ModelingLanguageFamily();
     family.addModelingLanguage(new JavaDSLLanguage());

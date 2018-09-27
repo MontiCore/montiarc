@@ -65,26 +65,15 @@ public class ComponentHelper {
     }
     return value;
   }
-  
-  // TODO: Wer nutzt die und warum? Kann die raus?
-  @Deprecated
+
+  /**
+   * Prints the type of the given port respecting inherited ports and the
+   * actual type values
+   *
+   * @param port Symbol of the port of which to determine the type
+   * @return The string representation of the type
+   */
   public String getPortTypeName(PortSymbol port) {
-    // ASTComponent comp = null;
-    //
-    // final Optional<? extends ScopeSpanningSymbol> spanningSymbol =
-    // port.getEnclosingScope().getSpanningSymbol();
-    // if(spanningSymbol.isPresent() && spanningSymbol.get() instanceof
-    // ComponentSymbol) {
-    // final ComponentSymbol symbol = (ComponentSymbol) spanningSymbol.get();
-    // final Optional<ASTNode> astNode = symbol.getAstNode();
-    // if(astNode.isPresent()) {
-    // return getPortTypeName((ASTComponent) astNode.get(), port);
-    // }
-    // }
-    
-//    ASTPort astPort = (ASTPort) port.getAstNode().get();
-//    return autobox(typesPrinter.prettyprint(astPort.getType()));
-    // return getPortTypeName(componentNode, port);
     return determinePortTypeName(this.component, port);
   }
 
@@ -208,20 +197,28 @@ public class ComponentHelper {
   public static String insertTypeParamValueIntoTypeArg(
       TypeReference<? extends TypeSymbol> toAnalyze,
       Map<String, String> typeParamMap){
+
     StringBuilder result = new StringBuilder();
     result.append(toAnalyze.getName());
     if(toAnalyze.getActualTypeArguments().isEmpty()){
       // There are no type arguments. Check if the type itself is a type parameter
       if(typeParamMap.containsKey(toAnalyze.getName())){
         return typeParamMap.get(toAnalyze.getName());
+      } else {
+        return toAnalyze.getName();
       }
     } else {
+      // There are type arguments and therefore they are processed recursively
+      // and reprinted
       result.append("<");
       result.append(
           toAnalyze.getActualTypeArguments().stream()
               .map(typeArg -> insertTypeParamValueIntoTypeArg(typeArg.getType(), typeParamMap))
               .collect(Collectors.joining(", ")));
       result.append(">");
+    }
+    for (int i = 0; i < toAnalyze.getDimension(); i++) {
+      result.append("[]");
     }
     return result.toString();
   }
@@ -233,19 +230,7 @@ public class ComponentHelper {
    * @return The printed type reference
    */
   public static String printTypeReference(TypeReference<? extends TypeSymbol> reference){
-    StringBuilder result = new StringBuilder(reference.getName());
-    if(!reference.getActualTypeArguments().isEmpty()) {
-      result.append("<");
-      result.append(reference.getActualTypeArguments()
-                        .stream()
-                        .map(ComponentHelper::printTypeArgument)
-                        .collect(Collectors.joining(", ")));
-      result.append(">");
-    }
-    for (int i = 0; i < reference.getDimension(); i++) {
-      result.append("[]");
-    }
-    return result.toString();
+    return insertTypeParamValueIntoTypeArg(reference, new HashMap<>());
   }
 
   /**
@@ -315,17 +300,7 @@ public class ComponentHelper {
     }
     return autoBoxedTypeName;
   }
-  
-  // TODO: Wer nutzt die und warum? Kann die raus?
-  @Deprecated
-  public String getPortTypeName(ASTComponent comp, PortSymbol port) {
-    //
-    // ASTTypesNode astTypeNode = (ASTTypesNode) comp.getPorts().getType();
-    // String portTypeName = visitor.prettyprint();
-    // return portTypeName;
-    return printFqnTypeName(comp, port.getTypeReference());
-  }
-  
+
   // TODO @MP in Templates übernehmen
   public String printPortTypeName(PortSymbol var) {
     String name = var.getName();
