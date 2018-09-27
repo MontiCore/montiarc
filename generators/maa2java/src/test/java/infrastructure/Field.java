@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package generation;
+package infrastructure;
 
 import de.monticore.types.types._ast.ASTSimpleReferenceType;
 import de.monticore.types.types._ast.ASTType;
@@ -15,11 +15,11 @@ import de.monticore.types.types._ast.ASTType;
  * @version ,
  * @since TODO
  */
-class Field {
+public class Field {
   private final String name;
   private final String type;
 
-  Field(String name, String type) {
+  public Field(String name, String type) {
     this.name = name;
     this.type = type;
   }

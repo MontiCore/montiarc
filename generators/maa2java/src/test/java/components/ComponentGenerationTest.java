@@ -13,15 +13,13 @@ import de.monticore.symboltable.GlobalScope;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.Symbol;
 import de.se_rwth.commons.logging.Log;
-import generation.ComponentElementsCollector;
-import generation.GeneratedComponentClassVisitor;
+import infrastructure.GeneratedComponentClassVisitor;
 import infrastructure.AbstractGeneratorTest;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -37,11 +35,22 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * TODO
+ * Test whether all generated classes of the model are syntactically and
+ * semantically correct.
+ * This is done by proceeding through the following steps:
+ * 1. Run the generator (Done implicitely through setUp method)
+ * 2. Specify the model to check and load the component symbol
+ * 3. Determine which files have to be checked for the specified model
+ * 4. Assert that all expected files are present
+ * 5. Compile the files to ensure syntactic correctness
+ * 6. Initialise the JavaDSL global scope
+ * 7. Run a visitor that collects the information about expected elements
+ *    in the generated files
+ * 8. Run the visitors on all generated files and check that exactly the
+ *    expected elements are present
  *
  * @author (last commit) Michael Mutert
  * @version , 2018-04-27
- * @since TODO
  */
 public class ComponentGenerationTest extends AbstractGeneratorTest {
 
@@ -50,45 +59,10 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 
   @Test
   /**
-   * Test whether all generated classes of the model are syntactically and
-   * semantically correct.
-   * This is done by proceeding through the following steps:
-   * 1. Run the generator (Done implicitely through setUp method)
-   * 2. Specify the model to check and load the component symbol
-   * 3. Determine which files have to be checked for the specified model
-   * 4. Assert that all expected files are present
-   * 5. Compile the files to ensure syntactic correctness
-   * 6. Initialise the JavaDSL global scope
-   * 7. Run a visitor that collects the information about expected elements
-   *    in the generated files
-   * 8. Run the visitors on all generated files and check that exactly the
-   *    expected elements are present
+   * Test all models that are imported from the montiarc-fe project.
+   * All invalid or otherwise wrong models which might produce generator errors
+   * are already filtered before the generation process.
    */
-  public void testGuardIsBoolean() {
-    // 2. Specify the model to check
-    executeGeneratorTest("components.body.automaton.transition.guards", "GuardIsBoolean");
-  }
-
-  @Test
-  @Ignore
-  public void testComplexComponent() {
-    executeGeneratorTest(PACKAGE + ".body.subcomponents", "ComplexComponent");
-  }
-
-  @Test
-  @Ignore
-  public void test() {
-    executeGeneratorTest("components.head.parameters",
-        "ComposedComponentUsingDefaultParameters");
-  }
-
-  @Test
-  @Ignore
-  public void testComponentExtendsGenericComponent3() {
-    executeGeneratorTest("components.head.generics", "ComponentExtendsGenericComponent3");
-  }
-
-  @Test
   public void testFEModels() {
 
     FileWalker modelVisitor = new FileWalker(".arc");
@@ -152,6 +126,12 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     }
   }
 
+  /**
+   * Executes the main flow of the generator test.
+   *
+   * @param packageName
+   * @param componentName
+   */
   private void executeGeneratorTest(String packageName, String componentName) {
     String qualifiedName = packageName + "." + componentName;
 
@@ -207,7 +187,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
         = new ComponentElementsCollector(symbol, componentName);
     compCollector.handle(compUnit);
 
-    // Check if all expected elements are present and no other errors occured
+    // Check if all expected elements are present and no other errors occurred
     Log.getFindings().clear();
 
     // Component class
@@ -218,7 +198,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     runVisitorOnFile(gs, compCollector.getInputVisitor(),
         qualifiedName + "Input");
 
-    // Result
+    // Result class
     runVisitorOnFile(gs, compCollector.getResultVisitor(),
         qualifiedName + "Result");
 
@@ -233,6 +213,14 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     assertEquals(0, Log.getFindings().size());
   }
 
+  /**
+   * Currently, components which contain inner components should not be considered,
+   * as they are not correctly generating as of MontiArc 5.0.0.
+   * When implementing inner component generation this method will become unnecessary
+   *
+   * @param symbol Component to check
+   * @return True, iff the component or any subcomponent defines an inner component.
+   */
   private boolean anyHasInnerComponent(ComponentSymbol symbol){
     if(!symbol.getInnerComponents().isEmpty()){
       return true;
@@ -245,11 +233,6 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
       }
     }
     return false;
-  }
-
-  @Test
-  public void testComponentWithEmptyComponent() {
-    executeGeneratorTest(PACKAGE, "ComponentWithEmptyComponent" );
   }
 
   /**

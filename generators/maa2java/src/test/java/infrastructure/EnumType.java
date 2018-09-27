@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package generation;
+package infrastructure;
 
 import java.util.Set;
 

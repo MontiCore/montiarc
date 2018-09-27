@@ -3,17 +3,15 @@
  *
  * http://www.se-rwth.de/
  */
-package generation;
+package infrastructure;
 
 import de.monticore.java.javadsl._ast.*;
-import de.monticore.types.types._ast.ASTReturnType;
 import de.monticore.types.types._ast.ASTType;
-import de.monticore.types.types._ast.ASTVoidType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static generation.GenerationConstants.PRINTER;
+import static infrastructure.GeneratorTestConstants.PRINTER;
 
 /**
  * TODO
@@ -36,7 +34,7 @@ public class Method{
     this.bodyElements = bodyElements;
   }
 
-  static Builder getBuilder(){
+  public static Builder getBuilder(){
     return new Builder();
   }
 
@@ -71,7 +69,7 @@ public class Method{
     this.bodyElements.add(index, element.replaceAll("\\s", ""));
   }
 
-  static class Builder{
+  public static class Builder{
 
     private String returnType;
     private String name;

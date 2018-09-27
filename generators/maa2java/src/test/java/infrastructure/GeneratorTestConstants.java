@@ -1,4 +1,4 @@
-package generation;
+package infrastructure;
 
 import com.google.common.collect.Lists;
 import de.monticore.java.javadsl._ast.ASTConstantsJavaDSL;
@@ -14,7 +14,7 @@ import montiarc._ast.MontiArcMill;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GenerationConstants {
+public class GeneratorTestConstants {
 
   public static final ASTPrimitiveModifier PUBLIC_MODIFIER
       = JavaDSLMill.primitiveModifierBuilder()

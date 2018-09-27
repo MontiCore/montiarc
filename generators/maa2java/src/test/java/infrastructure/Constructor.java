@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package generation;
+package infrastructure;
 
 import com.google.common.collect.Lists;
 import de.monticore.java.javadsl._ast.*;
@@ -45,11 +45,11 @@ public class Constructor{
     this.bodyElements = bodyElements;
   }
 
-  static Builder getBuilder(){
+  public static Builder getBuilder(){
     return new Builder();
   }
 
-  static class Builder{
+  public static class Builder{
 
     public List<ASTFormalParameter> getParameters() {
       return parameters;
@@ -132,7 +132,7 @@ public class Constructor{
   @Override public String toString() {
     String parameterString = "[]";
     if(parameters.isPresentFormalParameterListing()){
-      parameterString = GenerationConstants.PRINTER.prettyprint(parameters.getFormalParameterListing());
+      parameterString = GeneratorTestConstants.PRINTER.prettyprint(parameters.getFormalParameterListing());
     }
 
     return "Constructor{" +

@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package generation;
+package components;
 
 import com.google.common.collect.Lists;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
@@ -17,6 +17,7 @@ import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.types.types._ast.*;
+import infrastructure.*;
 import montiarc._ast.*;
 import montiarc._symboltable.*;
 import montiarc._visitor.MontiArcVisitor;
@@ -24,7 +25,7 @@ import montiarc._visitor.MontiArcVisitor;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static generation.GenerationConstants.PRINTER;
+import static infrastructure.GeneratorTestConstants.PRINTER;
 
 /**
  * Collects information about the generated java classes that is expected
@@ -636,7 +637,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         Method
             .getBuilder()
             .setName("toString")
-            .setReturnType(PRINTER.prettyprint(GenerationConstants.types.get("STRING_TYPE")))
+            .setReturnType(PRINTER.prettyprint(GeneratorTestConstants.types.get("STRING_TYPE")))
             .addBodyElement("String result = \"[\"");
 
     for (PortSymbol portSymbol : symbol.getOutgoingPorts()) {
@@ -833,7 +834,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         Method.Builder setter
             = Method
                   .getBuilder()
-                  .setReturnType(GenerationConstants.VOID_STRING)
+                  .setReturnType(GeneratorTestConstants.VOID_STRING)
                   .addParameter("port", expectedType)
                   .addBodyElement("this." + name + " = port;")
                   .setName("setPort" + portNameCapitalized);
@@ -846,7 +847,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         Method.Builder setter
             = Method
                   .getBuilder()
-                  .setReturnType(GenerationConstants.VOID_STRING)
+                  .setReturnType(GeneratorTestConstants.VOID_STRING)
                   .addParameter(name, type)
                   .addBodyElement("this." + name + " = " + name + ";")
                   .setName("set" + portNameCapitalized);
@@ -908,23 +909,23 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     } else if(type instanceof ASTPrimitiveType){
       // Base case: Box primitive types
       ASTPrimitiveType primitiveType = (ASTPrimitiveType) type;
-      ASTType result = GenerationConstants.types.get("OBJECT_TYPE");
+      ASTType result = GeneratorTestConstants.types.get("OBJECT_TYPE");
       if (primitiveType.isBoolean()) {
-        result = GenerationConstants.types.get("BOOLEAN_TYPE");
+        result = GeneratorTestConstants.types.get("BOOLEAN_TYPE");
       } else if(primitiveType.isByte()){
-        result = GenerationConstants.types.get("BYTE_TYPE");
+        result = GeneratorTestConstants.types.get("BYTE_TYPE");
       } else if(primitiveType.isChar()){
-        result = GenerationConstants.types.get("CHARACTER_TYPE");
+        result = GeneratorTestConstants.types.get("CHARACTER_TYPE");
       } else if(primitiveType.isDouble()){
-        result = GenerationConstants.types.get("DOUBLE_TYPE");
+        result = GeneratorTestConstants.types.get("DOUBLE_TYPE");
       } else if(primitiveType.isFloat()){
-        result = GenerationConstants.types.get("FLOAT_TYPE");
+        result = GeneratorTestConstants.types.get("FLOAT_TYPE");
       } else if(primitiveType.isInt()){
-        result = GenerationConstants.types.get("INTEGER_TYPE");
+        result = GeneratorTestConstants.types.get("INTEGER_TYPE");
       } else if(primitiveType.isLong()){
-        result = GenerationConstants.types.get("LONG_TYPE");
+        result = GeneratorTestConstants.types.get("LONG_TYPE");
       } else if(primitiveType.isShort()){
-        result = GenerationConstants.types.get("SHORT_TYPE");
+        result = GeneratorTestConstants.types.get("SHORT_TYPE");
       }
       return result;
     }

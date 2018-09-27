@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package generation;
+package infrastructure;
 
 import com.google.common.collect.Sets;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
@@ -12,6 +12,7 @@ import de.monticore.java.javadsl._visitor.JavaDSLVisitor;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.types.types._ast.*;
 import de.se_rwth.commons.logging.Log;
+import infrastructure.*;
 
 import java.util.HashSet;
 import java.util.List;
@@ -110,7 +111,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
         final ASTSimpleReferenceType refType = (ASTSimpleReferenceType) type;
         String typeArgs = "";
         if(refType.getTypeArgumentsOpt().isPresent()){
-          typeArgs = GenerationConstants.PRINTER.prettyprint(refType.getTypeArguments());
+          typeArgs = GeneratorTestConstants.PRINTER.prettyprint(refType.getTypeArguments());
         }
         String finalTypeArgs = typeArgs;
         boolean isComponentImplemented
@@ -161,7 +162,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
                                     "for super class '%s' in class '%s', but found '%s'.",
             className,
             superClassFqn,
-            GenerationConstants.PRINTER.prettyprint(superClassType.getTypeArguments())));
+            GeneratorTestConstants.PRINTER.prettyprint(superClassType.getTypeArguments())));
 
       } else if(!this.superClassTypeArgs.isEmpty() && superClassType.getTypeArgumentsOpt().isPresent()){
         // Case 3.4: Expected type arguments and actual type arguments generated
@@ -196,10 +197,10 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
   }
 
   private String printWithoutWhitespace(ASTTypesNode node){
-    return GenerationConstants.PRINTER.prettyprint(node).replaceAll("\\s", "");
+    return GeneratorTestConstants.PRINTER.prettyprint(node).replaceAll("\\s", "");
   }
   private String printWithoutWhitespace(ASTJavaDSLNode node){
-    return GenerationConstants.PRINTER.prettyprint(node).replaceAll("\\s", "");
+    return GeneratorTestConstants.PRINTER.prettyprint(node).replaceAll("\\s", "");
   }
 
   @Override
@@ -289,7 +290,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
                                   "Signature: %s%s",
           className,
           className,
-          GenerationConstants.PRINTER.prettyprint(node.getFormalParameters())));
+          GeneratorTestConstants.PRINTER.prettyprint(node.getFormalParameters())));
     }
   }
 
@@ -441,7 +442,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
   }
 
   public void addImplementedInterface(String name, ASTTypeArguments typeArgs) {
-    final String printedArgs = GenerationConstants.PRINTER.prettyprint(typeArgs);
+    final String printedArgs = GeneratorTestConstants.PRINTER.prettyprint(typeArgs);
     this.interfaces.add(name + printedArgs);
   }
 
