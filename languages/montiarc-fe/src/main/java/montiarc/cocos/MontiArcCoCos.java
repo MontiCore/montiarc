@@ -42,11 +42,11 @@ public class MontiArcCoCos {
         
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
-        .addCoCo(new InputPortChangedInCompute())
         .addCoCo(new UsedPortsAndVariablesExist())
         .addCoCo(new MultipleBehaviorImplementation())
         .addCoCo(new InitBlockOnlyOnEmbeddedAJava())
         .addCoCo(new AtMostOneInitBlock())
+        .addCoCo(new AJavaUsesCorrectPortDirection())
         /* MontiArcAutomaton Cocos */
         
         /// Automaton Cocos

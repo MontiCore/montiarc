@@ -13,8 +13,8 @@ import montiarc._ast.ASTIOAssignment;
 import montiarc._ast.ASTTransition;
 import montiarc._cocos.MontiArcASTTransitionCoCo;
 import montiarc._symboltable.PortSymbol;
-import montiarc.visitor.NamesInExpressionsVisitor;
-import montiarc.visitor.NamesInExpressionsVisitor.ExpressionKind;
+import montiarc.visitor.NamesInExpressionsDelegatorVisitor;
+import montiarc.visitor.NamesInExpressionsDelegatorVisitor.ExpressionKind;
 
 /**
  * Checks whether input and output ports are used correctly in automaton transitions.
@@ -35,7 +35,7 @@ public class AutomatonUsesCorrectPortDirection implements MontiArcASTTransitionC
   @Override
   public void check(ASTTransition node) {
     Optional<ASTGuard> guard = node.getGuardOpt();
-    NamesInExpressionsVisitor ev = new NamesInExpressionsVisitor();
+    NamesInExpressionsDelegatorVisitor ev = new NamesInExpressionsDelegatorVisitor();
     Scope componentScope = node.getEnclosingScope().get().getEnclosingScope().get();
     // check guard
     if (guard.isPresent()) {
@@ -58,7 +58,7 @@ public class AutomatonUsesCorrectPortDirection implements MontiArcASTTransitionC
     
     // check reaction
     for (ASTIOAssignment reactionExpr : node.getReaction().getIOAssignmentList()) {
-      ev = new NamesInExpressionsVisitor();
+      ev = new NamesInExpressionsDelegatorVisitor();
       if (reactionExpr.isAssignment()) {
         // check left hand side of assignment
         Optional<PortSymbol> port = componentScope.resolve(reactionExpr.getName(), PortSymbol.KIND);

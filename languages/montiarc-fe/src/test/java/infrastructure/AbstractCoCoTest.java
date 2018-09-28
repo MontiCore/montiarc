@@ -66,7 +66,7 @@ public abstract class AbstractCoCoTest {
       
       /// AJava Cocos
       /// /////////////////////////////////////////////////////////////
-      .addCoCo(new InputPortChangedInCompute())
+      .addCoCo(new AJavaUsesCorrectPortDirection())
       .addCoCo(new UsedPortsAndVariablesExist())
       .addCoCo(new MultipleBehaviorImplementation())
       .addCoCo(new InitBlockOnlyOnEmbeddedAJava())

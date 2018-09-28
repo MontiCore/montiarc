@@ -11,7 +11,6 @@ import montiarc._cocos.MontiArcASTGuardExpressionCoCo;
 import montiarc._cocos.MontiArcASTIOAssignmentCoCo;
 import montiarc._cocos.MontiArcASTInitialStateDeclarationCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc.cocos.AutomatonNoAssignmentToIncomingPort;
 import montiarc.cocos.AutomatonReactionWithAlternatives;
 import montiarc.cocos.IOAssignmentCallFollowsMethodCall;
 import montiarc.cocos.MontiArcCoCos;

@@ -74,7 +74,7 @@ public class AJavaTest extends AbstractCoCoTest {
     checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
   
-  @Ignore("@JP: Hier sollten drei Fehler entstehen (siehe Model). Bitte einbauen")
+//  @Ignore("@JP: Hier sollten drei Fehler entstehen (siehe Model). Bitte einbauen")
   @Test
   public void testWrongPortUsage() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongPortUsage");
