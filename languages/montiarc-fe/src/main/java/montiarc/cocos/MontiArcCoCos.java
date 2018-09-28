@@ -47,6 +47,7 @@ public class MontiArcCoCos {
         .addCoCo(new InitBlockOnlyOnEmbeddedAJava())
         .addCoCo(new AtMostOneInitBlock())
         .addCoCo(new AJavaUsesCorrectPortDirection())
+        .addCoCo(new AJavaUsesExistingVariablesAndPorts())
         /* MontiArcAutomaton Cocos */
         
         /// Automaton Cocos

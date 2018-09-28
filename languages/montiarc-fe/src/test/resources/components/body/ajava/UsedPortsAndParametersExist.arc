@@ -12,7 +12,8 @@ component UsedPortsAndParametersExist(String s) {
     hulu = "";
   } 
 
-  compute {    
+  compute { 
+    String s = "x";   
     hulu = s;
   }
 }

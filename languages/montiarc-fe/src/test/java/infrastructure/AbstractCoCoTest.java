@@ -71,6 +71,7 @@ public abstract class AbstractCoCoTest {
       .addCoCo(new MultipleBehaviorImplementation())
       .addCoCo(new InitBlockOnlyOnEmbeddedAJava())
       .addCoCo(new AtMostOneInitBlock())
+      .addCoCo(new AJavaUsesExistingVariablesAndPorts())
       /* MontiArcAutomaton Cocos */
       
       /// Automaton Cocos

@@ -1,5 +1,6 @@
 package components.body.ajava;
 
+import java.util.Collections;
 /**
  * Invalid model.
  * Bad usage of ports (see below)
@@ -14,8 +15,8 @@ component WrongPortUsage {
   
   compute PrintInput {
     String buffer = output;   // Cannot read from outgoing ports
-    Buffer.println(sIn);
+    Collections.emptyList();
     bubu = 0;             // Port does not exist
-    input = bubu;             // Cannot assign values to incoming ports
+    input = bubu;             // Cannot assign values to incoming ports + used variable does not exist
   }
 }
