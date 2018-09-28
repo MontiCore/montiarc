@@ -134,17 +134,6 @@ public class AssignmentTest extends AbstractCoCoTest {
         new ExpectedErrorInfo(1, "xMA042"));
   }
   
-  @Test
-  /* @implements [Wor16] AR2: Inputs, outputs, and variables are used correctly.
-   * (p.103, Lst 5.20) */
-  public void testAssignmentToIncomingPort() {
-    final ASTMontiArcNode astMontiArcNode = loadComponentAST(
-        PACKAGE + "." + "AssignmentToIncomingPort");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
-        .addCoCo(new AutomatonNoAssignmentToIncomingPort());
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA034");
-    checkInvalid(cocos, astMontiArcNode, errors);
-  }
   
   @Test
   public void testUseOfForbiddenExpressions() {

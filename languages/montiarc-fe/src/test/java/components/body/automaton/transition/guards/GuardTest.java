@@ -11,7 +11,7 @@ import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
-import montiarc.cocos.AutomatonOutputInExpression;
+import montiarc.cocos.AutomatonUsesCorrectPortDirection;
 import montiarc.cocos.MontiArcCoCos;
 
 /**
@@ -60,13 +60,14 @@ public class GuardTest extends AbstractCoCoTest {
         new ExpectedErrorInfo(1, "xMA023"));
   }
   
-  @Ignore("Siehe TODO in AutomatonOutputInExpression coco")
   @Test
+  /* @implements [Wor16] AR2: Inputs, outputs, and variables are used correctly.
+   * (p.103, Lst 5.20) */
   public void testGuardUsesOutgoingPort() {
     final String qualifiedModelName = PACKAGE + "." + "GuardUsesOutgoingPort";
-    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker().addCoCo(new AutomatonOutputInExpression());
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
     final ExpectedErrorInfo errors
-        = new ExpectedErrorInfo(4, "xMA022");
+        = new ExpectedErrorInfo(8, "xMA022", "xMA102", "xMA103");
     checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
 
