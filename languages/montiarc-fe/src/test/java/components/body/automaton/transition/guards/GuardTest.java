@@ -11,6 +11,7 @@ import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc.cocos.AutomatonGuardIsNotBoolean;
 import montiarc.cocos.AutomatonUsesCorrectPortDirection;
 import montiarc.cocos.MontiArcCoCos;
 
@@ -43,7 +44,7 @@ public class GuardTest extends AbstractCoCoTest {
     final String qualifiedModelName = PACKAGE + "." + "GuardNotBoolean";
     final ExpectedErrorInfo errors
         = new ExpectedErrorInfo(3, "xMA036");
-    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final MontiArcCoCoChecker checker = new MontiArcCoCoChecker().addCoCo(new AutomatonGuardIsNotBoolean());
     checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
   

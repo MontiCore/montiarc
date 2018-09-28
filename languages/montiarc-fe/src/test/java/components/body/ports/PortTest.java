@@ -49,7 +49,7 @@ public class PortTest extends AbstractCoCoTest {
     // TODO: Star imports?
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "InexistingPortType");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(1, "xMA076"));
+        new ExpectedErrorInfo(3, "xMA101","xMA076"));
     
     checkValid(PACKAGE + "." + "BumpControl");
   }

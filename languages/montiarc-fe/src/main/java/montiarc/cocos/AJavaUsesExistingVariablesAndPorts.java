@@ -54,13 +54,12 @@ public class AJavaUsesExistingVariablesAndPorts implements MontiArcASTJavaPBehav
             JTypeSymbol.KIND);
         
         // check whether used name is local ajava variable
-        Collection<VariableSymbol> localVar = Collections.emptyList();
+        boolean isLocalVar = false;
         if (entry.getKey().getEnclosingScope().isPresent()) {
-          localVar = entry.getKey().getEnclosingScopeOpt().get().resolveMany(entry.getKey().getName(),
-              VariableSymbol.KIND);
+          isLocalVar = checkPortOrVariabelWithNameAlreadyExists(entry.getKey().getName(), entry.getKey().getEnclosingScopeOpt().get());
         }
         
-        if (vars.isEmpty() && ports.isEmpty() && !type.isPresent() && localVar.isEmpty()) {
+        if (vars.isEmpty() && ports.isEmpty() && !type.isPresent() && !isLocalVar) {
           Log.error(
               "0xMA107 used variable " + entry.getKey().getName() + " is used but not declared.",
               entry.getKey().get_SourcePositionStart());
@@ -68,6 +67,29 @@ public class AJavaUsesExistingVariablesAndPorts implements MontiArcASTJavaPBehav
       }
     }
     
+  }
+  
+  /**
+   * Checks whether the component defines a component variable or port with the
+   * same name of the Java/P variable. If so, it logs a warning.
+   * 
+   * @param v Symbol of the variable which should be checked
+   */
+  private boolean checkPortOrVariabelWithNameAlreadyExists(String name, Scope s) {
+    Collection<PortSymbol> ports = s.resolveMany(name,
+        PortSymbol.KIND);
+    Collection<VariableSymbol> vars = s.resolveMany(name,
+        VariableSymbol.KIND);
+    
+    if (ports.size() > 0 || vars.size() > 0) {
+      return true;
+    }
+    
+    if (s.getEnclosingScope().isPresent() && !s.getEnclosingScope().get().isShadowingScope()) {
+      checkPortOrVariabelWithNameAlreadyExists(name, s.getEnclosingScope().get());
+    }
+    
+    return false;
   }
   
 }

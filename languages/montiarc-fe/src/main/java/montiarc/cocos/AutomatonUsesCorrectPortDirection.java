@@ -17,17 +17,15 @@ import montiarc.visitor.NamesInExpressionsDelegatorVisitor;
 import montiarc.visitor.NamesInExpressionsDelegatorVisitor.ExpressionKind;
 
 /**
- * Checks whether input and output ports are used correctly in automaton transitions.
+ * Checks whether input and output ports are used correctly in automaton
+ * transitions.
  * 
  * @implements [Wor16] AR2: Inputs, outputs, and variables are used correctly.
  * (p. 103, Lst. 520)
  * @implements [RRW14a] T6: The direction of ports has to be respected.
- * 
  * @author Pfeiffer
  */
 public class AutomatonUsesCorrectPortDirection implements MontiArcASTTransitionCoCo {
-  
-
   
   /**
    * @see montiarc._cocos.MontiArcASTTransitionCoCo#check(montiarc._ast.ASTTransition)
@@ -57,36 +55,39 @@ public class AutomatonUsesCorrectPortDirection implements MontiArcASTTransitionC
     }
     
     // check reaction
-    for (ASTIOAssignment reactionExpr : node.getReaction().getIOAssignmentList()) {
-      ev = new NamesInExpressionsDelegatorVisitor();
-      if (reactionExpr.isAssignment()) {
-        // check left hand side of assignment
-        Optional<PortSymbol> port = componentScope.resolve(reactionExpr.getName(), PortSymbol.KIND);
-        if (port.isPresent() && port.get().isIncoming()) {
-          Log.error(
-              "0xMA102 Incoming port " + reactionExpr.getName()
-                  + " must not be used in assignments of reaction.",
-              reactionExpr.get_SourcePositionStart());
-        }
-      }
-      
-      reactionExpr.getValueList().getValuation().getExpression().accept(ev);
-      Map<ASTNameExpression, ExpressionKind> foundNames = ev.getFoundNames();
-      for (ASTNameExpression entry : foundNames.keySet()) {
-        Optional<PortSymbol> port = componentScope.resolve(entry.getName(), PortSymbol.KIND);
-        if (port.isPresent()) {
-          if (port.get().isOutgoing()) {
+    if (node.isPresentReaction()) {
+      for (ASTIOAssignment reactionExpr : node.getReaction().getIOAssignmentList()) {
+        ev = new NamesInExpressionsDelegatorVisitor();
+        if (reactionExpr.isAssignment()) {
+          // check left hand side of assignment
+          Optional<PortSymbol> port = componentScope.resolve(reactionExpr.getName(),
+              PortSymbol.KIND);
+          if (port.isPresent() && port.get().isIncoming()) {
             Log.error(
-                "0xMA103 Outgoing port " + entry.getName()
-                    + " must not be used in call expressions of reaction.",
-                entry.get_SourcePositionStart());
+                "0xMA102 Incoming port " + reactionExpr.getName()
+                    + " must not be used in assignments of reaction.",
+                reactionExpr.get_SourcePositionStart());
+          }
+        }
+        
+        if (reactionExpr.isPresentValueList() && reactionExpr.getValueList().isPresentValuation()) {
+          reactionExpr.getValueList().getValuation().getExpression().accept(ev);
+          Map<ASTNameExpression, ExpressionKind> foundNames = ev.getFoundNames();
+          for (ASTNameExpression entry : foundNames.keySet()) {
+            Optional<PortSymbol> port = componentScope.resolve(entry.getName(), PortSymbol.KIND);
+            if (port.isPresent()) {
+              if (port.get().isOutgoing()) {
+                Log.error(
+                    "0xMA103 Outgoing port " + entry.getName()
+                        + " must not be used in call expressions of reaction.",
+                    entry.get_SourcePositionStart());
+              }
+            }
           }
         }
       }
     }
     
   }
-  
-  
   
 }
