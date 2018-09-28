@@ -318,4 +318,13 @@ public class PortTest extends AbstractCoCoTest {
         = new ExpectedErrorInfo(1, "xMA033");
     checkInvalid(cocos, node, errors);
   }
+
+  @Test
+  public void testHasProhibitedPortName() {
+    final String modelName = PACKAGE + "." + "HasProhibitedPortName";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo expectedErrorInfo
+        = new ExpectedErrorInfo(4, "xMA046");
+    checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
+  }
 }
