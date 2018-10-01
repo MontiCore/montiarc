@@ -6,15 +6,14 @@
 package de.montiarcautomaton.generator;
 
 import java.io.File;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 import de.montiarcautomaton.generator.codegen.MAAGenerator;
 import de.monticore.cd2pojo.Modelfinder;
 import de.monticore.cd2pojo.POJOGenerator;
-import de.monticore.symboltable.Scope;
 import de.monticore.umlcd4a.CD4AnalysisLanguage;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
@@ -26,14 +25,13 @@ import montiarc._symboltable.MontiArcLanguage;
 /**
  * Extends {@link MontiArcTool} with generate capabilities.
  *
- * @author  Pfeiffer, Wortmann
- * @version $Revision$,
- *          $Date$
- *
+ * @author Pfeiffer, Wortmann
+ * @version $Revision$, $Date$
  */
-public class MontiArcGeneratorTool extends MontiArcTool{
+public class MontiArcGeneratorTool extends MontiArcTool {
   
   public static final String DEFAULT_TYPES_FOLDER = "target/javaLib/";
+  
   public static final String LIBRARY_MODELS_FOLDER = "target/librarymodels/";
   
   /**
@@ -48,35 +46,44 @@ public class MontiArcGeneratorTool extends MontiArcTool{
   }
   
   /**
-   * Checks cocos and generates code for all MontiArc models in modelpath to folder target.
+   * Checks cocos and generates code for all MontiArc models in modelpath to
+   * folder target.
    * 
    * @param modelPath Path where MontiArc models are located.
    * @param target Path the code should be generated to.
-   * @param hwcPath Path where handwritten component implementations are located.
+   * @param hwcPath Path where handwritten component implementations are
+   * located.
    */
   public void generate(File modelPath, File target, File hwcPath) {
     List<String> foundModels = Modelfinder.getModelsInModelPath(modelPath,
         MontiArcLanguage.FILE_ENDING);
-
+    
     // 1. create symboltable
     Log.info("Initializing symboltable", "MontiArcGeneratorTool");
-    String basedir = getBasedirFromModelAndTargetPath(modelPath.getAbsolutePath(), target.getAbsolutePath());
-    Scope symTab = initSymbolTable(modelPath, Paths.get(basedir + DEFAULT_TYPES_FOLDER).toFile(), Paths.get(basedir + LIBRARY_MODELS_FOLDER).toFile(), hwcPath);
+    String basedir = getBasedirFromModelAndTargetPath(modelPath.getAbsolutePath(),
+        target.getAbsolutePath());
     
     for (String model : foundModels) {
       String qualifiedModelName = Names.getQualifier(model) + "." + Names.getSimpleName(model);
       
       // 2. parse + resolve model
-      Log.info("Parsing model:"+ qualifiedModelName, "MontiArcGeneratorTool");
-      ComponentSymbol comp = symTab.<ComponentSymbol> resolve(qualifiedModelName, ComponentSymbol.KIND).get();
-
-      // 3. check cocos
-      Log.info("Check model: " + qualifiedModelName, "MontiArcGeneratorTool");
-      checkCoCos((ASTMontiArcNode) comp.getAstNode().get());
+      Log.info("Parsing model:" + qualifiedModelName, "MontiArcGeneratorTool");
+      Optional<ComponentSymbol> comp = loadComponentSymbolWithoutCocos(qualifiedModelName,
+          modelPath, Paths.get(basedir + DEFAULT_TYPES_FOLDER).toFile(),
+          Paths.get(basedir + LIBRARY_MODELS_FOLDER).toFile(), hwcPath);
       
-      // 4. generate
-      Log.info("Generate model: " + qualifiedModelName, "MontiArcGeneratorTool");
-      generate(comp, target, hwcPath);
+      if (comp.isPresent()) {
+        // 3. check cocos
+        Log.info("Check model: " + qualifiedModelName, "MontiArcGeneratorTool");
+        checkCoCos((ASTMontiArcNode) comp.get().getAstNode().get());
+        
+        // 4. generate
+        Log.info("Generate model: " + qualifiedModelName, "MontiArcGeneratorTool");
+        generate(comp.get(), target, hwcPath);
+      }
+      else {
+        Log.error("Could not resolve model:" + qualifiedModelName);
+      }
     }
     
     // gen cd
@@ -108,7 +115,8 @@ public class MontiArcGeneratorTool extends MontiArcTool{
   }
   
   private void generatePOJOs(File modelPath, File targetFilepath) {
-    List<String> foundModels = Modelfinder.getModelsInModelPath(modelPath, CD4AnalysisLanguage.FILE_ENDING);
+    List<String> foundModels = Modelfinder.getModelsInModelPath(modelPath,
+        CD4AnalysisLanguage.FILE_ENDING);
     for (String model : foundModels) {
       String simpleName = Names.getSimpleName(model);
       String packageName = Names.getQualifier(model);
@@ -118,7 +126,5 @@ public class MontiArcGeneratorTool extends MontiArcTool{
           Names.getQualifiedName(packageName, simpleName)).generate();
     }
   }
-  
-  
   
 }

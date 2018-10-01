@@ -1,7 +1,7 @@
 package components.body.ajava;
 
 /**
- * Invalid model.
+ * Invalid model: port sOut must not be used on rightHandSide.
  */
 component AssignExpressionToOutgoingPort {
   
@@ -11,6 +11,6 @@ component AssignExpressionToOutgoingPort {
   
   compute ReadSout {
     sOut  = "test" + "123";
-    String x = sOut;
+    String x = sOut; 
   }
 }

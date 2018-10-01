@@ -39,7 +39,8 @@ public class AJavaTest extends AbstractCoCoTest {
   
   @Test
   public void testAssignExpressionToOutgoingPort() {
-    checkValid(PACKAGE + "." + "AssignExpressionToOutgoingPort");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AssignExpressionToOutgoingPort");
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(1, "xMA105"));
   }
   
   @Test
@@ -54,7 +55,7 @@ public class AJavaTest extends AbstractCoCoTest {
     final String qualifiedModelName = PACKAGE + "." + "DistanceLogger";
     final MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
     final ExpectedErrorInfo errors
-        = new ExpectedErrorInfo(2, "xMA015", "xMA078");
+        = new ExpectedErrorInfo(2, "xMA015", "xMA110");
     checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
   }
   
@@ -79,27 +80,23 @@ public class AJavaTest extends AbstractCoCoTest {
   @Test
   public void testChangeIncomingPortInCompute() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ChangeIncomingPortInCompute");
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA078");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA104");
     checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
   
-  @Ignore("@JP: Hier sollten drei Fehler entstehen (siehe Model). Bitte einbauen")
   @Test
   public void testWrongPortUsage() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongPortUsage");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(3, "xMA030", "xMA078"));
+        new ExpectedErrorInfo(4, "xMA104", "xMA105", "xMA107"));
   }
   
-  @Ignore("@JP: Laut Konsole entsteht hier 2x Fehler 0xMA030. Wieso wird das nicht geprüft?")
   @Test
   public void testUsingInexistingPort() {
-    loadComponentAST(PACKAGE + "." + "UsingInexistingPort");
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UsingInexistingPort");
     ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(2,
-        "xMA030");
-    // error occurs in symboltable only. Therefore no CoCo check via
-    // checkInvalid
-    expectedErrors.checkExpectedPresent(Log.getFindings(), "");
+        "xMA107");
+    checkInvalid(MontiArcCoCos.createChecker(), node, expectedErrors);
   }
   
   @Test

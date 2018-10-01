@@ -2,6 +2,7 @@ package components.body.ports;
 
 import static org.junit.Assert.assertEquals;
 
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -48,7 +49,7 @@ public class PortTest extends AbstractCoCoTest {
     // TODO: Star imports?
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "InexistingPortType");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(1, "xMA076"));
+        new ExpectedErrorInfo(3, "xMA101","xMA076"));
     
     checkValid(PACKAGE + "." + "BumpControl");
   }
@@ -82,6 +83,12 @@ public class PortTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "NonUniquePortNames");
     checkInvalid(MontiArcCoCos.createChecker(), node,
         new ExpectedErrorInfo(6, "xMA053"));
+  }
+  
+  @Test
+  public void testFormalTypeParametersNotExist() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortTypesNotExist");
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(2, "xMA101"));
   }
   
   @Test
@@ -177,15 +184,6 @@ public class PortTest extends AbstractCoCoTest {
     checkInvalid(checker, node, expectedErrors);
   }
   
-  @Test
-  @Ignore("TODO Adjust error and count after implementing CV7")
-  public void testGenericPortsWithAndWithoutNames() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "GenericPortsWithAndWithoutNames");
-    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo();
-    // TODO Adjust error and count after implementing CV7
-    checkInvalid(MontiArcCoCos.createChecker(),
-        node, expectedErrors);
-  }
   
   @Test
   public void testInPortUniqueSender() {
@@ -193,13 +191,6 @@ public class PortTest extends AbstractCoCoTest {
   }
   
   
-  /**
-   * TODO: Currently no errors found even though it is an invalid model
-   */
-  @Test
-  public void testGenericPortsWithoutTypeParams() {
-    checkValid(PACKAGE + "." + "GenericPortsWithoutTypeParams");
-  }
   
   @Test
   /* Checks whether all port names in the port definition start with a lower

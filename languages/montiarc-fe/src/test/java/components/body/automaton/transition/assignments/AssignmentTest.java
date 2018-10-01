@@ -1,7 +1,6 @@
 package components.body.automaton.transition.assignments;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
@@ -12,7 +11,6 @@ import montiarc._cocos.MontiArcASTGuardExpressionCoCo;
 import montiarc._cocos.MontiArcASTIOAssignmentCoCo;
 import montiarc._cocos.MontiArcASTInitialStateDeclarationCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc.cocos.AutomatonNoAssignmentToIncomingPort;
 import montiarc.cocos.AutomatonReactionWithAlternatives;
 import montiarc.cocos.IOAssignmentCallFollowsMethodCall;
 import montiarc.cocos.MontiArcCoCos;
@@ -135,21 +133,8 @@ public class AssignmentTest extends AbstractCoCoTest {
         new ExpectedErrorInfo(1, "xMA042"));
   }
   
-  @Test
-  /* @implements [Wor16] AR2: Inputs, outputs, and variables are used correctly.
-   * (p.103, Lst 5.20) */
-  public void testAssignmentToIncomingPort() {
-    final ASTMontiArcNode astMontiArcNode = loadComponentAST(
-        PACKAGE + "." + "AssignmentToIncomingPort");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
-        .addCoCo(new AutomatonNoAssignmentToIncomingPort());
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA034");
-    checkInvalid(cocos, astMontiArcNode, errors);
-  }
   
   @Test
-  @Ignore("TODO Fix UseOfForbiddenExpression CoCo. Currently only finds " +
-              "errors regarding the use of 'instanceof'.")
   public void testUseOfForbiddenExpressions() {
     final ASTMontiArcNode astMontiArcNode = loadComponentAST(
         PACKAGE + "." + "UseOfForbiddenExpressions");

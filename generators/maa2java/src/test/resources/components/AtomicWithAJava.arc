@@ -1,5 +1,6 @@
 package components;
 
+
 component AtomicWithAJava{
 
   port in Integer inInt;

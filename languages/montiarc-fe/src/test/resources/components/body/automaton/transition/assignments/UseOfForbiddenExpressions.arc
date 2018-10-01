@@ -20,6 +20,6 @@ component UseOfForbiddenExpressions {
         initial S;
     
         S -> S [i instanceof Integer & i==2 | ("Hi".equals("Test") ^ true)] / {"Hi"};
-        //forbidden instanceof expression and binary or, and, and xor
+        //forbidden instanceof expression and binary OR, AND, and XOR
     }
 }

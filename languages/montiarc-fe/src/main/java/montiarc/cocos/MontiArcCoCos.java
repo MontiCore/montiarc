@@ -16,6 +16,7 @@ public class MontiArcCoCos {
   public static MontiArcCoCoChecker createChecker() {
     return new MontiArcCoCoChecker()
         .addCoCo(new PortUsage())
+        .addCoCo(new UsedPortAndVarTypesExist())
         .addCoCo(new SubComponentsConnected())
         .addCoCo(new SubcomponentParametersCorrectlyAssigned())
         .addCoCo(new PackageLowerCase())
@@ -41,11 +42,12 @@ public class MontiArcCoCos {
         
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
-        .addCoCo(new InputPortChangedInCompute())
         .addCoCo(new UsedPortsAndVariablesExist())
         .addCoCo(new MultipleBehaviorImplementation())
         .addCoCo(new InitBlockOnlyOnEmbeddedAJava())
         .addCoCo(new AtMostOneInitBlock())
+        .addCoCo(new AJavaUsesCorrectPortDirection())
+        .addCoCo(new AJavaUsesExistingVariablesAndPorts())
         /* MontiArcAutomaton Cocos */
         
         /// Automaton Cocos
@@ -57,8 +59,7 @@ public class MontiArcCoCos {
         .addCoCo(new AutomatonHasNoState())
         .addCoCo(new AutomatonHasNoInitialState())
         .addCoCo(new MultipleAssignmentsSameIdentifier())
-        .addCoCo(new AutomatonOutputInExpression())
-        .addCoCo(new AutomatonNoAssignmentToIncomingPort())
+        .addCoCo(new AutomatonUsesCorrectPortDirection())
         .addCoCo((MontiArcASTInitialStateDeclarationCoCo) new AutomatonReactionWithAlternatives())
         .addCoCo((MontiArcASTTransitionCoCo) new AutomatonReactionWithAlternatives())
         .addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfForbiddenExpression())

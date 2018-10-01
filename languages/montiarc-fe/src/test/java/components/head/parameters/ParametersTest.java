@@ -75,12 +75,7 @@ public class ParametersTest extends AbstractCoCoTest {
   public void testEnumAsTypeArgument() {
     checkValid(PACKAGE+"."+"EnumAsTypeArg");
   }
-  
-  @Test
-  @Ignore("Check generic types in CD4A or fix CDTestTypes.cd")
-  public void testEnumFromCDAsTypeArgument() {
-    checkValid(PACKAGE+"."+"EnumFromCDAsTypeArg");
-  }
+
 
   @Test
   public void testCompWithIntegerParameter() {
