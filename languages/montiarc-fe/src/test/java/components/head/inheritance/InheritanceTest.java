@@ -40,18 +40,6 @@ public class InheritanceTest extends AbstractCoCoTest {
   }
   
   @Test
-  public void testMultipleInheritance() {
-    MontiArcParser parser = new MontiArcParser();
-    try {
-      parser.parse(PACKAGE + "." + "MultipleInheritance");
-    }
-    catch (Exception e) {
-      return;
-    }
-    fail("Component " + PACKAGE + ".invalid.MultipleInheritance should not be parseable.");
-  }
-  
-  @Test
   public void testSuperComponents() {
     ComponentSymbol subB = this.loadComponentSymbol(PACKAGE, "SubB");
     assertTrue(subB.getIncomingPort("anotherIn").isPresent());
@@ -247,6 +235,21 @@ public class InheritanceTest extends AbstractCoCoTest {
   @Test
   public void testExtendGenericComponentWithGenericConfigArg() {
     checkValid(PACKAGE + "." + "ExtendGenericComponentWithGenericConfigArg"); 
+  }
+
+  @Test
+  public void testSubSubNestedGenericPortType() {
+    checkValid(PACKAGE + "." + "SubSubNestedGenericPortType");
+  }
+
+  @Test
+  public void testSubNestedGenericPortType() {
+    checkValid(PACKAGE + "." + "SubNestedGenericPortType");
+  }
+
+  @Test
+  public void testNestedGenericPortType() {
+    checkValid(PACKAGE + "." + "NestedGenericPortType");
   }
   
 }

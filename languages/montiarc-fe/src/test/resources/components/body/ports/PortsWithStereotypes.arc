@@ -1,7 +1,10 @@
 package components.body.ports;
 
+import java.lang.System;
+import java.io.PrintStream;
+
 /**
- * Valid model. 
+ * Valid model.
  */
 component PortsWithStereotypes {
 

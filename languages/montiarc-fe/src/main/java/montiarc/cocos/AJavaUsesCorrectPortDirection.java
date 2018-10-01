@@ -49,6 +49,14 @@ public class AJavaUsesCorrectPortDirection implements MontiArcASTJavaPBehaviorCo
               Log.error("0xMA104 Incoming port " + port.get().getName()
                   + " must not be used on the left side of an assignment.");
               break;
+            case POSTFIX_EXPR:
+              Log.error("0xMA110 Ingoing port " + port.get().getName()
+                  + " must not be used in postfix expressions.");
+              break;
+              case PREFIX_EXPR:
+                Log.error("0xMA109 Ingoing port " + port.get().getName()
+                    + " must not be used in method prefix expressions.");
+                break;
             default:
               break;
           }
@@ -62,6 +70,15 @@ public class AJavaUsesCorrectPortDirection implements MontiArcASTJavaPBehaviorCo
             case CALL:
               Log.error("0xMA106 Outgoing port " + port.get().getName()
                   + " must not be used in method call statements.");
+              break;
+            case POSTFIX_EXPR:
+            Log.error("0xMA107 Outgoing port " + port.get().getName()
+                + " must not be used in method postfix expressions.");
+            break;
+            case PREFIX_EXPR:
+              Log.error("0xMA108 Outgoing port " + port.get().getName()
+                  + " must not be used in method prefix expressions.");
+              break;
             default:
               break;
           }

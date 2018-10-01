@@ -1,5 +1,7 @@
 package components.head.parameters;
 
+import types.Person;
+
 /**
  * Valid model.
  */

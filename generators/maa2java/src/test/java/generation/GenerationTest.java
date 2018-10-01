@@ -5,13 +5,18 @@
  */
 package generation;
 
+import java.io.File;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import de.montiarcautomaton.generator.MontiArcGeneratorTool;
 import de.se_rwth.commons.logging.Log;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.PortSymbol;
 
 /**
  * TODO: Write me!

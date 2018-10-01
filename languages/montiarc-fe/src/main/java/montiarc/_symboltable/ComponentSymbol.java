@@ -24,8 +24,13 @@ import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcConstants;
+import montiarc._ast.ASTBehaviorElement;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTElement;
 import montiarc.helper.SymbolPrinter;
 import montiarc.helper.Timing;
+
+import javax.swing.text.html.Option;
 
 //XXX: https://git.rwth-aachen.de/montiarc/core/issues/49
 
@@ -197,7 +202,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   }
 
   /**
-   * @param typeParameter generic type parameter to add
+   * @param formalTypeParameter generic type parameter to add
    */
   public void addFormalTypeParameter(JTypeSymbol formalTypeParameter) {
     if (referencedComponent.isPresent()) {
@@ -228,8 +233,30 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
     return !getPorts().isEmpty();
   }
 
+  private boolean hasBehavior;
+
+  /**
+   * Checks whether there is a behavior element defined in the model represented
+   * by the symbol.
+   *
+   * @return true, if there is a behavior element defined in the model.
+   */
+  public boolean hasBehavior(){
+    return hasBehavior;
+  }
+
+  /**
+   * Setter for the value of hasBehavior.
+   *
+   * @param hasBehavior The value to set
+   */
+  public void setHasBehavior(boolean hasBehavior){
+    this.hasBehavior = hasBehavior;
+  }
+
   /**
    * Ports of this component.
+   * Does not include inherited ports.
    *
    * @return ports of this component.
    */
@@ -240,6 +267,8 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
 
   /**
    * Finds a port with a given name.
+   * Only searches for ports that were declared in this component. Inherited ports
+   * are not included in the search.
    *
    * @param name Name of the searched port
    * @return {@link PortSymbol} with the given name. {@link Optional#empty()} if not found
@@ -251,7 +280,24 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   }
 
   /**
-   * @return incomingPorts of this component
+   * Finds a port with the given name.
+   * Search range can be extended to inherited ports with the second parameter.
+   *
+   * @param name The name of the port which should be searched for
+   * @param searchInherited Indication whether inherited ports should be considered
+   *                        in the search
+   * @return Optional containing the port if it is found, Optional.empty otherwise
+   */
+  public Optional<PortSymbol> getPort(String name, boolean searchInherited){
+    Collection<PortSymbol> searchRange = searchInherited ? getAllPorts(): getPorts();
+    return searchRange.stream().filter(p -> p.getName().equals(name)).findFirst();
+  }
+
+  /**
+   * Returns locally defined incoming ports of the component.
+   * Inherited ports are not considered in the search.
+   *
+   * @return Collection of the incoming ports of this component
    */
   public Collection<PortSymbol> getIncomingPorts() {
     return referencedComponent.orElse(this).getSpannedScope()
@@ -262,17 +308,40 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   }
 
   /**
+   * Tries to find an incoming port with the given name in the current component.
+   * Inherited ports are not considered in the search.
+   *
    * @param name port name
-   * @return incoming port with the given name, empty optional, if it does not exist
+   * @return incoming port with the given name, Optional.empty(), otherwise
    */
   public Optional<PortSymbol> getIncomingPort(String name) {
     // no check for reference required
-    return getIncomingPorts().stream()
-        .filter(p -> p.getName().equals(name))
-        .findFirst();
+    return getIncomingPort(name, false);
   }
 
   /**
+   * Tries to find an incoming port with the given name.
+   * Depending on the second parameter inherited ports are also considered.
+   *
+   * @param name Name of the port to find.
+   * @param searchInherited Specification whether inherited ports should be
+   *                        included in the search
+   * @return Optional containing the incoming port with the given name,
+   * Optional.empty(), otherwise
+   */
+  public Optional<PortSymbol> getIncomingPort(String name, boolean searchInherited) {
+    // no check for reference required
+    Collection<PortSymbol> searchRange =
+        searchInherited ? getAllIncomingPorts() : getIncomingPorts();
+    return searchRange.stream()
+               .filter(p -> p.getName().equals(name))
+               .findFirst();
+  }
+
+  /**
+   * Tries to find incoming ports with the given visibility in the current component.
+   * Inherited ports are not considered in the search.
+   *
    * @param visibility
    * @return incoming ports with the given visibility
    */
@@ -284,7 +353,10 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   }
 
   /**
-   * @return outgoingPorts of this component
+   * Returns locally defined outgoing ports of the component.
+   * Inherited ports are not considered in the search.
+   *
+   * @return Collection of outgoing ports of this component
    */
   public Collection<PortSymbol> getOutgoingPorts() {
     return referencedComponent.orElse(this).getSpannedScope()
@@ -295,25 +367,44 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   }
 
   /**
-   * Returns a list of all incoming ports that also contains ports from a super component.
+   * Returns a list of all incoming ports that also contains ports from super
+   * components.
    *
-   * @param loader        used to load full version of super component (if needed)
-   * @param deserializers used to load full version of super component (if needed)
-   * @return list of all incoming ports.
+   * @return List of all incoming ports.
    */
   public List<PortSymbol> getAllIncomingPorts() {
     return referencedComponent.orElse(this).getAllPorts(true);
   }
 
   /**
-   * @param name port name
+   * Tries to find an outgoing port with the given name in the current component.
+   * Does not consider inherited ports.
+   *
+   * @param name Name of the port to find.
    * @return outgoing port with the given name, empty optional, if it does not exist
    */
   public Optional<PortSymbol> getOutgoingPort(String name) {
     // no check for reference required
-    return getOutgoingPorts().stream()
-        .filter(p -> p.getName().equals(name))
-        .findFirst();
+    return getOutgoingPort(name, false);
+  }
+
+  /**
+   * Tries to find an outgoing port with the given name.
+   * Depending on the second parameter inherited ports are also considered.
+   *
+   * @param name Name of the port to find.
+   * @param searchInherited Specification whether inherited ports should be
+   *                        included in the search
+   * @return Optional containing the outgoing port with the given name,
+   * Optional.empty(), otherwise
+   */
+  public Optional<PortSymbol> getOutgoingPort(String name, boolean searchInherited) {
+    // no check for reference required
+    Collection<PortSymbol> searchRange =
+        searchInherited ? getAllOutgoingPorts() : getOutgoingPorts();
+    return searchRange.stream()
+               .filter(p -> p.getName().equals(name))
+               .findFirst();
   }
 
   /**
@@ -330,8 +421,6 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   /**
    * Returns a list of all outgoing ports that also contains ports from a super component.
    *
-   * @param loader        used to load full version of super component (if needed)
-   * @param deserializers used to load full version of super component (if needed)
    * @return list of all outgoing ports.
    */
   public List<PortSymbol> getAllOutgoingPorts() {
@@ -363,6 +452,14 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
     return result;
   }
 
+  /**
+   * Determine all ports of the component that have the specified direction.
+   * This includes inherited ports from super components.
+   *
+   * @param isIncoming The specification whether to search for incoming ports
+   * @return List of ports from the component or super component that have the
+   * specified direction
+   */
   private List<PortSymbol> getAllPorts(boolean isIncoming) {
     return getAllPorts().stream().filter(p -> p.isIncoming() == isIncoming)
         .collect(Collectors.toList());
@@ -393,8 +490,8 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   /**
    * @param superComponent the super component to set
    */
-  public void setSuperComponent(Optional<ComponentSymbolReference> superComponent) {
-    referencedComponent.orElse(this).superComponent = superComponent;
+  public void setSuperComponent(ComponentSymbolReference superComponent) {
+    referencedComponent.orElse(this).superComponent = Optional.of(superComponent);
   }
 
   /**
@@ -495,7 +592,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
   }
 
   /**
-   * @param timing the timing to set
+   * @param behaviorKind the timing to set
    */
   public void setBehaviorKind(Timing behaviorKind) {
     referencedComponent.orElse(this).timing = behaviorKind;

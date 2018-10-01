@@ -18,6 +18,8 @@ import de.monticore.mcexpressions._ast.ASTComparisonExpression;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.mcexpressions._ast.ASTIdentityExpression;
 import de.monticore.mcexpressions._ast.ASTNameExpression;
+import de.monticore.mcexpressions._ast.ASTPrefixExpression;
+import de.monticore.mcexpressions._ast.ASTSuffixExpression;
 import de.monticore.mcexpressions._visitor.MCExpressionsVisitor;
 
 /**
@@ -37,7 +39,7 @@ public class NamesInExpressionsDelegatorVisitor extends JavaDSLDelegatorVisitor 
    * @version $Revision$, $Date$
    */
   public enum ExpressionKind {
-    COMPARISON, CALL, ASSIGNMENT_RIGHT, ASSIGNMENT_LEFT, DEFAULT;
+    COMPARISON, CALL, ASSIGNMENT_RIGHT, ASSIGNMENT_LEFT, DEFAULT, PREFIX_EXPR, POSTFIX_EXPR;
   }
 
   
@@ -107,6 +109,26 @@ public class NamesInExpressionsDelegatorVisitor extends JavaDSLDelegatorVisitor 
     for (ASTExpression arg : node.getArguments().getExpressionList()) {
       arg.accept(this);
     }
+    currentExpressionKind = Optional.empty();
+  }
+  
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLDelegatorVisitor#visit(de.monticore.mcexpressions._ast.ASTPrefixExpression)
+   */
+  @Override
+  public void visit(ASTPrefixExpression node) {
+    currentExpressionKind = Optional.of(ExpressionKind.PREFIX_EXPR);
+    node.getExpression().accept(getRealThis());
+    currentExpressionKind = Optional.empty();
+  }
+  
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLDelegatorVisitor#visit(de.monticore.mcexpressions._ast.ASTSuffixExpression)
+   */
+  @Override
+  public void visit(ASTSuffixExpression node) {
+    currentExpressionKind = Optional.of(ExpressionKind.POSTFIX_EXPR);
+    node.getExpression().accept(getRealThis());
     currentExpressionKind = Optional.empty();
   }
   

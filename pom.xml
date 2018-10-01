@@ -52,6 +52,7 @@
 		<!-- Classifiers -->
 		<grammars.classifier>grammars</grammars.classifier>
 		<librarymodels.classifier>librarymodels</librarymodels.classifier>
+		<testmodels.classifier>testmodels</testmodels.classifier>
 
 		<!-- .. Misc .......................................................... -->
 		<java.version>1.8</java.version>
@@ -292,40 +293,6 @@
 							</goals>
 						</execution>
 					</executions>
-				</plugin>
-
-				<plugin>
-					<groupId>de.se_rwth.maven</groupId>
-					<artifactId>se-groovy-maven-plugin</artifactId>
-					<version>${se-groovy.maven.version}</version>
-					<!-- <configuration> -->
-					<!-- <arguments> -->
-					<!-- <modelPath>${basedir}/src/main/models</modelPath> -->
-					<!-- <out>${basedir}/target/gen</out> -->
-					<!-- </arguments> -->
-					<!-- <skip>false</skip> -->
-					<!-- <script>de/montiarc/simplegenerator/montiarc.groovy</script> -->
-					<!-- <baseClass>de.montiarc.simplegenerator.MontiArcScript</baseClass> -->
-					<!-- </configuration> -->
-					<!-- <executions> -->
-					<!-- <execution> -->
-					<!-- <goals> -->
-					<!-- <goal>execute</goal> -->
-					<!-- </goals> -->
-					<!-- </execution> -->
-					<!-- </executions> -->
-					<!-- <dependencies> -->
-					<!-- <dependency> -->
-					<!-- <groupId>de.monticore.lang</groupId> -->
-					<!-- <artifactId>montiarc-simple-generator</artifactId> -->
-					<!-- <version>${project.version}</version> -->
-					<!-- </dependency> -->
-					<!-- <dependency> -->
-					<!-- <groupId>de.se_rwth.commons</groupId> -->
-					<!-- <artifactId>se-commons-utilities</artifactId> -->
-					<!-- <version>${se-commons.version}</version> -->
-					<!-- </dependency> -->
-					<!-- </dependencies> -->
 				</plugin>
 
 				<!-- Source Jar Configuration -->

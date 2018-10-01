@@ -1,6 +1,8 @@
-package types;
+package components.body.timing.delays;
 
 /**
+ * Valid model.
+ *
  * @brief adds a fix delay to a channel.
  * 
  * All messages received on port {@link portIn} are relayed
@@ -19,7 +21,8 @@ package types;
  */
 component ConstantDelay<T>(int delay) {
   
- 
+  timing delayed;
+  
   port 
     in T portIn,
     out T portOut;

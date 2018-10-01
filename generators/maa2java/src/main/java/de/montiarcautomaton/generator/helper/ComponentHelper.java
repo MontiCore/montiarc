@@ -1,39 +1,27 @@
 package de.montiarcautomaton.generator.helper;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-
 import de.monticore.ast.ASTNode;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
+import de.monticore.symboltable.types.TypeSymbol;
+import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
+import de.monticore.symboltable.types.references.TypeReference;
 import de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor;
 import de.monticore.types.types._ast.ASTType;
 import de.monticore.types.types._ast.ASTTypeVariableDeclaration;
-import de.monticore.types.types._ast.ASTTypesNode;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
-import montiarc._ast.ASTComponent;
-import montiarc._ast.ASTElement;
-import montiarc._ast.ASTInterface;
-import montiarc._ast.ASTJavaPInitializer;
-import montiarc._ast.ASTParameter;
-import montiarc._ast.ASTPort;
-import montiarc._ast.ASTValuation;
-import montiarc._ast.ASTValueInitialization;
-import montiarc._ast.ASTVariableDeclaration;
-import montiarc._symboltable.ComponentInstanceSymbol;
-import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.ConnectorSymbol;
-import montiarc._symboltable.PortSymbol;
-import montiarc._symboltable.VariableSymbol;
+import montiarc._ast.*;
+import montiarc._symboltable.*;
+import montiarc.helper.SymbolPrinter;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Helper class used in the template to generate target code of atomic or
@@ -77,30 +65,201 @@ public class ComponentHelper {
     }
     return value;
   }
-  
-  // TODO: Wer nutzt die und warum? Kann die raus?
-  @Deprecated
+
+  /**
+   * Prints the type of the given port respecting inherited ports and the
+   * actual type values
+   *
+   * @param port Symbol of the port of which to determine the type
+   * @return The string representation of the type
+   */
   public String getPortTypeName(PortSymbol port) {
-    // ASTComponent comp = null;
-    //
-    // final Optional<? extends ScopeSpanningSymbol> spanningSymbol =
-    // port.getEnclosingScope().getSpanningSymbol();
-    // if(spanningSymbol.isPresent() && spanningSymbol.get() instanceof
-    // ComponentSymbol) {
-    // final ComponentSymbol symbol = (ComponentSymbol) spanningSymbol.get();
-    // final Optional<ASTNode> astNode = symbol.getAstNode();
-    // if(astNode.isPresent()) {
-    // return getPortTypeName((ASTComponent) astNode.get(), port);
-    // }
-    // }
-    
-    ASTPort astPort = (ASTPort) port.getAstNode().get();
-    ASTTypesNode astTypeNode = (ASTTypesNode) astPort.getType();
-    String portTypeName = autobox(typesPrinter.prettyprint(astTypeNode));
-    return portTypeName;
-    // return getPortTypeName(componentNode, port);
+    return determinePortTypeName(this.component, port);
   }
-  
+
+  /**
+   * Determines the name of the type of the port represented by its symbol.
+   * This takes in to account whether the port is inherited and possible required
+   * renamings due to generic type parameters and their actual arguments.
+   *
+   * @param portSymbol Symbol of the port for which the type name should be determined.
+   * @return The String representation of the type of the port.
+   */
+  public static String determinePortTypeName(ComponentSymbol componentSymbol, PortSymbol portSymbol){
+    final JTypeReference<? extends JTypeSymbol> typeReference = portSymbol.getTypeReference();
+    if(!typeReference.existsReferencedSymbol()){
+      return ""; // TODO Better error handling
+    }
+
+    if(componentSymbol.getPorts().contains(portSymbol) ||
+           !componentSymbol.getSuperComponent().isPresent()){
+      // A. Component has no super component or the port is defined in the
+      // extending component
+      //    Therefore, there are no special cases and the name can be used from
+      //    the typeReference, even if it is a generic type parameter of the
+      //    defining component
+//      return ComponentHelper.autobox(printTypeReference(typeReference));
+      // TODO: This is a temporary workaround until MC 5.0.0.1 is used that fixes the JTypeSymbolsHelper
+      TypesPrettyPrinterConcreteVisitor typesPrinter =
+          new TypesPrettyPrinterConcreteVisitor(new IndentPrinter());
+      final ASTPort astNode = (ASTPort) portSymbol.getAstNode().get();
+      return ComponentHelper.autobox(typesPrinter.prettyprint(astNode.getType()));
+      // End of temp workaround
+
+    } else {
+      // TODO Refactor stack and maps to fields of the Helper or remove stack and only save last element
+      // B. Component has a super component
+      // B.2 Port is inherited from the super component (it is not necessarily
+      //      defined exactly in the super component)
+
+      // Build the super component hierarchy stack up to the point where
+      // the port is defined
+      Deque<ComponentSymbolReference> superComponentStack = new ArrayDeque<>();
+
+      // This map contains the string representation of all actual type arguments
+      // for each component where types have been pushed through the
+      // inheritance hierarchy
+      Map<String, Map<String, String>> actualTypeArgStringsMap = new HashMap<>();
+
+      // Fill the stack for the inheritance hierarchy
+      // The starting component pushes its super component onto the stack and
+      // adds the type arguments to the map without any changes, as type parameters
+      // from the initial component do not have to be replaced
+      ComponentSymbol currentComponent = componentSymbol;
+      Map<String, String> identity = new HashMap<>();
+      for (JTypeSymbol typeParam : currentComponent.getFormalTypeParameters()) {
+        identity.put(typeParam.getName(), typeParam.getName());
+      }
+      actualTypeArgStringsMap.put(currentComponent.getFullName(), identity);
+
+      // Note: At this point the super component of the initial component is
+      //  on the stack and the map for the super component is filled
+
+      while(currentComponent != null &&
+                currentComponent.getSuperComponent().isPresent() &&
+                !currentComponent.getPorts().contains(portSymbol)){
+        Map<String, String> superCompTypeArgs = new HashMap<>();
+        final ComponentSymbolReference superCompRef =
+            currentComponent.getSuperComponent().get();
+        superComponentStack.push(superCompRef);
+        final ComponentSymbol superCompSymbol =
+            superCompRef.getReferencedSymbol();
+
+        // Fill the map for the super component
+        for (JTypeSymbol typeSymbol : superCompSymbol.getFormalTypeParameters()) {
+          final int index = superCompSymbol.getFormalTypeParameters().indexOf(typeSymbol);
+          final ActualTypeArgument actualTypeArg =
+              superCompRef.getActualTypeArguments().get(index);
+          String resultingTypeArgument =
+              insertTypeParamValueIntoTypeArg(actualTypeArg.getType(),
+                  actualTypeArgStringsMap.get(currentComponent.getFullName()));
+          superCompTypeArgs.put(typeSymbol.getName(), resultingTypeArgument);
+        }
+        actualTypeArgStringsMap.put(superCompSymbol.getFullName(), superCompTypeArgs);
+
+        // Prepare the next iteration. Keeps the component at the highest
+        // point in the inheritance hierarchy that defines the port
+        currentComponent = superComponentStack.peek();
+      }
+
+      // Note: At this point the currentComponent is the one that defines the
+      // port of which the type is to be determined.
+      // The stack contains all super components of the starting component
+      // Each component has a map which contains all actual type arguments with
+      // the types from the hierarchy replacing type parameters
+
+      // Replace all type parameters of the defining component which occurr in
+      // the port type by the actual type argument
+      String portTypeString =
+          insertTypeParamValueIntoTypeArg(
+              typeReference,
+              actualTypeArgStringsMap.get(currentComponent.getFullName()));
+      return portTypeString;
+    }
+  }
+
+  /**
+   * Converts the given type reference {@param toAnalyze} into a String
+   * representation where all occurrences of type arguments from the extending
+   * or embedding component are replaced by their actual values. The actual values
+   * are given as the second argument {@param typeParamMap}.
+   * <br/>
+   *
+   * Example: For a given type argument {@code Map<T,K>} as an
+   * {@link TypeReference} object and the {@link Map}
+   * {@code ["T" -> "String", "K -> "Integer"]}
+   * the resulting String is {@code Map<String, Integer>}.
+   *
+   * @param toAnalyze The type argument where the type parameters should be replaced.
+   * @param typeParamMap The map used to replace the type parameters
+   * @return The resulting String representation with replaced type parameters
+   */
+  public static String insertTypeParamValueIntoTypeArg(
+      TypeReference<? extends TypeSymbol> toAnalyze,
+      Map<String, String> typeParamMap){
+
+    StringBuilder result = new StringBuilder();
+    result.append(toAnalyze.getName());
+    if(toAnalyze.getActualTypeArguments().isEmpty()){
+      // There are no type arguments. Check if the type itself is a type parameter
+      if(typeParamMap.containsKey(toAnalyze.getName())){
+        return typeParamMap.get(toAnalyze.getName());
+      } else {
+        return toAnalyze.getName();
+      }
+    } else {
+      // There are type arguments and therefore they are processed recursively
+      // and reprinted
+      result.append("<");
+      result.append(
+          toAnalyze.getActualTypeArguments().stream()
+              .map(typeArg -> insertTypeParamValueIntoTypeArg(typeArg.getType(), typeParamMap))
+              .collect(Collectors.joining(", ")));
+      result.append(">");
+    }
+    for (int i = 0; i < toAnalyze.getDimension(); i++) {
+      result.append("[]");
+    }
+    return result.toString();
+  }
+
+  /**
+   * Prints a type reference with dimension and type arguments.
+   *
+   * @param reference The type reference to print
+   * @return The printed type reference
+   */
+  public static String printTypeReference(TypeReference<? extends TypeSymbol> reference){
+    return insertTypeParamValueIntoTypeArg(reference, new HashMap<>());
+  }
+
+  /**
+   * Prints an actual type argument.
+   * @param arg The actual type argument to print
+   * @return The printed actual type argument
+   */
+  public static String printTypeArgument(ActualTypeArgument arg){
+    return printTypeReference(arg.getType());
+  }
+
+  /**
+   * Prints a list of actual type arguments.
+   * @param typeArguments The actual type arguments to print
+   * @return The printed actual type arguments
+   */
+  public static String printTypeArguments(List<ActualTypeArgument> typeArguments){
+    if(typeArguments.size() > 0) {
+      StringBuilder result = new StringBuilder("<");
+      result.append(
+          typeArguments.stream()
+              .map(ComponentHelper::printTypeArgument)
+              .collect(Collectors.joining(", ")));
+      result.append(">");
+      return result.toString();
+    }
+    return "";
+  }
+
   private static HashMap<String, String> PRIMITIVE_TYPES = new HashMap<String, String>() {
     {
       put("int", "Integer");
@@ -115,10 +274,10 @@ public class ComponentHelper {
   };
   
   /**
-   * TODO: Write me!
+   * Boxes datatype if applicable.
    * 
-   * @param prettyprint
-   * @return
+   * @param datatype String representation of the datatype to box.
+   * @return The boxed datatype.
    */
   public static String autobox(String datatype) {
     
@@ -141,17 +300,7 @@ public class ComponentHelper {
     }
     return autoBoxedTypeName;
   }
-  
-  // TODO: Wer nutzt die und warum? Kann die raus?
-  @Deprecated
-  public String getPortTypeName(ASTComponent comp, PortSymbol port) {
-    //
-    // ASTTypesNode astTypeNode = (ASTTypesNode) comp.getPorts().getType();
-    // String portTypeName = visitor.prettyprint();
-    // return portTypeName;
-    return printFqnTypeName(comp, port.getTypeReference());
-  }
-  
+
   // TODO @MP in Templates übernehmen
   public String printPortTypeName(PortSymbol var) {
     String name = var.getName();
@@ -295,14 +444,20 @@ public class ComponentHelper {
   
   public String getSubComponentTypeName(ComponentInstanceSymbol instance) {
     
-    if (instance.getComponentType().getAstNode().isPresent()) {
-      return typesPrinter
-          .prettyprint((ASTTypesNode) instance.getComponentType().getAstNode().get());
+//    if (instance.getComponentType().getAstNode().isPresent()) {
+//      return typesPrinter
+//          .prettyprint((ASTTypesNode) instance.getComponentType().getAstNode().get());
+//    }
+//    else {
+//      return instance.getComponentType().getName();
+//    }
+    String result = "";
+    final ComponentSymbolReference componentTypeReference = instance.getComponentType();
+    result += componentTypeReference.getFullName();
+    if (componentTypeReference.hasActualTypeArguments()){
+      result += printTypeArguments(componentTypeReference.getActualTypeArguments());
     }
-    else {
-      return instance.getComponentType().getName();
-    }
-    
+    return result;
   }
   
   public boolean isIncomingPort(ComponentSymbol cmp, ConnectorSymbol conn, boolean isSource,
@@ -334,7 +489,7 @@ public class ComponentHelper {
    * Returns the component name of a connection.
    *
    * @param conn the connection
-   * @param isSource <tt>true</tt> for siurce component, else <tt>false>tt>
+   * @param isSource <tt>true</tt> for source component, else <tt>false>tt>
    * @return
    */
   public String getConnectorComponentName(ConnectorSymbol conn, boolean isSource) {
@@ -356,7 +511,7 @@ public class ComponentHelper {
    * Returns the port name of a connection.
    *
    * @param conn the connection
-   * @param isSource <tt>true</tt> for siurce component, else <tt>false>tt>
+   * @param isSource <tt>true</tt> for source component, else <tt>false>tt>
    * @return
    */
   public String getConnectorPortName(ConnectorSymbol conn, boolean isSource) {
@@ -445,6 +600,37 @@ public class ComponentHelper {
     }
     return "ERROR";
   }
+
+  public boolean superCompGeneric(){
+    if(component.getSuperComponent().isPresent()){
+      final ComponentSymbolReference componentSymbolReference = component.getSuperComponent().get();
+      return componentSymbolReference.hasActualTypeArguments();
+    }
+    return false;
+  }
+
+  /**
+   *
+   * @return A list of String represenations of the actual type arguments
+   * assigned to the super component
+   */
+  public List<String> getSuperCompActualTypeArguments() {
+    final List<String> paramList = new ArrayList<>();
+    if(component.getSuperComponent().isPresent()) {
+      final ComponentSymbolReference componentSymbolReference = component.getSuperComponent().get();
+      final List<ActualTypeArgument> actualTypeArgs = componentSymbolReference.getActualTypeArguments();
+      String componentPrefix = this.component.getFullName() + ".";
+      for (ActualTypeArgument actualTypeArg : actualTypeArgs) {
+        final String printedTypeArg = SymbolPrinter.printTypeParameters(actualTypeArg);
+        if(printedTypeArg.startsWith(componentPrefix)) {
+          paramList.add(printedTypeArg.substring(componentPrefix.length()));
+        } else {
+          paramList.add(printedTypeArg);
+        }
+      }
+    }
+    return paramList;
+  }
   
   public static Optional<ASTJavaPInitializer> getComponentInitialization(ComponentSymbol comp) {
     Optional<ASTJavaPInitializer> ret = Optional.empty();
@@ -467,7 +653,7 @@ public class ComponentHelper {
   
   public List<String> getGenericParameters() {
     List<String> output = new ArrayList<>();
-    if (componentNode.getHead().isPresentGenericTypeParameters()) {
+    if (isGeneric()) {
       List<ASTTypeVariableDeclaration> parameterList = componentNode.getHead()
           .getGenericTypeParameters().getTypeVariableDeclarationList();
       for (ASTTypeVariableDeclaration variableDeclaration : parameterList) {
@@ -476,7 +662,22 @@ public class ComponentHelper {
     }
     return output;
   }
-  
+
+  public List<String> getInheritedParams(){
+    List<String> result = new ArrayList<>();
+    final List<JFieldSymbol> configParameters = component.getConfigParameters();
+    if(component.getSuperComponent().isPresent()){
+      final ComponentSymbolReference superCompReference = component.getSuperComponent().get();
+      final List<JFieldSymbol> superConfigParams = superCompReference.getReferencedSymbol().getConfigParameters();
+      if(!configParameters.isEmpty()){
+        for (int i = 0; i < superConfigParams.size(); i++) {
+          result.add(configParameters.get(i).getName());
+        }
+      }
+    }
+    return result;
+  }
+
   public List<PortSymbol> getSuperInPorts() {
     return component.getSuperComponent().isPresent()
         ? component.getSuperComponent().get().getAllIncomingPorts()

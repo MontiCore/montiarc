@@ -1,4 +1,5 @@
-package some.wrong.packagename;
+//package some.wrong.packagename;
+package parser;
 
 /*
  * Invalid model.
