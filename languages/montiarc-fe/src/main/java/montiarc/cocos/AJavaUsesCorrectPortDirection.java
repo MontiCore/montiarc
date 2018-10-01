@@ -32,7 +32,7 @@ public class AJavaUsesCorrectPortDirection implements MontiArcASTJavaPBehaviorCo
    */
   @Override
   public void check(ASTJavaPBehavior node) {
-    Scope componentScope = node.getEnclosingScope().get();
+    Scope componentScope = node.getEnclosingScopeOpt().get();
     NamesInExpressionsDelegatorVisitor ev = new NamesInExpressionsDelegatorVisitor();
     for (ASTBlockStatement block : node.getBlockStatementList()) {
       block.accept(ev);

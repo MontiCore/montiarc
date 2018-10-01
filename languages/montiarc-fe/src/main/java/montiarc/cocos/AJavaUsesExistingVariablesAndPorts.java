@@ -6,7 +6,6 @@
 package montiarc.cocos;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -36,7 +35,7 @@ public class AJavaUsesExistingVariablesAndPorts implements MontiArcASTJavaPBehav
    */
   @Override
   public void check(ASTJavaPBehavior node) {
-    Scope componentScope = node.getEnclosingScope().get();
+    Scope componentScope = node.getEnclosingScopeOpt().get();
     
     for (ASTBlockStatement blockStmnt : node.getBlockStatementList()) {
       NamesInExpressionsDelegatorVisitor visitor = new NamesInExpressionsDelegatorVisitor();
@@ -55,7 +54,7 @@ public class AJavaUsesExistingVariablesAndPorts implements MontiArcASTJavaPBehav
         
         // check whether used name is local ajava variable
         boolean isLocalVar = false;
-        if (entry.getKey().getEnclosingScope().isPresent()) {
+        if (entry.getKey().getEnclosingScopeOpt ().isPresent()) {
           isLocalVar = checkPortOrVariabelWithNameAlreadyExists(entry.getKey().getName(), entry.getKey().getEnclosingScopeOpt().get());
         }
         
