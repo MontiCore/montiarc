@@ -5,6 +5,7 @@ import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
 /**
  * Valid model.
  * Used as supercomponent.
+ * TODO Add test
  */
 component SuperArchitecturalComponent {
     

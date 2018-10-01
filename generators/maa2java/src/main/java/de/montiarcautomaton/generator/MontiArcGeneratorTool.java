@@ -33,8 +33,8 @@ import montiarc._symboltable.MontiArcLanguage;
  */
 public class MontiArcGeneratorTool extends MontiArcTool{
   
-  private static final String DEFAULT_TYPES_FOLDER = "target/javaLib/";
-  private static final String LIBRARY_MODELS_FOLDER = "target/librarymodels/";
+  public static final String DEFAULT_TYPES_FOLDER = "target/javaLib/";
+  public static final String LIBRARY_MODELS_FOLDER = "target/librarymodels/";
   
   /**
    * Runs generator for single component

@@ -2,6 +2,8 @@ package de.monticore.cd2pojo;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import de.monticore.ModelingLanguageFamily;
@@ -77,16 +79,41 @@ public class POJOGenerator {
       _super.append("extends ");
       _super.append(typeHelper.printType(type.getSuperClass().get()));
       _super.append(" ");
+    } else if (type.isInterface() && !type.getInterfaces().isEmpty()){
+      // Allows extending other interfaces
+      _super.append("extends ");
+      _super.append(typeHelper.printType(type.getInterfaces().get(0)));
+      _super.append(" ");
     }
-    type.getInterfaces().forEach(i -> {
+    if(!type.getInterfaces().isEmpty() && !type.isInterface()){
       _super.append(" ");
       _super.append("implements");
-      _super.append(" ");
-      _super.append(typeHelper.printType(i));
-    });
+      type.getInterfaces().forEach(i -> {
+        _super.append(" ");
+        _super.append(typeHelper.printType(i));
+        _super.append(",");
+      });
+      _super.deleteCharAt(_super.length() - 1);
+    }
+
     Path filePath = Paths.get(Names.getPathFromPackage(typeHelper.printType(type)) + ".java");
-    
+
+    // Hack to at least correctly generate java.lang.*
+    // Will not work with packages that start with upper case letters
+    List<String> imports = new ArrayList<>();
+    for (String anImport : cdSymbol.getImports()) {
+      final String[] split = anImport.split("\\.");
+      if(split.length > 0){
+        final char firstOfLastElement = split[split.length - 1].charAt(0);
+        if(Character.isLowerCase(firstOfLastElement)){
+          imports.add(anImport + ".*");
+        } else{
+          imports.add(anImport);
+        }
+      }
+    }
+
     ge.generate("templates.type.ftl", filePath, type.getAstNode().get(), _package, kind,
-        type, _super, typeHelper, cdSymbol.getImports());
+        type, _super, typeHelper, imports);
   }
 }

@@ -20,7 +20,7 @@ component Stereotypes {
   }
 
   <<a, s, d, f>>
-  component InnerC<String>
+  component InnerC<String>(2,3)
     ic1 [<<fooo>> outout -> out1, out2;
           <<bar>> outout -> ic2.inin],
     ic2 [<<AW="Wurst">> outout -> ic1.inin];

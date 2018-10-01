@@ -29,14 +29,5 @@ public class NameTest extends AbstractCoCoTest {
   public static void setUp() {
     Log.enableFailQuick(false);
   }
-  
-  @Ignore("Not Resolvable in Symboltable. TODO catch error in Symboltable and enable Test again.")
-  @Test
-  public void testNameClash() {
-    Log.getFindings().clear();
-    
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "NameClashB");
-    // checkInvalid(new MontiArcCoCoChecker, node, expectedErrors);
-  }
 
 }

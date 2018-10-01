@@ -1,4 +1,5 @@
-package components.head.inheritance;
+//package components.head.inheritance;
+package parser;
 
 import contextconditions.valid.Types.*;
 import contextconditions.valid.Motor;

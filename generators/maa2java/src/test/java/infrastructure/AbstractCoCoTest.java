@@ -47,10 +47,15 @@ public abstract class AbstractCoCoTest {
     
     return (ASTMontiArcNode) comp.getAstNode().get();
   }
-  
+
   protected ComponentSymbol loadComponentSymbol(String packageName,
-      String unqualifiedComponentName) {
-    Scope symTab = MONTIARCTOOL.initSymbolTable(MODEL_PATH);
+                                              String unqualifiedComponentName) {
+    return loadComponentSymbol(packageName, unqualifiedComponentName, MODEL_PATH);
+  }
+
+  protected ComponentSymbol loadComponentSymbol(String packageName,
+                                                String unqualifiedComponentName, String modelPath) {
+    Scope symTab = MONTIARCTOOL.initSymbolTable(Paths.get(modelPath).toFile(), Paths.get(FAKE_JAVA_TYPES_PATH).toFile());
     String qualifiedName = packageName + "." + unqualifiedComponentName;
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
         qualifiedName, ComponentSymbol.KIND).orElse(null);

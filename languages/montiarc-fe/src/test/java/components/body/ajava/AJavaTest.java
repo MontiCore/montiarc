@@ -48,6 +48,15 @@ public class AJavaTest extends AbstractCoCoTest {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new JavaPVariableIdentifiersUnique()), node,
         new ExpectedErrorInfo(3, "xMA016", "xMA094", "xMA095"));
   }
+
+  @Test
+  public void testDistanceLogger() {
+    final String qualifiedModelName = PACKAGE + "." + "DistanceLogger";
+    final MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(2, "xMA015", "xMA078");
+    checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
+  }
   
   @Test
   public void testInitBlockWithAJava() {

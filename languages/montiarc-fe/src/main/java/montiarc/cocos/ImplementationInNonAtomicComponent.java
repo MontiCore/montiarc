@@ -35,20 +35,10 @@ public class ImplementationInNonAtomicComponent implements MontiArcASTComponentC
       return;
     }
     ComponentSymbol cs = (ComponentSymbol) node.getSymbolOpt().get();
-    if (cs.isDecomposed() && hasBehavior(node)) {
-      Log.error("0xMA051 There must not be a behavior embedding in composed components.",
+    if (cs.isDecomposed() && cs.hasBehavior()) {
+      Log.error("0xMA051 There must not be a behavior embedding in " +
+                    "composed components.",
           node.get_SourcePositionStart());
     }
-    
   }
-  
-  public boolean hasBehavior(ASTComponent node) {
-    for (ASTElement e : node.getBody().getElementList()) {
-      if (e instanceof ASTBehaviorElement) {
-        return true;
-      }
-    }
-    return false;
-  }
-  
 }

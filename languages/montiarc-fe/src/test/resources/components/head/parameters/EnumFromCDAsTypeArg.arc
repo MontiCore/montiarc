@@ -1,10 +1,10 @@
 package components.head.parameters;
 
-import types.CDTestTypes.MyEnum;
+import types.CDTestTypes.EnumType;
 
 /**
 * Valid model.
 */
-component EnumFromCDAsTypeArg(MyEnum varName) {
+component EnumFromCDAsTypeArg(EnumType varName) {
   port in String sIn;
 }

@@ -1,14 +1,14 @@
 package components.body.ajava;
 
 /**
- * Valid model.
+ * Invalid model.
  */
 component DistanceLogger {
   port
     in double distance,
     out String hulu;
 
-  compute increaseHulu {    
+  compute increaseHulu {
     distance++;
     hulu = distance;
   }

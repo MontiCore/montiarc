@@ -1,5 +1,7 @@
 package types;
 
+import types.Types.Car;
+
 /**
  * Valid model. 
  */
