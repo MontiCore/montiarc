@@ -7,6 +7,7 @@ import de.monticore.ast.ASTNode;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.symboltable.Symbol;
+import freemarker.template.utility.StringUtil;
 import montiarc._ast.ASTPort;
 import montiarc._symboltable.PortSymbol;
 import montiarc.cocos.*;
@@ -95,17 +96,16 @@ public class ComponentTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("Components with upper case packages can not be resolved by the symbol table.")
   /**
    * This test should check whether the Context condition PackageLowerCase is working.
    */
   public void testPackageUpperCase() {
-    final String modelName = PACKAGE + "." + "UpperCasePackageName";
+    final String modelName = PACKAGE + ".UpperCasePackageName." + "UpperCasePackageName";
     MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo(new PackageLowerCase());
     final ExpectedErrorInfo errors
         = new ExpectedErrorInfo(1, "xMA054");
-    checkInvalid(cocos, loadComponentAST(modelName), errors);
+    checkInvalid(cocos, loadCompilationUnitAST(modelName), errors);
   }
 
   /**
