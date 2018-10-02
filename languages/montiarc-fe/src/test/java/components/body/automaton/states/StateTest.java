@@ -1,5 +1,6 @@
 package components.body.automaton.states;
 
+import montiarc.cocos.GenericInitValues;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -18,14 +19,14 @@ import montiarc.cocos.MontiArcCoCos;
  * @author Andreas Wortmann
  */
 public class StateTest extends AbstractCoCoTest {
-  
+
   private static final String PACKAGE = "components.body.automaton.states";
-  
+
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
   }
-  
+
   @Test
   /*
    * Tests [Wor16] AU2: Each state is declared initial at most once.
@@ -38,7 +39,14 @@ public class StateTest extends AbstractCoCoTest {
     final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
     checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
-  
+
+  @Test
+  public void testGenericInitAssignment() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "GenericInitAssignment");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new GenericInitValues()), node,
+        new ExpectedErrorInfo(1, "xMA047"));
+  }
+
   @Test
   public void testStateDefinedMultipleTimes() {
     final String qualifiedModelName = PACKAGE + "." + "StateDefinedMultipleTimes";
@@ -47,7 +55,7 @@ public class StateTest extends AbstractCoCoTest {
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(4, "xMA031");
     checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
   }
-  
+
   @Test
   public void testConflictingStereotypes() {
     final String qualifiedModelName = PACKAGE + "." + "ConflictingStereotypes";
@@ -56,7 +64,7 @@ public class StateTest extends AbstractCoCoTest {
     final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
     checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
-  
+
   @Test
   /*
    * Tests CoCo [Wor16] AC4: The automaton has at least one initial state.
@@ -69,7 +77,7 @@ public class StateTest extends AbstractCoCoTest {
         = new ExpectedErrorInfo(1, "xMA013");
     checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
-  
+
   @Test
   /*
    * Tests [Wor16] AR3: Used states exist (p. 104. Lst. 5.21)
@@ -90,7 +98,7 @@ public class StateTest extends AbstractCoCoTest {
         = new ExpectedErrorInfo(2, "xMA042");
     checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
-  
+
   @Test
   /**
    * Tests CoCo [Wor16] AC8.
@@ -102,5 +110,5 @@ public class StateTest extends AbstractCoCoTest {
     final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
     checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
-  
+
 }

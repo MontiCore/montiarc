@@ -1,5 +1,4 @@
-package Components;
-//package parser;
+package components.UpperCasePackageName;
 
 /*
  *  Invalid model. Packages names are not allowed to start with upper case.
