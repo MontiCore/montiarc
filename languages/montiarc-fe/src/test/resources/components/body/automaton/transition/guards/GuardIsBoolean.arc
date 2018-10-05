@@ -8,12 +8,15 @@ import components.body.automaton.transition.guards.Number;
 component GuardIsBoolean {
 
 	port
-		in Number input;
+		in Number input,
+		out List<String> x;
 
-	automaton GuardIsNotBooleanAutomaton {
+  List<String> y;
+	automaton GuardIsBooleanAutomaton {
 		state A,B;
 		initial A;
 
-		A -> B [input.get()==0];
+		A -> B [input.get()==0] / {y = new ArrayList<String>(), x = new ArrayList<String>()};
+		B -> A [true] / {call y.add("bu")};
 	}
 }
