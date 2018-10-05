@@ -3,7 +3,7 @@ package components.body.ajava;
 /**
  * Valid model.
  */
-component ValidAJavaComponent {
+component ValidAJavaComponent(String x) {
 
   port
     in Integer i,
@@ -18,7 +18,10 @@ component ValidAJavaComponent {
   
   compute CalculateSomething {
     counter+=1;
-    o = i + counter;    
+    o = i + counter;
+    o = x;
+    i.toString();
+      
   }
 
 

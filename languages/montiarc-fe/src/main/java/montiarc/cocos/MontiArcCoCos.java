@@ -42,7 +42,7 @@ public class MontiArcCoCos {
         
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
-        .addCoCo(new UsedPortsAndVariablesExist())
+        .addCoCo(new AJavaInitUsedPortsAndVariablesExist())
         .addCoCo(new MultipleBehaviorImplementation())
         .addCoCo(new InitBlockOnlyOnEmbeddedAJava())
         .addCoCo(new AtMostOneInitBlock())
