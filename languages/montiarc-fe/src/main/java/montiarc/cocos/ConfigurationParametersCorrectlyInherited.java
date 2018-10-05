@@ -131,7 +131,7 @@ public class ConfigurationParametersCorrectlyInherited implements MontiArcASTCom
     }
     else {
       Log.error(
-          String.format("0xMA071 ASTComponent node \"%s\" has no symbol.",
+          String.format("0xMA010 ASTComponent node \"%s\" has no symbol.",
               component.getName()));
     }
   }

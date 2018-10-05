@@ -13,7 +13,7 @@ public class VariableSymbol extends CommonSymbol {
   
   private JTypeReference<? extends JTypeSymbol> typeReference;
   
-  private Optional<ASTValuation> valuation;
+  private Optional<ASTValuation> valuation = Optional.empty();
   
   public VariableSymbol(String name) {
     super(name, KIND);
