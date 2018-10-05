@@ -275,4 +275,10 @@ public class ConnectorTest extends AbstractCoCoTest {
         new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(checker, astNode, expectedErrorInfo);
   }
+  
+  @Test
+  public void testTypeHierarchyInConnector() {
+    checkValid(PACKAGE + "." + "TypeHierarchyInConnector");
+  }
+  
 }
