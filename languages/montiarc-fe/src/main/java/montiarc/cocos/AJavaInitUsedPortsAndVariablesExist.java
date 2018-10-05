@@ -29,7 +29,7 @@ import java.util.Optional;
  *
  * @author Andreas Wortmann
  */
-public class UsedPortsAndVariablesExist
+public class AJavaInitUsedPortsAndVariablesExist
     implements MontiArcASTComponentCoCo {
 
   @Override
