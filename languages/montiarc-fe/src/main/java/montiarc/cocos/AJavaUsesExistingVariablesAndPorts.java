@@ -17,6 +17,7 @@ import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTJavaPBehavior;
 import montiarc._cocos.MontiArcASTJavaPBehaviorCoCo;
+import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.VariableSymbol;
 import montiarc.visitor.NamesInExpressionsDelegatorVisitor;
@@ -51,14 +52,22 @@ public class AJavaUsesExistingVariablesAndPorts implements MontiArcASTJavaPBehav
             .<PortSymbol> resolveDownMany(entry.getKey().getName(), PortSymbol.KIND);
         Optional<JTypeSymbol> type = componentScope.resolve(entry.getKey().getName(),
             JTypeSymbol.KIND);
+        boolean foundConfigParameter = false;
+        Optional<ComponentSymbol> comp = (Optional<ComponentSymbol>) componentScope
+            .getSpanningSymbol();
+        if (comp.isPresent()) {
+          foundConfigParameter = comp.get().getConfigParameters().stream()
+              .filter(p -> p.getName().equals(entry.getKey().getName())).findAny().isPresent();
+        }
         
         // check whether used name is local ajava variable
         boolean isLocalVar = false;
-        if (entry.getKey().getEnclosingScopeOpt ().isPresent()) {
-          isLocalVar = checkPortOrVariabelWithNameAlreadyExists(entry.getKey().getName(), entry.getKey().getEnclosingScopeOpt().get());
+        if (entry.getKey().getEnclosingScopeOpt().isPresent()) {
+          isLocalVar = checkPortOrVariabelWithNameAlreadyExists(entry.getKey().getName(),
+              entry.getKey().getEnclosingScopeOpt().get());
         }
         
-        if (vars.isEmpty() && ports.isEmpty() && !type.isPresent() && !isLocalVar) {
+        if (vars.isEmpty() && ports.isEmpty() && !type.isPresent() && !isLocalVar && !foundConfigParameter) {
           Log.error(
               "0xMA107 used variable " + entry.getKey().getName() + " is used but not declared.",
               entry.getKey().get_SourcePositionStart());
