@@ -49,13 +49,12 @@ public class AJavaTest extends AbstractCoCoTest {
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new JavaPVariableIdentifiersUnique()), node,
         new ExpectedErrorInfo(3, "xMA016", "xMA094", "xMA095"));
   }
-
+  
   @Test
   public void testDistanceLogger() {
     final String qualifiedModelName = PACKAGE + "." + "DistanceLogger";
     final MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
-    final ExpectedErrorInfo errors
-        = new ExpectedErrorInfo(2, "xMA015", "xMA110");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA015", "xMA110");
     checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
   }
   
@@ -88,7 +87,8 @@ public class AJavaTest extends AbstractCoCoTest {
   public void testWrongPortUsage() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "WrongPortUsage");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(4, "xMA104", "xMA105", "xMA107"));
+        new ExpectedErrorInfo(12, "xMA104", "xMA105", "xMA106", "xMA107", "xMA108", "xMA109",
+            "xMA110", "xMA111", "xMA112", "xMA113"));
   }
   
   @Test
@@ -132,7 +132,8 @@ public class AJavaTest extends AbstractCoCoTest {
   @Test
   public void testDuplicateLocalVariables() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "DuplicateLocalVariables");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new JavaPVariableIdentifiersUnique()), node, new ExpectedErrorInfo(4, "xMA095"));
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new JavaPVariableIdentifiersUnique()), node,
+        new ExpectedErrorInfo(4, "xMA095"));
     
   }
   
