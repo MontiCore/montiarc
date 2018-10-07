@@ -490,7 +490,11 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     // Expect impl instance if not decomposed
     if (this.symbol.isAtomic()) {
-      StringBuilder implAssignment = new StringBuilder("behaviorImpl = new ");
+      String implVarName = "behaviorImpl";
+      if(helper.containsIdentifier(implVarName)){
+        implVarName = "r__behaviorImpl";
+      }
+      StringBuilder implAssignment = new StringBuilder(implVarName + " = new ");
       implAssignment.append(capitalizeFirst(componentName)).append("Impl");
       if (!symbol.getFormalTypeParameters().isEmpty()) {
         implAssignment.append(getTypeParameterList());
@@ -546,7 +550,8 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       final String paramList
           = symbol.getAllIncomingPorts()
                 .stream()
-                .map(p -> "this." + p.getName() + ".getCurrentValue()")
+                .map(p -> "this.getPort" + capitalizeFirst(p.getName()) + "()"
+                              + ".getCurrentValue()")
                 .collect(Collectors.joining(", "));
       inputVariable.append(paramList);
       inputVariable.append(");");
@@ -560,7 +565,12 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       if (!this.symbol.getFormalTypeParameters().isEmpty()) {
         tryBlock.append(getTypeParameterList());
       }
-      tryBlock.append("result = behaviorImpl.compute(input);");
+      String implVarName = "behaviorImpl";
+      if(helper.containsIdentifier(implVarName)){
+        implVarName = "r__behaviorImpl";
+      }
+      tryBlock.append("result = ").append(implVarName)
+          .append(".compute(").append("input").append(");");
       tryBlock.append("// set results to ports");
       tryBlock.append("setResult(result);");
       tryBlock.append("} catch (Exception e) { ");
@@ -621,9 +631,14 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     if(!this.symbol.getFormalTypeParameters().isEmpty()){
       resultString.append(getTypeParameterList());
     }
+
+    String implVarName = "behaviorImpl";
+    if(helper.containsIdentifier(implVarName)){
+      implVarName = "r__behaviorImpl";
+    }
     resultString
         .append(" result = ")
-        .append("behaviorImpl").append(".").append("getInitialValues()").append(";");
+        .append(implVarName).append(".").append("getInitialValues()").append(";");
     methodBuilder.addBodyElement(resultString.toString());
     methodBuilder.addBodyElement("setResult(result);");
     classVisitor.addMethod(methodBuilder.build());

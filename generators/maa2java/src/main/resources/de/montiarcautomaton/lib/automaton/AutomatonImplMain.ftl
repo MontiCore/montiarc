@@ -15,9 +15,26 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
   private static enum State {
     <#list states><#items as state>${state.getName()}<#sep>, </#sep></#items>;</#list>
   }
-  
+
+  <#-- Determine the correct names for variables in case of naming conflicts. -->
+  <#if helper.containsIdentifier("currentState")>
+    <#assign currentStateName = "r__currentState">
+  <#else>
+    <#assign currentStateName = "currentState">
+  </#if>
+  <#if helper.containsIdentifier("result")>
+    <#assign resultVarName = "r__result">
+  <#else>
+    <#assign resultVarName = "result">
+  </#if>
+  <#if helper.containsIdentifier("input")>
+    <#assign inputVarName = "r__input">
+  <#else>
+    <#assign inputVarName = "input">
+  </#if>
+
   // holds the current state of the automaton
-  private State currentState;
+  private State ${currentStateName};
   
   // variables
   <#list variables as variable>
@@ -37,14 +54,14 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
 
   @Override
   public ${resultName} getInitialValues() {
-    final ${resultName} result = new ${resultName}();
+    final ${resultName} ${resultVarName} = new ${resultName}();
     
 
     // initial reaction
     <#list helper.getInitialReaction(helper.getInitialState()) as assignment>
     <#if assignment.isAssignment()>
       <#if helper.isPort(assignment.getLeft())>
-        result.set${assignment.getLeft()?cap_first}(${assignment.getRight()});
+        ${resultVarName}.set${assignment.getLeft()?cap_first}(${assignment.getRight()});
       <#else>
         ${assignment.getLeft()} = ${assignment.getRight()};
       </#if>
@@ -55,22 +72,22 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
     </#list>
     
     // initial state
-    currentState = State.${helper.getInitialState().getName()};
+    ${currentStateName} = State.${helper.getInitialState().getName()};
     
-    return result;
+    return ${resultVarName};
   }
 
   @Override
-  public ${resultName} compute(${inputName} input) {
+  public ${resultName} compute(${inputName} ${inputVarName}) {
     // inputs
     <#list portsIn as port>
-  	final ${helper.getPortTypeName(port)} ${port.getName()} = input.get${port.getName()?cap_first}();
+  	final ${helper.getPortTypeName(port)} ${port.getName()} = ${inputVarName}.get${port.getName()?cap_first}();
   	</#list>
   
-    final ${resultName} result = new ${resultName}();
+    final ${resultName} ${resultVarName} = new ${resultName}();
     
     // first current state to reduce stimuli and guard checks
-    switch (currentState) {
+    switch (${currentStateName}) {
     <#list states as state>
       case ${state.getName()}:
       <#list helper.getTransitions(state) as transition>
@@ -85,7 +102,7 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
               <#if assignment.isVariable(assignment.getLeft())>
                 ${assignment.getLeft()} = ${assignment.getRight()};
               <#else>
-                result.set${assignment.getLeft()?cap_first}(${assignment.getRight()});
+                ${resultVarName}.set${assignment.getLeft()?cap_first}(${assignment.getRight()});
               </#if>
             <#else>
               ${assignment.getRight()};
@@ -95,7 +112,7 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
           //Log.log("${implName}", "${transition.toString()}");
              
           // state change
-          currentState = State.${transition.getTarget().getName()};
+          ${currentStateName} = State.${transition.getTarget().getName()};
           break;
         }
       </#list>  
@@ -103,7 +120,7 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
     </#list>
     }
     
-    return result;
+    return ${resultVarName};
   }
   
 }
