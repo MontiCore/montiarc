@@ -415,11 +415,16 @@ public class ComponentElementsCollector implements MontiArcVisitor {
             this.types.get("INPUT_CLASS_TYPE"),
             this.types.get("RESULT_CLASS_TYPE")));
 
+    String implVarName = "behaviorImpl";
+    if(helper.containsIdentifier(implVarName)){
+      implVarName = "r__behaviorImpl";
+    }
+
     ASTType expectedType = JavaDSLMill.simpleReferenceTypeBuilder()
                                .setNameList(Lists.newArrayList("IComputable"))
                                .setTypeArguments(typeArgs.build())
                                .build();
-    classVisitor.addField("behaviorImpl", PRINTER.prettyprint(expectedType));
+    classVisitor.addField(implVarName, PRINTER.prettyprint(expectedType));
   }
 
   private void addGetInitialValues() {
@@ -435,11 +440,16 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       return;
     }
 
+    String inputVarName = "input";
+    if (helper.containsIdentifier("input")) {
+      inputVarName = "r__input";
+    }
+
     ASTType paramType = this.types.get("INPUT_CLASS_TYPE");
     Method method = Method.getBuilder()
                         .setName("compute")
                         .setReturnType(PRINTER.prettyprint(this.types.get("RESULT_CLASS_TYPE")))
-                        .addParameter("input", paramType)
+                        .addParameter(inputVarName, paramType)
                         .build();
     this.implVisitor.addMethod(method);
   }
@@ -490,7 +500,11 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     // Expect impl instance if not decomposed
     if (this.symbol.isAtomic()) {
-      StringBuilder implAssignment = new StringBuilder("behaviorImpl = new ");
+      String implVarName = "behaviorImpl";
+      if(helper.containsIdentifier(implVarName)){
+        implVarName = "r__behaviorImpl";
+      }
+      StringBuilder implAssignment = new StringBuilder(implVarName + " = new ");
       implAssignment.append(capitalizeFirst(componentName)).append("Impl");
       if (!symbol.getFormalTypeParameters().isEmpty()) {
         implAssignment.append(getTypeParameterList());
@@ -546,7 +560,8 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       final String paramList
           = symbol.getAllIncomingPorts()
                 .stream()
-                .map(p -> "this." + p.getName() + ".getCurrentValue()")
+                .map(p -> "this.getPort" + capitalizeFirst(p.getName()) + "()"
+                              + ".getCurrentValue()")
                 .collect(Collectors.joining(", "));
       inputVariable.append(paramList);
       inputVariable.append(");");
@@ -560,7 +575,12 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       if (!this.symbol.getFormalTypeParameters().isEmpty()) {
         tryBlock.append(getTypeParameterList());
       }
-      tryBlock.append("result = behaviorImpl.compute(input);");
+      String implVarName = "behaviorImpl";
+      if(helper.containsIdentifier(implVarName)){
+        implVarName = "r__behaviorImpl";
+      }
+      tryBlock.append("result = ").append(implVarName)
+          .append(".compute(").append("input").append(");");
       tryBlock.append("// set results to ports");
       tryBlock.append("setResult(result);");
       tryBlock.append("} catch (Exception e) { ");
@@ -621,9 +641,14 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     if(!this.symbol.getFormalTypeParameters().isEmpty()){
       resultString.append(getTypeParameterList());
     }
+
+    String implVarName = "behaviorImpl";
+    if(helper.containsIdentifier(implVarName)){
+      implVarName = "r__behaviorImpl";
+    }
     resultString
         .append(" result = ")
-        .append("behaviorImpl").append(".").append("getInitialValues()").append(";");
+        .append(implVarName).append(".").append("getInitialValues()").append(";");
     methodBuilder.addBodyElement(resultString.toString());
     methodBuilder.addBodyElement("setResult(result);");
     classVisitor.addMethod(methodBuilder.build());
@@ -935,13 +960,17 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   @Override
   public void visit(ASTAutomaton node) {
     // Add the currentState field
-    this.implVisitor.addField("currentState", "State");
+    String currentStateVarName = "currentState";
+    if(helper.containsIdentifier(currentStateVarName)){
+      currentStateVarName = "r__" + currentStateVarName;
+    }
+    this.implVisitor.addField(currentStateVarName, "State");
   }
 
   @Override
   public void visit(ASTStateDeclaration node) {
     final Set<String> stateNames = node.getStateList().stream().map(ASTState::getName).collect(Collectors.toSet());
-    EnumType enumType = new EnumType("State", stateNames);
+    EnumType enumType = new EnumType(componentName + "State", stateNames);
 
     this.implVisitor.addEnumType(enumType);
   }

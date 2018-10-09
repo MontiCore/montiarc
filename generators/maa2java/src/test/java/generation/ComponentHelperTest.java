@@ -19,6 +19,7 @@ import static org.junit.Assert.*;
 public class ComponentHelperTest extends AbstractCoCoTest {
 
   private static final String PACKAGE = "components.head.parameters";
+  protected static final String TARGET_TEST_MODELS = "target/test-models/";
 
   @Test
   @Ignore("TODO Fix Java Types in the test symbol table. They appear to be missing or wrongly added. Then uncomment all lines")
@@ -51,7 +52,7 @@ public class ComponentHelperTest extends AbstractCoCoTest {
     comp = this.loadComponentSymbol(
         "components.head.generics",
         "SubCompExtendsGenericCompValid",
-        "target/test-models/");
+        TARGET_TEST_MODELS);
 
     portSymbolOpt = comp.getIncomingPort("tIn", true);
     assertTrue("Could not find expected port", portSymbolOpt.isPresent());
@@ -65,7 +66,7 @@ public class ComponentHelperTest extends AbstractCoCoTest {
 
   @Test
   public void getPortTypeName() {
-    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComponentWithGenerics");
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComponentWithGenerics", TARGET_TEST_MODELS);
     ComponentHelper helper = new ComponentHelper(comp);
 
     Optional<PortSymbol> portSymbol = comp.getSpannedScope().resolve("inT", PortSymbol.KIND);
@@ -100,7 +101,7 @@ public class ComponentHelperTest extends AbstractCoCoTest {
 
   @Test
   public void getPortGenerics() {
-    ComponentSymbol comp = this.loadComponentSymbol("components.head.generics", "Car");
+    ComponentSymbol comp = this.loadComponentSymbol("components.head.generics", "Car", TARGET_TEST_MODELS);
     ComponentHelper helper = new ComponentHelper(comp);
     
     Optional<PortSymbol> portSymbol = comp.getSpannedScope().resolve("motor", PortSymbol.KIND);
@@ -118,7 +119,7 @@ public class ComponentHelperTest extends AbstractCoCoTest {
   
   @Test
   public void testVariableTypeName() {
-    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComponentWithGenericVariables");
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComponentWithGenericVariables", TARGET_TEST_MODELS);
     ComponentHelper helper = new ComponentHelper(comp);
 
     Optional<VariableSymbol> variableSymbol = comp.getSpannedScope().resolve("varWithTypeT", VariableSymbol.KIND);
@@ -136,7 +137,8 @@ public class ComponentHelperTest extends AbstractCoCoTest {
   public void getParamTypeName() {
     
     MontiArcTool tool = new MontiArcTool();
-    ComponentSymbol comp = tool.loadComponentSymbolWithCocos("components.head.parameters.ComponentWithGenericParameters", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+//    ComponentSymbol comp = tool.loadComponentSymbolWithCocos("components.head.parameters.ComponentWithGenericParameters", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+    ComponentSymbol comp = this.loadComponentSymbol("components.head.parameters", "ComponentWithGenericParameters", TARGET_TEST_MODELS);
     assertNotNull(comp);
     ComponentHelper helper = new ComponentHelper(comp);
 

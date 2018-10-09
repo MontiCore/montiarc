@@ -89,6 +89,9 @@ public abstract class AbstractCoCoTest {
       .addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfForbiddenExpression())
       .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfForbiddenExpression())
       .addCoCo((MontiArcASTStateCoCo) new NamesCorrectlyCapitalized())
+      .addCoCo((MontiArcASTParameterCoCo) new UseOfProhibitedIdentifiers())
+      .addCoCo((MontiArcASTVariableDeclarationCoCo) new UseOfProhibitedIdentifiers())
+      .addCoCo((MontiArcASTPortCoCo) new UseOfProhibitedIdentifiers()) 
       .addCoCo(new ConnectorSourceAndTargetComponentDiffer())
       .addCoCo(new ConnectorSourceAndTargetExistAndFit())
       .addCoCo(new ImportsAreUnique())
@@ -139,7 +142,7 @@ public abstract class AbstractCoCoTest {
     assertNotNull("Could not find ASTComponent for model " + qualifiedModelName, node);
     return node;
   }
-  
+
   protected ComponentSymbol loadComponentSymbol(String packageName,
       String unqualifiedComponentName) {
     Scope symTab = MONTIARCTOOL.initSymbolTable(MODEL_PATH);

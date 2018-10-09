@@ -697,4 +697,40 @@ public class ComponentHelper {
   public List<PortSymbol> getAllOutPorts() {
     return component.getAllOutgoingPorts();
   }
+
+  /**
+   * Checks whether component parameter, variable, subcomponent instance, or
+   * port names contain the identifier given as the parameter.
+   * @param identifier The name to check
+   * @return True, iff. there is at least one identifier that is equal to the
+   * given identifier
+   */
+  public boolean containsIdentifier(String identifier){
+
+    for (PortSymbol portSymbol : component.getPorts()) {
+      if(portSymbol.getName().equals(identifier)){
+        return true;
+      }
+    }
+
+    for (JFieldSymbol jFieldSymbol : component.getConfigParameters()) {
+      if(jFieldSymbol.getName().equals(identifier)){
+        return true;
+      }
+    }
+
+    for (VariableSymbol variableSymbol : component.getVariables()) {
+      if(variableSymbol.getName().equals(identifier)){
+        return true;
+      }
+    }
+
+    for (ComponentInstanceSymbol instanceSymbol : component.getSubComponents()) {
+      if(instanceSymbol.getName().equals(identifier)){
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
