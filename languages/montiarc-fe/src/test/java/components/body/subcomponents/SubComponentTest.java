@@ -838,4 +838,9 @@ public class SubComponentTest extends AbstractCoCoTest {
 
     checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
+
+  @Test
+  public void testHasConflictingSubcomponentNames() {
+    checkValid(PACKAGE + "." + "HasConflictingSubcomponentNames");
+  }
 }

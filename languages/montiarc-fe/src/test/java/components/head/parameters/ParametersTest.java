@@ -155,4 +155,9 @@ public class ParametersTest extends AbstractCoCoTest {
         = new ExpectedErrorInfo(4, "xMA046");
     checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
   }
+
+  @Test
+  public void testHasConflictingParameterNames() {
+    checkValid(PACKAGE + "." + "HasConflictingParameterNames");
+  }
 }

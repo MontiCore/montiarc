@@ -1,6 +1,6 @@
-package components.body.automaton.transition.guards;
+package types;
 
-public class Number {
+public class JavaNumberType {
   private Integer a = 5;
   
   public Integer get(){

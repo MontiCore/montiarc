@@ -327,4 +327,14 @@ public class PortTest extends AbstractCoCoTest {
         = new ExpectedErrorInfo(4, "xMA046");
     checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
   }
+
+  @Test
+  public void testHasConflictingInPortNames() {
+    checkValid(PACKAGE + "." + "HasConflictingInPortNames");
+  }
+
+  @Test
+  public void testHasConflictingOutPortNames() {
+    checkValid(PACKAGE + "." + "HasConflictingOutPortNames");
+  }
 }

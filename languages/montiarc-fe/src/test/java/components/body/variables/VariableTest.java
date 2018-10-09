@@ -70,4 +70,9 @@ public class VariableTest extends AbstractCoCoTest {
         new ExpectedErrorInfo(4, "xMA046");
     checkInvalid(cocos, loadComponentAST(PACKAGE + "." + componentName), errors);
   }
+
+  @Test
+  public void testHasConflictingVariableNames() {
+    checkValid(PACKAGE + "." + "HasConflictingVariableNames");
+  }
 }

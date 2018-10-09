@@ -92,10 +92,10 @@ public class AbstractGeneratorTest {
      * Reason: Conflict between port named "input" and parameter "input"
      * of the compute method in Impl class
      */
-    EXCLUDED_MODELS.add(TEST_MODEL_PATH
-                            .resolve("components/body/automaton/" +
-                                         "transition/guards/" +
-                                         "GuardHasComplexExpressionWithCD.arc"));
+//    EXCLUDED_MODELS.add(TEST_MODEL_PATH
+//                            .resolve("components/body/automaton/" +
+//                                         "transition/guards/" +
+//                                         "GuardHasComplexExpressionWithCD.arc"));
 
     /*
      * Reason: Conflict between port named "input" and parameter "input"
