@@ -1,6 +1,6 @@
 package components.body.ajava;
 
-/**
+/*
  * Valid model.
  */
 component ComplexCodeExample {
@@ -10,7 +10,7 @@ component ComplexCodeExample {
 
   compute ThisIsSoComplex {
     int sum = 0;
-    for (int j = 0; j++; j<10) {
+    for (int j = 0; j<10; j++) {
       sum += j;
     }
     output = "Sum is: " + sum;

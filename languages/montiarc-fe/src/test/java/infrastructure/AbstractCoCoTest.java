@@ -39,88 +39,92 @@ public abstract class AbstractCoCoTest {
   
   protected static final String FAKE_JAVA_TYPES_PATH = "target/librarymodels/";
   
-  //TODO Remove when inner components are allowed again
+  // TODO Remove when inner components are allowed again
   private static final MontiArcCoCoChecker checker = new MontiArcCoCoChecker()
-    .addCoCo(new PortUsage())
-        .addCoCo(new SubComponentsConnected())
-        .addCoCo(new SubcomponentParametersCorrectlyAssigned())
-        .addCoCo(new PackageLowerCase())
-        .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized())
-        .addCoCo(new DefaultParametersHaveCorrectOrder())
-        .addCoCo(new DefaultParametersCorrectlyAssigned())
-        .addCoCo(new ComponentWithTypeParametersHasInstance())
-        .addCoCo(new CircularInheritance())
-        .addCoCo(new IOAssignmentCallFollowsMethodCall())
-        .addCoCo(new AllGenericParametersOfSuperClassSet())
-        .addCoCo(new TypeParameterNamesUnique())
-        .addCoCo(new TopLevelComponentHasNoInstanceName())
-        .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
-        .addCoCo(new InPortUniqueSender())
-        .addCoCo(new ImportsValid())
-        .addCoCo(new SubcomponentReferenceCycle())
-        .addCoCo(new ReferencedSubComponentExists())
-        .addCoCo(new PortNamesAreNotJavaKeywords())
-        .addCoCo(new UnusedImports())
-        .addCoCo(new AmbiguousTypes())
-        
-        /// AJava Cocos
-        /// /////////////////////////////////////////////////////////////
-        .addCoCo(new InputPortChangedInCompute())
-        .addCoCo(new UsedPortsAndVariablesExist())
-        .addCoCo(new MultipleBehaviorImplementation())
-        .addCoCo(new InitBlockOnlyOnEmbeddedAJava())
-        .addCoCo(new AtMostOneInitBlock())
-        /* MontiArcAutomaton Cocos */
-        
-        /// Automaton Cocos
-        /// /////////////////////////////////////////////////////////////
-        .addCoCo(new ImplementationInNonAtomicComponent())
-        
-        // CONVENTIONS
-        .addCoCo((MontiArcASTBehaviorElementCoCo) new NamesCorrectlyCapitalized())
-        .addCoCo(new AutomatonHasNoState())
-        .addCoCo(new AutomatonHasNoInitialState())
-        .addCoCo(new MultipleAssignmentsSameIdentifier())
-        .addCoCo(new AutomatonOutputInExpression())
-        .addCoCo(new AutomatonNoAssignmentToIncomingPort())
-        .addCoCo((MontiArcASTInitialStateDeclarationCoCo) new AutomatonReactionWithAlternatives())
-        .addCoCo((MontiArcASTTransitionCoCo) new AutomatonReactionWithAlternatives())
-        .addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfForbiddenExpression())
-        .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfForbiddenExpression())
-        .addCoCo((MontiArcASTStateCoCo) new NamesCorrectlyCapitalized())
-        .addCoCo(new ConnectorSourceAndTargetComponentDiffer())
-        .addCoCo(new ConnectorSourceAndTargetExistAndFit())
-        .addCoCo(new ImportsAreUnique())
-        
-        // REFERENTIAL INTEGRITY
-        .addCoCo(new AutomatonDeclaredInitialStateDoesNotExist())
-        .addCoCo(new UseOfUndeclaredState())
-        .addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfUndeclaredField())
-        .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfUndeclaredField())
-        .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
-        .addCoCo(new AssignmentHasNoName())
-        .addCoCo(new ConfigurationParametersCorrectlyInherited())
-        .addCoCo(new InnerComponentNotExtendsDefiningComponent())
-        
-        // TYPE CORRECTNESS
-        .addCoCo(new AutomatonGuardIsNotBoolean())
-        
-        // .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
-         .addCoCo((MontiArcASTTransitionCoCo)new
-         AutomatonReactionTypeDoesNotFitOutputType())
-         .addCoCo((MontiArcASTInitialStateDeclarationCoCo)new
-         AutomatonReactionTypeDoesNotFitOutputType())
-        
-        .addCoCo(new AutomatonNoDataAssignedToVariable())
-        
-        // UNIQUENESS OF NAMES
-        .addCoCo(new AutomatonInitialDeclaredMultipleTimes())
-        .addCoCo(new AutomatonStateDefinedMultipleTimes())
-        .addCoCo(new UseOfValueLists())
-        .addCoCo(new IdentifiersAreUnique())
-        .addCoCo(new JavaPVariableIdentifiersUnique());
+      .addCoCo(new PortUsage())
+      .addCoCo(new UsedPortAndVarTypesExist())
+      .addCoCo(new SubComponentsConnected())
+      .addCoCo(new SubcomponentParametersCorrectlyAssigned())
+      .addCoCo(new PackageLowerCase())
+      .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized())
+      .addCoCo(new DefaultParametersHaveCorrectOrder())
+      .addCoCo(new DefaultParametersCorrectlyAssigned())
+      .addCoCo(new ComponentWithTypeParametersHasInstance())
+      .addCoCo(new CircularInheritance())
+      .addCoCo(new IOAssignmentCallFollowsMethodCall())
+      .addCoCo(new AllGenericParametersOfSuperClassSet())
+      .addCoCo(new TypeParameterNamesUnique())
+      .addCoCo(new TopLevelComponentHasNoInstanceName())
+      .addCoCo((MontiArcASTConnectorCoCo) new ConnectorEndPointIsCorrectlyQualified())
+      .addCoCo(new InPortUniqueSender())
+      .addCoCo(new ImportsValid())
+      .addCoCo(new SubcomponentReferenceCycle())
+      .addCoCo(new ReferencedSubComponentExists())
+      .addCoCo(new PortNamesAreNotJavaKeywords())
+      .addCoCo(new UnusedImports())
+      .addCoCo(new AmbiguousTypes())
+      
+      /// AJava Cocos
+      /// /////////////////////////////////////////////////////////////
+      .addCoCo(new AJavaUsesCorrectPortDirection())
+      .addCoCo(new AJavaInitUsedPortsAndVariablesExist())
+      .addCoCo(new MultipleBehaviorImplementation())
+      .addCoCo(new InitBlockOnlyOnEmbeddedAJava())
+      .addCoCo(new AtMostOneInitBlock())
+      .addCoCo(new AJavaUsesExistingVariablesAndPorts())
+      /* MontiArcAutomaton Cocos */
+      
+      /// Automaton Cocos
+      /// /////////////////////////////////////////////////////////////
+      .addCoCo(new ImplementationInNonAtomicComponent())
+      
+      // CONVENTIONS
+      .addCoCo((MontiArcASTBehaviorElementCoCo) new NamesCorrectlyCapitalized())
+      .addCoCo(new AutomatonHasNoState())
+      .addCoCo(new AutomatonHasNoInitialState())
+      .addCoCo(new MultipleAssignmentsSameIdentifier())
+      .addCoCo(new AutomatonUsesCorrectPortDirection())
+      .addCoCo((MontiArcASTInitialStateDeclarationCoCo) new AutomatonReactionWithAlternatives())
+      .addCoCo((MontiArcASTTransitionCoCo) new AutomatonReactionWithAlternatives())
+      .addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfForbiddenExpression())
+      .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfForbiddenExpression())
+      .addCoCo((MontiArcASTStateCoCo) new NamesCorrectlyCapitalized())
+      .addCoCo((MontiArcASTParameterCoCo) new UseOfProhibitedIdentifiers())
+      .addCoCo((MontiArcASTVariableDeclarationCoCo) new UseOfProhibitedIdentifiers())
+      .addCoCo((MontiArcASTPortCoCo) new UseOfProhibitedIdentifiers()) 
+      .addCoCo(new ConnectorSourceAndTargetComponentDiffer())
+      .addCoCo(new ConnectorSourceAndTargetExistAndFit())
+      .addCoCo(new ImportsAreUnique())
+      
+      // REFERENTIAL INTEGRITY
+      .addCoCo(new UseOfUndeclaredState())
+      .addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfUndeclaredField())
+      .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfUndeclaredField())
+      .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned())
+      .addCoCo(new AssignmentHasNoName())
+      .addCoCo(new ConfigurationParametersCorrectlyInherited())
+      .addCoCo(new InnerComponentNotExtendsDefiningComponent())
+      
+      // TYPE CORRECTNESS
+      .addCoCo(new AutomatonGuardIsNotBoolean())
+      .addCoCo(new GenericInitValues())
+      
+      // .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
+      .addCoCo((MontiArcASTTransitionCoCo) new AutomatonReactionTypeDoesNotFitOutputType())
+      .addCoCo(
+          (MontiArcASTInitialStateDeclarationCoCo) new AutomatonReactionTypeDoesNotFitOutputType())
+      
+      .addCoCo(new AutomatonNoDataAssignedToVariable())
+      
+      // UNIQUENESS OF NAMES
+      .addCoCo(new AutomatonInitialDeclaredMultipleTimes())
+      .addCoCo(new AutomatonStateDefinedMultipleTimes())
+      .addCoCo(new UseOfValueLists())
+      .addCoCo(new IdentifiersAreUnique())
+      .addCoCo(new JavaPVariableIdentifiersUnique());
   
-  protected static final MontiArcTool MONTIARCTOOL = new MontiArcTool(new MontiArcLanguageFamily(),checker);
+  protected static final MontiArcTool MONTIARCTOOL = new MontiArcTool(new MontiArcLanguageFamily(),
+      checker);
   
   @Before
   public void cleanUpLog() {
@@ -135,7 +139,7 @@ public abstract class AbstractCoCoTest {
         qualifiedModelName, ComponentSymbol.KIND).orElse(null);
     assertNotNull("Could not resolve model " + qualifiedModelName, comp);
     ASTMontiArcNode node = (ASTMontiArcNode) comp.getAstNode().orElse(null);
-    assertNotNull("Could not find ASTComponent for model "+qualifiedModelName,node);
+    assertNotNull("Could not find ASTComponent for model " + qualifiedModelName, node);
     return node;
   }
 
@@ -154,11 +158,11 @@ public abstract class AbstractCoCoTest {
     return comp;
   }
   
-  protected ASTMontiArcNode loadCompilationUnitAST(String qualifiedModelName){
+  protected ASTMontiArcNode loadCompilationUnitAST(String qualifiedModelName) {
     Symbol comp = loadComponentAST(qualifiedModelName).getSymbolOpt().orElse(null);
     assertNotNull("Could not resolve model " + qualifiedModelName, comp);
-    ASTMontiArcNode node  =  (ASTMontiArcNode) comp.getEnclosingScope().getAstNode().orElse(null);
-    assertNotNull("Could not find ASTMACompilationUnit for model "+qualifiedModelName,node);
+    ASTMontiArcNode node = (ASTMontiArcNode) comp.getEnclosingScope().getAstNode().orElse(null);
+    assertNotNull("Could not find ASTMACompilationUnit for model " + qualifiedModelName, node);
     return node;
   }
   
@@ -168,8 +172,8 @@ public abstract class AbstractCoCoTest {
   }
   
   /**
-   * Checks all cocos on the given node, and checks for absence of errors. Use this for checking
-   * valid models.
+   * Checks all cocos on the given node, and checks for absence of errors. Use
+   * this for checking valid models.
    */
   protected void checkValid(String model) {
     Log.getFindings().clear();
@@ -178,9 +182,9 @@ public abstract class AbstractCoCoTest {
   }
   
   /**
-   * Runs coco checks on the model with two different coco sets: Once with all cocos, checking that
-   * the expected errors are present; once only with the given cocos, checking that no addditional
-   * errors are present.
+   * Runs coco checks on the model with two different coco sets: Once with all
+   * cocos, checking that the expected errors are present; once only with the
+   * given cocos, checking that no addditional errors are present.
    */
   protected static void checkInvalid(MontiArcCoCoChecker cocos, ASTMontiArcNode node,
       ExpectedErrorInfo expectedErrors) {
@@ -191,7 +195,8 @@ public abstract class AbstractCoCoTest {
     expectedErrors.checkExpectedPresent(Log.getFindings(), "Got no findings when checking all "
         + "cocos. Did you forget to add the new coco to MontiArcCocos?");
     
-    // check whether only the expected errors are present when using only the given cocos
+    // check whether only the expected errors are present when using only the
+    // given cocos
     Log.getFindings().clear();
     cocos.checkAll(node);
     expectedErrors.checkOnlyExpectedPresent(Log.getFindings(), "Got no findings when checking only "

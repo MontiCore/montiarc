@@ -5,9 +5,7 @@
  */
 package montiarc._symboltable;
 
-
 import java.util.ArrayList;
-
 import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
@@ -15,18 +13,19 @@ import java.util.Optional;
 import java.util.Stack;
 
 import de.monticore.ast.ASTNode;
+import de.monticore.java.javadsl._ast.ASTDoWhileStatement;
+import de.monticore.java.javadsl._ast.ASTForStatement;
+import de.monticore.java.javadsl._ast.ASTIfStatement;
 import de.monticore.java.javadsl._ast.ASTLocalVariableDeclaration;
+import de.monticore.java.javadsl._ast.ASTSwitchBlockStatementGroup;
+import de.monticore.java.javadsl._ast.ASTTryStatement;
 import de.monticore.java.javadsl._ast.ASTVariableDeclarator;
+import de.monticore.java.javadsl._ast.ASTWhileStatement;
 import de.monticore.java.symboltable.JavaSymbolFactory;
 import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.mcexpressions._ast.ASTExpression;
-import de.monticore.symboltable.ArtifactScope;
-import de.monticore.symboltable.CommonScope;
-import de.monticore.symboltable.ImportStatement;
-import de.monticore.symboltable.MutableScope;
-import de.monticore.symboltable.ResolvingConfiguration;
-import de.monticore.symboltable.Scope;
+import de.monticore.symboltable.*;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -59,6 +58,7 @@ import montiarc._ast.ASTInitialStateDeclaration;
 import montiarc._ast.ASTJavaPBehavior;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._ast.ASTMontiArcAutoConnect;
+import montiarc._ast.ASTMontiArcAutoInstantiate;
 import montiarc._ast.ASTParameter;
 import montiarc._ast.ASTPort;
 import montiarc._ast.ASTState;
@@ -92,6 +92,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   protected List<ImportStatement> currentImports = new ArrayList<>();
   
   protected AutoConnection autoConnectionTrafo = new AutoConnection();
+  
+  protected Stack<Boolean> autoinstantiate = new Stack<>();
   
   protected SimpleConnectorToQualifiedConnector simpleConnectorTrafo = new SimpleConnectorToQualifiedConnector();
   
@@ -130,6 +132,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       imports.add(importStatement);
     }
     JavaDefaultTypesManager.addJavaDefaultImports(imports);
+    autoinstantiate.push(true);
     
     ArtifactScope artifactScope = new MontiArcArtifactScope(
         Optional.empty(),
@@ -165,7 +168,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       JTypeReference<JavaTypeSymbol> typeRef = new JavaTypeSymbolReference(typeName,
           currentScope().get(), dimension);
       
-      addTypeArgumentsToTypeSymbol(typeRef, astType);
+      addTypeArgumentsToTypeSymbol(typeRef, astType, currentScope().get());
       
       sym.setTypeReference(typeRef);
       sym.setDirection(node.isIncoming());
@@ -197,7 +200,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(astType);
       JTypeReference<JavaTypeSymbol> typeRef = new JavaTypeSymbolReference(typeName,
           currentScope().get(), dimension);
-      addTypeArgumentsToTypeSymbol(typeRef, astType);
+      addTypeArgumentsToTypeSymbol(typeRef, astType, currentScope().get());
       
       sym.setTypeReference(typeRef);
       
@@ -206,8 +209,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   private void addTypeArgumentsToTypeSymbol(JTypeReference<? extends JTypeSymbol> typeRef,
-      ASTType astType) {
-    JTypeSymbolsHelper.addTypeArgumentsToTypeSymbol(typeRef, astType, currentScope().get(),
+      ASTType astType, Scope definingScope) {
+    JTypeSymbolsHelper.addTypeArgumentsToTypeSymbol(typeRef, astType, definingScope,
         javaTypeRefFactory);
   }
   
@@ -306,7 +309,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     // generic type parameters
     addTypeParametersToComponent(component, node.getHead().getGenericTypeParametersOpt(),
-        currentScope().get());
+        component.getSpannedScope());
     
     // parameters
     setParametersOfComponent(component, node.getHead());
@@ -336,6 +339,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       }
     }
     
+    autoinstantiate.push(autoinstantiate.peek());
     autoConnectionTrafo.transformAtStart(node, component);
   }
   
@@ -343,6 +347,14 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   public void visit(ASTMontiArcAutoConnect node) {
     autoConnectionTrafo.transform(node, componentStack.peek());
   }
+  
+  @Override
+  public void visit(ASTMontiArcAutoInstantiate node) {
+    autoinstantiate.pop();
+    autoinstantiate.push(node.isOn());
+  }
+  
+  ;
   
   protected void setParametersOfComponent(final ComponentSymbol componentSymbol,
       final ASTComponentHead astMethod) {
@@ -354,29 +366,14 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       JTypeReference<? extends JTypeSymbol> paramTypeSymbol = new JavaTypeSymbolReference(
           TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astParameter
               .getType()),
-          currentScope().get(), dimension);
+          componentSymbol.getSpannedScope(), dimension);
       
-      addTypeArgumentsToTypeSymbol(paramTypeSymbol, astParameter.getType());
+      addTypeArgumentsToTypeSymbol(paramTypeSymbol, astParameter.getType(),
+          componentSymbol.getSpannedScope());
       final JFieldSymbol parameterSymbol = javaSymbolFactory.createFormalParameterSymbol(paramName,
           (JavaTypeSymbolReference) paramTypeSymbol);
       componentSymbol.addConfigParameter(parameterSymbol);
     }
-  }
-  
-  /**
-   * Determine whether the component should be instantiated.
-   * 
-   * @param node ASTComponent node to analyze
-   * @param symbol Symbol of the {@param node}
-   * @return true, iff an instance should be created.
-   */
-  private boolean needsInstanceCreation(ASTComponent node, ComponentSymbol symbol) {
-    boolean instanceNameGiven = node.getInstanceNameOpt().isPresent();
-    boolean autoCreationPossible = symbol.getFormalTypeParameters().size() == 0;
-    boolean noParametersRequired = symbol.getConfigParameters().size() == 0;
-    // TODO: Check if the component only contains default parameters
-    
-    return instanceNameGiven || (autoCreationPossible && noParametersRequired);
   }
   
   @Override
@@ -395,7 +392,31 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       // actual type arguments
       addTypeArgumentsToComponent(ref, superCompRef);
       
-      component.setSuperComponent(Optional.of(ref));
+      component.setSuperComponent(ref);
+    }
+    
+    if (autoinstantiate.pop()) {
+      Collection<ComponentInstanceSymbol> instanceSymbols = component.getSpannedScope()
+          .resolveLocally(ComponentInstanceSymbol.KIND);
+      Collection<ComponentSymbol> componentSymbols = new ArrayList<>(
+          component.getSpannedScope().resolveLocally(ComponentSymbol.KIND));
+      componentSymbols.removeIf(c -> instanceSymbols.stream()
+          .anyMatch(i -> c.getName().equals(i.getComponentType().getName())));
+      componentSymbols.forEach(componentSymbol -> {
+        if (componentSymbol.hasConfigParameters() || componentSymbol.hasFormalTypeParameters()) {
+          Log.error(String.format(
+              "0xMA038 It was not possible to automatically create an instance " +
+                  "of component %s because it has generic type or component parameters",
+              componentSymbol.getName()));
+        }
+        else {
+          ComponentSymbolReference symbolReference = new ComponentSymbolReference(
+              componentSymbol.getName(), currentScope().get());
+          ComponentInstanceSymbol instanceSymbol = new ComponentInstanceSymbol(
+              StringTransformations.uncapitalize(componentSymbol.getName()), symbolReference);
+          addToScope(instanceSymbol);
+        }
+      });
     }
     
     removeCurrentScope();
@@ -411,25 +432,30 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
           referencedComponentTypeName, component.getSpannedScope());
       refEntry.setReferencedComponent(Optional.of(component));
       
-      if (needsInstanceCreation(node, component)) {
-        // create instance
-        String instanceName = node.getInstanceNameOpt()
-            .orElse(StringTransformations.uncapitalize(component.getName()));
-        
-        if (node.getActualTypeArgumentOpt().isPresent()) {
-          setActualTypeArgumentsOfCompRef(refEntry,
-              node.getActualTypeArgument().getTypeArgumentList());
+      if (node.getInstanceNameOpt().isPresent()) {
+        if (component.hasFormalTypeParameters() || component.hasConfigParameters()) {
+          Log.error(String.format(
+              "0xMA038 It was not possible to automatically create an instance of component %s because it has generic or constuctor parameters",
+              component.getName()));
         }
-        
-        ComponentInstanceSymbol instanceSymbol = new ComponentInstanceSymbol(instanceName,
-            refEntry);
-        Log.debug("Created component instance " + instanceSymbol.getName()
-            + " referencing component type " + referencedComponentTypeName,
-            MontiArcSymbolTableCreator.class.getSimpleName());
-        
-        addToScope(instanceSymbol);
+        else {
+          // create instance
+          String instanceName = node.getInstanceNameOpt().get();
+          
+          if (node.getActualTypeArgumentOpt().isPresent()) {
+            setActualTypeArgumentsOfCompRef(refEntry,
+                node.getActualTypeArgument().getTypeArgumentList());
+          }
+          
+          ComponentInstanceSymbol instanceSymbol = new ComponentInstanceSymbol(instanceName,
+              refEntry);
+          Log.debug("Created component instance " + instanceSymbol.getName()
+              + " referencing component type " + referencedComponentTypeName,
+              MontiArcSymbolTableCreator.class.getSimpleName());
+          
+          addToScope(instanceSymbol);
+        }
       }
-      
       // check whether there are already instances of the inner component type
       // defined in the component type. We then have to set the referenced
       // component.
@@ -469,7 +495,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
               typeBoundSymbolReference);
           
           // init bound
-          addTypeArgumentsToTypeSymbol(typeBoundSymbolReference, typeBound);
+          addTypeArgumentsToTypeSymbol(typeBoundSymbolReference, typeBound, currentScope().get());
           
           actualTypeArguments.add(actualTypeArgument);
         }
@@ -486,7 +512,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
             TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(astTypeNoBound),
             currentScope().get(), dimension);
         
-        addTypeArgumentsToTypeSymbol(typeArgumentSymbolReference, astTypeNoBound);
+        addTypeArgumentsToTypeSymbol(typeArgumentSymbolReference, astTypeNoBound,
+            currentScope().get());
         
         actualTypeArguments.add(new ActualTypeArgument(typeArgumentSymbolReference));
       }
@@ -571,11 +598,13 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   
   @Override
   public void visit(ASTJavaPBehavior node) {
-    MutableScope javaPScope = new CommonScope(true);
-    javaPScope.setResolvingFilters(currentScope().get().getResolvingFilters());
-    javaPScope.setEnclosingScope(currentScope().get());
-    node.setEnclosingScope(currentScope().get());
-    this.scopeStack.addLast(javaPScope);
+    // Add the presence of a behavior element to the component symbol
+    if(currentScope().isPresent()){
+      if(currentScope().get().getSpanningSymbol().isPresent()){
+        ((ComponentSymbol) currentSymbol().get()).setHasBehavior(true);
+      }
+    }
+    createScope(node);
   }
   
   @Override
@@ -624,28 +653,12 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(type);
       JTypeReference<JavaTypeSymbol> typeRef = new JavaTypeSymbolReference(typeName,
           currentScope().get(), dimension);
-      addTypeArgumentsToTypeSymbol(typeRef, type);
+      addTypeArgumentsToTypeSymbol(typeRef, type, currentScope().get());
       
       variableSymbol.setTypeReference(typeRef);
       
       addToScopeAndLinkWithNode(variableSymbol, variableDeclaration);
     }
-  }
-  
-  /**
-   * Checks whether the passed name references to a configuration parameter
-   * 
-   * @param name Name of the parameter to look up
-   * @return true, iff the currently processed node has a parameter of the
-   * passed name
-   */
-  private boolean isConfigurationArgument(String name) {
-    for (ASTParameter param : this.currentComponent.getHead().getParameterList()) {
-      if (name.equals(param.getName())) {
-        return true;
-      }
-    }
-    return false;
   }
   
   /***************************************
@@ -657,11 +670,13 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
    */
   @Override
   public void visit(ASTAutomatonBehavior node) {
-    MutableScope automatonScope = new CommonScope(true);
-    automatonScope.setResolvingFilters(currentScope().get().getResolvingFilters());
-    automatonScope.setEnclosingScope(currentScope().get());
-    node.setEnclosingScope(currentScope().get());
-    this.scopeStack.addLast(automatonScope);
+    // Add the presence of a behavior element to the component symbol
+    if(currentScope().isPresent()){
+      if(currentScope().get().getSpanningSymbol().isPresent()){
+        ((ComponentSymbol) currentSymbol().get()).setHasBehavior(true);
+      }
+    }
+    createScope(node);
   }
   
   /**
@@ -722,17 +737,17 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         c.setInitialReactionAST(node.getBlockOpt());
         if (node.isPresentBlock()) {
           for (ASTIOAssignment assign : node.getBlock().getIOAssignmentList()) {
-              if (assign.isPresentName()) {
-                Optional<VariableSymbol> var = currentScope().get()
-                    .<VariableSymbol> resolve(assign.getName(), VariableSymbol.KIND);
-                if (var.isPresent()) {
-                  if (assign.getValueListOpt().isPresent()
-                      && !assign.getValueList().getAllValuations().isEmpty()) {
-                    // This only covers the case "var i = somevalue"
-                    ASTValuation v = assign.getValueList().getAllValuations().get(0);
-                    var.get().setValuation(Optional.of(v));
-                  }
+            if (assign.isPresentName()) {
+              Optional<VariableSymbol> var = currentScope().get()
+                  .<VariableSymbol> resolve(assign.getName(), VariableSymbol.KIND);
+              if (var.isPresent()) {
+                if (assign.getValueListOpt().isPresent()
+                    && !assign.getValueList().getAllValuations().isEmpty()) {
+                  // This only covers the case "var i = somevalue"
+                  ASTValuation v = assign.getValueList().getAllValuations().get(0);
+                  var.get().setValuation(Optional.of(v));
                 }
+              }
             }
           }
         }
@@ -783,6 +798,131 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   @Override
   public void endVisit(ASTStateDeclaration ast) {
     // to prevent deletion of not existing scope we override with nothing
+  }
+  
+  /////////////// JAVA/P scope spanning Statements
+  /////////////// ////////////////////////////////////////
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#visit(de.monticore.java.javadsl._ast.ASTIfStatement)
+   */
+  @Override
+  public void visit(ASTIfStatement node) {
+    super.visit(node);
+    createScope(node);
+  }
+  
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#endVisit(de.monticore.java.javadsl._ast.ASTIfStatement)
+   */
+  @Override
+  public void endVisit(ASTIfStatement node) {
+    super.endVisit(node);
+    setEnclosingScopeOfNodes(node);
+    removeCurrentScope();
+  }
+  
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#visit(de.monticore.java.javadsl._ast.ASTForStatement)
+   */
+  @Override
+  public void visit(ASTForStatement node) {
+    super.visit(node);
+    createScope(node);
+  }
+  
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#endVisit(de.monticore.java.javadsl._ast.ASTForStatement)
+   */
+  @Override
+  public void endVisit(ASTForStatement node) {
+    super.endVisit(node);
+    setEnclosingScopeOfNodes(node);
+    removeCurrentScope();
+  }
+  
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#visit(de.monticore.java.javadsl._ast.ASTWhileStatement)
+   */
+  @Override
+  public void visit(ASTWhileStatement node) {
+    super.visit(node);
+    createScope(node);
+  }
+  
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#endVisit(de.monticore.java.javadsl._ast.ASTWhileStatement)
+   */
+  @Override
+  public void endVisit(ASTWhileStatement node) {
+    super.endVisit(node);
+    setEnclosingScopeOfNodes(node);
+    removeCurrentScope();
+  }
+  
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#visit(de.monticore.java.javadsl._ast.ASTDoWhileStatement)
+   */
+  @Override
+  public void visit(ASTDoWhileStatement node) {
+    super.visit(node);
+    createScope(node);
+  }
+  
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#endVisit(de.monticore.java.javadsl._ast.ASTDoWhileStatement)
+   */
+  @Override
+  public void endVisit(ASTDoWhileStatement node) {
+    super.endVisit(node);
+    setEnclosingScopeOfNodes(node);
+    removeCurrentScope();
+  }
+  
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#visit(de.monticore.java.javadsl._ast.ASTTryStatement)
+   */
+  @Override
+  public void visit(ASTTryStatement node) {
+    super.visit(node);
+    createScope(node);
+  }
+  
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#endVisit(de.monticore.java.javadsl._ast.ASTTryStatement)
+   */
+  @Override
+  public void endVisit(ASTTryStatement node) {
+    super.endVisit(node);
+    setEnclosingScopeOfNodes(node);
+    removeCurrentScope();
+  }
+  
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#visit(de.monticore.java.javadsl._ast.ASTSwitchBlockStatementGroup)
+   */
+  @Override
+  public void visit(ASTSwitchBlockStatementGroup node) {
+    super.visit(node);
+    createScope(node);
+  }
+  
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#endVisit(de.monticore.java.javadsl._ast.ASTSwitchBlockStatementGroup)
+   */
+  @Override
+  public void endVisit(ASTSwitchBlockStatementGroup node) {
+    super.endVisit(node);
+    setEnclosingScopeOfNodes(node);
+    removeCurrentScope();
+  }
+  
+  private void createScope(ASTNode node) {
+    MutableScope spannedScope = new CommonScope(false);
+    spannedScope.setResolvingFilters(currentScope().get().getResolvingFilters());
+    spannedScope.setEnclosingScope(currentScope().get());
+    node.setEnclosingScope(currentScope().get());
+    node.setSpannedScope(spannedScope);
+    this.scopeStack.addLast(spannedScope);
   }
   
 }

@@ -16,6 +16,7 @@ public class MontiArcCoCos {
   public static MontiArcCoCoChecker createChecker() {
     return new MontiArcCoCoChecker()
         .addCoCo(new PortUsage())
+        .addCoCo(new UsedPortAndVarTypesExist())
         .addCoCo(new SubComponentsConnected())
         .addCoCo(new SubcomponentParametersCorrectlyAssigned())
         .addCoCo(new PackageLowerCase())
@@ -41,11 +42,12 @@ public class MontiArcCoCos {
         
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
-        .addCoCo(new InputPortChangedInCompute())
-        .addCoCo(new UsedPortsAndVariablesExist())
+        .addCoCo(new AJavaInitUsedPortsAndVariablesExist())
         .addCoCo(new MultipleBehaviorImplementation())
         .addCoCo(new InitBlockOnlyOnEmbeddedAJava())
         .addCoCo(new AtMostOneInitBlock())
+        .addCoCo(new AJavaUsesCorrectPortDirection())
+        .addCoCo(new AJavaUsesExistingVariablesAndPorts())
         /* MontiArcAutomaton Cocos */
         
         /// Automaton Cocos
@@ -57,19 +59,20 @@ public class MontiArcCoCos {
         .addCoCo(new AutomatonHasNoState())
         .addCoCo(new AutomatonHasNoInitialState())
         .addCoCo(new MultipleAssignmentsSameIdentifier())
-        .addCoCo(new AutomatonOutputInExpression())
-        .addCoCo(new AutomatonNoAssignmentToIncomingPort())
+        .addCoCo(new AutomatonUsesCorrectPortDirection())
         .addCoCo((MontiArcASTInitialStateDeclarationCoCo) new AutomatonReactionWithAlternatives())
         .addCoCo((MontiArcASTTransitionCoCo) new AutomatonReactionWithAlternatives())
         .addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfForbiddenExpression())
         .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfForbiddenExpression())
+        .addCoCo((MontiArcASTPortCoCo) new UseOfProhibitedIdentifiers())
+        .addCoCo((MontiArcASTVariableDeclarationCoCo) new UseOfProhibitedIdentifiers())
+        .addCoCo((MontiArcASTParameterCoCo) new UseOfProhibitedIdentifiers())
         .addCoCo((MontiArcASTStateCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new ConnectorSourceAndTargetComponentDiffer())
         .addCoCo(new ConnectorSourceAndTargetExistAndFit())
         .addCoCo(new ImportsAreUnique())
         
         // REFERENTIAL INTEGRITY
-        .addCoCo(new AutomatonDeclaredInitialStateDoesNotExist())
         .addCoCo(new UseOfUndeclaredState())
         .addCoCo((MontiArcASTIOAssignmentCoCo) new UseOfUndeclaredField())
         .addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfUndeclaredField())
@@ -80,6 +83,7 @@ public class MontiArcCoCos {
         
         // TYPE CORRECTNESS
         .addCoCo(new AutomatonGuardIsNotBoolean())
+        .addCoCo(new GenericInitValues())
         
         // .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
          .addCoCo((MontiArcASTTransitionCoCo)new

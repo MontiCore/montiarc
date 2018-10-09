@@ -1,36 +1,72 @@
 package generation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import de.montiarcautomaton.generator.helper.ComponentHelper;
+import de.monticore.symboltable.types.JFieldSymbol;
+import infrastructure.AbstractCoCoTest;
+import montiarc.MontiArcTool;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.PortSymbol;
+import montiarc._symboltable.VariableSymbol;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Test;
-
-import de.montiarcautomaton.generator.helper.ComponentHelper;
-import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.types.JFieldSymbol;
-import de.monticore.types.types._ast.ASTType;
-import de.monticore.umlcd4a.cocos.mcg2ebnf.AssociationNoStereotypesCoCo;
-import infrastructure.AbstractCoCoTest;
-import montiarc.MontiArcTool;
-import montiarc._ast.ASTComponent;
-import montiarc._ast.ASTPort;
-import montiarc._symboltable.ComponentInstanceSymbol;
-import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.PortSymbol;
-import montiarc._symboltable.VariableSymbol;
+import static org.junit.Assert.*;
 
 public class ComponentHelperTest extends AbstractCoCoTest {
 
   private static final String PACKAGE = "components.head.parameters";
-  
+  protected static final String TARGET_TEST_MODELS = "target/test-models/";
+
+  @Test
+  @Ignore("TODO Fix Java Types in the test symbol table. They appear to be missing or wrongly added. Then uncomment all lines")
+  public void determinePortTypeName() {
+
+    ComponentSymbol comp;
+    Optional<PortSymbol> portSymbolOpt;
+    String printedPortType;
+
+//    comp = this.loadComponentSymbol(
+//        "components.head.inheritance",
+//        "SubSubNestedGenericPortType",
+//        "target/test-models/");
+//    ComponentHelper helper = new ComponentHelper(comp);
+//    portSymbolOpt = comp.getIncomingPort("nestedGenericInPort", true);
+//    assertTrue("Could not find expected port", portSymbolOpt.isPresent());
+//    printedPortType = ComponentHelper.determinePortTypeName(comp, portSymbolOpt.get());
+//    assertEquals("List<Map<String, String>>", printedPortType);
+//
+//    ComponentSymbol subComponentSymbol = this.loadComponentSymbol(
+//        "components.head.inheritance",
+//        "SubNestedGenericPortType",
+//        "target/test-models/");
+
+//    portSymbolOpt = comp.getIncomingPort("nestedGenericInPort", true);
+//    assertTrue("Could not find expected port", portSymbolOpt.isPresent());
+//    printedPortType = ComponentHelper.determinePortTypeName(comp, portSymbolOpt.get());
+//    assertEquals("List<Map<String, K>>", printedPortType);
+
+    comp = this.loadComponentSymbol(
+        "components.head.generics",
+        "SubCompExtendsGenericCompValid",
+        TARGET_TEST_MODELS);
+
+    portSymbolOpt = comp.getIncomingPort("tIn", true);
+    assertTrue("Could not find expected port", portSymbolOpt.isPresent());
+    printedPortType = ComponentHelper.determinePortTypeName(comp, portSymbolOpt.get());
+    assertEquals("String", printedPortType);
+    portSymbolOpt = comp.getOutgoingPort("kOut", true);
+    assertTrue("Could not find expected port", portSymbolOpt.isPresent());
+    printedPortType = ComponentHelper.determinePortTypeName(comp, portSymbolOpt.get());
+    assertEquals("Integer", printedPortType);
+  }
+
   @Test
   public void getPortTypeName() {
-    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComponentWithGenerics");
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComponentWithGenerics", TARGET_TEST_MODELS);
     ComponentHelper helper = new ComponentHelper(comp);
 
     Optional<PortSymbol> portSymbol = comp.getSpannedScope().resolve("inT", PortSymbol.KIND);
@@ -51,17 +87,21 @@ public class ComponentHelperTest extends AbstractCoCoTest {
     portTypeName = helper.printPortTypeName(portSymbol.get());
     assertEquals("K", portTypeName);    
   }
-  
+
   @Test
   public void testAutoboxing() {
     String datatype = "Map<List<int>[],Set<double[]>>";
     String result = ComponentHelper.autobox(datatype);
     assertEquals("Map<List<Integer>[],Set<Double[]>>", result);
+
+    datatype = "new HashMap<List<int>[],Set<double[]>>()";
+    result = ComponentHelper.autobox(datatype);
+    assertEquals("new HashMap<List<Integer>[],Set<Double[]>>()", result);
   }
 
   @Test
   public void getPortGenerics() {
-    ComponentSymbol comp = this.loadComponentSymbol("components.head.generics", "Car");
+    ComponentSymbol comp = this.loadComponentSymbol("components.head.generics", "Car", TARGET_TEST_MODELS);
     ComponentHelper helper = new ComponentHelper(comp);
     
     Optional<PortSymbol> portSymbol = comp.getSpannedScope().resolve("motor", PortSymbol.KIND);
@@ -79,7 +119,7 @@ public class ComponentHelperTest extends AbstractCoCoTest {
   
   @Test
   public void testVariableTypeName() {
-    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComponentWithGenericVariables");
+    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComponentWithGenericVariables", TARGET_TEST_MODELS);
     ComponentHelper helper = new ComponentHelper(comp);
 
     Optional<VariableSymbol> variableSymbol = comp.getSpannedScope().resolve("varWithTypeT", VariableSymbol.KIND);
@@ -97,7 +137,8 @@ public class ComponentHelperTest extends AbstractCoCoTest {
   public void getParamTypeName() {
     
     MontiArcTool tool = new MontiArcTool();
-    ComponentSymbol comp = tool.loadComponentSymbolWithCocos("components.head.parameters.ComponentWithGenericParameters", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+//    ComponentSymbol comp = tool.loadComponentSymbolWithCocos("components.head.parameters.ComponentWithGenericParameters", Paths.get("src/test/resources").toFile(), Paths.get("src/main/resources/defaultTypes").toFile()).orElse(null);
+    ComponentSymbol comp = this.loadComponentSymbol("components.head.parameters", "ComponentWithGenericParameters", TARGET_TEST_MODELS);
     assertNotNull(comp);
     ComponentHelper helper = new ComponentHelper(comp);
 

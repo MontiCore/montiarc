@@ -1,7 +1,10 @@
 package components.body.subcomponents;
 
 /**
- * Invalid model. Nested needs to specify an instance name.
+ * Invalid model.
+ * Nested needs to specify an instance name or an explicit instance.
+ *
+ * @implements No literature reference
  */
 component NestedComponentWithTypeParameterLacksInstance {
   component A {

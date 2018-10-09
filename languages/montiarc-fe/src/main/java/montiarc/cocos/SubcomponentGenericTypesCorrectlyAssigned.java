@@ -27,6 +27,14 @@ public class SubcomponentGenericTypesCorrectlyAssigned implements MontiArcASTCom
   
   @Override
   public void check(ASTComponent node) {
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
     final ComponentSymbol componentSymbol = (ComponentSymbol) node.getSymbolOpt().get();
     
     // Get all subcomponent instance symbols and run the check on them

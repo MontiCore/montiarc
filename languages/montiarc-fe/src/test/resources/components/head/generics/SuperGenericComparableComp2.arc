@@ -2,7 +2,6 @@ package components.head.generics;
 
 /*
  * Valid model.
- * TODO Add test
  */
 component SuperGenericComparableComp2<K, T extends Comparable<T>> {
 

@@ -22,6 +22,7 @@ component DuplicateAutoconnectMatches {
             out Double myDouble;
     }
     
+    
     /**
     expected connectors:
     intIn -> Inner.myInteger;

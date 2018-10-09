@@ -1,8 +1,11 @@
 package components.body.automaton.transition.assignments;
 
 /**
- * Invalid model. Fails matching assignment pots twice.
- * @implements [Wor16] AR5: Types of valuations and assignments without names are unambiguous. (p. 104, Lst. 5.22)
+ * Invalid model.
+ * Fails matching assignment ports twice.
+ *
+ * @implements [Wor16] AR5: Types of valuations and assignments without
+ *  names are unambiguous. (p. 104, Lst. 5.22)
  */
 component AmbiguousMatching {
 
@@ -18,7 +21,7 @@ component AmbiguousMatching {
     	// outputs for a String type
     	initial Idle / {"Wrong"};
     	
-    	// Stimulus is right, because only i matches String. The rreaction is 
+    	// Stimulus is right, because only i matches String. The reaction is
     	// wrong because we have more than one match for an int type
     	Idle [i=="Right"] / {5};
     	

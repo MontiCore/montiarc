@@ -7,10 +7,10 @@ component SimpleConnectorSourceUnqualified {
   component A {
     port out String outPort;
   }
-  
+
   connect a.outPort -> b.inPort;
   
-  component A a1
+  component A a
     [outPort -> b.inPort2];
   
   component B {

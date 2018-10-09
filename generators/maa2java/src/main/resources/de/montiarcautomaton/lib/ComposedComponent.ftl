@@ -10,7 +10,8 @@ import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
 import de.montiarcautomaton.runtimes.timesync.delegation.Port;
 
-public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}</#if> implements IComponent {
+
+public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}<#if helper.superCompGeneric()><<#list helper.getSuperCompActualTypeArguments() as typeArg>${typeArg}<#sep>, </#sep></#list>></#if></#if> implements IComponent {
  
   // port fields
   <#list portsIn as port>
@@ -53,9 +54,9 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   	return this.${component.getName()};
   }
   </#list>
-  
+
   public ${name}(<#list configParams as param>${helper.getParamTypeName(param)} ${param.getName()}<#sep>, </#list>) {
-  <#if helper.hasSuperComp()>super();</#if>
+  <#if helper.hasSuperComp()>super(<#list helper.getInheritedParams() as inhParam>${inhParam}<#sep>, </#sep></#list>);</#if>
   <#list configParams as param>
     this.${param.getName()} = ${param.getName()};
   </#list>

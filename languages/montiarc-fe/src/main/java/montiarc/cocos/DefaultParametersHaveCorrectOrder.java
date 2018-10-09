@@ -18,6 +18,8 @@ import montiarc._cocos.MontiArcASTComponentHeadCoCo;
  * to define a normal parameter after a declaration of a default parameter. E.g.: Wrong: A[int x =
  * 5, int y] Right: B[int x, int y = 5]
  *
+ * @implements [Wor16] MR4: All mandatory component configuration parameters
+ *  precede the parameters with default values. (p.60 Lst. 4.14) TODO Review
  * @author Andreas Wortmann
  */
 public class DefaultParametersHaveCorrectOrder

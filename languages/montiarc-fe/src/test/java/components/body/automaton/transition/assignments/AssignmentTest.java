@@ -1,7 +1,6 @@
 package components.body.automaton.transition.assignments;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
@@ -12,7 +11,6 @@ import montiarc._cocos.MontiArcASTGuardExpressionCoCo;
 import montiarc._cocos.MontiArcASTIOAssignmentCoCo;
 import montiarc._cocos.MontiArcASTInitialStateDeclarationCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc.cocos.AutomatonNoAssignmentToIncomingPort;
 import montiarc.cocos.AutomatonReactionWithAlternatives;
 import montiarc.cocos.IOAssignmentCallFollowsMethodCall;
 import montiarc.cocos.MontiArcCoCos;
@@ -82,10 +80,15 @@ public class AssignmentTest extends AbstractCoCoTest {
   }
   
   @Test
+  /*
+   * Tests CoCo [Wor16] AR5.
+   */
   public void testAmbiguousMatching() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousMatching");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(2, "xMA024"));
+    final String qualifiedModelName = PACKAGE + "." + "AmbiguousMatching";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(2, "xMA024");
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
   
   @Test
@@ -130,25 +133,14 @@ public class AssignmentTest extends AbstractCoCoTest {
         new ExpectedErrorInfo(1, "xMA042"));
   }
   
-  @Test
-  /* @implements [Wor16] AR2: Inputs, outputs, and variables are used correctly.
-   * (p.103, Lst 5.20) */
-  public void testAssignmentToIncomingPort() {
-    final ASTMontiArcNode astMontiArcNode = loadComponentAST(
-        PACKAGE + "." + "AssignmentToIncomingPort");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
-        .addCoCo(new AutomatonNoAssignmentToIncomingPort());
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA034");
-    checkInvalid(cocos, astMontiArcNode, errors);
-  }
   
   @Test
-  public void testUseOfForbiddenExpression() {
+  public void testUseOfForbiddenExpressions() {
     final ASTMontiArcNode astMontiArcNode = loadComponentAST(
         PACKAGE + "." + "UseOfForbiddenExpressions");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker();
     cocos.addCoCo((MontiArcASTGuardExpressionCoCo) new UseOfForbiddenExpression());
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA023");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(4, "xMA023");
     checkInvalid(cocos, astMontiArcNode, errors);
   }
   

@@ -63,29 +63,18 @@ public class SubComponentTest extends AbstractCoCoTest {
   public static void setUp() {
     Log.enableFailQuick(false);
   }
-  
-  @Test
-  public void testGenericSubcomponentWithGenericParameterOfSameType() {
-    checkValid(PACKAGE + "." +  "Garage");
-  }
-  
+
   @Test
   public void testSubcomponentWithJavaCfgArgs() {
     checkValid(PACKAGE + "." + "SubcomponentsWithJavaCfgArg");
   }
   
   @Test
-  public void testSubcomponentParametersOfWrongType() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentParametersOfWrongType");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
-        node, new ExpectedErrorInfo(2, "xMA064"));
-  }
-  
-  @Test
   public void testSubcomponentParametersOfWrongTypeWithCD() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentParametersOfWrongType2");
+    final String modelName = PACKAGE + "." + "SubcomponentParametersOfWrongType";
+    ASTMontiArcNode node = loadComponentAST(modelName);
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentParametersCorrectlyAssigned()),
-        node, new ExpectedErrorInfo(2, "xMA064"));
+        node, new ExpectedErrorInfo(3, "xMA064"));
   }
   
   @Test
@@ -107,41 +96,51 @@ public class SubComponentTest extends AbstractCoCoTest {
   
   @Test
   public void testSubcomponentReferenceCycles() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "SubcomponentReferenceCycleA");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle()), node,
-        new ExpectedErrorInfo(1, "xMA086"));
+    String qualifiedModelName = PACKAGE + "." + "SubcomponentReferenceCycleA";
+    ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA086");
+    final MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle());
+    checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
+
+    errors = new ExpectedErrorInfo(1, "xMA086");
+    qualifiedModelName = PACKAGE + "." + "SubcomponentReferenceCycleB";
+    checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
   }
   
   @Test
   public void testConfigurableComponentWithInnerCfgComp() {
-    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE,
-        "ConfigurableComponentWithInnerCfgComp");
-    assertNotNull(comp);
+    final String name = PACKAGE + "." + "ConfigurableComponentWithInnerCfgComp";
+    checkValid(name);
   }
   
   @Test
   public void testComponentInstanceNamesAmbiguous() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ComponentInstanceNamesAmbiguous");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
-        node,
-        new ExpectedErrorInfo(4, "xMA061"));
+    final String modelName = PACKAGE + "." + "ComponentInstanceNamesAmbiguous";
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(4, "xMA061");
+    final MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
   @Test
   public void testConfigurableArchitectureComponent() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ConfigurableArchitectureComponent");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
-        node,
-        new ExpectedErrorInfo(3, "xMA061"));
+    final String modelName = PACKAGE + "." + "ConfigurableArchitectureComponent";
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(3, "xMA061");
+    final MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
   @Test
+  /*
+   * TODO Add Error codes for CV7
+   */
   public void testAmbiguousImplicitAndExplicitSubcomponentNames() {
-    ASTMontiArcNode node = loadComponentAST(
-        PACKAGE + "." + "AmbiguousImplicitAndExplicitSubcomponentNames");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
-        node,
-        new ExpectedErrorInfo(6, "xMA061"));
+    final String modelName = PACKAGE + "." + "AmbiguousImplicitAndExplicitSubcomponentNames";
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(6, "xMA061");
+    final MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
   @Test
@@ -211,16 +210,12 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
   
   @Test
-  /* TODO: Throws Symboltable error in other CoCo before starting to check the
-   * CoCo that throws the expected error.
-   * testAmbiguousImplicitAndExplicitSubcomponentNames() checks only the
-   * ComponentInstanceNameUnique-CoCo. TODO: Adjust after implementing CoCo
+  /* TODO: Adjust after implementing CoCo
    * [Hab16] CV7 */
-  @Ignore("See comment above.")
   public void testUniquenessReferences() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UniquenessReferences");
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(2, "xMA061");
-    checkInvalid(MontiArcCoCos.createChecker(), node, errors);
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(4, "xMA061");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()), node, errors);
   }
   
   @Test
@@ -533,7 +528,7 @@ public class SubComponentTest extends AbstractCoCoTest {
   public void testInnerComponents2() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "InnerComponents");
     
-    assertEquals("6 subcomponents expected", 6, comp
+    assertEquals("6 subcomponents expected", 5, comp
         .getSubComponents().size());
     assertEquals(7, comp.getInnerComponents().size());
     
@@ -552,7 +547,7 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertNotNull(inner);
     assertEquals("Inner", inner.getName());
     assertEquals(PACKAGE + "." + "InnerComponents.Inner", inner.getFullName());
-    assertEquals("1 auto-instance and 2 named subcomponents", 3, inner.getSubComponents().size());
+    assertEquals("2 named subcomponents", 2, inner.getSubComponents().size());
     
     // usage of external component type as sub component in same package in
     // inner component
@@ -590,27 +585,31 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertEquals(PACKAGE + "." + "SimpleComponentWithAutomaton", refType.getFullName());
   }
   
-  @Ignore("Component ConstantDelay is not activated")
   @Test
   public void testUsingSCWithParams() {
     Scope symTab = this.loadDefaultSymbolTable();
+    final String modelNameFq = PACKAGE + "." + "UsingSCWithParams";
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        PACKAGE + "." + "UsingSCWithParams", ComponentSymbol.KIND).orElse(null);
+        modelNameFq, ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
-    
-    // assertEquals(0, Log.getErrorCount());
-    // TODO portusage coco
-    // assertEquals(1, Log.getFindings().stream().filter(f ->
-    // f.isWarning()).count());
-    assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());
-    
+
+    final MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
+    final ASTMontiArcNode node = loadComponentAST(modelNameFq);
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA059");
+    checkInvalid(cocos, node, errors);
+
     ComponentInstanceSymbol delay = (ComponentInstanceSymbol) comp.getSpannedScope()
         .resolve("deleteTempFile", ComponentInstanceSymbol.KIND).orElse(null);
     assertNotNull(delay);
     assertEquals("deleteTempFile", delay.getName());
     
+    IndentPrinter printer = new IndentPrinter();
+    JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(printer);
+    delay.getConfigArguments().get(0).accept(prettyPrinter);
+    
+    
     assertEquals(1, delay.getConfigArguments().size());
-    assertEquals("1", delay.getConfigArguments().get(0));
+    assertEquals("1", printer.getContent());
   }
   
   @Test
@@ -745,7 +744,6 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
   
   @Test
-  @Ignore("Should not pass like this, see #157")
   public void testMultipleInstancesWithSimpleConnector() {
     final ASTMontiArcNode astNode = loadComponentAST(
         PACKAGE + "." + "MultipleInstancesWithSimpleConnector");
@@ -806,5 +804,43 @@ public class SubComponentTest extends AbstractCoCoTest {
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(3, "xMA085", "xMA096");
 
     checkInvalid(checker, node, errors);
+  }
+
+  @Test
+  public void testReferenceCycle() {
+    final String qualifiedModelName = PACKAGE + "." + "ReferenceCycle";
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle());
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(5, "xMA086");
+
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
+  }
+
+  @Test
+  public void testReferenceCycle2() {
+    final String qualifiedModelName = PACKAGE + "." + "ReferenceCycle2";
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle());
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA086");
+
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
+  }
+
+  @Test
+  // TODO Redundanzen zwischen CoCos prüfen
+  public void testSubcomponentsWithCfgArgsAndTypeParams() {
+    final String qualifiedModelName
+        = PACKAGE + "." + "SubcomponentsWithCfgArgsAndTypeParams";
+    final MontiArcCoCoChecker checker
+        = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(9, "xMA082", "xMA085", "xMA096");
+
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
+  }
+
+  @Test
+  public void testHasConflictingSubcomponentNames() {
+    checkValid(PACKAGE + "." + "HasConflictingSubcomponentNames");
   }
 }

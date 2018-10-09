@@ -15,8 +15,8 @@ import montiarc._cocos.MontiArcASTIOAssignmentCoCo;
 /**
  * This coco checks whether the call keyword is followed by a method call only and vice versa.
  *
+ * @implements No literature reference
  * @author Jerome Pfeiffer
- * @version $Revision$, $Date$
  */
 public class IOAssignmentCallFollowsMethodCall implements MontiArcASTIOAssignmentCoCo {
   

@@ -9,7 +9,8 @@ import java.util.ArrayList;
  * Invalid model.
  * Uses undeclared fields in guards of transitions.
  *
- * TODO Literature
+ * @implements [Wor16] AR1: Names used in guards, valuations, and
+ *    assignments exist in the automaton. (p. 102, Lst. 5.19)
  */
 component GuardUsesUndeclaredField{
 

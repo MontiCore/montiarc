@@ -30,8 +30,6 @@ component UniquenessConnectors {
         in Integer intIn;
     
     component ValidComponentInPackage2 correctB [stringOut -> s2, s3];
-      // ERROR: Only one incoming transition is allowed from a subcomponent
-      // to the outgoing port s2.
     
     component ValidComponentInPackage1 correctA [stringOut -> s2];
       // ERROR: Only one incoming transition is allowed from a subcomponent
@@ -40,16 +38,15 @@ component UniquenessConnectors {
     component StringAndIntegerInputAndOutput tito;
     
     
-    connect s1 -> correctA.stringIn, // ERROR: Only one incoming transition is
-                                     // allowed for an input port.
+    connect s1 -> correctA.stringIn, 
                   correctB.stringIn,
-                  tito; // Connects to tito.stringIn
+                  tito.stringIn; // Connects to tito.stringIn
     
     connect s4 -> correctA.stringIn; // ERROR: Only one incoming transition is
                                      // allowed for an input port.
     
-    connect intIn -> tito; // Connects intInt to tito.intIn
+    connect intIn -> tito.intIn; // Connects intInt to tito.intIn
     
-    connect tito -> intOut, // Connects tito.intOut to intOut
+    connect tito.intOut -> intOut, // Connects tito.intOut to intOut
                     strOut; // Connects tito.stringOut to strOut
 }

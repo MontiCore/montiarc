@@ -32,6 +32,8 @@ import montiarc.helper.TypeCompatibilityChecker;
  * Context condition for checking, if all assignments inside a reaction of a
  * transition are type-correct.
  *
+ * @implements [Wor16] AT2: Types of valuations and assignments must match the
+ * type of the assigned input, output, or variable. (p. 105, Lst. 5.24)
  * @author Andreas Wortmann
  */
 public class AutomatonReactionTypeDoesNotFitOutputType
@@ -67,14 +69,8 @@ public class AutomatonReactionTypeDoesNotFitOutputType
       Optional<PortSymbol> pSymbol = transitionScope.resolve(currentNameToResolve,
           PortSymbol.KIND);
       if (pSymbol.isPresent()) {
-        if (pSymbol.get().isIncoming()) {
-          Log.error("0xMA041 Did not find matching Variable or Output with name "
-              + currentNameToResolve, assignment.get_SourcePositionStart());
-        }
-        else {
-          checkTypeCorrectness(assignment, pSymbol.get().getTypeReference(),
-              currentNameToResolve);
-        }
+        checkTypeCorrectness(assignment, pSymbol.get().getTypeReference(),
+            currentNameToResolve);
       }
       else if (vSymbol.isPresent()) {
         checkTypeCorrectness(assignment, vSymbol.get().getTypeReference(), currentNameToResolve);
@@ -168,14 +164,16 @@ public class AutomatonReactionTypeDoesNotFitOutputType
         correctParameters = substituteFormalParameters(correctParameters, varType);
         
         // 3.2 compare actual and correct method parameters with each other
-        List<JTypeSymbol> varTypeFormalTypeParams =  varType.getReferencedSymbol().getFormalTypeParameters().stream()
+        List<JTypeSymbol> varTypeFormalTypeParams = varType.getReferencedSymbol()
+            .getFormalTypeParameters().stream()
             .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
         
-        List<JTypeReference<? extends JTypeSymbol>> varTypeActualTypeArgs = varType.getActualTypeArguments().stream()
+        List<JTypeReference<? extends JTypeSymbol>> varTypeActualTypeArgs = varType
+            .getActualTypeArguments().stream()
             .map(a -> (JavaTypeSymbolReference) a.getType())
             .collect(Collectors.toList());
         
-        if(!TypeCompatibilityChecker.hasNestedGenerics(varType)) {
+        if (!TypeCompatibilityChecker.hasNestedGenerics(varType)) {
           varTypeFormalTypeParams = new ArrayList<>();
           varTypeActualTypeArgs = new ArrayList<>();
         }

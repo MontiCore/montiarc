@@ -1,8 +1,11 @@
 package components.body.automaton;
 
 /**
- * Invalid model. Components may contain one behavior automaton at most.
- * @implements [Wor16] MU2: Each atomic component contains at most one behavior model. (p. 55. Lst. 4.6)
+ * Invalid model.
+ * Components may contain one behavior automaton at most.
+ *
+ * @implements [Wor16] MU2: Each atomic component contains at most one
+ *  behavior model. (p. 55. Lst. 4.6)
  */
 component MultipleAutomata {
   port

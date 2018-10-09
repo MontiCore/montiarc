@@ -40,18 +40,6 @@ public class InheritanceTest extends AbstractCoCoTest {
   }
   
   @Test
-  public void testMultipleInheritance() {
-    MontiArcParser parser = new MontiArcParser();
-    try {
-      parser.parse(PACKAGE + "." + "MultipleInheritance");
-    }
-    catch (Exception e) {
-      return;
-    }
-    fail("Component " + PACKAGE + ".invalid.MultipleInheritance should not be parseable.");
-  }
-  
-  @Test
   public void testSuperComponents() {
     ComponentSymbol subB = this.loadComponentSymbol(PACKAGE, "SubB");
     assertTrue(subB.getIncomingPort("anotherIn").isPresent());
@@ -114,15 +102,20 @@ public class InheritanceTest extends AbstractCoCoTest {
   public void testCircularInheritance() {
     final String componentName = PACKAGE + "." + "CircularInheritanceA";
     ASTMontiArcNode node = loadComponentAST(componentName);
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new CircularInheritance()), node, new ExpectedErrorInfo(1, "xMA017"));
+    final MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new CircularInheritance());
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA017");
+    checkInvalid(cocos, node, errors);
   }
   
   @Test
   public void testTransitiveCircularInheritance() {
     final String componentName = PACKAGE + "." + "TransitiveCircularInheritanceA";
     ASTMontiArcNode node = loadComponentAST(componentName);
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new CircularInheritance()), node, new ExpectedErrorInfo(1, "xMA017"));
-
+    final MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new CircularInheritance());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA017");
+    checkInvalid(cocos, node, errors);
   }
 
   @Test
@@ -136,8 +129,10 @@ public class InheritanceTest extends AbstractCoCoTest {
    *    parameters. (p.69 Lst. 3.49)
    */
   public void testTooFewConfigurationParameters() {
-    final ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "TooFewConfigurationParameters");
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA084");
+    final ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "TooFewConfigurationParameters");
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA084");
     checkInvalid(MontiArcCoCos.createChecker(), node, errors);
   }
 
@@ -179,6 +174,12 @@ public class InheritanceTest extends AbstractCoCoTest {
   }
 
   @Test
+  @Ignore("Check validity: Inheritance of subcomponents?")
+  public void testSubB() {
+    checkValid(PACKAGE + "." + "SubB");
+  }
+
+  @Test
   public void testSubCompCorrect1() {
     checkValid(PACKAGE + "." + "SubCompCorrect1");
   }
@@ -194,7 +195,6 @@ public class InheritanceTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("ClassCastException in TypeCompatibilityChecker")
   public void testSubCompCorrect4() {
     checkValid(PACKAGE + "." + "SubCompCorrect4");
   }
@@ -231,4 +231,25 @@ public class InheritanceTest extends AbstractCoCoTest {
         = new ExpectedErrorInfo(3, "xMA084");
     checkInvalid(cocos, node, errors);
   }
+  
+  @Test
+  public void testExtendGenericComponentWithGenericConfigArg() {
+    checkValid(PACKAGE + "." + "ExtendGenericComponentWithGenericConfigArg"); 
+  }
+
+  @Test
+  public void testSubSubNestedGenericPortType() {
+    checkValid(PACKAGE + "." + "SubSubNestedGenericPortType");
+  }
+
+  @Test
+  public void testSubNestedGenericPortType() {
+    checkValid(PACKAGE + "." + "SubNestedGenericPortType");
+  }
+
+  @Test
+  public void testNestedGenericPortType() {
+    checkValid(PACKAGE + "." + "NestedGenericPortType");
+  }
+  
 }

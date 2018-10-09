@@ -5,7 +5,10 @@
  */
 package montiarc.cocos;
 
-import de.monticore.ast.ASTNode;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.types.JFieldSymbol;
@@ -17,10 +20,6 @@ import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ComponentSymbolReference;
 import montiarc.helper.TypeCompatibilityChecker;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * This CoCo checks that a component which extends another component correctly
@@ -43,7 +42,7 @@ public class ConfigurationParametersCorrectlyInherited implements MontiArcASTCom
   @Override
   public void check(ASTComponent component) {
     // Try to resolve the symbol for the component
-    final Optional<? extends Symbol> componentSymbolOpt = component.getSymbol();
+    final Optional<? extends Symbol> componentSymbolOpt = component.getSymbolOpt();
     if (componentSymbolOpt.isPresent()
         && componentSymbolOpt.get() instanceof ComponentSymbol) {
       ComponentSymbol componentSymbol = (ComponentSymbol) componentSymbolOpt.get();
@@ -56,8 +55,10 @@ public class ConfigurationParametersCorrectlyInherited implements MontiArcASTCom
           .getSuperComponent();
       
       if (superComponentOpt.isPresent()) {
-        final ComponentSymbol referencedSymbol = superComponentOpt.get().getReferencedSymbol();
-        final List<JFieldSymbol> superConfigParameters = referencedSymbol.getConfigParameters();
+        final ComponentSymbol superReferencedSymbol
+            = superComponentOpt.get().getReferencedSymbol();
+        final List<JFieldSymbol> superConfigParameters
+            = superReferencedSymbol.getConfigParameters();
         
         final int numInheritedParams = superConfigParameters.size();
         if (configParameters.size() < numInheritedParams) {
@@ -72,22 +73,30 @@ public class ConfigurationParametersCorrectlyInherited implements MontiArcASTCom
         for (int paramIndex = 0; paramIndex < Math.min(numInheritedParams,
             configParameters.size()); paramIndex++) {
           
-          final JTypeReference<? extends JTypeSymbol> superParameterType = superConfigParameters
-              .get(paramIndex).getType();
-          final JTypeReference<? extends JTypeSymbol> paramType = configParameters.get(paramIndex)
-              .getType();
+          JTypeReference<? extends JTypeSymbol> superParameterType
+              = superConfigParameters.get(paramIndex).getType();
+          final JTypeReference<? extends JTypeSymbol> paramType
+              = configParameters.get(paramIndex).getType();
+          
+          // in case the config parameter is formal type parameter we have to use the binded type. 
+          if(superParameterType.getReferencedSymbol().isFormalTypeParameter()) {
+            superParameterType = (JTypeReference<? extends JTypeSymbol>) componentSymbol.getSuperComponent().get().getActualTypeArguments().get(paramIndex).getType();
+          }
           
           // Check type correctness
-          if (!TypeCompatibilityChecker.doTypesMatch(superParameterType,
-              superParameterType.getReferencedSymbol().getFormalTypeParameters().stream()
-                  .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-              superParameterType.getActualTypeArguments().stream()
-                  .map(a -> (JavaTypeSymbolReference) a.getType())
-                  .collect(Collectors.toList()),
+          if (!TypeCompatibilityChecker.doTypesMatch(
               paramType,
               paramType.getReferencedSymbol().getFormalTypeParameters().stream()
-                  .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+                  .map(p -> (JTypeSymbol) p)
+                  .collect(Collectors.toList()),
               paramType.getActualTypeArguments().stream()
+                  .map(a -> (JavaTypeSymbolReference) a.getType())
+                  .collect(Collectors.toList()), superParameterType,
+              superParameterType.getReferencedSymbol().getFormalTypeParameters()
+                  .stream()
+                  .map(p -> (JTypeSymbol) p)
+                  .collect(Collectors.toList()),
+              superParameterType.getActualTypeArguments().stream()
                   .map(a -> (JavaTypeSymbolReference) a.getType())
                   .collect(Collectors.toList()))) {
             Log.error(
@@ -122,7 +131,7 @@ public class ConfigurationParametersCorrectlyInherited implements MontiArcASTCom
     }
     else {
       Log.error(
-          String.format("0xMA071 ASTComponent node \"%s\" has no symbol.",
+          String.format("0xMA010 ASTComponent node \"%s\" has no symbol.",
               component.getName()));
     }
   }

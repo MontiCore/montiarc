@@ -2,7 +2,6 @@ package components.body.subcomponents;
 
 
 import components.body.subcomponents.SimpleReferencedComponent;
-import components.body.subcomponents.SimpleReferencedComponent.*;
 
 /*
  * Valid model.

@@ -1,8 +1,9 @@
 package components.head.generics;
 
-import java.util.*;
-
+/*
+ * Invalid model.
+ */
 component AssignsWrongComplexTypeArgToSuperComp<K extends ArrayList<Integer>>
     extends ComplexFormalTypeParameter<K>{
-  // Error: Type of K is not compatible to ArrayList<String>
+  // Error: Type of K does not fulfill the upper bound ArrayList<String>
 }

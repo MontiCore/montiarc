@@ -28,7 +28,15 @@ public class InnerComponentNotExtendsDefiningComponent implements MontiArcASTCom
    */
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol definingComp = (ComponentSymbol) node.getSymbol().get();
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
+    ComponentSymbol definingComp = (ComponentSymbol) node.getSymbolOpt().get();
 
     // Start check only at the root of the inner component hierarchy
     // This prevents duplicate errors due to the call to this function

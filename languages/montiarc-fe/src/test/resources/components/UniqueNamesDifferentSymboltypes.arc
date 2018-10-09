@@ -8,6 +8,8 @@ import components.body.subcomponents._subcomponents.package1.ValidComponentInPac
  * are unique. (p. 98. Lst. 5.10)
  * @implements [Hab16] B1: All names of model elements within a component
  * namespace have to be unique. (p. 59. Lst. 3.31)
+ * @implementst [Wor16] MU1: The name of each component variable is unique
+ *  among ports, variables, and configuration parameters. (p.54, Lst. 4.5)
  */
 component UniqueNamesDifferentSymboltypes<myName>(int myName) {
   // Error: Ambiguous name

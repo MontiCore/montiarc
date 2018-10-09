@@ -5,11 +5,14 @@
  */
 package montiarc.cocos;
 
+import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
+
+import java.util.Optional;
 
 /**
  * @implements [Hab16] R13: Subcomponent reference cycles are forbidden. (p. 68,
@@ -25,11 +28,30 @@ public class SubcomponentReferenceCycle implements MontiArcASTComponentCoCo {
    */
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol comp = (ComponentSymbol) node.getSymbol().get();
-    for(ComponentInstanceSymbol subcomp : comp.getSubComponents()) {
-      for(ComponentInstanceSymbol subsubcomp : subcomp.getComponentType().getReferencedComponent().get().getSubComponents()) {
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
+    ComponentSymbol comp = (ComponentSymbol) node.getSymbolOpt().get();
+    for(ComponentInstanceSymbol subCompInstance : comp.getSubComponents()) {
+      SourcePosition sourcePos = SourcePosition.getDefaultSourcePosition();
+      if(subCompInstance.getAstNode().isPresent()){
+        sourcePos = subCompInstance.getAstNode().get().get_SourcePositionStart();
+      }
+
+      final Optional<ComponentSymbol> subCompInstanceCompOpt
+          = subCompInstance.getComponentType().getReferencedComponent();
+      for(ComponentInstanceSymbol subsubcomp : subCompInstanceCompOpt.get().getSubComponents()) {
         if(comp.getName().equals(subsubcomp.getComponentType().getName())) {
-          Log.error("0xMA086 Subcomponent "+subcomp.getName()+" declares "+comp.getName()+" as subcomponent as well.",  subcomp.getAstNode().get().get_SourcePositionStart());
+          Log.error(
+              String.format("0xMA086 Subcomponent %s declares %s as " +
+                                "subcomponent as well.",
+                  subCompInstance.getName(), comp.getName()),
+              sourcePos);
         }
       }
     }

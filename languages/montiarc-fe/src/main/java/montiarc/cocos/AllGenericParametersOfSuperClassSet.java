@@ -5,6 +5,7 @@
  */
 package montiarc.cocos;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,15 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
    */
   @Override
   public void check(ASTComponent node) {
-    ComponentSymbol compSym = (ComponentSymbol) node.getSymbol().get();
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
+    ComponentSymbol compSym = (ComponentSymbol) node.getSymbolOpt().get();
     
     if (compSym.getSuperComponent().isPresent()) {
       List<JTypeSymbol> typeParameters = compSym.getFormalTypeParameters();
@@ -76,9 +85,9 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                 // (component A
                 // extends B<Integer>)
                 if (!((JavaTypeSymbolReference) actualArg.getType()).getReferencedSymbol()
-                    .isFormalTypeParameter()) {
+                         .isFormalTypeParameter()) {
                   if (upperBound.getActualTypeArguments().isEmpty()
-                      && !upperBound.getReferencedSymbol().getFormalTypeParameters().isEmpty()) {
+                          && !upperBound.getReferencedSymbol().getFormalTypeParameters().isEmpty()) {
                     upperBound.setActualTypeArguments(supersActualTypeParams);
                   }
                   if (!TypeCompatibilityChecker.doTypesMatch(
@@ -102,15 +111,17 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                         node.getHead().getSuperComponent().get_SourcePositionStart());
                   }
                 }
-                
+
                 // Case 2 formal type parameter is passed to extend (component
                 // A<K extends
                 // Number> extends B<K>)
                 else {
-                  int pos = getPositionInFormalTypeParameters(typeParameters,
+                  int pos = TypeCompatibilityChecker.getPositionInFormalTypeParameters(typeParameters,
                       (JTypeReference<? extends JTypeSymbol>) actualArg.getType());
-                  
+
                   JTypeSymbol formalType = supersTypeParameters.get(pos);
+                  List<JTypeReference<? extends JTypeSymbol>> formalTypeArgs = new ArrayList<>();
+                  formalTypeArgs.add((JTypeReference<? extends JTypeSymbol>) actualArg.getType());
                   if (!formalType.getInterfaces().isEmpty()) {
                     if (!TypeCompatibilityChecker.doTypesMatch(
                         ((JTypeReference<? extends JTypeSymbol>) actualArg.getType()),
@@ -125,13 +136,10 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                         formalType.getInterfaces().get(j)
                             .getReferencedSymbol().getFormalTypeParameters().stream()
                             .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-                        formalType.getInterfaces().get(j)
-                            .getActualTypeArguments().stream()
-                            .map(a -> (JavaTypeSymbolReference) a.getType())
-                            .collect(Collectors.toList()))) {
+                            formalTypeArgs )) {
                       Log.error("0xMA089 Parameter " + formalType.getName()
-                          + " is not compatible with upper bound "
-                          + upperBound.getName(),
+                                    + " is not compatible with upper bound "
+                                    + upperBound.getName(),
                           node.getHead().getSuperComponent().get_SourcePositionStart());
                     }
                   }
@@ -144,17 +152,5 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
       
     }
     
-  }
-  
-  private int getPositionInFormalTypeParameters(List<JTypeSymbol> formalTypeParameters,
-      JTypeReference<? extends JTypeSymbol> searchedFormalTypeParameter) {
-    int positionInFormal = 0;
-    for (JTypeSymbol formalTypeParameter : formalTypeParameters) {
-      if (formalTypeParameter.getName().equals(searchedFormalTypeParameter.getName())) {
-        break;
-      }
-      positionInFormal++;
-    }
-    return positionInFormal;
   }
 }

@@ -2,6 +2,7 @@ package components.body.ports;
 
 import static org.junit.Assert.assertEquals;
 
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -48,7 +49,7 @@ public class PortTest extends AbstractCoCoTest {
     // TODO: Star imports?
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "InexistingPortType");
     checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(1, "xMA076"));
+        new ExpectedErrorInfo(3, "xMA101","xMA076"));
     
     checkValid(PACKAGE + "." + "BumpControl");
   }
@@ -70,9 +71,11 @@ public class PortTest extends AbstractCoCoTest {
   
   @Test
   public void testKeywordsAsPortName() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "KeywordAsPortName");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(4, "xMA028"));
+    final String qualifiedModelName = PACKAGE + "." + "KeywordAsPortName";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(4, "xMA028");
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
   
   @Test
@@ -83,19 +86,32 @@ public class PortTest extends AbstractCoCoTest {
   }
   
   @Test
-  @Ignore("TODO: Fix UniqueIdentifiers.java CoCo")
-  public void testPortNameAmbiguous() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortNameAmbiguous");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(1, "xMA053"));
+  public void testFormalTypeParametersNotExist() {
+    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortTypesNotExist");
+    checkInvalid(MontiArcCoCos.createChecker(), node, new ExpectedErrorInfo(2, "xMA101"));
   }
   
   @Test
-  @Ignore("TODO: Fix UniqueIdentifiers.java CoCo")
+  public void testPortNameAmbiguous() {
+    final String modelName = PACKAGE + "." + "PortNameAmbiguous";
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(3, "xMA053", "xMA061", "xMA069");
+    final MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
+  }
+  
+  @Test
+  /**
+   * TODO: CV7 Error Codes
+   */
   public void testImplicitAndExplicitPortNaming() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ImplicitAndExplicitPortNaming");
-    checkInvalid(MontiArcCoCos.createChecker(), node,
-        new ExpectedErrorInfo(3, "xMA053"));
+    final String modelName = PACKAGE + "." + "ImplicitAndExplicitPortNaming";
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(6, "xMA053");
+    final MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
   @Test
@@ -128,11 +144,10 @@ public class PortTest extends AbstractCoCoTest {
   }
   
   @Test
-  @Ignore("See UniquenessConnectors.arc")
   public void testUniquenessConnectors() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UniquenessConnectors");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
-        node, new ExpectedErrorInfo(4, "xMA005"));
+        node, new ExpectedErrorInfo(2, "xMA005"));
   }
   
   @Test
@@ -147,7 +162,7 @@ public class PortTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortCompatibilityWithGenerics");
     final MontiArcCoCoChecker checker = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(9, "xMA033");
+    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(11, "xMA033");
     checkInvalid(checker, node, expectedErrors);
   }
   
@@ -169,26 +184,13 @@ public class PortTest extends AbstractCoCoTest {
     checkInvalid(checker, node, expectedErrors);
   }
   
-  @Test
-  @Ignore("TODO Adjust error and count after implementing CV7")
-  public void testGenericPortsWithAndWithoutNames() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "GenericPortsWithAndWithoutNames");
-    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo();
-    // TODO Adjust error and count after implementing CV7
-    checkInvalid(MontiArcCoCos.createChecker(),
-        node, expectedErrors);
-  }
   
   @Test
   public void testInPortUniqueSender() {
     checkValid(PACKAGE + "." + "InPortUniqueSender");
   }
   
-  @Test
-  @Ignore("TODO: Currently no errors found even though it is an invalid model")
-  public void testGenericPortsWithoutTypeParams() {
-    checkValid(PACKAGE + "." + "GenericPortsWithoutTypeParams");
-  }
+  
   
   @Test
   /* Checks whether all port names in the port definition start with a lower
@@ -259,6 +261,7 @@ public class PortTest extends AbstractCoCoTest {
   }
   
   @Test
+  // TODO Fix test. Model uses types like PrintStream and System which are not imported. Test is not executing any CoCos
   public void testPortsWithStereotypes() {
     Scope symTab = this.loadDefaultSymbolTable();
     PortSymbol port = symTab
@@ -270,28 +273,6 @@ public class PortTest extends AbstractCoCoTest {
     assertEquals("held", port.getStereotype().get("disabled").get());
     assertEquals("1", port.getStereotype().get("initialOutput").get());
     assertFalse(port.getStereotype().get("ignoreWarning").isPresent());
-  }
-  
-  @Test
-  @Ignore("Check whether autoconnection is working.")
-  public void testReferenceConnectorCompletion() {
-    // checkValid(PACKAGE + "." + "ReferenceConnectorCompletion");
-    
-    ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ReferenceConnectorCompletion");
-    List<String[]> expectedConnectors = Lists.newArrayList(
-        new String[] { "strIn", "simpleOne.stringIn" },
-        new String[] { "simpleOne.integerOut", "intOut" },
-        new String[] { "simpleOne.stringOut", "strOut" },
-        new String[] { "simpleTwo.integerOut", "intOut2" },
-        new String[] { "simpleTwo.integerOut", "intOut3" });
-    final Collection<ConnectorSymbol> connectors = comp.getConnectors();
-    for (String[] expectedConnector : expectedConnectors) {
-      final Optional<ConnectorSymbol> connector = comp.getConnector(expectedConnector[1]);
-      assertTrue(connector.isPresent());
-      assertEquals(expectedConnector[0], connector.get().getSource());
-      assertEquals(expectedConnector[1], connector.get().getTarget());
-    }
-    
   }
   
   @Test
@@ -320,10 +301,40 @@ public class PortTest extends AbstractCoCoTest {
   }
   
   @Test
-  /* TODO Does not find all undefined types. Runtime exception after first one. */
   public void testUndefinedPortTypes() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UndefinedPortTypes");
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(3, "xMA097"));
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(3, "xMA097");
+    checkInvalid(cocos, node, errors);
+  }
+
+  @Test
+  public void testReferencingComp() {
+    final ASTMontiArcNode node
+        = loadComponentAST(PACKAGE + "." + "ReferencingComp");
+    MontiArcCoCoChecker cocos
+        = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA033");
+    checkInvalid(cocos, node, errors);
+  }
+
+  @Test
+  public void testHasProhibitedPortName() {
+    final String modelName = PACKAGE + "." + "HasProhibitedPortName";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo expectedErrorInfo
+        = new ExpectedErrorInfo(4, "xMA046");
+    checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
+  }
+
+  @Test
+  public void testHasConflictingInPortNames() {
+    checkValid(PACKAGE + "." + "HasConflictingInPortNames");
+  }
+
+  @Test
+  public void testHasConflictingOutPortNames() {
+    checkValid(PACKAGE + "." + "HasConflictingOutPortNames");
   }
 }

@@ -6,7 +6,9 @@ import components.body.subcomponents._subcomponents.AtomicComponent;
  * Invalid model.
  *
  * Formerly named "CG12" in MontiArc3.
- * TODO Add Test
+ *
+ * @implements No literature reference
+ * TODO Review literature
  */
 component AssignsWrongParameters {
 
@@ -22,7 +24,7 @@ component AssignsWrongParameters {
   
   component AtomicComponent wrong3; //Correct
   
-  component ParameterAmbiguous2("asdf","4") wrong4;
+  component ParameterAmbiguous("asdf","4") wrong4;
     //ERROR: Missing required parameter 'sth' of type 'java.lang.Integer'
     //ERROR: Given value "asdf" for parameter 'name' is not of type 'java.lang.Integer'
     // TODO: Correct errors?

@@ -37,38 +37,5 @@ public class InvariantTest extends AbstractCoCoTest {
         node,
         new ExpectedErrorInfo(4, "xMA052"));
   }
-
-  @Test
-  public void testAmbiguousInvariantNames2() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AmbiguousInvariantNames2");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique()),
-        node,
-        new ExpectedErrorInfo(2, "xMA052"));
-  }
-  
-  @Ignore("TODO ocl invariants?")
-  @Test
-  public void testAdaptOCLFieldToPort() {
-    Scope symTab = this.loadDefaultSymbolTable();
-    ComponentSymbol parent = symTab.<ComponentSymbol> resolve(
-        PACKAGE + "." + "OCLFieldToPort", ComponentSymbol.KIND).orElse(null);
-    assertNotNull(parent);
-    
-    assertEquals(0, Log.getErrorCount());
-    assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());
-  }
-  
-  @Ignore("TODO ocl invariants?")
-  @Test
-  public void testAdaptOCLFieldToArcdField() {
-    Scope symTab = this.loadDefaultSymbolTable();
-    ComponentSymbol parent = symTab.<ComponentSymbol> resolve(
-        PACKAGE + "." + "OCLFieldToArcField", ComponentSymbol.KIND).orElse(null);
-    assertNotNull(parent);
-    
-    assertEquals(0, Log.getErrorCount());
-    assertEquals(0, Log.getFindings().stream().filter(f -> f.isWarning()).count());
-    
-  }
   
 }

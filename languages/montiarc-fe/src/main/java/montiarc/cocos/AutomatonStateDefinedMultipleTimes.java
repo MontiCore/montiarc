@@ -13,7 +13,9 @@ import montiarc._cocos.MontiArcASTAutomatonCoCo;
 
 /**
  * Context condition for checking, if a state is defined multiple times with the same stereotypes.
- * 
+ *
+ * @implements No literature reference
+ *
  * @author Gerrit Leonhardt, Andreas Wortmann
  */
 public class AutomatonStateDefinedMultipleTimes implements MontiArcASTAutomatonCoCo {

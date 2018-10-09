@@ -1,6 +1,10 @@
 package components.body.ajava;
 
-
+/*
+ * Invalid model.
+ *
+ * @implements No literature reference, AJava CoCo
+ */
 component JavaPVariableIdentifiersUnique {
 
 

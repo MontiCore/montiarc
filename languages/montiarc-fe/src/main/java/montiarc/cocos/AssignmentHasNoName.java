@@ -78,7 +78,8 @@ public class AssignmentHasNoName implements MontiArcASTIOAssignmentCoCo {
       if (errorFlag) {
         // It is not possible that the name is in an expression
         Log.error(
-            "0xMA024 Could not find a unique matching type for the assignment '" + node + "'.",
+            String.format("0xMA024 Could not find a unique matching type " +
+                              "for the assignment '%s'.", node),
             node.get_SourcePositionStart());
       }
     }

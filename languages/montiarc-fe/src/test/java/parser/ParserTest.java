@@ -37,32 +37,30 @@ public class ParserTest {
   private static final String MODEL_PATH = "src/test/resources";
   
   static List<String> expectedParseErrorModels = Arrays.asList(
-      // The package name starts with an upper case letter which is not parseable
-      MODEL_PATH + "/components/UpperCasePackageName.arc",
 
       // "component" is a keyword and may not be used as component name
-      MODEL_PATH + "/components/head/name/component.arc",
+      MODEL_PATH + "/parser/component.arc",
 
       // "connect" is a keyword
-      MODEL_PATH + "/components/body/IllegalUseOfKeywords.arc",
+      MODEL_PATH + "/parser/IllegalUseOfKeywords.arc",
       
       // Multiple inheritance is not supported
-      MODEL_PATH + "/components/head/inheritance/MultipleInheritance.arc",
+      MODEL_PATH + "/parser/MultipleInheritance.arc",
       
       // The name of the component is not identical to the name of the file
-      MODEL_PATH + "/components/head/name/ComponentAndFileNameDiffer.arc",
+      MODEL_PATH + "/parser/ComponentAndFileNameDiffer.arc",
       
       // The name of the component is not identical to the name of the file
-      MODEL_PATH + "/components/head/name/NameClashB.arc",
+      MODEL_PATH + "/parser/NameClashB.arc",
 
       // The package declaration of the component must not differ from the package of the component file.
-      MODEL_PATH + "/components/PackageAndLocationDiffer.arc",
+      MODEL_PATH + "/parser/PackageAndLocationDiffer.arc",
       
       // TODO we do not support OCL Expressions yet
-      MODEL_PATH + "/components/body/invariants/OCLFieldToField.arc",
+      MODEL_PATH + "/components/body/invariants/OCLFieldToArcField.arc_",
       
       // TODO we do not support OCL Expressions yet
-      MODEL_PATH + "/components/body/invariants/OCLFieldToPort.arc")
+      MODEL_PATH + "/components/body/invariants/OCLFieldToPort.arc_")
       
       .stream().map(s -> Paths.get(s).toString())
       .collect(Collectors.toList());

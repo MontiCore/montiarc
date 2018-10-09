@@ -12,6 +12,7 @@ import montiarc._cocos.MontiArcASTComponentCoCo;
  * Context condition for guaranteeing that the AJava initialization block only occurs if there is a
  * compute block
  *
+ * @implements No literature reference, AJava CoCo
  * @author Michael Mutert
  */
 public class InitBlockOnlyOnEmbeddedAJava implements MontiArcASTComponentCoCo {
