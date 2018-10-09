@@ -12,7 +12,7 @@ import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 
 public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParameters() as param>${param}<#sep>,</#list> > </#if> implements IComputable<${inputName}, ${resultName}> {
-  private static enum State {
+  private static enum ${name}State {
     <#list states><#items as state>${state.getName()}<#sep>, </#sep></#items>;</#list>
   }
 
@@ -34,7 +34,7 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
   </#if>
 
   // holds the current state of the automaton
-  private State ${currentStateName};
+  private ${name}State ${currentStateName};
   
   // variables
   <#list variables as variable>
@@ -72,7 +72,7 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
     </#list>
     
     // initial state
-    ${currentStateName} = State.${helper.getInitialState().getName()};
+    ${currentStateName} = ${name}State.${helper.getInitialState().getName()};
     
     return ${resultVarName};
   }
@@ -112,7 +112,7 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
           //Log.log("${implName}", "${transition.toString()}");
              
           // state change
-          ${currentStateName} = State.${transition.getTarget().getName()};
+          ${currentStateName} = ${name}State.${transition.getTarget().getName()};
           break;
         }
       </#list>  

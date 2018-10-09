@@ -970,7 +970,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   @Override
   public void visit(ASTStateDeclaration node) {
     final Set<String> stateNames = node.getStateList().stream().map(ASTState::getName).collect(Collectors.toSet());
-    EnumType enumType = new EnumType("State", stateNames);
+    EnumType enumType = new EnumType(componentName + "State", stateNames);
 
     this.implVisitor.addEnumType(enumType);
   }
