@@ -415,11 +415,16 @@ public class ComponentElementsCollector implements MontiArcVisitor {
             this.types.get("INPUT_CLASS_TYPE"),
             this.types.get("RESULT_CLASS_TYPE")));
 
+    String implVarName = "behaviorImpl";
+    if(helper.containsIdentifier(implVarName)){
+      implVarName = "r__behaviorImpl";
+    }
+
     ASTType expectedType = JavaDSLMill.simpleReferenceTypeBuilder()
                                .setNameList(Lists.newArrayList("IComputable"))
                                .setTypeArguments(typeArgs.build())
                                .build();
-    classVisitor.addField("behaviorImpl", PRINTER.prettyprint(expectedType));
+    classVisitor.addField(implVarName, PRINTER.prettyprint(expectedType));
   }
 
   private void addGetInitialValues() {
@@ -435,11 +440,16 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       return;
     }
 
+    String inputVarName = "input";
+    if (helper.containsIdentifier("input")) {
+      inputVarName = "r__input";
+    }
+
     ASTType paramType = this.types.get("INPUT_CLASS_TYPE");
     Method method = Method.getBuilder()
                         .setName("compute")
                         .setReturnType(PRINTER.prettyprint(this.types.get("RESULT_CLASS_TYPE")))
-                        .addParameter("input", paramType)
+                        .addParameter(inputVarName, paramType)
                         .build();
     this.implVisitor.addMethod(method);
   }
@@ -950,7 +960,11 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   @Override
   public void visit(ASTAutomaton node) {
     // Add the currentState field
-    this.implVisitor.addField("currentState", "State");
+    String currentStateVarName = "currentState";
+    if(helper.containsIdentifier(currentStateVarName)){
+      currentStateVarName = "r__" + currentStateVarName;
+    }
+    this.implVisitor.addField(currentStateVarName, "State");
   }
 
   @Override

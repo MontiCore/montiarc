@@ -72,9 +72,6 @@ public class AbstractGeneratorTest {
     EXCLUDED_MODELS.add(TEST_MODEL_PATH
                             .resolve("components/head/generics/" +
                                          "UsingComplexGenericParams.arc"));
-//    EXCLUDED_MODELS.add(TEST_MODEL_PATH
-//                            .resolve("components/head/parameters/" +
-//                                         "UseEnumAsTypeArgFromCD.arc"));
     /*
      * Associations in CD files will not be generated correctly
      */
@@ -87,23 +84,6 @@ public class AbstractGeneratorTest {
                             .resolve("components/body/automaton/" +
                                          "transition/assignments/" +
                                          "ValidAssignmentMatching.arc"));
-
-    /*
-     * Reason: Conflict between port named "input" and parameter "input"
-     * of the compute method in Impl class
-     */
-//    EXCLUDED_MODELS.add(TEST_MODEL_PATH
-//                            .resolve("components/body/automaton/" +
-//                                         "transition/guards/" +
-//                                         "GuardHasComplexExpressionWithCD.arc"));
-
-    /*
-     * Reason: Conflict between port named "input" and parameter "input"
-     * of the compute method in Impl class
-     */
-    EXCLUDED_MODELS.add(TEST_MODEL_PATH
-                            .resolve("components/body/automaton/" +
-                                         "transition/guards/GuardIsBoolean.arc"));
 
     /*
      * Reason: Autoconnection is probably not working as intended. For the
