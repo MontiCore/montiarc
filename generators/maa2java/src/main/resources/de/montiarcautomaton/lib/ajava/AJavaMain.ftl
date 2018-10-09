@@ -28,11 +28,25 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
     <#list configParams as param>
     this.${param.getName()} = ${param.getName()};
     </#list>
-  }   
+  }
+
+  <#if helper.containsIdentifier("result")>
+    <#assign resultVarName = "r__result">
+  <#else>
+    <#assign resultVarName = "result">
+  </#if>
+  <#if helper.containsIdentifier("input")>
+    <#assign inputVarName = "r__input">
+  <#else>
+    <#assign inputVarName = "input">
+  </#if>
 
   @Override
+  <#-- The name of the result variable is changed, as the initialization with
+    null of the outgoing ports might lead to issues if the name "result" shadows
+    the name of a variable, port, etc-->
   public ${resultName} getInitialValues() {
-    final ${resultName} result = new ${resultName}();
+    final ${resultName} ${resultVarName} = new ${resultName}();
     
     try {
     <#list portsOut as portOut>
@@ -44,26 +58,29 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
     </#list>
 
     <#list portsOut as portOut>
-    result.set${portOut.getName()?cap_first}(${portOut.getName()});
+    ${resultVarName}.set${portOut.getName()?cap_first}(${portOut.getName()});
     </#list>
     } catch(Exception e) {
       e.printStackTrace();
     }
 
-    return result;
+    return ${resultVarName};
   }
 
   @Override
-  public ${resultName} compute(${inputName} input) {
+  <#-- The name of the input and result variables are changed, as otherwise
+    syntactical and semantical errors with models using those names for ports,
+    variables, or similar might occur. -->
+  public ${resultName} compute(${inputName} ${inputVarName}) {
     // inputs
     <#list portsIn as portIn>
-  	final ${helper.getPortTypeName(portIn)} ${portIn.getName()} = input.get${portIn.getName()?cap_first}();
+  	final ${helper.getPortTypeName(portIn)} ${portIn.getName()} = ${inputVarName}.get${portIn.getName()?cap_first}();
   	</#list>
   
-    final ${resultName} result = new ${resultName}();
+    final ${resultName} ${resultVarName} = new ${resultName}();
     
     <#list portsOut as portOut>
-    ${helper.getPortTypeName(portOut)} ${portOut.getName()} = result.get${portOut.getName()?cap_first}();
+    ${helper.getPortTypeName(portOut)} ${portOut.getName()} = ${resultVarName}.get${portOut.getName()?cap_first}();
     </#list>
     
     <#-- print java statements here -->
@@ -71,11 +88,11 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
     
     <#-- always add all outgoing values to result -->
     <#list portsOut as portOut>
-    result.set${portOut.getName()?cap_first}(${portOut.getName()});
+    ${resultVarName}.set${portOut.getName()?cap_first}(${portOut.getName()});
     </#list>
     
     
-    return result;
+    return ${resultVarName};
   }
   
 }

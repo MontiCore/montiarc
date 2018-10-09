@@ -1,6 +1,7 @@
 package components.body.variables;
 
 import montiarc._cocos.MontiArcASTComponentCoCo;
+import montiarc._cocos.MontiArcASTVariableDeclarationCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.*;
 import org.junit.BeforeClass;
@@ -57,5 +58,21 @@ public class VariableTest extends AbstractCoCoTest {
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new AutomatonNoDataAssignedToVariable());
     checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA092"));
 
+  }
+
+  @Test
+  public void testHasProhibitedVariableName() {
+    final String componentName = "HasProhibitedVariableName";
+    MontiArcCoCoChecker cocos =
+        new MontiArcCoCoChecker().addCoCo(
+            (MontiArcASTVariableDeclarationCoCo) new UseOfProhibitedIdentifiers());
+    final ExpectedErrorInfo errors =
+        new ExpectedErrorInfo(4, "xMA046");
+    checkInvalid(cocos, loadComponentAST(PACKAGE + "." + componentName), errors);
+  }
+
+  @Test
+  public void testHasConflictingVariableNames() {
+    checkValid(PACKAGE + "." + "HasConflictingVariableNames");
   }
 }

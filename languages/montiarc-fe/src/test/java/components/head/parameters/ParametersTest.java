@@ -146,4 +146,18 @@ public class ParametersTest extends AbstractCoCoTest {
         = new ExpectedErrorInfo(4, "xMA064", "xMA082");
     checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
   }
+
+  @Test
+  public void testHasProhibitedParameterName() {
+    final String modelName = PACKAGE + "." + "HasProhibitedParameterName";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo expectedErrorInfo
+        = new ExpectedErrorInfo(4, "xMA046");
+    checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
+  }
+
+  @Test
+  public void testHasConflictingParameterNames() {
+    checkValid(PACKAGE + "." + "HasConflictingParameterNames");
+  }
 }

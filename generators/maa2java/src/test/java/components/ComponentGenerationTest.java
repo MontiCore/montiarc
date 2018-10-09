@@ -128,18 +128,28 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 
   /**
    * Executes the main flow of the generator test.
-   *
-   * @param packageName
-   * @param componentName
+   *  @param packageName Package which contains the test model
+   * @param componentName Name of the test model
    */
   private void executeGeneratorTest(String packageName, String componentName) {
+    executeGeneratorTest(packageName, componentName, TEST_MODEL_PATH);
+  }
+
+  /**
+   * Executes the main flow of the generator test.
+   *
+   * @param packageName Name of the package that contains the test model
+   * @param componentName Name of the test model
+   * @param modelPath Model path that contains the test model
+   */
+  private void executeGeneratorTest(String packageName, String componentName, Path modelPath) {
     String qualifiedName = packageName + "." + componentName;
 
     // Load component symbol
     final ComponentSymbol symbol
         = generatorTool.loadComponentSymbolWithoutCocos(
             qualifiedName,
-        TEST_MODEL_PATH.toFile(),
+        modelPath.toFile(),
         Paths.get(DEFAULT_TYPES_FOLDER).toFile(),
         Paths.get(LIBRARY_MODELS_FOLDER).toFile()).orElse(null);
     assertNotNull("Could not load component symbol for which the " +

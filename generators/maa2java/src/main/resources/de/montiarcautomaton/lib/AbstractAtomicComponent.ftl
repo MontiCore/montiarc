@@ -18,7 +18,13 @@ class ${compName} <#if helper.isGeneric()><<#list helper.getGenericParameters() 
         throw new Error("Invoking getInitialValues() on abstract implementation ${packageName}.${compName}");
     }
 
-    public ${compResultName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> compute(${compInputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> input) {
+    <#if helper.containsIdentifier("input")>
+      <#assign inputVarName = "r__input">
+    <#else>
+      <#assign inputVarName = "input">
+    </#if>
+
+    public ${compResultName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> compute(${compInputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> ${inputVarName}) {
         throw new Error("Invoking compute() on abstract implementation ${packageName}.${compName}");
     }
 

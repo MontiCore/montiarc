@@ -1,6 +1,6 @@
 package components.body.automaton.transition.guards;
 
-import components.body.automaton.transition.guards.Number;
+import types.JavaNumberType;
 
 /*
  * Valid model.
@@ -8,7 +8,7 @@ import components.body.automaton.transition.guards.Number;
 component GuardIsBoolean {
 
 	port
-		in Number input;
+		in JavaNumberType input;
 
 	automaton GuardIsNotBooleanAutomaton {
 		state A,B;
