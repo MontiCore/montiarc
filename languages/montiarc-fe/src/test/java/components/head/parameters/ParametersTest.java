@@ -76,6 +76,21 @@ public class ParametersTest extends AbstractCoCoTest {
     checkValid(PACKAGE+"."+"EnumAsTypeArg");
   }
 
+  @Test
+  public void testFullyQualifiedEnumAsTypeArg() {
+    checkValid(PACKAGE + "." + "FullyQualifiedEnumAsTypeArg");
+  }
+
+  @Test
+  public void testJavaClassAsParameter() {
+    checkValid(PACKAGE + "." + "JavaClassAsParameter");
+  }
+
+  @Test
+  public void testJavaClassFromCDAsParameter() {
+    checkValid(PACKAGE + "." + "JavaClassFromCDAsParameter");
+  }
+
 
   @Test
   public void testCompWithIntegerParameter() {
@@ -93,6 +108,25 @@ public class ParametersTest extends AbstractCoCoTest {
   }
 
   @Test
+  public void testUseJavaClassAsParamTypeQualified() {
+    checkValid(PACKAGE + "." + "UseJavaClassAsParamTypeQualified");
+  }
+
+  @Test
+  public void testUseWrongJavaClassAsParamTypeQualified() {
+    final String modelName = PACKAGE + "." + "UseWrongJavaClassAsParamTypeQualified";
+    MontiArcCoCoChecker cocos
+        = MontiArcCoCos.createChecker();
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA064");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
+  }
+
+  @Test
+  public void testUseJavaClassFromCDAsParamTypeQualified() {
+    checkValid(PACKAGE + "." + "UseJavaClassFromCDAsParamTypeQualified");
+  }
+
+  @Test
   @Ignore("Qualified enum type which is used as a component argument can" +
               "not be found.")
   /*
@@ -101,8 +135,8 @@ public class ParametersTest extends AbstractCoCoTest {
    * StringReader:<10,40>: 0xMA065 Could not find type of argument no 0 of
    * subcomponent sub
    */
-  public void testUseEnumAsTypeArgQualified() {
-    checkValid(PACKAGE + "." + "UseEnumAsTypeArgQualified");
+  public void testUseEnumAsParamTypeQualified() {
+    checkValid(PACKAGE + "." + "UseEnumAsParamTypeQualified");
   }
 
   @Test
