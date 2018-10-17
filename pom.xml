@@ -127,11 +127,6 @@
 				<artifactId>se-commons-logging</artifactId>
 				<version>${se-commons.version}</version>
 			</dependency>
-		<dependency>
-				<groupId>de.monticore</groupId>
-				<artifactId>de.monticore.java.lib</artifactId>
-				<version>${javalib.version}</version>
-			</dependency>
 
 			<dependency>
 				<groupId>de.monticore.lang</groupId>

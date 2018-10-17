@@ -76,13 +76,6 @@
 
     <dependency>
       <groupId>de.monticore</groupId>
-      <artifactId>de.monticore.java.lib</artifactId>
-      <version>${javalib.version}</version>
-      <classifier>models</classifier>
-    </dependency>
-
-    <dependency>
-      <groupId>de.monticore</groupId>
       <artifactId>monticore-generator</artifactId>
       <version>${monticore.version}</version>
     </dependency>
@@ -139,10 +132,16 @@
             <id>unpack-dependencies</id>
             <phase>validate</phase>
             <goals>
-              <goal>unpack-dependencies</goal>
+              <goal>unpack</goal>
             </goals>
             <configuration>
-              <includeClassifiers>models</includeClassifiers>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>montiarc.libraries</groupId>
+                  <artifactId>javaLib</artifactId>
+                  <version>${project.version}</version>
+                </artifactItem>
+              </artifactItems>
               <outputDirectory>${basedir}/target/javaLib</outputDirectory>
             </configuration>
           </execution>
