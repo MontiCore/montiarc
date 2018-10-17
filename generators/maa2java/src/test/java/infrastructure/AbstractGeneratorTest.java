@@ -133,6 +133,7 @@ public class AbstractGeneratorTest {
     }
 
     for ( Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
+      if(diagnostic.getSource() != null)
       System.out.format("Error on line %d in %s%n %s%n",
           diagnostic.getLineNumber(),
           diagnostic.getSource().toUri(), diagnostic.getMessage(Locale.ENGLISH));

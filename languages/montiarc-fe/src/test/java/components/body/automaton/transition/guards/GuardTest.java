@@ -33,7 +33,7 @@ public class GuardTest extends AbstractCoCoTest {
   public void testGuardIsBoolean() {
     checkValid(PACKAGE + "." + "GuardIsBoolean");
   }
-  
+
   @Test
   /*
    * Tests
