@@ -7,7 +7,7 @@ package components.head.generics;
 component Car<X>(X xParameter) {
   port 
   	in List<java.util.HashMap<Boolean,Double>> wheels,
-  	out java.util.HashMap<Double[],List<String>>[] motor;
+  	out java.util.HashMap<Double[],List<String>> motor;
   	
   java.util.List<X> xList; 
 }

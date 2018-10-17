@@ -72,6 +72,15 @@ public class VariableTest extends AbstractCoCoTest {
   }
 
   @Test
+  public void testCompWithGenericArraysAsVars() {
+    MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors =
+        new ExpectedErrorInfo(5, "xMA048");
+    final String qualifiedModelName = PACKAGE + "." + "CompWithGenericArraysAsVars";
+    checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
+  }
+
+  @Test
   public void testHasConflictingVariableNames() {
     checkValid(PACKAGE + "." + "HasConflictingVariableNames");
   }

@@ -7,7 +7,7 @@ component Garage {
 
   port 
     in List<java.util.HashMap<Boolean,Double>> wheels,
-    out java.util.HashMap<Double[],List<String>>[] motor;
+    out java.util.HashMap<Double[],List<String>> motor;
 
   component Car<String>("My awesome car");
   
