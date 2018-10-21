@@ -843,4 +843,17 @@ public class SubComponentTest extends AbstractCoCoTest {
   public void testHasConflictingSubcomponentNames() {
     checkValid(PACKAGE + "." + "HasConflictingSubcomponentNames");
   }
+
+
+  @Test
+  @Ignore("NullPointerException in SubcomponentParametersCorrectlyAssigned:85")
+  // TODO Add correct error code
+  public void testSubCompWithNotExistingTypeAsTypeArg() {
+    final String qualifiedModelName = PACKAGE + "." + "SubCompWithNotExistingTypeAsTypeArg";
+    final MontiArcCoCoChecker checker =
+        MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "");
+
+    checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
+  }
 }
