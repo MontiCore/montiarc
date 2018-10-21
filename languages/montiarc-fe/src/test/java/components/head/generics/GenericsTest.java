@@ -200,15 +200,12 @@ public class GenericsTest extends AbstractCoCoTest {
   }
 
   @Test
-  /*
-   * TODO Fix CoCo AllGenericParametersOfSuperClassSet
-   */
   public void testAssignsTypeParamsToSuperCompWithoutFormalParams() {
     final String modelName
         = PACKAGE + ".AssignsTypeParamsToSuperCompWithoutFormalParams";
     final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
     final ExpectedErrorInfo errors
-        = new ExpectedErrorInfo();
+        = new ExpectedErrorInfo(1, "xMA071");
     checkInvalid(checker, loadComponentAST(modelName), errors);
   }
 

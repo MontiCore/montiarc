@@ -13,10 +13,12 @@ import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
+import de.monticore.types.types._ast.ASTReferenceType;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.ComponentSymbolReference;
 import montiarc.helper.SymbolPrinter;
 import montiarc.helper.TypeCompatibilityChecker;
 
@@ -48,27 +50,30 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
     ComponentSymbol compSym = (ComponentSymbol) node.getSymbolOpt().get();
     
     if (compSym.getSuperComponent().isPresent()) {
+      final ComponentSymbolReference superCompRef = compSym.getSuperComponent().get();
+      final ASTReferenceType superCompRefNode = node.getHead().getSuperComponent();
+
       List<JTypeSymbol> typeParameters = compSym.getFormalTypeParameters();
-      List<ActualTypeArgument> supersActualTypeParams = compSym.getSuperComponent().get()
+      List<ActualTypeArgument> supersActualTypeParams = superCompRef
           .getActualTypeArguments();
-      List<JTypeSymbol> supersTypeParameters = compSym.getSuperComponent().get()
+      List<JTypeSymbol> supersTypeParameters = superCompRef
           .getReferencedSymbol().getFormalTypeParameters();
-      
+
       // we have a generic component
       if (!supersTypeParameters.isEmpty()) {
         if (supersActualTypeParams.isEmpty()) {
           Log.error("0xMA087 Type parameters '"
               + SymbolPrinter.printFormalTypeParameters(supersTypeParameters)
-              + "' of the extended super component " + compSym.getSuperComponent().get().getName()
+              + "' of the extended super component " + superCompRef.getName()
               + " have to be set.",
-              node.getHead().getSuperComponent().get_SourcePositionStart());
+              superCompRefNode.get_SourcePositionStart());
         }
         else if (supersActualTypeParams.size() != supersTypeParameters.size()) {
           Log.error("0xMA088 All type parameters "
               + SymbolPrinter.printFormalTypeParameters(supersTypeParameters)
               + " of the extended super component "
-              + compSym.getSuperComponent().get().getName() + "have to be set",
-              node.getHead().getSuperComponent().get_SourcePositionStart());
+              + superCompRef.getName() + "have to be set",
+              superCompRefNode.get_SourcePositionStart());
         }
         // same length of params
         else {
@@ -108,7 +113,7 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                     Log.error("0xMA089 Parameter " + SymbolPrinter.printTypeParameters(actualArg)
                         + " is not compatible with "
                         + upperBound.getName(),
-                        node.getHead().getSuperComponent().get_SourcePositionStart());
+                        superCompRefNode.get_SourcePositionStart());
                   }
                 }
 
@@ -140,13 +145,25 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                       Log.error("0xMA089 Parameter " + formalType.getName()
                                     + " is not compatible with upper bound "
                                     + upperBound.getName(),
-                          node.getHead().getSuperComponent().get_SourcePositionStart());
+                          superCompRefNode.get_SourcePositionStart());
                     }
                   }
                 }
               }
             }
           }
+        }
+      } else {
+        // The super component has no type parameters.
+        // It remains to check that there are no type arguments assigned.
+        if(!supersActualTypeParams.isEmpty()){
+          Log.error(
+              String.format("0xMA071 Type parameters were assigned by " +
+                                "component %s to super component %s, which " +
+                                "does not declare generic type parameters.",
+                  compSym.getName(),
+                  superCompRef.getName()),
+              superCompRefNode.get_SourcePositionStart());
         }
       }
       
