@@ -10,14 +10,9 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.Optional;
 
-import de.monticore.ModelingLanguage;
 import de.monticore.symboltable.Symbol;
-import jdk.nashorn.internal.runtime.options.OptionTemplate;
-import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.*;
-import montiarc._symboltable.MontiArcLanguage;
 import montiarc._symboltable.MontiArcLanguageFamily;
 import montiarc.cocos.*;
 import org.junit.Before;
@@ -42,7 +37,7 @@ public abstract class AbstractCoCoTest {
   // TODO Remove when inner components are allowed again
   private static final MontiArcCoCoChecker checker = new MontiArcCoCoChecker()
       .addCoCo(new PortUsage())
-      .addCoCo(new UsedPortAndVarTypesExist())
+      .addCoCo(new UsedTypesExist())
       .addCoCo(new SubComponentsConnected())
       .addCoCo(new SubcomponentParametersCorrectlyAssigned())
       .addCoCo(new PackageLowerCase())

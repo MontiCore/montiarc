@@ -166,8 +166,6 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
               superCompRefNode.get_SourcePositionStart());
         }
       }
-      
     }
-    
   }
 }
