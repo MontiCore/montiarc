@@ -1,34 +1,21 @@
 package components.body.ports;
 
-import static org.junit.Assert.assertEquals;
-
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import com.google.common.collect.Lists;
-import montiarc._cocos.MontiArcASTComponentCoCo;
-import montiarc._symboltable.ConnectorSymbol;
-import montiarc.cocos.*;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
+import montiarc.cocos.*;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import static org.junit.Assert.*;
 
 /**
  * This class checks all context conditions directly related to port definitions
@@ -336,5 +323,17 @@ public class PortTest extends AbstractCoCoTest {
   @Test
   public void testHasConflictingOutPortNames() {
     checkValid(PACKAGE + "." + "HasConflictingOutPortNames");
+  }
+
+  @Test
+  @Ignore("ConnectorSourceAndTargetExistAndFit currently does not find the" +
+              "incompatible types from the first connector")
+  public void testPortCompatibilityWithGenerics4() {
+    final String fqModelName = PACKAGE + "." + "PortCompatibilityWithGenerics4";
+    final MontiArcCoCoChecker checker =
+        new MontiArcCoCoChecker()
+            .addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo();
+    checkInvalid(checker, loadComponentAST(fqModelName), expectedErrors);
   }
 }

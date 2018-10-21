@@ -74,12 +74,17 @@ public class GenericsTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent");
     checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent2");
     checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent3");
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ComponentExtendsGenericComponent4");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new AllGenericParametersOfSuperClassSet()), node, new ExpectedErrorInfo(1,"xMA087"));
-    node = loadComponentAST(PACKAGE + "." + "ComponentExtendsGenericComponent5");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new AllGenericParametersOfSuperClassSet()), node, new ExpectedErrorInfo(1,"xMA088"));
-    node = loadComponentAST(PACKAGE + "." + "ComponentExtendsGenericComponent6");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new AllGenericParametersOfSuperClassSet()), node, new ExpectedErrorInfo(1,"xMA089"));
+
+    String fqModelName = PACKAGE + "." + "ComponentExtendsGenericComponent5";
+    ExpectedErrorInfo errors =
+        new ExpectedErrorInfo(1, "xMA088");
+    final MontiArcCoCoChecker cocos =
+        new MontiArcCoCoChecker().addCoCo(new AllGenericParametersOfSuperClassSet());
+    checkInvalid(cocos, loadComponentAST(fqModelName), errors);
+
+    fqModelName = PACKAGE + "." + "ComponentExtendsGenericComponent6";
+    errors = new ExpectedErrorInfo(1, "xMA089");
+    checkInvalid(cocos, loadComponentAST(fqModelName), errors);
   }
   
   @Test
@@ -192,5 +197,28 @@ public class GenericsTest extends AbstractCoCoTest {
     ExpectedErrorInfo errors
         = new ExpectedErrorInfo(1, "xMA062");
     checkInvalid(cocos, loadComponentAST(modelName), errors);
+  }
+
+  @Test
+  /*
+   * TODO Fix CoCo AllGenericParametersOfSuperClassSet
+   */
+  public void testAssignsTypeParamsToSuperCompWithoutFormalParams() {
+    final String modelName
+        = PACKAGE + ".AssignsTypeParamsToSuperCompWithoutFormalParams";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo();
+    checkInvalid(checker, loadComponentAST(modelName), errors);
+  }
+
+  @Test
+  public void testAssignsNonExistingTypeToSuperComp() {
+    final String modelName
+        = PACKAGE + ".AssignsNonExistingTypeToSuperComp";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(1, "xMA011");
+    checkInvalid(checker, loadComponentAST(modelName), errors);
   }
 }
