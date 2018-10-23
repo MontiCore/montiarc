@@ -108,7 +108,7 @@ public class ComponentHelperTest extends AbstractCoCoTest {
     assertTrue(portSymbol.isPresent());
 
     String portTypeName = helper.printPortTypeName(portSymbol.get());
-    assertEquals("java.util.HashMap<Double[],List<String>>[]", portTypeName);
+    assertEquals("java.util.HashMap<Double[],List<String>>", portTypeName);
 
     portSymbol = comp.getSpannedScope().resolve("wheels", PortSymbol.KIND);
     assertTrue(portSymbol.isPresent());

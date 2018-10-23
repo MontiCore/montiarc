@@ -157,6 +157,15 @@ public class ParametersTest extends AbstractCoCoTest {
   }
 
   @Test
+  public void testCompWithGenericArraysAsParams() {
+    final String modelName = PACKAGE + "." + "CompWithGenericArraysAsParams";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo expectedErrorInfo
+        = new ExpectedErrorInfo(5, "xMA048");
+    checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
+  }
+
+  @Test
   public void testHasConflictingParameterNames() {
     checkValid(PACKAGE + "." + "HasConflictingParameterNames");
   }

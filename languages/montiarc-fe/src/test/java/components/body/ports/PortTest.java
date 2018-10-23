@@ -329,6 +329,15 @@ public class PortTest extends AbstractCoCoTest {
   }
 
   @Test
+  public void testCompWithGenericArraysAsPorts() {
+    final String modelName = PACKAGE + "." + "CompWithGenericArraysAsPorts";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo expectedErrorInfo
+        = new ExpectedErrorInfo(5, "xMA048");
+    checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
+  }
+
+  @Test
   public void testHasConflictingInPortNames() {
     checkValid(PACKAGE + "." + "HasConflictingInPortNames");
   }

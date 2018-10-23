@@ -57,6 +57,7 @@ public class MontiArcCoCos {
         // CONVENTIONS
         .addCoCo((MontiArcASTBehaviorElementCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new AutomatonHasNoState())
+        .addCoCo(new ArraysOfGenericTypes())
         .addCoCo(new AutomatonHasNoInitialState())
         .addCoCo(new MultipleAssignmentsSameIdentifier())
         .addCoCo(new AutomatonUsesCorrectPortDirection())
