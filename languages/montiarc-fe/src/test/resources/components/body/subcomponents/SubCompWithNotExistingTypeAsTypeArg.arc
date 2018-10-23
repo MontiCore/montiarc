@@ -8,4 +8,5 @@ import components.body.subcomponents._subcomponents.CompWithGenericArg;
 component SubCompWithNotExistingTypeAsTypeArg {
   component CompWithGenericArg<NotExistingType>(new NotExistingParmArgType()) subWrong;
   component CompWithGenericArg<String>(new NonExistingTypeInParamArg()) subWrong2;
+  component NotExistingComponent<NotExistingType> subWrong3;
 }

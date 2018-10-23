@@ -171,17 +171,14 @@ public class SubComponentTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "CompThatUsesCompWithInterfaceParam");
   }
   
-  /**
-   * SymbolTable already tries to resolve the non existing subcomponent. If it
-   * does not exist symbol table creator throws an error. Therefore the coco
-   * ReferencedSubComponentExists is never executed.
-   */
-  @Ignore
   @Test
   public void testReferencedSubComponentsNotExists() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ReferencedSubComponentsNotExists");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new ReferencedSubComponentExists()), node,
-        new ExpectedErrorInfo(3, "xMA004"));
+    final String qualifiedModelName = PACKAGE + "." + "ReferencedSubComponentsNotExists";
+    final MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(3, "xMA004");
+    checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
   }
   
   @Test
@@ -247,18 +244,12 @@ public class SubComponentTest extends AbstractCoCoTest {
   
   @Test
   public void testValidAndInvalidSubcomponents() {
-    try {
-      checkValid(PACKAGE + "." + "ValidAndInvalidSubcomponents");
-    }
-    catch (NullPointerException e) {
-      e.printStackTrace();
-    }
-    assertEquals("xA1038", 1,
-        Log.getFindings().stream().map(Finding::buildMsg).filter(m -> m.contains("xA1038"))
-            .count());
-    assertEquals("xMA098", 2,
-        Log.getFindings().stream().map(Finding::buildMsg).filter(m -> m.contains("xMA098"))
-            .count());
+    final String qualifiedModelName = PACKAGE + "." + "ValidAndInvalidSubcomponents";
+    final MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(5, "xMA004", "xMA059", "xMA060");
+    checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
   }
   
   @Test
@@ -854,7 +845,7 @@ public class SubComponentTest extends AbstractCoCoTest {
     final String qualifiedModelName = PACKAGE + "." + "SubCompWithNotExistingTypeAsTypeArg";
     final MontiArcCoCoChecker checker =
         MontiArcCoCos.createChecker();
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(3, "xMA096", "xMA103");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(4, "xMA096", "xMA103", "xMA004");
 
     checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }

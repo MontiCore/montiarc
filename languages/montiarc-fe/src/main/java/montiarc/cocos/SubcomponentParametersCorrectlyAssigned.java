@@ -227,7 +227,7 @@ public class SubcomponentParametersCorrectlyAssigned
     }
     else {
       Log.error(String.format("0xMA065 Could not find type of argument " +
-                                  "no %d of subcomponent%s",
+                                  "no %d of subcomponent %s",
           paramIndex, instance.getName()),
           arg.get_SourcePositionStart());
     }

@@ -54,7 +54,6 @@ public abstract class AbstractCoCoTest {
       .addCoCo(new InPortUniqueSender())
       .addCoCo(new ImportsValid())
       .addCoCo(new SubcomponentReferenceCycle())
-      .addCoCo(new ReferencedSubComponentExists())
       .addCoCo(new PortNamesAreNotJavaKeywords())
       .addCoCo(new UnusedImports())
       .addCoCo(new AmbiguousTypes())

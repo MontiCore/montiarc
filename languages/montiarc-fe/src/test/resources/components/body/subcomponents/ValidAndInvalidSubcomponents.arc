@@ -21,7 +21,7 @@ import components.body.subcomponents._subcomponents.AtomicComponent;
  */
 component ValidAndInvalidSubcomponents {
   
-  component AtomicComponent; //Correct
+  component AtomicComponent atomic; //Correct
   component HasPortWithImportedType; //Correct
   component ValidComponentInPackage1; //Correct
   component components.body.subcomponents._subcomponents.AtomicComponent; //Correct
