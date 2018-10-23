@@ -5,20 +5,24 @@
  */
 package montiarc.cocos;
 
+import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.ComponentSymbolReference;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.VariableSymbol;
 
 /**
  * Checks whether types of ports and variables exist.
  *
+ * No literature reference
+ *
  * @author Pfeiffer
  * @version $Revision$, $Date$
  */
-public class UsedPortAndVarTypesExist implements MontiArcASTComponentCoCo {
+public class UsedTypesExist implements MontiArcASTComponentCoCo {
   
   /**
    * @see montiarc._cocos.MontiArcASTComponentCoCo#check(montiarc._ast.ASTComponent)
@@ -35,11 +39,22 @@ public class UsedPortAndVarTypesExist implements MontiArcASTComponentCoCo {
     
     for (VariableSymbol v : comp.getVariables()) {
       if (!v.getTypeReference().existsReferencedSymbol()) {
-        Log.error("0xMA101 Type " + v.getTypeReference().getName() + " is used but does not exist.",
+        Log.error(String.format("0xMA101 Type %s is used but does not exist.",
+            v.getTypeReference().getName()),
             v.getSourcePosition());
         
       }
     }
-    
+
+    if(comp.getSuperComponent().isPresent()){
+      final ComponentSymbolReference superCompRef = comp.getSuperComponent().get();
+      for (ActualTypeArgument actualTypeArgument : superCompRef.getActualTypeArguments()) {
+        if(!actualTypeArgument.getType().existsReferencedSymbol()){
+          Log.error(String.format("0xMA102 Type %s is used but does not exist.",
+              actualTypeArgument.getType().getName()),
+              node.getHead().getSuperComponent().get_SourcePositionStart());
+        }
+      }
+    }
   }
 }

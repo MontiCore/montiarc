@@ -5,16 +5,16 @@
  */
 package montiarc.cocos;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Inner components that have formal type parameters have to be explicitly
@@ -44,11 +44,12 @@ public class ComponentWithTypeParametersHasInstance
     ComponentSymbol componentSymbol = (ComponentSymbol) node.getSymbolOpt().get();
     Collection<ComponentInstanceSymbol> subComponents = componentSymbol.getSubComponents();
     
-    Set<ComponentSymbol> instantiatedInnerComponents = subComponents
-        .stream()
-        .map(instanceSymbol -> instanceSymbol.getComponentType().getReferencedSymbol())
-        .filter(ComponentSymbol::hasFormalTypeParameters)
-        .collect(Collectors.toSet());
+    Set<ComponentSymbol> instantiatedInnerComponents =
+        subComponents.stream()
+            .filter(i -> i.getComponentType().existsReferencedSymbol())
+            .map(instanceSymbol -> instanceSymbol.getComponentType().getReferencedSymbol())
+            .filter(ComponentSymbol::hasFormalTypeParameters)
+            .collect(Collectors.toSet());
     
     List<ComponentSymbol> notInstantiatedInnerComponents = componentSymbol
         .getInnerComponents()

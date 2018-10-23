@@ -21,6 +21,10 @@ import montiarc._symboltable.PortSymbol;
  *
  * @implements [Hab16] CV6: All ports of subcomponents should be used in at
  * least one connector. (p.72 Lst. 3.53)
+ * @implements [Hab16] R3: Full qualified subcomponent types exist in the named package. (p. 63,
+ * Lst. 3.38)
+ * @implements [Hab16] R4: Unqualified subcomponent types either exist in the current package or are
+ * imported using an import statement. (p. 64, Lst. 3.39)
  * @author ahaber, Robert Heim
  */
 public class SubComponentsConnected implements MontiArcASTComponentCoCo {
@@ -103,7 +107,7 @@ public class SubComponentsConnected implements MontiArcASTComponentCoCo {
         }
       }
       else {
-        Log.error("0xMA098 Used Subcomponent "+ sub.getName()+ " does not exist!", sub.getAstNode().get().get_SourcePositionStart());
+        Log.error("0xMA004 Used Subcomponent "+ sub.getName()+ " does not exist!", sub.getAstNode().get().get_SourcePositionStart());
       }
     }
   }

@@ -45,6 +45,9 @@ public class SubcomponentReferenceCycle implements MontiArcASTComponentCoCo {
 
       final Optional<ComponentSymbol> subCompInstanceCompOpt
           = subCompInstance.getComponentType().getReferencedComponent();
+      if(!subCompInstanceCompOpt.isPresent()){
+        continue;
+      }
       for(ComponentInstanceSymbol subsubcomp : subCompInstanceCompOpt.get().getSubComponents()) {
         if(comp.getName().equals(subsubcomp.getComponentType().getName())) {
           Log.error(

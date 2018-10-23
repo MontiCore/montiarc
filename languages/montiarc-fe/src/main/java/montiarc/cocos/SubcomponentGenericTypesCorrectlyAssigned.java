@@ -40,7 +40,11 @@ public class SubcomponentGenericTypesCorrectlyAssigned implements MontiArcASTCom
     // Get all subcomponent instance symbols and run the check on them
     for (ComponentInstanceSymbol componentInstanceSymbol : componentSymbol.getSubComponents()) {
       final ComponentSymbolReference componentType = componentInstanceSymbol.getComponentType();
-      
+
+      if(!componentType.existsReferencedSymbol()){
+        continue;
+      }
+
       if (componentType.getActualTypeArguments().size() != componentType.getReferencedSymbol()
           .getFormalTypeParameters().size()) {
         Log.error(String.format("0xMA085 The number of type parameters " +
