@@ -251,9 +251,13 @@ public class SubComponentTest extends AbstractCoCoTest {
       checkValid(PACKAGE + "." + "ValidAndInvalidSubcomponents");
     }
     catch (NullPointerException e) {
+      e.printStackTrace();
     }
-    assertEquals("xA1038", 3,
-        Log.getFindings().stream().map(f -> f.buildMsg()).filter(m -> m.contains("xA1038"))
+    assertEquals("xA1038", 1,
+        Log.getFindings().stream().map(Finding::buildMsg).filter(m -> m.contains("xA1038"))
+            .count());
+    assertEquals("xMA098", 2,
+        Log.getFindings().stream().map(Finding::buildMsg).filter(m -> m.contains("xMA098"))
             .count());
   }
   
@@ -846,13 +850,11 @@ public class SubComponentTest extends AbstractCoCoTest {
 
 
   @Test
-  @Ignore("NullPointerException in SubcomponentParametersCorrectlyAssigned:85")
-  // TODO Add correct error code
   public void testSubCompWithNotExistingTypeAsTypeArg() {
     final String qualifiedModelName = PACKAGE + "." + "SubCompWithNotExistingTypeAsTypeArg";
     final MontiArcCoCoChecker checker =
         MontiArcCoCos.createChecker();
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "");
+    final ExpectedErrorInfo errors = new ExpectedErrorInfo(3, "xMA096", "xMA103");
 
     checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
