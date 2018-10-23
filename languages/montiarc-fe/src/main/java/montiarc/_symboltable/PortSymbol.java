@@ -33,27 +33,31 @@ public class PortSymbol extends CommonSymbol {
   public static final boolean INCOMING = true;
   
   /**
-   * Flags, if this port is incoming.
+   * Indicates whether the port is incoming.
    */
   private boolean incoming;
   
   private JTypeReference<? extends JTypeSymbol> typeReference;
-  
+
   /**
-   * use {@link #builder()}
+   * Constructor for a PortSymbol object.
+   * @param name Name of the PortSymbol
    */
-  protected PortSymbol(String name) {
+  public PortSymbol(String name) {
     super(name, KIND);
   }
   
   /**
-   * @param isIncoming incoming = true, outgoing = false
+   * Setter for the direction of the port.
+   * @param isIncoming The direction of the port. If true, the port is incoming,
+   *                   otherwise, it is outgoing.
    */
   public void setDirection(boolean isIncoming) {
     incoming = isIncoming;
   }
   
   /**
+   * Indicates whether the port is incoming.
    * @return true, if this is an incoming port, else false.
    */
   public boolean isIncoming() {
@@ -61,6 +65,7 @@ public class PortSymbol extends CommonSymbol {
   }
   
   /**
+   * Indicates whether the port is outgoing.
    * @return true, if this is an outgoing port, else false.
    */
   public boolean isOutgoing() {
@@ -68,14 +73,16 @@ public class PortSymbol extends CommonSymbol {
   }
   
   /**
-   * @return typeReference reference to the type from this port
+   * Getter for the type reference.
+   * @return The typeReference reference to the type from this port
    */
   public JTypeReference<? extends JTypeSymbol> getTypeReference() {
     return this.typeReference;
   }
   
   /**
-   * @param typeReference reference to the type from this port
+   * Setter for the type reference.
+   * @param typeReference The reference to the type from this port
    */
   public void setTypeReference(JTypeReference<? extends JTypeSymbol> typeReference) {
     this.typeReference = typeReference;
