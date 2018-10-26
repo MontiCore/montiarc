@@ -41,7 +41,7 @@ class JavaPGenerator extends BehaviorGenerator {
                   «FOR generic : helper.genericParameters SEPARATOR ','»
                     «generic»
                   «ENDFOR»
-                «ENDIF» input)
+                «ENDIF» input) {
         // inputs
         «FOR portIn : comp.incomingPorts»
           final «portIn.typeReference.referencedSymbol.fullName» «portIn.name» = input.get«portIn.name.toFirstUpper»();
@@ -53,10 +53,10 @@ class JavaPGenerator extends BehaviorGenerator {
           «portOut.typeReference.referencedSymbol.fullName» «portOut.name» = result.get«portOut.name.toFirstUpper»();
         «ENDFOR»
         
-        <#-- print java statements here -->
+        «««  print java statements here
         «getJavaP(comp)»
         
-        <#-- always add all outgoing values to result -->
+        «««  always add all outgoing values to result
         «FOR portOut : comp.outgoingPorts»
           result.set«portOut.name.toFirstUpper»(«portOut.name»);
         «ENDFOR»
@@ -91,7 +91,6 @@ class JavaPGenerator extends BehaviorGenerator {
     var ComponentHelper helper = new ComponentHelper(comp)
     return '''
       @Override
-       public «comp.name»Result 
        public «comp.name»Result
              «IF helper.isGeneric»
                «FOR generic : helper.genericParameters SEPARATOR ','»

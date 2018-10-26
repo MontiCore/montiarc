@@ -7,6 +7,7 @@ package de.montiarcautomaton.generator.codegen.xtend
 
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
+import montiarc._ast.ASTComponent
 
 /**
  * TODO: Write me!
@@ -33,7 +34,7 @@ abstract class BehaviorGenerator {
       import «comp.packageName».«comp.name»Result;
       import «comp.packageName».«comp.name»Input;
       «FOR _import : comp.imports»
-        import «_import.statement»«IF _import.isStar».*«ENDIF»
+        import «_import.statement»«IF _import.isStar».*«ENDIF»;
       «ENDFOR»
       
       import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
@@ -48,12 +49,12 @@ abstract class BehaviorGenerator {
         
         //component variables
         «FOR compVar : comp.variables»
-          private «compVar.typeReference.name» «compVar.name»;
+          private «helper.getVariableTypeName(comp.astNode.get as ASTComponent, compVar)» «compVar.name»;
         «ENDFOR» 
         
         // config parameters
         «FOR param : comp.configParameters»
-          private final «param.type.name» «param.name»; 
+          private final «helper.getParamTypeName(param)» «param.name»; 
         «ENDFOR»
         
         
@@ -65,7 +66,7 @@ abstract class BehaviorGenerator {
         
         «generateCompute(comp)»
         
-      
+      }
       
     '''
 
@@ -73,7 +74,7 @@ abstract class BehaviorGenerator {
 
   def String generateConstructor(ComponentSymbol comp) {
     return '''
-      public «comp.name»(«FOR param : comp.configParameters SEPARATOR ','» «param.type.name» «param.name» «ENDFOR») {
+      public «comp.name»Impl(«FOR param : comp.configParameters SEPARATOR ','» «param.type.name» «param.name» «ENDFOR») {
         «FOR param : comp.configParameters»
         this.«param.name» = «param.name»; 
         «ENDFOR»

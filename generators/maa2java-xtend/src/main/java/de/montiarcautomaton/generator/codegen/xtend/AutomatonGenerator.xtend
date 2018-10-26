@@ -26,10 +26,10 @@ class AutomatonGenerator extends BehaviorGenerator {
     }
     return 
     '''
-    private State currentState;
+    private «comp.name»State currentState;
     
     
-    private static enum State {
+    private static enum «comp.name»State {
       «FOR state : automaton.getStateDeclaration(0).stateList SEPARATOR ','»
       «state.name»
       «ENDFOR»;
@@ -61,7 +61,7 @@ class AutomatonGenerator extends BehaviorGenerator {
             «FOR generic : helper.genericParameters SEPARATOR ','»
               «generic»
             «ENDFOR»
-          «ENDIF» input)
+          «ENDIF» input) {
         // inputs
         «FOR inPort : comp.incomingPorts»
         final «inPort.typeReference.name» «inPort.name» = input.get«inPort.name.toFirstUpper»();
@@ -75,7 +75,7 @@ class AutomatonGenerator extends BehaviorGenerator {
           case «state.name»:
             «FOR transition : helper.getTransitions(state.symbolOpt.get as StateSymbol)»
               // transition: «transition.toString»
-              if («helper.getGuard(transition)») {
+              if («IF transition.guardAST.isPresent»«helper.getGuard(transition)»«ELSE» true «ENDIF») {
                 //reaction
                 «FOR assignment : helper.getReaction(transition)»
                   «IF assignment.isAssignment»
@@ -90,14 +90,14 @@ class AutomatonGenerator extends BehaviorGenerator {
                 «ENDFOR»
                 
                 //state change
-                currentState = State.«transition.target.name»;
+                currentState = «comp.name»State.«transition.target.name»;
                 break;
               }
               
               
             «ENDFOR»
         «ENDFOR»
-        
+        }
         return result;
       }
     '''
@@ -136,7 +136,7 @@ class AutomatonGenerator extends BehaviorGenerator {
           «ENDIF»
         «ENDFOR»
         
-        currentState = State.«automaton.initialStateDeclarationList.get(0).name»;
+        currentState = «comp.name»State.«automaton.initialStateDeclarationList.get(0).name»;
         return result;
       }
     '''

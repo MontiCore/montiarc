@@ -22,6 +22,13 @@
     </dependency>
 
     <dependency>
+      <groupId>montiarc.languages</groupId>
+      <artifactId>montiarc-fe</artifactId>
+      <version>${project.version}</version>
+      <classifier>${testmodels.classifier}</classifier>
+    </dependency>
+
+    <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>monticore-emf-runtime</artifactId>
       <version>${monticore.version}</version>
@@ -151,19 +158,30 @@
               <outputDirectory>${basedir}/target/javaLib</outputDirectory>
             </configuration>
           </execution>
+          <execution>
+            <id>unpack-test-models</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeClassifiers>${testmodels.classifier}</includeClassifiers>
+              <outputDirectory>${basedir}/target/test-models/</outputDirectory>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
-          <groupId>org.eclipse.xtend</groupId>
-          <artifactId>xtend-maven-plugin</artifactId>
-          <version>2.14.0</version>
-          <dependencies>
-            <dependency>
-                <groupId>org.eclipse.platform</groupId>
-                <artifactId>org.eclipse.equinox.common</artifactId>
-                <version>3.10.0</version>
-            </dependency>
-          </dependencies>
+        <groupId>org.eclipse.xtend</groupId>
+        <artifactId>xtend-maven-plugin</artifactId>
+        <version>2.14.0</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.common</artifactId>
+            <version>3.10.0</version>
+          </dependency>
+        </dependencies>
         <executions>
           <execution>
             <goals>

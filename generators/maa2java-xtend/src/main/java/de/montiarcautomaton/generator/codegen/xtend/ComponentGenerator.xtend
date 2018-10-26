@@ -8,6 +8,7 @@
 package de.montiarcautomaton.generator.codegen.xtend
 
 import de.montiarcautomaton.generator.helper.ComponentHelper
+
 import de.monticore.ast.ASTCNode
 import de.monticore.codegen.mc2cd.TransformationHelper
 import de.monticore.io.FileReaderWriter
@@ -85,9 +86,9 @@ class ComponentGenerator {
     «printImports(comp)»
     
     class «comp.name»Impl«printGenerics(comp)»     
-    implements IComputable<«comp.name»Input, «comp.name»Result> {
+    implements IComputable<«comp.name»Input«printGenerics(comp)», «comp.name»Result«printGenerics(comp)»> {
     
-      public «comp.name»(«FOR param : comp.configParameters SEPARATOR ','» «param.type.name» «param.name» «ENDFOR») {
+      public «comp.name»Impl(«FOR param : comp.configParameters SEPARATOR ','» «param.type.name» «param.name» «ENDFOR») {
         throw new Error("Invoking constructor on abstract implementation «comp.packageName».«comp.name»");
       }
     
@@ -106,26 +107,32 @@ class ComponentGenerator {
     var ComponentHelper helper = new ComponentHelper(comp)
     return '''
     «IF helper.isGeneric»
+    <
       «FOR generic : helper.genericParameters SEPARATOR ','»
         «generic»
       «ENDFOR»
+    >
     «ENDIF»
     '''
   }
 
   def generateInput(ComponentSymbol comp) {
+    var ComponentHelper helper = new ComponentHelper(comp)
+    
     return '''
       package «comp.packageName»;
       
       «printImports(comp)»
+      import de.montiarcautomaton.runtimes.timesync.implementation.IInput;
       
-      class «comp.name»Input«printGenerics(comp)»      
+      
+      public class «comp.name»Input«printGenerics(comp)»      
       «IF comp.superComponent.present» extends «comp.superComponent.get.fullName»Input«ENDIF»
       implements IInput 
        {
         
         «FOR port : comp.incomingPorts»
-          private «port.typeReference.referencedSymbol.name» «port.name»;
+          private «helper.getPortTypeName(port)» «port.name»;
         «ENDFOR»
         
         public «comp.name»Input() {
@@ -135,7 +142,7 @@ class ComponentGenerator {
         }
         
         «IF !comp.allIncomingPorts.empty»
-          public «comp.name»Input(«FOR port : comp.allIncomingPorts SEPARATOR ','» «port.typeReference.referencedSymbol.name» «port.name» «ENDFOR»=) {
+          public «comp.name»Input(«FOR port : comp.allIncomingPorts SEPARATOR ','» «helper.getPortTypeName(port)» «port.name» «ENDFOR») {
             «IF comp.superComponent.present»
               super(«FOR port : comp.superComponent.get.allIncomingPorts» «port.name» «ENDFOR»);
             «ENDIF»
@@ -147,17 +154,18 @@ class ComponentGenerator {
         «ENDIF»
         
       «FOR port : comp.incomingPorts»
-        public «port.typeReference.referencedSymbol.name» get«port.name.toFirstUpper»() {
+        public «helper.getPortTypeName(port)» get«port.name.toFirstUpper»() {
           return this.«port.name»;
+        }
       «ENDFOR»
       
       @Override
       public String toString() {
-        String result = "["
+        String result = "[";
         «FOR port : comp.incomingPorts»
           result += "«port.name»: " + this.«port.name» + " ";
         «ENDFOR»
-        return result + "]"
+        return result + "]";
       }  
         
       } 
@@ -166,29 +174,32 @@ class ComponentGenerator {
   }
 
   def generateResult(ComponentSymbol comp) {
+    var ComponentHelper helper = new ComponentHelper(comp)
     return '''
       package «comp.packageName»;
       
       «printImports(comp)»
+      import de.montiarcautomaton.runtimes.timesync.implementation.IResult;
       
-      class «comp.name»Output«printGenerics(comp)»
+      
+      public class «comp.name»Result«printGenerics(comp)»
       
       «IF comp.superComponent.present» extends «comp.superComponent.get.fullName»Input«ENDIF»
-      implements IOutput 
+      implements IResult 
        {
         
         «FOR port : comp.outgoingPorts»
-          private «port.typeReference.referencedSymbol.name» «port.name»;
+          private «helper.getPortTypeName(port)» «port.name»;
         «ENDFOR»
         
-        public «comp.name»Output() {
+        public «comp.name»Result() {
           «IF comp.superComponent.isPresent»
             super();
           «ENDIF»
         }
         
         «IF !comp.allOutgoingPorts.empty»
-          public «comp.name»Input(«FOR port : comp.allOutgoingPorts SEPARATOR ','» «port.typeReference.referencedSymbol.name» «port.name» «ENDFOR»=) {
+          public «comp.name»Result(«FOR port : comp.allOutgoingPorts SEPARATOR ','» «helper.getPortTypeName(port)» «port.name» «ENDFOR») {
             «IF comp.superComponent.present»
               super(«FOR port : comp.superComponent.get.allOutgoingPorts» «port.name» «ENDFOR»);
             «ENDIF»
@@ -198,19 +209,28 @@ class ComponentGenerator {
             
           }
         «ENDIF»
-        
+      
+      //getter  
       «FOR port : comp.outgoingPorts»
-        public «port.typeReference.referencedSymbol.name» get«port.name.toFirstUpper»() {
+        public «helper.getPortTypeName(port)» get«port.name.toFirstUpper»() {
           return this.«port.name»;
+        }
       «ENDFOR»
+      
+        // setter
+        «FOR port : comp.outgoingPorts»
+        public void set«port.name.toFirstUpper»(«helper.getPortTypeName(port)» «port.name») {
+          this.«port.name» = «port.name»;
+        }
+        «ENDFOR»
       
       @Override
       public String toString() {
-        String result = "["
+        String result = "[";
         «FOR port : comp.outgoingPorts»
           result += "«port.name»: " + this.«port.name» + " ";
         «ENDFOR»
-        return result + "]"
+        return result + "]";
       }  
         
       } 
@@ -248,6 +268,8 @@ class ComponentGenerator {
   }
 
   def generateAtomicComponent(ComponentSymbol comp) {
+    var ComponentHelper helper = new ComponentHelper(comp);
+    
     return '''
       package «comp.packageName»;
       
@@ -259,46 +281,55 @@ class ComponentGenerator {
       import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
       import de.montiarcautomaton.runtimes.Log;
       
-      public class ${name}«printGenerics(comp)»      
-      «IF comp.superComponent.present» extends «comp.superComponent.get.fullName»Input«ENDIF»
+      public class «comp.name»«printGenerics(comp)»      
+      «IF comp.superComponent.present» extends «comp.superComponent.get.fullName» 
+      «printGenerics(comp.superComponent.get.referencedComponent.get)»
+      «ENDIF»
       implements IComponent {
         
         // component variables
         «FOR v : comp.variables»
-          «printMember(v.typeReference.name, v.name, "protected")»
+          «printMember(helper.printVariableTypeName(v), v.name, "protected")»
         «ENDFOR»
         
         // config parameters
         «FOR param : comp.configParameters»
-          «printMember(param.type.name, param.name, "private final")»
+          «printMember(helper.printParamTypeName(param), param.name, "private final")»
         «ENDFOR»
         
         // port fields
         «FOR port : comp.ports»
-          «printMember(port.name, "Port<" + port.typeReference.name +">" , "protected")»
+          «printMember("Port<" + helper.printPortTypeName(port)+">", port.name, "protected")»
         «ENDFOR»      
       
         // port setter
         «FOR inPort : comp.incomingPorts»
-          public void setPort«inPort.name.toFirstUpper»(Port<«inPort.typeReference.name»> port) {
+          public void setPort«inPort.name.toFirstUpper»(Port<«helper.printPortTypeName(inPort)»> port) {
             this.«inPort.name» = port;
           }
-        «ENDFOR»
       
         // port getter
+          public Port<«helper.printPortTypeName(inPort)»> getPort«inPort.name.toFirstUpper»() {
+            return this.«inPort.name»;
+          }
+        «ENDFOR»
+        
         «FOR outPort : comp.outgoingPorts»
-          public Port<«outPort.typeReference.name»> getPort«outPort.name.toFirstUpper»() {
+          public Port<«helper.printPortTypeName(outPort)»> getPort«outPort.name.toFirstUpper»() {
             return this.«outPort.name»;
           }
         «ENDFOR»
         
         // the components behavior implementation
         private final IComputable
-        <«comp.name»Input«printGenerics(comp)», «comp.name»Output«printGenerics(comp)»>
+        <«comp.name»Input«printGenerics(comp)», «comp.name»Result«printGenerics(comp)»>
         behaviorImpl;      
       
         
-        public «comp.name»(«FOR param : comp.configParameters SEPARATOR ','» «param.type.name» «param.name»«ENDFOR») {
+        public «comp.name»(«FOR param : comp.configParameters SEPARATOR ','» «helper.printParamTypeName(param)» «param.name»«ENDFOR») {
+          «IF comp.superComponent.isPresent»
+          super(«FOR inhParam : helper.getInheritedParams() SEPARATOR ','» «inhParam» «ENDFOR»);
+          «ENDIF»
           behaviorImpl = new «comp.name»Impl«printGenerics(comp)»(
           «IF comp.hasConfigParameters» «FOR param : comp.configParameters SEPARATOR ','» «param.name» «ENDFOR» «ENDIF»);
           
@@ -315,7 +346,7 @@ class ComponentGenerator {
         «ENDIF»
         // set up output ports
         «FOR portOut : comp.outgoingPorts»
-          this.«portOut.name» = new Port<«portOut.typeReference.name»>();
+          this.«portOut.name» = new Port<«helper.printPortTypeName(portOut)»>();
         «ENDFOR»
         
         this.initialize();
@@ -345,7 +376,7 @@ class ComponentGenerator {
         public void compute() {
           // collect current input port values
         final «comp.name»Input«printGenerics(comp)» input = new «comp.name»Input«printGenerics(comp)»
-        («FOR inPort : comp.incomingPorts SEPARATOR ','»this.«inPort.name».getCurrentValue()«ENDFOR»);
+        («FOR inPort : comp.incomingPorts SEPARATOR ','»this.getPort«inPort.name.toFirstUpper»().getCurrentValue()«ENDFOR»);
         
         try {
         // perform calculations
@@ -370,12 +401,13 @@ class ComponentGenerator {
         
         private void initialize() {
            // get initial values from behavior implementation
-           final «comp.name»Result«printGenerics(comp)» result = new «comp.name»Result«printGenerics(comp)»();
-        result = behaviorImpl.getInitialValues();
+        final «comp.name»Result«printGenerics(comp)» result = behaviorImpl.getInitialValues();
         
         // set results to ports
         setResult(result);
         }
+        
+      }
     '''
   }
 
@@ -394,15 +426,15 @@ class ComponentGenerator {
       implements IComponent {
        
         // port fields
-        «FOR port : comp.ports»»
-            protected Port<«port.typeReference.name»> «port.name»;
+        «FOR port : comp.ports»
+            protected Port<«helper.printPortTypeName(port)»> «port.name»;
            // port setter
-           public void setPort«port.name.toFirstUpper»(Port<«port.typeReference.name»> port) {
+           public void setPort«port.name.toFirstUpper»(Port<«helper.printPortTypeName(port)»> port) {
              this.«port.name» = port;
            }
            
            // port getter
-           public Port<«port.typeReference.name»> getPort«port.name.toFirstUpper»() {
+           public Port<«helper.printPortTypeName(port)»> getPort«port.name.toFirstUpper»() {
              return this.«port.name»;
            }
         «ENDFOR»   
@@ -410,22 +442,22 @@ class ComponentGenerator {
         
         // config parameters
         «FOR param : comp.configParameters»
-          private final «param.type.name» «param.name»;
+          private final «helper.printParamTypeName(param)» «param.name»;
         «ENDFOR»
         
         // subcomponents
         «FOR subcomp : comp.subComponents»
-          private «subcomp.componentType.name» «subcomp.name»;  
+          private «helper.getSubComponentTypeName(subcomp)» «subcomp.name»;  
         «ENDFOR»
       
         // subcomponent getter
         «FOR subcomp : comp.subComponents»
-          public «subcomp.componentType.name» getComponent«subcomp.name.toFirstUpper»() {
+          public «helper.getSubComponentTypeName(subcomp)» getComponent«subcomp.name.toFirstUpper»() {
             return this.«subcomp.name»;
           }
         «ENDFOR»
         
-        public «comp.name»(«FOR param : comp.configParameters SEPARATOR ','»«param.type.name» «param.name»«ENDFOR») {
+        public «comp.name»(«FOR param : comp.configParameters SEPARATOR ','»«helper.printParamTypeName(param)» «param.name»«ENDFOR») {
           «IF comp.superComponent.present»
             super();
           «ENDIF»
@@ -447,7 +479,7 @@ class ComponentGenerator {
           «ENDFOR»
         }
       
-        
+      }
         
     '''
   }
@@ -539,12 +571,11 @@ class ComponentGenerator {
       «ENDIF»
       // instantiate all subcomponents
       «FOR subcomponent : comp.subComponents»
-        this.«subcomponent.name» = new «subcomponent.componentType.name»(
+        this.«subcomponent.name» = new «helper.getSubComponentTypeName(subcomponent)»(
         «FOR param : helper.getParamValues(subcomponent) SEPARATOR ','»
           «param»
         «ENDFOR»);
         
-        )
       «ENDFOR»
     
         //set up all sub components  
@@ -554,13 +585,13 @@ class ComponentGenerator {
         
         // set up output ports
         «FOR portOut : comp.outgoingPorts»
-      this.«portOut.name» = new Port<«portOut.typeReference.name»>();
+      this.«portOut.name» = new Port<«helper.printPortTypeName(portOut)»>();
         «ENDFOR»
         
         // propagate children's output ports to own output ports
         «FOR connector : comp.connectors»
       «IF !helper.isIncomingPort(comp,connector, false, connector.target)»
-        «helper.getConnectorComponentName(connector,false)».setPort(«helper.getConnectorPortName(connector,false).toFirstUpper»(«helper.getConnectorComponentName(connector, true)».getPort«helper.getConnectorPortName(connector, true).toFirstUpper»());
+        «helper.getConnectorComponentName(connector,false)».setPort«helper.getConnectorPortName(connector,false).toFirstUpper»(«helper.getConnectorComponentName(connector, true)».getPort«helper.getConnectorPortName(connector, true).toFirstUpper»());
       «ENDIF»
         «ENDFOR»
         
