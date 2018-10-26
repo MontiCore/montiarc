@@ -1,6 +1,6 @@
 package components.body.automaton.transition.assignments;
 
-import types.Types.Car;
+import types.CDTestTypes.*;
 
 /**
  * Invalid model.
@@ -12,10 +12,12 @@ import types.Types.Car;
 component AssignmentTypeConflictWithCD {
 
     port 
-        out Car c;
+        out int iOut;
 
+    TypeWithFields tf;
+    
     automaton {
       state S;
-      initial S / {c = 5};
+      initial S / {iOut = tf.t};
     }
 }

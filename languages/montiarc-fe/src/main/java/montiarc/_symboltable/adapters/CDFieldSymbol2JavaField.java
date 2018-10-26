@@ -21,8 +21,16 @@ public class CDFieldSymbol2JavaField extends JavaFieldSymbol
   private final CDFieldSymbol adaptee;
   
   private static JavaTypeSymbolReference createReference(CDTypeSymbolReference cdReference) {
-    return new JavaTypeSymbolReference(cdReference.getName(), cdReference.getEnclosingScope(),
-        cdReference.getDimension());
+    //case when its a reference to a cd type
+    if (cdReference.existsReferencedSymbol()) {
+      return new JavaTypeSymbolReference(cdReference.getName(), cdReference.getEnclosingScope(),
+          cdReference.getDimension());
+    }
+    // case when its a java type
+    else {
+      return new JavaTypeSymbolReference(cdReference.getName(), cdReference.getAstNode().get().getEnclosingScopeOpt().get(),
+          cdReference.getDimension());
+    }
   }
   
   public CDFieldSymbol2JavaField(CDFieldSymbol adaptee) {
