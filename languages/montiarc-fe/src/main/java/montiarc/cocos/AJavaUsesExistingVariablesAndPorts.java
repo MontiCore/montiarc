@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import de.monticore.java.javadsl._ast.ASTBlockStatement;
+import de.monticore.java.symboltable.JavaTypeSymbol;
 import de.monticore.mcexpressions._ast.ASTNameExpression;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -51,7 +52,7 @@ public class AJavaUsesExistingVariablesAndPorts implements MontiArcASTJavaPBehav
         Collection<PortSymbol> ports = componentScope
             .<PortSymbol> resolveDownMany(entry.getKey().getName(), PortSymbol.KIND);
         Optional<JTypeSymbol> type = componentScope.resolve(entry.getKey().getName(),
-            JTypeSymbol.KIND);
+            JavaTypeSymbol.KIND);
         boolean foundConfigParameter = false;
         Optional<ComponentSymbol> comp = (Optional<ComponentSymbol>) componentScope
             .getSpanningSymbol();
