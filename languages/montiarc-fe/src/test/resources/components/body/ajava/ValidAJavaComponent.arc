@@ -3,7 +3,7 @@ package components.body.ajava;
 /**
  * Valid model.
  */
-component ValidAJavaComponent(String x) {
+component ValidAJavaComponent(Integer x) {
 
   port
     in Integer i,
