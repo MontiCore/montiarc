@@ -14,7 +14,9 @@ import java.util.Stack;
 
 import de.monticore.ast.ASTNode;
 import de.monticore.java.javadsl._ast.ASTDoWhileStatement;
+import de.monticore.java.javadsl._ast.ASTEnhancedForControl;
 import de.monticore.java.javadsl._ast.ASTForStatement;
+import de.monticore.java.javadsl._ast.ASTFormalParameter;
 import de.monticore.java.javadsl._ast.ASTIfStatement;
 import de.monticore.java.javadsl._ast.ASTLocalVariableDeclaration;
 import de.monticore.java.javadsl._ast.ASTSwitchBlockStatementGroup;
@@ -599,8 +601,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   @Override
   public void visit(ASTJavaPBehavior node) {
     // Add the presence of a behavior element to the component symbol
-    if(currentScope().isPresent()){
-      if(currentScope().get().getSpanningSymbol().isPresent()){
+    if (currentScope().isPresent()) {
+      if (currentScope().get().getSpanningSymbol().isPresent()) {
         ((ComponentSymbol) currentSymbol().get()).setHasBehavior(true);
       }
     }
@@ -661,6 +663,26 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     }
   }
   
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLVisitor#visit(de.monticore.java.javadsl._ast.ASTEnhancedForControl)
+   */
+  @Override
+  public void visit(ASTEnhancedForControl node) {
+    ASTFormalParameter param = node.getFormalParameter();
+    final ASTType type = param.getType();
+    String typeName = TypesPrinter.printTypeWithoutTypeArgumentsAndDimension(type);
+    
+    VariableSymbol variableSymbol = new VariableSymbol(param.getDeclaratorId().getName());
+    int dimension = TypesHelper.getArrayDimensionIfArrayOrZero(type);
+    JTypeReference<JavaTypeSymbol> typeRef = new JavaTypeSymbolReference(typeName,
+        currentScope().get(), dimension);
+    addTypeArgumentsToTypeSymbol(typeRef, type, currentScope().get());
+    
+    variableSymbol.setTypeReference(typeRef);
+    
+    addToScopeAndLinkWithNode(variableSymbol, node);
+  }
+  
   /***************************************
    * I/O Automaton integration
    ***************************************/
@@ -671,8 +693,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   @Override
   public void visit(ASTAutomatonBehavior node) {
     // Add the presence of a behavior element to the component symbol
-    if(currentScope().isPresent()){
-      if(currentScope().get().getSpanningSymbol().isPresent()){
+    if (currentScope().isPresent()) {
+      if (currentScope().get().getSpanningSymbol().isPresent()) {
         ((ComponentSymbol) currentSymbol().get()).setHasBehavior(true);
       }
     }

@@ -17,9 +17,18 @@ component ValidAJavaComponent(Integer x) {
   }
   
   compute CalculateSomething {
-    counter+=1;
-    o = i + counter;
-    o = x;
+    for(int j = 1; j<10; j++) {
+      counter+=1;
+      o = i + counter;
+      o = x;
+      o += j;
+    }
+    
+    List<String> l = new ArrayList<String>();
+    for(String s : l) {
+      s.toString();
+    }
+    
   }
 
 
