@@ -1,7 +1,7 @@
 package components.head.inheritance;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -31,38 +31,37 @@ import montiarc.cocos.MontiArcCoCos;
  * @author Andreas Wortmann
  */
 public class InheritanceTest extends AbstractCoCoTest {
-  
+
   private static final String PACKAGE = "components.head.inheritance";
-  
+
   @BeforeClass
   public static void setUp() {
     Log.enableFailQuick(false);
   }
-  
+
   @Test
   public void testSuperComponents() {
     ComponentSymbol subB = this.loadComponentSymbol(PACKAGE, "SubB");
     assertTrue(subB.getIncomingPort("anotherIn").isPresent());
     assertTrue(subB.getOutgoingPort("anotherOut").isPresent());
     assertTrue(subB.getOutgoingPort("anotherOut2").isPresent());
-    
+
     // inherited
-    assertNotNull(subB.getSpannedScope().resolve("myInput", PortSymbol.KIND));
+    assertTrue(subB.getIncomingPort("myInput",true).isPresent());
     assertEquals(2, subB.getAllIncomingPorts().size());
-    
-    assertNotNull(subB.getSpannedScope().resolve("myOutput", PortSymbol.KIND));
-    assertNotNull(subB.getSpannedScope().resolve("myOutput519", PortSymbol.KIND));
+
+    assertTrue(subB.getOutgoingPort("myOutput", true).isPresent());
+    assertTrue(subB.getOutgoingPort("myOutput519", true).isPresent());
     assertEquals(4, subB.getAllOutgoingPorts().size());
   }
-  
+
   @Test
   public void testPortInheritance() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ExtendsSuperComponent");
     assertTrue(comp.getIncomingPort("inputInteger").isPresent()); // Locally
                                                                   // defined
                                                                   // port
-    assertNotNull(comp.getSpannedScope()
-        .resolve("inputString", PortSymbol.KIND)); // port inherited from
+    assertTrue(comp.getIncomingPort("inputString", true).isPresent()); // port inherited from
                                                    // SuperComponent
     checkValid(PACKAGE + "." + "ExtendsSuperComponent");
   }
