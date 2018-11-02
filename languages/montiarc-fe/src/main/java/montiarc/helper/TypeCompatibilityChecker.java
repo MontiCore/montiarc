@@ -85,6 +85,10 @@ public class TypeCompatibilityChecker {
       List<JTypeSymbol> targetTypeFormalTypeParameters,
       List<JTypeReference<? extends JTypeSymbol>> targetTypeArguments) {
     
+    if(sourceType.getName().equals("null")) {
+      return true;
+    }
+    
     checkNotNull(sourceType);
     checkNotNull(targetType);
     
