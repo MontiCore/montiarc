@@ -15,7 +15,6 @@ import de.monticore.mcexpressions._ast.ASTCallExpression;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.mcexpressions._ast.ASTQualifiedNameExpression;
 import de.monticore.symboltable.Scope;
-import de.monticore.symboltable.types.JMethodSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.se_rwth.commons.logging.Log;

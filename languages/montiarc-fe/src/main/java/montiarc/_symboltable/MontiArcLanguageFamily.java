@@ -6,7 +6,6 @@ import de.monticore.symboltable.resolving.CommonResolvingFilter;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.umlcd4a.CD4AnalysisLanguage;
-import montiarc.helper.CD4ALanguage;
 
 /**
  * The MontiArcLanguageFamily aggregates common languages for MontiArc usage; these are

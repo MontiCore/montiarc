@@ -33,7 +33,7 @@ public class MontiArcModelNameCalculator
     if (ComponentSymbol.KIND.isKindOf(kind)) {
       calculatedModelNames.addAll(calculateModelNameForComponent(name));
     }
-    else if (PortSymbol.KIND.isKindOf(kind)) {
+    else if (PortSymbol.KIND.isKindOf(kind) || VariableSymbol.KIND.isKindOf(kind)) {
       calculatedModelNames.addAll(calculateModelNameForPort(name));
     }
     else if (ConnectorSymbol.KIND.isKindOf(kind)) {

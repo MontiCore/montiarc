@@ -1,4 +1,4 @@
-package montiarc._symboltable;
+package montiarc._symboltable.adapters;
 
 import de.monticore.ast.ASTNode;
 import de.monticore.java.symboltable.JavaFieldSymbol;
@@ -7,6 +7,7 @@ import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.resolving.SymbolAdapter;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
+import montiarc._symboltable.PortSymbol;
 
 /**
  * Variable to field adapter for accessing variables/inputs/outputs as Java fields inside Java
