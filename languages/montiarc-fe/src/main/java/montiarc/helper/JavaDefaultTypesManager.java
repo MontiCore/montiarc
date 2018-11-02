@@ -32,7 +32,6 @@ public class JavaDefaultTypesManager {
       ArtifactScope spannedScope = new ArtifactScope("java.lang", new ArrayList<ImportStatement>());
       spannedScope.setResolvingFilters(globalScope.getResolvingFilters());
       spannedScope.setEnclosingScope(globalScope);
-      jTypeSymbol.setEnclosingScope(globalScope);
       spannedScope.add(jTypeSymbol);
       globalScope.addSubScope(spannedScope);
     }
