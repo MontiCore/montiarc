@@ -70,6 +70,11 @@ public class SubComponentTest extends AbstractCoCoTest {
   }
   
   @Test
+  public void testSubcomponentWithUUIDArg() {
+    checkValid(PACKAGE + "." + "ComponentWithConfigArgPassingToSub");
+  }
+  
+  @Test
   public void testSubcomponentParametersOfWrongTypeWithCD() {
     final String modelName = PACKAGE + "." + "SubcomponentParametersOfWrongType";
     ASTMontiArcNode node = loadComponentAST(modelName);
