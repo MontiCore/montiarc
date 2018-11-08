@@ -854,4 +854,29 @@ public class SubComponentTest extends AbstractCoCoTest {
 
     checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
+
+  @Test
+  public void testHasGenericOutput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." + "HasGenericOutput");
+  }
+
+  @Test
+  public void testHasGenericInput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." + "HasGenericInput");
+  }
+
+  @Test
+  public void testInheritsOutgoingStringPort() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +"InheritsOutgoingStringPort");
+  }
+
+  @Test
+  public void testExtendsExtendsHasStringInputAndOutput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +"ExtendsExtendsHasStringInputAndOutput");
+  }
+
+  @Test
+  public void testExtendsHasStringInputAndOutput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +"ExtendsHasStringInputAndOutput");
+  }
 }

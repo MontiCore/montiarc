@@ -1,17 +1,16 @@
 package montiarc._symboltable;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.annotation.Nullable;
-
 import de.monticore.symboltable.CommonSymbol;
 import de.se_rwth.commons.Splitters;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTConnector;
 import montiarc.helper.SymbolPrinter;
+
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Symbol for {@link ASTConnector}s. The name of a connector symbol equals its
@@ -84,8 +83,7 @@ public class ConnectorSymbol extends CommonSymbol {
   
   protected Optional<PortSymbol> getPort(String name) {
     ComponentSymbol cmp = (ComponentSymbol) this.getEnclosingScope().getSpanningSymbol().get();
-    Optional<PortSymbol> foundPort = Optional.empty();
-    
+
     // Case 1: componentinstance.port
     if (name.contains(".")) {
       Iterator<String> parts = Splitters.DOT.split(name).iterator();
@@ -100,27 +98,17 @@ public class ConnectorSymbol extends CommonSymbol {
         Log.error("0xMA008 Instance " + instance+ " is not defined in the component type " +cmp.getName());
         return Optional.empty();
       }
-      foundPort = inst.get().getComponentType().getReferencedSymbol().getAllPorts().stream().filter(p -> p.getName().equals(instancePort)).findFirst();
+      return inst.get().getComponentType().getReferencedSymbol().getAllPorts().stream().filter(p -> p.getName().equals(instancePort)).findFirst();
     }
-    // Case 2: port
+    // Case 2: port has to be locally defined or inherited
     else {
-      // Is port defined in component type?
-      foundPort = this.getEnclosingScope().<PortSymbol> resolveLocally(name,
-          PortSymbol.KIND);
-      
-      // Is it an inherited port from a super component?
-      if (!foundPort.isPresent()) {
-        if (cmp.getSuperComponent().isPresent()) {
-          ComponentSymbolReference superCmp = cmp.getSuperComponent().get();
-          foundPort = superCmp.getReferencedComponent().get().getSpannedScope()
-              .<PortSymbol> resolve(name,
-                  PortSymbol.KIND);
-        }
-      }
-      
+      final Optional<PortSymbol> portSymbolOptional
+          = cmp.getAllPorts()
+                .stream()
+                .filter(p -> p.getName().equals(name))
+                .findFirst();
+      return portSymbolOptional;
     }
-    return foundPort;
-    
   }
   
   /**

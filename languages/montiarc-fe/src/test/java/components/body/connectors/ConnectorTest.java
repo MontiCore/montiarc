@@ -280,5 +280,21 @@ public class ConnectorTest extends AbstractCoCoTest {
   public void testTypeHierarchyInConnector() {
     checkValid(PACKAGE + "." + "TypeHierarchyInConnector");
   }
+
+  @Test
+  @Ignore("Fix CoCo")
+  public void testConnectsIncompatibleInheritedPorts2() {
+    checkValid(PACKAGE + "." + "ConnectsIncompatibleInheritedPorts2");
+  }
+
+  @Test
+  public void testConnectsIncompatibleInheritedPorts() {
+    final String modelName = PACKAGE + "." + "ConnectsIncompatibleInheritedPorts";
+    final ExpectedErrorInfo expectedErrorInfo
+        = new ExpectedErrorInfo(4, "xMA033", "xMA067");
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
+  }
   
 }

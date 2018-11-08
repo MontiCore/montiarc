@@ -427,16 +427,26 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
     return referencedComponent.orElse(this).getAllPorts(false);
   }
 
-  protected List<PortSymbol> getAllPorts() {
-    List<PortSymbol> result = new ArrayList<PortSymbol>();
+  /**
+   * Find all ports of the component. This includes inherited ports from all
+   * super components. NameSpaceHiding is considered and therefore, hidden
+   * ports are not returned.
+   * A StackOverflowException will occur if the component is part of an
+   * inheritance cycle.
+   * @return A list of all ports of the component.
+   */
+  public List<PortSymbol> getAllPorts() {
 
     // own ports
-    result.addAll(getPorts());
+    List<PortSymbol> result = new ArrayList<PortSymbol>(getPorts());
 
     // ports from super components
     Optional<ComponentSymbolReference> superCompOpt = getSuperComponent();
     if (superCompOpt.isPresent()) {
       for (PortSymbol superPort : superCompOpt.get().getAllPorts()) {
+
+        // Check if the port was already added from an extending component
+        // Don't add the PortSymbol in that case, as the port is then hidden.
         boolean alreadyAdded = false;
         for (PortSymbol pToAdd : result) {
           if (pToAdd.getName().equals(superPort.getName())) {
