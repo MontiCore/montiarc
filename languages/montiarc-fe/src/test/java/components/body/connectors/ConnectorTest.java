@@ -11,12 +11,14 @@ import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
-import montiarc._cocos.MontiArcASTBehaviorElementCoCo;
 import montiarc._cocos.MontiArcASTConnectorCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
-import montiarc.cocos.*;
+import montiarc.cocos.ConnectorEndPointIsCorrectlyQualified;
+import montiarc.cocos.ConnectorSourceAndTargetComponentDiffer;
+import montiarc.cocos.ConnectorSourceAndTargetExistAndFit;
+import montiarc.cocos.MontiArcCoCos;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -215,9 +217,19 @@ public class ConnectorTest extends AbstractCoCoTest {
     
     assertEquals(1, connector.getStereotype().size());
     assertFalse(connector.getStereotype().get("realNews").isPresent());
-//    checkValid(PACKAGE + "." + "ConnectorsWithStereotypes");
+    checkValid(PACKAGE + "." + "ConnectorsWithStereotypes");
   }
   
+  @Test
+  @Ignore("see issue #237. Change coco and/or fix errors codes in test")
+  public void testConnectingInnerCompToIncomingPort() {
+    final String modelName = PACKAGE + "." + "ConnectingInnerCompToIncomingPort";
+    MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(2);
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
+  }
+
   @Test
   public void testConnectsNonExistingPorts() {
     ASTMontiArcNode node = loadComponentAST(
