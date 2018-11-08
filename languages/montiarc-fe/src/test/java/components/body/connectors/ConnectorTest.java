@@ -196,11 +196,12 @@ public class ConnectorTest extends AbstractCoCoTest {
   @Test
   /* Checks whether the source and target of a connect statement exist. */
   public void testConnectorReferenceDoesNotExist() {
-    ASTMontiArcNode node = loadComponentAST(
-        PACKAGE + "." + "ConnectorReferenceDoesNotExist");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
-        .addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(7, "xMA066", "xMA067","xMA008"));
+    final String modelName = PACKAGE + "." + "ConnectorReferenceDoesNotExist";
+    MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(7, "xMA066", "xMA067", "xMA008");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
   @Test
@@ -214,6 +215,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     
     assertEquals(1, connector.getStereotype().size());
     assertFalse(connector.getStereotype().get("realNews").isPresent());
+//    checkValid(PACKAGE + "." + "ConnectorsWithStereotypes");
   }
   
   @Test
@@ -279,6 +281,16 @@ public class ConnectorTest extends AbstractCoCoTest {
   @Test
   public void testTypeHierarchyInConnector() {
     checkValid(PACKAGE + "." + "TypeHierarchyInConnector");
+  }
+
+  @Test
+  public void testGenericSourceTypeNotSubtypeOfTargetType() {
+    final String modelName = PACKAGE + "." + "GenericSourceTypeNotSubtypeOfTargetType";
+    final ExpectedErrorInfo expectedErrorInfo
+        = new ExpectedErrorInfo(1, "xMA033");
+    final MontiArcCoCoChecker checker
+        = MontiArcCoCos.createChecker();
+    checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
   }
 
   @Test
