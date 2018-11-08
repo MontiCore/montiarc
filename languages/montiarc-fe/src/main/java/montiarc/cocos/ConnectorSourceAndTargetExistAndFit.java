@@ -148,9 +148,6 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
                 connector.getAstNode().get().get_SourcePositionStart());
           }
         }
-        else {
-          Log.error("0xMA097 Could not load referenced Symbol.", sourcePort.get().getAstNode().get().get_SourcePositionStart());
-        }
       }
     }
   }
