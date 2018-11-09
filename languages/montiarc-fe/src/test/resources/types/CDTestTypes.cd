@@ -3,8 +3,10 @@ package types;
 classdiagram CDTestTypes {
 
   class TypeWithFields {
-    int testInt = 1;
+    Integer x;
+    Integer y = 1;
     boolean testBool = true;
+    SubTypeOne t;
 
     int privateVar = 0;
   }

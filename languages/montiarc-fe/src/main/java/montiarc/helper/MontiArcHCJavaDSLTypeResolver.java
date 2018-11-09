@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import com.google.common.base.Strings;
+
 import de.monticore.java.symboltable.JavaFieldSymbol;
 import de.monticore.java.symboltable.JavaMethodSymbol;
 import de.monticore.java.symboltable.JavaTypeSymbol;
@@ -53,7 +55,8 @@ public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
     Optional<PortSymbol> portSymbol = scope.<PortSymbol> resolve(typeSymbolName, PortSymbol.KIND);
     Optional<VariableSymbol> varSymbol = scope.<VariableSymbol> resolve(typeSymbolName,
         VariableSymbol.KIND);
-    Optional<JavaFieldSymbol> fieldSymbol = scope.<JavaFieldSymbol> resolve(typeSymbolName, JavaFieldSymbol.KIND);
+    Optional<JavaFieldSymbol> fieldSymbol = scope.<JavaFieldSymbol> resolve(typeSymbolName,
+        JavaFieldSymbol.KIND);
     JavaTypeSymbolReference expType = new JavaTypeSymbolReference(typeSymbolName, scope, 0);
     
     if (portSymbol.isPresent()) {
@@ -62,7 +65,7 @@ public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
     else if (varSymbol.isPresent()) {
       expType = (JavaTypeSymbolReference) varSymbol.get().getTypeReference();
     }
-    else if(fieldSymbol.isPresent()) {
+    else if (fieldSymbol.isPresent()) {
       expType = (JavaTypeSymbolReference) fieldSymbol.get().getType();
     }
     Optional<JavaTypeSymbol> typeSymbol = Optional.ofNullable(expType.getReferencedSymbol());
@@ -115,12 +118,14 @@ public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
     }
     
     // try to resolve a type
-    Collection<JavaTypeSymbol> resolvedTypes = scope.resolveMany(name, JavaTypeSymbol.KIND);
-    if (resolvedTypes.size() == 1) {
-      JavaTypeSymbol type = resolvedTypes.iterator().next();
-      setResult(new JavaTypeSymbolReference(type.getFullName(),
-          scope, 0));
-      return;
+    if (!getResult().isPresent() && Character.isUpperCase(name.charAt(0))) {
+      Collection<JavaTypeSymbol> resolvedTypes = scope.resolveMany(name, JavaTypeSymbol.KIND);
+      if (resolvedTypes.size() == 1) {
+        JavaTypeSymbol type = resolvedTypes.iterator().next();
+        setResult(new JavaTypeSymbolReference(type.getFullName(),
+            scope, 0));
+        return;
+      }
     }
     
     // no symbol found for this expression. it could be a package name

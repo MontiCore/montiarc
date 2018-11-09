@@ -11,6 +11,8 @@ import de.monticore.symboltable.types.JMethodSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import montiarc._symboltable.adapters.CDFieldSymbol2JavaFieldFilter;
 import montiarc._symboltable.adapters.CDTypeSymbol2JavaTypeFilter;
+import montiarc._symboltable.adapters.Port2FieldResolvingFilter;
+import montiarc._symboltable.adapters.Variable2FieldResolvingFilter;
 
 //XXX: https://git.rwth-aachen.de/montiarc/core/issues/51
 

@@ -69,6 +69,11 @@ public class AJavaTest extends AbstractCoCoTest {
   }
   
   @Test
+  public void testAJavaWithSwitchCase() {
+    checkValid(PACKAGE + "." + "ComputeWithSwitchCaseStatement");
+  }
+  
+  @Test
   public void testAJavaComputeBlockNameIsLowerCase() {
     final ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "AJavaComputeBlockNameIsLowerCase");

@@ -1,8 +1,9 @@
-package montiarc._symboltable;
+package montiarc._symboltable.adapters;
 
 import de.monticore.java.symboltable.JavaFieldSymbol;
 import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.resolving.TransitiveAdaptedResolvingFilter;
+import montiarc._symboltable.PortSymbol;
 
 public class Port2FieldResolvingFilter extends TransitiveAdaptedResolvingFilter<JavaFieldSymbol> {
   

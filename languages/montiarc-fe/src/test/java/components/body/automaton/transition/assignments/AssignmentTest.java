@@ -154,6 +154,12 @@ public class AssignmentTest extends AbstractCoCoTest {
   }
   
   @Test
+  public void testAssignmentTypeConflictWithCD() {
+    final ASTMontiArcNode ast = loadComponentAST(PACKAGE + "." + "AssignmentTypeConflictWithCD");
+    checkInvalid(MontiArcCoCos.createChecker(), ast,
+        new ExpectedErrorInfo(1, "xMA042"));  }
+  
+  @Test
   public void testMultipleMessagesPerCycle() {
     final ASTMontiArcNode astMontiArcNode = loadComponentAST(
         PACKAGE + "." + "OneAssignmentPerCycle");
