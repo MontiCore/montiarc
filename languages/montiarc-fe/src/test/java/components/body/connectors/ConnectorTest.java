@@ -13,12 +13,11 @@ import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcASTConnectorCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
-import montiarc.cocos.ConnectorEndPointIsCorrectlyQualified;
-import montiarc.cocos.ConnectorSourceAndTargetComponentDiffer;
-import montiarc.cocos.ConnectorSourceAndTargetExistAndFit;
-import montiarc.cocos.MontiArcCoCos;
+import montiarc._symboltable.PortSymbol;
+import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -296,6 +295,11 @@ public class ConnectorTest extends AbstractCoCoTest {
   }
 
   @Test
+  public void testGenericSourceTypeIsSubtypeOfTargetType() {
+    checkValid(PACKAGE + "." + "GenericSourceTypeIsSubtypeOfTargetType");
+  }
+
+  @Test
   public void testGenericSourceTypeNotSubtypeOfTargetType() {
     final String modelName = PACKAGE + "." + "GenericSourceTypeNotSubtypeOfTargetType";
     final ExpectedErrorInfo expectedErrorInfo
@@ -308,7 +312,24 @@ public class ConnectorTest extends AbstractCoCoTest {
   @Test
   @Ignore("Fix CoCo")
   public void testConnectsIncompatibleInheritedPorts2() {
-    checkValid(PACKAGE + "." + "ConnectsIncompatibleInheritedPorts2");
+    final String compName = "ConnectsIncompatibleInheritedPorts2";
+    final ComponentSymbol componentSymbol = loadComponentSymbol(PACKAGE, compName);
+
+    final Optional<ComponentInstanceSymbol> subComp
+        = componentSymbol.getSubComponent("subComp");
+    assertTrue(subComp.isPresent());
+
+    final ComponentSymbol subCompSymbol
+        = subComp.get().getComponentType().getReferencedSymbol();
+
+    final Optional<PortSymbol> inTOpt = subCompSymbol.getPort("inT");
+    assertTrue(inTOpt.isPresent());
+
+    final Optional<PortSymbol> outTOpt = componentSymbol.getPort("outT", true);
+    assertTrue(outTOpt.isPresent());
+
+
+    checkValid(PACKAGE + "." + compName);
   }
 
   @Test
