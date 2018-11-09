@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import de.monticore.java.javadsl._ast.ASTConstantExpressionSwitchLabel;
 import de.monticore.java.javadsl._ast.ASTVariableDeclarator;
 import de.monticore.java.javadsl._visitor.JavaDSLDelegatorVisitor;
 import de.monticore.java.javadsl._visitor.JavaDSLVisitor;
@@ -34,12 +35,14 @@ public class NamesInExpressionsDelegatorVisitor extends JavaDSLDelegatorVisitor 
   /**
    * Enum used by {@link NamesInMCExpressionsVisitor}
    * {@link NamesInJavaExpressionsVisitor} and {@link NamesInExpressionsDelegatorVisitor}.
+   * 
+   * Expressions are mapped to these Kinds. A expression is of type DEFAULT when it is of no other kind. 
    *
    * @author Pfeiffer
    * @version $Revision$, $Date$
    */
   public enum ExpressionKind {
-    COMPARISON, CALL, ASSIGNMENT_RIGHT, ASSIGNMENT_LEFT, DEFAULT, PREFIX_EXPR, POSTFIX_EXPR;
+    CONSTANT_EXPRESSION_SWITCHLABEL, COMPARISON, CALL, ASSIGNMENT_RIGHT, ASSIGNMENT_LEFT, DEFAULT, PREFIX_EXPR, POSTFIX_EXPR;
   }
 
   
@@ -129,6 +132,16 @@ public class NamesInExpressionsDelegatorVisitor extends JavaDSLDelegatorVisitor 
   public void visit(ASTSuffixExpression node) {
     currentExpressionKind = Optional.of(ExpressionKind.POSTFIX_EXPR);
     node.getExpression().accept(getRealThis());
+    currentExpressionKind = Optional.empty();
+  }
+  
+  /**
+   * @see de.monticore.java.javadsl._visitor.JavaDSLDelegatorVisitor#visit(de.monticore.java.javadsl._ast.ASTConstantExpressionSwitchLabel)
+   */
+  @Override
+  public void visit(ASTConstantExpressionSwitchLabel node) {
+    currentExpressionKind = Optional.of(ExpressionKind.CONSTANT_EXPRESSION_SWITCHLABEL);
+    node.getConstantExpression().accept(getRealThis());
     currentExpressionKind = Optional.empty();
   }
   

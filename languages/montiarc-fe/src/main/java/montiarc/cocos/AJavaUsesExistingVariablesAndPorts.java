@@ -45,33 +45,38 @@ public class AJavaUsesExistingVariablesAndPorts implements MontiArcASTJavaPBehav
       Map<ASTNameExpression, ExpressionKind> foundNames = visitor.getFoundNames();
       
       for (Entry<ASTNameExpression, ExpressionKind> entry : foundNames.entrySet()) {
-        // check whether used name is declared as component variable or port or
-        // is a static type
-        Collection<VariableSymbol> vars = componentScope
-            .<VariableSymbol> resolveDownMany(entry.getKey().getName(), VariableSymbol.KIND);
-        Collection<PortSymbol> ports = componentScope
-            .<PortSymbol> resolveDownMany(entry.getKey().getName(), PortSymbol.KIND);
-        Optional<JTypeSymbol> type = componentScope.resolve(entry.getKey().getName(),
-            JavaTypeSymbol.KIND);
-        boolean foundConfigParameter = false;
-        Optional<ComponentSymbol> comp = (Optional<ComponentSymbol>) componentScope
-            .getSpanningSymbol();
-        if (comp.isPresent()) {
-          foundConfigParameter = comp.get().getConfigParameters().stream()
-              .filter(p -> p.getName().equals(entry.getKey().getName())).findAny().isPresent();
-        }
-        
-        // check whether used name is local ajava variable
-        boolean isLocalVar = false;
-        if (entry.getKey().getEnclosingScopeOpt().isPresent()) {
-          isLocalVar = checkPortOrVariabelWithNameAlreadyExists(entry.getKey().getName(),
-              entry.getKey().getEnclosingScopeOpt().get());
-        }
-        
-        if (vars.isEmpty() && ports.isEmpty() && !type.isPresent() && !isLocalVar && !foundConfigParameter) {
-          Log.error(
-              "0xMA107 used variable " + entry.getKey().getName() + " is used but not declared.",
-              entry.getKey().get_SourcePositionStart());
+        if (!entry.getValue().equals(ExpressionKind.DEFAULT)
+            && !entry.getValue().equals(ExpressionKind.CONSTANT_EXPRESSION_SWITCHLABEL)) {
+          // check whether used name is declared as component variable or port
+          // or
+          // is a static type
+          Collection<VariableSymbol> vars = componentScope
+              .<VariableSymbol> resolveDownMany(entry.getKey().getName(), VariableSymbol.KIND);
+          Collection<PortSymbol> ports = componentScope
+              .<PortSymbol> resolveDownMany(entry.getKey().getName(), PortSymbol.KIND);
+          Optional<JTypeSymbol> type = componentScope.resolve(entry.getKey().getName(),
+              JavaTypeSymbol.KIND);
+          boolean foundConfigParameter = false;
+          Optional<ComponentSymbol> comp = (Optional<ComponentSymbol>) componentScope
+              .getSpanningSymbol();
+          if (comp.isPresent()) {
+            foundConfigParameter = comp.get().getConfigParameters().stream()
+                .filter(p -> p.getName().equals(entry.getKey().getName())).findAny().isPresent();
+          }
+          
+          // check whether used name is local ajava variable
+          boolean isLocalVar = false;
+          if (entry.getKey().getEnclosingScopeOpt().isPresent()) {
+            isLocalVar = checkPortOrVariabelWithNameAlreadyExists(entry.getKey().getName(),
+                entry.getKey().getEnclosingScopeOpt().get());
+          }
+          
+          if (vars.isEmpty() && ports.isEmpty() && !type.isPresent() && !isLocalVar
+              && !foundConfigParameter) {
+            Log.error(
+                "0xMA107 used variable " + entry.getKey().getName() + " is used but not declared.",
+                entry.getKey().get_SourcePositionStart());
+          }
         }
       }
     }
