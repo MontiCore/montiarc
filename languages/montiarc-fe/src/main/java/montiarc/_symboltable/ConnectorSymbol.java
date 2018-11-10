@@ -98,7 +98,10 @@ public class ConnectorSymbol extends CommonSymbol {
         Log.error("0xMA008 Instance " + instance+ " is not defined in the component type " +cmp.getName());
         return Optional.empty();
       }
-      return inst.get().getComponentType().getReferencedSymbol().getAllPorts().stream().filter(p -> p.getName().equals(instancePort)).findFirst();
+      return inst.get().getComponentType().getReferencedSymbol().getAllPorts()
+                 .stream()
+                 .filter(p -> p.getName().equals(instancePort))
+                 .findFirst();
     }
     // Case 2: port has to be locally defined or inherited
     else {
