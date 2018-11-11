@@ -64,7 +64,7 @@ public class SubComponentsConnected implements MontiArcASTComponentCoCo {
       // outer.AnySub.simpleconnectors
       if (sub.getComponentType().existsReferencedSymbol()) {
         Collection<String> remainingSubIn
-            = getNames(sub.getComponentType().getIncomingPorts());
+            = getNames(sub.getComponentType().getAllIncomingPorts());
         // Connectors in the outer context always refer to the ports in a
         // relative-qualified way (e.g.
         // sub.portX) and hence we must prefix the remaining ones with sub's
@@ -89,7 +89,7 @@ public class SubComponentsConnected implements MontiArcASTComponentCoCo {
         // connectors with sub.out as source occur as outer.connectors or
         // outer.AnySub.simpleConnectors
         Collection<String> remainingSubOut
-            = getNames(sub.getComponentType().getOutgoingPorts());
+            = getNames(sub.getComponentType().getAllOutgoingPorts());
         // Connectors in the outer context always refer to the ports in a
         // relative-qualified way (e.g.
         // sub.portX) and hence we must prefix the remaining ones with sub's
