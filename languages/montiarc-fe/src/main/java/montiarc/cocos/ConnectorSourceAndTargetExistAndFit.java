@@ -106,8 +106,25 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
       // Also, for the defining component the formal type parameters have to
       // be determined.
 
-      List<JTypeSymbol> sourceTypeFormalParams = new ArrayList<>();
-      List<JTypeReference<? extends JTypeSymbol>> sourceTypeArgumentTypes = new ArrayList<>();
+      List<JTypeSymbol> sourceTypeFormalParams
+          = sourceType.getReferencedSymbol()
+                .getFormalTypeParameters().stream()
+                .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
+      List<JTypeSymbol> targetTypeFormalParams
+          = targetType.getReferencedSymbol()
+                .getFormalTypeParameters().stream()
+                .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
+
+      List<JTypeReference<? extends JTypeSymbol>> sourceTypeArgumentTypes
+          = sourceType.getActualTypeArguments()
+                .stream()
+                .map(arg -> (JTypeReference<? extends JTypeSymbol>)arg.getType())
+                .collect(Collectors.toList());
+      List<JTypeReference<? extends JTypeSymbol>> targetTypeArgumentTypes
+          = targetType.getActualTypeArguments()
+                .stream()
+                .map(arg -> (JTypeReference<? extends JTypeSymbol>)arg.getType())
+                .collect(Collectors.toList());
 
       // We have to load the binding of the formal type parameters to check
       // the types
@@ -132,8 +149,6 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
                   .collect(Collectors.toList());
       }
 
-      List<JTypeSymbol> targetTypeFormalParams = new ArrayList<>();
-      List<JTypeReference<? extends JTypeSymbol>> targetTypeArgumentTypes = new ArrayList<>();
 
       if (TypeCompatibilityChecker.hasNestedGenerics(targetType)) {
         ASTConnector astConnector = (ASTConnector) connector.getAstNode().get();
@@ -293,13 +308,14 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
     // Find the component that defines the port
     while(!currentComponent.getPort(portSymbol.getName(), false).isPresent()
            && currentComponent.getSuperComponent().isPresent()){
-      currentComponent = currentComponent.getSuperComponent().get();
 
       Map<String, ActualTypeArgument> superCompTypeArgs = new HashMap<>();
       final ComponentSymbolReference superCompRef =
           currentComponent.getSuperComponent().get();
       final ComponentSymbol superCompSymbol =
           superCompRef.getReferencedSymbol();
+
+      currentComponent = currentComponent.getSuperComponent().get();
 
       // Fill the map for the super component
       for (JTypeSymbol typeSymbol : superCompSymbol.getFormalTypeParameters()) {

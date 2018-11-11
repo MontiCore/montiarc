@@ -113,7 +113,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     final MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(cocos, node,
-        new ExpectedErrorInfo(6, "xMA066", "xMA067", "xMA008"));
+        new ExpectedErrorInfo(9, "xMA066", "xMA067", "xMA008"));
   }
   
   @Test
@@ -201,7 +201,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
     final ExpectedErrorInfo errors
-        = new ExpectedErrorInfo(7, "xMA066", "xMA067", "xMA008");
+        = new ExpectedErrorInfo(10, "xMA066", "xMA067", "xMA008");
     checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
@@ -310,7 +310,6 @@ public class ConnectorTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("Fix CoCo")
   public void testConnectsIncompatibleInheritedPorts2() {
     final String compName = "ConnectsIncompatibleInheritedPorts2";
     final ComponentSymbol componentSymbol = loadComponentSymbol(PACKAGE, compName);
@@ -322,8 +321,8 @@ public class ConnectorTest extends AbstractCoCoTest {
     final ComponentSymbol subCompSymbol
         = subComp.get().getComponentType().getReferencedSymbol();
 
-    final Optional<PortSymbol> inTOpt = subCompSymbol.getPort("inT");
-    assertTrue(inTOpt.isPresent());
+    final Optional<PortSymbol> subCompOutTOpt = subCompSymbol.getPort("outT");
+    assertTrue(subCompOutTOpt.isPresent());
 
     final Optional<PortSymbol> outTOpt = componentSymbol.getPort("outT", true);
     assertTrue(outTOpt.isPresent());
