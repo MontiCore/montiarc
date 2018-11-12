@@ -6,6 +6,7 @@
 package montiarc.cocos;
 
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
+import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesException;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
@@ -17,6 +18,7 @@ import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTConnector;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.*;
+import montiarc.helper.SymbolPrinter;
 import montiarc.helper.TypeCompatibilityChecker;
 
 import java.util.*;
@@ -186,9 +188,10 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
           targetTypeFormalParams, // Formal parameters occurring in the target type
           targetTypeArgumentTypes)// The actual types of the target type params
           ) {
-        // TODO Implement determining real source and target types for error message
-        String realSourceType = "";
-        String realTargetType = "";
+        String realSourceType
+            = determineRealType(sourceType, sourceTypeFormalParams, sourceTypeArgumentTypes);
+        String realTargetType
+            = determineRealType(targetType, targetTypeFormalParams, targetTypeArgumentTypes);
         Log.error(
             String.format("0xMA033 Source type '%s' and target type '%s' of " +
                               "connector %s->%s do not match.",
@@ -197,6 +200,52 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
             connector.getAstNode().get().get_SourcePositionStart());
       }
     }
+  }
+
+  /**
+   * Prints the real type of the given type reference. This means that all type
+   * parameters are replaced by their real type arguments, which are given in
+   * realTypeArguments.
+   * @param type The type to print
+   * @param formalTypeParameters the formal type parameters of the type to print
+   * @param realTypeArguments The actual type arguments of the type parameters
+   * @return The printed type with replaced type parameters.
+   */
+  private String determineRealType(
+      JTypeReference<? extends JTypeSymbol> type,
+      List<JTypeSymbol> formalTypeParameters,
+      List<JTypeReference<? extends JTypeSymbol>> realTypeArguments) {
+
+    if(type.getReferencedSymbol().isFormalTypeParameter()){
+      // First case: The type is just a type parameter
+      // Thus, return the printed real type argument of this type parameter
+      String paramName = type.getReferencedSymbol().getName();
+      final int typeParamIndex
+          = formalTypeParameters.stream()
+                .map(Symbol::getName)
+                .collect(Collectors.toList())
+                .indexOf(paramName);
+      return SymbolPrinter.printTypeWithFormalTypeParameters(
+          realTypeArguments.get(typeParamIndex).getReferencedSymbol());
+    }
+
+    // The type is not a type parameter.
+    // Therefore it has a type and possibly type arguments.
+    // Print the type and print
+    String result = type.getReferencedSymbol().getName();
+    // Print the type arguments with replaced type parameters
+    if(type.getActualTypeArguments().size() > 0) {
+      result += "<";
+      final String args = type.getActualTypeArguments().stream()
+                              .map(arg -> determineRealType(
+                                  (JTypeReference<? extends JTypeSymbol>) arg.getType(),
+                                  formalTypeParameters,
+                                  realTypeArguments))
+                              .collect(Collectors.joining(","));
+      result += args + ">";
+    }
+    return result;
+
   }
 
   private List<ActualTypeArgument> getInitialTypeArguments(
