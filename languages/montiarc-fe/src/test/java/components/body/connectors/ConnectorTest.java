@@ -113,7 +113,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     final MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(cocos, node,
-        new ExpectedErrorInfo(9, "xMA066", "xMA067", "xMA008"));
+        new ExpectedErrorInfo(6, "xMA066", "xMA067", "xMA008"));
   }
   
   @Test
@@ -201,7 +201,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
     final ExpectedErrorInfo errors
-        = new ExpectedErrorInfo(10, "xMA066", "xMA067", "xMA008");
+        = new ExpectedErrorInfo(7, "xMA066", "xMA067", "xMA008");
     checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   

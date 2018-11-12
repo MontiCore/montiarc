@@ -59,8 +59,11 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
     ComponentSymbol compSym = (ComponentSymbol) node.getSymbolOpt().get();
     
     for (ConnectorSymbol connector : compSym.getConnectors()) {
+      final Optional<PortSymbol> sourcePort;
+      final Optional<PortSymbol> targetPort;
       try {
-        if (!connector.getSourcePort().isPresent()) {
+        sourcePort = connector.getSourcePort();
+        if (!sourcePort.isPresent()) {
           Log.error(
               String.format("0xMA066 source port %s of connector %s does not " +
                   "exist.",
@@ -69,7 +72,8 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
               connector.getSourcePosition());
         }
 
-        if (!connector.getTargetPort().isPresent()) {
+        targetPort = connector.getTargetPort();
+        if (!targetPort.isPresent()) {
           Log.error(
               String.format("0xMA067 target port %s of connector %s does not " +
                   "exist.",
@@ -79,16 +83,16 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
         }
       }
       catch (ResolvedSeveralEntriesException e) {
-        e.printStackTrace();
-      }
-
-      // Only check if both ports actually exist
-      if (!connector.getSourcePort().isPresent() || !connector.getTargetPort().isPresent()) {
         continue;
       }
 
-      PortSymbol source = connector.getSourcePort().get();
-      PortSymbol target = connector.getTargetPort().get();
+      // Only check if both ports actually exist
+      if (!sourcePort.isPresent() || !targetPort.isPresent()) {
+        continue;
+      }
+
+      PortSymbol source = sourcePort.get();
+      PortSymbol target = targetPort.get();
 
       JTypeReference<? extends JTypeSymbol> sourceType = source.getTypeReference();
       JTypeReference<? extends JTypeSymbol> targetType = target.getTypeReference();
