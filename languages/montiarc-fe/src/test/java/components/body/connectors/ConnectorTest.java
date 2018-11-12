@@ -310,8 +310,8 @@ public class ConnectorTest extends AbstractCoCoTest {
   }
 
   @Test
-  public void testConnectsIncompatibleInheritedPorts2() {
-    final String compName = "ConnectsIncompatibleInheritedPorts2";
+  public void testConnectsCompatibleInheritedPorts2() {
+    final String compName = "ConnectsCompatibleInheritedPorts2";
     final ComponentSymbol componentSymbol = loadComponentSymbol(PACKAGE, compName);
 
     final Optional<ComponentInstanceSymbol> subComp

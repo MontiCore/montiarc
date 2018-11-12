@@ -621,7 +621,7 @@ public class ComponentHelper {
       final List<ActualTypeArgument> actualTypeArgs = componentSymbolReference.getActualTypeArguments();
       String componentPrefix = this.component.getFullName() + ".";
       for (ActualTypeArgument actualTypeArg : actualTypeArgs) {
-        final String printedTypeArg = SymbolPrinter.printTypeParameters(actualTypeArg);
+        final String printedTypeArg = SymbolPrinter.printTypeArgument(actualTypeArg);
         if(printedTypeArg.startsWith(componentPrefix)) {
           paramList.add(printedTypeArg.substring(componentPrefix.length()));
         } else {
