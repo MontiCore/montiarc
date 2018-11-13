@@ -48,6 +48,9 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   </#list>
   // port getter
   <#list portsOut as port>
+  public void setPort${port.getName()?cap_first}(Port<${helper.getPortTypeName(port)}> port) {
+  	this.${port.getName()} = port;
+  }
   public Port<${helper.getPortTypeName(port)}> getPort${port.getName()?cap_first}() {
   	return this.${port.getName()};
   }
