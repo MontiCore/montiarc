@@ -40,7 +40,13 @@ public class SymbolPrinter {
     }
 
     String ret = printWildCardPrefix(arg);
-    ret += arg.getType().getReferencedSymbol().getFullName();
+    if(arg.getType().getReferencedSymbol() instanceof JTypeSymbol &&
+           ((JTypeSymbol) arg.getType().getReferencedSymbol()).isFormalTypeParameter()) {
+      ret += arg.getType().getReferencedSymbol().getName();
+    } else {
+      ret += arg.getType().getReferencedSymbol().getFullName();
+    }
+
     // String ret = arg.getType().getName();
     if (arg.getType().getActualTypeArguments() != null
         && !arg.getType().getActualTypeArguments().isEmpty()) {
@@ -85,6 +91,34 @@ public class SymbolPrinter {
   }
 
   /**
+   * Helper function for nested type arguments such as
+   * {@code List<NewType<String, List<String>>>}. This also prints possible
+   * bounds on the types, i.e. {@code Number extends java.lang.Object &
+   * java.io.Serializable}
+   *
+   * @param arg The type symbol to print.
+   * @return The printed symbol.
+   */
+  public static String printTypeWithBoundsAndFormalTypeParameters(JTypeSymbol arg) {
+    String ret = arg.getName();
+
+    if (!arg.getSuperTypes().isEmpty()) {
+      ret += " extends " + arg.getSuperTypes().stream()
+                               .map(t -> t.getReferencedSymbol().getFullName()
+                                             + printTypeArguments(t.getActualTypeArguments()))
+                               .collect(Collectors.joining("&"));
+    }
+
+    if (arg.getFormalTypeParameters() != null && !arg.getFormalTypeParameters().isEmpty()) {
+      ret += "<" + arg.getFormalTypeParameters()
+                       .stream()
+                       .map(a -> printTypeWithBoundsAndFormalTypeParameters(a))
+                       .collect(Collectors.joining(",")) + ">";
+    }
+    return ret;
+  }
+
+  /**
    * Print the square array brackets according to the dimension {@code n} of
    * the referenced type.
    *
@@ -92,7 +126,7 @@ public class SymbolPrinter {
    * @return Empty string, if the type reference is not a {@link JTypeReference},
    * else the String "[]" concatenated {@code n} times.
    */
-  protected static String printArrayDimensions(ActualTypeArgument typeArgument) {
+  public static String printArrayDimensions(ActualTypeArgument typeArgument) {
     Preconditions.checkNotNull(typeArgument);
     if(!typeArgument.getType().existsReferencedSymbol()){
       return "";

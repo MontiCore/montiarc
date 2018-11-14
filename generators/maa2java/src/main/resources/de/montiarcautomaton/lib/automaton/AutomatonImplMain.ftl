@@ -81,7 +81,7 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
   public ${resultName} compute(${inputName} ${inputVarName}) {
     // inputs
     <#list portsIn as port>
-  	final ${helper.getPortTypeName(port)} ${port.getName()} = ${inputVarName}.get${port.getName()?cap_first}();
+  	final ${helper.getRealPortTypeString(port)} ${port.getName()} = ${inputVarName}.get${port.getName()?cap_first}();
   	</#list>
   
     final ${resultName} ${resultVarName} = new ${resultName}();

@@ -244,7 +244,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       return;
     }
     for (ConnectorSymbol connector : this.symbol.getConnectors()) {
-      if (helper.isIncomingPort(this.symbol, connector, false, connector.getTarget())) {
+      if (helper.isIncomingPort(this.symbol, connector, false)) {
         methodBuilder.addBodyElement(
             String.format("%s.setPort%s(%s.getPort%s());",
                 helper.getConnectorComponentName(connector, false),
@@ -339,7 +339,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       methodBuilder.addBodyElement("this.initialize();");
     } else {
       for (ConnectorSymbol connector : this.symbol.getConnectors()) {
-        if (!helper.isIncomingPort(this.symbol, connector, false, connector.getTarget())) {
+        if (!helper.isIncomingPort(this.symbol, connector, false)) {
           methodBuilder.addBodyElement(
               String.format("%s.setPort%s(%s.getPort%s());",
                   helper.getConnectorComponentName(connector, false),
@@ -738,7 +738,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
             = JavaDSLMill.simpleReferenceTypeBuilder()
                   .addAllNames(Lists.newArrayList(
                       ComponentHelper.autobox(
-                          ComponentHelper.determinePortTypeName(this.symbol, inPort)).split("\\.")))
+                          ComponentHelper.getRealPortTypeString(this.symbol, inPort)).split("\\.")))
                   .build();
         inputConstructorBuilder.addParameter(inPort.getName(), type);
       }
@@ -791,7 +791,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
             = JavaDSLMill.simpleReferenceTypeBuilder()
                   .addAllNames(Lists.newArrayList(
                       ComponentHelper.autobox(
-                          ComponentHelper.determinePortTypeName(this.symbol, outPort)).split("\\.")))
+                          ComponentHelper.getRealPortTypeString(this.symbol, outPort)).split("\\.")))
                   .build();
         resultConstructorBuilder.addParameter(outPort.getName(), type);
       }
