@@ -49,6 +49,11 @@ public class AssignmentTest extends AbstractCoCoTest {
   }
   
   @Test
+  public void testCallOfOverloadedMethods() {
+    checkValid(PACKAGE + "." + "CallOfOverloadedMethods"); 
+  }
+  
+  @Test
   public void testAssignmentWithAlternatives() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "AssignmentWithAlternatives");
     checkInvalid(new MontiArcCoCoChecker()
