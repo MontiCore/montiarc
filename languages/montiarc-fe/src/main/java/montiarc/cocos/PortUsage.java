@@ -54,7 +54,7 @@ public class PortUsage implements MontiArcASTComponentCoCo {
       // in->out or in->sub.in (both only occur as normal connectors where the in ports must be the
       // source)
       
-      Collection<String> remainingPorts = getNames(entry.getIncomingPorts());
+      Collection<String> remainingPorts = getNames(entry.getAllIncomingPorts());
       
       Collection<String> connectorSources = getSourceNames(entry.getConnectors());
       
@@ -77,7 +77,7 @@ public class PortUsage implements MontiArcASTComponentCoCo {
       // or using simple connectors (sub.out->out) (note that simple connectors only allow the
       // subcomponents outgoing ports as source)
       
-      remainingPorts = getNames(entry.getOutgoingPorts());
+      remainingPorts = getNames(entry.getAllOutgoingPorts());
       Collection<String> connectorTargets = getTargetNames(entry.getConnectors());
       
       remainingPorts.removeAll(connectorTargets);

@@ -110,7 +110,7 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                       supersActualTypeParams.stream()
                           .map(a -> (JavaTypeSymbolReference) a.getType())
                           .collect(Collectors.toList()))) {
-                    Log.error("0xMA089 Parameter " + SymbolPrinter.printTypeParameters(actualArg)
+                    Log.error("0xMA089 Parameter " + SymbolPrinter.printTypeArgument(actualArg)
                         + " is not compatible with "
                         + upperBound.getName(),
                         superCompRefNode.get_SourcePositionStart());

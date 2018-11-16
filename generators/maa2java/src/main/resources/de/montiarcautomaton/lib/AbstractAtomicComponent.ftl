@@ -8,7 +8,7 @@ import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 </#list>
 
-class ${compName} <#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if> implements IComputable<${compInputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>, ${compResultName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>> {
+class ${compName} <#if helper.isGeneric()><<#list helper.getGenericTypeParametersWithInterfaces() as param>${param}<#sep>,</#list>></#if> implements IComputable<${compInputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>, ${compResultName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if>> {
 
   public ${compName}(<#list configParams as param>${helper.getParamTypeName(param)} ${param.getName()}<#sep>, </#list>) {
         throw new Error("Invoking constructor on abstract implementation ${packageName}.${compName}");

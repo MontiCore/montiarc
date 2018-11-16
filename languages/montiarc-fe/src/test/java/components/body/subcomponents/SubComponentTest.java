@@ -5,12 +5,6 @@
  */
 package components.body.subcomponents;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -40,6 +34,8 @@ import montiarc._symboltable.ComponentSymbolReference;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc.helper.SymbolPrinter;
+
+import static org.junit.Assert.*;
 
 /**
  * This class checks all context conditions related to the definition of
@@ -290,7 +286,7 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertNotNull(inner);
     ComponentSymbolReference compRefToInner = subComp.getComponentType();
     assertTrue(compRefToInner.getReferencedComponent().isPresent());
-    assertTrue(inner == compRefToInner.getReferencedComponent().get());
+    assertSame(inner, compRefToInner.getReferencedComponent().get());
     assertEquals("NamedInnerComponent", inner.getName());
     assertEquals("NamedInnerComponent", compRefToInner.getName());
     assertEquals(PACKAGE + "." + "ComponentWithNamedInnerComponent.NamedInnerComponent",
@@ -328,9 +324,9 @@ public class SubComponentTest extends AbstractCoCoTest {
   
   @Test
   public void testReferencingCompsWithCfg() {
-    ComponentSymbol comp = MONTIARCTOOL.loadComponentSymbolWithCocos(
-        PACKAGE + "." + "ReferencingCompsWithCfg",
-        Paths.get(MODEL_PATH).toFile(), Paths.get(FAKE_JAVA_TYPES_PATH).toFile()).orElse(null);
+    final String modelName = "ReferencingCompsWithCfg";
+    checkValid(PACKAGE, modelName);
+    ComponentSymbol comp = loadComponentSymbol(PACKAGE, modelName);
     assertNotNull(comp);
     
     ComponentInstanceSymbol compWithArgsRef = comp.getSubComponent("cfg").orElse(null);
@@ -853,5 +849,30 @@ public class SubComponentTest extends AbstractCoCoTest {
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(4, "xMA096", "xMA103", "xMA004");
 
     checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
+  }
+
+  @Test
+  public void testHasGenericOutput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." + "HasGenericOutput");
+  }
+
+  @Test
+  public void testHasGenericInput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." + "HasGenericInput");
+  }
+
+  @Test
+  public void testInheritsOutgoingStringPort() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +"InheritsOutgoingStringPort");
+  }
+
+  @Test
+  public void testExtendsExtendsHasStringInputAndOutput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +"ExtendsExtendsHasStringInputAndOutput");
+  }
+
+  @Test
+  public void testExtendsHasStringInputAndOutput() {
+    checkValid(PACKAGE + "." + "_subcomponents" + "." +"ExtendsHasStringInputAndOutput");
   }
 }

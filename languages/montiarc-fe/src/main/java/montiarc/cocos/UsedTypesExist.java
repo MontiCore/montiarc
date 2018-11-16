@@ -29,18 +29,30 @@ public class UsedTypesExist implements MontiArcASTComponentCoCo {
    */
   @Override
   public void check(ASTComponent node) {
+    if (!node.getSymbolOpt().isPresent()) {
+      Log.error(
+          String.format("0xMA010 ASTComponent node \"%s\" has no " +
+                            "symbol. Did you forget to run the " +
+                            "SymbolTableCreator before checking cocos?",
+              node.getName()));
+      return;
+    }
     ComponentSymbol comp = (ComponentSymbol) node.getSymbolOpt().get();
     for (PortSymbol p : comp.getPorts()) {
       if (!p.getTypeReference().existsReferencedSymbol()) {
-        Log.error("0xMA101 Type " + p.getTypeReference().getName() + " is used but does not exist.",
+        Log.error(
+            String.format("0xMA101 Port type %s of port %s is used but does " +
+                              "not exist.",
+                p.getTypeReference().getName(), p.getName()),
             p.getSourcePosition());
       }
     }
     
     for (VariableSymbol v : comp.getVariables()) {
       if (!v.getTypeReference().existsReferencedSymbol()) {
-        Log.error(String.format("0xMA101 Type %s is used but does not exist.",
-            v.getTypeReference().getName()),
+        Log.error(String.format("0xMA101 Type %s of variable %s is used but " +
+                                    "does not exist.",
+            v.getTypeReference().getName(), v.getName()),
             v.getSourcePosition());
         
       }

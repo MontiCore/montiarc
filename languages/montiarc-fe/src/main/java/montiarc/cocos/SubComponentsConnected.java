@@ -1,9 +1,5 @@
 package montiarc.cocos;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
 import montiarc._cocos.MontiArcASTComponentCoCo;
@@ -11,6 +7,9 @@ import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * CV6: All ports of subcomponents should be used in at least one connector.<br>
@@ -64,21 +63,24 @@ public class SubComponentsConnected implements MontiArcASTComponentCoCo {
       // connectors with sub.in as target occur in outer.connectors or as
       // outer.AnySub.simpleconnectors
       if (sub.getComponentType().existsReferencedSymbol()) {
-        Collection<String> remainingSubIn = getNames(sub.getComponentType().getIncomingPorts());
+        Collection<String> remainingSubIn
+            = getNames(sub.getComponentType().getAllIncomingPorts());
         // Connectors in the outer context always refer to the ports in a
         // relative-qualified way (e.g.
         // sub.portX) and hence we must prefix the remaining ones with sub's
         // name to compare sets of
         // relative-qualified names
-        remainingSubIn = remainingSubIn.stream().map(s -> sub.getName() + "." + s)
-            .collect(Collectors.toList());
+        remainingSubIn = remainingSubIn.stream()
+                             .map(s -> sub.getName() + "." + s)
+                             .collect(Collectors.toList());
         
-        Collection<String> outerConnectorTargets = getTargetNames(entry.getConnectors());
+        Collection<String> outerConnectorTargets
+            = getTargetNames(entry.getConnectors());
         remainingSubIn.removeAll(outerConnectorTargets);
         if (!remainingSubIn.isEmpty()) {
           remainingSubIn.forEach(p -> Log.error(
-              String.format("0xMA059 Port %s of subcomponent %s is not used!", p,
-                  sub.getFullName()),
+              String.format("0xMA059 Port %s of subcomponent %s is not used!",
+                  p, sub.getFullName()),
               node.get_SourcePositionStart()));
         }
         // ------- OUT PORTS -------
@@ -86,16 +88,19 @@ public class SubComponentsConnected implements MontiArcASTComponentCoCo {
         // sub.out->outer.AnySub.in
         // connectors with sub.out as source occur as outer.connectors or
         // outer.AnySub.simpleConnectors
-        Collection<String> remainingSubOut = getNames(sub.getComponentType().getOutgoingPorts());
+        Collection<String> remainingSubOut
+            = getNames(sub.getComponentType().getAllOutgoingPorts());
         // Connectors in the outer context always refer to the ports in a
         // relative-qualified way (e.g.
         // sub.portX) and hence we must prefix the remaining ones with sub's
         // name to compare sets of
         // relative-qualified names
-        remainingSubOut = remainingSubOut.stream().map(s -> sub.getName() + "." + s)
-            .collect(Collectors.toList());
+        remainingSubOut = remainingSubOut.stream()
+                              .map(s -> sub.getName() + "." + s)
+                              .collect(Collectors.toList());
         
-        Collection<String> outerConnectorSources = getSourceNames(entry.getConnectors());
+        Collection<String> outerConnectorSources
+            = getSourceNames(entry.getConnectors());
         remainingSubOut.removeAll(outerConnectorSources);
         
         if (!remainingSubOut.isEmpty()) {

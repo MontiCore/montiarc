@@ -5,27 +5,21 @@
  */
 package montiarc.cocos;
 
-import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesException;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
-import de.monticore.types.TypesHelper;
 import de.monticore.types.types._ast.ASTQualifiedName;
 import de.se_rwth.commons.logging.Log;
+import javafx.util.Pair;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTConnector;
 import montiarc._cocos.MontiArcASTComponentCoCo;
-import montiarc._symboltable.ComponentInstanceSymbol;
-import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.ConnectorSymbol;
-import montiarc._symboltable.PortSymbol;
+import montiarc._symboltable.*;
+import montiarc.helper.InheritanceTypeHelper;
 import montiarc.helper.TypeCompatibilityChecker;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -65,8 +59,8 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
     ComponentSymbol compSym = (ComponentSymbol) node.getSymbolOpt().get();
     
     for (ConnectorSymbol connector : compSym.getConnectors()) {
-      Optional<PortSymbol> sourcePort = null;
-      Optional<PortSymbol> targetPort = null;
+      final Optional<PortSymbol> sourcePort;
+      final Optional<PortSymbol> targetPort;
       try {
         sourcePort = connector.getSourcePort();
         if (!sourcePort.isPresent()) {
@@ -77,7 +71,7 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
                   connector.getFullName()),
               connector.getSourcePosition());
         }
-        
+
         targetPort = connector.getTargetPort();
         if (!targetPort.isPresent()) {
           Log.error(
@@ -89,99 +83,124 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
         }
       }
       catch (ResolvedSeveralEntriesException e) {
-        break;
+        continue;
       }
-      
-      if (sourcePort.isPresent() && targetPort.isPresent()) {
-        PortSymbol source = sourcePort.get();
-        PortSymbol target = targetPort.get();
-        
-        JTypeReference<? extends JTypeSymbol> sourceType = source.getTypeReference();
-        JTypeReference<? extends JTypeSymbol> targetType = target.getTypeReference();
-        
-        if (sourceType.existsReferencedSymbol() && targetType.existsReferencedSymbol()) {
-          List<JTypeSymbol> sourceTypeFormalParams = sourceType.getReferencedSymbol()
-              .getFormalTypeParameters().stream()
-              .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
-          List<JTypeSymbol> targetTypeFormalParams = targetType.getReferencedSymbol()
-              .getFormalTypeParameters().stream()
-              .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
-          
-          List<ActualTypeArgument> sourceParams = sourceType.getActualTypeArguments();
-          List<ActualTypeArgument> targetParams = targetType.getActualTypeArguments();
-          
-          // We have to load the binding of the formal type parameters to check
-          // the types
-          if (TypeCompatibilityChecker.hasNestedGenerics(sourceType)) {
-            ASTConnector c = (ASTConnector) connector.getAstNode().get();
-            ASTQualifiedName sourceFQN = c.getSource();
-            sourceParams = getActualTypeArgumentsFromPortOfConnector(c, compSym, sourceFQN);
-            sourceTypeFormalParams = getFormalTypeParametersFromPortOfConnector(c, compSym,
-                sourceFQN);
-          }
-          
-          if (TypeCompatibilityChecker.hasNestedGenerics(targetType)) {
-            ASTConnector c = (ASTConnector) connector.getAstNode().get();
-            ASTQualifiedName targetFQN = c.getTargetsList().stream()
-                .filter(n -> n.toString().equals(connector.getTarget()))
-                .findFirst().get();
-            targetParams = getActualTypeArgumentsFromPortOfConnector(c, compSym, targetFQN);
-            targetTypeFormalParams = getFormalTypeParametersFromPortOfConnector(c, compSym,
-                targetFQN);
-            
-          }
-          
-          if (!TypeCompatibilityChecker.doTypesMatch(sourceType, sourceTypeFormalParams,
-              sourceParams.stream()
-                  .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList()),
-              targetType, targetTypeFormalParams, targetParams.stream()
-                  .map(a -> (JTypeReference<?>) a.getType()).collect(Collectors.toList())))
-            Log.error(
-                "0xMA033 Source and target type of connector " + connector.getSource() + "->"
-                    + connector.getTarget()
-                    + " do not match.",
-                connector.getAstNode().get().get_SourcePositionStart());
-        }
-        else {
-          Log.error("0xMA097 Could not load referenced Symbol.", sourcePort.get().getAstNode().get().get_SourcePositionStart());
-        }
+
+      // Only check if both ports actually exist
+      if (!sourcePort.isPresent() || !targetPort.isPresent()) {
+        continue;
+      }
+
+      PortSymbol source = sourcePort.get();
+      PortSymbol target = targetPort.get();
+
+      JTypeReference<? extends JTypeSymbol> sourceType = source.getTypeReference();
+      JTypeReference<? extends JTypeSymbol> targetType = target.getTypeReference();
+
+
+      // The checks are only applicable if the types of both ports exist
+      if (!sourceType.existsReferencedSymbol() || !targetType.existsReferencedSymbol()) {
+        continue;
+      }
+
+      // Status: Both ports exist and the types of both ports exist
+      // Next step is to determine the component in which the ports are defined.
+      // In this process the real type arguments of the defining components have
+      // to be determined.
+      // Also, for the defining component the formal type parameters have to
+      // be determined.
+
+      List<JTypeSymbol> sourceTypeFormalParams
+          = sourceType.getReferencedSymbol()
+                .getFormalTypeParameters().stream()
+                .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
+      List<JTypeSymbol> targetTypeFormalParams
+          = targetType.getReferencedSymbol()
+                .getFormalTypeParameters().stream()
+                .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
+
+      List<JTypeReference<? extends JTypeSymbol>> sourceTypeArgumentTypes
+          = sourceType.getActualTypeArguments()
+                .stream()
+                .map(arg -> (JTypeReference<? extends JTypeSymbol>)arg.getType())
+                .collect(Collectors.toList());
+      List<JTypeReference<? extends JTypeSymbol>> targetTypeArgumentTypes
+          = targetType.getActualTypeArguments()
+                .stream()
+                .map(arg -> (JTypeReference<? extends JTypeSymbol>)arg.getType())
+                .collect(Collectors.toList());
+
+      // We have to load the binding of the formal type parameters to check
+      // the types
+      if (TypeCompatibilityChecker.hasNestedGenerics(sourceType)) {
+        ASTConnector connectorNode = (ASTConnector) connector.getAstNode().get();
+        ASTQualifiedName sourceNameFQ = connectorNode.getSource();
+
+        final List<ActualTypeArgument> initialTypeArgs
+            = InheritanceTypeHelper.getInitialTypeArguments(compSym, sourceNameFQ);
+
+        // Determine the formal type arguments and type parameters of the defining component
+        final Pair<List<? extends JTypeSymbol>, List<ActualTypeArgument>>
+            sourceTypeParamsAndRealTypeArgs
+            = InheritanceTypeHelper.getTypeParamsAndRealTypeArgsForDefiningComponent(
+                compSym, source, sourceNameFQ, initialTypeArgs);
+
+        sourceTypeFormalParams = sourceTypeParamsAndRealTypeArgs.getKey().stream()
+              .map(p -> (JTypeSymbol) p)
+              .collect(Collectors.toList());
+        sourceTypeArgumentTypes
+            = sourceTypeParamsAndRealTypeArgs.getValue().stream()
+                  .map(a -> (JTypeReference<?>) a.getType())
+                  .collect(Collectors.toList());
+      }
+
+
+      if (TypeCompatibilityChecker.hasNestedGenerics(targetType)) {
+        ASTConnector astConnector = (ASTConnector) connector.getAstNode().get();
+        ASTQualifiedName targetFQN
+            = astConnector.getTargetsList().stream()
+                  .filter(n -> n.toString().equals(connector.getTarget()))
+                  .findFirst().get();
+
+        final List<ActualTypeArgument> initialTypeArgs
+            = InheritanceTypeHelper.getInitialTypeArguments(compSym, targetFQN);
+
+        // Determine the formal type arguments and type parameters of the defining component
+        final Pair<List<? extends JTypeSymbol>, List<ActualTypeArgument>> targetTypeParamsAndRealTypeArgs
+            = InheritanceTypeHelper.getTypeParamsAndRealTypeArgsForDefiningComponent(
+                compSym, target, targetFQN, initialTypeArgs);
+
+        targetTypeFormalParams = targetTypeParamsAndRealTypeArgs.getKey().stream()
+              .map(p -> (JTypeSymbol) p)
+              .collect(Collectors.toList());
+        targetTypeArgumentTypes
+            = targetTypeParamsAndRealTypeArgs.getValue()
+                  .stream()
+                  .map(a -> (JTypeReference<?>) a.getType())
+                  .collect(Collectors.toList());
+      }
+
+      if (!TypeCompatibilityChecker.doTypesMatch(
+          sourceType,             // Type reference to the type of the source port
+          sourceTypeFormalParams, // Formal parameters occurring in the source type
+          sourceTypeArgumentTypes,// The actual types of the source type params
+          targetType,             // Type reference to the type of the target port
+          targetTypeFormalParams, // Formal parameters occurring in the target type
+          targetTypeArgumentTypes)// The actual types of the target type params
+          ) {
+        String realSourceType
+            = InheritanceTypeHelper.determineRealType(
+                sourceType, sourceTypeFormalParams, sourceTypeArgumentTypes);
+        String realTargetType
+            = InheritanceTypeHelper.determineRealType(
+                targetType, targetTypeFormalParams, targetTypeArgumentTypes);
+        Log.error(
+            String.format("0xMA033 Source type '%s' and target type '%s' of " +
+                              "connector %s->%s do not match.",
+                realSourceType, realTargetType,
+                connector.getSource(), connector.getTarget()),
+            connector.getAstNode().get().get_SourcePositionStart());
       }
     }
   }
-  
-  private List<ActualTypeArgument> getActualTypeArgumentsFromPortOfConnector(
-      ASTConnector connector, ComponentSymbol definingComponent,
-      ASTQualifiedName nameOfConnectorEndpoint) {
-    List<ActualTypeArgument> params = new ArrayList<>();
-    if (nameOfConnectorEndpoint.getPartList().size() > 1) {
-      String compName = nameOfConnectorEndpoint.getPartList().get(0);
-      params = definingComponent.getSpannedScope()
-          .<ComponentInstanceSymbol> resolve(compName, ComponentInstanceSymbol.KIND).get()
-          .getComponentType().getActualTypeArguments();
-    }
-    else {
-      params = definingComponent.getFormalTypeParameters().stream()
-          .map(ftp -> new ActualTypeArgument(
-              new JavaTypeSymbolReference(ftp.getName(), ftp.getEnclosingScope(), 0)))
-          .collect(Collectors.toList());
-    }
-    return params;
-  }
-  
-  private List<JTypeSymbol> getFormalTypeParametersFromPortOfConnector(ASTConnector connector,
-      ComponentSymbol definingComponent,
-      ASTQualifiedName nameOfConnectorEndpoint) {
-    List<JTypeSymbol> params = new ArrayList<>();
-    if (nameOfConnectorEndpoint.getPartList().size() > 1) {
-      String compName = nameOfConnectorEndpoint.getPartList().get(0);
-      params = definingComponent.getSpannedScope()
-          .<ComponentInstanceSymbol> resolve(compName, ComponentInstanceSymbol.KIND).get()
-          .getComponentType().getFormalTypeParameters();
-    }
-    else {
-      params = definingComponent.getFormalTypeParameters();
-    }
-    return params;
-  }
-  
 }
