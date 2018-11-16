@@ -186,27 +186,29 @@ public class AutomatonReactionTypeDoesNotFitOutputType
             varTypeFormalTypeParams = new ArrayList<>();
             varTypeActualTypeArgs = new ArrayList<>();
           }
-          
-          for (int i = 0; i < argTypes.size(); i++) {
-            if (!TypeCompatibilityChecker.doTypesMatch(argTypes.get(i),
-                argTypes.get(i).getReferencedSymbol().getFormalTypeParameters().stream()
-                    .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-                argTypes.get(i).getActualTypeArguments().stream()
-                    .map(a -> (JavaTypeSymbolReference) a.getType())
-                    .collect(Collectors.toList()),
-                correctParameters.get(i),
-                varTypeFormalTypeParams,
-                varTypeActualTypeArgs)) {
-              typeFitMessage.add("0xMA043 Types do not fit " + argTypes.get(i).getName() + ", "
-                  + correctParameters.get(i).getName());
+          if (argTypes.size() == correctParameters.size()) {
+            
+            for (int i = 0; i < argTypes.size(); i++) {
+              if (!TypeCompatibilityChecker.doTypesMatch(argTypes.get(i),
+                  argTypes.get(i).getReferencedSymbol().getFormalTypeParameters().stream()
+                      .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+                  argTypes.get(i).getActualTypeArguments().stream()
+                      .map(a -> (JavaTypeSymbolReference) a.getType())
+                      .collect(Collectors.toList()),
+                  correctParameters.get(i),
+                  varTypeFormalTypeParams,
+                  varTypeActualTypeArgs)) {
+                typeFitMessage.add("0xMA043 Types do not fit " + argTypes.get(i).getName() + ", "
+                    + correctParameters.get(i).getName());
+              }
             }
-          }
-          if (typeFitMessage.isEmpty() && !argMessage.isPresent()) {
-            foundFittingMethod = true;
-            return;
-          }
-          else {
-            methInError = Optional.of(meth);
+            if (typeFitMessage.isEmpty() && !argMessage.isPresent()) {
+              foundFittingMethod = true;
+              return;
+            }
+            else {
+              methInError = Optional.of(meth);
+            }
           }
         }
         if (!typeFitMessage.isEmpty()) {
