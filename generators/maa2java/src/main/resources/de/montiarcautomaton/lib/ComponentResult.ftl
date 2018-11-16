@@ -7,7 +7,7 @@ import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 </#list>
 import de.montiarcautomaton.runtimes.timesync.implementation.IResult;
 
-public class ${resultName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}Result<#if helper.superCompGeneric()><<#list helper.getSuperCompActualTypeArguments() as typeArg>${typeArg}<#sep>, </#sep></#list>></#if></#if> implements IResult {
+public class ${resultName}<#if helper.isGeneric()><<#list helper.getGenericTypeParametersWithInterfaces() as param>${param}<#sep>,</#list>></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}Result<#if helper.isSuperComponentGeneric()><<#list helper.getSuperCompActualTypeArguments() as typeArg>${typeArg}<#sep>, </#sep></#list>></#if></#if> implements IResult {
   // variables  
   <#list portsOut as port>
   private ${helper.getRealPortTypeString(port)} ${port.getName()};

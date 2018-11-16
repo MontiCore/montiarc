@@ -87,17 +87,17 @@ public class ComponentHelperTest extends AbstractCoCoTest {
     portTypeName = helper.printPortType(portSymbol.get());
     assertEquals("K", portTypeName);
 
-    comp = loadComponentSymbol("components.body.connectors", "GenericSourceTypeIsSubtypeOfTargetType", TARGET_TEST_MODELS);
-    helper = new ComponentHelper(comp);
-
-    final Optional<PortSymbol> inT = comp.getPort("inT");
-    assertTrue(inT.isPresent());
-    final String inTType = helper.printPortType(inT.get());
-    assertEquals("T", inTType);
+//    comp = loadComponentSymbol("components.body.connectors", "GenericSourceTypeIsSubtypeOfTargetType", TARGET_TEST_MODELS);
+//    helper = new ComponentHelper(comp);
+//
+//    final Optional<PortSymbol> inT = comp.getPort("inT");
+//    assertTrue(inT.isPresent());
+//    final String inTType = helper.printPortType(inT.get());
+//    assertEquals("T", inTType);
   }
 
   @Test
-  public void testAutoboxing() {
+  public void autobox() {
     String datatype = "Map<List<int>[],Set<double[]>>";
     String result = ComponentHelper.autobox(datatype);
     assertEquals("Map<List<Integer>[],Set<Double[]>>", result);
@@ -162,16 +162,59 @@ public class ComponentHelperTest extends AbstractCoCoTest {
   }
 
   @Test
-  public void getGenericParametersWithBounds() {
+  @Ignore
+  public void getGenericTypeParametersWithInterfaces() {
     final ComponentSymbol componentSymbol = loadComponentSymbol("components.body.connectors", "GenericSourceTypeIsSubtypeOfTargetType", TARGET_TEST_MODELS);
     ComponentHelper helper = new ComponentHelper(componentSymbol);
     final List<JTypeSymbol> formalTypeParameters = componentSymbol.getFormalTypeParameters();
     assertFalse(formalTypeParameters.isEmpty());
 
-    final List<String> genericParametersWithBounds = helper.getGenericParametersWithBounds();
+    final List<String> genericParametersWithBounds = helper.getGenericTypeParametersWithInterfaces();
     assertTrue(!genericParametersWithBounds.isEmpty());
 
     assertEquals("T extends java.lang.Number".replace(" ", ""),
         genericParametersWithBounds.get(0).replace(" ", ""));
+  }
+
+  @Test
+  public void isSuperComponentGeneric(){
+    ComponentSymbol componentSymbol
+        = loadComponentSymbol("components.body.connectors", "ConnectsCompatibleInheritedPorts2", TARGET_TEST_MODELS);
+    ComponentHelper helper = new ComponentHelper(componentSymbol);
+    assertFalse(helper.isSuperComponentGeneric());
+
+    componentSymbol = loadComponentSymbol("components.body.subcomponents._subcomponents", "InheritsOutgoingStringPort", TARGET_TEST_MODELS);
+    helper = new ComponentHelper(componentSymbol);
+    assertTrue(helper.isSuperComponentGeneric());
+  }
+
+  @Test
+  public void hasSuperComponent() {
+    ComponentSymbol componentSymbol
+        = loadComponentSymbol("components.body.connectors", "ConnectsCompatibleInheritedPorts2", TARGET_TEST_MODELS);
+    ComponentHelper helper = new ComponentHelper(componentSymbol);
+    assertTrue(helper.hasSuperComp());
+
+    componentSymbol = loadComponentSymbol("components.body.subcomponents._subcomponents", "HasGenericOutput", TARGET_TEST_MODELS);
+    helper = new ComponentHelper(componentSymbol);
+    assertFalse(helper.hasSuperComp());
+  }
+
+  @Test
+  public void getSuperComponentActualTypeArguments() {
+    ComponentSymbol componentSymbol = loadComponentSymbol(
+        "components.body.subcomponents._subcomponents", "InheritsOutgoingStringPort", TARGET_TEST_MODELS);
+    ComponentHelper helper = new ComponentHelper(componentSymbol);
+    List<String> superCompActualTypeArguments = helper.getSuperCompActualTypeArguments();
+    assertTrue(!superCompActualTypeArguments.isEmpty());
+    assertEquals("java.lang.String", superCompActualTypeArguments.get(0));
+
+
+    componentSymbol = loadComponentSymbol("components.head.generics", "SubCompExtendsGenericComparableCompValid", TARGET_TEST_MODELS);
+    helper = new ComponentHelper(componentSymbol);
+    superCompActualTypeArguments = helper.getSuperCompActualTypeArguments();
+    assertTrue(!superCompActualTypeArguments.isEmpty());
+    assertEquals("K", superCompActualTypeArguments.get(0));
+
   }
 }

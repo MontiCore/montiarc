@@ -14,7 +14,7 @@ import de.montiarcautomaton.runtimes.timesync.delegation.Port;
 import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 import de.montiarcautomaton.runtimes.Log;
 
-public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParametersWithBounds() as param>${param}<#sep>,</#list>></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}<#if helper.superCompGeneric()><<#list helper.getSuperCompActualTypeArguments() as typeArg>${typeArg}<#sep>, </#sep></#list>></#if></#if> implements IComponent {
+public class ${name}<#if helper.isGeneric()><<#list helper.getGenericTypeParametersWithInterfaces() as param>${param}<#sep>,</#list>></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}<#if helper.isSuperComponentGeneric()><<#list helper.getSuperCompActualTypeArguments() as typeArg>${typeArg}<#sep>, </#sep></#list>></#if></#if> implements IComponent {
   
   // component variables
   <#list variables as var>

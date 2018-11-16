@@ -51,7 +51,14 @@ public class ComponentHelper {
       componentNode = null;
     }
   }
-  
+
+  /**
+   * Print the initial value for a parameter.
+   * If the parameter is a default parameter, then the default value is printed,
+   * other wise the name of the parameter is printed.
+   * @param parameter The parameter to print the initial value of
+   * @return The printed initial value
+   */
   public String printInitialValue(ASTParameter parameter) {
     String value;
     if (parameter.isPresentDefaultValue()) {
@@ -303,8 +310,6 @@ public class ComponentHelper {
     return autoBoxedTypeName;
   }
 
-  // TODO @MP in Templates übernehmen
-
   /**
    * Prints the type of the port without any alterations.
    * This means, that this is a pretty print of the port type as in the AST
@@ -312,7 +317,7 @@ public class ComponentHelper {
    * @return The printed port type
    */
   public String printPortType(PortSymbol var) {
-//    return SymbolPrinter.printTypeWithBoundsAndFormalTypeParameters(
+//    return SymbolPrinter.printTypeParameterWithInterfaces(
 //        var.getTypeReference().getReferencedSymbol());
     String name = var.getName();
     Optional<ASTType> optType = findPortTypeByName(name);
@@ -330,7 +335,6 @@ public class ComponentHelper {
     return port1.map(portSymbol -> ((ASTPort) portSymbol.getAstNode().get()).getType());
   }
   
-  // TODO @MP in Templates übernehmen
   public String printVariableTypeName(VariableSymbol var) {
     String name = var.getName();
     Optional<ASTType> optType = findVariableTypeByName(name);
@@ -599,7 +603,8 @@ public class ComponentHelper {
       return false;
     }
     if (comp.getHead().isPresentGenericTypeParameters()) {
-      List<ASTTypeVariableDeclaration> parameterList = comp.getHead().getGenericTypeParameters()
+      List<ASTTypeVariableDeclaration> parameterList
+          = comp.getHead().getGenericTypeParameters()
           .getTypeVariableDeclarationList();
       for (ASTTypeVariableDeclaration type : parameterList) {
         if (type.getName().equals(typeName)) {
@@ -609,7 +614,11 @@ public class ComponentHelper {
     }
     return false;
   }
-  
+
+  /**
+   * Determine whether the component has a super component
+   * @return True, if the component has a super component. False, otherwise
+   */
   public boolean hasSuperComp() {
     return component.getSuperComponent().isPresent();
   }
@@ -618,27 +627,35 @@ public class ComponentHelper {
     if (component.getSuperComponent().isPresent()) {
       return component.getSuperComponent().get().getFullName();
     }
-    return "ERROR";
+    return "";
   }
 
-  public boolean superCompGeneric(){
+  /**
+   * Determine whether the super component has generic type parameters
+   * Note: Used in templates
+   * @return True, iff the super component has generic type parameters
+   */
+  public boolean isSuperComponentGeneric(){
     if(component.getSuperComponent().isPresent()){
-      final ComponentSymbolReference componentSymbolReference = component.getSuperComponent().get();
-      return componentSymbolReference.hasActualTypeArguments();
+      final ComponentSymbolReference componentSymbolReference
+          = component.getSuperComponent().get();
+      return componentSymbolReference.getReferencedSymbol().hasFormalTypeParameters();
     }
     return false;
   }
 
   /**
    *
-   * @return A list of String represenations of the actual type arguments
+   * @return A list of String representations of the actual type arguments
    * assigned to the super component
    */
   public List<String> getSuperCompActualTypeArguments() {
     final List<String> paramList = new ArrayList<>();
     if(component.getSuperComponent().isPresent()) {
-      final ComponentSymbolReference componentSymbolReference = component.getSuperComponent().get();
-      final List<ActualTypeArgument> actualTypeArgs = componentSymbolReference.getActualTypeArguments();
+      final ComponentSymbolReference componentSymbolReference
+          = component.getSuperComponent().get();
+      final List<ActualTypeArgument> actualTypeArgs
+          = componentSymbolReference.getActualTypeArguments();
       String componentPrefix = this.component.getFullName() + ".";
       for (ActualTypeArgument actualTypeArg : actualTypeArgs) {
         final String printedTypeArg = SymbolPrinter.printTypeArgument(actualTypeArg);
@@ -666,26 +683,30 @@ public class ComponentHelper {
     }
     return ret;
   }
-  
+
+  /**
+   * Determine whether the component is a generic component
+   * @return True, iff the component has at least one generic type parameter
+   */
   public boolean isGeneric() {
     return componentNode.getHead().isPresentGenericTypeParameters();
   }
 
   /**
    * Determine the generic type parameters of the component. The result includes
-   * the wildcards of the type parameters. This means for
-   * <pre>{@code component<T extends Number & Serializable>{}}</pre>
+   * the interfaces of the type parameters. This means for
+   * <pre>{@code component<T extends Number & java.io.Serializable>{}}</pre>
    * the returned list consists of
-   * <pre>{@code "T extends Number & Serializable"}</pre>
+   * <pre>{@code "T extends java.lang.Number & java.io.Serializable"}</pre>
    *
    * Note: Used in ComposedComponent.ftl
    * @return A list of printed type parameters with bounds.
    */
-  public List<String> getGenericParametersWithBounds(){
+  public List<String> getGenericTypeParametersWithInterfaces(){
     List<String> output = new ArrayList<>();
     if(isGeneric()){
       for (JTypeSymbol parameter : component.getFormalTypeParameters()) {
-        output.add(SymbolPrinter.printTypeWithBoundsAndFormalTypeParameters(parameter));
+        output.add(SymbolPrinter.printTypeParameterWithInterfaces(parameter));
       }
     }
     return output;

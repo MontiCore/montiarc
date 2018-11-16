@@ -12,7 +12,7 @@ import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 
 import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 
-public class ${implName} implements IComputable<${inputName}, ${resultName}> {
+public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericTypeParametersWithInterfaces() as param>${param}<#sep>,</#list> > </#if> implements IComputable<${inputName}, ${resultName}> {
   
   //component variables
   <#list compVariables as compVariable>

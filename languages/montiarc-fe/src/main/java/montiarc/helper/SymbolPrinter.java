@@ -91,31 +91,32 @@ public class SymbolPrinter {
   }
 
   /**
-   * Helper function for nested type arguments such as
-   * {@code List<NewType<String, List<String>>>}. This also prints possible
+   * Print the type with its interfaces and their type arguments. This also prints possible
    * bounds on the types, i.e. {@code Number extends java.lang.Object &
    * java.io.Serializable}
    *
    * @param arg The type symbol to print.
    * @return The printed symbol.
    */
-  public static String printTypeWithBoundsAndFormalTypeParameters(JTypeSymbol arg) {
-    String ret = arg.getName();
+  public static String printTypeParameterWithInterfaces(JTypeSymbol arg) {
+    StringBuilder ret = new StringBuilder(arg.getName());
 
-    if (!arg.getSuperTypes().isEmpty()) {
-      ret += " extends " + arg.getSuperTypes().stream()
-                               .map(t -> t.getReferencedSymbol().getFullName()
-                                             + printTypeArguments(t.getActualTypeArguments()))
-                               .collect(Collectors.joining("&"));
+    if (!arg.getInterfaces().isEmpty()) {
+      ret.append(" extends ");
+      ret.append(arg.getSuperTypes().stream()
+                     .map(t -> t.getReferencedSymbol().getFullName()
+                                   + printTypeArguments(t.getActualTypeArguments())
+                     )
+                     .collect(Collectors.joining("&")));
     }
 
-    if (arg.getFormalTypeParameters() != null && !arg.getFormalTypeParameters().isEmpty()) {
-      ret += "<" + arg.getFormalTypeParameters()
-                       .stream()
-                       .map(a -> printTypeWithBoundsAndFormalTypeParameters(a))
-                       .collect(Collectors.joining(",")) + ">";
-    }
-    return ret;
+//    if (arg.getFormalTypeParameters() != null && !arg.getFormalTypeParameters().isEmpty()) {
+//      ret.append("<").append(arg.getFormalTypeParameters()
+//                                 .stream()
+//                                 .map(a -> printTypeParameterWithInterfaces(a))
+//                                 .collect(Collectors.joining(","))).append(">");
+//    }
+    return ret.toString();
   }
 
   /**

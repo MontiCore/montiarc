@@ -11,7 +11,7 @@ import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 
 import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 
-public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParameters() as param>${param}<#sep>,</#list> > </#if> implements IComputable<${inputName}, ${resultName}> {
+public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericTypeParametersWithInterfaces() as param>${param}<#sep>,</#list> > </#if> implements IComputable<${inputName}, ${resultName}> {
   private static enum ${name}State {
     <#list states><#items as state>${state.getName()}<#sep>, </#sep></#items>;</#list>
   }
