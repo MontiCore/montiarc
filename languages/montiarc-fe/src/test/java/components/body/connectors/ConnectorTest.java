@@ -220,12 +220,12 @@ public class ConnectorTest extends AbstractCoCoTest {
   }
   
   @Test
-  @Ignore("see issue #237. Change coco and/or fix errors codes in test")
   public void testConnectingInnerCompToIncomingPort() {
     final String modelName = PACKAGE + "." + "ConnectingInnerCompToIncomingPort";
-    MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
+    cocos.addCoCo(new SubComponentsConnected());
     final ExpectedErrorInfo errors
-        = new ExpectedErrorInfo(2);
+        = new ExpectedErrorInfo(4, "xMA097", "xMA098", "xMA104", "xMA105");
     checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
 

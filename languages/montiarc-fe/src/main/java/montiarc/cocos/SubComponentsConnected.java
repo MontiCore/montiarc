@@ -1,5 +1,8 @@
 package montiarc.cocos;
 
+import de.monticore.symboltable.CommonSymbol;
+import de.monticore.symboltable.Symbol;
+import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
 import montiarc._cocos.MontiArcASTComponentCoCo;
@@ -27,19 +30,46 @@ import java.util.stream.Collectors;
  * @author ahaber, Robert Heim
  */
 public class SubComponentsConnected implements MontiArcASTComponentCoCo {
-  
+
+  /**
+   * Collect the names of the given ports
+   * @param ports Collection of ports of which to determine the names
+   * @return The names of the ports
+   */
   private Collection<String> getNames(Collection<PortSymbol> ports) {
-    return ports.stream().map(p -> p.getName())
-        .collect(Collectors.toList());
+    return ports.stream()
+               .map(CommonSymbol::getName)
+               .collect(Collectors.toList());
   }
-  
+
+  /**
+   * Collect the names of the connectors sources as Strings
+   * @param connectors The connectors to collect the names of
+   * @return The collected names
+   */
   private Collection<String> getSourceNames(Collection<ConnectorSymbol> connectors) {
-    return connectors.stream().map(c -> c.getSource()).collect(Collectors.toList());
+    return connectors.stream()
+               .map(ConnectorSymbol::getSource)
+               .collect(Collectors.toList());
   }
-  
+
+  /**
+   * Collect the names of the connectors targets
+   * @param connectors The connectors to collect the names of
+   * @return The collected target names
+   */
   private Collection<String> getTargetNames(Collection<ConnectorSymbol> connectors) {
-    return connectors.stream().map(c -> c.getTarget()).collect(Collectors.toList());
+    return connectors.stream()
+               .map(ConnectorSymbol::getTarget)
+               .collect(Collectors.toList());
   }
+
+  /*
+  1. If a port is used in a connector, then there should be no error
+  2. If a port is used in the wrong way in a connector, then there should be an
+    error, possibly
+  3. If the port is unused there should be an error
+   */
   
   @Override
   public void check(ASTComponent node) {
@@ -51,11 +81,17 @@ public class SubComponentsConnected implements MontiArcASTComponentCoCo {
               node.getName()));
       return;
     }
-    ComponentSymbol entry = (ComponentSymbol) node.getSymbolOpt().get();
+    ComponentSymbol componentSymbol = (ComponentSymbol) node.getSymbolOpt().get();
     // Implemented on the symTab as it takes auto-instantiation into account
     // which is not reflected
     // in the AST.
-    for (ComponentInstanceSymbol sub : entry.getSubComponents()) {
+
+    Collection<String> outerConnectorTargets
+        = getTargetNames(componentSymbol.getConnectors());
+    Collection<String> outerConnectorSources
+        = getSourceNames(componentSymbol.getConnectors());
+
+    for (ComponentInstanceSymbol sub : componentSymbol.getSubComponents()) {
       // ------- IN PORTS -------
       // in ports must be connected
       // outer.in->sub.in
@@ -63,56 +99,92 @@ public class SubComponentsConnected implements MontiArcASTComponentCoCo {
       // connectors with sub.in as target occur in outer.connectors or as
       // outer.AnySub.simpleconnectors
       if (sub.getComponentType().existsReferencedSymbol()) {
-        Collection<String> remainingSubIn
+        Collection<String> remainingSubInputPortNames
             = getNames(sub.getComponentType().getAllIncomingPorts());
         // Connectors in the outer context always refer to the ports in a
         // relative-qualified way (e.g.
         // sub.portX) and hence we must prefix the remaining ones with sub's
         // name to compare sets of
         // relative-qualified names
-        remainingSubIn = remainingSubIn.stream()
+        remainingSubInputPortNames = remainingSubInputPortNames.stream()
                              .map(s -> sub.getName() + "." + s)
                              .collect(Collectors.toList());
-        
-        Collection<String> outerConnectorTargets
-            = getTargetNames(entry.getConnectors());
-        remainingSubIn.removeAll(outerConnectorTargets);
-        if (!remainingSubIn.isEmpty()) {
-          remainingSubIn.forEach(p -> Log.error(
-              String.format("0xMA059 Port %s of subcomponent %s is not used!",
-                  p, sub.getFullName()),
-              node.get_SourcePositionStart()));
+
+        remainingSubInputPortNames.removeAll(outerConnectorTargets);
+
+        for (String subInputPortName : remainingSubInputPortNames) {
+          SourcePosition sourcePosition
+              = sub.getComponentType().getPort(subInputPortName.split("\\.")[1])
+                    .map(Symbol::getSourcePosition)
+                    .orElse(node.get_SourcePositionStart());
+          if(outerConnectorSources.contains(subInputPortName)){
+            Log.error(
+                String.format("0xMA104 The incoming port %s of subcomponent " +
+                                  "%s of component type %s is used as the " +
+                                  "source of a connector. Incoming ports of " +
+                                  "subcomponents may only be used as the " +
+                                  "target of a connector from an incoming " +
+                                  "port of the component defining the " +
+                                  "connector, or an output port of another " +
+                                  "subcomponent.", 
+                    subInputPortName, sub.getName(), 
+                    sub.getComponentType().getFullName()), 
+                sourcePosition);
+          } else {
+            Log.error(
+                String.format("0xMA059 Incoming port %s of subcomponent %s is not used!",
+                    subInputPortName, sub.getFullName()),
+                sourcePosition);
+          }
         }
+
         // ------- OUT PORTS -------
         // sub.out->outer.out
         // sub.out->outer.AnySub.in
         // connectors with sub.out as source occur as outer.connectors or
         // outer.AnySub.simpleConnectors
-        Collection<String> remainingSubOut
+        Collection<String> remainingSubOutputPortNames
             = getNames(sub.getComponentType().getAllOutgoingPorts());
         // Connectors in the outer context always refer to the ports in a
         // relative-qualified way (e.g.
         // sub.portX) and hence we must prefix the remaining ones with sub's
         // name to compare sets of
         // relative-qualified names
-        remainingSubOut = remainingSubOut.stream()
+        remainingSubOutputPortNames = remainingSubOutputPortNames.stream()
                               .map(s -> sub.getName() + "." + s)
                               .collect(Collectors.toList());
-        
-        Collection<String> outerConnectorSources
-            = getSourceNames(entry.getConnectors());
-        remainingSubOut.removeAll(outerConnectorSources);
-        
-        if (!remainingSubOut.isEmpty()) {
-          // qualified sources of simple connectors
-          remainingSubOut.forEach(p -> Log.error(
-              String.format("0xMA060 Port %s of subcomponent %s is not used!", p,
-                  sub.getFullName()),
-              node.get_SourcePositionStart()));
+
+        remainingSubOutputPortNames.removeAll(outerConnectorSources);
+
+        for (String subOutputPortName : remainingSubOutputPortNames) {
+          SourcePosition sourcePosition
+              = sub.getComponentType().getPort(subOutputPortName.split("\\.")[1])
+                    .map(Symbol::getSourcePosition)
+                    .orElse(node.get_SourcePositionStart());
+          if(outerConnectorTargets.contains(subOutputPortName)){
+            Log.error(
+                String.format("0xMA105 The outgoing port %s of subcomponent " +
+                                  "%s of component type %s is used as the " +
+                                  "target of a connector. Outgoing ports of " +
+                                  "subcomponents may only be used as the " +
+                                  "source of a connector to an outgoing " +
+                                  "port of the component defining the " +
+                                  "connector, or an input port of another " +
+                                  "subcomponent.",
+                    subOutputPortName, sub.getName(),
+                    sub.getComponentType().getFullName()),
+                sourcePosition);
+          } else {
+            Log.error(
+                String.format("0xMA060 Outgoing port %s of subcomponent %s is not used!",
+                    subOutputPortName, sub.getFullName()),
+                sourcePosition);
+          }
         }
       }
       else {
-        Log.error("0xMA004 Used Subcomponent "+ sub.getName()+ " does not exist!", sub.getAstNode().get().get_SourcePositionStart());
+        Log.error(String.format("0xMA004 Used Subcomponent %s does not exist!",
+            sub.getName()), sub.getAstNode().get().get_SourcePositionStart());
       }
     }
   }
