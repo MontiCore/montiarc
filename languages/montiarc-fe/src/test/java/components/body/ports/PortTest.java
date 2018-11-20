@@ -327,6 +327,16 @@ public class PortTest extends AbstractCoCoTest {
   }
 
   @Test
+  public void testNameConflictsWithInheritance() {
+    final String modelName = PACKAGE + "." + "NameConflictsWithInheritance";
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
+    final ExpectedErrorInfo expectedErrorInfo
+        = new ExpectedErrorInfo(2, "xMA053", "xMA035");
+    checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
+  }
+
+  @Test
   public void testHasConflictingInPortNames() {
     checkValid(PACKAGE + "." + "HasConflictingInPortNames");
   }
@@ -344,7 +354,7 @@ public class PortTest extends AbstractCoCoTest {
     final MontiArcCoCoChecker checker =
         new MontiArcCoCoChecker()
             .addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo();
+    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(1, "");
     checkInvalid(checker, loadComponentAST(fqModelName), expectedErrors);
   }
 }
