@@ -1,13 +1,19 @@
 package montiarc.cocos;
 
+import com.google.common.collect.Lists;
+import de.monticore.ast.ASTNode;
 import de.monticore.types.TypesPrinter;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.StringTransformations;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.*;
 import montiarc._cocos.MontiArcASTComponentCoCo;
+import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.PortSymbol;
+import montiarc._symboltable.VariableSymbol;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,7 +27,7 @@ import java.util.Set;
  * are unique. (p. 98. Lst. 5.10)
  * @implements [Hab16] B1: All names of model elements within a component
  * namespace have to be unique. (p. 59. Lst. 3.31)
- * @implementst [Wor16] MU1: The name of each component variable is unique
+ * @implements [Wor16] MU1: The name of each component variable is unique
  *  among ports, variables, and configuration parameters. (p.54, Lst. 4.5)
  */
 public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
@@ -36,36 +42,51 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
               node.getName()));
       return;
     }
+    
     ArrayList<Identifier> names = new ArrayList<>();
     ComponentSymbol comp = (ComponentSymbol) node.getSymbolOpt().get();
+    
+    // In case the model is faulty and there are inheritance cycles, we have to 
+    // check for those before actually trying to check the uniqueness of the 
+    // connector names
+    // Findings up to this point are saved to not alter the results
+    final List<Finding> findings = Lists.newArrayList(Log.getFindings());
+    Log.getFindings().clear();
+    CircularInheritance cycleCoCo = new CircularInheritance();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(cycleCoCo);
+    checker.checkAll(node);
+    final boolean inheritanceCycle
+        = Log.getFindings().stream()
+              .map(Finding::getMsg)
+              .anyMatch(m -> m.contains("xMA017"));
+    if(inheritanceCycle){
+      Log.warn("Could not check for uniqueness of names in inherited " +
+                   "ports due to an inheritance cycle.");
+    } else {
+      // Collect port names
+      for (PortSymbol portSymbol : comp.getAllPorts()) {
+        SourcePosition sourcePosition = SourcePosition.getDefaultSourcePosition();
+        if(portSymbol.getAstNode().isPresent()){
+          sourcePosition = portSymbol.getAstNode().get().get_SourcePositionStart();
+        }
+        names.add(new Identifier(portSymbol.getName(), IdentifierTypes.PORT, sourcePosition));
+      }
+    }
+    // Restore the saved findings
+    Log.getFindings().clear();
+    Log.getFindings().addAll(findings);
+
+    // Collect variable declarations
+    for (VariableSymbol variableSymbol : comp.getVariables()) {
+      names.add(new Identifier(variableSymbol.getName(),
+          IdentifierTypes.VARIABLE, variableSymbol.getSourcePosition()));
+    }
 
     for (ASTElement e : node.getBody().getElementList()) {
 
-      // Check variable declarations
-      if (e instanceof ASTVariableDeclaration) {
-        ASTVariableDeclaration decl = (ASTVariableDeclaration) e;
-        for (String variableName : decl.getNameList()) {
-          names.add(new Identifier(variableName, IdentifierTypes.VARIABLE, e.get_SourcePositionStart()));
-        }
-      }
-
-      // Check port names
-      else if (e instanceof ASTInterface) {
-        ASTInterface decl = (ASTInterface) e;
-        for (ASTPort port : decl.getPortsList()) {
-          List<String> portInstanceNames = port.getNameList();
-          if (portInstanceNames.isEmpty()) {
-            String implicitName = TypesPrinter.printType(port.getType());
-            portInstanceNames.add(StringTransformations.uncapitalize(implicitName));
-          }
-          for (String name : portInstanceNames) {
-            names.add(new Identifier(name, IdentifierTypes.PORT, e.get_SourcePositionStart()));
-          }
-        }
-      }
-
-      // Check constraints
-      else if (e instanceof ASTMontiArcInvariant) {
+      // Collect constraints
+      if (e instanceof ASTMontiArcInvariant) {
         ASTMontiArcInvariant invariant = (ASTMontiArcInvariant) e;
         String name = invariant.getName();
         names.add(new Identifier(name, IdentifierTypes.INVARIANT, e.get_SourcePositionStart()));
@@ -85,6 +106,8 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
     }
 
     // Configuration Parameters
+    // Due to inheritance of parameters no checking of super component parameters
+    // required.
     List<ASTParameter> parameters = node.getHead().getParameterList();
     for (ASTParameter parameter : parameters) {
       names.add(new Identifier(parameter.getName(),
