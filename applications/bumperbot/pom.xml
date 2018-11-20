@@ -115,7 +115,7 @@
             </configuration>
           </execution>
           <execution>
-            <id>unpack-dependencies</id>
+            <id>unpack</id>
             <phase>validate</phase>
             <goals>
               <goal>unpack</goal>
