@@ -28,6 +28,14 @@
       <classifier>${testmodels.classifier}</classifier>
     </dependency>
 
+
+    <dependency>
+      <groupId>montiarc.libraries</groupId>
+      <artifactId>maJavaLib</artifactId>
+      <classifier>${majavalib.classifier}</classifier>
+      <version>${project.version}</version>
+    </dependency>
+    
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>monticore-emf-runtime</artifactId>
@@ -139,10 +147,9 @@
                 <artifactItem>
                   <groupId>montiarc.libraries</groupId>
                   <artifactId>maJavaLib</artifactId>
-                  <version>${project.version}</version>
                 </artifactItem>
               </artifactItems>
-              <outputDirectory>${basedir}/target/javaLib</outputDirectory>
+              <outputDirectory>${basedir}/target/${librarymodels.classifier}/</outputDirectory>
             </configuration>
           </execution>
           <execution>

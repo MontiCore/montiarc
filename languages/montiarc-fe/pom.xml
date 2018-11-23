@@ -22,12 +22,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>de.monticore</groupId>
-			<artifactId>javaLib</artifactId>
-			<classifier>models</classifier>
-		</dependency>
-
-		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 		</dependency>
@@ -75,6 +69,7 @@
 			<groupId>montiarc.libraries</groupId>
 			<artifactId>maJavaLib</artifactId>
 			<version>${project.version}</version>
+      <classifier>${majavalib.classifier}</classifier>
 			<scope>test</scope>
 		</dependency>
 

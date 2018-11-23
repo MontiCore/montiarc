@@ -29,7 +29,7 @@ public abstract class AbstractCoCoTest {
   
   protected static final String MODEL_PATH = "src/test/resources/";
   
-  protected static final String FAKE_JAVA_TYPES_PATH = "target/javaLib";
+  protected static final String FAKE_JAVA_TYPES_PATH = "target/librarymodels";
   
   protected static final MontiArcTool MONTIARCTOOL = new MontiArcTool();
   

@@ -51,6 +51,7 @@
 		
 		<!-- Classifiers -->
 		<grammars.classifier>grammars</grammars.classifier>
+    <majavalib.classifier>majavalibclasses</majavalib.classifier>
 		<librarymodels.classifier>librarymodels</librarymodels.classifier>
 		<testmodels.classifier>testmodels</testmodels.classifier>
 
