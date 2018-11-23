@@ -67,7 +67,6 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     
     FileWalker modelVisitor = new FileWalker(".arc");
     try {
-      System.out.println("JUHU: " + Paths.get("target/test-models/components/").toFile().exists());
       Files.walkFileTree(Paths.get("target/test-models/components/"), modelVisitor);
     } catch (IOException e) {
       e.printStackTrace();

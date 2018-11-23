@@ -11,6 +11,7 @@ import de.monticore.ast.Comment;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.java.lang.JavaDSLLanguage;
 import de.monticore.symboltable.GlobalScope;
+import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
@@ -160,7 +161,6 @@ public class AbstractGeneratorTest {
     if (REGENERATE && TARGET_GENERATED_TEST_SOURCES_DIR.toFile().exists()) {
       delete(TARGET_GENERATED_TEST_SOURCES_DIR);
     }
-    System.out.println("JUHU0: " + Paths.get("target/test-models/components/").toFile().exists());
 
     // Test models are assumed to be unpacked by Maven
     assertTrue(Files.exists(TEST_MODEL_PATH));
@@ -169,20 +169,16 @@ public class AbstractGeneratorTest {
     // Remove directories which are not whitelisted as folders with test
     // models and files
     removeNonWhitelistedDirs();
-    System.out.println("JUHU1: " + Paths.get("target/test-models/components/").toFile().exists());
 
     // Remove invalid or unspecified models
     InvalidFileDeleter deleter = new InvalidFileDeleter(".arc");
     Files.walkFileTree(TEST_MODEL_PATH, deleter);
-    System.out.println("JUHU2: " + Paths.get("target/test-models/components/").toFile().exists());
 
     // Remove files which are declared as valid but which still generate
     // errors in the generation process
     for (Path resolvedPath : EXCLUDED_MODELS) {
       Files.deleteIfExists(resolvedPath);
     }
-    System.out.println("JUHU3: " + Paths.get("target/test-models/components/").toFile().exists());
-
     
     // Generate models (at specified location)
     if (REGENERATE) {
@@ -193,8 +189,6 @@ public class AbstractGeneratorTest {
     }
 
     copyJavaTypesToOutput();
-    System.out.println("JUHU4: " + Paths.get("target/test-models/components/").toFile().exists());
-
   }
 
   /**
@@ -212,12 +206,7 @@ public class AbstractGeneratorTest {
         = Files.walk(TEST_MODEL_PATH, 1, FileVisitOption.FOLLOW_LINKS)
               .collect(Collectors.toList());
     for (Path path : paths) {
-      final String pathString = path.toString();
-      if(Files.isSameFile(TEST_MODEL_PATH, path)){
-        continue;
-      }
-      final String[] split = pathString.split("\\\\");
-      if(!allowedDirectories.contains(split[split.length-1])) {
+      if(!allowedDirectories.stream().anyMatch(path::endsWith)) {
         delete(path);
       }
     }
