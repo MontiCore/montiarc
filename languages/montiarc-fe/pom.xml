@@ -70,7 +70,7 @@
 			<artifactId>maJavaLib</artifactId>
 			<version>${project.version}</version>
       <classifier>${majavalib.classifier}</classifier>
-			<scope>test</scope>
+<!-- 			<scope>test</scope> -->
 		</dependency>
 
 		<dependency>

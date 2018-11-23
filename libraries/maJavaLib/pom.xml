@@ -13,8 +13,9 @@
   <dependencies>
     <dependency>
       <groupId>de.monticore</groupId>
-      <artifactId>javaLib</artifactId>
+      <artifactId>de.monticore.java.lib</artifactId>
       <classifier>models</classifier>
+      <version>${javalib.version}</version>
     </dependency>
   </dependencies>
 
@@ -77,7 +78,7 @@
           </execution>
           <execution>
             <id>default-jar</id>
-            <phase>none</phase>
+            <phase>package</phase>
           </execution>
         </executions>
       </plugin>
