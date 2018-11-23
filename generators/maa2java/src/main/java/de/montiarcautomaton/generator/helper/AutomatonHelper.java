@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.prettyprint.IndentPrinter;
@@ -172,7 +173,7 @@ public class AutomatonHelper extends ComponentHelper {
    */
   private static String printExpression(ASTExpression expr) {
     IndentPrinter printer = new IndentPrinter();
-    JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(printer);
+    JavaDSLPrettyPrinter prettyPrinter = new CDAttributeGetterTransformationVisitor(printer);
     expr.accept(prettyPrinter);
     return printer.getContent();
   }

@@ -28,7 +28,7 @@ public ${kind} ${type.getName()} ${super} {
     <#list type.getFields() as field>
         <#-- attributes -->
         <#assign mandatoryFields = mandatoryFields + [{"name": field.getName(), "type":field.getType()}]>
-        public ${field.getType()} ${field.getName()};
+        private ${field.getType()} ${field.getName()};
         public ${field.getType()} get${field.getName()?cap_first}() {
           return ${field.getName()};
         }

@@ -42,6 +42,12 @@ public class AssignmentTest extends AbstractCoCoTest {
   }
   
   @Test
+  public void testAssignsAttributeOfCD() {
+    checkValid(PACKAGE + "." + "AssignsAttributeOfCD");
+  }
+  
+  
+  @Test
   public void testMethodCallWithoutCallKeyword() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MethodCallWithoutCallKeyword");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new IOAssignmentCallFollowsMethodCall()), node,
