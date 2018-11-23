@@ -147,6 +147,7 @@
                 <artifactItem>
                   <groupId>montiarc.libraries</groupId>
                   <artifactId>maJavaLib</artifactId>
+                  <classifier>${majavalib.classifier}</classifier>
                 </artifactItem>
               </artifactItems>
               <outputDirectory>${basedir}/target/${librarymodels.classifier}/</outputDirectory>

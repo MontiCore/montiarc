@@ -221,13 +221,6 @@
 				<version>${logback.version}</version>
 				<scope>test</scope>
 			</dependency>
-
-			<dependency>
-				<groupId>de.monticore</groupId>
-				<artifactId>javaLib</artifactId>
-				<version>4.3.9</version>
-				<classifier>models</classifier>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

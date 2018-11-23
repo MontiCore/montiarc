@@ -44,7 +44,6 @@ public class AbstractGeneratorTest {
 
   public static final String IMPLEMENTATION_SUFFIX = "Impl";
 
-  public static final String outputPath = "target/generated-test-sources/";
   public static final String GENERATED_TEST_SOURCES = "generated-test-sources";
   public static final Path TARGET_GENERATED_TEST_SOURCES_DIR
       = Paths.get(GENERATED_TEST_SOURCES + "/");
@@ -158,7 +157,7 @@ public class AbstractGeneratorTest {
     generatorTool = new MontiArcGeneratorTool();
 
     // Clear output folder
-    if (REGENERATE) {
+    if (REGENERATE && TARGET_GENERATED_TEST_SOURCES_DIR.toFile().exists()) {
       delete(TARGET_GENERATED_TEST_SOURCES_DIR);
     }
 
