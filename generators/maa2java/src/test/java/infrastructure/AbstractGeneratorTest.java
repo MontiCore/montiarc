@@ -164,28 +164,20 @@ public class AbstractGeneratorTest {
     // Test models are assumed to be unpacked by Maven
     assertTrue(Files.exists(TEST_MODEL_PATH));
     assertTrue(Files.exists(Paths.get("target/test-models/components")));
-    assertTrue("components dir does exists1", Files.isDirectory(TEST_MODEL_PATH));
-    System.out.println("components dir exists1");
 
     // Remove directories which are not whitelisted as folders with test
     // models and files
     removeNonWhitelistedDirs();
 
-    assertTrue("components dir does exists2", Files.isDirectory(TEST_MODEL_PATH));
-    System.out.println("components dir exists2");
     // Remove invalid or unspecified models
     InvalidFileDeleter deleter = new InvalidFileDeleter(".arc");
     Files.walkFileTree(TEST_MODEL_PATH, deleter);
-    assertTrue("components dir does exists3", Files.isDirectory(TEST_MODEL_PATH));
-    System.out.println("components dir exists3");
 
     // Remove files which are declared as valid but which still generate
     // errors in the generation process
     for (Path resolvedPath : EXCLUDED_MODELS) {
       Files.deleteIfExists(resolvedPath);
     }
-    assertTrue("components dir does exists4", Files.isDirectory(TEST_MODEL_PATH));
-    System.out.println("components dir exists4");
     // Generate models (at specified location)
     if (REGENERATE) {
       generatorTool.generate(
@@ -195,8 +187,6 @@ public class AbstractGeneratorTest {
     }
 
     copyJavaTypesToOutput();
-    assertTrue("components dir does exists5", Files.isDirectory(TEST_MODEL_PATH));
-    System.out.println("components dir exists5");
   }
 
   /**
