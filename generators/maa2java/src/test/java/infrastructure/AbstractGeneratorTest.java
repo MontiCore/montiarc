@@ -206,7 +206,10 @@ public class AbstractGeneratorTest {
         = Files.walk(TEST_MODEL_PATH, 1, FileVisitOption.FOLLOW_LINKS)
               .collect(Collectors.toList());
     for (Path path : paths) {
-      if(!allowedDirectories.stream().anyMatch(path::endsWith)) {
+      if(Files.isSameFile(TEST_MODEL_PATH, path)){
+        continue;
+      }
+      if(!allowedDirectories.stream().anyMatch(aD -> path.endsWith(aD))) {
         delete(path);
       }
     }
