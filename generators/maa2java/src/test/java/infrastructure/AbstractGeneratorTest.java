@@ -167,7 +167,7 @@ public class AbstractGeneratorTest {
 
     // Remove directories which are not whitelisted as folders with test
     // models and files
-    removeNonWhitelistedDirs();
+//    removeNonWhitelistedDirs();
 
     // Remove invalid or unspecified models
     InvalidFileDeleter deleter = new InvalidFileDeleter(".arc");
