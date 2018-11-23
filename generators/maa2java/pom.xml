@@ -138,7 +138,7 @@
               <artifactItems>
                 <artifactItem>
                   <groupId>montiarc.libraries</groupId>
-                  <artifactId>javaLib</artifactId>
+                  <artifactId>maJavaLib</artifactId>
                   <version>${project.version}</version>
                 </artifactItem>
               </artifactItems>

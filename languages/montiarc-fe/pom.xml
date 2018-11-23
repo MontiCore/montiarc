@@ -73,7 +73,7 @@
 
 		<dependency>
 			<groupId>montiarc.libraries</groupId>
-			<artifactId>javaLib</artifactId>
+			<artifactId>maJavaLib</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
@@ -128,7 +128,7 @@
 							<artifactItems>
 								<artifactItem>
 									<groupId>montiarc.libraries</groupId>
-									<artifactId>javaLib</artifactId>
+									<artifactId>maJavaLib</artifactId>
 								</artifactItem>
 							</artifactItems>
 							<outputDirectory>${basedir}/target/${librarymodels.classifier}/</outputDirectory>
