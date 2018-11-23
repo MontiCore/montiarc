@@ -64,10 +64,11 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
    * are already filtered before the generation process.
    */
   public void testFEModels() {
-
+    
     FileWalker modelVisitor = new FileWalker(".arc");
     try {
-      Files.walkFileTree(Paths.get("target/test-models/components"), modelVisitor);
+      System.out.println("JUHU: " + Paths.get("target/test-models/components/").toFile().exists());
+      Files.walkFileTree(Paths.get("target/test-models/components/"), modelVisitor);
     } catch (IOException e) {
       e.printStackTrace();
     }
