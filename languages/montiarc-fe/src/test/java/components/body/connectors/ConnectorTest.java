@@ -296,7 +296,10 @@ public class ConnectorTest extends AbstractCoCoTest {
 
   @Test
   public void testGenericSourceTypeIsSubtypeOfTargetType() {
-    checkValid(PACKAGE + "." + "GenericSourceTypeIsSubtypeOfTargetType");
+    final String modelName = PACKAGE + "." + "GenericSourceTypeIsSubtypeOfTargetType";
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ProhibitGenericsWithBounds());
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA072");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
 
   @Test
