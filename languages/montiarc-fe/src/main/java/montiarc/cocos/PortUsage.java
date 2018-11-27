@@ -3,6 +3,8 @@ package montiarc.cocos;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import de.monticore.symboltable.Symbol;
+import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
 import montiarc._cocos.MontiArcASTComponentCoCo;
@@ -22,7 +24,7 @@ import montiarc._symboltable.PortSymbol;
  */
 public class PortUsage implements MontiArcASTComponentCoCo {
   
-  private Collection<String> getNames(Collection<PortSymbol> ports) {
+  private Collection<String> getNamesOfPorts(Collection<PortSymbol> ports) {
     return ports.stream().map(p -> p.getName())
         .collect(Collectors.toList());
   }
@@ -45,45 +47,87 @@ public class PortUsage implements MontiArcASTComponentCoCo {
               node.getName()));
       return;
     }
-    ComponentSymbol entry = (ComponentSymbol) node.getSymbolOpt().get();
-    
+    ComponentSymbol componentSymbol = (ComponentSymbol) node.getSymbolOpt().get();
+
+    /*
+    1. If the port is outgoing, then it should only occur as the target of a connector
+      defined in this component.
+      It should only be connected to from an output port of a subcomponent
+    2. If the port is incoming it should only be used as the source of a connector
+      defined in this component.
+      It should only connect to a subcomponents input port.
+     */
+
+
     // %%%%%%%%%%%%%%%% CV5 %%%%%%%%%%%%%%%%
-    if (entry.isDecomposed()) {
+    if (componentSymbol.isDecomposed()) {
+
+      Collection<String> connectorSources = getSourceNames(componentSymbol.getConnectors());
+      Collection<String> connectorTargets = getTargetNames(componentSymbol.getConnectors());
+
       // --------- IN PORTS ----------
       // check that in-ports are used within the component
       // in->out or in->sub.in (both only occur as normal connectors where the in ports must be the
       // source)
-      
-      Collection<String> remainingPorts = getNames(entry.getIncomingPorts());
-      
-      Collection<String> connectorSources = getSourceNames(entry.getConnectors());
-      
-      if (entry.isInnerComponent()) {
-        // ports not connected by the inner component itself might be connected from the parent
-        // component or any of the parent's subcomponents' simple connectors
-        ComponentSymbol componentUsingSubComp = (ComponentSymbol) entry.getEnclosingScope()
-            .getSpanningSymbol().get();
-        connectorSources.addAll(getSourceNames(componentUsingSubComp.getConnectors()));
+
+      Collection<String> remainingInPortNames
+          = getNamesOfPorts(componentSymbol.getAllIncomingPorts());
+
+//      if (componentSymbol.isInnerComponent()) {
+//        // ports not connected by the inner component itself might be connected from the parent
+//        // component or any of the parent's subcomponents' simple connectors
+//        ComponentSymbol componentUsingSubComp
+//            = (ComponentSymbol) componentSymbol.getEnclosingScope()
+//            .getSpanningSymbol().get();
+//        connectorSources.addAll(getSourceNames(componentUsingSubComp.getConnectors()));
+//      }
+
+      remainingInPortNames.removeAll(connectorSources);
+      for (String inPortName : remainingInPortNames) {
+        final SourcePosition sourcePosition
+            = componentSymbol.getPort(inPortName).map(Symbol::getSourcePosition)
+                  .orElse(node.get_SourcePositionStart());
+
+        if(connectorTargets.contains(inPortName)){
+          Log.error(
+              String.format("0xMA098 Incoming port %s of component %s is used as the " +
+                                "target of a connector, defined by the same " +
+                                "component. Incoming ports may only be used " +
+                                "as the source of a connector to a " +
+                                "subcomponents incoming port.",
+                  inPortName, componentSymbol.getName()), sourcePosition);
+        } else {
+          Log.warn(String.format("0xMA057 Port %s is not used!", inPortName), sourcePosition);
+        }
       }
-      
-      remainingPorts.removeAll(connectorSources);
-      if (!remainingPorts.isEmpty()) {
-        remainingPorts.forEach(p -> Log.warn(String.format("0xMA057 Port %s is not used!", p)));
-      }
-      
+
       // --------- OUT PORTS ----------
       // check that out-ports are connected (i.e. they are targets of connectors)
       // they might be connected using normal connectors (in->out or sub.out->out)
       // or using simple connectors (sub.out->out) (note that simple connectors only allow the
       // subcomponents outgoing ports as source)
-      
-      remainingPorts = getNames(entry.getOutgoingPorts());
-      Collection<String> connectorTargets = getTargetNames(entry.getConnectors());
-      
-      remainingPorts.removeAll(connectorTargets);
-      if (!remainingPorts.isEmpty()) {
-        remainingPorts.forEach(p -> Log.warn(String.format("0xMA058 Port %s is not used!", p),
-            node.get_SourcePositionStart()));
+
+      Collection<String> remainingOutPortNames
+          = getNamesOfPorts(componentSymbol.getAllOutgoingPorts());
+
+      remainingOutPortNames.removeAll(connectorTargets);
+      for (String outPortName : remainingOutPortNames) {
+        final SourcePosition sourcePosition
+            = componentSymbol.getPort(outPortName).map(Symbol::getSourcePosition)
+                  .orElse(node.get_SourcePositionStart());
+
+        if(connectorSources.contains(outPortName)){
+          Log.error(
+              String.format("0xMA097 Outgoing port %s of component %s is used as the " +
+                                "source of a connector, defined by the same " +
+                                "component. Outgoing ports may only be used " +
+                                "as the target of a connector from a " +
+                                "subcomponents outgoing port",
+                  outPortName, componentSymbol.getName()), sourcePosition);
+        } else {
+          Log.warn(String.format("0xMA058 Port %s is not used!", outPortName),
+              sourcePosition);
+        }
       }
     }
   }

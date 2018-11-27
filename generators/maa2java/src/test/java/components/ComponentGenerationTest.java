@@ -22,6 +22,7 @@ import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -64,10 +65,10 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
    * are already filtered before the generation process.
    */
   public void testFEModels() {
-
+    
     FileWalker modelVisitor = new FileWalker(".arc");
     try {
-      Files.walkFileTree(Paths.get("target/test-models/components"), modelVisitor);
+      Files.walkFileTree(Paths.get("target/test-models/components/"), modelVisitor);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -289,7 +290,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     // Add the special deployment file
     if (deploy != null && deploy.isPresent()) {
       filesToCheck.add(
-          TARGET_GENERATED_TEST_SOURCES_DIR.resolve(PACKAGE + "\\" +
+          TARGET_GENERATED_TEST_SOURCES_DIR.resolve(PACKAGE + File.separator +
                        "Deploy" + componentName + JAVA_FILE_ENDING));
     }
 
@@ -310,7 +311,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 //      }
 
       final String qualifiedFileName
-          = qualifiedName.replace('.', '\\') + "Impl";
+          = qualifiedName.replace('.', File.separatorChar) + "Impl";
       filesToCheck.add(basedir.resolve(qualifiedFileName + JAVA_FILE_ENDING));
     } else {
 
@@ -343,7 +344,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 
     for (String suffix : AbstractGeneratorTest.fileSuffixes) {
       final String qualifiedFileName
-          = qualifiedName.replace('.', '\\') + suffix;
+          = qualifiedName.replace('.', File.separatorChar) + suffix;
       filesToCheck.add(
           basedir.resolve(qualifiedFileName + JAVA_FILE_ENDING));
     }

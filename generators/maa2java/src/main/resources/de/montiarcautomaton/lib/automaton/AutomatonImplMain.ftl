@@ -11,7 +11,7 @@ import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 
 import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 
-public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParameters() as param>${param}<#sep>,</#list> > </#if> implements IComputable<${inputName}, ${resultName}> {
+public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericTypeParametersWithInterfaces() as param>${param}<#sep>,</#list> > </#if> implements IComputable<${inputName}, ${resultName}> {
   private static enum ${name}State {
     <#list states><#items as state>${state.getName()}<#sep>, </#sep></#items>;</#list>
   }
@@ -81,7 +81,7 @@ public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericParam
   public ${resultName} compute(${inputName} ${inputVarName}) {
     // inputs
     <#list portsIn as port>
-  	final ${helper.getPortTypeName(port)} ${port.getName()} = ${inputVarName}.get${port.getName()?cap_first}();
+  	final ${helper.getRealPortTypeString(port)} ${port.getName()} = ${inputVarName}.get${port.getName()?cap_first}();
   	</#list>
   
     final ${resultName} ${resultVarName} = new ${resultName}();

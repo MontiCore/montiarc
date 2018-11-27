@@ -289,10 +289,12 @@ public class PortTest extends AbstractCoCoTest {
   
   @Test
   public void testUndefinedPortTypes() {
-    ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UndefinedPortTypes");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    final ExpectedErrorInfo errors = new ExpectedErrorInfo(3, "xMA097");
-    checkInvalid(cocos, node, errors);
+    MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new UsedTypesExist());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(6, "xMA101");
+    final String qualifiedModelName = PACKAGE + "." + "UndefinedPortTypes";
+    checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
   }
 
   @Test
@@ -325,6 +327,16 @@ public class PortTest extends AbstractCoCoTest {
   }
 
   @Test
+  public void testNameConflictsWithInheritance() {
+    final String modelName = PACKAGE + "." + "NameConflictsWithInheritance";
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
+    final ExpectedErrorInfo expectedErrorInfo
+        = new ExpectedErrorInfo(2, "xMA053", "xMA035");
+    checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
+  }
+
+  @Test
   public void testHasConflictingInPortNames() {
     checkValid(PACKAGE + "." + "HasConflictingInPortNames");
   }
@@ -342,7 +354,7 @@ public class PortTest extends AbstractCoCoTest {
     final MontiArcCoCoChecker checker =
         new MontiArcCoCoChecker()
             .addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo();
+    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(1, "");
     checkInvalid(checker, loadComponentAST(fqModelName), expectedErrors);
   }
 }

@@ -244,7 +244,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       return;
     }
     for (ConnectorSymbol connector : this.symbol.getConnectors()) {
-      if (helper.isIncomingPort(this.symbol, connector, false, connector.getTarget())) {
+      if (helper.isIncomingPort(this.symbol, connector, false)) {
         methodBuilder.addBodyElement(
             String.format("%s.setPort%s(%s.getPort%s());",
                 helper.getConnectorComponentName(connector, false),
@@ -339,7 +339,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       methodBuilder.addBodyElement("this.initialize();");
     } else {
       for (ConnectorSymbol connector : this.symbol.getConnectors()) {
-        if (!helper.isIncomingPort(this.symbol, connector, false, connector.getTarget())) {
+        if (!helper.isIncomingPort(this.symbol, connector, false)) {
           methodBuilder.addBodyElement(
               String.format("%s.setPort%s(%s.getPort%s());",
                   helper.getConnectorComponentName(connector, false),
@@ -738,7 +738,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
             = JavaDSLMill.simpleReferenceTypeBuilder()
                   .addAllNames(Lists.newArrayList(
                       ComponentHelper.autobox(
-                          ComponentHelper.determinePortTypeName(this.symbol, inPort)).split("\\.")))
+                          ComponentHelper.getRealPortTypeString(this.symbol, inPort)).split("\\.")))
                   .build();
         inputConstructorBuilder.addParameter(inPort.getName(), type);
       }
@@ -791,7 +791,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
             = JavaDSLMill.simpleReferenceTypeBuilder()
                   .addAllNames(Lists.newArrayList(
                       ComponentHelper.autobox(
-                          ComponentHelper.determinePortTypeName(this.symbol, outPort)).split("\\.")))
+                          ComponentHelper.getRealPortTypeString(this.symbol, outPort)).split("\\.")))
                   .build();
         resultConstructorBuilder.addParameter(outPort.getName(), type);
       }
@@ -855,22 +855,19 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     // Setter
     for (String name : names) {
       final String portNameCapitalized = capitalizeFirst(name);
-      if (this.symbol.isDecomposed() || node.isIncoming()) {
-        Method.Builder setter
-            = Method
-                  .getBuilder()
-                  .setReturnType(GeneratorTestConstants.VOID_STRING)
-                  .addParameter("port", expectedType)
-                  .addBodyElement("this." + name + " = port;")
-                  .setName("setPort" + portNameCapitalized);
-        classVisitor.addMethod(setter.build());
-      }
+      Method.Builder setter
+          = Method
+                .getBuilder()
+                .setReturnType(GeneratorTestConstants.VOID_STRING)
+                .addParameter("port", expectedType)
+                .addBodyElement("this." + name + " = port;")
+                .setName("setPort" + portNameCapitalized);
+      classVisitor.addMethod(setter.build());
 
       // Different object, due to naming differences between component
       // class and result class
       if (node.isOutgoing()) {
-        Method.Builder setter
-            = Method
+        setter = Method
                   .getBuilder()
                   .setReturnType(GeneratorTestConstants.VOID_STRING)
                   .addParameter(name, type)
@@ -969,7 +966,9 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
   @Override
   public void visit(ASTStateDeclaration node) {
-    final Set<String> stateNames = node.getStateList().stream().map(ASTState::getName).collect(Collectors.toSet());
+    final Set<String> stateNames = node.getStateList().stream()
+                                       .map(ASTState::getName)
+                                       .collect(Collectors.toSet());
     EnumType enumType = new EnumType(componentName + "State", stateNames);
 
     this.implVisitor.addEnumType(enumType);

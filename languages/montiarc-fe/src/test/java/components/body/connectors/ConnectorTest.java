@@ -11,11 +11,12 @@ import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
-import montiarc._cocos.MontiArcASTBehaviorElementCoCo;
 import montiarc._cocos.MontiArcASTConnectorCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
+import montiarc._symboltable.PortSymbol;
 import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -196,11 +197,12 @@ public class ConnectorTest extends AbstractCoCoTest {
   @Test
   /* Checks whether the source and target of a connect statement exist. */
   public void testConnectorReferenceDoesNotExist() {
-    ASTMontiArcNode node = loadComponentAST(
-        PACKAGE + "." + "ConnectorReferenceDoesNotExist");
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
-        .addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    checkInvalid(cocos, node, new ExpectedErrorInfo(7, "xMA066", "xMA067","xMA008"));
+    final String modelName = PACKAGE + "." + "ConnectorReferenceDoesNotExist";
+    MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(7, "xMA066", "xMA067", "xMA008");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
   @Test
@@ -214,8 +216,19 @@ public class ConnectorTest extends AbstractCoCoTest {
     
     assertEquals(1, connector.getStereotype().size());
     assertFalse(connector.getStereotype().get("realNews").isPresent());
+    checkValid(PACKAGE + "." + "ConnectorsWithStereotypes");
   }
   
+  @Test
+  public void testConnectingInnerCompToIncomingPort() {
+    final String modelName = PACKAGE + "." + "ConnectingInnerCompToIncomingPort";
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new PortUsage());
+    cocos.addCoCo(new SubComponentsConnected());
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(4, "xMA097", "xMA098", "xMA104", "xMA105");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
+  }
+
   @Test
   public void testConnectsNonExistingPorts() {
     ASTMontiArcNode node = loadComponentAST(
@@ -279,6 +292,53 @@ public class ConnectorTest extends AbstractCoCoTest {
   @Test
   public void testTypeHierarchyInConnector() {
     checkValid(PACKAGE + "." + "TypeHierarchyInConnector");
+  }
+
+  @Test
+  public void testGenericSourceTypeIsSubtypeOfTargetType() {
+    checkValid(PACKAGE + "." + "GenericSourceTypeIsSubtypeOfTargetType");
+  }
+
+  @Test
+  public void testGenericSourceTypeNotSubtypeOfTargetType() {
+    final String modelName = PACKAGE + "." + "GenericSourceTypeNotSubtypeOfTargetType";
+    final ExpectedErrorInfo expectedErrorInfo
+        = new ExpectedErrorInfo(1, "xMA033");
+    final MontiArcCoCoChecker checker
+        = MontiArcCoCos.createChecker();
+    checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
+  }
+
+  @Test
+  public void testConnectsCompatibleInheritedPorts2() {
+    final String compName = "ConnectsCompatibleInheritedPorts2";
+    final ComponentSymbol componentSymbol = loadComponentSymbol(PACKAGE, compName);
+
+    final Optional<ComponentInstanceSymbol> subComp
+        = componentSymbol.getSubComponent("subComp");
+    assertTrue(subComp.isPresent());
+
+    final ComponentSymbol subCompSymbol
+        = subComp.get().getComponentType().getReferencedSymbol();
+
+    final Optional<PortSymbol> subCompOutTOpt = subCompSymbol.getPort("outT");
+    assertTrue(subCompOutTOpt.isPresent());
+
+    final Optional<PortSymbol> outTOpt = componentSymbol.getPort("outT", true);
+    assertTrue(outTOpt.isPresent());
+
+
+    checkValid(PACKAGE + "." + compName);
+  }
+
+  @Test
+  public void testConnectsIncompatibleInheritedPorts() {
+    final String modelName = PACKAGE + "." + "ConnectsIncompatibleInheritedPorts";
+    final ExpectedErrorInfo expectedErrorInfo
+        = new ExpectedErrorInfo(4, "xMA033", "xMA067");
+    final MontiArcCoCoChecker checker
+        = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    checkInvalid(checker, loadComponentAST(modelName), expectedErrorInfo);
   }
   
 }
