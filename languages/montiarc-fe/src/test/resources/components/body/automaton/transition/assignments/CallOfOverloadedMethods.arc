@@ -1,5 +1,8 @@
 package components.body.automaton.transition.assignments;
 
+/**
+* Valid model.
+*/
 
 component CallOfOverloadedMethods {
 

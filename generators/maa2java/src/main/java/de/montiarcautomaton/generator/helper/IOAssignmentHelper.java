@@ -2,7 +2,7 @@ package de.montiarcautomaton.generator.helper;
 
 import java.util.Optional;
 
-
+import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.prettyprint.IndentPrinter;
@@ -23,7 +23,6 @@ public class IOAssignmentHelper {
     this.assignment = assignment;
   }
   
-  
   /**
    * Returns the left hand side of an assignment/comparison.
    * 
@@ -34,8 +33,9 @@ public class IOAssignmentHelper {
   }
   
   public boolean isAssignment() {
-   // returns true if the assignment is a real assignment, not only a method call 
-   return assignment.isAssignment();
+    // returns true if the assignment is a real assignment, not only a method
+    // call
+    return assignment.isAssignment();
     
   }
   
@@ -81,9 +81,12 @@ public class IOAssignmentHelper {
    * @param expr
    * @return
    */
-  private static String printExpression(ASTExpression expr) {
+  private String printExpression(ASTExpression expr) {
     IndentPrinter printer = new IndentPrinter();
     JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(printer);
+    if (isAssignment()) {
+      prettyPrinter = new CDAttributeGetterTransformationVisitor(printer);
+    }
     expr.accept(prettyPrinter);
     return printer.getContent();
   }

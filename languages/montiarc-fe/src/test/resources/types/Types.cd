@@ -4,5 +4,17 @@ package types;
  * Valid model. 
  */
 classdiagram Types {
-  class Car {}
+  class Car {
+    Wheel w;
+  }
+  
+  
+  class Wheel {
+    Position p;
+  }
+  
+  
+  enum Position {
+    FRONT,REAR;
+  }
 }

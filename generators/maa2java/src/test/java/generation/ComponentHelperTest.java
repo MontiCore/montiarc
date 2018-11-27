@@ -1,5 +1,6 @@
 package generation;
 
+import de.montiarcautomaton.generator.MontiArcGeneratorTool;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
@@ -21,6 +22,7 @@ public class ComponentHelperTest extends AbstractCoCoTest {
   private static final String PACKAGE = "components.head.parameters";
   protected static final String TARGET_TEST_MODELS = "target/test-models/";
 
+  
   @Test
   @Ignore("TODO Fix Java Types in the test symbol table. They appear to be missing or wrongly added. Then uncomment all lines")
   public void determinePortTypeName() {
