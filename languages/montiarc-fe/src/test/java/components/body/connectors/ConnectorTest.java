@@ -283,7 +283,7 @@ public class ConnectorTest extends AbstractCoCoTest {
   public void testConnectsPortsWithIncompatibleTypes() {
     final ASTMontiArcNode astNode = loadComponentAST(
         PACKAGE + "." + "ConnectsPortsWithIncompatibleTypes");
-    final ExpectedErrorInfo expectedErrorInfo = new ExpectedErrorInfo(5, "xMA033");
+    final ExpectedErrorInfo expectedErrorInfo = new ExpectedErrorInfo(6, "xMA033");
     final MontiArcCoCoChecker checker =
         new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(checker, astNode, expectedErrorInfo);
