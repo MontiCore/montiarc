@@ -183,7 +183,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     }
 
     // 5. Invoke Java compiler to see whether they are compiling
-    final boolean compiling = AbstractGeneratorTest.isCompiling(filesToCheck);
+    final boolean compiling = AbstractGeneratorTest.isCompiling(filesToCheck, TARGET_GENERATED_TEST_SOURCES_DIR);
     assertTrue(
         String.format("The generated files for model %s are not " +
                           "compiling without errors", qualifiedName),

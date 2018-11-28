@@ -113,7 +113,7 @@ public class AbstractGeneratorTest {
    * @param paths Files to compile
    * @return true, if there are no compiler errors
    */
-  public static boolean isCompiling(Set<Path> paths){
+  public static boolean isCompiling(Set<Path> paths, Path sourcepath){
     // Remove directories, non java files and convert to File objects
     List<File> files = paths.stream()
                            .filter(path -> !Files.isDirectory(path))
@@ -127,10 +127,13 @@ public class AbstractGeneratorTest {
     DiagnosticCollector<JavaFileObject> diagnostics
         = new DiagnosticCollector<JavaFileObject>();
 
+    String sourcePathString = sourcepath.toAbsolutePath().toString();
+
+
     Iterable<? extends JavaFileObject> compilationUnits1 =
         fileManager.getJavaFileObjectsFromFiles(files);
     compiler.getTask(null, fileManager, diagnostics,
-        null, null, compilationUnits1).call();
+        Arrays.asList("-sourcepath", sourcePathString), null, compilationUnits1).call();
 
     try {
       fileManager.close();
@@ -139,10 +142,13 @@ public class AbstractGeneratorTest {
     }
 
     for ( Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
-      if(diagnostic.getSource() != null)
-      System.out.format("Error on line %d in %s%n %s%n",
-          diagnostic.getLineNumber(),
-          diagnostic.getSource().toUri(), diagnostic.getMessage(Locale.ENGLISH));
+      if(diagnostic.getKind().equals(Diagnostic.Kind.ERROR)) {
+        if (diagnostic.getSource() != null) {
+          System.out.format("Error on line %d in %s%n %s%n",
+              diagnostic.getLineNumber(),
+              diagnostic.getSource().toUri(), diagnostic.getMessage(Locale.ENGLISH));
+        }
+      }
     }
     return diagnostics.getDiagnostics()
                .stream()
