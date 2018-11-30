@@ -8,7 +8,7 @@
   <parent>
     <groupId>montiarc.libraries</groupId>
     <artifactId>libraries</artifactId>
-    <version>4.6.1-SNAPSHOT</version>
+    <version>5.0.0</version>
   </parent>
 
   <artifactId>lejos-rte</artifactId>
