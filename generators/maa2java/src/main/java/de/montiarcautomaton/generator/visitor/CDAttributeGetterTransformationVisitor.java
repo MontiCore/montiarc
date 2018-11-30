@@ -109,6 +109,7 @@ public class CDAttributeGetterTransformationVisitor extends JavaDSLPrettyPrinter
     getPrinter().print(".");
     printNode(attrCall);
     CommentPrettyPrinter.printPostComments(node, getPrinter());
+    isAttributeCall = true;
   }
   
   private Optional<JTypeSymbol> getTypeFromName(String name, Scope s) {
