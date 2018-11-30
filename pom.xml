@@ -40,7 +40,7 @@
 		<jsr305.version>3.0.0</jsr305.version>
 		<junit.version>4.12</junit.version>
 		<logback.version>1.1.2</logback.version>
-		<javalib.version>4.0.1-SNAPSHOT</javalib.version>
+		<javalib.version>4.3.10-SNAPSHOT</javalib.version>
 		
 		<!-- .. Plugins ....................................................... -->
 		<monticore.plugin>5.0.0.1</monticore.plugin>

@@ -13,7 +13,7 @@
   <dependencies>
     <dependency>
       <groupId>de.monticore</groupId>
-      <artifactId>de.monticore.java.lib</artifactId>
+      <artifactId>javaLib</artifactId>
       <classifier>models</classifier>
       <version>${javalib.version}</version>
     </dependency>
