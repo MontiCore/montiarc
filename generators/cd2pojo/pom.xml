@@ -7,7 +7,7 @@
   <parent>
     <groupId>montiarc.generators</groupId>
     <artifactId>generators</artifactId>
-	<version>4.6.0</version>
+	<version>4.6.1-SNAPSHOT</version>
   </parent>
   
   <artifactId>cd2pojo</artifactId>
