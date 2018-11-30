@@ -4,7 +4,7 @@
   <parent>
     <artifactId>libraries</artifactId>
     <groupId>montiarc.libraries</groupId>
-    <version>4.6.0</version>
+    <version>4.5.1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
