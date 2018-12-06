@@ -146,8 +146,8 @@ public class TypeCompatibilityChecker {
             sourceTypeArguments,
             targetTypeFormalTypeParameters,
             targetTypeArguments,
-            sourceParams,
-            targetParams,
+            sourceParams.get(paramIndex),
+            targetParams.get(paramIndex),
             paramIndex))
           return false;
       }
@@ -231,14 +231,14 @@ public class TypeCompatibilityChecker {
       List<JTypeReference<? extends JTypeSymbol>> sourceTypeArguments,
       List<JTypeSymbol> targetTypeFormalTypeParameters,
       List<JTypeReference<? extends JTypeSymbol>> targetTypeArguments,
-      List<ActualTypeArgument> sourceParams,
-      List<ActualTypeArgument> targetParams,
+      ActualTypeArgument paramTypeArgument,
+      ActualTypeArgument targetTypeArgument,
       int paramIndex) {
 
     JTypeReference<? extends JTypeSymbol> sourceTypesCurrentTypeArgument
-        = (JavaTypeSymbolReference) sourceParams.get(paramIndex).getType();
+        = (JavaTypeSymbolReference) paramTypeArgument.getType();
     JTypeReference<? extends JTypeSymbol> targetTypesCurrentTypeArgument
-        = (JavaTypeSymbolReference) targetParams.get(paramIndex).getType();
+        = (JavaTypeSymbolReference) targetTypeArgument.getType();
 
     // // This is the case when we resolved a type which has no actual type
     // // arguments set. E.g. when we resolve the type List<K>, the actual
@@ -356,6 +356,11 @@ public class TypeCompatibilityChecker {
 
     boolean result = false;
 
+    sourceType = genericSourceTypeToActualType(sourceType,
+        sourceTypeFormalTypeParameters, sourceTypeArguments);
+    targetType = genericSourceTypeToActualType(targetType,
+        targetTypeFormalTypeParameters, targetTypeArguments);
+
     // Can not determine the equality if the types do not exist
     if (!sourceType.existsReferencedSymbol() || !targetType.existsReferencedSymbol()) {
       return false;
@@ -363,50 +368,44 @@ public class TypeCompatibilityChecker {
 
     // If the fully qualified types without generic type arguments are not equal,
     // the types are not equal
+    final String sourceTypeName = autoBoxPrimitiveType(sourceType.getReferencedSymbol().getName());
+    final String targetTypeName = autoBoxPrimitiveType(targetType.getReferencedSymbol().getName());
+
     String sourceTypeFullName = sourceType.getReferencedSymbol().getFullName();
     String targetTypeFullName = targetType.getReferencedSymbol().getFullName();
-    final String sourceTypeName = sourceType.getReferencedSymbol().getName();
-    final String targetTypeName = targetType.getReferencedSymbol().getName();
+    sourceTypeFullName = autoBoxPrimitiveType(sourceTypeFullName);
+    targetTypeFullName = autoBoxPrimitiveType(targetTypeFullName);
 
-    if (primitiveToWrappers.containsKey(sourceTypeName)) {
-      if (primitiveToWrappers.inverse().containsKey(targetTypeName)) {
-        // One of the two types is a boxed type
-        final List<String> split = Arrays.asList(sourceTypeFullName.split("\\."));
-        sourceTypeFullName
-            = Names.getQualifiedName(split.subList(0, split.size() - 1),
-            primitiveToWrappers.get(sourceTypeName));
+//    if (!sourceTypeName.equals(targetTypeName)) {
+//      return false;
+//    }
+
+    // The type names match. If they are not formal type parameters they
+    // should match the full name
+    if(sourceType.getReferencedSymbol().isFormalTypeParameter()
+           && targetType.getReferencedSymbol().isFormalTypeParameter()){
+      if(!sourceTypeName.equals(targetTypeName)){
+        return false;
       }
     }
-    else if (primitiveToWrappers.containsKey(targetTypeName)) {
-      if (primitiveToWrappers.inverse().containsKey(sourceTypeName)) {
-        // One of the two types is a boxed type
-        final List<String> split = Arrays.asList(targetTypeFullName.split("\\."));
-        targetTypeFullName
-            = Names.getQualifiedName(split.subList(0, split.size() - 1),
-            primitiveToWrappers.get(targetTypeName));
-      }
-    }
-    if (!sourceTypeFullName.equals(targetTypeFullName)) {
+    else if(!sourceTypeFullName.equals(targetTypeFullName)){
       return false;
     }
-
-    if(primitiveToWrappers.containsKey(sourceTypeName)
-           && primitiveToWrappers.containsKey(targetTypeName)){
-      return sourceTypeName.equals(targetTypeName);
-    }
-
-    // The types are not primitive types
 
     // Check type arguments
     final List<? extends JTypeSymbol> sourceTypeParameters
         = sourceType.getReferencedSymbol().getFormalTypeParameters();
     final List<? extends JTypeSymbol> targetTypeParameters
         = targetType.getReferencedSymbol().getFormalTypeParameters();
-    if(sourceTypeParameters.size()
-        != targetTypeParameters.size()){
+
+    // Both types should have the same amount of type parameters
+    if(sourceTypeParameters.size() != targetTypeParameters.size()){
       return false;
     }
 
+    if(sourceType.getDimension() != targetType.getDimension()){
+      return false;
+    }
 
     final List<ActualTypeArgument> sourceParams = sourceType.getActualTypeArguments();
     final List<ActualTypeArgument> targetParams = targetType.getActualTypeArguments();
@@ -418,15 +417,25 @@ public class TypeCompatibilityChecker {
           sourceTypeArguments,
           targetTypeFormalTypeParameters,
           targetTypeArguments,
-          sourceParams,
-          targetParams,
+          sourceParams.get(paramIndex),
+          targetParams.get(paramIndex),
           paramIndex))
         return false;
     }
 
-
     // All checks have passed: The types are equal
     return true;
+  }
+
+  private static String autoBoxPrimitiveType(String startingFullName) {
+    final List<String> split = Arrays.asList(startingFullName.split("\\."));
+    String typeName = split.get(split.size() - 1);
+    if (primitiveToWrappers.containsKey(typeName)) {
+      // One of the two types is a boxed type
+      return Names.getQualifiedName(split.subList(0, split.size() - 1),
+          primitiveToWrappers.get(typeName));
+    }
+    return startingFullName;
   }
 
 

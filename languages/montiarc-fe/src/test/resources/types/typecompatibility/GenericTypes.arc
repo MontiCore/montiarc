@@ -9,11 +9,12 @@ component GenericTypes<T> {
     port in Map<String, Integer> portMapStringInteger;
     port in HashMap<String, Integer> portHashMapStringInteger;
     port in List<T> portListT;
-
+    port in T portT;
 
 
     component Inner<K> {
         port in List<K> portListK;
+        port in K portK;
     }
     component Inner<T> innerTInstance;
     component Inner<String> innerStringInstance;

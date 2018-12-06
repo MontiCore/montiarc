@@ -188,37 +188,49 @@ public class TypeCompatibilityCheckerTest extends AbstractCoCoTest {
     final Optional<ComponentInstanceSymbol> innerTInstance
         = componentSymbol.getSubComponent("innerTInstance");
     assertTrue(innerTInstance.isPresent());
+    final Optional<ComponentSymbol> innerComponent = componentSymbol.getInnerComponent("Inner");
+    assertTrue(innerComponent.isPresent());
+
     final List<JTypeSymbol> innerTypeParameters
-        = componentSymbol.getInnerComponent("Inner").get().getFormalTypeParameters();
+        = innerComponent.get().getFormalTypeParameters();
     final List<ActualTypeArgument> innerTTypeArguments
         = innerTInstance.get().getComponentType().getActualTypeArguments();
+
     final Optional<ComponentInstanceSymbol> innerStringInstance
         = componentSymbol.getSubComponent("innerStringInstance");
     assertTrue(innerStringInstance.isPresent());
     final List<ActualTypeArgument> innerStringActualTypeArguments
         = innerStringInstance.get().getComponentType().getActualTypeArguments();
 
-    final Optional<PortSymbol> portListString = componentSymbol.getPort("portListString");
+    final Optional<PortSymbol> portListString
+        = componentSymbol.getPort("portListString");
     assertTrue(portListString.isPresent());
-    final Optional<PortSymbol> portListInteger = componentSymbol.getPort("portListInteger");
+    final Optional<PortSymbol> portListInteger
+        = componentSymbol.getPort("portListInteger");
     assertTrue(portListInteger.isPresent());
-    final Optional<PortSymbol> portArrayListString = componentSymbol.getPort("portArrayListString");
+    final Optional<PortSymbol> portArrayListString
+        = componentSymbol.getPort("portArrayListString");
     assertTrue(portArrayListString.isPresent());
-    final Optional<PortSymbol> portListObject = componentSymbol.getPort("portListObject");
+    final Optional<PortSymbol> portListObject
+        = componentSymbol.getPort("portListObject");
     assertTrue(portListObject.isPresent());
-    final Optional<PortSymbol> portMapStringInteger = componentSymbol.getPort("portMapStringInteger");
+    final Optional<PortSymbol> portMapStringInteger
+        = componentSymbol.getPort("portMapStringInteger");
     assertTrue(portMapStringInteger.isPresent());
-    final Optional<PortSymbol> portHashMapStringInteger = componentSymbol.getPort("portHashMapStringInteger");
+    final Optional<PortSymbol> portHashMapStringInteger
+        = componentSymbol.getPort("portHashMapStringInteger");
     assertTrue(portHashMapStringInteger.isPresent());
-    final Optional<PortSymbol> portListT = componentSymbol.getPort("portListT");
+    final Optional<PortSymbol> portListT
+        = componentSymbol.getPort("portListT");
     assertTrue(portListT.isPresent());
+    final Optional<PortSymbol> portT = componentSymbol.getPort("portT");
+    assertTrue(portT.isPresent());
 
-    final Optional<PortSymbol> tPortListK
+    final Optional<PortSymbol> portListK
         = innerTInstance.get().getComponentType().getPort("portListK");
-    assertTrue(tPortListK.isPresent());
-    final Optional<PortSymbol> stringPortListK
-        = innerStringInstance.get().getComponentType().getPort("portListK");
-    assertTrue(stringPortListK.isPresent());
+    assertTrue(portListK.isPresent());
+    final Optional<PortSymbol> portK = innerComponent.get().getPort("portK");
+    assertTrue(portK.isPresent());
 
     assertTrue(portListInteger.get().getTypeReference().existsReferencedSymbol());
     final List<? extends JTypeSymbol> listTypeParameters
@@ -279,17 +291,64 @@ public class TypeCompatibilityCheckerTest extends AbstractCoCoTest {
         ));
     assertFalse(result);
 
+    // Check T, String
+    result = TypeCompatibilityChecker.areTypesEqual(
+        portT.get().getTypeReference(),
+        TypeCompatibilityChecker.toJTypeSymbols(listTypeParameters),
+        TypeCompatibilityChecker.toJTypeReferences(
+            portListString.get().getTypeReference().getActualTypeArguments()),
+        portK.get().getTypeReference(),
+        TypeCompatibilityChecker.toJTypeSymbols(innerComponent.get().getFormalTypeParameters()),
+        TypeCompatibilityChecker.toJTypeReferences(
+            innerStringActualTypeArguments
+        ));
+    assertFalse(result);
+
     // Check List<T>, List<K> from inner component with K -> T
     result = TypeCompatibilityChecker.areTypesEqual(
         portListT.get().getTypeReference(),
         TypeCompatibilityChecker.toJTypeSymbols(listTypeParameters),
         new ArrayList<>(),
-        tPortListK.get().getTypeReference(),
+        portListK.get().getTypeReference(),
         TypeCompatibilityChecker.toJTypeSymbols(listTypeParameters),
         TypeCompatibilityChecker.toJTypeReferences(
             innerTInstance.get().getComponentType().getActualTypeArguments()
         ));
     assertTrue(result);
 
+  }
+
+  @Test
+  public void test() {
+    final String packageName = "components.body.subcomponents";
+    final ComponentSymbol componentSymbol
+        = loadComponentSymbol(packageName, "ComponentWithTypeParametersHasInstance");
+
+    final Optional<PortSymbol> pIn = componentSymbol.getPort("pIn");
+    assertTrue(pIn.isPresent());
+
+    final Optional<ComponentSymbol> innerComponent = componentSymbol.getInnerComponent("Inner");
+    assertTrue(innerComponent.isPresent());
+    final Optional<PortSymbol> tIn = innerComponent.get().getPort("tIn");
+    assertTrue(tIn.isPresent());
+
+    final Optional<ComponentInstanceSymbol> inner = componentSymbol.getSubComponent("inner");
+    assertTrue(inner.isPresent());
+
+
+    // #################### START OF TESTS ####################
+
+    // Check pIn -> inner.tIn
+    boolean result = TypeCompatibilityChecker.areTypesEqual(
+        pIn.get().getTypeReference(),
+        componentSymbol.getFormalTypeParameters(),
+        TypeCompatibilityChecker.toJTypeReferences(
+            pIn.get().getTypeReference().getActualTypeArguments()),
+        tIn.get().getTypeReference(),
+        innerComponent.get().getFormalTypeParameters(),
+        TypeCompatibilityChecker.toJTypeReferences(
+            inner.get().getComponentType().getActualTypeArguments()
+        ));
+    assertTrue(result);
   }
 }
