@@ -57,17 +57,24 @@ public class ConnectorTest extends AbstractCoCoTest {
   }
   
   @Test
+  /*
+   3 errors, due to https://git.rwth-aachen.de/monticore/montiarc/core/issues/243
+   Usually, 1 error
+   */
   public void testConnectorSourceAndTargetTypeNotMatch() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "ConnectorSourceAndTargetTypeNotMatch");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit()), node,
-        new ExpectedErrorInfo(1, "xMA033"));
+        new ExpectedErrorInfo(3, "xMA033"));
   }
 
   @Test
+  /*
+    2 additional errors due to #241, #243
+   */
   public void testPortCompatibilityTypeInheritance() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortCompatibilityTypeInheritance");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit()), node,
-        new ExpectedErrorInfo(8, "xMA033"));
+        new ExpectedErrorInfo(10, "xMA033"));
   }
 
   @Test
@@ -252,7 +259,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     ASTMontiArcNode node = loadComponentAST(
         PACKAGE + "." + "GenericIfUsage");
     MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
-    checkInvalid(cocos, node, new ExpectedErrorInfo(1, "xMA033"));
+    checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA033"));
   }
 
   @Test
@@ -283,20 +290,30 @@ public class ConnectorTest extends AbstractCoCoTest {
   public void testConnectsPortsWithIncompatibleTypes() {
     final ASTMontiArcNode astNode = loadComponentAST(
         PACKAGE + "." + "ConnectsPortsWithIncompatibleTypes");
-    final ExpectedErrorInfo expectedErrorInfo = new ExpectedErrorInfo(5, "xMA033");
+    final ExpectedErrorInfo expectedErrorInfo = new ExpectedErrorInfo(6, "xMA033");
     final MontiArcCoCoChecker checker =
         new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(checker, astNode, expectedErrorInfo);
   }
   
   @Test
+  /*
+    1 error, due to issue #241, #243
+   */
   public void testTypeHierarchyInConnector() {
-    checkValid(PACKAGE + "." + "TypeHierarchyInConnector");
+    final String modelName = PACKAGE + "." + "TypeHierarchyInConnector";
+    MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA033");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
 
   @Test
   public void testGenericSourceTypeIsSubtypeOfTargetType() {
-    checkValid(PACKAGE + "." + "GenericSourceTypeIsSubtypeOfTargetType");
+    final String modelName = PACKAGE + "." + "GenericSourceTypeIsSubtypeOfTargetType";
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ProhibitGenericsWithBounds());
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA072");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
 
   @Test

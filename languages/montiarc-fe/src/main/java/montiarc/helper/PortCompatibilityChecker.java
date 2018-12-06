@@ -56,7 +56,7 @@ public class PortCompatibilityChecker {
       List<JTypeReference<? extends JTypeSymbol>> targetTypeArguments) {
     checkNotNull(sourcePort);
     checkNotNull(targetPort);
-    return TypeCompatibilityChecker.doTypesMatch(sourcePort.getTypeReference(),
+    return TypeCompatibilityChecker.areTypesEqual(sourcePort.getTypeReference(),
         sourceFormalTypeParameters,
         sourceTypeArguments, targetPort.getTypeReference(), targetTypeFormalTypeParameters,
         targetTypeArguments);

@@ -23,7 +23,7 @@ component GenericIfUsage<T> {
     connect p1.ifOut -> r1.ifIn;
     
     // invalid
-    connect p2.implOut -> r2.ifIn;    
-    connect p2.ifOut -> r2.implIn;
+    connect p2.implOut -> r2.ifIn;
+    connect p2.ifOut -> r2.implIn; //ERROR: See #241, #243
 
 }

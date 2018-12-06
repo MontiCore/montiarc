@@ -163,11 +163,14 @@ public class PortTest extends AbstractCoCoTest {
   }
   
   @Test
+  /*
+    Usually 1 error, but 3 due to issue #241, #243
+   */
   public void testPortCompatibilityWithGenerics3() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortCompatibilityWithGenerics3");
     final MontiArcCoCoChecker checker = new MontiArcCoCoChecker()
         .addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(1, "xMA033");
+    final ExpectedErrorInfo expectedErrors = new ExpectedErrorInfo(3, "xMA033");
     checkInvalid(checker, node, expectedErrors);
   }
   
