@@ -1,0 +1,207 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- == PROJECT COORDINATES ============================================= -->
+
+  <parent>
+    <groupId>montiarc.generators</groupId>
+    <artifactId>generators</artifactId>
+    <version>4.5.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>maa2java-xtend</artifactId>
+
+
+  <!-- == PROJECT DEPENDENCIES ============================================= -->
+
+  <dependencies>
+    <dependency>
+      <groupId>montiarc.languages</groupId>
+      <artifactId>montiarc-fe</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>montiarc.languages</groupId>
+      <artifactId>montiarc-fe</artifactId>
+      <version>${project.version}</version>
+      <classifier>${testmodels.classifier}</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>monticore-emf-runtime</artifactId>
+      <version>${monticore.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>montiarc.libraries</groupId>
+      <artifactId>simulator-rte</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>montiarc.libraries</groupId>
+      <artifactId>maa-rte</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>de.se_rwth.commons</groupId>
+      <artifactId>se-commons-groovy</artifactId>
+    </dependency>
+
+    <!-- MontiCore Dependencies -->
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>monticore-runtime</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>de.monticore.java.lib</artifactId>
+      <classifier>models</classifier>
+      <version>${javalib.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>monticore-grammar</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>javaDSL</artifactId>
+      <version>${javadsl.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>montiarc.generators</groupId>
+      <artifactId>cd2pojo</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>de.monticore.java.lib</artifactId>
+      <version>${javalib.version}</version>
+      <classifier>models</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>monticore-generator</artifactId>
+      <version>${monticore.version}</version>
+    </dependency>
+
+    <!-- .. xtend ............................................... -->
+    <dependency>
+      <groupId>org.eclipse.xtend</groupId>
+      <artifactId>org.eclipse.xtend.lib</artifactId>
+      <version>2.14.0</version>
+    </dependency>
+
+    <!-- .. Test Libraries ............................................... -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>monticore-runtime</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.emf</groupId>
+      <artifactId>org.eclipse.emf.compare</artifactId>
+      <scope>test</scope>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.emf</groupId>
+      <artifactId>org.eclipse.emf.compare.match</artifactId>
+      <scope>test</scope>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.emf</groupId>
+      <artifactId>org.eclipse.emf.compare.diff</artifactId>
+      <scope>test</scope>
+      <version>1.2.0</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.10</version>
+        <executions>
+          <execution>
+            <id>unpack-dependencies</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeClassifiers>models</includeClassifiers>
+              <outputDirectory>${basedir}/target/javaLib</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>unpack-test-models</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeClassifiers>${testmodels.classifier}</includeClassifiers>
+              <outputDirectory>${basedir}/target/test-models/</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.xtend</groupId>
+        <artifactId>xtend-maven-plugin</artifactId>
+        <version>2.14.0</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.common</artifactId>
+            <version>3.10.0</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>testCompile</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/xtend-gen/main</outputDirectory>
+              <testOutputDirectory>${project.build.directory}/xtend-gen/test</testOutputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    <resources>
+      <resource>
+        <directory>${basedir}/src/main/resources/</directory>
+      </resource>
+    </resources>
+
+  </build>
+
+</project>
