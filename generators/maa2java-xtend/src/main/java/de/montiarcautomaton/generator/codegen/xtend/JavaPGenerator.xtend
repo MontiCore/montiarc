@@ -41,16 +41,16 @@ class JavaPGenerator extends BehaviorGenerator {
                   «FOR generic : helper.genericParameters SEPARATOR ','»
                     «generic»
                   «ENDFOR»
-                «ENDIF» input) {
+                «ENDIF» «helper.inputName») {
         // inputs
         «FOR portIn : comp.incomingPorts»
-          final «portIn.typeReference.referencedSymbol.fullName» «portIn.name» = input.get«portIn.name.toFirstUpper»();
+          final «helper.printPortType(portIn)» «portIn.name» = «helper.inputName».get«portIn.name.toFirstUpper»();
         «ENDFOR»
       
-        final «comp.name»Result result = new «comp.name»Result();
+        final «comp.name»Result «helper.resultName» = new «comp.name»Result();
         
         «FOR portOut : comp.outgoingPorts»
-          «portOut.typeReference.referencedSymbol.fullName» «portOut.name» = result.get«portOut.name.toFirstUpper»();
+          «helper.printPortType(portOut)» «portOut.name» = «helper.resultName».get«portOut.name.toFirstUpper»();
         «ENDFOR»
         
         «««  print java statements here
@@ -58,9 +58,9 @@ class JavaPGenerator extends BehaviorGenerator {
         
         «««  always add all outgoing values to result
         «FOR portOut : comp.outgoingPorts»
-          result.set«portOut.name.toFirstUpper»(«portOut.name»);
+          «helper.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
         «ENDFOR»
-        return result;
+        return «helper.resultName»;
       }
       
     '''
@@ -97,11 +97,11 @@ class JavaPGenerator extends BehaviorGenerator {
                  «generic»
                «ENDFOR»
              «ENDIF» getInitialValues() {
-         final «comp.name»Result result = new «comp.name»Result();
+         final «comp.name»Result «helper.resultName» = new «comp.name»Result();
          
          try {
          «FOR portOut : comp.outgoingPorts»
-           «portOut.typeReference.referencedSymbol.fullName» «portOut.name» = null;
+           «helper.printPortType(portOut)» «portOut.name» = null;
          «ENDFOR»
          
          «FOR init : getInitializations(comp)»
@@ -109,7 +109,7 @@ class JavaPGenerator extends BehaviorGenerator {
          «ENDFOR»
       
          «FOR portOut : comp.outgoingPorts»
-           result.set«portOut.name.toFirstUpper»(«portOut.name»);
+           «helper.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
          «ENDFOR»
          } catch(Exception e) {
            e.printStackTrace();

@@ -14,10 +14,12 @@ import montiarc._ast.ASTComponent
 import montiarc._ast.ASTElement
 import montiarc._symboltable.ComponentSymbol
 import montiarc._symboltable.StateSymbol
+import de.montiarcautomaton.generator.helper.ComponentHelper
 
 class AutomatonGenerator extends BehaviorGenerator {
 
   override String hook(ComponentSymbol comp) {
+    var compHelper = new ComponentHelper(comp)
     var ASTAutomaton automaton = null
     for (ASTElement element : (comp.astNode.get as ASTComponent).body.elementList) {
       if(element instanceof ASTAutomatonBehavior) {
@@ -26,7 +28,7 @@ class AutomatonGenerator extends BehaviorGenerator {
     }
     return 
     '''
-    private «comp.name»State currentState;
+    private «comp.name»State «compHelper.currentStateName»;
     
     
     private static enum «comp.name»State {
@@ -42,6 +44,7 @@ class AutomatonGenerator extends BehaviorGenerator {
     var resultName = comp.name + "Result"
     var ASTAutomaton automaton = null
     var AutomatonHelper helper = new AutomatonHelper(comp)
+    var ComponentHelper compHelper = new ComponentHelper(comp)
     for (ASTElement element : (comp.astNode.get as ASTComponent).body.elementList) {
       if(element instanceof ASTAutomatonBehavior) {
         automaton = element.automaton
@@ -61,16 +64,16 @@ class AutomatonGenerator extends BehaviorGenerator {
             «FOR generic : helper.genericParameters SEPARATOR ','»
               «generic»
             «ENDFOR»
-          «ENDIF» input) {
+          «ENDIF» «helper.inputName») {
         // inputs
         «FOR inPort : comp.incomingPorts»
-        final «inPort.typeReference.name» «inPort.name» = input.get«inPort.name.toFirstUpper»();
+        final «helper.printPortType(inPort)» «inPort.name» = «helper.inputName».get«inPort.name.toFirstUpper»();
         «ENDFOR»
         
-        final «resultName» result = new «resultName»();
+        final «resultName» «helper.resultName» = new «resultName»();
         
         // first current state to reduce stimuli and guard checks
-        switch (currentState) {
+        switch («compHelper.currentStateName») {
         «FOR state : automaton.stateDeclarationList.get(0).stateList»
           case «state.name»:
             «FOR transition : helper.getTransitions(state.symbolOpt.get as StateSymbol)»
@@ -82,7 +85,7 @@ class AutomatonGenerator extends BehaviorGenerator {
                     «IF assignment.isVariable(assignment.left)»
                       «assignment.left» = «assignment.right»;
                     «ELSE»
-                      result.set«assignment.left.toFirstUpper»(«assignment.right»);
+                      «helper.resultName».set«assignment.left.toFirstUpper»(«assignment.right»);
                     «ENDIF»
                   «ELSE»
                     «assignment.right»;  
@@ -90,7 +93,7 @@ class AutomatonGenerator extends BehaviorGenerator {
                 «ENDFOR»
                 
                 //state change
-                currentState = «comp.name»State.«transition.target.name»;
+                «compHelper.currentStateName» = «comp.name»State.«transition.target.name»;
                 break;
               }
               
@@ -106,6 +109,7 @@ class AutomatonGenerator extends BehaviorGenerator {
   override String generateGetInitialValues(ComponentSymbol comp) {
     var resultName = comp.name + "Result"
     var ASTAutomaton automaton = null
+    var ComponentHelper compHelper = new ComponentHelper(comp)
     var AutomatonHelper helper = new AutomatonHelper(comp)
     for (ASTElement element : (comp.astNode.get as ASTComponent).body.elementList) {
       if(element instanceof ASTAutomatonBehavior) {
@@ -122,23 +126,24 @@ class AutomatonGenerator extends BehaviorGenerator {
               «ENDFOR»
             «ENDIF» 
       getInitialValues() {
-        final «resultName» result = new «resultName»();
+        final «resultName» «helper.resultName» = new «resultName»();
         
     
         // initial reaction
         «FOR assignment : helper.getInitialReaction(helper.initialState)»
           «IF assignment.isAssignment»
             «IF helper.isPort(assignment.left)»
-              result.set«assignment.left.toFirstUpper»(«assignment.right»);
+              «helper.resultName».set«assignment.left.toFirstUpper»(«assignment.right»);
             «ELSE»
               «assignment.left» = «assignment.right»;
             «ENDIF»
           «ENDIF»
         «ENDFOR»
         
-        currentState = «comp.name»State.«automaton.initialStateDeclarationList.get(0).name»;
-        return result;
+        «compHelper.currentStateName» = «comp.name»State.«automaton.initialStateDeclarationList.get(0).name»;
+        return «helper.resultName»;
       }
     '''
   }
+  
 }

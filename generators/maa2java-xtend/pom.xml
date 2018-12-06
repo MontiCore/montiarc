@@ -57,10 +57,10 @@
       <artifactId>monticore-runtime</artifactId>
     </dependency>
     <dependency>
-      <groupId>de.monticore</groupId>
-      <artifactId>de.monticore.java.lib</artifactId>
-      <classifier>models</classifier>
-      <version>${javalib.version}</version>
+      <groupId>montiarc.libraries</groupId>
+      <artifactId>maJavaLib</artifactId>
+      <classifier>${majavalib.classifier}</classifier>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>de.monticore</groupId>
@@ -77,13 +77,6 @@
       <groupId>montiarc.generators</groupId>
       <artifactId>cd2pojo</artifactId>
       <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>de.monticore</groupId>
-      <artifactId>de.monticore.java.lib</artifactId>
-      <version>${javalib.version}</version>
-      <classifier>models</classifier>
     </dependency>
 
     <dependency>
@@ -154,7 +147,7 @@
               <goal>unpack-dependencies</goal>
             </goals>
             <configuration>
-              <includeClassifiers>models</includeClassifiers>
+              <includeClassifiers>${majavalib.classifier}</includeClassifiers>
               <outputDirectory>${basedir}/target/javaLib</outputDirectory>
             </configuration>
           </execution>

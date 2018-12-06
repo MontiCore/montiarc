@@ -49,12 +49,12 @@ abstract class BehaviorGenerator {
         
         //component variables
         «FOR compVar : comp.variables»
-          private «helper.getVariableTypeName(comp.astNode.get as ASTComponent, compVar)» «compVar.name»;
+          private «helper.printVariableTypeName(compVar)» «compVar.name»;
         «ENDFOR» 
         
         // config parameters
         «FOR param : comp.configParameters»
-          private final «helper.getParamTypeName(param)» «param.name»; 
+          private final «helper.printParamTypeName(param)» «param.name»; 
         «ENDFOR»
         
         
@@ -73,8 +73,9 @@ abstract class BehaviorGenerator {
   }
 
   def String generateConstructor(ComponentSymbol comp) {
+    var ComponentHelper helper = new ComponentHelper(comp)
     return '''
-      public «comp.name»Impl(«FOR param : comp.configParameters SEPARATOR ','» «param.type.name» «param.name» «ENDFOR») {
+      public «comp.name»Impl(«FOR param : comp.configParameters SEPARATOR ','» «helper.getParamTypeName(param)» «param.name» «ENDFOR») {
         «FOR param : comp.configParameters»
         this.«param.name» = «param.name»; 
         «ENDFOR»
