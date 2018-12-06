@@ -15,7 +15,6 @@ component ReferencingComp (int[] configIntArray, String[][] configStringArray){
         in int[] intArrayIn,
         in String[] stringArrayIn,
         in int intNoArrayIn,
-        in GenericType<String>[][][] enumArrayIn,
         out short[] shortArrayOut;
         
     component CompWithArrays(configIntArray, configStringArray) ref;
@@ -24,6 +23,5 @@ component ReferencingComp (int[] configIntArray, String[][] configStringArray){
     connect stringArrayIn -> ref.stringArrayIn;
       //=> port not compatible because of different array dimensions
     connect intNoArrayIn -> ref.intNoArrayIn;
-    connect enumArrayIn -> ref.enumArrayIn;
     connect ref.shortArrayOut -> shortArrayOut;
 }

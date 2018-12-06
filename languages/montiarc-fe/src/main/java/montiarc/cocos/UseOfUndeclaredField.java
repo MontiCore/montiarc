@@ -19,11 +19,12 @@ import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.VariableSymbol;
 
 /**
- * Context condition for checking, if a reference is used inside an automaton which has not been
- * defined in an {@link ASTVariableDeclaration} or as {@link ASTPort}.
+ * Context condition for checking, if a reference is used inside an automaton
+ * which has not been defined in an {@link ASTVariableDeclaration} or as
+ * {@link ASTPort}.
  *
- * @implements [Wor16] AR1: Names used in guards, valuations, and assignments exist in the
- * automaton. (p. 102, Lst. 5.19)
+ * @implements [Wor16] AR1: Names used in guards, valuations, and assignments
+ * exist in the automaton. (p. 102, Lst. 5.19)
  * @author Gerrit Leonhardt, Andreas Wortmann, Michael Mutert
  */
 public class UseOfUndeclaredField
@@ -33,27 +34,38 @@ public class UseOfUndeclaredField
   public void check(ASTIOAssignment node) {
     // only check left side of IOAssignment, right side is implicitly checked
     // when resolving type of the valuations
-    if(node.isPresentName()) {
+    if (node.isPresentName()) {
       if (node.getEnclosingScopeOpt().isPresent()) {
         final String name = node.getName();
         Scope scope = node.getEnclosingScopeOpt().get();
         boolean foundVar = scope.resolve(name, VariableSymbol.KIND).isPresent();
         boolean foundPort = scope.resolve(name, PortSymbol.KIND).isPresent();
-
+        
         if (!foundVar && !foundPort) {
-          Log.error(
-              String.format("0xMA079: The name '%s' is used in %s, but is " +
-                                "neither declared a port, nor as a variable.",
-                  name, "assignment"),
-              node.get_SourcePositionStart());
+          Optional<JavaTypeSymbol> javaType = Optional.empty();
+          
+          // could also be a static method call
+          if (node.isCall()) {
+            javaType = node.getEnclosingScopeOpt().get().resolve(node.getName(),
+                JavaTypeSymbol.KIND);
+          }
+          
+          if (!javaType.isPresent()) {
+            Log.error(
+                String.format("0xMA079: The name '%s' is used in %s, but is " +
+                    "neither declared a port, nor as a variable or static method call.",
+                    name, "assignment"),
+                node.get_SourcePositionStart());
+          }
         }
       }
     }
   }
-
+  
   /**
    * Private common helper function that is used to check whether a used field
    * by the given name exists.
+   * 
    * @param name Name of the field
    * @param node Node object of the field
    * @param usage Environment in which the field is used (used in the log)
@@ -63,40 +75,39 @@ public class UseOfUndeclaredField
       Scope scope = node.getEnclosingScopeOpt().get();
       boolean foundVar = scope.resolve(name, VariableSymbol.KIND).isPresent();
       boolean foundPort = scope.resolve(name, PortSymbol.KIND).isPresent();
-      final Optional<JavaTypeSymbol> typeSymbolOpt
-          = scope.resolve(name, JavaTypeSymbol.KIND);
+      final Optional<JavaTypeSymbol> typeSymbolOpt = scope.resolve(name, JavaTypeSymbol.KIND);
       boolean foundEnum = false;
       boolean foundStaticCall = false;
-      if(typeSymbolOpt.isPresent()) {
+      if (typeSymbolOpt.isPresent()) {
         foundEnum = typeSymbolOpt.get().isEnum();
         foundStaticCall = typeSymbolOpt.get().isClass();
       }
-
+      
       if (!foundVar && !foundPort && !foundEnum && !foundStaticCall) {
         Log.error(
             String.format("0xMA079: The name '%s' is used in %s, but is " +
-                              "neither declared a port, nor as a variable.",
+                "neither declared a port, nor as a variable.",
                 name, usage),
             node.get_SourcePositionStart());
       }
     }
   }
-
+  
   @Override
   public void check(ASTGuardExpression node) {
     node.getExpression().accept(new GuardVisitor());
   }
-
+  
   /**
    * This class is used to check whether names used in GuardExpressions are
    * declared.
    */
-  private class GuardVisitor implements MCExpressionsVisitor{
-
+  private class GuardVisitor implements MCExpressionsVisitor {
+    
     @Override
-    public void visit(ASTNameExpression node){
-        check(node.getName(), node, "guard");
+    public void visit(ASTNameExpression node) {
+      check(node.getName(), node, "guard");
     }
   }
-
+  
 }

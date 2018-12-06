@@ -1,6 +1,7 @@
 package montiarc.cocos;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -145,52 +146,78 @@ public class AutomatonReactionTypeDoesNotFitOutputType
       // 2. find the method symbol of the called method
       String methName = ((ASTQualifiedNameExpression) methodCallExpr.getExpression())
           .getName();
-      Optional<JavaMethodSymbol> methSym = findMethodSymbol(varType, methName);
+      Collection<JavaMethodSymbol> methSym = findMethodSymbol(varType, methName);
       
       // 3. Check correct method parameters to passed parameters in the method
       // call in reaction.
-      if (methSym.isPresent()) {
-        List<JavaTypeSymbolReference> correctParameters = new ArrayList<>();
+      if (!methSym.isEmpty()) {
+        boolean foundFittingMethod = false;
+        Optional<String> argMessage = Optional.empty();
+        List<String> typeFitMessage = new ArrayList<>();
+        Optional<JavaMethodSymbol> methInError = Optional.empty();
         
-        correctParameters = JavaDSLHelper
-            .getParameterTypes(methSym.get());
-        
-        if (argTypes.size() != correctParameters.size()) {
-          Log.error("0xMA099 Number of method parameters does not fit.",
-              methSym.get().getSourcePosition());
-        }
-        
-        // 3.1 substitute possible generic parameters
-        correctParameters = substituteFormalParameters(correctParameters, varType);
-        
-        // 3.2 compare actual and correct method parameters with each other
-        List<JTypeSymbol> varTypeFormalTypeParams = varType.getReferencedSymbol()
-            .getFormalTypeParameters().stream()
-            .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
-        
-        List<JTypeReference<? extends JTypeSymbol>> varTypeActualTypeArgs = varType
-            .getActualTypeArguments().stream()
-            .map(a -> (JavaTypeSymbolReference) a.getType())
-            .collect(Collectors.toList());
-        
-        if (!TypeCompatibilityChecker.hasNestedGenerics(varType)) {
-          varTypeFormalTypeParams = new ArrayList<>();
-          varTypeActualTypeArgs = new ArrayList<>();
-        }
-        
-        for (int i = 0; i < argTypes.size(); i++) {
-          if (!TypeCompatibilityChecker.doTypesMatch(argTypes.get(i),
-              argTypes.get(i).getReferencedSymbol().getFormalTypeParameters().stream()
-                  .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-              argTypes.get(i).getActualTypeArguments().stream()
-                  .map(a -> (JavaTypeSymbolReference) a.getType())
-                  .collect(Collectors.toList()),
-              correctParameters.get(i),
-              varTypeFormalTypeParams,
-              varTypeActualTypeArgs)) {
-            Log.error("0xMA043 Types do not fit " + argTypes.get(i).getName() + ", "
-                + correctParameters.get(i).getName());
+        for (JavaMethodSymbol meth : methSym) {
+          List<JavaTypeSymbolReference> correctParameters = new ArrayList<>();
+          argMessage = Optional.empty();
+          typeFitMessage = new ArrayList<>();
+          
+          correctParameters = JavaDSLHelper
+              .getParameterTypes(meth);
+          
+          if (argTypes.size() != correctParameters.size()) {
+            argMessage = Optional.of("0xMA099 Number of method parameters does not fit. Expected "
+                + correctParameters.size() + " but was " + argTypes.size());
           }
+          
+          // 3.1 substitute possible generic parameters
+          correctParameters = substituteFormalParameters(correctParameters, varType);
+          
+          // 3.2 compare actual and correct method parameters with each other
+          List<JTypeSymbol> varTypeFormalTypeParams = varType.getReferencedSymbol()
+              .getFormalTypeParameters().stream()
+              .map(p -> (JTypeSymbol) p).collect(Collectors.toList());
+          
+          List<JTypeReference<? extends JTypeSymbol>> varTypeActualTypeArgs = varType
+              .getActualTypeArguments().stream()
+              .map(a -> (JavaTypeSymbolReference) a.getType())
+              .collect(Collectors.toList());
+          
+          if (!TypeCompatibilityChecker.hasNestedGenerics(varType)) {
+            varTypeFormalTypeParams = new ArrayList<>();
+            varTypeActualTypeArgs = new ArrayList<>();
+          }
+          if (argTypes.size() == correctParameters.size()) {
+            
+            for (int i = 0; i < argTypes.size(); i++) {
+              if (!TypeCompatibilityChecker.doTypesMatch(argTypes.get(i),
+                  argTypes.get(i).getReferencedSymbol().getFormalTypeParameters().stream()
+                      .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
+                  argTypes.get(i).getActualTypeArguments().stream()
+                      .map(a -> (JavaTypeSymbolReference) a.getType())
+                      .collect(Collectors.toList()),
+                  correctParameters.get(i),
+                  varTypeFormalTypeParams,
+                  varTypeActualTypeArgs)) {
+                typeFitMessage.add("0xMA043 Types do not fit " + argTypes.get(i).getName() + ", "
+                    + correctParameters.get(i).getName());
+              }
+            }
+            if (typeFitMessage.isEmpty() && !argMessage.isPresent()) {
+              foundFittingMethod = true;
+              return;
+            }
+            else {
+              methInError = Optional.of(meth);
+            }
+          }
+        }
+        if (!typeFitMessage.isEmpty()) {
+          for (String message : typeFitMessage) {
+            Log.error(message, methInError.get().getSourcePosition());
+          }
+        }
+        if (argMessage.isPresent()) {
+          Log.error(argMessage.get(), methInError.get().getSourcePosition());
         }
         
       }
@@ -205,12 +232,13 @@ public class AutomatonReactionTypeDoesNotFitOutputType
    * @param methodName
    * @return
    */
-  private Optional<JavaMethodSymbol> findMethodSymbol(JTypeReference<? extends JTypeSymbol> type,
+  private Collection<JavaMethodSymbol> findMethodSymbol(JTypeReference<? extends JTypeSymbol> type,
       String methodName) {
-    Optional<JavaMethodSymbol> methSym = ((JavaTypeSymbol) type.getReferencedSymbol())
-        .getMethod(methodName);
+    Collection<JavaMethodSymbol> methSym = ((JavaTypeSymbol) type.getReferencedSymbol())
+        .getSpannedScope().<JavaMethodSymbol> resolveDownMany(methodName, JavaMethodSymbol.KIND);
     
-    if (!methSym.isPresent()) {
+    if (methSym.isEmpty()) {
+      methSym = new ArrayList<>();
       JavaTypeSymbol varJavaType = ((JavaTypeSymbol) type.getReferencedSymbol());
       List<JavaMethodSymbol> m1 = new ArrayList<>();
       if (varJavaType.getSuperClass().isPresent()) {
@@ -221,7 +249,7 @@ public class AutomatonReactionTypeDoesNotFitOutputType
       }
       
       if (!m1.isEmpty()) {
-        methSym = Optional.of(m1.get(0));
+        methSym.add(m1.get(0));
       }
     }
     
@@ -229,8 +257,8 @@ public class AutomatonReactionTypeDoesNotFitOutputType
   }
   
   /**
-   * Substitutes formal paramters by their actual type and returns the resulting
-   * list.
+   * Substitutes formal parameters by their actual type and returns the
+   * resulting list.
    * 
    * @param parameters
    * @param type

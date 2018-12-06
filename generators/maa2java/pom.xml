@@ -7,7 +7,7 @@
   <parent>
     <groupId>montiarc.generators</groupId>
     <artifactId>generators</artifactId>
-    <version>4.5.1-SNAPSHOT</version>
+    <version>5.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>maa2java</artifactId>
 
@@ -26,6 +26,14 @@
       <artifactId>montiarc-fe</artifactId>
       <version>${project.version}</version>
       <classifier>${testmodels.classifier}</classifier>
+    </dependency>
+
+
+    <dependency>
+      <groupId>montiarc.libraries</groupId>
+      <artifactId>maJavaLib</artifactId>
+      <classifier>${majavalib.classifier}</classifier>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
@@ -72,13 +80,6 @@
       <groupId>montiarc.generators</groupId>
       <artifactId>cd2pojo</artifactId>
       <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>de.monticore</groupId>
-      <artifactId>de.monticore.java.lib</artifactId>
-      <version>${javalib.version}</version>
-      <classifier>models</classifier>
     </dependency>
 
     <dependency>
@@ -139,21 +140,34 @@
             <id>unpack-dependencies</id>
             <phase>validate</phase>
             <goals>
-              <goal>unpack-dependencies</goal>
+              <goal>unpack</goal>
             </goals>
             <configuration>
-              <includeClassifiers>models</includeClassifiers>
-              <outputDirectory>${basedir}/target/javaLib</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>montiarc.libraries</groupId>
+                  <artifactId>maJavaLib</artifactId>
+                  <classifier>${majavalib.classifier}</classifier>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${basedir}/target/${librarymodels.classifier}/</outputDirectory>
             </configuration>
           </execution>
           <execution>
             <id>unpack-test-models</id>
             <phase>validate</phase>
             <goals>
-              <goal>unpack-dependencies</goal>
+              <goal>unpack</goal>
             </goals>
             <configuration>
-              <includeClassifiers>${testmodels.classifier}</includeClassifiers>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>montiarc.languages</groupId>
+                  <artifactId>montiarc-fe</artifactId>
+                  <version>${project.version}</version>
+                  <classifier>${testmodels.classifier}</classifier>
+                </artifactItem>
+              </artifactItems>
               <outputDirectory>${basedir}/target/test-models/</outputDirectory>
             </configuration>
           </execution>

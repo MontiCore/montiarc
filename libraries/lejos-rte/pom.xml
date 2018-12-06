@@ -8,7 +8,7 @@
   <parent>
     <groupId>montiarc.libraries</groupId>
     <artifactId>libraries</artifactId>
-    <version>4.5.1-SNAPSHOT</version>
+    <version>5.0.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>lejos-rte</artifactId>
@@ -54,10 +54,10 @@
     </dependency>
 
     <dependency>
-      <groupId>de.monticore</groupId>
-      <artifactId>de.monticore.java.lib</artifactId>
-      <version>${javalib.version}</version>
-      <classifier>models</classifier>
+      <groupId>montiarc.libraries</groupId>
+      <artifactId>maJavaLib</artifactId>
+      <classifier>${majavalib.classifier}</classifier>
+      <version>${project.version}</version>
     </dependency>
 
     <!-- PLATFORM SPECIFIC API ================================= -->
@@ -76,17 +76,22 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.10</version>
+        <version>3.1.1</version>
         <executions>
           <execution>
             <id>unpack-dependencies</id>
             <phase>validate</phase>
             <goals>
-              <goal>unpack-dependencies</goal>
+              <goal>unpack</goal>
             </goals>
             <configuration>
-              <includeClassifiers>models</includeClassifiers>
-              <outputDirectory>${basedir}/target/javaLib</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>montiarc.libraries</groupId>
+                  <artifactId>maJavaLib</artifactId>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${basedir}/target/${librarymodels.classifier}/</outputDirectory>
             </configuration>
           </execution>
         </executions>

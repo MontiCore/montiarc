@@ -13,7 +13,7 @@ component ConnectorsWithStereotypes {
 
   port  
     in Integer myIn, 
-    in Integer myOut;
+    out Integer myOut;
   
   <<fakeNews>> connect myIn -> a.input; 
   <<realNews>> connect a.output -> myOut;

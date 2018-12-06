@@ -1,15 +1,10 @@
 package montiarc.helper;
 
-import java.util.Collection;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.google.common.base.Preconditions;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.types.JTypeSymbol;
-import de.monticore.symboltable.types.TypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.symboltable.types.references.TypeReference;
@@ -18,88 +13,183 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
- * Created by Michael von Wenckstern on 20.05.2016. class for pretty printing symbols, this class
- * does not use the AST
+ * Pretty print symbols.
+ * This class does not use the AST
+ *
+ * @author Michael von Wenckstern
+ * @since 20.05.2016
  */
 public class SymbolPrinter {
   
   /**
-   * help function for nested type arguments such as List<NewType<String, List<String>>>
+   * Helper function for nested type arguments such as
+   * {@code List<NewType<String, List<String>>>}
+   *
+   * @param arg The type argument to print
+   * @return The printed type argument
    */
-  public static String printTypeParameters(ActualTypeArgument arg) {
-    String ret = arg.getType().getReferencedSymbol().getFullName();
+  public static String printTypeArgument(ActualTypeArgument arg) {
+    Preconditions.checkNotNull(arg);
+    if(!arg.getType().existsReferencedSymbol()){
+      return "";
+    }
+
+    String ret = printWildCardPrefix(arg);
+    if(arg.getType().getReferencedSymbol() instanceof JTypeSymbol &&
+           ((JTypeSymbol) arg.getType().getReferencedSymbol()).isFormalTypeParameter()) {
+      ret += arg.getType().getReferencedSymbol().getName();
+    } else {
+      ret += arg.getType().getReferencedSymbol().getFullName();
+    }
+
     // String ret = arg.getType().getName();
     if (arg.getType().getActualTypeArguments() != null
         && !arg.getType().getActualTypeArguments().isEmpty()) {
-      ret += "<" + arg.getType().getActualTypeArguments().stream()
-          .map(a -> printWildCardPrefix(a) + printTypeParameters(a) + printArrayDimensions(a))
-          .collect(Collectors.joining(",")) + ">";
+      ret += printTypeArguments(arg.getType().getActualTypeArguments());
     }
     return ret;
   }
-  
-  protected static String printWildCardPrefix(ActualTypeArgument a) {
-    if (a.isLowerBound()) {
+
+  /**
+   * Print a list of type arguments.
+   * Example output: {@code <type1,type2,...>}
+   * @param arg The list of type arguments to print
+   * @return The printed type arguments, joined with "," and surrounded by "<" and ">"
+   */
+  public static String printTypeArguments(List<ActualTypeArgument> arg) {
+    Preconditions.checkNotNull(arg);
+    if (arg.isEmpty())
+      return "";
+    return "<" + arg.stream()
+                     .map(a -> printWildCardPrefix(a)
+                                   + printTypeArgument(a)
+                                   + printArrayDimensions(a))
+                     .collect(Collectors.joining(","))
+               + ">";
+  }
+
+  /**
+   * Print the prefix of a type argument, if it is a bound.
+   *
+   * @param typeArgument Type argument to check
+   * @return "? super " if the type arg is a lower bound, "? extends " if it is
+   * an upper bound, the empty String, else.
+   */
+  public static String printWildCardPrefix(ActualTypeArgument typeArgument) {
+    if (typeArgument.isLowerBound()) {
       return "? super ";
     }
-    else if (a.isUpperBound()) {
+    else if (typeArgument.isUpperBound()) {
       return "? extends ";
     }
     return "";
   }
-  
-  protected static String printArrayDimensions(ActualTypeArgument a) {
-    if (a.getType() instanceof JTypeReference) {
-      int dim = ((JTypeReference<?>) a.getType()).getDimension();
-      StringBuilder sb = new StringBuilder();
-      for (int i = 0; i < dim; i++) {
-        sb.append("[]");
-      }
-      return sb.toString();
-    }
-    return "";
-  }
-  
-  public static String printTypeParameters(List<ActualTypeArgument> arg) {
-    if (arg.isEmpty())
-      return "";
-    return "<" + arg.stream()
-        .map(a -> printWildCardPrefix(a) + printTypeParameters(a) + printArrayDimensions(a))
-        .collect(Collectors.joining(",")) + ">";
-  }
-  
+
   /**
-   * help function for nested type arguments such as List<NewType<String, List<String>>>
+   * Print the type with its interfaces and their type arguments. This also prints possible
+   * bounds on the types, i.e. {@code Number extends java.lang.Object &
+   * java.io.Serializable}
+   *
+   * @param arg The type symbol to print.
+   * @return The printed symbol.
    */
-  public static String printFormalTypeParameters(JTypeSymbol arg) {
+  public static String printTypeParameterWithInterfaces(JTypeSymbol arg) {
+    StringBuilder ret = new StringBuilder(arg.getName());
+
+    if (!arg.getInterfaces().isEmpty()) {
+      ret.append(" extends ");
+      ret.append(arg.getSuperTypes().stream()
+                     .map(t -> t.getReferencedSymbol().getFullName()
+                                   + printTypeArguments(t.getActualTypeArguments())
+                     )
+                     .collect(Collectors.joining("&")));
+    }
+
+//    if (arg.getFormalTypeParameters() != null && !arg.getFormalTypeParameters().isEmpty()) {
+//      ret.append("<").append(arg.getFormalTypeParameters()
+//                                 .stream()
+//                                 .map(a -> printTypeParameterWithInterfaces(a))
+//                                 .collect(Collectors.joining(","))).append(">");
+//    }
+    return ret.toString();
+  }
+
+  /**
+   * Print the square array brackets according to the dimension {@code n} of
+   * the referenced type.
+   *
+   * @param typeArgument Actual type argument for which to print the dimensionality String
+   * @return Empty string, if the type reference is not a {@link JTypeReference},
+   * else the String "[]" concatenated {@code n} times.
+   */
+  public static String printArrayDimensions(ActualTypeArgument typeArgument) {
+    Preconditions.checkNotNull(typeArgument);
+    if(!typeArgument.getType().existsReferencedSymbol()){
+      return "";
+    }
+    return printArrayDimensions(typeArgument.getType());
+  }
+
+  /**
+   * Print the square array brackets according to the dimension {@code n} of
+   * the typeReference.
+   *
+   * @param typeReference Actual type argument for which to print the dimensionality String
+   * @return Empty string, if the type reference is not a {@link JTypeReference},
+   * else the String "[]" concatenated {@code n} times.
+   */
+  public static String printArrayDimensions(TypeReference<?> typeReference){
+    int dim = typeReference.getDimension();
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < dim; i++) {
+      sb.append("[]");
+    }
+    return sb.toString();
+  }
+
+  /**
+   * Helper function for nested type arguments such as
+   * {@code List<NewType<String, List<String>>>}
+   *
+   * @param arg The type symbol to print.
+   * @return The printed symbol.
+   */
+  public static String printTypeWithFormalTypeParameters(JTypeSymbol arg) {
     String ret = arg.getName();
     
     if (!arg.getSuperTypes().isEmpty()) {
       ret += " extends " + arg.getSuperTypes().stream()
           .map(t -> t.getReferencedSymbol().getFullName()
-              + printTypeParameters(t.getActualTypeArguments()))
+              + printTypeArguments(t.getActualTypeArguments()))
           .collect(Collectors.joining("&"));
     }
-    
-    if (arg.getFormalTypeParameters() != null && !arg.getFormalTypeParameters().isEmpty()) {
-      ret += "<" + arg.getFormalTypeParameters().stream().map(a -> printFormalTypeParameters(a))
-          .collect(Collectors.joining(",")) + ">";
-    }
+    ret += printFormalTypeParameters(arg.getFormalTypeParameters());
     return ret;
   }
   
   /**
+   * @param arg A list of type symbols to print
    * @return string representation of the type parameters associated with this port.
    */
-  public static String printFormalTypeParameters(List<JTypeSymbol> arg) {
+  public static String printFormalTypeParameters(List<? extends JTypeSymbol> arg) {
     if (arg.isEmpty())
       return "";
     return "<" + arg.stream()
-        .map(a -> printFormalTypeParameters(a))
-        .collect(Collectors.joining(",")) + ">";
+                     .map(a -> printTypeWithFormalTypeParameters(a))
+                     .collect(Collectors.joining(","))
+               + ">";
   }
-  
+
+  /**
+   *
+   * @param port The port which should be printed
+   * @param ip IndentPrinter used to print the result
+   */
   public static void printPort(PortSymbol port, IndentPrinter ip) {
     if (port.isIncoming()) {
       ip.print("in ");
@@ -108,57 +198,112 @@ public class SymbolPrinter {
       ip.print("out ");
     }
     ip.print(port.getTypeReference().getName());
-    ip.print(printTypeParameters(port.getTypeReference().getActualTypeArguments()));
+    ip.print(printTypeArguments(port.getTypeReference().getActualTypeArguments()));
     ip.print(" ");
     ip.print(port.getName());
   }
-  
+
+  /**
+   * Print a PortSymbol to String
+   * @param port The port to print
+   * @return The printed port
+   */
   public static String printPort(PortSymbol port) {
     IndentPrinter ip = new IndentPrinter();
     printPort(port, ip);
     return ip.getContent();
   }
-  
-  public static void printConnector(ConnectorSymbol con, IndentPrinter ip) {
-    ip.print(con.getSource());
+
+  /**
+   * Prints a connector using the given IndentPrinter.
+   * @param connectorSymbol The connector to print
+   * @param ip The {@link IndentPrinter} used to print the connector
+   */
+  public static void printConnector(ConnectorSymbol connectorSymbol, IndentPrinter ip) {
+    ip.print(connectorSymbol.getSource());
     ip.print(" -> ");
-    ip.print(con.getTarget());
+    ip.print(connectorSymbol.getTarget());
   }
-  
+
+  /**
+   * Prints the given connector as a String.
+   * @param con The connector to print
+   * @return The printed connector
+   */
   public static String printConnector(ConnectorSymbol con) {
     IndentPrinter ip = new IndentPrinter();
     printConnector(con, ip);
     return ip.getContent();
   }
-  
+
+  /**
+   * Prints a list of ASTExpressions to String. The elements are joined with ","
+   * and the list of elements is surrounded by opening and closing brackets.
+   * Results look like {@code (param1,param2,param3,...)}
+   *
+   * @param config The list of configuration arguments to print.
+   * @return The printed argument list, surrounded by brackets
+   */
   public static String printConfigArguments(List<ASTExpression> config) {
     if (config.isEmpty())
       return "";
     JavaDSLPrettyPrinter javaPrinter = new JavaDSLPrettyPrinter(new IndentPrinter());
-    return "(" + config.stream().map(a -> javaPrinter.prettyprint(a))
-        .collect(Collectors.joining(",")) + ")";
+    return "(" + config.stream()
+                     .map(javaPrinter::prettyprint)
+                     .collect(Collectors.joining(","))
+               + ")";
   }
-  
+
+  /**
+   * Print the given expression
+   * @param config The expression to print
+   * @return The printed expression
+   */
   public static String printConfigArgument(ASTExpression config) {
     
     JavaDSLPrettyPrinter javaPrinter = new JavaDSLPrettyPrinter(new IndentPrinter());
     return javaPrinter.prettyprint(config);
   }
-  
+
+  /**
+   * Print a component instance to the given IndentPrinter
+   * @param inst The component instance to print
+   * @param ip The printer to print with
+   */
   public static void printComponentInstance(ComponentInstanceSymbol inst, IndentPrinter ip) {
     ip.print(inst.getComponentType().getName());
-    ip.print(printTypeParameters(inst.getComponentType().getActualTypeArguments()));
+    ip.print(printTypeArguments(inst.getComponentType().getActualTypeArguments()));
     ip.print(printConfigArguments(inst.getConfigArguments()));
     ip.print(" ");
     ip.print(inst.getName());
   }
-  
+
+  /**
+   * Print a component instance as a String.
+   * @param inst The instance to print.
+   * @return The printed instance
+   */
   public static String printComponentInstance(ComponentInstanceSymbol inst) {
     IndentPrinter ip = new IndentPrinter();
     printComponentInstance(inst, ip);
     return ip.getContent();
   }
-  
+
+  /**
+   * Print a collection of Ports to the given IndentPrinter.
+   * The output is similar to the following:
+   * <pre>
+   * {@code
+   * port
+   *    in port1,
+   *    out port2
+   *    ...
+   *    out portN;
+   * }
+   * </pre>
+   * @param ports The collection of Ports to print
+   * @param ip The printer to print the list to
+   */
   public static void printPorts(Collection<PortSymbol> ports, IndentPrinter ip) {
     if (!ports.isEmpty()) {
       ip.println("port");
@@ -178,7 +323,14 @@ public class SymbolPrinter {
       ip.unindent();
     }
   }
-  
+
+  /**
+   * Print a component symbol to the given IndentPrinter
+   * @param cmp The component symbol to print
+   * @param ip The printer to print to
+   * @param skipPackageImport Whether to skip printing package and imports
+   *                          of the component
+   */
   public static void printComponent(ComponentSymbol cmp, IndentPrinter ip,
       boolean skipPackageImport) {
     if (!skipPackageImport) {
@@ -225,7 +377,12 @@ public class SymbolPrinter {
     ip.unindent();
     ip.println("}");
   }
-  
+
+  /**
+   * Print a component Symbol
+   * @param cmp The componentSymbol to print
+   * @return The printed component
+   */
   public static String printComponent(ComponentSymbol cmp) {
     IndentPrinter ip = new IndentPrinter();
     printComponent(cmp, ip, false);

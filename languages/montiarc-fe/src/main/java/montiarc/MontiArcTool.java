@@ -46,18 +46,14 @@ public class MontiArcTool {
    * Constructor for montiarc.MontiArcTool
    */
   public MontiArcTool() {
-    family = new MontiArcLanguageFamily();
-    checker = MontiArcCoCos.createChecker();
-    isSymTabInitialized = false;
+    this(new MontiArcLanguageFamily(), MontiArcCoCos.createChecker());
   }
   
   /**
    * Constructor for montiarc.MontiArcTool
    */
   public MontiArcTool(ModelingLanguageFamily fam) {
-    this.family = fam;
-    checker = MontiArcCoCos.createChecker();
-    isSymTabInitialized = false;
+    this(fam, MontiArcCoCos.createChecker());
   }
   
   /**
@@ -113,8 +109,8 @@ public class MontiArcTool {
    * the packages the models are located in. When the ComponentSymbol is resolvable it is returned.
    * Otherwise the optional is empty.
    * 
-   * @param componentName
-   * @param modelPaths
+   * @param componentName Name of the component
+   * @param modelPaths Folders containing the packages with models
    * @return
    */
   public Optional<ComponentSymbol> loadComponentSymbolWithoutCocos(String componentName,
@@ -140,11 +136,11 @@ public class MontiArcTool {
    * models are located in. When the ComponentSymbol is resolvable it is returned. Otherwise the
    * optional is empty.
    * 
-   * @param modelPath
-   * @param model
-   * @return
+   * @param modelPath The model path containing the package with the model
+   * @param model the fully qualified model name
+   * @return the AST node of the model
    */
-  public ASTMontiArcNode getAstNode(String modelPath, String model) {
+  public Optional<ASTMontiArcNode> getAstNode(String modelPath, String model) {
     // ensure an empty log
     Log.getFindings().clear();
     Optional<ComponentSymbol> comp = loadComponentSymbolWithoutCocos(model,
@@ -152,10 +148,13 @@ public class MontiArcTool {
     
     if (!comp.isPresent()) {
       Log.error("Model could not be resolved!");
-      return null;
+      return Optional.empty();
     }
-    
-    return (ASTMontiArcNode) comp.get().getAstNode().get();
+
+    if(!comp.get().getAstNode().isPresent()){
+      return Optional.empty();
+    }
+    return Optional.of((ASTMontiArcNode) comp.get().getAstNode().get());
   }
   
   /**
@@ -166,7 +165,7 @@ public class MontiArcTool {
    * src/main/resources/models/a/b/C.arc, the modelpath is src/main/resources.
    * 
    * @param modelPaths
-   * @return
+   * @return The initialized symbol table
    */
   public Scope initSymbolTable(File... modelPaths) {
     Set<Path> p = Sets.newHashSet();
@@ -187,13 +186,13 @@ public class MontiArcTool {
    * the symbol table! Symbols for models within the modelpaths are not added to the symboltable
    * until resolve() is called. Modelpaths are relative to the project path and do contain all the
    * packages the models are located in. E.g. if model with fqn a.b.C lies in folder
-   * src/main/resources/models/a/b/C.arc, the modelpath is src/main/resources.
+   * src/main/resources/models/a/b/C.arc, the modelPath is src/main/resources.
    * 
-   * @param string
-   * @return
+   * @param modelPath The model path for the symbol table
+   * @return the initialized symbol table
    */
-  public Scope initSymbolTable(String modelpath) {
-    return initSymbolTable(Paths.get(modelpath).toFile());
+  public Scope initSymbolTable(String modelPath) {
+    return initSymbolTable(Paths.get(modelPath).toFile());
   }
   
 }

@@ -42,10 +42,21 @@ public class AssignmentTest extends AbstractCoCoTest {
   }
   
   @Test
+  public void testAssignsAttributeOfCD() {
+    checkValid(PACKAGE + "." + "AssignsAttributeOfCD");
+  }
+  
+  
+  @Test
   public void testMethodCallWithoutCallKeyword() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "MethodCallWithoutCallKeyword");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new IOAssignmentCallFollowsMethodCall()), node,
         new ExpectedErrorInfo(1, "xMA090"));
+  }
+  
+  @Test
+  public void testCallOfOverloadedMethods() {
+    checkValid(PACKAGE + "." + "CallOfOverloadedMethods"); 
   }
   
   @Test
@@ -152,6 +163,12 @@ public class AssignmentTest extends AbstractCoCoTest {
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA081");
     checkInvalid(cocos, astMontiArcNode, errors);
   }
+  
+  @Test
+  public void testAssignmentTypeConflictWithCD() {
+    final ASTMontiArcNode ast = loadComponentAST(PACKAGE + "." + "AssignmentTypeConflictWithCD");
+    checkInvalid(MontiArcCoCos.createChecker(), ast,
+        new ExpectedErrorInfo(1, "xMA042"));  }
   
   @Test
   public void testMultipleMessagesPerCycle() {

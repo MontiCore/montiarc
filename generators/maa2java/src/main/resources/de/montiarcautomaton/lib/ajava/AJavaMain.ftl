@@ -12,7 +12,7 @@ import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 
 import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 
-public class ${implName} implements IComputable<${inputName}, ${resultName}> {
+public class ${implName}<#if helper.isGeneric()> < <#list helper.getGenericTypeParametersWithInterfaces() as param>${param}<#sep>,</#list> > </#if> implements IComputable<${inputName}, ${resultName}> {
   
   //component variables
   <#list compVariables as compVariable>
@@ -50,7 +50,7 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
     
     try {
     <#list portsOut as portOut>
-    ${helper.getPortTypeName(portOut)} ${portOut.getName()} = null;
+    ${helper.getRealPortTypeString(portOut)} ${portOut.getName()} = null;
     </#list>
         
     <#list initializations as init>
@@ -74,13 +74,13 @@ public class ${implName} implements IComputable<${inputName}, ${resultName}> {
   public ${resultName} compute(${inputName} ${inputVarName}) {
     // inputs
     <#list portsIn as portIn>
-  	final ${helper.getPortTypeName(portIn)} ${portIn.getName()} = ${inputVarName}.get${portIn.getName()?cap_first}();
+  	final ${helper.getRealPortTypeString(portIn)} ${portIn.getName()} = ${inputVarName}.get${portIn.getName()?cap_first}();
   	</#list>
   
     final ${resultName} ${resultVarName} = new ${resultName}();
     
     <#list portsOut as portOut>
-    ${helper.getPortTypeName(portOut)} ${portOut.getName()} = ${resultVarName}.get${portOut.getName()?cap_first}();
+    ${helper.getRealPortTypeString(portOut)} ${portOut.getName()} = ${resultVarName}.get${portOut.getName()?cap_first}();
     </#list>
     
     <#-- print java statements here -->

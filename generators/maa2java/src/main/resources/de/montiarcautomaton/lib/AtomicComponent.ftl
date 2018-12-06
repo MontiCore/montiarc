@@ -14,7 +14,7 @@ import de.montiarcautomaton.runtimes.timesync.delegation.Port;
 import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 import de.montiarcautomaton.runtimes.Log;
 
-public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}<#if helper.superCompGeneric()><<#list helper.getSuperCompActualTypeArguments() as typeArg>${typeArg}<#sep>, </#sep></#list>></#if></#if> implements IComponent {
+public class ${name}<#if helper.isGeneric()><<#list helper.getGenericTypeParametersWithInterfaces() as param>${param}<#sep>,</#list>></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}<#if helper.isSuperComponentGeneric()><<#list helper.getSuperCompActualTypeArguments() as typeArg>${typeArg}<#sep>, </#sep></#list>></#if></#if> implements IComponent {
   
   // component variables
   <#list variables as var>
@@ -28,27 +28,30 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
   
   // port fields
   <#list portsIn as port>
-  protected Port<${helper.printPortTypeName(port)}> ${port.getName()};
+  protected Port<${helper.printPortType(port)}> ${port.getName()};
   </#list>
   
   <#list portsOut as port>
-  protected Port<${helper.printPortTypeName(port)}> ${port.getName()};
+  protected Port<${helper.printPortType(port)}> ${port.getName()};
   </#list>
   
   // port setter
   <#list portsIn as port>
-  public void setPort${port.getName()?cap_first}(Port<${helper.getPortTypeName(port)}> port) {
+  public void setPort${port.getName()?cap_first}(Port<${helper.getRealPortTypeString(port)}> port) {
   	this.${port.getName()} = port;
   }
 
-  public Port<${helper.getPortTypeName(port)}> getPort${port.getName()?cap_first}() {
+  public Port<${helper.getRealPortTypeString(port)}> getPort${port.getName()?cap_first}() {
   	return this.${port.getName()};
   }
   
   </#list>
   // port getter
   <#list portsOut as port>
-  public Port<${helper.getPortTypeName(port)}> getPort${port.getName()?cap_first}() {
+  public void setPort${port.getName()?cap_first}(Port<${helper.getRealPortTypeString(port)}> port) {
+  	this.${port.getName()} = port;
+  }
+  public Port<${helper.getRealPortTypeString(port)}> getPort${port.getName()?cap_first}() {
   	return this.${port.getName()};
   }
   </#list>
@@ -76,7 +79,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericParameters(
     <#if helper.hasSuperComp()>super.setUp();</#if>
     // set up output ports
     <#list portsOut as port>
-    this.${port.getName()} = new Port<${helper.getPortTypeName(port)}>();
+    this.${port.getName()} = new Port<${helper.getRealPortTypeString(port)}>();
     </#list>
     
     this.initialize();

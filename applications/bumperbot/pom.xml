@@ -6,7 +6,7 @@
   <parent>
     <groupId>montiarc.applications</groupId>
     <artifactId>applications</artifactId>
-    <version>4.5.1-SNAPSHOT</version>
+    <version>5.0.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>bumperbot</artifactId>
@@ -35,7 +35,11 @@
       <version>${project.version}</version>
       <classifier>${librarymodels.classifier}</classifier>
     </dependency>
-
+	<dependency>
+	  <groupId>montiarc.libraries</groupId>
+      <artifactId>maJavaLib</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
       <groupId>montiarc.libraries</groupId>
       <artifactId>maa-rte</artifactId>
@@ -63,12 +67,6 @@
       <artifactId>javaDSL</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>de.monticore</groupId>
-      <artifactId>de.monticore.java.lib</artifactId>
-      <version>${javalib.version}</version>
-      <classifier>models</classifier>
-    </dependency>
 
 
 
@@ -116,9 +114,24 @@
               <outputDirectory>${basedir}/target/${librarymodels.classifier}/</outputDirectory>
             </configuration>
           </execution>
+          <execution>
+            <id>unpack</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>montiarc.libraries</groupId>
+                  <artifactId>maJavaLib</artifactId>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${basedir}/target/${librarymodels.classifier}/</outputDirectory>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>de.se_rwth.maven</groupId>
         <artifactId>se-groovy-maven-plugin</artifactId>

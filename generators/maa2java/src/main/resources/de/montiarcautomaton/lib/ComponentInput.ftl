@@ -8,10 +8,10 @@ import ${import.getStatement()}<#if import.isStar()>.*</#if>;
 </#list>
 import de.montiarcautomaton.runtimes.timesync.implementation.IInput;
 
-public class ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParameters() as param>${param}<#sep>,</#list>></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}Input<#if helper.superCompGeneric()><<#list helper.getSuperCompActualTypeArguments() as typeArg>${typeArg}<#sep>, </#sep></#list>></#if></#if> implements IInput {
+public class ${inputName}<#if helper.isGeneric()><<#list helper.getGenericTypeParametersWithInterfaces() as param>${param}<#sep>,</#list>></#if><#if helper.hasSuperComp()> extends ${helper.getSuperComponentFqn()}Input<#if helper.isSuperComponentGeneric()><<#list helper.getSuperCompActualTypeArguments() as typeArg>${typeArg}<#sep>, </#sep></#list>></#if></#if> implements IInput {
   // variables  
   <#list portsIn as port>
-  private ${helper.getPortTypeName(port)} ${port.getName()};
+  private ${helper.getRealPortTypeString(port)} ${port.getName()};
   </#list>
   
   public ${inputName}() {<#if helper.hasSuperComp()>
@@ -19,7 +19,7 @@ public class ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParame
   </#if>}
   
   <#if helper.getAllInPorts()?size != 0>
-  public ${inputName}(<#list helper.getAllInPorts() as port>${helper.getPortTypeName(port)} ${port.getName()}<#sep>, </#list>) {
+  public ${inputName}(<#list helper.getAllInPorts() as port>${helper.getRealPortTypeString(port)} ${port.getName()}<#sep>, </#list>) {
     <#if helper.hasSuperComp()>
     super(<#list helper.getSuperInPorts() as port>${port.getName()}<#sep>, </#list>);
     </#if>
@@ -31,7 +31,7 @@ public class ${inputName}<#if helper.isGeneric()><<#list helper.getGenericParame
 
   // getter
   <#list portsIn as port>
-  public ${helper.getPortTypeName(port)} get${port.getName()?cap_first}() {
+  public ${helper.getRealPortTypeString(port)} get${port.getName()?cap_first}() {
   	return this.${port.getName()};
   }
   

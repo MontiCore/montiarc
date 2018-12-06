@@ -4,7 +4,6 @@ import de.monticore.ast.ASTNode;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.TypeSymbol;
@@ -15,7 +14,6 @@ import de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor;
 import de.monticore.types.types._ast.ASTType;
 import de.monticore.types.types._ast.ASTTypeVariableDeclaration;
 import de.se_rwth.commons.Names;
-import de.se_rwth.commons.logging.Log;
 import montiarc._ast.*;
 import montiarc._symboltable.*;
 import montiarc.helper.SymbolPrinter;
@@ -53,7 +51,14 @@ public class ComponentHelper {
       componentNode = null;
     }
   }
-  
+
+  /**
+   * Print the initial value for a parameter.
+   * If the parameter is a default parameter, then the default value is printed,
+   * other wise the name of the parameter is printed.
+   * @param parameter The parameter to print the initial value of
+   * @return The printed initial value
+   */
   public String printInitialValue(ASTParameter parameter) {
     String value;
     if (parameter.isPresentDefaultValue()) {
@@ -73,8 +78,8 @@ public class ComponentHelper {
    * @param port Symbol of the port of which to determine the type
    * @return The string representation of the type
    */
-  public String getPortTypeName(PortSymbol port) {
-    return determinePortTypeName(this.component, port);
+  public String getRealPortTypeString(PortSymbol port) {
+    return getRealPortTypeString(this.component, port);
   }
 
   /**
@@ -82,10 +87,14 @@ public class ComponentHelper {
    * This takes in to account whether the port is inherited and possible required
    * renamings due to generic type parameters and their actual arguments.
    *
+   * @param componentSymbol Symbol of the component which contains the port
    * @param portSymbol Symbol of the port for which the type name should be determined.
    * @return The String representation of the type of the port.
    */
-  public static String determinePortTypeName(ComponentSymbol componentSymbol, PortSymbol portSymbol){
+  public static String getRealPortTypeString(
+      ComponentSymbol componentSymbol,
+      PortSymbol portSymbol){
+
     final JTypeReference<? extends JTypeSymbol> typeReference = portSymbol.getTypeReference();
     if(!typeReference.existsReferencedSymbol()){
       return ""; // TODO Better error handling
@@ -301,32 +310,35 @@ public class ComponentHelper {
     return autoBoxedTypeName;
   }
 
-  // TODO @MP in Templates übernehmen
-  public String printPortTypeName(PortSymbol var) {
+  /**
+   * Prints the type of the port without any alterations.
+   * This means, that this is a pretty print of the port type as in the AST
+   * @param var the symbol of the port for which the type should be printed.
+   * @return The printed port type
+   */
+  public String printPortType(PortSymbol var) {
+//    return SymbolPrinter.printTypeParameterWithInterfaces(
+//        var.getTypeReference().getReferencedSymbol());
     String name = var.getName();
     Optional<ASTType> optType = findPortTypeByName(name);
-    return printTypeName(optType);
+    return optType.map(this::printTypeName).orElse("");
   }
-  
+
+  /**
+   * Find the AST Node for the type of the port with the given name
+   * @param name Name of the port for which to find the ast node
+   * @return Optional containing the node of the type, if present.
+   * {@link Optional#empty()}, otherwise.
+   */
   private Optional<ASTType> findPortTypeByName(String name) {
-    for (ASTElement e : componentNode.getBody().getElementList()) {
-      if (e instanceof ASTInterface) {
-        ASTInterface itf = (ASTInterface) e;
-        for (ASTPort port : itf.getPortsList()) {
-          if (port.getNameList().contains(name)) {
-            return Optional.of(port.getType());
-          }
-        }
-      }
-    }
-    return Optional.empty();
+    final Optional<PortSymbol> port1 = component.getPort(name);
+    return port1.map(portSymbol -> ((ASTPort) portSymbol.getAstNode().get()).getType());
   }
   
-  // TODO @MP in Templates übernehmen
   public String printVariableTypeName(VariableSymbol var) {
     String name = var.getName();
     Optional<ASTType> optType = findVariableTypeByName(name);
-    return printTypeName(optType);
+    return optType.map(this::printTypeName).orElse("");
   }
   
   private Optional<ASTType> findVariableTypeByName(String name) {
@@ -344,7 +356,7 @@ public class ComponentHelper {
   public String printParamTypeName(JFieldSymbol param) {
     String name = param.getName();
     Optional<ASTType> optType = findParamTypeByName(name);
-    return printTypeName(optType);
+    return optType.map(this::printTypeName).orElse("");
   }
   
   private Optional<ASTType> findParamTypeByName(String name) {
@@ -355,15 +367,15 @@ public class ComponentHelper {
     }
     return Optional.empty();
   }
-  
-  private String printTypeName(Optional<ASTType> optType) {
-    if (optType.isPresent()) {
-      return autobox(typesPrinter.prettyprint(optType.get()).replaceAll(" ", ""));
-    }
-    else {
-      Log.error("XX");
-      return "TYPE-NOT-FOUND";
-    }
+
+  /**
+   * Pretty print the ast type node with removed spaces.
+   * @param astType The node to print
+   * @return The printed node
+   */
+  private String printTypeName(ASTType astType) {
+      return autobox(
+          typesPrinter.prettyprint(astType).replaceAll(" ", ""));
   }
   
   public String getVariableTypeName(ASTComponent comp, VariableSymbol var) {
@@ -441,7 +453,13 @@ public class ComponentHelper {
     
     return outputParameters;
   }
-  
+
+  /**
+   * Print the type of the specified subcomponent.
+   *
+   * @param instance The instance of which the type should be printed
+   * @return The printed subcomponent type
+   */
   public String getSubComponentTypeName(ComponentInstanceSymbol instance) {
     
 //    if (instance.getComponentType().getAstNode().isPresent()) {
@@ -459,12 +477,21 @@ public class ComponentHelper {
     }
     return result;
   }
-  
-  public boolean isIncomingPort(ComponentSymbol cmp, ConnectorSymbol conn, boolean isSource,
-      String portName) {
+
+  /**
+   * Determine whether the port of the given connector is an incoming or
+   * outgoing port.
+   * @param cmp The component defining the connector
+   * @param conn The connector which connects the port to check
+   * @param isSource Specifies whether the port to check is the source port of
+   *                 the connector or the target port
+   * @return true, if the port is an incoming port. False, otherwise.
+   */
+  public boolean isIncomingPort(ComponentSymbol cmp, ConnectorSymbol conn, boolean isSource) {
     String subCompName = getConnectorComponentName(conn, isSource);
     String portNameUnqualified = getConnectorPortName(conn, isSource);
     Optional<PortSymbol> port = Optional.empty();
+    String portName = isSource ? conn.getSource() : conn.getTarget();
     // port is of subcomponent
     if (portName.contains(".")) {
       Optional<ComponentInstanceSymbol> subCompInstance = cmp.getSpannedScope()
@@ -477,12 +504,8 @@ public class ComponentHelper {
     else {
       port = cmp.getSpannedScope().<PortSymbol> resolve(portName, PortSymbol.KIND);
     }
-    
-    if (port.isPresent()) {
-      return port.get().isIncoming();
-    }
-    
-    return false;
+
+    return port.map(PortSymbol::isIncoming).orElse(false);
   }
   
   /**
@@ -530,9 +553,10 @@ public class ComponentHelper {
   }
   
   /**
-   * Returns <tt>true</tt> if the component is deployable.
+   * Determine whether the compmonent is deployable.
    *
-   * @return
+   * @return <tt>true</tt> if the component is deployable, {@code false} otherwise.
+   * @throws RuntimeException if the component is deployable and has parameters
    */
   public boolean isDeploy() {
     if (component.getStereotype().containsKey(DEPLOY_STEREOTYPE)) {
@@ -579,7 +603,8 @@ public class ComponentHelper {
       return false;
     }
     if (comp.getHead().isPresentGenericTypeParameters()) {
-      List<ASTTypeVariableDeclaration> parameterList = comp.getHead().getGenericTypeParameters()
+      List<ASTTypeVariableDeclaration> parameterList
+          = comp.getHead().getGenericTypeParameters()
           .getTypeVariableDeclarationList();
       for (ASTTypeVariableDeclaration type : parameterList) {
         if (type.getName().equals(typeName)) {
@@ -589,7 +614,11 @@ public class ComponentHelper {
     }
     return false;
   }
-  
+
+  /**
+   * Determine whether the component has a super component
+   * @return True, if the component has a super component. False, otherwise
+   */
   public boolean hasSuperComp() {
     return component.getSuperComponent().isPresent();
   }
@@ -598,30 +627,38 @@ public class ComponentHelper {
     if (component.getSuperComponent().isPresent()) {
       return component.getSuperComponent().get().getFullName();
     }
-    return "ERROR";
+    return "";
   }
 
-  public boolean superCompGeneric(){
+  /**
+   * Determine whether the super component has generic type parameters
+   * Note: Used in templates
+   * @return True, iff the super component has generic type parameters
+   */
+  public boolean isSuperComponentGeneric(){
     if(component.getSuperComponent().isPresent()){
-      final ComponentSymbolReference componentSymbolReference = component.getSuperComponent().get();
-      return componentSymbolReference.hasActualTypeArguments();
+      final ComponentSymbolReference componentSymbolReference
+          = component.getSuperComponent().get();
+      return componentSymbolReference.getReferencedSymbol().hasFormalTypeParameters();
     }
     return false;
   }
 
   /**
    *
-   * @return A list of String represenations of the actual type arguments
+   * @return A list of String representations of the actual type arguments
    * assigned to the super component
    */
   public List<String> getSuperCompActualTypeArguments() {
     final List<String> paramList = new ArrayList<>();
     if(component.getSuperComponent().isPresent()) {
-      final ComponentSymbolReference componentSymbolReference = component.getSuperComponent().get();
-      final List<ActualTypeArgument> actualTypeArgs = componentSymbolReference.getActualTypeArguments();
+      final ComponentSymbolReference componentSymbolReference
+          = component.getSuperComponent().get();
+      final List<ActualTypeArgument> actualTypeArgs
+          = componentSymbolReference.getActualTypeArguments();
       String componentPrefix = this.component.getFullName() + ".";
       for (ActualTypeArgument actualTypeArg : actualTypeArgs) {
-        final String printedTypeArg = SymbolPrinter.printTypeParameters(actualTypeArg);
+        final String printedTypeArg = SymbolPrinter.printTypeArgument(actualTypeArg);
         if(printedTypeArg.startsWith(componentPrefix)) {
           paramList.add(printedTypeArg.substring(componentPrefix.length()));
         } else {
@@ -646,11 +683,35 @@ public class ComponentHelper {
     }
     return ret;
   }
-  
+
+  /**
+   * Determine whether the component is a generic component
+   * @return True, iff the component has at least one generic type parameter
+   */
   public boolean isGeneric() {
     return componentNode.getHead().isPresentGenericTypeParameters();
   }
-  
+
+  /**
+   * Determine the generic type parameters of the component. The result includes
+   * the interfaces of the type parameters. This means for
+   * <pre>{@code component<T extends Number & java.io.Serializable>{}}</pre>
+   * the returned list consists of
+   * <pre>{@code "T extends java.lang.Number & java.io.Serializable"}</pre>
+   *
+   * Note: Used in ComposedComponent.ftl
+   * @return A list of printed type parameters with bounds.
+   */
+  public List<String> getGenericTypeParametersWithInterfaces(){
+    List<String> output = new ArrayList<>();
+    if(isGeneric()){
+      for (JTypeSymbol parameter : component.getFormalTypeParameters()) {
+        output.add(SymbolPrinter.printTypeParameterWithInterfaces(parameter));
+      }
+    }
+    return output;
+  }
+
   public List<String> getGenericParameters() {
     List<String> output = new ArrayList<>();
     if (isGeneric()) {
