@@ -26,7 +26,6 @@ component PortCompatibilityTypeInheritance {
   component ValidComponentInPackage1 ccia2;
 
   connect intIn -> ccia.stringIn, ccia2.stringIn;
-  //ERROR: Incompatibile types 'Integer', 'String'
   //ERROR: Incompatible types 'Integer', 'String'
 
   connect ccia2.stringOut -> intOut2;
@@ -43,10 +42,11 @@ component PortCompatibilityTypeInheritance {
 
   component ComponentWithJavaTypes
       cwjt [supOut -> subOut1, supOut1;  // incompatible (SuperType -> SubType)
-             subOut -> subOut2, supOut2];
+             subOut -> subOut2, supOut2]; // ERROR: see #241, #243
 
   connect supIn -> cwjt.supIn1; // compatible
-  connect subIn -> cwjt.supIn2, cwjt.subIn2; // compatible
+  connect subIn -> cwjt.supIn2, // ERROR: See #241, #243
+                   cwjt.subIn2; // compatible
 
   connect supIn -> cwjt.subIn1; // incompatible
 

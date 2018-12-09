@@ -23,8 +23,8 @@ component PortCompatibilityWithGenerics3 {
   component Buffer<String> bStr;
   
   connect myInt -> bInt.input;         // Int -> Int
-  connect bInt.buffered -> bObj.input; // Int -> Obj
+  connect bInt.buffered -> bObj.input; // Int -> Obj ERROR: See #241, #243
   connect bObj.buffered -> bStr.input; // Obj -> Str
                                        // invalid!    
-  connect bStr.buffered -> myObj;      // Str -> Obj
+  connect bStr.buffered -> myObj;      // Str -> Obj ERROR: See #241, #243
 }
