@@ -134,6 +134,7 @@ public class ${name}<#if helper.isGeneric()><<#list helper.getGenericTypeParamet
     
     // set results to ports
     setResult(result);
+    this.update();
   }
   
 }
