@@ -411,8 +411,9 @@ public class SubComponentTest extends AbstractCoCoTest {
   @Test
   public void testImportedReferences() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComplexComponent");
+    checkValid(PACKAGE, "ComplexComponent");
     
-    assertEquals("6 instances (3 named and 3 auto-instances) should be present!", 6,
+    assertEquals("6 instances (3 named and 3 auto-instances) should be present!", 7,
         comp.getSubComponents().size());
     
     ComponentInstanceSymbol ref = comp.getSubComponent("src").orElse(null);
