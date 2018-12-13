@@ -23,7 +23,9 @@ component ComplexComponent {
 	component components.body.subcomponents._subcomponents.Sub4 qFComponent1;
 	
 	component components.body.subcomponents._subcomponents.Sub5 qfc2;
-	
+
+	component types.SuperComp(1, "test", 2.0);
+
 	connect input -> src.input, myC.input;
 	connect myC.output -> output1;
 	connect src.output -> output2;
