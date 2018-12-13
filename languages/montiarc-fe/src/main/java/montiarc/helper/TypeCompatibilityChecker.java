@@ -450,10 +450,11 @@ public class TypeCompatibilityChecker {
     Log.debug("Resolve type of java expression.", "TypeCompatibilityChecker");
     MontiArcHCJavaDSLTypeResolver typeResolver = new MontiArcHCJavaDSLTypeResolver();
     expr.accept(typeResolver);
-    if (!typeResolver.getResult().isPresent()) {
+    final Optional<JavaTypeSymbolReference> result = typeResolver.getResult();
+    if (!result.isPresent()) {
       Log.info("Can't resolve type of expression: " + expr, "TypeCompatibilityChecker");
     }
-    return typeResolver.getResult();
+    return result;
   }
   
   /**

@@ -75,7 +75,8 @@ public class GenericsTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent");
 
     final String modelName = PACKAGE + "." + "ComponentExtendsGenericComponent2";
-    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ProhibitGenericsWithBounds());
+    MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new ProhibitGenericsWithBounds());
     ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA072");
     checkInvalid(cocos, loadComponentAST(modelName), errors);
     checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent3");

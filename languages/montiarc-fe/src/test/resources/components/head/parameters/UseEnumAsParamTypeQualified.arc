@@ -1,6 +1,6 @@
 package components.head.parameters;
 
-import types.MyEnum;
+//import types.MyEnum;
 
 /*
  * Valid model.
@@ -13,4 +13,5 @@ component UseEnumAsParamTypeQualified {
     component FullyQualifiedEnumAsTypeArg(types.MyEnum.First) sub2;
 
     connect sIn -> sub.sIn;
-}    
+    connect sIn -> sub2.sIn;
+}

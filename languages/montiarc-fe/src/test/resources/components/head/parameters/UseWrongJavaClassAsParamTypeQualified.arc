@@ -1,7 +1,7 @@
 package components.head.parameters;
 
 /*
- * Valid model.
+ * Invalid model.
  */
 component UseWrongJavaClassAsParamTypeQualified {
     
