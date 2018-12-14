@@ -1,5 +1,10 @@
 package components.body.connectors;
 
+/**
+ * Invalid model.
+ * See https://git.rwth-aachen.de/monticore/montiarc/core/issues/243
+ *
+ */
 component TypeHierarchyInConnector {
 
   component A {
@@ -11,6 +16,7 @@ component TypeHierarchyInConnector {
   component A subComp;
   
   connect inList -> subComp.inColl; //List extends Collection
+    // ERROR, due to #243
   
 
 }

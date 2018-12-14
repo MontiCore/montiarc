@@ -180,7 +180,7 @@ public class ConnectorSourceAndTargetExistAndFit implements MontiArcASTComponent
                   .collect(Collectors.toList());
       }
 
-      if (!TypeCompatibilityChecker.doTypesMatch(
+      if (!TypeCompatibilityChecker.areTypesEqual(
           sourceType,             // Type reference to the type of the source port
           sourceTypeFormalParams, // Formal parameters occurring in the source type
           sourceTypeArgumentTypes,// The actual types of the source type params

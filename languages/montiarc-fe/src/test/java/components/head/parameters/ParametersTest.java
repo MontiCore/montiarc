@@ -76,6 +76,21 @@ public class ParametersTest extends AbstractCoCoTest {
     checkValid(PACKAGE+"."+"EnumAsTypeArg");
   }
 
+  @Test
+  public void testFullyQualifiedEnumAsTypeArg() {
+    checkValid(PACKAGE + "." + "FullyQualifiedEnumAsTypeArg");
+  }
+
+  @Test
+  public void testJavaClassAsParameter() {
+    checkValid(PACKAGE + "." + "JavaClassAsParameter");
+  }
+
+  @Test
+  public void testJavaClassFromCDAsParameter() {
+    checkValid(PACKAGE + "." + "JavaClassFromCDAsParameter");
+  }
+
 
   @Test
   public void testCompWithIntegerParameter() {
@@ -93,20 +108,32 @@ public class ParametersTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("Qualified enum type which is used as a component argument can" +
-              "not be found.")
-  /*
-   * java.lang.AssertionError: 0xA1038 SymbolReference Could not load full
-   * information of 'types' (Kind de.monticore.java.symboltable.JavaTypeSymbolKind).
-   * StringReader:<10,40>: 0xMA065 Could not find type of argument no 0 of
-   * subcomponent sub
-   */
-  public void testUseEnumAsTypeArgQualified() {
-    checkValid(PACKAGE + "." + "UseEnumAsTypeArgQualified");
+  public void testUseJavaClassAsParamTypeQualified() {
+    checkValid(PACKAGE + "." + "UseJavaClassAsParamTypeQualified");
   }
 
   @Test
-  @Ignore("TypeCompatibilityChecker.expressionType() returns Opt.empty() on CD Enum parameter ")
+  public void testUseWrongJavaClassAsParamTypeQualified() {
+    final String modelName = PACKAGE + "." + "UseWrongJavaClassAsParamTypeQualified";
+    MontiArcCoCoChecker cocos
+        = MontiArcCoCos.createChecker();
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA064");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
+  }
+
+  @Test
+  public void testUseJavaClassFromCDAsParamTypeQualified() {
+    checkValid(PACKAGE + "." + "UseJavaClassFromCDAsParamTypeQualified");
+  }
+
+  @Test
+  public void testUseEnumAsParamTypeQualified() {
+    final String modelName = PACKAGE + "." + "UseEnumAsParamTypeQualified";
+    final ASTMontiArcNode astMontiArcNode = loadComponentAST(modelName);
+    checkValid(modelName);
+  }
+
+  @Test
   public void testUseEnumAsTypeArgFromCD() {
     checkValid(PACKAGE + "." + "UseEnumAsTypeArgFromCD");
   }

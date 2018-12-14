@@ -7,7 +7,7 @@ package components.head.generics;
  * have to assign concrete type arguments to all generic type parameters.
  * (p.69, lst. 3.50)
  */
-component ComponentExtendsGenericComponent6<X,Y> extends types.GenericComp2<X, Y> {
+component ComponentExtendsGenericComponent6<X,Y> extends GenericComp2<X, Y> {
   // ERROR: Type incompatibility of generic type 'Y': Not a subclass of Number.
   // Empty body
 }
