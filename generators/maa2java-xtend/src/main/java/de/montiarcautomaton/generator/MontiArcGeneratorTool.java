@@ -34,6 +34,7 @@ public class MontiArcGeneratorTool extends MontiArcTool{
   
   public static final String DEFAULT_TYPES_FOLDER = "target/javaLib/";
   public static final String LIBRARY_MODELS_FOLDER = "target/librarymodels/";
+  private Boolean dynamicGeneration = false;
   
   
   /**
@@ -71,6 +72,10 @@ public class MontiArcGeneratorTool extends MontiArcTool{
     // gen cd
     generatePOJOs(modelPath, target);
     
+  }
+  
+  public void enableDynamicGeneration(Boolean val) {
+	  dynamicGeneration = val;
   }
   
   /**
