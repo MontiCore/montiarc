@@ -651,6 +651,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         .append(implVarName).append(".").append("getInitialValues()").append(";");
     methodBuilder.addBodyElement(resultString.toString());
     methodBuilder.addBodyElement("setResult(result);");
+    methodBuilder.addBodyElement("this.update();");
     classVisitor.addMethod(methodBuilder.build());
   }
 

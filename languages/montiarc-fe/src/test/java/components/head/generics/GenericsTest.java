@@ -8,6 +8,7 @@ package components.head.generics;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,10 +20,6 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc.cocos.AllGenericParametersOfSuperClassSet;
-import montiarc.cocos.DefaultParametersCorrectlyAssigned;
-import montiarc.cocos.MontiArcCoCos;
-import montiarc.cocos.TypeParameterNamesUnique;
 import montiarc.helper.SymbolPrinter;
 
 /**
@@ -62,7 +59,10 @@ public class GenericsTest extends AbstractCoCoTest {
   
   @Test
   public void testSubCompExtendsGenericComparableCompValid() {
-    checkValid(PACKAGE + "." + "SubCompExtendsGenericComparableCompValid");
+    final String modelName = PACKAGE + "." + "SubCompExtendsGenericComparableCompValid";
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ProhibitGenericsWithBounds());
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA072");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
   @Test
@@ -71,16 +71,19 @@ public class GenericsTest extends AbstractCoCoTest {
    * have to assign concrete type arguments to all generic type parameters.
    * (p.69, lst. 3.50)
    */
-  public void testcomponentExtendsGenericComponent() {
+  public void testComponentExtendsGenericComponent() {
     checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent");
-    checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent2");
+
+    final String modelName = PACKAGE + "." + "ComponentExtendsGenericComponent2";
+    MontiArcCoCoChecker cocos
+        = new MontiArcCoCoChecker().addCoCo(new ProhibitGenericsWithBounds());
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA072");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
     checkValid(PACKAGE + "." + "ComponentExtendsGenericComponent3");
 
     String fqModelName = PACKAGE + "." + "ComponentExtendsGenericComponent5";
-    ExpectedErrorInfo errors =
-        new ExpectedErrorInfo(1, "xMA088");
-    final MontiArcCoCoChecker cocos =
-        new MontiArcCoCoChecker().addCoCo(new AllGenericParametersOfSuperClassSet());
+    errors = new ExpectedErrorInfo(1, "xMA088");
+    cocos = new MontiArcCoCoChecker().addCoCo(new AllGenericParametersOfSuperClassSet());
     checkInvalid(cocos, loadComponentAST(fqModelName), errors);
 
     fqModelName = PACKAGE + "." + "ComponentExtendsGenericComponent6";
@@ -128,7 +131,7 @@ public class GenericsTest extends AbstractCoCoTest {
     final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
     final String qualifiedModelName = PACKAGE + "." + "AssignsWrongComplexTypeArgToSuperComp";
     final ExpectedErrorInfo errors
-        = new ExpectedErrorInfo(1, "xMA089");
+        = new ExpectedErrorInfo(2, "xMA089", "xMA072");
     checkInvalid(checker, loadComponentAST(qualifiedModelName) , errors);
   }
 
@@ -140,12 +143,18 @@ public class GenericsTest extends AbstractCoCoTest {
 
   @Test
   public void testSuperGenericComparableComp() {
-    checkValid(PACKAGE + "." + "SuperGenericComparableComp");
+    final String modelName = PACKAGE + "." + "SuperGenericComparableComp";
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ProhibitGenericsWithBounds());
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA072");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
 
   @Test
   public void testSuperGenericComparableComp2() {
-    checkValid(PACKAGE + "." + "SuperGenericComparableComp2");
+    final String modelName = PACKAGE + "." + "SuperGenericComparableComp2";
+    MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new ProhibitGenericsWithBounds());
+    ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA072");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
   @Test

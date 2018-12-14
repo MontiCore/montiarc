@@ -84,7 +84,8 @@ public class MontiArcCoCos {
         // TYPE CORRECTNESS
         .addCoCo(new AutomatonGuardIsNotBoolean())
         .addCoCo(new GenericInitValues())
-        
+        .addCoCo(new ProhibitGenericsWithBounds())
+
         // .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
          .addCoCo((MontiArcASTTransitionCoCo)new
          AutomatonReactionTypeDoesNotFitOutputType())

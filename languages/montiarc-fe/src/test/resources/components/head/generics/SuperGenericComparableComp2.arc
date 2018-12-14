@@ -1,7 +1,8 @@
 package components.head.generics;
 
 /*
- * Valid model.
+ * Invalid model.
+ * Generic type parameters with type bounds are currently prohibited. See #241
  */
 component SuperGenericComparableComp2<K, T extends Comparable<T>> {
 

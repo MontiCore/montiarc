@@ -39,9 +39,9 @@ component ConnectsPortsWithIncompatibleTypes {
 
   component HasGenericInputAndOutputPort<Integer> p9;
   
-  // correct
+  // ERROR: https://git.rwth-aachen.de/monticore/montiarc/core/issues/243
   connect p4.subTypeOut -> p5.superTypeIn;
-    // correct String -> String
+    // ERROR String -> String
   connect p6.tOut -> outString2;
   // correct Integer -> Integer
   connect inInteger2 -> p9.tIn;  

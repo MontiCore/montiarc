@@ -411,6 +411,7 @@ class ComponentGenerator {
         
         // set results to ports
         setResult(result);
+        this.update();
         }
         
       }
