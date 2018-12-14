@@ -70,7 +70,6 @@ abstract class BehaviorGenerator {
   }
 
   def String printConstructor(ComponentSymbol comp) {
-    var ComponentHelper helper = new ComponentHelper(comp)
     return '''
       public «comp.name»Impl(«ConfigurationParameters.print(comp)») {
         «FOR param : comp.configParameters»

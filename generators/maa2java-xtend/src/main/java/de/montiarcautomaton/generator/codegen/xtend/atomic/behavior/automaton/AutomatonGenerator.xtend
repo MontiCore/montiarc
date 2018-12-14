@@ -115,7 +115,6 @@ class AutomatonGenerator extends BehaviorGenerator {
       getInitialValues() {
         final «resultName» «helper.resultName» = new «resultName»();
         
-    
         // initial reaction
         «FOR assignment : helper.getInitialReaction(helper.initialState)»
           «IF assignment.isAssignment»
