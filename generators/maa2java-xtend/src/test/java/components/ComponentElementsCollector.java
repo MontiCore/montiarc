@@ -860,7 +860,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
           = Method
                 .getBuilder()
                 .setReturnType(GeneratorTestConstants.VOID_STRING)
-                .addParameter("port", expectedType)
+                .addParameter(name, expectedType)
                 .addBodyElement("this." + name + " = port;")
                 .setName("setPort" + portNameCapitalized);
       classVisitor.addMethod(setter.build());

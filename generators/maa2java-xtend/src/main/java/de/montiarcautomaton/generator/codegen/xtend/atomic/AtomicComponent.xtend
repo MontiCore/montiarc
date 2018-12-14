@@ -6,10 +6,12 @@
 package de.montiarcautomaton.generator.codegen.xtend.atomic
 
 import de.montiarcautomaton.generator.codegen.xtend.util.Generics
+import de.montiarcautomaton.generator.codegen.xtend.util.Getter
 import de.montiarcautomaton.generator.codegen.xtend.util.Imports
+import de.montiarcautomaton.generator.codegen.xtend.util.Member
+import de.montiarcautomaton.generator.codegen.xtend.util.Setter
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
-import de.montiarcautomaton.generator.codegen.xtend.util.Member
 
 /**
  * TODO: Write me!
@@ -61,14 +63,8 @@ class AtomicComponent {
       
         // port setter
         «FOR inPort : comp.ports»
-          public void setPort«inPort.name.toFirstUpper»(Port<«helper.printPortType(inPort)»> port) {
-            this.«inPort.name» = port;
-          }
-      
-        // port getter
-          public Port<«helper.printPortType(inPort)»> getPort«inPort.name.toFirstUpper»() {
-            return this.«inPort.name»;
-          }
+          «Getter.printGetter("Port<" + helper.printPortType(inPort) + ">", inPort.name, "Port" + inPort.name.toFirstUpper)»
+          «Setter.printSetter("Port<" + helper.printPortType(inPort) + ">", inPort.name, "Port" + inPort.name.toFirstUpper)»      
         «ENDFOR»
         
         // the components behavior implementation
