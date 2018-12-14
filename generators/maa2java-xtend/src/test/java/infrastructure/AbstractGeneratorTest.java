@@ -103,6 +103,18 @@ public class AbstractGeneratorTest {
      * expected Port<Number>, actual Port<T>
      */
     EXCLUDED_MODELS.add(TEST_MODEL_PATH.resolve("components/body/connectors/GenericSourceTypeIsSubtypeOfTargetType.arc"));
+
+    /**
+     * Reason: Issue #241, #243 invalidates super component
+     */
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH
+        .resolve("components/head/generics/SubSubCompExtendsGenericComparableCompValid.arc"));
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH
+        .resolve("components/head/generics/AssignsNonExistingTypeToSuperComp.arc"));
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH
+        .resolve("components/head/generics/ComponentExtendsGenericComponent.arc"));
+    EXCLUDED_MODELS.add(TEST_MODEL_PATH
+        .resolve("components/head/generics/ComponentExtendsGenericComponent3.arc"));
   }
 
   /**
