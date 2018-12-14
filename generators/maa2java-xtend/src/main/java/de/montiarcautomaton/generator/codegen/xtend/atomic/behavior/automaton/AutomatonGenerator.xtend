@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package de.montiarcautomaton.generator.codegen.xtend
+package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.automaton
 
 import de.montiarcautomaton.generator.helper.AutomatonHelper
 import montiarc._ast.ASTAutomaton
@@ -15,6 +15,7 @@ import montiarc._ast.ASTElement
 import montiarc._symboltable.ComponentSymbol
 import montiarc._symboltable.StateSymbol
 import de.montiarcautomaton.generator.helper.ComponentHelper
+import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.BehaviorGenerator
 
 class AutomatonGenerator extends BehaviorGenerator {
 

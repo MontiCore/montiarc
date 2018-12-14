@@ -21,6 +21,8 @@ import montiarc._ast.ASTBehaviorElement
 import montiarc._ast.ASTComponent
 import montiarc._ast.ASTJavaPBehavior
 import montiarc._symboltable.ComponentSymbol
+import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.automaton.AutomatonGenerator
+import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.javap.JavaPGenerator
 
 class ComponentGenerator {
   

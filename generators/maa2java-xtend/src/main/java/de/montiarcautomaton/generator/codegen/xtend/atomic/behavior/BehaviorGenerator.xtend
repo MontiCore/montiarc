@@ -3,7 +3,7 @@
  * 
  * http://www.se-rwth.de/
  */
-package de.montiarcautomaton.generator.codegen.xtend
+package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior;
 
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol

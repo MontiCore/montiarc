@@ -221,7 +221,6 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     }
     // Log checking
     Log.debug("Number of errors found: " + Log.getFindings().size(), "ComponentGenerationTest");
-    System.out.println(Log.getFindings());
     assertEquals(0, Log.getFindings().size());
   }
 

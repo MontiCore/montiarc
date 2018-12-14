@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package de.montiarcautomaton.generator.codegen.xtend
+package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.javap
 
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import de.monticore.java.javadsl._ast.ASTBlockStatement
@@ -19,6 +19,7 @@ import montiarc._ast.ASTElement
 import montiarc._ast.ASTJavaPBehavior
 import montiarc._ast.ASTJavaPInitializer
 import montiarc._symboltable.ComponentSymbol
+import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.BehaviorGenerator
 
 class JavaPGenerator extends BehaviorGenerator {
 
@@ -29,41 +30,41 @@ class JavaPGenerator extends BehaviorGenerator {
   override String generateCompute(ComponentSymbol comp) {
     var ComponentHelper helper = new ComponentHelper(comp);
     return '''
-      @Override
-      public «comp.name»Result
-                «IF helper.isGeneric»
-                  «FOR generic : helper.genericParameters SEPARATOR ','»
-                    «generic»
-                  «ENDFOR»
-                «ENDIF»
-                compute(«comp.name»Input
-                «IF helper.isGeneric»
-                  «FOR generic : helper.genericParameters SEPARATOR ','»
-                    «generic»
-                  «ENDFOR»
-                «ENDIF» «helper.inputName») {
-        // inputs
-        «FOR portIn : comp.incomingPorts»
-          final «helper.printPortType(portIn)» «portIn.name» = «helper.inputName».get«portIn.name.toFirstUpper»();
-        «ENDFOR»
-      
-        final «comp.name»Result «helper.resultName» = new «comp.name»Result();
-        
-        «FOR portOut : comp.outgoingPorts»
-          «helper.printPortType(portOut)» «portOut.name» = «helper.resultName».get«portOut.name.toFirstUpper»();
-        «ENDFOR»
-        
-        «««  print java statements here
+			@Override
+			public «comp.name»Result
+			          «IF helper.isGeneric»
+			          	«FOR generic : helper.genericParameters SEPARATOR ','»
+			          		«generic»
+			          	«ENDFOR»
+			          «ENDIF»
+			          compute(«comp.name»Input
+			          «IF helper.isGeneric»
+			          	«FOR generic : helper.genericParameters SEPARATOR ','»
+			          		«generic»
+			          	«ENDFOR»
+			          «ENDIF» «helper.inputName») {
+			  // inputs
+			  «FOR portIn : comp.incomingPorts»
+			  	final «helper.printPortType(portIn)» «portIn.name» = «helper.inputName».get«portIn.name.toFirstUpper»();
+			  «ENDFOR»
+			
+			  final «comp.name»Result «helper.resultName» = new «comp.name»Result();
+			  
+			  «FOR portOut : comp.outgoingPorts»
+			  	«helper.printPortType(portOut)» «portOut.name» = «helper.resultName».get«portOut.name.toFirstUpper»();
+			  «ENDFOR»
+			  
+			  «««  print java statements here
         «getJavaP(comp)»
-        
-        «««  always add all outgoing values to result
+			  
+			  «««  always add all outgoing values to result
         «FOR portOut : comp.outgoingPorts»
-          «helper.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
-        «ENDFOR»
-        return «helper.resultName»;
-      }
-      
-    '''
+			  	«helper.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
+			  «ENDFOR»
+			  return «helper.resultName»;
+			}
+			
+		'''
   }
 
   def getJavaP(ComponentSymbol comp) {
@@ -90,34 +91,34 @@ class JavaPGenerator extends BehaviorGenerator {
   override String generateGetInitialValues(ComponentSymbol comp) {
     var ComponentHelper helper = new ComponentHelper(comp)
     return '''
-      @Override
-       public «comp.name»Result
-             «IF helper.isGeneric»
-               «FOR generic : helper.genericParameters SEPARATOR ','»
-                 «generic»
-               «ENDFOR»
-             «ENDIF» getInitialValues() {
-         final «comp.name»Result «helper.resultName» = new «comp.name»Result();
-         
-         try {
-         «FOR portOut : comp.outgoingPorts»
-           «helper.printPortType(portOut)» «portOut.name» = null;
-         «ENDFOR»
-         
-         «FOR init : getInitializations(comp)»
-           «ComponentHelper.printInit(init)»    
-         «ENDFOR»
-      
-         «FOR portOut : comp.outgoingPorts»
-           «helper.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
-         «ENDFOR»
-         } catch(Exception e) {
-           e.printStackTrace();
-          }
-      
-          return result;
-       }
-    '''
+			@Override
+			 public «comp.name»Result
+			       «IF helper.isGeneric»
+			       	«FOR generic : helper.genericParameters SEPARATOR ','»
+			       		«generic»
+			       	«ENDFOR»
+			       «ENDIF» getInitialValues() {
+			   final «comp.name»Result «helper.resultName» = new «comp.name»Result();
+			   
+			   try {
+			   «FOR portOut : comp.outgoingPorts»
+			   	«helper.printPortType(portOut)» «portOut.name» = null;
+			   «ENDFOR»
+			   
+			   «FOR init : getInitializations(comp)»
+			   	«ComponentHelper.printInit(init)»    
+			   «ENDFOR»
+			
+			   «FOR portOut : comp.outgoingPorts»
+			   	«helper.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
+			   «ENDFOR»
+			   } catch(Exception e) {
+			     e.printStackTrace();
+			    }
+			
+			    return result;
+			 }
+		'''
   }
 
   def getInitializations(ComponentSymbol comp) {
