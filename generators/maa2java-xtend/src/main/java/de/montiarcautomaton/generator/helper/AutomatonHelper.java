@@ -87,11 +87,11 @@ public class AutomatonHelper extends ComponentHelper {
    * @param symbol the transition
    * @return
    */
-  public Collection<IOAssignmentHelper> getReaction(TransitionSymbol symbol) {
-    ArrayList<IOAssignmentHelper> assignments = new ArrayList<>();
+  public Collection<ASTIOAssignment> getReaction(TransitionSymbol symbol) {
+    ArrayList<ASTIOAssignment> assignments = new ArrayList<>();
     if (symbol.getReactionAST().isPresent()) {
       for (ASTIOAssignment assignment : symbol.getReactionAST().get().getIOAssignmentList()) {
-        assignments.add(new IOAssignmentHelper(assignment));
+        assignments.add(assignment);
       }
     }
     return assignments;
@@ -131,11 +131,11 @@ public class AutomatonHelper extends ComponentHelper {
    * @param symbol the initial state
    * @return
    */
-  public Collection<IOAssignmentHelper> getInitialReaction(StateSymbol symbol) {
-    ArrayList<IOAssignmentHelper> assignments = new ArrayList<>();
+  public Collection<ASTIOAssignment> getInitialReaction(StateSymbol symbol) {
+    ArrayList<ASTIOAssignment> assignments = new ArrayList<>();
     if (symbol.getInitialReactionAST().isPresent()) {
       for (ASTIOAssignment assignment : symbol.getInitialReactionAST().get().getIOAssignmentList()) {
-        assignments.add(new IOAssignmentHelper(assignment));
+        assignments.add(assignment);
       }
     }
     return assignments;

@@ -17,6 +17,14 @@ import montiarc._ast.ASTComponent
 import montiarc._ast.ASTElement
 import montiarc._symboltable.ComponentSymbol
 import montiarc._symboltable.StateSymbol
+import montiarc._symboltable.VariableSymbol
+import de.monticore.mcexpressions._ast.ASTExpression
+import de.monticore.prettyprint.IndentPrinter
+import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor
+import de.monticore.java.prettyprint.JavaDSLPrettyPrinter
+import java.util.Optional
+import montiarc._ast.ASTValueList
+import montiarc._ast.ASTIOAssignment
 
 class AutomatonGenerator extends BehaviorGenerator {
 
@@ -74,13 +82,13 @@ class AutomatonGenerator extends BehaviorGenerator {
                 //reaction
                 «FOR assignment : helper.getReaction(transition)»
                   «IF assignment.isAssignment»
-                    «IF assignment.isVariable(assignment.left)»
-                      «assignment.left» = «assignment.right»;
+                    «IF isVariable(assignment.name, assignment)»
+                      «assignment.name» = «printRightHandSide(assignment)»;
                     «ELSE»
-                      «helper.resultName».set«assignment.left.toFirstUpper»(«assignment.right»);
+                      «helper.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
                     «ENDIF»
                   «ELSE»
-                    «assignment.right»;  
+                    «printRightHandSide(assignment)»;  
                   «ENDIF»
                 «ENDFOR»
                 
@@ -118,10 +126,10 @@ class AutomatonGenerator extends BehaviorGenerator {
         // initial reaction
         «FOR assignment : helper.getInitialReaction(helper.initialState)»
           «IF assignment.isAssignment»
-            «IF helper.isPort(assignment.left)»
-              «helper.resultName».set«assignment.left.toFirstUpper»(«assignment.right»);
+            «IF helper.isPort(assignment.name)»
+              «helper.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
             «ELSE»
-              «assignment.left» = «assignment.right»;
+              «assignment.name» = «printRightHandSide(assignment)»;
             «ENDIF»
           «ENDIF»
         «ENDFOR»
@@ -130,6 +138,61 @@ class AutomatonGenerator extends BehaviorGenerator {
         return «helper.resultName»;
       }
     '''
+  }
+  
+  
+  
+  
+  /**
+   * Returns <tt>true</tt> if the given name is a variable name.
+   * 
+   * @param name
+   * @return
+   */
+  def private boolean isVariable(String name, ASTIOAssignment assignment) {
+    var Optional<VariableSymbol> symbol = assignment.getEnclosingScopeOpt().get()
+        .<VariableSymbol> resolve(name, VariableSymbol.KIND);
+    if (symbol.isPresent()) {
+      return true;
+    }
+    return false;
+  }
+  
+  /**
+   * Returns the right side of an assignment/comparison. ValueLists &
+   * Alternatives are not supported.
+   * 
+   * @return
+   */
+  def private String printRightHandSide(ASTIOAssignment assignment) {
+    if (assignment.isPresentAlternative()) {
+      throw new RuntimeException("Alternatives not supported.");
+    }
+    else {
+      var ASTValueList vl = assignment.getValueList();
+      if (vl.isPresentValuation()) {
+        return printExpression(vl.getValuation().getExpression(), assignment);
+      }
+      else {
+        throw new RuntimeException("ValueLists not supported.");
+      }
+    }
+  }
+  
+  /**
+   * Prints the java expression of the given AST expression node.
+   * 
+   * @param expr
+   * @return
+   */
+  def private String printExpression(ASTExpression expr, ASTIOAssignment assignment) {
+    var IndentPrinter printer = new IndentPrinter();
+    var JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(printer);
+    if (assignment.isAssignment) {
+      prettyPrinter = new CDAttributeGetterTransformationVisitor(printer);
+    }
+    expr.accept(prettyPrinter);
+    return printer.getContent();
   }
   
 }
