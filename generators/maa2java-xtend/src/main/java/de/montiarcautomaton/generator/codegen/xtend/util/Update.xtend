@@ -17,19 +17,45 @@ import montiarc._symboltable.ComponentSymbol
  *
  */
 class Update {
-    def static printUpdate(ComponentSymbol comp) {
+  def static printUpdate(ComponentSymbol comp) {
+    if (comp.isDecomposed) {
+    	return printUpdateComposed(comp)
+    } else {
+    	return printUpdateAtomic(comp)
+    }
+  }
+  
+  
+  def private static printUpdateComposed(ComponentSymbol comp){
     return 
     '''
     @Override
-      public void update() {
-        // update subcomponent instances
-        «IF comp.superComponent.present»
-          super.update();
-        «ENDIF»
-        «FOR subcomponent : comp.subComponents»
-          this.«subcomponent.name».update();
-        «ENDFOR»
-      }
+    public void update() {
+      // update subcomponent instances
+      «IF comp.superComponent.present»
+        super.update();
+      «ENDIF»
+      «FOR subcomponent : comp.subComponents»
+        this.«subcomponent.name».update();
+      «ENDFOR»
+    }
+    '''
+  }
+  
+  def private static printUpdateAtomic(ComponentSymbol comp){
+    return 
+    '''
+    @Override
+    public void update() {
+    «IF comp.superComponent.present»
+      super.update();
+    «ENDIF»
+  
+    // update computed value for next computation cycle in all outgoing ports
+    «FOR portOut : comp.outgoingPorts»
+      this.«portOut.name».update();
+    «ENDFOR»
+    }
     '''
   }
 }

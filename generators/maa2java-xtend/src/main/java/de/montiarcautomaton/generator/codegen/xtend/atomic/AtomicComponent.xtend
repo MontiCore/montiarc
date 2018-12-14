@@ -5,11 +5,15 @@
  */
 package de.montiarcautomaton.generator.codegen.xtend.atomic
 
+import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
 import de.montiarcautomaton.generator.codegen.xtend.util.Generics
 import de.montiarcautomaton.generator.codegen.xtend.util.Getter
 import de.montiarcautomaton.generator.codegen.xtend.util.Imports
+import de.montiarcautomaton.generator.codegen.xtend.util.Init
 import de.montiarcautomaton.generator.codegen.xtend.util.Member
 import de.montiarcautomaton.generator.codegen.xtend.util.Setter
+import de.montiarcautomaton.generator.codegen.xtend.util.Setup
+import de.montiarcautomaton.generator.codegen.xtend.util.Update
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
 
@@ -41,8 +45,7 @@ class AtomicComponent {
       public class «comp.name»«Generics.printGenerics(comp)»      
       «IF comp.superComponent.present» extends «comp.superComponent.get.fullName» 
         «IF helper.isSuperComponentGeneric»<«FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
-          «scTypeParams»
-        «ENDFOR»>«ENDIF»
+          «scTypeParams»«ENDFOR»>«ENDIF»
       «ENDIF»
       implements IComponent {
         
@@ -64,64 +67,44 @@ class AtomicComponent {
         // port setter
         «FOR inPort : comp.ports»
           «Getter.printGetter("Port<" + helper.printPortType(inPort) + ">", inPort.name, "Port" + inPort.name.toFirstUpper)»
-          «Setter.printSetter("Port<" + helper.printPortType(inPort) + ">", inPort.name, "Port" + inPort.name.toFirstUpper)»      
+          «Setter.printSetter("Port<" + helper.printPortType(inPort) + ">", inPort.name, "Port" + inPort.name.toFirstUpper)»
         «ENDFOR»
         
         // the components behavior implementation
-        private final IComputable
-        <«comp.name»Input«generics», «comp.name»Result«generics»>
-        «helper.behaviorImplName»;      
+        private final IComputable<«comp.name»Input«generics», «comp.name»Result«generics»> «helper.behaviorImplName»;
       
-        
-        public «comp.name»(«FOR param : comp.configParameters SEPARATOR ','» «helper.getParamTypeName(param)» «param.name»«ENDFOR») {
+
+        public «comp.name»(«ConfigurationParameters.print(comp)») {
           «IF comp.superComponent.isPresent»
           super(«FOR inhParam : helper.getInheritedParams() SEPARATOR ','» «inhParam» «ENDFOR»);
           «ENDIF»
           «helper.behaviorImplName» = new «comp.name»Impl«generics»(
-          «IF comp.hasConfigParameters» «FOR param : comp.configParameters SEPARATOR ','» «param.name» «ENDFOR» «ENDIF»);
+          «IF comp.hasConfigParameters»
+            «FOR param : comp.configParameters SEPARATOR ','»
+              «param.name»
+            «ENDFOR»
+          «ENDIF»);
           
           // config parameters
           «FOR param : comp.configParameters»
-        this.«param.name» = «param.name»;
-        «ENDFOR»
+            this.«param.name» = «param.name»;
+          «ENDFOR»
         }
         
-        @Override
-        public void setUp() {
-        «IF comp.superComponent.present»
-          super.setUp();
-        «ENDIF»
-        // set up output ports
+        «Setup.printSetup(comp)»
+        
+        «Init.printInit(comp)»
+        
+        
+        private void setResult(«comp.name»Result«generics» result) {
         «FOR portOut : comp.outgoingPorts»
-          this.«portOut.name» = new Port<«helper.printPortType(portOut)»>();
-        «ENDFOR»
-        
-        this.initialize();
-        }
-        
-        @Override
-        public void init() {
-        «IF comp.superComponent.present»
-          super.init();
-        «ENDIF»
-        // set up unused input ports
-        «FOR portIn : comp.incomingPorts»
-          if (this.«portIn.name» == null) {
-            this.«portIn.name» = Port.EMPTY;
-          }
+          this.getPort«portOut.name.toFirstUpper»().setNextValue(result.get«portOut.name.toFirstUpper»());
         «ENDFOR»
         }
-        
-       private void setResult(«comp.name»Result«generics» result) {
-       «FOR portOut : comp.outgoingPorts»
-        this.getPort«portOut.name.toFirstUpper»().setNextValue(result.get«portOut.name.toFirstUpper»());
-       «ENDFOR»
-       
-       }
       
         @Override
         public void compute() {
-          // collect current input port values
+        // collect current input port values
         final «comp.name»Input«generics» input = new «comp.name»Input«generics»
         («FOR inPort : comp.allIncomingPorts SEPARATOR ','»this.getPort«inPort.name.toFirstUpper»().getCurrentValue()«ENDFOR»);
         
@@ -136,15 +119,7 @@ class AtomicComponent {
           }
         }
       
-        @Override
-        public void update() {
-          «IF comp.superComponent.present»super.update();«ENDIF»
-      
-          // update computed value for next computation cycle in all outgoing ports
-          «FOR portOut : comp.outgoingPorts»
-            this.«portOut.name».update();
-          «ENDFOR»
-        }
+        «Update.printUpdate(comp)»
         
         private void initialize() {
            // get initial values from behavior implementation
