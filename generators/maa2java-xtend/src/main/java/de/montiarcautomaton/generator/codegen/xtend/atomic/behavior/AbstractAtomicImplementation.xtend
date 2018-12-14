@@ -9,6 +9,7 @@ import de.montiarcautomaton.generator.codegen.xtend.util.Generics
 import de.montiarcautomaton.generator.codegen.xtend.util.Imports
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
+import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
 
 /**
  * TODO: Write me!
@@ -32,7 +33,7 @@ class AbstractAtomicImplementation {
       class «comp.name»Impl«generics»     
       implements IComputable<«comp.name»Input«generics», «comp.name»Result«generics»> {
       
-        public «comp.name»Impl(«FOR param : comp.configParameters SEPARATOR ','» «helper.getParamTypeName(param)» «param.name» «ENDFOR») {
+        public «comp.name»Impl(«ConfigurationParameters.print(comp)») {
           throw new Error("Invoking constructor on abstract implementation «comp.packageName».«comp.name»");
         }
       

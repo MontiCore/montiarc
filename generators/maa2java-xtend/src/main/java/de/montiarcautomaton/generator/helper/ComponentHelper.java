@@ -78,38 +78,6 @@ public class ComponentHelper {
     }
   }
   
-  /**
-   * Print the initial value for a parameter. If the parameter is a default
-   * parameter, then the default value is printed, other wise the name of the
-   * parameter is printed.
-   * 
-   * @param parameter The parameter to print the initial value of
-   * @return The printed initial value
-   */
-  public String printInitialValue(ASTParameter parameter) {
-    String value;
-    if (parameter.isPresentDefaultValue()) {
-      ASTValuation defaultValue = parameter.getDefaultValue();
-      value = javaPrinter.prettyprint(defaultValue.getExpression());
-    }
-    else {
-      value = parameter.getName();
-    }
-    return value;
-  }
-  
-  public static String printInit(ASTValueInitialization init) {
-    String ret = "";
-    JavaDSLPrettyPrinter printer = new JavaDSLPrettyPrinter(new IndentPrinter());
-    String name = Names.getQualifiedName(init.getQualifiedName().getPartList());
-    ret += name;
-    ret += " = ";
-    ret += printer.prettyprint(init.getValuation().getExpression());
-    ret += ";";
-    
-    return ret;
-    
-  }
   
   /**
    * Prints the type of the given port respecting inherited ports and the actual
@@ -275,6 +243,23 @@ public class ComponentHelper {
     return result.toString();
   }
   
+  public static ASTType getParamType(JFieldSymbol symbol, ComponentSymbol comp) {
+    return ((ASTComponent) comp.getAstNode().get()).getHead().getParameterList().stream().filter(p -> p.getName().equals(symbol.getName())).findFirst().get().getType();
+  }
+  
+  /**
+   * Pretty print the ast type node with removed spaces.
+   * 
+   * @param astType The node to print
+   * @return The printed node
+   */
+  public static String printTypeName(ASTType astType) {
+    TypesPrettyPrinterConcreteVisitor typesPrinter = new de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor(
+        new IndentPrinter());
+    return autobox(
+        typesPrinter.prettyprint(astType).replaceAll(" ", ""));
+  }
+  
   /**
    * Prints a type reference with dimension and type arguments.
    *
@@ -354,78 +339,6 @@ public class ComponentHelper {
     return autoBoxedTypeName;
   }
   
-  /**
-   * Prints the type of the port without any alterations. This means, that this
-   * is a pretty print of the port type as in the AST
-   * 
-   * @param var the symbol of the port for which the type should be printed.
-   * @return The printed port type
-   */
-  public String printPortType(PortSymbol port) {
-    Optional<ASTType> type = findPortTypeByName(port.getName());
-    return type.map(this::printTypeName).orElse("");
-  }
-  
-  /**
-   * Find the AST Node for the type of the port with the given name
-   * 
-   * @param name Name of the port for which to find the ast node
-   * @return Optional containing the node of the type, if present.
-   * {@link Optional#empty()}, otherwise.
-   */
-  private Optional<ASTType> findPortTypeByName(String name) {
-    final Optional<PortSymbol> port1 = component.getAllPorts().stream().filter(n -> n.getName().equals(name)).findAny();
-    return port1.map(portSymbol -> ((ASTPort) portSymbol.getAstNode().get()).getType());
-  }
-  
-  public String printVariableTypeName(VariableSymbol var) {
-    String name = var.getName();
-    Optional<ASTType> optType = findVariableTypeByName(name);
-    return optType.map(this::printTypeName).orElse("");
-  }
-  
-  private Optional<ASTType> findVariableTypeByName(String name) {
-    for (ASTElement e : componentNode.getBody().getElementList()) {
-      if (e instanceof ASTVariableDeclaration) {
-        ASTVariableDeclaration variableDeclaration = (ASTVariableDeclaration) e;
-        if (variableDeclaration.getNameList().contains(name)) {
-          return Optional.of(variableDeclaration.getType());
-        }
-      }
-    }
-    return Optional.empty();
-  }
-  
-  public String printParamTypeName(JFieldSymbol param) {
-    String name = param.getName();
-    Optional<ASTType> optType = findParamTypeByName(name);
-    return optType.map(this::printTypeName).orElse("");
-  }
-  
-  private Optional<ASTType> findParamTypeByName(String name) {
-    for (ASTParameter p : componentNode.getHead().getParameterList()) {
-      if (name.equals(p.getName())) {
-        return Optional.of(p.getType());
-      }
-    }
-    return Optional.empty();
-  }
-  
-  /**
-   * Pretty print the ast type node with removed spaces.
-   * 
-   * @param astType The node to print
-   * @return The printed node
-   */
-  private String printTypeName(ASTType astType) {
-    return autobox(
-        typesPrinter.prettyprint(astType).replaceAll(" ", ""));
-  }
-  
-  public String getVariableTypeName(ASTComponent comp, VariableSymbol var) {
-    return printFqnTypeName(comp, var.getTypeReference());
-  }
-  
   public String getParamTypeName(JFieldSymbol param) {
     return getParamTypeName(componentNode, param);
   }
@@ -492,15 +405,6 @@ public class ComponentHelper {
    * @return The printed subcomponent type
    */
   public String getSubComponentTypeName(ComponentInstanceSymbol instance) {
-    
-    // if (instance.getComponentType().getAstNode().isPresent()) {
-    // return typesPrinter
-    // .prettyprint((ASTTypesNode)
-    // instance.getComponentType().getAstNode().get());
-    // }
-    // else {
-    // return instance.getComponentType().getName();
-    // }
     String result = "";
     final ComponentSymbolReference componentTypeReference = instance.getComponentType();
     result += componentTypeReference.getFullName();
@@ -586,18 +490,25 @@ public class ComponentHelper {
   }
   
   /**
-   * Determine whether the compmonent is deployable.
+   * Checks whether the given typeName for the component comp is a generic
+   * parameter.
    *
-   * @return <tt>true</tt> if the component is deployable, {@code false}
-   * otherwise.
-   * @throws RuntimeException if the component is deployable and has parameters
+   * @param comp
+   * @param typeName
+   * @return
    */
-  public boolean isDeploy() {
-    if (component.getStereotype().containsKey(DEPLOY_STEREOTYPE)) {
-      if (!component.getConfigParameters().isEmpty()) {
-        throw new RuntimeException("Config parameters are not allowed for a depolyable component.");
+  private boolean isGenericTypeName(ASTComponent comp, String typeName) {
+    if (comp == null) {
+      return false;
+    }
+    if (comp.getHead().isPresentGenericTypeParameters()) {
+      List<ASTTypeVariableDeclaration> parameterList = comp.getHead().getGenericTypeParameters()
+          .getTypeVariableDeclarationList();
+      for (ASTTypeVariableDeclaration type : parameterList) {
+        if (type.getName().equals(typeName)) {
+          return true;
+        }
       }
-      return true;
     }
     return false;
   }
@@ -624,45 +535,6 @@ public class ComponentHelper {
     return autobox(name);
   }
   
-  /**
-   * Checks whether the given typeName for the component comp is a generic
-   * parameter.
-   *
-   * @param comp
-   * @param typeName
-   * @return
-   */
-  private boolean isGenericTypeName(ASTComponent comp, String typeName) {
-    if (comp == null) {
-      return false;
-    }
-    if (comp.getHead().isPresentGenericTypeParameters()) {
-      List<ASTTypeVariableDeclaration> parameterList = comp.getHead().getGenericTypeParameters()
-          .getTypeVariableDeclarationList();
-      for (ASTTypeVariableDeclaration type : parameterList) {
-        if (type.getName().equals(typeName)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-  
-  /**
-   * Determine whether the component has a super component
-   * 
-   * @return True, if the component has a super component. False, otherwise
-   */
-  public boolean hasSuperComp() {
-    return component.getSuperComponent().isPresent();
-  }
-  
-  public String getSuperComponentFqn() {
-    if (component.getSuperComponent().isPresent()) {
-      return component.getSuperComponent().get().getFullName();
-    }
-    return "";
-  }
   
   /**
    * Determine whether the super component has generic type parameters Note:
@@ -702,61 +574,10 @@ public class ComponentHelper {
     return paramList;
   }
   
-  public static Optional<ASTJavaPInitializer> getComponentInitialization(ComponentSymbol comp) {
-    Optional<ASTJavaPInitializer> ret = Optional.empty();
-    Optional<ASTNode> ast = comp.getAstNode();
-    if (ast.isPresent()) {
-      ASTComponent compAST = (ASTComponent) ast.get();
-      for (ASTElement e : compAST.getBody().getElementList()) {
-        if (e instanceof ASTJavaPInitializer) {
-          ret = Optional.of((ASTJavaPInitializer) e);
-          
-        }
-      }
-    }
-    return ret;
-  }
-  
-  /**
-   * Determine whether the component is a generic component
-   * 
-   * @return True, iff the component has at least one generic type parameter
-   */
-  public boolean isGeneric() {
-    return componentNode.getHead().isPresentGenericTypeParameters();
-  }
-  
-  /**
-   * Determine the generic type parameters of the component. The result includes
-   * the interfaces of the type parameters. This means for
-   * 
-   * <pre>
-   * {@code component<T extends Number & java.io.Serializable>{}}
-   * </pre>
-   * 
-   * the returned list consists of
-   * 
-   * <pre>
-   * {@code "T extends java.lang.Number & java.io.Serializable"}
-   * </pre>
-   *
-   * Note: Used in ComposedComponent.ftl
-   * 
-   * @return A list of printed type parameters with bounds.
-   */
-  public List<String> getGenericTypeParametersWithInterfaces() {
-    List<String> output = new ArrayList<>();
-    if (isGeneric()) {
-      for (JTypeSymbol parameter : component.getFormalTypeParameters()) {
-        output.add(SymbolPrinter.printTypeParameterWithInterfaces(parameter));
-      }
-    }
-    return output;
-  }
   
   public List<String> getGenericParameters() {
     List<String> output = new ArrayList<>();
-    if (isGeneric()) {
+    if (componentNode.getHead().isPresentGenericTypeParameters()) {
       List<ASTTypeVariableDeclaration> parameterList = componentNode.getHead()
           .getGenericTypeParameters().getTypeVariableDeclarationList();
       for (ASTTypeVariableDeclaration variableDeclaration : parameterList) {
@@ -782,25 +603,6 @@ public class ComponentHelper {
     return result;
   }
   
-  public List<PortSymbol> getSuperInPorts() {
-    return component.getSuperComponent().isPresent()
-        ? component.getSuperComponent().get().getAllIncomingPorts()
-        : Collections.emptyList();
-  }
-  
-  public List<PortSymbol> getAllInPorts() {
-    return component.getAllIncomingPorts();
-  }
-  
-  public List<PortSymbol> getSuperOutPorts() {
-    return component.getSuperComponent().isPresent()
-        ? component.getSuperComponent().get().getAllOutgoingPorts()
-        : Collections.emptyList();
-  }
-  
-  public List<PortSymbol> getAllOutPorts() {
-    return component.getAllOutgoingPorts();
-  }
   
   /**
    * Checks whether component parameter, variable, subcomponent instance, or

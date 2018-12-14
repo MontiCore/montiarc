@@ -15,6 +15,8 @@ import de.montiarcautomaton.generator.codegen.xtend.util.Setter
 import de.montiarcautomaton.generator.codegen.xtend.util.Setup
 import de.montiarcautomaton.generator.codegen.xtend.util.Update
 import de.montiarcautomaton.generator.helper.ComponentHelper
+import montiarc._ast.ASTPort
+import montiarc._ast.ASTVariableDeclaration
 import montiarc._symboltable.ComponentSymbol
 
 /**
@@ -51,23 +53,23 @@ class AtomicComponent {
         
         // component variables
         «FOR v : comp.variables»
-          «Member.print(helper.printVariableTypeName(v), v.name, "protected")»
+          «Member.print(ComponentHelper.printTypeName((v.astNode.get as ASTVariableDeclaration).type), v.name, "protected")»
         «ENDFOR»
         
         // config parameters
         «FOR param : comp.configParameters»
-          «Member.print(helper.printParamTypeName(param), param.name, "private final")»
+          «Member.print(ComponentHelper.printTypeName(ComponentHelper.getParamType(param, comp)), param.name, "private final")»
         «ENDFOR»
         
         // port fields
         «FOR port : comp.ports»
-          «Member.print("Port<" + helper.printPortType(port)+">", port.name, "protected")»
+          «Member.print("Port<" + ComponentHelper.printTypeName((port.astNode.get as ASTPort).type)+">", port.name, "protected")»
         «ENDFOR»      
       
         // port setter
         «FOR inPort : comp.ports»
-          «Getter.print("Port<" + helper.printPortType(inPort) + ">", inPort.name, "Port" + inPort.name.toFirstUpper)»
-          «Setter.print("Port<" + helper.printPortType(inPort) + ">", inPort.name, "Port" + inPort.name.toFirstUpper)»
+          «Getter.print("Port<" + ComponentHelper.printTypeName((inPort.astNode.get as ASTPort).type) + ">", inPort.name, "Port" + inPort.name.toFirstUpper)»
+          «Setter.print("Port<" + ComponentHelper.printTypeName((inPort.astNode.get as ASTPort).type) + ">", inPort.name, "Port" + inPort.name.toFirstUpper)»
         «ENDFOR»
         
         // the components behavior implementation
@@ -133,4 +135,6 @@ class AtomicComponent {
       }
     '''
   }
+  
+  
 }

@@ -20,7 +20,11 @@ import montiarc._ast.ASTComponent
 import montiarc._ast.ASTElement
 import montiarc._ast.ASTJavaPBehavior
 import montiarc._ast.ASTJavaPInitializer
+import montiarc._ast.ASTPort
 import montiarc._symboltable.ComponentSymbol
+import de.se_rwth.commons.Names
+import montiarc._ast.ASTValueInitialization
+import de.monticore.ast.ASTNode
 
 class JavaPGenerator extends BehaviorGenerator {
 
@@ -36,13 +40,13 @@ class JavaPGenerator extends BehaviorGenerator {
                 compute(«comp.name»Input«Generics.print(comp)» «helper.inputName») {
         // inputs
         «FOR portIn : comp.incomingPorts»
-          final «helper.printPortType(portIn)» «portIn.name» = «helper.inputName».get«portIn.name.toFirstUpper»();
+          final «ComponentHelper.printTypeName((portIn.astNode.get as ASTPort).type)» «portIn.name» = «helper.inputName».get«portIn.name.toFirstUpper»();
         «ENDFOR»
       
         final «comp.name»Result «helper.resultName» = new «comp.name»Result();
         
         «FOR portOut : comp.outgoingPorts»
-          «helper.printPortType(portOut)» «portOut.name» = «helper.resultName».get«portOut.name.toFirstUpper»();
+          «ComponentHelper.printTypeName((portOut.astNode.get as ASTPort).type)» «portOut.name» = «helper.resultName».get«portOut.name.toFirstUpper»();
         «ENDFOR»
         
         «««  print java statements here
@@ -88,11 +92,11 @@ class JavaPGenerator extends BehaviorGenerator {
          
          try {
          «FOR portOut : comp.outgoingPorts»
-           «helper.printPortType(portOut)» «portOut.name» = null;
+           «ComponentHelper.printTypeName((portOut.astNode.get as ASTPort).type)» «portOut.name» = null;
          «ENDFOR»
          
          «FOR init : getInitializations(comp)»
-           «ComponentHelper.printInit(init)»    
+           «printInit(init)»   
          «ENDFOR»
       
          «FOR portOut : comp.outgoingPorts»
@@ -107,12 +111,34 @@ class JavaPGenerator extends BehaviorGenerator {
     '''
   }
 
+
   def getInitializations(ComponentSymbol comp) {
-    var Optional<ASTJavaPInitializer> initialize = ComponentHelper.getComponentInitialization(comp);
+    var Optional<ASTJavaPInitializer> initialize = Optional.empty();
+    var Optional<ASTNode> ast = comp.getAstNode();
+    if (ast.isPresent()) {
+      var ASTComponent compAST = ast.get() as ASTComponent;
+      for (ASTElement e : compAST.getBody().getElementList()) {
+        if (e instanceof ASTJavaPInitializer) {
+          initialize = Optional.of(e);
+        }
+      }
+    }
     if (initialize.isPresent) {
       return initialize.get.valueInitializationList;
     }
     return Collections.EMPTY_LIST;
+  }
+
+  def String printInit(ASTValueInitialization init) {
+    var String ret = "";
+    var JavaDSLPrettyPrinter printer = new JavaDSLPrettyPrinter(new IndentPrinter());
+    var String name = Names.getQualifiedName(init.getQualifiedName().getPartList());
+    ret += name;
+    ret += " = ";
+    ret += printer.prettyprint(init.getValuation().getExpression());
+    ret += ";";
+
+    return ret;
   }
 
 }

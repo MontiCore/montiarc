@@ -10,6 +10,7 @@ import de.montiarcautomaton.generator.codegen.xtend.util.Generics
 import de.montiarcautomaton.generator.codegen.xtend.util.Member
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
+import montiarc._ast.ASTVariableDeclaration
 
 /**
  * TODO: Write me!
@@ -46,12 +47,12 @@ abstract class BehaviorGenerator {
         
       //component variables
       «FOR compVar : comp.variables»
-        «Member.print(helper.printVariableTypeName(compVar), compVar.name, "private")»
+        «Member.print(ComponentHelper.printTypeName((compVar.astNode.get as ASTVariableDeclaration).type), compVar.name, "private")»
       «ENDFOR» 
       
       // config parameters
       «FOR param : comp.configParameters»
-        «Member.print(helper.printParamTypeName(param), param.name, "private final")»
+        «Member.print(ComponentHelper.printTypeName(ComponentHelper.getParamType(param, comp)), param.name, "private final")»
       «ENDFOR»
       
       

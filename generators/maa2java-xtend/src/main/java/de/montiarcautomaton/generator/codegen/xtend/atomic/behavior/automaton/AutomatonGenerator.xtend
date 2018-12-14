@@ -8,6 +8,7 @@
 package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.automaton
 
 import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.BehaviorGenerator
+
 import de.montiarcautomaton.generator.codegen.xtend.util.Generics
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor
@@ -23,6 +24,7 @@ import montiarc._ast.ASTAutomatonBehavior
 import montiarc._ast.ASTComponent
 import montiarc._ast.ASTElement
 import montiarc._ast.ASTIOAssignment
+import montiarc._ast.ASTPort
 import montiarc._ast.ASTValueList
 import montiarc._symboltable.ComponentSymbol
 import montiarc._symboltable.StateSymbol
@@ -31,13 +33,13 @@ import montiarc._symboltable.VariableSymbol
 
 class AutomatonGenerator extends BehaviorGenerator {
 
-  private var Collection<StateSymbol> states
+  var Collection<StateSymbol> states
 
-  private var Collection<VariableSymbol> variables
+  var Collection<VariableSymbol> variables
 
-  private var Collection<TransitionSymbol> transitions
+  var Collection<TransitionSymbol> transitions
 
-  private var ComponentSymbol comp;
+  var ComponentSymbol comp;
 
   new(ComponentSymbol component) {
     this.comp = comp
@@ -80,7 +82,6 @@ class AutomatonGenerator extends BehaviorGenerator {
   override String printCompute(ComponentSymbol comp) {
     var resultName = comp.name + "Result"
     var ASTAutomaton automaton = null
-//    var AutomatonHelper helper = new AutomatonHelper(comp)
     var ComponentHelper helper = new ComponentHelper(comp)
     for (ASTElement element : (comp.astNode.get as ASTComponent).body.elementList) {
       if (element instanceof ASTAutomatonBehavior) {
@@ -93,7 +94,7 @@ class AutomatonGenerator extends BehaviorGenerator {
             compute(«comp.name»Input«Generics.print(comp)» «helper.inputName») {
           // inputs
           «FOR inPort : comp.incomingPorts»
-            final «helper.printPortType(inPort)» «inPort.name» = «helper.inputName».get«inPort.name.toFirstUpper»();
+            final «ComponentHelper.printTypeName((inPort.astNode.get as ASTPort).type)» «inPort.name» = «helper.inputName».get«inPort.name.toFirstUpper»();
           «ENDFOR»
           
           final «resultName» «helper.resultName» = new «resultName»();

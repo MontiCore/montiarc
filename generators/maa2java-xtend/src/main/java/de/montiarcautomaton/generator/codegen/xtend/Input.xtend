@@ -6,8 +6,10 @@
 package de.montiarcautomaton.generator.codegen.xtend
 
 import de.montiarcautomaton.generator.helper.ComponentHelper
+
 import montiarc._symboltable.ComponentSymbol
 import de.montiarcautomaton.generator.codegen.xtend.util.Generics
+import de.montiarcautomaton.generator.codegen.xtend.util.Member
 
 /**
  * TODO: Write me!
@@ -41,7 +43,7 @@ class Input {
        {
         
         «FOR port : comp.incomingPorts»
-          private «helper.getRealPortTypeString(port)» «port.name»;
+          «Member.print(helper.getRealPortTypeString(port), port.name, "protected")»
         «ENDFOR»
         
         public «comp.name»Input() {

@@ -8,6 +8,9 @@ package de.montiarcautomaton.generator.codegen.xtend
 import montiarc._symboltable.ComponentSymbol
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import de.montiarcautomaton.generator.codegen.xtend.util.Generics
+import de.montiarcautomaton.generator.codegen.xtend.util.Member
+import de.montiarcautomaton.generator.codegen.xtend.util.Getter
+import de.montiarcautomaton.generator.codegen.xtend.util.Setter
 
 /**
  * TODO: Write me!
@@ -37,7 +40,7 @@ class Result {
        {
         
         «FOR port : comp.outgoingPorts»
-          private «helper.getRealPortTypeString(port)» «port.name»;
+            «Member.print(helper.getRealPortTypeString(port), port.name, "private")»
         «ENDFOR»
         
         public «comp.name»Result() {
@@ -60,16 +63,12 @@ class Result {
       
       //getter  
       «FOR port : comp.outgoingPorts»
-        public «helper.getRealPortTypeString(port)» get«port.name.toFirstUpper»() {
-          return this.«port.name»;
-        }
+        «Getter.print(helper.getRealPortTypeString(port), port.name, port.name.toFirstUpper)»
       «ENDFOR»
       
         // setter
         «FOR port : comp.outgoingPorts»
-        public void set«port.name.toFirstUpper»(«helper.getRealPortTypeString(port)» «port.name») {
-          this.«port.name» = «port.name»;
-        }
+          «Setter.print(helper.getRealPortTypeString(port), port.name, port.name.toFirstUpper)»
         «ENDFOR»
       
       @Override

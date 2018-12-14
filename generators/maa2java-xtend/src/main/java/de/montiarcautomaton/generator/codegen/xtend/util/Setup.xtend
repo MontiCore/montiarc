@@ -6,7 +6,9 @@
 package de.montiarcautomaton.generator.codegen.xtend.util
 
 import de.montiarcautomaton.generator.helper.ComponentHelper
+
 import montiarc._symboltable.ComponentSymbol
+import montiarc._ast.ASTPort
 
 /**
  * TODO: Write me!
@@ -38,7 +40,7 @@ class Setup {
 
     // set up output ports
     «FOR portOut : comp.outgoingPorts»
-      this.«portOut.name» = new Port<«helper.printPortType(portOut)»>();
+      this.«portOut.name» = new Port<«ComponentHelper.printTypeName((portOut.astNode.get as ASTPort).type)»>();
     «ENDFOR»
 
     this.initialize();
@@ -74,7 +76,7 @@ class Setup {
 
   // set up output ports
   «FOR portOut : comp.outgoingPorts»
-    this.«portOut.name» = new Port<«helper.printPortType(portOut)»>();
+    this.«portOut.name» = new Port<«ComponentHelper.printTypeName((portOut.astNode.get as ASTPort).type)»>();
   «ENDFOR»
 
 
