@@ -21,7 +21,7 @@ import montiarc._ast.ASTComponent
 abstract class BehaviorGenerator {
 
   def String generateCompute(ComponentSymbol comp);
-  
+
   def String generateGetInitialValues(ComponentSymbol comp);
 
   def String hook(ComponentSymbol comp);
@@ -47,25 +47,25 @@ abstract class BehaviorGenerator {
       «ENDIF» 
       implements IComputable<«comp.name»Input, «comp.name»Result> {
         
-        //component variables
-        «FOR compVar : comp.variables»
-          private «helper.printVariableTypeName(compVar)» «compVar.name»;
-        «ENDFOR» 
-        
-        // config parameters
-        «FOR param : comp.configParameters»
-          private final «helper.printParamTypeName(param)» «param.name»; 
-        «ENDFOR»
-        
-        
-        «hook(comp)»
-        
-        «generateConstructor(comp)»
-        
-        «generateGetInitialValues(comp)»
-        
-        «generateCompute(comp)»
-        
+      //component variables
+      «FOR compVar : comp.variables»
+        private «helper.printVariableTypeName(compVar)» «compVar.name»;
+      «ENDFOR» 
+      
+      // config parameters
+      «FOR param : comp.configParameters»
+        private final «helper.printParamTypeName(param)» «param.name»; 
+      «ENDFOR»
+      
+      
+      «hook(comp)»
+      
+      «generateConstructor(comp)»
+      
+      «generateGetInitialValues(comp)»
+      
+      «generateCompute(comp)»
+      
       }
       
     '''
@@ -77,12 +77,11 @@ abstract class BehaviorGenerator {
     return '''
       public «comp.name»Impl(«FOR param : comp.configParameters SEPARATOR ','» «helper.getParamTypeName(param)» «param.name» «ENDFOR») {
         «FOR param : comp.configParameters»
-        this.«param.name» = «param.name»; 
+          this.«param.name» = «param.name»; 
         «ENDFOR»
       }
     '''
 
   }
-
 
 }
