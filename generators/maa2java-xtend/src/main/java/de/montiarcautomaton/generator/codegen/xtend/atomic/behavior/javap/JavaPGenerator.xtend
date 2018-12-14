@@ -73,7 +73,7 @@ class JavaPGenerator extends BehaviorGenerator {
     var List<ASTElement> elements = compAST.getBody().getElementList();
     for (ASTElement e : elements) {
       if (e instanceof ASTJavaPBehavior) {
-        return Optional.of(e as ASTJavaPBehavior);
+        return Optional.of(e);
       }
     }
     return Optional.empty();
