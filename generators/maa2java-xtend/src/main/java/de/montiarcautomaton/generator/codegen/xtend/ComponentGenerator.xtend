@@ -64,7 +64,7 @@ class ComponentGenerator {
   }
 
   def dispatch generateBehavior(ASTAutomatonBehavior automaton, ComponentSymbol comp) {
-    return AutomatonGenerator.newInstance.generate(comp)
+    return new AutomatonGenerator(comp).generate(comp)
   }
 
   def generateBehaviorImplementation(ComponentSymbol comp) {

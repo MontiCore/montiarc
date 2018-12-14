@@ -9,100 +9,128 @@ package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.automaton
 
 import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.BehaviorGenerator
 import de.montiarcautomaton.generator.codegen.xtend.util.Generics
-import de.montiarcautomaton.generator.helper.AutomatonHelper
 import de.montiarcautomaton.generator.helper.ComponentHelper
+import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor
+import de.monticore.java.prettyprint.JavaDSLPrettyPrinter
+import de.monticore.mcexpressions._ast.ASTExpression
+import de.monticore.prettyprint.IndentPrinter
+import java.util.ArrayList
+import java.util.Collection
+import java.util.Optional
+import java.util.stream.Collectors
 import montiarc._ast.ASTAutomaton
 import montiarc._ast.ASTAutomatonBehavior
 import montiarc._ast.ASTComponent
 import montiarc._ast.ASTElement
+import montiarc._ast.ASTIOAssignment
+import montiarc._ast.ASTValueList
 import montiarc._symboltable.ComponentSymbol
 import montiarc._symboltable.StateSymbol
+import montiarc._symboltable.TransitionSymbol
 import montiarc._symboltable.VariableSymbol
-import de.monticore.mcexpressions._ast.ASTExpression
-import de.monticore.prettyprint.IndentPrinter
-import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor
-import de.monticore.java.prettyprint.JavaDSLPrettyPrinter
-import java.util.Optional
-import montiarc._ast.ASTValueList
-import montiarc._ast.ASTIOAssignment
 
 class AutomatonGenerator extends BehaviorGenerator {
+
+  private var Collection<StateSymbol> states
+
+  private var Collection<VariableSymbol> variables
+
+  private var Collection<TransitionSymbol> transitions
+
+  private var ComponentSymbol comp;
+
+  new(ComponentSymbol component) {
+    this.comp = comp
+    this.states = new ArrayList;
+    this.transitions = new ArrayList;
+    this.variables = new ArrayList;
+
+    component.getSpannedScope().getSubScopes().stream().forEach(scope |
+      scope.<StateSymbol>resolveLocally(StateSymbol.KIND).forEach(state|this.states.add(state))
+    );
+    component.getSpannedScope().getSubScopes().stream().forEach(scope |
+      scope.<TransitionSymbol>resolveLocally(TransitionSymbol.KIND).forEach(transition|this.transitions.add(transition))
+    );
+    // variables can only be defined in the component's body unlike in JavaP
+    component.getSpannedScope().<VariableSymbol>resolveLocally(VariableSymbol.KIND).forEach(variable |
+      this.variables.add(variable)
+    );
+  }
 
   override String hook(ComponentSymbol comp) {
     var compHelper = new ComponentHelper(comp)
     var ASTAutomaton automaton = null
     for (ASTElement element : (comp.astNode.get as ASTComponent).body.elementList) {
-      if(element instanceof ASTAutomatonBehavior) {
+      if (element instanceof ASTAutomatonBehavior) {
         automaton = element.automaton
       }
     }
-    return 
-    '''
-    private «comp.name»State «compHelper.currentStateName»;
-    
-    
-    private static enum «comp.name»State {
-      «FOR state : automaton.getStateDeclaration(0).stateList SEPARATOR ','»
-      «state.name»
-      «ENDFOR»;
-    }
+    return '''
+      private «comp.name»State «compHelper.currentStateName»;
+      
+      
+      private static enum «comp.name»State {
+        «FOR state : automaton.getStateDeclaration(0).stateList SEPARATOR ','»
+          «state.name»
+        «ENDFOR»;
+      }
     '''
   }
-
 
   override String printCompute(ComponentSymbol comp) {
     var resultName = comp.name + "Result"
     var ASTAutomaton automaton = null
-    var AutomatonHelper helper = new AutomatonHelper(comp)
-    var ComponentHelper compHelper = new ComponentHelper(comp)
+//    var AutomatonHelper helper = new AutomatonHelper(comp)
+    var ComponentHelper helper = new ComponentHelper(comp)
     for (ASTElement element : (comp.astNode.get as ASTComponent).body.elementList) {
-      if(element instanceof ASTAutomatonBehavior) {
+      if (element instanceof ASTAutomatonBehavior) {
         automaton = element.automaton
       }
     }
-    return 
-    '''
-    @Override
-    public «resultName»«Generics.print(comp)»
-          compute(«comp.name»Input«Generics.print(comp)» «helper.inputName») {
-        // inputs
-        «FOR inPort : comp.incomingPorts»
-        final «helper.printPortType(inPort)» «inPort.name» = «helper.inputName».get«inPort.name.toFirstUpper»();
-        «ENDFOR»
-        
-        final «resultName» «helper.resultName» = new «resultName»();
-        
-        // first current state to reduce stimuli and guard checks
-        switch («compHelper.currentStateName») {
-        «FOR state : automaton.stateDeclarationList.get(0).stateList»
-          case «state.name»:
-            «FOR transition : helper.getTransitions(state.symbolOpt.get as StateSymbol)»
-              // transition: «transition.toString»
-              if («IF transition.guardAST.isPresent»«helper.getGuard(transition)»«ELSE» true «ENDIF») {
-                //reaction
-                «FOR assignment : helper.getReaction(transition)»
-                  «IF assignment.isAssignment»
-                    «IF isVariable(assignment.name, assignment)»
-                      «assignment.name» = «printRightHandSide(assignment)»;
-                    «ELSE»
-                      «helper.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
-                    «ENDIF»
-                  «ELSE»
-                    «printRightHandSide(assignment)»;  
+    return '''
+      @Override
+      public «resultName»«Generics.print(comp)»
+            compute(«comp.name»Input«Generics.print(comp)» «helper.inputName») {
+          // inputs
+          «FOR inPort : comp.incomingPorts»
+            final «helper.printPortType(inPort)» «inPort.name» = «helper.inputName».get«inPort.name.toFirstUpper»();
+          «ENDFOR»
+          
+          final «resultName» «helper.resultName» = new «resultName»();
+          
+          // first current state to reduce stimuli and guard checks
+          switch («helper.currentStateName») {
+          «FOR state : automaton.stateDeclarationList.get(0).stateList»
+            case «state.name»:
+              «FOR transition : transitions.stream.filter(s | s.source.referencedSymbol == state).collect(Collectors.toList)»
+                // transition: «transition.toString»
+                if («IF transition.guardAST.isPresent»«transition.guardAST.get?:printExpression(transition.guardAST.get.guardExpression.expression)»«ELSE» true «ENDIF») {
+                  //reaction
+                  «IF transition.reactionAST.present»
+                    «FOR assignment : transition.reactionAST.get.IOAssignmentList»
+                      «IF assignment.isAssignment»
+                        «IF isVariable(assignment.name, assignment)»
+                          «assignment.name» = «printRightHandSide(assignment)»;
+                        «ELSE»
+                          «helper.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
+                        «ENDIF»
+                      «ELSE»
+                        «printRightHandSide(assignment)»;  
+                      «ENDIF»
+                    «ENDFOR»
                   «ENDIF»
-                «ENDFOR»
+                  
+                  //state change
+                  «helper.currentStateName» = «comp.name»State.«transition.target.name»;
+                  break;
+                }
                 
-                //state change
-                «compHelper.currentStateName» = «comp.name»State.«transition.target.name»;
-                break;
-              }
-              
-              
-            «ENDFOR»
-        «ENDFOR»
+                
+              «ENDFOR»
+          «ENDFOR»
+          }
+          return result;
         }
-        return result;
-      }
     '''
   }
 
@@ -110,39 +138,40 @@ class AutomatonGenerator extends BehaviorGenerator {
     var resultName = comp.name + "Result"
     var ASTAutomaton automaton = null
     var ComponentHelper compHelper = new ComponentHelper(comp)
-    var AutomatonHelper helper = new AutomatonHelper(comp)
+//    var AutomatonHelper helper = new AutomatonHelper(comp)
     for (ASTElement element : (comp.astNode.get as ASTComponent).body.elementList) {
-      if(element instanceof ASTAutomatonBehavior) {
+      if (element instanceof ASTAutomatonBehavior) {
         automaton = element.automaton
       }
     }
-    return 
-    '''
+    return '''
       @Override
       public «resultName»«Generics.print(comp)»
       getInitialValues() {
-        final «resultName» «helper.resultName» = new «resultName»();
+        final «resultName» «compHelper.resultName» = new «resultName»();
         
         // initial reaction
-        «FOR assignment : helper.getInitialReaction(helper.initialState)»
-          «IF assignment.isAssignment»
-            «IF helper.isPort(assignment.name)»
-              «helper.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
+        «var StateSymbol initialState = states.stream.filter(state | state.isInitial).findFirst.get»
+        «IF initialState.initialReactionAST.isPresent»
+          «FOR assignment : initialState.initialReactionAST.get.IOAssignmentList»
+            «IF assignment.isAssignment»
+              «IF comp.getPort(assignment.name).isPresent»
+                «compHelper.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
+              «ELSE»
+                «assignment.name» = «printRightHandSide(assignment)»;
+              «ENDIF»
             «ELSE»
-              «assignment.name» = «printRightHandSide(assignment)»;
+              «printRightHandSide(assignment)»;  
             «ENDIF»
-          «ENDIF»
-        «ENDFOR»
+          «ENDFOR»
+        «ENDIF»
         
         «compHelper.currentStateName» = «comp.name»State.«automaton.initialStateDeclarationList.get(0).name»;
-        return «helper.resultName»;
+        return «compHelper.resultName»;
       }
     '''
   }
-  
-  
-  
-  
+
   /**
    * Returns <tt>true</tt> if the given name is a variable name.
    * 
@@ -150,14 +179,14 @@ class AutomatonGenerator extends BehaviorGenerator {
    * @return
    */
   def private boolean isVariable(String name, ASTIOAssignment assignment) {
-    var Optional<VariableSymbol> symbol = assignment.getEnclosingScopeOpt().get()
-        .<VariableSymbol> resolve(name, VariableSymbol.KIND);
+    var Optional<VariableSymbol> symbol = assignment.getEnclosingScopeOpt().get().<VariableSymbol>resolve(name,
+      VariableSymbol.KIND);
     if (symbol.isPresent()) {
       return true;
     }
     return false;
   }
-  
+
   /**
    * Returns the right side of an assignment/comparison. ValueLists &
    * Alternatives are not supported.
@@ -167,32 +196,34 @@ class AutomatonGenerator extends BehaviorGenerator {
   def private String printRightHandSide(ASTIOAssignment assignment) {
     if (assignment.isPresentAlternative()) {
       throw new RuntimeException("Alternatives not supported.");
-    }
-    else {
+    } else {
       var ASTValueList vl = assignment.getValueList();
       if (vl.isPresentValuation()) {
-        return printExpression(vl.getValuation().getExpression(), assignment);
-      }
-      else {
+        return printExpression(vl.getValuation().getExpression(), assignment.isAssignment);
+      } else {
         throw new RuntimeException("ValueLists not supported.");
       }
     }
   }
-  
+
   /**
    * Prints the java expression of the given AST expression node.
    * 
    * @param expr
    * @return
    */
-  def private String printExpression(ASTExpression expr, ASTIOAssignment assignment) {
+  def private String printExpression(ASTExpression expr, boolean isAssignment) {
     var IndentPrinter printer = new IndentPrinter();
     var JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(printer);
-    if (assignment.isAssignment) {
+    if (isAssignment) {
       prettyPrinter = new CDAttributeGetterTransformationVisitor(printer);
     }
     expr.accept(prettyPrinter);
     return printer.getContent();
   }
-  
+
+  def private String printExpression(ASTExpression expr) {
+    return printExpression(expr, true);
+  }
+
 }
