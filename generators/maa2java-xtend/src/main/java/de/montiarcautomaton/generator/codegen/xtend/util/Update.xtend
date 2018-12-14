@@ -17,7 +17,7 @@ import montiarc._symboltable.ComponentSymbol
  *
  */
 class Update {
-  def static printUpdate(ComponentSymbol comp) {
+  def static print(ComponentSymbol comp) {
     if (comp.isDecomposed) {
     	return printUpdateComposed(comp)
     } else {

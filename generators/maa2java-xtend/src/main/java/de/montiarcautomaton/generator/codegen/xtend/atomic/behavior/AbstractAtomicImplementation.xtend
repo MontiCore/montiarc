@@ -5,10 +5,10 @@
  */
 package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior
 
-import montiarc._symboltable.ComponentSymbol
-import de.montiarcautomaton.generator.helper.ComponentHelper
 import de.montiarcautomaton.generator.codegen.xtend.util.Generics
 import de.montiarcautomaton.generator.codegen.xtend.util.Imports
+import de.montiarcautomaton.generator.helper.ComponentHelper
+import montiarc._symboltable.ComponentSymbol
 
 /**
  * TODO: Write me!
@@ -22,12 +22,12 @@ import de.montiarcautomaton.generator.codegen.xtend.util.Imports
 class AbstractAtomicImplementation {
   def static generateAbstractAtomicImplementation(ComponentSymbol comp) {
     var ComponentHelper helper = new ComponentHelper(comp);
-    var String generics = Generics.printGenerics(comp)
+    var String generics = Generics.print(comp)
     return '''
       package «comp.packageName»;
       
       import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
-      «Imports.printImports(comp)»
+      «Imports.print(comp)»
       
       class «comp.name»Impl«generics»     
       implements IComputable<«comp.name»Input«generics», «comp.name»Result«generics»> {

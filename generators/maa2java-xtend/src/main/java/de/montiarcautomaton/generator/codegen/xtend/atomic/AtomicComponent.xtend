@@ -28,13 +28,13 @@ import montiarc._symboltable.ComponentSymbol
  */
 class AtomicComponent {
    def static generateAtomicComponent(ComponentSymbol comp) {
-     var String generics = Generics.printGenerics(comp)
+     var String generics = Generics.print(comp)
     var ComponentHelper helper = new ComponentHelper(comp);
     
     return '''
       package «comp.packageName»;
       
-      «Imports.printImports(comp)»
+      «Imports.print(comp)»
       import «comp.packageName».«comp.name»Input;
       import «comp.packageName».«comp.name»Result;
       import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
@@ -42,7 +42,7 @@ class AtomicComponent {
       import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
       import de.montiarcautomaton.runtimes.Log;
       
-      public class «comp.name»«Generics.printGenerics(comp)»      
+      public class «comp.name»«Generics.print(comp)»      
       «IF comp.superComponent.present» extends «comp.superComponent.get.fullName» 
         «IF helper.isSuperComponentGeneric»<«FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
           «scTypeParams»«ENDFOR»>«ENDIF»
@@ -51,23 +51,23 @@ class AtomicComponent {
         
         // component variables
         «FOR v : comp.variables»
-          «Member.printMember(helper.printVariableTypeName(v), v.name, "protected")»
+          «Member.print(helper.printVariableTypeName(v), v.name, "protected")»
         «ENDFOR»
         
         // config parameters
         «FOR param : comp.configParameters»
-          «Member.printMember(helper.printParamTypeName(param), param.name, "private final")»
+          «Member.print(helper.printParamTypeName(param), param.name, "private final")»
         «ENDFOR»
         
         // port fields
         «FOR port : comp.ports»
-          «Member.printMember("Port<" + helper.printPortType(port)+">", port.name, "protected")»
+          «Member.print("Port<" + helper.printPortType(port)+">", port.name, "protected")»
         «ENDFOR»      
       
         // port setter
         «FOR inPort : comp.ports»
-          «Getter.printGetter("Port<" + helper.printPortType(inPort) + ">", inPort.name, "Port" + inPort.name.toFirstUpper)»
-          «Setter.printSetter("Port<" + helper.printPortType(inPort) + ">", inPort.name, "Port" + inPort.name.toFirstUpper)»
+          «Getter.print("Port<" + helper.printPortType(inPort) + ">", inPort.name, "Port" + inPort.name.toFirstUpper)»
+          «Setter.print("Port<" + helper.printPortType(inPort) + ">", inPort.name, "Port" + inPort.name.toFirstUpper)»
         «ENDFOR»
         
         // the components behavior implementation
@@ -91,9 +91,9 @@ class AtomicComponent {
           «ENDFOR»
         }
         
-        «Setup.printSetup(comp)»
+        «Setup.print(comp)»
         
-        «Init.printInit(comp)»
+        «Init.print(comp)»
         
         
         private void setResult(«comp.name»Result«generics» result) {
@@ -119,7 +119,7 @@ class AtomicComponent {
           }
         }
       
-        «Update.printUpdate(comp)»
+        «Update.print(comp)»
         
         private void initialize() {
            // get initial values from behavior implementation

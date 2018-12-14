@@ -15,7 +15,7 @@ package de.montiarcautomaton.generator.codegen.xtend.util
  *
  */
 class Getter {
-    def static printGetter(String type, String name, String methodPostfix) {
+    def static print(String type, String name, String methodPostfix) {
     return 
     '''
     public «type» get«methodPostfix»() {

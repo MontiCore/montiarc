@@ -17,7 +17,7 @@ import montiarc._symboltable.ComponentSymbol
  *
  */
 class Imports {
-    def static printImports(ComponentSymbol comp) {
+    def static print(ComponentSymbol comp) {
     return 
     '''
     «FOR _import : comp.imports»

@@ -18,7 +18,7 @@ import de.montiarcautomaton.generator.helper.ComponentHelper
  * 
  */
 class Generics {
-  def static printGenerics(ComponentSymbol comp) {
+  def static print(ComponentSymbol comp) {
     var ComponentHelper helper = new ComponentHelper(comp)
     return '''
       «IF helper.isGeneric»

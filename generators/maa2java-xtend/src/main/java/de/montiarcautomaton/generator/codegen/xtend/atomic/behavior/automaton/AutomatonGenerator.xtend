@@ -55,8 +55,8 @@ class AutomatonGenerator extends BehaviorGenerator {
     return 
     '''
     @Override
-    public «resultName»«Generics.printGenerics(comp)»
-          compute(«comp.name»Input«Generics.printGenerics(comp)» «helper.inputName») {
+    public «resultName»«Generics.print(comp)»
+          compute(«comp.name»Input«Generics.print(comp)» «helper.inputName») {
         // inputs
         «FOR inPort : comp.incomingPorts»
         final «helper.printPortType(inPort)» «inPort.name» = «helper.inputName».get«inPort.name.toFirstUpper»();
@@ -111,7 +111,7 @@ class AutomatonGenerator extends BehaviorGenerator {
     return 
     '''
       @Override
-      public «resultName»«Generics.printGenerics(comp)»
+      public «resultName»«Generics.print(comp)»
       getInitialValues() {
         final «resultName» «helper.resultName» = new «resultName»();
         

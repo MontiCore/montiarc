@@ -41,17 +41,17 @@ abstract class BehaviorGenerator {
       
       import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
       
-      public class «comp.name»Impl«Generics.printGenerics(comp)»
+      public class «comp.name»Impl«Generics.print(comp)»
       implements IComputable<«comp.name»Input, «comp.name»Result> {
         
       //component variables
       «FOR compVar : comp.variables»
-        «Member.printMember(helper.printVariableTypeName(compVar), compVar.name, "private")»
+        «Member.print(helper.printVariableTypeName(compVar), compVar.name, "private")»
       «ENDFOR» 
       
       // config parameters
       «FOR param : comp.configParameters»
-        «Member.printMember(helper.printParamTypeName(param), param.name, "private final")»
+        «Member.print(helper.printParamTypeName(param), param.name, "private final")»
       «ENDFOR»
       
       

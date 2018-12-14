@@ -3,10 +3,11 @@
  *
  * http://www.se-rwth.de/
  */
-package de.montiarcautomaton.generator.codegen.xtend.util
+package de.montiarcautomaton.generator.codegen.xtend
 
 import montiarc._symboltable.ComponentSymbol
 import de.montiarcautomaton.generator.helper.ComponentHelper
+import de.montiarcautomaton.generator.codegen.xtend.util.Generics
 
 /**
  * TODO: Write me!
@@ -23,11 +24,11 @@ class Result {
     return '''
       package «comp.packageName»;
       
-      «Imports.printImports(comp)»
+      «de.montiarcautomaton.generator.codegen.xtend.util.Imports.print(comp)»
       import de.montiarcautomaton.runtimes.timesync.implementation.IResult;
       
       
-      public class «comp.name»Result«Generics.printGenerics(comp)»   
+      public class «comp.name»Result«Generics.print(comp)»   
       «IF comp.superComponent.present» extends 
       «comp.superComponent.get.fullName»Result «IF helper.isSuperComponentGeneric»< «FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
           «scTypeParams»«ENDFOR»>«ENDIF»

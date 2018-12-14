@@ -10,8 +10,8 @@ package de.montiarcautomaton.generator.codegen.xtend
 import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.AbstractAtomicImplementation
 import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.automaton.AutomatonGenerator
 import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.javap.JavaPGenerator
-import de.montiarcautomaton.generator.codegen.xtend.util.Input
-import de.montiarcautomaton.generator.codegen.xtend.util.Result
+import de.montiarcautomaton.generator.codegen.xtend.Input
+import de.montiarcautomaton.generator.codegen.xtend.Result
 import de.monticore.ast.ASTCNode
 import de.monticore.codegen.mc2cd.TransformationHelper
 import de.monticore.io.FileReaderWriter

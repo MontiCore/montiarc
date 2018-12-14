@@ -5,17 +5,17 @@
  */
 package de.montiarcautomaton.generator.codegen.xtend.composed
 
+import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
 import de.montiarcautomaton.generator.codegen.xtend.util.Generics
+import de.montiarcautomaton.generator.codegen.xtend.util.Getter
 import de.montiarcautomaton.generator.codegen.xtend.util.Imports
 import de.montiarcautomaton.generator.codegen.xtend.util.Init
 import de.montiarcautomaton.generator.codegen.xtend.util.Member
+import de.montiarcautomaton.generator.codegen.xtend.util.Setter
 import de.montiarcautomaton.generator.codegen.xtend.util.Setup
 import de.montiarcautomaton.generator.codegen.xtend.util.Update
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
-import de.montiarcautomaton.generator.codegen.xtend.util.Setter
-import de.montiarcautomaton.generator.codegen.xtend.util.Getter
-import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
 
 /**
  * TODO: Write me!
@@ -30,12 +30,12 @@ class ComposedComponent {
   
 
   def static generateComposedComponent(ComponentSymbol comp) {
-    var String generics = Generics.printGenerics(comp)
+    var String generics = Generics.print(comp)
     var helper = new ComponentHelper(comp);
     return '''
     package «comp.packageName»;
     
-    «Imports.printImports(comp)»    
+    «Imports.print(comp)»    
     import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
     import de.montiarcautomaton.runtimes.timesync.delegation.Port;
     
@@ -45,24 +45,24 @@ class ComposedComponent {
 
       //ports
       «FOR port : comp.ports»
-        «Member.printMember("Port<" + helper.printPortType(port)+">", port.name, "protected")»
+        «Member.print("Port<" + helper.printPortType(port)+">", port.name, "protected")»
         
-        «Getter.printGetter("Port<" + helper.printPortType(port) + ">", port.name, "Port" + port.name.toFirstUpper)»
-        «Setter.printSetter("Port<" + helper.printPortType(port) + ">", port.name, "Port" + port.name.toFirstUpper)»      
+        «Getter.print("Port<" + helper.printPortType(port) + ">", port.name, "Port" + port.name.toFirstUpper)»
+        «Setter.print("Port<" + helper.printPortType(port) + ">", port.name, "Port" + port.name.toFirstUpper)»      
         
       «ENDFOR»   
       
       
       // config parameters
       «FOR param : comp.configParameters»
-        «Member.printMember(helper.printParamTypeName(param), param.name, "private final")»
+        «Member.print(helper.printParamTypeName(param), param.name, "private final")»
       «ENDFOR»
       
       // subcomponents
       «FOR subcomp : comp.subComponents»
-        «Member.printMember(helper.getSubComponentTypeName(subcomp), subcomp.name, "private")»
+        «Member.print(helper.getSubComponentTypeName(subcomp), subcomp.name, "private")»
         
-        «Getter.printGetter(helper.getSubComponentTypeName(subcomp), subcomp.name, "Component" + subcomp.name.toFirstUpper)»
+        «Getter.print(helper.getSubComponentTypeName(subcomp), subcomp.name, "Component" + subcomp.name.toFirstUpper)»
       «ENDFOR»
       
       public «comp.name»(«ConfigurationParameters.print(comp)») {
@@ -74,9 +74,9 @@ class ComposedComponent {
         «ENDFOR»
       }
       
-      «Init.printInit(comp)»
-      «Setup.printSetup(comp)»
-      «Update.printUpdate(comp)»
+      «Init.print(comp)»
+      «Setup.print(comp)»
+      «Update.print(comp)»
       
       
       @Override

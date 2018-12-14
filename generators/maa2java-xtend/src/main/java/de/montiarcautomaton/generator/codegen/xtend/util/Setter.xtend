@@ -16,7 +16,7 @@ package de.montiarcautomaton.generator.codegen.xtend.util
  */
 class Setter {
     
-  def static printSetter(String type, String name,  String methodPostfix) {
+  def static print(String type, String name,  String methodPostfix) {
     return 
     '''
     public void set«methodPostfix»(«type» «name») {

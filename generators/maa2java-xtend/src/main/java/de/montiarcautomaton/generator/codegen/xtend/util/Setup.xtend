@@ -18,7 +18,7 @@ import montiarc._symboltable.ComponentSymbol
  *
  */
 class Setup {
-   def static printSetup(ComponentSymbol comp) {
+   def static print(ComponentSymbol comp) {
     if(comp.isAtomic) {
       return printSetupAtomic(comp)
     }else {

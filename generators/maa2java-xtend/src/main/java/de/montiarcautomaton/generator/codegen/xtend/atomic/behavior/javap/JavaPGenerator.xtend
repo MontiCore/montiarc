@@ -32,8 +32,8 @@ class JavaPGenerator extends BehaviorGenerator {
     var ComponentHelper helper = new ComponentHelper(comp);
     return '''
       @Override
-      public «comp.name»Result«Generics.printGenerics(comp)»
-                compute(«comp.name»Input«Generics.printGenerics(comp)» «helper.inputName») {
+      public «comp.name»Result«Generics.print(comp)»
+                compute(«comp.name»Input«Generics.print(comp)» «helper.inputName») {
         // inputs
         «FOR portIn : comp.incomingPorts»
           final «helper.printPortType(portIn)» «portIn.name» = «helper.inputName».get«portIn.name.toFirstUpper»();
@@ -83,7 +83,7 @@ class JavaPGenerator extends BehaviorGenerator {
     var ComponentHelper helper = new ComponentHelper(comp)
     return '''
       @Override
-       public «comp.name»Result«Generics.printGenerics(comp)» getInitialValues() {
+       public «comp.name»Result«Generics.print(comp)» getInitialValues() {
          final «comp.name»Result «helper.resultName» = new «comp.name»Result();
          
          try {

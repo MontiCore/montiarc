@@ -3,10 +3,11 @@
  *
  * http://www.se-rwth.de/
  */
-package de.montiarcautomaton.generator.codegen.xtend.util
+package de.montiarcautomaton.generator.codegen.xtend
 
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
+import de.montiarcautomaton.generator.codegen.xtend.util.Generics
 
 /**
  * TODO: Write me!
@@ -24,11 +25,11 @@ class Input {
     return '''
       package «comp.packageName»;
       
-      «Imports.printImports(comp)»
+      «de.montiarcautomaton.generator.codegen.xtend.util.Imports.print(comp)»
       import de.montiarcautomaton.runtimes.timesync.implementation.IInput;
       
       
-      public class «comp.name»Input«Generics.printGenerics(comp)»
+      public class «comp.name»Input«Generics.print(comp)»
       «IF comp.superComponent.present» extends 
             «comp.superComponent.get.fullName»Input
             «IF helper.isSuperComponentGeneric»<

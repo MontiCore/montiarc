@@ -20,7 +20,7 @@ import montiarc._symboltable.ComponentSymbol
 class Init {
   
   
-  def static printInit(ComponentSymbol comp) {
+  def static print(ComponentSymbol comp) {
     if (comp.isAtomic) {
     	return printInitAtomic(comp)
     } else {
