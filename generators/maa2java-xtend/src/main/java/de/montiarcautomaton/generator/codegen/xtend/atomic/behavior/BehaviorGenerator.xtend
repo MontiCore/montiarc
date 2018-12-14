@@ -5,9 +5,11 @@
  */
 package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior;
 
+import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
+import de.montiarcautomaton.generator.codegen.xtend.util.Generics
+import de.montiarcautomaton.generator.codegen.xtend.util.Member
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
-import montiarc._ast.ASTComponent
 
 /**
  * TODO: Write me!
@@ -20,9 +22,9 @@ import montiarc._ast.ASTComponent
  */
 abstract class BehaviorGenerator {
 
-  def String generateCompute(ComponentSymbol comp);
+  def String printCompute(ComponentSymbol comp);
 
-  def String generateGetInitialValues(ComponentSymbol comp);
+  def String printGetInitialValues(ComponentSymbol comp);
 
   def String hook(ComponentSymbol comp);
 
@@ -39,34 +41,27 @@ abstract class BehaviorGenerator {
       
       import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
       
-      public class «comp.name»Impl
-      «IF helper.isGeneric»
-      <
-        «FOR generic : helper.genericParameters SEPARATOR ','»
-          «generic»
-        «ENDFOR»
-       >
-      «ENDIF» 
+      public class «comp.name»Impl«Generics.printGenerics(comp)»
       implements IComputable<«comp.name»Input, «comp.name»Result> {
         
       //component variables
       «FOR compVar : comp.variables»
-        private «helper.printVariableTypeName(compVar)» «compVar.name»;
+        «Member.printMember(helper.printVariableTypeName(compVar), compVar.name, "private")»
       «ENDFOR» 
       
       // config parameters
       «FOR param : comp.configParameters»
-        private final «helper.printParamTypeName(param)» «param.name»; 
+        «Member.printMember(helper.printParamTypeName(param), param.name, "private final")»
       «ENDFOR»
       
       
       «hook(comp)»
       
-      «generateConstructor(comp)»
+      «printConstructor(comp)»
       
-      «generateGetInitialValues(comp)»
+      «printGetInitialValues(comp)»
       
-      «generateCompute(comp)»
+      «printCompute(comp)»
       
       }
       
@@ -74,10 +69,10 @@ abstract class BehaviorGenerator {
 
   }
 
-  def String generateConstructor(ComponentSymbol comp) {
+  def String printConstructor(ComponentSymbol comp) {
     var ComponentHelper helper = new ComponentHelper(comp)
     return '''
-      public «comp.name»Impl(«FOR param : comp.configParameters SEPARATOR ','» «helper.getParamTypeName(param)» «param.name» «ENDFOR») {
+      public «comp.name»Impl(«ConfigurationParameters.print(comp)») {
         «FOR param : comp.configParameters»
           this.«param.name» = «param.name»; 
         «ENDFOR»

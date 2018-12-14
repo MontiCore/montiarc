@@ -7,15 +7,16 @@
  *******************************************************************************/
 package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.automaton
 
+import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.BehaviorGenerator
+import de.montiarcautomaton.generator.codegen.xtend.util.Generics
 import de.montiarcautomaton.generator.helper.AutomatonHelper
+import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._ast.ASTAutomaton
 import montiarc._ast.ASTAutomatonBehavior
 import montiarc._ast.ASTComponent
 import montiarc._ast.ASTElement
 import montiarc._symboltable.ComponentSymbol
 import montiarc._symboltable.StateSymbol
-import de.montiarcautomaton.generator.helper.ComponentHelper
-import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.BehaviorGenerator
 
 class AutomatonGenerator extends BehaviorGenerator {
 
@@ -41,7 +42,7 @@ class AutomatonGenerator extends BehaviorGenerator {
   }
 
 
-  override String generateCompute(ComponentSymbol comp) {
+  override String printCompute(ComponentSymbol comp) {
     var resultName = comp.name + "Result"
     var ASTAutomaton automaton = null
     var AutomatonHelper helper = new AutomatonHelper(comp)
@@ -54,18 +55,8 @@ class AutomatonGenerator extends BehaviorGenerator {
     return 
     '''
     @Override
-    public «comp.name»Result
-          «IF helper.isGeneric»
-            «FOR generic : helper.genericParameters SEPARATOR ','»
-              «generic»
-            «ENDFOR»
-          «ENDIF»
-          compute(«comp.name»Input
-          «IF helper.isGeneric»
-            «FOR generic : helper.genericParameters SEPARATOR ','»
-              «generic»
-            «ENDFOR»
-          «ENDIF» «helper.inputName») {
+    public «resultName»«Generics.printGenerics(comp)»
+          compute(«comp.name»Input«Generics.printGenerics(comp)» «helper.inputName») {
         // inputs
         «FOR inPort : comp.incomingPorts»
         final «helper.printPortType(inPort)» «inPort.name» = «helper.inputName».get«inPort.name.toFirstUpper»();
@@ -107,7 +98,7 @@ class AutomatonGenerator extends BehaviorGenerator {
     '''
   }
 
-  override String generateGetInitialValues(ComponentSymbol comp) {
+  override String printGetInitialValues(ComponentSymbol comp) {
     var resultName = comp.name + "Result"
     var ASTAutomaton automaton = null
     var ComponentHelper compHelper = new ComponentHelper(comp)
@@ -120,12 +111,7 @@ class AutomatonGenerator extends BehaviorGenerator {
     return 
     '''
       @Override
-      public «resultName» 
-            «IF helper.isGeneric»
-              «FOR generic : helper.genericParameters SEPARATOR ','»
-                «generic»
-              «ENDFOR»
-            «ENDIF» 
+      public «resultName»«Generics.printGenerics(comp)»
       getInitialValues() {
         final «resultName» «helper.resultName» = new «resultName»();
         
