@@ -41,9 +41,11 @@ abstract class BehaviorGenerator {
       
       public class «comp.name»Impl
       «IF helper.isGeneric»
+      <
         «FOR generic : helper.genericParameters SEPARATOR ','»
           «generic»
         «ENDFOR»
+       >
       «ENDIF» 
       implements IComputable<«comp.name»Input, «comp.name»Result> {
         

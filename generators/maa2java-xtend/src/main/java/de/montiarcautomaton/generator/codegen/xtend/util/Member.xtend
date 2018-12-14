@@ -15,5 +15,10 @@ package de.montiarcautomaton.generator.codegen.xtend.util
  *
  */
 class Member {
-  
+   def static printMember(String type, String name, String visibility) {
+    return 
+    '''
+    «visibility» «type» «name»;
+    '''
+  }
 }

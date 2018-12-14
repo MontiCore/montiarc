@@ -5,6 +5,8 @@
  */
 package de.montiarcautomaton.generator.codegen.xtend.util
 
+import montiarc._symboltable.ComponentSymbol
+
 /**
  * TODO: Write me!
  *
@@ -14,13 +16,14 @@ package de.montiarcautomaton.generator.codegen.xtend.util
  * @since   TODO: add version number
  *
  */
-class Getter {
-    def static printGetter(String type, String name, String methodPostfix) {
+class Imports {
+    def static printImports(ComponentSymbol comp) {
     return 
     '''
-    public «type» get«methodPostfix»() {
-      return this.«name»;
-    }
+    «FOR _import : comp.imports»
+      import «_import.statement»«IF _import.isStar».*«ENDIF»;
+    «ENDFOR»
     '''
   }
+  
 }
