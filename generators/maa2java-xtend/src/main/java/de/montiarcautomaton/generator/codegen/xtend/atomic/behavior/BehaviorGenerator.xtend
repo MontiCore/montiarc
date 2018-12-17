@@ -9,8 +9,10 @@ import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
 import de.montiarcautomaton.generator.codegen.xtend.util.Generics
 import de.montiarcautomaton.generator.codegen.xtend.util.Member
 import de.montiarcautomaton.generator.helper.ComponentHelper
-import montiarc._symboltable.ComponentSymbol
+import montiarc._ast.ASTComponent
 import montiarc._ast.ASTVariableDeclaration
+import montiarc._symboltable.ComponentSymbol
+import de.monticore.types.TypesPrinter
 
 /**
  * TODO: Write me!
@@ -51,8 +53,8 @@ abstract class BehaviorGenerator {
       «ENDFOR» 
       
       // config parameters
-      «FOR param : comp.configParameters»
-        «Member.print(ComponentHelper.printTypeName(ComponentHelper.getParamType(param, comp)), param.name, "private final")»
+      «FOR param : (comp.astNode.get as ASTComponent).head.parameterList»
+        «Member.print(ComponentHelper.printTypeName(param.type), param.name, "private final")»
       «ENDFOR»
       
       

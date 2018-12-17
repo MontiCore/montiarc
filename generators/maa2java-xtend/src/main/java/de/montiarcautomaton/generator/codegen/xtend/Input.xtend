@@ -34,7 +34,7 @@ class Input {
       public class «comp.name»Input«Generics.print(comp)»
       «IF comp.superComponent.present» extends 
             «comp.superComponent.get.fullName»Input
-            «IF helper.isSuperComponentGeneric»<
+            «IF comp.superComponent.get.hasFormalTypeParameters»<
             «FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
                 «scTypeParams»
                 «ENDFOR» > «ENDIF»

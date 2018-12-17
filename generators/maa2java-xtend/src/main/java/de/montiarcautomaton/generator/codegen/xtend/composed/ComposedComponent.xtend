@@ -17,6 +17,8 @@ import de.montiarcautomaton.generator.codegen.xtend.util.Update
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
 import montiarc._ast.ASTPort
+import de.monticore.types.TypesPrinter
+import montiarc._ast.ASTComponent
 
 /**
  * TODO: Write me!
@@ -56,9 +58,9 @@ class ComposedComponent {
         
         
         // config parameters
-        «FOR param : comp.configParameters»
-          «Member.print(ComponentHelper.printTypeName(ComponentHelper.getParamType(param, comp)), param.name, "private final")»
-        «ENDFOR»
+      «FOR param : (comp.astNode.get as ASTComponent).head.parameterList»
+        «Member.print(ComponentHelper.printTypeName(param.type), param.name, "private final")»
+      «ENDFOR»
         
         // subcomponents
         «FOR subcomp : comp.subComponents»

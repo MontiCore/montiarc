@@ -10,6 +10,7 @@ import de.monticore.symboltable.types.TypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.symboltable.types.references.TypeReference;
+import de.monticore.types.TypesPrinter;
 import de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor;
 import de.monticore.types.types._ast.ASTType;
 import de.monticore.types.types._ast.ASTTypeVariableDeclaration;
@@ -42,13 +43,6 @@ public class ComponentHelper {
   private String behaviorImplName = "behaviorImpl";
   
   private String currentStateName = "currentState";
-  
-  private final IndentPrinter pr = new IndentPrinter();
-  
-  private final TypesPrettyPrinterConcreteVisitor typesPrinter = new de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor(
-      pr);
-  
-  private final JavaDSLPrettyPrinter javaPrinter = new JavaDSLPrettyPrinter(pr);
   
   public ComponentHelper(ComponentSymbol component) {
     this.component = component;
@@ -243,10 +237,6 @@ public class ComponentHelper {
     return result.toString();
   }
   
-  public static ASTType getParamType(JFieldSymbol symbol, ComponentSymbol comp) {
-    return ((ASTComponent) comp.getAstNode().get()).getHead().getParameterList().stream().filter(p -> p.getName().equals(symbol.getName())).findFirst().get().getType();
-  }
-  
   /**
    * Pretty print the ast type node with removed spaces.
    * 
@@ -337,14 +327,6 @@ public class ComponentHelper {
       autoBoxedTypeName = PRIMITIVE_TYPES.get(datatype);
     }
     return autoBoxedTypeName;
-  }
-  
-  public String getParamTypeName(JFieldSymbol param) {
-    return getParamTypeName(componentNode, param);
-  }
-  
-  public String getParamTypeName(ASTComponent comp, JFieldSymbol param) {
-    return printFqnTypeName(comp, param.getType());
   }
   
   /**
@@ -519,7 +501,7 @@ public class ComponentHelper {
    * @param ref
    * @return
    */
-  protected String printFqnTypeName(ASTComponent comp, JTypeReference<? extends JTypeSymbol> ref) {
+  public  String printFqnTypeName(ASTComponent comp, JTypeReference<? extends JTypeSymbol> ref) {
     String name = ref.getName();
     if (isGenericTypeName(comp, name)) {
       return name;
@@ -535,20 +517,6 @@ public class ComponentHelper {
     return autobox(name);
   }
   
-  
-  /**
-   * Determine whether the super component has generic type parameters Note:
-   * Used in templates
-   * 
-   * @return True, iff the super component has generic type parameters
-   */
-  public boolean isSuperComponentGeneric() {
-    if (component.getSuperComponent().isPresent()) {
-      final ComponentSymbolReference componentSymbolReference = component.getSuperComponent().get();
-      return componentSymbolReference.getReferencedSymbol().hasFormalTypeParameters();
-    }
-    return false;
-  }
   
   /**
    * @return A list of String representations of the actual type arguments
@@ -573,36 +541,6 @@ public class ComponentHelper {
     }
     return paramList;
   }
-  
-  
-  public List<String> getGenericParameters() {
-    List<String> output = new ArrayList<>();
-    if (componentNode.getHead().isPresentGenericTypeParameters()) {
-      List<ASTTypeVariableDeclaration> parameterList = componentNode.getHead()
-          .getGenericTypeParameters().getTypeVariableDeclarationList();
-      for (ASTTypeVariableDeclaration variableDeclaration : parameterList) {
-        output.add(variableDeclaration.getName());
-      }
-    }
-    return output;
-  }
-  
-  public List<String> getInheritedParams() {
-    List<String> result = new ArrayList<>();
-    final List<JFieldSymbol> configParameters = component.getConfigParameters();
-    if (component.getSuperComponent().isPresent()) {
-      final ComponentSymbolReference superCompReference = component.getSuperComponent().get();
-      final List<JFieldSymbol> superConfigParams = superCompReference.getReferencedSymbol()
-          .getConfigParameters();
-      if (!configParameters.isEmpty()) {
-        for (int i = 0; i < superConfigParams.size(); i++) {
-          result.add(configParameters.get(i).getName());
-        }
-      }
-    }
-    return result;
-  }
-  
   
   /**
    * Checks whether component parameter, variable, subcomponent instance, or

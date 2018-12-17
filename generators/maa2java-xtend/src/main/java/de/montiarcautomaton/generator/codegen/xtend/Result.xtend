@@ -33,7 +33,7 @@ class Result {
       
       public class «comp.name»Result«Generics.print(comp)»   
       «IF comp.superComponent.present» extends 
-      «comp.superComponent.get.fullName»Result «IF helper.isSuperComponentGeneric»< «FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
+      «comp.superComponent.get.fullName»Result «IF comp.superComponent.get.hasFormalTypeParameters»< «FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
           «scTypeParams»«ENDFOR»>«ENDIF»
       «ENDIF»
       implements IResult 

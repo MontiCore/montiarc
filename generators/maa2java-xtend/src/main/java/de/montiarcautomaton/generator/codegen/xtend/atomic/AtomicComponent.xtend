@@ -18,6 +18,12 @@ import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._ast.ASTPort
 import montiarc._ast.ASTVariableDeclaration
 import montiarc._symboltable.ComponentSymbol
+import java.util.List
+import de.monticore.symboltable.types.JFieldSymbol
+import montiarc._symboltable.ComponentSymbolReference
+import java.util.ArrayList
+import de.monticore.types.TypesPrinter
+import montiarc._ast.ASTComponent
 
 /**
  * TODO: Write me!
@@ -46,7 +52,7 @@ class AtomicComponent {
       
       public class «comp.name»«Generics.print(comp)»      
       «IF comp.superComponent.present» extends «comp.superComponent.get.fullName» 
-        «IF helper.isSuperComponentGeneric»<«FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
+        «IF comp.superComponent.get.hasFormalTypeParameters»<«FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
           «scTypeParams»«ENDFOR»>«ENDIF»
       «ENDIF»
       implements IComponent {
@@ -57,9 +63,9 @@ class AtomicComponent {
         «ENDFOR»
         
         // config parameters
-        «FOR param : comp.configParameters»
-          «Member.print(ComponentHelper.printTypeName(ComponentHelper.getParamType(param, comp)), param.name, "private final")»
-        «ENDFOR»
+      «FOR param : (comp.astNode.get as ASTComponent).head.parameterList»
+        «Member.print(ComponentHelper.printTypeName(param.type), param.name, "private final")»
+      «ENDFOR»
         
         // port fields
         «FOR port : comp.ports»
@@ -78,7 +84,7 @@ class AtomicComponent {
 
         public «comp.name»(«ConfigurationParameters.print(comp)») {
           «IF comp.superComponent.isPresent»
-          super(«FOR inhParam : helper.getInheritedParams() SEPARATOR ','» «inhParam» «ENDFOR»);
+          super(«FOR inhParam : getInheritedParams(comp) SEPARATOR ','» «inhParam» «ENDFOR»);
           «ENDIF»
           «helper.behaviorImplName» = new «comp.name»Impl«generics»(
           «IF comp.hasConfigParameters»
@@ -134,6 +140,23 @@ class AtomicComponent {
         
       }
     '''
+  }
+  
+    
+  def private static List<String> getInheritedParams(ComponentSymbol component) {
+    var List<String> result = new ArrayList;
+    var List<JFieldSymbol> configParameters = component.getConfigParameters();
+    if (component.getSuperComponent().isPresent()) {
+      var ComponentSymbolReference superCompReference = component.getSuperComponent().get();
+      var List<JFieldSymbol> superConfigParams = superCompReference.getReferencedSymbol()
+          .getConfigParameters();
+      if (!configParameters.isEmpty()) {
+        for (var i = 0; i < superConfigParams.size(); i++) {
+          result.add(configParameters.get(i).getName());
+        }
+      }
+    }
+    return result;
   }
   
   

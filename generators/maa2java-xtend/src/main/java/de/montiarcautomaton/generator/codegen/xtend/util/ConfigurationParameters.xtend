@@ -7,6 +7,7 @@ package de.montiarcautomaton.generator.codegen.xtend.util
 
 import montiarc._symboltable.ComponentSymbol
 import de.montiarcautomaton.generator.helper.ComponentHelper
+import montiarc._ast.ASTComponent
 
 /**
  * TODO: Write me!
@@ -22,7 +23,7 @@ class ConfigurationParameters {
   def static print(ComponentSymbol comp) {
     var helper = new ComponentHelper(comp)
     return '''
-      «FOR param : comp.configParameters SEPARATOR ','» «helper.getParamTypeName(param)» «param.name» «ENDFOR»
+      «FOR param : comp.configParameters SEPARATOR ','» «helper.printFqnTypeName(comp.astNode.get as ASTComponent, param.type)» «param.name» «ENDFOR»
     '''
   }
   
