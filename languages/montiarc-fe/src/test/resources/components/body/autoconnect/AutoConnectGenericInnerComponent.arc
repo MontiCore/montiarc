@@ -10,15 +10,15 @@ component AutoConnectGenericInnerComponent {
     autoconnect type;
     
     port 
-        in DBType strIn,
+        in DBType dbIn,
         in Integer intIn,
-        out DBType strOut,
+        out DBType dbOut,
         out Integer intOut;
     
     component Inner<T> myGeneric<DBType> {
       port
-        in T myStrIn,
-        out T myStrOut;
+        in T inT,
+        out T outT;
     }
     
     component Inner<Integer> a;

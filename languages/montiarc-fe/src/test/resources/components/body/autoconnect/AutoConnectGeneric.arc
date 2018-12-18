@@ -8,6 +8,6 @@ import types.database.*;
 component AutoConnectGeneric<T extends DBInterface> {
 
     port
-        in T myStrIn,
-        out T myStrOut;
+        in T inT,
+        out T outT;
 }
