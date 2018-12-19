@@ -1,13 +1,15 @@
-package de.montiarcautomaton.runtimes.timesync.delegation;
+package de.montiarcautomaton.generator.codegen.componentinstantiation;
 
 import java.util.Optional;
+
+import de.montiarcautomaton.runtimes.componentinstantiation.ILoader;
 
 
 /**
  * Loads new components from disc. Components can be provided as Models,
  * Java Files or compiled code.
  */
-public class FileSystemLoader implements Runnable {
+public class FileSystemLoader implements ILoader {
 
   AdapterLoader adapterLoader = null;
   Object classObject = null;
@@ -78,12 +80,9 @@ public class FileSystemLoader implements Runnable {
             + ComponentStore.replaceAll("\\.", "/");
   }
 
-  /**
-   * Returns class file if an updated component has been found.
-   *
-   * @return Class file of updated component.
-   */
-  public Optional<Object> hasNewSubPrinter() {
+
+  @Override
+public Optional<Object> hasNewSubPrinter() {
     if (classObject == null || adapterLoader == null) {
       return Optional.empty();
     }
@@ -91,10 +90,11 @@ public class FileSystemLoader implements Runnable {
     return Optional.of(classObject);
   }
 
-  /**
-   *
-   */
-  public void checkForUpdate() {
+  /* (non-Javadoc)
+ * @see de.montiarcautomaton.runtimes.timesync.delegation.ILoader#checkForUpdate()
+ */
+  @Override
+public void checkForUpdate() {
 
     if (adapterLoader == null) {
       classObject = null;
@@ -117,7 +117,11 @@ public class FileSystemLoader implements Runnable {
   }
 
 
-  public void deleteFile() {
+  /* (non-Javadoc)
+ * @see de.montiarcautomaton.runtimes.timesync.delegation.ILoader#deleteFile()
+ */
+@Override
+public void deleteFile() {
     String filePath = storeDir + ComponentStore.replaceAll("\\.", "/");
 
     String targetPath = targetDir + ComponentStore.replaceAll("\\.", "/");
