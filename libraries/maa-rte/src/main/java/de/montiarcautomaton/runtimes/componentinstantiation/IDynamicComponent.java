@@ -1,4 +1,4 @@
-package de.montiarcautomaton.runtimes.timesync.delegation;
+package de.montiarcautomaton.runtimes.componentinstantiation;
 
 import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
 import de.montiarcautomaton.runtimes.timesync.delegation.Port;

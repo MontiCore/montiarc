@@ -1,4 +1,4 @@
-package de.montiarcautomaton.runtimes.timesync.delegation;
+package de.montiarcautomaton.runtimes.componentinstantiation;
 
 import java.util.HashMap;
 import java.util.Map;

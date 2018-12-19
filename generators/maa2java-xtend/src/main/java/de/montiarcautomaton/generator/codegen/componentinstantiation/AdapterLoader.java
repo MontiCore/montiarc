@@ -1,4 +1,4 @@
-package de.montiarcautomaton.runtimes.timesync.delegation;
+package de.montiarcautomaton.generator.codegen.componentinstantiation;
 
 
 import de.montiarcautomaton.generator.MontiArcGeneratorTool;
