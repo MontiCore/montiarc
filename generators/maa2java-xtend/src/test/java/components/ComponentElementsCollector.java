@@ -7,10 +7,13 @@ package components;
 
 import com.google.common.collect.Lists;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
+import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor;
 import de.monticore.java.javadsl._ast.ASTImportDeclaration;
 import de.monticore.java.javadsl._ast.JavaDSLMill;
+import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.mcexpressions._ast.ASTExpression;
+import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.types.JFieldSymbol;
@@ -177,7 +180,6 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     addFixedImports();
 
     // Impl methods
-    addGetInitialValues();
     addImplCompute();
 
     // Subcomponents
@@ -209,14 +211,20 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   }
 
   /**
-   * Adds fields for component variables to the set of expected fields
+   * Adds fields for component variables to the set of expected fields.
    */
   private void addComponentVariableFields() {
     for (VariableSymbol variableSymbol : this.symbol.getVariables()) {
+
       if(variableSymbol.getAstNode().isPresent()) {
-        final ASTVariableDeclaration astNode = (ASTVariableDeclaration) variableSymbol.getAstNode().get();
-        final String fieldTypeString = PRINTER.prettyprint(boxPrimitiveType(astNode.getType()));
+        final ASTVariableDeclaration astNode
+            = (ASTVariableDeclaration) variableSymbol.getAstNode().get();
+        final String fieldTypeString
+            = PRINTER.prettyprint(boxPrimitiveType(astNode.getType()));
         Field field = new Field(variableSymbol.getName(), fieldTypeString);
+
+        // The field for the component variable is added to the component visitor
+        // and if applicable to the implementation visitor
         classVisitor.addField(field);
         if(this.symbol.isAtomic() && this.symbol.hasBehavior()){
           implVisitor.addField(field);
@@ -427,14 +435,6 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     classVisitor.addField(implVarName, PRINTER.prettyprint(expectedType));
   }
 
-  private void addGetInitialValues() {
-    Method method = Method.getBuilder()
-                        .setName("getInitialValues")
-                        .setReturnType(PRINTER.prettyprint(this.types.get("RESULT_CLASS_TYPE")))
-                        .build();
-    this.implVisitor.addMethod(method);
-  }
-
   private void addImplCompute() {
     if (this.symbol.isDecomposed()) {
       return;
@@ -451,6 +451,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
                         .setReturnType(PRINTER.prettyprint(this.types.get("RESULT_CLASS_TYPE")))
                         .addParameter(inputVarName, paramType)
                         .build();
+    // TODO Impl Add compute body
     this.implVisitor.addMethod(method);
   }
 
@@ -465,11 +466,15 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     builder.setName(componentName);
     implConstructorBuilder.setName(implName);
 
+    // Names of the component parameters
     String paramNamesListString =
         node.getHead().getParameterList()
             .stream()
             .map(ASTParameter::getName)
             .collect(Collectors.joining(", "));
+
+    // Add the component parameters as expected parameters for the
+    // components class and the implementation class
     for (ASTParameter astParameter : node.getHead().getParameterList()) {
       final String parameterName = astParameter.getName();
       ASTType paramType = boxPrimitiveType(astParameter.getType());
@@ -477,33 +482,15 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       implConstructorBuilder.addParameter(parameterName, paramType);
     }
 
-
-//    for (JFieldSymbol paramSymbol : this.symbol.getConfigParameters()) {
-//      parameterBuilder.append(paramSymbol.getName()).append(",");
-//
-//      if (paramSymbol.getType().existsReferencedSymbol()) {
-//        final String fullParameterTypeName
-//            = paramSymbol.getType().getReferencedSymbol().getFullName();
-//
-//        ASTType paramType =
-//            JavaDSLMill.simpleReferenceTypeBuilder()
-//                .setNameList(Lists.newArrayList(fullParameterTypeName))
-//                .build();
-//
-//        builder.addParameter(paramSymbol.getName(), paramType);
-//        implConstructorBuilder.addParameter(paramSymbol.getName(), paramType);
-//      }
-//    }
-//    if (parameterBuilder.length() > 0) {
-//      parameterBuilder.deleteCharAt(parameterBuilder.length() - 1);
-//    }
-
     // Expect impl instance if not decomposed
     if (this.symbol.isAtomic()) {
+
+      // Deal with possible naming problems
       String implVarName = "behaviorImpl";
       if(helper.containsIdentifier(implVarName)){
         implVarName = "r__behaviorImpl";
       }
+
       StringBuilder implAssignment = new StringBuilder(implVarName + " = new ");
       implAssignment.append(capitalizeFirst(componentName)).append("Impl");
       if (!symbol.getFormalTypeParameters().isEmpty()) {
@@ -511,13 +498,15 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       }
       implAssignment.append("(").append(paramNamesListString).append(");");
       builder.addBodyElement(implAssignment.toString());
+
     }
 
     for (ASTParameter parameter : node.getHead().getParameterList()) {
       builder.addBodyElement(
           String.format("this.%s=%s", parameter.getName(), parameter.getName()));
+      implConstructorBuilder.addBodyElement(
+          String.format("this.%s=%s", parameter.getName(), parameter.getName()));
     }
-
 
     this.implVisitor.addConstructor(implConstructorBuilder.build());
     this.classVisitor.addConstructor(builder.build());
@@ -962,7 +951,159 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     if(helper.containsIdentifier(currentStateVarName)){
       currentStateVarName = "r__" + currentStateVarName;
     }
-    this.implVisitor.addField(currentStateVarName, "State");
+    this.implVisitor.addField(currentStateVarName, this.symbol.getName() + "State");
+
+    final List<String> stateNames = new ArrayList<>();
+    for (ASTStateDeclaration stateList : node.getStateDeclarationList()) {
+      for (ASTState state : stateList.getStateList()) {
+        stateNames.add(state.getName());
+      }
+    }
+    addGetInitialValues(node);
+
+  }
+
+  @Override
+  public void visit(ASTJavaPBehavior node){
+    addGetInitialValues(node);
+  }
+
+  /**
+   * Adds the expected initial values method to the impl visitor
+   * @param node
+   */
+  private void addGetInitialValues(ASTAutomaton node) {
+    // TODO adapt names if conflicted
+
+
+    final String resultVarName = "result";
+    String resultVarDeclAndInit
+        = getVariableDeclAndInitialization(resultVarName, resultType(), Optional.empty());
+
+    // Initial reaction
+    final Optional<ASTInitialStateDeclaration> initialState
+        = node.getInitialStateDeclarationList().stream().findFirst();
+    assert initialState.isPresent();
+
+
+    StringBuilder initialReactionString = new StringBuilder();
+    if (initialState.get().getBlockOpt().isPresent()) {
+      final ASTBlock initialReaction = initialState.get().getBlock();
+      for (ASTIOAssignment astioAssignment : initialReaction.getIOAssignmentList()) {
+        if (astioAssignment.isAssignment()) {
+          // Name = (ValueList | Alternative)
+          final String assigneeName = astioAssignment.getName();
+          final List<String> outgoingPortNames
+              = symbol.getAllOutgoingPorts()
+                    .stream()
+                    .map(CommonSymbol::getName)
+                    .collect(Collectors.toList());
+          if(outgoingPortNames.contains(assigneeName)){
+            // Assignee is a port
+            initialReactionString.append(String.format(
+                "%s.set%s(%s);",
+                resultVarName,
+                toFirstUpper(assigneeName),
+                printRightHand(astioAssignment)));
+          } else if(symbol.getVariable(assigneeName).isPresent()){
+            initialReactionString
+                .append(assigneeName)
+                .append(" = ").append(printRightHand(astioAssignment))
+                .append(";");
+          }
+        } else {
+          // Function call
+          initialReactionString.append(printRightHand(astioAssignment));
+        }
+      }
+    }
+
+    String currentStateName = "currentState";
+    String initialStateStmt
+        = currentStateName + " = " + this.componentName + "State. "
+              + initialState.get().getName() + ";";
+    String returnStmt = "return " + resultVarName + ";";
+
+    Method method = Method.getBuilder()
+                        .setName("getInitialValues")
+                        .setReturnType(resultType())
+                        .addBodyElement(resultVarDeclAndInit)
+                        .addBodyElement(initialReactionString.toString())
+                        .addBodyElement(initialStateStmt)
+                        .addBodyElement(returnStmt)
+                        .build();
+    //TODO Impl Add getInitialValuesBody
+    this.implVisitor.addMethod(method);
+  }
+
+  private String printRightHand(ASTIOAssignment astioAssignment) {
+    String result = "";
+    if(astioAssignment.isPresentValueList()) {
+      final ASTValueList valueList = astioAssignment.getValueList();
+      if (valueList.isPresentValuation()) {
+        printExpression(valueList.getValuation().getExpression(),
+            astioAssignment.isAssignment());
+      }
+    }
+    return result;
+  }
+
+  private String toFirstUpper(String input){
+    String result = Character.toUpperCase(input.charAt(0)) + "";
+    if(input.length() > 1) {
+      result += input.substring(1);
+    }
+    return result;
+  }
+
+  private String printExpression(ASTExpression expr, boolean isAssignment) {
+    IndentPrinter printer = new IndentPrinter();
+    JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(printer);
+    if (isAssignment) {
+      prettyPrinter = new CDAttributeGetterTransformationVisitor(printer);
+    }
+    expr.accept(prettyPrinter);
+    return printer.getContent();
+  }
+
+  /**
+   * Prints the String for declaring and initializing a variable
+   * @param varName Name of the variable
+   * @param varType String representing the type of the variable
+   * @param parameters The parameters at the initialization
+   * @return The String of the Java statement
+   */
+  private String getVariableDeclAndInitialization(
+      String varName, String varType, Optional<String> parameters) {
+
+    return String.format("final %s %s = new %s(%s);",
+        resultType(), varName, resultType(), parameters.orElse(""));
+  }
+
+  /**
+   *
+   * @return The pretty printed type of the components result class
+   */
+  private String resultType(){
+    return PRINTER.prettyprint(this.types.get("RESULT_CLASS_TYPE"));
+  }
+
+  private void addGetInitialValues(ASTJavaPBehavior node){
+    final String resultVarName = "result";
+    String resultVar
+        = getVariableDeclAndInitialization
+              (resultVarName, resultType(), Optional.empty());
+
+    String returnStmt = "return " + resultVarName + ";";
+    Method method = Method.getBuilder()
+                        .setName("getInitialValues")
+                        .setReturnType(resultType())
+                        .addBodyElement(resultVar)
+                        .addBodyElement(returnStmt)
+                        .build();
+
+    //TODO Impl Add getInitialValuesBody
+    this.implVisitor.addMethod(method);
   }
 
   @Override
