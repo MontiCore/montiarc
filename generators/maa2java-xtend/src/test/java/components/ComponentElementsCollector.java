@@ -975,6 +975,9 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   private void addGetInitialValues(ASTAutomaton node) {
     // TODO adapt names if conflicted
 
+    Method.Builder method = Method.getBuilder()
+                        .setName("getInitialValues")
+                        .setReturnType(resultType());
 
     final String resultVarName = "result";
     String resultVarDeclAndInit
@@ -985,6 +988,8 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         = node.getInitialStateDeclarationList().stream().findFirst();
     assert initialState.isPresent();
 
+
+    method.addBodyElement(resultVarDeclAndInit);
 
     StringBuilder initialReactionString = new StringBuilder();
     if (initialState.get().getBlockOpt().isPresent()) {
@@ -1016,6 +1021,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
           initialReactionString.append(printRightHand(astioAssignment));
         }
       }
+      method.addBodyElement(initialReactionString.toString());
     }
 
     String currentStateName = "currentState";
@@ -1024,16 +1030,11 @@ public class ComponentElementsCollector implements MontiArcVisitor {
               + initialState.get().getName() + ";";
     String returnStmt = "return " + resultVarName + ";";
 
-    Method method = Method.getBuilder()
-                        .setName("getInitialValues")
-                        .setReturnType(resultType())
-                        .addBodyElement(resultVarDeclAndInit)
-                        .addBodyElement(initialReactionString.toString())
-                        .addBodyElement(initialStateStmt)
-                        .addBodyElement(returnStmt)
-                        .build();
-    //TODO Impl Add getInitialValuesBody
-    this.implVisitor.addMethod(method);
+
+    method.addBodyElement(initialStateStmt)
+        .addBodyElement(returnStmt);
+
+    this.implVisitor.addMethod(method.build());
   }
 
   private String printRightHand(ASTIOAssignment astioAssignment) {
@@ -1041,7 +1042,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     if(astioAssignment.isPresentValueList()) {
       final ASTValueList valueList = astioAssignment.getValueList();
       if (valueList.isPresentValuation()) {
-        printExpression(valueList.getValuation().getExpression(),
+        result = printExpression(valueList.getValuation().getExpression(),
             astioAssignment.isAssignment());
       }
     }
