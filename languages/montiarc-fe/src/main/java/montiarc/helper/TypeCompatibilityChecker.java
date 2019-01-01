@@ -446,13 +446,18 @@ public class TypeCompatibilityChecker {
    * @param expr the java expression
    * @return
    */
-  public static Optional<? extends JavaTypeSymbolReference> getExpressionType(ASTExpression expr) {
+  public static Optional<? extends JavaTypeSymbolReference> getExpressionType(
+      ASTExpression expr) {
+
     Log.debug("Resolve type of java expression.", "TypeCompatibilityChecker");
+
     MontiArcHCJavaDSLTypeResolver typeResolver = new MontiArcHCJavaDSLTypeResolver();
     expr.accept(typeResolver);
     final Optional<JavaTypeSymbolReference> result = typeResolver.getResult();
+
     if (!result.isPresent()) {
-      Log.info("Can't resolve type of expression: " + expr, "TypeCompatibilityChecker");
+      Log.info("Can't resolve type of expression: " + expr,
+          "TypeCompatibilityChecker");
     }
     return result;
   }
