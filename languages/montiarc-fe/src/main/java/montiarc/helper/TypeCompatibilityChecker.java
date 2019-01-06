@@ -16,6 +16,7 @@ import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
+import montiarc._symboltable.ComponentSymbol;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -471,8 +472,9 @@ public class TypeCompatibilityChecker {
    * @return
    */
   public static boolean doTypesMatch(ASTExpression expr,
-      JTypeReference<? extends JTypeSymbol> targetType) {
-    Optional<? extends JavaTypeSymbolReference> exprType = getExpressionType(expr);
+      JTypeReference<? extends JTypeSymbol> targetType, ComponentSymbol containingComp) {
+    Optional<? extends JavaTypeSymbolReference> exprType
+        = getExpressionType(expr);
     if (!exprType.isPresent()) {
       return false;
     }

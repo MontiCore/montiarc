@@ -65,8 +65,6 @@ public class AutomatonTest extends AbstractCoCoTest {
   }
 
   @Test
-  @Ignore("TODO Fix getExpressionType() in TypeCompatibilityChecker. " +
-              "Issue is in handle(ASTNameExpression of the hc type resolver.")
   public void testAutomatonWithGenerics() {
     checkValid(PACKAGE + "." + "AutomatonWithGenerics");
   }

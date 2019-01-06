@@ -37,36 +37,38 @@ public class UseOfUndeclaredField
     // when resolving type of the valuations
     if (node.isPresentName()) {
       final String name = node.getName();
+
       if (node.getEnclosingScopeOpt().isPresent()) {
-        Scope scope = node.getEnclosingScopeOpt().get(); //TransitionScope
-        if (scope.getEnclosingScope().isPresent()) {
-          // Scope of the automaton
-          if (scope.getEnclosingScope().get().getEnclosingScope().isPresent()) {
-            // Scope spanned by component symbol
-            scope = scope.getEnclosingScope().get().getEnclosingScope().get();
-            ComponentSymbol comp
-                = ((ComponentSymbol) scope.getSpanningSymbol().get());
-            boolean foundVar = comp.getVariable(name).isPresent();
-            boolean foundPort = comp.getPort(name, true).isPresent();
 
-            if (!foundVar && !foundPort) {
-              Optional<JavaTypeSymbol> javaType = Optional.empty();
+        Scope searchScope = node.getEnclosingScopeOpt().get();
+        while((!searchScope.getSpanningSymbol().isPresent() ||
+            !searchScope.getSpanningSymbol().get().isKindOf(ComponentSymbol.KIND))
+            && searchScope.getEnclosingScope().isPresent()){
+          searchScope = searchScope.getEnclosingScope().get();
+        }
+        ComponentSymbol currentComponent
+            = (ComponentSymbol) searchScope.getSpanningSymbol().get();
 
-              // could also be a static method call
-              if (node.isCall()) {
-                javaType = node.getEnclosingScopeOpt().get().resolve(node.getName(),
-                    JavaTypeSymbol.KIND);
-              }
+        boolean foundVar = currentComponent.getVariable(name).isPresent();
+        boolean foundPort
+            = currentComponent.getPort(name, true).isPresent();
 
-              if (!javaType.isPresent()) {
-                Log.error(
-                    String.format("0xMA079: The name '%s' is used in %s, but is " +
-                                      "neither declared a port, nor as a " +
-                                      "variable or static method call.",
-                        name, "assignment"),
-                    node.get_SourcePositionStart());
-              }
-            }
+        if (!foundVar && !foundPort) {
+          Optional<JavaTypeSymbol> javaType = Optional.empty();
+
+          // could also be a static method call
+          if (node.isCall()) {
+            javaType = node.getEnclosingScopeOpt().get().resolve(node.getName(),
+                JavaTypeSymbol.KIND);
+          }
+
+          if (!javaType.isPresent()) {
+            Log.error(
+                String.format("0xMA079: The name '%s' is used in %s, but is " +
+                        "neither declared a port, nor as a " +
+                        "variable or static method call.",
+                    name, "assignment"),
+                node.get_SourcePositionStart());
           }
         }
       }
