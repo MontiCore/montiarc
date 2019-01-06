@@ -93,8 +93,8 @@ class AutomatonGenerator extends BehaviorGenerator {
       public «resultName»«Generics.print(comp)»
             compute(«comp.name»Input«Generics.print(comp)» «helper.inputName») {
           // inputs
-          «FOR inPort : comp.incomingPorts»
-            final «ComponentHelper.printTypeName((inPort.astNode.get as ASTPort).type)» «inPort.name» = «helper.inputName».get«inPort.name.toFirstUpper»();
+          «FOR inPort : comp.allIncomingPorts»
+            final «ComponentHelper.getRealPortTypeString(comp, inPort)» «inPort.name» = «helper.inputName».get«inPort.name.toFirstUpper»();
           «ENDFOR»
           
           final «resultName» «helper.resultName» = new «resultName»();
@@ -103,9 +103,9 @@ class AutomatonGenerator extends BehaviorGenerator {
           switch («helper.currentStateName») {
           «FOR state : automaton.stateDeclarationList.get(0).stateList»
             case «state.name»:
-              «FOR transition : transitions.stream.filter(s | s.source.referencedSymbol == state).collect(Collectors.toList)»
+              «FOR transition : transitions.stream.filter(s | s.source.name == state.name).collect(Collectors.toList)»
                 // transition: «transition.toString»
-                if («IF transition.guardAST.isPresent»«transition.guardAST.get?:printExpression(transition.guardAST.get.guardExpression.expression)»«ELSE» true «ENDIF») {
+                if («IF transition.guardAST.isPresent»«printExpression(transition.guardAST.get.guardExpression.expression)»«ELSE» true «ENDIF») {
                   //reaction
                   «IF transition.reactionAST.present»
                     «FOR assignment : transition.reactionAST.get.IOAssignmentList»
