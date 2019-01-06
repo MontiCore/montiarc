@@ -179,9 +179,6 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     addToString();
     addFixedImports();
 
-    // Impl methods
-    addImplCompute();
-
     // Subcomponents
     addSubcomponents();
 
@@ -435,24 +432,62 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     classVisitor.addField(implVarName, PRINTER.prettyprint(expectedType));
   }
 
-  private void addImplCompute() {
+  private void addImplCompute(ASTAutomaton node) {
     if (this.symbol.isDecomposed()) {
       return;
     }
 
-    String inputVarName = "input";
-    if (helper.containsIdentifier("input")) {
-      inputVarName = "r__input";
+    Method.Builder method = Method.getBuilder().setName("compute");
+    String inputVarName = determineIdentifierName("input");
+
+    // TODO Impl Add compute body
+    StringBuilder body = new StringBuilder();
+    // Local variable assignment and extraction from input
+    for (PortSymbol port : symbol.getIncomingPorts()) {
+//      method.addBodyElement();
     }
 
-    ASTType paramType = this.types.get("INPUT_CLASS_TYPE");
-    Method method = Method.getBuilder()
-                        .setName("compute")
-                        .setReturnType(PRINTER.prettyprint(this.types.get("RESULT_CLASS_TYPE")))
-                        .addParameter(inputVarName, paramType)
-                        .build();
+
+    method
+        .setReturnType(PRINTER.prettyprint(this.types.get("RESULT_CLASS_TYPE")))
+        .addParameter(inputVarName, this.types.get("INPUT_CLASS_TYPE"));
+    this.implVisitor.addMethod(method.build());
+  }
+
+  /**
+   * Add the compute method to the expected methods for models with a
+   * JavaP/AJava implementation.
+   * @param node
+   */
+  private void addImplCompute(ASTJavaPBehavior node) {
+    if (this.symbol.isDecomposed()) {
+      return;
+    }
+
+
+    Method.Builder method = Method.getBuilder().setName("compute");
+
+    String inputVarName = determineIdentifierName("input");
+
     // TODO Impl Add compute body
-    this.implVisitor.addMethod(method);
+    method
+        .setReturnType(resultType())
+        .addParameter(inputVarName, this.types.get("INPUT_CLASS_TYPE"));
+    this.implVisitor.addMethod(method.build());
+  }
+
+  /**
+   * In case identifier names are used in the model the names in the generated
+   * classes should be adapted
+   * @param name Name to check
+   * @return The adapted name, if the name occurs in the model. The name, otherwise.
+   */
+  private String determineIdentifierName(String name){
+    if (helper.containsIdentifier(name)) {
+      return "r__" + name;
+    } else {
+      return name;
+    }
   }
 
   /**
@@ -960,12 +995,14 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       }
     }
     addGetInitialValues(node);
+    addImplCompute(node);
 
   }
 
   @Override
   public void visit(ASTJavaPBehavior node){
     addGetInitialValues(node);
+    addImplCompute(node);
   }
 
   /**
