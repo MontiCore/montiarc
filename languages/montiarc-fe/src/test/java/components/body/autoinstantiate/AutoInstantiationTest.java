@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 import infrastructure.ExpectedErrorInfo;
-import montiarc._ast.ASTMontiArcNode;
+import montiarc._ast.*;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ConnectorSymbol;
 import org.junit.BeforeClass;
@@ -153,7 +153,11 @@ public class AutoInstantiationTest extends AbstractCoCoTest {
   @Test
   public void testAutoInstanciateOn() {
     ComponentSymbol comp = this.loadComponent("AutoInstanciateOn");
-
+    assertTrue(comp.getAstNode().isPresent());
+    assertTrue(comp.getAstNode().get() instanceof ASTComponent);
+    ASTComponent astComp = (ASTComponent) comp.getAstNode().get();
+    long numberOfSubCompInstances = astComp.getBody().getElementList().stream().filter(element -> element instanceof ASTSubComponent).count();
+    assertEquals(2, numberOfSubCompInstances);
     assertEquals(2, comp.getSubComponents().size());
   }
 
