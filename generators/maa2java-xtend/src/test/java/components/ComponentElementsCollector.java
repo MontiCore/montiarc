@@ -8,6 +8,7 @@ package components;
 import com.google.common.collect.Lists;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor;
+import de.monticore.ast.ASTNode;
 import de.monticore.java.javadsl._ast.ASTImportDeclaration;
 import de.monticore.java.javadsl._ast.JavaDSLMill;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
@@ -439,17 +440,28 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     Method.Builder method = Method.getBuilder().setName("compute");
     String inputVarName = determineIdentifierName("input");
-
-    // TODO Impl Add compute body
-    StringBuilder body = new StringBuilder();
+    
     // Local variable assignment and extraction from input
-    for (PortSymbol port : symbol.getIncomingPorts()) {
-//      method.addBodyElement();
+    for (PortSymbol port : symbol.getAllIncomingPorts()) {
+      String portTypeString = ComponentHelper.getRealPortTypeString(symbol, port);
+      method.addBodyElement(
+          "final" + portTypeString + " " + port.getName() + " = " 
+          + inputVarName + ".get" + capitalizeFirst(port.getName()) + "();"
+      );
     }
 
-
+    // Result variable
+    String resultVarName = determineIdentifierName("result");
+    method.addBodyElement(
+        getVariableDeclAndInitialization(resultVarName, resultType()));
+    
+    
+    // Switch statement representing the automaton transitions
+    // TODO 
+    
+    // Return type and parameters
     method
-        .setReturnType(PRINTER.prettyprint(this.types.get("RESULT_CLASS_TYPE")))
+        .setReturnType(resultType())
         .addParameter(inputVarName, this.types.get("INPUT_CLASS_TYPE"));
     this.implVisitor.addMethod(method.build());
   }
@@ -1018,7 +1030,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     final String resultVarName = "result";
     String resultVarDeclAndInit
-        = getVariableDeclAndInitialization(resultVarName, resultType(), Optional.empty());
+        = getVariableDeclAndInitialization(resultVarName, resultType());
 
     // Initial reaction
     final Optional<ASTInitialStateDeclaration> initialState
@@ -1112,12 +1124,27 @@ public class ComponentElementsCollector implements MontiArcVisitor {
    * @return The String of the Java statement
    */
   private String getVariableDeclAndInitialization(
-      String varName, String varType, Optional<String> parameters) {
+      String varName, String varType, String parameters, String generics) {
 
-    return String.format("final %s %s = new %s(%s);",
-        resultType(), varName, resultType(), parameters.orElse(""));
+    if(generics != "") {
+      generics = "<" + generics + ">";
+    }
+    return String.format("final %s%s %s = new %s%s(%s);",
+        resultType(), generics, varName, resultType(), generics, parameters);
   }
+  
+  /**
+   * Prints the String for declaring and initializing a variable
+   * @param varName Name of the variable
+   * @param varType String representing the type of the variable
+   * @return The String of the Java statement
+   */
+  private String getVariableDeclAndInitialization(
+      String varName, String varType) {
 
+    return getVariableDeclAndInitialization(varName, varType, "", "");
+  }
+  
   /**
    *
    * @return The pretty printed type of the components result class
@@ -1130,8 +1157,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     final String resultVarName = "result";
     String resultVar
         = getVariableDeclAndInitialization
-              (resultVarName, resultType(), Optional.empty());
-
+              (resultVarName, resultType(), "", printTypeParameters(symbol)); 
     String returnStmt = "return " + resultVarName + ";";
     Method method = Method.getBuilder()
                         .setName("getInitialValues")
@@ -1140,8 +1166,23 @@ public class ComponentElementsCollector implements MontiArcVisitor {
                         .addBodyElement(returnStmt)
                         .build();
 
-    //TODO Impl Add getInitialValuesBody
+    //TODO Impl Add getInitialValuesBody for AJava
     this.implVisitor.addMethod(method);
+  }
+  
+  private String printTypeParameters(ComponentSymbol comp){
+    ASTComponent astNode = (ASTComponent) comp.getAstNode().get();
+    if(astNode.getHead().isPresentGenericTypeParameters()) {
+      return "<" + astNode.getHead()
+          .getGenericTypeParameters()
+          .getTypeVariableDeclarationList()
+          .stream()
+          .map(typeVar -> typeVar.getName())
+          .collect(Collectors.joining(",")) 
+          + ">";
+    }
+    
+    return "";
   }
 
   @Override
