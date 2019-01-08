@@ -458,7 +458,45 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     
     // Switch statement representing the automaton transitions
     // TODO 
-    
+    method.addBodyElement("switch(" + determineIdentifierName("currentState") + "){");
+    for (ASTStateDeclaration stateDeclaration : node.getStateDeclarationList()) {
+      for (ASTState state : stateDeclaration.getStateList()) {
+        method.addBodyElement("case " + state.getName() + ":");
+        
+        // Transitions from the current state
+        List<TransitionSymbol> transitions = 
+            symbol.getSpannedScope().getSubScopes()
+            .stream()
+            .flatMap(scope ->
+            scope.<TransitionSymbol>resolveLocally(TransitionSymbol.KIND).stream())
+            .filter(t -> t.getSource().getName().equals(state.getName()))
+            .collect(Collectors.toList());
+        
+        for (TransitionSymbol transition : transitions) {
+          String guard = "true";
+          if(transition.getGuardAST().isPresent()) {
+            guard = printExpression(transition.getGuardAST().get().getGuardExpression().getExpression(), false);
+          }
+          method.addBodyElement("if("+ guard + ")" + "{");
+          
+          // Reaction
+          if(transition.getReactionAST().isPresent()) {
+            for(ASTIOAssignment assignment : transition.getReactionAST().get().getIOAssignmentList()) {
+              method.addBodyElement(printReaction(resultVarName, assignment));
+            }
+          }
+          
+          // State change
+          method.addBodyElement(
+              determineIdentifierName("currentState") + " = " 
+              + this.symbol.getName() + "State." 
+              + transition.getTarget().getName() + ";"
+          );
+          method.addBodyElement("break;");
+          method.addBodyElement("}");
+        }
+      }
+    }
     // Return type and parameters
     method
         .setReturnType(resultType())
@@ -1040,37 +1078,13 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     method.addBodyElement(resultVarDeclAndInit);
 
-    StringBuilder initialReactionString = new StringBuilder();
+    String initialReactionString = "";
     if (initialState.get().getBlockOpt().isPresent()) {
       final ASTBlock initialReaction = initialState.get().getBlock();
       for (ASTIOAssignment astioAssignment : initialReaction.getIOAssignmentList()) {
-        if (astioAssignment.isAssignment()) {
-          // Name = (ValueList | Alternative)
-          final String assigneeName = astioAssignment.getName();
-          final List<String> outgoingPortNames
-              = symbol.getAllOutgoingPorts()
-                    .stream()
-                    .map(CommonSymbol::getName)
-                    .collect(Collectors.toList());
-          if(outgoingPortNames.contains(assigneeName)){
-            // Assignee is a port
-            initialReactionString.append(String.format(
-                "%s.set%s(%s);",
-                resultVarName,
-                toFirstUpper(assigneeName),
-                printRightHand(astioAssignment)));
-          } else if(symbol.getVariable(assigneeName).isPresent()){
-            initialReactionString
-                .append(assigneeName)
-                .append(" = ").append(printRightHand(astioAssignment))
-                .append(";");
-          }
-        } else {
-          // Function call
-          initialReactionString.append(printRightHand(astioAssignment));
-        }
+        initialReactionString = printReaction(resultVarName, astioAssignment);
       }
-      method.addBodyElement(initialReactionString.toString());
+      method.addBodyElement(initialReactionString);
     }
 
     String currentStateName = "currentState";
@@ -1084,6 +1098,43 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         .addBodyElement(returnStmt);
 
     this.implVisitor.addMethod(method.build());
+  }
+
+  /**
+   * TODO: Write me!
+   * @param resultVarName
+   * @param initialReactionString
+   * @param astioAssignment
+   */
+  private String printReaction(final String resultVarName,
+      ASTIOAssignment astioAssignment) {
+    StringBuilder reactionStringBuilder = new StringBuilder();
+    if (astioAssignment.isAssignment()) {
+      // Name = (ValueList | Alternative)
+      final String assigneeName = astioAssignment.getName();
+      final List<String> outgoingPortNames
+          = symbol.getAllOutgoingPorts()
+                .stream()
+                .map(CommonSymbol::getName)
+                .collect(Collectors.toList());
+      if(outgoingPortNames.contains(assigneeName)){
+        // Assignee is a port
+        reactionStringBuilder.append(String.format(
+            "%s.set%s(%s);",
+            resultVarName,
+            toFirstUpper(assigneeName),
+            printRightHand(astioAssignment)));
+      } else if(symbol.getVariable(assigneeName).isPresent()){
+        reactionStringBuilder
+            .append(assigneeName)
+            .append(" = ").append(printRightHand(astioAssignment))
+            .append(";");
+      }
+    } else {
+      // Function call
+      reactionStringBuilder.append(printRightHand(astioAssignment));
+    }
+    return reactionStringBuilder.toString();
   }
 
   private String printRightHand(ASTIOAssignment astioAssignment) {

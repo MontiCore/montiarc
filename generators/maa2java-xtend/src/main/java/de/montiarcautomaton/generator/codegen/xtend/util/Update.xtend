@@ -47,14 +47,14 @@ class Update {
     '''
     @Override
     public void update() {
-    «IF comp.superComponent.present»
+      «IF comp.superComponent.present»
       super.update();
-    «ENDIF»
-  
-    // update computed value for next computation cycle in all outgoing ports
-    «FOR portOut : comp.outgoingPorts»
+      «ENDIF»
+    
+      // update computed value for next computation cycle in all outgoing ports
+      «FOR portOut : comp.outgoingPorts»
       this.«portOut.name».update();
-    «ENDFOR»
+      «ENDFOR»
     }
     '''
   }
