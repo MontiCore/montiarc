@@ -5,11 +5,10 @@
  */
 package de.montiarcautomaton.generator.codegen.xtend.util
 
-import montiarc._ast.ASTComponent
-import montiarc._symboltable.ComponentSymbol
 import de.montiarcautomaton.generator.helper.ComponentHelper
-import montiarc._ast.ASTPort
+import montiarc._ast.ASTComponent
 import montiarc._ast.ASTVariableDeclaration
+import montiarc._symboltable.ComponentSymbol
 
 /**
  * TODO: Write me!

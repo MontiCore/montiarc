@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import de.montiarcautomaton.generator.codegen.xtend.ComponentGenerator;
 import de.montiarcautomaton.generator.codegen.xtend.MAAGenerator;
 import de.monticore.cd2pojo.Modelfinder;
 import de.monticore.cd2pojo.POJOGenerator;

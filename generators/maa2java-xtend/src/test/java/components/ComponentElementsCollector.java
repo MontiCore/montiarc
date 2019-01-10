@@ -6,6 +6,8 @@
 package components;
 
 import com.google.common.collect.Lists;
+
+import de.montiarcautomaton.generator.codegen.xtend.util.Identifier;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor;
 import de.monticore.ast.ASTNode;
@@ -422,7 +424,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
             this.types.get("RESULT_CLASS_TYPE")));
 
     String implVarName = "behaviorImpl";
-    if(helper.containsIdentifier(implVarName)){
+    if(new Identifier().containsIdentifier(implVarName, symbol)){
       implVarName = "r__behaviorImpl";
     }
 
@@ -533,7 +535,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
    * @return The adapted name, if the name occurs in the model. The name, otherwise.
    */
   private String determineIdentifierName(String name){
-    if (helper.containsIdentifier(name)) {
+    if (new Identifier().containsIdentifier(name, symbol)) {
       return "r__" + name;
     } else {
       return name;
@@ -572,7 +574,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
       // Deal with possible naming problems
       String implVarName = "behaviorImpl";
-      if(helper.containsIdentifier(implVarName)){
+      if(new Identifier().containsIdentifier(implVarName, symbol)){
         implVarName = "r__behaviorImpl";
       }
 
@@ -650,7 +652,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         tryBlock.append(getTypeParameterList());
       }
       String implVarName = "behaviorImpl";
-      if(helper.containsIdentifier(implVarName)){
+      if(new Identifier().containsIdentifier(implVarName, symbol)){
         implVarName = "r__behaviorImpl";
       }
       tryBlock.append("result = ").append(implVarName)
@@ -717,7 +719,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     }
 
     String implVarName = "behaviorImpl";
-    if(helper.containsIdentifier(implVarName)){
+    if(new Identifier().containsIdentifier(implVarName, symbol)){
       implVarName = "r__behaviorImpl";
     }
     resultString
@@ -1033,7 +1035,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   public void visit(ASTAutomaton node) {
     // Add the currentState field
     String currentStateVarName = "currentState";
-    if(helper.containsIdentifier(currentStateVarName)){
+    if(new Identifier().containsIdentifier(currentStateVarName, symbol)){
       currentStateVarName = "r__" + currentStateVarName;
     }
     this.implVisitor.addField(currentStateVarName, this.symbol.getName() + "State");

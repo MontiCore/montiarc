@@ -8,6 +8,7 @@
 package de.montiarcautomaton.generator.codegen.xtend
 
 import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
+import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
 import de.montiarcautomaton.generator.codegen.xtend.util.Imports
 import de.montiarcautomaton.generator.codegen.xtend.util.Init
 import de.montiarcautomaton.generator.codegen.xtend.util.Member
@@ -67,12 +68,12 @@ class ComponentGenerator {
         
         «ELSE»
         // the components behavior implementation
-        private final IComputable<«comp.name»Input«generics», «comp.name»Result«generics»> «helper.behaviorImplName»;
+        private final IComputable<«comp.name»Input«generics», «comp.name»Result«generics»> «Identifier.behaviorImplName»;
         
         «printComputeAtomic(comp)»
         private void initialize() {
           // get initial values from behavior implementation
-          final «comp.name»Result«generics» result = «helper.behaviorImplName».getInitialValues();
+          final «comp.name»Result«generics» result = «Identifier.behaviorImplName».getInitialValues();
           
           // set results to ports
           setResult(result);
@@ -106,7 +107,7 @@ class ComponentGenerator {
         «ENDIF»
         
         «IF comp.isAtomic»
-          «helper.behaviorImplName» = new «comp.name»Impl«generics»(
+          «Identifier.behaviorImplName» = new «comp.name»Impl«generics»(
           «IF comp.hasConfigParameters»
             «FOR param : comp.configParameters SEPARATOR ','»
               «param.name»
@@ -131,7 +132,7 @@ class ComponentGenerator {
       
       try {
       // perform calculations
-        final «comp.name»Result«generics» result = «helper.behaviorImplName».compute(input); 
+        final «comp.name»Result«generics» result = «Identifier.behaviorImplName».compute(input); 
         
         // set results to ports
         setResult(result);

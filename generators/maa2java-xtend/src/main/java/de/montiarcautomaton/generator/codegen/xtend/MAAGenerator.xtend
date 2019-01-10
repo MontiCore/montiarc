@@ -10,6 +10,7 @@ package de.montiarcautomaton.generator.codegen.xtend
 import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.AbstractAtomicImplementation
 import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.automaton.AutomatonGenerator
 import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.javap.JavaPGenerator
+import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
 import de.monticore.ast.ASTCNode
 import de.monticore.codegen.mc2cd.TransformationHelper
 import de.monticore.io.FileReaderWriter
@@ -24,8 +25,9 @@ import montiarc._ast.ASTJavaPBehavior
 import montiarc._symboltable.ComponentSymbol
 
 class MAAGenerator {
-
+  
   def generateAll(File targetPath, File hwc, ComponentSymbol comp) {
+    Identifier.createInstance(comp)
 
     var boolean existsHWCClass = TransformationHelper.existsHandwrittenClass(IterablePath.from(hwc, ".java"),
       comp.packageName + "." + comp.name);
@@ -74,5 +76,8 @@ class MAAGenerator {
     }
 
   }
-
+  
+   
+  
+ 
 }

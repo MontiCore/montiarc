@@ -31,7 +31,6 @@ abstract class BehaviorGenerator {
   def String hook(ComponentSymbol comp);
 
   def String generate(ComponentSymbol comp) {
-    var ComponentHelper helper = new ComponentHelper(comp)
     return '''
       package «comp.packageName»;
       

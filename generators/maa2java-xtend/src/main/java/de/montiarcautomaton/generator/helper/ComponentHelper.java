@@ -1,6 +1,15 @@
 package de.montiarcautomaton.generator.helper;
 
-import de.monticore.ast.ASTNode;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.prettyprint.IndentPrinter;
@@ -10,18 +19,19 @@ import de.monticore.symboltable.types.TypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.symboltable.types.references.TypeReference;
-import de.monticore.types.TypesPrinter;
 import de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor;
 import de.monticore.types.types._ast.ASTType;
 import de.monticore.types.types._ast.ASTTypeVariableDeclaration;
-import de.monticore.types.types._ast.ASTTypesNode;
-import de.se_rwth.commons.Names;
-import montiarc._ast.*;
-import montiarc._symboltable.*;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTParameter;
+import montiarc._ast.ASTPort;
+import montiarc._symboltable.ComponentInstanceSymbol;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.ComponentSymbolReference;
+import montiarc._symboltable.ConnectorSymbol;
+import montiarc._symboltable.PortSymbol;
+import montiarc._symboltable.VariableSymbol;
 import montiarc.helper.SymbolPrinter;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Helper class used in the template to generate target code of atomic or
@@ -36,17 +46,8 @@ public class ComponentHelper {
   
   protected final ASTComponent componentNode;
   
-  private String resultName = "result";
-  
-  private String inputName = "input";
-  
-  private String behaviorImplName = "behaviorImpl";
-  
-  private String currentStateName = "currentState";
-  
   public ComponentHelper(ComponentSymbol component) {
     this.component = component;
-    this.checkIdentifiers();
     if ((component.getAstNode().isPresent())
         && (component.getAstNode().get() instanceof ASTComponent)) {
       componentNode = (ASTComponent) component.getAstNode().get();
@@ -55,23 +56,6 @@ public class ComponentHelper {
       componentNode = null;
     }
   }
-  
-  public void checkIdentifiers() {
-    if (this.containsIdentifier("result")) {
-      resultName = "r__result";
-    }
-    if (this.containsIdentifier("input")) {
-      inputName = "r__input";
-    }
-    if (this.containsIdentifier("behaviorImpl")) {
-      behaviorImplName = "r__behaviorImpl";
-    }
-    
-    if(this.containsIdentifier("currentState")) {
-      currentStateName = "r__currentState";
-    }
-  }
-  
   
   /**
    * Prints the type of the given port respecting inherited ports and the actual
@@ -542,68 +526,6 @@ public class ComponentHelper {
     return paramList;
   }
   
-  /**
-   * Checks whether component parameter, variable, subcomponent instance, or
-   * port names contain the identifier given as the parameter.
-   * 
-   * @param identifier The name to check
-   * @return True, iff. there is at least one identifier that is equal to the
-   * given identifier
-   */
-  public boolean containsIdentifier(String identifier) {
-    
-    for (PortSymbol portSymbol : component.getPorts()) {
-      if (portSymbol.getName().equals(identifier)) {
-        return true;
-      }
-    }
-    
-    for (JFieldSymbol jFieldSymbol : component.getConfigParameters()) {
-      if (jFieldSymbol.getName().equals(identifier)) {
-        return true;
-      }
-    }
-    
-    for (VariableSymbol variableSymbol : component.getVariables()) {
-      if (variableSymbol.getName().equals(identifier)) {
-        return true;
-      }
-    }
-    
-    for (ComponentInstanceSymbol instanceSymbol : component.getSubComponents()) {
-      if (instanceSymbol.getName().equals(identifier)) {
-        return true;
-      }
-    }
-    
-    return false;
-  }
+
   
-  /**
-   * @return behaviorImplName
-   */
-  public String getBehaviorImplName() {
-    return this.behaviorImplName;
-  }
-  
-  /**
-   * @return resultName
-   */
-  public String getResultName() {
-    return this.resultName;
-  }
-  
-  /**
-   * @return inputName
-   */
-  public String getInputName() {
-    return this.inputName;
-  }
-  
-  /**
-   * @return currentStateName
-   */
-  public String getCurrentStateName() {
-    return this.currentStateName;
-  }
 }

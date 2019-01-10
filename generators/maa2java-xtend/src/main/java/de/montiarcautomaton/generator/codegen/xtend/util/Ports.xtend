@@ -7,7 +7,6 @@ package de.montiarcautomaton.generator.codegen.xtend.util
 
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import java.util.Collection
-import montiarc._ast.ASTPort
 import montiarc._symboltable.PortSymbol
 
 /**

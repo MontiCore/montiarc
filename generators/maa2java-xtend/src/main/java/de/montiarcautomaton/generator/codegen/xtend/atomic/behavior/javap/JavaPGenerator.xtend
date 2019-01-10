@@ -8,6 +8,7 @@
 package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.javap
 
 import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.BehaviorGenerator
+import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
 import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import de.monticore.ast.ASTNode
@@ -33,20 +34,19 @@ class JavaPGenerator extends BehaviorGenerator {
   }
 
   override String printCompute(ComponentSymbol comp) {
-    var ComponentHelper helper = new ComponentHelper(comp);
     return '''
       @Override
       public «comp.name»Result«TypeParameters.printFormalTypeParameters(comp)»
-                compute(«comp.name»Input«TypeParameters.printFormalTypeParameters(comp)» «helper.inputName») {
+                compute(«comp.name»Input«TypeParameters.printFormalTypeParameters(comp)» «Identifier.inputName») {
         // inputs
         «FOR portIn : comp.incomingPorts»
-          final «ComponentHelper.printTypeName((portIn.astNode.get as ASTPort).type)» «portIn.name» = «helper.inputName».get«portIn.name.toFirstUpper»();
+          final «ComponentHelper.printTypeName((portIn.astNode.get as ASTPort).type)» «portIn.name» = «Identifier.inputName».get«portIn.name.toFirstUpper»();
         «ENDFOR»
       
-        final «comp.name»Result «helper.resultName» = new «comp.name»Result();
+        final «comp.name»Result «Identifier.resultName» = new «comp.name»Result();
         
         «FOR portOut : comp.outgoingPorts»
-          «ComponentHelper.printTypeName((portOut.astNode.get as ASTPort).type)» «portOut.name» = «helper.resultName».get«portOut.name.toFirstUpper»();
+          «ComponentHelper.printTypeName((portOut.astNode.get as ASTPort).type)» «portOut.name» = «Identifier.resultName».get«portOut.name.toFirstUpper»();
         «ENDFOR»
         
         «««  print java statements here
@@ -54,9 +54,9 @@ class JavaPGenerator extends BehaviorGenerator {
         
         «««  always add all outgoing values to result
         «FOR portOut : comp.outgoingPorts»
-          «helper.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
+          «Identifier.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
         «ENDFOR»
-        return «helper.resultName»;
+        return «Identifier.resultName»;
       }
       
     '''
@@ -84,11 +84,10 @@ class JavaPGenerator extends BehaviorGenerator {
   }
 
   override String printGetInitialValues(ComponentSymbol comp) {
-    var ComponentHelper helper = new ComponentHelper(comp)
     return '''
       @Override
        public «comp.name»Result«TypeParameters.printFormalTypeParameters(comp)» getInitialValues() {
-         final «comp.name»Result «helper.resultName» = new «comp.name»Result();
+         final «comp.name»Result «Identifier.resultName» = new «comp.name»Result();
          
          try {
          «FOR portOut : comp.outgoingPorts»
@@ -100,7 +99,7 @@ class JavaPGenerator extends BehaviorGenerator {
          «ENDFOR»
       
          «FOR portOut : comp.outgoingPorts»
-           «helper.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
+           «Identifier.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
          «ENDFOR»
          } catch(Exception e) {
            e.printStackTrace();

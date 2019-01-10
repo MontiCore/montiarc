@@ -8,6 +8,8 @@
 package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.automaton
 
 import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.BehaviorGenerator
+import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
+import de.montiarcautomaton.generator.codegen.xtend.util.Member
 import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor
@@ -23,13 +25,11 @@ import montiarc._ast.ASTAutomatonBehavior
 import montiarc._ast.ASTComponent
 import montiarc._ast.ASTElement
 import montiarc._ast.ASTIOAssignment
-import montiarc._ast.ASTPort
 import montiarc._ast.ASTValueList
 import montiarc._symboltable.ComponentSymbol
 import montiarc._symboltable.StateSymbol
 import montiarc._symboltable.TransitionSymbol
 import montiarc._symboltable.VariableSymbol
-import de.montiarcautomaton.generator.codegen.xtend.util.Member
 
 class AutomatonGenerator extends BehaviorGenerator {
 
@@ -65,7 +65,6 @@ class AutomatonGenerator extends BehaviorGenerator {
   }
 
   override String hook(ComponentSymbol comp) {
-    var compHelper = new ComponentHelper(comp)
     var ASTAutomaton automaton = null
     for (ASTElement element : (comp.astNode.get as ASTComponent).body.elementList) {
       if (element instanceof ASTAutomatonBehavior) {
@@ -73,7 +72,7 @@ class AutomatonGenerator extends BehaviorGenerator {
       }
     }
     return '''
-      «Member.print(comp.name + "State", compHelper.currentStateName, "private")»
+      «Member.print(comp.name + "State", Identifier.currentStateName, "private")»
       
       «printStateEnum(automaton, comp)»
     '''
@@ -82,7 +81,6 @@ class AutomatonGenerator extends BehaviorGenerator {
   override String printCompute(ComponentSymbol comp) {
     var resultName = comp.name + "Result"
     var ASTAutomaton automaton = null
-    var ComponentHelper helper = new ComponentHelper(comp)
     for (ASTElement element : (comp.astNode.get as ASTComponent).body.elementList) {
       if (element instanceof ASTAutomatonBehavior) {
         automaton = element.automaton
@@ -91,16 +89,16 @@ class AutomatonGenerator extends BehaviorGenerator {
     return '''
       @Override
       public «resultName»«TypeParameters.printFormalTypeParameters(comp)»
-            compute(«comp.name»Input«TypeParameters.printFormalTypeParameters(comp)» «helper.inputName») {
+            compute(«comp.name»Input«TypeParameters.printFormalTypeParameters(comp)» «Identifier.inputName») {
           // inputs
           «FOR inPort : comp.allIncomingPorts»
-            final «ComponentHelper.getRealPortTypeString(comp, inPort)» «inPort.name» = «helper.inputName».get«inPort.name.toFirstUpper»();
+            final «ComponentHelper.getRealPortTypeString(comp, inPort)» «inPort.name» = «Identifier.inputName».get«inPort.name.toFirstUpper»();
           «ENDFOR»
           
-          final «resultName»«TypeParameters.printFormalTypeParameters(comp)» «helper.resultName» = new «resultName»«TypeParameters.printFormalTypeParameters(comp)»();
+          final «resultName»«TypeParameters.printFormalTypeParameters(comp)» «Identifier.resultName» = new «resultName»«TypeParameters.printFormalTypeParameters(comp)»();
           
           // first current state to reduce stimuli and guard checks
-          switch («helper.currentStateName») {
+          switch («Identifier.currentStateName») {
           «FOR state : automaton.stateDeclarationList.get(0).stateList»
             case «state.name»:
               «FOR transition : transitions.stream.filter(s | s.source.name == state.name).collect(Collectors.toList)»
@@ -113,7 +111,7 @@ class AutomatonGenerator extends BehaviorGenerator {
                         «IF isVariable(assignment.name, assignment)»
                           «assignment.name» = «printRightHandSide(assignment)»;
                         «ELSE»
-                          «helper.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
+                          «Identifier.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
                         «ENDIF»
                       «ELSE»
                         «printRightHandSide(assignment)»;  
@@ -122,7 +120,7 @@ class AutomatonGenerator extends BehaviorGenerator {
                   «ENDIF»
                   
                   //state change
-                  «helper.currentStateName» = «comp.name»State.«transition.target.name»;
+                  «Identifier.currentStateName» = «comp.name»State.«transition.target.name»;
                   break;
                 }
                 
@@ -138,7 +136,6 @@ class AutomatonGenerator extends BehaviorGenerator {
   override String printGetInitialValues(ComponentSymbol comp) {
     var resultName = comp.name + "Result"
     var ASTAutomaton automaton = null
-    var ComponentHelper compHelper = new ComponentHelper(comp)
     for (ASTElement element : (comp.astNode.get as ASTComponent).body.elementList) {
       if (element instanceof ASTAutomatonBehavior) {
         automaton = element.automaton
@@ -148,7 +145,7 @@ class AutomatonGenerator extends BehaviorGenerator {
       @Override
       public «resultName»«TypeParameters.printFormalTypeParameters(comp)»
       getInitialValues() {
-        final «resultName»«TypeParameters.printFormalTypeParameters(comp)» «compHelper.resultName» = new «resultName»«TypeParameters.printFormalTypeParameters(comp)»();
+        final «resultName»«TypeParameters.printFormalTypeParameters(comp)» «Identifier.resultName» = new «resultName»«TypeParameters.printFormalTypeParameters(comp)»();
         
         // initial reaction
         «var StateSymbol initialState = states.stream.filter(state | state.isInitial).findFirst.get»
@@ -156,7 +153,7 @@ class AutomatonGenerator extends BehaviorGenerator {
           «FOR assignment : initialState.initialReactionAST.get.IOAssignmentList»
             «IF assignment.isAssignment»
               «IF comp.getPort(assignment.name).isPresent»
-                «compHelper.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
+                «Identifier.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
               «ELSE»
                 «assignment.name» = «printRightHandSide(assignment)»;
               «ENDIF»
@@ -166,8 +163,8 @@ class AutomatonGenerator extends BehaviorGenerator {
           «ENDFOR»
         «ENDIF»
         
-        «compHelper.currentStateName» = «comp.name»State.«automaton.initialStateDeclarationList.get(0).name»;
-        return «compHelper.resultName»;
+        «Identifier.currentStateName» = «comp.name»State.«automaton.initialStateDeclarationList.get(0).name»;
+        return «Identifier.resultName»;
       }
     '''
   }

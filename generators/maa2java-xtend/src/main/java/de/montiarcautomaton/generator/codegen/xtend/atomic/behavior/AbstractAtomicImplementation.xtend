@@ -6,9 +6,9 @@
 package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior
 
 import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
+import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
 import de.montiarcautomaton.generator.codegen.xtend.util.Imports
 import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
-import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
 
 /**
@@ -22,7 +22,6 @@ import montiarc._symboltable.ComponentSymbol
  */
 class AbstractAtomicImplementation {
   def static generateAbstractAtomicImplementation(ComponentSymbol comp) {
-    var ComponentHelper helper = new ComponentHelper(comp);
     var String generics = TypeParameters.printFormalTypeParameters(comp)
     return '''
       package «comp.packageName»;
@@ -40,7 +39,7 @@ class AbstractAtomicImplementation {
         public «comp.name»Result«generics» getInitialValues() {
           throw new Error("Invoking getInitialValues() on abstract implementation «comp.packageName».«comp.name»");
         }
-       public «comp.name»Result«generics» compute(«comp.name»Input«generics» «helper.inputName») {
+       public «comp.name»Result«generics» compute(«comp.name»Input«generics» «Identifier.inputName») {
           throw new Error("Invoking compute() on abstract implementation «comp.packageName».«comp.name»");
       }
       
