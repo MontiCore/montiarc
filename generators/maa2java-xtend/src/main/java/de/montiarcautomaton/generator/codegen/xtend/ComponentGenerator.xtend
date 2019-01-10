@@ -12,7 +12,7 @@ import de.montiarcautomaton.generator.codegen.xtend.util.Getter
 import de.montiarcautomaton.generator.codegen.xtend.util.Imports
 import de.montiarcautomaton.generator.codegen.xtend.util.Init
 import de.montiarcautomaton.generator.codegen.xtend.util.Member
-import de.montiarcautomaton.generator.codegen.xtend.util.Setter
+import de.montiarcautomaton.generator.codegen.xtend.util.Ports
 import de.montiarcautomaton.generator.codegen.xtend.util.Setup
 import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
 import de.montiarcautomaton.generator.codegen.xtend.util.Update
@@ -20,7 +20,6 @@ import de.montiarcautomaton.generator.helper.ComponentHelper
 import de.monticore.symboltable.types.JFieldSymbol
 import java.util.ArrayList
 import java.util.List
-import montiarc._ast.ASTPort
 import montiarc._symboltable.ComponentSymbol
 import montiarc._symboltable.ComponentSymbolReference
 
@@ -53,12 +52,7 @@ class ComponentGenerator {
       implements IComponent {
         
       //ports
-      «FOR port : comp.ports»
-        «var String portType = ComponentHelper.printTypeName((port.astNode.get as ASTPort).type)»
-          «Getter.print("Port<" + portType + ">", port.name, "Port" + port.name.toFirstUpper)»
-          «Setter.print("Port<" + portType + ">", port.name, "Port" + port.name.toFirstUpper)»      
-      «ENDFOR»   
-      «Member.printPorts(comp)»
+      «Ports.print(comp.ports)»
       
       // component variables
       «Member.printVariables(comp)»

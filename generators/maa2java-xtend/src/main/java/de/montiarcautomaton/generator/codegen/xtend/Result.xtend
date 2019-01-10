@@ -68,7 +68,10 @@ class Result {
       
         // setter
         «FOR port : comp.outgoingPorts»
-          «Setter.print(helper.getRealPortTypeString(port), port.name, port.name.toFirstUpper)»
+          «var name = port.name»
+          public void set«name.toFirstUpper»(«helper.getRealPortTypeString(port)» «name») {
+            this.«name» = «name»;
+          }
         «ENDFOR»
       
       @Override

@@ -134,7 +134,6 @@ class AutomatonGenerator extends BehaviorGenerator {
     var resultName = comp.name + "Result"
     var ASTAutomaton automaton = null
     var ComponentHelper compHelper = new ComponentHelper(comp)
-//    var AutomatonHelper helper = new AutomatonHelper(comp)
     for (ASTElement element : (comp.astNode.get as ASTComponent).body.elementList) {
       if (element instanceof ASTAutomatonBehavior) {
         automaton = element.automaton
