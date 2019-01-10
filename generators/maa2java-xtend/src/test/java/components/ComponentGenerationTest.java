@@ -215,7 +215,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 
     // Impl
     // Only run if the component is not composed
-    if(symbol.isAtomic()) {
+    if(symbol.isAtomic() && symbol.hasBehavior()) {
       runVisitorOnFile(gs, compCollector.getImplVisitor(),
           qualifiedName + "Impl");
     }

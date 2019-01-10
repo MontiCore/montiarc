@@ -95,8 +95,7 @@ public class AssignmentNameCompleter implements MontiArcVisitor {
     ASTExpression expr = getFirstAssigntElement(assignment).getExpression();
     Optional<? extends JavaTypeSymbolReference> assignmentType = TypeCompatibilityChecker
         .getExpressionType(expr);
-    ;
-    
+
     if (!assignmentType.isPresent()) {
       info("no type of expression '" + expr + "' found.");
       return Optional.empty();

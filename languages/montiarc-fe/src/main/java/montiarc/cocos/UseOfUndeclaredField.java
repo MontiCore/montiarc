@@ -15,6 +15,7 @@ import montiarc._ast.ASTPort;
 import montiarc._ast.ASTVariableDeclaration;
 import montiarc._cocos.MontiArcASTGuardExpressionCoCo;
 import montiarc._cocos.MontiArcASTIOAssignmentCoCo;
+import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.VariableSymbol;
 
@@ -35,60 +36,41 @@ public class UseOfUndeclaredField
     // only check left side of IOAssignment, right side is implicitly checked
     // when resolving type of the valuations
     if (node.isPresentName()) {
+      final String name = node.getName();
+
       if (node.getEnclosingScopeOpt().isPresent()) {
-        final String name = node.getName();
-        Scope scope = node.getEnclosingScopeOpt().get();
-        boolean foundVar = scope.resolve(name, VariableSymbol.KIND).isPresent();
-        boolean foundPort = scope.resolve(name, PortSymbol.KIND).isPresent();
-        
+
+        Scope searchScope = node.getEnclosingScopeOpt().get();
+        while((!searchScope.getSpanningSymbol().isPresent() ||
+            !searchScope.getSpanningSymbol().get().isKindOf(ComponentSymbol.KIND))
+            && searchScope.getEnclosingScope().isPresent()){
+          searchScope = searchScope.getEnclosingScope().get();
+        }
+        ComponentSymbol currentComponent
+            = (ComponentSymbol) searchScope.getSpanningSymbol().get();
+
+        boolean foundVar = currentComponent.getVariable(name).isPresent();
+        boolean foundPort
+            = currentComponent.getPort(name, true).isPresent();
+
         if (!foundVar && !foundPort) {
           Optional<JavaTypeSymbol> javaType = Optional.empty();
-          
+
           // could also be a static method call
           if (node.isCall()) {
             javaType = node.getEnclosingScopeOpt().get().resolve(node.getName(),
                 JavaTypeSymbol.KIND);
           }
-          
+
           if (!javaType.isPresent()) {
             Log.error(
                 String.format("0xMA079: The name '%s' is used in %s, but is " +
-                    "neither declared a port, nor as a variable or static method call.",
+                        "neither declared a port, nor as a " +
+                        "variable or static method call.",
                     name, "assignment"),
                 node.get_SourcePositionStart());
           }
         }
-      }
-    }
-  }
-  
-  /**
-   * Private common helper function that is used to check whether a used field
-   * by the given name exists.
-   * 
-   * @param name Name of the field
-   * @param node Node object of the field
-   * @param usage Environment in which the field is used (used in the log)
-   */
-  private void check(String name, ASTNode node, String usage) {
-    if (node.getEnclosingScopeOpt().isPresent()) {
-      Scope scope = node.getEnclosingScopeOpt().get();
-      boolean foundVar = scope.resolve(name, VariableSymbol.KIND).isPresent();
-      boolean foundPort = scope.resolve(name, PortSymbol.KIND).isPresent();
-      final Optional<JavaTypeSymbol> typeSymbolOpt = scope.resolve(name, JavaTypeSymbol.KIND);
-      boolean foundEnum = false;
-      boolean foundStaticCall = false;
-      if (typeSymbolOpt.isPresent()) {
-        foundEnum = typeSymbolOpt.get().isEnum();
-        foundStaticCall = typeSymbolOpt.get().isClass();
-      }
-      
-      if (!foundVar && !foundPort && !foundEnum && !foundStaticCall) {
-        Log.error(
-            String.format("0xMA079: The name '%s' is used in %s, but is " +
-                "neither declared a port, nor as a variable.",
-                name, usage),
-            node.get_SourcePositionStart());
       }
     }
   }
@@ -107,6 +89,47 @@ public class UseOfUndeclaredField
     @Override
     public void visit(ASTNameExpression node) {
       check(node.getName(), node, "guard");
+    }
+
+    /**
+     * Private common helper function that is used to check whether a used field
+     * by the given name exists.
+     *
+     * @param name Name of the field
+     * @param node Node object of the field
+     * @param usage Environment in which the field is used (used in the log)
+     */
+    private void check(String name, ASTNameExpression node, String usage) {
+      if (node.getEnclosingScopeOpt().isPresent()) {
+        Scope scope = node.getEnclosingScopeOpt().get(); //TransitionScope
+        if(scope.getEnclosingScope().isPresent()){
+          // Scope of the automaton
+          if(scope.getEnclosingScope().get().getEnclosingScope().isPresent()){
+            // Scope spanned by component symbol
+            scope = scope.getEnclosingScope().get().getEnclosingScope().get();
+            ComponentSymbol comp
+                = ((ComponentSymbol) scope.getSpanningSymbol().get());
+            boolean foundVar = comp.getVariable(name).isPresent();
+            boolean foundPort = comp.getPort(name, true).isPresent();
+            final Optional<JavaTypeSymbol> typeSymbolOpt
+                = scope.resolve(name, JavaTypeSymbol.KIND);
+            boolean foundEnum = false;
+            boolean foundStaticCall = false;
+            if (typeSymbolOpt.isPresent()) {
+              foundEnum = typeSymbolOpt.get().isEnum();
+              foundStaticCall = typeSymbolOpt.get().isClass();
+            }
+
+            if (!foundVar && !foundPort && !foundEnum && !foundStaticCall) {
+              Log.error(
+                  String.format("0xMA079: The name '%s' is used in %s, but is " +
+                                    "neither declared a port, nor as a variable.",
+                      name, usage),
+                  node.get_SourcePositionStart());
+            }
+          }
+        }
+      }
     }
   }
   
