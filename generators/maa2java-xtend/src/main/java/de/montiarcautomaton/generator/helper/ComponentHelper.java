@@ -386,7 +386,7 @@ public class ComponentHelper {
    * @param instance The instance of which the type should be printed
    * @return The printed subcomponent type
    */
-  public String getSubComponentTypeName(ComponentInstanceSymbol instance) {
+  public static String getSubComponentTypeName(ComponentInstanceSymbol instance) {
     String result = "";
     final ComponentSymbolReference componentTypeReference = instance.getComponentType();
     result += componentTypeReference.getFullName();

@@ -58,7 +58,7 @@ class Setup {
     «ENDIF»
     
     «FOR subcomponent : comp.subComponents»
-      this.«subcomponent.name» = new «subcomponent.componentType.fullName»«TypeParameters.printTypeArguments(subcomponent.componentType.actualTypeArguments)»(
+      this.«subcomponent.name» = new «ComponentHelper.getSubComponentTypeName(subcomponent)»(
       «FOR param : helper.getParamValues(subcomponent) SEPARATOR ','»
         «param»
       «ENDFOR»

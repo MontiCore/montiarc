@@ -96,7 +96,7 @@ class AutomatonGenerator extends BehaviorGenerator {
             final «ComponentHelper.getRealPortTypeString(comp, inPort)» «inPort.name» = «helper.inputName».get«inPort.name.toFirstUpper»();
           «ENDFOR»
           
-          final «resultName»«Generics.print(comp)» «helper.resultName» = new «resultName»«Generics.print(comp)»();
+          final «resultName»«TypeParameters.printFormalTypeParameters(comp)» «helper.resultName» = new «resultName»«TypeParameters.printFormalTypeParameters(comp)»();
           
           // first current state to reduce stimuli and guard checks
           switch («helper.currentStateName») {
@@ -148,7 +148,7 @@ class AutomatonGenerator extends BehaviorGenerator {
       @Override
       public «resultName»«TypeParameters.printFormalTypeParameters(comp)»
       getInitialValues() {
-        final «resultName»«Generics.print(comp)» «compHelper.resultName» = new «resultName»«Generics.print(comp)»();
+        final «resultName»«TypeParameters.printFormalTypeParameters(comp)» «compHelper.resultName» = new «resultName»«TypeParameters.printFormalTypeParameters(comp)»();
         
         // initial reaction
         «var StateSymbol initialState = states.stream.filter(state | state.isInitial).findFirst.get»

@@ -29,30 +29,38 @@ class Member {
 
   def static printPorts(ComponentSymbol comp) {
     return '''
-«««    «FOR »for(port : comp.ports) {
-«««         print("Port<" + ComponentHelper.printTypeName((port.astNode.get as ASTPort).type) + ">", port.name, "protected")
-«««    }
-    
+    «FOR port : comp.ports»
+      «print("Port<" + ComponentHelper.printTypeName((port.astNode.get as ASTPort).type) + ">", port.name, "protected")»
+    «ENDFOR»
     '''
   }
 
   def static printSubcomponents(ComponentSymbol comp) {
-    for (sub : comp.subComponents) {
-      print(sub.componentType.fullName + TypeParameters.printTypeArguments(sub.componentType.actualTypeArguments), sub.name, "private")
-    }
+    return 
+    '''
+    «FOR sub : comp.subComponents»
+      «print(ComponentHelper.getSubComponentTypeName(sub), sub.name, "private")»
+    «ENDFOR»
+    '''
   }
 
 
   def static printConfigParameters(ComponentSymbol comp) {
-    for(param : (comp.astNode.get as ASTComponent).head.parameterList) {
-      Member.print(ComponentHelper.printTypeName(param.type), param.name, "private final")
-    }
+    return 
+    '''
+    «FOR param : (comp.astNode.get as ASTComponent).head.parameterList»
+      «Member.print(ComponentHelper.printTypeName(param.type), param.name, "private final")»
+    «ENDFOR»
+    '''
   }
 
   def static printVariables(ComponentSymbol comp) {
-    for(variable : comp.variables) {
-      print(ComponentHelper.printTypeName((variable.astNode.get as ASTVariableDeclaration).type), variable.name, "protected")
-    }
+    return 
+    '''
+    «FOR variable : comp.variables»
+      «print(ComponentHelper.printTypeName((variable.astNode.get as ASTVariableDeclaration).type), variable.name, "protected")»
+    «ENDFOR»
+    '''
   }
 
 }

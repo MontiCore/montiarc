@@ -60,7 +60,7 @@ class ComposedComponent {
         «Member.printSubcomponents(comp)»
         
         «FOR subcomp : comp.subComponents»
-          «Getter.print(helper.getSubComponentTypeName(subcomp), subcomp.name, "Component" + subcomp.name.toFirstUpper)»
+          «Getter.print(ComponentHelper.getSubComponentTypeName(subcomp), subcomp.name, "Component" + subcomp.name.toFirstUpper)»
         «ENDFOR»
         
         public «comp.name»(«ConfigurationParameters.print(comp)») {
