@@ -8,11 +8,13 @@
 package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.javap
 
 import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.BehaviorGenerator
-import de.montiarcautomaton.generator.codegen.xtend.util.Generics
+import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
 import de.montiarcautomaton.generator.helper.ComponentHelper
+import de.monticore.ast.ASTNode
 import de.monticore.java.javadsl._ast.ASTBlockStatement
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter
 import de.monticore.prettyprint.IndentPrinter
+import de.se_rwth.commons.Names
 import java.util.Collections
 import java.util.List
 import java.util.Optional
@@ -21,10 +23,8 @@ import montiarc._ast.ASTElement
 import montiarc._ast.ASTJavaPBehavior
 import montiarc._ast.ASTJavaPInitializer
 import montiarc._ast.ASTPort
-import montiarc._symboltable.ComponentSymbol
-import de.se_rwth.commons.Names
 import montiarc._ast.ASTValueInitialization
-import de.monticore.ast.ASTNode
+import montiarc._symboltable.ComponentSymbol
 
 class JavaPGenerator extends BehaviorGenerator {
 
@@ -36,8 +36,8 @@ class JavaPGenerator extends BehaviorGenerator {
     var ComponentHelper helper = new ComponentHelper(comp);
     return '''
       @Override
-      public «comp.name»Result«Generics.print(comp)»
-                compute(«comp.name»Input«Generics.print(comp)» «helper.inputName») {
+      public «comp.name»Result«TypeParameters.printFormalTypeParameters(comp)»
+                compute(«comp.name»Input«TypeParameters.printFormalTypeParameters(comp)» «helper.inputName») {
         // inputs
         «FOR portIn : comp.incomingPorts»
           final «ComponentHelper.printTypeName((portIn.astNode.get as ASTPort).type)» «portIn.name» = «helper.inputName».get«portIn.name.toFirstUpper»();
@@ -87,7 +87,7 @@ class JavaPGenerator extends BehaviorGenerator {
     var ComponentHelper helper = new ComponentHelper(comp)
     return '''
       @Override
-       public «comp.name»Result«Generics.print(comp)» getInitialValues() {
+       public «comp.name»Result«TypeParameters.printFormalTypeParameters(comp)» getInitialValues() {
          final «comp.name»Result «helper.resultName» = new «comp.name»Result();
          
          try {

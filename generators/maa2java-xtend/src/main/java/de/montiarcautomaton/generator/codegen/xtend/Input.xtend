@@ -5,11 +5,11 @@
  */
 package de.montiarcautomaton.generator.codegen.xtend
 
-import de.montiarcautomaton.generator.helper.ComponentHelper
-
-import montiarc._symboltable.ComponentSymbol
-import de.montiarcautomaton.generator.codegen.xtend.util.Generics
+import de.montiarcautomaton.generator.codegen.xtend.util.Imports
 import de.montiarcautomaton.generator.codegen.xtend.util.Member
+import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
+import de.montiarcautomaton.generator.helper.ComponentHelper
+import montiarc._symboltable.ComponentSymbol
 
 /**
  * TODO: Write me!
@@ -27,11 +27,11 @@ class Input {
     return '''
       package «comp.packageName»;
       
-      «de.montiarcautomaton.generator.codegen.xtend.util.Imports.print(comp)»
+      «Imports.print(comp)»
       import de.montiarcautomaton.runtimes.timesync.implementation.IInput;
       
       
-      public class «comp.name»Input«Generics.print(comp)»
+      public class «comp.name»Input«TypeParameters.printFormalTypeParameters(comp)»
       «IF comp.superComponent.present» extends 
             «comp.superComponent.get.fullName»Input
             «IF comp.superComponent.get.hasFormalTypeParameters»<

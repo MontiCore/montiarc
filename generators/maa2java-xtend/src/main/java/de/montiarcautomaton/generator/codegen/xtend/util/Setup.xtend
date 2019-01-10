@@ -6,9 +6,8 @@
 package de.montiarcautomaton.generator.codegen.xtend.util
 
 import de.montiarcautomaton.generator.helper.ComponentHelper
-
-import montiarc._symboltable.ComponentSymbol
 import montiarc._ast.ASTPort
+import montiarc._symboltable.ComponentSymbol
 
 /**
  * TODO: Write me!
@@ -29,7 +28,6 @@ class Setup {
   }
   
   def private static printSetupAtomic(ComponentSymbol comp) {
-    var helper = new ComponentHelper(comp)
     return '''
     @Override
     public void setUp() {
@@ -60,7 +58,7 @@ class Setup {
     «ENDIF»
     
     «FOR subcomponent : comp.subComponents»
-      this.«subcomponent.name» = new «helper.getSubComponentTypeName(subcomponent)»(
+      this.«subcomponent.name» = new «subcomponent.componentType.fullName»«TypeParameters.printTypeArguments(subcomponent.componentType.actualTypeArguments)»(
       «FOR param : helper.getParamValues(subcomponent) SEPARATOR ','»
         «param»
       «ENDFOR»
@@ -91,4 +89,6 @@ class Setup {
     }
     '''
   }
+  
+
 }

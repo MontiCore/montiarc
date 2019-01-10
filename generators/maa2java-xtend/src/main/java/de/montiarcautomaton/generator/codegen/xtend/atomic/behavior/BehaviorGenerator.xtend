@@ -6,13 +6,12 @@
 package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior;
 
 import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
-import de.montiarcautomaton.generator.codegen.xtend.util.Generics
 import de.montiarcautomaton.generator.codegen.xtend.util.Member
+import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._ast.ASTComponent
 import montiarc._ast.ASTVariableDeclaration
 import montiarc._symboltable.ComponentSymbol
-import de.monticore.types.TypesPrinter
 
 /**
  * TODO: Write me!
@@ -44,7 +43,7 @@ abstract class BehaviorGenerator {
       
       import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
       
-      public class «comp.name»Impl«Generics.print(comp)»
+      public class «comp.name»Impl«TypeParameters.printFormalTypeParameters(comp)»
       implements IComputable<«comp.name»Input, «comp.name»Result> {
         
       //component variables

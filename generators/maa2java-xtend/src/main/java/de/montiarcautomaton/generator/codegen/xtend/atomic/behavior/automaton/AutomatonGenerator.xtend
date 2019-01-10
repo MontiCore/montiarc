@@ -8,8 +8,7 @@
 package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.automaton
 
 import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.BehaviorGenerator
-
-import de.montiarcautomaton.generator.codegen.xtend.util.Generics
+import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter
@@ -90,8 +89,8 @@ class AutomatonGenerator extends BehaviorGenerator {
     }
     return '''
       @Override
-      public «resultName»«Generics.print(comp)»
-            compute(«comp.name»Input«Generics.print(comp)» «helper.inputName») {
+      public «resultName»«TypeParameters.printFormalTypeParameters(comp)»
+            compute(«comp.name»Input«TypeParameters.printFormalTypeParameters(comp)» «helper.inputName») {
           // inputs
           «FOR inPort : comp.incomingPorts»
             final «ComponentHelper.printTypeName((inPort.astNode.get as ASTPort).type)» «inPort.name» = «helper.inputName».get«inPort.name.toFirstUpper»();
@@ -147,7 +146,7 @@ class AutomatonGenerator extends BehaviorGenerator {
     }
     return '''
       @Override
-      public «resultName»«Generics.print(comp)»
+      public «resultName»«TypeParameters.printFormalTypeParameters(comp)»
       getInitialValues() {
         final «resultName» «compHelper.resultName» = new «resultName»();
         

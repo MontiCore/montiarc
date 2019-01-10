@@ -7,10 +7,10 @@ package de.montiarcautomaton.generator.codegen.xtend
 
 import montiarc._symboltable.ComponentSymbol
 import de.montiarcautomaton.generator.helper.ComponentHelper
-import de.montiarcautomaton.generator.codegen.xtend.util.Generics
 import de.montiarcautomaton.generator.codegen.xtend.util.Member
 import de.montiarcautomaton.generator.codegen.xtend.util.Getter
 import de.montiarcautomaton.generator.codegen.xtend.util.Setter
+import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
 
 /**
  * TODO: Write me!
@@ -31,7 +31,7 @@ class Result {
       import de.montiarcautomaton.runtimes.timesync.implementation.IResult;
       
       
-      public class «comp.name»Result«Generics.print(comp)»   
+      public class «comp.name»Result«TypeParameters.printFormalTypeParameters(comp)»   
       «IF comp.superComponent.present» extends 
       «comp.superComponent.get.fullName»Result «IF comp.superComponent.get.hasFormalTypeParameters»< «FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
           «scTypeParams»«ENDFOR»>«ENDIF»

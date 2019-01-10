@@ -5,11 +5,11 @@
  */
 package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior
 
-import de.montiarcautomaton.generator.codegen.xtend.util.Generics
+import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
 import de.montiarcautomaton.generator.codegen.xtend.util.Imports
+import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
-import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
 
 /**
  * TODO: Write me!
@@ -23,7 +23,7 @@ import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
 class AbstractAtomicImplementation {
   def static generateAbstractAtomicImplementation(ComponentSymbol comp) {
     var ComponentHelper helper = new ComponentHelper(comp);
-    var String generics = Generics.print(comp)
+    var String generics = TypeParameters.printFormalTypeParameters(comp)
     return '''
       package «comp.packageName»;
       

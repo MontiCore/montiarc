@@ -6,24 +6,21 @@
 package de.montiarcautomaton.generator.codegen.xtend.atomic
 
 import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
-import de.montiarcautomaton.generator.codegen.xtend.util.Generics
 import de.montiarcautomaton.generator.codegen.xtend.util.Getter
 import de.montiarcautomaton.generator.codegen.xtend.util.Imports
 import de.montiarcautomaton.generator.codegen.xtend.util.Init
 import de.montiarcautomaton.generator.codegen.xtend.util.Member
 import de.montiarcautomaton.generator.codegen.xtend.util.Setter
 import de.montiarcautomaton.generator.codegen.xtend.util.Setup
+import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
 import de.montiarcautomaton.generator.codegen.xtend.util.Update
 import de.montiarcautomaton.generator.helper.ComponentHelper
-import montiarc._ast.ASTPort
-import montiarc._ast.ASTVariableDeclaration
-import montiarc._symboltable.ComponentSymbol
-import java.util.List
 import de.monticore.symboltable.types.JFieldSymbol
-import montiarc._symboltable.ComponentSymbolReference
 import java.util.ArrayList
-import de.monticore.types.TypesPrinter
-import montiarc._ast.ASTComponent
+import java.util.List
+import montiarc._ast.ASTPort
+import montiarc._symboltable.ComponentSymbol
+import montiarc._symboltable.ComponentSymbolReference
 
 /**
  * TODO: Write me!
@@ -36,7 +33,7 @@ import montiarc._ast.ASTComponent
  */
 class AtomicComponent {
    def static generateAtomicComponent(ComponentSymbol comp) {
-     var String generics = Generics.print(comp)
+     var String generics = TypeParameters.printFormalTypeParameters(comp)
     var ComponentHelper helper = new ComponentHelper(comp);
     
     return '''
@@ -50,7 +47,7 @@ class AtomicComponent {
       import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
       import de.montiarcautomaton.runtimes.Log;
       
-      public class «comp.name»«Generics.print(comp)»      
+      public class «comp.name»«TypeParameters.printFormalTypeParameters(comp)»      
       «IF comp.superComponent.present» extends «comp.superComponent.get.fullName» 
         «IF comp.superComponent.get.hasFormalTypeParameters»<«FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
           «scTypeParams»«ENDFOR»>«ENDIF»
@@ -58,19 +55,13 @@ class AtomicComponent {
       implements IComponent {
         
         // component variables
-        «FOR v : comp.variables»
-          «Member.print(ComponentHelper.printTypeName((v.astNode.get as ASTVariableDeclaration).type), v.name, "protected")»
-        «ENDFOR»
+        «Member.printVariables(comp)»
         
         // config parameters
-      «FOR param : (comp.astNode.get as ASTComponent).head.parameterList»
-        «Member.print(ComponentHelper.printTypeName(param.type), param.name, "private final")»
-      «ENDFOR»
+        «Member.printConfigParameters(comp)»
         
         // port fields
-        «FOR port : comp.ports»
-          «Member.print("Port<" + ComponentHelper.printTypeName((port.astNode.get as ASTPort).type)+">", port.name, "protected")»
-        «ENDFOR»      
+        «Member.printPorts(comp)»     
       
         // port setter
         «FOR inPort : comp.ports»
@@ -103,6 +94,7 @@ class AtomicComponent {
         
         «Init.print(comp)»
         
+        «Update.print(comp)»
         
         private void setResult(«comp.name»Result«generics» result) {
         «FOR portOut : comp.outgoingPorts»
@@ -127,7 +119,6 @@ class AtomicComponent {
           }
         }
       
-        «Update.print(comp)»
         
         private void initialize() {
            // get initial values from behavior implementation
