@@ -47,15 +47,20 @@ class AutomatonGenerator extends BehaviorGenerator {
     this.transitions = new ArrayList;
     this.variables = new ArrayList;
 
-    component.getSpannedScope().getSubScopes().stream().forEach(scope |
-      scope.<StateSymbol>resolveLocally(StateSymbol.KIND).forEach(state|this.states.add(state))
+    component.getSpannedScope().getSubScopes().stream().forEach(
+      scope |
+        scope.<StateSymbol>resolveLocally(StateSymbol.KIND).forEach(state|this.states.add(state))
     );
-    component.getSpannedScope().getSubScopes().stream().forEach(scope |
-      scope.<TransitionSymbol>resolveLocally(TransitionSymbol.KIND).forEach(transition|this.transitions.add(transition))
+    component.getSpannedScope().getSubScopes().stream().forEach(
+      scope |
+        scope.<TransitionSymbol>resolveLocally(TransitionSymbol.KIND).forEach(transition|
+          this.transitions.add(transition)
+        )
     );
     // variables can only be defined in the component's body unlike in JavaP
-    component.getSpannedScope().<VariableSymbol>resolveLocally(VariableSymbol.KIND).forEach(variable |
-      this.variables.add(variable)
+    component.getSpannedScope().<VariableSymbol>resolveLocally(VariableSymbol.KIND).forEach(
+      variable |
+        this.variables.add(variable)
     );
   }
 
@@ -70,7 +75,7 @@ class AutomatonGenerator extends BehaviorGenerator {
     return '''
       «Member.print(comp.name + "State", compHelper.currentStateName, "private")»
       
-      «StateEnum.print(automaton, comp)»
+      «printStateEnum(automaton, comp)»
     '''
   }
 
@@ -163,6 +168,16 @@ class AutomatonGenerator extends BehaviorGenerator {
         
         «compHelper.currentStateName» = «comp.name»State.«automaton.initialStateDeclarationList.get(0).name»;
         return «compHelper.resultName»;
+      }
+    '''
+  }
+
+  def private String printStateEnum(ASTAutomaton automaton, ComponentSymbol comp) {
+    return '''
+      private static enum «comp.name»State {
+      «FOR state : automaton.getStateDeclaration(0).stateList SEPARATOR ','»
+        «state.name»
+      «ENDFOR»;
       }
     '''
   }
