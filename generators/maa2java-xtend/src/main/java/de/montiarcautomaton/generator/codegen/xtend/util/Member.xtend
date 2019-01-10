@@ -27,24 +27,6 @@ class Member {
     '''
   }
 
-  def static printPorts(ComponentSymbol comp) {
-    return '''
-    «FOR port : comp.ports»
-      «print("Port<" + ComponentHelper.printTypeName((port.astNode.get as ASTPort).type) + ">", port.name, "protected")»
-    «ENDFOR»
-    '''
-  }
-
-  def static printSubcomponents(ComponentSymbol comp) {
-    return 
-    '''
-    «FOR sub : comp.subComponents»
-      «print(ComponentHelper.getSubComponentTypeName(sub), sub.name, "private")»
-    «ENDFOR»
-    '''
-  }
-
-
   def static printConfigParameters(ComponentSymbol comp) {
     return 
     '''

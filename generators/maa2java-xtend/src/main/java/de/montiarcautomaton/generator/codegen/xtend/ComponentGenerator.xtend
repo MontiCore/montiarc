@@ -8,12 +8,12 @@
 package de.montiarcautomaton.generator.codegen.xtend
 
 import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
-import de.montiarcautomaton.generator.codegen.xtend.util.Getter
 import de.montiarcautomaton.generator.codegen.xtend.util.Imports
 import de.montiarcautomaton.generator.codegen.xtend.util.Init
 import de.montiarcautomaton.generator.codegen.xtend.util.Member
 import de.montiarcautomaton.generator.codegen.xtend.util.Ports
 import de.montiarcautomaton.generator.codegen.xtend.util.Setup
+import de.montiarcautomaton.generator.codegen.xtend.util.Subcomponents
 import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
 import de.montiarcautomaton.generator.codegen.xtend.util.Update
 import de.montiarcautomaton.generator.helper.ComponentHelper
@@ -32,72 +32,69 @@ class ComponentGenerator {
     helper = new ComponentHelper(comp);
 
     return '''
-    package «comp.packageName»;
-    
-    
-    «Imports.print(comp)»
-    import «comp.packageName».«comp.name»Input;
-    import «comp.packageName».«comp.name»Result;
-    import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
-    import de.montiarcautomaton.runtimes.timesync.delegation.Port;
-    import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
-    import de.montiarcautomaton.runtimes.Log;
-    
-      public class «comp.name»«generics»      
-      «IF comp.superComponent.present» extends «comp.superComponent.get.fullName» 
-              «IF comp.superComponent.get.hasFormalTypeParameters»<«FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
-                «scTypeParams»«ENDFOR»>
-              «ENDIF»
-      «ENDIF»
-      implements IComponent {
+      package «comp.packageName»;
+      
+      
+      «Imports.print(comp)»
+      import «comp.packageName».«comp.name»Input;
+      import «comp.packageName».«comp.name»Result;
+      import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
+      import de.montiarcautomaton.runtimes.timesync.delegation.Port;
+      import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
+      import de.montiarcautomaton.runtimes.Log;
+      
+        public class «comp.name»«generics»      
+        «IF comp.superComponent.present» extends «comp.superComponent.get.fullName» 
+            «IF comp.superComponent.get.hasFormalTypeParameters»<«FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
+              «scTypeParams»«ENDFOR»>
+            «ENDIF»
+        «ENDIF»
+        implements IComponent {
+          
+        //ports
+        «Ports.print(comp.ports)»
         
-      //ports
-      «Ports.print(comp.ports)»
+        // component variables
+        «Member.printVariables(comp)»
+        
+        // config parameters
+        «Member.printConfigParameters(comp)»
       
-      // component variables
-      «Member.printVariables(comp)»
-      
-      // config parameters
-      «Member.printConfigParameters(comp)»
-
-      «IF comp.isDecomposed»
+        «IF comp.isDecomposed»
         // subcomponents
-        «Member.printSubcomponents(comp)»
-        «FOR subcomp : comp.subComponents»
-          «Getter.print(ComponentHelper.getSubComponentTypeName(subcomp), subcomp.name, "Component" + subcomp.name.toFirstUpper)»
-        «ENDFOR»
-        
+        «Subcomponents.print(comp)»
         «printComputeComposed(comp)»
-      «ELSE»
-      // the components behavior implementation
-      private final IComputable<«comp.name»Input«generics», «comp.name»Result«generics»> «helper.behaviorImplName»;
-      
-      «printComputeAtomic(comp)»
-      private void initialize() {
-        // get initial values from behavior implementation
-        final «comp.name»Result«generics» result = «helper.behaviorImplName».getInitialValues();
         
-        // set results to ports
-        setResult(result);
-        this.update();
-      }
-      private void setResult(«comp.name»Result«generics» result) {
-        «FOR portOut : comp.outgoingPorts»
-          this.getPort«portOut.name.toFirstUpper»().setNextValue(result.get«portOut.name.toFirstUpper»());
-        «ENDFOR»
-      }
-      «ENDIF»
-      
-      «Setup.print(comp)»
-      
-      «Init.print(comp)»
-      
-      «Update.print(comp)»
-      
-      «printConstructor(comp)»
-      
-      }
-      
+        «ELSE»
+        // the components behavior implementation
+        private final IComputable<«comp.name»Input«generics», «comp.name»Result«generics»> «helper.behaviorImplName»;
+        
+        «printComputeAtomic(comp)»
+        private void initialize() {
+          // get initial values from behavior implementation
+          final «comp.name»Result«generics» result = «helper.behaviorImplName».getInitialValues();
+          
+          // set results to ports
+          setResult(result);
+          this.update();
+        }
+        private void setResult(«comp.name»Result«generics» result) {
+          «FOR portOut : comp.outgoingPorts»
+            this.getPort«portOut.name.toFirstUpper»().setNextValue(result.get«portOut.name.toFirstUpper»());
+          «ENDFOR»
+        }
+        «ENDIF»
+        
+        «Setup.print(comp)»
+        
+        «Init.print(comp)»
+        
+        «Update.print(comp)»
+        
+        «printConstructor(comp)»
+        
+        }
+        
     '''
   }
 
@@ -156,14 +153,13 @@ class ComponentGenerator {
       }
     '''
   }
-  
+
   def private static List<String> getInheritedParams(ComponentSymbol component) {
     var List<String> result = new ArrayList;
     var List<JFieldSymbol> configParameters = component.getConfigParameters();
     if (component.getSuperComponent().isPresent()) {
       var ComponentSymbolReference superCompReference = component.getSuperComponent().get();
-      var List<JFieldSymbol> superConfigParams = superCompReference.getReferencedSymbol()
-          .getConfigParameters();
+      var List<JFieldSymbol> superConfigParams = superCompReference.getReferencedSymbol().getConfigParameters();
       if (!configParameters.isEmpty()) {
         for (var i = 0; i < superConfigParams.size(); i++) {
           result.add(configParameters.get(i).getName());

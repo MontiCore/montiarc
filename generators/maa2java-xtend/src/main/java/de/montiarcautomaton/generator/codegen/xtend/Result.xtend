@@ -5,12 +5,11 @@
  */
 package de.montiarcautomaton.generator.codegen.xtend
 
-import montiarc._symboltable.ComponentSymbol
-import de.montiarcautomaton.generator.helper.ComponentHelper
+import de.montiarcautomaton.generator.codegen.xtend.util.Imports
 import de.montiarcautomaton.generator.codegen.xtend.util.Member
-import de.montiarcautomaton.generator.codegen.xtend.util.Getter
-import de.montiarcautomaton.generator.codegen.xtend.util.Setter
 import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
+import de.montiarcautomaton.generator.helper.ComponentHelper
+import montiarc._symboltable.ComponentSymbol
 
 /**
  * TODO: Write me!
@@ -27,7 +26,7 @@ class Result {
     return '''
       package «comp.packageName»;
       
-      «de.montiarcautomaton.generator.codegen.xtend.util.Imports.print(comp)»
+      «Imports.print(comp)»
       import de.montiarcautomaton.runtimes.timesync.implementation.IResult;
       
       
@@ -61,16 +60,15 @@ class Result {
           }
         «ENDIF»
       
-      //getter  
-      «FOR port : comp.outgoingPorts»
-        «Getter.print(helper.getRealPortTypeString(port), port.name, port.name.toFirstUpper)»
-      «ENDFOR»
-      
-        // setter
         «FOR port : comp.outgoingPorts»
           «var name = port.name»
-          public void set«name.toFirstUpper»(«helper.getRealPortTypeString(port)» «name») {
+          «var type = helper.getRealPortTypeString(port)»
+          public void set«name.toFirstUpper»(«type» «name») {
             this.«name» = «name»;
+          }
+          
+          public «type» get«name.toFirstUpper»() {
+            return this.«name»;
           }
         «ENDFOR»
       
