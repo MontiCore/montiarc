@@ -29,6 +29,7 @@ import montiarc._symboltable.ComponentSymbol
 import montiarc._symboltable.StateSymbol
 import montiarc._symboltable.TransitionSymbol
 import montiarc._symboltable.VariableSymbol
+import de.montiarcautomaton.generator.codegen.xtend.util.Member
 
 class AutomatonGenerator extends BehaviorGenerator {
 
@@ -67,14 +68,9 @@ class AutomatonGenerator extends BehaviorGenerator {
       }
     }
     return '''
-      private «comp.name»State «compHelper.currentStateName»;
+      «Member.print(comp.name + "State", compHelper.currentStateName, "private")»
       
-      
-      private static enum «comp.name»State {
-        «FOR state : automaton.getStateDeclaration(0).stateList SEPARATOR ','»
-          «state.name»
-        «ENDFOR»;
-      }
+      «StateEnum.print(automaton, comp)»
     '''
   }
 

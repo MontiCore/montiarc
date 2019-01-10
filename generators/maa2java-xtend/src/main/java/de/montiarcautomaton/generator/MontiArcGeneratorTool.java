@@ -6,12 +6,12 @@
 package de.montiarcautomaton.generator;
 
 import java.io.File;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 import de.montiarcautomaton.generator.codegen.xtend.ComponentGenerator;
+import de.montiarcautomaton.generator.codegen.xtend.MAAGenerator;
 import de.monticore.cd2pojo.Modelfinder;
 import de.monticore.cd2pojo.POJOGenerator;
 import de.monticore.symboltable.Scope;
@@ -66,7 +66,7 @@ public class MontiArcGeneratorTool extends MontiArcTool{
       
       // 4. generate
       Log.info("Generate model: " + qualifiedModelName, "MontiArcGeneratorTool");
-      ComponentGenerator generator = new ComponentGenerator();
+      MAAGenerator generator = new MAAGenerator();
       generator.generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(), hwcPath, comp);
     }
     
