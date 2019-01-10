@@ -1,6 +1,7 @@
 package components.body.automaton;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.se_rwth.commons.logging.Log;
@@ -61,6 +62,11 @@ public class AutomatonTest extends AbstractCoCoTest {
   @Test
   public void testValidAutomaton() {
     checkValid(PACKAGE + "." + "ValidAutomaton");
+  }
+
+  @Test
+  public void testAutomatonWithGenerics() {
+    checkValid(PACKAGE + "." + "AutomatonWithGenerics");
   }
   
 }

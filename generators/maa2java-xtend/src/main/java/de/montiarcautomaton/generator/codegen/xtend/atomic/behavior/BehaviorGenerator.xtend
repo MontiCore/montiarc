@@ -44,7 +44,7 @@ abstract class BehaviorGenerator {
       import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
       
       public class «comp.name»Impl«TypeParameters.printFormalTypeParameters(comp)»
-      implements IComputable<«comp.name»Input, «comp.name»Result> {
+      implements IComputable<«comp.name»Input«TypeParameters.printFormalTypeParameters(comp)», «comp.name»Result«TypeParameters.printFormalTypeParameters(comp)»> {
         
       //component variables
       «FOR compVar : comp.variables»

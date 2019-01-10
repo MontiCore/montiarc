@@ -14,6 +14,8 @@ import de.monticore.java.types.JavaDSLHelper;
 import de.monticore.mcexpressions._ast.ASTNameExpression;
 import de.monticore.mcexpressions._ast.ASTQualifiedNameExpression;
 import de.monticore.symboltable.Scope;
+import de.monticore.symboltable.Symbol;
+import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.VariableSymbol;
 
@@ -30,7 +32,13 @@ import java.util.Optional;
  * @since TODO: add version number
  */
 public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
-  
+
+//  private final ComponentSymbol comp;
+//
+//  public MontiArcHCJavaDSLTypeResolver(ComponentSymbol containingComponent){
+//    this.comp = containingComponent;
+//  }
+
   @Override
   public void handle(ASTNameExpression node) {
     setResult(null);
@@ -43,12 +51,28 @@ public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
     if (null == typeSymbolName) {
       typeSymbolName = name;
     }
-    Optional<PortSymbol> portSymbol = scope.<PortSymbol> resolve(typeSymbolName, PortSymbol.KIND);
-    Optional<VariableSymbol> varSymbol = scope.<VariableSymbol> resolve(typeSymbolName,
-        VariableSymbol.KIND);
-    Optional<JavaFieldSymbol> fieldSymbol = scope.<JavaFieldSymbol> resolve(typeSymbolName,
-        JavaFieldSymbol.KIND);
-    JavaTypeSymbolReference expType = new JavaTypeSymbolReference(typeSymbolName, scope, 0);
+
+    // Search the component hierarchy for a, possibly inherited, port
+    Scope searchScope = scope;
+    while((!searchScope.getSpanningSymbol().isPresent() ||
+        !searchScope.getSpanningSymbol().get().isKindOf(ComponentSymbol.KIND))
+        && searchScope.getEnclosingScope().isPresent()){
+      searchScope = searchScope.getEnclosingScope().get();
+    }
+    ComponentSymbol currentComponent
+        = (ComponentSymbol) searchScope.getSpanningSymbol().get();
+
+    Optional<ComponentSymbol> superComp;
+
+    Optional<PortSymbol> portSymbol
+        = currentComponent.getPort(typeSymbolName, true);
+
+    Optional<VariableSymbol> varSymbol
+        = scope.<VariableSymbol> resolve(typeSymbolName,VariableSymbol.KIND);
+    Optional<JavaFieldSymbol> fieldSymbol
+        = scope.<JavaFieldSymbol> resolve(typeSymbolName,JavaFieldSymbol.KIND);
+    JavaTypeSymbolReference expType
+        = new JavaTypeSymbolReference(typeSymbolName, scope, 0);
     
     if (portSymbol.isPresent()) {
       expType = (JavaTypeSymbolReference) portSymbol.get().getTypeReference();
@@ -64,7 +88,8 @@ public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
     }
 
     if(expType.existsReferencedSymbol()) {
-      Optional<JavaTypeSymbol> typeSymbol = Optional.ofNullable(expType.getReferencedSymbol());
+      Optional<JavaTypeSymbol> typeSymbol
+          = Optional.ofNullable(expType.getReferencedSymbol());
 
       if (!parameterStack.isEmpty() && parameterStack.peek() != null
           && isCallExpr && typeSymbol.isPresent()) {
@@ -72,15 +97,24 @@ public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
         // try to resolve a method
         List<JavaTypeSymbolReference> paramTypes = parameterStack.peek();
         HashMap<JavaMethodSymbol, JavaTypeSymbolReference> resolvedMethods
-            = JavaDSLHelper.resolveManyInSuperType(name, false, expType,
-            typeSymbol.get(), null, paramTypes);
+            = JavaDSLHelper.resolveManyInSuperType(
+                name,
+            false,
+            expType,
+            typeSymbol.get(),
+            null,
+            paramTypes
+        );
 
         if (resolvedMethods.size() == 1) {
-          JavaMethodSymbol methodSymbol = resolvedMethods.entrySet().iterator().next().getKey();
-          HashMap<String, JavaTypeSymbolReference> substituted = JavaDSLHelper
-              .getSubstitutedTypes(typeSymbol.get(), expType);
+          JavaMethodSymbol methodSymbol
+              = resolvedMethods.entrySet().iterator().next().getKey();
+          HashMap<String, JavaTypeSymbolReference> substituted
+              = JavaDSLHelper.getSubstitutedTypes(typeSymbol.get(), expType);
           JavaTypeSymbolReference returnType
-              = JavaDSLHelper.applyTypeSubstitution(substituted, methodSymbol.getReturnType());
+              = JavaDSLHelper.applyTypeSubstitution(
+                  substituted, methodSymbol.getReturnType()
+          );
           setResult(returnType);
           return;
         }
@@ -102,12 +136,15 @@ public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
 
       // try to resolve a local constant
       if (typeSymbol.isPresent()) {
-        Collection<JavaTypeSymbol> resolvedConstants = typeSymbol.get().getSpannedScope()
-            .resolveDownMany(name, JavaTypeSymbol.KIND);
+        Collection<JavaTypeSymbol> resolvedConstants
+            = typeSymbol.get()
+              .getSpannedScope()
+              .resolveDownMany(name, JavaTypeSymbol.KIND);
         if (resolvedConstants.size() == 1) {
           JavaTypeSymbol type = resolvedConstants.iterator().next();
-          setResult(new JavaTypeSymbolReference(type.getFullName(),
-              scope, 0));
+          setResult(new JavaTypeSymbolReference(
+              type.getFullName(),scope, 0)
+          );
           return;
         }
       }
@@ -146,10 +183,13 @@ public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
     if (!result.isPresent()) {
       // expression could be a package name. try to resolve the fullname
       fullName += "." + name;
-      Collection<JavaTypeSymbol> resolvedTypes = scope.resolveMany(fullName, JavaTypeSymbol.KIND);
+      Collection<JavaTypeSymbol> resolvedTypes
+          = scope.resolveMany(fullName, JavaTypeSymbol.KIND);
       if (resolvedTypes.size() == 1) {
         JavaTypeSymbol typeSymbol = resolvedTypes.iterator().next();
-        setResult(new JavaTypeSymbolReference(typeSymbol.getFullName(), scope, 0));
+        setResult(new JavaTypeSymbolReference(
+            typeSymbol.getFullName(), scope, 0)
+        );
       }
       // the result is either empty, because name is a package name again, or we
       // found an acutal symbol
@@ -162,7 +202,9 @@ public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
     // Handle the case of expressions getting the length of an array: "arrayname.length"
     // Result is of primitive type "int"
     if (expType.getDimension() > 0 && "length".equals(name)) {
-      setResult(new JavaTypeSymbolReference("int", expType.getEnclosingScope(), 0));
+      setResult(new JavaTypeSymbolReference(
+          "int", expType.getEnclosingScope(), 0)
+      );
       parameterStack.pop();
       return;
     }
@@ -175,29 +217,37 @@ public class MontiArcHCJavaDSLTypeResolver extends HCJavaDSLTypeResolver {
       if (!parameterStack.isEmpty() && parameterStack.peek() != null) {
         // try to resolve a method
         List<JavaTypeSymbolReference> paramTypes = parameterStack.peek();
-        HashMap<JavaMethodSymbol, JavaTypeSymbolReference> resolvedMethods = JavaDSLHelper
-            .resolveManyInSuperType(name, false, expType, typeSymbol, null,
+        HashMap<JavaMethodSymbol, JavaTypeSymbolReference> resolvedMethods
+            = JavaDSLHelper.resolveManyInSuperType(
+                name, false, expType, typeSymbol, null,
                 paramTypes);
         
         if (resolvedMethods.size() == 1) {
-          JavaMethodSymbol methodSymbol = resolvedMethods.entrySet().iterator().next().getKey();
-          HashMap<String, JavaTypeSymbolReference> substituted = JavaDSLHelper
-              .getSubstitutedTypes(typeSymbol, expType);
-          JavaTypeSymbolReference returnType = JavaDSLHelper.applyTypeSubstitution(substituted,
-              methodSymbol.getReturnType());
+          JavaMethodSymbol methodSymbol
+              = resolvedMethods.entrySet().iterator().next().getKey();
+          HashMap<String, JavaTypeSymbolReference> substituted
+              = JavaDSLHelper.getSubstitutedTypes(typeSymbol, expType);
+          JavaTypeSymbolReference returnType
+              = JavaDSLHelper.applyTypeSubstitution(
+                  substituted,methodSymbol.getReturnType()
+          );
           setResult(returnType);
         }
         return;
       }
       
       // try to resolve a local field
-      Collection<JavaFieldSymbol> resolvedFields = typeSymbol.getSpannedScope()
+      Collection<JavaFieldSymbol> resolvedFields
+          = typeSymbol.getSpannedScope()
           .resolveDownMany(name, JavaFieldSymbol.KIND);
       if (resolvedFields.size() == 1) {
         JavaTypeSymbolReference fieldType = resolvedFields.iterator().next().getType();
         String completeTypeName = JavaDSLHelper.getCompleteName(fieldType);
-        fieldType = new JavaTypeSymbolReference(completeTypeName, fieldType.getEnclosingScope(),
-            fieldType.getDimension());
+        fieldType = new JavaTypeSymbolReference(
+            completeTypeName,
+            fieldType.getEnclosingScope(),
+            fieldType.getDimension()
+        );
         fieldType.setActualTypeArguments(fieldType.getActualTypeArguments());
         setResult(fieldType);
         parameterStack.pop();

@@ -74,7 +74,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
           Log.error("Missing statement in method " + methodName +
                         " of class " + className + ": " + s);
         } else {
-          int foundIndex = methodString.indexOf(s);
+          int foundIndex = lastIndex + methodString.substring(lastIndex).indexOf(s);
           if(lastIndex >= foundIndex){
             Log.error(String.format("Body element %s of method %s was " +
                                         "found in the wrong order.",
