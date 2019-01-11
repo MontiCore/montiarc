@@ -5,12 +5,10 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.automaton
+package de.montiarcautomaton.generator.codegen.xtend.behavior
 
-import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.BehaviorGenerator
 import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
-import de.montiarcautomaton.generator.codegen.xtend.util.Member
-import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
+import de.montiarcautomaton.generator.codegen.xtend.util.Utils
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter
@@ -31,7 +29,14 @@ import montiarc._symboltable.StateSymbol
 import montiarc._symboltable.TransitionSymbol
 import montiarc._symboltable.VariableSymbol
 
-class AutomatonGenerator extends BehaviorGenerator {
+/**
+ * Prints the automaton behavior of a component.
+ * 
+ * @author  Pfeiffer
+ * @version $Revision$,
+ *          $Date$
+ */
+class AutomatonGenerator extends ABehaviorGenerator {
 
   var Collection<StateSymbol> states
 
@@ -64,6 +69,10 @@ class AutomatonGenerator extends BehaviorGenerator {
     );
   }
 
+  /**
+   * Adds a enum for alls states of the automtaton and the attribute currentState for storing 
+   * the current state of the automaton.
+   */
   override String hook(ComponentSymbol comp) {
     var ASTAutomaton automaton = null
     for (ASTElement element : (comp.astNode.get as ASTComponent).body.elementList) {
@@ -72,12 +81,15 @@ class AutomatonGenerator extends BehaviorGenerator {
       }
     }
     return '''
-      «Member.print(comp.name + "State", Identifier.currentStateName, "private")»
-      
-      «printStateEnum(automaton, comp)»
-    '''
+			«Utils.printMember(comp.name + "State", Identifier.currentStateName, "private")»
+			
+			«printStateEnum(automaton, comp)»
+		'''
   }
 
+  /**
+   * Prints the compute implementation of automaton behavior.
+   */
   override String printCompute(ComponentSymbol comp) {
     var resultName = comp.name + "Result"
     var ASTAutomaton automaton = null
@@ -87,50 +99,54 @@ class AutomatonGenerator extends BehaviorGenerator {
       }
     }
     return '''
-      @Override
-      public «resultName»«TypeParameters.printFormalTypeParameters(comp)»
-            compute(«comp.name»Input«TypeParameters.printFormalTypeParameters(comp)» «Identifier.inputName») {
-          // inputs
-          «FOR inPort : comp.allIncomingPorts»
-            final «ComponentHelper.getRealPortTypeString(comp, inPort)» «inPort.name» = «Identifier.inputName».get«inPort.name.toFirstUpper»();
-          «ENDFOR»
-          
-          final «resultName»«TypeParameters.printFormalTypeParameters(comp)» «Identifier.resultName» = new «resultName»«TypeParameters.printFormalTypeParameters(comp)»();
-          
-          // first current state to reduce stimuli and guard checks
-          switch («Identifier.currentStateName») {
-          «FOR state : automaton.stateDeclarationList.get(0).stateList»
-            case «state.name»:
-              «FOR transition : transitions.stream.filter(s | s.source.name == state.name).collect(Collectors.toList)»
-                // transition: «transition.toString»
-                if («IF transition.guardAST.isPresent»«printExpression(transition.guardAST.get.guardExpression.expression)»«ELSE» true «ENDIF») {
-                  //reaction
-                  «IF transition.reactionAST.present»
-                    «FOR assignment : transition.reactionAST.get.IOAssignmentList»
-                      «IF assignment.isAssignment»
-                        «IF isVariable(assignment.name, assignment)»
-                          «assignment.name» = «printRightHandSide(assignment)»;
-                        «ELSE»
-                          «Identifier.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
-                        «ENDIF»
-                      «ELSE»
-                        «printRightHandSide(assignment)»;  
-                      «ENDIF»
-                    «ENDFOR»
-                  «ENDIF»
-                  
-                  //state change
-                  «Identifier.currentStateName» = «comp.name»State.«transition.target.name»;
-                  break;
-                }
-                
-                
-              «ENDFOR»
-          «ENDFOR»
-          }
-          return result;
-        }
-    '''
+			@Override
+			public «resultName»«Utils.printFormalTypeParameters(comp)»
+			      compute(«comp.name»Input«Utils.printFormalTypeParameters(comp)» «Identifier.inputName») {
+			    
+«««			  Lists all ingoing ports and stores the values of the passed parameter input.
+			    // inputs
+			    «FOR inPort : comp.allIncomingPorts»
+			    	final «ComponentHelper.getRealPortTypeString(comp, inPort)» «inPort.name» = «Identifier.inputName».get«inPort.name.toFirstUpper»();
+			    «ENDFOR»
+			    
+«««			  Initialize result
+			    final «resultName»«Utils.printFormalTypeParameters(comp)» «Identifier.resultName» = new «resultName»«Utils.printFormalTypeParameters(comp)»();
+			    
+«««			  Generate implementation of automaton
+			    // first current state to reduce stimuli and guard checks
+			    switch («Identifier.currentStateName») {
+			    «FOR state : automaton.stateDeclarationList.get(0).stateList»
+			    	case «state.name»:
+			    	  «FOR transition : transitions.stream.filter(s | s.source.name == state.name).collect(Collectors.toList)»
+			    	  	// transition: «transition.toString»
+			    	  	if («IF transition.guardAST.isPresent»«printExpression(transition.guardAST.get.guardExpression.expression)»«ELSE» true «ENDIF») {
+			    	  	  //reaction
+			    	  	  «IF transition.reactionAST.present»
+			    	  	  	«FOR assignment : transition.reactionAST.get.getIOAssignmentList»
+			    	  	  		«IF assignment.isAssignment»
+			    	  	  			«IF isVariable(assignment.name, assignment)»
+			    	  	  				«assignment.name» = «printRightHandSide(assignment)»;
+			    	  	  			«ELSE»
+			    	  	  				«Identifier.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
+			    	  	  			«ENDIF»
+			    	  	  		«ELSE»
+			    	  	  			«printRightHandSide(assignment)»;  
+			    	  	  		«ENDIF»
+			    	  	  	«ENDFOR»
+			    	  	  «ENDIF»
+			    	  	  
+			    	  	  //state change
+			    	  	  «Identifier.currentStateName» = «comp.name»State.«transition.target.name»;
+			    	  	  break;
+			    	  	}
+			    	  	
+			    	  	
+			    	  «ENDFOR»
+			    «ENDFOR»
+			    }
+			    return result;
+			  }
+		'''
   }
 
   override String printGetInitialValues(ComponentSymbol comp) {
@@ -142,41 +158,44 @@ class AutomatonGenerator extends BehaviorGenerator {
       }
     }
     return '''
-      @Override
-      public «resultName»«TypeParameters.printFormalTypeParameters(comp)»
-      getInitialValues() {
-        final «resultName»«TypeParameters.printFormalTypeParameters(comp)» «Identifier.resultName» = new «resultName»«TypeParameters.printFormalTypeParameters(comp)»();
-        
-        // initial reaction
-        «var StateSymbol initialState = states.stream.filter(state | state.isInitial).findFirst.get»
-        «IF initialState.initialReactionAST.isPresent»
-          «FOR assignment : initialState.initialReactionAST.get.IOAssignmentList»
-            «IF assignment.isAssignment»
-              «IF comp.getPort(assignment.name).isPresent»
-                «Identifier.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
-              «ELSE»
-                «assignment.name» = «printRightHandSide(assignment)»;
-              «ENDIF»
-            «ELSE»
-              «printRightHandSide(assignment)»;  
-            «ENDIF»
-          «ENDFOR»
-        «ENDIF»
-        
-        «Identifier.currentStateName» = «comp.name»State.«automaton.initialStateDeclarationList.get(0).name»;
-        return «Identifier.resultName»;
-      }
-    '''
+			@Override
+			public «resultName»«Utils.printFormalTypeParameters(comp)»
+			getInitialValues() {
+			  final «resultName»«Utils.printFormalTypeParameters(comp)» «Identifier.resultName» = new «resultName»«Utils.printFormalTypeParameters(comp)»();
+			  
+			  // initial reaction
+			  «var StateSymbol initialState = states.stream.filter(state | state.isInitial).findFirst.get»
+			  «IF initialState.initialReactionAST.isPresent»
+			  	«FOR assignment : initialState.initialReactionAST.get.getIOAssignmentList»
+			  		«IF assignment.isAssignment»
+			  			«IF comp.getPort(assignment.name).isPresent»
+			  				«Identifier.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
+			  			«ELSE»
+			  				«assignment.name» = «printRightHandSide(assignment)»;
+			  			«ENDIF»
+			  		«ELSE»
+			  			«printRightHandSide(assignment)»;  
+			  		«ENDIF»
+			  	«ENDFOR»
+			  «ENDIF»
+			  
+			  «Identifier.currentStateName» = «comp.name»State.«automaton.initialStateDeclarationList.get(0).name»;
+			  return «Identifier.resultName»;
+			}
+		'''
   }
 
+  /**
+   * Prints a enum with all states of the automaton.
+   */
   def private String printStateEnum(ASTAutomaton automaton, ComponentSymbol comp) {
     return '''
-      private static enum «comp.name»State {
-      «FOR state : automaton.getStateDeclaration(0).stateList SEPARATOR ','»
-        «state.name»
-      «ENDFOR»;
-      }
-    '''
+			private static enum «comp.name»State {
+			«FOR state : automaton.getStateDeclaration(0).stateList SEPARATOR ','»
+				«state.name»
+			«ENDFOR»;
+			}
+		'''
   }
 
   /**

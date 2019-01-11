@@ -10,12 +10,11 @@ import java.util.Collection
 import montiarc._symboltable.PortSymbol
 
 /**
- * TODO: Write me!
+ * Prints the attributes and getter and setter for ports.
  *
- * @author  (last commit) $Author$
+ * @author  Pfeiffer
  * @version $Revision$,
  *          $Date$
- * @since   TODO: add version number
  *
  */
 class Ports {

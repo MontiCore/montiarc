@@ -8,12 +8,11 @@ package de.montiarcautomaton.generator.codegen.xtend
 import montiarc._symboltable.ComponentSymbol
 
 /**
- * TODO: Write me!
+ * Generates the deployment class for a component.
  *
- * @author  (last commit) $Author$
+ * @author  Pfeiffer
  * @version $Revision$,
  *          $Date$
- * @since   TODO: add version number
  *
  */
 class Deploy {

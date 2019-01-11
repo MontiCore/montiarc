@@ -9,12 +9,11 @@ import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
 
 /**
- * TODO: Write me!
+ * Prints member and getter for component's subcomponents.
  * 
- * @author  (last commit) $Author$
+ * @author  Pfeiffer
  * @version $Revision$,
  *          $Date$
- * @since   TODO: add version number
  * 
  */
 class Subcomponents {

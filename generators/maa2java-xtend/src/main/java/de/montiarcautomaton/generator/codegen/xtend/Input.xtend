@@ -5,19 +5,16 @@
  */
 package de.montiarcautomaton.generator.codegen.xtend
 
-import de.montiarcautomaton.generator.codegen.xtend.util.Imports
-import de.montiarcautomaton.generator.codegen.xtend.util.Member
-import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
+import de.montiarcautomaton.generator.codegen.xtend.util.Utils
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
 
 /**
- * TODO: Write me!
+ * Generates the input class for a component.
  *
- * @author  (last commit) $Author$
+ * @author  Pfeiffer
  * @version $Revision$,
  *          $Date$
- * @since   TODO: add version number
  *
  */
 class Input {
@@ -27,11 +24,11 @@ class Input {
     return '''
       package «comp.packageName»;
       
-      «Imports.print(comp)»
+      «Utils.printImports(comp)»
       import de.montiarcautomaton.runtimes.timesync.implementation.IInput;
       
       
-      public class «comp.name»Input«TypeParameters.printFormalTypeParameters(comp)»
+      public class «comp.name»Input«Utils.printFormalTypeParameters(comp)»
       «IF comp.superComponent.present» extends 
             «comp.superComponent.get.fullName»Input
             «IF comp.superComponent.get.hasFormalTypeParameters»<
@@ -43,7 +40,7 @@ class Input {
        {
         
         «FOR port : comp.incomingPorts»
-          «Member.print(helper.getRealPortTypeString(port), port.name, "protected")»
+          «Utils.printMember(helper.getRealPortTypeString(port), port.name, "protected")»
         «ENDFOR»
         
         public «comp.name»Input() {

@@ -7,9 +7,9 @@
  *******************************************************************************/
 package de.montiarcautomaton.generator.codegen.xtend
 
-import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.AbstractAtomicImplementation
-import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.automaton.AutomatonGenerator
-import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.javap.JavaPGenerator
+import de.montiarcautomaton.generator.codegen.xtend.behavior.AutomatonGenerator
+import de.montiarcautomaton.generator.codegen.xtend.behavior.JavaPGenerator
+import de.montiarcautomaton.generator.codegen.xtend.util.AbstractAtomicImplementation
 import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
 import de.monticore.ast.ASTCNode
 import de.monticore.codegen.mc2cd.TransformationHelper
@@ -24,8 +24,16 @@ import montiarc._ast.ASTComponent
 import montiarc._ast.ASTJavaPBehavior
 import montiarc._symboltable.ComponentSymbol
 
+/**
+ * Main entry point for generator. From this all target artifacts are generated for a component. 
+ * It uses dispatching for calling the right implementation generator.
+ * 
+ * @author  Pfeiffer
+ * @version $Revision$,
+ *          $Date$
+ */
 class MAAGenerator {
-  
+
   def generateAll(File targetPath, File hwc, ComponentSymbol comp) {
     Identifier.createInstance(comp)
 
@@ -46,18 +54,19 @@ class MAAGenerator {
 
   }
 
-  def toFile(File targetPath, String name, String content) {
+  def private toFile(File targetPath, String name, String content) {
     var Path path = Paths.get(targetPath.absolutePath + "\\" + name + ".java")
     var FileReaderWriter writer = new FileReaderWriter()
     println("Writing to file " + path + ".");
     writer.storeInFile(path, content)
   }
 
-  def dispatch generateBehavior(ASTJavaPBehavior ajava, ComponentSymbol comp) {
+
+  def private dispatch generateBehavior(ASTJavaPBehavior ajava, ComponentSymbol comp) {
     return JavaPGenerator.newInstance.generate(comp)
   }
 
-  def dispatch generateBehavior(ASTAutomatonBehavior automaton, ComponentSymbol comp) {
+  def private dispatch generateBehavior(ASTAutomatonBehavior automaton, ComponentSymbol comp) {
     return new AutomatonGenerator(comp).generate(comp)
   }
 
@@ -76,8 +85,5 @@ class MAAGenerator {
     }
 
   }
-  
-   
-  
- 
+
 }

@@ -22,6 +22,7 @@ import de.monticore.symboltable.types.references.TypeReference;
 import de.monticore.types.prettyprint.TypesPrettyPrinterConcreteVisitor;
 import de.monticore.types.types._ast.ASTType;
 import de.monticore.types.types._ast.ASTTypeVariableDeclaration;
+import jline.internal.Log;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTParameter;
 import montiarc._ast.ASTPort;
@@ -30,7 +31,6 @@ import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ComponentSymbolReference;
 import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
-import montiarc._symboltable.VariableSymbol;
 import montiarc.helper.SymbolPrinter;
 
 /**
@@ -84,7 +84,7 @@ public class ComponentHelper {
     
     final JTypeReference<? extends JTypeSymbol> typeReference = portSymbol.getTypeReference();
     if (!typeReference.existsReferencedSymbol()) {
-      return ""; // TODO Better error handling
+      Log.error("0xMA135 Referenced type for port \""+portSymbol.getName()+"\" does not exist.");
     }
     
     if (componentSymbol.getPorts().contains(portSymbol) ||

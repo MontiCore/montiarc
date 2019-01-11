@@ -7,16 +7,13 @@
  *******************************************************************************/
 package de.montiarcautomaton.generator.codegen.xtend
 
-import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
 import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
-import de.montiarcautomaton.generator.codegen.xtend.util.Imports
 import de.montiarcautomaton.generator.codegen.xtend.util.Init
-import de.montiarcautomaton.generator.codegen.xtend.util.Member
 import de.montiarcautomaton.generator.codegen.xtend.util.Ports
 import de.montiarcautomaton.generator.codegen.xtend.util.Setup
 import de.montiarcautomaton.generator.codegen.xtend.util.Subcomponents
-import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
 import de.montiarcautomaton.generator.codegen.xtend.util.Update
+import de.montiarcautomaton.generator.codegen.xtend.util.Utils
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import de.monticore.symboltable.types.JFieldSymbol
 import java.util.ArrayList
@@ -24,19 +21,26 @@ import java.util.List
 import montiarc._symboltable.ComponentSymbol
 import montiarc._symboltable.ComponentSymbolReference
 
+/**
+ * Generates the component class for atomic and composed components. 
+ * 
+ * @author  Pfeiffer
+ * @version $Revision$,
+ *          $Date$
+ */
 class ComponentGenerator {
   var String generics;
   var ComponentHelper helper;
 
   def generate(ComponentSymbol comp) {
-    generics = TypeParameters.printFormalTypeParameters(comp)
+    generics = Utils.printFormalTypeParameters(comp)
     helper = new ComponentHelper(comp);
 
     return '''
       package «comp.packageName»;
       
       
-      «Imports.print(comp)»
+      «Utils.printImports(comp)»
       import «comp.packageName».«comp.name»Input;
       import «comp.packageName».«comp.name»Result;
       import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
@@ -56,10 +60,10 @@ class ComponentGenerator {
         «Ports.print(comp.ports)»
         
         // component variables
-        «Member.printVariables(comp)»
+        «Utils.printVariables(comp)»
         
         // config parameters
-        «Member.printConfigParameters(comp)»
+        «Utils.printConfigParameters(comp)»
       
         «IF comp.isDecomposed»
         // subcomponents
@@ -101,7 +105,7 @@ class ComponentGenerator {
 
   def printConstructor(ComponentSymbol comp) {
     return '''
-      public «comp.name»(«ConfigurationParameters.print(comp)») {
+      public «comp.name»(«Utils.printConfiurationParametersAsList(comp)») {
         «IF comp.superComponent.present»
           super(«FOR inhParam : getInheritedParams(comp) SEPARATOR ','» «inhParam» «ENDFOR»);
         «ENDIF»

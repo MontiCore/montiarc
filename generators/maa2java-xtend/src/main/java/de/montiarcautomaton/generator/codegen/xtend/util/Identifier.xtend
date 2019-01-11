@@ -12,24 +12,25 @@ import montiarc._symboltable.PortSymbol
 import montiarc._symboltable.VariableSymbol
 
 /**
- * TODO: Write me!
+ * This class checks whether component parameter, variable, subcomponent instance, or
+ * port names are equal to names used in the generated code.
  * 
- * @author  (last commit) $Author$
+ * NOTICE: createInstance() has to be called for every component symbol again.
+ * 
+ * @author  Pfeiffer
  * @version $Revision$,
  *          $Date$
- * @since   TODO: add version number
  * 
  */
 class Identifier {
-  
+
   private static Identifier instance;
-  
+
   def static createInstance(ComponentSymbol comp) {
     instance = new Identifier()
     instance.checkIdentifiers(comp)
   }
-  
-  
+
   private String resultName = "result";
 
   private String inputName = "input";
@@ -37,8 +38,6 @@ class Identifier {
   private String behaviorImplName = "behaviorImpl";
 
   private String currentStateName = "currentState";
-
-  private ComponentSymbol component;
 
   /**
    * Checks whether component parameter, variable, subcomponent instance, or

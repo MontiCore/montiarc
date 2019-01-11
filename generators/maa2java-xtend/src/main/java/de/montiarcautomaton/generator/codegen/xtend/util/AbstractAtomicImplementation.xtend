@@ -3,36 +3,30 @@
  * 
  * http://www.se-rwth.de/
  */
-package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior
+package de.montiarcautomaton.generator.codegen.xtend.util
 
-import de.montiarcautomaton.generator.codegen.xtend.util.ConfigurationParameters
-import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
-import de.montiarcautomaton.generator.codegen.xtend.util.Imports
-import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
 import montiarc._symboltable.ComponentSymbol
 
 /**
- * TODO: Write me!
+ * The implementation class for atomic components without specified behavior.
  * 
- * @author  (last commit) $Author$
+ * @author  Pfeiffer
  * @version $Revision$,
  *          $Date$
- * @since   TODO: add version number
- * 
  */
 class AbstractAtomicImplementation {
   def static generateAbstractAtomicImplementation(ComponentSymbol comp) {
-    var String generics = TypeParameters.printFormalTypeParameters(comp)
+    var String generics = Utils.printFormalTypeParameters(comp)
     return '''
       package «comp.packageName»;
       
       import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
-      «Imports.print(comp)»
+      «Utils.printImports(comp)»
       
       class «comp.name»Impl«generics»     
       implements IComputable<«comp.name»Input«generics», «comp.name»Result«generics»> {
       
-        public «comp.name»Impl(«ConfigurationParameters.print(comp)») {
+        public «comp.name»Impl(«Utils.printConfiurationParametersAsList(comp)») {
           throw new Error("Invoking constructor on abstract implementation «comp.packageName».«comp.name»");
         }
       

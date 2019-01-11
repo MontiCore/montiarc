@@ -5,19 +5,16 @@
  */
 package de.montiarcautomaton.generator.codegen.xtend
 
-import de.montiarcautomaton.generator.codegen.xtend.util.Imports
-import de.montiarcautomaton.generator.codegen.xtend.util.Member
-import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
+import de.montiarcautomaton.generator.codegen.xtend.util.Utils
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
 
 /**
- * TODO: Write me!
+ * Generates the result class for a component.
  *
- * @author  (last commit) $Author$
+ * @author  Pfeiffer
  * @version $Revision$,
  *          $Date$
- * @since   TODO: add version number
  *
  */
 class Result {
@@ -26,11 +23,11 @@ class Result {
     return '''
       package «comp.packageName»;
       
-      «Imports.print(comp)»
+      «Utils.printImports(comp)»
       import de.montiarcautomaton.runtimes.timesync.implementation.IResult;
       
       
-      public class «comp.name»Result«TypeParameters.printFormalTypeParameters(comp)»   
+      public class «comp.name»Result«Utils.printFormalTypeParameters(comp)»   
       «IF comp.superComponent.present» extends 
       «comp.superComponent.get.fullName»Result «IF comp.superComponent.get.hasFormalTypeParameters»< «FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
           «scTypeParams»«ENDFOR»>«ENDIF»
@@ -39,7 +36,7 @@ class Result {
        {
         
         «FOR port : comp.outgoingPorts»
-            «Member.print(helper.getRealPortTypeString(port), port.name, "private")»
+            «Utils.printMember(helper.getRealPortTypeString(port), port.name, "private")»
         «ENDFOR»
         
         public «comp.name»Result() {

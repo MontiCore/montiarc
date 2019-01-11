@@ -9,17 +9,18 @@ import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
 
 /**
- * TODO: Write me!
+ * Class responsible for printing the init() method for both atomic and composed components.
  *
- * @author  (last commit) $Author$
+ * @author  Pfeiffer
  * @version $Revision$,
  *          $Date$
- * @since   TODO: add version number
  *
  */
 class Init {
   
-  
+  /**
+   * Delegates to the right printInit method.
+   */
   def static print(ComponentSymbol comp) {
     if (comp.isAtomic) {
     	return printInitAtomic(comp)

@@ -8,15 +8,18 @@ package de.montiarcautomaton.generator.codegen.xtend.util
 import montiarc._symboltable.ComponentSymbol
 
 /**
- * TODO: Write me!
+ * Prints the update() method for both atomic and composed components.
  *
- * @author  (last commit) $Author$
+ * @author  Pfeiffer
  * @version $Revision$,
  *          $Date$
- * @since   TODO: add version number
  *
  */
 class Update {
+  
+  /**
+   * Delegates to the right print method.
+   */
   def static print(ComponentSymbol comp) {
     if (comp.isDecomposed) {
     	return printUpdateComposed(comp)

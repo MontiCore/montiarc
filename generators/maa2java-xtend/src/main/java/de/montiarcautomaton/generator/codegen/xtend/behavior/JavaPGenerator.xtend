@@ -5,11 +5,10 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.javap
+package de.montiarcautomaton.generator.codegen.xtend.behavior
 
-import de.montiarcautomaton.generator.codegen.xtend.atomic.behavior.BehaviorGenerator
 import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
-import de.montiarcautomaton.generator.codegen.xtend.util.TypeParameters
+import de.montiarcautomaton.generator.codegen.xtend.util.Utils
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import de.monticore.ast.ASTNode
 import de.monticore.java.javadsl._ast.ASTBlockStatement
@@ -27,7 +26,14 @@ import montiarc._ast.ASTPort
 import montiarc._ast.ASTValueInitialization
 import montiarc._symboltable.ComponentSymbol
 
-class JavaPGenerator extends BehaviorGenerator {
+/**
+ * Prints the JavaP behavior of a component.
+ * 
+ * @author  Pfeiffer
+ * @version $Revision$,
+ *          $Date$
+ */
+class JavaPGenerator extends ABehaviorGenerator {
 
   override String hook(ComponentSymbol comp) {
     return ''''''
@@ -35,33 +41,36 @@ class JavaPGenerator extends BehaviorGenerator {
 
   override String printCompute(ComponentSymbol comp) {
     return '''
-      @Override
-      public «comp.name»Result«TypeParameters.printFormalTypeParameters(comp)»
-                compute(«comp.name»Input«TypeParameters.printFormalTypeParameters(comp)» «Identifier.inputName») {
-        // inputs
-        «FOR portIn : comp.incomingPorts»
-          final «ComponentHelper.printTypeName((portIn.astNode.get as ASTPort).type)» «portIn.name» = «Identifier.inputName».get«portIn.name.toFirstUpper»();
-        «ENDFOR»
-      
-        final «comp.name»Result «Identifier.resultName» = new «comp.name»Result();
-        
-        «FOR portOut : comp.outgoingPorts»
-          «ComponentHelper.printTypeName((portOut.astNode.get as ASTPort).type)» «portOut.name» = «Identifier.resultName».get«portOut.name.toFirstUpper»();
-        «ENDFOR»
-        
-        «««  print java statements here
+			@Override
+			public «comp.name»Result«Utils.printFormalTypeParameters(comp)»
+			          compute(«comp.name»Input«Utils.printFormalTypeParameters(comp)» «Identifier.inputName») {
+			  // inputs
+			  «FOR portIn : comp.incomingPorts»
+			  	final «ComponentHelper.printTypeName((portIn.astNode.get as ASTPort).type)» «portIn.name» = «Identifier.inputName».get«portIn.name.toFirstUpper»();
+			  «ENDFOR»
+			
+			  final «comp.name»Result «Identifier.resultName» = new «comp.name»Result();
+			  
+			  «FOR portOut : comp.outgoingPorts»
+			  	«ComponentHelper.printTypeName((portOut.astNode.get as ASTPort).type)» «portOut.name» = «Identifier.resultName».get«portOut.name.toFirstUpper»();
+			  «ENDFOR»
+			  
+			  «««  print java statements here
         «getJavaP(comp)»
-        
-        «««  always add all outgoing values to result
+			  
+			  «««  always add all outgoing values to result
         «FOR portOut : comp.outgoingPorts»
-          «Identifier.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
-        «ENDFOR»
-        return «Identifier.resultName»;
-      }
-      
-    '''
+			  	«Identifier.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
+			  «ENDFOR»
+			  return «Identifier.resultName»;
+			}
+			
+		'''
   }
 
+  /**
+   * @return the printed JavaP statements.
+   */
   def getJavaP(ComponentSymbol comp) {
     var Optional<ASTJavaPBehavior> behaviorEmbedding = getBehaviorEmbedding(comp);
     var JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(new IndentPrinter());
@@ -72,6 +81,9 @@ class JavaPGenerator extends BehaviorGenerator {
     return sb.toString;
   }
 
+  /**
+   * @return the JavaP AST.
+   */
   def Optional<ASTJavaPBehavior> getBehaviorEmbedding(ComponentSymbol comp) {
     var ASTComponent compAST = comp.astNode.get as ASTComponent;
     var List<ASTElement> elements = compAST.getBody().getElementList();
@@ -85,32 +97,35 @@ class JavaPGenerator extends BehaviorGenerator {
 
   override String printGetInitialValues(ComponentSymbol comp) {
     return '''
-      @Override
-       public «comp.name»Result«TypeParameters.printFormalTypeParameters(comp)» getInitialValues() {
-         final «comp.name»Result «Identifier.resultName» = new «comp.name»Result();
-         
-         try {
-         «FOR portOut : comp.outgoingPorts»
-           «ComponentHelper.printTypeName((portOut.astNode.get as ASTPort).type)» «portOut.name» = null;
-         «ENDFOR»
-         
-         «FOR init : getInitializations(comp)»
-           «printInit(init)»   
-         «ENDFOR»
-      
-         «FOR portOut : comp.outgoingPorts»
-           «Identifier.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
-         «ENDFOR»
-         } catch(Exception e) {
-           e.printStackTrace();
-          }
-      
-          return result;
-       }
-    '''
+			@Override
+			 public «comp.name»Result«Utils.printFormalTypeParameters(comp)» getInitialValues() {
+			   final «comp.name»Result «Identifier.resultName» = new «comp.name»Result();
+			   
+			   try {
+			   «FOR portOut : comp.outgoingPorts»
+			   	«ComponentHelper.printTypeName((portOut.astNode.get as ASTPort).type)» «portOut.name» = null;
+			   «ENDFOR»
+			   
+			   «FOR init : getInitializations(comp)»
+			   	«printInit(init)»   
+			   «ENDFOR»
+			
+			   «FOR portOut : comp.outgoingPorts»
+			   	«Identifier.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
+			   «ENDFOR»
+			   } catch(Exception e) {
+			     e.printStackTrace();
+			    }
+			
+			    return result;
+			 }
+		'''
   }
 
 
+  /**
+   * @return list of variable and port initializations.
+   */
   def getInitializations(ComponentSymbol comp) {
     var Optional<ASTJavaPInitializer> initialize = Optional.empty();
     var Optional<ASTNode> ast = comp.getAstNode();
@@ -128,6 +143,9 @@ class JavaPGenerator extends BehaviorGenerator {
     return Collections.EMPTY_LIST;
   }
 
+  /**
+   * Prints the init block of javaP embedding
+   */
   def String printInit(ASTValueInitialization init) {
     var String ret = "";
     var JavaDSLPrettyPrinter printer = new JavaDSLPrettyPrinter(new IndentPrinter());
