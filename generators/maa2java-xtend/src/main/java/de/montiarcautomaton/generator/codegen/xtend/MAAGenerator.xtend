@@ -34,7 +34,7 @@ import montiarc._symboltable.ComponentSymbol
  */
 class MAAGenerator {
 
-  def generateAll(File targetPath, File hwc, ComponentSymbol comp) {
+  def static generateAll(File targetPath, File hwc, ComponentSymbol comp) {
     Identifier.createInstance(comp)
 
     var boolean existsHWCClass = TransformationHelper.existsHandwrittenClass(IterablePath.from(hwc, ".java"),
@@ -54,23 +54,7 @@ class MAAGenerator {
 
   }
 
-  def private toFile(File targetPath, String name, String content) {
-    var Path path = Paths.get(targetPath.absolutePath + "\\" + name + ".java")
-    var FileReaderWriter writer = new FileReaderWriter()
-    println("Writing to file " + path + ".");
-    writer.storeInFile(path, content)
-  }
-
-
-  def private dispatch generateBehavior(ASTJavaPBehavior ajava, ComponentSymbol comp) {
-    return JavaPGenerator.newInstance.generate(comp)
-  }
-
-  def private dispatch generateBehavior(ASTAutomatonBehavior automaton, ComponentSymbol comp) {
-    return new AutomatonGenerator(comp).generate(comp)
-  }
-
-  def generateBehaviorImplementation(ComponentSymbol comp) {
+  def static generateBehaviorImplementation(ComponentSymbol comp) {
     var compAST = comp.astNode.get as ASTComponent
     var boolean hasBehavior = false
     for (element : compAST.body.elementList) {
@@ -86,4 +70,18 @@ class MAAGenerator {
 
   }
 
+  def static private toFile(File targetPath, String name, String content) {
+    var Path path = Paths.get(targetPath.absolutePath + "\\" + name + ".java")
+    var FileReaderWriter writer = new FileReaderWriter()
+    println("Writing to file " + path + ".");
+    writer.storeInFile(path, content)
+  }
+
+  def private static dispatch generateBehavior(ASTJavaPBehavior ajava, ComponentSymbol comp) {
+    return JavaPGenerator.newInstance.generate(comp)
+  }
+
+  def private static dispatch generateBehavior(ASTAutomatonBehavior automaton, ComponentSymbol comp) {
+    return new AutomatonGenerator(comp).generate(comp)
+  }
 }

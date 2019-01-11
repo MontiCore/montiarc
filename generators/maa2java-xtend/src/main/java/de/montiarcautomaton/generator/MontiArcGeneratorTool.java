@@ -65,8 +65,7 @@ public class MontiArcGeneratorTool extends MontiArcTool{
       
       // 4. generate
       Log.info("Generate model: " + qualifiedModelName, "MontiArcGeneratorTool");
-      MAAGenerator generator = new MAAGenerator();
-      generator.generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(), hwcPath, comp);
+      MAAGenerator.generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(), hwcPath, comp);
     }
     
     // gen cd

@@ -61,20 +61,20 @@ class Input {
           }
         «ENDIF»
         
-      «FOR port : comp.incomingPorts»
-        public «helper.getRealPortTypeString(port)» get«port.name.toFirstUpper»() {
-          return this.«port.name»;
-        }
-      «ENDFOR»
-      
-      @Override
-      public String toString() {
-        String result = "[";
         «FOR port : comp.incomingPorts»
-          result += "«port.name»: " + this.«port.name» + " ";
+          public «helper.getRealPortTypeString(port)» get«port.name.toFirstUpper»() {
+            return this.«port.name»;
+          }
         «ENDFOR»
-        return result + "]";
-      }  
+        
+        @Override
+        public String toString() {
+          String result = "[";
+          «FOR port : comp.incomingPorts»
+            result += "«port.name»: " + this.«port.name» + " ";
+          «ENDFOR»
+          return result + "]";
+        }  
         
       } 
       

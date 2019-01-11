@@ -41,31 +41,31 @@ class JavaPGenerator extends ABehaviorGenerator {
 
   override String printCompute(ComponentSymbol comp) {
     return '''
-			@Override
-			public «comp.name»Result«Utils.printFormalTypeParameters(comp)»
-			          compute(«comp.name»Input«Utils.printFormalTypeParameters(comp)» «Identifier.inputName») {
-			  // inputs
-			  «FOR portIn : comp.incomingPorts»
-			  	final «ComponentHelper.printTypeName((portIn.astNode.get as ASTPort).type)» «portIn.name» = «Identifier.inputName».get«portIn.name.toFirstUpper»();
-			  «ENDFOR»
-			
-			  final «comp.name»Result «Identifier.resultName» = new «comp.name»Result();
-			  
-			  «FOR portOut : comp.outgoingPorts»
-			  	«ComponentHelper.printTypeName((portOut.astNode.get as ASTPort).type)» «portOut.name» = «Identifier.resultName».get«portOut.name.toFirstUpper»();
-			  «ENDFOR»
-			  
-			  «««  print java statements here
-        «getJavaP(comp)»
-			  
-			  «««  always add all outgoing values to result
+      @Override
+      public «comp.name»Result«Utils.printFormalTypeParameters(comp)»
+                compute(«comp.name»Input«Utils.printFormalTypeParameters(comp)» «Identifier.inputName») {
+        // inputs
+        «FOR portIn : comp.incomingPorts»
+          final «ComponentHelper.printTypeName((portIn.astNode.get as ASTPort).type)» «portIn.name» = «Identifier.inputName».get«portIn.name.toFirstUpper»();
+        «ENDFOR»
+      
+        final «comp.name»Result «Identifier.resultName» = new «comp.name»Result();
+        
         «FOR portOut : comp.outgoingPorts»
-			  	«Identifier.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
-			  «ENDFOR»
-			  return «Identifier.resultName»;
-			}
-			
-		'''
+          «ComponentHelper.printTypeName((portOut.astNode.get as ASTPort).type)» «portOut.name» = «Identifier.resultName».get«portOut.name.toFirstUpper»();
+        «ENDFOR»
+        
+        «««  print java statements here
+        «getJavaP(comp)»
+        
+        «««  always add all outgoing values to result
+        «FOR portOut : comp.outgoingPorts»
+          «Identifier.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
+        «ENDFOR»
+        return «Identifier.resultName»;
+      }
+      
+    '''
   }
 
   /**
@@ -97,31 +97,29 @@ class JavaPGenerator extends ABehaviorGenerator {
 
   override String printGetInitialValues(ComponentSymbol comp) {
     return '''
-			@Override
-			 public «comp.name»Result«Utils.printFormalTypeParameters(comp)» getInitialValues() {
-			   final «comp.name»Result «Identifier.resultName» = new «comp.name»Result();
-			   
-			   try {
-			   «FOR portOut : comp.outgoingPorts»
-			   	«ComponentHelper.printTypeName((portOut.astNode.get as ASTPort).type)» «portOut.name» = null;
-			   «ENDFOR»
-			   
-			   «FOR init : getInitializations(comp)»
-			   	«printInit(init)»   
-			   «ENDFOR»
-			
-			   «FOR portOut : comp.outgoingPorts»
-			   	«Identifier.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
-			   «ENDFOR»
-			   } catch(Exception e) {
-			     e.printStackTrace();
-			    }
-			
-			    return result;
-			 }
-		'''
+      @Override
+      public «comp.name»Result«Utils.printFormalTypeParameters(comp)» getInitialValues() {
+        final «comp.name»Result «Identifier.resultName» = new «comp.name»Result();
+      
+        try {
+        «FOR portOut : comp.outgoingPorts»
+          «ComponentHelper.printTypeName((portOut.astNode.get as ASTPort).type)» «portOut.name» = null;
+        «ENDFOR»
+        
+        «FOR init : getInitializations(comp)»
+          «printInit(init)»
+        «ENDFOR»
+      
+        «FOR portOut : comp.outgoingPorts»
+          «Identifier.resultName».set«portOut.name.toFirstUpper»(«portOut.name»);
+        «ENDFOR»
+        } catch(Exception e) {
+          e.printStackTrace();
+        }
+        return result;
+      }
+    '''
   }
-
 
   /**
    * @return list of variable and port initializations.

@@ -6,7 +6,6 @@
 package de.montiarcautomaton.generator.codegen.xtend.behavior;
 
 import de.montiarcautomaton.generator.codegen.xtend.util.Utils
-import montiarc._ast.ASTComponent
 import montiarc._symboltable.ComponentSymbol
 
 /**

@@ -69,14 +69,14 @@ class Result {
           }
         «ENDFOR»
       
-      @Override
-      public String toString() {
-        String result = "[";
-        «FOR port : comp.outgoingPorts»
-          result += "«port.name»: " + this.«port.name» + " ";
-        «ENDFOR»
-        return result + "]";
-      }  
+        @Override
+        public String toString() {
+          String result = "[";
+          «FOR port : comp.outgoingPorts»
+            result += "«port.name»: " + this.«port.name» + " ";
+          «ENDFOR»
+          return result + "]";
+        }  
         
       } 
       

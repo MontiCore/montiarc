@@ -52,16 +52,20 @@ class AutomatonGenerator extends ABehaviorGenerator {
     this.transitions = new ArrayList;
     this.variables = new ArrayList;
 
+    // store all states of automaton
     component.getSpannedScope().getSubScopes().stream().forEach(
       scope |
         scope.<StateSymbol>resolveLocally(StateSymbol.KIND).forEach(state|this.states.add(state))
     );
+    
+    // store all transitions of automaton
     component.getSpannedScope().getSubScopes().stream().forEach(
       scope |
         scope.<TransitionSymbol>resolveLocally(TransitionSymbol.KIND).forEach(transition|
           this.transitions.add(transition)
         )
     );
+    
     // variables can only be defined in the component's body unlike in JavaP
     component.getSpannedScope().<VariableSymbol>resolveLocally(VariableSymbol.KIND).forEach(
       variable |
@@ -112,15 +116,17 @@ class AutomatonGenerator extends ABehaviorGenerator {
 «««			  Initialize result
 			    final «resultName»«Utils.printFormalTypeParameters(comp)» «Identifier.resultName» = new «resultName»«Utils.printFormalTypeParameters(comp)»();
 			    
-«««			  Generate implementation of automaton
-			    // first current state to reduce stimuli and guard checks
+«««			  Generate implementation of automaton:
+«««			  switch-case statement for every state name 
 			    switch («Identifier.currentStateName») {
 			    «FOR state : automaton.stateDeclarationList.get(0).stateList»
 			    	case «state.name»:
 			    	  «FOR transition : transitions.stream.filter(s | s.source.name == state.name).collect(Collectors.toList)»
 			    	  	// transition: «transition.toString»
+«««			    	  if statement for each guard of a transition from this state	
 			    	  	if («IF transition.guardAST.isPresent»«printExpression(transition.guardAST.get.guardExpression.expression)»«ELSE» true «ENDIF») {
 			    	  	  //reaction
+«««			    	  	if true execute reaction of transition  
 			    	  	  «IF transition.reactionAST.present»
 			    	  	  	«FOR assignment : transition.reactionAST.get.getIOAssignmentList»
 			    	  	  		«IF assignment.isAssignment»
@@ -135,7 +141,7 @@ class AutomatonGenerator extends ABehaviorGenerator {
 			    	  	  	«ENDFOR»
 			    	  	  «ENDIF»
 			    	  	  
-			    	  	  //state change
+«««			    	  	and change state to target state of transition
 			    	  	  «Identifier.currentStateName» = «comp.name»State.«transition.target.name»;
 			    	  	  break;
 			    	  	}
@@ -161,12 +167,15 @@ class AutomatonGenerator extends ABehaviorGenerator {
 			@Override
 			public «resultName»«Utils.printFormalTypeParameters(comp)»
 			getInitialValues() {
+«««			initialize initial result
 			  final «resultName»«Utils.printFormalTypeParameters(comp)» «Identifier.resultName» = new «resultName»«Utils.printFormalTypeParameters(comp)»();
 			  
 			  // initial reaction
 			  «var StateSymbol initialState = states.stream.filter(state | state.isInitial).findFirst.get»
+«««			if an initial reaction is present
 			  «IF initialState.initialReactionAST.isPresent»
 			  	«FOR assignment : initialState.initialReactionAST.get.getIOAssignmentList»
+«««			  	set initial result			  	
 			  		«IF assignment.isAssignment»
 			  			«IF comp.getPort(assignment.name).isPresent»
 			  				«Identifier.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);

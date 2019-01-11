@@ -48,7 +48,7 @@ class ComponentGenerator {
       import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
       import de.montiarcautomaton.runtimes.Log;
       
-        public class «comp.name»«generics»      
+      public class «comp.name»«generics»      
         «IF comp.superComponent.present» extends «comp.superComponent.get.fullName» 
             «IF comp.superComponent.get.hasFormalTypeParameters»<«FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
               «scTypeParams»«ENDFOR»>
