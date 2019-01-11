@@ -14,7 +14,6 @@ component UsedPortsAndParametersExist(String s) {
 
   compute { 
     String s = "x";
-    System.println("Hello World");   
     hulu = s;
   }
 }
