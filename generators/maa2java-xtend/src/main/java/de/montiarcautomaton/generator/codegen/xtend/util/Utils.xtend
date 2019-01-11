@@ -41,6 +41,9 @@ class Utils {
       «FOR _import : comp.imports»
         import «_import.statement»«IF _import.isStar».*«ENDIF»;
       «ENDFOR»
+      «FOR inner : comp.innerComponents»
+        import «inner.packageName + "gen." + inner.name»;
+      «ENDFOR»
     '''
   }
 
@@ -101,6 +104,16 @@ class Utils {
       }
     }
     return output;
+  }
+  
+  def static printPackage(ComponentSymbol comp) {
+  	return '''
+  	«IF comp.isInnerComponent»
+	package «comp.packageName + "gen"»;
+	«ELSE»
+	package «comp.packageName»;
+	«ENDIF»
+  	'''
   }
 
 }

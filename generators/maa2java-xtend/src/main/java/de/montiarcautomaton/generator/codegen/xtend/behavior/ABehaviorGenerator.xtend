@@ -43,7 +43,7 @@ abstract class ABehaviorGenerator {
    */
   def String generate(ComponentSymbol comp) {
     return '''
-      package «comp.packageName»;
+      «Utils.printPackage(comp)»
       
       import «comp.packageName».«comp.name»Result;
       import «comp.packageName».«comp.name»Input;

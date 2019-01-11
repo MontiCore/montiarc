@@ -37,7 +37,7 @@ class ComponentGenerator {
     helper = new ComponentHelper(comp);
 
     return '''
-      package «comp.packageName»;
+      «Utils.printPackage(comp)»
       
       
       «Utils.printImports(comp)»

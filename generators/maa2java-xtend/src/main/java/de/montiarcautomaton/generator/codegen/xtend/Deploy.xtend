@@ -6,6 +6,7 @@
 package de.montiarcautomaton.generator.codegen.xtend
 
 import montiarc._symboltable.ComponentSymbol
+import de.montiarcautomaton.generator.codegen.xtend.util.Utils
 
 /**
  * Generates the deployment class for a component.
@@ -19,7 +20,7 @@ class Deploy {
     def static generateDeploy(ComponentSymbol comp) {
     var name = comp.name;
     return '''
-      package «comp.packageName»
+      «Utils.printPackage(comp)»
       
       public class Deploy«name» {
         final static int CYCLE_TIME = 50; // in ms

@@ -21,7 +21,7 @@ class Result {
     def static generateResult(ComponentSymbol comp) {
     var ComponentHelper helper = new ComponentHelper(comp)
     return '''
-      package «comp.packageName»;
+      «Utils.printPackage(comp)»
       
       «Utils.printImports(comp)»
       import de.montiarcautomaton.runtimes.timesync.implementation.IResult;
