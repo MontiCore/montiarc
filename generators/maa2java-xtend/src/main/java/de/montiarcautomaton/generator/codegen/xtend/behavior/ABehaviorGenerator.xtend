@@ -57,15 +57,11 @@ abstract class ABehaviorGenerator {
       public class «comp.name»Impl«Utils.printFormalTypeParameters(comp)»
       implements IComputable<«comp.name»Input«Utils.printFormalTypeParameters(comp)», «comp.name»Result«Utils.printFormalTypeParameters(comp)»> {
         
-         «««	print members for component variables 
-    		«FOR compVar : comp.variables»
-         «Utils.printVariables(comp)»
-        «ENDFOR» 
+        «««	print members for component variables 
+        «Utils.printVariables(comp)»
         
         «««  print members for component's configuration parameters
-    		«FOR param : (comp.astNode.get as ASTComponent).head.parameterList»
-          «Utils.printConfigParameters(comp)»
-        «ENDFOR»
+        «Utils.printConfigParameters(comp)»
         
         «hook(comp)»
         
