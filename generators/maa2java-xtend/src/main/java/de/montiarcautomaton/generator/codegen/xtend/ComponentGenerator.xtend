@@ -39,10 +39,14 @@ class ComponentGenerator {
     return '''
       «Utils.printPackage(comp)»
       
-      
       «Utils.printImports(comp)»
+      «IF comp.isInnerComponent»
+      import «comp.packageName»gen.«comp.name»Input;
+      import «comp.packageName»gen.«comp.name»Result;
+	  «ELSE»
       import «comp.packageName».«comp.name»Input;
       import «comp.packageName».«comp.name»Result;
+	  «ENDIF»
       import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
       import de.montiarcautomaton.runtimes.timesync.delegation.Port;
       import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;

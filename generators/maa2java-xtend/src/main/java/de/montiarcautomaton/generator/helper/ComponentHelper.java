@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.google.common.base.Splitter;
+
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.prettyprint.IndentPrinter;
@@ -373,7 +375,14 @@ public class ComponentHelper {
   public static String getSubComponentTypeName(ComponentInstanceSymbol instance) {
     String result = "";
     final ComponentSymbolReference componentTypeReference = instance.getComponentType();
-    result += componentTypeReference.getFullName();
+    if(componentTypeReference.isInnerComponent()) {
+      Splitter splitter = Splitter.on(".");
+      List<String> list = splitter.splitToList(componentTypeReference.getFullName());
+      result += list.subList(0, list.size() - 1).stream().collect(Collectors.joining(".")) + "gen." 
+            + componentTypeReference.getName();
+    } else {
+      result += componentTypeReference.getFullName();
+    }
     if (componentTypeReference.hasActualTypeArguments()) {
       result += printTypeArguments(componentTypeReference.getActualTypeArguments());
     }
