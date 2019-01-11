@@ -47,7 +47,14 @@ class MAAGenerator {
     if (!existsHWCClass && comp.isAtomic) {
       toFile(targetPath, comp.name + "Impl", generateBehaviorImplementation(comp));
     }
-
+    
+	// Generate inner components
+    for(innerComp : comp.innerComponents) {
+    	//TODO Fix hwc path for inner components
+    	generateAll(targetPath.toPath.resolve(comp.name + "gen").toFile, hwc, innerComp);
+    }
+    
+	// Generate deploy class
     if (comp.getStereotype().containsKey("deploy")) {
       toFile(targetPath, "Deploy" + comp.name, Deploy.generateDeploy(comp));
     }
