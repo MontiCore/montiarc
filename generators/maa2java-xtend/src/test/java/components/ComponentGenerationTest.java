@@ -156,12 +156,6 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     assertNotNull("Could not load component symbol for which the " +
                       "generator test should be executed.", symbol);
 
-    // Skip if it contains inner components
-    // TODO Remove when generation of inner components is to be implemented again and implementation of expected elements and files is present
-    if(anyHasInnerComponent(symbol)){
-      return;
-    }
-
     // 3. Determine all files which have to be checked
     Set<Path> filesToCheck = determineFilesToCheck(
         componentName,
@@ -319,11 +313,27 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
       for (ComponentInstanceSymbol instanceSymbol : component.getSubComponents()) {
         final ComponentSymbol referencedSymbol
             = instanceSymbol.getComponentType().getReferencedSymbol();
-        filesToCheck.addAll(
-            determineFilesToCheck(
-                referencedSymbol.getName(),
-                referencedSymbol.getFullName(),
-                referencedSymbol, basedir));
+
+        if(referencedSymbol.isInnerComponent()) {
+          filesToCheck.addAll(
+              determineFilesToCheck(
+                  referencedSymbol.getName(),
+                  referencedSymbol.getPackageName() + "gen."
+                      + referencedSymbol.getName(),
+                  referencedSymbol,
+                  basedir
+              )
+          );
+        } else {
+          filesToCheck.addAll(
+              determineFilesToCheck(
+                  referencedSymbol.getName(),
+                  referencedSymbol.getFullName(),
+                  referencedSymbol,
+                  basedir
+              )
+          );
+        }
       }
     }
 

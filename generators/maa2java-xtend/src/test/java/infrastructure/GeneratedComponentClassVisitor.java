@@ -270,7 +270,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
                           className, bodyElement));
           foundError = true;
         }else {
-          int foundIndex = printedBody.indexOf(bodyElement);
+          int foundIndex = lastIndex + printedBody.substring(lastIndex).indexOf(bodyElement);
           if (lastIndex >= foundIndex) {
             Log.error(String.format("Body element %s of constructor " +
                                         "%s was " +
