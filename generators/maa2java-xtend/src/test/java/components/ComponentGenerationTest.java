@@ -133,7 +133,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
    * @param componentName Name of the test model
    */
   private void executeGeneratorTest(String packageName, String componentName) {
-    executeGeneratorTest(packageName, componentName, TEST_MODEL_PATH);
+    executeGeneratorTest(packageName, componentName, false, TEST_MODEL_PATH);
   }
 
   /**
@@ -143,7 +143,11 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
    * @param componentName Name of the test model
    * @param modelPath Model path that contains the test model
    */
-  private void executeGeneratorTest(String packageName, String componentName, Path modelPath) {
+  private void executeGeneratorTest(
+      String packageName, 
+      String componentName, 
+      boolean isInner,
+      Path modelPath) {
     String qualifiedName = packageName + "." + componentName;
 
     // Load component symbol
@@ -153,9 +157,14 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
         modelPath.toFile(),
         Paths.get(DEFAULT_TYPES_FOLDER).toFile(),
         Paths.get(LIBRARY_MODELS_FOLDER).toFile()).orElse(null);
-    assertNotNull("Could not load component symbol for which the " +
+    assertNotNull("Could not load component symbol of " + qualifiedName + " for which the " +
                       "generator test should be executed.", symbol);
 
+
+    if(isInner) {
+      qualifiedName = packageName + "gen." + componentName;
+    }
+    
     // 3. Determine all files which have to be checked
     Set<Path> filesToCheck = determineFilesToCheck(
         componentName,
@@ -191,10 +200,11 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     ComponentElementsCollector compCollector
         = new ComponentElementsCollector(symbol, componentName);
     compCollector.handle(compUnit);
+    compCollector.handleComponent();
 
     // Check if all expected elements are present and no other errors occurred
     Log.getFindings().clear();
-
+    
     // Component class
     runVisitorOnFile(gs, compCollector.getClassVisitor(),
         qualifiedName);
@@ -216,6 +226,12 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     // Log checking
     Log.debug("Number of errors found: " + Log.getFindings().size(), "ComponentGenerationTest");
     assertEquals(Log.getFindings().toString(), 0, Log.getFindings().size());
+    
+    // Inner components
+    for (ComponentSymbol innerComp : symbol.getInnerComponents()) {
+
+      executeGeneratorTest(symbol.getFullName(), innerComp.getName(), true, TEST_MODEL_PATH);
+    }
   }
 
   /**
@@ -289,26 +305,11 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     }
 
     if (component.isAtomic()) {
-
-      // Determine if an automaton or a compute block is present
-//      final ASTComponent astNode
-//          = (ASTComponent) component.getAstNode().get();
-
-//      for (ASTElement element : astNode.getBody().getElements()) {
-//        if (element instanceof ASTBehaviorElement) {
-//          final String qualifiedFileName
-//              = basedir + qualifiedName.replace('.', '\\') + "Impl";
-//          filesToCheck.add(
-//              new File(qualifiedFileName + JAVA_FILE_ENDING));
-//          break;
-//        }
-//      }
-
       final String qualifiedFileName
           = qualifiedName.replace('.', File.separatorChar) + "Impl";
       filesToCheck.add(basedir.resolve(qualifiedFileName + JAVA_FILE_ENDING));
+      
     } else {
-
       //Recursively add files for subcomponents
       for (ComponentInstanceSymbol instanceSymbol : component.getSubComponents()) {
         final ComponentSymbol referencedSymbol

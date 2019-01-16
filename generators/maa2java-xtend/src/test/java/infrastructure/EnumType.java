@@ -10,9 +10,7 @@ import java.util.Set;
 /**
  * TODO
  *
- * @author (last commit)
- * @version ,
- * @since TODO
+ * @author Michael Mutert
  */
 public class EnumType {
 

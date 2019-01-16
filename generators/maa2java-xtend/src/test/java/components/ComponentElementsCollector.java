@@ -41,6 +41,7 @@ import static infrastructure.GeneratorTestConstants.PRINTER;
  */
 public class ComponentElementsCollector implements MontiArcVisitor {
 
+  protected Map<String, GeneratedComponentClassVisitor> visitors = new HashMap<>();
   protected GeneratedComponentClassVisitor classVisitor;
   protected GeneratedComponentClassVisitor inputVisitor;
   protected GeneratedComponentClassVisitor resultVisitor;
@@ -104,18 +105,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     }
   }
 
-  @Override
-  public void visit(ASTParameter node) {
-    final String parameterName = node.getName();
-    final Optional<ASTValuation> defaultValue = node.getDefaultValueOpt();
-    final String type = PRINTER.prettyprint(boxPrimitiveType(node.getType()));
-    classVisitor.addField(parameterName, type);
-    if(this.symbol.isAtomic() && this.symbol.hasBehavior()){
-      implVisitor.addField(parameterName, type);
-    }
-  }
 
-  @Override
   /**
    * Visit the component node of the AST.
    *
@@ -144,12 +134,35 @@ public class ComponentElementsCollector implements MontiArcVisitor {
    *  - Constructor
    *  - toString
    */
-  public void visit(ASTComponent node) {
+  public void handleComponent() {
+    
+    ASTComponent node = (ASTComponent) symbol.getAstNode().get();
+    
     // Add elements which are not found by the visitor
     HCJavaDSLTypeResolver typeResolver = new HCJavaDSLTypeResolver();
 
-    // impl field
+    // Parameters
+    for (ASTParameter parameter : node.getHead().getParameterList()) {
+      final String parameterName = parameter.getName();
+      final Optional<ASTValuation> defaultValue = parameter.getDefaultValueOpt();
+      final String type = PRINTER.prettyprint(boxPrimitiveType(parameter.getType()));
+      classVisitor.addField(parameterName, type);
+      if(this.symbol.isAtomic() && this.symbol.hasBehavior()){
+        implVisitor.addField(parameterName, type);
+      }
+    }
+    
+    // impl field and Implementations
     addImplField();
+    
+    Optional<ASTAutomaton> automaton = getAutomaton();
+    if(automaton.isPresent()) {
+      handleAutomaton(automaton.get());
+    }
+    Optional<ASTJavaPBehavior> ajava = getJavaPBehavior();
+    if(ajava.isPresent()) {
+      handleJavaPBehavior(ajava.get());
+    }
 
     // Component variables
     addComponentVariableFields();
@@ -160,6 +173,11 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     Method.Builder methodBuilder;
 
+    // Ports
+    for (PortSymbol portSymbol : symbol.getPorts()) {
+      handlePort(portSymbol);
+    }
+    
     // init
     addInit();
 
@@ -208,6 +226,28 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       resultVisitor.setSuperClass(fullName + "Result", superTypeArguments);
       inputVisitor.setSuperClass(fullName + "Input", superTypeArguments);
     }
+  }
+  
+  private Optional<ASTAutomaton> getAutomaton(){
+    ASTComponent astNode = (ASTComponent) symbol.getAstNode().get();
+    
+    for (ASTElement element : astNode.getBody().getElementList()) {
+      if(element instanceof ASTAutomaton) {
+        return Optional.of((ASTAutomaton) element);
+      }
+    }
+    return Optional.empty();
+  }
+  
+  private Optional<ASTJavaPBehavior> getJavaPBehavior(){
+    ASTComponent astNode = (ASTComponent) symbol.getAstNode().get();
+    
+    for (ASTElement element : astNode.getBody().getElementList()) {
+      if(element instanceof ASTJavaPBehavior) {
+        return Optional.of((ASTJavaPBehavior) element);
+      }
+    }
+    return Optional.empty();
   }
 
   /**
@@ -901,9 +941,9 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     }
   }
 
-  @Override
-  public void visit(ASTPort node) {
-    final PortSymbol symbol = (PortSymbol) node.getSymbolOpt().get();
+  
+  public void handlePort(PortSymbol symbol) {
+    ASTPort node = (ASTPort) symbol.getAstNode().get();
     final ASTType type = boxPrimitiveType(node.getType());
     // Type parameters for the Port field type
     // The type parameters consist of the type of the ASTPort type
@@ -977,6 +1017,12 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     }
   }
 
+  /**
+   * Box the primitive types.
+   * 
+   * @param type
+   * @return The node of the boxed primitive type.
+   */
   private ASTType boxPrimitiveType(ASTType type){
     if(type instanceof ASTPrimitiveArrayType){
       // Box the type of a primitive array type
@@ -1031,8 +1077,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     return type;
   }
 
-  @Override
-  public void visit(ASTAutomaton node) {
+  public void handleAutomaton(ASTAutomaton node) {
     // Add the currentState field
     String currentStateVarName = "currentState";
     if(new Identifier().containsIdentifier(currentStateVarName, symbol)){
@@ -1040,7 +1085,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     }
     this.implVisitor.addField(currentStateVarName, this.symbol.getName() + "State");
 
-    final List<String> stateNames = new ArrayList<>();
+    final Set<String> stateNames = new HashSet<>();
     for (ASTStateDeclaration stateList : node.getStateDeclarationList()) {
       for (ASTState state : stateList.getStateList()) {
         stateNames.add(state.getName());
@@ -1048,11 +1093,13 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     }
     addGetInitialValues(node);
     addImplCompute(node);
-
+    
+    // States
+    EnumType enumType = new EnumType(symbol.getName() + "State", stateNames);
+    this.implVisitor.addEnumType(enumType);
   }
 
-  @Override
-  public void visit(ASTJavaPBehavior node){
+  public void handleJavaPBehavior(ASTJavaPBehavior node){
     addGetInitialValues(node);
     addImplCompute(node);
   }
@@ -1238,15 +1285,6 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     return "";
   }
 
-  @Override
-  public void visit(ASTStateDeclaration node) {
-    final Set<String> stateNames = node.getStateList().stream()
-                                       .map(ASTState::getName)
-                                       .collect(Collectors.toSet());
-    EnumType enumType = new EnumType(componentName + "State", stateNames);
-
-    this.implVisitor.addEnumType(enumType);
-  }
 
   private Optional<Method> getMethod(String name) {
     return classVisitor.getMethods()
@@ -1262,6 +1300,11 @@ public class ComponentElementsCollector implements MontiArcVisitor {
   @Override
   public void visit(ASTImportDeclaration node) {
     classVisitor.addImport(node.getQualifiedName().toString());
+  }
+  
+  @Override
+  public void visit(ASTMACompilationUnit node) {
+    handleComponent();
   }
 
   public GeneratedComponentClassVisitor getClassVisitor() {
