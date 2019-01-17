@@ -235,28 +235,6 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
   }
 
   /**
-   * Currently, components which contain inner components should not be considered,
-   * as they are not correctly generating as of MontiArc 5.0.0.
-   * When implementing inner component generation this method will become unnecessary
-   *
-   * @param symbol Component to check
-   * @return True, iff the component or any subcomponent defines an inner component.
-   */
-  private boolean anyHasInnerComponent(ComponentSymbol symbol){
-    if(!symbol.getInnerComponents().isEmpty()){
-      return true;
-    }
-    for(ComponentInstanceSymbol instanceSymbol : symbol.getSubComponents()) {
-      final ComponentSymbol referencedSymbol
-          = instanceSymbol.getComponentType().getReferencedSymbol();
-      if(anyHasInnerComponent(referencedSymbol)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
    * Run the visitor with the expected elements on the specified class.
    * @param javaGlobalScope Scope in which the class is present
    * @param visitor The visitor which should be run on the class
