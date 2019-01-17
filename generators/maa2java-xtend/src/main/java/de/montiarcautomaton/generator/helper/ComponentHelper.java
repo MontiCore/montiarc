@@ -378,7 +378,7 @@ public class ComponentHelper {
     final ComponentSymbolReference componentTypeReference
         = instance.getComponentType();
 
-    String packageName = Utils.printPackageWithoutKeyWordAndSemicolon(componentTypeReference);
+    String packageName = Utils.printPackageWithoutKeyWordAndSemicolon(componentTypeReference.getReferencedComponent().get());
     if(packageName != null && !packageName.equals("")) {
       result = packageName + ".";
     }

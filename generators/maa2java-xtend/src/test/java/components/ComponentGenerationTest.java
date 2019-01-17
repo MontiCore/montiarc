@@ -8,6 +8,7 @@ package components;
 import com.google.common.base.Preconditions;
 import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
+import de.montiarcautomaton.generator.codegen.xtend.util.Utils;
 import de.monticore.ast.Comment;
 import de.monticore.java.javadsl._ast.ASTClassDeclaration;
 import de.monticore.java.symboltable.JavaTypeSymbol;
@@ -62,7 +63,11 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 
   @Test
   public void testAUto() {
-    executeGeneratorTest("components.body.subcomponents", "ComplexComponent");
+    executeGeneratorTest("components.body.subcomponents", "InnerComponents");
+  }
+  @Test
+  public void testContainer() {
+    executeGeneratorTest("components.head.inheritance", "Container");
   }
   
   @Test
@@ -349,7 +354,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
         filesToCheck.addAll(
             determineFilesToCheck(
                 superComponent.getName(),
-                superComponent.getPackageName(),
+                Utils.printPackageWithoutKeyWordAndSemicolon(superComponent).replaceAll("\\s", ""),
                 superComponent,
                 basedir
             )

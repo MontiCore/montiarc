@@ -48,7 +48,7 @@ class ComponentGenerator {
       import de.montiarcautomaton.runtimes.Log;
       
       public class «comp.name»«generics»      
-        «IF comp.superComponent.present» extends «comp.superComponent.get.fullName» 
+        «IF comp.superComponent.present» extends «Utils.printPackageWithoutKeyWordAndSemicolon(comp.superComponent.get) + "." + comp.superComponent.get.name» 
             «IF comp.superComponent.get.hasFormalTypeParameters»<«FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
               «scTypeParams»«ENDFOR»>
             «ENDIF»

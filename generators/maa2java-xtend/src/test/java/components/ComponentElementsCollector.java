@@ -8,6 +8,7 @@ package components;
 import com.google.common.collect.Lists;
 
 import de.montiarcautomaton.generator.codegen.xtend.util.Identifier;
+import de.montiarcautomaton.generator.codegen.xtend.util.Utils;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor;
 import de.monticore.ast.ASTNode;
@@ -219,7 +220,8 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     // Add super classes to the signatures
     if (symbol.getSuperComponent().isPresent()) {
-      final String fullName = symbol.getSuperComponent().get().getFullName();
+      String fullName = Utils.printPackageWithoutKeyWordAndSemicolon(symbol.getSuperComponent().get()) + "." + symbol.getSuperComponent().get().getName();
+      fullName = fullName.replaceAll("\\s", "");
       final List<ActualTypeArgument> superTypeArguments =
           symbol.getSuperComponent().get().getActualTypeArguments();
       classVisitor.setSuperClass(fullName, superTypeArguments);

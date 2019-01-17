@@ -29,7 +29,8 @@ class Result {
       
       public class «comp.name»Result«Utils.printFormalTypeParameters(comp)»   
       «IF comp.superComponent.present» extends 
-      «comp.superComponent.get.fullName»Result «IF comp.superComponent.get.hasFormalTypeParameters»< «FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
+      «Utils.printPackageWithoutKeyWordAndSemicolon(comp.superComponent.get) + "." + comp.superComponent.get.name»Result
+      «IF comp.superComponent.get.hasFormalTypeParameters»< «FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
           «scTypeParams»«ENDFOR»>«ENDIF»
       «ENDIF»
       implements IResult 
