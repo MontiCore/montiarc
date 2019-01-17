@@ -325,7 +325,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     // check if this component is an inner component
     if (!componentStack.isEmpty()) {
-      component.setIsInnerComponent(true);
+      System.out.println("NOn empty stack");
+      component.setDefiningComponent(componentStack.peek());
     }
     
     // timing

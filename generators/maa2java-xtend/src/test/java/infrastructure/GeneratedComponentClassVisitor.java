@@ -30,6 +30,7 @@ import static junit.framework.TestCase.assertTrue;
 public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
 
   private final String className;
+  private final String packageName;
 
   private Set<String> imports;
   private Set<Field> fields;
@@ -45,8 +46,9 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
 
   Set<Constructor> constructors;
 
-  public GeneratedComponentClassVisitor(String className){
+  public GeneratedComponentClassVisitor(String className, String packageName){
     this.className = className;
+    this.packageName = packageName;
     this.imports = new HashSet<>();
     this.fields = new HashSet<>();
     this.methods = new HashSet<>();
@@ -72,7 +74,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
       for (String s : method.get().getBodyElements()) {
         if (!methodString.contains(s)) {
           Log.error("Missing statement in method " + methodName +
-                        " of class " + className + ": " + s);
+                        " of class " + packageName + "." + className + ": " + s);
         } else {
           int foundIndex = lastIndex + methodString.substring(lastIndex).indexOf(s);
           if(lastIndex >= foundIndex){
@@ -91,7 +93,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
         && printedReturnType.endsWith(m.getReturnType().replace(" ", ""))
     );
     if(!removed){
-      Log.error("Found unexpected method in " + this.className + ": " + methodName);
+      Log.error("Found unexpected method in " + packageName + "." + className + ": " + methodName);
     }
   }
 
@@ -118,7 +120,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
             = refType.getNameList()
                   .stream().anyMatch(s -> interfaces.contains(s + finalTypeArgs));
         if(!isComponentImplemented){
-          Log.error(String.format("Class %s does not implement interface %s", className,
+          Log.error(String.format("Class %s does not implement interface %s", packageName + "." + className,
               refType.getNameList()));
         }
       }
@@ -127,12 +129,12 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     if(this.superClass != null && !superClass.isPresent()){
       // Case 1: There is an expected super class but no super class in the generated code
       Log.error(String.format("%s does not extend superclass %s",
-          className, this.superClass));
+          packageName + "." + className, this.superClass));
 
     } else if(this.superClass == null && superClass.isPresent()){
       // Case 2: No expected super class but a super class in the code
       Log.error(String.format("%s unexpectedly extends a class %s",
-          className, printWithoutWhitespace(superClass.get())));
+          packageName + "." + className, printWithoutWhitespace(superClass.get())));
 
     } else if(this.superClass != null){
       // Case 3: Expected super class and generated super class
@@ -146,21 +148,21 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
         //            do not match
         Log.error(String.format("The class %s extends the wrong class " +
                                     "%s instead of expected class %s",
-            className, superClassFqn, this.superClass));
+            packageName + "." + className, superClassFqn, this.superClass));
 
       } else if(!this.superClassTypeArgs.isEmpty() && !superClassType.getTypeArgumentsOpt().isPresent()) {
         // Case 3.2: Expected type arguments but found none
         Log.error(String.format("Expected type arguments '%s' in class '%s' " +
                                     "for super class '%s', but found none.",
             ComponentHelper.printTypeArguments(this.superClassTypeArgs),
-            className,
+            packageName + "." + className,
             superClassFqn));
 
       } else if(this.superClassTypeArgs.isEmpty() && superClassType.getTypeArgumentsOpt().isPresent()) {
         // Case 3.3: Expected no type arguments, but there are generated type arguments
         Log.error(String.format("Expected no type arguments " +
                                     "for super class '%s' in class '%s', but found '%s'.",
-            className,
+            packageName + "." + className,
             superClassFqn,
             GeneratorTestConstants.PRINTER.prettyprint(superClassType.getTypeArguments())));
 
@@ -173,7 +175,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
                                       "class '%s' of class '%s', but found '%d'.",
               this.superClassTypeArgs.size(),
               this.superClass,
-              this.className,
+              this.packageName + "." + className,
               actualSuperTypeArgList.size()));
         }
         // Check that the parameters match
@@ -188,7 +190,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
                                         "match the expected type '%s'.",
                 printedSuperTypeArg,
                 this.superClass,
-                this.className,
+                this.packageName + "." + className,
                 printedExpectedTypeArg));
           }
         }
@@ -267,7 +269,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
           Log.error(
               String.format("Missing element in constructor of class %s" +
                                 ": %s",
-                          className, bodyElement));
+                  packageName + "." + className, bodyElement));
           foundError = true;
         }else {
           int foundIndex = lastIndex + printedBody.substring(lastIndex).indexOf(bodyElement);
@@ -275,7 +277,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
             Log.error(String.format("Body element %s of constructor " +
                                         "%s was " +
                                         "found in the wrong order.",
-                bodyElement, className));
+                bodyElement, packageName + "." + className));
             foundError = true;
           }
           lastIndex = foundIndex;
@@ -288,7 +290,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     } else {
       Log.error(String.format("Unexpected constructor in class %s. " +
                                   "Signature: %s%s",
-          className,
+          packageName + "." + className,
           className,
           GeneratorTestConstants.PRINTER.prettyprint(node.getFormalParameters())));
     }
@@ -329,7 +331,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
       if(!removed){
         Log.error(
             String.format("Found unexpected field in %s: %s",
-                this.className,
+                this.packageName + "." + className,
                 declarator.getDeclaratorId().getName()));
       }
     }
@@ -346,7 +348,7 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
     found = this.enumTypes.removeIf(e -> e.getName().equals(actualName));
 
     if(!found){
-      Log.error("Found unexpected enum in " + this.className + ": " + actualName);
+      Log.error("Found unexpected enum in " + packageName + "." + className + ": " + actualName);
     }
   }
 
@@ -359,13 +361,13 @@ public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
 //    assertTrue(String.format("Did not find all required imports in %s: \n%s",
 //            className, imports.toString()), imports.isEmpty());
     assertTrue(String.format("Did not find all required fields in %s: \n%s",
-        className, fields.toString()), fields.isEmpty());
+        packageName + "." + className, fields.toString()), fields.isEmpty());
     assertTrue(String.format("Did not find all required methods in %s: \n%s",
-            className, methods.toString()), methods.isEmpty());
+        packageName + "." + className, methods.toString()), methods.isEmpty());
     assertTrue(String.format("Did not find all required constructors in %s: \n%s",
-            className, constructors.toString()), constructors.isEmpty());
+        packageName + "." + className, constructors.toString()), constructors.isEmpty());
     assertTrue(String.format("Did not find all required enums in %s: \n%s",
-            className, enumTypes.toString()), enumTypes.isEmpty());
+        packageName + "." + className, enumTypes.toString()), enumTypes.isEmpty());
   }
 
   public void addImport(String fullQualifiedImport){

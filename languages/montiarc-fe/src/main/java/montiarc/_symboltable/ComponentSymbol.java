@@ -45,7 +45,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
 
   private final Map<String, Optional<String>> stereotype = new HashMap<>();
 
-  private boolean isInnerComponent = false;
+  private Optional<ComponentSymbol> definingComponent = Optional.empty();
 
   private Optional<ComponentSymbolReference> superComponent = Optional.empty();
 
@@ -189,16 +189,21 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
    * @return true, if this is an inner component, else false.
    */
   public boolean isInnerComponent() {
-    return referencedComponent.orElse(this).isInnerComponent;
+    return referencedComponent.orElse(this).definingComponent.isPresent();
   }
 
   /**
    * Sets, if this is an inner component or not.
    *
-   * @param isInnerComponent true, if this is an inner component
+   * @param definingComponent the component that defines this component.
    */
-  public void setIsInnerComponent(boolean isInnerComponent) {
-    referencedComponent.orElse(this).isInnerComponent = isInnerComponent;
+  public void setDefiningComponent(ComponentSymbol definingComponent) {
+    referencedComponent.orElse(this).definingComponent
+        = Optional.of(definingComponent);
+  }
+
+  public Optional<ComponentSymbol> getDefiningComponent() {
+    return referencedComponent.orElse(this).definingComponent;
   }
 
   /**

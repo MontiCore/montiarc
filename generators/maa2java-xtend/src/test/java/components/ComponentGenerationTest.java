@@ -6,6 +6,8 @@
 package components;
 
 import com.google.common.base.Preconditions;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
+
 import de.monticore.ast.Comment;
 import de.monticore.java.javadsl._ast.ASTClassDeclaration;
 import de.monticore.java.symboltable.JavaTypeSymbol;
@@ -58,6 +60,11 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
   public static final String PACKAGE = "components";
   public static final String JAVA_FILE_ENDING = ".java";
 
+  @Test
+  public void testAUto() {
+    executeGeneratorTest("components.body.subcomponents", "ComplexComponent");
+  }
+  
   @Test
   /**
    * Test all models that are imported from the montiarc-fe project.
@@ -162,31 +169,48 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
 
 
     if(isInner) {
-      qualifiedName = packageName + "gen." + componentName;
+      Deque<ComponentSymbol> symbolStack = new ArrayDeque<>();
+      symbolStack.push(symbol.getDefiningComponent().get());
+      while(symbolStack.peek().getDefiningComponent().isPresent()) {
+        symbolStack.push(symbolStack.peek().getDefiningComponent().get());
+      }
+      packageName = symbolStack.pop().getFullName() + "gen.";
+      for(ComponentSymbol currentSymbol : symbolStack) {
+        packageName += currentSymbol.getName() + "gen.";
+      }
+      qualifiedName = packageName + componentName;
     }
     
     // 3. Determine all files which have to be checked
     Set<Path> filesToCheck = determineFilesToCheck(
         componentName,
-        qualifiedName,
-        symbol, TARGET_GENERATED_TEST_SOURCES_DIR);
+        packageName,
+        symbol, 
+        TARGET_GENERATED_TEST_SOURCES_DIR);
 
     try {
       final Path generatedTypesPath
           = TARGET_GENERATED_TEST_SOURCES_DIR.resolve("types");
-      filesToCheck.addAll(Files.walk(generatedTypesPath).collect(Collectors.toSet()));
+      filesToCheck.addAll(
+          Files.walk(generatedTypesPath)
+          .collect(Collectors.toSet())
+      );
     } catch (IOException e) {
       e.printStackTrace();
     }
 
     // 4. Determine if all files are present
     for (Path path : filesToCheck) {
+      if(!Files.exists(path)) {
+        System.out.println("lhg");
+      }
       assertTrue("Could not find expected generated file " + path.toString(),
           Files.exists(path));
     }
 
     // 5. Invoke Java compiler to see whether they are compiling
-    final boolean compiling = AbstractGeneratorTest.isCompiling(filesToCheck, TARGET_GENERATED_TEST_SOURCES_DIR);
+    final boolean compiling = 
+        AbstractGeneratorTest.isCompiling(filesToCheck, TARGET_GENERATED_TEST_SOURCES_DIR);
     assertTrue(
         String.format("The generated files for model %s are not " +
                           "compiling without errors", qualifiedName),
@@ -262,21 +286,24 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
    * locations of the generated files of the component given by the parameters.
    *
    * @param componentName Name of the component
-   * @param qualifiedName Qualified name of the component (package.componentName)
+   * @param packageName Qualified name of the component (package.componentName)
    * @param component ComponentSymbol of the Component
    * @param basedir Location of the generated files
    * @return A list of generated files for the specified component
    */
   private Set<Path> determineFilesToCheck(String componentName,
-                                          String qualifiedName,
+                                          String packageName,
                                           ComponentSymbol component,
                                           Path basedir) {
     Set<Path> filesToCheck = new HashSet<>();
+    
+    String qualifiedName = packageName.equals("") ? componentName : packageName + "." + componentName;
 
     final Optional<String> deploy = component.getStereotype().get("deploy");
 
     // Add the special deployment file
     if (deploy != null && deploy.isPresent()) {
+      //TODO Fix file path for deploy class. Might be only components/XYZDeploy.java currently
       filesToCheck.add(
           TARGET_GENERATED_TEST_SOURCES_DIR.resolve(PACKAGE + File.separator +
                        "Deploy" + componentName + JAVA_FILE_ENDING));
@@ -297,8 +324,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
           filesToCheck.addAll(
               determineFilesToCheck(
                   referencedSymbol.getName(),
-                  referencedSymbol.getPackageName() + "gen."
-                      + referencedSymbol.getName(),
+                  qualifiedName + "gen",
                   referencedSymbol,
                   basedir
               )
@@ -307,7 +333,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
           filesToCheck.addAll(
               determineFilesToCheck(
                   referencedSymbol.getName(),
-                  referencedSymbol.getFullName(),
+                  referencedSymbol.getPackageName(),
                   referencedSymbol,
                   basedir
               )
@@ -323,7 +349,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
         filesToCheck.addAll(
             determineFilesToCheck(
                 superComponent.getName(),
-                superComponent.getFullName(),
+                superComponent.getPackageName(),
                 superComponent,
                 basedir
             )

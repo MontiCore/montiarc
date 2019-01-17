@@ -59,13 +59,13 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     this.symbol = symbol;
     this.componentName = name;
     this.helper = new ComponentHelper(symbol);
-    this.classVisitor = new GeneratedComponentClassVisitor(name);
+    this.classVisitor = new GeneratedComponentClassVisitor(name, symbol.getPackageName());
     this.inputName = name + "Input";
     this.resultName = name + "Result";
     this.implName = name + "Impl";
-    this.inputVisitor = new GeneratedComponentClassVisitor(inputName);
-    this.implVisitor = new GeneratedComponentClassVisitor(implName);
-    this.resultVisitor = new GeneratedComponentClassVisitor(resultName);
+    this.inputVisitor = new GeneratedComponentClassVisitor(inputName, symbol.getPackageName());
+    this.implVisitor = new GeneratedComponentClassVisitor(implName, symbol.getPackageName());
+    this.resultVisitor = new GeneratedComponentClassVisitor(resultName, symbol.getPackageName());
     initTypes();
   }
 
