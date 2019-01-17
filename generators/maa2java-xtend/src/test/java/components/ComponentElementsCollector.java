@@ -232,8 +232,9 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     ASTComponent astNode = (ASTComponent) symbol.getAstNode().get();
     
     for (ASTElement element : astNode.getBody().getElementList()) {
-      if(element instanceof ASTAutomaton) {
-        return Optional.of((ASTAutomaton) element);
+      if(element instanceof ASTAutomatonBehavior) {
+        ASTAutomaton automaton = ((ASTAutomatonBehavior)element).getAutomaton();
+        return Optional.of(automaton);
       }
     }
     return Optional.empty();
@@ -1302,10 +1303,10 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     classVisitor.addImport(node.getQualifiedName().toString());
   }
   
-  @Override
-  public void visit(ASTMACompilationUnit node) {
-    handleComponent();
-  }
+//  @Override
+//  public void visit(ASTMACompilationUnit node) {
+//    handleComponent();
+//  }
 
   public GeneratedComponentClassVisitor getClassVisitor() {
     return classVisitor;
