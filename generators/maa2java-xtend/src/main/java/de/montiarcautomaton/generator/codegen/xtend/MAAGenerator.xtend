@@ -37,12 +37,13 @@ class MAAGenerator {
   def static generateAll(File targetPath, File hwc, ComponentSymbol comp) {
     Identifier.createInstance(comp)
 
-    var boolean existsHWCClass = TransformationHelper.existsHandwrittenClass(IterablePath.from(hwc, ".java"),
-      comp.packageName + "." + comp.name);
-
     toFile(targetPath, comp.name + "Input", Input.generateInput(comp));
     toFile(targetPath, comp.name + "Result", Result.generateResult(comp));
     toFile(targetPath, comp.name, new ComponentGenerator().generate(comp));
+
+    var boolean existsHWCClass = TransformationHelper.existsHandwrittenClass(
+    	IterablePath.from(hwc, ".java"),
+      comp.packageName + "." + comp.name + "Impl");
 
     if (!existsHWCClass && comp.isAtomic) {
       toFile(targetPath, comp.name + "Impl", generateBehaviorImplementation(comp));
