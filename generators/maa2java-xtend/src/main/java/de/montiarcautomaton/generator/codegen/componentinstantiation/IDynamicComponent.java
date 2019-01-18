@@ -1,5 +1,6 @@
-package de.montiarcautomaton.runtimes.componentinstantiation;
+package de.montiarcautomaton.generator.codegen.componentinstantiation;
 
+import de.montiarcautomaton.runtimes.componentinstantiation.LoaderManager;
 import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
 import de.montiarcautomaton.runtimes.timesync.delegation.Port;
 
@@ -12,5 +13,7 @@ public interface IDynamicComponent extends IComponent {
   public List<Port> reconfigure();
   public void propagatePortChanges(List<Port> changedPorts);
   public String getInstanceName();
-  public void setLoaderConfiguration(String instanceName, String storeDir, String targetDir, LoaderManager loaderManager);
+
+  void setLoaderConfiguration(String s, String storeDir, String targetDir, LoaderManager loaderManager);
+
 }

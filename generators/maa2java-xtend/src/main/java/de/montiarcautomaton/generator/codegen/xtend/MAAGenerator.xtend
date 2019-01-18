@@ -78,18 +78,18 @@ class MAAGenerator {
 
   }
 
-  def static private toFile(File targetPath, String name, String content) {
+  def static public toFile(File targetPath, String name, String content) {
     var Path path = Paths.get(targetPath.absolutePath + "\\" + name + ".java")
     var FileReaderWriter writer = new FileReaderWriter()
     println("Writing to file " + path + ".");
     writer.storeInFile(path, content)
   }
 
-  def private static dispatch generateBehavior(ASTJavaPBehavior ajava, ComponentSymbol comp) {
+  def public static dispatch generateBehavior(ASTJavaPBehavior ajava, ComponentSymbol comp) {
     return JavaPGenerator.newInstance.generate(comp)
   }
 
-  def private static dispatch generateBehavior(ASTAutomatonBehavior automaton, ComponentSymbol comp) {
+  def public static dispatch generateBehavior(ASTAutomatonBehavior automaton, ComponentSymbol comp) {
     return new AutomatonGenerator(comp).generate(comp)
   }
 }

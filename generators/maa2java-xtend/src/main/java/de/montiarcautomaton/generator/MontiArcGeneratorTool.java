@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import de.montiarcautomaton.generator.codegen.xtend.MAADynamicGenerator;
 import de.montiarcautomaton.generator.codegen.xtend.MAAGenerator;
 import de.monticore.cd2pojo.Modelfinder;
 import de.monticore.cd2pojo.POJOGenerator;
@@ -67,6 +68,9 @@ public class MontiArcGeneratorTool extends MontiArcTool{
       // 4. generate
       Log.info("Generate model: " + qualifiedModelName, "MontiArcGeneratorTool");
       MAAGenerator.generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(), hwcPath, comp);
+      if (dynamicGeneration) {
+          MAADynamicGenerator.generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(), hwcPath, comp);
+      }
     }
     
     // gen cd

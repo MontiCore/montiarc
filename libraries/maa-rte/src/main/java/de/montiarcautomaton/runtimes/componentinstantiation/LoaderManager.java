@@ -9,14 +9,14 @@ import java.util.Map;
  */
 public class LoaderManager {
 
-  Map<String, FileSystemLoader> registeredLoaders = new HashMap<>();
+  Map<String, ILoader> registeredLoaders = new HashMap<>();
 
-  public void registerLoader(String instanceName, FileSystemLoader fsLoader){
+  public void registerLoader(String instanceName, ILoader fsLoader){
     registeredLoaders.put(instanceName, fsLoader);
   }
 
   public void unregisterLoader(String instanceName){
-    FileSystemLoader loader = registeredLoaders.get(instanceName);
+	  ILoader loader = registeredLoaders.get(instanceName);
     if (loader != null){
       loader.stop();
       registeredLoaders.remove(instanceName);
@@ -27,7 +27,7 @@ public class LoaderManager {
     }
   }
 
-  public Map<String, FileSystemLoader> getRegisteredLoaders() {
+  public Map<String, ILoader> getRegisteredLoaders() {
     return registeredLoaders;
   }
 }

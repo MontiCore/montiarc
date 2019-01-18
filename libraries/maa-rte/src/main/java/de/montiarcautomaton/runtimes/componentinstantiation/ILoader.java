@@ -4,10 +4,12 @@ import java.util.Optional;
 
 public interface ILoader extends Runnable{
 
-	Optional<Object> hasNewSubPrinter();
+	Optional<Object> hasNewSubComponent(String name);
 
 	void checkForUpdate();
 
-	void deleteFile();
+	void deleteFile(String name);
+	
+	void stop();
 
 }
