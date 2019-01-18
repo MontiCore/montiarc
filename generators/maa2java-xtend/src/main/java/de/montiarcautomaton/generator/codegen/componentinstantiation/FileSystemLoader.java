@@ -128,10 +128,7 @@ public void checkForUpdate() {
     	      return;
     	    }
     adapterLoaders.get(store).compileClasses(targetDir + store.replaceAll("\\.", "/"));
-    //FileUtils.copyDirectory(Paths.get(filePath).toFile(),
-    //        Paths.get(targetPath).toFile());
-    //FileUtils.cleanDirectory(Paths.get(filePath).toFile());
-    //adapterLoader.deleteClassFile(filePath);
+
     classObjects.put(store,adapterLoaders.get(store).getClassObject(targetDir + store.replaceAll("\\.", "/"), store, targetDir));
     }
   }
@@ -145,7 +142,6 @@ public void deleteFile(String name) {
 	String fileString = targetDir + name + "Store";
     String filePath = fileString.replaceAll("\\.", "/");
     new AdapterLoader().deleteClassFile(filePath);
-    //new AdapterLoader().deleteClassFile(filePath);
 
   }
 

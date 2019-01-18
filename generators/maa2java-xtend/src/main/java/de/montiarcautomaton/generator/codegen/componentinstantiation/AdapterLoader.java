@@ -42,7 +42,7 @@ public class AdapterLoader extends ClassLoader {
    * a part of the components.
    * @param filePath
    */
-  void compileClasses(String filePath) {
+  public void compileClasses(String filePath) {
     String classPathString = filePath;
     File classPath = Paths.get(classPathString).toFile();
     if (!classPath.isDirectory()){
@@ -81,7 +81,7 @@ public class AdapterLoader extends ClassLoader {
    * @param filePath
    * @param targetPath
    */
-  void generateJavaFiles(String filePath, String targetPath){
+  public void generateJavaFiles(String filePath, String targetPath){
     MontiArcGeneratorTool tool = new MontiArcGeneratorTool();
     tool.enableDynamicGeneration(true);
 
@@ -116,7 +116,7 @@ public class AdapterLoader extends ClassLoader {
    * @param className Name of the Class to be loaded
    * @return
    */
-  Object getClassObject(String path, String className, String classDir) {
+  public Object getClassObject(String path, String className, String classDir) {
     //String classPathString = "applications/prototype/target/classes/"
     //        + path.replaceAll("\\.", "/");
 	  this.classDir = classDir;
