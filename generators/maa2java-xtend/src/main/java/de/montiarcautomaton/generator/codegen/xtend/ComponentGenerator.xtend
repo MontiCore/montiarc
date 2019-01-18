@@ -8,10 +8,7 @@
 package de.montiarcautomaton.generator.codegen.xtend
 
 import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
-import de.montiarcautomaton.generator.codegen.xtend.util.Init
 import de.montiarcautomaton.generator.codegen.xtend.util.Ports
-import de.montiarcautomaton.generator.codegen.xtend.util.Setup
-import de.montiarcautomaton.generator.codegen.xtend.util.Subcomponents
 import de.montiarcautomaton.generator.codegen.xtend.util.Update
 import de.montiarcautomaton.generator.codegen.xtend.util.Utils
 import de.montiarcautomaton.generator.helper.ComponentHelper
@@ -20,6 +17,9 @@ import java.util.ArrayList
 import java.util.List
 import montiarc._symboltable.ComponentSymbol
 import montiarc._symboltable.ComponentSymbolReference
+import de.montiarcautomaton.generator.codegen.xtend.util.Subcomponents
+import de.montiarcautomaton.generator.codegen.xtend.util.Setup
+import de.montiarcautomaton.generator.codegen.xtend.util.Init
 
 /**
  * Generates the component class for atomic and composed components. 
@@ -29,8 +29,8 @@ import montiarc._symboltable.ComponentSymbolReference
  *          $Date$
  */
 class ComponentGenerator {
-  var String generics;
-  var ComponentHelper helper;
+  public var  String generics;
+  public var  ComponentHelper helper;
 
   def generate(ComponentSymbol comp) {
     generics = Utils.printFormalTypeParameters(comp)

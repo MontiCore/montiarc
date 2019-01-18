@@ -1,8 +1,14 @@
 package de.montiarcautomaton.generator.codegen.componentinstantiation;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import de.montiarcautomaton.runtimes.componentinstantiation.ILoader;
+
 
 
 /**
@@ -11,7 +17,10 @@ import de.montiarcautomaton.runtimes.componentinstantiation.ILoader;
  */
 public class FileSystemLoader implements ILoader {
 
-  AdapterLoader adapterLoader = null;
+	Map<String, AdapterLoader> adapterLoaders = new HashMap<>();
+	Map<String, Object> classObjects = new HashMap<>();;
+	private List<String> componentStores;
+  AdapterLoader adapterLoader = new AdapterLoader();
   Object classObject = null;
 
   private static String ComponentStore = null;
@@ -20,6 +29,7 @@ public class FileSystemLoader implements ILoader {
   private String targetDir;
   private String targetPath = null;
   private Thread t;
+  private List<String> subcomps;
   private volatile boolean isStopped = false;
 
 
@@ -65,14 +75,16 @@ public class FileSystemLoader implements ILoader {
    * @param storeDir     Directory where new component files will be stored
    * @param targetDir    Directory where generated and compiled sources should be moved
    */
-  public FileSystemLoader(String instanceName, String storeDir, String targetDir) {
-//    ComponentStore = instanceName + ".subPrinterStore.";
-//    filePath = "applications/prototype/target/componentstore/"
-//            + ComponentStore.replaceAll("\\.", "/");
-//    targetPath = "applications/prototype/target/classes/"
-//            + ComponentStore.replaceAll("\\.", "/");
+  public FileSystemLoader(String instanceName, String storeDir, String targetDir, List<String> subcomps) {
+	  this.subcomps = subcomps;
     this.targetDir = targetDir;
     this.storeDir = storeDir;
+    componentStores = new ArrayList<>();
+    for (String sc : subcomps) {
+    	componentStores.add(sc + "Store.");
+		
+	}
+    
     ComponentStore = instanceName + ".subPrinterStore.";
     filePath = storeDir
             + ComponentStore.replaceAll("\\.", "/");
@@ -82,12 +94,13 @@ public class FileSystemLoader implements ILoader {
 
 
   @Override
-public Optional<Object> hasNewSubPrinter() {
-    if (classObject == null || adapterLoader == null) {
+public Optional<Object> hasNewSubComponent(String name) {
+	  String key = name + "Store.";
+    if (classObjects.get(key) == null || adapterLoaders.get(key) == null) {
       return Optional.empty();
     }
-    adapterLoader = null;
-    return Optional.of(classObject);
+    adapterLoaders.put(key, null);
+    return Optional.of(classObjects.get(key));
   }
 
   /* (non-Javadoc)
@@ -95,7 +108,7 @@ public Optional<Object> hasNewSubPrinter() {
  */
   @Override
 public void checkForUpdate() {
-
+	  adapterLoader.generateJavaFiles(storeDir, targetDir);
     if (adapterLoader == null) {
       classObject = null;
       adapterLoader = new AdapterLoader();
@@ -105,15 +118,22 @@ public void checkForUpdate() {
       return;
     }
 
-    adapterLoader.generateJavaFiles("applications/prototype/target/componentstore/"
-            , "applications/prototype/target/classes/");
-    adapterLoader.compileClasses(targetPath);
+    for (String store : componentStores) {
+    	if (adapterLoaders.get(store) == null) {
+    	      classObjects.put(store, null);
+    	      adapterLoaders.put(store, new AdapterLoader());
+    	    }
+
+    	    if (classObjects.get(store) != null) {
+    	      return;
+    	    }
+    adapterLoaders.get(store).compileClasses(targetDir + store.replaceAll("\\.", "/"));
     //FileUtils.copyDirectory(Paths.get(filePath).toFile(),
     //        Paths.get(targetPath).toFile());
     //FileUtils.cleanDirectory(Paths.get(filePath).toFile());
     //adapterLoader.deleteClassFile(filePath);
-    classObject = adapterLoader.getClassObject(targetPath, ComponentStore);
-
+    classObjects.put(store,adapterLoaders.get(store).getClassObject(targetDir + store.replaceAll("\\.", "/"), store, targetDir));
+    }
   }
 
 
@@ -121,14 +141,14 @@ public void checkForUpdate() {
  * @see de.montiarcautomaton.runtimes.timesync.delegation.ILoader#deleteFile()
  */
 @Override
-public void deleteFile() {
-    String filePath = storeDir + ComponentStore.replaceAll("\\.", "/");
-
-    String targetPath = targetDir + ComponentStore.replaceAll("\\.", "/");
-    new AdapterLoader().deleteClassFile(targetPath);
+public void deleteFile(String name) {
+	String fileString = targetDir + name + "Store";
+    String filePath = fileString.replaceAll("\\.", "/");
+    new AdapterLoader().deleteClassFile(filePath);
     //new AdapterLoader().deleteClassFile(filePath);
 
   }
+
 
 
 }

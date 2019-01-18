@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class AdapterLoader extends ClassLoader {
 
   private String className = null;
+  private String classDir;
 
 
   /**
@@ -72,11 +73,7 @@ public class AdapterLoader extends ClassLoader {
     }
   }
 
-  public Object generateAndGetObject(String filePath, String targetPath){
-    generateJavaFiles(filePath, targetPath);
-    compileClasses(filePath);
-    return getClassObject(filePath, targetPath);
-  }
+
 
   /**
    * Generate Java Files out of MontiArc models. Can only be invoked on a whole package folder. Using it on
@@ -86,11 +83,10 @@ public class AdapterLoader extends ClassLoader {
    */
   void generateJavaFiles(String filePath, String targetPath){
     MontiArcGeneratorTool tool = new MontiArcGeneratorTool();
-    //String modelString = "applications/prototype/src/main/resources/models/";
-            //+ filePath.replaceAll("\\.", "/");
+    tool.enableDynamicGeneration(true);
+
     File modelFile = Paths.get(filePath + "/").toFile();
 
-    //Contains files that cannot be generated yet.
     File targetFile = Paths.get(targetPath).toFile();
 
 
@@ -120,16 +116,17 @@ public class AdapterLoader extends ClassLoader {
    * @param className Name of the Class to be loaded
    * @return
    */
-  Object getClassObject(String path, String className) {
+  Object getClassObject(String path, String className, String classDir) {
     //String classPathString = "applications/prototype/target/classes/"
     //        + path.replaceAll("\\.", "/");
+	  this.classDir = classDir;
     File classPath = Paths.get(path).toFile();
     String newClassPath = null;
     String fullClassName = null;
     if (classPath.exists() && classPath.isDirectory()) {
       for (File file : classPath.listFiles()) {
         String name = file.getName().split("\\.")[0];
-        if (!name.endsWith("Impl") && !name.endsWith("Input") && !name.endsWith("Result")) {
+        if (name.startsWith("Dynamic") && !name.endsWith("Impl") && !name.endsWith("Input") && !name.endsWith("Result")) {
           newClassPath = path + name;
           fullClassName = className + name;
         }
@@ -161,7 +158,7 @@ public class AdapterLoader extends ClassLoader {
       return super.loadClass(name);
 
     try {
-      URL url = Paths.get("applications/prototype/target/classes/"
+      URL url = Paths.get(classDir
               + name.replaceAll("\\.", "/")
               + ".class")
               .toUri().toURL();

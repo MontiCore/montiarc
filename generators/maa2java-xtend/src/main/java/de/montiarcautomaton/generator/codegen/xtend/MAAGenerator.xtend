@@ -85,11 +85,11 @@ class MAAGenerator {
     writer.storeInFile(path, content)
   }
 
-  def private static dispatch generateBehavior(ASTJavaPBehavior ajava, ComponentSymbol comp) {
+  def public static dispatch generateBehavior(ASTJavaPBehavior ajava, ComponentSymbol comp) {
     return JavaPGenerator.newInstance.generate(comp)
   }
 
-  def private static dispatch generateBehavior(ASTAutomatonBehavior automaton, ComponentSymbol comp) {
+  def public static dispatch generateBehavior(ASTAutomatonBehavior automaton, ComponentSymbol comp) {
     return new AutomatonGenerator(comp).generate(comp)
   }
 }
