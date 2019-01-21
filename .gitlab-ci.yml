@@ -24,14 +24,14 @@ variables:
 # Because some enforcer rules might check dependency convergence and class duplications
 # we use `test-compile` here instead of `validate`, so the correct classpath is picked up.
 validate:
-  image: maven:3-jdk-11
+  image: maven:3-jdk-8
   stage: build
   script:
     - mvn $MAVEN_CLI_OPTS clean test-compile
 
 # Run Unit Tests after build
 unit test:
-  image: maven:3-jdk-11
+  image: maven:3-jdk-8
   stage: test
   coverage: '/\d+.\d+ \% covered/'
   script:
