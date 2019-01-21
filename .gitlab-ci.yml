@@ -24,18 +24,16 @@ variables:
 # Because some enforcer rules might check dependency convergence and class duplications
 # we use `test-compile` here instead of `validate`, so the correct classpath is picked up.
 validate:
+  image: localhost:5000/mdse-jdk
   stage: build
-  tags:
-    - shell
   script:
     - mvn $MAVEN_CLI_OPTS clean test-compile
 
 # Run Unit Tests after build
 unit test:
+  image: localhost:5000/mdse-jdk
   stage: test
   coverage: '/\d+.\d+ \% covered/'
-  tags:
-    - shell
   script:
     - mvn $MAVEN_CLI_OPTS test
     - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, "instructions covered"; print 100*covered/instructions, "% covered" }' ./analyzer/target/site/jacoco/jacoco.csv
