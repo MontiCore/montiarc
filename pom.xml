@@ -41,6 +41,9 @@
 		<junit.version>4.12</junit.version>
 		<logback.version>1.1.2</logback.version>
 		<javalib.version>4.3.10-SNAPSHOT</javalib.version>
+		<junit.jupiter.version>5.1.0</junit.jupiter.version>
+        <junit.vintage.version>5.1.0</junit.vintage.version>
+        <junit.platform.version>1.1.0</junit.platform.version>
 		
 		<!-- .. Plugins ....................................................... -->
 		<monticore.plugin>5.0.0.1</monticore.plugin>
@@ -48,10 +51,13 @@
 		<compiler.plugin>3.3</compiler.plugin>
 		<se-groovy.maven.version>1.2.3</se-groovy.maven.version>
 		<source.plugin>2.4</source.plugin>
-		
+		<jacoco.plugin>0.8.2</jacoco.plugin>
+		<surefire.plugin>2.19.1</surefire.plugin>
+		<failsafe.plugin>2.19.1</failsafe.plugin>
+
 		<!-- Classifiers -->
 		<grammars.classifier>grammars</grammars.classifier>
-    <majavalib.classifier>majavalibclasses</majavalib.classifier>
+    	<majavalib.classifier>majavalibclasses</majavalib.classifier>
 		<librarymodels.classifier>librarymodels</librarymodels.classifier>
 		<testmodels.classifier>testmodels</testmodels.classifier>
 
@@ -313,6 +319,111 @@
 						</execution>
 					</executions>
 				</plugin>
+
+				<!-- Unit Tests -->
+	            <!-- default folder is src/test/java/ -->
+	            <!-- default incl. are "**/Test*.java", "**/*Test.java", "**/*TestCase.java" -->
+	            <plugin>
+	                <artifactId>maven-surefire-plugin</artifactId>
+	                <version>${surefire.plugin}</version>
+	                <configuration>
+	                    <skipTests>${skip.unit.tests}</skipTests>
+	                </configuration>
+	                <dependencies>
+	                    <!-- let surefire run JUnit 4 but also JUnit 5 tests -->
+	                    <dependency>
+	                        <groupId>org.junit.platform</groupId>
+	                        <artifactId>junit-platform-surefire-provider</artifactId>
+	                        <version>${junit.platform.version}</version>
+	                    </dependency>
+	                    <!-- let JUnit vintage engine run JUnit 3 or JUnit 4 tests -->
+	                    <dependency>
+	                        <groupId>org.junit.vintage</groupId>
+	                        <artifactId>junit-vintage-engine</artifactId>
+	                        <version>${junit.vintage.version}</version>
+	                    </dependency>
+	                    <!-- let JUnit 5 engine run JUnit 5 tests -->
+	                    <dependency>
+	                        <groupId>org.junit.jupiter</groupId>
+	                        <artifactId>junit-jupiter-engine</artifactId>
+	                        <version>${junit.jupiter.version}</version>
+	                    </dependency>
+	                </dependencies>
+	            </plugin>
+
+	            <!-- Integration / Acceptance Tests -->
+	            <plugin>
+	                <groupId>org.apache.maven.plugins</groupId>
+	                <artifactId>maven-failsafe-plugin</artifactId>
+	                <version>${failsafe.plugin}</version>
+	                <configuration>
+	                    <skipTests>${skip.integration.tests}</skipTests>
+	                    <includes>
+	                        <!-- Integration Tests -->
+	                        <!-- default folder is src/integration-test/java/ -->
+	                        <!-- default incl. are "**/IT*.java", "**/*IT.java", "**/*ITCase.java" -->
+	                        <include>**/IT*.java</include>
+	                        <include>**/*IT.java</include>
+	                        <include>**/*ITCase.java</include>
+	                        <!-- Acceptance Tests -->
+	                        <!-- default folder is src/acceptance-test/java/ -->
+	                        <!-- default incl. are "**/AT*.java", "**/*AT.java", "**/*ATCase.java" -->
+	                        <include>**/AT*.java</include>
+	                        <include>**/*AT.java</include>
+	                        <include>**/*ATCase.java</include>
+	                    </includes>
+	                </configuration>
+	                <dependencies>
+	                    <!-- let surefire run JUnit 4 but also JUnit 5 tests -->
+	                    <dependency>
+	                        <groupId>org.junit.platform</groupId>
+	                        <artifactId>junit-platform-surefire-provider</artifactId>
+	                        <version>${junit.platform.version}</version>
+	                    </dependency>
+	                    <!-- let JUnit vintage engine run JUnit 3 or JUnit 4 tests -->
+	                    <dependency>
+	                        <groupId>org.junit.vintage</groupId>
+	                        <artifactId>junit-vintage-engine</artifactId>
+	                        <version>${junit.vintage.version}</version>
+	                    </dependency>
+	                    <!-- let JUnit 5 engine run JUnit 5 tests -->
+	                    <dependency>
+	                        <groupId>org.junit.jupiter</groupId>
+	                        <artifactId>junit-jupiter-engine</artifactId>
+	                        <version>${junit.jupiter.version}</version>
+	                    </dependency>
+	                </dependencies>
+	                <executions>
+	                    <execution>
+	                        <goals>
+	                            <goal>integration-test</goal>
+	                            <goal>verify</goal>
+	                        </goals>
+	                    </execution>
+	                </executions>
+	            </plugin>
+
+				<!-- Coverage Report -->
+				<plugin>
+	                <groupId>org.jacoco</groupId>
+	                <artifactId>jacoco-maven-plugin</artifactId>
+	                <version>${jacoco.plugin}</version>
+	                <executions>
+	                    <execution>
+	                        <id>pre-unit-test</id>
+	                        <goals>
+	                            <goal>prepare-agent</goal>
+	                        </goals>
+	                    </execution>
+	                    <execution>
+	                        <id>post-unit-test</id>
+	                        <phase>test</phase>
+	                        <goals>
+	                            <goal>report</goal>
+	                        </goals>
+	                    </execution>
+	                </executions>
+	            </plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
