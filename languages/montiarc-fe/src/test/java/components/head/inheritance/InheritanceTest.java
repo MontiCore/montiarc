@@ -6,7 +6,12 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Iterator;
+import java.util.Optional;
 
+import ch.qos.logback.core.pattern.parser.OptionTokenizer;
+import de.monticore.symboltable.Scope;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTConnector;
 import montiarc.cocos.SubcomponentReferenceCycle;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -19,7 +24,6 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._parser.MontiArcParser;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc.cocos.CircularInheritance;
 import montiarc.cocos.ConfigurationParametersCorrectlyInherited;
@@ -69,23 +73,30 @@ public class InheritanceTest extends AbstractCoCoTest {
   @Test
   public void testConnectingInheritedPorts() {
     ComponentSymbol cmp = this.loadComponentSymbol(PACKAGE, "ComposedComponentUsingInheritedPorts");
+    assertTrue(cmp.getAstNode().isPresent());
+    assertTrue(cmp.getAstNode().get() instanceof ASTComponent);
+    ASTComponent astComp = (ASTComponent) cmp.getAstNode().get();
     
-    Iterator<ConnectorSymbol> iterator = cmp.getConnectors().iterator();
-    ConnectorSymbol conn0 = iterator.next();
-    assertTrue(conn0.getSourcePort().isPresent());
-    assertTrue(conn0.getTargetPort().isPresent());
-    assertEquals("inputIntegerA", conn0.getSourcePort().get().getName());
-    assertEquals("inputInteger", conn0.getTargetPort().get().getName());
-    assertTrue(conn0.getTargetPort().get().getComponent().isPresent());
-    assertEquals("ExtendsSuperComponent", conn0.getTargetPort().get().getComponent().get().getName());
+    Iterator<ASTConnector> iterator = astComp.getConnectors().iterator();
+    ASTConnector conn0 = iterator.next();
+    Optional<PortSymbol> source = cmp.getPort(conn0.getSource().toString(),true);
+    Optional<PortSymbol> target = cmp.getSubComponent(conn0.getTargets(0).getPart(0)).get().getComponentType().getPort(conn0.getTargets(0).getPart(1),true);
+    assertTrue(source.isPresent());
+    assertTrue(target.isPresent());
+    assertEquals("inputIntegerA", source.get().getName());
+    assertEquals("inputInteger", target.get().getName());
+    assertTrue(target.get().getComponent().isPresent());
+    assertEquals("ExtendsSuperComponent", target.get().getComponent().get().getName());
     
-    ConnectorSymbol conn1 = iterator.next();
-    assertTrue(conn1.getSourcePort().isPresent());
-    assertTrue(conn1.getTargetPort().isPresent());
-    assertEquals("inputStringA", conn1.getSourcePort().get().getName());
-    assertEquals("inputString", conn1.getTargetPort().get().getName());
-    assertTrue(conn1.getTargetPort().get().getComponent().isPresent());
-    assertEquals("SuperComponent", conn1.getTargetPort().get().getComponent().get().getName());
+    ASTConnector conn1 = iterator.next();
+    source = cmp.getPort(conn1.getSource().toString(),true);
+    target = cmp.getSubComponent(conn1.getTargets(0).getPart(0)).get().getComponentType().getPort(conn1.getTargets(0).getPart(1),true);
+    assertTrue(source.isPresent());
+    assertTrue(target.isPresent());
+    assertEquals("inputStringA", source.get().getName());
+    assertEquals("inputString", target.get().getName());
+    assertTrue(target.get().getComponent().isPresent());
+    assertEquals("SuperComponent", target.get().getComponent().get().getName());
   }
   
   @Test

@@ -187,26 +187,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   @Override
-  public void visit(ASTConnector node) {
-    String sourceName = node.getSource().toString();
-    
-    for (ASTQualifiedName target : node.getTargetsList()) {
-      String targetName = target.toString();
-      
-      ConnectorSymbol sym = new ConnectorSymbol(sourceName, targetName);
-      
-      // stereotype
-      if (node.getStereotypeOpt().isPresent()) {
-        for (ASTStereoValue st : node.getStereotypeOpt().get().getValuesList()) {
-          sym.addStereotype(st.getName(), st.getValue());
-        }
-      }
-      
-      addToScopeAndLinkWithNode(sym, node);
-    }
-  }
-  
-  @Override
   public void visit(ASTSubComponent node) {
     String referencedCompName = TypesPrinter
         .printTypeWithoutTypeArgumentsAndDimension(node.getType());
@@ -674,7 +654,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
    ***************************************/
   
   /**
-   * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#visit(de.monticore.lang.montiarc.montiarc._ast.ASTAutomatonBehavior)
+   * @see montiarc._visitor.MontiArcVisitor#visit(montiarc._ast.ASTAutomatonBehavior)
    */
   @Override
   public void visit(ASTAutomatonBehavior node) {
@@ -688,7 +668,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   /**
-   * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#endVisit(de.monticore.lang.montiarc.montiarc._ast.ASTAutomatonBehavior)
+   * @see montiarc._visitor.MontiArcVisitor#endVisit(montiarc._ast.ASTAutomatonBehavior)
    */
   @Override
   public void endVisit(ASTAutomatonBehavior node) {
@@ -696,7 +676,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   /**
-   * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#visit(de.monticore.lang.montiarc.montiarc._ast.ASTAutomaton)
+   * @see montiarc._visitor.MontiArcVisitor#visit(montiarc._ast.ASTAutomaton)
    */
   @Override
   public void visit(ASTAutomaton node) {
@@ -712,7 +692,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   /**
-   * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#visit(de.monticore.lang.montiarc.montiarc._ast.ASTState)
+   * @see montiarc._visitor.MontiArcVisitor#visit(montiarc._ast.ASTState)
    */
   @Override
   public void visit(ASTState node) {
@@ -734,7 +714,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   /**
-   * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#visit(de.monticore.lang.montiarc.montiarc._ast.ASTInitialStateDeclaration)
+   * @see montiarc._visitor.MontiArcVisitor#visit(montiarc._ast.ASTInitialStateDeclaration)
    */
   @Override
   public void visit(ASTInitialStateDeclaration node) {

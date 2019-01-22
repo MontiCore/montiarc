@@ -8,12 +8,7 @@ package montiarc._symboltable;
 import static com.google.common.base.Preconditions.checkArgument;
 import static de.monticore.symboltable.Symbols.sortSymbolsByPosition;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import de.monticore.symboltable.CommonScopeSpanningSymbol;
@@ -26,6 +21,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcConstants;
 import montiarc._ast.ASTBehaviorElement;
 import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTConnector;
 import montiarc._ast.ASTElement;
 import montiarc.helper.SymbolPrinter;
 import montiarc.helper.Timing;
@@ -94,40 +90,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
       getMutableSpannedScope().add(parameterType);
     }
   }
-
-  /**
-   * @param target target of the connector to get
-   * @return a connector with the given target, absent optional, if it does not exist
-   */
-  public Optional<ConnectorSymbol> getConnector(String target) {
-    // no check for reference required
-    for (ConnectorSymbol con : getConnectors()) {
-      if (con.getTarget().equals(target)) {
-        return Optional.of(con);
-      }
-    }
-    return Optional.empty();
-  }
-
-  /**
-   * @return connectors of this component
-   */
-  public Collection<ConnectorSymbol> getConnectors() {
-    return referencedComponent.orElse(this)
-        .getSpannedScope().<ConnectorSymbol>resolveLocally(ConnectorSymbol.KIND);
-  }
-
-  /**
-   * @param visibility visibility
-   * @return connectors with the given visibility
-   */
-  public Collection<ConnectorSymbol> getConnectors(AccessModifier visibility) {
-    // no check for reference required
-    return getConnectors().stream()
-        .filter(c -> c.getAccessModifier().includes(visibility))
-        .collect(Collectors.toList());
-  }
-
+  
   /**
    * Checks, if this component has a connector with the given receiver name.
    *
@@ -135,24 +98,21 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
    * @return true, if this component has a connector with the given receiver name, else false.
    */
   public boolean hasConnector(String receiver) {
-    // no check for reference required
-    return getConnectors().stream()
-        .filter(c -> c.getName().equals(receiver))
-        .findAny().isPresent();
+    if (!(getAstNode().isPresent() || getAstNode().get() instanceof ASTComponent)) {
+      return false;
+    }
+    ASTComponent component = (ASTComponent) getAstNode().get();
+    return component.getConnector(receiver).isPresent();
   }
-
-  /**
-   * Checks, if this component has one or more connectors with the given sender.
-   *
-   * @param sender name of the sender to find a connector for
-   * @return true, if this component has one ore more connectors with the given sender name, else
-   * false.
-   */
+  
   public boolean hasConnectors(String sender) {
-    // no check for reference required
-    return getConnectors().stream()
-        .filter(c -> c.getSource().equals(sender))
-        .findAny().isPresent();
+    if (!(getAstNode().isPresent() || getAstNode().get() instanceof ASTComponent)) {
+      return false;
+    }
+    ASTComponent component = (ASTComponent) getAstNode().get();
+    return component.getConnectors().stream().anyMatch(
+        astConnector -> astConnector.getSource().getPart(astConnector.getSource().sizeParts() - 1)
+            .equals(sender));
   }
 
   /**
