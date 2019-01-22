@@ -27,7 +27,7 @@ validate:
   image: localhost:5000/mdse-jdk
   stage: build
   script:
-    - mvn $MAVEN_CLI_OPTS clean test-compile
+    - mvn $MAVEN_CLI_OPTS clean install
 
 # Run Unit Tests after build
 unit test:
