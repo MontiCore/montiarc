@@ -35,9 +35,6 @@ public class MontiArcModelNameCalculator
     else if (PortSymbol.KIND.isKindOf(kind) || VariableSymbol.KIND.isKindOf(kind)) {
       return calculateModelNameForPort(name);
     }
-    else if (ConnectorSymbol.KIND.isKindOf(kind)) {
-      return calculateModelNameForConnector(name);
-    }
     else if (ComponentInstanceSymbol.KIND.isKindOf(kind)) {
       return calculateModelNameForComponentInstance(name);
     }

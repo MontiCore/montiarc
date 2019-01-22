@@ -23,15 +23,10 @@ import de.monticore.types.types._ast.TypesNodeFactory;
 import de.se_rwth.commons.Splitters;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcConstants;
-import montiarc._ast.ASTComponent;
-import montiarc._ast.ASTConnector;
-import montiarc._ast.ASTElement;
-import montiarc._ast.ASTMontiArcAutoConnect;
-import montiarc._ast.MontiArcNodeFactory;
+import montiarc._ast.*;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ComponentSymbolReference;
-import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc.helper.AutoconnectMode;
 import montiarc.helper.PortCompatibilityChecker;
@@ -46,28 +41,25 @@ public class AutoConnection {
   
   private Stack<List<AutoconnectMode>> modeStack = new Stack<List<AutoconnectMode>>();
   
-  public static ASTConnector createASTConnector(ASTComponent node, ConnectorSymbol conEntry) {
-    // create ast node
-    ASTConnector astConnector = MontiArcNodeFactory.createASTConnector();
+  public static ASTConnector createASTConnector(ASTComponent node, String source, String target) {
+    // get Connector Builder
+    ASTConnectorBuilder builder = MontiArcMill.connectorBuilder();
     
-    ASTQualifiedName source = TypesNodeFactory.createASTQualifiedName();
-    source.setPartList(Splitters.DOT.splitToList(conEntry.getSource()));
+    ASTQualifiedName sourceQN = TypesNodeFactory.createASTQualifiedName();
+    sourceQN.setPartList(Splitters.DOT.splitToList(source));
     
-    List<ASTQualifiedName> targets = new ArrayList<>();
-    ASTQualifiedName target = TypesNodeFactory.createASTQualifiedName();
-    target.setPartList(Splitters.DOT.splitToList(conEntry.getTarget()));
-    targets.add(target);
     
-    astConnector.setSource(source);
-    astConnector.setTargetsList(targets);
+    ASTQualifiedName targetQN = TypesNodeFactory.createASTQualifiedName();
+    targetQN.setPartList(Splitters.DOT.splitToList(target));
     
     Optional<ASTMontiArcAutoConnect> auto = resolveAutoconnect(node);
     if (auto.isPresent()) {
-      astConnector.set_SourcePositionStart(auto.get().get_SourcePositionStart());
-      astConnector.set_SourcePositionEnd(auto.get().get_SourcePositionEnd());
+      builder.set_SourcePositionStart(auto.get().get_SourcePositionStart());
+      builder.set_SourcePositionEnd(auto.get().get_SourcePositionEnd());
     }
-    
-    return astConnector;
+  
+    builder.setSource(sourceQN).addTargets(targetQN);
+    return builder.build();
   }
   
   /**
@@ -131,7 +123,8 @@ public class AutoConnection {
     for (Entry<String, PorWithGenericBindings> receiverEntry : unusedReceivers.entrySet()) {
       String receiver = receiverEntry.getKey();
       int indexReceiver = receiver.indexOf('.');
-      List<ConnectorSymbol> matches = new LinkedList<>();
+      List<ASTConnector> matches = new LinkedList<>();
+      
       for (Entry<String, PorWithGenericBindings> senderEntry : unusedSenders.entrySet()) {
         String sender = senderEntry.getKey();
         int indexSender = sender.indexOf('.');
@@ -190,35 +183,27 @@ public class AutoConnection {
         }
         // create connector entry and add to matched
         if (matched) {
-          ConnectorSymbol conEntry = new ConnectorSymbol(sender, receiver);
+          ASTConnector conEntry = createASTConnector(node, sender, receiver);
           
           matches.add(conEntry);
         }
       }
       
       if (matches.size() == 1) {
-        ConnectorSymbol created = matches.iterator().next();
-        
-        ASTConnector astConnector = createASTConnector(node, created);
+        ASTConnector astConnector = matches.iterator().next();
         
         // add node to arc elements
         node.getBody().getElementList().add(astConnector);
         
-        created.setAstNode(astConnector);
-        
-        // add symbol to components scope
-        ((MutableScope) currentComponent.getSpannedScope()).add(created);
-
-        
-        Log.info(node.get_SourcePositionStart() + " Created connector '" + created + "'.",
+        Log.info(node.get_SourcePositionStart() + " Created connector '" + astConnector + "'.",
             "AutoConnection");
       }
       else if (matches.size() > 1) {
         StringBuilder sb = new StringBuilder();
         sb.append("Duplicate autoconnection matches for the connector target '");
-        sb.append(matches.iterator().next().getTarget());
+        sb.append(matches.iterator().next().getTargets(0));
         sb.append("' with the sources '");
-        sb.append(matches.stream().map(c -> c.getSource()).collect(Collectors.joining("', '")));
+        sb.append(matches.stream().map(c -> c.getSource().toString()).collect(Collectors.joining("', '")));
         sb.append("'!");
         Log.warn(sb.toString());
       }

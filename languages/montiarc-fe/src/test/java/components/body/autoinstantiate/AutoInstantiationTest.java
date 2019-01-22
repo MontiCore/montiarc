@@ -15,7 +15,6 @@ import java.util.Optional;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.*;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc._symboltable.ConnectorSymbol;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -185,25 +184,28 @@ public class AutoInstantiationTest extends AbstractCoCoTest {
   public void testConnectors() {
 
     checkValid(PACKAGE + "." + "Connectors");
-
-    final ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "Connectors");
+  
+  
     final ComponentSymbol comp = loadComponentSymbol(PACKAGE, "Connectors");
+    assertTrue(comp.getAstNode().isPresent());
+    assertTrue(comp.getAstNode().get() instanceof ASTComponent);
+    ASTComponent astComp = (ASTComponent) comp.getAstNode().get();
 
     // inner2.i3 -> inner1.i1, inner1.i2
     // inner2.bool -> inner1.bool;
-    Optional<ConnectorSymbol> connector = comp.getConnector("inner.i1");
+    Optional<ASTConnector> connector = astComp.getConnector("inner.i1");
     assertTrue(connector.isPresent());
     assertEquals("inner2.i3", connector.get().getSource());
 
-    connector = comp.getConnector("inner.i2");
+    connector = astComp.getConnector("inner.i2");
     assertTrue(connector.isPresent());
     assertEquals("inner2.i3", connector.get().getSource());
 
     // myInner4.s4out -> inner3.i3s1, inner3.i3s2
-    assertTrue("Missing connector to inner3.i3s1", comp.getConnector("inner3.i3s1").isPresent());
-    assertEquals("myInner4.s4out", comp.getConnector("inner3.i3s1").get().getSource());
-    assertTrue(comp.getConnector("inner3.i3s2").isPresent());
-    assertEquals("myInner4.s4out", comp.getConnector("inner3.i3s2").get().getSource());
+    assertTrue("Missing connector to inner3.i3s1", astComp.getConnector("inner3.i3s1").isPresent());
+    assertEquals("myInner4.s4out", astComp.getConnector("inner3.i3s1").get().getSource());
+    assertTrue(astComp.getConnector("inner3.i3s2").isPresent());
+    assertEquals("myInner4.s4out", astComp.getConnector("inner3.i3s2").get().getSource());
 
   }
 

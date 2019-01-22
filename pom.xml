@@ -41,6 +41,7 @@
 		<junit.version>4.12</junit.version>
 		<logback.version>1.1.2</logback.version>
 		<javalib.version>4.3.10-SNAPSHOT</javalib.version>
+		<janino.version>3.0.6</janino.version>
 		<junit.jupiter.version>5.1.0</junit.jupiter.version>
         <junit.vintage.version>5.1.0</junit.vintage.version>
         <junit.platform.version>1.1.0</junit.platform.version>
@@ -157,6 +158,12 @@
 				<groupId>org.antlr</groupId>
 				<artifactId>antlr4-runtime</artifactId>
 				<version>${antlr.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.codehaus.janino</groupId>
+				<artifactId>janino</artifactId>
+				<version>${janino.version}</version>
 			</dependency>
 
 			<!-- MontiCore Dependencies -->

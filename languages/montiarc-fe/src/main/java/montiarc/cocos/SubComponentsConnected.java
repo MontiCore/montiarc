@@ -2,13 +2,14 @@ package montiarc.cocos;
 
 import de.monticore.symboltable.CommonSymbol;
 import de.monticore.symboltable.Symbol;
+import de.monticore.types.types._ast.ASTQualifiedName;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTConnector;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 
 import java.util.Collection;
@@ -44,24 +45,23 @@ public class SubComponentsConnected implements MontiArcASTComponentCoCo {
 
   /**
    * Collect the names of the connectors sources as Strings
-   * @param connectors The connectors to collect the names of
    * @return The collected names
    */
-  private Collection<String> getSourceNames(Collection<ConnectorSymbol> connectors) {
-    return connectors.stream()
-               .map(ConnectorSymbol::getSource)
-               .collect(Collectors.toList());
+  private Collection<String> getSourceNames(ASTComponent node) {
+    return node.getConnectors().stream()
+        .map(e -> e.getSource().toString()).collect(
+            Collectors.toList());
   }
 
   /**
    * Collect the names of the connectors targets
-   * @param connectors The connectors to collect the names of
    * @return The collected target names
    */
-  private Collection<String> getTargetNames(Collection<ConnectorSymbol> connectors) {
-    return connectors.stream()
-               .map(ConnectorSymbol::getTarget)
-               .collect(Collectors.toList());
+  private Collection<String> getTargetNames(ASTComponent node) {
+    return node.getConnectors().stream()
+        .map(ASTConnector::getTargetsList)
+        .flatMap(Collection::stream).map(
+            ASTQualifiedName::toString).collect(Collectors.toList());
   }
 
   /*
@@ -87,9 +87,9 @@ public class SubComponentsConnected implements MontiArcASTComponentCoCo {
     // in the AST.
 
     Collection<String> outerConnectorTargets
-        = getTargetNames(componentSymbol.getConnectors());
+        = getTargetNames(node);
     Collection<String> outerConnectorSources
-        = getSourceNames(componentSymbol.getConnectors());
+        = getSourceNames(node);
 
     for (ComponentInstanceSymbol sub : componentSymbol.getSubComponents()) {
       // ------- IN PORTS -------
