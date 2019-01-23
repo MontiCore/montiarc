@@ -5,15 +5,10 @@
  */
 package infrastructure;
 
-import de.monticore.types.types._ast.ASTSimpleReferenceType;
-import de.monticore.types.types._ast.ASTType;
-
 /**
- * TODO
+ * Represents a field that is expected to be in a generated file
  *
- * @author (last commit)
- * @version ,
- * @since TODO
+ * @author Michael Mutert
  */
 public class Field {
   private final String name;

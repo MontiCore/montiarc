@@ -325,7 +325,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     
     // check if this component is an inner component
     if (!componentStack.isEmpty()) {
-      component.setIsInnerComponent(true);
+      System.out.println("NOn empty stack");
+      component.setDefiningComponent(componentStack.peek());
     }
     
     // timing
@@ -435,9 +436,13 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       refEntry.setReferencedComponent(Optional.of(component));
       
       if (node.getInstanceNameOpt().isPresent()) {
-        if (component.hasFormalTypeParameters() || component.hasConfigParameters()) {
+        if ((component.hasFormalTypeParameters()
+                 && !node.getActualTypeArgumentOpt().isPresent())
+                || component.hasConfigParameters()) {
           Log.error(String.format(
-              "0xMA038 It was not possible to automatically create an instance of component %s because it has generic or constuctor parameters",
+              "0xMA038 It was not possible to automatically create an instance " +
+                  "of component %s because it has type or constructor " +
+                  "parameters that were not assigned in the instance.",
               component.getName()));
         }
         else {
@@ -449,8 +454,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
                 node.getActualTypeArgument().getTypeArgumentList());
           }
           
-          ComponentInstanceSymbol instanceSymbol = new ComponentInstanceSymbol(instanceName,
-              refEntry);
+          ComponentInstanceSymbol instanceSymbol
+              = new ComponentInstanceSymbol(instanceName, refEntry);
           Log.debug("Created component instance " + instanceSymbol.getName()
               + " referencing component type " + referencedComponentTypeName,
               MontiArcSymbolTableCreator.class.getSimpleName());
@@ -688,7 +693,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
    ***************************************/
   
   /**
-   * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#visit(de.monticore.lang.montiarc.montiarc._ast.ASTAutomatonBehavior)
+   * @see montiarc._visitor.MontiArcVisitor#visit(ASTAutomatonBehavior)
    */
   @Override
   public void visit(ASTAutomatonBehavior node) {
@@ -702,7 +707,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   /**
-   * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#endVisit(de.monticore.lang.montiarc.montiarc._ast.ASTAutomatonBehavior)
+   * @see montiarc._visitor.MontiArcVisitor#endVisit(ASTAutomatonBehavior)
    */
   @Override
   public void endVisit(ASTAutomatonBehavior node) {
@@ -710,7 +715,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   /**
-   * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#visit(de.monticore.lang.montiarc.montiarc._ast.ASTAutomaton)
+   * @see montiarc._visitor.MontiArcVisitor#visit(ASTAutomaton)
    */
   @Override
   public void visit(ASTAutomaton node) {
@@ -726,7 +731,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   /**
-   * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#visit(de.monticore.lang.montiarc.montiarc._ast.ASTState)
+   * @see montiarc._visitor.MontiArcVisitor#visit(ASTState)
    */
   @Override
   public void visit(ASTState node) {
@@ -748,7 +753,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
   
   /**
-   * @see de.monticore.lang.montiarc.montiarc._visitor.MontiArcVisitor#visit(de.monticore.lang.montiarc.montiarc._ast.ASTInitialStateDeclaration)
+   * @see montiarc._visitor.MontiArcVisitor#visit(ASTInitialStateDeclaration)
    */
   @Override
   public void visit(ASTInitialStateDeclaration node) {

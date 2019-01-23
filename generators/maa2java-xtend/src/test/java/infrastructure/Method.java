@@ -17,8 +17,6 @@ import static infrastructure.GeneratorTestConstants.PRINTER;
  * TODO
  *
  * @author (last commit) Michael Mutert
- * @version , 2018-06-22
- * @since TODO
  */
 public class Method{
   private final String returnType;

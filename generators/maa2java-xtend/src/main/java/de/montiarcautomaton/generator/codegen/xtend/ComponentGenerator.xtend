@@ -37,19 +37,18 @@ class ComponentGenerator {
     helper = new ComponentHelper(comp);
 
     return '''
-      package «comp.packageName»;
-      
+      «Utils.printPackage(comp)»
       
       «Utils.printImports(comp)»
-      import «comp.packageName».«comp.name»Input;
-      import «comp.packageName».«comp.name»Result;
+      import «Utils.printPackageWithoutKeyWordAndSemicolon(comp)».«comp.name»Input;
+      import «Utils.printPackageWithoutKeyWordAndSemicolon(comp)».«comp.name»Result;
       import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
       import de.montiarcautomaton.runtimes.timesync.delegation.Port;
       import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
       import de.montiarcautomaton.runtimes.Log;
       
       public class «comp.name»«generics»      
-        «IF comp.superComponent.present» extends «comp.superComponent.get.fullName» 
+        «IF comp.superComponent.present» extends «Utils.printSuperClassFQ(comp)» 
             «IF comp.superComponent.get.hasFormalTypeParameters»<«FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
               «scTypeParams»«ENDFOR»>
             «ENDIF»

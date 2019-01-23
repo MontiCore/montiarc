@@ -31,9 +31,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * TODO
  *
- * @author (last commit)
- * @version ,
- * @since TODO
+ * @author Michael Mutert
  */
 public class AbstractGeneratorTest {
 

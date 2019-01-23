@@ -6,6 +6,9 @@
 package components;
 
 import com.google.common.base.Preconditions;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
+
+import de.montiarcautomaton.generator.codegen.xtend.util.Utils;
 import de.monticore.ast.Comment;
 import de.monticore.java.javadsl._ast.ASTClassDeclaration;
 import de.monticore.java.symboltable.JavaTypeSymbol;
@@ -58,6 +61,15 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
   public static final String PACKAGE = "components";
   public static final String JAVA_FILE_ENDING = ".java";
 
+  @Test
+  public void testAUto() {
+    executeGeneratorTest("components.body.subcomponents", "InnerComponents");
+  }
+  @Test
+  public void testContainer() {
+    executeGeneratorTest("components.head.inheritance", "Container");
+  }
+  
   @Test
   /**
    * Test all models that are imported from the montiarc-fe project.
@@ -133,7 +145,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
    * @param componentName Name of the test model
    */
   private void executeGeneratorTest(String packageName, String componentName) {
-    executeGeneratorTest(packageName, componentName, TEST_MODEL_PATH);
+    executeGeneratorTest(packageName, componentName, false, TEST_MODEL_PATH);
   }
 
   /**
@@ -143,7 +155,11 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
    * @param componentName Name of the test model
    * @param modelPath Model path that contains the test model
    */
-  private void executeGeneratorTest(String packageName, String componentName, Path modelPath) {
+  private void executeGeneratorTest(
+      String packageName, 
+      String componentName, 
+      boolean isInner,
+      Path modelPath) {
     String qualifiedName = packageName + "." + componentName;
 
     // Load component symbol
@@ -153,37 +169,53 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
         modelPath.toFile(),
         Paths.get(DEFAULT_TYPES_FOLDER).toFile(),
         Paths.get(LIBRARY_MODELS_FOLDER).toFile()).orElse(null);
-    assertNotNull("Could not load component symbol for which the " +
+    assertNotNull("Could not load component symbol of " + qualifiedName + " for which the " +
                       "generator test should be executed.", symbol);
 
-    // Skip if it contains inner components
-    // TODO Remove when generation of inner components is to be implemented again and implementation of expected elements and files is present
-    if(anyHasInnerComponent(symbol)){
-      return;
-    }
 
+    if(isInner) {
+      Deque<ComponentSymbol> symbolStack = new ArrayDeque<>();
+      symbolStack.push(symbol.getDefiningComponent().get());
+      while(symbolStack.peek().getDefiningComponent().isPresent()) {
+        symbolStack.push(symbolStack.peek().getDefiningComponent().get());
+      }
+      packageName = symbolStack.pop().getFullName() + "gen.";
+      for(ComponentSymbol currentSymbol : symbolStack) {
+        packageName += currentSymbol.getName() + "gen.";
+      }
+      qualifiedName = packageName + componentName;
+    }
+    
     // 3. Determine all files which have to be checked
     Set<Path> filesToCheck = determineFilesToCheck(
         componentName,
-        qualifiedName,
-        symbol, TARGET_GENERATED_TEST_SOURCES_DIR);
+        packageName,
+        symbol, 
+        TARGET_GENERATED_TEST_SOURCES_DIR);
 
     try {
       final Path generatedTypesPath
           = TARGET_GENERATED_TEST_SOURCES_DIR.resolve("types");
-      filesToCheck.addAll(Files.walk(generatedTypesPath).collect(Collectors.toSet()));
+      filesToCheck.addAll(
+          Files.walk(generatedTypesPath)
+          .collect(Collectors.toSet())
+      );
     } catch (IOException e) {
       e.printStackTrace();
     }
 
     // 4. Determine if all files are present
     for (Path path : filesToCheck) {
+      if(!Files.exists(path)) {
+        System.out.println("lhg");
+      }
       assertTrue("Could not find expected generated file " + path.toString(),
           Files.exists(path));
     }
 
     // 5. Invoke Java compiler to see whether they are compiling
-    final boolean compiling = AbstractGeneratorTest.isCompiling(filesToCheck, TARGET_GENERATED_TEST_SOURCES_DIR);
+    final boolean compiling = 
+        AbstractGeneratorTest.isCompiling(filesToCheck, TARGET_GENERATED_TEST_SOURCES_DIR);
     assertTrue(
         String.format("The generated files for model %s are not " +
                           "compiling without errors", qualifiedName),
@@ -197,10 +229,11 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     ComponentElementsCollector compCollector
         = new ComponentElementsCollector(symbol, componentName);
     compCollector.handle(compUnit);
+    compCollector.handleComponent();
 
     // Check if all expected elements are present and no other errors occurred
     Log.getFindings().clear();
-
+    
     // Component class
     runVisitorOnFile(gs, compCollector.getClassVisitor(),
         qualifiedName);
@@ -222,28 +255,12 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
     // Log checking
     Log.debug("Number of errors found: " + Log.getFindings().size(), "ComponentGenerationTest");
     assertEquals(Log.getFindings().toString(), 0, Log.getFindings().size());
-  }
+    
+    // Inner components
+    for (ComponentSymbol innerComp : symbol.getInnerComponents()) {
 
-  /**
-   * Currently, components which contain inner components should not be considered,
-   * as they are not correctly generating as of MontiArc 5.0.0.
-   * When implementing inner component generation this method will become unnecessary
-   *
-   * @param symbol Component to check
-   * @return True, iff the component or any subcomponent defines an inner component.
-   */
-  private boolean anyHasInnerComponent(ComponentSymbol symbol){
-    if(!symbol.getInnerComponents().isEmpty()){
-      return true;
+      executeGeneratorTest(symbol.getFullName(), innerComp.getName(), true, TEST_MODEL_PATH);
     }
-    for(ComponentInstanceSymbol instanceSymbol : symbol.getSubComponents()) {
-      final ComponentSymbol referencedSymbol
-          = instanceSymbol.getComponentType().getReferencedSymbol();
-      if(anyHasInnerComponent(referencedSymbol)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   /**
@@ -274,56 +291,59 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
    * locations of the generated files of the component given by the parameters.
    *
    * @param componentName Name of the component
-   * @param qualifiedName Qualified name of the component (package.componentName)
+   * @param packageName Qualified name of the component (package.componentName)
    * @param component ComponentSymbol of the Component
    * @param basedir Location of the generated files
    * @return A list of generated files for the specified component
    */
   private Set<Path> determineFilesToCheck(String componentName,
-                                          String qualifiedName,
+                                          String packageName,
                                           ComponentSymbol component,
                                           Path basedir) {
     Set<Path> filesToCheck = new HashSet<>();
+    
+    String qualifiedName = packageName.equals("") ? componentName : packageName + "." + componentName;
 
     final Optional<String> deploy = component.getStereotype().get("deploy");
 
     // Add the special deployment file
     if (deploy != null && deploy.isPresent()) {
+      //TODO Fix file path for deploy class. Might be only components/XYZDeploy.java currently
       filesToCheck.add(
           TARGET_GENERATED_TEST_SOURCES_DIR.resolve(PACKAGE + File.separator +
                        "Deploy" + componentName + JAVA_FILE_ENDING));
     }
 
     if (component.isAtomic()) {
-
-      // Determine if an automaton or a compute block is present
-//      final ASTComponent astNode
-//          = (ASTComponent) component.getAstNode().get();
-
-//      for (ASTElement element : astNode.getBody().getElements()) {
-//        if (element instanceof ASTBehaviorElement) {
-//          final String qualifiedFileName
-//              = basedir + qualifiedName.replace('.', '\\') + "Impl";
-//          filesToCheck.add(
-//              new File(qualifiedFileName + JAVA_FILE_ENDING));
-//          break;
-//        }
-//      }
-
       final String qualifiedFileName
           = qualifiedName.replace('.', File.separatorChar) + "Impl";
       filesToCheck.add(basedir.resolve(qualifiedFileName + JAVA_FILE_ENDING));
+      
     } else {
-
       //Recursively add files for subcomponents
       for (ComponentInstanceSymbol instanceSymbol : component.getSubComponents()) {
         final ComponentSymbol referencedSymbol
             = instanceSymbol.getComponentType().getReferencedSymbol();
-        filesToCheck.addAll(
-            determineFilesToCheck(
-                referencedSymbol.getName(),
-                referencedSymbol.getFullName(),
-                referencedSymbol, basedir));
+
+        if(referencedSymbol.isInnerComponent()) {
+          filesToCheck.addAll(
+              determineFilesToCheck(
+                  referencedSymbol.getName(),
+                  qualifiedName + "gen",
+                  referencedSymbol,
+                  basedir
+              )
+          );
+        } else {
+          filesToCheck.addAll(
+              determineFilesToCheck(
+                  referencedSymbol.getName(),
+                  referencedSymbol.getPackageName(),
+                  referencedSymbol,
+                  basedir
+              )
+          );
+        }
       }
     }
 
@@ -334,7 +354,7 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
         filesToCheck.addAll(
             determineFilesToCheck(
                 superComponent.getName(),
-                superComponent.getFullName(),
+                Utils.printPackageWithoutKeyWordAndSemicolon(superComponent).replaceAll("\\s", ""),
                 superComponent,
                 basedir
             )

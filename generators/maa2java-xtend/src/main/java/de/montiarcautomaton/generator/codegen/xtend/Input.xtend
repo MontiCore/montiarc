@@ -22,7 +22,7 @@ class Input {
     var ComponentHelper helper = new ComponentHelper(comp)
     
     return '''
-      package «comp.packageName»;
+      «Utils.printPackage(comp)»
       
       «Utils.printImports(comp)»
       import de.montiarcautomaton.runtimes.timesync.implementation.IInput;
@@ -30,7 +30,7 @@ class Input {
       
       public class «comp.name»Input«Utils.printFormalTypeParameters(comp)»
       «IF comp.superComponent.present» extends 
-            «comp.superComponent.get.fullName»Input
+            «Utils.printSuperClassFQ(comp)»Input
             «IF comp.superComponent.get.hasFormalTypeParameters»<
             «FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
                 «scTypeParams»

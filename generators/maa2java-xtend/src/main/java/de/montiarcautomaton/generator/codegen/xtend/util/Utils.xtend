@@ -41,6 +41,9 @@ class Utils {
       «FOR _import : comp.imports»
         import «_import.statement»«IF _import.isStar».*«ENDIF»;
       «ENDFOR»
+      «FOR inner : comp.innerComponents»
+        import «printPackageWithoutKeyWordAndSemicolon(inner) + "." + inner.name»;
+      «ENDFOR»
     '''
   }
 
@@ -101,6 +104,44 @@ class Utils {
       }
     }
     return output;
+  }
+  
+  /**
+   * Print the package declaration for generated component classes.
+   * Uses recursive determination of the package name to accomodate for components
+   * with at least two levels of inner component. These require changing the package name
+   * to avoid name clashes between the generated packages and the outermost component.
+   */
+  def static String printPackage(ComponentSymbol comp) {
+  	return '''
+  	«IF comp.isInnerComponent»
+  	package «printPackageWithoutKeyWordAndSemicolon(comp.definingComponent.get) + "." + comp.definingComponent.get.name + "gen"»;
+	«ELSE»
+  	package «comp.packageName»;
+	«ENDIF»
+  	'''
+  }
+  
+  /**
+   * Helper function used to determine package names.
+   */
+  def static String printPackageWithoutKeyWordAndSemicolon(ComponentSymbol comp){
+  	return '''
+  	«IF comp.isInnerComponent»
+  	«printPackageWithoutKeyWordAndSemicolon(comp.definingComponent.get) + "." + comp.definingComponent.get.name + "gen"»
+	«ELSE»
+  	«comp.packageName»
+	«ENDIF»
+  	'''
+  }
+  
+  def static String printSuperClassFQ(ComponentSymbol comp){
+  	var String packageName = printPackageWithoutKeyWordAndSemicolon(comp.superComponent.get.referencedSymbol);
+  	if(packageName.equals("")){
+  		return '''«comp.superComponent.get.name»'''
+  	} else {
+  		return '''«packageName».«comp.superComponent.get.name»'''
+  	}
   }
 
 }

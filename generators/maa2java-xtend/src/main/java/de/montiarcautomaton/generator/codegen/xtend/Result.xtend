@@ -21,7 +21,7 @@ class Result {
     def static generateResult(ComponentSymbol comp) {
     var ComponentHelper helper = new ComponentHelper(comp)
     return '''
-      package «comp.packageName»;
+      «Utils.printPackage(comp)»
       
       «Utils.printImports(comp)»
       import de.montiarcautomaton.runtimes.timesync.implementation.IResult;
@@ -29,7 +29,8 @@ class Result {
       
       public class «comp.name»Result«Utils.printFormalTypeParameters(comp)»   
       «IF comp.superComponent.present» extends 
-      «comp.superComponent.get.fullName»Result «IF comp.superComponent.get.hasFormalTypeParameters»< «FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
+      «Utils.printSuperClassFQ(comp)»Result
+      «IF comp.superComponent.get.hasFormalTypeParameters»< «FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
           «scTypeParams»«ENDFOR»>«ENDIF»
       «ENDIF»
       implements IResult 
