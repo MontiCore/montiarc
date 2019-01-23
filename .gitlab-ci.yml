@@ -5,7 +5,14 @@
 cache:
   paths:
     - .m2/repository/
-    - */*/target/
+    - applications/bumperbot/target/
+    - generators/cd2pojo/target/
+    - generators/maa2java/target/
+    - languages/montiarc-fe/target/
+    - libraries/lejos-rte/target/
+    - libraries/maJavaLib/target/
+    - libraries/maa-rte/target/
+    - libraries/simulator-rte/target/
   key: "$CI_COMMIT_SHA" # Cache across branch and stage
 
 stages:
@@ -28,7 +35,7 @@ validate:
   image: localhost:5000/mdse-jdk
   stage: build
   script:
-    - mvn $MAVEN_CLI_OPTS clean install
+    - mvn $MAVEN_CLI_OPTS compile
 
 # Run Unit Tests after build
 unit test:
@@ -36,7 +43,7 @@ unit test:
   stage: test
   coverage: '/\d+.\d+ \% covered/'
   script:
-    - mvn $MAVEN_CLI_OPTS install test
+    - mvn $MAVEN_CLI_OPTS  test
     - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, "instructions covered"; print 100*covered/instructions, "% covered" }' ./analyzer/target/site/jacoco/jacoco.csv
   except:
     - master
