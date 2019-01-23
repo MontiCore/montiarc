@@ -44,7 +44,6 @@ unit test:
   coverage: '/\d+.\d+ \% covered/'
   script:
     - mvn $MAVEN_CLI_OPTS test
-    - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, "instructions covered"; print 100*covered/instructions, "% covered" }' ./languages/montiarc-fe/target/site/jacoco/jacoco.csv
   except:
     - master
   artifacts:
