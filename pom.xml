@@ -53,6 +53,7 @@
 		<se-groovy.maven.version>1.2.3</se-groovy.maven.version>
 		<source.plugin>2.4</source.plugin>
 		<jacoco.plugin>0.8.2</jacoco.plugin>
+		<jacoco.reportPath>${project.basedir}/../target/jacoco.exec</jacoco.reportPath>
 		<surefire.plugin>2.19.1</surefire.plugin>
 		<failsafe.plugin>2.19.1</failsafe.plugin>
 
@@ -411,29 +412,36 @@
 	                </executions>
 	            </plugin>
 
-				<!-- Coverage Report -->
-				<plugin>
-	                <groupId>org.jacoco</groupId>
-	                <artifactId>jacoco-maven-plugin</artifactId>
-	                <version>${jacoco.plugin}</version>
-	                <executions>
-	                    <execution>
-	                        <id>pre-unit-test</id>
-	                        <goals>
-	                            <goal>prepare-agent</goal>
-	                        </goals>
-	                    </execution>
-	                    <execution>
-	                        <id>post-unit-test</id>
-	                        <phase>test</phase>
-	                        <goals>
-	                            <goal>report</goal>
-	                        </goals>
-	                    </execution>
-	                </executions>
-	            </plugin>
 			</plugins>
 		</pluginManagement>
+
+		<plugins>
+			<!-- Coverage Report -->
+			<plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.plugin}</version>
+                <configuration>
+	                <append>true</append>
+	                <destFile>${jacoco.reportPath}</destFile>
+	            </configuration>
+                <executions>
+                    <execution>
+                        <id>pre-unit-test</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
 	</build>
 
 	<!-- == PROFILES ======================================================== -->

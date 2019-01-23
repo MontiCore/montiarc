@@ -161,11 +161,6 @@
 			</plugin>
 
 			<plugin>
-	            <groupId>org.jacoco</groupId>
-	            <artifactId>jacoco-maven-plugin</artifactId>
-			</plugin>
-
-			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<dependencies>
 					<dependency>
@@ -214,6 +209,15 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Enables Jacoco Coverage Report for this submodule -->
+	        <plugin>
+	        	<artifactId>maven-surefire-plugin</artifactId>
+	        	<version>${surefire.plugin}</version>
+	        	<configuration>
+	            	<argLine>${argLine}</argLine>
+	        	</configuration>
+	      	</plugin>
 		</plugins>
 	</build>
 
