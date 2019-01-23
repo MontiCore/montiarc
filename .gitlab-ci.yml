@@ -35,7 +35,7 @@ validate:
   image: localhost:5000/mdse-jdk
   stage: build
   script:
-    - mvn $MAVEN_CLI_OPTS compile
+    - mvn $MAVEN_CLI_OPTS compile package
 
 # Run Unit Tests after build
 unit test:
