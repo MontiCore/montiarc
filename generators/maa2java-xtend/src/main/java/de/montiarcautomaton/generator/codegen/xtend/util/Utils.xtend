@@ -134,5 +134,14 @@ class Utils {
 	«ENDIF»
   	'''
   }
+  
+  def static String printSuperClassFQ(ComponentSymbol comp){
+  	var String packageName = printPackageWithoutKeyWordAndSemicolon(comp.superComponent.get.referencedSymbol);
+  	if(packageName.equals("")){
+  		return '''«comp.superComponent.get.name»'''
+  	} else {
+  		return '''«packageName».«comp.superComponent.get.name»'''
+  	}
+  }
 
 }

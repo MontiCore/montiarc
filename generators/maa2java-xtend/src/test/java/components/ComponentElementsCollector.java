@@ -220,7 +220,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
 
     // Add super classes to the signatures
     if (symbol.getSuperComponent().isPresent()) {
-      String fullName = Utils.printPackageWithoutKeyWordAndSemicolon(symbol.getSuperComponent().get()) + "." + symbol.getSuperComponent().get().getName();
+      String fullName = Utils.printSuperClassFQ(symbol);
       fullName = fullName.replaceAll("\\s", "");
       final List<ActualTypeArgument> superTypeArguments =
           symbol.getSuperComponent().get().getActualTypeArguments();

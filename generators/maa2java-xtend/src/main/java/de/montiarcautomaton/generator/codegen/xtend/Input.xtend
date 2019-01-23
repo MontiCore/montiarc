@@ -30,7 +30,7 @@ class Input {
       
       public class «comp.name»Input«Utils.printFormalTypeParameters(comp)»
       «IF comp.superComponent.present» extends 
-            «Utils.printPackageWithoutKeyWordAndSemicolon(comp.superComponent.get) + "." + comp.superComponent.get.name»Input
+            «Utils.printSuperClassFQ(comp)»Input
             «IF comp.superComponent.get.hasFormalTypeParameters»<
             «FOR scTypeParams : helper.superCompActualTypeArguments SEPARATOR ','»
                 «scTypeParams»
