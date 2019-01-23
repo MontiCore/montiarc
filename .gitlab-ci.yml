@@ -5,7 +5,7 @@
 cache:
   paths:
     - .m2/repository/
-#  key: "$CI_COMMIT_SHA" # Cache across branch and stage
+  key: "$CI_COMMIT_SHA" # Cache across branch and stage
 
 stages:
   - build
