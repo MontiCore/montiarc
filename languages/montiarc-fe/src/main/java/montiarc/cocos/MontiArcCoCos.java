@@ -78,7 +78,8 @@ public class MontiArcCoCos {
         .addCoCo(new AssignmentHasNoName())
         .addCoCo(new ConfigurationParametersCorrectlyInherited())
         .addCoCo(new InnerComponentNotExtendsDefiningComponent())
-        
+        .addCoCo(new UniqueTypeParamsInInnerCompHierarchy())
+
         // TYPE CORRECTNESS
         .addCoCo(new AutomatonGuardIsNotBoolean())
         .addCoCo(new GenericInitValues())
