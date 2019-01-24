@@ -337,6 +337,7 @@
 	                <configuration>
 	                    <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
 	                    <skipTests>${skip.unit.tests}</skipTests>
+	                    <useSystemClassLoader>false</useSystemClassLoader>
 	                </configuration>
 	                <dependencies>
 	                    <!-- let surefire run JUnit 4 but also JUnit 5 tests -->
@@ -381,6 +382,7 @@
 	                        <include>**/*AT.java</include>
 	                        <include>**/*ATCase.java</include>
 	                    </includes>
+	                    <useSystemClassLoader>false</useSystemClassLoader> 
 	                </configuration>
 	                <dependencies>
 	                    <!-- let surefire run JUnit 4 but also JUnit 5 tests -->

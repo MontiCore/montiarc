@@ -216,6 +216,7 @@
 	        	<version>${surefire.plugin}</version>
 	        	<configuration>
 	            	<argLine>${argLine}</argLine>
+	            	<useSystemClassLoader>false</useSystemClassLoader> 
 	        	</configuration>
 	      	</plugin>
 		</plugins>
