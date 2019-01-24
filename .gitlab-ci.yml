@@ -32,14 +32,14 @@ variables:
 # Because some enforcer rules might check dependency convergence and class duplications
 # we use `test-compile` here instead of `validate`, so the correct classpath is picked up.
 validate:
-  image: localhost:5000/mdse-jdk
+  image: maven:3-jdk-8
   stage: build
   script:
     - mvn $MAVEN_CLI_OPTS compile package -DskipTests=true
 
 # Run Unit Tests after build
 unit test:
-  image: localhost:5000/mdse-jdk
+  image: maven:3-jdk-8
   stage: test
   coverage: '/\d+.\d+ \% covered/'
   script:
