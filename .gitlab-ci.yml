@@ -5,14 +5,6 @@
 cache:
   paths:
     - .m2/repository/
-    - applications/bumperbot/target/
-    - generators/cd2pojo/target/
-    - generators/maa2java/target/
-    - languages/montiarc-fe/target/
-    - libraries/lejos-rte/target/
-    - libraries/maJavaLib/target/
-    - libraries/maa-rte/target/
-    - libraries/simulator-rte/target/
   key: "$CI_COMMIT_SHA" # Cache across branch and stage
 
 stages:
@@ -36,6 +28,17 @@ Validate:
   stage: build
   script:
     - mvn $MAVEN_CLI_OPTS compile package -Dmaven.test.skip=true
+  artifacts:
+    paths:
+      - applications/bumperbot/target/
+      - generators/cd2pojo/target/
+      - generators/maa2java/target/
+      - languages/montiarc-fe/target/
+      - libraries/lejos-rte/target/
+      - libraries/maJavaLib/target/
+      - libraries/maa-rte/target/
+      - libraries/simulator-rte/target/
+    expire_in: 1 week
 
 # Run Unit Tests after build
 .unit_test_template: &unit_test_definition
@@ -44,8 +47,8 @@ Validate:
   script:
     - mvn $MAVEN_CLI_OPTS test
     - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, "instructions covered"; print 100*covered/instructions, "% covered" }' ./languages/montiarc-fe/target/site/jacoco/jacoco.csv
-  except:
-    - master
+  dependencies: 
+    - build #download artifacts from build
   artifacts:
     reports:
       junit:
@@ -93,3 +96,27 @@ Code Quality:
   artifacts:
     reports:
       codequality: codeclimate.json
+
+dependency_scanning:
+  stage: post-test
+  image: docker:stable
+  variables:
+    DOCKER_DRIVER: overlay2
+  allow_failure: true
+  tags: []
+  before_script: []
+  cache: {}
+  dependencies: []
+  services:
+    - docker:stable-dind
+  script:
+    - export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
+    - docker run
+        --env DEP_SCAN_DISABLE_REMOTE_CHECKS="${DEP_SCAN_DISABLE_REMOTE_CHECKS:-false}"
+        --volume "$PWD:/code"
+        --volume /var/run/docker.sock:/var/run/docker.sock
+        "registry.gitlab.com/gitlab-org/security-products/dependency-scanning:$SP_VERSION" /code
+  artifacts:
+    reports:
+      dependency_scanning: gl-dependency-scanning-report.json
+
