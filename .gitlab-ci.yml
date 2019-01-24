@@ -18,7 +18,7 @@ cache:
 stages:
   - build
   - test
-  - quality-report
+  - post-test
 
 variables:
   # This will supress any download for dependencies and plugins or upload messages which would clutter the console log.
@@ -31,7 +31,7 @@ variables:
 # This will only validate and compile stuff and run e.g. maven-enforcer-plugin.
 # Because some enforcer rules might check dependency convergence and class duplications
 # we use `test-compile` here instead of `validate`, so the correct classpath is picked up.
-validate:
+Validate:
   image: maven:3-jdk-8
   stage: build
   script:
@@ -53,18 +53,18 @@ validate:
       - ./libraries/simulator-rte/target/surefire-reports/TEST-*.xml
       - ./languages/montiarc-fe/target/surefire-reports/TEST-*.xml
 
-Unit Tests JDK 8:
+Unit Test JDK 8:
   image: maven:3-jdk-8
   <<: *unit_test_definition
       
-Unit Tests JDK 11:
+Unit Test JDK 11:
   image: maven:3-jdk-11
   # We do not require JDK 11 support yet. We appreciate it though.
   allow_failure: true 
   <<: *unit_test_definition
 
-code_quality:
-  stage: quality-report
+Code Quality:
+  stage: post-test
   variables:
     DOCKER_DRIVER: overlay2
   allow_failure: true
