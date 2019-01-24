@@ -71,6 +71,7 @@ Code Quality:
   variables:
     DOCKER_DRIVER: overlay2
   allow_failure: true
+  cache: {}
   tags:
     - shell
     - docker
@@ -97,7 +98,8 @@ Code Quality:
     reports:
       codequality: codeclimate.json
 
-dependency_scanning:
+# Scans for known vulnerabilities of dependencies
+Dependency Scan:
   stage: post-test
   image: docker:stable
   variables:
