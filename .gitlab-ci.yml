@@ -66,6 +66,12 @@ Unit Test JDK 11:
   allow_failure: true 
   <<: *unit_test_definition
 
+Unit Test Amazon Corretto JDK 8:
+  image: maven:3-amazoncorretto
+  # We do not require Amazon Corretto JDK 11 support. We appreciate it though.
+  allow_failure: true 
+  <<: *unit_test_definition
+
 Code Quality:
   stage: post-test
   variables:
