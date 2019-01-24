@@ -54,8 +54,8 @@
 		<source.plugin>2.4</source.plugin>
 		<jacoco.plugin>0.8.2</jacoco.plugin>
 		<jacoco.reportPath>${project.basedir}/../target/jacoco.exec</jacoco.reportPath>
-		<surefire.plugin>2.22.1</surefire.plugin>
-		<failsafe.plugin>2.22.1</failsafe.plugin>
+		<surefire.plugin>2.19.1</surefire.plugin>
+		<failsafe.plugin>2.19.1</failsafe.plugin>
 
 		<!-- Classifiers -->
 		<grammars.classifier>grammars</grammars.classifier>
