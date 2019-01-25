@@ -59,7 +59,7 @@ class DynamicInit {
 			subcomps.add(instanceName + ".«subcomponent.name»");
 						«ENDFOR»
 			
-				
+			//Set up and start new thread for the Filesystemloader	
 			this.loader = new FileSystemLoader(instanceName, storeDir, targetDir, subcomps);
 			this.loader.start();
 			«IF comp.superComponent.present»
@@ -76,7 +76,7 @@ class DynamicInit {
 			// the inputs a reference to the sending ports
 			«FOR connector : comp.connectors»
 				«IF helper.isIncomingPort(comp, connector, false)»
-					«helper.getConnectorComponentName(connector, false)».setPort«helper.getConnectorPortName(connector, false).toFirstUpper»(«helper.getConnectorComponentName(connector,true)».getPort«helper.getConnectorPortName(connector, true).toFirstUpper»());
+					«helper.getConnectorComponentName(connector, false)».setPort("«helper.getConnectorPortName(connector, false)»",«helper.getConnectorComponentName(connector,true)».getPort("«helper.getConnectorPortName(connector, true)»"));
 				«ENDIF»
 			«ENDFOR» 
 			
