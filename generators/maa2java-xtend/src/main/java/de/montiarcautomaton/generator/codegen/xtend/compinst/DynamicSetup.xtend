@@ -59,6 +59,7 @@ class DynamicSetup {
 				super.setUp();
 			  «ENDIF»
 			  
+			  //Cast subcomponents to generic interface so they can be replaced
 			  «FOR subcomponent : comp.subComponents»
 				this.«subcomponent.name» = (IDynamicComponent) new «DynamicComponentHelper.getSubComponentTypeName(subcomponent)»(
 				«FOR param : helper.getParamValues(subcomponent) SEPARATOR ','»
@@ -84,7 +85,7 @@ class DynamicSetup {
 			  // propagate children's output ports to own output ports
 			  «FOR connector : comp.connectors»
 			  	«IF !helper.isIncomingPort(comp,connector, false)»
-			  		«helper.getConnectorComponentName(connector,false)».setPort«helper.getConnectorPortName(connector,false).toFirstUpper»(«helper.getConnectorComponentName(connector, true)».getPort«helper.getConnectorPortName(connector, true).toFirstUpper»());
+					«helper.getConnectorComponentName(connector, false)».setPort("«helper.getConnectorPortName(connector, false)»",«helper.getConnectorComponentName(connector,true)».getPort("«helper.getConnectorPortName(connector, true)»"));
 			  	«ENDIF»
 			  «ENDFOR»
 			  

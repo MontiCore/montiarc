@@ -1,9 +1,15 @@
 package de.montiarcautomaton.generator.codegen.xtend.compinst;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
 import de.montiarcautomaton.generator.helper.ComponentHelper;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ComponentSymbolReference;
+import montiarc._symboltable.ConnectorSymbol;
 
 /**
  * Helper class used in the template to generate target code of atomic or
@@ -37,4 +43,21 @@ public class DynamicComponentHelper extends ComponentHelper{
     strb.replace(index,sourceWord.length()+index,targetWord);    
     return strb.toString();
   }
+
+/**
+ * Returns all connectors that start/end in a specified subcomponent
+ * @param comp
+ * @param subComp
+ * @return
+ */
+public Collection<ConnectorSymbol> getConnectorsForSubComp(ComponentSymbol comp, ComponentInstanceSymbol subComp){
+	Collection<ConnectorSymbol> subCompConnectors = new ArrayList<>();
+	Collection<ConnectorSymbol> connectors = comp.getConnectors();
+	for (ConnectorSymbol connectorSymbol : connectors) {
+		if ( subComp.getName().equals( getConnectorComponentName(connectorSymbol, true))){
+		subCompConnectors.add(connectorSymbol);
+		}
+	}
+	return subCompConnectors;
+}
 }

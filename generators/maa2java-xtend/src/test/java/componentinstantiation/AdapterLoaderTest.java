@@ -14,8 +14,8 @@ public class AdapterLoaderTest {
 	static final String SRCPATH = "src/test/resources/loaderTestStore/";
 	static final String TARPATH = "target/test/loaderTestStore/";
 	static final String MODELPATH  = "src/test/resources/models/initial/";
-	static final String GENPATH  = "target/test/genTest";
-	static final String GENPATH2  = "target/test/genTest2";
+	static final String GENPATH  = "target/test/genTest/";
+	static final String GENPATH2  = "target/test/genTest2/";
 
 	
 
@@ -47,6 +47,8 @@ public class AdapterLoaderTest {
 		AdapterLoader aLoader = new AdapterLoader();
 		aLoader.generateJavaFiles(GENPATH, GENPATH2);
 		FileUtils.cleanDirectory(Paths.get(GENPATH).toFile());
+		//assertTrue(Paths.get(TARPATH + "portTest/DynamicPortTest.java").toFile().isFile());
+
 		FileUtils.cleanDirectory(Paths.get(GENPATH2).toFile());
 
 

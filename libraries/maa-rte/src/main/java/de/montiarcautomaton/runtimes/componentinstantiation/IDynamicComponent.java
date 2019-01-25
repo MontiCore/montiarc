@@ -12,5 +12,9 @@ public interface IDynamicComponent extends IComponent {
   public List<Port> reconfigure();
   public void propagatePortChanges(List<Port> changedPorts);
   public String getInstanceName();
+  public List<Port> getPorts();
+  public List<String> getInterface();
+
   public void setLoaderConfiguration(String instanceName, String storeDir, String targetDir, LoaderManager loaderManager);
+
 }

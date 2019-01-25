@@ -1,8 +1,13 @@
 package de.montiarcautomaton.generator.codegen.xtend.compinst
 
 import montiarc._symboltable.ComponentSymbol
+import de.montiarcautomaton.generator.helper.ComponentHelper
 
 class CompInst {
+	
+	/**
+	 * checkForComponent() gets new subcomponents from the Loader, and sets them up for replacement.
+	 */
 		def static printCheckForCmp(ComponentSymbol comp){
 		return
 		'''
@@ -33,16 +38,37 @@ class CompInst {
 	}
 	
 	
+	/**
+	 * Ports that have changed during a subcomponent exchange need to be
+	 * set anew. This needs to happen both bottom-up and top-down. Fort this
+	 * this method gives a list of all changed ports to subcomponents.
+	 */
 		def static printPropagatePortChanges(ComponentSymbol comp){
+		var ComponentHelper helper = new ComponentHelper(comp);
+			
 		return
 		'''
 		@Override
 		  public void propagatePortChanges(List<Port> changedPorts) {
+		  	«FOR connector : comp.connectors»
+		  	«IF helper.isIncomingPort(comp, connector, false)»
+		  	if (changedPorts.contains(«helper.getConnectorComponentName(connector,true)».getPort("«helper.getConnectorPortName(connector, true)»"))){
+		  		«helper.getConnectorComponentName(connector, false)».setPort("«helper.getConnectorPortName(connector, false)»",«helper.getConnectorComponentName(connector,true)».getPort("«helper.getConnectorPortName(connector, true)»"));
+		  	}	
+		  	«ENDIF»
+		  	«ENDFOR» 
+		  	
+		  	«FOR subcomponent : comp.subComponents»
+		  	this.«subcomponent.name».propagatePortChanges(changedPorts);
+		  				«ENDFOR»
 		    }
 		
 		'''
 	}
 	
+	/**
+	 * Sets path variables for the Loader
+	 */
 		def static printSetLoaderConfiguration(ComponentSymbol comp){
 		return
 		'''
@@ -67,6 +93,35 @@ class CompInst {
 		@Override
 		public String getInstanceName() {
 		    return instanceName;
+		}
+		
+		'''
+	}
+	
+	/**
+	 * Returns interface of the component. Used for checking if a new subcomponent can actually
+	 * replace an old one.
+	 */
+	def static printGetInterface(ComponentSymbol comp){
+		var ComponentHelper helper = new ComponentHelper(comp);
+		
+		return
+		'''
+		@Override
+		public List<String> getInterface() {
+			List<String> compInterface = new ArrayList<>();
+			«FOR inPort : comp.incomingPorts»
+			compInterface.add("In-«inPort.name»-«helper.getRealPortTypeString(inPort)»");
+			«ENDFOR»
+			«FOR inPort : comp.outgoingPorts»
+			compInterface.add("Out-«inPort.name»-«helper.getRealPortTypeString(inPort)»");
+			«ENDFOR»
+			«IF comp.superComponent.present»
+			compInterface.add("Supercomponent-«comp.superComponent.get.fullName»"); 
+			
+			«ENDIF»
+			
+		    return compInterface;
 		}
 		
 		'''

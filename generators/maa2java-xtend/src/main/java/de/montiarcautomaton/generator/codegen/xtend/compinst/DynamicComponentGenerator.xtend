@@ -31,6 +31,7 @@ class DynamicComponentGenerator extends de.montiarcautomaton.generator.codegen.x
 			import «comp.packageName».«comp.name»Input;
 			import «comp.packageName».«comp.name»Result;
 			import de.montiarcautomaton.runtimes.componentinstantiation.IDynamicComponent;
+			import de.montiarcautomaton.runtimes.componentinstantiation.InterfaceChecker;
 			import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
 			import de.montiarcautomaton.runtimes.componentinstantiation.LoaderManager;
 			import de.montiarcautomaton.runtimes.timesync.delegation.Port;
@@ -105,6 +106,8 @@ class DynamicComponentGenerator extends de.montiarcautomaton.generator.codegen.x
 			   «CompInst.printSetLoaderConfiguration(comp)»
 			   
 			   «CompInst.printGetInstanceName(comp)»
+			   
+			   «CompInst.printGetInterface(comp)»
 			   
 			   
 			   

@@ -29,6 +29,8 @@ class DynamicDeploy {
 			
 			public class DynamicDeploy«name» {      	
 			  final static int CYCLE_TIME = 50; // in ms
+			  
+			  //Insert own Store and class path here
 			  static String STOREPATH = "";
 			  static String CLASSPATH = "";
 			    

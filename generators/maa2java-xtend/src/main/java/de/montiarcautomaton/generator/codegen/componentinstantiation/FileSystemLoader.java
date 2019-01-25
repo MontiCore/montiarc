@@ -52,7 +52,6 @@ public class FileSystemLoader implements ILoader {
   @Override
   public void run() {
     while (!isStopped) {
-      System.out.println("Checking for Printer Update");
       checkForUpdate();
       try {
         Thread.sleep(5000);
@@ -93,7 +92,10 @@ public class FileSystemLoader implements ILoader {
   }
 
 
-  @Override
+@Override
+/**
+ * Used by components to check if a new subcomponent has been found 
+ */
 public Optional<Object> hasNewSubComponent(String name) {
 	  String key = name + "Store.";
     if (classObjects.get(key) == null || adapterLoaders.get(key) == null) {
@@ -103,10 +105,13 @@ public Optional<Object> hasNewSubComponent(String name) {
     return Optional.of(classObjects.get(key));
   }
 
-  /* (non-Javadoc)
- * @see de.montiarcautomaton.runtimes.timesync.delegation.ILoader#checkForUpdate()
+
+
+@Override
+/**
+ * Generates Java Files from arc models in the store directory, compiles them and stores
+ * them in the Maps.
  */
-  @Override
 public void checkForUpdate() {
 	  adapterLoader.generateJavaFiles(storeDir, targetDir);
     if (adapterLoader == null) {
@@ -119,6 +124,7 @@ public void checkForUpdate() {
     }
 
     for (String store : componentStores) {
+    	System.out.println("Check for update in " + store);
     	if (adapterLoaders.get(store) == null) {
     	      classObjects.put(store, null);
     	      adapterLoaders.put(store, new AdapterLoader());
@@ -134,8 +140,8 @@ public void checkForUpdate() {
   }
 
 
-  /* (non-Javadoc)
- * @see de.montiarcautomaton.runtimes.timesync.delegation.ILoader#deleteFile()
+/**
+ * Deletes compiled files from the directory specified by the input
  */
 @Override
 public void deleteFile(String name) {

@@ -36,6 +36,7 @@ public class MontiArcGeneratorTool extends MontiArcTool{
   public static final String DEFAULT_TYPES_FOLDER = "target/javaLib/";
   public static final String LIBRARY_MODELS_FOLDER = "target/librarymodels/";
   private Boolean dynamicGeneration = false;
+  private Boolean checkCocos = false;
   
   
   /**
@@ -63,7 +64,10 @@ public class MontiArcGeneratorTool extends MontiArcTool{
 
       // 3. check cocos
       Log.info("Check model: " + qualifiedModelName, "MontiArcGeneratorTool");
-      checkCoCos((ASTMontiArcNode) comp.getAstNode().get());
+      if (checkCocos) {
+          checkCoCos((ASTMontiArcNode) comp.getAstNode().get());
+
+	}
       
       // 4. generate
       Log.info("Generate model: " + qualifiedModelName, "MontiArcGeneratorTool");

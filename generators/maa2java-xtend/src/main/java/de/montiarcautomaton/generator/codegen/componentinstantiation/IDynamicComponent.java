@@ -13,6 +13,7 @@ public interface IDynamicComponent extends IComponent {
   public List<Port> reconfigure();
   public void propagatePortChanges(List<Port> changedPorts);
   public String getInstanceName();
+  public List<Port> getPorts();
 
   void setLoaderConfiguration(String s, String storeDir, String targetDir, LoaderManager loaderManager);
 

@@ -44,6 +44,15 @@ public class SimpleGenerationTest {
     assertTrue(!Paths.get(TARGETPATH + "genTest/DynamicSubComp.java").toFile().isFile());
     
   }
+  
+  @Test
+  public void testPortGeneration() throws IOException {
+	FileUtils.cleanDirectory(Paths.get(TARGETPATH).toFile());  
+    MontiArcGeneratorTool script = new MontiArcGeneratorTool();
+    script.enableDynamicGeneration(true);
+    script.generate(Paths.get(MODELPATH).toFile(), Paths.get(TARGETPATH).toFile(), Paths.get(MODELPATH).toFile());
+    
+  }
 
 }
 
