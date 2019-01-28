@@ -109,6 +109,11 @@
     </dependency>
 
     <dependency>
+      <groupId>org.codehaus.janino</groupId>
+      <artifactId>janino</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.eclipse.emf</groupId>
       <artifactId>org.eclipse.emf.compare</artifactId>
       <scope>test</scope>

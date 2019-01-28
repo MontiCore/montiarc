@@ -190,7 +190,7 @@ public class MAAGenerator {
           comp.getIncomingPorts(),
           comp.getOutgoingPorts(),
           comp.getSubComponents(),
-          comp.getConnectors(),
+          compAST.getConnectors(),
           comp.getConfigParameters());
     }
     

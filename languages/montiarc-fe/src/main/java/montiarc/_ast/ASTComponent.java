@@ -27,7 +27,7 @@ public class ASTComponent extends ASTComponentTOP {
   
   /**
    * Constructor for montiarc._ast.ASTComponent
-   * 
+   *
    * @param stereotype
    * @param name
    * @param head
@@ -70,6 +70,14 @@ public class ASTComponent extends ASTComponentTOP {
   public List<ASTConnector> getConnectors() {
     return this.getBody().getElementList().stream().filter(a -> a instanceof ASTConnector)
         .map(a -> (ASTConnector) a).collect(Collectors.toList());
+  }
+  
+  // do not use symbol table, since symbol table must not be created
+  public Optional<ASTConnector> getConnector(String target) {
+    return getConnectors().stream()
+        .filter(astConnector -> astConnector.getTargetsList().stream()
+            .anyMatch(astTarget -> astTarget.toString().equals(target))).findFirst();
+    
   }
   
   // do not use symbol table, since symbol table must not be created

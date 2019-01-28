@@ -10,12 +10,13 @@ import de.monticore.symboltable.Symbol;
 import de.se_rwth.commons.logging.Log;
 import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTConnector;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcASTConnectorCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc.cocos.*;
 import org.junit.BeforeClass;
@@ -120,7 +121,7 @@ public class ConnectorTest extends AbstractCoCoTest {
     final MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checkInvalid(cocos, node,
-        new ExpectedErrorInfo(6, "xMA066", "xMA067", "xMA008"));
+        new ExpectedErrorInfo(3, "xMA066", "xMA067"));
   }
   
   @Test
@@ -208,21 +209,21 @@ public class ConnectorTest extends AbstractCoCoTest {
     MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
     final ExpectedErrorInfo errors
-        = new ExpectedErrorInfo(7, "xMA066", "xMA067", "xMA008");
+        = new ExpectedErrorInfo(4, "xMA066", "xMA067");
     checkInvalid(cocos, loadComponentAST(modelName), errors);
   }
   
   @Test
   public void testConnectorsWithStereotypes() {
-    Scope symTab = this.loadDefaultSymbolTable();
-    ConnectorSymbol connector = symTab
-        .<ConnectorSymbol> resolve(PACKAGE + "." + "ConnectorsWithStereotypes.myOut",
-            ConnectorSymbol.KIND)
-        .orElse(null);
+    final ComponentSymbol comp = loadComponentSymbol(PACKAGE, "ConnectorsWithStereotypes");
+    assertTrue(comp.getAstNode().isPresent());
+    assertTrue(comp.getAstNode().get() instanceof ASTComponent);
+    ASTComponent astComp = (ASTComponent) comp.getAstNode().get();
+    ASTConnector connector = astComp.getConnector("myOut").orElse(null);
     assertNotNull(connector);
     
-    assertEquals(1, connector.getStereotype().size());
-    assertFalse(connector.getStereotype().get("realNews").isPresent());
+    assertEquals(1, connector.getStereotype().sizeValuess());
+    assertTrue(connector.getStereotype().containsStereoValue("realNews"));
     checkValid(PACKAGE + "." + "ConnectorsWithStereotypes");
   }
   
@@ -278,12 +279,13 @@ public class ConnectorTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + modelName);
     final ASTMontiArcNode astMontiArcNode = loadComponentAST(PACKAGE + "." + modelName);
     assertNotNull(astMontiArcNode);
+    assertTrue(astMontiArcNode instanceof ASTComponent);
+    ASTComponent astComponent = (ASTComponent) astMontiArcNode;
     final Optional<? extends Symbol> componentSymbol = astMontiArcNode.getSymbolOpt();
     assertTrue(componentSymbol.isPresent());
-    final ComponentSymbol symbol = (ComponentSymbol) componentSymbol.get();
-    assertTrue(symbol.getConnector("sender.message").isPresent());
-    assertTrue(symbol.getConnector("sender.ack").isPresent());
-    assertTrue(symbol.getConnector("abpMessage").isPresent());
+    assertTrue(astComponent.getConnector("sender.message").isPresent());
+    assertTrue(astComponent.getConnector("sender.ack").isPresent());
+    assertTrue(astComponent.getConnector("abpMessage").isPresent());
   }
 
   @Test

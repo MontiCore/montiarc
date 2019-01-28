@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http:/maven.apache.org/SETTINGS/1.0.0
+                        http:/maven.apache.org/xsd/settings-1.0.0.xsd ">
+  
+  <servers>
+    <server>
+      <id>se-nexus</id>
+      <username>cibuild</username>
+      <password>${env.cibuild}</password>
+    </server>
+  </servers>
+  
+  <mirrors>
+    <mirror>
+      <!-- this sends everything to the specified nexus repository -->
+      <id>se-nexus</id>
+      <mirrorOf>external:*</mirrorOf>
+      <url>https://nexus.se.rwth-aachen.de/content/groups/se</url>
+    </mirror>
+  </mirrors>
+  
+  <profiles>
+    <profile>
+      <id>se-nexus</id>
+      <!-- enable snapshots for the built in central repo to direct -->
+      <!-- all requests to nexus via the mirror -->
+      <repositories>
+        <repository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases><enabled /></releases>
+          <snapshots><enabled /></snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases><enabled /></releases>
+          <snapshots><enabled /></snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+  
+  <activeProfiles>
+    <!-- make the profile active by default -->
+    <activeProfile>se-nexus</activeProfile>
+  </activeProfiles>
+  
+</settings>
