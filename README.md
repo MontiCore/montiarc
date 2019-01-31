@@ -7,7 +7,7 @@ The MontiArc Core repository contains everything related to the common basis of 
 
 ## The MontiArc Architecture Description Language
 
-<img src="pics\elevatorExample.png" alt="drawing" height="250px"/>
+<img src="pics/elevatorExample.png" alt="drawing" height="250px"/>
 
 In MontiArc, architectures are described as component and connector systems in which autonomously acting components perform computations. Communication between components is regulated by connectors between the components’ interfaces, which are stable and build up by typed, directed ports. Components are either atomic or composed of connected subcomponents. Atomic components yield behavior descriptions in the form of embedded time-synchronous port automata, embedded JavaDSL models, or via integration of handcrafted code. For composed components the behavior emerges from the behavior of their subcomponents. 
 
