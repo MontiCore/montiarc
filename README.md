@@ -30,4 +30,4 @@ In MontiArc, architectures are described as component and connector systems in w
 
 # copyright
 
-© Copyright 2018 by [Chair of Software Engineering at RWTH Aachen University][se-rwth].
+© Copyright 2019 by [Chair of Software Engineering at RWTH Aachen University][se-rwth].
