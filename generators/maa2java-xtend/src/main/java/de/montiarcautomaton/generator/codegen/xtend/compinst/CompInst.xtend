@@ -51,11 +51,9 @@ class CompInst {
 		@Override
 		  public void propagatePortChanges(List<Port> changedPorts) {
 		  	«FOR connector : comp.connectors»
-		  	«IF helper.isIncomingPort(comp, connector, false)»
 		  	if (changedPorts.contains(«helper.getConnectorComponentName(connector,true)».getPort("«helper.getConnectorPortName(connector, true)»"))){
 		  		«helper.getConnectorComponentName(connector, false)».setPort("«helper.getConnectorPortName(connector, false)»",«helper.getConnectorComponentName(connector,true)».getPort("«helper.getConnectorPortName(connector, true)»"));
 		  	}	
-		  	«ENDIF»
 		  	«ENDFOR» 
 		  	
 		  	«FOR subcomponent : comp.subComponents»

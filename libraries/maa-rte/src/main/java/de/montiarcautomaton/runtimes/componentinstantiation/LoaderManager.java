@@ -11,10 +11,19 @@ public class LoaderManager {
 
   Map<String, ILoader> registeredLoaders = new HashMap<>();
 
+  /**
+   * Register loader to the loadermanager
+   * @param instanceName
+   * @param fsLoader
+   */
   public void registerLoader(String instanceName, ILoader fsLoader){
     registeredLoaders.put(instanceName, fsLoader);
   }
 
+  /**
+   * Stop and unregister loader from the loadermanager
+   * @param instanceName
+   */
   public void unregisterLoader(String instanceName){
 	  ILoader loader = registeredLoaders.get(instanceName);
     if (loader != null){
