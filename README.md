@@ -18,15 +18,15 @@ In MontiArc, architectures are described as component and connector systems in w
 * languages/
   * montiarc-fe
 * generators/
-	* cd2pojo
-	* maa2java
+    * cd2pojo
+    * maa2java
 * applications/
-	  * bumperbot    
+    * bumperbot  
 * libraries/
-  * maa-rte
-  * lejos-rte
-  * simulator-rte
-	*...
+    * maa-rte
+    * lejos-rte
+    * simulator-rte
+    *...
 
 # copyright
 
