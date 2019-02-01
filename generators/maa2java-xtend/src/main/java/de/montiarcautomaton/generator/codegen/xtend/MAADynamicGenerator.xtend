@@ -31,7 +31,7 @@ import de.montiarcautomaton.generator.codegen.xtend.compinst.DynamicDeploy
  */
  
  
-class MAADynamicGenerator extends MAAGenerator {
+class MAADynamicGenerator {
 
   def static generateAll(File targetPath, File hwc, ComponentSymbol comp) {
     Identifier.createInstance(comp)
@@ -43,8 +43,15 @@ class MAADynamicGenerator extends MAAGenerator {
        toFile(targetPath, "DynamicDeploy" + comp.name, DynamicDeploy.generateDeploy(comp)); 	
     }
     
+    
+    
   }
 
-
+  def static public toFile(File targetPath, String name, String content) {
+    var Path path = Paths.get(targetPath.absolutePath + "\\" + name + ".java")
+    var FileReaderWriter writer = new FileReaderWriter()
+    println("Writing to file " + path + ".");
+    writer.storeInFile(path, content)
+  }
 
 }
