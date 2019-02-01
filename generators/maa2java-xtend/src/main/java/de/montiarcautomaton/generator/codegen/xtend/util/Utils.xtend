@@ -124,6 +124,10 @@ class Utils {
    */
   def static String printPackageWithoutKeyWordAndSemicolon(ComponentSymbol comp){
   	return '''
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
   	«comp.packageName»
   	'''
   }
