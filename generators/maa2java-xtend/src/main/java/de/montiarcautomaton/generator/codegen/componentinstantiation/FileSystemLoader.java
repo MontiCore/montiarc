@@ -24,6 +24,7 @@ public class FileSystemLoader implements ILoader {
   Object classObject = null;
 
   private static String ComponentStore = null;
+
   private String filePath;
   private String storeDir;
   private String targetDir;

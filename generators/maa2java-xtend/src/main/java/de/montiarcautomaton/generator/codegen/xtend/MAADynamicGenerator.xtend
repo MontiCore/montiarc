@@ -40,9 +40,9 @@ class MAADynamicGenerator extends MAAGenerator {
     toFile(targetPath, "Dynamic" + comp.name, new DynamicComponentGenerator().generate(comp));
     
     if (comp.getStereotype().containsKey("deploy")) {
-      toFile(targetPath, "DynamicDeploy" + comp.name, DynamicDeploy.generateDeploy(comp));
+       toFile(targetPath, "DynamicDeploy" + comp.name, DynamicDeploy.generateDeploy(comp)); 	
     }
-
+    
   }
 
 
