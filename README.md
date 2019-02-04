@@ -1,6 +1,6 @@
 # MontiArc Core Project
 
-The MontiArc Core repository contains everything related to the common basis of the MontiArc architecture description language. This project is maintained by the [Working Group for Model-Driven Systems Engineering(MDSE)][mdse].
+The MontiArc Core repository contains everything related to the common basis of the MontiArc architecture description language. This project is maintained by the [Working Group for Model-Driven Systems Engineering (MDSE)][mdse].
 
 Contact: @puetzer, @david.schmalzing, @wortmann
 
@@ -26,7 +26,7 @@ In MontiArc, architectures are described as component and connector systems in w
     * maa-rte
     * lejos-rte
     * simulator-rte
-    *...
+    * ...
 
 # copyright
 
