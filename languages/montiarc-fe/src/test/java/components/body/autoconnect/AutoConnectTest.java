@@ -134,8 +134,8 @@ public class AutoConnectTest extends AbstractCoCoTest {
     assertTrue(connectorNames.contains("intIn -> b.intIn"));
     assertTrue(connectorNames.contains("a.data -> d.dataSthElse"));
   }
-  
-  @Ignore("Inner components are deactivated")
+
+  @Ignore("TODO Check Why there should only be one duplicate autoconnect match. Also no errors for duplicate autoconnections are logged.")
   @Test
   public void testDuplicateAutoconnectMatches() {
     Scope symTab = loadDefaultSymbolTable();
@@ -188,36 +188,38 @@ public class AutoConnectTest extends AbstractCoCoTest {
     }
     
     assertEquals(2, connectors.size());
-    assertTrue(connectorNames.contains("strIn -> myGeneric.myStrIn"));
-    assertTrue(connectorNames.contains("myGeneric.myStrOut -> strOut"));
+    assertTrue(connectorNames.contains("strIn -> myGeneric.inT"));
+    assertTrue(connectorNames.contains("myGeneric.outT -> strOut"));
   }
   
-  @Ignore("Inner components are deactivated")
   @Test
   public void testAutoconnectGenericInnerComponentType() {
     Scope symTab = loadDefaultSymbolTable();
     Log.getFindings().clear();
+    final String modelName
+        = PACKAGE + "." + "AutoConnectGenericInnerComponent";
     ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
-        PACKAGE + "." + "AutoConnectGenericInnerComponent", ComponentSymbol.KIND).orElse(null);
+        modelName, ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
-  
+ 
     assertTrue(comp.getAstNode().isPresent() && comp.getAstNode().get() instanceof ASTComponent);
     ASTComponent astComp = (ASTComponent) comp.getAstNode().get();
     
     Collection<ASTConnector> connectors = astComp.getConnectors();
+
     List<String> connectorNames = new ArrayList<String>();
     for (ASTConnector con : connectors) {
       connectorNames.add(con.toString());
     }
     
     assertEquals(4, connectors.size());
-    assertTrue(connectorNames.contains("strIn -> myGeneric.myStrIn"));
-    assertTrue(connectorNames.contains("myGeneric.myStrOut -> strOut"));
-    assertTrue(connectorNames.contains("intIn -> a.myStrIn"));
-    assertTrue(connectorNames.contains("a.myStrOut -> intOut"));
+    assertTrue(connectorNames.contains("dbIn -> myGeneric.inT"));
+    assertTrue(connectorNames.contains("myGeneric.outT -> dbOut"));
+    assertTrue(connectorNames.contains("intIn -> a.inT"));
+    assertTrue(connectorNames.contains("a.outT -> intOut"));
   }
-  
-  @Ignore("Inner components are deactivated")
+
+  @Ignore("TODO Check why there is only one of the two expected connectors.")
   @Test
   public void testAutoconnectGenericTypeInHierarchy() {
     Scope symTab = loadDefaultSymbolTable();
@@ -265,10 +267,10 @@ public class AutoConnectTest extends AbstractCoCoTest {
     checkInvalid(cocos, node, new ExpectedErrorInfo(2, "xMA059", "xMA060"));
     
     assertEquals(2, connectors.size());
-    assertTrue(connectorNames.contains("strIn -> myGenericStr.myStrIn"));
-    assertTrue(connectorNames.contains("myGenericStr.myStrOut -> strOut"));
-    assertFalse(connectorNames.contains("strIn -> myGenericInt.myStrIn"));
-    assertFalse(connectorNames.contains("myGenericInt.myStrOut -> strOut"));
+    assertTrue(connectorNames.contains("strIn -> myGenericStr.inT"));
+    assertTrue(connectorNames.contains("myGenericStr.outT -> strOut"));
+    assertFalse(connectorNames.contains("strIn -> myGenericInt.inT"));
+    assertFalse(connectorNames.contains("myGenericInt.outT -> strOut"));
   }
   @Test
   public void testAutoconnectArrayTypes() {

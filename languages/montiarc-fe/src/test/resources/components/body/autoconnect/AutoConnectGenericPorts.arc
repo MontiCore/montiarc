@@ -19,13 +19,13 @@ component AutoConnectGenericPorts {
 
     
     /* expected additional connectors
-    strIn -> myGenericStr.myStrIn;
-    myGenericStr.myStrOut -> strOut;
+    strIn -> myGenericStr.inT;
+    myGenericStr.outT -> strOut;
     */
     
     /* forbidden additional connectors
-    strIn -> myGenericInt.myStrIn;
-    myGenericInt.myStrOut -> strOut;
+    strIn -> myGenericInt.inT;
+    myGenericInt.outT -> strOut;
     */
 
 }

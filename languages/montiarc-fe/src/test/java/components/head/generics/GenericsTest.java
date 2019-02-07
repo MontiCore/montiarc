@@ -229,4 +229,14 @@ public class GenericsTest extends AbstractCoCoTest {
         = new ExpectedErrorInfo(1, "xMA102");
     checkInvalid(checker, loadComponentAST(modelName), errors);
   }
+
+  @Test
+  public void testInnerCompWithSameTypeParameters() {
+    final String modelName
+        = PACKAGE + ".InnerCompWithSameTypeParameters";
+    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(2, "xMA114");
+    checkInvalid(checker, loadComponentAST(modelName), errors);
+  }
 }

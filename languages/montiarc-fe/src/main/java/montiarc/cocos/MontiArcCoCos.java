@@ -20,8 +20,6 @@ public class MontiArcCoCos {
         .addCoCo(new SubComponentsConnected())
         .addCoCo(new SubcomponentParametersCorrectlyAssigned())
         .addCoCo(new PackageLowerCase())
-        // TODO remove when Generator works for inner Components
-        .addCoCo(new NoInnerComponents())
         .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new DefaultParametersHaveCorrectOrder())
         .addCoCo(new DefaultParametersCorrectlyAssigned())
@@ -80,7 +78,8 @@ public class MontiArcCoCos {
         .addCoCo(new AssignmentHasNoName())
         .addCoCo(new ConfigurationParametersCorrectlyInherited())
         .addCoCo(new InnerComponentNotExtendsDefiningComponent())
-        
+        .addCoCo(new UniqueTypeParamsInInnerCompHierarchy())
+
         // TYPE CORRECTNESS
         .addCoCo(new AutomatonGuardIsNotBoolean())
         .addCoCo(new GenericInitValues())

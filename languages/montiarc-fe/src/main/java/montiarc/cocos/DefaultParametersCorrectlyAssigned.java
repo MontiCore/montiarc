@@ -60,14 +60,16 @@ public class DefaultParametersCorrectlyAssigned
                 .getType()),
             comp.getSpannedScope(), dimension);
         
-        MontiArcHCJavaDSLTypeResolver javaTypeResolver = new MontiArcHCJavaDSLTypeResolver();
+        MontiArcHCJavaDSLTypeResolver javaTypeResolver
+            = new MontiArcHCJavaDSLTypeResolver();
         ASTExpression expression = param.getDefaultValue().getExpression();
         // param.getDefaultValue().get().getValue().accept(javaTypeResolver);
         expression.accept(javaTypeResolver);
         Optional<JavaTypeSymbolReference> result = javaTypeResolver.getResult();
         if (!result.isPresent()) {
           Log.error(
-              "0xMA068 Could not resolve type of default parameter value for comparing it with the referenced parameter type.",
+              "0xMA068 Could not resolve type of default parameter value " +
+                  "for comparing it with the referenced parameter type.",
               param.getDefaultValue().get_SourcePositionStart());
         }
         else if (!TypeCompatibilityChecker.doTypesMatch(result.get(),
@@ -82,10 +84,13 @@ public class DefaultParametersCorrectlyAssigned
             paramTypeSymbol.getActualTypeArguments().stream()
                 .map(a -> (JavaTypeSymbolReference) a.getType())
                 .collect(Collectors.toList()))) {
-          Log.error("0xMA062 Type of parameter " + param.getName()
-              + " in the parameter declaration does not match the type of its assigned value. Type "
-              +
-              paramTypeSymbol.getName() + " can not cast to type " + result.get().getName() + ".",
+          Log.error(
+              String.format("0xMA062 Type of parameter %s in the parameter" +
+                  " declaration does not match the type of its assigned " +
+                  "value. Type %s can not cast to type %s.",
+                  param.getName(),
+                  paramTypeSymbol.getName(),
+                  result.get().getName()),
               param.get_SourcePositionStart());
         }
       }

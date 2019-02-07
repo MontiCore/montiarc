@@ -135,6 +135,7 @@
       <plugin>
         <groupId>de.se_rwth.maven</groupId>
         <artifactId>se-groovy-maven-plugin</artifactId>
+        <version>${se-groovy.maven.version}</version>
         <configuration>
           <baseClass>de.montiarcautomaton.generator.codegen.MAAGeneratorScript</baseClass>
           <arguments>

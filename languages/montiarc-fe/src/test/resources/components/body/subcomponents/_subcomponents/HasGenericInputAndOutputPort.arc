@@ -10,4 +10,10 @@ component HasGenericInputAndOutputPort<T> {
   port
     in T tIn,
     out T tOut;
+    
+  automaton {
+  	state Initial;
+  	initial Initial;
+  	Initial -> Initial / {tOut = tIn};
+  }
 }
