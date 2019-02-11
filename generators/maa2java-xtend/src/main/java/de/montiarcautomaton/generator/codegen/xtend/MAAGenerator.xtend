@@ -79,7 +79,7 @@ class MAAGenerator {
   }
 
   def static private toFile(File targetPath, String name, String content) {
-    var Path path = Paths.get(targetPath.absolutePath + "\\" + name + ".java")
+    var Path path = Paths.get(targetPath.absolutePath + File.separator + name + ".java")
     var FileReaderWriter writer = new FileReaderWriter()
     println("Writing to file " + path + ".");
     writer.storeInFile(path, content)
