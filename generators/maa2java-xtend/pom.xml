@@ -140,6 +140,17 @@
         <version>3.1.1</version>
         <executions>
           <execution>
+            <id>unpack-test-models</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeClassifiers>${testmodels.classifier}</includeClassifiers>
+              <outputDirectory>${basedir}/target/test-models/</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
             <id>unpack-dependencies</id>
             <phase>validate</phase>
             <goals>
@@ -153,17 +164,6 @@
                 </artifactItem>
               </artifactItems>
               <outputDirectory>${basedir}/target/${librarymodels.classifier}/</outputDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>unpack-test-models</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>unpack-dependencies</goal>
-            </goals>
-            <configuration>
-              <includeClassifiers>${testmodels.classifier}</includeClassifiers>
-              <outputDirectory>${basedir}/target/test-models/</outputDirectory>
             </configuration>
           </execution>
         </executions>
