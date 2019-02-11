@@ -32,7 +32,7 @@ Validate:
     paths:
       - applications/bumperbot/target/
       - generators/cd2pojo/target/
-      - generators/maa2java/target/
+      - generators/maa2java-xtend/target/
       - languages/montiarc-fe/target/
       - libraries/lejos-rte/target/
       - libraries/maJavaLib/target/
@@ -52,7 +52,7 @@ Validate:
   artifacts:
     reports:
       junit:
-      - ./generators/maa2java/target/surefire-reports/TEST-*.xml
+      - ./generators/maa2java-xtend/target/surefire-reports/TEST-*.xml
       - ./libraries/simulator-rte/target/surefire-reports/TEST-*.xml
       - ./languages/montiarc-fe/target/surefire-reports/TEST-*.xml
 
