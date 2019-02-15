@@ -362,7 +362,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
   /**
    * The Value for empty data
    */
-  NoData = "--";    
+  NoData implements Expression = "--";
  
      
   /**
@@ -386,7 +386,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
    * @attribute Valuation: The valuation
    */    
   ValueList   
-      = (("[" Valuation ("," Valuation )* "]") | Valuation | NoData); 
+      = (("[" Valuation ("," Valuation )* "]") | Valuation);
       
 
   /*************************************************************************

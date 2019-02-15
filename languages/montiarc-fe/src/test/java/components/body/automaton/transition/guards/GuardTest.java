@@ -62,6 +62,12 @@ public class GuardTest extends AbstractCoCoTest {
   }
   
   @Test
+  public void testGuardWithNoData(){
+    //ASTMontiArcNode node = loadComponentAST();
+    checkValid(PACKAGE + "." + "GuardWithNoData");
+  }
+  
+  @Test
   /* @implements [Wor16] AR2: Inputs, outputs, and variables are used correctly.
    * (p.103, Lst 5.20) */
   public void testGuardUsesOutgoingPort() {
