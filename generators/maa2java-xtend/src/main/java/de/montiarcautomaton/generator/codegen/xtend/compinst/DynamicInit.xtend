@@ -55,12 +55,18 @@ class DynamicInit {
 			@Override
 			public void init() {
 			List<String> subcomps = new ArrayList<>();
+			Map<String, List<String>> interfaces = new HashMap<>();
+			Map<String, String> subcompTypes = new HashMap<>();
 			«FOR subcomponent : comp.subComponents»
 			subcomps.add(instanceName + ".«subcomponent.name»");
-						«ENDFOR»
+			interfaces.put("«subcomponent.name»",«subcomponent.name».getInterface());
+			subcompTypes.put("«subcomponent.name»","«ComponentHelper.getSubComponentTypeName(subcomponent)»");
+			«ENDFOR»
 			
 			//Set up and start new thread for the Filesystemloader	
-			this.loader = new FileSystemLoader(instanceName, storeDir, targetDir, subcomps);
+			
+			this.loader = new FileSystemLoader(instanceName, storeDir, targetDir, 
+				subcomps, interfaces, subcompTypes);
 			this.loader.start();
 			«IF comp.superComponent.present»
 				super.init();
