@@ -8,6 +8,10 @@ package de.montiarcautomaton.generator.codegen.xtend.compinst
 import montiarc._symboltable.ComponentSymbol
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._ast.ASTPort
+import montiarc._ast.ASTConnector
+import montiarc._ast.ASTComponent
+import de.monticore.types.types._ast.ASTQualifiedName
+import de.montiarcautomaton.generator.helper.DynamicComponentHelper
 
 /**
  * Prints the setup for both atomic and composed components.
@@ -83,10 +87,14 @@ class DynamicSetup {
 			
 			
 			  // propagate children's output ports to own output ports
-			  «FOR connector : comp.connectors»
-			  	«IF !helper.isIncomingPort(comp,connector, false)»
-					«helper.getConnectorComponentName(connector, false)».setPort("«helper.getConnectorPortName(connector, false)»",«helper.getConnectorComponentName(connector,true)».getPort("«helper.getConnectorPortName(connector, true)»"));
-			  	«ENDIF»
+			  
+			  «FOR ASTConnector connector : (comp.getAstNode().get() as ASTComponent)
+			            .getConnectors()»
+			            «FOR ASTQualifiedName target : connector.targetsList»
+			              «IF !helper.isIncomingPort(comp,connector.source, target, false)»
+					«helper.getConnectorComponentName(connector.source, target, false)».setPort("«helper.getConnectorPortName(connector.source, target, false)»",«helper.getConnectorComponentName(connector.source, target,true)».getPort("«helper.getConnectorPortName(connector.source, target, true)»"));
+			              «ENDIF»
+			            «ENDFOR»
 			  «ENDFOR»
 			  
 			  }

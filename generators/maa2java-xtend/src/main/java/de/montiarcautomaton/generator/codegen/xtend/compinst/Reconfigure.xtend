@@ -7,7 +7,10 @@ package de.montiarcautomaton.generator.codegen.xtend.compinst
 
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
-
+import montiarc._ast.ASTConnector
+import montiarc._ast.ASTComponent
+import de.monticore.types.types._ast.ASTQualifiedName
+import de.montiarcautomaton.generator.helper.DynamicComponentHelper
 
 class Reconfigure {
   
@@ -49,11 +52,15 @@ class Reconfigure {
 	  			this.«subcomponent.name» = new«subcomponent.name»;
 	  			this.new«subcomponent.name» = null;	
 	  		
-	  		«FOR connector : helper.getConnectorsForSubComp(comp, subcomponent)»
-	  			«IF helper.isIncomingPort(comp, connector, false)»
-	  			«helper.getConnectorComponentName(connector, false)».setPort("«helper.getConnectorPortName(connector, false)»",«helper.getConnectorComponentName(connector,true)».getPort("«helper.getConnectorPortName(connector, true)»"));
+	  		«FOR ASTConnector connector : (comp.getAstNode().get() as ASTComponent)
+	  				  				          .getConnectors()»
+	  		«FOR ASTQualifiedName target : connector.targetsList»
+	  			«IF helper.isIncomingPort(comp, connector.source, target, false)»
+	  			«helper.getConnectorComponentName(connector.source, target, false)».setPort("«helper.getConnectorPortName(connector.source, target, false)»",«helper.getConnectorComponentName(connector.source, target,true)».getPort("«helper.getConnectorPortName(connector.source, target, true)»"));
 	  				«ENDIF»
 	  				«ENDFOR»
+	  				«ENDFOR»
+	  				
 	  		 	outgoingPortChanges.addAll(this.«subcomponent.name».getPorts());
 	  		} 
         }

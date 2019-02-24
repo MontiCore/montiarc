@@ -7,6 +7,9 @@ package de.montiarcautomaton.generator.codegen.xtend.compinst
 
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
+import montiarc._ast.ASTConnector
+import de.monticore.types.types._ast.ASTQualifiedName
+import montiarc._ast.ASTComponent
 
 /**
  * Class responsible for printing the init() method for both atomic and composed components.
@@ -80,11 +83,16 @@ class DynamicInit {
 			
 			// connect outputs of children with inputs of children, by giving 
 			// the inputs a reference to the sending ports
-			«FOR connector : comp.connectors»
-				«IF helper.isIncomingPort(comp, connector, false)»
-					«helper.getConnectorComponentName(connector, false)».setPort("«helper.getConnectorPortName(connector, false)»",«helper.getConnectorComponentName(connector,true)».getPort("«helper.getConnectorPortName(connector, true)»"));
-				«ENDIF»
-			«ENDFOR» 
+			«FOR ASTConnector connector : (comp.getAstNode().get() as ASTComponent)
+			          .getConnectors()»
+			          «FOR ASTQualifiedName target : connector.targetsList»
+			            «IF helper.isIncomingPort(comp, connector.source, target, false)»
+					«helper.getConnectorComponentName(connector.source, target, false)».setPort("«helper.getConnectorPortName(connector.source, target, false)»",«helper.getConnectorComponentName(connector.source, target,true)».getPort("«helper.getConnectorPortName(connector.source, target, true)»"));
+			            «ENDIF»
+			          «ENDFOR»
+			    «ENDFOR» 
+			
+
 			
 			// init all subcomponents
 			

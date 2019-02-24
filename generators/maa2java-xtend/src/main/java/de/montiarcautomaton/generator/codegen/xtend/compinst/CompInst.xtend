@@ -2,6 +2,9 @@ package de.montiarcautomaton.generator.codegen.xtend.compinst
 
 import montiarc._symboltable.ComponentSymbol
 import de.montiarcautomaton.generator.helper.ComponentHelper
+import montiarc._ast.ASTConnector
+import de.monticore.types.types._ast.ASTQualifiedName
+import montiarc._ast.ASTComponent
 
 class CompInst {
 	
@@ -50,10 +53,13 @@ class CompInst {
 		'''
 		@Override
 		  public void propagatePortChanges(List<Port> changedPorts) {
-		  	«FOR connector : comp.connectors»
-		  	if (changedPorts.contains(«helper.getConnectorComponentName(connector,true)».getPort("«helper.getConnectorPortName(connector, true)»"))){
-		  		«helper.getConnectorComponentName(connector, false)».setPort("«helper.getConnectorPortName(connector, false)»",«helper.getConnectorComponentName(connector,true)».getPort("«helper.getConnectorPortName(connector, true)»"));
+		  	«FOR ASTConnector connector : (comp.getAstNode().get() as ASTComponent)
+		  				          .getConnectors()»
+		  	«FOR ASTQualifiedName target : connector.targetsList»
+		  	if (changedPorts.contains(«helper.getConnectorComponentName(connector.source, target,true)».getPort("«helper.getConnectorPortName(connector.source, target, true)»"))){
+		  		«helper.getConnectorComponentName(connector.source, target, false)».setPort("«helper.getConnectorPortName(connector.source, target, false)»",«helper.getConnectorComponentName(connector.source, target,true)».getPort("«helper.getConnectorPortName(connector.source, target, true)»"));
 		  	}	
+		  	«ENDFOR»
 		  	«ENDFOR» 
 		  	
 		  	«FOR subcomponent : comp.subComponents»

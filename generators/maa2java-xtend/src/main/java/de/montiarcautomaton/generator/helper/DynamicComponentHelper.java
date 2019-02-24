@@ -1,15 +1,16 @@
-package de.montiarcautomaton.generator.codegen.xtend.compinst;
+package de.montiarcautomaton.generator.helper;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import de.montiarcautomaton.generator.helper.ComponentHelper;
+import de.monticore.types.types._ast.ASTQualifiedName;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTConnector;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ComponentSymbolReference;
-import montiarc._symboltable.ConnectorSymbol;
 
 /**
  * Helper class used in the template to generate target code of atomic or
@@ -50,12 +51,14 @@ public class DynamicComponentHelper extends ComponentHelper{
  * @param subComp
  * @return
  */
-public Collection<ConnectorSymbol> getConnectorsForSubComp(ComponentSymbol comp, ComponentInstanceSymbol subComp){
-	Collection<ConnectorSymbol> subCompConnectors = new ArrayList<>();
-	Collection<ConnectorSymbol> connectors = comp.getConnectors();
-	for (ConnectorSymbol connectorSymbol : connectors) {
-		if ( subComp.getName().equals( getConnectorComponentName(connectorSymbol, true))){
+public Collection<ASTConnector> getConnectorsForSubComp(ComponentSymbol comp, ComponentInstanceSymbol subComp){
+	Collection<ASTConnector> subCompConnectors = new ArrayList<>();
+	Collection<ASTConnector> connectors = ((ASTComponent)comp.getAstNode().get()).getConnectors();
+	for (ASTConnector connectorSymbol : connectors) {
+		for (ASTQualifiedName target : connectorSymbol.getTargetsList()) {
+		if ( subComp.getName().equals( getConnectorComponentName(connectorSymbol.getSource(),target, true))){
 		subCompConnectors.add(connectorSymbol);
+		}
 		}
 	}
 	return subCompConnectors;
