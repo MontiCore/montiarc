@@ -33,6 +33,7 @@ class DynamicComponentGenerator extends de.montiarcautomaton.generator.codegen.x
 			import de.montiarcautomaton.runtimes.componentinstantiation.IDynamicComponent;
 			import de.montiarcautomaton.runtimes.componentinstantiation.InterfaceChecker;
 			import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
+			import de.montiarcautomaton.runtimes.componentinstantiation.ILoader;
 			import de.montiarcautomaton.runtimes.componentinstantiation.LoaderManager;
 			import de.montiarcautomaton.runtimes.timesync.delegation.Port;
 			import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
@@ -58,7 +59,7 @@ class DynamicComponentGenerator extends de.montiarcautomaton.generator.codegen.x
 			   private String storeDir = null;
 			   private String targetDir = null;
 			   private LoaderManager loman;
-			   private FileSystemLoader loader;
+			   private ILoader loader;
 			   
 			   
 			   // config parameters

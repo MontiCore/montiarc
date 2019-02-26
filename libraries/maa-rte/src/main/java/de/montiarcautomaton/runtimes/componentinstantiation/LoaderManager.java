@@ -8,8 +8,14 @@ import java.util.Map;
  * Stores all ComponentLoaders, so they can be stopped whenever a component gets replaced.
  */
 public class LoaderManager {
+	
+
+	public LoaderManager(ILoader loader) {
+		setLoaderType(loader);
+	}
 
   Map<String, ILoader> registeredLoaders = new HashMap<>();
+  Class loaderClass = null;
 
   /**
    * Register loader to the loadermanager
@@ -38,5 +44,19 @@ public class LoaderManager {
 
   public Map<String, ILoader> getRegisteredLoaders() {
     return registeredLoaders;
+  }
+  
+  public void setLoaderType(ILoader loader) {
+	  loaderClass = loader.getClass();
+	  
+  }
+  
+  public ILoader getNewLoader() {
+	  try {
+		return (ILoader) loaderClass.newInstance();
+	} catch (InstantiationException | IllegalAccessException e) {
+		e.printStackTrace();
+	}
+	return null;
   }
 }

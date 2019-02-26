@@ -20,11 +20,11 @@ public class FileSystemLoaderTest {
 	public void loadCompTest() throws InterruptedException, IOException {
 		List<String> subcomps = new ArrayList<>();
 		subcomps.add("compInstTest.sc");
-		FileSystemLoader loader = new FileSystemLoader("compInstTest", STOREPATH, CLASSPATH, subcomps);
-		loader.start();
-		FileUtils.copyDirectory(Paths.get("src/test/resources/models/exchange/").toFile(),
-				Paths.get("src/test/resources/store/models").toFile());
-		Thread.sleep(5000);
+		FileSystemLoader loader = new FileSystemLoader();
+		loader.init("compInstTest", STOREPATH, CLASSPATH, subcomps,null,null);
+		FileUtils.copyDirectory(Paths.get("src/test/resources/models/exchange/compInstTest").toFile(),
+				Paths.get("src/test/resources/store/models/compInstTest").toFile());
+		Thread.sleep(10000);
 		assertTrue(loader.hasNewSubComponent("compInstTest.sc").isPresent());
 		FileUtils.cleanDirectory(Paths.get(CLASSPATH).toFile());  
 

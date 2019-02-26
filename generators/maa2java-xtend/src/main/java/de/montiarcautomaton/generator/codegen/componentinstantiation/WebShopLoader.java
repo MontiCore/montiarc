@@ -79,38 +79,8 @@ public class WebShopLoader implements ILoader {
 	}
 
 
-	/**
-	 * @param instanceName Fully qualified instance name of Component that should be checked
-	 * @param storeDir     Directory where new component files will be stored
-	 * @param targetDir    Directory where generated and compiled sources should be moved
-	 */
-	public WebShopLoader(String instanceName, String storeDir, String targetDir,
-			List<String> subcomps) {
-		this.subcomps = subcomps;
-		this.targetDir = targetDir;
-		this.storeDir = storeDir;
-		componentStores = new ArrayList<>();
-		for (String sc : subcomps) {
-			componentStores.add(sc + "Store.");
 
-		}
-
-		filePath = storeDir
-				+ ComponentStore.replaceAll("\\.", "/");
-		targetPath = targetDir
-				+ ComponentStore.replaceAll("\\.", "/");
-	}
-
-	public WebShopLoader(String instanceName, String storeDir, String targetDir,List<String> subcomps,
-				Map<String, List<String>> interfaces, Map<String,String> subcompTypes) {
-		this(instanceName, storeDir,  targetDir, subcomps);
-
-		for (String sc : subcomps) {
-			timestamps.put(sc, Instant.now());
-		}
-		this.interfaces = interfaces;
-		this.subcompTypes = subcompTypes;
-	}
+	public WebShopLoader() {}
 
 	@Override
 	/**
@@ -178,6 +148,36 @@ public class WebShopLoader implements ILoader {
 		
 		//TODO: Use timestamp, subCompInterface, subCompType for REST call, store resulting
 		// file in path and update timestamp afterwards
+	}
+
+	@Override
+	/**
+	 * @param instanceName Fully qualified instance name of Component that should be checked
+	 * @param storeDir     Directory where new component files will be stored
+	 * @param targetDir    Directory where generated and compiled sources should be moved
+	 */
+	public void init(String instanceName, String storeDir, String targetDir, List<String> subcomps,
+			Map<String, List<String>> interfaces, Map<String, String> subcompTypes) {
+		this.subcomps = subcomps;
+		this.targetDir = targetDir;
+		this.storeDir = storeDir;
+		componentStores = new ArrayList<>();
+		for (String sc : subcomps) {
+			componentStores.add(sc + "Store.");
+
+		}
+
+		filePath = storeDir
+				+ ComponentStore.replaceAll("\\.", "/");
+		targetPath = targetDir
+				+ ComponentStore.replaceAll("\\.", "/");
+		for (String sc : subcomps) {
+			timestamps.put(sc, Instant.now());
+		}
+		this.interfaces = interfaces;
+		this.subcompTypes = subcompTypes;
+		start();
+		
 	}
 
 

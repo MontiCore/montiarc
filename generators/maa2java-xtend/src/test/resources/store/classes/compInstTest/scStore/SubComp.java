@@ -1,10 +1,12 @@
-package compInstTest.scStore;
 
+package compInstTest.scStore;
 
 import java.lang.*;
 import java.util.*;
-import compInstTest.scStore.SubCompInput;
-import compInstTest.scStore.SubCompResult;
+import compInstTest.scStore
+.SubCompInput;
+import compInstTest.scStore
+.SubCompResult;
 import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
 import de.montiarcautomaton.runtimes.timesync.delegation.Port;
 import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;

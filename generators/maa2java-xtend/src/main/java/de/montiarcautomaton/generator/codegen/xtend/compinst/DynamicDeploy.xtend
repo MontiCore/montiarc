@@ -25,7 +25,10 @@ class DynamicDeploy {
 			
 			import java.util.List;
 			import de.montiarcautomaton.runtimes.componentinstantiation.LoaderManager;
-			import de.montiarcautomaton.runtimes.timesync.delegation.Port;      
+			import de.montiarcautomaton.runtimes.timesync.delegation.Port; 
+			import de.montiarcautomaton.generator.codegen.componentinstantiation.FileSystemLoader;
+			import de.montiarcautomaton.runtimes.componentinstantiation.ILoader;
+			     
 			
 			public class DynamicDeploy«name» {      	
 			  final static int CYCLE_TIME = 50; // in ms
@@ -35,7 +38,7 @@ class DynamicDeploy {
 			  static String CLASSPATH = "";
 			    
 			  public static void main(String[] args) {
-			    LoaderManager loman = new LoaderManager();
+			    LoaderManager loman = new LoaderManager((ILoader) new FileSystemLoader());
 			    final Dynamic«name» cmp = new Dynamic«name»();
 			    
 			    cmp.setUp();

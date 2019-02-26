@@ -63,14 +63,17 @@ class DynamicInit {
 			«FOR subcomponent : comp.subComponents»
 			subcomps.add(instanceName + ".«subcomponent.name»");
 			interfaces.put("«subcomponent.name»",«subcomponent.name».getInterface());
-			subcompTypes.put("«subcomponent.name»","«ComponentHelper.getSubComponentTypeName(subcomponent)»");
+			subcompTypes.put("«subcomponent.name»","«subcomponent.getComponentType().getReferencedComponent().get().getName()»");
 			«ENDFOR»
 			
 			//Set up and start new thread for the Filesystemloader	
 			
-			this.loader = new FileSystemLoader(instanceName, storeDir, targetDir, 
-				subcomps, interfaces, subcompTypes);
-			this.loader.start();
+			this.loader = loman.getNewLoader();
+			loader.init(instanceName, storeDir, targetDir, 
+							subcomps, interfaces, subcompTypes);
+			
+			//new FileSystemLoader(instanceName, storeDir, targetDir, 
+			//	subcomps, interfaces, subcompTypes);
 			«IF comp.superComponent.present»
 				super.init();
 			«ENDIF»

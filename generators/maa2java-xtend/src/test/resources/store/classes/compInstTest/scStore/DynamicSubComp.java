@@ -8,6 +8,7 @@ import compInstTest.scStore.SubCompResult;
 import de.montiarcautomaton.runtimes.componentinstantiation.IDynamicComponent;
 import de.montiarcautomaton.runtimes.componentinstantiation.InterfaceChecker;
 import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
+import de.montiarcautomaton.runtimes.componentinstantiation.ILoader;
 import de.montiarcautomaton.runtimes.componentinstantiation.LoaderManager;
 import de.montiarcautomaton.runtimes.timesync.delegation.Port;
 import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
@@ -26,7 +27,7 @@ import java.util.*;
    private String storeDir = null;
    private String targetDir = null;
    private LoaderManager loman;
-   private FileSystemLoader loader;
+   private ILoader loader;
    
    
    // config parameters
@@ -132,6 +133,7 @@ import java.util.*;
    @Override
    public List<String> getInterface() {
    	List<String> compInterface = new ArrayList<>();
+   	
        return compInterface;
    }
    
