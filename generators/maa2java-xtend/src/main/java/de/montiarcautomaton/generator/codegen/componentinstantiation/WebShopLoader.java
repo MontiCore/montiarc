@@ -75,7 +75,7 @@ public class WebShopLoader implements ILoader {
 	 * Toggle flag to stop the thread. Is checked in the run method.
 	 */
 	public void stop() {
-		if (isStopped == true) isStopped = true;
+		isStopped = true;
 	}
 
 
