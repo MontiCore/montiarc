@@ -89,8 +89,9 @@ public class AdapterLoader extends ClassLoader {
 
     File targetFile = Paths.get(targetPath).toFile();
 
-
-
+    if (!modelFile.isDirectory()) {
+    	System.out.println("Model Path not found! Did you set model directory? Dir: " + modelFile.toString());
+    }
     List<File> files = (List<File>) FileUtils.listFiles(modelFile, new String[]{"arc"}, true);
 
     if (files.size() > 0) try {

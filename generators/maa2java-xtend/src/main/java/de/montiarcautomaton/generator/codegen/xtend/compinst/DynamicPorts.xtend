@@ -23,7 +23,7 @@ class DynamicPorts {
 		}
 		@Override
 		public <T> Port<T> getPort(String name) {
-			«FOR outPort : comp.outgoingPorts»
+			«FOR outPort : comp.ports»
       	if (name.equals("«outPort.name»")){
       		return (Port<T>) getPort«outPort.name.toFirstUpper»();
       	}
