@@ -23,6 +23,7 @@
 //
 //    
 //  public static void main(String[] args) {
+//	//Change Loadertype if needed
 //    LoaderManager loman = new LoaderManager((ILoader) new FileSystemLoader());
 //    final DynamicPortTest cmp = new DynamicPortTest();
 //    
