@@ -56,6 +56,7 @@
 		<jacoco.reportPath>${project.basedir}/../target/jacoco.exec</jacoco.reportPath>
 		<surefire.plugin>2.19.1</surefire.plugin>
 		<failsafe.plugin>2.19.1</failsafe.plugin>
+		<xtend.version>2.17.0</xtend.version>
 
 		<!-- Classifiers -->
 		<grammars.classifier>grammars</grammars.classifier>
@@ -165,6 +166,13 @@
 				<groupId>org.codehaus.janino</groupId>
 				<artifactId>janino</artifactId>
 				<version>${janino.version}</version>
+			</dependency>
+
+			<!-- .. xtend ............................................... -->
+			<dependency>
+				<groupId>org.eclipse.xtend</groupId>
+				<artifactId>org.eclipse.xtend.lib</artifactId>
+				<version>${xtend.version}</version>
 			</dependency>
 
 			<!-- MontiCore Dependencies -->
