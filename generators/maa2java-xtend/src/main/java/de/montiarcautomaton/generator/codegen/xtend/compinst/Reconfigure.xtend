@@ -30,7 +30,7 @@ class Reconfigure {
     '''
     @Override
     public List<Port> reconfigure() {
-    	return new ArrayList<>();
+    	return new ArrayList<Port>();
     }
     '''
   }
@@ -42,7 +42,7 @@ class Reconfigure {
     '''
     @Override
     public List<Port> reconfigure() {
-    	List<Port> outgoingPortChanges = new ArrayList<>();
+    	List<Port> outgoingPortChanges = new ArrayList<Port>();
     	
     	«FOR subcomponent : comp.subComponents»
         if (new«subcomponent.name» != null){

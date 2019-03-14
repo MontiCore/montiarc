@@ -1,17 +1,17 @@
 
-package compInstTest.scStore;
+package portTest.ocStore;
 
 import java.lang.*;
 import java.util.*;
 import de.montiarcautomaton.runtimes.timesync.implementation.IInput;
 
 
-public class SubCompInput
+public class OutCompInput
 implements IInput 
  {
   
   
-  public SubCompInput() {
+  public OutCompInput() {
   }
   
   

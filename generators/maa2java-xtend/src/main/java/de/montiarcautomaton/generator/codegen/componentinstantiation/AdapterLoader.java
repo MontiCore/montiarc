@@ -6,6 +6,8 @@ import de.se_rwth.commons.Files;
 import org.apache.commons.io.FileUtils;
 
 import javax.tools.*;
+import javax.tools.JavaCompiler.CompilationTask;
+
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
@@ -56,13 +58,18 @@ public class AdapterLoader extends ClassLoader {
     }
 
     JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+    System.out.println(compiler.toString());
     StandardJavaFileManager fileManager = compiler.getStandardFileManager(null,
             null, null);
     //TODO: Do something with collected Diagnostics
-    DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
+    //DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
     Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(classFiles);
 
-    compiler.getTask(null, fileManager, diagnostics, null, null, compilationUnits).call();
+   
+    CompilationTask task = compiler.getTask(null, fileManager, null, null, null, compilationUnits);
+    if (task.call()) {
+    	System.out.println("Compilation done!");
+	}
     try {
       fileManager.close();
     } catch (IOException e) {

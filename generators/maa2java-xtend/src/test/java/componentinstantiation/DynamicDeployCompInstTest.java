@@ -1,3 +1,5 @@
+//TODO: These only work after executing SimpleGenerationTest
+
 //package componentinstantiation;
 //
 //import static org.junit.Assert.assertTrue;
@@ -31,7 +33,7 @@
 //
 //		long time;
 //		List<Port> changedPorts;
-//		ConsoleOutputCapturer stdoutCapturer = new ConsoleOutputCapturer();
+//		//ConsoleOutputCapturer stdoutCapturer = new ConsoleOutputCapturer();
 //		
 //		for (int i = 0; i < 160; i++) {
 //			time = System.currentTimeMillis();
@@ -45,7 +47,7 @@
 //			}
 //			System.out.print(i+":");
 //			if (i == 15) {
-//				stdoutCapturer.start();
+//				//stdoutCapturer.start();
 //				try {
 //					FileUtils.copyDirectory(Paths.get("src/test/resources/models/exchange/").toFile(),
 //							Paths.get("src/test/resources/store/models").toFile());
@@ -54,8 +56,8 @@
 //				}
 //			}
 //			if (i == 190){
-//				String string = stdoutCapturer.stop();
-//				assertTrue(stdoutCapturer.stop().contains("Test successful"));
+//				//String string = stdoutCapturer.stop();
+//				//assertTrue(stdoutCapturer.stop().contains("Test successful"));
 //			}
 //
 //

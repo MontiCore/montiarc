@@ -1,54 +1,66 @@
 
-package compInstTest.scStore;
+package portTest.ocStore;
 
 import java.lang.*;
 import java.util.*;
-import compInstTest.scStore
-.SubCompInput;
-import compInstTest.scStore
-.SubCompResult;
+import portTest.ocStore
+.OutCompInput;
+import portTest.ocStore
+.OutCompResult;
 import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
 import de.montiarcautomaton.runtimes.timesync.delegation.Port;
 import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 import de.montiarcautomaton.runtimes.Log;
 
-public class SubComp      
+public class OutComp      
     implements IComponent {
     
   //ports
+  
+  protected Port<String> outPort;
+  
+  public Port<String> getPortOutPort() {
+        return this.outPort;
+  }
+  
+  public void setPortOutPort(Port<String> outPort) {
+        this.outPort = outPort;
+  }
+  
   
   // component variables
   
   // config parameters
 
   // the components behavior implementation
-  private final IComputable<SubCompInput, SubCompResult> behaviorImpl;
+  private final IComputable<OutCompInput, OutCompResult> behaviorImpl;
   
   @Override
   public void compute() {
   // collect current input port values
-  final SubCompInput input = new SubCompInput
+  final OutCompInput input = new OutCompInput
   ();
   
   try {
   // perform calculations
-    final SubCompResult result = behaviorImpl.compute(input); 
+    final OutCompResult result = behaviorImpl.compute(input); 
     
     // set results to ports
     setResult(result);
     } catch (Exception e) {
-  Log.error("SubComp", e);
+  Log.error("OutComp", e);
     }
   }
   private void initialize() {
     // get initial values from behavior implementation
-    final SubCompResult result = behaviorImpl.getInitialValues();
+    final OutCompResult result = behaviorImpl.getInitialValues();
     
     // set results to ports
     setResult(result);
     this.update();
   }
-  private void setResult(SubCompResult result) {
+  private void setResult(OutCompResult result) {
+    this.getPortOutPort().setNextValue(result.getOutPort());
   }
   
   @Override
@@ -56,6 +68,7 @@ public class SubComp
   
   
   // set up output ports
+  this.outPort = new Port<String>();
   
   this.initialize();
   
@@ -70,11 +83,12 @@ public class SubComp
   public void update() {
   
     // update computed value for next computation cycle in all outgoing ports
+    this.outPort.update();
   }
   
-  public SubComp() {
+  public OutComp() {
     
-    behaviorImpl = new SubCompImpl(
+    behaviorImpl = new OutCompImpl(
   );
     // config parameters       
   }

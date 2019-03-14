@@ -15,6 +15,8 @@ implements IComputable<SubCompInput, SubCompResult> {
   }
  public SubCompResult compute(SubCompInput input) {
 	 System.out.println("Test successful");
+	 Double test = 0.0;
+	 System.out.println(test);
 	 return new SubCompResult();
 }
 

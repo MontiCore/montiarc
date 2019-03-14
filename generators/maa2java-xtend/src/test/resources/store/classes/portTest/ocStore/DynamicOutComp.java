@@ -1,10 +1,10 @@
-package compInstTest.scStore;
+package portTest.ocStore;
 
 
 import java.lang.*;
 import java.util.*;
-import compInstTest.scStore.SubCompInput;
-import compInstTest.scStore.SubCompResult;
+import portTest.ocStore.OutCompInput;
+import portTest.ocStore.OutCompResult;
 import de.montiarcautomaton.runtimes.componentinstantiation.IDynamicComponent;
 import de.montiarcautomaton.runtimes.componentinstantiation.InterfaceChecker;
 import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
@@ -17,10 +17,21 @@ import de.montiarcautomaton.runtimes.Log;
 import java.util.*;
 
  
- public class DynamicSubComp      
+ public class DynamicOutComp      
       implements IDynamicComponent {
      
    //ports
+   
+   protected Port<String> outPort;
+   
+   public Port<String> getPortOutPort() {
+         return this.outPort;
+   }
+   
+   public void setPortOutPort(Port<String> outPort) {
+         this.outPort = outPort;
+   }
+   
    
    // component variables
    private String instanceName = null;
@@ -33,33 +44,34 @@ import java.util.*;
    // config parameters
  
    // the components behavior implementation
-   private final IComputable<SubCompInput, SubCompResult> behaviorImpl;
+   private final IComputable<OutCompInput, OutCompResult> behaviorImpl;
    
    @Override
    public void compute() {
    // collect current input port values
-   final SubCompInput input = new SubCompInput
+   final OutCompInput input = new OutCompInput
    ();
    
    try {
    // perform calculations
-     final SubCompResult result = behaviorImpl.compute(input); 
+     final OutCompResult result = behaviorImpl.compute(input); 
      
      // set results to ports
      setResult(result);
      } catch (Exception e) {
-   Log.error("SubComp", e);
+   Log.error("OutComp", e);
      }
    }
    private void initialize() {
      // get initial values from behavior implementation
-     final SubCompResult result = behaviorImpl.getInitialValues();
+     final OutCompResult result = behaviorImpl.getInitialValues();
      
      // set results to ports
      setResult(result);
      this.update();
    }
-   private void setResult(SubCompResult result) {
+   private void setResult(OutCompResult result) {
+     this.getPortOutPort().setNextValue(result.getOutPort());
    }
    
    @Override
@@ -67,6 +79,7 @@ import java.util.*;
    
    
    // set up output ports
+   this.outPort = new Port<String>();
    
    this.initialize();
    
@@ -81,6 +94,7 @@ import java.util.*;
    public void update() {
    
      // update computed value for next computation cycle in all outgoing ports
+     this.outPort.update();
    }
    
    @Override
@@ -90,10 +104,16 @@ import java.util.*;
    
    @Override
    public <T> void setPort(String name, Port<T> port) {
+   if (name.equals("outPort")){
+   	setPortOutPort((Port<String>) port);
+   }
    	
    }
    @Override
    public <T> Port<T> getPort(String name) {
+   if (name.equals("outPort")){
+   	return (Port<T>) getPortOutPort();
+   }
    	return null;     	
    }
    
@@ -101,6 +121,7 @@ import java.util.*;
    @Override
    public List<Port> getPorts(){
    	List<Port> ports = new ArrayList<>();
+   	ports.add(getPortOutPort());
    	return ports;
    }
    
@@ -133,6 +154,7 @@ import java.util.*;
    @Override
    public List<String> getInterface() {
    	List<String> compInterface = new ArrayList<>();
+   	compInterface.add("Out-outPort-String");
    	
        return compInterface;
    }
@@ -140,9 +162,9 @@ import java.util.*;
    
    
    
-   public DynamicSubComp() {
+   public DynamicOutComp() {
      
-     behaviorImpl = new SubCompImpl(
+     behaviorImpl = new OutCompImpl(
    );
      // config parameters       
    }
