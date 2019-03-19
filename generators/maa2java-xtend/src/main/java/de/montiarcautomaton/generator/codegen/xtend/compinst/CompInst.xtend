@@ -36,6 +36,10 @@ class CompInst {
 			
 				  }
 		«ENDFOR»
+
+		«FOR subcomponent : comp.subComponents»
+      this.«subcomponent.name».checkForCmp();
+    «ENDFOR»
 		}
 		'''
 	}
