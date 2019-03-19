@@ -120,6 +120,11 @@ public class MontiArcGeneratorTool extends MontiArcTool{
           Names.getQualifiedName(packageName, simpleName)).generate();
     }
   }
+
+public void generate(File modelPath, File targetFilepath, File hwcPath, Boolean enableComponentInstantiation) {
+	this.dynamicGeneration = enableComponentInstantiation;
+	generate(modelPath, targetFilepath, hwcPath);
+}
   
   
   

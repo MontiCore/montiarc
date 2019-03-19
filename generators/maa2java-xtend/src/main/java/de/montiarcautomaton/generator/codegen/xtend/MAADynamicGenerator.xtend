@@ -47,11 +47,12 @@ class MAADynamicGenerator {
     
   }
 
-  def static public toFile(File targetPath, String name, String content) {
-    var Path path = Paths.get(targetPath.absolutePath + "\\" + name + ".java")
+  def static private toFile(File targetPath, String name, String content) {
+    var Path path = Paths.get(targetPath.absolutePath + File.separator + name + ".java")
     var FileReaderWriter writer = new FileReaderWriter()
     println("Writing to file " + path + ".");
-    writer.storeInFile(path, content)
+    writer.storeInFile(path, content);
   }
+
 
 }

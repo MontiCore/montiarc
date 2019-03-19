@@ -64,6 +64,12 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
     new MontiArcGeneratorTool().generate(modelPath, targetFilepath, hwcPath);
   }
   
+  public void generate(File modelPath, File targetFilepath, File hwcPath,
+		  Boolean enableComponentInstantiation) {
+	    new MontiArcGeneratorTool().generate(modelPath, targetFilepath,
+	    		hwcPath, enableComponentInstantiation);
+	  }
+  
   
   // #######################
   // log functions
