@@ -66,7 +66,7 @@ public class AdapterLoader extends ClassLoader {
     Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(classFiles);
 
    
-    CompilationTask task = compiler.getTask(null, fileManager, null, null, null, compilationUnits);
+    CompilationTask task = compiler.getTask(null, fileManager, null, Arrays.asList("-sourcepath", Paths.get(filePath).toAbsolutePath().toString()), null, compilationUnits);
     if (task.call()) {
     	System.out.println("Compilation done!");
 	}
