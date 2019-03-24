@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- == PROJECT COORDINATES ============================================= -->
@@ -13,7 +13,7 @@
 
 	<modules>
 		<module>languages</module>
-		<module>generators</module> 
+		<module>generators</module>
 		<module>libraries</module>
 		<module>applications</module>
 	</modules>
@@ -23,13 +23,13 @@
 	<properties>
 
 		<!-- DSLs -->
-		<javadsl.version>4.3.11.1</javadsl.version> 
+		<javadsl.version>4.3.11.1</javadsl.version>
 		<cd4a.version>1.3.13</cd4a.version>
 
 		<!-- .. SE-Libraries ..................................................... -->
-		<monticore.version>5.0.0.1</monticore.version> 
+		<monticore.version>5.0.0.1</monticore.version>
 		<mc.grammars.assembly.version>0.0.8</mc.grammars.assembly.version>
-		<se-commons.version>1.7.8</se-commons.version> 
+		<se-commons.version>1.7.8</se-commons.version>
 
 		<!-- generator -->
 		<groovy.version>2.3.0</groovy.version>
@@ -43,9 +43,9 @@
 		<javalib.version>4.3.10-SNAPSHOT</javalib.version>
 		<janino.version>3.0.6</janino.version>
 		<junit.jupiter.version>5.1.0</junit.jupiter.version>
-        <junit.vintage.version>5.1.0</junit.vintage.version>
-        <junit.platform.version>1.1.0</junit.platform.version>
-		
+		<junit.vintage.version>5.1.0</junit.vintage.version>
+		<junit.platform.version>1.1.0</junit.platform.version>
+
 		<!-- .. Plugins ....................................................... -->
 		<monticore.plugin>5.0.0.1</monticore.plugin>
 		<assembly.plugin>2.5.4</assembly.plugin>
@@ -56,10 +56,11 @@
 		<jacoco.reportPath>${project.basedir}/../target/jacoco.exec</jacoco.reportPath>
 		<surefire.plugin>2.19.1</surefire.plugin>
 		<failsafe.plugin>2.19.1</failsafe.plugin>
+		<xtend.version>2.17.0</xtend.version>
 
 		<!-- Classifiers -->
 		<grammars.classifier>grammars</grammars.classifier>
-    	<majavalib.classifier>majavalibclasses</majavalib.classifier>
+		<majavalib.classifier>majavalibclasses</majavalib.classifier>
 		<librarymodels.classifier>librarymodels</librarymodels.classifier>
 		<testmodels.classifier>testmodels</testmodels.classifier>
 
@@ -165,6 +166,13 @@
 				<groupId>org.codehaus.janino</groupId>
 				<artifactId>janino</artifactId>
 				<version>${janino.version}</version>
+			</dependency>
+
+			<!-- .. xtend ............................................... -->
+			<dependency>
+				<groupId>org.eclipse.xtend</groupId>
+				<artifactId>org.eclipse.xtend.lib</artifactId>
+				<version>${xtend.version}</version>
 			</dependency>
 
 			<!-- MontiCore Dependencies -->
@@ -329,90 +337,90 @@
 				</plugin>
 
 				<!-- Unit Tests -->
-	            <!-- default folder is src/test/java/ -->
-	            <!-- default incl. are "**/Test*.java", "**/*Test.java", "**/*TestCase.java" -->
-	            <plugin>
-	                <artifactId>maven-surefire-plugin</artifactId>
-	                <version>${surefire.plugin}</version>
-	                <configuration>
-	                    <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-	                    <skipTests>${skip.unit.tests}</skipTests>
-	                    <useSystemClassLoader>false</useSystemClassLoader>
-	                </configuration>
-	                <dependencies>
-	                    <!-- let surefire run JUnit 4 but also JUnit 5 tests -->
-	                    <dependency>
-	                        <groupId>org.junit.platform</groupId>
-	                        <artifactId>junit-platform-surefire-provider</artifactId>
-	                        <version>${junit.platform.version}</version>
-	                    </dependency>
-	                    <!-- let JUnit vintage engine run JUnit 3 or JUnit 4 tests -->
-	                    <dependency>
-	                        <groupId>org.junit.vintage</groupId>
-	                        <artifactId>junit-vintage-engine</artifactId>
-	                        <version>${junit.vintage.version}</version>
-	                    </dependency>
-	                    <!-- let JUnit 5 engine run JUnit 5 tests -->
-	                    <dependency>
-	                        <groupId>org.junit.jupiter</groupId>
-	                        <artifactId>junit-jupiter-engine</artifactId>
-	                        <version>${junit.jupiter.version}</version>
-	                    </dependency>
-	                </dependencies>
-	            </plugin>
+				<!-- default folder is src/test/java/ -->
+				<!-- default incl. are "**/Test*.java", "**/*Test.java", "**/*TestCase.java" -->
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${surefire.plugin}</version>
+					<configuration>
+						<argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+						<skipTests>${skip.unit.tests}</skipTests>
+						<useSystemClassLoader>false</useSystemClassLoader>
+					</configuration>
+					<dependencies>
+						<!-- let surefire run JUnit 4 but also JUnit 5 tests -->
+						<dependency>
+							<groupId>org.junit.platform</groupId>
+							<artifactId>junit-platform-surefire-provider</artifactId>
+							<version>${junit.platform.version}</version>
+						</dependency>
+						<!-- let JUnit vintage engine run JUnit 3 or JUnit 4 tests -->
+						<dependency>
+							<groupId>org.junit.vintage</groupId>
+							<artifactId>junit-vintage-engine</artifactId>
+							<version>${junit.vintage.version}</version>
+						</dependency>
+						<!-- let JUnit 5 engine run JUnit 5 tests -->
+						<dependency>
+							<groupId>org.junit.jupiter</groupId>
+							<artifactId>junit-jupiter-engine</artifactId>
+							<version>${junit.jupiter.version}</version>
+						</dependency>
+					</dependencies>
+				</plugin>
 
-	            <!-- Integration / Acceptance Tests -->
-	            <plugin>
-	                <groupId>org.apache.maven.plugins</groupId>
-	                <artifactId>maven-failsafe-plugin</artifactId>
-	                <version>${failsafe.plugin}</version>
-	                <configuration>
-	                    <skipTests>${skip.integration.tests}</skipTests>
-	                    <includes>
-	                        <!-- Integration Tests -->
-	                        <!-- default folder is src/integration-test/java/ -->
-	                        <!-- default incl. are "**/IT*.java", "**/*IT.java", "**/*ITCase.java" -->
-	                        <include>**/IT*.java</include>
-	                        <include>**/*IT.java</include>
-	                        <include>**/*ITCase.java</include>
-	                        <!-- Acceptance Tests -->
-	                        <!-- default folder is src/acceptance-test/java/ -->
-	                        <!-- default incl. are "**/AT*.java", "**/*AT.java", "**/*ATCase.java" -->
-	                        <include>**/AT*.java</include>
-	                        <include>**/*AT.java</include>
-	                        <include>**/*ATCase.java</include>
-	                    </includes>
-	                    <useSystemClassLoader>false</useSystemClassLoader> 
-	                </configuration>
-	                <dependencies>
-	                    <!-- let surefire run JUnit 4 but also JUnit 5 tests -->
-	                    <dependency>
-	                        <groupId>org.junit.platform</groupId>
-	                        <artifactId>junit-platform-surefire-provider</artifactId>
-	                        <version>${junit.platform.version}</version>
-	                    </dependency>
-	                    <!-- let JUnit vintage engine run JUnit 3 or JUnit 4 tests -->
-	                    <dependency>
-	                        <groupId>org.junit.vintage</groupId>
-	                        <artifactId>junit-vintage-engine</artifactId>
-	                        <version>${junit.vintage.version}</version>
-	                    </dependency>
-	                    <!-- let JUnit 5 engine run JUnit 5 tests -->
-	                    <dependency>
-	                        <groupId>org.junit.jupiter</groupId>
-	                        <artifactId>junit-jupiter-engine</artifactId>
-	                        <version>${junit.jupiter.version}</version>
-	                    </dependency>
-	                </dependencies>
-	                <executions>
-	                    <execution>
-	                        <goals>
-	                            <goal>integration-test</goal>
-	                            <goal>verify</goal>
-	                        </goals>
-	                    </execution>
-	                </executions>
-	            </plugin>
+				<!-- Integration / Acceptance Tests -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>${failsafe.plugin}</version>
+					<configuration>
+						<skipTests>${skip.integration.tests}</skipTests>
+						<includes>
+							<!-- Integration Tests -->
+							<!-- default folder is src/integration-test/java/ -->
+							<!-- default incl. are "**/IT*.java", "**/*IT.java", "**/*ITCase.java" -->
+							<include>**/IT*.java</include>
+							<include>**/*IT.java</include>
+							<include>**/*ITCase.java</include>
+							<!-- Acceptance Tests -->
+							<!-- default folder is src/acceptance-test/java/ -->
+							<!-- default incl. are "**/AT*.java", "**/*AT.java", "**/*ATCase.java" -->
+							<include>**/AT*.java</include>
+							<include>**/*AT.java</include>
+							<include>**/*ATCase.java</include>
+						</includes>
+						<useSystemClassLoader>false</useSystemClassLoader>
+					</configuration>
+					<dependencies>
+						<!-- let surefire run JUnit 4 but also JUnit 5 tests -->
+						<dependency>
+							<groupId>org.junit.platform</groupId>
+							<artifactId>junit-platform-surefire-provider</artifactId>
+							<version>${junit.platform.version}</version>
+						</dependency>
+						<!-- let JUnit vintage engine run JUnit 3 or JUnit 4 tests -->
+						<dependency>
+							<groupId>org.junit.vintage</groupId>
+							<artifactId>junit-vintage-engine</artifactId>
+							<version>${junit.vintage.version}</version>
+						</dependency>
+						<!-- let JUnit 5 engine run JUnit 5 tests -->
+						<dependency>
+							<groupId>org.junit.jupiter</groupId>
+							<artifactId>junit-jupiter-engine</artifactId>
+							<version>${junit.jupiter.version}</version>
+						</dependency>
+					</dependencies>
+					<executions>
+						<execution>
+							<goals>
+								<goal>integration-test</goal>
+								<goal>verify</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 
 			</plugins>
 		</pluginManagement>
@@ -420,26 +428,26 @@
 		<plugins>
 			<!-- Coverage Report -->
 			<plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.plugin}</version>
-                <executions>
-                    <execution>
-                        <id>pre-unit-test</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.plugin}</version>
+				<executions>
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 
 	<!-- == PROFILES ======================================================== -->
