@@ -145,7 +145,6 @@ public class WebShopLoader implements ILoader {
 		List<String> subCompinterface = interfaces.get(subCompName);
 		String subCompType = subcompTypes.get(subCompName);
 		Path path = Paths.get(this.storeDir + store.replaceAll("\\.", "/"));
-		System.out.println("bla");
 		//TODO: Use timestamp, subCompInterface, subCompType for REST call, store resulting
 		// file in path and update timestamp afterwards
 	}
