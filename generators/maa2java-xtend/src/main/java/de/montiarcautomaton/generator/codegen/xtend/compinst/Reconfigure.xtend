@@ -42,7 +42,11 @@ class Reconfigure {
     '''
     @Override
     public List<Port> reconfigure() {
+
     	List<Port> outgoingPortChanges = new ArrayList<Port>();
+    				«IF comp.superComponent.present»
+    	outgoingPortChanges = super.reconfigure();
+    				«ENDIF»
     	
     	«FOR subcomponent : comp.subComponents»
         if (new«subcomponent.name» != null){

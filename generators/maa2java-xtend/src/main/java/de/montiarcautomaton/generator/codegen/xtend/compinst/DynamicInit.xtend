@@ -57,35 +57,38 @@ class DynamicInit {
     '''
 			@Override
 			public void init() {
-			List<String> subcomps = new ArrayList<>();
-			Map<String, List<String>> interfaces = new HashMap<>();
-			Map<String, String> subcompTypes = new HashMap<>();
+				    «IF comp.superComponent.present»
+				super.init();
+				    «ENDIF»
+				List<String> subcomps = new ArrayList<>();
+				Map<String, List<String>> interfaces = new HashMap<>();
+				Map<String, String> subcompTypes = new HashMap<>();
 			«FOR subcomponent : comp.subComponents»
-			subcomps.add(instanceName + ".«subcomponent.name»");
-			interfaces.put("«subcomponent.name»",«subcomponent.name».getInterface());
-			subcompTypes.put("«subcomponent.name»","«subcomponent.getComponentType().getReferencedComponent().get().getName()»");
+				subcomps.add(instanceName + ".«subcomponent.name»");
+				interfaces.put("«subcomponent.name»",«subcomponent.name».getInterface());
+				subcompTypes.put("«subcomponent.name»","«subcomponent.getComponentType().getReferencedComponent().get().getName()»");
 			«ENDFOR»
 			
-			//Set up and start new thread for the Filesystemloader	
+				//Set up and start new thread for the Filesystemloader	
 			
-			this.loader = loman.getNewLoader();
-			loader.init(instanceName, storeDir, targetDir, 
+				this.loader = loman.getNewLoader();
+				loader.init(instanceName, storeDir, targetDir, 
 							subcomps, interfaces, subcompTypes);
 			
-			//new FileSystemLoader(instanceName, storeDir, targetDir, 
-			//	subcomps, interfaces, subcompTypes);
+				//new FileSystemLoader(instanceName, storeDir, targetDir, 
+				//	subcomps, interfaces, subcompTypes);
 			«IF comp.superComponent.present»
 				super.init();
 			«ENDIF»
-			// set up unused input ports
+				// set up unused input ports
 			«FOR portIn : comp.incomingPorts»
 				if (this.«portIn.name» == null) {
 				  this.«portIn.name» = Port.EMPTY;
 				}
 			«ENDFOR»
 			
-			// connect outputs of children with inputs of children, by giving 
-			// the inputs a reference to the sending ports
+				// connect outputs of children with inputs of children, by giving 
+				// the inputs a reference to the sending ports
 			«FOR ASTConnector connector : (comp.getAstNode().get() as ASTComponent)
 			          .getConnectors()»
 			          «FOR ASTQualifiedName target : connector.targetsList»
@@ -97,7 +100,7 @@ class DynamicInit {
 			
 
 			
-			// init all subcomponents
+				// init all subcomponents
 			
 			«FOR subcomponent : comp.subComponents»
 				this.«subcomponent.name».init();

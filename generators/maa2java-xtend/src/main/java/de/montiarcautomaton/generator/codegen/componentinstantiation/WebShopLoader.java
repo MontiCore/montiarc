@@ -140,12 +140,12 @@ public class WebShopLoader implements ILoader {
 	}
 	
 	private void checkWebStore(String store) {
-		String subCompName = store.substring(0, store.length()-6);
+		String subCompName = getSubCompInstanceName(store);
 		String timestamp = timestamps.get(subCompName).toString();
 		List<String> subCompinterface = interfaces.get(subCompName);
 		String subCompType = subcompTypes.get(subCompName);
 		Path path = Paths.get(this.storeDir + store.replaceAll("\\.", "/"));
-		
+		System.out.println("bla");
 		//TODO: Use timestamp, subCompInterface, subCompType for REST call, store resulting
 		// file in path and update timestamp afterwards
 	}
@@ -167,17 +167,17 @@ public class WebShopLoader implements ILoader {
 
 		}
 
-		filePath = storeDir
-				+ ComponentStore.replaceAll("\\.", "/");
-		targetPath = targetDir
-				+ ComponentStore.replaceAll("\\.", "/");
 		for (String sc : subcomps) {
-			timestamps.put(sc, Instant.now());
+			timestamps.put(sc.replaceAll(".*\\.", ""), Instant.now());
 		}
 		this.interfaces = interfaces;
 		this.subcompTypes = subcompTypes;
 		start();
 		
+	}
+	
+	String getSubCompInstanceName(String componentStore) {
+		return componentStore.substring(0, componentStore.length()-6).replaceAll(".*\\.", "");
 	}
 
 

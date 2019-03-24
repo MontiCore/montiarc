@@ -57,6 +57,9 @@ class CompInst {
 		'''
 		@Override
 		  public void propagatePortChanges(List<Port> changedPorts) {
+		  	«IF comp.superComponent.present»
+		  		super.propagatePortChanges(changedPorts);
+		  				«ENDIF»
 		  	«FOR ASTConnector connector : (comp.getAstNode().get() as ASTComponent)
 		  				          .getConnectors()»
 		  	«FOR ASTQualifiedName target : connector.targetsList»
