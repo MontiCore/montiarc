@@ -35,7 +35,7 @@ public class MontiArcGeneratorTool extends MontiArcTool{
   
   public static final String DEFAULT_TYPES_FOLDER = "target/javaLib/";
   public static final String LIBRARY_MODELS_FOLDER = "target/librarymodels/";
-  private Boolean dynamicGeneration = true;
+  private Boolean dynamicGeneration = false;
   private Boolean checkCocos = false;
   
   
