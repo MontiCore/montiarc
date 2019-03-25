@@ -114,17 +114,25 @@ class Utils {
    */
   def static String printPackage(ComponentSymbol comp) {
   	return '''
+  	«IF comp.isInnerComponent»
+  	package «printPackageWithoutKeyWordAndSemicolon(comp.definingComponent.get) + "." + comp.definingComponent.get.name + "gen"»;
+	«ELSE»
 
   	package «comp.packageName»;
+	«ENDIF»
   	'''
   }
-  
+
   /**
    * Helper function used to determine package names.
    */
   def static String printPackageWithoutKeyWordAndSemicolon(ComponentSymbol comp){
   	return '''
+  	«IF comp.isInnerComponent»
+  	«printPackageWithoutKeyWordAndSemicolon(comp.definingComponent.get) + "." + comp.definingComponent.get.name + "gen"»
+	«ELSE»
   	«comp.packageName»
+	«ENDIF»
   	'''
   }
   
