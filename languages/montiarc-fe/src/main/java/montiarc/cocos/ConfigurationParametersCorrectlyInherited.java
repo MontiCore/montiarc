@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.symboltable.Symbol;
+import de.monticore.symboltable.resolving.ResolvedSeveralEntriesException;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
@@ -46,9 +47,14 @@ public class ConfigurationParametersCorrectlyInherited implements MontiArcASTCom
     if (componentSymbolOpt.isPresent()
         && componentSymbolOpt.get() instanceof ComponentSymbol) {
       ComponentSymbol componentSymbol = (ComponentSymbol) componentSymbolOpt.get();
-      
-      final List<JFieldSymbol> configParameters = componentSymbol.getConfigParameters();
-      
+      final List<JFieldSymbol> configParameters;
+      // CoCo IdentifiersAreUnique has to be checked before
+      try {
+        configParameters = componentSymbol.getConfigParameters();
+      }catch (ResolvedSeveralEntriesException e){
+        Log.debug("ConfigurationParametersCorrectlyInherited could not be checked because there are non-unique Identifiers (see montiarc.cocos.IdentifiersAreUnique)", "ConfigurationParametersCorrectlyInherited");
+        return;
+      }
       // Check whether the component has a super component
       // Otherwise, no check is required.
       final Optional<ComponentSymbolReference> superComponentOpt = componentSymbol

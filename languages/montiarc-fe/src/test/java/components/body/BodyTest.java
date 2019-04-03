@@ -59,7 +59,7 @@ public class BodyTest extends AbstractCoCoTest {
    */
   public void testAmbiguousPortAndVariableNames() {
     final String qualifiedModelName = PACKAGE + "." + "AmbiguousPortAndVariableNames";
-    final MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    final MontiArcCoCoChecker checker = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
     final ExpectedErrorInfo errors
         = new ExpectedErrorInfo(14,
         "xMA035", "xMA053");
