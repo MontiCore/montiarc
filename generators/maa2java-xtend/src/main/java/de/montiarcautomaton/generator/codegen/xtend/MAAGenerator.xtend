@@ -42,13 +42,10 @@ class MAAGenerator {
     toFile(targetPath, comp.name + "Result", Result.generateResult(comp));
     toFile(targetPath, comp.name, new ComponentGenerator().generate(comp));
 
-    var boolean existsHWCClass = TransformationHelper.existsHandwrittenClass(
-    	IterablePath.from(hwc, ".java"),
-      comp.packageName + "." + comp.name + "Impl");
-      var boolean existsHWC = ComponentHelper.existsHWCClass(hwc, comp.packageName + "." + comp.name + "Impl");
+    var boolean existsHWC = ComponentHelper.existsHWCClass(hwc, comp.packageName + "." + comp.name + "Impl");
       
 
-    if (!existsHWCClass && comp.isAtomic) {
+    if (!existsHWC && comp.isAtomic) {
       toFile(targetPath, comp.name + "Impl", generateBehaviorImplementation(comp));
     }
     
