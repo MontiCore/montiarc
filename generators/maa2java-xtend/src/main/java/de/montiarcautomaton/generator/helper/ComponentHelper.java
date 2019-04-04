@@ -546,7 +546,7 @@ public class ComponentHelper {
 	  File cmpPath = Paths.get(hwcPath.toString() 
 			  + File.separator + cmpLocation.replaceAll("\\.",
 					  Matcher.quoteReplacement(File.separator)) + ".java").toFile();
-	  return cmpPath.exists();
+	  return cmpPath.isFile();
   }
   
 }
