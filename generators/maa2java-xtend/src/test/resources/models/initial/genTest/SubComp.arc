@@ -1,0 +1,5 @@
+package genTest;
+
+component SubComp{
+
+}

@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import de.montiarcautomaton.generator.codegen.xtend.MAADynamicGenerator;
 import de.montiarcautomaton.generator.codegen.xtend.MAAGenerator;
 import de.monticore.cd2pojo.Modelfinder;
 import de.monticore.cd2pojo.POJOGenerator;
@@ -34,6 +35,8 @@ public class MontiArcGeneratorTool extends MontiArcTool{
   
   public static final String DEFAULT_TYPES_FOLDER = "target/javaLib/";
   public static final String LIBRARY_MODELS_FOLDER = "target/librarymodels/";
+  private Boolean dynamicGeneration = false;
+  private Boolean checkCocos = false;
   
   
   /**
@@ -61,16 +64,26 @@ public class MontiArcGeneratorTool extends MontiArcTool{
 
       // 3. check cocos
       Log.info("Check model: " + qualifiedModelName, "MontiArcGeneratorTool");
-      checkCoCos((ASTMontiArcNode) comp.getAstNode().get());
+      if (checkCocos) {
+          checkCoCos((ASTMontiArcNode) comp.getAstNode().get());
+
+	}
       
       // 4. generate
       Log.info("Generate model: " + qualifiedModelName, "MontiArcGeneratorTool");
       MAAGenerator.generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(), hwcPath, comp);
+      if (dynamicGeneration) {
+          MAADynamicGenerator.generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(), hwcPath, comp);
+      }
     }
     
     // gen cd
     generatePOJOs(modelPath, target);
     
+  }
+  
+  public void enableDynamicGeneration(Boolean val) {
+	  dynamicGeneration = val;
   }
   
   /**
@@ -107,6 +120,11 @@ public class MontiArcGeneratorTool extends MontiArcTool{
           Names.getQualifiedName(packageName, simpleName)).generate();
     }
   }
+
+public void generate(File modelPath, File targetFilepath, File hwcPath, Boolean enableComponentInstantiation) {
+	this.dynamicGeneration = enableComponentInstantiation;
+	generate(modelPath, targetFilepath, hwcPath);
+}
   
   
   

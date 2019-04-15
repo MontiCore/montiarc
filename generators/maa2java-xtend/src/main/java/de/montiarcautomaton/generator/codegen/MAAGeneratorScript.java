@@ -47,6 +47,7 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
         config.getOut());
     builder.addVariable(MAAConfiguration.Options.HANDWRITTENCODEPATH.toString(),
         config.getHWCPath());
+    builder.addVariable(MAAConfiguration.Options.COMPONENTINST.toString(), config.getCI());
     
     GroovyInterpreter g = builder.build();
     g.evaluate(script);
@@ -63,6 +64,12 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
   public void generate(File modelPath, File targetFilepath, File hwcPath) {
     new MontiArcGeneratorTool().generate(modelPath, targetFilepath, hwcPath);
   }
+  
+  public void generate(File modelPath, File targetFilepath, File hwcPath,
+		  Boolean enableComponentInstantiation) {
+	    new MontiArcGeneratorTool().generate(modelPath, targetFilepath,
+	    		hwcPath, enableComponentInstantiation);
+	  }
   
   
   // #######################

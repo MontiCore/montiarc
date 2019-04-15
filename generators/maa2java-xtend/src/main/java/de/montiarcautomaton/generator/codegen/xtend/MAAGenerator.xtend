@@ -23,6 +23,7 @@ import montiarc._ast.ASTBehaviorElement
 import montiarc._ast.ASTComponent
 import montiarc._ast.ASTJavaPBehavior
 import montiarc._symboltable.ComponentSymbol
+import de.montiarcautomaton.generator.helper.ComponentHelper
 
 /**
  * Main entry point for generator. From this all target artifacts are generated for a component. 
@@ -41,11 +42,10 @@ class MAAGenerator {
     toFile(targetPath, comp.name + "Result", Result.generateResult(comp));
     toFile(targetPath, comp.name, new ComponentGenerator().generate(comp));
 
-    var boolean existsHWCClass = TransformationHelper.existsHandwrittenClass(
-    	IterablePath.from(hwc, ".java"),
-      comp.packageName + "." + comp.name + "Impl");
+    var boolean existsHWC = ComponentHelper.existsHWCClass(hwc, comp.packageName + "." + comp.name + "Impl");
+      
 
-    if (!existsHWCClass && comp.isAtomic) {
+    if (!existsHWC && comp.isAtomic) {
       toFile(targetPath, comp.name + "Impl", generateBehaviorImplementation(comp));
     }
     
@@ -85,11 +85,11 @@ class MAAGenerator {
     writer.storeInFile(path, content)
   }
 
-  def private static dispatch generateBehavior(ASTJavaPBehavior ajava, ComponentSymbol comp) {
+  def public static dispatch generateBehavior(ASTJavaPBehavior ajava, ComponentSymbol comp) {
     return JavaPGenerator.newInstance.generate(comp)
   }
 
-  def private static dispatch generateBehavior(ASTAutomatonBehavior automaton, ComponentSymbol comp) {
+  def public static dispatch generateBehavior(ASTAutomatonBehavior automaton, ComponentSymbol comp) {
     return new AutomatonGenerator(comp).generate(comp)
   }
 }
