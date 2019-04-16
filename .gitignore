@@ -10,3 +10,8 @@ target
 
 *.iml
 .DS_Store
+generated-test-sources
+
+*.xtendbin
+
+generators/maa2java-xtend/src/main/xtend-gen/

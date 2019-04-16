@@ -243,14 +243,14 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       classVisitor.addMethod(methodBuilder.build());
       return;
     }
-    for (ConnectorSymbol connector : this.symbol.getConnectors()) {
-      if (helper.isIncomingPort(this.symbol, connector, false)) {
+    for (ASTConnector  connector : ((ASTComponent) this.symbol.getAstNode().get()).getConnectors()) {
+      if (helper.isIncomingPort(this.symbol, connector.getSource().toString(),connector.getTargets(0).toString(), false)) {
         methodBuilder.addBodyElement(
             String.format("%s.setPort%s(%s.getPort%s());",
-                helper.getConnectorComponentName(connector, false),
-                capitalizeFirst(this.helper.getConnectorPortName(connector, false)),
-                helper.getConnectorComponentName(connector, true),
-                capitalizeFirst(this.helper.getConnectorPortName(connector, true))));
+                helper.getConnectorComponentName(connector.getSource().toString(),connector.getTargets(0).toString(), false),
+                capitalizeFirst(this.helper.getConnectorPortName(connector.getSource().toString(),connector.getTargets(0).toString(), false)),
+                helper.getConnectorComponentName(connector.getSource().toString(),connector.getTargets(0).toString(), true),
+                capitalizeFirst(this.helper.getConnectorPortName(connector.getSource().toString(),connector.getTargets(0).toString(), true))));
       }
     }
 
@@ -338,14 +338,14 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     if (this.symbol.isAtomic()) {
       methodBuilder.addBodyElement("this.initialize();");
     } else {
-      for (ConnectorSymbol connector : this.symbol.getConnectors()) {
-        if (!helper.isIncomingPort(this.symbol, connector, false)) {
+      for (ASTConnector connector : ((ASTComponent) this.symbol.getAstNode().get()).getConnectors()) {
+        if (!helper.isIncomingPort(this.symbol, connector.getSource().toString(),connector.getTargets(0).toString(), false)) {
           methodBuilder.addBodyElement(
               String.format("%s.setPort%s(%s.getPort%s());",
-                  helper.getConnectorComponentName(connector, false),
-                  capitalizeFirst(this.helper.getConnectorPortName(connector, false)),
-                  helper.getConnectorComponentName(connector, true),
-                  capitalizeFirst(this.helper.getConnectorPortName(connector, true))));
+                  helper.getConnectorComponentName(connector.getSource().toString(),connector.getTargets(0).toString(), false),
+                  capitalizeFirst(this.helper.getConnectorPortName(connector.getSource().toString(),connector.getTargets(0).toString(), false)),
+                  helper.getConnectorComponentName(connector.getSource().toString(),connector.getTargets(0).toString(), true),
+                  capitalizeFirst(this.helper.getConnectorPortName(connector.getSource().toString(),connector.getTargets(0).toString(), true))));
         }
       }
     }
@@ -651,6 +651,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         .append(implVarName).append(".").append("getInitialValues()").append(";");
     methodBuilder.addBodyElement(resultString.toString());
     methodBuilder.addBodyElement("setResult(result);");
+    methodBuilder.addBodyElement("this.update();");
     classVisitor.addMethod(methodBuilder.build());
   }
 

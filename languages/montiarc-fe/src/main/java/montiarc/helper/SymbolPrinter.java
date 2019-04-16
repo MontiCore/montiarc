@@ -10,7 +10,6 @@ import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.symboltable.types.references.TypeReference;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
-import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 
 import java.util.Collection;
@@ -215,28 +214,6 @@ public class SymbolPrinter {
   }
 
   /**
-   * Prints a connector using the given IndentPrinter.
-   * @param connectorSymbol The connector to print
-   * @param ip The {@link IndentPrinter} used to print the connector
-   */
-  public static void printConnector(ConnectorSymbol connectorSymbol, IndentPrinter ip) {
-    ip.print(connectorSymbol.getSource());
-    ip.print(" -> ");
-    ip.print(connectorSymbol.getTarget());
-  }
-
-  /**
-   * Prints the given connector as a String.
-   * @param con The connector to print
-   * @return The printed connector
-   */
-  public static String printConnector(ConnectorSymbol con) {
-    IndentPrinter ip = new IndentPrinter();
-    printConnector(con, ip);
-    return ip.getContent();
-  }
-
-  /**
    * Prints a list of ASTExpressions to String. The elements are joined with ","
    * and the list of elements is surrounded by opening and closing brackets.
    * Results look like {@code (param1,param2,param3,...)}
@@ -367,12 +344,6 @@ public class SymbolPrinter {
     });
     
     cmp.getInnerComponents().stream().forEachOrdered(a -> printComponent(a, ip, true));
-    
-    cmp.getConnectors().stream().forEachOrdered(a -> {
-      ip.print("connect ");
-      printConnector(a, ip);
-      ip.println(";");
-    });
     
     ip.unindent();
     ip.println("}");

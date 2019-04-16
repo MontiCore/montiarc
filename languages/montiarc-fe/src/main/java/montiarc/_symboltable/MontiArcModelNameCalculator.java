@@ -28,22 +28,18 @@ public class MontiArcModelNameCalculator
   
   @Override
   public Set<String> calculateModelNames(final String name, final SymbolKind kind) {
-    final Set<String> calculatedModelNames = new LinkedHashSet<>();
-    
+
     if (ComponentSymbol.KIND.isKindOf(kind)) {
-      calculatedModelNames.addAll(calculateModelNameForComponent(name));
+      return calculateModelNameForComponent(name);
     }
     else if (PortSymbol.KIND.isKindOf(kind) || VariableSymbol.KIND.isKindOf(kind)) {
-      calculatedModelNames.addAll(calculateModelNameForPort(name));
-    }
-    else if (ConnectorSymbol.KIND.isKindOf(kind)) {
-      calculatedModelNames.addAll(calculateModelNameForConnector(name));
+      return calculateModelNameForPort(name);
     }
     else if (ComponentInstanceSymbol.KIND.isKindOf(kind)) {
-      calculatedModelNames.addAll(calculateModelNameForComponentInstance(name));
+      return calculateModelNameForComponentInstance(name);
     }
     
-    return calculatedModelNames;
+    return new LinkedHashSet<>();
   }
   
   protected Set<String> calculateModelNameForComponent(String name) {

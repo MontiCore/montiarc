@@ -6,7 +6,6 @@ import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
 import de.monticore.symboltable.types.references.JTypeReference;
 import de.monticore.types.types._ast.ASTQualifiedName;
-import javafx.util.Pair;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ComponentSymbolReference;
@@ -149,7 +148,7 @@ public class InheritanceTypeHelper {
    * 1. A list of the type parameters of the defining component and
    * 2. The real type arguments for the defining component.
    */
-  public static Pair<List<? extends JTypeSymbol>, List<ActualTypeArgument>>
+  public static AbstractMap.Entry<List<? extends JTypeSymbol>, List<ActualTypeArgument>>
   getTypeParamsAndRealTypeArgsForDefiningComponent(
       ComponentSymbol startingComponent,
       PortSymbol portSymbol,
@@ -210,7 +209,7 @@ public class InheritanceTypeHelper {
 
     if(!currentComponent.getPort(portSymbol.getName(), false).isPresent()) {
       // TODO ERROR: The port is not defined in the current component and there is no super component it could be inherited from
-      return new Pair<>(new ArrayList<>(), new ArrayList<>());
+      return new AbstractMap.SimpleEntry<>(new ArrayList<>(), new ArrayList<>());
     }
 
     // Determine the type parameters of the defining component
@@ -219,7 +218,7 @@ public class InheritanceTypeHelper {
     for (JTypeSymbol resultTypeParameter : resultTypeParameters) {
       resultTypeArguments.add(realTypeArguments.get(resultTypeParameter.getName()));
     }
-    return new Pair<>(resultTypeParameters, resultTypeArguments);
+    return new AbstractMap.SimpleEntry<>(resultTypeParameters, resultTypeArguments);
   }
 
   /**

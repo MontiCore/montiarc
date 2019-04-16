@@ -7,9 +7,13 @@ package components.body.subcomponents;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import de.monticore.types.types._ast.ASTQualifiedName;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTConnector;
 import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -31,7 +35,6 @@ import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ComponentSymbolReference;
-import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc.helper.SymbolPrinter;
 
@@ -47,7 +50,7 @@ public class SubComponentTest extends AbstractCoCoTest {
   
   private static final String PACKAGE = "components.body.subcomponents";
   
-  public class Student extends Person{
+  public class Student extends Person {
     
   }
   
@@ -59,7 +62,7 @@ public class SubComponentTest extends AbstractCoCoTest {
   public static void setUp() {
     Log.enableFailQuick(false);
   }
-
+  
   @Test
   public void testSubcomponentWithJavaCfgArgs() {
     checkValid(PACKAGE + "." + "SubcomponentsWithJavaCfgArg");
@@ -103,7 +106,7 @@ public class SubComponentTest extends AbstractCoCoTest {
     final MontiArcCoCoChecker cocos
         = new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle());
     checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
-
+    
     errors = new ExpectedErrorInfo(1, "xMA086");
     qualifiedModelName = PACKAGE + "." + "SubcomponentReferenceCycleB";
     checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
@@ -265,6 +268,8 @@ public class SubComponentTest extends AbstractCoCoTest {
   public void testComponentWithNamedInnerComponent() {
     String unqualifiedComponentName = "ComponentWithNamedInnerComponent";
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, unqualifiedComponentName);
+    assertTrue(comp.getAstNode().isPresent() && comp.getAstNode().get() instanceof ASTComponent);
+    ASTComponent astComp = (ASTComponent) comp.getAstNode().get();
     
     assertFalse(comp.isInnerComponent());
     assertEquals(0, comp.getConfigParameters().size());
@@ -300,22 +305,26 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertEquals(1, inner.getAllOutgoingPorts().size());
     assertEquals(1, compRefToInner.getAllOutgoingPorts().size());
     
-    assertEquals(2, comp.getConnectors().size());
-    ConnectorSymbol conn = comp.getConnector("instance.sIn").orElse(null);
+    assertEquals(2, astComp.getConnectors().size());
+    ASTConnector conn = astComp.getConnectors().stream().filter(
+        astConnector -> astConnector.getSource().getPart(astConnector.getSource().sizeParts() - 1)
+            .equals("sIn")).findFirst().orElse(null);
     assertNotNull(conn);
-    assertEquals("sIn", conn.getSource());
-    assertEquals("instance.sIn", conn.getTarget());
+    assertEquals("sIn", conn.getSource().toString());
+    assertEquals("instance.sIn", conn.getTargets(0).toString());
     
-    conn = comp.getConnector("sOut").orElse(null);
+    conn = astComp.getConnectors().stream().filter(
+        astConnector -> astConnector.getSource().getPart(astConnector.getSource().sizeParts() - 1)
+            .equals("sOut")).findFirst().orElse(null);
     assertNotNull(conn);
-    assertEquals("instance.sOut", conn.getSource());
-    assertEquals("sOut", conn.getTarget());
-    assertEquals(
-        "Connectors should not be added to both, the connector-defining-component AND the target-component, but only to the source",
-        0, inner.getConnectors().size());
+    assertEquals("instance.sOut", conn.getSource().toString());
+    assertTrue( conn.getTargetsList().stream().map(ASTQualifiedName::toString).anyMatch(target -> target.equals("sOut")));
+    assertTrue(inner.getAstNode().isPresent() && inner.getAstNode().get() instanceof  ASTComponent);
+    ASTComponent astInner = (ASTComponent) inner.getAstNode().get();
+    
     
     Scope symTab = this.loadDefaultSymbolTable();
-    ComponentSymbol innerComp = symTab.<ComponentSymbol> resolve(
+    ComponentSymbol innerComp = symTab.<ComponentSymbol>resolve(
         PACKAGE + "." + "ComponentWithNamedInnerComponent.NamedInnerComponent",
         ComponentSymbol.KIND)
         .orElse(null);
@@ -411,8 +420,9 @@ public class SubComponentTest extends AbstractCoCoTest {
   @Test
   public void testImportedReferences() {
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComplexComponent");
+    checkValid(PACKAGE, "ComplexComponent");
     
-    assertEquals("6 instances (3 named and 3 auto-instances) should be present!", 6,
+    assertEquals("6 instances (3 named and 3 auto-instances) should be present!", 7,
         comp.getSubComponents().size());
     
     ComponentInstanceSymbol ref = comp.getSubComponent("src").orElse(null);
@@ -454,8 +464,11 @@ public class SubComponentTest extends AbstractCoCoTest {
   
   @Test
   public void testInnerComponents() {
-    checkValid(PACKAGE+".ComponentWithInnerComponent");
+    checkValid(PACKAGE + ".ComponentWithInnerComponent");
     ComponentSymbol comp = this.loadComponentSymbol(PACKAGE, "ComponentWithInnerComponent");
+    assertTrue(comp.getAstNode().isPresent());
+    assertTrue(comp.getAstNode().get() instanceof ASTComponent);
+    ASTComponent astComp = (ASTComponent) comp.getAstNode().get();
     assertEquals("1 auto-instance and 1 named subcomponent", 2, comp
         .getSubComponents().size());
     assertEquals(1, comp.getInnerComponents().size());
@@ -470,14 +483,15 @@ public class SubComponentTest extends AbstractCoCoTest {
     assertEquals(PACKAGE + "." + "ComponentWithInnerComponent.strIn", inPort.getFullName());
     
     // connectors
-    assertEquals(2, comp.getConnectors().size());
-    ConnectorSymbol connector = comp.getConnector("innerComponent.strIn").orElse(null);
-    assertEquals("innerComponent.strIn", connector.getName());
-    assertEquals(PACKAGE + "." + "ComponentWithInnerComponent.innerComponent.strIn",
-        connector.getFullName());
+    assertEquals(2, astComp.getConnectors().size());
+    ASTConnector connector = astComp.getConnector("innerComponent.strIn").orElse(null);
+    assertEquals("innerComponent.strIn", connector.getTargets(0).toString());
     
     // inner
     ComponentSymbol inner = comp.getInnerComponent("InnerComponent").orElse(null);
+    assertTrue(comp.getAstNode().isPresent());
+    assertTrue(comp.getAstNode().get() instanceof ASTComponent);
+    ASTComponent astInner = (ASTComponent) comp.getAstNode().get();
     assertNotNull(inner);
     assertEquals("InnerComponent", inner.getName());
     assertEquals(PACKAGE + "." + "ComponentWithInnerComponent.InnerComponent", inner.getFullName());
@@ -494,7 +508,7 @@ public class SubComponentTest extends AbstractCoCoTest {
         inPort.getFullName());
     
     // connectors
-    assertEquals(2, inner.getConnectors().size());
+    assertEquals(2, astInner.getConnectors().size());
     
     // inner inner
     ComponentSymbol innerInner = inner.getInnerComponent("InnerInnerComponent").orElse(null);
@@ -516,7 +530,7 @@ public class SubComponentTest extends AbstractCoCoTest {
         PACKAGE + "." + "ComponentWithInnerComponent.InnerComponent.InnerInnerComponent.strIn",
         inPort.getFullName());
     // connectors
-    assertEquals(2, inner.getConnectors().size());
+    assertEquals(2, astInner.getConnectors().size());
     
   }
   
@@ -585,15 +599,16 @@ public class SubComponentTest extends AbstractCoCoTest {
   public void testUsingSCWithParams() {
     Scope symTab = this.loadDefaultSymbolTable();
     final String modelNameFq = PACKAGE + "." + "UsingSCWithParams";
-    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
+    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         modelNameFq, ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
-
-    final MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
+    
+    final MontiArcCoCoChecker cocos = new MontiArcCoCoChecker()
+        .addCoCo(new SubComponentsConnected());
     final ASTMontiArcNode node = loadComponentAST(modelNameFq);
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA059");
     checkInvalid(cocos, node, errors);
-
+    
     ComponentInstanceSymbol delay = (ComponentInstanceSymbol) comp.getSpannedScope()
         .resolve("deleteTempFile", ComponentInstanceSymbol.KIND).orElse(null);
     assertNotNull(delay);
@@ -603,7 +618,6 @@ public class SubComponentTest extends AbstractCoCoTest {
     JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(printer);
     delay.getConfigArguments().get(0).accept(prettyPrinter);
     
-    
     assertEquals(1, delay.getConfigArguments().size());
     assertEquals("1", printer.getContent());
   }
@@ -611,7 +625,7 @@ public class SubComponentTest extends AbstractCoCoTest {
   @Test
   public void testUsingComplexParams() {
     Scope symTab = this.loadDefaultSymbolTable();
-    ComponentSymbol comp = symTab.<ComponentSymbol> resolve(
+    ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
         PACKAGE + "." + "UsingComplexParams", ComponentSymbol.KIND).orElse(null);
     assertNotNull(comp);
     
@@ -778,7 +792,7 @@ public class SubComponentTest extends AbstractCoCoTest {
         .addCoCo(new SubcomponentParametersCorrectlyAssigned());
     checkInvalid(checker, astNode, expectedErrorInfo);
   }
-
+  
   @Test
   public void testWrongSubcomponentAndGenericParameters() {
     final ASTMontiArcNode astNode = loadComponentAST(
@@ -790,38 +804,39 @@ public class SubComponentTest extends AbstractCoCoTest {
         .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned());
     checkInvalid(checker, astNode, expectedErrorInfo);
   }
-
+  
   @Test
   public void testWrongSubcomponentGenericsAssignment() {
     final ASTMontiArcNode node
         = loadComponentAST(PACKAGE + "." +
-                               "WrongSubcomponentGenericsAssignment");
-    final MontiArcCoCoChecker checker = new MontiArcCoCoChecker().addCoCo(new SubcomponentGenericTypesCorrectlyAssigned());
+        "WrongSubcomponentGenericsAssignment");
+    final MontiArcCoCoChecker checker = new MontiArcCoCoChecker()
+        .addCoCo(new SubcomponentGenericTypesCorrectlyAssigned());
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(3, "xMA085", "xMA096");
-
+    
     checkInvalid(checker, node, errors);
   }
-
+  
   @Test
   public void testReferenceCycle() {
     final String qualifiedModelName = PACKAGE + "." + "ReferenceCycle";
     final MontiArcCoCoChecker checker
         = new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle());
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(5, "xMA086");
-
+    
     checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
-
+  
   @Test
   public void testReferenceCycle2() {
     final String qualifiedModelName = PACKAGE + "." + "ReferenceCycle2";
     final MontiArcCoCoChecker checker
         = new MontiArcCoCoChecker().addCoCo(new SubcomponentReferenceCycle());
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(1, "xMA086");
-
+    
     checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
-
+  
   @Test
   // TODO Redundanzen zwischen CoCos prüfen
   public void testSubcomponentsWithCfgArgsAndTypeParams() {
@@ -831,48 +846,47 @@ public class SubComponentTest extends AbstractCoCoTest {
         = MontiArcCoCos.createChecker();
     final ExpectedErrorInfo errors
         = new ExpectedErrorInfo(9, "xMA082", "xMA085", "xMA096");
-
+    
     checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
-
+  
   @Test
   public void testHasConflictingSubcomponentNames() {
     checkValid(PACKAGE + "." + "HasConflictingSubcomponentNames");
   }
-
-
+  
   @Test
   public void testSubCompWithNotExistingTypeAsTypeArg() {
     final String qualifiedModelName = PACKAGE + "." + "SubCompWithNotExistingTypeAsTypeArg";
     final MontiArcCoCoChecker checker =
         MontiArcCoCos.createChecker();
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(4, "xMA096", "xMA103", "xMA004");
-
+    
     checkInvalid(checker, loadComponentAST(qualifiedModelName), errors);
   }
-
+  
   @Test
   public void testHasGenericOutput() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." + "HasGenericOutput");
   }
-
+  
   @Test
   public void testHasGenericInput() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." + "HasGenericInput");
   }
-
+  
   @Test
   public void testInheritsOutgoingStringPort() {
-    checkValid(PACKAGE + "." + "_subcomponents" + "." +"InheritsOutgoingStringPort");
+    checkValid(PACKAGE + "." + "_subcomponents" + "." + "InheritsOutgoingStringPort");
   }
-
+  
   @Test
   public void testExtendsExtendsHasStringInputAndOutput() {
-    checkValid(PACKAGE + "." + "_subcomponents" + "." +"ExtendsExtendsHasStringInputAndOutput");
+    checkValid(PACKAGE + "." + "_subcomponents" + "." + "ExtendsExtendsHasStringInputAndOutput");
   }
-
+  
   @Test
   public void testExtendsHasStringInputAndOutput() {
-    checkValid(PACKAGE + "." + "_subcomponents" + "." +"ExtendsHasStringInputAndOutput");
+    checkValid(PACKAGE + "." + "_subcomponents" + "." + "ExtendsHasStringInputAndOutput");
   }
 }

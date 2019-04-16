@@ -64,7 +64,6 @@ public class MAAGenerator {
     
     GeneratorSetup setup = new GeneratorSetup();
     GeneratorEngine generator = new GeneratorEngine(setup);
-    
     ComponentSymbol comp = compSym;
     
     String packageName = comp.getPackageName();
@@ -190,7 +189,7 @@ public class MAAGenerator {
           comp.getIncomingPorts(),
           comp.getOutgoingPorts(),
           comp.getSubComponents(),
-          comp.getConnectors(),
+          compAST.getConnectors(),
           comp.getConfigParameters());
     }
     

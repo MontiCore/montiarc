@@ -20,8 +20,8 @@ public class ASTValueList extends ASTValueListTOP {
    * @param valuations
    * @param valuation
    */
-  public ASTValueList(java.util.List<ASTValuation> valuations, Optional<ASTValuation> valuation, Optional<ASTNoData> nodata) {
-    super(valuations, valuation, nodata);
+  public ASTValueList(java.util.List<ASTValuation> valuations, Optional<ASTValuation> valuation) {
+    super(valuations, valuation);
   }
   
   public List<ASTValuation> getAllValuations() {

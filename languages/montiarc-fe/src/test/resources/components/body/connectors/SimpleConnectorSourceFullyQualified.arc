@@ -1,7 +1,8 @@
 package components.body.connectors;
 
 /**
- * Valid model.
+ * Invalid model.
+ TODO: See test ignore
  */
 component SimpleConnectorSourceFullyQualified {
   component A {

@@ -82,8 +82,8 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
             JTypeSymbol superFormalType = supersTypeParameters.get(i);
             // restricted generic type
             if (!superFormalType.getInterfaces().isEmpty()) {
-              List<? extends JTypeReference<? extends JTypeSymbol>> upperBounds = superFormalType
-                  .getInterfaces();
+              List<? extends JTypeReference<? extends JTypeSymbol>> upperBounds
+                  = superFormalType.getInterfaces();
               for (int j = 0; j < upperBounds.size(); j++) {
                 JTypeReference<? extends JTypeSymbol> upperBound = upperBounds.get(j);
                 // Case 1 formal type parameter is instantiated in extend
@@ -100,16 +100,12 @@ public class AllGenericParametersOfSuperClassSet implements MontiArcASTComponent
                       ((JTypeReference<? extends JTypeSymbol>) actualArg.getType())
                           .getReferencedSymbol().getFormalTypeParameters().stream()
                           .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-                      ((JTypeReference<? extends JTypeSymbol>) actualArg.getType())
-                          .getActualTypeArguments().stream()
-                          .map(a -> (JavaTypeSymbolReference) a.getType())
-                          .collect(Collectors.toList()),
+                      TypeCompatibilityChecker.toJTypeReferences(
+                          actualArg.getType().getActualTypeArguments()),
                       upperBound,
-                      upperBound.getReferencedSymbol().getFormalTypeParameters().stream()
-                          .map(p -> (JTypeSymbol) p).collect(Collectors.toList()),
-                      supersActualTypeParams.stream()
-                          .map(a -> (JavaTypeSymbolReference) a.getType())
-                          .collect(Collectors.toList()))) {
+                      TypeCompatibilityChecker.toJTypeSymbols(
+                          upperBound.getReferencedSymbol().getFormalTypeParameters()),
+                      TypeCompatibilityChecker.toJTypeReferences(supersActualTypeParams))) {
                     Log.error("0xMA089 Parameter " + SymbolPrinter.printTypeArgument(actualArg)
                         + " is not compatible with "
                         + upperBound.getName(),

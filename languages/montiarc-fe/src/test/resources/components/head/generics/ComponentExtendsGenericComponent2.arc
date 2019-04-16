@@ -1,8 +1,9 @@
 package components.head.generics;
 
 /*
- * Valid model.
+ * Invalid model.
+ * Currently invalid due to #241, #243
  */
-component ComponentExtendsGenericComponent2<K,V extends Number> extends types.GenericComp2<K, V> {
-
+component ComponentExtendsGenericComponent2<K,V extends Number> extends GenericComp2<K, V> {
+  // Empty body
 }

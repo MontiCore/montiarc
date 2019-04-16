@@ -40,7 +40,7 @@ component InnerComponents {
     }
 
     // No instance created
-    component InnerInnerConfigurableComponent(int x, String z, U v) {
+    component InnerInnerConfigurableComponent<U>(int x, String z, U v) {
       // Empty body
     }
 
@@ -57,7 +57,7 @@ component InnerComponents {
   }
 
   // No instance created
-  component InnerConfigurableComponent(int x, String z, U v) {
+  component InnerConfigurableComponent<U>(int x, String z, U v) {
     // Empty body
   }
 

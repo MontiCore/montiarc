@@ -5,16 +5,6 @@
  */
 package montiarc.trafos;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Stack;
-import java.util.stream.Collectors;
-
 import de.monticore.symboltable.MutableScope;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.JTypeReference;
@@ -23,18 +13,17 @@ import de.monticore.types.types._ast.TypesNodeFactory;
 import de.se_rwth.commons.Splitters;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcConstants;
-import montiarc._ast.ASTComponent;
-import montiarc._ast.ASTConnector;
-import montiarc._ast.ASTElement;
-import montiarc._ast.ASTMontiArcAutoConnect;
-import montiarc._ast.MontiArcNodeFactory;
+import montiarc._ast.*;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ComponentSymbolReference;
-import montiarc._symboltable.ConnectorSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc.helper.AutoconnectMode;
-import montiarc.helper.PortCompatibilityChecker;
+import montiarc.helper.TypeCompatibilityChecker;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 /**
  * Creates further connectors depending on the auto connect mode (type, port, off)
@@ -46,28 +35,25 @@ public class AutoConnection {
   
   private Stack<List<AutoconnectMode>> modeStack = new Stack<List<AutoconnectMode>>();
   
-  public static ASTConnector createASTConnector(ASTComponent node, ConnectorSymbol conEntry) {
-    // create ast node
-    ASTConnector astConnector = MontiArcNodeFactory.createASTConnector();
+  public static ASTConnector createASTConnector(ASTComponent node, String source, String target) {
+    // get Connector Builder
+    ASTConnectorBuilder builder = MontiArcMill.connectorBuilder();
     
-    ASTQualifiedName source = TypesNodeFactory.createASTQualifiedName();
-    source.setPartList(Splitters.DOT.splitToList(conEntry.getSource()));
+    ASTQualifiedName sourceQN = TypesNodeFactory.createASTQualifiedName();
+    sourceQN.setPartList(Splitters.DOT.splitToList(source));
     
-    List<ASTQualifiedName> targets = new ArrayList<>();
-    ASTQualifiedName target = TypesNodeFactory.createASTQualifiedName();
-    target.setPartList(Splitters.DOT.splitToList(conEntry.getTarget()));
-    targets.add(target);
     
-    astConnector.setSource(source);
-    astConnector.setTargetsList(targets);
+    ASTQualifiedName targetQN = TypesNodeFactory.createASTQualifiedName();
+    targetQN.setPartList(Splitters.DOT.splitToList(target));
     
     Optional<ASTMontiArcAutoConnect> auto = resolveAutoconnect(node);
     if (auto.isPresent()) {
-      astConnector.set_SourcePositionStart(auto.get().get_SourcePositionStart());
-      astConnector.set_SourcePositionEnd(auto.get().get_SourcePositionEnd());
+      builder.set_SourcePositionStart(auto.get().get_SourcePositionStart());
+      builder.set_SourcePositionEnd(auto.get().get_SourcePositionEnd());
     }
-    
-    return astConnector;
+  
+    builder.setSource(sourceQN).addTargets(targetQN);
+    return builder.build();
   }
   
   /**
@@ -122,52 +108,50 @@ public class AutoConnection {
    * @param node component node in the AST
    * @param mode auto connection mode
    */
-  private void createAutoconnections(ComponentSymbol currentComponent, ASTComponent node,
-      AutoconnectMode mode) {
-    Map<String, PorWithGenericBindings> unusedSenders = getUnusedSenders(
-        currentComponent);
-    Map<String, PorWithGenericBindings> unusedReceivers = getUnusedReceivers(
-        currentComponent);
-    for (Entry<String, PorWithGenericBindings> receiverEntry : unusedReceivers.entrySet()) {
+  private void createAutoconnections(ComponentSymbol currentComponent,
+                                     ASTComponent node,
+                                     AutoconnectMode mode) {
+    Map<String, PortWithGenericBindings> unusedSenders
+        = getUnusedSenders(currentComponent);
+    Map<String, PortWithGenericBindings> unusedReceivers
+        = getUnusedReceivers(currentComponent);
+
+    for (Entry<String, PortWithGenericBindings> receiverEntry :
+        unusedReceivers.entrySet()) {
+
       String receiver = receiverEntry.getKey();
       int indexReceiver = receiver.indexOf('.');
-      List<ConnectorSymbol> matches = new LinkedList<>();
-      for (Entry<String, PorWithGenericBindings> senderEntry : unusedSenders.entrySet()) {
+
+      List<ASTConnector> matches = new LinkedList<>();
+
+      for (Entry<String, PortWithGenericBindings> senderEntry :
+          unusedSenders.entrySet()) {
+
         String sender = senderEntry.getKey();
         int indexSender = sender.indexOf('.');
         
         boolean matched = false;
         
-        PorWithGenericBindings senderPort = senderEntry.getValue();
-        PorWithGenericBindings receiverPort = receiverEntry.getValue();
+        PortWithGenericBindings senderPort = senderEntry.getValue();
+        PortWithGenericBindings receiverPort = receiverEntry.getValue();
         
-        boolean portTypesMatch = PortCompatibilityChecker.doPortTypesMatch(senderPort.port,
-            senderPort.formalTypeParameters, senderPort.typeArguments, receiverPort.port,
-            receiverPort.formalTypeParameters, receiverPort.typeArguments);
+        boolean portTypesMatch
+            = TypeCompatibilityChecker.areTypesEqual(
+            senderPort.port.getTypeReference(),
+            senderPort.formalTypeParameters,
+            senderPort.typeArguments,
+            receiverPort.port.getTypeReference(),
+            receiverPort.formalTypeParameters,
+            receiverPort.typeArguments);
         // sender from current component, receiver from a reference
         if (portTypesMatch) {
           if (indexSender == -1 && indexReceiver != -1) {
-            String receiverPortName = receiver.substring(indexReceiver + 1);
-            
-            if (mode == AutoconnectMode.AUTOCONNECT_PORT && receiverPortName.equals(sender)) {
-              matched = true;
-            }
-            else if (mode == AutoconnectMode.AUTOCONNECT_TYPE) {
-              matched = true;
-            }
-            
+            matched = isMatched(mode, receiver, indexReceiver, sender, matched);
           }
           // sender from a reference, receiver from current component
           else if (indexSender != -1 && indexReceiver == -1) {
-            String senderPortName = sender.substring(indexSender + 1);
-            
-            if (mode == AutoconnectMode.AUTOCONNECT_PORT && senderPortName.equals(receiver)) {
-              matched = true;
-            }
-            else if (mode == AutoconnectMode.AUTOCONNECT_TYPE) {
-              matched = true;
-            }
-            
+            matched = isMatched(mode, sender, indexSender, receiver, matched);
+
           }
           // both from referenced components
           else if (indexSender != -1 && indexReceiver != -1) {
@@ -190,35 +174,26 @@ public class AutoConnection {
         }
         // create connector entry and add to matched
         if (matched) {
-          ConnectorSymbol conEntry = new ConnectorSymbol(sender, receiver);
+          ASTConnector conEntry = createASTConnector(node, sender, receiver);
           
           matches.add(conEntry);
         }
       }
       
       if (matches.size() == 1) {
-        ConnectorSymbol created = matches.iterator().next();
-        
-        ASTConnector astConnector = createASTConnector(node, created);
+        ASTConnector astConnector = matches.iterator().next();
         
         // add node to arc elements
         node.getBody().getElementList().add(astConnector);
         
-        created.setAstNode(astConnector);
-        
-        // add symbol to components scope
-        ((MutableScope) currentComponent.getSpannedScope()).add(created);
-
-        
-        Log.info(node.get_SourcePositionStart() + " Created connector '" + created + "'.",
-            "AutoConnection");
+        Log.info(node.get_SourcePositionStart() + " Created connector '" + astConnector + "'.",  "AutoConnection");
       }
       else if (matches.size() > 1) {
         StringBuilder sb = new StringBuilder();
         sb.append("Duplicate autoconnection matches for the connector target '");
-        sb.append(matches.iterator().next().getTarget());
+        sb.append(matches.iterator().next().getTargets(0));
         sb.append("' with the sources '");
-        sb.append(matches.stream().map(c -> c.getSource()).collect(Collectors.joining("', '")));
+        sb.append(matches.stream().map(c -> c.getSource().toString()).collect(Collectors.joining("', '")));
         sb.append("'!");
         Log.warn(sb.toString());
       }
@@ -227,7 +202,20 @@ public class AutoConnection {
       }
     }
   }
-  
+
+  private static boolean isMatched(AutoconnectMode mode, String receiver, int indexReceiver, String sender, boolean matched) {
+    String receiverPortName = receiver.substring(indexReceiver + 1);
+
+    if (mode == AutoconnectMode.AUTOCONNECT_PORT
+            && receiverPortName.equals(sender)) {
+      matched = true;
+    }
+    else if (mode == AutoconnectMode.AUTOCONNECT_TYPE) {
+      matched = true;
+    }
+    return matched;
+  }
+
   /**
    * Finds all incoming ports of a given component (and all referenced components) which are not
    * connected.
@@ -236,15 +224,15 @@ public class AutoConnection {
    * @return unused incoming ports of a given component represented in a map from port names to
    * types
    */
-  private Map<String, PorWithGenericBindings> getUnusedReceivers(
+  private Map<String, PortWithGenericBindings> getUnusedReceivers(
       ComponentSymbol currentComponent) {
     // portname, porttypebinding
-    Map<String, PorWithGenericBindings> unusedReceivers = new HashMap<>();
+    Map<String, PortWithGenericBindings> unusedReceivers = new HashMap<>();
     // check outgoing ports, b/c they must receive data from within the component
     for (PortSymbol receiver : currentComponent.getOutgoingPorts()) {
       if (!currentComponent.hasConnector(receiver.getName())) {
         unusedReceivers.put(receiver.getName(),
-            PorWithGenericBindings.create(receiver, currentComponent.getFormalTypeParameters(),
+            PortWithGenericBindings.create(receiver, currentComponent.getFormalTypeParameters(),
                 new ArrayList<>()));
       }
     }
@@ -258,7 +246,7 @@ public class AutoConnection {
         if (!currentComponent.hasConnector(portNameInConnector)) {
           // store the the type parameters' bindings of the referenced component for this reference
           unusedReceivers.put(portNameInConnector,
-              PorWithGenericBindings.create(port,
+              PortWithGenericBindings.create(port,
                   refType.getReferencedSymbol().getFormalTypeParameters(),
                   refType.getActualTypeArguments().stream()
                       .map(a -> (JTypeReference<?>) a.getType())
@@ -277,16 +265,16 @@ public class AutoConnection {
    * @return unused outgoing ports of a given component represented in a map from port names to
    * types
    */
-  private Map<String, PorWithGenericBindings> getUnusedSenders(
+  private Map<String, PortWithGenericBindings> getUnusedSenders(
       ComponentSymbol currentComponent) {
     // portname, <port, formaltypeparameters for the subcomponent that the port is defined in, type
     // arguments for the subcomponent that the port is defined in>
-    Map<String, PorWithGenericBindings> unusedSenders = new HashMap<>();
+    Map<String, PortWithGenericBindings> unusedSenders = new HashMap<>();
     // as senders could send to more then one receiver, all senders are added
     for (PortSymbol sender : currentComponent.getIncomingPorts()) {
       if (!currentComponent.hasConnectors(sender.getName())) {
         unusedSenders.put(sender.getName(),
-            PorWithGenericBindings.create(sender, currentComponent.getFormalTypeParameters(),
+            PortWithGenericBindings.create(sender, currentComponent.getFormalTypeParameters(),
                 new ArrayList<>()));
       }
     }
@@ -300,7 +288,7 @@ public class AutoConnection {
         if (!currentComponent.hasConnectors(portNameInConnector)) {
           // store the the type parameters' bindings of the referenced component for this reference
           unusedSenders.put(portNameInConnector,
-              PorWithGenericBindings.create(port,
+              PortWithGenericBindings.create(port,
                   refType.getReferencedSymbol().getFormalTypeParameters(),
                   refType.getActualTypeArguments().stream()
                       .map(a -> (JTypeReference<?>) a.getType())
@@ -311,14 +299,14 @@ public class AutoConnection {
     return unusedSenders;
   }
   
-  private static class PorWithGenericBindings {
+  private static class PortWithGenericBindings {
     PortSymbol port;
     
     List<JTypeSymbol> formalTypeParameters;
     
     List<JTypeReference<? extends JTypeSymbol>> typeArguments;
     
-    public PorWithGenericBindings(
+    public PortWithGenericBindings(
         PortSymbol port,
         List<JTypeSymbol> formalTypeParameters,
         List<JTypeReference<? extends JTypeSymbol>> typeArguments) {
@@ -328,10 +316,10 @@ public class AutoConnection {
       this.typeArguments = typeArguments;
     }
     
-    public static PorWithGenericBindings create(PortSymbol port,
-        List<JTypeSymbol> formalTypeParameters,
-        List<JTypeReference<? extends JTypeSymbol>> typeArguments) {
-      return new PorWithGenericBindings(port, formalTypeParameters, typeArguments);
+    public static PortWithGenericBindings create(PortSymbol port,
+                                                 List<JTypeSymbol> formalTypeParameters,
+                                                 List<JTypeReference<? extends JTypeSymbol>> typeArguments) {
+      return new PortWithGenericBindings(port, formalTypeParameters, typeArguments);
     }
     
   }

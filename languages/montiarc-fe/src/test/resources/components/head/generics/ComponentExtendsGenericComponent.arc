@@ -3,6 +3,6 @@ package components.head.generics;
 /*
  * Valid model.
  */
-component ComponentExtendsGenericComponent extends types.GenericComp2<String, Integer> {
+component ComponentExtendsGenericComponent extends GenericComp2<String, Integer> {
 
 }

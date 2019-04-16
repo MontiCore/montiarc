@@ -1,7 +1,5 @@
 package components.head.generics;
 
-import types.GenericComp2;
-
 /*
  * Invalid model.
  */

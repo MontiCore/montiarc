@@ -482,16 +482,15 @@ public class ComponentHelper {
    * Determine whether the port of the given connector is an incoming or
    * outgoing port.
    * @param cmp The component defining the connector
-   * @param conn The connector which connects the port to check
    * @param isSource Specifies whether the port to check is the source port of
    *                 the connector or the target port
    * @return true, if the port is an incoming port. False, otherwise.
    */
-  public boolean isIncomingPort(ComponentSymbol cmp, ConnectorSymbol conn, boolean isSource) {
-    String subCompName = getConnectorComponentName(conn, isSource);
-    String portNameUnqualified = getConnectorPortName(conn, isSource);
+  public boolean isIncomingPort(ComponentSymbol cmp, String source, String target, boolean isSource) {
+    String subCompName = getConnectorComponentName(source, target, isSource);
+    String portNameUnqualified = getConnectorPortName(source, target, isSource);
     Optional<PortSymbol> port = Optional.empty();
-    String portName = isSource ? conn.getSource() : conn.getTarget();
+    String portName = isSource ? source : target;
     // port is of subcomponent
     if (portName.contains(".")) {
       Optional<ComponentInstanceSymbol> subCompInstance = cmp.getSpannedScope()
@@ -508,20 +507,23 @@ public class ComponentHelper {
     return port.map(PortSymbol::isIncoming).orElse(false);
   }
   
+  public boolean isIncomingPort(ComponentSymbol cmp, ASTConnector conn, boolean isSource) {
+    return isIncomingPort(cmp, conn.getSource().toString(), conn.getTargets(0).toString(), isSource);
+  }
+  
   /**
    * Returns the component name of a connection.
    *
-   * @param conn the connection
    * @param isSource <tt>true</tt> for source component, else <tt>false>tt>
    * @return
    */
-  public String getConnectorComponentName(ConnectorSymbol conn, boolean isSource) {
+  public String getConnectorComponentName(String source , String target, boolean isSource) {
     final String name;
     if (isSource) {
-      name = conn.getSource();
+      name = source;
     }
     else {
-      name = conn.getTarget();
+      name = target;
     }
     if (name.contains(".")) {
       return name.split("\\.")[0];
@@ -530,26 +532,33 @@ public class ComponentHelper {
     
   }
   
+  public String getConnectorComponentName(ASTConnector conn , boolean isSource) {
+    return getConnectorComponentName(conn.getSource().toString(), conn.getTargets(0).toString(), isSource);
+  }
+  
   /**
    * Returns the port name of a connection.
    *
-   * @param conn the connection
    * @param isSource <tt>true</tt> for source component, else <tt>false>tt>
    * @return
    */
-  public String getConnectorPortName(ConnectorSymbol conn, boolean isSource) {
+  public String getConnectorPortName(String source, String target, boolean isSource) {
     final String name;
     if (isSource) {
-      name = conn.getSource();
+      name = source;
     }
     else {
-      name = conn.getTarget();
+      name = target;
     }
     
     if (name.contains(".")) {
       return name.split("\\.")[1];
     }
     return name;
+  }
+  
+  public String getConnectorPortName(ASTConnector conn, boolean isSource) {
+    return getConnectorPortName(conn.getSource().toString(), conn.getTargets(0).toString(), isSource);
   }
   
   /**

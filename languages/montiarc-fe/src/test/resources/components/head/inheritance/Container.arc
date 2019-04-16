@@ -14,6 +14,6 @@ component Container {
     
     component InnerComponent2 extends InnerComponent1 {
         port
-            in Boolean;
+            in Boolean inBool;
     }
 }

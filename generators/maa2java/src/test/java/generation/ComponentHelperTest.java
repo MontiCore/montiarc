@@ -212,11 +212,12 @@ public class ComponentHelperTest extends AbstractCoCoTest {
     assertEquals("java.lang.String", superCompActualTypeArguments.get(0));
 
 
-    componentSymbol = loadComponentSymbol("components.head.generics", "SubCompExtendsGenericComparableCompValid", TARGET_TEST_MODELS);
-    helper = new ComponentHelper(componentSymbol);
-    superCompActualTypeArguments = helper.getSuperCompActualTypeArguments();
-    assertTrue(!superCompActualTypeArguments.isEmpty());
-    assertEquals("K", superCompActualTypeArguments.get(0));
+    // Currently disabled due to issues #241, #243
+//    componentSymbol = loadComponentSymbol("components.head.generics", "SubCompExtendsGenericComparableCompValid", TARGET_TEST_MODELS);
+//    helper = new ComponentHelper(componentSymbol);
+//    superCompActualTypeArguments = helper.getSuperCompActualTypeArguments();
+//    assertTrue(!superCompActualTypeArguments.isEmpty());
+//    assertEquals("K", superCompActualTypeArguments.get(0));
 
   }
 }

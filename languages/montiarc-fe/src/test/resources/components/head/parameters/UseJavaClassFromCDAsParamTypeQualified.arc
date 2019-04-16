@@ -3,11 +3,11 @@ package components.head.parameters;
 /*
  * Valid model.
  */
-component UseEnumAsTypeArgQualified {
+component UseJavaClassFromCDAsParamTypeQualified {
     
     port in String sIn;
-    
-    component EnumAsTypeArg(types.MyEnum.First) sub;
+
+    component JavaClassFromCDAsParameter(new types.Types.Car()) sub;
 
     connect sIn -> sub.sIn;
 }    

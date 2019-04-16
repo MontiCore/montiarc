@@ -1,0 +1,19 @@
+---
+version: "2"
+
+plugins:
+  sonar-java:
+    enabled: true
+    config:
+      sonar.java.source: "8"
+      minimum_severity: minor
+      tests_patterns:
+        - "**/test/"
+        - "**/acceptance-test/"
+        - "**/integration-test/"
+
+exclude_patterns:
+  - "**/target/"
+  - "**/defaultTypes/"
+  - "libraries/"
+  - "**/generated-test-sources/"
