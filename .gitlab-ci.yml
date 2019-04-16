@@ -42,7 +42,7 @@ Validate:
 
 # Run Unit Tests after build
 .unit_test_template: &unit_test_definition
-  stage: test
+  stage: test install
   coverage: '/\d+.\d+ \% covered/'
   script:
     - mvn $MAVEN_CLI_OPTS test
