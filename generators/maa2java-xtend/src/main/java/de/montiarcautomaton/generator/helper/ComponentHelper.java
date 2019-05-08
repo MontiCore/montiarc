@@ -1,7 +1,5 @@
 package de.montiarcautomaton.generator.helper;
 
-import java.io.File;
-import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 import de.montiarcautomaton.generator.codegen.xtend.util.Utils;
@@ -539,13 +536,6 @@ public class ComponentHelper {
       }
     }
     return paramList;
-  }
-  
-  public static Boolean existsHWCClass(File hwcPath, String cmpLocation) {
-	  File cmpPath = Paths.get(hwcPath.toString() 
-			  + File.separator + cmpLocation.replaceAll("\\.",
-					  Matcher.quoteReplacement(File.separator)) + ".java").toFile();
-	  return cmpPath.isFile();
   }
   
 }

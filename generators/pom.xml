@@ -7,7 +7,7 @@
   <parent>
     <groupId>montiarc</groupId>
     <artifactId>montiarc-core</artifactId>
-	  <version>5.1.1-SNAPSHOT</version>
+	<version>5.0.2-SNAPSHOT</version>
   </parent>
 
   <groupId>montiarc.generators</groupId>
@@ -15,8 +15,8 @@
   <packaging>pom</packaging>
 
   <modules>
-	  <module>cd2pojo</module>
-	  <module>maa2java-xtend</module>
+	<module>cd2pojo</module>
+	<module>maa2java-xtend</module>
   </modules>
 
 </project>

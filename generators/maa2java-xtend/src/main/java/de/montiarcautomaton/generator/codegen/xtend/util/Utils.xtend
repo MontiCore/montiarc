@@ -117,12 +117,11 @@ class Utils {
   	«IF comp.isInnerComponent»
   	package «printPackageWithoutKeyWordAndSemicolon(comp.definingComponent.get) + "." + comp.definingComponent.get.name + "gen"»;
 	«ELSE»
-
   	package «comp.packageName»;
 	«ENDIF»
   	'''
   }
-
+  
   /**
    * Helper function used to determine package names.
    */
