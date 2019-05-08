@@ -6,7 +6,7 @@
   <parent>
     <groupId>montiarc.applications</groupId>
     <artifactId>applications</artifactId>
-    <version>5.1.0</version>
+    <version>5.0.2-SNAPSHOT</version>
   </parent>
 
   <artifactId>bumperbot</artifactId>
@@ -155,7 +155,7 @@
         <dependencies>
           <dependency>
             <groupId>montiarc.generators</groupId>
-            <artifactId>maa2java-xtend</artifactId>
+            <artifactId>maa2java</artifactId>
             <version>${project.version}</version>
           </dependency>
           <dependency>

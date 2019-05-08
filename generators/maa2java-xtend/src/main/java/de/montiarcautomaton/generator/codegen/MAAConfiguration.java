@@ -17,7 +17,6 @@ public class MAAConfiguration implements Configuration {
   public static final String CONFIGURATION_PROPERTY = "_configuration";
   public static final String DEFAULT_OUTPUT_DIRECTORY = "out";
   public static final String DEFAULT_HWC_DIRECTORY = "src";
-  public static final Boolean DEFAULT_COMPONENTINST = false;
   
   
 
@@ -28,7 +27,7 @@ public class MAAConfiguration implements Configuration {
   public enum Options {
     
     MODELPATH("modelPath"), MODELPATH_SHORT("mp"), HANDWRITTENCODEPATH("handwrittenCode"), HANDWRITTENCODEPATH_SHORT("hwc"),
-    OUT("out"), OUT_SHORT("o"), COMPONENTINST("enableComponentInstantiation"), COMPONENTINST_SHORT("ci");
+    OUT("out"), OUT_SHORT("o");
     
     String name;
     
@@ -228,19 +227,6 @@ public class MAAConfiguration implements Configuration {
       return hwc.toFile();
     }
     return Paths.get(DEFAULT_HWC_DIRECTORY).toFile();
-  }
-  
-  public Boolean getCI() {
-	  Optional<Boolean> ci = getAsBoolean(Options.COMPONENTINST);
-	  if (ci.isPresent()) {
-		  return ci.get();
-	  }
-	  ci = getAsBoolean(Options.COMPONENTINST_SHORT);
-	  if (ci.isPresent()) {
-		  return ci.get();
-	  }
-	  
-	  return DEFAULT_COMPONENTINST;
   }
   
 

@@ -8,7 +8,7 @@
   <parent>
     <groupId>montiarc.libraries</groupId>
     <artifactId>libraries</artifactId>
-	<version>5.1.0</version>
+	<version>5.0.2-SNAPSHOT</version>
   </parent>
 
   <artifactId>simulator-rte</artifactId>
