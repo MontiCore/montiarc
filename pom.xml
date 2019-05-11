@@ -446,6 +446,11 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/_*/*.class</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
 	</build>
