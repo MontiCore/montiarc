@@ -81,15 +81,26 @@ public class MontiArcGeneratorTool extends MontiArcTool {
    */
   private String getBasedirFromModelAndTargetPath(String modelPath, String targetPath) {
     String basedir = "";
-    
+    StringBuilder sb = new StringBuilder();
+    String seperator = File.separator;
+    int lastFolderIndex = 0;
     for (int i = 0; i < modelPath.length(); i++) {
-      if (modelPath.charAt(i) == targetPath.charAt(i)) {
-        basedir += modelPath.charAt(i);
+      // Assuming a seperator is always length 1
+      if (seperator.length() != 1) {
+        Log.error("0x???? File seperator should be a single char. Use a less strange system");
       }
-      else {
-        break;
+      else if (modelPath.charAt(i) == seperator.charAt(0)) {
+        lastFolderIndex = i;
       }
       
+      if (modelPath.charAt(i) == targetPath.charAt(i)) {
+        sb.append(modelPath.charAt(i));
+      }
+      else {
+        // basedir includes the seperator
+        basedir = sb.substring(0, lastFolderIndex + 1);
+        break;
+      }
     }
     return basedir;
   }
