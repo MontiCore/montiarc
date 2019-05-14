@@ -27,7 +27,6 @@ import de.monticore.types.types._ast.ASTTypeVariableDeclaration;
 import de.se_rwth.commons.Names;
 import jline.internal.Log;
 import montiarc._ast.ASTComponent;
-import montiarc._ast.ASTConnector;
 import montiarc._ast.ASTParameter;
 import montiarc._ast.ASTPort;
 import montiarc._symboltable.ComponentInstanceSymbol;
