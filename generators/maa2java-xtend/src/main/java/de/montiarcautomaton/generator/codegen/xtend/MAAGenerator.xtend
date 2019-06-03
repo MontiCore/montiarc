@@ -12,9 +12,7 @@ import de.montiarcautomaton.generator.codegen.xtend.behavior.JavaPGenerator
 import de.montiarcautomaton.generator.codegen.xtend.util.AbstractAtomicImplementation
 import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
 import de.monticore.ast.ASTCNode
-import de.monticore.codegen.mc2cd.TransformationHelper
 import de.monticore.io.FileReaderWriter
-import de.monticore.io.paths.IterablePath
 import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
