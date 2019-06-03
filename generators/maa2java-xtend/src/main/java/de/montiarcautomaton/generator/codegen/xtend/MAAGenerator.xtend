@@ -24,6 +24,7 @@ import montiarc._ast.ASTComponent
 import montiarc._ast.ASTJavaPBehavior
 import montiarc._symboltable.ComponentSymbol
 import de.montiarcautomaton.generator.helper.ComponentHelper
+import de.se_rwth.commons.logging.Log
 
 /**
  * Main entry point for generator. From this all target artifacts are generated for a component. 
@@ -81,7 +82,7 @@ class MAAGenerator {
   def static private toFile(File targetPath, String name, String content) {
     var Path path = Paths.get(targetPath.absolutePath + File.separator + name + ".java")
     var FileReaderWriter writer = new FileReaderWriter()
-    println("Writing to file " + path + ".");
+    Log.info("Writing to file " + path + ".", "MAAGenerator");
     writer.storeInFile(path, content)
   }
 
