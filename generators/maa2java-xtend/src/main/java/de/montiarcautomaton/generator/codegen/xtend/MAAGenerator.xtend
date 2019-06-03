@@ -35,7 +35,7 @@ import de.montiarcautomaton.generator.helper.ComponentHelper
  */
 class MAAGenerator {
 
-  def static generateAll(File targetPath, File hwc, ComponentSymbol comp) {
+  def static void generateAll(File targetPath, File hwc, ComponentSymbol comp) {
     Identifier.createInstance(comp)
 
     toFile(targetPath, comp.name + "Input", Input.generateInput(comp));
