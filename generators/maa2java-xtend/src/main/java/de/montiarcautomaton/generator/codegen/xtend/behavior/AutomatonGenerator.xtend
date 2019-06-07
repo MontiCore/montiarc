@@ -11,6 +11,7 @@ import de.montiarcautomaton.generator.helper.ComponentHelper
 import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter
 import de.monticore.mcexpressions._ast.ASTExpression
+import de.monticore.mcexpressions._ast.ASTNameExpression
 import de.monticore.prettyprint.IndentPrinter
 import java.util.ArrayList
 import java.util.Collection
@@ -23,9 +24,12 @@ import montiarc._ast.ASTElement
 import montiarc._ast.ASTIOAssignment
 import montiarc._ast.ASTValueList
 import montiarc._symboltable.ComponentSymbol
+import montiarc._symboltable.PortSymbol
 import montiarc._symboltable.StateSymbol
 import montiarc._symboltable.TransitionSymbol
 import montiarc._symboltable.VariableSymbol
+import montiarc.visitor.NamesInExpressionsDelegatorVisitor
+import de.montiarcautomaton.generator.visitor.NamesInExpressionVisitor
 
 /**
  * Prints the automaton behavior of a component.
@@ -122,7 +126,7 @@ class AutomatonGenerator extends ABehaviorGenerator {
 			    	  «FOR transition : transitions.stream.filter(s | s.source.name == state.name).collect(Collectors.toList)»
 			    	  	// transition: «transition.toString»
 «««			    	  if statement for each guard of a transition from this state	
-			    	  	if («IF transition.guardAST.isPresent»«printExpression(transition.guardAST.get.guardExpression.expression)»«ELSE» true «ENDIF») {
+			    	  	if («IF transition.guardAST.isPresent»«printNullChecks(comp, transition.guardAST.get.guardExpression.expression)» «printExpression(transition.guardAST.get.guardExpression.expression)»«ELSE» true «ENDIF») {
 			    	  	  //reaction
 «««			    	  	if true execute reaction of transition  
 			    	  	  «IF transition.reactionAST.present»
@@ -151,6 +155,19 @@ class AutomatonGenerator extends ABehaviorGenerator {
 			    return result;
 			  }
 		'''
+  }
+  
+  def String printNullChecks(ComponentSymbol symbol, ASTExpression expression) {
+    var StringBuilder builder = new StringBuilder();
+    var NamesInExpressionVisitor visitor = new NamesInExpressionVisitor();
+    expression.accept(visitor);
+    for(String name : visitor.foundNames) {
+      if(symbol.spannedScope.resolve(name, VariableSymbol.KIND).present || symbol.spannedScope.resolve(name, PortSymbol.KIND).present) {
+        builder.append(" " + name + "!=null &&");
+      }
+      
+    }
+    return builder.toString;
   }
 
   override String printGetInitialValues(ComponentSymbol comp) {

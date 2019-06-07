@@ -5,13 +5,25 @@
  */
 package components;
 
+import static infrastructure.GeneratorTestConstants.PRINTER;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Lists;
 
 import de.montiarcautomaton.generator.codegen.xtend.util.Identifier;
 import de.montiarcautomaton.generator.codegen.xtend.util.Utils;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor;
-import de.monticore.ast.ASTNode;
+import de.montiarcautomaton.generator.visitor.NamesInExpressionVisitor;
 import de.monticore.java.javadsl._ast.ASTImportDeclaration;
 import de.monticore.java.javadsl._ast.JavaDSLMill;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
@@ -23,16 +35,45 @@ import de.monticore.symboltable.Symbol;
 import de.monticore.symboltable.types.JFieldSymbol;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.monticore.symboltable.types.references.ActualTypeArgument;
-import de.monticore.types.types._ast.*;
-import infrastructure.*;
-import montiarc._ast.*;
-import montiarc._symboltable.*;
+import de.monticore.types.types._ast.ASTPrimitiveArrayType;
+import de.monticore.types.types._ast.ASTPrimitiveType;
+import de.monticore.types.types._ast.ASTQualifiedName;
+import de.monticore.types.types._ast.ASTSimpleReferenceType;
+import de.monticore.types.types._ast.ASTSimpleReferenceTypeBuilder;
+import de.monticore.types.types._ast.ASTType;
+import de.monticore.types.types._ast.ASTTypeArgument;
+import de.monticore.types.types._ast.ASTTypeArguments;
+import de.monticore.types.types._ast.ASTTypeArgumentsBuilder;
+import infrastructure.Constructor;
+import infrastructure.EnumType;
+import infrastructure.Field;
+import infrastructure.GeneratedComponentClassVisitor;
+import infrastructure.GeneratorTestConstants;
+import infrastructure.Method;
+import montiarc._ast.ASTAutomaton;
+import montiarc._ast.ASTAutomatonBehavior;
+import montiarc._ast.ASTBlock;
+import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTConnector;
+import montiarc._ast.ASTElement;
+import montiarc._ast.ASTIOAssignment;
+import montiarc._ast.ASTInitialStateDeclaration;
+import montiarc._ast.ASTJavaPBehavior;
+import montiarc._ast.ASTParameter;
+import montiarc._ast.ASTPort;
+import montiarc._ast.ASTState;
+import montiarc._ast.ASTStateDeclaration;
+import montiarc._ast.ASTValuation;
+import montiarc._ast.ASTValueList;
+import montiarc._ast.ASTVariableDeclaration;
+import montiarc._ast.MontiArcMill;
+import montiarc._symboltable.ComponentInstanceSymbol;
+import montiarc._symboltable.ComponentSymbol;
+import montiarc._symboltable.ComponentSymbolReference;
+import montiarc._symboltable.PortSymbol;
+import montiarc._symboltable.TransitionSymbol;
+import montiarc._symboltable.VariableSymbol;
 import montiarc._visitor.MontiArcVisitor;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static infrastructure.GeneratorTestConstants.PRINTER;
 
 /**
  * Collects information about the generated java classes that is expected to be
@@ -389,9 +430,11 @@ public class ComponentElementsCollector implements MontiArcVisitor {
             methodBuilder.addBodyElement(
                 String.format("%s.setPort%s(%s.getPort%s());",
                     helper.getConnectorComponentName(connector.getSource(), target, false),
-                    capitalizeFirst(this.helper.getConnectorPortName(connector.getSource(), target, false)),
+                    capitalizeFirst(
+                        this.helper.getConnectorPortName(connector.getSource(), target, false)),
                     helper.getConnectorComponentName(connector.getSource(), target, true),
-                    capitalizeFirst(this.helper.getConnectorPortName(connector.getSource(), target, true))));
+                    capitalizeFirst(
+                        this.helper.getConnectorPortName(connector.getSource(), target, true))));
           }
         }
         
@@ -514,8 +557,10 @@ public class ComponentElementsCollector implements MontiArcVisitor {
         for (TransitionSymbol transition : transitions) {
           String guard = "true";
           if (transition.getGuardAST().isPresent()) {
-            guard = printExpression(
-                transition.getGuardAST().get().getGuardExpression().getExpression(), false);
+            guard = printNullExpr(
+                transition.getGuardAST().get().getGuardExpression().getExpression(), symbol)
+                + printExpression(
+                    transition.getGuardAST().get().getGuardExpression().getExpression(), false);
           }
           method.addBodyElement("if(" + guard + ")" + "{");
           
@@ -1217,6 +1262,20 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     }
     expr.accept(prettyPrinter);
     return printer.getContent();
+  }
+  
+  private String printNullExpr(ASTExpression expr, ComponentSymbol comp) {
+    StringBuilder builder = new StringBuilder();
+    NamesInExpressionVisitor visitor = new NamesInExpressionVisitor();
+    expr.accept(visitor);
+    for (String name : visitor.getFoundNames()) {
+      if (symbol.getSpannedScope().resolve(name, VariableSymbol.KIND).isPresent()
+          || symbol.getSpannedScope().resolve(name, PortSymbol.KIND).isPresent()) {
+        builder.append(" " + name + "!=null &&");
+      }
+      
+    }
+    return builder.toString();
   }
   
   /**
