@@ -10,9 +10,7 @@ import de.montiarcautomaton.generator.codegen.xtend.behavior.JavaPGenerator
 import de.montiarcautomaton.generator.codegen.xtend.util.AbstractAtomicImplementation
 import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
 import de.monticore.ast.ASTCNode
-import de.monticore.codegen.mc2cd.TransformationHelper
 import de.monticore.io.FileReaderWriter
-import de.monticore.io.paths.IterablePath
 import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -22,6 +20,7 @@ import montiarc._ast.ASTComponent
 import montiarc._ast.ASTJavaPBehavior
 import montiarc._symboltable.ComponentSymbol
 import de.montiarcautomaton.generator.helper.ComponentHelper
+import de.se_rwth.commons.logging.Log
 
 /**
  * Main entry point for generator. From this all target artifacts are generated for a component. 
@@ -33,7 +32,7 @@ import de.montiarcautomaton.generator.helper.ComponentHelper
  */
 class MAAGenerator {
 
-  def static generateAll(File targetPath, File hwc, ComponentSymbol comp) {
+  def static void generateAll(File targetPath, File hwc, ComponentSymbol comp) {
     Identifier.createInstance(comp)
 
     toFile(targetPath, comp.name + "Input", Input.generateInput(comp));
@@ -79,7 +78,7 @@ class MAAGenerator {
   def static private toFile(File targetPath, String name, String content) {
     var Path path = Paths.get(targetPath.absolutePath + File.separator + name + ".java")
     var FileReaderWriter writer = new FileReaderWriter()
-    println("Writing to file " + path + ".");
+    Log.info("Writing to file " + path + ".", "MAAGenerator");
     writer.storeInFile(path, content)
   }
 
