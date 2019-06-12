@@ -487,13 +487,13 @@
 	<repositories>
 		<repository>
 			<id>se-nexus</id>
-			<url>https://nexus.se.rwth-aachen.de/content/groups/se/</url>
+			<url>https://nexus.se.rwth-aachen.de/content/groups/public/</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>se-nexus</id>
-			<url>https://nexus.se.rwth-aachen.de/content/groups/se/</url>
+			<url>https://nexus.se.rwth-aachen.de/content/groups/public/</url>
 		</pluginRepository>
 	</pluginRepositories>
 
