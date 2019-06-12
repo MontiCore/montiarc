@@ -27,7 +27,7 @@ In MontiArc, architectures are described as component and connector systems in w
     * maa-rte
     * lejos-rte
     * simulator-rte
-    * ...
+    * maJavaLib
 
 # copyright
 
