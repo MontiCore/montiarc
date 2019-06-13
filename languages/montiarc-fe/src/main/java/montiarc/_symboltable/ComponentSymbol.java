@@ -111,7 +111,7 @@ public class ComponentSymbol extends CommonScopeSpanningSymbol {
     }
     ASTComponent component = (ASTComponent) getAstNode().get();
     return component.getConnectors().stream().anyMatch(
-        astConnector -> astConnector.getSource().getPart(astConnector.getSource().sizeParts() - 1)
+        astConnector -> astConnector.getSource().toString()
             .equals(sender));
   }
 
