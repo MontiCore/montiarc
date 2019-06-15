@@ -331,7 +331,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   @Override
   public void endVisit(ASTComponent node) {
     ComponentSymbol component = componentStack.pop();
-    autoConnectionTrafo.transformAtEnd(node, component);
     
     // super component
     if (node.getHead().isPresentSuperComponent()) {
@@ -440,6 +439,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         }
       }
     }
+    autoConnectionTrafo.transformAtEnd(node, component);
   }
   
   private void setActualTypeArgumentsOfCompRef(ComponentSymbolReference typeReference,
