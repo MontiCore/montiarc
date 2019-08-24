@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package components.body.timing; //TODO Change package to components.body.connectors?
 
 import components.body.subcomponents._subcomponents.HasGenericInputAndOutputPort;

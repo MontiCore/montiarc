@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package components.body.timing;
 
 import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
