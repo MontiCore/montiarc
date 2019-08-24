@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
 
@@ -5,12 +6,7 @@ package sim.port;
  * Is used to encapsulate the forwarded ports from inner components in one
  * architecture component port. Is used like a regular IIncomingPort
  * 
- * <br>
- * <br>
- * Copyright (c) 2010 RWTH Aachen. All rights reserved.
  * 
- * @author Arne Haber
- * @version 29.07.2009
  * @see IInPort
  * @param <T> data type of this port
  */

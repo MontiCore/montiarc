@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package components;
 
 import components.body.subcomponents._subcomponents.package1.ValidComponentInPackage1;

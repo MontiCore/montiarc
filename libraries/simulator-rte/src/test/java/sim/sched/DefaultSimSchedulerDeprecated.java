@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -23,13 +24,7 @@ import sim.port.IPortFactory;
 /**
  * Old default simulation scheduler. 
  * Use {@link SchedulerFactory#createDefaultScheduler()} instead. DefaultPortFactoryDeprecated is for tests only.
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  * 
- * @author (last commit) $LastChangedBy: ahaber $
- * @version $LastChangedDate: 2014-10-14 10:42:14 +0200 (Di, 14 Okt 2014) $<br>
- *          $LastChangedRevision: 3036 $
  *          
  * 
  */

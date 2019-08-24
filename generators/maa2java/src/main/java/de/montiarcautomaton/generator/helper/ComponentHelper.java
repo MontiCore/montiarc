@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package de.montiarcautomaton.generator.helper;
 
 import de.monticore.ast.ASTNode;

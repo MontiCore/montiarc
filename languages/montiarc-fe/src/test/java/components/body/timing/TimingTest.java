@@ -1,8 +1,4 @@
-/*
- * Copyright (c) 2017 RWTH Aachen. All rights reserved.
- *
- * http://www.se-rwth.de/
- */
+/* (c) https://github.com/MontiCore/monticore */
 package components.body.timing;
 
 import static org.junit.Assert.assertEquals;

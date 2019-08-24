@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package components.head.inheritance;
 
 import types.GenericComp3;

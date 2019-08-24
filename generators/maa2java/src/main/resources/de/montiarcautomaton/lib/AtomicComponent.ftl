@@ -1,3 +1,4 @@
+<#-- (c) https://github.com/MontiCore/monticore -->
 ${tc.signature("helper",	"_package",	"imports", "name",	"resultName",	"inputName", 
 	"implName", "variables", "portsIn", "portsOut", "allPortsOut", "configParams")}
 	

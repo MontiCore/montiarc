@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -16,12 +17,7 @@ import sim.generic.TickedMessage;
 
 /**
  * Default port implementation.
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  * 
- * @author (last commit) $LastChangedBy: ahaber $
- * @version $LastChangedDate: 2014-11-17 17:17:34 +0100 (Mo, 17 Nov 2014) $<br>
- *          $LastChangedRevision: 3051 $
  * @param <T> data type of this port
  */
 public class Port<T> implements IPort<T> {

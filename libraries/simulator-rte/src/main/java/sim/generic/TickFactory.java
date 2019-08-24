@@ -1,15 +1,11 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim.generic;
 
 
 /**
  * Produces and manages ticks.
  * 
- * <br>
- * <br>
- * Copyright (c) 2010 RWTH Aachen. All rights reserved.
  * 
- * @author Arne Haber
- * @version 05.12.2008
  * @deprecated use {@link Tick#get()} instead. Will be removed after 
  * 2.5.0 release.
  */

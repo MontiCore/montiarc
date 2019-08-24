@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -14,12 +15,8 @@ import sim.generic.Message;
 import sim.generic.Tick;
 
 /**
- * Test for the incoming port implementation. <br>
- * <br>
- * Copyright (c) 2010 RWTH Aachen. All rights reserved.
+ * Test for the incoming port implementation. 
  * 
- * @author ahaber
- * @version 26.06.2010
  */
 public class IncomingPortTest {
     

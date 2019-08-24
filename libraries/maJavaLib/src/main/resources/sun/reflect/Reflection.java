@@ -1,4 +1,5 @@
-//* (c) https://github.com/MontiCore/monticore */
+/* (c) https://github.com/MontiCore/monticore */
+/
 
 package sun.reflect;
 

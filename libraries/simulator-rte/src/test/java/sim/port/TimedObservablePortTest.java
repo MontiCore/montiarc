@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -12,13 +13,8 @@ import sim.generic.Message;
 import sim.generic.Tick;
 
 /**
- * Tests for a {@link TimedObservablePort}. <br>
- * <br>
- * Copyright (c) 2012 RWTH Aachen. All rights reserved.
+ * Tests for a {@link TimedObservablePort}. 
  * 
- * @author (last commit) $Author: ahaber $
- * @version $Date: 2015-02-05 17:20:14 +0100 (Do, 05 Feb 2015) $<br>
- *          $Revision: 3114 $
  */
 public class TimedObservablePortTest {
     

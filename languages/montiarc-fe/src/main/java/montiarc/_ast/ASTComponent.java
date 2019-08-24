@@ -1,8 +1,4 @@
-/*
- * Copyright (c) 2016 RWTH Aachen. All rights reserved.
- *
- * http://www.se-rwth.de/
- */
+/* (c) https://github.com/MontiCore/monticore */
 package montiarc._ast;
 
 import java.util.ArrayList;

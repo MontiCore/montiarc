@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -13,13 +14,7 @@ import sim.generic.TickedMessage;
  * 
  * Port that logs incoming and outgoing messages.
  *
- * <br>
- * <br>
- * Copyright (c) 2012 RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $LastChangedBy: ahaber $
- * @version $LastChangedDate: 2014-11-17 17:17:34 +0100 (Mo, 17 Nov 2014) $<br>
- *          $LastChangedRevision: 3051 $
  * @param <T> port type
  */
 public class LoggingPort<T> extends Port<T> {

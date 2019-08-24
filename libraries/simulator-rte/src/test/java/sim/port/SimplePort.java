@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -19,13 +20,7 @@ import sim.generic.TickedMessage;
  * It contains a stream of type {@link IStream} to save 
  * and buffer messages that are transmitted by this port.
  *
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $LastChangedBy: ahaber $
- * @version $LastChangedDate: 2015-01-09 14:18:20 +0100 (Fr, 09 Jan 2015) $<br>
- *          $LastChangedRevision: 3068 $
  * @param <T> data type of this port.
  * 
  */

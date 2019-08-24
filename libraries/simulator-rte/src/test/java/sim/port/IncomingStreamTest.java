@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
 import java.util.LinkedList;
@@ -13,13 +14,7 @@ import sim.generic.TickedMessage;
 /**
  * Tests for incoming stream methods {@link IStream}. 
  * 
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  * 
- * @author (last commit) $Author: ahaber $
- * @version $Date: 2015-02-09 16:59:52 +0100 (Mo, 09 Feb 2015) $<br>
- *          $Revision: 3128 $
  */
 public class IncomingStreamTest extends TestCase {
     protected ComponentTimeDummy comp;

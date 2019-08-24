@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package montiarc;
 
 import java.io.File;
@@ -6,13 +7,8 @@ import montiarc.helper.AutoconnectMode;
 import montiarc.helper.Timing;
 
 /**
- * Constants for the MontiArc language. <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
+ * Constants for the MontiArc language. 
  *
- * @author (last commit) $Author: ahaber $
- * @version $Date: 2015-01-19 12:45:03 +0100 (Mo, 19 Jan 2015) $<br>
- * $Revision: 3080 $
  */
 public final class MontiArcConstants {
   

@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package bumperbot;
 
 import lejos.nxt.Button;

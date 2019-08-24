@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package montiarc._ast;
 
 import java.util.List;

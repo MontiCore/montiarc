@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /*
  * @(#)Queue.java	1.5 03/12/19
  *

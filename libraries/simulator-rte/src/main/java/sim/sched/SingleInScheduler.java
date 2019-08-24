@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -18,13 +19,7 @@ import sim.port.IPortFactory;
  * Scheduler optimized for components with one incoming port.
  * 
  *
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $LastChangedBy: ahaber $
- * @version $LastChangedDate: 2015-03-19 14:43:21 +0100 (Do, 19 Mrz 2015) $<br>
- *          $LastChangedRevision: 3136 $
  */
 class SingleInScheduler implements IScheduler {
     

@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package components.head.generics;
 
 import components.body.subcomponents._subcomponents.HasStringInputAndOutput;

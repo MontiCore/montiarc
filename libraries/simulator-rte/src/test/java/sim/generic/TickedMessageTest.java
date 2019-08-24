@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim.generic;
 
 import static org.junit.Assert.assertFalse;

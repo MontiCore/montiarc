@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package montiarc.cocos;
 
 import de.monticore.symboltable.Scope;

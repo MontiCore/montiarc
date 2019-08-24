@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -11,11 +12,7 @@ import sim.port.IPortFactory;
 /**
  * Produces remote tcp ports.
  *
- * <br>
- * <br>
- * Copyright (c) 2010 RWTH Aachen. All rights reserved.
  *
- * @author  Arne Haber
  * @date	29.10.2010
  */
 public class TCPPortFactory implements IPortFactory {

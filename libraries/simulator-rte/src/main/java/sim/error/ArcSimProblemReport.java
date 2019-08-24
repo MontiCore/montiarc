@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -6,12 +7,7 @@ package sim.error;
 /**
  * ProblemReport used in the ArcSim runtime.
  * 
- * <br>
- * <br>
- * Copyright (c) 2010 RWTH Aachen. All rights reserved.
  * 
- * @author Arne Haber
- * @version 02.07.2010
  */
 public class ArcSimProblemReport {
     
@@ -19,13 +15,7 @@ public class ArcSimProblemReport {
      * 
      * Possible problem report types.
      *
-     * <br>
-     * <br>
-     * Copyright (c) 2011 RWTH Aachen. All rights reserved.
      *
-     * @author  (last commit) $Author: ahaber $
-     * @version $Date: 2015-03-19 14:43:21 +0100 (Do, 19 Mrz 2015) $<br>
-     *          $Revision: 3136 $
      */
     public enum Type {
         /**

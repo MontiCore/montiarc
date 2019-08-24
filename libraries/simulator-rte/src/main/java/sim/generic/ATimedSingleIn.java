@@ -1,17 +1,12 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
 package sim.generic;
 
 /**
- * Abstract implementation for timed components with one incoming port. <br>
- * <br>
- * Copyright (c) 2013 RWTH Aachen. All rights reserved.
+ * Abstract implementation for timed components with one incoming port. 
  * 
- * @author (last commit) $Author: ahaber $
- * @version $Date: 2015-02-02 14:49:50 +0100 (Mo, 02 Feb 2015) $<br>
- *          $Revision: 3110 $
- * @since 2.3.0 (14.06.2013)
  */
 public abstract class ATimedSingleIn<Tin>
         extends ASingleIn<Tin>

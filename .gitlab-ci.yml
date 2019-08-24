@@ -1,3 +1,4 @@
+# (c) https://github.com/MontiCore/monticore  
 # Build JAVA applications using Apache Maven (http://maven.apache.org)
 
 # Cache downloaded dependencies and plugins between builds.

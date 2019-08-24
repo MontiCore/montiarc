@@ -1,3 +1,4 @@
+<!-- (c) https://github.com/MontiCore/monticore -->
 # Pojo Generator
 
 This generator derives plain old java objects (POJOs) from a given CD4A model.

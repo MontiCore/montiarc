@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package generation;
 
 import de.montiarcautomaton.generator.MontiArcGeneratorTool;

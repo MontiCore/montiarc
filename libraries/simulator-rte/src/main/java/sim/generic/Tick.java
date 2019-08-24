@@ -1,14 +1,10 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim.generic;
 
 /**
  * Represents a tick. To ticks are the borders from one time unit.
  * 
- * <br>
- * <br>
- * Copyright (c) 2010 RWTH Aachen. All rights reserved.
  * 
- * @author Arne Haber
- * @version 19.11.2008
  * @param <T> Type of the port the tick is used in
  */
 public final class Tick<T> extends TickedMessage<T> {

@@ -1,15 +1,10 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim.generic;
 
 /**
  * Messages with an associated priority. 
  * 
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  * 
- * @author (last commit) $Author: ahaber $
- * @version $Date: 2012-11-14 15:43:58 +0100 (Mi, 14 Nov 2012) $<br>
- *          $Revision: 1686 $
  * @param <T> data type
  */
 public class PrioMessage<T> extends Message<T> {

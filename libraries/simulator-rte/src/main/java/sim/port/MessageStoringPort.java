@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -15,13 +16,7 @@ import sim.generic.TickedMessage;
 /**
  * Stores all accepted messages in a buffer. They may be accessed using the poll method.
  *
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $Author: ahaber $
- * @version $Date: 2015-02-05 17:20:14 +0100 (Do, 05 Feb 2015) $<br>
- *          $Revision: 3114 $
  * @param <T> data type of the port         
  */
 public class MessageStoringPort<T> implements IPort<T> {

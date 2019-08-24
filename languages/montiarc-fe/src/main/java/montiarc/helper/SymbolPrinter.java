@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package montiarc.helper;
 
 import com.google.common.base.Preconditions;

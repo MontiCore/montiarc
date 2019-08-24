@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package de.montiarcautomaton.lejos.lib.timer;
 
 import de.montiarcautomaton.lejos.lib.timer.Datatypes.TimerCmd;

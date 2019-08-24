@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -19,13 +20,7 @@ import sim.sched.SimSchedulerHashSet;
 /**
  * Tests for the logging port. 
  * 
- * <br>
- * <br>
- * Copyright (c) 2012 RWTH Aachen. All rights reserved.
  * 
- * @author (last commit) $LastChangedBy: ahaber $
- * @version $LastChangedDate: 2015-02-05 17:20:14 +0100 (Do, 05 Feb 2015) $<br>
- *          $LastChangedRevision: 3114 $
  */
 public class LoggingPortTest {
     

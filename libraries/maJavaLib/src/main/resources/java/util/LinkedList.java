@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /*
  * @(#)LinkedList.java	1.61 04/02/19
  *

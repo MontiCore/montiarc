@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package components.body;
 
 import org.junit.BeforeClass;

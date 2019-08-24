@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -16,12 +17,8 @@ import sim.generic.TickedMessage;
 
 /**
  * Old default port implementation. Use {@link Port} instead. PortDeprecated is
- * for tests only. <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
+ * for tests only. 
  * 
- * @author (last commit) $LastChangedBy: ahaber $
- * @version $LastChangedDate: 2015-02-05 17:20:14 +0100 (Do, 05 Feb 2015) $<br>
- *          $LastChangedRevision: 3114 $
  * @param <T> data type of this port
  */
 public class PortDeprecated<T> extends AbstractPort<T> implements IPort<T> {

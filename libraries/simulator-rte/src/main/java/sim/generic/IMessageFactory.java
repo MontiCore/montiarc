@@ -1,15 +1,11 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim.generic;
 
 /**
  * Interface for message factories that create Ticks and TickedMessages that are
  * used in the simulation. 
  * 
- * <br>
- * <br>
- * Copyright (c) 2010 RWTH Aachen. All rights reserved.
  * 
- * @author Arne Haber
- * @version 07.03.2009
  */
 public interface IMessageFactory {
     

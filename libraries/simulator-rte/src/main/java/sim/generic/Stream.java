@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim.generic;
 
 import java.util.ArrayList;
@@ -8,12 +9,7 @@ import java.util.List;
 /**
  * The stream type implements all needed stream functions.
  * 
- * <br>
- * <br>
- * Copyright (c) 2010 RWTH Aachen. All rights reserved.
  * 
- * @author Arne Haber
- * @version 09.04.2009
  * @param <T> data type of this stream
  */
 public class Stream<T> extends LinkedList<TickedMessage<T>> implements IStream<T> {

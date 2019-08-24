@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -20,13 +21,7 @@ import sim.port.IInSimPort;
 /**
  * TODO: Write me!
  *
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $Author: ahaber $
- * @version $Date: 2014-10-14 10:42:14 +0200 (Di, 14 Okt 2014) $<br>
- *          $Revision: 3036 $
  * @deprecated use {@link SchedulerFactory#createPrioScheduler()} instead. PrioMsgSchedulerDeprecated is for tests only.
  */
 @Deprecated

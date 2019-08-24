@@ -1,9 +1,5 @@
+/* (c) https://github.com/MontiCore/monticore */
 
-/*
- * Copyright (c) 2016 RWTH Aachen. All rights reserved.
- *
- * http://www.se-rwth.de/
- */
 package montiarc.cocos;
 
 import java.util.List;

@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package modelloader;
 
 import static org.junit.Assert.assertFalse;

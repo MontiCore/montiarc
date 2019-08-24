@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package components.body.invariants;
 
 import static org.junit.Assert.assertEquals;

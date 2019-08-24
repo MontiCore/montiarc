@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -8,14 +9,7 @@ import sim.port.IInPort;
 /**
  * Simulation specific methods of a component.
  *
- * <br>
- * <br>
- * Copyright (c) 2013 RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $Author:$
- * @version $Date:$<br>
- *          $Revision:$
- * @since   2.2.0 (09.04.2013)
  */
 public interface ISimComponent extends IComponent {
     /**

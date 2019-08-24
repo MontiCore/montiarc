@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package montiarc.helper;
 
 import de.monticore.symboltable.types.JTypeSymbol;

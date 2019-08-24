@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -11,13 +12,7 @@ import sim.generic.PrioMessage;
 /**
  * Compares {@link PrioMessage}s according to their priority.
  *
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $Author: ahaber $
- * @version $Date: 2013-04-09 16:37:35 +0200 (Di, 09 Apr 2013) $<br>
- *          $Revision: 2169 $
  */
 public class PrioMsgComparator implements Comparator<Message<?>> {
     

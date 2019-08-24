@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim.generic;
 
 import sim.IScheduler;
@@ -13,13 +14,7 @@ import sim.sched.SchedulerFactory;
  * Is used for components with just one incoming port and two or more outgoing
  * ports.
  *
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $Author: ahaber $
- * @version $Date: 2015-03-19 14:43:21 +0100 (Do, 19 Mrz 2015) $<br>
- *          $Revision: 3136 $
  * @param <Tin>
  */
 public abstract class ASingleIn<Tin> extends Port<Tin> implements ITestPort<Tin>, SimpleInPortInterface<Tin>, ISimComponent {
