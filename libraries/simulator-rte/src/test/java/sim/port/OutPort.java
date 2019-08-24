@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -14,13 +15,7 @@ import sim.generic.TickedMessage;
 /**
  * Implementation of an outgoing port. 
  *
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $LastChangedBy: ahaber $
- * @version $LastChangedDate: 2013-06-05 17:33:36 +0200 (Mi, 05 Jun 2013) $<br>
- *          $LastChangedRevision: 2376 $
  * @param <T> data type of this port
  * 
  */

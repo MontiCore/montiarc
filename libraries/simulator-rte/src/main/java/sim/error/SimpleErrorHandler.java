@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /*
  * 31.07.2009
  */
@@ -13,12 +14,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Default implementation of an error handler that may be used in the simulation environment.
  * 
- * <br>
- * <br>
- * Copyright (c) 2010 RWTH Aachen. All rights reserved.
  *  
- * @author Arne Haber
- * @version 31.07.2009
  * 
  */
 public class SimpleErrorHandler implements ISimulationErrorHandler {

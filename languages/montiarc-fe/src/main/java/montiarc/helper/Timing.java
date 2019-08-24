@@ -1,8 +1,4 @@
-/*
- * Copyright (c) 2015 RWTH Aachen. All rights reserved.
- *
- * http://www.se-rwth.de/
- */
+/* (c) https://github.com/MontiCore/monticore */
 package montiarc.helper;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -13,11 +9,8 @@ import montiarc._ast.ASTElement;
 import montiarc._ast.ASTMontiArcTiming;
 
 /**
- * Contains available time paradigms. <br>
- * <br>
- * Copyright (c) 2013 RWTH Aachen. All rights reserved.
+ * Contains available time paradigms. 
  *
- * @author Arne Haber, Robert Heim
  */
 public enum Timing {
   

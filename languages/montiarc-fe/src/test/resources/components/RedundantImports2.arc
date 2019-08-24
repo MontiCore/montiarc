@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package components;
 
 import components.*; // The current package 'components' should not be imported!

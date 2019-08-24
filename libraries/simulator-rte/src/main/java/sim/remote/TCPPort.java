@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -10,13 +11,8 @@ import sim.generic.TickedMessage;
 import sim.port.Port;
 
 /**
- * Port that transmits over tcp. <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
+ * Port that transmits over tcp. 
  * 
- * @author (last commit) $LastChangedBy: ahaber $
- * @version $LastChangedDate: 2014-08-31 16:58:17 +0200 (So, 31 Aug 2014) $<br>
- * $LastChangedRevision: 2972 $
  * @param <T>
  */
 public class TCPPort<T> extends Port<T> implements IInTCPPort<T>, IOutTcpPort<T> {

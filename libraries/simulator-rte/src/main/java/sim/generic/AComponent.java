@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim.generic;
 
 import sim.IScheduler;
@@ -6,12 +7,7 @@ import sim.error.ISimulationErrorHandler;
 /**
  * Represents an abstract component in the simulation,
  * 
- * <br>
- * <br>
- * Copyright (c) 2010 RWTH Aachen. All rights reserved.
  * 
- * @author Arne Haber
- * @version 13.10.2008
  */
 public abstract class AComponent implements ISimComponent {
     

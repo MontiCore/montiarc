@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim;
 
 import sim.generic.TickedMessage;
@@ -7,13 +8,7 @@ import sim.port.IPortFactory;
 /**
  * Prescribes methods for the simulation scheduler. 
  * 
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $LastChangedBy: ahaber $
- * @version $LastChangedDate: 2014-10-14 10:42:14 +0200 (Di, 14 Okt 2014) $<br>
- *          $LastChangedRevision: 3036 $
  */
 public interface IScheduler extends IPortFactory {
     

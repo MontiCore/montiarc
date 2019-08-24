@@ -1,5 +1,5 @@
-// This file was generated AUTOMATICALLY from a template file Mon Apr 01 13:36:02 PDT 2013
 /* (c) https://github.com/MontiCore/monticore */
+// This file was generated AUTOMATICALLY from a template file Mon Apr 01 13:36:02 PDT 2013
 
 package java.lang;
 

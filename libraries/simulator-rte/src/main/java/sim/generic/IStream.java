@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim.generic;
 
 import java.util.Collection;
@@ -7,13 +8,7 @@ import java.util.List;
  * 
  * The interface {@link IStream} describes stream operations.
  *
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $Author: ahaber $
- * @version $Date: 2015-02-09 16:59:52 +0100 (Mo, 09 Feb 2015) $<br>
- *          $Revision: 3128 $
  * @param <T> data type of the stream
  */
 public interface IStream<T> extends List<TickedMessage<T>> {

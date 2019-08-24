@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package de.montiarcautomaton.lejos.lib.motor;
 
 import de.montiarcautomaton.lejos.lib.Datatypes.MotorPort;

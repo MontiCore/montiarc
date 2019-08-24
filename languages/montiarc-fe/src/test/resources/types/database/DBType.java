@@ -1,13 +1,11 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  *
  */
 package types.database;
 
 /**
- * Copyright (c) 2010 RWTH Aachen. All rights reserved.
  *
- * @author Arne Haber
- * @date 25.06.2010
  */
 public class DBType implements types.database.DBInterface {
 

@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -25,13 +26,8 @@ import sim.port.MasterSlavePortFactory;
 /**
  * A Master Scheduler that controls several slave scheduler. Each slave can be
  * associated with a priority. High priorities are preferred, if buffered
- * messages of silent ports are to be processed (see activate method). <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
+ * messages of silent ports are to be processed (see activate method). 
  * 
- * @author (last commit) $Author: ahaber $
- * @version $Date: 2014-06-24 14:38:16 +0200 (Di, 24 Jun 2014) $<br>
- *          $Revision: 2874 $
  */
 final class MasterScheduler implements IPortFactory {
     

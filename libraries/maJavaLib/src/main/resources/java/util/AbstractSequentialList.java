@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /*
  * @(#)AbstractSequentialList.java	1.33 04/02/19
  *

@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /*******************************************************************************
  * Copyright (c) 2012 itemis AG (http://www.itemis.eu) and others.
  * All rights reserved. This program and the accompanying materials

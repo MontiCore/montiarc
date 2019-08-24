@@ -1,3 +1,4 @@
+<#-- (c) https://github.com/MontiCore/monticore -->
 ${tc.signature("helper", "_package", "name", "deployName")}
 
 package ${_package};

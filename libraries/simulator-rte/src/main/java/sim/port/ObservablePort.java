@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -14,13 +15,7 @@ import sim.generic.TickedMessage;
 /**
  * A port that notifies its observers if data messages are accepted. 
  * 
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  * 
- * @author (last commit) $Author: ahaber $
- * @version $Date: 2014-06-24 14:38:16 +0200 (Di, 24 Jun 2014) $<br>
- *          $Revision: 2874 $
  * @param <T>
  */
 public class ObservablePort<T> extends Observable implements IPort<T> {

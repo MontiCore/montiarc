@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package a;
 
 import components.body.subcomponents._subcomponents.HasIntegerInputAndOutput;

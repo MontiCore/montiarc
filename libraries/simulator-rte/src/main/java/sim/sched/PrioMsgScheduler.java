@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -20,13 +21,7 @@ import sim.port.IInSimPort;
 /**
  * Orders and then forwards {@link PrioMessage} messages to components. 
  * 
- * <br> 
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  * 
- * @author (last commit) $Author: ahaber $
- * @version $Date: 2015-03-19 14:43:21 +0100 (Do, 19 Mrz 2015) $<br>
- * $Revision: 3136 $
  */
 class PrioMsgScheduler extends SimSchedulerPortMap implements IScheduler {
     

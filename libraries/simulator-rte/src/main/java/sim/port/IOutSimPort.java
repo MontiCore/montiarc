@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -10,14 +11,7 @@ import sim.generic.ISimComponent;
 /**
  * Simulation specific methods of an outgoing port.
  *  *
- * <br>
- * <br>
- * Copyright (c) 2013 RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $Author:$
- * @version $Date:$<br>
- *          $Revision:$
- * @since   2.2.0 (04.04.2013)
  * 
  * @param <T> data type of this port
  */

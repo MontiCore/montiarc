@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package speedbumper;
 
 import de.montiarcautomaton.lejos.lib.Datatypes.MotorPort;

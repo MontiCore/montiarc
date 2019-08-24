@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -11,13 +12,7 @@ import sim.generic.TickedMessage;
  * Can be used in Tests as an outgoing port. Received messages are stored 
  * in the field stream.
  *
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $LastChangedBy: ahaber $
- * @version $LastChangedDate: 2014-03-26 18:05:00 +0100 (Mi, 26 Mrz 2014) $<br>
- *          $LastChangedRevision: 2805 $
  * @param <T> type of the port
  */
 public class TestPort<T> extends Port<T> implements ITestPort<T> {

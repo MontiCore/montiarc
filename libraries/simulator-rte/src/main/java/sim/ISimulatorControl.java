@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim;
 
 import java.io.File;
@@ -5,12 +6,7 @@ import java.io.File;
 /**
  * Defines the methods needed for an architecture simulator.
  * 
- * <br>
- * <br>
- * Copyright (c) 2010 RWTH Aachen. All rights reserved.
  * 
- * @author Arne Haber
- * @version 25.11.2008
  */
 public interface ISimulatorControl {
     

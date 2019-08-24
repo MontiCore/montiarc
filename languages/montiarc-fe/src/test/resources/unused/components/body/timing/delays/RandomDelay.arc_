@@ -1,5 +1,4 @@
-package ma.sim;
-
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * @brief adds a randomized delay to a channel.
  *
@@ -7,17 +6,13 @@ package ma.sim;
  * to {@link portOut} after a random delay of minimum {@code minDelay} time
  * units and maximum {@code maxDelay} time units.
  *
- * <br>
- * <br>
- * Copyright (c) ${year} RWTH Aachen. All rights reserved.
- *
- * @author  (last commit) $Author: ahaber $
- * @version $Date: 2015-01-19 12:45:03 +0100 (Mo, 19 Jan 2015) $<br>
- *
  * @type T type of the delayed channel.
  * @param minDelay minimum delay in time units.
  * @param maxDelay maximum delay in time units.
  */
+
+package ma.sim;
+
 <<author="Arne Haber">> 
 component RandomDelay<T>(int minDelay, int maxDelay) {
   

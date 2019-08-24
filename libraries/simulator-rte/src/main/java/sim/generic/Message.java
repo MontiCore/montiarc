@@ -1,14 +1,11 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim.generic;
 
 import de.se_rwth.commons.logging.Log;
 
 /**
- * Represents a concrete data message in the simulation framework. <br>
- * <br>
- * Copyright (c) 2010 RWTH Aachen. All rights reserved.
+ * Represents a concrete data message in the simulation framework. 
  * 
- * @author Arne Haber
- * @version 13.10.2008
  * @param <T> Type of the data
  */
 public class Message<T> extends TickedMessage<T> {

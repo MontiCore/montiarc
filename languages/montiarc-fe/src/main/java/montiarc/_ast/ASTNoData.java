@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package montiarc._ast;
 
 import de.monticore.java.javadsl._visitor.JavaDSLVisitor;

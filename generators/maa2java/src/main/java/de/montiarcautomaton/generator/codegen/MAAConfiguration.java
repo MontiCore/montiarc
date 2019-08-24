@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package de.montiarcautomaton.generator.codegen;
 
 import java.io.File;

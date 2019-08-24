@@ -1,3 +1,4 @@
+<#-- (c) https://github.com/MontiCore/monticore -->
 ${tc.signature("package", "kind", "type", "super", "typeHelper", "imports")}
 
 package ${package};

@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim.generic;
 
 import java.io.Serializable;
@@ -6,12 +7,7 @@ import java.io.Serializable;
  * Abstract carrier data type that is used for messages in the simulation
  * framework. 
  * 
- * <br>
- * <br>
- * Copyright (c) 2010 RWTH Aachen. All rights reserved.
  * 
- * @author Arne Haber
- * @version 19.11.2008
  * @param <T> data type from this message
  */
 public abstract class TickedMessage<T> implements Serializable {

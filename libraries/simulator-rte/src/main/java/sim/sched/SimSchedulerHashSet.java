@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -21,13 +22,8 @@ import sim.port.IOutSimPort;
 import sim.port.IPortFactory;
 
 /**
- * Default simulation scheduler. <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
+ * Default simulation scheduler. 
  * 
- * @author (last commit) $LastChangedBy: ahaber $
- * @version $LastChangedDate: 2015-03-19 14:43:21 +0100 (Do, 19 Mrz 2015) $<br>
- *          $LastChangedRevision: 3136 $
  * 
  * @deprecated Will be removed after 2.5.0 release. Use {@link SchedulerFactory#createDefaultScheduler()} instead.
  */

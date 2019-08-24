@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 /**
  * 
  */
@@ -14,13 +15,7 @@ import sim.generic.PrioMessage;
 /**
  * Tests for {@link PrioMsgComparator}.
  *
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $Author: ahaber $
- * @version $Date: 2015-02-05 17:20:14 +0100 (Do, 05 Feb 2015) $<br>
- *          $Revision: 3114 $
  */
 public class PrioMsgComparatorTest {
     

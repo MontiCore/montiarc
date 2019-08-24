@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package components.head.parameters;
 
 import types.CDTestTypes.EnumType;

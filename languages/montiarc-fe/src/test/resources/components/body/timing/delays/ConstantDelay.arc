@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package components.body.timing.delays;
 
 /**
@@ -9,12 +10,7 @@ package components.body.timing.delays;
  * to {@link portOut} after a fix delay of {@code delay} time
  * units.
  * 
- * <br>
- * <br>
- * Copyright (c) ${year} RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $Author: ahaber $
- * @version $Date: 2015-01-19 12:45:03 +0100 (Mo, 19 Jan 2015) $<br>
  *
  * @type T type of the delayed channel.
  * @param delay constant delay in time units.

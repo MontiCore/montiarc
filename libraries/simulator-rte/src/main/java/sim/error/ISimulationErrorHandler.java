@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim.error;
 
 import java.util.List;
@@ -7,12 +8,7 @@ import org.slf4j.Logger;
 /**
  * Handles errors that occur during the simulation.
  * 
- * <br>
- * <br>
- * Copyright (c) 2010 RWTH Aachen. All rights reserved.
  * 
- * @author Arne Haber
- * @version 04.03.2009
  */
 public interface ISimulationErrorHandler {
     

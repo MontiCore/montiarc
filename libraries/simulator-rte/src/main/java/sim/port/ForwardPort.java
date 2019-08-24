@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
 import java.util.HashSet;
@@ -13,13 +14,7 @@ import sim.generic.TickedMessage;
  * Is used to encapsulate the forwarded ports from inner components in one
  * architecture component port.
  *
- * <br>
- * <br>
- * Copyright (c) 2011 RWTH Aachen. All rights reserved.
  *
- * @author  (last commit) $Author: ahaber $
- * @version $Date: 2015-03-19 14:43:21 +0100 (Do, 19 Mrz 2015) $<br>
- *          $Revision: 3136 $
  * @param <T> data type of this port
  */
 public class ForwardPort<T> implements IForwardPort<T> {
