@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package components.head.generics;
 
 import types.T; //ERROR: The type 'T' must not be imported!
