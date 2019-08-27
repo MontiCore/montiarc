@@ -18,7 +18,6 @@ import montiarc._ast.ASTAutomatonBehavior
 import montiarc._ast.ASTComponent
 import montiarc._ast.ASTElement
 import montiarc._ast.ASTIOAssignment
-import montiarc._ast.ASTValueList
 import montiarc._symboltable.ComponentSymbol
 import montiarc._symboltable.PortSymbol
 import montiarc._symboltable.StateSymbol
@@ -100,6 +99,8 @@ class AutomatonGenerator extends ABehaviorGenerator {
         automaton = element.automaton
       }
     }
+    var helper = new ComponentHelper(comp)
+    
     return '''
 			@Override
 			public «resultName»«Utils.printFormalTypeParameters(comp)»
@@ -122,19 +123,19 @@ class AutomatonGenerator extends ABehaviorGenerator {
 			    	  «FOR transition : transitions.stream.filter(s | s.source.name == state.name).collect(Collectors.toList)»
 			    	  	// transition: «transition.toString»
 «««			    	  if statement for each guard of a transition from this state	
-			    	  	if («IF transition.guardAST.isPresent»«printNullChecks(comp, transition.guardAST.get.guardExpression.expression)» «printExpression(transition.guardAST.get.guardExpression.expression)»«ELSE» true «ENDIF») {
+			    	  	if («IF transition.guardAST.isPresent»«printNullChecks(comp, transition.guardAST.get.guardExpression.expression)» «helper.printExpression(transition.guardAST.get.guardExpression.expression)»«ELSE» true «ENDIF») {
 			    	  	  //reaction
 «««			    	  	if true execute reaction of transition  
 			    	  	  «IF transition.reactionAST.present»
 			    	  	  	«FOR assignment : transition.reactionAST.get.getIOAssignmentList»
 			    	  	  		«IF assignment.isAssignment»
 			    	  	  			«IF isVariable(assignment.name, assignment)»
-			    	  	  				«assignment.name» = «printRightHandSide(assignment)»;
+			    	  	  				«assignment.name» = «helper.printRightHandSide(assignment)»;
 			    	  	  			«ELSE»
-			    	  	  				«Identifier.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
+			    	  	  				«Identifier.resultName».set«assignment.name.toFirstUpper»(«helper.printRightHandSide(assignment)»);
 			    	  	  			«ENDIF»
 			    	  	  		«ELSE»
-			    	  	  			«printRightHandSide(assignment)»;  
+			    	  	  			«helper.printRightHandSide(assignment)»;  
 			    	  	  		«ENDIF»
 			    	  	  	«ENDFOR»
 			    	  	  «ENDIF»
@@ -174,6 +175,8 @@ class AutomatonGenerator extends ABehaviorGenerator {
         automaton = element.automaton
       }
     }
+    var ComponentHelper helper = new ComponentHelper(comp)
+    
     return '''
 			@Override
 			public «resultName»«Utils.printFormalTypeParameters(comp)»
@@ -189,12 +192,12 @@ class AutomatonGenerator extends ABehaviorGenerator {
 «««			  	set initial result			  	
 			  		«IF assignment.isAssignment»
 			  			«IF comp.getPort(assignment.name).isPresent»
-			  				«Identifier.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
+			  				«Identifier.resultName».set«assignment.name.toFirstUpper»(«helper.printRightHandSide(assignment)»);
 			  			«ELSE»
-			  				«assignment.name» = «printRightHandSide(assignment)»;
+			  				«assignment.name» = «helper.printRightHandSide(assignment)»;
 			  			«ENDIF»
 			  		«ELSE»
-			  			«printRightHandSide(assignment)»;  
+			  			«helper.printRightHandSide(assignment)»;  
 			  		«ENDIF»
 			  	«ENDFOR»
 			  «ENDIF»
@@ -232,44 +235,4 @@ class AutomatonGenerator extends ABehaviorGenerator {
     }
     return false;
   }
-
-  /**
-   * Returns the right side of an assignment/comparison. ValueLists &
-   * Alternatives are not supported.
-   * 
-   * @return
-   */
-  def private String printRightHandSide(ASTIOAssignment assignment) {
-    if (assignment.isPresentAlternative()) {
-      throw new RuntimeException("Alternatives not supported.");
-    } else {
-      var ASTValueList vl = assignment.getValueList();
-      if (vl.isPresentValuation()) {
-        return printExpression(vl.getValuation().getExpression(), assignment.isAssignment);
-      } else {
-        throw new RuntimeException("ValueLists not supported.");
-      }
-    }
-  }
-
-  /**
-   * Prints the java expression of the given AST expression node.
-   * 
-   * @param expr
-   * @return
-   */
-  def private String printExpression(ASTExpression expr, boolean isAssignment) {
-    var IndentPrinter printer = new IndentPrinter();
-    var JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(printer);
-    if (isAssignment) {
-      prettyPrinter = new CDAttributeGetterTransformationVisitor(printer);
-    }
-    expr.accept(prettyPrinter);
-    return printer.getContent();
-  }
-
-  def private String printExpression(ASTExpression expr) {
-    return printExpression(expr, true);
-  }
-
 }

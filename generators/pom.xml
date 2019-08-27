@@ -19,6 +19,7 @@
 	<module>cd2pojo</module>
   <!-- <module>maa2java</module> -->
 	<module>maa2java-xtend</module>
+    <module>dynma2java</module>
   </modules>
 
 </project>

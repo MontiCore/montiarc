@@ -46,8 +46,8 @@ public class TransitionSymbol extends CommonScopeSpanningSymbol {
     this.target = target;
   }
   
-  public void setGuardAST(Optional<ASTGuard> guard) {
-    this.guard = guard;
+  public void setGuardAST(ASTGuard guard) {
+    this.guard = Optional.of(guard);
   }
   
   public Optional<ASTGuard> getGuardAST() {
@@ -55,8 +55,8 @@ public class TransitionSymbol extends CommonScopeSpanningSymbol {
   }
   
   
-  public void setReactionAST(Optional<ASTBlock> block) {
-    this.reaction = block;
+  public void setReactionAST(ASTBlock block) {
+    this.reaction = Optional.of(block);
   }
   
   public Optional<ASTBlock> getReactionAST() {

@@ -35,6 +35,7 @@ Validate:
       - generators/cd2pojo/target/
       - generators/maa2java-xtend/target/
       - languages/montiarc-fe/target/
+      - languages/dynamic-montiarc/target/
       - libraries/lejos-rte/target/
       - libraries/maJavaLib/target/
       - libraries/maa-rte/target/

@@ -105,9 +105,10 @@ public class UseOfUndeclaredField
         Scope scope = node.getEnclosingScopeOpt().get(); //TransitionScope
         if(scope.getEnclosingScope().isPresent()){
           // Scope of the automaton
-          if(scope.getEnclosingScope().get().getEnclosingScope().isPresent()){
+          final Scope automatonScope = scope.getEnclosingScope().get();
+          if(automatonScope.getEnclosingScope().isPresent()){
             // Scope spanned by component symbol
-            scope = scope.getEnclosingScope().get().getEnclosingScope().get();
+            scope = automatonScope.getEnclosingScope().get();
             ComponentSymbol comp
                 = ((ComponentSymbol) scope.getSpanningSymbol().get());
             boolean foundVar = comp.getVariable(name).isPresent();
