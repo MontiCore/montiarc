@@ -13,6 +13,7 @@ import de.monticore.prettyprint.CommentPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
+import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc._symboltable.VariableSymbol;
 import montiarc._symboltable.adapters.CDTypeSymbol2JavaType;
@@ -36,7 +37,6 @@ public class CDAttributeGetterTransformationVisitor extends JavaDSLPrettyPrinter
    * de.montiarcautomaton.generator.visitor.MontiArcJavaDSLPrettyPrinter
    * 
    * @param out
-   * @param left
    */
   public CDAttributeGetterTransformationVisitor(IndentPrinter out) {
     super(out);
@@ -61,9 +61,6 @@ public class CDAttributeGetterTransformationVisitor extends JavaDSLPrettyPrinter
     super.handle(a);
   }
   
-  /**
-   * @see de.monticore.java.expressions._visitor.ExpressionsVisitor#handle(de.monticore.java.expressions._ast.ASTQualifiedNameExpression)
-   */
   @Override
   public void handle(ASTQualifiedNameExpression node) {
     Scope s = node.getEnclosingScopeOpt().get();

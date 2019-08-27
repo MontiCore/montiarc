@@ -41,8 +41,8 @@ abstract class ABehaviorGenerator {
     return '''
       «Utils.printPackage(comp)»
       
-      import «comp.packageName».«comp.name»Result;
-      import «comp.packageName».«comp.name»Input;
+      import «Utils.printPackageWithoutKeyWordAndSemicolon(comp)».«comp.name»Result;
+      import «Utils.printPackageWithoutKeyWordAndSemicolon(comp)».«comp.name»Input;
       «FOR _import : comp.imports»
         import «_import.statement»«IF _import.isStar».*«ENDIF»;
       «ENDFOR»

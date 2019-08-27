@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 import de.montiarcautomaton.generator.codegen.xtend.util.Utils;
+import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
 import de.monticore.mcexpressions._ast.ASTExpression;
 import de.monticore.prettyprint.IndentPrinter;
@@ -31,8 +32,10 @@ import de.monticore.types.types._ast.ASTTypeVariableDeclaration;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTComponent;
+import montiarc._ast.ASTIOAssignment;
 import montiarc._ast.ASTParameter;
 import montiarc._ast.ASTPort;
+import montiarc._ast.ASTValueList;
 import montiarc._symboltable.ComponentInstanceSymbol;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.ComponentSymbolReference;
@@ -228,6 +231,46 @@ public class ComponentHelper {
     return result.toString();
   }
   
+
+  /**
+   * Prints the java expression of the given AST expression node.
+   * 
+   * @param expr
+   * @return
+   */
+  public String printExpression(ASTExpression expr, boolean isAssignment) {
+    IndentPrinter printer = new IndentPrinter();
+    JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(printer);
+    if (isAssignment) {
+      prettyPrinter = new CDAttributeGetterTransformationVisitor(printer);
+    }
+    expr.accept(prettyPrinter);
+    return printer.getContent();
+  }
+
+  public String printExpression(ASTExpression expr) {
+    return printExpression(expr, true);
+  }
+  
+  /**
+   * Returns the right side of an assignment/comparison. ValueLists &
+   * Alternatives are not supported.
+   * 
+   * @return
+   */
+  public String printRightHandSide(ASTIOAssignment assignment) {
+    if (assignment.isPresentAlternative()) {
+      throw new RuntimeException("Alternatives not supported.");
+    } else {
+      ASTValueList vl = assignment.getValueList();
+      if (vl.isPresentValuation()) {
+        return printExpression(vl.getValuation().getExpression(), assignment.isAssignment());
+      } else {
+        throw new RuntimeException("ValueLists not supported.");
+      }
+    }
+  }
+  
   /**
    * Pretty print the ast type node with removed spaces.
    * 
@@ -398,7 +441,8 @@ public class ComponentHelper {
    * outgoing port.
    * 
    * @param cmp The component defining the connector
-   * @param conn The connector which connects the port to check
+   * @param source The source name of the connector which connects the port to check
+   * @param target The target name of the connector which connects the port to check
    * @param isSource Specifies whether the port to check is the source port of
    * the connector or the target port
    * @return true, if the port is an incoming port. False, otherwise.
@@ -430,7 +474,8 @@ public class ComponentHelper {
   /**
    * Returns the component name of a connection.
    *
-   * @param conn the connection
+   * @param source The source name of the connector which connects the port to check
+   * @param target The target name of the connector which connects the port to check
    * @param isSource <tt>true</tt> for source component, else <tt>false>tt>
    * @return
    */
@@ -452,7 +497,8 @@ public class ComponentHelper {
   /**
    * Returns the port name of a connection.
    *
-   * @param conn the connection
+   * @param source The source name of the connector which connects the port to check
+   * @param target The target name of the connector which connects the port to check
    * @param isSource <tt>true</tt> for source component, else <tt>false>tt>
    * @return
    */

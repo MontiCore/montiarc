@@ -559,7 +559,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
           if (transition.getGuardAST().isPresent()) {
             guard = printNullExpr(
                 transition.getGuardAST().get().getGuardExpression().getExpression(), symbol)
-                + printExpression(
+                + helper.printExpression(
                     transition.getGuardAST().get().getGuardExpression().getExpression(), false);
           }
           method.addBodyElement("if(" + guard + ")" + "{");
@@ -1199,7 +1199,6 @@ public class ComponentElementsCollector implements MontiArcVisitor {
    * TODO: Write me!
    * 
    * @param resultVarName
-   * @param initialReactionString
    * @param astioAssignment
    */
   private String printReaction(final String resultVarName,
@@ -1239,7 +1238,7 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     if (astioAssignment.isPresentValueList()) {
       final ASTValueList valueList = astioAssignment.getValueList();
       if (valueList.isPresentValuation()) {
-        result = printExpression(valueList.getValuation().getExpression(),
+        result = helper.printExpression(valueList.getValuation().getExpression(),
             astioAssignment.isAssignment());
       }
     }
@@ -1252,16 +1251,6 @@ public class ComponentElementsCollector implements MontiArcVisitor {
       result += input.substring(1);
     }
     return result;
-  }
-  
-  private String printExpression(ASTExpression expr, boolean isAssignment) {
-    IndentPrinter printer = new IndentPrinter();
-    JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(printer);
-    if (isAssignment) {
-      prettyPrinter = new CDAttributeGetterTransformationVisitor(printer);
-    }
-    expr.accept(prettyPrinter);
-    return printer.getContent();
   }
   
   private String printNullExpr(ASTExpression expr, ComponentSymbol comp) {

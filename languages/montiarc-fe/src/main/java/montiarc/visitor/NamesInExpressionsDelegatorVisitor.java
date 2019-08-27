@@ -71,7 +71,10 @@ public class NamesInExpressionsDelegatorVisitor extends JavaDSLDelegatorVisitor 
   public Map<ASTNameExpression, ExpressionKind> getFoundNames() {
     return this.foundNames;
   }
-  
+
+  public void reset(){
+    this.foundNames = new HashMap<>();
+  }
   
   /**
    * @see de.monticore.mcexpressions._visitor.MCExpressionsVisitor#visit(de.monticore.mcexpressions._ast.ASTAssignmentExpression)

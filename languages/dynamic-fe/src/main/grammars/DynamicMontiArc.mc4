@@ -1,0 +1,59 @@
+/* (c) https://github.com/MontiCore/monticore */
+/**
+ * Grammar for MontiArc with dynamic reconfiguration. Comprises the definition
+ * of modes and mode automata.
+ *
+ * @author Oliver Kautz, Andreas Wortmann, David Schmalzing
+ */
+grammar DynamicMontiArc extends MontiArc {
+
+  /**
+   * ASTMACompilationUnit represents the entire content of MontiArc models,
+   * including MontiArc for dynamic reconfiguration.
+   */
+  start MACompilationUnit;
+
+  /**
+   * The declaration of configuration modes and mode-transitions defining the mode automaton
+   * @attribute modeDeclaration Declaration of mode names and mode-specific configurations
+   * @attribute initialModeDeclaration Defines the initial mode of the mode automaton
+   * @attribute modeTransition Declares the mode transitions with guards and reactions
+   */
+  ModeAutomaton implements Element =
+    "modeautomaton" Name? "{"
+    ( ModeDeclaration | InitialModeDeclaration | ModeTransition )* "}";
+
+  /*
+   * Declaration of the configuration modes
+   * @attribute mode Name of the mode
+   * @attribute connector Connector available in the mode
+   * @attribute useStatement Subcomponents active in the mode
+   */
+  ModeDeclaration =
+    "mode" mode:Name ("," mode:Name)* "{"
+      (Connector | UseStatement)*
+    "}";
+
+  /*
+   * Declaration of the initial configuration mode the component starts in
+   * @attribute name The name of the initial configuration mode
+   */
+  InitialModeDeclaration =
+    "initial" Name ";";
+
+  /*
+  * The declaration of a single mode transition
+  * @attribute source The name of the source mode of the transition
+  * @attribute target The name of the target mode of the transition
+  * @attribute guard Transition activation condition
+  * @attribute reaction Action when the transition is executed
+  */
+  ModeTransition =
+    source:Name "->" target:Name Guard? ("/" reaction:Block)? ";";
+
+  /*
+   * Defines a list of subcomponents active in the mode
+   * @attribute name Name of a subcomponent active in the mode
+   */
+  UseStatement = "use" Name ("," Name)* ";";
+}

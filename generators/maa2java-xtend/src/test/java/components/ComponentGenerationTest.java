@@ -6,7 +6,6 @@
 package components;
 
 import com.google.common.base.Preconditions;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 import de.montiarcautomaton.generator.codegen.xtend.util.Utils;
 import de.monticore.ast.Comment;
