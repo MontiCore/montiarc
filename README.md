@@ -17,10 +17,11 @@ In MontiArc, architectures are described as component and connector systems in w
 ## Project Structure
 
 * languages/
+  * dynamic-fe
   * montiarc-fe
 * generators/
     * cd2pojo
-    * maa2java
+    * dynma2java
     * maa2java-xtend
 * applications/
     * bumperbot  
