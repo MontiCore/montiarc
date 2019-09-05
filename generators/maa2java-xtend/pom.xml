@@ -172,6 +172,9 @@
         <groupId>org.eclipse.xtend</groupId>
         <artifactId>xtend-maven-plugin</artifactId>
         <version>${xtend.version}</version>
+        <configuration>
+          <javaSourceVersion>1.8</javaSourceVersion>
+        </configuration>
         <dependencies>
           <dependency>
             <groupId>org.eclipse.platform</groupId>

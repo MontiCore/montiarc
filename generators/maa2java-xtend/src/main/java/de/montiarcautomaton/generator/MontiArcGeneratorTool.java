@@ -29,6 +29,25 @@ public class MontiArcGeneratorTool extends MontiArcTool {
   public static final String DEFAULT_TYPES_FOLDER = "target/javaLib/";
   public static final String LIBRARY_MODELS_FOLDER = "target/librarymodels/";
   
+  private MAAGenerator instance;
+  
+  /**
+   * @return instance
+   */
+  public MAAGenerator getInstance() {
+    if (instance == null) {
+      instance = new MAAGenerator();
+    }
+    return instance;
+  }
+  
+  /**
+   * @param instance the instance to set
+   */
+  public void setInstance(MAAGenerator instance) {
+    this.instance = instance;
+  }
+  
   /**
    * Checks cocos and generates code for all MontiArc models in modelpath to
    * folder target.
@@ -60,8 +79,7 @@ public class MontiArcGeneratorTool extends MontiArcTool {
       
       // 4. generate
       Log.info("Generate model: " + qualifiedModelName, "MontiArcGeneratorTool");
-      MAAGenerator.generateAll(Paths.get(target.getAbsolutePath(), 
-          Names.getPathFromPackage(comp.getPackageName())).toFile(), hwcPath, comp);
+      getInstance().generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(), hwcPath, comp);
     }
     
     // gen cd

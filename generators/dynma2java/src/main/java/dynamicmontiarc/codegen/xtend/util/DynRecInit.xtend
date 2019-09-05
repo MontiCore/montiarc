@@ -7,21 +7,14 @@ import montiarc._ast.ASTComponent
 import montiarc._ast.ASTConnector
 import montiarc._symboltable.ComponentSymbol
 import dynamicmontiarc.codegen.helper.DynMAGeneratorHelper
+import de.montiarcautomaton.generator.codegen.xtend.util.Init
 
 /**
- * TODO: Write me!
- *
- * @author  (last commit) Mutert
- *
+ * Generates the init() method for all components.
  */
-class Init{
-	
-	
-  /**
-   * Prints the init method for composed components, dynamic and static ones.
-   * 
-   */
-  def static printInitComposed(ComponentSymbol comp) {
+class DynRecInit extends Init{
+
+  override print(ComponentSymbol comp) {
     var helper = new ComponentHelper(comp);
     var node = comp.astNode.get as ASTComponent;
     var isDynamic = DynamicMontiArcHelper.isDynamic(node);
@@ -62,37 +55,7 @@ class Init{
       this.currentMode = «comp.name»Mode.«modeautomaton.initialModeDeclarationList.get(0).getName()»;
       «ENDIF»
     }
-    '''
-  }
-  
-  
-  /**
-   * Delegates to the right printInit method.
-   */
-  def static print(ComponentSymbol comp) {
-    if (comp.isAtomic) {
-    	return printInitAtomic(comp)
-    } else {
-      return printInitComposed(comp)
-    }
-  }
-  
-  def private static printInitAtomic(ComponentSymbol comp) {
-    return
-    '''
-    @Override
-    public void init() {
-    «IF comp.superComponent.present»
-      super.init();
-    «ENDIF»
-    // set up unused input ports
-    «FOR portIn : comp.incomingPorts»
-      if (this.«portIn.name» == null) {
-        this.«portIn.name» = Port.EMPTY;
-      }
-    «ENDFOR»
-    }
-    '''
+    '''    
   }
 	
 }

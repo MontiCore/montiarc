@@ -15,7 +15,7 @@ import montiarc._symboltable.PortSymbol
  */
 class Ports {
   
-  def static String print(Collection<PortSymbol> ports) {
+  def String print(Collection<PortSymbol> ports) {
     
     return 
     '''

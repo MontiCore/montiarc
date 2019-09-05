@@ -25,6 +25,8 @@ import montiarc._symboltable.TransitionSymbol
 import montiarc._symboltable.VariableSymbol
 import montiarc.visitor.NamesInExpressionsDelegatorVisitor
 import de.montiarcautomaton.generator.visitor.NamesInExpressionVisitor
+import de.montiarcautomaton.generator.visitor.NoDataUsageVisitor
+import java.util.Set
 
 /**
  * Prints the automaton behavior of a component.
@@ -35,40 +37,20 @@ import de.montiarcautomaton.generator.visitor.NamesInExpressionVisitor
  */
 class AutomatonGenerator extends ABehaviorGenerator {
 
-  var Collection<StateSymbol> states
-
-  var Collection<VariableSymbol> variables
-
-  var Collection<TransitionSymbol> transitions
-
-  var ComponentSymbol comp;
-
-  new(ComponentSymbol component) {
-    this.comp = comp
-    this.states = new ArrayList;
-    this.transitions = new ArrayList;
-    this.variables = new ArrayList;
-
-    // store all states of automaton
-    component.getSpannedScope().getSubScopes().stream().forEach(
+  def Collection<StateSymbol> getStates(ComponentSymbol comp) {
+    return comp.getSpannedScope().getSubScopes().stream().flatMap(
       scope |
-        scope.<StateSymbol>resolveLocally(StateSymbol.KIND).forEach(state|this.states.add(state))
-    );
-    
-    // store all transitions of automaton
-    component.getSpannedScope().getSubScopes().stream().forEach(
-      scope |
-        scope.<TransitionSymbol>resolveLocally(TransitionSymbol.KIND).forEach(transition|
-          this.transitions.add(transition)
-        )
-    );
-    
-    // variables can only be defined in the component's body unlike in JavaP
-    component.getSpannedScope().<VariableSymbol>resolveLocally(VariableSymbol.KIND).forEach(
-      variable |
-        this.variables.add(variable)
-    );
+        scope.<StateSymbol>resolveLocally(StateSymbol.KIND).stream
+    ).collect(Collectors.toList);
   }
+  
+  def Collection<TransitionSymbol> getTransitions(ComponentSymbol comp) {
+    return comp.getSpannedScope().getSubScopes().stream().flatMap(
+      scope |
+        scope.<TransitionSymbol>resolveLocally(TransitionSymbol.KIND).stream
+    ).collect(Collectors.toList);
+  }
+  
 
   /**
    * Adds a enum for alls states of the automtaton and the attribute currentState for storing 
@@ -120,10 +102,10 @@ class AutomatonGenerator extends ABehaviorGenerator {
 			    switch («Identifier.currentStateName») {
 			    «FOR state : automaton.stateDeclarationList.get(0).stateList»
 			    	case «state.name»:
-			    	  «FOR transition : transitions.stream.filter(s | s.source.name == state.name).collect(Collectors.toList)»
+			    	  «FOR transition : getTransitions(comp).stream.filter(s | s.source.name == state.name).collect(Collectors.toList)»
 			    	  	// transition: «transition.toString»
 «««			    	  if statement for each guard of a transition from this state	
-			    	  	if («IF transition.guardAST.isPresent»«printNullChecks(comp, transition.guardAST.get.guardExpression.expression)» «helper.printExpression(transition.guardAST.get.guardExpression.expression)»«ELSE» true «ENDIF») {
+			    	  	if («IF transition.guardAST.isPresent»«printNullChecks(comp, transition.guardAST.get.guardExpression.expression)» («helper.printExpression(transition.guardAST.get.guardExpression.expression)»)«ELSE» true «ENDIF») {
 			    	  	  //reaction
 «««			    	  	if true execute reaction of transition  
 			    	  	  «IF transition.reactionAST.present»
@@ -158,9 +140,15 @@ class AutomatonGenerator extends ABehaviorGenerator {
     var StringBuilder builder = new StringBuilder();
     var NamesInExpressionVisitor visitor = new NamesInExpressionVisitor();
     expression.accept(visitor);
+    var NoDataUsageVisitor nodataVisitor = new NoDataUsageVisitor();
+    expression.accept(nodataVisitor);
+    val Set<String> portsComparedToNoData = nodataVisitor.getPortsComparedToNoData;
+            
     for(String name : visitor.foundNames) {
       if(symbol.spannedScope.resolve(name, VariableSymbol.KIND).present || symbol.spannedScope.resolve(name, PortSymbol.KIND).present) {
-        builder.append(" " + name + "!=null &&");
+        if(!portsComparedToNoData.contains(name)) {        
+          builder.append(" " + name + "!=null &&");
+        }
       }
       
     }
@@ -185,7 +173,7 @@ class AutomatonGenerator extends ABehaviorGenerator {
 			  final «resultName»«Utils.printFormalTypeParameters(comp)» «Identifier.resultName» = new «resultName»«Utils.printFormalTypeParameters(comp)»();
 			  
 			  // initial reaction
-			  «var StateSymbol initialState = states.stream.filter(state | state.isInitial).findFirst.get»
+			  «var StateSymbol initialState = getStates(comp).stream.filter(state | state.isInitial).findFirst.get»
 «««			if an initial reaction is present
 			  «IF initialState.initialReactionAST.isPresent»
 			  	«FOR assignment : initialState.initialReactionAST.get.getIOAssignmentList»

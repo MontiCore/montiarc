@@ -6,13 +6,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import de.montiarcautomaton.generator.codegen.xtend.MAAGenerator;
 import de.monticore.cd2pojo.Modelfinder;
 import de.monticore.cd2pojo.POJOGenerator;
 import de.monticore.symboltable.Scope;
 import de.monticore.umlcd4a.CD4AnalysisLanguage;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
-import dynamicmontiarc.codegen.xtend.DynamicMontiArcGenerator;
+import dynamicmontiarc.codegen.xtend.DynRecComponentGenerator;
+import dynamicmontiarc.codegen.xtend.DynRecDeploy;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.MontiArcLanguage;
@@ -25,13 +27,41 @@ public class DynamicMontiArcGeneratorTool extends DynamicMontiArcTool{
   public static final String DEFAULT_TYPES_FOLDER = "target/javaLib/";
   public static final String LIBRARY_MODELS_FOLDER = "target/librarymodels/";
   
+  private MAAGenerator instance;
   
   /**
-   * Checks cocos and generates code for all MontiArc models in modelpath to folder target.
+   * Instance is the MontiArc generator ({@link MAAGenerator}) of the MontiArc
+   * core language used during code generation.
+   *
+   * @return the current instance
+   */
+  public MAAGenerator getInstance() {
+    if (this.instance == null) {
+      this.instance = new MAAGenerator();
+      this.instance.compGenerator = new DynRecComponentGenerator();
+      this.instance.deploy = new DynRecDeploy();
+    }
+    return this.instance;
+  }
+
+  /**
+   * Instance is the MontiArc generator ({@link MAAGenerator}) of the MontiArc
+   * core language used during code generation.
+   *
+   * @param instance the instance to set
+   */
+  public void setInstance(MAAGenerator instance) {
+    this.instance = instance;
+  }
+  
+  /**
+   * Parses all models in the given model path, checks context conditions, and
+   * generates code for these.
    * 
-   * @param modelPath Path where MontiArc models are located.
-   * @param target Path the code should be generated to.
-   * @param hwcPath Path where handwritten component implementations are located.
+   * @param modelPath the path where MontiArc models are located
+   * @param target the path the code should be generated to
+   * @param hwcPath the path where handwritten component implementations are
+   *                located
    */
   public void generate(File modelPath, File target, File hwcPath) {
     List<String> foundModels = Modelfinder.getModelsInModelPath(modelPath,
@@ -55,7 +85,7 @@ public class DynamicMontiArcGeneratorTool extends DynamicMontiArcTool{
       
       // 4. generate
       Log.info("Generate model: " + qualifiedModelName, "DynamicMontiArcGeneratorTool");
-      DynamicMontiArcGenerator.generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(), hwcPath, comp);
+      getInstance().generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(), hwcPath, comp);
     }
     
     // gen cd

@@ -24,6 +24,7 @@ import de.montiarcautomaton.generator.codegen.xtend.util.Utils;
 import de.montiarcautomaton.generator.helper.ComponentHelper;
 import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor;
 import de.montiarcautomaton.generator.visitor.NamesInExpressionVisitor;
+import de.montiarcautomaton.generator.visitor.NoDataUsageVisitor;
 import de.monticore.java.javadsl._ast.ASTImportDeclaration;
 import de.monticore.java.javadsl._ast.JavaDSLMill;
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter;
@@ -559,8 +560,9 @@ public class ComponentElementsCollector implements MontiArcVisitor {
           if (transition.getGuardAST().isPresent()) {
             guard = printNullExpr(
                 transition.getGuardAST().get().getGuardExpression().getExpression(), symbol)
-                + helper.printExpression(
-                    transition.getGuardAST().get().getGuardExpression().getExpression(), false);
+                + "(" + helper.printExpression(
+                    transition.getGuardAST().get().getGuardExpression().getExpression(), false)
+                + ")";
           }
           method.addBodyElement("if(" + guard + ")" + "{");
           
@@ -1257,10 +1259,15 @@ public class ComponentElementsCollector implements MontiArcVisitor {
     StringBuilder builder = new StringBuilder();
     NamesInExpressionVisitor visitor = new NamesInExpressionVisitor();
     expr.accept(visitor);
+    NoDataUsageVisitor nodataVisitor = new NoDataUsageVisitor();
+    expr.accept(nodataVisitor);
+    Set<String> portsComparedToNoData = nodataVisitor.getPortsComparedToNoData();
     for (String name : visitor.getFoundNames()) {
       if (symbol.getSpannedScope().resolve(name, VariableSymbol.KIND).isPresent()
           || symbol.getSpannedScope().resolve(name, PortSymbol.KIND).isPresent()) {
-        builder.append(" " + name + "!=null &&");
+        if (!portsComparedToNoData.contains(name)) {
+          builder.append(" " + name + "!=null &&");
+        }
       }
       
     }

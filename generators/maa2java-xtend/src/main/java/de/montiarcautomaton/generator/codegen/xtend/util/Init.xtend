@@ -20,7 +20,7 @@ class Init {
   /**
    * Delegates to the right printInit method.
    */
-  def static print(ComponentSymbol comp) {
+  def print(ComponentSymbol comp) {
     if (comp.isAtomic) {
     	return printInitAtomic(comp)
     } else {
@@ -28,7 +28,7 @@ class Init {
     }
   }
   
-  def private static printInitAtomic(ComponentSymbol comp) {
+  def private printInitAtomic(ComponentSymbol comp) {
     return
     '''
     @Override
@@ -46,7 +46,7 @@ class Init {
     '''
   }
   
-  def private static printInitComposed(ComponentSymbol comp) {
+  def private printInitComposed(ComponentSymbol comp) {
     var helper = new ComponentHelper(comp);
     
     return 
