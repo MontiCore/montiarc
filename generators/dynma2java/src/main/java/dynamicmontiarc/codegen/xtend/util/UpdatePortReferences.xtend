@@ -6,10 +6,7 @@ import montiarc._ast.ASTComponent
 import dynamicmontiarc.helper.DynamicMontiArcHelper
 
 /**
- * TODO: Write me!
- * 
- * @author  (last commit) Mutert
- * 
+ * Generates updatePortReferences() method for atomic and composed components.
  */
 class UpdatePortReferences {
 

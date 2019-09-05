@@ -12,12 +12,11 @@ import dynamicmontiarc._ast.ASTModeTransition
 import montiarc.visitor.NamesInExpressionsDelegatorVisitor
 import java.util.stream.Collectors
 import de.monticore.mcexpressions._ast.ASTNameExpression
+import de.montiarcautomaton.generator.visitor.NoDataUsageVisitor
+import de.monticore.mcexpressions._ast.ASTExpression
 
 /**
- * TODO: Write me!
- *
- * @author  (last commit)  Mutert
- *
+ * Generates the updateMode() method for atomic and composed components.
  */
 class UpdateMode {
 
@@ -27,7 +26,6 @@ class UpdateMode {
 	var portNullChecks = new HashMap<ASTModeTransition, List<String>>()
 	var variableNullChecks = new HashMap<ASTModeTransition, List<String>>()
 	var ev = new NamesInExpressionsDelegatorVisitor();
-    
     for (transition : automaton.modeTransitionList) {
     	ev.foundNames.clear()
 		var list = new ArrayList<String>()
@@ -66,12 +64,14 @@ class UpdateMode {
 «««		  	If the guard is present we have to print it as an additional condition
    	  «IF modeTransition.guardOpt.isPresent»
 		  	 «FOR portName : portNullChecks.get(modeTransition)»
+		  	 «IF !getPortsComparedToNoData(modeTransition.guard.guardExpression.expression).contains(portName)»
 			&& «portName» != null && «portName» != null
+			   «ENDIF»
 			«ENDFOR»
   			«FOR varName : variableNullChecks.get(modeTransition)»
   			&& «varName» != null
   			«ENDFOR»
-	  		&& «helper.printExpression(modeTransition.guardOpt.get.guardExpression.expression)»
+	  		&& («helper.printExpression(modeTransition.guardOpt.get.guardExpression.expression)»)
 	  	  «ENDIF»
 	  	) {
 	  	
@@ -109,5 +109,11 @@ class UpdateMode {
 	  	
 	  }
   '''
+  }
+  
+  def static getPortsComparedToNoData(ASTExpression expr) {
+    var NoDataUsageVisitor visitor = new NoDataUsageVisitor;
+    expr.accept(visitor);
+    return visitor.portsComparedToNoData    
   }
 }

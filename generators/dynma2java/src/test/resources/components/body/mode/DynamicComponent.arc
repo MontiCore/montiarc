@@ -34,8 +34,8 @@ component DynamicComponent {
     }
 
     initial Init;
-
-    Init -> Mode1 [stringIn.equals("mode1")];
+    Init -> Init [stringIn == -- || stringIn != -- || -- != stringIn];
+    Init -> Mode1 [stringIn.equals("mode1") || stringIn == --];
     Init -> Mode2 [stringIn.equals("mode2")];
     Mode1 -> Mode2 [stringIn.equals("mode2")];
     Mode2 -> Mode1 [stringIn.equals("mode1")];

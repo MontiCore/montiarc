@@ -14,7 +14,7 @@
   <artifactId>dynma2java</artifactId>
 
 
-  <!-- == PROJECT DEPENDENCIES ===========================================  -->
+  <!-- == PROJECT DEPENDENCIES ============================================ -->
   <dependencies>
 
     <dependency>
@@ -85,13 +85,13 @@
       <version>${monticore.version}</version>
     </dependency>
 
-    <!-- .. xtend ......................................................... -->
+    <!-- Xtend Library -->
     <dependency>
       <groupId>org.eclipse.xtend</groupId>
       <artifactId>org.eclipse.xtend.lib</artifactId>
     </dependency>
 
-    <!-- .. Test Libraries ................................................ -->
+    <!-- Test Libraries -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -131,11 +131,12 @@
       <scope>test</scope>
       <version>1.2.0</version>
     </dependency>
+
   </dependencies>
 
-  <!-- == BUILD CONFIGURATION ============================================  -->
-
+  <!-- == BUILD CONFIGURATION ============================================ -->
   <build>
+
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -1,5 +1,4 @@
-/* (c) https://github.com/MontiCore/monticore */
-package dynamicmontiarc.codegen
+package de.montiarcautomaton.generator
 
 info("--------------------------------")
 info("MAA Dynamische Reconfiguration Generator")

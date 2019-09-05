@@ -3,12 +3,13 @@ package dynamicmontiarc.codegen.xtend
 
 import montiarc._symboltable.ComponentSymbol
 import de.montiarcautomaton.generator.codegen.xtend.util.Utils
+import de.montiarcautomaton.generator.codegen.xtend.Deploy
 
 /**
  * Generates the deployment class for a component.
  */
-class Deploy {
-    def static generateDeploy(ComponentSymbol comp) {
+class DynRecDeploy extends Deploy{
+    override generate(ComponentSymbol comp) {
     var name = comp.name;
     return '''
 			«Utils.printPackage(comp)»
@@ -28,7 +29,6 @@ class Deploy {
 			      time = System.currentTimeMillis();
 			      cmp.compute();
 			      cmp.reconfigure();
-			      cmp.updatePortReferences();			      
 			      cmp.update();
 			      while((System.currentTimeMillis()-time) < CYCLE_TIME){
 			        Thread.yield();

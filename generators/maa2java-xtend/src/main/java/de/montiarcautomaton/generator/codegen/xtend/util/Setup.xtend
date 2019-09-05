@@ -21,7 +21,7 @@ class Setup {
   /**
    * Delegates to the right print method.
    */
-  def static print(ComponentSymbol comp) {
+  def print(ComponentSymbol comp) {
     if (comp.isAtomic) {
       return printSetupAtomic(comp)
     } else {
@@ -29,7 +29,7 @@ class Setup {
     }
   }
 
-  def private static printSetupAtomic(ComponentSymbol comp) {
+  def protected printSetupAtomic(ComponentSymbol comp) {
     return '''
       @Override
       public void setUp() {
@@ -49,7 +49,7 @@ class Setup {
     '''
   }
 
-  def private static printSetupComposed(ComponentSymbol comp) {
+  def protected printSetupComposed(ComponentSymbol comp) {
     var helper = new ComponentHelper(comp)
     return '''
         @Override
