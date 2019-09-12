@@ -1,4 +1,5 @@
-/* (c) https://github.com/MontiCore/monticore */ package de.montiarcautomaton.generator.codegen.xtend
+/* (c) https://github.com/MontiCore/monticore */
+package de.montiarcautomaton.generator.codegen.xtend
 
 import montiarc._symboltable.ComponentSymbol
 import de.montiarcautomaton.generator.codegen.xtend.util.Utils
