@@ -118,5 +118,12 @@ classdiagram Domain {
   enum MessageType {
     P2P, BROADCAST;
   }
-  
+
+  class StringList {
+   java.util.List<String> listOfStrings;
+  }
+
+  class StringListList {
+     java.util.List<java.util.List<String>> listOfListOfStrings;
+  }
 }

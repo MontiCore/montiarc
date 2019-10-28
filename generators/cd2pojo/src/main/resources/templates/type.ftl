@@ -28,12 +28,12 @@ public ${kind} ${type.getName()} ${super} {
     
     <#list type.getFields() as field>
         <#-- attributes -->
-        <#assign mandatoryFields = mandatoryFields + [{"name": field.getName(), "type":field.getType()}]>
-        private ${field.getType()} ${field.getName()};
-        public ${field.getType()} get${field.getName()?cap_first}() {
+        <#assign mandatoryFields = mandatoryFields + [{"name": field.getName(), "type":field.getType().getStringRepresentation()}]>
+        private ${field.getType().getStringRepresentation()} ${field.getName()};
+        public ${field.getType().getStringRepresentation()} get${field.getName()?cap_first}() {
           return ${field.getName()};
         }
-        public void set${field.getName()?cap_first}(${field.getType()} ${field.getName()}) {
+        public void set${field.getName()?cap_first}(${field.getType().getStringRepresentation()} ${field.getName()}) {
           this.${field.getName()} = ${field.getName()};
         }
     </#list>
