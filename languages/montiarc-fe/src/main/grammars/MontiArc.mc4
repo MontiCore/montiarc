@@ -208,7 +208,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
    * A component variable
    * @attribute Name: The name of the variable
    */
-  VariableDeclaration implements Element = Type (Name ("," Name)*)? ";" ; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
+  VariableDeclaration implements Element = Type (Name || ",")+ ";" ; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
   
 
   /**
