@@ -17,8 +17,8 @@
 
   <modules>
     <module>simulator-rte</module>
-	<module>lejos-rte</module>
-	<module>maa-rte</module>
+	  <module>lejos-rte</module>
+	  <module>maa-rte</module>
     <module>maJavaLib</module>
   </modules>
 
