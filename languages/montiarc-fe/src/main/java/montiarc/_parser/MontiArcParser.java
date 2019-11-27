@@ -42,5 +42,13 @@ public class MontiArcParser extends MontiArcParserTOP {
     }
     return ast;
   }
-  
+
+  /**
+   * Besides parsing, this also checks that the filename equals the model name and the package
+   * declaration equals the suffix of the package name of the model.
+   */
+  @Override
+  public Optional<ASTMACompilationUnit> parse(String fileName) throws IOException {
+    return parseMACompilationUnit(fileName);
+  }
 }
