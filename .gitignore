@@ -6,8 +6,6 @@ target
 
 \.idea/
 
-/generators/maa2java/generated-test-sources/
-
 *.iml
 .DS_Store
 generated-test-sources
