@@ -16,7 +16,6 @@
 
   <modules>
     <module>montiarc-fe</module>
-    <module>dynamic-fe</module>
   </modules>
 
 </project>
