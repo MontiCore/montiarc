@@ -1,0 +1,174 @@
+/* (c) https://github.com/MontiCore/monticore */
+/**
+ * This grammar defines the basic structural elements of component & connector
+ * architecture descriptions in form of component models. The grammar contains
+ * definitions for components, ports, and connectors.
+ */
+component grammar Arc extends de.monticore.MCBasics,
+                              de.monticore.types.MCBasicTypes,
+                              de.monticore.expressions.ExpressionsBasis {
+  /**
+   * ASTArcElement is the top-level interface for all elements of the component.
+   * A component may contain arbitrary many elements. This interface may be
+   * used as an extension point to enrich components with further elements.
+   */
+  interface ArcElement;
+
+  /**
+   * ASTComponent represents the definition of a component type. A component is
+   * a unit of computation or a data store. The size of a component may scale
+   * from a single procedure to a whole application. A component ist either
+   * atomic or decomposed into subcomponents.
+   *
+   * @attribute name The type name of this component.
+   * @attribute head Defines configuration options and extensions of this component.
+   * @attribute instances List of optional instance names used to create.
+   * of this component type. This is only for inner components.
+   * @attribute body Contains the architectural elements of this component.
+   */
+  symbol scope Component implements ArcElement =
+    key("component") Name
+    head:ComponentHead
+    instance:(ComponentInstance || ",")*
+    body:ComponentBody
+  ;
+
+  /**
+   * ASTComponentHead holds the definitions of generic type parameters that may
+   * be used as prt types in the component, definitions of configuration parameters
+   * that ma may be used to configure the component, and this component's parent.
+   *
+   * @attribute typeParameters A list of generic type parameters that may be used
+   * to configure types in the component.
+   * @attribute parameters A list of parameters that define configuration options
+   * of the component.
+   * @attribute parentComponent The type of the parent component.
+   */
+  ComponentHead =
+    ( "<" typeParameter:(ArcTypeParameter || ",")+ ">" )?
+    ( "(" parameter:(ArcParameter || ",")+ ")" )?
+    ( "extends" parentComponent:MCObjectType)?
+  ;
+
+  /**
+   * ASTField is the top-level interface of the component's parameters and variables.
+   */
+  interface symbol ArcField = Name;
+
+  /**
+   * ASTParameter define the configuration usage interface of the component.
+   *
+   * @attribute type The type of the parameter.
+   * @attribute name The name of the parameter.
+   * @attribute defaultValue Default value used for the parameter if no
+   * argument is given during instantiation.
+   */
+  ArcParameter implements ArcField = type:MCType Name ("=" defaultValue:Expression)? ;
+
+  /**
+   * ArcTypeParameter define type configuration options of the component.
+   *
+   * @attribute name Name of the generic type parameter.
+   * @attribute upperBound Type restrictions to the generic type parameter.
+   */
+  symbol ArcTypeParameter = Name ( "extends" upperBound:(MCType || "&")+ )? ;
+
+  /**
+   * ASTComponentBody holds the architectural elements of the component.
+   *
+   * arcElements A list of architectural elements.
+   */
+  ComponentBody = "{" ArcElement* "}" ;
+
+  /**
+   * ASTComponentInterface defines the interface of the component in terms of
+   * in- and outgoing ports.
+   *
+   * @attribute ports A list of port declarations contained in this interface.
+   */
+  ComponentInterface implements ArcElement =
+    key("port") port:(PortDeclaration || ",")+ ";"
+  ;
+
+  /**
+   * ASTPortDeclaration declares one or more ports by specifying their
+   * direction and type.
+   *
+   * @attribute direction The direction of the port. Can be in- or outgoing.
+   * @attribute type The type of the port.
+   * @attribute ports A list of declared ports.
+   */
+  PortDeclaration =
+    {next("in", "out")}? direction:Name
+    type:MCType port:(Port || ",")+
+  ;
+
+  /**
+  * ASTPort defines the port identifier and functions as an extension point
+  * for other port identifier kinds.
+  *
+  * @attribute name Name of the port.
+  */
+  symbol Port = Name;
+
+  /**
+  * ASTArcVariableDeclaration declares one or more component variables by
+  * specifying their type.
+  *
+  * @attribute type The type of the variable.
+  * @attribute variables A list of declared variables.
+  */
+  ArcVariableDeclaration implements ArcElement =
+    type:MCType variable:(ArcVariable || ",")+ ";"
+  ;
+
+  /**
+   * ASTArcVariable defines the variable identifier.
+   *
+   * @attribute name The name of the variable.
+   */
+  ArcVariable implements ArcField = Name;
+
+  /**
+   * ASTComponentInstantiation holds one or more component instances that are
+   * used in topology spanned by the component. This way the hierarchical
+   * structure of decomposed components is defined.
+   *
+   * @attribute type The type of the instantiated component.
+   * @attribute arguments A list of configuration arguments.
+   * @attribute instances A list of instantiated components.
+   */
+  ComponentInstantiation implements ArcElement =
+    key("instance") type:MCObjectType
+    ( "(" argument:(Expression || ",")+ ")" )?
+    instance:(ComponentInstance || ",")* ";"
+  ;
+
+  /**
+   * ASTComponentInstance defines the component instance identifier and functions
+   * as an extension point for other identifier kinds of component instances.
+   *
+   * @attribute name The name of the component instance.
+   */
+  symbol ComponentInstance = Name;
+
+  /**
+   * ASTConnector connects one source port with one or more target ports.
+   *
+   * @attribute source The source port or component instance name.
+   * @attribute targets A list of target ports or component instance names.
+   */
+  Connector implements ArcElement =
+    key("connect") source:PortReference
+    "->" target:(PortReference || ",")+ ";"
+  ;
+
+  /**
+   * ASTPortReference refers to a port. Functions as an extension point for
+   * more complex identifier.
+   *
+   * @attribute qualifiedName The qualified name of the referenced port or
+   * component instance name.
+   */
+  PortReference = qualifiedName:MCQualifiedName;
+}

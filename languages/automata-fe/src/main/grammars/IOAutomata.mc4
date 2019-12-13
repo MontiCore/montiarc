@@ -1,0 +1,32 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+component grammar IOAutomata extends de.monticore.types.MCBasicTypes,
+                                     de.monticore.expressions.ExpressionsBasis {
+
+  symbol scope IOAutomaton =
+    "automaton" Name?
+    "{" ( stateDeclarations:IOAutStateDeclaration | transitions:IOAutTransition )*
+  ;
+
+  IOAutStateDeclaration =
+    key("state") state:(IOAutState || ",")+ ";"
+  ;
+
+  IOAutInitialStateDeclaration extends IOAutStateDeclaration =
+    key("initial") key("state") state:(IOAutState || ",")+ IOAutActionBlock? ";"
+  ;
+
+  symbol IOAutState = key("state") Name;
+
+  IOAutTransition =
+    source:Name ("->" target:Name)?
+    IOAutGuard? reaction:IOAutActionBlock? ";"
+  ;
+
+  IOAutGuard = "[" Expression "]";
+
+  IOAutActionBlock = "/" "{" (Expression || ",")+ "}";
+
+  NoData implements Expression = "--";
+
+}
