@@ -8,7 +8,7 @@
   <parent>
     <artifactId>generators</artifactId>
     <groupId>montiarc.generators</groupId>
-    <version>5.1.3</version>
+    <version>6.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>dynma2java</artifactId>
