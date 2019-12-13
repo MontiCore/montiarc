@@ -30,10 +30,10 @@
 		<!-- .. SE-Libraries ..................................................... -->
 		<monticore.version>6.0.0</monticore.version>
 		<mc.grammars.assembly.version>0.0.8</mc.grammars.assembly.version>
-		<se-commons.version>1.7.8</se-commons.version> 
+		<se-commons.version>1.7.9</se-commons.version>
 
 		<!-- generator -->
-		<groovy.version>2.3.0</groovy.version>
+		<groovy.version>2.5.7</groovy.version>
 
 		<!-- .. SE-Libraries ..................................................... -->
 		<antlr.version>4.7.1</antlr.version>
@@ -43,20 +43,20 @@
 		<logback.version>1.1.2</logback.version>
 		<javalib.version>4.3.10-SNAPSHOT</javalib.version>
 		<janino.version>3.0.6</janino.version>
-		<junit.jupiter.version>5.1.0</junit.jupiter.version>
-        <junit.vintage.version>5.1.0</junit.vintage.version>
-        <junit.platform.version>1.1.0</junit.platform.version>
+		<junit.jupiter.version>5.5.2</junit.jupiter.version>
+        <junit.vintage.version>5.5.2</junit.vintage.version>
+        <junit.platform.version>1.3.2</junit.platform.version>
 		
 		<!-- .. Plugins ....................................................... -->
 		<monticore.plugin>6.0.0</monticore.plugin>
-		<assembly.plugin>2.5.4</assembly.plugin>
-		<compiler.plugin>3.3</compiler.plugin>
+		<assembly.plugin>3.1.1</assembly.plugin>
+		<compiler.plugin>3.8.1</compiler.plugin>
 		<se-groovy.maven.version>1.2.3</se-groovy.maven.version>
-		<source.plugin>2.4</source.plugin>
-		<jacoco.plugin>0.8.2</jacoco.plugin>
+		<source.plugin>3.1.0</source.plugin>
+		<jacoco.plugin>0.8.5</jacoco.plugin>
 		<jacoco.reportPath>${project.basedir}/../target/jacoco.exec</jacoco.reportPath>
-		<surefire.plugin>2.19.1</surefire.plugin>
-		<failsafe.plugin>2.19.1</failsafe.plugin>
+		<surefire.plugin>3.0.0-M4</surefire.plugin>
+		<failsafe.plugin>3.0.0-M4</failsafe.plugin>
 		<xtend.version>2.17.0</xtend.version>
 
 		<!-- Classifiers -->
@@ -224,9 +224,16 @@
 
 			<!-- .. Test Libraries ............................................... -->
 			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>${junit.version}</version>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-api</artifactId>
+				<version>${junit.jupiter.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-params</artifactId>
+				<version>${junit.jupiter.version}</version>
 				<scope>test</scope>
 			</dependency>
 
