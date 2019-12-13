@@ -1,11 +1,10 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-
-  <!-- == PROJECT COORDINATES ============================================= -->
-
+  <!-- == PROJECT COORDINATES ============================================== -->
   <parent>
     <groupId>montiarc.libraries</groupId>
     <artifactId>libraries</artifactId>
@@ -14,16 +13,35 @@
 
   <artifactId>lejos-rte</artifactId>
 
-
   <!-- == PROJECT DEPENDENCIES ============================================= -->
   <dependencies>
-
+    <!-- MontiCore Dependencies -->
     <dependency>
       <groupId>de.se_rwth.commons</groupId>
       <artifactId>se-commons-logging</artifactId>
     </dependency>
 
-    <!-- .. Test Libraries ............................................... -->
+    <!-- MontiArc -->
+    <dependency>
+      <groupId>montiarc.generators</groupId>
+      <version>${project.version}</version>
+      <artifactId>cd2pojo</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>montiarc.libraries</groupId>
+      <artifactId>maa-rte</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>montiarc.libraries</groupId>
+      <artifactId>maJavaLib</artifactId>
+      <classifier>${majavalib.classifier}</classifier>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- Test Libraries -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -39,19 +57,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
-      <version>1.10.19</version>
-    </dependency>
-
-    <dependency>
-      <groupId>montiarc.generators</groupId>
-      <version>${project.version}</version>
-      <artifactId>cd2pojo</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>montiarc.libraries</groupId>
-      <artifactId>maa-rte</artifactId>
-      <version>${project.version}</version>
+      <version>${mockito.version}</version>
     </dependency>
 
     <dependency>
@@ -60,24 +66,15 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>montiarc.libraries</groupId>
-      <artifactId>maJavaLib</artifactId>
-      <classifier>${majavalib.classifier}</classifier>
-      <version>${project.version}</version>
-    </dependency>
-
-    <!-- PLATFORM SPECIFIC API ================================= -->
+    <!-- Platform specific API -->
     <dependency>
       <groupId>lejos.nxt</groupId>
       <artifactId>classes</artifactId>
       <version>0.9.1-beta</version>
     </dependency>
-
   </dependencies>
 
   <!-- == PROJECT BUILD SETTINGS =========================================== -->
-
   <build>
     <plugins>
       <plugin>
@@ -106,7 +103,7 @@
       <plugin>
         <groupId>de.se_rwth.maven</groupId>
         <artifactId>se-groovy-maven-plugin</artifactId>
-        <version>${se-groovy.maven.version}</version>
+        <version>${se-groovy.plugin}</version>
         <configuration>
           <baseClass>de.montiarcautomaton.generator.codegen.MAAGeneratorScript</baseClass>
           <arguments>
@@ -178,5 +175,4 @@
       </resource>
     </resources>
   </build>
-
 </project>

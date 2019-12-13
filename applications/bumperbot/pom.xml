@@ -1,9 +1,10 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <!-- == PROJECT COORDINATES ============================================= -->
+  <!-- == PROJECT COORDINATES ============================================== -->
   <parent>
     <groupId>montiarc.applications</groupId>
     <artifactId>applications</artifactId>
@@ -12,12 +13,9 @@
 
   <artifactId>bumperbot</artifactId>
 
-
-
   <!-- == PROJECT DEPENDENCIES ============================================= -->
-
   <dependencies>
-
+    <!-- MontiArc -->
     <dependency>
       <groupId>montiarc.languages</groupId>
       <artifactId>montiarc-fe</artifactId>
@@ -36,11 +34,13 @@
       <version>${project.version}</version>
       <classifier>${librarymodels.classifier}</classifier>
     </dependency>
-	<dependency>
-	  <groupId>montiarc.libraries</groupId>
+
+    <dependency>
+      <groupId>montiarc.libraries</groupId>
       <artifactId>maJavaLib</artifactId>
       <version>${project.version}</version>
     </dependency>
+
     <dependency>
       <groupId>montiarc.libraries</groupId>
       <artifactId>maa-rte</artifactId>
@@ -63,16 +63,13 @@
       <artifactId>monticore-grammar</artifactId>
     </dependency>
 
+    <!-- JavaDSL -->
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>javaDSL</artifactId>
     </dependency>
 
-
-
-
-
-    <!-- .. Test Libraries ............................................... -->
+    <!-- Test Libraries -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -97,7 +94,6 @@
       <artifactId>logback-classic</artifactId>
       <scope>runtime</scope>
     </dependency>
-
   </dependencies>
 
   <build>
@@ -139,16 +135,17 @@
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <groupId>de.se_rwth.maven</groupId>
         <artifactId>se-groovy-maven-plugin</artifactId>
-        <version>${se-groovy.maven.version}</version>
+        <version>${se-groovy.plugin}</version>
         <configuration>
           <baseClass>de.montiarcautomaton.generator.codegen.MAAGeneratorScript</baseClass>
           <arguments>
             <out>${basedir}/target/generated-sources/</out>
             <modelPath>${basedir}/src/main/resources/models</modelPath>
-			<handwrittenCode>${basedir}/src/main/java</handwrittenCode>
+            <handwrittenCode>${basedir}/src/main/java</handwrittenCode>
           </arguments>
           <script>de/montiarcautomaton/generator/maagenerator.groovy</script>
         </configuration>
@@ -172,6 +169,7 @@
           </dependency>
         </dependencies>
       </plugin>
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
@@ -189,9 +187,6 @@
           </execution>
         </executions>
       </plugin>
-
-
     </plugins>
   </build>
-
 </project>
