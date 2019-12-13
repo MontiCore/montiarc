@@ -36,13 +36,11 @@
     <antlr.version>4.7.1</antlr.version>
     <guava.version>18.0</guava.version>
     <jsr305.version>3.0.0</jsr305.version>
-    <junit.version>4.12</junit.version>
     <logback.version>1.1.2</logback.version>
     <javalib.version>4.3.10-SNAPSHOT</javalib.version>
     <janino.version>3.0.6</janino.version>
     <junit.jupiter.version>5.5.2</junit.jupiter.version>
     <junit.vintage.version>5.5.2</junit.vintage.version>
-    <junit.platform.version>1.3.2</junit.platform.version>
     <mockito.version>1.10.19</mockito.version>
 
     <!-- Plugins -->
@@ -358,12 +356,6 @@
             <useSystemClassLoader>false</useSystemClassLoader>
           </configuration>
           <dependencies>
-            <!-- let surefire run JUnit 4 but also JUnit 5 tests -->
-            <dependency>
-              <groupId>org.junit.platform</groupId>
-              <artifactId>junit-platform-surefire-provider</artifactId>
-              <version>${junit.platform.version}</version>
-            </dependency>
             <!-- let JUnit vintage engine run JUnit 3 or JUnit 4 tests -->
             <dependency>
               <groupId>org.junit.vintage</groupId>
@@ -403,12 +395,6 @@
             <useSystemClassLoader>false</useSystemClassLoader>
           </configuration>
           <dependencies>
-            <!-- let surefire run JUnit 4 but also JUnit 5 tests -->
-            <dependency>
-              <groupId>org.junit.platform</groupId>
-              <artifactId>junit-platform-surefire-provider</artifactId>
-              <version>${junit.platform.version}</version>
-            </dependency>
             <!-- let JUnit vintage engine run JUnit 3 or JUnit 4 tests -->
             <dependency>
               <groupId>org.junit.vintage</groupId>
