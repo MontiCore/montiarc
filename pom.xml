@@ -16,6 +16,7 @@
     <module>generators</module>
     <module>libraries</module>
     <module>applications</module>
+    <module>util</module>
   </modules>
 
   <!-- == PROJECT PROPERTIES =============================================== -->

@@ -53,6 +53,13 @@
       <artifactId>se-commons-logging</artifactId>
     </dependency>
 
+    <!-- MontiArc -->
+    <dependency>
+      <groupId>montiarc</groupId>
+      <artifactId>util</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
     <!-- Test Libraries -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>

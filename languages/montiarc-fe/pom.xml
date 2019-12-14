@@ -55,6 +55,12 @@
 
     <!-- MontiArc -->
     <dependency>
+      <groupId>montiarc</groupId>
+      <artifactId>util</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>montiarc.languages</groupId>
       <artifactId>arc-fe</artifactId>
       <version>${project.version}</version>
