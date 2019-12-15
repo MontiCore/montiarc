@@ -48,8 +48,10 @@
     <monticore.plugin>6.0.0</monticore.plugin>
     <se-groovy.plugin>1.2.3</se-groovy.plugin>
     <assembly.plugin>3.1.1</assembly.plugin>
+    <dependency.plugin>3.1.1</dependency.plugin>
     <compiler.plugin>3.8.1</compiler.plugin>
     <source.plugin>3.1.0</source.plugin>
+    <jar.plugin>3.1.0</jar.plugin>
     <jacoco.plugin>0.8.5</jacoco.plugin>
     <surefire.plugin>3.0.0-M4</surefire.plugin>
     <failsafe.plugin>3.0.0-M4</failsafe.plugin>
