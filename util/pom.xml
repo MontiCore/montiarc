@@ -13,6 +13,28 @@
 
   <artifactId>util</artifactId>
 
+  <!-- == PROJECT DEPENDENCIES ============================================= -->
+  <dependencies>
+    <!-- MontiCore Dependencies -->
+    <dependency>
+      <groupId>de.se_rwth.commons</groupId>
+      <artifactId>se-commons-logging</artifactId>
+    </dependency>
+
+    <!-- Test Libraries -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
   <!-- == PROJECT BUILD SETTINGS =========================================== -->
   <build>
     <plugins>
