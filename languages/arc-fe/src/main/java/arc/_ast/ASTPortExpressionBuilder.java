@@ -6,12 +6,12 @@ import com.google.common.base.Preconditions;
 import java.util.Arrays;
 
 /**
- * Extends the {@link ASTPortReferenceBuilderTOP} with utility functions for easy constructor of
- * {@link ASTPortReference} nodes.
+ * Extends the {@link ASTPortExpressionBuilderTOP} with utility functions for easy constructor of
+ * {@link ASTPortExpression} nodes.
  */
-public class ASTPortReferenceBuilder extends ASTPortReferenceBuilderTOP {
+public class ASTPortExpressionBuilder extends ASTPortExpressionBuilderTOP {
 
-  protected ASTPortReferenceBuilder() {
+  protected ASTPortExpressionBuilder() {
     super();
   }
 
@@ -22,7 +22,7 @@ public class ASTPortReferenceBuilder extends ASTPortReferenceBuilderTOP {
    * @param qualifiedName qualified name of the referenced port
    * @return the current builder
    */
-  public ASTPortReferenceBuilder setQualifiedName(String qualifiedName) {
+  public ASTPortExpressionBuilder setQualifiedName(String qualifiedName) {
     Preconditions.checkNotNull(qualifiedName);
     this.setQualifiedName(ArcMill.mCQualifiedNameBuilder()
         .setPartList(Arrays.asList(qualifiedName.split("\\."))).build());

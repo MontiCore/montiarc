@@ -62,12 +62,12 @@ public class ASTComponent extends ASTComponentTOP {
    *
    * @return a {@code List} of all variable declarations of this component
    */
-  public List<ASTArcVariableDeclaration> getVariableDeclarations() {
+  public List<ASTArcFieldDeclaration> getVariableDeclarations() {
     return this.getBody()
       .getArcElementList()
       .stream()
-      .filter(element -> element instanceof ASTArcVariableDeclaration)
-      .map(varDec -> (ASTArcVariableDeclaration) varDec)
+      .filter(element -> element instanceof ASTArcFieldDeclaration)
+      .map(varDec -> (ASTArcFieldDeclaration) varDec)
       .collect(Collectors.toList());
   }
 
@@ -80,7 +80,7 @@ public class ASTComponent extends ASTComponentTOP {
   public List<ASTArcVariable> getVariables() {
     return this.getVariableDeclarations()
       .stream()
-      .map(ASTArcVariableDeclaration::getVariableList)
+      .map(ASTArcFieldDeclaration::getFieldList)
       .flatMap(Collection::stream)
       .collect(Collectors.toList());
   }

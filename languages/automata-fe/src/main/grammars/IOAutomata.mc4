@@ -1,32 +1,80 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 component grammar IOAutomata extends de.monticore.types.MCBasicTypes,
-                                     de.monticore.expressions.ExpressionsBasis {
+                                     de.monticore.expressions.AssignmentExpressions {
 
+  /**
+   * ASTIOAutomaton represents the definition of an io-automaton.
+   *
+   * @attribute name The name of this automaton.
+   * @attribute stateDeclaration List of state declarations of this automaton.
+   * @attribute transition List of transitions of this automaton.
+   */
   symbol scope IOAutomaton =
     "automaton" Name?
-    "{" ( stateDeclarations:IOAutStateDeclaration | transitions:IOAutTransition )*
+    "{" ( stateDeclaration:StateDeclaration | transition:Transition )* "}"
   ;
 
-  IOAutStateDeclaration =
-    key("state") state:(IOAutState || ",")+ ";"
+  /**
+   * ASTStateDeclaration declares states of the automaton.
+   *
+   * @attribute state A list of state identifiers.
+   */
+  StateDeclaration =
+    "state" state:(State || ",")+ ";"
   ;
 
-  IOAutInitialStateDeclaration extends IOAutStateDeclaration =
-    key("initial") key("state") state:(IOAutState || ",")+ IOAutActionBlock? ";"
+  /**
+   * ASTStateDeclaration declares the initial states of this automaton.
+   *
+   * @attribute state A list of state identifiers.
+   */
+  InitialStateDeclaration extends StateDeclaration =
+    key("initial") "state" state:(State || ",")+ ActionBlock? ";"
   ;
 
-  symbol IOAutState = key("state") Name;
+  /**
+   * ASTArcField defines the state identifier.
+   *
+   * @attribute name The name of the state.
+   */
+  symbol State = Name;
 
-  IOAutTransition =
-    source:Name ("->" target:Name)?
-    IOAutGuard? reaction:IOAutActionBlock? ";"
+ /**
+   * ASTTransition declares a single Transition
+   * @attribute source: The source state of the transition
+   * @attribute target: The target state of the transition
+   * @attribute Guard: The transition is only active when the guard is true
+   * @attribute reaction: What is done when the transition is taken
+   */
+  Transition =
+    source:StateExpression ("->" target:StateExpression)?
+    Guard? reaction:ActionBlock? ";"
   ;
 
-  IOAutGuard = "[" Expression "]";
+  /**
+   * ASTGuard defines the guard of a transition
 
-  IOAutActionBlock = "/" "{" (Expression || ",")+ "}";
+   * @attribute expression: The expression which should be true for the
+   * transition to be active
+   */
+  Guard = "[" Expression "]";
 
+  /**
+   * ASTActionBlock contains a row of assignments.
+
+   * @attribute IOAssignment: List of assignments
+   */
+  ActionBlock = "/" "{" (AssignmentExpression || ",")+ "}";
+
+  /**
+   * The Value for empty data
+   */
   NoData implements Expression = "--";
 
+  /**
+   * ASTStateExpression refers to a state. Functions as an extension point for
+   * more complex identifier.
+   */
+  StateExpression = Name;
 }

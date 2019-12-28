@@ -18,7 +18,7 @@ public class ASTConnectorBuilder extends ASTConnectorBuilderTOP {
   }
 
   /**
-   * Creates a {@link ASTPortReference} to be used by this builder corresponding the the provided
+   * Creates a {@link ASTPortExpression} to be used by this builder corresponding the the provided
    * {@code String} argument. The string argument is expected to be not null and a qualified name
    * (parts separated by dots ".").
    *
@@ -27,12 +27,12 @@ public class ASTConnectorBuilder extends ASTConnectorBuilderTOP {
    */
   public ASTConnectorBuilder setSource(String source) {
     Preconditions.checkNotNull(source);
-    this.source = ArcMill.portReferenceBuilder().setQualifiedName(source).build();
+    this.source = ArcMill.portExpressionBuilder().setQualifiedName(source).build();
     return this.realBuilder;
   }
 
   /**
-   * Creates a {@link ASTPortReference} to be used by this builder corresponding the the provided
+   * Creates a {@link ASTPortExpression} to be used by this builder corresponding the the provided
    * {@code String} argument and adds it to the list of target ports at the given index. The
    * provided {@code String} argument is expected to be not null and a qualified name (parts
    * separated by dots "."). The index is expected to be zero or greater.
@@ -50,7 +50,7 @@ public class ASTConnectorBuilder extends ASTConnectorBuilderTOP {
   }
 
   /**
-   * Creates the list of {@link ASTPortReference} to be used by this builder corresponding to the
+   * Creates the list of {@link ASTPortExpression} to be used by this builder corresponding to the
    * provided {@code String} arguments. The provided {@code String} arguments are expected to be
    * not null and qualified names (parts separated by dots ".").
    *
@@ -64,7 +64,7 @@ public class ASTConnectorBuilder extends ASTConnectorBuilderTOP {
   }
 
   /**
-   * Creates a {@link ASTPortReference} corresponding to the provided {@code String} argument and
+   * Creates a {@link ASTPortExpression} corresponding to the provided {@code String} argument and
    * adds it to the list of targets to be used by this builder. The provided {@code String}
    * argument is expected to be not null and a qualified name (parts separated by dots ".").
    *
@@ -79,7 +79,7 @@ public class ASTConnectorBuilder extends ASTConnectorBuilderTOP {
   }
 
   /**
-   * Creates a list of {@link ASTPortReference} corresponding to the provided {@code String}
+   * Creates a list of {@link ASTPortExpression} corresponding to the provided {@code String}
    * arguments and adds it to the list of targets to be used by this builder. The provided
    * {@code String} arguments are expected to be not null and a qualified names (parts separated
    * by dots ".").
@@ -95,7 +95,7 @@ public class ASTConnectorBuilder extends ASTConnectorBuilderTOP {
   }
 
   /**
-   * Creates a {@link ASTPortReference} corresponding to the provided {@code String} argument
+   * Creates a {@link ASTPortExpression} corresponding to the provided {@code String} argument
    * and, at the given index, adds it to the list of targets to be used by this builder. The
    * provided {@code String} argument is expected to be not null and a qualified name (parts
    * separated by dots "."). The index is expected to be zero or greater.
@@ -113,7 +113,7 @@ public class ASTConnectorBuilder extends ASTConnectorBuilderTOP {
   }
 
   /**
-   * Creates a list of {@link ASTPortReference} corresponding to the provided {@code String}
+   * Creates a list of {@link ASTPortExpression} corresponding to the provided {@code String}
    * arguments and, at the given index, adds it to the list of targets to be used by this builder.
    * The provided {@code String} arguments are expected to be not null and a qualified names
    * (parts separated by dots "."). The index is expected to be zero or greater.
@@ -130,14 +130,14 @@ public class ASTConnectorBuilder extends ASTConnectorBuilderTOP {
     return this.realBuilder;
   }
 
-  protected ASTPortReference doCreateTarget(String target) {
-    return ArcMill.portReferenceBuilder().setQualifiedName(target).build();
+  protected ASTPortExpression doCreateTarget(String target) {
+    return ArcMill.portExpressionBuilder().setQualifiedName(target).build();
   }
 
-  protected List<ASTPortReference> doCreateTargetList(String... targets) {
-    List<ASTPortReference> targetList = new ArrayList<>();
+  protected List<ASTPortExpression> doCreateTargetList(String... targets) {
+    List<ASTPortExpression> targetList = new ArrayList<>();
     for (String target : targets) {
-      ASTPortReference portRef = ArcMill.portReferenceBuilder().setQualifiedName(target).build();
+      ASTPortExpression portRef = ArcMill.portExpressionBuilder().setQualifiedName(target).build();
       targetList.add(portRef);
     }
     return targetList;

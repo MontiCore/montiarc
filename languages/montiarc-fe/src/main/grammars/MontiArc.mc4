@@ -1,8 +1,16 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 grammar MontiArc extends de.monticore.literals.MCCommonLiterals,
+                         de.monticore.expressions.CommonExpressions,
+                         de.monticore.expressions.AssignmentExpressions,
                          de.monticore.types.MCSimpleGenericTypes,
                          IOAutomata, Arc {
+
+  /** ASTMACompilationUnit represents the entire content of a MontiArc model
+   * @attribute package The package declaration of the component model
+   * @attribute importStatement List of imported elements
+   * @attribute component Outermost component defined in this compilation unit.
+   */
   scope MACompilationUnit =
     ("package" package:MCQualifiedName ";")?
     importStatement:MCImportStatement*
@@ -10,8 +18,29 @@ grammar MontiArc extends de.monticore.literals.MCCommonLiterals,
     EOF
   ;
 
+  /**
+   * ASTArcBehaviorElement is the top-level interface for component behavior
+   * embedding.
+   */
   interface ArcBehaviorElement extends ArcElement;
 
-  AutomatonBehavior implements ArcBehaviorElement = IOAutomaton;
+  /**
+   * Embedds IOAutomata for behavior specification.
+   */
+  AutomatonBehavior implements ArcBehaviorElement = automaton:IOAutomaton;
 
+  /**
+   * ASTArcTiming sets the timing of a component.
+   *
+   * @attribute stereotype optional stereotype
+   * @attribute instant a timed component
+   * @attribute delayed a timed component with delay
+   * @attribute causalsync a causal synchronous component
+   * @attribute sync a synchronous component
+   */
+  ArcTiming implements ArcConfig  =
+    "timing"
+    {next("instant", "delayed", "untimed", "causalsync", "sync")}? timing:Name
+    ";"
+  ;
 }

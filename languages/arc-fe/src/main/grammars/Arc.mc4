@@ -27,7 +27,7 @@ component grammar Arc extends de.monticore.MCBasics,
    * @attribute body Contains the architectural elements of this component.
    */
   symbol scope Component implements ArcElement =
-    key("component") Name
+    "component" Name
     head:ComponentHead
     instance:(ComponentInstance || ",")*
     body:ComponentBody
@@ -38,7 +38,7 @@ component grammar Arc extends de.monticore.MCBasics,
    * be used as prt types in the component, definitions of configuration parameters
    * that ma may be used to configure the component, and this component's parent.
    *
-   * @attribute typeParameters A list of generic type parameters that may be used
+   * @attribute typeParameters A list of generic type parameters that may be used 
    * to configure types in the component.
    * @attribute parameters A list of parameters that define configuration options
    * of the component.
@@ -46,24 +46,33 @@ component grammar Arc extends de.monticore.MCBasics,
    */
   ComponentHead =
     ( "<" typeParameter:(ArcTypeParameter || ",")+ ">" )?
-    ( "(" parameter:(ArcParameter || ",")+ ")" )?
+    ( "(" parameter:(ArcParameterDeclaration || ",")+ ")" )?
     ( "extends" parentComponent:MCObjectType)?
   ;
 
   /**
-   * ASTField is the top-level interface of the component's parameters and variables.
+   * ASTVariable is the top-level interface of the component's parameters and fields.
    */
-  interface symbol ArcField = Name;
+  interface symbol ArcVariable = Name;
 
   /**
-   * ASTParameter define the configuration usage interface of the component.
+   * ASTArcParameterDeclaration define the configuration usage interface of the
+   * component.
    *
    * @attribute type The type of the parameter.
-   * @attribute name The name of the parameter.
+   * @attribute arcParameter The identifier of the parameter.
    * @attribute defaultValue Default value used for the parameter if no
    * argument is given during instantiation.
    */
-  ArcParameter implements ArcField = type:MCType Name ("=" defaultValue:Expression)? ;
+  ArcParameterDeclaration = type:MCType ArcParameter ("=" defaultValue:Expression)? ;
+
+  /**
+   * ASTArcParameter defines the parameter identifier.
+   *
+   * @attribute name The name of the parameter.
+   */
+  ArcParameter implements ArcVariable = Name;
+  
 
   /**
    * ArcTypeParameter define type configuration options of the component.
@@ -76,7 +85,7 @@ component grammar Arc extends de.monticore.MCBasics,
   /**
    * ASTComponentBody holds the architectural elements of the component.
    *
-   * arcElements A list of architectural elements.
+   * @attribute arcElements A list of architectural elements.
    */
   ComponentBody = "{" ArcElement* "}" ;
 
@@ -87,7 +96,7 @@ component grammar Arc extends de.monticore.MCBasics,
    * @attribute ports A list of port declarations contained in this interface.
    */
   ComponentInterface implements ArcElement =
-    key("port") port:(PortDeclaration || ",")+ ";"
+    "port" port:(PortDeclaration || ",")+ ";"
   ;
 
   /**
@@ -112,22 +121,22 @@ component grammar Arc extends de.monticore.MCBasics,
   symbol Port = Name;
 
   /**
-  * ASTArcVariableDeclaration declares one or more component variables by
-  * specifying their type.
+  * ASTArcFieldDeclaration declares one or more component fields by
+  * specifying their type and identifier.
   *
-  * @attribute type The type of the variable.
-  * @attribute variables A list of declared variables.
+  * @attribute type The type of the component field.
+  * @attribute fields A list of field identifier.
   */
-  ArcVariableDeclaration implements ArcElement =
-    type:MCType variable:(ArcVariable || ",")+ ";"
+  ArcFieldDeclaration implements ArcElement =
+    type:MCType field:(ArcField || ",")+ ";"
   ;
 
   /**
-   * ASTArcVariable defines the variable identifier.
+   * ASTArcField defines the field identifier.
    *
-   * @attribute name The name of the variable.
+   * @attribute name The name of the field.
    */
-  ArcVariable implements ArcField = Name;
+  ArcField implements ArcVariable = Name;
 
   /**
    * ASTComponentInstantiation holds one or more component instances that are
@@ -139,7 +148,7 @@ component grammar Arc extends de.monticore.MCBasics,
    * @attribute instances A list of instantiated components.
    */
   ComponentInstantiation implements ArcElement =
-    key("instance") type:MCObjectType
+    "instance" type:MCObjectType
     ( "(" argument:(Expression || ",")+ ")" )?
     instance:(ComponentInstance || ",")* ";"
   ;
@@ -159,16 +168,13 @@ component grammar Arc extends de.monticore.MCBasics,
    * @attribute targets A list of target ports or component instance names.
    */
   Connector implements ArcElement =
-    key("connect") source:PortReference
-    "->" target:(PortReference || ",")+ ";"
+    "connect" source:PortExpression
+    "->" target:(PortExpression || ",")+ ";"
   ;
 
   /**
-   * ASTPortReference refers to a port. Functions as an extension point for
+   * ASTPortExpression refers to a port. Functions as an extension point for
    * more complex identifier.
-   *
-   * @attribute qualifiedName The qualified name of the referenced port or
-   * component instance name.
    */
-  PortReference = qualifiedName:MCQualifiedName;
+  PortExpression = qualifiedName:MCQualifiedName;
 }
