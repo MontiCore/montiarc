@@ -3,7 +3,7 @@ package arc._ast;
 
 import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
 import montiarc.AbstractTest;
-import montiarc.util.ArcError;
+import arc.util.ArcError;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.util;
+package arc.util;
 
 /**
  * The enum of all Arc errors. Extends the mixing interface {@link montiarc.util.Error}

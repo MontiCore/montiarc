@@ -2,7 +2,7 @@
 package arc._ast;
 
 import montiarc.AbstractTest;
-import montiarc.util.ArcError;
+import arc.util.ArcError;
 
 import java.util.regex.Pattern;
 
