@@ -57,28 +57,28 @@ public class ASTComponent extends ASTComponentTOP {
   }
 
   /**
-   * Returns a list of all variable declarations contained in the body of this component in no
-   * specific order. The list is empty if this component contains no variable declarations.
+   * Returns a list of all field declarations contained in the body of this component in no
+   * specific order. The list is empty if this component contains no field declarations.
    *
-   * @return a {@code List} of all variable declarations of this component
+   * @return a {@code List} of all field declarations of this component
    */
-  public List<ASTArcFieldDeclaration> getVariableDeclarations() {
+  public List<ASTArcFieldDeclaration> getFieldDeclarations() {
     return this.getBody()
       .getArcElementList()
       .stream()
       .filter(element -> element instanceof ASTArcFieldDeclaration)
-      .map(varDec -> (ASTArcFieldDeclaration) varDec)
+      .map(fieldDec -> (ASTArcFieldDeclaration) fieldDec)
       .collect(Collectors.toList());
   }
 
   /**
-   * Returns a list of all variables declared in variable declarations of this component in no
-   * specific order. The list is empty if the component contains no variable declarations.
+   * Returns a list of all fields declared in field declarations of this component in no
+   * specific order. The list is empty if the component contains no field declarations.
    *
-   * @return a {@code List} of all variables declared in variable declarations of this component.
+   * @return a {@code List} of all fields declared in field declarations of this component.
    */
-  public List<ASTArcVariable> getVariables() {
-    return this.getVariableDeclarations()
+  public List<ASTArcField> getFields() {
+    return this.getFieldDeclarations()
       .stream()
       .map(ASTArcFieldDeclaration::getFieldList)
       .flatMap(Collection::stream)
@@ -86,15 +86,15 @@ public class ASTComponent extends ASTComponentTOP {
   }
 
   /**
-   * Returns a list of names of all variables declared in variable declarations of this
-   * component in no specific order. The list is empty if the component contains no variable
+   * Returns a list of names of all fields declared in field declarations of this
+   * component in no specific order. The list is empty if the component contains no field
    * declarations.
    *
-   * @return a {@code List} of names of all variables declared in variable declarations of this
+   * @return a {@code List} of names of all fields declared in field declarations of this
    * component.
    */
-  public List<String> getVariableNames() {
-    return this.getVariables().stream().map(ASTArcVariable::getName).collect(Collectors.toList());
+  public List<String> getFieldNames() {
+    return this.getFields().stream().map(ASTArcField::getName).collect(Collectors.toList());
   }
 
   /**

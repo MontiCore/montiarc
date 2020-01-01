@@ -225,7 +225,7 @@ public class ComponentTest extends AbstractTest {
   @MethodSource("variablesProvider")
   public void shouldFindExpectedVariables(String... variables) {
     List<String> expectedVariables = Arrays.asList(variables);
-    List<String> actualVariables = this.getVariablesTestComponent().getVariableNames();
+    List<String> actualVariables = this.getVariablesTestComponent().getFieldNames();
     Assertions.assertTrue(expectedVariables.containsAll(actualVariables));
     Assertions.assertTrue(actualVariables.containsAll(expectedVariables));
   }

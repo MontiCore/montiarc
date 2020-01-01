@@ -6,7 +6,8 @@
  */
 component grammar Arc extends de.monticore.MCBasics,
                               de.monticore.types.MCBasicTypes,
-                              de.monticore.expressions.ExpressionsBasis {
+                              de.monticore.expressions.ExpressionsBasis,
+                              de.monticore.types.TypeSymbols {
   /**
    * ASTArcElement is the top-level interface for all elements of the component.
    * A component may contain arbitrary many elements. This interface may be
@@ -51,11 +52,6 @@ component grammar Arc extends de.monticore.MCBasics,
   ;
 
   /**
-   * ASTVariable is the top-level interface of the component's parameters and fields.
-   */
-  interface symbol ArcVariable = Name;
-
-  /**
    * ASTArcParameterDeclaration define the configuration usage interface of the
    * component.
    *
@@ -71,7 +67,7 @@ component grammar Arc extends de.monticore.MCBasics,
    *
    * @attribute name The name of the parameter.
    */
-  ArcParameter implements ArcVariable = Name;
+  ArcParameter implements Field = Name;
   
 
   /**
@@ -80,7 +76,9 @@ component grammar Arc extends de.monticore.MCBasics,
    * @attribute name Name of the generic type parameter.
    * @attribute upperBound Type restrictions to the generic type parameter.
    */
-  symbol ArcTypeParameter = Name ( "extends" upperBound:(MCType || "&")+ )? ;
+  ArcTypeParameter implements Type =
+    Name ( "extends" upperBound:(MCType || "&")+ )?
+  ;
 
   /**
    * ASTComponentBody holds the architectural elements of the component.
@@ -136,7 +134,7 @@ component grammar Arc extends de.monticore.MCBasics,
    *
    * @attribute name The name of the field.
    */
-  ArcField implements ArcVariable = Name;
+  ArcField implements Field = Name;
 
   /**
    * ASTComponentInstantiation holds one or more component instances that are
