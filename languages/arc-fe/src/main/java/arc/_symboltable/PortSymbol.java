@@ -32,6 +32,10 @@ public class PortSymbol extends PortSymbolTOP {
     this.type = type;
   }
 
+  public String getDirection() {
+    return this.direction;
+  }
+
   /**
    * @param direction the direction of this port.
    */
