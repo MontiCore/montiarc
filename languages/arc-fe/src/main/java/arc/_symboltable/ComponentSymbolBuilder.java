@@ -3,7 +3,7 @@ package arc._symboltable;
 
 import com.google.common.base.Preconditions;
 import de.monticore.types.typesymbols._symboltable.FieldSymbol;
-import de.monticore.types.typesymbols._symboltable.TypeSymbol;
+import de.monticore.types.typesymbols._symboltable.TypeVarSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -14,7 +14,7 @@ public class ComponentSymbolBuilder extends ComponentSymbolBuilderTOP {
   protected ComponentSymbol outerComponent;
   protected ComponentSymbolLoader parentComponent;
   protected List<FieldSymbol> parameters;
-  protected List<TypeSymbol> typeParameters;
+  protected List<TypeVarSymbol> typeParameters;
 
   protected ComponentSymbolBuilder() {
     super();
@@ -62,11 +62,11 @@ public class ComponentSymbolBuilder extends ComponentSymbolBuilderTOP {
     return this.realBuilder;
   }
 
-  public List<TypeSymbol> getTypeParameters() {
+  public List<TypeVarSymbol> getTypeParameters() {
     return this.typeParameters;
   }
 
-  public ComponentSymbolBuilder setTypeParameters(@NotNull List<TypeSymbol> typeParameters) {
+  public ComponentSymbolBuilder setTypeParameters(@NotNull List<TypeVarSymbol> typeParameters) {
     Preconditions.checkArgument(typeParameters != null);
     Preconditions.checkArgument(!typeParameters.contains(null));
     this.typeParameters = typeParameters;

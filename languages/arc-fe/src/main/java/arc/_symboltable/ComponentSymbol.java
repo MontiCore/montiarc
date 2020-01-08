@@ -4,7 +4,7 @@ package arc._symboltable;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.types.typesymbols._symboltable.FieldSymbol;
-import de.monticore.types.typesymbols._symboltable.TypeSymbol;
+import de.monticore.types.typesymbols._symboltable.TypeVarSymbol;
 import org.codehaus.commons.nullanalysis.Nullable;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -16,7 +16,7 @@ public class ComponentSymbol extends ComponentSymbolTOP {
   protected ComponentSymbol outerComponent;
   protected ComponentSymbolLoader parentComponent;
   protected List<FieldSymbol> parameters;
-  protected List<TypeSymbol> typeParameters;
+  protected List<TypeVarSymbol> typeParameters;
 
   /**
    * @param name the name of this component type.
@@ -156,7 +156,7 @@ public class ComponentSymbol extends ComponentSymbolTOP {
   /**
    * @return a {@code List} of the type parameters of this component type.
    */
-  public List<TypeSymbol> getTypeParameters() {
+  public List<TypeVarSymbol> getTypeParameters() {
     return this.typeParameters;
   }
 
@@ -167,7 +167,7 @@ public class ComponentSymbol extends ComponentSymbolTOP {
    *
    * @param typeParameter the symbol to add.
    */
-  public void addTypeParameter(@NotNull TypeSymbol typeParameter) {
+  public void addTypeParameter(@NotNull TypeVarSymbol typeParameter) {
     Preconditions.checkArgument(typeParameter != null);
     this.typeParameters.add(typeParameter);
     this.getSpannedScope().add(typeParameter);
@@ -181,10 +181,10 @@ public class ComponentSymbol extends ComponentSymbolTOP {
    *
    * @param typeParameters the symbols to add.
    */
-  public void addTypeParameters(@NotNull Collection<TypeSymbol> typeParameters) {
+  public void addTypeParameters(@NotNull Collection<TypeVarSymbol> typeParameters) {
     Preconditions.checkArgument(typeParameters != null);
     Preconditions.checkArgument(!typeParameters.contains(null));
-    for (TypeSymbol typeParameter : typeParameters) {
+    for (TypeVarSymbol typeParameter : typeParameters) {
       this.addTypeParameter(typeParameter);
     }
   }

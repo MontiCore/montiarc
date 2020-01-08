@@ -76,7 +76,7 @@ component grammar Arc extends de.monticore.MCBasics,
    * @attribute name Name of the generic type parameter.
    * @attribute upperBound Type restrictions to the generic type parameter.
    */
-  ArcTypeParameter implements Type =
+  ArcTypeParameter implements TypeVar =
     Name ( "extends" upperBound:(MCType || "&")+ )?
   ;
 

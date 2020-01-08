@@ -3,8 +3,8 @@ package arc._symboltable;
 
 import arc.util.ArcError;
 import de.monticore.types.typesymbols._symboltable.FieldSymbol;
-import de.monticore.types.typesymbols._symboltable.TypeSymbol;
 import de.monticore.types.typesymbols._symboltable.TypeSymbolLoader;
+import de.monticore.types.typesymbols._symboltable.TypeVarSymbol;
 import montiarc.AbstractTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -108,8 +108,8 @@ public class ComponentSymbolTest extends AbstractTest {
       .setSpannedScope(new ArcScope()).build();
     ComponentSymbol compWithTypeParameters = ArcSymTabMill.componentSymbolBuilder().setName("Comp2")
       .setSpannedScope(new ArcScope()).build();
-    compWithTypeParameters.addTypeParameters(
-        Arrays.asList(mock(TypeSymbol.class), mock(TypeSymbol.class), mock(TypeSymbol.class)));
+    compWithTypeParameters.addTypeParameters(Arrays
+      .asList(mock(TypeVarSymbol.class), mock(TypeVarSymbol.class), mock(TypeVarSymbol.class)));
     Assertions.assertFalse(compWithoutTypeParameters.hasTypeParameter());
     Assertions.assertTrue(compWithTypeParameters.hasTypeParameter());
   }

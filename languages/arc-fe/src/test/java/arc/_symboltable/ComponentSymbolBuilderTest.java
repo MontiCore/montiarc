@@ -3,8 +3,7 @@ package arc._symboltable;
 
 import arc.util.ArcError;
 import de.monticore.types.typesymbols._symboltable.FieldSymbol;
-import de.monticore.types.typesymbols._symboltable.ITypeSymbolsScope;
-import de.monticore.types.typesymbols._symboltable.TypeSymbol;
+import de.monticore.types.typesymbols._symboltable.TypeVarSymbol;
 import montiarc.AbstractTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.Arguments;
 
 import static org.junit.jupiter.params.provider.Arguments.arguments;
-import static org.mockito.Mockito.mock;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -104,7 +102,8 @@ public class ComponentSymbolBuilderTest extends AbstractTest {
 
   @ParameterizedTest
   @MethodSource("compNameAndTypeParametersProvider")
-  public void shouldBuildWithExpectedTypeParameters(String name, List<TypeSymbol> typeParameters) {
+  public void shouldBuildWithExpectedTypeParameters(String name,
+    List<TypeVarSymbol> typeParameters) {
     ComponentSymbol symbol = ArcSymTabMill.componentSymbolBuilder().setName(name)
       .setSpannedScope(new ArcScope()).setTypeParameters(typeParameters).build();
     Assertions.assertEquals(symbol.getName(), name);
@@ -115,15 +114,10 @@ public class ComponentSymbolBuilderTest extends AbstractTest {
     return Stream.of(
       arguments("Comp1", Collections.emptyList()),
       arguments("Comp2", Arrays.asList(
-        ArcSymTabMill.typeSymbolBuilder().setSpannedScope(mock(ITypeSymbolsScope.class))
-          .setName("A").build(),
-        ArcSymTabMill.typeSymbolBuilder().setSpannedScope(mock(ITypeSymbolsScope.class))
-          .setName("B").build(),
-        ArcSymTabMill.typeSymbolBuilder().setSpannedScope(mock(ITypeSymbolsScope.class))
-          .setName("C").build())),
-      arguments("Comp3",
-        Collections.singletonList(
-          ArcSymTabMill.typeSymbolBuilder().setSpannedScope(mock(ITypeSymbolsScope.class))
-            .setName("D").build())));
+        ArcSymTabMill.typeVarSymbolBuilder().setName("A").build(),
+        ArcSymTabMill.typeVarSymbolBuilder().setName("B").build(),
+        ArcSymTabMill.typeVarSymbolBuilder().setName("C").build())),
+      arguments("Comp3", Collections.singletonList(
+        ArcSymTabMill.typeVarSymbolBuilder().setName("D").build())));
   }
 }
