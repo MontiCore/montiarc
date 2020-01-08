@@ -7,7 +7,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 public class PortSymbolBuilder extends PortSymbolBuilderTOP {
 
-  protected boolean incoming;
+  protected String direction;
   protected TypeSymbolLoader type;
 
   protected PortSymbolBuilder() {
@@ -30,12 +30,26 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
     return this.realBuilder;
   }
 
+  public String getDirection() {
+    return this.direction;
+  }
+
+  public PortSymbolBuilder setDirection(@NotNull String direction) {
+    Preconditions.checkArgument(direction != null);
+    this.direction = direction;
+    return this.realBuilder;
+  }
+
   public boolean isIncoming() {
-    return this.incoming;
+    return this.getDirection().equals("in");
   }
 
   public PortSymbolBuilder setIncoming(boolean incoming) {
-    this.incoming = incoming;
+    if (incoming) {
+      this.setDirection("in");
+    } else {
+      this.setDirection("out");
+    }
     return this.realBuilder;
   }
 
@@ -44,15 +58,16 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
     if (!isValid()) {
       Preconditions.checkState(this.getName() != null);
       Preconditions.checkState(this.getType() != null);
+      Preconditions.checkState(this.getDirection() != null);
     }
     PortSymbol symbol = super.build();
-    symbol.setDirection(incoming);
+    symbol.setDirection(this.getDirection());
     symbol.setType(this.getType());
     return symbol;
   }
 
   @Override
   public boolean isValid() {
-    return this.getName() != null && this.getType() != null;
+    return this.getName() != null && this.getType() != null && this.getDirection() !=null;
   }
 }

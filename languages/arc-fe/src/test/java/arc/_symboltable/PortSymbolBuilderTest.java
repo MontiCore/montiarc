@@ -24,24 +24,28 @@ public class PortSymbolBuilderTest extends AbstractTest {
   @Test
   public void shouldBeValid() {
     PortSymbolBuilder builder = new PortSymbolBuilder();
-    builder.setName("in1").setType(mock(TypeSymbolLoader.class));
+    builder.setName("in1").setType(mock(TypeSymbolLoader.class)).setDirection("in");
     Assertions.assertTrue(builder.isValid());
   }
 
   @Test
   public void shouldBeInvalid() {
-    PortSymbolBuilder builderWithName = new PortSymbolBuilder();
-    PortSymbolBuilder builderWithType = new PortSymbolBuilder();
-    builderWithName.setName("out1");
-    builderWithType.setType(mock(TypeSymbolLoader.class));
-    Assertions.assertFalse(builderWithName.isValid());
-    Assertions.assertFalse(builderWithType.isValid());
+    PortSymbolBuilder builderWithoutType = new PortSymbolBuilder();
+    PortSymbolBuilder builderWithoutName = new PortSymbolBuilder();
+    PortSymbolBuilder builderWithoutDirection = new PortSymbolBuilder();
+    builderWithoutType.setName("out1").setDirection("out");
+    builderWithoutName.setType(mock(TypeSymbolLoader.class)).setDirection("in");
+    builderWithoutDirection.setName("in1").setType(mock(TypeSymbolLoader.class));
+    Assertions.assertFalse(builderWithoutType.isValid());
+    Assertions.assertFalse(builderWithoutName.isValid());
+    Assertions.assertFalse(builderWithoutDirection.isValid());
   }
 
   @Test
   public void shouldBuildWithExpectedType() {
     TypeSymbolLoader type = TypeSymbolsSymTabMill.typeSymbolLoaderBuilder().setName("A").build();
-    PortSymbol symbol = ArcSymTabMill.portSymbolBuilder().setName("in2").setType(type).build();
+    PortSymbol symbol = ArcSymTabMill.portSymbolBuilder()
+      .setName("in2").setType(type).setDirection("in").build();
     Assertions.assertEquals(symbol.getType(), type);
   }
 }

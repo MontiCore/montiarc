@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class PortSymbol extends PortSymbolTOP {
 
-  protected boolean incoming;
+  protected String direction;
   protected TypeSymbolLoader type;
 
   /**
@@ -23,34 +23,35 @@ public class PortSymbol extends PortSymbolTOP {
 
   /**
    * @param name the name of this port.
-   * @param incoming the direction of this port.
+   * @param direction the direction of this port.
    * @param type the type of this port.
    */
-  protected PortSymbol(String name, boolean incoming, TypeSymbolLoader type) {
+  protected PortSymbol(String name, String direction, TypeSymbolLoader type) {
     super(name);
-    this.incoming = incoming;
+    this.direction = direction;
     this.type = type;
   }
 
   /**
-   * @param incoming the direction of this port.
+   * @param direction the direction of this port.
    */
-  public void setDirection(boolean incoming) {
-    this.incoming = incoming;
+  public void setDirection(@NotNull String direction) {
+    Preconditions.checkArgument(direction != null);
+    this.direction = direction;
   }
 
   /**
    * @return {@code true}, if this is an incoming port, else {@code false}.
    */
   public boolean isIncoming() {
-    return incoming;
+    return this.direction.equals("in");
   }
 
   /**
    * @return {@code true}, if this is an outgoing port, else {@code false}.
    */
   public boolean isOutgoing() {
-    return !incoming;
+    return this.direction.equals("out");
   }
 
   /**
