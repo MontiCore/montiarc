@@ -12,7 +12,7 @@ import java.util.List;
 public class ComponentSymbolBuilder extends ComponentSymbolBuilderTOP {
 
   protected ComponentSymbol outerComponent;
-  protected ComponentSymbolLoader parentComponent;
+  protected ComponentSymbolLoader parentComponentLoader;
   protected List<FieldSymbol> parameters;
   protected List<TypeVarSymbol> typeParameters;
 
@@ -41,13 +41,13 @@ public class ComponentSymbolBuilder extends ComponentSymbolBuilderTOP {
     return this.realBuilder;
   }
 
-  public ComponentSymbolLoader getParentComponent() {
-    return this.parentComponent;
+  public ComponentSymbolLoader getParentComponentLoader() {
+    return this.parentComponentLoader;
   }
 
-  public ComponentSymbolBuilder setParentComponent(
-    @Nullable ComponentSymbolLoader parentComponent) {
-    this.parentComponent = parentComponent;
+  public ComponentSymbolBuilder setParentComponentLoader(
+    @Nullable ComponentSymbolLoader parentComponentLoader) {
+    this.parentComponentLoader = parentComponentLoader;
     return this.realBuilder;
   }
 
@@ -88,7 +88,7 @@ public class ComponentSymbolBuilder extends ComponentSymbolBuilderTOP {
       symbol.addTypeParameters(this.getTypeParameters());
     }
     symbol.setOuterComponent(this.getOuterComponent());
-    symbol.setParentComponent(this.getParentComponent());
+    symbol.setParent(this.getParentComponentLoader());
     return symbol;
   }
 

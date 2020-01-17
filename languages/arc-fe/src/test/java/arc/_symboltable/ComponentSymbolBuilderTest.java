@@ -53,15 +53,15 @@ public class ComponentSymbolBuilderTest extends AbstractTest {
     ComponentSymbolLoader parentComp =
       ArcSymTabMill.componentSymbolLoaderBuilder().setName("A").build();
     ComponentSymbol childComp = ArcSymTabMill.componentSymbolBuilder().setName("B")
-      .setSpannedScope(new ArcScope()).setParentComponent(parentComp).build();
-    Assertions.assertTrue(childComp.getParentComponent().isPresent());
+      .setSpannedScope(new ArcScope()).setParentComponentLoader(parentComp).build();
+    Assertions.assertTrue(childComp.isPresentParentComponent());
   }
 
   @Test
   public void shouldNotHaveParent() {
     ComponentSymbol symbol = ArcSymTabMill.componentSymbolBuilder().setName("A")
       .setSpannedScope(new ArcScope()).build();
-    Assertions.assertFalse(symbol.getParentComponent().isPresent());
+    Assertions.assertFalse(symbol.isPresentParentComponent());
   }
 
   @Test

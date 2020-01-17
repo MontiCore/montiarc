@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class ComponentSymbol extends ComponentSymbolTOP {
 
   protected ComponentSymbol outerComponent;
-  protected ComponentSymbolLoader parentComponent;
+  protected ComponentSymbolLoader parent;
   protected List<FieldSymbol> parameters;
   protected List<TypeVarSymbol> typeParameters;
 
@@ -98,19 +98,34 @@ public class ComponentSymbol extends ComponentSymbolTOP {
     this.outerComponent = outerComponent;
   }
 
-  /**
-   * @return an {@code Optional} of this component's parent component, or an empty {@code Optional},
-   * if this component type has no parent component type.
-   */
-  public Optional<ComponentSymbolLoader> getParentComponent() {
-    return Optional.ofNullable(this.parentComponent);
+  public boolean isPresentParentComponent() {
+    return this.parent != null;
   }
 
   /**
-   * @param parentComponent this component type's parent component type.
+   * @return the loader of this component's parent component.
+   * @throws IllegalStateException if this component has no parent.
    */
-  public void setParentComponent(@Nullable ComponentSymbolLoader parentComponent) {
-    this.parentComponent = parentComponent;
+  public ComponentSymbolLoader getParent() {
+    Preconditions.checkState(this.isPresentParentComponent());
+    return this.parent;
+  }
+
+  /**
+   * @param parent this component type's parent component type.
+   */
+  public void setParent(@Nullable ComponentSymbolLoader parent) {
+    this.parent = parent;
+  }
+
+  /**
+   * @return this component's parent component.
+   * @throws IllegalStateException if this component has no parent.
+   * @throws NoSuchElementException if the parent component type is not found.
+   */
+  public ComponentSymbol getParentInfo() {
+    Preconditions.checkState(this.isPresentParentComponent());
+    return this.getParent().getLoadedSymbol();
   }
 
   /**
@@ -386,9 +401,9 @@ public class ComponentSymbol extends ComponentSymbolTOP {
    */
   public List<PortSymbol> getAllPorts() {
     List<PortSymbol> result = getPorts();
-    if (getParentComponent().isPresent()) {
+    if (this.isPresentParentComponent()) {
       List<PortSymbol> inheritedPorts = new ArrayList<>();
-      for (PortSymbol port : this.getParentComponent().get().getLoadedSymbol().getAllPorts()) {
+      for (PortSymbol port : this.getParentInfo().getAllPorts()) {
         if (result.stream().anyMatch(p -> p.getName().equals(port.getName()))) {
           inheritedPorts.add(port);
         }

@@ -257,7 +257,6 @@ public class ArcSymbolTableCreatorTest extends AbstractTest {
     this.getSymTab().setCurrentCompInstanceArguments(arguments);
     ComponentInstanceSymbol symbol = this.getSymTab().create_ComponentInstance(ast);
     Assertions.assertEquals(ast.getName(), symbol.getName());
-    Assertions.assertNotNull(symbol.getType());
     Assertions.assertNotNull(symbol.getArguments());
   }
 

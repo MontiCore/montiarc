@@ -189,8 +189,9 @@ public class ArcSymbolTableCreator extends ArcSymbolTableCreatorTOP {
     Preconditions.checkState(!this.getComponentStack().isEmpty());
     Preconditions.checkState(this.getCurrentComponent().isPresent());
     if (node.isPresentParentComponent()) {
-      ComponentSymbolLoader parent = this.create_ComponentLoader(node.getParentComponent());
-      this.getCurrentComponent().get().setParentComponent(parent);
+      ComponentSymbolLoader parentLoader = this.create_ComponentLoader(node.getParentComponent());
+      parentLoader.setEnclosingScope(this.getCurrentComponent().get().getEnclosingScope());
+      this.getCurrentComponent().get().setParent(parentLoader);
     }
   }
 
@@ -212,17 +213,19 @@ public class ArcSymbolTableCreator extends ArcSymbolTableCreatorTOP {
 
   protected TypeSymbolLoader create_TypeLoader(@NotNull ASTMCType type) {
     assert (this.getCurrentScope().isPresent());
-    return new TypeSymbolLoader(type.printType(getTypePrinter()),
+    return new TypeSymbolLoader(type.printType(this.getTypePrinter()),
       this.getCurrentScope().get());
   }
 
   @Override
   protected FieldSymbol create_ArcParameter(@NotNull ASTArcParameter ast) {
-    assert(this.getCurrentParameterType().isPresent());
+    assert (this.getCurrentParameterType().isPresent());
+    assert (this.getCurrentScope().isPresent());
     FieldSymbolBuilder builder = ArcSymTabMill.fieldSymbolBuilder();
     builder.setName(ast.getName());
-    SymTypeExpression typeExpression = SymTypeExpressionFactory
-      .createTypeObject(this.create_TypeLoader(this.getCurrentParameterType().get()));
+    TypeSymbolLoader typeLoader = this.create_TypeLoader(this.getCurrentParameterType().get());
+    typeLoader.setEnclosingScope(this.getCurrentScope().get());
+    SymTypeExpression typeExpression = SymTypeExpressionFactory.createTypeObject(typeLoader);
     builder.setType(typeExpression);
     return builder.build();
   }
@@ -239,11 +242,14 @@ public class ArcSymbolTableCreator extends ArcSymbolTableCreatorTOP {
 
   @Override
   protected TypeVarSymbol create_ArcTypeParameter(@NotNull ASTArcTypeParameter ast) {
+    assert (this.getCurrentScope().isPresent());
     TypeVarSymbolBuilder builder = ArcSymTabMill.typeVarSymbolBuilder();
     builder.setName(ast.getName());
     List<SymTypeExpression> bounds = new ArrayList<>();
     for (ASTMCType type : ast.getUpperBoundList()) {
-      bounds.add(SymTypeExpressionFactory.createTypeObject(create_TypeLoader(type)));
+      TypeSymbolLoader typeLoader = create_TypeLoader(type);
+      typeLoader.setEnclosingScope(this.getCurrentScope().get());
+      bounds.add(SymTypeExpressionFactory.createTypeObject(typeLoader));
     }
     builder.setUpperBoundList(bounds);
     return builder.build();
@@ -282,9 +288,12 @@ public class ArcSymbolTableCreator extends ArcSymbolTableCreatorTOP {
   protected PortSymbol create_Port(@NotNull ASTPort ast) {
     assert (this.getCurrentPortType().isPresent());
     assert (this.getCurrentPortDirection().isPresent());
+    assert (this.getCurrentScope().isPresent());
     PortSymbolBuilder builder = ArcSymTabMill.portSymbolBuilder();
     builder.setName(ast.getName());
-    builder.setType(this.create_TypeLoader(this.getCurrentPortType().get()));
+    TypeSymbolLoader typeLoader = this.create_TypeLoader(this.getCurrentPortType().get());
+    typeLoader.setEnclosingScope(this.getCurrentScope().get());
+    builder.setType(typeLoader);
     builder.setDirection(this.getCurrentPortDirection().get());
     return builder.build();
   }
@@ -319,10 +328,13 @@ public class ArcSymbolTableCreator extends ArcSymbolTableCreatorTOP {
   @Override
   protected FieldSymbol create_ArcField(@NotNull ASTArcField ast) {
     assert (this.getCurrentFieldType().isPresent());
+    assert (this.getCurrentScope().isPresent());
     FieldSymbolBuilder builder = ArcSymTabMill.fieldSymbolBuilder();
     builder.setName(ast.getName());
+    TypeSymbolLoader typeLoader = this.create_TypeLoader(this.getCurrentFieldType().get());
+    typeLoader.setEnclosingScope(this.getCurrentScope().get());
     SymTypeExpression typeExpression = SymTypeExpressionFactory
-      .createTypeObject(this.create_TypeLoader(this.getCurrentFieldType().get()));
+      .createTypeObject(typeLoader);
     builder.setType(typeExpression);
     return builder.build();
   }
@@ -366,8 +378,11 @@ public class ArcSymbolTableCreator extends ArcSymbolTableCreatorTOP {
     ComponentInstanceSymbolBuilder builder = ArcSymTabMill.componentInstanceSymbolBuilder();
     Preconditions.checkArgument(ast != null);
     Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
-    builder.setName(ast.getName());
-    builder.setType(this.create_ComponentLoader(this.getCurrentCompInstanceType().get()));
+    Preconditions.checkState(this.getCurrentScope().isPresent());
+    ComponentSymbolLoader typeLoader =
+      this.create_ComponentLoader(this.getCurrentCompInstanceType().get());
+    typeLoader.setEnclosingScope(this.getCurrentScope().get());
+    builder.setName(ast.getName()).setType(typeLoader);
     return builder.build();
   }
 

@@ -22,18 +22,26 @@ public class ComponentInstanceSymbol extends ComponentInstanceSymbolTOP {
   }
 
   /**
-   * @return the type of this component.
+   * @return the loader of the type of this component.
    */
   public ComponentSymbolLoader getType() {
     return this.type;
   }
 
   /**
-   * @param type the type of this component.
+   * @param type the loader of the type of this component.
    */
   public void setType(@NotNull ComponentSymbolLoader type) {
     Preconditions.checkArgument(type != null);
     this.type = type;
+  }
+
+  /**
+   * @return the type of this component.
+   * @throws java.util.NoSuchElementException if the type of this component is not found.
+   */
+  public ComponentSymbol getTypeInfo() {
+    return this.getType().getLoadedSymbol();
   }
 
   /**

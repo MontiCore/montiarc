@@ -59,18 +59,26 @@ public class PortSymbol extends PortSymbolTOP {
   }
 
   /**
-   * @return the type of this port.
+   * @return the loader for the type of this port.
    */
   public TypeSymbolLoader getType() {
     return this.type;
   }
 
   /**
-   * @param type the type of this port.
+   * @param type the loader for the type of this port.
    */
-  public void setType(@NotNull TypeSymbolLoader type) {
+  protected void setType(@NotNull TypeSymbolLoader type) {
     Preconditions.checkArgument(type != null);
     this.type = type;
+  }
+
+  /**
+   * @return the type of this port.
+   * @throws java.util.NoSuchElementException if the port type is not found.
+   */
+  public TypeSymbol getTypeInfo() {
+    return this.getType().getLoadedSymbol();
   }
 
   /**

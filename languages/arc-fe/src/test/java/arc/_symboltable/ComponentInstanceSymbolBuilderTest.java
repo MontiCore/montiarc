@@ -43,6 +43,6 @@ public class ComponentInstanceSymbolBuilderTest extends AbstractTest {
       ArcSymTabMill.componentSymbolLoaderBuilder().setName("Comp1").build();
     ComponentInstanceSymbol symbol =
       ArcSymTabMill.componentInstanceSymbolBuilder().setName("c").setType(type).build();
-    Assertions.assertEquals(symbol.getType(), type);
+    Assertions.assertEquals(symbol.type, type);
   }
 }
