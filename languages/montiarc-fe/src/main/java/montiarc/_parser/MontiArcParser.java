@@ -31,13 +31,9 @@ public class MontiArcParser extends MontiArcParserTOP {
    * differ. Error {@code COMPONENT_AND_FILE_PACKAGE_DIFFER} is raised if component package and file
    * package differ.
    *
-   * @param relativeFilePath
-   *   the {@code String} contained the relative path of the file to be parsed
-   *
+   * @param relativeFilePath the {@code String} contained the relative path of the file to be parsed
    * @return an {@code Optional} of an abstract syntax tree representing the parsed file
-   *
-   * @throws IOException
-   *   if an I/O exception of some sort occurs
+   * @throws IOException if an I/O exception of some sort occurs
    */
   @Override
   public Optional<ASTMACompilationUnit> parseMACompilationUnit(String relativeFilePath)
@@ -50,15 +46,14 @@ public class MontiArcParser extends MontiArcParserTOP {
       String packageOfFile = Names.getPackageFromPath(Names.getPathFromFilename(relativeFilePath));
       String packageOfModel = Names.getQualifiedName(optAst.get().getPackage().getPartList());
       if (!modelName.equals(fileRoot)) {
-        Log.error(MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER.toString() + "The name of the " +
-          "component '" + modelName + "' is not identical to the name of the file '" + fileRoot +
-          "' (without its file-extension).");
+        Log.error(String
+          .format(MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER.toString(), modelName, fileRoot));
         setError(true);
       }
       if (!packageOfFile.endsWith(packageOfModel)) {
-        Log.error(MontiArcError.COMPONENT_AND_FILE_PACKAGE_DIFFER.toString() + "The package declaration '"
-          + packageOfModel + "' of the component must not differ from the package of the file '" +
-          packageOfFile + "'.");
+        Log.error(String
+          .format(MontiArcError.COMPONENT_AND_FILE_PACKAGE_DIFFER.toString(), packageOfModel,
+            packageOfFile));
         setError(true);
       }
     }

@@ -12,7 +12,13 @@ public interface Error {
   static Pattern ERROR_CODE_PATTERN = Pattern.compile("0xMA((?!(0))\\d{4})(\\d{4})*");
 
   /**
-   * Returns the unique error code of this error.
+   * @return The unique error code of this error.
    */
   String getErrorCode();
+
+  /**
+   *
+   * @return The error message of this error.
+   */
+  String printErrorMessage();
 }
