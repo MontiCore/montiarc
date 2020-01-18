@@ -2,6 +2,7 @@
 package arc._symboltable;
 
 import arc.util.ArcError;
+import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.typesymbols._symboltable.FieldSymbol;
 import de.monticore.types.typesymbols._symboltable.TypeSymbolLoader;
 import de.monticore.types.typesymbols._symboltable.TypeVarSymbol;
@@ -181,7 +182,7 @@ public class ComponentSymbolTest extends AbstractTest {
       .setSpannedScope(new ArcScope()).build();
     for (String port : ports.keySet()) {
       PortSymbol portSymbol = ArcSymTabMill.portSymbolBuilder()
-        .setName(port).setType(mock(TypeSymbolLoader.class)).setIncoming(ports.get(port)).build();
+        .setName(port).setType(mock(SymTypeExpression.class)).setIncoming(ports.get(port)).build();
       compSymbol.getSpannedScope().add(portSymbol);
     }
     return compSymbol;

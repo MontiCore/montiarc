@@ -293,7 +293,9 @@ public class ArcSymbolTableCreator extends ArcSymbolTableCreatorTOP {
     builder.setName(ast.getName());
     TypeSymbolLoader typeLoader = this.create_TypeLoader(this.getCurrentPortType().get());
     typeLoader.setEnclosingScope(this.getCurrentScope().get());
-    builder.setType(typeLoader);
+    SymTypeExpression typeExpression = SymTypeExpressionFactory
+      .createTypeObject(typeLoader);
+    builder.setType(typeExpression);
     builder.setDirection(this.getCurrentPortDirection().get());
     return builder.build();
   }

@@ -2,6 +2,8 @@
 package arc._symboltable;
 
 import arc.util.ArcError;
+import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.typesymbols._symboltable.*;
 import montiarc.AbstractTest;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +26,7 @@ public class PortSymbolBuilderTest extends AbstractTest {
   @Test
   public void shouldBeValid() {
     PortSymbolBuilder builder = new PortSymbolBuilder();
-    builder.setName("in1").setType(mock(TypeSymbolLoader.class)).setDirection("in");
+    builder.setName("in1").setType(mock(SymTypeExpression.class)).setDirection("in");
     Assertions.assertTrue(builder.isValid());
   }
 
@@ -34,8 +36,8 @@ public class PortSymbolBuilderTest extends AbstractTest {
     PortSymbolBuilder builderWithoutName = new PortSymbolBuilder();
     PortSymbolBuilder builderWithoutDirection = new PortSymbolBuilder();
     builderWithoutType.setName("out1").setDirection("out");
-    builderWithoutName.setType(mock(TypeSymbolLoader.class)).setDirection("in");
-    builderWithoutDirection.setName("in1").setType(mock(TypeSymbolLoader.class));
+    builderWithoutName.setType(mock(SymTypeExpression.class)).setDirection("in");
+    builderWithoutDirection.setName("in1").setType(mock(SymTypeExpression.class));
     Assertions.assertFalse(builderWithoutType.isValid());
     Assertions.assertFalse(builderWithoutName.isValid());
     Assertions.assertFalse(builderWithoutDirection.isValid());
@@ -44,8 +46,9 @@ public class PortSymbolBuilderTest extends AbstractTest {
   @Test
   public void shouldBuildWithExpectedType() {
     TypeSymbolLoader type = TypeSymbolsSymTabMill.typeSymbolLoaderBuilder().setName("A").build();
+    SymTypeExpression typeExpression = SymTypeExpressionFactory.createTypeObject(type);
     PortSymbol symbol = ArcSymTabMill.portSymbolBuilder()
-      .setName("in2").setType(type).setDirection("in").build();
-    Assertions.assertEquals(symbol.getType(), type);
+      .setName("in2").setType(typeExpression).setDirection("in").build();
+    Assertions.assertEquals(symbol.getType(), typeExpression);
   }
 }

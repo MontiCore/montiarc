@@ -2,13 +2,13 @@
 package arc._symboltable;
 
 import com.google.common.base.Preconditions;
-import de.monticore.types.typesymbols._symboltable.TypeSymbolLoader;
+import de.monticore.types.check.SymTypeExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class PortSymbolBuilder extends PortSymbolBuilderTOP {
 
   protected String direction;
-  protected TypeSymbolLoader type;
+  protected SymTypeExpression type;
 
   protected PortSymbolBuilder() {
     super();
@@ -20,11 +20,11 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
     return super.setName(name);
   }
 
-  public TypeSymbolLoader getType() {
+  public SymTypeExpression getType() {
     return this.type;
   }
 
-  public PortSymbolBuilder setType(@NotNull TypeSymbolLoader type) {
+  public PortSymbolBuilder setType(@NotNull SymTypeExpression type) {
     Preconditions.checkArgument(type != null);
     this.type = type;
     return this.realBuilder;

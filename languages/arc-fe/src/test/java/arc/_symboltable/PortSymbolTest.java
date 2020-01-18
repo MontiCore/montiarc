@@ -2,6 +2,7 @@
 package arc._symboltable;
 
 import arc.util.ArcError;
+import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.typesymbols._symboltable.TypeSymbolLoader;
 import montiarc.AbstractTest;
 import org.junit.jupiter.api.Assertions;
@@ -26,7 +27,7 @@ public class PortSymbolTest extends AbstractTest {
     ComponentSymbol compSymbol = ArcSymTabMill.componentSymbolBuilder().setName("Comp")
       .setSpannedScope(new ArcScope()).build();
     PortSymbol portSymbol = ArcSymTabMill.portSymbolBuilder().setName("p1")
-      .setIncoming(true).setType(mock(TypeSymbolLoader.class)).build();
+      .setIncoming(true).setType(mock(SymTypeExpression.class)).build();
     compSymbol.getSpannedScope().add(portSymbol);
     Assertions.assertTrue(portSymbol.getComponent().isPresent());
   }
@@ -34,7 +35,7 @@ public class PortSymbolTest extends AbstractTest {
   @Test
   public void shouldNotFindComponentType() {
     PortSymbol portSymbol = ArcSymTabMill.portSymbolBuilder().setName("p1")
-      .setIncoming(true).setType(mock(TypeSymbolLoader.class)).build();
+      .setIncoming(true).setType(mock(SymTypeExpression.class)).build();
     Assertions.assertFalse(portSymbol.getComponent().isPresent());
   }
 }

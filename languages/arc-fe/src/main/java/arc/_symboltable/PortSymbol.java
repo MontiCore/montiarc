@@ -4,6 +4,7 @@ package arc._symboltable;
 
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.IScopeSpanningSymbol;
+import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.typesymbols._symboltable.*;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -12,7 +13,7 @@ import java.util.Optional;
 public class PortSymbol extends PortSymbolTOP {
 
   protected String direction;
-  protected TypeSymbolLoader type;
+  protected SymTypeExpression type;
 
   /**
    * @param name the name of this port.
@@ -26,7 +27,7 @@ public class PortSymbol extends PortSymbolTOP {
    * @param direction the direction of this port.
    * @param type the type of this port.
    */
-  protected PortSymbol(String name, String direction, TypeSymbolLoader type) {
+  protected PortSymbol(String name, String direction, SymTypeExpression type) {
     super(name);
     this.direction = direction;
     this.type = type;
@@ -61,14 +62,14 @@ public class PortSymbol extends PortSymbolTOP {
   /**
    * @return the loader for the type of this port.
    */
-  public TypeSymbolLoader getType() {
+  public SymTypeExpression getType() {
     return this.type;
   }
 
   /**
    * @param type the loader for the type of this port.
    */
-  protected void setType(@NotNull TypeSymbolLoader type) {
+  protected void setType(@NotNull SymTypeExpression type) {
     Preconditions.checkArgument(type != null);
     this.type = type;
   }
@@ -78,7 +79,7 @@ public class PortSymbol extends PortSymbolTOP {
    * @throws java.util.NoSuchElementException if the port type is not found.
    */
   public TypeSymbol getTypeInfo() {
-    return this.getType().getLoadedSymbol();
+    return this.getType().getTypeInfo();
   }
 
   /**
