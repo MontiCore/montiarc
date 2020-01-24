@@ -138,6 +138,7 @@ public class ArcSymbolTableCreatorTest extends AbstractTest {
     ASTArcParameter ast = ArcMill.arcParameterBuilder().setName("par").build();
     ArcScope scope = ArcSymTabMill.arcScopeBuilder().build();
     this.getSymTab().setCurrentParameterType(Mockito.mock(ASTMCType.class));
+    this.getSymTab().putOnStack(Mockito.mock(ComponentSymbol.class));
     this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);
     Assertions.assertEquals(scope, ast.getEnclosingScope());
@@ -160,6 +161,7 @@ public class ArcSymbolTableCreatorTest extends AbstractTest {
   public void shouldVisitTypeParameter() {
     ASTArcTypeParameter ast = ArcMill.arcTypeParameterBuilder().setName("T").build();
     ArcScope scope = ArcSymTabMill.arcScopeBuilder().build();
+    this.getSymTab().putOnStack(Mockito.mock(ComponentSymbol.class));
     this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);
     Assertions.assertEquals(scope, ast.getEnclosingScope());

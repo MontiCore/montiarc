@@ -235,9 +235,11 @@ public class ArcSymbolTableCreator extends ArcSymbolTableCreatorTOP {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     Preconditions.checkState(this.getCurrentParameterType().isPresent());
+    Preconditions.checkState(this.getCurrentComponent().isPresent());
     FieldSymbol symbol = this.create_ArcParameter(node);
     this.initialize_ArcParameter(symbol, node);
     this.addToScopeAndLinkWithNode(symbol, node);
+    this.getCurrentComponent().get().addParameter(symbol);
   }
 
   @Override
@@ -259,9 +261,11 @@ public class ArcSymbolTableCreator extends ArcSymbolTableCreatorTOP {
   public void visit(@NotNull ASTArcTypeParameter node) {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentScope().isPresent());
+    Preconditions.checkState(this.getCurrentComponent().isPresent());
     TypeVarSymbol symbol = this.create_ArcTypeParameter(node);
     this.initialize_ArcTypeParameter(symbol, node);
     this.addToScopeAndLinkWithNode(symbol, node);
+    this.getCurrentComponent().get().addTypeParameter(symbol);
   }
 
   @Override
