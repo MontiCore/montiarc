@@ -10,7 +10,7 @@ import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.IdentifiersAreUnique;
 import montiarc.cocos.MontiArcCoCos;
-import montiarc.cocos.NamesCorrectlyCapitalized;
+import arc._cocos.NamesCorrectlyCapitalized;
 import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
 
 import org.junit.BeforeClass;

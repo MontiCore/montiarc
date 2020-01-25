@@ -1,6 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.ports;
 
+import arc._cocos.ConnectorSourceAndTargetExistAndFit;
+import arc._cocos.NamesCorrectlyCapitalized;
+import arc._cocos.PortUniqueSender;
+import arc._cocos.SubComponentsConnected;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.types.JTypeSymbol;
 import de.se_rwth.commons.logging.Log;
@@ -119,21 +123,21 @@ public class PortTest extends AbstractCoCoTest {
   @Test
   public void testInPortAmbiguousSender() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "InPortAmbiguousSender");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new PortUniqueSender()),
         node, new ExpectedErrorInfo(2, "xMA005"));
   }
   
   @Test
   public void testPortsWithAmbiguousSenders() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "PortsWithAmbiguousSenders");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new PortUniqueSender()),
         node, new ExpectedErrorInfo(4, "xMA005"));
   }
   
   @Test
   public void testUniquenessConnectors() {
     ASTMontiArcNode node = loadComponentAST(PACKAGE + "." + "UniquenessConnectors");
-    checkInvalid(new MontiArcCoCoChecker().addCoCo(new InPortUniqueSender()),
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new PortUniqueSender()),
         node, new ExpectedErrorInfo(2, "xMA005"));
   }
   

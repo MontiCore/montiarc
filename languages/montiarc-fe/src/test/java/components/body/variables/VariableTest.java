@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.variables;
 
+import arc._cocos.NamesCorrectlyCapitalized;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._cocos.MontiArcASTVariableDeclarationCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;

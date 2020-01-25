@@ -3,17 +3,14 @@ package components.head.inheritance;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Iterator;
 import java.util.Optional;
 
-import ch.qos.logback.core.pattern.parser.OptionTokenizer;
 import de.monticore.symboltable.Scope;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTConnector;
-import montiarc.cocos.SubcomponentReferenceCycle;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,11 +20,10 @@ import infrastructure.AbstractCoCoTest;
 import infrastructure.ExpectedErrorInfo;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc._parser.MontiArcParser;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc._symboltable.PortSymbol;
 import montiarc.cocos.CircularInheritance;
-import montiarc.cocos.ConfigurationParametersCorrectlyInherited;
+import arc._cocos.ConfigurationParametersCorrectlyInherited;
 import montiarc.cocos.MontiArcCoCos;
 
 /**

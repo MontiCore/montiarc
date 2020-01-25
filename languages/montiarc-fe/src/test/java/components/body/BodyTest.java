@@ -11,9 +11,8 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcASTComponentCoCo;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.IdentifiersAreUnique;
-import montiarc.cocos.MontiArcCoCos;
 import montiarc.cocos.MultipleBehaviorImplementation;
-import montiarc.cocos.NamesCorrectlyCapitalized;
+import arc._cocos.NamesCorrectlyCapitalized;
 
 /**
  * This class checks all context conditions related the combination of elements

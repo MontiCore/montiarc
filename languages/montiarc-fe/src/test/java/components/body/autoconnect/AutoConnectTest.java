@@ -26,7 +26,7 @@ import montiarc._ast.ASTMontiArcNode;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.ComponentSymbol;
 import montiarc.cocos.PortUsage;
-import montiarc.cocos.SubComponentsConnected;
+import arc._cocos.SubComponentsConnected;
 
 public class AutoConnectTest extends AbstractCoCoTest {
   

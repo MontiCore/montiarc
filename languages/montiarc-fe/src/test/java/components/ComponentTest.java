@@ -4,11 +4,9 @@ package components;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-import de.monticore.ast.ASTNode;
 import de.monticore.java.symboltable.JavaTypeSymbolReference;
 import de.monticore.java.types.HCJavaDSLTypeResolver;
 import de.monticore.symboltable.Symbol;
-import freemarker.template.utility.StringUtil;
 import montiarc._ast.ASTPort;
 import montiarc._symboltable.PortSymbol;
 import montiarc.cocos.*;

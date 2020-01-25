@@ -1,12 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.subcomponents;
 
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import arc._cocos.ComponentWithTypeParametersHasInstance;
+import arc._cocos.InnerComponentNotExtendsDefiningComponent;
+import arc._cocos.NamesCorrectlyCapitalized;
+import arc._cocos.SubComponentsConnected;
 import de.monticore.types.types._ast.ASTQualifiedName;
 import montiarc._ast.ASTComponent;
 import montiarc._ast.ASTConnector;

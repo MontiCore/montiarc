@@ -44,7 +44,9 @@ public abstract class AbstractTest {
     List<String> actualErrorCodes = collectErrorCodes(findings);
     List<String> expErrorCodes = collectErrorCodes(expErrors);
 
-    Assertions.assertTrue(actualErrorCodes.containsAll(expErrorCodes));
+    Assertions.assertTrue(actualErrorCodes.containsAll(expErrorCodes), String.format("Expected "
+      + "error codes: " + expErrorCodes.toString() + " Actual error codes: "
+      + actualErrorCodes.toString()));
   }
 
   protected void checkNoAdditionalErrorsPresent(List<Finding> findings,

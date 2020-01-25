@@ -1,6 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.connectors;
 
+import arc._cocos.ConnectorEndPointIsCorrectlyQualified;
+import arc._cocos.ConnectorSourceAndTargetComponentDiffer;
+import arc._cocos.ConnectorSourceAndTargetExistAndFit;
+import arc._cocos.SubComponentsConnected;
 import de.monticore.symboltable.Scope;
 import de.monticore.symboltable.Symbol;
 import de.se_rwth.commons.logging.Log;

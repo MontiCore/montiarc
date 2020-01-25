@@ -4,6 +4,7 @@ package components.head.generics;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import arc._cocos.AllGenericParametersOfSuperClassSet;
 import montiarc.cocos.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
