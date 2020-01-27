@@ -38,7 +38,7 @@ grammar MontiArc extends de.monticore.literals.MCCommonLiterals,
    * @attribute causalsync a causal synchronous component
    * @attribute sync a synchronous component
    */
-  ArcTiming implements ArcConfig  =
+  ArcTiming implements ArcElement =
     "timing"
     {next("instant", "delayed", "untimed", "causalsync", "sync")}? timing:Name
     ";"
