@@ -98,16 +98,17 @@ class AutomatonGenerator extends ABehaviorGenerator {
 			    final «resultName»«Utils.printFormalTypeParameters(comp)» «Identifier.resultName» = new «resultName»«Utils.printFormalTypeParameters(comp)»();
 			    
 «««			  Generate implementation of automaton:
-«««			  switch-case statement for every state name 
+«««			  switch-case statement for every state name
 			    switch («Identifier.currentStateName») {
-			    «FOR state : automaton.stateDeclarationList.get(0).stateList»
+			    «FOR stateDeclaration : automaton.getStateDeclarationList()»
+			    «FOR state : stateDeclaration.stateList»
 			    	case «state.name»:
 			    	  «FOR transition : getTransitions(comp).stream.filter(s | s.source.name == state.name).collect(Collectors.toList)»
 			    	  	// transition: «transition.toString»
-«««			    	  if statement for each guard of a transition from this state	
+«««			    	  if statement for each guard of a transition from this state
 			    	  	if («IF transition.guardAST.isPresent»«printNullChecks(comp, transition.guardAST.get.guardExpression.expression)» («helper.printExpression(transition.guardAST.get.guardExpression.expression)»)«ELSE» true «ENDIF») {
 			    	  	  //reaction
-«««			    	  	if true execute reaction of transition  
+«««			    	  	if true execute reaction of transition
 			    	  	  «IF transition.reactionAST.present»
 			    	  	  	«FOR assignment : transition.reactionAST.get.getIOAssignmentList»
 			    	  	  		«IF assignment.isAssignment»
@@ -117,18 +118,19 @@ class AutomatonGenerator extends ABehaviorGenerator {
 			    	  	  				«Identifier.resultName».set«assignment.name.toFirstUpper»(«helper.printRightHandSide(assignment)»);
 			    	  	  			«ENDIF»
 			    	  	  		«ELSE»
-			    	  	  			«helper.printRightHandSide(assignment)»;  
+			    	  	  			«helper.printRightHandSide(assignment)»;
 			    	  	  		«ENDIF»
 			    	  	  	«ENDFOR»
 			    	  	  «ENDIF»
-			    	  	  
+
 «««			    	  	and change state to target state of transition
 			    	  	  «Identifier.currentStateName» = «comp.name»State.«transition.target.name»;
 			    	  	  break;
 			    	  	}
-			    	  	
-			    	  	
+
+
 			    	  «ENDFOR»
+			    «ENDFOR»
 			    «ENDFOR»
 			    }
 			    return result;
@@ -202,9 +204,11 @@ class AutomatonGenerator extends ABehaviorGenerator {
   def private String printStateEnum(ASTAutomaton automaton, ComponentSymbol comp) {
     return '''
 			private static enum «comp.name»State {
-			«FOR state : automaton.getStateDeclaration(0).stateList SEPARATOR ','»
-				«state.name»
-			«ENDFOR»;
+			«FOR stateDeclaration : automaton.getStateDeclarationList() SEPARATOR ','»
+        «FOR state : stateDeclaration.stateList SEPARATOR ','»
+          «state.name»
+        «ENDFOR»
+      «ENDFOR»;
 			}
 		'''
   }
