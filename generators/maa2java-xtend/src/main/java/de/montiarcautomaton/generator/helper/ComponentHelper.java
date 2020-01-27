@@ -94,7 +94,7 @@ public class ComponentHelper {
     final JTypeReference<? extends JTypeSymbol> typeReference = portSymbol.getTypeReference();
     if (!typeReference.existsReferencedSymbol()) {
       Log.error(
-          "0xMA135 Referenced type for port \"" + portSymbol.getName() + "\" does not exist.");
+          "0xMA135 Referenced type for port \"" + portSymbol.getName() + "\" in "  + componentSymbol.getName() + " does not exist.");
     }
     
     if (componentSymbol.getPorts().contains(portSymbol) ||
