@@ -16,7 +16,6 @@
 
   <modules>
     <module>arc-fe</module>
-    <module>automata-fe</module>
     <module>montiarc-fe</module>
   </modules>
 </project>
