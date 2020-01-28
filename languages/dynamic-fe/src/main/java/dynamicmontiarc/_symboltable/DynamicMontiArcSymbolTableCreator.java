@@ -45,8 +45,14 @@ public class DynamicMontiArcSymbolTableCreator extends MontiArcSymbolTableCreato
     node.setEnclosingScope(scopeStack.peek());
   }
 
+  @Override
   public void visit(ASTModeAutomaton node){
     createScope(node);
+  }
+
+  @Override
+  public void endVisit(ASTModeAutomaton node) {
+    removeCurrentScope();
   }
 
   @Override

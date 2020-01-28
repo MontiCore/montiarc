@@ -181,9 +181,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     JTypeSymbolsHelper.addTypeArgumentsToTypeSymbol(typeRef, astType, definingScope,
         javaTypeRefFactory);
   }
-  
-  @Override
-  public void visit(ASTSubComponent node) {
+
+  private void addSubComponentSymbols(ASTSubComponent node) {
     String referencedCompName = TypesPrinter
         .printTypeWithoutTypeArgumentsAndDimension(node.getType());
     
@@ -340,6 +339,10 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       addTypeArgumentsToComponent(ref, superCompRef);
       
       component.setSuperComponent(ref);
+    }
+
+    for (ASTSubComponent subComp : node.getSubComponents()) {
+      addSubComponentSymbols(subComp);
     }
     
     if (autoinstantiate.pop()) {
