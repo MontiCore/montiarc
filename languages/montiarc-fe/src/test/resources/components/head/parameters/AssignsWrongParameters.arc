@@ -3,13 +3,13 @@ package components.head.parameters;
 
 import components.head.parameters.CompWithIntegerParameter;
 import components.body.subcomponents._subcomponents.AtomicComponent;
+
 /*
  * Invalid model.
- *
  * Formerly named "CG12" in MontiArc3.
  *
- * @implements No literature reference
- * TODO Review literature
+ * @implements [Wor16] MR1:  MontiArcAutomaton requires subcomponent declarations to
+ * give arguments for all configuration parameters without default values. (p.58, no listing)
  */
 component AssignsWrongParameters {
 

@@ -3,7 +3,7 @@ package components.body.variables;
 
 /*
  * Invalid model.
- * Uses prohibited variable names
+ * Uses prohibited variable names.
  */
  component HasProhibitedVariableName{
   String r__input;

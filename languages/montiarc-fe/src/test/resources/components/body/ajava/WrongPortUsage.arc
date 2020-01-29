@@ -3,10 +3,7 @@ package components.body.ajava;
 
 import java.util.Collections;
 /**
- * Invalid model.
- * Bad usage of ports (see below)
- *
- * @implements: There is no AJava literature
+ * Invalid model.Reading from outgoing ports and assigning to incoming ports.
  */
 component WrongPortUsage(Integer x) {
   

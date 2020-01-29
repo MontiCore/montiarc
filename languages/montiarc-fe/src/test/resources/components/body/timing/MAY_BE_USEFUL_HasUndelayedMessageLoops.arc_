@@ -2,7 +2,7 @@
 package components.body.timing; //TODO Change package to components.body.connectors?
 
 import components.body.subcomponents._subcomponents.HasGenericInputAndOutputPort;
-import components.body.timing.delays.FixDelay;
+import components.body.timing.delays.ConstantDelay;
 import java.lang.String;
 
 /*
@@ -11,9 +11,9 @@ import java.lang.String;
  *
  * Formerly named "CG2" in MontiArc3.
  *
- * @implements @implements [Hab16] CG1: Communication cycles without delay
+ * @implements [Hab16] CG1: Communication cycles without delay
  *                                        should be avoided. (p. 73 Lst. 3.55)
- * TODO Referenziert library Modell, das nicht mehr vorhanden ist
+ * TODO Referenziert library Modell, das nicht mehr vorhanden ist?
  */
 component HasUndelayedMessageLoops {
 

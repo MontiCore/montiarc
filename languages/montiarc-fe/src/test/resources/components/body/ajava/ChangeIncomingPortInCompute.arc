@@ -4,9 +4,6 @@ package components.body.ajava;
 /**
  * Invalid model.
  * Cannot change values on incoming ports.
- * Test model for InputPortChangedInCompute
- *
- * @implements No literature reference, AJava CoCo
  */
 component ChangeIncomingPortInCompute {
 

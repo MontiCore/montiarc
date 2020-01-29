@@ -1,6 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.ports;
 
+/*
+ * Invalid model.
+ */
 component PortTypesNotExist {
 
   port 

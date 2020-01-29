@@ -4,10 +4,7 @@ package components.head.parameters;
 import types.*;
 
 /*
- * Invalid model.
- * Has arrays of generic types.
-
- * @implements No literature reference
+ * Invalid model. Has arrays of generic types.
  */
 component CompWithGenericArraysAsParams (
       List<String>[] configStringListArray, // ERROR

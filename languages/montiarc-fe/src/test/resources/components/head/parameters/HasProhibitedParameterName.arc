@@ -2,8 +2,7 @@
 package components.head.parameters;
 
 /*
- * Invalid model.
- * Uses prohibited parameter names
+ * Invalid model. Uses prohibited parameter names.
  */
  component HasProhibitedParameterName(
     String r__input,

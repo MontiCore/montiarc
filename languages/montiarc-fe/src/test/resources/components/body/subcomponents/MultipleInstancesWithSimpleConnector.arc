@@ -7,10 +7,8 @@ import components.body.subcomponents._subcomponents.HasTwoStringInAndOneStringOu
 /*
  * Invalid model.
  * Multiple Instances of the HasStringInputAndOutputComponent with the simple
- *  connector should result in an error, as c.sIn1 would have two incoming
- *  connectors.
+ * connector should result in an error, as c.sIn1 would have two incoming connectors.
  *
- * @author Michael Mutert
  * @implements [Hab16] R1: Each outgoing port of a component type definition
  *   is used at most once as target of a connector. (p. 63, Lst. 3.36)
  * @implements [Hab16] R2: Each incoming port of a subcomponent is used at

@@ -7,8 +7,6 @@ import components.body.subcomponents._subcomponents.AtomicComponent;
 
 /*
  * Invalid model.
- * Produces 2 errors and 1 warning in MontiArc3.
- * TODO: Correct amounts? Might be 2 warnings, 1 error
  *
  * @implements [Hab16] CV7: Avoid using implicit and explicit names for
  *                            elements with the same type. (p. 72, Lst. 3.54)

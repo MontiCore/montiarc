@@ -1,6 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package types.typecompatibility;
 
+/*
+ * Valid model.
+ */
 component GenericTypes<T> {
 
     port in List<String> portListString;

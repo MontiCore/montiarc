@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.variables;
 
-/**
+/*
  * Invalid model. NoData assigned to variables
- * @Implements [Wor16] AT3: The special literal value NoDatais not used for variables.
+ * @Implements [Wor16] AT3: The special literal value NoData is not used for variables.
  */
 component NoDataNotAssigned {
 	port
