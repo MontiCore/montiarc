@@ -2,10 +2,8 @@
 package components.AmbiguousNamedCD;
 
 /**
-Invalid model. The name is ambiguous (see components.AmbiguousNamedCD.cd)
-
-@Implements TODO No literature reference
-*/
+ * Invalid model. The name is ambiguous (see components.AmbiguousNamedCD.cd)
+ */
 
 component AmbiguousClass {
   //Empty Component

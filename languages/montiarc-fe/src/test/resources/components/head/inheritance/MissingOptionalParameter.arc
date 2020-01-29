@@ -3,7 +3,7 @@ package components.head.inheritance;
 
 /*
  * Invalid model.
- * Does not explicitely state the third optional parameter.
+ * Does not explicitly state the third optional parameter.
  *
  * @implements [Hab16] R14: Components that inherit from a parametrized
  *    component provide configuration parameters with the same types,

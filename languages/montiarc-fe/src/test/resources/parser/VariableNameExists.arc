@@ -2,9 +2,7 @@
 package parser;
 
 /*
- * Invalid model.
- * A component variable declaration must specify a name.
- *
+ * Invalid model. A component variable declaration must specify a name.
  */
 component VariableNameExists {
   String;

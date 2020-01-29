@@ -2,7 +2,7 @@
 package b;
 
 /*
- * Valid model
+ * Valid model.
  * TODO Add test (symboltable)
  */
 component CompC extends CompB {

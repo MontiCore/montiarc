@@ -1,9 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.connectors;
 
-/**
-* Invalid component. See comments below.
-* Also see https://git.rwth-aachen.de/monticore/montiarc/core/issues/243
+/*
+* Invalid component. See #243
 *
 * @implements [Hab16] R8: The target port in a connection has to be compatible
 * to the source port, i.e., the type of the target port is identical or a

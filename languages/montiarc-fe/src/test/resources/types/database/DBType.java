@@ -4,8 +4,8 @@
  */
 package types.database;
 
-/**
- *
+/*
+ * Valid class.
  */
 public class DBType implements types.database.DBInterface {
 

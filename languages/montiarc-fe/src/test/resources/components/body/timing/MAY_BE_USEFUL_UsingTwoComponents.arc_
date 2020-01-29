@@ -4,8 +4,7 @@ package components.body.timing;
 import components.body.timing.DelayedComponentWithTwoPorts;
 
 /*
- * Formerly 'UsingCandB'
- * TODO Valid?
+ * Valid model.
  */
 component UsingTwoComponents {
     

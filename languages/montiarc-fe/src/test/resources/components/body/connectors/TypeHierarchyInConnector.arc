@@ -1,10 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.connectors;
 
-/**
- * Invalid model.
- * See https://git.rwth-aachen.de/monticore/montiarc/core/issues/243
- *
+/*
+ * Invalid model. See #243
  */
 component TypeHierarchyInConnector {
 

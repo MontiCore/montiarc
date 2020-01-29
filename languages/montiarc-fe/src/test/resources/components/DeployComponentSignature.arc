@@ -2,9 +2,7 @@
 package components;
 
 /*
- * Invalid model.
- *
- * Deploy components should neither have ports nor parameter.
+ * Invalid model. Deploy components should neither have ports nor parameter.
  */
 <<deploy>> component DeployComponentSignature (int value = 32) {
 

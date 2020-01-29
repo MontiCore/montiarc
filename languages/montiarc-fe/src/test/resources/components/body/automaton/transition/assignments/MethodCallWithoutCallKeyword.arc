@@ -1,10 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.automaton.transition.assignments;
 
-/**
+/*
  * Invalid model.
- *
- * @implements No literature reference
  */
 component MethodCallWithoutCallKeyword {
 

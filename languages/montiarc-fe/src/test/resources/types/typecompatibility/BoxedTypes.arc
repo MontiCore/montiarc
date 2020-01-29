@@ -1,6 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package types.typecompatibility;
 
+/*
+ * Valid model.
+ */
 component BoxedTypes {
     port in Boolean inBooleanBoxed;
     port in Byte inByteBoxed;

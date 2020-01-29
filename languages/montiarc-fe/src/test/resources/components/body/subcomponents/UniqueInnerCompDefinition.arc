@@ -1,5 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-//package components;
 package components.body.subcomponents;
 
 /*
@@ -9,7 +8,6 @@ package components.body.subcomponents;
  *
  * @implements [Hab16] B1: All names of model elements within a component
  * namespace have to be unique. (p. 59. Lst. 3.31)
- * TODO Review literature
  */
 component UniqueInnerCompDefinition {
     

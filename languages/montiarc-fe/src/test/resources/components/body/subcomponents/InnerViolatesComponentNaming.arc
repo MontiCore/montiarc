@@ -2,10 +2,9 @@
 package components.body.subcomponents;
 
 /*
- * Invalid model.
- * Component names have to start with a capital letter
+ * Invalid model. Component names have to start with a capital letter
  *
- * @implements No literature reference
+ * @implements [Hab16] CV2: Types start with an upper-case letter. (p.71, no listing)
  */
 component InnerViolatesComponentNaming {
     

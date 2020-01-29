@@ -4,9 +4,7 @@ package components.body.variables;
 import types.*;
 
 /*
- * Invalid model.
- * Has arrays of generic types.
- * @implements No literature reference
+ * Invalid model. Has arrays of generic types.
  */
 component CompWithGenericArraysAsVars{
     List<String>[] configStringListArray; // Error

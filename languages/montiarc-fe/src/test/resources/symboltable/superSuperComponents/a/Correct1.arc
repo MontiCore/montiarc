@@ -4,8 +4,7 @@ package a;
 import b.CompC;
 
 /*
- * Valid model
- *
+ * Valid model.
  * TODO Add test (symboltable)
  */
 component Correct1 extends CompC{
