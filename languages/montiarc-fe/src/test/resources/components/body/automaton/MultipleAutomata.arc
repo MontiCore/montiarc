@@ -16,7 +16,7 @@ component MultipleAutomata {
 
   automaton InvalidAutomatonBehaviorImpl {
   	state Start;
-    initial Start;
+    initial Start / {c = 5};
 
     Start -> Start [c < 2];
   }

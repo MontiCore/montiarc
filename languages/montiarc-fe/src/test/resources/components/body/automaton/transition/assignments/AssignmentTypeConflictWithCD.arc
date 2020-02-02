@@ -19,6 +19,6 @@ component AssignmentTypeConflictWithCD {
     
     automaton {
       state S;
-      initial S / {iOut = tf.t};
+      initial S / {tf = new TypeWithFields(), iOut = tf.t};
     }
 }
