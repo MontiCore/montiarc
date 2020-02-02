@@ -345,8 +345,8 @@
 	                <version>${surefire.plugin}</version>
 	                <configuration>
 	                    <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-	                    <skipTests>${skip.unit.tests}</skipTests>
 	                    <useSystemClassLoader>false</useSystemClassLoader>
+											<enableAssertions>true</enableAssertions>
 	                </configuration>
 	                <dependencies>
 	                    <!-- let surefire run JUnit 4 but also JUnit 5 tests -->
@@ -376,7 +376,6 @@
 	                <artifactId>maven-failsafe-plugin</artifactId>
 	                <version>${failsafe.plugin}</version>
 	                <configuration>
-	                    <skipTests>${skip.integration.tests}</skipTests>
 	                    <includes>
 	                        <!-- Integration Tests -->
 	                        <!-- default folder is src/integration-test/java/ -->
