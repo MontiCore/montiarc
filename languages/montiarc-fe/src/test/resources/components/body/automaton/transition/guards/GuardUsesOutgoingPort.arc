@@ -20,7 +20,7 @@ component GuardUsesOutgoingPort {
 
   automaton AutomatonOutputInExpression{
      state S;
-     initial S;
+     initial S / {v = 5};
 
      S [i == v + i / o && v == (o+1)*o && s.equals("Hello World") && o>=6] / {call s.equals("Hello World"), i=6, o = (v*i)+o};
      //______________^__________^____^____^__________________________^_____________^________________________^______________^
