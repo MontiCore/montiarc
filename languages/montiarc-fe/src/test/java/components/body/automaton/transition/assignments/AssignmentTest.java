@@ -181,5 +181,14 @@ public class AssignmentTest extends AbstractCoCoTest {
     final ExpectedErrorInfo errors = new ExpectedErrorInfo(4, "xMA081", "xMA019");
     checkInvalid(cocos, astMontiArcNode, errors);
   }
+
+  @Test
+  public void testUninitializedVariableAssignment() {
+    final String modelName = PACKAGE + "." + "UninitializedVariableAssignment";
+    final MontiArcCoCoChecker cocos = MontiArcCoCos.createChecker();
+    final ExpectedErrorInfo errors
+        = new ExpectedErrorInfo(6, "xMA122");
+    checkInvalid(cocos, loadComponentAST(modelName), errors);
+  }
   
 }
