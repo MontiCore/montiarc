@@ -17,9 +17,11 @@ In MontiArc, architectures are described as component and connector systems in w
 ## Project Structure
 
 * languages/
+  * dynamic-fe
   * montiarc-fe
 * generators/
     * cd2pojo
+    * dynma2java
     * maa2java-xtend
 * applications/
     * bumperbot  
@@ -27,7 +29,7 @@ In MontiArc, architectures are described as component and connector systems in w
     * maa-rte
     * lejos-rte
     * simulator-rte
-    * ...
+    * maJavaLib
 
 # copyright
 

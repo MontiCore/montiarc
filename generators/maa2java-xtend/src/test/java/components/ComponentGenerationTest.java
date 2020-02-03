@@ -31,7 +31,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static de.montiarcautomaton.generator.MontiArcGeneratorTool.DEFAULT_TYPES_FOLDER;
 import static de.montiarcautomaton.generator.MontiArcGeneratorTool.LIBRARY_MODELS_FOLDER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -166,7 +165,6 @@ public class ComponentGenerationTest extends AbstractGeneratorTest {
         = generatorTool.loadComponentSymbolWithoutCocos(
             qualifiedName,
         modelPath.toFile(),
-        Paths.get(DEFAULT_TYPES_FOLDER).toFile(),
         Paths.get(LIBRARY_MODELS_FOLDER).toFile()).orElse(null);
     assertNotNull("Could not load component symbol of " + qualifiedName + " for which the " +
                       "generator test should be executed.", symbol);

@@ -1,6 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package types.typecompatibility;
 
+/*
+ * Valid model.
+ */
 component PrimitiveTypes {
 
     port in int inInt;

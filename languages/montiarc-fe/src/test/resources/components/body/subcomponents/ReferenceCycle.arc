@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.subcomponents;
 
-/**
-* Invalid model. See comments below.
-* @implements [Hab16] R13: Subcomponent reference cycles are forbidden. (
-*  p. 68, lst. 3.48)
-*/
+/*
+ * Invalid model.
+ * @implements [Hab16] R13: Subcomponent reference cycles are forbidden. (
+ *  p. 68, lst. 3.48)
+ */
 component ReferenceCycle {
 
     port

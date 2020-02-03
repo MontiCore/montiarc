@@ -3,17 +3,18 @@ package de.montiarcautomaton.generator.codegen.xtend
 
 import montiarc._symboltable.ComponentSymbol
 import de.montiarcautomaton.generator.codegen.xtend.util.Utils
+import de.montiarcautomaton.generator.codegen.xtend.util.IMontiArcGenerator
 
 /**
  * Generates the deployment class for a component.
- *
+ * 
  * @author  Pfeiffer
  * @version $Revision$,
  *          $Date$
- *
+ * 
  */
-class Deploy {
-    def static generateDeploy(ComponentSymbol comp) {
+class Deploy implements IMontiArcGenerator {
+  override generate(ComponentSymbol comp) {
     var name = comp.name;
     return '''
       «Utils.printPackage(comp)»
@@ -41,4 +42,9 @@ class Deploy {
       }
     '''
   }
+
+  override getArtifactName(ComponentSymbol comp) {
+    return "Deploy" + comp.name
+  }
+
 }

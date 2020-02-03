@@ -42,7 +42,7 @@ public class VariableTest extends AbstractCoCoTest {
     final String qualifiedModelName = PACKAGE + "." + "AmbiguousVariableNames";
     MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new IdentifiersAreUnique());
     final ExpectedErrorInfo errors
-        = new ExpectedErrorInfo(4, "xMA035");
+        = new ExpectedErrorInfo(2, "xMA035");
     checkInvalid(cocos, loadComponentAST(qualifiedModelName), errors);
   }
   

@@ -8,7 +8,7 @@
   <parent>
     <groupId>montiarc.generators</groupId>
     <artifactId>generators</artifactId>
-    <version>5.0.2-SNAPSHOT</version>
+    <version>5.1.2</version>
   </parent>
   <artifactId>maa2java-xtend</artifactId>
 
@@ -172,6 +172,9 @@
         <groupId>org.eclipse.xtend</groupId>
         <artifactId>xtend-maven-plugin</artifactId>
         <version>${xtend.version}</version>
+        <configuration>
+          <javaSourceVersion>1.8</javaSourceVersion>
+        </configuration>
         <dependencies>
           <dependency>
             <groupId>org.eclipse.platform</groupId>

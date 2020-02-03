@@ -103,31 +103,34 @@ public class UseOfUndeclaredField
     private void check(String name, ASTNameExpression node, String usage) {
       if (node.getEnclosingScopeOpt().isPresent()) {
         Scope scope = node.getEnclosingScopeOpt().get(); //TransitionScope
-        if(scope.getEnclosingScope().isPresent()){
+        if(scope.getEnclosingScope().isPresent()) {
           // Scope of the automaton
-          if(scope.getEnclosingScope().get().getEnclosingScope().isPresent()){
+          final Scope automatonScope = scope.getEnclosingScope().get();
+          if(automatonScope.getEnclosingScope().isPresent()) {
             // Scope spanned by component symbol
-            scope = scope.getEnclosingScope().get().getEnclosingScope().get();
+            scope = automatonScope.getEnclosingScope().get();
             ComponentSymbol comp
                 = ((ComponentSymbol) scope.getSpanningSymbol().get());
-            boolean foundVar = comp.getVariable(name).isPresent();
-            boolean foundPort = comp.getPort(name, true).isPresent();
-            final Optional<JavaTypeSymbol> typeSymbolOpt
-                = scope.resolve(name, JavaTypeSymbol.KIND);
-            boolean foundEnum = false;
-            boolean foundStaticCall = false;
-            if (typeSymbolOpt.isPresent()) {
-              foundEnum = typeSymbolOpt.get().isEnum();
-              foundStaticCall = typeSymbolOpt.get().isClass();
+            if (comp.getVariable(name).isPresent()) {
+              return;
             }
-
-            if (!foundVar && !foundPort && !foundEnum && !foundStaticCall) {
-              Log.error(
-                  String.format("0xMA079: The name '%s' is used in %s, but is " +
-                                    "neither declared a port, nor as a variable.",
-                      name, usage),
-                  node.get_SourcePositionStart());
+            else if (comp.getPort(name, true).isPresent()) {
+              return;
             }
+            else {
+              final Optional<JavaTypeSymbol> typeSymbolOpt
+                  = scope.resolve(name, JavaTypeSymbol.KIND);
+              if (typeSymbolOpt.isPresent()
+                  && (typeSymbolOpt.get().isEnum()
+                  || typeSymbolOpt.get().isClass())) {
+                return;
+              }
+            }
+            Log.error(
+                String.format("0xMA079: The name '%s' is used in %s, but is " +
+                        "neither declared a port, nor as a variable.",
+                    name, usage),
+                node.get_SourcePositionStart());
           }
         }
       }

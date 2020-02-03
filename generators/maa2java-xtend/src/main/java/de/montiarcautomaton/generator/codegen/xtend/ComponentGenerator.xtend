@@ -1,11 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-/*******************************************************************************
- * Copyright (c) 2012 itemis AG (http://www.itemis.eu) and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *******************************************************************************/
 package de.montiarcautomaton.generator.codegen.xtend
 
 import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
@@ -21,6 +14,7 @@ import java.util.ArrayList
 import java.util.List
 import montiarc._symboltable.ComponentSymbol
 import montiarc._symboltable.ComponentSymbolReference
+import de.montiarcautomaton.generator.codegen.xtend.util.IMontiArcGenerator
 
 /**
  * Generates the component class for atomic and composed components. 
@@ -29,11 +23,16 @@ import montiarc._symboltable.ComponentSymbolReference
  * @version $Revision$,
  *          $Date$
  */
-class ComponentGenerator {
-  var String generics;
-  var ComponentHelper helper;
+class ComponentGenerator implements IMontiArcGenerator {
+  var protected String generics;
+  var protected ComponentHelper helper;
+  var public Setup setup = new Setup;
+  var public Ports ports = new Ports;
+  var public Init init = new Init;
+  var public Update update = new Update;
+  var public Subcomponents subcomponents = new Subcomponents;
 
-  def generate(ComponentSymbol comp) {
+  override generate(ComponentSymbol comp) {
     generics = Utils.printFormalTypeParameters(comp)
     helper = new ComponentHelper(comp);
 
@@ -57,7 +56,7 @@ class ComponentGenerator {
         implements IComponent {
           
         //ports
-        «Ports.print(comp.ports)»
+        «ports.print(comp.ports)»
         
         // component variables
         «Utils.printVariables(comp)»
@@ -67,7 +66,7 @@ class ComponentGenerator {
       
         «IF comp.isDecomposed»
         // subcomponents
-        «Subcomponents.print(comp)»
+        «subcomponents.print(comp)»
         «printComputeComposed(comp)»
         
         «ELSE»
@@ -90,11 +89,11 @@ class ComponentGenerator {
         }
         «ENDIF»
         
-        «Setup.print(comp)»
+        «setup.print(comp)»
         
-        «Init.print(comp)»
+        «init.print(comp)»
         
-        «Update.print(comp)»
+        «update.print(comp)»
         
         «printConstructor(comp)»
         
@@ -159,7 +158,7 @@ class ComponentGenerator {
     '''
   }
 
-  def private static List<String> getInheritedParams(ComponentSymbol component) {
+  def protected static List<String> getInheritedParams(ComponentSymbol component) {
     var List<String> result = new ArrayList;
     var List<JFieldSymbol> configParameters = component.getConfigParameters();
     if (component.getSuperComponent().isPresent()) {
@@ -172,6 +171,10 @@ class ComponentGenerator {
       }
     }
     return result;
+  }
+  
+  override getArtifactName(ComponentSymbol comp) {
+    return comp.name;
   }
 
 }

@@ -1,8 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.autoinstantiate;
 
-
-
 /*
  * Valid model.
  */
@@ -11,5 +9,4 @@ component SomeComp {
         in String myIn,
         in List myListIn,
         out String myOut;
-    
 }

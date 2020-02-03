@@ -2,10 +2,7 @@
 package components.body.ajava;
 
 /**
- * Invalid model.
- * Components with init block must provide a compute block as well.
- *
- * @implements No literature reference, AJava CoCo.
+ * Invalid model. Components with init block must provide a compute block as well.
  */
 component InitBlockWithoutComputeBlock {
 

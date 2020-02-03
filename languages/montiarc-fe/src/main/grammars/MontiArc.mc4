@@ -56,21 +56,6 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
     head:ComponentHead
     (instanceName:Name actualTypeArgument:TypeArguments?)?
     body:ComponentBody;
-    
-  /**
-  * Use this interface to embed values.
-  * It has to be implemented by all values and additionally serves
-  * as an extension point to add further values to sub-languages.
-  */ 
-  interface Value;
-
-  /**
-  * A signed literal value.
-  * @example "Any String", -3, 17.3
-  *
-  * @attribute value the concrete literal value
-  */
-  LiteralValue implements Value = value:SignedLiteral;
 
   /**
   * Parameters are used in configurable components.
@@ -223,7 +208,7 @@ grammar MontiArc extends de.monticore.java.JavaDSL {
    * A component variable
    * @attribute Name: The name of the variable
    */
-  VariableDeclaration implements Element = Type (Name ("," Name)*)? ";" ; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
+  VariableDeclaration implements Element = Type (Name || ",")+ ";" ; // wird über init() bzw. InitialStateOutput abgebildet: ("=" Valuation)?;
   
 
   /**

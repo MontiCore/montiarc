@@ -76,7 +76,6 @@ public class AutoConnectTest extends AbstractCoCoTest {
   
   
   @Test
-  @Ignore
   public void testAutoconnectPortPartiallyConnected() {
     Scope symTab = loadDefaultSymbolTable();
     Log.getFindings().clear();
@@ -101,7 +100,6 @@ public class AutoConnectTest extends AbstractCoCoTest {
   }
   
   @Test
-  @Ignore
   public void testAutoconnectType() {
     Scope symTab = loadDefaultSymbolTable();
     Log.getFindings().clear();
@@ -136,7 +134,6 @@ public class AutoConnectTest extends AbstractCoCoTest {
     assertTrue(connectorNames.contains("a.data -> d.dataSthElse"));
   }
 
-  @Ignore("TODO Check Why there should only be one duplicate autoconnect match. Also no errors for duplicate autoconnections are logged.")
   @Test
   public void testDuplicateAutoconnectMatches() {
     Scope symTab = loadDefaultSymbolTable();
@@ -220,7 +217,7 @@ public class AutoConnectTest extends AbstractCoCoTest {
     assertTrue(connectorNames.contains("a.outT -> intOut"));
   }
 
-  @Ignore("TODO Check why there is only one of the two expected connectors.")
+  @Ignore("This test creates only one of the two connectors because Ports can only be connected to ports of the exact same Type. Type inheritance is ignored at the moment")
   @Test
   public void testAutoconnectGenericTypeInHierarchy() {
     Scope symTab = loadDefaultSymbolTable();
@@ -303,35 +300,7 @@ public class AutoConnectTest extends AbstractCoCoTest {
     assertFalse(connectorNames.contains("strIn -> ref.strIn2"));
     assertFalse(connectorNames.contains("ref.strOut2 -> strOut"));
   }
-  
-  // @Test
-  // public void testAutoconnectArrayTypes() {
-  // Scope symTab = tool.createSymbolTable(Paths.get(MODEL_PATH + "/arc/transformations").toFile(),
-  // Paths.get("src/main/resources/defaultTypes").toFile());
-  // Log.getFindings().clear();
-  // ComponentSymbol comp = symTab.<ComponentSymbol>resolve(
-  // "a.AutoConnectArrayTypes", ComponentSymbol.KIND).orElse(null);
-  // assertNotNull(comp);
-  //
-  // Collection<ConnectorSymbol> connectors = comp.getConnectors();
-  // List<String> connectorNames = new ArrayList<String>();
-  // for (ConnectorSymbol con : connectors) {
-  // connectorNames.add(con.toString());
-  // }
-  //
-  // // 3 warnings (1x unable to autoconnect, 2x unused ports)
-  // assertEquals(1, Log.getFindings().stream().filter(f -> f.isWarning()).count());
-  //
-  // ASTMontiArcNode node = (ASTComponent) comp.getAstNode().get();
-  // MontiArcCoCoChecker cocos = new MontiArcCoCoChecker().addCoCo(new SubComponentsConnected());
-  // checkInvalid(cocos, node, new AbstractCoCoTestExpectedErrorInfo(2, "xMA059", "xMA060"));
-  //
-  // assertEquals(2, connectors.size());
-  // assertTrue(connectorNames.contains("strIn -> ref.strIn1"));
-  // assertTrue(connectorNames.contains("ref.strOut1 -> strOut"));
-  // assertFalse(connectorNames.contains("strIn -> ref.strIn2"));
-  // assertFalse(connectorNames.contains("ref.strOut2 -> strOut"));
-  // }
+
   @Test
   public void testAutoconnectPortAndType() {
     Scope symTab = loadDefaultSymbolTable();

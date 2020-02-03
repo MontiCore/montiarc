@@ -3,6 +3,9 @@ package components.body.ajava;
 
 import types.Datatypes.MotorCommand;
 
+/*
+ * Valid model.
+ */
 component ComputeWithSwitchCaseStatement {
 
   compute {

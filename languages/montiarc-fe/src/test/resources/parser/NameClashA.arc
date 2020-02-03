@@ -3,6 +3,6 @@
 package parser;
 
 /**
- * Valid model. NameClashB.arc inherits from this component
+ * InvalidModel. Component name is different to file name.
  */
-component NameClashA {}
+component NameClashB {}

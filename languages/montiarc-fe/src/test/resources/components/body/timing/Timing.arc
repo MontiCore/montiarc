@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.timing;
 
-/**
- * Invalid model. Variable names 'a' and 'string' used twice.
+/*
+ * Valid model.
  */
 component Timing {
     

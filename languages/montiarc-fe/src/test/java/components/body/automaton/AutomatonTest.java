@@ -65,6 +65,12 @@ public class AutomatonTest extends AbstractCoCoTest {
     checkValid(PACKAGE + "." + "ValidAutomaton");
   }
 
+  @Ignore
+  @Test
+  public void testValidAutomaton2() {
+    checkValid(PACKAGE + "." + "ValidAutomaton2");
+  }
+
   @Test
   public void testAutomatonWithGenerics() {
     checkValid(PACKAGE + "." + "AutomatonWithGenerics");

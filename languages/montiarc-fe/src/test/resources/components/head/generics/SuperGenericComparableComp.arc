@@ -3,7 +3,7 @@ package components.head.generics;
 
 /*
  * Invalid model.
- * Generics with type bounds are currently prohibited. See #241
+ * Generics with type bounds are currently prohibited. See #241 / #243
  */
 component SuperGenericComparableComp<T extends Comparable<T>> {
 

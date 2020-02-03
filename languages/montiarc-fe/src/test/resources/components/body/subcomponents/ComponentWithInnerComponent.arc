@@ -3,8 +3,8 @@ package components.body.subcomponents;
 
 import components.body.subcomponents._subcomponents.AtomicComponent;
 
-/**
- * Valid model. Used by 
+/*
+ * Valid model.
  */
 component ComponentWithInnerComponent {
 

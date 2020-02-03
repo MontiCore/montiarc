@@ -11,7 +11,7 @@ import montiarc._symboltable.ComponentSymbol
  *          $Date$
  */
 class AbstractAtomicImplementation {
-  def static generateAbstractAtomicImplementation(ComponentSymbol comp) {
+  def generateAbstractAtomicImplementation(ComponentSymbol comp) {
     var String generics = Utils.printFormalTypeParameters(comp)
     return '''
 	  «Utils.printPackage(comp)»

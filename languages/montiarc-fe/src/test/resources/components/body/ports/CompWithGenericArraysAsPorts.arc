@@ -6,8 +6,6 @@ import types.*;
 /*
  * Invalid model.
  * Has arrays of generic types.
- *
- * @implements No literature reference
  */
 component CompWithGenericArraysAsPorts{
     port

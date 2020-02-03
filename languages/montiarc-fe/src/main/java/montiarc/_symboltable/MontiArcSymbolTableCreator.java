@@ -181,9 +181,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     JTypeSymbolsHelper.addTypeArgumentsToTypeSymbol(typeRef, astType, definingScope,
         javaTypeRefFactory);
   }
-  
-  @Override
-  public void visit(ASTSubComponent node) {
+
+  private void addSubComponentSymbols(ASTSubComponent node) {
     String referencedCompName = TypesPrinter
         .printTypeWithoutTypeArgumentsAndDimension(node.getType());
     
@@ -327,7 +326,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   @Override
   public void endVisit(ASTComponent node) {
     ComponentSymbol component = componentStack.pop();
-    autoConnectionTrafo.transformAtEnd(node, component);
     
     // super component
     if (node.getHead().isPresentSuperComponent()) {
@@ -341,6 +339,10 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       addTypeArgumentsToComponent(ref, superCompRef);
       
       component.setSuperComponent(ref);
+    }
+
+    for (ASTSubComponent subComp : node.getSubComponents()) {
+      addSubComponentSymbols(subComp);
     }
     
     if (autoinstantiate.pop()) {
@@ -436,6 +438,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
         }
       }
     }
+    autoConnectionTrafo.transformAtEnd(node, component);
   }
   
   private void setActualTypeArgumentsOfCompRef(ComponentSymbolReference typeReference,
@@ -763,9 +766,13 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     TransitionSymbol transition = new TransitionSymbol(node.getSource() + " -> " + targetName);
     transition.setSource(source);
     transition.setTarget(target);
-    
-    transition.setGuardAST(node.getGuardOpt());
-    transition.setReactionAST(node.getReactionOpt());
+
+    if(node.getGuardOpt().isPresent()) {
+      transition.setGuardAST(node.getGuardOpt().get());
+    }
+    if(node.getReactionOpt().isPresent()) {
+      transition.setReactionAST(node.getReactionOpt().get());
+    }
     
     addToScopeAndLinkWithNode(transition, node); // introduces new scope
   }
@@ -913,7 +920,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     removeCurrentScope();
   }
   
-  private void createScope(ASTNode node) {
+  protected void createScope(ASTNode node) {
     MutableScope spannedScope = new CommonScope(false);
     spannedScope.setResolvingFilters(currentScope().get().getResolvingFilters());
     spannedScope.setEnclosingScope(currentScope().get());

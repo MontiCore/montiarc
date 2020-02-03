@@ -222,4 +222,11 @@ public class ComponentTest extends AbstractCoCoTest {
     ExpectedErrorInfo errorInfo = new ExpectedErrorInfo(1, "xMA012");
     checkInvalid(new MontiArcCoCoChecker().addCoCo(new AmbiguousTypes()),node, errorInfo);
   }
+
+  @Test
+  public void testDeployComponentNoSignature() {
+    final ASTMontiArcNode node = loadCompilationUnitAST(PACKAGE + "." + "DeployComponentSignature");
+    ExpectedErrorInfo errorInfo = new ExpectedErrorInfo(2, "xMA120", "xMA121");
+    checkInvalid(new MontiArcCoCoChecker().addCoCo(new DeployComponentNoSignature()),node, errorInfo);
+  }
 }

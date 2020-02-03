@@ -6,8 +6,6 @@ package components.body.ports;
  *
  * Formerly named "CG3false" in MontiArc3.
  *
- * @implements TODO literature for import of port types
- *
  * TODO Enable Test; Problem: Currently no errors logged
  */
 component GenericPortsWithoutTypeParams {

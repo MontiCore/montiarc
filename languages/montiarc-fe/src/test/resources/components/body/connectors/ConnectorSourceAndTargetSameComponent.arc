@@ -1,12 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.connectors;
 
-/**
- * Invalid model.
- * A connector may not connect two ports of the same components.
- *
- * @implements No literature reference
- * TODO Review literature
+/*
+ * Invalid model. A connector may not connect two ports of the same components.
  */
 component ConnectorSourceAndTargetSameComponent {
     port

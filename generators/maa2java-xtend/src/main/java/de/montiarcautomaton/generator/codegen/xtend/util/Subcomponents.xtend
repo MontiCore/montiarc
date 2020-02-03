@@ -14,7 +14,7 @@ import montiarc._symboltable.ComponentSymbol
  */
 class Subcomponents {
 
-  def static String print(ComponentSymbol comp) {
+  def String print(ComponentSymbol comp) {
     return '''
       «FOR subcomponent : comp.subComponents»
         «var type = ComponentHelper.getSubComponentTypeName(subcomponent)»

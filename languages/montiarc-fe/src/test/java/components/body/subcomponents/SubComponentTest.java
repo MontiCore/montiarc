@@ -885,4 +885,10 @@ public class SubComponentTest extends AbstractCoCoTest {
   public void testExtendsHasStringInputAndOutput() {
     checkValid(PACKAGE + "." + "_subcomponents" + "." + "ExtendsHasStringInputAndOutput");
   }
+
+  @Test
+  public void testComponentWithInnerForwardDeclarations() {
+    String qualifiedModelName = PACKAGE + "." + "ComponentWithInnerForwardDeclarations";
+    checkValid(qualifiedModelName);
+  }
 }

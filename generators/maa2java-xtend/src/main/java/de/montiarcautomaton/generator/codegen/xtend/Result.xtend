@@ -4,6 +4,7 @@ package de.montiarcautomaton.generator.codegen.xtend
 import de.montiarcautomaton.generator.codegen.xtend.util.Utils
 import de.montiarcautomaton.generator.helper.ComponentHelper
 import montiarc._symboltable.ComponentSymbol
+import de.montiarcautomaton.generator.codegen.xtend.util.IMontiArcGenerator
 
 /**
  * Generates the result class for a component.
@@ -13,8 +14,8 @@ import montiarc._symboltable.ComponentSymbol
  *          $Date$
  *
  */
-class Result {
-    def static generateResult(ComponentSymbol comp) {
+class Result implements IMontiArcGenerator {
+    override generate(ComponentSymbol comp) {
     var ComponentHelper helper = new ComponentHelper(comp)
     return '''
       «Utils.printPackage(comp)»
@@ -79,4 +80,9 @@ class Result {
       
     '''
   }
+  
+  override getArtifactName(ComponentSymbol comp) {
+    return comp.name + "Result"
+  }
+  
 }

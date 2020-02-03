@@ -19,6 +19,7 @@ public class MontiArcCoCos {
         .addCoCo((MontiArcASTComponentCoCo) new NamesCorrectlyCapitalized())
         .addCoCo(new DefaultParametersHaveCorrectOrder())
         .addCoCo(new DefaultParametersCorrectlyAssigned())
+        .addCoCo(new DeployComponentNoSignature())
         .addCoCo(new ComponentWithTypeParametersHasInstance())
         .addCoCo(new CircularInheritance())
         .addCoCo(new IOAssignmentCallFollowsMethodCall())
@@ -32,7 +33,8 @@ public class MontiArcCoCos {
         .addCoCo(new SubcomponentReferenceCycle())
         .addCoCo(new PortNamesAreNotJavaKeywords())
         .addCoCo(new UnusedImports())
-        
+
+
         /// AJava Cocos
         /// /////////////////////////////////////////////////////////////
         .addCoCo(new AJavaInitUsedPortsAndVariablesExist())
@@ -80,6 +82,7 @@ public class MontiArcCoCos {
         .addCoCo(new AutomatonGuardIsNotBoolean())
         .addCoCo(new GenericInitValues())
         .addCoCo(new ProhibitGenericsWithBounds())
+        .addCoCo(new AutomatonUsedVariablesAreInitialized())
 
         // .addCoCo(new AutomatonStimulusTypeDoesNotFitInputType())
          .addCoCo((MontiArcASTTransitionCoCo)new

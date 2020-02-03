@@ -44,11 +44,10 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
       return;
     }
     
-    ArrayList<Identifier> names = new ArrayList<>();
     ComponentSymbol comp = (ComponentSymbol) node.getSymbolOpt().get();
-    
-    // In case the model is faulty and there are inheritance cycles, we have to 
-    // check for those before actually trying to check the uniqueness of the 
+
+    // In case the model is faulty and there are inheritance cycles, we have to
+    // check for those before actually trying to check the uniqueness of the
     // connector names
     // Findings up to this point are saved to not alter the results
     final List<Finding> findings = Lists.newArrayList(Log.getFindings());
@@ -64,19 +63,29 @@ public class IdentifiersAreUnique implements MontiArcASTComponentCoCo {
     if(inheritanceCycle){
       Log.warn("Could not check for uniqueness of names in inherited " +
                    "ports due to an inheritance cycle.");
-    } else {
-      // Collect port names
-      for (PortSymbol portSymbol : comp.getAllPorts()) {
-        SourcePosition sourcePosition = SourcePosition.getDefaultSourcePosition();
-        if(portSymbol.getAstNode().isPresent()){
-          sourcePosition = portSymbol.getAstNode().get().get_SourcePositionStart();
-        }
-        names.add(new Identifier(portSymbol.getName(), IdentifierTypes.PORT, sourcePosition));
-      }
+      // Restore the saved findings
+      Log.getFindings().clear();
+      Log.getFindings().addAll(findings);
+      return;
     }
     // Restore the saved findings
     Log.getFindings().clear();
     Log.getFindings().addAll(findings);
+
+    doCheck(node, comp);
+  }
+
+  protected void doCheck(ASTComponent node, ComponentSymbol comp) {
+    ArrayList<Identifier> names = new ArrayList<>();
+    // Collect port names
+    for (PortSymbol portSymbol : comp.getAllPorts()) {
+      SourcePosition sourcePosition = SourcePosition.getDefaultSourcePosition();
+      if(portSymbol.getAstNode().isPresent()){
+        sourcePosition = portSymbol.getAstNode().get().get_SourcePositionStart();
+      }
+      names.add(new Identifier(portSymbol.getName(), IdentifierTypes.PORT, sourcePosition));
+    }
+
 
     // Collect variable declarations
     for (VariableSymbol variableSymbol : comp.getVariables()) {

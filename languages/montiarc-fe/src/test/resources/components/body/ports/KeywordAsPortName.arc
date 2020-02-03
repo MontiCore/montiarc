@@ -1,10 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.ports;
 
-/**
- * Invalid model.
- * Uses Java keywords as identifiers for ports
- * @implements No literature reference
+/*
+ * Invalid model. Uses Java keywords as identifiers for ports.
  */
 component KeywordAsPortName {
   

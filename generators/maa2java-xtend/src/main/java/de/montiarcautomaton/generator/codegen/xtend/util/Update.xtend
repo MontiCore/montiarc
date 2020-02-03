@@ -16,7 +16,7 @@ class Update {
   /**
    * Delegates to the right print method.
    */
-  def static print(ComponentSymbol comp) {
+  def print(ComponentSymbol comp) {
     if (comp.isDecomposed) {
     	return printUpdateComposed(comp)
     } else {
@@ -25,7 +25,7 @@ class Update {
   }
   
   
-  def private static printUpdateComposed(ComponentSymbol comp){
+  def private printUpdateComposed(ComponentSymbol comp){
     return 
     '''
     @Override
@@ -41,7 +41,7 @@ class Update {
     '''
   }
   
-  def private static printUpdateAtomic(ComponentSymbol comp){
+  def private printUpdateAtomic(ComponentSymbol comp){
     return 
     '''
     @Override

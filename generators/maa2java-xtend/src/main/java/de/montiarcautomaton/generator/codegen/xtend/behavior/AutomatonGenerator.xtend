@@ -1,11 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-/*******************************************************************************
- * Copyright (c) 2012 itemis AG (http://www.itemis.eu) and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *******************************************************************************/
 package de.montiarcautomaton.generator.codegen.xtend.behavior
 
 import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
@@ -14,6 +7,7 @@ import de.montiarcautomaton.generator.helper.ComponentHelper
 import de.montiarcautomaton.generator.visitor.CDAttributeGetterTransformationVisitor
 import de.monticore.java.prettyprint.JavaDSLPrettyPrinter
 import de.monticore.mcexpressions._ast.ASTExpression
+import de.monticore.mcexpressions._ast.ASTNameExpression
 import de.monticore.prettyprint.IndentPrinter
 import java.util.ArrayList
 import java.util.Collection
@@ -24,11 +18,15 @@ import montiarc._ast.ASTAutomatonBehavior
 import montiarc._ast.ASTComponent
 import montiarc._ast.ASTElement
 import montiarc._ast.ASTIOAssignment
-import montiarc._ast.ASTValueList
 import montiarc._symboltable.ComponentSymbol
+import montiarc._symboltable.PortSymbol
 import montiarc._symboltable.StateSymbol
 import montiarc._symboltable.TransitionSymbol
 import montiarc._symboltable.VariableSymbol
+import montiarc.visitor.NamesInExpressionsDelegatorVisitor
+import de.montiarcautomaton.generator.visitor.NamesInExpressionVisitor
+import de.montiarcautomaton.generator.visitor.NoDataUsageVisitor
+import java.util.Set
 
 /**
  * Prints the automaton behavior of a component.
@@ -39,40 +37,20 @@ import montiarc._symboltable.VariableSymbol
  */
 class AutomatonGenerator extends ABehaviorGenerator {
 
-  var Collection<StateSymbol> states
-
-  var Collection<VariableSymbol> variables
-
-  var Collection<TransitionSymbol> transitions
-
-  var ComponentSymbol comp;
-
-  new(ComponentSymbol component) {
-    this.comp = comp
-    this.states = new ArrayList;
-    this.transitions = new ArrayList;
-    this.variables = new ArrayList;
-
-    // store all states of automaton
-    component.getSpannedScope().getSubScopes().stream().forEach(
+  def Collection<StateSymbol> getStates(ComponentSymbol comp) {
+    return comp.getSpannedScope().getSubScopes().stream().flatMap(
       scope |
-        scope.<StateSymbol>resolveLocally(StateSymbol.KIND).forEach(state|this.states.add(state))
-    );
-    
-    // store all transitions of automaton
-    component.getSpannedScope().getSubScopes().stream().forEach(
-      scope |
-        scope.<TransitionSymbol>resolveLocally(TransitionSymbol.KIND).forEach(transition|
-          this.transitions.add(transition)
-        )
-    );
-    
-    // variables can only be defined in the component's body unlike in JavaP
-    component.getSpannedScope().<VariableSymbol>resolveLocally(VariableSymbol.KIND).forEach(
-      variable |
-        this.variables.add(variable)
-    );
+        scope.<StateSymbol>resolveLocally(StateSymbol.KIND).stream
+    ).collect(Collectors.toList);
   }
+  
+  def Collection<TransitionSymbol> getTransitions(ComponentSymbol comp) {
+    return comp.getSpannedScope().getSubScopes().stream().flatMap(
+      scope |
+        scope.<TransitionSymbol>resolveLocally(TransitionSymbol.KIND).stream
+    ).collect(Collectors.toList);
+  }
+  
 
   /**
    * Adds a enum for alls states of the automtaton and the attribute currentState for storing 
@@ -103,6 +81,8 @@ class AutomatonGenerator extends ABehaviorGenerator {
         automaton = element.automaton
       }
     }
+    var helper = new ComponentHelper(comp)
+    
     return '''
 			@Override
 			public «resultName»«Utils.printFormalTypeParameters(comp)»
@@ -118,42 +98,63 @@ class AutomatonGenerator extends ABehaviorGenerator {
 			    final «resultName»«Utils.printFormalTypeParameters(comp)» «Identifier.resultName» = new «resultName»«Utils.printFormalTypeParameters(comp)»();
 			    
 «««			  Generate implementation of automaton:
-«««			  switch-case statement for every state name 
+«««			  switch-case statement for every state name
 			    switch («Identifier.currentStateName») {
-			    «FOR state : automaton.stateDeclarationList.get(0).stateList»
+			    «FOR stateDeclaration : automaton.getStateDeclarationList()»
+			    «FOR state : stateDeclaration.stateList»
 			    	case «state.name»:
-			    	  «FOR transition : transitions.stream.filter(s | s.source.name == state.name).collect(Collectors.toList)»
+			    	  «FOR transition : getTransitions(comp).stream.filter(s | s.source.name == state.name).collect(Collectors.toList)»
 			    	  	// transition: «transition.toString»
-«««			    	  if statement for each guard of a transition from this state	
-			    	  	if («IF transition.guardAST.isPresent»«printExpression(transition.guardAST.get.guardExpression.expression)»«ELSE» true «ENDIF») {
+«««			    	  if statement for each guard of a transition from this state
+			    	  	if («IF transition.guardAST.isPresent»«printNullChecks(comp, transition.guardAST.get.guardExpression.expression)» («helper.printExpression(transition.guardAST.get.guardExpression.expression)»)«ELSE» true «ENDIF») {
 			    	  	  //reaction
-«««			    	  	if true execute reaction of transition  
+«««			    	  	if true execute reaction of transition
 			    	  	  «IF transition.reactionAST.present»
 			    	  	  	«FOR assignment : transition.reactionAST.get.getIOAssignmentList»
 			    	  	  		«IF assignment.isAssignment»
 			    	  	  			«IF isVariable(assignment.name, assignment)»
-			    	  	  				«assignment.name» = «printRightHandSide(assignment)»;
+			    	  	  				«assignment.name» = «helper.printRightHandSide(assignment)»;
 			    	  	  			«ELSE»
-			    	  	  				«Identifier.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
+			    	  	  				«Identifier.resultName».set«assignment.name.toFirstUpper»(«helper.printRightHandSide(assignment)»);
 			    	  	  			«ENDIF»
 			    	  	  		«ELSE»
-			    	  	  			«printRightHandSide(assignment)»;  
+			    	  	  			«helper.printRightHandSide(assignment)»;
 			    	  	  		«ENDIF»
 			    	  	  	«ENDFOR»
 			    	  	  «ENDIF»
-			    	  	  
+
 «««			    	  	and change state to target state of transition
 			    	  	  «Identifier.currentStateName» = «comp.name»State.«transition.target.name»;
 			    	  	  break;
 			    	  	}
-			    	  	
-			    	  	
+
+
 			    	  «ENDFOR»
+			    «ENDFOR»
 			    «ENDFOR»
 			    }
 			    return result;
 			  }
 		'''
+  }
+  
+  def String printNullChecks(ComponentSymbol symbol, ASTExpression expression) {
+    var StringBuilder builder = new StringBuilder();
+    var NamesInExpressionVisitor visitor = new NamesInExpressionVisitor();
+    expression.accept(visitor);
+    var NoDataUsageVisitor nodataVisitor = new NoDataUsageVisitor();
+    expression.accept(nodataVisitor);
+    val Set<String> portsComparedToNoData = nodataVisitor.getPortsComparedToNoData;
+            
+    for(String name : visitor.foundNames) {
+      if(symbol.spannedScope.resolve(name, VariableSymbol.KIND).present || symbol.spannedScope.resolve(name, PortSymbol.KIND).present) {
+        if(!portsComparedToNoData.contains(name)) {        
+          builder.append(" " + name + "!=null &&");
+        }
+      }
+      
+    }
+    return builder.toString;
   }
 
   override String printGetInitialValues(ComponentSymbol comp) {
@@ -164,6 +165,8 @@ class AutomatonGenerator extends ABehaviorGenerator {
         automaton = element.automaton
       }
     }
+    var ComponentHelper helper = new ComponentHelper(comp)
+    
     return '''
 			@Override
 			public «resultName»«Utils.printFormalTypeParameters(comp)»
@@ -172,19 +175,19 @@ class AutomatonGenerator extends ABehaviorGenerator {
 			  final «resultName»«Utils.printFormalTypeParameters(comp)» «Identifier.resultName» = new «resultName»«Utils.printFormalTypeParameters(comp)»();
 			  
 			  // initial reaction
-			  «var StateSymbol initialState = states.stream.filter(state | state.isInitial).findFirst.get»
+			  «var StateSymbol initialState = getStates(comp).stream.filter(state | state.isInitial).findFirst.get»
 «««			if an initial reaction is present
 			  «IF initialState.initialReactionAST.isPresent»
 			  	«FOR assignment : initialState.initialReactionAST.get.getIOAssignmentList»
 «««			  	set initial result			  	
 			  		«IF assignment.isAssignment»
 			  			«IF comp.getPort(assignment.name).isPresent»
-			  				«Identifier.resultName».set«assignment.name.toFirstUpper»(«printRightHandSide(assignment)»);
+			  				«Identifier.resultName».set«assignment.name.toFirstUpper»(«helper.printRightHandSide(assignment)»);
 			  			«ELSE»
-			  				«assignment.name» = «printRightHandSide(assignment)»;
+			  				«assignment.name» = «helper.printRightHandSide(assignment)»;
 			  			«ENDIF»
 			  		«ELSE»
-			  			«printRightHandSide(assignment)»;  
+			  			«helper.printRightHandSide(assignment)»;  
 			  		«ENDIF»
 			  	«ENDFOR»
 			  «ENDIF»
@@ -201,9 +204,11 @@ class AutomatonGenerator extends ABehaviorGenerator {
   def private String printStateEnum(ASTAutomaton automaton, ComponentSymbol comp) {
     return '''
 			private static enum «comp.name»State {
-			«FOR state : automaton.getStateDeclaration(0).stateList SEPARATOR ','»
-				«state.name»
-			«ENDFOR»;
+			«FOR stateDeclaration : automaton.getStateDeclarationList() SEPARATOR ','»
+        «FOR state : stateDeclaration.stateList SEPARATOR ','»
+          «state.name»
+        «ENDFOR»
+      «ENDFOR»;
 			}
 		'''
   }
@@ -222,44 +227,4 @@ class AutomatonGenerator extends ABehaviorGenerator {
     }
     return false;
   }
-
-  /**
-   * Returns the right side of an assignment/comparison. ValueLists &
-   * Alternatives are not supported.
-   * 
-   * @return
-   */
-  def private String printRightHandSide(ASTIOAssignment assignment) {
-    if (assignment.isPresentAlternative()) {
-      throw new RuntimeException("Alternatives not supported.");
-    } else {
-      var ASTValueList vl = assignment.getValueList();
-      if (vl.isPresentValuation()) {
-        return printExpression(vl.getValuation().getExpression(), assignment.isAssignment);
-      } else {
-        throw new RuntimeException("ValueLists not supported.");
-      }
-    }
-  }
-
-  /**
-   * Prints the java expression of the given AST expression node.
-   * 
-   * @param expr
-   * @return
-   */
-  def private String printExpression(ASTExpression expr, boolean isAssignment) {
-    var IndentPrinter printer = new IndentPrinter();
-    var JavaDSLPrettyPrinter prettyPrinter = new JavaDSLPrettyPrinter(printer);
-    if (isAssignment) {
-      prettyPrinter = new CDAttributeGetterTransformationVisitor(printer);
-    }
-    expr.accept(prettyPrinter);
-    return printer.getContent();
-  }
-
-  def private String printExpression(ASTExpression expr) {
-    return printExpression(expr, true);
-  }
-
 }

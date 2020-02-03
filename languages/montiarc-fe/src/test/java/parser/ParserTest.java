@@ -47,10 +47,13 @@ public class ParserTest {
       MODEL_PATH + "/parser/ComponentAndFileNameDiffer.arc",
       
       // The name of the component is not identical to the name of the file
-      MODEL_PATH + "/parser/NameClashB.arc",
+      MODEL_PATH + "/parser/NameClashA.arc",
 
       // The package declaration of the component must not differ from the package of the component file.
       MODEL_PATH + "/parser/PackageAndLocationDiffer.arc",
+
+      // A component variable declaration must specify a name
+      MODEL_PATH + "/parser/VariableNameExists.arc",
       
       // TODO we do not support OCL Expressions yet
       MODEL_PATH + "/components/body/invariants/OCLFieldToArcField.arc_",

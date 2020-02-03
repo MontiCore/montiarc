@@ -1,0 +1,29 @@
+/* (c) https://github.com/MontiCore/monticore */
+package components.body.timing;
+
+import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
+
+/*
+ * Valid model.
+ * Used to check correctness of the CoCo for undelayed message cycles
+ *
+ * @author Arne Haber
+ */
+component BreaksDelayCycleInMoreComplexSubComponent {
+
+    port
+        in String sIn,
+        out String sOut;
+
+    component HasStringInputAndOutput a1, a2;
+    component HasTwoStringInAndOneStringOut c;
+    
+    component UsingTwoComponents usingTwo;
+    
+    connect sIn -> c.sIn1;
+    connect c.sOut -> a1.pIn;
+    connect a1.pOut -> sOut, usingTwo.sIn1;
+    connect a2.pOut -> usingTwo.sIn2, sOut;
+
+    connect usingTwo.sOut -> c.sIn2;
+}

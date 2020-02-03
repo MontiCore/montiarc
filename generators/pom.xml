@@ -1,6 +1,6 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <!-- == PROJECT COORDINATES ============================================= -->
@@ -8,7 +8,7 @@
   <parent>
     <groupId>montiarc</groupId>
     <artifactId>montiarc-core</artifactId>
-	<version>5.0.2-SNAPSHOT</version>
+	<version>5.1.2</version>
   </parent>
 
   <groupId>montiarc.generators</groupId>
@@ -17,7 +17,9 @@
 
   <modules>
 	<module>cd2pojo</module>
+  <!-- <module>maa2java</module> -->
 	<module>maa2java-xtend</module>
+    <module>dynma2java</module>
   </modules>
 
 </project>
