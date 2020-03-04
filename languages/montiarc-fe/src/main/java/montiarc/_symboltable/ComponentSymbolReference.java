@@ -71,7 +71,11 @@ public class ComponentSymbolReference extends ComponentSymbol implements
   
   @Override
   public String getName() {
-    return getReferencedSymbol().getName();
+    if(existsReferencedSymbol()) {
+      return getReferencedSymbol().getName();
+    } else {
+      return reference.getName();
+    }
   }
   
   @Override
