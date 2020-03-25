@@ -10,7 +10,6 @@ import montiarc._symboltable.ComponentSymbol;
 /**
  * Checks that only decomposed components contain a mode automaton
  *
- * @author Mutert
  */
 public class NoModeAutomatonInAtomicComponent implements MontiArcASTComponentCoCo {
 

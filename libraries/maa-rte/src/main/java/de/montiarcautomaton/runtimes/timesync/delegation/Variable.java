@@ -4,8 +4,6 @@ package de.montiarcautomaton.runtimes.timesync.delegation;
 /**
  * A variable is a {@code DataSource}.
  *
- * @author (last commit) $Author$
- * @version $Revision$, $Date$
  */
 public class Variable<T> extends DataSource<T> {
   

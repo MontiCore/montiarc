@@ -36,7 +36,6 @@ import montiarc.helper.TypeCompatibilityChecker;
  *
  * @implements [Wor16] AT2: Types of valuations and assignments must match the
  * type of the assigned input, output, or variable. (p. 105, Lst. 5.24)
- * @author Andreas Wortmann
  */
 public class AutomatonReactionTypeDoesNotFitOutputType
     implements MontiArcASTTransitionCoCo, MontiArcASTInitialStateDeclarationCoCo {

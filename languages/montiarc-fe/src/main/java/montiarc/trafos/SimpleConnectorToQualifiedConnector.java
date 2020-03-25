@@ -24,9 +24,6 @@ import java.util.Optional;
  * embedding component. This is happening on the AST level and the
  * transformation removes the original simple connectors from the AST.
  *
- * @author (last commit) Michael Mutert
- * @version , 2018-04-19
- * @since TODO
  */
 public class SimpleConnectorToQualifiedConnector {
   

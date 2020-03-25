@@ -12,7 +12,6 @@ import sim.comp.MessageAbstractionImpl;
  * <br>
  * Generated with MontiArc 2.5.0-SNAPSHOT.<br>
  * 
- * @date 09.01.2015 13:47:11<br>
  */
 public class MessageAbstractionFactory {
   

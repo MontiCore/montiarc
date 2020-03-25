@@ -21,8 +21,6 @@ import montiarc._symboltable.MontiArcLanguage;
 /**
  * Extends {@link MontiArcTool} with generate capabilities.
  *
- * @author Pfeiffer, Wortmann
- * @version $Revision$, $Date$
  */
 public class MontiArcGeneratorTool extends MontiArcTool {
 

@@ -31,8 +31,6 @@ import java.util.Set
 /**
  * Prints the automaton behavior of a component.
  * 
- * @author  Pfeiffer
- * @version $Revision$,
  *          $Date$
  */
 class AutomatonGenerator extends ABehaviorGenerator {

@@ -21,7 +21,6 @@ import static org.junit.Assert.*;
 /**
  * This class checks all context conditions directly related to port definitions
  *
- * @author Andreas Wortmann
  */
 public class PortTest extends AbstractCoCoTest {
   

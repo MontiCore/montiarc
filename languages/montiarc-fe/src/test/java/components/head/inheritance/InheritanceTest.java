@@ -33,7 +33,6 @@ import montiarc.cocos.MontiArcCoCos;
 /**
  * This class checks all context conditions related to component inheritance
  *
- * @author Andreas Wortmann
  */
 public class InheritanceTest extends AbstractCoCoTest {
 

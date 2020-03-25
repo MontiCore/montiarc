@@ -13,9 +13,6 @@ import de.monticore.mcexpressions._visitor.MCExpressionsVisitor;
 /**
  * TODO: Write me!
  *
- * @author (last commit) $Author$
- * @version $Revision$, $Date$
- * @since TODO: add version number
  */
 public class NamesInExpressionVisitor extends JavaDSLDelegatorVisitor {
   
@@ -67,8 +64,6 @@ public class NamesInExpressionVisitor extends JavaDSLDelegatorVisitor {
    * Visits {@link ASTExpression} and stores used names {@link ASTNameExpression}
    * and the kind of expression they are used in.
    *
-   * @author Pfeiffer
-   * @version $Revision$, $Date$
    */
   private class NamesInMCExpressionsVisitor implements MCExpressionsVisitor {
     
@@ -96,8 +91,6 @@ public class NamesInExpressionVisitor extends JavaDSLDelegatorVisitor {
   /**
    * Used for checking names in AJava blocks which uses the JavaDSL.
    *
-   * @author (last commit) $Author$
-   * @version $Revision$, $Date$
    */
   private class NamesInJavaExpressionsVisitor implements JavaDSLVisitor {
     

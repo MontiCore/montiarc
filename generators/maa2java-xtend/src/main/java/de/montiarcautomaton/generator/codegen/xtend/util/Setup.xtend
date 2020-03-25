@@ -11,8 +11,6 @@ import montiarc._ast.ASTComponent
 /**
  * Prints the setup for both atomic and composed components.
  * 
- * @author  Pfeiffer
- * @version $Revision$,
  *          $Date$
  * 
  */

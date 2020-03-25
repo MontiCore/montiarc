@@ -14,8 +14,6 @@ import java.util.Deque;
  * @implements [Hab16] R12: An inner component type definition must not extend
  * the component type in which it is defined. (p. 68, lst. 3.47)
  * 
- * @author Jerome Pfeiffer
- * @version $Revision$, $Date$
  */
 public class InnerComponentNotExtendsDefiningComponent implements MontiArcASTComponentCoCo {
   

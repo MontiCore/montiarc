@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
  * Uses implementation for [Hab16] CV6 if no mode automaton present.
  * Otherwise checks that in each mode all active components are completely connected
  *
- * @author (last commit) Mutert
  */
 public class SubComponentsConnected implements MontiArcASTComponentCoCo {
 

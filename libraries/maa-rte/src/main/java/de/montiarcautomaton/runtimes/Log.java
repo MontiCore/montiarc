@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Default methods for logging.
  * 
- * @author Gerrit Leonhardt
  */
 public class Log {
 

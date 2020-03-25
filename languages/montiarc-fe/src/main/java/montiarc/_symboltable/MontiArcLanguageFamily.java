@@ -12,7 +12,6 @@ import de.monticore.umlcd4a.CD4AnalysisLanguage;
  * The MontiArcLanguageFamily aggregates common languages for MontiArc usage; these are
  * {@link MontiArcLanguage}, {@link CD4AnalysisLanguage} and the {@link JavaDSLLanguage}.
  *
- * @author Robert Heim, Andreas Wortmann
  */
 public class MontiArcLanguageFamily extends ModelingLanguageFamily {
   

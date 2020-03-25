@@ -15,9 +15,6 @@ import java.util.List;
 /**
  * TODO
  *
- * @author (last commit) Michael Mutert
- * @version ,
- * @since TODO
  */
 public class Constructor{
 

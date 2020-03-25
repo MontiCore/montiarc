@@ -40,7 +40,6 @@ import static org.junit.Assert.*;
  * This class checks all context conditions related to the definition of
  * subcomponents
  *
- * @author Andreas Wortmann
  */
 public class SubComponentTest extends AbstractCoCoTest {
   

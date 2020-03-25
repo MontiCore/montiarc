@@ -17,7 +17,6 @@ import montiarc.cocos.MontiArcCoCos;
 /**
  * This class checks all context conditions related to automaton states
  *
- * @author Andreas Wortmann
  */
 public class StateTest extends AbstractCoCoTest {
 

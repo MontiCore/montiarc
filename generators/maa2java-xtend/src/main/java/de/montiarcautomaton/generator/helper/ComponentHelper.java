@@ -46,7 +46,6 @@ import montiarc.helper.SymbolPrinter;
  * Helper class used in the template to generate target code of atomic or
  * composed components.
  *
- * @author Gerrit Leonhardt
  */
 public class ComponentHelper {
   public static String DEPLOY_STEREOTYPE = "deploy";

@@ -27,7 +27,6 @@ import java.util.Optional;
  * R3: Modes may only use components that have been declared in the
  * corresponding component type definition.
  *
- * @author (last commit) Fuerste
  */
 public class UseUndefinedComponent implements DynamicMontiArcASTModeAutomatonCoCo {
 

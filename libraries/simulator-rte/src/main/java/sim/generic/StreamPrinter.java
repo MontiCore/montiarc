@@ -6,7 +6,6 @@ import java.util.List;
 /**
  * Helper class for printing streams.
  * 
- * @since 2.5.0
  */
 public class StreamPrinter {
     

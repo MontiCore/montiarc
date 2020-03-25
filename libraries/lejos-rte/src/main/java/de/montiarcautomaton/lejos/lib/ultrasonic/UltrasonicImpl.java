@@ -8,7 +8,6 @@ import lejos.nxt.UltrasonicSensor;
 /**
  * Component behavior implementation of the bumperbot ultrasonic sensor.
  * 
- * @author Gerrit Leonhardt
  */
 public class UltrasonicImpl implements IComputable<UltrasonicInput, UltrasonicResult> {
   private UltrasonicSensor nxtUltrasonicSensor;

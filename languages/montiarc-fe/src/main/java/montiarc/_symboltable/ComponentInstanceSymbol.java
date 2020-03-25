@@ -11,7 +11,6 @@ import montiarc.helper.SymbolPrinter;
 /**
  * Represents an instance of a component.
  *
- * @author Robert Heim
  */
 public class ComponentInstanceSymbol extends CommonSymbol {
 

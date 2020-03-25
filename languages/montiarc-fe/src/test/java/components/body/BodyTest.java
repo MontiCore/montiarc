@@ -19,7 +19,6 @@ import montiarc.cocos.NamesCorrectlyCapitalized;
  * This class checks all context conditions related the combination of elements
  * in component bodies
  *
- * @author Andreas Wortmann
  */
 public class BodyTest extends AbstractCoCoTest {
   

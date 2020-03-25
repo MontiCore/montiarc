@@ -21,8 +21,6 @@ import montiarc.visitor.NamesInExpressionsDelegatorVisitor.ExpressionKind;
  * Checks whether ports and component parameters are correctly used regarding
  * their direction.
  *
- * @author Pfeiffer
- * @version $Revision$, $Date$
  */
 public class AJavaUsesCorrectPortDirection implements MontiArcASTJavaPBehaviorCoCo {
   

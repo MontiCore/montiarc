@@ -8,7 +8,6 @@ package infrastructure;
 /**
  * Represents a field that is expected to be in a generated file
  *
- * @author Michael Mutert
  */
 public class Field {
   private final String name;

@@ -12,8 +12,6 @@ import sim.port.IInPort;
 /**
  * Is used to directly control the test components time.
  * 
- * @author Arne Haber
- * @version 05.02.2009
  */
 public class ComponentTimeDummy extends AComponent implements ISimComponent, ITimedComponent {
     

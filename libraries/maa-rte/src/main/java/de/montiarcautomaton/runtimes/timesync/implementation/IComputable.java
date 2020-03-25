@@ -5,8 +5,6 @@ package de.montiarcautomaton.runtimes.timesync.implementation;
  * The interface of component implementations used by the generator
  * java-timesync-delegation
  *
- * @author  (last commit) $Author$
- * @version $Revision$,
  *          $Date$
  *
  */

@@ -12,7 +12,6 @@ import java.util.*;
  * Used to check that there are no component type variables that are reused
  * as type variables in inner component definitions.
  *
- * @author Mutert
  */
 public class TypeUniquenessVisitor implements MontiArcVisitor {
 

@@ -17,10 +17,7 @@ import montiarc._symboltable.ComponentSymbol;
 /**
  * TODO: Write me!
  *
- * @author  (last commit) $Author$
- * @version $Revision$,
  *          $Date$
- * @since   TODO: add version number
  *
  */
 public class DynMAGeneratorHelper extends ComponentHelper{

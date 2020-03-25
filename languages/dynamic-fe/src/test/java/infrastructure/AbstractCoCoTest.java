@@ -20,7 +20,6 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Abstract base class for all tests that do more than just parsing
  * 
- * @author (last commit) Mutert
  */
 public abstract class AbstractCoCoTest {
   

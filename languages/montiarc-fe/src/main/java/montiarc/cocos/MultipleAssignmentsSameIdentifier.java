@@ -17,7 +17,6 @@ import montiarc._cocos.MontiArcASTTransitionCoCo;
  *
  * @implements [RRW14a] S3ts: In every cycle at most one message per port is sent (partially).
  * 
- * @author Gerrit Leonhardt, Andreas Wortmann
  */
 public class MultipleAssignmentsSameIdentifier implements MontiArcASTTransitionCoCo {
   

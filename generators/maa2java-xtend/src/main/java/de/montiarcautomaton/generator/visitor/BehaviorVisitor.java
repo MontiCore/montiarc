@@ -9,8 +9,6 @@ import montiarc._visitor.MontiArcVisitor;
 /**
  * Visitor for getting JavaPBehavior from AST.
  *
- * @author Jerome Pfeiffer
- * @version $Revision$, $Date$
  */
 public class BehaviorVisitor implements MontiArcVisitor {
   

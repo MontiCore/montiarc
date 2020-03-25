@@ -31,7 +31,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * TODO
  *
- * @author Michael Mutert
  */
 public class AbstractGeneratorTest {
 

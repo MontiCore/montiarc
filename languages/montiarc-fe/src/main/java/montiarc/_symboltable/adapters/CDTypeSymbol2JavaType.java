@@ -25,8 +25,6 @@ import de.monticore.umlcd4a.symboltable.references.CDTypeSymbolReference;
 /**
  * Adapts CDTypeSymbols to JavaTypeSymbols
  *
- * @author (last commit) $Author$
- * @version $Revision$, $Date$
  */
 public class CDTypeSymbol2JavaType extends JavaTypeSymbol implements SymbolAdapter<CDTypeSymbol> {
   

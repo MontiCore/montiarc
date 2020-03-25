@@ -13,7 +13,6 @@ import montiarc._symboltable.ComponentSymbol;
  *
  * @implements [Wor16] MU2:Each atomic component contains at most one
  *  behavior model. (p. 55. Lst. 4.6) TODO: Review
- * @author Andreas Wortmann
  */
 public class ImplementationInNonAtomicComponent implements MontiArcASTComponentCoCo {
   

@@ -13,7 +13,6 @@ import montiarc._symboltable.MontiArcModelNameCalculator;
  *
  * @implements No literature reference
  * TODO: Hat keine Referenz in den Arbeiten. Noch sinnvoll? Artefakte mit Paketnamen, die nicht lower case sind, koennen nicht resolvt werden.
- * @author Robert Heim
  */
 public class PackageLowerCase implements MontiArcASTMACompilationUnitCoCo {
   

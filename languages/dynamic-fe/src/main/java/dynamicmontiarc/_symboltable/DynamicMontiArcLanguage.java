@@ -14,7 +14,6 @@ import java.util.Optional;
 /**
  * TODO
  *
- * @author (last commit) Mutert
  */
 public class DynamicMontiArcLanguage extends DynamicMontiArcLanguageTOP {
     public static final String FILE_ENDING = "arc";

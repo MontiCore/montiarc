@@ -12,8 +12,6 @@ import java.util.HashSet;
 import org.junit.Test;
 
 /**
- * @author Arne Haber
- * @version 26.04.2009
  */
 public class StreamTest {
     

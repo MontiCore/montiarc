@@ -9,7 +9,6 @@ package sim.comp.gen;
  * Java representation of component TickSource.<br>
  * <br>
  * Generated with MontiArc 2.5.0-SNAPSHOT.<br>
- * @date 29.01.2015 18:06:04<br>
  *
  */
 public abstract class ATickSource extends sim.generic.ATimedComponent implements sim.comp.gen.interfaces.ITickSource, sim.generic.ISimComponent {

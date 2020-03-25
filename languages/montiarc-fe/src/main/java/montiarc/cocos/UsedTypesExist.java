@@ -15,8 +15,6 @@ import montiarc._symboltable.VariableSymbol;
  *
  * No literature reference
  *
- * @author Pfeiffer
- * @version $Revision$, $Date$
  */
 public class UsedTypesExist implements MontiArcASTComponentCoCo {
   

@@ -6,7 +6,6 @@ import de.monticore.symboltable.SymbolKind;
 /**
  * Symbol kind of component instances.
  *
- * @author Robert Heim
  */
 public class ComponentInstanceKind implements SymbolKind {
   

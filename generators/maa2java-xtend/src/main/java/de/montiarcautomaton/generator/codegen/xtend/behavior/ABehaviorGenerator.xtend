@@ -8,8 +8,6 @@ import montiarc._symboltable.ComponentSymbol
  * Abstract class for generating a component's behavior implementation. The concrete behavior implementations must implement the abstract print methods 
  * for compute() and getInitialValues().  
  * 
- * @author  Pfeiffer
- * @version $Revision$,
  *          $Date$
  */
 abstract class ABehaviorGenerator {

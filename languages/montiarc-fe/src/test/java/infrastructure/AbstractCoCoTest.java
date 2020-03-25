@@ -23,7 +23,6 @@ import montiarc._symboltable.ComponentSymbol;
 /**
  * Abstract base class for all tests that do more than just parsing
  * 
- * @author (last commit) Crispin Kirchner, Andreas Wortmann
  */
 public abstract class AbstractCoCoTest {
   

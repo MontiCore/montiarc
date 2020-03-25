@@ -25,8 +25,6 @@ import java.util.regex.Pattern;
  * invalid components should have at least one "@implements" tag of the format
  * @implements [ABC18] CoCo-Name: Description (p.XX, Lst. X.YZ)
  *
- * @author (last commit) Michael Mutert
- * @version , 2018-05-22
  */
 public class ModelAnnotationTest {
 

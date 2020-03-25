@@ -18,7 +18,6 @@ import java.util.Collection;
  * Checks that the name of the component is not ambiguous to an existing Java
  * type. Also checks for subcomponent and port types that the same holds.
  *
- * @author Manuel Pützer
  */
 public class AmbiguousTypes implements MontiArcASTComponentCoCo {
 

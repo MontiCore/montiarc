@@ -8,7 +8,6 @@ import dynamicmontiarc._cocos.DynamicMontiArcASTModeDeclarationCoCo;
 /**
  * Ensures that the names of the modes start with an uppercase character.
  *
- * @author (last commit) Fuerste
  */
 public class ModeNameUppercase implements DynamicMontiArcASTModeDeclarationCoCo {
 

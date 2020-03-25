@@ -66,13 +66,11 @@ public interface IInSimPort<T> extends IInPort<T> {
      * Used by the scheduler to set the port number from this port to the given number nr.
      * 
      * @param nr port number to set
-     * @since 2.5.0
      */
     void setPortNumber(int nr);
     
     /**
      * @return the port number from this port
-     * @since 2.5.0
      */
     int getPortNumber();
 }

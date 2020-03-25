@@ -23,7 +23,6 @@ import montiarc.cocos.UseOfValueLists;
 /**
  * This class checks all context conditions related to automaton assignments
  *
- * @author Andreas Wortmann
  */
 public class AssignmentTest extends AbstractCoCoTest {
   

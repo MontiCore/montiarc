@@ -6,7 +6,6 @@ import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 /**
  * Component behavior implementation for simple logging.
  * 
- * @author Gerrit Leonhardt
  */
 public class LoggerImpl implements IComputable<LoggerInput, LoggerResult> {
   

@@ -21,8 +21,6 @@ import java.util.stream.Collectors;
  * Pretty print symbols.
  * This class does not use the AST
  *
- * @author Michael von Wenckstern
- * @since 20.05.2016
  */
 public class SymbolPrinter {
   

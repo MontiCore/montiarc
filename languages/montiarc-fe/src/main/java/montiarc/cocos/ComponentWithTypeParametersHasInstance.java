@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
  *
  * @implements No literature reference
  *
- * @author (last commit) Crispin Kirchner
  */
 public class ComponentWithTypeParametersHasInstance
     implements MontiArcASTComponentCoCo {

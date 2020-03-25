@@ -161,7 +161,6 @@ public interface IStream<T> extends List<TickedMessage<T>> {
      * @return an array of time intervals in which the given <b>message</a> has
      *         been transmitted. The array is empty, if the message has not been
      *         transmitted in this stream.
-     * @since 2.5.0
      */
     int[] timeIntervalsOf(T message);
     
@@ -208,7 +207,6 @@ public interface IStream<T> extends List<TickedMessage<T>> {
      * @return a shallow copy of this streams with the same history/buffer. Copy
      *         contains links to the same message objects contained in this
      *         list.
-     * @since 2.2.0
      */
     IStream<T> copy();
 }

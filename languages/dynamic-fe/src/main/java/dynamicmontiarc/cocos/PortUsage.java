@@ -8,7 +8,6 @@ import montiarc._cocos.MontiArcASTComponentCoCo;
 /**
  * TODO
  *
- * @author (last commit) Mutert
  */
 public class PortUsage implements MontiArcASTComponentCoCo {
 

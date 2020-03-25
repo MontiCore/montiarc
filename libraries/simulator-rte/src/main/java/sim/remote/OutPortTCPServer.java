@@ -17,9 +17,6 @@ import sim.generic.TickedMessage;
 /**
  * TODO: Write me!
  * 
- * @author (last commit) $Author: ahaber $
- * @version $Revision: 2964 $, $Date: 2014-08-25 18:37:47 +0200 (Mo, 25 Aug 2014) $
- * @since 2.5.0
  */
 class OutPortTCPServer<T> implements Runnable {
     private boolean running = true;

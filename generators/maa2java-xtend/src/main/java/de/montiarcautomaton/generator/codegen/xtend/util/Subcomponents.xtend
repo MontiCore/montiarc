@@ -7,8 +7,6 @@ import montiarc._symboltable.ComponentSymbol
 /**
  * Prints member and getter for component's subcomponents.
  * 
- * @author  Pfeiffer
- * @version $Revision$,
  *          $Date$
  * 
  */

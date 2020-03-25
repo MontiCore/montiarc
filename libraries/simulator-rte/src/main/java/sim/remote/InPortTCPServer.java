@@ -15,10 +15,7 @@ import sim.port.IInSimPort;
  * 
  * Runnable that listens for incoming remote messages on incoming ports.
  *
- * @author  (last commit) $Author: ahaber $, ringert
- * @version $Revision: 2972 $,
  *          $Date: 2014-08-31 16:58:17 +0200 (So, 31 Aug 2014) $
- * @since   2.5.0
  *
  * @param <T> communication data type.
  */

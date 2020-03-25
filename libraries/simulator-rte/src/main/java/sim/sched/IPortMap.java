@@ -6,10 +6,7 @@ import sim.port.IInSimPort;
 /**
  * Handles the information, which ports of a component are tickfree and which are not.
  *
- * @author  (last commit) $Author: ahaber $
- * @version $Revision: 2949 $,
  *          $Date: 2014-08-15 11:18:12 +0200 (Fr, 15 Aug 2014) $
- * @since   2.5.0
  *
  */
 interface IPortMap {

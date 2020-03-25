@@ -33,7 +33,6 @@ import montiarc.helper.TypeCompatibilityChecker;
  * component has optional parameters with default values, then all new
  * parameters of the inheriting component have to be optional as well.
  *
- * @author (last commit) Michael Mutert
  * @implements [Hab16] R14: Components that inherit from a parametrized
  * component provide configuration parameters with the same types, but are
  * allowed to provide more parameters. (p.69 Lst. 3.49)

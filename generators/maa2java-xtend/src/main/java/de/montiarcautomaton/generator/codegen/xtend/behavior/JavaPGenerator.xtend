@@ -23,8 +23,6 @@ import montiarc._symboltable.ComponentSymbol
 /**
  * Prints the JavaP behavior of a component.
  * 
- * @author  Pfeiffer
- * @version $Revision$,
  *          $Date$
  */
 class JavaPGenerator extends ABehaviorGenerator {

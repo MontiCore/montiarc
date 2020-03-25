@@ -17,8 +17,6 @@ import sim.port.SimplePort;
 import sim.port.TestPort;
 
 /**
- * @author Arne Haber
- * @version 27.11.2008
  */
 public class ComponentDummy extends ATimedComponent implements ComponentDummyPortInterface {
     

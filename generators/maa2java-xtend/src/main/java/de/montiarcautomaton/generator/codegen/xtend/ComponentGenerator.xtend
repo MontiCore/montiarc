@@ -19,8 +19,6 @@ import de.montiarcautomaton.generator.codegen.xtend.util.IMontiArcGenerator
 /**
  * Generates the component class for atomic and composed components. 
  * 
- * @author  Pfeiffer
- * @version $Revision$,
  *          $Date$
  */
 class ComponentGenerator implements IMontiArcGenerator {

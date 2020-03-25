@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
  * Lst. 3.38)
  * @implements [Hab16] R4: Unqualified subcomponent types either exist in the current package or are
  * imported using an import statement. (p. 64, Lst. 3.39)
- * @author ahaber, Robert Heim
  */
 public class SubComponentsConnected implements MontiArcASTComponentCoCo {
 

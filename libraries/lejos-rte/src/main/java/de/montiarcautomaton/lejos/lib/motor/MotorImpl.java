@@ -9,7 +9,6 @@ import lejos.nxt.NXTMotor;
 /**
  * Component behavior implementation of a bumperbot motor.
  * 
- * @author Gerrit Leonhardt
  */
 public class MotorImpl implements IComputable<MotorInput, MotorResult> {
   private final int power;

@@ -17,7 +17,6 @@ import montiarc._symboltable.ComponentSymbol;
  * This class checks all context conditions related to the timing configuration
  * and undelayed message cycles.
  *
- * @author Andreas Wortmann
  */
 public class TimingTest extends AbstractCoCoTest {
 

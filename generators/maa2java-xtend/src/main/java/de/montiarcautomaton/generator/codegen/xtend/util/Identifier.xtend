@@ -13,8 +13,6 @@ import montiarc._symboltable.VariableSymbol
  * 
  * NOTICE: createInstance() has to be called for every component symbol again.
  * 
- * @author  Pfeiffer
- * @version $Revision$,
  *          $Date$
  * 
  */

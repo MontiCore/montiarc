@@ -13,7 +13,6 @@ import sim.port.IPortFactory;
  * Produces remote tcp ports.
  *
  *
- * @date	29.10.2010
  */
 public class TCPPortFactory implements IPortFactory {
     

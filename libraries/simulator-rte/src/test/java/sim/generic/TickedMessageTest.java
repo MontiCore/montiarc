@@ -9,8 +9,6 @@ import org.junit.Test;
 /**
  * Module test for Ticked Messages.
  * 
- * @author Arne Haber
- * @version 09.12.2008
  */
 public class TickedMessageTest {
     

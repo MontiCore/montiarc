@@ -34,7 +34,6 @@ import static org.junit.Assert.*;
 /**
  * This class checks all context conditions related the combination of elements in component bodies
  *
- * @author Andreas Wortmann
  */
 public class ComponentTest extends AbstractCoCoTest {
   

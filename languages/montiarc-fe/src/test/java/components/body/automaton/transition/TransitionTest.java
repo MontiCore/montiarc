@@ -13,7 +13,6 @@ import montiarc.cocos.MontiArcCoCos;
 /**
  * This class checks all context conditions directly related to automata (not their sub-elements)
  *
- * @author Andreas Wortmann
  */
 public class TransitionTest extends AbstractCoCoTest {
   

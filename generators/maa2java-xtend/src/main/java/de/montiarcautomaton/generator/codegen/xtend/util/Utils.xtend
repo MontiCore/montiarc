@@ -12,8 +12,6 @@ import montiarc._symboltable.ComponentSymbol
 /**
  * This class contains several methods commonly used by generator classes.
  * 
- * @author  Pfeiffer
- * @version $Revision$,
  *          $Date$
  * 
  */

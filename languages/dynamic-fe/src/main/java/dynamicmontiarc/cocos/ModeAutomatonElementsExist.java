@@ -9,7 +9,6 @@ import dynamicmontiarc._cocos.DynamicMontiArcASTModeAutomatonCoCo;
  * If the component is dynamic, it needs to have exactly one mode controller
  * and at least one mode declaration.
  *
- * @author (last commit) Fuerste
  */
 public class ModeAutomatonElementsExist implements DynamicMontiArcASTModeAutomatonCoCo {
 

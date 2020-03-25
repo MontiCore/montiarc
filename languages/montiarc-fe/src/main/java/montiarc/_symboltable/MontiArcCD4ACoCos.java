@@ -60,10 +60,7 @@ import montiarc.helper.CD4AModelLoader;
 /**
  * TODO: Write me!
  *
- * @author  (last commit) $Author$
- * @version $Revision$,
  *          $Date$
- * @since   TODO: add version number
  *
  */
 public class MontiArcCD4ACoCos extends CD4ACoCos{

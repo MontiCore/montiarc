@@ -23,7 +23,6 @@ import montiarc._symboltable.MontiArcSymbolTableCreator;
  * 
  * @implements [Wor16] AR5: Types of valuations and assignments without names are unambiguous. (p.
  * 104, Lst. 5.22)
- * @author Gerrit Leonhardt, Andreas Wortmann
  */
 public class AssignmentHasNoName implements MontiArcASTIOAssignmentCoCo {
   

@@ -27,7 +27,6 @@ import static org.junit.Assert.*;
  * This class checks all context conditions directly related to connector
  * definitions
  *
- * @author Andreas Wortmann
  */
 public class ConnectorTest extends AbstractCoCoTest {
   

@@ -5,8 +5,6 @@ import sim.generic.Message;
 
 /**
  * 
- * @author Arne Haber
- * @version 27.11.2008
  * 
  * 
  */

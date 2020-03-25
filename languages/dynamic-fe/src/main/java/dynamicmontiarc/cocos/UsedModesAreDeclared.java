@@ -12,7 +12,6 @@ import java.util.Set;
 /**
  * Checks that modes used in transitions are defined in the component
  *
- * @author Mutert
  */
 public class UsedModesAreDeclared implements DynamicMontiArcASTModeAutomatonCoCo {
 

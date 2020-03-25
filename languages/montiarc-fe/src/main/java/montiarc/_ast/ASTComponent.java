@@ -11,7 +11,6 @@ import de.monticore.types.types._ast.ASTTypeArguments;
 /**
  * Repräsentation einer Komponenten
  *
- * @author Robert Heim, Michael von Wenckstern, Andreas Wortmann
  */
 public class ASTComponent extends ASTComponentTOP {
   /**

@@ -51,8 +51,6 @@ import static org.junit.Assert.assertTrue;
  * 8. Run the visitors on all generated files and check that exactly the
  *    expected elements are present
  *
- * @author (last commit) Michael Mutert
- * @version , 2018-04-27
  */
 public class ComponentGenerationTest extends AbstractGeneratorTest {
 

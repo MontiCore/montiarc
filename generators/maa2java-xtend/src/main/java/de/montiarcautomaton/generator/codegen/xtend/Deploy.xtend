@@ -8,8 +8,6 @@ import de.montiarcautomaton.generator.codegen.xtend.util.IMontiArcGenerator
 /**
  * Generates the deployment class for a component.
  * 
- * @author  Pfeiffer
- * @version $Revision$,
  *          $Date$
  * 
  */

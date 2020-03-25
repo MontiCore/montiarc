@@ -21,7 +21,6 @@ import montiarc.helper.SymbolPrinter;
 /**
  * This class checks all context conditions related to the definition of generic type parameters
  *
- * @author Crispin Kirchner, Andreas Wortmann
  */
 public class GenericsTest extends AbstractCoCoTest {
 

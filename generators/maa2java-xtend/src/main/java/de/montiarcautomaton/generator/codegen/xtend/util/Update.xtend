@@ -6,8 +6,6 @@ import montiarc._symboltable.ComponentSymbol
 /**
  * Prints the update() method for both atomic and composed components.
  *
- * @author  Pfeiffer
- * @version $Revision$,
  *          $Date$
  *
  */

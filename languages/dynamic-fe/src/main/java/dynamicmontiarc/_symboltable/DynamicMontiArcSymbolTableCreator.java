@@ -14,9 +14,6 @@ import java.util.Deque;
 /**
  * Symboltable creator for the Dynamic MontiArc language.
  *
- * @author (last commit) Mutert
- * @version ,
- * @since TODO
  */
 public class DynamicMontiArcSymbolTableCreator extends MontiArcSymbolTableCreator implements DynamicMontiArcVisitor {
 

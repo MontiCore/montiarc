@@ -17,7 +17,6 @@ import montiarc._visitor.MontiArcDelegatorVisitor;
 /**
  * TODO: Write me!
  *
- * @since 5.1.2
  */
 public class NoDataUsageVisitor extends MontiArcDelegatorVisitor {
   
@@ -107,8 +106,6 @@ public class NoDataUsageVisitor extends MontiArcDelegatorVisitor {
    * Visits {@link ASTExpression} and stores used names
    * {@link ASTNameExpression} and the kind of expression they are used in.
    *
-   * @author Pfeiffer
-   * @version $Revision$, $Date$
    */
   private class NamesInMCExpressionsVisitor implements MCExpressionsVisitor {
     
@@ -135,8 +132,6 @@ public class NoDataUsageVisitor extends MontiArcDelegatorVisitor {
   /**
    * Used for checking names in AJava blocks which uses the JavaDSL.
    *
-   * @author (last commit) $Author$
-   * @version $Revision$, $Date$
    */
   private class NamesInJavaExpressionsVisitor implements JavaDSLVisitor {
     
@@ -163,8 +158,6 @@ public class NoDataUsageVisitor extends MontiArcDelegatorVisitor {
   /**
    * Used for checking names in AJava blocks which uses the JavaDSL.
    *
-   * @author (last commit) $Author$
-   * @version $Revision$, $Date$
    */
   private class Lit implements LiteralsVisitor {
     

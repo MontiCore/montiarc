@@ -9,7 +9,6 @@ import lejos.nxt.UltrasonicSensor;
 /**
  * This is the handwritten equivalent to the auto generated bumperbot.
  * 
- * @author Gerrit Leonhardt
  */
 public class BumperbotHW {
   final static int CYCLE_TIME = 10; // in ms

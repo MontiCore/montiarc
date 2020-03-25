@@ -22,7 +22,6 @@ import montiarc.cocos.PackageLowerCase;
  * part of a full-qualified name, e.g.:<br/>
  * a.b.C.D.E -> a.b.C
  *
- * @author Robert Heim, Michael von Wenckstern
  */
 public class MontiArcModelNameCalculator
     extends de.monticore.CommonModelNameCalculator {

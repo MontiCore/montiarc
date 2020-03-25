@@ -14,7 +14,6 @@ import montiarc._cocos.MontiArcASTTransitionCoCo;
  *
  * @implements No literature reference
  * 
- * @author Gerrit Leonhardt, Andreas Wortmann
  */
 public class AutomatonReactionWithAlternatives
     implements MontiArcASTInitialStateDeclarationCoCo, MontiArcASTTransitionCoCo {

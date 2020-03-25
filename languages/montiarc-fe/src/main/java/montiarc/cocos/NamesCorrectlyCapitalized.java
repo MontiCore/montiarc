@@ -12,7 +12,6 @@ import java.util.List;
 /**
  * CoCo that checks the correct capitalization of component elements.
  *
- * @author Gerrit Leonhardt, Andreas Wortmann, Michael Mutert
  * @implements [RRW14a] C2: The names of variables and ports start with
  * lowercase letters. (p. 31, Lst. 6.5) Context condition
  * for checking, if all fields of an IO-Automaton start with

@@ -47,7 +47,6 @@ import montiarc.visitor.AssignmentNameCompleter;
 /**
  * Visitor that creates the symboltable of a MontiArc AST.
  *
- * @author Robert Heim, Andreas Wortmann
  */
 public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   

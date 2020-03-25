@@ -11,7 +11,6 @@ import de.se_rwth.commons.logging.Log;
  * <br>
  * Generated with MontiArc 2.5.0-SNAPSHOT.<br>
  * 
- * @date 29.01.2015 18:06:05<br>
  */
 public class TickSourceFactory {
   

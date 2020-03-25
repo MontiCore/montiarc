@@ -6,7 +6,6 @@ import montiarc._cocos.*;
 /**
  * Bundle of CoCos for the MontiArc language.
  *
- * @author Robert Heim, Andreas Wortmann
  */
 public class MontiArcCoCos {
   public static MontiArcCoCoChecker createChecker() {

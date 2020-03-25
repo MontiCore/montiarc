@@ -16,7 +16,6 @@ import montiarc._cocos.MontiArcASTComponentHeadCoCo;
  *
  * @implements [Wor16] MR4: All mandatory component configuration parameters
  *  precede the parameters with default values. (p.60 Lst. 4.14) TODO Review
- * @author Andreas Wortmann
  */
 public class DefaultParametersHaveCorrectOrder
     implements MontiArcASTComponentHeadCoCo {

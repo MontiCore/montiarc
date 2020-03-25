@@ -27,8 +27,6 @@ import montiarc.helper.JavaDefaultTypesManager;
 /**
  * MontiArcTool
  *
- * @author Pfeiffer, Wortmann
- * @version $Revision$, $Date$
  */
 public class MontiArcTool {
   

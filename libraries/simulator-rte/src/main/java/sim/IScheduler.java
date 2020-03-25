@@ -44,7 +44,6 @@ public interface IScheduler extends IPortFactory {
     
     /**
      * @return the port facotry of the scheduler
-     * @since 2.5.0
      */
     IPortFactory getPortFactory();
 }

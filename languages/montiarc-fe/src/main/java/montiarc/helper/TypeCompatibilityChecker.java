@@ -25,7 +25,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Checks type compatibility of {@link JTypeReference}s.
  *
- * @author ahaber, Robert Heim
  */
 public class TypeCompatibilityChecker {
   

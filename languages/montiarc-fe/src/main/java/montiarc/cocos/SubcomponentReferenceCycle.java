@@ -14,8 +14,6 @@ import java.util.Optional;
  * @implements [Hab16] R13: Subcomponent reference cycles are forbidden. (p. 68,
  * lst. 3.48)
  * 
- * @author Jerome Pfeiffer
- * @version $Revision$, $Date$
  */
 public class SubcomponentReferenceCycle implements MontiArcASTComponentCoCo {
 

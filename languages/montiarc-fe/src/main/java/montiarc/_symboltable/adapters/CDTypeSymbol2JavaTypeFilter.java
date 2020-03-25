@@ -11,8 +11,6 @@ import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
 /**
  * CDTypeSymbol2JavaTypeSymbol resolving filter.
  *
- * @author (last commit) $Author$
- * @version $Revision$, $Date$
  */
 public class CDTypeSymbol2JavaTypeFilter extends TransitiveAdaptedResolvingFilter<JavaTypeSymbol> {
   
