@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package montiarc.visitor;
 
 import de.monticore.types.types._ast.ASTTypeParameters;
