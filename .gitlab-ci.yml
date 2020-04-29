@@ -62,9 +62,9 @@ Unit Test JDK 8:
   image: maven:3-jdk-8
   <<: *unit_test_definition
       
-Unit Test JDK 11:
-  image: maven:3-jdk-11
-  # We do not require JDK 11 support yet. We appreciate it though.
+Unit Test JDK 14:
+  image: maven:3-jdk-14
+  # We do not require JDK 14 support yet. We appreciate it though.
   allow_failure: true 
   <<: *unit_test_definition
 
