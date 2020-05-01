@@ -9,7 +9,6 @@ import montiarc._symboltable.ComponentSymbol;
 /**
  * @implements [Hab16] B2: Top-level component type definitions do not have instance names. (p. 59.
  * Lst. 3.32)
- * @author Crispin Kirchner
  */
 public class TopLevelComponentHasNoInstanceName
     implements MontiArcASTComponentCoCo {

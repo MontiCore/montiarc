@@ -23,7 +23,6 @@ import montiarc.cocos.SubcomponentParametersCorrectlyAssigned;
 /**
  * This class checks all context conditions related to default parameters
  *
- * @author Robert Heim, Andreas Wortmann
  */
 public class DefaultParametersTest extends AbstractCoCoTest {
   

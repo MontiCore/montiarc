@@ -12,7 +12,6 @@ import montiarc._cocos.MontiArcASTComponentCoCo;
  *
  * @implements [Wor16] MU2: Each atomic component contains at most one behavior model. (p. 55. Lst.
  * 4.6)
- * @author Jerome Pfeiffer, Andreas Wortmann
  */
 public class MultipleBehaviorImplementation implements MontiArcASTComponentCoCo {
   

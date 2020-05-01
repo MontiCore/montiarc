@@ -9,8 +9,6 @@ import de.montiarcautomaton.generator.codegen.xtend.util.IMontiArcGenerator
 /**
  * Generates the result class for a component.
  *
- * @author  Pfeiffer
- * @version $Revision$,
  *          $Date$
  *
  */

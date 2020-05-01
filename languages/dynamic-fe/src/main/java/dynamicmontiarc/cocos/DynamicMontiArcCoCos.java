@@ -8,7 +8,6 @@ import montiarc.cocos.*;
 /**
  * Context Conditions for the Dynamic MontiArc Language.
  *
- * @author (last commit) Mutert
  */
 public class DynamicMontiArcCoCos {
   public static DynamicMontiArcCoCoChecker createChecker() {

@@ -23,7 +23,6 @@ import java.util.Optional;
  *
  * @implements No literature reference
  *
- * @author Andreas Wortmann
  */
 public class AJavaInitUsedPortsAndVariablesExist
     implements MontiArcASTComponentCoCo {

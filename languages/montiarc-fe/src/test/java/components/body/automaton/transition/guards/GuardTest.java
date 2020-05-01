@@ -19,7 +19,6 @@ import montiarc.cocos.MontiArcCoCos;
 /**
  * This class checks all context conditions related to automaton guards
  *
- * @author Andreas Wortmann
  */
 public class GuardTest extends AbstractCoCoTest {
   

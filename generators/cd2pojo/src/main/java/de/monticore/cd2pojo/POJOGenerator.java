@@ -22,7 +22,6 @@ import de.se_rwth.commons.logging.Log;
 /**
  * see README.md
  *
- * @author Robert Heim
  * 
  */
 public class POJOGenerator {

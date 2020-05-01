@@ -4,8 +4,6 @@ package de.montiarcautomaton.runtimes.timesync.delegation;
 /**
  * A data source for a component is either a port or a variable.
  *
- * @author (last commit) $Author$
- * @version $Revision$, $Date$
  */
 public abstract class DataSource<T> {
   

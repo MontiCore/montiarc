@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
  * @implements [Wor16] MR4: All mandatory component configuration parameters
  *  precede the parameters with default values. (p.60 Lst. 4.14)
  * @implements TODO: Klaeren welche CoCo in der Literatur repraesentiert wird.
- * @author Andreas Wortmann
  */
 public class SubcomponentParametersCorrectlyAssigned
     implements MontiArcASTComponentCoCo {

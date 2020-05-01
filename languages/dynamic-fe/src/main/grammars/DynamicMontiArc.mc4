@@ -3,7 +3,6 @@
  * Grammar for MontiArc with dynamic reconfiguration. Comprises the definition
  * of modes and mode automata.
  *
- * @author Oliver Kautz, Andreas Wortmann, David Schmalzing
  */
 grammar DynamicMontiArc extends MontiArc {
 

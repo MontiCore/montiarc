@@ -27,8 +27,6 @@ import de.montiarcautomaton.generator.helper.ComponentHelper
  * Main entry point for generator. From this all target artifacts are generated for a component. 
  * It uses dispatching for calling the right implementation generator.
  * 
- * @author  Pfeiffer
- * @version $Revision$,
  *          $Date$
  */
 class MAAGenerator {

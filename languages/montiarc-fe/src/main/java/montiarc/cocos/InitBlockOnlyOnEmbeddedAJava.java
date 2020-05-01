@@ -14,7 +14,6 @@ import montiarc._cocos.MontiArcASTComponentCoCo;
  * compute block
  *
  * @implements No literature reference, AJava CoCo
- * @author Michael Mutert
  */
 public class InitBlockOnlyOnEmbeddedAJava implements MontiArcASTComponentCoCo {
   @Override

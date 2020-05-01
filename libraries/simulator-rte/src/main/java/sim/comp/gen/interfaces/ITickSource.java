@@ -9,7 +9,6 @@ package sim.comp.gen.interfaces;
  * Java interface of component TickSource.<br>
  * <br>
  * Generated with MontiArc 2.5.0-SNAPSHOT.<br>
- * @date 29.01.2015 18:06:05<br>
  *
  */
 public interface ITickSource extends sim.generic.ITimedComponent {

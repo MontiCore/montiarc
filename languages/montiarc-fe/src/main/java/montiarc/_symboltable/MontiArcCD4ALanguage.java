@@ -18,9 +18,6 @@ import montiarc.helper.CD4ALanguage;
 /**
  * TODO: Write me!
  *
- * @author (last commit) $Author$
- * @version $Revision$, $Date$
- * @since TODO: add version number
  */
 public class MontiArcCD4ALanguage extends CD4ALanguage {
   

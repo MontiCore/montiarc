@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author (last commit) Michael Mutert
  * @implements [Wor16] AU1: The name of each state is unique. (p. 97. Lst. 5.8)
  * @implements [Wor16] AU3: The names of all inputs, outputs, and variables
  * are unique. (p. 98. Lst. 5.10)

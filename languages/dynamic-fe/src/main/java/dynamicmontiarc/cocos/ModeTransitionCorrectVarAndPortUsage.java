@@ -29,7 +29,6 @@ import java.util.stream.Stream;
  * For the guard, it is only allowed to use incoming ports and component variables.
  * In the reaction only assignments to component variables are allowed.
  *
- * @author Mutert
  */
 public class ModeTransitionCorrectVarAndPortUsage implements DynamicMontiArcASTModeTransitionCoCo {
 

@@ -12,9 +12,6 @@ import org.junit.Test;
 /**
  * TODO
  *
- * @author (last commit)
- * @version ,
- * @since TODO
  */
 public class PortTest extends AbstractCoCoTest {
 

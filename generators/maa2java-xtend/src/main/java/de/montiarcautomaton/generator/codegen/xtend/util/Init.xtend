@@ -10,8 +10,6 @@ import de.monticore.types.types._ast.ASTQualifiedName
 /**
  * Class responsible for printing the init() method for both atomic and composed components.
  *
- * @author  Pfeiffer
- * @version $Revision$,
  *          $Date$
  *
  */

@@ -16,7 +16,6 @@ import java.util.List;
  * Checks that there are no variable, parameter or port types which are
  * arrays of generic types with type arguments.
  *
- * @author Michael Mutert
  */
 public class ArraysOfGenericTypes implements TypesASTComplexArrayTypeCoCo {
   @Override

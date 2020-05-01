@@ -8,7 +8,6 @@ import montiarc.visitor.TypeUniquenessVisitor;
 /**
  * Check that inner components do not reuse type parameter names from the defining
  * components hierarchy.
- * @author Michael Mutert
  */
 public class UniqueTypeParamsInInnerCompHierarchy implements MontiArcASTComponentCoCo {
 

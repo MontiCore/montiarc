@@ -23,7 +23,6 @@ import static org.junit.Assert.assertFalse;
 /**
  * This class tests all context conditions related to parameters
  * 
- * @author Crispin Kirchner, Andreas Wortmann
  */
 public class ParametersTest extends AbstractCoCoTest {
   

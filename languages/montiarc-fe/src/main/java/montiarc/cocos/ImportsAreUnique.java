@@ -14,7 +14,6 @@ import montiarc._symboltable.ComponentSymbol;
  * Ensures, that there are no duplicate import statements.
  *
  * @implements [Hab16] CV3: Duplicated imports should be avoided. (p.71, no listing)
- * @author Michael Mutert
  */
 public class ImportsAreUnique implements MontiArcASTComponentCoCo {
   

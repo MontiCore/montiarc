@@ -14,7 +14,6 @@ import montiarc._symboltable.PortSymbol;
  * Variable to field adapter for accessing variables/inputs/outputs as Java fields inside Java
  * expressions.
  * 
- * @author Gerrit Leonhard, Andreas Wortmann
  */
 public class Port2FieldAdapter extends JavaFieldSymbol implements SymbolAdapter<PortSymbol> {
   private final PortSymbol adaptee;

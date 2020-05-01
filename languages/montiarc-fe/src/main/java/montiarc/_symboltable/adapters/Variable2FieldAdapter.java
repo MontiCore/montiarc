@@ -14,7 +14,6 @@ import montiarc._symboltable.VariableSymbol;
  * Variable to field adapter for accessing variables/inputs/outputs as Java fields inside Java
  * expressions.
  * 
- * @author Gerrit Leonhard, Andreas Wortmann
  */
 public class Variable2FieldAdapter extends JavaFieldSymbol
     implements SymbolAdapter<VariableSymbol> {

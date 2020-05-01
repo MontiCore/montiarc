@@ -17,7 +17,6 @@ import montiarc._cocos.MontiArcASTAutomatonCoCo;
  *
  * @implements No literature reference
  *
- * @author Gerrit Leonhardt, Andreas Wortmann
  */
 public class AutomatonStateDefinedMultipleTimes implements MontiArcASTAutomatonCoCo {
   

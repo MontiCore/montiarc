@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author Fuerste
  */
 public class ConnectorUsageInModes implements MontiArcASTComponentCoCo {
 

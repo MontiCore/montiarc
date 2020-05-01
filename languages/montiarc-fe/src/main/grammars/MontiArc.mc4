@@ -5,7 +5,6 @@
  * architecture in form of component models. By default, MontiArc supports the
  * definition of component behavior in form of AJava and I/O-omega automata.
  *
- * @author Arne Haber, Robert Heim, Andreas Wortmann
  */
 grammar MontiArc extends de.monticore.java.JavaDSL {
 

@@ -25,7 +25,6 @@ import static junit.framework.TestCase.assertTrue;
 /**
  * Visits the AST of Java classes and checks whether they are fulfilling the specifications.
  *
- * @author (last commit) Michael Mutert
  */
 public class GeneratedComponentClassVisitor implements JavaDSLVisitor {
 

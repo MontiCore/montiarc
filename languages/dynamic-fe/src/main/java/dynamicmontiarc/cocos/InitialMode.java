@@ -14,7 +14,6 @@ import java.util.List;
  * mode. AND A mode referenced by an initial mode declaration must correspond to
  * a mode declared in the current component type definition M1+R6
  *
- * @author (last commit) Fuerste
  */
 public class InitialMode implements DynamicMontiArcASTModeAutomatonCoCo
 {

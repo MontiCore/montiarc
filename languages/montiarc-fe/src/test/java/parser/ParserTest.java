@@ -25,7 +25,6 @@ import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
 
 /**
- * @author Robert Heim
  */
 public class ParserTest {
   public static final boolean ENABLE_FAIL_QUICK = true;
@@ -102,7 +101,6 @@ public class ParserTest {
   /**
    * Visits files of the given file ending and checks whether they are parsable.
    *
-   * @author Robert Heim
    * @see Files#walkFileTree(Path, java.nio.file.FileVisitor)
    */
   private static class ParseTest extends SimpleFileVisitor<Path> {

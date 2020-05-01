@@ -8,7 +8,6 @@ import dynamicmontiarc._cocos.DynamicMontiArcASTModeAutomatonCoCo;
 /**
  * Checks that each mode automaton has at least one transition.
  *
- * @author (last commit) Fuerste, Mutert
  */
 public class AtLeastOneTransition implements DynamicMontiArcASTModeAutomatonCoCo {
 

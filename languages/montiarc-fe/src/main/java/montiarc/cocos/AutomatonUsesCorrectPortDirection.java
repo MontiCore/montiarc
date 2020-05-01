@@ -24,7 +24,6 @@ import montiarc.visitor.NamesInExpressionsDelegatorVisitor.ExpressionKind;
  * @implements [Wor16] AR2: Inputs, outputs, and variables are used correctly.
  * (p. 103, Lst. 520)
  * @implements [RRW14a] T6: The direction of ports has to be respected.
- * @author Pfeiffer
  */
 public class AutomatonUsesCorrectPortDirection implements MontiArcASTTransitionCoCo {
   

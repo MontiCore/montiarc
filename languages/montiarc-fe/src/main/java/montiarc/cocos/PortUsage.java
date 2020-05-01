@@ -20,7 +20,6 @@ import montiarc._symboltable.PortSymbol;
  * (non-atomic) component itself while CV6 checks that a subcomponent is connected in its <em>outer
  * context</em> (i.e. the outer component).
  *
- * @author ahaber, Robert Heim
  * @implements [Hab16] CV5: In decomposed components, all ports should be used in at least one
  * connector. (p.71 Lst. 3.52)
  */

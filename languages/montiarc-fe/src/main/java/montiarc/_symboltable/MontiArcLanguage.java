@@ -15,7 +15,6 @@ import montiarc._symboltable.adapters.Variable2FieldResolvingFilter;
 /**
  * The MontiArc Language
  *
- * @author Robert Heim, Andreas Wortmann
  */
 public class MontiArcLanguage extends MontiArcLanguageTOP {
   

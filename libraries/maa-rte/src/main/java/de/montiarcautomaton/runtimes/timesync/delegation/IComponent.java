@@ -4,8 +4,6 @@ package de.montiarcautomaton.runtimes.timesync.delegation;
 /**
  * The interface of a component to its environment.
  *
- * @author (last commit) $Author$
- * @version $Revision$, $Date$
  */
 public interface IComponent {
   

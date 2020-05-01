@@ -10,7 +10,6 @@ import java.util.Set;
 /**
  * TODO
  *
- * @author Michael Mutert
  */
 public class EnumType {
 

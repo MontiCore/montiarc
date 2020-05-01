@@ -23,8 +23,6 @@ import montiarc.visitor.NamesInExpressionsDelegatorVisitor.ExpressionKind;
 /**
  * This coco checks whether only declared variables are used in ajava.
  *
- * @author Pfeiffer
- * @version $Revision$, $Date$
  */
 public class AJavaUsesExistingVariablesAndPorts implements MontiArcASTJavaPBehaviorCoCo {
   

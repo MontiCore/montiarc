@@ -27,7 +27,6 @@ public enum Timing {
   /**
    * Timed component that produces a delay (= needs computation time).
    *
-   * @since 2.5.0
    */
   DELAYED("delayed"),
   

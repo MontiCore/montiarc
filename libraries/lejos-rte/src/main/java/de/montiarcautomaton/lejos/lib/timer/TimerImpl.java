@@ -8,7 +8,6 @@ import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
 /**
  * Component behavior implementation of the bumperbot timer.
  * 
- * @author Gerrit Leonhardt
  */
 public class TimerImpl implements IComputable<TimerInput, TimerResult> {
   private final int delay;

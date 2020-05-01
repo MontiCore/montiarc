@@ -17,7 +17,6 @@ import montiarc._ast.ASTMontiArcNode;
 /**
  * This class checks all context conditions related the combination of elements in component bodies
  *
- * @author Andreas Wortmann
  */
 public class VariableTest extends AbstractCoCoTest {
   

@@ -8,7 +8,6 @@ import montiarc._cocos.MontiArcASTValueListCoCo;
 /**
  * Context condition that forbids the usage of value lists.
  *
- * @author Gerrit Leonhardt, Andreas Wortmann
  * @implements [RRW14a] T5: Sequences of values cannot be read from or assigned to variables.
  */
 public class UseOfValueLists implements MontiArcASTValueListCoCo {

@@ -14,7 +14,6 @@ import montiarc._cocos.MontiArcASTAutomatonCoCo;
  * been defined in an {@link ASTStateDeclaration}.
  * 
  * @implements [Wor16] AR3: Used states exist. (p. 104, Lst. 5.21)
- * @author Andreas Wortmann
  */
 public class UseOfUndeclaredState implements MontiArcASTAutomatonCoCo {
   

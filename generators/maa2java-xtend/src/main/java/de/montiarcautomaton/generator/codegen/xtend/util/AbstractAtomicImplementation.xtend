@@ -6,8 +6,6 @@ import montiarc._symboltable.ComponentSymbol
 /**
  * The implementation class for atomic components without specified behavior.
  * 
- * @author  Pfeiffer
- * @version $Revision$,
  *          $Date$
  */
 class AbstractAtomicImplementation {

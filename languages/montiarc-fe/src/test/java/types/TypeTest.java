@@ -32,7 +32,6 @@ import montiarc._symboltable.PortSymbol;
 /**
  * This class checks all context conditions directly related to types (e.g., aggregation etc)
  *
- * @author Andreas Wortmann
  */
 public class TypeTest extends AbstractCoCoTest {
   

@@ -27,7 +27,6 @@ import montiarc.cocos.MontiArcCoCos;
  * This class checks all context conditions related the definition of AJava
  * behavior
  *
- * @author Andreas Wortmann
  */
 public class AJavaTest extends AbstractCoCoTest {
   

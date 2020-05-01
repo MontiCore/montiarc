@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package montiarc.visitor;
 
 import de.monticore.types.types._ast.ASTTypeParameters;
@@ -12,7 +13,6 @@ import java.util.*;
  * Used to check that there are no component type variables that are reused
  * as type variables in inner component definitions.
  *
- * @author Mutert
  */
 public class TypeUniquenessVisitor implements MontiArcVisitor {
 

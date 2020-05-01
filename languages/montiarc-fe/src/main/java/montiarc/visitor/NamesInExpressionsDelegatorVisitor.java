@@ -23,8 +23,6 @@ import de.monticore.mcexpressions._visitor.MCExpressionsVisitor;
  * Delegator Visitor to check names used in expressions. Combines
  * {@link NamesInJavaExpressionsVisitor} and {@link NamesInMCExpressionsVisitor}.
  *
- * @author Pfeiffer
- * @version $Revision$, $Date$
  */
 public class NamesInExpressionsDelegatorVisitor extends JavaDSLDelegatorVisitor {
   
@@ -34,8 +32,6 @@ public class NamesInExpressionsDelegatorVisitor extends JavaDSLDelegatorVisitor 
    * 
    * Expressions are mapped to these Kinds. A expression is of type DEFAULT when it is of no other kind. 
    *
-   * @author Pfeiffer
-   * @version $Revision$, $Date$
    */
   public enum ExpressionKind {
     CONSTANT_EXPRESSION_SWITCHLABEL, COMPARISON, CALL, ASSIGNMENT_RIGHT, ASSIGNMENT_LEFT, DEFAULT, PREFIX_EXPR, POSTFIX_EXPR;
@@ -175,8 +171,6 @@ public class NamesInExpressionsDelegatorVisitor extends JavaDSLDelegatorVisitor 
    * Visits {@link ASTExpression} and stores used names {@link ASTNameExpression}
    * and the kind of expression they are used in.
    *
-   * @author Pfeiffer
-   * @version $Revision$, $Date$
    */
   private class NamesInMCExpressionsVisitor implements MCExpressionsVisitor {
     
@@ -204,8 +198,6 @@ public class NamesInExpressionsDelegatorVisitor extends JavaDSLDelegatorVisitor 
   /**
    * Used for checking names in AJava blocks which uses the JavaDSL.
    *
-   * @author (last commit) $Author$
-   * @version $Revision$, $Date$
    */
   private class NamesInJavaExpressionsVisitor implements JavaDSLVisitor {
     

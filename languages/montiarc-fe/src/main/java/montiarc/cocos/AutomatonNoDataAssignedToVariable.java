@@ -20,7 +20,6 @@ import java.util.Optional;
 /**
  * Checks that variables don't get assigned the special No Data symbol "--" on transitions.
  *
- * @author Fuerste
  * @implements [Wor16] AT3: The special literal value NoDatais not used for variables.
  */
 public class AutomatonNoDataAssignedToVariable implements MontiArcASTIOAssignmentCoCo {

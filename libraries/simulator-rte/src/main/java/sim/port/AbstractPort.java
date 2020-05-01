@@ -7,9 +7,6 @@ import sim.generic.ISimComponent;
 /**
  * Abstract port implementation.
  * 
- * @author (last commit) $Author: ahaber $
- * @version $Revision: 2874 $, $Date: 2014-06-24 14:38:16 +0200 (Di, 24 Jun 2014) $
- * @since 2.5.0
  */
 public abstract class AbstractPort<T> implements IPort<T> {
     

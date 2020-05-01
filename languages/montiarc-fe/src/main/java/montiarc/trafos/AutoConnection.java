@@ -24,8 +24,6 @@ import java.util.stream.Collectors;
 /**
  * Creates further connectors depending on the auto connect mode (type, port, off)
  *
- * @author ahaber, Robert Heim
- * @since 1.0.0 (14.11.2012)
  */
 public class AutoConnection {
   

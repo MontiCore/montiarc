@@ -13,7 +13,6 @@ import montiarc._cocos.MontiArcASTConnectorCoCo;
  * 3.33)
  * @implements [Hab16] CO2: A simple connector’s source is an outgoing port of the referenced
  * component type and is therefore not qualified. (p. 61, Lst. 3.34)
- * @author Crispin Kirchner
  */
 public class ConnectorEndPointIsCorrectlyQualified
     implements MontiArcASTConnectorCoCo {

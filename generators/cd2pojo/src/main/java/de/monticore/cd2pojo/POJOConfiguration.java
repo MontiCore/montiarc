@@ -16,10 +16,7 @@ import de.se_rwth.commons.configuration.DelegatingConfigurationContributor;
 /**
  * TODO: Write me!
  *
- * @author  (last commit) $Author$
- * @version $Revision$,
  *          $Date$
- * @since   TODO: add version number
  *
  */
 public class POJOConfiguration implements Configuration{

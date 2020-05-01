@@ -12,7 +12,6 @@ import java.util.ArrayList;
 /**
  * There should be at most one Mode controller in a decomposed component
  *
- * @author (last commit) Mutert
  */
 public class AtMostOneModeAutomaton implements MontiArcASTComponentBodyCoCo {
 

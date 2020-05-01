@@ -16,7 +16,6 @@ import java.util.Optional;
  *
  * @implements [Wor16] AT1: Guard expressions evaluate to a Boolean truth
  *  value. (p.105, Lst. 5.23)
- * @author Andreas Wortmann
  */
 public class AutomatonGuardIsNotBoolean implements MontiArcASTGuardExpressionCoCo {
   

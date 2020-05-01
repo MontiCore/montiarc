@@ -9,9 +9,6 @@ import java.util.stream.Collectors;
 /**
  * TODO
  *
- * @author (last commit) Mutert
- * @version ,
- * @since TODO
  */
 public class ASTModeAutomaton extends ASTModeAutomatonTOP {
 

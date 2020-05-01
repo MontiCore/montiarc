@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  * Checks whether source and target type of connected ports match. It also
  * checks whether the source and target ports of the connectors actually exist.
  *
- * @author Jerome Pfeiffer, Michael Mutert
  * @implements [Hab16] CO3: Unqualified sources or targets in connectors either
  * refer to a port or a subcomponent in the same namespace. (p.61 Lst. 3.35)
  * @implements [Hab16] R5: The first part of a qualified connector’s source

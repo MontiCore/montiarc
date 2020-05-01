@@ -8,8 +8,6 @@ import montiarc._symboltable.PortSymbol
 /**
  * Prints the attributes and getter and setter for ports.
  *
- * @author  Pfeiffer
- * @version $Revision$,
  *          $Date$
  *
  */

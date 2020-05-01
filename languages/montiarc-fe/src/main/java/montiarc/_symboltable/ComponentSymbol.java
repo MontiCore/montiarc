@@ -29,7 +29,6 @@ import javax.swing.text.html.Option;
 /**
  * Symbol for component definitions.
  *
- * @author Robert Heim
  */
 public class ComponentSymbol extends CommonScopeSpanningSymbol {
 

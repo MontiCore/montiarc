@@ -11,7 +11,6 @@ import montiarc._ast.ASTComponentHead;
 import montiarc._cocos.MontiArcASTComponentHeadCoCo;
 
 /**
- * @author (last commit) Crispin Kirchner
  */
 public class TypeParameterNamesUnique implements MontiArcASTComponentHeadCoCo {
   

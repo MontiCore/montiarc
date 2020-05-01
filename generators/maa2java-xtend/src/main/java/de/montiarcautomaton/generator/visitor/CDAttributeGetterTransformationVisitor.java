@@ -21,8 +21,6 @@ import montiarc._symboltable.adapters.CDTypeSymbol2JavaType;
 /**
  * Transforms cd attribute calls to getter expression which correspond to the generated Java class methods
  *
- * @author Pfeiffer
- * @version $Revision$, $Date$
  */
 public class CDAttributeGetterTransformationVisitor extends JavaDSLPrettyPrinter {
   

@@ -27,7 +27,6 @@ import montiarc._symboltable.VariableSymbol;
  *
  * @implements [Wor16] AR1: Names used in guards, valuations, and assignments
  * exist in the automaton. (p. 102, Lst. 5.19)
- * @author Gerrit Leonhardt, Andreas Wortmann, Michael Mutert
  */
 public class UseOfUndeclaredField
     implements MontiArcASTIOAssignmentCoCo, MontiArcASTGuardExpressionCoCo {

@@ -19,8 +19,6 @@ import montiarc._symboltable.VariableSymbol;
  * behavior.
  *
  * @implements No literature reference, AJava CoCo
- * @author Jerome Pfeiffer
- * @version $Revision$, $Date$
  */
 public class JavaPVariableIdentifiersUnique implements MontiArcASTJavaPBehaviorCoCo {
   

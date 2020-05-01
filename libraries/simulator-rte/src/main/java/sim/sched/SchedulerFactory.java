@@ -8,9 +8,6 @@ import sim.IScheduler;
 /**
  * Factory that produces {@link IScheduler}s for MontiArc simulations.
  * 
- * @author (last commit) $Author: ahaber $
- * @version $Revision: 2959 $, $Date: 2014-08-19 09:43:57 +0200 (Di, 19 Aug 2014) $
- * @since 2.5.0
  */
 public class SchedulerFactory {
     

@@ -23,7 +23,6 @@ import montiarc._cocos.MontiArcASTIOAssignmentCoCo;
  * 
  * @implements [Wor16] AC5: The automaton’s valuations and assignments use only
  * allowed Java/P modeling elements (Lst. 5.15, p. 101).
- * @author Gerrit Leonhardt
  */
 public class UseOfForbiddenExpression
     implements MontiArcASTIOAssignmentCoCo, MontiArcASTGuardExpressionCoCo {

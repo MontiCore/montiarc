@@ -21,9 +21,6 @@ import sim.port.IPortFactory;
 /**
  * Simulation scheduler with a default strategy that uses a boolean array to check, if ports are tickfree.
  * 
- * @author (last commit) $Author: ahaber $
- * @version $Revision: 3136 $, $Date: 2015-03-19 14:43:21 +0100 (Do, 19 Mrz 2015) $
- * @since 2.5.0
  */
 public class SimSchedulerBoolArray implements IScheduler {
     

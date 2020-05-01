@@ -80,7 +80,6 @@ import montiarc._visitor.MontiArcVisitor;
  * Collects information about the generated java classes that is expected to be
  * present.
  *
- * @author (last commit) Michael Mutert
  */
 public class ComponentElementsCollector implements MontiArcVisitor {
   

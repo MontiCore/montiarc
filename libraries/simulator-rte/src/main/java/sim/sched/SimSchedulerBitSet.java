@@ -22,9 +22,6 @@ import sim.port.IPortFactory;
 /**
  * Default simulation scheduler for MontiArc simulations.
  * 
- * @author (last commit) $Author: ahaber $
- * @version $Revision: 3136 $, $Date: 2015-03-19 14:43:21 +0100 (Do, 19 Mrz 2015) $
- * @since 2.5.0
  */
 class SimSchedulerBitSet implements IScheduler {
     

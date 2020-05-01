@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 /**
  * TODO
  *
- * @author (last commit) Mutert
  */
 public class DynamicMontiArcHelper {
 
