@@ -9,9 +9,12 @@ by the [Working Group for Model-Driven Systems Engineering (MDSE)][mdse].
 [mdse]:http://www.se-rwth.de/teams/mdse/
 
 The language for MontiArc Architecture diagrams is split up into 4 languages:
-- **ArchitectureBasis**: basic language component for architectures consisting of ports, components, and connectors
-- **Statechart4MA**: basic language for component behavior description using automata, states, and transitions
-- **ComfortableArc**: extension of the architecture basis with comfort elements to ease the description of architectures
+- **ArchitectureBasis**: basic language component for architectures consisting
+of ports, components, and connectors
+- **Statechart4MA**: basic language for component behavior description using
+automata, states, and transitions
+- **ComfortableArc**: extension of the architecture basis with comfort elements
+to ease the description of architectures
 
 ## The MontiArc Architecture Description Language
 
@@ -20,7 +23,7 @@ which autonomously acting components perform computations. Communication between
 components is regulated by connectors between the components’ interface,
 which are stable and build up by typed, directed ports. Components are either 
 atomic or composed of connected subcomponents. Atomic components yield
-behavior #descriptions in the form of embedded time-synchronous port automata, 
+behavior descriptions in the form of embedded time-synchronous port automata, 
 embedded JavaDSL models, or via integration of handcrafted code. For composed 
 components the behavior emerges from the behavior of their subcomponents. 
 
@@ -30,6 +33,8 @@ The grammar file is [`MontiArc`][MontiArcGrammar].
 
 ## Handwritten Extensions
 ### AST
+
+### Symbols
 
 ## Functionality
 ### CoCos
