@@ -1,18 +1,19 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
-# MontiArc Core Project
+# MontiArc
 
 The MontiArc Core repository contains everything related to the common basis
 of the MontiArc architecture description language. This project is maintained
 by the [Working Group for Model-Driven Systems Engineering (MDSE)][mdse].
 
-Contact: @david.schmalzing, @wortmann
-
 [se-rwth]: http://www.se-rwth.de
 [mdse]:http://www.se-rwth.de/teams/mdse/
 
-## The MontiArc Architecture Description Language
+The language for MontiArc Architecture diagrams is split up into 4 languages:
+- **ArchitectureBasis**: basic language component for architectures consisting of ports, components, and connectors
+- **Statechart4MA**: basic language for component behavior description using automata, states, and transitions
+- **ComfortableArc**: extension of the architecture basis with comfort elements to ease the description of architectures
 
-<img src="pics/elevatorExample.PNG" alt="drawing" height="400px"/>
+## The MontiArc Architecture Description Language
 
 In MontiArc, architectures are described as component and connector systems in
 which autonomously acting components perform computations. Communication between
@@ -23,24 +24,33 @@ behavior #descriptions in the form of embedded time-synchronous port automata,
 embedded JavaDSL models, or via integration of handcrafted code. For composed 
 components the behavior emerges from the behavior of their subcomponents. 
 
-## Project Structure
+The grammar file is [`MontiArc`][MontiArcGrammar].
 
-* languages/
-  * arc-fe
-  * automata-fe
-  * montiarc-fe
-* generators/
-  * cd2pojo
-  * maa2java
-* applications/
-  * bumperbot  
-* libraries/
-  * maa-rte
-  * lejos-rte
-  * simulator-rte
-  * maJavaLib
+[MontiArcGrammar]: https://git.rwth-aachen.de/monticore/montiarc/core/-/blob/modularization/languages/montiarc-fe/src/main/grammars/MontiArc.mc4
 
-## For Language Developers (in Construction)
+## Handwritten Extensions
+### AST
+
+## Functionality
+### CoCos
+The CoCos can be found in 
+ [`montiarc.cocos`][CoCosPackage] and are combined accessible in
+ [`montiarc.cocos.MontiArcCoCos`][MontiArcCoCos].
+[CoCosPackage]: https://git.rwth-aachen.de/monticore/montiarc/core/-/tree/modularization/languages/montiarc-fe/src/main/java/montiarc/cocos
+[MontiArcCoCos]: https://git.rwth-aachen.de/monticore/montiarc/core/-/blob/modularization/languages/montiarc-fe/src/main/java/montiarc/cocos/MontiArcCoCos.java
+
+The context conditions check different parts of the models, to ensure the
+ semantic correctness, here is a list of some of the important ones:
+- Uniqueness of names of e.g. classes, attributes (in each class)
+- Cycleless extensions of classes
+- Correct counter part on `extends` and `implements` keywords
+- Correct association qualifiers
+- Coding conventions like correct cased class and attribute names
+- Check for correctness of a modifier on a given element
+
+### Transformations
+
+### PrettyPrinter
 
 
 # copyright
