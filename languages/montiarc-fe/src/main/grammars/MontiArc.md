@@ -16,7 +16,7 @@ using automata, states, and transitions
 - **ComfortableArc**: extension of the architecture basis with comfort elements
 to ease the description of architectures
 - **MontiArc**: language for description of components with embedded behavior 
-combining `ArchitectureBasis`, `Statechart4MA`, and `MontiArc`.
+combining `ArchitectureBasis`, `Statechart4MA`, and `ComfortableArc`.
 
 ## The MontiArc Architecture Description Language
 
