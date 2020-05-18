@@ -11,10 +11,12 @@ by the [Working Group for Model-Driven Systems Engineering (MDSE)][mdse].
 The language for MontiArc Architecture diagrams is split up into 4 languages:
 - **ArchitectureBasis**: basic language component for architectures consisting
 of ports, components, and connectors
-- **Statechart4MA**: basic language for component behavior description using
-automata, states, and transitions
+- **Statechart4MA**: basic language component for component behavior description
+using automata, states, and transitions
 - **ComfortableArc**: extension of the architecture basis with comfort elements
 to ease the description of architectures
+- **MontiArc**: language for description of components with embedded behavior 
+combining `ArchitectureBasis`, `Statechart4MA`, and `MontiArc`.
 
 ## The MontiArc Architecture Description Language
 
