@@ -22,12 +22,12 @@ grammar MontiArc extends de.monticore.literals.MCCommonLiterals,
    * ASTArcBehaviorElement is the top-level interface for component behavior
    * embedding.
    */
-  interface ArcBehaviorElement extends ArcElement;
+  interface ArcBehavior extends ArcElement;
 
   /**
    * Embedds IOAutomata for behavior specification.
    */
-  AutomatonBehavior implements ArcBehaviorElement = automaton:IOAutomaton;
+  AutomatonBehavior implements ArcBehavior = automaton:IOAutomaton;
 
   /**
    * ASTArcTiming sets the timing of a component.
@@ -38,7 +38,7 @@ grammar MontiArc extends de.monticore.literals.MCCommonLiterals,
    * @attribute causalsync a causal synchronous component
    * @attribute sync a synchronous component
    */
-  ArcTiming implements ArcElement =
+  ArcTiming implements ArcElement  =
     "timing"
     {next("instant", "delayed", "untimed", "causalsync", "sync")}? timing:Name
     ";"
