@@ -46,12 +46,9 @@ The CoCos can be found in
 
 The context conditions check different parts of the models, to ensure the
  semantic correctness, here is a list of some of the important ones:
-- Uniqueness of names of e.g. classes, attributes (in each class)
-- Cycleless extensions of classes
-- Correct counter part on `extends` and `implements` keywords
-- Correct association qualifiers
-- Coding conventions like correct cased class and attribute names
-- Check for correctness of a modifier on a given element
+- Uniqueness of names of e.g. components, ports, fields, parameters
+- Type compatibility for connected ports
+- ...
 
 ### Transformations
 
@@ -61,4 +58,3 @@ The context conditions check different parts of the models, to ensure the
 # copyright
 
 [(c) see MontiCore 3 Level License](https://github.com/MontiCore/monticore)
-
