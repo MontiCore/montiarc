@@ -43,6 +43,7 @@ The grammar file is [`MontiArc`][MontiArcGrammar].
 The CoCos can be found in 
  [`montiarc.cocos`][CoCosPackage] and are combined accessible in
  [`montiarc.cocos.MontiArcCoCos`][MontiArcCoCos].
+ 
 [CoCosPackage]: https://git.rwth-aachen.de/monticore/montiarc/core/-/tree/modularization/languages/montiarc-fe/src/main/java/montiarc/cocos
 [MontiArcCoCos]: https://git.rwth-aachen.de/monticore/montiarc/core/-/blob/modularization/languages/montiarc-fe/src/main/java/montiarc/cocos/MontiArcCoCos.java
 
