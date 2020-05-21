@@ -22,14 +22,48 @@ combining `ArchitectureBasis`, `Statechart4MA`, and `ComfortableArc`.
 
 ## The MontiArc Architecture Description Language
 
-In MontiArc, architectures are described as component and connector systems in
-which autonomously acting components perform computations. Communication between
-components is regulated by connectors between the components’ interface,
-which are stable and build up by typed, directed ports. Components are either 
-atomic or composed of connected subcomponents. Atomic components yield
-behavior descriptions in the form of embedded time-synchronous port automata, 
-embedded JavaDSL models, or via integration of handcrafted code. For composed 
-components the behavior emerges from the behavior of their subcomponents. 
+In MontiArc, architectures are topologies of component and connectors in which 
+autonomously acting components perform computations. Connectors define the
+interaction between the components' interfaces, which consist of typed, directed
+ports. Components are either atomic or composed of connected subcomponents.
+Atomic components yield behavior descriptions in the form of embedded 
+time-synchronous port automata, embedded JavaDSL models, or via integration of
+handcrafted code. For composed components, the behavior emerges from the 
+behavior of their subcomponents.
+
+```
+component InteriorLight {
+  port in Boolean lightSignal,
+       in Boolean doorSignal
+       out OnOff status;
+  ORGate or;
+  lightSignal -> or.a;
+  doorSignal -> or.b;
+  or.c -> cntr.signal;
+  component LightController cntr {
+    port in OnOff signal,
+         out OnOff status;
+    statechart {
+      initial state Off / {status = OFF};
+      state On;
+      Off -> On [ signal == true ] / {status = ON}
+      On -> Off [ signal == false ] / {status = OFF}
+    }
+  }
+  cntr.status -> status;
+}
+```
+Example component of a car `InteriorLight` that turns on if a user manually 
+presses a light switch or the car door opens. The  `InteriorLight` receives 
+information from a sensor whether the door is opened or closed via the
+`doorSignal` port of type `Boolean`. Furhtermore, it receives information via
+the `lightSignal` port whether the contact of the light switch is currently 
+closed. These signals are sent to an `ORGate` which evaluates to `true` if 
+either of the incoming signals forwarded by the `InteriorLight`is `true`.
+Via the `c` port of the `ORGate` this evaluation is then sent to the `signal`
+port of the `cntr` component of type `LightController`. This component turns 
+on the light and on state switches informs about the light status switch via
+its `status` port which is forwaded to the `status` port of the `InteriorLight`.
 
 The grammar file is [`MontiArc`][MontiArcGrammar].
 
