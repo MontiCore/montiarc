@@ -1,0 +1,26 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+component grammar ComfortableArc extends ArcBasis {
+
+  ArcAutoConnect implements ArcElement = key("autoconnect") ArcACMode;
+
+  interface ArcACMode;
+
+  ArcACType implements ArcACMode = key("type");
+
+  ArcACPort implements ArcACMode = key("port");
+
+  ArcACOff implements ArcACMode = key("off");
+
+  ArcAutoInstantiate implements ArcElement = key("autoinstantiate") ArcAIMode;
+
+  interface ArcAIMode;
+
+  ArcAIOn implements ArcAIMode = key("on");
+
+  ArcAIOff implements ArcAIMode = key("off");
+
+  ConnectedComponentInstance extends ComponentInstance =
+    Name arguments:ArcArguments? "[" Connector+ "]"
+  ;
+}

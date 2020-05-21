@@ -1,0 +1,29 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+component grammar GenericArc extends ArcBasis {
+
+  /**
+   * ASTGenericComponentHead in comparison to an ASTComponentHead also holds the
+   * definitions of generic type parameters that may
+   * be used as port and field types in the component.
+   *
+   * @attribute typeParameters A list of generic type parameters that may be used
+   * to configure types in the component.
+   * @attribute parameters A list of parameters that define configuration options
+   * of the component.
+   * @attribute parentComponent The type of the parent component.
+   */
+  GenericComponentHead extends ComponentHead =
+    "<" typeParameter:(ArcTypeParameter || ",")+ ">"
+    ( "(" parameter:(ArcParameter || ",")+ ")" )?
+    ( "extends" parentComponent:MCType)?
+  ;
+
+  /**
+   * ArcTypeParameter define type configuration options of the component.
+   *
+   * @attribute name Name of the generic type parameter.
+   * @attribute upperBound Type restrictions to the generic type parameter.
+   */
+  symbol ArcTypeParameter = Name ( "extends" upperBound:(MCType || "&")+ )? ;
+}

@@ -1,0 +1,68 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+component grammar StatechartBasis extends de.monticore.expressions.ExpressionsBasis,
+                                          de.monticore.statements.MCStatementsBasis {
+
+  /**
+   * ASTStatechart defines a statechart of states and transitions.
+   *
+   * @attribute name The name of this statechart.
+   * @attribute stateDeclaration List of state declarations of this statechart.
+   * @attribute transition List of transitions of this statechart.
+   */
+  symbol scope Statechart =
+    "statechart" Name?
+    "{" ( stateDeclaration:SCStateDeclaration | transition:SCTransition )* "}"
+  ;
+
+  /**
+   * ASTSCStateDeclaration declares states of the statechart.
+   *
+   * @attribute state A list of state identifiers.
+   */
+  SCStateDeclaration =
+    modifier:SCModifier key("state") states:(State || ",")+
+    ("/"  actionBlock:MCBlockStatement)? ";"
+  ;
+
+  /**
+   * ASTSCModifier represents the modifier of a state.
+   */
+  interface SCModifier;
+
+  SCInitialModifier implements SCModifier = key("initial");
+
+  SCFinalModifier implements SCModifier = key("initial");
+
+  /**
+   * ASTSCState defines the state identifier.
+   *
+   * @attribute name The name of the state.
+   */
+  symbol State = Name;
+
+ /**
+   * ASTSCTransition represents a transition between two states.
+   * @attribute source: The source state of the transition.
+   * @attribute target: The target state of the transition.
+   * @attribute body: The body of the transition.
+   */
+  SCTransition = source:Name "->" target:Name body:SCTransitionBody ";"  ;
+
+  /**
+   * ASTSCTransitionBody represents the body of transition.
+   * @attribute preCondition The pre-condition of this transition.
+   * @attributes statements Actions of this transition.
+   */
+   SCTransitionBody =
+     (preCondition:SCInvariant)?
+     ("/" actionBlock:MCBlockStatement)?
+   ;
+
+  /**
+   * ASTSCInvariant defines the guard of a transition
+   * @attribute expression: The expression which should be true for the
+   * transition to be active
+   */
+  SCInvariant = "[" Expression "]";
+}

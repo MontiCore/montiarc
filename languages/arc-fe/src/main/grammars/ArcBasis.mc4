@@ -1,10 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
+
 /**
  * This grammar defines the basic structural elements of component & connector
  * architecture descriptions in form of component models. The grammar contains
  * definitions for components, ports, and connectors.
  */
-component grammar Arc extends de.monticore.MCBasics,
+component grammar ArcBasis extends de.monticore.MCBasics,
                               de.monticore.types.MCBasicTypes,
                               de.monticore.expressions.ExpressionsBasis,
                               de.monticore.types.TypeSymbols {
@@ -27,10 +28,10 @@ component grammar Arc extends de.monticore.MCBasics,
    * of this component type. This is only for inner components.
    * @attribute body Contains the architectural elements of this component.
    */
-  symbol scope Component implements ArcElement =
-    "component" Name
+  symbol scope ComponentType implements ArcElement =
+    key("component") Name
     head:ComponentHead
-    instance:(ComponentInstance || ",")*
+    (ComponentInstance || ",")*
     body:ComponentBody
   ;
 
@@ -46,20 +47,25 @@ component grammar Arc extends de.monticore.MCBasics,
    * @attribute parentComponent The type of the parent component.
    */
   ComponentHead =
-    ( "<" typeParameter:(ArcTypeParameter || ",")+ ">" )?
-    ( "(" parameter:(ArcParameterDeclaration || ",")+ ")" )?
-    ( "extends" parentComponent:MCObjectType)?
+    ( "(" parameter:(ArcParameter || ",")+ ")" )?
+    ( "extends" parentComponent:MCType)?
   ;
 
   /**
+<<<<<<< HEAD:languages/arc-fe/src/main/grammars/Arc.mc4
    * ASTArcParameterDeclaration define the configuration usage interface of the
    * component.
+=======
+   * ASTParameterDeclaration defines the configuration usage interface of the
+   * component type.
+>>>>>>> 4e2ae62f... Update grammars:languages/arc-fe/src/main/grammars/ArcBasis.mc4
    *
    * @attribute type The type of the parameter.
    * @attribute arcParameter The identifier of the parameter.
    * @attribute defaultValue Default value used for the parameter if no
    * argument is given during instantiation.
    */
+<<<<<<< HEAD:languages/arc-fe/src/main/grammars/Arc.mc4
   ArcParameterDeclaration = type:MCType ArcParameter ("=" defaultValue:Expression)? ;
 
   /**
@@ -78,6 +84,10 @@ component grammar Arc extends de.monticore.MCBasics,
    */
   ArcTypeParameter implements TypeVar =
     Name ( "extends" upperBound:(MCType || "&")+ )?
+=======
+  ArcParameter implements Field =
+    type:MCType Name ("=" defaultValue:Expression)?
+>>>>>>> 4e2ae62f... Update grammars:languages/arc-fe/src/main/grammars/ArcBasis.mc4
   ;
 
   /**
@@ -94,7 +104,7 @@ component grammar Arc extends de.monticore.MCBasics,
    * @attribute ports A list of port declarations contained in this interface.
    */
   ComponentInterface implements ArcElement =
-    "port" port:(PortDeclaration || ",")+ ";"
+    key("port") port:(PortDeclaration || ",")+ ";"
   ;
 
   /**
@@ -106,15 +116,23 @@ component grammar Arc extends de.monticore.MCBasics,
    * @attribute ports A list of declared ports.
    */
   PortDeclaration =
-    {next("in", "out")}? direction:Name
-    type:MCType port:(Port || ",")+
+    PortDirection type:MCType port:(Port || ",")+
   ;
+
+  /**
+   * ASTPortDirection defines the direction of the port.
+   */
+   interface PortDirection;
+
+   PortDirectionIn implements PortDirection = key("in");
+
+   PortDirectionOut implements PortDirection = key("out");
 
   /**
   * ASTPort defines the port identifier and functions as an extension point
   * for other port identifier kinds.
   *
-  * @attribute name Name of the port.
+  * @attribute name The name of the port.
   */
   symbol Port = Name;
 
@@ -133,8 +151,13 @@ component grammar Arc extends de.monticore.MCBasics,
    * ASTArcField defines the field identifier.
    *
    * @attribute name The name of the field.
+   * @attribute value The initialization value of the field.
    */
+<<<<<<< HEAD:languages/arc-fe/src/main/grammars/Arc.mc4
   ArcField implements Field = Name;
+=======
+  ArcField implements Field = Name "=" value:Expression;
+>>>>>>> 4e2ae62f... Update grammars:languages/arc-fe/src/main/grammars/ArcBasis.mc4
 
   /**
    * ASTComponentInstantiation holds one or more component instances that are
@@ -142,13 +165,10 @@ component grammar Arc extends de.monticore.MCBasics,
    * structure of decomposed components is defined.
    *
    * @attribute type The type of the instantiated component.
-   * @attribute arguments A list of configuration arguments.
    * @attribute instances A list of instantiated components.
    */
   ComponentInstantiation implements ArcElement =
-    "instance" type:MCObjectType
-    ( "(" argument:(Expression || ",")+ ")" )?
-    instance:(ComponentInstance || ",")* ";"
+    type:MCType (ComponentInstance || ",")* ";"
   ;
 
   /**
@@ -156,8 +176,11 @@ component grammar Arc extends de.monticore.MCBasics,
    * as an extension point for other identifier kinds of component instances.
    *
    * @attribute name The name of the component instance.
+   * @attribute arguments A list of configuration arguments.
    */
-  symbol ComponentInstance = Name;
+  symbol ComponentInstance = Name arguments:ArcArguments?;
+
+  ArcArguments = "(" (Expression || ",")+ ")" ;
 
   /**
    * ASTConnector connects one source port with one or more target ports.
@@ -166,13 +189,27 @@ component grammar Arc extends de.monticore.MCBasics,
    * @attribute targets A list of target ports or component instance names.
    */
   Connector implements ArcElement =
-    "connect" source:PortExpression
-    "->" target:(PortExpression || ",")+ ";"
+    source:PortAccess "->" target:(PortAccess || ",")+ ";"
   ;
 
   /**
-   * ASTPortExpression refers to a port. Functions as an extension point for
-   * more complex identifier.
+   * ASTPortAccess refers to a port using simple or qualified identifier.
    */
-  PortExpression = qualifiedName:MCQualifiedName;
+  interface PortAccess;
+
+  /**
+  * ASTPortNameAccess refers to a port. Functions as an extension point for
+  * port identifier.
+  */
+  PortNameAccess implements PortAccess = Name@Port;
+
+  QualifiedPortAccess implements PortAccess =
+    ComponentNameAccess "." PortNameAccess
+  ;
+
+  /**
+   * ASTComponentNameAccess refers to a component. Functions as an extension
+   * point for component identifier.
+   */
+  ComponentNameAccess = Name@ComponentInstance;
 }

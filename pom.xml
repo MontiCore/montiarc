@@ -26,7 +26,7 @@
     <cd4a.version>1.6.0</cd4a.version>
 
     <!-- SE-Libraries -->
-    <monticore.version>6.0.0</monticore.version>
+    <monticore.version>6.1.0-SNAPSHOT</monticore.version>
     <mc.grammars.assembly.version>0.0.8</mc.grammars.assembly.version>
     <se-commons.version>1.7.9</se-commons.version>
 
@@ -45,7 +45,7 @@
     <mockito.version>3.2.0</mockito.version>
 
     <!-- Plugins -->
-    <monticore.plugin>6.0.0</monticore.plugin>
+    <monticore.plugin>6.1.0</monticore.plugin>
     <se-groovy.plugin>1.2.3</se-groovy.plugin>
     <assembly.plugin>3.1.1</assembly.plugin>
     <dependency.plugin>3.1.1</dependency.plugin>
