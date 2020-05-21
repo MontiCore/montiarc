@@ -56,14 +56,14 @@ component InteriorLight {
 Example component of a car `InteriorLight` that turns on if a user manually 
 presses a light switch or the car door opens. The  `InteriorLight` receives 
 information from a sensor whether the door is opened or closed via the
-`doorSignal` port of type `Boolean`. Furhtermore, it receives information via
-the `lightSignal` port whether the contact of the light switch is currently 
+`doorSignal` port of type `Boolean`. Furthermore, it receives information via
+the `lightSignal` port, whether the contact of the light switch is currently 
 closed. These signals are sent to an `ORGate` which evaluates to `true` if 
 either of the incoming signals forwarded by the `InteriorLight`is `true`.
 Via the `c` port of the `ORGate` this evaluation is then sent to the `signal`
 port of the `cntr` component of type `LightController`. This component turns 
-on the light and on state switches informs about the light status switch via
-its `status` port which is forwaded to the `status` port of the `InteriorLight`.
+on the light, and on state switches informs about the light status switch via
+its `status` port, which forwards to the `status` port of the `InteriorLight`.
 
 The grammar file is [`MontiArc`][MontiArcGrammar].
 
