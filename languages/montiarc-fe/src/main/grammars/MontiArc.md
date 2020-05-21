@@ -65,9 +65,29 @@ port of the `cntr` component of type `LightController`. This component turns
 on the light, and on state switches informs about the light status switch via
 its `status` port, which forwards to the `status` port of the `InteriorLight`.
 
-The grammar file is [`MontiArc`][MontiArcGrammar].
+The main grammar file is [`MontiArc`][MontiArcGrammar].
 
 [MontiArcGrammar]: https://git.rwth-aachen.de/monticore/montiarc/core/-/blob/modularization/languages/montiarc-fe/src/main/grammars/MontiArc.mc4
+
+## Symboltable
+
+The MontiArc language family defines the following symbols:
+
+- **ComponentTypeSymbol** The symbol of a component type providing the
+component's specification. Spans a scope that holds the symbols representing
+the type parameters, component fields, configuration parameters, ports, and
+subcomponent instances of the component type.
+- **ComponentInstanceSymbol** The symbol of a component instance. A component
+instance has a type corresponding to a compnent type symbol.
+- **PortSymbol** The symbol of a port. A port has a type corresponding to a
+type symbol.
+
+Additionally, the MontiArc language family imports the following symbols:
+
+- **FieldSymbol** The symbol of a component field or configuration parameter.
+- **TypeVarSymbol** The symbol of a type parameter of a component. 
+- **TypeSymbol** The symbol of a data type of ports, parameters, and component 
+fields.
 
 ## Handwritten Extensions
 ### AST
