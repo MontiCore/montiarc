@@ -89,6 +89,8 @@ Additionally, the MontiArc language family imports the following symbols:
 - **TypeSymbol** The symbol of a data type of ports, parameters, and component 
 fields.
 
+<img src="pics/MontiArc.SymbolTable.PNG" alt="drawing" height="400px"/>
+
 ## Handwritten Extensions
 ### AST
 
