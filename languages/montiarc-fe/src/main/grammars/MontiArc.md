@@ -105,7 +105,7 @@ The MontiArc language imports the following symbols kinds:
 ## Symbol kinds defined by the MontiArc language (exported):
 The MontiArc language family defines the following symbols:
 
-- `**ComponentTypeSymbol**` The symbol of a component type providing the
+- **`ComponentTypeSymbol`** The symbol of a component type providing the
   component's specification. Spans a scope that holds the symbols representing
   the type parameters, configuration parameters, component fields, ports, and
   subcomponent instances of the component type.
