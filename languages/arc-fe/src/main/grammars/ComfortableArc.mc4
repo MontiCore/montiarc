@@ -1,7 +1,33 @@
 /* (c) https://github.com/MontiCore/monticore */
 
+/* Beta-version: This is intended to become a MontiCore stable grammar. */
+
+/**
+ * This grammar defines additional elements to simplify 
+ * the definition of components, ports, and 
+ * especially connectors.
+ *
+ * This grammar is part of a hierarchy of architectural definitions, namely
+ * * MontiArc.mc4 consisting of
+ * * --  ArcBasis.mc4
+ * * --  -- ComfortableArc.mc4
+ * * --  -- GenericArc.mc4
+ *
+ */
+
 component grammar ComfortableArc extends ArcBasis {
 
+  /** "autoconnect" provides possibilities to automatically
+      connect the ports defined in a component (and also its
+      subcomponents):
+        autoconnect type: connects ports if they have the same types;
+            the port name is irrelevant (works rather good in automotive industry)
+        autoconnect port: connects if the names of the ports are identical
+            (and the type mus then be the same too);
+        autoconnect off: is the default, but can also be made explicit.
+      Connections are drawn only if unambiguous, i.e. a single source
+        even though multiple targets (in ports) exist.
+   */
   ArcAutoConnect implements ArcElement = key("autoconnect") ArcACMode;
 
   interface ArcACMode;
@@ -12,6 +38,13 @@ component grammar ComfortableArc extends ArcBasis {
 
   ArcACOff implements ArcACMode = key("off");
 
+  /** "autoinstantiate" enables / disables the mode where all
+      locally defined components also automatically are instantiated.
+        autoinstantiate on: works well in concrete models, where 
+          a component is defined and used at the same time (and same location)
+        autoinstantiate off: is typical for libraries that only define
+          components (this is the default)
+   */  
   ArcAutoInstantiate implements ArcElement = key("autoinstantiate") ArcAIMode;
 
   interface ArcAIMode;
@@ -20,7 +53,12 @@ component grammar ComfortableArc extends ArcBasis {
 
   ArcAIOff implements ArcAIMode = key("off");
 
+  /** ConnectedComponentInstance allows to directly connect
+    outgoing ports after instantiating a component.
+    Unqualified ports are then possible: they belong to the component.
+   */
   ConnectedComponentInstance extends ComponentInstance =
     Name arguments:ArcArguments? "[" Connector+ "]"
   ;
+
 }

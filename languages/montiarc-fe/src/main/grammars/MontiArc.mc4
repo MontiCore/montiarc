@@ -1,13 +1,39 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-grammar MontiArc extends de.monticore.literals.MCCommonLiterals,
-                         de.monticore.expressions.CommonExpressions,
-                         de.monticore.expressions.AssignmentExpressions,
-                         de.monticore.types.MCSimpleGenericTypes,
-                         de.monticore.statements.MCCommonStatements,
-                         de.monticore.statements.MCVarDeclarationStatements,
-                         ArcBasis, StatechartBasis, ComfortableArc,
-                         GenericArc {
+/* Alpha-version: This is intended to become a MontiCore stable grammar. */
+
+/**
+ * MontiArc is an architecture and behavior modeling language and framework
+ * that provides an platform independent structure and behavior
+ * modeling language with an extensible code generation framework.
+ * MontiArc covers components their ports, connectors between
+ * components and
+ * embedded statecharts for component behavior description.
+ *
+ * This grammar is connects a set of architectural definitions, namely
+ * * MontiArc.mc4 consisting of
+ * * --  ArcBasis.mc4
+ * * --  -- ComfortableArc.mc4
+ * * --  -- GenericArc.mc4
+ * and also behavior:
+ * * --  StatechartBasis.mc4
+ * 
+ * The basc loopholes for expressions, literals and types 
+ * are filled with concrete grammars, which renders MontiArc to become a
+ * complete language.
+ */
+ 
+grammar MontiArc extends 
+            de.monticore.literals.MCCommonLiterals,
+            de.monticore.expressions.CommonExpressions,
+            de.monticore.expressions.AssignmentExpressions,
+            de.monticore.types.MCSimpleGenericTypes,
+            de.monticore.statements.MCCommonStatements,
+            de.monticore.statements.MCVarDeclarationStatements,
+            StatechartBasis, 
+            ArcBasis, 
+            ComfortableArc,
+            GenericArc                                           {
 
   /** ASTMACompilationUnit represents the entire content of a MontiArc model
    * @attribute package The package declaration of the component model
@@ -24,6 +50,7 @@ grammar MontiArc extends de.monticore.literals.MCCommonLiterals,
   /**
    * ASTArcBehavior is the top-level interface for component behavior embedding.
    */
+   // TODO: ArcBehavior kann expandiert werden. (ich denke das sollten wir auch)
   interface ArcBehavior extends ArcElement;
 
   /**
@@ -34,6 +61,22 @@ grammar MontiArc extends de.monticore.literals.MCCommonLiterals,
 
   /**
    * ASTArcTiming sets the timing of a component.
+   *  timing untimed: means that there is no explicit timing available;
+   *            instead messages are processed on an event driven basis
+   *            (upon arrival; as usual: certain non-deterministic 
+   *             behavior may occur)
+   * in all other variants, there is a globally availble clock that 
+   * measures time slices of euqal distance (see Focus for the
+   * formal theoretical underpinning)
+   * TODO: describe other alternatives (or remove them?)
+   *  timing instant: means that each input is processed immediately
+   *            and the result is produced to the out ports directly
+   *  timing delayed: ...
+   *  ...
+   *  
+   *  
+   *  
+   *  
    */
   ArcTiming implements ArcElement  =
     key("timing") ArcTimeMode
@@ -50,4 +93,5 @@ grammar MontiArc extends de.monticore.literals.MCCommonLiterals,
   ArcCausalSync implements ArcTimeMode = key("causalsync");
 
   ArcUntimed implements ArcTimeMode = key("untimed");
+  
 }
