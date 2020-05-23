@@ -32,6 +32,10 @@ using states, transitions, messages as stimuli, conditions and Java-like actions
 - **MontiArc**: complete language aggregates the above mentioned language 
   components and includes powerful expression and type sub-grammar.
 
+The main grammar file is [`MontiArc`][MontiArcGrammar].
+
+[MontiArcGrammar]: https://git.rwth-aachen.de/monticore/montiarc/core/-/blob/modularization/languages/montiarc-fe/src/main/grammars/MontiArc.mc4
+
 
 ## The MontiArc Architecture Description Language
 
@@ -78,9 +82,6 @@ port of the `cntr` component of type `LightController`. This component turns
 on the light, and on state switches informs about the light status switch via
 its `status` port, which forwards to the `status` port of the `InteriorLight`.
 
-The main grammar file is [`MontiArc`][MontiArcGrammar].
-
-[MontiArcGrammar]: https://git.rwth-aachen.de/monticore/montiarc/core/-/blob/modularization/languages/montiarc-fe/src/main/grammars/MontiArc.mc4
 
 ## Symboltable
 
