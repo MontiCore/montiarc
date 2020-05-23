@@ -136,6 +136,9 @@ and the *component types* already syntactically disjoint. They cannot be mixed u
 - Inner component types need to be qualified within the artifact. 
   I.e. an artifact has a flat name space for its component types.
 - **`PortSymbol`** s  are exported as elements of the component types.
+- Fields and inner component instances are not available outside a component.
+  Components encapsulate these elements and only make them accessible for 
+  communication through their port interfaces.
 - The exported symbols are available in the symbol table  `*.masym`.
 
 
