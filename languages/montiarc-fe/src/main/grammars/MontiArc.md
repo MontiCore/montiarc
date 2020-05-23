@@ -84,24 +84,58 @@ its `status` port, which forwards to the `status` port of the `InteriorLight`.
 
 
 ## Symboltable
+- De-/Serialization functionality for the symbol table 
+  ([`XXX serialization`][XXX where to be found?])
+- [`XXX CD4AnalysisSymbolTableCreator`][CD4ASTC]
+  handles the creation and linking of the symbols
 
+## Symbol kinds used by the MontiArc language (importable):
+
+TODO @DS: check the following sections
+
+The MontiArc language imports the following symbols kinds:
+- `FieldSymbol` The symbol of a component field or configuration parameter.
+                        Kind is imported, symbols are defined locally only.
+- `TypeVarSymbol` The symbol of a type parameter of a component. 
+                        Kind is imported, symbols are defined locally only.
+- `TypeSymbol` The symbol of a data type of ports, parameters, and 
+                        components fields.
+                        Kind and symbol instances are imported.
+
+## Symbol kinds defined by the MontiArc language (exported):
 The MontiArc language family defines the following symbols:
 
-- **ComponentTypeSymbol** The symbol of a component type providing the
-component's specification. Spans a scope that holds the symbols representing
-the type parameters, component fields, configuration parameters, ports, and
-subcomponent instances of the component type.
-- **ComponentInstanceSymbol** The symbol of a component instance. A component
-instance has a type corresponding to a compnent type symbol.
-- **PortSymbol** The symbol of a port. A port has a type corresponding to a
-type symbol.
+- `**ComponentTypeSymbol**` The symbol of a component type providing the
+  component's specification. Spans a scope that holds the symbols representing
+  the type parameters, configuration parameters, component fields, ports, and
+  subcomponent instances of the component type.
+- `**ComponentInstanceSymbol**` The symbol of a component instance. A component
+  instance has a component type.
+- `**PortSymbol**` The symbol of a port. A port has a type corresponding to a
+  (normal) type expression, like `int`, `Signal`, or also `Set<String>`.
 
-Additionally, the MontiArc language family imports the following symbols:
+Please note that MontArc keeps the type expressions knwon from MontiCore's types
+and the *component types* already syntactically disjoint. They cannot be mixed up.
 
-- **FieldSymbol** The symbol of a component field or configuration parameter.
-- **TypeVarSymbol** The symbol of a type parameter of a component. 
-- **TypeSymbol** The symbol of a data type of ports, parameters, and component 
-fields.
+## Symbols imported by MontiArc models:
+- `**TypeSymbol**`: Through explicit import statements, a list of artifacts
+                may provide types.
+  - Subsequent extensions of MontiArc will also use the signatures provided
+    by these types (e.g. method signatures).
+- `**ComponentTypeSymbol**`: MontiArc models may import and use component types
+  defined in other models. A `ComponentTypeSymbol` is equipped with additional 
+  symbols, such as `PortSymbol` and symbols for their parameters.
+- no other kind of symbols is imported. E.g., isolated fields or methods 
+  are not imported.
+
+## Symbols exported by MontiArc models:
+- `**ComponentTypeSymbol**` each MontiArc model provides at least one newly defined
+  and externally usable component type.
+  If further component types are defined, then all these component types are
+  exported as well (MontiArc model is usable as library). 
+- `**PortSymbol**`s are exported as elements of the component types.
+- The exported symbols are available in the symbol table  `*.masym`.
+
 
 <img src="pics/MontiArc.SymbolTable.PNG" alt="drawing" height="400px"/>
 
