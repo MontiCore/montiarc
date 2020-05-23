@@ -133,7 +133,9 @@ and the *component types* already syntactically disjoint. They cannot be mixed u
   and externally usable component type.
   If further component types are defined, then all these component types are
   exported as well (MontiArc model is usable as library). 
-- **`PortSymbol`** s are exported as elements of the component types.
+- Inner component types need to be qualified within the artifact. 
+  I.e. an artifact has a flat name space for its component types.
+- **`PortSymbol`** s  are exported as elements of the component types.
 - The exported symbols are available in the symbol table  `*.masym`.
 
 
