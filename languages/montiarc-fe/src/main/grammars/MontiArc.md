@@ -166,6 +166,3 @@ The context conditions check different parts of the models, to ensure the
 ### PrettyPrinter
 
 
-# copyright
-
-[(c) see MontiCore 3 Level License](https://github.com/MontiCore/monticore)
