@@ -109,31 +109,31 @@ The MontiArc language family defines the following symbols:
   component's specification. Spans a scope that holds the symbols representing
   the type parameters, configuration parameters, component fields, ports, and
   subcomponent instances of the component type.
-- `**ComponentInstanceSymbol**` The symbol of a component instance. A component
+- **`ComponentInstanceSymbol`** The symbol of a component instance. A component
   instance has a component type.
-- `**PortSymbol**` The symbol of a port. A port has a type corresponding to a
+- **`PortSymbol`** The symbol of a port. A port has a type corresponding to a
   (normal) type expression, like `int`, `Signal`, or also `Set<String>`.
 
 Please note that MontArc keeps the type expressions knwon from MontiCore's types
 and the *component types* already syntactically disjoint. They cannot be mixed up.
 
 ## Symbols imported by MontiArc models:
-- `**TypeSymbol**`: Through explicit import statements, a list of artifacts
+- **`TypeSymbol`**: Through explicit import statements, a list of artifacts
                 may provide types.
   - Subsequent extensions of MontiArc will also use the signatures provided
     by these types (e.g. method signatures).
-- `**ComponentTypeSymbol**`: MontiArc models may import and use component types
+- **`ComponentTypeSymbol`**: MontiArc models may import and use component types
   defined in other models. A `ComponentTypeSymbol` is equipped with additional 
   symbols, such as `PortSymbol` and symbols for their parameters.
 - no other kind of symbols is imported. E.g., isolated fields or methods 
   are not imported.
 
 ## Symbols exported by MontiArc models:
-- `**ComponentTypeSymbol**` each MontiArc model provides at least one newly defined
+- **`ComponentTypeSymbol`** each MontiArc model provides at least one newly defined
   and externally usable component type.
   If further component types are defined, then all these component types are
   exported as well (MontiArc model is usable as library). 
-- `**PortSymbol**`s are exported as elements of the component types.
+- **`PortSymbol`**s are exported as elements of the component types.
 - The exported symbols are available in the symbol table  `*.masym`.
 
 
