@@ -135,8 +135,10 @@ and the *component types* already syntactically disjoint. They cannot be mixed u
   If further (inner) component types are defined, then all these component types are
   exported as well (MontiArc model is usable as library). 
 - Inner component types need to be qualified if used outside the defining artifact. 
-- **`PortSymbol`** s  are exported as elements of the component types and
+- **`PortSymbol`** s are exported as elements of the component types and
   only accessible through their components.
+- **`FieldSymbol`**s and **`TypeVarSymbols`** are used as parameters 
+  resp. type parameters of their component types as well.
 - Fields and inner component instances are not available outside a component.
   Components encapsulate these elements and only make them accessible for 
   communication through their port interfaces.
