@@ -123,8 +123,9 @@ and the *component types* already syntactically disjoint. They cannot be mixed u
   - Subsequent extensions of MontiArc will also use the signatures provided
     by these types (e.g. method signatures).
 - **`ComponentTypeSymbol`**: MontiArc models may import and use component types
-  defined in other models. A `ComponentTypeSymbol` is equipped with additional 
-  symbols, such as `PortSymbol` and symbols for their parameters.
+  defined in other models. A `ComponentTypeSymbol` additionally knows
+  symbols exported by the component, such as `PortSymbol`s and 
+  symbols for their parameters.
 - no other kind of symbols is imported. E.g., isolated fields or methods 
   are not imported.
 
