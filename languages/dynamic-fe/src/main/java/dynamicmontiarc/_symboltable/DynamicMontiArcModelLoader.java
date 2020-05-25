@@ -27,14 +27,14 @@ public class DynamicMontiArcModelLoader extends DynamicMontiArcModelLoaderTOP {
       final Scope scope = symbolTableCreator.createFromAST(ast);
 
       if (!(scope instanceof ArtifactScope)) {
-        Log.warn("0xA7001x496 Top scope of model " + modelName + " is expected to be an artifact scope, but"
+        Log.warn("0xA7FC1 Top scope of model " + modelName + " is expected to be an artifact scope, but"
           + " is scope \"" + scope.getName() + "\"");
       }
 
       Log.debug("Created symbol table for model \"" + modelName + "\".", DynamicMontiArcModelLoader.class.getSimpleName());
     }
     else {
-      Log.warn("0xA7002x496 No symbol created, because '" + getModelingLanguage().getName()
+      Log.warn("0xA7FC2 No symbol created, because '" + getModelingLanguage().getName()
         + "' does not define a symbol table creator.");
     }
   }
