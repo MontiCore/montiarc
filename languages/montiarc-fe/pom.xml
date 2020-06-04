@@ -86,13 +86,6 @@
     </dependency>
 
     <dependency>
-      <groupId>montiarc.libraries</groupId>
-      <artifactId>maJavaLib</artifactId>
-      <version>${project.version}</version>
-      <classifier>${majavalib.classifier}</classifier>
-    </dependency>
-
-    <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>javaDSL</artifactId>
       <classifier>${grammars.classifier}</classifier>
@@ -143,30 +136,6 @@
   <!-- == PROJECT BUILD SETTINGS =========================================== -->
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>${dependency.plugin}</version>
-        <executions>
-          <execution>
-            <id>unpack-dependencies</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>montiarc.libraries</groupId>
-                  <artifactId>maJavaLib</artifactId>
-                  <classifier>${majavalib.classifier}</classifier>
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>${basedir}/target/${librarymodels.classifier}/</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <!-- MontiCore Generation -->
       <plugin>
         <groupId>de.monticore.mojo</groupId>
@@ -245,7 +214,6 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${surefire.plugin}</version>
         <configuration>
-          <argLine>${argLine}</argLine>
           <useSystemClassLoader>false</useSystemClassLoader>
         </configuration>
       </plugin>
