@@ -73,19 +73,6 @@
       <classifier>${grammars.classifier}</classifier>
     </dependency>
 
-    <dependency>
-      <groupId>montiarc.languages</groupId>
-      <artifactId>automata-fe</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>montiarc.languages</groupId>
-      <artifactId>automata-fe</artifactId>
-      <version>${project.version}</version>
-      <classifier>${grammars.classifier}</classifier>
-    </dependency>
-
     <!-- CD4Analysis -->
     <dependency>
       <groupId>de.monticore.lang</groupId>

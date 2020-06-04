@@ -42,7 +42,7 @@ public class MontiArcParser extends MontiArcParserTOP {
     Optional<ASTMACompilationUnit> optAst = super.parseMACompilationUnit(relativeFilePath);
     if (optAst.isPresent()) {
       String fileRoot = Files.getNameWithoutExtension(relativeFilePath);
-      String modelName = optAst.get().getComponent().getName();
+      String modelName = optAst.get().getComponentType().getName();
       String packageOfFile = Names.getPackageFromPath(Names.getPathFromFilename(relativeFilePath));
       String packageOfModel = Names.getQualifiedName(optAst.get().getPackage().getPartList());
       if (!modelName.equals(fileRoot)) {

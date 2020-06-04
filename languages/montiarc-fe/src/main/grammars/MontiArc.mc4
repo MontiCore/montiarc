@@ -29,9 +29,8 @@ grammar MontiArc extends
             de.monticore.expressions.AssignmentExpressions,
             de.monticore.types.MCSimpleGenericTypes,
             de.monticore.statements.MCCommonStatements,
-            de.monticore.statements.MCVarDeclarationStatements,
-            StatechartBasis, 
-            ArcBasis, 
+            //de.monticore.statements.MCVarDeclarationStatements,
+            ArcBasis,
             ComfortableArc,
             GenericArc                                           {
 
@@ -46,18 +45,6 @@ grammar MontiArc extends
     ComponentType
     EOF
   ;
-
-  /**
-   * ASTArcBehavior is the top-level interface for component behavior embedding.
-   */
-   // TODO: ArcBehavior kann expandiert werden. (ich denke das sollten wir auch)
-  interface ArcBehavior extends ArcElement;
-
-  /**
-   * ASTStatechartBehavior embedds statecharts for component behavior
-   * specification.
-   */
-  StatechartBehavior implements ArcBehavior = Statechart;
 
   /**
    * ASTArcTiming sets the timing of a component.

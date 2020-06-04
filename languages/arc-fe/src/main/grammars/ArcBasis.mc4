@@ -188,41 +188,6 @@ component grammar ArcBasis extends
     source:PortAccess "->" target:(PortAccess || ",")+ ";"
   ;
 
-  /**
-   * ASTPortAccess refers to a port using simple or qualified identifier.
-   */
-  interface PortAccess;
-
-  /**
-  * ASTPortNameAccess refers to a port. Functions as an extension point for
-  * port identifier.
-  */
-  PortNameAccess implements PortAccess = Name@Port;
-
-  QualifiedPortAccess implements PortAccess =
-    ComponentNameAccess "." PortNameAccess
-  ;
-
-  /**
-   * ASTComponentNameAccess refers to a component. Functions as an extension
-   * point for component identifier.
-   */
-  ComponentNameAccess = Name@ComponentInstance;
-  
-  /*********** TODO: wie wäre es mit:
-
-  LocalPortAccess implements PortAccess = Name@Port;
-
-  ForeignPortAccess implements PortAccess =
-    component:Name@ComponentInstance "." port:Name@Port ;
-
-  ... und wenn da Erweiterbakeit keine so große Rolle spielt 
-  (was meiner Meinung nach so ist):
-  
   PortAccess = (component:Name@ComponentInstance ".")? port:Name@Port ;
 
-  Es ist aber damit klar, dass qualifizierung bei den Komponenten nicht 
-  geht, also zB: "x.y.MyComponent.myPort" geht nicht. Ok so?
-  
-  */
 }
