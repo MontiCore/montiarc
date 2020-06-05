@@ -31,7 +31,7 @@ public class ComponentInstanceTypeExistsTest extends AbstractTest {
       ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("A")).build())
       .build();
     ASTComponentInstantiation ast = ArcBasisMill.componentInstantiationBuilder()
-      .setType(type).setComponentInstanceList("sub1", "sub2", "sub3").build();
+      .setMCType(type).setComponentInstanceList("sub1", "sub2", "sub3").build();
     ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);

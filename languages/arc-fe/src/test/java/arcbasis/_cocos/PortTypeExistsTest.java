@@ -31,7 +31,7 @@ public class PortTypeExistsTest extends AbstractTest {
       ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("Integer")).build())
       .build();
     ASTPortDeclaration ast = ArcBasisMill.portDeclarationBuilder().setIncoming(true)
-      .setType(type).setPortList("p1", "p2", "p3").build();
+      .setMCType(type).setPortList("p1", "p2", "p3").build();
     ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);

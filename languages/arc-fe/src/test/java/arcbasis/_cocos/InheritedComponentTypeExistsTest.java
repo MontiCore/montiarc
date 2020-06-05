@@ -32,7 +32,7 @@ public class InheritedComponentTypeExistsTest extends AbstractTest {
     ASTMCQualifiedType parent = ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
       ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("A")).build()).build();
     ASTComponentType ast = ArcBasisMill.componentTypeBuilder().setName("B")
-      .setHead(ArcBasisMill.componentHeadBuilder().setParentComponent(parent).build())
+      .setHead(ArcBasisMill.componentHeadBuilder().setParent(parent).build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
     ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);

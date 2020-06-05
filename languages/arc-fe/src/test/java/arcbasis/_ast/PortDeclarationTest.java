@@ -24,12 +24,12 @@ public class PortDeclarationTest extends AbstractTest {
   @Test
   public void shouldReturnExpectedDirection() {
     ASTPortDeclaration astPortDeclaration1 = ArcBasisMill.portDeclarationBuilder()
-      .setType(Mockito.mock(ASTMCObjectType.class))
+      .setMCType(Mockito.mock(ASTMCObjectType.class))
       .setPortDirection(ArcBasisMill.portDirectionInBuilder().build()).setPortList("i1").build();
     Assertions.assertTrue(astPortDeclaration1.isIncoming());
     Assertions.assertFalse(astPortDeclaration1.isOutgoing());
     ASTPortDeclaration astPortDeclaration2 = ArcBasisMill.portDeclarationBuilder()
-      .setType(Mockito.mock(ASTMCObjectType.class))
+      .setMCType(Mockito.mock(ASTMCObjectType.class))
       .setPortDirection(ArcBasisMill.portDirectionOutBuilder().build()).setPortList("o1").build();
     Assertions.assertFalse(astPortDeclaration2.isIncoming());
     Assertions.assertTrue(astPortDeclaration2.isOutgoing());

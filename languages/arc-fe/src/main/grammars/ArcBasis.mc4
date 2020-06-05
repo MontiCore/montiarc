@@ -43,7 +43,6 @@ component grammar ArcBasis extends
    * @attribute body Contains the architectural elements of this component.
    */
   symbol scope ComponentType implements ArcElement =
-  // TODO: delete "head:" , "body:"
     key("component") Name
     head:ComponentHead
     (ComponentInstance || ",")*
@@ -62,9 +61,8 @@ component grammar ArcBasis extends
    * @attribute parentComponent The type of the parent component.
    */
   ComponentHead =
-  // TODO del "parameter:"; ersetze "parentComponent:"  "parent:"
-    ( "(" parameter:(ArcParameter || ",")+ ")" )?
-    ( "extends" parentComponent:MCType)?
+    ( "(" (ArcParameter || ",")+ ")" )?
+    ( "extends" parent:MCType)?
   ;
 
   /**
@@ -77,8 +75,7 @@ component grammar ArcBasis extends
    * argument is given during instantiation.
    */
   ArcParameter implements Field =
-    // TODO besser: MCType Name ("=" Expression)?
-    type:MCType Name ("=" defaultValue:Expression)?
+    MCType Name ("=" value:Expression)?
   ;
 
   /**
@@ -95,8 +92,7 @@ component grammar ArcBasis extends
    * @attribute ports A list of port declarations contained in this interface.
    */
   ComponentInterface implements ArcElement =
-    // TODO besser:     key("port") (PortDeclaration || ",")+ ";"
-    key("port") port:(PortDeclaration || ",")+ ";"
+    key("port") (PortDeclaration || ",")+ ";"
   ;
 
   /**
@@ -108,8 +104,7 @@ component grammar ArcBasis extends
    * @attribute ports A list of declared ports.
    */
   PortDeclaration =
-    // TODO besser:     PortDirection MCType (Port || ",")+    
-    PortDirection type:MCType port:(Port || ",")+
+    PortDirection MCType (Port || ",")+
   ;
 
   /**
@@ -138,8 +133,7 @@ component grammar ArcBasis extends
   * @attribute variables A list of field identifier.
   */
   ArcFieldDeclaration implements ArcElement =
-    // TODO besser:     MCType (ArcField || ",")+ ";" ;
-    type:MCType field:(ArcField || ",")+ ";" ;
+    MCType field:(ArcField || ",")+ ";" ;
 
   /**
    * ASTArcField defines the field identifier.
@@ -147,9 +141,6 @@ component grammar ArcBasis extends
    * @attribute name The name of the field.
    * @attribute value The initialization value of the field.
    */
-   // TODO: del "value:"
-   // TODO: muss das Field besetzt werden oder wäre Optional besser?
-   // also in Summe:          Name ("=" Expression)?;
   ArcField implements Field = Name "=" value:Expression;
 
   /**
@@ -161,8 +152,7 @@ component grammar ArcBasis extends
    * @attribute instances A list of instantiated components.
    */
   ComponentInstantiation implements ArcElement =
-   // TODO: del type:
-    type:MCType (ComponentInstance || ",")* ";"
+    MCType (ComponentInstance || ",")* ";"
   ;
 
   /**
@@ -172,8 +162,7 @@ component grammar ArcBasis extends
    * @attribute name The name of the component instance.
    * @attribute arguments A list of configuration arguments.
    */
-   // TODO: del arguments:
-  symbol ComponentInstance = Name arguments:ArcArguments?;
+  symbol ComponentInstance = Name ArcArguments?;
 
   ArcArguments = "(" (Expression || ",")+ ")" ;
 

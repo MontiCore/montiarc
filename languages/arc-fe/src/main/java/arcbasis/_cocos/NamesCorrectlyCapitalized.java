@@ -55,7 +55,7 @@ public class NamesCorrectlyCapitalized implements ArcBasisASTComponentTypeCoCo {
       }
     }
 
-    final List<ASTArcParameter> parameters = node.getHead().getParameterList();
+    final List<ASTArcParameter> parameters = node.getHead().getArcParameterList();
     for (ASTArcParameter parameter : parameters) {
       if (!Character.isLowerCase(parameter.getName().charAt(0))) {
         Log.error(String.format(ArcError.PARAMETER_LOWER_CASE.toString(),

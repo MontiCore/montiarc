@@ -27,7 +27,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
       .getArcElementList()
       .stream()
       .filter(element -> element instanceof ASTComponentInterface)
-      .map(compInterface -> ((ASTComponentInterface) compInterface).getPortList())
+      .map(compInterface -> ((ASTComponentInterface) compInterface).getPortDeclarationList())
       .flatMap(Collection::stream)
       .collect(Collectors.toList());
   }

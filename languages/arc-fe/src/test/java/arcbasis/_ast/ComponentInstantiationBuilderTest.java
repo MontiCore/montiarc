@@ -29,7 +29,7 @@ public class ComponentInstantiationBuilderTest extends AbstractTest {
   @BeforeEach
   public void setUpBuilder() {
     this.builder = new ASTComponentInstantiationBuilder();
-    this.builder.setType(Mockito.mock(ASTMCObjectType.class)).setComponentInstanceList("a", "b", "c");
+    this.builder.setMCType(Mockito.mock(ASTMCObjectType.class)).setComponentInstanceList("a", "b", "c");
   }
 
   @Override

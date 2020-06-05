@@ -171,9 +171,9 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(!this.getComponentStack().isEmpty());
     Preconditions.checkState(this.getCurrentComponent().isPresent());
-    if (node.isPresentParentComponent()) {
+    if (node.isPresentParent()) {
       ComponentTypeSymbolLoader parentLoader =
-        this.create_ComponentLoader(node.getParentComponent());
+        this.create_ComponentLoader(node.getParent());
       parentLoader.setEnclosingScope(this.getCurrentComponent().get().getEnclosingScope());
       this.getCurrentComponent().get().setParent(parentLoader);
     }
@@ -190,7 +190,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     assert (this.getCurrentScope().isPresent());
     FieldSymbolBuilder builder = ArcBasisSymTabMill.fieldSymbolBuilder();
     builder.setName(ast.getName());
-    TypeSymbolLoader typeLoader = this.create_TypeLoader(ast.getType());
+    TypeSymbolLoader typeLoader = this.create_TypeLoader(ast.getMCType());
     typeLoader.setEnclosingScope(this.getCurrentScope().get());
     SymTypeExpression typeExpression = SymTypeExpressionFactory.createTypeObject(typeLoader);
     builder.setType(typeExpression);
@@ -213,7 +213,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(getCurrentScope().isPresent());
     node.setEnclosingScope(getCurrentScope().get());
-    this.setCurrentPortType(node.getType());
+    this.setCurrentPortType(node.getMCType());
     this.setCurrentPortDirection(node.getPortDirection());
   }
 
@@ -221,7 +221,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
   public void endVisit(@NotNull ASTPortDeclaration node) {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentPortType().isPresent());
-    Preconditions.checkState(this.getCurrentPortType().get().equals(node.getType()));
+    Preconditions.checkState(this.getCurrentPortType().get().equals(node.getMCType()));
     Preconditions.checkState(this.getCurrentPortDirection().isPresent());
     Preconditions.checkState(this.getCurrentPortDirection().get().equals(node.getPortDirection()));
     this.setCurrentPortType(null);
@@ -260,14 +260,14 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     node.setEnclosingScope(this.getCurrentScope().get());
-    this.setCurrentFieldType(node.getType());
+    this.setCurrentFieldType(node.getMCType());
   }
 
   @Override
   public void endVisit(@NotNull ASTArcFieldDeclaration node) {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentFieldType().isPresent());
-    Preconditions.checkState(this.getCurrentFieldType().get().equals(node.getType()));
+    Preconditions.checkState(this.getCurrentFieldType().get().equals(node.getMCType()));
     this.setCurrentFieldType(null);
   }
 
@@ -300,14 +300,14 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     node.setEnclosingScope(this.getCurrentScope().get());
-    this.setCurrentCompInstanceType(node.getType());
+    this.setCurrentCompInstanceType(node.getMCType());
   }
 
   @Override
   public void endVisit(@NotNull ASTComponentInstantiation node) {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
-    Preconditions.checkState(this.getCurrentCompInstanceType().get().equals(node.getType()));
+    Preconditions.checkState(this.getCurrentCompInstanceType().get().equals(node.getMCType()));
     this.setCurrentCompInstanceType(null);
   }
 
@@ -332,8 +332,8 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
   @Override
   protected void initialize_ComponentInstance(@NotNull ComponentInstanceSymbol symbol,
     @NotNull ASTComponentInstance ast) {
-    if (ast.isPresentArguments()) {
-      symbol.addArguments(ast.getArguments().getExpressionList());
+    if (ast.isPresentArcArguments()) {
+      symbol.addArguments(ast.getArcArguments().getExpressionList());
     }
   }
 

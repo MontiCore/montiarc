@@ -32,7 +32,7 @@ public class CircularInheritanceTest extends AbstractTest {
   public void shouldFindCircularInheritance() {
     ASTComponentType parent = ArcBasisMill.componentTypeBuilder().setName("A")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(ArcBasisMill.componentHeadBuilder().setParentComponent(
+      .setHead(ArcBasisMill.componentHeadBuilder().setParent(
         ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
           ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("A")).build())
           .build())
@@ -40,7 +40,7 @@ public class CircularInheritanceTest extends AbstractTest {
       .build();
     ASTComponentType child = ArcBasisMill.componentTypeBuilder().setName("B")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(ArcBasisMill.componentHeadBuilder().setParentComponent(
+      .setHead(ArcBasisMill.componentHeadBuilder().setParent(
         ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
           ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("A")).build())
           .build())
@@ -64,7 +64,7 @@ public class CircularInheritanceTest extends AbstractTest {
       .build();
     ASTComponentType child = ArcBasisMill.componentTypeBuilder().setName("B")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(ArcBasisMill.componentHeadBuilder().setParentComponent(
+      .setHead(ArcBasisMill.componentHeadBuilder().setParent(
         ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
           ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("A")).build())
           .build())

@@ -35,7 +35,7 @@ public class FieldTypeExistsTest extends AbstractTest {
       .build();
     String[] names = new String[] { "v1", "v2", "v3" };
     ASTArcFieldDeclaration ast = ArcBasisMill.arcFieldDeclarationBuilder()
-      .setType(type).setFieldList(names, this.mockValues(names.length)).build();
+      .setMCType(type).setFieldList(names, this.mockValues(names.length)).build();
     ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);

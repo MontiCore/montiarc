@@ -33,10 +33,9 @@ component grammar GenericArc extends ArcBasis {
    * @attribute parentComponent The type of the parent component.
    */
   GenericComponentHead extends ComponentHead =
-// TODO: del "...:" (analog zu ComponentHead)
-    "<" typeParameter:(ArcTypeParameter || ",")+ ">"
-    ( "(" parameter:(ArcParameter || ",")+ ")" )?
-    ( "extends" parentComponent:MCType)?
+    "<" (ArcTypeParameter || ",")+ ">"
+    ( "(" (ArcParameter || ",")+ ")" )?
+    ( "extends" parent:MCType)?
   ;
 
   /**

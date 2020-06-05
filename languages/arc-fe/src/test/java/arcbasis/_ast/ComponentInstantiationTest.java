@@ -28,7 +28,7 @@ public class ComponentInstantiationTest extends AbstractTest {
   @BeforeEach
   public void setUpComponentInstantiation() {
     astCompInstantiation = ArcBasisMill.componentInstantiationBuilder()
-      .setType(Mockito.mock(ASTMCObjectType.class))
+      .setMCType(Mockito.mock(ASTMCObjectType.class))
       .setComponentInstanceList("comp1", "comp2", "comp3").build();
   }
 

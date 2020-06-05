@@ -58,7 +58,7 @@ component grammar ComfortableArc extends ArcBasis {
     Unqualified ports are then possible: they belong to the component.
    */
   ConnectedComponentInstance extends ComponentInstance =
-    Name arguments:ArcArguments? "[" Connector+ "]"
+    Name ArcArguments? "[" Connector+ "]"
   ;
 
 }

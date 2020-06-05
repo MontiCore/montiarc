@@ -30,7 +30,7 @@ public class FieldDeclarationBuilderTest extends AbstractTest {
   @BeforeEach
   public void setUpBuilder() {
     this.builder = new ASTArcFieldDeclarationBuilder();
-    this.builder.setType(Mockito.mock(ASTMCType.class))
+    this.builder.setMCType(Mockito.mock(ASTMCType.class))
       .setFieldList(new String[] { "a", "b", "c" },
         new ASTExpression[] { Mockito.mock(ASTExpression.class), Mockito.mock(ASTExpression.class),
           Mockito.mock(ASTExpression.class) });
