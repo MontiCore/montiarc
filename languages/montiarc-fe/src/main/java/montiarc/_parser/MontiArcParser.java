@@ -11,6 +11,7 @@ import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.MontiArcError;
+import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
  * Extends the {@link MontiArcParserTOP} with checks which check whether the name of the parsed
@@ -36,9 +37,9 @@ public class MontiArcParser extends MontiArcParserTOP {
    * @throws IOException if an I/O exception of some sort occurs
    */
   @Override
-  public Optional<ASTMACompilationUnit> parseMACompilationUnit(String relativeFilePath)
+  public Optional<ASTMACompilationUnit> parseMACompilationUnit(@NotNull String relativeFilePath)
     throws IOException {
-    Preconditions.checkNotNull(relativeFilePath);
+    Preconditions.checkArgument(relativeFilePath != null);
     Optional<ASTMACompilationUnit> optAst = super.parseMACompilationUnit(relativeFilePath);
     if (optAst.isPresent()) {
       String fileRoot = Files.getNameWithoutExtension(relativeFilePath);
@@ -67,8 +68,9 @@ public class MontiArcParser extends MontiArcParserTOP {
    * @see MontiArcParser#parseMACompilationUnit(String)
    */
   @Override
-  public Optional<ASTMACompilationUnit> parse(String relativeFilePath) throws IOException {
-    Preconditions.checkNotNull(relativeFilePath);
+  public Optional<ASTMACompilationUnit> parse(@NotNull String relativeFilePath) throws IOException {
+    Preconditions.checkArgument(relativeFilePath != null);
     return parseMACompilationUnit(relativeFilePath);
   }
+
 }
