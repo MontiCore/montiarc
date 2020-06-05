@@ -48,9 +48,7 @@ Validate:
   coverage: '/\d+.\d+ \% covered/'
   script:
     - mvn $MAVEN_CLI_OPTS test package
-    - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/",
-    - instructions, "instructions covered"; print 100*covered/instructions, "% covered" }'
-    - ./languages/arc-fe/target/site/jacoco/jacoco.csv
+    - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/",  instructions, "instructions covered"; print 100*covered/instructions, "% covered" }' ./languages/arc-fe/target/site/jacoco/jacoco.csv
   dependencies: 
     - Validate #download artifacts from build
   artifacts:
