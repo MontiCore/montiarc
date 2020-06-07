@@ -3,7 +3,7 @@ package arcbasis._cocos;
 
 import arcbasis._ast.*;
 import arcbasis._symboltable.ArcBasisScope;
-import arcbasis._symboltable.ArcBasisSymTabMill;
+import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisSymbolTableCreator;
 import arcbasis.util.ArcError;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
@@ -27,18 +27,18 @@ public class ParameterTypeExistsTest extends AbstractTest {
 
   @Test
   public void shouldNotFindType() {
-    ASTMCQualifiedType type = ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
-      ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("Integer"))
+    ASTMCQualifiedType type = arcbasis.ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
+      arcbasis.ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("Integer"))
         .build())
       .build();
-    ASTComponentType ast = ArcBasisMill.componentTypeBuilder().setName("Comp")
+    ASTComponentType ast = arcbasis.ArcBasisMill.componentTypeBuilder().setName("Comp")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(ArcBasisMill.componentHeadBuilder().setArcParameterList(
-        Collections.singletonList(ArcBasisMill.arcParameterBuilder().setName("p").setMCType(type)
+      .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setArcParameterList(
+        Collections.singletonList(arcbasis.ArcBasisMill.arcParameterBuilder().setName("p").setMCType(type)
           .build()))
         .build())
       .build();
-    ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
+    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);
     ParameterTypeExists coco = new ParameterTypeExists();

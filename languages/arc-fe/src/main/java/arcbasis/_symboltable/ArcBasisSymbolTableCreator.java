@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
 import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
@@ -123,7 +124,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
 
   @Override
   protected ComponentTypeSymbol create_ComponentType(@NotNull ASTComponentType ast) {
-    ComponentTypeSymbolBuilder builder = ArcBasisSymTabMill.componentTypeSymbolBuilder();
+    ComponentTypeSymbolBuilder builder = ArcBasisMill.componentTypeSymbolBuilder();
     builder.setName(ast.getName());
     IArcBasisScope scope = this.createScope(false);
     builder.setSpannedScope(scope);
@@ -188,7 +189,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
   @Override
   protected FieldSymbol create_ArcParameter(@NotNull ASTArcParameter ast) {
     assert (this.getCurrentScope().isPresent());
-    FieldSymbolBuilder builder = ArcBasisSymTabMill.fieldSymbolBuilder();
+    FieldSymbolBuilder builder = ArcBasisMill.fieldSymbolBuilder();
     builder.setName(ast.getName());
     TypeSymbolLoader typeLoader = this.create_TypeLoader(ast.getMCType());
     typeLoader.setEnclosingScope(this.getCurrentScope().get());
@@ -233,7 +234,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     assert (this.getCurrentPortType().isPresent());
     assert (this.getCurrentPortDirection().isPresent());
     assert (this.getCurrentScope().isPresent());
-    PortSymbolBuilder builder = ArcBasisSymTabMill.portSymbolBuilder();
+    PortSymbolBuilder builder = ArcBasisMill.portSymbolBuilder();
     builder.setName(ast.getName());
     TypeSymbolLoader typeLoader = this.create_TypeLoader(this.getCurrentPortType().get());
     typeLoader.setEnclosingScope(this.getCurrentScope().get());
@@ -275,7 +276,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
   protected FieldSymbol create_ArcField(@NotNull ASTArcField ast) {
     assert (this.getCurrentFieldType().isPresent());
     assert (this.getCurrentScope().isPresent());
-    FieldSymbolBuilder builder = ArcBasisSymTabMill.fieldSymbolBuilder();
+    FieldSymbolBuilder builder = ArcBasisMill.fieldSymbolBuilder();
     builder.setName(ast.getName());
     TypeSymbolLoader typeLoader = this.create_TypeLoader(this.getCurrentFieldType().get());
     typeLoader.setEnclosingScope(this.getCurrentScope().get());
@@ -312,13 +313,13 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
   }
 
   protected ComponentTypeSymbolLoader create_ComponentLoader(@NotNull ASTMCType type) {
-    return ArcBasisSymTabMill.componentTypeSymbolLoaderBuilder()
+    return ArcBasisMill.componentTypeSymbolLoaderBuilder()
       .setName(type.printType(this.getTypePrinter())).build();
   }
 
   @Override
   protected ComponentInstanceSymbol create_ComponentInstance(@NotNull ASTComponentInstance ast) {
-    ComponentInstanceSymbolBuilder builder = ArcBasisSymTabMill.componentInstanceSymbolBuilder();
+    ComponentInstanceSymbolBuilder builder = ArcBasisMill.componentInstanceSymbolBuilder();
     Preconditions.checkArgument(ast != null);
     Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
     Preconditions.checkState(this.getCurrentScope().isPresent());

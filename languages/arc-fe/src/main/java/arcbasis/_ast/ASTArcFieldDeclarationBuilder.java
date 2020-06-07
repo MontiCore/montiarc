@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
+import arcbasis.ArcBasisMill;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilderTOP {
 
-  protected ASTArcFieldDeclarationBuilder() {
+  public ASTArcFieldDeclarationBuilder() {
     super();
   }
 

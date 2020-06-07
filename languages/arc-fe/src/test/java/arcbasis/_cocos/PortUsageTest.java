@@ -2,7 +2,7 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ArcBasisMill;
+import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisScope;
 import arcbasis._symboltable.ArcBasisSymbolTableCreator;
 import arcbasis.util.ArcError;

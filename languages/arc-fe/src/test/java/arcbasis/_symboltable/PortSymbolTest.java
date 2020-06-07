@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.ArcBasisMill;
 import arcbasis.util.ArcError;
 import de.monticore.types.check.SymTypeExpression;
 import montiarc.AbstractTest;
@@ -23,9 +24,9 @@ public class PortSymbolTest extends AbstractTest {
 
   @Test
   public void shouldFindComponentType() {
-    ComponentTypeSymbol compSymbol = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("Comp")
+    ComponentTypeSymbol compSymbol = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp")
       .setSpannedScope(new ArcBasisScope()).build();
-    PortSymbol portSymbol = ArcBasisSymTabMill.portSymbolBuilder().setName("p1")
+    PortSymbol portSymbol = ArcBasisMill.portSymbolBuilder().setName("p1")
       .setIncoming(true).setType(mock(SymTypeExpression.class)).build();
     compSymbol.getSpannedScope().add(portSymbol);
     Assertions.assertTrue(portSymbol.getComponent().isPresent());
@@ -33,7 +34,7 @@ public class PortSymbolTest extends AbstractTest {
 
   @Test
   public void shouldNotFindComponentType() {
-    PortSymbol portSymbol = ArcBasisSymTabMill.portSymbolBuilder().setName("p1")
+    PortSymbol portSymbol = ArcBasisMill.portSymbolBuilder().setName("p1")
       .setIncoming(true).setType(mock(SymTypeExpression.class)).build();
     Assertions.assertFalse(portSymbol.getComponent().isPresent());
   }

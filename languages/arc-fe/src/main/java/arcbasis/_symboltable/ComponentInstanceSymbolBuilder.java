@@ -12,7 +12,7 @@ public class ComponentInstanceSymbolBuilder extends ComponentInstanceSymbolBuild
   protected ComponentTypeSymbolLoader type;
   protected List<ASTExpression> arguments;
 
-  protected ComponentInstanceSymbolBuilder() {
+  public ComponentInstanceSymbolBuilder() {
     super();
   }
 

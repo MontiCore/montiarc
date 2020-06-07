@@ -16,7 +16,7 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
   protected List<FieldSymbol> parameters;
   protected List<TypeVarSymbol> typeParameters;
 
-  protected ComponentTypeSymbolBuilder() {
+  public ComponentTypeSymbolBuilder() {
     super();
   }
 

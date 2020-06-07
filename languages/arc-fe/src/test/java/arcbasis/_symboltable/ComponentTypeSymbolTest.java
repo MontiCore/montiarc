@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.ArcBasisMill;
 import arcbasis.util.ArcError;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.typesymbols._symboltable.FieldSymbol;
@@ -69,9 +70,9 @@ public class ComponentTypeSymbolTest extends AbstractTest {
 
   @Test
   public void shouldStateIfIsInner() {
-    ComponentTypeSymbol outerCompSymbol = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("Comp1")
+    ComponentTypeSymbol outerCompSymbol = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp1")
       .setSpannedScope(new ArcBasisScope()).build();
-    ComponentTypeSymbol innerCompSymbol = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("Comp2")
+    ComponentTypeSymbol innerCompSymbol = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp2")
       .setSpannedScope(new ArcBasisScope()).build();
     innerCompSymbol.setOuterComponent(outerCompSymbol);
     Assertions.assertTrue(innerCompSymbol.isInnerComponent());
@@ -79,10 +80,10 @@ public class ComponentTypeSymbolTest extends AbstractTest {
   }
 
   private ComponentTypeSymbol builtTestComponentWithInnerComponents(List<String> innerComponents) {
-    ComponentTypeSymbol compSymbol = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("Comp")
+    ComponentTypeSymbol compSymbol = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp")
       .setSpannedScope(new ArcBasisScope()).build();
     for (String innerComponent : innerComponents) {
-      ComponentTypeSymbol innerCompSymbol = ArcBasisSymTabMill.componentTypeSymbolBuilder()
+      ComponentTypeSymbol innerCompSymbol = ArcBasisMill.componentTypeSymbolBuilder()
         .setName(innerComponent)
         .setSpannedScope(new ArcBasisScope()).build();
       compSymbol.getSpannedScope().add(innerCompSymbol);
@@ -92,9 +93,9 @@ public class ComponentTypeSymbolTest extends AbstractTest {
 
   @Test
   public void shouldStateIfHasParameters() {
-    ComponentTypeSymbol compWithoutParameters = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("Comp1")
+    ComponentTypeSymbol compWithoutParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp1")
       .setSpannedScope(new ArcBasisScope()).build();
-    ComponentTypeSymbol compWithParameters = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("Comp2")
+    ComponentTypeSymbol compWithParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp2")
       .setSpannedScope(new ArcBasisScope()).build();
     compWithParameters.addParameters(Arrays.asList(mock(FieldSymbol.class), mock(FieldSymbol.class),
       mock(FieldSymbol.class)));
@@ -104,9 +105,9 @@ public class ComponentTypeSymbolTest extends AbstractTest {
 
   @Test
   public void shouldStateIfHasTypeParameters() {
-    ComponentTypeSymbol compWithoutTypeParameters = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("Comp1")
+    ComponentTypeSymbol compWithoutTypeParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp1")
       .setSpannedScope(new ArcBasisScope()).build();
-    ComponentTypeSymbol compWithTypeParameters = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("Comp2")
+    ComponentTypeSymbol compWithTypeParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp2")
       .setSpannedScope(new ArcBasisScope()).build();
     compWithTypeParameters.addTypeParameters(Arrays
       .asList(mock(TypeVarSymbol.class), mock(TypeVarSymbol.class), mock(TypeVarSymbol.class)));
@@ -177,10 +178,10 @@ public class ComponentTypeSymbolTest extends AbstractTest {
   }
 
   private ComponentTypeSymbol buildTestComponentWithPorts(HashMap<String, Boolean> ports) {
-    ComponentTypeSymbol compSymbol = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("Comp")
+    ComponentTypeSymbol compSymbol = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp")
       .setSpannedScope(new ArcBasisScope()).build();
     for (String port : ports.keySet()) {
-      PortSymbol portSymbol = ArcBasisSymTabMill.portSymbolBuilder()
+      PortSymbol portSymbol = ArcBasisMill.portSymbolBuilder()
         .setName(port).setType(mock(SymTypeExpression.class)).setIncoming(ports.get(port)).build();
       compSymbol.getSpannedScope().add(portSymbol);
     }
@@ -234,10 +235,10 @@ public class ComponentTypeSymbolTest extends AbstractTest {
   }
 
   private ComponentTypeSymbol builtTestComponentWithInstances(List<String> instances) {
-    ComponentTypeSymbol compSymbol = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("Comp")
+    ComponentTypeSymbol compSymbol = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp")
       .setSpannedScope(new ArcBasisScope()).build();
     for (String instance : instances) {
-      ComponentInstanceSymbol subCompSymbol = ArcBasisSymTabMill.componentInstanceSymbolBuilder()
+      ComponentInstanceSymbol subCompSymbol = ArcBasisMill.componentInstanceSymbolBuilder()
         .setName(instance).setType(mock(ComponentTypeSymbolLoader.class)).build();
       compSymbol.getSpannedScope().add(subCompSymbol);
     }

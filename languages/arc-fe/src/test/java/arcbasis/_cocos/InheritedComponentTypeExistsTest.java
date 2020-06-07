@@ -1,11 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
+import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTComponentBody;
-import arcbasis._ast.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisScope;
-import arcbasis._symboltable.ArcBasisSymTabMill;
 import arcbasis._symboltable.ArcBasisSymbolTableCreator;
 import arcbasis.util.ArcError;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
@@ -29,12 +28,12 @@ public class InheritedComponentTypeExistsTest extends AbstractTest {
 
   @Test
   public void shouldNotFindType() {
-    ASTMCQualifiedType parent = ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
-      ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("A")).build()).build();
-    ASTComponentType ast = ArcBasisMill.componentTypeBuilder().setName("B")
-      .setHead(ArcBasisMill.componentHeadBuilder().setParent(parent).build())
+    ASTMCQualifiedType parent = arcbasis.ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
+      arcbasis.ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("A")).build()).build();
+    ASTComponentType ast = arcbasis.ArcBasisMill.componentTypeBuilder().setName("B")
+      .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setParent(parent).build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
+    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);
     InheritedComponentTypeExists coco = new InheritedComponentTypeExists();

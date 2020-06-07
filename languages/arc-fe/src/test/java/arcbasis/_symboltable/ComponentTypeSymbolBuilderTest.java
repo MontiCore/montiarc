@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.ArcBasisMill;
 import arcbasis.util.ArcError;
 import de.monticore.types.typesymbols._symboltable.FieldSymbol;
 import de.monticore.types.typesymbols._symboltable.TypeVarSymbol;
@@ -51,31 +52,31 @@ public class ComponentTypeSymbolBuilderTest extends AbstractTest {
   @Test
   public void shouldHaveParent() {
     ComponentTypeSymbolLoader parentComp =
-      ArcBasisSymTabMill.componentTypeSymbolLoaderBuilder().setName("A").build();
-    ComponentTypeSymbol childComp = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("B")
+      ArcBasisMill.componentTypeSymbolLoaderBuilder().setName("A").build();
+    ComponentTypeSymbol childComp = ArcBasisMill.componentTypeSymbolBuilder().setName("B")
       .setSpannedScope(new ArcBasisScope()).setParentComponentLoader(parentComp).build();
     Assertions.assertTrue(childComp.isPresentParentComponent());
   }
 
   @Test
   public void shouldNotHaveParent() {
-    ComponentTypeSymbol symbol = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("A")
+    ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName("A")
       .setSpannedScope(new ArcBasisScope()).build();
     Assertions.assertFalse(symbol.isPresentParentComponent());
   }
 
   @Test
   public void shouldHaveOuter() {
-    ComponentTypeSymbol outerComp = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("A")
+    ComponentTypeSymbol outerComp = ArcBasisMill.componentTypeSymbolBuilder().setName("A")
       .setSpannedScope(new ArcBasisScope()).build();
-    ComponentTypeSymbol innerComp = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("B")
+    ComponentTypeSymbol innerComp = ArcBasisMill.componentTypeSymbolBuilder().setName("B")
       .setSpannedScope(new ArcBasisScope()).setOuterComponent(outerComp).build();
     Assertions.assertTrue(innerComp.getOuterComponent().isPresent());
   }
 
   @Test
   public void shouldNotHaveOuter() {
-    ComponentTypeSymbol symbol = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("A")
+    ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName("A")
       .setSpannedScope(new ArcBasisScope()).build();
     Assertions.assertFalse(symbol.getOuterComponent().isPresent());
   }
@@ -83,7 +84,7 @@ public class ComponentTypeSymbolBuilderTest extends AbstractTest {
   @ParameterizedTest
   @MethodSource("compNameAndParametersProvider")
   public void shouldBuildWithExpectedParameters(String name, List<FieldSymbol> parameters) {
-    ComponentTypeSymbol symbol = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName(name)
+    ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName(name)
       .setSpannedScope(new ArcBasisScope()).setParameters(parameters).build();
     Assertions.assertEquals(symbol.getName(), name);
     Assertions.assertIterableEquals(symbol.getParameters(), parameters);
@@ -92,19 +93,19 @@ public class ComponentTypeSymbolBuilderTest extends AbstractTest {
   static Stream<Arguments> compNameAndParametersProvider() {
     return Stream.of(arguments("Comp1", Collections.emptyList()),
       arguments("Comp2", Arrays.asList(
-        ArcBasisSymTabMill.fieldSymbolBuilder().setName("a").build(),
-        ArcBasisSymTabMill.fieldSymbolBuilder().setName("b").build(),
-        ArcBasisSymTabMill.fieldSymbolBuilder().setName("c").build())),
+        ArcBasisMill.fieldSymbolBuilder().setName("a").build(),
+        ArcBasisMill.fieldSymbolBuilder().setName("b").build(),
+        ArcBasisMill.fieldSymbolBuilder().setName("c").build())),
       arguments("Comp3", Arrays.asList(
-        ArcBasisSymTabMill.fieldSymbolBuilder().setName("c").build(),
-        ArcBasisSymTabMill.fieldSymbolBuilder().setName("d").build())));
+        ArcBasisMill.fieldSymbolBuilder().setName("c").build(),
+        ArcBasisMill.fieldSymbolBuilder().setName("d").build())));
   }
 
   @ParameterizedTest
   @MethodSource("compNameAndTypeParametersProvider")
   public void shouldBuildWithExpectedTypeParameters(String name,
     List<TypeVarSymbol> typeParameters) {
-    ComponentTypeSymbol symbol = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName(name)
+    ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName(name)
       .setSpannedScope(new ArcBasisScope()).setTypeParameters(typeParameters).build();
     Assertions.assertEquals(symbol.getName(), name);
     Assertions.assertIterableEquals(symbol.getTypeParameters(), typeParameters);
@@ -114,10 +115,10 @@ public class ComponentTypeSymbolBuilderTest extends AbstractTest {
     return Stream.of(
       arguments("Comp1", Collections.emptyList()),
       arguments("Comp2", Arrays.asList(
-        ArcBasisSymTabMill.typeVarSymbolBuilder().setName("A").build(),
-        ArcBasisSymTabMill.typeVarSymbolBuilder().setName("B").build(),
-        ArcBasisSymTabMill.typeVarSymbolBuilder().setName("C").build())),
+        ArcBasisMill.typeVarSymbolBuilder().setName("A").build(),
+        ArcBasisMill.typeVarSymbolBuilder().setName("B").build(),
+        ArcBasisMill.typeVarSymbolBuilder().setName("C").build())),
       arguments("Comp3", Collections.singletonList(
-        ArcBasisSymTabMill.typeVarSymbolBuilder().setName("D").build())));
+        ArcBasisMill.typeVarSymbolBuilder().setName("D").build())));
   }
 }

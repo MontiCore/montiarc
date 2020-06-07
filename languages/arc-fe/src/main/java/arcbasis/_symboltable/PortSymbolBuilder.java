@@ -3,7 +3,7 @@ package arcbasis._symboltable;
 
 import arcbasis._ast.ASTPortDirection;
 import arcbasis._ast.ASTPortDirectionIn;
-import arcbasis._ast.ArcBasisMill;
+import arcbasis.ArcBasisMill;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -13,7 +13,7 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
   protected ASTPortDirection direction;
   protected SymTypeExpression type;
 
-  protected PortSymbolBuilder() {
+  public PortSymbolBuilder() {
     super();
   }
 

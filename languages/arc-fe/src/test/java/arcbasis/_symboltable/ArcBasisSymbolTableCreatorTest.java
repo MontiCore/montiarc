@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
 import arcbasis.util.ArcError;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -30,8 +31,8 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @BeforeEach
   public void SetUpSymTab() {
-    this.symTab = ArcBasisSymTabMill.arcBasisSymbolTableCreatorBuilder()
-      .addToScopeStack(ArcBasisSymTabMill.arcBasisScopeBuilder().build()).build();
+    this.symTab = ArcBasisMill.arcBasisSymbolTableCreatorBuilder()
+      .addToScopeStack(ArcBasisMill.arcBasisScopeBuilder().build()).build();
   }
 
   public ArcBasisSymbolTableCreator getSymTab() {
@@ -44,8 +45,8 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @Test
   public void shouldAddComponentSymbolToScope() {
-    ComponentTypeSymbol symbol = ArcBasisSymTabMill.componentTypeSymbolBuilder().setName("Comp")
-      .setSpannedScope(ArcBasisSymTabMill.arcBasisScopeBuilder().build()).build();
+    ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp")
+      .setSpannedScope(ArcBasisMill.arcBasisScopeBuilder().build()).build();
     this.getSymTab().addToScope(symbol);
     Assertions.assertTrue(this.getSymTab().getCurrentScope().isPresent());
     Assertions.assertEquals(1, this.getSymTab().getCurrentScope().get()
@@ -56,7 +57,7 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @Test
   public void shouldCreateComponentSymbol() {
-    ASTComponentType ast = ArcBasisMill.componentTypeBuilder().setName("Comp")
+    ASTComponentType ast = arcbasis.ArcBasisMill.componentTypeBuilder().setName("Comp")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(Mockito.mock(ASTComponentHead.class))
       .build();
@@ -67,11 +68,11 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @Test
   public void shouldVisitComponent() {
-    ASTComponentType ast = ArcBasisMill.componentTypeBuilder().setName("Comp")
-      .setBody(ArcBasisMill.componentBodyBuilder().build())
-      .setHead(ArcBasisMill.componentHeadBuilder().build())
+    ASTComponentType ast = arcbasis.ArcBasisMill.componentTypeBuilder().setName("Comp")
+      .setBody(arcbasis.ArcBasisMill.componentBodyBuilder().build())
+      .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().build())
       .build();
-    ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
+    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);
     Assertions.assertEquals(scope, ast.getEnclosingScope());
@@ -85,9 +86,9 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
   public void shouldEndVisitComponent() {
     IArcBasisScope scope = this.getSymTab().getCurrentScope().orElse(null);
     int size = this.getSymTab().getComponentStack().size();
-    ASTComponentType ast = ArcBasisMill.componentTypeBuilder().setName("Comp")
-      .setBody(ArcBasisMill.componentBodyBuilder().build())
-      .setHead(ArcBasisMill.componentHeadBuilder().build())
+    ASTComponentType ast = arcbasis.ArcBasisMill.componentTypeBuilder().setName("Comp")
+      .setBody(arcbasis.ArcBasisMill.componentBodyBuilder().build())
+      .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().build())
       .build();
     this.getSymTab().visit(ast);
     this.getSymTab().endVisit(ast);
@@ -98,9 +99,9 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
   @Test
   public void shouldVisitParameterDeclaration() {
     ASTMCType type = Mockito.mock(ASTMCType.class);
-    ASTArcParameter ast = ArcBasisMill.arcParameterBuilder()
+    ASTArcParameter ast = arcbasis.ArcBasisMill.arcParameterBuilder()
       .setName("par").setMCType(type).build();
-    ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
+    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     this.getSymTab().putOnStack(Mockito.mock(ComponentTypeSymbol.class));
     this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);
@@ -112,7 +113,7 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
   @Test
   public void shouldCreateParameter() {
     ASTMCType type = Mockito.mock(ASTMCType.class);
-    ASTArcParameter ast = ArcBasisMill.arcParameterBuilder().setName("par")
+    ASTArcParameter ast = arcbasis.ArcBasisMill.arcParameterBuilder().setName("par")
       .setMCType(type).build();
     FieldSymbol symbol = this.getSymTab().create_ArcParameter(ast);
     Assertions.assertEquals(ast.getName(), symbol.getName());
@@ -121,9 +122,9 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @Test
   public void shouldVisitParameter() {
-    ASTArcParameter ast = ArcBasisMill.arcParameterBuilder().setName("par")
+    ASTArcParameter ast = arcbasis.ArcBasisMill.arcParameterBuilder().setName("par")
       .setMCType(Mockito.mock(ASTMCType.class)).build();
-    ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
+    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     this.getSymTab().putOnStack(Mockito.mock(ComponentTypeSymbol.class));
     this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);
@@ -134,10 +135,10 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @Test
   public void shouldVisitPortDeclaration() {
-    ASTPortDeclaration ast = ArcBasisMill.portDeclarationBuilder()
+    ASTPortDeclaration ast = arcbasis.ArcBasisMill.portDeclarationBuilder()
       .setMCType(Mockito.mock(ASTMCType.class)).setIncoming(true)
       .setPortList("p1", "p2", "p3").build();
-    ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
+    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);
     Assertions.assertEquals(scope, ast.getEnclosingScope());
@@ -147,7 +148,7 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @Test
   public void shouldEndVisitPortDeclaration() {
-    ASTPortDeclaration ast = ArcBasisMill.portDeclarationBuilder()
+    ASTPortDeclaration ast = arcbasis.ArcBasisMill.portDeclarationBuilder()
       .setMCType(Mockito.mock(ASTMCType.class)).setOutgoing(true)
       .setPortList("p1", "p2", "p3").build();
     this.getSymTab().visit(ast);
@@ -158,9 +159,9 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @Test
   public void shouldCreatePort() {
-    this.getSymTab().setCurrentPortDirection(ArcBasisMill.portDirectionInBuilder().build());
+    this.getSymTab().setCurrentPortDirection(arcbasis.ArcBasisMill.portDirectionInBuilder().build());
     this.getSymTab().setCurrentPortType(Mockito.mock(ASTMCType.class));
-    ASTPort ast = ArcBasisMill.portBuilder().setName("p").build();
+    ASTPort ast = arcbasis.ArcBasisMill.portBuilder().setName("p").build();
     PortSymbol symbol = this.getSymTab().create_Port(ast);
     Assertions.assertEquals(ast.getName(), symbol.getName());
     Assertions.assertNotNull(symbol.getType());
@@ -169,9 +170,9 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @Test
   public void shouldVisitPort() {
-    ASTPort ast = ArcBasisMill.portBuilder().setName("p").build();
-    ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
-    this.getSymTab().setCurrentPortDirection(ArcBasisMill.portDirectionInBuilder().build());
+    ASTPort ast = arcbasis.ArcBasisMill.portBuilder().setName("p").build();
+    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
+    this.getSymTab().setCurrentPortDirection(arcbasis.ArcBasisMill.portDirectionInBuilder().build());
     this.getSymTab().setCurrentPortType(Mockito.mock(ASTMCType.class));
     this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);
@@ -183,9 +184,9 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
   @Test
   public void shouldVisitComponentInstantiation() {
     ASTMCObjectType type = Mockito.mock(ASTMCObjectType.class);
-    ASTComponentInstantiation ast = ArcBasisMill.componentInstantiationBuilder().setMCType(type)
+    ASTComponentInstantiation ast = arcbasis.ArcBasisMill.componentInstantiationBuilder().setMCType(type)
       .setComponentInstanceList("sub1", "sub2", "sub3").build();
-    ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
+    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);
     Assertions.assertEquals(scope, ast.getEnclosingScope());
@@ -197,7 +198,7 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @Test
   public void shouldEndVisitComponentInstantiation() {
-    ASTComponentInstantiation ast = ArcBasisMill.componentInstantiationBuilder()
+    ASTComponentInstantiation ast = arcbasis.ArcBasisMill.componentInstantiationBuilder()
       .setMCType(Mockito.mock(ASTMCObjectType.class)).setComponentInstanceList("sub1", "sub2", "sub3")
       .build();
     this.getSymTab().visit(ast);
@@ -207,7 +208,7 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @Test
   public void shouldCreateComponentInstance() {
-    ASTComponentInstance ast = ArcBasisMill.componentInstanceBuilder().setName("sub").build();
+    ASTComponentInstance ast = arcbasis.ArcBasisMill.componentInstanceBuilder().setName("sub").build();
     ASTMCObjectType type = Mockito.mock(ASTMCObjectType.class);
     this.getSymTab().setCurrentCompInstanceType(type);
     ComponentInstanceSymbol symbol = this.getSymTab().create_ComponentInstance(ast);
@@ -217,8 +218,8 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @Test
   public void shouldInitializeComponentInstance() {
-    ASTComponentInstance ast = ArcBasisMill.componentInstanceBuilder().setName("sub")
-      .setArcArguments(ArcBasisMill.arcArgumentsBuilder()
+    ASTComponentInstance ast = arcbasis.ArcBasisMill.componentInstanceBuilder().setName("sub")
+      .setArcArguments(arcbasis.ArcBasisMill.arcArgumentsBuilder()
         .setExpressionList(Arrays.asList(this.mockValues(3))).build()).build();
     ASTMCObjectType type = Mockito.mock(ASTMCObjectType.class);
     this.getSymTab().setCurrentCompInstanceType(type);
@@ -229,10 +230,10 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @Test
   public void shouldVisitComponentInstance() {
-    ASTComponentInstance ast = ArcBasisMill.componentInstanceBuilder().setName("sub")
-      .setArcArguments(ArcBasisMill.arcArgumentsBuilder()
+    ASTComponentInstance ast = arcbasis.ArcBasisMill.componentInstanceBuilder().setName("sub")
+      .setArcArguments(arcbasis.ArcBasisMill.arcArgumentsBuilder()
         .setExpressionList(Arrays.asList(this.mockValues(3))).build()).build();
-    ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
+    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     this.getSymTab().setCurrentCompInstanceType(Mockito.mock(ASTMCObjectType.class));
     this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);
@@ -247,9 +248,9 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
   public void shouldVisitFieldDeclaration() {
     ASTMCType type = Mockito.mock(ASTMCType.class);
     String[] names = new String[] { "var1", "var2", "var3" };
-    ASTArcFieldDeclaration ast = ArcBasisMill.arcFieldDeclarationBuilder()
+    ASTArcFieldDeclaration ast = arcbasis.ArcBasisMill.arcFieldDeclarationBuilder()
       .setMCType(type).setFieldList(names, this.mockValues(names.length)).build();
-    ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
+    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);
     Assertions.assertEquals(scope, ast.getEnclosingScope());
@@ -262,7 +263,7 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
   @Test
   public void shouldEndVisitFieldDeclaration() {
     String[] names = new String[] { "var1", "var2", "var3" };
-    ASTArcFieldDeclaration ast = ArcBasisMill.arcFieldDeclarationBuilder()
+    ASTArcFieldDeclaration ast = arcbasis.ArcBasisMill.arcFieldDeclarationBuilder()
       .setFieldList(names, this.mockValues(names.length))
       .setMCType(Mockito.mock(ASTMCType.class))
       .build();
@@ -273,7 +274,7 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @Test
   public void shouldCreateField() {
-    ASTArcField ast = ArcBasisMill.arcFieldBuilder().setName("var")
+    ASTArcField ast = arcbasis.ArcBasisMill.arcFieldBuilder().setName("var")
       .setValue(Mockito.mock(ASTExpression.class)).build();
     ASTMCType type = Mockito.mock(ASTMCType.class);
     this.getSymTab().setCurrentFieldType(type);
@@ -284,9 +285,9 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @Test
   public void shouldVisitField() {
-    ASTArcField ast = ArcBasisMill.arcFieldBuilder().setName("var")
+    ASTArcField ast = arcbasis.ArcBasisMill.arcFieldBuilder().setName("var")
       .setValue(Mockito.mock(ASTExpression.class)).build();
-    ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
+    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     this.getSymTab().setCurrentFieldType(Mockito.mock(ASTMCType.class));
     this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);

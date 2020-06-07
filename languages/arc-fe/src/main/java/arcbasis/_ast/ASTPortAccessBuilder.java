@@ -9,7 +9,7 @@ import com.google.common.base.Preconditions;
  */
 public class ASTPortAccessBuilder extends ASTPortAccessBuilderTOP {
 
-  protected ASTPortAccessBuilder() {
+  public ASTPortAccessBuilder() {
     super();
   }
 

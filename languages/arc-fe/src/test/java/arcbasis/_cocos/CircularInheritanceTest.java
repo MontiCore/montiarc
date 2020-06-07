@@ -4,9 +4,8 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisScope;
-import arcbasis._symboltable.ArcBasisSymTabMill;
+import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisSymbolTableCreator;
 import arcbasis.util.ArcError;
 import de.se_rwth.commons.logging.Log;
@@ -30,23 +29,23 @@ public class CircularInheritanceTest extends AbstractTest {
 
   @Test
   public void shouldFindCircularInheritance() {
-    ASTComponentType parent = ArcBasisMill.componentTypeBuilder().setName("A")
+    ASTComponentType parent = arcbasis.ArcBasisMill.componentTypeBuilder().setName("A")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(ArcBasisMill.componentHeadBuilder().setParent(
-        ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
-          ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("A")).build())
+      .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setParent(
+        arcbasis.ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
+          arcbasis.ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("A")).build())
           .build())
         .build())
       .build();
-    ASTComponentType child = ArcBasisMill.componentTypeBuilder().setName("B")
+    ASTComponentType child = arcbasis.ArcBasisMill.componentTypeBuilder().setName("B")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(ArcBasisMill.componentHeadBuilder().setParent(
-        ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
-          ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("A")).build())
+      .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setParent(
+        arcbasis.ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
+          arcbasis.ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("A")).build())
           .build())
         .build())
       .build();
-    ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
+    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(parent);
     symTab.handle(child);
@@ -58,19 +57,19 @@ public class CircularInheritanceTest extends AbstractTest {
 
   @Test
   public void shouldNotFindCircularInheritance() {
-    ASTComponentType parent = ArcBasisMill.componentTypeBuilder().setName("A")
+    ASTComponentType parent = arcbasis.ArcBasisMill.componentTypeBuilder().setName("A")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(Mockito.mock(ASTComponentHead.class))
       .build();
-    ASTComponentType child = ArcBasisMill.componentTypeBuilder().setName("B")
+    ASTComponentType child = arcbasis.ArcBasisMill.componentTypeBuilder().setName("B")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(ArcBasisMill.componentHeadBuilder().setParent(
-        ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
-          ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("A")).build())
+      .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setParent(
+        arcbasis.ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
+          arcbasis.ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("A")).build())
           .build())
         .build())
       .build();
-    ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
+    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(parent);
     symTab.handle(child);

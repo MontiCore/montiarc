@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
+import arcbasis.ArcBasisMill;
 import montiarc.AbstractTest;
 import arcbasis.util.ArcError;
 

@@ -1,10 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
+import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcFieldDeclaration;
-import arcbasis._ast.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisScope;
-import arcbasis._symboltable.ArcBasisSymTabMill;
 import arcbasis._symboltable.ArcBasisSymbolTableCreator;
 import arcbasis.util.ArcError;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -29,14 +28,14 @@ public class FieldTypeExistsTest extends AbstractTest {
 
   @Test
   public void shouldNotFindType() {
-    ASTMCQualifiedType type = ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
-      ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("Integer"))
+    ASTMCQualifiedType type = arcbasis.ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
+      arcbasis.ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("Integer"))
         .build())
       .build();
     String[] names = new String[] { "v1", "v2", "v3" };
-    ASTArcFieldDeclaration ast = ArcBasisMill.arcFieldDeclarationBuilder()
+    ASTArcFieldDeclaration ast = arcbasis.ArcBasisMill.arcFieldDeclarationBuilder()
       .setMCType(type).setFieldList(names, this.mockValues(names.length)).build();
-    ArcBasisScope scope = ArcBasisSymTabMill.arcBasisScopeBuilder().build();
+    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);
     FieldTypeExists coco = new FieldTypeExists();

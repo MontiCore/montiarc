@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.ArcBasisMill;
 import arcbasis.util.ArcError;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import montiarc.AbstractTest;
@@ -24,7 +25,7 @@ public class ComponentInstanceSymbolTest extends AbstractTest {
 
   @Test
   public void shouldAddArguments() {
-    ComponentInstanceSymbol symbol = ArcBasisSymTabMill.componentInstanceSymbolBuilder()
+    ComponentInstanceSymbol symbol = ArcBasisMill.componentInstanceSymbolBuilder()
       .setName("a").setType(mock(ComponentTypeSymbolLoader.class)).build();
     Assertions.assertEquals(symbol.getArguments().size(), 0);
     symbol.addArguments(Arrays.asList(mock(ASTExpression.class), mock(ASTExpression.class)));

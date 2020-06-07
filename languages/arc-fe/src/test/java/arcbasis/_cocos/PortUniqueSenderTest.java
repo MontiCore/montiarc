@@ -3,7 +3,7 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ArcBasisMill;
+import arcbasis.ArcBasisMill;
 import arcbasis.util.ArcError;
 import de.se_rwth.commons.logging.Log;
 import montiarc.AbstractTest;

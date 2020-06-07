@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.ArcBasisMill;
 import arcbasis.util.ArcError;
 import montiarc.AbstractTest;
 import org.junit.jupiter.api.Assertions;
@@ -40,9 +41,9 @@ public class ComponentInstanceSymbolBuilderTest extends AbstractTest {
   @Test
   public void shouldBuildWithExpectedType() {
     ComponentTypeSymbolLoader type =
-      ArcBasisSymTabMill.componentTypeSymbolLoaderBuilder().setName("Comp1").build();
+      ArcBasisMill.componentTypeSymbolLoaderBuilder().setName("Comp1").build();
     ComponentInstanceSymbol symbol =
-      ArcBasisSymTabMill.componentInstanceSymbolBuilder().setName("c").setType(type).build();
+      ArcBasisMill.componentInstanceSymbolBuilder().setName("c").setType(type).build();
     Assertions.assertEquals(symbol.type, type);
   }
 }
