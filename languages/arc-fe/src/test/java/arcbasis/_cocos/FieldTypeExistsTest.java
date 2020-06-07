@@ -34,12 +34,12 @@ public class FieldTypeExistsTest extends AbstractTest {
       .build();
     String[] names = new String[] { "v1", "v2", "v3" };
     ASTArcFieldDeclaration ast = arcbasis.ArcBasisMill.arcFieldDeclarationBuilder()
-      .setMCType(type).setFieldList(names, this.mockValues(names.length)).build();
+      .setMCType(type).setArcFieldList(names, this.mockValues(names.length)).build();
     ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);
     FieldTypeExists coco = new FieldTypeExists();
-    coco.check(ast.getField(0));
+    coco.check(ast.getArcField(0));
     this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
       new ArcError[] { ArcError.MISSING_TYPE_OF_FIELD });
   }

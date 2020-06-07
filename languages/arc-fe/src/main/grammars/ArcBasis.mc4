@@ -134,7 +134,7 @@ component grammar ArcBasis extends
   * @attribute variables A list of field identifier.
   */
   ArcFieldDeclaration implements ArcElement =
-    MCType field:(ArcField || ",")+ ";" ;
+    MCType (ArcField || ",")+ ";" ;
 
   /**
    * ASTArcField defines the field identifier.

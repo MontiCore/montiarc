@@ -31,7 +31,7 @@ public class FieldDeclarationBuilderTest extends AbstractTest {
   public void setUpBuilder() {
     this.builder = new ASTArcFieldDeclarationBuilder();
     this.builder.setMCType(Mockito.mock(ASTMCType.class))
-      .setFieldList(new String[] { "a", "b", "c" },
+      .setArcFieldList(new String[] { "a", "b", "c" },
         new ASTExpression[] { Mockito.mock(ASTExpression.class), Mockito.mock(ASTExpression.class),
           Mockito.mock(ASTExpression.class) });
   }
@@ -47,9 +47,9 @@ public class FieldDeclarationBuilderTest extends AbstractTest {
     List<String> expectedFieldList = this.getFieldList(this.builder);
     expectedFieldList.add(name);
     ASTArcFieldDeclaration ast =
-      this.builder.addField(name, Mockito.mock(ASTExpression.class)).build();
+      this.builder.addArcField(name, Mockito.mock(ASTExpression.class)).build();
     List<String> actualFieldList = this.getFieldList(ast);
-    Assertions.assertEquals(expectedFieldList.size(), ast.getFieldList().size());
+    Assertions.assertEquals(expectedFieldList.size(), ast.getArcFieldList().size());
     Assertions.assertEquals(expectedFieldList, actualFieldList);
   }
 
@@ -59,10 +59,10 @@ public class FieldDeclarationBuilderTest extends AbstractTest {
     List<String> expectedFieldList = this.getFieldList(this.builder);
     expectedFieldList.set(index, name);
     ASTArcFieldDeclaration ast =
-      this.builder.setField(index, name, Mockito.mock(ASTExpression.class)).build();
+      this.builder.setArcFieldList(index, name, Mockito.mock(ASTExpression.class)).build();
     List<String> actualFieldList = this.getFieldList(ast);
-    Assertions.assertEquals(ast.getField(index).getName(), name);
-    Assertions.assertEquals(expectedFieldList.size(), ast.getFieldList().size());
+    Assertions.assertEquals(ast.getArcField(index).getName(), name);
+    Assertions.assertEquals(expectedFieldList.size(), ast.getArcFieldList().size());
     Assertions.assertEquals(expectedFieldList, actualFieldList);
   }
 
@@ -72,10 +72,10 @@ public class FieldDeclarationBuilderTest extends AbstractTest {
     List<String> expectedFieldList = this.getFieldList(this.builder);
     expectedFieldList.add(index, field);
     ASTArcFieldDeclaration ast =
-      this.builder.addField(index, field, Mockito.mock(ASTExpression.class)).build();
+      this.builder.addArcField(index, field, Mockito.mock(ASTExpression.class)).build();
     List<String> actualFieldList = this.getFieldList(ast);
-    Assertions.assertEquals(ast.getField(index).getName(), field);
-    Assertions.assertEquals(expectedFieldList.size(), ast.getFieldList().size());
+    Assertions.assertEquals(ast.getArcField(index).getName(), field);
+    Assertions.assertEquals(expectedFieldList.size(), ast.getArcFieldList().size());
     Assertions.assertEquals(expectedFieldList, actualFieldList);
   }
 
@@ -88,9 +88,9 @@ public class FieldDeclarationBuilderTest extends AbstractTest {
   public void shouldSetGivenFields(String[] fields) {
     List<String> expectedFieldList = Arrays.asList(fields);
     ASTArcFieldDeclaration ast =
-      this.builder.setFieldList(fields, this.mockValues(fields.length)).build();
+      this.builder.setArcFieldList(fields, this.mockValues(fields.length)).build();
     List<String> actualFieldList = this.getFieldList(ast);
-    Assertions.assertEquals(expectedFieldList.size(), ast.getFieldList().size());
+    Assertions.assertEquals(expectedFieldList.size(), ast.getArcFieldList().size());
     Assertions.assertEquals(expectedFieldList, actualFieldList);
   }
 
@@ -100,9 +100,9 @@ public class FieldDeclarationBuilderTest extends AbstractTest {
     List<String> expectedFieldList = this.getFieldList(this.builder);
     expectedFieldList.addAll(Arrays.asList(fields));
     ASTArcFieldDeclaration ast =
-      this.builder.addAllFields(fields, this.mockValues(fields.length)).build();
+      this.builder.addAllArcFields(fields, this.mockValues(fields.length)).build();
     List<String> actualFieldList = this.getFieldList(ast);
-    Assertions.assertEquals(expectedFieldList.size(), ast.getFieldList().size());
+    Assertions.assertEquals(expectedFieldList.size(), ast.getArcFieldList().size());
     Assertions.assertEquals(expectedFieldList, actualFieldList);
   }
 
@@ -118,9 +118,9 @@ public class FieldDeclarationBuilderTest extends AbstractTest {
     List<String> expectedFieldList = this.getFieldList(this.builder);
     expectedFieldList.addAll(index, Arrays.asList(fields));
     ASTArcFieldDeclaration ast =
-      this.builder.addAllFields(index, fields, mockValues(fields.length)).build();
+      this.builder.addAllArcFields(index, fields, mockValues(fields.length)).build();
     List<String> actualFieldList = this.getFieldList(ast);
-    Assertions.assertEquals(expectedFieldList.size(), ast.getFieldList().size());
+    Assertions.assertEquals(expectedFieldList.size(), ast.getArcFieldList().size());
     Assertions.assertEquals(expectedFieldList, actualFieldList);
   }
 
@@ -131,12 +131,12 @@ public class FieldDeclarationBuilderTest extends AbstractTest {
   }
 
   protected List<String> getFieldList(ASTArcFieldDeclarationBuilder builder) {
-    return builder.getFieldList().stream().map(ASTArcField::getName)
+    return builder.getArcFieldList().stream().map(ASTArcField::getName)
       .collect(Collectors.toList());
   }
 
   protected List<String> getFieldList(ASTArcFieldDeclaration ast) {
-    return ast.getFieldList().stream().map(ASTArcField::getName).collect(Collectors.toList());
+    return ast.getArcFieldList().stream().map(ASTArcField::getName).collect(Collectors.toList());
   }
 
   protected ASTExpression[] mockValues(int length) {

@@ -32,12 +32,12 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
    * @return this builder
    * @see List#set(int, Object)
    */
-  public ASTArcFieldDeclarationBuilder setField(int index, String name, ASTExpression value) {
+  public ASTArcFieldDeclarationBuilder setArcFieldList(int index, String name, ASTExpression value) {
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkArgument(name != null);
     Preconditions.checkArgument(!name.contains("\\."));
     Preconditions.checkArgument(value != null);
-    this.setField(index, this.doCreateField(name, value));
+    this.setArcField(index, this.doCreateArcField(name, value));
     return this.realBuilder;
   }
 
@@ -50,9 +50,9 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
    * @param values initial values of the fields
    * @return this builder
    */
-  public ASTArcFieldDeclarationBuilder setFieldList(String[] names, ASTExpression[] values) {
+  public ASTArcFieldDeclarationBuilder setArcFieldList(String[] names, ASTExpression[] values) {
     Preconditions.checkNotNull(names);
-    this.setFieldList(this.doCreateFieldList(names, values));
+    this.setArcFieldList(this.doCreateArcFieldList(names, values));
     return this.realBuilder;
   }
 
@@ -66,10 +66,10 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
    * @return this builder
    * @see List#add(Object)
    */
-  public ASTArcFieldDeclarationBuilder addField(String name, ASTExpression value) {
+  public ASTArcFieldDeclarationBuilder addArcField(String name, ASTExpression value) {
     Preconditions.checkArgument(name != null);
     Preconditions.checkArgument(!name.contains("\\."));
-    this.addField(this.doCreateField(name, value));
+    this.addArcField(this.doCreateArcField(name, value));
     return this.realBuilder;
   }
 
@@ -83,13 +83,13 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
    * @return this builder
    * @see List#addAll(Collection)
    */
-  public ASTArcFieldDeclarationBuilder addAllFields(String[] names, ASTExpression[] values) {
+  public ASTArcFieldDeclarationBuilder addAllArcFields(String[] names, ASTExpression[] values) {
     Preconditions.checkArgument(names != null);
     Preconditions.checkArgument(!Arrays.asList(names).contains(null));
     Preconditions.checkArgument(values != null);
     Preconditions.checkArgument(!Arrays.asList(values).contains(null));
     Preconditions.checkArgument(names.length == values.length);
-    this.addAllFields(this.doCreateFieldList(names, values));
+    this.addAllArcFields(this.doCreateArcFieldList(names, values));
     return this.realBuilder;
   }
 
@@ -105,11 +105,11 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
    * @return this builder
    * @see List#add(int, Object)
    */
-  public ASTArcFieldDeclarationBuilder addField(int index, String name, ASTExpression value) {
+  public ASTArcFieldDeclarationBuilder addArcField(int index, String name, ASTExpression value) {
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkArgument(name != null);
     Preconditions.checkArgument(!name.contains("\\."));
-    this.addField(index, this.doCreateField(name, value));
+    this.addArcField(index, this.doCreateArcField(name, value));
     return this.realBuilder;
   }
 
@@ -125,25 +125,25 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
    * @return this builder
    * @see List#addAll(int, Collection)
    */
-  public ASTArcFieldDeclarationBuilder addAllFields(int index, String[] names,
+  public ASTArcFieldDeclarationBuilder addAllArcFields(int index, String[] names,
     ASTExpression[] values) {
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkArgument(names != null);
     Preconditions.checkArgument(!Arrays.asList(names).contains(null));
     Preconditions.checkArgument(values != null);
     Preconditions.checkArgument(!Arrays.asList(values).contains(null));
-    this.addAllFields(index, this.doCreateFieldList(names, values));
+    this.addAllArcFields(index, this.doCreateArcFieldList(names, values));
     return this.realBuilder;
   }
 
-  protected ASTArcField doCreateField(String name, ASTExpression value) {
+  protected ASTArcField doCreateArcField(String name, ASTExpression value) {
     return ArcBasisMill.arcFieldBuilder().setName(name).setValue(value).build();
   }
 
-  protected List<ASTArcField> doCreateFieldList(String[] names, ASTExpression[] values) {
+  protected List<ASTArcField> doCreateArcFieldList(String[] names, ASTExpression[] values) {
     List<ASTArcField> fieldList = new ArrayList<>();
     for (int i = 0; i < names.length; i++) {
-      fieldList.add(this.doCreateField(names[i], values[i]));
+      fieldList.add(this.doCreateArcField(names[i], values[i]));
     }
     return fieldList;
   }

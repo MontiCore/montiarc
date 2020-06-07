@@ -80,7 +80,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
   public List<ASTArcField> getFields() {
     return this.getFieldDeclarations()
       .stream()
-      .map(ASTArcFieldDeclaration::getFieldList)
+      .map(ASTArcFieldDeclaration::getArcFieldList)
       .flatMap(Collection::stream)
       .collect(Collectors.toList());
   }
