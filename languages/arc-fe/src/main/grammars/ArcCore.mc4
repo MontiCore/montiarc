@@ -1,0 +1,27 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+/* Alpha-version: This is intended to become a MontiCore stable grammar. */
+
+/**
+ * This grammar combines the core elements of component & connector
+ * architecture descriptions combining the basic structural elements, whith
+ * elements for simplified definitions and generic component descriptions.
+ *
+ * MontiArc's generic types are similar to Java generics and thus have a
+ * similar syntactic shabe, but they should not be mixed up.
+ *
+ * This grammar is part of a hierarchy of architectural definitions, namely
+ * * MontiArc.mc4 consisting of
+ * * --  ArcBasis.mc4
+ * * --  -- ComfortableArc.mc4
+ * * --  -- GenericArc.mc4
+ * * --  -- ArcCore.mc4
+ *
+ */
+
+component grammar ArcCore extends
+             ArcBasis,
+             ComfortableArc,
+             GenericArc       {
+
+}

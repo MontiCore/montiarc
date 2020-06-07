@@ -12,6 +12,7 @@
  * * --  ArcBasis.mc4
  * * --  -- ComfortableArc.mc4
  * * --  -- GenericArc.mc4
+ * * --  -- ArcCore.mc4
  *
  * The grammar relies on basic expressions, literals and types only.
  * All these are meant to be extended.

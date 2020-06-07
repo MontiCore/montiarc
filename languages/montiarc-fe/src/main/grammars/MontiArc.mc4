@@ -13,6 +13,7 @@
  * * --  ArcBasis.mc4
  * * --  -- ComfortableArc.mc4
  * * --  -- GenericArc.mc4
+ * * --  -- ArcCore.mc4
  * 
  * The basic loopholes for expressions, literals and types are filled with
  * concrete grammars, which renders MontiArc to become a complete language.
@@ -25,9 +26,7 @@ grammar MontiArc extends
             de.monticore.types.MCSimpleGenericTypes,
             de.monticore.statements.MCCommonStatements,
             de.monticore.statements.MCVarDeclarationStatements,
-            ArcBasis,
-            ComfortableArc,
-            GenericArc                                           {
+            ArcCore                                             {
 
   /** ASTMACompilationUnit represents the entire content of a MontiArc model
    * @attribute package The package declaration of the component model
