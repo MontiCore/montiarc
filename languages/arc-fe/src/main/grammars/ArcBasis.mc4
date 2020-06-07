@@ -39,8 +39,8 @@ component grammar ArcBasis extends
    *
    * @attribute name The type name of this component.
    * @attribute head Defines configuration options and extensions of this component.
-   * @attribute instances List of optional instance names used to create.
-   * of this component type. This is only for inner components.
+   * @attribute componentInstances List of identifiers used to create instances
+   * of this component type. Only available for inner components.
    * @attribute body Contains the architectural elements of this component.
    */
   symbol scope ComponentType implements ArcElement =
@@ -55,11 +55,9 @@ component grammar ArcBasis extends
    * be used as prt types in the component, definitions of configuration parameters
    * that ma may be used to configure the component, and this component's parent.
    *
-   * @attribute typeParameters A list of generic type parameters that may be used 
-   * to configure types in the component.
-   * @attribute parameters A list of parameters that define configuration options
-   * of the component.
-   * @attribute parentComponent The type of the parent component.
+   * @attribute arcParamers A list of parameters that define the configuration
+   * options of the component.
+   * @attribute parent The type of the parent component.
    */
   ComponentHead =
     ( "(" (ArcParameter || ",")+ ")" )?
@@ -71,9 +69,9 @@ component grammar ArcBasis extends
    * component type.
    *
    * @attribute type The type of the parameter.
-   * @attribute arcParameter The identifier of the parameter.
-   * @attribute defaultValue Default value used for the parameter if no
-   * argument is given during instantiation.
+   * @attribute name The identifier of the parameter.
+   * @attribute value Default value used for the parameter if no argument is
+   * given during instantiation.
    */
   ArcParameter implements Field =
     MCType Name ("=" value:Expression)?
@@ -90,7 +88,7 @@ component grammar ArcBasis extends
    * ASTComponentInterface defines the interface of the component in terms of
    * in- and outgoing ports.
    *
-   * @attribute ports A list of port declarations contained in this interface.
+   * @attribute portDeclarations A list of port declarations.
    */
   ComponentInterface implements ArcElement =
     key("port") (PortDeclaration || ",")+ ";"
@@ -100,9 +98,9 @@ component grammar ArcBasis extends
    * ASTPortDeclaration declares one or more ports by specifying their
    * direction and type.
    *
-   * @attribute direction The direction of the port. Can be in- or outgoing.
+   * @attribute portDirection The direction of the port. Can be in- or outgoing.
    * @attribute type The type of the port.
-   * @attribute ports A list of declared ports.
+   * @attribute ports A list of declared port identifiers.
    */
   PortDeclaration =
     PortDirection MCType (Port || ",")+
@@ -131,7 +129,7 @@ component grammar ArcBasis extends
   * specifying their type and identifier.
   *
   * @attribute type The type of the component field.
-  * @attribute variables A list of field identifier.
+  * @attribute fields A list of field identifier.
   */
   ArcFieldDeclaration implements ArcElement =
     MCType (ArcField || ",")+ ";" ;
@@ -149,7 +147,7 @@ component grammar ArcBasis extends
    * used in topology spanned by the component. This way the hierarchical
    * structure of decomposed components is defined.
    *
-   * @attribute  The mcType of the instantiated component.
+   * @attribute type The type of the component instance.
    * @attribute componentInstance A list of instantiated components.
    */
   ComponentInstantiation implements ArcElement =
@@ -161,10 +159,15 @@ component grammar ArcBasis extends
    * as an extension point for other identifier kinds of component instances.
    *
    * @attribute name The name of the component instance.
-   * @attribute arguments A list of configuration arguments.
+   * @attribute arcArguments A list of configuration arguments.
    */
   symbol ComponentInstance = Name ArcArguments?;
 
+  /**
+   * ASTArcArguments represents a list of configuration arguments defined.
+   *
+   * @attribute expressions A list of expressions as argument values.
+   */
   ArcArguments = "(" (Expression || ",")+ ")" ;
 
   /**
