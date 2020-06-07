@@ -148,8 +148,8 @@ component grammar ArcBasis extends
    * used in topology spanned by the component. This way the hierarchical
    * structure of decomposed components is defined.
    *
-   * @attribute type The type of the instantiated component.
-   * @attribute instances A list of instantiated components.
+   * @attribute  The mcType of the instantiated component.
+   * @attribute componentInstance A list of instantiated components.
    */
   ComponentInstantiation implements ArcElement =
     MCType (ComponentInstance || ",")* ";"
@@ -166,17 +166,22 @@ component grammar ArcBasis extends
 
   ArcArguments = "(" (Expression || ",")+ ")" ;
 
-
   /**
    * ASTConnector connects one source port with one or more target ports.
    *
-   * @attribute source The source port or component instance name.
-   * @attribute targets A list of target ports or component instance names.
+   * @attribute source The qualified identifier of the source port.
+   * @attribute targets A list of the qualified identifiers of the target ports.
    */
   Connector implements ArcElement =
     source:PortAccess "->" target:(PortAccess || ",")+ ";"
   ;
 
+  /**
+   * ASTPortAccess refers to a port via its qualified identifier.
+   *
+   * @attribute component The name of the component the port belongs to.
+   * @attribute port the name of the port.
+   */
   PortAccess = (component:Name@ComponentInstance ".")? port:Name@Port ;
 
 }

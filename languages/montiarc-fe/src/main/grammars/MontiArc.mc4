@@ -4,23 +4,18 @@
 
 /**
  * MontiArc is an architecture and behavior modeling language and framework
- * that provides an platform independent structure and behavior
- * modeling language with an extensible code generation framework.
- * MontiArc covers components their ports, connectors between
- * components and
- * embedded statecharts for component behavior description.
+ * that provides an platform independent structure and behavior modeling
+ * language with an extensible code generation framework.
+ * MontiArc covers components their ports, and connectors between components.
  *
  * This grammar is connects a set of architectural definitions, namely
  * * MontiArc.mc4 consisting of
  * * --  ArcBasis.mc4
  * * --  -- ComfortableArc.mc4
  * * --  -- GenericArc.mc4
- * and also behavior:
- * * --  StatechartBasis.mc4
  * 
- * The basc loopholes for expressions, literals and types 
- * are filled with concrete grammars, which renders MontiArc to become a
- * complete language.
+ * The basic loopholes for expressions, literals and types are filled with
+ * concrete grammars, which renders MontiArc to become a complete language.
  */
  
 grammar MontiArc extends 
@@ -29,7 +24,7 @@ grammar MontiArc extends
             de.monticore.expressions.AssignmentExpressions,
             de.monticore.types.MCSimpleGenericTypes,
             de.monticore.statements.MCCommonStatements,
-            //de.monticore.statements.MCVarDeclarationStatements,
+            de.monticore.statements.MCVarDeclarationStatements,
             ArcBasis,
             ComfortableArc,
             GenericArc                                           {
@@ -55,15 +50,11 @@ grammar MontiArc extends
    * in all other variants, there is a globally availble clock that 
    * measures time slices of euqal distance (see Focus for the
    * formal theoretical underpinning)
-   * TODO: describe other alternatives (or remove them?)
    *  timing instant: means that each input is processed immediately
    *            and the result is produced to the out ports directly
-   *  timing delayed: ...
-   *  ...
-   *  
-   *  
-   *  
-   *  
+   *  timing sync: means that each in each time slice exactly one input
+   *            per port is processed and one output pre port is produced.
+   *
    */
   ArcTiming implements ArcElement  =
     key("timing") ArcTimeMode
@@ -73,11 +64,7 @@ grammar MontiArc extends
 
   ArcInstant implements ArcTimeMode = key("instant");
 
-  ArcDelayed implements ArcTimeMode = key("delayed");
-
   ArcSync implements ArcTimeMode = key("sync");
-
-  ArcCausalSync implements ArcTimeMode = key("causalsync");
 
   ArcUntimed implements ArcTimeMode = key("untimed");
   
