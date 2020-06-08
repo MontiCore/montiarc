@@ -49,39 +49,36 @@ handcrafted code. For composed components, the behavior emerges from the
 behavior of their subcomponents.
 
 ```
-component InteriorLight {
-  port in Boolean lightSignal,
-       in Boolean doorSignal
-       out OnOff status;
-  ORGate or;
-  lightSignal -> or.a;
-  doorSignal -> or.b;
-  or.c -> cntr.signal;
-  component LightController cntr {
-    port in OnOff signal,
-         out OnOff status;
-    statechart {
-      initial state Off / {status = OFF};
-      state On;
-      Off -> On [ signal == true ] / {status = ON}
-      On -> Off [ signal == false ] / {status = OFF}
-    }
-  }
-  cntr.status -> status;
+component LightController {
+  port in Boolean switchStatus, alarmStatus,
+       in DoorAngle doorStatus,
+       out OnOff onOffCmd;
+  
+  Arbiter arb [cmd -> onOffCmd;]
+  AlarmCheck ac(5) [warn -> arb.warn;]
+  DoorEval eval; 
+  eval.offReq -> arb.offReq;
+  switchStatus -> arb.switchStatus;
+  switchStatus -> eval.switchStatus;
+  doorStatus -> eval.doorStatus;
+  alarmStatus -> ac.alarm;
 }
-```
-Example component of a car `InteriorLight` that turns on if a user manually 
-presses a light switch or the car door opens. The  `InteriorLight` receives 
-information from a sensor whether the door is opened or closed via the
-`doorSignal` port of type `Boolean`. Furthermore, it receives information via
-the `lightSignal` port, whether the contact of the light switch is currently 
-closed. These signals are sent to an `ORGate` which evaluates to `true` if 
-either of the incoming signals forwarded by the `InteriorLight`is `true`.
-Via the `c` port of the `ORGate` this evaluation is then sent to the `signal`
-port of the `cntr` component of type `LightController`. This component turns 
-on the light, and on state switches informs about the light status switch via
-its `status` port, which forwards to the `status` port of the `InteriorLight`.
 
+```
+Example component of a car interior light controller `LightController` 
+that turns on if a user manually presses a light switch or the car door opens.
+The `LightController` receives information from a sensor how far the door is 
+opened or if it is closed via the `doorStatus` port of type `DoorAngle`. 
+Furthermore, it receives information via the `switchStatus` port, whether 
+the contact of the light switch is currently closed. These signals are sent 
+to the component `eval` of type `DoorEval` which evaluates whether the light
+should be turned on or off based on the current switch and door status. 
+Based on this evaluation, the `eval` component may send an off requeset via
+its `offReq` port to the component `arb` of type `Arbiter`. The arbiter also
+receives warings if an alarm is triggered. Based on this, the arbiter 
+evaluates whether the light should be turned on or off and sends a
+corresponding command via its `cmd` port, which is then forwarded by
+the `LightController` via its `onOffCmd` port.
 
 ## Symboltable
 - De-/Serialization functionality for the symbol table 
