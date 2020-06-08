@@ -1,0 +1,36 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+/* Alpha-version: This is intended to become a MontiCore stable grammar. */
+
+component grammar IfThenElse extends ArcBasis {
+
+    /**
+     * Executionblocks contain If and Else Statements that
+     * control the behavior combined with handwritten code
+     * functions.
+     */
+    ExecutionBlock implements ArcElement =
+      "behavior" "{"
+        ExecutionIfStatement
+        ExecutionElseIfStatement*
+        ExecutionElseStatement
+      "}";
+
+    /**
+     * IfStatements specify which function in the
+     * handwritten implementation should be executed depending
+     * on the presence on messages on incoming ports and
+     * values of current messages.
+     */
+    ExecutionIfStatement =
+        key("if") (guard:Expression)
+        ((method:Name "()" )? | (PortValuation || ",")+) ";";
+
+    ExecutionElseIfStatement =
+      key("else") ExecutionIfStatement;
+
+    ExecutionElseStatement =
+        key("else") ((method:Name "()" )? | (PortValuation || ",")+) ";";
+
+    PortValuation = (port:Name@Port "=" value:Expression);
+}

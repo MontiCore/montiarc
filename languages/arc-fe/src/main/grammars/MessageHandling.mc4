@@ -1,0 +1,21 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+/* Alpha-version: This is intended to become a MontiCore stable grammar. */
+
+component grammar MessageHandling extends ArcBasis {
+
+  /**
+   * BatchStatements define which ports should be
+   * handled in batch processing mode instead of
+   * handling only one incoming message per tick
+   */
+  BatchStatement implements ArcElement =
+      key("batch") batchPorts:(Name || ",")+ ";";
+
+  /**
+   * SyncStatements allow the specification of groups of ports
+   * that should only be handled together
+   */
+  SyncStatement implements ArcElement =
+      key("sync") syncedPort:(Name || ",")+ ";";
+}

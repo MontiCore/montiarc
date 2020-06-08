@@ -1,0 +1,11 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+/* Alpha-version: This is intended to become a MontiCore stable grammar. */
+
+
+component grammar AssumptionGuarantee extends ArcBasis {
+
+    Assumption implements ArcElement = "assume" ":" guard:Expression ";";
+
+    Guarantee implements ArcElement = "guarantee" ":" guard:Expression ";";
+}
