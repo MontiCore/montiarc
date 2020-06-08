@@ -88,8 +88,6 @@ the `LightController` via its `onOffCmd` port.
 
 ## Symbol kinds used by the MontiArc language (importable):
 
-TODO @DS: check the following sections
-
 The MontiArc language imports the following symbols kinds:
 - `FieldSymbol` The symbol of a component field or configuration parameter.
                         Kind is imported, symbols are defined locally only.
@@ -127,19 +125,20 @@ and the *component types* already syntactically disjoint. They cannot be mixed u
   are not imported.
 
 ## Symbols exported by MontiArc models:
-- **`ComponentTypeSymbol`** each MontiArc model provides at least one newly defined
+- **`ComponentTypeSymbol`**: Each MontiArc model provides at least one newly defined
   and externally usable component type.
   If further (inner) component types are defined, then all these component types are
   exported as well (MontiArc model is usable as library). 
 - Inner component types need to be qualified if used outside the defining artifact. 
-- **`PortSymbol`** s are exported as elements of the component types and
+- **`PortSymbol`**: These are exported as elements of the component types and
   only accessible through their components.
-- **`FieldSymbol`**s and **`TypeVarSymbols`** are used as parameters 
-  resp. type parameters of their component types as well.
+- **`FieldSymbol`** and **`TypeVarSymbols`**: These are used as parameters 
+  resp. type parameters of their component types and expored as elements 
+  of the component types as well.
 - Fields and inner component instances are not available outside a component.
   Components encapsulate these elements and only make them accessible for 
   communication through their port interfaces.
-- The exported symbols are available in the symbol table  `*.masym`.
+- The exported symbols are available in the symbol table `*.masym`.
 
 
 <img src="pics/MontiArc.SymbolTable.PNG" alt="drawing" height="400px"/>
