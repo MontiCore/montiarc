@@ -19,7 +19,7 @@
  *
  */
 
-component grammar V extends
+component grammar ArcCore extends
              ArcBasis,
              ComfortableArc,
              GenericArc       {
