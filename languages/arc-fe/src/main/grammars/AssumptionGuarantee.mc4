@@ -3,7 +3,7 @@
 /* Alpha-version: This is intended to become a MontiCore stable grammar. */
 
 /**
- * TODO: describe
+ * TODO^BR: describe
  *
  * This grammar is part of the MontiArc langauge definition,
  * which are organized according to this extension hierachy:
@@ -28,7 +28,10 @@
 
 component grammar AssumptionGuarantee extends ArcBasis {
 
+// TODO ":" rauslassen, der ist eher unnötig.
     Assumption implements ArcElement = "assume" ":" guard:Expression ";";
+
+// TODO ":" rauslassen, der ist eher unnötig.
 
     Guarantee implements ArcElement = "guarantee" ":" guard:Expression ";";
 }

@@ -1,9 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-/* Alpha-version: This is intended to become a MontiCore stable grammar. */
 
 /**
- * TODO: describe
+ * TODO^BR: describe
  *
  * This grammar is part of the MontiArc langauge definition,
  * which are organized according to this extension hierachy:
@@ -28,6 +27,8 @@
 
 component grammar MessageHandling extends ArcBasis {
 
+// TODO^BR: also hier möchte ich gerne ggf. Einspruch einlegen.
+// da herrscht Diskussionsbedarf.
   /**
    * BatchStatements define which ports should be
    * handled in batch processing mode instead of

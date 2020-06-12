@@ -73,12 +73,13 @@ component grammar ArcBasis extends
    * @attribute parent The type of the parent component.
    */
 
-/* TODO: ganz frisch reingekommen:  Arguments (aus ExpressionBasis)
+/* TODO^BR: ganz frisch reingekommen:  Arguments (aus ExpressionBasis)
 Das hier könnte sich vereinfachen zu:
 (allerdings wahrscheinlich nicht, denn Sie wollen default werte fuer Parameter erlauben)
    ComponentHead =
     Arguments?
     ( "extends" parent:MCType)?
+    
 
 Ausserdem: "*" statt "+" könnte auch sinnvoll sein?
 */
@@ -96,7 +97,7 @@ Ausserdem: "*" statt "+" könnte auch sinnvoll sein?
    * @attribute value Default value used for the parameter if no argument is
    * given during instantiation.
    */
-// TODO: auch ganz frisch: Variable statt Field (ist ein Supertype der ausreichen sollte);    
+// TODO^BR: auch ganz frisch: Variable statt Field (ist ein Supertype der ausreichen sollte);    
 // "value" ist wenig aussagekräftig. wäre "default" besser? (Sonst weglassen?)
   ArcParameter implements Field =
     MCType Name ("=" value:Expression)?
@@ -194,7 +195,7 @@ Ausserdem: "*" statt "+" könnte auch sinnvoll sein?
    *
    * @attribute expressions A list of expressions as argument values.
    */
-// TODO: das hier ist genau identisch zu Arguments: sollte man also ersetzen
+// TODO^BR: das hier ist genau identisch zu Arguments: sollte man also ersetzen
   ArcArguments = "(" (Expression || ",")+ ")" ;
 
   /**

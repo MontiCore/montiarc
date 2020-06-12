@@ -1,9 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-/* Alpha-version: This is intended to become a MontiCore stable grammar. */
 
 /**
- * TODO: describe
+ * TODO^BR: describe
  *
  * This grammar is part of the MontiArc langauge definition,
  * which are organized according to this extension hierachy:
@@ -35,8 +34,14 @@ component grammar ValueRanges extends ArcBasis, de.monticore.literals.MCCommonLi
         (Port || ",")+
     ;
 
+// TODO^BR: würde ich gerne verstehen, was ein default bei einem Port bedeutet
     PortWithDefault extends Port = Name ("=" default:Expression)?;
 
+// TODO^BR: das würde ich gerne detaillierter besprechen.
+// INteressant ist das, aber man muss das wohl etwas allgemeingültiger adressieren
+// ICh würde auch gerne die Semantik verstehen 
+// * Auswirkungen auf das Typsystem, 
+// * Was passiert bei Fehlern
     // list of single (allowed) values
     MTValueList  implements MTAllowedValues =
       (Expression | MTValueRange)
@@ -49,6 +54,10 @@ component grammar ValueRanges extends ArcBasis, de.monticore.literals.MCCommonLi
       ":" upperBound:Expression
     ;
 
+// TODO^BR: Gilt das für String-Argumente oder allgemein?
     // RegEx to which value has to conform
     MTValueFormat implements MTAllowedValues = "format" ":" format:StringLiteral;
+    
+// TODO^BR: Sollte eigentlich auch die Reihenfolge der erlaubten ankommenden 
+// Nachrichten betrachtbar sein?
 }
