@@ -1,4 +1,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
+
+<!-- Alpha-version: This is intended to become a MontiCore stable explanation. -->
+
 # MontiArc - Language for Modelling Architecture
 
 MontiArc is an architecture modeling language and framework
