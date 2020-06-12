@@ -2,6 +2,30 @@
 
 /* Alpha-version: This is intended to become a MontiCore stable grammar. */
 
+/**
+ * TODO: describe
+ *
+ * This grammar is part of the MontiArc langauge definition,
+ * which are organized according to this extension hierachy:
+ * * ArcBasis.mc4
+ * * -- ComfortableArc.mc4
+ * * -- GenericArc.mc4
+ * * -- AssumptionGuarantee.mc4
+ * * -- IfThenElse.mc4
+ * * -- MessageHandling.mc4
+ * * -- ValueRanges.mc4
+ *
+ * * ArcCore.mc4 composes
+ *   + ArcBasis.mc4 + ComfortableArc.mc4 + GenericArc.mc4
+ *   and builds the core of architectural modelling
+ *   (still without concrete expressions, literals, etc.)
+ *
+ * Furthermore MontiArc.mc4 extends Arc.mc4 to a complete
+ * language, with Expressions, Literals, etc. defined
+ * * ArcCore.mc4
+ * * -- MontiArc.mc4
+ */
+
 component grammar ValueRanges extends ArcBasis, de.monticore.literals.MCCommonLiterals {
     interface MTAllowedValues;
 

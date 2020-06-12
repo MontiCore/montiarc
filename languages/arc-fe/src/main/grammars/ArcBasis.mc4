@@ -1,18 +1,31 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-/* Alpha-version: This is intended to become a MontiCore stable grammar. */
+/* Beta-version: This is intended to become a MontiCore stable grammar. */
 
 /**
  * This grammar defines the basic structural elements of component & connector
  * architecture descriptions in form of component models. The grammar contains
  * definitions for components, ports, and connectors.
  *
- * This grammar is part of a hierarchy of architectural definitions, namely
- * * MontiArc.mc4 consisting of
- * * --  ArcBasis.mc4
- * * --  -- ComfortableArc.mc4
- * * --  -- GenericArc.mc4
- * * --  -- ArcCore.mc4
+ * This grammar is part of the MontiArc langauge definition,
+ * which are organized according to this extension hierachy:
+ * * ArcBasis.mc4
+ * * -- ComfortableArc.mc4
+ * * -- GenericArc.mc4
+ * * -- AssumptionGuarantee.mc4
+ * * -- IfThenElse.mc4
+ * * -- MessageHandling.mc4
+ * * -- ValueRanges.mc4
+ *
+ * * ArcCore.mc4 composes
+ *   + ArcBasis.mc4 + ComfortableArc.mc4 + GenericArc.mc4
+ *   and builds the core of architectural modelling
+ *   (still without concrete expressions, literals, etc.)
+ *
+ * Furthermore MontiArc.mc4 extends Arc.mc4 to a complete
+ * language, with Expressions, Literals, etc. defined
+ * * ArcCore.mc4
+ * * -- MontiArc.mc4
  *
  * The grammar relies on basic expressions, literals and types only.
  * All these are meant to be extended.
@@ -59,6 +72,16 @@ component grammar ArcBasis extends
    * options of the component.
    * @attribute parent The type of the parent component.
    */
+
+/* TODO: ganz frisch reingekommen:  Arguments (aus ExpressionBasis)
+Das hier könnte sich vereinfachen zu:
+(allerdings wahrscheinlich nicht, denn Sie wollen default werte fuer Parameter erlauben)
+   ComponentHead =
+    Arguments?
+    ( "extends" parent:MCType)?
+
+Ausserdem: "*" statt "+" könnte auch sinnvoll sein?
+*/
   ComponentHead =
     ( "(" (ArcParameter || ",")+ ")" )?
     ( "extends" parent:MCType)?
@@ -73,6 +96,8 @@ component grammar ArcBasis extends
    * @attribute value Default value used for the parameter if no argument is
    * given during instantiation.
    */
+// TODO: auch ganz frisch: Variable statt Field (ist ein Supertype der ausreichen sollte);    
+// "value" ist wenig aussagekräftig. wäre "default" besser? (Sonst weglassen?)
   ArcParameter implements Field =
     MCType Name ("=" value:Expression)?
   ;
@@ -140,6 +165,7 @@ component grammar ArcBasis extends
    * @attribute name The name of the field.
    * @attribute value The initialization value of the field.
    */
+// TODO "value" weglassen, oder besser "initial" nennen? (weil hier ist es wohl kein default?)
   ArcField implements Field = Name "=" value:Expression;
 
   /**
@@ -168,6 +194,7 @@ component grammar ArcBasis extends
    *
    * @attribute expressions A list of expressions as argument values.
    */
+// TODO: das hier ist genau identisch zu Arguments: sollte man also ersetzen
   ArcArguments = "(" (Expression || ",")+ ")" ;
 
   /**

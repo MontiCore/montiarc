@@ -1,22 +1,42 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-/* Alpha-version: This is intended to become a MontiCore stable grammar. */
+/* This is a MontiCore stable grammar.
+ * Adaptations -- if any -- are conservative. */
 
 /**
  * MontiArc is an architecture and behavior modeling language and framework
- * that provides an platform independent structure and behavior modeling
+ * that provides a platform independent structure and behavior modeling
  * language with an extensible code generation framework.
  * MontiArc covers components their ports, and connectors between components.
  *
- * This grammar is connects a set of architectural definitions, namely
- * * MontiArc.mc4 consisting of
- * * --  ArcBasis.mc4
- * * --  -- ComfortableArc.mc4
- * * --  -- GenericArc.mc4
- * * --  -- ArcCore.mc4
+ * Concrete sets of expressions, literals and types are defined using
+ * the standards available from the MontiCore library,
+ * which renders MontiArc to be a complete language.
+ *
+ * MontiCore also adds the possibilitiy to define a concrete form
+ * of timing, namely instant, sync and untimed.
+ * See e.g. Focus (Broy/Stoelen 2001) for the underlying theory.
+ *
+ * This grammar is part of the MontiArc langauge definition,
+ * which are organized according to this extension hierachy:
+ * * ArcBasis.mc4
+ * * -- ComfortableArc.mc4
+ * * -- GenericArc.mc4
+ * * -- AssumptionGuarantee.mc4
+ * * -- IfThenElse.mc4
+ * * -- MessageHandling.mc4
+ * * -- ValueRanges.mc4
+ *
+ * * ArcCore.mc4 composes
+ *   + ArcBasis.mc4 + ComfortableArc.mc4 + GenericArc.mc4
+ *   and builds the core of architectural modelling
+ *   (still without concrete expressions, literals, etc.)
+ *
+ * Furthermore MontiArc.mc4 extends Arc.mc4 to a complete
+ * language, with Expressions, Literals, etc. defined
+ * * ArcCore.mc4
+ * * -- MontiArc.mc4
  * 
- * The basic loopholes for expressions, literals and types are filled with
- * concrete grammars, which renders MontiArc to become a complete language.
  */
  
 grammar MontiArc extends 
@@ -42,18 +62,28 @@ grammar MontiArc extends
 
   /**
    * ASTArcTiming sets the timing of a component.
-   *  timing untimed: means that there is no explicit timing available;
-   *            instead messages are processed on an event driven basis
-   *            (upon arrival; as usual: certain non-deterministic 
-   *             behavior may occur)
-   * in all other variants, there is a globally availble clock that 
-   * measures time slices of euqal distance (see Focus for the
-   * formal theoretical underpinning)
-   *  timing instant: means that each input is processed immediately
-   *            and the result is produced to the out ports directly
-   *  timing sync: means that each in each time slice exactly one input
-   *            per port is processed and one output pre port is produced.
+   * * timing untimed: means that there is no explicit timing available;
+   *          instead messages are processed on an event driven basis
+   *          upon arrival; as usual: certain non-deterministic 
+   *          effects may occur.
    *
+   * In all other variants, there is a globally availble clock that 
+   * measures time slices of euqal distance 
+   * (see Focus (Broy/Stoelen 2001) for the formal theoretical underpinning)
+   *
+   *  timing instant: means that each input is processed immediately
+   *         and the result is produced to the out ports directly.
+   *  timing sync: means that each in each time slice exactly one input
+   *         per port is processed and one output pre port is produced.
+   *
+   * Please note that the communication paradigms "instant" and "sync" 
+   * as defined here do not introduce any delay. Delay is assumed to
+   * happen in components, e.g. in strongly causal components, in order
+   * to allow feedback loops.
+   * (This however is mainly a problem in simulation, not in an
+   *  ordinary code generation.)
+   * 
+   * Therefore, the ArcTiming is defined in an extensble form.
    */
   ArcTiming implements ArcElement  =
     key("timing") ArcTimeMode
