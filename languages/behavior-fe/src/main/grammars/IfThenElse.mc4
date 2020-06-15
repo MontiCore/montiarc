@@ -1,6 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-
 /**
  * TODO^BR: describe
  *
@@ -48,21 +47,15 @@ component grammar IfThenElse extends ArcBasis {
      * on the presence on messages on incoming ports and
      * values of current messages.
      */
-// TODO^BR: key bei if, then und else unnoetig. (die sind genügend allgemeingültig)
-/* TODO^BR: halten wir das nicht für besser: 
     ExecutionIfStatement =
-        "if" "(" guard:Expression ")"
-        ((method:Name "()" )? | (PortValuation || ",")+) ";";
-*/
-    ExecutionIfStatement =
-        key("if") (guard:Expression)
+        "if" (guard:Expression)
         ((method:Name "()" )? | (PortValuation || ",")+) ";";
 
     ExecutionElseIfStatement =
-      key("else") ExecutionIfStatement;
+      "else" ExecutionIfStatement;
 
     ExecutionElseStatement =
-        key("else") ((method:Name "()" )? | (PortValuation || ",")+) ";";
+        "else" ((method:Name "()" )? | (PortValuation || ",")+) ";";
 
     PortValuation = (port:Name@Port "=" value:Expression);
 

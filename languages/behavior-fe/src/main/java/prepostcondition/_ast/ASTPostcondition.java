@@ -1,12 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
-package assumptionguarantee._ast;
+package prepostcondition._ast;
 
 import arcbasis._symboltable.PortSymbol;
 import arcbasis.helper.ExpressionUtil;
 
 import java.util.List;
 
-public class ASTAssumption extends ASTAssumptionTOP {
+public class ASTPostcondition extends ASTPostconditionTOP {
   public List<PortSymbol> getPortsInGuardExpression() {
     return ExpressionUtil.getPortsInGuardExpression(getGuard());
   }

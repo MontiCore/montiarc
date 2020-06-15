@@ -26,12 +26,9 @@
  * * -- MontiArc.mc4
  */
 
-component grammar AssumptionGuarantee extends ArcBasis {
+component grammar PrePostCondition extends ArcBasis {
 
-// TODO ":" rauslassen, der ist eher unnötig.
-    Assumption implements ArcElement = "assume" ":" guard:Expression ";";
+    Precondition implements ArcElement = "precheck" guard:Expression ";";
 
-// TODO ":" rauslassen, der ist eher unnötig.
-
-    Guarantee implements ArcElement = "guarantee" ":" guard:Expression ";";
+    Postcondition implements ArcElement = "postcheck" guard:Expression ";";
 }

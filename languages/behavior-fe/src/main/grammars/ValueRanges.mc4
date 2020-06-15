@@ -1,5 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 
+/* Alpha-version: This is intended to become a MontiCore stable grammar. */
 
 /**
  * TODO^BR: describe
@@ -54,8 +55,7 @@ component grammar ValueRanges extends ArcBasis, de.monticore.literals.MCCommonLi
       ":" upperBound:Expression
     ;
 
-// TODO^BR: Gilt das für String-Argumente oder allgemein?
-    // RegEx to which value has to conform
+    // RegEx to which value has to conform (applies not only to String type ports)
     MTValueFormat implements MTAllowedValues = "format" ":" format:StringLiteral;
     
 // TODO^BR: Sollte eigentlich auch die Reihenfolge der erlaubten ankommenden 
