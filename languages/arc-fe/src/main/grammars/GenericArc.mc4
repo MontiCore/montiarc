@@ -20,7 +20,6 @@
  * * -- ComfortableArc.mc4
  * * -- GenericArc.mc4
  * * -- AssumptionGuarantee.mc4
- * * -- ValueRanges.mc4
  *
  * * ArcCore.mc4 composes
  *   + ArcBasis.mc4 + ComfortableArc.mc4 + GenericArc.mc4
