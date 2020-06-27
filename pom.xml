@@ -23,7 +23,7 @@
   <properties>
     <!-- DSLs -->
     <javadsl.version>4.3.11.1</javadsl.version>
-    <cd4a.version>1.6.0</cd4a.version>
+    <cd4a.version>1.7.0</cd4a.version>
 
     <!-- SE-Libraries -->
     <monticore.version>6.1.0.1</monticore.version>
