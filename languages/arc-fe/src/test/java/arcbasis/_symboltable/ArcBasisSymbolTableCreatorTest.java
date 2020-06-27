@@ -275,7 +275,7 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
   @Test
   public void shouldCreateField() {
     ASTArcField ast = arcbasis.ArcBasisMill.arcFieldBuilder().setName("var")
-      .setValue(Mockito.mock(ASTExpression.class)).build();
+      .setInitial(Mockito.mock(ASTExpression.class)).build();
     ASTMCType type = Mockito.mock(ASTMCType.class);
     this.getSymTab().setCurrentFieldType(type);
     FieldSymbol symbol = this.getSymTab().create_ArcField(ast);
@@ -286,7 +286,7 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
   @Test
   public void shouldVisitField() {
     ASTArcField ast = arcbasis.ArcBasisMill.arcFieldBuilder().setName("var")
-      .setValue(Mockito.mock(ASTExpression.class)).build();
+      .setInitial(Mockito.mock(ASTExpression.class)).build();
     ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     this.getSymTab().setCurrentFieldType(Mockito.mock(ASTMCType.class));
     this.getSymTab().putOnStack(scope);

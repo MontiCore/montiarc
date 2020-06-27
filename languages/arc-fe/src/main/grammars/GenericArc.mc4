@@ -10,16 +10,15 @@
  * a generic type T, that can also be used as port type.
  *
  * MontiArc's generic types are similar to Java generics and thus have a
- * similar syntactic shabe, but they should not be mixed up.
+ * similar syntactic shape, but they should not be mixed up.
  * Type parameters are defined in "<...>", while 
  * value parameters are defined in "(...)".
  *
- * This grammar is part of the MontiArc langauge definition,
- * which are organized according to this extension hierachy:
+ * This grammar is part of the MontiArc language definition,
+ * which are organized according to this extension hierarchy:
  * * ArcBasis.mc4
  * * -- ComfortableArc.mc4
  * * -- GenericArc.mc4
- * * -- AssumptionGuarantee.mc4
  *
  * * ArcCore.mc4 composes
  *   + ArcBasis.mc4 + ComfortableArc.mc4 + GenericArc.mc4

@@ -137,7 +137,7 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
   }
 
   protected ASTArcField doCreateArcField(String name, ASTExpression value) {
-    return ArcBasisMill.arcFieldBuilder().setName(name).setValue(value).build();
+    return ArcBasisMill.arcFieldBuilder().setName(name).setInitial(value).build();
   }
 
   protected List<ASTArcField> doCreateArcFieldList(String[] names, ASTExpression[] values) {

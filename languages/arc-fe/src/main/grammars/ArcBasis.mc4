@@ -12,7 +12,6 @@
  * * ArcBasis.mc4
  * * -- ComfortableArc.mc4
  * * -- GenericArc.mc4
- * * -- AssumptionGuarantee.mc4
  *
  * * ArcCore.mc4 composes
  *   + ArcBasis.mc4 + ComfortableArc.mc4 + GenericArc.mc4
@@ -69,24 +68,13 @@ component grammar ArcBasis extends
    * options of the component.
    * @attribute parent The type of the parent component.
    */
-
-/* TODO^BR: ganz frisch reingekommen:  Arguments (aus ExpressionBasis)
-Das hier könnte sich vereinfachen zu:
-(allerdings wahrscheinlich nicht, denn Sie wollen default werte fuer Parameter erlauben)
-   ComponentHead =
-    Arguments?
-    ( "extends" parent:MCType)?
-    
-
-Ausserdem: "*" statt "+" könnte auch sinnvoll sein?
-*/
   ComponentHead =
-    ( "(" (ArcParameter || ",")+ ")" )?
+    ( "(" (ArcParameter || ",")* ")" )?
     ( "extends" parent:MCType)?
   ;
 
   /**
-   * ASTParameterDeclaration defines the configuration usage interface of the
+   * ASTParameter defines the configuration usage interface of the
    * component type.
    *
    * @attribute type The type of the parameter.
@@ -94,10 +82,9 @@ Ausserdem: "*" statt "+" könnte auch sinnvoll sein?
    * @attribute value Default value used for the parameter if no argument is
    * given during instantiation.
    */
-// TODO^BR: auch ganz frisch: Variable statt Field (ist ein Supertype der ausreichen sollte);    
-// "value" ist wenig aussagekräftig. wäre "default" besser? (Sonst weglassen?)
+  //TODO: Use Variable instead of Field, waiting for MC 6.0.2
   ArcParameter implements Field =
-    MCType Name ("=" value:Expression)?
+    MCType Name ("=" default:Expression)?
   ;
 
   /**
@@ -163,8 +150,8 @@ Ausserdem: "*" statt "+" könnte auch sinnvoll sein?
    * @attribute name The name of the field.
    * @attribute value The initialization value of the field.
    */
-// TODO "value" weglassen, oder besser "initial" nennen? (weil hier ist es wohl kein default?)
-  ArcField implements Field = Name "=" value:Expression;
+  // TODO: Use Variable instead of Field, waiting for MC 6.0.2
+  ArcField implements Field = Name "=" initial:Expression;
 
   /**
    * ASTComponentInstantiation holds one or more component instances that are
@@ -183,17 +170,12 @@ Ausserdem: "*" statt "+" könnte auch sinnvoll sein?
    * as an extension point for other identifier kinds of component instances.
    *
    * @attribute name The name of the component instance.
-   * @attribute arcArguments A list of configuration arguments.
+   * @attribute arguments A list of configuration arguments.
    */
+   //TODO: Use Arguments instead of ArcArguments, waiting for MC 6.0.2
   symbol ComponentInstance = Name ArcArguments?;
 
-  /**
-   * ASTArcArguments represents a list of configuration arguments defined.
-   *
-   * @attribute expressions A list of expressions as argument values.
-   */
-// TODO^BR: das hier ist genau identisch zu Arguments: sollte man also ersetzen
-  ArcArguments = "(" (Expression || ",")+ ")" ;
+  ArcArguments = "(" (Expression || ",")* ")";
 
   /**
    * ASTConnector connects one source port with one or more target ports.

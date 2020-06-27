@@ -7,12 +7,11 @@
  * This grammar defines additional elements to simplify the definition of
  * components, ports, and especially connectors.
  *
- * This grammar is part of the MontiArc langauge definition,
- * which are organized according to this extension hierachy:
+ * This grammar is part of the MontiArc language definition,
+ * which are organized according to this extension hierarchy:
  * * ArcBasis.mc4
  * * -- ComfortableArc.mc4
  * * -- GenericArc.mc4
- * * -- AssumptionGuarantee.mc4
  *
  * * ArcCore.mc4 composes
  *   + ArcBasis.mc4 + ComfortableArc.mc4 + GenericArc.mc4
@@ -49,7 +48,6 @@ component grammar ComfortableArc extends ArcBasis {
 
   ArcACOff implements ArcACMode = key("off");
 
-
   /** "autoinstantiate" enables / disables the mode where all
    *  locally defined components also automatically are instantiated.
    *  * autoinstantiate on: works well in concrete models, where 
@@ -64,7 +62,6 @@ component grammar ComfortableArc extends ArcBasis {
   ArcAIOn implements ArcAIMode = key("on");
 
   ArcAIOff implements ArcAIMode = key("off");
-
 
   /** ConnectedComponentInstance allows to directly connect
    *  outgoing ports after instantiating a component.

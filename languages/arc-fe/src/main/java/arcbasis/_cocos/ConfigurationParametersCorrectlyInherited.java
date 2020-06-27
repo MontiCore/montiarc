@@ -71,7 +71,7 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
   private boolean hasParameterDefaultValue(ComponentTypeSymbol symbol, int position) {
     if (symbol.isPresentAstNode()) {
       final ASTComponentType astNode = symbol.getAstNode();
-      return astNode.getHead().getArcParameterList().get(position).isPresentValue();
+      return astNode.getHead().getArcParameterList().get(position).isPresentDefault();
     }
     return false;
   }

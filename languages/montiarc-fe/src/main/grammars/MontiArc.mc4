@@ -13,19 +13,15 @@
  * the standards available from the MontiCore library,
  * which renders MontiArc to be a complete language.
  *
- * MontiCore also adds the possibilitiy to define a concrete form
+ * MontiCore also adds the possibility to define a concrete form
  * of timing, namely instant, sync and untimed.
  * See e.g. Focus (Broy/Stoelen 2001) for the underlying theory.
  *
- * This grammar is part of the MontiArc langauge definition,
- * which are organized according to this extension hierachy:
+ * This grammar is part of the MontiArc language definition,
+ * which are organized according to this extension hierarchy:
  * * ArcBasis.mc4
  * * -- ComfortableArc.mc4
  * * -- GenericArc.mc4
- * * -- AssumptionGuarantee.mc4
- * * -- IfThenElse.mc4
- * * -- MessageHandling.mc4
- * * -- ValueRanges.mc4
  *
  * * ArcCore.mc4 composes
  *   + ArcBasis.mc4 + ComfortableArc.mc4 + GenericArc.mc4
@@ -67,8 +63,8 @@ grammar MontiArc extends
    *          upon arrival; as usual: certain non-deterministic 
    *          effects may occur.
    *
-   * In all other variants, there is a globally availble clock that 
-   * measures time slices of euqal distance 
+   * In all other variants, there is a globally available clock that
+   * measures time slices of equal distance
    * (see Focus (Broy/Stoelen 2001) for the formal theoretical underpinning)
    *
    *  timing instant: means that each input is processed immediately
@@ -83,7 +79,7 @@ grammar MontiArc extends
    * (This however is mainly a problem in simulation, not in an
    *  ordinary code generation.)
    * 
-   * Therefore, the ArcTiming is defined in an extensble form.
+   * Therefore, the ArcTiming is defined in an extensible form.
    */
   ArcTiming implements ArcElement  =
     key("timing") ArcTimeMode
