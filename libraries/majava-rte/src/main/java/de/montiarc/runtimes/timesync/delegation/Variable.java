@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.runtimes.timesync.delegation;
+package de.montiarc.runtimes.timesync.delegation;
 
 /**
  * A variable is a {@code DataSource}.

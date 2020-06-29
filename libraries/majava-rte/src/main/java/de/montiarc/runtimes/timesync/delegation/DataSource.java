@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.runtimes.timesync.delegation;
+package de.montiarc.runtimes.timesync.delegation;
 
 /**
  * A data source for a component is either a port or a variable.

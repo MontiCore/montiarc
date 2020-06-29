@@ -16,9 +16,6 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>simulator-rte</module>
-    <module>lejos-rte</module>
-    <module>maa-rte</module>
-    <module>maJavaLib</module>
+    <module>majava-rte</module>
   </modules>
 </project>
