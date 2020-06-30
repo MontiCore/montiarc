@@ -13,7 +13,7 @@
   <!-- == PROJECT MODULES ================================================= -->
   <modules>
     <module>languages</module>
-    <!-- <module>generators</module> -->
+    <module>generators</module>
     <module>libraries</module>
     <!-- <module>applications</module>-->
     <module>util</module>

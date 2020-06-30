@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package de.monticore.cd2pojo;
 
-import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
+import de.monticore.cd.cd4analysis._symboltable.CDTypeSymbol;
 
 public class TypeHelper {
   

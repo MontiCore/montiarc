@@ -7,9 +7,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import de.monticore.cd.cd4analysis._symboltable.CD4AnalysisLanguage;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 
-import de.monticore.umlcd4a.CD4AnalysisLanguage;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.configuration.Configuration;
 import de.se_rwth.commons.groovy.GroovyInterpreter;
@@ -18,9 +18,6 @@ import de.se_rwth.commons.logging.Log;
 import groovy.lang.Script;
 
 /**
- * TODO: Write me!
- *
- *          $Date$
  *
  */
 public class POJOGeneratorScript extends Script implements GroovyRunner {
@@ -67,7 +64,7 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
    * component in {@code modelPath} to {@code targetFilepath}
    * 
    * @param modelPath
-   * @param fqnTemplateName
+   * @param targetFilepath
    */
   public void generate(File modelPath, File targetFilepath) {
     File fqnMP = Paths.get(modelPath.getAbsolutePath()).toFile();

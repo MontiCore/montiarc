@@ -31,20 +31,17 @@
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>monticore-runtime</artifactId>
-      <version>${monticore.version}</version>
     </dependency>
 
     <dependency>
       <groupId>de.se_rwth.commons</groupId>
       <artifactId>se-commons-groovy</artifactId>
-      <version>${se-commons.version}</version>
     </dependency>
 
     <!-- CD4Analysis -->
     <dependency>
       <groupId>de.monticore.lang</groupId>
       <artifactId>cd4analysis</artifactId>
-      <version>${cd4a.version}</version>
     </dependency>
 
     <!-- Test Libraries -->
@@ -63,7 +60,6 @@
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>monticore-runtime</artifactId>
-      <version>${monticore.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
@@ -71,7 +67,6 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>${logback.version}</version>
     </dependency>
   </dependencies>
 
@@ -80,44 +75,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${compiler.plugin}</version>
-        <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
-        </configuration>
       </plugin>
     </plugins>
   </build>
-
-  <!-- == DEPENDENCY & PLUGIN REPOSITORIES ================================= -->
-  <repositories>
-    <repository>
-      <id>se-public</id>
-      <url>http://nexus.se.rwth-aachen.de/content/groups/public</url>
-    </repository>
-  </repositories>
-  <pluginRepositories>
-    <pluginRepository>
-      <id>se-public</id>
-      <url>http://nexus.se.rwth-aachen.de/content/groups/public</url>
-    </pluginRepository>
-  </pluginRepositories>
-
-  <!-- == DISTRIBUTION ===================================================== -->
-  <distributionManagement>
-    <repository>
-      <id>se-nexus</id>
-      <url>https://nexus.se.rwth-aachen.de/content/repositories/monticore-releases/</url>
-    </repository>
-    <snapshotRepository>
-      <id>se-nexus</id>
-      <url>https://nexus.se.rwth-aachen.de/content/repositories/monticore-snapshots/</url>
-    </snapshotRepository>
-    <site>
-      <id>se-nexus</id>
-      <url>
-        dav:https://nexus.se.rwth-aachen.de/content/sites/se-sites/monticore/${project.version}/
-      </url>
-    </site>
-  </distributionManagement>
 </project>
