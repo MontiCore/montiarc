@@ -6,6 +6,11 @@
 
   <!-- == PROJECT COORDINATES ============================================== -->
 
+  <properties>
+    <emf.version>1.2.0</emf.version>
+    <xtend.plugin>2.22.0</xtend.plugin>
+  </properties>
+
   <parent>
     <groupId>montiarc</groupId>
     <artifactId>montiarc-core</artifactId>
@@ -18,5 +23,6 @@
 
   <modules>
     <module>cd2pojo</module>
+    <module>ma2java</module>
   </modules>
 </project>

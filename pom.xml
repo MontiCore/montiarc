@@ -55,7 +55,6 @@
     <jacoco.plugin>0.8.5</jacoco.plugin>
     <surefire.plugin>3.0.0-M4</surefire.plugin>
     <failsafe.plugin>3.0.0-M4</failsafe.plugin>
-    <xtend.plugin>2.17.0</xtend.plugin>
 
     <!-- Classifiers -->
     <grammars.classifier>grammars</grammars.classifier>
@@ -194,6 +193,17 @@
         <scope>provided</scope>
       </dependency>
 
+      <dependency>
+        <groupId>de.monticore</groupId>
+        <artifactId>monticore-emf-runtime</artifactId>
+        <version>${monticore.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>de.monticore</groupId>
+        <artifactId>de.monticore-generator</artifactId>
+        <version>${monticore.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>de.se_rwth.commons</groupId>

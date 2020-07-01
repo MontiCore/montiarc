@@ -10,8 +10,10 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
     super(langName, fileEnding);
   }
 
+  public static final String FILE_ENDING = "mc4";
+
   public MontiArcLanguage() {
-    super("MontiArc", ".mc4");
+    super("MontiArc", FILE_ENDING);
   }
 
   @Override
