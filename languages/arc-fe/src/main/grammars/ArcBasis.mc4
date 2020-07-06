@@ -82,7 +82,7 @@ component grammar ArcBasis extends
    * @attribute value Default value used for the parameter if no argument is
    * given during instantiation.
    */
-  //TODO: Use Variable instead of Field, waiting for MC 6.0.2
+  //TODO: Use Variable instead of Field, waiting for MC 6.2.0
   ArcParameter implements Field =
     MCType Name ("=" default:Expression)?
   ;
@@ -150,7 +150,7 @@ component grammar ArcBasis extends
    * @attribute name The name of the field.
    * @attribute value The initialization value of the field.
    */
-  // TODO: Use Variable instead of Field, waiting for MC 6.0.2
+  // TODO: Use Variable instead of Field, waiting for MC 6.2.0
   ArcField implements Field = Name "=" initial:Expression;
 
   /**
