@@ -7,8 +7,8 @@ package montiarc.util;
 public enum MontiArcError implements montiarc.util.Error {
   COMPONENT_AND_FILE_NAME_DIFFER("0xMA1000", "The name of the component \" %s \" is not identical "
     + "to the name of the file \" %s \" (without its file-extension)."),
-  COMPONENT_AND_FILE_PACKAGE_DIFFER("0xMA1001", "The package declaration \" %s \" of the component "
-    + "is different from the package \" %s \" of the file.");
+  COMPONENT_AND_FILE_PACKAGE_DIFFER("0xMA1001", "The package declaration \" %s \" of component "
+    + " \" %s \" is different from the package \" %s \" of the file.");
 
   private final String errorCode;
   private final String errorMessage;

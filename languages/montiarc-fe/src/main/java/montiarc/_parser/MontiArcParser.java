@@ -54,7 +54,7 @@ public class MontiArcParser extends MontiArcParserTOP {
       if (!packageOfFile.endsWith(packageOfModel)) {
         Log.error(String
           .format(MontiArcError.COMPONENT_AND_FILE_PACKAGE_DIFFER.toString(), packageOfModel,
-            packageOfFile));
+            modelName, packageOfFile));
         setError(true);
       }
     }
