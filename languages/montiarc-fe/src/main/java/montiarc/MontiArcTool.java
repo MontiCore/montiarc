@@ -36,9 +36,11 @@ public class MontiArcTool {
     this(MontiArcCoCos.createChecker(), new MontiArcLanguage("MontiArc", ".arc"));
   }
 
-  public MontiArcTool(@NotNull MontiArcCoCoChecker checker, MontiArcLanguage language) {
+  public MontiArcTool(@NotNull MontiArcCoCoChecker checker, @NotNull MontiArcLanguage language) {
     Preconditions.checkArgument(checker != null);
+    Preconditions.checkArgument(language != null);
     this.checker = checker;
+    this.language = language;
     this.isSymTabInitialized = false;
   }
   
