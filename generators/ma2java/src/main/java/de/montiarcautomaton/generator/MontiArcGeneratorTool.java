@@ -9,7 +9,8 @@ import java.util.List;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import de.montiarcautomaton.generator.codegen.xtend.MAAGenerator;
 import de.monticore.cd.cd4analysis._symboltable.CD4AnalysisLanguage;
-import de.monticore.cd2pojo.Modelfinder;
+import montiarc.util.DirectoryUtil;
+import montiarc.util.Modelfinder;
 import de.monticore.cd2pojo.POJOGenerator;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
@@ -57,7 +58,7 @@ public class MontiArcGeneratorTool extends MontiArcTool {
 
     // 1. create symboltable
     Log.info("Initializing symboltable", "MontiArcGeneratorTool");
-    String basedir = getBasedirFromModelAndTargetPath(modelPath.getAbsolutePath(), target.getAbsolutePath());
+    String basedir = DirectoryUtil.getBasedirFromModelAndTargetPath(modelPath.getAbsolutePath(), target.getAbsolutePath());
     IMontiArcScope symTab = initSymbolTable(modelPath, Paths.get(basedir + LIBRARY_MODELS_FOLDER).toFile(),
       hwcPath);
 
@@ -81,40 +82,6 @@ public class MontiArcGeneratorTool extends MontiArcTool {
     // gen cd
     generatePOJOs(modelPath, target);
 
-  }
-
-  /**
-   * Compares the two paths and returns the common path. The common path is the
-   * basedir.
-   *
-   * @param modelPath
-   * @param targetPath
-   * @return
-   */
-  public String getBasedirFromModelAndTargetPath(String modelPath, String targetPath) {
-    String basedir = "";
-    StringBuilder sb = new StringBuilder();
-    String seperator = File.separator;
-    int lastFolderIndex = 0;
-    for (int i = 0; i < modelPath.length(); i++) {
-      // Assuming a seperator is always length 1
-      if (seperator.length() != 1) {
-        Log.error("0x???? File seperator should be a single char. Use a less strange system");
-      }
-      else if (modelPath.charAt(i) == seperator.charAt(0)) {
-        lastFolderIndex = i;
-      }
-      
-      if (modelPath.charAt(i) == targetPath.charAt(i)) {
-        sb.append(modelPath.charAt(i));
-      }
-      else {
-        // basedir includes the seperator
-        basedir = sb.substring(0, lastFolderIndex + 1);
-        break;
-      }
-    }
-    return basedir;
   }
   
   private void generatePOJOs(File modelPath, File targetFilepath) {

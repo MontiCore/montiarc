@@ -46,6 +46,12 @@
       <version>${project.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>montiarc</groupId>
+      <artifactId>util</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
     <!-- MontiCore Dependencies -->
     <dependency>
       <groupId>de.monticore</groupId>

@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import montiarc.util.Modelfinder;
 import de.monticore.cd.cd4analysis._symboltable.CD4AnalysisLanguage;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 

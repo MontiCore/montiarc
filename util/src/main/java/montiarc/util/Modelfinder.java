@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.monticore.cd2pojo;
+package montiarc.util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class Modelfinder {
     return models;
   }
   
-  private static String getDotSeperatedFQNModelName(String FQNModelPath, String FQNFilePath, String fileExtension) {
+  protected static String getDotSeperatedFQNModelName(String FQNModelPath, String FQNFilePath, String fileExtension) {
     if (FQNFilePath.contains(FQNModelPath)) {
       String fqnModelName = FQNFilePath.substring(FQNModelPath.length() + 1);
       fqnModelName = fqnModelName.replace("." + fileExtension, "");

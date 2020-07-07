@@ -38,6 +38,13 @@
       <artifactId>se-commons-groovy</artifactId>
     </dependency>
 
+    <!-- MontiArc -->
+    <dependency>
+      <groupId>montiarc</groupId>
+      <artifactId>util</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
     <!-- CD4Analysis -->
     <dependency>
       <groupId>de.monticore.lang</groupId>
