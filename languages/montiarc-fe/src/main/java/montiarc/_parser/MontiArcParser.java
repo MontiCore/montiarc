@@ -1,8 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._parser;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.regex.Matcher;
 
 import com.google.common.base.Preconditions;
 import com.google.common.io.Files;
@@ -70,7 +72,8 @@ public class MontiArcParser extends MontiArcParserTOP {
   @Override
   public Optional<ASTMACompilationUnit> parse(@NotNull String relativeFilePath) throws IOException {
     Preconditions.checkArgument(relativeFilePath != null);
-    return parseMACompilationUnit(relativeFilePath);
+    String nonUriPath = relativeFilePath.replaceAll("/", Matcher.quoteReplacement(File.separator));
+    return parseMACompilationUnit(nonUriPath);
   }
 
 }
