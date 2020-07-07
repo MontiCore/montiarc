@@ -33,7 +33,7 @@ public class MontiArcTool {
   protected boolean isSymTabInitialized;
   
   public MontiArcTool() {
-    this(MontiArcCoCos.createChecker(), new MontiArcLanguage("MontiArc", ".arc"));
+    this(MontiArcCoCos.createChecker(), new MontiArcLanguage());
   }
 
   public MontiArcTool(@NotNull MontiArcCoCoChecker checker, @NotNull MontiArcLanguage language) {
