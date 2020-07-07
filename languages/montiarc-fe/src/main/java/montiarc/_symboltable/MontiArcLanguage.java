@@ -11,10 +11,12 @@ public class MontiArcLanguage extends MontiArcLanguageTOP {
     this.modelLoader = super.getModelLoader();
   }
 
-  public static final String FILE_ENDING = "mc4";
+  public static final String FILE_ENDING = "arc";
+
+  public static final String LANGUAGE_NAME = "MontiArc";
 
   public MontiArcLanguage() {
-    super("MontiArc", FILE_ENDING);
+    super(LANGUAGE_NAME, FILE_ENDING);
     this.modelLoader = super.getModelLoader();
   }
 
