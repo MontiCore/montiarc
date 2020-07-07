@@ -91,7 +91,7 @@ public class MontiArcGeneratorTool extends MontiArcTool {
    * @param targetPath
    * @return
    */
-  private String getBasedirFromModelAndTargetPath(String modelPath, String targetPath) {
+  public String getBasedirFromModelAndTargetPath(String modelPath, String targetPath) {
     String basedir = "";
     StringBuilder sb = new StringBuilder();
     String seperator = File.separator;
