@@ -37,4 +37,12 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     rootNode.accept(getRealThis());
     return artifactScope;
   }
+
+  @Override
+  public void visit(ASTMACompilationUnit node) {
+  }
+
+  @Override
+  public void endVisit(ASTMACompilationUnit node) {
+  }
 }
