@@ -1,9 +1,11 @@
 package montiarc;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
+import de.monticore.types.typesymbols._symboltable.TypeSymbol;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._symboltable.IMontiArcScope;
+import montiarc._symboltable.MontiArcGlobalScope;
 import montiarc._symboltable.MontiArcLanguage;
 import montiarc.util.DirectoryUtil;
 import montiarc.util.Modelfinder;
@@ -49,6 +51,7 @@ class MontiArcToolTest {
     String basedir = DirectoryUtil.getBasedirFromModelAndTargetPath(modelPath.getAbsolutePath(),
         target.getAbsolutePath());
     IMontiArcScope symTab = tool.initSymbolTable(modelPath);
+    symTab.add(new TypeSymbol("String"));
 
     List<ComponentTypeSymbol> foundComponents = new ArrayList<>();
 
