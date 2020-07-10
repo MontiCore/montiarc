@@ -5,6 +5,7 @@ import arcbasis._ast.*;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpressionsBasisNode;
 import de.monticore.prettyprint.IndentPrinter;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Iterator;
@@ -62,6 +63,15 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
       this.getPrinter().print(", ");
       iterator.next().accept(this.getRealThis());
     }
+  }
+
+  public boolean isCompletedStatement(){
+    int lastIndex = this.getPrinter().getWrittenbuffer().lastIndexOf(";");
+    if(lastIndex == -1){
+      return false;
+    }
+    String s = StringUtils.deleteWhitespace(this.getPrinter().getWrittenbuffer().substring(lastIndex));
+    return s.endsWith(";");
   }
 
   @Override
@@ -144,7 +154,9 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
     node.getMCType().accept(this.getRealThis());
     this.getPrinter().print(" ");
     acceptSeperatedList(node.getArcFieldList());
-    this.getPrinter().println(";");
+    if(!isCompletedStatement()) {
+      this.getPrinter().println(";");
+    }
   }
 
   @Override
