@@ -3,7 +3,6 @@ package arccore._visitor;
 
 import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class ArcCorePrettyPrinter implements ArcCoreVisitor {
@@ -13,7 +12,6 @@ public class ArcCorePrettyPrinter implements ArcCoreVisitor {
 
   public ArcCorePrettyPrinter() {
     IndentPrinter printer = new IndentPrinter();
-    MCBasicTypesPrettyPrinter typePrinter = new MCBasicTypesPrettyPrinter(printer);
     this.printer = printer;
   }
 

@@ -3,7 +3,6 @@ package montiarc._visitor;
 
 import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 import montiarc._ast.*;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -14,7 +13,6 @@ public class MontiArcPrettyPrinter implements MontiArcVisitor {
 
   public MontiArcPrettyPrinter() {
     IndentPrinter printer = new IndentPrinter();
-    MCBasicTypesPrettyPrinter typePrinter = new MCBasicTypesPrettyPrinter(printer);
     this.printer = printer;
   }
 

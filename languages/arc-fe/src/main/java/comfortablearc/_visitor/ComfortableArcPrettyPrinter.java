@@ -4,7 +4,6 @@ package comfortablearc._visitor;
 import com.google.common.base.Preconditions;
 import comfortablearc._ast.*;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class ComfortableArcPrettyPrinter implements ComfortableArcVisitor {
@@ -14,7 +13,6 @@ public class ComfortableArcPrettyPrinter implements ComfortableArcVisitor {
 
   public ComfortableArcPrettyPrinter() {
     IndentPrinter printer = new IndentPrinter();
-    MCBasicTypesPrettyPrinter typePrinter = new MCBasicTypesPrettyPrinter(printer);
     this.printer = printer;
   }
 

@@ -5,7 +5,6 @@ import arcbasis._ast.ASTArcBasisNode;
 import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
-import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericArcNode;
 import genericarc._ast.ASTGenericComponentHead;
@@ -21,7 +20,6 @@ public class GenericArcPrettyPrinter implements GenericArcVisitor {
 
   public GenericArcPrettyPrinter() {
     IndentPrinter printer = new IndentPrinter();
-    MCBasicTypesPrettyPrinter typePrinter = new MCBasicTypesPrettyPrinter(printer);
     this.printer = printer;
   }
 

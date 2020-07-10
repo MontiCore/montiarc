@@ -5,7 +5,6 @@ import arcbasis._ast.*;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpressionsBasisNode;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Iterator;
@@ -18,7 +17,6 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
 
   public ArcBasisPrettyPrinter() {
     IndentPrinter printer = new IndentPrinter();
-    MCBasicTypesPrettyPrinter typePrinter = new MCBasicTypesPrettyPrinter(printer);
     this.printer = printer;
   }
 
