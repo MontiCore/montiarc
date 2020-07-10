@@ -101,25 +101,27 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
 
   @Override
   public void handle(@NotNull ASTComponentBody node) {
-    this.getPrinter().print(" { ");
+    this.getPrinter().println(" { ");
     this.getPrinter().indent();
     for (ASTArcElement element : node.getArcElementList()) {
       element.accept(this.getRealThis());
     }
-    this.getPrinter().print("}");
+    this.getPrinter().unindent();
+    this.getPrinter().println("}");
   }
 
   @Override
   public void handle(@NotNull ASTComponentInterface node) {
     this.getPrinter().print("port ");
     acceptSeperatedList(node.getPortDeclarationList());
-    this.getPrinter().print(";");
+    this.getPrinter().println(";");
   }
 
   @Override
   public void handle(@NotNull ASTPortDeclaration node) {
     node.getPortDirection().accept(this.getRealThis());
     node.getMCType().accept(this.getRealThis());
+    this.getPrinter().print(" ");
     acceptSeperatedList(node.getPortList());
   }
 
@@ -141,8 +143,9 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
   @Override
   public void handle(ASTArcFieldDeclaration node) {
     node.getMCType().accept(this.getRealThis());
+    this.getPrinter().print(" ");
     acceptSeperatedList(node.getArcFieldList());
-    this.getPrinter().print(";");
+    this.getPrinter().println(";");
   }
 
   @Override
@@ -150,14 +153,15 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
     this.getPrinter().print(node.getName());
     this.getPrinter().print(" = ");
     node.getInitial().accept(this.getRealThis());
-    this.getPrinter().print(";");
+    this.getPrinter().println(";");
   }
 
   @Override
   public void handle(ASTComponentInstantiation node) {
     node.getMCType().accept(this.getRealThis());
+    this.getPrinter().print(" ");
     acceptSeperatedList(node.getComponentInstanceList());
-    this.getPrinter().print(";");
+    this.getPrinter().println(";");
   }
 
   @Override
@@ -180,7 +184,7 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
     node.getSource().accept(this.getRealThis());
     this.getPrinter().print(" -> ");
     acceptSeperatedList(node.getTargetList());
-    this.getPrinter().print(";");
+    this.getPrinter().println(";");
   }
 
   @Override

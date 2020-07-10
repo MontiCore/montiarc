@@ -7,6 +7,7 @@ import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 import genericarc._ast.ASTArcTypeParameter;
+import genericarc._ast.ASTGenericArcNode;
 import genericarc._ast.ASTGenericComponentHead;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -56,15 +57,27 @@ public class GenericArcPrettyPrinter implements GenericArcVisitor {
     }
   }
 
+  public <T extends ASTGenericArcNode> void acceptGenericSeperatedList(@NotNull List<T> list){
+    if (list.size() <= 0) {
+      return;
+    }
+    Iterator<T> iterator = list.iterator();
+    iterator.next().accept(this.getRealThis());
+    while (iterator.hasNext()) {
+      this.getPrinter().print(", ");
+      iterator.next().accept(this.getRealThis());
+    }
+  }
+
   @Override
   public void handle(ASTGenericComponentHead node) {
-    this.getPrinter().print("< ");
-    acceptSeperatedList(node.getArcParameterList());
+    this.getPrinter().print("<");
+    acceptGenericSeperatedList(node.getArcTypeParameterList());
     this.getPrinter().print("> ");
     if(!node.isEmptyArcTypeParameters()) {
       this.getPrinter().print("(");
       acceptSeperatedList(node.getArcParameterList());
-      this.getPrinter().print(")");
+      this.getPrinter().print(") ");
     }
     if(node.isPresentParent()){
       this.getPrinter().print("extends ");
@@ -80,7 +93,7 @@ public class GenericArcPrettyPrinter implements GenericArcVisitor {
       Iterator<ASTMCType> iterator = node.getUpperBoundList().iterator();
       iterator.next().accept(this.getRealThis());
       while (iterator.hasNext()) {
-        this.getPrinter().print("& ");
+        this.getPrinter().print(" & ");
         iterator.next().accept(this.getRealThis());
       }
     }
