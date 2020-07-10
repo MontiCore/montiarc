@@ -2,11 +2,17 @@
 package montiarc.parser;
 
 import de.se_rwth.commons.logging.Log;
+import montiarc.AbstractTest;
+import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
+import montiarc._visitor.MontiArcPrettyPrinterDelegator;
 import montiarc.util.Error;
 import montiarc.util.MontiArcError;
-import montiarc._ast.ASTMACompilationUnit;
-import montiarc.AbstractTest;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -14,11 +20,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ParserTest extends AbstractTest {
 
@@ -52,6 +54,30 @@ public class ParserTest extends AbstractTest {
     return optAst;
   }
 
+  static public Optional<ASTMACompilationUnit> parse_String(String content,
+      boolean expParserErrors) {
+    MontiArcParser parser = new MontiArcParser();
+    Optional<ASTMACompilationUnit> optAst;
+    try {
+      optAst = parser.parse_String(content);
+    }
+    catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    if (expParserErrors) {
+      assertThat(parser.hasErrors()).isTrue();
+      assertThat(optAst).isNotPresent();
+    }
+    else {
+      if (parser.hasErrors()) {
+        System.err.println(Log.getFindings().toString());
+      }
+      assertThat(parser.hasErrors()).isFalse();
+      assertThat(optAst).isPresent();
+    }
+    return optAst;
+  }
+
   @ParameterizedTest
   @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc"})
   public void shouldParseWithoutError(String fileName) {
@@ -70,6 +96,17 @@ public class ParserTest extends AbstractTest {
     Error... expErrors) {
     this.parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), true);
     this.checkOnlyExpectedErrorsPresent(Log.getFindings(), expErrors);
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc"})
+  public void shouldPrintWithoutError(String fileName) {
+    ASTMACompilationUnit unit = parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false).orElse(null);
+    String s = new MontiArcPrettyPrinterDelegator().prettyprint(unit);
+    ASTMACompilationUnit similarUnit = parse_String(s,false).orElse(null);
+    if(!unit.deepEquals(similarUnit)){
+      Log.error("PrettyPrinted ASTMACompilationUnit has changed");
+    }
   }
 
   static Stream<Arguments> filenameAndErrorCodeProvider() {

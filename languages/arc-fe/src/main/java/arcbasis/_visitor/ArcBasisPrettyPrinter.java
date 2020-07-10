@@ -69,6 +69,7 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
     this.getPrinter().print("component ");
     this.getPrinter().print(node.getName());
     node.getHead().accept(this.getRealThis());
+    this.getPrinter().print(" ");
     acceptSeperatedList(node.getComponentInstanceList());
     node.getBody().accept(this.getRealThis());
   }
