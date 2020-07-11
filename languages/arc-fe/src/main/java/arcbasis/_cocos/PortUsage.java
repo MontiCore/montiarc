@@ -1,18 +1,18 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
+import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import arcbasis.util.ArcError;
-import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * CV5: In decomposed components all ports should be used in at least one connector.<br>
@@ -29,15 +29,21 @@ public class PortUsage implements ArcBasisASTComponentTypeCoCo {
   public void check(@NotNull ASTComponentType node) {
     Preconditions.checkArgument(node != null);
     Preconditions.checkArgument(node.isPresentSymbol(), "ASTComponentType node '%s' has no symbol. "
-      + "Did you forget to run the SymbolTableCreator before checking cocos?", node.getName());
+        + "Did you forget to run the SymbolTableCreator before checking cocos?", node.getName());
     ComponentTypeSymbol symbol = node.getSymbol();
+
+    // CoCo does not apply to atomic components
+    if (symbol.getSubComponents().isEmpty()) {
+      return;
+    }
+
     Collection<String> sources = node.getConnectors().stream()
-      .map(ASTConnector::getSourceName)
-      .collect(Collectors.toList());
+        .map(ASTConnector::getSourceName)
+        .collect(Collectors.toList());
     Collection<String> targets = node.getConnectors().stream()
-      .map(ASTConnector::getTargetsNames)
-      .flatMap(Collection::stream)
-      .collect(Collectors.toList());
+        .map(ASTConnector::getTargetsNames)
+        .flatMap(Collection::stream)
+        .collect(Collectors.toList());
     // --------- INCOMING PORTS ----------
     Collection<String> incomingPorts = this.getNamesOfPorts(symbol.getAllIncomingPorts());
     incomingPorts.removeAll(sources);
@@ -45,12 +51,13 @@ public class PortUsage implements ArcBasisASTComponentTypeCoCo {
       final SourcePosition sourcePosition = this.getSourcePosition(symbol, node, port);
       if (targets.contains(port)) {
         Log.error(
-          String.format(ArcError.INCOMING_PORT_AS_TARGET.toString(), port, symbol.getFullName()),
-          sourcePosition);
-      } else {
+            String.format(ArcError.INCOMING_PORT_AS_TARGET.toString(), port, symbol.getFullName()),
+            sourcePosition);
+      }
+      else {
         Log.warn(
-          String.format(ArcError.INCOMING_PORT_NO_FORWARD.toString(), port, symbol.getFullName()),
-          sourcePosition);
+            String.format(ArcError.INCOMING_PORT_NO_FORWARD.toString(), port, symbol.getFullName()),
+            sourcePosition);
       }
     }
     // --------- OUTGOING PORTS ----------
@@ -60,12 +67,13 @@ public class PortUsage implements ArcBasisASTComponentTypeCoCo {
       final SourcePosition sourcePosition = this.getSourcePosition(symbol, node, port);
       if (sources.contains(port)) {
         Log.error(
-          String.format(ArcError.OUTGOING_PORT_AST_SOURCE.toString(), port, symbol.getFullName()),
-          sourcePosition);
-      } else {
+            String.format(ArcError.OUTGOING_PORT_AST_SOURCE.toString(), port, symbol.getFullName()),
+            sourcePosition);
+      }
+      else {
         Log.warn(
-          String.format(ArcError.OUTGOING_PORT_NO_FORWARD.toString(), port, symbol.getFullName()),
-          sourcePosition);
+            String.format(ArcError.OUTGOING_PORT_NO_FORWARD.toString(), port, symbol.getFullName()),
+            sourcePosition);
       }
     }
   }
@@ -75,8 +83,8 @@ public class PortUsage implements ArcBasisASTComponentTypeCoCo {
   }
 
   protected SourcePosition getSourcePosition(ComponentTypeSymbol symbol,
-    ASTComponentType node, String port) {
+      ASTComponentType node, String port) {
     return symbol.getPort(port).map(p -> p.getAstNode().get_SourcePositionStart())
-      .orElse(node.get_SourcePositionEnd());
+        .orElse(node.get_SourcePositionEnd());
   }
 }
