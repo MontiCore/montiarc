@@ -2,9 +2,7 @@
 package montiarc.util;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import org.apache.commons.io.FileUtils;
 
@@ -30,6 +28,19 @@ public class Modelfinder {
       models.add(model);
     }
     return models;
+  }
+
+  /**
+   * Finds all files with a certain file ending in the given model paths (recursively)
+   */
+  public static Set<File> getModelFiles(String fileExtension, File... modelPaths) {
+    Set<File> modelFiles = new HashSet<>();
+    for (File file : modelPaths) {
+      Collection<File> models = FileUtils
+          .listFiles(file, new String[] { fileExtension }, true);
+      modelFiles.addAll(models);
+    }
+    return modelFiles;
   }
   
   protected static String getDotSeperatedFQNModelName(String FQNModelPath, String FQNFilePath, String fileExtension) {
