@@ -68,7 +68,7 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
         connector.streamTargets().forEach(target -> {
           Optional<PortSymbol> targetPort;
           if (!target.isPresentComponent()) {
-            targetPort = component.getPort(target.toString(), true);
+            targetPort = component.getPort(target.getPort(), true);
           } else {
             Optional<ComponentInstanceSymbol> componentInstanceSymbol = component
               .getSubComponent(target.getComponent());
