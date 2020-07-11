@@ -81,7 +81,7 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
           }
           if (!targetPort.isPresent()) {
             Log.error(
-              String.format(ArcError.TARGET_PORT_NOT_EXISTS.toString(), target,
+              String.format(ArcError.TARGET_PORT_NOT_EXISTS.toString(), target.getQName(),
                 component.getFullName()), connector.get_SourcePositionStart());
           }
           targetPorts.add(targetPort);
