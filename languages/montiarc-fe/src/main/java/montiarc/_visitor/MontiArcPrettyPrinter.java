@@ -51,6 +51,7 @@ public class MontiArcPrettyPrinter implements MontiArcVisitor {
   public void handle(ASTArcTiming node) {
     this.getPrinter().print("timing ");
     node.getArcTimeMode().accept(this.getRealThis());
+    this.getPrinter().print(";");
   }
 
   @Override
