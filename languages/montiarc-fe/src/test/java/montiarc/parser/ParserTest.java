@@ -1,14 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.parser;
 
+import de.monticore.java.javadsl._ast.ASTCompilationUnit;
 import de.se_rwth.commons.logging.Log;
 import montiarc.AbstractTest;
+import montiarc._ast.ASTArcTiming;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
 import montiarc._visitor.MontiArcPrettyPrinterDelegator;
 import montiarc.util.Error;
 import montiarc.util.MontiArcError;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -107,6 +110,18 @@ public class ParserTest extends AbstractTest {
     if(!unit.deepEquals(similarUnit)){
       Log.error("PrettyPrinted ASTMACompilationUnit has changed");
     }
+  }
+
+  @Test
+  public void shouldParseTimingAsCorrectNode() {
+    String fileName = "ComponentWithTiming.arc";
+    ASTMACompilationUnit ast =
+      this.parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false).orElse(null);
+    Assertions.assertTrue(ast != null);
+    Assertions.assertEquals(3, ast.getComponentType().getBody().getArcElementList().size());
+    Assertions.assertTrue(ast.getComponentType().getBody().getArcElement(0) instanceof ASTArcTiming);
+    Assertions.assertTrue(ast.getComponentType().getBody().getArcElement(1) instanceof ASTArcTiming);
+    Assertions.assertTrue(ast.getComponentType().getBody().getArcElement(2) instanceof ASTArcTiming);
   }
 
   static Stream<Arguments> filenameAndErrorCodeProvider() {

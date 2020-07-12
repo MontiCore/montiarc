@@ -82,7 +82,7 @@ grammar MontiArc extends
    * Therefore, the ArcTiming is defined in an extensible form.
    */
   ArcTiming implements ArcElement  =
-    key("timing") ArcTimeMode
+    key("timing") ArcTimeMode ";"
   ;
 
   interface ArcTimeMode;
