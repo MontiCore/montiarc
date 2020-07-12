@@ -9,4 +9,6 @@ component Composed {
 	OutComp oc;
 
 	oc.outPort -> ic.inPort;
+
+	timing sync;
 }
