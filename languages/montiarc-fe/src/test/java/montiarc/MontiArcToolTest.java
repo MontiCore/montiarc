@@ -81,4 +81,35 @@ class MontiArcToolTest {
     assertThat(composed.getSubComponents()).anySatisfy(e -> assertThat(e.getName()).isEqualTo("ic"));
     assertThat(composed.getSubComponents()).anySatisfy(e -> assertThat(e.getName()).isEqualTo("oc"));
   }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"typeExample"})
+  public void shouldAcceptModelWithTypes(String modelPathDirectory) {
+    MontiArcTool tool = new MontiArcTool();
+    File modelPath = Paths.get(RELATIVE_MODEL_PATH, PACKAGE, modelPathDirectory).toFile();
+
+    // 1. Find all .arc files
+    List<String> foundModels = Modelfinder
+      .getModelsInModelPath(modelPath, MontiArcLanguage.FILE_ENDING);
+    // 2. Initialize SymbolTable
+    Log.info("Initializing symboltable", TOOL_NAME);
+    IMontiArcScope symTab = tool.initSymbolTable(modelPath);
+
+    List<ComponentTypeSymbol> foundComponents = new ArrayList<>();
+
+    for (String model : foundModels) {
+      String qualifiedModelName = Names.getQualifier(model) + "." + Names.getSimpleName(model);
+
+      // 3. parse + resolve model
+      Log.info("Parsing model:" + qualifiedModelName, TOOL_NAME);
+      ComponentTypeSymbol comp = symTab.resolveComponentType(qualifiedModelName).get();
+
+      // 4. check cocos
+      Log.info("Check model: " + qualifiedModelName, TOOL_NAME);
+      tool.checkCoCos(comp.getAstNode());
+
+      foundComponents.add(comp);
+    }
+    assertThat(Log.getFindings().isEmpty());
+  }
 }
