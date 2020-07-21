@@ -1,19 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-group = "montiarc"
-
 dependencies {
-  implementation 'de.se_rwth.commons:se-commons-logging:1.7.9'
-  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
-  testImplementation 'org.junit.jupiter:junit-jupiter-params:5.5.2'
+  implementation "de.se_rwth.commons:se-commons-logging:$se_commons_version"
 }
 
+group = 'montiarc.libraries'
+
 java {
-  //withJavadocJar()
   withSourcesJar()
-  registerFeature("tests") {
-    usingSourceSet(sourceSets.test)
-  }
 }
 
 publishing {

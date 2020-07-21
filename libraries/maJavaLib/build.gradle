@@ -1,0 +1,52 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+group = "montiarc.libraries"
+
+def maJavaLibDir = "$projectDir/src/main/java/lib"
+
+configurations { models }
+
+dependencies {
+  models "de.monticore:javaLib:$javalib_version:models"
+}
+
+java {
+  withSourcesJar()
+}
+
+task unpack_Models(type:Sync) {
+  dependsOn configurations.models
+
+  from {
+    configurations.models.collect { zipTree(it) }
+  }
+  into maJavaLibDir
+}
+
+task copyResources(type:Sync) {
+  from "$projectDir/src/main/resources"
+  into maJavaLibDir
+}
+
+clean {
+  delete maJavaLibDir
+}
+
+task maJavaLibJar(type: Jar) {
+  from("$projectDir/src/main/java/lib")
+  archiveClassifier = "$majavalib_classifier"
+}
+maJavaLibJar.dependsOn(copyResources)
+copyResources.dependsOn(unpack_Models)
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) { artifact maJavaLibJar }
+  }
+  repositories.maven {
+    name = "$SE_Nexus_ID"
+    credentials.username mavenUser
+    credentials.password mavenPassword
+    url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
+  }
+}

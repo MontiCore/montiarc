@@ -1,0 +1,28 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+group = "montiarc.libraries"
+
+test { useJUnit() }
+
+dependencies {
+  implementation "de.se_rwth.commons:se-commons-logging:$se_commons_version"
+  testImplementation "junit:junit:$junit_version"
+  testImplementation "org.mockito:mockito-core:$mockito_version"
+  testImplementation "ch.qos.logback:logback-classic:$logback_version"
+}
+
+java { withSourcesJar() }
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+    }
+  }
+  repositories.maven {
+    name = "$SE_Nexus_ID"
+    credentials.username mavenUser
+    credentials.password mavenPassword
+    url = version.endsWith("SNAPSHOT") ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
+  }
+}

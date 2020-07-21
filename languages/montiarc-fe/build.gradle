@@ -1,12 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-  id 'monticore'
+  id "monticore"
+  id "jacoco"
 }
 
 group = "montiarc.languages"
 
-def grammarDir = "src/main/grammars"
+def grammarDir = "$projectDir/src/main/grammars"
+def reportsDir = "$buildDir/generated-sources/monticore/sourcecode/reports/"
 
 sourceSets {
   main {
@@ -15,18 +17,29 @@ sourceSets {
   test {
     java.srcDirs += ["$buildDir/generated-test-sources/monticore/sourcecode"]
   }
+  grammars {
+    resources {
+      srcDirs(grammarDir, reportsDir)
+      include("**/*.mc4", "**/*.cd")
+    }
+  }
 }
 
-test { useJUnitPlatform() }
+test {
+  useJUnitPlatform()
+  finalizedBy jacocoTestReport
+}
 
 configurations { grammar }
 
 dependencies {
   //monticore dependencies
+  grammar "de.monticore:monticore-grammar:$monticore_version:$grammar_classifier"
+  grammar files(project(":languages:arc-fe").projectDir.toPath().resolve("src/main/grammars"))
+
   implementation "de.monticore:monticore-generator:$monticore_version"
   implementation "de.monticore:monticore-runtime:$monticore_version"
   implementation "de.monticore:monticore-grammar:$monticore_version"
-  grammar "de.monticore:monticore-grammar:$monticore_version:$grammar_classifier"
   testImplementation "de.monticore:monticore-runtime:$monticore_version:tests"
   testImplementation "de.monticore:monticore-runtime:$monticore_version"
 
@@ -55,9 +68,6 @@ fileTree(grammarDir).matching { include '**/*.mc4' }.each {
   def grammarName = it.getName().substring(0, it.getName().lastIndexOf('.'))
 
   task "generateGrammar$grammarName"(type: MCTask) {
-    modelPath(
-      file("$projectDir/src/main/grammars"),
-      file(project(":languages:arc-fe").projectDir.toURI().resolve("src/main/grammars")))
     grammar = file g
     outputDir = file "$buildDir/generated-sources/monticore/sourcecode"
     handcodedPath file("$projectDir/src/main/java")
@@ -81,4 +91,32 @@ compileJava {
   }
 
   dependsOn project.collect { it.tasks.findAll { task -> task.name.startsWith("generateGrammar") } }
+}
+
+java {
+  //withJavadocJar()
+  withSourcesJar()
+  registerFeature("grammars") {
+    usingSourceSet(sourceSets.grammars)
+  }
+}
+
+task testModelsJar(type: Jar) {
+  from("$projectDir/src/test/resources")
+  archiveClassifier = "$testmodels_classifier"
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+      artifact testModelsJar
+    }
+  }
+  repositories.maven {
+    name = "$SE_Nexus_ID"
+    credentials.username mavenUser
+    credentials.password mavenPassword
+    url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
+  }
 }

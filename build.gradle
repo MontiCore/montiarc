@@ -2,31 +2,32 @@
 
 plugins {
   id 'monticore' version '6.1.0' apply false
+  //plugin is only resolved, not applied -> no need to specify version in every subproject using it
 }
 
+group = "montiarc"
+
 allprojects {
-  group = 'montiarc'
   version = '6.0.0-SNAPSHOT'
   buildDir = "$projectDir/target"
 }
 
-description = """
-MontiArc Version $version
+description = """MontiArc Version $version
 
 Framework for Modeling and Simulation of Software Architectures
 
 Developed at the Department of Software Engineering, RWTH Aachen University
 http://www.se-rwth.de/"""
 
-buildDir = "$projectDir/target"
-
 subprojects {
-  apply plugin: 'java'
-  apply plugin: 'maven-publish'
-  apply plugin: 'idea'
-  idea {
-    module {
-      testSourceDirs += file("$projectDir/target/generated-test-sources/monticore/sourcecode")
+  apply plugin: 'java' //used for compiling & testing
+  apply plugin: 'maven-publish' //used to publish maven artifacts
+  if(project.group.toString() == "montiarc.languages") {
+    apply plugin: 'idea' //used to customize the structure given in *.iml files
+    idea {
+      module {
+        testSourceDirs += file("$projectDir/target/generated-test-sources/monticore/sourcecode")
+      }
     }
   }
 
@@ -42,22 +43,9 @@ subprojects {
 
   sourceCompatibility = '1.8'
 
-  publishing {
-    publications {
-      maven(MavenPublication) {
-        from(components.java)
-      }
-    }
-    repositories.maven {
-      credentials.username mavenUser
-      credentials.password mavenPassword
-      def releasesRepoUrl = "https://nexus.se.rwth-aachen.de/content/repositories/montiarc-releases/"
-      def snapshotsRepoUrl = "https://nexus.se.rwth-aachen.de/content/repositories/montiarc-snapshots/"
-      url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-    }
-  }
-
   tasks.withType(JavaCompile) {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
     options.encoding = 'UTF-8'
   }
 }

@@ -1,12 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-  id 'monticore'
+  id "monticore"
+  id "jacoco"
 }
 
 group = "montiarc.languages"
 
-def grammarDir = "src/main/grammars"
+def grammarDir = "$projectDir/src/main/grammars"
+def reportsDir = "$buildDir/generated-sources/monticore/sourcecode/reports/"
 
 sourceSets {
   main {
@@ -15,9 +17,18 @@ sourceSets {
   test {
     java.srcDirs += ["$buildDir/generated-test-sources/monticore/sourcecode"]
   }
+  grammars {
+    resources {
+      srcDirs(grammarDir, reportsDir)
+      include("**/*.mc4", "**/*.cd")
+    }
+  }
 }
 
-test { useJUnitPlatform() }
+test {
+  useJUnitPlatform()
+  finalizedBy jacocoTestReport
+}
 
 configurations { grammar }
 
@@ -81,4 +92,24 @@ compileJava {
   }
 
   dependsOn project.collect { it.tasks.findAll { task -> task.name.startsWith("generateGrammar") } }
+}
+
+java {
+  //withJavadocJar()
+  withSourcesJar()
+  registerFeature("grammars") {
+    usingSourceSet(sourceSets.grammars)
+  }
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) { from components.java }
+  }
+  repositories.maven {
+    name = "$SE_Nexus_ID"
+    credentials.username mavenUser
+    credentials.password mavenPassword
+    url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
+  }
 }
