@@ -12,14 +12,14 @@ import ${import};
 
 public ${kind} ${type.getName()} ${super} {
 
-  <#if type.isEnum()>
+  <#if type.isIsEnum()>
     <#-- enum -->
     <#list type.getFields() as field>
         ${field.getName()}
         <#if !field?is_last>,<#else>;</#if>
     </#list>
 
-  <#elseif type.isClass()>
+  <#elseif type.isIsClass()>
     <#-- class -->
 
     <#-- mandatoryFields are those required in the constructor -->
@@ -28,19 +28,19 @@ public ${kind} ${type.getName()} ${super} {
     
     <#list type.getFields() as field>
         <#-- attributes -->
-        <#assign mandatoryFields = mandatoryFields + [{"name": field.getName(), "type":field.getType().getStringRepresentation()}]>
-        private ${field.getType().getStringRepresentation()} ${field.getName()};
-        public ${field.getType().getStringRepresentation()} get${field.getName()?cap_first}() {
+        <#assign mandatoryFields = mandatoryFields + [{"name": field.getName(), "type":field.getType().getLoadedSymbol().getStringRepresentation()}]>
+        private ${field.getType().getLoadedSymbol().getStringRepresentation()} ${field.getName()};
+        public ${field.getType().getLoadedSymbol().getStringRepresentation()} get${field.getName()?cap_first}() {
           return ${field.getName()};
         }
-        public void set${field.getName()?cap_first}(${field.getType().getStringRepresentation()} ${field.getName()}) {
+        public void set${field.getName()?cap_first}(${field.getType().getLoadedSymbol().getStringRepresentation()} ${field.getName()}) {
           this.${field.getName()} = ${field.getName()};
         }
     </#list>
 
     <#-- associations -->
     <#list type.getAssociations() as assoc>
-      <#assign t=typeHelper.printType(assoc.getTargetType())>
+      <#assign t=typeHelper.printType(assoc.getTargetType().getLoadedSymbol())>
       <#assign n=assoc.getDerivedName()>
 
       <#if assoc.getTargetCardinality().isMultiple()>
