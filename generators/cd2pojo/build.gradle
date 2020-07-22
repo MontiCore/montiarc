@@ -2,7 +2,7 @@
 
 group = "montiarc.generators"
 
-//test { useJUnitPlatform() }
+test { useJUnitPlatform() }
 
 dependencies {
   implementation "de.monticore:monticore-runtime:$monticore_version"
