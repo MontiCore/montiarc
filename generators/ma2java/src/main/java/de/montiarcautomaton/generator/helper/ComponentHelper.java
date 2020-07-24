@@ -23,7 +23,9 @@ import de.monticore.symboltable.ImportStatement;
 import de.monticore.types.typesymbols._symboltable.FieldSymbol;
 import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericComponentHead;
+import montiarc._ast.ASTMontiArcNode;
 import montiarc._symboltable.MontiArcArtifactScope;
+import montiarc._visitor.MontiArcPrettyPrinterDelegator;
 
 /**
  * Helper class used in the template to generate target code of atomic or
@@ -202,7 +204,7 @@ public class ComponentHelper {
     // final List<ValueSymbol<TypeReference<TypeSymbol>>> configArguments =
     // param.getConfigArguments();
     List<ASTExpression> configArguments = param.getArguments();
-    CommonExpressionsPrettyPrinter printer = new CommonExpressionsPrettyPrinter(
+    MontiArcPrettyPrinterDelegator printer = new MontiArcPrettyPrinterDelegator(
       new IndentPrinter());
 
     List<String> outputParameters = new ArrayList<>();
@@ -229,7 +231,7 @@ public class ComponentHelper {
         // Fill up from the last parameter
         final ASTArcParameter astParameter = parameters.get(parameters.size() - 1 - counter);
         final String prettyprint = printer
-          .prettyprint(astParameter.getDefault());
+          .prettyprint((ASTMontiArcNode) astParameter.getDefault());
         outputParameters.add(outputParameters.size() - counter, prettyprint);
       }
     }
