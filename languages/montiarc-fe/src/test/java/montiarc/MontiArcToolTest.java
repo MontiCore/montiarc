@@ -51,7 +51,6 @@ class MontiArcToolTest {
     String basedir = DirectoryUtil.getBasedirFromModelAndTargetPath(modelPath.getAbsolutePath(),
         target.getAbsolutePath());
     IMontiArcScope symTab = tool.initSymbolTable(modelPath);
-    symTab.add(new TypeSymbol("String"));
 
     List<ComponentTypeSymbol> foundComponents = new ArrayList<>();
 
