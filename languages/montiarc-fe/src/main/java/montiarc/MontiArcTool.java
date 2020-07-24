@@ -10,6 +10,7 @@ import de.monticore.cd.cd4analysis.CD4AnalysisMill;
 import de.monticore.cd.cd4analysis._symboltable.CD4AnalysisGlobalScope;
 import de.monticore.cd.cd4analysis._symboltable.CD4AnalysisLanguage;
 import de.monticore.io.paths.ModelPath;
+import de.monticore.types.typesymbols._symboltable.TypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -162,11 +163,36 @@ public class MontiArcTool {
     MontiArcGlobalScope montiArcGlobalScope = new MontiArcGlobalScope(mp, language);
     montiArcGlobalScope.addAdaptedFieldSymbolResolvingDelegate(fieldDelegate);
     montiArcGlobalScope.addAdaptedTypeSymbolResolvingDelegate(typeDelegate);
-
+    addBasicTypes(montiArcGlobalScope);
+    
     isSymTabInitialized = true;
     return montiArcGlobalScope;
   }
-
+  
+  public IMontiArcScope addBasicTypes(@NotNull IMontiArcScope scope) {
+    scope.add(new TypeSymbol("String"));
+    scope.add(new TypeSymbol("Integer"));
+    scope.add(new TypeSymbol("Map"));
+    scope.add(new TypeSymbol("Set"));
+    scope.add(new TypeSymbol("List"));
+    scope.add(new TypeSymbol("Boolean"));
+    scope.add(new TypeSymbol("Character"));
+    scope.add(new TypeSymbol("Double"));
+    scope.add(new TypeSymbol("Float"));
+    
+    //primitives
+    scope.add(new TypeSymbol("int"));
+    scope.add(new TypeSymbol("boolean"));
+    scope.add(new TypeSymbol("float"));
+    scope.add(new TypeSymbol("double"));
+    scope.add(new TypeSymbol("char"));
+    scope.add(new TypeSymbol("long"));
+    scope.add(new TypeSymbol("short"));
+    scope.add(new TypeSymbol("byte"));
+    
+    return scope;
+  }
+  
   /**
    * Initializes the Symboltable by introducing scopes for the passed modelpaths. It does not create
    * the symbol table! Symbols for models within the modelpaths are not added to the symboltable
