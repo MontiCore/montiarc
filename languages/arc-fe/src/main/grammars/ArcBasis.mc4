@@ -151,7 +151,7 @@ component grammar ArcBasis extends
    * @attribute value The initialization value of the field.
    */
   // TODO: Use Variable instead of Field, waiting for MC 6.2.0
-  ArcField implements Field = Name "=" initial:Expression;
+  ArcField implements Field <100> = Name "=" initial:Expression;
 
   /**
    * ASTComponentInstantiation holds one or more component instances that are
@@ -161,7 +161,7 @@ component grammar ArcBasis extends
    * @attribute type The type of the component instance.
    * @attribute componentInstance A list of instantiated components.
    */
-  ComponentInstantiation implements ArcElement =
+  ComponentInstantiation implements ArcElement <100> =
     MCType (ComponentInstance || ",")* ";"
   ;
 
