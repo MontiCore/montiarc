@@ -8,6 +8,7 @@ import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
+import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
 import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 import de.monticore.types.typesymbols._symboltable.FieldSymbol;
 import de.monticore.types.typesymbols._symboltable.FieldSymbolBuilder;
@@ -313,8 +314,10 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
   }
 
   protected ComponentTypeSymbolLoader create_ComponentLoader(@NotNull ASTMCType type) {
-    return ArcBasisMill.componentTypeSymbolLoaderBuilder()
-      .setName(type.printType(this.getTypePrinter())).build();
+    if (type instanceof ASTMCGenericType){
+      return ArcBasisMill.componentTypeSymbolLoaderBuilder().setName(((ASTMCGenericType)type).printWithoutTypeArguments()).build();
+    }
+    return ArcBasisMill.componentTypeSymbolLoaderBuilder().setName(type.printType(this.getTypePrinter())).build();
   }
 
   @Override
