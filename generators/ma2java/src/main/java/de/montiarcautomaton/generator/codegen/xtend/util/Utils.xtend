@@ -58,7 +58,9 @@ class Utils {
   def static printVariables(ComponentTypeSymbol comp) {
     return '''
       «FOR variable : comp.getFields»
-        «printMember(variable.getType.print, variable.name, "protected")»
+        «IF !comp.getParameters.contains(variable)»
+          «printMember(variable.getType.print, variable.name, "protected")»
+        «ENDIF»
       «ENDFOR»
     '''
   }
