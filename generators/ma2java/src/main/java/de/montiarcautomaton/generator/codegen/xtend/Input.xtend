@@ -17,7 +17,7 @@ class Input implements IMontiArcGenerator {
         «Utils.printPackage(comp)»
         
         «Utils.printImports(comp)»
-        import de.montiarcautomaton.runtimes.timesync.implementation.IInput;
+        import de.montiarc.runtimes.timesync.implementation.IInput;
         
         
         public class «comp.name»Input«Utils.printFormalTypeParameters(comp)»

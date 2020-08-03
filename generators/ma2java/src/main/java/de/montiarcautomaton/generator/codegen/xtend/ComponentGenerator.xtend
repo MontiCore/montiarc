@@ -38,10 +38,10 @@ class ComponentGenerator implements IMontiArcGenerator {
       «Utils.printImports(comp)»
       import «Utils.printPackageWithoutKeyWordAndSemicolon(comp)».«comp.name»Input;
       import «Utils.printPackageWithoutKeyWordAndSemicolon(comp)».«comp.name»Result;
-      import de.montiarcautomaton.runtimes.timesync.delegation.IComponent;
-      import de.montiarcautomaton.runtimes.timesync.delegation.Port;
-      import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
-      import de.montiarcautomaton.runtimes.Log;
+      import de.montiarc.runtimes.timesync.delegation.IComponent;
+      import de.montiarc.runtimes.timesync.delegation.Port;
+      import de.montiarc.runtimes.timesync.implementation.IComputable;
+      import de.montiarc.runtimes.Log;
       
       public class «comp.name»«generics»      
         «IF comp.isPresentParentComponent» extends «Utils.printSuperClassFQ(comp)» 

@@ -16,7 +16,7 @@ class Result implements IMontiArcGenerator {
       «Utils.printPackage(comp)»
       
       «Utils.printImports(comp)»
-      import de.montiarcautomaton.runtimes.timesync.implementation.IResult;
+      import de.montiarc.runtimes.timesync.implementation.IResult;
       
       
       public class «comp.name»Result«Utils.printFormalTypeParameters(comp)»   
