@@ -15,23 +15,23 @@ import de.montiarcautomaton.lejos.lib.ultrasonic.Ultrasonic;
 
 import de.montiarcautomaton.lejos.lib.logger.Logger;
 
-<<deploy>> component BumperBot {
-  component Ultrasonic(SensorPort.S1) sensor; // use port S1
-  component Motor(MotorPort.A) leftMotor; // use port A
-  component Motor(MotorPort.B) rightMotor; // use port B
-  component BumpControl controller;  
-  component BumpSpeed(30) speedCtrl;  
-  component Timer(1000) timer; // 1 sec delay
-  component Logger logger;
-  
-  connect sensor.distance   -> controller.distance;
-  connect sensor.distance   -> speedCtrl.distance;
-  connect controller.right  -> leftMotor.cmd;
-  connect controller.left   -> rightMotor.cmd;
-  connect controller.timer  -> timer.cmd;  
-  connect controller.speedCmd  -> speedCtrl.cmd;  
-  connect timer.signal      -> controller.signal;
-  connect speedCtrl.speed  -> leftMotor.speed;
-  connect speedCtrl.speed  -> rightMotor.speed;
-  connect controller.log    -> logger.message;
+  component BumperBot {
+  Ultrasonic sensor (SensorPort.S1); // use port S1
+  Motor leftMotor (MotorPort.A); // use port A
+  Motor rightMotor (MotorPort.B); // use port B
+  BumpControl controller;
+  BumpSpeed speedCtrl (30);
+  Timer timer (1000); // 1 sec delay
+  Logger logger;
+
+  sensor.distance   -> controller.distance;
+  sensor.distance   -> speedCtrl.distance;
+  controller.right  -> leftMotor.cmd;
+  controller.left   -> rightMotor.cmd;
+  controller.timer  -> timer.cmd;
+  controller.speedCmd  -> speedCtrl.cmd;
+  timer.signal      -> controller.signal;
+  speedCtrl.speed  -> leftMotor.speed;
+  speedCtrl.speed  -> rightMotor.speed;
+  controller.log    -> logger.message;
 }

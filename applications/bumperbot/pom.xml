@@ -25,13 +25,13 @@
     <dependency>
       <groupId>montiarc.libraries</groupId>
       <artifactId>lejos-rte</artifactId>
-      <version>${project.version}</version>
+      <version>5.1.3</version>
     </dependency>
 
     <dependency>
       <groupId>montiarc.libraries</groupId>
       <artifactId>lejos-rte</artifactId>
-      <version>${project.version}</version>
+      <version>5.1.3</version>
       <classifier>${librarymodels.classifier}</classifier>
     </dependency>
 
@@ -43,7 +43,7 @@
 
     <dependency>
       <groupId>montiarc.libraries</groupId>
-      <artifactId>maa-rte</artifactId>
+      <artifactId>majava-rte</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -159,7 +159,7 @@
         <dependencies>
           <dependency>
             <groupId>montiarc.generators</groupId>
-            <artifactId>maa2java-xtend</artifactId>
+            <artifactId>ma2java</artifactId>
             <version>${project.version}</version>
           </dependency>
           <dependency>
