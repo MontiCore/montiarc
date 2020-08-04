@@ -1,0 +1,141 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- == PROJECT COORDINATES ============================================= -->
+	<groupId>montiarc.examples</groupId>
+	<artifactId>factory</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<!-- == PROJECT PROPERTIES ============================================== -->
+	<properties>
+		<montiarc.version>6.0.0-SNAPSHOT</montiarc.version>
+		<se-groovy.maven.version>1.2.3</se-groovy.maven.version>
+		<junit.version>4.11</junit.version>
+
+		<models.dir>${basedir}/src/main/resources/</models.dir>
+		<hwc.dir>${basedir}/src/main/java/</hwc.dir>
+		<gen.dir>${basedir}/target/generated-sources/</gen.dir>
+
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+	<!-- == PROJECT DEPENDENCIES ============================================= -->
+	<dependencies>
+		<!-- == MONTIARC ============================================= -->
+		<dependency>
+			<groupId>montiarc.languages</groupId>
+			<artifactId>montiarc-fe</artifactId>
+			<version>${montiarc.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>montiarc.libraries</groupId>
+			<artifactId>majava-rte</artifactId>
+			<version>${montiarc.version}</version>
+		</dependency>
+
+
+		<!-- == SIMULATOR ============================================= -->
+		<dependency>
+			<groupId>org.sourceforge</groupId>
+			<artifactId>simbad</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.vecmath</groupId>
+			<artifactId>vecmath</artifactId>
+			<version>1.5.2</version>
+		</dependency>
+
+		<!-- == TESTS ============================================= -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>1.7.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>1.7.0</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<!-- == BUILD CONFIGURATION ============================================= -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>de.se_rwth.maven</groupId>
+				<artifactId>se-groovy-maven-plugin</artifactId>
+				<version>${se-groovy.maven.version}</version>
+				<configuration>
+					<baseClass>de.montiarcautomaton.generator.codegen.MAAGeneratorScript</baseClass>
+					<arguments>
+						<out>${gen.dir}</out>
+						<modelPath>${models.dir}</modelPath>
+						<hwc>${hwc.dir}</hwc>
+					</arguments>
+					<script>de/montiarcautomaton/generator/maagenerator.groovy</script>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>montiarc.generators</groupId>
+						<artifactId>ma2java</artifactId>
+						<version>${montiarc.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.12</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${gen.dir}</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>se-nexus-public</id>
+			<url>https://nexus.se.rwth-aachen.de/content/groups/public/</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>se-nexus-public</id>
+			<url>https://nexus.se.rwth-aachen.de/content/groups/public/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+
+</project>
