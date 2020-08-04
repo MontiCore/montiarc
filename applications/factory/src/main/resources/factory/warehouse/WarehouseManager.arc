@@ -7,6 +7,9 @@ import factory.warehouse.Crane;
 import factory.warehouse.Storage;
 import factory.warehouse.Warehouse.*;
 
+/**
+ * The WarehouseManager connects the RequestManager to a Crane and a Transporter.
+ */
 component WarehouseManager {
 
   RequestManager requestManager ;//(new Storage(100, 100, 100), new Position(), new Position());
