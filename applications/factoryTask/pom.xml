@@ -5,7 +5,7 @@
 
 	<!-- == PROJECT COORDINATES ============================================= -->
 	<groupId>montiarc.applications</groupId>
-	<artifactId>factory</artifactId>
+	<artifactId>factoryTask</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<!-- == PROJECT PROPERTIES ============================================== -->
@@ -36,7 +36,42 @@
 			<artifactId>majava-rte</artifactId>
 			<version>${montiarc.version}</version>
 		</dependency>
-  </dependencies>
+
+
+		<!-- == SIMULATOR ============================================= -->
+		<dependency>
+			<groupId>org.sourceforge</groupId>
+			<artifactId>simbad</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.vecmath</groupId>
+			<artifactId>vecmath</artifactId>
+			<version>1.5.2</version>
+		</dependency>
+
+		<!-- == TESTS ============================================= -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>1.7.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>1.7.0</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
 	<!-- == BUILD CONFIGURATION ============================================= -->
 	<build>

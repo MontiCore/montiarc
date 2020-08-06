@@ -9,10 +9,37 @@ classdiagram Warehouse {
     int posZ;
   }
 
+  class Builder {
+
+    public Builder(int i);
+    public int method(int param) throws RuntimeException;
+    public void method2();
+    public static StorageObjectLinkedList buildStorageObjectLinkedList();
+    public static Position buildPosition();
+    public static Storage buildStorage();
+  }
+
+  class Storage {
+    public Storage();
+    public Storage(int xDimension, int yDimension, int zDimension);
+  }
+
   class StorageObject {
     String name;
     int size;
     Position pos;
+  }
+
+  class StorageObjectLinkedList {
+    public StorageObjectLinkedList();
+    public StorageObjectLinkedList(StorageObject head);
+    StorageObjectLinkedListNode head;
+    StorageObjectLinkedListNode tail;
+  }
+
+  class StorageObjectLinkedListNode {
+    StorageObject storageObject;
+    StorageObjectLinkedListNode next;
   }
 
   interface StorageRequest;

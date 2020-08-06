@@ -3,15 +3,13 @@ package factory.warehouse.transporter;
 
 import java.util.ArrayList;
 import factory.warehouse.Warehouse.StorageObject;
-import factory.warehouse.Warehouse.Builder;
-import factory.warehouse.Warehouse.StorageObjectLinkedList;
 
 /**
  * Atomic component for holding StorageObjects.
  */
 component Container(Integer capacity) {
 
-  StorageObjectLinkedList container = Builder.buildStorageObjectLinkedList();
+  //ArrayList <StorageObject> storedObjects = new ArrayList <StorageObject> ();
 
   port
     in StorageObject storageObjectInput,

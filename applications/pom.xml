@@ -17,6 +17,7 @@
 
   <modules>
     <module>factory</module>
-    <module>bumperbot</module>
+    <module>factoryTask</module>
+    <!-- <module>bumperbot</module> -->
   </modules>
 </project>

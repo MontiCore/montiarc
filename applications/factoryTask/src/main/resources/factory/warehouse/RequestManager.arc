@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package factory.warehouse;
 
+import factory.warehouse.Storage;
 import factory.warehouse.Warehouse.*;
 import factory.warehouse.transporter.Transporter;
 import factory.warehouse.Crane;
@@ -8,7 +9,7 @@ import factory.warehouse.Crane;
 /**
  * A RequestManager is required to process StorageRequests and to coordinate a crane and a transporter.
  */
-component RequestManager (Storage storage, Position dropOffZone, Position pickUpZone) {
+component RequestManager {//(Storage storage, Position dropOffZone, Position pickUpZone) {
 
   port
     in StorageRequest storageRequest,

@@ -1,4 +1,3 @@
-/* (c) https://github.com/MontiCore/monticore */
 package factory.warehouse;
 
 import factory.warehouse.Warehouse.Position;

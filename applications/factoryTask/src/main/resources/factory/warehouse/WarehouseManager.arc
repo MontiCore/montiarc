@@ -4,15 +4,12 @@ package factory.warehouse;
 import factory.warehouse.RequestManager;
 import factory.warehouse.transporter.Transporter;
 import factory.warehouse.Crane;
+import factory.warehouse.Storage;
 import factory.warehouse.Warehouse.*;
 
 component WarehouseManager {
 
-  Storage storage = Builder.buildStorage();
-  Position dropOffZone = Builder.buildPosition();
-  Position pickUpZone = Builder.buildPosition();
-
-  RequestManager requestManager (storage, dropOffZone, pickUpZone);
+  RequestManager requestManager ;//(new Storage(100, 100, 100), new Position(), new Position());
   Transporter transporter (10);
   Crane crane;
 
