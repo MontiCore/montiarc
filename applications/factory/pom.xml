@@ -4,9 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- == PROJECT COORDINATES ============================================= -->
-	<groupId>montiarc.applications</groupId>
+	<parent>
+		<groupId>montiarc.applications</groupId>
+		<artifactId>applications</artifactId>
+		<version>6.0.0-SNAPSHOT</version>
+	</parent>
+
 	<artifactId>factory</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 
 	<!-- == PROJECT PROPERTIES ============================================== -->
 	<properties>
