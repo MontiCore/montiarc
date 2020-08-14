@@ -191,7 +191,6 @@
         <artifactId>monticore-grammar</artifactId>
         <version>${monticore.version}</version>
         <classifier>${grammars.classifier}</classifier>
-        <scope>provided</scope>
       </dependency>
 
       <dependency>
