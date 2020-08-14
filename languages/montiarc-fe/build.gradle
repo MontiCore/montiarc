@@ -34,8 +34,10 @@ configurations { grammar }
 
 dependencies {
   //monticore dependencies
+  implementation "de.monticore:monticore-grammar:$monticore_version:$grammar_classifier"
   grammar "de.monticore:monticore-grammar:$monticore_version:$grammar_classifier"
-  grammar files(project(":languages:arc-fe").projectDir.toPath().resolve("src/main/grammars"))
+  implementation "montiarc.languages:arc-fe:$version:$grammar_classifier"
+  grammar "montiarc.languages:arc-fe:$version:$grammar_classifier"
 
   implementation "de.monticore:monticore-generator:$monticore_version"
   implementation "de.monticore:monticore-runtime:$monticore_version"

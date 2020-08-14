@@ -45,7 +45,6 @@
       <groupId>de.monticore</groupId>
       <artifactId>monticore-grammar</artifactId>
       <classifier>${grammars.classifier}</classifier>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -90,7 +89,6 @@
       <artifactId>javaDSL</artifactId>
       <classifier>${grammars.classifier}</classifier>
       <version>${javadsl.version}</version>
-      <scope>provided</scope>
     </dependency>
 
     <!-- Test Libraries -->
