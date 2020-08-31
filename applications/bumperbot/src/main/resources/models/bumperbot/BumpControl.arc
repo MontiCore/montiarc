@@ -15,7 +15,7 @@ component BumpControl {
     out Integer speed,
     out String log;
 
-  automaton BumpControl {
+  /*automaton BumpControl {
     state Idle, Driving, Backing, Turning;
 
     initial Idle / {right = MotorCmd.STOP, left = MotorCmd.STOP, log = "Idle"};
@@ -24,5 +24,5 @@ component BumpControl {
     Driving -> Backing [distance < 5] / {right = MotorCmd.BACKWARD, left = MotorCmd.BACKWARD, timer = TimerCmd.SINGLE, log = "Backing"};
     Backing -> Turning [signal == TimerSignal.ALERT] / {right = MotorCmd.BACKWARD, left = MotorCmd.FORWARD, timer = TimerCmd.DOUBLE, log = "Turning"};
     Turning -> Driving [signal == TimerSignal.ALERT] / {left = MotorCmd.FORWARD, right = MotorCmd.FORWARD, log = "Driving"};
-  }
+  }*/
 }

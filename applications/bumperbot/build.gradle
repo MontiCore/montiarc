@@ -1,0 +1,70 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+plugins {
+  id "monticore"
+}
+
+sourceSets {
+  main {
+    allSource.srcDirs += ["$buildDir/generated-sources"]
+  }
+}
+
+configurations { librarymodels }
+
+dependencies {
+  librarymodels "montiarc.libraries:lejos-rte:$version:$librarymodels_classifier"
+  librarymodels "montiarc.libraries:maJavaLib:$version"
+  implementation project(":generators:ma2java")
+  implementation project(":languages:montiarc-fe")
+  implementation project(":libraries:lejos-rte")
+  implementation project(":libraries:maJavaLib")
+  implementation project(":libraries:majava-rte")
+  implementation "de.se_rwth.commons:se-commons-groovy:$se_commons_version"
+  implementation "de.se_rwth.commons:se-commons-utilities:$se_commons_version"
+  implementation "de.monticore:monticore-runtime:$monticore_version"
+  implementation "de.monticore:monticore-grammar:$monticore_version"
+  implementation "de.monticore:javaDSL:$javadsl_version"
+  runtimeOnly "ch.qos.logback:logback-classic:$logback_version"
+  testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
+  testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version"
+  testImplementation "de.monticore:monticore-runtime:$monticore_version:tests"
+}
+
+task unpackLibrarymodels(type: Sync) {
+  dependsOn configurations.librarymodels
+
+  from {
+    configurations.librarymodels.collect { zipTree(it) }
+  }
+  into "$buildDir/$librarymodels_classifier"
+}
+
+task groovyTask(type: GroovyTask) {
+  baseClass = "de.montiarcautomaton.generator.codegen.MAAGeneratorScript"
+  outputDir = file "$buildDir/generated-sources"
+  modelPath(
+    file("$projectDir/src/main/resources/models")
+  )
+  handcodedPath(
+    file("$projectDir/src/main/java")
+  )
+  script = "de/montiarcautomaton/generator/maagenerator.groovy"
+}
+
+build.dependsOn unpackLibrarymodels, groovyTask
+build.dependsOn(tasks.getByPath(":libraries:lejos-rte:build"))
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+    }
+  }
+  repositories.maven {
+    name = "$SE_Nexus_ID"
+    credentials.username mavenUser
+    credentials.password mavenPassword
+    url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
+  }
+}

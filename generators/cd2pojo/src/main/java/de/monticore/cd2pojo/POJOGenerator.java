@@ -1,63 +1,60 @@
 /* (c) https://github.com/MontiCore/monticore */
 package de.monticore.cd2pojo;
 
+import de.monticore.cd.cd4analysis._symboltable.*;
+import de.monticore.generating.GeneratorEngine;
+import de.monticore.generating.GeneratorSetup;
+import de.monticore.io.paths.ModelPath;
+import de.monticore.utils.Names;
+import de.se_rwth.commons.logging.Log;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import de.monticore.ModelingLanguageFamily;
-import de.monticore.generating.GeneratorEngine;
-import de.monticore.generating.GeneratorSetup;
-import de.monticore.io.paths.ModelPath;
-import de.monticore.symboltable.GlobalScope;
-import de.monticore.symboltable.Scope;
-import de.monticore.umlcd4a.CD4AnalysisLanguage;
-import de.monticore.umlcd4a.symboltable.CDSymbol;
-import de.monticore.umlcd4a.symboltable.CDTypeSymbol;
-import de.se_rwth.commons.Names;
-import de.se_rwth.commons.logging.Log;
-
 /**
  * see README.md
  *
- * 
+ * @author Robert Heim
  */
 public class POJOGenerator {
   
+  private static final String[] primitiveTypes = { "boolean", "byte", "char", "double", "float",
+    "int", "long", "short", "String" };
+  
   private Path outputDir;
-  
+
   private TypeHelper typeHelper;
-  
+
   private GeneratorSetup generatorSetup;
-  
+
   private GeneratorEngine ge;
-  
+
   private String _package = "";
-  
-  private CDSymbol cdSymbol;
-  
+
+  private CDDefinitionSymbol cdSymbol;
+
   public POJOGenerator(Path outputDir, Path modelPath, String modelName) {
     this(outputDir, modelPath, modelName, Optional.empty());
   }
-  
+
   public POJOGenerator(Path outputDir, Path modelPath, String modelName, String targetPackage) {
     this(outputDir, modelPath, modelName, Optional.of(targetPackage));
   }
-  
+
   private POJOGenerator(
-      Path outputDir,
-      Path modelPath,
-      String modelName,
-      Optional<String> targetPackage) {
+    Path outputDir,
+    Path modelPath,
+    String modelName,
+    Optional<String> targetPackage) {
     this.outputDir = outputDir;
-    
+
     CD4AnalysisLanguage lang = new CD4AnalysisLanguage();
-    ModelingLanguageFamily fam = new ModelingLanguageFamily();
-    fam.addModelingLanguage(lang);
-    Scope st = new GlobalScope(new ModelPath(modelPath), fam);
-    cdSymbol = st.<CDSymbol> resolve(modelName, CDSymbol.KIND).get();
+    ICD4AnalysisScope st = new CD4AnalysisGlobalScope(new ModelPath(modelPath), lang);
+    st = injectPrimitives(st);
+    cdSymbol = st.resolveCDDefinition(modelName).orElse(null);
     _package = targetPackage.orElse(cdSymbol.getName().toLowerCase());
     
     this.typeHelper = new TypeHelper(_package);
@@ -65,32 +62,40 @@ public class POJOGenerator {
     this.generatorSetup.setOutputDirectory(this.outputDir.toFile());
     this.ge = new GeneratorEngine(this.generatorSetup);
   }
-  
+
   public void generate() {
     cdSymbol.getTypes().forEach(t -> generate(t));
     Log.info("Done.", "Generator");
   }
   
+  protected ICD4AnalysisScope injectPrimitives(ICD4AnalysisScope scope) {
+    for (String primitive : primitiveTypes) {
+      CDTypeSymbol primitiveCdType = new CDTypeSymbol(primitive);
+      scope.add(primitiveCdType);
+    }
+    return scope;
+  }
+
   private void generate(CDTypeSymbol type) {
-    String kind = type.isClass() ? "class" : (type.isEnum() ? "enum" : "interface");
-    
+    String kind = type.isIsClass() ? "class" : (type.isIsEnum() ? "enum" : "interface");
+
     final StringBuilder _super = new StringBuilder();
-    if (type.getSuperClass().isPresent()) {
+    if (type.isPresentSuperClass()) {
       _super.append("extends ");
-      _super.append(typeHelper.printType(type.getSuperClass().get()));
+      _super.append(typeHelper.printType(type.getSuperClass().getLoadedSymbol()));
       _super.append(" ");
-    } else if (type.isInterface() && !type.getInterfaces().isEmpty()){
+    } else if (type.isIsInterface() && !type.getCdInterfaceList().isEmpty()) {
       // Allows extending other interfaces
       _super.append("extends ");
-      _super.append(typeHelper.printType(type.getInterfaces().get(0)));
+      _super.append(typeHelper.printType(type.getCdInterface(0).getLoadedSymbol()));
       _super.append(" ");
     }
-    if(!type.getInterfaces().isEmpty() && !type.isInterface()){
+    if (!type.getCdInterfaceList().isEmpty() && !type.isIsInterface()) {
       _super.append(" ");
       _super.append("implements");
-      type.getInterfaces().forEach(i -> {
+      type.getCdInterfaceList().forEach(i -> {
         _super.append(" ");
-        _super.append(typeHelper.printType(i));
+        _super.append(typeHelper.printType(i.getLoadedSymbol()));
         _super.append(",");
       });
       _super.deleteCharAt(_super.length() - 1);
@@ -103,17 +108,17 @@ public class POJOGenerator {
     List<String> imports = new ArrayList<>();
     for (String anImport : cdSymbol.getImports()) {
       final String[] split = anImport.split("\\.");
-      if(split.length > 0){
+      if (split.length > 0) {
         final char firstOfLastElement = split[split.length - 1].charAt(0);
-        if(Character.isLowerCase(firstOfLastElement)){
+        if (Character.isLowerCase(firstOfLastElement)) {
           imports.add(anImport + ".*");
-        } else{
+        } else {
           imports.add(anImport);
         }
       }
     }
 
-    ge.generate("templates.type.ftl", filePath, type.getAstNode().get(), _package, kind,
-        type, _super, typeHelper, imports);
+    ge.generate("templates.type.ftl", filePath, type.getAstNode(), _package, kind,
+      type, _super, typeHelper, imports);
   }
 }

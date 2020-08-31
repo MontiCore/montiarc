@@ -12,14 +12,14 @@ import ${import};
 
 public ${kind} ${type.getName()} ${super} {
 
-  <#if type.isEnum()>
+  <#if type.isIsEnum()>
     <#-- enum -->
     <#list type.getFields() as field>
         ${field.getName()}
         <#if !field?is_last>,<#else>;</#if>
     </#list>
 
-  <#elseif type.isClass()>
+  <#elseif type.isIsClass()>
     <#-- class -->
 
     <#-- mandatoryFields are those required in the constructor -->
@@ -28,19 +28,94 @@ public ${kind} ${type.getName()} ${super} {
     
     <#list type.getFields() as field>
         <#-- attributes -->
-        <#assign mandatoryFields = mandatoryFields + [{"name": field.getName(), "type":field.getType().getStringRepresentation()}]>
-        private ${field.getType().getStringRepresentation()} ${field.getName()};
-        public ${field.getType().getStringRepresentation()} get${field.getName()?cap_first}() {
+        <#assign mandatoryFields = mandatoryFields + [{"name": field.getName(), "type":field.getType().getLoadedSymbol().getStringRepresentation()}]>
+        private ${field.getType().getLoadedSymbol().getStringRepresentation()} ${field.getName()};
+        public ${field.getType().getLoadedSymbol().getStringRepresentation()} get${field.getName()?cap_first}() {
           return ${field.getName()};
         }
-        public void set${field.getName()?cap_first}(${field.getType().getStringRepresentation()} ${field.getName()}) {
+        public void set${field.getName()?cap_first}(${field.getType().getLoadedSymbol().getStringRepresentation()} ${field.getName()}) {
           this.${field.getName()} = ${field.getName()};
         }
     </#list>
 
+    <#list type.getMethods() as method>
+      <#-- methods -->
+      <#-- methods will be generated with a body if they are not abstract and will have a
+      dummy return statement (either 'true', empty String, 0 or 'null') -->
+      <#assign methodStub = "">
+      <#if method.isIsPrivate()>
+        <#assign methodStub = methodStub + "private ">
+      <#elseif  method.isIsProtected()>
+        <#assign methodStub = methodStub + "protected ">
+      <#elseif method.isIsPublic()>
+        <#assign methodStub = methodStub + "public ">
+      </#if>
+      <#if method.isIsDerived()>
+        <#assign methodStub = methodStub + "derived ">
+      </#if>
+      <#if method.isIsFinal()>
+        <#assign methodStub = methodStub + "final ">
+      </#if>
+      <#if method.isIsAbstract()>
+        <#assign methodStub = methodStub + "abstract ">
+      </#if>
+      <#if method.isIsStatic()>
+        <#assign methodStub = methodStub + "static ">
+      </#if>
+      <#if method.getReturnType()??>
+        <#assign methodStub = methodStub + method.getReturnType().getName() + " ">
+      </#if>
+      <#assign methodStub = methodStub + method.getName() + " (">
+      <#list method.getSpannedScope().getLocalCDFieldSymbols() as param>
+        <#assign methodStub = methodStub + param.getType().getName() + " " + param.getName()>
+        <#if param_has_next>
+          <#assign methodStub = methodStub + ", ">
+        </#if>
+      </#list>
+      <#assign methodStub = methodStub + ") ">
+<#--  <#if (method.getExceptionList())?? && !method.getExceptionList().isEmpty()>
+        <#assign methodStub = methodStub + "throws ">
+        <#list method.getExceptionList() as exception>
+          <#assign methodStub = methodStub + exception.getName()>
+          <#if exception_has_next>
+            <#assign methodStub = methodStub + ", ">
+          </#if>
+        </#list>
+      </#if> -->
+      <#if !method.isIsAbstract()>
+        <#if !method.getReturnType()?? || method.isIsConstructor()>
+          <#-- Constructors are handled rather comprehensively below, so we skip them here -->
+          <#continue>
+        </#if>
+        <#if (method.getReturnType().getName() == "void")>
+          <#assign methodStub = methodStub + "{ }">
+        <#else>
+          <#if method.getReturnType().getName() == "boolean">
+            <#assign methodStub = methodStub + "{ return true; }">
+          <#elseif method.getReturnType().getName() == "String">
+            <#assign methodStub = methodStub + "{ return \"\"; }">
+          <#elseif (method.getReturnType().getName() == "byte")
+          || (method.getReturnType().getName() == "char")
+          || (method.getReturnType().getName() == "double")
+          || (method.getReturnType().getName() == "float")
+          || (method.getReturnType().getName() == "int")
+          || (method.getReturnType().getName() == "long")
+          || (method.getReturnType().getName() == "short")>
+            <#assign methodStub = methodStub + "{ return 0; }">
+          <#else>
+            <#assign methodStub = methodStub + "{ return null; }">
+          </#if>
+        </#if>
+      <#else>
+        <#assign methodStub = methodStub + ";">
+      </#if>
+      <#assign methodStub = methodStub + "\n">
+      ${methodStub}
+    </#list> <#-- /methods -->
+
     <#-- associations -->
     <#list type.getAssociations() as assoc>
-      <#assign t=typeHelper.printType(assoc.getTargetType())>
+      <#assign t=typeHelper.printType(assoc.getTargetType().getLoadedSymbol())>
       <#assign n=assoc.getDerivedName()>
 
       <#if assoc.getTargetCardinality().isMultiple()>

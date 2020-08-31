@@ -1,0 +1,38 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+pluginManagement {
+  repositories {
+    mavenLocal()
+    maven {
+      credentials.username mavenUser
+      credentials.password mavenPassword
+      url repo
+    }
+    gradlePluginPortal()
+  }
+}
+
+rootProject.name = 'montiarc-core'
+/*include(':applications:bumperbot')
+include(':applications')*/
+include(':generators:cd2pojo')
+include(':generators:ma2java')
+include(':generators')
+include(':languages:arc-fe')
+include(':languages:montiarc-fe')
+include(':languages')
+//include(':libraries:lejos-rte')
+include(':libraries:majava-rte')
+include(':libraries:maJavaLib')
+include(':libraries:simulator-rte')
+include(':libraries')
+include(':util')
+//project(':applications:bumperbot').projectDir = file('applications/bumperbot')
+project(':generators:cd2pojo').projectDir = file('generators/cd2pojo')
+project(':generators:ma2java').projectDir = file('generators/ma2java')
+project(':languages:arc-fe').projectDir = file('languages/arc-fe')
+project(':languages:montiarc-fe').projectDir = file('languages/montiarc-fe')
+//project(':libraries:lejos-rte').projectDir = file('libraries/lejos-rte')
+project(':libraries:majava-rte').projectDir = file('libraries/majava-rte')
+project(':libraries:maJavaLib').projectDir = file('libraries/maJavaLib')
+project(':libraries:simulator-rte').projectDir = file('libraries/simulator-rte')

@@ -1,0 +1,23 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+dependencies {
+  implementation "de.se_rwth.commons:se-commons-logging:$se_commons_version"
+}
+
+group = 'montiarc.libraries'
+
+java {
+  withSourcesJar()
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) { from components.java }
+  }
+  repositories.maven {
+    name = "$SE_Nexus_ID"
+    credentials.username mavenUser
+    credentials.password mavenPassword
+    url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
+  }
+}

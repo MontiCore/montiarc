@@ -1,501 +1,520 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-	<!-- == PROJECT COORDINATES ============================================= -->
+  <!-- == PROJECT COORDINATES ============================================= -->
+  <groupId>montiarc</groupId>
+  <artifactId>montiarc-core</artifactId>
+  <version>6.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
 
-	<groupId>montiarc</groupId>
-	<artifactId>montiarc-core</artifactId>
-	<version>5.1.3</version>
-	<packaging>pom</packaging>
+  <!-- == PROJECT MODULES ================================================= -->
+  <modules>
+    <module>languages</module>
+    <module>generators</module>
+    <module>libraries</module>
+    <module>applications</module>
+    <module>util</module>
+  </modules>
 
-	<!-- == PROJECT MODULES ================================================= -->
+  <!-- == PROJECT PROPERTIES =============================================== -->
+  <properties>
+    <!-- DSLs -->
+    <javadsl.version>4.3.11.1</javadsl.version>
+    <cd4a.version>1.7.0</cd4a.version>
 
-	<modules>
-		<module>languages</module>
-		<module>generators</module> 
-		<module>libraries</module>
-		<module>applications</module>
-	</modules>
+    <!-- SE-Libraries -->
+    <monticore.version>6.1.0.1</monticore.version>
+    <mc.grammars.assembly.version>0.0.8</mc.grammars.assembly.version>
+    <se-commons.version>1.7.9</se-commons.version>
 
-	<!-- == PROJECT PROPERTIES ============================================== -->
+    <!-- Generator -->
+    <groovy.version>2.5.7</groovy.version>
 
-	<properties>
+    <!-- Libraries -->
+    <antlr.version>4.7.1</antlr.version>
+    <guava.version>18.0</guava.version>
+    <jsr305.version>3.0.0</jsr305.version>
+    <logback.version>1.1.2</logback.version>
+    <javalib.version>4.3.10-SNAPSHOT</javalib.version>
+    <janino.version>3.0.6</janino.version>
+    <junit.jupiter.version>5.5.2</junit.jupiter.version>
+    <junit.vintage.version>5.5.2</junit.vintage.version>
+    <mockito.version>3.2.0</mockito.version>
+    <assertj.version>3.7.0</assertj.version>
 
-		<!-- DSLs -->
-		<javadsl.version>4.3.11.1</javadsl.version> 
-		<cd4a.version>1.3.13</cd4a.version>
+    <!-- Plugins -->
+    <monticore.plugin>${monticore.version}</monticore.plugin>
+    <se-groovy.plugin>1.2.3</se-groovy.plugin>
+    <assembly.plugin>3.1.1</assembly.plugin>
+    <dependency.plugin>3.1.1</dependency.plugin>
+    <compiler.plugin>3.8.1</compiler.plugin>
+    <source.plugin>3.1.0</source.plugin>
+    <jar.plugin>3.1.0</jar.plugin>
+    <jacoco.plugin>0.8.5</jacoco.plugin>
+    <surefire.plugin>3.0.0-M4</surefire.plugin>
+    <failsafe.plugin>3.0.0-M4</failsafe.plugin>
 
-		<!-- .. SE-Libraries ..................................................... -->
-		<monticore.version>5.0.0.1</monticore.version> 
-		<mc.grammars.assembly.version>0.0.8</mc.grammars.assembly.version>
-		<se-commons.version>1.7.8</se-commons.version> 
+    <!-- Classifiers -->
+    <grammars.classifier>grammars</grammars.classifier>
+    <majavalib.classifier>majavalibclasses</majavalib.classifier>
+    <librarymodels.classifier>librarymodels</librarymodels.classifier>
+    <testmodels.classifier>testmodels</testmodels.classifier>
 
-		<!-- generator -->
-		<groovy.version>2.3.0</groovy.version>
+    <!-- Directory -->
+    <jacoco.reportPath>${project.basedir}/../target/jacoco.exec</jacoco.reportPath>
 
-		<!-- .. SE-Libraries ..................................................... -->
-		<antlr.version>4.7.1</antlr.version>
-		<guava.version>18.0</guava.version>
-		<jsr305.version>3.0.0</jsr305.version>
-		<junit.version>4.12</junit.version>
-		<logback.version>1.1.2</logback.version>
-		<javalib.version>4.3.10-SNAPSHOT</javalib.version>
-		<janino.version>3.0.6</janino.version>
-		<junit.jupiter.version>5.1.0</junit.jupiter.version>
-        <junit.vintage.version>5.1.0</junit.vintage.version>
-        <junit.platform.version>1.1.0</junit.platform.version>
-		
-		<!-- .. Plugins ....................................................... -->
-		<monticore.plugin>5.0.0.1</monticore.plugin>
-		<assembly.plugin>3.2.0</assembly.plugin>
-		<compiler.plugin>3.3</compiler.plugin>
-		<se-groovy.maven.version>1.2.3</se-groovy.maven.version>
-		<source.plugin>3.2.1</source.plugin>
-		<jacoco.plugin>0.8.5</jacoco.plugin>
-		<jacoco.reportPath>${project.basedir}/../target/jacoco.exec</jacoco.reportPath>
-		<surefire.plugin>2.19.1</surefire.plugin>
-		<failsafe.plugin>2.19.1</failsafe.plugin>
-		<xtend.version>2.20.0</xtend.version>
+    <!-- Arguments -->
+    <skip.unit.tests>false</skip.unit.tests>
+    <skip.integration.tests>false</skip.integration.tests>
 
-		<!-- Classifiers -->
-		<grammars.classifier>grammars</grammars.classifier>
-    	<majavalib.classifier>majavalibclasses</majavalib.classifier>
-		<librarymodels.classifier>librarymodels</librarymodels.classifier>
-		<testmodels.classifier>testmodels</testmodels.classifier>
+    <!-- Misc -->
+    <java.version>1.8</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
 
-		<!-- .. Misc .......................................................... -->
-		<java.version>1.8</java.version>
+  <!-- == PROJECT METAINFORMATION ========================================= -->
+  <name>MontiArc</name>
+  <description>Framework for Modeling and Simulation of Software Architectures</description>
+  <url>
+    http://nexus.se.rwth-aachen.de/service/local/repositories/se-sites/content/monticore/${project.version}/
+  </url>
+  <inceptionYear>2009</inceptionYear>
 
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	</properties>
+  <organization>
+    <name>Department of Software Engineering, RWTH Aachen University</name>
+    <url>http://www.se-rwth.de/</url>
+  </organization>
 
-	<!-- == PROJECT METAINFORMATION ========================================= -->
+  <developers>
+    <developer>
+      <name>Robert Heim</name>
+      <email>heim@se-rwth.de</email>
+      <id>Department of Software Engineering, RWTH Aachen University</id>
+      <url>http://www.se-rwth.de/</url>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Michael von Wenckstern</name>
+      <email>vonwenckstern@se-rwth.de</email>
+      <id>Department of Software Engineering, RWTH Aachen University</id>
+      <url>http://www.se-rwth.de/</url>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Arne Haber</name>
+      <email>haber@se-rwth.de</email>
+      <id>Department of Software Engineering, RWTH Aachen University</id>
+      <url>http://www.se-rwth.de/</url>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+    </developer>
+  </developers>
 
-	<name>MontiArc</name>
-	<description>Framework for Modeling and Simulation of Software Architectures</description>
-	<url>http://nexus.se.rwth-aachen.de/service/local/repositories/se-sites/content/monticore/${project.version}/</url>
-	<inceptionYear>2009</inceptionYear>
+  <mailingLists>
+    <mailingList>
+      <name>Developer</name>
+      <post>MontiArc4@lab2.sselab.de</post>
+    </mailingList>
+  </mailingLists>
 
-	<organization>
-		<name>Department of Software Engineering, RWTH Aachen University</name>
-		<url>http://www.se-rwth.de/</url>
-	</organization>
+  <issueManagement>
+    <system>GitLab</system>
+    <url>https://git.rwth-aachen.de/montiarc/core/issues</url>
+  </issueManagement>
 
-	<developers>
-		<developer>
-			<name>Robert Heim</name>
-			<email>heim@se-rwth.de</email>
-			<id>Department of Software Engineering, RWTH Aachen University</id>
-			<url>http://www.se-rwth.de/</url>
-			<roles>
-				<role>architect</role>
-				<role>developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<name>Michael von Wenckstern</name>
-			<email>vonwenckstern@se-rwth.de</email>
-			<id>Department of Software Engineering, RWTH Aachen University</id>
-			<url>http://www.se-rwth.de/</url>
-			<roles>
-				<role>architect</role>
-				<role>developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<name>Arne Haber</name>
-			<email>haber@se-rwth.de</email>
-			<id>Department of Software Engineering, RWTH Aachen University</id>
-			<url>http://www.se-rwth.de/</url>
-			<roles>
-				<role>architect</role>
-				<role>developer</role>
-			</roles>
-		</developer>
-	</developers>
+  <!-- == DEPENDENCIES ==================================================== -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>${guava.version}</version>
+      </dependency>
 
-	<mailingLists>
-		<mailingList>
-			<name>Developer</name>
-			<post>MontiArc4@lab2.sselab.de</post>
-		</mailingList>
-	</mailingLists>
+      <dependency>
+        <groupId>com.google.code.findbugs</groupId>
+        <artifactId>jsr305</artifactId>
+        <version>${jsr305.version}</version>
+      </dependency>
 
-	<issueManagement>
-		<system>GitLab</system>
-		<url>https://git.rwth-aachen.de/montiarc/core/issues</url>
-	</issueManagement>
+      <dependency>
+        <groupId>org.antlr</groupId>
+        <artifactId>antlr4-runtime</artifactId>
+        <version>${antlr.version}</version>
+      </dependency>
 
-	<!-- == DEPENDENCIES ==================================================== -->
-	<dependencyManagement>
-		<dependencies>
+      <dependency>
+        <groupId>org.codehaus.janino</groupId>
+        <artifactId>janino</artifactId>
+        <version>${janino.version}</version>
+      </dependency>
 
-			<dependency>
-				<groupId>de.se_rwth.commons</groupId>
-				<artifactId>se-commons-logging</artifactId>
-				<version>${se-commons.version}</version>
-			</dependency>
+      <dependency>
+        <groupId>org.codehaus.groovy</groupId>
+        <artifactId>groovy</artifactId>
+        <version>${groovy.version}</version>
+      </dependency>
 
-			<dependency>
-				<groupId>de.monticore.lang</groupId>
-				<artifactId>cd4analysis</artifactId>
-				<version>${cd4a.version}</version>
-			</dependency>
+      <dependency>
+        <groupId>org.eclipse.xtend</groupId>
+        <artifactId>org.eclipse.xtend.lib</artifactId>
+        <version>${xtend.plugin}</version>
+      </dependency>
 
-			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>${guava.version}</version>
-			</dependency>
+      <!-- MontiCore Dependencies -->
+      <dependency>
+        <groupId>de.monticore</groupId>
+        <artifactId>monticore-runtime</artifactId>
+        <version>${monticore.version}</version>
+      </dependency>
 
-			<dependency>
-				<groupId>com.google.code.findbugs</groupId>
-				<artifactId>jsr305</artifactId>
-				<version>${jsr305.version}</version>
-			</dependency>
+      <dependency>
+        <groupId>de.monticore</groupId>
+        <artifactId>monticore-grammar</artifactId>
+        <version>${monticore.version}</version>
+      </dependency>
 
-			<dependency>
-				<groupId>org.antlr</groupId>
-				<artifactId>antlr4-runtime</artifactId>
-				<version>${antlr.version}</version>
-			</dependency>
+      <dependency>
+        <groupId>de.monticore</groupId>
+        <artifactId>monticore-grammar</artifactId>
+        <version>${monticore.version}</version>
+        <classifier>${grammars.classifier}</classifier>
+      </dependency>
 
-			<dependency>
-				<groupId>org.codehaus.janino</groupId>
-				<artifactId>janino</artifactId>
-				<version>${janino.version}</version>
-			</dependency>
+      <dependency>
+        <groupId>de.monticore</groupId>
+        <artifactId>monticore-emf-runtime</artifactId>
+        <version>${monticore.version}</version>
+      </dependency>
 
-			<!-- .. xtend ............................................... -->
-			<dependency>
-				<groupId>org.eclipse.xtend</groupId>
-				<artifactId>org.eclipse.xtend.lib</artifactId>
-				<version>${xtend.version}</version>
-			</dependency>
+      <dependency>
+        <groupId>de.monticore</groupId>
+        <artifactId>de.monticore-generator</artifactId>
+        <version>${monticore.version}</version>
+      </dependency>
 
-			<!-- MontiCore Dependencies -->
-			<dependency>
-				<groupId>de.monticore</groupId>
-				<artifactId>monticore-runtime</artifactId>
-				<version>${monticore.version}</version>
-			</dependency>
+      <dependency>
+        <groupId>de.se_rwth.commons</groupId>
+        <artifactId>se-commons-logging</artifactId>
+        <version>${se-commons.version}</version>
+      </dependency>
 
-			<dependency>
-				<groupId>de.monticore</groupId>
-				<artifactId>monticore-grammar</artifactId>
-				<version>${monticore.version}</version>
-			</dependency>
+      <dependency>
+        <groupId>de.se_rwth.commons</groupId>
+        <artifactId>se-commons-groovy</artifactId>
+        <version>${se-commons.version}</version>
+      </dependency>
 
-			<dependency>
-				<groupId>de.monticore</groupId>
-				<artifactId>monticore-grammar</artifactId>
-				<version>${monticore.version}</version>
-				<classifier>${grammars.classifier}</classifier>
-				<scope>provided</scope>
-			</dependency>
+      <dependency>
+        <groupId>de.monticore.lang</groupId>
+        <artifactId>cd4analysis</artifactId>
+        <version>${cd4a.version}</version>
+      </dependency>
 
-			<dependency>
-				<groupId>de.monticore</groupId>
-				<artifactId>javaDSL</artifactId>
-				<version>${javadsl.version}</version>
-			</dependency>
+      <dependency>
+        <groupId>de.monticore</groupId>
+        <artifactId>javaDSL</artifactId>
+        <version>${javadsl.version}</version>
+      </dependency>
 
-			<dependency>
-				<groupId>de.monticore</groupId>
-				<artifactId>de.monticore.java</artifactId>
-				<version>${javadsl.version}</version>
-				<classifier>${grammars.classifier}</classifier>
-			</dependency>
+      <dependency>
+        <groupId>de.monticore</groupId>
+        <artifactId>de.monticore.java</artifactId>
+        <version>${javadsl.version}</version>
+        <classifier>${grammars.classifier}</classifier>
+      </dependency>
 
-			<dependency>
-				<groupId>de.se_rwth.commons</groupId>
-				<artifactId>se-commons-groovy</artifactId>
-				<version>${se-commons.version}</version>
-			</dependency>
+      <!-- Test Libraries -->
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>${junit.jupiter.version}</version>
+        <scope>test</scope>
+      </dependency>
 
-			<dependency>
-				<groupId>org.codehaus.groovy</groupId>
-				<artifactId>groovy</artifactId>
-				<version>${groovy.version}</version>
-			</dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-params</artifactId>
+        <version>${junit.jupiter.version}</version>
+        <scope>test</scope>
+      </dependency>
 
-			<!-- .. Test Libraries ............................................... -->
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>${junit.version}</version>
-				<scope>test</scope>
-			</dependency>
+      <dependency>
+        <groupId>de.monticore</groupId>
+        <artifactId>monticore-runtime</artifactId>
+        <version>${monticore.version}</version>
+        <type>test-jar</type>
+        <scope>test</scope>
+      </dependency>
 
-			<dependency>
-				<groupId>de.monticore</groupId>
-				<artifactId>monticore-runtime</artifactId>
-				<version>${monticore.version}</version>
-				<type>test-jar</type>
-				<scope>test</scope>
-			</dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
+      </dependency>
 
-			<dependency>
-				<groupId>ch.qos.logback</groupId>
-				<artifactId>logback-classic</artifactId>
-				<version>${logback.version}</version>
-				<scope>test</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${assertj.version}</version>
+        <!-- doc: http://joel-costigliola.github.io/assertj/ -->
+      </dependency>
 
-	<!-- == BUILD INFRASTRUCTURE ============================================ -->
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback.version}</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
-	<ciManagement>
-		<system>Jenkins CI</system>
-		<url>http://ci.se.rwth-aachen.de/view/montiarc/</url>
-	</ciManagement>
+  <!-- == BUILD INFRASTRUCTURE ============================================= -->
+  <ciManagement>
+    <system>Jenkins CI</system>
+    <url>http://ci.se.rwth-aachen.de/view/montiarc/</url>
+  </ciManagement>
 
-	<!-- == PROJECT BUILD SETTINGS =========================================== -->
+  <!-- == PROJECT BUILD SETTINGS =========================================== -->
+  <build>
+    <pluginManagement>
+      <plugins>
+        <!-- MontiCore Generation -->
+        <plugin>
+          <groupId>de.monticore.mojo</groupId>
+          <artifactId>monticore-maven-plugin</artifactId>
+          <version>${monticore.plugin}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>generate</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
 
-	<build>
-		<pluginManagement>
-			<plugins>
-				<!-- MontiCore Generation -->
-				<plugin>
-					<groupId>de.monticore.mojo</groupId>
-					<artifactId>monticore-maven-plugin</artifactId>
-					<version>${monticore.plugin}</version>
-					<executions>
-						<execution>
-							<goals>
-								<goal>generate</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+        <!-- Other Configuration -->
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${compiler.plugin}</version>
+          <configuration>
+            <useIncrementalCompilation>true</useIncrementalCompilation>
+            <source>${java.version}</source>
+            <target>${java.version}</target>
+          </configuration>
+        </plugin>
 
-				<!-- Other Configuration -->
-				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>${compiler.plugin}</version>
-					<configuration>
-						<useIncrementalCompilation>true</useIncrementalCompilation>
-						<source>${java.version}</source>
-						<target>${java.version}</target>
-					</configuration>
-				</plugin>
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${assembly.plugin}</version>
+          <dependencies>
+            <dependency>
+              <groupId>de.monticore</groupId>
+              <artifactId>mc-assemblies</artifactId>
+              <version>${mc.grammars.assembly.version}</version>
+            </dependency>
+          </dependencies>
+          <executions>
+            <execution>
+              <id>grammars</id>
+              <configuration>
+                <finalName>${project.artifactId}-${project.version}</finalName>
+                <descriptorRefs>
+                  <descriptorRef>grammars-assembly</descriptorRef>
+                </descriptorRefs>
+                <formats>
+                  <format>jar</format>
+                </formats>
+              </configuration>
+              <phase>package</phase>
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
 
-				<plugin>
-					<artifactId>maven-assembly-plugin</artifactId>
-					<version>${assembly.plugin}</version>
-					<dependencies>
-						<dependency>
-							<groupId>de.monticore</groupId>
-							<artifactId>mc-assemblies</artifactId>
-							<version>${mc.grammars.assembly.version}</version>
-						</dependency>
-					</dependencies>
-					<executions>
-						<execution>
-							<id>grammars</id>
-							<configuration>
-								<finalName>${project.artifactId}-${project.version}</finalName>
-								<descriptorRefs>
-									<descriptorRef>grammars-assembly</descriptorRef>
-								</descriptorRefs>
-								<formats>
-									<format>jar</format>
-								</formats>
-							</configuration>
-							<phase>package</phase>
-							<goals>
-								<goal>single</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+        <!-- Source Jar Configuration -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>${source.plugin}</version>
+          <executions>
+            <execution>
+              <id>create source jar</id>
+              <phase>package</phase>
+              <goals>
+                <goal>jar-no-fork</goal>
+              </goals>
+              <configuration>
+                <excludeResources>false</excludeResources>
+                <includes>
+                  <include>**/*.java</include>
+                  <include>**/*.ftl</include>
+                </includes>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
 
-				<!-- Source Jar Configuration -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<version>${source.plugin}</version>
-					<executions>
-						<execution>
-							<id>create source jar</id>
-							<phase>package</phase>
-							<goals>
-								<goal>jar-no-fork</goal>
-							</goals>
-							<configuration>
-								<excludeResources>false</excludeResources>
-								<includes>
-									<include>**/*.java</include>
-									<include>**/*.ftl</include>
-								</includes>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
+        <!-- Unit Tests -->
+        <!-- default folder is src/test/java/ -->
+        <!-- default incl. are "**/Test*.java", "**/*Test.java", "**/*TestCase.java" -->
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${surefire.plugin}</version>
+          <configuration>
+            <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+            <skipTests>${skip.unit.tests}</skipTests>
+            <useSystemClassLoader>false</useSystemClassLoader>
+          </configuration>
+          <dependencies>
+            <!-- let JUnit vintage engine run JUnit 3 or JUnit 4 tests -->
+            <dependency>
+              <groupId>org.junit.vintage</groupId>
+              <artifactId>junit-vintage-engine</artifactId>
+              <version>${junit.vintage.version}</version>
+            </dependency>
+            <!-- let JUnit 5 engine run JUnit 5 tests -->
+            <dependency>
+              <groupId>org.junit.jupiter</groupId>
+              <artifactId>junit-jupiter-engine</artifactId>
+              <version>${junit.jupiter.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
 
-				<!-- Unit Tests -->
-	            <!-- default folder is src/test/java/ -->
-	            <!-- default incl. are "**/Test*.java", "**/*Test.java", "**/*TestCase.java" -->
-	            <plugin>
-	                <artifactId>maven-surefire-plugin</artifactId>
-	                <version>${surefire.plugin}</version>
-	                <configuration>
-	                    <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-	                    <useSystemClassLoader>false</useSystemClassLoader>
-											<enableAssertions>true</enableAssertions>
-	                </configuration>
-	                <dependencies>
-	                    <!-- let surefire run JUnit 4 but also JUnit 5 tests -->
-	                    <dependency>
-	                        <groupId>org.junit.platform</groupId>
-	                        <artifactId>junit-platform-surefire-provider</artifactId>
-	                        <version>${junit.platform.version}</version>
-	                    </dependency>
-	                    <!-- let JUnit vintage engine run JUnit 3 or JUnit 4 tests -->
-	                    <dependency>
-	                        <groupId>org.junit.vintage</groupId>
-	                        <artifactId>junit-vintage-engine</artifactId>
-	                        <version>${junit.vintage.version}</version>
-	                    </dependency>
-	                    <!-- let JUnit 5 engine run JUnit 5 tests -->
-	                    <dependency>
-	                        <groupId>org.junit.jupiter</groupId>
-	                        <artifactId>junit-jupiter-engine</artifactId>
-	                        <version>${junit.jupiter.version}</version>
-	                    </dependency>
-	                </dependencies>
-	            </plugin>
+        <!-- Integration / Acceptance Tests -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>${failsafe.plugin}</version>
+          <configuration>
+            <skipTests>${skip.integration.tests}</skipTests>
+            <includes>
+              <!-- Integration Tests -->
+              <!-- default folder is src/integration-test/java/ -->
+              <!-- default incl. are "**/IT*.java", "**/*IT.java", "**/*ITCase.java" -->
+              <include>**/IT*.java</include>
+              <include>**/*IT.java</include>
+              <include>**/*ITCase.java</include>
+              <!-- Acceptance Tests -->
+              <!-- default folder is src/acceptance-test/java/ -->
+              <!-- default incl. are "**/AT*.java", "**/*AT.java", "**/*ATCase.java" -->
+              <include>**/AT*.java</include>
+              <include>**/*AT.java</include>
+              <include>**/*ATCase.java</include>
+            </includes>
+            <useSystemClassLoader>false</useSystemClassLoader>
+          </configuration>
+          <dependencies>
+            <!-- let JUnit vintage engine run JUnit 3 or JUnit 4 tests -->
+            <dependency>
+              <groupId>org.junit.vintage</groupId>
+              <artifactId>junit-vintage-engine</artifactId>
+              <version>${junit.vintage.version}</version>
+            </dependency>
+            <!-- let JUnit 5 engine run JUnit 5 tests -->
+            <dependency>
+              <groupId>org.junit.jupiter</groupId>
+              <artifactId>junit-jupiter-engine</artifactId>
+              <version>${junit.jupiter.version}</version>
+            </dependency>
+          </dependencies>
+          <executions>
+            <execution>
+              <goals>
+                <goal>integration-test</goal>
+                <goal>verify</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
 
-	            <!-- Integration / Acceptance Tests -->
-	            <plugin>
-	                <groupId>org.apache.maven.plugins</groupId>
-	                <artifactId>maven-failsafe-plugin</artifactId>
-	                <version>${failsafe.plugin}</version>
-	                <configuration>
-	                    <includes>
-	                        <!-- Integration Tests -->
-	                        <!-- default folder is src/integration-test/java/ -->
-	                        <!-- default incl. are "**/IT*.java", "**/*IT.java", "**/*ITCase.java" -->
-	                        <include>**/IT*.java</include>
-	                        <include>**/*IT.java</include>
-	                        <include>**/*ITCase.java</include>
-	                        <!-- Acceptance Tests -->
-	                        <!-- default folder is src/acceptance-test/java/ -->
-	                        <!-- default incl. are "**/AT*.java", "**/*AT.java", "**/*ATCase.java" -->
-	                        <include>**/AT*.java</include>
-	                        <include>**/*AT.java</include>
-	                        <include>**/*ATCase.java</include>
-	                    </includes>
-	                    <useSystemClassLoader>false</useSystemClassLoader> 
-	                </configuration>
-	                <dependencies>
-	                    <!-- let surefire run JUnit 4 but also JUnit 5 tests -->
-	                    <dependency>
-	                        <groupId>org.junit.platform</groupId>
-	                        <artifactId>junit-platform-surefire-provider</artifactId>
-	                        <version>${junit.platform.version}</version>
-	                    </dependency>
-	                    <!-- let JUnit vintage engine run JUnit 3 or JUnit 4 tests -->
-	                    <dependency>
-	                        <groupId>org.junit.vintage</groupId>
-	                        <artifactId>junit-vintage-engine</artifactId>
-	                        <version>${junit.vintage.version}</version>
-	                    </dependency>
-	                    <!-- let JUnit 5 engine run JUnit 5 tests -->
-	                    <dependency>
-	                        <groupId>org.junit.jupiter</groupId>
-	                        <artifactId>junit-jupiter-engine</artifactId>
-	                        <version>${junit.jupiter.version}</version>
-	                    </dependency>
-	                </dependencies>
-	                <executions>
-	                    <execution>
-	                        <goals>
-	                            <goal>integration-test</goal>
-	                            <goal>verify</goal>
-	                        </goals>
-	                    </execution>
-	                </executions>
-	            </plugin>
+      </plugins>
+    </pluginManagement>
 
-			</plugins>
-		</pluginManagement>
+    <plugins>
+      <!-- Coverage Report -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco.plugin}</version>
+        <executions>
+          <execution>
+            <id>pre-unit-test</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>post-unit-test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <excludes>
+            <exclude>**/_*/*.class</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
-		<plugins>
-			<!-- Coverage Report -->
-			<plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.plugin}</version>
-                <executions>
-                    <execution>
-                        <id>pre-unit-test</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <excludes>
-                        <exclude>**/_*/*.class</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-	</build>
+  <!-- == PROFILES ========================================================= -->
+  <profiles>
+    <profile>
+      <id>skipTests</id>
+      <properties>
+        <skipTests>true</skipTests>
+      </properties>
+    </profile>
+  </profiles>
 
-	<!-- == PROFILES ======================================================== -->
+  <!-- == DISTRIBUTION ===================================================== -->
+  <distributionManagement>
+    <repository>
+      <id>se-nexus</id>
+      <url>http://nexus.se.rwth-aachen.de/content/repositories/montiarc-releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>se-nexus</id>
+      <url>http://nexus.se.rwth-aachen.de/content/repositories/montiarc-snapshots/</url>
+    </snapshotRepository>
+    <site>
+      <id>se-nexus</id>
+      <url>dav:http://nexus.se.rwth-aachen.de/content/sites/se-sites/montiarc/${project.version}/
+      </url>
+    </site>
+  </distributionManagement>
 
-	<profiles>
-		<profile>
-			<id>skipTests</id>
-			<properties>
-				<skipTests>true</skipTests>
-			</properties>
-		</profile>
-	</profiles>
-
-	<!-- == DISTRIBUTION ==================================================== -->
-
-	<distributionManagement>
-		<repository>
-			<id>se-nexus</id>
-			<url>http://nexus.se.rwth-aachen.de/content/repositories/montiarc-releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>se-nexus</id>
-			<url>http://nexus.se.rwth-aachen.de/content/repositories/montiarc-snapshots/</url>
-		</snapshotRepository>
-		<site>
-			<id>se-nexus</id>
-			<url>dav:http://nexus.se.rwth-aachen.de/content/sites/se-sites/montiarc/${project.version}/</url>
-		</site>
-	</distributionManagement>
-
-	<!-- == DEPENDENCY & PLUGIN REPOSITORIES ================================= -->
-
-	<repositories>
-		<repository>
-			<id>se-nexus</id>
-			<url>https://nexus.se.rwth-aachen.de/content/groups/public/</url>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>se-nexus</id>
-			<url>https://nexus.se.rwth-aachen.de/content/groups/public/</url>
-		</pluginRepository>
-	</pluginRepositories>
-
+  <!-- == DEPENDENCY & PLUGIN REPOSITORIES ================================= -->
+  <repositories>
+    <repository>
+      <id>se-nexus</id>
+      <url>https://nexus.se.rwth-aachen.de/content/groups/public/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>se-nexus</id>
+      <url>https://nexus.se.rwth-aachen.de/content/groups/public/</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>

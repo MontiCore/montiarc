@@ -1,0 +1,51 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+plugins {
+  id 'monticore' version '6.1.0' apply false
+  //plugin is only resolved, not applied -> no need to specify version in every subproject using it
+}
+
+group = "montiarc"
+
+allprojects {
+  version = '6.0.0-SNAPSHOT'
+  buildDir = "$projectDir/target"
+}
+
+description = """MontiArc Version $version
+
+Framework for Modeling and Simulation of Software Architectures
+
+Developed at the Department of Software Engineering, RWTH Aachen University
+http://www.se-rwth.de/"""
+
+subprojects {
+  apply plugin: 'java' //used for compiling & testing
+  apply plugin: 'maven-publish' //used to publish maven artifacts
+  if(project.group.toString() == "montiarc.languages") {
+    apply plugin: 'idea' //used to customize the structure given in *.iml files
+    idea {
+      module {
+        testSourceDirs += file("$projectDir/target/generated-test-sources/monticore/sourcecode")
+      }
+    }
+  }
+
+  repositories {
+    mavenLocal()
+    maven {
+      credentials.username mavenUser
+      credentials.password mavenPassword
+      url repo
+    }
+    mavenCentral()
+  }
+
+  sourceCompatibility = '1.8'
+
+  tasks.withType(JavaCompile) {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    options.encoding = 'UTF-8'
+  }
+}

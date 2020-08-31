@@ -1,0 +1,70 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+plugins {
+  id "monticore"
+}
+group = "montiarc.libraries"
+
+sourceSets {
+  main {
+    allSource.srcDirs += ["$buildDir/generated-sources"]
+  }
+}
+
+configurations { librarymodels }
+
+dependencies {
+  librarymodels "montiarc.libraries:maJavaLib:$version"
+  implementation project(":generators:ma2java")
+  implementation project(":generators:cd2pojo")
+  implementation project(":libraries:majava-rte")
+  implementation "de.se_rwth.commons:se-commons-logging:$se_commons_version"
+  implementation "lejos.nxt:classes:0.9.1-beta"
+  testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
+  testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version"
+  testImplementation "org.mockito:mockito-core:$mockito_version"
+  testImplementation "ch.qos.logback:logback-classic:$logback_version"
+}
+
+task unpackLibrarymodels(type:Sync) {
+  dependsOn configurations.librarymodels
+
+  from {
+    configurations.librarymodels.collect { zipTree(it) }
+  }
+  into "$buildDir/$librarymodels_classifier"
+}
+build.dependsOn unpackLibrarymodels
+build.mustRunAfter ":libraries:maJavaLib:build"
+
+task groovyTask(type: GroovyTask) {
+  baseClass = "de.montiarcautomaton.generator.codegen.MAAGeneratorScript"
+  outputDir = file "$buildDir/generated-sources"
+  modelPath(
+    file("$projectDir/src/main/resources")
+  )
+  handcodedPath(
+    file("$projectDir/src/main/java")
+  )
+  script = "de/montiarcautomaton/generator/maagenerator.groovy"
+}
+
+task librarymodelsJar(type: Jar) {
+  from("$projectDir/src/main/resources")
+  archiveClassifier = "$librarymodels_classifier"
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+      artifact librarymodelsJar
+    }
+  }
+  repositories.maven {
+    name = "$SE_Nexus_ID"
+    credentials.username mavenUser
+    credentials.password mavenPassword
+    url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
+  }
+}

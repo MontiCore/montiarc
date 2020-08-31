@@ -6,6 +6,8 @@ target
 
 \.idea/
 
+.gradle
+
 *.iml
 .DS_Store
 generated-test-sources
