@@ -72,4 +72,22 @@ component grammar ComfortableArc extends ArcBasis {
     Name ArcArguments? "[" Connector+ "]"
   ;
 
+  /** PortComplete prevents automatic
+   *  change (addition/deletion) of ports.
+   */
+  PortComplete implements ArcElement <110> =
+    key("portComplete")";";
+
+  /**
+   * ASTFullyConnectedComponentInstantiation holds one or more component instances that are
+   * used in topology spanned by the component. This way the hierarchical
+   * structure of decomposed components is defined.
+   *
+   * @attribute type The type of the component instance.
+   * @attribute componentInstance A list of instantiated components.
+   * @attribute fullyConnected Prevents creation of automatic connections.
+   */
+  FullyConnectedComponentInstantiation extends ComponentInstantiation =
+    key("fullyConnected") MCType (ComponentInstance || ",")* ";"
+  ;
 }
