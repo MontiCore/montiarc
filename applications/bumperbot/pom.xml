@@ -63,12 +63,6 @@
       <artifactId>monticore-grammar</artifactId>
     </dependency>
 
-    <!-- JavaDSL -->
-    <dependency>
-      <groupId>de.monticore</groupId>
-      <artifactId>javaDSL</artifactId>
-    </dependency>
-
     <!-- Test Libraries -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>

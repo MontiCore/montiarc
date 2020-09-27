@@ -47,9 +47,8 @@ autonomously acting components perform computations. Connectors define the
 interaction between the components' interfaces, which consist of typed, directed
 ports. Components are either atomic or composed of connected subcomponents.
 Atomic components yield behavior descriptions in the form of embedded 
-time-synchronous port automata, embedded JavaDSL models, or via integration of
-handcrafted code. For composed components, the behavior emerges from the 
-behavior of their subcomponents.
+time-synchronous port automata, or via integration of handcrafted code. For 
+composed components, the behavior emerges from the behavior of their subcomponents.
 
 ```
 component LightController {

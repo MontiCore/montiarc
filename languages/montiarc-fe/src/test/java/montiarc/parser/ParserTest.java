@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.parser;
 
-import de.monticore.java.javadsl._ast.ASTCompilationUnit;
 import de.se_rwth.commons.logging.Log;
 import montiarc.AbstractTest;
 import montiarc._ast.ASTArcTiming;
