@@ -78,19 +78,6 @@
       <artifactId>cd4analysis</artifactId>
     </dependency>
 
-    <!-- Java DSL -->
-    <dependency>
-      <groupId>de.monticore</groupId>
-      <artifactId>javaDSL</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>de.monticore</groupId>
-      <artifactId>javaDSL</artifactId>
-      <classifier>${grammars.classifier}</classifier>
-      <version>${javadsl.version}</version>
-    </dependency>
-
     <!-- Test Libraries -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>

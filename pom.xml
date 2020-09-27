@@ -22,7 +22,6 @@
   <!-- == PROJECT PROPERTIES =============================================== -->
   <properties>
     <!-- DSLs -->
-    <javadsl.version>4.3.11.1</javadsl.version>
     <cd4a.version>1.7.0</cd4a.version>
 
     <!-- SE-Libraries -->
@@ -221,19 +220,6 @@
         <groupId>de.monticore.lang</groupId>
         <artifactId>cd4analysis</artifactId>
         <version>${cd4a.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>de.monticore</groupId>
-        <artifactId>javaDSL</artifactId>
-        <version>${javadsl.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>de.monticore</groupId>
-        <artifactId>de.monticore.java</artifactId>
-        <version>${javadsl.version}</version>
-        <classifier>${grammars.classifier}</classifier>
       </dependency>
 
       <!-- Test Libraries -->

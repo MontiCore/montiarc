@@ -51,7 +51,6 @@ dependencies {
   testImplementation project(":util").sourceSets.test.output
 
   //other dependencies
-  implementation "de.monticore:javaDSL:$javadsl_version"
   implementation "de.monticore.lang:cd4analysis:$cd4a_version"
   implementation "de.se_rwth.commons:se-commons-logging:$se_commons_version"
   implementation "com.google.guava:guava:$guava_version"
