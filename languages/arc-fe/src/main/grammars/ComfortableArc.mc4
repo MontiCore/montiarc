@@ -38,7 +38,7 @@ component grammar ComfortableArc extends ArcBasis {
    *  Connections are drawn only if unambiguous, i.e. there is only 
    *  a single source. Multiple targets (in ports) are allowed.
    */
-  ArcAutoConnect implements ArcElement = key("autoconnect") ArcACMode;
+  ArcAutoConnect implements ArcElement <110> = key("autoconnect") ArcACMode ";";
 
   interface ArcACMode;
 
@@ -55,7 +55,7 @@ component grammar ComfortableArc extends ArcBasis {
    *  * autoinstantiate off: is typical for libraries that only define
    *      components (this is the default)
    */  
-  ArcAutoInstantiate implements ArcElement = key("autoinstantiate") ArcAIMode;
+  ArcAutoInstantiate implements ArcElement <110> = key("autoinstantiate") ArcAIMode ";";
 
   interface ArcAIMode;
 
