@@ -34,6 +34,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       .setImportList(imports)
       .build();
     putOnStack(artifactScope);
+    setLinkBetweenSpannedScopeAndNode(artifactScope, rootNode);
     rootNode.accept(getRealThis());
     return artifactScope;
   }
