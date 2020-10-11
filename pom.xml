@@ -52,9 +52,9 @@
     <compiler.plugin>3.8.1</compiler.plugin>
     <source.plugin>3.1.0</source.plugin>
     <jar.plugin>3.1.0</jar.plugin>
-    <jacoco.plugin>0.8.5</jacoco.plugin>
-    <surefire.plugin>3.0.0-M4</surefire.plugin>
-    <failsafe.plugin>3.0.0-M4</failsafe.plugin>
+    <jacoco.plugin>0.8.6</jacoco.plugin>
+    <surefire.plugin>3.0.0-M1</surefire.plugin>
+    <failsafe.plugin>3.0.0-M1</failsafe.plugin>
 
     <!-- Classifiers -->
     <grammars.classifier>grammars</grammars.classifier>
