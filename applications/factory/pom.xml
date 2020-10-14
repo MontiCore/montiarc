@@ -16,7 +16,7 @@
 	<properties>
 		<montiarc.version>6.0.0-SNAPSHOT</montiarc.version>
 		<se-groovy.maven.version>1.2.3</se-groovy.maven.version>
-		<junit.version>4.11</junit.version>
+		<junit.version>4.13.1</junit.version>
 
 		<models.dir>${basedir}/src/main/resources/</models.dir>
 		<hwc.dir>${basedir}/src/main/java/</hwc.dir>
