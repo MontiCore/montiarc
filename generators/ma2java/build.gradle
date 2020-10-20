@@ -18,9 +18,9 @@ dependencies {
   implementation project(":libraries:majava-rte")
   implementation project(":util")
   implementation "de.monticore.lang:cd4analysis:$cd4a_version"
-  implementation "de.monticore:monticore-emf-runtime:$monticore_version"
-  implementation "de.monticore:monticore-runtime:$monticore_version"
-  implementation "de.monticore:monticore-grammar:$monticore_version"
+  implementation "de.monticore:monticore-emf-runtime:$mc_version"
+  implementation "de.monticore:monticore-runtime:$mc_version"
+  implementation "de.monticore:monticore-grammar:$mc_version"
   implementation "de.se_rwth.commons:se-commons-groovy:$se_commons_version"
   implementation "org.eclipse.xtend:org.eclipse.xtend.lib:$xtend_version"
   //xtend-plugin works with guava version 23.0, but would upgrade to 27 if possible
@@ -32,7 +32,7 @@ dependencies {
     }
   }
   runtimeOnly "ch.qos.logback:logback-classic:$logback_version"
-  testImplementation "de.monticore:monticore-runtime:$monticore_version"
+  testImplementation "de.monticore:monticore-runtime:$mc_version"
   testImplementation "org.eclipse.emf:org.eclipse.emf.compare:$emf_version"
   testImplementation "org.eclipse.emf:org.eclipse.emf.compare.match:$emf_version"
   testImplementation "org.eclipse.emf:org.eclipse.emf.compare.diff:$emf_version"
