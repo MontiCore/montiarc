@@ -1,14 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-  id 'monticore' version '6.1.0' apply false
+  id 'monticore' version "$mc_version" apply false
   //plugin is only resolved, not applied -> no need to specify version in every subproject using it
 }
 
 group = "montiarc"
 
 allprojects {
-  version = '6.0.0-SNAPSHOT'
+  version = "$version"
   buildDir = "$projectDir/target"
 }
 

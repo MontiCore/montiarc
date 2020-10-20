@@ -34,13 +34,13 @@ configurations { grammar }
 
 dependencies {
   //monticore dependencies
-  implementation "de.monticore:monticore-generator:$monticore_version"
-  implementation "de.monticore:monticore-runtime:$monticore_version"
-  implementation "de.monticore:monticore-grammar:$monticore_version"
-  implementation "de.monticore:monticore-grammar:$monticore_version:$grammar_classifier"
-  grammar "de.monticore:monticore-grammar:$monticore_version:$grammar_classifier"
-  testImplementation "de.monticore:monticore-runtime:$monticore_version:tests"
-  testImplementation "de.monticore:monticore-runtime:$monticore_version"
+  implementation "de.monticore:monticore-generator:$mc_version"
+  implementation "de.monticore:monticore-runtime:$mc_version"
+  implementation "de.monticore:monticore-grammar:$mc_version"
+  implementation "de.monticore:monticore-grammar:$mc_version:$grammar_classifier"
+  grammar "de.monticore:monticore-grammar:$mc_version:$grammar_classifier"
+  testImplementation "de.monticore:monticore-runtime:$mc_version:tests"
+  testImplementation "de.monticore:monticore-runtime:$mc_version"
 
   //internal dependencies
   implementation project(":util")
