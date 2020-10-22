@@ -171,8 +171,10 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
   @Override
   public void visit(@NotNull ASTComponentHead node) {
     Preconditions.checkArgument(node != null);
+    Preconditions.checkState(this.getCurrentScope().isPresent());
     Preconditions.checkState(!this.getComponentStack().isEmpty());
     Preconditions.checkState(this.getCurrentComponent().isPresent());
+    node.setEnclosingScope(getCurrentScope().get());
     if (node.isPresentParent()) {
       ComponentTypeSymbolLoader parentLoader =
         this.create_ComponentLoader(node.getParent());
