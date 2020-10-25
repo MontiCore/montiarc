@@ -12,6 +12,7 @@ import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
 import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 import de.monticore.types.typesymbols._symboltable.FieldSymbol;
 import de.monticore.types.typesymbols._symboltable.FieldSymbolBuilder;
+import de.monticore.types.typesymbols._symboltable.ITypeSymbolsScope;
 import de.monticore.types.typesymbols._symboltable.TypeSymbolLoader;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -54,13 +55,24 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     this.typePrinter = Preconditions.checkNotNull(typePrinter);
   }
 
-  public MCBasicTypesPrettyPrinter getTypePrinter() {
+  protected MCBasicTypesPrettyPrinter getTypePrinter() {
     return this.typePrinter;
   }
 
-  public void setTypePrinter(@NotNull MCBasicTypesPrettyPrinter typesPrinter) {
-    Preconditions.checkArgument(typesPrinter != null);
+  protected void setTypePrinter(@NotNull MCBasicTypesPrettyPrinter typesPrinter) {
+    assert typesPrinter != null;
     this.typePrinter = typesPrinter;
+  }
+
+  protected String printType(@NotNull ASTMCType type) {
+    assert type != null;
+    return type.printType(this.getTypePrinter());
+  }
+
+  protected SymTypeExpression createTypeExpression(@NotNull ASTMCType type, @NotNull ITypeSymbolsScope scope) {
+    assert type != null;
+    assert scope != null;
+    return SymTypeExpressionFactory.createTypeExpression(this.printType(type), scope);
   }
 
   protected Stack<ComponentTypeSymbol> getComponentStack() {
@@ -183,9 +195,13 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     }
   }
 
+  /**
+   * @deprecated No need to create type loaders, use SymTypeExpressionFactory to directly create type ecpressions
+   */
+  @Deprecated
   protected TypeSymbolLoader create_TypeLoader(@NotNull ASTMCType type) {
     assert (this.getCurrentScope().isPresent());
-    return new TypeSymbolLoader(type.printType(this.getTypePrinter()),
+    return new TypeSymbolLoader(this.printType(type),
       this.getCurrentScope().get());
   }
 
@@ -194,10 +210,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     assert (this.getCurrentScope().isPresent());
     FieldSymbolBuilder builder = ArcBasisMill.fieldSymbolBuilder();
     builder.setName(ast.getName());
-    TypeSymbolLoader typeLoader = this.create_TypeLoader(ast.getMCType());
-    typeLoader.setEnclosingScope(this.getCurrentScope().get());
-    SymTypeExpression typeExpression = SymTypeExpressionFactory.createTypeObject(typeLoader);
-    builder.setType(typeExpression);
+    builder.setType(this.createTypeExpression(ast.getMCType(), this.getCurrentScope().get()));
     return builder.build();
   }
 
@@ -239,11 +252,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     assert (this.getCurrentScope().isPresent());
     PortSymbolBuilder builder = ArcBasisMill.portSymbolBuilder();
     builder.setName(ast.getName());
-    TypeSymbolLoader typeLoader = this.create_TypeLoader(this.getCurrentPortType().get());
-    typeLoader.setEnclosingScope(this.getCurrentScope().get());
-    SymTypeExpression typeExpression = SymTypeExpressionFactory
-      .createTypeObject(typeLoader);
-    builder.setType(typeExpression);
+    builder.setType(this.createTypeExpression(this.getCurrentPortType().get(), getCurrentScope().get()));
     builder.setDirection(this.getCurrentPortDirection().get());
     return builder.build();
   }
@@ -281,11 +290,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     assert (this.getCurrentScope().isPresent());
     FieldSymbolBuilder builder = ArcBasisMill.fieldSymbolBuilder();
     builder.setName(ast.getName());
-    TypeSymbolLoader typeLoader = this.create_TypeLoader(this.getCurrentFieldType().get());
-    typeLoader.setEnclosingScope(this.getCurrentScope().get());
-    SymTypeExpression typeExpression = SymTypeExpressionFactory
-      .createTypeObject(typeLoader);
-    builder.setType(typeExpression);
+    builder.setType(this.createTypeExpression(this.getCurrentFieldType().get(), this.getCurrentScope().get()));
     return builder.build();
   }
 
@@ -319,7 +324,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     if (type instanceof ASTMCGenericType){
       return ArcBasisMill.componentTypeSymbolLoaderBuilder().setName(((ASTMCGenericType)type).printWithoutTypeArguments()).build();
     }
-    return ArcBasisMill.componentTypeSymbolLoaderBuilder().setName(type.printType(this.getTypePrinter())).build();
+    return ArcBasisMill.componentTypeSymbolLoaderBuilder().setName(this.printType(type)).build();
   }
 
   @Override
