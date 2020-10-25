@@ -1,29 +1,23 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTComponentType;
-import arcbasis._ast.ASTComponentHead;
+import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTComponentHead;
+import arcbasis._ast.ASTComponentType;
 import arcbasis.util.ArcError;
 import de.se_rwth.commons.logging.Log;
-import montiarc.AbstractTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
  * Holds tests for the handwritten methods of {@link PortUniqueSender}.
  */
 public class PortUniqueSenderTest extends AbstractTest {
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return ArcError.ERROR_CODE_PATTERN;
-  }
 
   @ParameterizedTest
   @MethodSource("componentAndErrorCodeProvider")

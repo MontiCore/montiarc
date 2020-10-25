@@ -1,11 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
-import montiarc.AbstractTest;
-import arcbasis.util.ArcError;
-
-import java.util.regex.Pattern;
-
+import arcbasis.AbstractTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -16,11 +12,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 public class PortExpressionBuilderTest extends AbstractTest {
 
   protected ASTPortAccessBuilder builder = new ASTPortAccessBuilder();
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return ArcError.ERROR_CODE_PATTERN;
-  }
 
   @ParameterizedTest
   @ValueSource(strings = {"i1", "comp1.i1", "o1", "_comp1.o1"})

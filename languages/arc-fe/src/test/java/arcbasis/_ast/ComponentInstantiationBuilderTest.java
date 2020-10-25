@@ -1,16 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
+import arcbasis.AbstractTest;
 import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
-import montiarc.AbstractTest;
-import arcbasis.util.ArcError;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,6 +10,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Holds the tests for the handwritten methods of {@link ASTComponentInstantiationBuilder}.
@@ -30,11 +27,6 @@ public class ComponentInstantiationBuilderTest extends AbstractTest {
   public void setUpBuilder() {
     this.builder = new ASTComponentInstantiationBuilder();
     this.builder.setMCType(Mockito.mock(ASTMCObjectType.class)).setComponentInstanceList("a", "b", "c");
-  }
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return ArcError.ERROR_CODE_PATTERN;
   }
 
   @ParameterizedTest

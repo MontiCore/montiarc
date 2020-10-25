@@ -1,33 +1,26 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTComponentType;
-import arcbasis._ast.ASTComponentHead;
+import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTComponentHead;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScope;
 import arcbasis._symboltable.ArcBasisSymbolTableCreator;
 import arcbasis.util.ArcError;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.se_rwth.commons.logging.Log;
-import montiarc.AbstractTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
-import java.util.Collections;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
  * Holds tests for the handwritten methods of {@link SubComponentsConnected}
  */
 public class SubComponentsConnectedTest extends AbstractTest {
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return ArcError.ERROR_CODE_PATTERN;
-  }
 
   @ParameterizedTest
   @MethodSource("componentAndErrorCodeProvider")
@@ -70,10 +63,7 @@ public class SubComponentsConnectedTest extends AbstractTest {
             .build())
           .build())
         .addArcElement(ArcBasisMill.componentInstantiationBuilder()
-          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
-            ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("A"))
-              .build())
-            .build())
+          .setMCType(createQualifiedType("A"))
           .setComponentInstanceList("sub1")
           .build())
         .addArcElement(ArcBasisMill.connectorBuilder().setSource("i1").setTargetList("sub1.i1",
@@ -96,10 +86,7 @@ public class SubComponentsConnectedTest extends AbstractTest {
             .build())
           .build())
         .addArcElement(ArcBasisMill.componentInstantiationBuilder()
-          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
-            ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("A"))
-              .build())
-            .build())
+          .setMCType(createQualifiedType("A"))
           .setComponentInstanceList("sub1")
           .build())
         .addArcElement(
