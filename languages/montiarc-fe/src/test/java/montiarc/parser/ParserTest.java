@@ -19,7 +19,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Optional;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,11 +26,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ParserTest extends AbstractTest {
 
   protected static final String PACKAGE = "montiarc/parser";
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return MontiArcError.ERROR_CODE_PATTERN;
-  }
 
   static public Optional<ASTMACompilationUnit> parse(String relativeFilePath) {
     return parse(relativeFilePath, false);

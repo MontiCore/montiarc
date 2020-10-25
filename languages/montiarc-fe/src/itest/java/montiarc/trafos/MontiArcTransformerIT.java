@@ -19,7 +19,6 @@ import montiarc._ast.ASTMACompilationUnit;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._parser.MontiArcParser;
 import montiarc._visitor.MontiArcVisitor;
-import montiarc.util.MontiArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,7 +29,6 @@ import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 class MontiArcTransformerIT extends AbstractTest {
 
@@ -68,10 +66,6 @@ class MontiArcTransformerIT extends AbstractTest {
     Mockito.reset(genericArcTrafo);
     Mockito.reset(arcCoreTrafo);
     Mockito.reset(montiArcTrafo);
-  }
-
-  protected Pattern supplyErrorCodePattern() {
-    return MontiArcError.ERROR_CODE_PATTERN;
   }
 
   @ParameterizedTest

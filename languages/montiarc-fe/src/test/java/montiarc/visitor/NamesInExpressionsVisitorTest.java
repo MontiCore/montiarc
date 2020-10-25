@@ -5,7 +5,6 @@ import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import montiarc.AbstractTest;
 import montiarc._parser.MontiArcParser;
 import montiarc._visitor.NamesInExpressionsVisitor;
-import montiarc.util.MontiArcError;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -13,16 +12,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class NamesInExpressionsVisitorTest extends AbstractTest {
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return MontiArcError.ERROR_CODE_PATTERN;
-  }
 
   @ParameterizedTest
   @MethodSource("expressionAndVariableNamesProvider")

@@ -1,9 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
-package arcbasis;
+package montiarc;
 
-import arcbasis.util.ArcError;
+import arcbasis.ArcBasisMill;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
+import montiarc.util.MontiArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Arrays;
@@ -13,7 +14,7 @@ public abstract class AbstractTest extends montiarc.util.AbstractTest {
 
   @Override
   protected Pattern supplyErrorCodePattern() {
-    return ArcError.ERROR_CODE_PATTERN;
+    return MontiArcError.ERROR_CODE_PATTERN;
   }
 
   protected static ASTMCQualifiedName createQualifiedName(@NotNull String... parts) {

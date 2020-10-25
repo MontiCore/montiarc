@@ -1,11 +1,9 @@
 package montiarc;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
-import de.monticore.types.typesymbols._symboltable.TypeSymbol;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._symboltable.IMontiArcScope;
-import montiarc._symboltable.MontiArcGlobalScope;
 import montiarc._symboltable.MontiArcLanguage;
 import montiarc.util.DirectoryUtil;
 import montiarc.util.Modelfinder;
@@ -18,13 +16,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import static montiarc.AbstractTest.RELATIVE_MODEL_PATH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author kirchhof
  */
-class MontiArcToolTest {
+class MontiArcToolTest extends AbstractTest {
 
   protected static final String PACKAGE = "montiarc/tool";
 
