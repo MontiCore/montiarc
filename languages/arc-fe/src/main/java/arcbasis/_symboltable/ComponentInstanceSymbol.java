@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ComponentInstanceSymbol extends ComponentInstanceSymbolTOP {
 
-  protected ComponentTypeSymbolLoader type;
+  protected ComponentTypeSymbol type;
   protected List<ASTExpression> arguments;
 
   /**
@@ -22,26 +22,21 @@ public class ComponentInstanceSymbol extends ComponentInstanceSymbolTOP {
   }
 
   /**
-   * @return the loader of the type of this component.
+   * @return the type of this component
    */
-  public ComponentTypeSymbolLoader getType() {
+  public ComponentTypeSymbol getType() {
+    if (type instanceof ComponentTypeSymbolSurrogate) {
+      this.type = ((ComponentTypeSymbolSurrogate) type).lazyLoadDelegate();
+    }
     return this.type;
   }
 
   /**
-   * @param type the loader of the type of this component.
+   * @param type the type of this component
    */
-  public void setType(@NotNull ComponentTypeSymbolLoader type) {
+  public void setType(@NotNull ComponentTypeSymbol type) {
     Preconditions.checkArgument(type != null);
     this.type = type;
-  }
-
-  /**
-   * @return the type of this component.
-   * @throws java.util.NoSuchElementException if the type of this component is not found.
-   */
-  public ComponentTypeSymbol getTypeInfo() {
-    return this.getType().getLoadedSymbol();
   }
 
   /**

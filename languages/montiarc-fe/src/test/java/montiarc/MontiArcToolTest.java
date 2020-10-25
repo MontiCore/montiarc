@@ -4,7 +4,6 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._symboltable.IMontiArcScope;
-import montiarc._symboltable.MontiArcLanguage;
 import montiarc.util.DirectoryUtil;
 import montiarc.util.Modelfinder;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -42,7 +41,7 @@ class MontiArcToolTest extends AbstractTest {
 
     // 1. Find all .arc files
     List<String> foundModels = Modelfinder
-        .getModelsInModelPath(modelPath, MontiArcLanguage.FILE_ENDING);
+        .getModelsInModelPath(modelPath, "arc");
     // 2. Initialize SymbolTable
     Log.info("Initializing symboltable", TOOL_NAME);
     String basedir = DirectoryUtil.getBasedirFromModelAndTargetPath(modelPath.getAbsolutePath(),
@@ -86,7 +85,7 @@ class MontiArcToolTest extends AbstractTest {
 
     // 1. Find all .arc files
     List<String> foundModels = Modelfinder
-      .getModelsInModelPath(modelPath, MontiArcLanguage.FILE_ENDING);
+      .getModelsInModelPath(modelPath, "arc");
     // 2. Initialize SymbolTable
     Log.info("Initializing symboltable", TOOL_NAME);
     IMontiArcScope symTab = tool.initSymbolTable(modelPath);

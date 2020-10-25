@@ -25,7 +25,7 @@ public class PortTypeExistsTest extends AbstractTest {
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);
     PortTypeExists coco = new PortTypeExists();
-    coco.check(ast.getPort(0));
+    coco.check(ast.getPorts(0));
     this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
       new ArcError[] { ArcError.MISSING_TYPE_OF_PORT });
   }

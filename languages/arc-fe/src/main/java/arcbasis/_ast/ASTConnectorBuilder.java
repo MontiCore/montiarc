@@ -92,7 +92,7 @@ public class ASTConnectorBuilder extends ASTConnectorBuilderTOP {
    */
   public ASTConnectorBuilder addAllTargets(String... targets) {
     Preconditions.checkNotNull(targets);
-    this.addAllTargets(this.doCreateTargetList(targets));
+    this.addAllTarget(this.doCreateTargetList(targets));
     return this.realBuilder;
   }
 
@@ -128,7 +128,7 @@ public class ASTConnectorBuilder extends ASTConnectorBuilderTOP {
   public ASTConnectorBuilder addAllTargets(int index, String... targets) {
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkNotNull(targets);
-    this.addAllTargets(index, doCreateTargetList(targets));
+    this.addAllTarget(index, doCreateTargetList(targets));
     return this.realBuilder;
   }
 

@@ -3,12 +3,11 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
-
-import java.util.NoSuchElementException;
 
 /**
  * Checks for each component type whether an inherited component type exists
@@ -23,13 +22,12 @@ public class InheritedComponentTypeExists implements ArcBasisASTComponentTypeCoC
     ComponentTypeSymbol symbol = node.getSymbol();
     if (!symbol.isPresentParentComponent()) {
       return;
-    }
-    try {
-      symbol.getParentInfo();
-    }
-    catch (NoSuchElementException e) {
-      Log.error(String.format(ArcError.MISSING_TYPE_OF_INHERITED_COMPONENT.toString(),
-        symbol.getParent().getName(), symbol.getFullName()), node.get_SourcePositionStart());
+    } else {
+      ComponentTypeSymbol parent = symbol.getParent();
+      if (parent instanceof ComponentTypeSymbolSurrogate) {
+        Log.error(String.format(ArcError.MISSING_TYPE_OF_INHERITED_COMPONENT.toString(),
+          symbol.getParent().getName(), symbol.getFullName()), node.get_SourcePositionStart());
+      }
     }
   }
 }

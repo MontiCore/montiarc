@@ -28,7 +28,7 @@ public class FieldTypeExistsTest extends AbstractTest {
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);
     FieldTypeExists coco = new FieldTypeExists();
-    coco.check(ast.getArcField(0));
+    coco.check(ast.getArcFields(0));
     this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
       new ArcError[] { ArcError.MISSING_TYPE_OF_FIELD });
   }

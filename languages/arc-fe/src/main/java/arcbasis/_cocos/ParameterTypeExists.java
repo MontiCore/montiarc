@@ -4,7 +4,7 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.monticore.types.typesymbols._symboltable.FieldSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -21,7 +21,7 @@ public class ParameterTypeExists implements ArcBasisASTArcParameterCoCo {
     Preconditions.checkArgument(node.isPresentSymbol(), "ASTArcParameter node '%s' has no "
         + "symbol. Did you forget to run the SymbolTableCreator before checking cocos?",
       node.getName());
-    FieldSymbol symbol = node.getSymbol();
+    VariableSymbol symbol = node.getSymbol();
     try {
       symbol.getType().getTypeInfo();
     }

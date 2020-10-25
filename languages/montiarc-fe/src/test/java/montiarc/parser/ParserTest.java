@@ -111,10 +111,10 @@ public class ParserTest extends AbstractTest {
     ASTMACompilationUnit ast =
       this.parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false).orElse(null);
     Assertions.assertTrue(ast != null);
-    Assertions.assertEquals(3, ast.getComponentType().getBody().getArcElementList().size());
-    Assertions.assertTrue(ast.getComponentType().getBody().getArcElement(0) instanceof ASTArcTiming);
-    Assertions.assertTrue(ast.getComponentType().getBody().getArcElement(1) instanceof ASTArcTiming);
-    Assertions.assertTrue(ast.getComponentType().getBody().getArcElement(2) instanceof ASTArcTiming);
+    Assertions.assertEquals(3, ast.getComponentType().getBody().getArcElementsList().size());
+    Assertions.assertTrue(ast.getComponentType().getBody().getArcElements(0) instanceof ASTArcTiming);
+    Assertions.assertTrue(ast.getComponentType().getBody().getArcElements(1) instanceof ASTArcTiming);
+    Assertions.assertTrue(ast.getComponentType().getBody().getArcElements(2) instanceof ASTArcTiming);
   }
 
   static Stream<Arguments> filenameAndErrorCodeProvider() {

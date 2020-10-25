@@ -1,11 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable.adapters;
 
-import de.monticore.cd.cd4analysis._symboltable.CD4AnalysisGlobalScope;
-import de.monticore.cd.cd4analysis._symboltable.CDFieldSymbol;
+import de.monticore.cd4analysis._symboltable.CD4AnalysisGlobalScope;
+import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
+import de.monticore.symbols.oosymbols._symboltable.IFieldSymbolResolvingDelegate;
 import de.monticore.symboltable.modifiers.AccessModifier;
-import de.monticore.types.typesymbols._symboltable.FieldSymbol;
-import de.monticore.types.typesymbols._symboltable.IFieldSymbolResolvingDelegate;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
@@ -23,9 +22,9 @@ public class Field2CDFieldResolvingDelegate implements IFieldSymbolResolvingDele
 
   @Override
   public List<FieldSymbol> resolveAdaptedFieldSymbol(boolean foundSymbols, String name,
-    AccessModifier modifier, Predicate<FieldSymbol> predicate) {
+                                                     AccessModifier modifier, Predicate<FieldSymbol> predicate) {
     List<FieldSymbol> result = new ArrayList<>();
-    Optional<CDFieldSymbol> symbol = globalScope.resolveCDField(name, modifier);
+    Optional<FieldSymbol> symbol = globalScope.resolveField(name, modifier);
     if(symbol.isPresent() && symbol.get().isIsPublic()) {
       result.add(new CDField2FieldAdapter(symbol.get()));
     }

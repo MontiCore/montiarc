@@ -6,18 +6,16 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
-import de.monticore.cd.cd4analysis.CD4AnalysisMill;
-import de.monticore.cd.cd4analysis._symboltable.CD4AnalysisGlobalScope;
-import de.monticore.cd.cd4analysis._symboltable.CD4AnalysisLanguage;
+import de.monticore.cd4analysis.CD4AnalysisMill;
+import de.monticore.cd4analysis._symboltable.CD4AnalysisGlobalScope;
 import de.monticore.io.paths.ModelPath;
-import de.monticore.types.typesymbols._symboltable.TypeSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._parser.MontiArcParser;
 import montiarc._symboltable.IMontiArcScope;
 import montiarc._symboltable.MontiArcGlobalScope;
-import montiarc._symboltable.MontiArcLanguage;
 import montiarc._symboltable.adapters.Field2CDFieldResolvingDelegate;
 import montiarc._symboltable.adapters.Type2CDTypeResolvingDelegate;
 import montiarc.cocos.MontiArcCoCos;
@@ -32,21 +30,17 @@ import java.util.Set;
 
 public class MontiArcTool {
 
-  protected MontiArcLanguage language;
-
   protected MontiArcCoCoChecker checker;
 
   protected boolean isSymTabInitialized;
 
   public MontiArcTool() {
-    this(MontiArcCoCos.createChecker(), new MontiArcLanguage());
+    this(MontiArcCoCos.createChecker());
   }
 
-  public MontiArcTool(@NotNull MontiArcCoCoChecker checker, @NotNull MontiArcLanguage language) {
+  public MontiArcTool(@NotNull MontiArcCoCoChecker checker) {
     Preconditions.checkArgument(checker != null);
-    Preconditions.checkArgument(language != null);
     this.checker = checker;
-    this.language = language;
     this.isSymTabInitialized = false;
   }
 
@@ -149,18 +143,14 @@ public class MontiArcTool {
 
     final ModelPath mp = new ModelPath(p);
 
-    CD4AnalysisLanguage cd4ALanguage = CD4AnalysisMill.cD4AnalysisLanguageBuilder().build();
-    CD4AnalysisGlobalScope cd4AGlobalScope = CD4AnalysisMill.cD4AnalysisGlobalScopeBuilder()
-      .setModelPath(mp)
-      .setCD4AnalysisLanguage(cd4ALanguage)
-      .build();
+    CD4AnalysisGlobalScope cd4AGlobalScope = CD4AnalysisMill.cD4AnalysisGlobalScopeBuilder().setModelPath(mp).build();
 
     Field2CDFieldResolvingDelegate fieldDelegate =
       new Field2CDFieldResolvingDelegate(cd4AGlobalScope);
     Type2CDTypeResolvingDelegate typeDelegate =
       new Type2CDTypeResolvingDelegate(cd4AGlobalScope);
 
-    MontiArcGlobalScope montiArcGlobalScope = new MontiArcGlobalScope(mp, language);
+    MontiArcGlobalScope montiArcGlobalScope = new MontiArcGlobalScope(mp, "arc");
     montiArcGlobalScope.addAdaptedFieldSymbolResolvingDelegate(fieldDelegate);
     montiArcGlobalScope.addAdaptedTypeSymbolResolvingDelegate(typeDelegate);
     addBasicTypes(montiArcGlobalScope);

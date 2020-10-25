@@ -1,31 +1,30 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable.adapters;
 
-import de.monticore.cd.cd4analysis._symboltable.CDFieldSymbol;
+import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.symboltable.resolving.ISymbolAdapter;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.typesymbols._symboltable.FieldSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-public class CDField2FieldAdapter extends FieldSymbol implements ISymbolAdapter<CDFieldSymbol> {
+public class CDField2FieldAdapter extends FieldSymbol implements ISymbolAdapter<FieldSymbol> {
 
-  protected final CDFieldSymbol adaptee;
+  protected final FieldSymbol adaptee;
 
-  public CDField2FieldAdapter(@NotNull CDFieldSymbol adaptee) {
+  public CDField2FieldAdapter(@NotNull FieldSymbol adaptee) {
     super(adaptee.getName());
     this.adaptee = adaptee;
-    this.setType(CDSymTypeAdaptation.createSymType(adaptee.getType()));
+    this.setType(adaptee.getType());
   }
 
   @Override
-  public CDFieldSymbol getAdaptee() {
+  public FieldSymbol getAdaptee() {
     return this.adaptee;
   }
 
   @Override
   public SymTypeExpression getType() {
-    return CDSymTypeAdaptation.createSymType(getAdaptee().getType());
+    return getAdaptee().getType();
   }
 
   @Override
@@ -46,10 +45,5 @@ public class CDField2FieldAdapter extends FieldSymbol implements ISymbolAdapter<
   @Override
   public boolean isIsStatic() {
     return getAdaptee().isIsStatic();
-  }
-
-  @Override
-  public boolean isIsParameter() {
-    return getAdaptee().isIsParameter();
   }
 }

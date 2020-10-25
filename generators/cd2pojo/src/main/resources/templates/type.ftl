@@ -66,7 +66,7 @@ public ${kind} ${type.getName()} ${super} {
         <#assign methodStub = methodStub + method.getReturnType().getName() + " ">
       </#if>
       <#assign methodStub = methodStub + method.getName() + " (">
-      <#list method.getSpannedScope().getLocalCDFieldSymbols() as param>
+      <#list method.getSpannedScope().getLocalFieldSymbols() as param>
         <#assign methodStub = methodStub + param.getType().getName() + " " + param.getName()>
         <#if param_has_next>
           <#assign methodStub = methodStub + ", ">

@@ -36,7 +36,7 @@ public class ComponentInstantiationBuilderTest extends AbstractTest {
     expectedInstanceList.add(instance);
     ASTComponentInstantiation ast = this.builder.addInstance(instance).build();
     List<String> actualInstanceList = this.getInstanceList(ast);
-    Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstanceList().size());
+    Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstancesList().size());
     Assertions.assertEquals(expectedInstanceList, actualInstanceList);
   }
 
@@ -47,8 +47,8 @@ public class ComponentInstantiationBuilderTest extends AbstractTest {
     expectedInstanceList.set(index, instance);
     ASTComponentInstantiation ast = this.builder.setComponentInstance(index, instance).build();
     List<String> actualInstanceList = this.getInstanceList(ast);
-    Assertions.assertEquals(ast.getComponentInstance(index).getName(), instance);
-    Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstanceList().size());
+    Assertions.assertEquals(ast.getComponentInstances(index).getName(), instance);
+    Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstancesList().size());
     Assertions.assertEquals(expectedInstanceList, actualInstanceList);
   }
 
@@ -59,8 +59,8 @@ public class ComponentInstantiationBuilderTest extends AbstractTest {
     expectedInstanceList.add(index, instance);
     ASTComponentInstantiation ast = this.builder.addInstance(index, instance).build();
     List<String> actualInstanceList = this.getInstanceList(ast);
-    Assertions.assertEquals(ast.getComponentInstance(index).getName(), instance);
-    Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstanceList().size());
+    Assertions.assertEquals(ast.getComponentInstances(index).getName(), instance);
+    Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstancesList().size());
     Assertions.assertEquals(expectedInstanceList, actualInstanceList);
   }
 
@@ -74,7 +74,7 @@ public class ComponentInstantiationBuilderTest extends AbstractTest {
     List<String> expectedInstanceList = Arrays.asList(instances);
     ASTComponentInstantiation ast = this.builder.setComponentInstanceList(instances).build();
     List<String> actualInstanceList = this.getInstanceList(ast);
-    Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstanceList().size());
+    Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstancesList().size());
     Assertions.assertEquals(expectedInstanceList, actualInstanceList);
   }
 
@@ -85,7 +85,7 @@ public class ComponentInstantiationBuilderTest extends AbstractTest {
     expectedInstanceList.addAll(Arrays.asList(instances));
     ASTComponentInstantiation ast = this.builder.addAllInstances(instances).build();
     List<String> actualInstanceList = this.getInstanceList(ast);
-    Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstanceList().size());
+    Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstancesList().size());
     Assertions.assertEquals(expectedInstanceList, actualInstanceList);
   }
 
@@ -102,7 +102,7 @@ public class ComponentInstantiationBuilderTest extends AbstractTest {
     expectedInstanceList.addAll(index, Arrays.asList(instances));
     ASTComponentInstantiation ast = this.builder.addAllInstances(index, instances).build();
     List<String> actualInstanceList = this.getInstanceList(ast);
-    Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstanceList().size());
+    Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstancesList().size());
     Assertions.assertEquals(expectedInstanceList, actualInstanceList);
   }
 
@@ -114,12 +114,12 @@ public class ComponentInstantiationBuilderTest extends AbstractTest {
   }
 
   protected List<String> getInstanceList(ASTComponentInstantiationBuilder builder) {
-    return builder.getComponentInstanceList().stream().map(ASTComponentInstance::getName)
+    return builder.getComponentInstancesList().stream().map(ASTComponentInstance::getName)
         .collect(Collectors.toList());
   }
 
   protected List<String> getInstanceList(ASTComponentInstantiation ast) {
-    return ast.getComponentInstanceList().stream().map(ASTComponentInstance::getName)
+    return ast.getComponentInstancesList().stream().map(ASTComponentInstance::getName)
         .collect(Collectors.toList());
   }
 }

@@ -3,8 +3,8 @@ package arcbasis._symboltable;
 
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.modifiers.AccessModifier;
-import de.monticore.types.typesymbols._symboltable.FieldSymbol;
-import de.monticore.types.typesymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import org.codehaus.commons.nullanalysis.Nullable;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
 
   protected ComponentTypeSymbol outerComponent;
-  protected ComponentTypeSymbolLoader parent;
-  protected List<FieldSymbol> parameters;
+  protected ComponentTypeSymbol parent;
+  protected List<VariableSymbol> parameters;
   protected List<TypeVarSymbol> typeParameters;
 
   /**
@@ -103,35 +103,28 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   }
 
   /**
-   * @return the loader of this component's parent component.
+   * @return this component's parent component.
    * @throws IllegalStateException if this component has no parent.
    */
-  public ComponentTypeSymbolLoader getParent() {
+  public ComponentTypeSymbol getParent() {
     Preconditions.checkState(this.isPresentParentComponent());
+    if (parent instanceof ComponentTypeSymbolSurrogate) {
+      this.parent = ((ComponentTypeSymbolSurrogate) parent).lazyLoadDelegate();
+    }
     return this.parent;
   }
 
   /**
    * @param parent this component type's parent component type.
    */
-  public void setParent(@Nullable ComponentTypeSymbolLoader parent) {
+  public void setParent(@Nullable ComponentTypeSymbol parent) {
     this.parent = parent;
-  }
-
-  /**
-   * @return this component's parent component.
-   * @throws IllegalStateException if this component has no parent.
-   * @throws NoSuchElementException if the parent component type is not found.
-   */
-  public ComponentTypeSymbol getParentInfo() {
-    Preconditions.checkState(this.isPresentParentComponent());
-    return this.getParent().getLoadedSymbol();
   }
 
   /**
    * @return a {@code List} of the configuration parameters of this component type.
    */
-  public List<FieldSymbol> getParameters() {
+  public List<VariableSymbol> getParameters() {
     return this.parameters;
   }
 
@@ -141,25 +134,25 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    *
    * @param parameter the symbol to add.
    */
-  public void addParameter(@NotNull FieldSymbol parameter) {
+  public void addParameter(@NotNull VariableSymbol parameter) {
     Preconditions.checkArgument(parameter != null);
     this.parameters.add(parameter);
     this.getSpannedScope().add(parameter);
   }
 
   /**
-   * Adds the elements of a {@code Collection} of {@code FieldSymbol} of component configuration
+   * Adds the elements of a {@code Collection} of {@code VariableSymbol} of component configuration
    * parameters to the configuration parameters of this component type. Throws an
    * {@link IllegalArgumentException} if the given {@code Collection} is {@code null} or contains an
    * element that is {@code null}.
    *
    * @param parameters the symbols to add.
-   * @see this#addParameter(FieldSymbol)
+   * @see this#addParameter(VariableSymbol)
    */
-  public void addParameters(@NotNull Collection<FieldSymbol> parameters) {
+  public void addParameters(@NotNull Collection<VariableSymbol> parameters) {
     Preconditions.checkArgument(parameters != null);
     Preconditions.checkArgument(!parameters.contains(null));
-    for (FieldSymbol parameter : parameters) {
+    for (VariableSymbol parameter : parameters) {
       this.addParameter(parameter);
     }
   }
@@ -211,8 +204,8 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   /**
    * @return a {@code List} of the fields of this component type.
    */
-  public List<FieldSymbol> getFields() {
-    return this.getSpannedScope().getLocalFieldSymbols();
+  public List<VariableSymbol> getFields() {
+    return this.getSpannedScope().getLocalVariableSymbols();
   }
 
   /**
@@ -225,7 +218,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return an {@code Optional} of a field of this component type with the given name, or an
    * empty {@code Optional} if no such field exists.
    */
-  public Optional<FieldSymbol> getFields(@NotNull String name) {
+  public Optional<VariableSymbol> getFields(@NotNull String name) {
     Preconditions.checkArgument(name != null);
     return this.getFields().stream().filter(field -> field.getName().equals(name)).findFirst();
   }
@@ -403,7 +396,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
     List<PortSymbol> result = getPorts();
     if (this.isPresentParentComponent()) {
       List<PortSymbol> inheritedPorts = new ArrayList<>();
-      for (PortSymbol port : this.getParentInfo().getAllPorts()) {
+      for (PortSymbol port : this.getParent().getAllPorts()) {
         if (result.stream().anyMatch(p -> p.getName().equals(port.getName()))) {
           inheritedPorts.add(port);
         }

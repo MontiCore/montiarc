@@ -18,7 +18,7 @@ public abstract class AbstractTest extends montiarc.util.AbstractTest {
 
   protected static ASTMCQualifiedName createQualifiedName(@NotNull String... parts) {
     assert parts != null && !Arrays.asList(parts).contains(null);
-    return ArcBasisMill.mCQualifiedNameBuilder().setPartList(Arrays.asList(parts)).build();
+    return ArcBasisMill.mCQualifiedNameBuilder().setPartsList(Arrays.asList(parts)).build();
   }
 
   protected static ASTMCQualifiedType createQualifiedType(@NotNull String... parts) {

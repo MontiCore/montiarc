@@ -22,7 +22,7 @@ class Result implements IMontiArcGenerator {
       public class «comp.name»Result«Utils.printFormalTypeParameters(comp)»   
       «IF comp.isPresentParentComponent» extends
       «Utils.printSuperClassFQ(comp)»Result
-      «IF comp.getParent.getLoadedSymbol.hasTypeParameter»< «FOR scTypeParams : helper
+      «IF comp.getParent.hasTypeParameter»< «FOR scTypeParams : helper
       .superCompActualTypeArguments SEPARATOR ','»
           «scTypeParams»«ENDFOR»>«ENDIF»
       «ENDIF»
@@ -42,7 +42,7 @@ class Result implements IMontiArcGenerator {
         «IF !comp.allOutgoingPorts.empty»
           public «comp.name»Result(«FOR port : comp.allOutgoingPorts SEPARATOR ','» «helper.getRealPortTypeString(port)» «port.name» «ENDFOR») {
             «IF comp.isPresentParentComponent»
-              super(«FOR port : comp.getParent.getLoadedSymbol.getAllOutgoingPorts» «port.name»
+              super(«FOR port : comp.getParent.getAllOutgoingPorts» «port.name»
               «ENDFOR»);
             «ENDIF»
             «FOR port : comp.outgoingPorts»

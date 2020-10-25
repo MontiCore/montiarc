@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package de.montiarcautomaton.generator.codegen.xtend.util
 
-import de.monticore.types.typesymbols._symboltable.FieldSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import arcbasis._symboltable.ComponentInstanceSymbol
 import arcbasis._symboltable.ComponentTypeSymbol
 import arcbasis._symboltable.PortSymbol
@@ -45,13 +45,13 @@ class Identifier {
       }
     }
 
-    for (FieldSymbol parameter : component.getParameters()) {
+    for (VariableSymbol parameter : component.getParameters()) {
       if (parameter.getName().equals(identifier)) {
         return true;
       }
     }
 
-    for (FieldSymbol field : component.getFields()) {
+    for (VariableSymbol field : component.getFields()) {
       if (field.getName().equals(identifier)) {
         return true;
       }

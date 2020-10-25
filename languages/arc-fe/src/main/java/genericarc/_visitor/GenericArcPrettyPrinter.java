@@ -70,11 +70,11 @@ public class GenericArcPrettyPrinter implements GenericArcVisitor {
   @Override
   public void handle(ASTGenericComponentHead node) {
     this.getPrinter().print("<");
-    acceptGenericSeperatedList(node.getArcTypeParameterList());
+    acceptGenericSeperatedList(node.getArcTypeParametersList());
     this.getPrinter().print("> ");
     if(!node.isEmptyArcTypeParameters()) {
       this.getPrinter().print("(");
-      acceptSeperatedList(node.getArcParameterList());
+      acceptSeperatedList(node.getArcParametersList());
       this.getPrinter().print(") ");
     }
     if(node.isPresentParent()){
@@ -86,7 +86,7 @@ public class GenericArcPrettyPrinter implements GenericArcVisitor {
   @Override
   public void handle(ASTArcTypeParameter node) {
     this.getPrinter().print(node.getName() + " ");
-    if(!node.isEmptyUpperBounds()){
+    if(!node.isEmptyUpperBound()){
       this.getPrinter().print("extends ");
       Iterator<ASTMCType> iterator = node.getUpperBoundList().iterator();
       iterator.next().accept(this.getRealThis());

@@ -5,8 +5,6 @@ import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import de.monticore.types.typesymbols.TypeSymbolsMill;
-import de.monticore.types.typesymbols._symboltable.TypeSymbolLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -42,8 +40,7 @@ public class PortSymbolBuilderTest extends AbstractTest {
 
   @Test
   public void shouldBuildWithExpectedType() {
-    TypeSymbolLoader type = TypeSymbolsMill.typeSymbolLoaderBuilder().setName("A").build();
-    SymTypeExpression typeExpression = SymTypeExpressionFactory.createTypeObject(type);
+    SymTypeExpression typeExpression = SymTypeExpressionFactory.createTypeExpression("int", new ArcBasisScope());
     PortSymbol symbol = ArcBasisMill.portSymbolBuilder()
       .setName("in2").setType(typeExpression)
       .setDirection(arcbasis.ArcBasisMill.portDirectionInBuilder().build())
