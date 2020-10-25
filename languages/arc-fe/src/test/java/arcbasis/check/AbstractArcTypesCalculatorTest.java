@@ -11,9 +11,10 @@ import de.monticore.expressions.expressionsbasis.ExpressionsBasisMill;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.expressions.expressionsbasis._symboltable.IExpressionsBasisScope;
+import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbolSurrogate;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import de.monticore.types.typesymbols._symboltable.FieldSymbol;
-import de.monticore.types.typesymbols._symboltable.TypeSymbol;
 import montiarc.util.check.AbstractArcTypesCalculator;
 import montiarc.util.check.IArcTypesCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -61,19 +62,19 @@ public abstract class AbstractArcTypesCalculatorTest extends AbstractTest {
   @BeforeEach
   public void setUpTypes() {
     this.addBasicTypes2Scope(this.getScope());
-    TypeSymbol p =
-      ArcBasisMill.typeSymbolBuilder().setSpannedScope(new ArcBasisScope()).setName("Person").build();
-    TypeSymbol r = ArcBasisMill.typeSymbolBuilder().setSpannedScope(new ArcBasisScope()).setName("Role").build();
-    TypeSymbol t =
-      ArcBasisMill.typeSymbolBuilder().setSpannedScope(new ArcBasisScope()).setName("Teacher").build();
-    TypeSymbol s =
-      ArcBasisMill.typeSymbolBuilder().setSpannedScope(new ArcBasisScope()).setName("Student").build();
-    TypeSymbol f =
-      ArcBasisMill.typeSymbolBuilder().setSpannedScope(new ArcBasisScope()).setName("FirstGrader").build();
+    OOTypeSymbol p =
+      ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(new ArcBasisScope()).setName("Person").build();
+    OOTypeSymbol r = ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(new ArcBasisScope()).setName("Role").build();
+    OOTypeSymbol t =
+      ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(new ArcBasisScope()).setName("Teacher").build();
+    OOTypeSymbol s =
+      ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(new ArcBasisScope()).setName("Student").build();
+    OOTypeSymbol f =
+      ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(new ArcBasisScope()).setName("FirstGrader").build();
     this.add2Scope(this.getScope(), p, r, t, s, f);
-    t.setSuperTypeList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Role", this.getScope())));
-    s.setSuperTypeList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Role", this.getScope())));
-    f.setSuperTypeList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Student",
+    t.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Role", this.getScope())));
+    s.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Role", this.getScope())));
+    f.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Student",
       this.getScope())));
   }
 
@@ -102,10 +103,10 @@ public abstract class AbstractArcTypesCalculatorTest extends AbstractTest {
 
     //Then
     Assertions.assertTrue(this.getTypesCalculator().getResult().isPresent());
-    Assertions.assertEquals(isPrimitive, this.getTypesCalculator().getResult().get().isPrimitive());
+    Assertions.assertEquals(isPrimitive, this.getTypesCalculator().getResult().get().isTypeConstant());
     Assertions.assertEquals(isGeneric, this.getTypesCalculator().getResult().get().isGenericType());
     Assertions.assertFalse(this.getTypesCalculator().getResult().get().isTypeVariable());
-    Assertions.assertTrue(this.getTypesCalculator().getResult().get().isTypeInfoLoadable());
+    Assertions.assertFalse(this.getTypesCalculator().getResult().get().getTypeInfo() instanceof OOTypeSymbolSurrogate);
     Assertions.assertEquals(expectedType, this.getTypesCalculator().getResult().get().print());
   }
 

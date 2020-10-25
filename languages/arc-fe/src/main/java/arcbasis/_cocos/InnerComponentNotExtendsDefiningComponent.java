@@ -44,7 +44,7 @@ public class InnerComponentNotExtendsDefiningComponent implements ArcBasisASTCom
    */
   private void checkInner(ComponentTypeSymbol comp, Deque<String> compNameStack) {
     if (comp.isPresentParentComponent()) {
-      String superComponent = comp.getParentInfo().getFullName();
+      String superComponent = comp.getParent().getFullName();
       if (compNameStack.contains(superComponent)) {
         Log.error(
           String.format(ArcError.INNER_COMPONENT_EXTENDS_OUTER.toString(),

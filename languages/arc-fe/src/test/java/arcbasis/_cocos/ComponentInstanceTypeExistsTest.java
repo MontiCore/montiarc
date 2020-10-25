@@ -25,7 +25,7 @@ public class ComponentInstanceTypeExistsTest extends AbstractTest {
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);
     ComponentInstanceTypeExists coco = new ComponentInstanceTypeExists();
-    coco.check(ast.getComponentInstance(0));
+    coco.check(ast.getComponentInstances(0));
     this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
       new ArcError[] { ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE });
   }

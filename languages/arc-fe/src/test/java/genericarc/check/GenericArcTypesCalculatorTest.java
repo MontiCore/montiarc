@@ -2,7 +2,7 @@ package genericarc.check;
 
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.check.AbstractArcTypesCalculatorTest;
-import de.monticore.types.check.LastResult;
+import de.monticore.types.check.TypeCheckResult;
 import genericarc.GenericArcMill;
 import genericarc._visitor.GenericArcDelegatorVisitor;
 import genericarc._visitor.IGenericArcDelegatorVisitor;
@@ -20,7 +20,7 @@ public class GenericArcTypesCalculatorTest extends AbstractArcTypesCalculatorTes
   @Override
   protected IArcTypesCalculator getTypesCalculator() {
     if (this.typesCalculator == null) {
-      this.typesCalculator = new GenericArcTypesCalculator(new LastResult());
+      this.typesCalculator = new GenericArcTypesCalculator(new TypeCheckResult());
     }
     return this.typesCalculator;
   }
@@ -36,7 +36,7 @@ public class GenericArcTypesCalculatorTest extends AbstractArcTypesCalculatorTes
   @Test
   public void shouldReturnCorrectCalculationDelegator() {
     //Given
-    GenericArcTypesCalculator typesCalculator = new GenericArcTypesCalculator(new LastResult());
+    GenericArcTypesCalculator typesCalculator = new GenericArcTypesCalculator(new TypeCheckResult());
 
     //When
     IGenericArcDelegatorVisitor delegator = typesCalculator.getCalculationDelegator();

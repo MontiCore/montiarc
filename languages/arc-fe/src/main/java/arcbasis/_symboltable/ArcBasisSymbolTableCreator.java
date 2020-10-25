@@ -5,15 +5,15 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
 import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolBuilder;
+import de.monticore.types.check.ISynthesize;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types.check.SynthesizeSymTypeFromMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
 import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
-import de.monticore.types.typesymbols._symboltable.FieldSymbol;
-import de.monticore.types.typesymbols._symboltable.FieldSymbolBuilder;
-import de.monticore.types.typesymbols._symboltable.ITypeSymbolsScope;
-import de.monticore.types.typesymbols._symboltable.TypeSymbolLoader;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -28,6 +28,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
 
   protected Stack<ComponentTypeSymbol> componentStack = new Stack<>();
   protected MCBasicTypesPrettyPrinter typePrinter;
+  protected ISynthesize typeSynthesizer;
   protected ASTMCType currentCompInstanceType;
   protected ASTMCType currentFieldType;
   protected ASTMCType currentPortType;
@@ -36,23 +37,27 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
   public ArcBasisSymbolTableCreator(@NotNull IArcBasisScope enclosingScope) {
     super(Preconditions.checkNotNull(enclosingScope));
     this.typePrinter = new MCBasicTypesPrettyPrinter(new IndentPrinter());
+    this.typeSynthesizer = new SynthesizeSymTypeFromMCBasicTypes();
   }
 
   public ArcBasisSymbolTableCreator(@NotNull Deque<? extends IArcBasisScope> scopeStack) {
     super(Preconditions.checkNotNull(scopeStack));
     this.typePrinter = new MCBasicTypesPrettyPrinter(new IndentPrinter());
+    this.typeSynthesizer = new SynthesizeSymTypeFromMCBasicTypes();
   }
 
   public ArcBasisSymbolTableCreator(@NotNull IArcBasisScope enclosingScope,
-    @NotNull MCBasicTypesPrettyPrinter typePrinter) {
+    @NotNull MCBasicTypesPrettyPrinter typePrinter, @NotNull ISynthesize typeSynthesizer) {
     super(Preconditions.checkNotNull(enclosingScope));
     this.typePrinter = Preconditions.checkNotNull(typePrinter);
+    this.typeSynthesizer = Preconditions.checkNotNull(typeSynthesizer);
   }
 
   public ArcBasisSymbolTableCreator(@NotNull Deque<? extends IArcBasisScope> scopeStack,
-    @NotNull MCBasicTypesPrettyPrinter typePrinter) {
+    @NotNull MCBasicTypesPrettyPrinter typePrinter, @NotNull ISynthesize typeSynthesizer) {
     super(Preconditions.checkNotNull(scopeStack));
     this.typePrinter = Preconditions.checkNotNull(typePrinter);
+    this.typeSynthesizer = Preconditions.checkNotNull(typeSynthesizer);
   }
 
   protected MCBasicTypesPrettyPrinter getTypePrinter() {
@@ -69,10 +74,9 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     return type.printType(this.getTypePrinter());
   }
 
-  protected SymTypeExpression createTypeExpression(@NotNull ASTMCType type, @NotNull ITypeSymbolsScope scope) {
-    assert type != null;
-    assert scope != null;
-    return SymTypeExpressionFactory.createTypeExpression(this.printType(type), scope);
+  protected SymTypeExpression createTypeExpression(@NotNull ASTMCType type) {
+    assert type != null && this.getCurrentScope().isPresent();
+    return SymTypeExpressionFactory.createTypeExpression(this.printType(type), this.getCurrentScope().get());
   }
 
   protected Stack<ComponentTypeSymbol> getComponentStack() {
@@ -188,29 +192,28 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     Preconditions.checkState(this.getCurrentComponent().isPresent());
     node.setEnclosingScope(getCurrentScope().get());
     if (node.isPresentParent()) {
-      ComponentTypeSymbolLoader parentLoader =
-        this.create_ComponentLoader(node.getParent());
-      parentLoader.setEnclosingScope(this.getCurrentComponent().get().getEnclosingScope());
-      this.getCurrentComponent().get().setParent(parentLoader);
+      this.getCurrentComponent().get().setParent(this.delegateToParent(node));
     }
   }
 
-  /**
-   * @deprecated No need to create type loaders, use SymTypeExpressionFactory to directly create type ecpressions
-   */
-  @Deprecated
-  protected TypeSymbolLoader create_TypeLoader(@NotNull ASTMCType type) {
-    assert (this.getCurrentScope().isPresent());
-    return new TypeSymbolLoader(this.printType(type),
-      this.getCurrentScope().get());
+  protected ComponentTypeSymbol delegateToParent(@NotNull ASTComponentHead node) {
+    Preconditions.checkArgument(node != null);
+    Preconditions.checkArgument(node.isPresentParent());
+    return this.create_ComponentSurrogate(node.getParent());
   }
 
   @Override
-  protected FieldSymbol create_ArcParameter(@NotNull ASTArcParameter ast) {
+  public void visit(ASTMCType node) {
+    Preconditions.checkState(this.getCurrentScope().isPresent());
+    node.setEnclosingScope(this.getCurrentScope().get());
+  }
+
+  @Override
+  protected VariableSymbol create_ArcParameter(@NotNull ASTArcParameter ast) {
     assert (this.getCurrentScope().isPresent());
-    FieldSymbolBuilder builder = ArcBasisMill.fieldSymbolBuilder();
+    VariableSymbolBuilder builder = ArcBasisMill.variableSymbolBuilder();
     builder.setName(ast.getName());
-    builder.setType(this.createTypeExpression(ast.getMCType(), this.getCurrentScope().get()));
+    builder.setType(this.createTypeExpression(ast.getMCType()));
     return builder.build();
   }
 
@@ -219,7 +222,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     Preconditions.checkState(this.getCurrentComponent().isPresent());
-    FieldSymbol symbol = this.create_ArcParameter(node);
+    VariableSymbol symbol = this.create_ArcParameter(node);
     this.initialize_ArcParameter(symbol, node);
     this.addToScopeAndLinkWithNode(symbol, node);
     this.getCurrentComponent().get().addParameter(symbol);
@@ -252,7 +255,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     assert (this.getCurrentScope().isPresent());
     PortSymbolBuilder builder = ArcBasisMill.portSymbolBuilder();
     builder.setName(ast.getName());
-    builder.setType(this.createTypeExpression(this.getCurrentPortType().get(), getCurrentScope().get()));
+    builder.setType(this.createTypeExpression(this.getCurrentPortType().get()));
     builder.setDirection(this.getCurrentPortDirection().get());
     return builder.build();
   }
@@ -285,12 +288,12 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
   }
 
   @Override
-  protected FieldSymbol create_ArcField(@NotNull ASTArcField ast) {
+  protected VariableSymbol create_ArcField(@NotNull ASTArcField ast) {
     assert (this.getCurrentFieldType().isPresent());
     assert (this.getCurrentScope().isPresent());
-    FieldSymbolBuilder builder = ArcBasisMill.fieldSymbolBuilder();
+    VariableSymbolBuilder builder = ArcBasisMill.variableSymbolBuilder();
     builder.setName(ast.getName());
-    builder.setType(this.createTypeExpression(this.getCurrentFieldType().get(), this.getCurrentScope().get()));
+    builder.setType(this.createTypeExpression(this.getCurrentFieldType().get()));
     return builder.build();
   }
 
@@ -299,7 +302,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     Preconditions.checkState(this.getCurrentFieldType().isPresent());
-    FieldSymbol symbol = this.create_ArcField(node);
+    VariableSymbol symbol = this.create_ArcField(node);
     this.initialize_ArcField(symbol, node);
     this.addToScopeAndLinkWithNode(symbol, node);
   }
@@ -320,11 +323,12 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     this.setCurrentCompInstanceType(null);
   }
 
-  protected ComponentTypeSymbolLoader create_ComponentLoader(@NotNull ASTMCType type) {
+  protected ComponentTypeSymbolSurrogate create_ComponentSurrogate(@NotNull ASTMCType type) {
+    Preconditions.checkState(this.getCurrentScope().isPresent());
     if (type instanceof ASTMCGenericType){
-      return ArcBasisMill.componentTypeSymbolLoaderBuilder().setName(((ASTMCGenericType)type).printWithoutTypeArguments()).build();
+      return ArcBasisMill.componentTypeSymbolSurrogateBuilder().setName(((ASTMCGenericType)type).printWithoutTypeArguments()).setEnclosingScope(this.getCurrentScope().get()).build();
     }
-    return ArcBasisMill.componentTypeSymbolLoaderBuilder().setName(this.printType(type)).build();
+    return ArcBasisMill.componentTypeSymbolSurrogateBuilder().setName(this.printType(type)).setEnclosingScope(this.getCurrentScope().get()).build();
   }
 
   @Override
@@ -333,18 +337,22 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     Preconditions.checkArgument(ast != null);
     Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
     Preconditions.checkState(this.getCurrentScope().isPresent());
-    ComponentTypeSymbolLoader typeLoader =
-      this.create_ComponentLoader(this.getCurrentCompInstanceType().get());
-    typeLoader.setEnclosingScope(this.getCurrentScope().get());
-    builder.setName(ast.getName()).setType(typeLoader);
+    ast.setEnclosingScope(this.getCurrentScope().get());
+    builder.setName(ast.getName()).setType(this.delegateToType(ast));
     return builder.build();
+  }
+
+  protected ComponentTypeSymbol delegateToType(@NotNull ASTComponentInstance node) {
+    Preconditions.checkArgument(node != null);
+    Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
+    return this.create_ComponentSurrogate(this.getCurrentCompInstanceType().get());
   }
 
   @Override
   protected void initialize_ComponentInstance(@NotNull ComponentInstanceSymbol symbol,
     @NotNull ASTComponentInstance ast) {
-    if (ast.isPresentArcArguments()) {
-      symbol.addArguments(ast.getArcArguments().getExpressionList());
+    if (ast.isPresentArguments()) {
+      symbol.addArguments(ast.getArguments().getExpressionsList());
     }
   }
 

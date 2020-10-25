@@ -103,7 +103,7 @@ class MontiArcTransformerIT extends AbstractTest {
   @Test
   public void shouldInvokeMethodsOnArcBasisNodes() {
     ASTArcBasisNode ast = ArcBasisMill.componentHeadBuilder()
-      .addArcParameter(ArcBasisMill.arcParameterBuilder()
+      .addArcParameters(ArcBasisMill.arcParameterBuilder()
         .setMCType(Mockito.mock(ASTMCType.class)).setName("foo").build())
       .build();
 
@@ -115,7 +115,7 @@ class MontiArcTransformerIT extends AbstractTest {
   @Test
   public void shouldInvokeMethodsOnGenericArcNodes() {
     ASTGenericArcNode ast = GenericArcMill.genericComponentHeadBuilder()
-      .addArcTypeParameter(GenericArcMill.arcTypeParameterBuilder()
+      .addArcTypeParameters(GenericArcMill.arcTypeParameterBuilder()
         .setName("T").build())
       .build();
 

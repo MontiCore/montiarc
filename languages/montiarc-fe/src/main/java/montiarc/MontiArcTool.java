@@ -6,11 +6,10 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
-import de.monticore.cd.cd4analysis.CD4AnalysisMill;
-import de.monticore.cd.cd4analysis._symboltable.CD4AnalysisGlobalScope;
-import de.monticore.cd.cd4analysis._symboltable.CD4AnalysisLanguage;
+import de.monticore.cd4analysis.CD4AnalysisMill;
+import de.monticore.cd4analysis._symboltable.CD4AnalysisGlobalScope;
 import de.monticore.io.paths.ModelPath;
-import de.monticore.types.typesymbols._symboltable.TypeSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -31,24 +30,22 @@ import java.util.stream.Collectors;
 
 public class MontiArcTool {
 
-  protected MontiArcLanguage language;
   protected MontiArcCoCoChecker checker;
   protected boolean isSymTabInitialized;
+  protected String fileExtension = "arc";
 
   public MontiArcTool() {
-    this(MontiArcCoCos.createChecker(), new MontiArcLanguage());
+    this(MontiArcCoCos.createChecker());
   }
 
-  public MontiArcTool(@NotNull MontiArcCoCoChecker checker, @NotNull MontiArcLanguage language) {
+  public MontiArcTool(@NotNull MontiArcCoCoChecker checker) {
     Preconditions.checkArgument(checker != null);
-    Preconditions.checkArgument(language != null);
     this.checker = checker;
-    this.language = language;
     this.isSymTabInitialized = false;
   }
 
-  protected MontiArcLanguage getLanguage() {
-    return this.language;
+  protected String getFileExtension() {
+    return fileExtension;
   }
 
   protected MontiArcCoCoChecker getChecker() {
@@ -64,14 +61,12 @@ public class MontiArcTool {
   }
 
   public MontiArcGlobalScope createGlobalScope(@NotNull ModelPath mp) {
-    CD4AnalysisLanguage cd4ALanguage = CD4AnalysisMill.cD4AnalysisLanguageBuilder().build();
-    CD4AnalysisGlobalScope cd4AGlobalScope = CD4AnalysisMill.cD4AnalysisGlobalScopeBuilder().setModelPath(mp)
-      .setCD4AnalysisLanguage(cd4ALanguage).build();
+    CD4AnalysisGlobalScope cd4AGlobalScope = CD4AnalysisMill.cD4AnalysisGlobalScopeBuilder().setModelPath(mp).build();
 
     Field2CDFieldResolvingDelegate fieldDelegate = new Field2CDFieldResolvingDelegate(cd4AGlobalScope);
     Type2CDTypeResolvingDelegate typeDelegate = new Type2CDTypeResolvingDelegate(cd4AGlobalScope);
 
-    MontiArcGlobalScope montiArcGlobalScope = new MontiArcGlobalScope(mp, this.getLanguage());
+    MontiArcGlobalScope montiArcGlobalScope = new MontiArcGlobalScope(mp, fileExtension);
     montiArcGlobalScope.addAdaptedFieldSymbolResolvingDelegate(fieldDelegate);
     montiArcGlobalScope.addAdaptedTypeSymbolResolvingDelegate(typeDelegate);
     addBasicTypes(montiArcGlobalScope);
@@ -85,7 +80,7 @@ public class MontiArcTool {
 
   public Collection<MontiArcArtifactScope> createSymbolTable(@NotNull MontiArcGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
-    MontiArcSymbolTableCreatorDelegator symTab = this.getLanguage().getSymbolTableCreator(scope);
+    MontiArcSymbolTableCreatorDelegator symTab = MontiArcMill.montiArcSymbolTableCreatorDelegatorBuilder().setGlobalScope(scope).build();
     return this.parseModels(scope).stream().map(symTab::createFromAST).collect(Collectors.toSet());
   }
 
@@ -97,7 +92,7 @@ public class MontiArcTool {
   public Collection<ASTMACompilationUnit> parse(@NotNull Path path) {
     Preconditions.checkArgument(path != null);
     try {
-      return Files.walk(path).filter(Files::isRegularFile).filter(f -> f.getFileName().toString().endsWith(language.getFileExtension())).map(f -> parse(f.toString()))
+      return Files.walk(path).filter(Files::isRegularFile).filter(f -> f.getFileName().toString().endsWith(this.getFileExtension())).map(f -> parse(f.toString()))
         .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
     } catch (IOException e) {
       Log.error("Could not access " + path.toString() + ", there were I/O exceptions.");

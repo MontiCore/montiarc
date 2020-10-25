@@ -7,12 +7,16 @@ import arcbasis.check.AbstractArcTypesCalculatorTest;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._symboltable.IExpressionsBasisScope;
-import de.monticore.types.check.LastResult;
+import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
+import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
+import de.monticore.symbols.oosymbols._symboltable.OOSymbolsScope;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import de.monticore.types.typesymbols._symboltable.*;
+import de.monticore.types.check.TypeCheckResult;
 import montiarc.MontiArcMill;
-import montiarc.TypeSymbolsMillForMontiArc;
+import montiarc.OOSymbolsMillForMontiArc;
 import montiarc._parser.MontiArcParser;
 import montiarc._visitor.IMontiArcDelegatorVisitor;
 import montiarc._visitor.MontiArcDelegatorVisitor;
@@ -28,7 +32,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -56,49 +59,50 @@ public class MontiArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
   @BeforeEach
   public void setUpGenericTypes() {
     TypeVarSymbol bT = MontiArcMill.typeVarSymbolBuilder().setName("T").build();
-    TypeSymbol buffer = MontiArcMill.typeSymbolBuilder().setName("Buffer")
-      .setSpannedScope(TypeSymbolsMillForMontiArc.typeSymbolsScopeBuilder().build())
-      .setTypeParameterList(Collections.singletonList(bT)).build();
+    OOSymbolsScope bS = OOSymbolsMillForMontiArc.oOSymbolsScopeBuilder().build();
+    bS.add(bT);
+    OOTypeSymbol buffer = MontiArcMill.oOTypeSymbolBuilder().setName("Buffer").setSpannedScope(bS).build();
     TypeVarSymbol sT = MontiArcMill.typeVarSymbolBuilder().setName("T").build();
-    TypeSymbol storage = MontiArcMill.typeSymbolBuilder().setName("Storage")
-      .setSpannedScope(TypeSymbolsMillForMontiArc.typeSymbolsScopeBuilder().build())
-      .setTypeParameterList(Collections.singletonList(sT)).build();
+    OOSymbolsScope sS = OOSymbolsMillForMontiArc.oOSymbolsScopeBuilder().build();
+    sS.add(sT);
+    OOTypeSymbol storage = MontiArcMill.oOTypeSymbolBuilder().setName("Storage").setSpannedScope(sS).build();
     TypeVarSymbol tT = MontiArcMill.typeVarSymbolBuilder().setName("T").build();
     TypeVarSymbol tV = MontiArcMill.typeVarSymbolBuilder().setName("V").build();
-    TypeSymbol trafo = MontiArcMill.typeSymbolBuilder().setName("Trafo")
-      .setSpannedScope(TypeSymbolsMillForMontiArc.typeSymbolsScopeBuilder().build())
-      .setTypeParameterList(Arrays.asList(tT, tV)).build();
+    OOSymbolsScope tS = OOSymbolsMillForMontiArc.oOSymbolsScopeBuilder().build();
+    tS.add(tT);
+    tS.add(tV);
+    OOTypeSymbol trafo = MontiArcMill.oOTypeSymbolBuilder().setName("Trafo").setSpannedScope(tS).build();
     this.add2Scope(this.getScope(), buffer, storage, trafo);
   }
 
   @BeforeEach
   public void setUpMessageObject() {
-    TypeSymbolsScope getHeaderScope = TypeSymbolsMillForMontiArc.typeSymbolsScopeBuilder().build();
+    OOSymbolsScope getHeaderScope = OOSymbolsMillForMontiArc.oOSymbolsScopeBuilder().build();
     MethodSymbol getHeader = MontiArcMill.methodSymbolBuilder().setName("getHeader")
       .setReturnType(SymTypeExpressionFactory.createTypeExpression("String", this.getScope()))
       .setIsStatic(false).setSpannedScope(getHeaderScope).build();
     getHeaderScope.setSpanningSymbol(getHeader);
     getHeader.setSpannedScope(getHeaderScope);
-    TypeSymbolsScope setHeaderScope = TypeSymbolsMillForMontiArc.typeSymbolsScopeBuilder().build();
+    OOSymbolsScope setHeaderScope = OOSymbolsMillForMontiArc.oOSymbolsScopeBuilder().build();
     FieldSymbol setHeaderPara = ArcBasisMill.fieldSymbolBuilder().setName("content")
-      .setType(SymTypeExpressionFactory.createTypeExpression("String", setHeaderScope))
-      .setIsParameter(true).build();
+      .setType(SymTypeExpressionFactory.createTypeExpression("String", setHeaderScope)).build();
     setHeaderScope.add(setHeaderPara);
     MethodSymbol setHeader = MontiArcMill.methodSymbolBuilder().setName("setHeader")
       .setReturnType(SymTypeExpressionFactory.createTypeExpression("String", this.getScope()))
       .setIsStatic(false).setSpannedScope(setHeaderScope).build();
     setHeaderScope.setSpanningSymbol(setHeader);
     setHeader.setSpannedScope(setHeaderScope);
-    TypeSymbolsScope msgScope = TypeSymbolsMillForMontiArc.typeSymbolsScopeBuilder()
-      .addSubScope(getHeaderScope).addSubScope(setHeaderScope).build();
-    TypeSymbol msg = MontiArcMill.typeSymbolBuilder().setName("Message")
-      .setSpannedScope(msgScope).setMethodList(Arrays.asList(getHeader, setHeader)).build();
+    OOSymbolsScope msgScope = OOSymbolsMillForMontiArc.oOSymbolsScopeBuilder()
+      .addSubScopes(getHeaderScope).addSubScopes(setHeaderScope).build();
+    msgScope.add(getHeader);
+    msgScope.add(setHeader);
+    OOTypeSymbol msg = MontiArcMill.oOTypeSymbolBuilder().setName("Message").setSpannedScope(msgScope).build();
     this.add2Scope(this.getScope(), msg);
   }
 
   @BeforeEach
   public void setUpTrafoBuilder() {
-    TypeSymbolsScope buildScope = TypeSymbolsMillForMontiArc.typeSymbolsScopeBuilder().build();
+    OOSymbolsScope buildScope = OOSymbolsMillForMontiArc.oOSymbolsScopeBuilder().build();
     List<SymTypeExpression> trafoArgs = Arrays.asList(
       SymTypeExpressionFactory.createTypeVariable("Student", this.getScope()),
       SymTypeExpressionFactory.createTypeVariable("Teacher", this.getScope()));
@@ -107,10 +111,11 @@ public class MontiArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
       .setIsStatic(false).setSpannedScope(buildScope).build();
     buildScope.setSpanningSymbol(build);
     build.setSpannedScope(buildScope);
-    TypeSymbolsScope builderScope = TypeSymbolsMillForMontiArc.typeSymbolsScopeBuilder()
-      .addSubScope(buildScope).build();
-    TypeSymbol builder = MontiArcMill.typeSymbolBuilder().setName("TrafoBuilder")
-      .setSpannedScope(builderScope).setMethodList(Collections.singletonList(build)).build();
+    OOSymbolsScope builderScope = OOSymbolsMillForMontiArc.oOSymbolsScopeBuilder()
+      .addSubScopes(buildScope).build();
+    builderScope.add(build);
+    OOTypeSymbol builder =
+      MontiArcMill.oOTypeSymbolBuilder().setName("TrafoBuilder").setSpannedScope(builderScope).build();
     this.add2Scope(this.getScope(), builder);
   }
 
@@ -174,7 +179,8 @@ public class MontiArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
    */
   @ParameterizedTest
   @MethodSource("expressionProviderWithGenericMethodCalls")
-  public void shouldCalculateObjectTypeFromGenericMethodCalls(@NotNull String expression, @NotNull String expectedType) throws IOException {
+  public void shouldCalculateObjectTypeFromGenericMethodCalls(@NotNull String expression,
+                                                              @NotNull String expectedType) throws IOException {
     Preconditions.checkArgument(expression != null);
     Preconditions.checkArgument(expectedType != null);
     doCalculateTypeFromExpression(expression, expectedType, false, true);
@@ -206,7 +212,7 @@ public class MontiArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
   @Override
   protected IArcTypesCalculator getTypesCalculator() {
     if (this.typesCalculator == null) {
-      this.typesCalculator = new MontiArcTypesCalculator(new LastResult());
+      this.typesCalculator = new MontiArcTypesCalculator(new TypeCheckResult());
     }
     return this.typesCalculator;
   }
@@ -237,7 +243,7 @@ public class MontiArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
   @Test
   public void shouldReturnCorrectCalculationDelegator() {
     //Given
-    MontiArcTypesCalculator typesCalculator = new MontiArcTypesCalculator(new LastResult());
+    MontiArcTypesCalculator typesCalculator = new MontiArcTypesCalculator(new TypeCheckResult());
 
     //When
     IMontiArcDelegatorVisitor delegator = typesCalculator.getCalculationDelegator();
@@ -249,13 +255,13 @@ public class MontiArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
 
   public static class MontiArcExpressionsScopeSetter extends ArcBasisExpressionsScopeSetter implements MontiArcInheritanceVisitor {
 
+    public MontiArcExpressionsScopeSetter(@NotNull IExpressionsBasisScope scope) {
+      super(scope);
+    }
+
     @Override
     public MontiArcExpressionsScopeSetter getRealThis() {
       return this;
-    }
-
-    public MontiArcExpressionsScopeSetter(@NotNull IExpressionsBasisScope scope) {
-      super(scope);
     }
   }
 }

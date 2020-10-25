@@ -2,8 +2,8 @@
 package arcbasis._symboltable;
 
 import com.google.common.base.Preconditions;
-import de.monticore.types.typesymbols._symboltable.FieldSymbol;
-import de.monticore.types.typesymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -12,8 +12,8 @@ import java.util.List;
 public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
 
   protected ComponentTypeSymbol outerComponent;
-  protected ComponentTypeSymbolLoader parentComponentLoader;
-  protected List<FieldSymbol> parameters;
+  protected ComponentTypeSymbol parentComponent;
+  protected List<VariableSymbol> parameters;
   protected List<TypeVarSymbol> typeParameters;
 
   public ComponentTypeSymbolBuilder() {
@@ -41,21 +41,21 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
     return this.realBuilder;
   }
 
-  public ComponentTypeSymbolLoader getParentComponentLoader() {
-    return this.parentComponentLoader;
+  public ComponentTypeSymbol getParentComponent() {
+    return this.parentComponent;
   }
 
-  public ComponentTypeSymbolBuilder setParentComponentLoader(
-    @Nullable ComponentTypeSymbolLoader parentComponentLoader) {
-    this.parentComponentLoader = parentComponentLoader;
+  public ComponentTypeSymbolBuilder setParentComponent(
+    @Nullable ComponentTypeSymbol parent) {
+    this.parentComponent = parent;
     return this.realBuilder;
   }
 
-  public List<FieldSymbol> getParameters() {
+  public List<VariableSymbol> getParameters() {
     return this.parameters;
   }
 
-  public ComponentTypeSymbolBuilder setParameters(@NotNull List<FieldSymbol> parameters) {
+  public ComponentTypeSymbolBuilder setParameters(@NotNull List<VariableSymbol> parameters) {
     Preconditions.checkArgument(parameters != null);
     Preconditions.checkArgument(!parameters.contains(null));
     this.parameters = parameters;
@@ -88,7 +88,7 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
       symbol.addTypeParameters(this.getTypeParameters());
     }
     symbol.setOuterComponent(this.getOuterComponent());
-    symbol.setParent(this.getParentComponentLoader());
+    symbol.setParent(this.getParentComponent());
     return symbol;
   }
 

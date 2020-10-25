@@ -69,7 +69,7 @@ component grammar ComfortableArc extends ArcBasis {
    *  component itself.
    */
   ConnectedComponentInstance extends ComponentInstance =
-    Name ArcArguments? "[" Connector+ "]"
+    Name Arguments? "[" Connector+ "]"
   ;
 
   /** PortComplete prevents automatic

@@ -24,10 +24,10 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    */
   public List<ASTPortDeclaration> getPortDeclarations() {
     return this.getBody()
-      .getArcElementList()
+      .getArcElementsList()
       .stream()
       .filter(element -> element instanceof ASTComponentInterface)
-      .map(compInterface -> ((ASTComponentInterface) compInterface).getPortDeclarationList())
+      .map(compInterface -> ((ASTComponentInterface) compInterface).getPortDeclarationsList())
       .flatMap(Collection::stream)
       .collect(Collectors.toList());
   }
@@ -41,7 +41,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
   public List<ASTPort> getPorts() {
     return this.getPortDeclarations()
       .stream()
-      .map(ASTPortDeclaration::getPortList)
+      .map(ASTPortDeclaration::getPortsList)
       .flatMap(Collection::stream)
       .collect(Collectors.toList());
   }
@@ -64,7 +64,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    */
   public List<ASTArcFieldDeclaration> getFieldDeclarations() {
     return this.getBody()
-      .getArcElementList()
+      .getArcElementsList()
       .stream()
       .filter(element -> element instanceof ASTArcFieldDeclaration)
       .map(fieldDec -> (ASTArcFieldDeclaration) fieldDec)
@@ -80,7 +80,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
   public List<ASTArcField> getFields() {
     return this.getFieldDeclarations()
       .stream()
-      .map(ASTArcFieldDeclaration::getArcFieldList)
+      .map(ASTArcFieldDeclaration::getArcFieldsList)
       .flatMap(Collection::stream)
       .collect(Collectors.toList());
   }
@@ -105,7 +105,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    */
   public List<ASTConnector> getConnectors() {
     return this.getBody()
-      .getArcElementList()
+      .getArcElementsList()
       .stream()
       .filter(element -> element instanceof ASTConnector)
       .map(connector -> (ASTConnector) connector)
@@ -150,7 +150,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    */
   public List<ASTComponentInstantiation> getSubComponentInstantiations() {
     return this.getBody()
-      .getArcElementList()
+      .getArcElementsList()
       .stream()
       .filter(element -> element instanceof ASTComponentInstantiation)
       .map(subComponent -> (ASTComponentInstantiation) subComponent)
@@ -168,12 +168,12 @@ public class ASTComponentType extends ASTComponentTypeTOP {
     List<ASTComponentInstance> subComponents = new ArrayList<>();
     subComponents.addAll(this.getSubComponentInstantiations()
       .stream()
-      .map(ASTComponentInstantiation::getComponentInstanceList)
+      .map(ASTComponentInstantiation::getComponentInstancesList)
       .flatMap(Collection::stream)
       .collect(Collectors.toList()));
     subComponents.addAll(this.getInnerComponents()
       .stream()
-      .map(ASTComponentType::getComponentInstanceList)
+      .map(ASTComponentType::getComponentInstancesList)
       .flatMap(Collection::stream)
       .collect(Collectors.toList()));
     return subComponents;
@@ -200,7 +200,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    */
   public List<ASTComponentType> getInnerComponents() {
     return this.getBody()
-      .getArcElementList()
+      .getArcElementsList()
       .stream()
       .filter(element -> element instanceof ASTComponentType)
       .map(innerComponent -> (ASTComponentType) innerComponent)
@@ -213,10 +213,10 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    *
    * @param index index of the instance whose name to return
    * @return the name of the instance at the specified position
-   * @see super#getComponentInstance(int)
+   * @see super#getComponentInstances(int)
    */
   public String getInstanceName(int index) {
-    return this.getComponentInstance(index).getName();
+    return this.getComponentInstances(index).getName();
   }
 
   /**
@@ -224,10 +224,10 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * empty if this component definition contains no instance declarations.
    *
    * @return a list of names of all instances declared in this component definition.
-   * @see super#getComponentInstanceList()
+   * @see super#getComponentInstancesList()
    */
   public List<String> getInstancesNames() {
-    return this.getComponentInstanceList().stream().map(ASTComponentInstance::getName)
+    return this.getComponentInstancesList().stream().map(ASTComponentInstance::getName)
       .collect(Collectors.toList());
   }
 }

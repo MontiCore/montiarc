@@ -25,7 +25,7 @@ public class ParameterTypeExistsTest extends AbstractTest {
     ASTMCQualifiedType type = createQualifiedType("Integer");
     ASTComponentType ast = arcbasis.ArcBasisMill.componentTypeBuilder().setName("Comp")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setArcParameterList(
+      .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setArcParametersList(
         Collections.singletonList(arcbasis.ArcBasisMill.arcParameterBuilder().setName("p").setMCType(type)
           .build()))
         .build())
@@ -34,7 +34,7 @@ public class ParameterTypeExistsTest extends AbstractTest {
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);
     ParameterTypeExists coco = new ParameterTypeExists();
-    coco.check(ast.getHead().getArcParameter(0));
+    coco.check(ast.getHead().getArcParameters(0));
     this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
       new ArcError[] { ArcError.MISSING_TYPE_OF_PARAMETER });
   }

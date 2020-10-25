@@ -3,15 +3,10 @@ package montiarc.util.check;
 
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.monticore.expressions.expressionsbasis._symboltable.IExpressionsBasisScope;
 import de.monticore.literals.mcliteralsbasis._ast.ASTLiteral;
-import de.monticore.types.check.DeriveSymTypeOfExpression;
-import de.monticore.types.check.DeriveSymTypeOfLiterals;
-import de.monticore.types.check.LastResult;
-import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.*;
 import montiarc.util._visitor.IArcDelegatorVisitor;
 import org.codehaus.commons.nullanalysis.NotNull;
-import de.monticore.types.check.ITypesCalculator;
 
 import java.util.Optional;
 
@@ -26,9 +21,9 @@ import java.util.Optional;
 public abstract class AbstractArcTypesCalculator implements IArcTypesCalculator {
 
   protected IArcDelegatorVisitor calculationDelegator;
-  protected LastResult typeCheckResult;
+  protected TypeCheckResult typeCheckResult;
 
-  protected AbstractArcTypesCalculator(@NotNull LastResult typeCheckResult,
+  protected AbstractArcTypesCalculator(@NotNull TypeCheckResult typeCheckResult,
                                        @NotNull IArcDelegatorVisitor calculationDelegator) {
     Preconditions.checkArgument(typeCheckResult != null);
     Preconditions.checkArgument(calculationDelegator != null);
@@ -41,18 +36,18 @@ public abstract class AbstractArcTypesCalculator implements IArcTypesCalculator 
     return this.calculationDelegator;
   }
 
-  protected LastResult getTypeCheckResult() {
+  protected TypeCheckResult getTypeCheckResult() {
     return typeCheckResult;
   }
 
-  protected void setTypeCheckResult(@NotNull LastResult typeCheckResult) {
+  protected void setTypeCheckResult(@NotNull TypeCheckResult typeCheckResult) {
     Preconditions.checkArgument(typeCheckResult != null);
     this.typeCheckResult = typeCheckResult;
   }
 
   @Override
   public Optional<SymTypeExpression> getResult() {
-    return this.getTypeCheckResult().isPresentLast() ? Optional.of(this.getTypeCheckResult().getLast()) :
+    return this.getTypeCheckResult().isPresentCurrentResult() ? Optional.of(this.getTypeCheckResult().getCurrentResult()) :
       Optional.empty();
   }
 
@@ -61,7 +56,6 @@ public abstract class AbstractArcTypesCalculator implements IArcTypesCalculator 
     Preconditions.checkArgument(exp != null);
     Preconditions.checkArgument(exp.getEnclosingScope() != null);
     this.reset();
-    this.setScopeExpr(exp.getEnclosingScope());
     exp.accept(this.getCalculationDelegator());
     return this.getResult();
   }
@@ -76,7 +70,7 @@ public abstract class AbstractArcTypesCalculator implements IArcTypesCalculator 
 
   @Override
   public void reset() {
-    this.getTypeCheckResult().setLastAbsent();
+    this.getTypeCheckResult().setCurrentResultAbsent();
   }
 
   @Override
@@ -87,25 +81,13 @@ public abstract class AbstractArcTypesCalculator implements IArcTypesCalculator 
 
   protected void initDeriveSymTypeOfLiterals() {
     DeriveSymTypeOfLiterals deriveSymTypeOfLiterals = new DeriveSymTypeOfLiterals();
-    deriveSymTypeOfLiterals.setResult(this.getTypeCheckResult());
+    deriveSymTypeOfLiterals.setTypeCheckResult(this.getTypeCheckResult());
     this.getCalculationDelegator().setMCLiteralsBasisVisitor(deriveSymTypeOfLiterals);
   }
 
   protected void initDeriveSymTypeOfExpression() {
     DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpression();
-    deriveSymTypeOfExpression.setLastResult(this.getTypeCheckResult());
+    deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
     this.getCalculationDelegator().setExpressionsBasisVisitor(deriveSymTypeOfExpression);
-  }
-
-  /**
-   * Help method to set the required scope in a {@link DeriveSymTypeOfExpression}
-   * visitor. Needed, because the implementation in MC6.1.0 is broken.
-   * TODO: Remove once fixed in MontiCore.
-   */
-  protected void setScopeExpr(@NotNull IExpressionsBasisScope scope) {
-    Preconditions.checkArgument(scope != null);
-    Preconditions.checkState(this.getCalculationDelegator().getExpressionsBasisVisitor().isPresent());
-    Preconditions.checkState(this.getCalculationDelegator().getExpressionsBasisVisitor().get() instanceof DeriveSymTypeOfExpression);
-    ((DeriveSymTypeOfExpression) this.getCalculationDelegator().getExpressionsBasisVisitor().get()).setScope(scope);
   }
 }

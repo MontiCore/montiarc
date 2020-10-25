@@ -44,15 +44,15 @@ public class AutoInstantiateHelperTest extends AbstractTest {
   public static void setUpCompTypes() {
     ASTComponentType a = createCompType("A");
     ASTComponentType b = createCompType("B");
-    b.getBody().addArcElement(createAIOff());
+    b.getBody().addArcElements(createAIOff());
     ASTComponentType c = createCompType("C");
-    c.getBody().addArcElement(createAIOn());
+    c.getBody().addArcElements(createAIOn());
     ASTComponentType d = createCompType("D");
-    d.getBody().addArcElement(createAIOff());
-    d.getBody().addArcElement(createAIOn());
+    d.getBody().addArcElements(createAIOff());
+    d.getBody().addArcElements(createAIOn());
     ASTComponentType e = createCompType("E");
-    e.getBody().addArcElement(createAIOn());
-    e.getBody().addArcElement(createAIOff());
+    e.getBody().addArcElements(createAIOn());
+    e.getBody().addArcElements(createAIOff());
     putCompTypes(a, b, c, d, e);
   }
 

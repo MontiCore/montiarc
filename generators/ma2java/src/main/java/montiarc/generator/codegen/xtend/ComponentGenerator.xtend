@@ -2,7 +2,6 @@
 package montiarc.generator.codegen.xtend
 
 import arcbasis._symboltable.ComponentTypeSymbol
-import arcbasis._symboltable.ComponentTypeSymbolLoader
 import montiarc.generator.codegen.xtend.util.Identifier
 import montiarc.generator.codegen.xtend.util.Init
 import montiarc.generator.codegen.xtend.util.Ports
@@ -11,7 +10,7 @@ import montiarc.generator.codegen.xtend.util.Subcomponents
 import montiarc.generator.codegen.xtend.util.Update
 import montiarc.generator.codegen.xtend.util.Utils
 import montiarc.generator.helper.ComponentHelper
-import de.monticore.types.typesymbols._symboltable.FieldSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import java.util.ArrayList
 import java.util.List
 import montiarc.generator.codegen.xtend.util.IMontiArcGenerator
@@ -45,7 +44,7 @@ class ComponentGenerator implements IMontiArcGenerator {
       
       public class «comp.name»«generics»      
         «IF comp.isPresentParentComponent» extends «Utils.printSuperClassFQ(comp)» 
-            «IF comp.parent.getLoadedSymbol.hasTypeParameter»<«FOR scTypeParams : helper
+            «IF comp.parent.hasTypeParameter»<«FOR scTypeParams : helper
             .superCompActualTypeArguments SEPARATOR ','»
               «scTypeParams»«ENDFOR»>
             «ENDIF»
@@ -157,11 +156,10 @@ class ComponentGenerator implements IMontiArcGenerator {
 
   def protected static List<String> getInheritedParams(ComponentTypeSymbol component) {
     var List<String> result = new ArrayList;
-    var List<FieldSymbol> configParameters = component.getParameters();
+    var List<VariableSymbol> configParameters = component.getParameters();
     if (component.isPresentParentComponent()) {
-      var ComponentTypeSymbolLoader superCompReference = component.getParent();
-      var List<FieldSymbol> superConfigParams = superCompReference.getLoadedSymbol()
-      .getParameters();
+      var ComponentTypeSymbol superCompReference = component.getParent();
+      var List<VariableSymbol> superConfigParams = superCompReference.getParameters();
       if (!configParameters.isEmpty()) {
         for (var i = 0; i < superConfigParams.size(); i++) {
           result.add(configParameters.get(i).getName());

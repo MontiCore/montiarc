@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.util;
 
+import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
+import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.DefsTypeBasic;
-import de.monticore.types.typesymbols._symboltable.FieldSymbol;
-import de.monticore.types.typesymbols._symboltable.ITypeSymbolsScope;
-import de.monticore.types.typesymbols._symboltable.TypeSymbol;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.Assertions;
@@ -30,7 +30,7 @@ public abstract class AbstractTest {
     Log.enableFailQuick(false);
   }
 
-  protected void addBasicTypes2Scope(ITypeSymbolsScope scope) {
+  protected void addBasicTypes2Scope(IOOSymbolsScope scope) {
     DefsTypeBasic.add2scope(scope, DefsTypeBasic._boolean);
     DefsTypeBasic.add2scope(scope, DefsTypeBasic._char);
     DefsTypeBasic.add2scope(scope, DefsTypeBasic._short);
@@ -44,11 +44,11 @@ public abstract class AbstractTest {
     DefsTypeBasic.add2scope(scope, DefsTypeBasic._array);
   }
 
-  protected void add2Scope(ITypeSymbolsScope scope, TypeSymbol... types) {
+  protected void add2Scope(IOOSymbolsScope scope, OOTypeSymbol... types) {
     Arrays.asList(types).stream().forEach(type -> DefsTypeBasic.add2scope(scope, type));
   }
 
-  protected void add2Scope(ITypeSymbolsScope scope, FieldSymbol... fields) {
+  protected void add2Scope(IOOSymbolsScope scope, FieldSymbol... fields) {
     Arrays.asList(fields).stream().forEach(field -> DefsTypeBasic.add2scope(scope, field));
   }
 

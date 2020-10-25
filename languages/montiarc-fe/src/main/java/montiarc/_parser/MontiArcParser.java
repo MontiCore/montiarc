@@ -48,7 +48,7 @@ public class MontiArcParser extends MontiArcParserTOP {
       String modelName = optAst.get().getComponentType().getName();
       String packageOfFile = Names.getPackageFromPath(Names.getPathFromFilename(relativeFilePath));
       String packageOfModel = Names.getQualifiedName(optAst.get().isPresentPackage() ?
-        optAst.get().getPackage().getPartList() : new ArrayList<>());
+        optAst.get().getPackage().getPartsList() : new ArrayList<>());
       if (!modelName.equals(fileRoot)) {
         Log.error(String
           .format(MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER.toString(), modelName, fileRoot));

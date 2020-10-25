@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.Collections;
+
 /**
  * Holds tests for the handwritten methods of {@link CircularInheritance}.
  */
@@ -28,6 +30,12 @@ public class CircularInheritanceTest extends AbstractTest {
     ASTComponentType child = arcbasis.ArcBasisMill.componentTypeBuilder().setName("B")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setParent(createQualifiedType("A")).build())
+      .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setParent(
+        arcbasis.ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
+          arcbasis.ArcBasisMill.mCQualifiedNameBuilder().setPartsList(Collections.singletonList(
+            "A")).build())
+          .build())
+        .build())
       .build();
     ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);

@@ -6,7 +6,7 @@ import arcbasis.check.AbstractArcTypesCalculatorTest;
 import comfortablearc.ComfortableArcMill;
 import comfortablearc._visitor.ComfortableArcDelegatorVisitor;
 import comfortablearc._visitor.IComfortableArcDelegatorVisitor;
-import de.monticore.types.check.LastResult;
+import de.monticore.types.check.TypeCheckResult;
 import montiarc.util.check.IArcTypesCalculator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ public class ComfortableArcTypesCalculatorTest extends AbstractArcTypesCalculato
   @Override
   protected IArcTypesCalculator getTypesCalculator() {
     if (this.typesCalculator == null) {
-      this.typesCalculator = new ComfortableArcTypesCalculator(new LastResult());
+      this.typesCalculator = new ComfortableArcTypesCalculator(new TypeCheckResult());
     }
     return this.typesCalculator;
   }
@@ -37,7 +37,7 @@ public class ComfortableArcTypesCalculatorTest extends AbstractArcTypesCalculato
   @Test
   public void shouldReturnCorrectCalculationDelegator() {
     //Given
-    ComfortableArcTypesCalculator typesCalculator = new ComfortableArcTypesCalculator(new LastResult());
+    ComfortableArcTypesCalculator typesCalculator = new ComfortableArcTypesCalculator(new TypeCheckResult());
 
     //When
     IComfortableArcDelegatorVisitor delegator = typesCalculator.getCalculationDelegator();

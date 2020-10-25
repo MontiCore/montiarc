@@ -228,7 +228,7 @@ public class ComfortableArcNodeHelper {
   public static boolean isFullyConnected(@NotNull ASTComponentType node, @NotNull String subcomponent) {
     Preconditions.checkArgument(node != null);
     Preconditions.checkArgument(subcomponent != null);
-    return node.getBody().getArcElementList().stream().anyMatch(e -> e instanceof ASTFullyConnectedComponentInstantiation
+    return node.getBody().getArcElementsList().stream().anyMatch(e -> e instanceof ASTFullyConnectedComponentInstantiation
       && ((ASTComponentInstantiation) e).getInstancesNames().contains(subcomponent));
   }
 }

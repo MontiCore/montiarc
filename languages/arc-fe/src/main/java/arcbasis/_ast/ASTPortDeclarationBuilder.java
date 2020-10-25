@@ -66,7 +66,7 @@ public class ASTPortDeclarationBuilder extends ASTPortDeclarationBuilderTOP {
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkNotNull(port);
     Preconditions.checkArgument(!port.contains("."));
-    this.setPort(index, this.doCreatePort(port));
+    this.setPorts(index, this.doCreatePort(port));
     return this.realBuilder;
   }
 
@@ -80,7 +80,7 @@ public class ASTPortDeclarationBuilder extends ASTPortDeclarationBuilderTOP {
    */
   public ASTPortDeclarationBuilder setPortList(String... ports) {
     Preconditions.checkNotNull(ports);
-    this.setPortList(this.doCreatePortList(ports));
+    this.setPortsList(this.doCreatePortList(ports));
     return this.realBuilder;
   }
 
@@ -96,7 +96,7 @@ public class ASTPortDeclarationBuilder extends ASTPortDeclarationBuilderTOP {
   public ASTPortDeclarationBuilder addPort(String port) {
     Preconditions.checkNotNull(port);
     Preconditions.checkArgument(!port.contains("."));
-    this.addPort(this.doCreatePort(port));
+    this.addPorts(this.doCreatePort(port));
     return this.realBuilder;
   }
 
@@ -129,7 +129,7 @@ public class ASTPortDeclarationBuilder extends ASTPortDeclarationBuilderTOP {
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkNotNull(port);
     Preconditions.checkArgument(!port.contains("."));
-    this.addPort(index, this.doCreatePort(port));
+    this.addPorts(index, this.doCreatePort(port));
     return this.realBuilder;
   }
 

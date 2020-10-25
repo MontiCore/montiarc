@@ -31,7 +31,7 @@ component grammar ArcBasis extends
         de.monticore.MCBasics,
         de.monticore.types.MCBasicTypes,
         de.monticore.expressions.ExpressionsBasis,
-        de.monticore.types.TypeSymbols              {
+        de.monticore.symbols.OOSymbols              {
 
   /**
    * ASTArcElement is the top-level interface for all elements of the component.
@@ -82,8 +82,7 @@ component grammar ArcBasis extends
    * @attribute value Default value used for the parameter if no argument is
    * given during instantiation.
    */
-  //TODO: Use Variable instead of Field, waiting for MC 6.2.0
-  ArcParameter implements Field =
+  ArcParameter implements Variable =
     MCType Name ("=" default:Expression)?
   ;
 
@@ -150,8 +149,7 @@ component grammar ArcBasis extends
    * @attribute name The name of the field.
    * @attribute value The initialization value of the field.
    */
-  // TODO: Use Variable instead of Field, waiting for MC 6.2.0
-  ArcField implements Field <100> = Name "=" initial:Expression;
+  ArcField implements Variable <100> = Name "=" initial:Expression;
 
   /**
    * ASTComponentInstantiation holds one or more component instances that are
@@ -172,10 +170,7 @@ component grammar ArcBasis extends
    * @attribute name The name of the component instance.
    * @attribute arguments A list of configuration arguments.
    */
-   //TODO: Use Arguments instead of ArcArguments, waiting for MC 6.0.2
-  symbol ComponentInstance = Name ArcArguments?;
-
-  ArcArguments = "(" (Expression || ",")* ")";
+  symbol ComponentInstance = Name Arguments?;
 
   /**
    * ASTConnector connects one source port with one or more target ports.

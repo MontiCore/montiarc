@@ -5,9 +5,9 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.TypeCheck;
-import de.monticore.types.typesymbols._symboltable.FieldSymbol;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -36,10 +36,10 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
     Preconditions.checkArgument(node.isPresentSymbol(), "ASTComponent node '%s' has no symbol. "
       + "Did you forget to run the SymbolTableCreator before checking cocos?", node.getName());
     ComponentTypeSymbol component = node.getSymbol();
-    List<FieldSymbol> parameters = component.getParameters();
-    if (component.isPresentParentComponent() && component.getParent().loadSymbol().isPresent()) {
-      ComponentTypeSymbol parent = component.getParentInfo();
-      List<FieldSymbol> parentParameters = parent.getParameters();
+    List<VariableSymbol> parameters = component.getParameters();
+    if (component.isPresentParentComponent()) {
+      ComponentTypeSymbol parent = component.getParent();
+      List<VariableSymbol> parentParameters = parent.getParameters();
       if (parameters.size() < parentParameters.size()) {
         Log.error(
           String.format(ArcError.TO_FEW_CONFIGURATION_PARAMETER.toString(), component.getFullName(),
@@ -54,14 +54,14 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
               parameters.get(i).getName(), i + 1, component.getFullName(),
               paramType.getTypeInfo().getFullName(),
               superParameterType.getTypeInfo().getFullName()),
-            node.getHead().getArcParameterList().get(i).get_SourcePositionStart());
+            node.getHead().getArcParametersList().get(i).get_SourcePositionStart());
         }
         if (this.hasParameterDefaultValue(parent, i)) {
           if (!this.hasParameterDefaultValue(component, i)) {
             Log.error(
               String.format(ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH.toString(),
                 parameters.get(i).getName(), i + 1, component.getFullName()),
-              node.getHead().getArcParameterList().get(i).get_SourcePositionStart());
+              node.getHead().getArcParametersList().get(i).get_SourcePositionStart());
           }
         }
       }
@@ -71,7 +71,7 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
   private boolean hasParameterDefaultValue(ComponentTypeSymbol symbol, int position) {
     if (symbol.isPresentAstNode()) {
       final ASTComponentType astNode = symbol.getAstNode();
-      return astNode.getHead().getArcParameterList().get(position).isPresentDefault();
+      return astNode.getHead().getArcParametersList().get(position).isPresentDefault();
     }
     return false;
   }

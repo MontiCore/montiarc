@@ -5,7 +5,7 @@ import arcbasis._ast.*;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.monticore.types.typesymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -55,7 +55,7 @@ public class NamesCorrectlyCapitalized implements ArcBasisASTComponentTypeCoCo {
       }
     }
 
-    final List<ASTArcParameter> parameters = node.getHead().getArcParameterList();
+    final List<ASTArcParameter> parameters = node.getHead().getArcParametersList();
     for (ASTArcParameter parameter : parameters) {
       if (!Character.isLowerCase(parameter.getName().charAt(0))) {
         Log.error(String.format(ArcError.PARAMETER_LOWER_CASE.toString(),

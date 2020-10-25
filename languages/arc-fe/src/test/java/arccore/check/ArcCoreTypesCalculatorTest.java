@@ -7,7 +7,7 @@ import arccore.ArcCoreMill;
 import montiarc.util.check.IArcTypesCalculator;
 import arccore._visitor.ArcCoreDelegatorVisitor;
 import arccore._visitor.IArcCoreDelegatorVisitor;
-import de.monticore.types.check.LastResult;
+import de.monticore.types.check.TypeCheckResult;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,7 @@ public class ArcCoreTypesCalculatorTest extends AbstractArcTypesCalculatorTest {
   @Override
   protected IArcTypesCalculator getTypesCalculator() {
     if (this.typesCalculator == null) {
-      this.typesCalculator = new ArcCoreTypesCalculator(new LastResult());
+      this.typesCalculator = new ArcCoreTypesCalculator(new TypeCheckResult());
     }
     return this.typesCalculator;
   }
@@ -37,7 +37,7 @@ public class ArcCoreTypesCalculatorTest extends AbstractArcTypesCalculatorTest {
   @Test
   public void shouldReturnCorrectCalculationDelegator() {
     //Given
-    ArcCoreTypesCalculator typesCalculator = new ArcCoreTypesCalculator(new LastResult());
+    ArcCoreTypesCalculator typesCalculator = new ArcCoreTypesCalculator(new TypeCheckResult());
 
     //When
     IArcCoreDelegatorVisitor delegator = typesCalculator.getCalculationDelegator();

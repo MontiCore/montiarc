@@ -112,7 +112,7 @@ class Utils {
   }
   
   def static String printSuperClassFQ(ComponentTypeSymbol comp){
-  	var String packageName = printPackageWithoutKeyWordAndSemicolon(comp.getParent.getLoadedSymbol);
+  	var String packageName = printPackageWithoutKeyWordAndSemicolon(comp.getParent);
   	if(packageName.equals("")){
   		return '''«comp.getParent.getName»'''
   	} else {

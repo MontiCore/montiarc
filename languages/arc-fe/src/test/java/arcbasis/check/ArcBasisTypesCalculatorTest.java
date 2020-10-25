@@ -3,7 +3,7 @@ package arcbasis.check;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
-import de.monticore.types.check.LastResult;
+import de.monticore.types.check.TypeCheckResult;
 import montiarc.util.check.IArcTypesCalculator;
 
 /**
@@ -16,7 +16,7 @@ public class ArcBasisTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
   @Override
   protected IArcTypesCalculator getTypesCalculator() {
     if (this.typesCalculator == null) {
-      this.typesCalculator = new ArcBasisTypesCalculator(new LastResult());
+      this.typesCalculator = new ArcBasisTypesCalculator(new TypeCheckResult());
     }
     return this.typesCalculator;
   }

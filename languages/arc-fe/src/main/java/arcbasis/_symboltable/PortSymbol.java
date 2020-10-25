@@ -8,7 +8,7 @@ import arcbasis._ast.ASTPortDirectionOut;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.IScopeSpanningSymbol;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.typesymbols._symboltable.*;
+import de.monticore.symbols.basicsymbols._symboltable.*;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Optional;
@@ -63,7 +63,7 @@ public class PortSymbol extends PortSymbolTOP {
   }
 
   /**
-   * @return the loader for the type of this port.
+   * @return the type for the type of this port.
    */
   public SymTypeExpression getType() {
     return this.type;

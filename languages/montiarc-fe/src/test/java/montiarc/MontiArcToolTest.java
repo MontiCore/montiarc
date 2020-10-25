@@ -56,7 +56,7 @@ public class MontiArcToolTest extends AbstractTest {
     Path modelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, modelPathName);
 
     //When
-    MontiArcGlobalScope scope = tool.processModels(modelPath);
+    tool.processModels(modelPath);
 
     //Then
     Assertions.assertFalse(Log.getFindings().isEmpty());
