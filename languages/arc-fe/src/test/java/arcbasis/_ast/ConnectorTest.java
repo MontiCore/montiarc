@@ -1,29 +1,21 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
+import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
-import montiarc.AbstractTest;
-import arcbasis.util.ArcError;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
+
 /**
  * Holds test for the handwritten methods of {@link ASTConnector}.
  */
 public class ConnectorTest extends AbstractTest {
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return ArcError.ERROR_CODE_PATTERN;
-  }
 
   @ParameterizedTest
   @MethodSource("connectorAndSourceProvider")

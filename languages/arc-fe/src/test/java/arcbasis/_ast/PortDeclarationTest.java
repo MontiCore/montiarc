@@ -1,26 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
+import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
-import montiarc.AbstractTest;
-import arcbasis.util.ArcError;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.util.regex.Pattern;
 
 /**
  * Holds test for the handwritten methods of {@link ASTPortDeclaration}.
  */
 public class PortDeclarationTest extends AbstractTest {
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return ArcError.ERROR_CODE_PATTERN;
-  }
 
   @Test
   public void shouldReturnExpectedDirection() {

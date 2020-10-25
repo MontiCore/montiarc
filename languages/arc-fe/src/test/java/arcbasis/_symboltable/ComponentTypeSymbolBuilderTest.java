@@ -1,34 +1,27 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis.util.ArcError;
 import de.monticore.types.typesymbols._symboltable.FieldSymbol;
 import de.monticore.types.typesymbols._symboltable.TypeVarSymbol;
-import montiarc.AbstractTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.Arguments;
-
-import static org.junit.jupiter.params.provider.Arguments.arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
+
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
  * Holds tests for the handwritten methods of {@link ComponentTypeSymbolBuilder}.
  */
 public class ComponentTypeSymbolBuilderTest extends AbstractTest {
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return ArcError.ERROR_CODE_PATTERN;
-  }
 
   @Test
   public void shouldBeValid() {

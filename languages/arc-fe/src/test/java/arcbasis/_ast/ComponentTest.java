@@ -1,12 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
+import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis.util.ArcError;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
-import montiarc.AbstractTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -16,7 +15,6 @@ import org.mockito.Mockito;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,11 +22,6 @@ import java.util.stream.Stream;
  * Holds test for the handwritten methods of {@link ASTComponentType}.
  */
 public class ComponentTest extends AbstractTest {
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return ArcError.ERROR_CODE_PATTERN;
-  }
 
   @ParameterizedTest
   @MethodSource("sourceAndTargetsProvider")

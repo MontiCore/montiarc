@@ -1,26 +1,18 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis.util.ArcError;
 import de.monticore.types.check.SymTypeExpression;
-import montiarc.AbstractTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 
-import java.util.regex.Pattern;
-
 /**
  * Holds tests for the handwritten methods of {@link PortSymbol}.
  */
 public class PortSymbolTest extends AbstractTest {
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return ArcError.ERROR_CODE_PATTERN;
-  }
 
   @Test
   public void shouldFindComponentType() {

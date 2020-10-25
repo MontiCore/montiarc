@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
+import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcFieldDeclaration;
 import arcbasis._symboltable.ArcBasisScope;
@@ -9,29 +10,17 @@ import arcbasis.util.ArcError;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.se_rwth.commons.logging.Log;
-import montiarc.AbstractTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.util.Collections;
-import java.util.regex.Pattern;
 
 /**
  * Holds tests for the handwritten methods of {@link FieldTypeExists}.
  */
 public class FieldTypeExistsTest extends AbstractTest {
 
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return ArcError.ERROR_CODE_PATTERN;
-  }
-
   @Test
   public void shouldNotFindType() {
-    ASTMCQualifiedType type = arcbasis.ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
-      arcbasis.ArcBasisMill.mCQualifiedNameBuilder().setPartList(Collections.singletonList("Integer"))
-        .build())
-      .build();
+    ASTMCQualifiedType type = createQualifiedType("Integer");
     String[] names = new String[] { "v1", "v2", "v3" };
     ASTArcFieldDeclaration ast = arcbasis.ArcBasisMill.arcFieldDeclarationBuilder()
       .setMCType(type).setArcFieldList(names, this.mockValues(names.length)).build();

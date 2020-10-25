@@ -1,21 +1,19 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
-import arcbasis.util.ArcError;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.typesymbols._symboltable.FieldSymbol;
-import montiarc.AbstractTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
-import java.util.regex.Pattern;
 
 /**
  * Holds tests for the handwritten methods of {@link ArcBasisSymbolTableCreator}.
@@ -23,11 +21,6 @@ import java.util.regex.Pattern;
 public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   protected ArcBasisSymbolTableCreator symTab;
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return ArcError.ERROR_CODE_PATTERN;
-  }
 
   @BeforeEach
   public void SetUpSymTab() {
