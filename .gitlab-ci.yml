@@ -114,7 +114,7 @@ Code Quality:
 checkMDLinks:
   stage: check
   dependencies:
-    - post-test
+    - Code Quality
   script:
     - "./check/downloadlinkchecker.sh $secibuildtoken"
     - "url=https://git.rwth-aachen.de/monticore/montiarc/core/-/blob/develop/README.md"
