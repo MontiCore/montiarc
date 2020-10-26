@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ComponentInstanceSymbolBuilder extends ComponentInstanceSymbolBuilderTOP {
 
-  protected ComponentTypeSymbolLoader type;
+  protected ComponentTypeSymbol type;
   protected List<ASTExpression> arguments;
 
   public ComponentInstanceSymbolBuilder() {
@@ -22,11 +22,11 @@ public class ComponentInstanceSymbolBuilder extends ComponentInstanceSymbolBuild
     return super.setName(name);
   }
 
-  public ComponentTypeSymbolLoader getType() {
+  public ComponentTypeSymbol getType() {
     return this.type;
   }
 
-  public ComponentInstanceSymbolBuilder setType(@NotNull ComponentTypeSymbolLoader type) {
+  public ComponentInstanceSymbolBuilder setType(@NotNull ComponentTypeSymbol type) {
     Preconditions.checkArgument(type != null);
     this.type = type;
     return this.realBuilder;

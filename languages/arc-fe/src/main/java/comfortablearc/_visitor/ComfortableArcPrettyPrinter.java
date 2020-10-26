@@ -77,11 +77,11 @@ public class ComfortableArcPrettyPrinter implements ComfortableArcVisitor {
   public void handle(ASTConnectedComponentInstance node) {
     this.getPrinter().print(node.getName());
     this.getPrinter().print(" ");
-    if(node.isPresentArcArguments()) {
-      node.getArcArguments().accept(this.getRealThis());
+    if(node.isPresentArguments()) {
+      node.getArguments().accept(this.getRealThis());
     }
     this.getPrinter().print("[ ");
-    node.getConnectorList().stream().forEach((c)->c.accept(this.getRealThis()));
+    node.getConnectorsList().stream().forEach((c)->c.accept(this.getRealThis()));
     this.getPrinter().print("] ");
   }
   

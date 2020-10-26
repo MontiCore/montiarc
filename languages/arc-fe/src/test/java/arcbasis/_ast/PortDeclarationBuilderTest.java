@@ -35,35 +35,35 @@ public class PortDeclarationBuilderTest extends AbstractTest {
   @ParameterizedTest
   @ValueSource(strings = { "i1" })
   public void shouldAddGivenPort(String port) {
-    List<String> expectedPortList = this.getPortList(this.builder);
+    List<String> expectedPortList = this.getPortsList(this.builder);
     expectedPortList.add(port);
     ASTPortDeclaration ast = this.builder.addPort(port).build();
-    List<String> actualPortList = this.getPortList(ast);
-    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+    List<String> actualPortList = this.getPortsList(ast);
+    Assertions.assertEquals(expectedPortList.size(), ast.getPortsList().size());
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
   @ParameterizedTest
   @MethodSource("indexAndPortProvider")
   public void shouldSetGivenPort(int index, String port) {
-    List<String> expectedPortList = this.getPortList(this.builder);
+    List<String> expectedPortList = this.getPortsList(this.builder);
     expectedPortList.set(index, port);
     ASTPortDeclaration ast = this.builder.setPort(index, port).build();
-    List<String> actualPortList = this.getPortList(ast);
-    Assertions.assertEquals(ast.getPort(index).getName(), port);
-    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+    List<String> actualPortList = this.getPortsList(ast);
+    Assertions.assertEquals(ast.getPorts(index).getName(), port);
+    Assertions.assertEquals(expectedPortList.size(), ast.getPortsList().size());
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
   @ParameterizedTest
   @MethodSource("indexAndPortProvider")
   public void shouldAddGivenPort(int index, String port) {
-    List<String> expectedPortList = this.getPortList(this.builder);
+    List<String> expectedPortList = this.getPortsList(this.builder);
     expectedPortList.add(index, port);
     ASTPortDeclaration ast = this.builder.addPort(index, port).build();
-    List<String> actualPortList = this.getPortList(ast);
-    Assertions.assertEquals(ast.getPort(index).getName(), port);
-    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+    List<String> actualPortList = this.getPortsList(ast);
+    Assertions.assertEquals(ast.getPorts(index).getName(), port);
+    Assertions.assertEquals(expectedPortList.size(), ast.getPortsList().size());
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
@@ -76,19 +76,19 @@ public class PortDeclarationBuilderTest extends AbstractTest {
   public void shouldSetGivenPorts(String[] ports) {
     List<String> expectedPortList = Arrays.asList(ports);
     ASTPortDeclaration ast = this.builder.setPortList(ports).build();
-    List<String> actualPortList = this.getPortList(ast);
-    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+    List<String> actualPortList = this.getPortsList(ast);
+    Assertions.assertEquals(expectedPortList.size(), ast.getPortsList().size());
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
   @ParameterizedTest
   @MethodSource("portsProvider")
   public void shouldAddGivenPorts(String[] ports) {
-    List<String> expectedPortList = this.getPortList(this.builder);
+    List<String> expectedPortList = this.getPortsList(this.builder);
     expectedPortList.addAll(Arrays.asList(ports));
     ASTPortDeclaration ast = this.builder.addAllPorts(ports).build();
-    List<String> actualPortList = this.getPortList(ast);
-    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+    List<String> actualPortList = this.getPortsList(ast);
+    Assertions.assertEquals(expectedPortList.size(), ast.getPortsList().size());
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
@@ -101,11 +101,11 @@ public class PortDeclarationBuilderTest extends AbstractTest {
   @ParameterizedTest
   @MethodSource("indexAndPortsProvider")
   public void shouldAddGivenPorts(int index, String[] ports) {
-    List<String> expectedPortList = this.getPortList(this.builder);
+    List<String> expectedPortList = this.getPortsList(this.builder);
     expectedPortList.addAll(index, Arrays.asList(ports));
     ASTPortDeclaration ast = this.builder.addAllPorts(index, ports).build();
-    List<String> actualPortList = this.getPortList(ast);
-    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+    List<String> actualPortList = this.getPortsList(ast);
+    Assertions.assertEquals(expectedPortList.size(), ast.getPortsList().size());
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
@@ -116,11 +116,11 @@ public class PortDeclarationBuilderTest extends AbstractTest {
         Arguments.of(3, new String[] { "i1" }));
   }
 
-  protected List<String> getPortList(ASTPortDeclarationBuilder builder) {
-    return builder.getPortList().stream().map(ASTPort::getName).collect(Collectors.toList());
+  protected List<String> getPortsList(ASTPortDeclarationBuilder builder) {
+    return builder.getPortsList().stream().map(ASTPort::getName).collect(Collectors.toList());
   }
 
-  protected List<String> getPortList(ASTPortDeclaration ast) {
-    return ast.getPortList().stream().map(ASTPort::getName).collect(Collectors.toList());
+  protected List<String> getPortsList(ASTPortDeclaration ast) {
+    return ast.getPortsList().stream().map(ASTPort::getName).collect(Collectors.toList());
   }
 }

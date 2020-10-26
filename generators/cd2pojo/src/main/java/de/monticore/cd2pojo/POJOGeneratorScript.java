@@ -1,22 +1,19 @@
 /* (c) https://github.com/MontiCore/monticore */
 package de.monticore.cd2pojo;
 
-import java.io.File;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-
-import montiarc.util.Modelfinder;
-import de.monticore.cd.cd4analysis._symboltable.CD4AnalysisLanguage;
-import org.codehaus.groovy.control.customizers.ImportCustomizer;
-
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.configuration.Configuration;
 import de.se_rwth.commons.groovy.GroovyInterpreter;
 import de.se_rwth.commons.groovy.GroovyRunner;
 import de.se_rwth.commons.logging.Log;
 import groovy.lang.Script;
+import montiarc.util.Modelfinder;
+import org.codehaus.groovy.control.customizers.ImportCustomizer;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 /**
  *
@@ -69,7 +66,7 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
    */
   public void generate(File modelPath, File targetFilepath) {
     File fqnMP = Paths.get(modelPath.getAbsolutePath()).toFile();
-    List<String> foundModels = Modelfinder.getModelsInModelPath(fqnMP, CD4AnalysisLanguage.FILE_ENDING);
+    List<String> foundModels = Modelfinder.getModelsInModelPath(fqnMP, "cd");
     for (String model : foundModels) {
       String simpleName = Names.getSimpleName(model);
       String packageName = Names.getQualifier(model);

@@ -25,7 +25,7 @@ public class ConnectorSourceAndTargetComponentDiffer implements ArcBasisASTCompo
     List<ASTConnector> connectors = node.getConnectors();
     connectors.forEach(connector -> {
       ASTPortAccess connectorSource = connector.getSource();
-      connector.forEachTargets(connectorTarget -> {
+      connector.forEachTarget(connectorTarget -> {
         String sourceInstanceName = componentTypeSymbol.getName();
         String targetInstanceName = componentTypeSymbol.getName();
         if (connectorSource.isPresentComponent()) {

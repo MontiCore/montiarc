@@ -33,7 +33,7 @@ public class ASTComponentInstantiationBuilder extends ASTComponentInstantiationB
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkNotNull(instance);
     Preconditions.checkArgument(!instance.contains("."));
-    this.setComponentInstance(index, this.doCreateInstance(instance));
+    this.setComponentInstances(index, this.doCreateInstance(instance));
     return this.realBuilder;
   }
 
@@ -47,7 +47,7 @@ public class ASTComponentInstantiationBuilder extends ASTComponentInstantiationB
    */
   public ASTComponentInstantiationBuilder setComponentInstanceList(String... instances) {
     Preconditions.checkNotNull(instances);
-    this.setComponentInstanceList(this.doCreateInstanceList(instances));
+    this.setComponentInstancesList(this.doCreateInstanceList(instances));
     return this.realBuilder;
   }
 
@@ -63,7 +63,7 @@ public class ASTComponentInstantiationBuilder extends ASTComponentInstantiationB
   public ASTComponentInstantiationBuilder addInstance(String instance) {
     Preconditions.checkNotNull(instance);
     Preconditions.checkArgument(!instance.contains("."));
-    this.addComponentInstance(this.doCreateInstance(instance));
+    this.addComponentInstances(this.doCreateInstance(instance));
     return this.realBuilder;
   }
 
@@ -96,7 +96,7 @@ public class ASTComponentInstantiationBuilder extends ASTComponentInstantiationB
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkNotNull(instance);
     Preconditions.checkArgument(!instance.contains("."));
-    this.addComponentInstance(index, this.doCreateInstance(instance));
+    this.addComponentInstances(index, this.doCreateInstance(instance));
     return this.realBuilder;
   }
 

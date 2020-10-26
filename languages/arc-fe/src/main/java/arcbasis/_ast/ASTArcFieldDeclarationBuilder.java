@@ -37,7 +37,7 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
     Preconditions.checkArgument(name != null);
     Preconditions.checkArgument(!name.contains("\\."));
     Preconditions.checkArgument(value != null);
-    this.setArcField(index, this.doCreateArcField(name, value));
+    this.setArcFields(index, this.doCreateArcField(name, value));
     return this.realBuilder;
   }
 
@@ -52,7 +52,7 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
    */
   public ASTArcFieldDeclarationBuilder setArcFieldList(String[] names, ASTExpression[] values) {
     Preconditions.checkNotNull(names);
-    this.setArcFieldList(this.doCreateArcFieldList(names, values));
+    this.setArcFieldsList(this.doCreateArcFieldList(names, values));
     return this.realBuilder;
   }
 
@@ -69,7 +69,7 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
   public ASTArcFieldDeclarationBuilder addArcField(String name, ASTExpression value) {
     Preconditions.checkArgument(name != null);
     Preconditions.checkArgument(!name.contains("\\."));
-    this.addArcField(this.doCreateArcField(name, value));
+    this.addArcFields(this.doCreateArcField(name, value));
     return this.realBuilder;
   }
 
@@ -109,7 +109,7 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkArgument(name != null);
     Preconditions.checkArgument(!name.contains("\\."));
-    this.addArcField(index, this.doCreateArcField(name, value));
+    this.addArcFields(index, this.doCreateArcField(name, value));
     return this.realBuilder;
   }
 

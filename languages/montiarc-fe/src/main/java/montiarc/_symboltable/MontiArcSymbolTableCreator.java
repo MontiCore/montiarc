@@ -17,6 +17,8 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     super(enclosingScope);
   }
 
+  MontiArcScope watchscope;
+
   public MontiArcSymbolTableCreator(
     @NotNull Deque<? extends IMontiArcScope> scopeStack) {
     super(scopeStack);
@@ -31,11 +33,13 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     }
     MontiArcArtifactScope artifactScope = montiarc.MontiArcMill.montiArcArtifactScopeBuilder()
       .setPackageName(rootNode.getPackage().getQName())
-      .setImportList(imports)
+      .setImportsList(imports)
       .build();
     putOnStack(artifactScope);
+    watchscope = artifactScope;
     setLinkBetweenSpannedScopeAndNode(artifactScope, rootNode);
     rootNode.accept(getRealThis());
+    removeCurrentScope();
     return artifactScope;
   }
 

@@ -11,6 +11,8 @@ public class MontiArcCoCos {
 
   public static MontiArcCoCoChecker createChecker() {
     return new MontiArcCoCoChecker()
+      .addCoCo(new ComponentInstanceTypeExists())
+      .addCoCo(new InheritedComponentTypeExists())
       .addCoCo(new PortUsage())
       .addCoCo(new SubComponentsConnected())
       .addCoCo(new NamesCorrectlyCapitalized())
@@ -20,9 +22,7 @@ public class MontiArcCoCos {
       .addCoCo(new ConnectorSourceAndTargetExistAndFit())
       .addCoCo(new ConfigurationParametersCorrectlyInherited())
       .addCoCo(new InnerComponentNotExtendsDefiningComponent())
-      .addCoCo(new ComponentInstanceTypeExists())
       .addCoCo(new FieldTypeExists())
-      .addCoCo(new InheritedComponentTypeExists())
       .addCoCo(new InnerComponentNotExtendsDefiningComponent())
       .addCoCo(new ParameterTypeExists())
       .addCoCo(new PortUniqueSender());

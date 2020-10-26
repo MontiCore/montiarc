@@ -16,7 +16,7 @@ public class ComponentInstanceSymbolBuilderTest extends AbstractTest {
   @Test
   public void shouldBeValid() {
     ComponentInstanceSymbolBuilder builder = new ComponentInstanceSymbolBuilder();
-    builder.setName("a").setType(mock(ComponentTypeSymbolLoader.class));
+    builder.setName("a").setType(mock(ComponentTypeSymbolSurrogate.class));
     Assertions.assertTrue(builder.isValid());
   }
 
@@ -25,15 +25,15 @@ public class ComponentInstanceSymbolBuilderTest extends AbstractTest {
     ComponentInstanceSymbolBuilder builderWithName = new ComponentInstanceSymbolBuilder();
     ComponentInstanceSymbolBuilder builderWithType = new ComponentInstanceSymbolBuilder();
     builderWithName.setName("b");
-    builderWithType.setType(mock(ComponentTypeSymbolLoader.class));
+    builderWithType.setType(mock(ComponentTypeSymbolSurrogate.class));
     Assertions.assertFalse(builderWithName.isValid());
     Assertions.assertFalse(builderWithType.isValid());
   }
 
   @Test
   public void shouldBuildWithExpectedType() {
-    ComponentTypeSymbolLoader type =
-      ArcBasisMill.componentTypeSymbolLoaderBuilder().setName("Comp1").build();
+    ComponentTypeSymbolSurrogate type =
+      ArcBasisMill.componentTypeSymbolSurrogateBuilder().setName("Comp1").build();
     ComponentInstanceSymbol symbol =
       ArcBasisMill.componentInstanceSymbolBuilder().setName("c").setType(type).build();
     Assertions.assertEquals(symbol.type, type);

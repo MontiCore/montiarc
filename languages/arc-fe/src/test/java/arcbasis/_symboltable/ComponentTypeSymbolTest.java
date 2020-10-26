@@ -4,8 +4,8 @@ package arcbasis._symboltable;
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.typesymbols._symboltable.FieldSymbol;
-import de.monticore.types.typesymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -90,8 +90,8 @@ public class ComponentTypeSymbolTest extends AbstractTest {
       .setSpannedScope(new ArcBasisScope()).build();
     ComponentTypeSymbol compWithParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp2")
       .setSpannedScope(new ArcBasisScope()).build();
-    compWithParameters.addParameters(Arrays.asList(mock(FieldSymbol.class), mock(FieldSymbol.class),
-      mock(FieldSymbol.class)));
+    compWithParameters.addParameters(Arrays.asList(mock(VariableSymbol.class), mock(VariableSymbol.class),
+      mock(VariableSymbol.class)));
     Assertions.assertFalse(compWithoutParameters.hasParameters());
     Assertions.assertTrue(compWithParameters.hasParameters());
   }
@@ -232,7 +232,7 @@ public class ComponentTypeSymbolTest extends AbstractTest {
       .setSpannedScope(new ArcBasisScope()).build();
     for (String instance : instances) {
       ComponentInstanceSymbol subCompSymbol = ArcBasisMill.componentInstanceSymbolBuilder()
-        .setName(instance).setType(mock(ComponentTypeSymbolLoader.class)).build();
+        .setName(instance).setType(mock(ComponentTypeSymbolSurrogate.class)).build();
       compSymbol.getSpannedScope().add(subCompSymbol);
     }
     return compSymbol;

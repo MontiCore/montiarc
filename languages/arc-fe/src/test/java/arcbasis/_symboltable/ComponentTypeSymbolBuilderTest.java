@@ -3,8 +3,8 @@ package arcbasis._symboltable;
 
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
-import de.monticore.types.typesymbols._symboltable.FieldSymbol;
-import de.monticore.types.typesymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -44,10 +44,10 @@ public class ComponentTypeSymbolBuilderTest extends AbstractTest {
 
   @Test
   public void shouldHaveParent() {
-    ComponentTypeSymbolLoader parentComp =
-      ArcBasisMill.componentTypeSymbolLoaderBuilder().setName("A").build();
+    ComponentTypeSymbolSurrogate parentComp =
+      ArcBasisMill.componentTypeSymbolSurrogateBuilder().setName("A").build();
     ComponentTypeSymbol childComp = ArcBasisMill.componentTypeSymbolBuilder().setName("B")
-      .setSpannedScope(new ArcBasisScope()).setParentComponentLoader(parentComp).build();
+      .setSpannedScope(new ArcBasisScope()).setParentComponent(parentComp).build();
     Assertions.assertTrue(childComp.isPresentParentComponent());
   }
 
@@ -76,7 +76,7 @@ public class ComponentTypeSymbolBuilderTest extends AbstractTest {
 
   @ParameterizedTest
   @MethodSource("compNameAndParametersProvider")
-  public void shouldBuildWithExpectedParameters(String name, List<FieldSymbol> parameters) {
+  public void shouldBuildWithExpectedParameters(String name, List<VariableSymbol> parameters) {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName(name)
       .setSpannedScope(new ArcBasisScope()).setParameters(parameters).build();
     Assertions.assertEquals(symbol.getName(), name);
@@ -86,12 +86,12 @@ public class ComponentTypeSymbolBuilderTest extends AbstractTest {
   static Stream<Arguments> compNameAndParametersProvider() {
     return Stream.of(arguments("Comp1", Collections.emptyList()),
       arguments("Comp2", Arrays.asList(
-        ArcBasisMill.fieldSymbolBuilder().setName("a").build(),
-        ArcBasisMill.fieldSymbolBuilder().setName("b").build(),
-        ArcBasisMill.fieldSymbolBuilder().setName("c").build())),
+        ArcBasisMill.variableSymbolBuilder().setName("a").build(),
+        ArcBasisMill.variableSymbolBuilder().setName("b").build(),
+        ArcBasisMill.variableSymbolBuilder().setName("c").build())),
       arguments("Comp3", Arrays.asList(
-        ArcBasisMill.fieldSymbolBuilder().setName("c").build(),
-        ArcBasisMill.fieldSymbolBuilder().setName("d").build())));
+        ArcBasisMill.variableSymbolBuilder().setName("c").build(),
+        ArcBasisMill.variableSymbolBuilder().setName("d").build())));
   }
 
   @ParameterizedTest
