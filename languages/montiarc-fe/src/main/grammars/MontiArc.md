@@ -37,7 +37,7 @@ using states, transitions, messages as stimuli, conditions and Java-like actions
 
 The main grammar file is [`MontiArc`][MontiArcGrammar].
 
-[MontiArcGrammar]: https://git.rwth-aachen.de/monticore/montiarc/core/-/blob/modularization/languages/montiarc-fe/src/main/grammars/MontiArc.mc4
+[MontiArcGrammar]: https://git.rwth-aachen.de/monticore/montiarc/core/-/blob/develop/languages/montiarc-fe/src/main/grammars/MontiArc.mc4
 
 
 ## The MontiArc Architecture Description Language
@@ -156,8 +156,8 @@ The CoCos can be found in
  [`montiarc.cocos`][CoCosPackage] and are combined accessible in
  [`montiarc.cocos.MontiArcCoCos`][MontiArcCoCos].
  
-[CoCosPackage]: https://git.rwth-aachen.de/monticore/montiarc/core/-/tree/modularization/languages/montiarc-fe/src/main/java/montiarc/cocos
-[MontiArcCoCos]: https://git.rwth-aachen.de/monticore/montiarc/core/-/blob/modularization/languages/montiarc-fe/src/main/java/montiarc/cocos/MontiArcCoCos.java
+[CoCosPackage]: https://git.rwth-aachen.de/monticore/montiarc/core/-/tree/develop/languages/montiarc-fe/src/main/java/montiarc/cocos
+[MontiArcCoCos]: https://git.rwth-aachen.de/monticore/montiarc/core/-/blob/develop/languages/montiarc-fe/src/main/java/montiarc/cocos/MontiArcCoCos.java
 
 The context conditions check different parts of the models, to ensure the
  semantic correctness, here is a list of some of the important ones:
