@@ -72,7 +72,7 @@ public class PortSymbol extends PortSymbolTOP {
   /**
    * @param type the loader for the type of this port.
    */
-  protected void setType(@NotNull SymTypeExpression type) {
+  public void setType(@NotNull SymTypeExpression type) {
     Preconditions.checkArgument(type != null);
     this.type = type;
   }
