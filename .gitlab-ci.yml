@@ -118,10 +118,10 @@ checkMDLinks:
   dependencies:
     - Code Quality
   script:
-    - "./check/downloadlinkchecker.sh $secibuildtoken"
-    - "url=https://git.rwth-aachen.de/monticore/montiarc/core/-/blob/develop/README.md"
-    - "./check/mdlinkcheck.sh -url $url -t $secibuildtoken"
-    - "url=https://git.rwth-aachen.de/monticore/montiarc/core/-/blob/develop/languages/montiarc-fe/src/main/grammars/MontiArc.md"
-    - "./check/mdlinkcheck.sh -url $url -t $secibuildtoken"
+    - "curl --location --header \"PRIVATE-TOKEN: $secibuildtoken\" \"https://git.rwth-aachen.de/api/v4/projects/monticore%2Fmdlinkchecker/jobs/artifacts/master/raw/target/libs/MDLinkCheckerCLI.jar?job=build\" --output MDLinkCheckerCLI.jar"
+    - "url=https://git.rwth-aachen.de/monticore/montiarc/core/-/tree/develop"
+    - "linkCheckRes=$(java -jar MDLinkCheckerCLI.jar -url $url -t $secibuildtoken -p)"
+    - "echo \"$linkCheckRes\""
+    - "if [[ $linkCheckRes == *\"ERROR\"* ]]; then exit 1; fi"
   only:
     - develop
