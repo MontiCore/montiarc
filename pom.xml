@@ -50,6 +50,7 @@
     <build.helper.plugin>3.2.0</build.helper.plugin>
     <dependency.plugin>3.1.1</dependency.plugin>
     <compiler.plugin>3.8.1</compiler.plugin>
+    <plexus.plugin>2.8.8</plexus.plugin>
     <source.plugin>3.1.0</source.plugin>
     <jar.plugin>3.1.0</jar.plugin>
     <jacoco.plugin>0.8.6</jacoco.plugin>
@@ -306,7 +307,15 @@
             <useIncrementalCompilation>true</useIncrementalCompilation>
             <source>${java.version}</source>
             <target>${java.version}</target>
+            <compilerId>eclipse</compilerId>
           </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>org.codehaus.plexus</groupId>
+              <artifactId>plexus-compiler-eclipse</artifactId>
+              <version>${plexus.plugin}</version>
+            </dependency>
+          </dependencies>
         </plugin>
 
         <plugin>
