@@ -180,17 +180,20 @@ that was learn't form the type confusion occuring in SysML, where ultimatively
 everything is understood as class.
 
 ## Symbols imported by MontiArc models:
-- `TypeSymbol`: Through explicit import statements artifacts may provide types.
+
+- `TypeSymbol`: Through explicit import statements types from other artifacts 
+  can be used for loacal variable, parameters and port types.
   - The signatures provided by these types (e.g., method signatures) can be used
-  in expressions of the corresponding type system.
+  in expressions.
 - `ComponentTypeSymbol`: MontiArc models may import and use component types
-  defined in other component models. A `ComponentTypeSymbol` additionally knows
+  defined in other component models. A `ComponentTypeSymbol` knows
   symbols exported by the component, such as `PortSymbol`s and symbols 
   for their parameters.
-- No other kind of symbols is imported, e.g., isolated fields or methods 
-  are not imported.
+- No other kind of symbols is imported, e.g., no isolated fields or methods 
+  are imported.
 
 ## Symbols exported by MontiArc models:
+
 - `ComponentTypeSymbol`: Each MontiArc model provides at least one newly defined
   and externally usable component type.
   If further (inner) component types are defined, then all these component types are
