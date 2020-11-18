@@ -6,15 +6,18 @@
 
 MontiArc is an architecture modeling language and framework that provides platform 
 independent modeling capabilities. MontiArc is **extensible** in several dimensions:
-1. **Behavioral modelling** languages, such as statecharts, can be easily embedded
-2. External **types**, e.g., defined using class diagrams, can be imported
-3. The **code generation** framework can be adapted and extended for various target platforms.
+1. **Behavioral modelling** languages, such as statecharts or logic formulas, can be easily embedded
+2. The **type system** is configurable, e.g., types defined using class diagrams
+can be imported or *SI-unit types* can be provided, 
+3. MontiArc models can be combined with other structural or behavioral models by exchange of symbols (e.g. through import statements). This connects independently developed models in both directions.  
+4. The **code generation** framework can be adapted and extended for 
+simulation as well as for various technological and language target platforms.
 
 The MontiArc language covers **components** their **ports**, **connectors** between
 components and is shipped with embedded statecharts for component behavior description 
 as a standard extension.
 
-The MontiArc Core repository contains the common basis
+The MontiArc core repository contains the common basis
 of the MontiArc architecture description language. This project is maintained
 by the [Working Group for Model-Driven Systems Engineering (MDSE)][mdse].
 
@@ -32,31 +35,62 @@ to ease the description of architectures
 
 The main grammar file is [`MontiArc`][MontiArcGrammar].
 
+# Note to the relation between MontiArc and **SysML**
+
+SyML currently provides Block 
+Definition Diagrams (BDD) and Internal Block Diagrams (IBD) covering very similar concepts.
+One main difference is, that in SysML the definition of components (there called blocks) 
+is separated from the use, while MontiArc allows an integrated definition.
+I.e. the same model covers definition of the component and its ports and 
+the internal structuring and wiring into subcomponents.
+
+Of course SysML provides many more language constructs that the MontiArc 
+language family does not directly provide. The MontiArc approach instead is to 
+come up with a modular and extensible language family that allows individual companies, 
+or even projects to define their own version of architectural modelling
+specific to the domain and thus typically effective to use.
+
+This approach comes from the experience that while many projects use SysML, they typically 
+have to bend and tweak it into a "DSL based on SysML" in various forms.
+MontiArc allows that in an additive, modular form and is e.g. fully compatible
+with the many variants of expression, statement and typing language components that
+[`MontiCore`][MontiCore] provides.
+
 # The MontiArc Architecture Description Language
 
 In MontiArc, architectures are topologies of component and connectors in which 
-autonomously acting components perform computations. Connectors define the
+logically autonomous components perform computations. Connectors define the
 interaction between the components' interfaces, which consist of typed, directed
 ports. Components are either atomic or composed of connected subcomponents.
 Atomic components yield behavior descriptions in the form of embedded 
 time-synchronous port automata, or via integration of handcrafted code. For 
 composed components, the behavior emerges from the behavior of their subcomponents.
 
-## Example for MontiArc
+MontiArc is desined to define logical or physical components and can be mapped to 
+various target platforms, depending on the according interpretations, whether 
+a component will be a pyhsical unit (i.e. CPU, a virtual CPU unit, a process, 
+a thread, a logical function that is appropriately scheduled or even a networked IOT' 
+gadget).
+
+## Example for MontiArc (from the Electronics Domain)
 
 ```
 package ma.sim;
 
 component RSFlipFlop {
-  behavior timesynchronous;
-  port
+  behavior timesynchronous;   // relatively simple timing model
+  port                        // ports = signature of the component
     in Boolean set,
     in Boolean reset,
     out Boolean q,
     out Boolean notQ;
 
-  SyncNOR nor1, nor2;
+  SyncNOR nor1, nor2;         // two subcomponents
 
+  // definition of anothee subcomponent modelling delay
+  // component is parameterized in two ways:
+  //   T: type of ports and
+  //   delay: the delay it introduces
   component FixDelay<T>(int delay) {
     int counter;
     port
@@ -64,8 +98,9 @@ component RSFlipFlop {
       out T portOut;
   }
   
-  FixDelay<Boolean>(1) d1, d2;
-  
+  FixDelay<Boolean>(1) d1, d2; // two delays added
+
+  // connection structure   
   set -> nor1.in1;
   reset -> nor2.in1;
   
@@ -86,8 +121,10 @@ An example of a reset-set flip-flop
   as configuration options for component instantiation
 - Connectors are defined between the interfaces of components, 
   directing the flow of messages between them
+- In practice the connection structure can often be inferred from the port 
+  names and types. Keyword `autoconnect` allows to utilize this.
 
-Further examples can be found [here][Applications]
+Further examples in other domains can be found [here][Applications].
 
 ## Available handwritten Extensions
 
@@ -178,6 +215,7 @@ and the *component types* disjoint. They cannot be mixed up.
 
 [se-rwth]: http://www.se-rwth.de
 [mdse]:http://www.se-rwth.de/teams/mdse/
+[MontiCore]:http://www.monticore.de/
 
 [Applications]: ./applications
 
