@@ -151,26 +151,33 @@ Further examples in other domains can be found [here][Applications].
 ## Symbol kinds used by the MontiArc language (importable):
 
 The MontiArc language imports the following symbols kinds:
-- `TypeSymbol` The symbol of a data type of ports, parameters, and 
-  component fields. Kind and symbol instances are imported.
-- `FieldSymbol` The symbol of a component field or configuration parameter.
-  Kind is imported, symbols are defined locally only.
+- `TypeSymbol` defines a data type and can be used for ports, parameters, and 
+  component fields. Kind and symbol instances are imported. 
+- `FieldSymbol` can be imported as component field or configuration parameter
+  of an imported component.
+  Kind is imported, component fields are defined locally only, while 
+  configuration parameters are imported as part of component types.
 - `TypeVarSymbol` The symbol of a type parameter of a component. 
-  Kind is imported, symbols are defined locally only.
+  Kind is imported, symbols are defined locally and imported as
+  part of component types.
 
 ## Symbol kinds defined by the MontiArc language (exported):
 The MontiArc language family defines the following symbols:
 
-- `ComponentTypeSymbol` The symbol of a component type providing the
+- `ComponentTypeSymbol` the symbol for component types providing the
   component's definition. Holds symbols of the component's parameters,
   type parameters, ports, fields, and subcomponents.
-- `ComponentInstanceSymbol` The symbol of a component instance. A component
-  instance has a type corresponding to a component type.
-- `PortSymbol` The symbol of a port. A port has a type corresponding to a
+- `ComponentInstanceSymbol` the symbol for component instances. A component
+  instance has a component type and thus can be used to connect it's ports.
+- `PortSymbol` the symbol of a port. A port has a type for the 
+  data flowing on it, which thus corresponds to a
   (normal) type expression, like `int`, `Signal`, or also `Set<String>`.
 
-Please note that MontArc keeps the type expressions knwon from MontiCore's types
-and the *component types* disjoint. They cannot be mixed up.
+Please note that MontiArc keeps the type expressions knwon from MontiCore's types
+and the *component types* disjoint. The intention is that they cannot be mixed up.
+Components cannot be misused as classes and vice versa -- this is a lecture
+that was learn't form the type confusion occuring in SysML, where ultimatively 
+everything is understood as class.
 
 ## Symbols imported by MontiArc models:
 - `TypeSymbol`: Through explicit import statements artifacts may provide types.
