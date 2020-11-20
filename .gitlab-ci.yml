@@ -3,7 +3,7 @@
 
 # Cache downloaded dependencies and plugins between builds.
 # To keep cache across branches add 'key: "$CI_JOB_NAME"'
-image: maven:3.5.4-jdk-8-alpine
+image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3.5.4-jdk-8-alpine
 
 cache:
   paths:
@@ -28,7 +28,7 @@ variables:
 # Because some enforcer rules might check dependency convergence and class duplications
 # we use `test-compile` here instead of `validate`, so the correct classpath is picked up.
 Validate:
-  image: maven:3-jdk-8
+  image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3-jdk-8
   stage: build
   script:
     - mvn $MAVEN_CLI_OPTS compile package -skipTests=true
@@ -62,17 +62,17 @@ Validate:
       - ./languages/montiarc-fe/target/surefire-reports/TEST-*.xml
 
 Unit Test JDK 8:
-  image: maven:3-jdk-8
+  image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3-jdk-8
   <<: *unit_test_definition
       
 Unit Test JDK 14:
-  image: maven:3-jdk-14
+  image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3-jdk-14
   # We do not require JDK 14 support yet. We appreciate it though.
   allow_failure: true 
   <<: *unit_test_definition
 
 Unit Test Amazon Corretto JDK 8:
-  image: maven:3-amazoncorretto-8
+  image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3-amazoncorretto-8
   # We do not require Amazon Corretto JDK 11 support. We appreciate it though.
   allow_failure: true 
   <<: *unit_test_definition
