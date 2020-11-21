@@ -58,7 +58,7 @@ public class SubComponentsConnected implements ArcBasisASTComponentTypeCoCo {
               subSymbol.getFullName(), compSymbol.getFullName()), sourcePosition);
         }
       }
-      // --------- INCOMING PORTS ----------
+      // --------- OUTGOING PORTS ----------
       Collection<String> subOutputPorts
         = this.getNames(subSymbol.getType().getAllOutgoingPorts());
       subOutputPorts = subOutputPorts.stream()
