@@ -32,6 +32,10 @@ class MontiArcToolTest extends AbstractTest {
   @ValueSource(strings = { "validExample" })
   public void shouldAcceptValidModels(String modelPathDirectory) {
 
+    // Make testcase fail if there are errors
+    Log.init();
+    Log.enableFailQuick(true);
+
     // given
     MontiArcTool tool = new MontiArcTool();
     File modelPath = Paths.get(RELATIVE_MODEL_PATH, PACKAGE, modelPathDirectory).toFile();
