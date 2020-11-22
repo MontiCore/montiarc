@@ -90,30 +90,37 @@
 
   <developers>
     <developer>
-      <name>Robert Heim</name>
-      <email>heim@se-rwth.de</email>
-      <id>Department of Software Engineering, RWTH Aachen University</id>
-      <url>http://www.se-rwth.de/</url>
-      <roles>
-        <role>architect</role>
-        <role>developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Michael von Wenckstern</name>
-      <email>vonwenckstern@se-rwth.de</email>
-      <id>Department of Software Engineering, RWTH Aachen University</id>
-      <url>http://www.se-rwth.de/</url>
-      <roles>
-        <role>architect</role>
-        <role>developer</role>
-      </roles>
-    </developer>
-    <developer>
+      <id>AH</id>
       <name>Arne Haber</name>
       <email>haber@se-rwth.de</email>
-      <id>Department of Software Engineering, RWTH Aachen University</id>
-      <url>http://www.se-rwth.de/</url>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>RH</id>
+      <name>Robert Heim</name>
+      <email>heim@se-rwth.de</email>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>DS</id>
+      <name>David Schmalzing</name>
+      <email>schmalzing@se-rwth.de</email>
+      <url>http://www.se-rwth.de/staff/schmalzing/</url>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>MvW</id>
+      <name>Michael von Wenckstern</name>
+      <email>vonwenckstern@se-rwth.de</email>
       <roles>
         <role>architect</role>
         <role>developer</role>
