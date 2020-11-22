@@ -9,7 +9,7 @@ import com.google.common.collect.Sets;
 import de.monticore.cd4analysis.CD4AnalysisMill;
 import de.monticore.cd4analysis._symboltable.CD4AnalysisGlobalScope;
 import de.monticore.io.paths.ModelPath;
-import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -206,25 +206,25 @@ public class MontiArcTool {
   }
 
   public IMontiArcScope addBasicTypes(@NotNull IMontiArcScope scope) {
-    scope.add(new TypeSymbol("String"));
-    scope.add(new TypeSymbol("Integer"));
-    scope.add(new TypeSymbol("Map"));
-    scope.add(new TypeSymbol("Set"));
-    scope.add(new TypeSymbol("List"));
-    scope.add(new TypeSymbol("Boolean"));
-    scope.add(new TypeSymbol("Character"));
-    scope.add(new TypeSymbol("Double"));
-    scope.add(new TypeSymbol("Float"));
+    scope.add(new OOTypeSymbol("String"));
+    scope.add(new OOTypeSymbol("Integer"));
+    scope.add(new OOTypeSymbol("Map"));
+    scope.add(new OOTypeSymbol("Set"));
+    scope.add(new OOTypeSymbol("List"));
+    scope.add(new OOTypeSymbol("Boolean"));
+    scope.add(new OOTypeSymbol("Character"));
+    scope.add(new OOTypeSymbol("Double"));
+    scope.add(new OOTypeSymbol("Float"));
 
     //primitives
-    scope.add(new TypeSymbol("int"));
-    scope.add(new TypeSymbol("boolean"));
-    scope.add(new TypeSymbol("float"));
-    scope.add(new TypeSymbol("double"));
-    scope.add(new TypeSymbol("char"));
-    scope.add(new TypeSymbol("long"));
-    scope.add(new TypeSymbol("short"));
-    scope.add(new TypeSymbol("byte"));
+    scope.add(new OOTypeSymbol("int"));
+    scope.add(new OOTypeSymbol("boolean"));
+    scope.add(new OOTypeSymbol("float"));
+    scope.add(new OOTypeSymbol("double"));
+    scope.add(new OOTypeSymbol("char"));
+    scope.add(new OOTypeSymbol("long"));
+    scope.add(new OOTypeSymbol("short"));
+    scope.add(new OOTypeSymbol("byte"));
 
     return scope;
   }
