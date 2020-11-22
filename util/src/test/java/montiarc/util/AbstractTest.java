@@ -2,7 +2,6 @@ package montiarc.util;/* (c) https://github.com/MontiCore/monticore */
 
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
-import de.se_rwth.commons.logging.LogStub;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +23,6 @@ public abstract class AbstractTest {
   public static void cleanUpLog() {
     Log.getFindings().clear();
     Log.enableFailQuick(false);
-    LogStub.init();
   }
 
   @BeforeEach
