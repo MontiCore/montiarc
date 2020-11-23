@@ -48,6 +48,7 @@
     <monticore.plugin>${monticore.version}</monticore.plugin>
     <se-groovy.plugin>1.2.3</se-groovy.plugin>
     <assembly.plugin>3.1.1</assembly.plugin>
+    <build.helper.plugin>3.2.0</build.helper.plugin>
     <dependency.plugin>3.1.1</dependency.plugin>
     <compiler.plugin>3.8.1</compiler.plugin>
     <source.plugin>3.1.0</source.plugin>
@@ -398,18 +399,9 @@
           <configuration>
             <skipTests>${skip.integration.tests}</skipTests>
             <includes>
-              <!-- Integration Tests -->
-              <!-- default folder is src/integration-test/java/ -->
-              <!-- default incl. are "**/IT*.java", "**/*IT.java", "**/*ITCase.java" -->
               <include>**/IT*.java</include>
               <include>**/*IT.java</include>
               <include>**/*ITCase.java</include>
-              <!-- Acceptance Tests -->
-              <!-- default folder is src/acceptance-test/java/ -->
-              <!-- default incl. are "**/AT*.java", "**/*AT.java", "**/*ATCase.java" -->
-              <include>**/AT*.java</include>
-              <include>**/*AT.java</include>
-              <include>**/*ATCase.java</include>
             </includes>
             <useSystemClassLoader>false</useSystemClassLoader>
           </configuration>
@@ -437,6 +429,40 @@
           </executions>
         </plugin>
 
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>${build.helper.plugin}</version>
+          <executions>
+            <execution>
+              <id>add-integration-test-sources</id>
+              <phase>generate-test-sources</phase>
+              <goals>
+                <goal>add-test-source</goal>
+              </goals>
+              <configuration>
+                <sources>
+                  <source>src/it/java</source>
+                </sources>
+              </configuration>
+            </execution>
+            <execution>
+              <id>add-integration-test-resources</id>
+              <phase>generate-test-resources</phase>
+              <goals>
+                <goal>add-test-resource</goal>
+              </goals>
+              <configuration>
+                <resources>
+                  <resource>
+                    <filtering>true</filtering>
+                    <directory>src/it/resources</directory>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
 
