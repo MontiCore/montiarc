@@ -167,26 +167,23 @@
         </executions>
       </plugin>
 
-      <!-- Enables Jacoco Coverage Report for this submodule -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>${surefire.plugin}</version>
         <configuration>
+          <!-- Enables Jacoco Coverage Report for this submodule -->
           <argLine>${argLine}</argLine>
-          <useSystemClassLoader>false</useSystemClassLoader>
         </configuration>
       </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <version>${failsafe.plugin}</version>
       </plugin>
 
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>${build.helper.plugin}</version>
       </plugin>
     </plugins>
   </build>

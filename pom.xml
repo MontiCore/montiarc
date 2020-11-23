@@ -37,7 +37,6 @@
     <guava.version>18.0</guava.version>
     <jsr305.version>3.0.0</jsr305.version>
     <logback.version>1.1.2</logback.version>
-    <javalib.version>4.3.10-SNAPSHOT</javalib.version>
     <janino.version>3.0.6</janino.version>
     <junit.jupiter.version>5.5.2</junit.jupiter.version>
     <junit.vintage.version>5.5.2</junit.vintage.version>
@@ -59,7 +58,6 @@
 
     <!-- Classifiers -->
     <grammars.classifier>grammars</grammars.classifier>
-    <majavalib.classifier>majavalibclasses</majavalib.classifier>
     <librarymodels.classifier>librarymodels</librarymodels.classifier>
     <testmodels.classifier>testmodels</testmodels.classifier>
 
@@ -365,8 +363,6 @@
         </plugin>
 
         <!-- Unit Tests -->
-        <!-- default folder is src/test/java/ -->
-        <!-- default incl. are "**/Test*.java", "**/*Test.java", "**/*TestCase.java" -->
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${surefire.plugin}</version>
