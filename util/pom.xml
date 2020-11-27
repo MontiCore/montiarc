@@ -21,6 +21,11 @@
       <artifactId>se-commons-logging</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>monticore-grammar</artifactId>
+    </dependency>
+
     <!-- Test Libraries -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
