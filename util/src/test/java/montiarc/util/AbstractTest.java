@@ -1,5 +1,10 @@
-package montiarc.util;/* (c) https://github.com/MontiCore/monticore */
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.util;
 
+import de.monticore.types.check.DefsTypeBasic;
+import de.monticore.types.typesymbols._symboltable.FieldSymbol;
+import de.monticore.types.typesymbols._symboltable.ITypeSymbolsScope;
+import de.monticore.types.typesymbols._symboltable.TypeSymbol;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.Assertions;
@@ -25,6 +30,28 @@ public abstract class AbstractTest {
     Log.enableFailQuick(false);
   }
 
+  protected void addBasicTypes2Scope(ITypeSymbolsScope scope) {
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._boolean);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._char);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._short);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._String);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._int);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._long);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._float);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._double);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._null);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._Object);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._array);
+  }
+
+  protected void add2Scope(ITypeSymbolsScope scope, TypeSymbol... types) {
+    Arrays.asList(types).stream().forEach(type -> DefsTypeBasic.add2scope(scope, type));
+  }
+
+  protected void add2Scope(ITypeSymbolsScope scope, FieldSymbol... fields) {
+    Arrays.asList(fields).stream().forEach(field -> DefsTypeBasic.add2scope(scope, field));
+  }
+
   @BeforeEach
   public void setUp() {
     Log.getFindings().clear();
@@ -39,7 +66,7 @@ public abstract class AbstractTest {
   }
 
   protected void checkExpectedErrorsPresent(List<Finding> findings,
-    Error[] expErrors) {
+                                            Error[] expErrors) {
     List<String> actualErrorCodes = collectErrorCodes(findings);
     List<String> expErrorCodes = collectErrorCodes(expErrors);
 
@@ -49,7 +76,7 @@ public abstract class AbstractTest {
   }
 
   protected void checkNoAdditionalErrorsPresent(List<Finding> findings,
-    Error[] expErrors) {
+                                                Error[] expErrors) {
     List<String> actualErrorCodes = collectErrorCodes(findings);
     List<String> expErrorCodes = collectErrorCodes(expErrors);
 
@@ -59,7 +86,7 @@ public abstract class AbstractTest {
   }
 
   protected void checkOnlyExpectedErrorsPresent(List<Finding> findings,
-    Error[] expErrors) {
+                                                Error[] expErrors) {
     checkExpectedErrorsPresent(findings, expErrors);
     checkNoAdditionalErrorsPresent(findings, expErrors);
   }

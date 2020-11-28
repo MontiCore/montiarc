@@ -26,6 +26,11 @@
       <artifactId>monticore-grammar</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.codehaus.janino</groupId>
+      <artifactId>janino</artifactId>
+    </dependency>
+
     <!-- Test Libraries -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
