@@ -1,0 +1,48 @@
+/* (c) https://github.com/MontiCore/monticore */
+package arccore.check;
+
+import arcbasis._symboltable.IArcBasisScope;
+import arcbasis.check.AbstractArcTypesCalculatorTest;
+import arccore.ArcCoreMill;
+import montiarc.util.check.IArcTypesCalculator;
+import arccore._visitor.ArcCoreDelegatorVisitor;
+import arccore._visitor.IArcCoreDelegatorVisitor;
+import de.monticore.types.check.LastResult;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+/**
+ * Holds test for methods of {@link ArcCoreTypesCalculator}.
+ *
+ * @see AbstractArcTypesCalculatorTest for basic tests methods.
+ */
+public class ArcCoreTypesCalculatorTest extends AbstractArcTypesCalculatorTest {
+
+  @Override
+  protected IArcTypesCalculator getTypesCalculator() {
+    if (this.typesCalculator == null) {
+      this.typesCalculator = new ArcCoreTypesCalculator(new LastResult());
+    }
+    return this.typesCalculator;
+  }
+
+  @Override
+  protected IArcBasisScope getScope() {
+    if (this.scope == null) {
+      this.scope = ArcCoreMill.arcCoreScopeBuilder().build();
+    }
+    return this.scope;
+  }
+
+  @Test
+  public void shouldReturnCorrectCalculationDelegator() {
+    //Given
+    ArcCoreTypesCalculator typesCalculator = new ArcCoreTypesCalculator(new LastResult());
+
+    //When
+    IArcCoreDelegatorVisitor delegator = typesCalculator.getCalculationDelegator();
+
+    //Then
+    Assertions.assertTrue(delegator instanceof ArcCoreDelegatorVisitor);
+  }
+}
