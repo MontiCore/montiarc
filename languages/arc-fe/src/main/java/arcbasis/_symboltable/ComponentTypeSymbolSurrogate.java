@@ -27,7 +27,7 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
 
   public ComponentTypeSymbol lazyLoadDelegate() {
     if(!isPresentDelegate()) {
-      this.setDelegate(this.getEnclosingScope().resolveComponentType(name).orElse(this));
+      this.setDelegate(this.getEnclosingScope().resolveComponentType(name).orElse(null));
     }
     return delegate.orElse(this);
   }
