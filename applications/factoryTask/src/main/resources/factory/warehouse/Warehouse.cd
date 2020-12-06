@@ -1,0 +1,41 @@
+/* (c) https://github.com/MontiCore/monticore */
+package factory.warehouse;
+
+classdiagram Warehouse {
+
+  class Position {
+    int posX;
+    int posY;
+    int posZ;
+  }
+
+  class StorageObject {
+    String name;
+    int size;
+    Position pos;
+  }
+
+  interface StorageRequest;
+
+  class MoveRequest implements StorageRequest {
+    Position source;
+    Position target;
+  }
+
+  class DropOffRequest implements StorageRequest {
+    StorageObject storageObject;
+    Position target;
+  }
+
+  class PickUpRequest implements StorageRequest {
+    Position source;
+  }
+
+  enum MovementState {
+    MOVING, WAITING;
+  }
+
+  enum CraneState {
+    EMPTY, FULL;
+  }
+}

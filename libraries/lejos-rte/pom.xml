@@ -1,41 +1,27 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-
-  <!-- == PROJECT COORDINATES ============================================= -->
-
+  <!-- == PROJECT COORDINATES ============================================== -->
   <parent>
     <groupId>montiarc.libraries</groupId>
     <artifactId>libraries</artifactId>
-    <version>5.1.3</version>
+    <version>6.0.0</version>
   </parent>
 
   <artifactId>lejos-rte</artifactId>
 
-
   <!-- == PROJECT DEPENDENCIES ============================================= -->
   <dependencies>
-
+    <!-- MontiCore Dependencies -->
     <dependency>
       <groupId>de.se_rwth.commons</groupId>
       <artifactId>se-commons-logging</artifactId>
     </dependency>
 
-    <!-- .. Test Libraries ............................................... -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <version>1.10.19</version>
-    </dependency>
-
+    <!-- MontiArc -->
     <dependency>
       <groupId>montiarc.generators</groupId>
       <version>${project.version}</version>
@@ -44,14 +30,8 @@
 
     <dependency>
       <groupId>montiarc.libraries</groupId>
-      <artifactId>maa-rte</artifactId>
+      <artifactId>majava-rte</artifactId>
       <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -61,23 +41,47 @@
       <version>${project.version}</version>
     </dependency>
 
-    <!-- PLATFORM SPECIFIC API ================================= -->
+    <!-- Test Libraries -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Platform specific API -->
     <dependency>
       <groupId>lejos.nxt</groupId>
       <artifactId>classes</artifactId>
       <version>0.9.1-beta</version>
     </dependency>
-
   </dependencies>
 
   <!-- == PROJECT BUILD SETTINGS =========================================== -->
-
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.1.1</version>
+        <version>${dependency.plugin}</version>
         <executions>
           <execution>
             <id>unpack-dependencies</id>
@@ -100,15 +104,15 @@
       <plugin>
         <groupId>de.se_rwth.maven</groupId>
         <artifactId>se-groovy-maven-plugin</artifactId>
-        <version>${se-groovy.maven.version}</version>
+        <version>${se-groovy.plugin}</version>
         <configuration>
-          <baseClass>de.montiarcautomaton.generator.codegen.MAAGeneratorScript</baseClass>
+          <baseClass>MAAGeneratorScript</baseClass>
           <arguments>
             <out>${basedir}/target/generated-sources/</out>
             <modelPath>${basedir}/src/main/resources/</modelPath>
             <hwc>${basedir}/src/main/java</hwc>
           </arguments>
-          <script>de/montiarcautomaton/generator/maagenerator.groovy</script>
+          <script>montiarc/generator/maagenerator.groovy</script>
         </configuration>
         <executions>
           <execution>
@@ -120,7 +124,7 @@
         <dependencies>
           <dependency>
             <groupId>montiarc.generators</groupId>
-            <artifactId>maa2java-xtend</artifactId>
+            <artifactId>ma2java</artifactId>
             <version>${project.version}</version>
           </dependency>
           <dependency>
@@ -151,7 +155,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.3.2</version>
+        <version>${jar.plugin}</version>
         <executions>
           <execution>
             <id>librarymodels</id>
@@ -172,5 +176,4 @@
       </resource>
     </resources>
   </build>
-
 </project>

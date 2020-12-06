@@ -1,0 +1,11 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+component grammar ArcBehaviorBasis {
+
+  /**
+   * ASTArcBehavior is the interface of all atomic
+   * component behavior descriptions.
+   */
+  interface ArcBehavior;
+
+}

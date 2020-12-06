@@ -28,14 +28,14 @@ Validate:
   image: maven:3-jdk-8
   stage: build
   script:
-    - mvn $MAVEN_CLI_OPTS compile package -Dmaven.test.skip=true
+    - mvn $MAVEN_CLI_OPTS compile package -skipTests=true
   artifacts:
     paths:
       - applications/bumperbot/target/
       - generators/cd2pojo/target/
       - generators/maa2java-xtend/target/
+      - languages/arc-fe/target/
       - languages/montiarc-fe/target/
-      - languages/dynamic-montiarc/target/
       - libraries/lejos-rte/target/
       - libraries/maJavaLib/target/
       - libraries/maa-rte/target/
@@ -48,7 +48,7 @@ Validate:
   coverage: '/\d+.\d+ \% covered/'
   script:
     - mvn $MAVEN_CLI_OPTS test package
-    - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, "instructions covered"; print 100*covered/instructions, "% covered" }' ./languages/montiarc-fe/target/site/jacoco/jacoco.csv
+    - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/",  instructions, "instructions covered"; print 100*covered/instructions, "% covered" }' ./languages/arc-fe/target/site/jacoco/jacoco.csv
   dependencies: 
     - Validate #download artifacts from build
   artifacts:

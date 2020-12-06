@@ -1,0 +1,123 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+plugins {
+  id "monticore"
+  id "jacoco"
+}
+
+group = "montiarc.languages"
+
+def grammarDir = "$projectDir/src/main/grammars"
+def reportsDir = "$buildDir/generated-sources/monticore/sourcecode/reports/"
+
+sourceSets {
+  main {
+    java.srcDirs += ["$buildDir/generated-sources/monticore/sourcecode"]
+  }
+  test {
+    java.srcDirs += ["$buildDir/generated-test-sources/monticore/sourcecode"]
+  }
+  grammars {
+    resources {
+      srcDirs(grammarDir, reportsDir)
+      include("**/*.mc4", "**/*.cd")
+    }
+  }
+}
+
+test {
+  useJUnitPlatform()
+  finalizedBy jacocoTestReport
+}
+
+configurations { grammar }
+
+dependencies {
+  //monticore dependencies
+  implementation "de.monticore:monticore-grammar:$mc_version:$grammar_classifier"
+  grammar "de.monticore:monticore-grammar:$mc_version:$grammar_classifier"
+  implementation "montiarc.languages:arc-fe:$version:$grammar_classifier"
+  grammar "montiarc.languages:arc-fe:$version:$grammar_classifier"
+
+  implementation "de.monticore:monticore-generator:$mc_version"
+  implementation "de.monticore:monticore-runtime:$mc_version"
+  implementation "de.monticore:monticore-grammar:$mc_version"
+  testImplementation "de.monticore:monticore-runtime:$mc_version:tests"
+  testImplementation "de.monticore:monticore-runtime:$mc_version"
+
+  //internal dependencies
+  implementation project(":languages:arc-fe")
+  implementation project(":util")
+  testImplementation project(":util").sourceSets.test.output
+
+  //other dependencies
+  implementation "de.monticore.lang:cd4analysis:$cd4a_version"
+  implementation "de.se_rwth.commons:se-commons-logging:$se_commons_version"
+  implementation "com.google.guava:guava:$guava_version"
+  implementation "com.google.code.findbugs:jsr305:$jsr305_version"
+  implementation "org.antlr:antlr4-runtime:$antlr_version"
+  implementation "org.codehaus.janino:janino:$janino_version"
+  testImplementation "ch.qos.logback:logback-classic:$logback_version"
+  testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
+  testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version"
+  testImplementation "org.assertj:assertj-core:$assertj_version"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
+}
+
+fileTree(grammarDir).matching { include '**/*.mc4' }.each {
+  def g = it
+  def grammarName = it.getName().substring(0, it.getName().lastIndexOf('.'))
+
+  task "generateGrammar$grammarName"(type: MCTask) {
+    grammar = file g
+    outputDir = file "$buildDir/generated-sources/monticore/sourcecode"
+    handcodedPath file("$projectDir/src/main/java")
+    def grammarIncludingPackage = file(grammarDir).toURI().relativize(g.toURI()).toString()
+    def upToDate = incCheck(grammarIncludingPackage)
+    outputs.upToDateWhen { upToDate }
+  }
+}
+
+def grammarDependencies = ext {
+  MontiArc = [":languages:arc-fe:generateGrammarArcCore"]
+}
+
+compileJava {
+  tasks.findAll { task -> task.name.startsWith("generateGrammar") }.each {
+    def grammarName = it.getName().substring('generateGrammar'.length())
+    it.dependsOn grammarDependencies[grammarName]
+    /*it.outputs.upToDateWhen {
+      it.outputs.upToDateWhen && !it.dependsOn.any { !it.outputs.upToDateWhen }
+    }*/
+  }
+
+  dependsOn project.collect { it.tasks.findAll { task -> task.name.startsWith("generateGrammar") } }
+}
+
+java {
+  //withJavadocJar()
+  withSourcesJar()
+  registerFeature("grammars") {
+    usingSourceSet(sourceSets.grammars)
+  }
+}
+
+task testModelsJar(type: Jar) {
+  from("$projectDir/src/test/resources")
+  archiveClassifier = "$testmodels_classifier"
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+      artifact testModelsJar
+    }
+  }
+  repositories.maven {
+    name = "$SE_Nexus_ID"
+    credentials.username mavenUser
+    credentials.password mavenPassword
+    url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
+  }
+}

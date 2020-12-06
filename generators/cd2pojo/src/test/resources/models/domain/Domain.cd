@@ -119,6 +119,7 @@ classdiagram Domain {
     P2P, BROADCAST;
   }
 
+  /*
   class StringList {
    java.util.List<String> listOfStrings;
   }
@@ -126,4 +127,5 @@ classdiagram Domain {
   class StringListList {
      java.util.List<java.util.List<String>> listOfListOfStrings;
   }
+  */
 }

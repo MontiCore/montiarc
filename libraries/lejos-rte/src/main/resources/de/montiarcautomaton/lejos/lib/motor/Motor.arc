@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.lejos.lib.motor;
+package montiarc.lejos.lib.motor;
 
-import de.montiarcautomaton.lejos.lib.Datatypes.MotorPort;
-import de.montiarcautomaton.lejos.lib.motor.Datatypes.MotorCmd;
+import montiarc.lejos.lib.Datatypes.MotorPort;
+import montiarc.lejos.lib.motor.Datatypes.MotorCmd;
 
 component Motor(MotorPort motorPort) {
   port

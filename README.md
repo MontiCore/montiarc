@@ -12,7 +12,7 @@ Contact: @puetzer, @david.schmalzing, @wortmann
 
 <img src="pics/elevatorExample.PNG" alt="drawing" height="400px"/>
 
-In MontiArc, architectures are described as component and connector systems in which autonomously acting components perform computations. Communication between components is regulated by connectors between the components’ interfaces, which are stable and build up by typed, directed ports. Components are either atomic or composed of connected subcomponents. Atomic components yield behavior descriptions in the form of embedded time-synchronous port automata, embedded JavaDSL models, or via integration of handcrafted code. For composed components the behavior emerges from the behavior of their subcomponents. 
+In MontiArc, architectures are described as component and connector systems in which autonomously acting components perform computations. Communication between components is regulated by connectors between the components’ interfaces, which are stable and build up by typed, directed ports. Components are either atomic or composed of connected subcomponents. Atomic components yield behavior descriptions in the form of embedded time-synchronous port automata, or via integration of handcrafted code. For composed components the behavior emerges from the behavior of their subcomponents. 
 
 ## Project Structure
 

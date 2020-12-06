@@ -1,0 +1,72 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+plugins {
+  id "org.xtext.xtend" version "2.0.8"
+}
+
+apply plugin: 'org.xtext.xtend'
+
+group = "montiarc.generators"
+
+configurations { testmodels }
+
+dependencies {
+  testmodels "montiarc.languages:montiarc-fe:$version:$testmodels_classifier"
+  implementation project(":generators:cd2pojo")
+  implementation project(":languages:montiarc-fe")
+  implementation project(":languages:arc-fe")
+  implementation project(":libraries:majava-rte")
+  implementation project(":util")
+  implementation "de.monticore.lang:cd4analysis:$cd4a_version"
+  implementation "de.monticore:monticore-emf-runtime:$mc_version"
+  implementation "de.monticore:monticore-runtime:$mc_version"
+  implementation "de.monticore:monticore-grammar:$mc_version"
+  implementation "de.se_rwth.commons:se-commons-groovy:$se_commons_version"
+  implementation "org.eclipse.xtend:org.eclipse.xtend.lib:$xtend_version"
+  //xtend-plugin works with guava version 23.0, but would upgrade to 27 if possible
+  implementation("com.google.guava:guava:$guava_version"){
+    version {
+      strictly "[18.0, 23.0]"
+      prefer "23.0"
+      because "Guava's CharMatcher breaks parts of se-commons if version > 23"
+    }
+  }
+  runtimeOnly "ch.qos.logback:logback-classic:$logback_version"
+  testImplementation "de.monticore:monticore-runtime:$mc_version"
+  testImplementation "org.eclipse.emf:org.eclipse.emf.compare:$emf_version"
+  testImplementation "org.eclipse.emf:org.eclipse.emf.compare.match:$emf_version"
+  testImplementation "org.eclipse.emf:org.eclipse.emf.compare.diff:$emf_version"
+}
+
+xtend {
+  sourceSets {
+    main.xtendOutputDir = "$buildDir/xtend-gen/main"
+    test.xtendOutputDir = "$buildDir/xtend-gen/test"
+  }
+}
+
+task unpackTestmodels(type:Sync) {
+  dependsOn configurations.testmodels
+
+  from {
+    configurations.testmodels.collect { zipTree(it) }
+  }
+  into "$buildDir/test-models"
+}
+
+java {
+  //withJavadocJar()
+  //withSourcesJar()
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) { from components.java }
+  }
+  repositories.maven {
+    name = "$SE_Nexus_ID"
+    credentials.username mavenUser
+    credentials.password mavenPassword
+    url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
+  }
+}

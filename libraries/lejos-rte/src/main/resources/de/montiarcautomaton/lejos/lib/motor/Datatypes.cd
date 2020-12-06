@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.lejos.lib.motor;
+package montiarc.lejos.lib.motor;
 
 classdiagram Datatypes {
   enum MotorCmd {FORWARD, BACKWARD, STOP;}

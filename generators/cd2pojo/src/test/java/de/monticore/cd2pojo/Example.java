@@ -1,12 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package de.monticore.cd2pojo;
 
+import org.junit.jupiter.api.Test;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.junit.Test;
-
 public class Example {
+
   @Test
   public void test() {
     Path outDir = Paths.get("out/");
