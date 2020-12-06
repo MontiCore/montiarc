@@ -30,7 +30,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
       imports.add(new ImportStatement(importStatement.getQName(), importStatement.isStar()));
     }
     MontiArcArtifactScope artifactScope = montiarc.MontiArcMill.montiArcArtifactScopeBuilder()
-      .setPackageName(rootNode.getPackage().getQName())
+      .setPackageName(rootNode.isPresentPackage() ? rootNode.getPackage().getQName() : "")
       .setImportList(imports)
       .build();
     putOnStack(artifactScope);
@@ -44,6 +44,10 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
 
   @Override
-  public void endVisit(ASTMACompilationUnit node) {
+  public void endVisit(@NotNull ASTMACompilationUnit node) {
+    Preconditions.checkArgument(node != null);
+    Preconditions.checkState(this.getCurrentScope().isPresent());
+    Preconditions.checkState(this.getCurrentScope().get() instanceof MontiArcArtifactScope);
+    super.endVisit(node);
   }
 }

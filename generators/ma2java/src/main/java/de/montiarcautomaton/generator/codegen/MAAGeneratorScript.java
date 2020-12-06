@@ -1,16 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 package de.montiarcautomaton.generator.codegen;
 
-import java.io.File;
-
-import org.codehaus.groovy.control.customizers.ImportCustomizer;
-
 import de.montiarcautomaton.generator.MontiArcGeneratorTool;
 import de.se_rwth.commons.configuration.Configuration;
 import de.se_rwth.commons.groovy.GroovyInterpreter;
 import de.se_rwth.commons.groovy.GroovyRunner;
 import de.se_rwth.commons.logging.Log;
 import groovy.lang.Script;
+import org.codehaus.groovy.control.customizers.ImportCustomizer;
+
+import java.io.File;
 
 public class MAAGeneratorScript extends Script implements GroovyRunner {
   
@@ -62,7 +61,7 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
    * @param fqnTemplateName
    */
   public void generate(File modelPath, File targetFilepath, File hwcPath) {
-    new MontiArcGeneratorTool().generate(modelPath, targetFilepath, hwcPath);
+    new MontiArcGeneratorTool().generate(modelPath.toPath(), targetFilepath.toPath(), hwcPath.toPath());
   }
   
   

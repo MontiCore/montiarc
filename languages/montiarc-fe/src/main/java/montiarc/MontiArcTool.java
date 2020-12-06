@@ -15,9 +15,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._parser.MontiArcParser;
-import montiarc._symboltable.IMontiArcScope;
-import montiarc._symboltable.MontiArcGlobalScope;
-import montiarc._symboltable.MontiArcLanguage;
+import montiarc._symboltable.*;
 import montiarc._symboltable.adapters.Field2CDFieldResolvingDelegate;
 import montiarc._symboltable.adapters.Type2CDTypeResolvingDelegate;
 import montiarc.cocos.MontiArcCoCos;
@@ -25,17 +23,16 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MontiArcTool {
 
   protected MontiArcLanguage language;
-
   protected MontiArcCoCoChecker checker;
-
   protected boolean isSymTabInitialized;
 
   public MontiArcTool() {
@@ -50,6 +47,64 @@ public class MontiArcTool {
     this.isSymTabInitialized = false;
   }
 
+  protected MontiArcLanguage getLanguage() {
+    return this.language;
+  }
+
+  protected MontiArcCoCoChecker getChecker() {
+    return this.checker;
+  }
+
+  public MontiArcGlobalScope processModels(@NotNull Path... modelPaths) {
+    Preconditions.checkArgument(modelPaths != null);
+    Preconditions.checkArgument(!Arrays.asList(modelPaths).contains(null));
+    MontiArcGlobalScope scope = createGlobalScope(new ModelPath(Arrays.asList(modelPaths)));
+    this.processModels(scope);
+    return scope;
+  }
+
+  public MontiArcGlobalScope createGlobalScope(@NotNull ModelPath mp) {
+    CD4AnalysisLanguage cd4ALanguage = CD4AnalysisMill.cD4AnalysisLanguageBuilder().build();
+    CD4AnalysisGlobalScope cd4AGlobalScope = CD4AnalysisMill.cD4AnalysisGlobalScopeBuilder().setModelPath(mp)
+      .setCD4AnalysisLanguage(cd4ALanguage).build();
+
+    Field2CDFieldResolvingDelegate fieldDelegate = new Field2CDFieldResolvingDelegate(cd4AGlobalScope);
+    Type2CDTypeResolvingDelegate typeDelegate = new Type2CDTypeResolvingDelegate(cd4AGlobalScope);
+
+    MontiArcGlobalScope montiArcGlobalScope = new MontiArcGlobalScope(mp, this.getLanguage());
+    montiArcGlobalScope.addAdaptedFieldSymbolResolvingDelegate(fieldDelegate);
+    montiArcGlobalScope.addAdaptedTypeSymbolResolvingDelegate(typeDelegate);
+    addBasicTypes(montiArcGlobalScope);
+    return montiArcGlobalScope;
+  }
+
+  public void processModels(@NotNull MontiArcGlobalScope scope) {
+    Preconditions.checkArgument(scope != null);
+    this.createSymbolTable(scope).stream().map(as -> (ASTMACompilationUnit) as.getAstNode()).forEach(a -> a.accept(this.getChecker()));
+  }
+
+  public Collection<MontiArcArtifactScope> createSymbolTable(@NotNull MontiArcGlobalScope scope) {
+    Preconditions.checkArgument(scope != null);
+    MontiArcSymbolTableCreatorDelegator symTab = this.getLanguage().getSymbolTableCreator(scope);
+    return this.parseModels(scope).stream().map(symTab::createFromAST).collect(Collectors.toSet());
+  }
+
+  public Collection<ASTMACompilationUnit> parseModels(@NotNull MontiArcGlobalScope scope) {
+    Preconditions.checkArgument(scope != null);
+    return scope.getModelPath().getFullPathOfEntries().stream().flatMap(p -> parse(p).stream()).collect(Collectors.toSet());
+  }
+
+  public Collection<ASTMACompilationUnit> parse(@NotNull Path path) {
+    Preconditions.checkArgument(path != null);
+    try {
+      return Files.walk(path).filter(Files::isRegularFile).filter(f -> f.getFileName().toString().endsWith(language.getFileExtension())).map(f -> parse(f.toString()))
+        .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
+    } catch (IOException e) {
+      Log.error("Could not access " + path.toString() + ", there were I/O exceptions.");
+    }
+    return new HashSet<>();
+  }
+
   public Optional<ASTMACompilationUnit> parse(@NotNull String filename) {
     Preconditions.checkArgument(filename != null);
     MontiArcParser p = new MontiArcParser();
@@ -57,19 +112,18 @@ public class MontiArcTool {
     try {
       compUnit = p.parse(filename);
       return compUnit;
-    }
-    catch (IOException e) {
-      e.printStackTrace();
+    } catch (IOException e) {
+      Log.error("Could not access " + filename + ", there were I/O exceptions.");
     }
     return Optional.empty();
-
   }
 
+  @Deprecated
   public boolean checkCoCos(@NotNull ASTArcBasisNode node) {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.isSymTabInitialized, "Please initialize symbol-table before "
       + "checking cocos.");
-    this.checker.checkAll(node);
+    this.getChecker().checkAll(node);
     if (Log.getErrorCount() != 0) {
       Log.debug("Found " + Log.getErrorCount() + " errors in node " + node + ".", "XX");
       return false;
@@ -84,17 +138,19 @@ public class MontiArcTool {
    * Otherwise the optional is empty.
    *
    * @param componentName Name of the component
-   * @param modelPaths Folders containing the packages with models
+   * @param modelPaths    Folders containing the packages with models
    * @return an {@code Optional} of the loaded component type
    */
+  @Deprecated
   public Optional<ComponentTypeSymbol> loadComponentSymbolWithoutCocos(String componentName,
-      File... modelPaths) {
+                                                                       File... modelPaths) {
     IMontiArcScope s = initSymbolTable(modelPaths);
     return s.resolveComponentType(componentName);
   }
 
+  @Deprecated
   public Optional<ComponentTypeSymbol> loadComponentSymbolWithCocos(String componentName,
-    File... modelPaths) {
+                                                                    File... modelPaths) {
     Optional<ComponentTypeSymbol> compSym = loadComponentSymbolWithoutCocos(componentName,
       modelPaths);
 
@@ -110,9 +166,10 @@ public class MontiArcTool {
    * optional is empty.
    *
    * @param modelPath The model path containing the package with the model
-   * @param model the fully qualified model name
+   * @param model     the fully qualified model name
    * @return the AST node of the model
    */
+  @Deprecated
   public Optional<ASTComponentType> getAstNode(String modelPath, String model) {
     // ensure an empty log
     Log.getFindings().clear();
@@ -141,34 +198,18 @@ public class MontiArcTool {
    * @param modelPaths paths of all folders containing models
    * @return The initialized symbol table
    */
+  @Deprecated
   public IMontiArcScope initSymbolTable(File... modelPaths) {
     Set<Path> p = Sets.newHashSet();
     for (File mP : modelPaths) {
       p.add(Paths.get(mP.getAbsolutePath()));
     }
-
     final ModelPath mp = new ModelPath(p);
-
-    CD4AnalysisLanguage cd4ALanguage = CD4AnalysisMill.cD4AnalysisLanguageBuilder().build();
-    CD4AnalysisGlobalScope cd4AGlobalScope = CD4AnalysisMill.cD4AnalysisGlobalScopeBuilder()
-      .setModelPath(mp)
-      .setCD4AnalysisLanguage(cd4ALanguage)
-      .build();
-
-    Field2CDFieldResolvingDelegate fieldDelegate =
-      new Field2CDFieldResolvingDelegate(cd4AGlobalScope);
-    Type2CDTypeResolvingDelegate typeDelegate =
-      new Type2CDTypeResolvingDelegate(cd4AGlobalScope);
-
-    MontiArcGlobalScope montiArcGlobalScope = new MontiArcGlobalScope(mp, language);
-    montiArcGlobalScope.addAdaptedFieldSymbolResolvingDelegate(fieldDelegate);
-    montiArcGlobalScope.addAdaptedTypeSymbolResolvingDelegate(typeDelegate);
-    addBasicTypes(montiArcGlobalScope);
-    
+    MontiArcGlobalScope montiArcGlobalScope = this.createGlobalScope(mp);
     isSymTabInitialized = true;
     return montiArcGlobalScope;
   }
-  
+
   public IMontiArcScope addBasicTypes(@NotNull IMontiArcScope scope) {
     scope.add(new TypeSymbol("String"));
     scope.add(new TypeSymbol("Integer"));
@@ -179,7 +220,7 @@ public class MontiArcTool {
     scope.add(new TypeSymbol("Character"));
     scope.add(new TypeSymbol("Double"));
     scope.add(new TypeSymbol("Float"));
-    
+
     //primitives
     scope.add(new TypeSymbol("int"));
     scope.add(new TypeSymbol("boolean"));
@@ -189,10 +230,10 @@ public class MontiArcTool {
     scope.add(new TypeSymbol("long"));
     scope.add(new TypeSymbol("short"));
     scope.add(new TypeSymbol("byte"));
-    
+
     return scope;
   }
-  
+
   /**
    * Initializes the Symboltable by introducing scopes for the passed modelpaths. It does not create
    * the symbol table! Symbols for models within the modelpaths are not added to the symboltable
@@ -203,6 +244,7 @@ public class MontiArcTool {
    * @param modelPath The model path for the symbol table
    * @return the initialized symbol table
    */
+  @Deprecated
   public IMontiArcScope initSymbolTable(String modelPath) {
     return initSymbolTable(Paths.get(modelPath).toFile());
   }
