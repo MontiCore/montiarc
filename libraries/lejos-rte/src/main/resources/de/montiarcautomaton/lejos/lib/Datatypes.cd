@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.lejos.lib;
+package montiarc.lejos.lib;
 
 classdiagram Datatypes {
   enum MotorPort {A, B, C; }

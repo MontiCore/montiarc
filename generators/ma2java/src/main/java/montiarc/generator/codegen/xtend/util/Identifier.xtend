@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.generator.codegen.xtend.util
+package montiarc.generator.codegen.xtend.util
 
 import de.monticore.types.typesymbols._symboltable.FieldSymbol;
 import arcbasis._symboltable.ComponentInstanceSymbol

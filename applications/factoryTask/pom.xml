@@ -85,13 +85,13 @@
 				<artifactId>se-groovy-maven-plugin</artifactId>
 				<version>${se-groovy.maven.version}</version>
 				<configuration>
-					<baseClass>de.montiarcautomaton.generator.codegen.MAAGeneratorScript</baseClass>
+					<baseClass>montiarc.generator.codegen.MAAGeneratorScript</baseClass>
 					<arguments>
 						<out>${gen.dir}</out>
 						<modelPath>${models.dir}</modelPath>
 						<hwc>${hwc.dir}</hwc>
 					</arguments>
-					<script>de/montiarcautomaton/generator/maagenerator.groovy</script>
+					<script>montiarc/generator/maagenerator.groovy</script>
 				</configuration>
 				<executions>
 					<execution>

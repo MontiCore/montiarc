@@ -1,20 +1,20 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.generator.codegen.xtend
+package montiarc.generator.codegen.xtend
 
 import arcbasis._symboltable.ComponentTypeSymbol
 import arcbasis._symboltable.ComponentTypeSymbolLoader
-import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
-import de.montiarcautomaton.generator.codegen.xtend.util.Init
-import de.montiarcautomaton.generator.codegen.xtend.util.Ports
-import de.montiarcautomaton.generator.codegen.xtend.util.Setup
-import de.montiarcautomaton.generator.codegen.xtend.util.Subcomponents
-import de.montiarcautomaton.generator.codegen.xtend.util.Update
-import de.montiarcautomaton.generator.codegen.xtend.util.Utils
-import de.montiarcautomaton.generator.helper.ComponentHelper
+import montiarc.generator.codegen.xtend.util.Identifier
+import montiarc.generator.codegen.xtend.util.Init
+import montiarc.generator.codegen.xtend.util.Ports
+import montiarc.generator.codegen.xtend.util.Setup
+import montiarc.generator.codegen.xtend.util.Subcomponents
+import montiarc.generator.codegen.xtend.util.Update
+import montiarc.generator.codegen.xtend.util.Utils
+import montiarc.generator.helper.ComponentHelper
 import de.monticore.types.typesymbols._symboltable.FieldSymbol;
 import java.util.ArrayList
 import java.util.List
-import de.montiarcautomaton.generator.codegen.xtend.util.IMontiArcGenerator
+import montiarc.generator.codegen.xtend.util.IMontiArcGenerator
 
 /**
  * Generates the component class for atomic and composed components. 

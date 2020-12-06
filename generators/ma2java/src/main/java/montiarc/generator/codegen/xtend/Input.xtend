@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.generator.codegen.xtend
+package montiarc.generator.codegen.xtend
 
 import arcbasis._symboltable.ComponentTypeSymbol
-import de.montiarcautomaton.generator.codegen.xtend.util.Utils
-import de.montiarcautomaton.generator.helper.ComponentHelper
-import de.montiarcautomaton.generator.codegen.xtend.util.IMontiArcGenerator
+import montiarc.generator.codegen.xtend.util.Utils
+import montiarc.generator.helper.ComponentHelper
+import montiarc.generator.codegen.xtend.util.IMontiArcGenerator
 
 /**
  * Generates the input class for a component.

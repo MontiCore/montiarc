@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.generator.codegen.xtend.util
+package montiarc.generator.codegen.xtend.util
 
 import arcbasis._symboltable.ComponentTypeSymbol
-import de.montiarcautomaton.generator.helper.ComponentHelper
+import montiarc.generator.helper.ComponentHelper
 
 /**
  * This class contains several methods commonly used by generator classes.

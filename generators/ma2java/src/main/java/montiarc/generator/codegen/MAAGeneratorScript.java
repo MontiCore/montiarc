@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.generator.codegen;
+package montiarc.generator.codegen;
 
-import de.montiarcautomaton.generator.MontiArcGeneratorTool;
+import montiarc.generator.MontiArcGeneratorTool;
 import de.se_rwth.commons.configuration.Configuration;
 import de.se_rwth.commons.groovy.GroovyInterpreter;
 import de.se_rwth.commons.groovy.GroovyRunner;

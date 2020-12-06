@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.generator.codegen.xtend.util
+package montiarc.generator.codegen.xtend.util
 
 import arcbasis._symboltable.ComponentTypeSymbol
 
@@ -12,7 +12,7 @@ class AtomicAbstractImplementation {
     return '''
 	  «Utils.printPackage(comp)»
 	  
-	  import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
+	  import montiarc.runtimes.timesync.implementation.IComputable;
 	  «Utils.printImports(comp)»
 
 	  class «comp.name»Impl«generics»

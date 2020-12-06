@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.generator.helper;
+package montiarc.generator.helper;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -13,7 +13,7 @@ import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolLoader;
 import arcbasis._symboltable.PortSymbol;
-import de.montiarcautomaton.generator.codegen.xtend.util.Utils;
+import montiarc.generator.codegen.xtend.util.Utils;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.prettyprint.AssignmentExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.CommonExpressionsPrettyPrinter;

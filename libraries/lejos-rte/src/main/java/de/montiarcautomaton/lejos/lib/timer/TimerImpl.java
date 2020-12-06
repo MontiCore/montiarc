@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.lejos.lib.timer;
+package montiarc.lejos.lib.timer;
 
-import de.montiarcautomaton.lejos.lib.timer.Datatypes.TimerCmd;
-import de.montiarcautomaton.lejos.lib.timer.Datatypes.TimerSignal;
-import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
+import montiarc.lejos.lib.timer.Datatypes.TimerCmd;
+import montiarc.lejos.lib.timer.Datatypes.TimerSignal;
+import montiarc.runtimes.timesync.implementation.IComputable;
 
 /**
  * Component behavior implementation of the bumperbot timer.

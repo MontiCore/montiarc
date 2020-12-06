@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.generator;
+package montiarc.generator;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
-import de.montiarcautomaton.generator.codegen.xtend.MAAGenerator;
+import montiarc.generator.codegen.xtend.MAAGenerator;
 import de.monticore.cd.cd4analysis._symboltable.CD4AnalysisLanguage;
 import de.monticore.cd2pojo.POJOGenerator;
 import de.monticore.symboltable.IScope;

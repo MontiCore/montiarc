@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.generator
+package montiarc.generator
 
 info("--------------------------------")
 info("MAA Generator")

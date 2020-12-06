@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.generator.codegen;
+package montiarc.generator.codegen;
 
 import java.io.File;
 

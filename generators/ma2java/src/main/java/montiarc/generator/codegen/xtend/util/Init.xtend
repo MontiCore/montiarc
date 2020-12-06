@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.generator.codegen.xtend.util
+package montiarc.generator.codegen.xtend.util
 
 import arcbasis._symboltable.ComponentTypeSymbol
 import arcbasis._ast.ASTConnector
 import arcbasis._ast.ASTPortAccess
-import de.montiarcautomaton.generator.helper.ComponentHelper
+import montiarc.generator.helper.ComponentHelper
 
 /**
  * Class responsible for printing the init() method for both atomic and composed components.

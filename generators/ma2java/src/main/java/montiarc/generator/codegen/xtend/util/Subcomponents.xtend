@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.generator.codegen.xtend.util
+package montiarc.generator.codegen.xtend.util
 
-import de.montiarcautomaton.generator.helper.ComponentHelper
+import montiarc.generator.helper.ComponentHelper
 import arcbasis._symboltable.ComponentTypeSymbol
 
 /**

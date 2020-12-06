@@ -3,7 +3,7 @@
  *
  * http://www.se-rwth.de/
  */
-package de.montiarcautomaton.generator.codegen.xtend.util
+package montiarc.generator.codegen.xtend.util
 
 import arcbasis._symboltable.ComponentTypeSymbol
 

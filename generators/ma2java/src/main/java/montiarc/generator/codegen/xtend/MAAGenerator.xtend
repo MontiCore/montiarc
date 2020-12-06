@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.generator.codegen.xtend
+package montiarc.generator.codegen.xtend
 
 import arcbasis._symboltable.ComponentTypeSymbol
-import de.montiarcautomaton.generator.codegen.xtend.util.AtomicAbstractImplementation
-import de.montiarcautomaton.generator.codegen.xtend.util.IMontiArcGenerator
-import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
+import montiarc.generator.codegen.xtend.util.AtomicAbstractImplementation
+import montiarc.generator.codegen.xtend.util.IMontiArcGenerator
+import montiarc.generator.codegen.xtend.util.Identifier
 import de.monticore.io.FileReaderWriter
 import de.se_rwth.commons.logging.Log
 import java.io.File
