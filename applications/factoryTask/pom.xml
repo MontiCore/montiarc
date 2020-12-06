@@ -7,14 +7,14 @@
 	<parent>
 		<groupId>montiarc.applications</groupId>
 		<artifactId>applications</artifactId>
-		<version>6.0.0-SNAPSHOT</version>
+		<version>6.0.0</version>
 	</parent>
 
 	<artifactId>factoryTask</artifactId>
 
 	<!-- == PROJECT PROPERTIES ============================================== -->
 	<properties>
-		<montiarc.version>6.0.0-SNAPSHOT</montiarc.version>
+		<montiarc.version>6.0.0</montiarc.version>
 		<se-groovy.maven.version>1.2.3</se-groovy.maven.version>
 		<junit.version>4.13.1</junit.version>
 
