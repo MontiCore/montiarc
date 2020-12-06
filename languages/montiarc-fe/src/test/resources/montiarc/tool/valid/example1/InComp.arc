@@ -1,5 +1,4 @@
-// (c) https://github.com/MontiCore/monticore
-package valid;
+/* (c) https://github.com/MontiCore/monticore */
 
 /*
  * Valid model.
