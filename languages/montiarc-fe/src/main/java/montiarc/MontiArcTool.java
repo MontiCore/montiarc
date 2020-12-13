@@ -68,7 +68,7 @@ public class MontiArcTool {
 
     MontiArcGlobalScope montiArcGlobalScope = new MontiArcGlobalScope(mp, fileExtension);
     montiArcGlobalScope.addAdaptedFieldSymbolResolvingDelegate(fieldDelegate);
-    montiArcGlobalScope.addAdaptedTypeSymbolResolvingDelegate(typeDelegate);
+    montiArcGlobalScope.addAdaptedOOTypeSymbolResolvingDelegate(typeDelegate);
     addBasicTypes(montiArcGlobalScope);
     return montiArcGlobalScope;
   }

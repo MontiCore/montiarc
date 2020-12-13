@@ -2,12 +2,12 @@
 package montiarc._symboltable.adapters;
 
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
-import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.symboltable.resolving.ISymbolAdapter;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-public class CDType2TypeAdapter extends TypeSymbol implements ISymbolAdapter<CDTypeSymbol> {
+public class CDType2TypeAdapter extends OOTypeSymbol implements ISymbolAdapter<CDTypeSymbol> {
 
   CDTypeSymbol adaptee;
 
