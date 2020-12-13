@@ -4,7 +4,6 @@ package montiarc.generator;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import montiarc.generator.codegen.xtend.MAAGenerator;
-import de.monticore.cd.cd4analysis._symboltable.CD4AnalysisLanguage;
 import de.monticore.cd2pojo.POJOGenerator;
 import de.monticore.symboltable.IScope;
 import de.se_rwth.commons.Names;
@@ -12,7 +11,6 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTool;
 import montiarc._symboltable.IMontiArcScope;
 import montiarc._symboltable.MontiArcGlobalScope;
-import montiarc._symboltable.MontiArcLanguage;
 import montiarc.util.DirectoryUtil;
 import montiarc.util.Modelfinder;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -80,7 +78,7 @@ public class MontiArcGeneratorTool extends MontiArcTool {
    */
   @Deprecated
   public void generate(File modelPath, File target, File hwcPath) {
-    List<String> foundModels = Modelfinder.getModelsInModelPath(modelPath, MontiArcLanguage.FILE_ENDING);
+    List<String> foundModels = Modelfinder.getModelsInModelPath(modelPath, "arc");
 
     // 1. create symboltable
     Log.info("Initializing symboltable", "MontiArcGeneratorTool");
@@ -111,7 +109,7 @@ public class MontiArcGeneratorTool extends MontiArcTool {
   }
 
   private void generatePOJOs(File modelPath, File targetFilepath) {
-    List<String> foundModels = Modelfinder.getModelsInModelPath(modelPath, CD4AnalysisLanguage.FILE_ENDING);
+    List<String> foundModels = Modelfinder.getModelsInModelPath(modelPath, "arc");
     for (String model : foundModels) {
       String simpleName = Names.getSimpleName(model);
       String packageName = Names.getQualifier(model);

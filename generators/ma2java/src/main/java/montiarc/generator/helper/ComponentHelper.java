@@ -1,30 +1,30 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.helper;
 
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.regex.Matcher;
-
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTPortAccess;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
-import montiarc.generator.codegen.xtend.util.Utils;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.prettyprint.AssignmentExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.CommonExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.ExpressionsBasisPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ImportStatement;
 import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericComponentHead;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._symboltable.MontiArcArtifactScope;
 import montiarc._visitor.MontiArcPrettyPrinterDelegator;
+import montiarc.generator.codegen.xtend.util.Utils;
+
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.regex.Matcher;
 
 /**
  * Helper class used in the template to generate target code of atomic or
@@ -213,17 +213,15 @@ public class ComponentHelper {
     }
 
     // Append the default parameter values for as many as there are left
-    final List<FieldSymbol> configParameters = param.getType().getLoadedSymbol().getParameters();
+    final List<VariableSymbol> configParameters = param.getType().getParameters();
 
     // Calculate the number of missing parameters
     int numberOfMissingParameters = configParameters.size() - configArguments.size();
 
     if (numberOfMissingParameters > 0) {
       // Get the AST node of the component and the list of parameters in the AST
-      final ASTComponentType astNode = (ASTComponentType) param.getType()
-        .getLoadedSymbol()
-        .getAstNode();
-      final List<ASTArcParameter> parameters = astNode.getHead().getArcParameterList();
+      final ASTComponentType astNode = (ASTComponentType) param.getType().getAstNode();
+      final List<ASTArcParameter> parameters = astNode.getHead().getArcParametersList();
 
       // Retrieve the parameters from the node and add them to the list
       for (int counter = 0; counter < numberOfMissingParameters; counter++) {
@@ -246,10 +244,9 @@ public class ComponentHelper {
    */
   public static String getSubComponentTypeName(ComponentInstanceSymbol instance) {
     String result = "";
-    final ComponentTypeSymbolLoader componentTypeReference = instance.getType();
+    final ComponentTypeSymbol componentTypeReference = instance.getType();
 
-    String packageName = Utils.printPackageWithoutKeyWordAndSemicolon(
-      componentTypeReference.getLoadedSymbol());
+    String packageName = Utils.printPackageWithoutKeyWordAndSemicolon(componentTypeReference);
     if (packageName != null && !packageName.equals("")) {
       result = packageName + ".";
     }
@@ -283,7 +280,7 @@ public class ComponentHelper {
     if (portName.contains(".")) {
       Optional<ComponentInstanceSymbol> subCompInstance = cmp.getSpannedScope()
         .resolveComponentInstance(subCompName);
-      ComponentTypeSymbol subComp = subCompInstance.get().getType().getLoadedSymbol();
+      ComponentTypeSymbol subComp = subCompInstance.get().getType();
       port = subComp.getSpannedScope().resolvePort(portNameUnqualified);
     } else {
       port = cmp.getSpannedScope().resolvePort(portName);
@@ -342,7 +339,7 @@ public class ComponentHelper {
     }
     if (comp.getHead() instanceof ASTGenericComponentHead) {
       List<ASTArcTypeParameter> parameterList =
-        ((ASTGenericComponentHead) comp.getHead()).getArcTypeParameterList();
+        ((ASTGenericComponentHead) comp.getHead()).getArcTypeParametersList();
       for (ASTArcTypeParameter type : parameterList) {
         if (type.getName().equals(typeName)) {
           return true;
@@ -359,7 +356,7 @@ public class ComponentHelper {
   public List<String> getSuperCompActualTypeArguments() {
     final List<String> paramList = new ArrayList<>();
     if (component.isPresentParentComponent()) {
-      final ComponentTypeSymbolLoader componentSymbolReference = component.getParent();
+      final ComponentTypeSymbol componentSymbolReference = component.getParent();
 /*      final List<ActualTypeArgument> actualTypeArgs = componentSymbolReference
         .getActualTypeArguments();
       String componentPrefix = this.component.getFullName() + ".";
@@ -387,6 +384,6 @@ public class ComponentHelper {
       symbol = symbol.getOuterComponent().get();
     }
     ASTComponentType ast = symbol.getAstNode();
-    return ((MontiArcArtifactScope) ast.getEnclosingScope()).getImportList();
+    return ((MontiArcArtifactScope) ast.getEnclosingScope()).getImportsList();
   }
 }

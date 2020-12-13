@@ -23,6 +23,6 @@
 
   <modules>
     <module>cd2pojo</module>
-    <!--<module>ma2java</module>-->
+    <module>ma2java</module>
   </modules>
 </project>
