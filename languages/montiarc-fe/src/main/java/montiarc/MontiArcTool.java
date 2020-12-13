@@ -6,15 +6,18 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
-import de.monticore.cd4analysis.CD4AnalysisMill;
-import de.monticore.cd4analysis._symboltable.CD4AnalysisGlobalScope;
+import de.monticore.cd4code.CD4CodeMill;
+import de.monticore.cd4code._symboltable.CD4CodeGlobalScope;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._parser.MontiArcParser;
-import montiarc._symboltable.*;
+import montiarc._symboltable.IMontiArcScope;
+import montiarc._symboltable.MontiArcArtifactScope;
+import montiarc._symboltable.MontiArcGlobalScope;
+import montiarc._symboltable.MontiArcSymbolTableCreatorDelegator;
 import montiarc._symboltable.adapters.Field2CDFieldResolvingDelegate;
 import montiarc._symboltable.adapters.Type2CDTypeResolvingDelegate;
 import montiarc.cocos.MontiArcCoCos;
@@ -61,10 +64,10 @@ public class MontiArcTool {
   }
 
   public MontiArcGlobalScope createGlobalScope(@NotNull ModelPath mp) {
-    CD4AnalysisGlobalScope cd4AGlobalScope = CD4AnalysisMill.cD4AnalysisGlobalScopeBuilder().setModelPath(mp).build();
+    CD4CodeGlobalScope cd4CGlobalScope = CD4CodeMill.cD4CodeGlobalScopeBuilder().setModelPath(mp).build();
 
-    Field2CDFieldResolvingDelegate fieldDelegate = new Field2CDFieldResolvingDelegate(cd4AGlobalScope);
-    Type2CDTypeResolvingDelegate typeDelegate = new Type2CDTypeResolvingDelegate(cd4AGlobalScope);
+    Field2CDFieldResolvingDelegate fieldDelegate = new Field2CDFieldResolvingDelegate(cd4CGlobalScope);
+    Type2CDTypeResolvingDelegate typeDelegate = new Type2CDTypeResolvingDelegate(cd4CGlobalScope);
 
     MontiArcGlobalScope montiArcGlobalScope = new MontiArcGlobalScope(mp, fileExtension);
     montiArcGlobalScope.addAdaptedFieldSymbolResolvingDelegate(fieldDelegate);

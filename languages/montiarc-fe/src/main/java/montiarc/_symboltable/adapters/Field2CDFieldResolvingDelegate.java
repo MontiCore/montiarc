@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable.adapters;
 
-import de.monticore.cd4analysis._symboltable.CD4AnalysisGlobalScope;
+import de.monticore.cd4code._symboltable.CD4CodeGlobalScope;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IFieldSymbolResolvingDelegate;
 import de.monticore.symboltable.modifiers.AccessModifier;
@@ -14,9 +14,9 @@ import java.util.function.Predicate;
 
 public class Field2CDFieldResolvingDelegate implements IFieldSymbolResolvingDelegate {
 
-  protected CD4AnalysisGlobalScope globalScope;
+  protected CD4CodeGlobalScope globalScope;
 
-  public Field2CDFieldResolvingDelegate(@NotNull CD4AnalysisGlobalScope globalScope) {
+  public Field2CDFieldResolvingDelegate(@NotNull CD4CodeGlobalScope globalScope) {
     this.globalScope = globalScope;
   }
 
