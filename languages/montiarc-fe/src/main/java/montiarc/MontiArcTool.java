@@ -13,6 +13,7 @@ import de.monticore.cd4code._symboltable.CD4CodeSymbolTableCreatorDelegator;
 import de.monticore.cd4code._symboltable.ICD4CodeArtifactScope;
 import de.monticore.cd4code._symboltable.ICD4CodeGlobalScope;
 import de.monticore.cd4code.cocos.CD4CodeCoCos;
+import de.monticore.cd4code.resolver.CD4CodeResolver;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.cdbasis._ast.ASTCDPackage;
 import de.monticore.io.paths.ModelPath;
@@ -25,8 +26,7 @@ import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc._symboltable.IMontiArcGlobalScope;
 import montiarc._symboltable.IMontiArcScope;
 import montiarc._symboltable.MontiArcSymbolTableCreatorDelegator;
-import montiarc._symboltable.adapters.Field2CDFieldResolver;
-import montiarc._symboltable.adapters.OOType2CDTypeResolver;
+import montiarc._symboltable.adapters.ArcCD4CodeResolver;
 import montiarc.cocos.MontiArcCoCos;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -90,10 +90,9 @@ public class MontiArcTool {
   }
 
   protected void resolvingDelegates(@NotNull IMontiArcGlobalScope montiArcGlobalScope, @NotNull ICD4CodeGlobalScope cd4CGlobalScope) {
-    Field2CDFieldResolver fieldDelegate = new Field2CDFieldResolver(cd4CGlobalScope);
-    OOType2CDTypeResolver typeDelegate = new OOType2CDTypeResolver(cd4CGlobalScope);
-    montiArcGlobalScope.addAdaptedFieldSymbolResolver(fieldDelegate);
-    montiArcGlobalScope.addAdaptedOOTypeSymbolResolver(typeDelegate);
+    CD4CodeResolver cd4CodeResolver = new ArcCD4CodeResolver(cd4CGlobalScope);
+    montiArcGlobalScope.addAdaptedFieldSymbolResolver(cd4CodeResolver);
+    montiArcGlobalScope.addAdaptedTypeSymbolResolver(cd4CodeResolver);
   }
 
   public void processModels(@NotNull IMontiArcGlobalScope scope) {
