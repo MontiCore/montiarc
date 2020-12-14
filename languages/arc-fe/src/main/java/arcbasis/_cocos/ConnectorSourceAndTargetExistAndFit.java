@@ -5,11 +5,11 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
+import arcbasis.check.ArcTypeCheck;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheck;
 import de.se_rwth.commons.logging.Log;
 
 import java.util.ArrayList;
@@ -104,7 +104,7 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
         SymTypeExpression sourceType = source.getType();
         SymTypeExpression targetType = target.getType();
 
-        if (!TypeCheck.compatible(sourceType, targetType)) {
+        if (!ArcTypeCheck.compatible(sourceType, targetType)) {
           Log.error(
             String.format(ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH.toString(),
               source.getType().print(), target.getType().print(), component.getFullName()),

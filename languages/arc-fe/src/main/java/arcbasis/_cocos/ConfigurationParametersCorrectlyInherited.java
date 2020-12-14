@@ -3,11 +3,11 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis.check.ArcTypeCheck;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheck;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -48,7 +48,7 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
       for (int i = 0; i < Math.min(parentParameters.size(), parameters.size()); i++) {
         SymTypeExpression superParameterType = parentParameters.get(i).getType();
         SymTypeExpression paramType = parameters.get(i).getType();
-        if (!TypeCheck.compatible(paramType, superParameterType)) {
+        if (!ArcTypeCheck.compatible(paramType, superParameterType)) {
           Log.error(
             String.format(ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH.toString(),
               parameters.get(i).getName(), i + 1, component.getFullName(),

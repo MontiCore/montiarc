@@ -13,6 +13,10 @@ import java.util.List;
 
 public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
 
+  public MontiArcSymbolTableCreator() {
+    super(new MontiArcGlobalScope());
+  }
+
   public MontiArcSymbolTableCreator(@NotNull IMontiArcScope enclosingScope) {
     super(enclosingScope);
   }

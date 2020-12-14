@@ -34,6 +34,10 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
   protected ASTMCType currentPortType;
   protected ASTPortDirection currentPortDirection;
 
+  public ArcBasisSymbolTableCreator() {
+
+  }
+
   public ArcBasisSymbolTableCreator(@NotNull IArcBasisScope enclosingScope) {
     super(Preconditions.checkNotNull(enclosingScope));
     this.typePrinter = new MCBasicTypesPrettyPrinter(new IndentPrinter());

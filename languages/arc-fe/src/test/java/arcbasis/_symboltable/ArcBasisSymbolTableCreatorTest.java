@@ -24,8 +24,8 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @BeforeEach
   public void SetUpSymTab() {
-    this.symTab = ArcBasisMill.arcBasisSymbolTableCreatorBuilder()
-      .addToScopeStack(ArcBasisMill.arcBasisScopeBuilder().build()).build();
+    this.symTab = ArcBasisMill.arcBasisSymbolTableCreator();
+    this.symTab.putOnStack(ArcBasisMill.arcBasisScopeBuilder().build());
   }
 
   public ArcBasisSymbolTableCreator getSymTab() {

@@ -17,9 +17,8 @@ import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.check.TypeCheckResult;
 import montiarc.MontiArcMill;
-import montiarc.OOSymbolsMillForMontiArc;
+import montiarc._auxiliary.OOSymbolsMillForMontiArc;
 import montiarc._parser.MontiArcParser;
-import montiarc._visitor.IMontiArcDelegatorVisitor;
 import montiarc._visitor.MontiArcDelegatorVisitor;
 import montiarc._visitor.MontiArcInheritanceVisitor;
 import montiarc.util.check.IArcTypesCalculator;
@@ -247,10 +246,10 @@ public class MontiArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
     MontiArcTypesCalculator typesCalculator = new MontiArcTypesCalculator(new TypeCheckResult());
 
     //When
-    IMontiArcDelegatorVisitor delegator = typesCalculator.getCalculationDelegator();
+    MontiArcDelegatorVisitor delegator = typesCalculator.getCalculationDelegator();
 
     //Then
-    Assertions.assertTrue(delegator instanceof MontiArcDelegatorVisitor);
+    Assertions.assertNotNull(delegator);
   }
 
 

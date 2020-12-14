@@ -25,8 +25,8 @@ import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc._symboltable.IMontiArcGlobalScope;
 import montiarc._symboltable.IMontiArcScope;
 import montiarc._symboltable.MontiArcSymbolTableCreatorDelegator;
-import montiarc._symboltable.adapters.Field2CDFieldResolvingDelegate;
-import montiarc._symboltable.adapters.Type2CDTypeResolvingDelegate;
+import montiarc._symboltable.adapters.Field2CDFieldResolver;
+import montiarc._symboltable.adapters.OOType2CDTypeResolver;
 import montiarc.cocos.MontiArcCoCos;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -90,10 +90,10 @@ public class MontiArcTool {
   }
 
   protected void resolvingDelegates(@NotNull IMontiArcGlobalScope montiArcGlobalScope, @NotNull ICD4CodeGlobalScope cd4CGlobalScope) {
-    Field2CDFieldResolvingDelegate fieldDelegate = new Field2CDFieldResolvingDelegate(cd4CGlobalScope);
-    Type2CDTypeResolvingDelegate typeDelegate = new Type2CDTypeResolvingDelegate(cd4CGlobalScope);
-    montiArcGlobalScope.addAdaptedFieldSymbolResolvingDelegate(fieldDelegate);
-    montiArcGlobalScope.addAdaptedOOTypeSymbolResolvingDelegate(typeDelegate);
+    Field2CDFieldResolver fieldDelegate = new Field2CDFieldResolver(cd4CGlobalScope);
+    OOType2CDTypeResolver typeDelegate = new OOType2CDTypeResolver(cd4CGlobalScope);
+    montiArcGlobalScope.addAdaptedFieldSymbolResolver(fieldDelegate);
+    montiArcGlobalScope.addAdaptedOOTypeSymbolResolver(typeDelegate);
   }
 
   public void processModels(@NotNull IMontiArcGlobalScope scope) {
@@ -109,13 +109,13 @@ public class MontiArcTool {
 
   public Collection<IMontiArcArtifactScope> createSymbolTable(@NotNull IMontiArcGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
-    MontiArcSymbolTableCreatorDelegator symTab = MontiArcMill.montiArcSymbolTableCreatorDelegatorBuilder().setGlobalScope(scope).build();
+    MontiArcSymbolTableCreatorDelegator symTab = new MontiArcSymbolTableCreatorDelegator(scope);
     return this.parseModels(scope).stream().map(symTab::createFromAST).collect(Collectors.toSet());
   }
 
   public Collection<ICD4CodeArtifactScope> createSymbolTable(@NotNull ICD4CodeGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
-    CD4CodeSymbolTableCreatorDelegator symTab = CD4CodeMill.cD4CodeSymbolTableCreatorDelegatorBuilder().setGlobalScope(scope).build();
+    CD4CodeSymbolTableCreatorDelegator symTab = new CD4CodeSymbolTableCreatorDelegator(scope);
     return this.parseModels(scope).stream().map(symTab::createFromAST).collect(Collectors.toSet());
   }
 

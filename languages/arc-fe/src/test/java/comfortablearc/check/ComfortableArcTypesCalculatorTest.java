@@ -5,7 +5,6 @@ import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.check.AbstractArcTypesCalculatorTest;
 import comfortablearc.ComfortableArcMill;
 import comfortablearc._visitor.ComfortableArcDelegatorVisitor;
-import comfortablearc._visitor.IComfortableArcDelegatorVisitor;
 import de.monticore.types.check.TypeCheckResult;
 import montiarc.util.check.IArcTypesCalculator;
 import org.junit.jupiter.api.Assertions;
@@ -40,9 +39,9 @@ public class ComfortableArcTypesCalculatorTest extends AbstractArcTypesCalculato
     ComfortableArcTypesCalculator typesCalculator = new ComfortableArcTypesCalculator(new TypeCheckResult());
 
     //When
-    IComfortableArcDelegatorVisitor delegator = typesCalculator.getCalculationDelegator();
+    ComfortableArcDelegatorVisitor delegator = typesCalculator.getCalculationDelegator();
 
     //Then
-    Assertions.assertTrue(delegator instanceof ComfortableArcDelegatorVisitor);
+    Assertions.assertTrue(delegator != null);
   }
 }

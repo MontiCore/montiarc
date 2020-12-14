@@ -15,7 +15,6 @@ import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbolSurrogate;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import montiarc.util.check.AbstractArcTypesCalculator;
 import montiarc.util.check.IArcTypesCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;

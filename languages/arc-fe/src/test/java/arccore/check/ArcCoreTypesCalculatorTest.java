@@ -6,7 +6,6 @@ import arcbasis.check.AbstractArcTypesCalculatorTest;
 import arccore.ArcCoreMill;
 import montiarc.util.check.IArcTypesCalculator;
 import arccore._visitor.ArcCoreDelegatorVisitor;
-import arccore._visitor.IArcCoreDelegatorVisitor;
 import de.monticore.types.check.TypeCheckResult;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -40,9 +39,9 @@ public class ArcCoreTypesCalculatorTest extends AbstractArcTypesCalculatorTest {
     ArcCoreTypesCalculator typesCalculator = new ArcCoreTypesCalculator(new TypeCheckResult());
 
     //When
-    IArcCoreDelegatorVisitor delegator = typesCalculator.getCalculationDelegator();
+    ArcCoreDelegatorVisitor delegator = typesCalculator.getCalculationDelegator();
 
     //Then
-    Assertions.assertTrue(delegator instanceof ArcCoreDelegatorVisitor);
+    Assertions.assertTrue(delegator != null);
   }
 }

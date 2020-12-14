@@ -1,12 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
+import arcbasis.check.AbstractArcTypesCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.literals.mccommonliterals._ast.ASTSignedLiteral;
 import de.monticore.types.check.*;
 import montiarc.MontiArcMill;
-import montiarc._visitor.IMontiArcDelegatorVisitor;
-import montiarc.util.check.AbstractArcTypesCalculator;
+import montiarc._visitor.MontiArcDelegatorVisitor;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Optional;
@@ -23,14 +23,14 @@ public class MontiArcTypesCalculator
   }
 
   protected MontiArcTypesCalculator(@NotNull TypeCheckResult typeCheckResult,
-                                    @NotNull IMontiArcDelegatorVisitor typesCalculator) {
+                                    @NotNull MontiArcDelegatorVisitor typesCalculator) {
     super(typeCheckResult, typesCalculator);
   }
 
   @Override
-  protected IMontiArcDelegatorVisitor getCalculationDelegator() {
-    Preconditions.checkState(super.getCalculationDelegator() instanceof IMontiArcDelegatorVisitor);
-    return (IMontiArcDelegatorVisitor) super.getCalculationDelegator();
+  protected MontiArcDelegatorVisitor getCalculationDelegator() {
+    Preconditions.checkState(super.getCalculationDelegator() instanceof MontiArcDelegatorVisitor);
+    return (MontiArcDelegatorVisitor) super.getCalculationDelegator();
   }
 
   @Override
@@ -44,10 +44,23 @@ public class MontiArcTypesCalculator
 
   @Override
   public void init() {
-    super.init();
+    this.initDeriveSymTypeOfLiterals();
+    this.initDeriveSymTypeOfExpression();
     this.initDeriveSymTypeOfMCCommonLiterals();
     this.initDeriveSymTypeOfCommonExpressions();
     this.initDeriveSymTypeOfAssignmentExpressions();
+  }
+
+  protected void initDeriveSymTypeOfLiterals() {
+    DeriveSymTypeOfLiterals deriveSymTypeOfLiterals = new DeriveSymTypeOfLiterals();
+    deriveSymTypeOfLiterals.setTypeCheckResult(this.getTypeCheckResult());
+    this.getCalculationDelegator().setMCLiteralsBasisVisitor(deriveSymTypeOfLiterals);
+  }
+
+  protected void initDeriveSymTypeOfExpression() {
+    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpression();
+    deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
+    this.getCalculationDelegator().setExpressionsBasisVisitor(deriveSymTypeOfExpression);
   }
 
   protected void initDeriveSymTypeOfMCCommonLiterals() {
@@ -57,7 +70,7 @@ public class MontiArcTypesCalculator
   }
 
   protected void initDeriveSymTypeOfCommonExpressions() {
-    DeriveSymTypeOfCommonExpressions deriveSymTypeOfCommonExpressions = new DeriveSymTypeOfCommonExpressions();
+    DeriveSymTypeOfCommonExpressions deriveSymTypeOfCommonExpressions = new ArcDeriveSymTypeOfCommonExpression();
     deriveSymTypeOfCommonExpressions.setTypeCheckResult(this.getTypeCheckResult());
     this.getCalculationDelegator().setCommonExpressionsVisitor(deriveSymTypeOfCommonExpressions);
   }

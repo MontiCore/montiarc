@@ -1,12 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.util.check;
+package arcbasis.check;
 
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mcliteralsbasis._ast.ASTLiteral;
 import de.monticore.types.check.*;
-import montiarc.util._visitor.IArcDelegatorVisitor;
+import montiarc.util.check.IArcTypesCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
+import arcbasis._visitor.ArcBasisInheritanceVisitor;
 
 import java.util.Optional;
 
@@ -14,17 +15,17 @@ import java.util.Optional;
  * Abstract implementation of a visitor that calculates a
  * {@link SymTypeExpression} (type) for expressions in language components of
  * the MontiArc language family. Can be extended for other types of expressions
- * by providing a corresponding delegator ({@link IArcDelegatorVisitor}),
+ * by providing a corresponding delegator ({@link ArcBasisInheritanceVisitor}),
  * types calculators {@link ITypesCalculator}, and initializing these for
  * delegation in {@link this#init()}.
  */
 public abstract class AbstractArcTypesCalculator implements IArcTypesCalculator {
 
-  protected IArcDelegatorVisitor calculationDelegator;
+  protected ArcBasisInheritanceVisitor calculationDelegator;
   protected TypeCheckResult typeCheckResult;
 
   protected AbstractArcTypesCalculator(@NotNull TypeCheckResult typeCheckResult,
-                                       @NotNull IArcDelegatorVisitor calculationDelegator) {
+                                       @NotNull ArcBasisInheritanceVisitor calculationDelegator) {
     Preconditions.checkArgument(typeCheckResult != null);
     Preconditions.checkArgument(calculationDelegator != null);
     this.typeCheckResult = typeCheckResult;
@@ -32,7 +33,7 @@ public abstract class AbstractArcTypesCalculator implements IArcTypesCalculator 
     this.init();
   }
 
-  protected IArcDelegatorVisitor getCalculationDelegator() {
+  protected ArcBasisInheritanceVisitor getCalculationDelegator() {
     return this.calculationDelegator;
   }
 
@@ -71,23 +72,5 @@ public abstract class AbstractArcTypesCalculator implements IArcTypesCalculator 
   @Override
   public void reset() {
     this.getTypeCheckResult().setCurrentResultAbsent();
-  }
-
-  @Override
-  public void init() {
-    this.initDeriveSymTypeOfLiterals();
-    this.initDeriveSymTypeOfExpression();
-  }
-
-  protected void initDeriveSymTypeOfLiterals() {
-    DeriveSymTypeOfLiterals deriveSymTypeOfLiterals = new DeriveSymTypeOfLiterals();
-    deriveSymTypeOfLiterals.setTypeCheckResult(this.getTypeCheckResult());
-    this.getCalculationDelegator().setMCLiteralsBasisVisitor(deriveSymTypeOfLiterals);
-  }
-
-  protected void initDeriveSymTypeOfExpression() {
-    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpression();
-    deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
-    this.getCalculationDelegator().setExpressionsBasisVisitor(deriveSymTypeOfExpression);
   }
 }
