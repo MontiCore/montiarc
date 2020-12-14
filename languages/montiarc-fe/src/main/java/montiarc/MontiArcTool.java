@@ -7,7 +7,14 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import de.monticore.cd4code.CD4CodeMill;
+import de.monticore.cd4code._cocos.CD4CodeCoCoChecker;
+import de.monticore.cd4code._parser.CD4CodeParser;
+import de.monticore.cd4code._symboltable.CD4CodeArtifactScope;
 import de.monticore.cd4code._symboltable.CD4CodeGlobalScope;
+import de.monticore.cd4code._symboltable.CD4CodeSymbolTableCreatorDelegator;
+import de.monticore.cd4code.cocos.CD4CodeCoCos;
+import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
+import de.monticore.cdbasis._ast.ASTCDPackage;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.se_rwth.commons.logging.Log;
@@ -33,52 +40,71 @@ import java.util.stream.Collectors;
 
 public class MontiArcTool {
 
-  protected MontiArcCoCoChecker checker;
+  protected MontiArcCoCoChecker maChecker;
+  protected CD4CodeCoCoChecker cdChecker;
   protected boolean isSymTabInitialized;
-  protected String fileExtension = "arc";
+  protected String maFileExtension = "arc";
+  protected String cdFileExtension = "cd";
 
   public MontiArcTool() {
-    this(MontiArcCoCos.createChecker());
+    this(MontiArcCoCos.createChecker(), new CD4CodeCoCos().createNewChecker());
   }
 
-  public MontiArcTool(@NotNull MontiArcCoCoChecker checker) {
-    Preconditions.checkArgument(checker != null);
-    this.checker = checker;
+  public MontiArcTool(@NotNull MontiArcCoCoChecker maChecker, @NotNull CD4CodeCoCoChecker cdChecker) {
+    Preconditions.checkArgument(maChecker != null);
+    Preconditions.checkArgument(cdChecker != null);
+    this.maChecker = maChecker;
+    this.cdChecker = cdChecker;
     this.isSymTabInitialized = false;
   }
 
-  protected String getFileExtension() {
-    return fileExtension;
+  protected String getMAFileExtension() {
+    return this.maFileExtension;
   }
 
-  protected MontiArcCoCoChecker getChecker() {
-    return this.checker;
+  protected String getCDFileExtension() {
+    return this.cdFileExtension;
+  }
+
+  protected MontiArcCoCoChecker getMAChecker() {
+    return this.maChecker;
+  }
+
+  protected CD4CodeCoCoChecker getCdChecker() {
+    return this.cdChecker;
   }
 
   public MontiArcGlobalScope processModels(@NotNull Path... modelPaths) {
     Preconditions.checkArgument(modelPaths != null);
     Preconditions.checkArgument(!Arrays.asList(modelPaths).contains(null));
-    MontiArcGlobalScope scope = createGlobalScope(new ModelPath(Arrays.asList(modelPaths)));
-    this.processModels(scope);
-    return scope;
+    ModelPath mp = new ModelPath(Arrays.asList(modelPaths));
+    CD4CodeGlobalScope cd4CGlobalScope = CD4CodeMill.cD4CodeGlobalScopeBuilder().setModelPath(mp)
+      .setModelFileExtension(this.getCDFileExtension()).build();
+    MontiArcGlobalScope montiArcGlobalScope = MontiArcMill.montiArcGlobalScopeBuilder().setModelPath(mp)
+      .setModelFileExtension(this.getMAFileExtension()).build();
+    resolvingDelegates(montiArcGlobalScope, cd4CGlobalScope);
+    addBasicTypes(montiArcGlobalScope);
+    this.processModels(cd4CGlobalScope);
+    this.processModels(montiArcGlobalScope);
+    return montiArcGlobalScope;
   }
 
-  public MontiArcGlobalScope createGlobalScope(@NotNull ModelPath mp) {
-    CD4CodeGlobalScope cd4CGlobalScope = CD4CodeMill.cD4CodeGlobalScopeBuilder().setModelPath(mp).build();
-
+  protected void resolvingDelegates(@NotNull MontiArcGlobalScope montiArcGlobalScope, @NotNull CD4CodeGlobalScope cd4CGlobalScope) {
     Field2CDFieldResolvingDelegate fieldDelegate = new Field2CDFieldResolvingDelegate(cd4CGlobalScope);
     Type2CDTypeResolvingDelegate typeDelegate = new Type2CDTypeResolvingDelegate(cd4CGlobalScope);
-
-    MontiArcGlobalScope montiArcGlobalScope = new MontiArcGlobalScope(mp, fileExtension);
     montiArcGlobalScope.addAdaptedFieldSymbolResolvingDelegate(fieldDelegate);
     montiArcGlobalScope.addAdaptedOOTypeSymbolResolvingDelegate(typeDelegate);
-    addBasicTypes(montiArcGlobalScope);
-    return montiArcGlobalScope;
   }
 
   public void processModels(@NotNull MontiArcGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
-    this.createSymbolTable(scope).stream().map(as -> (ASTMACompilationUnit) as.getAstNode()).forEach(a -> a.accept(this.getChecker()));
+    this.createSymbolTable(scope).stream().map(as -> (ASTMACompilationUnit) as.getAstNode()).forEach(a -> a.accept(this.getMAChecker()));
+  }
+
+  public void processModels(@NotNull CD4CodeGlobalScope scope) {
+    Preconditions.checkArgument(scope != null);
+    this.createSymbolTable(scope).stream().flatMap(a -> a.getSubScopes().stream())
+      .map(as -> (ASTCDPackage) as.getAstNode()).forEach(a -> a.accept(this.getCdChecker()));
   }
 
   public Collection<MontiArcArtifactScope> createSymbolTable(@NotNull MontiArcGlobalScope scope) {
@@ -87,15 +113,26 @@ public class MontiArcTool {
     return this.parseModels(scope).stream().map(symTab::createFromAST).collect(Collectors.toSet());
   }
 
-  public Collection<ASTMACompilationUnit> parseModels(@NotNull MontiArcGlobalScope scope) {
+  public Collection<CD4CodeArtifactScope> createSymbolTable(@NotNull CD4CodeGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
-    return scope.getModelPath().getFullPathOfEntries().stream().flatMap(p -> parse(p).stream()).collect(Collectors.toSet());
+    CD4CodeSymbolTableCreatorDelegator symTab = CD4CodeMill.cD4CodeSymbolTableCreatorDelegatorBuilder().setGlobalScope(scope).build();
+    return this.parseModels(scope).stream().map(symTab::createFromAST).collect(Collectors.toSet());
   }
 
-  public Collection<ASTMACompilationUnit> parse(@NotNull Path path) {
+  public Collection<ASTMACompilationUnit> parseModels(@NotNull MontiArcGlobalScope scope) {
+    Preconditions.checkArgument(scope != null);
+    return scope.getModelPath().getFullPathOfEntries().stream().flatMap(p -> parseMA(p).stream()).collect(Collectors.toSet());
+  }
+
+  public Collection<ASTCDCompilationUnit> parseModels(@NotNull CD4CodeGlobalScope scope) {
+    Preconditions.checkArgument(scope != null);
+    return scope.getModelPath().getFullPathOfEntries().stream().flatMap(p -> parseCD(p).stream()).collect(Collectors.toSet());
+  }
+
+  public Collection<ASTMACompilationUnit> parseMA(@NotNull Path path) {
     Preconditions.checkArgument(path != null);
     try {
-      return Files.walk(path).filter(Files::isRegularFile).filter(f -> f.getFileName().toString().endsWith(this.getFileExtension())).map(f -> parse(f.toString()))
+      return Files.walk(path).filter(Files::isRegularFile).filter(f -> f.getFileName().toString().endsWith(this.getMAFileExtension())).map(f -> parseMA(f.toString()))
         .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
     } catch (IOException e) {
       Log.error("Could not access " + path.toString() + ", there were I/O exceptions.");
@@ -103,7 +140,18 @@ public class MontiArcTool {
     return new HashSet<>();
   }
 
-  public Optional<ASTMACompilationUnit> parse(@NotNull String filename) {
+  public Collection<ASTCDCompilationUnit> parseCD(@NotNull Path path) {
+    Preconditions.checkArgument(path != null);
+    try {
+      return Files.walk(path).filter(Files::isRegularFile).filter(f -> f.getFileName().toString().endsWith(this.getCDFileExtension())).map(f -> parseCD(f.toString()))
+        .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
+    } catch (IOException e) {
+      Log.error("Could not access " + path.toString() + ", there were I/O exceptions.");
+    }
+    return new HashSet<>();
+  }
+
+  public Optional<ASTMACompilationUnit> parseMA(@NotNull String filename) {
     Preconditions.checkArgument(filename != null);
     MontiArcParser p = new MontiArcParser();
     Optional<ASTMACompilationUnit> compUnit;
@@ -116,12 +164,25 @@ public class MontiArcTool {
     return Optional.empty();
   }
 
+  public Optional<ASTCDCompilationUnit> parseCD(@NotNull String filename) {
+    Preconditions.checkArgument(filename != null);
+    CD4CodeParser p = new CD4CodeParser();
+    Optional<ASTCDCompilationUnit> cd;
+    try {
+      cd = p.parse(filename);
+      return cd;
+    } catch (IOException e) {
+      Log.error("Could not access " + filename + ", there were I/O exceptions.");
+    }
+    return Optional.empty();
+  }
+
   @Deprecated
   public boolean checkCoCos(@NotNull ASTArcBasisNode node) {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.isSymTabInitialized, "Please initialize symbol-table before "
       + "checking cocos.");
-    this.getChecker().checkAll(node);
+    this.getMAChecker().checkAll(node);
     if (Log.getErrorCount() != 0) {
       Log.debug("Found " + Log.getErrorCount() + " errors in node " + node + ".", "XX");
       return false;
@@ -203,12 +264,15 @@ public class MontiArcTool {
       p.add(Paths.get(mP.getAbsolutePath()));
     }
     final ModelPath mp = new ModelPath(p);
-    MontiArcGlobalScope montiArcGlobalScope = this.createGlobalScope(mp);
+    MontiArcGlobalScope montiArcGlobalScope = MontiArcMill.montiArcGlobalScopeBuilder().setModelPath(mp).setModelFileExtension(this.getMAFileExtension()).build();
+    CD4CodeGlobalScope cd4CodeGlobalScope = CD4CodeMill.cD4CodeGlobalScopeBuilder().setModelPath(mp).setModelFileExtension(this.getCDFileExtension()).build();
+    this.resolvingDelegates(montiArcGlobalScope, cd4CodeGlobalScope);
+    this.addBasicTypes(montiArcGlobalScope);
     isSymTabInitialized = true;
     return montiArcGlobalScope;
   }
 
-  public IMontiArcScope addBasicTypes(@NotNull IMontiArcScope scope) {
+  public void addBasicTypes(@NotNull IMontiArcScope scope) {
     scope.add(new OOTypeSymbol("String"));
     scope.add(new OOTypeSymbol("Integer"));
     scope.add(new OOTypeSymbol("Map"));
@@ -229,7 +293,6 @@ public class MontiArcTool {
     scope.add(new OOTypeSymbol("short"));
     scope.add(new OOTypeSymbol("byte"));
 
-    return scope;
   }
 
   /**
