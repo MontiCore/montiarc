@@ -5,8 +5,8 @@ import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ArcBasisScope;
 import arcbasis._symboltable.ArcBasisSymbolTableCreator;
+import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.util.ArcError;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.se_rwth.commons.logging.Log;
@@ -30,11 +30,11 @@ public class ParameterTypeExistsTest extends AbstractTest {
           .build()))
         .build())
       .build();
-    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
+    IArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);
     ParameterTypeExists coco = new ParameterTypeExists();
-    coco.check(ast.getHead().getArcParameters(0));
+    coco.check(ast.getHead().getArcParameter(0));
     this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
       new ArcError[] { ArcError.MISSING_TYPE_OF_PARAMETER });
   }

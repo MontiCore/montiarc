@@ -9,21 +9,21 @@ import com.google.common.collect.Sets;
 import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cd4code._cocos.CD4CodeCoCoChecker;
 import de.monticore.cd4code._parser.CD4CodeParser;
-import de.monticore.cd4code._symboltable.CD4CodeArtifactScope;
-import de.monticore.cd4code._symboltable.CD4CodeGlobalScope;
 import de.monticore.cd4code._symboltable.CD4CodeSymbolTableCreatorDelegator;
+import de.monticore.cd4code._symboltable.ICD4CodeArtifactScope;
+import de.monticore.cd4code._symboltable.ICD4CodeGlobalScope;
 import de.monticore.cd4code.cocos.CD4CodeCoCos;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.cdbasis._ast.ASTCDPackage;
 import de.monticore.io.paths.ModelPath;
-import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
+import de.monticore.types.check.DefsTypeBasic;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._parser.MontiArcParser;
+import montiarc._symboltable.IMontiArcArtifactScope;
+import montiarc._symboltable.IMontiArcGlobalScope;
 import montiarc._symboltable.IMontiArcScope;
-import montiarc._symboltable.MontiArcArtifactScope;
-import montiarc._symboltable.MontiArcGlobalScope;
 import montiarc._symboltable.MontiArcSymbolTableCreatorDelegator;
 import montiarc._symboltable.adapters.Field2CDFieldResolvingDelegate;
 import montiarc._symboltable.adapters.Type2CDTypeResolvingDelegate;
@@ -74,13 +74,13 @@ public class MontiArcTool {
     return this.cdChecker;
   }
 
-  public MontiArcGlobalScope processModels(@NotNull Path... modelPaths) {
+  public IMontiArcGlobalScope processModels(@NotNull Path... modelPaths) {
     Preconditions.checkArgument(modelPaths != null);
     Preconditions.checkArgument(!Arrays.asList(modelPaths).contains(null));
     ModelPath mp = new ModelPath(Arrays.asList(modelPaths));
-    CD4CodeGlobalScope cd4CGlobalScope = CD4CodeMill.cD4CodeGlobalScopeBuilder().setModelPath(mp)
+    ICD4CodeGlobalScope cd4CGlobalScope = CD4CodeMill.cD4CodeGlobalScopeBuilder().setModelPath(mp)
       .setModelFileExtension(this.getCDFileExtension()).build();
-    MontiArcGlobalScope montiArcGlobalScope = MontiArcMill.montiArcGlobalScopeBuilder().setModelPath(mp)
+    IMontiArcGlobalScope montiArcGlobalScope = MontiArcMill.montiArcGlobalScopeBuilder().setModelPath(mp)
       .setModelFileExtension(this.getMAFileExtension()).build();
     resolvingDelegates(montiArcGlobalScope, cd4CGlobalScope);
     addBasicTypes(montiArcGlobalScope);
@@ -89,42 +89,42 @@ public class MontiArcTool {
     return montiArcGlobalScope;
   }
 
-  protected void resolvingDelegates(@NotNull MontiArcGlobalScope montiArcGlobalScope, @NotNull CD4CodeGlobalScope cd4CGlobalScope) {
+  protected void resolvingDelegates(@NotNull IMontiArcGlobalScope montiArcGlobalScope, @NotNull ICD4CodeGlobalScope cd4CGlobalScope) {
     Field2CDFieldResolvingDelegate fieldDelegate = new Field2CDFieldResolvingDelegate(cd4CGlobalScope);
     Type2CDTypeResolvingDelegate typeDelegate = new Type2CDTypeResolvingDelegate(cd4CGlobalScope);
     montiArcGlobalScope.addAdaptedFieldSymbolResolvingDelegate(fieldDelegate);
     montiArcGlobalScope.addAdaptedOOTypeSymbolResolvingDelegate(typeDelegate);
   }
 
-  public void processModels(@NotNull MontiArcGlobalScope scope) {
+  public void processModels(@NotNull IMontiArcGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
     this.createSymbolTable(scope).stream().map(as -> (ASTMACompilationUnit) as.getAstNode()).forEach(a -> a.accept(this.getMAChecker()));
   }
 
-  public void processModels(@NotNull CD4CodeGlobalScope scope) {
+  public void processModels(@NotNull ICD4CodeGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
     this.createSymbolTable(scope).stream().flatMap(a -> a.getSubScopes().stream())
-      .map(as -> (ASTCDPackage) as.getAstNode()).forEach(a -> a.accept(this.getCdChecker()));
+      .map(as -> (ASTCDPackage) as.getSpanningSymbol().getAstNode()).forEach(a -> a.accept(this.getCdChecker()));
   }
 
-  public Collection<MontiArcArtifactScope> createSymbolTable(@NotNull MontiArcGlobalScope scope) {
+  public Collection<IMontiArcArtifactScope> createSymbolTable(@NotNull IMontiArcGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
     MontiArcSymbolTableCreatorDelegator symTab = MontiArcMill.montiArcSymbolTableCreatorDelegatorBuilder().setGlobalScope(scope).build();
     return this.parseModels(scope).stream().map(symTab::createFromAST).collect(Collectors.toSet());
   }
 
-  public Collection<CD4CodeArtifactScope> createSymbolTable(@NotNull CD4CodeGlobalScope scope) {
+  public Collection<ICD4CodeArtifactScope> createSymbolTable(@NotNull ICD4CodeGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
     CD4CodeSymbolTableCreatorDelegator symTab = CD4CodeMill.cD4CodeSymbolTableCreatorDelegatorBuilder().setGlobalScope(scope).build();
     return this.parseModels(scope).stream().map(symTab::createFromAST).collect(Collectors.toSet());
   }
 
-  public Collection<ASTMACompilationUnit> parseModels(@NotNull MontiArcGlobalScope scope) {
+  public Collection<ASTMACompilationUnit> parseModels(@NotNull IMontiArcGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
     return scope.getModelPath().getFullPathOfEntries().stream().flatMap(p -> parseMA(p).stream()).collect(Collectors.toSet());
   }
 
-  public Collection<ASTCDCompilationUnit> parseModels(@NotNull CD4CodeGlobalScope scope) {
+  public Collection<ASTCDCompilationUnit> parseModels(@NotNull ICD4CodeGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
     return scope.getModelPath().getFullPathOfEntries().stream().flatMap(p -> parseCD(p).stream()).collect(Collectors.toSet());
   }
@@ -264,8 +264,8 @@ public class MontiArcTool {
       p.add(Paths.get(mP.getAbsolutePath()));
     }
     final ModelPath mp = new ModelPath(p);
-    MontiArcGlobalScope montiArcGlobalScope = MontiArcMill.montiArcGlobalScopeBuilder().setModelPath(mp).setModelFileExtension(this.getMAFileExtension()).build();
-    CD4CodeGlobalScope cd4CodeGlobalScope = CD4CodeMill.cD4CodeGlobalScopeBuilder().setModelPath(mp).setModelFileExtension(this.getCDFileExtension()).build();
+    IMontiArcGlobalScope montiArcGlobalScope = MontiArcMill.montiArcGlobalScopeBuilder().setModelPath(mp).setModelFileExtension(this.getMAFileExtension()).build();
+    ICD4CodeGlobalScope cd4CodeGlobalScope = CD4CodeMill.cD4CodeGlobalScopeBuilder().setModelPath(mp).setModelFileExtension(this.getCDFileExtension()).build();
     this.resolvingDelegates(montiArcGlobalScope, cd4CodeGlobalScope);
     this.addBasicTypes(montiArcGlobalScope);
     isSymTabInitialized = true;
@@ -273,26 +273,17 @@ public class MontiArcTool {
   }
 
   public void addBasicTypes(@NotNull IMontiArcScope scope) {
-    scope.add(new OOTypeSymbol("String"));
-    scope.add(new OOTypeSymbol("Integer"));
-    scope.add(new OOTypeSymbol("Map"));
-    scope.add(new OOTypeSymbol("Set"));
-    scope.add(new OOTypeSymbol("List"));
-    scope.add(new OOTypeSymbol("Boolean"));
-    scope.add(new OOTypeSymbol("Character"));
-    scope.add(new OOTypeSymbol("Double"));
-    scope.add(new OOTypeSymbol("Float"));
-
-    //primitives
-    scope.add(new OOTypeSymbol("int"));
-    scope.add(new OOTypeSymbol("boolean"));
-    scope.add(new OOTypeSymbol("float"));
-    scope.add(new OOTypeSymbol("double"));
-    scope.add(new OOTypeSymbol("char"));
-    scope.add(new OOTypeSymbol("long"));
-    scope.add(new OOTypeSymbol("short"));
-    scope.add(new OOTypeSymbol("byte"));
-
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._boolean);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._char);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._short);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._String);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._int);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._long);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._float);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._double);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._null);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._Object);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._array);
   }
 
   /**

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable.adapters;
 
-import de.monticore.cd4code._symboltable.CD4CodeGlobalScope;
+import de.monticore.cd4code._symboltable.ICD4CodeGlobalScope;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOTypeSymbolResolvingDelegate;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
@@ -15,9 +15,9 @@ import java.util.function.Predicate;
 
 public class Type2CDTypeResolvingDelegate implements IOOTypeSymbolResolvingDelegate {
 
-  protected CD4CodeGlobalScope globalScope;
+  protected ICD4CodeGlobalScope globalScope;
 
-  public Type2CDTypeResolvingDelegate(@NotNull CD4CodeGlobalScope globalScope) {
+  public Type2CDTypeResolvingDelegate(@NotNull ICD4CodeGlobalScope globalScope) {
     this.globalScope = globalScope;
   }
 

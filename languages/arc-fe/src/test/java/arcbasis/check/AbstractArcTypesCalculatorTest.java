@@ -106,7 +106,8 @@ public abstract class AbstractArcTypesCalculatorTest extends AbstractTest {
     Assertions.assertEquals(isPrimitive, this.getTypesCalculator().getResult().get().isTypeConstant());
     Assertions.assertEquals(isGeneric, this.getTypesCalculator().getResult().get().isGenericType());
     Assertions.assertFalse(this.getTypesCalculator().getResult().get().isTypeVariable());
-    Assertions.assertFalse(this.getTypesCalculator().getResult().get().getTypeInfo() instanceof OOTypeSymbolSurrogate);
+    Assertions.assertTrue(!(this.getTypesCalculator().getResult().get().getTypeInfo() instanceof OOTypeSymbolSurrogate) ||
+      !(((OOTypeSymbolSurrogate) this.getTypesCalculator().getResult().get().getTypeInfo()).lazyLoadDelegate() instanceof  OOTypeSymbolSurrogate));
     Assertions.assertEquals(expectedType, this.getTypesCalculator().getResult().get().print());
   }
 

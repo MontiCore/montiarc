@@ -54,14 +54,14 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
               parameters.get(i).getName(), i + 1, component.getFullName(),
               paramType.getTypeInfo().getFullName(),
               superParameterType.getTypeInfo().getFullName()),
-            node.getHead().getArcParametersList().get(i).get_SourcePositionStart());
+            node.getHead().getArcParameterList().get(i).get_SourcePositionStart());
         }
         if (this.hasParameterDefaultValue(parent, i)) {
           if (!this.hasParameterDefaultValue(component, i)) {
             Log.error(
               String.format(ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH.toString(),
                 parameters.get(i).getName(), i + 1, component.getFullName()),
-              node.getHead().getArcParametersList().get(i).get_SourcePositionStart());
+              node.getHead().getArcParameterList().get(i).get_SourcePositionStart());
           }
         }
       }
@@ -71,7 +71,7 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
   private boolean hasParameterDefaultValue(ComponentTypeSymbol symbol, int position) {
     if (symbol.isPresentAstNode()) {
       final ASTComponentType astNode = symbol.getAstNode();
-      return astNode.getHead().getArcParametersList().get(position).isPresentDefault();
+      return astNode.getHead().getArcParameterList().get(position).isPresentDefault();
     }
     return false;
   }

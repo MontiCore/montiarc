@@ -33,7 +33,7 @@ public class ASTComponentTypeBuilder extends ASTComponentTypeBuilderTOP {
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkNotNull(instance);
     Preconditions.checkArgument(!instance.contains("."));
-    this.setComponentInstances(index, this.doCreateInstance(instance));
+    this.setComponentInstance(index, this.doCreateInstance(instance));
     return this.realBuilder;
   }
 
@@ -63,7 +63,7 @@ public class ASTComponentTypeBuilder extends ASTComponentTypeBuilderTOP {
   public ASTComponentTypeBuilder addInstance(String instance) {
     Preconditions.checkNotNull(instance);
     Preconditions.checkArgument(!instance.contains("."));
-    this.addComponentInstances(this.doCreateInstance(instance));
+    this.addComponentInstance(this.doCreateInstance(instance));
     return this.realBuilder;
   }
 
@@ -96,7 +96,7 @@ public class ASTComponentTypeBuilder extends ASTComponentTypeBuilderTOP {
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkNotNull(instance);
     Preconditions.checkArgument(!instance.contains("."));
-    this.addComponentInstances(index, this.doCreateInstance(instance));
+    this.addComponentInstance(index, this.doCreateInstance(instance));
     return this.realBuilder;
   }
 

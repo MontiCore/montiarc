@@ -5,8 +5,8 @@ import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ArcBasisScope;
 import arcbasis._symboltable.ArcBasisSymbolTableCreator;
+import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.util.ArcError;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.se_rwth.commons.logging.Log;
@@ -24,7 +24,7 @@ public class InheritedComponentTypeExistsTest extends AbstractTest {
     ASTComponentType ast = arcbasis.ArcBasisMill.componentTypeBuilder().setName("B")
       .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setParent(parent).build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
+    IArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);
     InheritedComponentTypeExists coco = new InheritedComponentTypeExists();

@@ -352,7 +352,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
   protected void initialize_ComponentInstance(@NotNull ComponentInstanceSymbol symbol,
     @NotNull ASTComponentInstance ast) {
     if (ast.isPresentArguments()) {
-      symbol.addArguments(ast.getArguments().getExpressionsList());
+      symbol.addArguments(ast.getArguments().getExpressionList());
     }
   }
 

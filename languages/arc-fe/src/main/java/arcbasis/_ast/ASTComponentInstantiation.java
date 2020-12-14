@@ -20,10 +20,10 @@ public class ASTComponentInstantiation extends ASTComponentInstantiationTOP {
    *
    * @param index index of the instance whose name to return
    * @return the name of the instance at the specified position
-   * @see this#getComponentInstances(int)
+   * @see this#getComponentInstance(int)
    */
   public String getInstanceName(int index) {
-    return this.getComponentInstances(index).getName();
+    return this.getComponentInstance(index).getName();
   }
 
   /**
@@ -31,10 +31,10 @@ public class ASTComponentInstantiation extends ASTComponentInstantiationTOP {
    * empty if this component instantiation contains no instance declarations.
    *
    * @return a list of names of all instances declared in this component definition.
-   * @see this#getComponentInstancesList()
+   * @see this#getComponentInstanceList()
    */
   public List<String> getInstancesNames() {
-    return this.getComponentInstancesList().stream()
+    return this.getComponentInstanceList().stream()
       .map(ASTComponentInstance::getName)
       .collect(Collectors.toList());
   }

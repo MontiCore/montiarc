@@ -4,8 +4,8 @@ package arcbasis._cocos;
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTPortDeclaration;
-import arcbasis._symboltable.ArcBasisScope;
 import arcbasis._symboltable.ArcBasisSymbolTableCreator;
+import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.util.ArcError;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.se_rwth.commons.logging.Log;
@@ -21,11 +21,11 @@ public class PortTypeExistsTest extends AbstractTest {
     ASTMCQualifiedType type = createQualifiedType("Integer");
     ASTPortDeclaration ast = arcbasis.ArcBasisMill.portDeclarationBuilder().setIncoming(true)
       .setMCType(type).setPortList("p1", "p2", "p3").build();
-    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
+    IArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);
     PortTypeExists coco = new PortTypeExists();
-    coco.check(ast.getPorts(0));
+    coco.check(ast.getPort(0));
     this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
       new ArcError[] { ArcError.MISSING_TYPE_OF_PORT });
   }

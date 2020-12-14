@@ -4,6 +4,7 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -23,9 +24,12 @@ public class ParameterTypeExists implements ArcBasisASTArcParameterCoCo {
       node.getName());
     VariableSymbol symbol = node.getSymbol();
     try {
-      symbol.getType().getTypeInfo();
-    }
-    catch (NoSuchElementException e) {
+      if (symbol.getType().getTypeInfo() instanceof TypeSymbolSurrogate &&
+        ((TypeSymbolSurrogate) symbol.getType().getTypeInfo()).lazyLoadDelegate() instanceof TypeSymbolSurrogate) {
+        Log.error(String.format(ArcError.MISSING_TYPE_OF_PARAMETER.toString(), symbol.getName()),
+          node.get_SourcePositionStart());
+      }
+    } catch (NoSuchElementException e) {
       Log.error(String.format(ArcError.MISSING_TYPE_OF_PARAMETER.toString(), symbol.getName()),
         node.get_SourcePositionStart());
     }

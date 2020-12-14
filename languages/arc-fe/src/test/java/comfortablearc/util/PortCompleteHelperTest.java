@@ -43,10 +43,10 @@ public class PortCompleteHelperTest extends AbstractTest {
   public static void setUpCompTypes() {
     ASTComponentType a = createCompType("A");
     ASTComponentType b = createCompType("B");
-    b.getBody().addArcElements(createPC());
+    b.getBody().addArcElement(createPC());
     ASTComponentType c = createCompType("C");
-    c.getBody().addArcElements(createPC());
-    c.getBody().addArcElements(createPC());
+    c.getBody().addArcElement(createPC());
+    c.getBody().addArcElement(createPC());
     putCompTypes(a, b, c);
   }
 

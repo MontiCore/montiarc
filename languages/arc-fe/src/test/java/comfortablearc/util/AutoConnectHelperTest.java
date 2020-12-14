@@ -44,24 +44,24 @@ public class AutoConnectHelperTest extends AbstractTest {
   public static void setUpCompTypes() {
     ASTComponentType a = createCompType("A");
     ASTComponentType b = createCompType("B");
-    b.getBody().addArcElements(createACOff());
+    b.getBody().addArcElement(createACOff());
     ASTComponentType c = createCompType("C");
-    c.getBody().addArcElements(createACPort());
+    c.getBody().addArcElement(createACPort());
     ASTComponentType d = createCompType("D");
-    d.getBody().addArcElements(createACType());
+    d.getBody().addArcElement(createACType());
     ASTComponentType e = createCompType("E");
-    e.getBody().addArcElements(createACOff());
-    e.getBody().addArcElements(createACOff());
+    e.getBody().addArcElement(createACOff());
+    e.getBody().addArcElement(createACOff());
     ASTComponentType f = createCompType("F");
-    f.getBody().addArcElements(createACPort());
-    f.getBody().addArcElements(createACPort());
+    f.getBody().addArcElement(createACPort());
+    f.getBody().addArcElement(createACPort());
     ASTComponentType g = createCompType("G");
-    g.getBody().addArcElements(createACType());
-    g.getBody().addArcElements(createACType());
+    g.getBody().addArcElement(createACType());
+    g.getBody().addArcElement(createACType());
     ASTComponentType h = createCompType("H");
-    h.getBody().addArcElements(createACOff());
-    h.getBody().addArcElements(createACPort());
-    h.getBody().addArcElements(createACType());
+    h.getBody().addArcElement(createACOff());
+    h.getBody().addArcElement(createACPort());
+    h.getBody().addArcElement(createACType());
     putCompTypes(a, b, c, d, e, f, g, h);
   }
 

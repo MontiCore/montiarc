@@ -1,8 +1,8 @@
 package montiarc;
 
 import de.se_rwth.commons.logging.Log;
+import montiarc._symboltable.IMontiArcGlobalScope;
 import montiarc._symboltable.MontiArcArtifactScope;
-import montiarc._symboltable.MontiArcGlobalScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,7 +37,7 @@ public class MontiArcToolTest extends AbstractTest {
     Path modelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, modelPathName);
 
     //When
-    MontiArcGlobalScope scope = tool.processModels(modelPath);
+    IMontiArcGlobalScope scope = tool.processModels(modelPath);
 
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());

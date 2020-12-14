@@ -45,14 +45,14 @@ public class FullyConnectedHelperTest extends AbstractTest {
   @BeforeAll
   public static void setUpCompTypes() {
     ASTComponentType a = createCompType("A");
-    a.getBody().addArcElements(createCompInstantiation(false, "a1"));
+    a.getBody().addArcElement(createCompInstantiation(false, "a1"));
     ASTComponentType b = createCompType("B");
-    b.getBody().addArcElements(createCompInstantiation(false, "a1"));
-    b.getBody().addArcElements(createCompInstantiation(true, "a2"));
+    b.getBody().addArcElement(createCompInstantiation(false, "a1"));
+    b.getBody().addArcElement(createCompInstantiation(true, "a2"));
     ASTComponentType c = createCompType("C");
-    c.getBody().addArcElements(createCompInstantiation(true, "a1", "a2"));
-    c.getBody().addArcElements(createCompInstantiation(false, "a3", "a4"));
-    c.getBody().addArcElements(createCompInstantiation(true, "a5"));
+    c.getBody().addArcElement(createCompInstantiation(true, "a1", "a2"));
+    c.getBody().addArcElement(createCompInstantiation(false, "a3", "a4"));
+    c.getBody().addArcElement(createCompInstantiation(true, "a5"));
     putCompTypes(a, b, c);
   }
 

@@ -22,10 +22,10 @@
   <!-- == PROJECT PROPERTIES =============================================== -->
   <properties>
     <!-- DSLs -->
-    <cd4a.version>6.2.0</cd4a.version>
+    <cd4a.version>6.3.0</cd4a.version>
 
     <!-- SE-Libraries -->
-    <monticore.version>6.2.0.1</monticore.version>
+    <monticore.version>6.3.0</monticore.version>
     <mc.grammars.assembly.version>0.0.8</mc.grammars.assembly.version>
     <se-commons.version>1.7.11</se-commons.version>
 
