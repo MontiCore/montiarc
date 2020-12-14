@@ -22,7 +22,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>cd2pojo</module>
-    <module>ma2java</module>
+    <!--<module>cd2pojo</module>-->
+    <!--<module>ma2java</module>-->
   </modules>
 </project>

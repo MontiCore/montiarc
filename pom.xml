@@ -7,7 +7,7 @@
   <!-- == PROJECT COORDINATES ============================================= -->
   <groupId>montiarc</groupId>
   <artifactId>montiarc-core</artifactId>
-  <version>6.2.0-SNAPSHOT</version>
+  <version>6.2.0</version>
   <packaging>pom</packaging>
 
   <!-- == PROJECT MODULES ================================================= -->
@@ -15,7 +15,7 @@
     <module>languages</module>
     <module>generators</module>
     <module>libraries</module>
-    <!--<module>applications</module>-->
+    <module>applications</module>
     <module>util</module>
   </modules>
 

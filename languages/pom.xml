@@ -7,7 +7,7 @@
   <parent>
     <groupId>montiarc</groupId>
     <artifactId>montiarc-core</artifactId>
-    <version>6.2.0-SNAPSHOT</version>
+    <version>6.2.0</version>
   </parent>
 
   <groupId>montiarc.languages</groupId>
@@ -16,7 +16,7 @@
 
   <modules>
     <module>arc-fe</module>
-    <module>behavior-fe</module>
+    <!--<module>behavior-fe</module>-->
     <module>montiarc-fe</module>
   </modules>
 </project>

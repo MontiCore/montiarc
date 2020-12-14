@@ -16,8 +16,8 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>factory</module>
-    <module>factoryTask</module>
+    <!--<module>factory</module>-->
+    <!--<module>factoryTask</module>-->
     <!-- <module>bumperbot</module> -->
   </modules>
 </project>
