@@ -50,7 +50,6 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   public void endVisit(@NotNull ASTMACompilationUnit node) {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentScope().isPresent());
-    Preconditions.checkState(this.getCurrentScope().get() instanceof MontiArcArtifactScope);
     super.endVisit(node);
   }
 }
