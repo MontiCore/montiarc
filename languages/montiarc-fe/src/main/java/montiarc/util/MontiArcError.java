@@ -8,7 +8,9 @@ public enum MontiArcError implements montiarc.util.Error {
   COMPONENT_AND_FILE_NAME_DIFFER("0xMA1000", "The name of the component \" %s \" is not identical "
     + "to the name of the file \" %s \" (without its file-extension)."),
   COMPONENT_AND_FILE_PACKAGE_DIFFER("0xMA1001", "The package declaration \" %s \" of component "
-    + " \" %s \" is different from the package \" %s \" of the file.");
+    + " \" %s \" is different from the package \" %s \" of the file."),
+  TOOL_PARSE_IOEXCEPTION("0xMA1002", "Could not parse the file \" %s \"."),
+  TOOL_FILE_WALK_IOEXCEPTION("0xMA1003", "Could not access the directory \" %s \" or one of its subdirectories.");
 
   private final String errorCode;
   private final String errorMessage;
