@@ -366,7 +366,6 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     Preconditions.checkState(this.getCurrentScope().isPresent());
     Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
     ComponentInstanceSymbol symbol = create_ComponentInstance(node);
-    this.initialize_ComponentInstance(symbol, node);
     this.addToScopeAndLinkWithNode(symbol, node);
   }
 }

@@ -4,16 +4,18 @@ package arcbasis._symboltable;
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
+import de.monticore.expressions.expressionsbasis._ast.ASTArguments;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
-import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Holds tests for the handwritten methods of {@link ArcBasisSymbolTableCreator}.
@@ -229,7 +231,7 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
     IArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     this.getSymTab().setCurrentCompInstanceType(Mockito.mock(ASTMCObjectType.class));
     this.getSymTab().putOnStack(scope);
-    this.getSymTab().visit(ast);
+    this.getSymTab().handle(ast);
     Assertions.assertEquals(scope, ast.getEnclosingScope());
     Assertions.assertFalse(scope.getLocalComponentInstanceSymbols().isEmpty());
     Assertions.assertEquals(1, scope.getLocalComponentInstanceSymbols().size());
@@ -240,7 +242,7 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
   @Test
   public void shouldVisitFieldDeclaration() {
     ASTMCType type = Mockito.mock(ASTMCType.class);
-    String[] names = new String[] { "var1", "var2", "var3" };
+    String[] names = new String[]{"var1", "var2", "var3"};
     ASTArcFieldDeclaration ast = arcbasis.ArcBasisMill.arcFieldDeclarationBuilder()
       .setMCType(type).setArcFieldList(names, this.mockValues(names.length)).build();
     IArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
@@ -255,7 +257,7 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
 
   @Test
   public void shouldEndVisitFieldDeclaration() {
-    String[] names = new String[] { "var1", "var2", "var3" };
+    String[] names = new String[]{"var1", "var2", "var3"};
     ASTArcFieldDeclaration ast = arcbasis.ArcBasisMill.arcFieldDeclarationBuilder()
       .setArcFieldList(names, this.mockValues(names.length))
       .setMCType(Mockito.mock(ASTMCType.class))
@@ -287,6 +289,21 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
     Assertions.assertEquals(scope, ast.getEnclosingScope());
     Assertions.assertFalse(scope.getVariableSymbols().isEmpty());
     Assertions.assertEquals(1, scope.getLocalVariableSymbols().size());
+  }
+
+  @Test
+  public void shouldAddArgumentsOnlyOnce() {
+    ASTArguments args = ArcBasisMill.argumentsBuilder()
+      .setExpressionsList(Collections.singletonList(Mockito.mock(ASTExpression.class))).build();
+    ASTComponentInstance instance = ArcBasisMill.componentInstanceBuilder().setName("comp").setArguments(args).build();
+    ASTComponentInstantiation instances = ArcBasisMill.componentInstantiationBuilder()
+      .setMCType(Mockito.mock(ASTMCType.class)).setComponentInstancesList(Collections.singletonList(instance)).build();
+    IArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
+    this.getSymTab().putOnStack(scope);
+    this.getSymTab().handle(instances);
+    Assertions.assertEquals(1, instances.getComponentInstanceList().size());
+    Assertions.assertFalse(scope.getComponentInstanceSymbols().get("comp").isEmpty());
+    Assertions.assertEquals(1, scope.getComponentInstanceSymbols().get("comp").get(0).getArguments().size());
   }
 
   protected ASTExpression[] mockValues(int length) {
