@@ -1,6 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import com.google.common.base.Preconditions;
+import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
+import genericarc._symboltable.ArcTypeParameterSymbol;
+import genericarc._symboltable.IGenericArcScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -26,9 +31,21 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
   }
 
   public ComponentTypeSymbol lazyLoadDelegate() {
-    if(!isPresentDelegate()) {
-      this.setDelegate(this.getEnclosingScope().resolveComponentType(name).orElse(null));
+    if (!isPresentDelegate()) {
+      this.setDelegate(this.getEnclosingScope().resolveComponentType(this.getName()).orElse(this.getEnclosingScope() instanceof IGenericArcScope ?
+        tryGeneric().orElse(null) : null));
     }
     return delegate.orElse(this);
+  }
+
+  protected Optional<ComponentTypeSymbol> tryGeneric() {
+    Preconditions.checkState(this.getEnclosingScope() instanceof IGenericArcScope);
+    Optional<ArcTypeParameterSymbol> resolvedTypeSymbol =
+      ((IGenericArcScope) this.getEnclosingScope()).resolveArcTypeParameter(this.getName());
+    if (resolvedTypeSymbol.isPresent()) {
+      ComponentTypeSymbol resolvedSymbol = this.getEnclosingScope().resolveComponentType(resolvedTypeSymbol.get().getAstNode().getUpperBound(0).printType(new MCBasicTypesPrettyPrinter(new IndentPrinter()))).orElse(null);
+      return Optional.ofNullable(resolvedSymbol);
+    }
+    return Optional.empty();
   }
 }
