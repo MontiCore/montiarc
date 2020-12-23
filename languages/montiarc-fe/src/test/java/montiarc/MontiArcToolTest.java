@@ -4,12 +4,14 @@ import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cd4code._symboltable.ICD4CodeGlobalScope;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.io.paths.ModelPath;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcGlobalScope;
 import montiarc._symboltable.MontiArcArtifactScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -17,6 +19,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -167,6 +170,19 @@ public class MontiArcToolTest extends AbstractTest {
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());
     Assertions.assertEquals(expNumModels, models.size());
+  }
+
+  @Test
+  public void shouldResolveUniqueCDTypeSymbol() {
+    //Given
+    Path path = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, "valid", "example3");
+    IMontiArcGlobalScope scope = this.getMATool().processModels(path);
+
+    //When
+    List<TypeSymbol> types = scope.resolveTypeMany("Color");
+
+    //Then
+    Assertions.assertEquals(1, types.size());
   }
 
   /**

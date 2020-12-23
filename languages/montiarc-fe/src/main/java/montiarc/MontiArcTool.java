@@ -21,7 +21,6 @@ import montiarc._parser.MontiArcParser;
 import montiarc._symboltable.IMontiArcGlobalScope;
 import montiarc._symboltable.IMontiArcScope;
 import montiarc._symboltable.MontiArcSymbolTableCreatorDelegator;
-import montiarc._symboltable.adapters.ArcCD4CodeResolver;
 import montiarc.cocos.MontiArcCoCos;
 import montiarc.util.MontiArcError;
 import org.apache.commons.io.FilenameUtils;
@@ -301,7 +300,7 @@ public class MontiArcTool implements IMontiArcTool {
 
   protected void resolvingDelegates(@NotNull IMontiArcGlobalScope montiArcGlobalScope,
                                     @NotNull ICD4CodeGlobalScope cd4CGlobalScope) {
-    CD4CodeResolver cd4CodeResolver = new ArcCD4CodeResolver(cd4CGlobalScope);
+    CD4CodeResolver cd4CodeResolver = new CD4CodeResolver(cd4CGlobalScope);
     montiArcGlobalScope.addAdaptedFieldSymbolResolver(cd4CodeResolver);
     montiArcGlobalScope.addAdaptedTypeSymbolResolver(cd4CodeResolver);
   }
