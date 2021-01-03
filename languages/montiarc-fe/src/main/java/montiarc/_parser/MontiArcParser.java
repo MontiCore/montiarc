@@ -11,6 +11,10 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+<<<<<<< HEAD
+=======
+import java.util.ArrayList;
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 import java.util.Optional;
 import java.util.regex.Matcher;
 
@@ -46,7 +50,12 @@ public class MontiArcParser extends MontiArcParserTOP {
       String fileRoot = Files.getNameWithoutExtension(relativeFilePath);
       String modelName = optAst.get().getComponentType().getName();
       String packageOfFile = Names.getPackageFromPath(Names.getPathFromFilename(relativeFilePath));
+<<<<<<< HEAD
       String packageOfModel = Names.getQualifiedName(optAst.get().getPackage().getPartsList());
+=======
+      String packageOfModel = Names.getQualifiedName(optAst.get().isPresentPackage() ?
+        optAst.get().getPackage().getPartsList() : new ArrayList<>());
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
       if (!modelName.equals(fileRoot)) {
         Log.error(String
           .format(MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER.toString(), modelName, fileRoot));

@@ -32,7 +32,11 @@ import java.util.Optional;
 
 class MontiArcTransformerIT extends AbstractTest {
 
+<<<<<<< HEAD
   String MODEL_PATH = "src/test/itest/resources/montiarc/";
+=======
+  String MODEL_PATH = "src/test/it/resources/montiarc/";
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 
   protected static ArcBasisNodeTransformer arcBasisTrafo =
     Mockito.mock(ArcBasisNodeTransformer.class);

@@ -1,37 +1,103 @@
 package montiarc;
 
+<<<<<<< HEAD
 import arcbasis._symboltable.ComponentTypeSymbol;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._symboltable.IMontiArcScope;
 import montiarc.util.DirectoryUtil;
 import montiarc.util.Modelfinder;
+=======
+import de.monticore.cd4code.CD4CodeMill;
+import de.monticore.cd4code._symboltable.ICD4CodeGlobalScope;
+import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
+import de.monticore.io.paths.ModelPath;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
+import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMACompilationUnit;
+import montiarc._symboltable.IMontiArcGlobalScope;
+import montiarc._symboltable.MontiArcArtifactScope;
+import org.codehaus.commons.nullanalysis.NotNull;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+<<<<<<< HEAD
 
 import static org.assertj.core.api.Assertions.assertThat;
+=======
+import java.util.Optional;
+import java.util.stream.Stream;
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 
 /**
- * @author kirchhof
+ * Holds tests for methods of {@link MontiArcTool}.
  */
+<<<<<<< HEAD
 class MontiArcToolTest extends AbstractTest {
+=======
+public class MontiArcToolTest extends AbstractTest {
 
-  protected static final String PACKAGE = "montiarc/tool";
+  protected static final String TEST_PATH = Paths.get("montiarc", "tool").toString();
 
-  protected static final String TOOL_NAME = "MontiArcTool";
+  protected MontiArcTool maTool = new MontiArcTool();
 
-  private static final Path TARGETPATH = Paths.get("target/generated-test-sources/");
+  protected MontiArcTool getMATool() {
+    return this.maTool;
+  }
 
+  protected static Stream<Path> steamValidMAModelFiles() {
+    return Stream.of(Paths.get("valid", "example1", "Composed.arc"),
+      Paths.get("valid", "example1", "InComp.arc"),
+      Paths.get("valid", "example1", "OutComp.arc"));
+  }
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
+
+  protected static Stream<Arguments> validMAModelFileNameProvider() {
+    return steamValidMAModelFiles().map(Path::toString).map(Arguments::of);
+  }
+
+  protected static Stream<Path> streamValidCDModelFiles() {
+    return Stream.of(Paths.get("valid", "example3", "Colors.cd"));
+  }
+
+  protected static Stream<Arguments> validCDModelFileNameProvider() {
+    return streamValidCDModelFiles().map(Path::toString).map(Arguments::of);
+  }
+
+  protected static Stream<Arguments> validMAModelPathAndExpectedValuesProvider() {
+    return Stream.of(Arguments.of(Paths.get("valid", "example1").toString(), 3),
+      Arguments.of(Paths.get("valid", "example2").toString(), 3),
+      Arguments.of(Paths.get("valid", "example3").toString(), 3));
+  }
+
+  protected static Stream<Arguments> validCDModelPathAndExpectedValuesProvider() {
+    return Stream.of(Arguments.of(Paths.get("valid", "example1").toString(), 0),
+      Arguments.of(Paths.get("valid", "example2").toString(), 0),
+      Arguments.of(Paths.get("valid", "example3").toString(), 1));
+  }
+
+  protected static Stream<Arguments> invalidModelPathProvider() {
+    return Stream.of(Arguments.of(Paths.get("invalid", "example1").toString()));
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#parseMAModel(Path)}.
+   */
   @ParameterizedTest
-  @ValueSource(strings = { "validExample" })
-  public void shouldAcceptValidModels(String modelPathDirectory) {
+  @MethodSource("validMAModelFileNameProvider")
+  public void shouldParseMAModelFromFile(@NotNull String filename) {
+    //Given
+    Path file = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, filename);
 
+<<<<<<< HEAD
     // Make testcase fail if there are errors
     Log.init();
     Log.enableFailQuick(true);
@@ -40,9 +106,17 @@ class MontiArcToolTest extends AbstractTest {
     MontiArcTool tool = new MontiArcTool();
     File modelPath = Paths.get(RELATIVE_MODEL_PATH, PACKAGE, modelPathDirectory).toFile();
     File target = TARGETPATH.toFile();
+=======
+    //When
+    Optional<ASTMACompilationUnit> ast = this.getMATool().parseMAModel(file);
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 
-    // when
+    //Then
+    Assertions.assertTrue(ast.isPresent());
+    Assertions.assertTrue(Log.getFindings().isEmpty());
+  }
 
+<<<<<<< HEAD
     // 1. Find all .arc files
     List<String> foundModels = Modelfinder
         .getModelsInModelPath(modelPath, "arc");
@@ -51,64 +125,187 @@ class MontiArcToolTest extends AbstractTest {
     String basedir = DirectoryUtil.getBasedirFromModelAndTargetPath(modelPath.getAbsolutePath(),
         target.getAbsolutePath());
     IMontiArcScope symTab = tool.initSymbolTable(modelPath);
+=======
+  /**
+   * Method under test {@link MontiArcTool#parseCDModel(Path)}.
+   */
+  @ParameterizedTest
+  @MethodSource("validCDModelFileNameProvider")
+  public void shouldParseCDModelFromFile(@NotNull String filename) {
+    //Given
+    Path file = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, filename);
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 
-    List<ComponentTypeSymbol> foundComponents = new ArrayList<>();
+    //When
+    Optional<ASTCDCompilationUnit> ast = this.getMATool().parseCDModel(file);
 
-    for (String model : foundModels) {
-      String qualifiedModelName = Names.getQualifier(model) + "." + Names.getSimpleName(model);
-
-      // 3. parse + resolve model
-      Log.info("Parsing model:" + qualifiedModelName, TOOL_NAME);
-      ComponentTypeSymbol comp = symTab.resolveComponentType(qualifiedModelName).get();
-
-      // 4. check cocos
-      Log.info("Check model: " + qualifiedModelName, TOOL_NAME);
-      tool.checkCoCos(comp.getAstNode());
-
-      foundComponents.add(comp);
-    }
-
-    // then
-    assertThat(foundComponents).hasSize(3);
-    assertThat(foundComponents).doesNotContainNull();
-    assertThat(foundComponents).anySatisfy(e -> assertThat(e.getName()).isEqualTo("Composed"));
-    assertThat(foundComponents).anySatisfy(e -> assertThat(e.getName()).isEqualTo("InComp"));
-    assertThat(foundComponents).anySatisfy(e -> assertThat(e.getName()).isEqualTo("OutComp"));
-    ComponentTypeSymbol composed = foundComponents.stream()
-        .filter(c -> c.getName().equals("Composed")).findAny().get();
-    assertThat(composed.getSubComponents()).hasSize(2);
-    assertThat(composed.getSubComponents()).anySatisfy(e -> assertThat(e.getName()).isEqualTo("ic"));
-    assertThat(composed.getSubComponents()).anySatisfy(e -> assertThat(e.getName()).isEqualTo("oc"));
+    //Then
+    Assertions.assertTrue(ast.isPresent());
+    Assertions.assertTrue(Log.getFindings().isEmpty());
   }
 
+  /**
+   * Method under test {@link MontiArcTool#parseMAModel(String)}.
+   */
   @ParameterizedTest
-  @ValueSource(strings = {"typeExample"})
-  public void shouldAcceptModelWithTypes(String modelPathDirectory) {
-    MontiArcTool tool = new MontiArcTool();
-    File modelPath = Paths.get(RELATIVE_MODEL_PATH, PACKAGE, modelPathDirectory).toFile();
+  @MethodSource("validMAModelFileNameProvider")
+  public void shouldParseMAModelFromFileName(@NotNull String filename) {
+    //Given
+    String respFileName = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, filename).toString();
 
+    //When
+    Optional<ASTMACompilationUnit> ast = this.getMATool().parseMAModel(respFileName);
+
+    //Then
+    Assertions.assertTrue(ast.isPresent());
+    Assertions.assertTrue(Log.getFindings().isEmpty());
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#parseCDModel(String)}.
+   */
+  @ParameterizedTest
+  @MethodSource("validCDModelFileNameProvider")
+  public void shouldParseCDModelFromFileName(@NotNull String filename) {
+    //When
+    String respFileName = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, filename).toString();
+
+    //When
+    Optional<ASTCDCompilationUnit> ast = this.getMATool().parseCDModel(respFileName);
+
+    //Then
+    Assertions.assertTrue(ast.isPresent());
+    Assertions.assertTrue(Log.getFindings().isEmpty());
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#parseMAModels(Path)}.
+   */
+  @ParameterizedTest
+  @MethodSource("validMAModelPathAndExpectedValuesProvider")
+  public void shouldParseMAModelsFromDirectory(@NotNull String directoryName, int expNumModels) {
+    //Given
+    Path directory = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName);
+
+    //When
+    Collection<ASTMACompilationUnit> models = this.getMATool().parseMAModels(directory);
+
+<<<<<<< HEAD
     // 1. Find all .arc files
     List<String> foundModels = Modelfinder
       .getModelsInModelPath(modelPath, "arc");
     // 2. Initialize SymbolTable
     Log.info("Initializing symboltable", TOOL_NAME);
     IMontiArcScope symTab = tool.initSymbolTable(modelPath);
+=======
+    //Then
+    Assertions.assertTrue(Log.getFindings().isEmpty());
+    Assertions.assertEquals(expNumModels, models.size());
+  }
 
-    List<ComponentTypeSymbol> foundComponents = new ArrayList<>();
+  /**
+   * Method under test {@link MontiArcTool#parseCDModels(Path)} (Path)}.
+   */
+  @ParameterizedTest
+  @MethodSource("validCDModelPathAndExpectedValuesProvider")
+  public void shouldParseCDModelsFromDirectory(@NotNull String directoryName, int expNumModels) {
+    //Given
+    Path directory = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName);
 
-    for (String model : foundModels) {
-      String qualifiedModelName = Names.getQualifier(model) + "." + Names.getSimpleName(model);
+    //When
+    Collection<ASTCDCompilationUnit> models = this.getMATool().parseCDModels(directory);
 
-      // 3. parse + resolve model
-      Log.info("Parsing model:" + qualifiedModelName, TOOL_NAME);
-      ComponentTypeSymbol comp = symTab.resolveComponentType(qualifiedModelName).get();
+    //Then
+    Assertions.assertTrue(Log.getFindings().isEmpty());
+    Assertions.assertEquals(expNumModels, models.size());
+  }
 
-      // 4. check cocos
-      Log.info("Check model: " + qualifiedModelName, TOOL_NAME);
-      tool.checkCoCos(comp.getAstNode());
+  @Test
+  public void shouldResolveUniqueCDTypeSymbol() {
+    //Given
+    Path path = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, "valid", "example3");
+    IMontiArcGlobalScope scope = this.getMATool().processModels(path);
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 
-      foundComponents.add(comp);
-    }
-    assertThat(Log.getFindings().isEmpty());
+    //When
+    List<TypeSymbol> types = scope.resolveTypeMany("Color");
+
+    //Then
+    Assertions.assertEquals(1, types.size());
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#parseModels(IMontiArcGlobalScope)}.
+   */
+  @ParameterizedTest
+  @MethodSource("validMAModelPathAndExpectedValuesProvider")
+  public void shouldParseMAModelsFromScope(@NotNull String directoryName, int expNumModels) {
+    //Given
+    IMontiArcGlobalScope scope = MontiArcMill.montiArcGlobalScopeBuilder()
+      .setModelPath(new ModelPath(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName)))
+      .setModelFileExtension(this.getMATool().getMAFileExtension()).build();
+
+    //When
+    Collection<ASTMACompilationUnit> models = this.getMATool().parseModels(scope);
+
+    //Then
+    Assertions.assertTrue(Log.getFindings().isEmpty());
+    Assertions.assertEquals(expNumModels, models.size());
+  }
+
+
+  /**
+   * Method under test {@link MontiArcTool#parseModels(ICD4CodeGlobalScope)}.
+   */
+  @ParameterizedTest
+  @MethodSource("validCDModelPathAndExpectedValuesProvider")
+  public void shouldParseCDModelsFromScope(@NotNull String directoryName, int expNumModels) {
+    //Given
+    ICD4CodeGlobalScope scope = CD4CodeMill.cD4CodeGlobalScopeBuilder()
+      .setModelPath(new ModelPath(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName)))
+      .setModelFileExtension(this.getMATool().getCDFileExtension()).build();
+
+    //When
+    Collection<ASTCDCompilationUnit> models = this.getMATool().parseModels(scope);
+
+    //Then
+    Assertions.assertTrue(Log.getFindings().isEmpty());
+    Assertions.assertEquals(expNumModels, models.size());
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#processModels(Path...)}.
+   */
+  @ParameterizedTest
+  @MethodSource("validMAModelPathAndExpectedValuesProvider")
+  public void shouldProcessValidModels(@NotNull String modelPathName, int expNumModels) {
+    //Given
+    MontiArcTool tool = new MontiArcTool();
+    Path modelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, modelPathName);
+
+    //When
+    IMontiArcGlobalScope scope = tool.processModels(modelPath);
+
+    //Then
+    Assertions.assertTrue(Log.getFindings().isEmpty());
+    Assertions.assertEquals(expNumModels, scope.getSubScopes().size());
+    Assertions.assertTrue(scope.getSubScopes().stream().allMatch(s -> s instanceof MontiArcArtifactScope));
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#processModels(Path...)}.
+   */
+  @ParameterizedTest
+  @MethodSource("invalidModelPathProvider")
+  public void shouldLogError(@NotNull String modelPathName) {
+    //Given
+    MontiArcTool tool = new MontiArcTool();
+    Path modelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, modelPathName);
+
+    //When
+    tool.processModels(modelPath);
+
+    //Then
+    Assertions.assertFalse(Log.getFindings().isEmpty());
   }
 }

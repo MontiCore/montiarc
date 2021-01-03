@@ -5,11 +5,11 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
+import arcbasis.check.ArcTypeCheck;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheck;
 import de.se_rwth.commons.logging.Log;
 
 import java.util.ArrayList;
@@ -52,8 +52,13 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
           Optional<ComponentInstanceSymbol> componentInstanceSymbol = component
             .getSubComponent(connector.getSource().getComponent());
           if (componentInstanceSymbol.isPresent()) {
+<<<<<<< HEAD
             sourcePort = componentInstanceSymbol.get().getType()
               .getPort(connector.getSource().getPort(), true);
+=======
+              sourcePort = componentInstanceSymbol.get().getType()
+                .getPort(connector.getSource().getPort(), true);
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
           } else {
             sourcePort = Optional.empty();
           }
@@ -73,8 +78,13 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
             Optional<ComponentInstanceSymbol> componentInstanceSymbol = component
               .getSubComponent(target.getComponent());
             if (componentInstanceSymbol.isPresent()) {
+<<<<<<< HEAD
               targetPort = componentInstanceSymbol.get().getType()
                 .getPort(target.getPort(), true);
+=======
+                targetPort = componentInstanceSymbol.get().getType()
+                  .getPort(target.getPort(), true);
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
             } else {
               targetPort = Optional.empty();
             }
@@ -104,7 +114,7 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
         SymTypeExpression sourceType = source.getType();
         SymTypeExpression targetType = target.getType();
 
-        if (!TypeCheck.compatible(sourceType, targetType)) {
+        if (!ArcTypeCheck.compatible(sourceType, targetType)) {
           Log.error(
             String.format(ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH.toString(),
               source.getType().print(), target.getType().print(), component.getFullName()),

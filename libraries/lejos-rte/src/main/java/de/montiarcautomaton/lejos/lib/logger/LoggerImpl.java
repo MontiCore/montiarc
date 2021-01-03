@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.lejos.lib.logger;
+package montiarc.lejos.lib.logger;
 
-import de.montiarcautomaton.runtimes.timesync.implementation.IComputable;
+import montiarc.runtimes.timesync.implementation.IComputable;
 
 /**
  * Component behavior implementation for simple logging.

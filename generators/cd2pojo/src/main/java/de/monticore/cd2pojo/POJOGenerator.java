@@ -18,10 +18,10 @@ import java.util.Optional;
  * @author Robert Heim
  */
 public class POJOGenerator {
-  
+
   private static final String[] primitiveTypes = { "boolean", "byte", "char", "double", "float",
     "int", "long", "short", "String" };
-  
+
   private Path outputDir;
 
   private TypeHelper typeHelper;
@@ -49,11 +49,20 @@ public class POJOGenerator {
     Optional<String> targetPackage) {
     this.outputDir = outputDir;
 
+<<<<<<< HEAD
     CD4AnalysisGlobalScope st = new CD4AnalysisGlobalScope(new ModelPath(modelPath));
     //st = injectPrimitives(st);
     //cdSymbol = st.resolveC(modelName).orElse(null);
     _package = targetPackage.orElse("");//cdSymbol.getName().toLowerCase());
     
+=======
+    CD4AnalysisLanguage lang = new CD4AnalysisLanguage();
+    ICD4AnalysisScope st = new CD4AnalysisGlobalScope(new ModelPath(modelPath), lang);
+    st = injectPrimitives(st);
+    cdSymbol = st.resolveCDDefinition(modelName).orElse(null);
+    _package = targetPackage.orElse(cdSymbol.getName().toLowerCase());
+
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
     this.typeHelper = new TypeHelper(_package);
     this.generatorSetup = new GeneratorSetup();
     this.generatorSetup.setOutputDirectory(this.outputDir.toFile());
@@ -64,7 +73,7 @@ public class POJOGenerator {
     //cdSymbol.getTypes().forEach(t -> generate(t));
     Log.info("Done.", "Generator");
   }
-  
+
   protected ICD4AnalysisScope injectPrimitives(ICD4AnalysisScope scope) {
 /*    for (String primitive : primitiveTypes) {
       CDTypeSymbol primitiveCdType = new CDTypeSymbol(primitive);

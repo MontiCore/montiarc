@@ -40,7 +40,7 @@ task unpackLibrarymodels(type: Sync) {
 }
 
 task groovyTask(type: GroovyTask) {
-  baseClass = "de.montiarcautomaton.generator.codegen.MAAGeneratorScript"
+  baseClass = "montiarc.generator.codegen.MAAGeneratorScript"
   outputDir = file "$buildDir/generated-sources"
   modelPath(
     file("$projectDir/src/main/resources/models")
@@ -48,7 +48,7 @@ task groovyTask(type: GroovyTask) {
   handcodedPath(
     file("$projectDir/src/main/java")
   )
-  script = "de/montiarcautomaton/generator/maagenerator.groovy"
+  script = "montiarc/generator/maagenerator.groovy"
 }
 
 build.dependsOn unpackLibrarymodels, groovyTask

@@ -1,19 +1,19 @@
 /* (c) https://github.com/MontiCore/monticore */
 package bumperbot;
 
-import de.montiarcautomaton.lejos.lib.Datatypes.MotorPort;
-import de.montiarcautomaton.lejos.lib.Datatypes.SensorPort;
+import montiarc.lejos.lib.Datatypes.MotorPort;
+import montiarc.lejos.lib.Datatypes.SensorPort;
 
-import de.montiarcautomaton.lejos.lib.timer.Timer;
-import de.montiarcautomaton.lejos.lib.timer.Datatypes.TimerCmd;
-import de.montiarcautomaton.lejos.lib.timer.Datatypes.TimerSignal;
+import montiarc.lejos.lib.timer.Timer;
+import montiarc.lejos.lib.timer.Datatypes.TimerCmd;
+import montiarc.lejos.lib.timer.Datatypes.TimerSignal;
 
-import de.montiarcautomaton.lejos.lib.motor.Motor;
-import de.montiarcautomaton.lejos.lib.motor.Datatypes.MotorCmd;
+import montiarc.lejos.lib.motor.Motor;
+import montiarc.lejos.lib.motor.Datatypes.MotorCmd;
 
-import de.montiarcautomaton.lejos.lib.ultrasonic.Ultrasonic;
+import montiarc.lejos.lib.ultrasonic.Ultrasonic;
 
-import de.montiarcautomaton.lejos.lib.logger.Logger;
+import montiarc.lejos.lib.logger.Logger;
 
   component BumperBot {
   Ultrasonic sensor (SensorPort.S1); // use port S1

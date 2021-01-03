@@ -26,9 +26,9 @@ public class PortSymbol extends PortSymbolTOP {
   }
 
   /**
-   * @param name the name of this port.
+   * @param name      the name of this port.
    * @param direction the direction of this port.
-   * @param type the type of this port.
+   * @param type      the type of this port.
    */
   protected PortSymbol(String name, ASTPortDirection direction, SymTypeExpression type) {
     super(name);
@@ -82,12 +82,13 @@ public class PortSymbol extends PortSymbolTOP {
    * @throws java.util.NoSuchElementException if the port type is not found.
    */
   public TypeSymbol getTypeInfo() {
-    return this.getType().getTypeInfo();
+    return this.getType().getTypeInfo() instanceof TypeSymbolSurrogate ?
+      ((TypeSymbolSurrogate) this.getType().getTypeInfo()).lazyLoadDelegate() : this.getType().getTypeInfo();
   }
 
   /**
-   * @return an {@code Optional} of the component type this port belongs to. The {@code Optional}
-   * is empty if the port does not belong to a component type.
+   * @return an {@code Optional} of the component type this port belongs to. The {@code Optional} is empty if the port
+   * does not belong to a component type.
    */
   public Optional<ComponentTypeSymbol> getComponent() {
     if (this.getEnclosingScope() == null) {

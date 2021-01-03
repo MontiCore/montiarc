@@ -1,8 +1,20 @@
+<<<<<<< HEAD:util/src/test/java/montiarc/util/AbstractTest.java
 package montiarc.util;/* (c) https://github.com/MontiCore/monticore */
+=======
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.util;
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772:util/src/test/java/montiarc/AbstractTest.java
 
+import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
+import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
+import de.monticore.types.check.DefsTypeBasic;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
+<<<<<<< HEAD:util/src/test/java/montiarc/util/AbstractTest.java
 import de.se_rwth.commons.logging.LogStub;
+=======
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772:util/src/test/java/montiarc/AbstractTest.java
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +36,28 @@ public abstract class AbstractTest {
   public static void cleanUpLog() {
     Log.getFindings().clear();
     Log.enableFailQuick(false);
-    LogStub.init();
+  }
+
+  protected void addBasicTypes2Scope(IOOSymbolsScope scope) {
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._boolean);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._char);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._short);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._String);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._int);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._long);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._float);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._double);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._null);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._Object);
+    DefsTypeBasic.add2scope(scope, DefsTypeBasic._array);
+  }
+
+  protected void add2Scope(IOOSymbolsScope scope, OOTypeSymbol... types) {
+    Arrays.asList(types).stream().forEach(type -> DefsTypeBasic.add2scope(scope, type));
+  }
+
+  protected void add2Scope(IOOSymbolsScope scope, FieldSymbol... fields) {
+    Arrays.asList(fields).stream().forEach(field -> DefsTypeBasic.add2scope(scope, field));
   }
 
   @BeforeEach
@@ -41,7 +74,7 @@ public abstract class AbstractTest {
   }
 
   protected void checkExpectedErrorsPresent(List<Finding> findings,
-    Error[] expErrors) {
+                                            Error[] expErrors) {
     List<String> actualErrorCodes = collectErrorCodes(findings);
     List<String> expErrorCodes = collectErrorCodes(expErrors);
 
@@ -51,7 +84,7 @@ public abstract class AbstractTest {
   }
 
   protected void checkNoAdditionalErrorsPresent(List<Finding> findings,
-    Error[] expErrors) {
+                                                Error[] expErrors) {
     List<String> actualErrorCodes = collectErrorCodes(findings);
     List<String> expErrorCodes = collectErrorCodes(expErrors);
 
@@ -61,7 +94,7 @@ public abstract class AbstractTest {
   }
 
   protected void checkOnlyExpectedErrorsPresent(List<Finding> findings,
-    Error[] expErrors) {
+                                                Error[] expErrors) {
     checkExpectedErrorsPresent(findings, expErrors);
     checkNoAdditionalErrorsPresent(findings, expErrors);
   }

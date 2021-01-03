@@ -3,6 +3,7 @@ package arcbasis._symboltable;
 
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import genericarc._symboltable.IGenericArcScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
@@ -11,7 +12,20 @@ import java.util.List;
 public class ComponentInstanceSymbol extends ComponentInstanceSymbolTOP {
 
   protected ComponentTypeSymbol type;
+<<<<<<< HEAD
+=======
+  protected ComponentTypeSymbol genericType;
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
   protected List<ASTExpression> arguments;
+
+  public ComponentTypeSymbol getGenericType() {
+    ComponentTypeSymbol type = this.getType();
+    return genericType != null ? genericType : type;
+  }
+
+  protected void setGenericType(@NotNull ComponentTypeSymbol type) {
+    this.genericType = type;
+  }
 
   /**
    * @param name the name of this component.
@@ -26,6 +40,12 @@ public class ComponentInstanceSymbol extends ComponentInstanceSymbolTOP {
    */
   public ComponentTypeSymbol getType() {
     if (type instanceof ComponentTypeSymbolSurrogate) {
+<<<<<<< HEAD
+=======
+      if (type.getEnclosingScope() instanceof IGenericArcScope) {
+        this.setGenericType(type);
+      }
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
       this.type = ((ComponentTypeSymbolSurrogate) type).lazyLoadDelegate();
     }
     return this.type;

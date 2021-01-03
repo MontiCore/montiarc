@@ -9,6 +9,13 @@ import java.util.Deque;
 
 public class ComfortableArcSymbolTableCreator extends ComfortableArcSymbolTableCreatorTOP {
 
+<<<<<<< HEAD
+=======
+  public ComfortableArcSymbolTableCreator() {
+
+  }
+
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
   public ComfortableArcSymbolTableCreator(@NotNull IComfortableArcScope enclosingScope) {
     super(enclosingScope);
   }

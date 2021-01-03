@@ -54,6 +54,7 @@
     <dependency>
       <groupId>de.monticore.lang</groupId>
       <artifactId>cd4analysis</artifactId>
+      <version>1.7.0</version>
     </dependency>
 
     <!-- Test Libraries -->

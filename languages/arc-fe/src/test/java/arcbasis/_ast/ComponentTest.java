@@ -70,12 +70,20 @@ public class ComponentTest extends AbstractTest {
     return ArcBasisMill.componentTypeBuilder().setName("Connectors")
       .setHead(ArcBasisMill.componentHeadBuilder().build())
       .setBody(
+<<<<<<< HEAD
         ArcBasisMill.componentBodyBuilder().addArcElements(ArcBasisMill.componentInterfaceBuilder()
+=======
+        ArcBasisMill.componentBodyBuilder().addArcElement(ArcBasisMill.componentInterfaceBuilder()
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
           .setPortDeclarationsList(Collections.singletonList(ArcBasisMill.portDeclarationBuilder()
             .setPortDirection(ArcBasisMill.portDirectionInBuilder().build())
             .setMCType(Mockito.mock(ASTMCType.class))
             .setPortList("i1", "i2", "i3").build())).build())
+<<<<<<< HEAD
           .addArcElements(ArcBasisMill.componentInterfaceBuilder()
+=======
+          .addArcElement(ArcBasisMill.componentInterfaceBuilder()
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
             .setPortDeclarationsList(Collections.singletonList(ArcBasisMill.portDeclarationBuilder()
               .setPortDirection(ArcBasisMill.portDirectionOutBuilder().build())
               .setMCType(Mockito.mock(ASTMCType.class))
@@ -234,12 +242,20 @@ public class ComponentTest extends AbstractTest {
       .setName("Variables")
       .setHead(ArcBasisMill.componentHeadBuilder().build())
       .setBody(ArcBasisMill.componentBodyBuilder()
+<<<<<<< HEAD
         .addArcElements(ArcBasisMill.componentInterfaceBuilder().setPortDeclarationsList(
+=======
+        .addArcElement(ArcBasisMill.componentInterfaceBuilder().setPortDeclarationsList(
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
           Collections.singletonList(ArcBasisMill.portDeclarationBuilder()
             .setPortDirection(ArcBasisMill.portDirectionInBuilder().build())
             .setMCType(Mockito.mock(ASTMCType.class))
             .setPortList("i1").build())).build())
+<<<<<<< HEAD
         .addArcElements(ArcBasisMill.componentInterfaceBuilder().setPortDeclarationsList(
+=======
+        .addArcElement(ArcBasisMill.componentInterfaceBuilder().setPortDeclarationsList(
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
           Collections.singletonList(ArcBasisMill.portDeclarationBuilder()
             .setPortDirection(ArcBasisMill.portDirectionOutBuilder().build())
             .setMCType(Mockito.mock(ASTMCType.class))
@@ -288,7 +304,11 @@ public class ComponentTest extends AbstractTest {
       .setName("Ports")
       .setHead(ArcBasisMill.componentHeadBuilder().build())
       .setBody(ArcBasisMill.componentBodyBuilder()
+<<<<<<< HEAD
         .addArcElements(ArcBasisMill.componentInterfaceBuilder()
+=======
+        .addArcElement(ArcBasisMill.componentInterfaceBuilder()
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
           .setPortDeclarationsList(Arrays.asList(
             ArcBasisMill.portDeclarationBuilder()
               .setPortDirection(ArcBasisMill.portDirectionInBuilder().build())
@@ -299,7 +319,11 @@ public class ComponentTest extends AbstractTest {
               .setMCType(Mockito.mock(ASTMCType.class))
               .setPortList("o1").build()))
           .build())
+<<<<<<< HEAD
         .addArcElements(ArcBasisMill.componentInterfaceBuilder()
+=======
+        .addArcElement(ArcBasisMill.componentInterfaceBuilder()
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
           .setPortDeclarationsList(Arrays.asList(
             ArcBasisMill.portDeclarationBuilder()
               .setPortDirection(ArcBasisMill.portDirectionInBuilder().build())

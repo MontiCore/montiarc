@@ -16,6 +16,6 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>majava-rte</module>
+    <!--<module>majava-rte</module>-->
   </modules>
 </project>

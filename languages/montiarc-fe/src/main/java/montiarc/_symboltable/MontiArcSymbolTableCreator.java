@@ -13,11 +13,19 @@ import java.util.List;
 
 public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
 
+  public MontiArcSymbolTableCreator() {
+    super(new MontiArcGlobalScope());
+  }
+
   public MontiArcSymbolTableCreator(@NotNull IMontiArcScope enclosingScope) {
     super(enclosingScope);
   }
 
+<<<<<<< HEAD
   MontiArcScope watchscope;
+=======
+  IMontiArcScope watchscope;
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 
   public MontiArcSymbolTableCreator(
     @NotNull Deque<? extends IMontiArcScope> scopeStack) {
@@ -25,14 +33,19 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
 
   @Override
-  public MontiArcArtifactScope createFromAST(@NotNull ASTMACompilationUnit rootNode) {
+  public IMontiArcArtifactScope createFromAST(@NotNull ASTMACompilationUnit rootNode) {
     Preconditions.checkArgument(rootNode != null);
     List<ImportStatement> imports = new ArrayList<>();
     for (ASTMCImportStatement importStatement : rootNode.getImportStatementList()) {
       imports.add(new ImportStatement(importStatement.getQName(), importStatement.isStar()));
     }
+<<<<<<< HEAD
     MontiArcArtifactScope artifactScope = montiarc.MontiArcMill.montiArcArtifactScopeBuilder()
       .setPackageName(rootNode.getPackage().getQName())
+=======
+    IMontiArcArtifactScope artifactScope = montiarc.MontiArcMill.montiArcArtifactScopeBuilder()
+      .setPackageName(rootNode.isPresentPackage() ? rootNode.getPackage().getQName() : "")
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
       .setImportsList(imports)
       .build();
     putOnStack(artifactScope);
@@ -48,6 +61,9 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
   }
 
   @Override
-  public void endVisit(ASTMACompilationUnit node) {
+  public void endVisit(@NotNull ASTMACompilationUnit node) {
+    Preconditions.checkArgument(node != null);
+    Preconditions.checkState(this.getCurrentScope().isPresent());
+    super.endVisit(node);
   }
 }

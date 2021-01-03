@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarcautomaton.lejos.lib.logger;
+package montiarc.lejos.lib.logger;
 
 component Logger {
   port

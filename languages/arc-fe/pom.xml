@@ -8,7 +8,11 @@
   <parent>
     <artifactId>languages</artifactId>
     <groupId>montiarc.languages</groupId>
+<<<<<<< HEAD
     <version>6.2.0-SNAPSHOT</version>
+=======
+    <version>6.5.0-SNAPSHOT</version>
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
   </parent>
 
   <artifactId>arc-fe</artifactId>
@@ -167,14 +171,37 @@
         </executions>
       </plugin>
 
-      <!-- Enables Jacoco Coverage Report for this submodule -->
+      <!-- Test Jar -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>${jar.plugin}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>${surefire.plugin}</version>
         <configuration>
+          <!-- Enables Jacoco Coverage Report for this submodule -->
           <argLine>${argLine}</argLine>
-          <useSystemClassLoader>false</useSystemClassLoader>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

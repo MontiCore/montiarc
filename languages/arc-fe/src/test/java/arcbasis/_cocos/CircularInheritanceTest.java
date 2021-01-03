@@ -6,8 +6,12 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
+<<<<<<< HEAD
 import arcbasis._symboltable.ArcBasisScope;
+=======
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 import arcbasis._symboltable.ArcBasisSymbolTableCreator;
+import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.util.ArcError;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.Assertions;
@@ -37,7 +41,7 @@ public class CircularInheritanceTest extends AbstractTest {
           .build())
         .build())
       .build();
-    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
+    IArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(parent);
     symTab.handle(child);
@@ -57,7 +61,7 @@ public class CircularInheritanceTest extends AbstractTest {
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setParent(createQualifiedType("A")).build())
       .build();
-    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
+    IArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(parent);
     symTab.handle(child);

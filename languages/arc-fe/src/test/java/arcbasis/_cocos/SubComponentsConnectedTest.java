@@ -63,7 +63,11 @@ public class SubComponentsConnectedTest extends AbstractTest {
             .setPortList("o1")
             .build())
           .build())
+<<<<<<< HEAD
         .addArcElements(ArcBasisMill.componentInstantiationBuilder()
+=======
+        .addArcElement(ArcBasisMill.componentInstantiationBuilder()
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
           .setMCType(createQualifiedType("A"))
           .setComponentInstanceList("sub1")
           .build())
@@ -86,7 +90,11 @@ public class SubComponentsConnectedTest extends AbstractTest {
             .setPortList("o1", "o2")
             .build())
           .build())
+<<<<<<< HEAD
         .addArcElements(ArcBasisMill.componentInstantiationBuilder()
+=======
+        .addArcElement(ArcBasisMill.componentInstantiationBuilder()
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
           .setMCType(createQualifiedType("A"))
           .setComponentInstanceList("sub1")
           .build())

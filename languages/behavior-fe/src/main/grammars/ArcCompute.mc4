@@ -1,0 +1,11 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+component grammar ArcCompute extends ArcBehaviorBasis,
+   de.monticore.statements.MCStatementsBasis {
+
+  /**
+   * ASTArcCompute holds a compute behavior block statement.
+   */
+  ArcCompute implements ArcBehavior = key("compute") MCBlockStatement;
+
+}

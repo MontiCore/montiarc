@@ -39,7 +39,11 @@ public class PortDeclarationBuilderTest extends AbstractTest {
     expectedPortList.add(port);
     ASTPortDeclaration ast = this.builder.addPort(port).build();
     List<String> actualPortList = this.getPortsList(ast);
+<<<<<<< HEAD
     Assertions.assertEquals(expectedPortList.size(), ast.getPortsList().size());
+=======
+    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
@@ -50,8 +54,13 @@ public class PortDeclarationBuilderTest extends AbstractTest {
     expectedPortList.set(index, port);
     ASTPortDeclaration ast = this.builder.setPort(index, port).build();
     List<String> actualPortList = this.getPortsList(ast);
+<<<<<<< HEAD
     Assertions.assertEquals(ast.getPorts(index).getName(), port);
     Assertions.assertEquals(expectedPortList.size(), ast.getPortsList().size());
+=======
+    Assertions.assertEquals(ast.getPort(index).getName(), port);
+    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
@@ -62,8 +71,13 @@ public class PortDeclarationBuilderTest extends AbstractTest {
     expectedPortList.add(index, port);
     ASTPortDeclaration ast = this.builder.addPort(index, port).build();
     List<String> actualPortList = this.getPortsList(ast);
+<<<<<<< HEAD
     Assertions.assertEquals(ast.getPorts(index).getName(), port);
     Assertions.assertEquals(expectedPortList.size(), ast.getPortsList().size());
+=======
+    Assertions.assertEquals(ast.getPort(index).getName(), port);
+    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
@@ -77,7 +91,11 @@ public class PortDeclarationBuilderTest extends AbstractTest {
     List<String> expectedPortList = Arrays.asList(ports);
     ASTPortDeclaration ast = this.builder.setPortList(ports).build();
     List<String> actualPortList = this.getPortsList(ast);
+<<<<<<< HEAD
     Assertions.assertEquals(expectedPortList.size(), ast.getPortsList().size());
+=======
+    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
@@ -88,7 +106,11 @@ public class PortDeclarationBuilderTest extends AbstractTest {
     expectedPortList.addAll(Arrays.asList(ports));
     ASTPortDeclaration ast = this.builder.addAllPorts(ports).build();
     List<String> actualPortList = this.getPortsList(ast);
+<<<<<<< HEAD
     Assertions.assertEquals(expectedPortList.size(), ast.getPortsList().size());
+=======
+    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
@@ -105,7 +127,11 @@ public class PortDeclarationBuilderTest extends AbstractTest {
     expectedPortList.addAll(index, Arrays.asList(ports));
     ASTPortDeclaration ast = this.builder.addAllPorts(index, ports).build();
     List<String> actualPortList = this.getPortsList(ast);
+<<<<<<< HEAD
     Assertions.assertEquals(expectedPortList.size(), ast.getPortsList().size());
+=======
+    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
@@ -117,10 +143,18 @@ public class PortDeclarationBuilderTest extends AbstractTest {
   }
 
   protected List<String> getPortsList(ASTPortDeclarationBuilder builder) {
+<<<<<<< HEAD
     return builder.getPortsList().stream().map(ASTPort::getName).collect(Collectors.toList());
   }
 
   protected List<String> getPortsList(ASTPortDeclaration ast) {
     return ast.getPortsList().stream().map(ASTPort::getName).collect(Collectors.toList());
+=======
+    return builder.getPortList().stream().map(ASTPort::getName).collect(Collectors.toList());
+  }
+
+  protected List<String> getPortsList(ASTPortDeclaration ast) {
+    return ast.getPortList().stream().map(ASTPort::getName).collect(Collectors.toList());
+>>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
   }
 }
