@@ -1,10 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.util;
 
+import de.se_rwth.commons.logging.Log;
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.util.*;
-
-import org.apache.commons.io.FileUtils;
 
 /**
  * Class that finds all models with a given file extension in a modelpath.
@@ -24,7 +25,7 @@ public class Modelfinder {
     Collection<File> files = FileUtils.listFiles(modelPath, extension, true);
     for (File f : files) {
       String model = getDotSeperatedFQNModelName(modelPath.getPath(), f.getPath(), fileExtension);
-      System.out.println("[Modelfinder] found model: " + model);
+      Log.info("Found model: " + model, "Modelfinder");
       models.add(model);
     }
     return models;
