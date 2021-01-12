@@ -81,7 +81,7 @@ public class ComfortableArcPrettyPrinter implements ComfortableArcVisitor {
       node.getArguments().accept(this.getRealThis());
     }
     this.getPrinter().print("[ ");
-    node.getConnectorsList().stream().forEach((c)->c.accept(this.getRealThis()));
+    node.getConnectorList().stream().forEach((c)->c.accept(this.getRealThis()));
     this.getPrinter().print("] ");
   }
   

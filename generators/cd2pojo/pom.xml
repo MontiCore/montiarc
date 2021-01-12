@@ -38,11 +38,6 @@
       <artifactId>se-commons-groovy</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>de.monticore</groupId>
-      <artifactId>monticore-grammar</artifactId>
-    </dependency>
-
     <!-- MontiArc -->
     <dependency>
       <groupId>montiarc</groupId>

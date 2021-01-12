@@ -1,13 +1,5 @@
 package montiarc;
 
-<<<<<<< HEAD
-import arcbasis._symboltable.ComponentTypeSymbol;
-import de.se_rwth.commons.Names;
-import de.se_rwth.commons.logging.Log;
-import montiarc._symboltable.IMontiArcScope;
-import montiarc.util.DirectoryUtil;
-import montiarc.util.Modelfinder;
-=======
 import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cd4code._symboltable.ICD4CodeGlobalScope;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
@@ -20,7 +12,6 @@ import montiarc._symboltable.MontiArcArtifactScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -29,20 +20,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
-<<<<<<< HEAD
-
-import static org.assertj.core.api.Assertions.assertThat;
-=======
 import java.util.Optional;
 import java.util.stream.Stream;
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 
 /**
  * Holds tests for methods of {@link MontiArcTool}.
  */
-<<<<<<< HEAD
-class MontiArcToolTest extends AbstractTest {
-=======
 public class MontiArcToolTest extends AbstractTest {
 
   protected static final String TEST_PATH = Paths.get("montiarc", "tool").toString();
@@ -58,7 +41,6 @@ public class MontiArcToolTest extends AbstractTest {
       Paths.get("valid", "example1", "InComp.arc"),
       Paths.get("valid", "example1", "OutComp.arc"));
   }
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 
   protected static Stream<Arguments> validMAModelFileNameProvider() {
     return steamValidMAModelFiles().map(Path::toString).map(Arguments::of);
@@ -97,35 +79,14 @@ public class MontiArcToolTest extends AbstractTest {
     //Given
     Path file = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, filename);
 
-<<<<<<< HEAD
-    // Make testcase fail if there are errors
-    Log.init();
-    Log.enableFailQuick(true);
-
-    // given
-    MontiArcTool tool = new MontiArcTool();
-    File modelPath = Paths.get(RELATIVE_MODEL_PATH, PACKAGE, modelPathDirectory).toFile();
-    File target = TARGETPATH.toFile();
-=======
     //When
     Optional<ASTMACompilationUnit> ast = this.getMATool().parseMAModel(file);
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 
     //Then
     Assertions.assertTrue(ast.isPresent());
     Assertions.assertTrue(Log.getFindings().isEmpty());
   }
 
-<<<<<<< HEAD
-    // 1. Find all .arc files
-    List<String> foundModels = Modelfinder
-        .getModelsInModelPath(modelPath, "arc");
-    // 2. Initialize SymbolTable
-    Log.info("Initializing symboltable", TOOL_NAME);
-    String basedir = DirectoryUtil.getBasedirFromModelAndTargetPath(modelPath.getAbsolutePath(),
-        target.getAbsolutePath());
-    IMontiArcScope symTab = tool.initSymbolTable(modelPath);
-=======
   /**
    * Method under test {@link MontiArcTool#parseCDModel(Path)}.
    */
@@ -134,7 +95,6 @@ public class MontiArcToolTest extends AbstractTest {
   public void shouldParseCDModelFromFile(@NotNull String filename) {
     //Given
     Path file = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, filename);
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 
     //When
     Optional<ASTCDCompilationUnit> ast = this.getMATool().parseCDModel(file);
@@ -190,14 +150,6 @@ public class MontiArcToolTest extends AbstractTest {
     //When
     Collection<ASTMACompilationUnit> models = this.getMATool().parseMAModels(directory);
 
-<<<<<<< HEAD
-    // 1. Find all .arc files
-    List<String> foundModels = Modelfinder
-      .getModelsInModelPath(modelPath, "arc");
-    // 2. Initialize SymbolTable
-    Log.info("Initializing symboltable", TOOL_NAME);
-    IMontiArcScope symTab = tool.initSymbolTable(modelPath);
-=======
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());
     Assertions.assertEquals(expNumModels, models.size());
@@ -225,7 +177,6 @@ public class MontiArcToolTest extends AbstractTest {
     //Given
     Path path = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, "valid", "example3");
     IMontiArcGlobalScope scope = this.getMATool().processModels(path);
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 
     //When
     List<TypeSymbol> types = scope.resolveTypeMany("Color");

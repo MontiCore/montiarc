@@ -12,11 +12,7 @@ import de.monticore.expressions.prettyprint.AssignmentExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.CommonExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.ExpressionsBasisPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
-<<<<<<< HEAD:generators/ma2java/src/main/java/de/montiarcautomaton/generator/helper/ComponentHelper.java
-import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
-=======
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772:generators/ma2java/src/main/java/montiarc/generator/helper/ComponentHelper.java
 import de.monticore.symboltable.ImportStatement;
 import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericComponentHead;

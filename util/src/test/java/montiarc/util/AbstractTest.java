@@ -1,9 +1,5 @@
-<<<<<<< HEAD:util/src/test/java/montiarc/util/AbstractTest.java
-package montiarc.util;/* (c) https://github.com/MontiCore/monticore */
-=======
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.util;
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772:util/src/test/java/montiarc/AbstractTest.java
 
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
@@ -11,10 +7,6 @@ import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.DefsTypeBasic;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
-<<<<<<< HEAD:util/src/test/java/montiarc/util/AbstractTest.java
-import de.se_rwth.commons.logging.LogStub;
-=======
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772:util/src/test/java/montiarc/AbstractTest.java
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

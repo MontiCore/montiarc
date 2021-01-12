@@ -21,11 +21,7 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     super(enclosingScope);
   }
 
-<<<<<<< HEAD
-  MontiArcScope watchscope;
-=======
   IMontiArcScope watchscope;
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 
   public MontiArcSymbolTableCreator(
     @NotNull Deque<? extends IMontiArcScope> scopeStack) {
@@ -39,20 +35,14 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     for (ASTMCImportStatement importStatement : rootNode.getImportStatementList()) {
       imports.add(new ImportStatement(importStatement.getQName(), importStatement.isStar()));
     }
-<<<<<<< HEAD
-    MontiArcArtifactScope artifactScope = montiarc.MontiArcMill.montiArcArtifactScopeBuilder()
-      .setPackageName(rootNode.getPackage().getQName())
-=======
     IMontiArcArtifactScope artifactScope = montiarc.MontiArcMill.montiArcArtifactScopeBuilder()
       .setPackageName(rootNode.isPresentPackage() ? rootNode.getPackage().getQName() : "")
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
       .setImportsList(imports)
       .build();
     putOnStack(artifactScope);
     watchscope = artifactScope;
     setLinkBetweenSpannedScopeAndNode(artifactScope, rootNode);
     rootNode.accept(getRealThis());
-    removeCurrentScope();
     return artifactScope;
   }
 

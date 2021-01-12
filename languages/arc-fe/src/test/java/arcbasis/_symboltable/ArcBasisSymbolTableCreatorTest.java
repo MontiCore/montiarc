@@ -4,28 +4,18 @@ package arcbasis._symboltable;
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
-<<<<<<< HEAD
-=======
 import de.monticore.expressions.expressionsbasis._ast.ASTArguments;
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
-<<<<<<< HEAD
-import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-=======
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
-<<<<<<< HEAD
-=======
 import java.util.Collections;
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 
 /**
  * Holds tests for the handwritten methods of {@link ArcBasisSymbolTableCreator}.
@@ -238,11 +228,7 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
     ASTComponentInstance ast = arcbasis.ArcBasisMill.componentInstanceBuilder().setName("sub")
       .setArguments(arcbasis.ArcBasisMill.argumentsBuilder()
         .setExpressionsList(Arrays.asList(this.mockValues(3))).build()).build();
-<<<<<<< HEAD
-    ArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
-=======
     IArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
     this.getSymTab().setCurrentCompInstanceType(Mockito.mock(ASTMCObjectType.class));
     this.getSymTab().putOnStack(scope);
     this.getSymTab().handle(ast);
@@ -303,8 +289,6 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
     Assertions.assertEquals(scope, ast.getEnclosingScope());
     Assertions.assertFalse(scope.getVariableSymbols().isEmpty());
     Assertions.assertEquals(1, scope.getLocalVariableSymbols().size());
-<<<<<<< HEAD
-=======
   }
 
   @Test
@@ -320,7 +304,6 @@ public class ArcBasisSymbolTableCreatorTest extends AbstractTest {
     Assertions.assertEquals(1, instances.getComponentInstanceList().size());
     Assertions.assertFalse(scope.getComponentInstanceSymbols().get("comp").isEmpty());
     Assertions.assertEquals(1, scope.getComponentInstanceSymbols().get("comp").get(0).getArguments().size());
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
   }
 
   protected ASTExpression[] mockValues(int length) {

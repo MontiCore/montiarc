@@ -5,10 +5,6 @@ import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
-<<<<<<< HEAD
-import arcbasis._symboltable.ArcBasisScope;
-=======
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 import arcbasis._symboltable.ArcBasisSymbolTableCreator;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.util.ArcError;
@@ -38,7 +34,7 @@ public class ParameterTypeExistsTest extends AbstractTest {
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);
     ParameterTypeExists coco = new ParameterTypeExists();
-    coco.check(ast.getHead().getArcParameters(0));
+    coco.check(ast.getHead().getArcParameter(0));
     this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
       new ArcError[] { ArcError.MISSING_TYPE_OF_PARAMETER });
   }

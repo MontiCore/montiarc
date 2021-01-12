@@ -7,11 +7,7 @@
   <!-- == PROJECT COORDINATES ============================================= -->
   <groupId>montiarc</groupId>
   <artifactId>montiarc-core</artifactId>
-<<<<<<< HEAD
-  <version>6.2.0-SNAPSHOT</version>
-=======
   <version>6.5.0-SNAPSHOT</version>
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
   <packaging>pom</packaging>
 
   <!-- == PROJECT MODULES ================================================= -->
@@ -19,24 +15,17 @@
     <module>languages</module>
     <module>generators</module>
     <module>libraries</module>
-    <!--<module>applications</module>-->
+    <module>applications</module>
     <module>util</module>
   </modules>
 
   <!-- == PROJECT PROPERTIES =============================================== -->
   <properties>
     <!-- DSLs -->
-<<<<<<< HEAD
-    <cd4a.version>6.2.0</cd4a.version>
-
-    <!-- SE-Libraries -->
-    <monticore.version>6.2.0.1</monticore.version>
-=======
     <cd4a.version>6.5.0-SNAPSHOT</cd4a.version>
 
     <!-- SE-Libraries -->
     <monticore.version>6.5.0.1</monticore.version>
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
     <mc.grammars.assembly.version>0.0.8</mc.grammars.assembly.version>
     <se-commons.version>1.7.11</se-commons.version>
 

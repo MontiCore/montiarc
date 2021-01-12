@@ -6,10 +6,6 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
-<<<<<<< HEAD
-import arcbasis._symboltable.ArcBasisScope;
-=======
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 import arcbasis._symboltable.ArcBasisSymbolTableCreator;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.util.ArcError;

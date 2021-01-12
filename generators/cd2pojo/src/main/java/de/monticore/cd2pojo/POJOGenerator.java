@@ -1,15 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package de.monticore.cd2pojo;
 
-import de.monticore.cd4analysis._symboltable.CD4AnalysisGlobalScope;
-import de.monticore.cd4analysis._symboltable.ICD4AnalysisScope;
-import de.monticore.cdbasis._symboltable.CDTypeSymbol;
+import de.monticore.cd.cd4analysis._symboltable.*;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.io.paths.ModelPath;
+import de.monticore.utils.Names;
 import de.se_rwth.commons.logging.Log;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -32,7 +34,7 @@ public class POJOGenerator {
 
   private String _package = "";
 
-  //private CDDefinitionSymbol cdSymbol;
+  private CDDefinitionSymbol cdSymbol;
 
   public POJOGenerator(Path outputDir, Path modelPath, String modelName) {
     this(outputDir, modelPath, modelName, Optional.empty());
@@ -49,20 +51,12 @@ public class POJOGenerator {
     Optional<String> targetPackage) {
     this.outputDir = outputDir;
 
-<<<<<<< HEAD
-    CD4AnalysisGlobalScope st = new CD4AnalysisGlobalScope(new ModelPath(modelPath));
-    //st = injectPrimitives(st);
-    //cdSymbol = st.resolveC(modelName).orElse(null);
-    _package = targetPackage.orElse("");//cdSymbol.getName().toLowerCase());
-    
-=======
     CD4AnalysisLanguage lang = new CD4AnalysisLanguage();
     ICD4AnalysisScope st = new CD4AnalysisGlobalScope(new ModelPath(modelPath), lang);
     st = injectPrimitives(st);
     cdSymbol = st.resolveCDDefinition(modelName).orElse(null);
     _package = targetPackage.orElse(cdSymbol.getName().toLowerCase());
 
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
     this.typeHelper = new TypeHelper(_package);
     this.generatorSetup = new GeneratorSetup();
     this.generatorSetup.setOutputDirectory(this.outputDir.toFile());
@@ -70,21 +64,20 @@ public class POJOGenerator {
   }
 
   public void generate() {
-    //cdSymbol.getTypes().forEach(t -> generate(t));
+    cdSymbol.getTypes().forEach(t -> generate(t));
     Log.info("Done.", "Generator");
   }
 
   protected ICD4AnalysisScope injectPrimitives(ICD4AnalysisScope scope) {
-/*    for (String primitive : primitiveTypes) {
+    for (String primitive : primitiveTypes) {
       CDTypeSymbol primitiveCdType = new CDTypeSymbol(primitive);
       scope.add(primitiveCdType);
     }
-    return scope;*/
-    return null;
+    return scope;
   }
 
   private void generate(CDTypeSymbol type) {
-/*    String kind = type.isIsClass() ? "class" : (type.isIsEnum() ? "enum" : "interface");
+    String kind = type.isIsClass() ? "class" : (type.isIsEnum() ? "enum" : "interface");
 
     final StringBuilder _super = new StringBuilder();
     if (type.isPresentSuperClass()) {
@@ -126,6 +119,6 @@ public class POJOGenerator {
     }
 
     ge.generate("templates.type.ftl", filePath, type.getAstNode(), _package, kind,
-      type, _super, typeHelper, imports);*/
+      type, _super, typeHelper, imports);
   }
 }

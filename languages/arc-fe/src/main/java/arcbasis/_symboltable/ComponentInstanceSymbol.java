@@ -12,10 +12,7 @@ import java.util.List;
 public class ComponentInstanceSymbol extends ComponentInstanceSymbolTOP {
 
   protected ComponentTypeSymbol type;
-<<<<<<< HEAD
-=======
   protected ComponentTypeSymbol genericType;
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
   protected List<ASTExpression> arguments;
 
   public ComponentTypeSymbol getGenericType() {
@@ -40,12 +37,9 @@ public class ComponentInstanceSymbol extends ComponentInstanceSymbolTOP {
    */
   public ComponentTypeSymbol getType() {
     if (type instanceof ComponentTypeSymbolSurrogate) {
-<<<<<<< HEAD
-=======
       if (type.getEnclosingScope() instanceof IGenericArcScope) {
         this.setGenericType(type);
       }
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
       this.type = ((ComponentTypeSymbolSurrogate) type).lazyLoadDelegate();
     }
     return this.type;

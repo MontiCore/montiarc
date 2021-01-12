@@ -4,10 +4,6 @@ package arcbasis._cocos;
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentInstantiation;
-<<<<<<< HEAD
-import arcbasis._symboltable.ArcBasisScope;
-=======
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
 import arcbasis._symboltable.ArcBasisSymbolTableCreator;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.util.ArcError;
@@ -29,7 +25,7 @@ public class ComponentInstanceTypeExistsTest extends AbstractTest {
     ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
     symTab.handle(ast);
     ComponentInstanceTypeExists coco = new ComponentInstanceTypeExists();
-    coco.check(ast.getComponentInstances(0));
+    coco.check(ast.getComponentInstance(0));
     this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
       new ArcError[] { ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE });
   }

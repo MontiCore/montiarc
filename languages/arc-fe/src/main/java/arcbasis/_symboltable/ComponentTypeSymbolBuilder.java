@@ -12,11 +12,7 @@ import java.util.List;
 public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
 
   protected ComponentTypeSymbol outerComponent;
-<<<<<<< HEAD
-  protected ComponentTypeSymbolSurrogate parentComponent;
-=======
   protected ComponentTypeSymbol parentComponent;
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
   protected List<VariableSymbol> parameters;
   protected List<TypeVarSymbol> typeParameters;
 
@@ -45,20 +41,12 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
     return this.realBuilder;
   }
 
-<<<<<<< HEAD
-  public ComponentTypeSymbolSurrogate getParentComponent() {
-=======
   public ComponentTypeSymbol getParentComponent() {
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
     return this.parentComponent;
   }
 
   public ComponentTypeSymbolBuilder setParentComponent(
-<<<<<<< HEAD
-    @Nullable ComponentTypeSymbolSurrogate parent) {
-=======
     @Nullable ComponentTypeSymbol parent) {
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
     this.parentComponent = parent;
     return this.realBuilder;
   }

@@ -36,12 +36,12 @@ public class SubComponentsConnectedTest extends AbstractTest {
     ASTComponentType comp1 = ArcBasisMill.componentTypeBuilder().setName("A")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
-        .addArcElements(ArcBasisMill.componentInterfaceBuilder()
-          .addPortDeclarations(ArcBasisMill.portDeclarationBuilder()
+        .addArcElement(ArcBasisMill.componentInterfaceBuilder()
+          .addPortDeclaration(ArcBasisMill.portDeclarationBuilder()
             .setIncoming(true).setMCType(Mockito.mock(ASTMCType.class))
             .setPortList("i1", "i2")
             .build())
-          .addPortDeclarations(ArcBasisMill.portDeclarationBuilder()
+          .addPortDeclaration(ArcBasisMill.portDeclarationBuilder()
             .setOutgoing(true).setMCType(Mockito.mock(ASTMCType.class))
             .setPortList("o1")
             .build())
@@ -53,25 +53,21 @@ public class SubComponentsConnectedTest extends AbstractTest {
     ASTComponentType comp2 = ArcBasisMill.componentTypeBuilder().setName("B")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
-        .addArcElements(ArcBasisMill.componentInterfaceBuilder()
-          .addPortDeclarations(ArcBasisMill.portDeclarationBuilder()
+        .addArcElement(ArcBasisMill.componentInterfaceBuilder()
+          .addPortDeclaration(ArcBasisMill.portDeclarationBuilder()
             .setIncoming(true).setMCType(Mockito.mock(ASTMCType.class))
             .setPortList("i1")
             .build())
-          .addPortDeclarations(ArcBasisMill.portDeclarationBuilder()
+          .addPortDeclaration(ArcBasisMill.portDeclarationBuilder()
             .setOutgoing(true).setMCType(Mockito.mock(ASTMCType.class))
             .setPortList("o1")
             .build())
           .build())
-<<<<<<< HEAD
-        .addArcElements(ArcBasisMill.componentInstantiationBuilder()
-=======
         .addArcElement(ArcBasisMill.componentInstantiationBuilder()
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
           .setMCType(createQualifiedType("A"))
           .setComponentInstanceList("sub1")
           .build())
-        .addArcElements(ArcBasisMill.connectorBuilder().setSource("i1").setTargetList("sub1.i1",
+        .addArcElement(ArcBasisMill.connectorBuilder().setSource("i1").setTargetList("sub1.i1",
           "sub1.i2", "sub1.o1").build())
         .build())
       .build();
@@ -80,29 +76,25 @@ public class SubComponentsConnectedTest extends AbstractTest {
     ASTComponentType comp3 = ArcBasisMill.componentTypeBuilder().setName("C")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
-        .addArcElements(ArcBasisMill.componentInterfaceBuilder()
-          .addPortDeclarations(ArcBasisMill.portDeclarationBuilder()
+        .addArcElement(ArcBasisMill.componentInterfaceBuilder()
+          .addPortDeclaration(ArcBasisMill.portDeclarationBuilder()
             .setIncoming(true).setMCType(Mockito.mock(ASTMCType.class))
             .setPortList("i1")
             .build())
-          .addPortDeclarations(ArcBasisMill.portDeclarationBuilder()
+          .addPortDeclaration(ArcBasisMill.portDeclarationBuilder()
             .setOutgoing(true).setMCType(Mockito.mock(ASTMCType.class))
             .setPortList("o1", "o2")
             .build())
           .build())
-<<<<<<< HEAD
-        .addArcElements(ArcBasisMill.componentInstantiationBuilder()
-=======
         .addArcElement(ArcBasisMill.componentInstantiationBuilder()
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
           .setMCType(createQualifiedType("A"))
           .setComponentInstanceList("sub1")
           .build())
-        .addArcElements(
+        .addArcElement(
           ArcBasisMill.connectorBuilder().setSource("i1").setTargetList("sub1.i1").build())
-        .addArcElements(
+        .addArcElement(
           ArcBasisMill.connectorBuilder().setSource("sub1.o1").setTargetList("o1").build())
-        .addArcElements(
+        .addArcElement(
           ArcBasisMill.connectorBuilder().setSource("sub1.i2").setTargetList("o2").build())
         .build())
       .build();

@@ -81,7 +81,7 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
     this.getPrinter().print(node.getName());
     node.getHead().accept(this.getRealThis());
     this.getPrinter().print(" ");
-    acceptSeperatedList(node.getComponentInstancesList());
+    acceptSeperatedList(node.getComponentInstanceList());
     node.getBody().accept(this.getRealThis());
   }
 
@@ -89,7 +89,7 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
   public void handle(@NotNull ASTComponentHead node) {
     if (!node.isEmptyArcParameters()) {
       this.getPrinter().print("(");
-      acceptSeperatedList(node.getArcParametersList());
+      acceptSeperatedList(node.getArcParameterList());
       this.getPrinter().print(")");
     }
     if (node.isPresentParent()) {
@@ -113,7 +113,7 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
   public void handle(@NotNull ASTComponentBody node) {
     this.getPrinter().println(" { ");
     this.getPrinter().indent();
-    for (ASTArcElement element : node.getArcElementsList()) {
+    for (ASTArcElement element : node.getArcElementList()) {
       element.accept(this.getRealThis());
     }
     this.getPrinter().unindent();
@@ -123,7 +123,7 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
   @Override
   public void handle(@NotNull ASTComponentInterface node) {
     this.getPrinter().print("port ");
-    acceptSeperatedList(node.getPortDeclarationsList());
+    acceptSeperatedList(node.getPortDeclarationList());
     this.getPrinter().println(";");
   }
 
@@ -132,7 +132,7 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
     node.getPortDirection().accept(this.getRealThis());
     node.getMCType().accept(this.getRealThis());
     this.getPrinter().print(" ");
-    acceptSeperatedList(node.getPortsList());
+    acceptSeperatedList(node.getPortList());
   }
 
   @Override
@@ -154,7 +154,7 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
   public void handle(ASTArcFieldDeclaration node) {
     node.getMCType().accept(this.getRealThis());
     this.getPrinter().print(" ");
-    acceptSeperatedList(node.getArcFieldsList());
+    acceptSeperatedList(node.getArcFieldList());
     if(!isCompletedStatement()) {
       this.getPrinter().println(";");
     }
@@ -172,7 +172,7 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
   public void handle(ASTComponentInstantiation node) {
     node.getMCType().accept(this.getRealThis());
     this.getPrinter().print(" ");
-    acceptSeperatedList(node.getComponentInstancesList());
+    acceptSeperatedList(node.getComponentInstanceList());
     this.getPrinter().println(";");
   }
 
@@ -187,7 +187,7 @@ public class ArcBasisPrettyPrinter implements ArcBasisVisitor {
   @Override
   public void handle(ASTArguments node) {
     this.getPrinter().print("(");
-    acceptSeperatedExpressionList(node.getExpressionsList());
+    acceptSeperatedExpressionList(node.getExpressionList());
     this.getPrinter().print(")");
   }
 

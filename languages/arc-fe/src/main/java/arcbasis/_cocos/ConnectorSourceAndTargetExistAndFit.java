@@ -52,13 +52,8 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
           Optional<ComponentInstanceSymbol> componentInstanceSymbol = component
             .getSubComponent(connector.getSource().getComponent());
           if (componentInstanceSymbol.isPresent()) {
-<<<<<<< HEAD
-            sourcePort = componentInstanceSymbol.get().getType()
-              .getPort(connector.getSource().getPort(), true);
-=======
               sourcePort = componentInstanceSymbol.get().getType()
                 .getPort(connector.getSource().getPort(), true);
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
           } else {
             sourcePort = Optional.empty();
           }
@@ -78,13 +73,8 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
             Optional<ComponentInstanceSymbol> componentInstanceSymbol = component
               .getSubComponent(target.getComponent());
             if (componentInstanceSymbol.isPresent()) {
-<<<<<<< HEAD
-              targetPort = componentInstanceSymbol.get().getType()
-                .getPort(target.getPort(), true);
-=======
                 targetPort = componentInstanceSymbol.get().getType()
                   .getPort(target.getPort(), true);
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
             } else {
               targetPort = Optional.empty();
             }

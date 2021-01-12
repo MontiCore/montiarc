@@ -204,7 +204,6 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
     Preconditions.checkArgument(node != null);
     Preconditions.checkArgument(node.isPresentParent());
     return this.create_ComponentSurrogate(node.getParent());
-<<<<<<< HEAD
   }
 
   @Override
@@ -214,17 +213,6 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
   }
 
   @Override
-=======
-  }
-
-  @Override
-  public void visit(ASTMCType node) {
-    Preconditions.checkState(this.getCurrentScope().isPresent());
-    node.setEnclosingScope(this.getCurrentScope().get());
-  }
-
-  @Override
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
   protected VariableSymbol create_ArcParameter(@NotNull ASTArcParameter ast) {
     assert (this.getCurrentScope().isPresent());
     VariableSymbolBuilder builder = ArcBasisMill.variableSymbolBuilder();
@@ -368,11 +356,7 @@ public class ArcBasisSymbolTableCreator extends ArcBasisSymbolTableCreatorTOP {
   protected void initialize_ComponentInstance(@NotNull ComponentInstanceSymbol symbol,
     @NotNull ASTComponentInstance ast) {
     if (ast.isPresentArguments()) {
-<<<<<<< HEAD
-      symbol.addArguments(ast.getArguments().getExpressionsList());
-=======
       symbol.addArguments(ast.getArguments().getExpressionList());
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
     }
   }
 

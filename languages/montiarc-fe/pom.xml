@@ -8,11 +8,7 @@
   <parent>
     <groupId>montiarc.languages</groupId>
     <artifactId>languages</artifactId>
-<<<<<<< HEAD
-    <version>6.2.0-SNAPSHOT</version>
-=======
     <version>6.5.0-SNAPSHOT</version>
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772
   </parent>
 
   <artifactId>montiarc-fe</artifactId>

@@ -2,16 +2,6 @@
 package montiarc.generator.codegen.xtend
 
 import arcbasis._symboltable.ComponentTypeSymbol
-<<<<<<< HEAD:generators/ma2java/src/main/java/de/montiarcautomaton/generator/codegen/xtend/ComponentGenerator.xtend
-import de.montiarcautomaton.generator.codegen.xtend.util.Identifier
-import de.montiarcautomaton.generator.codegen.xtend.util.Init
-import de.montiarcautomaton.generator.codegen.xtend.util.Ports
-import de.montiarcautomaton.generator.codegen.xtend.util.Setup
-import de.montiarcautomaton.generator.codegen.xtend.util.Subcomponents
-import de.montiarcautomaton.generator.codegen.xtend.util.Update
-import de.montiarcautomaton.generator.codegen.xtend.util.Utils
-import de.montiarcautomaton.generator.helper.ComponentHelper
-=======
 import montiarc.generator.codegen.xtend.util.Identifier
 import montiarc.generator.codegen.xtend.util.Init
 import montiarc.generator.codegen.xtend.util.Ports
@@ -20,7 +10,6 @@ import montiarc.generator.codegen.xtend.util.Subcomponents
 import montiarc.generator.codegen.xtend.util.Update
 import montiarc.generator.codegen.xtend.util.Utils
 import montiarc.generator.helper.ComponentHelper
->>>>>>> bb276d4fcc3784a5352ae1a8711ede81331f4772:generators/ma2java/src/main/java/montiarc/generator/codegen/xtend/ComponentGenerator.xtend
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import java.util.ArrayList
 import java.util.List
