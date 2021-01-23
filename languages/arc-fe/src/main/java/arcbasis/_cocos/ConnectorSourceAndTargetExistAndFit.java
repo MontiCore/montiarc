@@ -5,6 +5,7 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
+import arcbasis._visitor.ArcBasisPrettyPrinterDelegator;
 import arcbasis.check.ArcTypeCheck;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
@@ -48,13 +49,15 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
       try {
         if (!connector.getSource().isPresentComponent()) {
           sourcePort = component.getPort(connector.getSource().getPort(), true);
-        } else {
+        }
+        else {
           Optional<ComponentInstanceSymbol> componentInstanceSymbol = component
             .getSubComponent(connector.getSource().getComponent());
           if (componentInstanceSymbol.isPresent()) {
-              sourcePort = componentInstanceSymbol.get().getType()
-                .getPort(connector.getSource().getPort(), true);
-          } else {
+            sourcePort = componentInstanceSymbol.get().getType()
+              .getPort(connector.getSource().getPort(), true);
+          }
+          else {
             sourcePort = Optional.empty();
           }
         }
@@ -69,13 +72,15 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
           Optional<PortSymbol> targetPort;
           if (!target.isPresentComponent()) {
             targetPort = component.getPort(target.getPort(), true);
-          } else {
+          }
+          else {
             Optional<ComponentInstanceSymbol> componentInstanceSymbol = component
               .getSubComponent(target.getComponent());
             if (componentInstanceSymbol.isPresent()) {
-                targetPort = componentInstanceSymbol.get().getType()
-                  .getPort(target.getPort(), true);
-            } else {
+              targetPort = componentInstanceSymbol.get().getType()
+                .getPort(target.getPort(), true);
+            }
+            else {
               targetPort = Optional.empty();
             }
           }
@@ -107,7 +112,11 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
         if (!ArcTypeCheck.compatible(sourceType, targetType)) {
           Log.error(
             String.format(ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH.toString(),
-              source.getType().print(), target.getType().print(), component.getFullName()),
+              source.getType().print(), target.getType().print(),
+              new ArcBasisPrettyPrinterDelegator().prettyprint(connector)
+                .replaceAll(";", "")
+                .replaceAll("\n", ""),
+              component.getFullName()),
             connector.get_SourcePositionStart());
         }
       }

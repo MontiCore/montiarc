@@ -50,7 +50,7 @@ public enum ArcError implements montiarc.util.Error {
   TARGET_PORT_NOT_EXISTS("0xMA1036", "Target port '%s' of connector of component '%s' does not "
     + "exist."),
   SOURCE_AND_TARGET_TYPE_MISMATCH("0xMA1037", "Type '%s' of source port and type '%s' of target "
-    + "port of connector of component '%s' are incompatible."),
+    + "port of connector '%s' of component '%s' are incompatible."),
   INNER_COMPONENT_EXTENDS_OUTER("0xMA1038", "Inner component type '%s' extends the " +
     "component type %s which is also its outer component type."),
   VARIABLE_LOWER_CASE("0xMA1039", "The name of the variable '%s' of component '%s' should start "
