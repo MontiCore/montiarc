@@ -1,0 +1,5 @@
+*	text = auto
+*.txt	text
+*.java	text
+*.arc	text
+*.cd	text
