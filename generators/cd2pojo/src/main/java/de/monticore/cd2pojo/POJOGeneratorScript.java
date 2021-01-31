@@ -1,28 +1,25 @@
 /* (c) https://github.com/MontiCore/monticore */
 package de.monticore.cd2pojo;
 
-import de.se_rwth.commons.Names;
 import de.se_rwth.commons.configuration.Configuration;
 import de.se_rwth.commons.groovy.GroovyInterpreter;
 import de.se_rwth.commons.groovy.GroovyRunner;
-import de.se_rwth.commons.logging.Log;
 import groovy.lang.Script;
 import montiarc.util.Modelfinder;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 /**
- *
+ * The script class that integrates with se-groovy-maven plugin to run the
+ * pojo generator groovy script during an applications build process to execute
+ * the pojo generator.
  */
 public class POJOGeneratorScript extends Script implements GroovyRunner {
   
   protected static final String[] DEFAULT_IMPORTS = {};
-  
-  protected static final String LOG = "POJOGeneratorScript";
   
   /**
    * @see de.se_rwth.commons.groovy.GroovyRunner#run(java.lang.String,
@@ -38,14 +35,12 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
     POJOConfiguration config = POJOConfiguration
         .withConfiguration(configuration);
     
-    // we add the configuration object as property with a special property
-    // name
+    // we add the configuration object as property with a special property name
     builder.addVariable(POJOConfiguration.CONFIGURATION_PROPERTY, config);
     
     config.getAllValues().forEach((key, value) -> builder.addVariable(key, value));
     
-    // after adding everything we override a couple of known variable
-    // bindings
+    // after adding everything we override a couple of known variable bindings
     // to have them properly typed in the script
     builder.addVariable(POJOConfiguration.Options.MODELPATH.toString(),
         config.getModelPath());
@@ -54,9 +49,7 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
     GroovyInterpreter g = builder.build();
     g.evaluate(script);
   }
-  
-  
-  
+
   /**
    * Gets called by Groovy Script. Generates component artifacts for each
    * component in {@code modelPath} to {@code targetFilepath}
@@ -67,59 +60,8 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
   public void generate(File modelPath, File targetFilepath) {
     File fqnMP = Paths.get(modelPath.getAbsolutePath()).toFile();
     List<String> foundModels = Modelfinder.getModelsInModelPath(fqnMP, "cd");
-    for (String model : foundModels) {
-      String simpleName = Names.getSimpleName(model);
-      String packageName = Names.getQualifier(model);
-      
-      Path outDir = Paths.get(targetFilepath.getAbsolutePath());
-      new POJOGenerator(outDir, Paths.get(fqnMP.getAbsolutePath()), model,
-          Names.getQualifiedName(packageName, simpleName)).generate();
-    }    
-  }
-  
-  
-  // #######################
-  // log functions
-  // #######################
-  
-  public boolean isDebugEnabled() {
-    return Log.isDebugEnabled(LOG);
-  }
-  
-  public void debug(String msg) {
-    Log.debug(msg, LOG);
-  }
-  
-  public void debug(String msg, Throwable t) {
-    Log.debug(msg, t, LOG);
-  }
-  
-  public boolean isInfoEnabled() {
-    return Log.isInfoEnabled(LOG);
-  }
-  
-  public void info(String msg) {
-    Log.info(msg, LOG);
-  }
-  
-  public void info(String msg, Throwable t) {
-    Log.info(msg, t, LOG);
-  }
-  
-  public void warn(String msg) {
-    Log.warn(msg);
-  }
-  
-  public void warn(String msg, Throwable t) {
-    Log.warn(msg, t);
-  }
-  
-  public void error(String msg) {
-    Log.error(msg);
-  }
-  
-  public void error(String msg, Throwable t) {
-    Log.error(msg, t);
+    POJOGeneratorTool tool = new POJOGeneratorTool(targetFilepath.toPath(), Paths.get(""));
+    tool.generateCDTypesInPath(foundModels, fqnMP.toPath());
   }
   
   /**

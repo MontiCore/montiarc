@@ -2,11 +2,7 @@
 package domain;
 import java.io.File;
 
-/**
- * Example CD
- * @version: 1.0, 27.10.2016
- */
-classdiagram Domain {
+classdiagram RoadNetwork {
 
   /*******************
    *   Straßennetz   *
@@ -26,10 +22,10 @@ classdiagram Domain {
   association [1] StreetNetwork -> Node [*];
   association [1] StreetNetwork -> Connection [0..1];
 
-  // Knoten auf Straßennetz
   class Node {
     String id;
   }
+
   association [1] Node -> Point [1];
 
   class Point {
@@ -37,29 +33,26 @@ classdiagram Domain {
     double y;
   }
 
-  // gerichtete, gewichtete Kante im Straßennetz
   class Connection {
     double weight;
   }
+
   association [*] Connection (outgoing) <-> (src) Node [1];
   association [*] Connection (incoming) <-> (target) Node [1];
 
-  // Pfad auf dm Straßennetz
   class Path;
   association [1] Path -> Connection [*];
-
-  /*******************
-   *       LTS       *
-   *******************/
 
   class LTS {
     String id;
   }
-  association [1] LTS -> (coordinator) Participant [0..1]; // (Optionale) Zuweisung eines koordinierenden Teilnehmers
+
+  association [1] LTS -> (coordinator) Participant [0..1];
 
   class Position {
     double positionOnConnection;
   }
+
   association [1] Position -> Connection [1];
 
   class Participant {
@@ -67,17 +60,18 @@ classdiagram Domain {
     double width;
     double height;
     Position position;
-    double velocity; // aktuelle Geschwindigkeit 
+    double velocity;
   }
-  association [1] Participant -> (entourage) Participant [*]; // Individuelles Umfeld
-  association [1] Participant -> LTS [*]; // LTS-Zugehöorigkeit(en) oder keine
-  association [1] Participant -> Kinodynamic [1]; // erweitertes kinodynamisches Modell
-  association [1] Participant -> (intentionPath) Path [1]; // geplanter oder wahscheinlister Pfad auf dem Stassennetz (Fahrvorhaben)
-  association [1] Participant -> (preceptedPath) Path [1]; // Vom Kollektiv oder Koordinator vorgegebener Pfad (Fahrvorgabe)
-  association [1] Participant -> (possiblePaths) Path [*]; // Mögliche Pfade auf dem Straßennetz
-  association [1] Participant -> (interaction) InteractionMode [1]; // (Interaktionsfähigkeit)
-  association [1] Participant -> PlanState [1]; // Planungsvorgang
-  association [1] Participant -> ComputingCapacity[1]; // Rechenkapazität
+
+  association [1] Participant -> (entourage) Participant [*];
+  association [1] Participant -> LTS [*];
+  association [1] Participant -> Kinodynamic [1];
+  association [1] Participant -> (intentionPath) Path [1];
+  association [1] Participant -> (preceptedPath) Path [1];
+  association [1] Participant -> (possiblePaths) Path [*];
+  association [1] Participant -> (interaction) InteractionMode [1];
+  association [1] Participant -> PlanState [1];
+  association [1] Participant -> ComputingCapacity[1];
 
   enum PlanState {
     IDLE, PLANNING, DONE;
@@ -102,7 +96,7 @@ classdiagram Domain {
     double bandwidth;
   }
   association [1] CommunicationChannel -> (type) ChannelType [1];
-  association [1] CommunicationChannel -> Message [*]; // Übertragung von Nachrichten
+  association [1] CommunicationChannel -> Message [*];
 
   enum ChannelType {
     UMTS, WLAN;
@@ -110,9 +104,9 @@ classdiagram Domain {
 
   class Message {
     String content;
-    
+
   }
-  association [1] Message -> (reciepients) Participant [*]; // Empfängerliste
+  association [1] Message -> (reciepients) Participant [*];
   association [1] Message -> MessageType [1];
 
   enum MessageType {

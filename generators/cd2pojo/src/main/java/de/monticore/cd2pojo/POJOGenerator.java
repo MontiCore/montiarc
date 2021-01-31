@@ -1,124 +1,97 @@
 /* (c) https://github.com/MontiCore/monticore */
 package de.monticore.cd2pojo;
 
-import de.monticore.cd.cd4analysis._symboltable.*;
+import com.google.common.base.Preconditions;
+import de.monticore.cdbasis._symboltable.CDTypeSymbol;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
-import de.monticore.io.paths.ModelPath;
-import de.monticore.utils.Names;
-import de.se_rwth.commons.logging.Log;
+import de.monticore.io.paths.IterablePath;
+import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
-/**
- * see README.md
- *
- * @author Robert Heim
- */
 public class POJOGenerator {
-
-  private static final String[] primitiveTypes = { "boolean", "byte", "char", "double", "float",
-    "int", "long", "short", "String" };
-
-  private Path outputDir;
-
-  private TypeHelper typeHelper;
-
-  private GeneratorSetup generatorSetup;
-
-  private GeneratorEngine ge;
-
-  private String _package = "";
-
-  private CDDefinitionSymbol cdSymbol;
-
-  public POJOGenerator(Path outputDir, Path modelPath, String modelName) {
-    this(outputDir, modelPath, modelName, Optional.empty());
+  
+  protected static String FILE_EXTENSION = ".java";
+  
+  protected GeneratorEngine engine;
+  protected IterablePath hwcPath;
+  
+  public POJOGenerator(@NotNull GeneratorEngine engine, @NotNull IterablePath hwcPaths) {
+    Preconditions.checkNotNull(engine);
+    Preconditions.checkNotNull(hwcPaths);
+    this.engine = engine;
+    this.hwcPath = hwcPaths;
   }
-
-  public POJOGenerator(Path outputDir, Path modelPath, String modelName, String targetPackage) {
-    this(outputDir, modelPath, modelName, Optional.of(targetPackage));
+  
+  public POJOGenerator(@NotNull GeneratorSetup setup) {
+    this(new GeneratorEngine(Preconditions.checkNotNull(setup)), setup.getHandcodedPath());
   }
-
-  private POJOGenerator(
-    Path outputDir,
-    Path modelPath,
-    String modelName,
-    Optional<String> targetPackage) {
-    this.outputDir = outputDir;
-
-    CD4AnalysisLanguage lang = new CD4AnalysisLanguage();
-    ICD4AnalysisScope st = new CD4AnalysisGlobalScope(new ModelPath(modelPath), lang);
-    st = injectPrimitives(st);
-    cdSymbol = st.resolveCDDefinition(modelName).orElse(null);
-    _package = targetPackage.orElse(cdSymbol.getName().toLowerCase());
-
-    this.typeHelper = new TypeHelper(_package);
-    this.generatorSetup = new GeneratorSetup();
-    this.generatorSetup.setOutputDirectory(this.outputDir.toFile());
-    this.ge = new GeneratorEngine(this.generatorSetup);
+  
+  public POJOGenerator(@NotNull Path targetDir, @NotNull Path hwcPath) {
+    this(createGeneratorSetup(Preconditions.checkNotNull(targetDir), Preconditions.checkNotNull(hwcPath)));
+    this.hwcPath = IterablePath.from(hwcPath.toFile(), "java");
   }
-
-  public void generate() {
-    cdSymbol.getTypes().forEach(t -> generate(t));
-    Log.info("Done.", "Generator");
+  
+  protected static GeneratorSetup createGeneratorSetup(@NotNull Path targetDir, @NotNull Path hwcPath) {
+    Preconditions.checkNotNull(targetDir);
+    Preconditions.checkNotNull(hwcPath);
+    GeneratorSetup setup = new GeneratorSetup();
+    setup.setOutputDirectory(targetDir.toFile());
+    setup.setHandcodedPath(IterablePath.from(hwcPath.toFile(), "java"));
+    return setup;
   }
-
-  protected ICD4AnalysisScope injectPrimitives(ICD4AnalysisScope scope) {
-    for (String primitive : primitiveTypes) {
-      CDTypeSymbol primitiveCdType = new CDTypeSymbol(primitive);
-      scope.add(primitiveCdType);
+  
+  public void generate(@NotNull CDTypeSymbol typeSymbol) {
+    Preconditions.checkNotNull(typeSymbol);
+    Boolean existsHWC = existsHWC(typeSymbol);
+    String kind = "";
+    if (typeSymbol.isIsClass()) {
+      if (existsHWC) {
+        kind = "abstract ";
+      }
+      kind += "class";
+    } else if (typeSymbol.isIsEnum()) {
+      kind = "enum";
+    } else {
+      kind = "interface";
     }
-    return scope;
-  }
-
-  private void generate(CDTypeSymbol type) {
-    String kind = type.isIsClass() ? "class" : (type.isIsEnum() ? "enum" : "interface");
-
+    
     final StringBuilder _super = new StringBuilder();
-    if (type.isPresentSuperClass()) {
+    if (typeSymbol.isPresentSuperClass()) {
       _super.append("extends ");
-      _super.append(typeHelper.printType(type.getSuperClass().getLoadedSymbol()));
+      _super.append(typeSymbol.getSuperClass().getTypeInfo().getFullName());
       _super.append(" ");
-    } else if (type.isIsInterface() && !type.getCdInterfaceList().isEmpty()) {
+    } else if (typeSymbol.isIsInterface() && !typeSymbol.getInterfaceList().isEmpty()) {
       // Allows extending other interfaces
       _super.append("extends ");
-      _super.append(typeHelper.printType(type.getCdInterface(0).getLoadedSymbol()));
+      _super.append(typeSymbol.getInterfaceList().get(0).getTypeInfo().getFullName());
       _super.append(" ");
     }
-    if (!type.getCdInterfaceList().isEmpty() && !type.isIsInterface()) {
-      _super.append(" ");
-      _super.append("implements");
-      type.getCdInterfaceList().forEach(i -> {
-        _super.append(" ");
-        _super.append(typeHelper.printType(i.getLoadedSymbol()));
-        _super.append(",");
-      });
-      _super.deleteCharAt(_super.length() - 1);
+    if (!typeSymbol.getInterfaceList().isEmpty() && !typeSymbol.isIsInterface()) {
+      _super.append("implements ");
+      _super.append(typeSymbol.getInterfaceList().stream()
+        .map(i -> i.getTypeInfo().getFullName())
+        .collect(Collectors.joining(", ")));
     }
-
-    Path filePath = Paths.get(Names.getPathFromPackage(typeHelper.printType(type)) + ".java");
-
-    // Hack to at least correctly generate java.lang.*
-    // Will not work with packages that start with upper case letters
-    List<String> imports = new ArrayList<>();
-    for (String anImport : cdSymbol.getImports()) {
-      final String[] split = anImport.split("\\.");
-      if (split.length > 0) {
-        final char firstOfLastElement = split[split.length - 1].charAt(0);
-        if (Character.isLowerCase(firstOfLastElement)) {
-          imports.add(anImport + ".*");
-        } else {
-          imports.add(anImport);
-        }
-      }
-    }
-
-    ge.generate("templates.type.ftl", filePath, type.getAstNode(), _package, kind,
-      type, _super, typeHelper, imports);
+    
+    String _package = typeSymbol.getFullName().substring(0, typeSymbol.getFullName().lastIndexOf("."));
+    engine.generateNoA("templates.Type.ftl", getFileAsPath(typeSymbol),
+      _package, kind, typeSymbol, _super, new TemplateHelper(), existsHWC);
+  }
+  
+  protected Boolean existsHWC(@NotNull CDTypeSymbol typeSymbol) {
+    Preconditions.checkNotNull(typeSymbol);
+    return hwcPath.exists(Paths.get(
+      typeSymbol.getFullName().replaceAll("\\.", "/") + FILE_EXTENSION));
+    
+  }
+  
+  protected Path getFileAsPath(@NotNull CDTypeSymbol typeSymbol) {
+    Preconditions.checkNotNull(typeSymbol);
+    Boolean existsHWC = existsHWC(typeSymbol);
+    return Paths.get(typeSymbol.getFullName().replaceAll("\\.", "/") + (existsHWC? "TOP":"") + FILE_EXTENSION);
   }
 }

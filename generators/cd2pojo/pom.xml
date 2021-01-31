@@ -22,6 +22,20 @@
       <id>Department of Software Engineering, RWTH Aachen University</id>
       <url>http://www.se-rwth.de/</url>
     </developer>
+
+    <developer>
+      <name>Joshua Mingers</name>
+      <email>mingers@se-rwth.de</email>
+      <id>Department of Software Engineering, RWTH Aachen University</id>
+      <url>http://www.se-rwth.de/</url>
+    </developer>
+
+    <developer>
+      <name>David Schmalzing</name>
+      <email>schmalzing@se-rwth.de</email>
+      <id>Department of Software Engineering, RWTH Aachen University</id>
+      <url>http://www.se-rwth.de/</url>
+    </developer>
   </developers>
 
   <!-- == PROJECT DEPENDENCIES ============================================= -->
@@ -38,6 +52,11 @@
       <artifactId>se-commons-groovy</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>de.monticore</groupId>
+      <artifactId>monticore-grammar</artifactId>
+    </dependency>
+
     <!-- MontiArc -->
     <dependency>
       <groupId>montiarc</groupId>
@@ -49,7 +68,6 @@
     <dependency>
       <groupId>de.monticore.lang</groupId>
       <artifactId>cd4analysis</artifactId>
-      <version>1.7.0</version>
     </dependency>
 
     <!-- Test Libraries -->
@@ -75,6 +93,17 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>21.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.janino</groupId>
+      <artifactId>janino</artifactId>
     </dependency>
   </dependencies>
 

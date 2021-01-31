@@ -1,0 +1,13 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+package cocos;
+
+classdiagram AmbiguousAssociations {
+
+  class A;
+  class B;
+  class C;
+
+  association some A -> B;
+  association some A -> C;
+}

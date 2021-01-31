@@ -1,0 +1,28 @@
+package simple;
+
+classdiagram Double {
+
+  class A implements C {
+    private int aInt;
+    public myConstr(String constrParam);
+  }
+
+  class B {
+    private int bInt;
+  }
+
+  interface C {
+    public void myMethod(String myParam);
+  }
+
+  association once [1] A -> B [1];
+  association second [1] A -> B [1];
+  association third [1] B -> A [*];
+
+  association namedBidiAssociation private [1] A <-> B [1..*] public {ordered};
+
+  association qualifiedByAttributeName A -> [[bInt]] B;
+  association qualifiedByType A [int] -> B;
+
+  association withRoles [1] A (a) -> (b2) B [1];
+}

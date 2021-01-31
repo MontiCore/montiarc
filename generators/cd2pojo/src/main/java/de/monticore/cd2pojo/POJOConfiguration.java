@@ -1,6 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package de.monticore.cd2pojo;
 
+import de.se_rwth.commons.configuration.Configuration;
+import de.se_rwth.commons.configuration.ConfigurationContributorChainBuilder;
+import de.se_rwth.commons.configuration.DelegatingConfigurationContributor;
+
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,22 +13,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import de.se_rwth.commons.configuration.Configuration;
-import de.se_rwth.commons.configuration.ConfigurationContributorChainBuilder;
-import de.se_rwth.commons.configuration.DelegatingConfigurationContributor;
+public class POJOConfiguration implements Configuration {
 
-/**
- * TODO: Write me!
- *
- *          $Date$
- *
- */
-public class POJOConfiguration implements Configuration{
   public static final String CONFIGURATION_PROPERTY = "_configuration";
-  public static final String DEFAULT_OUTPUT_DIRECTORY = "out";
-  
 
-  
+  public static final String DEFAULT_OUTPUT_DIRECTORY = "out";
+
   /**
    * The names of the specific MontiArc options used in this configuration.
    */
@@ -48,20 +42,13 @@ public class POJOConfiguration implements Configuration{
     }
     
   }
-  
-  
+
   private final Configuration configuration;
   
-  /**
-   * Factory method for {@link TemplateClassGeneratorConfiguration}.
-   */
   public static POJOConfiguration withConfiguration(Configuration configuration) {
     return new POJOConfiguration(configuration);
   }
   
-  /**
-   * Constructor for {@link TemplateClassGeneratorConfiguration}
-   */
   private POJOConfiguration(Configuration internal) {
     this.configuration = ConfigurationContributorChainBuilder.newChain()
         .add(DelegatingConfigurationContributor.with(internal))
@@ -204,7 +191,6 @@ public class POJOConfiguration implements Configuration{
     return getValues(key.toString());
   }
   
-  
   public File getModelPath() {
     Optional<String> modelPath = getAsString(Options.MODELPATH);
     if(modelPath.isPresent()){
@@ -219,7 +205,6 @@ public class POJOConfiguration implements Configuration{
     System.out.println(modelPath);
     return null;
   }
-  
 
   /**
    * Getter for the output directory stored in this configuration. A fallback
@@ -233,20 +218,16 @@ public class POJOConfiguration implements Configuration{
       return new File(out.get());
     }
     out = getAsString(Options.OUT_SHORT);
-    if (out.isPresent()) {
-      return new File(out.get());
-    }
+    return out.map(File::new).orElseGet(() -> new File(DEFAULT_OUTPUT_DIRECTORY));
     // fallback default is "out"
-    return new File(DEFAULT_OUTPUT_DIRECTORY);
   }
-  
   
   /**
    * @param files as String names to convert
    * @return list of files by creating file objects from the Strings
    */
   protected static List<File> toFileList(List<String> files) {
-    return files.stream().collect(Collectors.mapping(file -> new File(file), Collectors.toList()));
+    return files.stream().map(File::new).collect(Collectors.toList());
   }
 
   /**
