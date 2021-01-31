@@ -77,6 +77,14 @@ Unit Test Amazon Corretto JDK 8:
   allow_failure: true 
   <<: *unit_test_definition
 
+Deploy Nexus:
+  image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3-jdk-8
+  stage: post-test
+  script:
+    - mvn -U $MAVEN_CLI_OPTS clean deploy -Dexec.skip -Dmaven.test.skip=true
+  only:
+    - develop
+
 Code Quality:
   stage: post-test
   variables:
