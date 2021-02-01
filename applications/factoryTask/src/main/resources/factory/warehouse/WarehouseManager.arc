@@ -5,7 +5,7 @@ import factory.warehouse.RequestManager;
 import factory.warehouse.transporter.Transporter;
 import factory.warehouse.Crane;
 import factory.warehouse.Storage;
-import factory.warehouse.Warehouse.*;
+import factory.warehouse.*;
 
 component WarehouseManager {
 

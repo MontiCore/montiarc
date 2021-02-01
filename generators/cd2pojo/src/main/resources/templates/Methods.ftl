@@ -39,28 +39,28 @@ dummy return statement (either 'false', empty String, 0 or 'null') -->
         <@printParams methodSignature=methodSignature/>)
         <#if withThrowsDeclaration><@printThrowsDeclaration methodSignature=methodSignature helper=helper/></#if>
     </#local>
-    <#if (methodSignature.getReturnType().getTypeInfo().getName() == "voidType")>
+    <#if (methodSignature.getReturnType().print() == "void")>
         <#local methodBody = "{ }">
     <#else>
-        <#if (methodSignature.getReturnType().getName() == "boolean")
-        || (methodSignature.getReturnType().getName() == "Boolean")>
+        <#if (methodSignature.getReturnType().print() == "boolean")
+        || (methodSignature.getReturnType().print() == "Boolean")>
             <#local methodBody = "{ return false; }">
-        <#elseif methodSignature.getReturnType().getName() == "String">
+        <#elseif methodSignature.getReturnType().print() == "String">
             <#local methodBody = "{ return \"\"; }">
-        <#elseif (methodSignature.getReturnType().getName() == "byte")
-        || (methodSignature.getReturnType().getName() == "Byte")
-        || (methodSignature.getReturnType().getName() == "short")
-        || (methodSignature.getReturnType().getName() == "Short")
-        || (methodSignature.getReturnType().getName() == "int")
-        || (methodSignature.getReturnType().getName() == "Integer")
-        || (methodSignature.getReturnType().getName() == "long")
-        || (methodSignature.getReturnType().getName() == "Long")
-        || (methodSignature.getReturnType().getName() == "float")
-        || (methodSignature.getReturnType().getName() == "Float")
-        || (methodSignature.getReturnType().getName() == "double")
-        || (methodSignature.getReturnType().getName() == "Double")
-        || (methodSignature.getReturnType().getName() == "char")
-        || (methodSignature.getReturnType().getName() == "Character")>
+        <#elseif (methodSignature.getReturnType().print() == "byte")
+        || (methodSignature.getReturnType().print() == "Byte")
+        || (methodSignature.getReturnType().print() == "short")
+        || (methodSignature.getReturnType().print() == "Short")
+        || (methodSignature.getReturnType().print() == "int")
+        || (methodSignature.getReturnType().print() == "Integer")
+        || (methodSignature.getReturnType().print() == "long")
+        || (methodSignature.getReturnType().print() == "Long")
+        || (methodSignature.getReturnType().print() == "float")
+        || (methodSignature.getReturnType().print() == "Float")
+        || (methodSignature.getReturnType().print() == "double")
+        || (methodSignature.getReturnType().print() == "Double")
+        || (methodSignature.getReturnType().print() == "char")
+        || (methodSignature.getReturnType().print() == "Character")>
             <#local methodBody = "{ return 0; }">
         <#else>
             <#local methodBody = "{ return null; }">

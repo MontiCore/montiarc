@@ -1,7 +1,7 @@
 package factory.warehouse;
 
-import factory.warehouse.Warehouse.Position;
-import factory.warehouse.Warehouse.StorageObject;
+import factory.warehouse.Position;
+import factory.warehouse.StorageObject;
 
 public class Storage {
   

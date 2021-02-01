@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>montiarc.libraries</groupId>
 			<artifactId>majava-rte</artifactId>
-			<version>${montiarc.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 
 
@@ -105,6 +105,11 @@
 						<groupId>montiarc.generators</groupId>
 						<artifactId>ma2java</artifactId>
 						<version>${montiarc.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>com.google.guava</groupId>
+						<artifactId>guava</artifactId>
+						<version>21.0</version>
 					</dependency>
 				</dependencies>
 			</plugin>

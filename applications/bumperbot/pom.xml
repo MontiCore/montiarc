@@ -135,7 +135,7 @@
         <artifactId>se-groovy-maven-plugin</artifactId>
         <version>${se-groovy.plugin}</version>
         <configuration>
-          <baseClass>MAAGeneratorScript</baseClass>
+          <baseClass>montiarc.generator.codegen.MAAGeneratorScript</baseClass>
           <arguments>
             <out>${basedir}/target/generated-sources/</out>
             <modelPath>${basedir}/src/main/resources/models</modelPath>
@@ -155,6 +155,11 @@
             <groupId>montiarc.generators</groupId>
             <artifactId>ma2java</artifactId>
             <version>${project.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
           </dependency>
           <dependency>
             <groupId>de.se_rwth.commons</groupId>

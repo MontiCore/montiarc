@@ -2,9 +2,9 @@
 package factory.warehouse.transporter;
 
 import java.util.ArrayList;
-import factory.warehouse.Warehouse.StorageObject;
-import factory.warehouse.Warehouse.Builder;
-import factory.warehouse.Warehouse.StorageObjectLinkedList;
+import factory.warehouse.StorageObject;
+import factory.warehouse.Builder;
+import factory.warehouse.StorageObjectLinkedList;
 
 /**
  * Atomic component for holding StorageObjects.

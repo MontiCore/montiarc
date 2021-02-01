@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package factory.warehouse;
 
-import factory.warehouse.Warehouse.StorageObject;
-import factory.warehouse.Warehouse.Position;
-import factory.warehouse.Warehouse.MovementState;
-import factory.warehouse.Warehouse.CraneState
+import factory.warehouse.StorageObject;
+import factory.warehouse.Position;
+import factory.warehouse.MovementState;
+import factory.warehouse.CraneState
 ;
 
 /**

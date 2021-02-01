@@ -3,14 +3,14 @@ package montiarc.generator;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
-import montiarc.generator.codegen.xtend.MAAGenerator;
-import de.monticore.cd2pojo.POJOGenerator;
+import de.monticore.cd2pojo.POJOGeneratorTool;
 import de.monticore.symboltable.IScope;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTool;
 import montiarc._symboltable.IMontiArcScope;
 import montiarc._symboltable.MontiArcGlobalScope;
+import montiarc.generator.codegen.xtend.MAAGenerator;
 import montiarc.util.DirectoryUtil;
 import montiarc.util.Modelfinder;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -109,14 +109,7 @@ public class MontiArcGeneratorTool extends MontiArcTool {
   }
 
   private void generatePOJOs(File modelPath, File targetFilepath) {
-    List<String> foundModels = Modelfinder.getModelsInModelPath(modelPath, "arc");
-    for (String model : foundModels) {
-      String simpleName = Names.getSimpleName(model);
-      String packageName = Names.getQualifier(model);
-
-      Path outDir = Paths.get(targetFilepath.getAbsolutePath());
-      new POJOGenerator(outDir, Paths.get(modelPath.getAbsolutePath()), model,
-          Names.getQualifiedName(packageName, simpleName)).generate();
-    }
+    Path outDir = Paths.get(targetFilepath.getAbsolutePath());
+    new POJOGeneratorTool(outDir, Paths.get(modelPath.getAbsolutePath())).generateAllTypesInPath(modelPath.toPath());
   }
 }

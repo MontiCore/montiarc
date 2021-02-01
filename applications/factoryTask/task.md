@@ -66,7 +66,7 @@ When creating the interfaces, consider the following:
  * the `RequestManager` needs to be able to tell both components from where to
    where they should be moving
  * both components need to be able to accept an object (`StorageObject` in
-   class diagram `factory.warehouse.Warehouse.cd`) and need to be able
+   class diagram `factory.warehouse.cd`) and need to be able
    to pass the object/objects they are holding to another component
  * it might be beneficial for the `RequestManager` to know:
    * where the `Transporter` and `Crane` are (for more efficient routing)

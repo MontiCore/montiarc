@@ -2,13 +2,10 @@
 package factory.warehouse;
 
 import de.montiarc.runtimes.timesync.implementation.IComputable;
-import factory.warehouse.Warehouse.CraneState;
-import factory.warehouse.Warehouse.MovementState;
-import factory.warehouse.Warehouse.Position;
 
 public class CraneImpl implements IComputable<CraneInput, CraneResult> {
   
-  private final static Position start = new Position(0,0,0);
+  private final static Position start = new Position();
   
   
   

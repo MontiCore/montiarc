@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>montiarc.libraries</groupId>
 			<artifactId>majava-rte</artifactId>
-			<version>${montiarc.version}</version>
+			<version>${project.version}</version>
 		</dependency>
   </dependencies>
 

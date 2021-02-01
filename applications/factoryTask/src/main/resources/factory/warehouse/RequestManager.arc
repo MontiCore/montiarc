@@ -2,7 +2,7 @@
 package factory.warehouse;
 
 import factory.warehouse.Storage;
-import factory.warehouse.Warehouse.*;
+import factory.warehouse.*;
 import factory.warehouse.transporter.Transporter;
 import factory.warehouse.Crane;
 

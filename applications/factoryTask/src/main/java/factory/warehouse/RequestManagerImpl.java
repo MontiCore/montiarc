@@ -2,11 +2,10 @@
 package factory.warehouse;
 
 import de.montiarc.runtimes.timesync.implementation.IComputable;
-import factory.warehouse.Warehouse.Position;
 
 public class RequestManagerImpl implements IComputable<RequestManagerInput, RequestManagerResult> {
   
-  private final static Position start = new Position(0,0,0);
+  private final static Position start = new Position();
   
   @Override
   public RequestManagerResult getInitialValues() {

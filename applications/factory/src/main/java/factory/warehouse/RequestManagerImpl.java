@@ -2,12 +2,10 @@
 package factory.warehouse;
 
 import de.montiarc.runtimes.timesync.implementation.IComputable;
-import factory.warehouse.Warehouse.Position;
-import factory.warehouse.Warehouse.Storage;
 
 public class RequestManagerImpl implements IComputable<RequestManagerInput, RequestManagerResult> {
   
-  private final static Position start = new Position(0,0,0);
+  private final static Position start = new Position();
   private Storage storage;
   private Position dropOffZone, pickUpZone;
   

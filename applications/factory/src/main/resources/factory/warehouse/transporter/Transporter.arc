@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package factory.warehouse.transporter;
 
-import factory.warehouse.Warehouse.StorageObject;
-import factory.warehouse.Warehouse.MovementState;
-import factory.warehouse.Warehouse.Position;
+import factory.warehouse.StorageObject;
+import factory.warehouse.MovementState;
+import factory.warehouse.Position;
 
 
 /**

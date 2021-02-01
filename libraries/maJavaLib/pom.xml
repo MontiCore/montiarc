@@ -21,7 +21,7 @@
       <groupId>de.monticore</groupId>
       <artifactId>javaLib</artifactId>
       <classifier>models</classifier>
-      <version>${javalib.version}</version>
+      <version>4.3.9</version>
     </dependency>
   </dependencies>
 
@@ -79,7 +79,7 @@
               <goal>jar</goal>
             </goals>
             <configuration>
-              <classifier>${majavalib.classifier}</classifier>
+              <classifier>majavalib</classifier>
               <classesDirectory>${project.build.directory}/lib</classesDirectory>
             </configuration>
           </execution>
