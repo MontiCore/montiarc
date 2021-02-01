@@ -95,7 +95,7 @@ public class POJOGeneratorTool {
   
   protected void doGenerate(@NotNull CDTypeSymbol typeSymbol) {
     Preconditions.checkNotNull(typeSymbol);
-    Log.debug("Now generating CD type symbol " + typeSymbol.getFullName(), "POJO Generator Tool");
+    Log.debug("Now generating CD type symbol " + typeSymbol.getName(), "POJO Generator Tool");
     generator.generate(typeSymbol);
   }
   

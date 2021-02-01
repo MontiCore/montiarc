@@ -90,7 +90,7 @@ dummy return statement (either 'false', empty String, 0 or 'null') -->
 </#macro>
 
 <#macro printParams methodSignature>
-    <#list methodSignature.getParameterList() as param>
+    <#list methodSignature.getSpannedScope().getFieldSymbols() as param>
         ${Util.getType(param.getType())}<#if param?is_last && methodSignature.isIsElliptic()>...</#if> ${param.getName()}<#sep>,
     </#list>
 </#macro>

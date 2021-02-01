@@ -1,13 +1,8 @@
 package de.monticore.cd2pojo;
 
 import de.monticore.cd._symboltable.CDSymbolTableHelper;
-import de.monticore.cd2pojo.cocos.CDAssociationNamesUnique;
-import de.monticore.cd2pojo.cocos.CDRoleNamesUnique;
 import de.monticore.cd4code.CD4CodeMill;
-import de.monticore.cd4code._cocos.CD4CodeCoCoChecker;
-import de.monticore.cd4code._symboltable.CD4CodeGlobalScope;
 import de.monticore.cd4code._symboltable.ICD4CodeGlobalScope;
-import de.monticore.cd4code.cocos.CD4CodeCoCosDelegator;
 import de.monticore.cd4code.typescalculator.DeriveSymTypeOfCD4Code;
 import de.monticore.cdassociation._symboltable.CDRoleSymbol;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
@@ -34,7 +29,7 @@ public class Beispiel {
     CDSymbolTableHelper helper = new CDSymbolTableHelper(new DeriveSymTypeOfCD4Code());
     
     //Standard GlobalScope (mit CDSymTabHelper)
-    CD4CodeGlobalScope a = CD4CodeMill.cD4CodeGlobalScopeBuilder().setModelPath(mp).setModelFileExtension("cd").setSymbolTableHelper(helper).build();
+    ICD4CodeGlobalScope a = CD4CodeMill.cD4CodeGlobalScopeBuilder().setModelPath(mp).setModelFileExtension("cd").setSymbolTableHelper(helper).build();
     
     //Standard resolving
     List<CDTypeSymbol> l = a.resolveCDTypeMany(typeSymbolFQN);

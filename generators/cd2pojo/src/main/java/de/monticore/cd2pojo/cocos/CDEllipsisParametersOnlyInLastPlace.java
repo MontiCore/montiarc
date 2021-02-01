@@ -12,12 +12,12 @@ public class CDEllipsisParametersOnlyInLastPlace implements CD4CodeBasisASTCDMet
   @Override
   public void check(@NotNull ASTCDMethod node) {
     Preconditions.checkNotNull(node);
-    if(node.getCDParametersList().size() < 2) return;
-    for(int i = node.getCDParametersList().size() - 2; i >= 0; i--) {
-      if(node.getCDParameters(i).isEllipsis()) {
+    if(node.getCDParameterList().size() < 2) return;
+    for(int i = node.getCDParameterList().size() - 2; i >= 0; i--) {
+      if(node.getCDParameter(i).isEllipsis()) {
         Log.error(String.format("The parameter %s of the method %s is elliptic, " +
             "but is not the last parameter in the method definition." ,
-          node.getCDParameters(i).getName(), node.getName()));
+          node.getCDParameter(i).getName(), node.getName()));
       }
     }
   }

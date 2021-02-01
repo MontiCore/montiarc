@@ -9,7 +9,7 @@
   <parent>
     <artifactId>libraries</artifactId>
     <groupId>montiarc.libraries</groupId>
-    <version>6.2.0</version>
+    <version>6.5.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>maJavaLib</artifactId>

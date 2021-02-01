@@ -16,7 +16,9 @@ public class CDAssociationNamesUnique implements CDBasisASTCDDefinitionCoCo {
   public void check(@NotNull ASTCDDefinition ast) {
     Preconditions.checkNotNull(ast);
     HashSet<String> uniques = new HashSet<>();
-    ast.getCDAssociationsList().stream().map(ASTCDAssociation::getPrintableName)
+    ast.getCDAssociationsList().stream()
+      .filter(ASTCDAssociation::isPresentName)
+      .map(ASTCDAssociation::getName)
       .filter(name -> !uniques.add(name))
       .forEach(name -> Log.error("The association name " + name +
         " is used multiple times the class diagram " + ast.getName() + "."));

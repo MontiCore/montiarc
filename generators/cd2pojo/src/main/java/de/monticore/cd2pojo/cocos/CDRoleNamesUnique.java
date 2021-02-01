@@ -49,25 +49,25 @@ public class CDRoleNamesUnique implements CDBasisASTCDDefinitionCoCo {
       String errorMessage = "The role name %s would be used multiple times as an attribute name in the class %s";
       if (isBiDirectional(association)) {
         if (String.join(".", association.getRightReferenceName()).equals(sourceClassName)) {
-          if (!roleNames.add(association.getLeft().getCDRole().getName())) {
-            Log.error(String.format(errorMessage, association.getLeft().getCDRole().getName(), sourceClassName));
+          if (!roleNames.add(association.getLeft().getName())) {
+            Log.error(String.format(errorMessage, association.getLeft().getName(), sourceClassName));
           }
         }
         if (String.join(".", association.getLeftReferenceName()).equals(sourceClassName)) {
-          if (!roleNames.add(association.getRight().getCDRole().getName())) {
-            Log.error(String.format(errorMessage, association.getRight().getCDRole().getName(), sourceClassName));
+          if (!roleNames.add(association.getRight().getName())) {
+            Log.error(String.format(errorMessage, association.getRight().getName(), sourceClassName));
           }
         }
       } else if (isDefinitiveNavigableLeft(association)) {
-        if (String.join(".", association.getRightReferenceName()).equals(sourceClassName)) {
-          if (!roleNames.add(association.getLeft().getCDRole().getName())) {
-            Log.error(String.format(errorMessage, association.getLeft().getCDRole().getName(), sourceClassName));
+        if (association.isPresentName() && association.getName().equals(sourceClassName)) {
+          if (!roleNames.add(association.getLeft().getName())) {
+            Log.error(String.format(errorMessage, association.getLeft().getName(), sourceClassName));
           }
         }
       } else if (isDefinitiveNavigableRight(association)) {
-        if (String.join(".", association.getLeftReferenceName()).equals(sourceClassName)) {
-          if (!roleNames.add(association.getRight().getCDRole().getName())) {
-            Log.error(String.format(errorMessage, association.getRight().getCDRole().getName(), sourceClassName));
+        if (association.isPresentName() && association.getName().equals(sourceClassName)) {
+          if (!roleNames.add(association.getRight().getName())) {
+            Log.error(String.format(errorMessage, association.getRight().getName(), sourceClassName));
           }
         }
       }

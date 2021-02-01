@@ -60,6 +60,7 @@ public class POJOGenerator {
     }
     
     final StringBuilder _super = new StringBuilder();
+
     if (typeSymbol.isPresentSuperClass()) {
       _super.append("extends ");
       _super.append(typeSymbol.getSuperClass().getTypeInfo().getFullName());

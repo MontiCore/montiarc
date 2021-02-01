@@ -9,7 +9,7 @@
   <parent>
     <groupId>montiarc.generators</groupId>
     <artifactId>generators</artifactId>
-    <version>6.2.0</version>
+    <version>6.5.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>cd2pojo</artifactId>
@@ -104,6 +104,13 @@
     <dependency>
       <groupId>org.codehaus.janino</groupId>
       <artifactId>janino</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.javaparser</groupId>
+      <artifactId>javaparser-core</artifactId>
+      <version>3.18.0</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

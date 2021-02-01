@@ -6,8 +6,8 @@ import de.monticore.cd4codebasis._ast.ASTCDMethod;
 import de.monticore.cd4codebasis._symboltable.CDMethodSignatureSymbol;
 import de.monticore.cdassociation._symboltable.CDRoleSymbol;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
-import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbolTOP;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
@@ -15,8 +15,6 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class TemplateHelper {
@@ -31,7 +29,7 @@ public class TemplateHelper {
     Preconditions.checkNotNull(methodSignature);
     if (!methodSignature.getExceptionsList().isEmpty()) {
       return methodSignature.getExceptionsList().stream()
-        .map(exp -> exp.getTypeInfo().getFullName()).collect(Collectors.toList());
+        .map(exp -> exp.getTypeInfo().getName()).collect(Collectors.toList());
     } else if (methodSignature.isPresentAstNode()) {
       if (methodSignature.getAstNode() instanceof ASTCDMethod) {
         ASTCDMethod astcdMethod = (ASTCDMethod) methodSignature.getAstNode();
@@ -55,7 +53,7 @@ public class TemplateHelper {
     for (FieldSymbol fieldSymbol : typeSymbol.getFieldList()) {
       res.add(new Attribute(
         getModifiers(fieldSymbol),
-        fieldSymbol.getType().getTypeInfo().getFullName(),
+        fieldSymbol.getType().getTypeInfo().getName(),
         fieldSymbol.getName(),
         fieldSymbol.isIsReadOnly()));
     }
@@ -75,7 +73,7 @@ public class TemplateHelper {
     //Attributes come from attribute definitions and associations
     //But we ignore associations where the cardinality can be 0 for the constructor
     for (FieldSymbol fieldSymbol : typeSymbol.getFieldList()) {
-      res.add(new Field(fieldSymbol.getType().getTypeInfo().getFullName(),
+      res.add(new Field(fieldSymbol.getType().getTypeInfo().getName(),
         fieldSymbol.getName()));
     }
     for (CDRoleSymbol roleSymbol : typeSymbol.getCDRoleList()) {
@@ -116,17 +114,17 @@ public class TemplateHelper {
     Preconditions.checkNotNull(roleSymbol);
     String type = "";
     if (!roleSymbol.isPresentCardinality() || roleSymbol.getCardinality().isOne()) {
-      type = roleSymbol.getType().getTypeInfo().getFullName();
+      type = roleSymbol.getType().getTypeInfo().getName();
     } else if (roleSymbol.getCardinality().isOpt()) {
-      type = "Optional<" + roleSymbol.getType().getTypeInfo().getFullName() + ">";
+      type = "Optional<" + roleSymbol.getType().getTypeInfo().getName() + ">";
     } else if (roleSymbol.isPresentAttributeQualifier()) {
-      type = "Map<" + roleSymbol.getAttributeQualifier().getType().getTypeInfo().getFullName() +
-        ", " + roleSymbol.getType().getTypeInfo().getFullName() + ">";
+      type = "Map<" + roleSymbol.getAttributeQualifier().getType().getTypeInfo().getName() +
+        ", " + roleSymbol.getType().getTypeInfo().getName() + ">";
     } else if (roleSymbol.isPresentTypeQualifier()) {
-      type = "Map<" + roleSymbol.getTypeQualifier().getTypeInfo().getFullName() +
-        ", " + roleSymbol.getType().getTypeInfo().getFullName() + ">";
+      type = "Map<" + roleSymbol.getTypeQualifier().getTypeInfo().getName() +
+        ", " + roleSymbol.getType().getTypeInfo().getName() + ">";
     } else {
-      type = "List<" + roleSymbol.getType().getTypeInfo().getFullName() + ">";
+      type = "List<" + roleSymbol.getType().getTypeInfo().getName() + ">";
     }
     return type;
   }
@@ -175,29 +173,29 @@ public class TemplateHelper {
     }
     return typeSymbol.getInterfaceList().stream()
       .map(SymTypeExpression::getTypeInfo)
-      .flatMap(ooTypeSymbol -> ooTypeSymbol.getMethodList().stream())
-      .filter(methodSymbol -> methodSymbol instanceof CDMethodSignatureSymbol)
-      .filter(methodSymbol -> typeSymbol.getMethodSignatureList().stream()
-        .noneMatch(otherSignature -> methodSignaturesMatch(methodSymbol, otherSignature)))
+      .flatMap(ooTypeSymbol -> ooTypeSymbol.getFunctionList().stream())
+      .filter(functionSymbol -> functionSymbol instanceof CDMethodSignatureSymbol)
+      .filter(functionSymbol -> typeSymbol.getMethodSignatureList().stream()
+        .noneMatch(otherSignature -> methodSignaturesMatch(functionSymbol, otherSignature)))
       .map(methodSymbol -> (CDMethodSignatureSymbol) methodSymbol)
       .collect(Collectors.toList());
   }
   
-  public Collection<MethodSymbol> getNonCDMethodsFromImplementedInterfaces(@NotNull CDTypeSymbol typeSymbol) {
+  public Collection<FunctionSymbol> getNonCDMethodsFromImplementedInterfaces(@NotNull CDTypeSymbol typeSymbol) {
     Preconditions.checkNotNull(typeSymbol);
     if (typeSymbol.isIsInterface()) {
       return new ArrayList<>();
     }
     return typeSymbol.getInterfaceList().stream()
       .map(SymTypeExpression::getTypeInfo)
-      .flatMap(ooTypeSymbol -> ooTypeSymbol.getMethodList().stream())
-      .filter(methodSymbol -> !(methodSymbol instanceof CDMethodSignatureSymbol))
-      .filter(methodSymbol -> typeSymbol.getMethodSignatureList().stream()
-        .noneMatch(otherSignature -> methodSignaturesMatch(methodSymbol, otherSignature)))
+      .flatMap(ooTypeSymbol -> ooTypeSymbol.getFunctionList().stream())
+      .filter(functionSymbol -> !(functionSymbol instanceof CDMethodSignatureSymbol))
+      .filter(functionSymbol -> typeSymbol.getMethodSignatureList().stream()
+        .noneMatch(otherSignature -> methodSignaturesMatch(functionSymbol, otherSignature)))
       .collect(Collectors.toList());
   }
   
-  protected static boolean methodSignaturesMatch(@NotNull MethodSymbol _this, CDMethodSignatureSymbol other) {
+  protected static boolean methodSignaturesMatch(@NotNull FunctionSymbol _this, CDMethodSignatureSymbol other) {
     Preconditions.checkNotNull(_this);
     Preconditions.checkNotNull(other);
     /*
