@@ -7,14 +7,13 @@
 	<parent>
 		<groupId>montiarc.applications</groupId>
 		<artifactId>applications</artifactId>
-		<version>6.2.0-SNAPSHOT</version>
+		<version>6.2.0</version>
 	</parent>
 
 	<artifactId>factoryTask</artifactId>
 
 	<!-- == PROJECT PROPERTIES ============================================== -->
 	<properties>
-		<montiarc.version>6.2.0-SNAPSHOT</montiarc.version>
 		<se-groovy.maven.version>1.2.3</se-groovy.maven.version>
 		<junit.version>4.13.1</junit.version>
 
@@ -32,7 +31,7 @@
 		<dependency>
 			<groupId>montiarc.languages</groupId>
 			<artifactId>montiarc-fe</artifactId>
-			<version>${montiarc.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
@@ -104,7 +103,7 @@
 					<dependency>
 						<groupId>montiarc.generators</groupId>
 						<artifactId>ma2java</artifactId>
-						<version>${montiarc.version}</version>
+						<version>${project.version}</version>
 					</dependency>
 					<dependency>
 						<groupId>com.google.guava</groupId>
