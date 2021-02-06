@@ -81,7 +81,7 @@ Deploy Nexus:
   image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3-jdk-8
   stage: post-test
   script:
-    - mvn -U $MAVEN_CLI_OPTS clean deploy -Dexec.skip
+    - mvn -U $MAVEN_CLI_OPTS clean deploy
   only:
     - develop
 
