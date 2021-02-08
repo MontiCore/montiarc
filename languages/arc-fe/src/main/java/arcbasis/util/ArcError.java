@@ -45,9 +45,9 @@ public enum ArcError implements montiarc.util.Error {
     + "refer to the same port."),
   SOURCE_AND_TARGET_SAME_COMPONENT("0xMA1034", "Source and target of a connector of component "
     + "'%s' refer to the same subcomponent."),
-  SOURCE_PORT_NOT_EXISTS("0xMA1035", "Source port '%s' of connector of component '%s' does not "
+  SOURCE_PORT_NOT_EXISTS("0xMA1035", "Source port '%s' of connector '%s' of component '%s' does not "
     + "exist."),
-  TARGET_PORT_NOT_EXISTS("0xMA1036", "Target port '%s' of connector of component '%s' does not "
+  TARGET_PORT_NOT_EXISTS("0xMA1036", "Target port '%s' of connector '%s' of component '%s' does not "
     + "exist."),
   SOURCE_AND_TARGET_TYPE_MISMATCH("0xMA1037", "Type '%s' of source port and type '%s' of target "
     + "port of connector '%s' of component '%s' are incompatible."),
@@ -60,7 +60,9 @@ public enum ArcError implements montiarc.util.Error {
   PARAMETER_LOWER_CASE("0xMA1041", "The name of the parameter '%s' of component '%s' should start"
     + " with a lower case letter."),
   TYPE_PARAMETER_UPPER_CASE_LETTER("0xMA1042", "The generic type parameter '%s' of component '%s'"
-    + " should start with an upper case letter.");
+    + " should start with an upper case letter."),
+  PORT_DIRECTION_MISMATCH("0xMA1043", "The %s-port '%s' can not be a %s of the connector '%s', because it is %s."
+                              + "");
 
   private final String errorCode;
   private final String errorMessage;
@@ -68,7 +70,7 @@ public enum ArcError implements montiarc.util.Error {
   ArcError(String errorCode, String errorMessage) {
     assert (errorCode != null);
     assert (errorMessage != null);
-    assert (ERROR_CODE_PATTERN.matcher(errorCode).matches());
+    assert (ERROR_CODE_PATTERN.matcher(errorCode).matches()):"Invalid error code: "+errorCode;
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;
   }
