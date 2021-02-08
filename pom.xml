@@ -13,7 +13,7 @@
   <!-- == PROJECT MODULES ================================================= -->
   <modules>
     <module>languages</module>
-    <!-- <module>generators</module> -->
+    <module>generators</module>
     <module>libraries</module>
     <!-- <module>applications</module> -->
     <module>util</module>
@@ -25,7 +25,7 @@
     <cd4a.version>6.5.0</cd4a.version>
 
     <!-- SE-Libraries -->
-    <monticore.version>6.5.0.1</monticore.version>
+    <monticore.version>6.6.0</monticore.version>
     <mc.grammars.assembly.version>0.0.8</mc.grammars.assembly.version>
     <se-commons.version>1.7.11</se-commons.version>
 
@@ -44,7 +44,7 @@
     <assertj.version>3.7.0</assertj.version>
 
     <!-- Plugins -->
-    <monticore.plugin>6.5.0</monticore.plugin>
+    <monticore.plugin>6.6.0</monticore.plugin>
     <se-groovy.plugin>1.2.3</se-groovy.plugin>
     <assembly.plugin>3.1.1</assembly.plugin>
     <build.helper.plugin>3.2.0</build.helper.plugin>
@@ -197,12 +197,6 @@
         <artifactId>monticore-grammar</artifactId>
         <version>${monticore.version}</version>
         <classifier>${grammars.classifier}</classifier>
-      </dependency>
-
-      <dependency>
-        <groupId>de.monticore</groupId>
-        <artifactId>monticore-emf-runtime</artifactId>
-        <version>${monticore.version}</version>
       </dependency>
 
       <dependency>

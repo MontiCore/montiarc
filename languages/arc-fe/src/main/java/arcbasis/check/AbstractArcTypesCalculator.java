@@ -1,8 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
+import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
 import de.monticore.literals.mcliteralsbasis._ast.ASTLiteral;
 import de.monticore.types.check.*;
 import montiarc.util.check.IArcTypesCalculator;
@@ -21,11 +23,11 @@ import java.util.Optional;
  */
 public abstract class AbstractArcTypesCalculator implements IArcTypesCalculator {
 
-  protected ArcBasisInheritanceVisitor calculationDelegator;
+  protected ArcBasisTraverser calculationDelegator;
   protected TypeCheckResult typeCheckResult;
 
   protected AbstractArcTypesCalculator(@NotNull TypeCheckResult typeCheckResult,
-                                       @NotNull ArcBasisInheritanceVisitor calculationDelegator) {
+                                       @NotNull ArcBasisTraverser calculationDelegator) {
     Preconditions.checkArgument(typeCheckResult != null);
     Preconditions.checkArgument(calculationDelegator != null);
     this.typeCheckResult = typeCheckResult;
@@ -33,7 +35,7 @@ public abstract class AbstractArcTypesCalculator implements IArcTypesCalculator 
     this.init();
   }
 
-  protected ArcBasisInheritanceVisitor getCalculationDelegator() {
+  protected ArcBasisTraverser getCalculationDelegator() {
     return this.calculationDelegator;
   }
 
@@ -72,5 +74,10 @@ public abstract class AbstractArcTypesCalculator implements IArcTypesCalculator 
   @Override
   public void reset() {
     this.getTypeCheckResult().setCurrentResultAbsent();
+  }
+  
+  @Override
+  public ExpressionsBasisTraverser getTraverser() {
+    return getCalculationDelegator();
   }
 }

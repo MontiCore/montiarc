@@ -8,17 +8,13 @@ import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.monticore.expressions.prettyprint.AssignmentExpressionsPrettyPrinter;
-import de.monticore.expressions.prettyprint.CommonExpressionsPrettyPrinter;
-import de.monticore.expressions.prettyprint.ExpressionsBasisPrettyPrinter;
-import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ImportStatement;
 import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericComponentHead;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._symboltable.MontiArcArtifactScope;
-import montiarc._visitor.MontiArcPrettyPrinterDelegator;
+import montiarc._visitor.MontiArcFullPrettyPrinter;
 import montiarc.generator.codegen.xtend.util.Utils;
 
 import java.io.File;
@@ -34,12 +30,19 @@ public class ComponentHelper {
 
   public static String DEPLOY_STEREOTYPE = "deploy";
 
+  protected MontiArcFullPrettyPrinter prettyPrinter;
+
+  protected MontiArcFullPrettyPrinter getPrettyPrinter() {
+    return this.prettyPrinter;
+  }
+
   private final ComponentTypeSymbol component;
 
   protected final ASTComponentType componentNode;
 
   public ComponentHelper(ComponentTypeSymbol component) {
     this.component = component;
+    this.prettyPrinter = new MontiArcFullPrettyPrinter();
     if ((component.isPresentAstNode())
       && (component.getAstNode() instanceof ASTComponentType)) {
       componentNode = (ASTComponentType) component.getAstNode();
@@ -129,20 +132,8 @@ public class ComponentHelper {
    * @param expr
    * @return
    */
-  public String printExpression(ASTExpression expr, boolean isAssignment) {
-    IndentPrinter printer = new IndentPrinter();
-    ExpressionsBasisPrettyPrinter prettyPrinter;
-    if (isAssignment) {
-      prettyPrinter = new AssignmentExpressionsPrettyPrinter(printer);
-    } else {
-      prettyPrinter = new CommonExpressionsPrettyPrinter(printer);
-    }
-    expr.accept(prettyPrinter);
-    return printer.getContent();
-  }
-
   public String printExpression(ASTExpression expr) {
-    return printExpression(expr, true);
+    return this.getPrettyPrinter().prettyprint(expr);
   }
 
   private static HashMap<String, String> PRIMITIVE_TYPES = new HashMap<String, String>() {
@@ -203,12 +194,10 @@ public class ComponentHelper {
     // final List<ValueSymbol<TypeReference<TypeSymbol>>> configArguments =
     // param.getConfigArguments();
     List<ASTExpression> configArguments = param.getArguments();
-    MontiArcPrettyPrinterDelegator printer = new MontiArcPrettyPrinterDelegator(
-      new IndentPrinter());
 
     List<String> outputParameters = new ArrayList<>();
     for (ASTExpression configArgument : configArguments) {
-      final String prettyprint = printer.prettyprint(configArgument);
+      final String prettyprint = this.getPrettyPrinter().prettyprint(configArgument);
       outputParameters.add(autobox(prettyprint));
     }
 
@@ -221,13 +210,13 @@ public class ComponentHelper {
     if (numberOfMissingParameters > 0) {
       // Get the AST node of the component and the list of parameters in the AST
       final ASTComponentType astNode = (ASTComponentType) param.getType().getAstNode();
-      final List<ASTArcParameter> parameters = astNode.getHead().getArcParametersList();
+      final List<ASTArcParameter> parameters = astNode.getHead().getArcParameterList();
 
       // Retrieve the parameters from the node and add them to the list
       for (int counter = 0; counter < numberOfMissingParameters; counter++) {
         // Fill up from the last parameter
         final ASTArcParameter astParameter = parameters.get(parameters.size() - 1 - counter);
-        final String prettyprint = printer
+        final String prettyprint = this.getPrettyPrinter()
           .prettyprint((ASTMontiArcNode) astParameter.getDefault());
         outputParameters.add(outputParameters.size() - counter, prettyprint);
       }
@@ -339,7 +328,7 @@ public class ComponentHelper {
     }
     if (comp.getHead() instanceof ASTGenericComponentHead) {
       List<ASTArcTypeParameter> parameterList =
-        ((ASTGenericComponentHead) comp.getHead()).getArcTypeParametersList();
+        ((ASTGenericComponentHead) comp.getHead()).getArcTypeParameterList();
       for (ASTArcTypeParameter type : parameterList) {
         if (type.getName().equals(typeName)) {
           return true;

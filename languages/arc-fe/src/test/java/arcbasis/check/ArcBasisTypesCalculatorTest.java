@@ -24,7 +24,7 @@ public class ArcBasisTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
   @Override
   protected IArcBasisScope getScope() {
     if (this.scope == null) {
-      this.scope = ArcBasisMill.arcBasisScopeBuilder().build();
+      this.scope = ArcBasisMill.scope();
     }
     return this.scope;
   }

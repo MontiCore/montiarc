@@ -2,7 +2,9 @@
 package montiarc.check;
 
 import arcbasis.check.ArcTypeCheck;
+import de.monticore.expressions.commonexpressions.CommonExpressionsMill;
 import de.monticore.expressions.commonexpressions._ast.ASTCallExpression;
+import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsTraverser;
 import de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.DeriveSymTypeOfCommonExpressions;
@@ -30,7 +32,7 @@ public class ArcDeriveSymTypeOfCommonExpression extends DeriveSymTypeOfCommonExp
       boolean success = true;
 
       for (int i = 0; i < method.getParameterList().size(); ++i) {
-        expr.getArguments().getExpression(i).accept(this.getRealThis());
+        expr.getArguments().getExpression(i).accept(this.getTraverser());
         if (!((VariableSymbol) method.getParameterList().get(i)).getType().deepEquals(this.typeCheckResult.getCurrentResult()) && !ArcTypeCheck.compatible(((VariableSymbol) method.getParameterList().get(i)).getType(), this.typeCheckResult.getCurrentResult())) {
           success = false;
         }
@@ -45,9 +47,14 @@ public class ArcDeriveSymTypeOfCommonExpression extends DeriveSymTypeOfCommonExp
   @Override
   public void traverse(ASTCallExpression expr) {
     NameToCallExpressionVisitor visitor = new NameToCallExpressionVisitor();
-    expr.accept(visitor);
+    CommonExpressionsTraverser traverser = CommonExpressionsMill.traverser();
+    traverser.setCommonExpressionsHandler(visitor);
+    traverser.add4CommonExpressions(visitor);
+    traverser.setExpressionsBasisHandler(visitor);
+    traverser.add4ExpressionsBasis(visitor);
+    expr.accept(traverser);
     SymTypeExpression innerResult;
-    expr.getExpression().accept(getRealThis());
+    expr.getExpression().accept(getTraverser());
     if (typeCheckResult.isPresentCurrentResult()) {
       innerResult = typeCheckResult.getCurrentResult();
       //resolve methods with name of the inner expression

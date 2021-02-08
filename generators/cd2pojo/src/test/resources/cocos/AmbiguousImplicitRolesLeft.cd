@@ -2,12 +2,12 @@
 
 package cocos;
 
-classdiagram AmbiguousExplicitRoles {
+classdiagram AmbiguousImplicitRolesLeft {
 
   class A;
   class B;
   class C;
 
-  association A -> (d) B;
-  association A -> (d) C;
+  association B <- A;
+  association b C <- A;
 }

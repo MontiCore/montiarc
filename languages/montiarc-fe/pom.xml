@@ -72,12 +72,6 @@
       <classifier>${grammars.classifier}</classifier>
     </dependency>
 
-    <!-- CD4Analysis -->
-    <dependency>
-      <groupId>de.monticore.lang</groupId>
-      <artifactId>cd4analysis</artifactId>
-    </dependency>
-
     <!-- Test Libraries -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>

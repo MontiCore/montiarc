@@ -16,7 +16,7 @@
 
   <modules>
     <module>arc-fe</module>
-    <!--<module>behavior-fe</module>-->
+    <module>behavior-fe</module>
     <module>montiarc-fe</module>
   </modules>
 </project>

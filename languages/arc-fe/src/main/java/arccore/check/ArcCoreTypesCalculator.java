@@ -4,6 +4,7 @@ package arccore.check;
 import arcbasis.check.AbstractArcTypesCalculator;
 import arccore.ArcCoreMill;
 import arccore._visitor.ArcCoreDelegatorVisitor;
+import arccore._visitor.ArcCoreTraverser;
 import com.google.common.base.Preconditions;
 import de.monticore.literals.mccommonliterals._ast.ASTSignedLiteral;
 import de.monticore.types.check.DeriveSymTypeOfExpression;
@@ -22,18 +23,18 @@ public class ArcCoreTypesCalculator
   extends AbstractArcTypesCalculator {
 
   public ArcCoreTypesCalculator(@NotNull TypeCheckResult typeCheckResult) {
-    this(typeCheckResult, ArcCoreMill.arcCoreDelegatorVisitorBuilder().build());
+    this(typeCheckResult, ArcCoreMill.traverser());
   }
 
   protected ArcCoreTypesCalculator(@NotNull TypeCheckResult typeCheckResult,
-                                   @NotNull ArcCoreDelegatorVisitor typesCalculator) {
+                                   @NotNull ArcCoreTraverser typesCalculator) {
     super(typeCheckResult, typesCalculator);
   }
 
   @Override
-  protected ArcCoreDelegatorVisitor getCalculationDelegator() {
-    Preconditions.checkState(super.getCalculationDelegator() instanceof ArcCoreDelegatorVisitor);
-    return (ArcCoreDelegatorVisitor) super.getCalculationDelegator();
+  protected ArcCoreTraverser getCalculationDelegator() {
+    Preconditions.checkState(super.getCalculationDelegator() instanceof ArcCoreTraverser);
+    return (ArcCoreTraverser) super.getCalculationDelegator();
   }
 
   @Override
@@ -51,12 +52,13 @@ public class ArcCoreTypesCalculator
   protected void initDeriveSymTypeOfLiterals() {
     DeriveSymTypeOfLiterals deriveSymTypeOfLiterals = new DeriveSymTypeOfLiterals();
     deriveSymTypeOfLiterals.setTypeCheckResult(this.getTypeCheckResult());
-    this.getCalculationDelegator().setMCLiteralsBasisVisitor(deriveSymTypeOfLiterals);
+    this.getCalculationDelegator().add4MCLiteralsBasis(deriveSymTypeOfLiterals);
   }
 
   protected void initDeriveSymTypeOfExpression() {
     DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpression();
     deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
-    this.getCalculationDelegator().setExpressionsBasisVisitor(deriveSymTypeOfExpression);
+    this.getCalculationDelegator().add4ExpressionsBasis(deriveSymTypeOfExpression);
+    this.getCalculationDelegator().setExpressionsBasisHandler(deriveSymTypeOfExpression);
   }
 }

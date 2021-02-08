@@ -13,14 +13,34 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CDRoleNamesUnique implements CDBasisASTCDDefinitionCoCo {
-  
+
+  protected static boolean isDefinitiveNavigableRight(@NotNull ASTCDAssociation association) {
+    Preconditions.checkNotNull(association);
+    return association.getCDAssocDir() instanceof ASTCDLeftToRightDir || isBiDirectional(association);
+  }
+
+  protected static boolean isDefinitiveNavigableLeft(@NotNull ASTCDAssociation association) {
+    Preconditions.checkNotNull(association);
+    return association.getCDAssocDir() instanceof ASTCDRightToLeftDir || isBiDirectional(association);
+  }
+
+  protected static boolean isBiDirectional(@NotNull ASTCDAssociation association) {
+    Preconditions.checkNotNull(association);
+    return association.getCDAssocDir() instanceof ASTCDBiDir;
+  }
+
+  protected static boolean isNotDefinitiveNavigable(@NotNull ASTCDAssociation association) {
+    Preconditions.checkNotNull(association);
+    return association.getCDAssocDir() instanceof ASTCDUnspecifiedDir;
+  }
+
   @Override
   public void check(@NotNull ASTCDDefinition ast) {
     Preconditions.checkNotNull(ast);
     this.getSourceClassNamesFromAssociations(ast)
       .forEach(source -> this.checkRoleNamesUnique(source, ast));
   }
-  
+
   protected Collection<String> getSourceClassNamesFromAssociations(@NotNull ASTCDDefinition ast) {
     Preconditions.checkNotNull(ast);
     Set<String> sourceClassNames = new HashSet<>();
@@ -36,7 +56,7 @@ public class CDRoleNamesUnique implements CDBasisASTCDDefinitionCoCo {
     }
     return sourceClassNames;
   }
-  
+
   protected void checkRoleNamesUnique(@NotNull String sourceClassName, @NotNull ASTCDDefinition ast) {
     Preconditions.checkNotNull(sourceClassName);
     Preconditions.checkNotNull(ast);
@@ -59,38 +79,34 @@ public class CDRoleNamesUnique implements CDBasisASTCDDefinitionCoCo {
           }
         }
       } else if (isDefinitiveNavigableLeft(association)) {
-        if (association.isPresentName() && association.getName().equals(sourceClassName)) {
-          if (!roleNames.add(association.getLeft().getName())) {
+        if (association.getLeft().isPresentCDRole()) {
+          if (!roleNames.add(association.getLeft().getName()))
             Log.error(String.format(errorMessage, association.getLeft().getName(), sourceClassName));
+        } else if (association.isPresentName()) {
+          if (!roleNames.add(association.getName())) {
+            Log.error(String.format(errorMessage, association.getName(), sourceClassName));
+          }
+        } else {
+          if (!roleNames.add(association.getLeft().getMCQualifiedType().getMCQualifiedName().getBaseName().toLowerCase())) {
+            Log.error(String.format(errorMessage, association.getLeft().getMCQualifiedType().getMCQualifiedName()
+              .getBaseName().toLowerCase(), sourceClassName));
           }
         }
       } else if (isDefinitiveNavigableRight(association)) {
-        if (association.isPresentName() && association.getName().equals(sourceClassName)) {
-          if (!roleNames.add(association.getRight().getName())) {
+        if (association.getRight().isPresentCDRole()) {
+          if (!roleNames.add(association.getRight().getName()))
             Log.error(String.format(errorMessage, association.getRight().getName(), sourceClassName));
+        } else if (association.isPresentName()) {
+          if (!roleNames.add(association.getName())) {
+            Log.error(String.format(errorMessage, association.getName(), sourceClassName));
+          }
+        } else {
+          if (!roleNames.add(association.getRight().getMCQualifiedType().getMCQualifiedName().getBaseName().toLowerCase())) {
+            Log.error(String.format(errorMessage, association.getRight().getMCQualifiedType().getMCQualifiedName()
+              .getBaseName().toLowerCase(), sourceClassName));
           }
         }
       }
     }
-  }
-  
-  protected static boolean isDefinitiveNavigableRight(@NotNull ASTCDAssociation association) {
-    Preconditions.checkNotNull(association);
-    return association.getCDAssocDir() instanceof ASTCDLeftToRightDir || isBiDirectional(association);
-  }
-  
-  protected static boolean isDefinitiveNavigableLeft(@NotNull ASTCDAssociation association) {
-    Preconditions.checkNotNull(association);
-    return association.getCDAssocDir() instanceof ASTCDRightToLeftDir || isBiDirectional(association);
-  }
-  
-  protected static boolean isBiDirectional(@NotNull ASTCDAssociation association) {
-    Preconditions.checkNotNull(association);
-    return association.getCDAssocDir() instanceof ASTCDBiDir;
-  }
-  
-  protected static boolean isNotDefinitiveNavigable(@NotNull ASTCDAssociation association) {
-    Preconditions.checkNotNull(association);
-    return association.getCDAssocDir() instanceof ASTCDUnspecifiedDir;
   }
 }

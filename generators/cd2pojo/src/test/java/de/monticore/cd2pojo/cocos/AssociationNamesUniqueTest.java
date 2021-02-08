@@ -7,7 +7,6 @@ import de.monticore.cd4code.cocos.CD4CodeCoCos;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -29,14 +28,10 @@ public class AssociationNamesUniqueTest {
     return Stream.of(Arguments.of("AmbiguousAssociations.cd", 1));
   }
 
-  @BeforeAll
-  protected static void setUpLog() {
-    Log.enableFailQuick(false);
-  }
-
   @BeforeEach
-  protected void clearLog() {
+  public void cleanUpLog() {
     Log.getFindings().clear();
+    Log.enableFailQuick(false);
   }
 
   @ParameterizedTest

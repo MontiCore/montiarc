@@ -1,0 +1,11 @@
+{
+  "name": "SingleTypeSymbol",
+  "kindHierarchy": [
+  ],
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeSymbol",
+      "name": "A"
+    }
+  ]
+}

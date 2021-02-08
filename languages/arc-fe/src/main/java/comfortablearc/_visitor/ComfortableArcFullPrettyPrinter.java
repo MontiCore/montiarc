@@ -2,6 +2,7 @@ package comfortablearc._visitor;
 
 import arcbasis._ast.ASTArcBasisNode;
 import arcbasis._visitor.ArcBasisPrettyPrinter;
+import comfortablearc.ComfortableArcMill;
 import comfortablearc._ast.ASTComfortableArcNode;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpressionsBasisNode;
 import de.monticore.expressions.prettyprint.ExpressionsBasisPrettyPrinter;
@@ -11,30 +12,28 @@ import de.monticore.prettyprint.MCBasicsPrettyPrinter;
 import de.monticore.types.mcbasictypes._ast.ASTMCBasicTypesNode;
 import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 
-public class ComfortableArcPrettyPrinterDelegator extends ComfortableArcDelegatorVisitor {
+public class ComfortableArcFullPrettyPrinter {
 
-  protected ComfortableArcPrettyPrinterDelegator realThis = this;
+  protected ComfortableArcTraverser traverser;
 
-  protected IndentPrinter printer = null;
+  protected IndentPrinter printer;
 
-  public ComfortableArcPrettyPrinterDelegator() {
-    this.printer = new IndentPrinter();
-    realThis = this;
-    setArcBasisVisitor(new ArcBasisPrettyPrinter(printer));
-    setComfortableArcVisitor(new ComfortableArcPrettyPrinter(printer));
-    setMCBasicsVisitor(new MCBasicsPrettyPrinter(printer));
-    setMCBasicTypesVisitor(new MCBasicTypesPrettyPrinter(printer));
-    setExpressionsBasisVisitor(new ExpressionsBasisPrettyPrinter(printer));
+  public ComfortableArcFullPrettyPrinter() {
+    this(new IndentPrinter());
   }
 
-  public ComfortableArcPrettyPrinterDelegator(IndentPrinter printer) {
+  public ComfortableArcFullPrettyPrinter(IndentPrinter printer) {
     this.printer = printer;
-    realThis = this;
-    setArcBasisVisitor(new ArcBasisPrettyPrinter(printer));
-    setComfortableArcVisitor(new ComfortableArcPrettyPrinter(printer));
-    setMCBasicsVisitor(new MCBasicsPrettyPrinter(printer));
-    setMCBasicTypesVisitor(new MCBasicTypesPrettyPrinter(printer));
-    setExpressionsBasisVisitor(new ExpressionsBasisPrettyPrinter(printer));
+    traverser = ComfortableArcMill.traverser();
+    traverser.setArcBasisHandler(new ArcBasisPrettyPrinter(printer));
+    traverser.setComfortableArcHandler(new ComfortableArcPrettyPrinter(printer));
+    traverser.add4MCBasics(new MCBasicsPrettyPrinter(printer));
+    MCBasicTypesPrettyPrinter mcBasicTypesPrettyPrinter = new MCBasicTypesPrettyPrinter(printer);
+    traverser.setMCBasicTypesHandler(mcBasicTypesPrettyPrinter);
+    traverser.add4MCBasicTypes(mcBasicTypesPrettyPrinter);
+    ExpressionsBasisPrettyPrinter expressionsBasisPrettyPrinter = new ExpressionsBasisPrettyPrinter(printer);
+    traverser.setExpressionsBasisHandler(expressionsBasisPrettyPrinter);
+    traverser.add4ExpressionsBasis(expressionsBasisPrettyPrinter);
   }
 
   protected IndentPrinter getPrinter() {
@@ -43,36 +42,35 @@ public class ComfortableArcPrettyPrinterDelegator extends ComfortableArcDelegato
 
   public String prettyprint(ASTComfortableArcNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
   public String prettyprint(ASTMCBasicsNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
   public String prettyprint(ASTMCBasicTypesNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
   public String prettyprint(ASTExpressionsBasisNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
   public String prettyprint(ASTArcBasisNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
-  @Override
-  public ComfortableArcPrettyPrinterDelegator getRealThis() {
-    return realThis;
+  public ComfortableArcTraverser getTraverser() {
+    return traverser;
   }
 }

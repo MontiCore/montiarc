@@ -4,7 +4,7 @@ package arcbasis._cocos;
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcFieldDeclaration;
-import arcbasis._symboltable.ArcBasisSymbolTableCreator;
+import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.util.ArcError;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -24,9 +24,8 @@ public class FieldTypeExistsTest extends AbstractTest {
     String[] names = new String[] { "v1", "v2", "v3" };
     ASTArcFieldDeclaration ast = arcbasis.ArcBasisMill.arcFieldDeclarationBuilder()
       .setMCType(type).setArcFieldList(names, this.mockValues(names.length)).build();
-    IArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
-    ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
-    symTab.handle(ast);
+    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator(ArcBasisMill.globalScope());
+    symTab.createFromAST(ast).setName("Watermelon");
     FieldTypeExists coco = new FieldTypeExists();
     coco.check(ast.getArcField(0));
     this.checkOnlyExpectedErrorsPresent(Log.getFindings(),

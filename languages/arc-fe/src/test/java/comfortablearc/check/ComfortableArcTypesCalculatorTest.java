@@ -4,7 +4,7 @@ package comfortablearc.check;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.check.AbstractArcTypesCalculatorTest;
 import comfortablearc.ComfortableArcMill;
-import comfortablearc._visitor.ComfortableArcDelegatorVisitor;
+import comfortablearc._visitor.ComfortableArcTraverser;
 import de.monticore.types.check.TypeCheckResult;
 import montiarc.util.check.IArcTypesCalculator;
 import org.junit.jupiter.api.Assertions;
@@ -28,7 +28,7 @@ public class ComfortableArcTypesCalculatorTest extends AbstractArcTypesCalculato
   @Override
   protected IArcBasisScope getScope() {
     if (this.scope == null) {
-      this.scope = ComfortableArcMill.comfortableArcScopeBuilder().build();
+      this.scope = ComfortableArcMill.scope();
     }
     return this.scope;
   }
@@ -39,7 +39,7 @@ public class ComfortableArcTypesCalculatorTest extends AbstractArcTypesCalculato
     ComfortableArcTypesCalculator typesCalculator = new ComfortableArcTypesCalculator(new TypeCheckResult());
 
     //When
-    ComfortableArcDelegatorVisitor delegator = typesCalculator.getCalculationDelegator();
+    ComfortableArcTraverser delegator = typesCalculator.getCalculationDelegator();
 
     //Then
     Assertions.assertTrue(delegator != null);

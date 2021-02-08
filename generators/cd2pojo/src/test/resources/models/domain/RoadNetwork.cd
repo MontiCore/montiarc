@@ -20,7 +20,7 @@ classdiagram RoadNetwork {
 
   class StreetNetwork;
   association [1] StreetNetwork -> Node [*];
-  association [1] StreetNetwork -> Connection [0..1];
+  association [1] StreetNetwork -> (street) Connection [0..1];
 
   class Node {
     String id;
@@ -41,7 +41,7 @@ classdiagram RoadNetwork {
   association [*] Connection (incoming) <-> (target) Node [1];
 
   class Path;
-  association [1] Path -> Connection [*];
+  association [1] Path -> (path) Connection [*];
 
   class LTS {
     String id;
@@ -53,7 +53,7 @@ classdiagram RoadNetwork {
     double positionOnConnection;
   }
 
-  association [1] Position -> Connection [1];
+  association [1] Position -> (position) Connection [1];
 
   class Participant {
     String id;

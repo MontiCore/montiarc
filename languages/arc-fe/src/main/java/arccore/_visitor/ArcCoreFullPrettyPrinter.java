@@ -2,6 +2,7 @@ package arccore._visitor;
 
 import arcbasis._ast.ASTArcBasisNode;
 import arcbasis._visitor.ArcBasisPrettyPrinter;
+import arccore.ArcCoreMill;
 import arccore._ast.ASTArcCoreNode;
 import comfortablearc._ast.ASTComfortableArcNode;
 import comfortablearc._visitor.ComfortableArcPrettyPrinter;
@@ -15,34 +16,26 @@ import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 import genericarc._ast.ASTGenericArcNode;
 import genericarc._visitor.GenericArcPrettyPrinter;
 
-public class ArcCorePrettyPrinterDelegator extends ArcCoreDelegatorVisitor {
+public class ArcCoreFullPrettyPrinter {
 
-  protected ArcCorePrettyPrinterDelegator realThis = this;
+  protected ArcCoreTraverser traverser;
 
-  protected IndentPrinter printer = null;
+  protected IndentPrinter printer;
 
-  public ArcCorePrettyPrinterDelegator() {
-    this.printer = new IndentPrinter();
-    realThis = this;
-    setArcBasisVisitor(new ArcBasisPrettyPrinter(printer));
-    setComfortableArcVisitor(new ComfortableArcPrettyPrinter(printer));
-    setGenericArcVisitor(new GenericArcPrettyPrinter(printer));
-    setMCBasicsVisitor(new MCBasicsPrettyPrinter(printer));
-    setMCBasicTypesVisitor(new MCBasicTypesPrettyPrinter(printer));
-    setExpressionsBasisVisitor(new ExpressionsBasisPrettyPrinter(printer));
-    setArcCoreVisitor(new ArcCorePrettyPrinter(printer));
+  public ArcCoreFullPrettyPrinter() {
+    this(new IndentPrinter());
   }
 
-  public ArcCorePrettyPrinterDelegator(IndentPrinter printer) {
+  public ArcCoreFullPrettyPrinter(IndentPrinter printer) {
     this.printer = printer;
-    realThis = this;
-    setArcBasisVisitor(new ArcBasisPrettyPrinter(printer));
-    setComfortableArcVisitor(new ComfortableArcPrettyPrinter(printer));
-    setGenericArcVisitor(new GenericArcPrettyPrinter(printer));
-    setMCBasicsVisitor(new MCBasicsPrettyPrinter(printer));
-    setMCBasicTypesVisitor(new MCBasicTypesPrettyPrinter(printer));
-    setExpressionsBasisVisitor(new ExpressionsBasisPrettyPrinter(printer));
-    setArcCoreVisitor(new ArcCorePrettyPrinter(printer));
+    traverser = ArcCoreMill.traverser();
+    ArcBasisPrettyPrinter arcBasisPrettyPrinter = new ArcBasisPrettyPrinter(printer);
+    traverser.setArcBasisHandler(arcBasisPrettyPrinter);
+    traverser.setComfortableArcHandler(new ComfortableArcPrettyPrinter(printer));
+    traverser.setGenericArcHandler(new GenericArcPrettyPrinter(printer));
+    traverser.add4MCBasics(new MCBasicsPrettyPrinter(printer));
+    traverser.add4MCBasicTypes(new MCBasicTypesPrettyPrinter(printer));
+    traverser.add4ExpressionsBasis(new ExpressionsBasisPrettyPrinter(printer));
   }
 
   protected IndentPrinter getPrinter() {
@@ -51,48 +44,47 @@ public class ArcCorePrettyPrinterDelegator extends ArcCoreDelegatorVisitor {
 
   public String prettyprint(ASTArcCoreNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
   public String prettyprint(ASTComfortableArcNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
   public String prettyprint(ASTGenericArcNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
   public String prettyprint(ASTMCBasicsNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
   public String prettyprint(ASTMCBasicTypesNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
   public String prettyprint(ASTExpressionsBasisNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
   public String prettyprint(ASTArcBasisNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
-  @Override
-  public ArcCorePrettyPrinterDelegator getRealThis() {
-    return realThis;
+  public ArcCoreTraverser getTraverser() {
+    return traverser;
   }
 }

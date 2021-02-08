@@ -5,7 +5,7 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
-import arcbasis._visitor.ArcBasisPrettyPrinterDelegator;
+import arcbasis._visitor.ArcBasisFullPrettyPrinter;
 import arcbasis.check.ArcTypeCheck;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
@@ -113,7 +113,7 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
           Log.error(
             String.format(ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH.toString(),
               source.getType().print(), target.getType().print(),
-              new ArcBasisPrettyPrinterDelegator().prettyprint(connector)
+              new ArcBasisFullPrettyPrinter().prettyprint(connector)
                 .replaceAll(";", "")
                 .replaceAll("\n", ""),
               component.getFullName()),

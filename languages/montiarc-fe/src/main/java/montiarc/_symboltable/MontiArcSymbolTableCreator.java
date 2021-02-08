@@ -4,6 +4,7 @@ package montiarc._symboltable;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.types.mcbasictypes._ast.ASTMCImportStatement;
+import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+@Deprecated
 public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
 
   public MontiArcSymbolTableCreator() {
@@ -35,10 +37,9 @@ public class MontiArcSymbolTableCreator extends MontiArcSymbolTableCreatorTOP {
     for (ASTMCImportStatement importStatement : rootNode.getImportStatementList()) {
       imports.add(new ImportStatement(importStatement.getQName(), importStatement.isStar()));
     }
-    IMontiArcArtifactScope artifactScope = montiarc.MontiArcMill.montiArcArtifactScopeBuilder()
-      .setPackageName(rootNode.isPresentPackage() ? rootNode.getPackage().getQName() : "")
-      .setImportsList(imports)
-      .build();
+    IMontiArcArtifactScope artifactScope = MontiArcMill.artifactScope();
+    artifactScope.setPackageName(rootNode.isPresentPackage() ? rootNode.getPackage().getQName() : "");
+    artifactScope.setImportsList(imports);
     putOnStack(artifactScope);
     watchscope = artifactScope;
     setLinkBetweenSpannedScopeAndNode(artifactScope, rootNode);

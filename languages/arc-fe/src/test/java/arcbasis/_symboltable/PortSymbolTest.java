@@ -3,6 +3,8 @@ package arcbasis._symboltable;
 
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTComponentInstance;
+import arcbasis._ast.ASTComponentInterface;
 import arcbasis._ast.ASTPortDeclaration;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
 import de.monticore.types.check.SymTypeExpression;
@@ -37,8 +39,7 @@ public class PortSymbolTest extends AbstractTest {
 
   @Test
   public void shouldReturnResolvedType() {
-    IArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
-    ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
+    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator(ArcBasisMill.globalScope());
     ASTPortDeclaration ports = ArcBasisMill.portDeclarationBuilder()
       .setPortList("p")
       .setIncoming(true)
@@ -47,8 +48,9 @@ public class PortSymbolTest extends AbstractTest {
           .setPartsList(Collections.singletonList("Integer")).build())
         .build())
       .build();
-    symTab.handle(ports);
-    scope.add(ArcBasisMill.typeSymbolBuilder().setName("Integer").build());
+    ASTComponentInterface portInterface = ArcBasisMill.componentInterfaceBuilder().addPortDeclaration(ports).build();
+    IArcBasisArtifactScope scope = symTab.createFromAST(portInterface);
+    ArcBasisMill.globalScope().add(ArcBasisMill.typeSymbolBuilder().setName("Integer").build());
     Assertions.assertFalse(scope.getPortSymbols().get("p").get(0).getTypeInfo() instanceof TypeSymbolSurrogate);
   }
 }

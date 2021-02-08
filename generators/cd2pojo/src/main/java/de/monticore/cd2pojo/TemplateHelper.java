@@ -48,23 +48,13 @@ public class TemplateHelper {
   
   public Collection<Attribute> getAttributes(@NotNull CDTypeSymbol typeSymbol) {
     Preconditions.checkNotNull(typeSymbol);
-    Collection<Attribute> res = new ArrayList<>();
-    //Attributes come from attribute definitions and associations
-    for (FieldSymbol fieldSymbol : typeSymbol.getFieldList()) {
-      res.add(new Attribute(
+    return typeSymbol.getFieldList().stream()
+      .map(fieldSymbol -> new Attribute(
         getModifiers(fieldSymbol),
         fieldSymbol.getType().getTypeInfo().getName(),
         fieldSymbol.getName(),
-        fieldSymbol.isIsReadOnly()));
-    }
-    for (CDRoleSymbol roleSymbol : typeSymbol.getCDRoleList()) {
-      if (roleSymbol.isIsDefinitiveNavigable()) {
-        res.add(new Attribute(
-          getModifiers(roleSymbol), getType(roleSymbol),
-          roleSymbol.getName(), roleSymbol.isIsReadOnly()));
-      }
-    }
-    return res;
+        fieldSymbol.isIsReadOnly()))
+      .collect(Collectors.toList());
   }
   
   public Collection<Field> getConstructorParams(@NotNull CDTypeSymbol typeSymbol) {

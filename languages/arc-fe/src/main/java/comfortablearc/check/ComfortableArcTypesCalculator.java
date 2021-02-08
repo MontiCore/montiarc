@@ -5,6 +5,7 @@ import arcbasis.check.AbstractArcTypesCalculator;
 import com.google.common.base.Preconditions;
 import comfortablearc.ComfortableArcMill;
 import comfortablearc._visitor.ComfortableArcDelegatorVisitor;
+import comfortablearc._visitor.ComfortableArcTraverser;
 import de.monticore.literals.mccommonliterals._ast.ASTSignedLiteral;
 import de.monticore.types.check.DeriveSymTypeOfExpression;
 import de.monticore.types.check.DeriveSymTypeOfLiterals;
@@ -22,18 +23,18 @@ public class ComfortableArcTypesCalculator
   extends AbstractArcTypesCalculator {
 
   public ComfortableArcTypesCalculator(@NotNull TypeCheckResult typeCheckResult) {
-    this(typeCheckResult, ComfortableArcMill.comfortableArcDelegatorVisitorBuilder().build());
+    this(typeCheckResult, ComfortableArcMill.traverser());
   }
 
   protected ComfortableArcTypesCalculator(@NotNull TypeCheckResult typeCheckResult,
-                                          @NotNull ComfortableArcDelegatorVisitor calculationDelegator) {
+                                          @NotNull ComfortableArcTraverser calculationDelegator) {
     super(typeCheckResult, calculationDelegator);
   }
 
   @Override
-  protected ComfortableArcDelegatorVisitor getCalculationDelegator() {
-    Preconditions.checkState(super.getCalculationDelegator() instanceof ComfortableArcDelegatorVisitor);
-    return (ComfortableArcDelegatorVisitor) super.getCalculationDelegator();
+  protected ComfortableArcTraverser getCalculationDelegator() {
+    Preconditions.checkState(super.getCalculationDelegator() instanceof ComfortableArcTraverser);
+    return (ComfortableArcTraverser) super.getCalculationDelegator();
   }
 
   @Override
@@ -51,12 +52,13 @@ public class ComfortableArcTypesCalculator
   protected void initDeriveSymTypeOfLiterals() {
     DeriveSymTypeOfLiterals deriveSymTypeOfLiterals = new DeriveSymTypeOfLiterals();
     deriveSymTypeOfLiterals.setTypeCheckResult(this.getTypeCheckResult());
-    this.getCalculationDelegator().setMCLiteralsBasisVisitor(deriveSymTypeOfLiterals);
+    this.getCalculationDelegator().add4MCLiteralsBasis(deriveSymTypeOfLiterals);
   }
 
   protected void initDeriveSymTypeOfExpression() {
     DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpression();
     deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
-    this.getCalculationDelegator().setExpressionsBasisVisitor(deriveSymTypeOfExpression);
+    this.getCalculationDelegator().setExpressionsBasisHandler(deriveSymTypeOfExpression);
+    this.getCalculationDelegator().add4ExpressionsBasis(deriveSymTypeOfExpression);
   }
 }

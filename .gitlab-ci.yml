@@ -43,7 +43,6 @@ Validate:
       - libraries/maJavaLib/target/
       - libraries/maa-rte/target/
       - libraries/simulator-rte/target/
-    expire_in: 1 week
 
 # Run Unit Tests after build
 .unit_test_template: &unit_test_definition
@@ -52,36 +51,36 @@ Validate:
   script:
     - mvn $MAVEN_CLI_OPTS test package
     - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/",  instructions, "instructions covered"; print 100*covered/instructions, "% covered" }' ./languages/arc-fe/target/site/jacoco/jacoco.csv
-  dependencies: 
+  dependencies:
     - Validate #download artifacts from build
   artifacts:
     reports:
       junit:
-      - ./generators/maa2java-xtend/target/surefire-reports/TEST-*.xml
-      - ./libraries/simulator-rte/target/surefire-reports/TEST-*.xml
-      - ./languages/montiarc-fe/target/surefire-reports/TEST-*.xml
+        - ./generators/maa2java-xtend/target/surefire-reports/TEST-*.xml
+        - ./libraries/simulator-rte/target/surefire-reports/TEST-*.xml
+        - ./languages/montiarc-fe/target/surefire-reports/TEST-*.xml
 
 Unit Test JDK 8:
   image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3-jdk-8
   <<: *unit_test_definition
-      
+
 Unit Test JDK 14:
   image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3-jdk-14
   # We do not require JDK 14 support yet. We appreciate it though.
-  allow_failure: true 
+  allow_failure: true
   <<: *unit_test_definition
 
 Unit Test Amazon Corretto JDK 8:
   image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3-amazoncorretto-8
   # We do not require Amazon Corretto JDK 11 support. We appreciate it though.
-  allow_failure: true 
+  allow_failure: true
   <<: *unit_test_definition
 
 Deploy Nexus:
   image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3-jdk-8
   stage: post-test
   script:
-    - mvn -U $MAVEN_CLI_OPTS clean deploy
+    - mvn -U $MAVEN_CLI_OPTS clean deploy -Dexec.skip
   only:
     - develop
 
@@ -97,22 +96,22 @@ Code Quality:
   script:
     - export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
     # Update Codeclimate and SonarJava Plugin
-    - docker run  --rm 
-      --env CODECLIMATE_CODE="$PWD" 
-      --env CONTAINER_TIMEOUT_SECONDS=150000 
-      --volume "$PWD":/code 
-      --volume /var/run/docker.sock:/var/run/docker.sock 
-      --volume /tmp/cc:/tmp/cc 
+    - docker run  --rm
+      --env CODECLIMATE_CODE="$PWD"
+      --env CONTAINER_TIMEOUT_SECONDS=150000
+      --volume "$PWD":/code
+      --volume /var/run/docker.sock:/var/run/docker.sock
+      --volume /tmp/cc:/tmp/cc
       codeclimate/codeclimate engines:install
     # Check Code Quality
-    - docker run --rm 
-       --env CODECLIMATE_CODE="$PWD" 
-       --env CONTAINER_TIMEOUT_SECONDS=150000 
-       --volume "$PWD":/code 
-       --volume /var/run/docker.sock:/var/run/docker.sock 
-       --volume /tmp/cc:/tmp/cc 
-       codeclimate/codeclimate analyze -f json > codeclimate.json
-        #"registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
+    - docker run --rm
+      --env CODECLIMATE_CODE="$PWD"
+      --env CONTAINER_TIMEOUT_SECONDS=150000
+      --volume "$PWD":/code
+      --volume /var/run/docker.sock:/var/run/docker.sock
+      --volume /tmp/cc:/tmp/cc
+      codeclimate/codeclimate analyze -f json > codeclimate.json
+    #"registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
   artifacts:
     reports:
       codequality: codeclimate.json

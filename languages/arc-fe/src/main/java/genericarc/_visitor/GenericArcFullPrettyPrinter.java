@@ -9,32 +9,31 @@ import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.prettyprint.MCBasicsPrettyPrinter;
 import de.monticore.types.mcbasictypes._ast.ASTMCBasicTypesNode;
 import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
+import genericarc.GenericArcMill;
 import genericarc._ast.ASTGenericArcNode;
 
-public class GenericArcPrettyPrinterDelegator extends GenericArcDelegatorVisitor {
+public class GenericArcFullPrettyPrinter {
 
-  protected GenericArcPrettyPrinterDelegator realThis = this;
+  protected GenericArcTraverser traverser;
 
-  protected IndentPrinter printer = null;
+  protected IndentPrinter printer;
 
-  public GenericArcPrettyPrinterDelegator() {
-    this.printer = new IndentPrinter();
-    realThis = this;
-    setArcBasisVisitor(new ArcBasisPrettyPrinter(printer));
-    setMCBasicsVisitor(new MCBasicsPrettyPrinter(printer));
-    setMCBasicTypesVisitor(new MCBasicTypesPrettyPrinter(printer));
-    setExpressionsBasisVisitor(new ExpressionsBasisPrettyPrinter(printer));
-    setGenericArcVisitor(new GenericArcPrettyPrinter(printer));
+  public GenericArcFullPrettyPrinter() {
+    this(new IndentPrinter());
   }
 
-  public GenericArcPrettyPrinterDelegator(IndentPrinter printer) {
+  public GenericArcFullPrettyPrinter(IndentPrinter printer) {
     this.printer = printer;
-    realThis = this;
-    setArcBasisVisitor(new ArcBasisPrettyPrinter(printer));
-    setMCBasicsVisitor(new MCBasicsPrettyPrinter(printer));
-    setMCBasicTypesVisitor(new MCBasicTypesPrettyPrinter(printer));
-    setExpressionsBasisVisitor(new ExpressionsBasisPrettyPrinter(printer));
-    setGenericArcVisitor(new GenericArcPrettyPrinter(printer));
+    traverser = GenericArcMill.traverser();
+    traverser.setArcBasisHandler(new ArcBasisPrettyPrinter(printer));
+    traverser.add4MCBasics(new MCBasicsPrettyPrinter(printer));
+    MCBasicTypesPrettyPrinter mcBasicTypesPrettyPrinter = new MCBasicTypesPrettyPrinter(printer);
+    traverser.setMCBasicTypesHandler(mcBasicTypesPrettyPrinter);
+    traverser.add4MCBasicTypes(mcBasicTypesPrettyPrinter);
+    ExpressionsBasisPrettyPrinter expressionsBasisPrettyPrinter = new ExpressionsBasisPrettyPrinter(printer);
+    traverser.setExpressionsBasisHandler(expressionsBasisPrettyPrinter);
+    traverser.add4ExpressionsBasis(expressionsBasisPrettyPrinter);
+    traverser.setGenericArcHandler(new GenericArcPrettyPrinter(printer));
   }
 
   protected IndentPrinter getPrinter() {
@@ -43,36 +42,35 @@ public class GenericArcPrettyPrinterDelegator extends GenericArcDelegatorVisitor
 
   public String prettyprint(ASTGenericArcNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
   public String prettyprint(ASTMCBasicsNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
   public String prettyprint(ASTMCBasicTypesNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
   public String prettyprint(ASTExpressionsBasisNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
   public String prettyprint(ASTArcBasisNode a) {
     getPrinter().clearBuffer();
-    a.accept(getRealThis());
+    a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
-  @Override
-  public GenericArcPrettyPrinterDelegator getRealThis() {
-    return realThis;
+  public GenericArcTraverser getTraverser() {
+    return traverser;
   }
 }

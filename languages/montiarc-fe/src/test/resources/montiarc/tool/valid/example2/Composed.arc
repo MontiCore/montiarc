@@ -1,6 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-package valid.example2;
-
 import in.InComp;
 import out.OutComp;
 

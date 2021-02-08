@@ -6,9 +6,9 @@ import de.monticore.prettyprint.IndentPrinter;
 import montiarc._ast.*;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-public class MontiArcPrettyPrinter implements MontiArcVisitor {
+public class MontiArcPrettyPrinter implements MontiArcHandler {
 
-  private MontiArcVisitor realThis = this;
+  private MontiArcTraverser traverser;
   protected IndentPrinter printer;
 
   public MontiArcPrettyPrinter() {
@@ -22,14 +22,14 @@ public class MontiArcPrettyPrinter implements MontiArcVisitor {
   }
 
   @Override
-  public MontiArcVisitor getRealThis() {
-    return this.realThis;
+  public MontiArcTraverser getTraverser() {
+    return this.traverser;
   }
-
+  
   @Override
-  public void setRealThis(@NotNull MontiArcVisitor realThis) {
-    Preconditions.checkArgument(realThis != null);
-    this.realThis = realThis;
+  public void setTraverser(@NotNull MontiArcTraverser traverser) {
+    Preconditions.checkArgument(traverser != null);
+    this.traverser = traverser;
   }
 
   public IndentPrinter getPrinter() {
@@ -40,17 +40,17 @@ public class MontiArcPrettyPrinter implements MontiArcVisitor {
   public void handle(ASTMACompilationUnit node) {
     if(node.isPresentPackage()){
       this.getPrinter().print("package ");
-      node.getPackage().accept(this.getRealThis());
+      node.getPackage().accept(this.getTraverser());
       this.getPrinter().println(";");
     }
-    node.getImportStatementList().stream().forEach(n->n.accept(this.getRealThis()));
-    node.getComponentType().accept(this.getRealThis());
+    node.getImportStatementList().stream().forEach(n->n.accept(this.getTraverser()));
+    node.getComponentType().accept(this.getTraverser());
   }
 
   @Override
   public void handle(ASTArcTiming node) {
     this.getPrinter().print("timing ");
-    node.getArcTimeMode().accept(this.getRealThis());
+    node.getArcTimeMode().accept(this.getTraverser());
     this.getPrinter().print(";");
   }
 

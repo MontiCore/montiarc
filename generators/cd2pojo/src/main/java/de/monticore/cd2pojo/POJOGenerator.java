@@ -2,14 +2,28 @@
 package de.monticore.cd2pojo;
 
 import com.google.common.base.Preconditions;
+import de.monticore.cd2pojo.cocos.CDSymTabPrinter;
+import de.monticore.cd4code._symboltable.CD4CodeArtifactScope;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.io.paths.IterablePath;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
+import de.monticore.symboltable.IArtifactScope;
+import de.monticore.symboltable.IGlobalScope;
+import de.monticore.symboltable.IScope;
+import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import org.codehaus.commons.nullanalysis.NotNull;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class POJOGenerator {
@@ -18,16 +32,13 @@ public class POJOGenerator {
   
   protected GeneratorEngine engine;
   protected IterablePath hwcPath;
-  
-  public POJOGenerator(@NotNull GeneratorEngine engine, @NotNull IterablePath hwcPaths) {
-    Preconditions.checkNotNull(engine);
-    Preconditions.checkNotNull(hwcPaths);
-    this.engine = engine;
-    this.hwcPath = hwcPaths;
-  }
+  protected File outputDirectory;
   
   public POJOGenerator(@NotNull GeneratorSetup setup) {
-    this(new GeneratorEngine(Preconditions.checkNotNull(setup)), setup.getHandcodedPath());
+    Preconditions.checkNotNull(setup);
+    this.engine = new GeneratorEngine(setup);
+    this.hwcPath = setup.getHandcodedPath();
+    outputDirectory = setup.getOutputDirectory();
   }
   
   public POJOGenerator(@NotNull Path targetDir, @NotNull Path hwcPath) {
@@ -46,6 +57,8 @@ public class POJOGenerator {
   
   public void generate(@NotNull CDTypeSymbol typeSymbol) {
     Preconditions.checkNotNull(typeSymbol);
+    CDWorkaroundsForCD2POJOGenerator.doAllWorkarounds(typeSymbol);
+    CDSymTabPrinter.printCDSymTab2Json(typeSymbol, outputDirectory.toPath());
     Boolean existsHWC = existsHWC(typeSymbol);
     String kind = "";
     if (typeSymbol.isIsClass()) {
@@ -60,7 +73,7 @@ public class POJOGenerator {
     }
     
     final StringBuilder _super = new StringBuilder();
-
+    
     if (typeSymbol.isPresentSuperClass()) {
       _super.append("extends ");
       _super.append(typeSymbol.getSuperClass().getTypeInfo().getFullName());
@@ -78,7 +91,8 @@ public class POJOGenerator {
         .collect(Collectors.joining(", ")));
     }
     
-    String _package = typeSymbol.getFullName().substring(0, typeSymbol.getFullName().lastIndexOf("."));
+    String _package = CDWorkaroundsForCD2POJOGenerator.getFullNameWorkaround(typeSymbol)
+      .substring(0, typeSymbol.getFullName().lastIndexOf("."));
     engine.generateNoA("templates.Type.ftl", getFileAsPath(typeSymbol),
       _package, kind, typeSymbol, _super, new TemplateHelper(), existsHWC);
   }
@@ -86,13 +100,127 @@ public class POJOGenerator {
   protected Boolean existsHWC(@NotNull CDTypeSymbol typeSymbol) {
     Preconditions.checkNotNull(typeSymbol);
     return hwcPath.exists(Paths.get(
-      typeSymbol.getFullName().replaceAll("\\.", "/") + FILE_EXTENSION));
+      CDWorkaroundsForCD2POJOGenerator.getFullNameWorkaround(typeSymbol)
+        .replaceAll("\\.", "/") + FILE_EXTENSION));
     
   }
   
   protected Path getFileAsPath(@NotNull CDTypeSymbol typeSymbol) {
     Preconditions.checkNotNull(typeSymbol);
     Boolean existsHWC = existsHWC(typeSymbol);
-    return Paths.get(typeSymbol.getFullName().replaceAll("\\.", "/") + (existsHWC? "TOP":"") + FILE_EXTENSION);
+    return Paths.get(CDWorkaroundsForCD2POJOGenerator.getFullNameWorkaround(typeSymbol)
+      .replaceAll("\\.", "/") + (existsHWC ? "TOP" : "") + FILE_EXTENSION);
+  }
+  
+  // TODO remove when CD4A symbol table is fixed
+  static class CDWorkaroundsForCD2POJOGenerator {
+    
+    public static void doAllWorkarounds(CDTypeSymbol typeSymbol) {
+      setProperFullName(typeSymbol); //this also ensures that the proper package name is set
+      fixSupertypes(typeSymbol);
+    }
+    
+    /*
+     * This is mostly copied from generated code with adaptations as needed.
+     * It is only needed until CDTypeSymbolTOP::determineFullName works again.
+     * determineFullName is probably broken because CD4CodeArtifactScope overrides getPackageName horribly.
+     */
+    public static String getFullNameWorkaround(@NotNull CDTypeSymbol typeSymbol) {
+      Preconditions.checkNotNull(typeSymbol);
+      if (typeSymbol.getFullName().contains(".")) {
+        return typeSymbol.getFullName();
+      }
+      if (typeSymbol.getEnclosingScope() == null) {
+        return typeSymbol.getName();
+      }
+      setProperFullName(typeSymbol);
+      return typeSymbol.getFullName();
+    }
+  
+    /*
+     * This is mostly copied from generated code with adaptations as needed.
+     * It is only needed until CDTypeSymbolTOP::determineFullName works again.
+     * determineFullName is probably broken because CD4CodeArtifactScope overrides getPackageName horribly.
+     */
+    public static void setProperFullName(@NotNull CDTypeSymbol typeSymbol) {
+      Preconditions.checkNotNull(typeSymbol);
+      final Deque<String> nameParts = new ArrayDeque<>();
+      nameParts.addFirst(typeSymbol.getName());
+      
+      IScope optCurrentScope = typeSymbol.getEnclosingScope();
+      
+      while (optCurrentScope != null) {
+        final IScope currentScope = optCurrentScope;
+        if (currentScope.isPresentSpanningSymbol()) {
+          nameParts.addFirst(currentScope.getSpanningSymbol().getFullName());
+          break;
+        }
+        
+        if (!(currentScope instanceof IGlobalScope)) {
+          if (currentScope instanceof IArtifactScope) {
+            if (!getPackageNameWorkaround(typeSymbol).isEmpty()) {
+              nameParts.addFirst(typeSymbol.getPackageName());
+            }
+          } else {
+            if (currentScope.isPresentName()) {
+              nameParts.addFirst(currentScope.getName());
+            }
+          }
+          optCurrentScope = currentScope.getEnclosingScope();
+        } else {
+          break;
+        }
+      }
+      String fullName = de.se_rwth.commons.Names.constructQualifiedName(nameParts);
+      typeSymbol.setFullName(fullName);
+    }
+  
+    /*
+     * This is supposed to work around the horrible override
+     * of getPackageName in CD4CArtifactScope
+     */
+    public static String getPackageNameWorkaround(@NotNull CDTypeSymbol typeSymbol) {
+      Preconditions.checkNotNull(typeSymbol);
+      //1. determine package name
+      String packageName = "";
+      IScope optCurrentScope = typeSymbol.getEnclosingScope();
+      while (optCurrentScope != null) {
+        final IScope currentScope = optCurrentScope;
+        if (currentScope.isPresentSpanningSymbol()) {
+          packageName = currentScope.getSpanningSymbol().getPackageName();
+          break;
+        } else if (currentScope instanceof CD4CodeArtifactScope) {
+          packageName = ((CD4CodeArtifactScope) currentScope).getRealPackageName();
+          break;
+        }
+        optCurrentScope = currentScope.getEnclosingScope();
+      }
+      
+      //2. set proper package name (hopefully)
+      typeSymbol.setPackageName(packageName);
+      
+      //3. return package name
+      return packageName;
+    }
+    
+    /*
+     * I don't even know why but the supertypes of CDTypeSymbols were broken
+     * (one could, for example, not differentiate between a superclass and an implemented interface)
+     */
+    protected static void fixSupertypes(@NotNull CDTypeSymbol typeSymbol) {
+      Preconditions.checkNotNull(typeSymbol);
+      List<SymTypeExpression> expressions = typeSymbol.getSuperTypesList().stream()
+        .filter(t -> t.getTypeInfo() instanceof TypeSymbolSurrogate).collect(Collectors.toList());
+      List<SymTypeExpression> fixed = new ArrayList<>();
+      for (SymTypeExpression expression : expressions) {
+        TypeSymbolSurrogate surrogate = (TypeSymbolSurrogate) expression.getTypeInfo();
+        TypeSymbol sym = surrogate.lazyLoadDelegate();
+        fixed.add(SymTypeExpressionFactory.createTypeExpression(sym));
+      }
+      List<SymTypeExpression> superTypes = typeSymbol.getSuperTypesList();
+      superTypes.removeAll(expressions);
+      superTypes.addAll(fixed);
+      typeSymbol.setSuperTypesList(superTypes);
+    }
   }
 }

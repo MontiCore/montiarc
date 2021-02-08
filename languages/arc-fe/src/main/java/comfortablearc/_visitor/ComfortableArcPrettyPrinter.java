@@ -6,14 +6,13 @@ import comfortablearc._ast.*;
 import de.monticore.prettyprint.IndentPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-public class ComfortableArcPrettyPrinter implements ComfortableArcVisitor {
+public class ComfortableArcPrettyPrinter implements ComfortableArcHandler {
 
-  private ComfortableArcVisitor realThis = this;
+  private ComfortableArcTraverser traverser;
   protected IndentPrinter printer;
 
   public ComfortableArcPrettyPrinter() {
-    IndentPrinter printer = new IndentPrinter();
-    this.printer = printer;
+    this(new IndentPrinter());
   }
 
   public ComfortableArcPrettyPrinter(@NotNull IndentPrinter printer) {
@@ -22,14 +21,13 @@ public class ComfortableArcPrettyPrinter implements ComfortableArcVisitor {
   }
 
   @Override
-  public ComfortableArcVisitor getRealThis() {
-    return this.realThis;
+  public ComfortableArcTraverser getTraverser() {
+    return this.traverser;
   }
 
-  @Override
-  public void setRealThis(@NotNull ComfortableArcVisitor realThis) {
-    Preconditions.checkArgument(realThis != null);
-    this.realThis = realThis;
+  public void setTraverser(@NotNull ComfortableArcTraverser traverser) {
+    Preconditions.checkArgument(traverser != null);
+    this.traverser = traverser;
   }
 
   public IndentPrinter getPrinter() {
@@ -39,7 +37,7 @@ public class ComfortableArcPrettyPrinter implements ComfortableArcVisitor {
   @Override
   public void handle(ASTArcAutoConnect node) {
     this.getPrinter().print("autoconnect");
-    node.getArcACMode().accept(this.getRealThis());
+    node.getArcACMode().accept(this.getTraverser());
   }
 
   @Override
@@ -60,7 +58,7 @@ public class ComfortableArcPrettyPrinter implements ComfortableArcVisitor {
   @Override
   public void handle(ASTArcAutoInstantiate node) {
     this.getPrinter().print("autoinstantiate ");
-    node.getArcAIMode().accept(this.getRealThis());
+    node.getArcAIMode().accept(this.getTraverser());
   }
 
   @Override
@@ -78,10 +76,10 @@ public class ComfortableArcPrettyPrinter implements ComfortableArcVisitor {
     this.getPrinter().print(node.getName());
     this.getPrinter().print(" ");
     if(node.isPresentArguments()) {
-      node.getArguments().accept(this.getRealThis());
+      node.getArguments().accept(this.getTraverser());
     }
     this.getPrinter().print("[ ");
-    node.getConnectorList().stream().forEach((c)->c.accept(this.getRealThis()));
+    node.getConnectorList().stream().forEach((c)->c.accept(this.getTraverser()));
     this.getPrinter().print("] ");
   }
   

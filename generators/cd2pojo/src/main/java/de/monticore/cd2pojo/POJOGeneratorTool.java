@@ -56,9 +56,8 @@ public class POJOGeneratorTool {
     List<CDTypeSymbol> symbolsToGenerate = new ArrayList<>();
     ICD4CodeGlobalScope globalScope = getLoadedICD4CodeGlobalScope(modelPaths);
     for (ICD4CodeScope artifactScope : globalScope.getSubScopes()) {
-      for (ICD4CodeScope codeScope : artifactScope.getSubScopes()) {
-        symbolsToGenerate.addAll(codeScope.getLocalCDTypeSymbols());
-      }
+      Collection<CDTypeSymbol> typeSymbols = artifactScope.getLocalCDTypeSymbols();
+      symbolsToGenerate.addAll(typeSymbols);
     }
     for (CDTypeSymbol typeSymbol : symbolsToGenerate) {
       doGenerate(typeSymbol);
@@ -105,8 +104,10 @@ public class POJOGeneratorTool {
     Preconditions.checkNotNull(paths);
     Preconditions.checkNotNull(cdChecker);
     ModelPath mp = new ModelPath(paths);
-    ICD4CodeGlobalScope cd4CGlobalScope = CD4CodeMill.cD4CodeGlobalScopeBuilder().setModelPath(mp)
-      .setModelFileExtension(cdFileExtension).build();
+    ICD4CodeGlobalScope cd4CGlobalScope = CD4CodeMill.globalScope();
+    cd4CGlobalScope.clear();
+    cd4CGlobalScope.setModelPath(mp);
+    cd4CGlobalScope.setFileExt(cdFileExtension);
     processModels(cd4CGlobalScope, cdChecker);
     addBasicTypes(cd4CGlobalScope);
     return cd4CGlobalScope;

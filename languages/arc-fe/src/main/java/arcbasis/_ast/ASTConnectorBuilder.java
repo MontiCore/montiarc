@@ -28,6 +28,7 @@ public class ASTConnectorBuilder extends ASTConnectorBuilderTOP {
    */
   public ASTConnectorBuilder setSource(String source) {
     Preconditions.checkNotNull(source);
+    //TODO should this regex be \\.  ?
     Preconditions.checkArgument(source.split(".").length < 3);
     this.source = ArcBasisMill.portAccessBuilder().setQualifiedName(source).build();
     return this.realBuilder;

@@ -3,7 +3,9 @@ package montiarc.visitor;
 
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import montiarc.AbstractTest;
+import montiarc.MontiArcMill;
 import montiarc._parser.MontiArcParser;
+import montiarc._visitor.MontiArcTraverser;
 import montiarc._visitor.NamesInExpressionsVisitor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,7 +24,12 @@ public class NamesInExpressionsVisitorTest extends AbstractTest {
   public void shouldFindNames(String expression, List<String> names) throws IOException {
     MontiArcParser parser = new MontiArcParser();
     NamesInExpressionsVisitor visitor = new NamesInExpressionsVisitor();
-    Objects.requireNonNull(parser.parse_StringExpression(expression).orElse(null)).accept(visitor);
+    MontiArcTraverser traverser = MontiArcMill.traverser();
+    traverser.add4AssignmentExpressions(visitor);
+    traverser.setAssignmentExpressionsHandler(visitor);
+    traverser.add4CommonExpressions(visitor);
+    traverser.add4ExpressionsBasis(visitor);
+    Objects.requireNonNull(parser.parse_StringExpression(expression).orElse(null)).accept(traverser);
     Map<ASTNameExpression, NamesInExpressionsVisitor.ExpressionKind> foundNodes
       = visitor.getFoundNames();
     List<String> foundNames = foundNodes.keySet().stream()

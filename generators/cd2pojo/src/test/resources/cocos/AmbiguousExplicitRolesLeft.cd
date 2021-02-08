@@ -1,0 +1,13 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+package cocos;
+
+classdiagram AmbiguousExplicitRolesLeft {
+
+  class A;
+  class B;
+  class C;
+
+  association B (d) <- A;
+  association C (d) <- A;
+}

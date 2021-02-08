@@ -5,6 +5,7 @@ import arcbasis.check.AbstractArcTypesCalculatorTest;
 import de.monticore.types.check.TypeCheckResult;
 import genericarc.GenericArcMill;
 import genericarc._visitor.GenericArcDelegatorVisitor;
+import genericarc._visitor.GenericArcTraverser;
 import montiarc.util.check.IArcTypesCalculator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ public class GenericArcTypesCalculatorTest extends AbstractArcTypesCalculatorTes
   @Override
   protected IArcBasisScope getScope() {
     if (this.scope == null) {
-      this.scope = GenericArcMill.genericArcScopeBuilder().build();
+      this.scope = GenericArcMill.scope();
     }
     return this.scope;
   }
@@ -38,7 +39,7 @@ public class GenericArcTypesCalculatorTest extends AbstractArcTypesCalculatorTes
     GenericArcTypesCalculator typesCalculator = new GenericArcTypesCalculator(new TypeCheckResult());
 
     //When
-    GenericArcDelegatorVisitor delegator = typesCalculator.getCalculationDelegator();
+    GenericArcTraverser delegator = typesCalculator.getCalculationDelegator();
 
     //Then
     Assertions.assertTrue(delegator != null);

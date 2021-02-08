@@ -20,7 +20,7 @@ public class Beispiel {
   public void testResolvingCDTypeSymbol() {
     //Standard Model Path
     ModelPath mp = new ModelPath(Paths.get("src/test/resources/models"));
-  
+    
     //Hier haben wir vieles versucht, bspw. domain.Domain.domain.A oder domain.A
     //Der FQN scheint mit domain.Domain beginnen zu müssen, damit das zu parsende Modell überhaupt gefunden werden kann.
     String typeSymbolFQN = "domain.Domain.A";
@@ -29,13 +29,15 @@ public class Beispiel {
     CDSymbolTableHelper helper = new CDSymbolTableHelper(new DeriveSymTypeOfCD4Code());
     
     //Standard GlobalScope (mit CDSymTabHelper)
-    ICD4CodeGlobalScope a = CD4CodeMill.cD4CodeGlobalScopeBuilder().setModelPath(mp).setModelFileExtension("cd").setSymbolTableHelper(helper).build();
+    ICD4CodeGlobalScope a = CD4CodeMill.globalScope();
+    a.setModelPath(mp);
+    a.setFileExt("cd");
     
     //Standard resolving
     List<CDTypeSymbol> l = a.resolveCDTypeMany(typeSymbolFQN);
     
     //Der Test sollte auch fehlschlagen können
-    assertEquals(1,l.size(),
+    assertEquals(1, l.size(),
       "Es sollte exakt ein Symbol mit qualifiziertem Namen " + typeSymbolFQN + " gefunden werden. " +
         "Es wurden " + l.size() + " Symbole gefunden.");
   }
@@ -54,8 +56,9 @@ public class Beispiel {
   @Test
   public void how2ResolveCD() {
     ModelPath mp = new ModelPath(Paths.get("src/test/resources/models"));
-    ICD4CodeGlobalScope cd4CGlobalScope = CD4CodeMill.cD4CodeGlobalScopeBuilder().setModelPath(mp)
-      .setModelFileExtension("cd").build();
+    ICD4CodeGlobalScope cd4CGlobalScope = CD4CodeMill.globalScope();
+    cd4CGlobalScope.setModelPath(mp);
+    cd4CGlobalScope.setFileExt("cd");
     List<CDRoleSymbol> aRoleSymbols =
       cd4CGlobalScope.resolveCDTypeMany("simple.simple.A").get(0).getCDRoleList();
     System.out.println(aRoleSymbols.size());

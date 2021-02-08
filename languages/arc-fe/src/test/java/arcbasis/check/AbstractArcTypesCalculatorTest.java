@@ -18,6 +18,7 @@ import de.monticore.types.check.SymTypeExpressionFactory;
 import montiarc.util.check.IArcTypesCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

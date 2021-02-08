@@ -2,23 +2,22 @@
 package montiarc.generator;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.IArcBasisScope;
 import com.google.common.base.Preconditions;
 import de.monticore.cd2pojo.POJOGeneratorTool;
 import de.monticore.symboltable.IScope;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTool;
-import montiarc._symboltable.IMontiArcScope;
-import montiarc._symboltable.MontiArcGlobalScope;
+import montiarc._symboltable.IMontiArcGlobalScope;
 import montiarc.generator.codegen.xtend.MAAGenerator;
 import montiarc.util.DirectoryUtil;
-import montiarc.util.Modelfinder;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Extends {@link MontiArcTool} with generate capabilities.
@@ -47,19 +46,18 @@ public class MontiArcGeneratorTool extends MontiArcTool {
   }
 
   /**
-   * Parses and checks cocos for all MontiArc models in the provided model path.
-   * If the models are well formed, generates target code for these.
+   * Parses and checks cocos for all MontiArc models in the provided model path. If the models are well formed,
+   * generates target code for these.
    *
    * @param modelPath Path where MontiArc models are located.
    * @param target    Path the code should be generated to.
-   * @param hwcPath   Path where handwritten component implementations are
-   *                  located.
+   * @param hwcPath   Path where handwritten component implementations are located.
    */
   public void generate(@NotNull Path modelPath, @NotNull Path target, @NotNull Path hwcPath) {
     Preconditions.checkArgument(modelPath != null);
     Preconditions.checkArgument(target != null);
     Preconditions.checkArgument(hwcPath != null);
-    MontiArcGlobalScope scope = processModels(modelPath);
+    IMontiArcGlobalScope scope = processModels(modelPath);
     if (Log.getErrorCount() > 0) {
       return;
     }
@@ -68,44 +66,27 @@ public class MontiArcGeneratorTool extends MontiArcTool {
   }
 
   /**
-   * Checks cocos and generates code for all MontiArc models in modelpath to
-   * folder target.
+   * Checks cocos and generates code for all MontiArc models in modelpath to folder target.
    *
    * @param modelPath Path where MontiArc models are located.
-   * @param target Path the code should be generated to.
-   * @param hwcPath Path where handwritten component implementations are
-   *          located.
+   * @param target    Path the code should be generated to.
+   * @param hwcPath   Path where handwritten component implementations are located.
    */
   @Deprecated
   public void generate(File modelPath, File target, File hwcPath) {
-    List<String> foundModels = Modelfinder.getModelsInModelPath(modelPath, "arc");
-
     // 1. create symboltable
     Log.info("Initializing symboltable", "MontiArcGeneratorTool");
-    String basedir = DirectoryUtil.getBasedirFromModelAndTargetPath(modelPath.getAbsolutePath(), target.getAbsolutePath());
-    IMontiArcScope symTab = initSymbolTable(modelPath, Paths.get(basedir + LIBRARY_MODELS_FOLDER).toFile(),
-      hwcPath);
+    String basedir = DirectoryUtil.getBasedirFromModelAndTargetPath(modelPath.getAbsolutePath(),
+      target.getAbsolutePath());
+    IMontiArcGlobalScope symTab = this.processModels(modelPath.toPath(), Paths.get(basedir + LIBRARY_MODELS_FOLDER),
+      hwcPath.toPath());
 
-    for (String model : foundModels) {
-      String qualifiedModelName = Names.getQualifier(model) + "." + Names.getSimpleName(model);
+    symTab.getSubScopes().stream().map(IArcBasisScope::getLocalComponentTypeSymbols).flatMap(Collection::stream)
+      .forEach(comp -> this.getInstance()
+        .generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(),
+          hwcPath, comp));
 
-      // 2. parse + resolve model
-      Log.info("Parsing model:" + qualifiedModelName, "MontiArcGeneratorTool");
-      ComponentTypeSymbol comp =
-        symTab.resolveComponentType(qualifiedModelName).get();
-
-      // 3. check cocos
-      Log.info("Check model: " + qualifiedModelName, "MontiArcGeneratorTool");
-      checkCoCos(comp.getAstNode());
-
-      // 4. generate
-      Log.info("Generate model: " + qualifiedModelName, "MontiArcGeneratorTool");
-      getInstance().generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(), hwcPath, comp);
-    }
-
-    // gen cd
     generatePOJOs(modelPath, target);
-
   }
 
   private void generatePOJOs(File modelPath, File targetFilepath) {

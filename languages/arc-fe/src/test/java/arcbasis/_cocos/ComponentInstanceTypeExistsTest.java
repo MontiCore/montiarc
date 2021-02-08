@@ -4,7 +4,7 @@ package arcbasis._cocos;
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._symboltable.ArcBasisSymbolTableCreator;
+import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.util.ArcError;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
@@ -21,9 +21,8 @@ public class ComponentInstanceTypeExistsTest extends AbstractTest {
     ASTMCQualifiedType type = createQualifiedType("A");
     ASTComponentInstantiation ast = arcbasis.ArcBasisMill.componentInstantiationBuilder()
       .setMCType(type).setComponentInstanceList("sub1", "sub2", "sub3").build();
-    IArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
-    ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
-    symTab.handle(ast);
+    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator(arcbasis.ArcBasisMill.globalScope());
+    symTab.createFromAST(ast).setName("Scopy");
     ComponentInstanceTypeExists coco = new ComponentInstanceTypeExists();
     coco.check(ast.getComponentInstance(0));
     this.checkOnlyExpectedErrorsPresent(Log.getFindings(),

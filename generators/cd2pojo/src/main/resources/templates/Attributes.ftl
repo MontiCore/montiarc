@@ -5,7 +5,6 @@
         ${attribute.getModifier()} ${attribute.getType()} ${attribute.getName()};
 
     </#list>
-
     <#list helper.getAttributes(type) as attribute>
         <@printGetterSetter attribute=attribute/>
     </#list>

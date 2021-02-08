@@ -5,7 +5,7 @@ import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ArcBasisSymbolTableCreator;
+import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.util.ArcError;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
@@ -30,9 +30,8 @@ public class ParameterTypeExistsTest extends AbstractTest {
           .build()))
         .build())
       .build();
-    IArcBasisScope scope = ArcBasisMill.arcBasisScopeBuilder().build();
-    ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(scope);
-    symTab.handle(ast);
+    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator(ArcBasisMill.globalScope());
+    symTab.createFromAST(ast).setName("THE SCOPE");
     ParameterTypeExists coco = new ParameterTypeExists();
     coco.check(ast.getHead().getArcParameter(0));
     this.checkOnlyExpectedErrorsPresent(Log.getFindings(),

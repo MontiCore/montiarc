@@ -1,0 +1,24 @@
+{
+  "name": "Colors",
+  "kindHierarchy": [
+  ],
+  "symbols": [
+    {
+      "kind":"de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "Color",
+      "isClass":false,
+      "isInterface":false,
+      "isEnum":true,
+      "isAbstract":false,
+      "isPrivate":false,
+      "isProtected":false,
+      "isPublic":false,
+      "isStatic":false,
+      "isFinal":false
+    },
+    {
+      "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeSymbol",
+      "name": "Color"
+    }
+  ]
+}

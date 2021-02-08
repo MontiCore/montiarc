@@ -13,14 +13,13 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import java.util.Iterator;
 import java.util.List;
 
-public class GenericArcPrettyPrinter implements GenericArcVisitor {
+public class GenericArcPrettyPrinter implements GenericArcHandler {
 
-  private GenericArcVisitor realThis = this;
+  private GenericArcTraverser traverser;
   protected IndentPrinter printer;
 
   public GenericArcPrettyPrinter() {
-    IndentPrinter printer = new IndentPrinter();
-    this.printer = printer;
+    this(new IndentPrinter());
   }
 
   public GenericArcPrettyPrinter(@NotNull IndentPrinter printer) {
@@ -29,57 +28,56 @@ public class GenericArcPrettyPrinter implements GenericArcVisitor {
   }
 
   @Override
-  public GenericArcVisitor getRealThis() {
-    return this.realThis;
+  public GenericArcTraverser getTraverser() {
+    return this.traverser;
   }
 
-  @Override
-  public void setRealThis(@NotNull GenericArcVisitor realThis) {
-    Preconditions.checkArgument(realThis != null);
-    this.realThis = realThis;
+  public void setTraverser(@NotNull GenericArcTraverser traverser) {
+    Preconditions.checkArgument(traverser != null);
+    this.traverser = traverser;
   }
 
   public IndentPrinter getPrinter() {
     return this.printer;
   }
 
-  public <T extends ASTArcBasisNode> void acceptSeperatedList(@NotNull List<T> list){
+  public <T extends ASTArcBasisNode> void acceptSeparatedList(@NotNull List<T> list){
     if (list.size() <= 0) {
       return;
     }
     Iterator<T> iterator = list.iterator();
-    iterator.next().accept(this.getRealThis());
+    iterator.next().accept(this.getTraverser());
     while (iterator.hasNext()) {
       this.getPrinter().print(", ");
-      iterator.next().accept(this.getRealThis());
+      iterator.next().accept(this.getTraverser());
     }
   }
 
-  public <T extends ASTGenericArcNode> void acceptGenericSeperatedList(@NotNull List<T> list){
+  public <T extends ASTGenericArcNode> void acceptGenericSeparatedList(@NotNull List<T> list){
     if (list.size() <= 0) {
       return;
     }
     Iterator<T> iterator = list.iterator();
-    iterator.next().accept(this.getRealThis());
+    iterator.next().accept(this.getTraverser());
     while (iterator.hasNext()) {
       this.getPrinter().print(", ");
-      iterator.next().accept(this.getRealThis());
+      iterator.next().accept(this.getTraverser());
     }
   }
 
   @Override
   public void handle(ASTGenericComponentHead node) {
     this.getPrinter().print("<");
-    acceptGenericSeperatedList(node.getArcTypeParameterList());
+    acceptGenericSeparatedList(node.getArcTypeParameterList());
     this.getPrinter().print("> ");
     if(!node.isEmptyArcTypeParameters()) {
       this.getPrinter().print("(");
-      acceptSeperatedList(node.getArcParameterList());
+      acceptSeparatedList(node.getArcParameterList());
       this.getPrinter().print(") ");
     }
     if(node.isPresentParent()){
       this.getPrinter().print("extends ");
-      node.getParent().accept(this.getRealThis());
+      node.getParent().accept(this.getTraverser());
     }
   }
 
@@ -89,10 +87,10 @@ public class GenericArcPrettyPrinter implements GenericArcVisitor {
     if(!node.isEmptyUpperBound()){
       this.getPrinter().print("extends ");
       Iterator<ASTMCType> iterator = node.getUpperBoundList().iterator();
-      iterator.next().accept(this.getRealThis());
+      iterator.next().accept(this.getTraverser());
       while (iterator.hasNext()) {
         this.getPrinter().print(" & ");
-        iterator.next().accept(this.getRealThis());
+        iterator.next().accept(this.getTraverser());
       }
     }
   }

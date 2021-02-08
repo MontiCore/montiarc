@@ -8,7 +8,6 @@ import de.monticore.types.check.DefsTypeBasic;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.ArrayList;
@@ -24,8 +23,8 @@ public abstract class AbstractTest {
   protected static final String RELATIVE_MODEL_PATH = "src/test/resources";
   private Pattern errorCodePattern;
 
-  @BeforeAll
-  public static void cleanUpLog() {
+  @BeforeEach
+  public void cleanUpLog() {
     Log.getFindings().clear();
     Log.enableFailQuick(false);
   }

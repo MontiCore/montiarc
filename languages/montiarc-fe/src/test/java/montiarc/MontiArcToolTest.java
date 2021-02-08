@@ -1,16 +1,16 @@
 package montiarc;
 
-import de.monticore.cd4code.CD4CodeMill;
-import de.monticore.cd4code._symboltable.ICD4CodeGlobalScope;
-import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
+import de.monticore.symboltable.IScope;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc._symboltable.IMontiArcGlobalScope;
 import montiarc._symboltable.MontiArcArtifactScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -30,37 +30,42 @@ public class MontiArcToolTest extends AbstractTest {
 
   protected static final String TEST_PATH = Paths.get("montiarc", "tool").toString();
 
-  protected MontiArcTool maTool = new MontiArcTool();
+  protected MontiArcTool tool;
 
-  protected MontiArcTool getMATool() {
-    return this.maTool;
+  protected MontiArcTool getTool() {
+    return this.tool;
   }
 
-  protected static Stream<Path> steamValidMAModelFiles() {
+  @BeforeEach
+  public void setUp() {
+    this.tool = new MontiArcTool();
+  }
+
+  protected static Stream<Path> steamValidMontiArcModelFiles() {
     return Stream.of(Paths.get("valid", "example1", "Composed.arc"),
       Paths.get("valid", "example1", "InComp.arc"),
       Paths.get("valid", "example1", "OutComp.arc"));
   }
 
-  protected static Stream<Arguments> validMAModelFileNameProvider() {
-    return steamValidMAModelFiles().map(Path::toString).map(Arguments::of);
+  protected static Stream<Arguments> validMontiArcModelFileNameProvider() {
+    return steamValidMontiArcModelFiles().map(Path::toString).map(Arguments::of);
   }
 
-  protected static Stream<Path> streamValidCDModelFiles() {
-    return Stream.of(Paths.get("valid", "example3", "Colors.cd"));
+  protected static Stream<Path> streamValidSerializedModelFileNames() {
+    return Stream.of(Paths.get("valid", "example3", "Colors.sym"));
   }
 
-  protected static Stream<Arguments> validCDModelFileNameProvider() {
-    return streamValidCDModelFiles().map(Path::toString).map(Arguments::of);
+  protected static Stream<Arguments> validSerializedModelFileNameProvider() {
+    return streamValidSerializedModelFileNames().map(Path::toString).map(Arguments::of);
   }
 
-  protected static Stream<Arguments> validMAModelPathAndExpectedValuesProvider() {
+  protected static Stream<Arguments> validMontiArcModelPathAndExpectedValuesProvider() {
     return Stream.of(Arguments.of(Paths.get("valid", "example1").toString(), 3),
       Arguments.of(Paths.get("valid", "example2").toString(), 3),
       Arguments.of(Paths.get("valid", "example3").toString(), 3));
   }
 
-  protected static Stream<Arguments> validCDModelPathAndExpectedValuesProvider() {
+  protected static Stream<Arguments> validSerializedModelPathAndExpectedValuesProvider() {
     return Stream.of(Arguments.of(Paths.get("valid", "example1").toString(), 0),
       Arguments.of(Paths.get("valid", "example2").toString(), 0),
       Arguments.of(Paths.get("valid", "example3").toString(), 1));
@@ -71,16 +76,16 @@ public class MontiArcToolTest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcTool#parseMAModel(Path)}.
+   * Method under test {@link MontiArcTool#parse(Path)}.
    */
   @ParameterizedTest
-  @MethodSource("validMAModelFileNameProvider")
-  public void shouldParseMAModelFromFile(@NotNull String filename) {
+  @MethodSource("validMontiArcModelFileNameProvider")
+  public void shouldParseModelGivenPath(@NotNull String filename) {
     //Given
     Path file = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, filename);
 
     //When
-    Optional<ASTMACompilationUnit> ast = this.getMATool().parseMAModel(file);
+    Optional<ASTMACompilationUnit> ast = this.getTool().parse(file);
 
     //Then
     Assertions.assertTrue(ast.isPresent());
@@ -88,33 +93,33 @@ public class MontiArcToolTest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcTool#parseCDModel(Path)}.
+   * Method under test {@link MontiArcTool#load(Path)}.
    */
   @ParameterizedTest
-  @MethodSource("validCDModelFileNameProvider")
-  public void shouldParseCDModelFromFile(@NotNull String filename) {
+  @MethodSource("validSerializedModelFileNameProvider")
+  public void shouldLoadModelGivenPath(@NotNull String filename) {
     //Given
     Path file = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, filename);
 
     //When
-    Optional<ASTCDCompilationUnit> ast = this.getMATool().parseCDModel(file);
+    IMontiArcArtifactScope scope = this.getTool().load(file);
 
     //Then
-    Assertions.assertTrue(ast.isPresent());
+    Assertions.assertNotNull(scope);
     Assertions.assertTrue(Log.getFindings().isEmpty());
   }
 
   /**
-   * Method under test {@link MontiArcTool#parseMAModel(String)}.
+   * Method under test {@link MontiArcTool#parse(String)}.
    */
   @ParameterizedTest
-  @MethodSource("validMAModelFileNameProvider")
-  public void shouldParseMAModelFromFileName(@NotNull String filename) {
+  @MethodSource("validMontiArcModelFileNameProvider")
+  public void shouldParseModelGivenFileName(@NotNull String filename) {
     //Given
     String respFileName = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, filename).toString();
 
     //When
-    Optional<ASTMACompilationUnit> ast = this.getMATool().parseMAModel(respFileName);
+    Optional<ASTMACompilationUnit> ast = this.getTool().parse(respFileName);
 
     //Then
     Assertions.assertTrue(ast.isPresent());
@@ -122,33 +127,33 @@ public class MontiArcToolTest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcTool#parseCDModel(String)}.
+   * Method under test {@link MontiArcTool#load(String)}.
    */
   @ParameterizedTest
-  @MethodSource("validCDModelFileNameProvider")
-  public void shouldParseCDModelFromFileName(@NotNull String filename) {
+  @MethodSource("validSerializedModelFileNameProvider")
+  public void shouldLoadModelGivenFileName(@NotNull String filename) {
     //When
     String respFileName = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, filename).toString();
 
     //When
-    Optional<ASTCDCompilationUnit> ast = this.getMATool().parseCDModel(respFileName);
+    IMontiArcArtifactScope scope = this.getTool().load(respFileName);
 
     //Then
-    Assertions.assertTrue(ast.isPresent());
+    Assertions.assertNotNull(scope);
     Assertions.assertTrue(Log.getFindings().isEmpty());
   }
 
   /**
-   * Method under test {@link MontiArcTool#parseMAModels(Path)}.
+   * Method under test {@link MontiArcTool#parseAll(Path)}.
    */
   @ParameterizedTest
-  @MethodSource("validMAModelPathAndExpectedValuesProvider")
-  public void shouldParseMAModelsFromDirectory(@NotNull String directoryName, int expNumModels) {
+  @MethodSource("validMontiArcModelPathAndExpectedValuesProvider")
+  public void shouldParseModelsGivenDirectory(@NotNull String directoryName, int expNumModels) {
     //Given
     Path directory = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName);
 
     //When
-    Collection<ASTMACompilationUnit> models = this.getMATool().parseMAModels(directory);
+    Collection<ASTMACompilationUnit> models = this.getTool().parseAll(directory);
 
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());
@@ -156,27 +161,27 @@ public class MontiArcToolTest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcTool#parseCDModels(Path)} (Path)}.
+   * Method under test {@link MontiArcTool#loadAll(Path)}.
    */
   @ParameterizedTest
-  @MethodSource("validCDModelPathAndExpectedValuesProvider")
-  public void shouldParseCDModelsFromDirectory(@NotNull String directoryName, int expNumModels) {
+  @MethodSource("validSerializedModelPathAndExpectedValuesProvider")
+  public void shouldLoadModelsGivenDirectory(@NotNull String directoryName, int expNumModels) {
     //Given
     Path directory = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName);
 
     //When
-    Collection<ASTCDCompilationUnit> models = this.getMATool().parseCDModels(directory);
+    Collection<IMontiArcArtifactScope> scopes = this.getTool().loadAll(directory);
 
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());
-    Assertions.assertEquals(expNumModels, models.size());
+    Assertions.assertEquals(expNumModels, scopes.size());
   }
 
   @Test
-  public void shouldResolveUniqueCDTypeSymbol() {
+  public void shouldResolveUniqueTypeSymbolFromSerializedModel() {
     //Given
     Path path = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, "valid", "example3");
-    IMontiArcGlobalScope scope = this.getMATool().processModels(path);
+    IMontiArcGlobalScope scope = this.getTool().processModels(path);
 
     //When
     List<TypeSymbol> types = scope.resolveTypeMany("Color");
@@ -186,18 +191,19 @@ public class MontiArcToolTest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcTool#parseModels(IMontiArcGlobalScope)}.
+   * Method under test {@link MontiArcTool#parseAll(IMontiArcGlobalScope)}.
    */
   @ParameterizedTest
-  @MethodSource("validMAModelPathAndExpectedValuesProvider")
-  public void shouldParseMAModelsFromScope(@NotNull String directoryName, int expNumModels) {
+  @MethodSource("validMontiArcModelPathAndExpectedValuesProvider")
+  public void shouldParseModelsGivenScope(@NotNull String directoryName, int expNumModels) {
     //Given
-    IMontiArcGlobalScope scope = MontiArcMill.montiArcGlobalScopeBuilder()
-      .setModelPath(new ModelPath(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName)))
-      .setModelFileExtension(this.getMATool().getMAFileExtension()).build();
+    IMontiArcGlobalScope globalScope = MontiArcMill.globalScope();
+    globalScope.clear();
+    globalScope.setModelPath(new ModelPath(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName)));
+    globalScope.setFileExt(this.getTool().getMAFileExtension());
 
     //When
-    Collection<ASTMACompilationUnit> models = this.getMATool().parseModels(scope);
+    Collection<ASTMACompilationUnit> models = this.getTool().parseAll(globalScope);
 
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());
@@ -206,29 +212,30 @@ public class MontiArcToolTest extends AbstractTest {
 
 
   /**
-   * Method under test {@link MontiArcTool#parseModels(ICD4CodeGlobalScope)}.
+   * Method under test {@link MontiArcTool#loadAll(IMontiArcGlobalScope)}.
    */
   @ParameterizedTest
-  @MethodSource("validCDModelPathAndExpectedValuesProvider")
-  public void shouldParseCDModelsFromScope(@NotNull String directoryName, int expNumModels) {
+  @MethodSource("validSerializedModelPathAndExpectedValuesProvider")
+  public void shouldLoadModelsGivenScope(@NotNull String directoryName, int expNumModels) {
     //Given
-    ICD4CodeGlobalScope scope = CD4CodeMill.cD4CodeGlobalScopeBuilder()
-      .setModelPath(new ModelPath(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName)))
-      .setModelFileExtension(this.getMATool().getCDFileExtension()).build();
+    IMontiArcGlobalScope globalScope = MontiArcMill.globalScope();
+    globalScope.clear();
+    globalScope.setModelPath(new ModelPath(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName)));
+    globalScope.setFileExt(this.getTool().getMAFileExtension());
 
     //When
-    Collection<ASTCDCompilationUnit> models = this.getMATool().parseModels(scope);
+    Collection<IMontiArcArtifactScope> scopes = this.getTool().loadAll(globalScope);
 
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());
-    Assertions.assertEquals(expNumModels, models.size());
+    Assertions.assertEquals(expNumModels, scopes.size());
   }
 
   /**
    * Method under test {@link MontiArcTool#processModels(Path...)}.
    */
   @ParameterizedTest
-  @MethodSource("validMAModelPathAndExpectedValuesProvider")
+  @MethodSource("validMontiArcModelPathAndExpectedValuesProvider")
   public void shouldProcessValidModels(@NotNull String modelPathName, int expNumModels) {
     //Given
     MontiArcTool tool = new MontiArcTool();
@@ -239,7 +246,7 @@ public class MontiArcToolTest extends AbstractTest {
 
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());
-    Assertions.assertEquals(expNumModels, scope.getSubScopes().size());
+    Assertions.assertEquals(expNumModels, scope.getSubScopes().stream().filter(IScope::isPresentAstNode).count());
     Assertions.assertTrue(scope.getSubScopes().stream().allMatch(s -> s instanceof MontiArcArtifactScope));
   }
 

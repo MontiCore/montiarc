@@ -36,11 +36,6 @@
     </dependency>
 
     <dependency>
-      <groupId>de.monticore</groupId>
-      <artifactId>monticore-emf-runtime</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>montiarc.libraries</groupId>
       <artifactId>majava-rte</artifactId>
       <version>${project.version}</version>

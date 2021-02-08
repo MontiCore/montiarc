@@ -7,28 +7,28 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Deque;
 
-public class ComfortableArcSymbolTableCreator extends ComfortableArcSymbolTableCreatorTOP {
+public class ComfortableArcScopesGenitor extends ComfortableArcScopesGenitorTOP {
 
-  public ComfortableArcSymbolTableCreator() {
+  public ComfortableArcScopesGenitor() {
 
   }
 
-  public ComfortableArcSymbolTableCreator(@NotNull IComfortableArcScope enclosingScope) {
+  public ComfortableArcScopesGenitor(@NotNull IComfortableArcScope enclosingScope) {
     super(enclosingScope);
   }
 
-  public ComfortableArcSymbolTableCreator(
+  public ComfortableArcScopesGenitor(
     @NotNull Deque<? extends IComfortableArcScope> scopeStack) {
     super(scopeStack);
   }
 
   @Override
   public void visit(@NotNull ASTFullyConnectedComponentInstantiation node) {
-    getRealThis().visit((ASTComponentInstantiation) node);
+    visit((ASTComponentInstantiation) node);
   }
 
   @Override
   public void endVisit(@NotNull ASTFullyConnectedComponentInstantiation node) {
-    getRealThis().endVisit((ASTComponentInstantiation) node);
+    endVisit((ASTComponentInstantiation) node);
   }
 }

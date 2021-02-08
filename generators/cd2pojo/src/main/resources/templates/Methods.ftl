@@ -16,14 +16,15 @@
         <@printNoArgConstructor type=type/>
     </#if>
 
-    //methods required by implemented interfaces
-    <#list helper.getCDMethodsFromImplementedInterfaces(type) as methodSignature>
-      <@printMethod methodSignature=methodSignature helper=helper withThrowsDeclaration=true/>
-
+    <#list helper.getCDMethodsFromImplementedInterfaces(type)>
+      //methods required by implemented interfaces
+        <#items as methodSignature>
+            <@printMethod methodSignature=methodSignature helper=helper withThrowsDeclaration=true/>
+        </#items>
     </#list>
 
     <#list helper.getNonCDMethodsFromImplementedInterfaces(type) as methodSignature>
-      <@printMethod methodSignature=methodSignature helper=helper withThrowsDeclaration=false/>
+        <@printMethod methodSignature=methodSignature helper=helper withThrowsDeclaration=false/>
     </#list>
 </#macro>
 
@@ -90,7 +91,7 @@ dummy return statement (either 'false', empty String, 0 or 'null') -->
 </#macro>
 
 <#macro printParams methodSignature>
-    <#list methodSignature.getSpannedScope().getFieldSymbols() as param>
+    <#list methodSignature.getSpannedScope().getLocalFieldSymbols() as param>
         ${Util.getType(param.getType())}<#if param?is_last && methodSignature.isIsElliptic()>...</#if> ${param.getName()}<#sep>,
     </#list>
 </#macro>

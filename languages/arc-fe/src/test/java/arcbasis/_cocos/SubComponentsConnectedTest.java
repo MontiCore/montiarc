@@ -6,7 +6,7 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScope;
-import arcbasis._symboltable.ArcBasisSymbolTableCreator;
+import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis.util.ArcError;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.se_rwth.commons.logging.Log;
@@ -15,7 +15,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
-import java.util.Collections;
 import java.util.stream.Stream;
 
 /**
@@ -32,7 +31,7 @@ public class SubComponentsConnectedTest extends AbstractTest {
   }
 
   static Stream<Arguments> componentAndErrorCodeProvider() {
-    ArcBasisSymbolTableCreator symTab = new ArcBasisSymbolTableCreator(new ArcBasisScope());
+    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator(ArcBasisMill.globalScope());
     ASTComponentType comp1 = ArcBasisMill.componentTypeBuilder().setName("A")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
@@ -48,7 +47,7 @@ public class SubComponentsConnectedTest extends AbstractTest {
           .build())
         .build())
       .build();
-    symTab.handle(comp1);
+    symTab.createFromAST(comp1);
     ArcError[] errors1 = new ArcError[] {};
     ASTComponentType comp2 = ArcBasisMill.componentTypeBuilder().setName("B")
       .setHead(Mockito.mock(ASTComponentHead.class))
@@ -71,7 +70,7 @@ public class SubComponentsConnectedTest extends AbstractTest {
           "sub1.i2", "sub1.o1").build())
         .build())
       .build();
-    symTab.handle(comp2);
+    symTab.createFromAST(comp2);
     ArcError[] errors2 = new ArcError[] { ArcError.OUTGOING_PORT_AS_TARGET };
     ASTComponentType comp3 = ArcBasisMill.componentTypeBuilder().setName("C")
       .setHead(Mockito.mock(ASTComponentHead.class))
@@ -98,7 +97,7 @@ public class SubComponentsConnectedTest extends AbstractTest {
           ArcBasisMill.connectorBuilder().setSource("sub1.i2").setTargetList("o2").build())
         .build())
       .build();
-    symTab.handle(comp3);
+    symTab.createFromAST(comp3);
     ArcError[] errors3 = new ArcError[] { ArcError.INCOMING_PORT_AS_SOURCE };
     return Stream.of(Arguments.of(comp1, errors1), Arguments.of(comp2, errors2),
       Arguments.of(comp3, errors3));
