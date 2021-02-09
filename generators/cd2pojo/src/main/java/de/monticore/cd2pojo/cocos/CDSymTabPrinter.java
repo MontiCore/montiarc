@@ -2,7 +2,7 @@
 package de.monticore.cd2pojo.cocos;
 
 import com.google.common.base.Preconditions;
-import de.monticore.cd4code._symboltable.CD4CodeScopeDeSer;
+import de.monticore.cd2pojo.BetterCD4CodeDeSer;
 import de.monticore.cd4code._symboltable.ICD4CodeScope;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
 import de.monticore.cdbasis._symboltable.ICDBasisScope;
@@ -15,9 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class CDSymTabPrinter {
   
@@ -31,21 +29,17 @@ public class CDSymTabPrinter {
       Log.error("Error while trying to serialize type " + typeSymbol.getFullName());
       return;
     }
-    
+
     ICD4CodeScope typeScope = (ICD4CodeScope) typeSymbol.getEnclosingScope();
-    String serializedCDSymTab = new CD4CodeScopeDeSer().serialize(typeScope);
-    
-    //TODO first: implement fixSerializedCDSymTab
-    // second: remove function call when cd4a serializes correctly
-    serializedCDSymTab = CDDeSerWorkarounds.fixSerializedCDSymTab(serializedCDSymTab);
-    
+    String serializedCDSymTab = new BetterCD4CodeDeSer().serialize(typeScope);
+
     File outputFile = targetPath.resolve(
-      typeSymbol.getFullName().replaceAll("\\.", "/") + cdSymTabFileExt).toAbsolutePath().toFile();
-    
+        typeSymbol.getFullName().replaceAll("\\.", "/") + CD_SYM_FILE_EXT).toAbsolutePath().toFile();
+
     doPrintToFile(serializedCDSymTab, outputFile);
   }
   
-  protected static String cdSymTabFileExt = ".cdsym";
+  protected static final String CD_SYM_FILE_EXT = ".cdsym";
   
   /**
    * Writes the JSON string to the specified file in a nicely formatted way.
@@ -205,37 +199,5 @@ public class CDSymTabPrinter {
     public String toString() {
       return sb.toString();
     }
-  }
-}
-
-class CDDeSerWorkarounds {
-  
-  public static String fixSerializedCDSymTab(String serializedSymTab) {
-    //TODO implement
-    return serializedSymTab;
-  }
-  
-  static Map<String, List<String>> mapTypeToSuperTypes; //Key extends/implements Values
-  public static void initMap() {
-    mapTypeToSuperTypes.put("de.monticore.cdassociation._symboltable.CDRoleSymbol", new ArrayList<>(Arrays.asList(
-      "de.monticore.symbols.oosymbols._symboltable.FieldSymbol")));
-    
-    mapTypeToSuperTypes.put("de.monticore.cdbasis._symboltable.CDTypeSymbol", new ArrayList<>(Arrays.asList(
-      "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol")));
-    
-    mapTypeToSuperTypes.put("de.monticore.symbols.oosymbols._symboltable.FieldSymbol", new ArrayList<>(Arrays.asList(
-      "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol")));
-    
-    mapTypeToSuperTypes.put("de.monticore.cd4codebasis._symboltable.CDMethodSignatureSymbol", new ArrayList<>(Arrays.asList(
-      "de.monticore.symbols.oosymbols._symboltable.MethodSymbol")));
-    
-    mapTypeToSuperTypes.put("de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol", new ArrayList<>(Arrays.asList(
-      "de.monticore.symbols.basicsymbols._symboltable.TypeSymbol")));
-    
-    mapTypeToSuperTypes.put("de.monticore.symbols.oosymbols._symboltable.MethodSymbol", new ArrayList<>(Arrays.asList(
-      "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol")));
-    
-    mapTypeToSuperTypes.put("de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol", new ArrayList<>(Arrays.asList(
-      "de.monticore.symbols.basicsymbols._symboltable.TypeSymbol")));
   }
 }

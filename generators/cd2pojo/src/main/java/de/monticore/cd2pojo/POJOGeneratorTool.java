@@ -59,9 +59,7 @@ public class POJOGeneratorTool {
       Collection<CDTypeSymbol> typeSymbols = artifactScope.getLocalCDTypeSymbols();
       symbolsToGenerate.addAll(typeSymbols);
     }
-    for (CDTypeSymbol typeSymbol : symbolsToGenerate) {
-      doGenerate(typeSymbol);
-    }
+    generateAll(symbolsToGenerate);
   }
   
   public void generateCDTypesInPath(@NotNull Iterable<String> cdTypeNames, @NotNull Path modelPath) {
@@ -78,9 +76,7 @@ public class POJOGeneratorTool {
         symbolsToGenerate.add(optCDTypeSymbol.get());
       }
     }
-    for (CDTypeSymbol typeSymbol : symbolsToGenerate) {
-      doGenerate(typeSymbol);
-    }
+    generateAll(symbolsToGenerate);
   }
   
   public static ICD4CodeGlobalScope getLoadedICD4CodeGlobalScope(@NotNull Collection<Path> modelPaths) {
@@ -90,6 +86,16 @@ public class POJOGeneratorTool {
         .addCoCo(new CDAssociationNamesUnique())
         .addCoCo(new CDRoleNamesUnique())
         .addCoCo(new CDEllipsisParametersOnlyInLastPlace()));
+  }
+
+  /**
+   * prepares the types for generation and then serializes symboltables and generates classes
+   * @param symbols collection to process
+   */
+  protected void generateAll(@NotNull Collection<CDTypeSymbol> symbols){
+    Preconditions.checkNotNull(symbols);
+    symbols.forEach(POJOGenerator.CDWorkaroundsForCD2POJOGenerator::doAllWorkarounds);
+    symbols.forEach(this::doGenerate);
   }
   
   protected void doGenerate(@NotNull CDTypeSymbol typeSymbol) {

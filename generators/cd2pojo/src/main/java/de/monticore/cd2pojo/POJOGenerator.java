@@ -20,10 +20,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class POJOGenerator {
@@ -54,10 +51,9 @@ public class POJOGenerator {
     setup.setHandcodedPath(IterablePath.from(hwcPath.toFile(), "java"));
     return setup;
   }
-  
+
   public void generate(@NotNull CDTypeSymbol typeSymbol) {
     Preconditions.checkNotNull(typeSymbol);
-    CDWorkaroundsForCD2POJOGenerator.doAllWorkarounds(typeSymbol);
     CDSymTabPrinter.printCDSymTab2Json(typeSymbol, outputDirectory.toPath());
     Boolean existsHWC = existsHWC(typeSymbol);
     String kind = "";
@@ -73,7 +69,7 @@ public class POJOGenerator {
     }
     
     final StringBuilder _super = new StringBuilder();
-    
+
     if (typeSymbol.isPresentSuperClass()) {
       _super.append("extends ");
       _super.append(typeSymbol.getSuperClass().getTypeInfo().getFullName());
@@ -90,26 +86,36 @@ public class POJOGenerator {
         .map(i -> i.getTypeInfo().getFullName())
         .collect(Collectors.joining(", ")));
     }
-    
+
     String _package = CDWorkaroundsForCD2POJOGenerator.getFullNameWorkaround(typeSymbol)
       .substring(0, typeSymbol.getFullName().lastIndexOf("."));
     engine.generateNoA("templates.Type.ftl", getFileAsPath(typeSymbol),
       _package, kind, typeSymbol, _super, new TemplateHelper(), existsHWC);
   }
-  
+
+  /**
+   * @return true if there is an handwritten version of this symbol
+   */
   protected Boolean existsHWC(@NotNull CDTypeSymbol typeSymbol) {
     Preconditions.checkNotNull(typeSymbol);
-    return hwcPath.exists(Paths.get(
-      CDWorkaroundsForCD2POJOGenerator.getFullNameWorkaround(typeSymbol)
-        .replaceAll("\\.", "/") + FILE_EXTENSION));
-    
+    return hwcPath.exists(getPathFor(typeSymbol, false));
   }
   
   protected Path getFileAsPath(@NotNull CDTypeSymbol typeSymbol) {
     Preconditions.checkNotNull(typeSymbol);
-    Boolean existsHWC = existsHWC(typeSymbol);
+    return getPathFor(typeSymbol, existsHWC(typeSymbol));
+  }
+
+  /**
+   *
+   * @param typeSymbol type for which the path should be fetched
+   * @param addTopExtension true if there should be a top-file-exension added
+   * @return path where to locate the type's file
+   */
+  protected Path getPathFor(@NotNull CDTypeSymbol typeSymbol, boolean addTopExtension){
+    Preconditions.checkNotNull(typeSymbol);
     return Paths.get(CDWorkaroundsForCD2POJOGenerator.getFullNameWorkaround(typeSymbol)
-      .replaceAll("\\.", "/") + (existsHWC ? "TOP" : "") + FILE_EXTENSION);
+                         .replaceAll("\\.", "/") + (addTopExtension ? "TOP" : "") + FILE_EXTENSION);
   }
   
   // TODO remove when CD4A symbol table is fixed
