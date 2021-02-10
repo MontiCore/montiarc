@@ -7,6 +7,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc._symboltable.IMontiArcGlobalScope;
+import montiarc._symboltable.IMontiArcScope;
 import montiarc._symboltable.MontiArcArtifactScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -229,6 +230,25 @@ public class MontiArcToolTest extends AbstractTest {
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());
     Assertions.assertEquals(expNumModels, scopes.size());
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#createSymbolTable(Path)}.
+   */
+  @ParameterizedTest
+  @MethodSource("validMontiArcModelPathAndExpectedValuesProvider")
+  public void shouldCreateSymbolTable(@NotNull String modelPathName, int expNumModels) {
+    //Given
+    MontiArcTool tool = new MontiArcTool();
+    Path modelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, modelPathName);
+
+    //When
+    Collection<IMontiArcScope> scopes = tool.createSymbolTable(modelPath);
+
+    //Then
+    Assertions.assertTrue(Log.getFindings().isEmpty());
+    Assertions.assertEquals(expNumModels, scopes.stream().flatMap(scope -> scope.getSubScopes().stream()).filter(IScope::isPresentAstNode).count());
+    Assertions.assertTrue(scopes.stream().allMatch(scope -> scope instanceof MontiArcArtifactScope));
   }
 
   /**

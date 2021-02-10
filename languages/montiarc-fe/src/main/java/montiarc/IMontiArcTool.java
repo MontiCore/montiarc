@@ -113,6 +113,16 @@ public interface IMontiArcTool {
   Collection<IMontiArcScope> createSymbolTable(@NotNull IMontiArcGlobalScope scope);
 
   /**
+   * Loads all models in the provided scope, creates their symbol table, and returns a collection of their artifact
+   * scopes.
+   *
+   * @param directory the directory containing the files to load
+   * @return a possibly empty collection of artifact scopes of models in the provided directory
+   * @throws IllegalArgumentException if the location to given path does not exist, or is not a directory.
+   */
+  Collection<IMontiArcScope> createSymbolTable(@NotNull Path directory);
+
+  /**
    * Creates a montiarc global scope with the provided directories as model path and default file ending ('arc').
    *
    * @param directories the directories that compose the model path

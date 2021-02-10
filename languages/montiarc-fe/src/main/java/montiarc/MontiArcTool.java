@@ -169,6 +169,15 @@ public class MontiArcTool implements IMontiArcTool {
   }
 
   @Override
+  public Collection<IMontiArcScope> createSymbolTable(@NotNull Path directory) {
+    Preconditions.checkArgument(directory != null);
+    Preconditions.checkArgument(directory.toFile().exists());
+    Preconditions.checkArgument(directory.toFile().isDirectory());
+    MontiArcMill.globalScope().setModelPath(new ModelPath(directory));
+    return this.createSymbolTable(this.createMAGlobalScope(directory));
+  }
+
+  @Override
   public IMontiArcGlobalScope createMAGlobalScope(@NotNull Path... directories) {
     Preconditions.checkArgument(directories != null);
     return this.createMAGlobalScope(new ModelPath(directories));
