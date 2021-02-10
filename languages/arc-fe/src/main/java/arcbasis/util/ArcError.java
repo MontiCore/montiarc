@@ -61,8 +61,11 @@ public enum ArcError implements montiarc.util.Error {
     + " with a lower case letter."),
   TYPE_PARAMETER_UPPER_CASE_LETTER("0xMA1042", "The generic type parameter '%s' of component '%s'"
     + " should start with an upper case letter."),
-  PORT_DIRECTION_MISMATCH("0xMA1043", "The %s-port '%s' can not be a %s of the connector '%s', because it is %s."
-                              + "");
+  PORT_DIRECTION_MISMATCH("0xMA1043", "The %s-port '%s' can not be a %s of the connector '%s', because it is %s." + ""),
+  COMPONENT_NAME_UPPER_CASE("0xMA1055", "Component names must be in upper-case."
+    + " So '%s' is an unsuitable name"),
+  INSTANCE_NAME_LOWER_CASE("0xMA1056", "The name of the component instance '%s' should start"
+    + " with a lower case letter.");
 
   private final String errorCode;
   private final String errorMessage;
@@ -70,7 +73,7 @@ public enum ArcError implements montiarc.util.Error {
   ArcError(String errorCode, String errorMessage) {
     assert (errorCode != null);
     assert (errorMessage != null);
-    assert (ERROR_CODE_PATTERN.matcher(errorCode).matches()):"Invalid error code: "+errorCode;
+    assert (ERROR_CODE_PATTERN.matcher(errorCode).matches());
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;
   }

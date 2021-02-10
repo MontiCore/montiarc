@@ -1,0 +1,1 @@
+All of these 'Variables' are Component initiations, Variables need initial Values
