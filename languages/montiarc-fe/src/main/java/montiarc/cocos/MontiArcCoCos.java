@@ -24,6 +24,7 @@ public class MontiArcCoCos {
       .addCoCo(new SubComponentsConnected())
       .addCoCo(new CircularInheritance())
       .addCoCo(new ConnectorSourceAndTargetComponentDiffer())
+      .addCoCo(new ConnectorSourceAndTargetDiffer())
       .addCoCo(new ConnectorSourceAndTargetExistAndFit())
       .addCoCo(new ConfigurationParametersCorrectlyInherited())
       .addCoCo(new InnerComponentNotExtendsDefiningComponent())

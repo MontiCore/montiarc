@@ -62,6 +62,8 @@ public enum ArcError implements montiarc.util.Error {
   TYPE_PARAMETER_UPPER_CASE_LETTER("0xMA1042", "The generic type parameter '%s' of component '%s'"
     + " should start with an upper case letter."),
   PORT_DIRECTION_MISMATCH("0xMA1043", "The %s-port '%s' can not be a %s of the connector '%s', because it is %s." + ""),
+  CONNECTOR_SOURCE_AND_TARGET_ARE_IDENTICAL("0xMA1045", "The target port '%s' is identical to the"
+    + " source port '%s'"),
   COMPONENT_NAME_UPPER_CASE("0xMA1055", "Component names must be in upper-case."
     + " So '%s' is an unsuitable name"),
   INSTANCE_NAME_LOWER_CASE("0xMA1056", "The name of the component instance '%s' should start"
