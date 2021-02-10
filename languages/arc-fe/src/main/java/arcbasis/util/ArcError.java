@@ -35,7 +35,7 @@ public enum ArcError implements montiarc.util.Error {
   INNER_WITH_TYPE_PARAMETER_REQUIRES_INSTANCE("0xMA1029", "Inner component '%s' must have an "
     + "instance defining its formal type parameters."),
   TO_FEW_CONFIGURATION_PARAMETER("0xMA1030", "There are too few configuration parameters. The "
-    + "component '%s% requires at least %d configuration parameters"),
+    + "component '%s' requires at least %d configuration parameters"),
   CONFIGURATION_PARAMETER_TYPE_MISMATCH("0xMA1031",
     "Configuration parameter '%s' at position %d of "
       + "component %s is of type '%s', but it is required to be of type '%s'."),
