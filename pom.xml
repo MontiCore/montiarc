@@ -22,7 +22,7 @@
   <!-- == PROJECT PROPERTIES =============================================== -->
   <properties>
     <!-- DSLs -->
-    <cd4a.version>6.6.0-SNAPSHOT</cd4a.version>
+    <cd4a.version>6.6.0</cd4a.version>
 
     <!-- SE-Libraries -->
     <monticore.version>6.6.0</monticore.version>
