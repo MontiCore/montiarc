@@ -8,8 +8,10 @@ import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ImportStatement;
+import de.monticore.types.check.SymTypeExpression;
 import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericComponentHead;
 import montiarc._ast.ASTMontiArcNode;
@@ -74,11 +76,18 @@ public class ComponentHelper {
    */
   public static String getRealPortTypeString(ComponentTypeSymbol componentSymbol,
     PortSymbol portSymbol) {
-    return portSymbol.getType().print();
+    return portSymbol.getTypeInfo().getFullName();
   }
-  /*
 
-   */
+  //TODO: Fix surrogates printing wrong qualified type (omit scope name)
+  public static String print(SymTypeExpression expr) {
+    if (expr.getTypeInfo() instanceof TypeSymbolSurrogate) {
+      return ((TypeSymbolSurrogate) expr.getTypeInfo()).lazyLoadDelegate().getFullName();
+    } else {
+      return expr.print();
+    }
+  }
+
   /**
    * Converts the given type reference {@param toAnalyze} into a String
    * representation where all occurrences of type arguments from the extending

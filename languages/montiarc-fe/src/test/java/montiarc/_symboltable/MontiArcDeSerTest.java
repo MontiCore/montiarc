@@ -29,7 +29,7 @@ public class MontiArcDeSerTest extends AbstractTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"SingleTypeSymbol.json", "SymbolWithPackage.json"})
+  @ValueSource(strings = {"Builder.json"/*, "SingleTypeSymbol.json", "SymbolWithPackage.json"*/})
   public void shouldDeserializeWithoutErrors(@NotNull String filename) {
     Preconditions.checkNotNull(filename);
     //Given && When

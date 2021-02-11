@@ -33,7 +33,7 @@ class Setup {
       
       // set up output ports
       «FOR portOut : comp.outgoingPorts»
-        this.«portOut.name» = new Port<«portOut.getType.print»>();
+        this.«portOut.name» = new Port<«portOut.getTypeInfo.getFullName»>();
       «ENDFOR»
       
       this.initialize();
@@ -68,7 +68,7 @@ class Setup {
       
       // set up output ports
       «FOR portOut : comp.outgoingPorts»
-        this.«portOut.name» = new Port<«portOut.getType.print()»>();
+        this.«portOut.name» = new Port<«portOut.getTypeInfo.getFullName()»>();
       «ENDFOR»
       
 

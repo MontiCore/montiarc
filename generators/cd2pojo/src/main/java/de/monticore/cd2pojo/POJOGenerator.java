@@ -2,7 +2,7 @@
 package de.monticore.cd2pojo;
 
 import com.google.common.base.Preconditions;
-import de.monticore.cd2pojo.cocos.CDSymTabPrinter;
+import de.monticore.cd2pojo.symboltable.CDSymTabPrinter;
 import de.monticore.cd4code._symboltable.CD4CodeArtifactScope;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
 import de.monticore.generating.GeneratorEngine;

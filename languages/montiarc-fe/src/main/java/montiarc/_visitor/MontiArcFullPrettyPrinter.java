@@ -6,6 +6,7 @@ import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.prettyprint.AssignmentExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.CommonExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.ExpressionsBasisPrettyPrinter;
+import de.monticore.literals.prettyprint.MCCommonLiteralsPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.statements.prettyprint.MCCommonStatementsPrettyPrinter;
 import de.monticore.statements.prettyprint.MCVarDeclarationStatementsPrettyPrinter;
@@ -61,7 +62,11 @@ public class MontiArcFullPrettyPrinter {
     traverser.setComfortableArcHandler(comfortableArcPrettyPrinter);
     GenericArcPrettyPrinter genericArcPrettyPrinter = new GenericArcPrettyPrinter(printer);
     traverser.setGenericArcHandler(genericArcPrettyPrinter);
-  
+
+    MCCommonLiteralsPrettyPrinter commonLiteralsPrettyPrinter = new MCCommonLiteralsPrettyPrinter(printer);
+    traverser.setMCCommonLiteralsHandler(commonLiteralsPrettyPrinter);
+    traverser.add4MCCommonLiterals(commonLiteralsPrettyPrinter);
+
     MontiArcPrettyPrinter montiArcPrettyPrinter = new MontiArcPrettyPrinter(printer);
     traverser.setMontiArcHandler(montiArcPrettyPrinter);
   }

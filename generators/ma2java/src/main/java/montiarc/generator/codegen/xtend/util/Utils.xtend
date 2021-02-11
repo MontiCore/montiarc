@@ -14,7 +14,7 @@ class Utils {
    */
   def static printConfiurationParametersAsList(ComponentTypeSymbol comp) {
     return '''
-      «FOR param : comp.getParameters SEPARATOR ','» «param.getType.print» «param.name» «ENDFOR»
+      «FOR param : comp.getParameters SEPARATOR ','» «ComponentHelper.print(param.getType)» «param.name» «ENDFOR»
     '''
   }
 
@@ -47,7 +47,7 @@ class Utils {
   def static printConfigParameters(ComponentTypeSymbol comp) {
     return '''
       «FOR param : comp.getParameters»
-        «printMember(param.getType.print, param.name, "private final")»
+        «printMember(ComponentHelper.print(param.getType), param.name, "private final")»
       «ENDFOR»
     '''
   }
@@ -59,7 +59,7 @@ class Utils {
     return '''
       «FOR variable : comp.getFields»
         «IF !comp.getParameters.contains(variable)»
-          «printMember(variable.getType.print, variable.name, "protected")»
+          «printMember(ComponentHelper.print(variable.getType), variable.name, "protected")»
         «ENDIF»
       «ENDFOR»
     '''

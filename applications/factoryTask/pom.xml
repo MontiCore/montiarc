@@ -83,20 +83,35 @@
 				<groupId>de.se_rwth.maven</groupId>
 				<artifactId>se-groovy-maven-plugin</artifactId>
 				<version>${se-groovy.maven.version}</version>
-				<configuration>
-					<baseClass>montiarc.generator.codegen.MAAGeneratorScript</baseClass>
-					<arguments>
-						<out>${gen.dir}</out>
-						<modelPath>${models.dir}</modelPath>
-						<hwc>${hwc.dir}</hwc>
-					</arguments>
-					<script>montiarc/generator/maagenerator.groovy</script>
-				</configuration>
 				<executions>
 					<execution>
+						<id>cd2pojo</id>
 						<goals>
 							<goal>execute</goal>
 						</goals>
+						<configuration>
+							<baseClass>de.monticore.cd2pojo.POJOGeneratorScript</baseClass>
+							<arguments>
+								<out>${gen.dir}</out>
+								<modelPath>${models.dir}</modelPath>
+							</arguments>
+							<script>de/monticore/cd2pojo/pojogenerator.groovy</script>
+						</configuration>
+					</execution>
+					<execution>
+						<id>ma2java</id>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<baseClass>montiarc.generator.codegen.MAAGeneratorScript</baseClass>
+							<arguments>
+								<out>${gen.dir}</out>
+								<modelPath>${models.dir}</modelPath>
+								<hwc>${hwc.dir}</hwc>
+							</arguments>
+							<script>montiarc/generator/maagenerator.groovy</script>
+						</configuration>
 					</execution>
 				</executions>
 				<dependencies>
@@ -106,9 +121,21 @@
 						<version>${project.version}</version>
 					</dependency>
 					<dependency>
+						<groupId>montiarc.generators</groupId>
+						<artifactId>cd2pojo</artifactId>
+						<version>${project.version}</version>
+					</dependency>
+					<dependency>
 						<groupId>com.google.guava</groupId>
 						<artifactId>guava</artifactId>
-						<version>21.0</version>
+						<version>${guava.version}</version>
+					</dependency>
+					<!-- TODO: Was added common-utilities because of version incompatibles
+                  with cd4a. Remove once incompatibilities are resolved. -->
+					<dependency>
+						<groupId>de.se_rwth.commons</groupId>
+						<artifactId>se-commons-utilities</artifactId>
+						<version>${se-commons.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>

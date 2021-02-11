@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.monticore.cd2pojo.cocos;
+package de.monticore.cd2pojo.symboltable;
 
 import com.google.common.base.Preconditions;
 import de.monticore.cd2pojo.BetterCD4CodeDeSer;
@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,13 +34,13 @@ public class CDSymTabPrinter {
     ICD4CodeScope typeScope = (ICD4CodeScope) typeSymbol.getEnclosingScope();
     String serializedCDSymTab = new BetterCD4CodeDeSer().serialize(typeScope);
 
-    File outputFile = targetPath.resolve(
-        typeSymbol.getFullName().replaceAll("\\.", "/") + CD_SYM_FILE_EXT).toAbsolutePath().toFile();
+    File outputFile = Paths.get(targetPath.toString(), typeSymbol.getEnclosingScope().getRealPackageName().replaceAll("\\.", "/"),
+          typeSymbol.getEnclosingScope().getName() + CD_SYM_FILE_EXT).toAbsolutePath().toFile();
 
     doPrintToFile(serializedCDSymTab, outputFile);
   }
   
-  protected static final String CD_SYM_FILE_EXT = ".cdsym";
+  protected static final String CD_SYM_FILE_EXT = ".sym";
   
   /**
    * Writes the JSON string to the specified file in a nicely formatted way.
@@ -51,12 +52,15 @@ public class CDSymTabPrinter {
   protected static void doPrintToFile(@NotNull String cdSymTabJSON, @NotNull File outputFile) {
     Preconditions.checkNotNull(cdSymTabJSON);
     Preconditions.checkNotNull(outputFile);
-    outputFile = outputFile.isAbsolute() ? outputFile : outputFile.getAbsoluteFile();
+    outputFile = outputFile.isAbsolute() ? outputFile : outputFile;
+    if (outputFile.exists()) {
+      outputFile.delete();
+    }
     if (!prepareOutputFile(outputFile)) {
       Log.error("Error while preparing output file for CD symbol table " + outputFile);
       return;
     }
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile.getAbsoluteFile(), false))) {
       Indent indent = new Indent();
       for (String line : splitIntoSingleLines(cdSymTabJSON)) {
         if (line.isEmpty()) {

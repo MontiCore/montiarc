@@ -8,6 +8,7 @@ import de.monticore.cd2pojo.POJOGeneratorTool;
 import de.monticore.symboltable.IScope;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._symboltable.IMontiArcGlobalScope;
 import montiarc.generator.codegen.xtend.MAAGenerator;
@@ -57,7 +58,9 @@ public class MontiArcGeneratorTool extends MontiArcTool {
     Preconditions.checkArgument(modelPath != null);
     Preconditions.checkArgument(target != null);
     Preconditions.checkArgument(hwcPath != null);
-    IMontiArcGlobalScope scope = processModels(modelPath);
+    IMontiArcGlobalScope scope = createMAGlobalScope(modelPath, target, hwcPath);
+    scope.add(MontiArcMill.typeSymbolBuilder().setName("Integer").setPackageName("java.lang").build());
+    processModels(scope);
     if (Log.getErrorCount() > 0) {
       return;
     }
@@ -79,7 +82,7 @@ public class MontiArcGeneratorTool extends MontiArcTool {
     String basedir = DirectoryUtil.getBasedirFromModelAndTargetPath(modelPath.getAbsolutePath(),
       target.getAbsolutePath());
     IMontiArcGlobalScope symTab = this.processModels(modelPath.toPath(), Paths.get(basedir + LIBRARY_MODELS_FOLDER),
-      hwcPath.toPath());
+      hwcPath.toPath(), target.toPath());
 
     symTab.getSubScopes().stream().map(IArcBasisScope::getLocalComponentTypeSymbols).flatMap(Collection::stream)
       .forEach(comp -> this.getInstance()

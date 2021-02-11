@@ -62,20 +62,11 @@ public class POJOGeneratorTool {
     generateAll(symbolsToGenerate);
   }
   
-  public void generateCDTypesInPath(@NotNull Iterable<String> cdTypeNames, @NotNull Path modelPath) {
-    Preconditions.checkNotNull(cdTypeNames);
+  public void generateCDTypesInPath(@NotNull Path modelPath) {
     Preconditions.checkNotNull(modelPath);
-    List<CDTypeSymbol> symbolsToGenerate = new ArrayList<>();
     ICD4CodeGlobalScope globalScope = getLoadedICD4CodeGlobalScope(Collections.singleton(modelPath));
-    for (String cdTypeName : cdTypeNames) {
-      Optional<CDTypeSymbol> optCDTypeSymbol = globalScope.resolveCDType(cdTypeName);
-      if (!optCDTypeSymbol.isPresent()) {
-        Log.error("CD2POJO generator tool could not resolve CD Type "
-          + cdTypeName + " in " + modelPath.toString());
-      } else {
-        symbolsToGenerate.add(optCDTypeSymbol.get());
-      }
-    }
+    Collection<CDTypeSymbol> symbolsToGenerate = globalScope.getSubScopes().stream()
+      .flatMap(scope -> scope.getLocalCDTypeSymbols().stream()).collect(Collectors.toList());
     generateAll(symbolsToGenerate);
   }
   

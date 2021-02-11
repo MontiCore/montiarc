@@ -15,6 +15,7 @@ import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
@@ -74,16 +75,20 @@ public class BetterCD4CodeDeSer extends CD4CodeScopeDeSer {
    * @param scope object to modify
    */
   private List<Remove<?>> createRemovers(ICD4CodeScope scope) {
+    Remove<OOTypeSymbol> extraRem = new Remove<>(scope::getCDTypeSymbols, scope::remove, scope::add);
+    extraRem.perform();
     // note that all these remove- and add-lambdas are actually different methods
-    return Arrays.asList(
+    List<Remove<?>> returnee = new ArrayList<>(Arrays.asList(
       new Remove<VariableSymbol>(scope::getFieldSymbols, scope::remove, scope::add),
       new Remove<FieldSymbol>(scope::getCDRoleSymbols, scope::remove, scope::add),
       new Remove<FunctionSymbol>(scope::getMethodSymbols, scope::remove, scope::add),
       new Remove<MethodSymbol>(scope::getCDMethodSignatureSymbols, scope::remove, scope::add),
       new Remove<TypeSymbol>(scope::getTypeVarSymbols, scope::remove, scope::add),
       new Remove<TypeSymbol>(scope::getOOTypeSymbols, scope::remove, scope::add),
-      new Remove<OOTypeSymbol>(scope::getCDTypeSymbols, scope::remove, scope::add)
-    );
+        extraRem
+    ));
+    scope.getSubScopes().forEach(subScope -> returnee.addAll(createRemovers(subScope)));
+    return returnee;
   }
 
   /**
@@ -124,6 +129,11 @@ public class BetterCD4CodeDeSer extends CD4CodeScopeDeSer {
      */
     private void undo(){
       duplicates.forEach(undo);
+    }
+
+    @Override
+    public String toString() {
+      return duplicates.toString();
     }
   }
 }

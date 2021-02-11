@@ -5,6 +5,7 @@ import factory.warehouse.RequestManager;
 import factory.warehouse.transporter.Transporter;
 import factory.warehouse.Crane;
 import factory.warehouse.*;
+import java.lang.Integer;
 
 component WarehouseManager {
 

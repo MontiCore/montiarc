@@ -4,6 +4,7 @@ package factory.warehouse.transporter;
 import factory.warehouse.StorageObject;
 import factory.warehouse.MovementState;
 import factory.warehouse.Position;
+import java.lang.Integer;
 
 
 /**

@@ -68,7 +68,6 @@
     <dependency>
       <groupId>de.monticore.lang</groupId>
       <artifactId>cd4analysis</artifactId>
-      <version>6.6.0-SNAPSHOT</version> <!-- TODO version number to root pom? -->
     </dependency>
 
     <!-- Test Libraries -->
