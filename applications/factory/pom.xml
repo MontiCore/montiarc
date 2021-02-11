@@ -48,23 +48,23 @@
         <groupId>de.se_rwth.maven</groupId>
         <artifactId>se-groovy-maven-plugin</artifactId>
         <version>${se-groovy.maven.version}</version>
-				<executions>
-					<execution>
-						<id>cd2pojo</id>
-						<goals>
-							<goal>execute</goal>
-						</goals>
-						<configuration>
-							<baseClass>de.monticore.cd2pojo.POJOGeneratorScript</baseClass>
-							<arguments>
-								<out>${gen.dir}</out>
-								<modelPath>${models.dir}</modelPath>
-							</arguments>
-							<script>de/monticore/cd2pojo/pojogenerator.groovy</script>
-						</configuration>
-					</execution>
+        <executions>
           <execution>
-						<id>ma2java</id>
+            <id>cd2pojo</id>
+            <goals>
+              <goal>execute</goal>
+            </goals>
+            <configuration>
+              <baseClass>de.monticore.cd2pojo.POJOGeneratorScript</baseClass>
+              <arguments>
+                <out>${gen.dir}</out>
+                <modelPath>${models.dir}</modelPath>
+              </arguments>
+              <script>de/monticore/cd2pojo/pojogenerator.groovy</script>
+            </configuration>
+          </execution>
+          <execution>
+            <id>ma2java</id>
             <goals>
               <goal>execute</goal>
             </goals>
@@ -85,11 +85,11 @@
             <artifactId>ma2java</artifactId>
             <version>${project.version}</version>
           </dependency>
-					<dependency>
-						<groupId>montiarc.generators</groupId>
-						<artifactId>cd2pojo</artifactId>
-						<version>${project.version}</version>
-					</dependency>
+          <dependency>
+            <groupId>montiarc.generators</groupId>
+            <artifactId>cd2pojo</artifactId>
+            <version>${project.version}</version>
+          </dependency>
           <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>

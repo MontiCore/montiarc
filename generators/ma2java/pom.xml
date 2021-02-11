@@ -131,13 +131,6 @@
         <configuration>
           <javaSourceVersion>1.8</javaSourceVersion>
         </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-          </dependency>
-        </dependencies>
         <executions>
           <execution>
             <goals>

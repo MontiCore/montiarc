@@ -23,14 +23,6 @@ dependencies {
   implementation "de.monticore:monticore-grammar:$mc_version"
   implementation "de.se_rwth.commons:se-commons-groovy:$se_commons_version"
   implementation "org.eclipse.xtend:org.eclipse.xtend.lib:$xtend_version"
-  //xtend-plugin works with guava version 23.0, but would upgrade to 27 if possible
-  implementation("com.google.guava:guava:$guava_version"){
-    version {
-      strictly "[18.0, 23.0]"
-      prefer "23.0"
-      because "Guava's CharMatcher breaks parts of se-commons if version > 23"
-    }
-  }
   runtimeOnly "ch.qos.logback:logback-classic:$logback_version"
   testImplementation "de.monticore:monticore-runtime:$mc_version"
   testImplementation "org.eclipse.emf:org.eclipse.emf.compare:$emf_version"
