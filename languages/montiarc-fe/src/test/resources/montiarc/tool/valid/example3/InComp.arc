@@ -1,7 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-import Colors.Color;
-
 /*
  * Valid model.
  */

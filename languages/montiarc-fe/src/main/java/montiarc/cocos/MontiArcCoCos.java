@@ -31,6 +31,7 @@ public class MontiArcCoCos {
       .addCoCo(new FieldTypeExists())
       .addCoCo(new InnerComponentNotExtendsDefiningComponent())
       .addCoCo(new ParameterTypeExists())
+      .addCoCo(new PortTypeExists())
       .addCoCo(new PortUniqueSender());
   }
 }

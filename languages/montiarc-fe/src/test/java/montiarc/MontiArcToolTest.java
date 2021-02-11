@@ -73,7 +73,8 @@ public class MontiArcToolTest extends AbstractTest {
   }
 
   protected static Stream<Arguments> invalidModelPathProvider() {
-    return Stream.of(Arguments.of(Paths.get("invalid", "example1").toString()));
+    return Stream.of(Arguments.of(Paths.get("invalid", "example1").toString()),
+        Arguments.of(Paths.get("invalid", "example2").toString()));
   }
 
   /**
