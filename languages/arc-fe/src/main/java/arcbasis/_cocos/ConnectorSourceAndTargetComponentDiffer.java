@@ -26,20 +26,11 @@ public class ConnectorSourceAndTargetComponentDiffer implements ArcBasisASTCompo
     connectors.forEach(connector -> {
       ASTPortAccess connectorSource = connector.getSource();
       connector.forEachTarget(connectorTarget -> {
-        String sourceInstanceName = componentTypeSymbol.getName();
-        String targetInstanceName = componentTypeSymbol.getName();
-        if (connectorSource.isPresentComponent()) {
-          sourceInstanceName = connectorSource.getComponent();
-        }
-        if (connectorTarget.isPresentComponent()) {
-          targetInstanceName = connectorTarget.getComponent();
-        }
+        String sourceInstanceName = connectorSource.isPresentComponent()?connectorSource.getComponent():componentTypeSymbol.getName();
+        String targetInstanceName = connectorTarget.isPresentComponent()?connectorTarget.getComponent():componentTypeSymbol.getName();
 
-        if (connectorSource.equals(connectorTarget.getQName())) {
-          Log.error(String.format(ArcError.SOURCE_AND_TARGET_SAME_PORT.toString(),
-            componentTypeSymbol.getFullName()), connector.get_SourcePositionStart());
-        } else if (sourceInstanceName.equals(targetInstanceName)) {
-          Log.error(String.format(ArcError.SOURCE_AND_TARGET_SAME_COMPONENT.toString(),
+        if (sourceInstanceName.equals(targetInstanceName)) {
+          Log.error(ArcError.SOURCE_AND_TARGET_SAME_COMPONENT.format(
             componentTypeSymbol.getFullName()), connector.get_SourcePositionStart());
         }
       });

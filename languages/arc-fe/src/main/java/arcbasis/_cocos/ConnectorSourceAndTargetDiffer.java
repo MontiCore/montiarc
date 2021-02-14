@@ -17,7 +17,7 @@ public class ConnectorSourceAndTargetDiffer implements ArcBasisASTConnectorCoCo 
     Preconditions.checkNotNull(node);
     node.streamTarget().forEach(target -> {
       if (target.deepEquals(node.getSource())) {
-        Log.error(String.format(ArcError.CONNECTOR_SOURCE_AND_TARGET_ARE_IDENTICAL.toString(),
+        Log.error(ArcError.CONNECTOR_SOURCE_AND_TARGET_ARE_IDENTICAL.format(
           target.getQName(), node.getSourceName()), node.get_SourcePositionStart()
         );
       }

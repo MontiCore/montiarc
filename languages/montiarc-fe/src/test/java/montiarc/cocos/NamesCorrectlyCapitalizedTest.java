@@ -14,20 +14,15 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
 
-  protected static final String MODEL_PATH = "montiarc/cocos/";
-
   protected static final String PACKAGE = "namesCorrectlyCapitalized";
 
-  protected static Arguments arg(@NotNull String model, @NotNull ArcError... errors) {
-    Preconditions.checkNotNull(model);
-    Preconditions.checkNotNull(errors);
-    return Arguments.of(model, errors);
+  @Override
+  protected String getPackage() {
+    return PACKAGE;
   }
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
@@ -44,14 +39,6 @@ public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
       arg("TypeParameterLowerCaseLetter.arc", ArcError.TYPE_PARAMETER_UPPER_CASE_LETTER),
       arg("VariableNameUpperCase.arc", ArcError.VARIABLE_LOWER_CASE)
     );
-  }
-
-  protected ASTMACompilationUnit parseAndLoadSymbols(@NotNull String model) {
-    Preconditions.checkNotNull(model);
-    Path pathToModel = Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, PACKAGE, model);
-    ASTMACompilationUnit ast = this.getTool().parse(pathToModel).orElse(null);
-    this.getTool().createSymbolTable(ast);
-    return ast;
   }
 
   @ParameterizedTest

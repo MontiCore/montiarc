@@ -32,7 +32,7 @@ public class CircularInheritance implements ArcBasisASTComponentTypeCoCo {
       superComps.add(symbol.getFullName());
       symbol = symbol.getParent();
       if (superComps.contains(symbol.getFullName())) {
-        Log.error(String.format(ArcError.CIRCULAR_INHERITANCE.toString(), symbol.getFullName()));
+        Log.error(ArcError.CIRCULAR_INHERITANCE.format(symbol.getFullName()));
         return;
       }
     }

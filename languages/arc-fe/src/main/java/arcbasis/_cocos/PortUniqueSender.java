@@ -26,7 +26,7 @@ public class PortUniqueSender implements ArcBasisASTComponentTypeCoCo {
     for (ASTConnector connector : node.getConnectors()) {
       for (String target : connector.getTargetsNames()) {
         if (targets.contains(target)) {
-          Log.error(String.format(ArcError.PORT_MUlTIPPLE_SENDER.toString(), target),
+          Log.error(ArcError.PORT_MUlTIPPLE_SENDER.format(target),
             connector.get_SourcePositionStart());
         } else {
           targets.add(target);

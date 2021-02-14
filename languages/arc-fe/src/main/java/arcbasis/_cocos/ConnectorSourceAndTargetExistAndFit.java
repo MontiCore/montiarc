@@ -67,7 +67,7 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
 
           if (!ArcTypeCheck.compatible(sourceType, targetType)) {
             Log.error(
-              String.format(ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH.toString(),
+              ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH.format(
                 source.getType().print(), target.getType().print(),
                 printConnector(connector),
                 component.getFullName()),
@@ -132,7 +132,7 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
    */
   protected static void checkDirection(PortSymbol symbol, ASTPortAccess port, boolean isSource, Supplier<String> connector){
     if(symbol.isIncoming() == port.isPresentComponent() == isSource) {
-      Log.error(String.format(ArcError.PORT_DIRECTION_MISMATCH.toString(),
+      Log.error(ArcError.PORT_DIRECTION_MISMATCH.format(
           symbol.isIncoming()?"input":"output",
           port.getQName(),
           isSource?"source":"target",

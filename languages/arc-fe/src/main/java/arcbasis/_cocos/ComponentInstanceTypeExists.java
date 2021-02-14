@@ -22,7 +22,7 @@ public class ComponentInstanceTypeExists implements ArcBasisASTComponentInstance
       node.getName());
     ComponentInstanceSymbol symbol = node.getSymbol();
     if (symbol.getType() instanceof ComponentTypeSymbolSurrogate) {
-      Log.error(String.format(ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE.toString(),
+      Log.error(ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE.format(
         symbol.getType().getName(), symbol.getName()));
     }
   }

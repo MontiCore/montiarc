@@ -41,8 +41,6 @@ public enum ArcError implements montiarc.util.Error {
       + "component %s is of type '%s', but it is required to be of type '%s'."),
   CONFIGURATION_PARAMETER_VALUE_MISMATCH("0xMA1032", "Configuration parameter '%s' at position %d"
     + " of component '%s' should have a default value but has none."),
-  SOURCE_AND_TARGET_SAME_PORT("0xMA1033", "Source and target of a connector of component '%s' "
-    + "refer to the same port."),
   SOURCE_AND_TARGET_SAME_COMPONENT("0xMA1034", "Source and target of a connector of component "
     + "'%s' refer to the same subcomponent."),
   SOURCE_PORT_NOT_EXISTS("0xMA1035", "Source port '%s' of connector '%s' of component '%s' does not "
@@ -99,5 +97,14 @@ public enum ArcError implements montiarc.util.Error {
   @Override
   public String toString() {
     return this.getErrorCode() + ": " + this.printErrorMessage();
+  }
+
+  /**
+   * calls {@link String#format(String, Object...)} with this error message as template
+   * @param args arguments for the format-call. The count has to match the string defined in {@link #printErrorMessage()}
+   * @return properly formatted error message
+   */
+  public String format(Object... args){
+    return String.format(toString(), args);
   }
 }

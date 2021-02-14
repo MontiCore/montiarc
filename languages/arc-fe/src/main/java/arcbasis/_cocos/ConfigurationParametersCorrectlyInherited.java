@@ -42,7 +42,7 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
       List<VariableSymbol> parentParameters = parent.getParameters();
       if (parameters.size() < parentParameters.size()) {
         Log.error(
-          String.format(ArcError.TO_FEW_CONFIGURATION_PARAMETER.toString(), component.getFullName(),
+          ArcError.TO_FEW_CONFIGURATION_PARAMETER.format(component.getFullName(),
             parentParameters.size()), node.getHead().get_SourcePositionStart());
       }
       for (int i = 0; i < Math.min(parentParameters.size(), parameters.size()); i++) {
@@ -50,7 +50,7 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
         SymTypeExpression paramType = parameters.get(i).getType();
         if (!ArcTypeCheck.compatible(paramType, superParameterType)) {
           Log.error(
-            String.format(ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH.toString(),
+            ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH.format(
               parameters.get(i).getName(), i + 1, component.getFullName(),
               paramType.getTypeInfo().getFullName(),
               superParameterType.getTypeInfo().getFullName()),
@@ -59,7 +59,7 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
         if (this.hasParameterDefaultValue(parent, i)) {
           if (!this.hasParameterDefaultValue(component, i)) {
             Log.error(
-              String.format(ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH.toString(),
+              ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH.format(
                 parameters.get(i).getName(), i + 1, component.getFullName()),
               node.getHead().getArcParameterList().get(i).get_SourcePositionStart());
           }

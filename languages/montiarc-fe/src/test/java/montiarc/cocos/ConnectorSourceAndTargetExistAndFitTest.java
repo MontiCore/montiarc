@@ -13,56 +13,51 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public class ConnectorSourceAndTargetExistAndFitTest extends AbstractCoCoTest {
 
-  protected static final String MODEL_PATH = "montiarc/cocos/connectorSourceAndTargetExistAndFit/";
+  protected static final String PACKAGE = "connectorSourceAndTargetExistAndFit";
+
+  @Override
+  protected String getPackage() {
+    return PACKAGE;
+  }
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-      Arguments.of("EverythingMismatched.arc", new ArcError[]{
+      arg("EverythingMismatched.arc",
         ArcError.SOURCE_PORT_NOT_EXISTS, ArcError.TARGET_PORT_NOT_EXISTS, ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH,
         ArcError.PORT_DIRECTION_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH, ArcError.SOURCE_PORT_NOT_EXISTS,
         ArcError.PORT_DIRECTION_MISMATCH, ArcError.TARGET_PORT_NOT_EXISTS, ArcError.PORT_DIRECTION_MISMATCH
-      }),
-      Arguments.of("SourceAndTargetDoNotExist.arc", new ArcError[]{
+      ),
+      arg("SourceAndTargetDoNotExist.arc",
         ArcError.SOURCE_PORT_NOT_EXISTS, ArcError.TARGET_PORT_NOT_EXISTS
-      }),
-      Arguments.of("SourceAndTargetTypeMismatch.arc", new ArcError[]{
+      ),
+      arg("SourceAndTargetTypeMismatch.arc",
         ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH
-      }),
-      Arguments.of("SourceAndTargetWrongDirection.arc", new ArcError[]{
+      ),
+      arg("SourceAndTargetWrongDirection.arc",
         ArcError.PORT_DIRECTION_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH
-      }),
-      Arguments.of("SourceDoesNotExist.arc", new ArcError[]{
+      ),
+      arg("SourceDoesNotExist.arc",
         ArcError.SOURCE_PORT_NOT_EXISTS
-      }),
-      Arguments.of("SourceWrongDirection.arc", new ArcError[]{
+      ),
+      arg("SourceWrongDirection.arc",
         ArcError.PORT_DIRECTION_MISMATCH
-      }),
-      Arguments.of("TargetDoesNotExist.arc", new ArcError[]{
+      ),
+      arg("TargetDoesNotExist.arc",
         ArcError.TARGET_PORT_NOT_EXISTS
-      }),
-      Arguments.of("TargetWrongDirection.arc", new ArcError[]{
+      ),
+      arg("TargetWrongDirection.arc",
         ArcError.PORT_DIRECTION_MISMATCH
-      })
+      )
     );
   }
 
   @Override
   protected void registerCoCos() {
     this.getChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
-  }
-
-  protected ASTMACompilationUnit parseAndLoadSymbols(@NotNull String model) {
-    Preconditions.checkNotNull(model);
-    Path pathToModel = Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, model);
-    ASTMACompilationUnit ast = this.getTool().parse(pathToModel).orElse(null);
-    this.getTool().createSymbolTable(ast);
-    return ast;
   }
 
   @ParameterizedTest

@@ -22,12 +22,12 @@ public class InheritedComponentTypeExists implements ArcBasisASTComponentTypeCoC
     ComponentTypeSymbol symbol = node.getSymbol();
     if (!symbol.isPresentParentComponent()) {
       return;
-    } else {
-      ComponentTypeSymbol parent = symbol.getParent();
-      if (parent instanceof ComponentTypeSymbolSurrogate) {
-        Log.error(String.format(ArcError.MISSING_TYPE_OF_INHERITED_COMPONENT.toString(),
-          symbol.getParent().getName(), symbol.getFullName()), node.get_SourcePositionStart());
-      }
+    }
+
+    ComponentTypeSymbol parent = symbol.getParent();
+    if (parent instanceof ComponentTypeSymbolSurrogate) {
+      Log.error(ArcError.MISSING_TYPE_OF_INHERITED_COMPONENT.format(
+        symbol.getParent().getName(), symbol.getFullName()), node.get_SourcePositionStart());
     }
   }
 }

@@ -26,11 +26,11 @@ public class ParameterTypeExists implements ArcBasisASTArcParameterCoCo {
     try {
       if (symbol.getType().getTypeInfo() instanceof TypeSymbolSurrogate &&
         ((TypeSymbolSurrogate) symbol.getType().getTypeInfo()).lazyLoadDelegate() instanceof TypeSymbolSurrogate) {
-        Log.error(String.format(ArcError.MISSING_TYPE_OF_PARAMETER.toString(), symbol.getName()),
+        Log.error(ArcError.MISSING_TYPE_OF_PARAMETER.format(symbol.getName()),
           node.get_SourcePositionStart());
       }
     } catch (NoSuchElementException e) {
-      Log.error(String.format(ArcError.MISSING_TYPE_OF_PARAMETER.toString(), symbol.getName()),
+      Log.error(ArcError.MISSING_TYPE_OF_PARAMETER.format(symbol.getName()),
         node.get_SourcePositionStart());
     }
   }

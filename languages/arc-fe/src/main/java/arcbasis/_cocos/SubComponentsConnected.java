@@ -50,11 +50,11 @@ public class SubComponentsConnected implements ArcBasisASTComponentTypeCoCo {
         SourcePosition sourcePosition = this.getSourcePosition(compSymbol, node, port);
         if (sources.contains(port)) {
           Log.error(
-            String.format(ArcError.INCOMING_PORT_AS_SOURCE.toString(), port,
+            ArcError.INCOMING_PORT_AS_SOURCE.format(port,
               subSymbol.getFullName(), compSymbol.getFullName()), sourcePosition);
         } else {
           Log.error(
-            String.format(ArcError.INCOMING_PORT_NOT_CONNECTED.toString(), port,
+            ArcError.INCOMING_PORT_NOT_CONNECTED.format(port,
               subSymbol.getFullName(), compSymbol.getFullName()), sourcePosition);
         }
       }
@@ -69,11 +69,11 @@ public class SubComponentsConnected implements ArcBasisASTComponentTypeCoCo {
         SourcePosition sourcePosition = this.getSourcePosition(compSymbol, node, port);
         if (targets.contains(port)) {
           Log.error(
-            String.format(ArcError.OUTGOING_PORT_AS_TARGET.toString(), port,
+            ArcError.OUTGOING_PORT_AS_TARGET.format(port,
               subSymbol.getFullName(), compSymbol.getFullName()), sourcePosition);
         } else {
           Log.error(
-            String.format(ArcError.OUTGOING_PORT_NOT_CONNECTED.toString(), port,
+            ArcError.OUTGOING_PORT_NOT_CONNECTED.format(port,
               subSymbol.getFullName(), compSymbol.getFullName()), sourcePosition);
         }
       }

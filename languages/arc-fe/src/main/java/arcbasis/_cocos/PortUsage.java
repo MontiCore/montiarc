@@ -51,12 +51,12 @@ public class PortUsage implements ArcBasisASTComponentTypeCoCo {
       final SourcePosition sourcePosition = this.getSourcePosition(symbol, node, port);
       if (targets.contains(port)) {
         Log.error(
-          String.format(ArcError.INCOMING_PORT_AS_TARGET.toString(), port, symbol.getFullName()),
+          ArcError.INCOMING_PORT_AS_TARGET.format(port, symbol.getFullName()),
           sourcePosition);
       }
       else {
         Log.warn(
-          String.format(ArcError.INCOMING_PORT_NO_FORWARD.toString(), port, symbol.getFullName()),
+          ArcError.INCOMING_PORT_NO_FORWARD.format(port, symbol.getFullName()),
           sourcePosition);
       }
     }
@@ -67,12 +67,12 @@ public class PortUsage implements ArcBasisASTComponentTypeCoCo {
       final SourcePosition sourcePosition = this.getSourcePosition(symbol, node, port);
       if (sources.contains(port)) {
         Log.error(
-          String.format(ArcError.OUTGOING_PORT_AST_SOURCE.toString(), port, symbol.getFullName()),
+          ArcError.OUTGOING_PORT_AST_SOURCE.format(port, symbol.getFullName()),
           sourcePosition);
       }
       else {
         Log.warn(
-          String.format(ArcError.OUTGOING_PORT_NO_FORWARD.toString(), port, symbol.getFullName()),
+          ArcError.OUTGOING_PORT_NO_FORWARD.format(port, symbol.getFullName()),
           sourcePosition);
       }
     }

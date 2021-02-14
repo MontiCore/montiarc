@@ -16,21 +16,12 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoTest {
 
-  protected static final String MODEL_PATH = "montiarc/cocos/";
-
   protected static final String PACKAGE = "configurationParametersCorrectlyInherited";
-
-  protected static Arguments arg(@NotNull String model, @NotNull ArcError... errors) {
-    Preconditions.checkNotNull(model);
-    Preconditions.checkNotNull(errors);
-    return Arguments.of(model, errors);
-  }
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
@@ -80,12 +71,9 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
     );
   }
 
-  protected ASTMACompilationUnit parseAndLoadSymbols(@NotNull String model) {
-    Preconditions.checkNotNull(model);
-    Path pathToModel = Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, PACKAGE, model);
-    ASTMACompilationUnit ast = this.getTool().parse(pathToModel).orElse(null);
-    this.getTool().createSymbolTable(ast);
-    return ast;
+  @Override
+  protected String getPackage() {
+    return PACKAGE;
   }
 
   protected ASTComponentType parseAndLoadAllSymbols(@NotNull String model) {

@@ -11,21 +11,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 public class InnerComponentNotExtendsDefiningComponentTest extends AbstractCoCoTest {
 
-  protected static String MODEL_PATH = "montiarc/cocos/";
+  protected static final String PACKAGE = "innerComponentNotExtendsDefiningComponent";
 
-  protected static String PACKAGE = "innerComponentNotExtendsDefiningComponent";
-
-  protected ASTMACompilationUnit parseAndLoadSymbols(@NotNull String model) {
-    Preconditions.checkNotNull(model);
-    Path pathToModel = Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, PACKAGE, model);
-    ASTMACompilationUnit ast = this.getTool().parse(pathToModel).orElse(null);
-    this.getTool().createSymbolTable(ast);
-    return ast;
+  @Override
+  protected String getPackage() {
+    return PACKAGE;
   }
 
   @ParameterizedTest
