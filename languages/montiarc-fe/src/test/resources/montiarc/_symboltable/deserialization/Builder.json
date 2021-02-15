@@ -1,36 +1,6 @@
 {
   "name":"Warehouse",
   "package":"factory.warehouse",
-  "kindHierarchy":[
-    [
-      "de.monticore.cdassociation._symboltable.CDRoleSymbol",
-      "de.monticore.symbols.oosymbols._symboltable.FieldSymbol"
-    ],
-    [
-      "de.monticore.cdbasis._symboltable.CDTypeSymbol",
-      "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol"
-    ],
-    [
-      "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
-      "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol"
-    ],
-    [
-      "de.monticore.cd4codebasis._symboltable.CDMethodSignatureSymbol",
-      "de.monticore.symbols.oosymbols._symboltable.MethodSymbol"
-    ],
-    [
-      "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
-      "de.monticore.symbols.basicsymbols._symboltable.TypeSymbol"
-    ],
-    [
-      "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
-      "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol"
-    ],
-    [
-      "de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol",
-      "de.monticore.symbols.basicsymbols._symboltable.TypeSymbol"
-    ]
-  ],
   "symbols":[
     {
       "kind":"de.monticore.cdbasis._symboltable.CDTypeSymbol",

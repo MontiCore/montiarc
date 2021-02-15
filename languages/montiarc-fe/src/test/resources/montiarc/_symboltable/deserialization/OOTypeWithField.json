@@ -1,0 +1,23 @@
+{
+  "name": "SomeOOType",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "SomeOOType",
+      "isClass": true,
+      "spannedScope": {
+        "isShadowingScope": false,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+            "name": "SomeField",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeConstant",
+              "constName": "int"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

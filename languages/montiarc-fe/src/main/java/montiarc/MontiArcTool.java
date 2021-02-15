@@ -212,7 +212,7 @@ public class MontiArcTool implements IMontiArcTool {
   @Override
   public void checkCoCos(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkArgument(ast != null);
-    ast.accept(this.getChecker());
+    this.checker.checkAll(ast);
   }
 
   @Override

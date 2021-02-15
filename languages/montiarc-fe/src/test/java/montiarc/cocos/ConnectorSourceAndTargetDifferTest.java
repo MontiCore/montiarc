@@ -66,7 +66,7 @@ public class ConnectorSourceAndTargetDifferTest extends AbstractCoCoTest {
 
   @Override
   protected void registerCoCos() {
-    this.getChecker().addCoCo(new ConnectorSourceAndTargetComponentDiffer())
-      .addCoCo(new ConnectorSourceAndTargetDiffer());
+    this.getChecker().addCoCo(new ConnectorSourceAndTargetComponentDiffer());
+    this.getChecker().addCoCo(new ConnectorSourceAndTargetDiffer());
   }
 }

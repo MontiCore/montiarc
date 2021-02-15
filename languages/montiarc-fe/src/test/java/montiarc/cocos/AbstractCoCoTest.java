@@ -10,7 +10,6 @@ import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.provider.Arguments;
 
@@ -22,12 +21,6 @@ public abstract class AbstractCoCoTest extends AbstractTest {
   protected static final String MODEL_PATH = "montiarc/cocos/";
   protected MontiArcCoCoChecker checker;
   protected MontiArcTool tool;
-
-  @BeforeAll
-  public static void init() {
-    MontiArcMill.init();
-    Log.enableFailQuick(false);
-  }
 
   /**
    * method that facilitates stating arguments for parameterized tests. removes the need to explicitly created arrays by

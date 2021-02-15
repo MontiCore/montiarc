@@ -11,27 +11,28 @@ import montiarc._cocos.MontiArcCoCoChecker;
 public class MontiArcCoCos {
 
   public static MontiArcCoCoChecker createChecker() {
-    return new MontiArcCoCoChecker()
-      .addCoCo(new ComponentTypeNameCapitalization())
-      .addCoCo(new FieldNameCapitalization())
-      .addCoCo(new GenericTypeParameterNameCapitalization())
-      .addCoCo(new InstanceNameCapitalisation())
-      .addCoCo(new ParameterNameCapitalization())
-      .addCoCo(new PortNameCapitalisation())
-      .addCoCo(new ComponentInstanceTypeExists())
-      .addCoCo(new InheritedComponentTypeExists())
-      .addCoCo(new PortUsage())
-      .addCoCo(new SubComponentsConnected())
-      .addCoCo(new CircularInheritance())
-      .addCoCo(new ConnectorSourceAndTargetComponentDiffer())
-      .addCoCo(new ConnectorSourceAndTargetDiffer())
-      .addCoCo(new ConnectorSourceAndTargetExistAndFit())
-      .addCoCo(new ConfigurationParametersCorrectlyInherited())
-      .addCoCo(new InnerComponentNotExtendsDefiningComponent())
-      .addCoCo(new FieldTypeExists())
-      .addCoCo(new InnerComponentNotExtendsDefiningComponent())
-      .addCoCo(new ParameterTypeExists())
-      .addCoCo(new PortTypeExists())
-      .addCoCo(new PortUniqueSender());
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ComponentTypeNameCapitalization());
+    checker.addCoCo(new FieldNameCapitalization());
+    checker.addCoCo(new GenericTypeParameterNameCapitalization());
+    checker.addCoCo(new InstanceNameCapitalisation());
+    checker.addCoCo(new ParameterNameCapitalization());
+    checker.addCoCo(new PortNameCapitalisation());
+    checker.addCoCo(new ComponentInstanceTypeExists());
+    checker.addCoCo(new InheritedComponentTypeExists());
+    checker.addCoCo(new PortUsage());
+    checker.addCoCo(new SubComponentsConnected());
+    checker.addCoCo(new CircularInheritance());
+    checker.addCoCo(new ConnectorSourceAndTargetComponentDiffer());
+    checker.addCoCo(new ConnectorSourceAndTargetDiffer());
+    checker.addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    checker.addCoCo(new ConfigurationParametersCorrectlyInherited());
+    checker.addCoCo(new InnerComponentNotExtendsDefiningComponent());
+    checker.addCoCo(new FieldTypeExists());
+    checker.addCoCo(new InnerComponentNotExtendsDefiningComponent());
+    checker.addCoCo(new ParameterTypeExists());
+    checker.addCoCo(new PortTypeExists());
+    checker.addCoCo(new PortUniqueSender());
+    return checker;
   }
 }

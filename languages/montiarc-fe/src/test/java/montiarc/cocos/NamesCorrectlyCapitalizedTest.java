@@ -73,11 +73,11 @@ public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
 
   @Override
   protected void registerCoCos() {
-    this.getChecker().addCoCo(new ComponentTypeNameCapitalization())
-      .addCoCo(new FieldNameCapitalization())
-      .addCoCo(new GenericTypeParameterNameCapitalization())
-      .addCoCo(new InstanceNameCapitalisation())
-      .addCoCo(new ParameterNameCapitalization())
-      .addCoCo(new PortNameCapitalisation());
+    this.getChecker().addCoCo(new ComponentTypeNameCapitalization());
+    this.getChecker().addCoCo(new FieldNameCapitalization());
+    this.getChecker().addCoCo(new GenericTypeParameterNameCapitalization());
+    this.getChecker().addCoCo(new InstanceNameCapitalisation());
+    this.getChecker().addCoCo(new ParameterNameCapitalization());
+    this.getChecker().addCoCo(new PortNameCapitalisation());
   }
 }

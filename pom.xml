@@ -13,9 +13,9 @@
   <!-- == PROJECT MODULES ================================================= -->
   <modules>
     <module>languages</module>
-    <module>generators</module>
+    <!-- <module>generators</module> -->
     <module>libraries</module>
-    <module>applications</module>
+    <!-- <module>applications</module> -->
     <module>util</module>
   </modules>
 
@@ -25,7 +25,7 @@
     <cd4a.version>6.6.0</cd4a.version>
 
     <!-- SE-Libraries -->
-    <monticore.version>6.6.0</monticore.version>
+    <monticore.version>6.7.0</monticore.version>
     <mc.grammars.assembly.version>0.0.8</mc.grammars.assembly.version>
     <se-commons.version>1.7.11</se-commons.version>
 
@@ -44,7 +44,7 @@
     <assertj.version>3.7.0</assertj.version>
 
     <!-- Plugins -->
-    <monticore.plugin>6.6.0</monticore.plugin>
+    <monticore.plugin>6.7.0</monticore.plugin>
     <se-groovy.plugin>1.2.3</se-groovy.plugin>
     <assembly.plugin>3.1.1</assembly.plugin>
     <build.helper.plugin>3.2.0</build.helper.plugin>
@@ -53,6 +53,7 @@
     <plexus.plugin>2.8.8</plexus.plugin>
     <source.plugin>3.1.0</source.plugin>
     <jar.plugin>3.1.0</jar.plugin>
+    <exec.plugin>3.0.0</exec.plugin>
     <jacoco.plugin>0.8.6</jacoco.plugin>
     <surefire.plugin>3.0.0-M5</surefire.plugin>
     <failsafe.plugin>3.0.0-M5</failsafe.plugin>
