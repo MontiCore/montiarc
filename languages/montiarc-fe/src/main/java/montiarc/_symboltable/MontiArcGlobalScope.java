@@ -25,6 +25,9 @@ public class MontiArcGlobalScope extends MontiArcGlobalScopeTOP {
     desers.put("de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope", new MontiArc4OOSymbolDeSer());
     desers.put("de.monticore.cd4codebasis._symboltable.CDMethodSignatureSymbol", new MethodSymbolDeSer());
     desers.put("de.monticore.cdassociation._symboltable.CDRoleSymbol", new FieldSymbolDeSer());
+    desers.put("de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope", new MontiArc4BasicSymbolsDeSer());
+    
+    
   }
 
   //TODO: Default tries to load montiarc component models instead of serialized symbol tables. Remove once fixed.

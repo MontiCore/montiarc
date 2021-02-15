@@ -2,6 +2,7 @@
 package montiarc._symboltable;
 
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.basicsymbols._symboltable.*;
 import de.monticore.symbols.oosymbols._symboltable.*;
 import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.json.JsonElement;
@@ -12,23 +13,23 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MontiArc4OOSymbolDeSer extends OOSymbolsDeSer {
-
+public class MontiArc4BasicSymbolsDeSer extends BasicSymbolsDeSer {
+  
   @Override
-  protected void deserializeAddons(@NotNull IOOSymbolsScope scope, @NotNull JsonObject scopeJson) {
+  protected void deserializeAddons(@NotNull IBasicSymbolsScope scope, @NotNull JsonObject scopeJson) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(scopeJson);
     this.doDeserializeAddons(scope, scopeJson);
   }
-
+  
   @Override
-  protected void deserializeAddons(@NotNull IOOSymbolsArtifactScope scope, @NotNull JsonObject scopeJson) {
+  protected void deserializeAddons(@NotNull IBasicSymbolsArtifactScope scope, @NotNull JsonObject scopeJson) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(scopeJson);
     this.doDeserializeAddons(scope, scopeJson);
   }
-
-  protected void doDeserializeAddons(@NotNull IOOSymbolsScope scope, @NotNull JsonObject scopeJson) {
+  
+  protected void doDeserializeAddons(@NotNull IBasicSymbolsScope scope, @NotNull JsonObject scopeJson) {
     List<JsonElement> markedForRemoval = new ArrayList<>();
     for (JsonElement e : scopeJson.getArrayMember(JsonDeSers.SYMBOLS)) {
       if (e.isJsonObject() && JsonDeSers.getKind(e.getAsJsonObject())

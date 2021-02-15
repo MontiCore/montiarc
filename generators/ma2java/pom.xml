@@ -23,12 +23,6 @@
     </dependency>
 
     <dependency>
-      <groupId>montiarc.generators</groupId>
-      <artifactId>cd2pojo</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>montiarc.languages</groupId>
       <artifactId>montiarc-fe</artifactId>
       <version>${project.version}</version>

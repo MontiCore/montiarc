@@ -4,7 +4,6 @@ package montiarc.generator;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import com.google.common.base.Preconditions;
-import de.monticore.cd2pojo.POJOGeneratorTool;
 import de.monticore.symboltable.IScope;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
@@ -65,7 +64,6 @@ public class MontiArcGeneratorTool extends MontiArcTool {
       return;
     }
     scope.getSubScopes().stream().flatMap(s -> s.getSubScopes().stream()).map(IScope::getSpanningSymbol).filter(s -> s instanceof ComponentTypeSymbol).forEach(c -> getInstance().generateAll(Paths.get(target.toString(), Names.getPathFromPackage(c.getPackageName())).toFile(), hwcPath.toFile(), (ComponentTypeSymbol) c));
-    this.generatePOJOs(modelPath.toFile(), target.toFile());
   }
 
   /**
@@ -88,12 +86,5 @@ public class MontiArcGeneratorTool extends MontiArcTool {
       .forEach(comp -> this.getInstance()
         .generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(),
           hwcPath, comp));
-
-    generatePOJOs(modelPath, target);
-  }
-
-  private void generatePOJOs(File modelPath, File targetFilepath) {
-    Path outDir = Paths.get(targetFilepath.getAbsolutePath());
-    new POJOGeneratorTool(outDir, Paths.get(modelPath.getAbsolutePath())).generateAllTypesInPath(modelPath.toPath());
   }
 }

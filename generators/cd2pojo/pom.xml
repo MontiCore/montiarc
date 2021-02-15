@@ -38,6 +38,10 @@
     </developer>
   </developers>
 
+  <properties>
+    <mc4cd2pojo.version>6.6.0</mc4cd2pojo.version>
+  </properties>
+
   <!-- == PROJECT DEPENDENCIES ============================================= -->
 
   <dependencies>
@@ -45,6 +49,7 @@
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>monticore-runtime</artifactId>
+      <version>${mc4cd2pojo.version}</version>
     </dependency>
 
     <dependency>
@@ -55,13 +60,7 @@
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>monticore-grammar</artifactId>
-    </dependency>
-
-    <!-- MontiArc -->
-    <dependency>
-      <groupId>montiarc</groupId>
-      <artifactId>util</artifactId>
-      <version>${project.version}</version>
+      <version>${mc4cd2pojo.version}</version>
     </dependency>
 
     <!-- CD4Analysis -->
@@ -88,6 +87,7 @@
       <artifactId>monticore-runtime</artifactId>
       <type>test-jar</type>
       <scope>test</scope>
+      <version>${mc4cd2pojo.version}</version>
     </dependency>
 
     <dependency>
@@ -119,6 +119,35 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>grammars</id>
+            <phase>none</phase>
+          </execution>
+          <execution>
+            <id>assembly</id>
+            <configuration>
+              <finalName>${project.artifactId}-${project.version}</finalName>
+              <archive>
+                <manifest>
+                  <mainClass>de.monticore.cd2pojo.POJOGeneratorScript</mainClass>
+                </manifest>
+              </archive>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
+            </configuration>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

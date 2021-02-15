@@ -3,6 +3,7 @@ package de.monticore.cd2pojo.symboltable;
 
 import com.google.common.base.Preconditions;
 import de.monticore.cd2pojo.BetterCD4CodeDeSer;
+import de.monticore.cd4code._symboltable.CD4CodeScopeDeSer;
 import de.monticore.cd4code._symboltable.ICD4CodeScope;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
 import de.monticore.cdbasis._symboltable.ICDBasisScope;
@@ -30,14 +31,20 @@ public class CDSymTabPrinter {
       Log.error("Error while trying to serialize type " + typeSymbol.getFullName());
       return;
     }
-
+    
     ICD4CodeScope typeScope = (ICD4CodeScope) typeSymbol.getEnclosingScope();
+    
     String serializedCDSymTab = new BetterCD4CodeDeSer().serialize(typeScope);
 
     File outputFile = Paths.get(targetPath.toString(), typeSymbol.getEnclosingScope().getRealPackageName().replaceAll("\\.", "/"),
-          typeSymbol.getEnclosingScope().getName() + CD_SYM_FILE_EXT).toAbsolutePath().toFile();
-
+      typeSymbol.getEnclosingScope().getName() + CD_SYM_FILE_EXT).toAbsolutePath().toFile();
+    
     doPrintToFile(serializedCDSymTab, outputFile);
+  }
+  
+  protected static String removeKindHierarchy(String serializedSymTab) {
+    String regex = "\"kindHierarchy\":\\[(\\[.*\\]|\\{.*\\}|,|\\s*)*\\],";
+    return serializedSymTab.replaceAll(regex, "");
   }
   
   protected static final String CD_SYM_FILE_EXT = ".sym";
@@ -179,26 +186,26 @@ public class CDSymTabPrinter {
    * Allows setting the character with which it realizes indents for no particular reason.
    */
   private static class Indent {
-  
+    
     public char indentChar = ' ';
     private StringBuilder sb = new StringBuilder();
-  
+    
     public Indent() {}
-  
+    
     public Indent(char indentChar) { this.indentChar = indentChar; }
-  
+    
     public void increaseIndent(int increase) {
       for (int i = 0; i < increase; i++) {
         sb.append(indentChar);
       }
     }
-  
+    
     public void decreaseIndent(int decrease) {
       if (sb.length() > 0) {
         sb.delete(0, decrease);
       }
     }
-  
+    
     @Override
     public String toString() {
       return sb.toString();

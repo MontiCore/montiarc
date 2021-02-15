@@ -21,6 +21,11 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
   protected static final String[] DEFAULT_IMPORTS = {};
 
   protected static final String LOG = "POJOGeneratorScript";
+
+  public static void main(String[] args){
+    generate(Paths.get(args[0]).toFile(), Paths.get(args[1]).toFile());
+  }
+
   
   /**
    * @see de.se_rwth.commons.groovy.GroovyRunner#run(java.lang.String,
@@ -59,7 +64,7 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
    * @param modelPath
    * @param targetFilepath
    */
-  public void generate(File modelPath, File targetFilepath) {
+  public static void generate(File modelPath, File targetFilepath) {
     File fqnMP = Paths.get(modelPath.getAbsolutePath()).toFile();
     POJOGeneratorTool tool = new POJOGeneratorTool(targetFilepath.toPath(), Paths.get(""));
     tool.generateCDTypesInPath(fqnMP.toPath());

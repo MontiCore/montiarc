@@ -200,8 +200,6 @@ public class ComponentHelper {
    * @return The parameters.
    */
   public Collection<String> getParamValues(ComponentInstanceSymbol param) {
-    // final List<ValueSymbol<TypeReference<TypeSymbol>>> configArguments =
-    // param.getConfigArguments();
     List<ASTExpression> configArguments = param.getArguments();
 
     List<String> outputParameters = new ArrayList<>();
