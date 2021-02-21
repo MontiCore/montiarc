@@ -38,10 +38,6 @@
     </developer>
   </developers>
 
-  <properties>
-    <mc4cd2pojo.version>6.6.0</mc4cd2pojo.version>
-  </properties>
-
   <!-- == PROJECT DEPENDENCIES ============================================= -->
 
   <dependencies>
@@ -49,7 +45,6 @@
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>monticore-runtime</artifactId>
-      <version>${mc4cd2pojo.version}</version>
     </dependency>
 
     <dependency>
@@ -60,7 +55,6 @@
     <dependency>
       <groupId>de.monticore</groupId>
       <artifactId>monticore-grammar</artifactId>
-      <version>${mc4cd2pojo.version}</version>
     </dependency>
 
     <!-- CD4Analysis -->
@@ -87,7 +81,6 @@
       <artifactId>monticore-runtime</artifactId>
       <type>test-jar</type>
       <scope>test</scope>
-      <version>${mc4cd2pojo.version}</version>
     </dependency>
 
     <dependency>

@@ -4,7 +4,6 @@ import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.check.AbstractArcTypesCalculatorTest;
 import de.monticore.types.check.TypeCheckResult;
 import genericarc.GenericArcMill;
-import genericarc._visitor.GenericArcDelegatorVisitor;
 import genericarc._visitor.GenericArcTraverser;
 import montiarc.util.check.IArcTypesCalculator;
 import org.junit.jupiter.api.Assertions;

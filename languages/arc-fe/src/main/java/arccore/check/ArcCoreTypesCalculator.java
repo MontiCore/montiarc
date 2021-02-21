@@ -3,7 +3,6 @@ package arccore.check;
 
 import arcbasis.check.AbstractArcTypesCalculator;
 import arccore.ArcCoreMill;
-import arccore._visitor.ArcCoreDelegatorVisitor;
 import arccore._visitor.ArcCoreTraverser;
 import com.google.common.base.Preconditions;
 import de.monticore.literals.mccommonliterals._ast.ASTSignedLiteral;

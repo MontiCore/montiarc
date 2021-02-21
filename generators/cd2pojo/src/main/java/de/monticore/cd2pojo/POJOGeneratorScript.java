@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package de.monticore.cd2pojo;
 
+import com.google.common.base.Preconditions;
 import de.se_rwth.commons.configuration.Configuration;
 import de.se_rwth.commons.groovy.GroovyInterpreter;
 import de.se_rwth.commons.groovy.GroovyRunner;
@@ -23,7 +24,11 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
   protected static final String LOG = "POJOGeneratorScript";
 
   public static void main(String[] args){
-    generate(Paths.get(args[0]).toFile(), Paths.get(args[1]).toFile());
+    File modelPath = Paths.get(args[0]).toFile();
+    File output = Paths.get(args[1]).toFile();
+    Log.debug("Model Path:  " + modelPath.toString(), POJOGeneratorScript.class.getName());
+    Log.debug("Output Path: " + output.toString(), POJOGeneratorScript.class.getName());
+    generate(modelPath, output);
   }
 
   

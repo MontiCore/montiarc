@@ -13,8 +13,7 @@ import genericarc._ast.ASTGenericArcNode;
 import genericarc.trafos.GenericArcNodeTransformer;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._ast.ASTMontiArcNode;
-import montiarc._visitor.MontiArcInheritanceVisitor;
-import montiarc._visitor.MontiArcVisitor;
+import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
@@ -22,9 +21,8 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-public class MontiArcTransformer implements MontiArcInheritanceVisitor {
-
-  protected montiarc._visitor.MontiArcVisitor realThis = this;
+public class MontiArcTransformer implements MontiArcTraverser {
+  
 
   protected List<MontiArcTransformer> montiArcTrafos = new ArrayList<>();
 
@@ -45,20 +43,12 @@ public class MontiArcTransformer implements MontiArcInheritanceVisitor {
   public MontiArcTransformer() {
   }
 
-  public MontiArcVisitor getRealThis() {
-    return this.realThis;
-  }
-
-  public void setRealThis(@NotNull MontiArcVisitor realThis) {
-    this.realThis = realThis;
-  }
-
   public void addTrafo(@NotNull MontiArcTransformer trafo) {
     this.montiArcTrafos.add(trafo);
   }
 
   public void transformAll(@NotNull ASTMontiArcNode node) {
-    node.accept(getRealThis());
+    node.accept(this);
   }
 
   public MontiArcTransformer addTrafo(@NotNull MACompilationUnitTransformer trafo) {
@@ -86,7 +76,7 @@ public class MontiArcTransformer implements MontiArcInheritanceVisitor {
   }
 
   public void transformAll(@NotNull ASTGenericArcNode node) {
-    node.accept(getRealThis());
+    node.accept(this);
   }
 
   public MontiArcTransformer addTrafo(GenericArcNodeTransformer trafo) {
@@ -102,7 +92,7 @@ public class MontiArcTransformer implements MontiArcInheritanceVisitor {
   }
 
   public void transformAll(@NotNull ASTComfortableArcNode node) {
-    node.accept(getRealThis());
+    node.accept(this);
   }
 
   public MontiArcTransformer addTrafo(
@@ -119,7 +109,7 @@ public class MontiArcTransformer implements MontiArcInheritanceVisitor {
   }
 
   public void transformAll(@NotNull ASTArcCoreNode node) {
-    node.accept(getRealThis());
+    node.accept(this);
   }
 
   public MontiArcTransformer addTrafo(@NotNull ArcCoreNodeTransformer trafo) {
@@ -135,7 +125,7 @@ public class MontiArcTransformer implements MontiArcInheritanceVisitor {
   }
 
   public void transformAll(@NotNull ASTArcBasisNode node) {
-    node.accept(getRealThis());
+    node.accept(this);
   }
 
   public MontiArcTransformer addTrafo(@NotNull ComponentTypeTransformer trafo) {

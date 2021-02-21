@@ -3,11 +3,9 @@ package montiarc.check;
 
 import arcbasis.check.AbstractArcTypesCalculator;
 import com.google.common.base.Preconditions;
-import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
 import de.monticore.literals.mccommonliterals._ast.ASTSignedLiteral;
 import de.monticore.types.check.*;
 import montiarc.MontiArcMill;
-import montiarc._visitor.MontiArcDelegatorVisitor;
 import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 

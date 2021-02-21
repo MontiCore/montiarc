@@ -8,10 +8,10 @@ import de.monticore.cd2pojo.cocos.CDRoleNamesUnique;
 import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cd4code._cocos.CD4CodeCoCoChecker;
 import de.monticore.cd4code._parser.CD4CodeParser;
-import de.monticore.cd4code._symboltable.CD4CodeSymbolTableCreatorDelegator;
 import de.monticore.cd4code._symboltable.ICD4CodeGlobalScope;
 import de.monticore.cd4code._symboltable.ICD4CodeScope;
 import de.monticore.cd4code.cocos.CD4CodeCoCos;
+import de.monticore.cd4code.trafo.CD4CodeAfterParseTrafo;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
 import de.monticore.generating.GeneratorSetup;
@@ -27,65 +27,62 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class POJOGeneratorTool {
-
+  
   protected POJOGenerator generator;
   
   public POJOGeneratorTool(@NotNull POJOGenerator generator) {
     Preconditions.checkNotNull(generator);
     this.generator = generator;
+    initMill();
   }
   
   public POJOGeneratorTool(@NotNull GeneratorSetup setup) {
-    Preconditions.checkNotNull(setup);
-    this.generator = new POJOGenerator(setup);
+    this(new POJOGenerator(setup));
   }
   
   public POJOGeneratorTool(@NotNull Path targetDir, @NotNull Path hwcPath) {
-    Preconditions.checkNotNull(targetDir);
-    Preconditions.checkNotNull(hwcPath);
-    this.generator = new POJOGenerator(targetDir, hwcPath);
+    this(new POJOGenerator(targetDir, hwcPath));
   }
   
-  public void generateAllTypesInPath(@NotNull Path modelPath) {
-    Preconditions.checkNotNull(modelPath);
-    generateAllTypesInPaths(Collections.singleton(modelPath));
+  protected void initMill() {
+    CD4CodeMill.init();
   }
   
-  public void generateAllTypesInPaths(@NotNull Collection<Path> modelPaths) {
+  public void generateCDTypesInPaths(@NotNull Collection<Path> modelPaths) {
     Preconditions.checkNotNull(modelPaths);
     List<CDTypeSymbol> symbolsToGenerate = new ArrayList<>();
     ICD4CodeGlobalScope globalScope = getLoadedICD4CodeGlobalScope(modelPaths);
     for (ICD4CodeScope artifactScope : globalScope.getSubScopes()) {
-      Collection<CDTypeSymbol> typeSymbols = artifactScope.getLocalCDTypeSymbols();
-      symbolsToGenerate.addAll(typeSymbols);
+      for(ICD4CodeScope sub : artifactScope.getSubScopes()) {
+        symbolsToGenerate.addAll(sub.getLocalCDTypeSymbols());
+      }
     }
     generateAll(symbolsToGenerate);
+
+    //TODO Serialize
   }
   
   public void generateCDTypesInPath(@NotNull Path modelPath) {
     Preconditions.checkNotNull(modelPath);
-    ICD4CodeGlobalScope globalScope = getLoadedICD4CodeGlobalScope(Collections.singleton(modelPath));
-    Collection<CDTypeSymbol> symbolsToGenerate = globalScope.getSubScopes().stream()
-      .flatMap(scope -> scope.getLocalCDTypeSymbols().stream()).collect(Collectors.toList());
-    generateAll(symbolsToGenerate);
+    generateCDTypesInPaths(Collections.singleton(modelPath));
   }
   
   public static ICD4CodeGlobalScope getLoadedICD4CodeGlobalScope(@NotNull Collection<Path> modelPaths) {
     Preconditions.checkNotNull(modelPaths);
-    return loadCD4CModelsFromPaths(modelPaths,
-      new CD4CodeCoCos().getCheckerForAllCoCos()
-        .addCoCo(new CDAssociationNamesUnique())
-        .addCoCo(new CDRoleNamesUnique())
-        .addCoCo(new CDEllipsisParametersOnlyInLastPlace()));
+    CD4CodeCoCoChecker checker = new CD4CodeCoCos().getCheckerForAllCoCos();
+    checker.addCoCo(new CDAssociationNamesUnique());
+    checker.addCoCo(new CDRoleNamesUnique());
+    checker.addCoCo(new CDEllipsisParametersOnlyInLastPlace());
+    return loadCD4CModelsFromPaths(modelPaths, checker);
   }
-
+  
   /**
    * prepares the types for generation and then serializes symboltables and generates classes
+   *
    * @param symbols collection to process
    */
-  protected void generateAll(@NotNull Collection<CDTypeSymbol> symbols){
+  protected void generateAll(@NotNull Collection<CDTypeSymbol> symbols) {
     Preconditions.checkNotNull(symbols);
-    symbols.forEach(POJOGenerator.CDWorkaroundsForCD2POJOGenerator::doAllWorkarounds);
     symbols.forEach(this::doGenerate);
   }
   
@@ -114,52 +111,59 @@ public class POJOGeneratorTool {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(cdChecker);
     for (ASTCDCompilationUnit compUnit : createSymbolTable(scope)) {
-      compUnit.accept(cdChecker);
+      compUnit.accept(cdChecker.getTraverser());
     }
   }
   
   public static Collection<ASTCDCompilationUnit> createSymbolTable(@NotNull ICD4CodeGlobalScope scope) {
     Preconditions.checkNotNull(scope);
-    CD4CodeSymbolTableCreatorDelegator symTab = new CD4CodeSymbolTableCreatorDelegator(scope);
+    CD4CodeMill.init();
     Set<ASTCDCompilationUnit> set = new HashSet<>();
-    for (ASTCDCompilationUnit astcdCompilationUnit : parseModels(scope)) {
-      symTab.createFromAST(astcdCompilationUnit);
+    for (ASTCDCompilationUnit astcdCompilationUnit : parseAndTransformModels(scope)) {
+      CD4CodeMill.scopesGenitorDelegator().createFromAST(astcdCompilationUnit);
       set.add(astcdCompilationUnit);
     }
     return set;
   }
   
-  public static Collection<ASTCDCompilationUnit> parseModels(@NotNull ICD4CodeGlobalScope scope) {
+  public static Collection<ASTCDCompilationUnit> parseAndTransformModels(@NotNull ICD4CodeGlobalScope scope) {
     Preconditions.checkNotNull(scope);
-    Set<ASTCDCompilationUnit> set = new HashSet<>();
-    for (Path p : scope.getModelPath().getFullPathOfEntries()) {
-      set.addAll(parseCD(p));
-    }
-    return set;
+    return scope.getModelPath().getFullPathOfEntries().stream()
+      .flatMap(path -> parseAndTransformCD(path).stream())
+      .collect(Collectors.toList());
   }
   
-  public static Collection<ASTCDCompilationUnit> parseCD(@NotNull Path path) {
+  public static Collection<ASTCDCompilationUnit> parseAndTransformCD(@NotNull Path path) {
     Preconditions.checkNotNull(path);
     try {
-      return Files.walk(path).filter(Files::isRegularFile).filter(f -> f.getFileName().toString().endsWith(cdFileExtension)).map(f -> parseCD(f.toString()))
-        .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
+      return Files.walk(path).filter(Files::isRegularFile)
+        .filter(f -> f.getFileName().toString().endsWith(cdFileExtension))
+        .map(f -> parseAndTransformCD(f.toString()))
+        .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
     } catch (IOException e) {
       Log.error("Could not access " + path.toString() + ", there were I/O exceptions.");
     }
-    return new HashSet<>();
+    return new ArrayList<>();
+  }
+  
+  public static Optional<ASTCDCompilationUnit> parseAndTransformCD(@NotNull String filename) {
+    Preconditions.checkNotNull(filename);
+    return parseCD(filename).map((ASTCDCompilationUnit node) -> {
+      new CD4CodeAfterParseTrafo().transform(node);
+      return node;
+    });
   }
   
   public static Optional<ASTCDCompilationUnit> parseCD(@NotNull String filename) {
     Preconditions.checkNotNull(filename);
-    CD4CodeParser p = new CD4CodeParser();
-    Optional<ASTCDCompilationUnit> cd;
+    CD4CodeParser p = CD4CodeMill.parser();
+    ASTCDCompilationUnit cd = null;
     try {
-      cd = p.parse(filename);
-      return cd;
+      cd = p.parse(filename).orElse(null);
     } catch (IOException e) {
       Log.error("Could not access " + filename + ", there were I/O exceptions.");
     }
-    return Optional.empty();
+    return Optional.ofNullable(cd);
   }
   
   protected static void addBasicTypes(@NotNull ICD4CodeGlobalScope scope) {

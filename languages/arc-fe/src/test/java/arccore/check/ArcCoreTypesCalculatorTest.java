@@ -1,14 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arccore.check;
 
-import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.check.AbstractArcTypesCalculatorTest;
 import arccore.ArcCoreMill;
 import arccore._visitor.ArcCoreTraverser;
-import montiarc.util.check.IArcTypesCalculator;
-import arccore._visitor.ArcCoreDelegatorVisitor;
 import de.monticore.types.check.TypeCheckResult;
+import montiarc.util.check.IArcTypesCalculator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

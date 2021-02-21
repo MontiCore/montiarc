@@ -9,7 +9,6 @@ import de.monticore.literals.mcliteralsbasis._ast.ASTLiteral;
 import de.monticore.types.check.*;
 import montiarc.util.check.IArcTypesCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
-import arcbasis._visitor.ArcBasisInheritanceVisitor;
 
 import java.util.Optional;
 

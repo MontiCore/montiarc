@@ -23,28 +23,28 @@ import java.util.Collection;
  * Extends {@link MontiArcTool} with generate capabilities.
  */
 public class MontiArcGeneratorTool extends MontiArcTool {
-
+  
   public static final String LIBRARY_MODELS_FOLDER = "target/librarymodels/";
-
-  private MAAGenerator instance;
-
+  
+  private MAAGenerator generator;
+  
   /**
-   * @return instance
+   * @return the current generator instance
    */
-  public MAAGenerator getInstance() {
-    if (instance == null) {
-      instance = new MAAGenerator();
+  public MAAGenerator getGenerator() {
+    if (generator == null) {
+      generator = new MAAGenerator();
     }
-    return instance;
+    return generator;
   }
-
+  
   /**
-   * @param instance the instance to set
+   * @param generator the generator instance to set
    */
-  public void setInstance(MAAGenerator instance) {
-    this.instance = instance;
+  public void setGenerator(MAAGenerator generator) {
+    this.generator = generator;
   }
-
+  
   /**
    * Parses and checks cocos for all MontiArc models in the provided model path. If the models are well formed,
    * generates target code for these.
@@ -57,15 +57,22 @@ public class MontiArcGeneratorTool extends MontiArcTool {
     Preconditions.checkArgument(modelPath != null);
     Preconditions.checkArgument(target != null);
     Preconditions.checkArgument(hwcPath != null);
-    IMontiArcGlobalScope scope = createMAGlobalScope(modelPath, target, hwcPath);
-    scope.add(MontiArcMill.typeSymbolBuilder().setName("Integer").setPackageName("java.lang").build());
-    processModels(scope);
+    IMontiArcGlobalScope globalScope = createMAGlobalScope(modelPath, target, hwcPath);
+    globalScope.add(MontiArcMill.typeSymbolBuilder().setName("Integer").setPackageName("java.lang").build());
+    processModels(globalScope);
     if (Log.getErrorCount() > 0) {
       return;
     }
-    scope.getSubScopes().stream().flatMap(s -> s.getSubScopes().stream()).map(IScope::getSpanningSymbol).filter(s -> s instanceof ComponentTypeSymbol).forEach(c -> getInstance().generateAll(Paths.get(target.toString(), Names.getPathFromPackage(c.getPackageName())).toFile(), hwcPath.toFile(), (ComponentTypeSymbol) c));
+    globalScope.getSubScopes().stream()
+      .flatMap(artifactScope -> artifactScope.getSubScopes().stream()).map(IScope::getSpanningSymbol)
+      .filter(scopeSpanningSymbol -> scopeSpanningSymbol instanceof ComponentTypeSymbol)
+      .forEach(componentTypeSymbol -> getGenerator().generateAll(
+        Paths.get(
+          target.toString(), Names.getPathFromPackage(componentTypeSymbol.getPackageName())).toFile(),
+        hwcPath.toFile(),
+        (ComponentTypeSymbol) componentTypeSymbol));
   }
-
+  
   /**
    * Checks cocos and generates code for all MontiArc models in modelpath to folder target.
    *
@@ -81,9 +88,9 @@ public class MontiArcGeneratorTool extends MontiArcTool {
       target.getAbsolutePath());
     IMontiArcGlobalScope symTab = this.processModels(modelPath.toPath(), Paths.get(basedir + LIBRARY_MODELS_FOLDER),
       hwcPath.toPath(), target.toPath());
-
+    
     symTab.getSubScopes().stream().map(IArcBasisScope::getLocalComponentTypeSymbols).flatMap(Collection::stream)
-      .forEach(comp -> this.getInstance()
+      .forEach(comp -> this.getGenerator()
         .generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(),
           hwcPath, comp));
   }

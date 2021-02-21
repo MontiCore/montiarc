@@ -15,10 +15,6 @@
       "isPublic":false,
       "isStatic":false,
       "isFinal":false
-    },
-    {
-      "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeSymbol",
-      "name": "Color"
     }
   ]
 }

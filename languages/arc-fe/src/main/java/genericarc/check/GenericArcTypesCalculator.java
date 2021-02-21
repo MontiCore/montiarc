@@ -9,7 +9,6 @@ import de.monticore.types.check.DeriveSymTypeOfLiterals;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.TypeCheckResult;
 import genericarc.GenericArcMill;
-import genericarc._visitor.GenericArcDelegatorVisitor;
 import genericarc._visitor.GenericArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 

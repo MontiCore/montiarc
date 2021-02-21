@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Collection;
 
 public class GeneratorTest {
 
@@ -47,11 +48,12 @@ public class GeneratorTest {
     POJOGeneratorTool tool = new POJOGeneratorTool(Paths.get(TEST_TARGET_PATH), Paths.get(TEST_JAVA_PATH));
 
     //When
-    tool.generateAllTypesInPath(Paths.get(TEST_RESOURCE_PATH, modelPath));
+    tool.generateCDTypesInPath(Paths.get(TEST_RESOURCE_PATH, modelPath));
 
     //Then
-    Assertions.assertAll(() -> FileUtils.listFiles(Paths.get(TEST_TARGET_PATH).toFile(), new String[]{"java"}, true)
-      .forEach(file -> Assertions.assertTrue(this.doParseFile(file))));
+    Collection<File> result = FileUtils.listFiles(Paths.get(TEST_TARGET_PATH).toFile(), new String[]{"java"}, true);
+    Assertions.assertFalse(result.isEmpty(), "No java files were generated.");
+    result.forEach(file -> Assertions.assertTrue(this.doParseFile(file)));
   }
 
   protected boolean doParseFile(@NotNull File file) {

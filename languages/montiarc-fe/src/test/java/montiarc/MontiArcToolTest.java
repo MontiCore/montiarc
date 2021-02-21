@@ -179,19 +179,6 @@ public class MontiArcToolTest extends AbstractTest {
     Assertions.assertEquals(expNumModels, scopes.size());
   }
 
-  @Test
-  public void shouldResolveUniqueTypeSymbolFromSerializedModel() {
-    //Given
-    Path path = Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, "valid", "example3");
-    IMontiArcGlobalScope scope = this.getTool().processModels(path);
-
-    //When
-    List<TypeSymbol> types = scope.resolveTypeMany("Color");
-
-    //Then
-    Assertions.assertEquals(1, types.size());
-  }
-
   /**
    * Method under test {@link MontiArcTool#parseAll(IMontiArcGlobalScope)}.
    */

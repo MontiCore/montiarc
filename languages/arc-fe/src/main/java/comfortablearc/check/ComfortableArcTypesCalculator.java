@@ -4,7 +4,6 @@ package comfortablearc.check;
 import arcbasis.check.AbstractArcTypesCalculator;
 import com.google.common.base.Preconditions;
 import comfortablearc.ComfortableArcMill;
-import comfortablearc._visitor.ComfortableArcDelegatorVisitor;
 import comfortablearc._visitor.ComfortableArcTraverser;
 import de.monticore.literals.mccommonliterals._ast.ASTSignedLiteral;
 import de.monticore.types.check.DeriveSymTypeOfExpression;

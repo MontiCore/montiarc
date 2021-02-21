@@ -2,7 +2,6 @@
 package arcbasis.check;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._visitor.ArcBasisDelegatorVisitor;
 import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
 import de.monticore.literals.mccommonliterals._ast.ASTSignedLiteral;

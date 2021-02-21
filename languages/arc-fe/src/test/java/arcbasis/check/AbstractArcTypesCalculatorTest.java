@@ -5,12 +5,14 @@ import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisScope;
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis._visitor.ArcBasisInheritanceVisitor;
+import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis.ExpressionsBasisMill;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.expressions.expressionsbasis._symboltable.IExpressionsBasisScope;
+import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
+import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbolSurrogate;
@@ -18,7 +20,6 @@ import de.monticore.types.check.SymTypeExpressionFactory;
 import montiarc.util.check.IArcTypesCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -96,8 +97,7 @@ public abstract class AbstractArcTypesCalculatorTest extends AbstractTest {
     Preconditions.checkArgument(expression != null);
     Preconditions.checkArgument(expectedType != null);
     //Given
-    expression.accept(this.getScopeSetter());
-
+    this.getScopeSetter().handle(expression);
     //When
     this.getTypesCalculator().calculateType(expression);
 
@@ -162,18 +162,13 @@ public abstract class AbstractArcTypesCalculatorTest extends AbstractTest {
     Assertions.assertFalse(this.getTypesCalculator().getResult().isPresent());
   }
 
-  public static class ArcBasisExpressionsScopeSetter implements ArcBasisInheritanceVisitor {
+  public static class ArcBasisExpressionsScopeSetter implements ArcBasisTraverser {
 
     protected IExpressionsBasisScope scope;
 
     public ArcBasisExpressionsScopeSetter(@NotNull IExpressionsBasisScope scope) {
       Preconditions.checkArgument(scope != null);
       this.scope = scope;
-    }
-
-    @Override
-    public ArcBasisExpressionsScopeSetter getRealThis() {
-      return this;
     }
 
     public IExpressionsBasisScope getScope() {

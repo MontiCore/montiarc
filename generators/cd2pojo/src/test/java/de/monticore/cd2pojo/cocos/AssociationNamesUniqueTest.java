@@ -3,11 +3,13 @@ package de.monticore.cd2pojo.cocos;
 
 import com.google.common.base.Preconditions;
 import de.monticore.cd2pojo.POJOGeneratorTool;
+import de.monticore.cd4code._cocos.CD4CodeCoCoChecker;
 import de.monticore.cd4code.cocos.CD4CodeCoCos;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -34,6 +36,7 @@ public class AssociationNamesUniqueTest {
     Log.enableFailQuick(false);
   }
 
+  @Disabled //TODO enable once CD4A issue #5 is fixed
   @ParameterizedTest
   @MethodSource("modelWithAmbiguousAssociationsAndErrorCountProvider")
   public void shouldDetectAmbiguousAssociations(@NotNull String fileName, int expectedErrorCount) {
@@ -41,10 +44,10 @@ public class AssociationNamesUniqueTest {
     //Given
     Path pathToModel = Paths.get(TEST_RESOURCE_PATH, fileName);
 
-    //WHen
-    POJOGeneratorTool.loadCD4CModelsFromPaths(Collections.singleton(pathToModel),
-      new CD4CodeCoCos().getCheckerForAllCoCos()
-      .addCoCo(new CDAssociationNamesUnique()));
+    //When
+    CD4CodeCoCoChecker checker = new CD4CodeCoCos().getCheckerForAllCoCos();
+    checker.addCoCo(new CDAssociationNamesUnique());
+    POJOGeneratorTool.loadCD4CModelsFromPaths(Collections.singleton(pathToModel), checker);
 
     //Then
     Assertions.assertEquals(expectedErrorCount, Log.getErrorCount());

@@ -3,10 +3,13 @@ package de.monticore.cd2pojo.symboltable;
 
 import com.google.common.base.Preconditions;
 import de.monticore.cd2pojo.BetterCD4CodeDeSer;
-import de.monticore.cd4code._symboltable.CD4CodeScopeDeSer;
+import de.monticore.cd4code._symboltable.CD4CodeDeSer;
+import de.monticore.cd4code._symboltable.ICD4CodeArtifactScope;
 import de.monticore.cd4code._symboltable.ICD4CodeScope;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
 import de.monticore.cdbasis._symboltable.ICDBasisScope;
+import de.monticore.symboltable.IArtifactScope;
+import de.monticore.symboltable.IScope;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -21,23 +24,28 @@ import java.util.List;
 
 public class CDSymTabPrinter {
   
+  protected static ICD4CodeArtifactScope getEnclosingArtifactScope(@NotNull CDTypeSymbol typeSymbol) {
+    Preconditions.checkNotNull(typeSymbol);
+    IScope scope = typeSymbol.getSpannedScope();
+    while(!(scope instanceof IArtifactScope)) {
+      scope = scope.getEnclosingScope();
+    }
+    if(!(scope instanceof ICD4CodeArtifactScope)) {
+      Log.error("Enclosing artifact scope of type symbol is not an instance of ICD4CodeArtifactScope");
+    }
+    return (ICD4CodeArtifactScope) scope;
+  }
+  
   public static void printCDSymTab2Json(@NotNull CDTypeSymbol typeSymbol, @NotNull Path targetPath) {
     Preconditions.checkNotNull(typeSymbol);
     Preconditions.checkNotNull(targetPath);
-    ICDBasisScope scope = typeSymbol.getEnclosingScope();
-    if (!(scope instanceof ICD4CodeScope)) {
-      Log.debug("Scope spanned by type symbol '" + typeSymbol.getFullName() +
-        "' is expected to be an instance of ICD4CodeScope, but it is not.", "Error");
-      Log.error("Error while trying to serialize type " + typeSymbol.getFullName());
-      return;
-    }
     
-    ICD4CodeScope typeScope = (ICD4CodeScope) typeSymbol.getEnclosingScope();
+    ICD4CodeArtifactScope artifactScope = getEnclosingArtifactScope(typeSymbol);
     
-    String serializedCDSymTab = new BetterCD4CodeDeSer().serialize(typeScope);
+    String serializedCDSymTab = new CD4CodeDeSer().serialize(artifactScope);
 
     File outputFile = Paths.get(targetPath.toString(), typeSymbol.getEnclosingScope().getRealPackageName().replaceAll("\\.", "/"),
-      typeSymbol.getEnclosingScope().getName() + CD_SYM_FILE_EXT).toAbsolutePath().toFile();
+      artifactScope.getName() + CD_SYM_FILE_EXT).toAbsolutePath().toFile();
     
     doPrintToFile(serializedCDSymTab, outputFile);
   }

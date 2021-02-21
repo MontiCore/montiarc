@@ -6,7 +6,9 @@ import de.monticore.io.FileFinder;
 import de.monticore.io.paths.ModelCoordinate;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbolDeSer;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbolDeSer;
+import de.monticore.symbols.oosymbols._symboltable.OOSymbolsDeSer;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbolDeSer;
+import de.monticore.symboltable.serialization.ISymbolDeSer;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Optional;
@@ -21,13 +23,9 @@ public class MontiArcGlobalScope extends MontiArcGlobalScopeTOP {
   @Override
   public void init() {
     super.init();
-    desers.put("de.monticore.cdbasis._symboltable.CDTypeSymbol", new OOTypeSymbolDeSer());
-    desers.put("de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope", new MontiArc4OOSymbolDeSer());
-    desers.put("de.monticore.cd4codebasis._symboltable.CDMethodSignatureSymbol", new MethodSymbolDeSer());
-    desers.put("de.monticore.cdassociation._symboltable.CDRoleSymbol", new FieldSymbolDeSer());
-    desers.put("de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope", new MontiArc4BasicSymbolsDeSer());
-    
-    
+    this.putSymbolDeSer("de.monticore.cdbasis._symboltable.CDTypeSymbol", new OOTypeSymbolDeSer());
+    this.putSymbolDeSer("de.monticore.cd4codebasis._symboltable.CDMethodSignatureSymbol", new MethodSymbolDeSer());
+    this.putSymbolDeSer("de.monticore.cdassociation._symboltable.CDRoleSymbol", new FieldSymbolDeSer());
   }
 
   //TODO: Default tries to load montiarc component models instead of serialized symbol tables. Remove once fixed.

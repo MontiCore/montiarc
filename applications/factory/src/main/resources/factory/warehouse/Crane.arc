@@ -9,7 +9,7 @@ import factory.warehouse.CraneState
 
 /**
  * A Crane moves StorageObjects from one position to another.
- * It can hold one StorageObject at  time.
+ * It can hold one StorageObject at a time.
  * When holding an Object, horizontal movement is slow, therefore objects should be passed
  * to a transporter, which can only operate on ground level, but moves faster.
  */
