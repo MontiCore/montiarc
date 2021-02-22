@@ -376,6 +376,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkState(this.getCurrentScope().isPresent());
     ast.setEnclosingScope(this.getCurrentScope().get());
     builder.setName(ast.getName()).setType(this.delegateToType(ast));
+    builder.fetchParametersFrom(createTypeExpression(this.getCurrentCompInstanceType().get()));
     return builder;
   }
 

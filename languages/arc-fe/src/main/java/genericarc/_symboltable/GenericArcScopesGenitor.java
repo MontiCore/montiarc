@@ -2,7 +2,6 @@
 package genericarc._symboltable;
 
 
-import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisScopesGenitor;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
@@ -17,7 +16,6 @@ import genericarc.GenericArcMill;
 import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericComponentHead;
 
-import java.util.Collection;
 import java.util.Deque;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
