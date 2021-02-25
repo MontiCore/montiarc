@@ -5,15 +5,15 @@ import arcbasis.util.ArcError;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
 public abstract class AbstractTest extends montiarc.util.AbstractTest {
 
-  @BeforeAll
-  public static void refreshGlobalScope(){
+  @BeforeEach
+  public void refreshGlobalScope(){
     ArcBasisMill.globalScope().clear();
   }
 
