@@ -26,7 +26,6 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
 
   @BeforeEach
   public void SetUpSymTab() {
-    ArcBasisMill.globalScope().clear();
     this.symTab = new ArcBasisScopesGenitorTestDelegator(ArcBasisMill.globalScope());
   }
 

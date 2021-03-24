@@ -6,6 +6,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.AbstractTest;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,7 +25,7 @@ public class MontiArcDeSerTest extends AbstractTest {
   }
 
   @BeforeEach
-  public void setUp() {
+  public void setUpDeSer() {
     this.deSer = new MontiArcSymbols2Json();
   }
 
@@ -37,7 +38,7 @@ public class MontiArcDeSerTest extends AbstractTest {
 
     //Then
     Assertions.assertNotNull(scope);
-    Assertions.assertEquals(0, Log.getErrorCount());
+    Assertions.assertEquals(0, Log.getErrorCount(), ()->Log.getFindings().toString());
   }
 
   @Test

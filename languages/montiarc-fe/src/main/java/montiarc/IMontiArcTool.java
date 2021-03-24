@@ -132,11 +132,9 @@ public interface IMontiArcTool {
   IMontiArcGlobalScope createMAGlobalScope(@NotNull Path... directories);
 
   /**
-   * Adds basic types {@link de.monticore.types.check.DefsTypeBasic} to the provided scope.
-   *
-   * @param scope to scope to be extended with basic types
+   * Adds primitive types to the global scope.
    */
-  void addBasicTypes(@NotNull IMontiArcScope scope);
+  void addBasicTypes();
 
   /**
    * Checks default context conditions for the provided montiarc compilation unit and logs findings.

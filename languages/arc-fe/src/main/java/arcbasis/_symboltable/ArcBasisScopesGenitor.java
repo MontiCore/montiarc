@@ -17,6 +17,7 @@ import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Optional;
 import java.util.Stack;
@@ -155,6 +156,20 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   protected void setCurrentCompInstanceType(@Nullable ASTMCType currentCompInstanceType) {
     this.currentCompInstanceType = currentCompInstanceType;
+  }
+
+  @Override
+  public IArcBasisArtifactScope createFromAST(@NotNull ASTArcElement rootNode)  {
+    Preconditions.checkNotNull(rootNode);
+    IArcBasisArtifactScope artifactScope = arcbasis.ArcBasisMill.artifactScope();
+    artifactScope.setPackageName("");
+    artifactScope.setImportsList(new ArrayList<>());
+    this.putOnStack(artifactScope);
+    rootNode.accept(getTraverser());
+    assert this.getCurrentScope().isPresent();
+    assert this.getCurrentScope().get().equals(artifactScope);
+    this.removeCurrentScope();
+    return artifactScope;
   }
 
   @Override

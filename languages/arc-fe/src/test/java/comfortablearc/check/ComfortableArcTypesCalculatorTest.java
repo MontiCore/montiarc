@@ -8,6 +8,7 @@ import comfortablearc._visitor.ComfortableArcTraverser;
 import de.monticore.types.check.TypeCheckResult;
 import montiarc.util.check.IArcTypesCalculator;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -16,6 +17,11 @@ import org.junit.jupiter.api.Test;
  * @see AbstractArcTypesCalculatorTest for basic tests methods.
  */
 public class ComfortableArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest {
+
+  @BeforeAll
+  public static void initMill() {
+    ComfortableArcMill.init();
+  }
 
   @Override
   protected IArcTypesCalculator getTypesCalculator() {

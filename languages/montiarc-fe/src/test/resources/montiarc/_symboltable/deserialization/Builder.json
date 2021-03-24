@@ -158,7 +158,7 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":"voidType"
+            "returnType":"void"
           },
           {
             "kind":"de.monticore.cd4codebasis._symboltable.CDMethodSignatureSymbol",
@@ -896,7 +896,7 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":"voidType"
+            "returnType":"void"
           },
           {
             "kind":"de.monticore.cd4codebasis._symboltable.CDMethodSignatureSymbol",

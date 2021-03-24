@@ -7,6 +7,7 @@ import genericarc.GenericArcMill;
 import genericarc._visitor.GenericArcTraverser;
 import montiarc.util.check.IArcTypesCalculator;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -15,6 +16,11 @@ import org.junit.jupiter.api.Test;
  * @see AbstractArcTypesCalculatorTest for basic tests methods.
  */
 public class GenericArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest {
+
+  @BeforeAll
+  public static void initMill() {
+    GenericArcMill.init();
+  }
 
   @Override
   protected IArcTypesCalculator getTypesCalculator() {

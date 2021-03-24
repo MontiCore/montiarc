@@ -1,10 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.util;
 
+import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
-import de.monticore.types.check.DefsTypeBasic;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.Assertions;
@@ -23,39 +24,42 @@ public abstract class AbstractTest {
   protected static final String RELATIVE_MODEL_PATH = "src/test/resources";
   private Pattern errorCodePattern;
 
+  public static void addBasicTypes2Scope() {
+    BasicSymbolsMill.initializePrimitives();
+    BasicSymbolsMill.globalScope()
+      .add(BasicSymbolsMill.typeSymbolBuilder().setName("Object")
+        .setEnclosingScope(BasicSymbolsMill.globalScope())
+        .setFullName("java.lang.Object")
+        .setSpannedScope(BasicSymbolsMill.scope()).build());
+    BasicSymbolsMill.globalScope()
+      .add(BasicSymbolsMill.typeSymbolBuilder().setName("String")
+        .setEnclosingScope(BasicSymbolsMill.globalScope())
+        .setFullName("java.lang.String")
+        .setSpannedScope(BasicSymbolsMill.scope())
+        .addSuperTypes(SymTypeExpressionFactory.createTypeObject("java.lang.Object", BasicSymbolsMill.globalScope()))
+        .build());
+  }
+
   @BeforeEach
   public void cleanUpLog() {
     Log.getFindings().clear();
     Log.enableFailQuick(false);
-  }
-
-  protected void addBasicTypes2Scope(IOOSymbolsScope scope) {
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._boolean);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._char);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._short);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._String);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._int);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._long);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._float);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._double);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._null);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._Object);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._array);
+    errorCodePattern = supplyErrorCodePattern();
+    assert errorCodePattern != null;
   }
 
   protected void add2Scope(IOOSymbolsScope scope, OOTypeSymbol... types) {
-    Arrays.asList(types).stream().forEach(type -> DefsTypeBasic.add2scope(scope, type));
+    Arrays.stream(types).forEach(type -> {
+      scope.add(type);
+      type.setEnclosingScope(scope);
+    });
   }
 
   protected void add2Scope(IOOSymbolsScope scope, FieldSymbol... fields) {
-    Arrays.asList(fields).stream().forEach(field -> DefsTypeBasic.add2scope(scope, field));
-  }
-
-  @BeforeEach
-  public void setUp() {
-    Log.getFindings().clear();
-    errorCodePattern = supplyErrorCodePattern();
-    assert errorCodePattern != null;
+    Arrays.stream(fields).forEach(field -> {
+      scope.add(field);
+      field.setEnclosingScope(scope);
+    });
   }
 
   protected abstract Pattern supplyErrorCodePattern();

@@ -32,9 +32,8 @@ public class TypeParameterGetterTest extends AbstractTest {
 
   @BeforeEach
   public void setGlobalScope(){
-    MontiArcMill.globalScope().clear();
     MontiArcMill.globalScope().setModelPath(new ModelPath(PATH));
-    new MontiArcTool().addBasicTypes(MontiArcMill.globalScope());
+    new MontiArcTool().addBasicTypes();
   }
 
   @Test

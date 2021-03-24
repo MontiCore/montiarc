@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 public class ArcBasisScopeTest extends AbstractTest {
 
-  protected ArcBasisScope scope;
+  protected IArcBasisScope scope;
 
   protected static Stream<Arguments> validScopeAndTypeAndResolutionNameProvider() {
     return Stream.of(Arguments.of("", "A", "A"), Arguments.of("x", "A", "A"), Arguments.of("x", "A", "x.A"),
@@ -30,13 +30,13 @@ public class ArcBasisScopeTest extends AbstractTest {
       Arguments.of("", "A", "B"), Arguments.of("", "x.A", "A"), Arguments.of("x", "A", "B.A"));
   }
 
-  protected ArcBasisScope getScope() {
+  protected IArcBasisScope getScope() {
     return this.scope;
   }
 
   @BeforeEach
-  public void setUpScopes() {
-    this.scope = new ArcBasisScope();
+  public void setUp() {
+    this.scope = ArcBasisMill.scope();
     IArcBasisArtifactScope aScope = ArcBasisMill.artifactScope();
     aScope.setName("B");
     aScope.addSubScope(this.getScope());

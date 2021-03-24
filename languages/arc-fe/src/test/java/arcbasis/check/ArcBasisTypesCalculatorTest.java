@@ -5,6 +5,7 @@ import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
 import de.monticore.types.check.TypeCheckResult;
 import montiarc.util.check.IArcTypesCalculator;
+import org.junit.jupiter.api.BeforeAll;
 
 /**
  * Holds test for methods of {@link ArcBasisTypesCalculator}.
@@ -12,6 +13,11 @@ import montiarc.util.check.IArcTypesCalculator;
  * @see AbstractArcTypesCalculatorTest for basic tests methods.
  */
 public class ArcBasisTypesCalculatorTest extends AbstractArcTypesCalculatorTest {
+
+  @BeforeAll
+  public static void initMill() {
+    ArcBasisMill.init();
+  }
 
   @Override
   protected IArcTypesCalculator getTypesCalculator() {

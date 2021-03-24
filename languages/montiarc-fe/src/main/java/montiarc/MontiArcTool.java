@@ -3,7 +3,8 @@ package montiarc;
 
 import com.google.common.base.Preconditions;
 import de.monticore.io.paths.ModelPath;
-import de.monticore.types.check.DefsTypeBasic;
+import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -189,24 +190,25 @@ public class MontiArcTool implements IMontiArcTool {
     maScope.clear();
     maScope.setModelPath(modelPath);
     maScope.setFileExt(this.getMAFileExtension());
-    this.addBasicTypes(maScope);
+    this.addBasicTypes();
     return maScope;
   }
 
   @Override
-  public void addBasicTypes(@NotNull IMontiArcScope scope) {
-    Preconditions.checkArgument(scope != null);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._boolean);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._char);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._short);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._String);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._int);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._long);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._float);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._double);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._null);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._Object);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._array);
+  public void addBasicTypes() {
+    BasicSymbolsMill.initializePrimitives();
+    BasicSymbolsMill.globalScope()
+      .add(BasicSymbolsMill.typeSymbolBuilder().setName("Object")
+        .setEnclosingScope(BasicSymbolsMill.globalScope())
+        .setFullName("java.lang.Object")
+        .setSpannedScope(BasicSymbolsMill.scope()).build());
+    BasicSymbolsMill.globalScope()
+      .add(BasicSymbolsMill.typeSymbolBuilder().setName("String")
+        .setEnclosingScope(BasicSymbolsMill.globalScope())
+        .setFullName("java.lang.String")
+        .setSpannedScope(BasicSymbolsMill.scope())
+        .addSuperTypes(SymTypeExpressionFactory.createTypeObject("java.lang.Object", BasicSymbolsMill.globalScope()))
+        .build());
   }
 
   @Override

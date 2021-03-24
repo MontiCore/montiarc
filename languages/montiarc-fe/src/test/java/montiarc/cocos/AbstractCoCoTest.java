@@ -77,14 +77,4 @@ public abstract class AbstractCoCoTest extends AbstractTest {
    * Provider for CoCos to execute during tests.
    */
   abstract protected void registerCoCos();
-
-  @BeforeEach
-  public void setUpLog() {
-    Log.getFindings().clear();
-  }
-
-  @BeforeEach
-  public void clearGlobalScope() {
-    MontiArcMill.globalScope().clear();
-  }
 }

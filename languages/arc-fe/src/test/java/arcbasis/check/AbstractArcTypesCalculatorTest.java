@@ -3,7 +3,6 @@ package arcbasis.check;
 
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis._symboltable.ArcBasisScope;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
@@ -11,8 +10,6 @@ import de.monticore.expressions.expressionsbasis.ExpressionsBasisMill;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.expressions.expressionsbasis._symboltable.IExpressionsBasisScope;
-import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
-import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbolSurrogate;
@@ -61,17 +58,24 @@ public abstract class AbstractArcTypesCalculatorTest extends AbstractTest {
   }
 
   @BeforeEach
+  public void setUp() {
+    this.scope = ArcBasisMill.artifactScope();
+    this.scope.setName("");
+    this.setUpTypes();
+    this.setUpFields();
+    this.getScope().setEnclosingScope(ArcBasisMill.globalScope());
+  }
+
   public void setUpTypes() {
-    this.addBasicTypes2Scope(this.getScope());
     OOTypeSymbol p =
-      ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(new ArcBasisScope()).setName("Person").build();
-    OOTypeSymbol r = ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(new ArcBasisScope()).setName("Role").build();
+      ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(ArcBasisMill.scope()).setName("Person").build();
+    OOTypeSymbol r = ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(ArcBasisMill.scope()).setName("Role").build();
     OOTypeSymbol t =
-      ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(new ArcBasisScope()).setName("Teacher").build();
+      ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(ArcBasisMill.scope()).setName("Teacher").build();
     OOTypeSymbol s =
-      ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(new ArcBasisScope()).setName("Student").build();
+      ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(ArcBasisMill.scope()).setName("Student").build();
     OOTypeSymbol f =
-      ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(new ArcBasisScope()).setName("FirstGrader").build();
+      ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(ArcBasisMill.scope()).setName("FirstGrader").build();
     this.add2Scope(this.getScope(), p, r, t, s, f);
     t.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Role", this.getScope())));
     s.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Role", this.getScope())));
@@ -79,7 +83,6 @@ public abstract class AbstractArcTypesCalculatorTest extends AbstractTest {
       this.getScope())));
   }
 
-  @BeforeEach
   public void setUpFields() {
     FieldSymbol a = ArcBasisMill.fieldSymbolBuilder().setName("a")
       .setType(SymTypeExpressionFactory.createTypeConstant("int")).build();
