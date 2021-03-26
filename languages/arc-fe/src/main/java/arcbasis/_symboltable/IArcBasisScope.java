@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
-package genericarc._symboltable;
+package arcbasis._symboltable;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
@@ -15,23 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class GenericArcScope extends GenericArcScopeTOP {
-
-  public GenericArcScope() {
-    super();
-  }
-
-  public GenericArcScope(boolean shadowing) {
-    super(shadowing);
-  }
-
-  public GenericArcScope(@NotNull IGenericArcScope enclosingScope) {
-    super(Preconditions.checkNotNull(enclosingScope));
-  }
-
-  public GenericArcScope(@NotNull IGenericArcScope enclosingScope, boolean shadowing) {
-    super(Preconditions.checkNotNull(enclosingScope), shadowing);
-  }
+public interface IArcBasisScope extends IArcBasisScopeTOP {
 
   /**
    * Filters the provided type symbols for those which match the provided name string. Here, a name match is defined
@@ -45,7 +28,7 @@ public class GenericArcScope extends GenericArcScopeTOP {
    * @throws ResolvedSeveralEntriesForSymbolException if multiple matching symbols are found
    */
   @Override
-  public Optional<TypeSymbol> filterType(@NotNull String name,
+  default Optional<TypeSymbol> filterType(@NotNull String name,
                                          @NotNull LinkedListMultimap<String, TypeSymbol> symbols) {
     Preconditions.checkNotNull(name);
     Preconditions.checkNotNull(symbols);
@@ -66,7 +49,7 @@ public class GenericArcScope extends GenericArcScopeTOP {
    * @throws ResolvedSeveralEntriesForSymbolException if multiple matching symbols are found
    */
   @Override
-  public Optional<OOTypeSymbol> filterOOType(@NotNull String name,
+  default Optional<OOTypeSymbol> filterOOType(@NotNull String name,
                                              @NotNull LinkedListMultimap<String, OOTypeSymbol> symbols) {
     Preconditions.checkNotNull(name);
     Preconditions.checkNotNull(symbols);
@@ -87,8 +70,8 @@ public class GenericArcScope extends GenericArcScopeTOP {
    * @throws ResolvedSeveralEntriesForSymbolException if multiple matching symbols are found
    */
   @Override
-  public Optional<ComponentTypeSymbol> filterComponentType(@NotNull String name,
-                                                           @NotNull LinkedListMultimap<String, ComponentTypeSymbol> symbols) {
+  default Optional<ComponentTypeSymbol> filterComponentType(@NotNull String name,
+                                             @NotNull LinkedListMultimap<String, ComponentTypeSymbol> symbols) {
     Preconditions.checkNotNull(name);
     Preconditions.checkNotNull(symbols);
 
@@ -96,24 +79,24 @@ public class GenericArcScope extends GenericArcScopeTOP {
       this.filterName(name, symbols)), this.filterQualifiedName(name, symbols)).collect(Collectors.toSet()));
   }
 
-  protected <T extends ISymbol> Stream<T> filterSimpleName(@NotNull String name,
-                                                           @NotNull LinkedListMultimap<String, T> symbols) {
+  default <T extends ISymbol> Stream<T> filterSimpleName(@NotNull String name,
+                                                         @NotNull LinkedListMultimap<String, T> symbols) {
     Preconditions.checkNotNull(name);
     Preconditions.checkNotNull(symbols);
     return symbols.containsKey(Names.getSimpleName(name)) ? symbols.get(Names.getSimpleName(name)).stream()
       .filter(s -> s.getName().equals(name)) : Stream.empty();
   }
 
-  protected <T extends ISymbol> Stream<T> filterName(@NotNull String name,
-                                                     @NotNull LinkedListMultimap<String, T> symbols) {
+  default <T extends ISymbol> Stream<T> filterName(@NotNull String name,
+                                                   @NotNull LinkedListMultimap<String, T> symbols) {
     Preconditions.checkNotNull(name);
     Preconditions.checkNotNull(symbols);
     return symbols.values().stream()
       .filter(s -> s.getName().equals(name));
   }
 
-  protected <T extends ISymbol> Stream<T> filterQualifiedName(@NotNull String name,
-                                                              @NotNull LinkedListMultimap<String, T> symbols) {
+  default <T extends ISymbol> Stream<T> filterQualifiedName(@NotNull String name,
+                                                            @NotNull LinkedListMultimap<String, T> symbols) {
     Preconditions.checkNotNull(name);
     Preconditions.checkNotNull(symbols);
     return symbols.containsKey(name) ? symbols.get(name).stream()

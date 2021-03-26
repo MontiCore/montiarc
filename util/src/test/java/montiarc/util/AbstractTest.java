@@ -5,7 +5,6 @@ import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
-import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.Assertions;
@@ -26,18 +25,6 @@ public abstract class AbstractTest {
 
   public static void addBasicTypes2Scope() {
     BasicSymbolsMill.initializePrimitives();
-    BasicSymbolsMill.globalScope()
-      .add(BasicSymbolsMill.typeSymbolBuilder().setName("Object")
-        .setEnclosingScope(BasicSymbolsMill.globalScope())
-        .setFullName("java.lang.Object")
-        .setSpannedScope(BasicSymbolsMill.scope()).build());
-    BasicSymbolsMill.globalScope()
-      .add(BasicSymbolsMill.typeSymbolBuilder().setName("String")
-        .setEnclosingScope(BasicSymbolsMill.globalScope())
-        .setFullName("java.lang.String")
-        .setSpannedScope(BasicSymbolsMill.scope())
-        .addSuperTypes(SymTypeExpressionFactory.createTypeObject("java.lang.Object", BasicSymbolsMill.globalScope()))
-        .build());
   }
 
   @BeforeEach

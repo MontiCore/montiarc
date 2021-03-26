@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class ArcBasisScopeTest extends AbstractTest {
+public class ArcBasisResolvingTest extends AbstractTest {
 
   protected IArcBasisScope scope;
 

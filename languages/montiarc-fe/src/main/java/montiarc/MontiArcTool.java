@@ -4,6 +4,8 @@ package montiarc;
 import com.google.common.base.Preconditions;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
@@ -174,7 +176,6 @@ public class MontiArcTool implements IMontiArcTool {
     Preconditions.checkArgument(directory != null);
     Preconditions.checkArgument(directory.toFile().exists());
     Preconditions.checkArgument(directory.toFile().isDirectory());
-    MontiArcMill.globalScope().setModelPath(new ModelPath(directory));
     return this.createSymbolTable(this.createMAGlobalScope(directory));
   }
 
@@ -197,18 +198,28 @@ public class MontiArcTool implements IMontiArcTool {
   @Override
   public void addBasicTypes() {
     BasicSymbolsMill.initializePrimitives();
-    BasicSymbolsMill.globalScope()
-      .add(BasicSymbolsMill.typeSymbolBuilder().setName("Object")
-        .setEnclosingScope(BasicSymbolsMill.globalScope())
-        .setFullName("java.lang.Object")
-        .setSpannedScope(BasicSymbolsMill.scope()).build());
-    BasicSymbolsMill.globalScope()
-      .add(BasicSymbolsMill.typeSymbolBuilder().setName("String")
-        .setEnclosingScope(BasicSymbolsMill.globalScope())
-        .setFullName("java.lang.String")
-        .setSpannedScope(BasicSymbolsMill.scope())
-        .addSuperTypes(SymTypeExpressionFactory.createTypeObject("java.lang.Object", BasicSymbolsMill.globalScope()))
-        .build());
+    IMontiArcArtifactScope artifactScope = MontiArcMill.artifactScope();
+    artifactScope.setEnclosingScope(MontiArcMill.globalScope());
+    artifactScope.setName("java.lang");
+    this.add2Scope(artifactScope, MontiArcMill.oOTypeSymbolBuilder()
+      .setName("Object")
+      .setEnclosingScope(MontiArcMill.artifactScope())
+      .setSpannedScope(MontiArcMill.scope()).build());
+    this.add2Scope(artifactScope, MontiArcMill.oOTypeSymbolBuilder()
+      .setName("String")
+      .setEnclosingScope(MontiArcMill.artifactScope())
+      .setSpannedScope(MontiArcMill.scope())
+      .addSuperTypes(SymTypeExpressionFactory.createTypeObject("java.lang.Object", MontiArcMill.globalScope()))
+      .build());
+  }
+
+  protected void add2Scope(@NotNull IOOSymbolsScope scope, @NotNull OOTypeSymbol... symbols) {
+    Preconditions.checkNotNull(scope);
+    Preconditions.checkNotNull(symbols);
+    Arrays.stream(symbols).forEach(symbol -> {
+      symbol.setEnclosingScope(scope);
+      scope.add(symbol);
+    });
   }
 
   @Override
