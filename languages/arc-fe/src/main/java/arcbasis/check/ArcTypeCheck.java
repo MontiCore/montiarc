@@ -6,16 +6,8 @@ import de.monticore.types.check.*;
 public class ArcTypeCheck extends TypeCheck {
 
 
-  public ArcTypeCheck(ISynthesize synthesizeSymType, ITypesCalculator iTypesCalculator) {
+  public ArcTypeCheck(ISynthesize synthesizeSymType, IDerive iTypesCalculator) {
     super(synthesizeSymType, iTypesCalculator);
-  }
-
-  public ArcTypeCheck(ISynthesize synthesizeSymType) {
-    super(synthesizeSymType);
-  }
-
-  public ArcTypeCheck(ITypesCalculator iTypesCalculator) {
-    super(iTypesCalculator);
   }
 
   //TODO: Remove once fixed in MontiCore

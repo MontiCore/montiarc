@@ -1,9 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package genericarc.check;
 
-import arcbasis.check.AbstractArcTypesCalculator;
+import arcbasis.check.AbstractArcDerive;
 import com.google.common.base.Preconditions;
-import de.monticore.literals.mccommonliterals._ast.ASTSignedLiteral;
 import de.monticore.types.check.DeriveSymTypeOfExpression;
 import de.monticore.types.check.DeriveSymTypeOfLiterals;
 import de.monticore.types.check.SymTypeExpression;
@@ -12,21 +11,19 @@ import genericarc.GenericArcMill;
 import genericarc._visitor.GenericArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.Optional;
-
 /**
  * A visitor that calculates a {@link SymTypeExpression} (type) for expressions
  * in GenericArc.
  */
-public class GenericArcTypesCalculator
-  extends AbstractArcTypesCalculator {
+public class GenericArcDerive
+  extends AbstractArcDerive {
 
-  public GenericArcTypesCalculator(@NotNull TypeCheckResult typeCheckResult) {
+  public GenericArcDerive(@NotNull TypeCheckResult typeCheckResult) {
     this(typeCheckResult, GenericArcMill.traverser());
   }
 
-  protected GenericArcTypesCalculator(@NotNull TypeCheckResult typeCheckResult,
-                                      @NotNull GenericArcTraverser typesCalculator) {
+  protected GenericArcDerive(@NotNull TypeCheckResult typeCheckResult,
+                             @NotNull GenericArcTraverser typesCalculator) {
     super(typeCheckResult, typesCalculator);
   }
 
@@ -34,12 +31,6 @@ public class GenericArcTypesCalculator
   protected GenericArcTraverser getCalculationDelegator() {
     Preconditions.checkState(super.getCalculationDelegator() instanceof GenericArcTraverser);
     return (GenericArcTraverser) super.getCalculationDelegator();
-  }
-
-  @Override
-  public Optional<SymTypeExpression> calculateType(@NotNull ASTSignedLiteral lit) {
-    Preconditions.checkArgument(lit != null);
-    throw new UnsupportedOperationException();
   }
 
   @Override

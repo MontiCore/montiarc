@@ -1,45 +1,35 @@
 /* (c) https://github.com/MontiCore/monticore */
-package comfortablearc.check;
+package arcbasis.check;
 
-import arcbasis.check.AbstractArcTypesCalculator;
+import arcbasis.ArcBasisMill;
+import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
-import comfortablearc.ComfortableArcMill;
-import comfortablearc._visitor.ComfortableArcTraverser;
-import de.monticore.literals.mccommonliterals._ast.ASTSignedLiteral;
 import de.monticore.types.check.DeriveSymTypeOfExpression;
 import de.monticore.types.check.DeriveSymTypeOfLiterals;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.TypeCheckResult;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.Optional;
-
 /**
  * A visitor that calculates a {@link SymTypeExpression} (type) for expressions
- * in ComfortableArc.
+ * in ArcBasis.
  */
-public class ComfortableArcTypesCalculator
-  extends AbstractArcTypesCalculator {
+public class ArcBasisDerive
+  extends AbstractArcDerive {
 
-  public ComfortableArcTypesCalculator(@NotNull TypeCheckResult typeCheckResult) {
-    this(typeCheckResult, ComfortableArcMill.traverser());
+  public ArcBasisDerive(@NotNull TypeCheckResult typeCheckResult) {
+    this(typeCheckResult, ArcBasisMill.traverser());
   }
 
-  protected ComfortableArcTypesCalculator(@NotNull TypeCheckResult typeCheckResult,
-                                          @NotNull ComfortableArcTraverser calculationDelegator) {
-    super(typeCheckResult, calculationDelegator);
-  }
-
-  @Override
-  protected ComfortableArcTraverser getCalculationDelegator() {
-    Preconditions.checkState(super.getCalculationDelegator() instanceof ComfortableArcTraverser);
-    return (ComfortableArcTraverser) super.getCalculationDelegator();
+  protected ArcBasisDerive(@NotNull TypeCheckResult typeCheckResult,
+                           @NotNull ArcBasisTraverser typesCalculator) {
+    super(typeCheckResult, typesCalculator);
   }
 
   @Override
-  public Optional<SymTypeExpression> calculateType(@NotNull ASTSignedLiteral lit) {
-    Preconditions.checkArgument(lit != null);
-    throw new UnsupportedOperationException();
+  protected ArcBasisTraverser getCalculationDelegator() {
+    Preconditions.checkNotNull(super.getCalculationDelegator());
+    return super.getCalculationDelegator();
   }
 
   @Override

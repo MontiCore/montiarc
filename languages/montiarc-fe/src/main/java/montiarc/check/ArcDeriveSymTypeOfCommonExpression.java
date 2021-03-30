@@ -63,7 +63,7 @@ public class ArcDeriveSymTypeOfCommonExpression extends DeriveSymTypeOfCommonExp
       List<FunctionSymbol> fittingMethods = getFittingMethods(methodlist,expr);
       //if the last result is static then filter for static methods
       if(typeCheckResult.isType()){
-        fittingMethods = filterStaticMethodSymbols(fittingMethods);
+        fittingMethods = filterModifiersFunctions(fittingMethods);
       }
       //there can only be one method with the correct arguments and return type
       if (!fittingMethods.isEmpty()) {

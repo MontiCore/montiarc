@@ -1,32 +1,29 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arccore.check;
 
-import arcbasis.check.AbstractArcTypesCalculator;
+import arcbasis.check.AbstractArcDerive;
 import arccore.ArcCoreMill;
 import arccore._visitor.ArcCoreTraverser;
 import com.google.common.base.Preconditions;
-import de.monticore.literals.mccommonliterals._ast.ASTSignedLiteral;
 import de.monticore.types.check.DeriveSymTypeOfExpression;
 import de.monticore.types.check.DeriveSymTypeOfLiterals;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.TypeCheckResult;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.Optional;
-
 /**
  * A visitor that calculates a {@link SymTypeExpression} (type) for expressions
  * in ArcCore.
  */
-public class ArcCoreTypesCalculator
-  extends AbstractArcTypesCalculator {
+public class ArcCoreDerive
+  extends AbstractArcDerive {
 
-  public ArcCoreTypesCalculator(@NotNull TypeCheckResult typeCheckResult) {
+  public ArcCoreDerive(@NotNull TypeCheckResult typeCheckResult) {
     this(typeCheckResult, ArcCoreMill.traverser());
   }
 
-  protected ArcCoreTypesCalculator(@NotNull TypeCheckResult typeCheckResult,
-                                   @NotNull ArcCoreTraverser typesCalculator) {
+  protected ArcCoreDerive(@NotNull TypeCheckResult typeCheckResult,
+                          @NotNull ArcCoreTraverser typesCalculator) {
     super(typeCheckResult, typesCalculator);
   }
 
@@ -34,12 +31,6 @@ public class ArcCoreTypesCalculator
   protected ArcCoreTraverser getCalculationDelegator() {
     Preconditions.checkState(super.getCalculationDelegator() instanceof ArcCoreTraverser);
     return (ArcCoreTraverser) super.getCalculationDelegator();
-  }
-
-  @Override
-  public Optional<SymTypeExpression> calculateType(@NotNull ASTSignedLiteral lit) {
-    Preconditions.checkArgument(lit != null);
-    throw new UnsupportedOperationException();
   }
 
   @Override

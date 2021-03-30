@@ -2,21 +2,21 @@
 package arccore.check;
 
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis.check.AbstractArcTypesCalculatorTest;
+import arcbasis.check.AbstractArcDeriveTest;
 import arccore.ArcCoreMill;
 import arccore._visitor.ArcCoreTraverser;
 import de.monticore.types.check.TypeCheckResult;
-import montiarc.util.check.IArcTypesCalculator;
+import montiarc.util.check.IArcDerive;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
- * Holds test for methods of {@link ArcCoreTypesCalculator}.
+ * Holds test for methods of {@link ArcCoreDerive}.
  *
- * @see AbstractArcTypesCalculatorTest for basic tests methods.
+ * @see AbstractArcDeriveTest for basic tests methods.
  */
-public class ArcCoreTypesCalculatorTest extends AbstractArcTypesCalculatorTest {
+public class ArcCoreDeriveTest extends AbstractArcDeriveTest {
 
   @BeforeAll
   public static void initMill() {
@@ -24,11 +24,11 @@ public class ArcCoreTypesCalculatorTest extends AbstractArcTypesCalculatorTest {
   }
 
   @Override
-  protected IArcTypesCalculator getTypesCalculator() {
-    if (this.typesCalculator == null) {
-      this.typesCalculator = new ArcCoreTypesCalculator(new TypeCheckResult());
+  protected IArcDerive getDerive() {
+    if (this.derive == null) {
+      this.derive = new ArcCoreDerive(new TypeCheckResult());
     }
-    return this.typesCalculator;
+    return this.derive;
   }
 
   @Override
@@ -42,7 +42,7 @@ public class ArcCoreTypesCalculatorTest extends AbstractArcTypesCalculatorTest {
   @Test
   public void shouldReturnCorrectCalculationDelegator() {
     //Given
-    ArcCoreTypesCalculator typesCalculator = new ArcCoreTypesCalculator(new TypeCheckResult());
+    ArcCoreDerive typesCalculator = new ArcCoreDerive(new TypeCheckResult());
 
     //When
     ArcCoreTraverser delegator = typesCalculator.getCalculationDelegator();

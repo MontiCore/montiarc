@@ -4,15 +4,15 @@ package arcbasis.check;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
 import de.monticore.types.check.TypeCheckResult;
-import montiarc.util.check.IArcTypesCalculator;
+import montiarc.util.check.IArcDerive;
 import org.junit.jupiter.api.BeforeAll;
 
 /**
- * Holds test for methods of {@link ArcBasisTypesCalculator}.
+ * Holds test for methods of {@link ArcBasisDerive}.
  *
- * @see AbstractArcTypesCalculatorTest for basic tests methods.
+ * @see AbstractArcDeriveTest for basic tests methods.
  */
-public class ArcBasisTypesCalculatorTest extends AbstractArcTypesCalculatorTest {
+public class ArcBasisDeriveTest extends AbstractArcDeriveTest {
 
   @BeforeAll
   public static void initMill() {
@@ -20,11 +20,11 @@ public class ArcBasisTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
   }
 
   @Override
-  protected IArcTypesCalculator getTypesCalculator() {
-    if (this.typesCalculator == null) {
-      this.typesCalculator = new ArcBasisTypesCalculator(new TypeCheckResult());
+  protected IArcDerive getDerive() {
+    if (this.derive == null) {
+      this.derive = new ArcBasisDerive(new TypeCheckResult());
     }
-    return this.typesCalculator;
+    return this.derive;
   }
 
   @Override

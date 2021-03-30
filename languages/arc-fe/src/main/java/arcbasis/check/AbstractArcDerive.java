@@ -3,11 +3,9 @@ package arcbasis.check;
 
 import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
-import de.monticore.literals.mcliteralsbasis._ast.ASTLiteral;
 import de.monticore.types.check.*;
-import montiarc.util.check.IArcTypesCalculator;
+import montiarc.util.check.IArcDerive;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Optional;
@@ -16,17 +14,17 @@ import java.util.Optional;
  * Abstract implementation of a visitor that calculates a
  * {@link SymTypeExpression} (type) for expressions in language components of
  * the MontiArc language family. Can be extended for other types of expressions
- * by providing a corresponding delegator ({@link ArcBasisInheritanceVisitor}),
- * types calculators {@link ITypesCalculator}, and initializing these for
+ * by providing a corresponding traverser ({@link ArcBasisTraverser}),
+ * types calculators {@link IDerive}, and initializing these for
  * delegation in {@link this#init()}.
  */
-public abstract class AbstractArcTypesCalculator implements IArcTypesCalculator {
+public abstract class AbstractArcDerive implements IArcDerive {
 
   protected ArcBasisTraverser calculationDelegator;
   protected TypeCheckResult typeCheckResult;
 
-  protected AbstractArcTypesCalculator(@NotNull TypeCheckResult typeCheckResult,
-                                       @NotNull ArcBasisTraverser calculationDelegator) {
+  protected AbstractArcDerive(@NotNull TypeCheckResult typeCheckResult,
+                              @NotNull ArcBasisTraverser calculationDelegator) {
     Preconditions.checkArgument(typeCheckResult != null);
     Preconditions.checkArgument(calculationDelegator != null);
     this.typeCheckResult = typeCheckResult;
@@ -51,23 +49,6 @@ public abstract class AbstractArcTypesCalculator implements IArcTypesCalculator 
   public Optional<SymTypeExpression> getResult() {
     return this.getTypeCheckResult().isPresentCurrentResult() ? Optional.of(this.getTypeCheckResult().getCurrentResult()) :
       Optional.empty();
-  }
-
-  @Override
-  public Optional<SymTypeExpression> calculateType(@NotNull ASTExpression exp) {
-    Preconditions.checkArgument(exp != null);
-    Preconditions.checkArgument(exp.getEnclosingScope() != null);
-    this.reset();
-    exp.accept(this.getCalculationDelegator());
-    return this.getResult();
-  }
-
-  @Override
-  public Optional<SymTypeExpression> calculateType(@NotNull ASTLiteral lit) {
-    Preconditions.checkArgument(lit != null);
-    this.reset();
-    lit.accept(this.getCalculationDelegator());
-    return this.getResult();
   }
 
   @Override

@@ -1,21 +1,21 @@
 package genericarc.check;
 
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis.check.AbstractArcTypesCalculatorTest;
+import arcbasis.check.AbstractArcDeriveTest;
 import de.monticore.types.check.TypeCheckResult;
 import genericarc.GenericArcMill;
 import genericarc._visitor.GenericArcTraverser;
-import montiarc.util.check.IArcTypesCalculator;
+import montiarc.util.check.IArcDerive;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
- * Holds test for methods of {@link GenericArcTypesCalculator}.
+ * Holds test for methods of {@link GenericArcDerive}.
  *
- * @see AbstractArcTypesCalculatorTest for basic tests methods.
+ * @see AbstractArcDeriveTest for basic tests methods.
  */
-public class GenericArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest {
+public class GenericArcDeriveTest extends AbstractArcDeriveTest {
 
   @BeforeAll
   public static void initMill() {
@@ -23,11 +23,11 @@ public class GenericArcTypesCalculatorTest extends AbstractArcTypesCalculatorTes
   }
 
   @Override
-  protected IArcTypesCalculator getTypesCalculator() {
-    if (this.typesCalculator == null) {
-      this.typesCalculator = new GenericArcTypesCalculator(new TypeCheckResult());
+  protected IArcDerive getDerive() {
+    if (this.derive == null) {
+      this.derive = new GenericArcDerive(new TypeCheckResult());
     }
-    return this.typesCalculator;
+    return this.derive;
   }
 
   @Override
@@ -41,7 +41,7 @@ public class GenericArcTypesCalculatorTest extends AbstractArcTypesCalculatorTes
   @Test
   public void shouldReturnCorrectCalculationDelegator() {
     //Given
-    GenericArcTypesCalculator typesCalculator = new GenericArcTypesCalculator(new TypeCheckResult());
+    GenericArcDerive typesCalculator = new GenericArcDerive(new TypeCheckResult());
 
     //When
     GenericArcTraverser delegator = typesCalculator.getCalculationDelegator();

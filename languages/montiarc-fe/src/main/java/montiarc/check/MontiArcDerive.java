@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
-import arcbasis.check.AbstractArcTypesCalculator;
+import arcbasis.check.AbstractArcDerive;
 import com.google.common.base.Preconditions;
 import de.monticore.literals.mccommonliterals._ast.ASTSignedLiteral;
 import de.monticore.types.check.*;
@@ -15,15 +15,15 @@ import java.util.Optional;
  * A visitor that calculates a {@link SymTypeExpression} (type) for expressions
  * in MontiArc.
  */
-public class MontiArcTypesCalculator
-  extends AbstractArcTypesCalculator {
+public class MontiArcDerive
+  extends AbstractArcDerive {
 
-  public MontiArcTypesCalculator(@NotNull TypeCheckResult typeCheckResult) {
+  public MontiArcDerive(@NotNull TypeCheckResult typeCheckResult) {
     this(typeCheckResult, MontiArcMill.traverser());
   }
 
-  protected MontiArcTypesCalculator(@NotNull TypeCheckResult typeCheckResult,
-                                    @NotNull MontiArcTraverser typesCalculator) {
+  protected MontiArcDerive(@NotNull TypeCheckResult typeCheckResult,
+                           @NotNull MontiArcTraverser typesCalculator) {
     super(typeCheckResult, typesCalculator);
   }
 
@@ -31,15 +31,6 @@ public class MontiArcTypesCalculator
   protected MontiArcTraverser getCalculationDelegator() {
     Preconditions.checkState(super.getCalculationDelegator() instanceof MontiArcTraverser);
     return (MontiArcTraverser) super.getCalculationDelegator();
-  }
-
-  @Override
-  public Optional<SymTypeExpression> calculateType(@NotNull ASTSignedLiteral lit) {
-    Preconditions.checkArgument(lit != null);
-    Preconditions.checkArgument(lit.getEnclosingScope() != null);
-    this.reset();
-    lit.accept(this.getCalculationDelegator());
-    return this.getResult();
   }
 
   @Override

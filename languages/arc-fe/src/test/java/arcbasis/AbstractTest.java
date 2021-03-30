@@ -16,6 +16,8 @@ public abstract class AbstractTest extends montiarc.util.AbstractTest {
   @BeforeAll
   public static void init() {
     ArcBasisMill.init();
+    ArcBasisMill.globalScope().clear();
+    addBasicTypes2Scope();
   }
 
   @BeforeEach

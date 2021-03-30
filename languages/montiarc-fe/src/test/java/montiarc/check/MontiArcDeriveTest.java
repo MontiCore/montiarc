@@ -3,7 +3,7 @@ package montiarc.check;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis.check.AbstractArcTypesCalculatorTest;
+import arcbasis.check.AbstractArcDeriveTest;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._symboltable.IExpressionsBasisScope;
@@ -20,7 +20,7 @@ import montiarc.MontiArcMill;
 import montiarc._auxiliary.OOSymbolsMillForMontiArc;
 import montiarc._parser.MontiArcParser;
 import montiarc._visitor.MontiArcTraverser;
-import montiarc.util.check.IArcTypesCalculator;
+import montiarc.util.check.IArcDerive;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Disabled //TODO fix me - a few tests here are broken. Possible source of error: parts of generated callExpression don't have enclosing scope
-public class MontiArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest {
+public class MontiArcDeriveTest extends AbstractArcDeriveTest {
 
   protected MontiArcParser parser;
 
@@ -155,7 +155,7 @@ public class MontiArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
   }
 
   /**
-   * Method under test {@link MontiArcTypesCalculator#calculateType(ASTExpression)}
+   * Method under test {@link MontiArcDerive#calculateType(ASTExpression)}
    */
   @ParameterizedTest
   @MethodSource("expressionProviderForGenericFields")
@@ -166,7 +166,7 @@ public class MontiArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
   }
 
   /**
-   * Method under test {@link MontiArcTypesCalculator#calculateType(ASTExpression)}
+   * Method under test {@link MontiArcDerive#calculateType(ASTExpression)}
    */
   @ParameterizedTest
   @MethodSource("expressionProviderWithMethodCalls")
@@ -177,7 +177,7 @@ public class MontiArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
   }
 
   /**
-   * Method under test {@link MontiArcTypesCalculator#calculateType(ASTExpression)}
+   * Method under test {@link MontiArcDerive#calculateType(ASTExpression)}
    */
   @ParameterizedTest
   @MethodSource("expressionProviderWithGenericMethodCalls")
@@ -189,7 +189,7 @@ public class MontiArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
   }
 
   /**
-   * Method under test {@link MontiArcTypesCalculator#calculateType(ASTExpression)}
+   * Method under test {@link MontiArcDerive#calculateType(ASTExpression)}
    */
   @ParameterizedTest
   @MethodSource("expressionProviderWithAssignments")
@@ -212,11 +212,11 @@ public class MontiArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
   }
 
   @Override
-  protected IArcTypesCalculator getTypesCalculator() {
-    if (this.typesCalculator == null) {
-      this.typesCalculator = new MontiArcTypesCalculator(new TypeCheckResult());
+  protected IArcDerive getDerive() {
+    if (this.derive == null) {
+      this.derive = new MontiArcDerive(new TypeCheckResult());
     }
-    return this.typesCalculator;
+    return this.derive;
   }
 
   @Override
@@ -245,7 +245,7 @@ public class MontiArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest 
   @Test
   public void shouldReturnCorrectCalculationDelegator() {
     //Given
-    MontiArcTypesCalculator typesCalculator = new MontiArcTypesCalculator(new TypeCheckResult());
+    MontiArcDerive typesCalculator = new MontiArcDerive(new TypeCheckResult());
 
     //When
     MontiArcTraverser traverser = typesCalculator.getCalculationDelegator();

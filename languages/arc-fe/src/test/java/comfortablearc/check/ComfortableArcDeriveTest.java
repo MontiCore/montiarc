@@ -2,21 +2,21 @@
 package comfortablearc.check;
 
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis.check.AbstractArcTypesCalculatorTest;
+import arcbasis.check.AbstractArcDeriveTest;
 import comfortablearc.ComfortableArcMill;
 import comfortablearc._visitor.ComfortableArcTraverser;
 import de.monticore.types.check.TypeCheckResult;
-import montiarc.util.check.IArcTypesCalculator;
+import montiarc.util.check.IArcDerive;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
- * Holds test for methods of {@link ComfortableArcTypesCalculator}.
+ * Holds test for methods of {@link ComfortableArcDerive}.
  *
- * @see AbstractArcTypesCalculatorTest for basic tests methods.
+ * @see AbstractArcDeriveTest for basic tests methods.
  */
-public class ComfortableArcTypesCalculatorTest extends AbstractArcTypesCalculatorTest {
+public class ComfortableArcDeriveTest extends AbstractArcDeriveTest {
 
   @BeforeAll
   public static void initMill() {
@@ -24,11 +24,11 @@ public class ComfortableArcTypesCalculatorTest extends AbstractArcTypesCalculato
   }
 
   @Override
-  protected IArcTypesCalculator getTypesCalculator() {
-    if (this.typesCalculator == null) {
-      this.typesCalculator = new ComfortableArcTypesCalculator(new TypeCheckResult());
+  protected IArcDerive getDerive() {
+    if (this.derive == null) {
+      this.derive = new ComfortableArcDerive(new TypeCheckResult());
     }
-    return this.typesCalculator;
+    return this.derive;
   }
 
   @Override
@@ -42,7 +42,7 @@ public class ComfortableArcTypesCalculatorTest extends AbstractArcTypesCalculato
   @Test
   public void shouldReturnCorrectCalculationDelegator() {
     //Given
-    ComfortableArcTypesCalculator typesCalculator = new ComfortableArcTypesCalculator(new TypeCheckResult());
+    ComfortableArcDerive typesCalculator = new ComfortableArcDerive(new TypeCheckResult());
 
     //When
     ComfortableArcTraverser delegator = typesCalculator.getCalculationDelegator();
