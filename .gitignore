@@ -11,3 +11,7 @@ target
 *.iml
 .DS_Store
 generated-test-sources
+
+gradlew.bat
+gradlew
+gradle
