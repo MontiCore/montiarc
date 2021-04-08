@@ -8,7 +8,6 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +45,7 @@ public class SubComponentsConnectedTest extends AbstractTest {
 
   @BeforeEach
   public void setUpTest() {
-    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator(ArcBasisMill.globalScope());
+    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator();
     ASTComponentType comp1 = ArcBasisMill.componentTypeBuilder().setName("A")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()

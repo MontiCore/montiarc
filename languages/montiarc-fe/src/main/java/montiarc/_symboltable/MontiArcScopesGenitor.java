@@ -9,25 +9,9 @@ import montiarc._ast.ASTMACompilationUnit;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 
 public class MontiArcScopesGenitor extends MontiArcScopesGenitorTOP {
-
-  public MontiArcScopesGenitor() {
-    super(new MontiArcGlobalScope());
-  }
-
-  public MontiArcScopesGenitor(@NotNull IMontiArcScope enclosingScope) {
-    super(enclosingScope);
-  }
-
-  IMontiArcScope watchscope;
-
-  public MontiArcScopesGenitor(
-    @NotNull Deque<? extends IMontiArcScope> scopeStack) {
-    super(scopeStack);
-  }
 
   @Override
   public IMontiArcArtifactScope createFromAST(@NotNull ASTMACompilationUnit rootNode) {
@@ -40,8 +24,8 @@ public class MontiArcScopesGenitor extends MontiArcScopesGenitorTOP {
     artifactScope.setPackageName(rootNode.isPresentPackage() ? rootNode.getPackage().getQName() : "");
     artifactScope.setImportsList(imports);
     putOnStack(artifactScope);
-    watchscope = artifactScope;
-    setLinkBetweenSpannedScopeAndNode(artifactScope, rootNode);
+    rootNode.setSpannedScope(artifactScope);
+    artifactScope.setAstNode(rootNode);
     rootNode.accept(getTraverser());
     return artifactScope;
   }

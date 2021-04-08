@@ -166,7 +166,8 @@ public class MontiArcTool implements IMontiArcTool {
   @Override
   public Collection<IMontiArcScope> createSymbolTable(@NotNull IMontiArcGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
-    MontiArcScopesGenitorDelegator symTab = new MontiArcScopesGenitorDelegator(scope);
+    MontiArcScopesGenitorDelegator symTab = MontiArcMill.scopesGenitorDelegator();
+    MontiArcMill.globalScope();
     this.loadAll(scope).forEach(scope::addSubScope);
     return this.parseAll(scope).stream().map(symTab::createFromAST).collect(Collectors.toSet());
   }

@@ -18,7 +18,6 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.Optional;
 import java.util.Stack;
 import java.util.function.BiFunction;
@@ -34,39 +33,8 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   protected ASTMCType currentPortType;
   protected ASTPortDirection currentPortDirection;
 
-  public ArcBasisScopesGenitor(@NotNull IArcBasisScope enclosingScope) {
-    super(Preconditions.checkNotNull(enclosingScope));
+  public ArcBasisScopesGenitor() {
     this.typeSynthesizer = new FullSynthesizeSymTypeFromMCBasicTypes();
-  }
-
-  public ArcBasisScopesGenitor(@NotNull Deque<? extends IArcBasisScope> scopeStack) {
-    super(Preconditions.checkNotNull(scopeStack));
-    this.typeSynthesizer = new FullSynthesizeSymTypeFromMCBasicTypes();
-  }
-
-  public ArcBasisScopesGenitor(){
-    super();
-    this.typeSynthesizer = new FullSynthesizeSymTypeFromMCBasicTypes();
-  }
-
-  public ArcBasisScopesGenitor(@NotNull IArcBasisScope enclosingScope,
-                                    @NotNull MCBasicTypesFullPrettyPrinter typePrinter, @NotNull ISynthesize typeSynthesizer) {
-    super(Preconditions.checkNotNull(enclosingScope));
-    this.typePrinter = Preconditions.checkNotNull(typePrinter);
-    this.typeSynthesizer = Preconditions.checkNotNull(typeSynthesizer);
-  }
-
-  public ArcBasisScopesGenitor(@NotNull Deque<? extends IArcBasisScope> scopeStack,
-                                    @NotNull MCBasicTypesFullPrettyPrinter typePrinter, @NotNull ISynthesize typeSynthesizer) {
-    super(Preconditions.checkNotNull(scopeStack));
-    this.typePrinter = Preconditions.checkNotNull(typePrinter);
-    this.typeSynthesizer = Preconditions.checkNotNull(typeSynthesizer);
-  }
-
-  public ArcBasisScopesGenitor(@NotNull MCBasicTypesFullPrettyPrinter typePrinter, @NotNull ISynthesize typeSynthesizer){
-    super();
-    this.typePrinter = Preconditions.checkNotNull(typePrinter);
-    this.typeSynthesizer = Preconditions.checkNotNull(typeSynthesizer);
   }
 
   /**
@@ -172,14 +140,12 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     return artifactScope;
   }
 
-  @Override
   public void addToScope(@NotNull ComponentTypeSymbol symbol) {
     Preconditions.checkArgument(symbol != null);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     this.getCurrentScope().get().add(symbol);
   }
 
-  @Override
   protected ComponentTypeSymbolBuilder create_ComponentType(@NotNull ASTComponentType ast) {
     ComponentTypeSymbolBuilder builder = ArcBasisMill.componentTypeSymbolBuilder();
     builder.setName(ast.getName());
@@ -199,21 +165,20 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   }
 
   @Override
-  public void addToScopeAndLinkWithNode(@NotNull ComponentTypeSymbol symbol,
-                                        @NotNull ASTComponentType ast) {
-    this.addToScope(symbol);
-    this.putOnStack(symbol.getSpannedScope());
-    this.setLinkBetweenSymbolAndNode(symbol, ast);
-  }
-
-  @Override
   public void visit(@NotNull ASTComponentType node) {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     ComponentTypeSymbol symbol = this.create_ComponentType(node).build();
-    setOuter(symbol);
-    this.addToScopeAndLinkWithNode(symbol, node);
-    componentStack.push(symbol);
+    this.setOuter(symbol);
+    node.setSymbol(symbol);
+    node.setEnclosingScope(this.getCurrentScope().get());
+    node.setSpannedScope(symbol.getSpannedScope());
+    symbol.getSpannedScope().setAstNode(node);
+    symbol.setAstNode(node);
+    symbol.setEnclosingScope(this.getCurrentScope().get());
+    this.getCurrentScope().get().add(symbol);
+    this.putOnStack(symbol.getSpannedScope());
+    this.putOnStack(symbol);
   }
 
   @Override
@@ -258,7 +223,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     node.setEnclosingScope(this.getCurrentScope().get());
   }
 
-  @Override
   protected VariableSymbolBuilder create_ArcParameter(@NotNull ASTArcParameter ast) {
     assert (this.getCurrentScope().isPresent());
     VariableSymbolBuilder builder = ArcBasisMill.variableSymbolBuilder();
@@ -273,7 +237,11 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkState(this.getCurrentScope().isPresent());
     Preconditions.checkState(this.getCurrentComponent().isPresent());
     VariableSymbol symbol = this.create_ArcParameter(node).build();
-    this.addToScopeAndLinkWithNode(symbol, node);
+    node.setSymbol(symbol);
+    node.setEnclosingScope(this.getCurrentScope().get());
+    symbol.setAstNode(node);
+    symbol.setEnclosingScope(this.getCurrentScope().get());
+    this.getCurrentScope().get().add(symbol);
     this.getCurrentComponent().get().addParameter(symbol);
   }
 
@@ -297,7 +265,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     this.setCurrentPortDirection(null);
   }
 
-  @Override
   protected PortSymbolBuilder create_Port(@NotNull ASTPort ast) {
     assert (this.getCurrentPortType().isPresent());
     assert (this.getCurrentPortDirection().isPresent());
@@ -316,7 +283,11 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkState(getCurrentPortType().isPresent());
     Preconditions.checkState(getCurrentPortDirection().isPresent());
     PortSymbol symbol = this.create_Port(node).build();
-    this.addToScopeAndLinkWithNode(symbol, node);
+    node.setSymbol(symbol);
+    node.setEnclosingScope(this.getCurrentScope().get());
+    symbol.setAstNode(node);
+    symbol.setEnclosingScope(this.getCurrentScope().get());
+    this.getCurrentScope().get().add(symbol);
   }
 
   @Override
@@ -335,7 +306,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     this.setCurrentFieldType(null);
   }
 
-  @Override
   protected VariableSymbolBuilder create_ArcField(@NotNull ASTArcField ast) {
     assert (this.getCurrentFieldType().isPresent());
     assert (this.getCurrentScope().isPresent());
@@ -351,7 +321,11 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkState(this.getCurrentScope().isPresent());
     Preconditions.checkState(this.getCurrentFieldType().isPresent());
     VariableSymbol symbol = this.create_ArcField(node).build();
-    this.addToScopeAndLinkWithNode(symbol, node);
+    node.setSymbol(symbol);
+    node.setEnclosingScope(this.getCurrentScope().get());
+    symbol.setAstNode(node);
+    symbol.setEnclosingScope(this.getCurrentScope().get());
+    this.getCurrentScope().get().add(symbol);
   }
 
   @Override
@@ -383,7 +357,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     return ArcBasisMill.componentTypeSymbolSurrogateBuilder().setName(this.printType(type)).setEnclosingScope(this.getCurrentScope().get()).build();
   }
 
-  @Override
   protected ComponentInstanceSymbolBuilder create_ComponentInstance(@NotNull ASTComponentInstance ast) {
     ComponentInstanceSymbolBuilder builder = ArcBasisMill.componentInstanceSymbolBuilder();
     Preconditions.checkArgument(ast != null);
@@ -411,7 +384,11 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkState(this.getCurrentScope().isPresent());
     Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
     ComponentInstanceSymbol symbol = create_ComponentInstance(node).build();
-    this.addToScopeAndLinkWithNode(symbol, node);
+    node.setSymbol(symbol);
+    node.setEnclosingScope(this.getCurrentScope().get());
+    symbol.setAstNode(node);
+    symbol.setEnclosingScope(this.getCurrentScope().get());
+    this.getCurrentScope().get().add(symbol);
   }
 
   @Override

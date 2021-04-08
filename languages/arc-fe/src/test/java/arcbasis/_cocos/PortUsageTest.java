@@ -6,8 +6,6 @@ import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis.util.ArcError;
-import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
-import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -27,7 +25,7 @@ class PortUsageTest extends AbstractTest {
   }
 
   static Stream<Arguments> componentAndErrorCodeProvider() {
-    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator(ArcBasisMill.globalScope());
+    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator();
     ASTComponentType comp1 = ArcBasisMill.componentTypeBuilder().setName("Comp1")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()

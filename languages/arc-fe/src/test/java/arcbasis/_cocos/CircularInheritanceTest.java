@@ -2,12 +2,10 @@
 package arcbasis._cocos;
 
 import arcbasis.AbstractTest;
-import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
-import arcbasis._symboltable.IArcBasisGlobalScope;
 import arcbasis.util.ArcError;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.Assertions;
@@ -37,8 +35,7 @@ public class CircularInheritanceTest extends AbstractTest {
           .build())
         .build())
       .build();
-    IArcBasisGlobalScope scope = ArcBasisMill.globalScope();
-    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator(scope);
+    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator();
     symTab.createFromAST(parent);
     symTab.createFromAST(child);
     CircularInheritance coco = new CircularInheritance();
@@ -57,8 +54,7 @@ public class CircularInheritanceTest extends AbstractTest {
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setParent(createQualifiedType("A")).build())
       .build();
-    IArcBasisGlobalScope scope = ArcBasisMill.globalScope();
-    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator(scope);
+    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator();
     symTab.createFromAST(parent);
     symTab.createFromAST(child);
     CircularInheritance coco = new CircularInheritance();

@@ -26,13 +26,7 @@ import java.util.stream.Collectors;
  */
 public class MontiArcScopesGenitorDelegator extends MontiArcScopesGenitorDelegatorTOP {
 
-  public MontiArcScopesGenitorDelegator(IMontiArcGlobalScope globalScope) {
-    super(globalScope);
-    init();
-  }
-
   public MontiArcScopesGenitorDelegator(){
-    super();
     init();
   }
 

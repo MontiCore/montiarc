@@ -16,18 +16,10 @@ import genericarc.GenericArcMill;
 import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericComponentHead;
 
-import java.util.Deque;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 public class GenericArcScopesGenitor extends GenericArcScopesGenitorTOP {
-
-  public GenericArcScopesGenitor() {
-  }
-
-  public GenericArcScopesGenitor(Deque<? extends IGenericArcScope> scopeStack) {
-    super(scopeStack);
-  }
 
   /**
    *  used for mapping types to expressions, the default can only deal with MCBasicTypes

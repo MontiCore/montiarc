@@ -3,7 +3,6 @@ package arcbasis._symboltable;
 
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInterface;
 import arcbasis._ast.ASTPortDeclaration;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
@@ -39,7 +38,7 @@ public class PortSymbolTest extends AbstractTest {
 
   @Test
   public void shouldReturnResolvedType() {
-    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator(ArcBasisMill.globalScope());
+    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator();
     ASTPortDeclaration ports = ArcBasisMill.portDeclarationBuilder()
       .setPortList("p")
       .setIncoming(true)

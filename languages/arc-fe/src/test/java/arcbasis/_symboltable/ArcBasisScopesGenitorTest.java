@@ -27,7 +27,7 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
 
   @BeforeEach
   public void SetUpSymTab() {
-    this.symTab = new ArcBasisScopesGenitorTestDelegator(ArcBasisMill.globalScope());
+    this.symTab = new ArcBasisScopesGenitorTestDelegator();
   }
 
   /**
@@ -341,10 +341,6 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
    * grants access to the usually capsulated used arcbasis genitor
    */
   private static class ArcBasisScopesGenitorTestDelegator extends ArcBasisScopesGenitorDelegator {
-    public ArcBasisScopesGenitorTestDelegator(IArcBasisGlobalScope scope) {
-      super(scope);
-    }
-
     public ArcBasisScopesGenitor getGenitor() {
       return symbolTable;
     }
