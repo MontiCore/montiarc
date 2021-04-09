@@ -65,7 +65,8 @@ public enum ArcError implements montiarc.util.Error {
   COMPONENT_NAME_UPPER_CASE("0xMA1055", "Component names must be in upper-case."
     + " So '%s' is an unsuitable name"),
   INSTANCE_NAME_LOWER_CASE("0xMA1056", "The name of the component instance '%s' should start"
-    + " with a lower case letter.");
+    + " with a lower case letter."),
+  UNIQUE_FIELD_NAME("0xMA1061", "There may not be multiple fields called '%s' in the component '%s'.");
 
   private final String errorCode;
   private final String errorMessage;
