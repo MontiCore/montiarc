@@ -15,13 +15,13 @@ public enum ArcError implements montiarc.util.Error {
     + "instance '%s'."),
   INCOMING_PORT_AS_TARGET("0xMA1020", "Incoming port '%s' of component '%s' is target of a port "
     + "forward. Incoming ports may only be used as the source of a port forward."),
-  OUTGOING_PORT_AST_SOURCE("0xMA1021", "Outgoing port '%s' of component '%s' is source of a port "
+  OUTGOING_PORT_AS_SOURCE("0xMA1021", "Outgoing port '%s' of component '%s' is source of a port "
     + "forward. Outgoing ports may only be used as the target of a port forward."),
   INCOMING_PORT_NO_FORWARD("0xMA1022", "Incoming port '%s' of component '%s' is not connected "
     + "as a source of a port forward."),
   OUTGOING_PORT_NO_FORWARD("0xMA1023", "Outgoing port '%s' of component '%s' is not connected "
     + "as a target of a port forward."),
-  PORT_MUlTIPPLE_SENDER("0xMA1024", "Target port ''%s' of connector is already connected."),
+  PORT_MUlTIPLE_SENDER("0xMA1024", "Target port ''%s' of connector is already connected."),
   INCOMING_PORT_AS_SOURCE("0xMA1025", "Incoming port '%s' of subcomponent '%s' of component type "
     + "'%s' is source of a connector. Incoming ports of subcomponents may only be used as the "
     + "target of a connector."),
@@ -34,7 +34,7 @@ public enum ArcError implements montiarc.util.Error {
     + "type '%s' is not connected."),
   INNER_WITH_TYPE_PARAMETER_REQUIRES_INSTANCE("0xMA1029", "Inner component '%s' must have an "
     + "instance defining its formal type parameters."),
-  TO_FEW_CONFIGURATION_PARAMETER("0xMA1030", "There are too few configuration parameters. The "
+  TOO_FEW_CONFIGURATION_PARAMETER("0xMA1030", "There are too few configuration parameters. The "
     + "component '%s' requires at least %d configuration parameters"),
   CONFIGURATION_PARAMETER_TYPE_MISMATCH("0xMA1031",
     "Configuration parameter '%s' at position %d of "

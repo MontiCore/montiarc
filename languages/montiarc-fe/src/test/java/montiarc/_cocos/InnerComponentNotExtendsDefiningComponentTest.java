@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.cocos;
+package montiarc._cocos;
 
 import arcbasis._cocos.InnerComponentNotExtendsDefiningComponent;
 import arcbasis.util.ArcError;

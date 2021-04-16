@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.cocos;
+package montiarc._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ConfigurationParametersCorrectlyInherited;
@@ -26,7 +26,7 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
       arg("MandatoryInheritedParameterOmitted.arc",
-        ArcError.TO_FEW_CONFIGURATION_PARAMETER),
+        ArcError.TOO_FEW_CONFIGURATION_PARAMETER),
       arg("MandatoryInheritedParametersUnordered.arc",
         ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH,
         ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH),
@@ -36,7 +36,7 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
       arg("MandatoryInheritedParameterWithTypeChange.arc",
         ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH),
       arg("MultipleInheritedParametersAllOmitted.arc",
-        ArcError.TO_FEW_CONFIGURATION_PARAMETER),
+        ArcError.TOO_FEW_CONFIGURATION_PARAMETER),
       arg("MultipleInheritedParametersAndAdditionalParametersFirst.arc",
         ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH,
         ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH,
@@ -44,7 +44,7 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
       arg("MultipleInheritedParametersAndAdditionalParametersInBetween.arc",
         ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH),
       arg("MultipleInheritedParametersPartiallyOmitted.arc",
-        ArcError.TO_FEW_CONFIGURATION_PARAMETER),
+        ArcError.TOO_FEW_CONFIGURATION_PARAMETER),
       arg("MultipleInheritedParametersUnordered.arc",
         ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH),
       arg("MultipleInheritedParametersWithSomeTypesChanged.arc",
@@ -58,7 +58,7 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
       arg("OptionalInheritedParameterBecomesMandatorySameName.arc",
         ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH),
       arg("OptionalInheritedParameterOmitted.arc",
-        ArcError.TO_FEW_CONFIGURATION_PARAMETER),
+        ArcError.TOO_FEW_CONFIGURATION_PARAMETER),
       arg("OptionalInheritedParametersWithSomeTypesChanged.arc",
         ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH,
         ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH),

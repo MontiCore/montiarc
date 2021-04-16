@@ -1,14 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.cocos;
+package montiarc._cocos;
 
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.se_rwth.commons.logging.Log;
 import montiarc.AbstractTest;
-import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc._cocos.MontiArcCoCoChecker;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.provider.Arguments;
@@ -18,7 +15,7 @@ import java.nio.file.Paths;
 
 public abstract class AbstractCoCoTest extends AbstractTest {
 
-  protected static final String MODEL_PATH = "montiarc/cocos/";
+  protected static final String MODEL_PATH = "montiarc/_cocos/";
   protected MontiArcCoCoChecker checker;
   protected MontiArcTool tool;
 

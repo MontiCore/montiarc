@@ -67,7 +67,7 @@ public class PortUsage implements ArcBasisASTComponentTypeCoCo {
       final SourcePosition sourcePosition = this.getSourcePosition(symbol, node, port);
       if (sources.contains(port)) {
         Log.error(
-          ArcError.OUTGOING_PORT_AST_SOURCE.format(port, symbol.getFullName()),
+          ArcError.OUTGOING_PORT_AS_SOURCE.format(port, symbol.getFullName()),
           sourcePosition);
       }
       else {

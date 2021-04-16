@@ -12,7 +12,7 @@ import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._parser.MontiArcParser;
 import montiarc._symboltable.*;
-import montiarc.cocos.MontiArcCoCos;
+import montiarc._cocos.MontiArcCoCos;
 import montiarc.util.MontiArcError;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.commons.nullanalysis.NotNull;

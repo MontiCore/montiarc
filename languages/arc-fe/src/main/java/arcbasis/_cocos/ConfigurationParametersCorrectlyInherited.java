@@ -42,7 +42,7 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
       List<VariableSymbol> parentParameters = parent.getParameters();
       if (parameters.size() < parentParameters.size()) {
         Log.error(
-          ArcError.TO_FEW_CONFIGURATION_PARAMETER.format(component.getFullName(),
+          ArcError.TOO_FEW_CONFIGURATION_PARAMETER.format(component.getFullName(),
             parentParameters.size()), node.getHead().get_SourcePositionStart());
       }
       for (int i = 0; i < Math.min(parentParameters.size(), parameters.size()); i++) {

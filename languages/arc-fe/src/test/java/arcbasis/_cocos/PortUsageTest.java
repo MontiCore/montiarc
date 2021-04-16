@@ -67,6 +67,6 @@ class PortUsageTest extends AbstractTest {
       .build();
     symTab.createFromAST(comp2);
     return Stream.of(Arguments.of(comp1, new ArcError[] { ArcError.INCOMING_PORT_AS_TARGET }),
-      Arguments.of(comp2, new ArcError[] { ArcError.OUTGOING_PORT_AST_SOURCE }));
+      Arguments.of(comp2, new ArcError[] { ArcError.OUTGOING_PORT_AS_SOURCE}));
   }
 }

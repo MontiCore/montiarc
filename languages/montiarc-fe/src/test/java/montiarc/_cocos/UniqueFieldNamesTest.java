@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.cocos;
+package montiarc._cocos;
 
 import arcbasis._cocos.UniqueFieldNames;
 import arcbasis.util.ArcError;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class UniqueFieldNameCoCoTest extends AbstractCoCoTest {
+public class UniqueFieldNamesTest extends AbstractCoCoTest {
 
   @Override
   protected String getPackage() {
