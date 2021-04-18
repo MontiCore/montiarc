@@ -24,6 +24,7 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
    */
   @Override
   public void run(String script, Configuration configuration) {
+    Log.enableFailQuick(false);
     GroovyInterpreter.Builder builder = GroovyInterpreter.newInterpreter()
         .withScriptBaseClass(MAAGeneratorScript.class)
         .withImportCustomizer(new ImportCustomizer().addStarImports(DEFAULT_IMPORTS));

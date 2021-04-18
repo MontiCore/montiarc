@@ -4,7 +4,7 @@ classdiagram Double {
 
   class A implements C {
     private int aInt;
-    public myConstr(String constrParam);
+    public myConstr(int constrParam);
   }
 
   class B {
@@ -12,7 +12,7 @@ classdiagram Double {
   }
 
   interface C {
-    public void myMethod(String myParam);
+    public void myMethod(int myParam);
   }
 
   association once [1] A -> B [1];

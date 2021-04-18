@@ -75,12 +75,7 @@ public class TemplateHelper {
     }
     return res;
   }
-  
-  protected String getModifiers(@NotNull CDRoleSymbol roleSymbol) {
-    Preconditions.checkNotNull(roleSymbol);
-    return getModifiers((FieldSymbol) roleSymbol);
-  }
-  
+
   protected String getModifiers(@NotNull FieldSymbol fieldSymbol) {
     Preconditions.checkNotNull(fieldSymbol);
     String res = "";
@@ -163,11 +158,10 @@ public class TemplateHelper {
     }
     return typeSymbol.getInterfaceList().stream()
       .map(SymTypeExpression::getTypeInfo)
-      .flatMap(ooTypeSymbol -> ooTypeSymbol.getFunctionList().stream())
-      .filter(functionSymbol -> functionSymbol instanceof CDMethodSignatureSymbol)
-      .filter(functionSymbol -> typeSymbol.getMethodSignatureList().stream()
-        .noneMatch(otherSignature -> methodSignaturesMatch(functionSymbol, otherSignature)))
-      .map(methodSymbol -> (CDMethodSignatureSymbol) methodSymbol)
+      .filter(ooTypeSymbol -> ooTypeSymbol instanceof CDTypeSymbol)
+      .flatMap(cdTypeSymbol -> ((CDTypeSymbol) cdTypeSymbol).getMethodSignatureList().stream())
+      .filter(methodSignatureSymbol -> typeSymbol.getMethodSignatureList().stream()
+        .noneMatch(otherSignature -> methodSignaturesMatch(methodSignatureSymbol, otherSignature)))
       .collect(Collectors.toList());
   }
   

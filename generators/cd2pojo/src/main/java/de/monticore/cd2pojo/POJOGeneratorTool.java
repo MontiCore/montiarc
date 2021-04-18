@@ -8,6 +8,8 @@ import de.monticore.cd2pojo.cocos.CDRoleNamesUnique;
 import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cd4code._cocos.CD4CodeCoCoChecker;
 import de.monticore.cd4code._parser.CD4CodeParser;
+import de.monticore.cd4code._symboltable.CD4CodeSymbolTableCompleter;
+import de.monticore.cd4code._symboltable.ICD4CodeArtifactScope;
 import de.monticore.cd4code._symboltable.ICD4CodeGlobalScope;
 import de.monticore.cd4code._symboltable.ICD4CodeScope;
 import de.monticore.cd4code.cocos.CD4CodeCoCos;
@@ -16,7 +18,8 @@ import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.io.paths.ModelPath;
-import de.monticore.types.check.DefsTypeBasic;
+import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -98,12 +101,14 @@ public class POJOGeneratorTool {
     Preconditions.checkNotNull(paths);
     Preconditions.checkNotNull(cdChecker);
     ModelPath mp = new ModelPath(paths);
+    CD4CodeMill.init();
     ICD4CodeGlobalScope cd4CGlobalScope = CD4CodeMill.globalScope();
     cd4CGlobalScope.clear();
     cd4CGlobalScope.setModelPath(mp);
     cd4CGlobalScope.setFileExt(cdFileExtension);
+    BasicSymbolsMill.initializePrimitives();
+    addJavaLangToGlobalScope();
     processModels(cd4CGlobalScope, cdChecker);
-    addBasicTypes(cd4CGlobalScope);
     return cd4CGlobalScope;
   }
   
@@ -117,11 +122,14 @@ public class POJOGeneratorTool {
   
   public static Collection<ASTCDCompilationUnit> createSymbolTable(@NotNull ICD4CodeGlobalScope scope) {
     Preconditions.checkNotNull(scope);
-    CD4CodeMill.init();
     Set<ASTCDCompilationUnit> set = new HashSet<>();
-    for (ASTCDCompilationUnit astcdCompilationUnit : parseAndTransformModels(scope)) {
-      CD4CodeMill.scopesGenitorDelegator().createFromAST(astcdCompilationUnit);
-      set.add(astcdCompilationUnit);
+    for (ASTCDCompilationUnit ast : parseAndTransformModels(scope)) {
+      CD4CodeMill.scopesGenitorDelegator().createFromAST(ast);
+      set.add(ast);
+    }
+    for (ASTCDCompilationUnit ast : set) {
+      CD4CodeSymbolTableCompleter completer = new CD4CodeSymbolTableCompleter(ast);
+      ast.accept(completer.getTraverser());
     }
     return set;
   }
@@ -165,19 +173,20 @@ public class POJOGeneratorTool {
     }
     return Optional.ofNullable(cd);
   }
-  
-  protected static void addBasicTypes(@NotNull ICD4CodeGlobalScope scope) {
-    Preconditions.checkNotNull(scope);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._boolean);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._char);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._short);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._String);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._int);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._long);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._float);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._double);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._null);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._Object);
-    DefsTypeBasic.add2scope(scope, DefsTypeBasic._array);
+
+  public static void addJavaLangToGlobalScope() {
+    ICD4CodeArtifactScope artifactScope = CD4CodeMill.artifactScope();
+    artifactScope.setName("java.lang");
+    CD4CodeMill.globalScope().addSubScope(artifactScope);
+    artifactScope.add(CD4CodeMill.oOTypeSymbolBuilder()
+      .setName("Object")
+      .setEnclosingScope(CD4CodeMill.artifactScope())
+      .setSpannedScope(CD4CodeMill.scope()).build());
+    artifactScope.add(CD4CodeMill.oOTypeSymbolBuilder()
+      .setName("String")
+      .setEnclosingScope(CD4CodeMill.artifactScope())
+      .setSpannedScope(CD4CodeMill.scope())
+      .addSuperTypes(SymTypeExpressionFactory.createTypeObject("java.lang.Object", CD4CodeMill.globalScope()))
+      .build());
   }
 }
