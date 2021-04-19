@@ -2,7 +2,6 @@
 package montiarc._cocos;
 
 import arcbasis._cocos.ConnectorSourceAndTargetComponentDiffer;
-import arcbasis._cocos.ConnectorSourceAndTargetDiffer;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
@@ -16,9 +15,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
-public class ConnectorSourceAndTargetDifferTest extends AbstractCoCoTest {
+public class ConnectorSourceAndTargetComponentDifferTest extends AbstractCoCoTest {
 
-  protected static final String PACKAGE = "connectorSourceAndTargetDiffer";
+  protected static final String PACKAGE = "connectorSourceAndTargetComponentDiffer";
 
   @Override
   protected String getPackage() {
@@ -27,13 +26,14 @@ public class ConnectorSourceAndTargetDifferTest extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
+      arg("ConnectorSourceAndTargetFromSameComponent.arc",
+          ArcError.SOURCE_AND_TARGET_SAME_COMPONENT),
       arg("ConnectorSourceAndTargetSamePort.arc",
-          ArcError.CONNECTOR_SOURCE_AND_TARGET_ARE_IDENTICAL));
+          ArcError.SOURCE_AND_TARGET_SAME_COMPONENT));
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"ConnectorSourceAndTargetFromSameComponent.arc",
-          "ConnectorSourceAndTargetComponentDiffer.arc", "NoConnectors.arc"})
+  @ValueSource(strings = {"ConnectorSourceAndTargetComponentDiffer.arc", "NoConnectors.arc"})
   public void sourceAndTargetShouldDiffer(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
@@ -64,6 +64,6 @@ public class ConnectorSourceAndTargetDifferTest extends AbstractCoCoTest {
 
   @Override
   protected void registerCoCos() {
-    this.getChecker().addCoCo(new ConnectorSourceAndTargetDiffer());
+    this.getChecker().addCoCo(new ConnectorSourceAndTargetComponentDiffer());
   }
 }

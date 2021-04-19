@@ -16,6 +16,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
+/**
+ * Contains tests for
+ * {@link arcbasis._cocos.ComponentTypeNameCapitalization}, {@link arcbasis._cocos.FieldNameCapitalization},
+ * {@link arcbasis._cocos.InstanceNameCapitalisation}, {@link arcbasis._cocos.ParameterNameCapitalization},
+ * {@link arcbasis._cocos.PortNameCapitalisation}, {@link genericarc._cocos.GenericTypeParameterNameCapitalization}
+ */
 public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
 
   protected static final String PACKAGE = "namesCorrectlyCapitalized";
