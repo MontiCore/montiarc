@@ -4,13 +4,12 @@
  */
 package sim.help;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import sim.generic.Message;
 import sim.generic.PrioMessage;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for {@link PrioMsgComparator}.

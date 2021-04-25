@@ -4,9 +4,10 @@
  */
 package sim.port;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import sim.IScheduler;
 import sim.dummys.ComponentTimeDummy;
@@ -29,7 +30,7 @@ public class IncomingPortTest {
     public IInPort<?> computedPort;
     
     
-    @Before
+    @BeforeEach
     public void setUp() {
         scheduler = new SimulationScheduler();
         comp = new ComponentTimeDummy();
@@ -47,70 +48,70 @@ public class IncomingPortTest {
     
     @Test
     public void testGetComponent() {
-        Assert.assertEquals(comp, testling.getComponent());
+        assertEquals(comp, testling.getComponent());
     }
     
     @Test
     public void testGetIncomingStream() {
         IStream<String> s = testling.stream;
-        Assert.assertTrue(testling.getIncomingStream().isEmpty());
-        Assert.assertEquals(s, testling.getIncomingStream());
+        assertTrue(testling.getIncomingStream().isEmpty());
+        assertEquals(s, testling.getIncomingStream());
         
     }
     
     @Test
     public void testHasTickReceived() {
         IStream<String> s = testling.stream;
-        Assert.assertFalse(testling.hasTickReceived());
+        assertFalse(testling.hasTickReceived());
         s.add(Tick.<String> get());
-        Assert.assertTrue(testling.hasTickReceived());
+        assertTrue(testling.hasTickReceived());
         s.pollLastMessage();
-        Assert.assertFalse(testling.hasTickReceived());
+        assertFalse(testling.hasTickReceived());
     }
     
     @Test
     public void testHasUnprocessedMessages() {
         IStream<String> s = testling.stream;
-        Assert.assertFalse(testling.hasUnprocessedMessages());
+        assertFalse(testling.hasUnprocessedMessages());
         s.add(Tick.<String> get());
-        Assert.assertTrue(testling.hasUnprocessedMessages());
+        assertTrue(testling.hasUnprocessedMessages());
         s.pollLastMessage();
-        Assert.assertFalse(testling.hasUnprocessedMessages());
+        assertFalse(testling.hasUnprocessedMessages());
         s.add(Message.of("Hallo"));
-        Assert.assertTrue(testling.hasUnprocessedMessages());
+        assertTrue(testling.hasUnprocessedMessages());
         s.pollLastMessage();
-        Assert.assertFalse(testling.hasUnprocessedMessages());
+        assertFalse(testling.hasUnprocessedMessages());
     }
     
     @Test
     public void testReceiveMessage() {
         IStream<String> s = testling.stream;
-        Assert.assertTrue(s.isEmpty());
+        assertTrue(s.isEmpty());
         
         String expectedMessage = "Hallo";
         
         testling.accept(Message.of(expectedMessage));
         String actualMessage = ((Message<String>) s.getHistory().get(0)).getData();
-        Assert.assertEquals(expectedMessage, actualMessage);
+        assertEquals(expectedMessage, actualMessage);
     }
     
     @Test
     public void testSetup() {
         testling.setup(null, null);
-        Assert.assertNull(testling.getScheduler());
-        Assert.assertNull(testling.getComponent());
+        assertNull(testling.getScheduler());
+        assertNull(testling.getComponent());
         
         IScheduler s = new SimulationScheduler();
         
         testling.setup(null, s);
-        Assert.assertEquals(s, testling.getScheduler());
-        Assert.assertNull(testling.getComponent());
+        assertEquals(s, testling.getScheduler());
+        assertNull(testling.getComponent());
         
         ComponentTimeDummy c = new ComponentTimeDummy();
         
         testling.setup(c, s);
-        Assert.assertEquals(s, testling.getScheduler());
-        Assert.assertEquals(c, testling.getComponent());
+        assertEquals(s, testling.getScheduler());
+        assertEquals(c, testling.getComponent());
     }
     
 }

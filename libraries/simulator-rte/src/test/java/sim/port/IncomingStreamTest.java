@@ -4,30 +4,34 @@ package sim.port;
 import java.util.LinkedList;
 import java.util.List;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import sim.dummys.ComponentTimeDummy;
 import sim.generic.IStream;
 import sim.generic.Message;
 import sim.generic.Tick;
 import sim.generic.TickedMessage;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 /**
  * Tests for incoming stream methods {@link IStream}. 
  * 
  * 
  */
-public class IncomingStreamTest extends TestCase {
+public class IncomingStreamTest {
     protected ComponentTimeDummy comp;
     
     protected SimplePort<String> testling;
     
-    @Override
+    @BeforeEach
     public void setUp() {
         comp = new ComponentTimeDummy();
         testling = new SimplePort<String>();
         testling.setup(comp, new SimulationScheduler());
     }
     
+    @Test
     public void testGetHistory() {
         assertEquals(0, testling.getIncomingStream().getHistory().size());
         testling.accept(Tick.<String> get());
@@ -50,6 +54,7 @@ public class IncomingStreamTest extends TestCase {
         assertTrue(history.get(3).isTick());
     }
     
+    @Test
     public void testGetHistoryN() {
         for (int i = 0; i < 10; i++) {
             assertEquals(0, testling.getIncomingStream().getHistory(i).size());
@@ -82,6 +87,7 @@ public class IncomingStreamTest extends TestCase {
         assertTrue(testling.getIncomingStream().getHistory(1).get(0).isTick());
     }
     
+    @Test
     public void testGetLastMessage() {
         // fill input stream
         String lastMessage = "";
@@ -102,6 +108,7 @@ public class IncomingStreamTest extends TestCase {
         }
     }
     
+    @Test
     public void testGetLastNTimeSlices() {
         // fill input stream
         for (int i = 0; i < 101; i++) {
@@ -131,6 +138,7 @@ public class IncomingStreamTest extends TestCase {
         }
     }
     
+    @Test
     public void testGetLastTimeSlice() {
         for (int i = 0; i < 100; i++) {
             if (i % 4 == 0) {
@@ -156,6 +164,7 @@ public class IncomingStreamTest extends TestCase {
         }
     }
     
+    @Test
     public void testGetTimeSlice() {
         for (int i = 0; i < 101; i++) {
             if (i % 4 == 0) {
@@ -176,6 +185,7 @@ public class IncomingStreamTest extends TestCase {
         }
     }
     
+    @Test
     public void testGetTimeSliceFromTo() {
         // fill input stream
         for (int i = 0; i < 101; i++) {
@@ -199,6 +209,7 @@ public class IncomingStreamTest extends TestCase {
         }
     }
     
+    @Test
     public void testGetTimeUnit() {
         List<String> sentMessages = new LinkedList<String>();
         
@@ -222,6 +233,7 @@ public class IncomingStreamTest extends TestCase {
         }
     }
     
+    @Test
     public void testGetUntimedHistory() {
         // fill input stream
         for (int i = 0; i < 101; i++) {
@@ -240,12 +252,14 @@ public class IncomingStreamTest extends TestCase {
         }
     }
     
+    @Test
     public void testStreamContains() {
         testling.accept(Message.of("TEST"));
         assertTrue(testling.getIncomingStream().contains("TEST"));
         assertFalse(testling.getIncomingStream().contains("BLA"));
     }
     
+    @Test
     public void testStreamContainsAll() {
         testling.accept(Message.of("TEST"));
         for (int i = 0; i < 10; i++) {
@@ -269,6 +283,7 @@ public class IncomingStreamTest extends TestCase {
         assertFalse(testling.getIncomingStream().containsAll(null));
     }
     
+    @Test
     public void testStreamCount() {
         testling.accept(Message.of("TEST"));
         assertEquals(0, testling.getIncomingStream().count("BLA"));

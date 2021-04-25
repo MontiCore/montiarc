@@ -4,13 +4,12 @@
  */
 package sim.port;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Before;
-import org.junit.Test;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import sim.generic.Message;
 import sim.generic.Tick;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for a {@link TimedObservablePort}. 
@@ -21,7 +20,7 @@ public class TimedObservablePortTest {
     protected TimedObservablePort<String> testling;
     protected TestObserver observer;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         testling = new TimedObservablePort<String>();
         observer = new TestObserver();
