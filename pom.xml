@@ -7,7 +7,7 @@
   <!-- == PROJECT COORDINATES ============================================= -->
   <groupId>montiarc</groupId>
   <artifactId>montiarc-core</artifactId>
-  <version>6.8.0-SNAPSHOT</version>
+  <version>7.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <!-- == PROJECT MODULES ================================================= -->
@@ -22,10 +22,10 @@
   <!-- == PROJECT PROPERTIES =============================================== -->
   <properties>
     <!-- DSLs -->
-    <cd4a.version>6.8.0-SNAPSHOT</cd4a.version>
+    <cd4a.version>7.0.0</cd4a.version>
 
     <!-- SE-Libraries -->
-    <monticore.version>6.8.0-SNAPSHOT</monticore.version>
+    <monticore.version>7.0.0</monticore.version>
     <mc.grammars.assembly.version>0.0.8</mc.grammars.assembly.version>
     <se-commons.version>1.7.11</se-commons.version>
 
