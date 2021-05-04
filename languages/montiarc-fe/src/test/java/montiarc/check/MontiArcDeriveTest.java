@@ -6,7 +6,6 @@ import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.check.AbstractArcDeriveTest;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.monticore.expressions.expressionsbasis._symboltable.IExpressionsBasisScope;
 import de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -35,8 +34,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-@Disabled //TODO fix me - a few tests here are broken. Possible source of error: parts of generated callExpression don't have enclosing scope
+/**
+ * Holds test for methods of {@link MontiArcDerive}.
+ *
+ * @see AbstractArcDeriveTest for basic tests methods.
+ */
+@Disabled //TODO Fix Me. Missing Enclosing Scope. Needs appropriate scope setter.
 public class MontiArcDeriveTest extends AbstractArcDeriveTest {
+
+  @Override
+  @BeforeEach
+  public void init() {
+    MontiArcMill.globalScope().clear();
+    MontiArcMill.reset();
+    MontiArcMill.init();
+    addBasicTypes2Scope();
+    this.setUp();
+  }
 
   protected MontiArcParser parser;
 
@@ -154,9 +168,6 @@ public class MontiArcDeriveTest extends AbstractArcDeriveTest {
     this.add2Scope(this.getScope(), builder);
   }
 
-  /**
-   * Method under test {@link MontiArcDerive#calculateType(ASTExpression)}
-   */
   @ParameterizedTest
   @MethodSource("expressionProviderForGenericFields")
   public void shouldCalculateGenericType(@NotNull String expression, @NotNull String expectedType) {
@@ -165,9 +176,6 @@ public class MontiArcDeriveTest extends AbstractArcDeriveTest {
     doCalculateTypeFromNameExpression(expression, expectedType, false, true);
   }
 
-  /**
-   * Method under test {@link MontiArcDerive#calculateType(ASTExpression)}
-   */
   @ParameterizedTest
   @MethodSource("expressionProviderWithMethodCalls")
   public void shouldCalculateObjectTypeFromMethodCalls(@NotNull String expression, @NotNull String expectedType) throws IOException {
@@ -176,9 +184,6 @@ public class MontiArcDeriveTest extends AbstractArcDeriveTest {
     doCalculateTypeFromExpression(expression, expectedType, false, false);
   }
 
-  /**
-   * Method under test {@link MontiArcDerive#calculateType(ASTExpression)}
-   */
   @ParameterizedTest
   @MethodSource("expressionProviderWithGenericMethodCalls")
   public void shouldCalculateObjectTypeFromGenericMethodCalls(@NotNull String expression,
@@ -188,9 +193,6 @@ public class MontiArcDeriveTest extends AbstractArcDeriveTest {
     doCalculateTypeFromExpression(expression, expectedType, false, true);
   }
 
-  /**
-   * Method under test {@link MontiArcDerive#calculateType(ASTExpression)}
-   */
   @ParameterizedTest
   @MethodSource("expressionProviderWithAssignments")
   public void shouldCalculatePrimitiveTypeFromAssignment(@NotNull String expression, @NotNull String expectedType) throws IOException {
@@ -227,14 +229,6 @@ public class MontiArcDeriveTest extends AbstractArcDeriveTest {
     return this.scope;
   }
 
-  @Override
-  protected ArcBasisExpressionsScopeSetter getScopeSetter() {
-    if (this.scopeSetter == null) {
-      this.scopeSetter = new MontiArcExpressionsScopeSetter(this.getScope());
-    }
-    return this.scopeSetter;
-  }
-
   protected MontiArcParser getParser() {
     if (this.parser == null) {
       this.parser = new MontiArcParser();
@@ -252,13 +246,5 @@ public class MontiArcDeriveTest extends AbstractArcDeriveTest {
 
     //Then
     Assertions.assertNotNull(traverser);
-  }
-
-
-  public static class MontiArcExpressionsScopeSetter extends ArcBasisExpressionsScopeSetter {
-
-    public MontiArcExpressionsScopeSetter(@NotNull IExpressionsBasisScope scope) {
-      super(scope);
-    }
   }
 }

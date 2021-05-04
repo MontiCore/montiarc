@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.codegen;
 
+import montiarc.MontiArcMill;
 import montiarc.generator.MontiArcGeneratorTool;
 import de.se_rwth.commons.configuration.Configuration;
 import de.se_rwth.commons.groovy.GroovyInterpreter;
@@ -25,6 +26,9 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
   @Override
   public void run(String script, Configuration configuration) {
     Log.enableFailQuick(false);
+    MontiArcMill.globalScope().clear();
+    MontiArcMill.reset();
+    MontiArcMill.init();
     GroovyInterpreter.Builder builder = GroovyInterpreter.newInterpreter()
         .withScriptBaseClass(MAAGeneratorScript.class)
         .withImportCustomizer(new ImportCustomizer().addStarImports(DEFAULT_IMPORTS));

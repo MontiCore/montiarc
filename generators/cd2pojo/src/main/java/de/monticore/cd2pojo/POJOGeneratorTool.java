@@ -36,7 +36,6 @@ public class POJOGeneratorTool {
   public POJOGeneratorTool(@NotNull POJOGenerator generator) {
     Preconditions.checkNotNull(generator);
     this.generator = generator;
-    initMill();
   }
   
   public POJOGeneratorTool(@NotNull GeneratorSetup setup) {
@@ -46,11 +45,7 @@ public class POJOGeneratorTool {
   public POJOGeneratorTool(@NotNull Path targetDir, @NotNull Path hwcPath) {
     this(new POJOGenerator(targetDir, hwcPath));
   }
-  
-  protected void initMill() {
-    CD4CodeMill.init();
-  }
-  
+
   public void generateCDTypesInPaths(@NotNull Collection<Path> modelPaths) {
     Preconditions.checkNotNull(modelPaths);
     List<CDTypeSymbol> symbolsToGenerate = new ArrayList<>();
@@ -101,9 +96,7 @@ public class POJOGeneratorTool {
     Preconditions.checkNotNull(paths);
     Preconditions.checkNotNull(cdChecker);
     ModelPath mp = new ModelPath(paths);
-    CD4CodeMill.init();
     ICD4CodeGlobalScope cd4CGlobalScope = CD4CodeMill.globalScope();
-    cd4CGlobalScope.clear();
     cd4CGlobalScope.setModelPath(mp);
     cd4CGlobalScope.setFileExt(cdFileExtension);
     BasicSymbolsMill.initializePrimitives();

@@ -2,12 +2,9 @@
 package de.monticore.cd2pojo.symboltable;
 
 import com.google.common.base.Preconditions;
-import de.monticore.cd2pojo.BetterCD4CodeDeSer;
 import de.monticore.cd4code._symboltable.CD4CodeDeSer;
 import de.monticore.cd4code._symboltable.ICD4CodeArtifactScope;
-import de.monticore.cd4code._symboltable.ICD4CodeScope;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
-import de.monticore.cdbasis._symboltable.ICDBasisScope;
 import de.monticore.symboltable.IArtifactScope;
 import de.monticore.symboltable.IScope;
 import de.se_rwth.commons.logging.Log;
@@ -45,7 +42,7 @@ public class CDSymTabPrinter {
     String serializedCDSymTab = new CD4CodeDeSer().serialize(artifactScope);
 
     File outputFile = Paths.get(targetPath.toString(), typeSymbol.getEnclosingScope().getRealPackageName().replaceAll("\\.", "/"),
-      artifactScope.getName() + CD_SYM_FILE_EXT).toAbsolutePath().toFile();
+      artifactScope.getName() + CD_SYM_FILE_EXT).toFile();
     
     doPrintToFile(serializedCDSymTab, outputFile);
   }

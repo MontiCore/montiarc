@@ -17,7 +17,6 @@ import de.monticore.types.check.SymTypeExpressionFactory;
 import montiarc.util.check.IArcDerive;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -57,8 +56,7 @@ public abstract class AbstractArcDeriveTest extends AbstractTest {
     return this.scopeSetter;
   }
 
-  @BeforeEach
-  public void setUp() {
+  protected void setUp() {
     this.scope = ArcBasisMill.artifactScope();
     this.scope.setName("");
     this.setUpTypes();

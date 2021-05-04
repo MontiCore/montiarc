@@ -50,14 +50,9 @@ public class MontiArcTool implements IMontiArcTool {
     Preconditions.checkArgument(checker != null);
     Preconditions.checkArgument(deSer != null);
     Preconditions.checkArgument(parser != null);
-    this.initMill();
     this.parser = parser;
     this.deSer = deSer;
     this.checker = checker;
-  }
-
-  protected void initMill() {
-    MontiArcMill.init();
   }
 
   protected MontiArcParser getParser() {

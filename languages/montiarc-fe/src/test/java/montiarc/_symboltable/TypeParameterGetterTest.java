@@ -7,11 +7,9 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import montiarc.AbstractTest;
 import montiarc.MontiArcMill;
-import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,15 +23,9 @@ public class TypeParameterGetterTest extends AbstractTest {
 
   private static final Path PATH = Paths.get(RELATIVE_MODEL_PATH, "montiarc", "_symboltable", "generics");
 
-  @BeforeAll
-  public static void initMill(){
-    MontiArcMill.init();
-  }
-
   @BeforeEach
   public void setGlobalScope(){
     MontiArcMill.globalScope().setModelPath(new ModelPath(PATH));
-    new MontiArcTool().addBasicTypes();
   }
 
   @Test

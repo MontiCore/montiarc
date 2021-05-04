@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package de.monticore.cd2pojo;
 
+import de.monticore.cd4code.CD4CodeMill;
 import de.se_rwth.commons.configuration.Configuration;
 import de.se_rwth.commons.groovy.GroovyInterpreter;
 import de.se_rwth.commons.groovy.GroovyRunner;
@@ -24,6 +25,9 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
 
   public static void main(String[] args){
     Log.enableFailQuick(false);
+    CD4CodeMill.globalScope().clear();
+    CD4CodeMill.reset();
+    CD4CodeMill.init();
     File modelPath = Paths.get(args[0]).toFile();
     File output = Paths.get(args[1]).toFile();
     Log.debug("Model Path:  " + modelPath.toString(), POJOGeneratorScript.class.getName());

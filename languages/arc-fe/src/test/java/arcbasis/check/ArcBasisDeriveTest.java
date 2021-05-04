@@ -5,7 +5,7 @@ import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
 import de.monticore.types.check.TypeCheckResult;
 import montiarc.util.check.IArcDerive;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Holds test for methods of {@link ArcBasisDerive}.
@@ -14,9 +14,14 @@ import org.junit.jupiter.api.BeforeAll;
  */
 public class ArcBasisDeriveTest extends AbstractArcDeriveTest {
 
-  @BeforeAll
-  public static void initMill() {
+  @Override
+  @BeforeEach
+  public void init() {
+    ArcBasisMill.globalScope().clear();
+    ArcBasisMill.reset();
     ArcBasisMill.init();
+    addBasicTypes2Scope();
+    this.setUp();
   }
 
   @Override

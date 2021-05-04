@@ -8,7 +8,7 @@ import arccore._visitor.ArcCoreTraverser;
 import de.monticore.types.check.TypeCheckResult;
 import montiarc.util.check.IArcDerive;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -18,9 +18,14 @@ import org.junit.jupiter.api.Test;
  */
 public class ArcCoreDeriveTest extends AbstractArcDeriveTest {
 
-  @BeforeAll
-  public static void initMill() {
+  @Override
+  @BeforeEach
+  public void init() {
+    ArcCoreMill.globalScope().clear();
+    ArcCoreMill.reset();
     ArcCoreMill.init();
+    addBasicTypes2Scope();
+    this.setUp();
   }
 
   @Override

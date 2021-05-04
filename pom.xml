@@ -370,12 +370,6 @@
             <useSystemClassLoader>false</useSystemClassLoader>
           </configuration>
           <dependencies>
-            <!-- let JUnit vintage engine run JUnit 3 or JUnit 4 tests -->
-            <dependency>
-              <groupId>org.junit.vintage</groupId>
-              <artifactId>junit-vintage-engine</artifactId>
-              <version>${junit.vintage.version}</version>
-            </dependency>
             <!-- let JUnit 5 engine run JUnit 5 tests -->
             <dependency>
               <groupId>org.junit.jupiter</groupId>

@@ -3,10 +3,12 @@ package de.monticore.cd2pojo;
 
 import com.github.javaparser.JavaParser;
 import com.google.common.base.Preconditions;
+import de.monticore.cd4code.CD4CodeMill;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -17,6 +19,13 @@ import java.nio.file.Paths;
 import java.util.Collection;
 
 public class GeneratorTest {
+
+  @BeforeEach
+  public void init() {
+    CD4CodeMill.globalScope().clear();
+    CD4CodeMill.reset();
+    CD4CodeMill.init();
+  }
 
   protected static final String TEST_RESOURCE_PATH = "src/test/resources";
   protected static final String TEST_JAVA_PATH = "src/test/java";

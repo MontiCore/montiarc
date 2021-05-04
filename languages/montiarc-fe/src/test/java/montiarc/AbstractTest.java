@@ -6,7 +6,6 @@ import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import montiarc.util.MontiArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.Arrays;
@@ -14,14 +13,11 @@ import java.util.regex.Pattern;
 
 public abstract class AbstractTest extends montiarc.util.AbstractTest {
 
-  @BeforeAll
-  public static void initMill() {
-    MontiArcMill.init();
-  }
-
   @BeforeEach
-  public void clearGlobalScope() {
+  public void init() {
     MontiArcMill.globalScope().clear();
+    MontiArcMill.reset();
+    MontiArcMill.init();
     addBasicTypes2Scope();
   }
 

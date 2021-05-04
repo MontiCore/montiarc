@@ -8,7 +8,7 @@ import comfortablearc._visitor.ComfortableArcTraverser;
 import de.monticore.types.check.TypeCheckResult;
 import montiarc.util.check.IArcDerive;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -18,9 +18,14 @@ import org.junit.jupiter.api.Test;
  */
 public class ComfortableArcDeriveTest extends AbstractArcDeriveTest {
 
-  @BeforeAll
-  public static void initMill() {
+  @Override
+  @BeforeEach
+  public void init() {
+    ComfortableArcMill.globalScope().clear();
+    ComfortableArcMill.reset();
     ComfortableArcMill.init();
+    addBasicTypes2Scope();
+    this.setUp();
   }
 
   @Override

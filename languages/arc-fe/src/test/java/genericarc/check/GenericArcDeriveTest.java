@@ -7,7 +7,7 @@ import genericarc.GenericArcMill;
 import genericarc._visitor.GenericArcTraverser;
 import montiarc.util.check.IArcDerive;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -17,9 +17,14 @@ import org.junit.jupiter.api.Test;
  */
 public class GenericArcDeriveTest extends AbstractArcDeriveTest {
 
-  @BeforeAll
-  public static void initMill() {
+  @Override
+  @BeforeEach
+  public void init() {
+    GenericArcMill.globalScope().clear();
+    GenericArcMill.reset();
     GenericArcMill.init();
+    addBasicTypes2Scope();
+    this.setUp();
   }
 
   @Override

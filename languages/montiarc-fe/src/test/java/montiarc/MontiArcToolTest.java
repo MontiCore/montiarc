@@ -1,7 +1,6 @@
 package montiarc;
 
 import de.monticore.io.paths.ModelPath;
-import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symboltable.IScope;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
@@ -12,7 +11,6 @@ import montiarc._symboltable.MontiArcArtifactScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -20,7 +18,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -187,7 +184,6 @@ public class MontiArcToolTest extends AbstractTest {
   public void shouldParseModelsGivenScope(@NotNull String directoryName, int expNumModels) {
     //Given
     IMontiArcGlobalScope globalScope = MontiArcMill.globalScope();
-    globalScope.clear();
     globalScope.setModelPath(new ModelPath(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName)));
     globalScope.setFileExt(this.getTool().getMAFileExtension());
 
@@ -208,9 +204,7 @@ public class MontiArcToolTest extends AbstractTest {
   public void shouldLoadModelsGivenScope(@NotNull String directoryName, int expNumModels) {
     //Given
     IMontiArcGlobalScope globalScope = MontiArcMill.globalScope();
-    globalScope.clear();
     globalScope.setModelPath(new ModelPath(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName)));
-    globalScope.setFileExt(this.getTool().getMAFileExtension());
 
     //When
     Collection<IMontiArcArtifactScope> scopes = this.getTool().loadAll(globalScope);
