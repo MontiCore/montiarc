@@ -2,7 +2,9 @@
 package montiarc._cocos;
 
 import arcbasis._cocos.*;
+import de.monticore.types.check.TypeCheckResult;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
+import montiarc.check.MontiArcDerive;
 
 /**
  * Bundle of CoCos for the MontiArc language.
@@ -17,6 +19,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new ComponentInstanceTypeExists());
     checker.addCoCo(new ComponentTypeNameCapitalization());
     checker.addCoCo(new ConfigurationParametersCorrectlyInherited());
+    checker.addCoCo(new ConfigurationParameterAssignment(new MontiArcDerive(new TypeCheckResult())));
     checker.addCoCo(new ConnectorSourceAndTargetComponentDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetExistAndFit());

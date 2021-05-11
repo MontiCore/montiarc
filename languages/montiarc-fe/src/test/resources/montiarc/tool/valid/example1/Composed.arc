@@ -4,7 +4,7 @@
  * Valid model.
  */
 component Composed {
-  InComp ic;
+  InComp ic("foo");
   OutComp oc;
 
   oc.outPort -> ic.inPort;
