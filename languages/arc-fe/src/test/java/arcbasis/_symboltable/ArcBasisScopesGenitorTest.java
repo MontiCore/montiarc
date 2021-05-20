@@ -74,6 +74,7 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     Assertions.assertEquals(1, scope.getComponentTypeSymbols().get("Comp").size());
     Assertions.assertTrue(scope.getComponentTypeSymbols().get("Comp").get(0).getSpannedScope()
       .getComponentTypeSymbols().isEmpty());
+    Assertions.assertTrue(this.getSymTab().getCurrentCompInstanceType().isPresent());
   }
 
   @Test
@@ -88,6 +89,7 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     this.getSymTab().endVisit(ast);
     Assertions.assertEquals(scope, this.getSymTab().getCurrentScope().orElse(null));
     Assertions.assertEquals(size, this.getSymTab().getComponentStack().size());
+    Assertions.assertFalse(this.getSymTab().getCurrentCompInstanceType().isPresent());
   }
 
   @Test
@@ -236,7 +238,9 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
         .setPartsList(Lists.newArrayList("String"))
         .build())
       .build();
+    IArcBasisScope scope = ArcBasisMill.scope();
     this.getSymTab().setCurrentCompInstanceType(type);
+    this.getSymTab().pushCurrentEnclosingScope4Instances(scope);
     this.getSymTab().visit(ast);
     this.getSymTab().endVisit(ast);
     Assertions.assertEquals(3, ast.getSymbol().getArguments().size());
@@ -248,12 +252,13 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
       .setArguments(arcbasis.ArcBasisMill.argumentsBuilder()
         .setExpressionsList(Arrays.asList(this.mockValues(3))).build()).build();
     IArcBasisScope scope = ArcBasisMill.scope();
-    this.getSymTab().setCurrentCompInstanceType(ArcBasisMill.mCQualifiedTypeBuilder()
+    ASTMCType curCompInstType = ArcBasisMill.mCQualifiedTypeBuilder()
       .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
         .setPartsList(Lists.newArrayList("String"))
         .build())
-      .build());
-    this.getSymTab().putOnStack(scope);
+      .build();
+    this.getSymTab().setCurrentCompInstanceType(curCompInstType);
+    this.getSymTab().pushCurrentEnclosingScope4Instances(scope);
     this.getSymTab().handle(ast);
     Assertions.assertEquals(scope, ast.getEnclosingScope());
     Assertions.assertFalse(scope.getLocalComponentInstanceSymbols().isEmpty());
@@ -323,10 +328,46 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
       .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build()).setComponentInstancesList(Collections.singletonList(instance)).build();
     IArcBasisScope scope = ArcBasisMill.scope();
     this.getSymTab().putOnStack(scope);
+    this.getSymTab().pushCurrentEnclosingScope4Instances(scope);
     this.getSymTab().handle(instances);
     Assertions.assertEquals(1, instances.getComponentInstanceList().size());
     Assertions.assertFalse(scope.getComponentInstanceSymbols().get("comp").isEmpty());
     Assertions.assertEquals(1, scope.getComponentInstanceSymbols().get("comp").get(0).getArguments().size());
+  }
+
+  @Test
+  public void shouldVisitComponentBody() {
+    // Given
+    IArcBasisScope scope = ArcBasisMill.scope();
+    ASTComponentBody compBody = arcbasis.ArcBasisMill.componentBodyBuilder().build();
+
+    // When
+    this.getSymTab().putOnStack(scope);
+    this.getSymTab().visit(compBody);
+
+    // Then
+    Assertions.assertEquals(scope, compBody.getEnclosingScope());
+    Assertions.assertTrue(this.getSymTab().getCurrentEnclosingScope4Instances().isPresent());
+    Assertions.assertEquals(scope, this.getSymTab().getCurrentEnclosingScope4Instances().get());
+  }
+
+  @Test
+  public void shouldEndVisitComponentBody() {
+    // Given
+    IArcBasisScope lowStackScope = ArcBasisMill.scope();
+    IArcBasisScope highStackScope = ArcBasisMill.scope();
+    ASTComponentBody compBody = arcbasis.ArcBasisMill.componentBodyBuilder().build();
+
+    // When
+    this.getSymTab().pushCurrentEnclosingScope4Instances(lowStackScope);
+    this.getSymTab().pushCurrentEnclosingScope4Instances(highStackScope);
+    this.getSymTab().endVisit(compBody);
+
+    // Then
+    Assertions.assertEquals(1, this.getSymTab().getEnclosingScope4InstancesStack().size());
+    Assertions.assertEquals(lowStackScope, this.getSymTab().getCurrentEnclosingScope4Instances().get());
+
+
   }
 
   protected ASTExpression[] mockValues(int length) {

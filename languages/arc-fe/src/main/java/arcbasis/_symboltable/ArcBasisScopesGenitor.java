@@ -18,6 +18,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.Optional;
 import java.util.Stack;
 import java.util.function.BiFunction;
@@ -29,6 +30,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   protected BiFunction<ASTMCType, IArcBasisScope, SymTypeExpression> expressionCreator;
   protected ISynthesize typeSynthesizer;
   protected ASTMCType currentCompInstanceType;
+  protected Stack<IArcBasisScope> enclosingScope4InstancesStack = new Stack();
   protected ASTMCType currentFieldType;
   protected ASTMCType currentPortType;
   protected ASTPortDirection currentPortDirection;
@@ -126,6 +128,31 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     this.currentCompInstanceType = currentCompInstanceType;
   }
 
+  protected Stack<IArcBasisScope> getEnclosingScope4InstancesStack() {
+    return this.enclosingScope4InstancesStack;
+  }
+
+  protected Optional<IArcBasisScope> getCurrentEnclosingScope4Instances() {
+    try {
+      return Optional.ofNullable(this.getEnclosingScope4InstancesStack().peek());
+    } catch (EmptyStackException e) {
+      return Optional.empty();
+    }
+  }
+
+  protected Optional<IArcBasisScope> removeCurrentEnclosingScope4Instances() {
+    try {
+      return Optional.ofNullable(this.getEnclosingScope4InstancesStack().pop());
+    } catch (EmptyStackException e) {
+      return Optional.empty();
+    }
+  }
+
+  protected void pushCurrentEnclosingScope4Instances(@Nullable IArcBasisScope scope) {
+    Preconditions.checkArgument(scope != null);
+    this.getEnclosingScope4InstancesStack().push(scope);
+  }
+
   @Override
   public IArcBasisArtifactScope createFromAST(@NotNull ASTArcElement rootNode)  {
     Preconditions.checkNotNull(rootNode);
@@ -164,6 +191,30 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     }
   }
 
+  /**
+   * Creates an ASTMCType that represents the  given component type
+   * @param comp the component type for which the ASMCType should be created
+   * @return the given component type, represented as MCType
+   */
+  protected ASTMCType mcTypeFromCompType(@NotNull ComponentTypeSymbol comp) {
+    Preconditions.checkArgument(comp != null);
+    Preconditions.checkArgument(comp.getEnclosingScope() != null);
+
+    ASTMCType type = ArcBasisMill
+      .mCQualifiedTypeBuilder()
+      .setMCQualifiedName(
+        MCBasicTypesMill
+          .mCQualifiedNameBuilder()
+          .addParts(comp.getFullName())
+          .build()
+      )
+      .build();
+
+    type.setEnclosingScope(comp.getEnclosingScope());
+
+    return type;
+  }
+
   @Override
   public void visit(@NotNull ASTComponentType node) {
     Preconditions.checkArgument(node != null);
@@ -179,6 +230,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     this.getCurrentScope().get().add(symbol);
     this.putOnStack(symbol.getSpannedScope());
     this.putOnStack(symbol);
+    this.setCurrentCompInstanceType(this.mcTypeFromCompType(symbol));
   }
 
   @Override
@@ -190,6 +242,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkState(this.getCurrentComponent().get().getAstNode().equals(node));
     this.removeCurrentComponent();
     this.removeCurrentScope();
+    this.setCurrentCompInstanceType(null);
   }
 
   @Override
@@ -202,6 +255,21 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     if (node.isPresentParent()) {
       this.getCurrentComponent().get().setParent(this.delegateToParent(node));
     }
+  }
+
+  @Override
+  public void visit(@NotNull ASTComponentBody node) {
+    Preconditions.checkArgument(node != null);
+    Preconditions.checkState(this.getCurrentScope().isPresent());
+    node.setEnclosingScope(this.getCurrentScope().get());
+    this.pushCurrentEnclosingScope4Instances(this.getCurrentScope().get());
+  }
+
+  @Override
+  public void endVisit(@NotNull ASTComponentBody node) {
+    Preconditions.checkArgument(node != null);
+    Preconditions.checkState(this.getCurrentEnclosingScope4Instances().isPresent());
+    this.removeCurrentEnclosingScope4Instances();
   }
 
   /**
@@ -381,14 +449,15 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   @Override
   public void visit(@NotNull ASTComponentInstance node) {
     Preconditions.checkArgument(node != null);
-    Preconditions.checkState(this.getCurrentScope().isPresent());
     Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
+    Preconditions.checkState(this.getCurrentEnclosingScope4Instances().isPresent());
+
     ComponentInstanceSymbol symbol = create_ComponentInstance(node).build();
     node.setSymbol(symbol);
-    node.setEnclosingScope(this.getCurrentScope().get());
+    node.setEnclosingScope(getCurrentEnclosingScope4Instances().get());
     symbol.setAstNode(node);
-    symbol.setEnclosingScope(this.getCurrentScope().get());
-    this.getCurrentScope().get().add(symbol);
+    symbol.setEnclosingScope(getCurrentEnclosingScope4Instances().get());
+    getCurrentEnclosingScope4Instances().get().add(symbol);
   }
 
   @Override
