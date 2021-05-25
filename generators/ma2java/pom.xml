@@ -72,12 +72,6 @@
     </dependency>
 
     <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
       <groupId>org.eclipse.emf</groupId>
       <artifactId>org.eclipse.emf.compare</artifactId>
       <scope>test</scope>

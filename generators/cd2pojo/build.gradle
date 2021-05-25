@@ -10,7 +10,6 @@ dependencies {
   implementation project(":util")
   implementation "de.monticore.lang:cd4analysis:$cd4a_version"
   testImplementation "de.monticore:monticore-runtime:$mc_version:tests"
-  testImplementation "ch.qos.logback:logback-classic:$logback_version"
   testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
   testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version"
   testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"

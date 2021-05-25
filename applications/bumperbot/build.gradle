@@ -24,7 +24,6 @@ dependencies {
   implementation "de.se_rwth.commons:se-commons-utilities:$se_commons_version"
   implementation "de.monticore:monticore-runtime:$mc_version"
   implementation "de.monticore:monticore-grammar:$mc_version"
-  runtimeOnly "ch.qos.logback:logback-classic:$logback_version"
   testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
   testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version"
   testImplementation "de.monticore:monticore-runtime:$mc_version:tests"
