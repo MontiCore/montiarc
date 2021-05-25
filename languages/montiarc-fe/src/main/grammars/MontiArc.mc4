@@ -42,6 +42,7 @@ grammar MontiArc extends
             de.monticore.types.MCSimpleGenericTypes,
             de.monticore.statements.MCCommonStatements,
             de.monticore.statements.MCVarDeclarationStatements,
+            de.monticore.TriggeredStatecharts,
             ArcCore                                             {
 
   /** ASTMACompilationUnit represents the entire content of a MontiArc model
@@ -55,6 +56,13 @@ grammar MontiArc extends
     ComponentType
     EOF
   ;
+
+  /**
+   * ASTArcBehaviorElement offers an extension point to specify behavior of a component
+   */
+  interface ArcBehaviorElement extends ArcElement;
+
+  ArcStatechart implements ArcBehaviorElement = Statechart;
 
   /**
    * ASTArcTiming sets the timing of a component.
@@ -92,5 +100,4 @@ grammar MontiArc extends
   ArcSync implements ArcTimeMode = key("sync");
 
   ArcUntimed implements ArcTimeMode = key("untimed");
-  
 }

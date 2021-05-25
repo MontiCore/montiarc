@@ -23,6 +23,7 @@
   <properties>
     <!-- DSLs -->
     <cd4a.version>7.0.0</cd4a.version>
+    <statechart.version>${monticore.version}</statechart.version>
 
     <!-- SE-Libraries -->
     <monticore.version>7.0.0</monticore.version>

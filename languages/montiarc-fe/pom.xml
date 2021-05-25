@@ -31,6 +31,20 @@
       <artifactId>antlr4-runtime</artifactId>
     </dependency>
 
+    <!-- State Chart -->
+    <dependency>
+      <artifactId>statecharts</artifactId>
+      <groupId>de.monticore.lang</groupId>
+      <version>${statechart.version}</version>
+    </dependency>
+
+    <dependency>
+      <artifactId>statecharts</artifactId>
+      <groupId>de.monticore.lang</groupId>
+      <version>${statechart.version}</version>
+      <classifier>${grammars.classifier}</classifier>
+    </dependency>
+
     <!-- MontiCore Dependencies -->
     <dependency>
       <groupId>de.monticore</groupId>
