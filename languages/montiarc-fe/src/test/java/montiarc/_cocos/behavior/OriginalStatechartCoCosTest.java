@@ -1,19 +1,24 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc._cocos;
+package montiarc._cocos.behavior;
 
 import com.google.common.base.Preconditions;
 import de.monticore.scbasis._cocos.*;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc._cocos.AbstractCoCoTest;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.Collections;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -23,6 +28,7 @@ import java.util.stream.Stream;
  * {@link CapitalStateNames}, {@link PackageCorrespondsToFolders},
  * {@link SCFileExtension}, {@link SCNameIsArtifactName}
  */
+@Disabled(value = "The cocos 'CapitalStateNames' and 'UniqueStates' both contain errors")
 public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
 
   @Override
@@ -37,15 +43,15 @@ public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-  //    Arguments.of("LowercaseStateName.arc", new Error[] {ExternalErrors.CAPITAL_STATE_NAMES}),
-  //    Arguments.of("NoUniqueStates.arc", new Error[] {ExternalErrors.UNIQUE_STATES}),
+      Arguments.of("LowercaseStateName.arc", new Error[] {ExternalErrors.CAPITAL_STATE_NAMES}),
+      Arguments.of("NoUniqueStates.arc", new Error[] {ExternalErrors.UNIQUE_STATES}),
       Arguments.of("TransitionSourceMissing.arc", new Error[] {ExternalErrors.TRANSITION_SOURCE_EXISTS}),
       Arguments.of("TransitionTargetMissing.arc", new Error[] {ExternalErrors.TRANSITION_TARGET_EXISTS})
     );
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"ValidStatechart.arc", "NoStatechart.arc"})
+  @ValueSource(strings = {"ValidStatechart.arc", "TransStateTransition.arc", "NoStatechart.arc"})
   public void succeed(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
@@ -56,8 +62,8 @@ public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
     this.getChecker().checkAll(ast);
 
     //Then
-    Assertions.assertEquals(0, Log.getFindings().stream().filter(f -> !f.getMsg().startsWith("0xA7000")).count());
-    // ignore strange travreser stuff
+    Assertions.assertEquals(Collections.emptyList(), Log.getFindings().stream().map(Finding::getMsg).filter(s -> !s.startsWith("0xA7000")).collect(Collectors.toList()));
+    // ignore strange traverser stuff
   }
 
   @ParameterizedTest
@@ -81,14 +87,17 @@ public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
 
   @Override
   protected void registerCoCos() {
-    //this.getChecker().addCoCo(new UniqueStates());
+    this.getChecker().addCoCo(new UniqueStates());
     this.getChecker().addCoCo(new TransitionSourceTargetExists());
-    //this.getChecker().addCoCo(new CapitalStateNames()); // this coco does not work
+    this.getChecker().addCoCo(new CapitalStateNames());
     this.getChecker().addCoCo(new PackageCorrespondsToFolders());
     this.getChecker().addCoCo(new SCFileExtension());
     this.getChecker().addCoCo(new SCNameIsArtifactName());
   }
 
+  /**
+   * wraps the error messages into enum values, so they can be used in combination with the existing test infrastructure
+   */
   enum ExternalErrors implements Error {
     UNIQUE_STATES(UniqueStates.ERROR_CODE),
     TRANSITION_SOURCE_EXISTS(TransitionSourceTargetExists.SOURCE_ERROR_CODE),

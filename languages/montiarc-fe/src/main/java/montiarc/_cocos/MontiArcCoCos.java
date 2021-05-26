@@ -3,7 +3,6 @@ package montiarc._cocos;
 
 import arcbasis._cocos.*;
 import de.monticore.types.check.TypeCheckResult;
-import de.monticore.scbasis._cocos.*;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
 import montiarc.check.MontiArcDerive;
 
@@ -44,11 +43,11 @@ public class MontiArcCoCos {
 
     // statechart origin cocos
     // checker.addCoCo(new UniqueStates()); // uses uml traverser
-    checker.addCoCo(new TransitionSourceTargetExists());
+    // checker.addCoCo(new TransitionSourceTargetExists());
     //checker.addCoCo(new CapitalStateNames()); // this coco is implemented wrongly
-    checker.addCoCo(new PackageCorrespondsToFolders());
-    checker.addCoCo(new SCFileExtension());
-    checker.addCoCo(new SCNameIsArtifactName());
+    // checker.addCoCo(new PackageCorrespondsToFolders());
+    // checker.addCoCo(new SCFileExtension());
+    // checker.addCoCo(new SCNameIsArtifactName());
 
     return checker;
   }

@@ -10,7 +10,7 @@ component F_HierarchicalStates {
        in boolean unlock;
   port out boolean ringing;
 
-  statechart Door {
+  automaton {
     initial state Closed;
     state Locked;
     state Opened { };

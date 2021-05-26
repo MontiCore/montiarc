@@ -10,7 +10,7 @@ component B_JustSomeStates {
        in boolean unlock;
   port out boolean ringing;
 
-  statechart Door {
+  automaton {
     state Opened;
     initial state Closed;
     state Locked;

@@ -6,7 +6,7 @@ component NoUniqueStates {
        in boolean unlock;
   port out boolean ringing;
 
-  statechart Door {
+  automaton {
     initial state Closed; // <- name "Closed" used twice
     state Locked;
     state Closed { // <- name "Closed" used twice

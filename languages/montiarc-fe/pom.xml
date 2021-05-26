@@ -31,20 +31,6 @@
       <artifactId>antlr4-runtime</artifactId>
     </dependency>
 
-    <!-- State Chart -->
-    <dependency>
-      <artifactId>statecharts</artifactId>
-      <groupId>de.monticore.lang</groupId>
-      <version>${statechart.version}</version>
-    </dependency>
-
-    <dependency>
-      <artifactId>statecharts</artifactId>
-      <groupId>de.monticore.lang</groupId>
-      <version>${statechart.version}</version>
-      <classifier>${grammars.classifier}</classifier>
-    </dependency>
-
     <!-- MontiCore Dependencies -->
     <dependency>
       <groupId>de.monticore</groupId>
@@ -84,6 +70,19 @@
       <groupId>montiarc.languages</groupId>
       <artifactId>arc-fe</artifactId>
       <version>${project.version}</version>
+      <classifier>${grammars.classifier}</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>montiarc.languages</groupId>
+      <version>${project.version}</version>
+      <artifactId>behavior-fe</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>montiarc.languages</groupId>
+      <version>${project.version}</version>
+      <artifactId>behavior-fe</artifactId>
       <classifier>${grammars.classifier}</classifier>
     </dependency>
 

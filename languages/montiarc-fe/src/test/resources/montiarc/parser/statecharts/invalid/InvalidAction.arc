@@ -7,7 +7,7 @@ component InvalidAction {
        in boolean unlock;
   port out boolean ringing;
 
-  statechart {
+  automaton {
     state Open;
     initial state Closed;
     state Locked {

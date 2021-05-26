@@ -1,0 +1,11 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+component grammar ArcAutomaton extends ArcBehaviorBasis,
+            de.monticore.TriggeredStatecharts {
+
+  ArcStatechart implements ArcBehaviorElement extends UnnamedStatechart =
+    Stereotype?
+    "automaton" "{"
+      SCStatechartElement*
+    "}";
+}

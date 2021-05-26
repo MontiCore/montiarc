@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-component grammar ArcBehaviorBasis {
+component grammar ArcBehaviorBasis extends ArcBasis {
 
   /**
-   * ASTArcBehavior is the interface of all atomic
+   * ASTArcBehaviorElement is the interface of all atomic
    * component behavior descriptions.
    */
-  interface ArcBehavior;
+  interface ArcBehaviorElement extends ArcElement;
 
 }
