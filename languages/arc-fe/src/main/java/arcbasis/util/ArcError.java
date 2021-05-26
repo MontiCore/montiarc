@@ -66,7 +66,7 @@ public enum ArcError implements montiarc.util.Error {
     + " So '%s' is an unsuitable name"),
   INSTANCE_NAME_LOWER_CASE("0xMA1056", "The name of the component instance '%s' should start"
     + " with a lower case letter."),
-  UNIQUE_FIELD_NAME("0xMA1061", "There may not be multiple fields called '%s' in the component '%s'."),
+  UNIQUE_IDENTIFIER_NAMES("0xMA1061", "Within '%s' there may not be multiple identifiers called '%s'. Occurrences: %s."),
   CONFIG_PARAMETER_BINDING("0xMA1063", "Component type '%s' has no signature '%s', as given by "
     + "instantiation '%s'.");
 

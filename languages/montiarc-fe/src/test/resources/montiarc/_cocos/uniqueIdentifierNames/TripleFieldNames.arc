@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
-package uniqueFieldNames;
+package uniqueIdentifierNames;
 
 /**
  * Invalid model because of redundant names.
  */
-component TripleNames {
+component TripleFieldNames {
 
   int a = 1, a = 2, a = 3;
 }

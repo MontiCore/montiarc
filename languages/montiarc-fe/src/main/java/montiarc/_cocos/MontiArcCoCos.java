@@ -36,7 +36,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new PortUniqueSender());
     checker.addCoCo(new PortUsage());
     checker.addCoCo(new SubComponentsConnected());
-    checker.addCoCo(new UniqueFieldNames());
+    checker.addCoCo(new UniqueIdentifierNames());
     
     //genericarc cocos
     checker.addCoCo(new GenericTypeParameterNameCapitalization());
