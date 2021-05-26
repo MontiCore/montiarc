@@ -2,6 +2,7 @@
 package arcbasis._cocos;
 
 import arcbasis.AbstractTest;
+import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
@@ -28,7 +29,7 @@ public class ParameterTypeExistsTest extends AbstractTest {
           .build()))
         .build())
       .build();
-    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator();
+    ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     symTab.createFromAST(ast).setName("THE SCOPE");
     ParameterTypeExists coco = new ParameterTypeExists();
     coco.check(ast.getHead().getArcParameter(0));

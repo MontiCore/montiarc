@@ -38,7 +38,7 @@ public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
   //    Arguments.of("LowercaseStateName.arc", new Error[] {ExternalErrors.CAPITAL_STATE_NAMES}),
-      Arguments.of("NoUniqueStates.arc", new Error[] {ExternalErrors.UNIQUE_STATES}),
+  //    Arguments.of("NoUniqueStates.arc", new Error[] {ExternalErrors.UNIQUE_STATES}),
       Arguments.of("TransitionSourceMissing.arc", new Error[] {ExternalErrors.TRANSITION_SOURCE_EXISTS}),
       Arguments.of("TransitionTargetMissing.arc", new Error[] {ExternalErrors.TRANSITION_TARGET_EXISTS})
     );
@@ -81,7 +81,7 @@ public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
 
   @Override
   protected void registerCoCos() {
-    this.getChecker().addCoCo(new UniqueStates());
+    //this.getChecker().addCoCo(new UniqueStates());
     this.getChecker().addCoCo(new TransitionSourceTargetExists());
     //this.getChecker().addCoCo(new CapitalStateNames()); // this coco does not work
     this.getChecker().addCoCo(new PackageCorrespondsToFolders());

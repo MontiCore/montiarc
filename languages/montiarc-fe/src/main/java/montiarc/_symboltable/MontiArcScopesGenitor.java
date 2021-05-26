@@ -44,30 +44,4 @@ public class MontiArcScopesGenitor extends MontiArcScopesGenitorTOP {
     Preconditions.checkState(this.getCurrentScope().isPresent());
     super.endVisit(node);
   }
-
-  @Override
-  public void endVisit(ASTArcStatechart node) {
-    IMontiArcScope arcScope = node.getEnclosingScope();
-    Optional<ISCBasisScope> stateChartScope = ((MontiArcScope)arcScope).getStatechartScope();
-    if(stateChartScope.isPresent()){
-      ISCBasisScope chartScope = stateChartScope.get();
-      // add port names to the statechart scope
-      // TODO: is this necessary?
-      // it would be nicer if the statechart scope could use the monti arc scope to resolve
-      arcScope
-          .getLocalPortSymbols()
-          .stream()
-          .map(p -> MontiArcMill
-                        .variableSymbolBuilder()
-                        .setFullName(p.getFullName())
-                        .setType(p.getType())
-                        .setEnclosingScope(chartScope)
-                        .build())
-          .forEach(chartScope::add);
-    } else {
-      // TODO: deal with named charts
-    }
-  }
-
-
 }

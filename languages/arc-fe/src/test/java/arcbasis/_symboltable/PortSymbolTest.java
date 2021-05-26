@@ -22,7 +22,7 @@ public class PortSymbolTest extends AbstractTest {
   @Test
   public void shouldFindComponentType() {
     ComponentTypeSymbol compSymbol = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp")
-      .setSpannedScope(new ArcBasisScope()).build();
+      .setSpannedScope(ArcBasisMill.scope()).build();
     PortSymbol portSymbol = ArcBasisMill.portSymbolBuilder().setName("p1")
       .setIncoming(true).setType(mock(SymTypeExpression.class)).build();
     compSymbol.getSpannedScope().add(portSymbol);
@@ -38,7 +38,7 @@ public class PortSymbolTest extends AbstractTest {
 
   @Test
   public void shouldReturnResolvedType() {
-    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator();
+    ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     ASTPortDeclaration ports = ArcBasisMill.portDeclarationBuilder()
       .setPortList("p")
       .setIncoming(true)

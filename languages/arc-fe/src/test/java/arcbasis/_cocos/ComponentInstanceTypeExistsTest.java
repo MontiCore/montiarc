@@ -2,6 +2,7 @@
 package arcbasis._cocos;
 
 import arcbasis.AbstractTest;
+import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentType;
@@ -27,7 +28,7 @@ public class ComponentInstanceTypeExistsTest extends AbstractTest {
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(arcbasis.ArcBasisMill.componentBodyBuilder().addArcElement(instantiation).build())
       .build();
-    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator();
+    ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     symTab.createFromAST(enclType).setName("Scopy");
     ComponentInstanceTypeExists coco = new ComponentInstanceTypeExists();
     coco.check(instantiation.getComponentInstance(0));

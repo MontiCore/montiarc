@@ -22,7 +22,7 @@ public class NamesInExpressionsVisitorTest extends AbstractTest {
   @ParameterizedTest
   @MethodSource("expressionAndVariableNamesProvider")
   public void shouldFindNames(String expression, List<String> names) throws IOException {
-    MontiArcParser parser = new MontiArcParser();
+    MontiArcParser parser = MontiArcMill.parser();
     NamesInExpressionsVisitor visitor = new NamesInExpressionsVisitor();
     MontiArcTraverser traverser = MontiArcMill.traverser();
     traverser.add4AssignmentExpressions(visitor);

@@ -154,7 +154,7 @@ public class MontiArcTool implements IMontiArcTool {
   @Override
   public IMontiArcScope createSymbolTable(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkArgument(ast != null);
-    MontiArcScopesGenitorDelegator symTab = new MontiArcScopesGenitorDelegator();
+    MontiArcScopesGenitorDelegator symTab = MontiArcMill.scopesGenitorDelegator();
     return symTab.createFromAST(ast);
   }
 

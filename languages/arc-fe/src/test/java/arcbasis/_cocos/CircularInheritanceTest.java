@@ -2,6 +2,7 @@
 package arcbasis._cocos;
 
 import arcbasis.AbstractTest;
+import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
@@ -35,7 +36,7 @@ public class CircularInheritanceTest extends AbstractTest {
           .build())
         .build())
       .build();
-    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator();
+    ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     symTab.createFromAST(parent);
     symTab.createFromAST(child);
     CircularInheritance coco = new CircularInheritance();
@@ -54,7 +55,7 @@ public class CircularInheritanceTest extends AbstractTest {
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setParent(createQualifiedType("A")).build())
       .build();
-    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator();
+    ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     symTab.createFromAST(parent);
     symTab.createFromAST(child);
     CircularInheritance coco = new CircularInheritance();

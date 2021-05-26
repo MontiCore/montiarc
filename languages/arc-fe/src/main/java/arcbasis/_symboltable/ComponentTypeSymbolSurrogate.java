@@ -1,10 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.ArcBasisMill;
 import com.google.common.base.Preconditions;
-import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
-import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 import genericarc._symboltable.ArcTypeParameterSymbol;
 import genericarc._symboltable.IGenericArcScope;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -16,7 +15,7 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
 
   public ComponentTypeSymbolSurrogate(@NotNull String name) {
     super(name);
-    this.spannedScope = new ArcBasisScope();
+    this.spannedScope = ArcBasisMill.scope();
   }
 
   protected Optional<ComponentTypeSymbol> getDelegate() {

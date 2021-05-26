@@ -45,7 +45,7 @@ public class SubComponentsConnectedTest extends AbstractTest {
 
   @BeforeEach
   public void setUpTest() {
-    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator();
+    ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     ASTComponentType comp1 = ArcBasisMill.componentTypeBuilder().setName("A")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()

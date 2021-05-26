@@ -25,7 +25,7 @@ class PortUsageTest extends AbstractTest {
   }
 
   static Stream<Arguments> componentAndErrorCodeProvider() {
-    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator();
+    ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     ASTComponentType comp1 = ArcBasisMill.componentTypeBuilder().setName("Comp1")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()

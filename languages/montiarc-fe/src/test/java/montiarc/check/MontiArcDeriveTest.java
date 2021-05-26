@@ -231,7 +231,7 @@ public class MontiArcDeriveTest extends AbstractArcDeriveTest {
 
   protected MontiArcParser getParser() {
     if (this.parser == null) {
-      this.parser = new MontiArcParser();
+      this.parser = MontiArcMill.parser();
     }
     return parser;
   }

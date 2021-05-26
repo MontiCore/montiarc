@@ -42,7 +42,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new GenericTypeParameterNameCapitalization());
 
     // statechart origin cocos
-    checker.addCoCo(new UniqueStates());
+    // checker.addCoCo(new UniqueStates()); // uses uml traverser
     checker.addCoCo(new TransitionSourceTargetExists());
     //checker.addCoCo(new CapitalStateNames()); // this coco is implemented wrongly
     checker.addCoCo(new PackageCorrespondsToFolders());

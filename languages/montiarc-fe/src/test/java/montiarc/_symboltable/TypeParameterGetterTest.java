@@ -31,7 +31,7 @@ public class TypeParameterGetterTest extends AbstractTest {
   @Test
   public void areParametersProcessedCorrectly() throws IOException {
     MontiArcScopesGenitorDelegator symTab = new MontiArcScopesGenitorDelegator();
-    MontiArcParser parser = new MontiArcParser();
+    MontiArcParser parser = MontiArcMill.parser();
     ASTMACompilationUnit asthma = parser.parse(PATH.resolve("TriGenericInstantiation.arc").toString()).orElseThrow(couldNot("parse ..Instantiation.arc"));
     symTab.createFromAST(parser.parse(PATH.resolve("TriGenericComponent.arc").toString()).orElseThrow(couldNot("parse ..Component.arc")));
     ComponentInstanceSymbol comp =

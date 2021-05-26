@@ -28,7 +28,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
   @Override
   public void setUp() {
     super.setUp();
-    this.scopeGenitor = new ArcBasisScopesGenitorDelegator();
+    this.scopeGenitor = ArcBasisMill.scopesGenitorDelegator();
   }
 
   @Override

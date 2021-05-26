@@ -3,6 +3,7 @@ package montiarc.parser;
 
 import de.se_rwth.commons.logging.Log;
 import montiarc.AbstractTest;
+import montiarc.MontiArcMill;
 import montiarc._ast.ASTArcTiming;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
@@ -33,7 +34,7 @@ public class ParserTest extends AbstractTest {
 
   static public Optional<ASTMACompilationUnit> parse(String relativeFilePath,
       boolean expParserErrors) {
-    MontiArcParser parser = new MontiArcParser();
+    MontiArcParser parser = MontiArcMill.parser();
     Optional<ASTMACompilationUnit> optAst;
     try {
       optAst = parser.parse(relativeFilePath);
@@ -52,7 +53,7 @@ public class ParserTest extends AbstractTest {
 
   static public Optional<ASTMACompilationUnit> parse_String(String content,
       boolean expParserErrors) {
-    MontiArcParser parser = new MontiArcParser();
+    MontiArcParser parser = MontiArcMill.parser();
     Optional<ASTMACompilationUnit> optAst;
     try {
       optAst = parser.parse_String(content);

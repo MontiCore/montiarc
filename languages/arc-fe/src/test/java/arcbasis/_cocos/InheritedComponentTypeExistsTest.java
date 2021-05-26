@@ -2,6 +2,7 @@
 package arcbasis._cocos;
 
 import arcbasis.AbstractTest;
+import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
@@ -22,7 +23,7 @@ public class InheritedComponentTypeExistsTest extends AbstractTest {
     ASTComponentType ast = arcbasis.ArcBasisMill.componentTypeBuilder().setName("B")
       .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setParent(parent).build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    ArcBasisScopesGenitorDelegator symTab = new ArcBasisScopesGenitorDelegator();
+    ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     symTab.createFromAST(ast);
     InheritedComponentTypeExists coco = new InheritedComponentTypeExists();
     coco.check(ast);

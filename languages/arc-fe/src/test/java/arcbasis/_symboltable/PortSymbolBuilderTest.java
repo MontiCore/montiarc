@@ -40,7 +40,7 @@ public class PortSymbolBuilderTest extends AbstractTest {
 
   @Test
   public void shouldBuildWithExpectedType() {
-    SymTypeExpression typeExpression = SymTypeExpressionFactory.createTypeExpression("int", new ArcBasisScope());
+    SymTypeExpression typeExpression = SymTypeExpressionFactory.createTypeExpression("int", ArcBasisMill.scope());
     PortSymbol symbol = ArcBasisMill.portSymbolBuilder()
       .setName("in2").setType(typeExpression)
       .setDirection(arcbasis.ArcBasisMill.portDirectionInBuilder().build())

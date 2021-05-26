@@ -26,7 +26,7 @@ public class ComponentTypeSymbolBuilderTest extends AbstractTest {
   @Test
   public void shouldBeValid() {
     ComponentTypeSymbolBuilder builder = new ComponentTypeSymbolBuilder();
-    builder.setName("A").setSpannedScope(new ArcBasisScope());
+    builder.setName("A").setSpannedScope(ArcBasisMill.scope());
     Assertions.assertTrue(builder.isValid());
   }
 
@@ -36,7 +36,7 @@ public class ComponentTypeSymbolBuilderTest extends AbstractTest {
     ComponentTypeSymbolBuilder builder2 = new ComponentTypeSymbolBuilder();
     builder2.setName("Comp");
     ComponentTypeSymbolBuilder builder3 = new ComponentTypeSymbolBuilder();
-    builder3.setSpannedScope(new ArcBasisScope());
+    builder3.setSpannedScope(ArcBasisMill.scope());
     Assertions.assertFalse(builder1.isValid());
     Assertions.assertFalse(builder2.isValid());
     Assertions.assertFalse(builder3.isValid());
@@ -47,30 +47,30 @@ public class ComponentTypeSymbolBuilderTest extends AbstractTest {
     ComponentTypeSymbolSurrogate parentComp =
       ArcBasisMill.componentTypeSymbolSurrogateBuilder().setName("A").build();
     ComponentTypeSymbol childComp = ArcBasisMill.componentTypeSymbolBuilder().setName("B")
-      .setSpannedScope(new ArcBasisScope()).setParentComponent(parentComp).build();
+      .setSpannedScope(ArcBasisMill.scope()).setParentComponent(parentComp).build();
     Assertions.assertTrue(childComp.isPresentParentComponent());
   }
 
   @Test
   public void shouldNotHaveParent() {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName("A")
-      .setSpannedScope(new ArcBasisScope()).build();
+      .setSpannedScope(ArcBasisMill.scope()).build();
     Assertions.assertFalse(symbol.isPresentParentComponent());
   }
 
   @Test
   public void shouldHaveOuter() {
     ComponentTypeSymbol outerComp = ArcBasisMill.componentTypeSymbolBuilder().setName("A")
-      .setSpannedScope(new ArcBasisScope()).build();
+      .setSpannedScope(ArcBasisMill.scope()).build();
     ComponentTypeSymbol innerComp = ArcBasisMill.componentTypeSymbolBuilder().setName("B")
-      .setSpannedScope(new ArcBasisScope()).setOuterComponent(outerComp).build();
+      .setSpannedScope(ArcBasisMill.scope()).setOuterComponent(outerComp).build();
     Assertions.assertTrue(innerComp.getOuterComponent().isPresent());
   }
 
   @Test
   public void shouldNotHaveOuter() {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName("A")
-      .setSpannedScope(new ArcBasisScope()).build();
+      .setSpannedScope(ArcBasisMill.scope()).build();
     Assertions.assertFalse(symbol.getOuterComponent().isPresent());
   }
 
@@ -78,7 +78,7 @@ public class ComponentTypeSymbolBuilderTest extends AbstractTest {
   @MethodSource("compNameAndParametersProvider")
   public void shouldBuildWithExpectedParameters(String name, List<VariableSymbol> parameters) {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName(name)
-      .setSpannedScope(new ArcBasisScope()).setParameters(parameters).build();
+      .setSpannedScope(ArcBasisMill.scope()).setParameters(parameters).build();
     Assertions.assertEquals(symbol.getName(), name);
     Assertions.assertIterableEquals(symbol.getParameters(), parameters);
   }
@@ -99,7 +99,7 @@ public class ComponentTypeSymbolBuilderTest extends AbstractTest {
   public void shouldBuildWithExpectedTypeParameters(String name,
     List<TypeVarSymbol> typeParameters) {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName(name)
-      .setSpannedScope(new ArcBasisScope()).setTypeParameters(typeParameters).build();
+      .setSpannedScope(ArcBasisMill.scope()).setTypeParameters(typeParameters).build();
     Assertions.assertEquals(symbol.getName(), name);
     Assertions.assertIterableEquals(symbol.getTypeParameters(), typeParameters);
   }
