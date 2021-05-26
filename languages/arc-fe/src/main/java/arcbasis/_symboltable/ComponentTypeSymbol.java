@@ -136,8 +136,8 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    */
   public void addParameter(@NotNull VariableSymbol parameter) {
     Preconditions.checkArgument(parameter != null);
+    Preconditions.checkArgument(this.getSpannedScope().getLocalVariableSymbols().contains(parameter));
     this.parameters.add(parameter);
-    this.getSpannedScope().add(parameter);
   }
 
   /**

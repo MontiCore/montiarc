@@ -94,20 +94,34 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
 
   @Test
   public void shouldVisitParameterDeclaration() {
+    // Given
     ASTMCType type = ArcBasisMill.mCQualifiedTypeBuilder()
       .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
         .setPartsList(Lists.newArrayList("String"))
         .build())
       .build();
-    ASTArcParameter ast = arcbasis.ArcBasisMill.arcParameterBuilder()
+    ASTArcParameter astParam = arcbasis.ArcBasisMill.arcParameterBuilder()
       .setName("par").setMCType(type).build();
-    IArcBasisScope scope = ArcBasisMill.scope();
-    this.getSymTab().putOnStack(Mockito.mock(ComponentTypeSymbol.class));
-    this.getSymTab().putOnStack(scope);
-    this.getSymTab().visit(ast);
-    Assertions.assertEquals(scope, ast.getEnclosingScope());
+    ComponentTypeSymbol enclosingComp = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName("Encl")
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+    IArcBasisScope compScope = enclosingComp.getSpannedScope();
+
+    this.getSymTab().putOnStack(enclosingComp);
+    this.getSymTab().putOnStack(compScope);
+
+    // When
+    this.getSymTab().visit(astParam);
+
+    // Then
+    Assertions.assertEquals(compScope, astParam.getEnclosingScope());
     Assertions.assertTrue(this.getSymTab().getCurrentScope().isPresent());
-    Assertions.assertEquals(scope, this.getSymTab().getCurrentScope().get());
+    Assertions.assertEquals(compScope, this.getSymTab().getCurrentScope().get());
+    Assertions.assertEquals(1, compScope.getLocalVariableSymbols().size());
+    Assertions.assertEquals(1, enclosingComp.getParameters().size());
+    Assertions.assertEquals(astParam, compScope.getLocalVariableSymbols().get(0).getAstNode());
+    Assertions.assertEquals(astParam, enclosingComp.getParameters().get(0).getAstNode());
   }
 
   @Test
@@ -122,15 +136,28 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
 
   @Test
   public void shouldVisitParameter() {
-    ASTArcParameter ast = arcbasis.ArcBasisMill.arcParameterBuilder().setName("par")
+    // Given
+    ASTArcParameter astParam = arcbasis.ArcBasisMill.arcParameterBuilder().setName("par")
       .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build()).build();
-    IArcBasisScope scope = ArcBasisMill.scope();
-    this.getSymTab().putOnStack(Mockito.mock(ComponentTypeSymbol.class));
-    this.getSymTab().putOnStack(scope);
-    this.getSymTab().visit(ast);
-    Assertions.assertEquals(scope, ast.getEnclosingScope());
-    Assertions.assertFalse(scope.getVariableSymbols().isEmpty());
-    Assertions.assertEquals(1, scope.getLocalVariableSymbols().size());
+    ComponentTypeSymbol enclosingComp = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName("Encl")
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+    IArcBasisScope compScope = enclosingComp.getSpannedScope();
+    this.getSymTab().putOnStack(enclosingComp);
+    this.getSymTab().putOnStack(compScope);
+
+    // When
+    this.getSymTab().visit(astParam);
+
+    // Then
+    Assertions.assertEquals(compScope, astParam.getEnclosingScope());
+    Assertions.assertFalse(compScope.getVariableSymbols().isEmpty());
+    Assertions.assertFalse(enclosingComp.getParameters().isEmpty());
+    Assertions.assertEquals(1, compScope.getLocalVariableSymbols().size());
+    Assertions.assertEquals(1, enclosingComp.getParameters().size());
+    Assertions.assertEquals(astParam, compScope.getLocalVariableSymbols().get(0).getAstNode());
+    Assertions.assertEquals(astParam, enclosingComp.getParameters().get(0).getAstNode());
   }
 
   @Test
