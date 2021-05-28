@@ -28,10 +28,6 @@ public class ParserTest extends AbstractTest {
 
   protected static final String PACKAGE = "montiarc/parser";
 
-  static public Optional<ASTMACompilationUnit> parse(String relativeFilePath) {
-    return parse(relativeFilePath, false);
-  }
-
   static public Optional<ASTMACompilationUnit> parse(String relativeFilePath,
       boolean expParserErrors) {
     MontiArcParser parser = MontiArcMill.parser();
@@ -41,13 +37,8 @@ public class ParserTest extends AbstractTest {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    if (expParserErrors) {
-      Assertions.assertTrue(parser.hasErrors());
-      Assertions.assertFalse(optAst.isPresent());
-    } else {
-      Assertions.assertFalse(parser.hasErrors(), Log.getFindings().toString());
-      Assertions.assertTrue(optAst.isPresent());
-    }
+    Assertions.assertEquals(expParserErrors, parser.hasErrors(), Log.getFindings().toString());
+    Assertions.assertEquals(!expParserErrors, optAst.isPresent());
     return optAst;
   }
 
@@ -78,20 +69,20 @@ public class ParserTest extends AbstractTest {
   @ParameterizedTest
   @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc"})
   public void shouldParseWithoutError(String fileName) {
-    this.parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false);
+    parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false);
   }
 
   @ParameterizedTest
   @ValueSource(strings = "MultipleInheritance.arc")
   public void shouldParseWithErrors(String fileName) {
-    this.parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), true);
+    parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), true);
   }
 
   @ParameterizedTest
   @MethodSource("filenameAndErrorCodeProvider")
   public void shouldParseWithSpecifiedErrorsOnly(String fileName,
     Error... expErrors) {
-    this.parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), true);
+    parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), true);
     this.checkOnlyExpectedErrorsPresent(Log.getFindings(), expErrors);
   }
 
@@ -110,8 +101,8 @@ public class ParserTest extends AbstractTest {
   public void shouldParseTimingAsCorrectNode() {
     String fileName = "ComponentWithTiming.arc";
     ASTMACompilationUnit ast =
-      this.parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false).orElse(null);
-    Assertions.assertTrue(ast != null);
+      parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false).orElse(null);
+    Assertions.assertNotNull(ast);
     Assertions.assertEquals(3, ast.getComponentType().getBody().getArcElementList().size());
     Assertions.assertTrue(ast.getComponentType().getBody().getArcElement(0) instanceof ASTArcTiming);
     Assertions.assertTrue(ast.getComponentType().getBody().getArcElement(1) instanceof ASTArcTiming);

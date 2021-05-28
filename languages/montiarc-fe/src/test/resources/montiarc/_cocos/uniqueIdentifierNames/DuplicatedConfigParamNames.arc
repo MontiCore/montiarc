@@ -8,7 +8,7 @@ component DuplicatedConfigParamNames<VsTypeParam>(
   int VsConfigParam,
   int VsConfigParam,
   int VsTypeParam,
-  int vsPort,
+  int VsPort,
   int VsField,
   int VsCompType,
   int VsCompInst) {

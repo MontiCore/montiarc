@@ -32,8 +32,8 @@ public class NoSubComponentReferenceCyclesTest extends AbstractCoCoTest {
     return Stream.of(
       arg("LongCycle1.arc", ArcError.NO_SUBCOMPONENT_CYCLE),
       arg("WithDirectSelfReference.arc", ArcError.NO_SUBCOMPONENT_CYCLE),
-      arg("WithNestedSubCompRefCycle.arc", ArcError.NO_SUBCOMPONENT_CYCLE),
-      arg("WithNestedSubCompRefCycle2.arc", ArcError.NO_SUBCOMPONENT_CYCLE),
+      arg("WithNestedSubCompRefCycle.arc", ArcError.NO_SUBCOMPONENT_CYCLE, ArcError.NO_SUBCOMPONENT_CYCLE, ArcError.NO_SUBCOMPONENT_CYCLE, ArcError.NO_SUBCOMPONENT_CYCLE),
+      arg("WithNestedSubCompRefCycle2.arc", ArcError.NO_SUBCOMPONENT_CYCLE, ArcError.NO_SUBCOMPONENT_CYCLE, ArcError.NO_SUBCOMPONENT_CYCLE, ArcError.NO_SUBCOMPONENT_CYCLE),
       arg("WithSubCompRefCycle.arc", ArcError.NO_SUBCOMPONENT_CYCLE)
     );
   }

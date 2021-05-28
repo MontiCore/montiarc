@@ -78,8 +78,8 @@ public class MontiArcTool implements IMontiArcTool {
   @Override
   public Optional<ASTMACompilationUnit> parse(@NotNull Path file) {
     Preconditions.checkArgument(file != null);
-    Preconditions.checkArgument(file.toFile().exists());
-    Preconditions.checkArgument(file.toFile().isFile());
+    Preconditions.checkArgument(file.toFile().exists(), file.toString());
+    Preconditions.checkArgument(file.toFile().isFile(), file.toString());
     Preconditions.checkArgument(FilenameUtils.getExtension(file.getFileName().toString()).equals(this.getMAFileExtension()));
     try {
       return this.getParser().parse(file.toString());
@@ -92,8 +92,8 @@ public class MontiArcTool implements IMontiArcTool {
   @Override
   public IMontiArcArtifactScope load(@NotNull Path file) {
     Preconditions.checkArgument(file != null);
-    Preconditions.checkArgument(file.toFile().exists());
-    Preconditions.checkArgument(file.toFile().isFile());
+    Preconditions.checkArgument(file.toFile().exists(), file.toString());
+    Preconditions.checkArgument(file.toFile().isFile(), file.toString());
     Preconditions.checkArgument(FilenameUtils.getExtension(file.getFileName().toString()).equals(this.getSymFileExtension()));
     return this.getDeSer().load(file.toString());
   }
