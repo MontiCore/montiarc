@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package arcbasis._visitor;
 
 import arcbasis.ArcBasisMill;

@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package genericarc.check;
 
 import arcbasis._symboltable.IArcBasisScope;

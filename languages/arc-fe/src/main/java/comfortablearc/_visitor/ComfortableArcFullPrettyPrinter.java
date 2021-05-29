@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package comfortablearc._visitor;
 
 import arcbasis._ast.ASTArcBasisNode;

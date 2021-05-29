@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package montiarc.trafos;
 
 import arcbasis.ArcBasisMill;

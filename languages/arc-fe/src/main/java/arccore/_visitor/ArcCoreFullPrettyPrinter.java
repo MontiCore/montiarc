@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package arccore._visitor;
 
 import arcbasis._ast.ASTArcBasisNode;
