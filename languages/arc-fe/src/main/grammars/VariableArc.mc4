@@ -1,0 +1,58 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+/**
+ * This grammar defines the basic structural elements required for a variable
+ * component architecture. The grammar contains definitions for if-statements,
+ * constraints, and features.
+ */
+component grammar VariableArc extends ArcBasis {
+
+  /**
+   * ASTFeatureDeclaration declares one or more feature by specifying their name.
+   *
+   * @attribute features A list of declared feature identifiers.
+   */
+  ArcFeatureDeclaration implements ArcElement <110> =
+    key("feature") (ArcFeature || ",")* ";"
+  ;
+
+  /**
+   * ASTFeature defines the feature identifier, also creates FeatureSymbols.
+   *
+   * @attribute name The name of the feature.
+   */
+  symbol ArcFeature = Name;
+
+  /**
+   * ASTBranchDeclaration defines optional component behaviour and architecture
+   * based on a given condition.
+   *
+   * @attribute expression The condition on which the body is added to the component.
+   * @attribute branchBody Contains architectural elements of this component
+   * only in use if expression is true.
+   * @attribute else Contains optional architectural elements of this
+   * component in use if the expression equals false.
+   */
+  ArcIfStatement implements ArcElement <110> =
+    key("if") "(" condition:Expression ")" then:ArcElement
+    ( ArcElseStatement )?
+  ;
+
+  ArcElseStatement = key("else") else:ArcElement;
+
+  /**
+   * ASTArcBlock holds multiple architectural components of the component.
+   *
+   * @attribute arcElements A list of architectural elements.
+   */
+  ArcBlock implements ArcElement = "{" ArcElement* "}" ;
+
+  /**
+   * ASTArcConstraintDeclaration defines rules for valid component instances.
+   *
+   * @attribute expression The condition that must be true.
+   */
+  ArcConstraintDeclaration implements ArcElement <110> =
+    key("constraint") "(" Expression ")" ";"
+  ;
+}

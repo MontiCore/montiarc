@@ -67,7 +67,7 @@ public class ParserTest extends AbstractTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc"})
+  @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc", "VariabilitySyntax.arc"})
   public void shouldParseWithoutError(String fileName) {
     parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false);
   }
@@ -87,7 +87,7 @@ public class ParserTest extends AbstractTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc"})
+  @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc", "VariabilitySyntax.arc"})
   public void shouldPrintWithoutError(String fileName) {
     ASTMACompilationUnit unit = parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false).orElse(null);
     String s = new MontiArcFullPrettyPrinter().prettyprint(unit);
@@ -95,6 +95,15 @@ public class ParserTest extends AbstractTest {
     if(!unit.deepEquals(similarUnit)){
       Log.error("PrettyPrinted ASTMACompilationUnit has changed");
     }
+  }
+
+  @ParameterizedTest
+  @MethodSource("filenameAndASTProvider")
+  public void shouldParseWithoutErrorAndBeEqualTo(String fileName, ASTMACompilationUnit unit) {
+    ASTMACompilationUnit parsedUnit =
+      this.parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false).orElse(null);
+    Assertions.assertTrue(parsedUnit != null);
+    Assertions.assertTrue(unit.deepEquals(parsedUnit));
   }
 
   @Test
@@ -115,5 +124,11 @@ public class ParserTest extends AbstractTest {
         new Error[]{MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER}),
       Arguments.of("PackageAndLocationDiffer.arc",
         new Error[]{MontiArcError.COMPONENT_AND_FILE_PACKAGE_DIFFER}));
+  }
+
+  static Stream<Arguments> filenameAndASTProvider() {
+    return Stream.of(
+      Arguments.of("VariabilitySyntax.arc",
+        VariabilityParserTestHelper.getVariabilitySyntaxArcASTUnit().build()));
   }
 }

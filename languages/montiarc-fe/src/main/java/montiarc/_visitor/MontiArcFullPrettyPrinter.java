@@ -17,6 +17,7 @@ import de.monticore.types.prettyprint.MCSimpleGenericTypesPrettyPrinter;
 import genericarc._visitor.GenericArcPrettyPrinter;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMontiArcNode;
+import variablearc._visitor.VariableArcPrettyPrinter;
 
 public class MontiArcFullPrettyPrinter {
 
@@ -70,6 +71,9 @@ public class MontiArcFullPrettyPrinter {
 
     MontiArcPrettyPrinter montiArcPrettyPrinter = new MontiArcPrettyPrinter(printer);
     traverser.setMontiArcHandler(montiArcPrettyPrinter);
+
+    VariableArcPrettyPrinter variableArcPrettyPrinter = new VariableArcPrettyPrinter(printer);
+    traverser.setVariableArcHandler(variableArcPrettyPrinter);
   }
 
   protected IndentPrinter getPrinter() {
