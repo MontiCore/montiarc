@@ -27,9 +27,9 @@ public class InitialStateInHierarchicalStates extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-        Arguments.of("AllStatesInitial.arc", new Error[] {BehaviorError.FIELD_IN_GUARD_MISSING}),
-        Arguments.of("LacksInitialState.arc", new Error[] {BehaviorError.FIELD_IN_GUARD_MISSING}),
-        Arguments.of("TwoInitialStates.arc", new Error[] {BehaviorError.FIELD_IN_GUARD_MISSING})
+        Arguments.of("AllStatesInitial.arc", new Error[] {BehaviorError.FIELD_IN_STATECHART_MISSING}),
+        Arguments.of("LacksInitialState.arc", new Error[] {BehaviorError.FIELD_IN_STATECHART_MISSING}),
+        Arguments.of("TwoInitialStates.arc", new Error[] {BehaviorError.FIELD_IN_STATECHART_MISSING})
     );
   }
 

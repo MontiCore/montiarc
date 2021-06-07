@@ -15,8 +15,12 @@ public enum BehaviorError implements Error {
       "All automata must have exactly one initial state, but the one of %s has %s"),
   ONE_INITIAL_IN_HIERARCHICAL("",
       "An hierarchical state should have exactly one initial state, but one in %s has %s"),
-  FIELD_IN_GUARD_MISSING("RRW14 32", ""),
-  FIELD_IN_ACTION_MISSING("RRW14 32", "");
+  FIELD_IN_STATECHART_MISSING("0xMA2004", "There is no variable or port called '%s' in component '%s'."),
+  FIELD_IN_ACTION_MISSING("RRW14 32", ""),
+  READ_FROM_OUTGOING_PORT("0xMA2005", "Cannot read from the outgoing port '%s' of component '%s'."),
+  WRITE_TO_INCOMING_PORT("0xMA2006", "Cannot write to the incoming port '%s' of component '%s'."),
+  WRITE_TO_READONLY_VARIABLE("0xMA2007", "Cannot write to readonly variable '%s' of component '%s'."),
+  WRITE_TO_LITERAL("0xMA2008", "Cannot assign variables to a literal.");
 
   BehaviorError(String code, String message) {
     this.message = message;

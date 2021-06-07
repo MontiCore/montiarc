@@ -9,7 +9,6 @@ import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -21,7 +20,6 @@ import java.util.stream.Stream;
  * Tests whether the variables used in Guards exist.
  * Does not search for type-miss-matches
  */
-@Disabled(value = "This coco is not implemented yet")
 public class GuardVariablesTest extends AbstractCoCoTest {
 
   @Override
@@ -31,20 +29,20 @@ public class GuardVariablesTest extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-      Arguments.of("MissingVariable.arc", new Error[] {BehaviorError.FIELD_IN_GUARD_MISSING}),
-      Arguments.of("OnlyOneMissing.arc", new Error[] {BehaviorError.FIELD_IN_GUARD_MISSING}),
-      Arguments.of("OutputPort.arc", new Error[] {BehaviorError.FIELD_IN_GUARD_MISSING})
+      Arguments.of("MissingVariable.arc", new Error[] {BehaviorError.FIELD_IN_STATECHART_MISSING}),
+      Arguments.of("OnlyOneMissing.arc", new Error[] {BehaviorError.FIELD_IN_STATECHART_MISSING}),
+      Arguments.of("DeeplyNestedMissingVariable.arc", new Error[] {BehaviorError.FIELD_IN_STATECHART_MISSING})
     );
   }
 
   @ParameterizedTest
   @ValueSource(strings = {
-      "MissingVariable.arc",
       "NoGuards.arc",
       "UsedParameter.arc",
       "UsedVariable.arc",
+      "UsedPort.arc",
       "UsedVariablePortAndParameter.arc",
-      "ValidStatechart.arc",
+      "DeeplyNestedVariable.arc",
       "ValidWithSubstates.arc"})
   public void succeed(@NotNull String model) {
     Preconditions.checkNotNull(model);
