@@ -6,7 +6,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.util.Error;
 
 public enum BehaviorError implements Error {
-
+  UNSUPPORTED_EVENT("0xMA2011", "Events are not supported."),
   MULTIPLE_BEHAVIOR("RRW14 37/40",
       "The component type %s defines multiple behaviors, but only one is allowed at max"),
   BEHAVIOR_IN_COMPOSED_COMPONENT("",

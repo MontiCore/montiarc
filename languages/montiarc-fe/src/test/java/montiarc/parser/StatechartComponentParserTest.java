@@ -17,10 +17,8 @@ public class StatechartComponentParserTest extends AbstractTest {
                           "C_StatesAndTransitions.arc",
                           "D_GuardedTransitions.arc",
                           "E_TransitionsWithReactions.arc",
-                          "F_HierarchicalStates.arc",
-                          "G_SubStates.arc",
-                          "H_Actions.arc",
-                          "I_SelfTransitions.arc"})
+                          "F_StateWithBody.arc",
+                          "G_Actions.arc"})
   public void shouldParseValidStateCharts(String fileName) {
     ParserTest.parse(Paths.get(RELATIVE_MODEL_PATH, VALID_MODELS, fileName).toString(), false);
   }

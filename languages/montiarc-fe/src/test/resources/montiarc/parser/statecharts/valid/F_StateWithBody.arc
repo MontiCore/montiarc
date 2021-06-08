@@ -5,7 +5,7 @@ package parser.statecharts.valid;
  * valid
  * a bit more complex than TransitionsWithReactions
  */
-component F_HierarchicalStates {
+component F_StateWithBody {
   port in boolean open,
        in boolean unlock;
   port out boolean ringing;

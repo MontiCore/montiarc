@@ -1,11 +1,32 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 component grammar ArcAutomaton extends ArcBehaviorBasis,
-            de.monticore.TriggeredStatecharts {
+            de.monticore.SCTransitions4Code {
 
-  ArcStatechart implements ArcBehaviorElement extends UnnamedStatechart =
-    Stereotype?
+  /**
+   * Allows to specify the behavior of a component by using a statechart
+   */
+  ArcStatechart implements ArcBehaviorElement =
     "automaton" "{"
       SCStatechartElement*
     "}";
+
+  /**
+   * This is an option to define entry and exit actions for a state
+   */
+  StateBody implements SCSBody = "{"
+    SCStateElement*
+  "}";
+
+  /**
+   * Define a possibility to enumerate ports
+   */
+  PortListEvent implements SCEvent = "<" (Name@Port || ",")* ">";
+
+  // allow using statechart's keywords on other places as well
+  nokeyword "initial", "final", "state";
+  nokeyword "entry", "exit";
+  nokeyword "do";
+
+  splittoken "(...)";
 }
