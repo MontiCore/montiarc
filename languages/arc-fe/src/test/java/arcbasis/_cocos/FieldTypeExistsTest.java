@@ -27,8 +27,7 @@ public class FieldTypeExistsTest extends AbstractTest {
     symTab.createFromAST(ast).setName("Watermelon");
     FieldTypeExists coco = new FieldTypeExists();
     coco.check(ast.getArcField(0));
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
-      new ArcError[] { ArcError.MISSING_TYPE_OF_FIELD });
+    this.checkOnlyExpectedErrorsPresent(ArcError.MISSING_TYPE_OF_FIELD);
   }
 
   protected ASTExpression[] mockValues(int length) {

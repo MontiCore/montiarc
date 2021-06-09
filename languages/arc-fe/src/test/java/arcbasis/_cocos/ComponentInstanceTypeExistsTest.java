@@ -32,7 +32,6 @@ public class ComponentInstanceTypeExistsTest extends AbstractTest {
     symTab.createFromAST(enclType).setName("Scopy");
     ComponentInstanceTypeExists coco = new ComponentInstanceTypeExists();
     coco.check(instantiation.getComponentInstance(0));
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
-      new ArcError[] { ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE });
+    this.checkOnlyExpectedErrorsPresent(new ArcError[] { ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE});
   }
 }

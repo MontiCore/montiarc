@@ -658,6 +658,6 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
     coco.check(astComp);
 
     // Then
-    checkOnlyExpectedErrorsPresent(Log.getFindings(), new ArcError[] {ArcError.NO_SUBCOMPONENT_CYCLE});
+    checkOnlyExpectedErrorsPresent(new ArcError[] {ArcError.NO_SUBCOMPONENT_CYCLE});
   }
 }

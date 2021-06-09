@@ -7,6 +7,7 @@ import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.AbstractCoCoTest;
+import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -82,17 +83,17 @@ public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
     }
 
     //Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), errors);
+    this.checkOnlyExpectedErrorsPresent(errors, getPathToModel(model).toAbsolutePath());
   }
 
   @Override
-  protected void registerCoCos() {
-    this.getChecker().addCoCo(new UniqueStates());
-    this.getChecker().addCoCo(new TransitionSourceTargetExists());
-    this.getChecker().addCoCo(new CapitalStateNames());
-    this.getChecker().addCoCo(new PackageCorrespondsToFolders());
-    this.getChecker().addCoCo(new SCFileExtension());
-    this.getChecker().addCoCo(new SCNameIsArtifactName());
+  protected void registerCoCos(MontiArcCoCoChecker checker) {
+    checker.addCoCo(new UniqueStates());
+    checker.addCoCo(new TransitionSourceTargetExists());
+    checker.addCoCo(new CapitalStateNames());
+    checker.addCoCo(new PackageCorrespondsToFolders());
+    checker.addCoCo(new SCFileExtension());
+    checker.addCoCo(new SCNameIsArtifactName());
   }
 
   /**

@@ -184,8 +184,7 @@ public class OptionalConfigurationParametersLastTest extends AbstractTest {
 
     // Then
     this.checkOnlyExpectedErrorsPresent(
-      Log.getFindings(),
-      new ArcError[] {ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH}
+      ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH
     );
   }
 
@@ -221,8 +220,7 @@ public class OptionalConfigurationParametersLastTest extends AbstractTest {
 
     // Then
     this.checkOnlyExpectedErrorsPresent(
-      Log.getFindings(),
-      new ArcError[] {ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH}
+      ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH
     );
   }
 
@@ -263,8 +261,7 @@ public class OptionalConfigurationParametersLastTest extends AbstractTest {
 
     // Then
     this.checkOnlyExpectedErrorsPresent(
-      Log.getFindings(),
-      new ArcError[] {ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH, ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH}
+      ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH, ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH
     );
   }
 }

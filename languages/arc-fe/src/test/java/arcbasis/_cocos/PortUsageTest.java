@@ -22,7 +22,7 @@ class PortUsageTest extends AbstractTest {
   void shouldDetectWronglyConnectedPorts(ASTComponentType ast, ArcError[] errors) {
     PortUsage coco = new PortUsage();
     coco.check(ast);
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), errors);
+    this.checkOnlyExpectedErrorsPresent(errors);
   }
 
   static Stream<Arguments> componentAndErrorCodeProvider() {

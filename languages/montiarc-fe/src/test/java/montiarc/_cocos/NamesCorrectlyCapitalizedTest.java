@@ -4,11 +4,8 @@ package montiarc._cocos;
 import arcbasis._cocos.*;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.se_rwth.commons.logging.Log;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
-import montiarc._ast.ASTMACompilationUnit;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -52,38 +49,23 @@ public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
   public void allNamesCorrectlyCapitalized(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
-    //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    Assertions.assertEquals(0, Log.getFindingsCount());
+    testModel(model);
   }
 
   @ParameterizedTest
   @MethodSource("modelAndExpectedErrorsProvider")
   public void shouldDetectIncorrectCapitalization(@NotNull String model, @NotNull ArcError... errors) {
-    Preconditions.checkNotNull(model);
-
-    //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), errors);
+    testModel(model, errors);
   }
 
   @Override
-  protected void registerCoCos() {
-    this.getChecker().addCoCo(new ComponentTypeNameCapitalization());
-    this.getChecker().addCoCo(new FieldNameCapitalization());
-    this.getChecker().addCoCo(new GenericTypeParameterNameCapitalization());
-    this.getChecker().addCoCo(new InstanceNameCapitalisation());
-    this.getChecker().addCoCo(new ParameterNameCapitalization());
-    this.getChecker().addCoCo(new PortNameCapitalisation());
+  protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
+    Preconditions.checkNotNull(checker);
+    checker.addCoCo(new ComponentTypeNameCapitalization());
+    checker.addCoCo(new FieldNameCapitalization());
+    checker.addCoCo(new GenericTypeParameterNameCapitalization());
+    checker.addCoCo(new InstanceNameCapitalisation());
+    checker.addCoCo(new ParameterNameCapitalization());
+    checker.addCoCo(new PortNameCapitalisation());
   }
 }

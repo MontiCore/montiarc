@@ -27,7 +27,6 @@ public class InheritedComponentTypeExistsTest extends AbstractTest {
     symTab.createFromAST(ast);
     InheritedComponentTypeExists coco = new InheritedComponentTypeExists();
     coco.check(ast);
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
-      new ArcError[] { ArcError.MISSING_TYPE_OF_INHERITED_COMPONENT });
+    this.checkOnlyExpectedErrorsPresent(ArcError.MISSING_TYPE_OF_INHERITED_COMPONENT);
   }
 }

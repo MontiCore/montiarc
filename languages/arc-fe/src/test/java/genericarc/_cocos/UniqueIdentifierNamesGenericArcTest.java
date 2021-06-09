@@ -42,8 +42,7 @@ public class UniqueIdentifierNamesGenericArcTest extends UniqueIdentifierNamesTe
     coco.check(enclosingComp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
-      new ArcError[] { ArcError.UNIQUE_IDENTIFIER_NAMES });
+    this.checkOnlyExpectedErrorsPresent(ArcError.UNIQUE_IDENTIFIER_NAMES);
   }
 
   @Test
@@ -69,8 +68,7 @@ public class UniqueIdentifierNamesGenericArcTest extends UniqueIdentifierNamesTe
     coco.check(enclosingComp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
-      new ArcError[] { ArcError.UNIQUE_IDENTIFIER_NAMES });
+    this.checkOnlyExpectedErrorsPresent(ArcError.UNIQUE_IDENTIFIER_NAMES);
   }
 
   @Test
@@ -94,8 +92,7 @@ public class UniqueIdentifierNamesGenericArcTest extends UniqueIdentifierNamesTe
     coco.check(enclosingComp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
-      new ArcError[] { ArcError.UNIQUE_IDENTIFIER_NAMES });
+    this.checkOnlyExpectedErrorsPresent(ArcError.UNIQUE_IDENTIFIER_NAMES);
   }
 
   @Test

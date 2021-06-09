@@ -33,7 +33,6 @@ public class ParameterTypeExistsTest extends AbstractTest {
     symTab.createFromAST(ast).setName("THE SCOPE");
     ParameterTypeExists coco = new ParameterTypeExists();
     coco.check(ast.getHead().getArcParameter(0));
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
-      new ArcError[] { ArcError.MISSING_TYPE_OF_PARAMETER });
+    this.checkOnlyExpectedErrorsPresent(ArcError.MISSING_TYPE_OF_PARAMETER);
   }
 }

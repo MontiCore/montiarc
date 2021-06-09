@@ -67,7 +67,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     coco.check(compInst.getComponentInstance(0));
 
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
+    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
   }
 
   @Test
@@ -97,7 +97,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment(getDerive());
     coco.check(compInst.getComponentInstance(0));
 
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
+    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
   }
 
   @Test
@@ -151,7 +151,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     coco.check(compInst.getComponentInstance(0));
 
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
+    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
   }
 
   @Test
@@ -183,7 +183,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     coco.check(compInst.getComponentInstance(0));
 
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
+    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
   }
 
   @Test
@@ -213,7 +213,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     coco.check(compInst.getComponentInstance(0));
 
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
+    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
   }
 
   @Test
@@ -333,7 +333,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     coco.check(compInst.getComponentInstance(0));
 
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
+    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
   }
 
   /**

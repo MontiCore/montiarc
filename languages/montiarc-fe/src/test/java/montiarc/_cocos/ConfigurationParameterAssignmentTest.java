@@ -6,11 +6,8 @@ import arcbasis._cocos.ConfigurationParameterAssignment;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.TypeCheckResult;
-import de.se_rwth.commons.logging.Log;
-import montiarc._ast.ASTMACompilationUnit;
 import montiarc.check.MontiArcDerive;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -26,22 +23,14 @@ public class ConfigurationParameterAssignmentTest extends AbstractCoCoTest {
   @BeforeEach
   public void loadComponentsToInstantiate() {
     // loading helper models into the symboltable
-    ASTMACompilationUnit simple = this.parseAndLoadSymbols("subcomponentDefinitions/Simple.arc");
-    ASTMACompilationUnit complex = this.parseAndLoadSymbols("subcomponentDefinitions/Complex.arc");
+    this.parseAndLoadSymbols("subcomponentDefinitions/Simple.arc");
+    this.parseAndLoadSymbols("subcomponentDefinitions/Complex.arc");
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"CorrectParameterBindings.arc"})
   public void shouldCorrectlyBindConfigurationParameters(@NotNull String model) {
-    Preconditions.checkNotNull(model);
-    //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    Assertions.assertEquals(0, Log.getFindingsCount());
+    testModel(model);
   }
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
@@ -66,21 +55,16 @@ public class ConfigurationParameterAssignmentTest extends AbstractCoCoTest {
   @MethodSource("modelAndExpectedErrorsProvider")
   public void shouldIncorrectlyBindConfigurationParameters(@NotNull String model, @NotNull ArcError... errors) {
     Preconditions.checkNotNull(model);
-    //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), errors);
+    Preconditions.checkNotNull(errors);
+    testModel(model, errors);
   }
 
   @Override
   protected String getPackage() { return PACKAGE; }
 
   @Override
-  protected void registerCoCos() {
-    this.getChecker().addCoCo(new ConfigurationParameterAssignment(new MontiArcDerive(new TypeCheckResult())));
+  protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
+    Preconditions.checkNotNull(checker);
+    checker.addCoCo(new ConfigurationParameterAssignment(new MontiArcDerive(new TypeCheckResult())));
   }
 }

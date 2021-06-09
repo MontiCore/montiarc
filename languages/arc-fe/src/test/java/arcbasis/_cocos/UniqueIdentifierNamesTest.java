@@ -107,8 +107,7 @@ public class UniqueIdentifierNamesTest extends AbstractTest {
     coco.check(enclosingComp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
-      new ArcError[] { expectedError });
+    this.checkOnlyExpectedErrorsPresent(expectedError);
   }
 
   @ParameterizedTest
@@ -138,8 +137,7 @@ public class UniqueIdentifierNamesTest extends AbstractTest {
     coco.check(enclosingComp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
-      new ArcError[] { ArcError.UNIQUE_IDENTIFIER_NAMES });
+    this.checkOnlyExpectedErrorsPresent(ArcError.UNIQUE_IDENTIFIER_NAMES);
   }
 
   @Test
@@ -166,8 +164,7 @@ public class UniqueIdentifierNamesTest extends AbstractTest {
     coco.check(enclosingComp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
-      new ArcError[] { ArcError.UNIQUE_IDENTIFIER_NAMES });
+    this.checkOnlyExpectedErrorsPresent(ArcError.UNIQUE_IDENTIFIER_NAMES);
   }
 
   @Test

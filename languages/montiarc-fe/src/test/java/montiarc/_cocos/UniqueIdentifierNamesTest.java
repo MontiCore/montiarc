@@ -4,10 +4,7 @@ package montiarc._cocos;
 import arcbasis._cocos.UniqueIdentifierNames;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.se_rwth.commons.logging.Log;
-import montiarc._ast.ASTMACompilationUnit;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -23,8 +20,9 @@ public class UniqueIdentifierNamesTest extends AbstractCoCoTest {
   }
 
   @Override
-  protected void registerCoCos() {
-    this.getChecker().addCoCo(new UniqueIdentifierNames());
+  protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
+    Preconditions.checkNotNull(checker);
+    checker.addCoCo(new UniqueIdentifierNames());
   }
 
   @ParameterizedTest
@@ -32,14 +30,7 @@ public class UniqueIdentifierNamesTest extends AbstractCoCoTest {
   public void shouldNotFindErrorInValidModel(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
-    //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    Assertions.assertEquals(0, Log.getFindingsCount());
+    testModel(model);
   }
 
   protected static Stream<Arguments> provideFaultyModels() {
@@ -58,18 +49,12 @@ public class UniqueIdentifierNamesTest extends AbstractCoCoTest {
   @MethodSource("provideFaultyModels")
   public void shouldFindDuplicatedNames(@NotNull String model, ArcError... expectedErrors) {
     Preconditions.checkNotNull(model);
+    Preconditions.checkNotNull(expectedErrors);
 
-    //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), expectedErrors);
+    testModel(model, expectedErrors);
   }
 
   protected static ArcError[] repeatError(ArcError error, int repeats) {
-    return Stream.generate(() -> error).limit(repeats).toArray(size -> new ArcError[size]);
+    return Stream.generate(() -> error).limit(repeats).toArray(ArcError[]::new);
   }
 }

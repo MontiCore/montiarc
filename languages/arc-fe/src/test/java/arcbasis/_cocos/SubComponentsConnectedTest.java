@@ -40,7 +40,7 @@ public class SubComponentsConnectedTest extends AbstractTest {
     coco.check(ast);
 
     //Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), errors);
+    this.checkOnlyExpectedErrorsPresent(errors);
   }
 
   @BeforeEach

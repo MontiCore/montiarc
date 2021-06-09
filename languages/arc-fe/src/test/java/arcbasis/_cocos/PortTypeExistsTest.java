@@ -25,7 +25,6 @@ public class PortTypeExistsTest extends AbstractTest {
         .setName("I am Scope");
     PortTypeExists coco = new PortTypeExists();
     coco.check(ast.getPort(0));
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
-      new ArcError[] { ArcError.MISSING_TYPE_OF_PORT });
+    this.checkOnlyExpectedErrorsPresent(ArcError.MISSING_TYPE_OF_PORT);
   }
 }

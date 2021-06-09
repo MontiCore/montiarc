@@ -4,9 +4,9 @@ package montiarc._cocos.behavior;
 import arcautomaton._cocos.*;
 import arcbehaviorbasis.BehaviorError;
 import com.google.common.base.Preconditions;
-import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.AbstractCoCoTest;
+import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,9 +40,7 @@ public class AssignmentExpressionsTest extends AbstractCoCoTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {
-      "UsedVariableSomewhere.arc"
-  })
+  @ValueSource(strings = {"UsedVariableSomewhere.arc"})
   public void succeed(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
@@ -53,7 +51,7 @@ public class AssignmentExpressionsTest extends AbstractCoCoTest {
     this.getChecker().checkAll(ast);
 
     //Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), new Error[0]);
+    this.checkOnlyExpectedErrorsPresent(new Error[0]);
   }
 
   @ParameterizedTest
@@ -67,15 +65,15 @@ public class AssignmentExpressionsTest extends AbstractCoCoTest {
     this.getChecker().checkAll(ast);
 
     //Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), errors);
+    this.checkOnlyExpectedErrorsPresent(errors);
   }
 
   @Override
-  protected void registerCoCos() {
-    this.getChecker().addCoCo(new OnlyAssignToNames());
-    this.getChecker().addCoCo(new PrefixDecrementTargetsNamesOnly());
-    this.getChecker().addCoCo(new PrefixIncrementTargetsNamesOnly());
-    this.getChecker().addCoCo(new SuffixDecrementTargetsNamesOnly());
-    this.getChecker().addCoCo(new SuffixIncrementTargetsNamesOnly());
+  protected void registerCoCos(MontiArcCoCoChecker checker) {
+    checker.addCoCo(new OnlyAssignToNames());
+    checker.addCoCo(new PrefixDecrementTargetsNamesOnly());
+    checker.addCoCo(new PrefixIncrementTargetsNamesOnly());
+    checker.addCoCo(new SuffixDecrementTargetsNamesOnly());
+    checker.addCoCo(new SuffixIncrementTargetsNamesOnly());
   }
 }

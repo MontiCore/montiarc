@@ -5,12 +5,9 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ConfigurationParametersCorrectlyInherited;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
-import montiarc._ast.ASTMACompilationUnit;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -103,14 +100,7 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
   })
   public void shouldCorrectlyInheritConfigurationParameters(@NotNull String model) {
     Preconditions.checkNotNull(model);
-    //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    Assertions.assertEquals(0, Log.getFindingsCount());
+    testModel(model);
   }
 
   @ParameterizedTest
@@ -125,11 +115,12 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
     this.getChecker().checkAll(ast);
 
     //Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), errors);
+    this.checkOnlyExpectedErrorsPresent(errors, getPathToModel(model).toAbsolutePath());
   }
 
   @Override
-  protected void registerCoCos() {
-    this.getChecker().addCoCo(new ConfigurationParametersCorrectlyInherited());
+  protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
+    Preconditions.checkNotNull(checker);
+    checker.addCoCo(new ConfigurationParametersCorrectlyInherited());
   }
 }

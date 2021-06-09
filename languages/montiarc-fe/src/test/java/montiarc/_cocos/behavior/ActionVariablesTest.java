@@ -4,9 +4,8 @@ package montiarc._cocos.behavior;
 import arcautomaton._cocos.FieldsInReactionsExist;
 import arcbehaviorbasis.BehaviorError;
 import com.google.common.base.Preconditions;
-import de.se_rwth.commons.logging.Log;
-import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.AbstractCoCoTest;
+import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Disabled;
@@ -50,38 +49,20 @@ public class ActionVariablesTest extends AbstractCoCoTest {
   })
   public void succeed(@NotNull String model) {
     Preconditions.checkNotNull(model);
-
-    //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), new Error[0]);
+    testModel(model);
   }
 
   @ParameterizedTest
   @MethodSource("modelAndExpectedErrorsProvider")
   public void fail(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
+    Preconditions.checkNotNull(errors);
 
-    //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
-
-    //When
-    try {
-      this.getChecker().checkAll(ast);
-    } catch(de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException e){
-      // continue, as this error is kind of expected in some models
-    }
-
-    //Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), errors);
+    testModel(model, errors);
   }
 
   @Override
-  protected void registerCoCos() {
-    this.getChecker().addCoCo(new FieldsInReactionsExist());
+  protected void registerCoCos(MontiArcCoCoChecker checker) {
+    checker.addCoCo(new FieldsInReactionsExist());
   }
 }

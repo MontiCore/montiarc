@@ -26,7 +26,10 @@ public class NoSubComponentReferenceCyclesTest extends AbstractCoCoTest {
   protected String getPackage() { return PACKAGE; }
 
   @Override
-  protected void registerCoCos() { this.getChecker().addCoCo(new NoSubComponentReferenceCycles()); }
+  protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
+    Preconditions.checkNotNull(checker);
+    checker.addCoCo(new NoSubComponentReferenceCycles());
+  }
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
@@ -50,7 +53,7 @@ public class NoSubComponentReferenceCyclesTest extends AbstractCoCoTest {
     this.getChecker().checkAll(ast);
 
     //Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), errors);
+    this.checkOnlyExpectedErrorsPresent(errors, getPathToModel(model).toAbsolutePath());
   }
 
   @ParameterizedTest

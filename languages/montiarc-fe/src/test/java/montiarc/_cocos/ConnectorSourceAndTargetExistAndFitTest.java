@@ -4,10 +4,7 @@ package montiarc._cocos;
 import arcbasis._cocos.ConnectorSourceAndTargetExistAndFit;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.se_rwth.commons.logging.Log;
-import montiarc._ast.ASTMACompilationUnit;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -56,22 +53,16 @@ public class ConnectorSourceAndTargetExistAndFitTest extends AbstractCoCoTest {
   }
 
   @Override
-  protected void registerCoCos() {
-    this.getChecker().addCoCo(new ConnectorSourceAndTargetExistAndFit());
+  protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
+    Preconditions.checkNotNull(checker);
+    checker.addCoCo(new ConnectorSourceAndTargetExistAndFit());
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"AllSourcesAndTargetsExistAndFit.arc", "NoConnectors.arc"})
   public void connectorSourceAndTargetShouldFit(@NotNull String model) {
     Preconditions.checkNotNull(model);
-    //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    Assertions.assertEquals(0, Log.getFindingsCount());
+    testModel(model);
   }
 
   @ParameterizedTest
@@ -79,13 +70,6 @@ public class ConnectorSourceAndTargetExistAndFitTest extends AbstractCoCoTest {
   public void shouldFind(@NotNull String model, @NotNull ArcError... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
-    //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), errors);
+    testModel(model, errors);
   }
 }

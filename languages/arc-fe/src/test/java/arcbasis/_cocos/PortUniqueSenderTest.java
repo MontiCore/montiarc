@@ -24,7 +24,7 @@ public class PortUniqueSenderTest extends AbstractTest {
   public void shouldDetectMultipleConnectedTarget(ASTComponentType ast, ArcError[] errors) {
     PortUniqueSender coco = new PortUniqueSender();
     coco.check(ast);
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), errors);
+    this.checkOnlyExpectedErrorsPresent(errors);
   }
 
   static Stream<Arguments> componentAndErrorCodeProvider() {

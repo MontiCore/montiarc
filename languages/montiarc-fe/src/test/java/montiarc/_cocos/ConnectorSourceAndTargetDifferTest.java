@@ -1,14 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcbasis._cocos.ConnectorSourceAndTargetComponentDiffer;
 import arcbasis._cocos.ConnectorSourceAndTargetDiffer;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.se_rwth.commons.logging.Log;
-import montiarc._ast.ASTMACompilationUnit;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -35,35 +31,18 @@ public class ConnectorSourceAndTargetDifferTest extends AbstractCoCoTest {
   @ValueSource(strings = {"ConnectorSourceAndTargetFromSameComponent.arc",
           "ConnectorSourceAndTargetComponentDiffer.arc", "NoConnectors.arc"})
   public void sourceAndTargetShouldDiffer(@NotNull String model) {
-    Preconditions.checkNotNull(model);
-
-    //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    Assertions.assertEquals(0, Log.getFindingsCount());
+    testModel(model);
   }
 
   @ParameterizedTest
   @MethodSource("modelAndExpectedErrorsProvider")
   public void shouldDetectSourceAndTargetAreTheSame(@NotNull String model, @NotNull ArcError... errors) {
-    Preconditions.checkNotNull(model);
-
-    //Given
-    ASTMACompilationUnit ast = parseAndLoadSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), errors);
+    testModel(model, errors);
   }
 
   @Override
-  protected void registerCoCos() {
-    this.getChecker().addCoCo(new ConnectorSourceAndTargetDiffer());
+  protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
+    Preconditions.checkNotNull(checker);
+    checker.addCoCo(new ConnectorSourceAndTargetDiffer());
   }
 }

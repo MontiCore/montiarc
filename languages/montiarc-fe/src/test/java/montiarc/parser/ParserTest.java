@@ -18,6 +18,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -82,8 +83,9 @@ public class ParserTest extends AbstractTest {
   @MethodSource("filenameAndErrorCodeProvider")
   public void shouldParseWithSpecifiedErrorsOnly(String fileName,
     Error... expErrors) {
-    parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), true);
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), expErrors);
+    Path path = Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName);
+    parse(path.toString(), true);
+    this.checkOnlyExpectedErrorsPresent(expErrors, path.toAbsolutePath());
   }
 
   @ParameterizedTest
@@ -100,10 +102,11 @@ public class ParserTest extends AbstractTest {
   @ParameterizedTest
   @MethodSource("filenameAndASTProvider")
   public void shouldParseWithoutErrorAndBeEqualTo(String fileName, ASTMACompilationUnit unit) {
+    Path path = Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName);
     ASTMACompilationUnit parsedUnit =
-      this.parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false).orElse(null);
-    Assertions.assertTrue(parsedUnit != null);
-    Assertions.assertTrue(unit.deepEquals(parsedUnit));
+      parse(path.toString(), false).orElse(null);
+    Assertions.assertNotNull(parsedUnit, path.toAbsolutePath().toString());
+    Assertions.assertTrue(unit.deepEquals(parsedUnit), path.toAbsolutePath().toString());
   }
 
   @Test

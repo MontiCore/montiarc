@@ -2,14 +2,12 @@
 package montiarc.util;
 
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
-import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
-import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
-import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,20 +30,6 @@ public abstract class AbstractTest {
     assert errorCodePattern != null;
   }
 
-  protected void add2Scope(IOOSymbolsScope scope, OOTypeSymbol... types) {
-    Arrays.stream(types).forEach(type -> {
-      scope.add(type);
-      type.setEnclosingScope(scope);
-    });
-  }
-
-  protected void add2Scope(IOOSymbolsScope scope, FieldSymbol... fields) {
-    Arrays.stream(fields).forEach(field -> {
-      scope.add(field);
-      field.setEnclosingScope(scope);
-    });
-  }
-
   /**
    * @return pattern used to find error-codes in raw console output
    */
@@ -60,48 +44,66 @@ public abstract class AbstractTest {
 
   /**
    * makes sure that all errors contained in the second collection are also contained by the first.
-   * {@link #checkNoAdditionalErrorsPresent(List, Error[]) opposite action}
-   * @param findings collection of found errors
+   * {@link #checkNoAdditionalErrorsPresent(Error[]) opposite action}
    * @param expErrors expected errors (contains the same or less errors than the first collection)
    */
-  protected void checkExpectedErrorsPresent(List<Finding> findings,
-                                            Error[] expErrors) {
-    List<String> actualErrorCodes = collectErrorCodes(findings);
-    List<String> expErrorCodes = collectErrorCodes(expErrors);
-
-    Assertions.assertTrue(actualErrorCodes.containsAll(expErrorCodes), String.format("Expected "
-      + "error codes: " + expErrorCodes.toString() + " Actual error codes: "
-      + actualErrorCodes.toString()));
+  protected void checkExpectedErrorsPresent(Error[] expErrors) {
+    checkBoundsForFoundErrors(true, Log.getFindings(), expErrors, "Some expected errors did not occur");
   }
 
   /**
    * makes sure that all errors contained in the first collection are also contained by the second.
-   * {@link #checkExpectedErrorsPresent(List, Error[]) opposite action}
-   * @param findings collection of found errors
+   * {@link #checkExpectedErrorsPresent(Error[]) opposite action}
    * @param expErrors expected errors (contains the same or more errors than the first collection)
    */
-  protected void checkNoAdditionalErrorsPresent(List<Finding> findings,
-                                                Error[] expErrors) {
-    List<String> actualErrorCodes = collectErrorCodes(findings);
-    List<String> expErrorCodes = collectErrorCodes(expErrors);
-
-    actualErrorCodes.removeAll(expErrorCodes);
-
-    Assertions.assertEquals(Collections.emptyList(), actualErrorCodes, "There were additional errors found that were not expected");
+  protected void checkNoAdditionalErrorsPresent(Error[] expErrors) {
+    checkBoundsForFoundErrors(false, Log.getFindings(), expErrors, "There were additional errors found that were not expected");
   }
 
   /**
-   * compares two collections of errors and {@link Assertions#fail() fails} if they do not contain the same error codes.
-   * This is like calling {@link #checkExpectedErrorsPresent(List, Error[]) this}
-   * and {@link #checkNoAdditionalErrorsPresent(List, Error[]) this}
-   * @param findings actual errors and other noise found in the console output
+   * Checks whether one of the given collections contains a part of the other one, but not more.
+   *
+   * @param moreAllowed if
+   *                    <code>true</code> the test will succeed if all expected errors and possibly more errors occurred
+   *                    <code>false</code> the test will succeed if there are no additional errors than expected
+   * @param findings log that contains the occurred errors
+   * @param errors upper or lower bound for expected errors
+   */
+  protected void checkBoundsForFoundErrors(boolean moreAllowed, List<Finding> findings, Error[] errors, String message){
+    List<String> actual = collectErrorCodes(findings);
+    List<String> expected = collectErrorCodes(errors);
+    List<String> bigger = moreAllowed ? actual : expected;
+    List<String> lesser = moreAllowed ? expected : actual;
+
+    // do not use 'removeAll' because that behaves differently to remove when a list contains one element multiple times
+    List<String> matched = bigger.stream().filter(lesser::remove).collect(Collectors.toList());
+
+    Assertions.assertEquals(
+        moreAllowed ? expected : Collections.emptyList(),
+        moreAllowed ? Collections.emptyList() : actual,
+        String.format("%s\nCould match: %s",message, matched));
+  }
+
+  /**
+   * Searches console-output for error codes, filters out noise and then compares those errors to the given errors.
+   * {@link Assertions#fail() Fails} if the collections of errors do not contain the same error codes.
+   * This is like calling {@link #checkExpectedErrorsPresent(Error[]) this}
+   * and {@link #checkNoAdditionalErrorsPresent(Error[]) this}
    * @param expErrors expected errors (the order does not matter)
    */
-  protected void checkOnlyExpectedErrorsPresent(List<Finding> findings, Error[] expErrors) {
+  protected void checkOnlyExpectedErrorsPresent(Error... expErrors) {
+    checkOnlyExpectedErrorsPresent(expErrors, null);
+  }
+
+  /**
+   * see {@link #checkOnlyExpectedErrorsPresent(Error...) base method}.
+   * @param location optional parameter that describes where the error was found.
+   */
+  protected void checkOnlyExpectedErrorsPresent(Error[] expErrors, Path location) {
     Assertions.assertEquals(
         collectErrorCodes(expErrors),
-        collectErrorCodes(findings),
-        "Expected errors do not match the found ones");
+        collectErrorCodes(Log.getFindings()),
+        "Expected errors do not match the found ones"+(location==null?'.':" in \n"+location.toString()));
   }
 
   /**

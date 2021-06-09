@@ -41,8 +41,7 @@ public class CircularInheritanceTest extends AbstractTest {
     symTab.createFromAST(child);
     CircularInheritance coco = new CircularInheritance();
     coco.check(child);
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(),
-      new ArcError[] { ArcError.CIRCULAR_INHERITANCE });
+    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CIRCULAR_INHERITANCE});
   }
 
   @Test

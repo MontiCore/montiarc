@@ -4,10 +4,7 @@ package montiarc._cocos;
 import arcbasis._cocos.OptionalConfigurationParametersLast;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.se_rwth.commons.logging.Log;
-import montiarc._ast.ASTMACompilationUnit;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -25,7 +22,10 @@ public class OptionalConfigurationParametersLastTest extends AbstractCoCoTest {
   }
 
   @Override
-  protected void registerCoCos() { this.getChecker().addCoCo(new OptionalConfigurationParametersLast()); }
+  protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
+    Preconditions.checkNotNull(checker);
+    checker.addCoCo(new OptionalConfigurationParametersLast());
+  }
 
   @ParameterizedTest
   @ValueSource(strings = {
@@ -35,16 +35,7 @@ public class OptionalConfigurationParametersLastTest extends AbstractCoCoTest {
     "WithOptionalParameters.arc"
   })
   public void shouldFindCorrectParameterOrderRegardingOptionality(@NotNull String model) {
-    Preconditions.checkNotNull(model);
-
-    //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    Assertions.assertEquals(0, Log.getErrorCount());
+    testModel(model);
   }
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
@@ -61,15 +52,6 @@ public class OptionalConfigurationParametersLastTest extends AbstractCoCoTest {
   public void shouldFindMandatoryParametersAfterOptionalOnes(
     @NotNull String model,
     @NotNull  ArcError... expectedErrors) {
-    Preconditions.checkNotNull(model);
-
-    //Given
-    ASTMACompilationUnit ast = parseAndLoadSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //then
-    this.checkOnlyExpectedErrorsPresent(Log.getFindings(), expectedErrors);
+    testModel(model, expectedErrors);
   }
 }

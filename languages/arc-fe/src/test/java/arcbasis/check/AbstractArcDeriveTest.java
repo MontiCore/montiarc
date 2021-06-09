@@ -11,6 +11,7 @@ import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.expressions.expressionsbasis._symboltable.IExpressionsBasisScope;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
+import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbolSurrogate;
 import de.monticore.types.check.SymTypeExpressionFactory;
@@ -22,6 +23,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
 
@@ -36,6 +38,24 @@ public abstract class AbstractArcDeriveTest extends AbstractTest {
   protected IArcDerive derive;
   protected IArcBasisScope scope;
   protected ArcBasisExpressionsScopeSetter scopeSetter;
+
+  protected void add2Scope(@NotNull IOOSymbolsScope scope, @NotNull FieldSymbol... fields) {
+    Preconditions.checkNotNull(scope);
+    Preconditions.checkNotNull(fields);
+    Arrays.stream(fields).forEach(field -> {
+      scope.add(field);
+      field.setEnclosingScope(scope);
+    });
+  }
+
+  protected void add2Scope(@NotNull IOOSymbolsScope scope, @NotNull OOTypeSymbol... types) {
+    Preconditions.checkNotNull(scope);
+    Preconditions.checkNotNull(types);
+    Arrays.stream(types).forEach(type -> {
+      scope.add(type);
+      type.setEnclosingScope(scope);
+    });
+  }
 
   protected static Stream<Arguments> expressionProviderForPrimitiveFields() {
     return Stream.of(Arguments.of("a", "int"), Arguments.of("b", "int"), Arguments.of("c", "int"));
@@ -95,8 +115,9 @@ public abstract class AbstractArcDeriveTest extends AbstractTest {
 
   protected void doShouldCalculateType(@NotNull ASTExpression expression, @NotNull String expectedType,
                                        boolean isPrimitive, boolean isGeneric) {
-    Preconditions.checkArgument(expression != null);
-    Preconditions.checkArgument(expectedType != null);
+    Preconditions.checkNotNull(expression);
+    Preconditions.checkNotNull(expectedType);
+
     //Given
     this.getScopeSetter().handle(expression);
     //When
@@ -114,14 +135,14 @@ public abstract class AbstractArcDeriveTest extends AbstractTest {
 
   protected void doCalculateTypeFromNameExpression(@NotNull String expression, @NotNull String expectedType,
                                                    boolean isPrimitive, boolean isGeneric) {
-    Preconditions.checkArgument(expression != null);
-    Preconditions.checkArgument(expectedType != null);
+    Preconditions.checkNotNull(expression);
+    Preconditions.checkNotNull(expectedType);
     doShouldCalculateType(this.doBuildNameExpression(expression), expectedType,
       isPrimitive, isGeneric);
   }
 
   protected ASTNameExpression doBuildNameExpression(@NotNull String expression) {
-    Preconditions.checkArgument(expression != null);
+    Preconditions.checkNotNull(expression);
     return ExpressionsBasisMill.nameExpressionBuilder().setName(expression).build();
   }
 
@@ -131,8 +152,8 @@ public abstract class AbstractArcDeriveTest extends AbstractTest {
   @ParameterizedTest
   @MethodSource("expressionProviderForPrimitiveFields")
   void shouldCalculatePrimitiveType(@NotNull String expression, @NotNull String expectedType) {
-    Preconditions.checkArgument(expression != null);
-    Preconditions.checkArgument(expectedType != null);
+    Preconditions.checkNotNull(expression);
+    Preconditions.checkNotNull(expectedType);
     doCalculateTypeFromNameExpression(expression, expectedType, true, false);
   }
 
@@ -142,8 +163,8 @@ public abstract class AbstractArcDeriveTest extends AbstractTest {
   @ParameterizedTest
   @MethodSource("expressionProviderForObjectFields")
   void shouldCalculateObjectType(@NotNull String expression, @NotNull String expectedType) {
-    Preconditions.checkArgument(expression != null);
-    Preconditions.checkArgument(expectedType != null);
+    Preconditions.checkNotNull(expression);
+    Preconditions.checkNotNull(expectedType);
     doCalculateTypeFromNameExpression(expression, expectedType, false, false);
   }
 
@@ -183,7 +204,7 @@ public abstract class AbstractArcDeriveTest extends AbstractTest {
 
     @Override
     public void visit(@NotNull ASTExpression node) {
-      Preconditions.checkArgument(node != null);
+      Preconditions.checkNotNull(node);
       Preconditions.checkState(this.getScope() != null);
       Preconditions.checkArgument(node.getEnclosingScope() == null ||
         node.getEnclosingScope() == this.getScope());
