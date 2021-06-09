@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package fieldsInActionsExist;
 
-// invalid, unlock cannot be assigned
-component WriteToInPort {
+// valid model
+component ReadFromDeeplyNestedPort {
   port in boolean unlock;
   port out boolean ringing;
 
@@ -10,7 +10,7 @@ component WriteToInPort {
     initial state Closed;
     state Opened;
 
-    Locked -> Closed / {unlock = false;};
+    Locked -> Closed / {ringing = 5 + 3 <= 4 && !(unlock != 4 > 5);};
   }
 
 }

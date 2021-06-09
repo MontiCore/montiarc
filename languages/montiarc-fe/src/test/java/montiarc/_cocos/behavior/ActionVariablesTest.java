@@ -20,7 +20,6 @@ import java.util.stream.Stream;
  * Tests whether the variables used in Actions and Reactions exist.
  * Does not search for type-miss-matches
  */
-@Disabled(value = "This coco is not implemented yet")
 public class ActionVariablesTest extends AbstractCoCoTest {
 
   @Override
@@ -30,11 +29,10 @@ public class ActionVariablesTest extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-      Arguments.of("MissingVariableInAction.arc", new Error[] {BehaviorError.FIELD_IN_ACTION_MISSING}),
-      Arguments.of("MissingVariableInReaction.arc", new Error[] {BehaviorError.FIELD_IN_ACTION_MISSING}),
-      Arguments.of("ReadFromOutPort.arc", new Error[] {BehaviorError.FIELD_IN_ACTION_MISSING}),
-      Arguments.of("WriteToInPort.arc", new Error[] {BehaviorError.FIELD_IN_ACTION_MISSING}),
-      Arguments.of("OnlyOneMissing.arc", new Error[] {BehaviorError.FIELD_IN_ACTION_MISSING})
+      Arguments.of("MissingVariableInAction.arc", new Error[] {BehaviorError.FIELD_IN_STATECHART_MISSING}),
+      Arguments.of("MissingVariableInReaction.arc", new Error[] {BehaviorError.FIELD_IN_STATECHART_MISSING}),
+      Arguments.of("ReadFromDeeplyNestedMissingPort.arc", new Error[] {BehaviorError.FIELD_IN_STATECHART_MISSING}),
+      Arguments.of("OnlyOneMissing.arc", new Error[] {BehaviorError.FIELD_IN_STATECHART_MISSING})
     );
   }
 
@@ -44,6 +42,7 @@ public class ActionVariablesTest extends AbstractCoCoTest {
       "UsedParameter.arc",
       "UsedVariable.arc",
       "UsedVariablePortAndParameter.arc",
+      "ReadFromDeeplyNestedPort.arc",
       "ValidStatechart.arc",
       "ValidWithSubstates.arc"
   })

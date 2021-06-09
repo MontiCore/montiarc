@@ -2,7 +2,7 @@
 package fieldsInActionsExist;
 
   // valid model
-component ValidWithSubstates {
+component ValidWithSubstates(StringBuilder log) {
   port in boolean open,
        in boolean unlock;
   port out boolean ringing;
@@ -19,7 +19,7 @@ component ValidWithSubstates {
 
     Opened -> Closed;
     Closed -> Opened [open] / {ringing = true;};
-    Closed -> Locked        / {System.out.println("Door locked now.");};
+    Closed -> Locked        / {log.append("Door locked now.");};
     Locked -> Closed [unlock == true];
   }
 }

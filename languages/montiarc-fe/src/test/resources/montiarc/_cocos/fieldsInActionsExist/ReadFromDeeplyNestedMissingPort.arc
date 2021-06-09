@@ -1,16 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 package fieldsInActionsExist;
 
-// invalid, ringing cannot be readed
-component ReadFromOutPort {
-  port in boolean unlock;
+// invalid, unlock cannot be readed because it is missing
+component ReadFromDeeplyNestedMissingPort {
   port out boolean ringing;
 
   automaton {
     initial state Closed;
     state Opened;
 
-    Locked -> Closed / {ringing = ringing && unlock;};
+    Locked -> Closed / {ringing = 5 + 3 <= 4 && !(unlock != 4 > 5);};
   }
 
 }

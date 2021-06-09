@@ -1,17 +1,23 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcautomaton._cocos;
 
-import arcbehaviorbasis.BehaviorError;
-import de.monticore.scactions._ast.ASTSCABody;
-import de.monticore.scactions._cocos.SCActionsASTSCABodyCoCo;
+import arcautomaton.ArcAutomatonMill;
+import arcautomaton._visitor.ArcAutomatonTraverser;
+import arcautomaton._visitor.NamePresenceChecker;
+import de.monticore.sctransitions4code._ast.ASTTransitionAction;
+import de.monticore.sctransitions4code._cocos.SCTransitions4CodeASTTransitionActionCoCo;
 
 /**
- * checks whether the ports or variables used in re-, entry- and exit-actions exist.
+ * checks whether the ports or variables used in transition-re-, entry- and exit-actions exist.
  */
-public class FieldsInReactionsExist implements SCActionsASTSCABodyCoCo {
+public class FieldsInReactionsExist implements SCTransitions4CodeASTTransitionActionCoCo {
 
   @Override
-  public void check(ASTSCABody action) {
-    BehaviorError.FIELD_IN_ACTION_MISSING.logAt(action);
+  public void check(ASTTransitionAction action) {
+    if(action.isPresentMCBlockStatement()){
+      ArcAutomatonTraverser traverser = ArcAutomatonMill.inheritanceTraverser();
+      traverser.add4ExpressionsBasis(new NamePresenceChecker(action.getEnclosingScope()));
+      action.getMCBlockStatement().accept(traverser);
+    }
   }
 }
