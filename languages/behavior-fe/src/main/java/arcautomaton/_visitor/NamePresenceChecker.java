@@ -32,14 +32,14 @@ public class NamePresenceChecker implements ExpressionsBasisVisitor2 {
   /**
    * searches for a port of the component with the given variable
    */
-  protected Optional<PortSymbol> resolvePort(String name){
+  public Optional<PortSymbol> resolvePort(String name){
     return scope.resolvePortLocally(name);
   }
 
   /**
    * tries to search for a parameter or a variable with the given name in this component
    */
-  protected Optional<VariableSymbol> resolveField(String name){
+  public Optional<VariableSymbol> resolveField(String name){
     return scope.resolveVariableLocally(name);
   }
 

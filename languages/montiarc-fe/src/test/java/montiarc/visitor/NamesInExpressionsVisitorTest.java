@@ -6,7 +6,8 @@ import montiarc.AbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._parser.MontiArcParser;
 import montiarc._visitor.MontiArcTraverser;
-import montiarc._visitor.NamesInExpressionsVisitor;
+import arcautomaton._visitor.NamesInExpressionsVisitor;
+import org.assertj.core.util.Preconditions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -17,33 +18,109 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static arcautomaton._visitor.NamesInExpressionsVisitor.*;
+
 public class NamesInExpressionsVisitorTest extends AbstractTest {
 
   @ParameterizedTest
   @MethodSource("expressionAndVariableNamesProvider")
-  public void shouldFindNames(String expression, List<String> names) throws IOException {
+  public void shouldFindNames(String expression, List<String> names, List<ExpressionKind> kinds) throws IOException {
     MontiArcParser parser = MontiArcMill.parser();
     NamesInExpressionsVisitor visitor = new NamesInExpressionsVisitor();
     MontiArcTraverser traverser = MontiArcMill.traverser();
-    traverser.add4AssignmentExpressions(visitor);
-    traverser.setAssignmentExpressionsHandler(visitor);
-    traverser.add4CommonExpressions(visitor);
-    traverser.add4ExpressionsBasis(visitor);
+    visitor.registerTo(traverser);
     Objects.requireNonNull(parser.parse_StringExpression(expression).orElse(null)).accept(traverser);
-    Map<ASTNameExpression, NamesInExpressionsVisitor.ExpressionKind> foundNodes
+    Map<ASTNameExpression, ExpressionKind> map
       = visitor.getFoundNames();
-    List<String> foundNames = foundNodes.keySet().stream()
-      .map(ASTNameExpression::getName)
-      .collect(Collectors.toList());
+    List<ASTNameExpression> found = sort(map.keySet(), names);
 
-    Assertions.assertEquals(foundNames.size(), names.size());
-    Assertions.assertTrue(foundNames.containsAll(names));
-    Assertions.assertTrue(names.containsAll(foundNames));
+    Assertions.assertEquals(names, found.stream().map(ASTNameExpression::getName).collect(Collectors.toList()));
+    Assertions.assertEquals(kinds, found.stream().map(map::get).collect(Collectors.toList()), names.toString());
   }
 
   static public Stream<Arguments> expressionAndVariableNamesProvider() {
-    return Stream.of(Arguments.of("a = 4 + b", Arrays.asList("a", "b")),
-      Arguments.of("c == d", Arrays.asList("c", "d")),
-      Arguments.of("5 == 5", new ArrayList<>()));
+    return Stream.of(
+        new Tuple("a = 4 + b")
+            .is("a").is(ExpressionKind.OVERWRITE)
+            .is("b").is(ExpressionKind.DEFAULT_READ)
+            .build(),
+        new Tuple("c == d")
+            .is("c").is(ExpressionKind.DEFAULT_READ)
+            .is("d").is(ExpressionKind.DEFAULT_READ)
+            .build(),
+        new Tuple("e *= 5")
+            .is("e").is(ExpressionKind.UPDATE)
+            .build(),
+        new Tuple("5 == 5")
+            .build(),
+        new Tuple("t <= !(r)")
+            .is("t").is(ExpressionKind.DEFAULT_READ)
+            .is("r").is(ExpressionKind.DEFAULT_READ)
+            .build(),
+        new Tuple("z = x++")
+            .is("z").is(ExpressionKind.OVERWRITE)
+            .is("x").is(ExpressionKind.UPDATE)
+            .build(),
+        new Tuple("++f % g")
+            .is("g").is(ExpressionKind.DEFAULT_READ)
+            .is("f").is(ExpressionKind.UPDATE)
+            .build()
+    );
+  }
+
+  // *************
+  // just infrastructure for simpler testing
+  // ****
+
+  /**
+   * costly method create a list from a set in which the elements are ordered like in the given reference
+   * @param toSort set without order
+   * @param reference list that purports an order for the given data
+   * @return list that contains all given elements in the given order, other elements are just appended to the back
+   */
+  public static List<ASTNameExpression> sort(Set<ASTNameExpression> toSort, List<String> reference){
+    Preconditions.checkNotNull(toSort);
+    Preconditions.checkNotNull(reference);
+
+    Set<ASTNameExpression> set = new HashSet<>(toSort);
+    List<ASTNameExpression> sorted = new ArrayList<>();
+    for(String name : reference) {
+      set.removeIf(ex -> {
+        if(ex.getName().equals(name)){
+          sorted.add(ex);
+          return true;
+        }
+        return false;
+      });
+    }
+    sorted.addAll(set);
+    return sorted;
+  }
+
+  /**
+   * allows simple inline creation of an argument parameter
+   */
+  public static class Tuple {
+    private final String expression;
+    private final List<String> names = new ArrayList<>();
+    private final List<ExpressionKind> kinds = new ArrayList<>();
+
+    public Tuple(String expression) {
+      this.expression = Preconditions.checkNotNull(expression);
+    }
+
+    public Tuple is(String name){
+      names.add(Preconditions.checkNotNull(name));
+      return this;
+    }
+
+    public Tuple is(ExpressionKind kind){
+      kinds.add(Preconditions.checkNotNull(kind));
+      return this;
+    }
+
+    public Arguments build(){
+      return Arguments.of(expression, names, kinds);
+    }
   }
 }
