@@ -38,6 +38,7 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
   protected final static String MODEL_LONG_CYCLE_1_NAME = "LongCycle1";
   protected final static String MODEL_LONG_CYCLE_2_NAME = "LongCycle2";
   protected final static String MODEL_LONG_CYCLE_3_NAME = "LongCycle3";
+
   /**
    * Provides a component symbol {@link #DUMMY_WITHOUT_CYCLE_NAME}.
    */
@@ -68,8 +69,8 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
   }
 
   /**
-   * Builds a component symbol {@link #DUMMY_WITH_CYCLE_NAME} that contains a reference to a component type
-   * {@link #MODEL_WITH_CYCLE_NAME} that is not build by this method yet. You have to provide it yourself.
+   * Builds a component symbol {@link #DUMMY_WITH_CYCLE_NAME} that contains a reference to a component type {@link
+   * #MODEL_WITH_CYCLE_NAME} that is not build by this method yet. You have to provide it yourself.
    */
   protected static ComponentTypeSymbol provideDummyWithCycle() {
     ComponentTypeSymbol dummyWithCycle = ArcBasisMill.componentTypeSymbolBuilder()
@@ -178,8 +179,8 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
   }
 
   /**
-   * Provides a component symbol {@link #MODEL_LONG_CYCLE_1_NAME} that contains a reference to a component type
-   * {@link #MODEL_LONG_CYCLE_2_NAME} that is not build by this method yet. You have to provide it yourself.
+   * Provides a component symbol {@link #MODEL_LONG_CYCLE_1_NAME} that contains a reference to a component type {@link
+   * #MODEL_LONG_CYCLE_2_NAME} that is not build by this method yet. You have to provide it yourself.
    */
   protected static ComponentTypeSymbol provideModelLongCycle1() {
     ComponentTypeSymbol longCycleType1 = ArcBasisMill.componentTypeSymbolBuilder()
@@ -199,10 +200,10 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
 
     longCycleType1.setAstNode(
       ArcBasisMill.componentTypeBuilder()
-      .setName(MODEL_LONG_CYCLE_1_NAME)
-      .setHead(Mockito.mock(ASTComponentHead.class))
-      .setBody(Mockito.mock(ASTComponentBody.class))
-      .build()
+        .setName(MODEL_LONG_CYCLE_1_NAME)
+        .setHead(Mockito.mock(ASTComponentHead.class))
+        .setBody(Mockito.mock(ASTComponentBody.class))
+        .build()
     );
     longCycleType1.getAstNode().setSymbol(longCycleType1);
 
@@ -210,8 +211,8 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
   }
 
   /**
-   * Provides a component symbol {@link #MODEL_LONG_CYCLE_2_NAME} that contains a reference to a component type
-   * {@link #MODEL_LONG_CYCLE_3_NAME} that is not build by this method yet. You have to provide it yourself.
+   * Provides a component symbol {@link #MODEL_LONG_CYCLE_2_NAME} that contains a reference to a component type {@link
+   * #MODEL_LONG_CYCLE_3_NAME} that is not build by this method yet. You have to provide it yourself.
    */
   protected static ComponentTypeSymbol provideModelLongCycle2() {
     ComponentTypeSymbol longCycleType2 = ArcBasisMill.componentTypeSymbolBuilder()
@@ -242,8 +243,8 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
   }
 
   /**
-   * Provides a component symbol {@link #MODEL_LONG_CYCLE_3_NAME} that contains a reference to a component type
-   * {@link #MODEL_LONG_CYCLE_1_NAME} that is not build by this method yet. You have to provide it yourself.
+   * Provides a component symbol {@link #MODEL_LONG_CYCLE_3_NAME} that contains a reference to a component type {@link
+   * #MODEL_LONG_CYCLE_1_NAME} that is not build by this method yet. You have to provide it yourself.
    */
   protected static ComponentTypeSymbol provideModelLongCycle3() {
     ComponentTypeSymbol longCycleType3 = ArcBasisMill.componentTypeSymbolBuilder()
@@ -274,8 +275,8 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
   }
 
   /**
-   * Provides a component symbol {@link #MODEL_WITHOUT_CYCLE_NAME} that contains a reference to a component type7
-   * {@link #DUMMY_WITHOUT_CYCLE_NAME} that is not build by this method yet. You have to provide it yourself.
+   * Provides a component symbol {@link #MODEL_WITHOUT_CYCLE_NAME} that contains a reference to a component type7 {@link
+   * #DUMMY_WITHOUT_CYCLE_NAME} that is not build by this method yet. You have to provide it yourself.
    */
   protected static ComponentTypeSymbol provideModelWithoutCycle() {
     /*
@@ -372,8 +373,8 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
   }
 
   /**
-   * Provides a component symbol {@link #MODEL_WITH_CYCLE_NAME} that contains a reference to a component type
-   * {@link #DUMMY_WITH_CYCLE_NAME} that is not build by this method yet. You have to provide it yourself.
+   * Provides a component symbol {@link #MODEL_WITH_CYCLE_NAME} that contains a reference to a component type {@link
+   * #DUMMY_WITH_CYCLE_NAME} that is not build by this method yet. You have to provide it yourself.
    */
   protected static ComponentTypeSymbol provideModelWithCycle() {
     ComponentTypeSymbol modelWithCycle = ArcBasisMill.componentTypeSymbolBuilder()
@@ -500,7 +501,11 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
   }
 
   /**
-   * Provides a component symbol {@link #MODEL_WITH_SELF_NESTED_CYCLE_NAME}.
+   * Provides a component symbol {@link #MODEL_WITH_SELF_NESTED_CYCLE_NAME}. Although this model is not valid, this
+   * cycle should not be found by the coco. This is because usually every component type is checked by the coco, and
+   * this may may react at Sub1, Sub2 and Sub3. But the component WithSelfNestedCycle is independent from the circle, so
+   * the coco should not fail on this component. Or else every component indirectly containing WithSelfNestedCycle would
+   * also fail, which would result in endless error messages.
    */
   protected static ComponentTypeSymbol provideModelWithSelfNestedCycle() {
     /*
@@ -617,17 +622,17 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
 
   protected static Stream<Arguments> invalidModelsAndErrorProvider() {
     return Stream.of(
-      Arguments.arguments(provideModelWithCycle(), new ComponentTypeSymbol[] {provideDummyWithCycle()},
-        new ArcError[] {ArcError.NO_SUBCOMPONENT_CYCLE}),
-      Arguments.arguments(provideModelWithDirectSelfReference(), new ComponentTypeSymbol[] {},
+      Arguments.arguments(provideModelWithCycle(), new ComponentTypeSymbol[]{provideDummyWithCycle()},
+        new ArcError[]{ArcError.NO_SUBCOMPONENT_CYCLE}),
+      Arguments.arguments(provideModelWithDirectSelfReference(), new ComponentTypeSymbol[]{},
         new ArcError[]{ArcError.NO_SUBCOMPONENT_CYCLE}),
       Arguments.arguments(provideModelLongCycle1(),
-        new ComponentTypeSymbol[] {provideModelLongCycle2(), provideModelLongCycle3()},
-        new ArcError[] {ArcError.NO_SUBCOMPONENT_CYCLE}),
-      Arguments.arguments(provideModelWithNestedCycle(), new ComponentTypeSymbol[] {provideDummyWithNestedCycle()},
+        new ComponentTypeSymbol[]{provideModelLongCycle2(), provideModelLongCycle3()},
         new ArcError[]{ArcError.NO_SUBCOMPONENT_CYCLE}),
-      Arguments.arguments(provideModelWithSelfNestedCycle(), new ComponentTypeSymbol[] {},
-        new ArcError[]{ArcError.NO_SUBCOMPONENT_CYCLE})
+      Arguments.arguments(provideModelWithNestedCycle(), new ComponentTypeSymbol[]{provideDummyWithNestedCycle()},
+        new ArcError[]{ArcError.NO_SUBCOMPONENT_CYCLE}),
+      Arguments.arguments(provideModelWithSelfNestedCycle(), new ComponentTypeSymbol[]{},
+        new ArcError[0])
 
     );
   }
@@ -658,6 +663,6 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
     coco.check(astComp);
 
     // Then
-    checkOnlyExpectedErrorsPresent(new ArcError[] {ArcError.NO_SUBCOMPONENT_CYCLE});
+    checkOnlyExpectedErrorsPresent(expectedErrors);
   }
 }

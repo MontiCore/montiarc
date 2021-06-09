@@ -69,7 +69,7 @@ public enum ArcError implements montiarc.util.Error {
   UNIQUE_IDENTIFIER_NAMES("0xMA1061", "Within '%s' there may not be multiple identifiers called '%s'. Occurrences: %s."),
   CONFIG_PARAMETER_BINDING("0xMA1063", "Component type '%s' has no signature '%s', as given by "
     + "instantiation '%s'."),
-  NO_SUBCOMPONENT_CYCLE("0xMA1064", "Component type '%s' or one of it's subcomponents is part of an illegal " +
+  NO_SUBCOMPONENT_CYCLE("0xMA1064", "Found an illegal " +
     "subcomponent instantiation cycle: %s");
 
   private final String errorCode;
