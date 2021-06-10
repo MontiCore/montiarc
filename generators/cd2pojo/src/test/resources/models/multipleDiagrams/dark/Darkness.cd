@@ -1,0 +1,8 @@
+/* (c) https://github.com/MontiCore/monticore */
+package dark;
+
+classdiagram Darkness {
+  package dark{
+    enum Level {TWILIGHT, DARK, VERY_DARK, VERY_VERY_DARK;}
+  }
+}

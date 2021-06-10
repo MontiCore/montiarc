@@ -1,0 +1,8 @@
+/* (c) https://github.com/MontiCore/monticore */
+package loud;
+
+classdiagram Music {
+  package loud {
+    enum Instruments {DRUMS, GUITAR, TRUMPET, SAXOPHONE, TRIANGLE;}
+  }
+}
