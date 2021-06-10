@@ -2,8 +2,8 @@
 package arcautomaton._cocos;
 
 import arcautomaton.ArcAutomatonMill;
-import arcautomaton._visitor.NamePresenceChecker;
 import arcautomaton._visitor.NamesInExpressionsVisitor;
+import arcautomaton._visitor.StatechartNameResolver;
 import arcbasis._symboltable.PortSymbol;
 import arcbehaviorbasis.BehaviorError;
 import com.google.common.base.Preconditions;
@@ -14,7 +14,6 @@ import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.sctransitions4code._cocos.SCTransitions4CodeASTTransitionBodyCoCo;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.IScope;
-import de.monticore.visitor.ITraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Map;
@@ -22,6 +21,9 @@ import java.util.Optional;
 
 import static arcautomaton._visitor.NamesInExpressionsVisitor.ExpressionKind.*;
 
+/**
+ * checks the direction of assignment and read access to variables and ports in expressions that occur in guards
+ */
 public class FieldReadWriteAccessFitsInGuards implements SCTransitions4CodeASTTransitionBodyCoCo {
 
   /**
@@ -41,6 +43,7 @@ public class FieldReadWriteAccessFitsInGuards implements SCTransitions4CodeASTTr
    * @param visitor {@link #visitor}
    */
   public FieldReadWriteAccessFitsInGuards(@NotNull NamesInExpressionsVisitor visitor) {
+    Preconditions.checkNotNull(visitor);
     this.visitor = Preconditions.checkNotNull(visitor);
   }
 
@@ -79,8 +82,8 @@ public class FieldReadWriteAccessFitsInGuards implements SCTransitions4CodeASTTr
   protected static void checkVariableAccess(@NotNull Map<ASTNameExpression, NamesInExpressionsVisitor.ExpressionKind> map, @NotNull IScope scope){
     Preconditions.checkNotNull(map);
     Preconditions.checkNotNull(scope);
-    NamePresenceChecker resolver = new NamePresenceChecker(scope);
-    String component = scope.getName();
+    StatechartNameResolver resolver = new StatechartNameResolver(scope);
+    String component = resolver.getName();
 
     map.forEach((node, access) -> {
       String name = node.getName();

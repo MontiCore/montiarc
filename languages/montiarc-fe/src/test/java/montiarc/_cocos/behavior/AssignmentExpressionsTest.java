@@ -44,14 +44,7 @@ public class AssignmentExpressionsTest extends AbstractCoCoTest {
   public void succeed(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
-    //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    this.checkOnlyExpectedErrorsPresent(new Error[0]);
+    testModel(model);
   }
 
   @ParameterizedTest
@@ -59,13 +52,7 @@ public class AssignmentExpressionsTest extends AbstractCoCoTest {
   public void fail(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
 
-    //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
-
-    this.getChecker().checkAll(ast);
-
-    //Then
-    this.checkOnlyExpectedErrorsPresent(errors);
+    testModel(model, errors);
   }
 
   @Override
