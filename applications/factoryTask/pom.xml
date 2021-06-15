@@ -15,15 +15,9 @@
 
   <!-- == PROJECT PROPERTIES ============================================== -->
   <properties>
-    <se-groovy.maven.version>1.2.3</se-groovy.maven.version>
-    <junit.version>4.13.1</junit.version>
-
     <models.dir>${basedir}/src/main/resources/</models.dir>
     <hwc.dir>${basedir}/src/main/java/</hwc.dir>
     <gen.dir>${basedir}/target/generated-sources/</gen.dir>
-
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
   <!-- == PROJECT DEPENDENCIES ============================================= -->
@@ -120,7 +114,7 @@
       <plugin>
         <groupId>de.se_rwth.maven</groupId>
         <artifactId>se-groovy-maven-plugin</artifactId>
-        <version>${se-groovy.maven.version}</version>
+        <version>${se-groovy.plugin}</version>
         <configuration>
           <baseClass>montiarc.generator.codegen.MAAGeneratorScript</baseClass>
           <arguments>

@@ -20,4 +20,10 @@
     <module>factoryTask</module>
     <!--<module>bumperbot</module>-->
   </modules>
+
+  <properties>
+    <junit.version>4.13.1</junit.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
 </project>

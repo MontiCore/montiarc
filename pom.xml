@@ -45,7 +45,7 @@
 
     <!-- Plugins -->
     <monticore.plugin>${monticore.version}</monticore.plugin>
-    <se-groovy.plugin>1.2.3</se-groovy.plugin>
+    <se-groovy.plugin>1.2.4-SNAPSHOT</se-groovy.plugin>
     <assembly.plugin>3.1.1</assembly.plugin>
     <build.helper.plugin>3.2.0</build.helper.plugin>
     <dependency.plugin>3.1.1</dependency.plugin>
