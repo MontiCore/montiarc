@@ -90,7 +90,7 @@ public class FieldInitExpressionsOmitPortReferencesTest extends AbstractCoCoTest
 
   protected ASTComponentType parseAndLoadAllSymbols(@NotNull String model) {
     Preconditions.checkNotNull(model);
-    this.getTool().createSymbolTable(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH));
+    this.getTool().createSymbolTable(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, PACKAGE));
     Preconditions.checkState(MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model)).isPresent());
     return MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model)).get().getAstNode();
   }
