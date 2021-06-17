@@ -15,7 +15,6 @@ import de.monticore.symbols.basicsymbols._ast.ASTVariable;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.IDerive;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheck;
 import de.monticore.types.check.TypeCheckResult;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -100,7 +99,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
 
     // checking that configuration parameters are assignable from arguments
     for (int i = 0; i < bindingSignature.size(); i++) {
-      if (!TypeCheck.compatible(signatureOfCompType.get(i), bindingSignature.get(i))) {
+      if (!ArcTypeCheck.compatible(signatureOfCompType.get(i), bindingSignature.get(i))) {
         this.logCocoViolation(bindingSignature, compInstance);
         return; // to terminate when fail-fast of logger is off (e.g. during tests)
       }

@@ -4,7 +4,9 @@ package montiarc._cocos;
 import arcbasis._cocos.ConnectorSourceAndTargetExistAndFit;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import montiarc.MontiArcMill;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -71,5 +73,13 @@ public class ConnectorSourceAndTargetExistAndFitTest extends AbstractCoCoTest {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
     testModel(model, errors);
+  }
+
+  @Override
+  @BeforeEach
+  public void init() {
+    super.init();
+    MontiArcMill.globalScope()
+      .add(MontiArcMill.typeSymbolBuilder().setName("String").setEnclosingScope(MontiArcMill.globalScope()).build());
   }
 }
