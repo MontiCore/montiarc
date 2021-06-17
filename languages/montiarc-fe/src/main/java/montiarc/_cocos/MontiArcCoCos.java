@@ -52,6 +52,9 @@ public class MontiArcCoCos {
     // checker.addCoCo(new SCFileExtension());
     // checker.addCoCo(new SCNameIsArtifactName());
 
+    // MontiArc cocos
+    checker.addCoCo(new RootComponentTypesNoInstanceName());
+
     return checker;
   }
 }

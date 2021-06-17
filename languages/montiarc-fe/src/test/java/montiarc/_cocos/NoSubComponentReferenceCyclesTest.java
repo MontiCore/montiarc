@@ -78,7 +78,7 @@ public class NoSubComponentReferenceCyclesTest extends AbstractCoCoTest {
   protected Stream<ASTComponentType> parseAndLoadAllSymbols(@NotNull String model) {
     Preconditions.checkNotNull(model);
     // parse and load symbols
-    this.getTool().createSymbolTable(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH));
+    this.getTool().createSymbolTable(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, this.getPackage()));
     // find top-component
     Optional<ComponentTypeSymbol> topComponent =
       MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model));

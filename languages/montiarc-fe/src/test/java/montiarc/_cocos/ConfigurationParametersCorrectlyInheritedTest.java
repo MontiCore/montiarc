@@ -75,7 +75,7 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
 
   protected ASTComponentType parseAndLoadAllSymbols(@NotNull String model) {
     Preconditions.checkNotNull(model);
-    this.getTool().createSymbolTable(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH));
+    this.getTool().createSymbolTable(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, this.getPackage()));
     Preconditions.checkState(MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model)).isPresent());
     return MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model)).get().getAstNode();
   }

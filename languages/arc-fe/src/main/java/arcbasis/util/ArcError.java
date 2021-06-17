@@ -67,6 +67,8 @@ public enum ArcError implements montiarc.util.Error {
   INSTANCE_NAME_LOWER_CASE("0xMA1056", "The name of the component instance '%s' should start"
     + " with a lower case letter."),
   UNIQUE_IDENTIFIER_NAMES("0xMA1061", "Within '%s' there may not be multiple identifiers called '%s'. Occurrences: %s."),
+  ROOT_COMPONENT_TYPES_MISS_INSTANCE_NAMES("0xMA1062", "Root components must not have instance "
+    + "names. Violated by component type '%s', named '%s'."),
   CONFIG_PARAMETER_BINDING("0xMA1063", "Component type '%s' has no signature '%s', as given by "
     + "instantiation '%s'."),
   NO_SUBCOMPONENT_CYCLE("0xMA1064", "Found an illegal subcomponent instantiation cycle: %s"),
