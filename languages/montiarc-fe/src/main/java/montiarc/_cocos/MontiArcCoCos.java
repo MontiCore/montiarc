@@ -4,6 +4,7 @@ package montiarc._cocos;
 import arcbasis._cocos.*;
 import de.monticore.types.check.TypeCheckResult;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
+import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
 import montiarc.check.MontiArcDerive;
 
 /**
@@ -24,6 +25,8 @@ public class MontiArcCoCos {
     checker.addCoCo(new ConnectorSourceAndTargetDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checker.addCoCo(new FieldNameCapitalization());
+    checker.addCoCo(new FieldInitExpressionsOmitPortReferences(
+      new PortReferenceExtractor4CommonExpressions()::findPortReferences));
     checker.addCoCo(new FieldTypeExists());
     checker.addCoCo(new InheritedComponentTypeExists());
     checker.addCoCo(new InnerComponentNotExtendsDefiningComponent());
