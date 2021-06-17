@@ -19,6 +19,7 @@ public enum BehaviorError implements Error {
   WRITE_TO_READONLY_VARIABLE("0xMA2007", "Cannot write to readonly variable '%s' of component '%s'."),
   WRITE_TO_LITERAL("0xMA2008", "Cannot assign variables to a literal."),
   ASSIGN_TO_NOT_NAME("0xMA2010", "Cannot %s %s."),
+  GUARD_IS_NO_BOOLEAN("0xMA2009", "The a guard of a transition should evaluate to 'boolean', but this guard evaluates to '%s'."),
   UNSUPPORTED_EVENT("0xMA2011", "Events are not supported."),
   REDUNDANT_INITIAL_DECLARATION("0xMA2012", "The state '%s' has multiple initial outputs."),
   INITIAL_STATE_REFERENCE_MISSING("0xMA2013", "The state '%s' referenced here does not exist.");

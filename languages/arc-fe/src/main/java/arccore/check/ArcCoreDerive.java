@@ -2,6 +2,7 @@
 package arccore.check;
 
 import arcbasis.check.AbstractArcDerive;
+import arcbasis.check.DeriveSymTypeOfExpressionWithPorts;
 import arccore.ArcCoreMill;
 import arccore._visitor.ArcCoreTraverser;
 import com.google.common.base.Preconditions;
@@ -46,7 +47,7 @@ public class ArcCoreDerive
   }
 
   protected void initDeriveSymTypeOfExpression() {
-    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpression();
+    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpressionWithPorts();
     deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
     this.getCalculationDelegator().add4ExpressionsBasis(deriveSymTypeOfExpression);
     this.getCalculationDelegator().setExpressionsBasisHandler(deriveSymTypeOfExpression);

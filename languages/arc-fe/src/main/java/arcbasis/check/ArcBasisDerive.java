@@ -45,7 +45,7 @@ public class ArcBasisDerive
   }
 
   protected void initDeriveSymTypeOfExpression() {
-    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpression();
+    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpressionWithPorts();
     deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
     this.getCalculationDelegator().setExpressionsBasisHandler(deriveSymTypeOfExpression);
     this.getCalculationDelegator().add4ExpressionsBasis(deriveSymTypeOfExpression);

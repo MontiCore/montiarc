@@ -2,8 +2,8 @@
 package montiarc.check;
 
 import arcbasis.check.AbstractArcDerive;
+import arcbasis.check.DeriveSymTypeOfExpressionWithPorts;
 import com.google.common.base.Preconditions;
-import de.monticore.literals.mccommonliterals._ast.ASTSignedLiteral;
 import de.monticore.types.check.*;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
@@ -49,7 +49,7 @@ public class MontiArcDerive
   }
 
   protected void initDeriveSymTypeOfExpression() {
-    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpression();
+    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpressionWithPorts();
     deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
     this.getCalculationDelegator().add4ExpressionsBasis(deriveSymTypeOfExpression);
     this.getCalculationDelegator().setExpressionsBasisHandler(deriveSymTypeOfExpression);
