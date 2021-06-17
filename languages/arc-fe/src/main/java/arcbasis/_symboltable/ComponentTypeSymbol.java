@@ -393,11 +393,11 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return a {@code List} of all ports of this component type.
    */
   public List<PortSymbol> getAllPorts() {
-    List<PortSymbol> result = getPorts();
+    List<PortSymbol> result = new ArrayList<>(getPorts());
     if (this.isPresentParentComponent()) {
       List<PortSymbol> inheritedPorts = new ArrayList<>();
       for (PortSymbol port : this.getParent().getAllPorts()) {
-        if (result.stream().anyMatch(p -> p.getName().equals(port.getName()))) {
+        if (result.stream().noneMatch(p -> p.getName().equals(port.getName()))) {
           inheritedPorts.add(port);
         }
       }
