@@ -37,7 +37,14 @@ public abstract class AbstractCoCoTest extends AbstractTest {
     return this.tool;
   }
 
+  @Override
   @BeforeEach
+  public void init() {
+    super.init();
+    setUpTool();
+    setUpChecker();
+  }
+
   public void setUpTool() {
     this.tool = new MontiArcTool();
   }
@@ -46,7 +53,6 @@ public abstract class AbstractCoCoTest extends AbstractTest {
     return this.checker;
   }
 
-  @BeforeEach
   public void setUpChecker() {
     this.checker = new MontiArcCoCoChecker();
     this.registerCoCos(this.checker);
