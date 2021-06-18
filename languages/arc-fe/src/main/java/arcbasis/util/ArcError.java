@@ -73,7 +73,10 @@ public enum ArcError implements montiarc.util.Error {
     + "instantiation '%s'."),
   NO_SUBCOMPONENT_CYCLE("0xMA1064", "Found an illegal subcomponent instantiation cycle: %s"),
   PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL("0xMA1065", "The initializing expression for " +
-    "field '%s' in component type '%s' illegally relies on the port '%s'.");
+    "field '%s' in component type '%s' illegally relies on the port '%s'."),
+  DEFAULT_PARAM_EXPRESSION_WRONG_TYPE("0xMA1067", "Calculated type of default value expression of configuration " +
+    "parameter '%s' was calculated as '%s' but was expected to be '%s'.");
+
 
   private final String errorCode;
   private final String errorMessage;

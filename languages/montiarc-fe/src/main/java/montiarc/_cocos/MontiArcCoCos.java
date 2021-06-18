@@ -32,6 +32,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new InnerComponentNotExtendsDefiningComponent());
     checker.addCoCo(new InstanceNameCapitalisation());
     checker.addCoCo(new NoSubComponentReferenceCycles());
+    checker.addCoCo(new ParameterDefaultValueTypesCorrect(new MontiArcDerive(new TypeCheckResult())));
     checker.addCoCo(new ParameterNameCapitalization());
     checker.addCoCo(new ParameterTypeExists());
     checker.addCoCo(new PortNameCapitalisation());
