@@ -1,9 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.lejos.lib.motor;
 
-import montiarc.lejos.lib.Datatypes.MotorPort;
-import montiarc.lejos.lib.motor.Datatypes.MotorCmd;
-import montiarc.runtimes.timesync.implementation.IComputable;
+import montiarc.lejos.lib.motor.MotorCmd;
+import montiarc.lejos.lib.motor.MotorInput;
+import montiarc.lejos.lib.motor.MotorResult;
+import de.montiarc.runtimes.timesync.implementation.IComputable;
+import montiarc.lejos.lib.MotorPort;
 import lejos.nxt.NXTMotor;
 
 /**

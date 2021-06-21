@@ -8,10 +8,23 @@
   <parent>
     <groupId>montiarc.applications</groupId>
     <artifactId>applications</artifactId>
-    <version>6.8.0-SNAPSHOT</version>
+    <version>7.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>bumperbot</artifactId>
+
+  <!-- == PROJECT PROPERTIES ============================================== -->
+  <properties>
+    <se-groovy.maven.version>1.2.3</se-groovy.maven.version>
+    <junit.version>4.13.1</junit.version>
+
+    <models.dir>${basedir}/src/main/resources/models/</models.dir>
+    <hwc.dir>${basedir}/src/main/java/</hwc.dir>
+    <gen.dir>${basedir}/target/generated-sources/</gen.dir>
+
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
 
   <!-- == PROJECT DEPENDENCIES ============================================= -->
   <dependencies>
@@ -25,14 +38,21 @@
     <dependency>
       <groupId>montiarc.libraries</groupId>
       <artifactId>lejos-rte</artifactId>
-      <version>5.1.3</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>montiarc.libraries</groupId>
       <artifactId>lejos-rte</artifactId>
-      <version>5.1.3</version>
+      <version>${project.version}</version>
       <classifier>${librarymodels.classifier}</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>montiarc.libraries</groupId>
+      <artifactId>lejos-rte</artifactId>
+      <version>${project.version}</version>
+      <classifier>libsymf</classifier>
     </dependency>
 
     <dependency>
@@ -101,7 +121,7 @@
               <goal>unpack-dependencies</goal>
             </goals>
             <configuration>
-              <includeClassifiers>${librarymodels.classifier}, models</includeClassifiers>
+              <includeClassifiers>${librarymodels.classifier}, models, libsymf</includeClassifiers>
               <outputDirectory>${basedir}/target/${librarymodels.classifier}/</outputDirectory>
             </configuration>
           </execution>
@@ -125,20 +145,59 @@
       </plugin>
 
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>${exec.plugin}</version>
+        <executions>
+          <execution>
+            <id>cd2pojo</id>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <includeProjectDependencies>false</includeProjectDependencies>
+              <includePluginDependencies>true</includePluginDependencies>
+              <mainClass>de.monticore.cd2pojo.POJOGeneratorScript</mainClass>
+              <arguments>
+                <modelPath>${models.dir}</modelPath>
+                <out>${gen.dir}</out>
+              </arguments>
+            </configuration>
+            <phase>generate-sources</phase>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>montiarc.generators</groupId>
+            <artifactId>cd2pojo</artifactId>
+            <version>${project.version}</version>
+            <classifier>jar-with-dependencies</classifier>
+            <exclusions>
+              <exclusion>
+                <groupId>*</groupId>
+                <artifactId>*</artifactId>
+              </exclusion>
+            </exclusions>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <plugin>
         <groupId>de.se_rwth.maven</groupId>
         <artifactId>se-groovy-maven-plugin</artifactId>
         <version>${se-groovy.plugin}</version>
         <configuration>
           <baseClass>montiarc.generator.codegen.MAAGeneratorScript</baseClass>
           <arguments>
-            <out>${basedir}/target/generated-sources/</out>
-            <modelPath>${basedir}/src/main/resources/models</modelPath>
-            <handwrittenCode>${basedir}/src/main/java</handwrittenCode>
+            <out>${gen.dir}</out>
+            <modelPath>${models.dir}</modelPath>
+            <handwrittenCode>${hwc.dir}</handwrittenCode>
           </arguments>
           <script>montiarc/generator/maagenerator.groovy</script>
         </configuration>
         <executions>
           <execution>
+            <phase>generate-sources</phase>
             <goals>
               <goal>execute</goal>
             </goals>

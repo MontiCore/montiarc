@@ -128,8 +128,8 @@ public class MontiArcTool implements IMontiArcTool {
   @Override
   public Collection<IMontiArcArtifactScope> loadAll(@NotNull Path directory) {
     Preconditions.checkArgument(directory != null);
-    Preconditions.checkArgument(directory.toFile().exists());
-    Preconditions.checkArgument(directory.toFile().isDirectory());
+    Preconditions.checkArgument(directory.toFile().exists(), directory.toAbsolutePath()+" does not exist");
+    Preconditions.checkArgument(directory.toFile().isDirectory(), directory.toAbsolutePath()+" is not a directory");
     try (Stream<Path> paths = Files.walk(directory)) {
       return paths.filter(Files::isRegularFile)
         .filter(file -> file.getFileName().toString().endsWith(this.getSymFileExtension())).map(this::load).collect(Collectors.toSet());

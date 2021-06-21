@@ -18,6 +18,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Extends {@link MontiArcTool} with generate capabilities.
@@ -25,7 +26,7 @@ import java.util.Collection;
 public class MontiArcGeneratorTool extends MontiArcTool {
   
   public static final String LIBRARY_MODELS_FOLDER = "target/librarymodels/";
-  
+
   private MAAGenerator generator;
   
   /**
@@ -54,10 +55,15 @@ public class MontiArcGeneratorTool extends MontiArcTool {
    * @param hwcPath   Path where handwritten component implementations are located.
    */
   public void generate(@NotNull Path modelPath, @NotNull Path target, @NotNull Path hwcPath) {
-    Preconditions.checkArgument(modelPath != null);
-    Preconditions.checkArgument(target != null);
-    Preconditions.checkArgument(hwcPath != null);
-    IMontiArcGlobalScope globalScope = createMAGlobalScope(modelPath, target, hwcPath);
+    Preconditions.checkNotNull(modelPath);
+    Preconditions.checkNotNull(target);
+    Preconditions.checkNotNull(hwcPath);
+    Path library = getLibraryFor(target);
+    // create target directory if that does not exist yet
+    target.toFile().mkdirs();
+    library.toFile().mkdirs();
+    MontiArcMill.init();
+    IMontiArcGlobalScope globalScope = createMAGlobalScope(modelPath, target, hwcPath, library);
     globalScope.add(MontiArcMill.typeSymbolBuilder().setName("Integer").setPackageName("java.lang").build());
     processModels(globalScope);
     if (Log.getErrorCount() > 0) {
@@ -93,5 +99,17 @@ public class MontiArcGeneratorTool extends MontiArcTool {
       .forEach(comp -> this.getGenerator()
         .generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(),
           hwcPath, comp));
+  }
+
+  /**
+   * infers the path for library-models from a given output-path
+   * @param target path that poits somewhere into the target-directory
+   * @return estimated library-models-path
+   */
+  private Path getLibraryFor(Path target){
+    while(target != null && !target.endsWith("target")){
+      target = target.getParent();
+    }
+    return Optional.ofNullable(target).orElse(Paths.get("target").toAbsolutePath()).resolve("librarymodels");
   }
 }

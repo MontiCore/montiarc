@@ -121,7 +121,7 @@ public class POJOGeneratorTool {
       set.add(ast);
     }
     for (ASTCDCompilationUnit ast : set) {
-      CD4CodeSymbolTableCompleter completer = new CD4CodeSymbolTableCompleter(ast);
+      CD4CBetterCompleter completer = new CD4CBetterCompleter(ast);
       ast.accept(completer.getTraverser());
     }
     return set;

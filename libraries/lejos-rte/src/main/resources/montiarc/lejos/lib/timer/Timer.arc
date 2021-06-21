@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.lejos.lib.timer;
 
-import montiarc.lejos.lib.timer.Datatypes.TimerCmd;
-import montiarc.lejos.lib.timer.Datatypes.TimerSignal;
+import montiarc.lejos.lib.timer.TimerCmd;
+import montiarc.lejos.lib.timer.TimerSignal;
 
 component Timer(Integer delay) {
   port

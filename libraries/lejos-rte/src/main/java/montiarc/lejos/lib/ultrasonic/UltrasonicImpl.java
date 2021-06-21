@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.lejos.lib.ultrasonic;
 
-import montiarc.lejos.lib.Datatypes.SensorPort;
-import montiarc.runtimes.timesync.implementation.IComputable;
+import de.montiarc.runtimes.timesync.implementation.IComputable;
+import montiarc.lejos.lib.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 
 /**

@@ -17,6 +17,7 @@
 
   <modules>
     <module>majava-rte</module>
+    <module>lejos-rte</module>
     <module>maJavaLib</module>
   </modules>
 </project>

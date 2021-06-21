@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package bumperbot;
 
-import montiarc.lejos.lib.motor.Datatypes.MotorCmd;
-import montiarc.lejos.lib.timer.Datatypes.TimerSignal;
-import montiarc.lejos.lib.timer.Datatypes.TimerCmd;
+import montiarc.lejos.lib.motor.MotorCmd;
+import montiarc.lejos.lib.timer.TimerSignal;
+import montiarc.lejos.lib.timer.TimerCmd;
 
 component BumpControl {
   port
@@ -15,14 +15,40 @@ component BumpControl {
     out Integer speed,
     out String log;
 
-  /*automaton BumpControl {
-    state Idle, Driving, Backing, Turning;
+  automaton {
+    initial state Idle {
+      entry / {
+        right = MotorCmd.STOP;
+        left = MotorCmd.STOP;
+        log = "Idle";
+      }
+    };
+    state Driving;
+    state Backing;
+    state Turning;
 
-    initial Idle / {right = MotorCmd.STOP, left = MotorCmd.STOP, log = "Idle"};
-
-    Idle -> Driving / {right = MotorCmd.FORWARD, left = MotorCmd.FORWARD, speed = 30, log = "Driving"};
-    Driving -> Backing [distance < 5] / {right = MotorCmd.BACKWARD, left = MotorCmd.BACKWARD, timer = TimerCmd.SINGLE, log = "Backing"};
-    Backing -> Turning [signal == TimerSignal.ALERT] / {right = MotorCmd.BACKWARD, left = MotorCmd.FORWARD, timer = TimerCmd.DOUBLE, log = "Turning"};
-    Turning -> Driving [signal == TimerSignal.ALERT] / {left = MotorCmd.FORWARD, right = MotorCmd.FORWARD, log = "Driving"};
-  }*/
+    Idle -> Driving / {
+      right = MotorCmd.FORWARD;
+      left = MotorCmd.FORWARD;
+      speed = 30;
+      log = "Driving";
+    };
+    Driving -> Backing [distance < 5] / {
+      right = MotorCmd.BACKWARD;
+      left = MotorCmd.BACKWARD;
+      timer = TimerCmd.SINGLE;
+      log = "Backing";
+    };
+    Backing -> Turning [signal == TimerSignal.ALERT] / {
+      right = MotorCmd.BACKWARD;
+      left = MotorCmd.FORWARD;
+      timer = TimerCmd.DOUBLE;
+      log = "Turning";
+    };
+    Turning -> Driving [signal == TimerSignal.ALERT] / {
+      left = MotorCmd.FORWARD;
+      right = MotorCmd.FORWARD;
+      log = "Driving";
+    };
+  }
 }

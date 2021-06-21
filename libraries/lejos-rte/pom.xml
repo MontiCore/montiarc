@@ -8,10 +8,16 @@
   <parent>
     <groupId>montiarc.libraries</groupId>
     <artifactId>libraries</artifactId>
-    <version>6.8.0-SNAPSHOT</version>
+    <version>7.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>lejos-rte</artifactId>
+
+  <properties>
+    <models.dir>${basedir}/src/main/resources/</models.dir>
+    <hwc.dir>${basedir}/src/main/java/</hwc.dir>
+    <gen.dir>${basedir}/target/generated-sources/</gen.dir>
+  </properties>
 
   <!-- == PROJECT DEPENDENCIES ============================================= -->
   <dependencies>
@@ -31,13 +37,6 @@
     <dependency>
       <groupId>montiarc.libraries</groupId>
       <artifactId>majava-rte</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>montiarc.libraries</groupId>
-      <artifactId>maJavaLib</artifactId>
-      <classifier>${majavalib.classifier}</classifier>
       <version>${project.version}</version>
     </dependency>
 
@@ -88,6 +87,7 @@
                 <artifactItem>
                   <groupId>montiarc.libraries</groupId>
                   <artifactId>maJavaLib</artifactId>
+                  <version>${project.version}</version>
                 </artifactItem>
               </artifactItems>
               <outputDirectory>${basedir}/target/${librarymodels.classifier}/</outputDirectory>
@@ -96,15 +96,53 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>${exec.plugin}</version>
+        <executions>
+          <execution>
+            <id>cd2pojo</id>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <includeProjectDependencies>false</includeProjectDependencies>
+              <includePluginDependencies>true</includePluginDependencies>
+              <mainClass>de.monticore.cd2pojo.POJOGeneratorScript</mainClass>
+              <arguments>
+                <modelPath>${models.dir}</modelPath>
+                <out>${gen.dir}</out>
+              </arguments>
+            </configuration>
+            <phase>generate-sources</phase>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>montiarc.generators</groupId>
+            <artifactId>cd2pojo</artifactId>
+            <version>${project.version}</version>
+            <classifier>jar-with-dependencies</classifier>
+            <exclusions>
+              <exclusion>
+                <groupId>*</groupId>
+                <artifactId>*</artifactId>
+              </exclusion>
+            </exclusions>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <plugin>
         <groupId>de.se_rwth.maven</groupId>
         <artifactId>se-groovy-maven-plugin</artifactId>
         <version>${se-groovy.plugin}</version>
         <configuration>
-          <baseClass>MAAGeneratorScript</baseClass>
+          <baseClass>montiarc.generator.codegen.MAAGeneratorScript</baseClass>
           <arguments>
-            <out>${basedir}/target/generated-sources/</out>
-            <modelPath>${basedir}/src/main/resources/</modelPath>
-            <hwc>${basedir}/src/main/java</hwc>
+            <out>${gen.dir}</out>
+            <modelPath>${models.dir}</modelPath>
+            <handwrittenCode>${hwc.dir}</handwrittenCode>
           </arguments>
           <script>montiarc/generator/maagenerator.groovy</script>
         </configuration>
@@ -120,6 +158,11 @@
             <groupId>montiarc.generators</groupId>
             <artifactId>ma2java</artifactId>
             <version>${project.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
           </dependency>
           <dependency>
             <groupId>de.se_rwth.commons</groupId>
@@ -159,6 +202,19 @@
             <configuration>
               <classifier>${librarymodels.classifier}</classifier>
               <classesDirectory>${basedir}/src/main/resources/</classesDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>library-sym-files</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>libsymf</classifier>
+              <classesDirectory>${basedir}/target/generated-sources</classesDirectory>
+              <excludes>
+                <exclude>**/*.java</exclude>
+              </excludes>
             </configuration>
           </execution>
         </executions>
