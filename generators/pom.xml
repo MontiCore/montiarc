@@ -8,7 +8,6 @@
 
   <properties>
     <emf.version>1.2.0</emf.version>
-    <xtend.plugin>2.22.0</xtend.plugin>
   </properties>
 
   <parent>

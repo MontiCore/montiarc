@@ -57,12 +57,6 @@
       <artifactId>se-commons-groovy</artifactId>
     </dependency>
 
-    <!-- Template Engine -->
-    <dependency>
-      <groupId>org.eclipse.xtend</groupId>
-      <artifactId>org.eclipse.xtend.lib</artifactId>
-    </dependency>
-
     <!-- Test Libraries -->
     <dependency>
       <groupId>de.monticore</groupId>
@@ -108,26 +102,6 @@
             <configuration>
               <includeClassifiers>${testmodels.classifier}</includeClassifiers>
               <outputDirectory>${basedir}/target/test-models/</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.eclipse.xtend</groupId>
-        <artifactId>xtend-maven-plugin</artifactId>
-        <version>${xtend.plugin}</version>
-        <configuration>
-          <javaSourceVersion>1.8</javaSourceVersion>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>compile</goal>
-              <goal>testCompile</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/xtend-gen/main</outputDirectory>
-              <testOutputDirectory>${project.build.directory}/xtend-gen/test</testOutputDirectory>
             </configuration>
           </execution>
         </executions>
