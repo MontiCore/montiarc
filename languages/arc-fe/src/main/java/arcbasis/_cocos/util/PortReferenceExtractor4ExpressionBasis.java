@@ -14,8 +14,6 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 public class PortReferenceExtractor4ExpressionBasis
   implements ExpressionsBasisHandler, IPortReferenceInExpressionExtractor {
 
@@ -24,9 +22,14 @@ public class PortReferenceExtractor4ExpressionBasis
   protected ExpressionsBasisTraverser traverser;
 
   public PortReferenceExtractor4ExpressionBasis() {
+    this(ExpressionsBasisMill.traverser());
+  }
+
+  public PortReferenceExtractor4ExpressionBasis(@NotNull ExpressionsBasisTraverser traverser) {
+    Preconditions.checkNotNull(traverser);
     this.portReferencesToLookFor = new HashSet<>();
     this.foundPortReferences = new HashMap<>();
-    this.setTraverser(ExpressionsBasisMill.traverser());
+    this.setTraverser(traverser);
   }
 
   @Override
@@ -53,7 +56,8 @@ public class PortReferenceExtractor4ExpressionBasis
   }
 
   protected void setPortReferencesToLookFor(@NotNull HashSet<PortReference> portReferencesToLookFor) {
-    this.portReferencesToLookFor = checkNotNull(portReferencesToLookFor);
+    Preconditions.checkNotNull(portReferencesToLookFor);
+    this.portReferencesToLookFor = portReferencesToLookFor;
   }
 
   @Override

@@ -75,8 +75,9 @@ public enum ArcError implements montiarc.util.Error {
   PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL("0xMA1065", "The initializing expression for " +
     "field '%s' in component type '%s' illegally relies on the port '%s'."),
   DEFAULT_PARAM_EXPRESSION_WRONG_TYPE("0xMA1067", "Calculated type of default value expression of configuration " +
-    "parameter '%s' was calculated as '%s' but was expected to be '%s'.");
-
+    "parameter '%s' was calculated as '%s' but was expected to be '%s'."),
+  PORT_REFERENCE_IN_PARAMETER_DEFAULT_VALUE_ILLEGAL("0xMA1068", "Default values of parameter '%s' in component type " +
+    "'%s' illegally relies on port '%s'.");
 
   private final String errorCode;
   private final String errorMessage;

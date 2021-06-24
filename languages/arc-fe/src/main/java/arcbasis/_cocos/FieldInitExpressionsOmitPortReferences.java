@@ -38,7 +38,7 @@ public class FieldInitExpressionsOmitPortReferences implements ArcBasisASTCompon
   @Override
   public void check(@NotNull ASTComponentType astComp) {
     Preconditions.checkNotNull(astComp);
-    Preconditions.checkArgument(astComp.isPresentSymbol(), "ASTComponentInstance node '%s' has no " +
+    Preconditions.checkArgument(astComp.isPresentSymbol(), "ASTComponentType node '%s' has no " +
         "symbol. Did you forget to run the SymbolTableCreator before checking cocos? Without symbol, we can not " +
         "check CoCo '%s'",
       astComp.getName(), this.getClass().getSimpleName());

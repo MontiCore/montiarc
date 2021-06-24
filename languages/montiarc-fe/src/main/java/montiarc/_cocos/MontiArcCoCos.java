@@ -25,13 +25,13 @@ public class MontiArcCoCos {
     checker.addCoCo(new ConnectorSourceAndTargetDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetExistAndFit());
     checker.addCoCo(new FieldNameCapitalization());
-    checker.addCoCo(new FieldInitExpressionsOmitPortReferences(
-      new PortReferenceExtractor4CommonExpressions()::findPortReferences));
+    checker.addCoCo(new FieldInitExpressionsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new FieldTypeExists());
     checker.addCoCo(new InheritedComponentTypeExists());
     checker.addCoCo(new InnerComponentNotExtendsDefiningComponent());
     checker.addCoCo(new InstanceNameCapitalisation());
     checker.addCoCo(new NoSubComponentReferenceCycles());
+    checker.addCoCo(new ParameterDefaultValuesOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new ParameterDefaultValueTypesCorrect(new MontiArcDerive(new TypeCheckResult())));
     checker.addCoCo(new ParameterNameCapitalization());
     checker.addCoCo(new ParameterTypeExists());

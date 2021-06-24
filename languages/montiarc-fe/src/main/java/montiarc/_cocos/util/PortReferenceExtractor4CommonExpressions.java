@@ -24,8 +24,11 @@ public class PortReferenceExtractor4CommonExpressions extends PortReferenceExtra
   protected CommonExpressionsTraverser traverser;
 
   public PortReferenceExtractor4CommonExpressions() {
-    super();
-    this.setTraverser(CommonExpressionsMill.traverser());
+    this(CommonExpressionsMill.traverser());
+  }
+
+  public PortReferenceExtractor4CommonExpressions(@NotNull CommonExpressionsTraverser traverser) {
+    super(traverser);
   }
 
   @Override
