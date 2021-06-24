@@ -24,6 +24,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new ConnectorSourceAndTargetComponentDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetExistAndFit());
+    checker.addCoCo(new FieldInitExpressionTypesCorrect(new MontiArcDerive(new TypeCheckResult())));
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new FieldInitExpressionsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new FieldTypeExists());
