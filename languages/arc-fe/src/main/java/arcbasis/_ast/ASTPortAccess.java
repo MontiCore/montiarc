@@ -2,8 +2,7 @@
 package arcbasis._ast;
 
 /**
- * Represents a port access. Extends {@Link PortAccessTOP} with utility functionality
- * for easy access.
+ * Represents a port access. Extends {@Link PortAccessTOP} with utility functionality for easy access.
  */
 public class ASTPortAccess extends ASTPortAccessTOP {
 
@@ -12,6 +11,22 @@ public class ASTPortAccess extends ASTPortAccessTOP {
       return this.getComponent() + "." + this.getPort();
     } else {
       return this.getPort();
+    }
+  }
+
+  @Override
+  protected void updatePortSymbol() {
+    if (getEnclosingScope() != null && (portSymbol == null || !getPort().equals(portSymbol.getName()))) {
+      if (isPresentComponent()) {
+        if (this.getComponentSymbol() != null && this.getComponentSymbol().getType() != null
+          && this.getComponentSymbol().getType().getEnclosingScope() != null) {
+          portSymbol = getComponentSymbol().getType().getSpannedScope().resolvePort(getPort()).orElse(null);
+        } else {
+          portSymbol = null;
+        }
+      } else {
+        portSymbol = getEnclosingScope().resolvePort(getPort()).orElse(null);
+      }
     }
   }
 }
