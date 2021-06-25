@@ -18,7 +18,9 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.Optional;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Extends {@link MontiArcTool} with generate capabilities.
@@ -50,20 +52,17 @@ public class MontiArcGeneratorTool extends MontiArcTool {
    * Parses and checks cocos for all MontiArc models in the provided model path. If the models are well formed,
    * generates target code for these.
    *
-   * @param modelPath Path where MontiArc models are located.
-   * @param target    Path the code should be generated to.
-   * @param hwcPath   Path where handwritten component implementations are located.
+   * @param models Path where MontiArc models are located.
+   * @param output Path the code should be generated to.
+   * @param hwc     Path where handwritten component implementations are located.
    */
-  public void generate(@NotNull Path modelPath, @NotNull Path target, @NotNull Path hwcPath) {
-    Preconditions.checkNotNull(modelPath);
-    Preconditions.checkNotNull(target);
-    Preconditions.checkNotNull(hwcPath);
-    Path library = getLibraryFor(target);
-    // create target directory if that does not exist yet
-    target.toFile().mkdirs();
-    library.toFile().mkdirs();
+  public void generate(@NotNull List<File> models, @NotNull File output, @NotNull List<File> hwc) {
+    Preconditions.checkNotNull(output);
+    Preconditions.checkNotNull(models);
+    Preconditions.checkNotNull(hwc);
+    Path target = output.toPath();
     MontiArcMill.init();
-    IMontiArcGlobalScope globalScope = createMAGlobalScope(modelPath, target, hwcPath, library);
+    IMontiArcGlobalScope globalScope = createMAGlobalScope(Stream.of(models, hwc, Collections.singletonList(output)).flatMap(Collection::stream).peek(File::mkdirs).map(File::toPath).toArray(Path[]::new));
     globalScope.add(MontiArcMill.typeSymbolBuilder().setName("Integer").setPackageName("java.lang").build());
     processModels(globalScope);
     if (Log.getErrorCount() > 0) {
@@ -75,7 +74,7 @@ public class MontiArcGeneratorTool extends MontiArcTool {
       .forEach(componentTypeSymbol -> getGenerator().generateAll(
         Paths.get(
           target.toString(), Names.getPathFromPackage(componentTypeSymbol.getPackageName())).toFile(),
-        hwcPath.toFile(),
+        null, // unused parameter?
         (ComponentTypeSymbol) componentTypeSymbol));
   }
   
@@ -99,17 +98,5 @@ public class MontiArcGeneratorTool extends MontiArcTool {
       .forEach(comp -> this.getGenerator()
         .generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(),
           hwcPath, comp));
-  }
-
-  /**
-   * infers the path for library-models from a given output-path
-   * @param target path that poits somewhere into the target-directory
-   * @return estimated library-models-path
-   */
-  private Path getLibraryFor(Path target){
-    while(target != null && !target.endsWith("target")){
-      target = target.getParent();
-    }
-    return Optional.ofNullable(target).orElse(Paths.get("target").toAbsolutePath()).resolve("librarymodels");
   }
 }

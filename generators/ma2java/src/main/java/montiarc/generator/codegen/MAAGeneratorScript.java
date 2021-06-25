@@ -11,14 +11,14 @@ import groovy.lang.Script;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 
 import java.io.File;
+import java.util.List;
 
 public class MAAGeneratorScript extends Script implements GroovyRunner {
-  
+
   protected static final String[] DEFAULT_IMPORTS = {};
-  
+
   protected static final String LOG = "MAAGeneratorScript";
-  
-  
+
   /**
    * @see de.se_rwth.commons.groovy.GroovyRunner#run(java.lang.String,
    * de.se_rwth.commons.configuration.Configuration)
@@ -32,44 +32,33 @@ public class MAAGeneratorScript extends Script implements GroovyRunner {
     GroovyInterpreter.Builder builder = GroovyInterpreter.newInterpreter()
         .withScriptBaseClass(MAAGeneratorScript.class)
         .withImportCustomizer(new ImportCustomizer().addStarImports(DEFAULT_IMPORTS));
-    
+
     // configuration
     MAAConfiguration config = MAAConfiguration
         .withConfiguration(configuration);
-    
+
     // we add the configuration object as property with a special property
     // name
     builder.addVariable(MAAConfiguration.CONFIGURATION_PROPERTY, config);
-    
-    config.getAllValues().forEach((key, value) -> builder.addVariable(key, value));
-    
-    // after adding everything we override a couple of known variable
-    // bindings
-    // to have them properly typed in the script
-    builder.addVariable(MAAConfiguration.Options.MODELPATH.toString(),
-        config.getModelPath());
-    builder.addVariable(MAAConfiguration.Options.OUT.toString(),
-        config.getOut());
-    builder.addVariable(MAAConfiguration.Options.HANDWRITTENCODEPATH.toString(),
-        config.getHWCPath());
-    
+
+    config.getValueMap().forEach(builder::addVariable);
+
     GroovyInterpreter g = builder.build();
     g.evaluate(script);
   }
-  
-  
+
   /**
    * Gets called by Groovy Script. Generates component artifacts for each
    * component in {@code modelPath} to {@code targetFilepath}
-   * 
-   * @param modelPath
-   * @param fqnTemplateName
+   *
+   * @param codes paths for handwritten code
+   * @param models paths where models are located
+   * @param output path to where the output should be generated to
    */
-  public void generate(File modelPath, File targetFilepath, File hwcPath) {
-    new MontiArcGeneratorTool().generate(modelPath.toPath(), targetFilepath.toPath(), hwcPath.toPath());
+  public void generate(List<File> models, File output, List<File> codes) {
+    new MontiArcGeneratorTool().generate(models, output, codes);
   }
-  
-  
+
   // #######################
   // log functions
   // #######################

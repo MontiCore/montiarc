@@ -10,7 +10,11 @@ import groovy.lang.Script;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The script class that integrates with se-groovy-maven plugin to run the
@@ -28,7 +32,7 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
     CD4CodeMill.globalScope().clear();
     CD4CodeMill.reset();
     CD4CodeMill.init();
-    File modelPath = Paths.get(args[0]).toFile();
+    List<File> modelPath = Arrays.stream(args[0].split(",\\s+")).map(File::new).peek(File::mkdirs).collect(Collectors.toList());
     File output = Paths.get(args[1]).toFile();
     Log.debug("Model Path:  " + modelPath.toString(), POJOGeneratorScript.class.getName());
     Log.debug("Output Path: " + output.toString(), POJOGeneratorScript.class.getName());
@@ -53,14 +57,7 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
     // we add the configuration object as property with a special property name
     builder.addVariable(POJOConfiguration.CONFIGURATION_PROPERTY, config);
     
-    config.getAllValues().forEach((key, value) -> builder.addVariable(key, value));
-    
-    // after adding everything we override a couple of known variable bindings
-    // to have them properly typed in the script
-    builder.addVariable(POJOConfiguration.Options.MODELPATH.toString(),
-        config.getModelPath());
-    builder.addVariable(POJOConfiguration.Options.OUT.toString(),
-        config.getOut());
+    config.getValueMap().forEach(builder::addVariable);
     GroovyInterpreter g = builder.build();
     g.evaluate(script);
   }
@@ -73,10 +70,10 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
    * @param modelPath
    * @param targetFilepath
    */
-  public static void generate(File modelPath, File targetFilepath) {
-    File fqnMP = Paths.get(modelPath.getAbsolutePath()).toFile();
+  public static void generate(List<File> modelPath, File targetFilepath) {
+    List<Path> fqnMP = modelPath.stream().map(File::getAbsolutePath).map(Paths::get).collect(Collectors.toList());
     POJOGeneratorTool tool = new POJOGeneratorTool(targetFilepath.toPath(), Paths.get(""));
-    tool.generateCDTypesInPath(fqnMP.toPath());
+    tool.generateCDTypesInPaths(fqnMP);
   }
 
   // #######################

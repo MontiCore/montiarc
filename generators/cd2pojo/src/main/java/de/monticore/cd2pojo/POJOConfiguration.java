@@ -1,240 +1,81 @@
 /* (c) https://github.com/MontiCore/monticore */
 package de.monticore.cd2pojo;
 
+import com.google.common.base.Preconditions;
 import de.se_rwth.commons.configuration.Configuration;
 import de.se_rwth.commons.configuration.ConfigurationContributorChainBuilder;
 import de.se_rwth.commons.configuration.DelegatingConfigurationContributor;
+import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class POJOConfiguration implements Configuration {
+public class POJOConfiguration {
 
   public static final String CONFIGURATION_PROPERTY = "_configuration";
 
   public static final String DEFAULT_OUTPUT_DIRECTORY = "out";
+  public static final String OUT = "out";
+  public static final String OUT_SHORT = "o";
 
-  /**
-   * The names of the specific MontiArc options used in this configuration.
-   */
-  public enum Options {
-    
-    MODELPATH("modelPath"), MODELPATH_SHORT("mp"),
-    OUT("out"), OUT_SHORT("o");
-    
-    String name;
-    
-    Options(String name) {
-      this.name = name;
-    }
-    
-    /**
-     * @see java.lang.Enum#toString()
-     */
-    @Override
-    public String toString() {
-      return this.name;
-    }
-    
-  }
+  public static final String[] MODELPATH = {"modelPath", "mp", "model", "models"};
+  protected final Configuration configuration;
 
-  private final Configuration configuration;
-  
-  public static POJOConfiguration withConfiguration(Configuration configuration) {
+  public static POJOConfiguration withConfiguration(@NotNull Configuration configuration) {
+    Preconditions.checkNotNull(configuration);
     return new POJOConfiguration(configuration);
   }
-  
-  private POJOConfiguration(Configuration internal) {
+
+  protected POJOConfiguration(@NotNull Configuration internal) {
     this.configuration = ConfigurationContributorChainBuilder.newChain()
-        .add(DelegatingConfigurationContributor.with(internal))
-        .build();
-  }
-  
-  /**
-   * @see de.se_rwth.commons.configuration.Configuration#getAllValues()
-   */
-  @Override
-  public Map<String, Object> getAllValues() {
-    return this.configuration.getAllValues();
-  }
-  
-  /**
-   * @see de.se_rwth.commons.configuration.Configuration#getAllValuesAsStrings()
-   */
-  @Override
-  public Map<String, String> getAllValuesAsStrings() {
-    return this.configuration.getAllValuesAsStrings();
-  }
-  
-  /**
-   * @see de.se_rwth.commons.configuration.Configuration#getAsBoolean(java.lang.String)
-   */
-  @Override
-  public Optional<Boolean> getAsBoolean(String key) {
-    return this.configuration.getAsBoolean(key);
-  }
-  
-  public Optional<Boolean> getAsBoolean(Enum<?> key) {
-    return getAsBoolean(key.toString());
-  }
-  
-  /**
-   * @see de.se_rwth.commons.configuration.Configuration#getAsBooleans(java.lang.String)
-   */
-  @Override
-  public Optional<List<Boolean>> getAsBooleans(String key) {
-    return this.configuration.getAsBooleans(key);
-  }
-  
-  public Optional<List<Boolean>> getAsBooleans(Enum<?> key) {
-    return getAsBooleans(key.toString());
-  }
-  
-  /**
-   * @see de.se_rwth.commons.configuration.Configuration#getAsDouble(java.lang.String)
-   */
-  @Override
-  public Optional<Double> getAsDouble(String key) {
-    return this.configuration.getAsDouble(key);
-  }
-  
-  public Optional<Double> getAsDouble(Enum<?> key) {
-    return getAsDouble(key.toString());
-  }
-  
-  /**
-   * @see de.se_rwth.commons.configuration.Configuration#getAsDoubles(java.lang.String)
-   */
-  @Override
-  public Optional<List<Double>> getAsDoubles(String key) {
-    return this.configuration.getAsDoubles(key);
-  }
-  
-  public Optional<List<Double>> getAsDoubles(Enum<?> key) {
-    return getAsDoubles(key.toString());
-  }
-  
-  /**
-   * @see de.se_rwth.commons.configuration.Configuration#getAsInteger(java.lang.String)
-   */
-  @Override
-  public Optional<Integer> getAsInteger(String key) {
-    return this.configuration.getAsInteger(key);
-  }
-  
-  public Optional<Integer> getAsInteger(Enum<?> key) {
-    return getAsInteger(key.toString());
-  }
-  
-  /**
-   * @see de.se_rwth.commons.configuration.Configuration#getAsIntegers(java.lang.String)
-   */
-  @Override
-  public Optional<List<Integer>> getAsIntegers(String key) {
-    return this.configuration.getAsIntegers(key);
-  }
-  
-  public Optional<List<Integer>> getAsIntegers(Enum<?> key) {
-    return getAsIntegers(key.toString());
-  }
-  
-  /**
-   * @see de.se_rwth.commons.configuration.Configuration#getAsString(java.lang.String)
-   */
-  @Override
-  public Optional<String> getAsString(String key) {
-    return this.configuration.getAsString(key);
-  }
-  
-  public Optional<String> getAsString(Enum<?> key) {
-    return getAsString(key.toString());
-  }
-  
-  /**
-   * @see de.se_rwth.commons.configuration.Configuration#getAsStrings(java.lang.String)
-   */
-  @Override
-  public Optional<List<String>> getAsStrings(String key) {
-    return this.configuration.getAsStrings(key);
-  }
-  
-  public Optional<List<String>> getAsStrings(Enum<?> key) {
-    return getAsStrings(key.toString());
-  }
-  
-  /**
-   * @see de.se_rwth.commons.configuration.Configuration#getValue(java.lang.String)
-   */
-  @Override
-  public Optional<Object> getValue(String key) {
-    return this.configuration.getValue(key);
-  }
-  
-  public Optional<Object> getValue(Enum<?> key) {
-    return getValue(key.toString());
-  }
-  
-  /**
-   * @see de.se_rwth.commons.configuration.Configuration#getValues(java.lang.String)
-   */
-  @Override
-  public Optional<List<Object>> getValues(String key) {
-    return this.configuration.getValues(key);
-  }
-  
-  public Optional<List<Object>> getValues(Enum<?> key) {
-    return getValues(key.toString());
-  }
-  
-  public File getModelPath() {
-    Optional<String> modelPath = getAsString(Options.MODELPATH);
-    if(modelPath.isPresent()){
-      Path mp = Paths.get(modelPath.get());
-      return mp.toFile();
-    }
-    modelPath = getAsString(Options.MODELPATH_SHORT);
-    if(modelPath.isPresent()){
-      Path mp = Paths.get(modelPath.get());
-      return mp.toFile();
-    }
-    System.out.println(modelPath);
-    return null;
+      .add(DelegatingConfigurationContributor.with(Preconditions.checkNotNull(internal)))
+      .build();
   }
 
   /**
-   * Getter for the output directory stored in this configuration. A fallback
-   * default is "out".
-   * 
+   * {@see de.se_rwth.commons.configuration.Configuration#getAllValues()} this also adds the custom special values
+   * required for the {@link POJOGeneratorScript#generate(List, File) generator}
+   */
+  public Map<String, Object> getValueMap() {
+    Map<String, Object> values = new HashMap<>(this.configuration.getAllValues());
+    normalize(values, MODELPATH);
+    values.put(OUT, getOut());
+    return values;
+  }
+
+  /**
+   * collects all values aggregated under the given keys into a list that is stored as a value of the first key
+   *
+   * @param map  map to modify
+   * @param keys array with at least one entry
+   */
+  public void normalize(@NotNull Map<String, Object> map, @NotNull String... keys) {
+    Preconditions.checkNotNull(map);
+    Preconditions.checkNotNull(keys);
+    Preconditions.checkArgument(keys.length != 0);
+    map.put(keys[0], Arrays.stream(keys)
+      .map(configuration::getAsStrings)
+      .filter(Optional::isPresent)
+      .map(Optional::get)
+      .flatMap(Collection::stream)
+      .map(Paths::get)
+      .map(Path::toFile)
+      .collect(Collectors.toList()));
+  }
+
+  /**
+   * Getter for the output directory stored in this configuration. A fallback default is "out".
+   *
    * @return output directory file
    */
   public File getOut() {
-    Optional<String> out = getAsString(Options.OUT);
-    if (out.isPresent()) {
-      return new File(out.get());
-    }
-    out = getAsString(Options.OUT_SHORT);
-    return out.map(File::new).orElseGet(() -> new File(DEFAULT_OUTPUT_DIRECTORY));
-    // fallback default is "out"
-  }
-  
-  /**
-   * @param files as String names to convert
-   * @return list of files by creating file objects from the Strings
-   */
-  protected static List<File> toFileList(List<String> files) {
-    return files.stream().map(File::new).collect(Collectors.toList());
-  }
-
-  /**
-   * @see de.se_rwth.commons.configuration.Configuration#hasProperty(java.lang.String)
-   */
-  @Override
-  public boolean hasProperty(String key) {
-   return this.configuration.hasProperty(key);
+    return new File(
+      this.configuration.getAsString(OUT)
+        .orElseGet(() -> this.configuration.getAsString(OUT_SHORT)
+          .orElse(DEFAULT_OUTPUT_DIRECTORY))
+    );
   }
 }

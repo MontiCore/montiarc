@@ -119,8 +119,8 @@
           <baseClass>montiarc.generator.codegen.MAAGeneratorScript</baseClass>
           <arguments>
             <out>${gen.dir}</out>
-            <modelPath>${models.dir}</modelPath>
-            <handwrittenCode>${hwc.dir}</handwrittenCode>
+            <modelPath>${models.dir};${basedir}/target/librarymodels</modelPath>
+            <hwc>${hwc.dir}</hwc>
           </arguments>
           <script>montiarc/generator/maagenerator.groovy</script>
         </configuration>
