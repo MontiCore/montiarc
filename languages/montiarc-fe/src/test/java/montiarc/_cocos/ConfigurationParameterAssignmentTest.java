@@ -7,6 +7,7 @@ import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.TypeCheckResult;
 import montiarc.check.MontiArcDerive;
+import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -53,7 +54,7 @@ public class ConfigurationParameterAssignmentTest extends AbstractCoCoTest {
 
   @ParameterizedTest
   @MethodSource("modelAndExpectedErrorsProvider")
-  public void shouldIncorrectlyBindConfigurationParameters(@NotNull String model, @NotNull ArcError... errors) {
+  public void shouldIncorrectlyBindConfigurationParameters(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
     testModel(model, errors);

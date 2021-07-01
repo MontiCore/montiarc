@@ -4,6 +4,7 @@ package montiarc._cocos;
 import arcbasis._cocos.UniqueIdentifierNames;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -47,7 +48,7 @@ public class UniqueIdentifierNamesTest extends AbstractCoCoTest {
 
   @ParameterizedTest
   @MethodSource("provideFaultyModels")
-  public void shouldFindDuplicatedNames(@NotNull String model, ArcError... expectedErrors) {
+  public void shouldFindDuplicatedNames(@NotNull String model, Error... expectedErrors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(expectedErrors);
 

@@ -5,6 +5,7 @@ import arcbasis._cocos.*;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
+import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -54,7 +55,7 @@ public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
 
   @ParameterizedTest
   @MethodSource("modelAndExpectedErrorsProvider")
-  public void shouldDetectIncorrectCapitalization(@NotNull String model, @NotNull ArcError... errors) {
+  public void shouldDetectIncorrectCapitalization(@NotNull String model, @NotNull Error... errors) {
     testModel(model, errors);
   }
 

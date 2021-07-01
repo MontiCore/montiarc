@@ -5,6 +5,7 @@ import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,7 +39,7 @@ public class RootComponentTypesNoInstanceNameTest extends AbstractCoCoTest {
 
   @ParameterizedTest
   @MethodSource("provideModelsAndErrors")
-  public void shouldFindRootCompWithInstanceName(@NotNull String model, @NotNull ArcError... errors) {
+  public void shouldFindRootCompWithInstanceName(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 

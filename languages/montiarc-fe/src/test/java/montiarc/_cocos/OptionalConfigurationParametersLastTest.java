@@ -4,6 +4,7 @@ package montiarc._cocos;
 import arcbasis._cocos.OptionalConfigurationParametersLast;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -51,7 +52,7 @@ public class OptionalConfigurationParametersLastTest extends AbstractCoCoTest {
   @MethodSource("modelAndExpectedErrorsProvider")
   public void shouldFindMandatoryParametersAfterOptionalOnes(
     @NotNull String model,
-    @NotNull  ArcError... expectedErrors) {
+    @NotNull  Error... expectedErrors) {
     testModel(model, expectedErrors);
   }
 }

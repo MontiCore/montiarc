@@ -4,6 +4,7 @@ package montiarc._cocos;
 import arcbasis._cocos.InnerComponentNotExtendsDefiningComponent;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -31,7 +32,7 @@ public class InnerComponentNotExtendsDefiningComponentTest extends AbstractCoCoT
   public void innerComponentExtendsDefiningComponent(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
-    testModel(model, new ArcError[]{ArcError.INNER_COMPONENT_EXTENDS_OUTER});
+    testModel(model, ArcError.INNER_COMPONENT_EXTENDS_OUTER);
   }
 
   @Override

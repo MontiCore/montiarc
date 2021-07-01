@@ -9,6 +9,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.check.MontiArcDerive;
+import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,7 +66,7 @@ public class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
 
   @ParameterizedTest
   @MethodSource("modelAndExpectedErrorsProvider")
-  public void shouldFindInvalidTypeAssignments(@NotNull String model, @NotNull ArcError... errors) {
+  public void shouldFindInvalidTypeAssignments(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
 
     //Given

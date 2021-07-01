@@ -8,6 +8,7 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
+import montiarc.util.Error;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -55,7 +56,7 @@ public class FieldInitExpressionsOmitPortReferencesTest extends AbstractCoCoTest
 
   @ParameterizedTest
   @MethodSource("provideFaultyModels")
-  public void shouldFindPortReferenceInFieldInitExpression(@NotNull String model, ArcError... expectedErrors) {
+  public void shouldFindPortReferenceInFieldInitExpression(@NotNull String model, Error... expectedErrors) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -70,19 +71,19 @@ public class FieldInitExpressionsOmitPortReferencesTest extends AbstractCoCoTest
 
   public static Stream<Arguments> provideFaultyModels() {
     return Stream.of(
-      Arguments.of("WithExternalModelInheritedPortRef.arc", new ArcError[] {
+      Arguments.of("WithExternalModelInheritedPortRef.arc", new Error[] {
         ArcError.PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL,
         ArcError.PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL}),
-      Arguments.of("WithExternalModelPortRef.arc", new ArcError[] {
+      Arguments.of("WithExternalModelPortRef.arc", new Error[] {
         ArcError.PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL,
         ArcError.PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL}),
-      Arguments.of("WithInheritedPortRef.arc", new ArcError[] {
+      Arguments.of("WithInheritedPortRef.arc", new Error[] {
         ArcError.PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL,
         ArcError.PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL}),
-      Arguments.of("WithOwnPortRef.arc", new ArcError[] {
+      Arguments.of("WithOwnPortRef.arc", new Error[] {
         ArcError.PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL,
         ArcError.PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL}),
-      Arguments.of("WithSubCompPortRef.arc", new ArcError[] {
+      Arguments.of("WithSubCompPortRef.arc", new Error[] {
         ArcError.PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL,
         ArcError.PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL})
     );

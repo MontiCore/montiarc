@@ -4,6 +4,7 @@ package montiarc._cocos;
 import arcbasis._cocos.ConnectorSourceAndTargetDiffer;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -36,7 +37,7 @@ public class ConnectorSourceAndTargetDifferTest extends AbstractCoCoTest {
 
   @ParameterizedTest
   @MethodSource("modelAndExpectedErrorsProvider")
-  public void shouldDetectSourceAndTargetAreTheSame(@NotNull String model, @NotNull ArcError... errors) {
+  public void shouldDetectSourceAndTargetAreTheSame(@NotNull String model, @NotNull Error... errors) {
     testModel(model, errors);
   }
 

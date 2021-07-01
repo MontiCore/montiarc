@@ -27,7 +27,7 @@ public abstract class AbstractCoCoTest extends AbstractTest {
    * @param model  model to test
    * @param errors all expected errors
    */
-  protected static Arguments arg(@NotNull String model, @NotNull ArcError... errors) {
+  protected static Arguments arg(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
     return Arguments.of(model, errors);

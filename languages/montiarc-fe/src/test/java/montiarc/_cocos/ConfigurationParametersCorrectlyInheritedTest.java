@@ -6,6 +6,7 @@ import arcbasis._cocos.ConfigurationParametersCorrectlyInherited;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import montiarc.MontiArcMill;
+import montiarc.util.Error;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -105,7 +106,7 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
 
   @ParameterizedTest
   @MethodSource("modelAndExpectedErrorsProvider")
-  public void testInvalidModelHasErrors(@NotNull String model, @NotNull ArcError... errors) {
+  public void testInvalidModelHasErrors(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
 
     //Given
