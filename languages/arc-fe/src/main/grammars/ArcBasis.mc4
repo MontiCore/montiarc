@@ -161,7 +161,7 @@ component grammar ArcBasis extends
    * @attribute componentInstance A list of instantiated components.
    */
   ComponentInstantiation implements ArcElement <100> =
-    MCType (ComponentInstance || ",")* ";"
+    MCType (ComponentInstance || ",")+ ";"
   ;
 
   /**
