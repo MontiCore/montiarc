@@ -1,34 +1,23 @@
 /* (c) https://github.com/MontiCore/monticore */
 package connectorSourceAndTargetExistAndFit;
 
+/*
+ * Invalid model.
+ */
 component EverythingMismatched {
+  port in String sIn;
+  port out Integer sOut;
 
-  //source and target do not exist
-  nonExistentSource1 -> nonExistentTarget1;
+  sOut -> sIn; // Error, source and target of direct port-forward have the wrong direction and types mismatch
 
-  //source and target type mismatch
-  port in String sIn1;
-  port out int iOut1;
-  sIn1 -> iOut1;
+  component Inner {
+    port in Integer sIn;
+    port out String sOut;
+  }
 
-  //source and target direction mismatch
-  port in String sIn2;
-  port out String sOut2;
-  sOut2 -> sIn2;
+  Inner inner1, inner2;
 
-  //source does not exist
-  port out String sOut3;
-  nonExistentSource2 -> sOut3;
-
-  //source direction mismatch
-  port out String sOut4, sOut5;
-  sOut4 -> sOut5;
-
-  //target does not exist
-  port in String sIn6;
-  sIn6 -> nonExistentTarget2;
-
-  //target direction mismatch
-  port in String sIn7, sIn8;
-  sIn7 -> sIn8;
+  sOut -> inner1.sOut; // Error, source and target of incoming port-forward have the wrong direction and types mismatch
+  inner1.sIn -> inner2.sOut; // Error, source and target of hidden channel have the wrong direction and types mismatch
+  inner2.sIn -> sIn; // Error, source and target of outgoing port-forward have the wrong direction and types mismatch
 }

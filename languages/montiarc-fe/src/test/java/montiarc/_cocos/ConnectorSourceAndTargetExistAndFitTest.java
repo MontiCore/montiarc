@@ -4,6 +4,7 @@ package montiarc._cocos;
 import arcbasis._cocos.ConnectorSourceAndTargetExistAndFit;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import montiarc.MontiArcMill;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -27,30 +28,42 @@ public class ConnectorSourceAndTargetExistAndFitTest extends AbstractCoCoTest {
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
       arg("EverythingMismatched.arc",
-        ArcError.SOURCE_PORT_NOT_EXISTS, ArcError.TARGET_PORT_NOT_EXISTS, ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH,
-        ArcError.PORT_DIRECTION_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH, ArcError.SOURCE_PORT_NOT_EXISTS,
-        ArcError.PORT_DIRECTION_MISMATCH, ArcError.TARGET_PORT_NOT_EXISTS, ArcError.PORT_DIRECTION_MISMATCH
-      ),
+        ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH,
+        ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH,
+        ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH,
+        ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH
+        ),
       arg("SourceAndTargetDoNotExist.arc",
+        ArcError.SOURCE_PORT_NOT_EXISTS, ArcError.TARGET_PORT_NOT_EXISTS,
+        ArcError.SOURCE_PORT_NOT_EXISTS, ArcError.TARGET_PORT_NOT_EXISTS,
+        ArcError.SOURCE_PORT_NOT_EXISTS, ArcError.TARGET_PORT_NOT_EXISTS,
         ArcError.SOURCE_PORT_NOT_EXISTS, ArcError.TARGET_PORT_NOT_EXISTS
       ),
       arg("SourceAndTargetTypeMismatch.arc",
-        ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH
+        ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH, ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH,
+        ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH, ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH
       ),
       arg("SourceAndTargetWrongDirection.arc",
+        ArcError.PORT_DIRECTION_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH,
+        ArcError.PORT_DIRECTION_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH,
+        ArcError.PORT_DIRECTION_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH,
         ArcError.PORT_DIRECTION_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH
       ),
       arg("SourceDoesNotExist.arc",
-        ArcError.SOURCE_PORT_NOT_EXISTS
+        ArcError.SOURCE_PORT_NOT_EXISTS, ArcError.SOURCE_PORT_NOT_EXISTS,
+        ArcError.SOURCE_PORT_NOT_EXISTS, ArcError.SOURCE_PORT_NOT_EXISTS
       ),
       arg("SourceWrongDirection.arc",
-        ArcError.PORT_DIRECTION_MISMATCH
+        ArcError.PORT_DIRECTION_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH,
+        ArcError.PORT_DIRECTION_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH
       ),
       arg("TargetDoesNotExist.arc",
-        ArcError.TARGET_PORT_NOT_EXISTS
+        ArcError.TARGET_PORT_NOT_EXISTS, ArcError.TARGET_PORT_NOT_EXISTS,
+        ArcError.TARGET_PORT_NOT_EXISTS, ArcError.TARGET_PORT_NOT_EXISTS
       ),
       arg("TargetWrongDirection.arc",
-        ArcError.PORT_DIRECTION_MISMATCH
+        ArcError.PORT_DIRECTION_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH,
+        ArcError.PORT_DIRECTION_MISMATCH, ArcError.PORT_DIRECTION_MISMATCH
       )
     );
   }
@@ -62,7 +75,9 @@ public class ConnectorSourceAndTargetExistAndFitTest extends AbstractCoCoTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"AllSourcesAndTargetsExistAndFit.arc", "NoConnectors.arc"})
+  @ValueSource(strings = {
+    "AllSourcesAndTargetsExistAndFit.arc",
+    "NoConnectors.arc"})
   public void connectorSourceAndTargetShouldFit(@NotNull String model) {
     Preconditions.checkNotNull(model);
     testModel(model);
@@ -80,7 +95,13 @@ public class ConnectorSourceAndTargetExistAndFitTest extends AbstractCoCoTest {
   @BeforeEach
   public void init() {
     super.init();
-    MontiArcMill.globalScope()
-      .add(MontiArcMill.typeSymbolBuilder().setName("String").setEnclosingScope(MontiArcMill.globalScope()).build());
+    OOTypeSymbol string = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("String").setEnclosingScope(MontiArcMill.globalScope()).build();
+    OOTypeSymbol integer = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("Integer").setEnclosingScope(MontiArcMill.globalScope()).build();
+    string.setEnclosingScope(MontiArcMill.globalScope());
+    integer.setEnclosingScope(MontiArcMill.globalScope());
+    MontiArcMill.globalScope().add(string);
+    MontiArcMill.globalScope().add(integer);
   }
 }
