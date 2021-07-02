@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
+import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
 import de.monticore.types.check.*;
@@ -143,6 +144,11 @@ public abstract class AdaptedSymType {
 
     @Override
     public String getName() { return original.getName(); }
+
+    @Override
+    public IBasicSymbolsScope getEnclosingScope() {
+      return original.getEnclosingScope();
+    }
   }
 
   /**
