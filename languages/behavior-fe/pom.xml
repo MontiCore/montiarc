@@ -9,7 +9,7 @@
   <parent>
     <artifactId>languages</artifactId>
     <groupId>montiarc.languages</groupId>
-    <version>7.0.0-SNAPSHOT</version>
+    <version>7.0.0</version>
   </parent>
 
   <artifactId>behavior-fe</artifactId>

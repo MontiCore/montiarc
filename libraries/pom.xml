@@ -8,7 +8,7 @@
   <parent>
     <groupId>montiarc</groupId>
     <artifactId>montiarc-core</artifactId>
-    <version>7.0.0-SNAPSHOT</version>
+    <version>7.0.0</version>
   </parent>
 
   <groupId>montiarc.libraries</groupId>
@@ -17,7 +17,7 @@
 
   <modules>
     <module>majava-rte</module>
-    <module>lejos-rte</module>
     <module>maJavaLib</module>
+    <module>lejos-rte</module>
   </modules>
 </project>
