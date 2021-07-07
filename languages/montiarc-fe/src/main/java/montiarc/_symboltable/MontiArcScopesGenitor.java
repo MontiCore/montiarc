@@ -23,6 +23,7 @@ public class MontiArcScopesGenitor extends MontiArcScopesGenitorTOP {
     IMontiArcArtifactScope artifactScope = MontiArcMill.artifactScope();
     artifactScope.setPackageName(rootNode.isPresentPackage() ? rootNode.getPackage().getQName() : "");
     artifactScope.setImportsList(imports);
+    if (this.getCurrentScope().isPresent()) rootNode.setEnclosingScope(this.getCurrentScope().get());
     putOnStack(artifactScope);
     rootNode.setSpannedScope(artifactScope);
     artifactScope.setAstNode(rootNode);
