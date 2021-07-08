@@ -1,0 +1,11 @@
+{
+  "name": "BufferedReader",
+  "kindHierarchy": [
+  ],
+  "symbols": [
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "BufferedReader"
+    }
+  ]
+}

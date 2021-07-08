@@ -186,7 +186,6 @@ public class MontiArcTool implements IMontiArcTool {
     IMontiArcGlobalScope maScope = MontiArcMill.globalScope();
     maScope.clear();
     maScope.setModelPath(modelPath);
-    maScope.setFileExt(this.getMAFileExtension());
     this.addBasicTypes();
     return maScope;
   }

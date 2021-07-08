@@ -1,0 +1,11 @@
+{
+  "name": "BufferedWriter",
+  "kindHierarchy": [
+  ],
+  "symbols": [
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "BufferedWriter"
+    }
+  ]
+}

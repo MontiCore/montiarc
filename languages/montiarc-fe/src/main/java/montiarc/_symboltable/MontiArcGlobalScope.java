@@ -27,16 +27,4 @@ public class MontiArcGlobalScope extends MontiArcGlobalScopeTOP {
     this.putSymbolDeSer("de.monticore.cd4codebasis._symboltable.CDMethodSignatureSymbol", new MethodSymbolDeSer());
     this.putSymbolDeSer("de.monticore.cdassociation._symboltable.CDRoleSymbol", new FieldSymbolDeSer());
   }
-
-  //TODO: Default tries to load montiarc component models instead of serialized symbol tables. Remove once fixed.
-  @Override
-  public void loadFileForModelName(@NotNull String modelName) {
-    Preconditions.checkNotNull(modelName);
-    Optional<ModelCoordinate> mc = FileFinder.findFile(getModelPath(), modelName, ".sym", cache);
-    if (mc.isPresent()) {
-      addLoadedFile(mc.get().getQualifiedPath().toString());
-      IMontiArcArtifactScope as = getSymbols2Json().load(mc.get().getLocation());
-      addSubScope(as);
-    }
-  }
 }
