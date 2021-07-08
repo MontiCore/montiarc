@@ -4,6 +4,8 @@
 
 # MontiArc - Language for Modelling Architecture
 
+[[_TOC_]]
+
 MontiArc is an architecture modeling language and framework that provides platform 
 independent modeling capabilities. MontiArc is **extensible** in several dimensions:
 1. **Behavioral modelling** languages, such as statecharts or logic formulas, can be easily embedded
@@ -211,7 +213,7 @@ everything is understood as class.
 
 ## Functionality
 
-### CoCos
+### Context Conditions
 - [`MontiArcCoCos`][MontiArcCoCos] combines all CoCos for all its sublanguages.
 - The individual CoCos can be found in the corresponding directory of each language.
 - The context conditions ensure the semantic correctness, here is a list of some of the important ones:
@@ -221,7 +223,7 @@ everything is understood as class.
   - Type compatibility of connected ports
 
 ### PrettyPrinter
-- ['MontiArcPrettyPrinterDelegator`][MontiArcPrettyPrinterDelegator] contains the basic pretty printer for MontiArc
+- ['MontiArcFullPrettyPrinter`][MontiArcFullPrettyPrinter] contains the basic pretty printer for MontiArc
 
 [se-rwth]: http://www.se-rwth.de
 [mdse]:http://www.se-rwth.de/teams/mdse/
@@ -235,9 +237,9 @@ everything is understood as class.
 [ASTPortAccess]: ./languages/arc-fe/src/main/java/arcbasis/_ast/ASTPortAccess.java
 [ASTPortDeclaration]: ./languages/arc-fe/src/main/java/arcbasis/_ast/ASTPortDeclaration.java
 
-[MontiArcCoCos]: ./languages/montiarc-fe/src/main/java/montiarc/cocos/MontiArcCoCos.java
+[MontiArcCoCos]: ./languages/montiarc-fe/src/main/java/montiarc/_cocos/MontiArcCoCos.java
 [MontiArcParser]: ./languages/montiarc-fe/src/main/java/montiarc/_parser/MontiArcParser.java
-[MontiArcPrettyPrinterDelegator]: ./languages/montiarc-fe/src/main/java/montiarc/_visitor/MontiArcPrettyPrinterDelegator.java
+[MontiArcFullPrettyPrinter]: ./languages/montiarc-fe/src/main/java/montiarc/_visitor/MontiArcFullPrettyPrinter.java
 
 [MontiArcGrammar]: ./languages/montiarc-fe/src/main/grammars/MontiArc.mc4
 
@@ -250,4 +252,3 @@ everything is understood as class.
 * [Best Practices](https://github.com/MontiCore/monticore/blob/dev/docs/BestPractices.md)
 * [Publications about MBSE and MontiCore](https://www.se-rwth.de/publications/)
 * [Licence definition](https://github.com/MontiCore/monticore/blob/master/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL.md)
-
