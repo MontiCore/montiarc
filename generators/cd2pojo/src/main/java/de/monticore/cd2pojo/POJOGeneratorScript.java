@@ -119,13 +119,9 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
   public void error(String msg, Throwable t) {
     Log.error(msg, t);
   }
-  
-  /**
-   * @see groovy.lang.Script#run()
-   */
+
   @Override
   public Object run() {
     return true;
   }
-  
 }

@@ -15,7 +15,6 @@
 
   <!-- == PROJECT PROPERTIES ============================================== -->
   <properties>
-    <se-groovy.maven.version>1.2.3</se-groovy.maven.version>
     <junit.version>4.13.1</junit.version>
 
     <models.dir>${basedir}/src/main/resources/models/</models.dir>

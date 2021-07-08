@@ -3,12 +3,15 @@ package arcbasis._symboltable;
 
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInterface;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTPortDeclaration;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
 import de.monticore.types.check.SymTypeExpression;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.Collections;
 
@@ -48,8 +51,14 @@ public class PortSymbolTest extends AbstractTest {
         .build())
       .build();
     ASTComponentInterface portInterface = ArcBasisMill.componentInterfaceBuilder().addPortDeclaration(ports).build();
-    IArcBasisArtifactScope scope = symTab.createFromAST(portInterface);
+    ASTComponentType ast = ArcBasisMill.componentTypeBuilder()
+      .setName("CompA").setHead(Mockito.mock(ASTComponentHead.class))
+      .setBody(ArcBasisMill.componentBodyBuilder()
+        .addArcElement(portInterface)
+        .build())
+      .build();
+    symTab.createFromAST(ast);
     ArcBasisMill.globalScope().add(ArcBasisMill.typeSymbolBuilder().setName("Integer").build());
-    Assertions.assertFalse(scope.getPortSymbols().get("p").get(0).getTypeInfo() instanceof TypeSymbolSurrogate);
+    Assertions.assertFalse(ast.getSpannedScope().getPortSymbols().get("p").get(0).getTypeInfo() instanceof TypeSymbolSurrogate);
   }
 }

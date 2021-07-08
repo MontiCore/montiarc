@@ -17,6 +17,12 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy</artifactId>
+    </dependency>
+
+    <!-- MontiArc -->
+    <dependency>
       <groupId>montiarc.languages</groupId>
       <artifactId>montiarc-fe</artifactId>
       <version>${project.version}</version>

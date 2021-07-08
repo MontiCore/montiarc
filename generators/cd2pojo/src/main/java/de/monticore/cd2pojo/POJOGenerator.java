@@ -7,7 +7,7 @@ import de.monticore.cd4code._symboltable.CD4CodeArtifactScope;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
-import de.monticore.io.paths.IterablePath;
+import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
 import de.monticore.symboltable.IArtifactScope;
@@ -20,7 +20,10 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class POJOGenerator {
@@ -28,7 +31,7 @@ public class POJOGenerator {
   protected static String FILE_EXTENSION = ".java";
   
   protected GeneratorEngine engine;
-  protected IterablePath hwcPath;
+  protected MCPath hwcPath;
   protected File outputDirectory;
   
   public POJOGenerator(@NotNull GeneratorSetup setup) {
@@ -40,7 +43,7 @@ public class POJOGenerator {
   
   public POJOGenerator(@NotNull Path targetDir, @NotNull Path hwcPath) {
     this(createGeneratorSetup(Preconditions.checkNotNull(targetDir), Preconditions.checkNotNull(hwcPath)));
-    this.hwcPath = IterablePath.from(hwcPath.toFile(), "java");
+    this.hwcPath = new MCPath(hwcPath);
   }
   
   protected static GeneratorSetup createGeneratorSetup(@NotNull Path targetDir, @NotNull Path hwcPath) {
@@ -48,7 +51,7 @@ public class POJOGenerator {
     Preconditions.checkNotNull(hwcPath);
     GeneratorSetup setup = new GeneratorSetup();
     setup.setOutputDirectory(targetDir.toFile());
-    setup.setHandcodedPath(IterablePath.from(hwcPath.toFile(), "java"));
+    setup.setHandcodedPath(new MCPath(hwcPath));
     return setup;
   }
 
@@ -98,7 +101,7 @@ public class POJOGenerator {
    */
   protected Boolean existsHWC(@NotNull CDTypeSymbol typeSymbol) {
     Preconditions.checkNotNull(typeSymbol);
-    return hwcPath.exists(getPathFor(typeSymbol, false));
+    return hwcPath.find(getPathFor(typeSymbol, false).toString()).isPresent();
   }
   
   protected Path getFileAsPath(@NotNull CDTypeSymbol typeSymbol) {

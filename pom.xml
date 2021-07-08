@@ -26,28 +26,28 @@
     <statechart.version>${monticore.version}</statechart.version>
 
     <!-- SE-Libraries -->
-    <monticore.version>7.0.0</monticore.version>
-    <mc.grammars.assembly.version>0.0.8</mc.grammars.assembly.version>
-    <se-commons.version>1.7.11</se-commons.version>
+    <monticore.version>7.1.0</monticore.version>
+    <mc.grammars.assembly.version>0.0.11</mc.grammars.assembly.version>
+    <se-commons.version>7.1.0</se-commons.version>
 
     <!-- Generator -->
-    <groovy.version>2.5.7</groovy.version>
+    <groovy.version>3.0.7</groovy.version>
 
     <!-- Libraries -->
     <antlr.version>4.7.1</antlr.version>
     <guava.version>25.1-jre</guava.version>
     <jsr305.version>3.0.0</jsr305.version>
     <janino.version>3.0.6</janino.version>
-    <junit.jupiter.version>5.5.2</junit.jupiter.version>
-    <junit.vintage.version>5.5.2</junit.vintage.version>
+    <junit.jupiter.version>5.7.0</junit.jupiter.version>
+    <junit.vintage.version>5.7.0</junit.vintage.version>
     <mockito.version>3.2.0</mockito.version>
     <assertj.version>3.7.0</assertj.version>
     <apache.commons.version>3.11</apache.commons.version>
     <commons_cli_version>1.4</commons_cli_version>
 
     <!-- Plugins -->
-    <monticore.plugin>${monticore.version}</monticore.plugin>
-    <se-groovy.plugin>1.2.4-SNAPSHOT</se-groovy.plugin>
+    <monticore.plugin>7.1.1</monticore.plugin>
+    <se-groovy.plugin>1.2.4</se-groovy.plugin>
     <assembly.plugin>3.1.1</assembly.plugin>
     <build.helper.plugin>3.2.0</build.helper.plugin>
     <dependency.plugin>3.1.1</dependency.plugin>
