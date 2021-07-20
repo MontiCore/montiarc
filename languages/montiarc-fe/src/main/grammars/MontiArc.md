@@ -32,6 +32,8 @@ to ease the description of architectures
 - **GenericArc**: extension of the architecture basis for generic component types
 - **ArcCore**: builds the core of architectural modelling by aggregating the above 
   mentioned languages components (still without concrete expressions, literals, etc.)
+- **VariableArc**: extension of the architecture basis for variable component types,
+adding variable elements and constraints for their inclusion
 - **MontiArc**: extends ArcCore to a complete language with defined expressions,
   literals, and types. MontiArc furthermore embedds statecharts for behavior description.
 

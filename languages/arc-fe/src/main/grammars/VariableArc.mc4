@@ -1,5 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 
+/* This is a MontiCore stable grammar.
+ * Adaptations -- if any -- are conservative. */
+
 /**
  * This grammar defines the basic structural elements required for a variable
  * component architecture. The grammar contains definitions for if-statements,
@@ -8,7 +11,7 @@
 component grammar VariableArc extends ArcBasis {
 
   /**
-   * ASTFeatureDeclaration declares one or more feature by specifying their name.
+   * ASTFeatureDeclaration declares one or more features by specifying their name.
    *
    * @attribute features A list of declared feature identifiers.
    */
@@ -17,31 +20,28 @@ component grammar VariableArc extends ArcBasis {
   ;
 
   /**
-   * ASTFeature defines the feature identifier, also creates FeatureSymbols.
+   * ASTFeature defines the feature identifier, also creates corresponding symbols.
    *
    * @attribute name The name of the feature.
    */
   symbol ArcFeature = Name;
 
   /**
-   * ASTBranchDeclaration defines optional component behaviour and architecture
-   * based on a given condition.
+   * ArcIfStatement defines the variable elements of a component and the condition
+   * for their inclusion. IfStatements of MC are not reused to keep component elements
+   * and statements syntactically separated.
    *
-   * @attribute expression The condition on which the body is added to the component.
-   * @attribute branchBody Contains architectural elements of this component
-   * only in use if expression is true.
-   * @attribute else Contains optional architectural elements of this
-   * component in use if the expression equals false.
+   * @attribute condition The condition for which elements are added to the component.
+   * @attribute thenStatement Elements added to the comonent if the condition evaluates to true.
+   * @attribute elseStatement Elements added to the component if the condition evaluates to false.
    */
-  ArcIfStatement implements ArcElement <110> =
-    key("if") "(" condition:Expression ")" then:ArcElement
-    ( ArcElseStatement )?
+  ArcIfStatement implements ArcElement =
+    "if" "(" condition:Expression ")" thenStatement:ArcElement
+    ("else" elseStatement:ArcElement)?
   ;
 
-  ArcElseStatement = key("else") else:ArcElement;
-
   /**
-   * ASTArcBlock holds multiple architectural components of the component.
+   * ASTArcBlock holds multiple elements in a separate block.
    *
    * @attribute arcElements A list of architectural elements.
    */
@@ -50,9 +50,9 @@ component grammar VariableArc extends ArcBasis {
   /**
    * ASTArcConstraintDeclaration defines rules for valid component instances.
    *
-   * @attribute expression The condition that must be true.
+   * @attribute expression The constraint, which must be a valid boolean expression.
    */
   ArcConstraintDeclaration implements ArcElement <110> =
-    key("constraint") "(" Expression ")" ";"
+    "constraint" "(" Expression ")" ";"
   ;
 }

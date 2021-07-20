@@ -67,16 +67,11 @@ public class VariableArcPrettyPrinter implements VariableArcHandler, VariableArc
     this.getPrinter().print("if (");
     node.getCondition().accept(this.getTraverser());
     this.getPrinter().print(")");
-    node.getThen().accept(this.getTraverser());
-    if (node.isPresentArcElseStatement()) {
-      node.getArcElseStatement().accept(this.getTraverser());
+    node.getThenStatement().accept(this.getTraverser());
+    if (node.isPresentElseStatement()) {
+      this.getPrinter().print(" else ");
+      node.getElseStatement().accept(this.getTraverser());
     }
-  }
-
-  @Override
-  public void handle(@NotNull ASTArcElseStatement node) {
-    this.getPrinter().print(" else ");
-    node.getElse().accept(this.getTraverser());
   }
 
   @Override
