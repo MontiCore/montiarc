@@ -6,10 +6,6 @@ def maJavaLibDir = "$projectDir/src/main/java/lib"
 
 configurations { models }
 
-dependencies {
-  models "de.monticore:javaLib:$javalib_version:models"
-}
-
 java {
   withSourcesJar()
 }

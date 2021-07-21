@@ -27,7 +27,7 @@ variables:
 # This will only validate and compile stuff and run e.g. maven-enforcer-plugin.
 # Because some enforcer rules might check dependency convergence and class duplications
 # we use `test-compile` here instead of `validate`, so the correct classpath is picked up.
-Validate:
+Validate Maven:
   image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3-jdk-8
   stage: build
   script:
@@ -43,6 +43,34 @@ Validate:
       - libraries/maJavaLib/target/
       - libraries/maa-rte/target/
       - libraries/simulator-rte/target/
+      
+Validate Gradle:
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.7-jdk8
+  stage: build
+  allow_failure: true
+  artifacts:
+    paths:
+      - applications/bumperbot/target/
+      - generators/cd2pojo/target/
+      - generators/maa2java-xtend/target/
+      - languages/arc-fe/target/
+      - languages/montiarc-fe/target/
+      - libraries/lejos-rte/target/
+      - libraries/maJavaLib/target/
+      - libraries/maa-rte/target/
+      - libraries/simulator-rte/target/
+  script:
+    - gradle clean assemble
+    
+Unit Test Gradle:
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.7-jdk8
+  stage: test
+  allow_failure: true
+  dependencies: 
+    - Validate Gradle #download artifacts from build
+  needs: ["Validate Gradle"]
+  script:
+    - gradle test
 
 # Run Unit Tests after build
 .unit_test_template: &unit_test_definition
@@ -52,7 +80,7 @@ Validate:
     - mvn $MAVEN_CLI_OPTS test package
     - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/",  instructions, "instructions covered"; print 100*covered/instructions, "% covered" }' ./languages/arc-fe/target/site/jacoco/jacoco.csv
   dependencies:
-    - Validate #download artifacts from build
+    - Validate Maven #download artifacts from build
   artifacts:
     reports:
       junit:

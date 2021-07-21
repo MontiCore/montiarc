@@ -8,21 +8,27 @@ plugins {
 group = "montiarc.languages"
 
 def grammarDir = "$projectDir/src/main/grammars"
-def reportsDir = "$buildDir/generated-sources/monticore/sourcecode/reports/"
+def grammarOutDir = "$buildDir/generated-sources/monticore/sourcecode"
+def hwcDir = "$projectDir/src/main/java"
 
 sourceSets {
   main {
-    java.srcDirs += ["$buildDir/generated-sources/monticore/sourcecode"]
-  }
-  test {
-    java.srcDirs += ["$buildDir/generated-test-sources/monticore/sourcecode"]
+    java.srcDirs += ["$hwcDir", "$grammarOutDir"]
   }
   grammars {
     resources {
-      srcDirs(grammarDir, reportsDir)
-      include("**/*.mc4", "**/*.cd")
+      srcDirs(grammarDir)
+      include "**/*.mc4"
     }
   }
+}
+
+tasks.withType(JavaCompile) {
+  options.fork = false
+  options.encoding = "UTF-8"
+  options.deprecation = false
+  options.warnings = false
+  options.headerOutputDirectory.convention(null)
 }
 
 test {
@@ -33,25 +39,27 @@ test {
 configurations { grammar }
 
 dependencies {
-  //monticore dependencies
-  implementation "de.monticore:monticore-grammar:$mc_version:$grammar_classifier"
-  grammar "de.monticore:monticore-grammar:$mc_version:$grammar_classifier"
-  implementation "montiarc.languages:arc-fe:$version:$grammar_classifier"
-  grammar "montiarc.languages:arc-fe:$version:$grammar_classifier"
+  //Grammar dependencies
+  grammar ("de.monticore:monticore-grammar:$mc_version:$grammars_classifier")
+  grammar ("de.monticore.lang:statecharts:$mc_version:$grammars_classifier")
+  grammar files(project(":languages:arc-fe").projectDir.toPath().resolve("src/main/grammars"))
+  grammar files(project(":languages:behavior-fe").projectDir.toPath().resolve("src/main/grammars"))
 
-  implementation "de.monticore:monticore-generator:$mc_version"
+  //MontiCore dependencies
+  implementation "de.monticore.lang:statecharts:$mc_version"
   implementation "de.monticore:monticore-runtime:$mc_version"
-  implementation "de.monticore:monticore-grammar:$mc_version"
+  implementation("de.monticore:monticore-grammar:$mc_version")
   testImplementation "de.monticore:monticore-runtime:$mc_version:tests"
   testImplementation "de.monticore:monticore-runtime:$mc_version"
 
-  //internal dependencies
+  //Internal dependencies
   implementation project(":languages:arc-fe")
+  implementation project(":languages:behavior-fe")
   implementation project(":util")
+  testImplementation project(":languages:arc-fe").sourceSets.test.output
   testImplementation project(":util").sourceSets.test.output
 
-  //other dependencies
-  implementation "de.monticore.lang:cd4analysis:$cd4a_version"
+  //Other dependencies
   implementation "de.se_rwth.commons:se-commons-logging:$se_commons_version"
   implementation "com.google.guava:guava:$guava_version"
   implementation "com.google.code.findbugs:jsr305:$jsr305_version"
@@ -63,55 +71,36 @@ dependencies {
   testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
 }
 
-fileTree(grammarDir).matching { include '**/*.mc4' }.each {
-  def g = it
-  def grammarName = it.getName().substring(0, it.getName().lastIndexOf('.'))
+task generate {}
 
-  task "generateGrammar$grammarName"(type: MCTask) {
-    grammar = file g
-    outputDir = file "$buildDir/generated-sources/monticore/sourcecode"
-    handcodedPath file("$projectDir/src/main/java")
+// one task per grammar file
+fileTree(grammarDir).matching { include '**/*.mc4' }.each { File g ->
+  String taskname = "generateGrammar${g.getName().substring(0, g.getName().lastIndexOf('.'))}"
+  task "$taskname"(type: MCTask) {
+
+    grammar = g
+    outputDir = file grammarOutDir
     def grammarIncludingPackage = file(grammarDir).toURI().relativize(g.toURI()).toString()
-    def upToDate = incCheck(grammarIncludingPackage)
-    outputs.upToDateWhen { upToDate }
+    outputs.upToDateWhen { incCheck(grammarIncludingPackage) }
   }
+  generate.dependsOn("$taskname")
 }
 
-def grammarDependencies = ext {
-  MontiArc = [":languages:arc-fe:generateGrammarArcCore"]
-}
-
-compileJava {
-  tasks.findAll { task -> task.name.startsWith("generateGrammar") }.each {
-    def grammarName = it.getName().substring('generateGrammar'.length())
-    it.dependsOn grammarDependencies[grammarName]
-    /*it.outputs.upToDateWhen {
-      it.outputs.upToDateWhen && !it.dependsOn.any { !it.outputs.upToDateWhen }
-    }*/
-  }
-
-  dependsOn project.collect { it.tasks.findAll { task -> task.name.startsWith("generateGrammar") } }
-}
+compileJava.dependsOn generate
 
 java {
   //withJavadocJar()
   withSourcesJar()
-  registerFeature("grammars") {
+  registerFeature("$grammars_classifier") {
     usingSourceSet(sourceSets.grammars)
   }
 }
 
-task testModelsJar(type: Jar) {
-  from("$projectDir/src/test/resources")
-  archiveClassifier = "$testmodels_classifier"
-}
+jar.dependsOn grammarsJar
 
 publishing {
   publications {
-    mavenJava(MavenPublication) {
-      from components.java
-      artifact testModelsJar
-    }
+    mavenJava(MavenPublication) { from components.java }
   }
   repositories.maven {
     name = "$SE_Nexus_ID"

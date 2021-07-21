@@ -47,7 +47,9 @@ public class GeneratorTest {
 
   @BeforeAll
   public static void cleanTarget() throws IOException {
-    FileUtils.cleanDirectory(Paths.get(TEST_TARGET_PATH).toFile());
+    if(Paths.get(TEST_TARGET_PATH).toFile().exists()) {
+      FileUtils.cleanDirectory(Paths.get(TEST_TARGET_PATH).toFile());
+    }
   }
 
   @ParameterizedTest

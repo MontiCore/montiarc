@@ -1,39 +1,51 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-  id "org.xtext.xtend" version "2.0.8"
+  id "monticore"
+  id "jacoco"
 }
 
-apply plugin: 'org.xtext.xtend'
-
 group = "montiarc.generators"
+
+tasks.withType(JavaCompile) {
+  options.fork = false
+  options.encoding = "UTF-8"
+  options.deprecation = false
+  options.warnings = false
+  options.headerOutputDirectory.convention(null)
+}
+
+test {
+  useJUnitPlatform()
+  finalizedBy jacocoTestReport
+}
 
 configurations { testmodels }
 
 dependencies {
-  testmodels "montiarc.languages:montiarc-fe:$version:$testmodels_classifier"
-  implementation project(":generators:cd2pojo")
-  implementation project(":languages:montiarc-fe")
-  implementation project(":languages:arc-fe")
-  implementation project(":libraries:majava-rte")
-  implementation project(":util")
-  implementation "de.monticore.lang:cd4analysis:$cd4a_version"
-  implementation "de.monticore:monticore-emf-runtime:$mc_version"
+  //MontiCore dependencies
   implementation "de.monticore:monticore-runtime:$mc_version"
   implementation "de.monticore:monticore-grammar:$mc_version"
-  implementation "de.se_rwth.commons:se-commons-groovy:$se_commons_version"
-  implementation "org.eclipse.xtend:org.eclipse.xtend.lib:$xtend_version"
+  implementation "de.monticore.lang:statecharts:$mc_version"
   testImplementation "de.monticore:monticore-runtime:$mc_version"
+  implementation "de.se_rwth.commons:se-commons-groovy:$se_commons_version"
+
+  //Internal dependencies
+  implementation project(":languages:arc-fe")
+  implementation project(":languages:behavior-fe")
+  implementation project(":languages:montiarc-fe")
+  implementation project(":libraries:majava-rte")
+  implementation project(":util")
+
+  //Model dependencies
+  testmodels "montiarc.languages:montiarc-fe:$version:$testmodels_classifier"
+
+  //Other dependencies
+  implementation "org.codehaus.janino:janino:$janino_version"
+  implementation "org.codehaus.groovy:groovy:$groovy_version"
   testImplementation "org.eclipse.emf:org.eclipse.emf.compare:$emf_version"
   testImplementation "org.eclipse.emf:org.eclipse.emf.compare.match:$emf_version"
   testImplementation "org.eclipse.emf:org.eclipse.emf.compare.diff:$emf_version"
-}
-
-xtend {
-  sourceSets {
-    main.xtendOutputDir = "$buildDir/xtend-gen/main"
-    test.xtendOutputDir = "$buildDir/xtend-gen/test"
-  }
 }
 
 task unpackTestmodels(type:Sync) {
@@ -47,7 +59,7 @@ task unpackTestmodels(type:Sync) {
 
 java {
   //withJavadocJar()
-  //withSourcesJar()
+  withSourcesJar()
 }
 
 publishing {

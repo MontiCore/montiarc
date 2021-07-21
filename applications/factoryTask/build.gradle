@@ -4,7 +4,7 @@ plugins {
   id 'java'
 }
 
-group = "montiarc.libraries"
+group = "montiarc.applications"
 
 def hwcDir = "$projectDir/src/main/java"
 def genDir = "$buildDir/generated-sources"
@@ -31,48 +31,41 @@ configurations {
 dependencies {
   //MontiCore dependencies
   implementation "de.se_rwth.commons:se-commons-logging:$se_commons_version"
+  implementation "de.se_rwth.commons:se-commons-utilities:$se_commons_version"
 
   //Internal dependencies
   generateCD project(":generators:cd2pojo")
   generateMA project(":generators:ma2java")
+  implementation project(":languages:montiarc-fe")
   implementation project(":libraries:majava-rte")
+  implementation project(":libraries:lejos-rte")
 
   //Other dependencies
-  implementation "lejos.nxt:classes:0.9.1-beta"
   testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
   testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version"
-  testImplementation "org.mockito:mockito-core:$mockito_version"
 }
 
 task generateCD(type: JavaExec) {
   classpath = configurations.generateCD
   mainClass = "de.monticore.cd2pojo.POJOGeneratorScript"
 
-  args "$projectDir/src/main/resources", "$genDir", "$hwcDir"
+  args "$projectDir/src/main/resources, $buildDir/$librarymodels_classifier", "$genDir", "$hwcDir"
 }
 
 task generateMontiArc(type: JavaExec) {
   classpath = configurations.generateMA
   mainClass = "montiarc.generator.MontiArcGeneratorTool"
 
-  args "$projectDir/src/main/resources", "$genDir", "$hwcDir"
+  args "$projectDir/src/main/resources, $buildDir/$librarymodels_classifier", "$genDir", "$hwcDir"
 }
 
 generateMontiArc.dependsOn generateCD
-
-task librarymodelsJar(type: Jar) {
-  from("$projectDir/src/main/resources").collect()
-  archiveClassifier = "$librarymodels_classifier"
-}
-
 compileJava.dependsOn generateMontiArc
-librarymodelsJar.mustRunAfter generateMontiArc
 
 publishing {
   publications {
     mavenJava(MavenPublication) {
       from components.java
-      artifact librarymodelsJar
     }
   }
   repositories.maven {

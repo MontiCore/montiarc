@@ -1,32 +1,52 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-  id "monticore"
+  id 'java'
 }
+
+group = "montiarc.applications"
+
+def hwcDir = "$projectDir/src/main/java"
+def genDir = "$buildDir/generated-sources"
 
 sourceSets {
   main {
-    allSource.srcDirs += ["$buildDir/generated-sources"]
+    java.srcDirs += ["$hwcDir", "$genDir"]
   }
 }
 
-configurations { librarymodels }
+tasks.withType(JavaCompile) {
+  options.fork = false
+  options.encoding = "UTF-8"
+  options.deprecation = false
+  options.warnings = false
+  options.headerOutputDirectory.convention(null)
+}
+
+configurations {
+  generateCD
+  generateMA
+  librarymodels
+}
 
 dependencies {
-  librarymodels "montiarc.libraries:lejos-rte:$version:$librarymodels_classifier"
-  librarymodels "montiarc.libraries:maJavaLib:$version"
-  implementation project(":generators:ma2java")
-  implementation project(":languages:montiarc-fe")
-  implementation project(":libraries:lejos-rte")
-  implementation project(":libraries:maJavaLib")
-  implementation project(":libraries:majava-rte")
-  implementation "de.se_rwth.commons:se-commons-groovy:$se_commons_version"
+  //MontiCore dependencies
+  implementation "de.se_rwth.commons:se-commons-logging:$se_commons_version"
   implementation "de.se_rwth.commons:se-commons-utilities:$se_commons_version"
-  implementation "de.monticore:monticore-runtime:$mc_version"
-  implementation "de.monticore:monticore-grammar:$mc_version"
+
+  //Internal dependencies
+  generateCD project(":generators:cd2pojo")
+  generateMA project(":generators:ma2java")
+  librarymodels project(":libraries:maJavaLib")
+  librarymodels project(":libraries:lejos-rte")
+  implementation project(":languages:montiarc-fe")
+  implementation project(":libraries:majava-rte")
+  implementation project(":libraries:lejos-rte")
+
+  //Other dependencies
+  implementation "lejos.nxt:classes:0.9.1-beta"
   testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
   testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version"
-  testImplementation "de.monticore:monticore-runtime:$mc_version:tests"
 }
 
 task unpackLibrarymodels(type: Sync) {
@@ -38,20 +58,23 @@ task unpackLibrarymodels(type: Sync) {
   into "$buildDir/$librarymodels_classifier"
 }
 
-task groovyTask(type: GroovyTask) {
-  baseClass = "montiarc.generator.codegen.MAAGeneratorScript"
-  outputDir = file "$buildDir/generated-sources"
-  modelPath(
-    file("$projectDir/src/main/resources/models")
-  )
-  handcodedPath(
-    file("$projectDir/src/main/java")
-  )
-  script = "montiarc/generator/maagenerator.groovy"
+task generateCD(type: JavaExec) {
+  classpath = configurations.generateCD
+  mainClass = "de.monticore.cd2pojo.POJOGeneratorScript"
+
+  args "$projectDir/src/main/resources, $buildDir/$librarymodels_classifier", "$genDir", "$hwcDir"
 }
 
-build.dependsOn unpackLibrarymodels, groovyTask
-build.dependsOn(tasks.getByPath(":libraries:lejos-rte:build"))
+task generateMontiArc(type: JavaExec) {
+  classpath = configurations.generateMA
+  mainClass = "montiarc.generator.MontiArcGeneratorTool"
+
+  args "$projectDir/src/main/resources, $buildDir/$librarymodels_classifier", "$genDir", "$hwcDir"
+}
+
+generateCD.dependsOn unpackLibrarymodels
+generateMontiArc.dependsOn generateCD
+compileJava.dependsOn generateMontiArc
 
 publishing {
   publications {

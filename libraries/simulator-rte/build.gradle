@@ -6,7 +6,6 @@ test { useJUnit() }
 
 dependencies {
   implementation "de.se_rwth.commons:se-commons-logging:$se_commons_version"
-  testImplementation "junit:junit:$junit_version"
   testImplementation "org.mockito:mockito-core:$mockito_version"
 }
 

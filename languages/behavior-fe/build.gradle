@@ -40,17 +40,20 @@ configurations { grammar }
 
 dependencies {
   //Grammar dependencies
-  grammar("de.monticore:monticore-grammar:$mc_version:$grammars_classifier")
+  grammar ("de.monticore:monticore-grammar:$mc_version:$grammars_classifier")
+  grammar ("de.monticore.lang:statecharts:$mc_version:$grammars_classifier")
+  grammar files(project(":languages:arc-fe").projectDir.toPath().resolve("src/main/grammars"))
 
   //MontiCore dependencies
   implementation "de.monticore:monticore-runtime:$mc_version"
   implementation "de.monticore:monticore-grammar:$mc_version"
-  testImplementation "de.monticore:monticore-grammar:$mc_version"
   testImplementation "de.monticore:monticore-runtime:$mc_version:tests"
   testImplementation "de.monticore:monticore-runtime:$mc_version"
+  implementation "de.monticore.lang:statecharts:$mc_version"
 
   //Internal dependencies
   implementation project(":util")
+  implementation project(":languages:arc-fe")
   testImplementation project(":util").sourceSets.test.output
 
   //Other dependencies

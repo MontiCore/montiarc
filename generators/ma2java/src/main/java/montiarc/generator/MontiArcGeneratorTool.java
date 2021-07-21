@@ -12,14 +12,18 @@ import montiarc.MontiArcTool;
 import montiarc._symboltable.IMontiArcGlobalScope;
 import montiarc.generator.codegen.xtend.MAAGenerator;
 import montiarc.util.DirectoryUtil;
+import org.apache.commons.cli.ParseException;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -30,6 +34,17 @@ public class MontiArcGeneratorTool extends MontiArcTool {
   public static final String LIBRARY_MODELS_FOLDER = "target/librarymodels/";
 
   private MAAGenerator generator;
+
+  public static void main(@NotNull String[] args) {
+    Preconditions.checkNotNull(args);
+    Preconditions.checkArgument(args.length >= 3, "Argument size was " + args.length
+    + " but the code generator expects at least three arguments: model path, target path, and hwc path;"
+    + " but argument was " + args[0]);
+    new MontiArcGeneratorTool().generate(
+      Arrays.stream(args[0].split(",\\s+")).map(File::new).collect(Collectors.toList()),
+      new File(args[1]),
+      Arrays.stream(args[2].split(",\\s+")).map(File::new).collect(Collectors.toList()));
+  }
   
   /**
    * @return the current generator instance

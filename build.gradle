@@ -2,7 +2,6 @@
 
 plugins {
   id 'monticore' version "$mc_version" apply false
-  //plugin is only resolved, not applied -> no need to specify version in every subproject using it
 }
 
 group = "montiarc"
@@ -20,19 +19,10 @@ Developed at the Department of Software Engineering, RWTH Aachen University
 http://www.se-rwth.de/"""
 
 subprojects {
-  apply plugin: 'java' //used for compiling & testing
-  apply plugin: 'maven-publish' //used to publish maven artifacts
-  if(project.group.toString() == "montiarc.languages") {
-    apply plugin: 'idea' //used to customize the structure given in *.iml files
-    idea {
-      module {
-        testSourceDirs += file("$projectDir/target/generated-test-sources/monticore/sourcecode")
-      }
-    }
-  }
+  apply plugin: 'java'
+  apply plugin: 'maven-publish'
 
   repositories {
-    mavenLocal()
     maven {
       credentials.username mavenUser
       credentials.password mavenPassword
