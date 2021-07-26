@@ -18,7 +18,7 @@ import java.util.stream.Stream;
  * Tests whether the variables used in Guards exist.
  * Does not search for type-miss-matches
  */
-public class GuardVariablesTest extends AbstractCoCoTest {
+public class FieldsInGuardsExistTest extends AbstractCoCoTest {
 
   @Override
   protected String getPackage() {
@@ -27,9 +27,9 @@ public class GuardVariablesTest extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-      Arguments.of("MissingVariable.arc", new Error[] {BehaviorError.FIELD_IN_STATECHART_MISSING}),
-      Arguments.of("OnlyOneMissing.arc", new Error[] {BehaviorError.FIELD_IN_STATECHART_MISSING}),
-      Arguments.of("DeeplyNestedMissingVariable.arc", new Error[] {BehaviorError.FIELD_IN_STATECHART_MISSING})
+      Arguments.of("MissingVariable.arc", new Error[] {BehaviorError.SYMBOL_IN_STATECHART_MISSING}),
+      Arguments.of("OnlyOneMissing.arc", new Error[] {BehaviorError.SYMBOL_IN_STATECHART_MISSING}),
+      Arguments.of("DeeplyNestedMissingVariable.arc", new Error[] {BehaviorError.SYMBOL_IN_STATECHART_MISSING})
     );
   }
 

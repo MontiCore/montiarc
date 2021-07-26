@@ -13,7 +13,7 @@ public enum BehaviorError implements Error {
   NO_INITIAL_STATE("0xMA2002", "The automaton of %s lacks an initial state."),
   MANY_INITIAL_STATES("0xMA2003",
       "Automata may not have more than one initial state, but the one of %s has %d: %s and %s"),
-  FIELD_IN_STATECHART_MISSING("0xMA2004", "There is no variable or port called '%s' in component '%s'."),
+  SYMBOL_IN_STATECHART_MISSING("0xMA2004", "Symbol '%s' not found in component '%s'."),
   READ_FROM_OUTGOING_PORT("0xMA2005", "Cannot read from the outgoing port '%s' of component '%s'."),
   WRITE_TO_INCOMING_PORT("0xMA2006", "Cannot write to the incoming port '%s' of component '%s'."),
   WRITE_TO_READONLY_VARIABLE("0xMA2007", "Cannot write to readonly variable '%s' of component '%s'."),
