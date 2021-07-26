@@ -3,12 +3,15 @@
 group = "montiarc"
 
 dependencies {
-  implementation 'de.se_rwth.commons:se-commons-logging:1.7.9'
-  implementation "de.monticore:monticore-runtime:$mc_version"
-  implementation "de.monticore:monticore-grammar:$mc_version"
-  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
-  testImplementation 'org.junit.jupiter:junit-jupiter-params:5.5.2'
-  implementation "org.codehaus.janino:janino:$janino_version"
+  //MontiCore dependencies
+  implementation("de.se_rwth.commons:se-commons-logging:$se_commons_version")
+  implementation("de.monticore:monticore-runtime:$mc_version")
+  implementation("de.monticore:monticore-grammar:$mc_version")
+
+  //Other dependencies
+  testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
+  testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
+  implementation("org.codehaus.janino:janino:$janino_version")
 }
 
 java {
@@ -21,12 +24,12 @@ java {
 
 publishing {
   publications {
-    mavenJava(MavenPublication) { from components.java }
+    mavenJava(MavenPublication) { from(components.java) }
   }
   repositories.maven {
     name = "$SE_Nexus_ID"
-    credentials.username mavenUser
-    credentials.password mavenPassword
+    credentials.username(mavenUser)
+    credentials.password(mavenPassword)
     url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
   }
 }

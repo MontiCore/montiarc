@@ -7,14 +7,6 @@ plugins {
 
 group = "montiarc.generators"
 
-tasks.withType(JavaCompile) {
-  options.fork = false
-  options.encoding = "UTF-8"
-  options.deprecation = false
-  options.warnings = false
-  options.headerOutputDirectory.convention(null)
-}
-
 test {
   useJUnitPlatform()
   finalizedBy jacocoTestReport
@@ -24,32 +16,32 @@ configurations { testmodels }
 
 dependencies {
   //MontiCore dependencies
-  implementation "de.monticore:monticore-runtime:$mc_version"
-  implementation "de.monticore:monticore-grammar:$mc_version"
-  implementation "de.monticore.lang:statecharts:$mc_version"
-  testImplementation "de.monticore:monticore-runtime:$mc_version"
-  implementation "de.se_rwth.commons:se-commons-groovy:$se_commons_version"
+  implementation("de.monticore:monticore-runtime:$mc_version")
+  implementation("de.monticore:monticore-grammar:$mc_version")
+  implementation("de.monticore.lang:statecharts:$mc_version")
+  testImplementation("de.monticore:monticore-runtime:$mc_version")
+  implementation("de.se_rwth.commons:se-commons-groovy:$se_commons_version")
 
   //Internal dependencies
-  implementation project(":languages:arc-fe")
-  implementation project(":languages:behavior-fe")
-  implementation project(":languages:montiarc-fe")
-  implementation project(":libraries:majava-rte")
-  implementation project(":util")
+  implementation(project(":languages:arc-fe"))
+  implementation(project(":languages:behavior-fe"))
+  implementation(project(":languages:montiarc-fe"))
+  implementation(project(":libraries:majava-rte"))
+  implementation(project(":util"))
 
   //Model dependencies
-  testmodels "montiarc.languages:montiarc-fe:$version:$testmodels_classifier"
+  testmodels("montiarc.languages:montiarc-fe:$version:$testmodels_classifier")
 
   //Other dependencies
-  implementation "org.codehaus.janino:janino:$janino_version"
-  implementation "org.codehaus.groovy:groovy:$groovy_version"
-  testImplementation "org.eclipse.emf:org.eclipse.emf.compare:$emf_version"
-  testImplementation "org.eclipse.emf:org.eclipse.emf.compare.match:$emf_version"
-  testImplementation "org.eclipse.emf:org.eclipse.emf.compare.diff:$emf_version"
+  implementation("org.codehaus.janino:janino:$janino_version")
+  implementation("org.codehaus.groovy:groovy:$groovy_version")
+  testImplementation("org.eclipse.emf:org.eclipse.emf.compare:$emf_version")
+  testImplementation("org.eclipse.emf:org.eclipse.emf.compare.match:$emf_version")
+  testImplementation("org.eclipse.emf:org.eclipse.emf.compare.diff:$emf_version")
 }
 
 task unpackTestmodels(type:Sync) {
-  dependsOn configurations.testmodels
+  dependsOn(configurations.testmodels)
 
   from {
     configurations.testmodels.collect { zipTree(it) }
@@ -64,12 +56,12 @@ java {
 
 publishing {
   publications {
-    mavenJava(MavenPublication) { from components.java }
+    mavenJava(MavenPublication) { from(components.java) }
   }
   repositories.maven {
     name = "$SE_Nexus_ID"
-    credentials.username mavenUser
-    credentials.password mavenPassword
+    credentials.username(mavenUser)
+    credentials.password(mavenPassword)
     url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
   }
 }

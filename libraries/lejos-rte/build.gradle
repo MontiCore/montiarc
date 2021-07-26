@@ -1,9 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-plugins {
-  id 'java'
-}
-
 group = "montiarc.libraries"
 
 def hwcDir = "$projectDir/src/main/java"
@@ -15,14 +11,6 @@ sourceSets {
   }
 }
 
-tasks.withType(JavaCompile) {
-  options.fork = false
-  options.encoding = "UTF-8"
-  options.deprecation = false
-  options.warnings = false
-  options.headerOutputDirectory.convention(null)
-}
-
 configurations {
   generateCD
   generateMA
@@ -30,55 +18,55 @@ configurations {
 
 dependencies {
   //MontiCore dependencies
-  implementation "de.se_rwth.commons:se-commons-logging:$se_commons_version"
+  implementation("de.se_rwth.commons:se-commons-logging:$se_commons_version")
 
   //Internal dependencies
-  generateCD project(":generators:cd2pojo")
-  generateMA project(":generators:ma2java")
-  implementation project(":libraries:majava-rte")
+  generateCD(project(":generators:cd2pojo"))
+  generateMA(project(":generators:ma2java"))
+  implementation(project(":libraries:majava-rte"))
 
   //Other dependencies
-  implementation "lejos.nxt:classes:0.9.1-beta"
-  testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
-  testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version"
-  testImplementation "org.mockito:mockito-core:$mockito_version"
+  implementation("lejos.nxt:classes:$lejos_version")
+  testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
+  testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
+  testImplementation("org.mockito:mockito-core:$mockito_version")
 }
 
 task generateCD(type: JavaExec) {
   classpath = configurations.generateCD
   mainClass = "de.monticore.cd2pojo.POJOGeneratorScript"
 
-  args "$projectDir/src/main/resources", "$genDir", "$hwcDir"
+  args("$projectDir/src/main/resources", "$genDir", "$hwcDir")
 }
 
 task generateMontiArc(type: JavaExec) {
   classpath = configurations.generateMA
   mainClass = "montiarc.generator.MontiArcGeneratorTool"
 
-  args "$projectDir/src/main/resources", "$genDir", "$hwcDir"
+  args("$projectDir/src/main/resources", "$genDir", "$hwcDir")
 }
 
-generateMontiArc.dependsOn generateCD
+generateMontiArc.dependsOn(generateCD)
 
 task librarymodelsJar(type: Jar) {
   from("$projectDir/src/main/resources").collect()
   archiveClassifier = "$librarymodels_classifier"
 }
 
-compileJava.dependsOn generateMontiArc
-librarymodelsJar.mustRunAfter generateMontiArc
+compileJava.dependsOn(generateMontiArc)
+librarymodelsJar.mustRunAfter(generateMontiArc)
 
 publishing {
   publications {
     mavenJava(MavenPublication) {
-      from components.java
+      from(components.java)
       artifact librarymodelsJar
     }
   }
   repositories.maven {
     name = "$SE_Nexus_ID"
-    credentials.username mavenUser
-    credentials.password mavenPassword
+    credentials.username(mavenUser)
+    credentials.password(mavenPassword)
     url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
   }
 }

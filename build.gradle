@@ -22,20 +22,24 @@ subprojects {
   apply plugin: 'java'
   apply plugin: 'maven-publish'
 
-  repositories {
-    maven {
-      credentials.username mavenUser
-      credentials.password mavenPassword
-      url repo
-    }
-    mavenCentral()
-  }
-
   sourceCompatibility = '1.8'
 
   tasks.withType(JavaCompile) {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
     options.encoding = 'UTF-8'
+    options.fork = false
+    options.deprecation = false
+    options.warnings = false
+    options.headerOutputDirectory.convention(null)
+  }
+
+  repositories {
+    maven {
+      credentials.username(mavenUser)
+      credentials.password(mavenPassword)
+      url repo
+    }
+    mavenCentral()
   }
 }

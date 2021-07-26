@@ -9,11 +9,10 @@ group = "montiarc.languages"
 
 def grammarDir = "$projectDir/src/main/grammars"
 def grammarOutDir = "$buildDir/generated-sources/monticore/sourcecode"
-def hwcDir = "$projectDir/src/main/java"
 
 sourceSets {
   main {
-    java.srcDirs += ["$hwcDir", "$grammarOutDir"]
+    java.srcDirs += ["$grammarOutDir"]
   }
   grammars {
     resources {
@@ -21,14 +20,6 @@ sourceSets {
       include "**/*.mc4"
     }
   }
-}
-
-tasks.withType(JavaCompile) {
-  options.fork = false
-  options.encoding = "UTF-8"
-  options.deprecation = false
-  options.warnings = false
-  options.headerOutputDirectory.convention(null)
 }
 
 test {
@@ -40,33 +31,37 @@ configurations { grammar }
 
 dependencies {
   //Grammar dependencies
-  grammar ("de.monticore:monticore-grammar:$mc_version:$grammars_classifier")
-  grammar ("de.monticore.lang:statecharts:$mc_version:$grammars_classifier")
-  grammar files(project(":languages:arc-fe").projectDir.toPath().resolve("src/main/grammars"))
+  grammar("de.monticore:monticore-grammar:$mc_version:$grammars_classifier")
+  grammar("de.monticore.lang:statecharts:$mc_version:$grammars_classifier")
+  grammar(project(":languages:arc-fe")) {
+    capabilities {
+      requireCapability("montiarc.languages:arc-fe-$grammars_classifier")
+    }
+  }
 
   //MontiCore dependencies
-  implementation "de.monticore:monticore-runtime:$mc_version"
-  implementation "de.monticore:monticore-grammar:$mc_version"
-  testImplementation "de.monticore:monticore-runtime:$mc_version:tests"
-  testImplementation "de.monticore:monticore-runtime:$mc_version"
-  implementation "de.monticore.lang:statecharts:$mc_version"
+  implementation("de.monticore:monticore-runtime:$mc_version")
+  implementation("de.monticore:monticore-grammar:$mc_version")
+  testImplementation("de.monticore:monticore-runtime:$mc_version:tests")
+  testImplementation("de.monticore:monticore-runtime:$mc_version")
+  implementation("de.monticore.lang:statecharts:$mc_version")
 
   //Internal dependencies
-  implementation project(":util")
-  implementation project(":languages:arc-fe")
-  testImplementation project(":util").sourceSets.test.output
+  implementation(project(":util"))
+  implementation(project(":languages:arc-fe"))
+  testImplementation(project(":util").sourceSets.test.output)
 
   //Other dependencies
-  implementation "de.se_rwth.commons:se-commons-logging:$se_commons_version"
-  implementation "com.google.guava:guava:$guava_version"
-  implementation "com.google.code.findbugs:jsr305:$jsr305_version"
-  implementation "org.apache.commons:commons-lang3:3.9"
-  implementation "org.antlr:antlr4-runtime:$antlr_version"
-  implementation "org.codehaus.janino:janino:$janino_version"
-  testImplementation "org.mockito:mockito-core:$mockito_version"
-  testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
-  testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version"
-  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
+  implementation("de.se_rwth.commons:se-commons-logging:$se_commons_version")
+  implementation("com.google.guava:guava:$guava_version")
+  implementation("com.google.code.findbugs:jsr305:$jsr305_version")
+  implementation("org.apache.commons:commons-lang3:3.9")
+  implementation("org.antlr:antlr4-runtime:$antlr_version")
+  implementation("org.codehaus.janino:janino:$janino_version")
+  testImplementation("org.mockito:mockito-core:$mockito_version")
+  testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
+  testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version")
 }
 
 task generate {}
@@ -84,7 +79,7 @@ fileTree(grammarDir).matching { include '**/*.mc4' }.each { File g ->
   generate.dependsOn("$taskname")
 }
 
-compileJava.dependsOn generate
+compileJava.dependsOn(generate)
 
 java {
   //withJavadocJar()
@@ -94,16 +89,16 @@ java {
   }
 }
 
-jar.dependsOn grammarsJar
+jar.dependsOn(grammarsJar)
 
 publishing {
   publications {
-    mavenJava(MavenPublication) { from components.java }
+    mavenJava(MavenPublication) { from(components.java) }
   }
   repositories.maven {
     name = "$SE_Nexus_ID"
-    credentials.username mavenUser
-    credentials.password mavenPassword
+    credentials.username(mavenUser)
+    credentials.password(mavenPassword)
     url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
   }
 }

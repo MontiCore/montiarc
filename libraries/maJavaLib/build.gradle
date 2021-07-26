@@ -7,25 +7,26 @@ def maJavaLibDir = "$projectDir/src/main/java/lib"
 configurations { models }
 
 java {
+  //withJavadocJar()
   withSourcesJar()
 }
 
 task unpack_Models(type:Sync) {
-  dependsOn configurations.models
+  dependsOn(configurations.models)
 
   from {
     configurations.models.collect { zipTree(it) }
   }
-  into maJavaLibDir
+  into(maJavaLibDir)
 }
 
 task copyResources(type:Sync) {
-  from "$projectDir/src/main/resources"
-  into maJavaLibDir
+  from("$projectDir/src/main/resources")
+  into(maJavaLibDir)
 }
 
 clean {
-  delete maJavaLibDir
+  delete(maJavaLibDir)
 }
 
 task maJavaLibJar(type: Jar) {
@@ -37,12 +38,12 @@ copyResources.dependsOn(unpack_Models)
 
 publishing {
   publications {
-    mavenJava(MavenPublication) { artifact maJavaLibJar }
+    mavenJava(MavenPublication) { artifact(maJavaLibJar) }
   }
   repositories.maven {
     name = "$SE_Nexus_ID"
-    credentials.username mavenUser
-    credentials.password mavenPassword
+    credentials.username(mavenUser)
+    credentials.password(mavenPassword)
     url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
   }
 }

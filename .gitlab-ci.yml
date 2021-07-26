@@ -47,7 +47,7 @@ Validate Maven:
 Validate Gradle:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.7-jdk8
   stage: build
-  allow_failure: true
+  allow_failure: false
   artifacts:
     paths:
       - applications/bumperbot/target/
@@ -65,7 +65,7 @@ Validate Gradle:
 Unit Test Gradle:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.7-jdk8
   stage: test
-  allow_failure: true
+  allow_failure: false
   dependencies: 
     - Validate Gradle #download artifacts from build
   needs: ["Validate Gradle"]
