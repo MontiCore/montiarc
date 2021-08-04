@@ -6,7 +6,6 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis.util.ArcError;
-import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -35,7 +34,7 @@ public class PortUniqueSenderTest extends AbstractTest {
         .addArcElement(ArcBasisMill.connectorBuilder().setSource("i2").setTargetList("o1").build())
         .build())
       .build();
-    ArcError[] errors1 = new ArcError[] { ArcError.PORT_MUlTIPLE_SENDER};
+    ArcError[] errors1 = new ArcError[] { ArcError.PORT_MULTIPLE_SENDER};
     ASTComponentType comp2 = ArcBasisMill. componentTypeBuilder().setName("Comp2")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
@@ -43,7 +42,7 @@ public class PortUniqueSenderTest extends AbstractTest {
         .addArcElement(ArcBasisMill.connectorBuilder().setSource("i1").setTargetList("o2").build())
         .build())
       .build();
-    ArcError[] errors2 = new ArcError[] { ArcError.PORT_MUlTIPLE_SENDER};
+    ArcError[] errors2 = new ArcError[] { ArcError.PORT_MULTIPLE_SENDER};
     ASTComponentType comp3 = ArcBasisMill. componentTypeBuilder().setName("Comp3")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
@@ -52,7 +51,7 @@ public class PortUniqueSenderTest extends AbstractTest {
         .addArcElement(ArcBasisMill.connectorBuilder().setSource("i3").setTargetList("o3", "o2").build())
         .build())
       .build();
-    ArcError[] errors3 = new ArcError[] { ArcError.PORT_MUlTIPLE_SENDER};
+    ArcError[] errors3 = new ArcError[] { ArcError.PORT_MULTIPLE_SENDER};
     ASTComponentType comp4 = ArcBasisMill. componentTypeBuilder().setName("Comp4")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
