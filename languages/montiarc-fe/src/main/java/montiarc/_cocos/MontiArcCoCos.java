@@ -15,7 +15,7 @@ public class MontiArcCoCos {
   public static MontiArcCoCoChecker createChecker() {
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
 
-    //arcbasis cocos
+    // ArcBasis CoCos
     checker.addCoCo(new CircularInheritance());
     checker.addCoCo(new ComponentInstanceTypeExists());
     checker.addCoCo(new ComponentTypeNameCapitalization());
@@ -43,18 +43,10 @@ public class MontiArcCoCos {
     checker.addCoCo(new SubComponentsConnected());
     checker.addCoCo(new UniqueIdentifierNames());
     
-    //genericarc cocos
+    // GenericArc CoCos
     checker.addCoCo(new GenericTypeParameterNameCapitalization());
 
-    // statechart origin cocos
-    // checker.addCoCo(new UniqueStates()); // uses uml traverser
-    // checker.addCoCo(new TransitionSourceTargetExists());
-    //checker.addCoCo(new CapitalStateNames()); // this coco is implemented wrongly
-    // checker.addCoCo(new PackageCorrespondsToFolders());
-    // checker.addCoCo(new SCFileExtension());
-    // checker.addCoCo(new SCNameIsArtifactName());
-
-    // MontiArc cocos
+    // MontiArc CoCos
     checker.addCoCo(new RootComponentTypesNoInstanceName());
 
     return checker;
