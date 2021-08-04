@@ -7,6 +7,7 @@ import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
+import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
 import arcbasis.util.ArcError;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.Assertions;
@@ -36,9 +37,12 @@ public class CircularInheritanceTest extends AbstractTest {
           .build())
         .build())
       .build();
-    ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
-    symTab.createFromAST(parent);
-    symTab.createFromAST(child);
+    ArcBasisScopesGenitorDelegator genitor = ArcBasisMill.scopesGenitorDelegator();
+    genitor.createFromAST(parent);
+    genitor.createFromAST(child);
+    ArcBasisSymbolTableCompleterDelegator completer = ArcBasisMill.symbolTableCompleterDelegator();
+    completer.createFromAST(parent);
+    completer.createFromAST(child);
     CircularInheritance coco = new CircularInheritance();
     coco.check(child);
     this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CIRCULAR_INHERITANCE});

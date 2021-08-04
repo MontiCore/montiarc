@@ -52,7 +52,7 @@ public class NoSubComponentReferenceCyclesTest extends AbstractCoCoTest {
     Preconditions.checkNotNull(errors);
 
     //Given
-    Stream<ASTComponentType> artifacts = this.parseAndLoadAllSymbols(this.getPackage() + "." + model);
+    Stream<ASTComponentType> artifacts = this.parseAndLoadAllSymbolsStream(this.getPackage() + "." + model);
 
     //When
     artifacts.forEach(artifact -> this.getChecker().checkAll(artifact));
@@ -67,7 +67,7 @@ public class NoSubComponentReferenceCyclesTest extends AbstractCoCoTest {
     Preconditions.checkNotNull(model);
 
     //Given
-    Stream<ASTComponentType> artifacts = this.parseAndLoadAllSymbols(this.getPackage() + "." + model);
+    Stream<ASTComponentType> artifacts = this.parseAndLoadAllSymbolsStream(this.getPackage() + "." + model);
 
     //When
     artifacts.forEach(unit -> this.getChecker().checkAll(unit));
@@ -76,7 +76,7 @@ public class NoSubComponentReferenceCyclesTest extends AbstractCoCoTest {
     Assertions.assertEquals(Collections.emptyList(), Log.getFindings());
   }
 
-  protected Stream<ASTComponentType> parseAndLoadAllSymbols(@NotNull String model) {
+  protected Stream<ASTComponentType> parseAndLoadAllSymbolsStream(@NotNull String model) {
     Preconditions.checkNotNull(model);
     // parse and load symbols
     this.getTool().createSymbolTable(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, this.getPackage()));

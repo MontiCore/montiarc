@@ -12,11 +12,9 @@ import montiarc.MontiArcTool;
 import montiarc._symboltable.IMontiArcGlobalScope;
 import montiarc.generator.codegen.xtend.MAAGenerator;
 import montiarc.util.DirectoryUtil;
-import org.apache.commons.cli.ParseException;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -78,7 +76,7 @@ public class MontiArcGeneratorTool extends MontiArcTool {
     Path target = output.toPath();
     MontiArcMill.init();
     IMontiArcGlobalScope globalScope = createMAGlobalScope(Stream.of(models, hwc, Collections.singletonList(output)).flatMap(Collection::stream).peek(File::mkdirs).map(File::toPath).toArray(Path[]::new));
-    globalScope.add(MontiArcMill.typeSymbolBuilder().setName("Integer").setPackageName("java.lang").build());
+    this.initializeBasicTypes();
     processModels(globalScope);
     if (Log.getErrorCount() > 0) {
       return;

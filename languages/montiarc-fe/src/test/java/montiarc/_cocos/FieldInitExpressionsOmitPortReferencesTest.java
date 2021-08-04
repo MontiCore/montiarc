@@ -6,10 +6,8 @@ import arcbasis._cocos.FieldInitExpressionsOmitPortReferences;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcMill;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
 import montiarc.util.Error;
-import org.apache.commons.io.FilenameUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,7 +15,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 /**
@@ -87,12 +84,5 @@ public class FieldInitExpressionsOmitPortReferencesTest extends AbstractCoCoTest
         ArcError.PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL,
         ArcError.PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL})
     );
-  }
-
-  protected ASTComponentType parseAndLoadAllSymbols(@NotNull String model) {
-    Preconditions.checkNotNull(model);
-    this.getTool().createSymbolTable(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, PACKAGE));
-    Preconditions.checkState(MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model)).isPresent());
-    return MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model)).get().getAstNode();
   }
 }

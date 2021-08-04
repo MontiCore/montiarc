@@ -252,9 +252,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkState(!this.getComponentStack().isEmpty());
     Preconditions.checkState(this.getCurrentComponent().isPresent());
     node.setEnclosingScope(getCurrentScope().get());
-    if (node.isPresentParent()) {
-      this.getCurrentComponent().get().setParent(this.delegateToParent(node));
-    }
   }
 
   @Override
@@ -270,17 +267,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentEnclosingScope4Instances().isPresent());
     this.removeCurrentEnclosingScope4Instances();
-  }
-
-  /**
-   * creates a surrogate of the component this component extends
-   * @param node a component head defining an extends-relation
-   * @return the parent: the extended component
-   */
-  protected ComponentTypeSymbol delegateToParent(@NotNull ASTComponentHead node) {
-    Preconditions.checkArgument(node != null);
-    Preconditions.checkArgument(node.isPresentParent());
-    return this.create_ComponentSurrogate(node.getParent());
   }
 
   /**
@@ -417,6 +403,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
    * builds a component surrogate and adds it to the current enclosing scope
    * @param type component type
    */
+  @Deprecated
   protected ComponentTypeSymbolSurrogate create_ComponentSurrogate(@NotNull ASTMCType type) {
     Preconditions.checkState(this.getCurrentScope().isPresent());
     if (type instanceof ASTMCGenericType){

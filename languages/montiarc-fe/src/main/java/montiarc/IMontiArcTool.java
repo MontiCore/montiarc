@@ -132,9 +132,16 @@ public interface IMontiArcTool {
   IMontiArcGlobalScope createMAGlobalScope(@NotNull Path... directories);
 
   /**
-   * Adds primitive types to the global scope.
+   * Creates types available without import and adds those to the global scope, including primitive types, Object,
+   * String, and Integer.
    */
-  void addBasicTypes();
+  void initializeBasicTypes();
+
+  /**
+   * Creates object types available without import and adds those to the global scope, including Object, String,
+   * and Integer.
+   */
+  void initializeBasicOOTypes();
 
   /**
    * Checks default context conditions for the provided montiarc compilation unit and logs findings.

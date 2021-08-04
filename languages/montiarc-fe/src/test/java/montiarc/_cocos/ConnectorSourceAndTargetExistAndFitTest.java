@@ -4,8 +4,6 @@ package montiarc._cocos;
 import arcbasis._cocos.ConnectorSourceAndTargetExistAndFit;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
-import montiarc.MontiArcMill;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +12,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public class ConnectorSourceAndTargetExistAndFitTest extends AbstractCoCoTest {
@@ -95,13 +94,8 @@ public class ConnectorSourceAndTargetExistAndFitTest extends AbstractCoCoTest {
   @BeforeEach
   public void init() {
     super.init();
-    OOTypeSymbol string = MontiArcMill.oOTypeSymbolBuilder()
-      .setName("String").setEnclosingScope(MontiArcMill.globalScope()).build();
-    OOTypeSymbol integer = MontiArcMill.oOTypeSymbolBuilder()
-      .setName("Integer").setEnclosingScope(MontiArcMill.globalScope()).build();
-    string.setEnclosingScope(MontiArcMill.globalScope());
-    integer.setEnclosingScope(MontiArcMill.globalScope());
-    MontiArcMill.globalScope().add(string);
-    MontiArcMill.globalScope().add(integer);
+    this.getTool().initializeBasicTypes();
+    this.getTool().parseAll(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, getPackage()))
+      .forEach(ast -> this.getTool().createSymbolTable(ast));
   }
 }

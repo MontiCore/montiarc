@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.InnerComponentNotExtendsDefiningComponent;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -24,7 +24,14 @@ public class InnerComponentNotExtendsDefiningComponentTest extends AbstractCoCoT
   public void shouldNotFindInnerExtendingDefiningComponent(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
-    testModel(model);
+    //Given
+    ASTComponentType ast = this.parseAndLoadAllSymbols(PACKAGE + "." + model);
+
+    //When
+    this.getChecker().checkAll(ast);
+
+    //Then
+    this.checkOnlyExpectedErrorsPresent(new ArcError[]{}, getPathToModel(model).toAbsolutePath());
   }
 
   @ParameterizedTest

@@ -9,6 +9,7 @@ import montiarc.MontiArcMill;
 import montiarc.util.Error;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -101,7 +102,15 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
   })
   public void shouldCorrectlyInheritConfigurationParameters(@NotNull String model) {
     Preconditions.checkNotNull(model);
-    testModel(model);
+
+    //Given
+    ASTComponentType ast = this.parseAndLoadAllSymbols(PACKAGE + "." + model);
+
+    //When
+    this.getChecker().checkAll(ast);
+
+    //Then
+    this.checkOnlyExpectedErrorsPresent(new ArcError[]{}, getPathToModel(model).toAbsolutePath());
   }
 
   @ParameterizedTest
@@ -123,5 +132,12 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
     Preconditions.checkNotNull(checker);
     checker.addCoCo(new ConfigurationParametersCorrectlyInherited());
+  }
+
+  @Override
+  @BeforeEach
+  public void init() {
+    super.init();
+    this.getTool().initializeBasicOOTypes();
   }
 }

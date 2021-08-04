@@ -154,17 +154,24 @@ public class MontiArcTool implements IMontiArcTool {
   @Override
   public IMontiArcScope createSymbolTable(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkArgument(ast != null);
-    MontiArcScopesGenitorDelegator symTab = MontiArcMill.scopesGenitorDelegator();
-    return symTab.createFromAST(ast);
+    MontiArcScopesGenitorDelegator genitor = MontiArcMill.scopesGenitorDelegator();
+    IMontiArcScope scope = genitor.createFromAST(ast);
+    MontiArcSymbolTableCompleterDelegator completer = MontiArcMill.symbolTableCompleterDelegator();
+    completer.createFromAST(ast);
+    return scope;
   }
 
   @Override
   public Collection<IMontiArcScope> createSymbolTable(@NotNull IMontiArcGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
-    MontiArcScopesGenitorDelegator symTab = MontiArcMill.scopesGenitorDelegator();
+    MontiArcScopesGenitorDelegator genitor = MontiArcMill.scopesGenitorDelegator();
+    MontiArcSymbolTableCompleterDelegator completer = MontiArcMill.symbolTableCompleterDelegator();
     MontiArcMill.globalScope();
     this.loadAll(scope).forEach(scope::addSubScope);
-    return this.parseAll(scope).stream().map(symTab::createFromAST).collect(Collectors.toSet());
+    Collection<ASTMACompilationUnit> models = this.parseAll(scope);
+    Collection<IMontiArcScope> scopes = models.stream().map(genitor::createFromAST).collect(Collectors.toSet());
+    models.forEach(ast -> completer.createFromAST(ast));
+    return scopes;
   }
 
   @Override
@@ -184,27 +191,33 @@ public class MontiArcTool implements IMontiArcTool {
   protected IMontiArcGlobalScope createMAGlobalScope(@NotNull ModelPath modelPath) {
     Preconditions.checkArgument(modelPath != null);
     IMontiArcGlobalScope maScope = MontiArcMill.globalScope();
-    maScope.clear();
     maScope.setModelPath(modelPath);
-    this.addBasicTypes();
     return maScope;
   }
 
   @Override
-  public void addBasicTypes() {
+  public void initializeBasicTypes() {
     BasicSymbolsMill.initializePrimitives();
-    IMontiArcArtifactScope artifactScope = MontiArcMill.artifactScope();
-    artifactScope.setEnclosingScope(MontiArcMill.globalScope());
-    artifactScope.setName("java.lang");
-    this.add2Scope(artifactScope, MontiArcMill.oOTypeSymbolBuilder()
+    this.initializeBasicOOTypes();
+  }
+
+  @Override
+  public void initializeBasicOOTypes() {
+    this.add2Scope(MontiArcMill.globalScope(), MontiArcMill.oOTypeSymbolBuilder()
       .setName("Object")
       .setEnclosingScope(MontiArcMill.artifactScope())
       .setSpannedScope(MontiArcMill.scope()).build());
-    this.add2Scope(artifactScope, MontiArcMill.oOTypeSymbolBuilder()
+    this.add2Scope(MontiArcMill.globalScope(), MontiArcMill.oOTypeSymbolBuilder()
       .setName("String")
       .setEnclosingScope(MontiArcMill.artifactScope())
       .setSpannedScope(MontiArcMill.scope())
-      .addSuperTypes(SymTypeExpressionFactory.createTypeObject("java.lang.Object", MontiArcMill.globalScope()))
+      .addSuperTypes(SymTypeExpressionFactory.createTypeObject("Object", MontiArcMill.globalScope()))
+      .build());
+    this.add2Scope(MontiArcMill.globalScope(), MontiArcMill.oOTypeSymbolBuilder()
+      .setName("Integer")
+      .setEnclosingScope(MontiArcMill.artifactScope())
+      .setSpannedScope(MontiArcMill.scope())
+      .addSuperTypes(SymTypeExpressionFactory.createTypeObject("Object", MontiArcMill.globalScope()))
       .build());
   }
 

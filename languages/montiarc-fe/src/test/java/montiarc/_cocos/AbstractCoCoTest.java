@@ -1,12 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcbasis.util.ArcError;
+import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import montiarc.AbstractTest;
+import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
+import org.apache.commons.io.FilenameUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.provider.Arguments;
@@ -110,5 +112,12 @@ public abstract class AbstractCoCoTest extends AbstractTest {
 
     //Then
     this.checkOnlyExpectedErrorsPresent(errors, getPathToModel(model).toAbsolutePath());
+  }
+
+  protected ASTComponentType parseAndLoadAllSymbols(@NotNull String model) {
+    Preconditions.checkNotNull(model);
+    this.getTool().createSymbolTable(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, this.getPackage()));
+    Preconditions.checkState(MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model)).isPresent());
+    return MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model)).get().getAstNode();
   }
 }

@@ -13,6 +13,7 @@ public enum ArcError implements montiarc.util.Error {
     + "component '%s'."),
   MISSING_TYPE_OF_COMPONENT_INSTANCE("0xMA1015", "Cannot resolve type '%s' of component "
     + "instance '%s'."),
+  SYMBOL_NOT_FOUND("0xMA1016", "Cannot find Symbol `%s`."),
   INCOMING_PORT_AS_TARGET("0xMA1020", "Incoming port '%s' of component '%s' is target of a port "
     + "forward. Incoming ports may only be used as the source of a port forward."),
   OUTGOING_PORT_AS_SOURCE("0xMA1021", "Outgoing port '%s' of component '%s' is source of a port "

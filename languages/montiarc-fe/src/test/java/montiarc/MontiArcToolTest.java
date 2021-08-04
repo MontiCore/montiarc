@@ -36,8 +36,15 @@ public class MontiArcToolTest extends AbstractTest {
   }
 
   @BeforeEach
-  public void setUp() {
+  @Override
+  public void init() {
+    super.init();
+    this.setUpTool();
+  }
+
+  public void setUpTool() {
     this.tool = new MontiArcTool();
+    this.getTool().initializeBasicTypes();
   }
 
   protected static Stream<Path> steamValidMontiArcModelFiles() {
