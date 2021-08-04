@@ -1,5 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 
+plugins {
+  id "jacoco"
+}
+
 group = "montiarc"
 
 dependencies {
@@ -11,7 +15,13 @@ dependencies {
   //Other dependencies
   testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
   testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version")
   implementation("org.codehaus.janino:janino:$janino_version")
+}
+
+test {
+  useJUnitPlatform()
+  finalizedBy jacocoTestReport
 }
 
 java {
