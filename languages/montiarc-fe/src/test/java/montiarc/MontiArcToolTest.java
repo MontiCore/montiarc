@@ -16,6 +16,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -182,6 +184,33 @@ public class MontiArcToolTest extends AbstractTest {
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());
     Assertions.assertEquals(expNumModels, scopes.size());
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#loadAllIntoGlobalScope(IMontiArcGlobalScope)}.
+   */
+  @ParameterizedTest
+  @MethodSource("validSerializedModelPathAndExpectedValuesProvider")
+  public void shouldLoadModelsGivenGlobalScope(@NotNull String directoryName, int expNumModels) {
+    //Given
+    IMontiArcGlobalScope globalScope = MontiArcMill.globalScope();
+    globalScope.setModelPath(new ModelPath(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName)));
+
+    //When
+    IMontiArcGlobalScope returnedScope = this.getTool().loadAllIntoGlobalScope(globalScope);
+
+    //Then
+    Assertions.assertEquals(globalScope, returnedScope);
+    Assertions.assertEquals(expNumModels, globalScope.getSubScopes().size());
+    try {
+      Files.walk(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName))
+        .filter(p -> p.toString().endsWith(".sym"))
+        .map(p -> p.getFileName().toString())
+        .map(p -> p.substring(0, p.length() - ".sym".length()))
+        .forEach(p -> Assertions.assertTrue(globalScope.isFileLoaded(p)));
+    } catch (IOException e) {
+      Assertions.fail(e.toString());
+    }
   }
 
   /**

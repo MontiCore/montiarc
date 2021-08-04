@@ -2,6 +2,7 @@
 package montiarc;
 
 import com.google.common.base.Preconditions;
+import de.monticore.io.paths.MCPath;
 import de.monticore.io.paths.ModelPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
@@ -17,6 +18,7 @@ import montiarc.util.MontiArcError;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -151,6 +153,63 @@ public class MontiArcTool implements IMontiArcTool {
     return scope.getModelPath().getFullPathOfEntries().stream().flatMap(path -> this.loadAll(path).stream()).collect(Collectors.toSet());
   }
 
+  public Collection<Path> findSymbolFiles(@NotNull Path directory) {
+    Preconditions.checkArgument(directory != null);
+    Preconditions.checkArgument(directory.toFile().exists(), directory.toAbsolutePath()+" does not exist");
+    Preconditions.checkArgument(directory.toFile().isDirectory(), directory.toAbsolutePath()+" is not a directory");
+
+    try (Stream<Path> paths = Files.walk(directory)) {
+      return paths.filter(Files::isRegularFile)
+          .filter(file -> file.getFileName().toString().endsWith(this.getSymFileExtension()))
+          .collect(Collectors.toSet());
+    } catch (IOException e) {
+      Log.error(String.format(MontiArcError.TOOL_FILE_WALK_IOEXCEPTION.toString(), directory.toString()), e);
+    }
+    return Collections.emptySet();
+  }
+
+  /**
+   * Loads all serialized models in the provided scope as deserialized montiarc models. Then the deserializes montiarc
+   * models are added to the global scope. The global scope is returned afterwards.
+   *
+   * @param scope the scope under consideration
+   * @return The scope passed as argument.
+   */
+  public IMontiArcGlobalScope loadAllIntoGlobalScope(@NotNull IMontiArcGlobalScope scope) {
+    Preconditions.checkArgument(scope != null);
+
+    Collection<Path> symFiles = scope.getModelPath().getFullPathOfEntries().stream()
+      .map(this::findSymbolFiles)
+      .flatMap(Collection::stream)
+      .collect(Collectors.toSet());
+
+    Collection<IMontiArcScope> loadedSymbols = symFiles.stream().map(this::load).collect(Collectors.toSet());
+    loadedSymbols.forEach(scope::addSubScope);
+
+    Collection<String> namesOfLoadedModels = symFiles.stream()
+        .map(f -> this.getModelNameFromPath(f, scope.getSymbolPath()))
+        .map(name -> name.orElseThrow(IllegalStateException::new))
+        .collect(Collectors.toSet());
+    namesOfLoadedModels.forEach(scope::addLoadedFile);
+
+    return scope;
+  }
+
+  protected Optional<String> getModelNameFromPath(@NotNull Path pathToModel, @NotNull MCPath possiblePrefixes) {
+    Preconditions.checkNotNull(pathToModel);
+    Preconditions.checkNotNull(possiblePrefixes);
+
+    for(Path possiblePrefix : possiblePrefixes.getEntries()) {
+      if(pathToModel.startsWith(possiblePrefix)) {
+        Path relativePath = possiblePrefix.relativize(pathToModel);
+        Path relativePathWithoutExt = Paths.get(FilenameUtils.removeExtension(relativePath.toString()));
+        String asModelName = relativePathWithoutExt.toString().replace(File.separator, ".");
+        return Optional.of(asModelName);
+      }
+    }
+    return  Optional.empty();
+  }
+
   @Override
   public IMontiArcScope createSymbolTable(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkArgument(ast != null);
@@ -167,7 +226,7 @@ public class MontiArcTool implements IMontiArcTool {
     MontiArcScopesGenitorDelegator genitor = MontiArcMill.scopesGenitorDelegator();
     MontiArcSymbolTableCompleterDelegator completer = MontiArcMill.symbolTableCompleterDelegator();
     MontiArcMill.globalScope();
-    this.loadAll(scope).forEach(scope::addSubScope);
+    this.loadAllIntoGlobalScope(scope);
     Collection<ASTMACompilationUnit> models = this.parseAll(scope);
     Collection<IMontiArcScope> scopes = models.stream().map(genitor::createFromAST).collect(Collectors.toSet());
     models.forEach(ast -> completer.createFromAST(ast));
