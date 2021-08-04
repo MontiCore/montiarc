@@ -33,7 +33,7 @@ public class Message<T> extends TickedMessage<T> {
    * @throws NullPointerException if {@code data == null}
    */
   public static <T> Message<T> of(T data) {
-    Log.errorIfNull(data, "0xMA001, Parameter data must not be null!");
+    Log.errorIfNull(data, "", Parameter data must not be null!");
     return new Message<T>(data);
   }
   

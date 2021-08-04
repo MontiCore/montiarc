@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  */
 public interface Error {
 
-  static Pattern ERROR_CODE_PATTERN = Pattern.compile("0xMA((?!(0))\\d{4})(\\d{4})*");
+  Pattern ERROR_CODE_PATTERN = Pattern.compile("0xC\\d{4}");
 
   /**
    * @return The unique error code of this error.

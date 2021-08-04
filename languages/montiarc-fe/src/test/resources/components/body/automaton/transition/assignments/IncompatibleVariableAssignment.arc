@@ -27,7 +27,6 @@ component IncompatibleVariableAssignment {
 
     initial Idle / {right = MotorCommand.STOP, left = MotorCommand.STOP};
 
-    //ERRROR 0xMA42 stateChanges (Type java.lang.String can not cast to type Integer)
     Idle -> Driving  / {right = MotorCommand.FORWARD, left = MotorCommand.FORWARD, stateChanges = "1"}; 
     Driving -> Backing [distance < 5] / {right = MotorCommand.BACKWARD, left = MotorCommand.BACKWARD, timer = TimerCmd.SINGLE, stateChanges++}; 
     Backing -> Turning [signal == TimerSignal.ALERT] / {right = MotorCommand.BACKWARD, left = MotorCommand.FORWARD, timer = TimerCmd.DOUBLE};

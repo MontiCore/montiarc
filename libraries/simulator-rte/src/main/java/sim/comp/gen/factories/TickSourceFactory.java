@@ -33,7 +33,7 @@ public class TickSourceFactory {
     }
     else {
       Log.error(
-          "0xMA003 More then one concrete factory registered for TickSourceFactory. Current factory class is: "
+          "More then one concrete factory registered for TickSourceFactory. Current factory class is: "
               +
               theInstance.getClass().getName() + ", factory class to register: "
               + factory.getClass().getName());

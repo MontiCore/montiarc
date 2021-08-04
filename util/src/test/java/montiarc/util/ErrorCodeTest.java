@@ -17,14 +17,13 @@ public class ErrorCodeTest extends AbstractTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "0xMA1000", "0xMA1001", "0xMA10000000", "0xMA100000000000" })
+  @ValueSource(strings = { "0xC1000", "0xC1001", "0xC0100"})
   public void shouldMatchErrorCodePattern(String errorCode) {
     Assertions.assertTrue(Error.ERROR_CODE_PATTERN.matcher(errorCode).matches());
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "", "1000", "0xMA", "0xMA0", "0xMA1", "0xMA100", "0xMA0100",
-      "0xMA10001", "0xMA01000000" })
+  @ValueSource(strings = { "", "1000", "0xC", "0xC0", "0xC1", "0xC100", "0xC00001"})
   public void shouldMismatchErrorCodePattern(String errorCode) {
     Assertions.assertFalse(Error.ERROR_CODE_PATTERN.matcher(errorCode).matches());
   }

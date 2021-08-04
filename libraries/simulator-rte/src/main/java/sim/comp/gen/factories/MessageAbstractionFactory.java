@@ -40,7 +40,7 @@ public class MessageAbstractionFactory {
     }
     else {
       Log.error(
-          "0xMA002 More then one concrete factory registered for MessageAbstractionFactory. Current factory class is: "
+          "More then one concrete factory registered for MessageAbstractionFactory. Current factory class is: "
               +
               theInstance.getClass().getName() + ", factory class to register: "
               + factory.getClass().getName());
