@@ -2,7 +2,7 @@
 package portUniqueSender;
 
 /**
- * Valid model.
+ * Invalid model.
  */
 component MultipleSenderPortForwardAndHiddenChannel {
 
