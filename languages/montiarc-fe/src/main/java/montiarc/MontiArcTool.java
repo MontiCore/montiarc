@@ -20,6 +20,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -186,11 +187,14 @@ public class MontiArcTool implements IMontiArcTool {
     Collection<IMontiArcScope> loadedSymbols = symFiles.stream().map(this::load).collect(Collectors.toSet());
     loadedSymbols.forEach(scope::addSubScope);
 
-    Collection<String> namesOfLoadedModels = symFiles.stream()
-        .map(f -> this.getModelNameFromPath(f, scope.getSymbolPath()))
-        .map(name -> name.orElseThrow(IllegalStateException::new))
-        .collect(Collectors.toSet());
-    namesOfLoadedModels.forEach(scope::addLoadedFile);
+    for(Path path : symFiles) {
+      try {
+        String urlPath = path.toUri().toURL().toString();
+        scope.addLoadedFile(urlPath);
+      } catch (MalformedURLException e) {
+        throw new IllegalStateException();
+      }
+    }
 
     return scope;
   }

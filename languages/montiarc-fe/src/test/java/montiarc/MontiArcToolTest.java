@@ -17,6 +17,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -205,11 +207,15 @@ public class MontiArcToolTest extends AbstractTest {
     try {
       Files.walk(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName))
         .filter(p -> p.toString().endsWith(".sym"))
-        .map(p -> p.getFileName().toString())
-        .map(p -> p.substring(0, p.length() - ".sym".length()))
+        .map(Path::toUri)
+        .map(p -> {
+          try { return p.toURL(); }
+          catch (MalformedURLException e) { Assertions.fail(e.getMessage()); throw new IllegalStateException(); }
+        })
+        .map(URL::toString)
         .forEach(p -> Assertions.assertTrue(globalScope.isFileLoaded(p)));
     } catch (IOException e) {
-      Assertions.fail(e.toString());
+      Assertions.fail(e.getMessage());
     }
   }
 
