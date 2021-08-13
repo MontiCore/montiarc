@@ -2,7 +2,7 @@
 package montiarc.cli;
 
 import com.google.common.base.Preconditions;
-import de.monticore.io.paths.ModelPath;
+import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.se_rwth.commons.Joiners;
 import de.se_rwth.commons.Names;
@@ -212,7 +212,7 @@ public class MontiArcCLI {
     if (cmd.hasOption(CLIOption.PATH.getName())) {
       String[] modelPath = cmd.getOptionValues(CLIOption.PATH.getName());
       MontiArcMill.globalScope()
-        .setModelPath(new ModelPath(Arrays.stream(modelPath).map(Paths::get).collect(Collectors.toSet())));
+        .setSymbolPath(new MCPath(Arrays.stream(modelPath).map(Paths::get).collect(Collectors.toSet())));
     }
     this.getSymbolTableCreator().createFromAST(ast);
   }

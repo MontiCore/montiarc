@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc;
 
-import de.monticore.io.paths.ModelPath;
+import de.monticore.io.paths.MCPath;
 import de.monticore.symboltable.IScope;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
@@ -196,7 +196,7 @@ public class MontiArcToolTest extends AbstractTest {
   public void shouldLoadModelsGivenGlobalScope(@NotNull String directoryName, int expNumModels) {
     //Given
     IMontiArcGlobalScope globalScope = MontiArcMill.globalScope();
-    globalScope.setModelPath(new ModelPath(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName)));
+    globalScope.setSymbolPath(new MCPath(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName)));
 
     //When
     IMontiArcGlobalScope returnedScope = this.getTool().loadAllIntoGlobalScope(globalScope);
@@ -227,7 +227,7 @@ public class MontiArcToolTest extends AbstractTest {
   public void shouldParseModelsGivenScope(@NotNull String directoryName, int expNumModels) {
     //Given
     IMontiArcGlobalScope globalScope = MontiArcMill.globalScope();
-    globalScope.setModelPath(new ModelPath(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName)));
+    globalScope.setSymbolPath(new MCPath(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName)));
     globalScope.setFileExt(this.getTool().getMAFileExtension());
 
     //When
@@ -247,7 +247,7 @@ public class MontiArcToolTest extends AbstractTest {
   public void shouldLoadModelsGivenScope(@NotNull String directoryName, int expNumModels) {
     //Given
     IMontiArcGlobalScope globalScope = MontiArcMill.globalScope();
-    globalScope.setModelPath(new ModelPath(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName)));
+    globalScope.setSymbolPath(new MCPath(Paths.get(RELATIVE_MODEL_PATH, TEST_PATH, directoryName)));
 
     //When
     Collection<IMontiArcArtifactScope> scopes = this.getTool().loadAll(globalScope);

@@ -8,15 +8,14 @@ import de.monticore.cd2pojo.cocos.CDRoleNamesUnique;
 import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cd4code._cocos.CD4CodeCoCoChecker;
 import de.monticore.cd4code._parser.CD4CodeParser;
-import de.monticore.cd4code._symboltable.ICD4CodeArtifactScope;
-import de.monticore.cd4code._symboltable.ICD4CodeGlobalScope;
-import de.monticore.cd4code._symboltable.ICD4CodeScope;
+import de.monticore.cd4code._symboltable.*;
 import de.monticore.cd4code.cocos.CD4CodeCoCos;
 import de.monticore.cd4code.trafo.CD4CodeAfterParseTrafo;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
 import de.monticore.generating.GeneratorSetup;
-import de.monticore.io.paths.ModelPath;
+import de.monticore.io.FileReaderWriter;
+import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
@@ -25,6 +24,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -54,9 +54,27 @@ public class POJOGeneratorTool {
         symbolsToGenerate.addAll(sub.getLocalCDTypeSymbols());
       }
     }
+    for (ICD4CodeScope scope: globalScope.getSubScopes()) {
+      if (scope instanceof ICD4CodeArtifactScope) {
+        printCDSymTab2Json((ICD4CodeArtifactScope) scope, this.generator.outputDirectory.toPath());
+      }
+    }
     generateAll(symbolsToGenerate);
+  }
 
-    //TODO Serialize
+  protected void printCDSymTab2Json(@NotNull ICD4CodeArtifactScope artifactScope, @NotNull Path targetPath) {
+    Preconditions.checkNotNull(artifactScope);
+    Preconditions.checkNotNull(targetPath);
+    if (artifactScope.getLocalDiagramSymbols().isEmpty()) return;
+    if (artifactScope.getLocalCDPackageSymbols().isEmpty()) return;
+
+    String serializedCDSymTab = new CD4CodeSymbols2Json().serialize(artifactScope);
+
+    Path outputFilePath = Paths.get(targetPath.toAbsolutePath().toString(),
+      artifactScope.getLocalCDPackageSymbols().get(0).getName().replaceAll("\\.", "/"),
+      artifactScope.getLocalDiagramSymbols().get(0).getName() + ".sym");
+
+    FileReaderWriter.storeInFile(outputFilePath, serializedCDSymTab);
   }
   
   public void generateCDTypesInPath(@NotNull Path modelPath) {
@@ -94,9 +112,9 @@ public class POJOGeneratorTool {
   public static ICD4CodeGlobalScope loadCD4CModelsFromPaths(@NotNull Collection<Path> paths, @NotNull CD4CodeCoCoChecker cdChecker) {
     Preconditions.checkNotNull(paths);
     Preconditions.checkNotNull(cdChecker);
-    ModelPath mp = new ModelPath(paths);
+    MCPath mp = new MCPath(paths);
     ICD4CodeGlobalScope cd4CGlobalScope = CD4CodeMill.globalScope();
-    cd4CGlobalScope.setModelPath(mp);
+    cd4CGlobalScope.setSymbolPath(mp);
     cd4CGlobalScope.setFileExt(cdFileExtension);
     BasicSymbolsMill.initializePrimitives();
     addJavaLangToGlobalScope();
@@ -120,7 +138,7 @@ public class POJOGeneratorTool {
       set.add(ast);
     }
     for (ASTCDCompilationUnit ast : set) {
-      CD4CBetterCompleter completer = new CD4CBetterCompleter(ast);
+      CD4CodeSymbolTableCompleter completer = new CD4CodeSymbolTableCompleter(ast);
       ast.accept(completer.getTraverser());
     }
     return set;
@@ -128,7 +146,7 @@ public class POJOGeneratorTool {
   
   public static Collection<ASTCDCompilationUnit> parseAndTransformModels(@NotNull ICD4CodeGlobalScope scope) {
     Preconditions.checkNotNull(scope);
-    return scope.getModelPath().getFullPathOfEntries().stream()
+    return scope.getSymbolPath().getEntries().stream()
       .flatMap(path -> parseAndTransformCD(path).stream())
       .collect(Collectors.toList());
   }

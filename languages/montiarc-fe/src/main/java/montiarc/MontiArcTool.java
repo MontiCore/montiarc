@@ -3,7 +3,6 @@ package montiarc;
 
 import com.google.common.base.Preconditions;
 import de.monticore.io.paths.MCPath;
-import de.monticore.io.paths.ModelPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
@@ -145,13 +144,13 @@ public class MontiArcTool implements IMontiArcTool {
   @Override
   public Collection<ASTMACompilationUnit> parseAll(@NotNull IMontiArcGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
-    return scope.getModelPath().getFullPathOfEntries().stream().flatMap(path -> this.parseAll(path).stream()).collect(Collectors.toSet());
+    return scope.getSymbolPath().getEntries().stream().flatMap(path -> this.parseAll(path).stream()).collect(Collectors.toSet());
   }
 
   @Override
   public Collection<IMontiArcArtifactScope> loadAll(@NotNull IMontiArcGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
-    return scope.getModelPath().getFullPathOfEntries().stream().flatMap(path -> this.loadAll(path).stream()).collect(Collectors.toSet());
+    return scope.getSymbolPath().getEntries().stream().flatMap(path -> this.loadAll(path).stream()).collect(Collectors.toSet());
   }
 
   public Collection<Path> findSymbolFiles(@NotNull Path directory) {
@@ -179,7 +178,7 @@ public class MontiArcTool implements IMontiArcTool {
   public IMontiArcGlobalScope loadAllIntoGlobalScope(@NotNull IMontiArcGlobalScope scope) {
     Preconditions.checkArgument(scope != null);
 
-    Collection<Path> symFiles = scope.getModelPath().getFullPathOfEntries().stream()
+    Collection<Path> symFiles = scope.getSymbolPath().getEntries().stream()
       .map(this::findSymbolFiles)
       .flatMap(Collection::stream)
       .collect(Collectors.toSet());
@@ -248,13 +247,13 @@ public class MontiArcTool implements IMontiArcTool {
   @Override
   public IMontiArcGlobalScope createMAGlobalScope(@NotNull Path... directories) {
     Preconditions.checkArgument(directories != null);
-    return this.createMAGlobalScope(new ModelPath(directories));
+    return this.createMAGlobalScope(new MCPath(directories));
   }
 
-  protected IMontiArcGlobalScope createMAGlobalScope(@NotNull ModelPath modelPath) {
+  protected IMontiArcGlobalScope createMAGlobalScope(@NotNull MCPath modelPath) {
     Preconditions.checkArgument(modelPath != null);
     IMontiArcGlobalScope maScope = MontiArcMill.globalScope();
-    maScope.setModelPath(modelPath);
+    maScope.setSymbolPath(modelPath);
     return maScope;
   }
 
@@ -310,7 +309,7 @@ public class MontiArcTool implements IMontiArcTool {
   public IMontiArcGlobalScope processModels(@NotNull Path... directories) {
     Preconditions.checkArgument(directories != null);
     Preconditions.checkArgument(!Arrays.asList(directories).contains(null));
-    ModelPath modelPath = new ModelPath(directories);
+    MCPath modelPath = new MCPath(directories);
     IMontiArcGlobalScope maScope = this.createMAGlobalScope(modelPath);
     this.processModels(maScope);
     return maScope;

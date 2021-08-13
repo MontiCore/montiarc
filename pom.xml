@@ -22,13 +22,13 @@
   <!-- == PROJECT PROPERTIES =============================================== -->
   <properties>
     <!-- DSLs -->
-    <cd4a.version>7.0.0</cd4a.version>
+    <cd4a.version>7.2.0-SNAPSHOT</cd4a.version>
     <statechart.version>${monticore.version}</statechart.version>
 
     <!-- SE-Libraries -->
-    <monticore.version>7.1.0</monticore.version>
+    <monticore.version>7.2.0-SNAPSHOT</monticore.version>
     <mc.grammars.assembly.version>0.0.11</mc.grammars.assembly.version>
-    <se-commons.version>7.1.0</se-commons.version>
+    <se-commons.version>7.2.0-SNAPSHOT</se-commons.version>
 
     <!-- Generator -->
     <groovy.version>3.0.7</groovy.version>
@@ -46,7 +46,7 @@
     <commons_cli_version>1.4</commons_cli_version>
 
     <!-- Plugins -->
-    <monticore.plugin>7.1.1</monticore.plugin>
+    <monticore.plugin>${monticore.version}</monticore.plugin>
     <se-groovy.plugin>1.2.4</se-groovy.plugin>
     <assembly.plugin>3.1.1</assembly.plugin>
     <build.helper.plugin>3.2.0</build.helper.plugin>

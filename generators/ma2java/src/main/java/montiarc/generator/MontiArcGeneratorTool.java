@@ -28,7 +28,7 @@ import java.util.stream.Stream;
  * Extends {@link MontiArcTool} with generate capabilities.
  */
 public class MontiArcGeneratorTool extends MontiArcTool {
-  
+
   public static final String LIBRARY_MODELS_FOLDER = "target/librarymodels/";
 
   private MAAGenerator generator;
@@ -36,14 +36,14 @@ public class MontiArcGeneratorTool extends MontiArcTool {
   public static void main(@NotNull String[] args) {
     Preconditions.checkNotNull(args);
     Preconditions.checkArgument(args.length >= 3, "Argument size was " + args.length
-    + " but the code generator expects at least three arguments: model path, target path, and hwc path;"
-    + " but argument was " + args[0]);
-    new MontiArcGeneratorTool().generate(
-      Arrays.stream(args[0].split(",\\s+")).map(File::new).collect(Collectors.toList()),
-      new File(args[1]),
-      Arrays.stream(args[2].split(",\\s+")).map(File::new).collect(Collectors.toList()));
+      + " but the code generator expects at least three arguments: model path, target path, and hwc path;"
+      + " but argument was " + args[0]);
+      new MontiArcGeneratorTool().generate(
+        Arrays.stream(args[0].split(",\\s+")).map(File::new).collect(Collectors.toList()),
+        new File(args[1]),
+        Arrays.stream(args[2].split(",\\s+")).map(File::new).collect(Collectors.toList()));
   }
-  
+
   /**
    * @return the current generator instance
    */
@@ -53,14 +53,14 @@ public class MontiArcGeneratorTool extends MontiArcTool {
     }
     return generator;
   }
-  
+
   /**
    * @param generator the generator instance to set
    */
   public void setGenerator(MAAGenerator generator) {
     this.generator = generator;
   }
-  
+
   /**
    * Parses and checks cocos for all MontiArc models in the provided model path. If the models are well formed,
    * generates target code for these.
@@ -90,7 +90,7 @@ public class MontiArcGeneratorTool extends MontiArcTool {
         null, // unused parameter?
         (ComponentTypeSymbol) componentTypeSymbol));
   }
-  
+
   /**
    * Checks cocos and generates code for all MontiArc models in modelpath to folder target.
    *
@@ -106,7 +106,7 @@ public class MontiArcGeneratorTool extends MontiArcTool {
       target.getAbsolutePath());
     IMontiArcGlobalScope symTab = this.processModels(modelPath.toPath(), Paths.get(basedir + LIBRARY_MODELS_FOLDER),
       hwcPath.toPath(), target.toPath());
-    
+
     symTab.getSubScopes().stream().map(IArcBasisScope::getLocalComponentTypeSymbols).flatMap(Collection::stream)
       .forEach(comp -> this.getGenerator()
         .generateAll(Paths.get(target.getAbsolutePath(), Names.getPathFromPackage(comp.getPackageName())).toFile(),

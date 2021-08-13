@@ -7,7 +7,7 @@ import de.monticore.cd4code._symboltable.CD4CodeGlobalScope;
 import de.monticore.cd4code._symboltable.ICD4CodeGlobalScope;
 import de.monticore.cd4code.trafo.CD4CodeAfterParseTrafo;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
-import de.monticore.io.paths.ModelPath;
+import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -71,7 +71,7 @@ public class SymTabBuildingTest {
   @ValueSource(strings = {"models", "cocos", ""})
   public void shouldBuildSymTabForModelsParsedAndTransformedByToolFromGlobalScope(String pathToModels) {
     ICD4CodeGlobalScope globalScope = CD4CodeMill.globalScope();
-    globalScope.setModelPath(new ModelPath(modelsPath.resolve(pathToModels)));
+    globalScope.setSymbolPath(new MCPath(modelsPath.resolve(pathToModels)));
     if(globalScope instanceof CD4CodeGlobalScope) {
       ((CD4CodeGlobalScope) globalScope).addBuiltInTypes();
     }
@@ -86,7 +86,7 @@ public class SymTabBuildingTest {
   @ValueSource(strings = {"models", "cocos", ""})
   public void toolShouldBuildSymTabForParsedAndTransformedModel(String pathToModels) {
     ICD4CodeGlobalScope globalScope = CD4CodeMill.globalScope();
-    globalScope.setModelPath(new ModelPath(modelsPath.resolve(pathToModels)));
+    globalScope.setSymbolPath(new MCPath(modelsPath.resolve(pathToModels)));
     if(globalScope instanceof CD4CodeGlobalScope) {
       ((CD4CodeGlobalScope) globalScope).addBuiltInTypes();
     }

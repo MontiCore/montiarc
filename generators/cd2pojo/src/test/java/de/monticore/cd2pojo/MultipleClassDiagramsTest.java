@@ -7,7 +7,7 @@ import de.monticore.cd2pojo.cocos.CDRoleNamesUnique;
 import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cd4code._cocos.CD4CodeCoCoChecker;
 import de.monticore.cd4code.cocos.CD4CodeCoCos;
-import de.monticore.io.paths.ModelPath;
+import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.Assertions;
@@ -39,7 +39,7 @@ public class MultipleClassDiagramsTest {
   @Test
   public void multipleClassDiagramsShouldNotConfuseTool() {
     //Given
-    CD4CodeMill.globalScope().setModelPath(new ModelPath(Paths.get(MODEL_PATH)));
+    CD4CodeMill.globalScope().setSymbolPath(new MCPath(Paths.get(MODEL_PATH)));
     CD4CodeCoCoChecker checker = new CD4CodeCoCos().getCheckerForAllCoCos();
     checker.addCoCo(new CDAssociationNamesUnique());
     checker.addCoCo(new CDRoleNamesUnique());

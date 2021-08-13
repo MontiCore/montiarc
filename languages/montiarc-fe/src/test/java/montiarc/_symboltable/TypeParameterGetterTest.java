@@ -2,7 +2,7 @@
 package montiarc._symboltable;
 
 import arcbasis._symboltable.ComponentInstanceSymbol;
-import de.monticore.io.paths.ModelPath;
+import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import montiarc.AbstractTest;
@@ -25,7 +25,7 @@ public class TypeParameterGetterTest extends AbstractTest {
 
   @BeforeEach
   public void setGlobalScope(){
-    MontiArcMill.globalScope().setModelPath(new ModelPath(PATH));
+    MontiArcMill.globalScope().setSymbolPath(new MCPath(PATH));
   }
 
   @Test
