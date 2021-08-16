@@ -14,7 +14,11 @@ dependencies {
   implementation("com.google.guava:guava:$guava_version")
   implementation("com.github.javaparser:javaparser-core:3.18.0")
   implementation("org.codehaus.groovy:groovy:$groovy_version")
-  testImplementation("de.monticore:monticore-runtime:$mc_version:tests")
+  testImplementation("de.monticore:monticore-runtime:$mc_version") {
+    capabilities {
+      requireCapability("de.monticore:monticore-runtime-tests")
+    }
+  }
   testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
   testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version")

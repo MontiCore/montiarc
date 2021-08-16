@@ -43,3 +43,37 @@ subprojects {
     mavenCentral()
   }
 }
+
+task buildAll(type: Task) {
+  group("build")
+	description("Assembles and tests all subprojects.")
+	dependsOn(":util:build")
+	dependsOn(":languages:arc-fe:build")
+	dependsOn(":languages:behavior-fe:build")
+	dependsOn(":languages:montiarc-fe:build")
+	dependsOn(":libraries:lejos-rte:build")
+	dependsOn(":libraries:maJavaLib:build")
+	dependsOn(":libraries:majava-rte:build")
+	dependsOn(":generators:cd2pojo:build")
+	dependsOn(":generators:ma2java:build")
+	dependsOn(":applications:bumperbot:build")
+	dependsOn(":applications:factory:build")
+	dependsOn(":applications:factoryTask:build")
+}
+
+task cleanAll(type: Delete) {
+  group("clean")
+	description("Deletes the build directory in all subprojects.")
+	dependsOn(":util:clean")
+	dependsOn(":languages:arc-fe:clean")
+	dependsOn(":languages:behavior-fe:clean")
+	dependsOn(":languages:montiarc-fe:clean")
+	dependsOn(":libraries:lejos-rte:clean")
+	dependsOn(":libraries:maJavaLib:clean")
+	dependsOn(":libraries:majava-rte:clean")
+	dependsOn(":generators:cd2pojo:clean")
+	dependsOn(":generators:ma2java:clean")
+	dependsOn(":applications:bumperbot:clean")
+	dependsOn(":applications:factory:clean")
+	dependsOn(":applications:factoryTask:clean")
+}
