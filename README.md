@@ -31,6 +31,30 @@ In MontiArc, architectures are described as component and connector systems in w
     * simulator-rte
     * maJavaLib
 
+## Tool Documentation
+
+The [MontiArcCLI](languages/montiarc-fe/src/main/java/montiarc/cli/MontiArcCLI.java) offers the CLI for processing MontiArc component models.
+It provides through the CLI as follows:
+
+`java -jar MontiArcCLI.jar [-h] -i <fileName> [-path <p>] [-pp [<file>]] [-s [<file>]]`
+
+where the arguments are:
+
+| Option                            | Explanation |
+| ------                            | ------ |
+| `-h,--help`                       | Prints this help information   |
+| `-i,--input <file>`               | Reads the source file (mandatory) and parses the contents as a statechart |
+| `-pp,--prettyprint <file>`        | Prints the Statechart-AST to stdout or the specified file (optional) |
+| `-path <pathlist>`                | Sets the artifact path for imported symbols, space separated |
+| `-s,--symboltable <file>`         | Stores the symbol table of the given Statechart |
+
+exemplary usage:
+
+```
+  java -jar MontiArcCLI.jar -h
+  java -jar MontiArcCLI.jar -i BumperBot.arc -pp
+``` 
+
 ## Further Information
 
 * [Project root: MontiCore @github](https://github.com/MontiCore/monticore)
