@@ -92,6 +92,8 @@ java {
 
 jar.dependsOn(grammarsJar)
 
+sourcesJar.dependsOn project.collect { it.tasks.withType(MCTask)}
+
 publishing {
   publications {
     mavenJava(MavenPublication) { from(components.java) }
