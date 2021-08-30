@@ -38,6 +38,7 @@ task generateCD(type: JavaExec) {
   mainClass = "de.monticore.cd2pojo.POJOGeneratorScript"
 
   args("$projectDir/src/main/resources, $buildDir/$librarymodels_classifier", "$genDir", "$hwcDir")
+  outputs.dir(genDir)
 }
 
 task generateMontiArc(type: JavaExec) {
@@ -45,6 +46,7 @@ task generateMontiArc(type: JavaExec) {
   mainClass = "montiarc.generator.MontiArcGeneratorTool"
 
   args("$projectDir/src/main/resources, $buildDir/$librarymodels_classifier", "$genDir", "$hwcDir")
+  outputs.dir(genDir)
 }
 
 generateMontiArc.dependsOn(generateCD)
