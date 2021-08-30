@@ -3,8 +3,6 @@ package de.monticore.cd2pojo;
 
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.configuration.Configuration;
-import de.se_rwth.commons.configuration.ConfigurationContributorChainBuilder;
-import de.se_rwth.commons.configuration.DelegatingConfigurationContributor;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.io.File;
@@ -29,10 +27,8 @@ public class POJOConfiguration {
     return new POJOConfiguration(configuration);
   }
 
-  protected POJOConfiguration(@NotNull Configuration internal) {
-    this.configuration = ConfigurationContributorChainBuilder.newChain()
-      .add(DelegatingConfigurationContributor.with(Preconditions.checkNotNull(internal)))
-      .build();
+  protected POJOConfiguration(@NotNull Configuration configuration) {
+    this.configuration = Preconditions.checkNotNull(configuration);
   }
 
   /**
