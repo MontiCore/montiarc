@@ -58,7 +58,7 @@ Unit Test JDK 17:
   <<: *unit_test_definition
 
 Deploy Nexus:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3-jdk-8
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.7-jdk8
   stage: post-test
   script:
     - gradle publish -PmavenPassword=$pass -PmavenUser=$user
