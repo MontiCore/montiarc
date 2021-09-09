@@ -32,6 +32,8 @@ java {
   }
 }
 
+jar.dependsOn(test)
+
 publishing {
   publications {
     mavenJava(MavenPublication) { from(components.java) }

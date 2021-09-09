@@ -105,6 +105,7 @@ java {
 sourcesJar.dependsOn project.collect { it.tasks.withType(MCTask)}
 
 jar.dependsOn(grammarsJar)
+jar.dependsOn(test)
 
 publishing {
   publications {
