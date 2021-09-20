@@ -9,6 +9,15 @@ sourceSets {
   main {
     java.srcDirs += ["$hwcDir", "$genDir"]
   }
+  librarymodels {
+    resources.srcDirs += "$projectDir/src/main/resources"
+  }
+}
+
+java {
+  registerFeature("$librarymodels_classifier") {
+    usingSourceSet(sourceSets.librarymodels)
+  }
 }
 
 configurations {
@@ -49,20 +58,13 @@ task generateMontiArc(type: JavaExec) {
 }
 
 generateMontiArc.dependsOn(generateCD)
-
-task librarymodelsJar(type: Jar) {
-  from("$projectDir/src/main/resources").collect()
-  archiveClassifier = "$librarymodels_classifier"
-}
-
 compileJava.dependsOn(generateMontiArc)
-librarymodelsJar.mustRunAfter(generateMontiArc)
+librarymodelsJar.dependsOn(compileJava)
 
 publishing {
   publications {
     mavenJava(MavenPublication) {
       from(components.java)
-      artifact librarymodelsJar
     }
   }
   repositories.maven {

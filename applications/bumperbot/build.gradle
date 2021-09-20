@@ -25,8 +25,9 @@ dependencies {
   //Internal dependencies
   generateCD(project(":generators:cd2pojo"))
   generateMA(project(":generators:ma2java"))
-  librarymodels(project(":libraries:maJavaLib"))
-  librarymodels(project(":libraries:lejos-rte"))
+  librarymodels(project(":libraries:lejos-rte")) {
+    capabilities { requireCapability("montiarc.libraries:lejos-rte-$librarymodels_classifier") }
+  }
   implementation(project(":languages:montiarc-fe"))
   implementation(project(":libraries:majava-rte"))
   implementation(project(":libraries:lejos-rte"))
@@ -44,6 +45,7 @@ task unpackLibrarymodels(type: Sync) {
     configurations.librarymodels.collect { zipTree(it) }
   }
   into "$buildDir/$librarymodels_classifier"
+  exclude "META-INF/"
 }
 
 task generateCD(type: JavaExec) {
