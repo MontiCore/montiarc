@@ -44,7 +44,11 @@ Validate Gradle:
     - Validate Gradle #download artifacts from build
   needs: ["Validate Gradle"]
   script:
-    - gradle test
+    - gradle test aggregatedJacocoReport
+  artifacts:
+    paths:
+      - target/reports/jacoco/aggregatedJacocoReport/aggregatedJacocoReport.xml
+      - target/reports/jacoco/aggregatedJacocoReport/aggregatedJacocoReport.csv
 
 Unit Test JDK 8:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.7-jdk8
@@ -96,6 +100,23 @@ Code Quality:
   artifacts:
     reports:
       codequality: codeclimate.json
+
+# Gitlab can visualize cobertura code coverage reports, but we have jacoco reports.
+# Thus, we will convert our jacoco report to a cobertura report:
+# Moreover we will print jacoco's instruction coverage to the command line so that gitlab parses it and creates a
+# coverage badge for us.
+Code Coverage:
+  stage: post-test
+  image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.7
+  script:
+    - awk -F "," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/",  instructions, "instructions covered"; print "Total " 100*covered/instructions, "% covered" }' target/reports/jacoco/aggregatedJacocoReport/aggregatedJacocoReport.csv
+    - python /opt/cover2cover.py target/reports/jacoco/aggregatedJacocoReport/aggregatedJacocoReport.xml languages/arc-fe/src/main/java/ applications/bumperbot/src/main/java/ applications/factory/src/main/java/ applications/factoryTask/src/main/java/ generators/cd2pojo/src/main/java/ generators/ma2java/src/main/java/ languages/arc-fe/src/main/java/ languages/behavior-fe/src/main/java/ languages/montiarc-fe/src/main/java/ libraries/lejos-rte/src/main/java/ libraries/majava-rte/src/main/java/ libraries/maJavaLib/src/main/java/ libraries/simulator-rte/src/main/java/ > cobertura.xml
+  needs: ["Unit Test JDK 8"]
+  dependencies:
+    - Unit Test JDK 8
+  artifacts:
+    reports:
+      cobertura: cobertura.xml
 
 checkMDLinks:
   stage: check

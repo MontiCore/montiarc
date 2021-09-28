@@ -2,6 +2,8 @@
 
 plugins {
   id 'monticore' version "$mc_version" apply false
+  id 'java'
+  id 'jacoco'
 }
 
 group = "montiarc"
@@ -20,6 +22,7 @@ http://www.se-rwth.de/"""
 
 subprojects {
   apply plugin: 'java'
+  apply plugin: 'jacoco'
   apply plugin: 'maven-publish'
 
   sourceCompatibility = '1.8'
@@ -32,6 +35,59 @@ subprojects {
     options.deprecation = false
     options.warnings = false
     options.headerOutputDirectory.convention(null)
+  }
+
+  /* ======================= Extra Configurations ========================== */
+  // The following three configurations share the source code files, compiled classes and jacoco report data of all
+  // subprojects so that we can aggregate the jacoco reports of the subprojects into a single aggregated one
+
+  // Share subproject's source folder with other projects for aggregated JaCoCo reports
+  configurations.create('transitiveSourcesElements') {
+    visible = false
+    canBeResolved = false
+    canBeConsumed = true
+    extendsFrom(configurations.implementation)
+    attributes {
+      attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+      attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
+      attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'source-folders'))
+    }
+    sourceSets.main.java.srcDirs.forEach {
+      outgoing.artifact(it)
+    }
+  }
+
+  // Share subproject's compiled class folders with other projects for aggregated JaCoCo reports
+  configurations.create('transitiveClassesElements') {
+    visible = false
+    canBeResolved = false
+    canBeConsumed = true
+    extendsFrom(configurations.implementation)
+    attributes {
+      attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+      attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
+      attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'class-folders'))
+    }
+    outgoing.artifact file("$projectDir/target/classes/java/main")
+    outgoing.artifact file("$projectDir/target/classes/resources/main")
+  }
+
+
+  // Share subproject's jacoco coverage data to be aggregated for the whole project
+  configurations.create('coverageDataElements') {
+    visible = false
+    canBeResolved = false
+    canBeConsumed = true
+    extendsFrom(configurations.implementation)
+    attributes {
+      attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+      attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
+      attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'jacoco-coverage-data'))
+    }
+    // This will cause the test task to run if the coverage data is requested by the aggregation task
+    outgoing.artifact(tasks.named("test").map { task ->
+      task.extensions.getByType(JacocoTaskExtension).destinationFile
+    })
   }
 
   repositories {
@@ -76,4 +132,94 @@ task cleanAll(type: Delete) {
 	dependsOn(":applications:bumperbot:clean")
 	dependsOn(":applications:factory:clean")
 	dependsOn(":applications:factoryTask:clean")
+}
+
+repositories {
+  maven {
+    credentials.username(mavenUser)
+    credentials.password(mavenPassword)
+    url repo
+  }
+  mavenCentral()
+}
+
+/* ======================= Extra Configurations ========================== */
+// The following three configurations collect the source code files, compiled classes and jacoco report data of all
+// subprojects so that we can aggregate the jacoco reports of the subprojects into a single aggregated one
+
+// A resolvable configuration to collect source code of subprojects
+def sourcesPath = configurations.create("sourcesPath") {
+  visible = false
+  canBeResolved = true
+  canBeConsumed = false
+  extendsFrom(configurations.implementation)
+  attributes {
+    attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+    attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
+    attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'source-folders'))
+  }
+}
+
+// A resolvable configuration to collect compiled classes of subprojects
+def classesPath = configurations.create("classesPath") {
+  visible = false
+  canBeResolved = true
+  canBeConsumed = false
+  extendsFrom(configurations.implementation)
+  attributes {
+    attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+    attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
+    attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'class-folders'))
+  }
+}
+
+// A resolvable configuration to collect JaCoCo coverage data of subprojects
+def coverageDataPath = configurations.create("coverageDataPath") {
+  visible = false
+  canBeResolved = true
+  canBeConsumed = false
+  extendsFrom(configurations.implementation)
+  attributes {
+    attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+    attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
+    attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'jacoco-coverage-data'))
+  }
+}
+
+def jacocoProjectsToAggregate = [
+    project(":util"),
+    project(":languages:arc-fe"),
+    project(":languages:behavior-fe"),
+    project(":languages:montiarc-fe"),
+    //project(":libraries:lejos-rte"),
+    //project(":libraries:maJavaLib"),
+    //project(":libraries:majava-rte"),
+    project(":generators:cd2pojo"),
+    project(":generators:ma2java"),
+    //project(":applications:bumperbot"),
+    //project(":applications:factory"),
+    //project(":applications:factoryTask"),
+].toSet()
+
+jacocoProjectsToAggregate.each {
+  getRootProject().dependencies.add("sourcesPath", it)
+  getRootProject().dependencies.add("classesPath", it)
+  getRootProject().dependencies.add("coverageDataPath", it)
+}
+
+// Task to aggregate code coverage from subprojects
+task aggregatedJacocoReport(type: JacocoReport) {
+  additionalClassDirs(classesPath.incoming.artifactView{lenient(true) }.files)
+  additionalSourceDirs(sourcesPath.incoming.artifactView{ lenient(true) }.files)
+  executionData(coverageDataPath.incoming.artifactView{ lenient(true) }.files.filter{ it.exists() })
+
+  reports {
+    xml.required = true
+    csv.required = true
+  }
+}
+
+// Make JaCoCo report aggregation part of the 'check' lifecycle phase
+tasks.named("check") {
+  dependsOn(aggregatedJacocoReport)
 }
