@@ -29,7 +29,7 @@ java {
   withSourcesJar()
 }
 
-jar.dependsOn(test)
+jar.mustRunAfter(test)
 
 publishing {
   publications {

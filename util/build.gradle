@@ -32,7 +32,7 @@ java {
   }
 }
 
-jar.dependsOn(test)
+jar.mustRunAfter(test)
 
 publishing {
   publications {
