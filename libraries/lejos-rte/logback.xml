@@ -1,0 +1,36 @@
+<!--  (c) https://github.com/MontiCore/monticore -->
+<!-- This logback configuration is meant for the logging during the execution
+of cd2pojo and ma2java during the gradle build. Thus it is NOT meant as logging
+configuration for the source code of lejos-rte and consequently it is not
+placed into the resource folder. -->
+<configuration>
+
+  <!-- Insert the current time formatted as "yyyyMMdd'T'HHmmss" under the key
+  "bySecond" into the logger context to be appended to the file name of log
+  files available to all subsequent configuration elements. -->
+  <timestamp key="bySecond" datePattern="yyyy-MM-dd-HHmmss"/>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>WARN</level>
+    </filter>
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <file>${LOGBACK_TARGET_DIR:-target/logs/}/${LOGBACK_TARGET_FILE_NAME:-logback-out}-${bySecond}.txt</file>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>INFO</level>
+    </filter>
+    <encoder>
+      <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <root level="info">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="FILE"/>
+  </root>
+</configuration>

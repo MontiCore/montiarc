@@ -5,6 +5,9 @@ group = "montiarc.libraries"
 def hwcDir = "$projectDir/src/main/java"
 def genDir = "$buildDir/generated-sources"
 
+def generatorLogbackConfig = "$projectDir/logback.xml"
+def generatorLogbackOutDir = "$buildDir/logs"
+
 sourceSets {
   main {
     java.srcDirs += ["$hwcDir", "$genDir"]
@@ -39,6 +42,12 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
   testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
   testImplementation("org.mockito:mockito-core:$mockito_version")
+
+  // loggers for generators
+  generateCD("ch.qos.logback:logback-core:$logback_version")
+  generateCD("ch.qos.logback:logback-classic:$logback_version")
+  generateMA("ch.qos.logback:logback-core:$logback_version")
+  generateMA("ch.qos.logback:logback-classic:$logback_version")
 }
 
 task generateCD(type: JavaExec) {
@@ -47,6 +56,11 @@ task generateCD(type: JavaExec) {
 
   args("$projectDir/src/main/resources", "$genDir", "$hwcDir")
   outputs.dir(genDir)
+
+  // configuring logging during generation
+  systemProperties "logback.configurationFile": "$generatorLogbackConfig"
+  systemProperties "LOGBACK_TARGET_DIR" : "$generatorLogbackOutDir"
+  systemProperties "LOGBACK_TARGET_FILE_NAME" : "logback-cd2pojo"
 }
 
 task generateMontiArc(type: JavaExec) {
@@ -55,6 +69,11 @@ task generateMontiArc(type: JavaExec) {
 
   args("$projectDir/src/main/resources", "$genDir", "$hwcDir")
   outputs.dir(genDir)
+
+  // configuring logging during generation
+  systemProperties "logback.configurationFile": "$generatorLogbackConfig"
+  systemProperties "LOGBACK_TARGET_DIR" : "$generatorLogbackOutDir"
+  systemProperties "LOGBACK_TARGET_FILE_NAME" : "logback-ma2java"
 }
 
 generateMontiArc.dependsOn(generateCD)
