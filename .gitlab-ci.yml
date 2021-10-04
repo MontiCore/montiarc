@@ -69,38 +69,6 @@ Deploy Nexus:
   only:
     - develop
 
-Code Quality:
-  stage: post-test
-  variables:
-    DOCKER_DRIVER: overlay2
-  allow_failure: true
-  cache: {}
-  tags:
-    - shell
-    - docker
-  script:
-    - export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
-    # Update Codeclimate and SonarJava Plugin
-    - docker run  --rm
-      --env CODECLIMATE_CODE="$PWD"
-      --env CONTAINER_TIMEOUT_SECONDS=150000
-      --volume "$PWD":/code
-      --volume /var/run/docker.sock:/var/run/docker.sock
-      --volume /tmp/cc:/tmp/cc
-      codeclimate/codeclimate engines:install
-    # Check Code Quality
-    - docker run --rm
-      --env CODECLIMATE_CODE="$PWD"
-      --env CONTAINER_TIMEOUT_SECONDS=150000
-      --volume "$PWD":/code
-      --volume /var/run/docker.sock:/var/run/docker.sock
-      --volume /tmp/cc:/tmp/cc
-      codeclimate/codeclimate analyze -f json > codeclimate.json
-    #"registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
-  artifacts:
-    reports:
-      codequality: codeclimate.json
-
 # Gitlab can visualize cobertura code coverage reports, but we have jacoco reports.
 # Thus, we will convert our jacoco report to a cobertura report:
 # Moreover we will print jacoco's instruction coverage to the command line so that gitlab parses it and creates a
@@ -121,7 +89,7 @@ Code Coverage:
 checkMDLinks:
   stage: check
   dependencies:
-    - Code Quality
+    - Code Coverage
   script:
     - "curl --location --header \"PRIVATE-TOKEN: $secibuildtoken\" \"https://git.rwth-aachen.de/api/v4/projects/monticore%2Fauxiliary-development-tools%2Fmdlinkchecker/jobs/artifacts/master/raw/target/libs/MDLinkCheckerCLI.jar?job=build\" --output MDLinkCheckerCLI.jar"
     - "url=https://git.rwth-aachen.de/monticore/montiarc/core/-/tree/develop"
