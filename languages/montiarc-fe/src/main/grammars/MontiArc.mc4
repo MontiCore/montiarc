@@ -55,7 +55,6 @@ grammar MontiArc extends
     ("package" package:MCQualifiedName ";")?
     importStatement:MCImportStatement*
     ComponentType
-    EOF
   ;
 
   /**
