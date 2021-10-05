@@ -37,6 +37,22 @@ subprojects {
     options.headerOutputDirectory.convention(null)
   }
 
+  // print summaries of test executions
+  tasks.withType(Test) {
+    afterSuite { desc, result ->
+      if (!desc.parent) {
+        println(
+          "Test outcome: ${result.resultType} (" +
+            "${result.testCount} tests, " +
+            "${result.successfulTestCount} successes, " +
+            "${result.failedTestCount} failures, " +
+            "${result.skippedTestCount} skipped" +
+          ")"
+        )
+      }
+    }
+  }
+
   /* ======================= Extra Configurations ========================== */
   // The following three configurations share the source code files, compiled classes and jacoco report data of all
   // subprojects so that we can aggregate the jacoco reports of the subprojects into a single aggregated one
