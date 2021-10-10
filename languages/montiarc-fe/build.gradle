@@ -1,3 +1,5 @@
+import java.nio.file.Paths
+
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
@@ -20,6 +22,18 @@ sourceSets {
       include "**/*.mc4"
     }
   }
+}
+
+jacocoTestReport.configure {
+  // We only want to analyze code coverage based on our hwc source code, not the one generated from our grammars
+  def hwcPath = "$projectDir/src/main/java"
+  def classesToReport = fileTree(hwcPath).collect {
+    def packagePath = Paths.get(hwcPath).relativize(it.toPath())
+    def packagePathWithClassEnding = packagePath.toString().replace(".java", ".class")
+    def classLocation = Paths.get("$buildDir/classes/java/main").resolve(packagePathWithClassEnding)
+    classLocation
+  }
+  classDirectories.setFrom files([classesToReport, "$buildDir/classes/resources/main"])
 }
 
 test {

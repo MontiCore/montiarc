@@ -1,3 +1,5 @@
+import java.nio.file.Paths
+
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
@@ -73,8 +75,8 @@ subprojects {
     }
   }
 
-  // Share subproject's compiled class folders with other projects for aggregated JaCoCo reports
-  configurations.create('transitiveClassesElements') {
+  // Share subproject's compiled hwc classes with other projects for aggregated JaCoCo reports
+  configurations.create('transitiveHwcClassesElements') {
     visible = false
     canBeResolved = false
     canBeConsumed = true
@@ -82,9 +84,17 @@ subprojects {
     attributes {
       attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
       attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
-      attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'class-folders'))
+      attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'hwc-classes'))
     }
-    outgoing.artifact file("$projectDir/target/classes/java/main")
+
+    // We only want to analyze code coverage based on our hwc source code, not the one generated from our grammars
+    def hwcPath = "$projectDir/src/main/java"
+    fileTree(hwcPath).each {
+      def packagePath = Paths.get(hwcPath).relativize(it.toPath())
+      def packagePathWithClassEnding = packagePath.toString().replace(".java", ".class")
+      def classLocation = Paths.get("$buildDir/classes/java/main").resolve(packagePathWithClassEnding)
+      outgoing.artifact classLocation.toFile()
+    }
     outgoing.artifact file("$projectDir/target/classes/resources/main")
   }
 
@@ -185,7 +195,7 @@ def classesPath = configurations.create("classesPath") {
   attributes {
     attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
     attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
-    attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'class-folders'))
+    attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'hwc-classes'))
   }
 }
 
