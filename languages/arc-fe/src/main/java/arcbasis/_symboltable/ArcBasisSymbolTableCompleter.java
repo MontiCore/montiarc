@@ -23,6 +23,10 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
 
   protected MCBasicTypesFullPrettyPrinter typePrinter;
 
+  protected MCBasicTypesFullPrettyPrinter getTypePrinter() {
+    return this.typePrinter;
+  }
+
   public void setTypePrinter(@NotNull MCBasicTypesFullPrettyPrinter typesPrinter) {
     Preconditions.checkNotNull(typesPrinter);
     this.typePrinter = typesPrinter;
@@ -30,13 +34,19 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
 
   protected String printType(@NotNull ASTMCType type) {
     Preconditions.checkNotNull(type);
-    return type.printType(typePrinter);
+    return type.printType(this.getTypePrinter());
   }
 
-  protected Stack<ComponentTypeSymbol> componentStack = new Stack<>();
+  protected Stack<ComponentTypeSymbol> componentStack;
 
   protected Stack<ComponentTypeSymbol> getComponentStack() {
     return this.componentStack;
+  }
+
+  protected void setComponentStack(@NotNull Stack<ComponentTypeSymbol> stack) {
+    Preconditions.checkNotNull(stack);
+    Preconditions.checkArgument(!stack.contains(null));
+    this.componentStack = stack;
   }
 
   protected Optional<ComponentTypeSymbol> getCurrentComponent() {
@@ -51,13 +61,27 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     this.getComponentStack().push(symbol);
   }
 
+  protected ArcBasisTraverser traverser;
+
+  @Override
+  public void setTraverser(@NotNull ArcBasisTraverser traverser) {
+    Preconditions.checkNotNull(traverser);
+    this.traverser = traverser;
+  }
+
+  @Override
+  public ArcBasisTraverser getTraverser() {
+    return this.traverser;
+  }
+
   public ArcBasisSymbolTableCompleter() {
-    this.typePrinter = MCBasicTypesMill.mcBasicTypesPrettyPrinter();
+    this(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
   }
 
   public ArcBasisSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter) {
     Preconditions.checkNotNull(typePrinter);
     this.typePrinter = typePrinter;
+    this.componentStack = new Stack<>();
   }
 
   @Override
@@ -70,9 +94,12 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   @Override
   public void endVisit(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
+    Preconditions.checkArgument(node.isPresentSymbol());
+    Preconditions.checkState(!this.getComponentStack().isEmpty());
     Preconditions.checkState(this.getCurrentComponent().isPresent());
     Preconditions.checkState(this.getCurrentComponent().get().isPresentAstNode());
     Preconditions.checkState(this.getCurrentComponent().get().getAstNode().equals(node));
+    Preconditions.checkState(this.getCurrentComponent().get().equals(node.getSymbol()));
     this.removeCurrentComponent();
   }
 
@@ -86,7 +113,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
       String type;
       if (node.getParent() instanceof ASTMCGenericType) {
         type = ((ASTMCGenericType) node.getParent()).printWithoutTypeArguments();
-       } else {
+      } else {
         type = this.printType(node.getParent());
       }
       Optional<ComponentTypeSymbol> parent = node.getEnclosingScope().resolveComponentType(type);
@@ -96,18 +123,5 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
         this.getCurrentComponent().get().setParent(parent.get());
       }
     }
-  }
-
-  protected ArcBasisTraverser traverser ;
-
-  @Override
-  public void setTraverser(@NotNull ArcBasisTraverser traverser) {
-    Preconditions.checkNotNull(traverser);
-    this.traverser = traverser;
-  }
-
-  @Override
-  public ArcBasisTraverser getTraverser() {
-    return this.traverser;
   }
 }
