@@ -5,10 +5,10 @@ package uniqueIdentifierNames;
  * Valid model.
  */
 component FineNames<T>(int param) {
-  port in int p0rt;
+  port in int i_port;
   int var = 1;
 
-  component CompType {}
+  component CompType { }
 
   CompType compInst;
 }

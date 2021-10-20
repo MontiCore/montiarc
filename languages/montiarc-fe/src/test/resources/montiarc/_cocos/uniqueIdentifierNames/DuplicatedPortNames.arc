@@ -14,12 +14,11 @@ component DuplicatedPortNames<VsTypeParam>(int VsConfigParam) {
   port in int VsCompType;
   port in int VsCompInst;
 
-  int VsField;
+  int VsField = 0;
 
-  component VsCompType {}
+  component VsCompType { }
 
   Foo VsCompInst;
 
-  component Foo {}
-
+  component Foo { }
 }

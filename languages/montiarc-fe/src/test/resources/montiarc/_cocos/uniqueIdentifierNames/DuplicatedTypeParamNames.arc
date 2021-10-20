@@ -4,16 +4,15 @@ package uniqueIdentifierNames;
 /**
  * Invalid model because of redundant names.
  */
-component DuplicatedTypeParamNames
-  <VsTypeParam, VsTypeParam, VsConfigParam, VsField, VsPort, VsCompType, VsCompInst>
-  (int VsConfigParam) {
+component DuplicatedTypeParamNames<VsTypeParam, VsTypeParam, VsConfigParam,
+  VsField, VsPort, VsCompType, VsCompInst>(int VsConfigParam) {
 
   port in int VsPort;
-  int VsField;
+  int VsField = 0;
 
-  component VsCompType {}
+  component VsCompType { }
 
   Foo VsCompInst;
 
-  component Foo {}
+  component Foo { }
 }

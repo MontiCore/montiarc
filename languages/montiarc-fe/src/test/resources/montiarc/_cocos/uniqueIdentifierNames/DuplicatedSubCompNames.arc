@@ -6,9 +6,9 @@ package uniqueIdentifierNames;
  */
 component DuplicatedSubCompNames<VsTypeParam>(int VsConfigParam) {
   port in int VsPort;
-  int VsField;
+  int VsField = 0;
 
-  component VsCompType {}
+  component VsCompType { }
 
   Foo VsCompInst;
   Foo VsCompInst;
@@ -18,6 +18,5 @@ component DuplicatedSubCompNames<VsTypeParam>(int VsConfigParam) {
   Foo VsField;
   Foo VsCompType;
 
-  component Foo {}
-
+  component Foo { }
 }

@@ -10,5 +10,5 @@ component AllNamesCorrectlyCapitalized<T> (Integer lowerCaseParameter) {
   port in Integer lowerCaseIncomingPort;
   port out Integer lowerCaseOutgoingPort;
 
-  Integer lowerCaseVariable;
+  Integer lowerCaseVariable = lowerCaseParameter;
 }
