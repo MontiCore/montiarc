@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Optional;
 
+@Deprecated
 public interface IMontiArcTool {
 
   /**
