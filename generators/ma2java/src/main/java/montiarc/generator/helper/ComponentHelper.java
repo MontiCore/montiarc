@@ -1,32 +1,45 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.helper;
 
+import arcautomaton._ast.ASTArcStatechart;
+import arcautomaton._visitor.NamesInExpressionsVisitor;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTPortAccess;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
 import arcbasis._symboltable.PortSymbol;
+import arcbasis.check.AdaptedSymType;
+import arccompute._ast.ASTArcCompute;
+import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
+import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symboltable.ISymbol;
 import de.monticore.symboltable.ImportStatement;
+import de.monticore.types.check.SymTypeConstant;
 import de.monticore.types.check.SymTypeExpression;
 import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericComponentHead;
+import montiarc.MontiArcMill;
 import montiarc._ast.ASTMontiArcNode;
+import montiarc._symboltable.IMontiArcScope;
 import montiarc._symboltable.MontiArcArtifactScope;
 import montiarc._visitor.MontiArcFullPrettyPrinter;
-import montiarc.generator.codegen.xtend.util.Utils;
+import montiarc._visitor.MontiArcTraverser;
+import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 /**
- * Helper class used in the template to generate target code of atomic or
- * composed components.
+ * Helper class used in the template to generate target code of atomic or composed components.
  */
 public class ComponentHelper {
 
@@ -54,8 +67,7 @@ public class ComponentHelper {
   }
 
   /**
-   * Prints the type of the given port respecting inherited ports and the actual
-   * type values
+   * Prints the type of the given port respecting inherited ports and the actual type values
    *
    * @param port Symbol of the port of which to determine the type
    * @return The string representation of the type
@@ -65,18 +77,19 @@ public class ComponentHelper {
   }
 
   /**
-   * Determines the name of the type of the port represented by its symbol. This
-   * takes in to account whether the port is inherited and possible required
-   * renamings due to generic type parameters and their actual arguments.
+   * Determines the name of the type of the port represented by its symbol. This takes in to account whether the port is
+   * inherited and possible required renamings due to generic type parameters and their actual arguments.
    *
    * @param componentSymbol Symbol of the component which contains the port
-   * @param portSymbol Symbol of the port for which the type name should be
-   * determined.
+   * @param portSymbol      Symbol of the port for which the type name should be determined.
    * @return The String representation of the type of the port.
    */
   public static String getRealPortTypeString(ComponentTypeSymbol componentSymbol,
-    PortSymbol portSymbol) {
-    return portSymbol.getTypeInfo().getFullName();
+                                             PortSymbol portSymbol) {
+    SymTypeExpression portType = AdaptedSymType.of(portSymbol.getType());
+    return portType.isTypeConstant() ?
+      ((SymTypeConstant) portType).getBoxedConstName() :
+      portType.printFullName();
   }
 
   //TODO: Fix surrogates printing wrong qualified type (omit scope name)
@@ -102,8 +115,8 @@ public class ComponentHelper {
    * replaced.
    * @param typeParamMap The map used to replace the type parameters
    * @return The resulting String representation with replaced type parameters
-   *//*
-
+   */
+  /*
   public static String insertTypeParamValueIntoTypeArg(
     SymTypeExpression toAnalyze,
     Map<String, String> typeParamMap) {
@@ -133,7 +146,7 @@ public class ComponentHelper {
     }
     return result.toString();
   }
-*/
+  */
 
   /**
    * Prints the java expression of the given AST expression node.
@@ -143,6 +156,13 @@ public class ComponentHelper {
    */
   public String printExpression(ASTExpression expr) {
     return this.getPrettyPrinter().prettyprint(expr);
+  }
+
+  /**
+   * @return the printed java expression of the given {@link ASTMCBlockStatement} node.
+   */
+  public String printStatement(ASTMCBlockStatement statement) {
+    return this.getPrettyPrinter().prettyprint(statement);
   }
 
   private static HashMap<String, String> PRIMITIVE_TYPES = new HashMap<String, String>() {
@@ -186,17 +206,14 @@ public class ComponentHelper {
   }
 
   /**
-   * Calculates the values of the parameters of a
-   * {@link ComponentInstanceSymbol}. This takes default values for parameters
-   * into account and adds them as required. Default values are only added from
-   * left to right in order. <br/>
+   * Calculates the values of the parameters of a {@link ComponentInstanceSymbol}. This takes default values for
+   * parameters into account and adds them as required. Default values are only added from left to right in order. <br/>
    * Example: For a component with parameters
    * <code>String stringParam, Integer integerParam = 2, Object objectParam = new Object()</code>
-   * that is instanciated with parameters <code>"Test String", 5</code> this
-   * method adds <code>new Object()</code> as the last parameter.
+   * that is instanciated with parameters <code>"Test String", 5</code> this method adds <code>new Object()</code> as
+   * the last parameter.
    *
-   * @param param The {@link ComponentInstanceSymbol} for which the parameters
-   * should be calculated.
+   * @param param The {@link ComponentInstanceSymbol} for which the parameters should be calculated.
    * @return The parameters.
    */
   public Collection<String> getParamValues(ComponentInstanceSymbol param) {
@@ -240,32 +257,46 @@ public class ComponentHelper {
    */
   public static String getSubComponentTypeName(ComponentInstanceSymbol instance) {
     String result = "";
-    final ComponentTypeSymbol componentTypeReference = instance.getType();
-
-    String packageName = Utils.printPackageWithoutKeyWordAndSemicolon(componentTypeReference);
+    ComponentTypeSymbol componentTypeReference = instance.getType();
+    if (componentTypeReference instanceof ComponentTypeSymbolSurrogate) {
+      componentTypeReference = ((ComponentTypeSymbolSurrogate) componentTypeReference).lazyLoadDelegate();
+    }
+    String packageName = ComponentHelper.printPackageWithoutKeyWordAndSemicolon(componentTypeReference);
     if (packageName != null && !packageName.equals("")) {
       result = packageName + ".";
     }
     result += componentTypeReference.getName();
-/*    if (componentTypeReference.hasActualTypeArguments()) {
+    /*
+    if (componentTypeReference.hasActualTypeArguments()) {
       result += printTypeArguments(componentTypeReference.getActualTypeArguments());
-    }*/
+    }
+    */
     return result;
   }
 
   /**
-   * Determine whether the port of the given connector is an incoming or
-   * outgoing port.
+   * Helper function used to determine package names.
+   */
+  public static String printPackageWithoutKeyWordAndSemicolon(final ComponentTypeSymbol comp) {
+    if (comp.isInnerComponent()) {
+      //TODO add check for outermost component being TOP-Class or remove this function?
+      return printPackageWithoutKeyWordAndSemicolon(comp.getOuterComponent().get()) + "." + comp.getOuterComponent().get().getName();
+    } else {
+      return comp.getPackageName();
+    }
+  }
+
+  /**
+   * Determine whether the port of the given connector is an incoming or outgoing port.
    *
-   * @param cmp The component defining the connector
-   * @param source The source name of the connector which connects the port to check
-   * @param target The target name of the connector which connects the port to check
-   * @param isSource Specifies whether the port to check is the source port of
-   * the connector or the target port
+   * @param cmp      The component defining the connector
+   * @param source   The source name of the connector which connects the port to check
+   * @param target   The target name of the connector which connects the port to check
+   * @param isSource Specifies whether the port to check is the source port of the connector or the target port
    * @return true, if the port is an incoming port. False, otherwise.
    */
   public boolean isIncomingPort(ComponentTypeSymbol cmp, ASTPortAccess source,
-    ASTPortAccess target, boolean isSource) {
+                                ASTPortAccess target, boolean isSource) {
     String subCompName = getConnectorComponentName(source, target, isSource);
     String portNameUnqualified = getConnectorPortName(source, target, isSource);
     Optional<PortSymbol> port = Optional.empty();
@@ -274,12 +305,11 @@ public class ComponentHelper {
       : target.getQName();
     // port is of subcomponent
     if (portName.contains(".")) {
-      Optional<ComponentInstanceSymbol> subCompInstance = cmp.getSpannedScope()
-        .resolveComponentInstance(subCompName);
-      ComponentTypeSymbol subComp = subCompInstance.get().getType();
-      port = subComp.getSpannedScope().resolvePort(portNameUnqualified);
+      Optional<ComponentInstanceSymbol> subCompInstance = cmp.getSubComponent(subCompName);
+      ComponentTypeSymbol typeOfSubComp = subCompInstance.get().getType();
+      port = typeOfSubComp.getPort(portNameUnqualified); // TODO: searchInherited?
     } else {
-      port = cmp.getSpannedScope().resolvePort(portName);
+      port = cmp.getPort(portName); // TODO: searchInherited?
     }
 
     return port.map(PortSymbol::isIncoming).orElse(false);
@@ -288,13 +318,13 @@ public class ComponentHelper {
   /**
    * Returns the component name of a connection.
    *
-   * @param source The source name of the connector which connects the port to check
-   * @param target The target name of the connector which connects the port to check
+   * @param source   The source name of the connector which connects the port to check
+   * @param target   The target name of the connector which connects the port to check
    * @param isSource <tt>true</tt> for source component, else <tt>false>tt>
    * @return
    */
   public String getConnectorComponentName(ASTPortAccess source, ASTPortAccess target,
-    boolean isSource) {
+                                          boolean isSource) {
     if (isSource && source.isPresentComponent()) {
       return source.getComponent();
     } else if (!isSource && target.isPresentComponent()) {
@@ -306,13 +336,13 @@ public class ComponentHelper {
   /**
    * Returns the port name of a connection.
    *
-   * @param source The source name of the connector which connects the port to check
-   * @param target The target name of the connector which connects the port to check
+   * @param source   The source name of the connector which connects the port to check
+   * @param target   The target name of the connector which connects the port to check
    * @param isSource <tt>true</tt> for source component, else <tt>false>tt>
    * @return
    */
   public String getConnectorPortName(ASTPortAccess source, ASTPortAccess target,
-    boolean isSource) {
+                                     boolean isSource) {
     final String name;
     if (isSource) {
       return source.getPort();
@@ -322,8 +352,7 @@ public class ComponentHelper {
   }
 
   /**
-   * Checks whether the given typeName for the component comp is a generic
-   * parameter.
+   * Checks whether the given typeName for the component comp is a generic parameter.
    *
    * @param comp
    * @param typeName
@@ -346,8 +375,7 @@ public class ComponentHelper {
   }
 
   /**
-   * @return A list of String representations of the actual type arguments
-   * assigned to the super component
+   * @return A list of String representations of the actual type arguments assigned to the super component
    */
   public List<String> getSuperCompActualTypeArguments() {
     final List<String> paramList = new ArrayList<>();
@@ -368,6 +396,11 @@ public class ComponentHelper {
     return paramList;
   }
 
+  public static List<String> getSuperCompActualTypeArguments(ComponentTypeSymbol component) {
+    //TODO implement (to be used in template for component heads instead of parameterless variant)
+    return null;
+  }
+
   public static Boolean existsHWCClass(File hwcPath, String cmpLocation) {
     File cmpPath = Paths.get(hwcPath.toString()
       + File.separator + cmpLocation.replaceAll("\\.",
@@ -381,5 +414,100 @@ public class ComponentHelper {
     }
     ASTComponentType ast = symbol.getAstNode();
     return ((MontiArcArtifactScope) ast.getEnclosingScope()).getImportsList();
+  }
+
+  protected static List<String> getInheritedParams(final ComponentTypeSymbol component) {
+    List<String> result = new ArrayList<String>();
+    List<VariableSymbol> configParameters = component.getParameters();
+    boolean _isPresentParentComponent = component.isPresentParentComponent();
+    if (_isPresentParentComponent) {
+      ComponentTypeSymbol superCompReference = component.getParent();
+      if (superCompReference instanceof ComponentTypeSymbolSurrogate) {
+        superCompReference = ((ComponentTypeSymbolSurrogate) superCompReference).lazyLoadDelegate();
+      }
+      List<VariableSymbol> superConfigParams = superCompReference.getParameters();
+      boolean _isEmpty = configParameters.isEmpty();
+      boolean _not = (!_isEmpty);
+      if (_not) {
+        for (int i = 0; (i < superConfigParams.size()); i++) {
+          result.add(configParameters.get(i).getName());
+        }
+      }
+    }
+    return result;
+  }
+
+  public static void appendAllInnerComponents(List<ComponentTypeSymbol> components) {
+    List<ComponentTypeSymbol> innerComponents = getAllInnerComponents(components);
+    components.addAll(innerComponents);
+  }
+
+  public static List<ComponentTypeSymbol> getAllInnerComponents(List<ComponentTypeSymbol> components) {
+    List<ComponentTypeSymbol> innerComponents = new ArrayList<>();
+    components.forEach(c -> innerComponents.addAll(getAllInnerComponents(c)));
+    return innerComponents;
+  }
+
+  public static List<ComponentTypeSymbol> getAllInnerComponents(ComponentTypeSymbol component) {
+    List<ComponentTypeSymbol> subcomponents = new ArrayList<>(component.getInnerComponents());
+    for (ComponentTypeSymbol innerComp : component.getInnerComponents()) {
+      subcomponents.addAll(getAllInnerComponents(innerComp));
+    }
+    return subcomponents;
+  }
+
+  public boolean hasAutomatonBehavior() {
+    return getAutomatonBehavior().isPresent();
+  }
+
+  public boolean hasComputeBehavior() {
+    return getComputeBehavior().isPresent();
+  }
+
+  public Optional<ASTArcStatechart> getAutomatonBehavior() {
+    Preconditions.checkState(component != null);
+    Preconditions.checkState(component.isPresentAstNode());
+
+    return this.component.getAstNode().getBody().getArcElementList().stream()
+      .filter(el -> el instanceof ASTArcStatechart)
+      .map(el -> (ASTArcStatechart) el)
+      .findFirst();
+  }
+
+  public Optional<ASTArcCompute> getComputeBehavior() {
+    Preconditions.checkState(component != null);
+    Preconditions.checkState(component.isPresentAstNode());
+
+    return this.component.getAstNode().getBody().getArcElementList().stream()
+      .filter(el -> el instanceof ASTArcCompute)
+      .map(el -> (ASTArcCompute) el)
+      .findFirst();
+  }
+
+  public static ArcAutomatonHelper automatonHelperFrom(@NotNull ASTArcStatechart stateChart) {
+    return new ArcAutomatonHelper(stateChart);
+  }
+
+  public Set<ASTNameExpression> getNamesInExpression(@NotNull ASTExpression expr) {
+    Preconditions.checkNotNull(expr);
+    Preconditions.checkArgument(expr.getEnclosingScope() != null);
+    Preconditions.checkArgument(expr.getEnclosingScope() instanceof IMontiArcScope);
+    NamesInExpressionsVisitor visitor = new NamesInExpressionsVisitor();
+    MontiArcTraverser traverser = MontiArcMill.traverser();
+    visitor.registerTo(traverser);
+    visitor.setTraverser(traverser);
+    expr.accept(traverser);
+
+    // check if the expression refers to a field or port and not a Type (e.g. an Enum: Days.MONDAY)
+    Collection<String> portsOfComp = this.component.getAllPorts().stream()
+      .map(ISymbol::getName)
+      .collect(Collectors.toSet());
+
+    return visitor.getFoundNames().keySet().stream()
+      .filter(astName ->
+        portsOfComp.contains(astName.getName())
+          || !((IMontiArcScope) expr.getEnclosingScope()).resolveVariableMany(astName.getName()).isEmpty()
+      )
+      .collect(Collectors.toSet());
   }
 }

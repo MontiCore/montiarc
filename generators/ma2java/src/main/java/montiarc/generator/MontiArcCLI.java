@@ -3,10 +3,9 @@ package montiarc.generator;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
-import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.generator.codegen.xtend.MAAGenerator;
+import montiarc.generator.codegen.MontiArcGenerator;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -72,7 +71,7 @@ public class MontiArcCLI extends montiarc.MontiArcCLI {
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(!target.isEmpty());
-    MAAGenerator generator = new MAAGenerator();
-    generator.generateAll(Paths.get(target, Names.getPathFromPackage(symbol.getPackageName())).toFile(), Paths.get(hwc).toFile(), symbol);
+    MontiArcGenerator generator = new MontiArcGenerator(Paths.get(target), Paths.get(hwc));
+    generator.generate(symbol);
   }
 }
