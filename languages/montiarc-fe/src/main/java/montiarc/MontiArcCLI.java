@@ -11,12 +11,13 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCos;
 import montiarc._symboltable.IMontiArcArtifactScope;
-import montiarc._symboltable.MontiArcSymbols2Json;
 import montiarc._visitor.MontiArcFullPrettyPrinter;
 import montiarc.util.MontiArcError;
 import org.apache.commons.cli.*;
+import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.codehaus.commons.nullanalysis.NotNull;
 
+import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -84,7 +85,7 @@ public class MontiArcCLI extends MontiArcCLITOP {
     Collection<ASTMACompilationUnit> asts = this.parse(".arc", this.createModelPath(cli).getEntries());
     Log.enableFailQuick(true);
 
-    this.loadSymbols(cli);
+    this.loadSymbols();
     this.runDefaultTasks(asts);
     this.runAdditionalTasks(asts, cli);
   }
@@ -94,44 +95,41 @@ public class MontiArcCLI extends MontiArcCLITOP {
     return cli.hasOption("modelpath") ? new MCPath(cli.getOptionValues("modelpath")) : new MCPath();
   }
 
-  protected void loadSymbols(@NotNull CommandLine cli) {
-    Preconditions.checkNotNull(cli);
-    if (cli.hasOption("path")) {
-      Log.info("Preload symbol tables", "MontiArcCLITool");
-      this.loadSymbols(".sym", new MCPath(cli.getOptionValues("path")), new MontiArcSymbols2Json());
-    }
+  protected void loadSymbols() {
+    Log.info("Load symbols", "MontiArcCLITool");
+    this.loadSymbols(MontiArcMill.globalScope().getFileExt(), MontiArcMill.globalScope().getSymbolPath());
   }
 
-  public void loadSymbols(@NotNull String fileExt, @NotNull MCPath path, @NotNull MontiArcSymbols2Json deSer) {
-    Preconditions.checkNotNull(fileExt);
+  public void loadSymbols(@NotNull String fileNameRegEx, @NotNull MCPath path) {
+    Preconditions.checkNotNull(fileNameRegEx);
     Preconditions.checkNotNull(path);
-    Preconditions.checkNotNull(deSer);
-    Preconditions.checkArgument(!fileExt.isEmpty());
-    path.getEntries().forEach(entry -> this.loadSymbols(fileExt, entry, deSer));
+    Preconditions.checkArgument(!fileNameRegEx.isEmpty());
+    path.getEntries().forEach(entry -> this.loadSymbols(fileNameRegEx, entry));
   }
 
-  public void loadSymbols(@NotNull String fileExt, @NotNull Path directory, @NotNull MontiArcSymbols2Json deSer) {
-    Preconditions.checkNotNull(fileExt);
+
+  public void loadSymbols(@NotNull String fileNameRegEx, @NotNull Path directory) {
+    Preconditions.checkNotNull(fileNameRegEx);
     Preconditions.checkNotNull(directory);
-    Preconditions.checkNotNull(deSer);
-    Preconditions.checkArgument(!fileExt.isEmpty());
+    Preconditions.checkArgument(!fileNameRegEx.isEmpty());
     Preconditions.checkArgument(directory.toFile().exists(), directory.toAbsolutePath() + " does not exist.");
     Preconditions.checkArgument(directory.toFile().isDirectory(), directory.toAbsolutePath() + " is not a directory.");
+    FileFilter filter = new RegexFileFilter(fileNameRegEx);
     try (Stream<Path> paths = Files.walk(directory)) {
-      paths.filter(Files::isRegularFile)
-        .filter(file -> file.getFileName().toString().endsWith(fileExt))
-        .forEach(path -> this.loadSymbols(path, deSer));
+      paths.filter(file -> {
+        return filter.accept(file.toFile());
+      }).forEach(this::loadSymbols);
     } catch (IOException e) {
       Log.error(String.format(MontiArcError.TOOL_FILE_WALK_IOEXCEPTION.toString(), directory), e);
     }
   }
 
-  public void loadSymbols(@NotNull Path file, @NotNull MontiArcSymbols2Json deSer) {
+  public void loadSymbols(@NotNull Path file) {
+    Log.info("Load symbols from " + file, "MontiArcCLITool");
     Preconditions.checkNotNull(file);
-    Preconditions.checkNotNull(deSer);
     Preconditions.checkArgument(file.toFile().exists(), file.toAbsolutePath() + " does not exist.");
     Preconditions.checkArgument(file.toFile().isFile(), file.toAbsolutePath() + " is not a file.");
-    MontiArcMill.globalScope().addSubScope(deSer.load(file.toString()));
+    MontiArcMill.globalScope().loadFile(file.toString());
   }
 
   public void runDefaultTasks(@NotNull Collection<ASTMACompilationUnit> asts) {
