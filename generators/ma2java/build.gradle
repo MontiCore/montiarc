@@ -3,6 +3,7 @@
 plugins {
   id "monticore"
   id "jacoco"
+  id "com.github.johnrengelman.shadow" version "$shadow_version"
 }
 
 group = "montiarc.generators"
@@ -54,6 +55,17 @@ java {
   withSourcesJar()
 }
 
+// all in one cli-jar
+shadowJar {
+  manifest {
+    attributes "Main-Class": "montiarc.generator.MontiArcCLI"
+  }
+  archiveClassifier = "cli"
+  archiveBaseName = "MontiArc2Java"
+  archiveFileName = "${archiveBaseName.get()}CLI-${archiveVersion.get()}.${archiveExtension.get()}"
+}
+
+jar.dependsOn(shadowJar)
 jar.mustRunAfter(test)
 
 publishing {

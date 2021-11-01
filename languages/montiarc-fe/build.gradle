@@ -5,6 +5,8 @@ import java.nio.file.Paths
 plugins {
   id "monticore"
   id "jacoco"
+  id "com.github.johnrengelman.shadow" version "$shadow_version"
+
 }
 
 group = "montiarc.languages"
@@ -121,6 +123,17 @@ java {
   }
 }
 
+// all in one cli-jar
+shadowJar {
+  manifest {
+    attributes "Main-Class": "montiarc.generator.MontiArcCLI"
+  }
+  archiveClassifier = "cli"
+  archiveBaseName = "MontiArc"
+  archiveFileName = "${archiveBaseName.get()}CLI-${archiveVersion.get()}.${archiveExtension.get()}"
+}
+
+jar.dependsOn(shadowJar)
 jar.dependsOn(grammarsJar)
 jar.mustRunAfter(test)
 sourcesJar.dependsOn project.collect { it.tasks.withType(MCTask)}
