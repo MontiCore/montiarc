@@ -116,9 +116,7 @@ public class MontiArcCLI extends MontiArcCLITOP {
     Preconditions.checkArgument(directory.toFile().isDirectory(), directory.toAbsolutePath() + " is not a directory.");
     FileFilter filter = new RegexFileFilter(fileNameRegEx);
     try (Stream<Path> paths = Files.walk(directory)) {
-      paths.filter(file -> {
-        return filter.accept(file.toFile());
-      }).forEach(this::loadSymbols);
+      paths.filter(file -> filter.accept(file.toFile())).forEach(this::loadSymbols);
     } catch (IOException e) {
       Log.error(String.format(MontiArcError.TOOL_FILE_WALK_IOEXCEPTION.toString(), directory), e);
     }
