@@ -67,7 +67,7 @@ task generateMontiArc(type: JavaExec) {
   classpath = configurations.generateMA
   mainClass = "montiarc.generator.MontiArcCLI"
 
-  args("-mp", "$projectDir/src/main/resources", "-path", "$genDir", "-t", "$genDir", "-hwc", "$hwcDir")
+  args("-mp", "$projectDir/src/main/resources", "-path", "$genDir", "-o", "$genDir", "-hwc", "$hwcDir")
   outputs.dir(genDir)
 
   // configuring logging during generation

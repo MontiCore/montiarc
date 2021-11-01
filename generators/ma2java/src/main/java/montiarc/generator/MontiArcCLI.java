@@ -28,14 +28,14 @@ public class MontiArcCLI extends montiarc.MontiArcCLI {
   public Options addStandardOptions(@NotNull Options options) {
     Preconditions.checkNotNull(options);
 
-    options.addOption(org.apache.commons.cli.Option.builder("t")
-      .longOpt("target")
+    options.addOption(org.apache.commons.cli.Option.builder("o")
+      .longOpt("output")
       .hasArgs()
-      .desc("Sets the target path for generated files.")
+      .desc("Sets the target path for the generated files (optional).")
       .build());
     options.addOption(org.apache.commons.cli.Option.builder("hwc")
       .hasArgs()
-      .desc("Sets the artifact path for handwritten code.")
+      .desc("Sets the artifact path for handwritten code (optional).")
       .build());
 
     return super.addStandardOptions(options);
@@ -47,7 +47,7 @@ public class MontiArcCLI extends montiarc.MontiArcCLI {
     Preconditions.checkNotNull(cli);
     super.runAdditionalTasks(asts, cli);
     Log.info("Generate java classes from component models", "MontiArcCLITool");
-    this.generate(asts, cli.getOptionValue("target"), Optional.ofNullable(cli.getOptionValue("hwc")).orElse(""));
+    this.generate(asts, cli.getOptionValue("output"), Optional.ofNullable(cli.getOptionValue("hwc")).orElse(""));
   }
 
   public void generate(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String target, @NotNull String hwc) {

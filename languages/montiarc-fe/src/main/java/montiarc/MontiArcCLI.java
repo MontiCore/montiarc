@@ -355,6 +355,7 @@ public class MontiArcCLI extends MontiArcCLITOP {
     Preconditions.checkNotNull(options);
     options.addOption(org.apache.commons.cli.Option.builder("mp")
       .longOpt("modelpath")
+      .argName("dirlist")
       .hasArgs()
       .desc("Sets the artifact path for the input component models, space separated.")
       .build());
@@ -374,23 +375,24 @@ public class MontiArcCLI extends MontiArcCLITOP {
     // pretty print
     options.addOption(org.apache.commons.cli.Option.builder("pp")
       .longOpt("prettyprint")
-      .argName("file")
+      .argName("dir")
       .optionalArg(true)
       .numberOfArgs(1)
-      .desc("Prints the AST to stdout or the specified file (optional).")
+      .desc("Prints the ASTs to stdout or the specified directory (optional).")
       .build());
 
     // store symbol table
     options.addOption(org.apache.commons.cli.Option.builder("s")
       .longOpt("symboltable")
-      .argName("file")
+      .argName("dir")
       .hasArg()
-      .desc("Serialized the Symbol table of the given artifact.")
+      .desc("Serializes and prints the symbol table to stdout or the specified output directory (optional).")
       .build());
 
     // symbol paths
     options.addOption(org.apache.commons.cli.Option.builder("path")
       .hasArgs()
+      .argName("dirlist")
       .desc("Sets the artifact path for imported symbols, space separated.")
       .build());
 
