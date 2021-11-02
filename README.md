@@ -3,7 +3,7 @@
 
 The MontiArc Core repository contains everything related to the common basis of the MontiArc architecture description language. This project is maintained by the [Working Group for Model-Driven Systems Engineering (MDSE)][mdse].
 
-© https://github.com/MontiCore/monticore; Contact: [David Schmalzing](https://git.rwth-aachen.de/david.schmalzing)
+© https://github.com/MontiCore/monticore Contact: [David Schmalzing](https://git.rwth-aachen.de/david.schmalzing)
 
 [se-rwth]: http://www.se-rwth.de
 [mdse]:http://www.se-rwth.de/teams/mdse/
