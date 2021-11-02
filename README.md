@@ -14,22 +14,47 @@ The MontiArc Core repository contains everything related to the common basis of 
 
 In MontiArc, architectures are described as component and connector systems in which autonomously acting components perform computations. Communication between components is regulated by connectors between the components’ interfaces, which are stable and build up by typed, directed ports. Components are either atomic or composed of connected subcomponents. Atomic components yield behavior descriptions in the form of embedded time-synchronous port automata, or via integration of handcrafted code. For composed components the behavior emerges from the behavior of their subcomponents. 
 
-## Project Structure
+# Installation
 
-* languages/
-  * dynamic-fe
-  * montiarc-fe
-* generators/
-    * cd2pojo
-    * dynma2java
-    * maa2java-xtend
-* applications/
-    * bumperbot  
-* libraries/
-    * maa-rte
-    * lejos-rte
-    * simulator-rte
-    * maJavaLib
+## Native installation
+
+### Prerequisites 
+- Git (for checking out the project)
+- Gradle (for building the project), ecplicitly version 6.8.3
+- Java 8 or 17 (other versions are not checked by the CI pipeline)
+
+### Installation
+
+```
+git clone <link to this Git repository>
+cd core
+gradle build
+```
+
+This should build the project. Note, building the project for the first time may
+take a while. Subsequent builds should be faster.
+
+Once the project is built, you can look at the generated source code. 
+The `languages` folder contains the language components of MontiArc, more 
+specifically, their frontend implementation. That is parsers to create abstract
+syntax trees (ASTs) from textual models, genitors and symbol table completers
+to construct and complete the symbol table, context condition checks to check
+well-formedness, transformtations, visitors, and a cli tool that puts everything
+together.
+
+The `generators` folder contains code generators that translate MontiArc component 
+models to some general purpose language. Currently available are the MontiArc to 
+Java (MA2Java) and the CD to Java (CD2Pojo, Pojo for Plain Old Java) generators.
+
+The `application` folder contains some example applications. 
+Each of them should contain a `target/generated-sources` subdirectory after
+building their respective project. 
+
+Please note that `gradle build` on the top most folder builds the whole project. 
+However, each subproject contains an individual build file. 
+Executing the build command on a subproject builds everything needed for that 
+project and then builds the project. For more information about the gradle build
+tool, see the [Gradle Website](https://gradle.org/).
 
 ## Tool Documentation
 
