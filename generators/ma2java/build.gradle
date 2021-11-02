@@ -76,6 +76,7 @@ shadowJar {
   manifest {
     attributes "Main-Class": "montiarc.generator.MontiArcCLI"
   }
+  zip64 = true
   archiveClassifier = "cli"
   archiveBaseName = "MontiArc2Java"
   archiveFileName = "${archiveBaseName.get()}CLI-${archiveVersion.get()}.${archiveExtension.get()}"
