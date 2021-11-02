@@ -56,6 +56,25 @@ Executing the build command on a subproject builds everything needed for that
 project and then builds the project. For more information about the gradle build
 tool, see the [Gradle Website](https://gradle.org/).
 
+# Building and Running Your First Application
+
+This section guides you through building and executing your first application.
+We will use the example under `applications/bumperbot`.
+It consists of only a few components but should showcase the build process.
+
+We support building an application via an IDE
+
+### Building and Running an Application using an IDE
+
+As MontiArc generates Java code, you can use the same IDE to build both MontiArc 
+and MontiArc applications.
+The whole build process can be handled by gradle. 
+That is, `gradle build` not only generates Java code from MontiArc component 
+models, but also compiles the handwritten and generated
+code, and executes tests. 
+Extending the build process to construct an executable only requires defining the 
+main class and setting up the build process to generate an executable.
+
 ## Tool Documentation
 
 The [MontiArcCLITool](languages/montiarc-fe/src/main/java/montiarc/cli/MontiArcCLI.java) offers capabilities for processing MontiArc component models.
