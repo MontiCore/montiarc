@@ -24,7 +24,8 @@ public class TypeParameterGetterTest extends AbstractTest {
   private static final Path PATH = Paths.get(RELATIVE_MODEL_PATH, "montiarc", "_symboltable", "generics");
 
   @BeforeEach
-  public void setGlobalScope(){
+  public void setUp() {
+    MontiArcMill.init();
     MontiArcMill.globalScope().setSymbolPath(new MCPath(PATH));
   }
 
