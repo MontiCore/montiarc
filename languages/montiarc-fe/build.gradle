@@ -126,7 +126,7 @@ java {
 // all in one cli-jar
 shadowJar {
   manifest {
-    attributes "Main-Class": "montiarc.generator.MontiArcCLI"
+    attributes "Main-Class": "montiarc.MontiArcCLI"
   }
   archiveClassifier = "cli"
   archiveBaseName = "MontiArc"
