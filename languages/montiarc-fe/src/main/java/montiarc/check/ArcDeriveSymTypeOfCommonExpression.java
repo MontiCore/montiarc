@@ -71,7 +71,7 @@ public class ArcDeriveSymTypeOfCommonExpression extends DeriveSymTypeOfCommonExp
           SymTypeExpression returnType = fittingMethods.get(0).getReturnType();
           for (FunctionSymbol method : fittingMethods) {
             if (!returnType.deepEquals(method.getReturnType())) {
-              logError("0xA0238", expr.get_SourcePositionStart());
+              logError("0xA1238", expr.get_SourcePositionStart());
             }
           }
         }
@@ -80,7 +80,7 @@ public class ArcDeriveSymTypeOfCommonExpression extends DeriveSymTypeOfCommonExp
         typeCheckResult.setCurrentResult(result);
       } else {
         typeCheckResult.reset();
-        logError("0xA0239", expr.get_SourcePositionStart());
+        logError("0xA1240", expr.get_SourcePositionStart());
       }
     } else {
       Collection<FunctionSymbol> methodcollection = getScope(expr.getEnclosingScope()).resolveFunctionMany(expr.getName());
@@ -94,7 +94,7 @@ public class ArcDeriveSymTypeOfCommonExpression extends DeriveSymTypeOfCommonExp
         typeCheckResult.setCurrentResult(wholeResult.get());
       } else {
         typeCheckResult.reset();
-        logError("0xA0240", expr.get_SourcePositionStart());
+        logError("0xA1241", expr.get_SourcePositionStart());
       }
     }
   }
