@@ -50,6 +50,11 @@ dependencies {
       requireCapability("de.monticore:monticore-grammar-grammars")
     }
   }
+  grammar("de.monticore.lang:statecharts:$mc_version") {
+    capabilities {
+      requireCapability("de.monticore.lang:statecharts-$grammars_classifier")
+    }
+  }
 
   //MontiCore dependencies
   implementation("de.monticore:monticore-runtime:$mc_version")
@@ -67,6 +72,7 @@ dependencies {
   testImplementation(project(":util").sourceSets.test.output)
 
   //Other dependencies
+  implementation("de.monticore.lang:statecharts:$mc_version")
   implementation("de.se_rwth.commons:se-commons-logging:$se_commons_version")
   implementation("com.google.guava:guava:$guava_version")
   implementation("com.google.code.findbugs:jsr305:$jsr305_version")

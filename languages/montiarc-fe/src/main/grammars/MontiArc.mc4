@@ -44,6 +44,7 @@ grammar MontiArc extends
             de.monticore.statements.MCVarDeclarationStatements,
             ArcAutomaton,
             ArcCore,
+            BasicModeAutomata,
             VariableArc                                 {
 
   /** ASTMACompilationUnit represents the entire content of a MontiArc model
