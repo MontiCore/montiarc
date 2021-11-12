@@ -5,9 +5,7 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ConfigurationParametersCorrectlyInherited;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import montiarc.MontiArcMill;
 import montiarc.util.Error;
-import org.apache.commons.io.FilenameUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,7 +13,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoTest {
@@ -75,13 +72,6 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
     return PACKAGE;
   }
 
-  protected ASTComponentType parseAndLoadAllSymbols(@NotNull String model) {
-    Preconditions.checkNotNull(model);
-    this.getTool().createSymbolTable(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, this.getPackage()));
-    Preconditions.checkState(MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model)).isPresent());
-    return MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model)).get().getAstNode();
-  }
-
   @ParameterizedTest
   @ValueSource(strings = {
     "MandatoryInheritedParameterBecomesOptionalNewName.arc",
@@ -138,6 +128,6 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
   @BeforeEach
   public void init() {
     super.init();
-    this.getTool().initializeBasicOOTypes();
+    this.getCLI().initializeBasicOOTypes();
   }
 }

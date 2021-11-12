@@ -9,6 +9,7 @@ import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
+import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -18,6 +19,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
@@ -79,7 +81,11 @@ public class NoSubComponentReferenceCyclesTest extends AbstractCoCoTest {
   protected Stream<ASTComponentType> parseAndLoadAllSymbolsStream(@NotNull String model) {
     Preconditions.checkNotNull(model);
     // parse and load symbols
-    this.getTool().createSymbolTable(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, this.getPackage()));
+    Path path = Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, this.getPackage());
+    this.getCLI().loadSymbols(MontiArcMill.globalScope().getFileExt(), path);
+    Collection<ASTMACompilationUnit> asts = this.getCLI().parse(".arc", path);
+    this.getCLI().createSymbolTable(asts);
+    this.getCLI().completeSymbolTable(asts);
     // find top-component
     Optional<ComponentTypeSymbol> topComponent =
       MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model));

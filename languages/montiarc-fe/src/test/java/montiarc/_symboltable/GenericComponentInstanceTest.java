@@ -4,12 +4,15 @@ package montiarc._symboltable;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
 import montiarc.AbstractTest;
-import montiarc.MontiArcTool;
+import montiarc.MontiArcCLI;
+import montiarc.MontiArcMill;
+import montiarc._ast.ASTMACompilationUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 
 public class GenericComponentInstanceTest extends AbstractTest {
 
@@ -18,10 +21,13 @@ public class GenericComponentInstanceTest extends AbstractTest {
   @Test
   public void shouldReturnGenericType() {
     //Given
-    MontiArcTool tool = new MontiArcTool();
+    MontiArcCLI cli = new MontiArcCLI();
     Path path = Paths.get(RELATIVE_MODEL_PATH, Test_PATH, "example1");
-    IMontiArcGlobalScope scope = tool.processModels(path);
-    ComponentTypeSymbol compC = scope.resolveComponentType("B").get();
+
+    cli.loadSymbols(MontiArcMill.globalScope().getFileExt(), path);
+    Collection<ASTMACompilationUnit> asts = cli.parse(".arc", path);
+    cli.runDefaultTasks(asts);
+    ComponentTypeSymbol compC = MontiArcMill.globalScope().resolveComponentType("B").get();
 
     //When
     ComponentTypeSymbol genericType = compC.getSubComponents().get(0).getGenericType();

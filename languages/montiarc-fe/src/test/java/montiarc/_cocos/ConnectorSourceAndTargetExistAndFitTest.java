@@ -4,6 +4,7 @@ package montiarc._cocos;
 import arcbasis._cocos.ConnectorSourceAndTargetExistAndFit;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.stream.Stream;
 
 public class ConnectorSourceAndTargetExistAndFitTest extends AbstractCoCoTest {
@@ -94,8 +96,10 @@ public class ConnectorSourceAndTargetExistAndFitTest extends AbstractCoCoTest {
   @BeforeEach
   public void init() {
     super.init();
-    this.getTool().initializeBasicTypes();
-    this.getTool().parseAll(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, getPackage()))
-      .forEach(ast -> this.getTool().createSymbolTable(ast));
+    this.getCLI().initializeBasicTypes();
+    Collection<ASTMACompilationUnit> asts = this.getCLI().parse(".arc",
+            Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, getPackage()));
+    this.getCLI().createSymbolTable(asts);
+    this.getCLI().completeSymbolTable(asts);
   }
 }

@@ -3,9 +3,10 @@ package montiarc._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Log;
 import montiarc.AbstractTest;
+import montiarc.MontiArcCLI;
 import montiarc.MontiArcMill;
-import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
 import org.apache.commons.io.FilenameUtils;
@@ -15,12 +16,13 @@ import org.junit.jupiter.params.provider.Arguments;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 
 public abstract class AbstractCoCoTest extends AbstractTest {
 
   protected static final String MODEL_PATH = "montiarc/_cocos/";
   protected MontiArcCoCoChecker checker;
-  protected MontiArcTool tool;
+  protected MontiArcCLI cli;
 
   /**
    * This method that facilitates stating arguments for parameterized tests. By using an elliptical parameter this
@@ -35,20 +37,22 @@ public abstract class AbstractCoCoTest extends AbstractTest {
     return Arguments.of(model, errors);
   }
 
-  protected MontiArcTool getTool() {
-    return this.tool;
+  protected MontiArcCLI getCLI() {
+    return this.cli;
   }
 
   @Override
   @BeforeEach
   public void init() {
     super.init();
-    setUpTool();
+    setUpCLI();
     setUpChecker();
   }
 
-  public void setUpTool() {
-    this.tool = new MontiArcTool();
+  public void setUpCLI() {
+    this.cli = new MontiArcCLI();
+    this.getCLI().init();
+    Log.enableFailQuick(false);
   }
 
   protected MontiArcCoCoChecker getChecker() {
@@ -68,8 +72,9 @@ public abstract class AbstractCoCoTest extends AbstractTest {
    */
   protected ASTMACompilationUnit parseAndLoadSymbols(@NotNull String model) {
     Preconditions.checkNotNull(model);
-    ASTMACompilationUnit ast = this.getTool().parse(getPathToModel(model)).orElse(null);
-    this.getTool().createSymbolTable(ast);
+    ASTMACompilationUnit ast = this.getCLI().parse(getPathToModel(model)).orElse(null);
+    this.getCLI().createSymbolTable(ast);
+    this.getCLI().completeSymbolTable(ast);
     return ast;
   }
 
@@ -116,7 +121,13 @@ public abstract class AbstractCoCoTest extends AbstractTest {
 
   protected ASTComponentType parseAndLoadAllSymbols(@NotNull String model) {
     Preconditions.checkNotNull(model);
-    this.getTool().createSymbolTable(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, this.getPackage()));
+    Path path = Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, this.getPackage());
+
+    this.getCLI().loadSymbols(MontiArcMill.globalScope().getFileExt(), path);
+    Collection<ASTMACompilationUnit> asts = this.getCLI().parse(".arc", path);
+    this.getCLI().createSymbolTable(asts);
+    this.getCLI().completeSymbolTable(asts);
+
     Preconditions.checkState(MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model)).isPresent());
     return MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model)).get().getAstNode();
   }

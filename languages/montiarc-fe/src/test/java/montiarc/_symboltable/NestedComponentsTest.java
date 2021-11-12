@@ -6,7 +6,9 @@ import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import montiarc.AbstractTest;
-import montiarc.MontiArcTool;
+import montiarc.MontiArcCLI;
+import montiarc.MontiArcMill;
+import montiarc._ast.ASTMACompilationUnit;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,10 +26,13 @@ public class NestedComponentsTest extends AbstractTest {
   @Test
   public void shouldCreateNestedTypes () {
     // Given
-    MontiArcTool tool = new MontiArcTool();
+    MontiArcCLI cli = new MontiArcCLI();
     Path path = Paths.get(RELATIVE_MODEL_PATH, Test_PATH);
-    IMontiArcGlobalScope scope = tool.processModels(path);
-    ComponentTypeSymbol rootComp = scope.resolveComponentType("WithInnerComponents").get();
+    cli.loadSymbols(MontiArcMill.globalScope().getFileExt(), path);
+    Collection<ASTMACompilationUnit> asts = cli.parse(".arc", path);
+    cli.runDefaultTasks(asts);
+
+    ComponentTypeSymbol rootComp = MontiArcMill.globalScope().resolveComponentType("WithInnerComponents").get();
 
     // When
     List<ComponentTypeSymbol> innerTypes = rootComp.getInnerComponents();

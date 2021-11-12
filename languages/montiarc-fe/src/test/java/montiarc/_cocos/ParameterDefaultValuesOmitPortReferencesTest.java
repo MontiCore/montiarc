@@ -7,6 +7,7 @@ import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
+import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
 import montiarc.util.Error;
 import org.apache.commons.io.FilenameUtils;
@@ -17,7 +18,9 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.stream.Stream;
 
 public class ParameterDefaultValuesOmitPortReferencesTest extends AbstractCoCoTest {
@@ -87,7 +90,11 @@ public class ParameterDefaultValuesOmitPortReferencesTest extends AbstractCoCoTe
 
   protected ASTComponentType parseAndLoadWithPackageSymbols(@NotNull String model) {
     Preconditions.checkNotNull(model);
-    this.getTool().createSymbolTable(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, PACKAGE));
+    Path path = Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, PACKAGE);
+    this.getCLI().loadSymbols(MontiArcMill.globalScope().getFileExt(), path);
+    Collection<ASTMACompilationUnit> asts = this.getCLI().parse(".arc", path);
+    this.getCLI().createSymbolTable(asts);
+    this.getCLI().completeSymbolTable(asts);
     Preconditions.checkState(MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model)).isPresent());
     return MontiArcMill.globalScope().resolveComponentType(FilenameUtils.removeExtension(model)).get().getAstNode();
   }

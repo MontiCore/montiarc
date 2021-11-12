@@ -44,7 +44,7 @@ public class RootComponentTypesNoInstanceNameTest extends AbstractCoCoTest {
     Preconditions.checkNotNull(errors);
 
     //Given
-    Optional<ASTMACompilationUnit> ast = this.getTool().parse(getPathToModel(model));
+    Optional<ASTMACompilationUnit> ast = this.getCLI().parse(getPathToModel(model));
     Preconditions.checkState(ast.isPresent());
 
     //When
@@ -60,7 +60,7 @@ public class RootComponentTypesNoInstanceNameTest extends AbstractCoCoTest {
     Preconditions.checkNotNull(model);
 
     //Given
-    Optional<ASTMACompilationUnit> ast = this.getTool().parse(getPathToModel(model));
+    Optional<ASTMACompilationUnit> ast = this.getCLI().parse(getPathToModel(model));
     Preconditions.checkState(ast.isPresent());
 
     //When
