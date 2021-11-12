@@ -6,6 +6,7 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis._visitor.ArcBasisVisitor2;
+import arcbasis.check.SymTypeOfComponent;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
@@ -120,7 +121,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
       if (!parent.isPresent()) {
         Log.error(ArcError.SYMBOL_NOT_FOUND.format(type), node.get_SourcePositionStart());
       } else {
-        this.getCurrentComponent().get().setParent(parent.get());
+        this.getCurrentComponent().get().setParent(new SymTypeOfComponent(parent.get()));
       }
     }
   }

@@ -445,7 +445,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     getCompleter().visit(childCompHead);
 
     // Then
-    Assertions.assertEquals(parentComp, symChildComp.getParent());
+    Assertions.assertEquals(parentComp, symChildComp.getParent().getTypeInfo());
     Assertions.assertEquals(1, this.getCompleter().getComponentStack().size());
     Assertions.assertTrue(this.getCompleter().getCurrentComponent().isPresent());
     Assertions.assertEquals(symChildComp, this.getCompleter().getCurrentComponent().get());

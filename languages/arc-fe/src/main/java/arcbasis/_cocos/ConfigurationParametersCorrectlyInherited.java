@@ -38,7 +38,7 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
     ComponentTypeSymbol component = node.getSymbol();
     List<VariableSymbol> parameters = component.getParameters();
     if (component.isPresentParentComponent()) {
-      ComponentTypeSymbol parent = component.getParent();
+      ComponentTypeSymbol parent = component.getParent().getTypeInfo();
       List<VariableSymbol> parentParameters = parent.getParameters();
       if (parameters.size() < parentParameters.size()) {
         Log.error(

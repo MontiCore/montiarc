@@ -3,6 +3,7 @@ package arcbasis._symboltable;
 
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.check.SymTypeOfComponent;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.junit.jupiter.api.Assertions;
@@ -47,7 +48,7 @@ public class ComponentTypeSymbolBuilderTest extends AbstractTest {
     ComponentTypeSymbolSurrogate parentComp =
       ArcBasisMill.componentTypeSymbolSurrogateBuilder().setName("A").build();
     ComponentTypeSymbol childComp = ArcBasisMill.componentTypeSymbolBuilder().setName("B")
-      .setSpannedScope(ArcBasisMill.scope()).setParentComponent(parentComp).build();
+      .setSpannedScope(ArcBasisMill.scope()).setParentComponent(new SymTypeOfComponent(parentComp)).build();
     Assertions.assertTrue(childComp.isPresentParentComponent());
   }
 

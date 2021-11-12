@@ -10,6 +10,8 @@ import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.PortSymbol;
+import arcbasis.check.CompSymTypeExpression;
+import arcbasis.check.SymTypeOfComponent;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -182,7 +184,7 @@ public class ParameterDefaultValuesOmitPortReferencesTest extends AbstractTest {
    * method. The component returned by this method accesses the ports of it's parent in the default value expressions of
    * it's configuration parameters.
    */
-  protected ComponentTypeSymbol provideCompWithInheritedPortRef() {
+  protected ComponentTypeSymbol provideCompWithInheritedPortRef(CompSymTypeExpression parent) {
     ComponentTypeSymbol comp = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("WithInheritedPortRef")
       .setSpannedScope(ArcBasisMill.scope())
@@ -196,11 +198,7 @@ public class ParameterDefaultValuesOmitPortReferencesTest extends AbstractTest {
     compAst.setSymbol(comp);
     comp.setAstNode(compAst);
 
-    comp.setParent(ArcBasisMill.componentTypeSymbolSurrogateBuilder()
-      .setName(INDEPENDENT_COMPONENT_NAME)
-      .setEnclosingScope(comp.getSpannedScope())
-      .build()
-    );
+    comp.setParent(parent);
 
     VariableSymbol firstParam = ArcBasisMill.variableSymbolBuilder()
       .setName("firstParam")
@@ -271,7 +269,7 @@ public class ParameterDefaultValuesOmitPortReferencesTest extends AbstractTest {
     // Given
     IArcBasisScope scope = ArcBasisMill.scope();
     ComponentTypeSymbol superComp = provideIndependentComponent();
-    ComponentTypeSymbol comp = provideCompWithInheritedPortRef();
+    ComponentTypeSymbol comp = provideCompWithInheritedPortRef(new SymTypeOfComponent(superComp));
     scope.add(superComp);
     scope.add(comp);
     scope.addSubScope(superComp.getSpannedScope());

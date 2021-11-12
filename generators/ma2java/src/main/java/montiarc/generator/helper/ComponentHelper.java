@@ -374,28 +374,6 @@ public class ComponentHelper {
     return false;
   }
 
-  /**
-   * @return A list of String representations of the actual type arguments assigned to the super component
-   */
-  public List<String> getSuperCompActualTypeArguments() {
-    final List<String> paramList = new ArrayList<>();
-    if (component.isPresentParentComponent()) {
-      final ComponentTypeSymbol componentSymbolReference = component.getParent();
-/*      final List<ActualTypeArgument> actualTypeArgs = componentSymbolReference
-        .getActualTypeArguments();
-      String componentPrefix = this.component.getFullName() + ".";
-      for (ActualTypeArgument actualTypeArg : actualTypeArgs) {
-        final String printedTypeArg = SymbolPrinter.printTypeArgument(actualTypeArg);
-        if (printedTypeArg.startsWith(componentPrefix)) {
-          paramList.add(printedTypeArg.substring(componentPrefix.length()));
-        } else {
-          paramList.add(printedTypeArg);
-        }
-      }*/
-    }
-    return paramList;
-  }
-
   public static List<String> getSuperCompActualTypeArguments(ComponentTypeSymbol component) {
     //TODO implement (to be used in template for component heads instead of parameterless variant)
     return null;
@@ -421,7 +399,7 @@ public class ComponentHelper {
     List<VariableSymbol> configParameters = component.getParameters();
     boolean _isPresentParentComponent = component.isPresentParentComponent();
     if (_isPresentParentComponent) {
-      ComponentTypeSymbol superCompReference = component.getParent();
+      ComponentTypeSymbol superCompReference = component.getParent().getTypeInfo();
       if (superCompReference instanceof ComponentTypeSymbolSurrogate) {
         superCompReference = ((ComponentTypeSymbolSurrogate) superCompReference).lazyLoadDelegate();
       }

@@ -46,6 +46,7 @@ public class ArcDeriveSymTypeOfCommonExpression extends DeriveSymTypeOfCommonExp
 
   @Override
   public void traverse(ASTCallExpression expr) {
+    super.traverse(expr);
     NameToCallExpressionVisitor visitor = new NameToCallExpressionVisitor();
     CommonExpressionsTraverser traverser = CommonExpressionsMill.traverser();
     traverser.setCommonExpressionsHandler(visitor);

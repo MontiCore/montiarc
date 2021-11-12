@@ -1,20 +1,24 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.check.CompSymTypeExpression;
 import com.google.common.base.Preconditions;
-import de.monticore.symboltable.modifiers.AccessModifier;
-import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
-import org.codehaus.commons.nullanalysis.Nullable;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symboltable.modifiers.AccessModifier;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.codehaus.commons.nullanalysis.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
 
   protected ComponentTypeSymbol outerComponent;
-  protected ComponentTypeSymbol parent;
+  protected CompSymTypeExpression parent;
   protected List<VariableSymbol> parameters;
   protected List<TypeVarSymbol> typeParameters;
 
@@ -106,18 +110,15 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return this component's parent component.
    * @throws IllegalStateException if this component has no parent.
    */
-  public ComponentTypeSymbol getParent() {
+  public CompSymTypeExpression getParent() {
     Preconditions.checkState(this.isPresentParentComponent());
-    if (parent instanceof ComponentTypeSymbolSurrogate) {
-      this.parent = ((ComponentTypeSymbolSurrogate) parent).lazyLoadDelegate();
-    }
     return this.parent;
   }
 
   /**
    * @param parent this component type's parent component type.
    */
-  public void setParent(@Nullable ComponentTypeSymbol parent) {
+  public void setParent(@Nullable CompSymTypeExpression parent) {
     this.parent = parent;
   }
 
@@ -126,6 +127,11 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    */
   public List<VariableSymbol> getParameters() {
     return this.parameters;
+  }
+
+  public Optional<VariableSymbol> getParameter(@NotNull String parameterName) {
+    Preconditions.checkArgument(parameterName != null);
+    return this.getParameters().stream().filter(v -> v.getName().equals(parameterName)).findFirst();
   }
 
   /**
@@ -396,7 +402,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
     List<PortSymbol> result = new ArrayList<>(getPorts());
     if (this.isPresentParentComponent()) {
       List<PortSymbol> inheritedPorts = new ArrayList<>();
-      for (PortSymbol port : this.getParent().getAllPorts()) {
+      for (PortSymbol port : this.getParent().getTypeInfo().getAllPorts()) {
         if (result.stream().noneMatch(p -> p.getName().equals(port.getName()))) {
           inheritedPorts.add(port);
         }

@@ -108,6 +108,30 @@ public class ComponentTypeSymbolTest extends AbstractTest {
   }
 
   @Test
+  public void shouldReturnParametersIfPresent() {
+    // Given
+    ComponentTypeSymbol compWithoutParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp1")
+      .setSpannedScope(ArcBasisMill.scope()).build();
+    ComponentTypeSymbol compWithParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp2")
+      .setSpannedScope(ArcBasisMill.scope()).build();
+    List<VariableSymbol> params = Arrays.asList(
+      ArcBasisMill.variableSymbolBuilder().setName("first").build(),
+      ArcBasisMill.variableSymbolBuilder().setName("second").build(),
+      ArcBasisMill.variableSymbolBuilder().setName("third").build()
+    );
+
+    // When
+    params.forEach(compWithParameters.getSpannedScope()::add);
+    compWithParameters.addParameters(params);
+
+    // Then
+    for(VariableSymbol param : params) {
+      Assertions.assertTrue(compWithParameters.getParameter(param.getName()).isPresent());
+      Assertions.assertFalse(compWithoutParameters.getParameter(param.getName()).isPresent());
+    }
+  }
+
+  @Test
   public void shouldStateIfHasTypeParameters() {
     ComponentTypeSymbol compWithoutTypeParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp1")
       .setSpannedScope(ArcBasisMill.scope()).build();
