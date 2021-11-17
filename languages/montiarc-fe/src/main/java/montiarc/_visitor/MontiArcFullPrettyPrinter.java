@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._visitor;
 
+import arcautomaton._visitor.ArcAutomatonPrettyPrinter;
 import arcbasis._visitor.ArcBasisPrettyPrinter;
 import comfortablearc._visitor.ComfortableArcPrettyPrinter;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -9,6 +10,9 @@ import de.monticore.expressions.prettyprint.CommonExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.ExpressionsBasisPrettyPrinter;
 import de.monticore.literals.prettyprint.MCCommonLiteralsPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.prettyprint.SCActionsPrettyPrinter;
+import de.monticore.prettyprint.SCBasisPrettyPrinter;
+import de.monticore.prettyprint.SCTransitions4CodePrettyPrinter;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.statements.prettyprint.MCCommonStatementsPrettyPrinter;
 import de.monticore.statements.prettyprint.MCVarDeclarationStatementsPrettyPrinter;
@@ -49,7 +53,17 @@ public class MontiArcFullPrettyPrinter {
     MCVarDeclarationStatementsPrettyPrinter mcVarDeclarationStatementsPrettyPrinter = new MCVarDeclarationStatementsPrettyPrinter(printer);
     traverser.setMCVarDeclarationStatementsHandler(mcVarDeclarationStatementsPrettyPrinter);
     traverser.add4MCVarDeclarationStatements(mcVarDeclarationStatementsPrettyPrinter);
-  
+
+    SCTransitions4CodePrettyPrinter scTransitions4CodePrettyPrinter = new SCTransitions4CodePrettyPrinter(printer);
+    traverser.setSCTransitions4CodeHandler(scTransitions4CodePrettyPrinter);
+    ArcAutomatonPrettyPrinter arcAutomatonPrettyPrinter = new ArcAutomatonPrettyPrinter(printer);
+    traverser.setArcAutomatonHandler(arcAutomatonPrettyPrinter);
+    traverser.add4ArcAutomaton(arcAutomatonPrettyPrinter);
+    SCBasisPrettyPrinter scBasisPrettyPrinter = new SCBasisPrettyPrinter(printer);
+    traverser.setSCBasisHandler(scBasisPrettyPrinter);
+    SCActionsPrettyPrinter scActionsPrettyPrinter = new SCActionsPrettyPrinter(printer);
+    traverser.setSCActionsHandler(scActionsPrettyPrinter);
+
     ExpressionsBasisPrettyPrinter expressionsBasisPrettyPrinter = new ExpressionsBasisPrettyPrinter(printer);
     traverser.setExpressionsBasisHandler(expressionsBasisPrettyPrinter);
     traverser.add4ExpressionsBasis(expressionsBasisPrettyPrinter);
