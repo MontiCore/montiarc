@@ -65,13 +65,13 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     this.getComponentStack().push(symbol);
   }
 
-  protected CompSymTypeExpression currentCompInstanceType;
+  protected CompTypeExpression currentCompInstanceType;
 
-  protected Optional<CompSymTypeExpression> getCurrentCompInstanceType() {
+  protected Optional<CompTypeExpression> getCurrentCompInstanceType() {
     return Optional.ofNullable((this.currentCompInstanceType));
   }
 
-  protected void setCurrentCompInstanceType(@Nullable CompSymTypeExpression currentCompInstanceType) {
+  protected void setCurrentCompInstanceType(@Nullable CompTypeExpression currentCompInstanceType) {
     this.currentCompInstanceType = currentCompInstanceType;
   }
 
@@ -89,16 +89,16 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   }
 
   /**
-   * Used to create {@link CompSymTypeExpression}s from the {@link ASTMCType}s that declare the types of component
+   * Used to create {@link CompTypeExpression}s from the {@link ASTMCType}s that declare the types of component
    * instances within {@link ASTComponentInstantiation}s.
    */
-  protected ISynthesizeCompSymTypeExpression compTypeExpressionSynth;
+  protected ISynthesizeCompTypeExpression compTypeExpressionSynth;
 
-  public void setCompTypeExpressionSynth(@NotNull ISynthesizeCompSymTypeExpression compTypeExpressionSynth) {
+  public void setCompTypeExpressionSynth(@NotNull ISynthesizeCompTypeExpression compTypeExpressionSynth) {
     this.compTypeExpressionSynth = Preconditions.checkNotNull(compTypeExpressionSynth);
   }
 
-  public ISynthesizeCompSymTypeExpression getCompTypeExpressionSynth() {
+  public ISynthesizeCompTypeExpression getCompTypeExpressionSynth() {
     return this.compTypeExpressionSynth;
   }
 
@@ -111,7 +111,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   }
 
   public ArcBasisSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter,
-                                      @NotNull ISynthesizeCompSymTypeExpression compTypeExpressionSynth) {
+                                      @NotNull ISynthesizeCompTypeExpression compTypeExpressionSynth) {
     this.typePrinter = Preconditions.checkNotNull(typePrinter);
     this.compTypeExpressionSynth = Preconditions.checkNotNull(compTypeExpressionSynth);
     this.componentStack = new Stack<>();
@@ -128,7 +128,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     }
   }
 
-  protected CompSymTypeExpression typeExprForDirectComponentInstantiation(@NotNull ASTComponentType node) {
+  protected CompTypeExpression typeExprForDirectComponentInstantiation(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
     Preconditions.checkArgument(node.getSymbol().getTypeParameters().isEmpty(),
@@ -138,7 +138,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
       node.getSymbol().getTypeParameters().stream().map(ISymbol::getName).reduce("", (a, b) -> a + "'" + b + "' "),
       node.get_SourcePositionStart());
 
-    return new SymTypeOfComponent(node.getSymbol());
+    return new TypeExprOfComponent(node.getSymbol());
   }
 
   @Override
@@ -166,7 +166,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
       if (!parent.isPresent()) {
         Log.error(ArcError.SYMBOL_NOT_FOUND.format(type), node.get_SourcePositionStart());
       } else {
-        this.getCurrentComponent().get().setParent(new SymTypeOfComponent(parent.get()));
+        this.getCurrentComponent().get().setParent(new TypeExprOfComponent(parent.get()));
       }
     }
   }
@@ -176,7 +176,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getEnclosingScope());
 
-    Optional<CompSymTypeExpression> compTypeExpr = this.getCompTypeExpressionSynth().synthesizeFrom(node.getMCType());
+    Optional<CompTypeExpression> compTypeExpr = this.getCompTypeExpressionSynth().synthesizeFrom(node.getMCType());
     if(compTypeExpr.isPresent()) {
       this.setCurrentCompInstanceType(compTypeExpr.get());
     } else {

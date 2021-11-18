@@ -14,9 +14,9 @@ import java.util.Optional;
  * Represents component types that are solely defined by their type symbol. I.e. they, for example, are not generic and
  * do not feature type parameters.
  */
-public class SymTypeOfComponent extends CompSymTypeExpression {
+public class TypeExprOfComponent extends CompTypeExpression {
 
-  public SymTypeOfComponent(@NotNull ComponentTypeSymbol compTypeSymbol) {
+  public TypeExprOfComponent(@NotNull ComponentTypeSymbol compTypeSymbol) {
     super(compTypeSymbol);
   }
 
@@ -31,7 +31,7 @@ public class SymTypeOfComponent extends CompSymTypeExpression {
   }
 
   @Override
-  public Optional<CompSymTypeExpression> getParentTypeExpr() {
+  public Optional<CompTypeExpression> getParentTypeExpr() {
     if (this.getTypeInfo().isPresentParentComponent()) {
       return Optional.of(this.getTypeInfo().getParent());
     } else {
@@ -54,12 +54,12 @@ public class SymTypeOfComponent extends CompSymTypeExpression {
   }
 
   @Override
-  public CompSymTypeExpression deepClone() {
-    return new SymTypeOfComponent(this.getTypeInfo());
+  public CompTypeExpression deepClone() {
+    return new TypeExprOfComponent(this.getTypeInfo());
   }
 
   @Override
-  public boolean deepEquals(@NotNull CompSymTypeExpression compSymType) {
+  public boolean deepEquals(@NotNull CompTypeExpression compSymType) {
     Preconditions.checkNotNull(compSymType);
     return this.getTypeInfo().equals(compSymType.getTypeInfo());
   }

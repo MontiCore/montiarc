@@ -4,7 +4,7 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis.check.CompSymTypeExpression;
+import arcbasis.check.CompTypeExpression;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
@@ -66,7 +66,7 @@ public class NoSubComponentReferenceCycles implements ArcBasisASTComponentTypeCo
 
     Collection<ComponentTypeSymbol> instantiatedTypes = trace.peekLast().getSubComponents().stream()
       .map(ComponentInstanceSymbol::getType)
-      .map(CompSymTypeExpression::getTypeInfo)
+      .map(CompTypeExpression::getTypeInfo)
       .distinct()
       .collect(Collectors.toList());
 

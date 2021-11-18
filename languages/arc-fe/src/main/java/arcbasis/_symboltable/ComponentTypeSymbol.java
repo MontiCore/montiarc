@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.check.CompSymTypeExpression;
+import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
 
   protected ComponentTypeSymbol outerComponent;
-  protected CompSymTypeExpression parent;
+  protected CompTypeExpression parent;
   protected List<VariableSymbol> parameters;
   protected List<TypeVarSymbol> typeParameters;
 
@@ -111,7 +111,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return this component's parent component.
    * @throws IllegalStateException if this component has no parent.
    */
-  public CompSymTypeExpression getParent() {
+  public CompTypeExpression getParent() {
     Preconditions.checkState(this.isPresentParentComponent());
     return this.parent;
   }
@@ -119,7 +119,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   /**
    * @param parent this component type's parent component type.
    */
-  public void setParent(@Nullable CompSymTypeExpression parent) {
+  public void setParent(@Nullable CompTypeExpression parent) {
     this.parent = parent;
   }
 

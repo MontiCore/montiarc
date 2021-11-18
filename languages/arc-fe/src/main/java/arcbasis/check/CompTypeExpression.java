@@ -10,15 +10,15 @@ import java.util.Optional;
 
 /**
  * Represents all sorts of component types that component instances can have or that can be parents of other component
- * types. E.g., a {@code CompSymTypeExpression} can represent a generic component type whose type arguments are filled:
+ * types. E.g., a {@code CompTypeExpression} can represent a generic component type whose type arguments are filled:
  * {@code MyComp<Integer>}. This is not representable by Symbols alone, as generic component types only have unspecific
  * type parameters ({@code MyComp<T>}.
  */
-public abstract class CompSymTypeExpression {
+public abstract class CompTypeExpression {
 
   protected final ComponentTypeSymbol compTypeSymbol;
 
-  protected CompSymTypeExpression(@NotNull ComponentTypeSymbol compTypeSymbol) {
+  protected CompTypeExpression(@NotNull ComponentTypeSymbol compTypeSymbol) {
     Preconditions.checkNotNull(compTypeSymbol);
     this.compTypeSymbol = compTypeSymbol;
   }
@@ -32,16 +32,16 @@ public abstract class CompSymTypeExpression {
   public abstract String printFullName();
 
   /**
-   * @return The CompSymTypeExpression that represents this component's parent. E.g., if this component's type
+   * @return The CompTypeExpression that represents this component's parent. E.g., if this component's type
    * expression is {@code Comp<Person>} and the definition of Comp is {@code Comp<T> extends Parent<List<T>>}, then the
-   * returned CompSymTypeExpression represents {@code Parent<List<Person>>}. The returned CompSymTypeExpression is
+   * returned CompTypeExpression represents {@code Parent<List<Person>>}. The returned CompTypeExpression is
    * enclosed in an {@code Optional}. The Optional is empty {@code Optional} if the component has no parent component.
    */
-  public abstract Optional<CompSymTypeExpression> getParentTypeExpr();
+  public abstract Optional<CompTypeExpression> getParentTypeExpr();
 
   /**
    * Returns the SymTypeExpression of the type of the port specified by {@code portName}. If the port's type depends on
-   * type parameters which are assigned by this CompSymTypeExpression, they are resolved in the returned
+   * type parameters which are assigned by this CompTypeExpression, they are resolved in the returned
    * SymTypeExpression. E.g., let assume this component's type expression is {@code Comp<Person>} and Comp is defined by
    * {@code Comp<T>}, having a port of type {@code T}. Then, as the type argument for {@code T} is {@code Person}, the
    * SymTypeExpression returned by this method will be {@code Person} for that port.
@@ -54,7 +54,7 @@ public abstract class CompSymTypeExpression {
 
   /**
    * Returns the SymTypeExpression of the type of the parameter specified by {@code parameterName}. If the parameter's
-   * type depends on type parameters which are assigned by this CompSymTypeExpression, they are resolved in the returned
+   * type depends on type parameters which are assigned by this CompTypeExpression, they are resolved in the returned
    * SymTypeExpression. E.g., let assume this component's type expression is {@code Comp<Person>} and Comp is defined by
    * {@code Comp<T>}, having a parameter of type {@code T}. Then, as the type argument for {@code T} is {@code Person},
    * the SymTypeExpression returned by this method will be {@code Person} for that parameter.
@@ -65,7 +65,7 @@ public abstract class CompSymTypeExpression {
    */
   public abstract Optional<SymTypeExpression> getTypeExprOfParameter(@NotNull String parameterName);
 
-  public abstract CompSymTypeExpression deepClone();
+  public abstract CompTypeExpression deepClone();
 
-  public abstract boolean deepEquals(@NotNull CompSymTypeExpression compSymType);
+  public abstract boolean deepEquals(@NotNull CompTypeExpression compSymType);
 }

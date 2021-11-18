@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
-import arcbasis.check.CompSymTypeExpression;
-import arcbasis.check.ISynthesizeCompSymTypeExpression;
+import arcbasis.check.CompTypeExpression;
+import arcbasis.check.ISynthesizeCompTypeExpression;
 import arcbasis.check.SynthCompTypeExprFromMCBasicTypes;
 import arcbasis.check.SynthCompTypeResult;
 import montiarc.MontiArcMill;
@@ -12,9 +12,9 @@ import java.util.Optional;
 
 /**
  * A composed visitor for MontiArc that takes component type expressions represented as
- * {@link de.monticore.types.mcbasictypes._ast.ASTMCType} and creates {@link CompSymTypeExpression}s from them.
+ * {@link de.monticore.types.mcbasictypes._ast.ASTMCType} and creates {@link CompTypeExpression}s from them.
  */
-public class SynthMontiArcCompTypeExpression implements ISynthesizeCompSymTypeExpression {
+public class SynthMontiArcCompTypeExpression implements ISynthesizeCompTypeExpression {
   protected MontiArcTraverser traverser;
   protected SynthCompTypeResult resultWrapper;
 
@@ -41,7 +41,7 @@ public class SynthMontiArcCompTypeExpression implements ISynthesizeCompSymTypeEx
   }
 
   @Override
-  public Optional<CompSymTypeExpression>  getResult() {
+  public Optional<CompTypeExpression>  getResult() {
     return resultWrapper.getCurrentResult();
   }
 }

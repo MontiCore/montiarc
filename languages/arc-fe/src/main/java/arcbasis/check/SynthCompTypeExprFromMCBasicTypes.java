@@ -14,7 +14,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import java.util.Optional;
 
 /**
- * A visitor (a handler indeed) that creates {@link CompSymTypeExpression}s from {@link ASTMCQualifiedType}s, given that
+ * A visitor (a handler indeed) that creates {@link CompTypeExpression}s from {@link ASTMCQualifiedType}s, given that
  * there is a ComponentTypeSymbol which is resolvable through the name represented by the {@link ASTMCQualifiedType}.
  */
 public class SynthCompTypeExprFromMCBasicTypes implements MCBasicTypesHandler {
@@ -52,7 +52,7 @@ public class SynthCompTypeExprFromMCBasicTypes implements MCBasicTypesHandler {
       Log.error(ArcError.SYMBOL_NOT_FOUND.format(compTypeName), mcType.get_SourcePositionStart());
       resultWrapper.setCurrentResultAbsent();
     } else {
-      resultWrapper.setCurrentResult(new SymTypeOfComponent(compType.get()));
+      resultWrapper.setCurrentResult(new TypeExprOfComponent(compType.get()));
     }
   }
 }

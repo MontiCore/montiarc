@@ -30,11 +30,11 @@ public class SynthArcBasisCompTypeExpressionTest extends AbstractTest {
     SynthArcBasisCompTypeExpression synth = new SynthArcBasisCompTypeExpression();
 
     // When
-    Optional<CompSymTypeExpression> result = synth.synthesizeFrom(astComp);
+    Optional<CompTypeExpression> result = synth.synthesizeFrom(astComp);
 
     // Then
     Assertions.assertTrue(result.isPresent());
-    Assertions.assertTrue(result.get() instanceof SymTypeOfComponent);
+    Assertions.assertTrue(result.get() instanceof TypeExprOfComponent);
     Assertions.assertEquals(compSym, result.get().getTypeInfo());
   }
 
@@ -47,7 +47,7 @@ public class SynthArcBasisCompTypeExpressionTest extends AbstractTest {
     SynthArcBasisCompTypeExpression synth = new SynthArcBasisCompTypeExpression();
 
     // When
-    Optional<CompSymTypeExpression> result = synth.synthesizeFrom(astComp);
+    Optional<CompTypeExpression> result = synth.synthesizeFrom(astComp);
 
     // Then
     Assertions.assertFalse(result.isPresent());

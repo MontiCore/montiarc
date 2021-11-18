@@ -5,7 +5,7 @@ import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
 import arcbasis._visitor.ArcBasisTraverser;
-import arcbasis.check.SymTypeOfComponent;
+import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
@@ -306,7 +306,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     Assertions.assertTrue(this.getCompleter().getCurrentComponent().isPresent());
     Assertions.assertEquals(ast.getSymbol(), this.getCompleter().getCurrentComponent().get());
     Assertions.assertTrue(this.getCompleter().getCurrentCompInstanceType().isPresent());
-    Assertions.assertTrue(this.getCompleter().getCurrentCompInstanceType().get() instanceof SymTypeOfComponent);
+    Assertions.assertTrue(this.getCompleter().getCurrentCompInstanceType().get() instanceof TypeExprOfComponent);
     Assertions.assertEquals(symbol, this.getCompleter().getCurrentCompInstanceType().get().getTypeInfo());
   }
 
@@ -392,7 +392,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     ast.getSymbol().setAstNode(ast);
 
     this.getCompleter().putOnStack(ast.getSymbol());
-    this.getCompleter().setCurrentCompInstanceType(new SymTypeOfComponent(ast.getSymbol()));
+    this.getCompleter().setCurrentCompInstanceType(new TypeExprOfComponent(ast.getSymbol()));
 
     // When
     this.getCompleter().endVisit(ast);
@@ -533,7 +533,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
 
     // Then
     Assertions.assertTrue(getCompleter().getCurrentCompInstanceType().isPresent());
-    Assertions.assertTrue(getCompleter().getCurrentCompInstanceType().get() instanceof SymTypeOfComponent);
+    Assertions.assertTrue(getCompleter().getCurrentCompInstanceType().get() instanceof TypeExprOfComponent);
     Assertions.assertEquals(compTypeSym.get(), getCompleter().getCurrentCompInstanceType().get().getTypeInfo());
   }
 
@@ -546,7 +546,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
       throw new IllegalStateException("We expect the component type 'Comp' to be added to the global scope by the " +
         "provider of the ASTComponentInstantiation.");
     }
-    getCompleter().setCurrentCompInstanceType(new SymTypeOfComponent(compTypeSym.get()));
+    getCompleter().setCurrentCompInstanceType(new TypeExprOfComponent(compTypeSym.get()));
 
     // When
     getCompleter().endVisit(instantiation);
@@ -570,14 +570,14 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
       .setName("CompType")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
-    getCompleter().setCurrentCompInstanceType(new SymTypeOfComponent(compType));
+    getCompleter().setCurrentCompInstanceType(new TypeExprOfComponent(compType));
 
     // When
     getCompleter().visit(astInstance);
 
     // Then
     Assertions.assertDoesNotThrow(astInstance.getSymbol()::getType);
-    Assertions.assertTrue(astInstance.getSymbol().getType() instanceof SymTypeOfComponent);
+    Assertions.assertTrue(astInstance.getSymbol().getType() instanceof TypeExprOfComponent);
     Assertions.assertEquals(compType, astInstance.getSymbol().getType().getTypeInfo());
   }
 
@@ -602,7 +602,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     // Then
     for (ASTComponentInstance astInst : astInstantiation.getComponentInstanceList()) {
       Assertions.assertDoesNotThrow(astInst.getSymbol()::getType);
-      Assertions.assertTrue(astInst.getSymbol().getType() instanceof  SymTypeOfComponent);
+      Assertions.assertTrue(astInst.getSymbol().getType() instanceof TypeExprOfComponent);
       Assertions.assertEquals(compTypeSym.get(), astInst.getSymbol().getType().getTypeInfo());
     }
   }

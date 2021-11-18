@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.check.CompSymTypeExpression;
+import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -10,7 +10,7 @@ import java.util.*;
 
 public class ComponentInstanceSymbol extends ComponentInstanceSymbolTOP {
 
-  protected CompSymTypeExpression type;
+  protected CompTypeExpression type;
   protected List<ASTExpression> arguments;
 
   /**
@@ -24,7 +24,7 @@ public class ComponentInstanceSymbol extends ComponentInstanceSymbolTOP {
   /**
    * @return the type of this component
    */
-  public CompSymTypeExpression getType() {
+  public CompTypeExpression getType() {
     Preconditions.checkState(this.type != null,
       "Type of component instance '%s' has not been set yet.", this.getFullName());
     return this.type;
@@ -33,7 +33,7 @@ public class ComponentInstanceSymbol extends ComponentInstanceSymbolTOP {
   /**
    * @param type the type of this component
    */
-  public void setType(CompSymTypeExpression type) {
+  public void setType(CompTypeExpression type) {
     this.type = type;
   }
 

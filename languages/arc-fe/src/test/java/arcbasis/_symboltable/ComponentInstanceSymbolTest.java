@@ -3,7 +3,7 @@ package arcbasis._symboltable;
 
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis.check.CompSymTypeExpression;
+import arcbasis.check.CompTypeExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ public class ComponentInstanceSymbolTest extends AbstractTest {
   @Test
   public void shouldAddArguments() {
     ComponentInstanceSymbol symbol = ArcBasisMill.componentInstanceSymbolBuilder()
-      .setName("a").setType(mock(CompSymTypeExpression.class)).build();
+      .setName("a").setType(mock(CompTypeExpression.class)).build();
     Assertions.assertEquals(symbol.getArguments().size(), 0);
     symbol.addArguments(Arrays.asList(mock(ASTExpression.class), mock(ASTExpression.class)));
     Assertions.assertEquals(symbol.getArguments().size(), 2);

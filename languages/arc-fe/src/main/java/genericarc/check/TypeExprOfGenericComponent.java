@@ -3,8 +3,8 @@ package genericarc.check;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
-import arcbasis.check.CompSymTypeExpression;
-import arcbasis.check.SymTypeOfComponent;
+import arcbasis.check.CompTypeExpression;
+import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -17,12 +17,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Represents generic component types with filled type parameters. E.g., a {@code SymTypeOfGenericComponent} can
+ * Represents generic component types with filled type parameters. E.g., a {@code TypeExprOfGenericComponent} can
  * represent generic component type usages, such as, {@code MyComp<Person>} and {@code OtherComp<List<T>>}. Note,
  * however, that {@code Person}, {@code List<>}, and {@code T} must be accessible type symbols in the enclosing scope
  * of the generic component type usage.
  */
-public class SymTypeOfGenericComponent extends CompSymTypeExpression {
+public class TypeExprOfGenericComponent extends CompTypeExpression {
 
   protected final ImmutableMap<TypeVarSymbol, SymTypeExpression> typeVarBindings;
 
@@ -30,8 +30,8 @@ public class SymTypeOfGenericComponent extends CompSymTypeExpression {
     return this.typeVarBindings;
   }
 
-  public SymTypeOfGenericComponent(@NotNull ComponentTypeSymbol compTypeSymbol,
-                                   @NotNull List<SymTypeExpression> typeArguments) {
+  public TypeExprOfGenericComponent(@NotNull ComponentTypeSymbol compTypeSymbol,
+                                    @NotNull List<SymTypeExpression> typeArguments) {
     super(compTypeSymbol);
     Preconditions.checkNotNull(typeArguments);
     Preconditions.checkArgument(compTypeSymbol.getSpannedScope().getTypeVarSymbols().size() == typeArguments.size(),
@@ -73,20 +73,20 @@ public class SymTypeOfGenericComponent extends CompSymTypeExpression {
   }
 
   @Override
-  public Optional<CompSymTypeExpression> getParentTypeExpr() {
+  public Optional<CompTypeExpression> getParentTypeExpr() {
     if (!this.getTypeInfo().isPresentParentComponent()) {
       return Optional.empty();
     }
 
-    CompSymTypeExpression unboundParentExpr = this.getTypeInfo().getParent();
-    if (unboundParentExpr instanceof SymTypeOfComponent) {
+    CompTypeExpression unboundParentExpr = this.getTypeInfo().getParent();
+    if (unboundParentExpr instanceof TypeExprOfComponent) {
       return Optional.of(unboundParentExpr);
-    } else if (unboundParentExpr instanceof SymTypeOfGenericComponent) {
-      return Optional.of(((SymTypeOfGenericComponent) unboundParentExpr).bindTypeParameter(this.typeVarBindings));
+    } else if (unboundParentExpr instanceof TypeExprOfGenericComponent) {
+      return Optional.of(((TypeExprOfGenericComponent) unboundParentExpr).bindTypeParameter(this.typeVarBindings));
     } else {
       throw new UnsupportedOperationException("Encountered a type expression for components that is not known." +
         String.format(" (We only know '%s' and '%s')",
-          SymTypeOfComponent.class.getName(), SymTypeOfGenericComponent.class.getName()
+          TypeExprOfComponent.class.getName(), TypeExprOfGenericComponent.class.getName()
         )
       );
     }
@@ -144,14 +144,14 @@ public class SymTypeOfGenericComponent extends CompSymTypeExpression {
   }
 
   /**
-   * If this {@code SymTypeOfGenericComponent} references type variables (e.g. the type {@code Comp<List<T>>}) and you
+   * If this {@code TypeExprOfGenericComponent} references type variables (e.g. the type {@code Comp<List<T>>}) and you
    * provide a {@link SymTypeExpression} mapping for that type variable, this method returns a {@code
-   * SymTypeOfGenericComponent} where that type variable has been reset by the SymTypeExpression you provided. E.g., if
+   * TypeExprOfGenericComponent} where that type variable has been reset by the SymTypeExpression you provided. E.g., if
    * you provide the mapping {@code T -> Person} for the above given example component, then this method would return
    * {@code Comp<List<Person>>}. If you provide mappings for type variables that do not appear in the component type
    * expression, then these will be ignored.
    */
-  public SymTypeOfGenericComponent bindTypeParameter(@NotNull Map<TypeVarSymbol, SymTypeExpression> typeVarBindings) {
+  public TypeExprOfGenericComponent bindTypeParameter(@NotNull Map<TypeVarSymbol, SymTypeExpression> typeVarBindings) {
     Preconditions.checkNotNull(typeVarBindings);
 
     ImmutableList.Builder<SymTypeExpression> newBindings = ImmutableList.builder();
@@ -160,25 +160,25 @@ public class SymTypeOfGenericComponent extends CompSymTypeExpression {
       if (unboundTypeArg.isTypeConstant())
         newBindings.add(this.createBoundTypeExpression(unboundTypeArg).orElseThrow(IllegalStateException::new));
     }
-    return new SymTypeOfGenericComponent(this.getTypeInfo(), newBindings.build());
+    return new TypeExprOfGenericComponent(this.getTypeInfo(), newBindings.build());
   }
 
   @Override
-  public SymTypeOfGenericComponent deepClone() {
+  public TypeExprOfGenericComponent deepClone() {
     List<SymTypeExpression> clonedBindings = this.getBindingsAsList().stream()
       .map(SymTypeExpression::deepClone)
       .collect(Collectors.toList());
-    return new SymTypeOfGenericComponent(this.getTypeInfo(), clonedBindings);
+    return new TypeExprOfGenericComponent(this.getTypeInfo(), clonedBindings);
   }
 
   @Override
-  public boolean deepEquals(@NotNull CompSymTypeExpression compSymType) {
+  public boolean deepEquals(@NotNull CompTypeExpression compSymType) {
     Preconditions.checkNotNull(compSymType);
 
-    if(!(compSymType instanceof SymTypeOfGenericComponent)) {
+    if(!(compSymType instanceof TypeExprOfGenericComponent)) {
       return false;
     }
-    SymTypeOfGenericComponent otherCompExpr = (SymTypeOfGenericComponent) compSymType;
+    TypeExprOfGenericComponent otherCompExpr = (TypeExprOfGenericComponent) compSymType;
 
     boolean equal = this.getTypeInfo().equals(compSymType.getTypeInfo());
     equal &= this.getBindingsAsList().size() == otherCompExpr.getBindingsAsList().size();

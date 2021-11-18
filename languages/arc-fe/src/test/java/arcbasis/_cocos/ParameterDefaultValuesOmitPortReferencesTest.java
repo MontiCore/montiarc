@@ -10,8 +10,8 @@ import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.PortSymbol;
-import arcbasis.check.CompSymTypeExpression;
-import arcbasis.check.SymTypeOfComponent;
+import arcbasis.check.CompTypeExpression;
+import arcbasis.check.TypeExprOfComponent;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -125,13 +125,13 @@ public class ParameterDefaultValuesOmitPortReferencesTest extends AbstractTest {
 
       ComponentInstanceSymbol independentCompInst = ArcBasisMill.componentInstanceSymbolBuilder()
         .setName("independentComp")
-        .setType(new SymTypeOfComponent(provideIndependentComponent()))
+        .setType(new TypeExprOfComponent(provideIndependentComponent()))
         .build();
       comp.getSpannedScope().add(independentCompInst);
 
       ComponentInstanceSymbol independentChildInst = ArcBasisMill.componentInstanceSymbolBuilder()
         .setName("independentComp2")
-        .setType(new SymTypeOfComponent(provideIndependentComponent()))
+        .setType(new TypeExprOfComponent(provideIndependentComponent()))
         .build();
       comp.getSpannedScope().add(independentChildInst);
 
@@ -204,7 +204,7 @@ public class ParameterDefaultValuesOmitPortReferencesTest extends AbstractTest {
    * default value expressions of it's configuration parameters. If the provided component type has not been added to
    * the global scope yet, this method also adds it to the global scope.
    */
-  protected ComponentTypeSymbol provideCompWithInheritedPortRef(CompSymTypeExpression parent) {
+  protected ComponentTypeSymbol provideCompWithInheritedPortRef(CompTypeExpression parent) {
     ComponentTypeSymbol comp = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("WithInheritedPortRef")
       .setSpannedScope(ArcBasisMill.scope())
@@ -286,7 +286,7 @@ public class ParameterDefaultValuesOmitPortReferencesTest extends AbstractTest {
     // Given
     IArcBasisScope scope = ArcBasisMill.scope();
     ComponentTypeSymbol superComp = provideIndependentComponent();
-    ComponentTypeSymbol comp = provideCompWithInheritedPortRef(new SymTypeOfComponent(superComp));
+    ComponentTypeSymbol comp = provideCompWithInheritedPortRef(new TypeExprOfComponent(superComp));
     scope.add(superComp);
     scope.add(comp);
     scope.addSubScope(superComp.getSpannedScope());

@@ -16,7 +16,7 @@ import de.monticore.types.mccollectiontypes._ast.ASTMCPrimitiveTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericTypeBuilder;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCCustomTypeArgument;
-import genericarc.check.SymTypeOfGenericComponent;
+import genericarc.check.TypeExprOfGenericComponent;
 import montiarc.AbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._symboltable.IMontiArcScope;
@@ -108,13 +108,13 @@ public class SynthCompTypeExprFromMCSimpleGenericTypesTest extends AbstractTest 
     // Then
     Assertions.assertTrue(result4normal.getCurrentResult().isPresent());
     Assertions.assertTrue(result4qual.getCurrentResult().isPresent());
-    Assertions.assertTrue(result4normal.getCurrentResult().get() instanceof SymTypeOfGenericComponent);
-    Assertions.assertTrue(result4qual.getCurrentResult().get() instanceof SymTypeOfGenericComponent);
+    Assertions.assertTrue(result4normal.getCurrentResult().get() instanceof TypeExprOfGenericComponent);
+    Assertions.assertTrue(result4qual.getCurrentResult().get() instanceof TypeExprOfGenericComponent);
 
-    SymTypeOfGenericComponent result4normalAsGeneric =
-      (SymTypeOfGenericComponent) result4normal.getCurrentResult().get();
-    SymTypeOfGenericComponent result4qualAsGeneric =
-      (SymTypeOfGenericComponent) result4qual.getCurrentResult().get();
+    TypeExprOfGenericComponent result4normalAsGeneric =
+      (TypeExprOfGenericComponent) result4normal.getCurrentResult().get();
+    TypeExprOfGenericComponent result4qualAsGeneric =
+      (TypeExprOfGenericComponent) result4qual.getCurrentResult().get();
 
     Assertions.assertEquals(compSym, result4normal.getCurrentResult().get().getTypeInfo());
     Assertions.assertEquals(compSym, result4qual.getCurrentResult().get().getTypeInfo());

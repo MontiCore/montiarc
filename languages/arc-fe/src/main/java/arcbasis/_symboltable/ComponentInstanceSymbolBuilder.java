@@ -1,20 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.check.CompSymTypeExpression;
+import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.SymTypeOfGenerics;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class ComponentInstanceSymbolBuilder extends ComponentInstanceSymbolBuilderTOP {
 
-  protected CompSymTypeExpression type;
+  protected CompTypeExpression type;
   protected List<ASTExpression> arguments;
   protected List<SymTypeExpression> typeParameters;
 
@@ -28,11 +25,11 @@ public class ComponentInstanceSymbolBuilder extends ComponentInstanceSymbolBuild
     return super.setName(name);
   }
 
-  public CompSymTypeExpression getType() {
+  public CompTypeExpression getType() {
     return this.type;
   }
 
-  public ComponentInstanceSymbolBuilder setType(@NotNull CompSymTypeExpression type) {
+  public ComponentInstanceSymbolBuilder setType(@NotNull CompTypeExpression type) {
     this.type = Preconditions.checkNotNull(type);
     return this.realBuilder;
   }

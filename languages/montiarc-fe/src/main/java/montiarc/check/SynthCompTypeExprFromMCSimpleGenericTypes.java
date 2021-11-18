@@ -2,7 +2,7 @@
 package montiarc.check;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis.check.CompSymTypeExpression;
+import arcbasis.check.CompTypeExpression;
 import arcbasis.check.SynthCompTypeResult;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
@@ -19,7 +19,7 @@ import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesHand
 import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesTraverser;
 import de.se_rwth.commons.logging.Log;
 import genericarc._symboltable.IGenericArcScope;
-import genericarc.check.SymTypeOfGenericComponent;
+import genericarc.check.TypeExprOfGenericComponent;
 import montiarc._symboltable.IMontiArcScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -29,7 +29,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * A visitor (a handler indeed) that creates {@link CompSymTypeExpression}s from {@link ASTMCBasicGenericType}s, given
+ * A visitor (a handler indeed) that creates {@link CompTypeExpression}s from {@link ASTMCBasicGenericType}s, given
  * that there is a ComponentTypeSymbol with matching TypeParameters which is represented by the
  * {@link ASTMCBasicGenericType}.
  */
@@ -89,7 +89,7 @@ public class SynthCompTypeExprFromMCSimpleGenericTypes implements MCSimpleGeneri
       List<SymTypeExpression> typeArgExpressions = typeArgumentsToTypes(mcType.getMCTypeArgumentList()).stream()
         .map(typeArg -> synthOOTypeExpressions.symTypeFromAST(typeArg))
         .collect(Collectors.toList());
-      this.resultWrapper.setCurrentResult(new SymTypeOfGenericComponent(compSym.get(), typeArgExpressions));
+      this.resultWrapper.setCurrentResult(new TypeExprOfGenericComponent(compSym.get(), typeArgExpressions));
     }
   }
 

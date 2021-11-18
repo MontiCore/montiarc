@@ -2,9 +2,8 @@
 package montiarc._symboltable;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
-import arcbasis.check.CompSymTypeExpression;
-import genericarc.check.SymTypeOfGenericComponent;
+import arcbasis.check.CompTypeExpression;
+import genericarc.check.TypeExprOfGenericComponent;
 import montiarc.AbstractTest;
 import montiarc.MontiArcCLI;
 import montiarc.MontiArcMill;
@@ -34,10 +33,10 @@ public class GenericComponentInstanceTest extends AbstractTest {
     ComponentTypeSymbol compC = MontiArcMill.globalScope().resolveComponentType("B").get();
 
     //When
-    CompSymTypeExpression genericType = compC.getSubComponents().get(0).getType();
+    CompTypeExpression genericType = compC.getSubComponents().get(0).getType();
 
     //Then
-    Assertions.assertTrue(genericType instanceof SymTypeOfGenericComponent);
+    Assertions.assertTrue(genericType instanceof TypeExprOfGenericComponent);
     Assertions.assertEquals("T", genericType.getTypeInfo().getTypeParameters().get(0));
   }
 }

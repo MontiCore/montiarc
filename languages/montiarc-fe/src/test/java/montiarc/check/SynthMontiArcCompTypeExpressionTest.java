@@ -2,8 +2,8 @@
 package montiarc.check;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis.check.CompSymTypeExpression;
-import arcbasis.check.SymTypeOfComponent;
+import arcbasis.check.CompTypeExpression;
+import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
@@ -17,7 +17,7 @@ import de.monticore.types.mccollectiontypes._ast.ASTMCPrimitiveTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericTypeBuilder;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCCustomTypeArgument;
-import genericarc.check.SymTypeOfGenericComponent;
+import genericarc.check.TypeExprOfGenericComponent;
 import montiarc.AbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._symboltable.IMontiArcScope;
@@ -50,11 +50,11 @@ public class SynthMontiArcCompTypeExpressionTest extends AbstractTest {
     SynthMontiArcCompTypeExpression synth = new SynthMontiArcCompTypeExpression();
 
     // When
-    Optional<CompSymTypeExpression> result = synth.synthesizeFrom(astComp);
+    Optional<CompTypeExpression> result = synth.synthesizeFrom(astComp);
 
     // Then
     Assertions.assertTrue(result.isPresent());
-    Assertions.assertTrue(result.get() instanceof SymTypeOfComponent);
+    Assertions.assertTrue(result.get() instanceof TypeExprOfComponent);
     Assertions.assertEquals(compSym, result.get().getTypeInfo());
   }
 
@@ -108,12 +108,12 @@ public class SynthMontiArcCompTypeExpressionTest extends AbstractTest {
     SynthMontiArcCompTypeExpression synth = new SynthMontiArcCompTypeExpression();
 
     // When
-    Optional<CompSymTypeExpression> result = synth.synthesizeFrom(astNormalComp);
+    Optional<CompTypeExpression> result = synth.synthesizeFrom(astNormalComp);
 
     // Then
     Assertions.assertTrue(result.isPresent());
-    Assertions.assertTrue(result.get() instanceof SymTypeOfGenericComponent);
-    SymTypeOfGenericComponent resultAsGeneric = (SymTypeOfGenericComponent) result.get();
+    Assertions.assertTrue(result.get() instanceof TypeExprOfGenericComponent);
+    TypeExprOfGenericComponent resultAsGeneric = (TypeExprOfGenericComponent) result.get();
 
     Assertions.assertEquals(compSym, resultAsGeneric.getTypeInfo());
     Assertions.assertTrue(resultAsGeneric.getBindingFor("K").get() instanceof SymTypeOfObject);
@@ -134,7 +134,7 @@ public class SynthMontiArcCompTypeExpressionTest extends AbstractTest {
     SynthMontiArcCompTypeExpression synth = new SynthMontiArcCompTypeExpression();
 
     // When
-    Optional<CompSymTypeExpression> result = synth.synthesizeFrom(astComp);
+    Optional<CompTypeExpression> result = synth.synthesizeFrom(astComp);
 
     // Then
     Assertions.assertFalse(result.isPresent());

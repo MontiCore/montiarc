@@ -9,7 +9,7 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import arcbasis._visitor.ArcBasisFullPrettyPrinter;
 import arcbasis.check.ArcTypeCheck;
-import arcbasis.check.CompSymTypeExpression;
+import arcbasis.check.CompTypeExpression;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
@@ -108,7 +108,7 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
       // is the port the port of a sub-component?
       portSymbol = component.getSubComponent(portAccess.getComponent())
         .map(ComponentInstanceSymbol::getType)
-        .map(CompSymTypeExpression::getTypeInfo)
+        .map(CompTypeExpression::getTypeInfo)
         .flatMap(compType -> compType.getPort(portAccess.getPort(), true));
     }
     // some checks with the resulting port-optional

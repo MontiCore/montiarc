@@ -9,9 +9,9 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import java.util.Optional;
 
 /**
- * A common interface that can be used to synthesize {@link CompSymTypeExpression}s from {@link ASTMCType}.
+ * A common interface that can be used to synthesize {@link CompTypeExpression}s from {@link ASTMCType}.
  */
-public interface ISynthesizeCompSymTypeExpression {
+public interface ISynthesizeCompTypeExpression {
 
   /**
    * Initializes the traverser with the correct visitors and handlers.
@@ -21,14 +21,14 @@ public interface ISynthesizeCompSymTypeExpression {
   MCBasicTypesTraverser getTraverser();
 
   /**
-   * Collects the synthesized {@link CompSymTypeExpression} after using the traverser to traverse the {@link ASTMCType}
+   * Collects the synthesized {@link CompTypeExpression} after using the traverser to traverse the {@link ASTMCType}
    */
-  Optional<CompSymTypeExpression> getResult();
+  Optional<CompTypeExpression> getResult();
 
   /**
-   * Synthesizes a {@link CompSymTypeExpression} from a {@link ASTMCType}
+   * Synthesizes a {@link CompTypeExpression} from a {@link ASTMCType}
    */
-  default Optional<CompSymTypeExpression> synthesizeFrom(@NotNull ASTMCType mcType) {
+  default Optional<CompTypeExpression> synthesizeFrom(@NotNull ASTMCType mcType) {
     Preconditions.checkNotNull(mcType);
     this.init();
     mcType.accept(this.getTraverser());

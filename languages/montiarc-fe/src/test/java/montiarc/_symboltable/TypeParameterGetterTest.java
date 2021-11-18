@@ -7,7 +7,7 @@ import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpression;
-import genericarc.check.SymTypeOfGenericComponent;
+import genericarc.check.TypeExprOfGenericComponent;
 import montiarc.AbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
@@ -82,7 +82,7 @@ public class TypeParameterGetterTest extends AbstractTest {
       .resolveComponentInstance("comp")
       .orElseThrow(couldNot("find instance"));
 
-    SymTypeOfGenericComponent compType = (SymTypeOfGenericComponent) comp.getType();
+    TypeExprOfGenericComponent compType = (TypeExprOfGenericComponent) comp.getType();
     Map<TypeVarSymbol, SymTypeExpression> params = compType.getTypeVarBindings();
     new MockTypeParameter("T", "Map<String,Integer>").checkMatch(params);
     new MockTypeParameter("U", "Double").checkMatch(params);

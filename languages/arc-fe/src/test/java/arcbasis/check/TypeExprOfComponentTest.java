@@ -15,10 +15,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-public class SymTypeOfComponentTest extends AbstractTest {
+public class TypeExprOfComponentTest extends AbstractTest {
 
   /**
-   * Method under test {@link SymTypeOfComponent#getParentTypeExpr()}
+   * Method under test {@link TypeExprOfComponent#getParentTypeExpr()}
    */
   @Test
   public void getParentShouldReturnExpected() {
@@ -27,17 +27,17 @@ public class SymTypeOfComponentTest extends AbstractTest {
       .setName("Parent")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
-    SymTypeOfComponent parentTypeExpr = new SymTypeOfComponent(parent);
+    TypeExprOfComponent parentTypeExpr = new TypeExprOfComponent(parent);
 
     ComponentTypeSymbol component = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
     component.setParent(parentTypeExpr);
-    SymTypeOfComponent compTypeExpr = new SymTypeOfComponent(component);
+    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(component);
 
     // When
-    Optional<CompSymTypeExpression> parentOfTypeExpr = compTypeExpr.getParentTypeExpr();
+    Optional<CompTypeExpression> parentOfTypeExpr = compTypeExpr.getParentTypeExpr();
 
     // Then
     Assertions.assertTrue(parentOfTypeExpr.isPresent());
@@ -45,7 +45,7 @@ public class SymTypeOfComponentTest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link SymTypeOfComponent#getParentTypeExpr()}
+   * Method under test {@link TypeExprOfComponent#getParentTypeExpr()}
    */
   @Test
   public void getParentShouldReturnOptionalEmpty() {
@@ -54,10 +54,10 @@ public class SymTypeOfComponentTest extends AbstractTest {
       .setName("Comp")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
-    SymTypeOfComponent compTypeExpr = new SymTypeOfComponent(component);
+    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(component);
 
     // When
-    Optional<CompSymTypeExpression> parentOfTypeExpr = compTypeExpr.getParentTypeExpr();
+    Optional<CompTypeExpression> parentOfTypeExpr = compTypeExpr.getParentTypeExpr();
 
     // Then
     Assertions.assertFalse(parentOfTypeExpr.isPresent());
@@ -78,7 +78,7 @@ public class SymTypeOfComponentTest extends AbstractTest {
       .build();
     comp.getSpannedScope().add(port);
 
-    SymTypeOfComponent compTypeExpr = new SymTypeOfComponent(comp);
+    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(comp);
 
     // When
     Optional<SymTypeExpression> portsType = compTypeExpr.getTypeExprOfPort(portName);
@@ -106,11 +106,11 @@ public class SymTypeOfComponentTest extends AbstractTest {
 
     ComponentTypeSymbol component = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
-      .setParentComponent(new SymTypeOfComponent(parent))
+      .setParentComponent(new TypeExprOfComponent(parent))
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 
-    SymTypeOfComponent compTypeExpr = new SymTypeOfComponent(component);
+    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(component);
 
     // When
     Optional<SymTypeExpression> portsType = compTypeExpr.getTypeExprOfPort(portName);
@@ -136,7 +136,7 @@ public class SymTypeOfComponentTest extends AbstractTest {
     component.getSpannedScope().add(param);
     component.addParameter(param);
 
-    SymTypeOfComponent compTypeExpr = new SymTypeOfComponent(component);
+    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(component);
 
     // When
     Optional<SymTypeExpression> paramType = compTypeExpr.getTypeExprOfParameter(paramName);

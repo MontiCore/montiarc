@@ -4,7 +4,7 @@ package montiarc.generator.util;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
-import arcbasis.check.CompSymTypeExpression;
+import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ISymbol;
@@ -130,7 +130,7 @@ public class IdentifierTest {
     VariableSymbol field = MontiArcMill.fieldSymbolBuilder()
       .setName("c").setType(Mockito.mock(SymTypeExpression.class)).build();
     ComponentInstanceSymbol subcomponent = MontiArcMill.componentInstanceSymbolBuilder()
-      .setName("d").setType(Mockito.mock(CompSymTypeExpression.class)).build();
+      .setName("d").setType(Mockito.mock(CompTypeExpression.class)).build();
     component.getSpannedScope().add(port);
     component.getSpannedScope().add(parameter);
     component.addParameter(parameter);

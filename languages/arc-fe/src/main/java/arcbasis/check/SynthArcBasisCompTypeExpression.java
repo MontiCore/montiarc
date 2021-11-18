@@ -8,9 +8,9 @@ import java.util.Optional;
 
 /**
  * A composed visitor for ArcBasis that takes component type expressions represented as
- * {@link de.monticore.types.mcbasictypes._ast.ASTMCType} and creates {@link CompSymTypeExpression}s from them.
+ * {@link de.monticore.types.mcbasictypes._ast.ASTMCType} and creates {@link CompTypeExpression}s from them.
  */
-public class SynthArcBasisCompTypeExpression implements ISynthesizeCompSymTypeExpression {
+public class SynthArcBasisCompTypeExpression implements ISynthesizeCompTypeExpression {
 
   protected ArcBasisTraverser traverser;
   protected SynthCompTypeResult resultWrapper;
@@ -34,7 +34,7 @@ public class SynthArcBasisCompTypeExpression implements ISynthesizeCompSymTypeEx
   }
 
   @Override
-  public Optional<CompSymTypeExpression> getResult() {
+  public Optional<CompTypeExpression> getResult() {
     return resultWrapper.getCurrentResult();
   }
 }

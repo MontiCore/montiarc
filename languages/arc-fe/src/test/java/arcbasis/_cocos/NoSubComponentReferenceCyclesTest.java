@@ -8,7 +8,7 @@ import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis.check.SymTypeOfComponent;
+import arcbasis.check.TypeExprOfComponent;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
@@ -61,7 +61,7 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
 
       ComponentInstanceSymbol innerCompInst = ArcBasisMill.componentInstanceSymbolBuilder()
         .setName("i1")
-        .setType(new SymTypeOfComponent(innerComp))
+        .setType(new TypeExprOfComponent(innerComp))
         .build();
       dummyWithoutCycle.getSpannedScope().add(innerCompInst);
 
@@ -83,8 +83,8 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
       ComponentTypeSymbol dummyWithCycle = provideDummyWithCycle_unlinked();
       ComponentTypeSymbol modelWithCycle = provideModelWithCycle_unlinked();
 
-      dummyWithCycle.getSubComponent("sub").get().setType(new SymTypeOfComponent(modelWithCycle));
-      modelWithCycle.getSubComponent("dummy").get().setType(new SymTypeOfComponent(dummyWithCycle));
+      dummyWithCycle.getSubComponent("sub").get().setType(new TypeExprOfComponent(modelWithCycle));
+      modelWithCycle.getSubComponent("dummy").get().setType(new TypeExprOfComponent(dummyWithCycle));
       return dummyWithCycle;
     }
   }
@@ -130,11 +130,11 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
       dummyWithNestedCycle.getInnerComponent("Sub1").get()
         .getInnerComponent("Sub2").get()
         .getInnerComponent("Sub3").get()
-        .getSubComponent("withCyc").get().setType(new SymTypeOfComponent(modelWithNestedCycle));
+        .getSubComponent("withCyc").get().setType(new TypeExprOfComponent(modelWithNestedCycle));
       modelWithNestedCycle.getInnerComponent("Sub1").get()
         .getInnerComponent("Sub2").get()
         .getInnerComponent("Sub3").get()
-        .getSubComponent("withCyc").get().setType(new SymTypeOfComponent(dummyWithNestedCycle));
+        .getSubComponent("withCyc").get().setType(new TypeExprOfComponent(dummyWithNestedCycle));
 
       return dummyWithNestedCycle;
     }
@@ -195,19 +195,19 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
 
       ComponentInstanceSymbol subInst1 = ArcBasisMill.componentInstanceSymbolBuilder()
         .setName("sub1")
-        .setType(new SymTypeOfComponent(subType1))
+        .setType(new TypeExprOfComponent(subType1))
         .build();
       dummyWithNestedCycle.getSpannedScope().add(subInst1);
 
       ComponentInstanceSymbol subInst2 = ArcBasisMill.componentInstanceSymbolBuilder()
         .setName("sub2")
-        .setType(new SymTypeOfComponent(subType2))
+        .setType(new TypeExprOfComponent(subType2))
         .build();
       subType1.getSpannedScope().add(subInst2);
 
       ComponentInstanceSymbol subInst3 = ArcBasisMill.componentInstanceSymbolBuilder()
         .setName("sub3")
-        .setType(new SymTypeOfComponent(subType3))
+        .setType(new TypeExprOfComponent(subType3))
         .build();
       subType2.getSpannedScope().add(subInst3);
 
@@ -230,9 +230,9 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
       ComponentTypeSymbol longCycleComp2 = provideModelLongCycle2_unlinked();
       ComponentTypeSymbol longCycleComp3 = provideModelLongCycle3_unlinked();
 
-      longCycleComp1.getSubComponent("lc2").get().setType(new SymTypeOfComponent(longCycleComp2));
-      longCycleComp2.getSubComponent("lc3").get().setType(new SymTypeOfComponent(longCycleComp3));
-      longCycleComp3.getSubComponent("lc1").get().setType(new SymTypeOfComponent(longCycleComp1));
+      longCycleComp1.getSubComponent("lc2").get().setType(new TypeExprOfComponent(longCycleComp2));
+      longCycleComp2.getSubComponent("lc3").get().setType(new TypeExprOfComponent(longCycleComp3));
+      longCycleComp3.getSubComponent("lc1").get().setType(new TypeExprOfComponent(longCycleComp1));
 
       return longCycleComp1;
     }
@@ -285,9 +285,9 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
       ComponentTypeSymbol longCycleComp2 = provideModelLongCycle2_unlinked();
       ComponentTypeSymbol longCycleComp3 = provideModelLongCycle3_unlinked();
 
-      longCycleComp1.getSubComponent("lc2").get().setType(new SymTypeOfComponent(longCycleComp2));
-      longCycleComp2.getSubComponent("lc3").get().setType(new SymTypeOfComponent(longCycleComp3));
-      longCycleComp3.getSubComponent("lc1").get().setType(new SymTypeOfComponent(longCycleComp1));
+      longCycleComp1.getSubComponent("lc2").get().setType(new TypeExprOfComponent(longCycleComp2));
+      longCycleComp2.getSubComponent("lc3").get().setType(new TypeExprOfComponent(longCycleComp3));
+      longCycleComp3.getSubComponent("lc1").get().setType(new TypeExprOfComponent(longCycleComp1));
 
       return longCycleComp2;
     }
@@ -340,9 +340,9 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
       ComponentTypeSymbol longCycleComp2 = provideModelLongCycle2_unlinked();
       ComponentTypeSymbol longCycleComp3 = provideModelLongCycle3_unlinked();
 
-      longCycleComp1.getSubComponent("lc2").get().setType(new SymTypeOfComponent(longCycleComp2));
-      longCycleComp2.getSubComponent("lc3").get().setType(new SymTypeOfComponent(longCycleComp3));
-      longCycleComp3.getSubComponent("lc1").get().setType(new SymTypeOfComponent(longCycleComp1));
+      longCycleComp1.getSubComponent("lc2").get().setType(new TypeExprOfComponent(longCycleComp2));
+      longCycleComp2.getSubComponent("lc3").get().setType(new TypeExprOfComponent(longCycleComp3));
+      longCycleComp3.getSubComponent("lc1").get().setType(new TypeExprOfComponent(longCycleComp1));
 
       return longCycleComp3;
     }
@@ -420,19 +420,19 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
 
     ComponentInstanceSymbol fooInst = ArcBasisMill.componentInstanceSymbolBuilder()
       .setName("foo1")
-      .setType(new SymTypeOfComponent(fooComp))
+      .setType(new TypeExprOfComponent(fooComp))
       .build();
     modelWithoutCycle.getSpannedScope().add(fooInst);
 
     ComponentInstanceSymbol refToDummy = ArcBasisMill.componentInstanceSymbolBuilder()
       .setName("du1")
-      .setType(new SymTypeOfComponent(provideDummyWithoutCycle()))
+      .setType(new TypeExprOfComponent(provideDummyWithoutCycle()))
       .build();
     modelWithoutCycle.getSpannedScope().add(refToDummy);
 
     ComponentInstanceSymbol nestedRefToDummy = ArcBasisMill.componentInstanceSymbolBuilder()
       .setName("innerDummy")
-      .setType(new SymTypeOfComponent(provideDummyWithoutCycle()))
+      .setType(new TypeExprOfComponent(provideDummyWithoutCycle()))
       .build();
     fooComp.getSpannedScope().add(nestedRefToDummy);
 
@@ -465,7 +465,7 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
 
       ComponentInstanceSymbol selfRefInstance = ArcBasisMill.componentInstanceSymbolBuilder()
         .setName("selfRef")
-        .setType(new SymTypeOfComponent(modelWithSelfRef))
+        .setType(new TypeExprOfComponent(modelWithSelfRef))
         .build();
       modelWithSelfRef.getSpannedScope().add(selfRefInstance);
 
@@ -487,8 +487,8 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
       ComponentTypeSymbol modelWithCycle = provideModelWithCycle_unlinked();
       ComponentTypeSymbol dummyWithCycle = provideDummyWithCycle_unlinked();
 
-      modelWithCycle.getSubComponent("dummy").get().setType(new SymTypeOfComponent(dummyWithCycle));
-      dummyWithCycle.getSubComponent("sub").get().setType(new SymTypeOfComponent(modelWithCycle));
+      modelWithCycle.getSubComponent("dummy").get().setType(new TypeExprOfComponent(dummyWithCycle));
+      dummyWithCycle.getSubComponent("sub").get().setType(new TypeExprOfComponent(modelWithCycle));
       return modelWithCycle;
     }
   }
@@ -543,11 +543,11 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
       modelWithNestedCycle.getInnerComponent("Sub1").get()
         .getInnerComponent("Sub2").get()
         .getInnerComponent("Sub3").get()
-        .getSubComponent("withCyc").get().setType(new SymTypeOfComponent(dummyWithNestedCycle));
+        .getSubComponent("withCyc").get().setType(new TypeExprOfComponent(dummyWithNestedCycle));
       dummyWithNestedCycle.getInnerComponent("Sub1").get()
         .getInnerComponent("Sub2").get()
         .getInnerComponent("Sub3").get()
-        .getSubComponent("withCyc").get().setType(new SymTypeOfComponent(modelWithNestedCycle));
+        .getSubComponent("withCyc").get().setType(new TypeExprOfComponent(modelWithNestedCycle));
 
       return modelWithNestedCycle;
     }
@@ -618,19 +618,19 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
 
       ComponentInstanceSymbol subInst1 = ArcBasisMill.componentInstanceSymbolBuilder()
         .setName("sub1")
-        .setType(new SymTypeOfComponent(subType1))
+        .setType(new TypeExprOfComponent(subType1))
         .build();
       modelWithNestedCycle.getSpannedScope().add(subInst1);
 
       ComponentInstanceSymbol subInst2 = ArcBasisMill.componentInstanceSymbolBuilder()
         .setName("sub2")
-        .setType(new SymTypeOfComponent(subType2))
+        .setType(new TypeExprOfComponent(subType2))
         .build();
       subType1.getSpannedScope().add(subInst2);
 
       ComponentInstanceSymbol subInst3 = ArcBasisMill.componentInstanceSymbolBuilder()
         .setName("sub3")
-        .setType(new SymTypeOfComponent(subType3))
+        .setType(new TypeExprOfComponent(subType3))
         .build();
       subType2.getSpannedScope().add(subInst3);
 
@@ -700,25 +700,25 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
 
     ComponentInstanceSymbol cycleRef = ArcBasisMill.componentInstanceSymbolBuilder()
       .setName("withCyc")
-      .setType(new SymTypeOfComponent(subType1))
+      .setType(new TypeExprOfComponent(subType1))
       .build();
     subType3.getSpannedScope().add(cycleRef);
 
     ComponentInstanceSymbol subInst1 = ArcBasisMill.componentInstanceSymbolBuilder()
       .setName("sub1")
-      .setType(new SymTypeOfComponent(subType1))
+      .setType(new TypeExprOfComponent(subType1))
       .build();
     modelWithNestedCycle.getSpannedScope().add(subInst1);
 
     ComponentInstanceSymbol subInst2 = ArcBasisMill.componentInstanceSymbolBuilder()
       .setName("sub2")
-      .setType(new SymTypeOfComponent(subType2))
+      .setType(new TypeExprOfComponent(subType2))
       .build();
     subType1.getSpannedScope().add(subInst2);
 
     ComponentInstanceSymbol subInst3 = ArcBasisMill.componentInstanceSymbolBuilder()
       .setName("sub3")
-      .setType(new SymTypeOfComponent(subType3))
+      .setType(new TypeExprOfComponent(subType3))
       .build();
     subType2.getSpannedScope().add(subInst3);
 

@@ -3,8 +3,8 @@ package arcbasis._symboltable;
 
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis.check.CompSymTypeExpression;
-import arcbasis.check.SymTypeOfComponent;
+import arcbasis.check.CompTypeExpression;
+import arcbasis.check.TypeExprOfComponent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -19,14 +19,14 @@ public class ComponentInstanceSymbolBuilderTest extends AbstractTest {
   @Test
   public void shouldBeValid() {
     ComponentInstanceSymbolBuilder builder = new ComponentInstanceSymbolBuilder();
-    builder.setName("a").setType(mock(CompSymTypeExpression.class));
+    builder.setName("a").setType(mock(CompTypeExpression.class));
     Assertions.assertTrue(builder.isValid());
   }
 
   @Test
   public void shouldBeInvalid() {
     ComponentInstanceSymbolBuilder builderWithType = new ComponentInstanceSymbolBuilder();
-    builderWithType.setType(mock(CompSymTypeExpression.class));
+    builderWithType.setType(mock(CompTypeExpression.class));
     Assertions.assertFalse(builderWithType.isValid());
   }
 
@@ -35,8 +35,8 @@ public class ComponentInstanceSymbolBuilderTest extends AbstractTest {
     ComponentTypeSymbol type = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp1").setSpannedScope(Mockito.mock(IArcBasisScope.class)).build();
     ComponentInstanceSymbol symbol =
-      ArcBasisMill.componentInstanceSymbolBuilder().setName("c").setType(new SymTypeOfComponent(type)).build();
-    Assertions.assertTrue(symbol.type instanceof SymTypeOfComponent);
+      ArcBasisMill.componentInstanceSymbolBuilder().setName("c").setType(new TypeExprOfComponent(type)).build();
+    Assertions.assertTrue(symbol.type instanceof TypeExprOfComponent);
     Assertions.assertEquals(symbol.type.getTypeInfo(), type);
   }
 }

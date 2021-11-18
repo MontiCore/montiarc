@@ -6,8 +6,8 @@ package genericarc.check;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
-import arcbasis.check.CompSymTypeExpression;
-import arcbasis.check.SymTypeOfComponent;
+import arcbasis.check.CompTypeExpression;
+import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class SymTypeOfGenericComponentTest extends AbstractTest {
+public class TypeExprOfGenericComponentTest extends AbstractTest {
 
   @BeforeEach
   @Override
@@ -47,11 +47,11 @@ public class SymTypeOfGenericComponentTest extends AbstractTest {
       .build();
 
     // Creating a typeExpr representing Parent<int> that is then set to be the parent of comp
-    CompSymTypeExpression parentTypeExpr = new SymTypeOfGenericComponent(parent,
+    CompTypeExpression parentTypeExpr = new TypeExprOfGenericComponent(parent,
       Lists.newArrayList(SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT)));
     component.setParent(parentTypeExpr);
 
-    SymTypeOfComponent compTypeExpr = new SymTypeOfComponent(component);
+    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(component);
 
     // When && Then
     Assertions.assertTrue(compTypeExpr.getParentTypeExpr().isPresent());
@@ -68,23 +68,23 @@ public class SymTypeOfGenericComponentTest extends AbstractTest {
       SymTypeExpressionFactory.createTypeVariable(comp.getTypeParameters().get(0));
 
     // creating a typeExpr representing Parent<T> that is then set to be the parent of comp
-    CompSymTypeExpression parentTypeExpr = new SymTypeOfGenericComponent(parent, Lists.newArrayList(childTypeVar));
+    CompTypeExpression parentTypeExpr = new TypeExprOfGenericComponent(parent, Lists.newArrayList(childTypeVar));
     comp.setParent(parentTypeExpr);
 
     // Now consider Comp<int>. The parent then should be Parent<int>.
     SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT);
-    CompSymTypeExpression boundCompTypeExpr = new SymTypeOfGenericComponent(comp, Lists.newArrayList(intTypeExpr));
+    CompTypeExpression boundCompTypeExpr = new TypeExprOfGenericComponent(comp, Lists.newArrayList(intTypeExpr));
 
     // When
-    Optional<CompSymTypeExpression> parentOfBoundCompTypeExpr = boundCompTypeExpr.getParentTypeExpr();
+    Optional<CompTypeExpression> parentOfBoundCompTypeExpr = boundCompTypeExpr.getParentTypeExpr();
 
     // Then
     Assertions.assertTrue(parentOfBoundCompTypeExpr.isPresent());
     Assertions.assertSame(parent, parentOfBoundCompTypeExpr.get().getTypeInfo());
-    Assertions.assertTrue(parentOfBoundCompTypeExpr.get() instanceof SymTypeOfGenericComponent);
-    Assertions.assertTrue(((SymTypeOfGenericComponent) parentOfBoundCompTypeExpr.get()).getBindingFor(parentTypeVar).isPresent());
+    Assertions.assertTrue(parentOfBoundCompTypeExpr.get() instanceof TypeExprOfGenericComponent);
+    Assertions.assertTrue(((TypeExprOfGenericComponent) parentOfBoundCompTypeExpr.get()).getBindingFor(parentTypeVar).isPresent());
     Assertions.assertEquals(intTypeExpr,
-      ((SymTypeOfGenericComponent) parentOfBoundCompTypeExpr.get()).getBindingFor(parentTypeVar).get());
+      ((TypeExprOfGenericComponent) parentOfBoundCompTypeExpr.get()).getBindingFor(parentTypeVar).get());
   }
 
 
@@ -103,8 +103,8 @@ public class SymTypeOfGenericComponentTest extends AbstractTest {
     compDefinition.getSpannedScope().add(port);
 
     SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT);
-    SymTypeOfGenericComponent boundCompTypeExpr =
-      new SymTypeOfGenericComponent(compDefinition, Lists.newArrayList(intTypeExpr));
+    TypeExprOfGenericComponent boundCompTypeExpr =
+      new TypeExprOfGenericComponent(compDefinition, Lists.newArrayList(intTypeExpr));
 
     // When
     Optional<SymTypeExpression> portsType = boundCompTypeExpr.getTypeExprOfPort(portName);
@@ -132,14 +132,14 @@ public class SymTypeOfGenericComponentTest extends AbstractTest {
     // bind parent's S with child's T to declare: Comp<T> extends Parent<T>
     TypeVarSymbol childTypeVar = compDefinition.getTypeParameters().get(0);
     SymTypeExpression childTypeVarExpr = SymTypeExpressionFactory.createTypeVariable(childTypeVar);
-    CompSymTypeExpression boundParentTypeExpr =
-      new SymTypeOfGenericComponent(parentCompDefinition, Lists.newArrayList(childTypeVarExpr));
+    CompTypeExpression boundParentTypeExpr =
+      new TypeExprOfGenericComponent(parentCompDefinition, Lists.newArrayList(childTypeVarExpr));
     compDefinition.setParent(boundParentTypeExpr);
 
     // create CompTypeExpr representing Comp<int>
     SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT);
-    SymTypeOfGenericComponent boundCompTypeExpr =
-      new SymTypeOfGenericComponent(compDefinition, Lists.newArrayList(intTypeExpr));
+    TypeExprOfGenericComponent boundCompTypeExpr =
+      new TypeExprOfGenericComponent(compDefinition, Lists.newArrayList(intTypeExpr));
 
     // When
     Optional<SymTypeExpression> portsType = boundCompTypeExpr.getTypeExprOfPort(portName);
@@ -165,8 +165,8 @@ public class SymTypeOfGenericComponentTest extends AbstractTest {
     compDefinition.addParameter(param);
 
     SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT);
-    SymTypeOfGenericComponent boundCompTypeExpr =
-      new SymTypeOfGenericComponent(compDefinition, Lists.newArrayList(intTypeExpr));
+    TypeExprOfGenericComponent boundCompTypeExpr =
+      new TypeExprOfGenericComponent(compDefinition, Lists.newArrayList(intTypeExpr));
 
     // When
     Optional<SymTypeExpression> paramTypeExpr = boundCompTypeExpr.getTypeExprOfParameter(paramName);
@@ -200,14 +200,14 @@ public class SymTypeOfGenericComponentTest extends AbstractTest {
     compDefinition.addParameter(paramOfComp);
     // bind parent's S with child's T to declare: Comp<T> extends Parent<T>
     SymTypeExpression childTypeVarExpr = SymTypeExpressionFactory.createTypeVariable(childTypeVar);
-    CompSymTypeExpression boundParentTypeExpr =
-      new SymTypeOfGenericComponent(parentCompDefinition, Lists.newArrayList(childTypeVarExpr));
+    CompTypeExpression boundParentTypeExpr =
+      new TypeExprOfGenericComponent(parentCompDefinition, Lists.newArrayList(childTypeVarExpr));
     compDefinition.setParent(boundParentTypeExpr);
 
     // create CompTypeExpr representing Comp<int>
     SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT);
-    SymTypeOfGenericComponent boundCompTypeExpr =
-      new SymTypeOfGenericComponent(compDefinition, Lists.newArrayList(intTypeExpr));
+    TypeExprOfGenericComponent boundCompTypeExpr =
+      new TypeExprOfGenericComponent(compDefinition, Lists.newArrayList(intTypeExpr));
 
     // When
     Optional<SymTypeExpression> paramTypeExpr = boundCompTypeExpr.getTypeExprOfParameter(paramName);
@@ -229,7 +229,7 @@ public class SymTypeOfGenericComponentTest extends AbstractTest {
     List<SymTypeExpression> typeExprList = Lists.newArrayList(floatTypeExpr, intTypeExpr, boolTypeExpr);
 
     // When
-    SymTypeOfGenericComponent compTypeExpr = new SymTypeOfGenericComponent(comp, typeExprList);
+    TypeExprOfGenericComponent compTypeExpr = new TypeExprOfGenericComponent(comp, typeExprList);
 
     // Then
     List<SymTypeExpression> returnedBindings = compTypeExpr.getBindingsAsList();

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.check.CompSymTypeExpression;
+import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -13,7 +13,7 @@ import java.util.List;
 public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
 
   protected ComponentTypeSymbol outerComponent;
-  protected CompSymTypeExpression parentComponent;
+  protected CompTypeExpression parentComponent;
   protected List<VariableSymbol> parameters;
   protected List<TypeVarSymbol> typeParameters;
 
@@ -43,11 +43,11 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
     return this.realBuilder;
   }
 
-  public CompSymTypeExpression getParentComponent() {
+  public CompTypeExpression getParentComponent() {
     return this.parentComponent;
   }
 
-  public ComponentTypeSymbolBuilder setParentComponent(@Nullable CompSymTypeExpression parent) {
+  public ComponentTypeSymbolBuilder setParentComponent(@Nullable CompTypeExpression parent) {
     this.parentComponent = parent;
     return this.realBuilder;
   }

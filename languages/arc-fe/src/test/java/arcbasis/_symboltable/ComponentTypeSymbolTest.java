@@ -3,7 +3,7 @@ package arcbasis._symboltable;
 
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis.check.CompSymTypeExpression;
+import arcbasis.check.CompTypeExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -268,7 +268,7 @@ public class ComponentTypeSymbolTest extends AbstractTest {
       .setSpannedScope(ArcBasisMill.scope()).build();
     for (String instance : instances) {
       ComponentInstanceSymbol subCompSymbol = ArcBasisMill.componentInstanceSymbolBuilder()
-        .setName(instance).setType(mock(CompSymTypeExpression.class)).build();
+        .setName(instance).setType(mock(CompTypeExpression.class)).build();
       compSymbol.getSpannedScope().add(subCompSymbol);
     }
     return compSymbol;

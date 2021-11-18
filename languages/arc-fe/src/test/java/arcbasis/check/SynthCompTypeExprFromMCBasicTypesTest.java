@@ -56,8 +56,8 @@ public class SynthCompTypeExprFromMCBasicTypesTest extends AbstractTest {
     // Then
     Assertions.assertTrue(result4normal.getCurrentResult().isPresent());
     Assertions.assertTrue(result4qual.getCurrentResult().isPresent());
-    Assertions.assertTrue(result4normal.getCurrentResult().get() instanceof SymTypeOfComponent);
-    Assertions.assertTrue(result4qual.getCurrentResult().get() instanceof SymTypeOfComponent);
+    Assertions.assertTrue(result4normal.getCurrentResult().get() instanceof TypeExprOfComponent);
+    Assertions.assertTrue(result4qual.getCurrentResult().get() instanceof TypeExprOfComponent);
     Assertions.assertEquals(normalComp, result4normal.getCurrentResult().get().getTypeInfo());
     Assertions.assertEquals(qualifiedComp, result4qual.getCurrentResult().get().getTypeInfo());
   }
