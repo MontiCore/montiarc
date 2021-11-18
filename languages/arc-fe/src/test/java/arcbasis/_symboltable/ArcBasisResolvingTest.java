@@ -35,7 +35,14 @@ public class ArcBasisResolvingTest extends AbstractTest {
   }
 
   @BeforeEach
-  public void setUp() {
+  @Override
+  public void init() {
+    ArcBasisMill.globalScope().clear();
+    ArcBasisMill.init();
+    this.setUp();
+  }
+
+  protected void setUp() {
     this.scope = ArcBasisMill.scope();
     IArcBasisArtifactScope aScope = ArcBasisMill.artifactScope();
     aScope.setName("B");
@@ -68,7 +75,7 @@ public class ArcBasisResolvingTest extends AbstractTest {
       .setName(typeName).setSpannedScope(ArcBasisMill.scope()).build());
 
     //When
-    Optional<OOTypeSymbol> symbol = this.getScope().resolveOOType(resolutionName);
+    Optional<TypeSymbol> symbol = this.getScope().resolveType(resolutionName);
 
     //Then
     Assertions.assertFalse(symbol.isPresent());
@@ -103,6 +110,21 @@ public class ArcBasisResolvingTest extends AbstractTest {
 
     //Then
     Assertions.assertFalse(symbol.isPresent());
+  }
+
+  @ParameterizedTest
+  @MethodSource("validScopeAndTypeAndResolutionNameProvider")
+  public void shouldResolveTypeFromOOType(@NotNull String scopeName, @NotNull String typeName, @NotNull String resolutionName) {
+    //Given
+    this.getScope().setName(scopeName);
+    this.getScope().add(ArcBasisMill.oOTypeSymbolBuilder()
+      .setName(typeName).setSpannedScope(ArcBasisMill.scope()).build());
+
+    //When
+    Optional<TypeSymbol> symbol = this.getScope().resolveType(resolutionName);
+
+    //Then
+    Assertions.assertTrue(symbol.isPresent());
   }
 
   @ParameterizedTest
