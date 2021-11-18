@@ -226,14 +226,14 @@ public class ComponentHelper {
     }
 
     // Append the default parameter values for as many as there are left
-    final List<VariableSymbol> configParameters = param.getType().getParameters();
+    final List<VariableSymbol> configParameters = param.getType().getTypeInfo().getParameters();
 
     // Calculate the number of missing parameters
     int numberOfMissingParameters = configParameters.size() - configArguments.size();
 
     if (numberOfMissingParameters > 0) {
       // Get the AST node of the component and the list of parameters in the AST
-      final ASTComponentType astNode = (ASTComponentType) param.getType().getAstNode();
+      final ASTComponentType astNode = param.getType().getTypeInfo().getAstNode();
       final List<ASTArcParameter> parameters = astNode.getHead().getArcParameterList();
 
       // Retrieve the parameters from the node and add them to the list
@@ -257,7 +257,7 @@ public class ComponentHelper {
    */
   public static String getSubComponentTypeName(ComponentInstanceSymbol instance) {
     String result = "";
-    ComponentTypeSymbol componentTypeReference = instance.getType();
+    ComponentTypeSymbol componentTypeReference = instance.getType().getTypeInfo();
     if (componentTypeReference instanceof ComponentTypeSymbolSurrogate) {
       componentTypeReference = ((ComponentTypeSymbolSurrogate) componentTypeReference).lazyLoadDelegate();
     }
@@ -306,7 +306,7 @@ public class ComponentHelper {
     // port is of subcomponent
     if (portName.contains(".")) {
       Optional<ComponentInstanceSymbol> subCompInstance = cmp.getSubComponent(subCompName);
-      ComponentTypeSymbol typeOfSubComp = subCompInstance.get().getType();
+      ComponentTypeSymbol typeOfSubComp = subCompInstance.get().getType().getTypeInfo();
       port = typeOfSubComp.getPort(portNameUnqualified); // TODO: searchInherited?
     } else {
       port = cmp.getPort(portName); // TODO: searchInherited?

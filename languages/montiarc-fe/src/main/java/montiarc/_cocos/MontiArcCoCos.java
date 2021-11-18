@@ -2,7 +2,9 @@
 package montiarc._cocos;
 
 import arcbasis._cocos.*;
+import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.check.TypeCheckResult;
+import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
 import montiarc.check.MontiArcDerive;
@@ -17,7 +19,7 @@ public class MontiArcCoCos {
 
     // ArcBasis CoCos
     checker.addCoCo(new CircularInheritance());
-    checker.addCoCo(new ComponentInstanceTypeExists());
+    checker.addCoCo(new ComponentInstanceTypeExists(new MCSimpleGenericTypesFullPrettyPrinter(new IndentPrinter())));
     checker.addCoCo(new ComponentTypeNameCapitalization());
     checker.addCoCo(new ConfigurationParametersCorrectlyInherited());
     checker.addCoCo(new ConfigurationParameterAssignment(new MontiArcDerive(new TypeCheckResult())));

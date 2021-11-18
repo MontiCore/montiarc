@@ -1,29 +1,42 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTComponentInstance;
-import arcbasis._symboltable.ComponentInstanceSymbol;
-import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
+import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
- * Checks for each component instance whether its component type exists.
+ * Checks for each (AST) component instantiation whether its component type exists.
  */
-public class ComponentInstanceTypeExists implements ArcBasisASTComponentInstanceCoCo {
+public class ComponentInstanceTypeExists implements ArcBasisASTComponentInstantiationCoCo {
+
+  protected MCBasicTypesFullPrettyPrinter typePrinter;
+
+  public ComponentInstanceTypeExists() {
+    this(new MCBasicTypesFullPrettyPrinter(new IndentPrinter()));
+  }
+
+  public ComponentInstanceTypeExists(@NotNull MCBasicTypesFullPrettyPrinter typePrinter) {
+    this.typePrinter = Preconditions.checkNotNull(typePrinter);
+  }
 
   @Override
-  public void check(@NotNull ASTComponentInstance node) {
+  public void check(ASTComponentInstantiation node) {
     Preconditions.checkArgument(node != null);
-    Preconditions.checkArgument(node.isPresentSymbol(), "ASTComponentInstance node '%s' has no "
-        + "symbol. Did you forget to run the SymbolTableCreator before checking cocos?",
-      node.getName());
-    ComponentInstanceSymbol symbol = node.getSymbol();
-    if (symbol.getType() instanceof ComponentTypeSymbolSurrogate) {
+    Preconditions.checkArgument(node.getEnclosingScope() != null);
+
+    String typeName = node.getMCType().printType(typePrinter);
+
+    if(!node.getEnclosingScope().resolveComponentType(typeName).isPresent()) {
+      String firstInstanceName = node.getComponentInstanceList().isEmpty() ?
+        "?" : node.getComponentInstanceList().get(0).getName();
+
       Log.error(ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE.format(
-        symbol.getType().getName(), symbol.getName()), node.get_SourcePositionStart());
+        typeName, firstInstanceName, node.get_SourcePositionStart()));
     }
   }
 }

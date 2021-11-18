@@ -74,7 +74,6 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     Assertions.assertEquals(1, scope.getComponentTypeSymbols().get("Comp").size());
     Assertions.assertTrue(scope.getComponentTypeSymbols().get("Comp").get(0).getSpannedScope()
       .getComponentTypeSymbols().isEmpty());
-    Assertions.assertTrue(this.getSymTab().getCurrentCompInstanceType().isPresent());
   }
 
   @Test
@@ -89,7 +88,6 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     this.getSymTab().endVisit(ast);
     Assertions.assertEquals(scope, this.getSymTab().getCurrentScope().orElse(null));
     Assertions.assertEquals(size, this.getSymTab().getComponentStack().size());
-    Assertions.assertFalse(this.getSymTab().getCurrentCompInstanceType().isPresent());
   }
 
   @Test
@@ -223,36 +221,15 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     Assertions.assertEquals(scope, ast.getEnclosingScope());
     Assertions.assertTrue(this.getSymTab().getCurrentScope().isPresent());
     Assertions.assertEquals(scope, this.getSymTab().getCurrentScope().get());
-    Assertions.assertTrue(this.getSymTab().getCurrentCompInstanceType().isPresent());
-    Assertions.assertEquals(type, this.getSymTab().getCurrentCompInstanceType().get());
-  }
-
-  @Test
-  public void shouldEndVisitComponentInstantiation() {
-    ASTComponentInstantiation ast = arcbasis.ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
-      .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
-        .setPartsList(Lists.newArrayList("String"))
-        .build())
-      .build()).setComponentInstanceList("sub1", "sub2", "sub3")
-      .build();
-    this.getSymTab().visit(ast);
-    this.getSymTab().endVisit(ast);
-    Assertions.assertFalse(this.getSymTab().getCurrentCompInstanceType().isPresent());
   }
 
   @Test
   public void shouldCreateComponentInstance() {
     ASTComponentInstance ast = arcbasis.ArcBasisMill.componentInstanceBuilder().setName("sub").build();
-    ASTMCObjectType type = ArcBasisMill.mCQualifiedTypeBuilder()
-      .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
-        .setPartsList(Lists.newArrayList("String"))
-        .build())
-      .build();
-    this.getSymTab().setCurrentCompInstanceType(type);
     ComponentInstanceSymbol symbol = this.getSymTab().create_ComponentInstance(ast).build();
     Assertions.assertEquals(ast.getName(), symbol.getName());
     Assertions.assertNotNull(symbol.getArguments());
+    Assertions.assertThrows(IllegalStateException.class, symbol::getType);
   }
 
   @Test
@@ -260,13 +237,7 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     ASTComponentInstance ast = arcbasis.ArcBasisMill.componentInstanceBuilder().setName("sub")
       .setArguments(arcbasis.ArcBasisMill.argumentsBuilder()
         .setExpressionsList(Arrays.asList(this.mockValues(3))).build()).build();
-    ASTMCObjectType type = ArcBasisMill.mCQualifiedTypeBuilder()
-      .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
-        .setPartsList(Lists.newArrayList("String"))
-        .build())
-      .build();
     IArcBasisScope scope = ArcBasisMill.scope();
-    this.getSymTab().setCurrentCompInstanceType(type);
     this.getSymTab().pushCurrentEnclosingScope4Instances(scope);
     this.getSymTab().visit(ast);
     this.getSymTab().endVisit(ast);
@@ -279,12 +250,6 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
       .setArguments(arcbasis.ArcBasisMill.argumentsBuilder()
         .setExpressionsList(Arrays.asList(this.mockValues(3))).build()).build();
     IArcBasisScope scope = ArcBasisMill.scope();
-    ASTMCType curCompInstType = ArcBasisMill.mCQualifiedTypeBuilder()
-      .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
-        .setPartsList(Lists.newArrayList("String"))
-        .build())
-      .build();
-    this.getSymTab().setCurrentCompInstanceType(curCompInstType);
     this.getSymTab().pushCurrentEnclosingScope4Instances(scope);
     this.getSymTab().handle(ast);
     Assertions.assertEquals(scope, ast.getEnclosingScope());

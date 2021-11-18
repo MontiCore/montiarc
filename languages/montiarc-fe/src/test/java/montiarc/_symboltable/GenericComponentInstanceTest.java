@@ -3,11 +3,14 @@ package montiarc._symboltable;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
+import arcbasis.check.CompSymTypeExpression;
+import genericarc.check.SymTypeOfGenericComponent;
 import montiarc.AbstractTest;
 import montiarc.MontiArcCLI;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
@@ -18,6 +21,7 @@ public class GenericComponentInstanceTest extends AbstractTest {
 
   protected String Test_PATH = "montiarc/_symboltable";
 
+  @Disabled(value = "Because we currently do not support generic component types.")
   @Test
   public void shouldReturnGenericType() {
     //Given
@@ -30,13 +34,10 @@ public class GenericComponentInstanceTest extends AbstractTest {
     ComponentTypeSymbol compC = MontiArcMill.globalScope().resolveComponentType("B").get();
 
     //When
-    ComponentTypeSymbol genericType = compC.getSubComponents().get(0).getGenericType();
-    ComponentTypeSymbol type = compC.getSubComponents().get(0).getType();
+    CompSymTypeExpression genericType = compC.getSubComponents().get(0).getType();
 
     //Then
-    Assertions.assertNotEquals(genericType, type);
-    Assertions.assertTrue(genericType instanceof ComponentTypeSymbolSurrogate);
-    Assertions.assertEquals("T", genericType.getName());
-    Assertions.assertEquals("A", type.getName());
+    Assertions.assertTrue(genericType instanceof SymTypeOfGenericComponent);
+    Assertions.assertEquals("T", genericType.getTypeInfo().getTypeParameters().get(0));
   }
 }

@@ -4,6 +4,7 @@ package montiarc._symboltable;
 
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis.check.SymTypeOfComponent;
 import com.google.common.base.Preconditions;
 import montiarc.AbstractTest;
 import montiarc.MontiArcCLI;
@@ -55,12 +56,20 @@ public class NestedComponentsTest extends AbstractTest {
     ComponentInstanceSymbol nn2 = findCompInstIn(instancesInNestedComp, "nn2");
 
     // Then
-    Assertions.assertEquals(innerType1, inr1.getType());
-    Assertions.assertEquals(innerType2, inr2.getType());
-    Assertions.assertEquals(innerType2, inr22.getType());
-    Assertions.assertEquals(nestedType, nest1.getType());
-    Assertions.assertEquals(nextNested1, nn1.getType());
-    Assertions.assertEquals(nextNested2, nn2.getType());
+    Assertions.assertTrue(inr1.getType() instanceof SymTypeOfComponent);
+    Assertions.assertTrue(inr2.getType() instanceof SymTypeOfComponent);
+    Assertions.assertTrue(inr22.getType() instanceof SymTypeOfComponent);
+    Assertions.assertTrue(nest1.getType() instanceof SymTypeOfComponent);
+    Assertions.assertTrue(nn1.getType() instanceof SymTypeOfComponent);
+    Assertions.assertTrue(nn2.getType() instanceof SymTypeOfComponent);
+
+
+    Assertions.assertEquals(innerType1, inr1.getType().getTypeInfo());
+    Assertions.assertEquals(innerType2, inr2.getType().getTypeInfo());
+    Assertions.assertEquals(innerType2, inr22.getType().getTypeInfo());
+    Assertions.assertEquals(nestedType, nest1.getType().getTypeInfo());
+    Assertions.assertEquals(nextNested1, nn1.getType().getTypeInfo());
+    Assertions.assertEquals(nextNested2, nn2.getType().getTypeInfo());
   }
 
   protected ComponentTypeSymbol findCompTypeIn(

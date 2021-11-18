@@ -4,6 +4,7 @@ package arcbasis._ast;
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.*;
+import arcbasis.check.SymTypeOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
 import de.se_rwth.commons.logging.Log;
@@ -168,11 +169,11 @@ public class ASTPortAccessTest extends AbstractTest {
     port6.setEnclosingScope(scope2);
 
     ComponentInstanceSymbol sub1 = ArcBasisMill.componentInstanceSymbolBuilder()
-      .setName("sub1").setType(compB).build();
+      .setName("sub1").setType(new SymTypeOfComponent(compB)).build();
     scope1.add(sub1);
     sub1.setEnclosingScope(scope1);
     ComponentInstanceSymbol sub2 = ArcBasisMill.componentInstanceSymbolBuilder()
-      .setName("sub2").setEnclosingScope(scope1).setType(compC).build();
+      .setName("sub2").setEnclosingScope(scope1).setType(new SymTypeOfComponent(compC)).build();
     scope1.add(sub2);
     sub2.setEnclosingScope(scope1);
     return scope1;

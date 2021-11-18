@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -45,8 +46,8 @@ public class ComponentTypeSymbolBuilderTest extends AbstractTest {
 
   @Test
   public void shouldHaveParent() {
-    ComponentTypeSymbolSurrogate parentComp =
-      ArcBasisMill.componentTypeSymbolSurrogateBuilder().setName("A").build();
+    ComponentTypeSymbol parentComp = ArcBasisMill.componentTypeSymbolBuilder()
+      .setSpannedScope(Mockito.mock(IArcBasisScope.class)).setName("A").build();
     ComponentTypeSymbol childComp = ArcBasisMill.componentTypeSymbolBuilder().setName("B")
       .setSpannedScope(ArcBasisMill.scope()).setParentComponent(new SymTypeOfComponent(parentComp)).build();
     Assertions.assertTrue(childComp.isPresentParentComponent());

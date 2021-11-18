@@ -4,10 +4,12 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
+import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import arcbasis._visitor.ArcBasisFullPrettyPrinter;
 import arcbasis.check.ArcTypeCheck;
+import arcbasis.check.CompSymTypeExpression;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
@@ -104,7 +106,10 @@ public class ConnectorSourceAndTargetExistAndFit implements ArcBasisASTComponent
     }
     else {
       // is the port the port of a sub-component?
-      portSymbol = component.getSubComponent(portAccess.getComponent()).flatMap(componentInstanceSymbol -> componentInstanceSymbol.getType().getPort(portAccess.getPort(), true));
+      portSymbol = component.getSubComponent(portAccess.getComponent())
+        .map(ComponentInstanceSymbol::getType)
+        .map(CompSymTypeExpression::getTypeInfo)
+        .flatMap(compType -> compType.getPort(portAccess.getPort(), true));
     }
     // some checks with the resulting port-optional
     if (!portSymbol.isPresent()) {

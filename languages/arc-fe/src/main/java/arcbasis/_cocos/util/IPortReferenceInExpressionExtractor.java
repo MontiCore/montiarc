@@ -88,7 +88,8 @@ public interface IPortReferenceInExpressionExtractor {
 
       for (ComponentInstanceSymbol subComp : comp.getSubComponents()) {
         Preconditions.checkState(subComp.getType() != null);
-        subComp.getType().getAllPorts().stream()
+        Preconditions.checkState(subComp.getType().getTypeInfo() != null);
+        subComp.getType().getTypeInfo().getAllPorts().stream()
           .map(port -> new PortReference(subComp.getName(), port.getName()))
           .forEach(allSubCompPorts::add);
       }

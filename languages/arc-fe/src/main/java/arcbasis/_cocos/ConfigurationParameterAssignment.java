@@ -75,9 +75,10 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     Preconditions.checkArgument(node.isPresentSymbol(), "Could not perform coco check '%s'. Perhaps you missed the " +
       "symbol table creation.", this.getClass().getSimpleName());
     Preconditions.checkArgument(node.getSymbol().getType() != null);
+    Preconditions.checkArgument(node.getSymbol().getType().getTypeInfo() != null);
 
     ComponentInstanceSymbol compInstance = node.getSymbol();
-    ComponentTypeSymbol typeOfCompInstance = compInstance.getType();
+    ComponentTypeSymbol typeOfCompInstance = compInstance.getType().getTypeInfo();
 
     List<ASTExpression> paramBindings = compInstance.getArguments();
     List<SymTypeExpression> bindingSignature =
@@ -125,7 +126,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
 
   protected void logCocoViolation(
     List<SymTypeExpression> bindingSignature, ComponentInstanceSymbol compInstance) {
-    Log.error(ArcError.CONFIG_PARAMETER_BINDING.format(compInstance.getType().getFullName(),
+    Log.error(ArcError.CONFIG_PARAMETER_BINDING.format(compInstance.getType().printFullName(),
       printSignature(bindingSignature), compInstance.getFullName()));
   }
 

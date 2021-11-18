@@ -34,7 +34,6 @@ public class FieldInitExpressionsOmitPortReferencesTest extends AbstractTest {
   protected final static String INDEPENDENT_COMPONENT_NAME = "IndependentComp";
   protected final static String INDEPENDENT_COMPONENT_IN_PORT_NAME = "someIndependentInPort";
   protected final static String INDEPENDENT_COMPONENT_OUT_PORT_NAME = "someIndependentOutPort";
-  protected final static String INDEPENDENT_CHILD_NAME = "IndependentChild";
 
   @BeforeEach
   protected void setCoCo() {
@@ -43,6 +42,7 @@ public class FieldInitExpressionsOmitPortReferencesTest extends AbstractTest {
 
   /**
    * Provides a component type symbol with specified name and one in and one out port with specified names.
+   * If such a component did not exist in the global scope yet, it is added to it.
    */
   protected ComponentTypeSymbol provideComponentWithInAndOutPort(
     @NotNull String compName, @NotNull String inPortName, @NotNull String outPortName) {
@@ -50,58 +50,79 @@ public class FieldInitExpressionsOmitPortReferencesTest extends AbstractTest {
     Preconditions.checkNotNull(inPortName);
     Preconditions.checkNotNull(outPortName);
 
-    ComponentTypeSymbol comp = ArcBasisMill.componentTypeSymbolBuilder()
-      .setName(compName)
-      .setSpannedScope(ArcBasisMill.scope())
-      .build();
+    if(
+      ArcBasisMill.globalScope().resolveComponentType(compName).isPresent()
+      && ArcBasisMill.globalScope().resolveComponentType(compName).get().getIncomingPort(inPortName).isPresent()
+      && ArcBasisMill.globalScope().resolveComponentType(compName).get().getOutgoingPort(outPortName).isPresent()
+      && ArcBasisMill.globalScope().resolveComponentType(compName).get().getAllPorts().size() == 2
+    ) {
+      return ArcBasisMill.globalScope().resolveComponentType(compName).get();
+    } else {
+      ComponentTypeSymbol comp = ArcBasisMill.componentTypeSymbolBuilder()
+        .setName(compName)
+        .setSpannedScope(ArcBasisMill.scope())
+        .build();
 
-    PortSymbol inPort = ArcBasisMill.portSymbolBuilder()
-      .setName(inPortName)
-      .setIncoming(true)
-      .setType(Mockito.mock(SymTypeExpression.class))
-      .build();
-    comp.getSpannedScope().add(inPort);
+      PortSymbol inPort = ArcBasisMill.portSymbolBuilder()
+        .setName(inPortName)
+        .setIncoming(true)
+        .setType(Mockito.mock(SymTypeExpression.class))
+        .build();
+      comp.getSpannedScope().add(inPort);
 
-    PortSymbol outPort = ArcBasisMill.portSymbolBuilder()
-      .setName(outPortName)
-      .setIncoming(false)
-      .setType(Mockito.mock(SymTypeExpression.class))
-      .build();
-    comp.getSpannedScope().add(outPort);
+      PortSymbol outPort = ArcBasisMill.portSymbolBuilder()
+        .setName(outPortName)
+        .setIncoming(false)
+        .setType(Mockito.mock(SymTypeExpression.class))
+        .build();
+      comp.getSpannedScope().add(outPort);
 
-    return comp;
+      ArcBasisMill.globalScope().add(comp);
+      ArcBasisMill.globalScope().addSubScope(comp.getSpannedScope());
+
+      return comp;
+    }
   }
 
   /**
    * Provides a component type symbol called {@link #INDEPENDENT_COMPONENT_NAME} with an in port of name {@link
    * #INDEPENDENT_COMPONENT_IN_PORT_NAME} and an out port of name {@link #INDEPENDENT_COMPONENT_OUT_PORT_NAME}.
+   * This component type is added to the global scope subsequently, if it was not present there before.
    */
   protected ComponentTypeSymbol provideIndependentComponent() {
-    ComponentTypeSymbol independentComp = ArcBasisMill.componentTypeSymbolBuilder()
-      .setName(INDEPENDENT_COMPONENT_NAME)
-      .setSpannedScope(ArcBasisMill.scope())
-      .build();
 
-    PortSymbol inPort = ArcBasisMill.portSymbolBuilder()
-      .setName(INDEPENDENT_COMPONENT_IN_PORT_NAME)
-      .setIncoming(true)
-      .setType(Mockito.mock(SymTypeExpression.class))
-      .build();
-    independentComp.getSpannedScope().add(inPort);
+    if(ArcBasisMill.globalScope().resolveComponentType(INDEPENDENT_COMPONENT_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveComponentType(INDEPENDENT_COMPONENT_NAME).get();
+    } else {
+      ComponentTypeSymbol independentComp = ArcBasisMill.componentTypeSymbolBuilder()
+        .setName(INDEPENDENT_COMPONENT_NAME)
+        .setSpannedScope(ArcBasisMill.scope())
+        .build();
 
-    PortSymbol outPort = ArcBasisMill.portSymbolBuilder()
-      .setName(INDEPENDENT_COMPONENT_OUT_PORT_NAME)
-      .setIncoming(false)
-      .setType(Mockito.mock(SymTypeExpression.class))
-      .build();
-    independentComp.getSpannedScope().add(outPort);
+      PortSymbol inPort = ArcBasisMill.portSymbolBuilder()
+        .setName(INDEPENDENT_COMPONENT_IN_PORT_NAME)
+        .setIncoming(true)
+        .setType(Mockito.mock(SymTypeExpression.class))
+        .build();
+      independentComp.getSpannedScope().add(inPort);
 
-    return independentComp;
+      PortSymbol outPort = ArcBasisMill.portSymbolBuilder()
+        .setName(INDEPENDENT_COMPONENT_OUT_PORT_NAME)
+        .setIncoming(false)
+        .setType(Mockito.mock(SymTypeExpression.class))
+        .build();
+      independentComp.getSpannedScope().add(outPort);
+
+      ArcBasisMill.globalScope().add(independentComp);
+      ArcBasisMill.globalScope().addSubScope(independentComp.getSpannedScope());
+
+      return independentComp;
+    }
   }
 
   /**
    * Provides a component type symbol that has does not reference any ports in the initializer expressions of it's
-   * fields.
+   * fields. If no such component was found in the global scope yet, the component is added to it.
    */
   protected ComponentTypeSymbol provideCompWithoutPortRef() {
     final String compInPortName = "someInPort";
@@ -131,29 +152,22 @@ public class FieldInitExpressionsOmitPortReferencesTest extends AbstractTest {
 
     ComponentInstanceSymbol independentCompInst = ArcBasisMill.componentInstanceSymbolBuilder()
       .setName("independentComp")
-      .setType(ArcBasisMill.componentTypeSymbolSurrogateBuilder()
-        .setName(INDEPENDENT_COMPONENT_NAME)
-        .setEnclosingScope(comp.getSpannedScope())
-        .build()
-      )
+      .setType(new SymTypeOfComponent(provideIndependentComponent()))
       .build();
     comp.getSpannedScope().add(independentCompInst);
 
-    ComponentInstanceSymbol independentChildInst = ArcBasisMill.componentInstanceSymbolBuilder()
-      .setName("independentChild")
-      .setType(ArcBasisMill.componentTypeSymbolSurrogateBuilder()
-        .setName(INDEPENDENT_CHILD_NAME)
-        .setEnclosingScope(comp.getSpannedScope())
-        .build()
-      )
+    ComponentInstanceSymbol independentCompInst2 = ArcBasisMill.componentInstanceSymbolBuilder()
+      .setName("independentComp2")
+      .setType(new SymTypeOfComponent(provideIndependentComponent()))
       .build();
-    comp.getSpannedScope().add(independentChildInst);
+    comp.getSpannedScope().add(independentCompInst2);
 
     return comp;
   }
 
   /**
    * Provides a component type symbol that references it's own ports in the initializer expressions of it's fields.
+   * If there was no such component before in the global scope, the component is added to it.
    */
   protected ComponentTypeSymbol provideCompWithOwnPortRef() {
     final String compInPortName = "anotherInPort";
@@ -197,10 +211,9 @@ public class FieldInitExpressionsOmitPortReferencesTest extends AbstractTest {
 
   /**
    * Provides a component type symbol that inherits from the one that inherits from the symbol returned by {@link
-   * #provideIndependentComponent()}. Note that this relationship is only realized by a surrogate. If you want to have
-   * access to the parent, you must put the parent into a scope that is reachable from the component returned by this
-   * method. The component returned by this method accesses the ports of it's parent in initializer expressions for it's
-   * fields.
+   * #provideIndependentComponent()}. The component returned by this method accesses the ports of it's parent in
+   * initializer expressions for it's fields. If the created component did not exist in the global scope before, it is
+   * added to it.
    */
   protected ComponentTypeSymbol provideCompWithInheritedPortRef(CompSymTypeExpression parent) {
     ComponentTypeSymbol comp = ArcBasisMill.componentTypeSymbolBuilder()
@@ -240,16 +253,16 @@ public class FieldInitExpressionsOmitPortReferencesTest extends AbstractTest {
       .build();
     comp.getSpannedScope().add(secondField);
 
+    ArcBasisMill.globalScope().add(comp);
+    ArcBasisMill.globalScope().addSubScope(comp.getSpannedScope());
+
     return comp;
   }
 
   @Test
   public void shouldNotFindPortReference() {
     // Given
-    IArcBasisScope scope = ArcBasisMill.scope();
     ComponentTypeSymbol comp = provideCompWithoutPortRef();
-    scope.add(comp);
-    scope.addSubScope(comp.getSpannedScope());
 
     // When
     this.coco.check(comp.getAstNode());
@@ -261,10 +274,7 @@ public class FieldInitExpressionsOmitPortReferencesTest extends AbstractTest {
   @Test
   public void shouldFindOwnPortReference() {
     // Given
-    IArcBasisScope scope = ArcBasisMill.scope();
     ComponentTypeSymbol comp = provideCompWithOwnPortRef();
-    scope.add(comp);
-    scope.addSubScope(comp.getSpannedScope());
 
     // When
     this.coco.check(comp.getAstNode());

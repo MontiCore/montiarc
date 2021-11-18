@@ -9,7 +9,6 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis.util.ArcError;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
-import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -28,10 +27,10 @@ public class ComponentInstanceTypeExistsTest extends AbstractTest {
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(arcbasis.ArcBasisMill.componentBodyBuilder().addArcElement(instantiation).build())
       .build();
-    ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
-    symTab.createFromAST(enclType).setName("Scopy");
+    ArcBasisScopesGenitorDelegator genitor = ArcBasisMill.scopesGenitorDelegator();
+    genitor.createFromAST(enclType).setName("Scopy");
     ComponentInstanceTypeExists coco = new ComponentInstanceTypeExists();
-    coco.check(instantiation.getComponentInstance(0));
+    coco.check(instantiation);
     this.checkOnlyExpectedErrorsPresent(new ArcError[] { ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE});
   }
 }

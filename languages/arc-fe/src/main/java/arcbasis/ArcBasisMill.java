@@ -3,6 +3,9 @@ package arcbasis;
 
 import arcbasis._symboltable.ArcBasisSymbolTableCompleter;
 import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
+import arcbasis._symboltable.PortSymbolSurrogate;
+import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
+import arcbasis._symboltable.ComponentInstanceSymbolSurrogate;
 
 public class ArcBasisMill extends ArcBasisMillTOP {
 

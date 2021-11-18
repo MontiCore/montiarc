@@ -41,7 +41,7 @@ public class SubComponentsConnected implements ArcBasisASTComponentTypeCoCo {
     for (ComponentInstanceSymbol subSymbol : compSymbol.getSubComponents()) {
       // --------- INCOMING PORTS ----------
       Collection<String> subInputPorts =
-        this.getNames(subSymbol.getType().getAllIncomingPorts());
+        this.getNames(subSymbol.getType().getTypeInfo().getAllIncomingPorts());
       subInputPorts = subInputPorts.stream()
         .map(s -> subSymbol.getName() + "." + s)
         .collect(Collectors.toList());
@@ -60,7 +60,7 @@ public class SubComponentsConnected implements ArcBasisASTComponentTypeCoCo {
       }
       // --------- OUTGOING PORTS ----------
       Collection<String> subOutputPorts
-        = this.getNames(subSymbol.getType().getAllOutgoingPorts());
+        = this.getNames(subSymbol.getType().getTypeInfo().getAllOutgoingPorts());
       subOutputPorts = subOutputPorts.stream()
         .map(s -> subSymbol.getName() + "." + s)
         .collect(Collectors.toList());

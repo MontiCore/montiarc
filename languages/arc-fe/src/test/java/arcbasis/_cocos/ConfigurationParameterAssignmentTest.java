@@ -5,6 +5,7 @@ package arcbasis._cocos;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
+import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
 import arcbasis.check.ArcBasisDeriveTest;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
@@ -24,11 +25,13 @@ import org.mockito.Mockito;
 public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
 
   protected ArcBasisScopesGenitorDelegator scopeGenitor;
+  protected ArcBasisSymbolTableCompleterDelegator completer;
 
   @Override
   public void setUp() {
     super.setUp();
     this.scopeGenitor = ArcBasisMill.scopesGenitorDelegator();
+    this.completer = ArcBasisMill.symbolTableCompleterDelegator();
   }
 
   @Override
@@ -49,6 +52,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
   public void shouldFindTooFewParameterBindings() {
     ASTComponentType compType = provideSimpleCompType();
     this.scopeGenitor.createFromAST(compType);
+    this.completer.createFromAST(compType);
 
     // ↓ test subject
     ASTComponentInstantiation compInst = ArcBasisMill.componentInstantiationBuilder()
@@ -63,6 +67,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
 
     ASTComponentType enclComp = encloseInstInCompType(compInst);
     this.scopeGenitor.createFromAST(enclComp);
+    this.completer.createFromAST(enclComp);
 
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     coco.check(compInst.getComponentInstance(0));
@@ -74,6 +79,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
   public void shouldFindTooManyParameterBindings() {
     ASTComponentType compType = provideSimpleCompType();
     this.scopeGenitor.createFromAST(compType);
+    this.completer.createFromAST(compType);
 
     ASTArguments arguments = ArcBasisMill.argumentsBuilder()
       .addExpression(doBuildNameExpressionInScope("anInt"))
@@ -93,6 +99,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
 
     ASTComponentType enclComp = encloseInstInCompType(compInst);
     this.scopeGenitor.createFromAST(enclComp);
+    this.completer.createFromAST(enclComp);
 
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment(getDerive());
     coco.check(compInst.getComponentInstance(0));
@@ -104,6 +111,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
   public void shouldFindCorrectNumberOfParameterBindings() {
     ASTComponentType compType = provideSimpleCompType();
     this.scopeGenitor.createFromAST(compType);
+    this.completer.createFromAST(compType);
 
     ASTArguments arguments = ArcBasisMill.argumentsBuilder()
       .addExpression(doBuildNameExpressionInScope("anInt"))
@@ -122,6 +130,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
 
     ASTComponentType enclComp = encloseInstInCompType(compInst);
     this.scopeGenitor.createFromAST(enclComp);
+    this.completer.createFromAST(enclComp);
 
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment(getDerive());
     coco.check(compInst.getComponentInstance(0));
@@ -133,6 +142,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
   public void shouldFindTooFewParameterBindingsWithDefaultParameters() {
     ASTComponentType compType = provideAdvancedCompType();
     this.scopeGenitor.createFromAST(compType);
+    this.completer.createFromAST(compType);
 
     // ↓ test subject
     ASTComponentInstantiation compInst = ArcBasisMill.componentInstantiationBuilder()
@@ -147,6 +157,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
 
     ASTComponentType enclComp = encloseInstInCompType(compInst);
     this.scopeGenitor.createFromAST(enclComp);
+    this.completer.createFromAST(enclComp);
 
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     coco.check(compInst.getComponentInstance(0));
@@ -158,6 +169,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
   public void shouldFindTooManyParameterBindingsWithDefaultParameters() {
     ASTComponentType compType = provideAdvancedCompType();
     this.scopeGenitor.createFromAST(compType);
+    this.completer.createFromAST(compType);
 
     ASTArguments arguments = ArcBasisMill.argumentsBuilder()
       .addExpression(doBuildNameExpressionInScope("anInt"))
@@ -179,6 +191,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
 
     ASTComponentType enclComp = encloseInstInCompType(compInst);
     this.scopeGenitor.createFromAST(enclComp);
+    this.completer.createFromAST(enclComp);
 
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     coco.check(compInst.getComponentInstance(0));
@@ -190,6 +203,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
   public void shouldFindWrongDefaultParameterOverwriteSequence() {
     ASTComponentType compType = provideAdvancedCompType();
     this.scopeGenitor.createFromAST(compType);
+    this.completer.createFromAST(compType);
 
     ASTArguments arguments = ArcBasisMill.argumentsBuilder()
       .addExpression(doBuildNameExpressionInScope("anInt"))
@@ -209,6 +223,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
 
     ASTComponentType enclComp = encloseInstInCompType(compInst);
     this.scopeGenitor.createFromAST(enclComp);
+    this.completer.createFromAST(enclComp);
 
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     coco.check(compInst.getComponentInstance(0));
@@ -220,6 +235,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
   public void shouldFindCorrectNumberOfParameterBindingsWithDefaultParameters() {
     ASTComponentType compType = provideAdvancedCompType();
     this.scopeGenitor.createFromAST(compType);
+    this.completer.createFromAST(compType);
 
     ASTArguments arguments = ArcBasisMill.argumentsBuilder()
       .addExpression(doBuildNameExpressionInScope("anInt"))
@@ -238,6 +254,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
 
     ASTComponentType enclComp = encloseInstInCompType(compInst);
     this.scopeGenitor.createFromAST(enclComp);
+    this.completer.createFromAST(enclComp);
 
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     coco.check(compInst.getComponentInstance(0));
@@ -249,6 +266,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
   public void shouldFindCorrectNumberOfParameterBindingsWithAllDefaultsOverwritten() {
     ASTComponentType compType = provideAdvancedCompType();
     this.scopeGenitor.createFromAST(compType);
+    this.completer.createFromAST(compType);
 
     ASTArguments arguments = ArcBasisMill.argumentsBuilder()
       .addExpression(doBuildNameExpressionInScope("anInt"))
@@ -269,6 +287,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
 
     ASTComponentType enclComp = encloseInstInCompType(compInst);
     this.scopeGenitor.createFromAST(enclComp);
+    this.completer.createFromAST(enclComp);
 
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     coco.check(compInst.getComponentInstance(0));
@@ -280,6 +299,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
   public void shouldFindCorrectNumberOfParameterBindingsWithSomeDefaultsOverwritten() {
     ASTComponentType compType = provideAdvancedCompType();
     this.scopeGenitor.createFromAST(compType);
+    this.completer.createFromAST(compType);
 
     ASTArguments arguments = ArcBasisMill.argumentsBuilder()
       .addExpression(doBuildNameExpressionInScope("anInt"))
@@ -299,6 +319,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
 
     ASTComponentType enclComp = encloseInstInCompType(compInst);
     this.scopeGenitor.createFromAST(enclComp);
+    this.completer.createFromAST(enclComp);
 
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     coco.check(compInst.getComponentInstance(0));
@@ -310,6 +331,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
   public void shouldFindWrongTypes() {
     ASTComponentType compType = provideAdvancedCompType();
     this.scopeGenitor.createFromAST(compType);
+    this.completer.createFromAST(compType);
 
     ASTArguments arguments = ArcBasisMill.argumentsBuilder()
       .addExpression(doBuildNameExpressionInScope("aDouble"))
@@ -329,6 +351,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
 
     ASTComponentType enclComp = encloseInstInCompType(compInst);
     this.scopeGenitor.createFromAST(enclComp);
+    this.completer.createFromAST(enclComp);
 
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     coco.check(compInst.getComponentInstance(0));

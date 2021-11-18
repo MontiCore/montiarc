@@ -99,6 +99,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @param outerComponent the component type that contains this component type.
    */
   public void setOuterComponent(@Nullable ComponentTypeSymbol outerComponent) {
+    Preconditions.checkArgument(!(outerComponent instanceof ComponentTypeSymbolSurrogate));
     this.outerComponent = outerComponent;
   }
 

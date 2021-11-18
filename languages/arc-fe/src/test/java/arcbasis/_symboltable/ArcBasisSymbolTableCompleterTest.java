@@ -3,10 +3,9 @@ package arcbasis._symboltable;
 
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.ASTComponentBody;
-import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.*;
 import arcbasis._visitor.ArcBasisTraverser;
+import arcbasis.check.SymTypeOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
@@ -24,6 +23,7 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Stack;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -281,6 +281,33 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     Assertions.assertEquals(1, this.getCompleter().getComponentStack().size());
     Assertions.assertTrue(this.getCompleter().getCurrentComponent().isPresent());
     Assertions.assertEquals(ast.getSymbol(), this.getCompleter().getCurrentComponent().get());
+    Assertions.assertTrue(!this.getCompleter().getCurrentCompInstanceType().isPresent());
+  }
+
+  public void shouldVisitComponentTypeAndSetCurrentCompInstanceType() {
+    Preconditions.checkState(this.getCompleter().getComponentStack().isEmpty());
+
+    // Given
+    ASTComponentType ast = ArcBasisMill.componentTypeBuilder().setName("SomeName")
+      .setHead(Mockito.mock(ASTComponentHead.class))
+      .setBody(Mockito.mock(ASTComponentBody.class))
+      .addInstance("someInst")
+      .build();
+    ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName("SomeName")
+      .setSpannedScope(ArcBasisMill.scope()).build();
+    ast.setSymbol(symbol);
+
+    // When
+    this.getCompleter().visit(ast);
+
+    //Then
+    Assertions.assertFalse(this.getCompleter().getComponentStack().isEmpty());
+    Assertions.assertEquals(1, this.getCompleter().getComponentStack().size());
+    Assertions.assertTrue(this.getCompleter().getCurrentComponent().isPresent());
+    Assertions.assertEquals(ast.getSymbol(), this.getCompleter().getCurrentComponent().get());
+    Assertions.assertTrue(this.getCompleter().getCurrentCompInstanceType().isPresent());
+    Assertions.assertTrue(this.getCompleter().getCurrentCompInstanceType().get() instanceof SymTypeOfComponent);
+    Assertions.assertEquals(symbol, this.getCompleter().getCurrentCompInstanceType().get().getTypeInfo());
   }
 
   /**
@@ -365,12 +392,14 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     ast.getSymbol().setAstNode(ast);
 
     this.getCompleter().putOnStack(ast.getSymbol());
+    this.getCompleter().setCurrentCompInstanceType(new SymTypeOfComponent(ast.getSymbol()));
 
     // When
     this.getCompleter().endVisit(ast);
 
     // Then
     Assertions.assertTrue(this.getCompleter().getComponentStack().isEmpty());
+    Assertions.assertFalse(this.getCompleter().getCurrentCompInstanceType().isPresent());
   }
 
   /**
@@ -487,5 +516,130 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
       Arguments.of(ast2, consumer1, IllegalStateException.class),
       Arguments.of(ast2, consumer2, IllegalStateException.class)
     );
+  }
+
+  @Test
+  public void shouldVisitComponentInstantiation() {
+    // Given
+    ASTComponentInstantiation instantiation = provideComponentInstantiation();
+    Optional<ComponentTypeSymbol> compTypeSym = ArcBasisMill.globalScope().resolveComponentType("Comp");
+    if(!compTypeSym.isPresent()) {
+      throw new IllegalStateException("We expect the component type 'Comp' to be added to the global scope by the " +
+        "provider of the ASTComponentInstantiation.");
+    }
+
+    // When
+    getCompleter().visit(instantiation);
+
+    // Then
+    Assertions.assertTrue(getCompleter().getCurrentCompInstanceType().isPresent());
+    Assertions.assertTrue(getCompleter().getCurrentCompInstanceType().get() instanceof SymTypeOfComponent);
+    Assertions.assertEquals(compTypeSym.get(), getCompleter().getCurrentCompInstanceType().get().getTypeInfo());
+  }
+
+  @Test
+  public void shouldEndVisitComponentInstantiation() {
+    // Given
+    ASTComponentInstantiation instantiation = provideComponentInstantiation();
+    Optional<ComponentTypeSymbol> compTypeSym = ArcBasisMill.globalScope().resolveComponentType("Comp");
+    if(!compTypeSym.isPresent()) {
+      throw new IllegalStateException("We expect the component type 'Comp' to be added to the global scope by the " +
+        "provider of the ASTComponentInstantiation.");
+    }
+    getCompleter().setCurrentCompInstanceType(new SymTypeOfComponent(compTypeSym.get()));
+
+    // When
+    getCompleter().endVisit(instantiation);
+
+    // Then
+    Assertions.assertFalse(getCompleter().getCurrentCompInstanceType().isPresent());
+  }
+
+  @Test
+  public void shouldVisitComponentInstance() {
+    // Given
+    ASTComponentInstance astInstance = ArcBasisMill.componentInstanceBuilder()
+      .setName("inst").build();
+    ComponentInstanceSymbol symInstance = ArcBasisMill.componentInstanceSymbolBuilder()
+      .setName("inst").build();
+
+    astInstance.setSymbol(symInstance);
+    symInstance.setAstNode(astInstance);
+
+    ComponentTypeSymbol compType = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName("CompType")
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+    getCompleter().setCurrentCompInstanceType(new SymTypeOfComponent(compType));
+
+    // When
+    getCompleter().visit(astInstance);
+
+    // Then
+    Assertions.assertDoesNotThrow(astInstance.getSymbol()::getType);
+    Assertions.assertTrue(astInstance.getSymbol().getType() instanceof SymTypeOfComponent);
+    Assertions.assertEquals(compType, astInstance.getSymbol().getType().getTypeInfo());
+  }
+
+  @Test
+  public void shouldHandleComponentInstantiationByCompletingComponentInstanceSymbols() {
+    // Given
+    ASTComponentInstantiation astInstantiation = provideComponentInstantiation();
+    Preconditions.checkState(astInstantiation.getComponentInstanceList().size() > 0);
+    Optional<ComponentTypeSymbol> compTypeSym = ArcBasisMill.globalScope().resolveComponentType("Comp");
+    if(!compTypeSym.isPresent()) {
+      throw new IllegalStateException("We expect the component type 'Comp' to be added to the global scope by the " +
+        "provider of the ASTComponentInstantiation.");
+    }
+    // Attach a traverser to the completer, so that he can perfrom the whole handling process
+    ArcBasisTraverser traverser = ArcBasisMill.traverser();
+    traverser.setArcBasisHandler(getCompleter());
+    traverser.add4ArcBasis(getCompleter());
+
+    // When
+    getCompleter().handle(astInstantiation);
+
+    // Then
+    for (ASTComponentInstance astInst : astInstantiation.getComponentInstanceList()) {
+      Assertions.assertDoesNotThrow(astInst.getSymbol()::getType);
+      Assertions.assertTrue(astInst.getSymbol().getType() instanceof  SymTypeOfComponent);
+      Assertions.assertEquals(compTypeSym.get(), astInst.getSymbol().getType().getTypeInfo());
+    }
+  }
+
+  /**
+   * Adds a component type symbol "Comp" to the global scope and creates an ASTComponentInstantiation
+   * {@code Comp inst1, inst2;} where all AST elements are enclosed by the global scope. Also adds symbols for the
+   * instances (inst1 and inst2) to the global scope. The types of the instances are not set yet though.
+   */
+  protected ASTComponentInstantiation provideComponentInstantiation() {
+    String compName = "Comp";
+    ComponentTypeSymbol compTypeSym = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(compName)
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+
+    ASTMCType astCompType = createQualifiedType(compName);
+    ASTComponentInstantiation instantiation = ArcBasisMill.componentInstantiationBuilder()
+      .setMCType(astCompType)
+      .addInstance("inst1")
+      .addInstance("inst2")
+      .build();
+
+    ArcBasisMill.globalScope().add(compTypeSym);
+    astCompType.setEnclosingScope(ArcBasisMill.globalScope());
+    instantiation.setEnclosingScope(ArcBasisMill.globalScope());
+
+    for(ASTComponentInstance astInst : instantiation.getComponentInstanceList()) {
+      ComponentInstanceSymbol instSym = ArcBasisMill.componentInstanceSymbolBuilder()
+        .setName(astInst.getName())
+        .build();
+      instSym.setAstNode(astInst);
+      astInst.setSymbol(instSym);
+      astInst.setEnclosingScope(ArcBasisMill.globalScope());
+      ArcBasisMill.globalScope().add(instSym);
+    }
+
+    return instantiation;
   }
 }

@@ -38,6 +38,7 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
   }
 
   public ComponentTypeSymbolBuilder setOuterComponent(@Nullable ComponentTypeSymbol outerComponent) {
+    Preconditions.checkArgument(!(outerComponent instanceof ComponentTypeSymbolSurrogate));
     this.outerComponent = outerComponent;
     return this.realBuilder;
   }

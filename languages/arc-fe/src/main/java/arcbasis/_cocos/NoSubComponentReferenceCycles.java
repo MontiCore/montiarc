@@ -4,7 +4,7 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
+import arcbasis.check.CompSymTypeExpression;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
@@ -28,23 +28,16 @@ public class NoSubComponentReferenceCycles implements ArcBasisASTComponentTypeCo
 
     ComponentTypeSymbol comp = astComp.getSymbol();
 
-    try {
-      Optional<List<ComponentTypeSymbol>> referenceCycle = findRefCycle(comp);
-      if (referenceCycle.isPresent()) {
-        Log.error(ArcError.NO_SUBCOMPONENT_CYCLE.format(printCycle(referenceCycle.get())),
-          astComp.get_SourcePositionStart()
-        );
-      }
-    } catch (SurrogateNotResolvableException e) {
-      Log.error(String.format("Can not check coco '%s' on component type '%s' because component type surrogate '%s', " +
-        "which is contained in the the component types' transitive subcomponent instantiations, does not lead " +
-        "anywhere.", this.getClass().getSimpleName(), comp.getFullName(), e.getSurrogate().getFullName()
-      ));
+    Optional<List<ComponentTypeSymbol>> referenceCycle = findRefCycle(comp);
+    if (referenceCycle.isPresent()) {
+      Log.error(ArcError.NO_SUBCOMPONENT_CYCLE.format(printCycle(referenceCycle.get())),
+        astComp.get_SourcePositionStart()
+      );
     }
   }
 
   /**
-   * Checks whether the given component is part of a instantiation reference cycle
+   * Checks whether the given component is part of an instantiation reference cycle
    *
    * @param compArg root element of the recursion
    * @return any cycles where the root-element directly or indirectly instantiates itself
@@ -53,7 +46,7 @@ public class NoSubComponentReferenceCycles implements ArcBasisASTComponentTypeCo
     Preconditions.checkNotNull(compArg);
 
     Deque<ComponentTypeSymbol> stack = new LinkedList<>();
-    stack.push(skipSurrogate(compArg));
+    stack.push(compArg);
 
     return findRefCycleDepthFirst(stack);
   }
@@ -73,7 +66,7 @@ public class NoSubComponentReferenceCycles implements ArcBasisASTComponentTypeCo
 
     Collection<ComponentTypeSymbol> instantiatedTypes = trace.peekLast().getSubComponents().stream()
       .map(ComponentInstanceSymbol::getType)
-      .map(NoSubComponentReferenceCycles::skipSurrogate)
+      .map(CompSymTypeExpression::getTypeInfo)
       .distinct()
       .collect(Collectors.toList());
 
@@ -99,27 +92,6 @@ public class NoSubComponentReferenceCycles implements ArcBasisASTComponentTypeCo
   }
 
   /**
-   * Resolves a component symbol
-   *
-   * @param sym component symbol or a surrogate for that
-   * @return a loaded component symbol
-   */
-  protected static ComponentTypeSymbol skipSurrogate(@NotNull ComponentTypeSymbol sym) {
-    Preconditions.checkArgument(sym != null);
-
-    ComponentTypeSymbol curSym = sym;
-    while (curSym instanceof ComponentTypeSymbolSurrogate) {
-      ComponentTypeSymbolSurrogate surrogate = (ComponentTypeSymbolSurrogate) curSym;
-      ComponentTypeSymbol updatedSym = surrogate.lazyLoadDelegate();
-      if (updatedSym == surrogate) {
-        throw new SurrogateNotResolvableException(surrogate);
-      }
-      curSym = updatedSym;
-    }
-    return curSym;
-  }
-
-  /**
    * Represents a given list as a string
    *
    * @param cycle a list (preferably random access) of component types that instantiate each other (each component only
@@ -139,20 +111,5 @@ public class NoSubComponentReferenceCycles implements ArcBasisASTComponentTypeCo
     }
 
     return printer.toString();
-  }
-
-  /**
-   * Custom exception thrown and caught only by {@link NoSubComponentReferenceCycles this class}
-   */
-  protected static class SurrogateNotResolvableException extends RuntimeException {
-    protected final ComponentTypeSymbolSurrogate surrogate;
-
-    public SurrogateNotResolvableException(@NotNull ComponentTypeSymbolSurrogate surr) {
-      this.surrogate = Preconditions.checkNotNull(surr);
-    }
-
-    public ComponentTypeSymbolSurrogate getSurrogate() {
-      return surrogate;
-    }
   }
 }

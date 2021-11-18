@@ -2,13 +2,16 @@
 package arcbasis._symboltable;
 
 import arcbasis._ast.ASTComponentHead;
+import arcbasis._ast.ASTComponentInstance;
+import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis._visitor.ArcBasisVisitor2;
-import arcbasis.check.SymTypeOfComponent;
+import arcbasis.check.*;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import de.monticore.symboltable.ISymbol;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
@@ -35,7 +38,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
 
   protected String printType(@NotNull ASTMCType type) {
     Preconditions.checkNotNull(type);
-    return type.printType(this.getTypePrinter());
+    return type.printType(typePrinter);
   }
 
   protected Stack<ComponentTypeSymbol> componentStack;
@@ -62,6 +65,16 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     this.getComponentStack().push(symbol);
   }
 
+  protected CompSymTypeExpression currentCompInstanceType;
+
+  protected Optional<CompSymTypeExpression> getCurrentCompInstanceType() {
+    return Optional.ofNullable((this.currentCompInstanceType));
+  }
+
+  protected void setCurrentCompInstanceType(@Nullable CompSymTypeExpression currentCompInstanceType) {
+    this.currentCompInstanceType = currentCompInstanceType;
+  }
+
   protected ArcBasisTraverser traverser;
 
   @Override
@@ -75,13 +88,32 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     return this.traverser;
   }
 
+  /**
+   * Used to create {@link CompSymTypeExpression}s from the {@link ASTMCType}s that declare the types of component
+   * instances within {@link ASTComponentInstantiation}s.
+   */
+  protected ISynthesizeCompSymTypeExpression compTypeExpressionSynth;
+
+  public void setCompTypeExpressionSynth(@NotNull ISynthesizeCompSymTypeExpression compTypeExpressionSynth) {
+    this.compTypeExpressionSynth = Preconditions.checkNotNull(compTypeExpressionSynth);
+  }
+
+  public ISynthesizeCompSymTypeExpression getCompTypeExpressionSynth() {
+    return this.compTypeExpressionSynth;
+  }
+
   public ArcBasisSymbolTableCompleter() {
     this(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
   }
 
   public ArcBasisSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter) {
-    Preconditions.checkNotNull(typePrinter);
-    this.typePrinter = typePrinter;
+    this(typePrinter, new SynthArcBasisCompTypeExpression());
+  }
+
+  public ArcBasisSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter,
+                                      @NotNull ISynthesizeCompSymTypeExpression compTypeExpressionSynth) {
+    this.typePrinter = Preconditions.checkNotNull(typePrinter);
+    this.compTypeExpressionSynth = Preconditions.checkNotNull(compTypeExpressionSynth);
     this.componentStack = new Stack<>();
   }
 
@@ -90,6 +122,23 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
     this.putOnStack(node.getSymbol());
+
+    if (!node.getComponentInstanceList().isEmpty()) {
+      this.setCurrentCompInstanceType(typeExprForDirectComponentInstantiation(node));
+    }
+  }
+
+  protected CompSymTypeExpression typeExprForDirectComponentInstantiation(@NotNull ASTComponentType node) {
+    Preconditions.checkNotNull(node);
+    Preconditions.checkArgument(node.isPresentSymbol());
+    Preconditions.checkArgument(node.getSymbol().getTypeParameters().isEmpty(),
+      "ArcBasis does not support generic components when instantiating component types within their" +
+        " type declaration. But component type '%s' has type parameters %s. Occurrence: %s",
+      node.getSymbol().getName(),
+      node.getSymbol().getTypeParameters().stream().map(ISymbol::getName).reduce("", (a, b) -> a + "'" + b + "' "),
+      node.get_SourcePositionStart());
+
+    return new SymTypeOfComponent(node.getSymbol());
   }
 
   @Override
@@ -102,6 +151,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkState(this.getCurrentComponent().get().getAstNode().equals(node));
     Preconditions.checkState(this.getCurrentComponent().get().equals(node.getSymbol()));
     this.removeCurrentComponent();
+    this.setCurrentCompInstanceType(null);
   }
 
   @Override
@@ -111,12 +161,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkState(!this.getComponentStack().isEmpty());
     Preconditions.checkState(this.getCurrentComponent().isPresent());
     if (node.isPresentParent()) {
-      String type;
-      if (node.getParent() instanceof ASTMCGenericType) {
-        type = ((ASTMCGenericType) node.getParent()).printWithoutTypeArguments();
-      } else {
-        type = this.printType(node.getParent());
-      }
+      String type = printSimpleType(node.getParent());
       Optional<ComponentTypeSymbol> parent = node.getEnclosingScope().resolveComponentType(type);
       if (!parent.isPresent()) {
         Log.error(ArcError.SYMBOL_NOT_FOUND.format(type), node.get_SourcePositionStart());
@@ -124,5 +169,45 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
         this.getCurrentComponent().get().setParent(new SymTypeOfComponent(parent.get()));
       }
     }
+  }
+
+  @Override
+  public void visit(@NotNull ASTComponentInstantiation node) {
+    Preconditions.checkNotNull(node);
+    Preconditions.checkNotNull(node.getEnclosingScope());
+
+    Optional<CompSymTypeExpression> compTypeExpr = this.getCompTypeExpressionSynth().synthesizeFrom(node.getMCType());
+    if(compTypeExpr.isPresent()) {
+      this.setCurrentCompInstanceType(compTypeExpr.get());
+    } else {
+      Log.error(String.format("Could not create a component type expression from '%s'",
+        this.getTypePrinter().prettyprint(node.getMCType())),
+        node.get_SourcePositionStart()
+      );
+    }
+  }
+
+  @Override
+  public void endVisit(@NotNull ASTComponentInstantiation node) {
+    Preconditions.checkNotNull(node);
+    Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
+    this.setCurrentCompInstanceType(null);
+  }
+
+  public void visit(@NotNull ASTComponentInstance node) {
+    Preconditions.checkNotNull(node);
+    Preconditions.checkArgument(node.isPresentSymbol());
+    Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
+
+    node.getSymbol().setType(this.getCurrentCompInstanceType().get());
+  }
+
+  protected String printSimpleType(@NotNull ASTMCType type) {
+    Preconditions.checkNotNull(type);
+    Preconditions.checkState(this.typePrinter != null);
+
+    return type instanceof ASTMCGenericType ?
+        ((ASTMCGenericType) type).printWithoutTypeArguments()
+        : type.printType(typePrinter);
   }
 }

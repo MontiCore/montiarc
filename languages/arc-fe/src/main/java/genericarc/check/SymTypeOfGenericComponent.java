@@ -26,7 +26,7 @@ public class SymTypeOfGenericComponent extends CompSymTypeExpression {
 
   protected final ImmutableMap<TypeVarSymbol, SymTypeExpression> typeVarBindings;
 
-  protected ImmutableMap<TypeVarSymbol, SymTypeExpression> getTypeVarBindings() {
+  public ImmutableMap<TypeVarSymbol, SymTypeExpression> getTypeVarBindings() {
     return this.typeVarBindings;
   }
 

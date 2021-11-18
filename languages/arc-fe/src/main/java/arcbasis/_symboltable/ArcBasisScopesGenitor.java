@@ -7,12 +7,10 @@ import arcbasis.check.FullSynthesizeSymTypeFromMCBasicTypes;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolBuilder;
-import de.monticore.types.check.ISynthesize;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
-import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
 import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -28,23 +26,17 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   protected Stack<ComponentTypeSymbol> componentStack = new Stack<>();
   protected MCBasicTypesFullPrettyPrinter typePrinter = MCBasicTypesMill.mcBasicTypesPrettyPrinter();
   protected BiFunction<ASTMCType, IArcBasisScope, SymTypeExpression> expressionCreator;
-  protected ISynthesize typeSynthesizer;
-  protected ASTMCType currentCompInstanceType;
   protected Stack<IArcBasisScope> enclosingScope4InstancesStack = new Stack();
   protected ASTMCType currentFieldType;
   protected ASTMCType currentPortType;
   protected ASTPortDirection currentPortDirection;
-
-  public ArcBasisScopesGenitor() {
-    this.typeSynthesizer = new FullSynthesizeSymTypeFromMCBasicTypes();
-  }
 
   /**
    * allows updating the internal printer used to print types
    * @param typesPrinter new printer
    */
   public void setTypePrinter(@NotNull MCBasicTypesFullPrettyPrinter typesPrinter) {
-    assert typesPrinter != null;
+    Preconditions.checkNotNull(typesPrinter);
     this.typePrinter = typesPrinter;
   }
 
@@ -118,14 +110,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   protected void setCurrentFieldType(@Nullable ASTMCType currentFieldType) {
     this.currentFieldType = currentFieldType;
-  }
-
-  protected Optional<ASTMCType> getCurrentCompInstanceType() {
-    return Optional.ofNullable((this.currentCompInstanceType));
-  }
-
-  protected void setCurrentCompInstanceType(@Nullable ASTMCType currentCompInstanceType) {
-    this.currentCompInstanceType = currentCompInstanceType;
   }
 
   protected Stack<IArcBasisScope> getEnclosingScope4InstancesStack() {
@@ -230,7 +214,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     this.getCurrentScope().get().add(symbol);
     this.putOnStack(symbol.getSpannedScope());
     this.putOnStack(symbol);
-    this.setCurrentCompInstanceType(this.mcTypeFromCompType(symbol));
   }
 
   @Override
@@ -242,7 +225,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkState(this.getCurrentComponent().get().getAstNode().equals(node));
     this.removeCurrentComponent();
     this.removeCurrentScope();
-    this.setCurrentCompInstanceType(null);
   }
 
   @Override
@@ -387,56 +369,20 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     node.setEnclosingScope(this.getCurrentScope().get());
-    this.setCurrentCompInstanceType(node.getMCType());
-  }
-
-  @Override
-  public void endVisit(@NotNull ASTComponentInstantiation node) {
-    Preconditions.checkArgument(node != null);
-    Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
-    Preconditions.checkState(this.getCurrentCompInstanceType().get().equals(node.getMCType()));
-    this.setCurrentCompInstanceType(null);
-  }
-
-  /**
-   * todo: Generic components belong to generic arc
-   * builds a component surrogate and adds it to the current enclosing scope
-   * @param type component type
-   */
-  @Deprecated
-  protected ComponentTypeSymbolSurrogate create_ComponentSurrogate(@NotNull ASTMCType type) {
-    Preconditions.checkState(this.getCurrentScope().isPresent());
-    if (type instanceof ASTMCGenericType){
-      return ArcBasisMill.componentTypeSymbolSurrogateBuilder().setName(((ASTMCGenericType)type).printWithoutTypeArguments()).setEnclosingScope(this.getCurrentScope().get()).build();
-    }
-    return ArcBasisMill.componentTypeSymbolSurrogateBuilder().setName(this.printType(type)).setEnclosingScope(this.getCurrentScope().get()).build();
   }
 
   protected ComponentInstanceSymbolBuilder create_ComponentInstance(@NotNull ASTComponentInstance ast) {
     ComponentInstanceSymbolBuilder builder = ArcBasisMill.componentInstanceSymbolBuilder();
     Preconditions.checkArgument(ast != null);
-    Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
     Preconditions.checkState(this.getCurrentScope().isPresent());
     ast.setEnclosingScope(this.getCurrentScope().get());
-    builder.setName(ast.getName()).setType(this.delegateToType(ast));
-    builder.fetchParametersFrom(createTypeExpression(this.getCurrentCompInstanceType().get()));
+    builder.setName(ast.getName());
     return builder;
-  }
-
-  /**
-   * @param node not used, but may not be null
-   * @return component surrogate of the type of the current instance
-   */
-  protected ComponentTypeSymbol delegateToType(@NotNull ASTComponentInstance node) {
-    Preconditions.checkArgument(node != null);
-    Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
-    return this.create_ComponentSurrogate(this.getCurrentCompInstanceType().get());
   }
 
   @Override
   public void visit(@NotNull ASTComponentInstance node) {
     Preconditions.checkArgument(node != null);
-    Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
     Preconditions.checkState(this.getCurrentEnclosingScope4Instances().isPresent());
 
     ComponentInstanceSymbol symbol = create_ComponentInstance(node).build();

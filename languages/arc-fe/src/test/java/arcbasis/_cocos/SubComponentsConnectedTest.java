@@ -6,9 +6,9 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
+import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -45,7 +45,9 @@ public class SubComponentsConnectedTest extends AbstractTest {
 
   @BeforeEach
   public void setUpTest() {
-    ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
+    ArcBasisScopesGenitorDelegator genitor = ArcBasisMill.scopesGenitorDelegator();
+    ArcBasisSymbolTableCompleterDelegator completer = ArcBasisMill.symbolTableCompleterDelegator();
+
     ASTComponentType comp1 = ArcBasisMill.componentTypeBuilder().setName("A")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
@@ -61,7 +63,7 @@ public class SubComponentsConnectedTest extends AbstractTest {
           .build())
         .build())
       .build();
-    symTab.createFromAST(comp1);
+    genitor.createFromAST(comp1);
     ASTComponentType comp2 = ArcBasisMill.componentTypeBuilder().setName("B")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
@@ -83,7 +85,7 @@ public class SubComponentsConnectedTest extends AbstractTest {
           "sub1.i2", "sub1.o1").build())
         .build())
       .build();
-    symTab.createFromAST(comp2);
+    genitor.createFromAST(comp2);
     ASTComponentType comp3 = ArcBasisMill.componentTypeBuilder().setName("C")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
@@ -109,7 +111,11 @@ public class SubComponentsConnectedTest extends AbstractTest {
           ArcBasisMill.connectorBuilder().setSource("sub1.i2").setTargetList("o2").build())
         .build())
       .build();
-    symTab.createFromAST(comp3);
+    genitor.createFromAST(comp3);
+    completer.createFromAST(comp1);
+    completer.createFromAST(comp2);
+    completer.createFromAST(comp3);
+
     components = new HashMap<>();
     components.put(comp1.getName(), comp1);
     components.put(comp2.getName(), comp2);

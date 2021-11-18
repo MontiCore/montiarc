@@ -19,8 +19,10 @@ public class ASTPortAccess extends ASTPortAccessTOP {
     if (getEnclosingScope() != null && (portSymbol == null || !getPort().equals(portSymbol.getName()))) {
       if (isPresentComponent()) {
         if (this.getComponentSymbol() != null && this.getComponentSymbol().getType() != null
-          && this.getComponentSymbol().getType().getEnclosingScope() != null) {
-          portSymbol = getComponentSymbol().getType().getSpannedScope().resolvePort(getPort()).orElse(null);
+          && this.getComponentSymbol().getType().getTypeInfo() != null
+          && this.getComponentSymbol().getType().getTypeInfo().getEnclosingScope() != null) {
+          portSymbol = getComponentSymbol().getType().getTypeInfo().getSpannedScope().resolvePort(getPort())
+            .orElse(null);
         } else {
           portSymbol = null;
         }

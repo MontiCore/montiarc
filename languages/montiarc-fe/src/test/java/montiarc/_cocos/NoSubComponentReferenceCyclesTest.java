@@ -5,6 +5,7 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.NoSubComponentReferenceCycles;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis.check.CompSymTypeExpression;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
@@ -115,6 +116,7 @@ public class NoSubComponentReferenceCyclesTest extends AbstractCoCoTest {
       .map(ComponentTypeSymbol::getSubComponents)
       .flatMap(List::stream)
       .map(ComponentInstanceSymbol::getType)
+      .map(CompSymTypeExpression::getTypeInfo)
       // recursion call
       .forEach(type -> collectSubComponents(type, bucket));
   }
