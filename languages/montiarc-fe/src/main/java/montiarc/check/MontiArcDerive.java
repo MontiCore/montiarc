@@ -9,8 +9,6 @@ import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.Optional;
-
 /**
  * A visitor that calculates a {@link SymTypeExpression} (type) for expressions
  * in MontiArc.
@@ -62,7 +60,7 @@ public class MontiArcDerive
   }
 
   protected void initDeriveSymTypeOfCommonExpressions() {
-    DeriveSymTypeOfCommonExpressions deriveSymTypeOfCommonExpressions = new ArcDeriveSymTypeOfCommonExpression();
+    DeriveSymTypeOfCommonExpressions deriveSymTypeOfCommonExpressions = new DeriveSymTypeOfCommonExpressions();
     deriveSymTypeOfCommonExpressions.setTypeCheckResult(this.getTypeCheckResult());
     this.getCalculationDelegator().add4CommonExpressions(deriveSymTypeOfCommonExpressions);
     this.getCalculationDelegator().setCommonExpressionsHandler(deriveSymTypeOfCommonExpressions);
