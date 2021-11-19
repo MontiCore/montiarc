@@ -2,6 +2,7 @@
 package montiarc;
 
 import com.google.common.base.Preconditions;
+import de.monticore.class2mc.Class2MCResolver;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
@@ -69,6 +70,7 @@ public class MontiArcCLI extends MontiArcCLITOP {
 
       this.initGlobalScope(cli);
       this.initializeBasicTypes();
+      this.initializeClass2MC(cli);
 
       this.runTasks(cli);
 
@@ -106,7 +108,6 @@ public class MontiArcCLI extends MontiArcCLITOP {
     Preconditions.checkArgument(!fileNameRegEx.isEmpty());
     path.getEntries().forEach(entry -> this.loadSymbols(fileNameRegEx, entry));
   }
-
 
   public void loadSymbols(@NotNull String fileNameRegEx, @NotNull Path directory) {
     Preconditions.checkNotNull(fileNameRegEx);
@@ -328,9 +329,21 @@ public class MontiArcCLI extends MontiArcCLITOP {
 
   public void initializeBasicTypes() {
     BasicSymbolsMill.initializePrimitives();
-    this.initializeBasicOOTypes();
   }
 
+  public void initializeClass2MC() {
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new Class2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new Class2MCResolver());
+  }
+
+  protected void initializeClass2MC(@NotNull CommandLine cli) {
+    Preconditions.checkNotNull(cli);
+    if (cli.hasOption("c2mc")) {
+      this.initializeClass2MC();
+    }
+  }
+
+  @Deprecated
   public void initializeBasicOOTypes() {
     this.add2Scope(MontiArcMill.globalScope(), MontiArcMill.oOTypeSymbolBuilder()
       .setName("Object")
@@ -394,6 +407,12 @@ public class MontiArcCLI extends MontiArcCLITOP {
       .hasArgs()
       .argName("dirlist")
       .desc("Sets the artifact path for imported symbols, space separated.")
+      .build());
+
+    // class2mc
+    options.addOption(org.apache.commons.cli.Option.builder("c2mc")
+      .longOpt("class2mc")
+      .desc("Enables to resolve java classes in the model path")
       .build());
 
     return options;

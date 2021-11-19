@@ -12,7 +12,6 @@ import montiarc.lejos.lib.motor.Motor;
 import montiarc.lejos.lib.motor.MotorCmd;
 
 import montiarc.lejos.lib.ultrasonic.Ultrasonic;
-
 import montiarc.lejos.lib.logger.Logger;
 
 component BumperBot {

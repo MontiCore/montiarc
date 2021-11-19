@@ -97,6 +97,7 @@ public class ConnectorSourceAndTargetExistAndFitTest extends AbstractCoCoTest {
   public void init() {
     super.init();
     this.getCLI().initializeBasicTypes();
+    this.getCLI().initializeBasicOOTypes();
     Collection<ASTMACompilationUnit> asts = this.getCLI().parse(".arc",
             Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, getPackage()));
     this.getCLI().createSymbolTable(asts);

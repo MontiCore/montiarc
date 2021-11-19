@@ -5,6 +5,8 @@ import types.Datatypes.MotorCommand;
 import types.Datatypes.TimerSignal;
 import types.Datatypes.TimerCmd;
 
+import java.lang.Integer;
+
 /**
  * Valid model. All port data types exist.
  */

@@ -4,6 +4,8 @@ package factory.warehouse.transporter;
 import java.util.ArrayList;
 import factory.warehouse.StorageObject;
 
+import java.lang.Integer;
+
 /**
  * Atomic component for holding StorageObjects.
  */

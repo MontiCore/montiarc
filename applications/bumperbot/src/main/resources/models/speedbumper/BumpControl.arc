@@ -6,6 +6,9 @@ import montiarc.lejos.lib.timer.TimerSignal;
 import montiarc.lejos.lib.timer.TimerCmd;
 import speedbumper.SpeedCmd;
 
+import java.lang.Integer;
+import java.lang.String;
+
 component BumpControl {
   port
     in Integer distance,

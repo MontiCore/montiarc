@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.subcomponents;
 
-import types.Datatypes.*; 
+import types.Datatypes.*;
+
+import java.lang.String;
 
 /**
  * Valid model. Used by Navi.

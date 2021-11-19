@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public abstract class AdaptedSymType {
 
   public static SymTypeExpression of(@NotNull SymTypeExpression original) {
+    Log.info("Adapt sym type of " + original.printFullName(), "AdaptSymType");
     if(original.isArrayType()) {
       return new AdaptedSymType.Array((SymTypeArray) original);
     } else if(original.isTypeConstant()) {
@@ -123,10 +124,7 @@ public abstract class AdaptedSymType {
       super(original.getName());
       this.original = skipSurrogate(original);
 
-      List<SymTypeExpression> adaptedSuperTypes = original.getSuperTypesList().stream()
-        .map(AdaptedSymType::of)
-        .collect(Collectors.toList());
-      this.setSuperTypesList(adaptedSuperTypes);
+      this.setSuperTypesList(original.getSuperTypesList());
     }
 
     @Override

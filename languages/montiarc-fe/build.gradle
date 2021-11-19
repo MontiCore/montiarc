@@ -72,6 +72,7 @@ dependencies {
   implementation("de.monticore.lang:statecharts:$mc_version")
   implementation("de.monticore:monticore-runtime:$mc_version")
   implementation("de.monticore:monticore-grammar:$mc_version")
+  implementation("de.monticore:class2mc:$mc_version")
   testImplementation("de.monticore:monticore-runtime:$mc_version") {
     capabilities {
       requireCapability("de.monticore:monticore-runtime-tests")
