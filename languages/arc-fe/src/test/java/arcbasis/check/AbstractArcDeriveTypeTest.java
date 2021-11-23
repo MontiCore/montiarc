@@ -28,12 +28,12 @@ import java.util.Collections;
 import java.util.stream.Stream;
 
 /**
- * Abstract class for test subclasses of {@link AbstractArcDerive}.
+ * Abstract class for test subclasses of {@link AbstractArcDeriveType}.
  * <p>
  * Override {@link this#getDerive()} with method that returns the type
  * calculator under test.
  */
-public abstract class AbstractArcDeriveTest extends AbstractTest {
+public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
 
   protected IArcDerive derive;
   protected IArcBasisScope scope;
@@ -147,7 +147,7 @@ public abstract class AbstractArcDeriveTest extends AbstractTest {
   }
 
   /**
-   * Class under test {@link ArcBasisDerive}.
+   * Class under test {@link ArcBasisDeriveType}.
    */
   @ParameterizedTest
   @MethodSource("expressionProviderForPrimitiveFields")
@@ -158,7 +158,7 @@ public abstract class AbstractArcDeriveTest extends AbstractTest {
   }
 
   /**
-   * Class under test {@link ArcBasisDerive}.
+   * Class under test {@link ArcBasisDeriveType}.
    */
   @ParameterizedTest
   @MethodSource("expressionProviderForObjectFields")
@@ -169,7 +169,7 @@ public abstract class AbstractArcDeriveTest extends AbstractTest {
   }
 
   /**
-   * Class under test {@link ArcBasisDerive}.
+   * Class under test {@link ArcBasisDeriveType}.
    */
   @Test
   void ShouldNotCalculateResult() {

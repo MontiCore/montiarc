@@ -2,9 +2,9 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcParameter;
-import arcbasis.check.ArcBasisDerive;
+import arcbasis.check.ArcBasisDeriveType;
 import arcbasis.check.ArcTypeCheck;
-import arcbasis.check.FullSynthesizeSymTypeFromMCBasicTypes;
+import arcbasis.check.ArcBasisSynthesizeType;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -27,11 +27,11 @@ public class ParameterDefaultValueTypesCorrect implements ArcBasisASTArcParamete
   protected final TypeCheck typeChecker;
 
   /**
-   * Creates this coco with an ArcTypeCheck, combined with {@link ArcBasisDerive} to check whether default values of
+   * Creates this coco with an ArcTypeCheck, combined with {@link ArcBasisDeriveType} to check whether default values of
    * parameters match the parameters' types.
    */
   public ParameterDefaultValueTypesCorrect() {
-    this(new ArcTypeCheck(new FullSynthesizeSymTypeFromMCBasicTypes(), new ArcBasisDerive(new TypeCheckResult())));
+    this(new ArcTypeCheck(new ArcBasisSynthesizeType(), new ArcBasisDeriveType(new TypeCheckResult())));
   }
 
   /**
@@ -48,7 +48,7 @@ public class ParameterDefaultValueTypesCorrect implements ArcBasisASTArcParamete
    * parameters' types.
    */
   public ParameterDefaultValueTypesCorrect(@NotNull IDerive deriveFromExpr) {
-    this(new ArcTypeCheck(new FullSynthesizeSymTypeFromMCBasicTypes(), Preconditions.checkNotNull(deriveFromExpr)));
+    this(new ArcTypeCheck(new ArcBasisSynthesizeType(), Preconditions.checkNotNull(deriveFromExpr)));
   }
 
   @Override

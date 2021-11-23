@@ -11,7 +11,7 @@ import de.monticore.types.mcbasictypes._ast.ASTMCVoidType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class SynthCompTypeExprFromMCBasicTypesTest extends AbstractTest {
+public class SynthesizeComponentFromMCBasicTypesTest extends AbstractTest {
 
   @Test
   public void shouldHandleMCQualifiedType() {
@@ -46,8 +46,8 @@ public class SynthCompTypeExprFromMCBasicTypesTest extends AbstractTest {
 
     SynthCompTypeResult result4normal = new SynthCompTypeResult();
     SynthCompTypeResult result4qual = new SynthCompTypeResult();
-    SynthCompTypeExprFromMCBasicTypes synth4normal = new SynthCompTypeExprFromMCBasicTypes(result4normal);
-    SynthCompTypeExprFromMCBasicTypes synth4qual = new SynthCompTypeExprFromMCBasicTypes(result4qual);
+    SynthesizeComponentFromMCBasicTypes synth4normal = new SynthesizeComponentFromMCBasicTypes(result4normal);
+    SynthesizeComponentFromMCBasicTypes synth4qual = new SynthesizeComponentFromMCBasicTypes(result4qual);
 
     // When
     synth4normal.handle(astNormalComp);
@@ -72,8 +72,8 @@ public class SynthCompTypeExprFromMCBasicTypesTest extends AbstractTest {
 
     SynthCompTypeResult result4normal = new SynthCompTypeResult();
     SynthCompTypeResult result4qual = new SynthCompTypeResult();
-    SynthCompTypeExprFromMCBasicTypes synth4normal = new SynthCompTypeExprFromMCBasicTypes(result4normal);
-    SynthCompTypeExprFromMCBasicTypes synth4qual = new SynthCompTypeExprFromMCBasicTypes(result4qual);
+    SynthesizeComponentFromMCBasicTypes synth4normal = new SynthesizeComponentFromMCBasicTypes(result4normal);
+    SynthesizeComponentFromMCBasicTypes synth4qual = new SynthesizeComponentFromMCBasicTypes(result4qual);
 
     // When
     synth4normal.handle(astNormalComp);
@@ -89,7 +89,7 @@ public class SynthCompTypeExprFromMCBasicTypesTest extends AbstractTest {
     // Given
     ASTMCVoidType voidType = ArcBasisMill.mCVoidTypeBuilder().build();
     SynthCompTypeResult resultWrapper = new SynthCompTypeResult();
-    SynthCompTypeExprFromMCBasicTypes synth = new SynthCompTypeExprFromMCBasicTypes(resultWrapper);
+    SynthesizeComponentFromMCBasicTypes synth = new SynthesizeComponentFromMCBasicTypes(resultWrapper);
 
     // Attach a traverser to the synth, as we do not override the handle method and thus the synth tries to traverse the
     // AST. In the end this should result in an empty synth result, however, if we do not attach a traverser, this will

@@ -7,7 +7,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.types.check.TypeCheckResult;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc.check.MontiArcDerive;
+import montiarc.check.MontiArcDeriveType;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -62,6 +62,6 @@ public class GuardIsBooleanTest extends AbstractCoCoTest {
   @Override
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
     Preconditions.checkNotNull(checker);
-    checker.addCoCo(new GuardIsBoolean(new MontiArcDerive(new TypeCheckResult())));
+    checker.addCoCo(new GuardIsBoolean(new MontiArcDeriveType(new TypeCheckResult())));
   }
 }

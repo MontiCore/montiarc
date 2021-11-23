@@ -5,9 +5,9 @@ import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis.check.ArcBasisDerive;
+import arcbasis.check.ArcBasisDeriveType;
 import arcbasis.check.ArcTypeCheck;
-import arcbasis.check.FullSynthesizeSymTypeFromMCBasicTypes;
+import arcbasis.check.ArcBasisSynthesizeType;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -46,11 +46,11 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   protected final ArcTypeCheck typeChecker;
 
   /**
-   * Creates this coco with an ArcTypeCheck, combined with {@link ArcBasisDerive} to check whether instantiation
+   * Creates this coco with an ArcTypeCheck, combined with {@link ArcBasisDeriveType} to check whether instantiation
    * arguments match a component types signature.
    */
   public ConfigurationParameterAssignment() {
-    this(new ArcTypeCheck(new FullSynthesizeSymTypeFromMCBasicTypes(), new ArcBasisDerive(new TypeCheckResult())));
+    this(new ArcTypeCheck(new ArcBasisSynthesizeType(), new ArcBasisDeriveType(new TypeCheckResult())));
   }
 
   /**
@@ -66,7 +66,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
    * signature.
    */
   public ConfigurationParameterAssignment(@NotNull IDerive deriverFromExpr) {
-    this(new ArcTypeCheck(new FullSynthesizeSymTypeFromMCBasicTypes(), checkNotNull(deriverFromExpr)));
+    this(new ArcTypeCheck(new ArcBasisSynthesizeType(), checkNotNull(deriverFromExpr)));
   }
 
   @Override

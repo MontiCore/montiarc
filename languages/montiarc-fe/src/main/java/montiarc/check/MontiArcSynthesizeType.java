@@ -8,12 +8,12 @@ import montiarc._visitor.MontiArcTraverser;
 
 import java.util.Optional;
 
-public class MontiArcTypesSynthesizer implements ISynthesize {
+public class MontiArcSynthesizeType implements ISynthesize {
   
   MontiArcTraverser traverser;
   TypeCheckResult typeCheckResult;
   
-  public MontiArcTypesSynthesizer() {
+  public MontiArcSynthesizeType() {
     init();
   }
   

@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class SynthMontiArcCompTypeExpressionTest extends AbstractTest {
+public class MontiArcSynthesizeComponentTest extends AbstractTest {
 
   @Test
   public void shouldSynthesizeFromMCQualifiedType() {
@@ -47,7 +47,7 @@ public class SynthMontiArcCompTypeExpressionTest extends AbstractTest {
     ASTMCQualifiedType astComp = createQualifiedType(compName);
     astComp.setEnclosingScope(MontiArcMill.globalScope());
 
-    SynthMontiArcCompTypeExpression synth = new SynthMontiArcCompTypeExpression();
+    MontiArcSynthesizeComponent synth = new MontiArcSynthesizeComponent();
 
     // When
     Optional<CompTypeExpression> result = synth.synthesizeFrom(astComp);
@@ -105,7 +105,7 @@ public class SynthMontiArcCompTypeExpressionTest extends AbstractTest {
     );
     astNormalComp.setEnclosingScope(MontiArcMill.globalScope());
 
-    SynthMontiArcCompTypeExpression synth = new SynthMontiArcCompTypeExpression();
+    MontiArcSynthesizeComponent synth = new MontiArcSynthesizeComponent();
 
     // When
     Optional<CompTypeExpression> result = synth.synthesizeFrom(astNormalComp);
@@ -131,7 +131,7 @@ public class SynthMontiArcCompTypeExpressionTest extends AbstractTest {
     ASTMCQualifiedType astComp = createQualifiedType("Unresolvable");
     astComp.setEnclosingScope(MontiArcMill.globalScope());
 
-    SynthMontiArcCompTypeExpression synth = new SynthMontiArcCompTypeExpression();
+    MontiArcSynthesizeComponent synth = new MontiArcSynthesizeComponent();
 
     // When
     Optional<CompTypeExpression> result = synth.synthesizeFrom(astComp);

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcautomaton._cocos;
 
-import arcbasis.check.FullSynthesizeSymTypeFromMCBasicTypes;
+import arcbasis.check.ArcBasisSynthesizeType;
 import arcbehaviorbasis.BehaviorError;
 import com.google.common.base.Preconditions;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
@@ -19,7 +19,7 @@ public class GuardIsBoolean implements SCTransitions4CodeASTTransitionBodyCoCo {
   }
 
   public GuardIsBoolean(@NotNull IDerive derive) {
-    this(new TypeCheck(new FullSynthesizeSymTypeFromMCBasicTypes(), Preconditions.checkNotNull(derive)));
+    this(new TypeCheck(new ArcBasisSynthesizeType(), Preconditions.checkNotNull(derive)));
   }
 
   @Override

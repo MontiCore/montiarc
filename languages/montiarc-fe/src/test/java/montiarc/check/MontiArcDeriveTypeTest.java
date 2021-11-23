@@ -3,7 +3,7 @@ package montiarc.check;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis.check.AbstractArcDeriveTest;
+import arcbasis.check.AbstractArcDeriveTypeTest;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol;
@@ -35,12 +35,12 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * Holds test for methods of {@link MontiArcDerive}.
+ * Holds test for methods of {@link MontiArcDeriveType}.
  *
- * @see AbstractArcDeriveTest for basic tests methods.
+ * @see AbstractArcDeriveTypeTest for basic tests methods.
  */
 @Disabled //TODO Fix Me. Missing Enclosing Scope. Needs appropriate scope setter.
-public class MontiArcDeriveTest extends AbstractArcDeriveTest {
+public class MontiArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
 
   @Override
   @BeforeEach
@@ -216,7 +216,7 @@ public class MontiArcDeriveTest extends AbstractArcDeriveTest {
   @Override
   protected IArcDerive getDerive() {
     if (this.derive == null) {
-      this.derive = new MontiArcDerive(new TypeCheckResult());
+      this.derive = new MontiArcDeriveType(new TypeCheckResult());
     }
     return this.derive;
   }
@@ -239,7 +239,7 @@ public class MontiArcDeriveTest extends AbstractArcDeriveTest {
   @Test
   public void shouldReturnCorrectCalculationDelegator() {
     //Given
-    MontiArcDerive typesCalculator = new MontiArcDerive(new TypeCheckResult());
+    MontiArcDeriveType typesCalculator = new MontiArcDeriveType(new TypeCheckResult());
 
     //When
     MontiArcTraverser traverser = typesCalculator.getCalculationDelegator();

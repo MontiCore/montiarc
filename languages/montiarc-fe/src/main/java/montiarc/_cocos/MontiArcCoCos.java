@@ -7,7 +7,7 @@ import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
-import montiarc.check.MontiArcDerive;
+import montiarc.check.MontiArcDeriveType;
 
 /**
  * Bundle of CoCos for the MontiArc language.
@@ -22,11 +22,11 @@ public class MontiArcCoCos {
     checker.addCoCo(new ComponentInstanceTypeExists(new MCSimpleGenericTypesFullPrettyPrinter(new IndentPrinter())));
     checker.addCoCo(new ComponentTypeNameCapitalization());
     checker.addCoCo(new ConfigurationParametersCorrectlyInherited());
-    checker.addCoCo(new ConfigurationParameterAssignment(new MontiArcDerive(new TypeCheckResult())));
+    checker.addCoCo(new ConfigurationParameterAssignment(new MontiArcDeriveType(new TypeCheckResult())));
     checker.addCoCo(new ConnectorSourceAndTargetComponentDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetExistAndFit());
-    checker.addCoCo(new FieldInitExpressionTypesCorrect(new MontiArcDerive(new TypeCheckResult())));
+    checker.addCoCo(new FieldInitExpressionTypesCorrect(new MontiArcDeriveType(new TypeCheckResult())));
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new FieldInitExpressionsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new FieldTypeExists());
@@ -35,7 +35,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new InstanceNameCapitalisation());
     checker.addCoCo(new NoSubComponentReferenceCycles());
     checker.addCoCo(new ParameterDefaultValuesOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
-    checker.addCoCo(new ParameterDefaultValueTypesCorrect(new MontiArcDerive(new TypeCheckResult())));
+    checker.addCoCo(new ParameterDefaultValueTypesCorrect(new MontiArcDeriveType(new TypeCheckResult())));
     checker.addCoCo(new ParameterNameCapitalization());
     checker.addCoCo(new ParameterTypeExists());
     checker.addCoCo(new PortNameCapitalisation());

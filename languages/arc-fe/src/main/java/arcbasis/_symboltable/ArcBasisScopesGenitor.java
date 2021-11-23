@@ -3,7 +3,6 @@ package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
-import arcbasis.check.FullSynthesizeSymTypeFromMCBasicTypes;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolBuilder;

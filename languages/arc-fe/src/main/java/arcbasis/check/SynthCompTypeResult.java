@@ -8,7 +8,7 @@ import java.util.Optional;
 
 /**
  * Wraps a {@link CompTypeExpression} (if present). This class is used as a common state for composed visitors that
- * implement {@link ISynthesizeCompTypeExpression}.
+ * implement {@link ISynthesizeComponent}.
  */
 public class SynthCompTypeResult {
 

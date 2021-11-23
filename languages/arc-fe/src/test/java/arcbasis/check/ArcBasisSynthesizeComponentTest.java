@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-public class SynthArcBasisCompTypeExpressionTest extends AbstractTest {
+public class ArcBasisSynthesizeComponentTest extends AbstractTest {
 
   @Test
   public void shouldSynthesizeFromMCQualifiedType() {
@@ -27,7 +27,7 @@ public class SynthArcBasisCompTypeExpressionTest extends AbstractTest {
     ASTMCQualifiedType astComp = createQualifiedType(compName);
     astComp.setEnclosingScope(ArcBasisMill.globalScope());
 
-    SynthArcBasisCompTypeExpression synth = new SynthArcBasisCompTypeExpression();
+    ArcBasisSynthesizeComponent synth = new ArcBasisSynthesizeComponent();
 
     // When
     Optional<CompTypeExpression> result = synth.synthesizeFrom(astComp);
@@ -44,7 +44,7 @@ public class SynthArcBasisCompTypeExpressionTest extends AbstractTest {
     ASTMCQualifiedType astComp = createQualifiedType("Unresolvable");
     astComp.setEnclosingScope(ArcBasisMill.globalScope());
 
-    SynthArcBasisCompTypeExpression synth = new SynthArcBasisCompTypeExpression();
+    ArcBasisSynthesizeComponent synth = new ArcBasisSynthesizeComponent();
 
     // When
     Optional<CompTypeExpression> result = synth.synthesizeFrom(astComp);

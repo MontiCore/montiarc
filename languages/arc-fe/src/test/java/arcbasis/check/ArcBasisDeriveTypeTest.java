@@ -8,11 +8,11 @@ import montiarc.util.check.IArcDerive;
 import org.junit.jupiter.api.BeforeEach;
 
 /**
- * Holds test for methods of {@link ArcBasisDerive}.
+ * Holds test for methods of {@link ArcBasisDeriveType}.
  *
- * @see AbstractArcDeriveTest for basic tests methods.
+ * @see AbstractArcDeriveTypeTest for basic tests methods.
  */
-public class ArcBasisDeriveTest extends AbstractArcDeriveTest {
+public class ArcBasisDeriveTypeTest extends AbstractArcDeriveTypeTest {
 
   @Override
   @BeforeEach
@@ -27,7 +27,7 @@ public class ArcBasisDeriveTest extends AbstractArcDeriveTest {
   @Override
   protected IArcDerive getDerive() {
     if (this.derive == null) {
-      this.derive = new ArcBasisDerive(new TypeCheckResult());
+      this.derive = new ArcBasisDeriveType(new TypeCheckResult());
     }
     return this.derive;
   }

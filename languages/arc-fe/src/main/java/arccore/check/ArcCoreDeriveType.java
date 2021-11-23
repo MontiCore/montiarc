@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
-package comfortablearc.check;
+package arccore.check;
 
-import arcbasis.check.AbstractArcDerive;
+import arcbasis.check.AbstractArcDeriveType;
 import arcbasis.check.DeriveSymTypeOfExpressionWithPorts;
+import arccore.ArcCoreMill;
+import arccore._visitor.ArcCoreTraverser;
 import com.google.common.base.Preconditions;
-import comfortablearc.ComfortableArcMill;
-import comfortablearc._visitor.ComfortableArcTraverser;
 import de.monticore.types.check.DeriveSymTypeOfExpression;
 import de.monticore.types.check.DeriveSymTypeOfLiterals;
 import de.monticore.types.check.SymTypeExpression;
@@ -14,24 +14,23 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
  * A visitor that calculates a {@link SymTypeExpression} (type) for expressions
- * in ComfortableArc.
+ * in ArcCore.
  */
-public class ComfortableArcDerive
-  extends AbstractArcDerive {
+public class ArcCoreDeriveType extends AbstractArcDeriveType {
 
-  public ComfortableArcDerive(@NotNull TypeCheckResult typeCheckResult) {
-    this(typeCheckResult, ComfortableArcMill.traverser());
+  public ArcCoreDeriveType(@NotNull TypeCheckResult typeCheckResult) {
+    this(typeCheckResult, ArcCoreMill.traverser());
   }
 
-  protected ComfortableArcDerive(@NotNull TypeCheckResult typeCheckResult,
-                                 @NotNull ComfortableArcTraverser calculationDelegator) {
-    super(typeCheckResult, calculationDelegator);
+  protected ArcCoreDeriveType(@NotNull TypeCheckResult typeCheckResult,
+                              @NotNull ArcCoreTraverser typesCalculator) {
+    super(typeCheckResult, typesCalculator);
   }
 
   @Override
-  protected ComfortableArcTraverser getCalculationDelegator() {
-    Preconditions.checkState(super.getCalculationDelegator() instanceof ComfortableArcTraverser);
-    return (ComfortableArcTraverser) super.getCalculationDelegator();
+  protected ArcCoreTraverser getCalculationDelegator() {
+    Preconditions.checkState(super.getCalculationDelegator() instanceof ArcCoreTraverser);
+    return (ArcCoreTraverser) super.getCalculationDelegator();
   }
 
   @Override
@@ -49,7 +48,7 @@ public class ComfortableArcDerive
   protected void initDeriveSymTypeOfExpression() {
     DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpressionWithPorts();
     deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
-    this.getCalculationDelegator().setExpressionsBasisHandler(deriveSymTypeOfExpression);
     this.getCalculationDelegator().add4ExpressionsBasis(deriveSymTypeOfExpression);
+    this.getCalculationDelegator().setExpressionsBasisHandler(deriveSymTypeOfExpression);
   }
 }

@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class SynthCompTypeExprFromMCSimpleGenericTypesTest extends AbstractTest {
+public class SynthesizeComponentFromMCSimpleGenericTypesTest extends AbstractTest {
 
   @Test
   public void shouldHandleMCBasicGenericType() {
@@ -98,8 +98,8 @@ public class SynthCompTypeExprFromMCSimpleGenericTypesTest extends AbstractTest 
 
     SynthCompTypeResult result4normal = new SynthCompTypeResult();
     SynthCompTypeResult result4qual = new SynthCompTypeResult();
-    SynthCompTypeExprFromMCSimpleGenericTypes synth4normal = new SynthCompTypeExprFromMCSimpleGenericTypes(result4normal);
-    SynthCompTypeExprFromMCSimpleGenericTypes synth4qual = new SynthCompTypeExprFromMCSimpleGenericTypes(result4qual);
+    SynthesizeComponentFromMCSimpleGenericTypes synth4normal = new SynthesizeComponentFromMCSimpleGenericTypes(result4normal);
+    SynthesizeComponentFromMCSimpleGenericTypes synth4qual = new SynthesizeComponentFromMCSimpleGenericTypes(result4qual);
 
     // When
     synth4normal.handle(astNormalComp);
@@ -158,7 +158,7 @@ public class SynthCompTypeExprFromMCSimpleGenericTypesTest extends AbstractTest 
     );
 
     SynthCompTypeResult resultWrapper = new SynthCompTypeResult();
-    SynthCompTypeExprFromMCSimpleGenericTypes synth = new SynthCompTypeExprFromMCSimpleGenericTypes(resultWrapper);
+    SynthesizeComponentFromMCSimpleGenericTypes synth = new SynthesizeComponentFromMCSimpleGenericTypes(resultWrapper);
 
     // When
     synth.handle(astComp);
@@ -191,7 +191,7 @@ public class SynthCompTypeExprFromMCSimpleGenericTypesTest extends AbstractTest 
     );
 
     SynthCompTypeResult resultWrapper = new SynthCompTypeResult();
-    SynthCompTypeExprFromMCSimpleGenericTypes synth = new SynthCompTypeExprFromMCSimpleGenericTypes(resultWrapper);
+    SynthesizeComponentFromMCSimpleGenericTypes synth = new SynthesizeComponentFromMCSimpleGenericTypes(resultWrapper);
 
     // When
     synth.handle(astComp);
@@ -235,7 +235,7 @@ public class SynthCompTypeExprFromMCSimpleGenericTypesTest extends AbstractTest 
     );
 
     SynthCompTypeResult resultWrapper = new SynthCompTypeResult();
-    SynthCompTypeExprFromMCSimpleGenericTypes synth = new SynthCompTypeExprFromMCSimpleGenericTypes(resultWrapper);
+    SynthesizeComponentFromMCSimpleGenericTypes synth = new SynthesizeComponentFromMCSimpleGenericTypes(resultWrapper);
 
     // When
     synth.handle(astComp);

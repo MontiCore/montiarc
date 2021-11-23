@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * that there is a ComponentTypeSymbol with matching TypeParameters which is represented by the
  * {@link ASTMCBasicGenericType}.
  */
-public class SynthCompTypeExprFromMCSimpleGenericTypes implements MCSimpleGenericTypesHandler {
+public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGenericTypesHandler {
 
   protected MCSimpleGenericTypesTraverser traverser;
 
@@ -49,12 +49,12 @@ public class SynthCompTypeExprFromMCSimpleGenericTypes implements MCSimpleGeneri
    */
   protected TypeCheck synthOOTypeExpressions;
 
-  public SynthCompTypeExprFromMCSimpleGenericTypes(@NotNull SynthCompTypeResult resultWrapper) {
-    this(resultWrapper, new MontiArcTypesSynthesizer());
+  public SynthesizeComponentFromMCSimpleGenericTypes(@NotNull SynthCompTypeResult resultWrapper) {
+    this(resultWrapper, new MontiArcSynthesizeType());
   }
 
-  public SynthCompTypeExprFromMCSimpleGenericTypes(@NotNull SynthCompTypeResult resultWrapper,
-                                                   @NotNull ISynthesize synthOOTypeExpressions) {
+  public SynthesizeComponentFromMCSimpleGenericTypes(@NotNull SynthCompTypeResult resultWrapper,
+                                                     @NotNull ISynthesize synthOOTypeExpressions) {
     Preconditions.checkNotNull(resultWrapper);
     Preconditions.checkNotNull(synthOOTypeExpressions);
 

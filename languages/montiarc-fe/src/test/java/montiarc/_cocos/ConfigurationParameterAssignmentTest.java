@@ -6,7 +6,7 @@ import arcbasis._cocos.ConfigurationParameterAssignment;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.TypeCheckResult;
-import montiarc.check.MontiArcDerive;
+import montiarc.check.MontiArcDeriveType;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,6 +66,6 @@ public class ConfigurationParameterAssignmentTest extends AbstractCoCoTest {
   @Override
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
     Preconditions.checkNotNull(checker);
-    checker.addCoCo(new ConfigurationParameterAssignment(new MontiArcDerive(new TypeCheckResult())));
+    checker.addCoCo(new ConfigurationParameterAssignment(new MontiArcDeriveType(new TypeCheckResult())));
   }
 }

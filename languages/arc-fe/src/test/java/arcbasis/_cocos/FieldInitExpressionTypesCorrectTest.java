@@ -4,7 +4,7 @@ package arcbasis._cocos;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
-import arcbasis.check.ArcBasisDeriveTest;
+import arcbasis.check.ArcBasisDeriveTypeTest;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -19,7 +19,7 @@ import org.mockito.Mockito;
 /**
  * Tests {@link FieldInitExpressionTypesCorrect}
  */
-public class FieldInitExpressionTypesCorrectTest extends ArcBasisDeriveTest {
+public class FieldInitExpressionTypesCorrectTest extends ArcBasisDeriveTypeTest {
 
   protected ArcBasisScopesGenitorDelegator scopeGenitor;
 

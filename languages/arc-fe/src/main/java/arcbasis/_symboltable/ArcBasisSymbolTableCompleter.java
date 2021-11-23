@@ -92,13 +92,13 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
    * Used to create {@link CompTypeExpression}s from the {@link ASTMCType}s that declare the types of component
    * instances within {@link ASTComponentInstantiation}s.
    */
-  protected ISynthesizeCompTypeExpression compTypeExpressionSynth;
+  protected ISynthesizeComponent compTypeExpressionSynth;
 
-  public void setCompTypeExpressionSynth(@NotNull ISynthesizeCompTypeExpression compTypeExpressionSynth) {
+  public void setCompTypeExpressionSynth(@NotNull ISynthesizeComponent compTypeExpressionSynth) {
     this.compTypeExpressionSynth = Preconditions.checkNotNull(compTypeExpressionSynth);
   }
 
-  public ISynthesizeCompTypeExpression getCompTypeExpressionSynth() {
+  public ISynthesizeComponent getCompTypeExpressionSynth() {
     return this.compTypeExpressionSynth;
   }
 
@@ -107,11 +107,11 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   }
 
   public ArcBasisSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter) {
-    this(typePrinter, new SynthArcBasisCompTypeExpression());
+    this(typePrinter, new ArcBasisSynthesizeComponent());
   }
 
   public ArcBasisSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter,
-                                      @NotNull ISynthesizeCompTypeExpression compTypeExpressionSynth) {
+                                      @NotNull ISynthesizeComponent compTypeExpressionSynth) {
     this.typePrinter = Preconditions.checkNotNull(typePrinter);
     this.compTypeExpressionSynth = Preconditions.checkNotNull(compTypeExpressionSynth);
     this.componentStack = new Stack<>();

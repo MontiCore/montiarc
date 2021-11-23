@@ -11,11 +11,11 @@ import de.monticore.types.mcbasictypes._visitor.MCBasicTypesTraverser;
 
 import java.util.Optional;
 
-public class FullSynthesizeSymTypeFromMCBasicTypes implements ISynthesize {
+public class ArcBasisSynthesizeType implements ISynthesize {
   protected ArcBasisTraverser traverser;
   protected TypeCheckResult typeCheckResult;
   
-  public FullSynthesizeSymTypeFromMCBasicTypes() {
+  public ArcBasisSynthesizeType() {
     init();
   }
   

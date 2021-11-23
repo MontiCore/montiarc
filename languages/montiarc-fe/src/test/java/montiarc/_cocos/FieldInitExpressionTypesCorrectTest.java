@@ -8,7 +8,7 @@ import de.monticore.types.check.TypeCheckResult;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.check.MontiArcDerive;
+import montiarc.check.MontiArcDeriveType;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -29,7 +29,7 @@ public class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
 
   @Override
   protected void registerCoCos(MontiArcCoCoChecker checker) {
-    checker.addCoCo(new FieldInitExpressionTypesCorrect(new MontiArcDerive(new TypeCheckResult())));
+    checker.addCoCo(new FieldInitExpressionTypesCorrect(new MontiArcDeriveType(new TypeCheckResult())));
   }
 
   @Override

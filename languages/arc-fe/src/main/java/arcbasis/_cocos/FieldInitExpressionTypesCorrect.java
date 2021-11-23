@@ -2,9 +2,9 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcField;
-import arcbasis.check.ArcBasisDerive;
+import arcbasis.check.ArcBasisDeriveType;
 import arcbasis.check.ArcTypeCheck;
-import arcbasis.check.FullSynthesizeSymTypeFromMCBasicTypes;
+import arcbasis.check.ArcBasisSynthesizeType;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -25,11 +25,11 @@ public class FieldInitExpressionTypesCorrect implements ArcBasisASTArcFieldCoCo 
   protected final TypeCheck typeChecker;
 
   /**
-   * Creates this coco with an ArcTypeCheck, combined with {@link ArcBasisDerive} to check whether initialization
+   * Creates this coco with an ArcTypeCheck, combined with {@link ArcBasisDeriveType} to check whether initialization
    * expressions for fields match the fields' types.
    */
   public FieldInitExpressionTypesCorrect() {
-    this(new ArcTypeCheck(new FullSynthesizeSymTypeFromMCBasicTypes(), new ArcBasisDerive(new TypeCheckResult())));
+    this(new ArcTypeCheck(new ArcBasisSynthesizeType(), new ArcBasisDeriveType(new TypeCheckResult())));
   }
 
   /**
@@ -45,7 +45,7 @@ public class FieldInitExpressionTypesCorrect implements ArcBasisASTArcFieldCoCo 
    * match the fields' types.
    */
   public FieldInitExpressionTypesCorrect(@NotNull IDerive deriverFromExpr) {
-    this(new ArcTypeCheck(new FullSynthesizeSymTypeFromMCBasicTypes(), Preconditions.checkNotNull(deriverFromExpr)));
+    this(new ArcTypeCheck(new ArcBasisSynthesizeType(), Preconditions.checkNotNull(deriverFromExpr)));
   }
 
   @Override

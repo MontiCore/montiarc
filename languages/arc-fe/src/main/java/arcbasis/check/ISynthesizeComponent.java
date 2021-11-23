@@ -11,7 +11,7 @@ import java.util.Optional;
 /**
  * A common interface that can be used to synthesize {@link CompTypeExpression}s from {@link ASTMCType}.
  */
-public interface ISynthesizeCompTypeExpression {
+public interface ISynthesizeComponent {
 
   /**
    * Initializes the traverser with the correct visitors and handlers.

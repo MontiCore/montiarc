@@ -9,7 +9,7 @@ import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._visitor.MontiArcTraverser;
-import montiarc.check.SynthMontiArcCompTypeExpression;
+import montiarc.check.MontiArcSynthesizeComponent;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class MontiArcSymbolTableCompleterDelegator {
@@ -35,7 +35,7 @@ public class MontiArcSymbolTableCompleterDelegator {
   protected void initArcBasis() {
     ArcBasisSymbolTableCompleter arcBasisSymbolTableCompleter = ArcBasisMill.symbolTableCompleter();
     arcBasisSymbolTableCompleter.setTypePrinter(new MCSimpleGenericTypesFullPrettyPrinter(new IndentPrinter()));
-    arcBasisSymbolTableCompleter.setCompTypeExpressionSynth(new SynthMontiArcCompTypeExpression());
+    arcBasisSymbolTableCompleter.setCompTypeExpressionSynth(new MontiArcSynthesizeComponent());
 
     this.getTraverser().add4ArcBasis(arcBasisSymbolTableCompleter);
     this.getTraverser().setArcBasisHandler(arcBasisSymbolTableCompleter);

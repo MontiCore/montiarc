@@ -1,37 +1,36 @@
 /* (c) https://github.com/MontiCore/monticore */
-package arccore.check;
+package genericarc.check;
 
-import arcbasis.check.AbstractArcDerive;
+import arcbasis.check.AbstractArcDeriveType;
 import arcbasis.check.DeriveSymTypeOfExpressionWithPorts;
-import arccore.ArcCoreMill;
-import arccore._visitor.ArcCoreTraverser;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.DeriveSymTypeOfExpression;
 import de.monticore.types.check.DeriveSymTypeOfLiterals;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.TypeCheckResult;
+import genericarc.GenericArcMill;
+import genericarc._visitor.GenericArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
  * A visitor that calculates a {@link SymTypeExpression} (type) for expressions
- * in ArcCore.
+ * in GenericArc.
  */
-public class ArcCoreDerive
-  extends AbstractArcDerive {
+public class GenericArcDeriveType extends AbstractArcDeriveType {
 
-  public ArcCoreDerive(@NotNull TypeCheckResult typeCheckResult) {
-    this(typeCheckResult, ArcCoreMill.traverser());
+  public GenericArcDeriveType(@NotNull TypeCheckResult typeCheckResult) {
+    this(typeCheckResult, GenericArcMill.traverser());
   }
 
-  protected ArcCoreDerive(@NotNull TypeCheckResult typeCheckResult,
-                          @NotNull ArcCoreTraverser typesCalculator) {
+  protected GenericArcDeriveType(@NotNull TypeCheckResult typeCheckResult,
+                                 @NotNull GenericArcTraverser typesCalculator) {
     super(typeCheckResult, typesCalculator);
   }
 
   @Override
-  protected ArcCoreTraverser getCalculationDelegator() {
-    Preconditions.checkState(super.getCalculationDelegator() instanceof ArcCoreTraverser);
-    return (ArcCoreTraverser) super.getCalculationDelegator();
+  protected GenericArcTraverser getCalculationDelegator() {
+    Preconditions.checkState(super.getCalculationDelegator() instanceof GenericArcTraverser);
+    return (GenericArcTraverser) super.getCalculationDelegator();
   }
 
   @Override
@@ -49,7 +48,7 @@ public class ArcCoreDerive
   protected void initDeriveSymTypeOfExpression() {
     DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpressionWithPorts();
     deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
-    this.getCalculationDelegator().add4ExpressionsBasis(deriveSymTypeOfExpression);
     this.getCalculationDelegator().setExpressionsBasisHandler(deriveSymTypeOfExpression);
+    this.getCalculationDelegator().add4ExpressionsBasis(deriveSymTypeOfExpression);
   }
 }

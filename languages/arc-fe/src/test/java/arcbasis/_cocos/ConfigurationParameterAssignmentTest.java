@@ -6,7 +6,7 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
-import arcbasis.check.ArcBasisDeriveTest;
+import arcbasis.check.ArcBasisDeriveTypeTest;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.*;
@@ -22,7 +22,7 @@ import org.mockito.Mockito;
 /**
  * Tests {@link  ConfigurationParameterAssignment}
  */
-public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTest {
+public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTypeTest {
 
   protected ArcBasisScopesGenitorDelegator scopeGenitor;
   protected ArcBasisSymbolTableCompleterDelegator completer;

@@ -2,8 +2,8 @@
 package montiarc.check;
 
 import arcbasis.check.CompTypeExpression;
-import arcbasis.check.ISynthesizeCompTypeExpression;
-import arcbasis.check.SynthCompTypeExprFromMCBasicTypes;
+import arcbasis.check.ISynthesizeComponent;
+import arcbasis.check.SynthesizeComponentFromMCBasicTypes;
 import arcbasis.check.SynthCompTypeResult;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
@@ -14,11 +14,11 @@ import java.util.Optional;
  * A composed visitor for MontiArc that takes component type expressions represented as
  * {@link de.monticore.types.mcbasictypes._ast.ASTMCType} and creates {@link CompTypeExpression}s from them.
  */
-public class SynthMontiArcCompTypeExpression implements ISynthesizeCompTypeExpression {
+public class MontiArcSynthesizeComponent implements ISynthesizeComponent {
   protected MontiArcTraverser traverser;
   protected SynthCompTypeResult resultWrapper;
 
-  public SynthMontiArcCompTypeExpression() {
+  public MontiArcSynthesizeComponent() {
     init();
   }
 
@@ -27,9 +27,9 @@ public class SynthMontiArcCompTypeExpression implements ISynthesizeCompTypeExpre
     this.traverser = MontiArcMill.traverser();
     this.resultWrapper = new SynthCompTypeResult();
 
-    SynthCompTypeExprFromMCBasicTypes synthFromBasicTypes = new SynthCompTypeExprFromMCBasicTypes(resultWrapper);
-    SynthCompTypeExprFromMCSimpleGenericTypes synthFromSimpleGenerics =
-      new SynthCompTypeExprFromMCSimpleGenericTypes(resultWrapper);
+    SynthesizeComponentFromMCBasicTypes synthFromBasicTypes = new SynthesizeComponentFromMCBasicTypes(resultWrapper);
+    SynthesizeComponentFromMCSimpleGenericTypes synthFromSimpleGenerics =
+      new SynthesizeComponentFromMCSimpleGenericTypes(resultWrapper);
 
     traverser.setMCBasicTypesHandler(synthFromBasicTypes);
     traverser.setMCSimpleGenericTypesHandler(synthFromSimpleGenerics);

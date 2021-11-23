@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
-import arcbasis.check.AbstractArcDerive;
+import arcbasis.check.AbstractArcDeriveType;
 import arcbasis.check.DeriveSymTypeOfExpressionWithPorts;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.*;
@@ -13,15 +13,14 @@ import org.codehaus.commons.nullanalysis.NotNull;
  * A visitor that calculates a {@link SymTypeExpression} (type) for expressions
  * in MontiArc.
  */
-public class MontiArcDerive
-  extends AbstractArcDerive {
+public class MontiArcDeriveType extends AbstractArcDeriveType {
 
-  public MontiArcDerive(@NotNull TypeCheckResult typeCheckResult) {
+  public MontiArcDeriveType(@NotNull TypeCheckResult typeCheckResult) {
     this(typeCheckResult, MontiArcMill.traverser());
   }
 
-  protected MontiArcDerive(@NotNull TypeCheckResult typeCheckResult,
-                           @NotNull MontiArcTraverser typesCalculator) {
+  protected MontiArcDeriveType(@NotNull TypeCheckResult typeCheckResult,
+                               @NotNull MontiArcTraverser typesCalculator) {
     super(typeCheckResult, typesCalculator);
   }
 

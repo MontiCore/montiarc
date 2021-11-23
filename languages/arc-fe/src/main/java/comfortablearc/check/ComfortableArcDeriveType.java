@@ -1,9 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
-package arcbasis.check;
+package comfortablearc.check;
 
-import arcbasis.ArcBasisMill;
-import arcbasis._visitor.ArcBasisTraverser;
+import arcbasis.check.AbstractArcDeriveType;
+import arcbasis.check.DeriveSymTypeOfExpressionWithPorts;
 import com.google.common.base.Preconditions;
+import comfortablearc.ComfortableArcMill;
+import comfortablearc._visitor.ComfortableArcTraverser;
 import de.monticore.types.check.DeriveSymTypeOfExpression;
 import de.monticore.types.check.DeriveSymTypeOfLiterals;
 import de.monticore.types.check.SymTypeExpression;
@@ -12,24 +14,23 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
  * A visitor that calculates a {@link SymTypeExpression} (type) for expressions
- * in ArcBasis.
+ * in ComfortableArc.
  */
-public class ArcBasisDerive
-  extends AbstractArcDerive {
+public class ComfortableArcDeriveType extends AbstractArcDeriveType {
 
-  public ArcBasisDerive(@NotNull TypeCheckResult typeCheckResult) {
-    this(typeCheckResult, ArcBasisMill.traverser());
+  public ComfortableArcDeriveType(@NotNull TypeCheckResult typeCheckResult) {
+    this(typeCheckResult, ComfortableArcMill.traverser());
   }
 
-  protected ArcBasisDerive(@NotNull TypeCheckResult typeCheckResult,
-                           @NotNull ArcBasisTraverser typesCalculator) {
-    super(typeCheckResult, typesCalculator);
+  protected ComfortableArcDeriveType(@NotNull TypeCheckResult typeCheckResult,
+                                     @NotNull ComfortableArcTraverser calculationDelegator) {
+    super(typeCheckResult, calculationDelegator);
   }
 
   @Override
-  protected ArcBasisTraverser getCalculationDelegator() {
-    Preconditions.checkNotNull(super.getCalculationDelegator());
-    return super.getCalculationDelegator();
+  protected ComfortableArcTraverser getCalculationDelegator() {
+    Preconditions.checkState(super.getCalculationDelegator() instanceof ComfortableArcTraverser);
+    return (ComfortableArcTraverser) super.getCalculationDelegator();
   }
 
   @Override

@@ -1,37 +1,35 @@
 /* (c) https://github.com/MontiCore/monticore */
-package genericarc.check;
+package arcbasis.check;
 
-import arcbasis.check.AbstractArcDerive;
-import arcbasis.check.DeriveSymTypeOfExpressionWithPorts;
+import arcbasis.ArcBasisMill;
+import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.DeriveSymTypeOfExpression;
 import de.monticore.types.check.DeriveSymTypeOfLiterals;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.TypeCheckResult;
-import genericarc.GenericArcMill;
-import genericarc._visitor.GenericArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
  * A visitor that calculates a {@link SymTypeExpression} (type) for expressions
- * in GenericArc.
+ * in ArcBasis.
  */
-public class GenericArcDerive
-  extends AbstractArcDerive {
+public class ArcBasisDeriveType
+  extends AbstractArcDeriveType {
 
-  public GenericArcDerive(@NotNull TypeCheckResult typeCheckResult) {
-    this(typeCheckResult, GenericArcMill.traverser());
+  public ArcBasisDeriveType(@NotNull TypeCheckResult typeCheckResult) {
+    this(typeCheckResult, ArcBasisMill.traverser());
   }
 
-  protected GenericArcDerive(@NotNull TypeCheckResult typeCheckResult,
-                             @NotNull GenericArcTraverser typesCalculator) {
+  protected ArcBasisDeriveType(@NotNull TypeCheckResult typeCheckResult,
+                               @NotNull ArcBasisTraverser typesCalculator) {
     super(typeCheckResult, typesCalculator);
   }
 
   @Override
-  protected GenericArcTraverser getCalculationDelegator() {
-    Preconditions.checkState(super.getCalculationDelegator() instanceof GenericArcTraverser);
-    return (GenericArcTraverser) super.getCalculationDelegator();
+  protected ArcBasisTraverser getCalculationDelegator() {
+    Preconditions.checkNotNull(super.getCalculationDelegator());
+    return super.getCalculationDelegator();
   }
 
   @Override

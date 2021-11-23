@@ -18,13 +18,13 @@ import java.util.Optional;
  * types calculators {@link IDerive}, and initializing these for
  * delegation in {@link this#init()}.
  */
-public abstract class AbstractArcDerive implements IArcDerive {
+public abstract class AbstractArcDeriveType implements IArcDerive {
 
   protected ArcBasisTraverser calculationDelegator;
   protected TypeCheckResult typeCheckResult;
 
-  protected AbstractArcDerive(@NotNull TypeCheckResult typeCheckResult,
-                              @NotNull ArcBasisTraverser calculationDelegator) {
+  protected AbstractArcDeriveType(@NotNull TypeCheckResult typeCheckResult,
+                                  @NotNull ArcBasisTraverser calculationDelegator) {
     Preconditions.checkArgument(typeCheckResult != null);
     Preconditions.checkArgument(calculationDelegator != null);
     this.typeCheckResult = typeCheckResult;

@@ -17,14 +17,14 @@ import java.util.Optional;
  * A visitor (a handler indeed) that creates {@link CompTypeExpression}s from {@link ASTMCQualifiedType}s, given that
  * there is a ComponentTypeSymbol which is resolvable through the name represented by the {@link ASTMCQualifiedType}.
  */
-public class SynthCompTypeExprFromMCBasicTypes implements MCBasicTypesHandler {
+public class SynthesizeComponentFromMCBasicTypes implements MCBasicTypesHandler {
 
   protected MCBasicTypesTraverser traverser;
 
   /** Common state with other visitors, if this visitor is part of a visitor composition. */
   protected SynthCompTypeResult resultWrapper;
 
-  public SynthCompTypeExprFromMCBasicTypes(@NotNull SynthCompTypeResult resultWrapper) {
+  public SynthesizeComponentFromMCBasicTypes(@NotNull SynthCompTypeResult resultWrapper) {
     this.resultWrapper = Preconditions.checkNotNull(resultWrapper);
   }
 

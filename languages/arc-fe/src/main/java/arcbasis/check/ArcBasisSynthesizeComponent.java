@@ -10,12 +10,12 @@ import java.util.Optional;
  * A composed visitor for ArcBasis that takes component type expressions represented as
  * {@link de.monticore.types.mcbasictypes._ast.ASTMCType} and creates {@link CompTypeExpression}s from them.
  */
-public class SynthArcBasisCompTypeExpression implements ISynthesizeCompTypeExpression {
+public class ArcBasisSynthesizeComponent implements ISynthesizeComponent {
 
   protected ArcBasisTraverser traverser;
   protected SynthCompTypeResult resultWrapper;
 
-  public SynthArcBasisCompTypeExpression() {
+  public ArcBasisSynthesizeComponent() {
     init();
   }
 
@@ -24,7 +24,7 @@ public class SynthArcBasisCompTypeExpression implements ISynthesizeCompTypeExpre
     this.traverser = ArcBasisMill.traverser();
     this.resultWrapper = new SynthCompTypeResult();
 
-    SynthCompTypeExprFromMCBasicTypes synthFromBasicTypes = new SynthCompTypeExprFromMCBasicTypes(resultWrapper);
+    SynthesizeComponentFromMCBasicTypes synthFromBasicTypes = new SynthesizeComponentFromMCBasicTypes(resultWrapper);
     traverser.setMCBasicTypesHandler(synthFromBasicTypes);
   }
 

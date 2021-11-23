@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
-package comfortablearc.check;
+package arccore.check;
 
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis.check.AbstractArcDeriveTest;
-import comfortablearc.ComfortableArcMill;
-import comfortablearc._visitor.ComfortableArcTraverser;
+import arcbasis.check.AbstractArcDeriveTypeTest;
+import arccore.ArcCoreMill;
+import arccore._visitor.ArcCoreTraverser;
 import de.monticore.types.check.TypeCheckResult;
 import montiarc.util.check.IArcDerive;
 import org.junit.jupiter.api.Assertions;
@@ -12,18 +12,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Holds test for methods of {@link ComfortableArcDerive}.
+ * Holds test for methods of {@link ArcCoreDeriveType}.
  *
- * @see AbstractArcDeriveTest for basic tests methods.
+ * @see AbstractArcDeriveTypeTest for basic tests methods.
  */
-public class ComfortableArcDeriveTest extends AbstractArcDeriveTest {
+public class ArcCoreDeriveTypeTest extends AbstractArcDeriveTypeTest {
 
   @Override
   @BeforeEach
   public void init() {
-    ComfortableArcMill.globalScope().clear();
-    ComfortableArcMill.reset();
-    ComfortableArcMill.init();
+    ArcCoreMill.globalScope().clear();
+    ArcCoreMill.reset();
+    ArcCoreMill.init();
     addBasicTypes2Scope();
     this.setUp();
   }
@@ -31,7 +31,7 @@ public class ComfortableArcDeriveTest extends AbstractArcDeriveTest {
   @Override
   protected IArcDerive getDerive() {
     if (this.derive == null) {
-      this.derive = new ComfortableArcDerive(new TypeCheckResult());
+      this.derive = new ArcCoreDeriveType(new TypeCheckResult());
     }
     return this.derive;
   }
@@ -39,7 +39,7 @@ public class ComfortableArcDeriveTest extends AbstractArcDeriveTest {
   @Override
   protected IArcBasisScope getScope() {
     if (this.scope == null) {
-      this.scope = ComfortableArcMill.scope();
+      this.scope = ArcCoreMill.scope();
     }
     return this.scope;
   }
@@ -47,10 +47,10 @@ public class ComfortableArcDeriveTest extends AbstractArcDeriveTest {
   @Test
   public void shouldReturnCorrectCalculationDelegator() {
     //Given
-    ComfortableArcDerive typesCalculator = new ComfortableArcDerive(new TypeCheckResult());
+    ArcCoreDeriveType typesCalculator = new ArcCoreDeriveType(new TypeCheckResult());
 
     //When
-    ComfortableArcTraverser delegator = typesCalculator.getCalculationDelegator();
+    ArcCoreTraverser delegator = typesCalculator.getCalculationDelegator();
 
     //Then
     Assertions.assertTrue(delegator != null);
