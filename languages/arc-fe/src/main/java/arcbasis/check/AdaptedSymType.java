@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 public abstract class AdaptedSymType {
 
   public static SymTypeExpression of(@NotNull SymTypeExpression original) {
-    Log.info("Adapt sym type of " + original.printFullName(), "AdaptSymType");
     if(original.isArrayType()) {
       return new AdaptedSymType.Array((SymTypeArray) original);
     } else if(original.isTypeConstant()) {

@@ -5,8 +5,8 @@ import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.check.AbstractArcDeriveTypeTest;
 import arccore.ArcCoreMill;
 import arccore._visitor.ArcCoreTraverser;
+import de.monticore.types.check.IDerive;
 import de.monticore.types.check.TypeCheckResult;
-import montiarc.util.check.IArcDerive;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ public class ArcCoreDeriveTypeTest extends AbstractArcDeriveTypeTest {
   }
 
   @Override
-  protected IArcDerive getDerive() {
+  protected IDerive getDerive() {
     if (this.derive == null) {
       this.derive = new ArcCoreDeriveType(new TypeCheckResult());
     }

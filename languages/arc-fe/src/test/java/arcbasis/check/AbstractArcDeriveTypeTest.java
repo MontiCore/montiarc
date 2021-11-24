@@ -14,8 +14,8 @@ import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbolSurrogate;
+import de.monticore.types.check.IDerive;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import montiarc.util.check.IArcDerive;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ import java.util.stream.Stream;
  */
 public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
 
-  protected IArcDerive derive;
+  protected IDerive derive;
   protected IArcBasisScope scope;
   protected ArcBasisExpressionsScopeSetter scopeSetter;
 
@@ -65,7 +65,7 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
     return Stream.of(Arguments.of("s", "Student"));
   }
 
-  protected abstract IArcDerive getDerive();
+  protected abstract IDerive getDerive();
 
   protected abstract IArcBasisScope getScope();
 

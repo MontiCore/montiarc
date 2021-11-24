@@ -3,10 +3,10 @@ package genericarc.check;
 
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.check.AbstractArcDeriveTypeTest;
+import de.monticore.types.check.IDerive;
 import de.monticore.types.check.TypeCheckResult;
 import genericarc.GenericArcMill;
 import genericarc._visitor.GenericArcTraverser;
-import montiarc.util.check.IArcDerive;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ public class GenericArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
   }
 
   @Override
-  protected IArcDerive getDerive() {
+  protected IDerive getDerive() {
     if (this.derive == null) {
       this.derive = new GenericArcDeriveType(new TypeCheckResult());
     }

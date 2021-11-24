@@ -12,6 +12,7 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
+import de.monticore.types.check.IDerive;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.check.TypeCheckResult;
@@ -19,7 +20,6 @@ import montiarc.MontiArcMill;
 import montiarc._auxiliary.OOSymbolsMillForMontiArc;
 import montiarc._parser.MontiArcParser;
 import montiarc._visitor.MontiArcTraverser;
-import montiarc.util.check.IArcDerive;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -214,7 +214,7 @@ public class MontiArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
   }
 
   @Override
-  protected IArcDerive getDerive() {
+  protected IDerive getDerive() {
     if (this.derive == null) {
       this.derive = new MontiArcDeriveType(new TypeCheckResult());
     }

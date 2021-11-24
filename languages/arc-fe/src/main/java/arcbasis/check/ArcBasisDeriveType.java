@@ -14,8 +14,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
  * A visitor that calculates a {@link SymTypeExpression} (type) for expressions
  * in ArcBasis.
  */
-public class ArcBasisDeriveType
-  extends AbstractArcDeriveType {
+public class ArcBasisDeriveType extends AbstractArcDeriveType {
 
   public ArcBasisDeriveType(@NotNull TypeCheckResult typeCheckResult) {
     this(typeCheckResult, ArcBasisMill.traverser());

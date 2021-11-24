@@ -5,7 +5,6 @@ import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
 import de.monticore.types.check.*;
-import montiarc.util.check.IArcDerive;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Optional;
@@ -18,7 +17,7 @@ import java.util.Optional;
  * types calculators {@link IDerive}, and initializing these for
  * delegation in {@link this#init()}.
  */
-public abstract class AbstractArcDeriveType implements IArcDerive {
+public abstract class AbstractArcDeriveType implements IDerive {
 
   protected ArcBasisTraverser calculationDelegator;
   protected TypeCheckResult typeCheckResult;
@@ -51,7 +50,6 @@ public abstract class AbstractArcDeriveType implements IArcDerive {
       Optional.empty();
   }
 
-  @Override
   public void reset() {
     this.getTypeCheckResult().setCurrentResultAbsent();
   }
