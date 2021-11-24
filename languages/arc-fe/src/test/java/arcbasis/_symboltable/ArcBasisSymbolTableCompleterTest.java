@@ -8,7 +8,7 @@ import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
-import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
+import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -22,7 +22,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mockito;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.Stack;
 import java.util.function.Consumer;
@@ -73,46 +72,6 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
   public void setTypePrinterShouldThrowNullPointerException() {
     // When && Then
     Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().setTypePrinter(null));
-  }
-
-  /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#printType(ASTMCType)}
-   *
-   * @param ast      the type to print
-   * @param expected the expected print result
-   */
-  @ParameterizedTest
-  @MethodSource("typeAndExpectedStringRepresentationProvider")
-  public void shouldPrintType(@NotNull ASTMCType ast, @NotNull String expected) {
-    Preconditions.checkNotNull(ast);
-    Preconditions.checkNotNull(expected);
-
-    // Given
-    this.getCompleter().setTypePrinter(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
-
-    // When && Then
-    Assertions.assertEquals(expected, this.getCompleter().printType(ast));
-  }
-
-  protected static Stream<Arguments> typeAndExpectedStringRepresentationProvider() {
-    return Stream.of(
-      Arguments.of(MCBasicTypesMill.mCPrimitiveTypeBuilder()
-        .setPrimitive(ASTConstantsMCBasicTypes.BOOLEAN).build(), "boolean"),
-      Arguments.of(MCBasicTypesMill.mCQualifiedTypeBuilder()
-        .setMCQualifiedName(MCBasicTypesMill.mCQualifiedNameBuilder()
-          .setPartsList(Arrays.asList("foo", "bar", "Type"))
-          .build())
-        .build(), "foo.bar.Type")
-    );
-  }
-
-  /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#printType(ASTMCType)}
-   */
-  @Test
-  public void printTypeShouldThrowNullPointerException() {
-    // When && Then
-    Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().printType(null));
   }
 
   /**
@@ -284,6 +243,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     Assertions.assertTrue(!this.getCompleter().getCurrentCompInstanceType().isPresent());
   }
 
+  @Test
   public void shouldVisitComponentTypeAndSetCurrentCompInstanceType() {
     Preconditions.checkState(this.getCompleter().getComponentStack().isEmpty());
 
@@ -447,7 +407,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     String childCompName = "ChildComp";
     ComponentTypeSymbol symChildComp = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(childCompName)
-      .setSpannedScope(Mockito.mock(IArcBasisScope.class))
+      .setSpannedScope(ArcBasisMill.scope())
       .build();
 
     ASTComponentHead childCompHead = ArcBasisMill.componentHeadBuilder()
@@ -462,11 +422,16 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
 
     ArcBasisMill.globalScope().add(parentComp);
     ArcBasisMill.globalScope().add(symChildComp);
+    parentComp.getSpannedScope().setEnclosingScope(ArcBasisMill.globalScope());
+    symChildComp.getSpannedScope().setEnclosingScope(ArcBasisMill.globalScope());
 
     symChildComp.setAstNode(astChildComp);
     astChildComp.setSymbol(symChildComp);
     astChildComp.setEnclosingScope(ArcBasisMill.globalScope());
-    childCompHead.setEnclosingScope(ArcBasisMill.globalScope());
+    astChildComp.setSpannedScope(symChildComp.getSpannedScope());
+    childCompHead.setEnclosingScope(symChildComp.getSpannedScope());
+    childCompHead.getParent().setEnclosingScope(symChildComp.getSpannedScope());
+    ((ASTMCQualifiedType) childCompHead.getParent()).getMCQualifiedName().setEnclosingScope(symChildComp.getSpannedScope());
 
     getCompleter().putOnStack(symChildComp);
 

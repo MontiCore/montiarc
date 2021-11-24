@@ -22,30 +22,32 @@ import java.util.function.BiFunction;
 
 public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
-  protected Stack<ComponentTypeSymbol> componentStack = new Stack<>();
-  protected MCBasicTypesFullPrettyPrinter typePrinter = MCBasicTypesMill.mcBasicTypesPrettyPrinter();
+  protected Stack<ComponentTypeSymbol> componentStack;
+  protected MCBasicTypesFullPrettyPrinter typePrinter;
   protected BiFunction<ASTMCType, IArcBasisScope, SymTypeExpression> expressionCreator;
-  protected Stack<IArcBasisScope> enclosingScope4InstancesStack = new Stack();
+  protected Stack<IArcBasisScope> enclosingScope4InstancesStack;
   protected ASTMCType currentFieldType;
   protected ASTMCType currentPortType;
   protected ASTPortDirection currentPortDirection;
 
-  /**
-   * allows updating the internal printer used to print types
-   * @param typesPrinter new printer
-   */
-  public void setTypePrinter(@NotNull MCBasicTypesFullPrettyPrinter typesPrinter) {
+  public ArcBasisScopesGenitor() {
+    this(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
+  }
+
+  public ArcBasisScopesGenitor(@NotNull MCBasicTypesFullPrettyPrinter typePrinter) {
+    super();
+    this.typePrinter = Preconditions.checkNotNull(typePrinter);
+    this.componentStack = new Stack<>();
+    this.enclosingScope4InstancesStack = new Stack<>();
+  }
+
+  protected void setTypePrinter(@NotNull MCBasicTypesFullPrettyPrinter typesPrinter) {
     Preconditions.checkNotNull(typesPrinter);
     this.typePrinter = typesPrinter;
   }
 
-  /**
-   * @param type type of an model element instance
-   * @return a string representation of this element type that can be used for building expressions, etc.
-   */
-  protected String printType(@NotNull ASTMCType type) {
-    assert type != null;
-    return type.printType(typePrinter);
+  public MCBasicTypesFullPrettyPrinter getTypePrinter() {
+    return this.typePrinter;
   }
 
   /**
@@ -174,30 +176,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     }
   }
 
-  /**
-   * Creates an ASTMCType that represents the  given component type
-   * @param comp the component type for which the ASMCType should be created
-   * @return the given component type, represented as MCType
-   */
-  protected ASTMCType mcTypeFromCompType(@NotNull ComponentTypeSymbol comp) {
-    Preconditions.checkArgument(comp != null);
-    Preconditions.checkArgument(comp.getEnclosingScope() != null);
-
-    ASTMCType type = ArcBasisMill
-      .mCQualifiedTypeBuilder()
-      .setMCQualifiedName(
-        MCBasicTypesMill
-          .mCQualifiedNameBuilder()
-          .addParts(comp.getFullName())
-          .build()
-      )
-      .build();
-
-    type.setEnclosingScope(comp.getEnclosingScope());
-
-    return type;
-  }
-
   @Override
   public void visit(@NotNull ASTComponentType node) {
     Preconditions.checkArgument(node != null);
@@ -248,14 +226,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentEnclosingScope4Instances().isPresent());
     this.removeCurrentEnclosingScope4Instances();
-  }
-
-  /**
-   * todo: override the simple types genitor to do this
-   */
-  public void visit(ASTMCType node) {
-    Preconditions.checkState(this.getCurrentScope().isPresent());
-    node.setEnclosingScope(this.getCurrentScope().get());
   }
 
   protected VariableSymbolBuilder create_ArcParameter(@NotNull ASTArcParameter ast) {

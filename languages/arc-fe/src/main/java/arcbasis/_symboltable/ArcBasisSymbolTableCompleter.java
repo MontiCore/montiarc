@@ -8,13 +8,14 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis._visitor.ArcBasisVisitor2;
-import arcbasis.check.*;
-import arcbasis.util.ArcError;
+import arcbasis.check.ArcBasisSynthesizeComponent;
+import arcbasis.check.CompTypeExpression;
+import arcbasis.check.ISynthesizeComponent;
+import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.ISymbol;
+import de.monticore.types.check.ISynthesize;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
-import de.monticore.types.mcbasictypes._ast.ASTMCType;
-import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
 import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -27,18 +28,13 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
 
   protected MCBasicTypesFullPrettyPrinter typePrinter;
 
-  protected MCBasicTypesFullPrettyPrinter getTypePrinter() {
+  public MCBasicTypesFullPrettyPrinter getTypePrinter() {
     return this.typePrinter;
   }
 
-  public void setTypePrinter(@NotNull MCBasicTypesFullPrettyPrinter typesPrinter) {
+  protected void setTypePrinter(@NotNull MCBasicTypesFullPrettyPrinter typesPrinter) {
     Preconditions.checkNotNull(typesPrinter);
     this.typePrinter = typesPrinter;
-  }
-
-  protected String printType(@NotNull ASTMCType type) {
-    Preconditions.checkNotNull(type);
-    return type.printType(typePrinter);
   }
 
   protected Stack<ComponentTypeSymbol> componentStack;
@@ -88,18 +84,26 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     return this.traverser;
   }
 
-  /**
-   * Used to create {@link CompTypeExpression}s from the {@link ASTMCType}s that declare the types of component
-   * instances within {@link ASTComponentInstantiation}s.
-   */
-  protected ISynthesizeComponent compTypeExpressionSynth;
+  protected ISynthesize typeSynthesizer;
 
-  public void setCompTypeExpressionSynth(@NotNull ISynthesizeComponent compTypeExpressionSynth) {
-    this.compTypeExpressionSynth = Preconditions.checkNotNull(compTypeExpressionSynth);
+  protected void setTypeSynthesizer(@NotNull ISynthesize typeSynthesizer) {
+    Preconditions.checkNotNull(typeSynthesizer);
+    this.typeSynthesizer = typeSynthesizer;
   }
 
-  public ISynthesizeComponent getCompTypeExpressionSynth() {
-    return this.compTypeExpressionSynth;
+  public ISynthesize getTypeSynthesizer() {
+    return this.typeSynthesizer;
+  }
+
+  protected ISynthesizeComponent componentSynthesizer;
+
+  protected void setComponentSynthesizer(@NotNull ISynthesizeComponent componentSynthesizer) {
+    Preconditions.checkNotNull(componentSynthesizer);
+    this.componentSynthesizer = componentSynthesizer;
+  }
+
+  protected ISynthesizeComponent getComponentSynthesizer() {
+    return this.componentSynthesizer;
   }
 
   public ArcBasisSymbolTableCompleter() {
@@ -111,9 +115,9 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   }
 
   public ArcBasisSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter,
-                                      @NotNull ISynthesizeComponent compTypeExpressionSynth) {
+                                      @NotNull ISynthesizeComponent componentSynthesizer) {
     this.typePrinter = Preconditions.checkNotNull(typePrinter);
-    this.compTypeExpressionSynth = Preconditions.checkNotNull(compTypeExpressionSynth);
+    this.componentSynthesizer = Preconditions.checkNotNull(componentSynthesizer);
     this.componentStack = new Stack<>();
   }
 
@@ -161,12 +165,13 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkState(!this.getComponentStack().isEmpty());
     Preconditions.checkState(this.getCurrentComponent().isPresent());
     if (node.isPresentParent()) {
-      String type = printSimpleType(node.getParent());
-      Optional<ComponentTypeSymbol> parent = node.getEnclosingScope().resolveComponentType(type);
-      if (!parent.isPresent()) {
-        Log.error(ArcError.SYMBOL_NOT_FOUND.format(type), node.get_SourcePositionStart());
+      Optional<CompTypeExpression> parentTypeExpr = this.getComponentSynthesizer().synthesizeFrom(node.getParent());
+      if (parentTypeExpr.isPresent()) {
+        this.getCurrentComponent().get().setParent(parentTypeExpr.get());
       } else {
-        this.getCurrentComponent().get().setParent(new TypeExprOfComponent(parent.get()));
+        Log.error(String.format("Could not create a component type expression from '%s'",
+          node.getParent().printType(this.getTypePrinter())), node.get_SourcePositionStart()
+        );
       }
     }
   }
@@ -176,13 +181,12 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getEnclosingScope());
 
-    Optional<CompTypeExpression> compTypeExpr = this.getCompTypeExpressionSynth().synthesizeFrom(node.getMCType());
-    if(compTypeExpr.isPresent()) {
+    Optional<CompTypeExpression> compTypeExpr = this.getComponentSynthesizer().synthesizeFrom(node.getMCType());
+    if (compTypeExpr.isPresent()) {
       this.setCurrentCompInstanceType(compTypeExpr.get());
     } else {
       Log.error(String.format("Could not create a component type expression from '%s'",
-        this.getTypePrinter().prettyprint(node.getMCType())),
-        node.get_SourcePositionStart()
+        node.getMCType().printType(this.getTypePrinter())), node.get_SourcePositionStart()
       );
     }
   }
@@ -200,14 +204,5 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
 
     node.getSymbol().setType(this.getCurrentCompInstanceType().get());
-  }
-
-  protected String printSimpleType(@NotNull ASTMCType type) {
-    Preconditions.checkNotNull(type);
-    Preconditions.checkState(this.typePrinter != null);
-
-    return type instanceof ASTMCGenericType ?
-        ((ASTMCGenericType) type).printWithoutTypeArguments()
-        : type.printType(typePrinter);
   }
 }

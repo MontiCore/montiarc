@@ -3,8 +3,6 @@ package montiarc._symboltable;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisScopesGenitor;
-import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
 
 public class MontiArcScopesGenitorDelegator extends MontiArcScopesGenitorDelegatorTOP {
 
@@ -13,7 +11,6 @@ public class MontiArcScopesGenitorDelegator extends MontiArcScopesGenitorDelegat
     traverser.getArcBasisVisitorList().clear();
     ArcBasisScopesGenitor arcBasisScopesGenitor = ArcBasisMill.scopesGenitor();
     arcBasisScopesGenitor.setScopeStack(scopeStack);
-    arcBasisScopesGenitor.setTypePrinter(new MCSimpleGenericTypesFullPrettyPrinter(new IndentPrinter()));
     traverser.add4ArcBasis(arcBasisScopesGenitor);
     traverser.setArcBasisHandler(arcBasisScopesGenitor);
   }

@@ -4,12 +4,9 @@ package montiarc._symboltable;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisSymbolTableCompleter;
 import com.google.common.base.Preconditions;
-import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._visitor.MontiArcTraverser;
-import montiarc.check.MontiArcSynthesizeComponent;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class MontiArcSymbolTableCompleterDelegator {
@@ -34,8 +31,6 @@ public class MontiArcSymbolTableCompleterDelegator {
 
   protected void initArcBasis() {
     ArcBasisSymbolTableCompleter arcBasisSymbolTableCompleter = ArcBasisMill.symbolTableCompleter();
-    arcBasisSymbolTableCompleter.setTypePrinter(new MCSimpleGenericTypesFullPrettyPrinter(new IndentPrinter()));
-    arcBasisSymbolTableCompleter.setCompTypeExpressionSynth(new MontiArcSynthesizeComponent());
 
     this.getTraverser().add4ArcBasis(arcBasisSymbolTableCompleter);
     this.getTraverser().setArcBasisHandler(arcBasisSymbolTableCompleter);
