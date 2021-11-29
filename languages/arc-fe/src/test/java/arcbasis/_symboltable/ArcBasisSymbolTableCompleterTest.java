@@ -7,6 +7,9 @@ import arcbasis._ast.*;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
@@ -481,6 +484,139 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
       Arguments.of(ast2, consumer1, IllegalStateException.class),
       Arguments.of(ast2, consumer2, IllegalStateException.class)
     );
+  }
+
+  @Test
+  public void shouldVisitArcParameter() {
+    // Given
+    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build(); // Type: byte
+    VariableSymbol symParam = ArcBasisMill.variableSymbolBuilder().setName("par").build();
+    ASTArcParameter astParam = arcbasis.ArcBasisMill.arcParameterBuilder().setName("par")
+      .setMCType(type).build();
+    astParam.setSymbol(symParam);
+    symParam.setAstNode(astParam);
+    astParam.setEnclosingScope(ArcBasisMill.globalScope());
+    symParam.setEnclosingScope(ArcBasisMill.globalScope());
+
+    // When
+    getCompleter().visit(astParam);
+
+    // Then
+    Assertions.assertNotNull(symParam.getType());
+    Assertions.assertTrue(SymTypeExpressionFactory.createTypeConstant("byte").deepEquals(symParam.getType()));
+  }
+
+  @Test
+  public void shouldVisitPortDeclaration() {
+    // Given
+    ASTMCType type = createQualifiedType("some.Type");
+    ASTPortDeclaration astPortDecl = arcbasis.ArcBasisMill.portDeclarationBuilder()
+      .setMCType(type)
+      .setIncoming(true)
+      .addPort("mock").build();
+
+    // When
+    this.getCompleter().visit(astPortDecl);
+
+    // Then
+    Assertions.assertTrue(this.getCompleter().getCurrentPortType().isPresent());
+  }
+
+  @Test
+  public void shouldEndVisitPortDeclaration() {
+    // When
+    ASTMCType type = createQualifiedType("some.Type");
+    ASTPortDeclaration astPortDecl = arcbasis.ArcBasisMill.portDeclarationBuilder()
+      .setMCType(type)
+      .setIncoming(true)
+      .addPort("mock").build();
+    this.getCompleter().setCurrentPortType(type);
+
+    // When
+    this.getCompleter().endVisit(astPortDecl);
+
+    // Then
+    Assertions.assertFalse(this.getCompleter().getCurrentPortType().isPresent());
+  }
+
+  @Test
+  public void shouldVisitPort() {
+    // Given
+    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build(); // Type: byte
+    PortSymbol symParam = ArcBasisMill.portSymbolBuilder()
+      .setName("po")
+      .setDirection(Mockito.mock(ASTPortDirection.class))
+      .buildWithoutType();
+    ASTPort astPort = ArcBasisMill.portBuilder().setName("po").build();
+    astPort.setSymbol(symParam);
+    symParam.setAstNode(astPort);
+    astPort.setEnclosingScope(ArcBasisMill.globalScope());
+    symParam.setEnclosingScope(ArcBasisMill.globalScope());
+
+    this.getCompleter().setCurrentPortType(type);
+
+    // When
+    getCompleter().visit(astPort);
+
+    // Then
+    Assertions.assertDoesNotThrow(symParam::getType);
+    Assertions.assertTrue(SymTypeExpressionFactory.createTypeConstant("byte").deepEquals(symParam.getType()));
+  }
+
+  @Test
+  public void shouldVisitFieldDeclaration() {
+    // Given
+    ASTMCType type = createQualifiedType("some.Type");
+    ASTArcFieldDeclaration astFieldDecl = arcbasis.ArcBasisMill.arcFieldDeclarationBuilder()
+      .setMCType(type)
+      .addArcField("mock", Mockito.mock(ASTExpression.class))
+      .build();
+
+    // When
+    this.getCompleter().visit(astFieldDecl);
+
+    // Then
+    Assertions.assertTrue(this.getCompleter().getCurrentFieldType().isPresent());
+    Assertions.assertEquals(type, this.getCompleter().getCurrentFieldType().get());
+  }
+
+  @Test
+  public void shouldEndVisitFieldDeclaration() {
+    // Given
+    ASTMCType type = createQualifiedType("some.Type");
+    ASTArcFieldDeclaration astFieldDecl = arcbasis.ArcBasisMill.arcFieldDeclarationBuilder()
+      .setMCType(type)
+      .addArcField("mock", Mockito.mock(ASTExpression.class))
+      .build();
+    this.getCompleter().setCurrentFieldType(type);
+
+    // When
+    this.getCompleter().endVisit(astFieldDecl);
+
+    Assertions.assertFalse(this.getCompleter().getCurrentFieldType().isPresent());
+  }
+
+  @Test
+  public void shouldVisitArcField() {
+    // Given
+    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build(); // Type: byte
+    VariableSymbol symField = ArcBasisMill.variableSymbolBuilder()
+      .setName("po")
+      .build();
+    ASTArcField astField = ArcBasisMill.arcFieldBuilder().setName("po").uncheckedBuild();
+    astField.setSymbol(symField);
+    symField.setAstNode(astField);
+    astField.setEnclosingScope(ArcBasisMill.globalScope());
+    symField.setEnclosingScope(ArcBasisMill.globalScope());
+
+    this.getCompleter().setCurrentFieldType(type);
+
+    // When
+    getCompleter().visit(astField);
+
+    // Then
+    Assertions.assertNotNull(symField.getType());
+    Assertions.assertTrue(SymTypeExpressionFactory.createTypeConstant("byte").deepEquals(symField.getType()));
   }
 
   @Test

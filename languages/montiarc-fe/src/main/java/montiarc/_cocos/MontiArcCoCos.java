@@ -6,6 +6,7 @@ import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
+import montiarc._cocos.util.CheckTypeExistence4MontiArc;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
 import montiarc.check.MontiArcDeriveType;
 
@@ -29,7 +30,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new FieldInitExpressionTypesCorrect(new MontiArcDeriveType(new TypeCheckResult())));
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new FieldInitExpressionsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
-    checker.addCoCo(new FieldTypeExists());
+    checker.addCoCo(new FieldTypeExists(new CheckTypeExistence4MontiArc()));
     checker.addCoCo(new InheritedComponentTypeExists());
     checker.addCoCo(new InnerComponentNotExtendsDefiningComponent());
     checker.addCoCo(new InstanceNameCapitalisation());
@@ -37,9 +38,9 @@ public class MontiArcCoCos {
     checker.addCoCo(new ParameterDefaultValuesOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new ParameterDefaultValueTypesCorrect(new MontiArcDeriveType(new TypeCheckResult())));
     checker.addCoCo(new ParameterNameCapitalization());
-    checker.addCoCo(new ParameterTypeExists());
+    checker.addCoCo(new ParameterTypeExists(new CheckTypeExistence4MontiArc()));
     checker.addCoCo(new PortNameCapitalisation());
-    checker.addCoCo(new PortTypeExists());
+    checker.addCoCo(new PortTypeExists(new CheckTypeExistence4MontiArc()));
     checker.addCoCo(new PortUniqueSender());
     checker.addCoCo(new PortUsage());
     checker.addCoCo(new SubComponentsConnected());

@@ -11,6 +11,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -57,6 +58,7 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractTest {
 
     ASTComponentType enclComp = encloseParamInCompType(param);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
     ParameterDefaultValueTypesCorrect coco = new ParameterDefaultValueTypesCorrect();
 
@@ -78,6 +80,7 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractTest {
 
     ASTComponentType enclComp = encloseParamInCompType(param);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
     ParameterDefaultValueTypesCorrect coco = new ParameterDefaultValueTypesCorrect();
 
@@ -93,12 +96,13 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractTest {
     //Given
     ASTArcParameter param = ArcBasisMill.arcParameterBuilder()
       .setName("fooField")
-      .setMCType(createQualifiedType("double"))
+      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.DOUBLE).build())
       .setDefault(doBuildNameExpressionInGlobalScope(INT_VAR_NAME))
       .build();
 
     ASTComponentType enclComp = encloseParamInCompType(param);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
     ParameterDefaultValueTypesCorrect coco = new ParameterDefaultValueTypesCorrect();
 
@@ -120,6 +124,7 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractTest {
 
     ASTComponentType enclComp = encloseParamInCompType(param);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
     ParameterDefaultValueTypesCorrect coco = new ParameterDefaultValueTypesCorrect();
 

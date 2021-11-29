@@ -10,6 +10,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -20,14 +21,6 @@ import org.mockito.Mockito;
  * Tests {@link FieldInitExpressionTypesCorrect}
  */
 public class FieldInitExpressionTypesCorrectTest extends ArcBasisDeriveTypeTest {
-
-  protected ArcBasisScopesGenitorDelegator scopeGenitor;
-
-  @Override
-  public void setUp() {
-    super.setUp();
-    this.scopeGenitor = new ArcBasisScopesGenitorDelegator();
-  }
 
   @Override
   public void setUpFields() {
@@ -40,7 +33,7 @@ public class FieldInitExpressionTypesCorrectTest extends ArcBasisDeriveTypeTest 
     FieldSymbol aDouble = ArcBasisMill.fieldSymbolBuilder().setName("aDouble")
       .setType(SymTypeExpressionFactory.createTypeConstant("double")).build();
 
-    this.add2Scope(this.scope, new FieldSymbol[]{anInt, aBool, aDouble});
+    this.add2Scope(this.scope, anInt, aBool, aDouble);
   }
 
   @Test
@@ -56,7 +49,8 @@ public class FieldInitExpressionTypesCorrectTest extends ArcBasisDeriveTypeTest 
       .build();
 
     ASTComponentType enclComp = encloseFieldInCompType(fieldDecl);
-    this.scopeGenitor.createFromAST(enclComp);
+    ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
     FieldInitExpressionTypesCorrect coco = new FieldInitExpressionTypesCorrect();
     coco.check(field);
@@ -72,12 +66,13 @@ public class FieldInitExpressionTypesCorrectTest extends ArcBasisDeriveTypeTest 
       .build();
 
     ASTArcFieldDeclaration fieldDecl = ArcBasisMill.arcFieldDeclarationBuilder()
-      .setMCType(createQualifiedType("double"))
+      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.DOUBLE).build())
       .addArcField(field)
       .build();
 
     ASTComponentType enclComp = encloseFieldInCompType(fieldDecl);
-    this.scopeGenitor.createFromAST(enclComp);
+    ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
     FieldInitExpressionTypesCorrect coco = new FieldInitExpressionTypesCorrect();
     coco.check(field);
@@ -98,7 +93,8 @@ public class FieldInitExpressionTypesCorrectTest extends ArcBasisDeriveTypeTest 
       .build();
 
     ASTComponentType enclComp = encloseFieldInCompType(fieldDecl);
-    this.scopeGenitor.createFromAST(enclComp);
+    ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
     FieldInitExpressionTypesCorrect coco = new FieldInitExpressionTypesCorrect();
     coco.check(field);

@@ -59,7 +59,7 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractCoCoTest {
     Preconditions.checkNotNull(model);
 
     //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
+    ASTMACompilationUnit ast = this.parseAndCreateAndCompleteSymbols(model);
 
     //When
     this.getChecker().checkAll(ast);
@@ -75,7 +75,7 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractCoCoTest {
     Preconditions.checkNotNull(errors);
 
     //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
+    ASTMACompilationUnit ast = this.parseAndCreateAndCompleteSymbols(model);
 
     //When
     this.getChecker().checkAll(ast);

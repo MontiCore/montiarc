@@ -53,7 +53,8 @@ public class FieldInitExpressionTypesCorrect implements ArcBasisASTArcFieldCoCo 
     Preconditions.checkNotNull(astField);
     Preconditions.checkArgument(astField.isPresentSymbol(), "Could not perform coco check '%s'. Perhaps you missed the " +
       "symbol table creation.", this.getClass().getSimpleName());
-    Preconditions.checkNotNull(astField.getSymbol().getType());
+    Preconditions.checkNotNull(astField.getSymbol().getType(), "Could not perform coco check '%s'. Perhaps you " +
+      "missed the symbol table completion.", this.getClass().getSimpleName());
 
     VariableSymbol fieldSym = astField.getSymbol();
     SymTypeExpression fieldType = fieldSym.getType();

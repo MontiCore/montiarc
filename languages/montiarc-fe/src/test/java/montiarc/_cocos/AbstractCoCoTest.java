@@ -65,16 +65,29 @@ public abstract class AbstractCoCoTest extends AbstractTest {
   }
 
   /**
-   * processes the given test model
+   * processes the given test model (parse, run scopes genitor, complete symbol table)
    *
    * @param model name of the file (with the file ending)
    * @return generated top ast element
    */
-  protected ASTMACompilationUnit parseAndLoadSymbols(@NotNull String model) {
+  protected ASTMACompilationUnit parseAndCreateAndCompleteSymbols(@NotNull String model) {
     Preconditions.checkNotNull(model);
     ASTMACompilationUnit ast = this.getCLI().parse(getPathToModel(model)).orElse(null);
     this.getCLI().createSymbolTable(ast);
     this.getCLI().completeSymbolTable(ast);
+    return ast;
+  }
+
+  /**
+   * processes the given test model (parse, run scopes genitor)
+   *
+   * @param model name of the file (with the file ending)
+   * @return generated top ast element
+   */
+  protected ASTMACompilationUnit parseAndCreateSymbols(@NotNull String model) {
+    Preconditions.checkNotNull(model);
+    ASTMACompilationUnit ast = this.getCLI().parse(getPathToModel(model)).orElse(null);
+    this.getCLI().createSymbolTable(ast);
     return ast;
   }
 
@@ -110,7 +123,7 @@ public abstract class AbstractCoCoTest extends AbstractTest {
     Preconditions.checkNotNull(errors);
 
     //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
+    ASTMACompilationUnit ast = this.parseAndCreateAndCompleteSymbols(model);
 
     //When
     this.getChecker().checkAll(ast);

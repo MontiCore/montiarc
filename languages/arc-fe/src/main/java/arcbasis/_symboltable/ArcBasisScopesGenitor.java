@@ -8,7 +8,6 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolBuilder;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import de.monticore.types.mcbasictypes.MCBasicTypesMill;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -23,54 +22,13 @@ import java.util.function.BiFunction;
 public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   protected Stack<ComponentTypeSymbol> componentStack;
-  protected MCBasicTypesFullPrettyPrinter typePrinter;
-  protected BiFunction<ASTMCType, IArcBasisScope, SymTypeExpression> expressionCreator;
   protected Stack<IArcBasisScope> enclosingScope4InstancesStack;
-  protected ASTMCType currentFieldType;
-  protected ASTMCType currentPortType;
   protected ASTPortDirection currentPortDirection;
 
   public ArcBasisScopesGenitor() {
-    this(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
-  }
-
-  public ArcBasisScopesGenitor(@NotNull MCBasicTypesFullPrettyPrinter typePrinter) {
     super();
-    this.typePrinter = Preconditions.checkNotNull(typePrinter);
     this.componentStack = new Stack<>();
     this.enclosingScope4InstancesStack = new Stack<>();
-  }
-
-  protected void setTypePrinter(@NotNull MCBasicTypesFullPrettyPrinter typesPrinter) {
-    Preconditions.checkNotNull(typesPrinter);
-    this.typePrinter = typesPrinter;
-  }
-
-  public MCBasicTypesFullPrettyPrinter getTypePrinter() {
-    return this.typePrinter;
-  }
-
-  /**
-   * transforms this type to an expression and maybe adds it to the scope
-   * @param type type to transform
-   * @return null- void- or object-expression
-   */
-  protected SymTypeExpression createTypeExpression(@NotNull ASTMCType type) {
-    assert type != null && this.getCurrentScope().isPresent();
-    if(expressionCreator==null){
-      updateConverter(mapWith(typePrinter));
-    }
-    return expressionCreator.apply(type, getCurrentScope().get());
-  }
-
-  /**
-   * sets a new mapper object used to create sym tab expressions
-   * @param newBuilder new lambda
-   * @return this object, for daisy chaining
-   */
-  public ArcBasisScopesGenitor updateConverter(BiFunction<ASTMCType, IArcBasisScope, SymTypeExpression> newBuilder){
-    expressionCreator = newBuilder;
-    return this;
   }
 
   protected Stack<ComponentTypeSymbol> getComponentStack() {
@@ -89,28 +47,12 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     this.getComponentStack().push(symbol);
   }
 
-  protected Optional<ASTMCType> getCurrentPortType() {
-    return Optional.ofNullable(this.currentPortType);
-  }
-
-  protected void setCurrentPortType(@Nullable ASTMCType currentPortType) {
-    this.currentPortType = currentPortType;
-  }
-
   protected Optional<ASTPortDirection> getCurrentPortDirection() {
     return Optional.ofNullable(this.currentPortDirection);
   }
 
   protected void setCurrentPortDirection(@Nullable ASTPortDirection currentPortDirection) {
     this.currentPortDirection = currentPortDirection;
-  }
-
-  protected Optional<ASTMCType> getCurrentFieldType() {
-    return Optional.ofNullable(this.currentFieldType);
-  }
-
-  protected void setCurrentFieldType(@Nullable ASTMCType currentFieldType) {
-    this.currentFieldType = currentFieldType;
   }
 
   protected Stack<IArcBasisScope> getEnclosingScope4InstancesStack() {
@@ -232,7 +174,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     assert (this.getCurrentScope().isPresent());
     VariableSymbolBuilder builder = ArcBasisMill.variableSymbolBuilder();
     builder.setName(ast.getName());
-    builder.setType(this.createTypeExpression(ast.getMCType()));
     return builder;
   }
 
@@ -255,28 +196,22 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(getCurrentScope().isPresent());
     node.setEnclosingScope(getCurrentScope().get());
-    this.setCurrentPortType(node.getMCType());
     this.setCurrentPortDirection(node.getPortDirection());
   }
 
   @Override
   public void endVisit(@NotNull ASTPortDeclaration node) {
     Preconditions.checkArgument(node != null);
-    Preconditions.checkState(this.getCurrentPortType().isPresent());
-    Preconditions.checkState(this.getCurrentPortType().get().equals(node.getMCType()));
     Preconditions.checkState(this.getCurrentPortDirection().isPresent());
     Preconditions.checkState(this.getCurrentPortDirection().get().equals(node.getPortDirection()));
-    this.setCurrentPortType(null);
     this.setCurrentPortDirection(null);
   }
 
   protected PortSymbolBuilder create_Port(@NotNull ASTPort ast) {
-    assert (this.getCurrentPortType().isPresent());
-    assert (this.getCurrentPortDirection().isPresent());
-    assert (this.getCurrentScope().isPresent());
+    Preconditions.checkState(this.getCurrentPortDirection().isPresent());
+    Preconditions.checkState(this.getCurrentScope().isPresent());
     PortSymbolBuilder builder = ArcBasisMill.portSymbolBuilder();
     builder.setName(ast.getName());
-    builder.setType(this.createTypeExpression(this.getCurrentPortType().get()));
     builder.setDirection(this.getCurrentPortDirection().get());
     return builder;
   }
@@ -285,9 +220,8 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   public void visit(@NotNull ASTPort node) {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(getCurrentScope().isPresent());
-    Preconditions.checkState(getCurrentPortType().isPresent());
     Preconditions.checkState(getCurrentPortDirection().isPresent());
-    PortSymbol symbol = this.create_Port(node).build();
+    PortSymbol symbol = this.create_Port(node).buildWithoutType();
     node.setSymbol(symbol);
     node.setEnclosingScope(this.getCurrentScope().get());
     symbol.setAstNode(node);
@@ -300,23 +234,12 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     node.setEnclosingScope(this.getCurrentScope().get());
-    this.setCurrentFieldType(node.getMCType());
-  }
-
-  @Override
-  public void endVisit(@NotNull ASTArcFieldDeclaration node) {
-    Preconditions.checkArgument(node != null);
-    Preconditions.checkState(this.getCurrentFieldType().isPresent());
-    Preconditions.checkState(this.getCurrentFieldType().get().equals(node.getMCType()));
-    this.setCurrentFieldType(null);
   }
 
   protected VariableSymbolBuilder create_ArcField(@NotNull ASTArcField ast) {
-    assert (this.getCurrentFieldType().isPresent());
-    assert (this.getCurrentScope().isPresent());
+    Preconditions.checkState(this.getCurrentScope().isPresent());
     VariableSymbolBuilder builder = ArcBasisMill.variableSymbolBuilder();
     builder.setName(ast.getName());
-    builder.setType(this.createTypeExpression(this.getCurrentFieldType().get()));
     return builder;
   }
 
@@ -324,7 +247,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   public void visit(@NotNull ASTArcField node) {
     Preconditions.checkArgument(node != null);
     Preconditions.checkState(this.getCurrentScope().isPresent());
-    Preconditions.checkState(this.getCurrentFieldType().isPresent());
     VariableSymbol symbol = this.create_ArcField(node).build();
     node.setSymbol(symbol);
     node.setEnclosingScope(this.getCurrentScope().get());

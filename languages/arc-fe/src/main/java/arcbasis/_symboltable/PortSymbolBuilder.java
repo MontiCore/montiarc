@@ -69,8 +69,22 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
     return symbol;
   }
 
+  public PortSymbol buildWithoutType() {
+    if (!isValidWithoutType()) {
+      Preconditions.checkState(this.getName() != null);
+      Preconditions.checkState(this.getDirection() != null);
+    }
+    PortSymbol symbol = super.build();
+    symbol.setDirection(this.getDirection());
+    return symbol;
+  }
+
   @Override
   public boolean isValid() {
     return this.getName() != null && this.getType() != null && this.getDirection() !=null;
+  }
+
+  public boolean isValidWithoutType() {
+    return this.getName() != null && this.getDirection() != null;
   }
 }

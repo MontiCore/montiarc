@@ -5,11 +5,13 @@ import arcautomaton._cocos.GuardIsBoolean;
 import arcbehaviorbasis.BehaviorError;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.TypeCheckResult;
+import montiarc.MontiArcMill;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.check.MontiArcDeriveType;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -18,6 +20,20 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.stream.Stream;
 
 public class GuardIsBooleanTest extends AbstractCoCoTest {
+
+  @Override
+  @BeforeEach
+  public void init() {
+    super.init();
+    addStringToGlobalScope();
+  }
+
+  protected static void addStringToGlobalScope() {
+    MontiArcMill.globalScope()
+      .add(MontiArcMill.typeSymbolBuilder().setName("String")
+        .setEnclosingScope(MontiArcMill.globalScope())
+        .build());
+  }
 
   @Override
   protected String getPackage() {

@@ -8,11 +8,12 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.ArcBasisDeriveType;
 import arcbasis.check.ArcTypeCheck;
 import arcbasis.check.ArcBasisSynthesizeType;
+import arcbasis.check.CompTypeExpression;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.monticore.symbols.basicsymbols._ast.ASTVariable;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.IDerive;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.TypeCheckResult;
@@ -76,9 +77,11 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       "symbol table creation.", this.getClass().getSimpleName());
     Preconditions.checkArgument(node.getSymbol().getType() != null);
     Preconditions.checkArgument(node.getSymbol().getType().getTypeInfo() != null);
+    node.getSymbol().getType().getTypeInfo().getParameters().forEach(
+      (param) -> this.assertVarIsArcParameter(param, node.getSymbol().getType().getTypeInfo()));
 
     ComponentInstanceSymbol compInstance = node.getSymbol();
-    ComponentTypeSymbol typeOfCompInstance = compInstance.getType().getTypeInfo();
+    CompTypeExpression typeOfCompInstance = compInstance.getType();
 
     List<ASTExpression> paramBindings = compInstance.getArguments();
     List<SymTypeExpression> bindingSignature =
@@ -86,42 +89,45 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
         .map(typeChecker::typeOf)
         .collect(toList());
 
-    List<VariableSymbol> configParamsOfType = typeOfCompInstance.getParameters();
-    List<SymTypeExpression> signatureOfCompType =
-      configParamsOfType.stream()
-        .map(VariableSymbol::getType)
-        .collect(toList());
+    List<SymTypeExpression> signatureOfCompExpr = typeOfCompInstance.getTypeInfo()
+      .getParameters().stream()
+      .map(ISymbol::getName)
+      .map(typeOfCompInstance::getTypeExprOfParameter)
+      .map(paramType -> paramType.orElseThrow(IllegalStateException::new))
+      .collect(toList());
 
     // checking that not too many arguments were provided during instantiation
-    if (bindingSignature.size() > signatureOfCompType.size()) {
+    if (bindingSignature.size() > signatureOfCompExpr.size()) {
       this.logCocoViolation(bindingSignature, compInstance);
-      return; // to terminate when fail-fast of logger is off (e.g. during tests)
+      return; // to terminate when logger's fail-fast is off (e.g. during tests)
     }
 
     // checking that configuration parameters are assignable from arguments
     for (int i = 0; i < bindingSignature.size(); i++) {
-      if (!ArcTypeCheck.compatible(signatureOfCompType.get(i), bindingSignature.get(i))) {
+      if (!ArcTypeCheck.compatible(signatureOfCompExpr.get(i), bindingSignature.get(i))) {
         this.logCocoViolation(bindingSignature, compInstance);
-        return; // to terminate when fail-fast of logger is off (e.g. during tests)
+        return; // to terminate when logger's fail-fast is off (e.g. during tests)
       }
     }
 
     // checking that all parameters left have default values
-    if (!configParamsOfType.stream()
+    if (!typeOfCompInstance.getTypeInfo().getParameters().stream()
       .skip(bindingSignature.size())
       .map(VariableSymbol::getAstNode)
-      .peek(astVar -> assertVarIsArcParameter(astVar, typeOfCompInstance))
       .map(astVar -> (ASTArcParameter) astVar)
       .allMatch(ASTArcParameter::isPresentDefault)) {
       this.logCocoViolation(bindingSignature, compInstance);
-      return; // to terminate when fail-fast of logger is off (e.g. during tests)
+      return; // to terminate when logger's fail-fast is off (e.g. during tests)
     }
   }
 
-  protected void assertVarIsArcParameter(ASTVariable configParam, ComponentTypeSymbol fromType) {
-    Preconditions.checkArgument(configParam instanceof ASTArcParameter, "Could not check coco '%s', because " +
-        "configuration parameter '%s' of component type '%s' is not of type '%s", this.getClass().getSimpleName(),
-      configParam.getName(), fromType.getFullName(), ASTArcParameter.class.getSimpleName());
+  protected void assertVarIsArcParameter(VariableSymbol configParam, ComponentTypeSymbol fromType) {
+    Preconditions.checkArgument(configParam.isPresentAstNode());
+    Preconditions.checkArgument(configParam.getAstNode() instanceof ASTArcParameter, "Could not check coco '%s', " +
+        "because configuration parameter '%s' of component type '%s' is not of type '%s",
+      this.getClass().getSimpleName(), configParam.getName(), fromType.getFullName(),
+      ASTArcParameter.class.getSimpleName()
+    );
   }
 
   protected void logCocoViolation(

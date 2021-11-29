@@ -21,7 +21,9 @@ public class ArcBasisSynthesizeType implements ISynthesize {
   
   @Override
   public Optional<SymTypeExpression> getResult() {
-    return Optional.empty();
+    return typeCheckResult.isPresentCurrentResult() ?
+      Optional.of(typeCheckResult.getCurrentResult())
+      : Optional.empty();
   }
   
   @Override

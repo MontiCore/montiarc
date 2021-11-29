@@ -6,9 +6,6 @@ package arcbasis.util;
  */
 public enum ArcError implements montiarc.util.Error {
   CIRCULAR_INHERITANCE("0xC1010", "Circular inheritance of component '%s' detected."),
-  MISSING_TYPE_OF_PORT("0xC1011", "Cannot resolve type of port '%s'."),
-  MISSING_TYPE_OF_FIELD("0xC1012", "Cannot resolve type of field '%s'."),
-  MISSING_TYPE_OF_PARAMETER("0xC1013", "Cannot resolve type of parameter '%s'."),
   MISSING_TYPE_OF_INHERITED_COMPONENT("0xC1014", "Cannot resolve type of parent '%s' of "
     + "component '%s'."),
   MISSING_TYPE_OF_COMPONENT_INSTANCE("0xC1015", "Cannot resolve type '%s' of component "
@@ -80,7 +77,8 @@ public enum ArcError implements montiarc.util.Error {
   DEFAULT_PARAM_EXPRESSION_WRONG_TYPE("0xC1067", "Calculated type of default value expression of configuration " +
     "parameter '%s' was calculated as '%s' but was expected to be '%s'."),
   PORT_REFERENCE_IN_PARAMETER_DEFAULT_VALUE_ILLEGAL("0xC1068", "Default values of parameter '%s' in component type " +
-    "'%s' illegally relies on port '%s'.");
+    "'%s' illegally relies on port '%s'."),
+  MISSING_TYPE("0xC1069", "Cannot resolve type '%s'.");
 
   private final String errorCode;
   private final String errorMessage;

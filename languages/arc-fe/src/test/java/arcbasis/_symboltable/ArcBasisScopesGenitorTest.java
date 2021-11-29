@@ -129,7 +129,7 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
       .setMCType(type).build();
     VariableSymbol symbol = this.getSymTab().create_ArcParameter(ast).build();
     Assertions.assertEquals(ast.getName(), symbol.getName());
-    Assertions.assertNotNull(symbol.getType());
+    Assertions.assertNull(symbol.getType()); // We set the symbol in the completer
   }
 
   @Test
@@ -167,7 +167,6 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);
     Assertions.assertEquals(scope, ast.getEnclosingScope());
-    Assertions.assertTrue(this.getSymTab().getCurrentPortType().isPresent());
     Assertions.assertTrue(this.getSymTab().getCurrentPortDirection().isPresent());
   }
 
@@ -178,18 +177,15 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
       .setPortList("p1", "p2", "p3").build();
     this.getSymTab().visit(ast);
     this.getSymTab().endVisit(ast);
-    Assertions.assertFalse(this.getSymTab().getCurrentPortType().isPresent());
     Assertions.assertFalse(this.getSymTab().getCurrentPortDirection().isPresent());
   }
 
   @Test
   public void shouldCreatePort() {
     this.getSymTab().setCurrentPortDirection(arcbasis.ArcBasisMill.portDirectionInBuilder().build());
-    this.getSymTab().setCurrentPortType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build());
     ASTPort ast = arcbasis.ArcBasisMill.portBuilder().setName("p").build();
-    PortSymbol symbol = this.getSymTab().create_Port(ast).build();
+    PortSymbol symbol = this.getSymTab().create_Port(ast).buildWithoutType();
     Assertions.assertEquals(ast.getName(), symbol.getName());
-    Assertions.assertNotNull(symbol.getType());
     Assertions.assertNotNull(symbol.getDirection());
   }
 
@@ -198,7 +194,6 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     ASTPort ast = arcbasis.ArcBasisMill.portBuilder().setName("p").build();
     IArcBasisScope scope = ArcBasisMill.scope();
     this.getSymTab().setCurrentPortDirection(arcbasis.ArcBasisMill.portDirectionInBuilder().build());
-    this.getSymTab().setCurrentPortType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build());
     this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);
     Assertions.assertEquals(scope, ast.getEnclosingScope());
@@ -271,8 +266,6 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     Assertions.assertEquals(scope, ast.getEnclosingScope());
     Assertions.assertTrue(this.getSymTab().getCurrentScope().isPresent());
     Assertions.assertEquals(scope, this.getSymTab().getCurrentScope().get());
-    Assertions.assertTrue(this.getSymTab().getCurrentFieldType().isPresent());
-    Assertions.assertEquals(type, this.getSymTab().getCurrentFieldType().get());
   }
 
   @Test
@@ -284,7 +277,6 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
       .build();
     this.getSymTab().visit(ast);
     this.getSymTab().endVisit(ast);
-    Assertions.assertFalse(this.getSymTab().getCurrentFieldType().isPresent());
   }
 
   @Test
@@ -292,10 +284,8 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     ASTArcField ast = arcbasis.ArcBasisMill.arcFieldBuilder().setName("var")
       .setInitial(Mockito.mock(ASTExpression.class)).build();
     ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build();
-    this.getSymTab().setCurrentFieldType(type);
     VariableSymbol symbol = this.getSymTab().create_ArcField(ast).build();
     Assertions.assertEquals(ast.getName(), symbol.getName());
-    Assertions.assertNotNull(symbol.getType());
   }
 
   @Test
@@ -303,7 +293,6 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     ASTArcField ast = arcbasis.ArcBasisMill.arcFieldBuilder().setName("var")
       .setInitial(Mockito.mock(ASTExpression.class)).build();
     IArcBasisScope scope = ArcBasisMill.scope();
-    this.getSymTab().setCurrentFieldType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build());
     this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);
     Assertions.assertEquals(scope, ast.getEnclosingScope());

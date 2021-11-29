@@ -10,6 +10,7 @@ import de.monticore.symboltable.IScopeSpanningSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.symbols.basicsymbols._symboltable.*;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.util.Optional;
 
@@ -66,11 +67,13 @@ public class PortSymbol extends PortSymbolTOP {
    * @return the type for the type of this port.
    */
   public SymTypeExpression getType() {
+    Preconditions.checkState(this.type != null, "Type of Port '%s' has not been set. Did you " +
+      "forget to run the symbol table completer?", this.getName());
     return this.type;
   }
 
   /**
-   * @param type the loader for the type of this port.
+   * @param type the type of this port.
    */
   public void setType(@NotNull SymTypeExpression type) {
     Preconditions.checkArgument(type != null);

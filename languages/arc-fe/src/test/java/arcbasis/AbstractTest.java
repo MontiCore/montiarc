@@ -1,7 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis;
 
+import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.util.ArcError;
+import com.google.common.base.Preconditions;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -33,5 +36,34 @@ public abstract class AbstractTest extends montiarc.util.AbstractTest {
   protected static ASTMCQualifiedType createQualifiedType(@NotNull String... parts) {
     assert parts != null && !Arrays.asList(parts).contains(null);
     return ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(createQualifiedName(parts)).build();
+  }
+
+  protected static TypeSymbol createTypeSymbol(@NotNull String name) {
+    Preconditions.checkNotNull(name);
+    return ArcBasisMill.typeSymbolBuilder()
+      .setName(name)
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+  }
+
+  protected static void createTypeSymbolInScope(@NotNull String typeName, @NotNull String scopeName) {
+    Preconditions.checkNotNull(typeName);
+    Preconditions.checkNotNull(scopeName);
+
+    IArcBasisScope scope = ArcBasisMill.scope();
+    scope.setName(scopeName);
+
+    TypeSymbol type = createTypeSymbol(typeName);
+    scope.add(type);
+    scope.addSubScope(type.getSpannedScope());
+    ArcBasisMill.globalScope().addSubScope(scope);
+  }
+
+  protected static void createTypeSymbolInGlobalScope(@NotNull String typeName) {
+    Preconditions.checkNotNull(typeName);
+
+    TypeSymbol type = createTypeSymbol(typeName);
+    ArcBasisMill.globalScope().add(type);
+    ArcBasisMill.globalScope().addSubScope(type.getSpannedScope());
   }
 }

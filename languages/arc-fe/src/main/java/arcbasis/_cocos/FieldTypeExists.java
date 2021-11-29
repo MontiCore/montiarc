@@ -1,37 +1,36 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTArcField;
-import arcbasis.util.ArcError;
+import arcbasis._ast.ASTArcFieldDeclaration;
+import arcbasis._cocos.util.CheckTypeExistence4ArcBasis;
+import arcbasis._cocos.util.ICheckTypeExistence;
 import com.google.common.base.Preconditions;
-import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
-import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
-
-import java.util.NoSuchElementException;
 
 /**
  * Checks for each variable whether it type exists.
  */
-public class FieldTypeExists implements ArcBasisASTArcFieldCoCo {
+public class FieldTypeExists implements ArcBasisASTArcFieldDeclarationCoCo {
+
+  /** Visitor used to check whether all symbols to which ast types refer to exist. */
+  protected ICheckTypeExistence existenceChecker;
+
+  public FieldTypeExists() {
+    this(new CheckTypeExistence4ArcBasis());
+  }
+
+  public FieldTypeExists(@NotNull ICheckTypeExistence existenceChecker) {
+    this.existenceChecker = Preconditions.checkNotNull(existenceChecker);
+  }
 
   @Override
-  public void check(@NotNull ASTArcField node) {
-    Preconditions.checkArgument(node != null);
-    Preconditions.checkArgument(node.isPresentSymbol(), "ASTArcField node '%s' has no symbol. "
-      + "Did you forget to run the SymbolTableCreator before checking cocos?", node.getName());
-    VariableSymbol symbol = node.getSymbol();
-    symbol.getType().getTypeInfo();
-    try {
-      if (symbol.getType().getTypeInfo() instanceof TypeSymbolSurrogate &&
-        ((TypeSymbolSurrogate) symbol.getType().getTypeInfo()).lazyLoadDelegate() instanceof TypeSymbolSurrogate) {
-        Log.error(ArcError.MISSING_TYPE_OF_FIELD.format(symbol.getName()),
-          node.get_SourcePositionStart());
-      }
-    } catch (NoSuchElementException e) {
-      Log.error(ArcError.MISSING_TYPE_OF_FIELD.format(symbol.getName()),
-        node.get_SourcePositionStart());
-    }
+  public void check(ASTArcFieldDeclaration node) {
+    Preconditions.checkNotNull(node);
+    Preconditions.checkArgument(!node.getArcFieldList().isEmpty());
+    Preconditions.checkNotNull(node.getEnclosingScope(), "ASTArcFieldDeclaration node '%s' at '%s' has no enclosing " +
+        "scope. Did you forget to run the scopes genitor before checking cocos?", node.getArcField(0).getName(),
+      node.get_SourcePositionStart());
+
+    existenceChecker.checkExistenceOf(node.getMCType());
   }
 }

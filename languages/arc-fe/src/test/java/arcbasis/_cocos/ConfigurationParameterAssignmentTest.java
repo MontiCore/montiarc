@@ -45,7 +45,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTypeTest
     FieldSymbol aDouble = ArcBasisMill.fieldSymbolBuilder().setName("aDouble")
       .setType(SymTypeExpressionFactory.createTypeConstant("double")).build();
 
-    this.add2Scope(this.scope, new FieldSymbol[]{anInt, aBool, aDouble});
+    this.add2Scope(this.scope, anInt, aBool, aDouble);
   }
 
   @Test

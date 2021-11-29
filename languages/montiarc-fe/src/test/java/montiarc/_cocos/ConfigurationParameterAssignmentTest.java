@@ -5,7 +5,9 @@ package montiarc._cocos;
 import arcbasis._cocos.ConfigurationParameterAssignment;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.TypeCheckResult;
+import montiarc.MontiArcMill;
 import montiarc.check.MontiArcDeriveType;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -22,14 +24,30 @@ public class ConfigurationParameterAssignmentTest extends AbstractCoCoTest {
   protected static final String PACKAGE = "configurationParameterAssignment";
 
   @BeforeEach
+  public void prepareModels() {
+    loadList();
+    loadComponentsToInstantiate();
+  }
+
+  public void loadList() {
+    OOTypeSymbol listSym = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("List")
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
+    listSym.addTypeVarSymbol(MontiArcMill.typeVarSymbolBuilder().setName("T").build());
+    MontiArcMill.globalScope().add(listSym);
+    MontiArcMill.globalScope().addSubScope(listSym.getSpannedScope());
+  }
+
   public void loadComponentsToInstantiate() {
     // loading helper models into the symboltable
-    this.parseAndLoadSymbols("subcomponentDefinitions/Simple.arc");
-    this.parseAndLoadSymbols("subcomponentDefinitions/Complex.arc");
+    this.parseAndCreateAndCompleteSymbols("subcomponentDefinitions/Simple.arc");
+    this.parseAndCreateAndCompleteSymbols("subcomponentDefinitions/Complex.arc");
+    this.parseAndCreateAndCompleteSymbols("subcomponentDefinitions/Generic.arc");
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"CorrectParameterBindings.arc"})
+  @ValueSource(strings = {"CorrectParameterBindings.arc", "CorrectGenericParameterBindings.arc"})
   public void shouldCorrectlyBindConfigurationParameters(@NotNull String model) {
     testModel(model);
   }
@@ -48,7 +66,10 @@ public class ConfigurationParameterAssignmentTest extends AbstractCoCoTest {
         ArcError.CONFIG_PARAMETER_BINDING,
         ArcError.CONFIG_PARAMETER_BINDING,
         ArcError.CONFIG_PARAMETER_BINDING,
-        ArcError.CONFIG_PARAMETER_BINDING)
+        ArcError.CONFIG_PARAMETER_BINDING)/*,
+       arg("WrongGenericParameterBindings.arc",   TODO: include this test case once the bug in MontiCores TypeCheck is
+        ArcError.CONFIG_PARAMETER_BINDING,              fixed: List<boolean> is considered compatible to List<int>
+        ArcError.CONFIG_PARAMETER_BINDING) */
     );
   }
 

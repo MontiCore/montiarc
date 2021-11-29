@@ -57,7 +57,7 @@ public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
     Preconditions.checkNotNull(model);
 
     //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
+    ASTMACompilationUnit ast = this.parseAndCreateAndCompleteSymbols(model);
 
     //When
     this.getChecker().checkAll(ast);
@@ -73,7 +73,7 @@ public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
     Preconditions.checkNotNull(model);
 
     //Given
-    ASTMACompilationUnit ast = this.parseAndLoadSymbols(model);
+    ASTMACompilationUnit ast = this.parseAndCreateAndCompleteSymbols(model);
 
     //When
     try {

@@ -19,7 +19,9 @@ public class MontiArcSynthesizeType implements ISynthesize {
   
   @Override
   public Optional<SymTypeExpression> getResult() {
-    return Optional.ofNullable(typeCheckResult.getCurrentResult());
+    return typeCheckResult.isPresentCurrentResult()?
+      Optional.of(typeCheckResult.getCurrentResult())
+      : Optional.empty();
   }
   
   @Override
