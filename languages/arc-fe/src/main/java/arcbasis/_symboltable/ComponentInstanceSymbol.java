@@ -31,6 +31,13 @@ public class ComponentInstanceSymbol extends ComponentInstanceSymbolTOP {
   }
 
   /**
+   * @return whether the type for this component instance has already been set.
+   */
+  public boolean isPresentType() {
+    return this.type != null;
+  }
+
+  /**
    * @param type the type of this component
    */
   public void setType(CompTypeExpression type) {

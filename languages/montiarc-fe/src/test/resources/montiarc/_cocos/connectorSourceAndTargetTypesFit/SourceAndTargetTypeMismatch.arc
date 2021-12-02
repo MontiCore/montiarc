@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package connectorSourceAndTargetExistAndFit;
+package connectorSourceAndTargetTypesFit;
 
 /*
  * Invalid model.

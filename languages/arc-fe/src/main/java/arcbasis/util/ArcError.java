@@ -57,7 +57,7 @@ public enum ArcError implements montiarc.util.Error {
     + " with a lower case letter."),
   TYPE_PARAMETER_UPPER_CASE_LETTER("0xC1042", "The generic type parameter '%s' of component '%s'"
     + " should start with an upper case letter."),
-  PORT_DIRECTION_MISMATCH("0xC1043", "The %s-port '%s' can not be a %s of the connector '%s', because it is %s." + ""),
+  PORT_DIRECTION_MISMATCH("0xC1043", "Port '%s' can not be a %s of the connector '%s', because it is %s." + ""),
   CONNECTOR_SOURCE_AND_TARGET_ARE_IDENTICAL("0xC1045", "The target port '%s' is identical to the"
     + " source port '%s'"),
   COMPONENT_NAME_UPPER_CASE("0xC1055", "Component names must be in upper-case."
@@ -78,7 +78,9 @@ public enum ArcError implements montiarc.util.Error {
     "parameter '%s' was calculated as '%s' but was expected to be '%s'."),
   PORT_REFERENCE_IN_PARAMETER_DEFAULT_VALUE_ILLEGAL("0xC1068", "Default values of parameter '%s' in component type " +
     "'%s' illegally relies on port '%s'."),
-  MISSING_TYPE("0xC1069", "Cannot resolve type '%s'.");
+  MISSING_TYPE("0xC1069", "Cannot resolve type '%s'."),
+  SOURCE_PORT_COMPONENT_MISSING("0xC1070", "Component instance '%s' missing for source of connector '%s'."),
+  TARGET_PORT_COMPONENT_MISSING("0xC1071", "Component instance '%s' missing for target of connector '%s'.");
 
   private final String errorCode;
   private final String errorMessage;
