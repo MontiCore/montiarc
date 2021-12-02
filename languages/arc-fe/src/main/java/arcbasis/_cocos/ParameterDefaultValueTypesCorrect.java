@@ -3,7 +3,6 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcParameter;
 import arcbasis.check.ArcBasisDeriveType;
-import arcbasis.check.ArcTypeCheck;
 import arcbasis.check.ArcBasisSynthesizeType;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
@@ -27,11 +26,11 @@ public class ParameterDefaultValueTypesCorrect implements ArcBasisASTArcParamete
   protected final TypeCheck typeChecker;
 
   /**
-   * Creates this coco with an ArcTypeCheck, combined with {@link ArcBasisDeriveType} to check whether default values of
+   * Creates this coco with an TypeCheck, combined with {@link ArcBasisDeriveType} to check whether default values of
    * parameters match the parameters' types.
    */
   public ParameterDefaultValueTypesCorrect() {
-    this(new ArcTypeCheck(new ArcBasisSynthesizeType(), new ArcBasisDeriveType(new TypeCheckResult())));
+    this(new TypeCheck(new ArcBasisSynthesizeType(), new ArcBasisDeriveType(new TypeCheckResult())));
   }
 
   /**
@@ -48,7 +47,7 @@ public class ParameterDefaultValueTypesCorrect implements ArcBasisASTArcParamete
    * parameters' types.
    */
   public ParameterDefaultValueTypesCorrect(@NotNull IDerive deriveFromExpr) {
-    this(new ArcTypeCheck(new ArcBasisSynthesizeType(), Preconditions.checkNotNull(deriveFromExpr)));
+    this(new TypeCheck(new ArcBasisSynthesizeType(), Preconditions.checkNotNull(deriveFromExpr)));
   }
 
   @Override
@@ -66,7 +65,7 @@ public class ParameterDefaultValueTypesCorrect implements ArcBasisASTArcParamete
       ASTExpression defaultExpr = astParam.getDefault();
       SymTypeExpression expressionType = this.typeChecker.typeOf(defaultExpr);
 
-      if (!ArcTypeCheck.compatible(paramType, expressionType)) {
+      if (!TypeCheck.compatible(paramType, expressionType)) {
         Log.error(ArcError.DEFAULT_PARAM_EXPRESSION_WRONG_TYPE.format(
           paramSym.getFullName(),
           expressionType.print(),

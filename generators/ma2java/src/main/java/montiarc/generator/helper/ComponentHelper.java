@@ -10,7 +10,6 @@ import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
 import arcbasis._symboltable.PortSymbol;
-import arcbasis.check.AdaptedSymType;
 import arccompute._ast.ASTArcCompute;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -86,7 +85,7 @@ public class ComponentHelper {
    */
   public static String getRealPortTypeString(ComponentTypeSymbol componentSymbol,
                                              PortSymbol portSymbol) {
-    SymTypeExpression portType = AdaptedSymType.of(portSymbol.getType());
+    SymTypeExpression portType = portSymbol.getType();
     return portType.isTypeConstant() ?
       ((SymTypeConstant) portType).getBoxedConstName() :
       portType.printFullName();

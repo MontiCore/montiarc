@@ -6,7 +6,6 @@ import arcbasis._ast.ASTComponentInstance;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.ArcBasisDeriveType;
-import arcbasis.check.ArcTypeCheck;
 import arcbasis.check.ArcBasisSynthesizeType;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.util.ArcError;
@@ -16,6 +15,7 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.IDerive;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.TypeCheck;
 import de.monticore.types.check.TypeCheckResult;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -36,29 +36,28 @@ import static java.util.stream.Collectors.toList;
  * specified value bindings.
  * <p>
  * This coco must be checked AFTER symbol table creation! This coco can be reused by grammars that extend ArcBasis and
- * introduce new expressions by calling a constructor with a configured {@link ArcTypeCheck} or an {@link IDerive} to
- * use.
+ * introduce new expressions by calling a constructor with a configured {@link TypeCheck} or an {@link IDerive} to use.
  */
 public class ConfigurationParameterAssignment implements ArcBasisASTComponentInstanceCoCo {
 
   /**
    * Used to check whether component instantiation arguments match a component types signature.
    */
-  protected final ArcTypeCheck typeChecker;
+  protected final TypeCheck typeChecker;
 
   /**
-   * Creates this coco with an ArcTypeCheck, combined with {@link ArcBasisDeriveType} to check whether instantiation
+   * Creates this coco with an TypeCheck, combined with {@link ArcBasisDeriveType} to check whether instantiation
    * arguments match a component types signature.
    */
   public ConfigurationParameterAssignment() {
-    this(new ArcTypeCheck(new ArcBasisSynthesizeType(), new ArcBasisDeriveType(new TypeCheckResult())));
+    this(new TypeCheck(new ArcBasisSynthesizeType(), new ArcBasisDeriveType(new TypeCheckResult())));
   }
 
   /**
-   * Creates this coco with a custom ArcTypeCheck to use to check if instantiation arguments match a component types
+   * Creates this coco with a custom TypeCheck to use to check if instantiation arguments match a component types
    * signature.
    */
-  public ConfigurationParameterAssignment(@NotNull ArcTypeCheck typeChecker) {
+  public ConfigurationParameterAssignment(@NotNull TypeCheck typeChecker) {
     this.typeChecker = checkNotNull(typeChecker);
   }
 
@@ -67,7 +66,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
    * signature.
    */
   public ConfigurationParameterAssignment(@NotNull IDerive deriverFromExpr) {
-    this(new ArcTypeCheck(new ArcBasisSynthesizeType(), checkNotNull(deriverFromExpr)));
+    this(new TypeCheck(new ArcBasisSynthesizeType(), checkNotNull(deriverFromExpr)));
   }
 
   @Override
@@ -104,7 +103,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
 
     // checking that configuration parameters are assignable from arguments
     for (int i = 0; i < bindingSignature.size(); i++) {
-      if (!ArcTypeCheck.compatible(signatureOfCompExpr.get(i), bindingSignature.get(i))) {
+      if (!TypeCheck.compatible(signatureOfCompExpr.get(i), bindingSignature.get(i))) {
         this.logCocoViolation(bindingSignature, compInstance);
         return; // to terminate when logger's fail-fast is off (e.g. during tests)
       }

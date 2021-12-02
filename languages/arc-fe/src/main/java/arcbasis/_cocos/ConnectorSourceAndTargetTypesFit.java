@@ -8,10 +8,10 @@ import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import arcbasis._visitor.ArcBasisFullPrettyPrinter;
-import arcbasis.check.ArcTypeCheck;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.TypeCheck;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -45,7 +45,7 @@ public class ConnectorSourceAndTargetTypesFit implements ArcBasisASTComponentTyp
         Optional<SymTypeExpression> symTypeOfTarget = getTypeOfPortIfPresent(target, enclComponent);
         if (symTypeOfTarget.isPresent()) {
           // Perform type check
-          if (!ArcTypeCheck.compatible(symTypeOfTarget.get(), symTypeOfSource.get())) {
+          if (!TypeCheck.compatible(symTypeOfTarget.get(), symTypeOfSource.get())) {
             Log.error(
               ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH.format(
                 symTypeOfSource.get().print(), symTypeOfTarget.get().print(),
