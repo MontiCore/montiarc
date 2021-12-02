@@ -12,7 +12,11 @@ The MontiArc Core repository contains everything related to the common basis of 
 
 <img src="pics/elevatorExample.PNG" alt="drawing" height="400px"/>
 
-In MontiArc, architectures are described as component and connector systems in which autonomously acting components perform computations. Communication between components is regulated by connectors between the components’ interfaces, which are stable and build up by typed, directed ports. Components are either atomic or composed of connected subcomponents. Atomic components yield behavior descriptions in the form of embedded time-synchronous port automata, or via integration of handcrafted code. For composed components the behavior emerges from the behavior of their subcomponents. 
+In MontiArc, architectures are described as component and connector systems in which autonomously acting components 
+perform computations. Communication between components is regulated by connectors between the components’ interfaces, 
+which are stable and built up by typed, directed ports. Components are either atomic or composed of connected 
+subcomponents. Atomic components yield behavior descriptions in the form of embedded time-synchronous port automata 
+or via integration of handcrafted code. For composed components, the behavior emerges from the behavior of their subcomponents. 
 
 # Installation
 
@@ -20,7 +24,7 @@ In MontiArc, architectures are described as component and connector systems in w
 
 ### Prerequisites 
 - Git (for checking out the project)
-- Gradle (for building the project), ecplicitly version 6.8.3
+- Gradle (for building the project), explicitly version 6.8.3
 - Java 8 or 17 (other versions are not checked by the CI pipeline)
 
 ### Installation
@@ -37,24 +41,24 @@ take a while. Subsequent builds should be faster.
 Once the project is built, you can look at the generated source code. 
 The `languages` folder contains the language components of MontiArc, more 
 specifically, their frontend implementation. That is parsers to create abstract
-syntax trees (ASTs) from textual models, genitors and symbol table completers
+syntax trees (ASTs) from textual models, genitors, and symbol table completers
 to construct and complete the symbol table, context condition checks to check
-well-formedness, transformtations, visitors, and a cli tool that puts everything
+well-formedness, transformations, visitors, and a cli tool that puts everything
 together.
 
 The `generators` folder contains code generators that translate MontiArc component 
-models to some general purpose language. Currently available are the MontiArc to 
+models to some general-purpose language. Currently, available are the MontiArc to 
 Java (MA2Java) and the CD to Java (CD2Pojo, Pojo for Plain Old Java) generators.
 
 The `application` folder contains some example applications. 
 Each of them should contain a `target/generated-sources` subdirectory after
 building their respective project. 
 
-Please note that `gradle build` on the top most folder builds the whole project. 
+Please note that `gradle build` on the topmost folder builds the whole project. 
 However, each subproject contains an individual build file. 
 Executing the build command on a subproject builds everything needed for that 
-project and then builds the project. For more information about the gradle build
-tool, see the [Gradle Website](https://gradle.org/).
+project and then builds the project. See the [Gradle Website](https://gradle.org/) 
+for more information about the gradle build tool.
 
 # Building and Running Your First Application
 
@@ -77,20 +81,20 @@ main class and setting up the build process to generate an executable.
 
 ## Tool Documentation
 
-The [MontiArcCLITool](languages/montiarc-fe/src/main/java/montiarc/cli/MontiArcCLI.java) offers capabilities for processing MontiArc component models.
+The [MontiArcCLITool](languages/montiarc-fe/src/main/java/montiarc/MontiArcCLI.java) offers capabilities for processing MontiArc component models.
 It provides multiple options that can be used as follows:
 
 `java -jar MontiArcCLI.jar [-h] -i <fileName> [-path <p>] [-pp [<file>]] [-s [<file>]]`
 
 where the arguments are:
 
-| Option                            | Explanation |
-| ------                            | ------ |
-| `-h, --help`                      | Prints the help dialog. |
-| `-v, --version`                   | Prints version information. |
-| `-mp, --modelpath <dirlist>`      | Sets the artifact path for the input component models, space separated. |
-| `-path <dirlist>`                 | Sets the artifact path for imported symbols, space separated. |
-| `-pp, --prettyprint <dir>`        | Prints the AST of the component models to stdout or the specified directory (optional). |
+| Option                            | Explanation                                                                                    |
+|-----------------------------------|------------------------------------------------------------------------------------------------|
+| `-h, --help`                      | Prints the help dialog.                                                                        |
+| `-v, --version`                   | Prints version information.                                                                    |
+| `-mp, --modelpath <dirlist>`      | Sets the artifact path for the input component models, space separated.                        |
+| `-path <dirlist>`                 | Sets the artifact path for imported symbols, space separated.                                  |
+| `-pp, --prettyprint <dir>`        | Prints the AST of the component models to stdout or the specified directory (optional).        |
 | `-s, --symboltable <dir>`         | Serializes and prints the symbol table to stdout or the specified output directory (optional). |
 
 Exemplary usage:
@@ -100,12 +104,12 @@ Exemplary usage:
   java -jar MontiArcCLI.jar -mp applications/bumperbot/src/main/resources
 ``` 
 
-The [MA2JavaCLITool](generators/ma2java/src/main/java/montiarc/generator/MontiArcCLI.java) extends the MontiArcCLITool with code generating capabilites. It provides the following options in addition to those defined above:
+The [MA2JavaCLITool](generators/ma2java/src/main/java/montiarc/generator/MontiArcCLI.java) extends the MontiArcCLITool with code generating capabilities. It provides the following options in addition to those defined above:
 
-| Option                            | Explanation |
-| ------                            | ------ |
-| `-o, --output <dir>`              | Sets the target path for the generated files (optional). |
-| `-hwc <dir>`                      | Sets the artifact path for handwritten code (optional). |
+| Option                             | Explanation                                              |
+|------------------------------------|----------------------------------------------------------|
+| `-o, --output <dir>`               | Sets the target path for the generated files (optional). |
+| `-hwc <dir>`                       | Sets the artifact path for handwritten code (optional).  |
 
 ## Further Information
 
