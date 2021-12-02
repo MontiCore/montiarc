@@ -305,8 +305,13 @@ public class MontiArcCLI extends MontiArcCLITOP {
     if (cli.hasOption("path")) {
       this.initGlobalScope(cli.getOptionValues("path"));
     } else {
-      this.initGlobalScope("");
+      this.initGlobalScope();
     }
+  }
+
+  public void initGlobalScope() {
+    MontiArcMill.globalScope().clear();
+    MontiArcMill.globalScope().init();
   }
 
   public void initGlobalScope(@NotNull String... entries) {
@@ -322,7 +327,7 @@ public class MontiArcCLI extends MontiArcCLITOP {
   public void initGlobalScope(@NotNull Collection<Path> entries) {
     Preconditions.checkNotNull(entries);
     Preconditions.checkArgument(!entries.contains(null));
-    MontiArcMill.globalScope().init();
+    this.initGlobalScope();
     MCPath symbolPath = new MCPath(entries);
     MontiArcMill.globalScope().setSymbolPath(symbolPath);
   }
