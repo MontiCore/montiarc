@@ -149,7 +149,7 @@ public class MontiArcCLI extends MontiArcCLITOP {
     this.completeSymbolTable(asts);
     Log.enableFailQuick(true);
 
-    Log.info("Check remaining context-condition checks", "MontiArcCLITool");
+    Log.info("Perform remaining context-condition checks", "MontiArcCLITool");
     Log.enableFailQuick(false);
     this.runAdditionalCoCos(asts);
     Log.enableFailQuick(true);
