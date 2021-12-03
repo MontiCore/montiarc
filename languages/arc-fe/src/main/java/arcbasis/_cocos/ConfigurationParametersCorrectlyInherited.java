@@ -3,15 +3,18 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis.check.CompTypeExpression;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.TypeCheck;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This CoCo checks that a component which extends another component correctly
@@ -32,30 +35,46 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
 
   @Override
   public void check(@NotNull ASTComponentType node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol(), "ASTComponent node '%s' has no symbol. "
       + "Did you forget to run the SymbolTableCreator before checking cocos?", node.getName());
+    if(node.getSymbol().isPresentParentComponent()) {
+      Preconditions.checkArgument(node.getSymbol().getParent().getTypeInfo().getParameters().stream().allMatch(
+        param -> node.getSymbol().getParent().getTypeExprOfParameter(param.getName()).isPresent()
+      ));
+    }
+
     ComponentTypeSymbol component = node.getSymbol();
     List<VariableSymbol> parameters = component.getParameters();
+
     if (component.isPresentParentComponent()) {
-      ComponentTypeSymbol parent = component.getParent().getTypeInfo();
-      List<VariableSymbol> parentParameters = parent.getParameters();
+      CompTypeExpression parent = component.getParent();
+      List<SymTypeExpression> parentParameters = parent.getTypeInfo().getParameters().stream()
+        .map(ISymbol::getName)
+        .map(parent::getTypeExprOfParameter)
+        .map(paramType -> paramType.orElseThrow(IllegalStateException::new))
+        .collect(Collectors.toList());
+
       if (parameters.size() < parentParameters.size()) {
         Log.error(
           ArcError.TOO_FEW_CONFIGURATION_PARAMETER.format(component.getFullName(),
             parentParameters.size()), node.getHead().get_SourcePositionStart());
       }
+
+      // TypeCheck compatibility between own and parent's parameters
       for (int i = 0; i < Math.min(parentParameters.size(), parameters.size()); i++) {
-        SymTypeExpression superParameterType = parentParameters.get(i).getType();
+        SymTypeExpression superParameterType = parentParameters.get(i);
         SymTypeExpression paramType = parameters.get(i).getType();
         if (!TypeCheck.compatible(paramType, superParameterType)) {
           Log.error(
             ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH.format(
               parameters.get(i).getName(), i + 1, component.getFullName(),
-              paramType.getTypeInfo().getFullName(),
-              superParameterType.getTypeInfo().getFullName()),
+              paramType.printFullName(),
+              superParameterType.printFullName()),
             node.getHead().getArcParameterList().get(i).get_SourcePositionStart());
         }
+
+        // Check that all parameters of the parent that have default values also have default values in the child
         if (this.hasParameterDefaultValue(parent, i)) {
           if (!this.hasParameterDefaultValue(component, i)) {
             Log.error(
@@ -68,7 +87,13 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
     }
   }
 
-  private boolean hasParameterDefaultValue(ComponentTypeSymbol symbol, int position) {
+  private boolean hasParameterDefaultValue(@NotNull CompTypeExpression compTypeExpr, int position) {
+    Preconditions.checkNotNull(compTypeExpr);
+    return hasParameterDefaultValue(compTypeExpr.getTypeInfo(), position);
+  }
+
+  private boolean hasParameterDefaultValue(@NotNull ComponentTypeSymbol symbol, int position) {
+    Preconditions.checkNotNull(symbol);
     if (symbol.isPresentAstNode()) {
       final ASTComponentType astNode = symbol.getAstNode();
       return astNode.getHead().getArcParameterList().get(position).isPresentDefault();

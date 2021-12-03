@@ -1,10 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ConfigurationParametersCorrectlyInherited;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
+import de.monticore.types.check.SymTypeExpressionFactory;
+import montiarc.MontiArcMill;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +20,69 @@ import java.util.stream.Stream;
 public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoTest {
 
   protected static final String PACKAGE = "configurationParametersCorrectlyInherited";
+
+  @Override
+  @BeforeEach
+  public void init() {
+    super.init();
+    loadOOTypes();
+    loadUtilityComponents();
+  }
+
+  public void loadOOTypes() {
+    loadString();
+    loadList();
+    loadPersonAndStudent();
+  }
+
+  public void loadString() {
+    OOTypeSymbol listSym = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("String")
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
+    MontiArcMill.globalScope().add(listSym);
+    MontiArcMill.globalScope().addSubScope(listSym.getSpannedScope());
+  }
+
+  public void loadList() {
+    OOTypeSymbol listSym = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("List")
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
+    listSym.addTypeVarSymbol(MontiArcMill.typeVarSymbolBuilder().setName("T").build());
+    MontiArcMill.globalScope().add(listSym);
+    MontiArcMill.globalScope().addSubScope(listSym.getSpannedScope());
+  }
+
+  public void loadPersonAndStudent() {
+    OOTypeSymbol personSym = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("Person")
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
+    MontiArcMill.globalScope().add(personSym);
+    MontiArcMill.globalScope().addSubScope(personSym.getSpannedScope());
+
+    OOTypeSymbol studentSym = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("Student")
+      .setSpannedScope(MontiArcMill.scope())
+      .addSuperTypes(SymTypeExpressionFactory.createTypeObject(personSym))
+      .build();
+    MontiArcMill.globalScope().add(studentSym);
+    MontiArcMill.globalScope().addSubScope(studentSym.getSpannedScope());
+  }
+
+  public void loadUtilityComponents() {
+    // loading super components into the symboltable
+    this.parseAndCreateAndCompleteSymbols("superComponents/NoParameters.arc");
+    this.parseAndCreateAndCompleteSymbols("superComponents/OneMandatoryString.arc");
+    this.parseAndCreateAndCompleteSymbols("superComponents/OneMandatoryStringAndOneMandatoryInt.arc");
+    this.parseAndCreateAndCompleteSymbols("superComponents/OneOptionalString.arc");
+    this.parseAndCreateAndCompleteSymbols("superComponents/OneOptionalStringAndOneOptionalInt.arc");
+    this.parseAndCreateAndCompleteSymbols("superComponents/ThreeMandatoryAndThreeOptionalStrings.arc");
+    this.parseAndCreateAndCompleteSymbols("superComponents/ThreeMandatoryStrings.arc");
+    this.parseAndCreateAndCompleteSymbols("superComponents/ThreeOptionalStrings.arc");
+    this.parseAndCreateAndCompleteSymbols("superComponents/WithVariousTypesAsParameters.arc");
+  }
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
@@ -63,7 +128,13 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
         ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH,
         ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH),
       arg("OptionalInheritedParameterWithTypeChange.arc",
-        ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH)
+        ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH),
+      arg("TypeOverwritingIncorrectly.arc",
+        ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH, ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH,
+        ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH, ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH,
+        ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH, ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH /*,
+         // TODO: fix when monticores typecheck on generics is fixed
+        ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH, ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH */)
     );
   }
 
@@ -78,7 +149,7 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
     "MandatoryInheritedParameterBecomesOptionalSameName.arc",
     "MandatoryInheritedParameterNewName.arc",
     "MandatoryInheritedParameterNoChanges.arc",
-    "MultipleInheritedParametersAndAdditionalParametersLast.arc",
+    "MultipleInheritedParametersAndAdditionalOptionalParametersLast.arc",
     "MultipleInheritedParametersNoChanges.arc",
     "NoInheritanceAndNoParametersInComponent.arc",
     "NoInheritanceButParametersInComponent.arc",
@@ -88,46 +159,25 @@ public class ConfigurationParametersCorrectlyInheritedTest extends AbstractCoCoT
     "OptionalInheritedParameterDifferentNameDifferentValue.arc",
     "OptionalInheritedParameterDifferentNameSameValue.arc",
     "OptionalInheritedParameterSameNameDifferentValue.arc",
-    "OptionalInheritedParametersUnordered.arc"
+    "OptionalInheritedParametersUnordered.arc",
+    "TypeOverwritingCorrectly.arc",
+    "TypeOverwritingWithoutChange.arc"
   })
   public void shouldCorrectlyInheritConfigurationParameters(@NotNull String model) {
     Preconditions.checkNotNull(model);
-
-    //Given
-    ASTComponentType ast = this.parseAndLoadAllSymbols(PACKAGE + "." + model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    this.checkOnlyExpectedErrorsPresent(new ArcError[]{}, getPathToModel(model).toAbsolutePath());
+    testModel(model);
   }
 
   @ParameterizedTest
   @MethodSource("modelAndExpectedErrorsProvider")
   public void testInvalidModelHasErrors(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
-
-    //Given
-    ASTComponentType ast = this.parseAndLoadAllSymbols(PACKAGE + "." + model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    this.checkOnlyExpectedErrorsPresent(errors, getPathToModel(model).toAbsolutePath());
+    testModel(model, errors);
   }
 
   @Override
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
     Preconditions.checkNotNull(checker);
     checker.addCoCo(new ConfigurationParametersCorrectlyInherited());
-  }
-
-  @Override
-  @BeforeEach
-  public void init() {
-    super.init();
-    this.getCLI().initializeBasicOOTypes();
   }
 }
