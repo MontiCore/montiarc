@@ -8,6 +8,7 @@ import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
@@ -26,7 +27,6 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mockito;
 
 import java.util.Optional;
-import java.util.Stack;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -78,46 +78,6 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#setComponentStack(Stack)}
-   */
-  @Test
-  public void shouldSetComponentStack() {
-    // Given
-    Stack<ComponentTypeSymbol> stack = new Stack<>();
-
-    // When
-    this.getCompleter().setComponentStack(stack);
-
-    // Then
-    Assertions.assertEquals(stack, this.getCompleter().getComponentStack());
-  }
-
-  /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#setComponentStack(Stack)}
-   *
-   * @param stack    the stack to set
-   * @param expected the expected exception
-   */
-  @ParameterizedTest
-  @MethodSource("componentStackAndExpectedExceptionProvider")
-  public void setComponentStackShouldThrowException(@Nullable Stack<ComponentTypeSymbol> stack,
-                                                    @NotNull Class<Exception> expected) {
-    Preconditions.checkNotNull(expected);
-
-    // When && Then
-    Assertions.assertThrows(expected, () -> this.getCompleter().setComponentStack(stack));
-  }
-
-  protected static Stream<Arguments> componentStackAndExpectedExceptionProvider() {
-    Stack<ComponentTypeSymbol> stack = new Stack<>();
-    stack.add(null);
-    return Stream.of(
-      Arguments.of(null, NullPointerException.class),
-      Arguments.of(stack, IllegalArgumentException.class)
-    );
-  }
-
-  /**
    * Method under test {@link ArcBasisSymbolTableCompleter#setTraverser(ArcBasisTraverser)}
    */
   @Test
@@ -154,7 +114,6 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
 
     //Then
     Assertions.assertNotNull(completer.getTypePrinter());
-    Assertions.assertNotNull(completer.getComponentStack());
   }
 
   /**
@@ -172,7 +131,6 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
 
     // Then
     Assertions.assertEquals(printer, completer.getTypePrinter());
-    Assertions.assertNotNull(completer.getComponentStack());
   }
 
   protected static Stream<MCBasicTypesFullPrettyPrinter> typesPrinterProvider() {
@@ -224,8 +182,6 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
    */
   @Test
   public void shouldVisitComponentType() {
-    Preconditions.checkState(this.getCompleter().getComponentStack().isEmpty());
-
     // Given
     ASTComponentType ast = ArcBasisMill.componentTypeBuilder().setName("SomeName")
       .setHead(Mockito.mock(ASTComponentHead.class))
@@ -239,17 +195,11 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     this.getCompleter().visit(ast);
 
     //Then
-    Assertions.assertFalse(this.getCompleter().getComponentStack().isEmpty());
-    Assertions.assertEquals(1, this.getCompleter().getComponentStack().size());
-    Assertions.assertTrue(this.getCompleter().getCurrentComponent().isPresent());
-    Assertions.assertEquals(ast.getSymbol(), this.getCompleter().getCurrentComponent().get());
     Assertions.assertTrue(!this.getCompleter().getCurrentCompInstanceType().isPresent());
   }
 
   @Test
   public void shouldVisitComponentTypeAndSetCurrentCompInstanceType() {
-    Preconditions.checkState(this.getCompleter().getComponentStack().isEmpty());
-
     // Given
     ASTComponentType ast = ArcBasisMill.componentTypeBuilder().setName("SomeName")
       .setHead(Mockito.mock(ASTComponentHead.class))
@@ -264,10 +214,6 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     this.getCompleter().visit(ast);
 
     //Then
-    Assertions.assertFalse(this.getCompleter().getComponentStack().isEmpty());
-    Assertions.assertEquals(1, this.getCompleter().getComponentStack().size());
-    Assertions.assertTrue(this.getCompleter().getCurrentComponent().isPresent());
-    Assertions.assertEquals(ast.getSymbol(), this.getCompleter().getCurrentComponent().get());
     Assertions.assertTrue(this.getCompleter().getCurrentCompInstanceType().isPresent());
     Assertions.assertTrue(this.getCompleter().getCurrentCompInstanceType().get() instanceof TypeExprOfComponent);
     Assertions.assertEquals(symbol, this.getCompleter().getCurrentCompInstanceType().get().getTypeInfo());
@@ -301,39 +247,12 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
       .setBody(Mockito.mock(ASTComponentBody.class))
       .build();
     ast1.setSymbolAbsent();
-    ASTComponentType ast2 = ArcBasisMill.componentTypeBuilder().setName("SomeName")
-      .setHead(Mockito.mock(ASTComponentHead.class))
-      .setBody(Mockito.mock(ASTComponentBody.class))
-      .build();
-    ast2.setSymbol(ArcBasisMill.componentTypeSymbolBuilder().setName("SomeName")
-      .setSpannedScope(ArcBasisMill.scope()).build());
-    ast2.getSymbol().setAstNode(ast2);
 
     Consumer<ArcBasisSymbolTableCompleter> consumer1 = completer -> {};
-    Consumer<ArcBasisSymbolTableCompleter> consumer2 = completer -> completer.putOnStack(null);
-    Consumer<ArcBasisSymbolTableCompleter> consumer3 = completer -> {
-      ComponentTypeSymbol symbol = Mockito.mock(ComponentTypeSymbol.class);
-      completer.putOnStack(symbol);
-      Mockito.when(symbol.isPresentAstNode()).thenReturn(false);
-    };
-    Consumer<ArcBasisSymbolTableCompleter> consumer4 = completer -> {
-      ComponentTypeSymbol symbol = Mockito.mock(ComponentTypeSymbol.class);
-      symbol.setAstNode(Mockito.mock(ASTComponentType.class));
-      completer.putOnStack(symbol);
-    };
-    Consumer<ArcBasisSymbolTableCompleter> consumer5 = completer -> {
-      ComponentTypeSymbol symbol = Mockito.mock(ComponentTypeSymbol.class);
-      symbol.setAstNode(ast2);
-      completer.putOnStack(symbol);
-    };
+
     return Stream.of(
       Arguments.of(null, consumer1, NullPointerException.class),
-      Arguments.of(ast1, consumer1, IllegalArgumentException.class),
-      Arguments.of(ast2, consumer1, IllegalStateException.class),
-      Arguments.of(ast2, consumer2, IllegalStateException.class),
-      Arguments.of(ast2, consumer3, IllegalStateException.class),
-      Arguments.of(ast2, consumer4, IllegalStateException.class),
-      Arguments.of(ast2, consumer5, IllegalStateException.class)
+      Arguments.of(ast1, consumer1, IllegalArgumentException.class)
     );
   }
 
@@ -354,14 +273,12 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
       .build());
     ast.getSymbol().setAstNode(ast);
 
-    this.getCompleter().putOnStack(ast.getSymbol());
     this.getCompleter().setCurrentCompInstanceType(new TypeExprOfComponent(ast.getSymbol()));
 
     // When
     this.getCompleter().endVisit(ast);
 
     // Then
-    Assertions.assertTrue(this.getCompleter().getComponentStack().isEmpty());
     Assertions.assertFalse(this.getCompleter().getCurrentCompInstanceType().isPresent());
   }
 
@@ -373,15 +290,14 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
   @Test
   public void shouldVisitComponentHeadWithoutParent() {
     // Given
-    ASTComponentHead ast = ArcBasisMill.componentHeadBuilder().build();
-    ast.setEnclosingScope(ArcBasisMill.scope());
-    ast.setParentAbsent();
-
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("SomeName")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
-    this.getCompleter().putOnStack(symbol);
+
+    ASTComponentHead ast = ArcBasisMill.componentHeadBuilder().build();
+    ast.setEnclosingScope(symbol.getSpannedScope());
+    ast.setParentAbsent();
 
     // When
     this.getCompleter().visit(ast);
@@ -389,10 +305,6 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     // Then
     Assertions.assertFalse(ast.isPresentParent());
     Assertions.assertFalse(symbol.isPresentParentComponent());
-    Assertions.assertFalse(this.getCompleter().getComponentStack().isEmpty());
-    Assertions.assertEquals(1, this.getCompleter().getComponentStack().size());
-    Assertions.assertTrue(this.getCompleter().getCurrentComponent().isPresent());
-    Assertions.assertEquals(symbol, this.getCompleter().getCurrentComponent().get());
   }
 
   /**
@@ -436,16 +348,11 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     childCompHead.getParent().setEnclosingScope(symChildComp.getSpannedScope());
     ((ASTMCQualifiedType) childCompHead.getParent()).getMCQualifiedName().setEnclosingScope(symChildComp.getSpannedScope());
 
-    getCompleter().putOnStack(symChildComp);
-
     // When
     getCompleter().visit(childCompHead);
 
     // Then
     Assertions.assertEquals(parentComp, symChildComp.getParent().getTypeInfo());
-    Assertions.assertEquals(1, this.getCompleter().getComponentStack().size());
-    Assertions.assertTrue(this.getCompleter().getCurrentComponent().isPresent());
-    Assertions.assertEquals(symChildComp, this.getCompleter().getCurrentComponent().get());
   }
 
   /**
@@ -475,14 +382,20 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     ASTComponentHead ast2 = ArcBasisMill.componentHeadBuilder().build();
     ast2.setEnclosingScope(ArcBasisMill.scope());
 
+    ASTComponentHead ast3 = ArcBasisMill.componentHeadBuilder().build();
+    IArcBasisScope spannedBySymbol = ArcBasisMill.scope();
+    TypeSymbol typeSym = ArcBasisMill.typeSymbolBuilder().setName("A")
+      .setSpannedScope(spannedBySymbol).build();
+    spannedBySymbol.setSpanningSymbol(typeSym);
+    ast3.setEnclosingScope(spannedBySymbol);
+
     Consumer<ArcBasisSymbolTableCompleter> consumer1 = completer -> {};
-    Consumer<ArcBasisSymbolTableCompleter> consumer2 = completer -> completer.putOnStack(null);
 
     return Stream.of(
       Arguments.of(null, consumer1, NullPointerException.class),
       Arguments.of(ast1, consumer1, NullPointerException.class),
-      Arguments.of(ast2, consumer1, IllegalStateException.class),
-      Arguments.of(ast2, consumer2, IllegalStateException.class)
+      Arguments.of(ast2, consumer1, IllegalArgumentException.class),
+      Arguments.of(ast3, consumer1, IllegalArgumentException.class)
     );
   }
 
