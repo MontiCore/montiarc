@@ -85,7 +85,9 @@ task generateMontiArc(type: JavaExec) {
 }
 
 generateCD.dependsOn(unpackLibrarymodels)
+generateCD.mustRunAfter(project.collect {it.project(":generators:cd2pojo").getTasks().withType(Test) })
 generateMontiArc.dependsOn(generateCD)
+generateMontiArc.mustRunAfter(project.collect {it.project(":generators:ma2java").getTasks().withType(Test) })
 compileJava.dependsOn(generateMontiArc)
 
 publishing {

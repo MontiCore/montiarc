@@ -69,7 +69,9 @@ task generateMontiArc(type: JavaExec) {
   systemProperties "LOGBACK_TARGET_FILE_NAME" : "logback-ma2java"
 }
 
+generateCD.mustRunAfter(project.collect {it.project(":generators:cd2pojo").getTasks().withType(Test) })
 generateMontiArc.dependsOn(generateCD)
+generateMontiArc.mustRunAfter(project.collect {it.project(":generators:ma2java").getTasks().withType(Test) })
 compileJava.dependsOn(generateMontiArc)
 
 publishing {

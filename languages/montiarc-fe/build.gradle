@@ -136,8 +136,8 @@ shadowJar {
 
 jar.dependsOn(shadowJar)
 jar.dependsOn(grammarsJar)
-jar.mustRunAfter(test)
 sourcesJar.dependsOn project.collect { it.tasks.withType(MCTask)}
+compileJava.mustRunAfter(project.collect {it.project(":languages:arc-fe").getTasks().withType(Test) })
 
 publishing {
   publications {

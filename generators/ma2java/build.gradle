@@ -83,7 +83,8 @@ shadowJar {
 }
 
 jar.dependsOn(shadowJar)
-jar.mustRunAfter(test)
+compileJava.mustRunAfter(project.collect {it.project(":languages:montiarc-fe").getTasks().withType(Test) })
+
 
 publishing {
   publications {

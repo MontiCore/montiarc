@@ -29,8 +29,6 @@ java {
   withSourcesJar()
 }
 
-jar.mustRunAfter(test)
-
 publishing {
   publications {
     mavenJava(MavenPublication) { from(components.java) }
