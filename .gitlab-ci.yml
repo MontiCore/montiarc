@@ -17,7 +17,7 @@ stages:
   - check
       
 Validate Gradle:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.7-jdk8
+  image: gradle:6.8.2-jdk8
   stage: build
   allow_failure: false
   artifacts:
