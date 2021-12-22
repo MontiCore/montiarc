@@ -86,6 +86,7 @@ Code Coverage:
 
 checkMDLinks:
   stage: check
+  image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3.5.4-jdk-8-alpine
   dependencies:
     - Code Coverage
   script:
