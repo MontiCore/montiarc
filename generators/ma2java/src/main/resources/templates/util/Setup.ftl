@@ -11,6 +11,7 @@
       <#assign subComponents = comp.getSubComponents()>
       <#list subComponents as subcomponent>
         <#lt>    this.${subcomponent.getName()} = new ${compHelper.getSubComponentTypeName(subcomponent)}(<#list compHelper.getParamValues(subcomponent) as param>${param}<#sep>, </#sep></#list>);
+        <#lt>    this.${subcomponent.getName()}.setUp();
       </#list>
   </#if>
 
