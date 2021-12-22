@@ -57,6 +57,6 @@ component grammar GenericArc extends ArcBasis {
    * @attribute name Name of the generic type parameter.
    * @attribute upperBound Type restrictions to the generic type parameter.
    */
-  symbol ArcTypeParameter = Name ( "extends" upperBound:(MCType || "&")+ )? ;
+  ArcTypeParameter implements TypeVar = Name ( "extends" upperBound:(MCType || "&")+ )? ;
 
 }

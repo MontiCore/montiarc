@@ -20,7 +20,6 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   protected ComponentTypeSymbol outerComponent;
   protected CompTypeExpression parent;
   protected List<VariableSymbol> parameters;
-  protected List<TypeVarSymbol> typeParameters;
 
   /**
    * @param name the name of this component type.
@@ -28,7 +27,6 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   protected ComponentTypeSymbol(String name) {
     super(name);
     this.parameters = new ArrayList<>();
-    this.typeParameters = new ArrayList<>();
   }
 
   @Override
@@ -172,36 +170,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return a {@code List} of the type parameters of this component type.
    */
   public List<TypeVarSymbol> getTypeParameters() {
-    return this.typeParameters;
-  }
-
-  /**
-   * Adds the given {@code ArcTypeParameterSymbol} of a component type parameter to the
-   * type parameters of this component type. Throws an {@link IllegalArgumentException}
-   * if the given symbol is {@code null}.
-   *
-   * @param typeParameter the symbol to add.
-   */
-  public void addTypeParameter(@NotNull TypeVarSymbol typeParameter) {
-    Preconditions.checkArgument(typeParameter != null);
-    this.typeParameters.add(typeParameter);
-    this.getSpannedScope().add(typeParameter);
-  }
-
-  /**
-   * Adds the elements of a {@code Collection} of {@code ArcTypeParameterSymbol} of component type
-   * parameters to the type parameters of this component type. Throws an
-   * {@link IllegalArgumentException} if the given {@code Collection} is {@code null} or contains an
-   * element that is {@code null}.
-   *
-   * @param typeParameters the symbols to add.
-   */
-  public void addTypeParameters(@NotNull Collection<TypeVarSymbol> typeParameters) {
-    Preconditions.checkArgument(typeParameters != null);
-    Preconditions.checkArgument(!typeParameters.contains(null));
-    for (TypeVarSymbol typeParameter : typeParameters) {
-      this.addTypeParameter(typeParameter);
-    }
+    return this.getSpannedScope().getLocalTypeVarSymbols();
   }
 
   public boolean hasTypeParameter() {

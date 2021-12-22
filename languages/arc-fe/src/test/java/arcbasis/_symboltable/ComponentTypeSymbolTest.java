@@ -134,12 +134,16 @@ public class ComponentTypeSymbolTest extends AbstractTest {
 
   @Test
   public void shouldStateIfHasTypeParameters() {
+    // Given
     ComponentTypeSymbol compWithoutTypeParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp1")
       .setSpannedScope(ArcBasisMill.scope()).build();
     ComponentTypeSymbol compWithTypeParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp2")
       .setSpannedScope(ArcBasisMill.scope()).build();
-    compWithTypeParameters.addTypeParameters(Arrays
-      .asList(mock(TypeVarSymbol.class), mock(TypeVarSymbol.class), mock(TypeVarSymbol.class)));
+    List<TypeVarSymbol> typeParams = Arrays.asList(
+      mock(TypeVarSymbol.class), mock(TypeVarSymbol.class), mock(TypeVarSymbol.class));
+    typeParams.forEach(compWithTypeParameters.getSpannedScope()::add);
+
+    // When & Then
     Assertions.assertFalse(compWithoutTypeParameters.hasTypeParameter());
     Assertions.assertTrue(compWithTypeParameters.hasTypeParameter());
   }

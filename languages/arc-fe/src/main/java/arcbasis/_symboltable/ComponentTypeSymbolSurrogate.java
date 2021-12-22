@@ -2,10 +2,7 @@
 package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
-import com.google.common.base.Preconditions;
-import de.monticore.types.mcbasictypes.MCBasicTypesMill;
-import genericarc._symboltable.ArcTypeParameterSymbol;
-import genericarc._symboltable.IGenericArcScope;
+import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -32,18 +29,15 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
 
   public ComponentTypeSymbol lazyLoadDelegate() {
     if (!isPresentDelegate()) {
-      this.setDelegate(this.getEnclosingScope().resolveComponentType(this.getName()).orElse(this.getEnclosingScope() instanceof IGenericArcScope ?
-        tryGeneric().orElse(null) : null));
+      this.setDelegate(this.getEnclosingScope().resolveComponentType(this.getName()).orElse(tryGeneric().orElse(null)));
     }
     return delegate.orElse(this);
   }
 
   protected Optional<ComponentTypeSymbol> tryGeneric() {
-    Preconditions.checkState(this.getEnclosingScope() instanceof IGenericArcScope);
-    Optional<ArcTypeParameterSymbol> resolvedTypeSymbol =
-      ((IGenericArcScope) this.getEnclosingScope()).resolveArcTypeParameter(this.getName());
+    Optional<TypeVarSymbol> resolvedTypeSymbol = this.getEnclosingScope().resolveTypeVar(this.getName());
     if (resolvedTypeSymbol.isPresent()) {
-      ComponentTypeSymbol resolvedSymbol = this.getEnclosingScope().resolveComponentType(resolvedTypeSymbol.get().getAstNode().getUpperBound(0).printType(MCBasicTypesMill.mcBasicTypesPrettyPrinter())).orElse(null);
+      ComponentTypeSymbol resolvedSymbol = this.getEnclosingScope().resolveComponentType(resolvedTypeSymbol.get().getSuperTypes(0).printFullName()).orElse(null);
       return Optional.ofNullable(resolvedSymbol);
     }
     return Optional.empty();

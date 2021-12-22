@@ -87,7 +87,7 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
       symbol.addParameters(this.getParameters());
     }
     if (this.getTypeParameters() != null) {
-      symbol.addTypeParameters(this.getTypeParameters());
+      this.getTypeParameters().forEach(symbol.getSpannedScope()::add);
     }
     symbol.setOuterComponent(this.getOuterComponent());
     symbol.setParent(this.getParentComponent());

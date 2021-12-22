@@ -36,7 +36,7 @@ public class UniqueIdentifierNamesGenericArcTest extends UniqueIdentifierNamesTe
       .build();
 
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclosingComp);
-    enclosingComp.getSymbol().addTypeParameter(typeParam);
+    enclosingComp.getSpannedScope().add(typeParam);
 
     // When
     coco.check(enclosingComp);
@@ -62,7 +62,7 @@ public class UniqueIdentifierNamesGenericArcTest extends UniqueIdentifierNamesTe
       .build();
 
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclosingComp);
-    enclosingComp.getSymbol().addTypeParameter(typeParam);
+    enclosingComp.getSpannedScope().add(typeParam);
 
     // When
     coco.check(enclosingComp);
@@ -85,8 +85,8 @@ public class UniqueIdentifierNamesGenericArcTest extends UniqueIdentifierNamesTe
       .build();
 
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclosingComp);
-    enclosingComp.getSymbol().addTypeParameter(typeParam);
-    enclosingComp.getSymbol().addTypeParameter(typeParam2);
+    enclosingComp.getSpannedScope().add(typeParam);
+    enclosingComp.getSpannedScope().add(typeParam2);
 
     // When
     coco.check(enclosingComp);
@@ -122,7 +122,7 @@ public class UniqueIdentifierNamesGenericArcTest extends UniqueIdentifierNamesTe
       .build();
 
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclosingComp);
-    enclosingComp.getSymbol().addTypeParameter(typeParam);
+    enclosingComp.getSpannedScope().add(typeParam);
 
     // When
     coco.check(enclosingComp);

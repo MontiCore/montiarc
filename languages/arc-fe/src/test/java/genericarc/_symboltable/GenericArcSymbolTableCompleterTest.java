@@ -1,16 +1,25 @@
 /* (c) https://github.com/MontiCore/monticore */
 package genericarc._symboltable;
 
+import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis.check.ArcBasisSynthesizeComponent;
+import arcbasis.check.ArcBasisSynthesizeType;
+import arcbasis.check.ISynthesizeComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.types.check.ISynthesize;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
+import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import genericarc.AbstractTest;
 import genericarc.GenericArcMill;
+import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericComponentHead;
 import genericarc._visitor.GenericArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -18,6 +27,7 @@ import org.codehaus.commons.nullanalysis.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -72,6 +82,54 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
   }
 
   /**
+   * Method under test {@link GenericArcSymbolTableCompleter#setTypeSynthesizer(ISynthesize)}
+   */
+  @Test
+  public void shouldSetTypeSynthesizer() {
+    // Given
+    ISynthesize typeSynth = new ArcBasisSynthesizeType();
+
+    // When
+    this.getCompleter().setTypeSynthesizer(typeSynth);
+
+    // Then
+    Assertions.assertEquals(typeSynth, this.getCompleter().getTypeSynthesizer());
+  }
+
+  /**
+   * Method under test {@link GenericArcSymbolTableCompleter#setTypeSynthesizer(ISynthesize)}
+   */
+  @Test
+  public void setTypeSynthesizerShouldThrowNullPointerException() {
+    // When && Then
+    Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().setTypeSynthesizer(null));
+  }
+
+  /**
+   * Method under test {@link GenericArcSymbolTableCompleter#setComponentSynthesizer(ISynthesizeComponent)}
+   */
+  @Test
+  public void shouldSetComponentSynthesizer() {
+    // Given
+    ISynthesizeComponent typeSynth = new ArcBasisSynthesizeComponent();
+
+    // When
+    this.getCompleter().setComponentSynthesizer(typeSynth);
+
+    // Then
+    Assertions.assertEquals(typeSynth, this.getCompleter().getComponentSynthesizer());
+  }
+
+  /**
+   * Method under test {@link GenericArcSymbolTableCompleter#setComponentSynthesizer(ISynthesizeComponent)}
+   */
+  @Test
+  public void setComponentSynthesizerShouldThrowNullPointerException() {
+    // When && Then
+    Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().setComponentSynthesizer(null));
+  }
+
+  /**
    * Method under test {@link GenericArcSymbolTableCompleter#setTraverser(GenericArcTraverser)}
    */
   @Test
@@ -108,6 +166,8 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
 
     //Then
     Assertions.assertNotNull(completer.getTypePrinter());
+    Assertions.assertNotNull(completer.getComponentSynthesizer());
+    Assertions.assertNotNull(completer.getTypeSynthesizer());
   }
 
   /**
@@ -125,6 +185,8 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
 
     // Then
     Assertions.assertEquals(printer, completer.getTypePrinter());
+    Assertions.assertNotNull(completer.getComponentSynthesizer());
+    Assertions.assertNotNull(completer.getTypeSynthesizer());
   }
 
   protected static Stream<MCBasicTypesFullPrettyPrinter> typesPrinterProvider() {
@@ -134,13 +196,26 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
   /**
    * Method under test {@link GenericArcSymbolTableCompleter#GenericArcSymbolTableCompleter(MCBasicTypesFullPrettyPrinter)}
    *
-   * @param printer the first constructor parameter (null)
+   * @param constructorCall The constructor call that should throw the null pointer exception
    */
   @ParameterizedTest
-  @NullSource
-  public void constructorShouldThrowNullPointerException(@Nullable MCBasicTypesFullPrettyPrinter printer) {
+  @MethodSource("constructorWithNullArgumentProvider")
+  public void constructorShouldThrowNullPointerException(@NotNull Executable constructorCall) {
     // When && Then
-    Assertions.assertThrows(NullPointerException.class, () -> new GenericArcSymbolTableCompleter(printer));
+    Assertions.assertThrows(NullPointerException.class, constructorCall);
+  }
+
+  public static Stream<Arguments> constructorWithNullArgumentProvider() {
+    MCBasicTypesFullPrettyPrinter printer = MCBasicTypesMill.mcBasicTypesPrettyPrinter();
+    ISynthesizeComponent compSynth = new ArcBasisSynthesizeComponent();
+    ISynthesize typeSynth = new ArcBasisSynthesizeType();
+
+    return Stream.of(
+      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(null)),
+      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(null, compSynth, typeSynth)),
+      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(printer, null, typeSynth)),
+      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(printer, compSynth, null))
+    );
   }
 
   /**
@@ -257,6 +332,57 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
       Arguments.of(ast1, consumer1, NullPointerException.class),
       Arguments.of(ast2, consumer1, IllegalArgumentException.class),
       Arguments.of(ast3, consumer1, IllegalArgumentException.class)
+    );
+  }
+
+  @Test
+  public void shouldVisitArcTypeParameter() {
+    // Given
+    ASTArcTypeParameter astTypeParam = GenericArcMill.arcTypeParameterBuilder()
+      .setName("T")
+      .build();
+    TypeVarSymbol typeParamSym = GenericArcMill.typeVarSymbolBuilder()
+      .setName("T")
+      .setSpannedScope(GenericArcMill.scope())
+      .build();
+    astTypeParam.setSymbol(typeParamSym);
+    typeParamSym.setAstNode(astTypeParam);
+
+    ASTArcTypeParameter astTypeParamWithBounds = GenericArcMill.arcTypeParameterBuilder()
+      .setName("U")
+      .addUpperBound(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.DOUBLE).build())
+      .addUpperBound(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BOOLEAN).build())
+      .build();
+    TypeVarSymbol typeParamWithBoundSym = GenericArcMill.typeVarSymbolBuilder()
+      .setName("U")
+      .setSpannedScope(GenericArcMill.scope())
+      .build();
+    astTypeParamWithBounds.setSymbol(typeParamWithBoundSym);
+    typeParamWithBoundSym.setAstNode(astTypeParamWithBounds);
+
+    // When
+    this.getCompleter().visit(astTypeParam);
+    this.getCompleter().visit(astTypeParamWithBounds);
+
+    // Then
+    Assertions.assertEquals(0, typeParamSym.getSuperTypesList().size());
+    Assertions.assertEquals(2, typeParamWithBoundSym.getSuperTypesList().size());
+    Assertions.assertTrue(SymTypeExpressionFactory.createTypeConstant("double").deepEquals(
+      typeParamWithBoundSym.getSuperTypes(0)));
+    Assertions.assertTrue(SymTypeExpressionFactory.createTypeConstant("boolean").deepEquals(
+      typeParamWithBoundSym.getSuperTypes(1)));
+  }
+
+  @Test
+  public void visitShouldThrowException() {
+    // Given
+    ASTArcTypeParameter param1 = null;
+    ASTArcTypeParameter param2 = GenericArcMill.arcTypeParameterBuilder().setName("A").build();
+
+    // When & Then
+    Assertions.assertAll(
+      () -> Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().visit(param1)),
+      () -> Assertions.assertThrows(IllegalArgumentException.class, () -> this.getCompleter().visit(param2))
     );
   }
 }

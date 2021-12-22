@@ -6,10 +6,6 @@ import arcbasis._ast.*;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolBuilder;
-import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.SymTypeExpressionFactory;
-import de.monticore.types.mcbasictypes._ast.ASTMCType;
-import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -17,7 +13,6 @@ import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.Optional;
 import java.util.Stack;
-import java.util.function.BiFunction;
 
 public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
@@ -291,17 +286,5 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     if (ast.isPresentArguments()) {
       ast.getSymbol().addArguments(ast.getArguments().getExpressionList());
     }
-  }
-
-  /**
-   * the scope is the enclosing scope of the expression to create
-   * @param printer printer that can be used to print a type
-   * @return a mapper that can create a symTypeExpression from a MontiCore-Type
-   */
-  public static BiFunction<ASTMCType, IArcBasisScope, SymTypeExpression> mapWith(MCBasicTypesFullPrettyPrinter printer){
-    Preconditions.checkNotNull(printer);
-    return (type, scope) -> SymTypeExpressionFactory.createTypeExpression(
-        Preconditions.checkNotNull(type).printType(printer),
-        Preconditions.checkNotNull(scope));
   }
 }

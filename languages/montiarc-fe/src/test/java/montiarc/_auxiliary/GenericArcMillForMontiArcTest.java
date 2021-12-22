@@ -2,14 +2,17 @@
 package montiarc._auxiliary;
 
 import arcbasis.check.ArcBasisSynthesizeComponent;
+import arcbasis.check.ArcBasisSynthesizeType;
 import arcbasis.check.ISynthesizeComponent;
 import arccore.ArcCoreMill;
 import com.google.common.base.Preconditions;
+import de.monticore.types.check.ISynthesize;
 import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
 import genericarc.GenericArcMill;
 import montiarc.MontiArcMill;
 import montiarc.check.MontiArcSynthesizeComponent;
+import montiarc.check.MontiArcSynthesizeType;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,15 +33,18 @@ public class GenericArcMillForMontiArcTest {
    * @param setup                   The setup to execute, e.g., initialize the respective mill.
    * @param expectedPrettyPrinter   The expected class of the type printer of the symbol table completer.
    * @param expectedCompSynthesizer The expected class of the component synthesizer of the symbol-table completer.
+   * @param expectedTypeSynthesizer The expected class of the type synthesizer of the symbol-table completer.
    */
   @ParameterizedTest
   @MethodSource("setupAndExpectedClassForSymTabCompleterProvider")
   public void shouldProvideCompleterAsExpected(@NotNull Runnable setup,
                                                @NotNull Class<MCBasicTypesFullPrettyPrinter> expectedPrettyPrinter,
-                                               @NotNull Class<ISynthesizeComponent> expectedCompSynthesizer) {
+                                               @NotNull Class<ISynthesizeComponent> expectedCompSynthesizer,
+                                               @NotNull Class<ISynthesize> expectedTypeSynthesizer) {
     Preconditions.checkNotNull(setup);
     Preconditions.checkNotNull(expectedPrettyPrinter);
     Preconditions.checkNotNull(expectedCompSynthesizer);
+    Preconditions.checkNotNull(expectedTypeSynthesizer);
 
     // When
     setup.run();
@@ -48,7 +54,9 @@ public class GenericArcMillForMontiArcTest {
       () -> Assertions.assertEquals(expectedPrettyPrinter,
         GenericArcMill.symbolTableCompleter().getTypePrinter().getClass()),
       () -> Assertions.assertEquals(expectedCompSynthesizer,
-        GenericArcMill.symbolTableCompleter().getComponentSynthesizer().getClass())
+        GenericArcMill.symbolTableCompleter().getComponentSynthesizer().getClass()),
+      () -> Assertions.assertEquals(expectedTypeSynthesizer,
+        GenericArcMill.symbolTableCompleter().getTypeSynthesizer().getClass())
     );
   }
 
@@ -66,9 +74,12 @@ public class GenericArcMillForMontiArcTest {
       MontiArcMill.init();
     };
     return Stream.of(
-      Arguments.of(setupGenericArc, MCBasicTypesFullPrettyPrinter.class, ArcBasisSynthesizeComponent.class),
-      Arguments.of(setupArcCore, MCBasicTypesFullPrettyPrinter.class, ArcBasisSynthesizeComponent.class),
-      Arguments.of(setupMontiArc, MCSimpleGenericTypesFullPrettyPrinter.class, MontiArcSynthesizeComponent.class)
+      Arguments.of(setupGenericArc,
+        MCBasicTypesFullPrettyPrinter.class, ArcBasisSynthesizeComponent.class, ArcBasisSynthesizeType.class),
+      Arguments.of(setupArcCore,
+        MCBasicTypesFullPrettyPrinter.class, ArcBasisSynthesizeComponent.class, ArcBasisSynthesizeType.class),
+      Arguments.of(setupMontiArc,
+        MCSimpleGenericTypesFullPrettyPrinter.class, MontiArcSynthesizeComponent.class, MontiArcSynthesizeType.class)
     );
   }
 }
