@@ -28,6 +28,9 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
 
   protected static final String LOG = "POJOGeneratorScript";
 
+  /** Whether the generator should terminate before the generation process in case of errors in the models. */
+  protected static boolean failBeforeGenerationIfModelErrors = true;
+
   public static void main(String[] args){
     Log.enableFailQuick(false);
     CD4CodeMill.globalScope().clear();
@@ -81,7 +84,8 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
    */
   public static void generate(List<File> modelPath, File targetFilepath) {
     List<Path> fqnMP = modelPath.stream().map(File::getAbsolutePath).map(Paths::get).collect(Collectors.toList());
-    POJOGeneratorTool tool = new POJOGeneratorTool(targetFilepath.toPath(), Paths.get(""));
+    POJOGeneratorTool tool = new POJOGeneratorTool(targetFilepath.toPath(), Paths.get(""),
+      failBeforeGenerationIfModelErrors);
     tool.generateCDTypesInPaths(fqnMP);
   }
 

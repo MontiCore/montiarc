@@ -53,6 +53,8 @@ task generateCD(type: JavaExec) {
   systemProperties "logback.configurationFile": "$generatorLogbackConfig"
   systemProperties "LOGBACK_TARGET_DIR" : "$generatorLogbackOutDir"
   systemProperties "LOGBACK_TARGET_FILE_NAME" : "logback-cd2pojo"
+
+  ignoreExitValue(true) // TODO: remove this after integrating java2mc
 }
 
 task generateMontiArc(type: JavaExec) {

@@ -56,7 +56,7 @@ public class GeneratorTest {
   @ValueSource(strings = {"models/simple", "models/domain"})
   public void quickGeneratorTest(@NotNull String modelPath) {
     //Given
-    POJOGeneratorTool tool = new POJOGeneratorTool(Paths.get(TEST_TARGET_PATH), Paths.get(TEST_JAVA_PATH));
+    POJOGeneratorTool tool = new POJOGeneratorTool(Paths.get(TEST_TARGET_PATH), Paths.get(TEST_JAVA_PATH), false);
 
     //When
     tool.generateCDTypesInPath(Paths.get(TEST_RESOURCE_PATH, modelPath));

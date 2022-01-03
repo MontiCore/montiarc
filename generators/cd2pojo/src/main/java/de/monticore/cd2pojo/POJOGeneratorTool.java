@@ -31,18 +31,30 @@ import java.util.stream.Collectors;
 public class POJOGeneratorTool {
   
   protected POJOGenerator generator;
+
+  /** Whether the generator should terminate before the generation process in case of errors in the models. */
+  boolean failBeforeGenerationIfModelErrors;
   
-  public POJOGeneratorTool(@NotNull POJOGenerator generator) {
+  public POJOGeneratorTool(@NotNull POJOGenerator generator, boolean failBeforeGenerationIfModelErrors) {
     Preconditions.checkNotNull(generator);
     this.generator = generator;
+    this.failBeforeGenerationIfModelErrors = failBeforeGenerationIfModelErrors;
   }
   
   public POJOGeneratorTool(@NotNull GeneratorSetup setup) {
-    this(new POJOGenerator(setup));
+    this(setup, true);
+  }
+
+  public POJOGeneratorTool(@NotNull GeneratorSetup setup, boolean failBeforeGenerationIfModelErrors) {
+    this(new POJOGenerator(setup), failBeforeGenerationIfModelErrors);
   }
   
   public POJOGeneratorTool(@NotNull Path targetDir, @NotNull Path hwcPath) {
-    this(new POJOGenerator(targetDir, hwcPath));
+    this(new POJOGenerator(targetDir, hwcPath), true);
+  }
+
+  public POJOGeneratorTool(@NotNull Path targetDir, @NotNull Path hwcPath, boolean failBeforeGenerationIfModelErrors) {
+    this(new POJOGenerator(targetDir, hwcPath), failBeforeGenerationIfModelErrors);
   }
 
   public void generateCDTypesInPaths(@NotNull Collection<Path> modelPaths) {
@@ -54,6 +66,9 @@ public class POJOGeneratorTool {
         symbolsToGenerate.addAll(sub.getLocalCDTypeSymbols());
       }
     }
+
+    terminateOnModelErrorsIfEnabled();
+
     for (ICD4CodeScope scope: globalScope.getSubScopes()) {
       if (scope instanceof ICD4CodeArtifactScope) {
         printCDSymTab2Json((ICD4CodeArtifactScope) scope, this.generator.outputDirectory.toPath());
@@ -198,5 +213,22 @@ public class POJOGeneratorTool {
       .setSpannedScope(CD4CodeMill.scope())
       .addSuperTypes(SymTypeExpressionFactory.createTypeObject("java.lang.Object", CD4CodeMill.globalScope()))
       .build());
+  }
+
+  /**
+   * If attribute {@link this#failBeforeGenerationIfModelErrors} is set, this method will send the logger the signal to
+   * terminate this process in case there are errors in the log. The state of fail quick is not relevant for this
+   * termination process. It will not be affected by this method, either.
+   */
+  private void terminateOnModelErrorsIfEnabled() {
+    // The following lines ensure that errors in the models will terminate this GeneratorTool before starting the
+    // generation process
+    if(failBeforeGenerationIfModelErrors) {
+      Log.info("cd2java generation process is aborted because some class diagrams models contain errors.",
+        "PojoGeneratorTool");
+      boolean wasFailQuickEnabled = Log.isFailQuickEnabled();
+      Log.enableFailQuick(true);
+      Log.enableFailQuick(wasFailQuickEnabled);
+    }
   }
 }
