@@ -82,12 +82,11 @@ public class ConnectorSourceAndTargetTypesFitTest extends AbstractCoCoTest {
       arg("SourceAndTargetTypeMismatch.arc",
         ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH, ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH,
         ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH, ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH
-      )/*, TODO: include this test case once the bug in MontiCores TypeCheck is fixed:
+      ),
       arg("GenericTypesIncorrect.arc",
-       currently List<boolean> is considered compatible to List<int>
         ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH, ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH,
         ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH
-      )*/
+      )
     );
   }
 

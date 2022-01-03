@@ -66,10 +66,10 @@ public class ConfigurationParameterAssignmentTest extends AbstractCoCoTest {
         ArcError.CONFIG_PARAMETER_BINDING,
         ArcError.CONFIG_PARAMETER_BINDING,
         ArcError.CONFIG_PARAMETER_BINDING,
-        ArcError.CONFIG_PARAMETER_BINDING)/*,
-       arg("WrongGenericParameterBindings.arc",   TODO: include this test case once the bug in MontiCores TypeCheck is
-        ArcError.CONFIG_PARAMETER_BINDING,              fixed: List<boolean> is considered compatible to List<int>
-        ArcError.CONFIG_PARAMETER_BINDING) */
+        ArcError.CONFIG_PARAMETER_BINDING),
+      arg("WrongGenericParameterBindings.arc",
+        ArcError.CONFIG_PARAMETER_BINDING,
+        ArcError.CONFIG_PARAMETER_BINDING)
     );
   }
 
