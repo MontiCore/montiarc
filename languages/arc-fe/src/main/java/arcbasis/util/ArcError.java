@@ -80,7 +80,9 @@ public enum ArcError implements montiarc.util.Error {
     "'%s' illegally relies on port '%s'."),
   MISSING_TYPE("0xC1069", "Cannot resolve type '%s'."),
   SOURCE_PORT_COMPONENT_MISSING("0xC1070", "Component instance '%s' missing for source of connector '%s'."),
-  TARGET_PORT_COMPONENT_MISSING("0xC1071", "Component instance '%s' missing for target of connector '%s'.");
+  TARGET_PORT_COMPONENT_MISSING("0xC1071", "Component instance '%s' missing for target of connector '%s'."),
+  TYPE_ARG_IGNORES_UPPER_BOUND("0xC1072", "Type argument '%s' does not respect upper bound '%s' for type parameter " +
+    "'%s' of component type component type");
 
   private final String errorCode;
   private final String errorMessage;
