@@ -14,13 +14,13 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Optional;
 
-public class MontiArcCLI extends montiarc.MontiArcCLI {
+public class MontiArcTool extends montiarc.MontiArcTool {
 
   public static void main(@NotNull String[] args) {
     Preconditions.checkNotNull(args);
-    MontiArcCLI cli = new MontiArcCLI();
-    cli.init();
-    cli.run(args);
+    MontiArcTool tool = new MontiArcTool();
+    tool.init();
+    tool.run(args);
   }
 
   @Override
@@ -41,12 +41,12 @@ public class MontiArcCLI extends montiarc.MontiArcCLI {
   }
 
   @Override
-  public void runAdditionalTasks(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull CommandLine cli) {
+  public void runAdditionalTasks(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull CommandLine cl) {
     Preconditions.checkNotNull(asts);
-    Preconditions.checkNotNull(cli);
-    super.runAdditionalTasks(asts, cli);
-    Log.info("Generate java classes from component models", "MontiArcCLITool");
-    this.generate(asts, cli.getOptionValue("output"), Optional.ofNullable(cli.getOptionValue("hwc")).orElse(""));
+    Preconditions.checkNotNull(cl);
+    super.runAdditionalTasks(asts, cl);
+    Log.info("Generate java classes from component models", "MontiArcTool");
+    this.generate(asts, cl.getOptionValue("output"), Optional.ofNullable(cl.getOptionValue("hwc")).orElse(""));
   }
 
   public void generate(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String target, @NotNull String hwc) {

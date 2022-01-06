@@ -29,9 +29,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * Holds tests for {@link MontiArcCLI}.
+ * Holds tests for {@link MontiArcTool}.
  */
-public class MontiArcCLITest extends AbstractTest {
+public class MontiArcToolTest extends AbstractTest {
 
   @BeforeEach
   @Override
@@ -43,25 +43,25 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#run(String[])}
+   * Method under test {@link MontiArcTool#run(String[])}
    */
   @Test
   public void runShouldThrowNullPointerException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class, () -> tool.run(null));
   }
 
   /**
-   * Method under test {@link MontiArcCLI#run(String[])}
+   * Method under test {@link MontiArcTool#run(String[])}
    */
   @Test
   public void runInvalidOptionShouldThrowToolParseIOException() {
     // Given
     String[] args = new String[]{"-notavalidoption"};
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When
     tool.run(args);
@@ -71,19 +71,19 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#initGlobalScope(CommandLine)}
+   * Method under test {@link MontiArcTool#initGlobalScope(CommandLine)}
    */
   @Test
   public void initGlobalScopeCommandLineShouldThrowNullPointerException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class, () -> tool.initGlobalScope((CommandLine) null));
   }
 
   /**
-   * Method under test {@link MontiArcCLI#initGlobalScope(CommandLine)}
+   * Method under test {@link MontiArcTool#initGlobalScope(CommandLine)}
    */
   @Test
   public void initGlobalScopeShouldSetSymbolPath() throws ParseException {
@@ -91,7 +91,7 @@ public class MontiArcCLITest extends AbstractTest {
     String path = "src/test/resources/CLI/industryModels/industry";
     String[] args = new String[]{"-path", path};
     CommandLineParser cliParser = new DefaultParser();
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
     tool.initOptions();
     Options options = tool.initOptions();
     CommandLine cli = cliParser.parse(options, args);
@@ -106,48 +106,48 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#initGlobalScope(Path...)}
+   * Method under test {@link MontiArcTool#initGlobalScope(Path...)}
    */
   @Test
   public void initGlobalScopePathsShouldThrowNullPointerException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class, () -> tool.initGlobalScope((Path[]) null));
   }
 
   /**
-   * Method under test {@link MontiArcCLI#initGlobalScope(String...)}
+   * Method under test {@link MontiArcTool#initGlobalScope(String...)}
    */
   @Test
   public void initGlobalScopeStringsShouldThrowNullPointerException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class, () -> tool.initGlobalScope((String[]) null));
   }
 
   /**
-   * Method under test {@link MontiArcCLI#initGlobalScope(Collection)}
+   * Method under test {@link MontiArcTool#initGlobalScope(Collection)}
    */
   @Test
   public void initGlobalScopeCollectionShouldThrowNullPointerException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class, () -> tool.initGlobalScope((Collection<Path>) null));
   }
 
   /**
-   * Method under test {@link MontiArcCLI#initGlobalScope(Collection)}
+   * Method under test {@link MontiArcTool#initGlobalScope(Collection)}
    */
   @Test
   public void initGlobalScopeCollectionShouldThrowIllegalArgumentsException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
     Collection<Path> entries = new ArrayList<>();
     entries.add(null);
 
@@ -156,7 +156,7 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#runTasks(CommandLine)}
+   * Method under test {@link MontiArcTool#runTasks(CommandLine)}
    */
   @ParameterizedTest
   @MethodSource("runTasksExceptionProvider")
@@ -165,14 +165,14 @@ public class MontiArcCLITest extends AbstractTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(expected, () -> tool.runTasks(cli));
   }
 
   protected static Stream<Arguments> runTasksExceptionProvider() throws ParseException {
-    MontiArcCLI mArcCLI = new MontiArcCLI();
+    MontiArcTool mArcCLI = new MontiArcTool();
     Options options = mArcCLI.initOptions();
     String[] args = new String[]{"-mp", "invalid/model/path"};
     CommandLineParser cliParser = new DefaultParser();
@@ -184,24 +184,24 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#createModelPath(CommandLine)}
+   * Method under test {@link MontiArcTool#createModelPath(CommandLine)}
    */
   @Test
   public void createModelPathShouldThrowNullPointerException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class, () -> tool.createModelPath(null));
   }
 
   /**
-   * Method under test {@link MontiArcCLI#createModelPath(CommandLine)}
+   * Method under test {@link MontiArcTool#createModelPath(CommandLine)}
    */
   @Test
   public void createModelPathWithoutModelPathOption() throws ParseException {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
     String[] args = new String[]{};
     CommandLineParser cliParser = new DefaultParser();
@@ -212,12 +212,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#createModelPath(CommandLine)}
+   * Method under test {@link MontiArcTool#createModelPath(CommandLine)}
    */
   @Test
   public void shouldCreateModelPath() throws ParseException {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
     String[] args = new String[]{"-mp", "src/test/resources/CLI/industryModels/industry"};
     CommandLineParser cliParser = new DefaultParser();
@@ -230,7 +230,7 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#parse(String, Collection)}
+   * Method under test {@link MontiArcTool#parse(String, Collection)}
    */
   @ParameterizedTest
   @MethodSource("parseDirectoriesExpectedExceptionProvider")
@@ -240,14 +240,14 @@ public class MontiArcCLITest extends AbstractTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(expected, () -> tool.parse(fileExt, directories));
   }
 
   protected static Stream<Arguments> parseDirectoriesExpectedExceptionProvider() throws ParseException {
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
     String[] args = new String[]{"-mp", "src/test/resources/CLI/industryModels/industry"};
     CommandLineParser cliParser = new DefaultParser();
@@ -260,12 +260,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#parse(String, Collection)}
+   * Method under test {@link MontiArcTool#parse(String, Collection)}
    */
   @Test
   public void shouldParseDirectories() throws ParseException {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
     String[] args = new String[]{"-mp", "src/test/resources/CLI/industryModels"};
     CommandLineParser cliParser = new DefaultParser();
@@ -283,7 +283,7 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#parse(String, Path)}
+   * Method under test {@link MontiArcTool#parse(String, Path)}
    */
   @ParameterizedTest
   @MethodSource("parseDirectoryExpectedExceptionProvider")
@@ -293,7 +293,7 @@ public class MontiArcCLITest extends AbstractTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(expected, () -> tool.parse(fileExt, directory));
@@ -315,12 +315,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#parse(String, Path)}
+   * Method under test {@link MontiArcTool#parse(String, Path)}
    */
   @Test
   public void shouldParseDirectory() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertTrue(tool.parse(".arc", Paths.get("src/test/resources/"
@@ -329,7 +329,7 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#parse(Path)}
+   * Method under test {@link MontiArcTool#parse(Path)}
    */
   @ParameterizedTest
   @MethodSource("parseFileExpectedExceptionProvider")
@@ -338,7 +338,7 @@ public class MontiArcCLITest extends AbstractTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(expected, () -> tool.parse(file));
@@ -355,12 +355,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#parse(Path)}
+   * Method under test {@link MontiArcTool#parse(Path)}
    */
   @Test
   public void shouldParseFile() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When
     Optional<ASTMACompilationUnit> ast2 = tool.parse(Paths.get("src/test/resources/" +
@@ -372,12 +372,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#createSymbolTable(Collection)}
+   * Method under test {@link MontiArcTool#createSymbolTable(Collection)}
    */
   @Test
   public void createSymbolTableCollectionShouldThrowException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class,
@@ -385,12 +385,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#createSymbolTable(ASTMACompilationUnit)}
+   * Method under test {@link MontiArcTool#createSymbolTable(ASTMACompilationUnit)}
    */
   @Test
   public void createSymbolTableShouldThrowException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class,
@@ -398,12 +398,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#createSymbolTable(Collection)}
+   * Method under test {@link MontiArcTool#createSymbolTable(Collection)}
    */
   @Test
   public void shouldCreateSymbolTableCollection() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
     Collection<ASTMACompilationUnit> asts = tool.parse(".arc", Paths.get("src/test/resources/" +
       "/CLI/industryModels/"));
     Preconditions.checkState(!asts.isEmpty());
@@ -420,12 +420,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#createSymbolTable(ASTMACompilationUnit)}
+   * Method under test {@link MontiArcTool#createSymbolTable(ASTMACompilationUnit)}
    */
   @Test
   public void shouldCreateSymbolTable() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
     Optional<ASTMACompilationUnit> ast = tool.parse(Paths.get("src/test/resources/" +
       "/CLI/industryModels/industry/PIController.arc"));
     Preconditions.checkState(ast.isPresent());
@@ -438,12 +438,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#completeSymbolTable(Collection)}
+   * Method under test {@link MontiArcTool#completeSymbolTable(Collection)}
    */
   @Test
   public void completeSymbolTableCollectionShouldThrowException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class, 
@@ -451,24 +451,24 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#completeSymbolTable(ASTMACompilationUnit)}
+   * Method under test {@link MontiArcTool#completeSymbolTable(ASTMACompilationUnit)}
    */
   @Test
   public void completeSymbolTableShouldThrowException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class, () -> tool.completeSymbolTable((ASTMACompilationUnit) null));
   }
 
   /**
-   * Method under test {@link MontiArcCLI#completeSymbolTable(ASTMACompilationUnit)}
+   * Method under test {@link MontiArcTool#completeSymbolTable(ASTMACompilationUnit)}
    */
   @Test
   public void shouldCompleteSymbolTable() throws IOException {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
     ASTMACompilationUnit astA = MontiArcMill.parser().parse(Paths.get("src/test/resources/" +
       "/CLI/symboltable/completer/A.arc").toAbsolutePath().toString()).orElseThrow(IllegalArgumentException::new);
     ASTMACompilationUnit astB = MontiArcMill.parser().parse(Paths.get("src/test/resources/" +
@@ -487,24 +487,24 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#runDefaultTasks(Collection)}
+   * Method under test {@link MontiArcTool#runDefaultTasks(Collection)}
    */
   @Test
   public void runDefaultTasksShouldThrowNullPointerException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class, () -> tool.runDefaultTasks(null));
   }
 
   /**
-   * Method under test {@link MontiArcCLI#runAdditionalTasks(Collection, CommandLine)}
+   * Method under test {@link MontiArcTool#runAdditionalTasks(Collection, CommandLine)}
    */
   @Test
   public void runAdditionalTasksShouldThrowException() throws ParseException {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
     Collection<ASTMACompilationUnit> innerComponents =
       tool.parse(".arc", Paths.get("src/test/resources/CLI/nestedComponent").toAbsolutePath());
@@ -520,12 +520,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#runAdditionalTasks(Collection, CommandLine)}
+   * Method under test {@link MontiArcTool#runAdditionalTasks(Collection, CommandLine)}
    */
   @Test
   public void runAdditionalTasksShouldPrettyPrintFile() throws ParseException {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
     File file = new File(Paths.get("src/test/resources/CLI/prettyprint/WithInnerComponents.arc")
       .toAbsolutePath().toString());
@@ -544,12 +544,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#runAdditionalTasks(Collection, CommandLine)}
+   * Method under test {@link MontiArcTool#runAdditionalTasks(Collection, CommandLine)}
    */
   @Test
   public void runAdditionalTasksShouldOutputSymbolTable() throws ParseException {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
     File file = new File(Paths.get("src/test/resources/CLI/symboltable/WithInnerComponents.arcsym")
       .toAbsolutePath().toString());
@@ -570,7 +570,7 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#storeSymbols(Collection, String)}
+   * Method under test {@link MontiArcTool#storeSymbols(Collection, String)}
    */
   @ParameterizedTest
   @MethodSource("storeSymbolsCollectionExpectedExceptionProvider")
@@ -580,14 +580,14 @@ public class MontiArcCLITest extends AbstractTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(expected, () -> tool.storeSymbols(asts, path));
   }
 
   protected static Stream<Arguments> storeSymbolsCollectionExpectedExceptionProvider() {
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
     Collection<ASTMACompilationUnit> innerComponents =
       tool.parse(".arc", Paths.get("src/test/resources/CLI/nestedComponent").toAbsolutePath());
     return Stream.of(
@@ -598,7 +598,7 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#storeSymbols(ASTMACompilationUnit, String)}
+   * Method under test {@link MontiArcTool#storeSymbols(ASTMACompilationUnit, String)}
    */
   @ParameterizedTest
   @MethodSource("storeSymbolsAstExpectedExceptionProvider")
@@ -608,14 +608,14 @@ public class MontiArcCLITest extends AbstractTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(expected, () -> tool.storeSymbols(ast, path));
   }
 
   protected static Stream<Arguments> storeSymbolsAstExpectedExceptionProvider() {
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     ASTMACompilationUnit ast = tool.parse(Paths.get("src/test/resources/"
       + "CLI/nestedComponent/WithInnerComponents.arc").toAbsolutePath())
@@ -628,7 +628,7 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#storeSymbols(IMontiArcArtifactScope, String)}
+   * Method under test {@link MontiArcTool#storeSymbols(IMontiArcArtifactScope, String)}
    */
   @ParameterizedTest
   @MethodSource("storeSymbolsScopeExpectedExceptionProvider")
@@ -638,14 +638,14 @@ public class MontiArcCLITest extends AbstractTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(expected, () -> tool.storeSymbols(scope, path));
   }
 
   protected static Stream<Arguments> storeSymbolsScopeExpectedExceptionProvider() {
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
     Optional<ASTMACompilationUnit> optAst = tool.parse(
       Paths.get("src/test/resources/CLI/nestedComponent/WithInnerComponents.arc").toAbsolutePath()
     );
@@ -662,12 +662,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#runDefaultCoCos(Collection)}
+   * Method under test {@link MontiArcTool#runDefaultCoCos(Collection)}
    */
   @Test
   public void runDefaultCoCosCollectionShouldThrowNullPointerException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class,
@@ -675,12 +675,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#runDefaultCoCos(ASTMACompilationUnit)}
+   * Method under test {@link MontiArcTool#runDefaultCoCos(ASTMACompilationUnit)}
    */
   @Test
   public void runDefaultCoCosShouldThrowNullPointerException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class,
@@ -688,12 +688,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#runAdditionalCoCos(ASTMACompilationUnit)}
+   * Method under test {@link MontiArcTool#runAdditionalCoCos(ASTMACompilationUnit)}
    */
   @Test
   public void runAdditionalCoCosCollectionShouldThrowNullPointerException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class,
@@ -701,12 +701,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#runAdditionalCoCos(ASTMACompilationUnit)}
+   * Method under test {@link MontiArcTool#runAdditionalCoCos(ASTMACompilationUnit)}
    */
   @Test
   public void runAdditionalCoCosShouldThrowNullPointerException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class,
@@ -714,12 +714,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#initializeClass2MC(CommandLine)}
+   * Method under test {@link MontiArcTool#initializeClass2MC(CommandLine)}
    */
   @Test
   public void initializeClass2MCShouldThrowNullPointerException() {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class,
@@ -727,12 +727,12 @@ public class MontiArcCLITest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcCLI#initializeClass2MC(CommandLine)}
+   * Method under test {@link MontiArcTool#initializeClass2MC(CommandLine)}
    */
   @Test
   public void shouldInitializeClass2MC() throws ParseException {
     // Given
-    MontiArcCLI tool = new MontiArcCLI();
+    MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
     Assertions.assertFalse(MontiArcMill.globalScope().getAdaptedTypeSymbolResolverList().
       stream().anyMatch(symbolResolver -> symbolResolver instanceof Class2MCResolver));

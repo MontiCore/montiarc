@@ -5,7 +5,7 @@ import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.AbstractTest;
-import montiarc.MontiArcCLI;
+import montiarc.MontiArcTool;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
@@ -22,7 +22,7 @@ public abstract class AbstractCoCoTest extends AbstractTest {
 
   protected static final String MODEL_PATH = "montiarc/_cocos/";
   protected MontiArcCoCoChecker checker;
-  protected MontiArcCLI cli;
+  protected MontiArcTool cli;
 
   /**
    * This method that facilitates stating arguments for parameterized tests. By using an elliptical parameter this
@@ -37,7 +37,7 @@ public abstract class AbstractCoCoTest extends AbstractTest {
     return Arguments.of(model, errors);
   }
 
-  protected MontiArcCLI getCLI() {
+  protected MontiArcTool getCLI() {
     return this.cli;
   }
 
@@ -50,7 +50,7 @@ public abstract class AbstractCoCoTest extends AbstractTest {
   }
 
   public void setUpCLI() {
-    this.cli = new MontiArcCLI();
+    this.cli = new MontiArcTool();
     this.getCLI().init();
     Log.enableFailQuick(false);
   }

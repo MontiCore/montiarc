@@ -30,13 +30,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MontiArcCLI extends MontiArcCLITOP {
+public class MontiArcTool extends MontiArcToolTOP {
 
   public static void main(@NotNull String[] args) {
     Preconditions.checkNotNull(args);
-    MontiArcCLI cli = new MontiArcCLI();
-    cli.init();
-    cli.run(args);
+    MontiArcTool tool = new MontiArcTool();
+    tool.init();
+    tool.run(args);
   }
 
   @Override
@@ -48,57 +48,57 @@ public class MontiArcCLI extends MontiArcCLITOP {
     try {
       //parse input options from the command line
       CommandLineParser cliParser = new DefaultParser();
-      CommandLine cli = cliParser.parse(options, args);
+      CommandLine cl = cliParser.parse(options, args);
 
       // if --help: print help and stop
-      if (cli.hasOption("h")) {
+      if (cl.hasOption("h")) {
         this.printHelp(options);
         return;
       }
 
       // if --version: print version and stop
-      if (cli.hasOption("v")) {
+      if (cl.hasOption("v")) {
         this.printVersion();
         return;
       }
 
       // if neither --modelpath nor --i: print help and stop
-      if (!cli.hasOption("modelpath")) {
+      if (!cl.hasOption("modelpath")) {
         this.printHelp(options);
         return;
       }
 
-      this.initGlobalScope(cli);
+      this.initGlobalScope(cl);
       this.initializeBasicTypes();
-      this.initializeClass2MC(cli);
+      this.initializeClass2MC(cl);
 
-      this.runTasks(cli);
+      this.runTasks(cl);
 
     } catch (ParseException e) {
       Log.error(String.format(MontiArcError.TOOL_PARSE_IOEXCEPTION.toString(), e.getMessage()));
     }
   }
 
-  protected void runTasks(@NotNull CommandLine cli) {
-    Preconditions.checkNotNull(cli);
+  protected void runTasks(@NotNull CommandLine cl) {
+    Preconditions.checkNotNull(cl);
 
-    Log.info("Parse the input models", "MontiArcCLITool");
+    Log.info("Parse the input models", "MontiArcTool");
     Log.enableFailQuick(false);
-    Collection<ASTMACompilationUnit> asts = this.parse(".arc", this.createModelPath(cli).getEntries());
+    Collection<ASTMACompilationUnit> asts = this.parse(".arc", this.createModelPath(cl).getEntries());
     Log.enableFailQuick(true);
 
     this.loadSymbols();
     this.runDefaultTasks(asts);
-    this.runAdditionalTasks(asts, cli);
+    this.runAdditionalTasks(asts, cl);
   }
 
-  protected MCPath createModelPath(@NotNull CommandLine cli) {
-    Preconditions.checkNotNull(cli);
-    return cli.hasOption("modelpath") ? new MCPath(cli.getOptionValues("modelpath")) : new MCPath();
+  protected MCPath createModelPath(@NotNull CommandLine cl) {
+    Preconditions.checkNotNull(cl);
+    return cl.hasOption("modelpath") ? new MCPath(cl.getOptionValues("modelpath")) : new MCPath();
   }
 
   protected void loadSymbols() {
-    Log.info("Load symbols", "MontiArcCLITool");
+    Log.info("Load symbols", "MontiArcTool");
     this.loadSymbols(MontiArcMill.globalScope().getFileExt(), MontiArcMill.globalScope().getSymbolPath());
   }
 
@@ -124,7 +124,7 @@ public class MontiArcCLI extends MontiArcCLITOP {
   }
 
   public void loadSymbols(@NotNull Path file) {
-    Log.info("Load symbols from " + file, "MontiArcCLITool");
+    Log.info("Load symbols from " + file, "MontiArcTool");
     Preconditions.checkNotNull(file);
     Preconditions.checkArgument(file.toFile().exists(), file.toAbsolutePath() + " does not exist.");
     Preconditions.checkArgument(file.toFile().isFile(), file.toAbsolutePath() + " is not a file.");
@@ -134,39 +134,39 @@ public class MontiArcCLI extends MontiArcCLITOP {
   public void runDefaultTasks(@NotNull Collection<ASTMACompilationUnit> asts) {
     Preconditions.checkNotNull(asts);
 
-    Log.info("Create the symbol table", "MontiArcCLITool");
+    Log.info("Create the symbol table", "MontiArcTool");
     Log.enableFailQuick(false);
     this.createSymbolTable(asts);
     Log.enableFailQuick(true);
 
-    Log.info("Perform initial context-condition checks", "MontiArcCLITool");
+    Log.info("Perform initial context-condition checks", "MontiArcTool");
     Log.enableFailQuick(false);
     this.runDefaultCoCos(asts);
     Log.enableFailQuick(true);
 
-    Log.info("Complete the symbol table", "MontiArcCLITool");
+    Log.info("Complete the symbol table", "MontiArcTool");
     Log.enableFailQuick(false);
     this.completeSymbolTable(asts);
     Log.enableFailQuick(true);
 
-    Log.info("Perform remaining context-condition checks", "MontiArcCLITool");
+    Log.info("Perform remaining context-condition checks", "MontiArcTool");
     Log.enableFailQuick(false);
     this.runAdditionalCoCos(asts);
     Log.enableFailQuick(true);
   }
 
-  public void runAdditionalTasks(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull CommandLine cli) {
+  public void runAdditionalTasks(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull CommandLine cl) {
     Preconditions.checkNotNull(asts);
-    Preconditions.checkNotNull(cli);
+    Preconditions.checkNotNull(cl);
 
-    if (cli.hasOption("pp")) {
-      Log.info("Pretty print models", "MontiArcCLITool");
-      this.prettyPrint(asts, Optional.ofNullable(cli.getOptionValue("pp")).orElse(""));
+    if (cl.hasOption("pp")) {
+      Log.info("Pretty print models", "MontiArcTool");
+      this.prettyPrint(asts, Optional.ofNullable(cl.getOptionValue("pp")).orElse(""));
     }
 
-    if (cli.hasOption("symboltable")) {
-      Log.info("Print symbol table", "MontiArcCLITool");
-      this.storeSymbols(asts, cli.getOptionValue("symboltable"));
+    if (cl.hasOption("symboltable")) {
+      Log.info("Print symbol table", "MontiArcTool");
+      this.storeSymbols(asts, cl.getOptionValue("symboltable"));
     }
   }
 
@@ -300,10 +300,10 @@ public class MontiArcCLI extends MontiArcCLITOP {
     super.storeSymbols(scope, path);
   }
 
-  protected void initGlobalScope(@NotNull CommandLine cli) {
-    Preconditions.checkNotNull(cli);
-    if (cli.hasOption("path")) {
-      this.initGlobalScope(cli.getOptionValues("path"));
+  protected void initGlobalScope(@NotNull CommandLine cl) {
+    Preconditions.checkNotNull(cl);
+    if (cl.hasOption("path")) {
+      this.initGlobalScope(cl.getOptionValues("path"));
     } else {
       this.initGlobalScope();
     }
@@ -341,9 +341,9 @@ public class MontiArcCLI extends MontiArcCLITOP {
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new Class2MCResolver());
   }
 
-  protected void initializeClass2MC(@NotNull CommandLine cli) {
-    Preconditions.checkNotNull(cli);
-    if (cli.hasOption("c2mc")) {
+  protected void initializeClass2MC(@NotNull CommandLine cl) {
+    Preconditions.checkNotNull(cl);
+    if (cl.hasOption("c2mc")) {
       this.initializeClass2MC();
     }
   }
@@ -371,7 +371,7 @@ public class MontiArcCLI extends MontiArcCLITOP {
   @Override
   public Options addStandardOptions(@NotNull Options options) {
     Preconditions.checkNotNull(options);
-    options.addOption(org.apache.commons.cli.Option.builder("mp")
+    options.addOption(Option.builder("mp")
       .longOpt("modelpath")
       .argName("dirlist")
       .hasArgs()
@@ -379,19 +379,19 @@ public class MontiArcCLI extends MontiArcCLITOP {
       .build());
 
     //help
-    options.addOption(org.apache.commons.cli.Option.builder("h")
+    options.addOption(Option.builder("h")
       .longOpt("help")
       .desc("Prints this help dialog.")
       .build());
 
     //version
-    options.addOption(org.apache.commons.cli.Option.builder("v")
+    options.addOption(Option.builder("v")
       .longOpt("version")
       .desc("Prints version information.")
       .build());
 
     // pretty print
-    options.addOption(org.apache.commons.cli.Option.builder("pp")
+    options.addOption(Option.builder("pp")
       .longOpt("prettyprint")
       .argName("dir")
       .optionalArg(true)
@@ -400,7 +400,7 @@ public class MontiArcCLI extends MontiArcCLITOP {
       .build());
 
     // store symbol table
-    options.addOption(org.apache.commons.cli.Option.builder("s")
+    options.addOption(Option.builder("s")
       .longOpt("symboltable")
       .argName("dir")
       .hasArg()
@@ -408,14 +408,14 @@ public class MontiArcCLI extends MontiArcCLITOP {
       .build());
 
     // symbol paths
-    options.addOption(org.apache.commons.cli.Option.builder("path")
+    options.addOption(Option.builder("path")
       .hasArgs()
       .argName("dirlist")
       .desc("Sets the artifact path for imported symbols, space separated.")
       .build());
 
     // class2mc
-    options.addOption(org.apache.commons.cli.Option.builder("c2mc")
+    options.addOption(Option.builder("c2mc")
       .longOpt("class2mc")
       .desc("Enables to resolve java classes in the model path")
       .build());

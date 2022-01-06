@@ -7,7 +7,7 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import montiarc.AbstractTest;
-import montiarc.MontiArcCLI;
+import montiarc.MontiArcTool;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -27,7 +27,7 @@ public class NestedComponentsTest extends AbstractTest {
   @Test
   public void shouldCreateNestedTypes () {
     // Given
-    MontiArcCLI cli = new MontiArcCLI();
+    MontiArcTool cli = new MontiArcTool();
     Path path = Paths.get(RELATIVE_MODEL_PATH, Test_PATH);
     cli.loadSymbols(MontiArcMill.globalScope().getFileExt(), path);
     Collection<ASTMACompilationUnit> asts = cli.parse(".arc", path);

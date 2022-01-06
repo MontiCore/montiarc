@@ -65,7 +65,7 @@ task generateCD(type: JavaExec) {
 
 task generateMontiArc(type: JavaExec) {
   classpath = configurations.generateMA
-  mainClass = "montiarc.generator.MontiArcCLI"
+  mainClass = "montiarc.generator.MontiArcTool"
 
   args("-mp", "$projectDir/src/main/resources", "-path", "$genDir", "-o", "$genDir", "-hwc", "$hwcDir", "-c2mc")
   outputs.dir(genDir)

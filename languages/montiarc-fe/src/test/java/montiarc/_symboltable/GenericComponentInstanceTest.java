@@ -5,7 +5,7 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
 import genericarc.check.TypeExprOfGenericComponent;
 import montiarc.AbstractTest;
-import montiarc.MontiArcCLI;
+import montiarc.MontiArcTool;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +24,7 @@ public class GenericComponentInstanceTest extends AbstractTest {
   @Test
   public void shouldReturnGenericType() {
     //Given
-    MontiArcCLI cli = new MontiArcCLI();
+    MontiArcTool cli = new MontiArcTool();
     Path path = Paths.get(RELATIVE_MODEL_PATH, Test_PATH, "example1");
 
     cli.loadSymbols(MontiArcMill.globalScope().getFileExt(), path);
