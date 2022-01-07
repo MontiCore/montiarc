@@ -49,7 +49,7 @@
         <#assign connectors = comp.getAstNode().getConnectors()>
         <#list connectors as connector>
             <#list connector.getTargetList() as target>
-                <#if compHelper.isIncomingPort(comp, connector.getSource(), target, true)>
+                <#if compHelper.isIncomingPort(comp, connector.getSource(), target, false)>
                     <#assign targetComponentName = compHelper.getConnectorComponentName(connector.getSource(), target, false)/>
                     <#assign targetPortName = compHelper.getConnectorPortName(connector.getSource(), target, false)?cap_first/>
                     <#assign sourceComponentName = compHelper.getConnectorComponentName(connector.getSource(), target,true)/>
