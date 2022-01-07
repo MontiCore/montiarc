@@ -5,6 +5,7 @@ import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._visitor.NamesInExpressionsVisitor;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
@@ -284,70 +285,40 @@ public class ComponentHelper {
       return comp.getPackageName();
     }
   }
-
-  /**
-   * Determine whether the port of the given connector is an incoming or outgoing port.
-   *
-   * @param cmp      The component defining the connector
-   * @param source   The source name of the connector which connects the port to check
-   * @param target   The target name of the connector which connects the port to check
-   * @param isSource Specifies whether the port to check is the source port of the connector or the target port
-   * @return true, if the port is an incoming port. False, otherwise.
-   */
-  public boolean isIncomingPort(ComponentTypeSymbol cmp, ASTPortAccess source,
-                                ASTPortAccess target, boolean isSource) {
-    String subCompName = getConnectorComponentName(source, target, isSource);
-    String portNameUnqualified = getConnectorPortName(source, target, isSource);
-    Optional<PortSymbol> port = Optional.empty();
-    String portName = isSource
-      ? source.getQName()
-      : target.getQName();
-    // port is of subcomponent
-    if (portName.contains(".")) {
-      Optional<ComponentInstanceSymbol> subCompInstance = cmp.getSubComponent(subCompName);
-      ComponentTypeSymbol typeOfSubComp = subCompInstance.get().getType().getTypeInfo();
-      port = typeOfSubComp.getPort(portNameUnqualified); // TODO: searchInherited?
-    } else {
-      port = cmp.getPort(portName); // TODO: searchInherited?
+  
+  public static String getSourcePortGetCallNoSemicolon(ASTConnector connector) {
+    ASTPortAccess src = connector.getSource();
+    StringBuilder sb = new StringBuilder("this.");
+    if(src.isPresentComponent()) {
+      sb.append(src.getComponent());
+      sb.append(".");
     }
-
-    return port.map(PortSymbol::isIncoming).orElse(false);
+    sb.append("getPort");
+    String uppercasePortName = Character.toUpperCase(src.getPort().charAt(0)) + src.getPort().substring(1);
+    sb.append(uppercasePortName);
+    sb.append("()");
+    return sb.toString();
   }
-
-  /**
-   * Returns the component name of a connection.
-   *
-   * @param source   The source name of the connector which connects the port to check
-   * @param target   The target name of the connector which connects the port to check
-   * @param isSource <tt>true</tt> for source component, else <tt>false>tt>
-   * @return
-   */
-  public String getConnectorComponentName(ASTPortAccess source, ASTPortAccess target,
-                                          boolean isSource) {
-    if (isSource && source.isPresentComponent()) {
-      return source.getComponent();
-    } else if (!isSource && target.isPresentComponent()) {
-      return target.getComponent();
-    } else
-      return "this";
-  }
-
-  /**
-   * Returns the port name of a connection.
-   *
-   * @param source   The source name of the connector which connects the port to check
-   * @param target   The target name of the connector which connects the port to check
-   * @param isSource <tt>true</tt> for source component, else <tt>false>tt>
-   * @return
-   */
-  public String getConnectorPortName(ASTPortAccess source, ASTPortAccess target,
-                                     boolean isSource) {
-    final String name;
-    if (isSource) {
-      return source.getPort();
-    } else {
-      return target.getPort();
+  
+  public static Collection<String> getConnectorSetupCalls(ASTConnector connector) {
+    String sourcePortGetCall = getSourcePortGetCallNoSemicolon(connector);
+    List<String> calls = new ArrayList<>();
+    for(ASTPortAccess target : connector.getTargetList()) {
+      StringBuilder sb = new StringBuilder("this.");
+      if(target.isPresentComponent()) {
+        sb.append(target.getComponent());
+        sb.append(".");
+      }
+      sb.append("setPort");
+      String uppercasePortName = Character.toUpperCase(target.getPort().charAt(0)) + target.getPort().substring(1);
+      sb.append(uppercasePortName);
+      sb.append("(");
+      sb.append(sourcePortGetCall);
+      sb.append(")");
+      sb.append(";");
+      calls.add(sb.toString());
     }
+    return calls;
   }
 
   /**
