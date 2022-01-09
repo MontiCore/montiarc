@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableMap;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolTOP;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.SymTypeVariable;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.*;
@@ -151,16 +152,23 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
    * {@code Comp<List<Person>>}. If you provide mappings for type variables that do not appear in the component type
    * expression, then these will be ignored.
    */
-  public TypeExprOfGenericComponent bindTypeParameter(@NotNull Map<TypeVarSymbol, SymTypeExpression> typeVarBindings) {
-    Preconditions.checkNotNull(typeVarBindings);
+  public TypeExprOfGenericComponent bindTypeParameter(
+    @NotNull Map<TypeVarSymbol, SymTypeExpression> newTypeVarBindings) {
+    Preconditions.checkNotNull(newTypeVarBindings);
 
-    ImmutableList.Builder<SymTypeExpression> newBindings = ImmutableList.builder();
+    List<SymTypeExpression> newBindings = new ArrayList<>();
     // We know guava immutable maps are ordered and thus .values represents the order of the type arguments
-    for (SymTypeExpression unboundTypeArg : typeVarBindings.values()) {
-      if (unboundTypeArg.isTypeConstant())
-        newBindings.add(this.createBoundTypeExpression(unboundTypeArg).orElseThrow(IllegalStateException::new));
+    for(SymTypeExpression typeArg : this.typeVarBindings.values()) {
+      SymTypeExpression newTypeArg;
+      if(typeArg.isTypeVariable() && newTypeVarBindings.containsKey((typeArg.getTypeInfo()))) {
+        newTypeArg = newTypeVarBindings.get(typeArg.getTypeInfo());
+      } else {
+        newTypeArg = typeArg.deepClone();
+        newTypeArg.replaceTypeVariables(newTypeVarBindings);
+      }
+      newBindings.add(newTypeArg);
     }
-    return new TypeExprOfGenericComponent(this.getTypeInfo(), newBindings.build());
+    return new TypeExprOfGenericComponent(this.getTypeInfo(), newBindings);
   }
 
   @Override

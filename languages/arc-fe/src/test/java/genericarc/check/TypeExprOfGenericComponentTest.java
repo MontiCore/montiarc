@@ -1,7 +1,4 @@
-/*
- * (c) https://github.com/MontiCore/monticore
- */
-
+/* (c) https://github.com/MontiCore/monticore */
 package genericarc.check;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
@@ -11,6 +8,7 @@ import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.SymTypeConstant;
@@ -22,10 +20,15 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class TypeExprOfGenericComponentTest extends AbstractTest {
 
@@ -58,8 +61,17 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
     Assertions.assertEquals(parentTypeExpr, compTypeExpr.getParentTypeExpr().get());
   }
 
-  @Test
-  public void shouldGetParentComponentWithOwnVarReplacement() {
+  public static Stream<Arguments> symTypeExprProvider() {
+    return Stream.of(
+      Arguments.of(SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT)),
+      Arguments.of(SymTypeExpressionFactory.createTypeObject(Mockito.mock(TypeSymbol.class))),
+      Arguments.of(SymTypeExpressionFactory.createTypeVariable(Mockito.mock(TypeVarSymbol.class)))
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("symTypeExprProvider")
+  public void shouldGetParentComponentWithOwnVarReplacement(@NotNull SymTypeExpression typeArgument) {
     // Given
     ComponentTypeSymbol parent = createComponentWithTypeParams("Parent", "S");
     TypeVarSymbol parentTypeVar = parent.getTypeParameters().get(0);
@@ -67,13 +79,12 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
     SymTypeExpression childTypeVar =
       SymTypeExpressionFactory.createTypeVariable(comp.getTypeParameters().get(0));
 
-    // creating a typeExpr representing Parent<T> that is then set to be the parent of comp
+    // creating a typeExpr representing Parent<T> that is then set to be the parent of Comp<T>
     CompTypeExpression parentTypeExpr = new TypeExprOfGenericComponent(parent, Lists.newArrayList(childTypeVar));
     comp.setParent(parentTypeExpr);
 
-    // Now consider Comp<int>. The parent then should be Parent<int>.
-    SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT);
-    CompTypeExpression boundCompTypeExpr = new TypeExprOfGenericComponent(comp, Lists.newArrayList(intTypeExpr));
+    // Now consider Comp<typeArgument> (see parameter of the test). The parent then should be Parent<typeArgument>.
+    CompTypeExpression boundCompTypeExpr = new TypeExprOfGenericComponent(comp, Lists.newArrayList(typeArgument));
 
     // When
     Optional<CompTypeExpression> parentOfBoundCompTypeExpr = boundCompTypeExpr.getParentTypeExpr();
@@ -83,8 +94,68 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
     Assertions.assertSame(parent, parentOfBoundCompTypeExpr.get().getTypeInfo());
     Assertions.assertTrue(parentOfBoundCompTypeExpr.get() instanceof TypeExprOfGenericComponent);
     Assertions.assertTrue(((TypeExprOfGenericComponent) parentOfBoundCompTypeExpr.get()).getBindingFor(parentTypeVar).isPresent());
-    Assertions.assertEquals(intTypeExpr,
+    Assertions.assertEquals(typeArgument,
       ((TypeExprOfGenericComponent) parentOfBoundCompTypeExpr.get()).getBindingFor(parentTypeVar).get());
+  }
+
+  public static Stream<Arguments> symTypeExpressionPairProvider() {
+    SymTypeExpression intSymType = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT);
+    SymTypeExpression boolSymType = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.BOOLEAN);
+    SymTypeExpression ooSymType1 = SymTypeExpressionFactory.createTypeObject(createTypeSymbol("First"));
+    SymTypeExpression ooSymType2 = SymTypeExpressionFactory.createTypeObject(createTypeSymbol("Second"));
+    SymTypeExpression symTypeVar1 = SymTypeExpressionFactory.createTypeVariable(
+      GenericArcMill.typeVarSymbolBuilder().setName("A").build());
+    SymTypeExpression symTypeVar2 = SymTypeExpressionFactory.createTypeVariable(
+      GenericArcMill.typeVarSymbolBuilder().setName("B").build());
+
+    // Setting enclosing scopes (deepEquals throws a null pointer exception else wise)
+    ooSymType1.getTypeInfo().setEnclosingScope(GenericArcMill.globalScope());
+    ooSymType2.getTypeInfo().setEnclosingScope(GenericArcMill.globalScope());
+    symTypeVar1.getTypeInfo().setEnclosingScope(GenericArcMill.globalScope());
+    symTypeVar2.getTypeInfo().setEnclosingScope(GenericArcMill.globalScope());
+
+    return Stream.of(
+      Arguments.of(intSymType, boolSymType),
+      Arguments.of(intSymType, ooSymType1),
+      Arguments.of(intSymType, symTypeVar1),
+      Arguments.of(ooSymType1, boolSymType),
+      Arguments.of(ooSymType1, ooSymType2),
+      Arguments.of(ooSymType1, symTypeVar1),
+      Arguments.of(symTypeVar1, boolSymType),
+      Arguments.of(symTypeVar1, ooSymType1),
+      Arguments.of(symTypeVar1, symTypeVar2)
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("symTypeExpressionPairProvider")
+  public void getParentComponentShouldNotReplaceParentTypeParam(@NotNull SymTypeExpression typeArgForParent,
+                                                                @NotNull SymTypeExpression typeArgForChild) {
+    Preconditions.checkNotNull(typeArgForParent);
+    Preconditions.checkNotNull(typeArgForChild);
+
+    // Given
+    ComponentTypeSymbol parent = createComponentWithTypeParams("Parent", "S");
+    TypeVarSymbol parentTypeVar = parent.getTypeParameters().get(0);
+
+    // Creating the type expression representing the Parent component, binding its type parameter to typeArgForParent
+    CompTypeExpression parentTypeExpr = new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeArgForParent));
+    ComponentTypeSymbol comp = createComponentWithTypeParams("Comp", "T");
+    comp.setParent(parentTypeExpr);
+
+    // Instantiating Comp<typeArgForChild>
+    CompTypeExpression boundCompTypeExpr = new TypeExprOfGenericComponent(comp, Lists.newArrayList(typeArgForChild));
+
+    // When
+    Optional<CompTypeExpression> parentOfBoundCompTypeExpr = boundCompTypeExpr.getParentTypeExpr();
+
+    // Then
+    Assertions.assertTrue(parentOfBoundCompTypeExpr.isPresent());
+    Assertions.assertSame(parent, parentOfBoundCompTypeExpr.get().getTypeInfo());
+    Assertions.assertTrue(parentOfBoundCompTypeExpr.get() instanceof TypeExprOfGenericComponent);
+    Assertions.assertTrue(((TypeExprOfGenericComponent) parentOfBoundCompTypeExpr.get()).getBindingFor(parentTypeVar).isPresent());
+    Assertions.assertTrue(((TypeExprOfGenericComponent) parentOfBoundCompTypeExpr.get())
+      .getBindingFor(parentTypeVar).get().deepEquals(typeArgForParent));
   }
 
 
