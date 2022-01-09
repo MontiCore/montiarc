@@ -75,7 +75,7 @@ public class ComponentInstantiationRespectsGenericTypeBounds implements ArcBasis
         }
       } else {
         Log.debug(String.format("Not checking coco '%s' on type parameter '%s' of component type '%s' for component " +
-          "instantiation at '%s' because the binding for that type parameter is missing.",
+          "instantiation at '%s' because the binding for that type parameter is not set.",
             ComponentInstantiationRespectsGenericTypeBounds.class.getSimpleName(), typeVar.getName(),
             compTypeSymbol.getName(), astInstantiation.get_SourcePositionStart()),
           "CoCos");

@@ -52,6 +52,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new GenericTypeParameterNameCapitalization());
 
     // MontiArc CoCos
+    checker.addCoCo(new ComponentInheritanceRespectsGenericTypeBounds());
     checker.addCoCo(new ComponentInstantiationRespectsGenericTypeBounds());
     checker.addCoCo(new RootComponentTypesNoInstanceName());
 
