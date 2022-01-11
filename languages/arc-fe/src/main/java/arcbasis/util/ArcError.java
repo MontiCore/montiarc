@@ -82,7 +82,15 @@ public enum ArcError implements montiarc.util.Error {
   SOURCE_PORT_COMPONENT_MISSING("0xC1070", "Component instance '%s' missing for source of connector '%s'."),
   TARGET_PORT_COMPONENT_MISSING("0xC1071", "Component instance '%s' missing for target of connector '%s'."),
   TYPE_ARG_IGNORES_UPPER_BOUND("0xC1072", "Type argument '%s' does not respect upper bound '%s' for type parameter " +
-    "'%s' of component type component type");
+    "'%s' of component type component type"),
+  INSTANCE_NAME_NOT_UNIQUE_IN_MODE("0xC1073", "There are multiple subcomponents named '%s' in mode '%s'."),
+  COMPONENT_NAME_NOT_UNIQUE_IN_MODE("0xC1074", "There are multiple components named '%s' in mode '%s'."),
+  PORT_NAME_NOT_UNIQUE_IN_MODE("0xC1075", "There are multiple ports named '%s' in mode '%s'."),
+  HIERARCHICAL_MODE_ELEMENTS("0xC1076", "Hierarchical modes are not allowed."),
+  MULTIPLE_MODE_AUTOMATA("0xC1077", "Components may only have one mode-automaton at max."),
+  MODES_WITHOUT_AUTOMATON("0xC1078", "The component '%s' defines modes, but no mode-automaton."),
+  MODE_ELEMENTS_IN_ATOMIC_COMPONENTS("0xC1079", "Atomic components may not define modes and mode automata."),
+  INITIAL_MODE_DOES_NOT_EXIST("0xC1080", "The initial mode '%s' is not defined anywhere in the component '%s'.");
 
   private final String errorCode;
   private final String errorMessage;

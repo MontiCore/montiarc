@@ -20,8 +20,8 @@ component grammar BasicModeAutomata extends ArcBasis,
    * @Param modes Names of the modes, that share the defined structure
    * @Param ModeBody Mutual Structure Elements of the declared modes
    */
-  ModeDeclaration implements ArcElement =
-      "mode" modes:(Name || ",")+ ComponentBody;
+  scope ModeDeclaration implements ArcElement =
+      "mode" (Name || ",")+ body:ComponentBody;
 
   /**
    * Allows to specify the behavior of a component by using a statechart
@@ -50,6 +50,6 @@ component grammar BasicModeAutomata extends ArcBasis,
   ReconfigurationEvent implements SCEvent = event:Name Arguments;
 
   // allow using statechart's keywords on other places as well
-  nokeyword "entry", "exit", "final";
+  nokeyword "entry", "exit", "final", "mode";
 
 }
