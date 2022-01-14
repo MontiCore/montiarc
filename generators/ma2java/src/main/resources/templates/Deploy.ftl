@@ -4,7 +4,9 @@ ${tc.signature("comp", "helper", "isTOPClass")}
 <#assign comp=comp><#assign helper=helper>
 <#import "/templates/util/Utils.ftl" as Utils>
 
-package ${comp.getPackageName()};
+<#if comp.getPackageName() != "">
+  package ${comp.getPackageName()};
+</#if>
 
 <#assign compName = comp.getName()>
 <#assign deployClassName> <#if isTOPClass> Deploy${compName}TOP <#else> Deploy${compName} </#if> </#assign>
