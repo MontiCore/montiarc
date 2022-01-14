@@ -134,7 +134,6 @@ task buildAll(type: Task) {
 	dependsOn(":languages:behavior-fe:build")
 	dependsOn(":languages:montiarc-fe:build")
 	dependsOn(":libraries:lejos-rte:build")
-	dependsOn(":libraries:maJavaLib:build")
 	dependsOn(":libraries:majava-rte:build")
 	dependsOn(":generators:cd2pojo:build")
 	dependsOn(":generators:ma2java:build")
@@ -151,7 +150,6 @@ task cleanAll(type: Delete) {
 	dependsOn(":languages:behavior-fe:clean")
 	dependsOn(":languages:montiarc-fe:clean")
 	dependsOn(":libraries:lejos-rte:clean")
-	dependsOn(":libraries:maJavaLib:clean")
 	dependsOn(":libraries:majava-rte:clean")
 	dependsOn(":generators:cd2pojo:clean")
 	dependsOn(":generators:ma2java:clean")
@@ -218,7 +216,6 @@ def jacocoProjectsToAggregate = [
     project(":languages:behavior-fe"),
     project(":languages:montiarc-fe"),
     //project(":libraries:lejos-rte"),
-    //project(":libraries:maJavaLib"),
     //project(":libraries:majava-rte"),
     project(":generators:cd2pojo"),
     project(":generators:ma2java"),

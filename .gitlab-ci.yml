@@ -30,7 +30,6 @@ Validate Gradle:
       - languages/montiarc-fe/target/
       - libraries/lejos-rte/target/
       - libraries/majava-rte/target/
-      - libraries/maJavaLib/target/
       - libraries/simulator-rte/target/
   script:
     - gradle clean assemble
@@ -76,7 +75,7 @@ Code Coverage:
   image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.7
   script:
     - awk -F "," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/",  instructions, "instructions covered"; print "Total " 100*covered/instructions, "% covered" }' target/reports/jacoco/aggregatedJacocoReport/aggregatedJacocoReport.csv
-    - python /opt/cover2cover.py target/reports/jacoco/aggregatedJacocoReport/aggregatedJacocoReport.xml languages/arc-fe/src/main/java/ applications/bumperbot/src/main/java/ applications/factory/src/main/java/ applications/factoryTask/src/main/java/ generators/cd2pojo/src/main/java/ generators/ma2java/src/main/java/ languages/arc-fe/src/main/java/ languages/behavior-fe/src/main/java/ languages/montiarc-fe/src/main/java/ libraries/lejos-rte/src/main/java/ libraries/majava-rte/src/main/java/ libraries/maJavaLib/src/main/java/ libraries/simulator-rte/src/main/java/ > cobertura.xml
+    - python /opt/cover2cover.py target/reports/jacoco/aggregatedJacocoReport/aggregatedJacocoReport.xml languages/arc-fe/src/main/java/ applications/bumperbot/src/main/java/ applications/factory/src/main/java/ applications/factoryTask/src/main/java/ generators/cd2pojo/src/main/java/ generators/ma2java/src/main/java/ languages/arc-fe/src/main/java/ languages/behavior-fe/src/main/java/ languages/montiarc-fe/src/main/java/ libraries/lejos-rte/src/main/java/ libraries/majava-rte/src/main/java/ libraries/simulator-rte/src/main/java/ > cobertura.xml
   needs: ["Unit Test JDK 8"]
   dependencies:
     - Unit Test JDK 8
