@@ -7,6 +7,7 @@ test { useJUnitPlatform() }
 dependencies {
   implementation("de.monticore:monticore-runtime:$mc_version")
   implementation("de.monticore:monticore-grammar:$mc_version")
+  implementation("de.monticore:class2mc:$mc_version")
   implementation("de.monticore.lang:cd4analysis:$cd4a_version")
   implementation("de.se_rwth.commons:se-commons-groovy:$se_commons_version")
   implementation(project(":util"))

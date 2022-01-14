@@ -12,7 +12,7 @@ classdiagram Warehouse {
   class Builder {
 
     public Builder(int i);
-    public int method(int param) throws RuntimeException;
+    public int method(int param) throws java.lang.RuntimeException;
     public void method2();
     public static StorageObjectLinkedList buildStorageObjectLinkedList();
     public static Position buildPosition();

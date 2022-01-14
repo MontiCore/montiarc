@@ -46,7 +46,7 @@ task generateCD(type: JavaExec) {
   classpath = configurations.generateCD
   mainClass = "de.monticore.cd2pojo.POJOGeneratorScript"
 
-  args("$projectDir/src/main/resources, $buildDir/$librarymodels_classifier", "$genDir", "$hwcDir")
+  args("$projectDir/src/main/resources, $buildDir/$librarymodels_classifier, ", "$genDir", "$hwcDir", "-c2mc")
   outputs.dir(genDir)
 
   // configuring logging during generation
