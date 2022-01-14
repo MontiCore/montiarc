@@ -41,6 +41,39 @@ public class ArcAutomatonHelper {
       .filter(tr -> tr.getSourceName().equals(srcState.getName()))
       .collect(Collectors.toList());
   }
+  
+  public boolean existTransitionsFrom(@NotNull ASTSCState srcState) {
+    Preconditions.checkNotNull(srcState);
+    return automaton.streamStates().anyMatch(state -> state.equals(srcState));
+  }
+  
+  public ASTSCTransition getFirstTransitionWithoutGuardFrom(@NotNull ASTSCState srcState) {
+    Preconditions.checkNotNull(srcState);
+    Preconditions.checkArgument(automaton.streamStates().anyMatch(state -> state.equals(srcState)));
+    Preconditions.checkArgument(hasTransitionWithoutGuardFrom(srcState));
+    
+    List<ASTSCTransition> transitions = automaton.streamTransitions().filter(tr ->
+        tr.getSourceName().equals(srcState.getName()) &&
+        !((ASTTransitionBody) tr.getSCTBody()).isPresentPre())
+      .collect(Collectors.toList());
+    
+    return  transitions.get(0);
+  }
+  
+  public List<ASTSCTransition> getAllTransitionsWithGuardFrom(@NotNull ASTSCState srcState) {
+    Preconditions.checkNotNull(srcState);
+    Preconditions.checkArgument(automaton.streamStates().anyMatch(state -> state.equals(srcState)));
+    Preconditions.checkArgument(
+      automaton.streamTransitions()
+        .map(ASTSCTransition::getSCTBody)
+        .allMatch(trB -> trB instanceof ASTTransitionBody)
+    );
+    
+    return automaton.streamTransitions().filter(tr ->
+      tr.getSourceName().equals(srcState.getName()) &&
+        ((ASTTransitionBody) tr.getSCTBody()).isPresentPre())
+      .collect(Collectors.toList());
+  }
 
   public ASTTransitionAction scABodyToTransitionAction(@NotNull ASTSCABody action) {
     Preconditions.checkNotNull(action);
@@ -60,5 +93,20 @@ public class ArcAutomatonHelper {
       .filter(tr -> tr.getSourceName().equals(srcState.getName()))
       .map(tr -> (ASTTransitionBody) tr.getSCTBody())
       .anyMatch(tr -> !tr.isPresentPre());
+  }
+  
+  public boolean hasTransitionWithGuardFrom(@NotNull ASTSCState srcState) {
+    Preconditions.checkNotNull(srcState);
+    Preconditions.checkArgument(automaton.streamStates().anyMatch(state -> state.equals(srcState)));
+    Preconditions.checkArgument(
+      automaton.streamTransitions()
+        .map(ASTSCTransition::getSCTBody)
+        .allMatch(trB -> trB instanceof ASTTransitionBody)
+    );
+    
+    return automaton.streamTransitions()
+      .filter(tr -> tr.getSourceName().equals(srcState.getName()))
+      .map(tr -> (ASTTransitionBody) tr.getSCTBody())
+      .anyMatch(ASTTransitionBody::isPresentPre);
   }
 }

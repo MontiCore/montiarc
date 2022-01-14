@@ -116,34 +116,50 @@
       <#list automatonHelper.getAutomatonStates() as state>
 
         case ${state.name}:
-          <#list automatonHelper.getTransitionsFrom(state) as transition>
-            <#if transition.getSCTBody().isPresentPre()>
-            <#assign guardExpr = transition.getSCTBody().getPre()>
-              if(
-                <#list compHelper.getNamesInExpression(guardExpr) as readField>
+          <#list automatonHelper.getAllTransitionsWithGuardFrom(state) as guardedTransition>
+            //transition with guard
+              <#assign guardExpr = guardedTransition.getSCTBody().getPre()>
+            if(
+              <#list compHelper.getNamesInExpression(guardExpr) as readField>
                   ${readField.name} != null &&
-                </#list>
-                ( ${compHelper.printExpression(guardExpr)} )
-              )
-            </#if>
+              </#list>
+            ( ${compHelper.printExpression(guardExpr)} )
+            )
             {
-              // reaction
-              <#if transition.getSCTBody().isPresentTransitionAction()
-                && transition.getSCTBody().getTransitionAction().isPresentMCBlockStatement()>
-                ${compHelper.printStatement(transition.getSCTBody().getTransitionAction().getMCBlockStatement())}
+            // reaction
+              <#if guardedTransition.getSCTBody().isPresentTransitionAction()
+              && guardedTransition.getSCTBody().getTransitionAction().isPresentMCBlockStatement()>
+                  ${compHelper.printStatement(guardedTransition.getSCTBody().getTransitionAction().getMCBlockStatement())}
               </#if>
 
-              // enter new state
-              ${identifier.currentStateName} = ${compName}State.${transition.targetName};
-              break;
+            // enter new state
+              ${identifier.currentStateName} = ${compName}State.${guardedTransition.targetName};
             }
           </#list>
+          <#if automatonHelper.hasTransitionWithoutGuardFrom(state)>
+              //first transition specified in the model without guard
+          <#assign transition = automatonHelper.getFirstTransitionWithoutGuardFrom(state)>
+              <#if transition.getSCTBody().isPresentPre()>
+                  <#assign guardExpr = transition.getSCTBody().getPre()>
+                if(
+                  <#list compHelper.getNamesInExpression(guardExpr) as readField>
+                      ${readField.name} != null &&
+                  </#list>
+                ( ${compHelper.printExpression(guardExpr)} )
+                )
+              </#if>
+            {
+            // reaction
+              <#if transition.getSCTBody().isPresentTransitionAction()
+              && transition.getSCTBody().getTransitionAction().isPresentMCBlockStatement()>
+                  ${compHelper.printStatement(transition.getSCTBody().getTransitionAction().getMCBlockStatement())}
+              </#if>
 
-          <#-- We want to break the case if no guard was satisfied. However, sometimes there exist states without
-            -- guards. Then that transition would also already contain a break which will always be reached. Printing an
-            -- additional break statement would be unreachable code so we have to avoid this:
-            -->
-          <#if !automatonHelper.hasTransitionWithoutGuardFrom(state)> break; </#if>
+            // enter new state
+              ${identifier.currentStateName} = ${compName}State.${transition.targetName};
+            }
+          </#if>
+          break;
       </#list>
     }
 
