@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package de.monticore.cd2pojo;
 
+import de.monticore.cd._symboltable.BuiltInTypes;
 import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cd4code._parser.CD4CodeParser;
 import de.monticore.cd4code._symboltable.CD4CodeGlobalScope;
@@ -73,7 +74,7 @@ public class SymTabBuildingTest {
     ICD4CodeGlobalScope globalScope = CD4CodeMill.globalScope();
     globalScope.setSymbolPath(new MCPath(modelsPath.resolve(pathToModels)));
     if(globalScope instanceof CD4CodeGlobalScope) {
-      ((CD4CodeGlobalScope) globalScope).addBuiltInTypes();
+      BuiltInTypes.addBuiltInTypes(globalScope);
     }
     Collection<ASTCDCompilationUnit> compUnits = POJOGeneratorTool.parseAndTransformModels(globalScope);
     assertFalse(compUnits.isEmpty());
@@ -88,7 +89,7 @@ public class SymTabBuildingTest {
     ICD4CodeGlobalScope globalScope = CD4CodeMill.globalScope();
     globalScope.setSymbolPath(new MCPath(modelsPath.resolve(pathToModels)));
     if(globalScope instanceof CD4CodeGlobalScope) {
-      ((CD4CodeGlobalScope) globalScope).addBuiltInTypes();
+      BuiltInTypes.addBuiltInTypes(globalScope);
     }
     POJOGeneratorTool.createSymbolTable(globalScope);
   }
