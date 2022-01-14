@@ -46,18 +46,21 @@ public class MontiArcParser extends MontiArcParserTOP {
     if (optAst.isPresent()) {
       String fileRoot = Files.getNameWithoutExtension(relativeFilePath);
       String modelName = optAst.get().getComponentType().getName();
-      String packageOfFile = Names.getPackageFromPath(Names.getPathFromFilename(relativeFilePath));
-      String packageOfModel = Names.getQualifiedName(optAst.get().isPresentPackage() ?
+      String packageOfFile = Names.getPathFromFilename(relativeFilePath);
+      String packageOfModel = Names.constructQualifiedName(optAst.get().isPresentPackage() ?
         optAst.get().getPackage().getPartsList() : new ArrayList<>());
       if (!modelName.equals(fileRoot)) {
-        Log.error(String
-          .format(MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER.toString(), modelName, fileRoot));
+        Log.error(String.format(MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER.toString(),
+            modelName, fileRoot),
+          optAst.get().isPresentPackage() ? optAst.get().getPackage().get_SourcePositionStart()
+            : optAst.get().get_SourcePositionStart());
         setError(true);
       }
-      if (!packageOfFile.endsWith(packageOfModel)) {
-        Log.error(String
-          .format(MontiArcError.COMPONENT_AND_FILE_PACKAGE_DIFFER.toString(), packageOfModel,
-            modelName, packageOfFile));
+      if (!Names.getPackageFromPath(packageOfFile).endsWith(packageOfModel)) {
+        Log.error(String.format(MontiArcError.COMPONENT_AND_FILE_PACKAGE_DIFFER.toString(),
+            packageOfModel, packageOfFile),
+          optAst.get().isPresentPackage() ? optAst.get().getPackage().get_SourcePositionStart()
+            : optAst.get().get_SourcePositionStart());
         setError(true);
       }
     }

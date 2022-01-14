@@ -5,10 +5,8 @@ package montiarc.util;
  * The enum of all MontiArc errors. Extends the mixing interface {@link montiarc.util.Error}
  */
 public enum MontiArcError implements montiarc.util.Error {
-  COMPONENT_AND_FILE_NAME_DIFFER("0xC1000", "The name of the component \" %s \" is not identical "
-    + "to the name of the file \" %s \" (without its file-extension)."),
-  COMPONENT_AND_FILE_PACKAGE_DIFFER("0xC1001", "The package declaration \" %s \" of component "
-    + " \" %s \" is different from the package \" %s \" of the file."),
+  COMPONENT_AND_FILE_NAME_DIFFER("0xC1000", "The component name '%s' does not correspond to the file name '%s'."),
+  COMPONENT_AND_FILE_PACKAGE_DIFFER("0xC1001", "The package name '%s' does not correspond to the file path '%s'."),
   TOOL_PARSE_IOEXCEPTION("0xC1002", "Could not parse the file \" %s \"."),
   TOOL_FILE_WALK_IOEXCEPTION("0xC1003", "Could not access the directory \" %s \" or one of its subdirectories."),
   CLI_INPUT_OPTION_MISSING("0xC1004",  "Option '%s' is missing, but an input is required"),
