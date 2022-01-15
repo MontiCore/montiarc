@@ -49,6 +49,8 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
     }
 
     generate(modelPath, output);
+
+    Log.enableFailQuick(true);
   }
 
   
