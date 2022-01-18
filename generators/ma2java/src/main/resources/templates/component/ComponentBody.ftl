@@ -45,7 +45,7 @@
       }
     </#if>
 
-    <@Setup.printSetupMethod comp=comp compHelper=compHelper/>
+    <@Setup.printSetupRegion comp=comp compHelper=compHelper/>
 
     <@Init.printInitMethod comp=comp compHelper=compHelper/>
 

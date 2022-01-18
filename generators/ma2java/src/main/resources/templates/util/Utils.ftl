@@ -53,6 +53,12 @@
     </#if>
 </#macro>
 
+<#macro forEachSubcomponent comp>
+  <#list comp.getSubComponents() as subcomponent>
+    this.${subcomponent.getName()}<#nested>
+    </#list>
+</#macro>
+
 <#-- macros for fully qualified names of (generated or handwritten) classes for a given ComponentTypeSymbol -->
 <#macro componentClassFQN comp>
   ${comp.getFullName()}<#t>

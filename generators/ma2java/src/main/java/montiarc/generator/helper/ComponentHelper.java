@@ -3,10 +3,7 @@ package montiarc.generator.helper;
 
 import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._visitor.NamesInExpressionsVisitor;
-import arcbasis._ast.ASTArcParameter;
-import arcbasis._ast.ASTComponentType;
-import arcbasis._ast.ASTConnector;
-import arcbasis._ast.ASTPortAccess;
+import arcbasis._ast.*;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
@@ -319,6 +316,49 @@ public class ComponentHelper {
       calls.add(sb.toString());
     }
     return calls;
+  }
+  
+  public List<ASTConnector> getOutgoingPortForwards(@NotNull ComponentTypeSymbol comp) {
+    Preconditions.checkNotNull(comp);
+    
+    List<ASTConnector> res = new ArrayList<>();
+    for(ASTConnector conn: comp.getAstNode().getConnectors()) {
+      if(conn.getTargetList().stream().anyMatch(portAccess -> !portAccess.isPresentComponent())) {
+        ASTConnector clone = conn.deepClone();
+        clone.setTargetList(clone.getTargetList().stream()
+          .filter(portAccess -> !portAccess.isPresentComponent()).collect(Collectors.toList()));
+        res.add(clone);
+      }
+    }
+    return res;
+  }
+  
+  public List<ASTConnector> getIncomingPortForwards(@NotNull ComponentTypeSymbol comp) {
+    Preconditions.checkNotNull(comp);
+    
+    List<ASTConnector> res = new ArrayList<>();
+    for(ASTConnector conn: comp.getAstNode().getConnectors()) {
+      if(!conn.getSource().isPresentComponent()) {
+        res.add(conn);
+      }
+    }
+    return res;
+  }
+  
+  public List<ASTConnector> getHiddenChannels(@NotNull ComponentTypeSymbol comp) {
+    Preconditions.checkNotNull(comp);
+    
+    List<ASTConnector> res = new ArrayList<>();
+    for(ASTConnector conn: comp.getAstNode().getConnectors()) {
+      if(conn.getSource().isPresentComponent()
+      && conn.getTargetList().stream().anyMatch(ASTPortAccessTOP::isPresentComponent)) {
+        ASTConnector clone = conn.deepClone();
+        clone.setTargetList(clone.getTargetList().stream()
+          .filter(ASTPortAccessTOP::isPresentComponent).collect(Collectors.toList()));
+        res.add(clone);
+      }
+    }
+    return res;
   }
 
   /**
