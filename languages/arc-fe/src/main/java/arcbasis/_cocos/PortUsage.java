@@ -27,7 +27,7 @@ public class PortUsage implements ArcBasisASTComponentTypeCoCo {
 
   @Override
   public void check(@NotNull ASTComponentType node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol(), "ASTComponentType node '%s' has no symbol. "
       + "Did you forget to run the SymbolTableCreator before checking cocos?", node.getName());
     ComponentTypeSymbol symbol = node.getSymbol();

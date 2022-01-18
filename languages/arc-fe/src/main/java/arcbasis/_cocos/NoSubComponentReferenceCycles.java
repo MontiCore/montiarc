@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 public class NoSubComponentReferenceCycles implements ArcBasisASTComponentTypeCoCo {
 
   @Override
-  public void check(ASTComponentType astComp) {
-    Preconditions.checkArgument(astComp != null);
+  public void check(@NotNull ASTComponentType astComp) {
+    Preconditions.checkNotNull(astComp);
     Preconditions.checkArgument(astComp.isPresentSymbol(), "ASTComponent '%s' has no symbol. "
       + "Did you forget to run the SymbolTableCreator before checking cocos?", astComp.getName());
 
@@ -99,8 +99,8 @@ public class NoSubComponentReferenceCycles implements ArcBasisASTComponentTypeCo
    * @return a string where every list entry is named at least twice
    */
   protected static String printCycle(@NotNull List<ComponentTypeSymbol> cycle) {
-    Preconditions.checkArgument(cycle != null);
-    Preconditions.checkArgument(cycle.size() != 0);
+    Preconditions.checkNotNull(cycle);
+    Preconditions.checkArgument(!cycle.isEmpty());
 
     StringBuilder printer = new StringBuilder();
     for (int i = 0; i < cycle.size(); i++) {

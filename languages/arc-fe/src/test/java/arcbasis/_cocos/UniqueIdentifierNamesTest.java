@@ -84,9 +84,9 @@ public class UniqueIdentifierNamesTest extends AbstractTest {
     @NotNull ASTArcElement secondEl,
     @NotNull ArcError expectedError
   ) {
-    Preconditions.checkArgument(firstEl != null);
-    Preconditions.checkArgument(secondEl != null);
-    Preconditions.checkArgument( expectedError != null);
+    Preconditions.checkNotNull(firstEl);
+    Preconditions.checkNotNull(secondEl);
+    Preconditions.checkNotNull( expectedError);
     Preconditions.checkState(coco != null);
 
     // Given
@@ -113,7 +113,7 @@ public class UniqueIdentifierNamesTest extends AbstractTest {
   @ParameterizedTest
   @MethodSource("provideIdentifiers")
   public void shouldFindDuplicatedNameWithConfigParam (@NotNull ASTArcElement arcEl) {
-    Preconditions.checkArgument(arcEl != null);
+    Preconditions.checkNotNull(arcEl);
     Preconditions.checkState(coco != null);
 
     // Given
@@ -205,7 +205,7 @@ public class UniqueIdentifierNamesTest extends AbstractTest {
 
   /** @return An arbitrary {@link ASTComponentType} with the given name. */
   protected static ASTComponentType simpleCompTypeNamed(@NotNull String name) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
 
     return ArcBasisMill.componentTypeBuilder()
       .setName(name)
@@ -216,7 +216,7 @@ public class UniqueIdentifierNamesTest extends AbstractTest {
 
   /** @return An arbitrary {@link ASTComponentInstantiation} with the given name. */
   protected static ASTComponentInstantiation simpleCompInstNamed(@NotNull String name) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
 
     return ArcBasisMill.componentInstantiationBuilder()
       .setMCType(createQualifiedType("int"))
@@ -226,7 +226,7 @@ public class UniqueIdentifierNamesTest extends AbstractTest {
 
   /** @return An arbitrary {@link ASTComponentInterface} with the given name. */
   protected static ASTComponentInterface simplePortNamed(@NotNull String name) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
 
     ASTPortDeclaration port =  ArcBasisMill.portDeclarationBuilder()
       .setIncoming(true)
@@ -242,7 +242,7 @@ public class UniqueIdentifierNamesTest extends AbstractTest {
 
   /** @return An arbitrary {@link ASTArcFieldDeclaration} with the given name. */
   protected static ASTArcFieldDeclaration simpleFieldNamed(@NotNull String name) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
 
     ASTArcField field = ArcBasisMill.arcFieldBuilder()
       .setName(name)
@@ -257,7 +257,7 @@ public class UniqueIdentifierNamesTest extends AbstractTest {
 
   /** @return An arbitrary {@link ASTArcParameter} with the given name. */
   protected static ASTArcParameter simpleConfigParamNamed(@NotNull String name) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
 
     return ArcBasisMill.arcParameterBuilder()
       .setName(name)
@@ -267,7 +267,7 @@ public class UniqueIdentifierNamesTest extends AbstractTest {
   }
 
   protected static <X> Collection<Pair<X, X>> permutePairs(@NotNull List<X> baseSet) {
-    Preconditions.checkArgument(baseSet != null);
+    Preconditions.checkNotNull(baseSet);
     Set<Pair<X, X>> pairs = new HashSet<>(baseSet.size());
 
     for(int i = 0; i < baseSet.size(); i++) {

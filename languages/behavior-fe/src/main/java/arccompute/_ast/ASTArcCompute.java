@@ -17,7 +17,7 @@ public class ASTArcCompute extends ASTArcComputeTOP {
   protected ASTArcCompute() { super(); }
 
   protected ASTArcCompute(@NotNull ASTMCBlockStatement blockStatement) {
-    Preconditions.checkArgument(blockStatement != null);
+    Preconditions.checkNotNull(blockStatement);
     this.mCBlockStatement = blockStatement;
   }
 
@@ -49,7 +49,7 @@ public class ASTArcCompute extends ASTArcComputeTOP {
 
   @Override
   public void setMCBlockStatement(@NotNull ASTMCBlockStatement blockStatement) {
-    Preconditions.checkArgument(blockStatement != null);
+    Preconditions.checkNotNull(blockStatement);
     super.setMCBlockStatement(blockStatement);
   }
 }

@@ -14,12 +14,12 @@ public class AutoInstantiateTest extends AbstractTest {
    * Method under test {@link ASTArcAutoInstantiate#setArcAIMode(ASTArcAIMode)}.
    */
   @Test
-  public void modeSetterShouldThrowIllegalArgumentException() {
+  public void modeSetterShouldThrowException() {
     //Given
     ASTArcAutoInstantiate ai = createAIOff();
 
     //When && Then
-    Assertions.assertThrows(IllegalArgumentException.class, () -> ai.setArcAIMode(null));
+    Assertions.assertThrows(NullPointerException.class, () -> ai.setArcAIMode(null));
   }
 
   /**

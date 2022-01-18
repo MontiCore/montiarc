@@ -23,7 +23,7 @@ public class GenericArcPrettyPrinter implements GenericArcHandler {
   }
 
   public GenericArcPrettyPrinter(@NotNull IndentPrinter printer) {
-    Preconditions.checkArgument(printer != null);
+    Preconditions.checkNotNull(printer);
     this.printer = printer;
   }
 
@@ -33,7 +33,7 @@ public class GenericArcPrettyPrinter implements GenericArcHandler {
   }
 
   public void setTraverser(@NotNull GenericArcTraverser traverser) {
-    Preconditions.checkArgument(traverser != null);
+    Preconditions.checkNotNull(traverser);
     this.traverser = traverser;
   }
 

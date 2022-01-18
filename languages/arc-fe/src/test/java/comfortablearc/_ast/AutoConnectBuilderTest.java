@@ -14,12 +14,12 @@ public class AutoConnectBuilderTest {
    * Method under test {@link ASTArcAutoConnectBuilder#setArcACMode(ASTArcACMode)}.
    */
   @Test
-  public void modeSetterShouldThrowIllegalArgumentException() {
+  public void modeSetterShouldThrowException() {
     //Given
     ASTArcAutoConnectBuilder builder = ComfortableArcMill.arcAutoConnectBuilder();
 
     //When && Then
-    Assertions.assertThrows(IllegalArgumentException.class, () -> builder.setArcACMode(null));
+    Assertions.assertThrows(NullPointerException.class, () -> builder.setArcACMode(null));
   }
 
   /**

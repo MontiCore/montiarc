@@ -21,9 +21,7 @@ import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 /**
  * Checks coco R10 of [Hab16]: If a configurable component is instantiated as a subcomponent, all configuration
@@ -58,7 +56,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
    * signature.
    */
   public ConfigurationParameterAssignment(@NotNull TypeCheck typeChecker) {
-    this.typeChecker = checkNotNull(typeChecker);
+    this.typeChecker = Preconditions.checkNotNull(typeChecker);
   }
 
   /**
@@ -66,16 +64,16 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
    * signature.
    */
   public ConfigurationParameterAssignment(@NotNull IDerive deriverFromExpr) {
-    this(new TypeCheck(new ArcBasisSynthesizeType(), checkNotNull(deriverFromExpr)));
+    this(new TypeCheck(new ArcBasisSynthesizeType(), Preconditions.checkNotNull(deriverFromExpr)));
   }
 
   @Override
-  public void check(ASTComponentInstance node) {
-    Preconditions.checkArgument(node != null);
+  public void check(@NotNull ASTComponentInstance node) {
+    Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol(), "Could not perform coco check '%s'. Perhaps you missed the " +
       "symbol table creation.", this.getClass().getSimpleName());
-    Preconditions.checkArgument(node.getSymbol().getType() != null);
-    Preconditions.checkArgument(node.getSymbol().getType().getTypeInfo() != null);
+    Preconditions.checkNotNull(node.getSymbol().getType());
+    Preconditions.checkNotNull(node.getSymbol().getType().getTypeInfo());
     node.getSymbol().getType().getTypeInfo().getParameters().forEach(
       (param) -> this.assertVarIsArcParameter(param, node.getSymbol().getType().getTypeInfo()));
 
@@ -86,14 +84,14 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     List<SymTypeExpression> bindingSignature =
       paramBindings.stream()
         .map(typeChecker::typeOf)
-        .collect(toList());
+        .collect(Collectors.toList());
 
     List<SymTypeExpression> signatureOfCompExpr = typeOfCompInstance.getTypeInfo()
       .getParameters().stream()
       .map(ISymbol::getName)
       .map(typeOfCompInstance::getTypeExprOfParameter)
       .map(paramType -> paramType.orElseThrow(IllegalStateException::new))
-      .collect(toList());
+      .collect(Collectors.toList());
 
     // checking that not too many arguments were provided during instantiation
     if (bindingSignature.size() > signatureOfCompExpr.size()) {
@@ -120,7 +118,9 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     }
   }
 
-  protected void assertVarIsArcParameter(VariableSymbol configParam, ComponentTypeSymbol fromType) {
+  protected void assertVarIsArcParameter(@NotNull VariableSymbol configParam, @NotNull ComponentTypeSymbol fromType) {
+    Preconditions.checkNotNull(configParam);
+    Preconditions.checkNotNull(fromType);
     Preconditions.checkArgument(configParam.isPresentAstNode());
     Preconditions.checkArgument(configParam.getAstNode() instanceof ASTArcParameter, "Could not check coco '%s', " +
         "because configuration parameter '%s' of component type '%s' is not of type '%s",
@@ -136,7 +136,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   }
 
   protected String printSignature(List<SymTypeExpression> signature) {
-    List<String> signatureParts = signature.stream().map(SymTypeExpression::print).collect(toList());
+    List<String> signatureParts = signature.stream().map(SymTypeExpression::print).collect(Collectors.toList());
     return "(" + String.join(", ", signatureParts) + ")";
   }
 }

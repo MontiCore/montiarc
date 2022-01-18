@@ -76,8 +76,8 @@ public class NestedComponentsTest extends AbstractTest {
     @NotNull Collection<ComponentTypeSymbol> typeCollection,
     @NotNull String compName
   ) {
-    Preconditions.checkArgument(typeCollection != null);
-    Preconditions.checkArgument(compName != null);
+    Preconditions.checkNotNull(typeCollection);
+    Preconditions.checkNotNull(compName);
 
     Optional<ComponentTypeSymbol> result =
       typeCollection
@@ -96,8 +96,8 @@ public class NestedComponentsTest extends AbstractTest {
     @NotNull Collection<ComponentInstanceSymbol> instanceCollection,
     @NotNull String compName
   ) {
-    Preconditions.checkArgument(instanceCollection != null);
-    Preconditions.checkArgument(compName != null);
+    Preconditions.checkNotNull(instanceCollection);
+    Preconditions.checkNotNull(compName);
 
     Optional<ComponentInstanceSymbol> result =
       instanceCollection

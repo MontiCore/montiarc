@@ -20,7 +20,7 @@ public class VariableArcPrettyPrinter implements VariableArcHandler, VariableArc
   }
 
   public VariableArcPrettyPrinter(@NotNull IndentPrinter printer) {
-    Preconditions.checkArgument(printer != null);
+    Preconditions.checkNotNull(printer);
     this.printer = printer;
   }
 
@@ -30,7 +30,7 @@ public class VariableArcPrettyPrinter implements VariableArcHandler, VariableArc
   }
 
   public void setTraverser(@NotNull VariableArcTraverser traverser) {
-    Preconditions.checkArgument(traverser != null);
+    Preconditions.checkNotNull(traverser);
     this.traverser = traverser;
   }
 

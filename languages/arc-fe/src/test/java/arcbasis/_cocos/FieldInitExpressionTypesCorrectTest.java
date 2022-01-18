@@ -103,7 +103,7 @@ public class FieldInitExpressionTypesCorrectTest extends ArcBasisDeriveTypeTest 
   }
 
   protected ASTComponentType encloseFieldInCompType(@NotNull ASTArcFieldDeclaration field) {
-    Preconditions.checkArgument(field != null);
+    Preconditions.checkNotNull(field);
 
     return ArcBasisMill.componentTypeBuilder()
       .setName("Outer")
@@ -113,7 +113,7 @@ public class FieldInitExpressionTypesCorrectTest extends ArcBasisDeriveTypeTest 
   }
 
   protected ASTExpression doBuildNameExpressionInScope(@NotNull String expression) {
-    Preconditions.checkArgument(expression != null);
+    Preconditions.checkNotNull(expression);
     ASTExpression result = this.doBuildNameExpression(expression);
     this.getScopeSetter().handle(result);
     return result;

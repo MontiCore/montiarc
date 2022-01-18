@@ -14,12 +14,12 @@ public class AutoConnectTest extends AbstractTest {
    * Method under test {@link ASTArcAutoConnect#setArcACMode(ASTArcACMode)}.
    */
   @Test
-  public void modeSetterShouldThrowIllegalArgumentException() {
+  public void modeSetterShouldException() {
     //Given
     ASTArcAutoConnect ac = createACOff();
 
     //When && Then
-    Assertions.assertThrows(IllegalArgumentException.class, () -> ac.setArcACMode(null));
+    Assertions.assertThrows(NullPointerException.class, () -> ac.setArcACMode(null));
   }
 
   /**

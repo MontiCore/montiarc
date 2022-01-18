@@ -20,15 +20,15 @@ import java.util.regex.Pattern;
 public abstract class AbstractTest extends montiarc.util.AbstractTest {
 
   protected static ASTComponentType createCompType(@NotNull String type) {
-    Preconditions.checkArgument(type != null);
+    Preconditions.checkNotNull(type);
     return ComfortableArcMill.componentTypeBuilder().setName(type).setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ComfortableArcMill.componentBodyBuilder().build()).build();
   }
 
   protected static ASTComponentInstantiation createCompInstantiation(boolean fullyConnected, @NotNull ASTMCType type,
                                                                      @NotNull String... instances) {
-    Preconditions.checkArgument(type != null);
-    Preconditions.checkArgument(instances != null);
+    Preconditions.checkNotNull(type);
+    Preconditions.checkNotNull(instances);
     Preconditions.checkArgument(!Arrays.asList(instances).contains(null));
     if (fullyConnected) {
       return createFCCompInstantiation(type, instances);
@@ -39,16 +39,16 @@ public abstract class AbstractTest extends montiarc.util.AbstractTest {
 
   protected static ASTComponentInstantiation createCompInstantiation(@NotNull ASTMCType type,
                                                                      @NotNull String... instances) {
-    Preconditions.checkArgument(type != null);
-    Preconditions.checkArgument(instances != null);
+    Preconditions.checkNotNull(type);
+    Preconditions.checkNotNull(instances);
     Preconditions.checkArgument(!Arrays.asList(instances).contains(null));
     return ComfortableArcMill.componentInstantiationBuilder().setMCType(type).setComponentInstanceList(instances).build();
   }
 
   protected static ASTFullyConnectedComponentInstantiation createFCCompInstantiation(@NotNull ASTMCType type,
                                                                                      @NotNull String... instances) {
-    Preconditions.checkArgument(type != null);
-    Preconditions.checkArgument(instances != null);
+    Preconditions.checkNotNull(type);
+    Preconditions.checkNotNull(instances);
     Preconditions.checkArgument(!Arrays.asList(instances).contains(null));
     return ComfortableArcMill.fullyConnectedComponentInstantiationBuilder()
       .setMCType(type).setMCType(type).setComponentInstanceList(instances).build();

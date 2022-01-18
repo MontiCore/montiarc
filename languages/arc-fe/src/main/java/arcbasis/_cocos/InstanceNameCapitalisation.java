@@ -15,7 +15,7 @@ public class InstanceNameCapitalisation implements ArcBasisASTComponentInstantia
 
   @Override
   public void check(@NotNull ASTComponentInstantiation instantiation) {
-    Preconditions.checkArgument(instantiation != null);
+    Preconditions.checkNotNull(instantiation);
     instantiation.getInstancesNames().forEach(name -> {
       if(NameCapitalizationHelper.isNotLowerCase(name)) {
         NameCapitalizationHelper.warning(ArcError.INSTANCE_NAME_LOWER_CASE, instantiation, name);

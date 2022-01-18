@@ -9,7 +9,7 @@ public class ASTArcAutoInstantiateBuilder extends ASTArcAutoInstantiateBuilderTO
 
   @Override
   public ASTArcAutoInstantiateBuilder setArcAIMode(@NotNull ASTArcAIMode mode) {
-    Preconditions.checkArgument(mode != null);
+    Preconditions.checkNotNull(mode);
     return super.setArcAIMode(mode);
   }
 

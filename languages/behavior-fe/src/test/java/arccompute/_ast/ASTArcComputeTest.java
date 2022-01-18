@@ -41,7 +41,7 @@ public class ASTArcComputeTest {
   @Test
   public void constructedWithBlockStatementShouldDetectIllegalArgument() {
     //When && Then
-    Assertions.assertThrows(IllegalArgumentException.class, () -> new ASTArcCompute(null));
+    Assertions.assertThrows(NullPointerException.class, () -> new ASTArcCompute(null));
   }
 
   /**

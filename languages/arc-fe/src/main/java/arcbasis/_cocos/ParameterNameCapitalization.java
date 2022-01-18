@@ -14,7 +14,7 @@ public class ParameterNameCapitalization implements ArcBasisASTArcParameterCoCo 
 
   @Override
   public void check(@NotNull ASTArcParameter parameter) {
-    Preconditions.checkArgument(parameter != null);
+    Preconditions.checkNotNull(parameter);
     if(NameCapitalizationHelper.isNotLowerCase(parameter.getName())) {
       NameCapitalizationHelper.warning(ArcError.PARAMETER_LOWER_CASE, parameter, parameter.getName(),
         parameter.getEnclosingScope().getSpanningSymbol().getName());

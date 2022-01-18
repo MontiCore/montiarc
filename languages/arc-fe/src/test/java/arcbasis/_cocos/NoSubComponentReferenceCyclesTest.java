@@ -768,9 +768,9 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
     @NotNull ComponentTypeSymbol compToTest,
     @NotNull ComponentTypeSymbol[] contextComponents,
     @NotNull ArcError... expectedErrors) {
-    Preconditions.checkArgument(contextComponents != null);
-    Preconditions.checkArgument(expectedErrors != null);
-    Preconditions.checkArgument(compToTest != null);
+    Preconditions.checkNotNull(contextComponents);
+    Preconditions.checkNotNull(expectedErrors);
+    Preconditions.checkNotNull(compToTest);
     Preconditions.checkArgument(compToTest.isPresentAstNode());
 
     // Given

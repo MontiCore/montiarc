@@ -30,12 +30,12 @@ public class AutoConnectHelperTest extends AbstractTest {
   }
 
   protected static void putCompType(@NotNull ASTComponentType compType) {
-    Preconditions.checkArgument(compType != null);
+    Preconditions.checkNotNull(compType);
     getCompTypes().put(compType.getName(), compType);
   }
 
   protected static void putCompTypes(@NotNull ASTComponentType... componentTypes) {
-    Preconditions.checkArgument(componentTypes != null);
+    Preconditions.checkNotNull(componentTypes);
     Preconditions.checkArgument(!Arrays.asList(componentTypes).contains(null));
     Arrays.stream(componentTypes).forEach(AutoConnectHelperTest::putCompType);
   }
@@ -91,7 +91,7 @@ public class AutoConnectHelperTest extends AbstractTest {
   @ParameterizedTest
   @MethodSource("compNameAndExpectedSizeProvider")
   public void shouldGetACs(@NotNull String typeName, int expectedSize) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(expectedSize >= 0);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
 
@@ -118,7 +118,7 @@ public class AutoConnectHelperTest extends AbstractTest {
   @ParameterizedTest
   @ValueSource(strings = {"A"})
   public void getACShouldThrowNoSuchElementException(@NotNull String typeName) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
     //Given
     ASTComponentType compType = getCompTypes().get(typeName);
@@ -137,7 +137,7 @@ public class AutoConnectHelperTest extends AbstractTest {
   @ParameterizedTest
   @ValueSource(strings = {"B", "C", "D"})
   public void shouldGetACWithoutError(@NotNull String typeName) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
 
     //Given
@@ -178,7 +178,7 @@ public class AutoConnectHelperTest extends AbstractTest {
   @ParameterizedTest
   @MethodSource("compNameAndUniqueACProvider")
   public void shouldEvaluateUniqueACCorrectly(@NotNull String typeName, boolean isACUnique) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
 
     //Given
@@ -197,7 +197,7 @@ public class AutoConnectHelperTest extends AbstractTest {
   @ParameterizedTest
   @MethodSource("compNameAndMaxOneACProvider")
   public void shouldEvaluateMaxOneACCorrectly(@NotNull String typeName, boolean isACMaxOne) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
 
     //Given
@@ -241,7 +241,7 @@ public class AutoConnectHelperTest extends AbstractTest {
   }
 
   protected void doEvaluateAC(@NotNull String typeName, boolean acOff, boolean acPortActive, boolean acTypeActive) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
 
     //Given

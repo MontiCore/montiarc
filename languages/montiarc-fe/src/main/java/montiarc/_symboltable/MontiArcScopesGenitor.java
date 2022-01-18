@@ -15,7 +15,7 @@ public class MontiArcScopesGenitor extends MontiArcScopesGenitorTOP {
 
   @Override
   public IMontiArcArtifactScope createFromAST(@NotNull ASTMACompilationUnit rootNode) {
-    Preconditions.checkArgument(rootNode != null);
+    Preconditions.checkNotNull(rootNode);
     List<ImportStatement> imports = new ArrayList<>();
     for (ASTMCImportStatement importStatement : rootNode.getImportStatementList()) {
       imports.add(new ImportStatement(importStatement.getQName(), importStatement.isStar()));
@@ -37,7 +37,7 @@ public class MontiArcScopesGenitor extends MontiArcScopesGenitorTOP {
 
   @Override
   public void endVisit(@NotNull ASTMACompilationUnit node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     super.endVisit(node);
   }

@@ -55,7 +55,7 @@ public class ComponentInstanceSymbol extends ComponentInstanceSymbolTOP {
    * @param argument the configuration argument to add to this component.
    */
   public void addArgument(@NotNull ASTExpression argument) {
-    Preconditions.checkArgument(argument != null);
+    Preconditions.checkNotNull(argument);
     this.arguments.add(argument);
   }
 
@@ -64,7 +64,7 @@ public class ComponentInstanceSymbol extends ComponentInstanceSymbolTOP {
    * @see this#addArgument(ASTExpression)
    */
   public void addArguments(@NotNull List<ASTExpression> arguments) {
-    Preconditions.checkArgument(arguments != null);
+    Preconditions.checkNotNull(arguments);
     Preconditions.checkArgument(!arguments.contains(null));
     for (ASTExpression argument : arguments) {
       this.addArgument(argument);

@@ -438,7 +438,7 @@ public class ComponentHelper {
 
   public Set<ASTNameExpression> getNamesInExpression(@NotNull ASTExpression expr) {
     Preconditions.checkNotNull(expr);
-    Preconditions.checkArgument(expr.getEnclosingScope() != null);
+    Preconditions.checkNotNull(expr.getEnclosingScope());
     Preconditions.checkArgument(expr.getEnclosingScope() instanceof IMontiArcScope);
     NamesInExpressionsVisitor visitor = new NamesInExpressionsVisitor();
     MontiArcTraverser traverser = MontiArcMill.traverser();

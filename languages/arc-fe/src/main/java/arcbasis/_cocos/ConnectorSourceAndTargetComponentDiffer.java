@@ -8,6 +8,7 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
+import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
 
@@ -17,8 +18,8 @@ import java.util.List;
 public class ConnectorSourceAndTargetComponentDiffer implements ArcBasisASTComponentTypeCoCo {
 
   @Override
-  public void check(ASTComponentType node) {
-    Preconditions.checkArgument(node != null);
+  public void check(@NotNull ASTComponentType node) {
+    Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol(), "ASTComponent node '%s' has no symbol. "
       + "Did you forget to run the SymbolTableCreator before checking cocos?", node.getName());
     ComponentTypeSymbol componentTypeSymbol = node.getSymbol();

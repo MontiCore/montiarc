@@ -21,7 +21,7 @@ public class PortUniqueSender implements ArcBasisASTComponentTypeCoCo {
 
   @Override
   public void check(@NotNull ASTComponentType node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     List<String> targets = new ArrayList<>();
     for (ASTConnector connector : node.getConnectors()) {
       for (String target : connector.getTargetsNames()) {

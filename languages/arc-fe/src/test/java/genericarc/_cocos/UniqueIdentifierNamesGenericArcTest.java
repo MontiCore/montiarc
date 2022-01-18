@@ -21,7 +21,7 @@ public class UniqueIdentifierNamesGenericArcTest extends UniqueIdentifierNamesTe
   @ParameterizedTest
   @MethodSource("provideIdentifiers")
   public void shouldFindDuplicatedNameWithTypeParam (@NotNull ASTArcElement arcEl) {
-    Preconditions.checkArgument(arcEl != null);
+    Preconditions.checkNotNull(arcEl);
     Preconditions.checkState(coco != null);
 
     // Given
@@ -134,7 +134,7 @@ public class UniqueIdentifierNamesGenericArcTest extends UniqueIdentifierNamesTe
   /* ======================== helpers ================================= */
 
   protected static TypeVarSymbol simpleTypeParamNamed(@NotNull String name) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
 
     return GenericArcMill.typeVarSymbolBuilder()
       .setName(name)

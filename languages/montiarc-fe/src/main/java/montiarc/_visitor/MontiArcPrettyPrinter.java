@@ -17,7 +17,7 @@ public class MontiArcPrettyPrinter implements MontiArcHandler {
   }
 
   public MontiArcPrettyPrinter(@NotNull IndentPrinter printer) {
-    Preconditions.checkArgument(printer != null);
+    Preconditions.checkNotNull(printer);
     this.printer = printer;
   }
 
@@ -28,7 +28,7 @@ public class MontiArcPrettyPrinter implements MontiArcHandler {
   
   @Override
   public void setTraverser(@NotNull MontiArcTraverser traverser) {
-    Preconditions.checkArgument(traverser != null);
+    Preconditions.checkNotNull(traverser);
     this.traverser = traverser;
   }
 

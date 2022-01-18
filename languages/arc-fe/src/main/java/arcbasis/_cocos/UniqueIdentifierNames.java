@@ -135,7 +135,7 @@ public class UniqueIdentifierNames implements ArcBasisASTComponentTypeCoCo {
    * where they occur.
    */
   protected Multimap<String, SourcePosition> getTypeParameterNameOccurrences(@NotNull ComponentTypeSymbol component) {
-    Preconditions.checkArgument(component != null);
+    Preconditions.checkNotNull(component);
 
     Multimap<String, SourcePosition> nameOccurrences = MultimapBuilder.hashKeys().arrayListValues().build();
     component.getTypeParameters().forEach(
@@ -149,7 +149,7 @@ public class UniqueIdentifierNames implements ArcBasisASTComponentTypeCoCo {
    * contained in an optional. Otherwise, an empty Optional is returned.
    */
   protected static Optional<SourcePosition> optSourcePosOf(@NotNull ISymbol sym) {
-    Preconditions.checkArgument(sym != null);
+    Preconditions.checkNotNull(sym);
 
     if(!sym.isPresentAstNode()) {
       return Optional.empty();

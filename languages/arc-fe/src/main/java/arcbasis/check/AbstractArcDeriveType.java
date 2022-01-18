@@ -24,8 +24,8 @@ public abstract class AbstractArcDeriveType implements IDerive {
 
   protected AbstractArcDeriveType(@NotNull TypeCheckResult typeCheckResult,
                                   @NotNull ArcBasisTraverser calculationDelegator) {
-    Preconditions.checkArgument(typeCheckResult != null);
-    Preconditions.checkArgument(calculationDelegator != null);
+    Preconditions.checkNotNull(typeCheckResult);
+    Preconditions.checkNotNull(calculationDelegator);
     this.typeCheckResult = typeCheckResult;
     this.calculationDelegator = calculationDelegator;
     this.init();
@@ -40,7 +40,7 @@ public abstract class AbstractArcDeriveType implements IDerive {
   }
 
   protected void setTypeCheckResult(@NotNull TypeCheckResult typeCheckResult) {
-    Preconditions.checkArgument(typeCheckResult != null);
+    Preconditions.checkNotNull(typeCheckResult);
     this.typeCheckResult = typeCheckResult;
   }
 

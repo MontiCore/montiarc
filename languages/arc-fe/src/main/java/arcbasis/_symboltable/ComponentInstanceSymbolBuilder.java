@@ -21,7 +21,7 @@ public class ComponentInstanceSymbolBuilder extends ComponentInstanceSymbolBuild
 
   @Override
   public ComponentInstanceSymbolBuilder setName(@NotNull String name) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
     return super.setName(name);
   }
 
@@ -39,7 +39,7 @@ public class ComponentInstanceSymbolBuilder extends ComponentInstanceSymbolBuild
   }
 
   public ComponentInstanceSymbolBuilder setArguments(@NotNull List<ASTExpression> arguments) {
-    Preconditions.checkArgument(arguments != null);
+    Preconditions.checkNotNull(arguments);
     Preconditions.checkArgument(!arguments.contains(null));
     this.arguments = arguments;
     return this.realBuilder;

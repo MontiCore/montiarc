@@ -309,8 +309,8 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
 
   protected static ComponentTypeSymbol createComponentWithTypeParams(
     @NotNull String compName, @NotNull String... typeVarNames) {
-    Preconditions.checkArgument(compName != null);
-    Preconditions.checkArgument(typeVarNames != null);
+    Preconditions.checkNotNull(compName);
+    Preconditions.checkNotNull(typeVarNames);
 
     List<TypeVarSymbol> typeVars = new ArrayList<>(typeVarNames.length);
     for(String typeVarName : typeVarNames) {

@@ -189,7 +189,7 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
     protected IExpressionsBasisScope scope;
 
     public ArcBasisExpressionsScopeSetter(@NotNull IExpressionsBasisScope scope) {
-      Preconditions.checkArgument(scope != null);
+      Preconditions.checkNotNull(scope);
       this.scope = scope;
     }
 
@@ -198,7 +198,7 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
     }
 
     public void setScope(@NotNull IExpressionsBasisScope scope) {
-      Preconditions.checkArgument(scope != null);
+      Preconditions.checkNotNull(scope);
       this.scope = scope;
     }
 

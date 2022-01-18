@@ -19,7 +19,7 @@ public class InheritedComponentTypeExists implements ArcBasisASTComponentTypeCoC
 
   @Override
   public void check(@NotNull ASTComponentType node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol(), "ASTComponent node '%s' has no symbol. "
       + "Did you forget to run the SymbolTableCreator before checking cocos?", node.getName());
     if (!node.getHead().isPresentParent()) {

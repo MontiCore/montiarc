@@ -4,6 +4,7 @@ package arcbasis._ast;
 import arcbasis.ArcBasisMill;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +22,7 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
   }
 
   /**
-   * Creates a {@link ASTArcField} to be used by this builder corresponding the the provided
+   * Creates a {@link ASTArcField} to be used by this builder corresponding the provided
    * {@code String} argument and adds it to the list of declared fields at the given index. The
    * provided {@code String} argument is expected to be not null and a simple name (no parts
    * separated by dots "."). The index is expected to be zero or greater.
@@ -32,11 +33,11 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
    * @return this builder
    * @see List#set(int, Object)
    */
-  public ASTArcFieldDeclarationBuilder setArcFieldList(int index, String name, ASTExpression value) {
+  public ASTArcFieldDeclarationBuilder setArcFieldList(int index, @NotNull String name, @NotNull ASTExpression value) {
     Preconditions.checkArgument(index >= 0);
-    Preconditions.checkArgument(name != null);
-    Preconditions.checkArgument(!name.contains("\\."));
-    Preconditions.checkArgument(value != null);
+    Preconditions.checkNotNull(name);
+    Preconditions.checkArgument(!name.isEmpty());
+    Preconditions.checkNotNull(value);
     this.setArcField(index, this.doCreateArcField(name, value));
     return this.realBuilder;
   }
@@ -50,8 +51,9 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
    * @param values initial values of the fields
    * @return this builder
    */
-  public ASTArcFieldDeclarationBuilder setArcFieldList(String[] names, ASTExpression[] values) {
+  public ASTArcFieldDeclarationBuilder setArcFieldList(@NotNull String[] names, @NotNull ASTExpression[] values) {
     Preconditions.checkNotNull(names);
+    Preconditions.checkNotNull(values);
     this.setArcFieldsList(this.doCreateArcFieldList(names, values));
     return this.realBuilder;
   }
@@ -66,9 +68,10 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
    * @return this builder
    * @see List#add(Object)
    */
-  public ASTArcFieldDeclarationBuilder addArcField(String name, ASTExpression value) {
-    Preconditions.checkArgument(name != null);
-    Preconditions.checkArgument(!name.contains("\\."));
+  public ASTArcFieldDeclarationBuilder addArcField(@NotNull String name, @NotNull ASTExpression value) {
+    Preconditions.checkNotNull(name);
+    Preconditions.checkArgument(!name.isEmpty());
+    Preconditions.checkNotNull(value);
     this.addArcField(this.doCreateArcField(name, value));
     return this.realBuilder;
   }
@@ -83,11 +86,9 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
    * @return this builder
    * @see List#addAll(Collection)
    */
-  public ASTArcFieldDeclarationBuilder addAllArcFields(String[] names, ASTExpression[] values) {
-    Preconditions.checkArgument(names != null);
-    Preconditions.checkArgument(!Arrays.asList(names).contains(null));
-    Preconditions.checkArgument(values != null);
-    Preconditions.checkArgument(!Arrays.asList(values).contains(null));
+  public ASTArcFieldDeclarationBuilder addAllArcFields(@NotNull String[] names, @NotNull ASTExpression[] values) {
+    Preconditions.checkNotNull(names);
+    Preconditions.checkNotNull(values);
     Preconditions.checkArgument(names.length == values.length);
     this.addAllArcFields(this.doCreateArcFieldList(names, values));
     return this.realBuilder;
@@ -105,10 +106,11 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
    * @return this builder
    * @see List#add(int, Object)
    */
-  public ASTArcFieldDeclarationBuilder addArcField(int index, String name, ASTExpression value) {
+  public ASTArcFieldDeclarationBuilder addArcField(int index, @NotNull String name, @NotNull ASTExpression value) {
     Preconditions.checkArgument(index >= 0);
-    Preconditions.checkArgument(name != null);
-    Preconditions.checkArgument(!name.contains("\\."));
+    Preconditions.checkNotNull(name);
+    Preconditions.checkArgument(!name.isEmpty());
+    Preconditions.checkNotNull(value);
     this.addArcField(index, this.doCreateArcField(name, value));
     return this.realBuilder;
   }
@@ -125,22 +127,24 @@ public class ASTArcFieldDeclarationBuilder extends ASTArcFieldDeclarationBuilder
    * @return this builder
    * @see List#addAll(int, Collection)
    */
-  public ASTArcFieldDeclarationBuilder addAllArcFields(int index, String[] names,
-    ASTExpression[] values) {
+  public ASTArcFieldDeclarationBuilder addAllArcFields(int index, @NotNull String[] names,
+                                                       @NotNull ASTExpression[] values) {
     Preconditions.checkArgument(index >= 0);
-    Preconditions.checkArgument(names != null);
-    Preconditions.checkArgument(!Arrays.asList(names).contains(null));
-    Preconditions.checkArgument(values != null);
-    Preconditions.checkArgument(!Arrays.asList(values).contains(null));
+    Preconditions.checkNotNull(names);
+    Preconditions.checkNotNull(values);
     this.addAllArcFields(index, this.doCreateArcFieldList(names, values));
     return this.realBuilder;
   }
 
-  protected ASTArcField doCreateArcField(String name, ASTExpression value) {
+  protected ASTArcField doCreateArcField(@NotNull String name, @NotNull ASTExpression value) {
+    Preconditions.checkNotNull(name);
+    Preconditions.checkNotNull(value);
     return ArcBasisMill.arcFieldBuilder().setName(name).setInitial(value).build();
   }
 
-  protected List<ASTArcField> doCreateArcFieldList(String[] names, ASTExpression[] values) {
+  protected List<ASTArcField> doCreateArcFieldList(@NotNull String[] names, @NotNull ASTExpression[] values) {
+    Preconditions.checkNotNull(names);
+    Preconditions.checkNotNull(values);
     List<ASTArcField> fieldList = new ArrayList<>();
     for (int i = 0; i < names.length; i++) {
       fieldList.add(this.doCreateArcField(names[i], values[i]));

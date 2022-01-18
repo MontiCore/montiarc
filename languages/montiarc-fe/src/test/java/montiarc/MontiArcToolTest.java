@@ -620,6 +620,7 @@ public class MontiArcToolTest extends AbstractTest {
     ASTMACompilationUnit ast = tool.parse(Paths.get("src/test/resources/"
       + "CLI/nestedComponent/WithInnerComponents.arc").toAbsolutePath())
       .orElseThrow(IllegalStateException::new);
+    ast.setSpannedScope(MontiArcMill.scope());
     return Stream.of(
       Arguments.of(null, ast, NullPointerException.class),
       Arguments.of("src/test/resources/CLI/symboltable/", null, NullPointerException.class),

@@ -14,12 +14,12 @@ public class AutoInstantiateBuilderTest {
    * Method under test {@link ASTArcAutoInstantiateBuilder#setArcAIMode(ASTArcAIMode)}.
    */
   @Test
-  public void modeSetterShouldThrowIllegalArgumentException() {
+  public void modeSetterShouldThrowException() {
     //Given
     ASTArcAutoInstantiateBuilder builder = ComfortableArcMill.arcAutoInstantiateBuilder();
 
     //When && Then
-    Assertions.assertThrows(IllegalArgumentException.class, () -> builder.setArcAIMode(null));
+    Assertions.assertThrows(NullPointerException.class, () -> builder.setArcAIMode(null));
   }
 
   /**

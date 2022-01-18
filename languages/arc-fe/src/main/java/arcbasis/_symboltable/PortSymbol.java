@@ -45,7 +45,7 @@ public class PortSymbol extends PortSymbolTOP {
    * @param direction the direction of this port.
    */
   public void setDirection(@NotNull ASTPortDirection direction) {
-    Preconditions.checkArgument(direction != null);
+    Preconditions.checkNotNull(direction);
     this.direction = direction;
   }
 
@@ -76,7 +76,7 @@ public class PortSymbol extends PortSymbolTOP {
    * @param type the type of this port.
    */
   public void setType(@NotNull SymTypeExpression type) {
-    Preconditions.checkArgument(type != null);
+    Preconditions.checkNotNull(type);
     this.type = type;
   }
 

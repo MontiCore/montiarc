@@ -23,13 +23,13 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
 
   @Override
   public ComponentTypeSymbolBuilder setName(@NotNull String name) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
     return super.setName(name);
   }
 
   @Override
   public ComponentTypeSymbolBuilder setSpannedScope(@NotNull IArcBasisScope spannedScope) {
-    Preconditions.checkArgument(spannedScope != null);
+    Preconditions.checkNotNull(spannedScope);
     return super.setSpannedScope(spannedScope);
   }
 
@@ -57,7 +57,7 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
   }
 
   public ComponentTypeSymbolBuilder setParameters(@NotNull List<VariableSymbol> parameters) {
-    Preconditions.checkArgument(parameters != null);
+    Preconditions.checkNotNull(parameters);
     Preconditions.checkArgument(!parameters.contains(null));
     this.parameters = parameters;
     return this.realBuilder;
@@ -68,7 +68,7 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
   }
 
   public ComponentTypeSymbolBuilder setTypeParameters(@NotNull List<TypeVarSymbol> typeParameters) {
-    Preconditions.checkArgument(typeParameters != null);
+    Preconditions.checkNotNull(typeParameters);
     Preconditions.checkArgument(!typeParameters.contains(null));
     this.typeParameters = typeParameters;
     return this.realBuilder;

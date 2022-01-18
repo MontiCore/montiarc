@@ -11,7 +11,7 @@ public class ASTArcAutoConnect extends ASTArcAutoConnectTOP {
 
   @Override
   public void setArcACMode(@NotNull ASTArcACMode mode) {
-    Preconditions.checkArgument(mode != null);
+    Preconditions.checkNotNull(mode);
     super.setArcACMode(mode);
   }
 

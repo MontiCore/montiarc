@@ -13,7 +13,7 @@ public class ASTArcAutoConnectBuilder extends ASTArcAutoConnectBuilderTOP {
 
   @Override
   public ASTArcAutoConnectBuilder setArcACMode(@NotNull ASTArcACMode mode) {
-    Preconditions.checkArgument(mode != null);
+    Preconditions.checkNotNull(mode);
     return super.setArcACMode(mode);
   }
 

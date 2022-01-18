@@ -32,12 +32,12 @@ public class FullyConnectedHelperTest extends AbstractTest {
   }
 
   protected static void putCompType(@NotNull ASTComponentType compType) {
-    Preconditions.checkArgument(compType != null);
+    Preconditions.checkNotNull(compType);
     getCompTypes().put(compType.getName(), compType);
   }
 
   protected static void putCompTypes(@NotNull ASTComponentType... componentTypes) {
-    Preconditions.checkArgument(componentTypes != null);
+    Preconditions.checkNotNull(componentTypes);
     Preconditions.checkArgument(!Arrays.asList(componentTypes).contains(null));
     Arrays.stream(componentTypes).forEach(FullyConnectedHelperTest::putCompType);
   }
@@ -68,7 +68,7 @@ public class FullyConnectedHelperTest extends AbstractTest {
 
   protected static ASTComponentInstantiation createCompInstantiation(boolean fullyConnected,
                                                                      @NotNull String... instances) {
-    Preconditions.checkArgument(instances != null);
+    Preconditions.checkNotNull(instances);
     Preconditions.checkArgument(!Arrays.asList(instances).contains(null));
     return createCompInstantiation(fullyConnected, Mockito.mock(ASTMCType.class), instances);
   }
@@ -99,9 +99,9 @@ public class FullyConnectedHelperTest extends AbstractTest {
 
   protected void doShouldEvaluateFullyConnected(@NotNull String typeName, @NotNull String instanceName,
                                                 boolean fullyConnected) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
-    Preconditions.checkArgument(instanceName != null);
+    Preconditions.checkNotNull(instanceName);
 
     //Given
     ASTComponentType compType = getCompTypes().get(typeName);

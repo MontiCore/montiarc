@@ -25,9 +25,9 @@ public class ComponentInstanceTypeExists implements ArcBasisASTComponentInstanti
   }
 
   @Override
-  public void check(ASTComponentInstantiation node) {
-    Preconditions.checkArgument(node != null);
-    Preconditions.checkArgument(node.getEnclosingScope() != null);
+  public void check(@NotNull ASTComponentInstantiation node) {
+    Preconditions.checkNotNull(node);
+    Preconditions.checkNotNull(node.getEnclosingScope());
 
     String typeName = node.getMCType().printType(typePrinter);
 

@@ -15,7 +15,7 @@ public class ComponentTypeNameCapitalization implements ArcBasisASTComponentType
 
   @Override
   public void check(@NotNull ASTComponentType component) {
-    Preconditions.checkArgument(component != null);
+    Preconditions.checkNotNull(component);
     if(NameCapitalizationHelper.isNotUpperCase(component.getName())) {
       NameCapitalizationHelper.warning(ArcError.COMPONENT_NAME_UPPER_CASE, component, component.getName());
     }

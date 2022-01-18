@@ -71,7 +71,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   }
 
   protected void pushCurrentEnclosingScope4Instances(@Nullable IArcBasisScope scope) {
-    Preconditions.checkArgument(scope != null);
+    Preconditions.checkNotNull(scope);
     this.getEnclosingScope4InstancesStack().push(scope);
   }
 
@@ -90,7 +90,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   }
 
   public void addToScope(@NotNull ComponentTypeSymbol symbol) {
-    Preconditions.checkArgument(symbol != null);
+    Preconditions.checkNotNull(symbol);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     this.getCurrentScope().get().add(symbol);
   }
@@ -115,7 +115,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   @Override
   public void visit(@NotNull ASTComponentType node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     ComponentTypeSymbol symbol = this.create_ComponentType(node).build();
     this.setOuter(symbol);
@@ -132,7 +132,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   @Override
   public void endVisit(@NotNull ASTComponentType node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentComponent().isPresent());
     Preconditions.checkState(this.getCurrentScope().isPresent());
     Preconditions.checkState(this.getCurrentComponent().get().isPresentAstNode());
@@ -143,7 +143,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   @Override
   public void visit(@NotNull ASTComponentHead node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     Preconditions.checkState(!this.getComponentStack().isEmpty());
     Preconditions.checkState(this.getCurrentComponent().isPresent());
@@ -152,7 +152,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   @Override
   public void visit(@NotNull ASTComponentBody node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     node.setEnclosingScope(this.getCurrentScope().get());
     this.pushCurrentEnclosingScope4Instances(this.getCurrentScope().get());
@@ -160,7 +160,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   @Override
   public void endVisit(@NotNull ASTComponentBody node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentEnclosingScope4Instances().isPresent());
     this.removeCurrentEnclosingScope4Instances();
   }
@@ -174,7 +174,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   @Override
   public void visit(@NotNull ASTArcParameter node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     Preconditions.checkState(this.getCurrentComponent().isPresent());
     VariableSymbol symbol = this.create_ArcParameter(node).build();
@@ -188,7 +188,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   @Override
   public void visit(@NotNull ASTPortDeclaration node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkState(getCurrentScope().isPresent());
     node.setEnclosingScope(getCurrentScope().get());
     this.setCurrentPortDirection(node.getPortDirection());
@@ -196,7 +196,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   @Override
   public void endVisit(@NotNull ASTPortDeclaration node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentPortDirection().isPresent());
     Preconditions.checkState(this.getCurrentPortDirection().get().equals(node.getPortDirection()));
     this.setCurrentPortDirection(null);
@@ -213,7 +213,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   @Override
   public void visit(@NotNull ASTPort node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkState(getCurrentScope().isPresent());
     Preconditions.checkState(getCurrentPortDirection().isPresent());
     PortSymbol symbol = this.create_Port(node).buildWithoutType();
@@ -226,7 +226,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   @Override
   public void visit(@NotNull ASTArcFieldDeclaration node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     node.setEnclosingScope(this.getCurrentScope().get());
   }
@@ -240,7 +240,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   @Override
   public void visit(@NotNull ASTArcField node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     VariableSymbol symbol = this.create_ArcField(node).build();
     node.setSymbol(symbol);
@@ -252,14 +252,14 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   @Override
   public void visit(@NotNull ASTComponentInstantiation node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     node.setEnclosingScope(this.getCurrentScope().get());
   }
 
   protected ComponentInstanceSymbolBuilder create_ComponentInstance(@NotNull ASTComponentInstance ast) {
     ComponentInstanceSymbolBuilder builder = ArcBasisMill.componentInstanceSymbolBuilder();
-    Preconditions.checkArgument(ast != null);
+    Preconditions.checkNotNull(ast);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     ast.setEnclosingScope(this.getCurrentScope().get());
     builder.setName(ast.getName());
@@ -268,7 +268,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   @Override
   public void visit(@NotNull ASTComponentInstance node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentEnclosingScope4Instances().isPresent());
 
     ComponentInstanceSymbol symbol = create_ComponentInstance(node).build();

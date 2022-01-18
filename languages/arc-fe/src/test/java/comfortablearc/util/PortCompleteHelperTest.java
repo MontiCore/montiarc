@@ -29,12 +29,12 @@ public class PortCompleteHelperTest extends AbstractTest {
   }
 
   protected static void putCompType(@NotNull ASTComponentType compType) {
-    Preconditions.checkArgument(compType != null);
+    Preconditions.checkNotNull(compType);
     getCompTypes().put(compType.getName(), compType);
   }
 
   protected static void putCompTypes(@NotNull ASTComponentType... componentTypes) {
-    Preconditions.checkArgument(componentTypes != null);
+    Preconditions.checkNotNull(componentTypes);
     Preconditions.checkArgument(!Arrays.asList(componentTypes).contains(null));
     Arrays.stream(componentTypes).forEach(PortCompleteHelperTest::putCompType);
   }
@@ -67,7 +67,7 @@ public class PortCompleteHelperTest extends AbstractTest {
   @ParameterizedTest
   @MethodSource("compNameAndExpectedSizeProvider")
   public void shouldGetACs(@NotNull String typeName, int expectedSize) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(expectedSize >= 0);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
 
@@ -90,7 +90,7 @@ public class PortCompleteHelperTest extends AbstractTest {
   @ParameterizedTest
   @ValueSource(strings = {"A"})
   public void getPCShouldThrowNoSuchElementException(@NotNull String typeName) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
     //Given
     ASTComponentType compType = getCompTypes().get(typeName);
@@ -107,7 +107,7 @@ public class PortCompleteHelperTest extends AbstractTest {
   @ParameterizedTest
   @ValueSource(strings = {"B"})
   public void shouldGetPCWithoutError(@NotNull String typeName) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
 
     //Given
@@ -144,7 +144,7 @@ public class PortCompleteHelperTest extends AbstractTest {
   @ParameterizedTest
   @MethodSource("compNameAndMaxOnePCProvider")
   public void shouldEvaluateMaxOnePCCorrectly(@NotNull String typeName, boolean isPCMaxOne) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
 
     //Given
@@ -177,7 +177,7 @@ public class PortCompleteHelperTest extends AbstractTest {
   }
 
   protected void doEvaluatePC(@NotNull String typeName, boolean pcActive) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
 
     //Given

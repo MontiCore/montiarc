@@ -171,16 +171,16 @@ public class MontiArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
   @ParameterizedTest
   @MethodSource("expressionProviderForGenericFields")
   public void shouldCalculateGenericType(@NotNull String expression, @NotNull String expectedType) {
-    Preconditions.checkArgument(expression != null);
-    Preconditions.checkArgument(expectedType != null);
+    Preconditions.checkNotNull(expression);
+    Preconditions.checkNotNull(expectedType);
     doCalculateTypeFromNameExpression(expression, expectedType, false, true);
   }
 
   @ParameterizedTest
   @MethodSource("expressionProviderWithMethodCalls")
   public void shouldCalculateObjectTypeFromMethodCalls(@NotNull String expression, @NotNull String expectedType) throws IOException {
-    Preconditions.checkArgument(expression != null);
-    Preconditions.checkArgument(expectedType != null);
+    Preconditions.checkNotNull(expression);
+    Preconditions.checkNotNull(expectedType);
     doCalculateTypeFromExpression(expression, expectedType, false, false);
   }
 
@@ -188,28 +188,28 @@ public class MontiArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
   @MethodSource("expressionProviderWithGenericMethodCalls")
   public void shouldCalculateObjectTypeFromGenericMethodCalls(@NotNull String expression,
                                                               @NotNull String expectedType) throws IOException {
-    Preconditions.checkArgument(expression != null);
-    Preconditions.checkArgument(expectedType != null);
+    Preconditions.checkNotNull(expression);
+    Preconditions.checkNotNull(expectedType);
     doCalculateTypeFromExpression(expression, expectedType, false, true);
   }
 
   @ParameterizedTest
   @MethodSource("expressionProviderWithAssignments")
   public void shouldCalculatePrimitiveTypeFromAssignment(@NotNull String expression, @NotNull String expectedType) throws IOException {
-    Preconditions.checkArgument(expression != null);
-    Preconditions.checkArgument(expectedType != null);
+    Preconditions.checkNotNull(expression);
+    Preconditions.checkNotNull(expectedType);
     doCalculateTypeFromExpression(expression, expectedType, true, false);
   }
 
   protected void doCalculateTypeFromExpression(@NotNull String expression, @NotNull String expectedType,
                                                boolean isPrimitive, boolean isGeneric) throws IOException {
-    Preconditions.checkArgument(expression != null);
-    Preconditions.checkArgument(expectedType != null);
+    Preconditions.checkNotNull(expression);
+    Preconditions.checkNotNull(expectedType);
     doShouldCalculateType(doParseExpression(expression), expectedType, isPrimitive, isGeneric);
   }
 
   protected ASTExpression doParseExpression(@NotNull String expression) throws IOException {
-    Preconditions.checkArgument(expression != null);
+    Preconditions.checkNotNull(expression);
     return this.getParser().parse_StringExpression(expression).orElse(null);
   }
 

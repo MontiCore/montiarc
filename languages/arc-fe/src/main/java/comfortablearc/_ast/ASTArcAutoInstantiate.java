@@ -11,7 +11,7 @@ public class ASTArcAutoInstantiate extends ASTArcAutoInstantiateTOP {
 
   @Override
   public void setArcAIMode(@NotNull ASTArcAIMode mode) {
-    Preconditions.checkArgument(mode != null);
+    Preconditions.checkNotNull(mode);
     super.setArcAIMode(mode);
   }
 

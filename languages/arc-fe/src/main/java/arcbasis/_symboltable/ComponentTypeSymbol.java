@@ -31,7 +31,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
 
   @Override
   public void setSpannedScope(@NotNull IArcBasisScope spannedScope) {
-    Preconditions.checkArgument(spannedScope != null);
+    Preconditions.checkNotNull(spannedScope);
     super.setSpannedScope(spannedScope);
   }
 
@@ -54,7 +54,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * {@code Optional}, if such an inner component type does not exist.
    */
   public Optional<ComponentTypeSymbol> getInnerComponent(@NotNull String name) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
     return this.getSpannedScope().resolveComponentTypeLocally(name);
   }
 
@@ -69,7 +69,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * List}, if the component type has no inner components with the given visibility.
    */
   public List<ComponentTypeSymbol> getInnerComponents(@NotNull AccessModifier visibility) {
-    Preconditions.checkArgument(visibility != null);
+    Preconditions.checkNotNull(visibility);
     return this.getInnerComponents().stream()
       .filter(c -> c.getAccessModifier().includes(visibility))
       .collect(Collectors.toList());
@@ -129,7 +129,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   }
 
   public Optional<VariableSymbol> getParameter(@NotNull String parameterName) {
-    Preconditions.checkArgument(parameterName != null);
+    Preconditions.checkNotNull(parameterName);
     return this.getParameters().stream().filter(v -> v.getName().equals(parameterName)).findFirst();
   }
 
@@ -140,7 +140,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @param parameter the symbol to add.
    */
   public void addParameter(@NotNull VariableSymbol parameter) {
-    Preconditions.checkArgument(parameter != null);
+    Preconditions.checkNotNull(parameter);
     Preconditions.checkArgument(this.getSpannedScope().getLocalVariableSymbols().contains(parameter));
     this.parameters.add(parameter);
   }
@@ -155,7 +155,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @see this#addParameter(VariableSymbol)
    */
   public void addParameters(@NotNull Collection<VariableSymbol> parameters) {
-    Preconditions.checkArgument(parameters != null);
+    Preconditions.checkNotNull(parameters);
     Preconditions.checkArgument(!parameters.contains(null));
     for (VariableSymbol parameter : parameters) {
       this.addParameter(parameter);
@@ -195,7 +195,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * empty {@code Optional} if no such field exists.
    */
   public Optional<VariableSymbol> getFields(@NotNull String name) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
     return this.getFields().stream().filter(field -> field.getName().equals(name)).findFirst();
   }
 
@@ -218,7 +218,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * {@code Optional} if no such port exists.
    */
   public Optional<PortSymbol> getPort(@NotNull String name) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
     return this.getSpannedScope().resolvePortLocally(name);
   }
 
@@ -234,7 +234,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * such port exists.
    */
   public Optional<PortSymbol> getPort(@NotNull String name, boolean searchInherited) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
     Collection<PortSymbol> portsToConsider
       = searchInherited ? this.getAllPorts() : this.getPorts();
     return portsToConsider.stream().filter(p -> p.getName().equals(name)).findFirst();
@@ -259,7 +259,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * visibility.
    */
   public List<PortSymbol> getIncomingPorts(@NotNull AccessModifier visibility) {
-    Preconditions.checkArgument(visibility != null);
+    Preconditions.checkNotNull(visibility);
     return this.getIncomingPorts().stream().filter(p -> p.getAccessModifier().includes(visibility))
       .collect(Collectors.toList());
   }
@@ -274,7 +274,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * Optional} if no such port exists.
    */
   public Optional<PortSymbol> getIncomingPort(@NotNull String name) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
     return this.getIncomingPort(name, false);
   }
 
@@ -289,7 +289,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * Optional} if no such port exists in the specified search range.
    */
   public Optional<PortSymbol> getIncomingPort(@NotNull String name, boolean searchInherited) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
     Collection<PortSymbol> portsToConsider
       = searchInherited ? this.getAllIncomingPorts() : this.getIncomingPorts();
     return portsToConsider.stream().filter(p -> p.getName().equals(name)).findFirst();
@@ -314,7 +314,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * visibility.
    */
   public List<PortSymbol> getOutgoingPorts(@NotNull AccessModifier visibility) {
-    Preconditions.checkArgument(visibility != null);
+    Preconditions.checkNotNull(visibility);
     return this.getOutgoingPorts().stream().filter(p -> p.getAccessModifier().includes(visibility))
       .collect(Collectors.toList());
   }
@@ -329,7 +329,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * Optional} if no such port exists.
    */
   public Optional<PortSymbol> getOutgoingPort(@NotNull String name) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
     return this.getOutgoingPort(name, false);
   }
 
@@ -344,7 +344,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * Optional} if no such port exists in the specified search range.
    */
   public Optional<PortSymbol> getOutgoingPort(@NotNull String name, boolean searchInherited) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
     Collection<PortSymbol> portsToConsider
       = searchInherited ? this.getAllOutgoingPorts() : this.getOutgoingPorts();
     return portsToConsider.stream().filter(p -> p.getName().equals(name)).findFirst();
@@ -444,7 +444,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * given name or an empty {@code Optional} if such a subcomponent instance does not exist.
    */
   public Optional<ComponentInstanceSymbol> getSubComponent(@NotNull String name) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
     return this.getSubComponents().stream().filter(c -> c.getName().equals(name)).findFirst();
   }
 

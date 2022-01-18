@@ -19,7 +19,7 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
 
   @Override
   public PortSymbolBuilder setName(@NotNull String name) {
-    Preconditions.checkArgument(name != null);
+    Preconditions.checkNotNull(name);
     return super.setName(name);
   }
 
@@ -28,7 +28,7 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
   }
 
   public PortSymbolBuilder setType(@NotNull SymTypeExpression type) {
-    Preconditions.checkArgument(type != null);
+    Preconditions.checkNotNull(type);
     this.type = type;
     return this.realBuilder;
   }
@@ -38,7 +38,7 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
   }
 
   public PortSymbolBuilder setDirection(@NotNull ASTPortDirection direction) {
-    Preconditions.checkArgument(direction != null);
+    Preconditions.checkNotNull(direction);
     this.direction = direction;
     return this.realBuilder;
   }

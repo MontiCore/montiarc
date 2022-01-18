@@ -20,7 +20,7 @@ public class InnerComponentNotExtendsDefiningComponent implements ArcBasisASTCom
 
   @Override
   public void check(@NotNull ASTComponentType node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol(), "ASTComponent node '%s' has no symbol. "
       + "Did you forget to run the SymbolTableCreator before checking cocos?", node.getName());
     ComponentTypeSymbol outer = node.getSymbol();

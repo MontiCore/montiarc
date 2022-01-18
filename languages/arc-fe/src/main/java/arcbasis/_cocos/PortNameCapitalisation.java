@@ -15,7 +15,7 @@ public class PortNameCapitalisation implements ArcBasisASTPortCoCo {
 
   @Override
   public void check(@NotNull ASTPort port) {
-    Preconditions.checkArgument(port != null);
+    Preconditions.checkNotNull(port);
     if(NameCapitalizationHelper.isNotLowerCase(port.getName())) {
       NameCapitalizationHelper.warning(ArcError.PORT_LOWER_CASE, port, port.getName(),
         port.getEnclosingScope().getSpanningSymbol().getName());

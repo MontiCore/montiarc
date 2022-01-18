@@ -284,7 +284,7 @@ public class MontiArcTool extends MontiArcToolTOP {
   public void storeSymbols(@NotNull ASTMACompilationUnit ast, @NotNull String path) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(path);
-    Preconditions.checkArgument(ast.getSpannedScope() != null);
+    Preconditions.checkNotNull(ast.getSpannedScope());
     Preconditions.checkArgument(ast.getSpannedScope() instanceof IMontiArcArtifactScope);
     Preconditions.checkArgument(ast.getComponentType().isPresentSymbol());
     Preconditions.checkArgument(!path.isEmpty());

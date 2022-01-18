@@ -20,7 +20,7 @@ public class ArcBasisPrettyPrinter implements ArcBasisHandler {
   }
 
   public ArcBasisPrettyPrinter(@NotNull IndentPrinter printer) {
-    Preconditions.checkArgument(printer != null);
+    Preconditions.checkNotNull(printer);
     this.printer = printer;
   }
 
@@ -30,7 +30,7 @@ public class ArcBasisPrettyPrinter implements ArcBasisHandler {
   }
 
   public void setTraverser(@NotNull ArcBasisTraverser traverser) {
-    Preconditions.checkArgument(traverser != null);
+    Preconditions.checkNotNull(traverser);
     this.traverser = traverser;
   }
 

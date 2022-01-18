@@ -17,7 +17,7 @@ public class GenericTypeParameterNameCapitalization implements GenericArcASTArcT
   @Override
   public void check(@NotNull ASTArcTypeParameter typeParameter) {
 
-    Preconditions.checkArgument(typeParameter != null);
+    Preconditions.checkNotNull(typeParameter);
     if (NameCapitalizationHelper.isNotUpperCase(typeParameter.getName())) {
       NameCapitalizationHelper.warning(ArcError.TYPE_PARAMETER_UPPER_CASE_LETTER, typeParameter,
         typeParameter.getName(), typeParameter.getEnclosingScope().getSpanningSymbol().getName());

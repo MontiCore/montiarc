@@ -19,7 +19,7 @@ public class ASTArcComputeBuilder extends ASTArcComputeBuilderTOP {
 
   @Override
   public ASTArcComputeBuilder setMCBlockStatement(@NotNull ASTMCBlockStatement blockStatement) {
-    Preconditions.checkArgument(blockStatement != null);
+    Preconditions.checkNotNull(blockStatement);
     this.mCBlockStatement = blockStatement;
     return this.realBuilder;
   }

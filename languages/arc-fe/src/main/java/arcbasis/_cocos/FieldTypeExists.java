@@ -24,7 +24,7 @@ public class FieldTypeExists implements ArcBasisASTArcFieldDeclarationCoCo {
   }
 
   @Override
-  public void check(ASTArcFieldDeclaration node) {
+  public void check(@NotNull ASTArcFieldDeclaration node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(!node.getArcFieldList().isEmpty());
     Preconditions.checkNotNull(node.getEnclosingScope(), "ASTArcFieldDeclaration node '%s' at '%s' has no enclosing " +

@@ -423,8 +423,8 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTypeTest
    * @return the given component type, represented as MCType
    */
   protected ASTMCType mcTypeFromCompType(@NotNull ASTComponentType comp) {
-    Preconditions.checkArgument(comp != null);
-    Preconditions.checkArgument(comp.getEnclosingScope() != null);
+    Preconditions.checkNotNull(comp);
+    Preconditions.checkNotNull(comp.getEnclosingScope());
 
     ASTMCType type = ArcBasisMill.mCQualifiedTypeBuilder()
       .setMCQualifiedName(
@@ -438,7 +438,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTypeTest
   }
 
   protected ASTComponentType encloseInstInCompType(@NotNull ASTComponentInstantiation inst) {
-    Preconditions.checkArgument(inst != null);
+    Preconditions.checkNotNull(inst);
 
     return ArcBasisMill.componentTypeBuilder()
       .setName("Outer")
@@ -448,7 +448,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTypeTest
   }
 
   protected ASTExpression doBuildNameExpressionInScope(@NotNull String expression) {
-    Preconditions.checkArgument(expression != null);
+    Preconditions.checkNotNull(expression);
     ASTExpression result = this.doBuildNameExpression(expression);
     this.getScopeSetter().handle(result);
     return result;

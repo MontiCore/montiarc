@@ -41,7 +41,7 @@ public class MontiArcParser extends MontiArcParserTOP {
   @Override
   public Optional<ASTMACompilationUnit> parseMACompilationUnit(@NotNull String relativeFilePath)
     throws IOException {
-    Preconditions.checkArgument(relativeFilePath != null);
+    Preconditions.checkNotNull(relativeFilePath);
     Optional<ASTMACompilationUnit> optAst = super.parseMACompilationUnit(relativeFilePath);
     if (optAst.isPresent()) {
       String fileRoot = Files.getNameWithoutExtension(relativeFilePath);
@@ -75,7 +75,7 @@ public class MontiArcParser extends MontiArcParserTOP {
    */
   @Override
   public Optional<ASTMACompilationUnit> parse(@NotNull String relativeFilePath) throws IOException {
-    Preconditions.checkArgument(relativeFilePath != null);
+    Preconditions.checkNotNull(relativeFilePath);
     String nonUriPath = relativeFilePath.replaceAll("/", Matcher.quoteReplacement(File.separator));
     return parseMACompilationUnit(nonUriPath);
   }

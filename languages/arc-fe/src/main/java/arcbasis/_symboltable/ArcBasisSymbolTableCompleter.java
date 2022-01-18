@@ -229,7 +229,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
 
   @Override
   public void endVisit(@NotNull ASTPortDeclaration node) {
-    Preconditions.checkArgument(node != null);
+    Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentPortType().isPresent());
     Preconditions.checkState(this.getCurrentPortType().get().equals(node.getMCType()));
     this.setCurrentPortType(null);

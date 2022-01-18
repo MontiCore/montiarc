@@ -30,12 +30,12 @@ public class AutoInstantiateHelperTest extends AbstractTest {
   }
 
   protected static void putCompType(@NotNull ASTComponentType compType) {
-    Preconditions.checkArgument(compType != null);
+    Preconditions.checkNotNull(compType);
     getCompTypes().put(compType.getName(), compType);
   }
 
   protected static void putCompTypes(@NotNull ASTComponentType... componentTypes) {
-    Preconditions.checkArgument(componentTypes != null);
+    Preconditions.checkNotNull(componentTypes);
     Preconditions.checkArgument(!Arrays.asList(componentTypes).contains(null));
     Arrays.stream(componentTypes).forEach(AutoInstantiateHelperTest::putCompType);
   }
@@ -81,7 +81,7 @@ public class AutoInstantiateHelperTest extends AbstractTest {
   @ParameterizedTest
   @MethodSource("compNameAndExpectedSizeProvider")
   public void shouldGetAIs(@NotNull String typeName, int expectedSize) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(expectedSize >= 0);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
 
@@ -108,7 +108,7 @@ public class AutoInstantiateHelperTest extends AbstractTest {
   @ParameterizedTest
   @ValueSource(strings = {"A"})
   public void getAIShouldThrowNoSuchElementException(@NotNull String typeName) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
     //Given
     ASTComponentType compType = getCompTypes().get(typeName);
@@ -127,7 +127,7 @@ public class AutoInstantiateHelperTest extends AbstractTest {
   @ParameterizedTest
   @ValueSource(strings = {"B", "C"})
   public void shouldGetAIWithoutError(@NotNull String typeName) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
 
     //Given
@@ -169,7 +169,7 @@ public class AutoInstantiateHelperTest extends AbstractTest {
   @ParameterizedTest
   @MethodSource("compNameAndUniqueAIProvider")
   public void shouldEvaluateUniqueAICorrectly(@NotNull String typeName, boolean isAIUnique) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
 
     //Given
@@ -188,7 +188,7 @@ public class AutoInstantiateHelperTest extends AbstractTest {
   @ParameterizedTest
   @MethodSource("compNameAndMaxOneAIProvider")
   public void shouldEvaluateMaxOneAICorrectly(@NotNull String typeName, boolean isAIMaxOne) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
 
     //Given
@@ -221,7 +221,7 @@ public class AutoInstantiateHelperTest extends AbstractTest {
   }
 
   protected void doEvaluateAI(@NotNull String typeName, boolean aiOn) {
-    Preconditions.checkArgument(typeName != null);
+    Preconditions.checkNotNull(typeName);
     Preconditions.checkArgument(getCompTypes().containsKey(typeName));
 
     //Given

@@ -48,6 +48,6 @@ public class ASTArcComputeBuilderTest {
     final ASTArcComputeBuilder builder = new ASTArcComputeBuilder();
 
     //When && Then
-    Assertions.assertThrows(IllegalArgumentException.class, () -> builder.setMCBlockStatement(null));
+    Assertions.assertThrows(NullPointerException.class, () -> builder.setMCBlockStatement(null));
   }
 }
