@@ -83,6 +83,9 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
   testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version")
+
+  // VariableArc
+  // implementation("org.openjdk.nashorn:nashorn-core:15.3") //JavaScript for JDK>14
 }
 
 task generate {}

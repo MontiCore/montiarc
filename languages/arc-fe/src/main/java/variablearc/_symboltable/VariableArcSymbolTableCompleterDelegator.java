@@ -15,24 +15,32 @@ public class VariableArcSymbolTableCompleterDelegator {
 
   protected VariableArcTraverser traverser;
 
-  protected VariableArcTraverser getTraverser() {
-    return this.traverser;
-  }
-
   public VariableArcSymbolTableCompleterDelegator() {
     this.globalScope = VariableArcMill.globalScope();
     this.traverser = VariableArcMill.traverser();
     this.init();
   }
 
+  protected VariableArcTraverser getTraverser() {
+    return this.traverser;
+  }
+
   protected void init() {
     this.initArcBasis();
+    this.initVariableArc();
   }
 
   protected void initArcBasis() {
     ArcBasisSymbolTableCompleter arcBasisSymbolTableCompleter = ArcBasisMill.symbolTableCompleter();
     this.getTraverser().add4ArcBasis(arcBasisSymbolTableCompleter);
     this.getTraverser().setArcBasisHandler(arcBasisSymbolTableCompleter);
+  }
+
+  protected void initVariableArc() {
+    VariableArcSymbolTableCompleter variableArcSymbolTableCompleter = VariableArcMill.symbolTableCompleter();
+    this.getTraverser().add4ArcBasis(variableArcSymbolTableCompleter);
+    this.getTraverser().add4VariableArc(variableArcSymbolTableCompleter);
+    this.getTraverser().setVariableArcHandler(variableArcSymbolTableCompleter);
   }
 
   public void createFromAST(@NotNull ASTArcElement rootNode) {

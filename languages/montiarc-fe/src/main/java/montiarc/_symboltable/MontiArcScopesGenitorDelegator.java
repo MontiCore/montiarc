@@ -3,6 +3,8 @@ package montiarc._symboltable;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisScopesGenitor;
+import variablearc.VariableArcMill;
+import variablearc._symboltable.VariableArcScopesGenitor;
 
 public class MontiArcScopesGenitorDelegator extends MontiArcScopesGenitorDelegatorTOP {
 
@@ -13,5 +15,12 @@ public class MontiArcScopesGenitorDelegator extends MontiArcScopesGenitorDelegat
     arcBasisScopesGenitor.setScopeStack(scopeStack);
     traverser.add4ArcBasis(arcBasisScopesGenitor);
     traverser.setArcBasisHandler(arcBasisScopesGenitor);
+
+    traverser.getVariableArcVisitorList().clear();
+    VariableArcScopesGenitor variableArcScopesGenitor = VariableArcMill.scopesGenitor();
+    variableArcScopesGenitor.setScopeStack(scopeStack);
+    traverser.add4VariableArc(variableArcScopesGenitor);
+    traverser.add4ArcBasis(variableArcScopesGenitor);
+    traverser.setVariableArcHandler(variableArcScopesGenitor);
   }
 }

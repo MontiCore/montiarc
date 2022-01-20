@@ -3,6 +3,7 @@ package montiarc._visitor;
 
 import arcautomaton._visitor.ArcAutomatonPrettyPrinter;
 import arcbasis._visitor.ArcBasisPrettyPrinter;
+import arcbasis._visitor.IFullPrettyPrinter;
 import com.google.common.base.Preconditions;
 import comfortablearc._visitor.ComfortableArcPrettyPrinter;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -26,7 +27,7 @@ import montiarc._ast.ASTMontiArcNode;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._visitor.VariableArcPrettyPrinter;
 
-public class MontiArcFullPrettyPrinter {
+public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
 
   protected MontiArcTraverser traverser;
 
@@ -131,7 +132,8 @@ public class MontiArcFullPrettyPrinter {
   protected void initMCSimpleGenericTypesPrettyPrinter(@NotNull IndentPrinter printer) {
     Preconditions.checkNotNull(printer);
 
-    MCSimpleGenericTypesPrettyPrinter mcSimpleGenericTypesPrettyPrinter = new MCSimpleGenericTypesPrettyPrinter(printer);
+    MCSimpleGenericTypesPrettyPrinter mcSimpleGenericTypesPrettyPrinter =
+      new MCSimpleGenericTypesPrettyPrinter(printer);
     traverser.setMCSimpleGenericTypesHandler(mcSimpleGenericTypesPrettyPrinter);
     traverser.add4MCSimpleGenericTypes(mcSimpleGenericTypesPrettyPrinter);
   }
@@ -155,7 +157,8 @@ public class MontiArcFullPrettyPrinter {
   protected void initAssignmentExpressionsPrettyPrinter(@NotNull IndentPrinter printer) {
     Preconditions.checkNotNull(printer);
 
-    AssignmentExpressionsPrettyPrinter assignmentExpressionsPrettyPrinter = new AssignmentExpressionsPrettyPrinter(printer);
+    AssignmentExpressionsPrettyPrinter assignmentExpressionsPrettyPrinter =
+      new AssignmentExpressionsPrettyPrinter(printer);
     traverser.setAssignmentExpressionsHandler(assignmentExpressionsPrettyPrinter);
     traverser.add4AssignmentExpressions(assignmentExpressionsPrettyPrinter);
   }
@@ -179,7 +182,8 @@ public class MontiArcFullPrettyPrinter {
   protected void initMCVarDeclarationStatementsPrettyPrinter(@NotNull IndentPrinter printer) {
     Preconditions.checkNotNull(printer);
 
-    MCVarDeclarationStatementsPrettyPrinter mcVarDeclarationStatementsPrettyPrinter = new MCVarDeclarationStatementsPrettyPrinter(printer);
+    MCVarDeclarationStatementsPrettyPrinter mcVarDeclarationStatementsPrettyPrinter =
+      new MCVarDeclarationStatementsPrettyPrinter(printer);
     traverser.setMCVarDeclarationStatementsHandler(mcVarDeclarationStatementsPrettyPrinter);
     traverser.add4MCVarDeclarationStatements(mcVarDeclarationStatementsPrettyPrinter);
   }
@@ -211,7 +215,7 @@ public class MontiArcFullPrettyPrinter {
     a.accept(getTraverser());
     return getPrinter().getContent();
   }
-  
+
   public String prettyprint(ASTExpression node) {
     getPrinter().clearBuffer();
     node.accept(getTraverser());

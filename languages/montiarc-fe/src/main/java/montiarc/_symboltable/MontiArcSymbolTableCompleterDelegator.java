@@ -10,6 +10,8 @@ import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
+import variablearc.VariableArcMill;
+import variablearc._symboltable.VariableArcSymbolTableCompleter;
 
 public class MontiArcSymbolTableCompleterDelegator {
 
@@ -30,6 +32,7 @@ public class MontiArcSymbolTableCompleterDelegator {
   protected void init() {
     this.initArcBasis();
     this.initGenericArc();
+    this.initVariableArc();
   }
 
   protected void initArcBasis() {
@@ -42,6 +45,13 @@ public class MontiArcSymbolTableCompleterDelegator {
     GenericArcSymbolTableCompleter genericArcSymbolTableCompleter = GenericArcMill.symbolTableCompleter();
     this.getTraverser().add4GenericArc(genericArcSymbolTableCompleter);
     this.getTraverser().setGenericArcHandler(genericArcSymbolTableCompleter);
+  }
+
+  protected void initVariableArc() {
+    VariableArcSymbolTableCompleter variableArcSymbolTableCompleter = VariableArcMill.symbolTableCompleter();
+    this.getTraverser().add4ArcBasis(variableArcSymbolTableCompleter);
+    this.getTraverser().add4VariableArc(variableArcSymbolTableCompleter);
+    this.getTraverser().setVariableArcHandler(variableArcSymbolTableCompleter);
   }
 
   public void createFromAST(@NotNull ASTMACompilationUnit rootNode) {

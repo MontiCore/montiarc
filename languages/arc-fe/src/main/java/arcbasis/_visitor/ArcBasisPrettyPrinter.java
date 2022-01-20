@@ -12,7 +12,8 @@ import java.util.List;
 
 public class ArcBasisPrettyPrinter implements ArcBasisHandler {
 
-  private ArcBasisTraverser traverser;
+  protected ArcBasisTraverser traverser;
+
   protected IndentPrinter printer;
 
   public ArcBasisPrettyPrinter() {

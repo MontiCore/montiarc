@@ -2,7 +2,7 @@
 package montiarc.check;
 
 import arcbasis.check.AbstractArcDeriveType;
-import arcbasis.check.DeriveSymTypeOfExpressionWithPorts;
+import variablearc.check.DeriveSymTypeOfExpressionWithPortsAndFeatures;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.*;
 import montiarc.MontiArcMill;
@@ -46,7 +46,7 @@ public class MontiArcDeriveType extends AbstractArcDeriveType {
   }
 
   protected void initDeriveSymTypeOfExpression() {
-    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpressionWithPorts();
+    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpressionWithPortsAndFeatures();
     deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
     this.getCalculationDelegator().add4ExpressionsBasis(deriveSymTypeOfExpression);
     this.getCalculationDelegator().setExpressionsBasisHandler(deriveSymTypeOfExpression);

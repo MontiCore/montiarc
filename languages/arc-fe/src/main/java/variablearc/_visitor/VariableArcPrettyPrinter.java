@@ -12,8 +12,8 @@ import java.util.List;
 
 public class VariableArcPrettyPrinter implements VariableArcHandler, VariableArcVisitor2 {
 
-  private VariableArcTraverser traverser;
   protected IndentPrinter printer;
+  private VariableArcTraverser traverser;
 
   public VariableArcPrettyPrinter() {
     this(new IndentPrinter());

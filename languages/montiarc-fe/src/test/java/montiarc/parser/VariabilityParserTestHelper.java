@@ -43,26 +43,51 @@ public class VariabilityParserTestHelper {
                 .setElseStatementAbsent()
                 .build(),
               MontiArcMill.arcIfStatementBuilder().setCondition(
-                MontiArcMill.nameExpressionBuilder().setName("b").build()
-              ).setThenStatement(
-                MontiArcMill.componentInterfaceBuilder().setPortDeclarationsList(
-                  Collections.singletonList(
-                    MontiArcMill.portDeclarationBuilder()
-                      .setPortDirection(MontiArcMill.portDirectionInBuilder().build())
-                      .setPortsList(Collections.singletonList(MontiArcMill.portBuilder()
-                        .setName("i")
-                        .build()))
-                      .setMCType(MontiArcMill.mCQualifiedTypeBuilder()
-                        .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
-                          .setPartsList(Collections.singletonList("String")).build())
-                        .build())
-                      .build()
-                  )).build()
-              ).setElseStatement(
-                MontiArcMill.arcBlockBuilder()
-                  .setArcElementsList(Collections.emptyList())
-                  .build())
-              .build(),
+                  MontiArcMill.nameExpressionBuilder().setName("b").build()
+                ).setThenStatement(
+                  MontiArcMill.componentInterfaceBuilder().setPortDeclarationsList(
+                    Collections.singletonList(
+                      MontiArcMill.portDeclarationBuilder()
+                        .setPortDirection(MontiArcMill.portDirectionInBuilder().build())
+                        .setPortsList(Collections.singletonList(MontiArcMill.portBuilder()
+                          .setName("i")
+                          .build()))
+                        .setMCType(MontiArcMill.mCQualifiedTypeBuilder()
+                          .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
+                            .setPartsList(Collections.singletonList("String")).build())
+                          .build())
+                        .build()
+                    )).build()
+                ).setElseStatement(
+                  MontiArcMill.arcBlockBuilder()
+                    .setArcElementsList(Collections.emptyList())
+                    .build())
+                .build(),
+              MontiArcMill.componentTypeBuilder().setName("A").setHead(MontiArcMill.componentHeadBuilder().build()).setBody(
+                MontiArcMill.componentBodyBuilder().setArcElementsList(
+                  Collections.singletonList(MontiArcMill.arcFeatureDeclarationBuilder()
+                    .setArcFeaturesList(Collections.singletonList(
+                      MontiArcMill.arcFeatureBuilder().setName("c").build())
+                    ).build())
+                ).build()
+              ).build(),
+              MontiArcMill.componentInstantiationBuilder().setMCType(
+                MontiArcMill.mCQualifiedTypeBuilder().setMCQualifiedName(
+                  MontiArcMill.mCQualifiedNameBuilder().setPartsList(Collections.singletonList("A")
+                  ).build()
+                ).build()
+              ).setComponentInstancesList(
+                Collections.singletonList(MontiArcMill.componentInstanceBuilder().setName("a1").setArguments(
+                  MontiArcMill.argumentsBuilder().setExpressionsList(
+                    Collections.singletonList(
+                      MontiArcMill.assignmentExpressionBuilder().setOperator(2)
+                        .setLeft(MontiArcMill.nameExpressionBuilder().setName("c").build())
+                        .setRight(MontiArcMill.literalExpressionBuilder()
+                          .setLiteral(MontiArcMill.booleanLiteralBuilder()
+                            .setSource(3)
+                            .build())
+                          .build()).build())).build()).build())
+              ).build(),
               MontiArcMill.arcConstraintDeclarationBuilder().setExpression(
                 MontiArcMill.booleanOrOpExpressionBuilder().setLeft(
                   MontiArcMill.equalsExpressionBuilder().setLeft(

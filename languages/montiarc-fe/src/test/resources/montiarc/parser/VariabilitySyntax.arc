@@ -14,5 +14,11 @@ component VariabilitySyntax {
   if (b) port in String i;
   else {}
 
+  component A {
+    feature c;
+  }
+
+  A a1(c=true);
+
   constraint (a==false || a==true && b==false);
 }

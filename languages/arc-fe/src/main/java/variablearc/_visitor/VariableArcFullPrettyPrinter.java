@@ -2,6 +2,8 @@
 package variablearc._visitor;
 
 import arcbasis._visitor.ArcBasisPrettyPrinter;
+import arcbasis._visitor.IFullPrettyPrinter;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.prettyprint.ExpressionsBasisPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.prettyprint.MCBasicsPrettyPrinter;
@@ -9,7 +11,7 @@ import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 import variablearc.VariableArcMill;
 import variablearc._ast.ASTVariableArcNode;
 
-public class VariableArcFullPrettyPrinter {
+public class VariableArcFullPrettyPrinter implements IFullPrettyPrinter {
   protected VariableArcTraverser traverser;
 
   protected IndentPrinter printer;
@@ -39,6 +41,13 @@ public class VariableArcFullPrettyPrinter {
   }
 
   public String prettyprint(ASTVariableArcNode node) {
+    getPrinter().clearBuffer();
+    node.accept(getTraverser());
+    return getPrinter().getContent();
+  }
+
+  @Override
+  public String prettyprint(ASTExpression node) {
     getPrinter().clearBuffer();
     node.accept(getTraverser());
     return getPrinter().getContent();
