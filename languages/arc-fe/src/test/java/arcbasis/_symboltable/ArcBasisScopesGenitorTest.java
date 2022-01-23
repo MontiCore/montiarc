@@ -58,6 +58,7 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     ComponentTypeSymbol symbol = this.getSymTab().create_ComponentType(ast).build();
     Assertions.assertEquals(ast.getName(), symbol.getName());
     Assertions.assertNotNull(symbol.getSpannedScope());
+    Assertions.assertTrue(symbol.getSpannedScope().isShadowing());
   }
 
   @Test

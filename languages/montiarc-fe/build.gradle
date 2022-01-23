@@ -93,6 +93,7 @@ dependencies {
   implementation("com.google.code.findbugs:jsr305:$jsr305_version")
   implementation("org.antlr:antlr4-runtime:$antlr_version")
   implementation("org.codehaus.janino:janino:$janino_version")
+  testImplementation("org.mockito:mockito-core:$mockito_version")
   testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
   testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
   testImplementation("org.assertj:assertj-core:$assertj_version")

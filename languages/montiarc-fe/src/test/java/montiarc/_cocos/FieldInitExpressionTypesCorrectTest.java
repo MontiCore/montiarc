@@ -49,7 +49,8 @@ public class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    "CorrectFieldInitializations.arc"
+    "CorrectFieldInitializations.arc",
+    "ParameterShadowing.arc"
   })
   public void shouldApproveValidTypeAssignments(@NotNull String model) {
     Preconditions.checkNotNull(model);

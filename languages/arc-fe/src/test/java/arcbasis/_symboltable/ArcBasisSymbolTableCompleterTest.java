@@ -52,7 +52,6 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     this.setUpCompleter();
   }
 
-
   /**
    * Method under test {@link ArcBasisSymbolTableCompleter#setTypePrinter(MCBasicTypesFullPrettyPrinter)}
    */
