@@ -124,14 +124,14 @@ java {
   }
 }
 
-// all in one cli-jar
+// all in one tool-jar
 shadowJar {
   manifest {
     attributes "Main-Class": "montiarc.MontiArcTool"
   }
-  archiveClassifier = "cli"
+  archiveClassifier = "mc-tool"
   archiveBaseName = "MontiArc"
-  archiveFileName = "${archiveBaseName.get()}CLI-${archiveVersion.get()}.${archiveExtension.get()}"
+  archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
 }
 
 jar.dependsOn(shadowJar)

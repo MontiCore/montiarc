@@ -84,7 +84,7 @@ main class and setting up the build process to generate an executable.
 The [MontiArcTool](languages/montiarc-fe/src/main/java/montiarc/MontiArcTool.java) offers capabilities for processing MontiArc component models.
 It provides multiple options that can be used as follows:
 
-`java -jar MontiArcCLI.jar [-h] -i <fileName> [-path <p>] [-pp [<file>]] [-s [<file>]]`
+`java -jar MontiArc.jar [-h] -i <fileName> [-path <p>] [-pp [<file>]] [-s [<file>]]`
 
 where the arguments are:
 
@@ -100,8 +100,8 @@ where the arguments are:
 Exemplary usage:
 
 ```
-  java -jar MontiArcCLI.jar -h
-  java -jar MontiArcCLI.jar -mp applications/bumperbot/src/main/resources
+  java -jar MontiArc.jar -h
+  java -jar MontiArc.jar -mp applications/bumperbot/src/main/resources
 ``` 
 
 The [MA2JavaTool](generators/ma2java/src/main/java/montiarc/generator/MontiArcTool.java) extends the MontiArcTool with code generating capabilities. It provides the following options in addition to those defined above:

@@ -71,15 +71,15 @@ java {
   withSourcesJar()
 }
 
-// all in one cli-jar
+// all in one tool-jar
 shadowJar {
   manifest {
     attributes "Main-Class": "montiarc.generator.MontiArcTool"
   }
   zip64 = true
-  archiveClassifier = "cli"
+  archiveClassifier = "mc-tool"
   archiveBaseName = "MontiArc2Java"
-  archiveFileName = "${archiveBaseName.get()}CLI-${archiveVersion.get()}.${archiveExtension.get()}"
+  archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
 }
 
 jar.dependsOn(shadowJar)
