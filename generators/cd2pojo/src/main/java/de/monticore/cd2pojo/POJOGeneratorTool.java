@@ -132,7 +132,6 @@ public class POJOGeneratorTool {
     cd4CGlobalScope.setSymbolPath(mp);
     cd4CGlobalScope.setFileExt(cdFileExtension);
     BasicSymbolsMill.initializePrimitives();
-    addJavaLangToGlobalScope();
     processModels(cd4CGlobalScope, cdChecker);
     return cd4CGlobalScope;
   }
@@ -197,22 +196,6 @@ public class POJOGeneratorTool {
       Log.error("Could not access " + filename + ", there were I/O exceptions.");
     }
     return Optional.ofNullable(cd);
-  }
-
-  public static void addJavaLangToGlobalScope() {
-    ICD4CodeArtifactScope artifactScope = CD4CodeMill.artifactScope();
-    artifactScope.setName("java.lang");
-    CD4CodeMill.globalScope().addSubScope(artifactScope);
-    artifactScope.add(CD4CodeMill.oOTypeSymbolBuilder()
-      .setName("Object")
-      .setEnclosingScope(CD4CodeMill.artifactScope())
-      .setSpannedScope(CD4CodeMill.scope()).build());
-    artifactScope.add(CD4CodeMill.oOTypeSymbolBuilder()
-      .setName("String")
-      .setEnclosingScope(CD4CodeMill.artifactScope())
-      .setSpannedScope(CD4CodeMill.scope())
-      .addSuperTypes(SymTypeExpressionFactory.createTypeObject("java.lang.Object", CD4CodeMill.globalScope()))
-      .build());
   }
 
   /**
