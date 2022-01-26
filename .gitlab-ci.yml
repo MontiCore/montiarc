@@ -13,6 +13,7 @@ stages:
   - test
   - post-test
   - check
+  - mirror
       
 Validate Gradle:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.8.2-jdk8
@@ -94,5 +95,38 @@ checkMDLinks:
     - "linkCheckRes=$(java -jar MDLinkCheckerCLI.jar -url $url -t $secibuildtoken)"
     - "echo \"$linkCheckRes\""
     - "if [[ $linkCheckRes == *\"ERROR\"* ]]; then exit 1; fi"
-  only:
-    - develop
+
+# Mirrors this repository to GitHub.
+#
+# The mirror will always be at either HEAD or HEAD+1 (depending on whether cleanup is necessary).
+# For more information, visit: https://git.rwth-aachen.de/monticore/auxiliary-development-tools/github-mirror-tools (Available internally only)
+Github Mirror:
+  stage: mirror
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.8.2-jdk8
+  variables:
+    # The repository is edited during this job. To make sure that no changes persist, we instruct GitLab to always
+    # create a fresh clone of the repository instead of caching it and attempting to remove any changes.
+    #
+    # See https://docs.gitlab.com/ee/ci/runners/configure_runners.html#git-strategy
+    GIT_STRATEGY: clone
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SE_CIBUILD_SSH_PRIV_KEY")
+    - echo "$SE_CIBUILD_SSH_PRIV_KEY" | tr -d '\r' | ssh-add -
+    - git config --global user.email "noreply-ci@se-rwth.de"
+    - git config --global user.name "MontiCore Mirroring Bot"
+    - git checkout "$CI_COMMIT_REF_NAME" # GitLab checks out a commit in detached HEAD mode by default, but we want to commit to the branch and push.
+    - mkdir -p ~/.ssh
+    - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  script:
+    - git lfs fetch --all
+    - git remote add github git@github.com:MontiCore/montiarc.git
+    - git fetch --all
+    - if git rev-parse --quiet --verify github/"$CI_COMMIT_BRANCH" > /dev/null; 
+      then git pull --rebase github "$CI_COMMIT_BRANCH";
+      fi
+    - git push --force github $CI_COMMIT_BRANCH
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"'
+      when: on_success
