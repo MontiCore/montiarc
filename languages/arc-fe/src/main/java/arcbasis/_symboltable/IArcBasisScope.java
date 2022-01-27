@@ -7,7 +7,7 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
-import de.monticore.utils.Names;
+import de.se_rwth.commons.Names;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Optional;

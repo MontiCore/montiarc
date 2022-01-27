@@ -9,7 +9,7 @@ import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.io.FileReaderWriter;
 import de.monticore.io.paths.MCPath;
-import de.monticore.utils.Names;
+import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc.generator.util.Identifier;
 import montiarc.generator.util.MA2JavaError;
