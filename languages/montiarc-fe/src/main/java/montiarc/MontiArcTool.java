@@ -114,7 +114,6 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkNotNull(directory);
     Preconditions.checkArgument(!fileNameRegEx.isEmpty());
     Preconditions.checkArgument(directory.toFile().exists(), directory.toAbsolutePath() + " does not exist.");
-    Preconditions.checkArgument(directory.toFile().isDirectory(), directory.toAbsolutePath() + " is not a directory.");
     FileFilter filter = new RegexFileFilter(fileNameRegEx);
     try (Stream<Path> paths = Files.walk(directory)) {
       paths.filter(file -> filter.accept(file.toFile())).forEach(this::loadSymbols);
@@ -328,8 +327,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkNotNull(entries);
     Preconditions.checkArgument(!entries.contains(null));
     this.initGlobalScope();
-    MCPath symbolPath = new MCPath(entries);
-    MontiArcMill.globalScope().setSymbolPath(symbolPath);
+    entries.forEach(entry -> MontiArcMill.globalScope().getSymbolPath().addEntry(entry));
   }
 
   public void initializeBasicTypes() {

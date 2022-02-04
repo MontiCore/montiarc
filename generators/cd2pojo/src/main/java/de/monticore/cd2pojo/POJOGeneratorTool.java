@@ -127,9 +127,10 @@ public class POJOGeneratorTool {
   public static ICD4CodeGlobalScope loadCD4CModelsFromPaths(@NotNull Collection<Path> paths, @NotNull CD4CodeCoCoChecker cdChecker) {
     Preconditions.checkNotNull(paths);
     Preconditions.checkNotNull(cdChecker);
-    MCPath mp = new MCPath(paths);
     ICD4CodeGlobalScope cd4CGlobalScope = CD4CodeMill.globalScope();
-    cd4CGlobalScope.setSymbolPath(mp);
+    for (Path path: paths) {
+      cd4CGlobalScope.getSymbolPath().addEntry(path);
+    }
     cd4CGlobalScope.setFileExt(cdFileExtension);
     BasicSymbolsMill.initializePrimitives();
     processModels(cd4CGlobalScope, cdChecker);
