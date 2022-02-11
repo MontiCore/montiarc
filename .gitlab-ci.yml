@@ -32,6 +32,7 @@ Validate Gradle:
       - libraries/lejos-rte/target/
       - libraries/majava-rte/target/
       - libraries/simulator-rte/target/
+    expire_in: 1 week
   script:
     - gradle clean assemble
     
@@ -46,6 +47,7 @@ Validate Gradle:
     paths:
       - target/reports/jacoco/aggregatedJacocoReport/aggregatedJacocoReport.xml
       - target/reports/jacoco/aggregatedJacocoReport/aggregatedJacocoReport.csv
+    expire_in: 1 week
 
 Unit Test JDK 8:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.8.2-jdk8
@@ -82,6 +84,7 @@ Code Coverage:
   artifacts:
     reports:
       cobertura: cobertura.xml
+    expire_in: 1 week
 
 checkMDLinks:
   stage: check
