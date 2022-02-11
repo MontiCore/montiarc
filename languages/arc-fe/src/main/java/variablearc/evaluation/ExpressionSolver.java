@@ -60,8 +60,7 @@ public abstract class ExpressionSolver {
         }
       }
     }
-    catch (ScriptException e) {
-      e.printStackTrace();
+    catch (ScriptException ignored) {
     }
     return Optional.empty();
   }
