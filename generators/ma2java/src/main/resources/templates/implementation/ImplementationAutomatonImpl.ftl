@@ -9,7 +9,7 @@
   <#assign automatonHelper = compHelper.automatonHelperFrom(automaton)>
 
   // component variables
-  <@Utils.printVariables comp=comp/>
+  <@Utils.printVariables comp=comp compHelper=compHelper/>
 
   // component config parameters
   <@Utils.printConfigParameters comp=comp/>

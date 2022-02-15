@@ -8,14 +8,12 @@ import com.google.common.base.Preconditions;
 import de.monticore.scactions._ast.ASTSCABody;
 import de.monticore.scactions._ast.ASTSCEntryAction;
 import de.monticore.scactions._ast.ASTSCExitAction;
-import de.monticore.scbasis._ast.ASTSCSBody;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.sctransitions4code._ast.ASTTransitionAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import org.codehaus.commons.nullanalysis.NotNull;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 import java.util.Optional;

@@ -12,7 +12,7 @@
     <@Ports.printPortsWithGetterAndSetter comp=comp compHelper=compHelper/>
 
   // component variables
-    <@Utils.printVariables comp=comp/>
+    <@Utils.printVariables comp=comp compHelper=compHelper/>
 
   // config parameters
     <@Utils.printConfigParameters comp=comp/>

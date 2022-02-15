@@ -32,16 +32,16 @@
 </#macro>
 
 <#-- Prints members for variables -->
-<#macro printVariables comp>
-    <#assign parameters = comp.getParameters()>
-    <#assign variables = comp.getFields()>
-    <#list variables as variable>
-        <#assign compHasVariables = true>
-        <#list parameters as param>
-            <#if variable == param><#assign compHasVariables = false><#break></#if>
-        </#list>
-        <#if compHasVariables>
-            <#lt>  <@printMember type=variable.getType().print() name=variable.getName() visibility="protected"/>
+<#macro printVariables comp compHelper>
+    <#list compHelper.getComponentVariables(comp) as variable>
+        <#assign visibility="protected">
+        <#assign type=variable.getType().print()>
+        <#assign name=variable.getName()>
+        <#if compHelper.hasInitializerExpression(variable)>
+            <#assign initial=compHelper.printExpression(compHelper.getInitializerExpression(variable))>
+            ${visibility} ${type} ${name} = ${initial};
+        <#else>
+            ${visibility} ${type} ${name};
         </#if>
     </#list>
 </#macro>

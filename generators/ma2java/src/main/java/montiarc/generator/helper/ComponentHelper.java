@@ -14,6 +14,7 @@ import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
+import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.symboltable.ImportStatement;
@@ -152,7 +153,8 @@ public class ComponentHelper {
    * @return
    */
   public String printExpression(ASTExpression expr) {
-    return this.getPrettyPrinter().prettyprint(expr);
+    String res = this.getPrettyPrinter().prettyprint(expr);
+    return res;
   }
 
   /**
@@ -201,13 +203,32 @@ public class ComponentHelper {
     }
     return autoBoxedTypeName;
   }
+  
+  public static List<VariableSymbol> getComponentVariables(ComponentTypeSymbol comp) {
+    Preconditions.checkNotNull(comp);
+    List<VariableSymbol> vss = new ArrayList<>(comp.getFields());
+    vss.removeAll(comp.getParameters());
+    return vss;
+  }
+  
+  public static boolean hasInitializerExpression(VariableSymbol sym) {
+    Preconditions.checkNotNull(sym);
+    return sym.isPresentAstNode() && sym.getAstNode() instanceof ASTArcField;
+  }
+  
+  public static ASTExpression getInitializerExpression(VariableSymbol sym) {
+    Preconditions.checkNotNull(sym);
+    Preconditions.checkArgument(sym.isPresentAstNode());
+    Preconditions.checkArgument(sym.getAstNode() instanceof ASTArcField);
+    return ((ASTArcField) sym.getAstNode()).getInitial();
+  }
 
   /**
    * Calculates the values of the parameters of a {@link ComponentInstanceSymbol}. This takes default values for
    * parameters into account and adds them as required. Default values are only added from left to right in order. <br/>
    * Example: For a component with parameters
    * <code>String stringParam, Integer integerParam = 2, Object objectParam = new Object()</code>
-   * that is instanciated with parameters <code>"Test String", 5</code> this method adds <code>new Object()</code> as
+   * that is instantiated with parameters <code>"Test String", 5</code> this method adds <code>new Object()</code> as
    * the last parameter.
    *
    * @param param The {@link ComponentInstanceSymbol} for which the parameters should be calculated.
