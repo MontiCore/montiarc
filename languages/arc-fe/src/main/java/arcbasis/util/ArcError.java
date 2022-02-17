@@ -90,7 +90,8 @@ public enum ArcError implements montiarc.util.Error {
   MULTIPLE_MODE_AUTOMATA("0xC1077", "Components may only have one mode-automaton at max."),
   MODES_WITHOUT_AUTOMATON("0xC1078", "The component '%s' defines modes, but no mode-automaton."),
   MODE_ELEMENTS_IN_ATOMIC_COMPONENTS("0xC1079", "Atomic components may not define modes and mode automata."),
-  INITIAL_MODE_DOES_NOT_EXIST("0xC1080", "The initial mode '%s' is not defined anywhere in the component '%s'.");
+  INITIAL_MODE_DOES_NOT_EXIST("0xC1080", "The initial mode '%s' is not defined anywhere in the component '%s'."),
+  UNSUPPORTED_MODEL_ELEMENT("0xC1081", "%s");
 
   private final String errorCode;
   private final String errorMessage;

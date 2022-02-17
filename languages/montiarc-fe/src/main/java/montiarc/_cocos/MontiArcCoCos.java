@@ -56,6 +56,14 @@ public class MontiArcCoCos {
     checker.addCoCo(new ComponentInstantiationRespectsGenericTypeBounds());
     checker.addCoCo(new RootComponentTypesNoInstanceName());
 
+    // Block unsupported model elements
+    checker.addCoCo(new UnsupportedAutomatonElements.HierarchicalStates());
+    checker.addCoCo(new UnsupportedAutomatonElements.EntryActions());
+    checker.addCoCo(new UnsupportedAutomatonElements.ExitActions());
+    checker.addCoCo(new UnsupportedAutomatonElements.TriggerEvents());
+    checker.addCoCo(new UnsupportedAutomatonElements.FinalStates());
+    checker.addCoCo(new UnsupportedAutomatonElements.WrongInitialStateDeclaration());
+
     return checker;
   }
 }

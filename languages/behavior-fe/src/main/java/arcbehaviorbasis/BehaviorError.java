@@ -20,7 +20,6 @@ public enum BehaviorError implements Error {
   WRITE_TO_LITERAL("0xC2008", "Cannot assign variables to a literal."),
   ASSIGN_TO_NOT_NAME("0xC2010", "Cannot %s %s."),
   GUARD_IS_NO_BOOLEAN("0xC2009", "The a guard of a transition should evaluate to 'boolean', but this guard evaluates to '%s'."),
-  UNSUPPORTED_EVENT("0xC2011", "Events are not supported."),
   REDUNDANT_INITIAL_DECLARATION("0xC2012", "The state '%s' has multiple initial outputs."),
   INITIAL_STATE_REFERENCE_MISSING("0xC2013", "The state '%s' referenced here does not exist.");
 
