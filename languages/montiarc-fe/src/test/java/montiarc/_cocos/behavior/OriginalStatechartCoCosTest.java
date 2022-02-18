@@ -26,10 +26,8 @@ import java.util.stream.Stream;
  * Tests whether the original state-chart cocos of TriggeredStatecharts work in statecharts of MontiArc.
  * Those are:
  * {@link UniqueStates}, {@link TransitionSourceTargetExists},
- * {@link CapitalStateNames}, {@link PackageCorrespondsToFolders},
- * {@link SCFileExtension}, {@link SCNameIsArtifactName}
+ * {@link CapitalStateNames}
  */
-@Disabled(value = "The cocos 'CapitalStateNames' and 'UniqueStates' both contain errors")
 public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
 
   @Override
@@ -91,9 +89,6 @@ public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
     checker.addCoCo(new UniqueStates());
     checker.addCoCo(new TransitionSourceTargetExists());
     checker.addCoCo(new CapitalStateNames());
-    checker.addCoCo(new PackageCorrespondsToFolders());
-    checker.addCoCo(new SCFileExtension());
-    checker.addCoCo(new SCNameIsArtifactName());
   }
 
   /**

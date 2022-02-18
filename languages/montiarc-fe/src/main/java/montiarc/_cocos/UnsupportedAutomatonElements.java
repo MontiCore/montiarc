@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._ast.ASTStateBody;
+import arcautomaton._cocos.ArcAutomatonASTArcStatechartCoCo;
 import arcautomaton._cocos.ArcAutomatonASTStateBodyCoCo;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
@@ -111,6 +113,21 @@ public interface UnsupportedAutomatonElements {
             "\n    }",
           node.get_SourcePositionStart(), node.get_SourcePositionEnd()
         );
+      }
+    }
+  }
+
+  /**
+   * Stereotypes annotating automatons in MontiArc are not supported by MontiArc. Because they are permitted by the
+   * statechart grammars, we inform the user that they will be ignored though.
+   */
+  class AutomatonStereotypes implements ArcAutomatonASTArcStatechartCoCo {
+
+    @Override
+    public void check(ASTArcStatechart node) {
+      if(node.isPresentStereotype()) {
+        Log.warn(ArcError.UNSUPPORTED_MODEL_ELEMENT.format("Using stereotypes for automatons is not supported by " +
+          "MontiArc. The stereotypes will be ignored."), node.get_SourcePositionStart(), node.get_SourcePositionEnd());
       }
     }
   }

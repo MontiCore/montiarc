@@ -5,6 +5,8 @@ import arcbasis._cocos.*;
 import arcbehaviorbasis._cocos.NoBehaviorInComposedComponents;
 import arcbehaviorbasis._cocos.OnlyOneBehavior;
 import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
+import de.monticore.scbasis._cocos.UniqueStates;
 import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
@@ -57,6 +59,10 @@ public class MontiArcCoCos {
     checker.addCoCo(new NoBehaviorInComposedComponents());
     checker.addCoCo(new OnlyOneBehavior());
 
+    // SCBasis, SCActions, and SCTransitions4Code CoCos
+    checker.addCoCo(new UniqueStates());
+    checker.addCoCo(new TransitionSourceTargetExists());
+
     // MontiArc CoCos
     checker.addCoCo(new ComponentInheritanceRespectsGenericTypeBounds());
     checker.addCoCo(new ComponentInstantiationRespectsGenericTypeBounds());
@@ -69,6 +75,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new UnsupportedAutomatonElements.TriggerEvents());
     checker.addCoCo(new UnsupportedAutomatonElements.FinalStates());
     checker.addCoCo(new UnsupportedAutomatonElements.WrongInitialStateDeclaration());
+    checker.addCoCo(new UnsupportedAutomatonElements.AutomatonStereotypes());
 
     return checker;
   }

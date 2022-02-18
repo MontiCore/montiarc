@@ -6,7 +6,8 @@ component grammar ArcAutomaton extends ArcBehaviorBasis,
   /**
    * Allows to specify the behavior of a component by using a statechart
    */
-  ArcStatechart implements ArcBehaviorElement =
+  ArcStatechart implements Statechart, ArcBehaviorElement =
+    Stereotype?
     "automaton" "{"
       SCStatechartElement*
     "}";
