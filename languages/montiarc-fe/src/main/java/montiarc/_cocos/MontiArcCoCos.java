@@ -2,6 +2,8 @@
 package montiarc._cocos;
 
 import arcbasis._cocos.*;
+import arcbehaviorbasis._cocos.NoBehaviorInComposedComponents;
+import arcbehaviorbasis._cocos.OnlyOneBehavior;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
@@ -50,6 +52,10 @@ public class MontiArcCoCos {
     
     // GenericArc CoCos
     checker.addCoCo(new GenericTypeParameterNameCapitalization());
+
+    // ArcBehaviorBasis CoCos
+    checker.addCoCo(new NoBehaviorInComposedComponents());
+    checker.addCoCo(new OnlyOneBehavior());
 
     // MontiArc CoCos
     checker.addCoCo(new ComponentInheritanceRespectsGenericTypeBounds());

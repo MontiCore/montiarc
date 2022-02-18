@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
-package behavior;
+package behavior.noBehaviorInComposedComponents;
 
-// invalid, composed components should not have behavior
+// Invalid, composed components should not have behavior
 component ComposedComponentWithBehavior {
   port in int number;
 
@@ -12,6 +12,7 @@ component ComposedComponentWithBehavior {
   number -> inner.number;
 
   automaton {
-    initial state Invalid;
+    state Invalid;
+    initial Invalid / {};
   }
 }

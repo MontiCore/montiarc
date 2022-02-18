@@ -1,13 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
-package behavior;
+package behavior.onlyOneBehavior;
 
-// valid, one automaton is fine
+// Valid, one automaton is fine
 component OneAutomaton {
   port in int number;
 
   automaton {
-    initial state Alpha;
+    state Alpha;
     state Beta;
+    initial Alpha / {};
 
     Alpha -> Beta;
   }

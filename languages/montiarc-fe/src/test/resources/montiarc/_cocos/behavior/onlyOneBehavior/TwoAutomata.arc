@@ -1,19 +1,21 @@
 /* (c) https://github.com/MontiCore/monticore */
-package behavior;
+package behavior.onlyOneBehavior;
 
-// invalid, a component may only have one automata at max
+// Invalid, a component may only have one automata at max
 component TwoAutomata {
   port in int number;
 
   automaton {
-    initial state Alpha;
+    state Alpha;
     state Beta;
+    initial Alpha / {};
 
     Alpha -> Beta;
   }
 
   automaton {
-    initial state Gamma;
+    state Gamma;
+    initial Gamma / {};
 
     Gamma -> Gamma;
   }
