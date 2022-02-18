@@ -74,14 +74,11 @@
       ${portType} ${outPort.getName()} = null;
     </#list>
 
-<#-- TODO I'm not sure if this works correctly? -->
     <#if optInitialOutputDecl.isPresent()>
       <#assign initialReaction = automatonHelper.scABodyToTransitionAction(optInitialOutputDecl.get().getSCABody()).getMCBlockStatement()>
       // initial reaction
       ${compHelper.printStatement(initialReaction)}
     </#if>
-
-    ${identifier.getCurrentStateName()} = ${compName}State.${optInitialState.get().getName()};
 
     // transfer locally recorded initial port values into the result
     <#list comp.allOutgoingPorts as outPort>
@@ -89,7 +86,9 @@
       ${resultVarName}.${portSetterName}( ${outPort.getName()} );
     </#list>
 
-    return ${resultVarName};
+    ${identifier.getCurrentStateName()} = ${compName}State.${optInitialState.get().getName()};
+
+    return <@entryMethodName state=optInitialState.get()/>(new <@Utils.componentInputClassFQN comp=comp/>(), ${resultVarName});
   }
 </#macro>
 
