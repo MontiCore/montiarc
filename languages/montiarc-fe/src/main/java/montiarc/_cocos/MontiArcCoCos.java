@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcautomaton._cocos.InitialStatesResolvable;
+import arcautomaton._cocos.NoRedundantInitialOutput;
 import arcbasis._cocos.*;
 import arcbehaviorbasis._cocos.NoBehaviorInComposedComponents;
 import arcbehaviorbasis._cocos.OnlyOneBehavior;
@@ -62,6 +64,10 @@ public class MontiArcCoCos {
     // SCBasis, SCActions, and SCTransitions4Code CoCos
     checker.addCoCo(new UniqueStates());
     checker.addCoCo(new TransitionSourceTargetExists());
+
+    // ArcAutomaton CoCos
+    checker.addCoCo(new NoRedundantInitialOutput());
+    checker.addCoCo(new InitialStatesResolvable());
 
     // MontiArc CoCos
     checker.addCoCo(new ComponentInheritanceRespectsGenericTypeBounds());

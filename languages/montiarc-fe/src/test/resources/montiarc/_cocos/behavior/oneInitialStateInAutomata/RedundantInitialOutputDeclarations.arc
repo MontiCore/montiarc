@@ -1,20 +1,21 @@
 /* (c) https://github.com/MontiCore/monticore */
-package oneInitialStateInAutomata;
+package behavior.oneInitialStateInAutomata;
 
-component MultipleStatesDeclaredInitial {
+component RedundantInitialOutputDeclarations {
   port in boolean open,
        in boolean unlock;
   port out boolean ringing;
 
 
-  // invalid, because both B and C are marked as initial
+  // invalid, because B has multiple initial outputs
   automaton {
     state A;
-    initial state B;
+    state B;
     state C;
     state D;
 
-    initial C / {ringing = false;};
+    initial B / {ringing = true;};
+    initial B / {ringing = false;};
 
     A -> B;
     B -> C;

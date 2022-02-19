@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package oneInitialStateInAutomata;
+package behavior.oneInitialStateInAutomata;
 
 component NoStatechart {
   port in boolean open,

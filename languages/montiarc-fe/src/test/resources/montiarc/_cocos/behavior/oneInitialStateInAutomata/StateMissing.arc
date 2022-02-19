@@ -1,21 +1,20 @@
 /* (c) https://github.com/MontiCore/monticore */
-package oneInitialStateInAutomata;
+package behavior.oneInitialStateInAutomata;
 
-component MultipleInitialOutputDeclarations {
+component StateMissing {
   port in boolean open,
        in boolean unlock;
   port out boolean ringing;
 
 
-  // invalid, because both B and C are marked as initial
+  // invalid, because state F does not exist
   automaton {
-    state A;
+    initial state A;
     state B;
     state C;
     state D;
 
-    initial B / {ringing = false;};
-    initial C / {ringing = false;};
+    initial F / {ringing = false;};
 
     A -> B;
     B -> C;

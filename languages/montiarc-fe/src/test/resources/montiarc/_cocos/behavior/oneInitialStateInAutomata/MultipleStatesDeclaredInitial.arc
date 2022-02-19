@@ -1,17 +1,16 @@
 /* (c) https://github.com/MontiCore/monticore */
-package oneInitialStateInAutomata;
+package behavior.oneInitialStateInAutomata;
 
-component StateDeclaredInitialSeparately {
+component MultipleStatesDeclaredInitial {
   port in boolean open,
        in boolean unlock;
   port out boolean ringing;
 
 
-  // valid model, because although no state has an "initial"-modifier,
-  // there is an initial state: C is marked as such separately
+  // invalid, because both B and C are marked as initial
   automaton {
     state A;
-    state B;
+    initial state B;
     state C;
     state D;
 

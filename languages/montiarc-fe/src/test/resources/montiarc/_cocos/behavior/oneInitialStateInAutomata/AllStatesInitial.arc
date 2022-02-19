@@ -1,20 +1,18 @@
 /* (c) https://github.com/MontiCore/monticore */
-package oneInitialStateInAutomata;
+package behavior.oneInitialStateInAutomata;
 
-component StateMissing {
+component AllStatesInitial {
   port in boolean open,
        in boolean unlock;
   port out boolean ringing;
 
 
-  // invalid, because state F does not exist
+  // invalid model, because there is no unique initial state
   automaton {
     initial state A;
-    state B;
-    state C;
-    state D;
-
-    initial F / {ringing = false;};
+    initial state B;
+    initial state C;
+    initial state D;
 
     A -> B;
     B -> C;

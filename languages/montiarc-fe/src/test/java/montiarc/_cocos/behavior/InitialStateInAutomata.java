@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos.behavior;
 
+import arcautomaton._cocos.InitialStatesResolvable;
 import arcautomaton._cocos.NoRedundantInitialOutput;
 import arcautomaton._cocos.OneInitialStateAtLeast;
 import arcautomaton._cocos.OneInitialStateAtMax;
@@ -20,7 +21,7 @@ public class InitialStateInAutomata extends AbstractCoCoTest {
 
   @Override
   protected String getPackage() {
-    return "oneInitialStateInAutomata";
+    return "behavior/oneInitialStateInAutomata";
   }
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
@@ -56,6 +57,7 @@ public class InitialStateInAutomata extends AbstractCoCoTest {
     checker.addCoCo(new OneInitialStateAtLeast());
     checker.addCoCo(new OneInitialStateAtMax());
     checker.addCoCo(new NoRedundantInitialOutput());
+    checker.addCoCo(new InitialStatesResolvable());
   }
 
 }

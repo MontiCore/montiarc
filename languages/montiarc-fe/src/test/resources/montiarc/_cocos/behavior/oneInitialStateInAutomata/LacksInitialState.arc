@@ -1,18 +1,18 @@
 /* (c) https://github.com/MontiCore/monticore */
-package oneInitialStateInAutomata;
+package behavior.oneInitialStateInAutomata;
 
-component TwoInitialStates {
+component LacksInitialState {
   port in boolean open,
        in boolean unlock;
   port out boolean ringing;
 
 
-  // invalid model, because there is no unique initial state
+  // invalid model, because there is no initial state
   automaton {
-    initial state A;
+    state A;
     state B;
     state C;
-    initial state D;
+    state D;
 
     A -> B;
     B -> C;

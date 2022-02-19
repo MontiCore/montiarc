@@ -9,6 +9,9 @@ import arcbehaviorbasis._ast.ASTArcBehaviorElement;
 
 import java.util.stream.Stream;
 
+/**
+ * Checks that there is at most one behavior declaration for a component type.
+ */
 public class OnlyOneBehavior implements ArcBasisASTComponentTypeCoCo {
 
   @Override
