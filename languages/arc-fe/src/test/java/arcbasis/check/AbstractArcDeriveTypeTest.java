@@ -4,13 +4,13 @@ package arcbasis.check;
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
+import arcbasis._symboltable.SymbolService;
 import arcbasis._symboltable.TransitiveScopeSetter;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis.ExpressionsBasisMill;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
-import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbolSurrogate;
 import de.monticore.types.check.IDerive;
@@ -22,7 +22,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
 
@@ -37,24 +36,6 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
   protected IDerive derive;
   protected IArcBasisScope scope;
   protected TransitiveScopeSetter scopeSetter;
-
-  protected void add2Scope(@NotNull IOOSymbolsScope scope, @NotNull FieldSymbol... fields) {
-    Preconditions.checkNotNull(scope);
-    Preconditions.checkNotNull(fields);
-    Arrays.stream(fields).forEach(field -> {
-      scope.add(field);
-      field.setEnclosingScope(scope);
-    });
-  }
-
-  protected void add2Scope(@NotNull IOOSymbolsScope scope, @NotNull OOTypeSymbol... types) {
-    Preconditions.checkNotNull(scope);
-    Preconditions.checkNotNull(types);
-    Arrays.stream(types).forEach(type -> {
-      scope.add(type);
-      type.setEnclosingScope(scope);
-    });
-  }
 
   protected static Stream<Arguments> expressionProviderForPrimitiveFields() {
     return Stream.of(Arguments.of("a", "int"), Arguments.of("b", "int"), Arguments.of("c", "int"));
@@ -93,7 +74,7 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
       ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(ArcBasisMill.scope()).setName("Student").build();
     OOTypeSymbol f =
       ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(ArcBasisMill.scope()).setName("FirstGrader").build();
-    this.add2Scope(this.getScope(), p, r, t, s, f);
+    SymbolService.link(this.getScope(), p, r, t, s, f);
     t.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Role", this.getScope())));
     s.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Role", this.getScope())));
     f.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Student",
@@ -109,7 +90,7 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
       .setType(SymTypeExpressionFactory.createTypeConstant("int")).build();
     FieldSymbol s = ArcBasisMill.fieldSymbolBuilder().setName("s")
       .setType(SymTypeExpressionFactory.createTypeObject("Student", this.getScope())).build();
-    this.add2Scope(scope, a, b, c, s);
+    SymbolService.link(scope, a, b, c, s);
   }
 
   protected void doShouldCalculateType(@NotNull ASTExpression expression, @NotNull String expectedType,

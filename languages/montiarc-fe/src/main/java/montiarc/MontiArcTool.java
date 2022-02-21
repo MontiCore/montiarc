@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc;
 
+import arcbasis._symboltable.SymbolService;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.Class2MCResolver;
 import de.monticore.io.paths.MCPath;
@@ -348,17 +349,17 @@ public class MontiArcTool extends MontiArcToolTOP {
 
   @Deprecated
   public void initializeBasicOOTypes() {
-    this.add2Scope(MontiArcMill.globalScope(), MontiArcMill.oOTypeSymbolBuilder()
+    SymbolService.link(MontiArcMill.globalScope(), MontiArcMill.oOTypeSymbolBuilder()
       .setName("Object")
       .setEnclosingScope(MontiArcMill.artifactScope())
       .setSpannedScope(MontiArcMill.scope()).build());
-    this.add2Scope(MontiArcMill.globalScope(), MontiArcMill.oOTypeSymbolBuilder()
+    SymbolService.link(MontiArcMill.globalScope(), MontiArcMill.oOTypeSymbolBuilder()
       .setName("String")
       .setEnclosingScope(MontiArcMill.artifactScope())
       .setSpannedScope(MontiArcMill.scope())
       .addSuperTypes(SymTypeExpressionFactory.createTypeObject("Object", MontiArcMill.globalScope()))
       .build());
-    this.add2Scope(MontiArcMill.globalScope(), MontiArcMill.oOTypeSymbolBuilder()
+    SymbolService.link(MontiArcMill.globalScope(), MontiArcMill.oOTypeSymbolBuilder()
       .setName("Integer")
       .setEnclosingScope(MontiArcMill.artifactScope())
       .setSpannedScope(MontiArcMill.scope())
@@ -419,14 +420,5 @@ public class MontiArcTool extends MontiArcToolTOP {
       .build());
 
     return options;
-  }
-
-  protected void add2Scope(@NotNull IOOSymbolsScope scope, @NotNull OOTypeSymbol... symbols) {
-    Preconditions.checkNotNull(scope);
-    Preconditions.checkNotNull(symbols);
-    Arrays.stream(symbols).forEach(symbol -> {
-      symbol.setEnclosingScope(scope);
-      scope.add(symbol);
-    });
   }
 }

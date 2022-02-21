@@ -3,6 +3,7 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
+import arcbasis._symboltable.SymbolService;
 import arcbasis.check.ArcBasisDeriveTypeTest;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
@@ -32,7 +33,7 @@ public class FieldInitExpressionTypesCorrectTest extends ArcBasisDeriveTypeTest 
     FieldSymbol aDouble = ArcBasisMill.fieldSymbolBuilder().setName("aDouble")
       .setType(SymTypeExpressionFactory.createTypeConstant("double")).build();
 
-    this.add2Scope(this.scope, anInt, aBool, aDouble);
+    SymbolService.link(this.scope, anInt, aBool, aDouble);
   }
 
   @Test
