@@ -4,12 +4,11 @@ package arcbasis.check;
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis._visitor.ArcBasisTraverser;
+import arcbasis._symboltable.TransitiveScopeSetter;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis.ExpressionsBasisMill;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
-import de.monticore.expressions.expressionsbasis._symboltable.IExpressionsBasisScope;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
@@ -37,7 +36,7 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
 
   protected IDerive derive;
   protected IArcBasisScope scope;
-  protected ArcBasisExpressionsScopeSetter scopeSetter;
+  protected TransitiveScopeSetter scopeSetter;
 
   protected void add2Scope(@NotNull IOOSymbolsScope scope, @NotNull FieldSymbol... fields) {
     Preconditions.checkNotNull(scope);
@@ -69,9 +68,9 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
 
   protected abstract IArcBasisScope getScope();
 
-  protected ArcBasisExpressionsScopeSetter getScopeSetter() {
+  protected TransitiveScopeSetter getScopeSetter() {
     if (this.scopeSetter == null) {
-      this.scopeSetter = new ArcBasisExpressionsScopeSetter(this.getScope());
+      this.scopeSetter = new TransitiveScopeSetter();
     }
     return this.scopeSetter;
   }
@@ -119,7 +118,8 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
     Preconditions.checkNotNull(expectedType);
 
     //Given
-    this.getScopeSetter().handle(expression);
+    this.getScopeSetter().setScope(expression, this.getScope());
+
     //When
     expression.accept(this.getDerive().getTraverser());
 
@@ -182,33 +182,5 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
 
     //Then
     Assertions.assertFalse(this.getDerive().getResult().isPresent());
-  }
-
-  public static class ArcBasisExpressionsScopeSetter implements ArcBasisTraverser {
-
-    protected IExpressionsBasisScope scope;
-
-    public ArcBasisExpressionsScopeSetter(@NotNull IExpressionsBasisScope scope) {
-      Preconditions.checkNotNull(scope);
-      this.scope = scope;
-    }
-
-    public IExpressionsBasisScope getScope() {
-      return this.scope;
-    }
-
-    public void setScope(@NotNull IExpressionsBasisScope scope) {
-      Preconditions.checkNotNull(scope);
-      this.scope = scope;
-    }
-
-    @Override
-    public void visit(@NotNull ASTExpression node) {
-      Preconditions.checkNotNull(node);
-      Preconditions.checkState(this.getScope() != null);
-      Preconditions.checkArgument(node.getEnclosingScope() == null ||
-        node.getEnclosingScope() == this.getScope());
-      node.setEnclosingScope(this.getScope());
-    }
   }
 }

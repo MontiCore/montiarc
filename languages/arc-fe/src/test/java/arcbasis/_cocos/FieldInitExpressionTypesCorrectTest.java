@@ -3,7 +3,6 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
-import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis.check.ArcBasisDeriveTypeTest;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
@@ -115,7 +114,7 @@ public class FieldInitExpressionTypesCorrectTest extends ArcBasisDeriveTypeTest 
   protected ASTExpression doBuildNameExpressionInScope(@NotNull String expression) {
     Preconditions.checkNotNull(expression);
     ASTExpression result = this.doBuildNameExpression(expression);
-    this.getScopeSetter().handle(result);
+    this.getScopeSetter().setScope(result, this.getScope());
     return result;
   }
 }

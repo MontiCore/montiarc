@@ -450,7 +450,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTypeTest
   protected ASTExpression doBuildNameExpressionInScope(@NotNull String expression) {
     Preconditions.checkNotNull(expression);
     ASTExpression result = this.doBuildNameExpression(expression);
-    this.getScopeSetter().handle(result);
+    this.getScopeSetter().setScope(result, this.getScope());
     return result;
   }
 }

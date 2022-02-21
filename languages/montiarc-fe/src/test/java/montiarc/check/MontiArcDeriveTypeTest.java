@@ -3,6 +3,7 @@ package montiarc.check;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
+import arcbasis._symboltable.SymbolService;
 import arcbasis.check.AbstractArcDeriveTypeTest;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -23,7 +24,6 @@ import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -39,7 +39,6 @@ import java.util.stream.Stream;
  *
  * @see AbstractArcDeriveTypeTest for basic tests methods.
  */
-@Disabled //TODO Fix Me. Missing Enclosing Scope. Needs appropriate scope setter.
 public class MontiArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
 
   @Override
@@ -50,6 +49,17 @@ public class MontiArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
     MontiArcMill.init();
     addBasicTypes2Scope();
     this.setUp();
+  }
+
+  @Override
+  protected void setUp() {
+    super.setUp();
+    this.setUpMessageType();
+    this.setUpMsgFields();
+    this.setUpGenericTypes();
+    this.setUpGenericFields();
+    this.setUpTrafoBuilderType();
+    this.setUpTrafoBuilderFields();
   }
 
   protected MontiArcParser parser;
@@ -71,7 +81,6 @@ public class MontiArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
     return Stream.of(Arguments.of("5 + 4", "int"), Arguments.of("a + 6", "int"), Arguments.of("a + b", "int"));
   }
 
-  @BeforeEach
   public void setUpGenericTypes() {
     TypeVarSymbol bT = MontiArcMill.typeVarSymbolBuilder().setName("T").build();
     IOOSymbolsScope bS = MontiArcMill.scope();
@@ -87,11 +96,10 @@ public class MontiArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
     tS.add(tT);
     tS.add(tV);
     OOTypeSymbol trafo = MontiArcMill.oOTypeSymbolBuilder().setName("Trafo").setSpannedScope(tS).build();
-    this.add2Scope(this.getScope(), buffer, storage, trafo);
+    SymbolService.link(this.getScope(), buffer, storage, trafo);
   }
 
-  @BeforeEach
-  public void setUpMessageObject() {
+  public void setUpMessageType() {
     IOOSymbolsScope getHeaderScope = MontiArcMill.scope();
     FunctionSymbol getHeader = MontiArcMill.functionSymbolBuilder().setName("getHeader")
       .setReturnType(SymTypeExpressionFactory.createTypeExpression("String", this.getScope()))
@@ -113,11 +121,10 @@ public class MontiArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
     msgScope.add(getHeader);
     msgScope.add(setHeader);
     OOTypeSymbol msg = MontiArcMill.oOTypeSymbolBuilder().setName("Message").setSpannedScope(msgScope).build();
-    this.add2Scope(this.getScope(), msg);
+    SymbolService.link(this.getScope(), msg);
   }
 
-  @BeforeEach
-  public void setUpTrafoBuilder() {
+  public void setUpTrafoBuilderType() {
     IOOSymbolsScope buildScope = OOSymbolsMillForMontiArc.scope();
     List<SymTypeExpression> trafoArgs = Arrays.asList(
       SymTypeExpressionFactory.createTypeVariable("Student", this.getScope()),
@@ -132,10 +139,9 @@ public class MontiArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
     builderScope.add(build);
     OOTypeSymbol builder =
       MontiArcMill.oOTypeSymbolBuilder().setName("TrafoBuilder").setSpannedScope(builderScope).build();
-    this.add2Scope(this.getScope(), builder);
+    SymbolService.link(this.getScope(), builder);
   }
 
-  @BeforeEach
   public void setUpGenericFields() {
     SymTypeExpression bufferArg = SymTypeExpressionFactory.createTypeVariable("String", this.getScope());
     FieldSymbol buffer = ArcBasisMill.fieldSymbolBuilder().setName("strBuffer")
@@ -151,21 +157,19 @@ public class MontiArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
       SymTypeExpressionFactory.createTypeVariable("Teacher", this.getScope()));
     FieldSymbol trafo = ArcBasisMill.fieldSymbolBuilder().setName("ma2java")
       .setType(SymTypeExpressionFactory.createGenerics("Trafo", this.getScope(), ma2javaArgs)).build();
-    this.add2Scope(this.getScope(), buffer, buffer2, storage, trafo);
+    SymbolService.link(this.getScope(), buffer, buffer2, storage, trafo);
   }
 
-  @BeforeEach
   public void setUpMsgFields() {
     FieldSymbol msg = ArcBasisMill.fieldSymbolBuilder().setName("msg")
       .setType(SymTypeExpressionFactory.createTypeExpression("Message", this.getScope())).build();
-    this.add2Scope(this.getScope(), msg);
+    SymbolService.link(this.getScope(), msg);
   }
 
-  @BeforeEach
   public void setUpTrafoBuilderFields() {
     FieldSymbol builder = ArcBasisMill.fieldSymbolBuilder().setName("trafoBuilder")
       .setType(SymTypeExpressionFactory.createTypeExpression("TrafoBuilder", this.getScope())).build();
-    this.add2Scope(this.getScope(), builder);
+    SymbolService.link(this.getScope(), builder);
   }
 
   @ParameterizedTest
