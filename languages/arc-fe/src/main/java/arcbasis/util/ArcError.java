@@ -91,7 +91,9 @@ public enum ArcError implements montiarc.util.Error {
   MODES_WITHOUT_AUTOMATON("0xC1078", "The component '%s' defines modes, but no mode-automaton."),
   MODE_ELEMENTS_IN_ATOMIC_COMPONENTS("0xC1079", "Atomic components may not define modes and mode automata."),
   INITIAL_MODE_DOES_NOT_EXIST("0xC1080", "The initial mode '%s' is not defined anywhere in the component '%s'."),
-  UNSUPPORTED_MODEL_ELEMENT("0xC1081", "%s");
+  UNSUPPORTED_MODEL_ELEMENT("0xC1081", "%s"),
+  PORT_REFERENCE_IN_INSTANTIATION_ARG_ILLEGAL("0xC1082", "An argument for the instantiation '%s' illegally relies " +
+    "on the port '%s'");
 
   private final String errorCode;
   private final String errorMessage;

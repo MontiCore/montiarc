@@ -41,6 +41,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new FieldTypeExists(new CheckTypeExistence4MontiArc()));
     checker.addCoCo(new InheritedComponentTypeExists());
     checker.addCoCo(new InnerComponentNotExtendsDefiningComponent());
+    checker.addCoCo(new InstanceArgsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new InstanceNameCapitalisation());
     checker.addCoCo(new NoSubComponentReferenceCycles());
     checker.addCoCo(new ParameterDefaultValuesOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
