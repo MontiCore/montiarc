@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package variableAccessInGuards;
+package behavior.fieldReadWriteAccessFitsInGuards;
 
 // valid
 component UsedAllInGuard(boolean parameter) {
@@ -9,9 +9,10 @@ component UsedAllInGuard(boolean parameter) {
   int variable = 42;
 
   automaton {
-    initial state Begin;
+    state Begin;
     state End;
+    initial Begin / { outPort = 0; };
 
-    Begin -> End [parameter == (variable * inPort <= 3)];
+    Begin -> End [parameter == (variable * inPort <= 3)] / { outPort = 0; };
   }
 }

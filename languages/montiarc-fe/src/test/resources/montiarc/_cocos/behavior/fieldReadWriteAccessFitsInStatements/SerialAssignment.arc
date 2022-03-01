@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package variableAccessInReactions;
+package behavior.fieldReadWriteAccessFitsInStatements;
 
 // valid
 component SerialAssignment(boolean parameter) {
@@ -9,8 +9,9 @@ component SerialAssignment(boolean parameter) {
   double doubleVariable = 4.2;
 
   automaton {
-    initial state Begin;
+    state Begin;
     state End;
+    initial Begin / { outPort = 0; };
 
     Begin -> End / {outPort = doubleVariable = inPort;};
   }

@@ -24,13 +24,13 @@ public class NamesInExpressionsVisitorTest extends AbstractTest {
 
   @ParameterizedTest
   @MethodSource("expressionAndVariableNamesProvider")
-  public void shouldFindNames(String expression, List<String> names, List<ExpressionKind> kinds) throws IOException {
+  public void shouldFindNames(String expression, List<String> names, List<VarAccessKind> kinds) throws IOException {
     MontiArcParser parser = MontiArcMill.parser();
     NamesInExpressionsVisitor visitor = new NamesInExpressionsVisitor();
     MontiArcTraverser traverser = MontiArcMill.traverser();
     visitor.registerTo(traverser);
     Objects.requireNonNull(parser.parse_StringExpression(expression).orElse(null)).accept(traverser);
-    Map<ASTNameExpression, ExpressionKind> map
+    Map<ASTNameExpression, VarAccessKind> map
       = visitor.getFoundNames();
     List<ASTNameExpression> found = sort(map.keySet(), names);
 
@@ -41,29 +41,29 @@ public class NamesInExpressionsVisitorTest extends AbstractTest {
   static public Stream<Arguments> expressionAndVariableNamesProvider() {
     return Stream.of(
         new Tuple("a = 4 + b")
-            .is("a").is(ExpressionKind.OVERWRITE)
-            .is("b").is(ExpressionKind.DEFAULT_READ)
+            .is("a").is(VarAccessKind.OVERWRITE)
+            .is("b").is(VarAccessKind.DEFAULT_READ)
             .build(),
         new Tuple("c == d")
-            .is("c").is(ExpressionKind.DEFAULT_READ)
-            .is("d").is(ExpressionKind.DEFAULT_READ)
+            .is("c").is(VarAccessKind.DEFAULT_READ)
+            .is("d").is(VarAccessKind.DEFAULT_READ)
             .build(),
         new Tuple("e *= 5")
-            .is("e").is(ExpressionKind.UPDATE)
+            .is("e").is(VarAccessKind.UPDATE)
             .build(),
         new Tuple("5 == 5")
             .build(),
         new Tuple("t <= !(r)")
-            .is("t").is(ExpressionKind.DEFAULT_READ)
-            .is("r").is(ExpressionKind.DEFAULT_READ)
+            .is("t").is(VarAccessKind.DEFAULT_READ)
+            .is("r").is(VarAccessKind.DEFAULT_READ)
             .build(),
         new Tuple("z = x++")
-            .is("z").is(ExpressionKind.OVERWRITE)
-            .is("x").is(ExpressionKind.UPDATE)
+            .is("z").is(VarAccessKind.OVERWRITE)
+            .is("x").is(VarAccessKind.UPDATE)
             .build(),
         new Tuple("++f % g")
-            .is("g").is(ExpressionKind.DEFAULT_READ)
-            .is("f").is(ExpressionKind.UPDATE)
+            .is("g").is(VarAccessKind.DEFAULT_READ)
+            .is("f").is(VarAccessKind.UPDATE)
             .build()
     );
   }
@@ -103,7 +103,7 @@ public class NamesInExpressionsVisitorTest extends AbstractTest {
   public static class Tuple {
     private final String expression;
     private final List<String> names = new ArrayList<>();
-    private final List<ExpressionKind> kinds = new ArrayList<>();
+    private final List<VarAccessKind> kinds = new ArrayList<>();
 
     public Tuple(String expression) {
       this.expression = Preconditions.checkNotNull(expression);
@@ -114,7 +114,7 @@ public class NamesInExpressionsVisitorTest extends AbstractTest {
       return this;
     }
 
-    public Tuple is(ExpressionKind kind){
+    public Tuple is(VarAccessKind kind){
       kinds.add(Preconditions.checkNotNull(kind));
       return this;
     }

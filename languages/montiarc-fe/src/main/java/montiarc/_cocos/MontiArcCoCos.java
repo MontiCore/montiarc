@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcautomaton._cocos.FieldReadWriteAccessFitsInGuards;
+import arcautomaton._cocos.FieldReadWriteAccessFitsInStatements;
 import arcautomaton._cocos.InitialStatesResolvable;
 import arcautomaton._cocos.NoRedundantInitialOutput;
 import arcbasis._cocos.*;
@@ -67,6 +69,8 @@ public class MontiArcCoCos {
     checker.addCoCo(new TransitionSourceTargetExists());
 
     // ArcAutomaton CoCos
+    checker.addCoCo(new FieldReadWriteAccessFitsInGuards());
+    checker.addCoCo(new FieldReadWriteAccessFitsInStatements());
     checker.addCoCo(new NoRedundantInitialOutput());
     checker.addCoCo(new InitialStatesResolvable());
 

@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package variableAccessInReactions;
+package behavior.fieldReadWriteAccessFitsInStatements;
 
 // invalid, because the value of outPort is unknown
 component ReadOutgoingPort(boolean parameter) {
@@ -9,9 +9,16 @@ component ReadOutgoingPort(boolean parameter) {
   boolean boolVariable = true;
 
   automaton {
-    initial state Begin;
+    state Begin;
     state End;
+    initial Begin / {
+      boolVariable = outPort < 5;
+      outPort = 0;
+    };
 
-    Begin -> End / {boolVariable = outPort < 5;};
+    Begin -> End / {
+      boolVariable = outPort < 5;
+      outPort = 0;
+    };
   }
 }

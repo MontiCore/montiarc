@@ -1,72 +1,61 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcautomaton._visitor;
 
-import arcautomaton.ArcAutomatonMill;
 import com.google.common.base.Preconditions;
-import de.monticore.ast.ASTNode;
+import com.google.common.collect.ImmutableSet;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisVisitor2;
 import org.codehaus.commons.nullanalysis.NotNull;
 
+import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.LinkedList;
-import java.util.function.Consumer;
+import java.util.HashSet;
+import java.util.Set;
 
+/**
+ * Extracts top level {@link ASTExpression} in every AST tree you pass. I.e. top level means that the expression is not
+ * part of the composition of another expression. Some limitations:
+ * 1) You must register this visitor to an inheritance traverser
+ * 2) Between the traversals you must manually clear the cache of this visitor by calling {@link #reset()}. Else,
+ * expressions from prior traversals will be included when calling {@link #getExpressionRoots()}.
+ * 3) If you start AST traversal at a non-top-level expression, then this handler can not detect this and falsely will
+ * recognize that expression as being top level. Thus, this expression will be included in the results.
+ */
 public class ExpressionRootFinder implements ExpressionsBasisVisitor2 {
-  /**
-   * Saves whether the last visited node was an expression or not.
-   * So if {@link Deque#peek()} changes from <code>null</code> or <code>false</code> to <code>true</code>,
-   * the root of an expression was found
-   */
-  protected final Deque<Boolean> isInExpression;
 
-  /**
-   * Action that should be applied to every found root of an expression-tree
-   */
-  protected final Consumer<ASTExpression> bucket;
-
-  /**
-   * creates a fresh new object that will identify the first expressions it finds as expression-root
-   * @param bucket action to apply to found expressions
-   */
-  public ExpressionRootFinder(@NotNull Consumer<ASTExpression> bucket) {
-    Preconditions.checkNotNull(bucket);
-    this.bucket = bucket;
-    this.isInExpression = new LinkedList<>();
-  }
-
-  /**
-   * creates a traverser and marries it to this visitor
-   * @return a traverser that contains this visitor
-   */
-  public ArcAutomatonTraverser createTraverser() {
-    ArcAutomatonTraverser traverser = ArcAutomatonMill.inheritanceTraverser();
-    traverser.add4IVisitor(this);
-    traverser.add4ExpressionsBasis(this);
-    return traverser;
-  }
+  protected final Set<ASTExpression> expressionRoots = new HashSet<>();
+  protected final Deque<ASTExpression> expressionTrace = new ArrayDeque<>();
 
   @Override
   public void visit(@NotNull ASTExpression node) {
     Preconditions.checkNotNull(node);
-    if(isInExpression.peek() != Boolean.TRUE){
-      bucket.accept(node);
+    if(expressionTrace.isEmpty()) {
+      expressionRoots.add(node);
     }
-    isInExpression.push(true);
+    expressionTrace.push(node);
   }
 
   @Override
-  public void visit(@NotNull ASTNode node) {
+  public void endVisit(@NotNull ASTExpression node) {
     Preconditions.checkNotNull(node);
-    if(node instanceof ASTExpression) {
-      return;
-    }
-    isInExpression.push(false);
+    Preconditions.checkState(expressionTrace.peek().equals(node), "ExpressionRootFinder seems to be misconfigured. " +
+      "Contact a language engineer if you run into this error.");
+
+    expressionTrace.pop();
   }
 
-  @Override
-  public void endVisit(@NotNull ASTNode node) {
-    Preconditions.checkNotNull(node);
-    isInExpression.pop();
+  /**
+   * Clears the cache of currently recorded top level expressions. Calling this method is a must between different AST
+   * traversals. Else, expressions from prior traversals will be included when calling {@link #getExpressionRoots()}.
+   */
+  public void reset() {
+    expressionRoots.clear();
+  }
+
+  /**
+   * Get an immutable view of the currently cached top level expressions.
+   */
+  public ImmutableSet<ASTExpression> getExpressionRoots() {
+    return ImmutableSet.copyOf(expressionRoots);
   }
 }

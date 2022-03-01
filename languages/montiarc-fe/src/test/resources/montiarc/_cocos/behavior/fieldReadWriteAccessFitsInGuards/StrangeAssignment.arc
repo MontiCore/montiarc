@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package variableAccessInGuards;
+package behavior.fieldReadWriteAccessFitsInGuards;
 
 // valid, because outPort is not actually read, the assignment is read and returns 5.7
 component StrangeAssignment(boolean parameter) {
@@ -9,9 +9,10 @@ component StrangeAssignment(boolean parameter) {
   int variable = 42;
 
   automaton {
-    initial state Begin;
+    state Begin;
     state End;
+    initial Begin / { outPort = 0; };
 
-    Begin -> End [outPort = 5.7 == 5.7];
+    Begin -> End [outPort = 5.7 == 5.7] / { outPort = 0; };
   }
 }

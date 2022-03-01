@@ -10,8 +10,8 @@ import de.monticore.expressions.assignmentexpressions._ast.ASTIncSuffixExpressio
 import de.monticore.expressions.commonexpressions._ast.ASTBracketExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTEqualsExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTPlusExpression;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
+import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
 import montiarc.MontiArcMill;
 import montiarc._parser.MontiArcParser;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ExpressionRootFinderTest {
@@ -41,11 +42,13 @@ public class ExpressionRootFinderTest {
   @MethodSource(value = "provideTestCases")
   public void testFinder(ASTNode node, Set<Class<?>> expected){
     // given
-    Set<Class<?>> actual = new HashSet<>();
-    Consumer<ASTExpression> adder = expression -> actual.add(expression.getClass());
+    ExpressionRootFinder rootFinder = new ExpressionRootFinder();
+    ExpressionsBasisTraverser traverser = MontiArcMill.inheritanceTraverser();
+    traverser.add4ExpressionsBasis(rootFinder);
 
     // when
-    node.accept(new ExpressionRootFinder(adder).createTraverser());
+    node.accept(traverser);
+    Set<Class<?>> actual = rootFinder.getExpressionRoots().stream().map(Object::getClass).collect(Collectors.toSet());
 
     // then
     Assertions.assertEquals(expected, actual);

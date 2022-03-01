@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package variableAccessInGuards;
+package behavior.fieldReadWriteAccessFitsInGuards;
 
 // invalid, because ++ implies a change to the variable
 component IncrementPort(boolean parameter) {
@@ -9,9 +9,10 @@ component IncrementPort(boolean parameter) {
   double variable = 0.001;
 
   automaton {
-    initial state Begin;
+    state Begin;
     state End;
+    initial Begin / { outPort = 0; };
 
-    Begin -> End [inPort++ == 42];
+    Begin -> End [inPort++ == 42 + outPort] / { outPort = 0; };
   }
 }

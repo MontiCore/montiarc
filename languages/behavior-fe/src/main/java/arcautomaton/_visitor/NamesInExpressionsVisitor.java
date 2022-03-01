@@ -26,9 +26,9 @@ import java.util.Map;
  * <ul>
  *   <li> implement the additional interfaces </li>
  *   <li> extend the {@link #registerTo(ITraverser) registration} </li>
- *   <li> set the variable {@link #current} to the respective {@link ExpressionKind value} in the <code>visit</code>-methods </li>
+ *   <li> set the variable {@link #current} to the respective {@link VarAccessKind value} in the <code>visit</code>-methods </li>
  *   <li> set {@link #current} back to <code>null</code> in the corresponding <code>endVisit</code>-methods </li>
- *   <li> expressions that imply a {@link ExpressionKind#DEFAULT_READ read-only-access} do not need explicit treatment, as that is the default </li>
+ *   <li> expressions that imply a {@link VarAccessKind#DEFAULT_READ read-only-access} do not need explicit treatment, as that is the default </li>
  * </ul>
  */
 public class NamesInExpressionsVisitor implements AssignmentExpressionsVisitor2, AssignmentExpressionsHandler, CommonExpressionsVisitor2, ExpressionsBasisVisitor2 {
@@ -39,8 +39,32 @@ public class NamesInExpressionsVisitor implements AssignmentExpressionsVisitor2,
    * {@link #UPDATE}: the content of a variable is read and then used to evaluate a new value that is then assigned to the variable.
    * {@link #DEFAULT_READ}: the values of a variable are just read, without reassigning a new value to the variable.
    */
-  public enum ExpressionKind {
-    OVERWRITE, DEFAULT_READ, UPDATE
+  public enum VarAccessKind {
+    OVERWRITE, DEFAULT_READ, UPDATE;
+
+    /**
+     * Whether the access performs a mutation. Is true for {@link #OVERWRITE} and {@link #UPDATE}
+     */
+    public boolean performsMutation() {
+      switch (this) {
+        case OVERWRITE: return true;
+        case DEFAULT_READ: return false;
+        case UPDATE: return true;
+        default: throw new IllegalStateException();
+      }
+    }
+
+    /**
+     * Whether the access includes reading a value. Is true for {@link #DEFAULT_READ} and {@link #UPDATE}
+     */
+    public boolean includesRead() {
+      switch (this) {
+        case OVERWRITE: return false;
+        case DEFAULT_READ: return true;
+        case UPDATE: return true;
+        default: throw new IllegalStateException();
+      }
+    }
   }
 
   /**
@@ -54,17 +78,17 @@ public class NamesInExpressionsVisitor implements AssignmentExpressionsVisitor2,
    * The type of access, the last visited expression implies.
    * If this has the value <code>null</code>, it means that there was no expression yet that implies write access.
    */
-  protected ExpressionKind current = null;
+  protected VarAccessKind current = null;
 
   /**
    * Lists all names that are found in the expression, and how the variables are accessed
    */
-  protected HashMap<ASTNameExpression, ExpressionKind> foundNames = new HashMap<>();
+  protected HashMap<ASTNameExpression, VarAccessKind> foundNames = new HashMap<>();
 
   /**
    * @return {@link #foundNames all variables} that were found.
    */
-  public Map<ASTNameExpression, ExpressionKind> getFoundNames() {
+  public Map<ASTNameExpression, VarAccessKind> getFoundNames() {
     return this.foundNames;
   }
 
@@ -115,7 +139,7 @@ public class NamesInExpressionsVisitor implements AssignmentExpressionsVisitor2,
     if (current != null) {
       foundNames.put(node, current);
     } else {
-      foundNames.put(node, ExpressionKind.DEFAULT_READ);
+      foundNames.put(node, VarAccessKind.DEFAULT_READ);
     }
   }
 
@@ -124,11 +148,11 @@ public class NamesInExpressionsVisitor implements AssignmentExpressionsVisitor2,
     Preconditions.checkNotNull(node);
     Preconditions.checkState(getTraverser() != null, "Traverser not set yet");
     current = node.getOperator() == ASTConstantsAssignmentExpressions.EQUALS?
-                                ExpressionKind.OVERWRITE:
-                                ExpressionKind.UPDATE;
+                                VarAccessKind.OVERWRITE:
+                                VarAccessKind.UPDATE;
     node.getLeft().accept(getTraverser());
 
-    current = ExpressionKind.DEFAULT_READ;
+    current = VarAccessKind.DEFAULT_READ;
     node.getRight().accept(getTraverser());
     
     current = null;
@@ -136,7 +160,7 @@ public class NamesInExpressionsVisitor implements AssignmentExpressionsVisitor2,
   
   @Override
   public void visit(@NotNull ASTIncPrefixExpression node) {
-    current = ExpressionKind.UPDATE;
+    current = VarAccessKind.UPDATE;
   }
   
   @Override
@@ -146,7 +170,7 @@ public class NamesInExpressionsVisitor implements AssignmentExpressionsVisitor2,
   
   @Override
   public void visit(@NotNull ASTDecPrefixExpression node) {
-    current = ExpressionKind.UPDATE;
+    current = VarAccessKind.UPDATE;
   }
   
   @Override
@@ -156,7 +180,7 @@ public class NamesInExpressionsVisitor implements AssignmentExpressionsVisitor2,
   
   @Override
   public void visit(@NotNull ASTIncSuffixExpression node) {
-    current = ExpressionKind.UPDATE;
+    current = VarAccessKind.UPDATE;
   }
   
   @Override
@@ -166,7 +190,7 @@ public class NamesInExpressionsVisitor implements AssignmentExpressionsVisitor2,
   
   @Override
   public void visit(@NotNull ASTDecSuffixExpression node) {
-    current = ExpressionKind.UPDATE;
+    current = VarAccessKind.UPDATE;
   }
   
   @Override

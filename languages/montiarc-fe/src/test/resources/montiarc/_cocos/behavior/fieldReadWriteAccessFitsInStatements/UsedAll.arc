@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package variableAccessInReactions;
+package behavior.fieldReadWriteAccessFitsInStatements;
 
 // valid
 component UsedAll(boolean parameter) {
@@ -9,8 +9,9 @@ component UsedAll(boolean parameter) {
   int variable = 42;
 
   automaton {
-    initial state Begin;
+    state Begin;
     state End;
+    initial Begin / { outPort = 0; };
 
     Begin -> End / {
       outPort = inPort + variable;

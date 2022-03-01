@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package variableAccessInGuards;
+package behavior.fieldReadWriteAccessFitsInStatements;
 
 // invalid, cannot write to inPort
 component InvalidAssignment(boolean parameter) {
@@ -9,9 +9,16 @@ component InvalidAssignment(boolean parameter) {
   int variable = 42;
 
   automaton {
-    initial state Begin;
+    state Begin;
     state End;
+    initial Begin / {
+      inPort = 5.7;
+      outPort = 0;
+    };
 
-    Begin -> End [inPort = 5.7 == 5.7];
+    Begin -> End / {
+      inPort = 5.7;
+      outPort = 0;
+    };
   }
 }
