@@ -3,7 +3,6 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcField;
 import arcbasis.check.ArcBasisDeriveType;
-import arcbasis.check.ArcBasisSynthesizeType;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -11,41 +10,47 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.IDerive;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.TypeCheck;
-import de.monticore.types.check.TypeCheckResult;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
+
+import java.util.Optional;
 
 /**
  * [RRW14a] T2: Initial values of variables must conform to their types.
  */
 public class FieldInitExpressionTypesCorrect implements ArcBasisASTArcFieldCoCo {
 
-  /** Used to check whether initialization expressions match a field's type. */
-  protected final TypeCheck typeChecker;
+  /** Used to extract the type to which initialization expressions of fields evaluate. */
+  protected final IDerive typeDeriver;
 
   /**
-   * Creates this coco with an TypeCheck, combined with {@link ArcBasisDeriveType} to check whether initialization
-   * expressions for fields match the fields' types.
+   * Initializes the used {@link IDerive} to be a {@link ArcBasisDeriveType}.
+   * @see #FieldInitExpressionTypesCorrect(IDerive)
    */
   public FieldInitExpressionTypesCorrect() {
-    this(new TypeCheck(new ArcBasisSynthesizeType(), new ArcBasisDeriveType(new TypeCheckResult())));
+    this(new ArcBasisDeriveType());
   }
 
   /**
-   * Creates this coco with a custom {@link TypeCheck} to use to check whether initialization expressions for
-   * fields match the fields' types.
+   * Creates this coco with a custom {@link IDerive} used to extract the type to which initialization expressions of
+   * fields evaluate.
    */
-  public FieldInitExpressionTypesCorrect(@NotNull TypeCheck typeChecker) {
-    this.typeChecker = Preconditions.checkNotNull(typeChecker);
+  public FieldInitExpressionTypesCorrect(@NotNull IDerive typeDeriver) {
+    this.typeDeriver = Preconditions.checkNotNull(typeDeriver);
   }
 
   /**
-   * Creates this coco with a custom {@link IDerive} to use to check whether initialization expressions for fields
-   * match the fields' types.
+   * Checks to which type the {@code expression} evaluates to and returns it, wrapped in an optional. If the expression
+   * does not evaluate to a type, e.g., because it is malformed, the returned optional is empty.
    */
-  public FieldInitExpressionTypesCorrect(@NotNull IDerive deriverFromExpr) {
-    this(new TypeCheck(new ArcBasisSynthesizeType(), Preconditions.checkNotNull(deriverFromExpr)));
+  protected Optional<SymTypeExpression> extractTypeOf(@NotNull ASTExpression expression) {
+    Preconditions.checkNotNull(expression);
+
+    this.typeDeriver.init();
+    expression.accept(this.typeDeriver.getTraverser());
+    return this.typeDeriver.getResult();
   }
+
 
   @Override
   public void check(@NotNull ASTArcField astField) {
@@ -59,14 +64,20 @@ public class FieldInitExpressionTypesCorrect implements ArcBasisASTArcFieldCoCo 
     SymTypeExpression fieldType = fieldSym.getType();
 
     ASTExpression initExpr = astField.getInitial();
-    SymTypeExpression expressionType = this.typeChecker.typeOf(initExpr);
+    Optional<SymTypeExpression> expressionType = this.extractTypeOf(initExpr);
 
-    if(!TypeCheck.compatible(fieldType, expressionType)) {
+    if(expressionType.isPresent() && !TypeCheck.compatible(fieldType, expressionType.get())) {
       Log.error(ArcError.FIELD_INIT_EXPRESSION_WRONG_TYPE.format(
         fieldSym.getFullName(),
-        expressionType.print(),
+        expressionType.get().print(),
         fieldType.print()),
-        astField.get_SourcePositionStart());
+        astField.get_SourcePositionStart(), astField.get_SourcePositionEnd());
+    }
+    if(!expressionType.isPresent()) {
+      Log.debug(String.format("Checking coco '%s' is skipped for field '%s', as the type of the initialization " +
+            "expression could not be calculated. Position: '%s'.",
+            this.getClass().getSimpleName(), astField.getName(), astField.get_SourcePositionStart()),
+        "CoCos");
     }
   }
 }
