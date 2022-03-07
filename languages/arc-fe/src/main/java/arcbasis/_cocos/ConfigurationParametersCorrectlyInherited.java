@@ -57,8 +57,8 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
 
       if (parameters.size() < parentParameters.size()) {
         Log.error(
-          ArcError.TOO_FEW_CONFIGURATION_PARAMETER.format(component.getFullName(),
-            parentParameters.size()), node.getHead().get_SourcePositionStart());
+          ArcError.TOO_FEW_INHERITED_CONFIG_PARAMS.format(component.getFullName(), parameters.size(),
+            parentParameters.size(), parent.printName()), node.getHead().get_SourcePositionStart());
       }
 
       // TypeCheck compatibility between own and parent's parameters
@@ -67,20 +67,22 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
         SymTypeExpression paramType = parameters.get(i).getType();
         if (!TypeCheck.compatible(paramType, superParameterType)) {
           Log.error(
-            ArcError.CONFIGURATION_PARAMETER_TYPE_MISMATCH.format(
-              parameters.get(i).getName(), i + 1, component.getFullName(),
-              paramType.printFullName(),
-              superParameterType.printFullName()),
-            node.getHead().getArcParameterList().get(i).get_SourcePositionStart());
+            ArcError.INHERITED_CONFIG_PARAM_TYPE_MISMATCH.format(
+              parameters.get(i).getName(), i + 1, component.getFullName(), paramType.printFullName(),
+              superParameterType.printFullName(), parentParameters.get(i).getTypeInfo().getName(), i + 1),
+            node.getHead().getArcParameterList().get(i).get_SourcePositionStart(),
+            node.getHead().getArcParameterList().get(i).get_SourcePositionEnd());
         }
 
         // Check that all parameters of the parent that have default values also have default values in the child
         if (this.hasParameterDefaultValue(parent, i)) {
           if (!this.hasParameterDefaultValue(component, i)) {
             Log.error(
-              ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH.format(
-                parameters.get(i).getName(), i + 1, component.getFullName()),
-              node.getHead().getArcParameterList().get(i).get_SourcePositionStart());
+              ArcError.INHERITED_CONFIG_PARAM_MISSES_DEFAULT_VALUE.format(
+                parameters.get(i).getName(), i + 1, component.getFullName(),
+                parentParameters.get(i).getTypeInfo().getName(), parent.printName(), i + 1),
+              node.getHead().getArcParameterList().get(i).get_SourcePositionStart(),
+              node.getHead().getArcParameterList().get(i).get_SourcePositionEnd());
           }
         }
       }

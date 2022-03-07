@@ -11,6 +11,7 @@ import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -34,13 +35,17 @@ public class OptionalConfigurationParametersLast implements ArcBasisASTComponent
     List<ASTArcParameter> parameters = parameterASTsOf(comp);
 
     boolean alreadySawOptionalParameter = false;
+    Optional<Integer> firstOptionalParamPosition = Optional.empty();  // measured in [0; length-1]
+
     for(int i = 0; i < parameters.size(); i++) {
       ASTArcParameter param = parameters.get(i);
       if(isMandatory(param) && alreadySawOptionalParameter) {
-        Log.error(ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH.format(param.getName(), i + 1,
-          comp.getFullName()));
+        Log.error(ArcError.OPTIONAL_CONFIG_PARAMS_LAST.format(param.getName(), i + 1, comp.getFullName(),
+          parameters.get(firstOptionalParamPosition.get()).getName(), 1 + firstOptionalParamPosition.get()),
+          param.get_SourcePositionStart(), param.get_SourcePositionEnd());
       } else if(isOptional(param)) {
         alreadySawOptionalParameter = true;
+        firstOptionalParamPosition = Optional.of(i);
       }
     }
   }

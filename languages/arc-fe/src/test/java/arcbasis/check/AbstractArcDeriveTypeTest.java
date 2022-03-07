@@ -122,7 +122,7 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
       isPrimitive, isGeneric);
   }
 
-  protected ASTNameExpression doBuildNameExpression(@NotNull String expression) {
+  protected static ASTNameExpression doBuildNameExpression(@NotNull String expression) {
     Preconditions.checkNotNull(expression);
     return ExpressionsBasisMill.nameExpressionBuilder().setName(expression).build();
   }

@@ -7,6 +7,7 @@ import arcbasis._ast.*;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
 import arcbasis._symboltable.SymbolService;
+import arcbasis._symboltable.TransitiveScopeSetter;
 import arcbasis.check.ArcBasisDeriveTypeTest;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
@@ -18,7 +19,12 @@ import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
+
+import java.util.stream.Stream;
 
 /**
  * Tests {@link  ConfigurationParameterAssignment}
@@ -27,6 +33,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTypeTest
 
   protected ArcBasisScopesGenitorDelegator scopeGenitor;
   protected ArcBasisSymbolTableCompleterDelegator completer;
+  protected final static TransitiveScopeSetter scopeSetter = new TransitiveScopeSetter();
 
   @Override
   public void setUp() {
@@ -49,321 +56,134 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTypeTest
     SymbolService.link(this.scope, anInt, aBool, aDouble);
   }
 
-  @Test
-  public void shouldFindTooFewParameterBindings() {
-    ASTComponentType compType = provideSimpleCompType();
-    this.scopeGenitor.createFromAST(compType);
-    this.completer.createFromAST(compType);
+  @ParameterizedTest(name = "{index}: {0}")
+  @MethodSource("provideArgsAndExpectedErrors")
+  void shouldCheckParameterBindings(@NotNull String testName,
+                                    @NotNull ASTComponentType toInstantiate,
+                                    @NotNull ASTArguments instantiationArgs,
+                                    @NotNull ArcError... expectedErrors) {
+    Preconditions.checkNotNull(testName);
+    Preconditions.checkNotNull(toInstantiate);
+    Preconditions.checkNotNull(instantiationArgs);
+    Preconditions.checkNotNull(expectedErrors);
 
-    // ↓ test subject
-    ASTComponentInstantiation compInst = ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(mcTypeFromCompType(compType))
-      .addComponentInstance(
-        ArcBasisMill.componentInstanceBuilder()
-          .setName("foo")
-          .setArguments(ArcBasisMill.argumentsBuilder().build())
-          .build())
-      .build();
-    // ↑ test subject
+    // Given
+    this.scopeGenitor.createFromAST(toInstantiate);
+    this.completer.createFromAST(toInstantiate);
 
+    ASTComponentInstantiation compInst = provideInstantiation(toInstantiate, "foo", instantiationArgs);
     ASTComponentType enclComp = encloseInstInCompType(compInst);
     this.scopeGenitor.createFromAST(enclComp);
     this.completer.createFromAST(enclComp);
 
+    // When
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     coco.check(compInst.getComponentInstance(0));
 
-    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
+    // Then
+    this.checkOnlyExpectedErrorsPresent(expectedErrors);
   }
 
-  @Test
-  public void shouldFindTooManyParameterBindings() {
-    ASTComponentType compType = provideSimpleCompType();
-    this.scopeGenitor.createFromAST(compType);
-    this.completer.createFromAST(compType);
+  protected static Stream<Arguments> provideArgsAndExpectedErrors() {
+    return Stream.of(
+      Arguments.arguments("shouldFindTooFewParameterBindings",
+        provideSimpleCompType(),
+        ArcBasisMill.argumentsBuilder().build(),
+        new ArcError[] {ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS}),
 
-    ASTArguments arguments = ArcBasisMill.argumentsBuilder()
-      .addExpression(doBuildNameExpressionInScope("anInt"))
-      .addExpression(doBuildNameExpressionInScope("aBool"))
-      .build();
+      Arguments.arguments("shouldFindTooManyParameterBindings",
+        provideSimpleCompType(),
+        ArcBasisMill.argumentsBuilder()
+          .addExpression(doBuildNameExpressionInScope("anInt"))
+          .addExpression(doBuildNameExpressionInScope("aBool"))
+          .build(),
+        new ArcError[] {ArcError.TOO_MANY_INSTANTIATION_ARGUMENTS}),
 
-    // ↓ test subject
-    ASTComponentInstantiation compInst = ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(mcTypeFromCompType(compType))
-      .addComponentInstance(
-        ArcBasisMill.componentInstanceBuilder()
-          .setName("foo")
-          .setArguments(arguments)
-          .build())
-      .build();
-    // ↑ test subject
+      Arguments.arguments("shouldFindCorrectNumberOfParameterBindings",
+        provideSimpleCompType(),
+        ArcBasisMill.argumentsBuilder()
+          .addExpression(doBuildNameExpressionInScope("anInt"))
+          .build(),
+        new ArcError[]{}),
 
-    ASTComponentType enclComp = encloseInstInCompType(compInst);
-    this.scopeGenitor.createFromAST(enclComp);
-    this.completer.createFromAST(enclComp);
+      Arguments.arguments("shouldFindTooFewParameterBindingsWithDefaultParameters",
+        provideAdvancedCompType(),
+        ArcBasisMill.argumentsBuilder().build(),
+        new ArcError[] {ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS}),
 
-    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment(getDerive());
-    coco.check(compInst.getComponentInstance(0));
+      Arguments.arguments("shouldFindTooManyParameterBindingsWithDefaultParameters",
+        provideAdvancedCompType(),
+        ArcBasisMill.argumentsBuilder()
+          .addExpression(doBuildNameExpressionInScope("anInt"))
+          .addExpression(doBuildNameExpressionInScope("aBool"))
+          .addExpression(doBuildNameExpressionInScope("aDouble"))
+          .addExpression(doBuildNameExpressionInScope("anInt"))
+          .build(),
+        new ArcError[] {ArcError.TOO_MANY_INSTANTIATION_ARGUMENTS}),
 
-    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
-  }
+      Arguments.arguments("shouldFindWrongDefaultParameterOverwriteSequence",
+        provideAdvancedCompType(),
+        ArcBasisMill.argumentsBuilder()
+          .addExpression(doBuildNameExpressionInScope("anInt"))
+          .addExpression(doBuildNameExpressionInScope("aDouble"))
+          .build(),
+        new ArcError[] {ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH}),
 
-  @Test
-  public void shouldFindCorrectNumberOfParameterBindings() {
-    ASTComponentType compType = provideSimpleCompType();
-    this.scopeGenitor.createFromAST(compType);
-    this.completer.createFromAST(compType);
+      Arguments.arguments("shouldFindCorrectNumberOfParameterBindingsWithDefaultParameters",
+        provideAdvancedCompType(), ArcBasisMill.argumentsBuilder()
+          .addExpression(doBuildNameExpressionInScope("anInt"))
+          .build(),
+        new ArcError[]{}),
 
-    ASTArguments arguments = ArcBasisMill.argumentsBuilder()
-      .addExpression(doBuildNameExpressionInScope("anInt"))
-      .build();
+      Arguments.arguments("shouldFindCorrectNumberOfParameterBindingsAllDefaultsOverwritten",
+        provideAdvancedCompType(),
+        ArcBasisMill.argumentsBuilder()
+          .addExpression(doBuildNameExpressionInScope("anInt"))
+          .addExpression(doBuildNameExpressionInScope("aBool"))
+          .addExpression(doBuildNameExpressionInScope("aDouble"))
+          .build(),
+        new ArcError[]{}),
 
-    // ↓ test subject
-    ASTComponentInstantiation compInst = ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(mcTypeFromCompType(compType))
-      .addComponentInstance(
-        ArcBasisMill.componentInstanceBuilder()
-          .setName("foo")
-          .setArguments(arguments)
-          .build())
-      .build();
-    // ↑ test subject
+      Arguments.arguments("shouldFindCorrectNumberOfParameterBindingsSomeDefaultsOverwritten",
+        provideAdvancedCompType(),
+        ArcBasisMill.argumentsBuilder()
+          .addExpression(doBuildNameExpressionInScope("anInt"))
+          .addExpression(doBuildNameExpressionInScope("aBool"))
+          .build(),
+        new ArcError[]{}),
 
-    ASTComponentType enclComp = encloseInstInCompType(compInst);
-    this.scopeGenitor.createFromAST(enclComp);
-    this.completer.createFromAST(enclComp);
+      Arguments.arguments("shouldFindWrongTypes",
+        provideAdvancedCompType(),
+        ArcBasisMill.argumentsBuilder()
+          .addExpression(doBuildNameExpressionInScope("aDouble"))
+          .addExpression(doBuildNameExpressionInScope("aBool"))
+          .build(),
+        new ArcError[] {ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH}),
 
-    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment(getDerive());
-    coco.check(compInst.getComponentInstance(0));
+      Arguments.arguments("wrongTypeAndTooManyArguments",
+        provideAdvancedCompType(),
+        ArcBasisMill.argumentsBuilder()
+          .addExpression(doBuildNameExpressionInScope("aDouble"))
+          .addExpression(doBuildNameExpressionInScope("anInt"))
+          .addExpression(doBuildNameExpressionInScope("aBool"))
+          .addExpression(doBuildNameExpressionInScope("aBool"))
+          .build(),
+        new ArcError[] {ArcError.TOO_MANY_INSTANTIATION_ARGUMENTS, ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH,
+          ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH, ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH}),
 
-    Assertions.assertEquals(0, Log.getErrorCount());
-  }
-
-  @Test
-  public void shouldFindTooFewParameterBindingsWithDefaultParameters() {
-    ASTComponentType compType = provideAdvancedCompType();
-    this.scopeGenitor.createFromAST(compType);
-    this.completer.createFromAST(compType);
-
-    // ↓ test subject
-    ASTComponentInstantiation compInst = ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(mcTypeFromCompType(compType))
-      .addComponentInstance(
-        ArcBasisMill.componentInstanceBuilder()
-          .setName("foo")
-          .setArguments(ArcBasisMill.argumentsBuilder().build())
-          .build())
-      .build();
-    // ↑ test subject
-
-    ASTComponentType enclComp = encloseInstInCompType(compInst);
-    this.scopeGenitor.createFromAST(enclComp);
-    this.completer.createFromAST(enclComp);
-
-    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
-    coco.check(compInst.getComponentInstance(0));
-
-    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
-  }
-
-  @Test
-  public void shouldFindTooManyParameterBindingsWithDefaultParameters() {
-    ASTComponentType compType = provideAdvancedCompType();
-    this.scopeGenitor.createFromAST(compType);
-    this.completer.createFromAST(compType);
-
-    ASTArguments arguments = ArcBasisMill.argumentsBuilder()
-      .addExpression(doBuildNameExpressionInScope("anInt"))
-      .addExpression(doBuildNameExpressionInScope("aBool"))
-      .addExpression(doBuildNameExpressionInScope("aDouble"))
-      .addExpression(doBuildNameExpressionInScope("anInt"))
-      .build();
-
-    // ↓ test subject
-    ASTComponentInstantiation compInst = ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(mcTypeFromCompType(compType))
-      .addComponentInstance(
-        ArcBasisMill.componentInstanceBuilder()
-          .setName("foo")
-          .setArguments(arguments)
-          .build())
-      .build();
-    // ↑ test subject
-
-    ASTComponentType enclComp = encloseInstInCompType(compInst);
-    this.scopeGenitor.createFromAST(enclComp);
-    this.completer.createFromAST(enclComp);
-
-    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
-    coco.check(compInst.getComponentInstance(0));
-
-    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
-  }
-
-  @Test
-  public void shouldFindWrongDefaultParameterOverwriteSequence() {
-    ASTComponentType compType = provideAdvancedCompType();
-    this.scopeGenitor.createFromAST(compType);
-    this.completer.createFromAST(compType);
-
-    ASTArguments arguments = ArcBasisMill.argumentsBuilder()
-      .addExpression(doBuildNameExpressionInScope("anInt"))
-      .addExpression(doBuildNameExpressionInScope("aDouble"))
-      .build();
-
-    // ↓ test subject
-    ASTComponentInstantiation compInst = ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(mcTypeFromCompType(compType))
-      .addComponentInstance(
-        ArcBasisMill.componentInstanceBuilder()
-          .setName("foo")
-          .setArguments(arguments)
-          .build())
-      .build();
-    // ↑ test subject
-
-    ASTComponentType enclComp = encloseInstInCompType(compInst);
-    this.scopeGenitor.createFromAST(enclComp);
-    this.completer.createFromAST(enclComp);
-
-    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
-    coco.check(compInst.getComponentInstance(0));
-
-    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
-  }
-
-  @Test
-  public void shouldFindCorrectNumberOfParameterBindingsWithDefaultParameters() {
-    ASTComponentType compType = provideAdvancedCompType();
-    this.scopeGenitor.createFromAST(compType);
-    this.completer.createFromAST(compType);
-
-    ASTArguments arguments = ArcBasisMill.argumentsBuilder()
-      .addExpression(doBuildNameExpressionInScope("anInt"))
-      .build();
-
-    // ↓ test subject
-    ASTComponentInstantiation compInst = ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(mcTypeFromCompType(compType))
-      .addComponentInstance(
-        ArcBasisMill.componentInstanceBuilder()
-          .setName("foo")
-          .setArguments(arguments)
-          .build())
-      .build();
-    // ↑ test subject
-
-    ASTComponentType enclComp = encloseInstInCompType(compInst);
-    this.scopeGenitor.createFromAST(enclComp);
-    this.completer.createFromAST(enclComp);
-
-    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
-    coco.check(compInst.getComponentInstance(0));
-
-    Assertions.assertEquals(0, Log.getErrorCount());
-  }
-
-  @Test
-  public void shouldFindCorrectNumberOfParameterBindingsWithAllDefaultsOverwritten() {
-    ASTComponentType compType = provideAdvancedCompType();
-    this.scopeGenitor.createFromAST(compType);
-    this.completer.createFromAST(compType);
-
-    ASTArguments arguments = ArcBasisMill.argumentsBuilder()
-      .addExpression(doBuildNameExpressionInScope("anInt"))
-      .addExpression(doBuildNameExpressionInScope("aBool"))
-      .addExpression(doBuildNameExpressionInScope("aDouble"))
-      .build();
-
-    // ↓ test subject
-    ASTComponentInstantiation compInst = ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(mcTypeFromCompType(compType))
-      .addComponentInstance(
-        ArcBasisMill.componentInstanceBuilder()
-          .setName("foo")
-          .setArguments(arguments)
-          .build())
-      .build();
-    // ↑ test subject
-
-    ASTComponentType enclComp = encloseInstInCompType(compInst);
-    this.scopeGenitor.createFromAST(enclComp);
-    this.completer.createFromAST(enclComp);
-
-    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
-    coco.check(compInst.getComponentInstance(0));
-
-    Assertions.assertEquals(0, Log.getErrorCount());
-  }
-
-  @Test
-  public void shouldFindCorrectNumberOfParameterBindingsWithSomeDefaultsOverwritten() {
-    ASTComponentType compType = provideAdvancedCompType();
-    this.scopeGenitor.createFromAST(compType);
-    this.completer.createFromAST(compType);
-
-    ASTArguments arguments = ArcBasisMill.argumentsBuilder()
-      .addExpression(doBuildNameExpressionInScope("anInt"))
-      .addExpression(doBuildNameExpressionInScope("aBool"))
-      .build();
-
-    // ↓ test subject
-    ASTComponentInstantiation compInst = ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(mcTypeFromCompType(compType))
-      .addComponentInstance(
-        ArcBasisMill.componentInstanceBuilder()
-          .setName("foo")
-          .setArguments(arguments)
-          .build())
-      .build();
-    // ↑ test subject
-
-    ASTComponentType enclComp = encloseInstInCompType(compInst);
-    this.scopeGenitor.createFromAST(enclComp);
-    this.completer.createFromAST(enclComp);
-
-    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
-    coco.check(compInst.getComponentInstance(0));
-
-    Assertions.assertEquals(0, Log.getErrorCount());
-  }
-
-  @Test
-  public void shouldFindWrongTypes() {
-    ASTComponentType compType = provideAdvancedCompType();
-    this.scopeGenitor.createFromAST(compType);
-    this.completer.createFromAST(compType);
-
-    ASTArguments arguments = ArcBasisMill.argumentsBuilder()
-      .addExpression(doBuildNameExpressionInScope("aDouble"))
-      .addExpression(doBuildNameExpressionInScope("aBool"))
-      .build();
-
-    // ↓ test subject
-    ASTComponentInstantiation compInst = ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(mcTypeFromCompType(compType))
-      .addComponentInstance(
-        ArcBasisMill.componentInstanceBuilder()
-          .setName("foo")
-          .setArguments(arguments)
-          .build())
-      .build();
-    // ↑ test subject
-
-    ASTComponentType enclComp = encloseInstInCompType(compInst);
-    this.scopeGenitor.createFromAST(enclComp);
-    this.completer.createFromAST(enclComp);
-
-    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
-    coco.check(compInst.getComponentInstance(0));
-
-    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CONFIG_PARAMETER_BINDING});
+      Arguments.arguments("wrongTypeAndTooFewArguments",
+        provideAdvancedCompTypeWithOneDefaultValue(),
+        ArcBasisMill.argumentsBuilder()
+          .addExpression(doBuildNameExpressionInScope("aDouble"))
+          .build(),
+        new ArcError[] {ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS, ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH})
+    );
   }
 
   /**
    * @return An ASTComponentType with one int parameter that has no default value.
    */
-  protected ASTComponentType provideSimpleCompType() {
+  protected static ASTComponentType provideSimpleCompType() {
     ASTComponentHead compHead = ArcBasisMill.componentHeadBuilder()
       .addArcParameter(
         ArcBasisMill.arcParameterBuilder()
@@ -385,7 +205,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTypeTest
    * @return An ASTComponentType with an int parameter that has no default value, followed by a boolean and double
    * parameter with default values.
    */
-  protected ASTComponentType provideAdvancedCompType() {
+  protected static ASTComponentType provideAdvancedCompType() {
     ASTArcParameter param1 = ArcBasisMill.arcParameterBuilder()
       .setName("first")
       .setMCType(createQualifiedType("int"))
@@ -416,6 +236,35 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTypeTest
     return compType;
   }
 
+  /**
+   * Like {@link #provideAdvancedCompType()} but the second parameter is mandatory.
+   */
+  protected static ASTComponentType provideAdvancedCompTypeWithOneDefaultValue() {
+    ASTComponentType compType = provideAdvancedCompType();
+    compType.getHead().getArcParameter(1).setDefaultAbsent();
+    return compType;
+  }
+
+  /**
+   * Instantiates the given component type using the given arguments and gives it the given name.
+   */
+  protected static ASTComponentInstantiation provideInstantiation(@NotNull ASTComponentType componentType,
+                                                           @NotNull String name,
+                                                           @NotNull ASTArguments arguments) {
+    Preconditions.checkNotNull(componentType);
+    Preconditions.checkNotNull(name);
+    Preconditions.checkNotNull(arguments);
+
+    return ArcBasisMill.componentInstantiationBuilder()
+      .setMCType(mcTypeFromCompType(componentType))
+      .addComponentInstance(
+        ArcBasisMill.componentInstanceBuilder()
+          .setName(name)
+          .setArguments(arguments)
+          .build())
+      .build();
+  }
+
 
   /**
    * Creates an ASTMCType that represents the  given component type.
@@ -423,7 +272,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTypeTest
    * @param comp the component type for which the ASMCType should be created
    * @return the given component type, represented as MCType
    */
-  protected ASTMCType mcTypeFromCompType(@NotNull ASTComponentType comp) {
+  protected static ASTMCType mcTypeFromCompType(@NotNull ASTComponentType comp) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(comp.getEnclosingScope());
 
@@ -438,7 +287,7 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTypeTest
     return type;
   }
 
-  protected ASTComponentType encloseInstInCompType(@NotNull ASTComponentInstantiation inst) {
+  protected static ASTComponentType encloseInstInCompType(@NotNull ASTComponentInstantiation inst) {
     Preconditions.checkNotNull(inst);
 
     return ArcBasisMill.componentTypeBuilder()
@@ -448,10 +297,10 @@ public class ConfigurationParameterAssignmentTest extends ArcBasisDeriveTypeTest
       .build();
   }
 
-  protected ASTExpression doBuildNameExpressionInScope(@NotNull String expression) {
+  protected static ASTExpression doBuildNameExpressionInScope(@NotNull String expression) {
     Preconditions.checkNotNull(expression);
-    ASTExpression result = this.doBuildNameExpression(expression);
-    this.getScopeSetter().setScope(result, this.getScope());
+    ASTExpression result = doBuildNameExpression(expression);
+    scopeSetter.setScope(result, ArcBasisMill.globalScope());
     return result;
   }
 }

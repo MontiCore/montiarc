@@ -41,10 +41,10 @@ public class OptionalConfigurationParametersLastTest extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-      arg("WithMixedParameters1.arc", ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH),
-      arg("WithMixedParameters2.arc", ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH),
+      arg("WithMixedParameters1.arc", ArcError.OPTIONAL_CONFIG_PARAMS_LAST),
+      arg("WithMixedParameters2.arc", ArcError.OPTIONAL_CONFIG_PARAMS_LAST),
       arg("WithOptionalThenMandatoryParameters.arc",
-          ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH, ArcError.CONFIGURATION_PARAMETER_VALUE_MISMATCH)
+          ArcError.OPTIONAL_CONFIG_PARAMS_LAST, ArcError.OPTIONAL_CONFIG_PARAMS_LAST)
     );
   }
 

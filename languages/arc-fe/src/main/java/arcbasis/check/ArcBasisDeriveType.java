@@ -16,6 +16,10 @@ import org.codehaus.commons.nullanalysis.NotNull;
  */
 public class ArcBasisDeriveType extends AbstractArcDeriveType {
 
+  public ArcBasisDeriveType() {
+    this(new TypeCheckResult());
+  }
+
   public ArcBasisDeriveType(@NotNull TypeCheckResult typeCheckResult) {
     this(typeCheckResult, ArcBasisMill.traverser());
   }

@@ -32,13 +32,18 @@ public enum ArcError implements montiarc.util.Error {
     + "type '%s' is not connected."),
   INNER_WITH_TYPE_PARAMETER_REQUIRES_INSTANCE("0xC1029", "Inner component '%s' must have an "
     + "instance defining its formal type parameters."),
-  TOO_FEW_CONFIGURATION_PARAMETER("0xC1030", "There are too few configuration parameters. The "
-    + "component '%s' requires at least %d configuration parameters"),
-  CONFIGURATION_PARAMETER_TYPE_MISMATCH("0xC1031",
-    "Configuration parameter '%s' at position %d of "
-      + "component %s is of type '%s', but it is required to be of type '%s'."),
-  CONFIGURATION_PARAMETER_VALUE_MISMATCH("0xC1032", "Configuration parameter '%s' at position %d"
-    + " of component '%s' should have a default value but has none."),
+  TOO_FEW_INHERITED_CONFIG_PARAMS("0xC1030", "You defined component type '%s' to have '%s' parameters, but you must " +
+    "provide at least '%s' parameters, matching the type signature of the parent component '%s'."),
+  INHERITED_CONFIG_PARAM_TYPE_MISMATCH("0xC1031", "Configuration parameter '%s' at position '%d' of component '%s' " +
+    "is of type '%s', but it is required to match the type '%s' of the inherited configuration parameter '%s' at " +
+    "position '%d'."),
+  INHERITED_CONFIG_PARAM_MISSES_DEFAULT_VALUE("0xC1032", "Configuration parameter '%s' at position %d of component " +
+    "'%s' has no default value. However, it should have a default value, as the configuration parameter '%s' of " +
+    "parent component '%s' at position '%d' has a default value, too."),
+  OPTIONAL_CONFIG_PARAMS_LAST("0xC1033", "Configuration parameter '%s' at position '%d' of component '%s' should be " +
+    "optional, as it is preceded by the optional configuration parameter '%s' at position '%s'. Mandatory parameters " +
+    "(that do not specify default values) must be declared before all optional parameters (that specify default " +
+    "values). Therefore provide a default value!"),
   SOURCE_AND_TARGET_SAME_COMPONENT("0xC1034", "Source and target of a connector of component "
     + "'%s' refer to the same subcomponent."),
   SOURCE_PORT_NOT_EXISTS("0xC1035", "Source port '%s' of connector '%s' of component '%s' does not "
@@ -67,8 +72,6 @@ public enum ArcError implements montiarc.util.Error {
   UNIQUE_IDENTIFIER_NAMES("0xC1061", "Within '%s' there may not be multiple identifiers called '%s'. Occurrences: %s."),
   ROOT_COMPONENT_TYPES_MISS_INSTANCE_NAMES("0xC1062", "Root components must not have instance "
     + "names. Violated by component type '%s', named '%s'."),
-  CONFIG_PARAMETER_BINDING("0xC1063", "Component type '%s' has no signature '%s', as given by "
-    + "instantiation '%s'."),
   NO_SUBCOMPONENT_CYCLE("0xC1064", "Found an illegal subcomponent instantiation cycle: %s"),
   PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL("0xC1065", "The initializing expression for " +
     "field '%s' in component type '%s' illegally relies on the port '%s'."),
@@ -93,7 +96,16 @@ public enum ArcError implements montiarc.util.Error {
   INITIAL_MODE_DOES_NOT_EXIST("0xC1080", "The initial mode '%s' is not defined anywhere in the component '%s'."),
   UNSUPPORTED_MODEL_ELEMENT("0xC1081", "%s"),
   PORT_REFERENCE_IN_INSTANTIATION_ARG_ILLEGAL("0xC1082", "An argument for the instantiation '%s' illegally relies " +
-    "on the port '%s'");
+    "on the port '%s'"),
+  TOO_FEW_INSTANTIATION_ARGUMENTS("0xC1083", "There are '%d' instantiation arguments for component instance '%s', " +
+    "but component type '%s' has '%d' mandatory configuration parameters that all must be bound."),
+  TOO_MANY_INSTANTIATION_ARGUMENTS("0xC1084", "There are '%d' instantiation arguments for component instance '%s', " +
+    "but its component type '%s' only has '%d' configuration parameters. Please do not provide more arguments than " +
+    "parameters exist."),
+  INSTANTIATION_ARGUMENT_TYPE_MISMATCH("0xC1085", "The instantiation argument at position '%d' of component instance " +
+    "'%s' is of type '%s' which is incompatible to type '%s' of the corresponding configuration parameter '%s' of " +
+    "component type '%s'.");
+
 
   private final String errorCode;
   private final String errorMessage;

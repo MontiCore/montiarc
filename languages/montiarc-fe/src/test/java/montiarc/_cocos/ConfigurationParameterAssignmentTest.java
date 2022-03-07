@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
-public class ConfigurationParameterAssignmentTest extends AbstractCoCoTest {
+class ConfigurationParameterAssignmentTest extends AbstractCoCoTest {
 
   protected static final String PACKAGE = "configurationParameterAssignment";
 
@@ -43,39 +43,48 @@ public class ConfigurationParameterAssignmentTest extends AbstractCoCoTest {
     // loading helper models into the symboltable
     this.parseAndCreateAndCompleteSymbols("subcomponentDefinitions/Simple.arc");
     this.parseAndCreateAndCompleteSymbols("subcomponentDefinitions/Complex.arc");
+    this.parseAndCreateAndCompleteSymbols("subcomponentDefinitions/ComplexWithTwoMandatoryParams.arc");
     this.parseAndCreateAndCompleteSymbols("subcomponentDefinitions/Generic.arc");
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"CorrectParameterBindings.arc", "CorrectGenericParameterBindings.arc"})
-  public void shouldCorrectlyBindConfigurationParameters(@NotNull String model) {
+  void shouldCorrectlyBindConfigurationParameters(@NotNull String model) {
     testModel(model);
   }
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
+      arg("TooFewAndWrongBindings.arc",
+        ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS,
+        ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH),
       arg("TooFewParameterBindings.arc",
-        ArcError.CONFIG_PARAMETER_BINDING,
-        ArcError.CONFIG_PARAMETER_BINDING,
-        ArcError.CONFIG_PARAMETER_BINDING,
-        ArcError.CONFIG_PARAMETER_BINDING),
+        ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS,
+        ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS,
+        ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS,
+        ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS),
+      arg("TooManyAndWrongBindings.arc",
+        ArcError.TOO_MANY_INSTANTIATION_ARGUMENTS,
+        ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH,
+        ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH,
+        ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH),
       arg("TooManyParameterBindings.arc",
-        ArcError.CONFIG_PARAMETER_BINDING,
-        ArcError.CONFIG_PARAMETER_BINDING),
+        ArcError.TOO_MANY_INSTANTIATION_ARGUMENTS,
+        ArcError.TOO_MANY_INSTANTIATION_ARGUMENTS),
       arg("WrongTypeParameterBindings.arc",
-        ArcError.CONFIG_PARAMETER_BINDING,
-        ArcError.CONFIG_PARAMETER_BINDING,
-        ArcError.CONFIG_PARAMETER_BINDING,
-        ArcError.CONFIG_PARAMETER_BINDING),
+        ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH,
+        ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH,
+        ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH,
+        ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH),
       arg("WrongGenericParameterBindings.arc",
-        ArcError.CONFIG_PARAMETER_BINDING,
-        ArcError.CONFIG_PARAMETER_BINDING)
+        ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH,
+        ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH)
     );
   }
 
   @ParameterizedTest
   @MethodSource("modelAndExpectedErrorsProvider")
-  public void shouldIncorrectlyBindConfigurationParameters(@NotNull String model, @NotNull Error... errors) {
+  void shouldIncorrectlyBindConfigurationParameters(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
     testModel(model, errors);
