@@ -3,6 +3,7 @@ package montiarc._cocos;
 
 import arcautomaton._cocos.FieldReadWriteAccessFitsInGuards;
 import arcautomaton._cocos.FieldReadWriteAccessFitsInStatements;
+import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
 import arcautomaton._cocos.InitialStatesResolvable;
 import arcautomaton._cocos.NoRedundantInitialOutput;
 import arcbasis._cocos.*;
@@ -73,6 +74,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new FieldReadWriteAccessFitsInStatements());
     checker.addCoCo(new NoRedundantInitialOutput());
     checker.addCoCo(new InitialStatesResolvable());
+    checker.addCoCo(new NoInputPortsInInitialOutputDeclaration());
 
     // MontiArc CoCos
     checker.addCoCo(new ComponentInheritanceRespectsGenericTypeBounds());

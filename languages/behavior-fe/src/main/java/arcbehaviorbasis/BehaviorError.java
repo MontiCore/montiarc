@@ -2,6 +2,7 @@
 package arcbehaviorbasis;
 
 import de.monticore.ast.ASTNode;
+import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.Error;
 
@@ -21,7 +22,9 @@ public enum BehaviorError implements Error {
   ASSIGN_TO_NOT_NAME("0xC2010", "Cannot %s %s."),
   GUARD_IS_NO_BOOLEAN("0xC2009", "The a guard of a transition should evaluate to 'boolean', but this guard evaluates to '%s'."),
   REDUNDANT_INITIAL_DECLARATION("0xC2012", "The state '%s' has multiple initial outputs."),
-  INITIAL_STATE_REFERENCE_MISSING("0xC2013", "The state '%s' referenced here does not exist.");
+  INITIAL_STATE_REFERENCE_MISSING("0xC2013", "The state '%s' referenced here does not exist."),
+  INPUT_PORT_IN_INITIAL_OUT_DECL("0xC2014", "Input port '%s' is referenced in the initial output declaration. This " +
+    "is illegal as input port values are undefined at the point of component initialization.");
 
   BehaviorError(String code, String message) {
     this.message = message;
@@ -47,6 +50,25 @@ public enum BehaviorError implements Error {
    * @param args arguments for a {@link String#format(String, Object...)} and {@link Error#printErrorMessage()} call
    */
   public void logAt(ASTNode sourcePosition, Object... args){
-    Log.error(String.format(getErrorCode()+": "+printErrorMessage(), args), sourcePosition.get_SourcePositionStart());
+    this.logAt(sourcePosition.get_SourcePositionStart(), sourcePosition.get_SourcePositionEnd(), args);
+  }
+
+  /**
+   * logs this error
+   * @param sourceStart start of the source position of the error occurrence
+   * @param args arguments for a {@link String#format(String, Object...)} and {@link Error#printErrorMessage()} call
+   */
+  public void logAt(SourcePosition sourceStart, Object... args) {
+    Log.error(String.format(getErrorCode()+": "+printErrorMessage(), args), sourceStart);
+  }
+
+  /**
+   * logs this error
+   * @param sourceStart start of the source position of the error occurrence
+   * @param sourceEnd end of the source position of the error occurrence
+   * @param args arguments for a {@link String#format(String, Object...)} and {@link Error#printErrorMessage()} call
+   */
+  public void logAt(SourcePosition sourceStart, SourcePosition sourceEnd, Object... args) {
+    Log.error(String.format(getErrorCode()+": "+printErrorMessage(), args), sourceStart, sourceEnd);
   }
 }
