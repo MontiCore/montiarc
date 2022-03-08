@@ -32,7 +32,7 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractCoCoTest {
   @Override
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
     Preconditions.checkNotNull(checker);
-    checker.addCoCo(new ParameterDefaultValueTypesCorrect(new MontiArcDeriveType(new TypeCheckResult())));
+    checker.addCoCo(new ParameterDefaultValueTypesCorrect(new MontiArcDeriveType()));
   }
 
   @Override

@@ -96,6 +96,6 @@ class ConfigurationParameterAssignmentTest extends AbstractCoCoTest {
   @Override
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
     Preconditions.checkNotNull(checker);
-    checker.addCoCo(new ConfigurationParameterAssignment(new MontiArcDeriveType(new TypeCheckResult())));
+    checker.addCoCo(new ConfigurationParameterAssignment(new MontiArcDeriveType()));
   }
 }

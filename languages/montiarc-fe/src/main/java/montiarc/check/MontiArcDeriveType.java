@@ -15,6 +15,10 @@ import org.codehaus.commons.nullanalysis.NotNull;
  */
 public class MontiArcDeriveType extends AbstractArcDeriveType {
 
+  public MontiArcDeriveType() {
+    this(new TypeCheckResult());
+  }
+
   public MontiArcDeriveType(@NotNull TypeCheckResult typeCheckResult) {
     this(typeCheckResult, MontiArcMill.traverser());
   }

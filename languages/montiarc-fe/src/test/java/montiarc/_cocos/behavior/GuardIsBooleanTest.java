@@ -78,6 +78,6 @@ public class GuardIsBooleanTest extends AbstractCoCoTest {
   @Override
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
     Preconditions.checkNotNull(checker);
-    checker.addCoCo(new GuardIsBoolean(new MontiArcDeriveType(new TypeCheckResult())));
+    checker.addCoCo(new GuardIsBoolean(new MontiArcDeriveType()));
   }
 }

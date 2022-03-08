@@ -4,6 +4,7 @@ package montiarc._cocos;
 import arcautomaton._cocos.FieldReadWriteAccessFitsInGuards;
 import arcautomaton._cocos.FieldReadWriteAccessFitsInStatements;
 import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
+import arcautomaton._cocos.ExpressionStatementWellFormedness;
 import arcautomaton._cocos.InitialStatesResolvable;
 import arcautomaton._cocos.NoRedundantInitialOutput;
 import arcbasis._cocos.*;
@@ -12,7 +13,6 @@ import arcbehaviorbasis._cocos.OnlyOneBehavior;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
 import de.monticore.scbasis._cocos.UniqueStates;
-import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
 import montiarc._cocos.util.CheckTypeExistence4MontiArc;
@@ -32,13 +32,13 @@ public class MontiArcCoCos {
     checker.addCoCo(new ComponentInstanceTypeExists(new MCSimpleGenericTypesFullPrettyPrinter(new IndentPrinter())));
     checker.addCoCo(new ComponentTypeNameCapitalization());
     checker.addCoCo(new ConfigurationParametersCorrectlyInherited());
-    checker.addCoCo(new ConfigurationParameterAssignment(new MontiArcDeriveType(new TypeCheckResult())));
+    checker.addCoCo(new ConfigurationParameterAssignment(new MontiArcDeriveType()));
     checker.addCoCo(new ConnectorSourceAndTargetComponentDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetDirectionsFit());
     checker.addCoCo(new ConnectorSourceAndTargetExist());
     checker.addCoCo(new ConnectorSourceAndTargetTypesFit());
-    checker.addCoCo(new FieldInitExpressionTypesCorrect(new MontiArcDeriveType(new TypeCheckResult())));
+    checker.addCoCo(new FieldInitExpressionTypesCorrect(new MontiArcDeriveType()));
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new FieldInitExpressionsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new FieldTypeExists(new CheckTypeExistence4MontiArc()));
@@ -48,7 +48,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new InstanceNameCapitalisation());
     checker.addCoCo(new NoSubComponentReferenceCycles());
     checker.addCoCo(new ParameterDefaultValuesOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
-    checker.addCoCo(new ParameterDefaultValueTypesCorrect(new MontiArcDeriveType(new TypeCheckResult())));
+    checker.addCoCo(new ParameterDefaultValueTypesCorrect(new MontiArcDeriveType()));
     checker.addCoCo(new ParameterNameCapitalization());
     checker.addCoCo(new ParameterTypeExists(new CheckTypeExistence4MontiArc()));
     checker.addCoCo(new PortNameCapitalisation());
@@ -75,6 +75,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new NoRedundantInitialOutput());
     checker.addCoCo(new InitialStatesResolvable());
     checker.addCoCo(new NoInputPortsInInitialOutputDeclaration());
+    // checker.addCoCo(new ExpressionStatementWellFormedness(new MontiArcDeriveType())); // TODO: integrate coco MontiCore bug is fixed: https://git.rwth-aachen.de/monticore/monticore/-/issues/3082
 
     // MontiArc CoCos
     checker.addCoCo(new ComponentInheritanceRespectsGenericTypeBounds());

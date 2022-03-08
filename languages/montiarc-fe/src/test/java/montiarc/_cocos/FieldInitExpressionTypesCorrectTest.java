@@ -29,7 +29,7 @@ public class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
 
   @Override
   protected void registerCoCos(MontiArcCoCoChecker checker) {
-    checker.addCoCo(new FieldInitExpressionTypesCorrect(new MontiArcDeriveType(new TypeCheckResult())));
+    checker.addCoCo(new FieldInitExpressionTypesCorrect(new MontiArcDeriveType()));
   }
 
   @Override
