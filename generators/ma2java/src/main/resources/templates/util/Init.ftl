@@ -4,21 +4,13 @@
   @Override
   public void init() {
     <#if comp.isPresentParentComponent()>
-      <#lt>    super.init();
-
+      super.init();
     </#if>
-    // set up unused input ports
-    <#assign portsIn = comp.getIncomingPorts()>
-    <#list portsIn as port>
-      <#lt>    if (this.${port.getName()} == null) { this.${port.getName()} = Port.EMPTY; }
-    </#list>
-
     <#if !comp.isAtomic()>
-      <#lt>    // init all subcomponents
-        <#assign subComponents = comp.getSubComponents()>
-        <#list subComponents as subcomponent>
-          <#lt>    this.${subcomponent.getName()}.init();
-        </#list>
+      // init all subcomponents
+      <#list comp.getSubComponents() as subcomponent>
+        this.${subcomponent.getName()}.init();
+      </#list>
     </#if>
   }
 </#macro>

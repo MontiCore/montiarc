@@ -4,17 +4,13 @@ package montiarc.generator.helper;
 import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._visitor.NamesInExpressionsVisitor;
 import arcbasis._ast.*;
-import arcbasis._symboltable.ComponentInstanceSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
-import arcbasis._symboltable.PortSymbol;
+import arcbasis._symboltable.*;
 import arccompute._ast.ASTArcCompute;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
-import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.symboltable.ImportStatement;
@@ -339,7 +335,7 @@ public class ComponentHelper {
     return calls;
   }
   
-  public List<ASTConnector> getOutgoingPortForwards(@NotNull ComponentTypeSymbol comp) {
+  public static List<ASTConnector> getOutgoingPortForwards(@NotNull ComponentTypeSymbol comp) {
     Preconditions.checkNotNull(comp);
     
     List<ASTConnector> res = new ArrayList<>();
@@ -354,7 +350,7 @@ public class ComponentHelper {
     return res;
   }
   
-  public List<ASTConnector> getIncomingPortForwards(@NotNull ComponentTypeSymbol comp) {
+  public static List<ASTConnector> getIncomingPortForwards(@NotNull ComponentTypeSymbol comp) {
     Preconditions.checkNotNull(comp);
     
     List<ASTConnector> res = new ArrayList<>();
@@ -366,20 +362,60 @@ public class ComponentHelper {
     return res;
   }
   
-  public List<ASTConnector> getHiddenChannels(@NotNull ComponentTypeSymbol comp) {
-    Preconditions.checkNotNull(comp);
-    
-    List<ASTConnector> res = new ArrayList<>();
-    for(ASTConnector conn: comp.getAstNode().getConnectors()) {
-      if(conn.getSource().isPresentComponent()
-      && conn.getTargetList().stream().anyMatch(ASTPortAccessTOP::isPresentComponent)) {
-        ASTConnector clone = conn.deepClone();
-        clone.setTargetList(clone.getTargetList().stream()
-          .filter(ASTPortAccessTOP::isPresentComponent).collect(Collectors.toList()));
-        res.add(clone);
+  public static Map<String, List<ASTConnector>> getConnectorsSortedBySourceQName(@NotNull Collection<ASTConnector> connectors) {
+    Map<String, List<ASTConnector>> map = new HashMap<>();
+    for(ASTConnector conn : connectors) {
+      if(map.containsKey(conn.getSource().getQName())) {
+        map.get(conn.getSource().getQName()).add(conn);
+      } else {
+        map.put(conn.getSource().getQName(), new ArrayList<>());
+        map.get(conn.getSource().getQName()).add(conn);
       }
     }
+    return map;
+  }
+  
+  public static Map<String, List<ASTConnector>> getConnectorsSortedByTargetQName(@NotNull Collection<ASTConnector> connectors) {
+    Map<String, Set<ASTConnector>> map = new HashMap<>();
+    for(ASTConnector conn : connectors) {
+      for(ASTPortAccess port : conn.getTargetList()) {
+        if(map.containsKey(port.getQName())) {
+          map.get(port.getQName()).add(conn);
+        } else {
+          map.put(port.getQName(), new HashSet<>());
+          map.get(port.getQName()).add(conn);
+        }
+      }
+    }
+    Map<String, List<ASTConnector>> res = new HashMap<>();
+    for(String key : map.keySet()) {
+      res.put(key, new ArrayList<>(map.get(key)));
+    }
     return res;
+  }
+  
+  public static List<PortSymbol> getAllPortSymbolsSorted(@NotNull ComponentTypeSymbol comp) {
+    return comp.getAllPorts().stream()
+      .sorted(Comparator.comparing(PortSymbolTOP::getName))
+      .collect(Collectors.toList());
+  }
+  
+  public static List<PortSymbol> getLocalPortSymbolsSorted(@NotNull ComponentTypeSymbol comp) {
+    return comp.getPorts().stream()
+      .sorted(Comparator.comparing(PortSymbolTOP::getName))
+      .collect(Collectors.toList());
+  }
+  
+  public static List<PortSymbol> getLocalIncomingPortSymbolsSorted(@NotNull ComponentTypeSymbol comp) {
+    return comp.getIncomingPorts().stream()
+      .sorted(Comparator.comparing(PortSymbolTOP::getName))
+      .collect(Collectors.toList());
+  }
+  
+  public static List<PortSymbol> getLocalOutgoingPortSymbolsSorted(@NotNull ComponentTypeSymbol comp) {
+    return comp.getOutgoingPorts().stream()
+      .sorted(Comparator.comparing(PortSymbolTOP::getName))
+      .collect(Collectors.toList());
   }
 
   /**
@@ -518,5 +554,106 @@ public class ComponentHelper {
           || !((IMontiArcScope) expr.getEnclosingScope()).resolveVariableMany(astName.getName()).isEmpty()
       )
       .collect(Collectors.toSet());
+  }
+  
+  /**
+   * Derive a valid identifier from an ASTPortAccess based on the port's name.
+   * Moved to own function because names must be derived the same way across multiple methods.
+   * @param portAccess The PortAccess from which the name should be derived
+   * @return A valid variable identifier
+   */
+  private static String varNameFromPortAccess(@NotNull ASTPortAccess portAccess) {
+    return portAccess.getQName().replace('.', '_');
+  }
+  
+  /**
+   * Get a map of variable names mapped to the types of their respective ports.
+   * This is required by in our process of setting up connector representations:
+   * We have to create a new Port instance for each hidden channel.
+   * Connectors where at least one target is not a subcomponent are not considered hidden channels.
+   * @param comp the component for whose hidden channels the map is created
+   * @return a map of variable names and port types
+   */
+  public static Map<String, String> getVarsForHiddenChannelsMappedToTypeString(@NotNull ComponentTypeSymbol comp) {
+    Map<String, String> res = new HashMap<>();
+    comp.getAstNode().getConnectors().stream()
+      .filter(
+        conn -> conn.getSource().isPresentComponent()
+          // this is where we decide that connectors with at least one port forward are not hidden channels
+          && conn.getTargetList().stream().allMatch(ASTPortAccessTOP::isPresentComponent))
+      .forEach(
+        conn -> res.put(
+          varNameFromPortAccess(conn.getSource()),
+          getRealPortTypeString(comp, conn.getSource().getPortSymbol())));
+    
+    return res;
+  }
+  
+  /**
+   * Transforms a nested map to a Map of Lists.
+   * Keys of the outer map are not changed.
+   * Values of the inner map are transferred into a list sorted by their key.
+   * Keys of the inner map are discarded thereafter.
+   * @param map The nested map that should be transformed
+   * @return The transformed map of lists
+   */
+  public static Map<String, List<String>> transformMapMapToSortedListMap(@NotNull Map<String, Map<String, String>> map) {
+    Map<String, List<String>> res = new HashMap<>();
+    for(String key : map.keySet()) {
+      res.put(key, map.get(key).keySet().stream().sorted().map(innerKey -> map.get(key).get(innerKey)).collect(Collectors.toList()));
+    }
+    return res;
+  }
+  
+  /**
+   * Creates a mapping from subcomponent names to a map of
+   * ports of that component to the variable they need to be set to.
+   *
+   * Expects variable names for ports of hidden channels
+   * as produced by getVarsForHiddenChannelsMappedToTypeString.
+   * Expects variable names for local ports to be exactly their name.
+   * @param comp The component for whose subcomponents mappings should be created
+   * @return the mapping specified above
+   */
+  public static Map<String, Map<String, String>> mapSubCompNameToPortVariableMap(@NotNull ComponentTypeSymbol comp) {
+    Map<String, Map<String, String>> res = new HashMap<>();
+    
+    // initialize result map
+    for(ComponentInstanceSymbol sub : comp.getSubComponents()) {
+      Map<String, String> innerMap = new HashMap<>();
+      for(PortSymbol ps : sub.getType().getTypeInfo().getPorts()) {
+        innerMap.put(ps.getName(), "new Port<>()");
+        // notice: if a port is not connected we do not want it to be null, but we also don't want it to return values.
+        // One might suggest simply using Port.EMPTY, but as long as it is an unmodified single instance, it's unusable.
+        // Sharing a normal Port instance for all unconnected ports leads to problems because data can still be transferred across it.
+      }
+      res.put(sub.getName(), innerMap);
+    }
+    
+    // iterate over all connectors in the component to fill the map
+    for(ASTConnector conn : comp.getAstNode().getConnectors()) {
+      String varName;
+      
+      // determine which variable represents the current connector (based on the "type" of connector)
+      if(!conn.getSource().isPresentComponent()) { // incoming port forward
+        varName = "this." + conn.getSourceName();
+      } else if(conn.getTargetList().stream().anyMatch(pa -> !pa.isPresentComponent())) { // outgoing port forward (at least partial)
+        varName = "this." + conn.getTargetList().stream().filter(pa -> !pa.isPresentComponent()).findAny().get().getPort();
+      } else { // hidden channel
+        varName = varNameFromPortAccess(conn.getSource());
+      }
+      
+      // Add variable name to map in all relevant places
+      if(conn.getSource().isPresentComponent()) {
+        res.get(conn.getSource().getComponent()).put(conn.getSource().getPort(), varName);
+      }
+      for(ASTPortAccess pa : conn.getTargetList()) {
+        if(pa.isPresentComponent()) {
+          res.get(pa.getComponent()).put(pa.getPort(), varName);
+        }
+      }
+    }
+    
+    return res;
   }
 }
