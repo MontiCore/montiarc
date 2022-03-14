@@ -20,7 +20,6 @@ public class VariableArcRootOnlyHandler implements VariableArcHandler {
     this.traverser = traverser;
   }
 
-  @Override
   public void traverse(IVariableArcScope node) {
     /* partial copy of generated _visitor.handler.TraverseScope*/
     for (de.monticore.symbols.oosymbols._symboltable.MethodSymbol s : node.getLocalMethodSymbols()) {
