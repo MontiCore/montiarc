@@ -9,6 +9,8 @@
 
 <#macro printComponentClassBody comp compHelper identifier isTOPClass>
 
+    <@printInstanceNameAttributeWithGetterSetter/>
+
     <@Ports.printPortsWithGetterAndSetter comp=comp compHelper=compHelper/>
 
   // component variables
@@ -25,7 +27,7 @@
     <#else>
       <@printComputeAtomic comp=comp identifier=identifier/>
 
-      // the components behavior implementation
+      // the component's behavior implementation
       protected final IComputable <<@Utils.componentInputClassFQN comp=comp/><@Utils.printFormalTypeParameters comp=comp/>, <@Utils.componentResultClassFQN comp=comp/><@Utils.printFormalTypeParameters comp=comp/>>
         ${identifier.getBehaviorImplName()};
 
@@ -50,6 +52,8 @@
     <@Init.printInitMethod comp=comp compHelper=compHelper/>
 
     <@Update.printUpdateMethod comp=comp/>
+
+    <@printLogPortValuesMethod comp=comp compHelper=compHelper/>
 
     <@printConstructor comp=comp compHelper=compHelper identifier=identifier isTOPClass=isTOPClass/>
 
@@ -90,6 +94,7 @@
     <#assign compName = comp.getName()>
   @Override
   public void compute() {
+    logPortValues();
     // collect current input port values
     final <@Utils.componentInputClassFQN comp=comp/><@Utils.printFormalTypeParameters comp=comp/> ${identifier.getInputName()} = new <@Utils.componentInputClassFQN comp=comp/><@Utils.printFormalTypeParameters comp=comp/>(
       <#list comp.getAllIncomingPorts() as inPort>this.getPort${inPort.getName()?cap_first}().getCurrentValue()<#sep>, </#sep></#list>);
@@ -101,7 +106,7 @@
       // set results to ports
       setResult(${identifier.getResultName()});
     } catch (Exception e) {
-      Log.error("${compName}", e);
+      Log.error("An exception occurred during the computation cycle", "${compName}", e);
     }
   }
 </#macro>
@@ -109,9 +114,35 @@
 <#macro printComputeComposed comp>
   @Override
   public void compute() {
+    logPortValues();
     // trigger computation in all subcomponent instances
     <#list comp.getSubComponents() as subcomponent>
       this.${subcomponent.getName()}.compute();
     </#list>
+  }
+</#macro>
+
+<#macro printInstanceNameAttributeWithGetterSetter>
+  private String instanceName = null;
+
+  public void setInstanceName(String instanceName) {
+    this.instanceName = instanceName;
+  }
+
+  public String getInstanceName() {
+    return this.instanceName;
+  }
+</#macro>
+
+<#macro printLogPortValuesMethod comp compHelper>
+  public void logPortValues() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Port values of ${comp.getFullName()} instance '").append(this.instanceName).append("': ");
+    <#list comp.getPorts() as port>
+      sb.append("[${compHelper.getRealPortTypeString(port)} ${port.getName()} = ")
+      .append(this.${port.getName()}.getCurrentValue())
+      .append("]<#if port?has_next>, </#if>");
+    </#list>
+  Log.info(sb.toString());
   }
 </#macro>

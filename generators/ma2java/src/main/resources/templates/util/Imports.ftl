@@ -34,7 +34,7 @@
   import de.montiarc.runtimes.timesync.delegation.IComponent;
   import de.montiarc.runtimes.timesync.delegation.Port;
   import de.montiarc.runtimes.timesync.implementation.IComputable;
-  import de.montiarc.runtimes.Log;
+  import de.montiarc.runtimes.log.Log;
 </#macro>
 
 <#macro printImportsForResultClass comp compHelper>
