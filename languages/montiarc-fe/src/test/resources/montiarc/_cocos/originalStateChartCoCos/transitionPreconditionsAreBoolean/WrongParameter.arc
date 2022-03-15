@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package guardIsBoolean;
+package originalStateChartCoCos.transitionPreconditionsAreBoolean;
 
   // invalid model
 component WrongParameter (String string) {

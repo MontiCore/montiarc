@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
-package guardIsBoolean;
+package originalStateChartCoCos.transitionPreconditionsAreBoolean;
 
-  // valid model
-component JustPort {
-  port in boolean inputPort;
+  // invalid model
+component WrongPort {
+  port in double inputPort;
 
   automaton {
     initial state Begin;

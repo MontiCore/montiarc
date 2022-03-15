@@ -1,14 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
-package guardIsBoolean;
+package originalStateChartCoCos.transitionPreconditionsAreBoolean;
 
   // valid model
-component JustParameter (boolean free) {
+component JustLiteral {
 
   automaton {
     initial state Begin;
     state End;
 
-    Begin -> End [free];
+    Begin -> End [false];
   }
 
 }

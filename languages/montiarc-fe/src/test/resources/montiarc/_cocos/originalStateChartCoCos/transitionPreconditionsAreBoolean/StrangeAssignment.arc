@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package guardIsBoolean;
+package originalStateChartCoCos.transitionPreconditionsAreBoolean;
 
 // valid, because the assignment evaluates to a truth variable
 component StrangeAssignment{

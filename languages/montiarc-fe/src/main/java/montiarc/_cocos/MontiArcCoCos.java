@@ -13,6 +13,7 @@ import arcbehaviorbasis._cocos.OnlyOneBehavior;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
 import de.monticore.scbasis._cocos.UniqueStates;
+import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
 import montiarc._cocos.util.CheckTypeExistence4MontiArc;
@@ -68,6 +69,7 @@ public class MontiArcCoCos {
     // SCBasis, SCActions, and SCTransitions4Code CoCos
     checker.addCoCo(new UniqueStates());
     checker.addCoCo(new TransitionSourceTargetExists());
+    checker.addCoCo(new TransitionPreconditionsAreBoolean(new MontiArcDeriveType()));
 
     // ArcAutomaton CoCos
     checker.addCoCo(new FieldReadWriteAccessFitsInGuards());

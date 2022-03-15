@@ -1,17 +1,21 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos.behavior;
 
+import arcbehaviorbasis.BehaviorError;
 import com.google.common.base.Preconditions;
 import de.monticore.scbasis._cocos.*;
+import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.check.MontiArcDeriveType;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -28,7 +32,7 @@ import java.util.stream.Stream;
  * {@link UniqueStates}, {@link TransitionSourceTargetExists},
  * {@link CapitalStateNames}
  */
-public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
+class OriginalStatechartCoCosTest extends AbstractCoCoTest {
 
   @Override
   protected String getPackage() {
@@ -38,6 +42,21 @@ public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
   @Override
   protected Pattern supplyErrorCodePattern() {
     return Pattern.compile("0xCC\\d{3}");
+  }
+
+
+  @Override
+  @BeforeEach
+  public void init() {
+    super.init();
+    addStringToGlobalScope();
+  }
+
+  protected static void addStringToGlobalScope() {
+    MontiArcMill.globalScope()
+      .add(MontiArcMill.typeSymbolBuilder().setName("String")
+        .setEnclosingScope(MontiArcMill.globalScope())
+        .build());
   }
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
@@ -51,7 +70,7 @@ public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
 
   @ParameterizedTest
   @ValueSource(strings = {"ValidStatechart.arc", "TransStateTransition.arc", "NoStatechart.arc"})
-  public void succeed(@NotNull String model) {
+  void succeed(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     //Given
@@ -67,7 +86,7 @@ public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
 
   @ParameterizedTest
   @MethodSource("modelAndExpectedErrorsProvider")
-  public void fail(@NotNull String model, @NotNull Error... errors) {
+  void fail(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
 
     //Given
@@ -84,11 +103,47 @@ public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
     this.checkOnlyExpectedErrorsPresent(errors, getPathToModel(model).toAbsolutePath());
   }
 
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "transitionPreconditionsAreBoolean/JustLiteral.arc",
+    "transitionPreconditionsAreBoolean/JustParameter.arc",
+    "transitionPreconditionsAreBoolean/JustPort.arc",
+    "transitionPreconditionsAreBoolean/JustVariable.arc",
+    "transitionPreconditionsAreBoolean/SimpleComparison.arc",
+    "transitionPreconditionsAreBoolean/StrangeAssignment.arc",
+    "transitionPreconditionsAreBoolean/ValidBraceExpression.arc"
+  })
+  void shouldSucceedBooleanPreconditions(@NotNull String model) {
+    testModel(model);
+  }
+
+  protected static Stream<Arguments> booleanPreconditionsModelAndExpectedErrorProvider() {
+    return Stream.of(
+      Arguments.of("transitionPreconditionsAreBoolean/InvalidBraceExpression.arc",
+        new Error[]{ExternalErrors.PRECONDITION_IS_NOT_BOOLEAN}),
+      Arguments.of("transitionPreconditionsAreBoolean/WrongLiteral.arc",
+        new Error[]{ExternalErrors.PRECONDITION_IS_NOT_BOOLEAN}),
+      Arguments.of("transitionPreconditionsAreBoolean/WrongParameter.arc",
+        new Error[]{ExternalErrors.PRECONDITION_IS_NOT_BOOLEAN}),
+      Arguments.of("transitionPreconditionsAreBoolean/WrongPort.arc",
+        new Error[]{ExternalErrors.PRECONDITION_IS_NOT_BOOLEAN}),
+      Arguments.of("transitionPreconditionsAreBoolean/WrongVariable.arc",
+        new Error[]{ExternalErrors.PRECONDITION_IS_NOT_BOOLEAN})
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("booleanPreconditionsModelAndExpectedErrorProvider")
+  void shouldFailNotBooleanPreconditions(@NotNull String model, @NotNull Error... errors) {
+    testModel(model, errors);
+  }
+
   @Override
   protected void registerCoCos(MontiArcCoCoChecker checker) {
     checker.addCoCo(new UniqueStates());
     checker.addCoCo(new TransitionSourceTargetExists());
     checker.addCoCo(new CapitalStateNames());
+    checker.addCoCo(new TransitionPreconditionsAreBoolean(new MontiArcDeriveType()));
   }
 
   /**
@@ -101,7 +156,8 @@ public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
     CAPITAL_STATE_NAMES(CapitalStateNames.ERROR_CODE),
     PACKAGE_CORRESPONDS_TO_FOLDERS(PackageCorrespondsToFolders.ERROR_CODE),
     SC_FILE_EXTENSION(SCFileExtension.ERROR_CODE),
-    SC_NAME_IS_ARTIFACT_NAME(SCNameIsArtifactName.ERROR_CODE);
+    SC_NAME_IS_ARTIFACT_NAME(SCNameIsArtifactName.ERROR_CODE),
+    PRECONDITION_IS_NOT_BOOLEAN(TransitionPreconditionsAreBoolean.ERROR_CODE);
 
     ExternalErrors(String code){
       this.code = code;

@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package guardIsBoolean;
+package originalStateChartCoCos.transitionPreconditionsAreBoolean;
 
 // invalid, because the expression in the braces (and therefore the brace expression itself) evaluates to int
 component InvalidBraceExpression{
