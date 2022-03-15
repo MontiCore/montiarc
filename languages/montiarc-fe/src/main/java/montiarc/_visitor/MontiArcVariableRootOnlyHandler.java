@@ -19,6 +19,7 @@ public class MontiArcVariableRootOnlyHandler implements MontiArcHandler {
     this.traverser = traverser;
   }
 
+  @Override
   public void traverse(IMontiArcScope node) {
     /* partial copy of generated _visitor.handler.TraverseScope */
     /* keep it up to date with ALL possible symbols from super */
