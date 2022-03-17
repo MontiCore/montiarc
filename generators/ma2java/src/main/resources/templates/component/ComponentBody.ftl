@@ -143,6 +143,6 @@
       .append(this.${port.getName()}.getCurrentValue())
       .append("]<#if port?has_next>, </#if>");
     </#list>
-  Log.info(sb.toString());
+  Log.trace(sb.toString());
   }
 </#macro>
