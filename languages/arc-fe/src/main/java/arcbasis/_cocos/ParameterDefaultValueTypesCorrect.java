@@ -2,18 +2,17 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcParameter;
-import arcbasis.check.ArcBasisDeriveType;
+import arcbasis.check.ArcBasisTypeCalculator;
+import arcbasis.check.IArcTypeCalculator;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.types.check.IDerive;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.TypeCheck;
+import de.monticore.types.check.TypeCheckResult;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
-
-import java.util.Optional;
 
 /**
  * [Wor16] MT7: Default values of configuration parameters must conform to the parameters' types.
@@ -23,39 +22,29 @@ public class ParameterDefaultValueTypesCorrect implements ArcBasisASTArcParamete
   /**
    * Used to extract the type to which parameter's default values evaluate to.
    */
-  protected final IDerive typeDeriver;
+  protected final IArcTypeCalculator typeCalculator;
 
+  protected IArcTypeCalculator getTypeCalculator() {
+    return this.typeCalculator;
+  }
 
   /**
-   * Creates this coco with an {@link ArcBasisDeriveType}.
-   * @see #ParameterDefaultValueTypesCorrect(IDerive)
+   * Creates this coco with an {@link ArcBasisTypeCalculator}.
+   * @see #ParameterDefaultValueTypesCorrect(IArcTypeCalculator)
    */
 
   public ParameterDefaultValueTypesCorrect() {
-    this(new ArcBasisDeriveType());
+    this(new ArcBasisTypeCalculator());
   }
 
   /**
-   * Creates this coco with a custom {@link IDerive} to extract the types to which parameter's default values evaluate
+   * Creates this coco with a custom {@link IArcTypeCalculator} to extract the types to which parameter's default values evaluate
    * to.
    */
 
-  public ParameterDefaultValueTypesCorrect(@NotNull IDerive typeDeriver) {
-    this.typeDeriver = Preconditions.checkNotNull(typeDeriver);
+  public ParameterDefaultValueTypesCorrect(@NotNull IArcTypeCalculator typeCalculator) {
+    this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
   }
-
-  /**
-   * Checks to which type the {@code expression} evaluates to and returns it, wrapped in an optional. If the expression
-   * does not evaluate to a type, e.g., because it is malformed, the returned optional is empty.
-   */
-  protected Optional<SymTypeExpression> extractTypeOf(@NotNull ASTExpression expression) {
-    Preconditions.checkNotNull(expression);
-
-    this.typeDeriver.init();
-    expression.accept(this.typeDeriver.getTraverser());
-    return this.typeDeriver.getResult();
-  }
-
 
   @Override
   public void check(@NotNull ASTArcParameter astParam) {
@@ -70,16 +59,16 @@ public class ParameterDefaultValueTypesCorrect implements ArcBasisASTArcParamete
 
     if (astParam.isPresentDefault()) {
       ASTExpression defaultExpr = astParam.getDefault();
-      Optional<SymTypeExpression> expressionType = this.extractTypeOf(defaultExpr);
+      TypeCheckResult expressionType = this.getTypeCalculator().deriveType(defaultExpr);
 
-      if (expressionType.isPresent() && !TypeCheck.compatible(paramType, expressionType.get())) {
+      if (expressionType.isPresentCurrentResult() && !TypeCheck.compatible(paramType, expressionType.getCurrentResult())) {
         Log.error(ArcError.DEFAULT_PARAM_EXPRESSION_WRONG_TYPE.format(
           paramSym.getFullName(),
-          expressionType.get().print(),
+          expressionType.getCurrentResult().print(),
           paramType.print()),
           astParam.get_SourcePositionStart());
       }
-      if(!expressionType.isPresent()) {
+      if(!expressionType.isPresentCurrentResult()) {
         Log.debug(String.format("Checking coco '%s' is skipped for parameter '%s', as the type of the its default " +
               "value expression could not be calculated. Position: '%s'.",
             this.getClass().getSimpleName(), astParam.getName(), astParam.get_SourcePositionStart()),

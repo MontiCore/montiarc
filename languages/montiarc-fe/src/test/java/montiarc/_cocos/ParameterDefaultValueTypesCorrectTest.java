@@ -4,11 +4,10 @@ package montiarc._cocos;
 import arcbasis._cocos.ParameterDefaultValueTypesCorrect;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.monticore.types.check.TypeCheckResult;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.check.MontiArcDeriveType;
+import montiarc.check.MontiArcTypeCalculator;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -32,7 +31,7 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractCoCoTest {
   @Override
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
     Preconditions.checkNotNull(checker);
-    checker.addCoCo(new ParameterDefaultValueTypesCorrect(new MontiArcDeriveType()));
+    checker.addCoCo(new ParameterDefaultValueTypesCorrect(new MontiArcTypeCalculator()));
   }
 
   @Override

@@ -4,7 +4,7 @@ package montiarc._cocos;
 import arcautomaton._cocos.ExpressionStatementWellFormedness;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import montiarc.check.MontiArcDeriveType;
+import montiarc.check.MontiArcTypeCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -25,7 +25,7 @@ class ExpressionStatementWellFormednessTest extends AbstractCoCoTest {
 
   @Override
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
-    Preconditions.checkNotNull(checker).addCoCo(new ExpressionStatementWellFormedness(new MontiArcDeriveType()));
+    Preconditions.checkNotNull(checker).addCoCo(new ExpressionStatementWellFormedness(new MontiArcTypeCalculator()));
   }
 
   @ParameterizedTest

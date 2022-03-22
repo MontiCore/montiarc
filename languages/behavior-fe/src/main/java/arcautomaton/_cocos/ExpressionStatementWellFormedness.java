@@ -3,6 +3,7 @@ package arcautomaton._cocos;
 
 import arcautomaton.ArcAutomatonMill;
 import arcautomaton._visitor.ExpressionRootFinder;
+import arcbasis.check.IArcTypeCalculator;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -10,7 +11,7 @@ import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraver
 import de.monticore.statements.mccommonstatements._ast.ASTMCJavaBlock;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.statements.mcstatementsbasis._cocos.MCStatementsBasisASTMCBlockStatementCoCo;
-import de.monticore.types.check.IDerive;
+import de.monticore.types.check.TypeCheckResult;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -23,25 +24,27 @@ public class ExpressionStatementWellFormedness implements MCStatementsBasisASTMC
   /**
    * Used to traverse expressions, finding malformed ones.
    */
-  protected final IDerive typeDeriver;
-
+  protected final IArcTypeCalculator typeCalculator;
   protected final ExpressionRootFinder exprRootFinder;
   protected final ExpressionsBasisTraverser exprRootTraverser;
 
-  public ExpressionStatementWellFormedness(@NotNull IDerive typeDeriver) {
-    this.typeDeriver = Preconditions.checkNotNull(typeDeriver);
+  public ExpressionStatementWellFormedness(@NotNull IArcTypeCalculator typeCalculator) {
+    this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
 
     this.exprRootFinder = new ExpressionRootFinder();
     this.exprRootTraverser = ArcAutomatonMill.inheritanceTraverser();
     this.exprRootTraverser.add4ExpressionsBasis(exprRootFinder);
   }
 
+  protected IArcTypeCalculator getTypeCalculator() {
+    return typeCalculator;
+  }
 
   @Override
   public void check(@NotNull ASTMCBlockStatement block) {
     Preconditions.checkNotNull(block);
 
-    if(block instanceof ASTMCJavaBlock) {
+    if (block instanceof ASTMCJavaBlock) {
       return;
       // We exit early because a JavaBlock itself contains MCBlockStatements which will also be checked by other runs of
       // this coco. By exiting early we avoid printing duplicated outputs.
@@ -54,10 +57,9 @@ public class ExpressionStatementWellFormedness implements MCStatementsBasisASTMC
 
   protected void checkWellFormedness(@NotNull ASTExpression expression) {
     Preconditions.checkNotNull(expression);
+    TypeCheckResult result = this.getTypeCalculator().deriveType(expression);
 
-    typeDeriver.init();
-    expression.accept(typeDeriver.getTraverser());
-    if(!typeDeriver.getResult().isPresent()) {
+    if (!result.isPresentCurrentResult()) {
       Log.error(ArcError.MALFORMED_EXPRESSION.format(expression.get_SourcePositionStart()),
         expression.get_SourcePositionStart(), expression.get_SourcePositionEnd()
       );

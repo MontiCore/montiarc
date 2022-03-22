@@ -3,8 +3,9 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentInstance;
-import arcbasis.check.ArcBasisDeriveType;
+import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.CompTypeExpression;
+import arcbasis.check.IArcTypeCalculator;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -13,12 +14,12 @@ import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.IDerive;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.TypeCheck;
+import de.monticore.types.check.TypeCheckResult;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -39,33 +40,48 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   /**
    * Used to extract the type to which instantiation arguments evaluate to.
    */
-  protected final IDerive typeDeriver;
+  protected final IArcTypeCalculator typeCalculator;
 
   /**
-   * Creates this coco with an {@link ArcBasisDeriveType}.
-   * @see #ConfigurationParameterAssignment(IDerive)
+   * Creates this coco with an {@link ArcBasisTypeCalculator}.
+   *
+   * @see #ConfigurationParameterAssignment(IArcTypeCalculator)
    */
   public ConfigurationParameterAssignment() {
-    this(new ArcBasisDeriveType());
+    this(new ArcBasisTypeCalculator());
   }
 
   /**
-   * Creates this coco with a custom {@link IDerive} to extract the types to which instantiation arguments evaluate to.
+   * Creates this coco with a custom {@link IArcTypeCalculator} to extract the types to which instantiation arguments evaluate to.
    */
-  public ConfigurationParameterAssignment(@NotNull IDerive typeDeriver) {
-    this.typeDeriver = Preconditions.checkNotNull(typeDeriver);
+  public ConfigurationParameterAssignment(@NotNull IArcTypeCalculator typeCalculator) {
+    this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
   }
 
   /**
-   * Checks to which type the {@code expression} evaluates to and returns it, wrapped in an optional. If the expression
-   * does not evaluate to a type, e.g., because it is malformed, the returned optional is empty.
+   * If astInst is linked to a symbol then this method checks that the arguments of
+   * {@code astInst.getSymbol().getArguments()} are equal to {@code astInst.getArguments().getExpressionList(}
    */
-  protected Optional<SymTypeExpression> extractTypeOf(@NotNull ASTExpression expression) {
-    Preconditions.checkNotNull(expression);
+  protected static void assertConsistentArguments(@NotNull ASTComponentInstance astInst) {
+    Preconditions.checkNotNull(astInst);
+    if (astInst.isPresentSymbol()) {
 
-    this.typeDeriver.init();
-    expression.accept(this.typeDeriver.getTraverser());
-    return this.typeDeriver.getResult();
+      Preconditions.checkArgument(
+        astInst.getSymbol().getArguments().isEmpty()
+          == (!astInst.isPresentArguments() || astInst.getArguments().getExpressionList().isEmpty())
+      );
+
+      if (!astInst.getSymbol().getArguments().isEmpty()) {
+        Preconditions.checkArgument(astInst.getSymbol().getArguments().size()
+          == astInst.getArguments().getExpressionList().size()
+        );
+      }
+
+    }
+  }
+
+  protected IArcTypeCalculator getTypeCalculator() {
+    return this.typeCalculator;
   }
 
   @Override
@@ -80,10 +96,10 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     checkInstantiationArgsHaveCorrectTypes(astInst);
   }
 
-
   /**
    * Checks that there are not more instantiation arguments provided than there are configuration parameters in the
    * component type that should be instantiated.
+   *
    * @param instance The AST node of the component instance whose instantiation arguments should be checked.
    */
   protected void checkInstantiationArgsAreNotTooMany(@NotNull ASTComponentInstance instance) {
@@ -103,13 +119,14 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
 
       Log.error(ArcError.TOO_MANY_INSTANTIATION_ARGUMENTS.format(
         instantiationArgs.size(), instance.getName(), toInstantiate.printName(), paramsOfCompType.size()
-        ), firstIllegalArg.get_SourcePositionStart(), lastIllegalArg.get_SourcePositionEnd());
+      ), firstIllegalArg.get_SourcePositionStart(), lastIllegalArg.get_SourcePositionEnd());
     }
   }
 
   /**
    * Checks that there are enough instantiation arguments provided to bind all mandatory configuration parameters of the
    * component type that should be instantiated.
+   *
    * @param instance The AST node of the component instance whose instantiation arguments should be checked.
    */
   protected void checkInstantiationArgsBindAllMandatoryParams(@NotNull ASTComponentInstance instance) {
@@ -147,9 +164,9 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     assertConsistentArguments(instance);
 
     CompTypeExpression toInstantiate = instance.getSymbol().getType();
-    List<Optional<SymTypeExpression>> instantiationArgs = instance.getSymbol().getArguments().stream()
-        .map(this::extractTypeOf)
-        .collect(Collectors.toList());
+    List<TypeCheckResult> instantiationArgs = instance.getSymbol().getArguments().stream()
+      .map(expr -> this.getTypeCalculator().deriveType(expr))
+      .collect(Collectors.toList());
 
     List<SymTypeExpression> paramSignatureOfCompType = toInstantiate.getTypeInfo()
       .getParameters().stream()
@@ -159,46 +176,24 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       .collect(Collectors.toList());
 
     for (int i = 0; i < Math.min(instantiationArgs.size(), paramSignatureOfCompType.size()); i++) {
-      if (instantiationArgs.get(i).isPresent()
-        && !TypeCheck.compatible(paramSignatureOfCompType.get(i), instantiationArgs.get(i).get())) {
+      if (instantiationArgs.get(i).isPresentCurrentResult()
+        && !TypeCheck.compatible(paramSignatureOfCompType.get(i), instantiationArgs.get(i).getCurrentResult())) {
 
         ASTExpression incompatibleArgument = instance.getArguments().getExpression(i);
         String correspondingParamName = toInstantiate.getTypeInfo().getParameters().get(i).getName();
 
         Log.error(ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH.format(
-          i + 1, instance.getName(), instantiationArgs.get(i).get().print(),
+          i + 1, instance.getName(), instantiationArgs.get(i).getCurrentResult().print(),
           paramSignatureOfCompType.get(i).print(), correspondingParamName,
           toInstantiate.printName()
         ), incompatibleArgument.get_SourcePositionStart(), incompatibleArgument.get_SourcePositionEnd());
       }
-      if(!instantiationArgs.get(i).isPresent()) {
+      if (!instantiationArgs.get(i).isPresentCurrentResult()) {
         Log.debug(String.format("Checking coco '%s' is skipped for instantiation argument No. '%d', as the type of " +
               "the argument expression could not be calculated. Position: '%s'.",
             this.getClass().getSimpleName(), i + 1, instance.getArguments().getExpression(i).get_SourcePositionStart()),
           "CoCos");
       }
-    }
-  }
-
-  /**
-   * If astInst is linked to a symbol then this method checks that the arguments of
-   * {@code astInst.getSymbol().getArguments()} are equal to {@code astInst.getArguments().getExpressionList(}
-   */
-  protected static void assertConsistentArguments(@NotNull ASTComponentInstance astInst) {
-    Preconditions.checkNotNull(astInst);
-    if(astInst.isPresentSymbol()) {
-
-      Preconditions.checkArgument(
-        astInst.getSymbol().getArguments().isEmpty()
-          == ( !astInst.isPresentArguments() || astInst.getArguments().getExpressionList().isEmpty() )
-      );
-
-      if(!astInst.getSymbol().getArguments().isEmpty()) {
-        Preconditions.checkArgument(astInst.getSymbol().getArguments().size()
-          == astInst.getArguments().getExpressionList().size()
-        );
-      }
-
     }
   }
 }

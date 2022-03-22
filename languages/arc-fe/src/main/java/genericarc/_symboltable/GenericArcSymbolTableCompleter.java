@@ -3,13 +3,12 @@ package genericarc._symboltable;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.ArcBasisSynthesizeComponent;
-import arcbasis.check.ArcBasisSynthesizeType;
 import arcbasis.check.CompTypeExpression;
+import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
-import de.monticore.types.check.ISynthesize;
-import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
@@ -19,18 +18,32 @@ import genericarc._ast.ASTGenericComponentHead;
 import genericarc._visitor.GenericArcHandler;
 import genericarc._visitor.GenericArcTraverser;
 import genericarc._visitor.GenericArcVisitor2;
+import genericarc.check.GenericArcTypeCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Optional;
 
 public class GenericArcSymbolTableCompleter implements GenericArcVisitor2, GenericArcHandler {
 
-  protected GenericArcTraverser traverser ;
+  protected GenericArcTraverser traverser;
+  protected MCBasicTypesFullPrettyPrinter typePrinter;
+  protected ISynthesizeComponent componentSynthesizer;
+  protected IArcTypeCalculator typeCalculator;
 
-  @Override
-  public void setTraverser(@NotNull GenericArcTraverser traverser) {
-    Preconditions.checkNotNull(traverser);
-    this.traverser = traverser;
+  public GenericArcSymbolTableCompleter() {
+    this(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
+  }
+
+  public GenericArcSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter) {
+    this(typePrinter, new ArcBasisSynthesizeComponent(), new GenericArcTypeCalculator());
+  }
+
+  public GenericArcSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter,
+                                        @NotNull ISynthesizeComponent componentSynthesizer,
+                                        @NotNull IArcTypeCalculator typeCalculator) {
+    this.typePrinter = Preconditions.checkNotNull(typePrinter);
+    this.componentSynthesizer = Preconditions.checkNotNull(componentSynthesizer);
+    this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
   }
 
   @Override
@@ -38,7 +51,11 @@ public class GenericArcSymbolTableCompleter implements GenericArcVisitor2, Gener
     return this.traverser;
   }
 
-  protected MCBasicTypesFullPrettyPrinter typePrinter;
+  @Override
+  public void setTraverser(@NotNull GenericArcTraverser traverser) {
+    Preconditions.checkNotNull(traverser);
+    this.traverser = traverser;
+  }
 
   public MCBasicTypesFullPrettyPrinter getTypePrinter() {
     return this.typePrinter;
@@ -49,51 +66,17 @@ public class GenericArcSymbolTableCompleter implements GenericArcVisitor2, Gener
     this.typePrinter = typesPrinter;
   }
 
-  protected ISynthesizeComponent componentSynthesizer;
+  public ISynthesizeComponent getComponentSynthesizer() {
+    return this.componentSynthesizer;
+  }
 
   public void setComponentSynthesizer(@NotNull ISynthesizeComponent componentSynthesizer) {
     Preconditions.checkNotNull(componentSynthesizer);
     this.componentSynthesizer = componentSynthesizer;
   }
 
-  public ISynthesizeComponent getComponentSynthesizer() {
-    return this.componentSynthesizer;
-  }
-
-  protected ISynthesize typeSynthesizer;
-
-  protected void setTypeSynthesizer(@NotNull ISynthesize typeSynthesizer) {
-    Preconditions.checkNotNull(typeSynthesizer);
-    this.typeSynthesizer = typeSynthesizer;
-  }
-
-  public ISynthesize getTypeSynthesizer() {
-    return this.typeSynthesizer;
-  }
-
-  public Optional<SymTypeExpression> synthSymTypeFrom(@NotNull ASTMCType astType) {
-    Preconditions.checkNotNull(astType);
-    Preconditions.checkState(this.getTypeSynthesizer() != null);
-
-    this.getTypeSynthesizer().init();
-    astType.accept(this.getTypeSynthesizer().getTraverser());
-    return this.getTypeSynthesizer().getResult();
-  }
-
-  public GenericArcSymbolTableCompleter() {
-    this(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
-  }
-
-  public GenericArcSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter) {
-    this(typePrinter, new ArcBasisSynthesizeComponent(), new ArcBasisSynthesizeType());
-  }
-
-  public GenericArcSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter,
-                                        @NotNull ISynthesizeComponent componentSynthesizer,
-                                        @NotNull ISynthesize typeSynthesizer) {
-    this.typePrinter = Preconditions.checkNotNull(typePrinter);
-    this.componentSynthesizer = Preconditions.checkNotNull(componentSynthesizer);
-    this.typeSynthesizer = Preconditions.checkNotNull(typeSynthesizer);
+  public IArcTypeCalculator getTypeCalculator() {
+    return this.typeCalculator;
   }
 
   @Override
@@ -123,10 +106,10 @@ public class GenericArcSymbolTableCompleter implements GenericArcVisitor2, Gener
 
     TypeVarSymbol typeParamSym = typeParam.getSymbol();
 
-    for(ASTMCType upperBound : typeParam.getUpperBoundList()) {
-      Optional<SymTypeExpression> boundExpr = this.synthSymTypeFrom(upperBound);
-      if(boundExpr.isPresent()) {
-        typeParamSym.addSuperTypes(boundExpr.get());
+    for (ASTMCType upperBound : typeParam.getUpperBoundList()) {
+      TypeCheckResult boundExpr = this.getTypeCalculator().synthesizeType(upperBound);
+      if (boundExpr.isPresentCurrentResult()) {
+        typeParamSym.addSuperTypes(boundExpr.getCurrentResult());
       } else {
         Log.error(String.format("Could not create a SymTypeExpression from '%s'",
           upperBound.printType(this.getTypePrinter())), upperBound.get_SourcePositionStart()

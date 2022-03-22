@@ -4,7 +4,7 @@ package arcbasis._cocos;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
 import arcbasis._symboltable.SymbolService;
-import arcbasis.check.ArcBasisDeriveTypeTest;
+import arcbasis.check.ArcBasisTypeCalculatorTest;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -20,7 +20,7 @@ import org.mockito.Mockito;
 /**
  * Tests {@link FieldInitExpressionTypesCorrect}
  */
-public class FieldInitExpressionTypesCorrectTest extends ArcBasisDeriveTypeTest {
+public class FieldInitExpressionTypesCorrectCalculatorTest extends ArcBasisTypeCalculatorTest {
 
   @Override
   public void setUpFields() {

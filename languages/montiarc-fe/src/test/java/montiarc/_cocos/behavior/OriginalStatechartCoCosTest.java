@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos.behavior;
 
-import arcbehaviorbasis.BehaviorError;
 import com.google.common.base.Preconditions;
 import de.monticore.scbasis._cocos.*;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
@@ -11,7 +10,7 @@ import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc.check.MontiArcDeriveType;
+import montiarc.check.MontiArcTypeCalculator;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -143,7 +142,7 @@ class OriginalStatechartCoCosTest extends AbstractCoCoTest {
     checker.addCoCo(new UniqueStates());
     checker.addCoCo(new TransitionSourceTargetExists());
     checker.addCoCo(new CapitalStateNames());
-    checker.addCoCo(new TransitionPreconditionsAreBoolean(new MontiArcDeriveType()));
+    checker.addCoCo(new TransitionPreconditionsAreBoolean(new MontiArcTypeCalculator()));
   }
 
   /**

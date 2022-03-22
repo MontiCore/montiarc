@@ -13,8 +13,8 @@ import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbolSurrogate;
-import de.monticore.types.check.IDerive;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types.check.TypeCheckResult;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,14 +26,14 @@ import java.util.Collections;
 import java.util.stream.Stream;
 
 /**
- * Abstract class for test subclasses of {@link AbstractArcDeriveType}.
+ * Abstract class for test subclasses of {@link IArcTypeCalculator}.
  * <p>
- * Override {@link this#getDerive()} with method that returns the type
+ * Override {@link this#getTypeCalculator()} with method that returns the type
  * calculator under test.
  */
-public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
+public abstract class AbstractArcTypeCalculatorTest extends AbstractTest {
 
-  protected IDerive derive;
+  protected IArcTypeCalculator typeCalculator;
   protected IArcBasisScope scope;
   protected TransitiveScopeSetter scopeSetter;
 
@@ -45,7 +45,7 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
     return Stream.of(Arguments.of("s", "Student"));
   }
 
-  protected abstract IDerive getDerive();
+  protected abstract IArcTypeCalculator getTypeCalculator();
 
   protected abstract IArcBasisScope getScope();
 
@@ -102,23 +102,23 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
     this.getScopeSetter().setScope(expression, this.getScope());
 
     //When
-    expression.accept(this.getDerive().getTraverser());
+    TypeCheckResult result = this.getTypeCalculator().deriveType(expression);
 
     //Then
-    Assertions.assertTrue(this.getDerive().getResult().isPresent());
-    Assertions.assertEquals(isPrimitive, this.getDerive().getResult().get().isTypeConstant());
-    Assertions.assertEquals(isGeneric, this.getDerive().getResult().get().isGenericType());
-    Assertions.assertFalse(this.getDerive().getResult().get().isTypeVariable());
-    Assertions.assertTrue(!(this.getDerive().getResult().get().getTypeInfo() instanceof OOTypeSymbolSurrogate) ||
-      !(((OOTypeSymbolSurrogate) this.getDerive().getResult().get().getTypeInfo()).lazyLoadDelegate() instanceof  OOTypeSymbolSurrogate));
-    Assertions.assertEquals(expectedType, this.getDerive().getResult().get().print());
+    Assertions.assertTrue(result.isPresentCurrentResult());
+    Assertions.assertEquals(isPrimitive, result.getCurrentResult().isTypeConstant());
+    Assertions.assertEquals(isGeneric, result.getCurrentResult().isGenericType());
+    Assertions.assertFalse(result.getCurrentResult().isTypeVariable());
+    Assertions.assertTrue(!(result.getCurrentResult().getTypeInfo() instanceof OOTypeSymbolSurrogate) ||
+      !(((OOTypeSymbolSurrogate) result.getCurrentResult().getTypeInfo()).lazyLoadDelegate() instanceof  OOTypeSymbolSurrogate));
+    Assertions.assertEquals(expectedType, result.getCurrentResult().print());
   }
 
   protected void doCalculateTypeFromNameExpression(@NotNull String expression, @NotNull String expectedType,
                                                    boolean isPrimitive, boolean isGeneric) {
     Preconditions.checkNotNull(expression);
     Preconditions.checkNotNull(expectedType);
-    doShouldCalculateType(this.doBuildNameExpression(expression), expectedType,
+    doShouldCalculateType(doBuildNameExpression(expression), expectedType,
       isPrimitive, isGeneric);
   }
 
@@ -128,7 +128,7 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
   }
 
   /**
-   * Class under test {@link ArcBasisDeriveType}.
+   * Class under test {@link ArcBasisTypeCalculator}.
    */
   @ParameterizedTest
   @MethodSource("expressionProviderForPrimitiveFields")
@@ -139,7 +139,7 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
   }
 
   /**
-   * Class under test {@link ArcBasisDeriveType}.
+   * Class under test {@link ArcBasisTypeCalculator}.
    */
   @ParameterizedTest
   @MethodSource("expressionProviderForObjectFields")
@@ -150,7 +150,7 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
   }
 
   /**
-   * Class under test {@link ArcBasisDeriveType}.
+   * Class under test {@link ArcBasisTypeCalculator}.
    */
   @Test
   void ShouldNotCalculateResult() {
@@ -159,9 +159,9 @@ public abstract class AbstractArcDeriveTypeTest extends AbstractTest {
     expr.setEnclosingScope(this.getScope());
 
     //When
-    expr.accept(this.getDerive().getTraverser());
+    TypeCheckResult result = this.getTypeCalculator().deriveType(expr);
 
     //Then
-    Assertions.assertFalse(this.getDerive().getResult().isPresent());
+    Assertions.assertFalse(result.isPresentCurrentResult());
   }
 }

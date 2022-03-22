@@ -4,7 +4,6 @@ package montiarc._cocos;
 import arcautomaton._cocos.FieldReadWriteAccessFitsInGuards;
 import arcautomaton._cocos.FieldReadWriteAccessFitsInStatements;
 import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
-import arcautomaton._cocos.ExpressionStatementWellFormedness;
 import arcautomaton._cocos.InitialStatesResolvable;
 import arcautomaton._cocos.NoRedundantInitialOutput;
 import arcbasis._cocos.*;
@@ -18,7 +17,7 @@ import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
 import montiarc._cocos.util.CheckTypeExistence4MontiArc;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
-import montiarc.check.MontiArcDeriveType;
+import montiarc.check.MontiArcTypeCalculator;
 
 /**
  * Bundle of CoCos for the MontiArc language.
@@ -33,13 +32,13 @@ public class MontiArcCoCos {
     checker.addCoCo(new ComponentInstanceTypeExists(new MCSimpleGenericTypesFullPrettyPrinter(new IndentPrinter())));
     checker.addCoCo(new ComponentTypeNameCapitalization());
     checker.addCoCo(new ConfigurationParametersCorrectlyInherited());
-    checker.addCoCo(new ConfigurationParameterAssignment(new MontiArcDeriveType()));
+    checker.addCoCo(new ConfigurationParameterAssignment(new MontiArcTypeCalculator()));
     checker.addCoCo(new ConnectorSourceAndTargetComponentDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetDirectionsFit());
     checker.addCoCo(new ConnectorSourceAndTargetExist());
     checker.addCoCo(new ConnectorSourceAndTargetTypesFit());
-    checker.addCoCo(new FieldInitExpressionTypesCorrect(new MontiArcDeriveType()));
+    checker.addCoCo(new FieldInitExpressionTypesCorrect(new MontiArcTypeCalculator()));
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new FieldInitExpressionsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new FieldTypeExists(new CheckTypeExistence4MontiArc()));
@@ -49,7 +48,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new InstanceNameCapitalisation());
     checker.addCoCo(new NoSubComponentReferenceCycles());
     checker.addCoCo(new ParameterDefaultValuesOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
-    checker.addCoCo(new ParameterDefaultValueTypesCorrect(new MontiArcDeriveType()));
+    checker.addCoCo(new ParameterDefaultValueTypesCorrect(new MontiArcTypeCalculator()));
     checker.addCoCo(new ParameterNameCapitalization());
     checker.addCoCo(new ParameterTypeExists(new CheckTypeExistence4MontiArc()));
     checker.addCoCo(new PortNameCapitalisation());
@@ -69,7 +68,7 @@ public class MontiArcCoCos {
     // SCBasis, SCActions, and SCTransitions4Code CoCos
     checker.addCoCo(new UniqueStates());
     checker.addCoCo(new TransitionSourceTargetExists());
-    checker.addCoCo(new TransitionPreconditionsAreBoolean(new MontiArcDeriveType()));
+    checker.addCoCo(new TransitionPreconditionsAreBoolean(new MontiArcTypeCalculator()));
 
     // ArcAutomaton CoCos
     checker.addCoCo(new FieldReadWriteAccessFitsInGuards());

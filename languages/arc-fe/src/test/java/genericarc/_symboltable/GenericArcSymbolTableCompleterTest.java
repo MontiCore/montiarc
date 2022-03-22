@@ -6,12 +6,11 @@ import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.ArcBasisSynthesizeComponent;
-import arcbasis.check.ArcBasisSynthesizeType;
+import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
-import de.monticore.types.check.ISynthesize;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
@@ -22,6 +21,7 @@ import genericarc.GenericArcMill;
 import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericComponentHead;
 import genericarc._visitor.GenericArcTraverser;
+import genericarc.check.GenericArcTypeCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import org.junit.jupiter.api.Assertions;
@@ -41,6 +41,45 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
 
   protected GenericArcSymbolTableCompleter completer;
 
+  protected static Stream<MCBasicTypesFullPrettyPrinter> typesPrinterProvider() {
+    return Stream.of(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
+  }
+
+  public static Stream<Arguments> constructorWithNullArgumentProvider() {
+    MCBasicTypesFullPrettyPrinter printer = MCBasicTypesMill.mcBasicTypesPrettyPrinter();
+    ISynthesizeComponent compSynth = new ArcBasisSynthesizeComponent();
+    IArcTypeCalculator typeSynth = new GenericArcTypeCalculator();
+
+    return Stream.of(
+      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(null)),
+      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(null, compSynth, typeSynth)),
+      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(printer, null, typeSynth)),
+      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(printer, compSynth, null))
+    );
+  }
+
+  protected static Stream<Arguments> visitComponentHeadExpectedExceptionProvider() {
+    ASTGenericComponentHead ast1 = GenericArcMill.genericComponentHeadBuilder().build();
+    ASTGenericComponentHead ast2 = GenericArcMill.genericComponentHeadBuilder().build();
+    ast2.setEnclosingScope(GenericArcMill.scope());
+
+    ASTGenericComponentHead ast3 = GenericArcMill.genericComponentHeadBuilder().build();
+    IGenericArcScope spannedBySymbol = GenericArcMill.scope();
+    TypeSymbol typeSym = GenericArcMill.typeSymbolBuilder().setName("A")
+      .setSpannedScope(spannedBySymbol).build();
+    spannedBySymbol.setSpanningSymbol(typeSym);
+    ast3.setEnclosingScope(spannedBySymbol);
+
+    Consumer<GenericArcSymbolTableCompleter> consumer1 = completer -> {};
+
+    return Stream.of(
+      Arguments.of(null, consumer1, NullPointerException.class),
+      Arguments.of(ast1, consumer1, NullPointerException.class),
+      Arguments.of(ast2, consumer1, IllegalArgumentException.class),
+      Arguments.of(ast3, consumer1, IllegalArgumentException.class)
+    );
+  }
+
   protected GenericArcSymbolTableCompleter getCompleter() {
     return this.completer;
   }
@@ -55,7 +94,6 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
     super.init();
     this.setUpCompleter();
   }
-
 
   /**
    * Method under test {@link GenericArcSymbolTableCompleter#setTypePrinter(MCBasicTypesFullPrettyPrinter)}
@@ -79,30 +117,6 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
   public void setTypePrinterShouldThrowNullPointerException() {
     // When && Then
     Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().setTypePrinter(null));
-  }
-
-  /**
-   * Method under test {@link GenericArcSymbolTableCompleter#setTypeSynthesizer(ISynthesize)}
-   */
-  @Test
-  public void shouldSetTypeSynthesizer() {
-    // Given
-    ISynthesize typeSynth = new ArcBasisSynthesizeType();
-
-    // When
-    this.getCompleter().setTypeSynthesizer(typeSynth);
-
-    // Then
-    Assertions.assertEquals(typeSynth, this.getCompleter().getTypeSynthesizer());
-  }
-
-  /**
-   * Method under test {@link GenericArcSymbolTableCompleter#setTypeSynthesizer(ISynthesize)}
-   */
-  @Test
-  public void setTypeSynthesizerShouldThrowNullPointerException() {
-    // When && Then
-    Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().setTypeSynthesizer(null));
   }
 
   /**
@@ -167,7 +181,7 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
     //Then
     Assertions.assertNotNull(completer.getTypePrinter());
     Assertions.assertNotNull(completer.getComponentSynthesizer());
-    Assertions.assertNotNull(completer.getTypeSynthesizer());
+    Assertions.assertNotNull(completer.getTypeCalculator());
   }
 
   /**
@@ -186,11 +200,7 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
     // Then
     Assertions.assertEquals(printer, completer.getTypePrinter());
     Assertions.assertNotNull(completer.getComponentSynthesizer());
-    Assertions.assertNotNull(completer.getTypeSynthesizer());
-  }
-
-  protected static Stream<MCBasicTypesFullPrettyPrinter> typesPrinterProvider() {
-    return Stream.of(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
+    Assertions.assertNotNull(completer.getTypeCalculator());
   }
 
   /**
@@ -203,19 +213,6 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
   public void constructorShouldThrowNullPointerException(@NotNull Executable constructorCall) {
     // When && Then
     Assertions.assertThrows(NullPointerException.class, constructorCall);
-  }
-
-  public static Stream<Arguments> constructorWithNullArgumentProvider() {
-    MCBasicTypesFullPrettyPrinter printer = MCBasicTypesMill.mcBasicTypesPrettyPrinter();
-    ISynthesizeComponent compSynth = new ArcBasisSynthesizeComponent();
-    ISynthesize typeSynth = new ArcBasisSynthesizeType();
-
-    return Stream.of(
-      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(null)),
-      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(null, compSynth, typeSynth)),
-      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(printer, null, typeSynth)),
-      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(printer, compSynth, null))
-    );
   }
 
   /**
@@ -311,28 +308,6 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
 
     // When && Then
     Assertions.assertThrows(expected, () -> this.getCompleter().visit(ast));
-  }
-
-  protected static Stream<Arguments> visitComponentHeadExpectedExceptionProvider() {
-    ASTGenericComponentHead ast1 = GenericArcMill.genericComponentHeadBuilder().build();
-    ASTGenericComponentHead ast2 = GenericArcMill.genericComponentHeadBuilder().build();
-    ast2.setEnclosingScope(GenericArcMill.scope());
-
-    ASTGenericComponentHead ast3 = GenericArcMill.genericComponentHeadBuilder().build();
-    IGenericArcScope spannedBySymbol = GenericArcMill.scope();
-    TypeSymbol typeSym = GenericArcMill.typeSymbolBuilder().setName("A")
-      .setSpannedScope(spannedBySymbol).build();
-    spannedBySymbol.setSpanningSymbol(typeSym);
-    ast3.setEnclosingScope(spannedBySymbol);
-
-    Consumer<GenericArcSymbolTableCompleter> consumer1 = completer -> {};
-
-    return Stream.of(
-      Arguments.of(null, consumer1, NullPointerException.class),
-      Arguments.of(ast1, consumer1, NullPointerException.class),
-      Arguments.of(ast2, consumer1, IllegalArgumentException.class),
-      Arguments.of(ast3, consumer1, IllegalArgumentException.class)
-    );
   }
 
   @Test

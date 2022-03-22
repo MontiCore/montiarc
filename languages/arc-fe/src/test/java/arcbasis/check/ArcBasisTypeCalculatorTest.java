@@ -3,16 +3,15 @@ package arcbasis.check;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
-import de.monticore.types.check.IDerive;
 import de.monticore.types.check.TypeCheckResult;
 import org.junit.jupiter.api.BeforeEach;
 
 /**
- * Holds test for methods of {@link ArcBasisDeriveType}.
+ * Holds test for methods of {@link ArcBasisTypeCalculator}.
  *
- * @see AbstractArcDeriveTypeTest for basic tests methods.
+ * @see AbstractArcTypeCalculatorTest for basic tests methods.
  */
-public class ArcBasisDeriveTypeTest extends AbstractArcDeriveTypeTest {
+public class ArcBasisTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
 
   @Override
   @BeforeEach
@@ -25,11 +24,11 @@ public class ArcBasisDeriveTypeTest extends AbstractArcDeriveTypeTest {
   }
 
   @Override
-  protected IDerive getDerive() {
-    if (this.derive == null) {
-      this.derive = new ArcBasisDeriveType(new TypeCheckResult());
+  protected IArcTypeCalculator getTypeCalculator() {
+    if (this.typeCalculator == null) {
+      this.typeCalculator = new ArcBasisTypeCalculator(new TypeCheckResult());
     }
-    return this.derive;
+    return this.typeCalculator;
   }
 
   @Override

@@ -4,7 +4,7 @@ package montiarc._auxiliary;
 import de.monticore.types.mcsimplegenerictypes.MCSimpleGenericTypesMill;
 import genericarc._symboltable.GenericArcSymbolTableCompleter;
 import montiarc.check.MontiArcSynthesizeComponent;
-import montiarc.check.MontiArcSynthesizeType;
+import montiarc.check.MontiArcTypeCalculator;
 
 public class GenericArcMillForMontiArc extends GenericArcMillForMontiArcTOP {
 
@@ -13,7 +13,7 @@ public class GenericArcMillForMontiArc extends GenericArcMillForMontiArcTOP {
     return new GenericArcSymbolTableCompleter(
       MCSimpleGenericTypesMill.mcSimpleGenericTypesPrettyPrinter(),
       new MontiArcSynthesizeComponent(),
-      new MontiArcSynthesizeType()
+      new MontiArcTypeCalculator()
     );
   }
 }

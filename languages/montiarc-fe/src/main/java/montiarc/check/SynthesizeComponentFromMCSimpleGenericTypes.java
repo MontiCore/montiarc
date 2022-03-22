@@ -3,12 +3,11 @@ package montiarc.check;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
+import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.SynthCompTypeResult;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.monticore.types.check.ISynthesize;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheck;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCBasicTypeArgument;
 import de.monticore.types.mccollectiontypes._ast.ASTMCPrimitiveTypeArgument;
@@ -37,29 +36,27 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
 
   protected MCSimpleGenericTypesTraverser traverser;
 
-  /** Common state with other visitors, if this visitor is part of a visitor composition. */
+  /**
+   * Common state with other visitors, if this visitor is part of a visitor composition.
+   */
   protected SynthCompTypeResult resultWrapper;
 
   /**
    * Used to create {@link SymTypeExpression}s for the ast-representation of the generic component type's type.
-   * Note that the {@link TypeCheck} misses a Deriver to derive types of
-   * {@link de.monticore.expressions.expressionsbasis._ast.ASTExpression}, as we are onl interested in synthesizing
-   * @code SymTypeExpression}s from {@link ASTMCType}s. Thus expect errors, if you try to use the TypeCheck for
-   * operating on {@code ASTExpression}s.
    */
-  protected TypeCheck synthOOTypeExpressions;
+  protected IArcTypeCalculator typeCalculator;
 
   public SynthesizeComponentFromMCSimpleGenericTypes(@NotNull SynthCompTypeResult resultWrapper) {
-    this(resultWrapper, new MontiArcSynthesizeType());
+    this(resultWrapper, new MontiArcTypeCalculator());
   }
 
   public SynthesizeComponentFromMCSimpleGenericTypes(@NotNull SynthCompTypeResult resultWrapper,
-                                                     @NotNull ISynthesize synthOOTypeExpressions) {
+                                                     @NotNull IArcTypeCalculator typeCalculator) {
     Preconditions.checkNotNull(resultWrapper);
-    Preconditions.checkNotNull(synthOOTypeExpressions);
+    Preconditions.checkNotNull(typeCalculator);
 
-    this.resultWrapper = resultWrapper;   // We are not interested in using a ↓ Deriver for Expressions.
-    this.synthOOTypeExpressions = new TypeCheck(synthOOTypeExpressions, null);
+    this.resultWrapper = resultWrapper;
+    this.typeCalculator = typeCalculator;
   }
 
   @Override
@@ -82,12 +79,12 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
     String compName = String.join(".", mcType.getNameList());
     Optional<ComponentTypeSymbol> compSym = enclScope.resolveComponentType(compName);
 
-    if(!compSym.isPresent()) {
+    if (!compSym.isPresent()) {
       Log.error(ArcError.SYMBOL_NOT_FOUND.format(compName), mcType.get_SourcePositionStart());
       this.resultWrapper.setCurrentResultAbsent();
     } else {
       List<SymTypeExpression> typeArgExpressions = typeArgumentsToTypes(mcType.getMCTypeArgumentList()).stream()
-        .map(typeArg -> synthOOTypeExpressions.symTypeFromAST(typeArg))
+        .map(typeArg -> typeCalculator.synthesizeType(typeArg).getCurrentResult())
         .collect(Collectors.toList());
       this.resultWrapper.setCurrentResult(new TypeExprOfGenericComponent(compSym.get(), typeArgExpressions));
     }
@@ -110,8 +107,8 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
     );
 
     List<ASTMCType> types = new ArrayList<>(typeArgs.size());
-    for(ASTMCTypeArgument typeArg : typeArgs) {
-      if(typeArg instanceof ASTMCBasicTypeArgument) {
+    for (ASTMCTypeArgument typeArg : typeArgs) {
+      if (typeArg instanceof ASTMCBasicTypeArgument) {
         types.add(((ASTMCBasicTypeArgument) typeArg).getMCQualifiedType());
       } else if (typeArg instanceof ASTMCPrimitiveTypeArgument) {
         types.add(((ASTMCPrimitiveTypeArgument) typeArg).getMCPrimitiveType());

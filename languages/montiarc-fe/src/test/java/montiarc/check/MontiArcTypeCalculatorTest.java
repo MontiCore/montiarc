@@ -4,7 +4,8 @@ package montiarc.check;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.SymbolService;
-import arcbasis.check.AbstractArcDeriveTypeTest;
+import arcbasis.check.AbstractArcTypeCalculatorTest;
+import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol;
@@ -13,18 +14,14 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
-import de.monticore.types.check.IDerive;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.check.TypeCheckResult;
 import montiarc.MontiArcMill;
 import montiarc._auxiliary.OOSymbolsMillForMontiArc;
 import montiarc._parser.MontiArcParser;
-import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -35,11 +32,30 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * Holds test for methods of {@link MontiArcDeriveType}.
+ * Holds test for methods of {@link MontiArcTypeCalculator}.
  *
- * @see AbstractArcDeriveTypeTest for basic tests methods.
+ * @see AbstractArcTypeCalculatorTest for basic tests methods.
  */
-public class MontiArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
+public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
+
+  protected MontiArcParser parser;
+
+  protected static Stream<Arguments> expressionProviderForGenericFields() {
+    return Stream.of(Arguments.of("strBuffer", "Buffer<String>"), Arguments.of("roleBuffer", "Buffer<Role>"),
+      Arguments.of("msgStorage", "Storage<Message>"), Arguments.of("ma2java", "Trafo<Student,Teacher>"));
+  }
+
+  protected static Stream<Arguments> expressionProviderWithMethodCalls() {
+    return Stream.of(Arguments.of("msg.getHeader()", "String"), Arguments.of("msg.setHeader(\"0x\")", "String"));
+  }
+
+  protected static Stream<Arguments> expressionProviderWithGenericMethodCalls() {
+    return Stream.of(Arguments.of("trafoBuilder.build()", "Trafo<Student,Teacher>"));
+  }
+
+  protected static Stream<Arguments> expressionProviderWithAssignments() {
+    return Stream.of(Arguments.of("5 + 4", "int"), Arguments.of("a + 6", "int"), Arguments.of("a + b", "int"));
+  }
 
   @Override
   @BeforeEach
@@ -60,25 +76,6 @@ public class MontiArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
     this.setUpGenericFields();
     this.setUpTrafoBuilderType();
     this.setUpTrafoBuilderFields();
-  }
-
-  protected MontiArcParser parser;
-
-  protected static Stream<Arguments> expressionProviderForGenericFields() {
-    return Stream.of(Arguments.of("strBuffer", "Buffer<String>"), Arguments.of("roleBuffer", "Buffer<Role>"),
-      Arguments.of("msgStorage", "Storage<Message>"), Arguments.of("ma2java", "Trafo<Student,Teacher>"));
-  }
-
-  protected static Stream<Arguments> expressionProviderWithMethodCalls() {
-    return Stream.of(Arguments.of("msg.getHeader()", "String"), Arguments.of("msg.setHeader(\"0x\")", "String"));
-  }
-
-  protected static Stream<Arguments> expressionProviderWithGenericMethodCalls() {
-    return Stream.of(Arguments.of("trafoBuilder.build()", "Trafo<Student,Teacher>"));
-  }
-
-  protected static Stream<Arguments> expressionProviderWithAssignments() {
-    return Stream.of(Arguments.of("5 + 4", "int"), Arguments.of("a + 6", "int"), Arguments.of("a + b", "int"));
   }
 
   public void setUpGenericTypes() {
@@ -218,11 +215,11 @@ public class MontiArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
   }
 
   @Override
-  protected IDerive getDerive() {
-    if (this.derive == null) {
-      this.derive = new MontiArcDeriveType(new TypeCheckResult());
+  protected IArcTypeCalculator getTypeCalculator() {
+    if (this.typeCalculator == null) {
+      this.typeCalculator = new MontiArcTypeCalculator(new TypeCheckResult());
     }
-    return this.derive;
+    return this.typeCalculator;
   }
 
   @Override
@@ -238,17 +235,5 @@ public class MontiArcDeriveTypeTest extends AbstractArcDeriveTypeTest {
       this.parser = MontiArcMill.parser();
     }
     return parser;
-  }
-
-  @Test
-  public void shouldReturnCorrectCalculationDelegator() {
-    //Given
-    MontiArcDeriveType typesCalculator = new MontiArcDeriveType(new TypeCheckResult());
-
-    //When
-    MontiArcTraverser traverser = typesCalculator.getCalculationDelegator();
-
-    //Then
-    Assertions.assertNotNull(traverser);
   }
 }

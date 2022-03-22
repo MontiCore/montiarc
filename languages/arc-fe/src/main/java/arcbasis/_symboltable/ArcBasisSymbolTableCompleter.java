@@ -8,8 +8,7 @@ import arcbasis._visitor.ArcBasisVisitor2;
 import arcbasis.check.*;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.ISymbol;
-import de.monticore.types.check.ISynthesize;
-import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
@@ -22,6 +21,28 @@ import java.util.Optional;
 public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisHandler {
 
   protected MCBasicTypesFullPrettyPrinter typePrinter;
+  protected CompTypeExpression currentCompInstanceType;
+  protected ArcBasisTraverser traverser;
+  protected IArcTypeCalculator typeCalculator;
+  protected ISynthesizeComponent componentSynthesizer;
+  protected ASTMCType currentPortType;
+  protected ASTMCType currentFieldType;
+
+  public ArcBasisSymbolTableCompleter() {
+    this(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
+  }
+
+  public ArcBasisSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter) {
+    this(typePrinter, new ArcBasisSynthesizeComponent(), new ArcBasisTypeCalculator());
+  }
+
+  public ArcBasisSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter,
+                                      @NotNull ISynthesizeComponent componentSynthesizer,
+                                      @NotNull IArcTypeCalculator typeCalculator) {
+    this.typePrinter = Preconditions.checkNotNull(typePrinter);
+    this.componentSynthesizer = Preconditions.checkNotNull(componentSynthesizer);
+    this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
+  }
 
   public MCBasicTypesFullPrettyPrinter getTypePrinter() {
     return this.typePrinter;
@@ -32,8 +53,6 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     this.typePrinter = typesPrinter;
   }
 
-  protected CompTypeExpression currentCompInstanceType;
-
   protected Optional<CompTypeExpression> getCurrentCompInstanceType() {
     return Optional.ofNullable((this.currentCompInstanceType));
   }
@@ -42,7 +61,10 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     this.currentCompInstanceType = currentCompInstanceType;
   }
 
-  protected ArcBasisTraverser traverser;
+  @Override
+  public ArcBasisTraverser getTraverser() {
+    return this.traverser;
+  }
 
   @Override
   public void setTraverser(@NotNull ArcBasisTraverser traverser) {
@@ -50,43 +72,18 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     this.traverser = traverser;
   }
 
-  @Override
-  public ArcBasisTraverser getTraverser() {
-    return this.traverser;
-  }
-
-  protected ISynthesize typeSynthesizer;
-
-  protected void setTypeSynthesizer(@NotNull ISynthesize typeSynthesizer) {
-    Preconditions.checkNotNull(typeSynthesizer);
-    this.typeSynthesizer = typeSynthesizer;
-  }
-
-  public ISynthesize getTypeSynthesizer() {
-    return this.typeSynthesizer;
-  }
-
-  public Optional<SymTypeExpression> synthSymTypeFrom(@NotNull ASTMCType astType) {
-    Preconditions.checkNotNull(astType);
-    Preconditions.checkState(this.getTypeSynthesizer() != null);
-
-    this.getTypeSynthesizer().init();
-    astType.accept(this.getTypeSynthesizer().getTraverser());
-    return this.getTypeSynthesizer().getResult();
-  }
-
-  protected ISynthesizeComponent componentSynthesizer;
-
-  public void setComponentSynthesizer(@NotNull ISynthesizeComponent componentSynthesizer) {
-    Preconditions.checkNotNull(componentSynthesizer);
-    this.componentSynthesizer = componentSynthesizer;
+  public IArcTypeCalculator getTypeCalculator() {
+    return this.typeCalculator;
   }
 
   public ISynthesizeComponent getComponentSynthesizer() {
     return this.componentSynthesizer;
   }
 
-  protected ASTMCType currentPortType;
+  public void setComponentSynthesizer(@NotNull ISynthesizeComponent componentSynthesizer) {
+    Preconditions.checkNotNull(componentSynthesizer);
+    this.componentSynthesizer = componentSynthesizer;
+  }
 
   protected Optional<ASTMCType> getCurrentPortType() {
     return Optional.ofNullable(this.currentPortType);
@@ -96,30 +93,12 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     this.currentPortType = currentPortType;
   }
 
-  protected ASTMCType currentFieldType;
-
   protected Optional<ASTMCType> getCurrentFieldType() {
     return Optional.ofNullable(this.currentFieldType);
   }
 
   protected void setCurrentFieldType(@Nullable ASTMCType currentFieldType) {
     this.currentFieldType = currentFieldType;
-  }
-
-  public ArcBasisSymbolTableCompleter() {
-    this(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
-  }
-
-  public ArcBasisSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter) {
-    this(typePrinter, new ArcBasisSynthesizeComponent(), new ArcBasisSynthesizeType());
-  }
-
-  public ArcBasisSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter,
-                                      @NotNull ISynthesizeComponent componentSynthesizer,
-                                      @NotNull ISynthesize typeSynthesizer) {
-    this.typePrinter = Preconditions.checkNotNull(typePrinter);
-    this.componentSynthesizer = Preconditions.checkNotNull(componentSynthesizer);
-    this.typeSynthesizer = Preconditions.checkNotNull(typeSynthesizer);
   }
 
   @Override
@@ -207,12 +186,12 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getMCType());
     Preconditions.checkState(node.isPresentSymbol(), "Missing symbol for configuration parameter '%s' at %s. " +
-      "Did you forget to run the scopes genitor prior to the completer?", node.getName(),
+        "Did you forget to run the scopes genitor prior to the completer?", node.getName(),
       node.get_SourcePositionStart());
 
-    Optional<SymTypeExpression> typeExpr = this.synthSymTypeFrom(node.getMCType());
-    if (typeExpr.isPresent()) {
-      node.getSymbol().setType(typeExpr.get());
+    TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(node.getMCType());
+    if (typeExpr.isPresentCurrentResult()) {
+      node.getSymbol().setType(typeExpr.getCurrentResult());
     } else {
       Log.error(String.format("Could not create a sym type expression from '%s'",
         node.getMCType().printType(this.getTypePrinter())), node.get_SourcePositionStart()
@@ -240,11 +219,11 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkNotNull(port);
     Preconditions.checkState(this.getCurrentPortType().isPresent());
     Preconditions.checkState(port.isPresentSymbol(), "Missing symbol for port '%s' at %s. Did you forget to run the " +
-        "scopes genitor prior to the completer?", port.getName(), port.get_SourcePositionStart());
+      "scopes genitor prior to the completer?", port.getName(), port.get_SourcePositionStart());
 
-    Optional<SymTypeExpression> typeExpr = this.synthSymTypeFrom(this.getCurrentPortType().get());
-    if (typeExpr.isPresent()) {
-      port.getSymbol().setType(typeExpr.get());
+    TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(this.getCurrentPortType().get());
+    if (typeExpr.isPresentCurrentResult()) {
+      port.getSymbol().setType(typeExpr.getCurrentResult());
     } else {
       Log.error(String.format("Could not create a sym type expression from '%s'",
         this.getCurrentPortType().get().printType(this.getTypePrinter())), port.get_SourcePositionStart()
@@ -274,9 +253,9 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkState(field.isPresentSymbol(), "Missing symbol for field '%s' at %s. Did you forget to run " +
       "the scopes genitor prior to the completer?", field.getName(), field.get_SourcePositionStart());
 
-    Optional<SymTypeExpression> typeExpr = this.synthSymTypeFrom(this.getCurrentFieldType().get());
-    if (typeExpr.isPresent()) {
-      field.getSymbol().setType(typeExpr.get());
+    TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(this.getCurrentFieldType().get());
+    if (typeExpr.isPresentCurrentResult()) {
+      field.getSymbol().setType(typeExpr.getCurrentResult());
     } else {
       Log.error(String.format("Could not create a sym type expression from '%s'",
         this.getCurrentFieldType().get().printType(this.getTypePrinter())), field.get_SourcePositionStart()
