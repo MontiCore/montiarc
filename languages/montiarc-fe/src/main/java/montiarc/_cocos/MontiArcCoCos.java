@@ -82,6 +82,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new ComponentInheritanceRespectsGenericTypeBounds());
     checker.addCoCo(new ComponentInstantiationRespectsGenericTypeBounds());
     checker.addCoCo(new RootComponentTypesNoInstanceName());
+    checker.addCoCo(new UnresolvableImport());
 
     // Block unsupported model elements
     checker.addCoCo(new UnsupportedAutomatonElements.HierarchicalStates());

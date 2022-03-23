@@ -105,7 +105,8 @@ public enum ArcError implements montiarc.util.Error {
   INSTANTIATION_ARGUMENT_TYPE_MISMATCH("0xC1085", "The instantiation argument at position '%d' of component instance " +
     "'%s' is of type '%s' which is incompatible to type '%s' of the corresponding configuration parameter '%s' of " +
     "component type '%s'."),
-  MALFORMED_EXPRESSION("0xC1086", "The expression at '%s' is malformed and can not be evaluated.");
+  MALFORMED_EXPRESSION("0xC1086", "The expression at '%s' is malformed and can not be evaluated."),
+  UNRESOLVABLE_IMPORT("0xC1087", "Can't resolve imported symbol '%s'.");
 
   private final String errorCode;
   private final String errorMessage;
