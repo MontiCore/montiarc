@@ -1,8 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package parser;
 
-import java.lang.String;
-
 /*
  * Invalid model. Uses keywords as identifiers and types.
  * Formerly named "S2" in MontiArc3.

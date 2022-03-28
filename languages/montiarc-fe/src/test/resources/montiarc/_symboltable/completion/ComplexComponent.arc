@@ -1,8 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package completion;
 
-import java.lang.*;
-
 /**
  * Valid model.
  */

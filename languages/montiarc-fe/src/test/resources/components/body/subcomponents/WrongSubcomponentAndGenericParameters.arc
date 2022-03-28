@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.subcomponents;
 
-import java.lang.String;
 import components.body.subcomponents._subcomponents.HasGenericInputAndOutputPort;
 import components.body.subcomponents._subcomponents.SingleIntegerParameter;
 import components.body.subcomponents._subcomponents.SingleStringParameter;

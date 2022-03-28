@@ -5,8 +5,6 @@ import factory.warehouse.StorageObject;
 import factory.warehouse.MovementState;
 import factory.warehouse.Position;
 
-import java.lang.Integer;
-
 /**
  * A Transporter moves StorageObjects from one position to another, but can only operate on ground level.
  * To obtain a StorageObject, it has to be passed from a Crane.

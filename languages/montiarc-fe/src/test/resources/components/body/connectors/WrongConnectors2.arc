@@ -1,8 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.connectors;
 
-import java.lang.String;
-
 /*
  * Invalid model
  *

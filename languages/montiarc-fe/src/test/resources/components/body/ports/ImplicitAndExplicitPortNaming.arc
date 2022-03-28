@@ -1,11 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.ports;
 
-import java.lang.String;
-import java.lang.Boolean;
-import java.lang.Object;
-import java.lang.Throwable;
-
 /*
  * Invalid model.
  * Mixing implicit and explicit identifiers for ports, which also results

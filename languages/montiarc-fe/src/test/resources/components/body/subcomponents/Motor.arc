@@ -3,8 +3,6 @@ package components.body.subcomponents;
 
 import types.Datatypes.*;
 
-import java.lang.String;
-
 /**
  * Valid model. Used by Navi.
  */

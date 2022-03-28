@@ -6,8 +6,6 @@ import factory.warehouse.StorageObject;
 import factory.warehouse.Builder;
 import factory.warehouse.StorageObjectLinkedList;
 
-import java.lang.Integer;
-
 /**
  * Atomic component for holding StorageObjects.
  */

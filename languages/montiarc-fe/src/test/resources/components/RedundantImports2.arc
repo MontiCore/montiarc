@@ -7,9 +7,6 @@ import components.DefinedJavaTypeSamePackage; // Duplicate import
   // The model 'components.DefinedJavaTypeSamePackage' is in the current package
   //  so it must not be imported!
 
-import java.lang.String;
-import java.lang.String; // The model 'java.lang.String' is imported more than once!
-
 import java.io.*;
 import java.io.*; // WARNING: The package 'java.io' is imported more than once!
 

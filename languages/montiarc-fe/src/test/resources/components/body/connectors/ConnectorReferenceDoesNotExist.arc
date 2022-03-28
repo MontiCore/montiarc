@@ -1,9 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.connectors;
 
-import java.lang.String;
-import java.lang.Integer;
-
 /*
  * Invalid model.
  * Fully qualified port names in connectors do not exist in the component.

@@ -3,8 +3,6 @@ package speedbumper;
 
 import speedbumper.SpeedCmd;
 
-import java.lang.Integer;
-
 component BumpSpeed(Integer defaultSpeed) {
   port
     in SpeedCmd cmd,

@@ -1,8 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body;
 
-import java.lang.String;
-
 /*
  * Invalid model.
  * Multiple capitalization mistakes resulting in unresolvable subcomponents

@@ -4,7 +4,6 @@ package factory.warehouse;
 import factory.warehouse.*;
 import factory.warehouse.transporter.Transporter;
 import factory.warehouse.Crane;
-import java.lang.Integer;
 
 /**
  * A RequestManager is required to process StorageRequests and to coordinate a crane and a transporter.

@@ -14,8 +14,6 @@ import montiarc.lejos.lib.motor.MotorCmd;
 import montiarc.lejos.lib.ultrasonic.Ultrasonic;
 import montiarc.lejos.lib.logger.Logger;
 
-import java.lang.Integer;
-
 component BumperBot {
   Ultrasonic sensor (SensorPort.S1); // use port S1
   Motor leftMotor (MotorPort.A); // use port A

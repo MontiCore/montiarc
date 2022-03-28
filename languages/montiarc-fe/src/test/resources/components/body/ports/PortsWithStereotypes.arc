@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.ports;
 
-import java.lang.System;
 import java.io.PrintStream;
 
 /**
