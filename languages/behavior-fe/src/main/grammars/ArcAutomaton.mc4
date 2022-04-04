@@ -1,7 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 component grammar ArcAutomaton extends ArcBehaviorBasis,
-            de.monticore.SCTransitions4Code {
+            de.monticore.SCTransitions4Code,
+            de.monticore.SCStateHierarchy {
 
   /**
    * Allows to specify the behavior of a component by using a statechart
@@ -18,18 +19,6 @@ component grammar ArcAutomaton extends ArcBehaviorBasis,
    */
   InitialOutputDeclaration implements SCStatechartElement =
     "initial" Name@SCState "/" SCABody ";";
-
-  /**
-   * This is an option to define entry and exit actions for a state
-   */
-  StateBody implements SCSBody = "{"
-    SCStateElement*
-  "}";
-
-  /**
-   * Define a possibility to enumerate ports
-   */
-  PortListEvent implements SCEvent = "<" (Name@Port || ",")* ">";
 
   // allow using statechart's keywords on other places as well
   nokeyword "initial", "final", "state";

@@ -2,7 +2,6 @@
 package montiarc.visitor;
 
 import arcautomaton._ast.ASTArcStatechart;
-import arcautomaton._ast.ASTStateBody;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.assignmentexpressions._ast.ASTAssignmentExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTCallExpression;
@@ -17,6 +16,7 @@ import de.monticore.scactions._ast.ASTSCExitAction;
 import de.monticore.scbasis._ast.ASTSCEmptyBody;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCTransition;
+import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
 import de.monticore.sctransitions4code._ast.ASTTransitionAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mccommonstatements._ast.ASTExpressionStatement;
@@ -375,7 +375,6 @@ public class ArcAutomatonPrettyPrinterTest extends AbstractTest {
     Assertions.assertEquals("Opened", opened.getName());
     Assertions.assertFalse(opened.getSCModifier().isInitial());
     Assertions.assertFalse(opened.getSCModifier().isFinal());
-    Assertions.assertTrue(opened.getSCSBody() instanceof ASTStateBody);
   }
 
   @Test
@@ -416,10 +415,10 @@ public class ArcAutomatonPrettyPrinterTest extends AbstractTest {
     Assertions.assertEquals("Opened", opened.getName());
     Assertions.assertFalse(opened.getSCModifier().isInitial());
     Assertions.assertFalse(opened.getSCModifier().isFinal());
-    Assertions.assertTrue(opened.getSCSBody() instanceof ASTStateBody);
+    Assertions.assertTrue(opened.getSCSBody() instanceof ASTSCHierarchyBody);
 
     // Check actions
-    ASTStateBody opened_body = (ASTStateBody) opened.getSCSBody();
+    ASTSCHierarchyBody opened_body = (ASTSCHierarchyBody) opened.getSCSBody();
     Assertions.assertTrue(opened_body.getSCStateElement(0) instanceof ASTSCEntryAction);
     Assertions.assertTrue(((ASTTransitionAction) ((ASTSCEntryAction) opened_body.getSCStateElement(0)).getSCABody())
       .getMCBlockStatement() instanceof ASTMCJavaBlock);

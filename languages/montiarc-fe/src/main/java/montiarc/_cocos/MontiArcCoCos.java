@@ -85,10 +85,8 @@ public class MontiArcCoCos {
     checker.addCoCo(new UnresolvableImport());
 
     // Block unsupported model elements
-    checker.addCoCo(new UnsupportedAutomatonElements.HierarchicalStates());
     checker.addCoCo(new UnsupportedAutomatonElements.EntryActions());
     checker.addCoCo(new UnsupportedAutomatonElements.ExitActions());
-    checker.addCoCo(new UnsupportedAutomatonElements.TriggerEvents());
     checker.addCoCo(new UnsupportedAutomatonElements.FinalStates());
     checker.addCoCo(new UnsupportedAutomatonElements.WrongInitialStateDeclaration());
     checker.addCoCo(new UnsupportedAutomatonElements.AutomatonStereotypes());

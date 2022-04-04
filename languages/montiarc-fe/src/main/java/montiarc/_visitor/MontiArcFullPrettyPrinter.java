@@ -11,10 +11,7 @@ import de.monticore.expressions.prettyprint.AssignmentExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.CommonExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.ExpressionsBasisPrettyPrinter;
 import de.monticore.literals.prettyprint.MCCommonLiteralsPrettyPrinter;
-import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.prettyprint.SCActionsPrettyPrinter;
-import de.monticore.prettyprint.SCBasisPrettyPrinter;
-import de.monticore.prettyprint.SCTransitions4CodePrettyPrinter;
+import de.monticore.prettyprint.*;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.statements.prettyprint.MCCommonStatementsPrettyPrinter;
 import de.monticore.statements.prettyprint.MCVarDeclarationStatementsPrettyPrinter;
@@ -68,6 +65,7 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
     initSCBasisPrettyPrinter(printer);
     initSCTransitions4CodePrettyPrinter(printer);
     initSCActionsPrettyPrinter(printer);
+    initSCStateHierarchyPrettyPrinter(printer);
   }
 
   protected void initMontiArcPrettyPrinter(@NotNull IndentPrinter printer) {
@@ -200,6 +198,13 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
 
     SCTransitions4CodePrettyPrinter scTransitions4CodePrettyPrinter = new SCTransitions4CodePrettyPrinter(printer);
     traverser.setSCTransitions4CodeHandler(scTransitions4CodePrettyPrinter);
+  }
+
+  protected void initSCStateHierarchyPrettyPrinter(@NotNull IndentPrinter printer) {
+    Preconditions.checkNotNull(printer);
+
+    SCStateHierarchyPrettyPrinter scStateHierarchyPrettyPrinter = new SCStateHierarchyPrettyPrinter(printer);
+    traverser.setSCStateHierarchyHandler(scStateHierarchyPrettyPrinter);
   }
 
   protected void initSCActionsPrettyPrinter(@NotNull IndentPrinter printer) {

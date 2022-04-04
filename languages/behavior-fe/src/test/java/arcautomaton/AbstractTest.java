@@ -63,6 +63,7 @@ public class AbstractTest extends montiarc.util.AbstractTest{
     ASTSCState astState = ArcAutomatonMill.sCStateBuilder()
       .setName(name4State)
       .setSCModifier(ArcAutomatonMill.sCModifierBuilder().build())
+      .setSCSAnte(ArcAutomatonMill.sCEmptyAnteBuilder().build())
       .setSCSBody(ArcAutomatonMill.sCEmptyBodyBuilder().build()).build();
 
     SCStateSymbol symState = ArcAutomatonMill.sCStateSymbolBuilder()

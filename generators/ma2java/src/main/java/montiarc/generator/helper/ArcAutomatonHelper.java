@@ -3,13 +3,13 @@ package montiarc.generator.helper;
 
 import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._ast.ASTInitialOutputDeclaration;
-import arcautomaton._ast.ASTStateBody;
 import com.google.common.base.Preconditions;
 import de.monticore.scactions._ast.ASTSCABody;
 import de.monticore.scactions._ast.ASTSCEntryAction;
 import de.monticore.scactions._ast.ASTSCExitAction;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCTransition;
+import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
 import de.monticore.sctransitions4code._ast.ASTTransitionAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
@@ -117,8 +117,8 @@ public class ArcAutomatonHelper {
   public boolean hasEntryAction(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
     
-    if(!(state.getSCSBody() instanceof ASTStateBody)) return false;
-    ASTStateBody stateBody = (ASTStateBody) state.getSCSBody();
+    if(!(state.getSCSBody() instanceof ASTSCHierarchyBody)) return false;
+    ASTSCHierarchyBody stateBody = (ASTSCHierarchyBody) state.getSCSBody();
     return stateBody.getSCStateElementList().stream()
       .anyMatch(elem -> elem instanceof ASTSCEntryAction);
   }
@@ -126,8 +126,8 @@ public class ArcAutomatonHelper {
   public ASTMCBlockStatement getEntryActionBlockStatement(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
     Preconditions.checkArgument(hasEntryAction(state));
-    
-    ASTStateBody stateBody = (ASTStateBody) state.getSCSBody();
+
+    ASTSCHierarchyBody stateBody = (ASTSCHierarchyBody) state.getSCSBody();
     ASTSCEntryAction entryAction = stateBody.getSCStateElementList().stream()
       .filter(elem -> elem instanceof ASTSCEntryAction).map(elem -> (ASTSCEntryAction) elem)
       .findFirst().get();
@@ -137,8 +137,8 @@ public class ArcAutomatonHelper {
   public boolean hasExitAction(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
   
-    if(!(state.getSCSBody() instanceof ASTStateBody)) return false;
-    ASTStateBody stateBody = (ASTStateBody) state.getSCSBody();
+    if(!(state.getSCSBody() instanceof ASTSCHierarchyBody)) return false;
+    ASTSCHierarchyBody stateBody = (ASTSCHierarchyBody) state.getSCSBody();
     return stateBody.getSCStateElementList().stream()
       .anyMatch(elem -> elem instanceof ASTSCExitAction);
   }
@@ -146,8 +146,8 @@ public class ArcAutomatonHelper {
   public ASTMCBlockStatement getExitActionBlockStatement(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
     Preconditions.checkArgument(hasExitAction(state));
-    
-    ASTStateBody stateBody = (ASTStateBody) state.getSCSBody();
+
+    ASTSCHierarchyBody stateBody = (ASTSCHierarchyBody) state.getSCSBody();
     ASTSCExitAction exitAction = stateBody.getSCStateElementList().stream()
       .filter(elem -> elem instanceof ASTSCExitAction).map(elem -> (ASTSCExitAction) elem)
       .findFirst().get();

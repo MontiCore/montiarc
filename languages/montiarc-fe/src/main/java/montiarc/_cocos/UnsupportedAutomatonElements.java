@@ -2,9 +2,7 @@
 package montiarc._cocos;
 
 import arcautomaton._ast.ASTArcStatechart;
-import arcautomaton._ast.ASTStateBody;
 import arcautomaton._cocos.ArcAutomatonASTArcStatechartCoCo;
-import arcautomaton._cocos.ArcAutomatonASTStateBodyCoCo;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.scactions._ast.ASTSCEntryAction;
@@ -13,8 +11,6 @@ import de.monticore.scactions._cocos.SCActionsASTSCEntryActionCoCo;
 import de.monticore.scactions._cocos.SCActionsASTSCExitActionCoCo;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._cocos.SCBasisASTSCStateCoCo;
-import de.monticore.sctransitions4code._ast.ASTSCEvent;
-import de.monticore.sctransitions4code._cocos.SCTransitions4CodeASTSCEventCoCo;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -23,21 +19,6 @@ import org.codehaus.commons.nullanalysis.NotNull;
  * MontiArc.
  */
 public interface UnsupportedAutomatonElements {
-
-  /** Hierarchical states are currently not supported by MontiArc. */
-  class HierarchicalStates implements ArcAutomatonASTStateBodyCoCo {
-
-    @Override
-    public void check(@NotNull ASTStateBody node) {
-      Preconditions.checkNotNull(node);
-      // Check if the state body contains states by its own (which is illegal as we do not support hierarchical states).
-      if (node.streamSCStateElements().anyMatch(ASTSCState.class::isInstance)) {
-        Log.error(ArcError.UNSUPPORTED_MODEL_ELEMENT.format("Using hierarchical states is currently not supported " +
-          "by MontiArc.", node.get_SourcePositionStart(), node.get_SourcePositionEnd())
-        );
-      }
-    }
-  }
 
   /** Entry actions for states in automatas are currently not supported by MontiArc. */
   class EntryActions implements SCActionsASTSCEntryActionCoCo {
@@ -59,18 +40,6 @@ public interface UnsupportedAutomatonElements {
       Preconditions.checkNotNull(node);
       Log.error(ArcError.UNSUPPORTED_MODEL_ELEMENT.format("Using exit actions for states in automatas is currently " +
         "not supported by MontiArc."), node.get_SourcePositionStart(), node.get_SourcePositionEnd()
-      );
-    }
-  }
-
-  /** Using trigger events for transitions in automatas is currently not supported by MontiArc. */
-  class TriggerEvents implements SCTransitions4CodeASTSCEventCoCo {
-
-    @Override
-    public void check(@NotNull ASTSCEvent node) {
-      Preconditions.checkNotNull(node);
-      Log.error(ArcError.UNSUPPORTED_MODEL_ELEMENT.format("Using trigger events for transitions in automatas is " +
-        "currently not supported by MontiArc."), node.get_SourcePositionStart(), node.get_SourcePositionEnd()
       );
     }
   }

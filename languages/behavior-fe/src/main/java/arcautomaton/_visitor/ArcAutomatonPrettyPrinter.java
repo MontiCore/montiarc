@@ -3,11 +3,8 @@ package arcautomaton._visitor;
 
 import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._ast.ASTInitialOutputDeclaration;
-import arcautomaton._ast.ASTPortListEvent;
-import arcautomaton._ast.ASTStateBody;
 import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.scbasis._ast.ASTSCStateElement;
 import de.monticore.scbasis._ast.ASTSCStatechartElement;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -62,33 +59,5 @@ public class ArcAutomatonPrettyPrinter implements ArcAutomatonHandler, ArcAutoma
     getPrinter().print(" / ");
     node.getSCABody().accept(this.getTraverser());
     getPrinter().print(";");
-  }
-
-  @Override
-  public void handle(@NotNull ASTStateBody node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkNotNull(node.getSCStateElementList());
-    Preconditions.checkArgument(!node.getSCStateElementList().contains(null));
-    getPrinter().println("{");
-    getPrinter().indent();
-    for (ASTSCStateElement element : node.getSCStateElementList()){
-      element.accept(this.getTraverser());
-    }
-    getPrinter().unindent();
-    getPrinter().println("}");
-  }
-
-  @Override
-  public void handle(@NotNull ASTPortListEvent node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkNotNull(node.getNameList());
-    Preconditions.checkArgument(!node.getNameList().contains(null));
-    String separator = "";
-    getPrinter().print("<");
-    for (String portName : node.getNameList()){
-      getPrinter().print(separator + portName);
-      separator = ", ";
-    }
-    getPrinter().print(">");
   }
 }
