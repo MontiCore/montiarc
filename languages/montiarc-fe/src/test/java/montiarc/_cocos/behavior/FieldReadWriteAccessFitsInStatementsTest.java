@@ -2,7 +2,7 @@
 package montiarc._cocos.behavior;
 
 import arcautomaton._cocos.FieldReadWriteAccessFitsInStatements;
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
@@ -68,11 +68,11 @@ class FieldReadWriteAccessFitsInStatementsTest extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-      arg("DeepIncrement.arc", BehaviorError.WRITE_TO_INCOMING_PORT, BehaviorError.WRITE_TO_INCOMING_PORT),
-      arg("IncrementPorts.arc", BehaviorError.WRITE_TO_INCOMING_PORT, BehaviorError.READ_FROM_OUTGOING_PORT,
-        BehaviorError.WRITE_TO_INCOMING_PORT, BehaviorError.READ_FROM_OUTGOING_PORT),
-      arg("InvalidAssignment.arc", BehaviorError.WRITE_TO_INCOMING_PORT, BehaviorError.WRITE_TO_INCOMING_PORT),
-      arg("ReadOutgoingPort.arc", BehaviorError.READ_FROM_OUTGOING_PORT, BehaviorError.READ_FROM_OUTGOING_PORT)
+      arg("DeepIncrement.arc", ArcError.WRITE_TO_INCOMING_PORT, ArcError.WRITE_TO_INCOMING_PORT),
+      arg("IncrementPorts.arc", ArcError.WRITE_TO_INCOMING_PORT, ArcError.READ_FROM_OUTGOING_PORT,
+        ArcError.WRITE_TO_INCOMING_PORT, ArcError.READ_FROM_OUTGOING_PORT),
+      arg("InvalidAssignment.arc", ArcError.WRITE_TO_INCOMING_PORT, ArcError.WRITE_TO_INCOMING_PORT),
+      arg("ReadOutgoingPort.arc", ArcError.READ_FROM_OUTGOING_PORT, ArcError.READ_FROM_OUTGOING_PORT)
     );
   }
 

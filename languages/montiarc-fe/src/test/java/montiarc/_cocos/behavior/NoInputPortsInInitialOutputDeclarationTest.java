@@ -2,7 +2,7 @@
 package montiarc._cocos.behavior;
 
 import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -44,7 +44,7 @@ class NoInputPortsInInitialOutputDeclarationTest extends AbstractCoCoTest {
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
       arg("WithInputPortRef.arc",
-        BehaviorError.INPUT_PORT_IN_INITIAL_OUT_DECL, BehaviorError.INPUT_PORT_IN_INITIAL_OUT_DECL
+        ArcError.INPUT_PORT_IN_INITIAL_OUT_DECL, ArcError.INPUT_PORT_IN_INITIAL_OUT_DECL
       )
     );
   }

@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos.behavior;
 
-import arcbehaviorbasis.BehaviorError;
-import arcbehaviorbasis._cocos.OnlyOneBehavior;
+import arcbasis._cocos.OnlyOneBehavior;
+import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -32,7 +32,7 @@ public class OnlyOneBehaviorTest extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelsAndExpectedErrorProvider() {
     return Stream.of(
-      arg("TwoAutomata.arc", BehaviorError.MULTIPLE_BEHAVIOR)
+      arg("TwoAutomata.arc", ArcError.MULTIPLE_BEHAVIOR, ArcError.MULTIPLE_BEHAVIOR)
     );
   }
 

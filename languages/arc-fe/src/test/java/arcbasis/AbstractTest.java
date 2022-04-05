@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis;
 
+import arcbasis._ast.ASTComponentType;
+import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
@@ -65,5 +67,30 @@ public abstract class AbstractTest extends montiarc.util.AbstractTest {
     TypeSymbol type = createTypeSymbol(typeName);
     ArcBasisMill.globalScope().add(type);
     ArcBasisMill.globalScope().addSubScope(type.getSpannedScope());
+  }
+
+  /**
+   * Creates an empty ASTComponentType that is linked to a ComponentTypeSymbol with the same name. Beware that the
+   * ComponentTypeSymbol is not part of any scope.
+   */
+  protected static ASTComponentType createComponentTypeWithSymbol(@NotNull String name4Comp) {
+    Preconditions.checkNotNull(name4Comp);
+
+    ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
+      .setName(name4Comp)
+      .setHead(ArcBasisMill.componentHeadBuilder().build())
+      .setBody(ArcBasisMill.componentBodyBuilder().build())
+      .build();
+
+    ComponentTypeSymbol sym = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(name4Comp)
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+
+    comp.setSymbol(sym);
+    comp.setSpannedScope(sym.getSpannedScope());
+    sym.setAstNode(comp);
+
+    return comp;
   }
 }

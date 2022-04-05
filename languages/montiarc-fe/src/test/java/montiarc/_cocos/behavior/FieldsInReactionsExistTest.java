@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos.behavior;
 
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import montiarc.MontiArcMill;
 import montiarc._cocos.AbstractCoCoTest;
@@ -38,11 +38,11 @@ public class FieldsInReactionsExistTest extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-      Arguments.of("MissingClassInAction.arc", new Error[]{BehaviorError.SYMBOL_IN_STATECHART_MISSING}),
-      Arguments.of("MissingVariableInAction.arc", new Error[]{BehaviorError.SYMBOL_IN_STATECHART_MISSING}),
-      Arguments.of("MissingVariableInReaction.arc", new Error[]{BehaviorError.SYMBOL_IN_STATECHART_MISSING}),
-      Arguments.of("ReadFromDeeplyNestedMissingPort.arc", new Error[]{BehaviorError.SYMBOL_IN_STATECHART_MISSING}),
-      Arguments.of("OnlyOneMissing.arc", new Error[]{BehaviorError.SYMBOL_IN_STATECHART_MISSING})
+      Arguments.of("MissingClassInAction.arc", new Error[]{ArcError.SYMBOL_IN_STATECHART_MISSING}),
+      Arguments.of("MissingVariableInAction.arc", new Error[]{ArcError.SYMBOL_IN_STATECHART_MISSING}),
+      Arguments.of("MissingVariableInReaction.arc", new Error[]{ArcError.SYMBOL_IN_STATECHART_MISSING}),
+      Arguments.of("ReadFromDeeplyNestedMissingPort.arc", new Error[]{ArcError.SYMBOL_IN_STATECHART_MISSING}),
+      Arguments.of("OnlyOneMissing.arc", new Error[]{ArcError.SYMBOL_IN_STATECHART_MISSING})
     );
   }
 

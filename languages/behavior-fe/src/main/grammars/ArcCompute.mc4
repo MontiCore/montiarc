@@ -1,6 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-component grammar ArcCompute extends ArcBehaviorBasis,
+component grammar ArcCompute extends ArcBasis,
    de.monticore.statements.MCStatementsBasis {
 
   /**

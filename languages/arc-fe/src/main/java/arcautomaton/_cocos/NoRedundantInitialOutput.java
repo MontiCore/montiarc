@@ -3,7 +3,8 @@ package arcautomaton._cocos;
 
 import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._ast.ASTInitialOutputDeclaration;
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
+import de.se_rwth.commons.logging.Log;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +20,9 @@ public class NoRedundantInitialOutput implements ArcAutomatonASTArcStatechartCoC
     Set<String> duplicates = new HashSet<>();
     for(ASTInitialOutputDeclaration decl : statechart.streamInitialOutput().collect(Collectors.toList())) {
       if (duplicates.contains(decl.getName())) {
-        BehaviorError.REDUNDANT_INITIAL_DECLARATION.logAt(decl, decl.getName());
+        Log.error(ArcError.REDUNDANT_INITIAL_DECLARATION.format(decl.getName()),
+          decl.get_SourcePositionStart(), decl.get_SourcePositionEnd()
+        );
       } else {
         duplicates.add(decl.getName());
       }

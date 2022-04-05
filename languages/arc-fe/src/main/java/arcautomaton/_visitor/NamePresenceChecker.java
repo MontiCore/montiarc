@@ -1,11 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcautomaton._visitor;
 
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisVisitor2;
 import de.monticore.symboltable.IScope;
+import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class NamePresenceChecker extends StatechartNameResolver implements ExpressionsBasisVisitor2 {
@@ -24,7 +25,9 @@ public class NamePresenceChecker extends StatechartNameResolver implements Expre
     String name = node.getName();
     if(!resolveField(name).isPresent() && !resolvePort(name).isPresent()
       && !(this.scope.resolveType(name).isPresent())) {
-      BehaviorError.SYMBOL_IN_STATECHART_MISSING.logAt(node, name, scope.getName());
+      Log.error(ArcError.SYMBOL_IN_STATECHART_MISSING.format(name, scope.getName()),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd()
+      );
     }
   }
 }

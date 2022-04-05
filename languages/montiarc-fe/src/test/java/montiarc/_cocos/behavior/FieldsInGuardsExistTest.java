@@ -2,7 +2,7 @@
 package montiarc._cocos.behavior;
 
 import arcautomaton._cocos.FieldsInGuardsExist;
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.util.Error;
@@ -27,9 +27,9 @@ public class FieldsInGuardsExistTest extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-      Arguments.of("MissingVariable.arc", new Error[] {BehaviorError.SYMBOL_IN_STATECHART_MISSING}),
-      Arguments.of("OnlyOneMissing.arc", new Error[] {BehaviorError.SYMBOL_IN_STATECHART_MISSING}),
-      Arguments.of("DeeplyNestedMissingVariable.arc", new Error[] {BehaviorError.SYMBOL_IN_STATECHART_MISSING})
+      Arguments.of("MissingVariable.arc", new Error[] {ArcError.SYMBOL_IN_STATECHART_MISSING}),
+      Arguments.of("OnlyOneMissing.arc", new Error[] {ArcError.SYMBOL_IN_STATECHART_MISSING}),
+      Arguments.of("DeeplyNestedMissingVariable.arc", new Error[] {ArcError.SYMBOL_IN_STATECHART_MISSING})
     );
   }
 

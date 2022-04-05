@@ -2,8 +2,9 @@
 package arcautomaton._cocos;
 
 import arcautomaton._ast.ASTArcStatechart;
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 
@@ -16,7 +17,9 @@ public class OneInitialStateAtLeast implements ArcAutomatonASTArcStatechartCoCo 
   public void check(@NotNull ASTArcStatechart automaton) {
     Preconditions.checkNotNull(automaton);
     if(automaton.streamInitialStates().count() == 0L){
-      BehaviorError.NO_INITIAL_STATE.logAt(automaton, automaton.getEnclosingScope().getName());
+      Log.error(ArcError.NO_INITIAL_STATE.format(automaton.getEnclosingScope().getName()),
+        automaton.get_SourcePositionStart(), automaton.get_SourcePositionEnd()
+      );
     }
   }
 }

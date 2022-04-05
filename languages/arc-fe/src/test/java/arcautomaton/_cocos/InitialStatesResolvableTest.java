@@ -7,7 +7,7 @@ import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._ast.ASTInitialOutputDeclaration;
 import arcautomaton._symboltable.ArcAutomatonScope;
 import arcbasis._ast.ASTComponentType;
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import de.monticore.scactions._ast.ASTSCABody;
 import de.monticore.scbasis._ast.ASTSCState;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ public class InitialStatesResolvableTest extends AbstractTest {
     coco.check(initialDec);
 
     // Then
-    checkOnlyExpectedErrorsPresent(BehaviorError.INITIAL_STATE_REFERENCE_MISSING);
+    checkOnlyExpectedErrorsPresent(ArcError.INITIAL_STATE_REFERENCE_MISSING);
   }
 
   @Test
@@ -65,6 +65,6 @@ public class InitialStatesResolvableTest extends AbstractTest {
     coco.check(initialDec);
 
     // Then
-    checkOnlyExpectedErrorsPresent(new BehaviorError[]{});
+    checkOnlyExpectedErrorsPresent(new ArcError[]{});
   }
 }

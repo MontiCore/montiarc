@@ -2,7 +2,7 @@
 package montiarc._cocos.behavior;
 
 import arcautomaton._cocos.InitialStatesResolvable;
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -37,7 +37,7 @@ class InitialStatesResolvableTest extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-      arg("InitialStateUnresolvable.arc", BehaviorError.INITIAL_STATE_REFERENCE_MISSING)
+      arg("InitialStateUnresolvable.arc", ArcError.INITIAL_STATE_REFERENCE_MISSING)
     );
   }
 

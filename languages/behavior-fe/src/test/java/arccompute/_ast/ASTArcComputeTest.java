@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arccompute._ast;
 
-import arcbehaviorbasis._symboltable.IArcBehaviorBasisScope;
+import arcbasis._symboltable.IArcBasisScope;
 import arccompute.ArcComputeMill;
 import arccompute._symboltable.IArcComputeScope;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
@@ -61,11 +61,11 @@ public class ASTArcComputeTest {
   }
 
   /**
-   * Method under test {@link ASTArcCompute#setEnclosingScope(IArcBehaviorBasisScope)}.
+   * Method under test {@link ASTArcCompute#setEnclosingScope(IArcBasisScope)}.
    */
   @ParameterizedTest
   @MethodSource("validEnclosingScopeProvider")
-  public void setterShouldSetCorrectScope(final IArcBehaviorBasisScope scope) {
+  public void setterShouldSetCorrectScope(final IArcBasisScope scope) {
     //Given
     final ASTArcCompute compute = createCompute();
 
@@ -112,12 +112,12 @@ public class ASTArcComputeTest {
   }
 
   /**
-   * Method under test {@link ASTArcCompute#setEnclosingScope(IArcBehaviorBasisScope)}.
+   * Method under test {@link ASTArcCompute#setEnclosingScope(IArcBasisScope)}.
    */
   @Test
   public void setterWithBehaviorBasisScopeShouldDetectIllegalArgument() {
     //Given
-    final IArcBehaviorBasisScope scope = Mockito.mock(IArcBehaviorBasisScope.class);
+    final IArcBasisScope scope = Mockito.mock(IArcBasisScope.class);
     final ASTArcCompute compute = createCompute();
 
     //When && Then

@@ -4,7 +4,6 @@ package montiarc._symboltable;
 import arcautomaton._visitor.ArcAutomatonInheritanceHandler;
 import arcbasis._visitor.ArcBasisInheritanceHandler;
 import arcbasis._visitor.ArcBasisTraverser;
-import arcbehaviorbasis._visitor.ArcBehaviorBasisInheritanceHandler;
 import arccore._visitor.ArcCoreInheritanceHandler;
 import basicmodeautomata._visitor.BasicModeAutomataInheritanceHandler;
 import com.google.common.base.Preconditions;
@@ -114,7 +113,6 @@ public class SymbolTableCompletionTest extends AbstractTest {
       this.traverser.setVariableArcHandler(new VariableArcInheritanceHandler());
       this.traverser.setBasicModeAutomataHandler(new BasicModeAutomataInheritanceHandler());
       this.traverser.setMontiArcHandler(new MontiArcInheritanceHandler());
-      this.traverser.setArcBehaviorBasisHandler(new ArcBehaviorBasisInheritanceHandler());
       this.traverser.setArcAutomatonHandler(new ArcAutomatonInheritanceHandler());
 
       // Statechart handler

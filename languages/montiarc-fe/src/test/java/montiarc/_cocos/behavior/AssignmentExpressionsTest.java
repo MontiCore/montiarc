@@ -2,9 +2,8 @@
 package montiarc._cocos.behavior;
 
 import arcautomaton._cocos.*;
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.util.Error;
@@ -33,9 +32,9 @@ public class AssignmentExpressionsTest extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-      Arguments.of("AssignToIncrement.arc", new Error[] {BehaviorError.ASSIGN_TO_NOT_NAME}),
-      Arguments.of("DecrementLiterals.arc", new Error[] {BehaviorError.ASSIGN_TO_NOT_NAME, BehaviorError.ASSIGN_TO_NOT_NAME}),
-      Arguments.of("IncrementAnAddition.arc", new Error[] {BehaviorError.ASSIGN_TO_NOT_NAME})
+      Arguments.of("AssignToIncrement.arc", new Error[] {ArcError.ASSIGN_TO_NOT_NAME}),
+      Arguments.of("DecrementLiterals.arc", new Error[] {ArcError.ASSIGN_TO_NOT_NAME, ArcError.ASSIGN_TO_NOT_NAME}),
+      Arguments.of("IncrementAnAddition.arc", new Error[] {ArcError.ASSIGN_TO_NOT_NAME})
     );
   }
 

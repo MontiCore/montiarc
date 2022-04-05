@@ -1,6 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-component grammar ArcAutomaton extends ArcBehaviorBasis,
+component grammar ArcAutomaton extends ArcBasis,
             de.monticore.SCTransitions4Code,
             de.monticore.SCStateHierarchy {
 

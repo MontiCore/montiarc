@@ -1,12 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcautomaton._cocos;
 
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import de.monticore.expressions.assignmentexpressions._ast.ASTAssignmentExpression;
 import de.monticore.expressions.assignmentexpressions._cocos.AssignmentExpressionsASTAssignmentExpressionCoCo;
 import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
+import de.se_rwth.commons.logging.Log;
 
 public class OnlyAssignToNames implements AssignmentExpressionsASTAssignmentExpressionCoCo {
 
@@ -26,7 +27,10 @@ public class OnlyAssignToNames implements AssignmentExpressionsASTAssignmentExpr
    */
   public static void checkAssignment(ASTExpression expression, String action){
     if(!(expression instanceof ASTNameExpression) && !(expression instanceof ASTFieldAccessExpression)){
-      BehaviorError.ASSIGN_TO_NOT_NAME.logAt(expression, action, expression.getClass().getSimpleName().replaceFirst("\\AAST", ""));
+      Log.error(
+        ArcError.ASSIGN_TO_NOT_NAME.format(action, expression.getClass().getSimpleName().replaceFirst("\\AAST", "")),
+        expression.get_SourcePositionStart(), expression.get_SourcePositionEnd()
+      );
     }
   }
 }

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arccompute._ast;
 
-import arcbehaviorbasis._symboltable.IArcBehaviorBasisScope;
+import arcbasis._symboltable.IArcBasisScope;
 import arccompute._symboltable.IArcComputeScope;
 import com.google.common.base.Preconditions;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
@@ -29,7 +29,7 @@ public class ASTArcCompute extends ASTArcComputeTOP {
    * @see ASTArcCompute#setEnclosingScope(IArcComputeScope)
    */
   @Override
-  public void setEnclosingScope(@NotNull IArcBehaviorBasisScope enclosingScope) {
+  public void setEnclosingScope(@NotNull IArcBasisScope enclosingScope) {
     Preconditions.checkArgument(enclosingScope instanceof IArcComputeScope);
     super.setEnclosingScope(enclosingScope);
   }

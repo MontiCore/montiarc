@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos.behavior;
 
-import arcbehaviorbasis.BehaviorError;
-import arcbehaviorbasis._cocos.NoBehaviorInComposedComponents;
+import arcbasis._cocos.NoBehaviorInComposedComponents;
+import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -31,7 +31,7 @@ public class NoBehaviorInComposedComponentsTest extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelsAndExpectedErrorProvider() {
     return Stream.of(
-      arg("ComposedComponentWithBehavior.arc", BehaviorError.BEHAVIOR_IN_COMPOSED_COMPONENT)
+      arg("ComposedComponentWithBehavior.arc", ArcError.BEHAVIOR_IN_COMPOSED_COMPONENT)
     );
   }
 

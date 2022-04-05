@@ -10,7 +10,7 @@ import arcbasis._cocos.util.IPortReferenceInExpressionExtractor;
 import static arcbasis._cocos.util.IPortReferenceInExpressionExtractor.PortReference;
 import arcbasis._cocos.util.PortReferenceExtractor4ExpressionBasis;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
@@ -94,7 +94,7 @@ public class NoInputPortsInInitialOutputDeclaration implements ArcBasisASTCompon
 
       if(portOwner.getPort(portRef.toString(), true).isPresent()
         && portOwner.getPort(portRef.toString(), true).get().isIncoming()) {
-        BehaviorError.INPUT_PORT_IN_INITIAL_OUT_DECL.logAt(portRefPosition, portRef.toString());
+        Log.error(ArcError.INPUT_PORT_IN_INITIAL_OUT_DECL.format(portRef.toString()), portRefPosition);
       }
     }
   }

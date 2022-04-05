@@ -5,7 +5,7 @@ import arcautomaton._cocos.InitialStatesResolvable;
 import arcautomaton._cocos.NoRedundantInitialOutput;
 import arcautomaton._cocos.OneInitialStateAtLeast;
 import arcautomaton._cocos.OneInitialStateAtMax;
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.util.Error;
@@ -26,13 +26,13 @@ public class InitialStateInAutomata extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-        Arguments.of("StateMissing.arc", new Error[] {BehaviorError.INITIAL_STATE_REFERENCE_MISSING}),
-        Arguments.of("AllStatesInitial.arc", new Error[] {BehaviorError.MANY_INITIAL_STATES}),
-        Arguments.of("LacksInitialState.arc", new Error[] {BehaviorError.NO_INITIAL_STATE}),
-        Arguments.of("TwoInitialStates.arc", new Error[] {BehaviorError.MANY_INITIAL_STATES}),
-        Arguments.of("MultipleInitialOutputDeclarations.arc", new Error[] {BehaviorError.MANY_INITIAL_STATES}),
-        Arguments.of("MultipleStatesDeclaredInitial.arc", new Error[] {BehaviorError.MANY_INITIAL_STATES}),
-        Arguments.of("RedundantInitialOutputDeclarations.arc", new Error[] {BehaviorError.REDUNDANT_INITIAL_DECLARATION})
+        Arguments.of("StateMissing.arc", new Error[] {ArcError.INITIAL_STATE_REFERENCE_MISSING}),
+        Arguments.of("AllStatesInitial.arc", new Error[] {ArcError.MANY_INITIAL_STATES}),
+        Arguments.of("LacksInitialState.arc", new Error[] {ArcError.NO_INITIAL_STATE}),
+        Arguments.of("TwoInitialStates.arc", new Error[] {ArcError.MANY_INITIAL_STATES}),
+        Arguments.of("MultipleInitialOutputDeclarations.arc", new Error[] {ArcError.MANY_INITIAL_STATES}),
+        Arguments.of("MultipleStatesDeclaredInitial.arc", new Error[] {ArcError.MANY_INITIAL_STATES}),
+        Arguments.of("RedundantInitialOutputDeclarations.arc", new Error[] {ArcError.REDUNDANT_INITIAL_DECLARATION})
     );
   }
 

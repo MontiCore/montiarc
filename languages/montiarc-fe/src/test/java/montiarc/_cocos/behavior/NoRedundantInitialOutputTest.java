@@ -2,7 +2,7 @@
 package montiarc._cocos.behavior;
 
 import arcautomaton._cocos.NoRedundantInitialOutput;
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -37,7 +37,7 @@ class NoRedundantInitialOutputTest extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-      arg("RedundantOutputDeclaration.arc", BehaviorError.REDUNDANT_INITIAL_DECLARATION)
+      arg("RedundantOutputDeclaration.arc", ArcError.REDUNDANT_INITIAL_DECLARATION)
     );
   }
 

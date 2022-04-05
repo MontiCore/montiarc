@@ -6,7 +6,7 @@ import arcautomaton.ArcAutomatonMill;
 import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._ast.ASTInitialOutputDeclaration;
 import arcbasis._ast.ASTComponentType;
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import de.monticore.scactions._ast.ASTSCABody;
 import de.monticore.scbasis._ast.ASTSCState;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ public class NoRedundantInitialOutputTest extends AbstractTest {
     coco.check(automaton);
 
     // Then
-    checkOnlyExpectedErrorsPresent(new BehaviorError[]{});
+    checkOnlyExpectedErrorsPresent(new ArcError[]{});
   }
 
   @Test
@@ -68,6 +68,6 @@ public class NoRedundantInitialOutputTest extends AbstractTest {
     coco.check(automaton);
 
     // Then
-    checkOnlyExpectedErrorsPresent(BehaviorError.REDUNDANT_INITIAL_DECLARATION);
+    checkOnlyExpectedErrorsPresent(ArcError.REDUNDANT_INITIAL_DECLARATION);
   }
 }

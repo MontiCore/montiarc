@@ -2,8 +2,9 @@
 package arcautomaton._cocos;
 
 import arcautomaton._ast.ASTInitialOutputDeclaration;
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
@@ -16,7 +17,9 @@ public class InitialStatesResolvable implements ArcAutomatonASTInitialOutputDecl
   public void check(@NotNull ASTInitialOutputDeclaration node) {
     Preconditions.checkNotNull(node);
     if(!node.isPresentNameDefinition()){
-      BehaviorError.INITIAL_STATE_REFERENCE_MISSING.logAt(node, node.getName());
+      Log.error(ArcError.INITIAL_STATE_REFERENCE_MISSING.format(node.getName()),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd()
+      );
     }
   }
 }

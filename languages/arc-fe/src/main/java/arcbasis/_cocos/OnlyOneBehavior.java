@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
-package arcbehaviorbasis._cocos;
+package arcbasis._cocos;
 
+import arcbasis._ast.ASTArcBehaviorElement;
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
-import arcbehaviorbasis.BehaviorError;
-import arcbehaviorbasis._ast.ASTArcBehaviorElement;
+import arcbasis.util.ArcError;
+import de.se_rwth.commons.logging.Log;
 
 import java.util.stream.Stream;
 
@@ -16,7 +16,13 @@ public class OnlyOneBehavior implements ArcBasisASTComponentTypeCoCo {
 
   @Override
   public void check(ASTComponentType type) {
-    streamBehaviors(type).skip(1).findAny().ifPresent(behavior -> BehaviorError.MULTIPLE_BEHAVIOR.logAt(behavior, type.getName()));
+    if(streamBehaviors(type).count() >= 2L) {
+      streamBehaviors(type).forEach(
+        behavior -> Log.error(
+          ArcError.MULTIPLE_BEHAVIOR.format(type.getName()),
+          behavior.get_SourcePositionStart(), behavior.get_SourcePositionEnd())
+      );
+    }
   }
 
   /**
@@ -27,6 +33,6 @@ public class OnlyOneBehavior implements ArcBasisASTComponentTypeCoCo {
   static Stream<ASTArcElement> streamBehaviors(ASTComponentType type){
     return type.getBody()
         .streamArcElements()
-        .filter(element -> element instanceof ASTArcBehaviorElement);
+        .filter(ASTArcBehaviorElement.class::isInstance);
   }
 }

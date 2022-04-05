@@ -42,6 +42,12 @@ component grammar ArcBasis extends
   interface ArcElement;
 
   /**
+   * ASTArcBehaviorElement is the interface of all atomic
+   * component behavior descriptions.
+   */
+  interface ArcBehaviorElement extends ArcElement;
+
+  /**
    * ASTComponent represents the definition of a component type. A component is
    * a unit of computation or a data store. The size of a component may scale
    * from a single procedure to a whole application. A component ist either

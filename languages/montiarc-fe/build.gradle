@@ -62,11 +62,6 @@ dependencies {
       requireCapability("montiarc.languages:arc-fe-$grammars_classifier")
     }
   }
-  grammar(project(":languages:behavior-fe")) {
-    capabilities {
-      requireCapability("montiarc.languages:behavior-fe-$grammars_classifier")
-    }
-  }
 
   //MontiCore dependencies
   implementation("de.monticore.lang:statecharts:$mc_version")
@@ -82,7 +77,6 @@ dependencies {
 
   //Internal dependencies
   implementation(project(":languages:arc-fe"))
-  implementation(project(":languages:behavior-fe"))
   implementation(project(":util"))
   testImplementation(project(":languages:arc-fe").sourceSets.test.output)
   testImplementation(project(":util").sourceSets.test.output)

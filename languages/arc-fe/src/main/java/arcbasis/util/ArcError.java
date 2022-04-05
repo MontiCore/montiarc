@@ -106,7 +106,23 @@ public enum ArcError implements montiarc.util.Error {
     "'%s' is of type '%s' which is incompatible to type '%s' of the corresponding configuration parameter '%s' of " +
     "component type '%s'."),
   MALFORMED_EXPRESSION("0xC1086", "The expression at '%s' is malformed and can not be evaluated."),
-  UNRESOLVABLE_IMPORT("0xC1087", "Can't resolve imported symbol '%s'.");
+  UNRESOLVABLE_IMPORT("0xC1087", "Can't resolve imported symbol '%s'."),
+  MULTIPLE_BEHAVIOR("0xC1088",
+    "The component type %s defines multiple behaviors, but only one is allowed at max"),
+  BEHAVIOR_IN_COMPOSED_COMPONENT("0xC1089",
+    "Only atomic components may have behavior specifications, but %s is composed."),
+  NO_INITIAL_STATE("0xC1090", "The automaton of %s lacks an initial state."),
+  MANY_INITIAL_STATES("0xC1091",
+    "Automata may not have more than one initial state, but the one of %s has %d: %s and %s"),
+  SYMBOL_IN_STATECHART_MISSING("0xC1092", "Symbol '%s' not found in component '%s'."),
+  READ_FROM_OUTGOING_PORT("0xC1093", "Cannot read from the outgoing port '%s' of component '%s'."),
+  WRITE_TO_INCOMING_PORT("0xC1094", "Cannot write to the incoming port '%s' of component '%s'."),
+  WRITE_TO_READONLY_VARIABLE("0xC1095", "Cannot write to readonly variable '%s' of component '%s'."),
+  ASSIGN_TO_NOT_NAME("0xC1096", "Cannot %s %s."),
+  REDUNDANT_INITIAL_DECLARATION("0xC1097", "The state '%s' has multiple initial outputs."),
+  INITIAL_STATE_REFERENCE_MISSING("0xC1098", "The state '%s' referenced here does not exist."),
+  INPUT_PORT_IN_INITIAL_OUT_DECL("0xC1099", "Input port '%s' is referenced in the initial output declaration. This " +
+    "is illegal as input port values are undefined at the point of component initialization.");
 
   private final String errorCode;
   private final String errorMessage;

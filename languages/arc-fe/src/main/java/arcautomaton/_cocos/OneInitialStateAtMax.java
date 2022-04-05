@@ -2,9 +2,10 @@
 package arcautomaton._cocos;
 
 import arcautomaton._ast.ASTArcStatechart;
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.scbasis._ast.ASTSCState;
+import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
@@ -22,9 +23,13 @@ public class OneInitialStateAtMax implements ArcAutomatonASTArcStatechartCoCo {
     List<ASTSCState> initialStates = automaton.streamInitialStates().collect(Collectors.toList());
     int count = initialStates.size();
     if (count > 1) {
-      BehaviorError.MANY_INITIAL_STATES.logAt(initialStates.get(1), automaton.getEnclosingScope().getName(), count,
-        String.join(", ", initialStates.subList(0, count - 1).stream().map(ASTSCState::getName).toArray(String[]::new)),
-        initialStates.get(count - 1).getName()
+      Log.error(ArcError.MANY_INITIAL_STATES.format(
+          automaton.getEnclosingScope().getName(),
+          count,
+          String.join(", ", initialStates.subList(0, count - 1).stream().map(ASTSCState::getName).toArray(String[]::new)),
+          initialStates.get(count - 1).getName()
+        ),
+        initialStates.get(1).get_SourcePositionStart(), initialStates.get(1).get_SourcePositionEnd()
       );
     }
   }

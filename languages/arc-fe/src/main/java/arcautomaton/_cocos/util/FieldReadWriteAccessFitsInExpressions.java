@@ -4,7 +4,7 @@ package arcautomaton._cocos.util;
 import arcautomaton._visitor.NamesInExpressionsVisitor;
 import arcautomaton._visitor.StatechartNameResolver;
 import arcbasis._symboltable.PortSymbol;
-import arcbehaviorbasis.BehaviorError;
+import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
@@ -96,9 +96,13 @@ public class FieldReadWriteAccessFitsInExpressions {
     Preconditions.checkNotNull(enclCompTypeName);
 
     if(port.isIncoming() && accessKind.performsMutation()){
-      BehaviorError.WRITE_TO_INCOMING_PORT.logAt(astLocation, port.getName(), enclCompTypeName);
+      Log.error(ArcError.WRITE_TO_INCOMING_PORT.format(port.getName(), enclCompTypeName),
+        astLocation.get_SourcePositionStart(), astLocation.get_SourcePositionEnd()
+      );
     } else if(port.isOutgoing() && accessKind.includesRead()) {
-      BehaviorError.READ_FROM_OUTGOING_PORT.logAt(astLocation, port.getName(), enclCompTypeName);
+      Log.error(ArcError.READ_FROM_OUTGOING_PORT.format(port.getName(), enclCompTypeName),
+        astLocation.get_SourcePositionStart(), astLocation.get_SourcePositionEnd()
+      );
     }
   }
 
@@ -120,7 +124,9 @@ public class FieldReadWriteAccessFitsInExpressions {
     Preconditions.checkNotNull(enclCompTypeName);
 
     if(variable.isIsReadOnly() && accessKind.performsMutation()) {
-      BehaviorError.WRITE_TO_READONLY_VARIABLE.logAt(astLocation, variable.getName(), enclCompTypeName);
+      Log.error(ArcError.WRITE_TO_READONLY_VARIABLE.format(variable.getName(), enclCompTypeName),
+        astLocation.get_SourcePositionStart(), astLocation.get_SourcePositionEnd()
+      );
     }
   }
 }
