@@ -11,10 +11,8 @@ component MultipleStatesDeclaredInitial {
   automaton {
     state A;
     initial state B;
-    state C;
+    initial state C;
     state D;
-
-    initial C / {ringing = false;};
 
     A -> B;
     B -> C;

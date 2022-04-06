@@ -9,10 +9,8 @@ component DeepIncrement(boolean parameter) {
   double variable = 0.001;
 
   automaton {
-    state Begin;
+    initial { outPort = 0; } state Begin;
     state End;
-
-    initial Begin / { outPort = 0; };
 
     Begin -> End [6 + (inPort++ -1-2-3 + outPort++) / 6 == 7 * 6] / { outPort = 0; };
   }

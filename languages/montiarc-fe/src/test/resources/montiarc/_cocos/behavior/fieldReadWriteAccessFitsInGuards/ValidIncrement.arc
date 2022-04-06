@@ -9,9 +9,8 @@ component ValidIncrement(boolean parameter) {
   int variable = 42;
 
   automaton {
-    state Begin;
+    initial { outPort = 0; } state Begin;
     state End;
-    initial Begin / { outPort = 0; };
 
     Begin -> End [++variable > 100] / { outPort = 0; };
   }

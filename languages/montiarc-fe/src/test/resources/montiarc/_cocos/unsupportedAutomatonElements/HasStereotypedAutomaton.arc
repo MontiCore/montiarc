@@ -6,7 +6,6 @@ package unsupportedAutomatonElements;
  */
 component HasStereotypedAutomaton {
   <<stereo_sound>> automaton {
-    state Foo;
-    initial Foo / { /* empty initial output declaration */ };
+    initial state Foo;
   }
 }

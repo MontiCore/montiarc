@@ -9,9 +9,8 @@ component UsedAll(boolean parameter) {
   int variable = 42;
 
   automaton {
-    state Begin;
+    initial { outPort = 0; } state Begin;
     state End;
-    initial Begin / { outPort = 0; };
 
     Begin -> End / {
       outPort = inPort + variable;

@@ -9,9 +9,8 @@ component IncrementPort(boolean parameter) {
   double variable = 0.001;
 
   automaton {
-    state Begin;
+    initial { outPort = 0; } state Begin;
     state End;
-    initial Begin / { outPort = 0; };
 
     Begin -> End [inPort++ == 42 + outPort] / { outPort = 0; };
   }

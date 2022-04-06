@@ -10,12 +10,9 @@ component MultipleInitialOutputDeclarations {
   // invalid, because both B and C are marked as initial
   automaton {
     state A;
-    state B;
-    state C;
+    initial {ringing = false;} state B;
+    initial {ringing = false;} state C;
     state D;
-
-    initial B / {ringing = false;};
-    initial C / {ringing = false;};
 
     A -> B;
     B -> C;

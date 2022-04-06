@@ -6,9 +6,8 @@ component OneAutomaton {
   port in int number;
 
   automaton {
-    state Alpha;
+    initial {} state Alpha;
     state Beta;
-    initial Alpha / {};
 
     Alpha -> Beta;
   }

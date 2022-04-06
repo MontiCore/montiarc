@@ -12,7 +12,6 @@ component ComposedComponentWithBehavior {
   number -> inner.number;
 
   automaton {
-    state Invalid;
-    initial Invalid / {};
+    initial state Invalid;
   }
 }

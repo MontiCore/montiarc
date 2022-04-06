@@ -59,34 +59,6 @@ public interface UnsupportedAutomatonElements {
   }
 
   /**
-   * Catches the unsupported declaration of initial states by using the 'initial' modifier for states that is introduced
-   * in SCBasis. However, we have our own way to declare initial states (InitialInputOutputDeclaration) that must be
-   * used.
-   */
-  class WrongInitialStateDeclaration implements SCBasisASTSCStateCoCo {
-
-    @Override
-    public void check(@NotNull ASTSCState node) {
-      Preconditions.checkNotNull(node);
-      if(node.getSCModifier().isInitial()) {
-        Log.error(ArcError.UNSUPPORTED_MODEL_ELEMENT.format("You declared your initial state wrong. You used the " +
-            "unsupported 'initial' modifier in front of your state declaration:" +
-            "\n    initial state " + node.getName() + ";" +
-            "\n  You should declare your state separately from marking it as initial. You must also provide initial values " +
-            "for outgoing ports if you have any. The declaration should look like:" +
-            "\n    state " + node.getName() + ";" +
-            "\n    initial " + node.getName()) + "/ { " +
-            "\n      yourOutPort1 = val1;" +
-            "\n      yourOutPort2 = val2;" +
-            "\n      //..." +
-            "\n    }",
-          node.get_SourcePositionStart(), node.get_SourcePositionEnd()
-        );
-      }
-    }
-  }
-
-  /**
    * Stereotypes annotating automatons in MontiArc are not supported by MontiArc. Because they are permitted by the
    * statechart grammars, we inform the user that they will be ignored though.
    */

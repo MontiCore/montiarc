@@ -6,8 +6,7 @@ package unsupportedAutomatonElements;
  */
 component HasFinalState {
   automaton {
-    state Foo;
-    initial Foo / { /* empty initial output declaration */ };
+    initial state Foo;
 
     final state Bar;
   }

@@ -9,13 +9,11 @@ component DeepIncrement(boolean parameter) {
   boolean boolVariable = true;
 
   automaton {
-    state Begin;
-    state End;
-
-    initial Begin / {
+    initial {
       boolVariable = 6 + (inPort++ -1-2-3) / 6 == 7 * 6;
       outPort = 0;
-    };
+    } state Begin;
+    state End;
 
     Begin -> End / {
       boolVariable = 6 + (inPort++ -1-2-3) / 6 == 7 * 6;

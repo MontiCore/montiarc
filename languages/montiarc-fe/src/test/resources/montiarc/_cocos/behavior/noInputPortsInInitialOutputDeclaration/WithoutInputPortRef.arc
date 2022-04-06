@@ -13,11 +13,10 @@ component WithoutInputPortRef (int param) extends Parent {
   int field = 0;
 
   automaton {
-    state A;
-    initial A / {
+    initial {
       ownOut1 = param;
       ownOut2 = field * 2;
       ownOut3 = (field / (param != 0 ? param : 1)) + 2;
-    };
+    } state A;
   }
 }

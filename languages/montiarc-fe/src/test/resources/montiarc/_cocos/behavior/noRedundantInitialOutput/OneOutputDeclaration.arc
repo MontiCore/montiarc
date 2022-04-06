@@ -6,9 +6,8 @@ component OneOutputDeclaration {
   port out int number;
 
   automaton {
-    state Alpha;
+    initial { number = 0; } state Alpha;
     state Beta;
-    initial Alpha / { number = 0; };
 
     Alpha -> Beta;
   }

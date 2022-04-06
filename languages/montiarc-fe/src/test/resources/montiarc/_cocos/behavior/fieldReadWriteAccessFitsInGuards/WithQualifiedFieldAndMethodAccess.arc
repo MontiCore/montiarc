@@ -9,9 +9,10 @@ component WithQualifiedFieldAndMethodAccess(L l) {
   int variable = 42;
 
   automaton {
-    state Begin;
+    initial
+      { lFieldStatic = 0; lMethodStatic = 0; lField = 0; lMethod = 0; }
+      state Begin;
     state End;
-    initial Begin / { lFieldStatic = 0; lMethodStatic = 0; lField = 0; lMethod = 0; };
 
     // The reads in the guard are not reads of our out ports, but reads on fields of L/l or method invocations.
     // Thus this is valid.

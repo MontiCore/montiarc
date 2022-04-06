@@ -9,9 +9,8 @@ component SerialAssignment(boolean parameter) {
   double doubleVariable = 4.2;
 
   automaton {
-    state Begin;
+    initial { outPort = 0; } state Begin;
     state End;
-    initial Begin / { outPort = 0; };
 
     Begin -> End / {outPort = doubleVariable = inPort;};
   }

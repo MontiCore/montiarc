@@ -6,16 +6,14 @@ component TwoAutomata {
   port in int number;
 
   automaton {
-    state Alpha;
+    initial state Alpha;
     state Beta;
-    initial Alpha / {};
 
     Alpha -> Beta;
   }
 
   automaton {
-    state Gamma;
-    initial Gamma / {};
+    initial state Gamma;
 
     Gamma -> Gamma;
   }

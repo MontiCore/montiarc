@@ -4,7 +4,6 @@ package montiarc._cocos;
 import arcautomaton._cocos.FieldReadWriteAccessFitsInGuards;
 import arcautomaton._cocos.FieldReadWriteAccessFitsInStatements;
 import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
-import arcautomaton._cocos.InitialStatesResolvable;
 import arcautomaton._cocos.NoRedundantInitialOutput;
 import arcbasis._cocos.*;
 import arcbasis._cocos.NoBehaviorInComposedComponents;
@@ -74,7 +73,6 @@ public class MontiArcCoCos {
     checker.addCoCo(new FieldReadWriteAccessFitsInGuards());
     checker.addCoCo(new FieldReadWriteAccessFitsInStatements());
     checker.addCoCo(new NoRedundantInitialOutput());
-    checker.addCoCo(new InitialStatesResolvable());
     checker.addCoCo(new NoInputPortsInInitialOutputDeclaration());
     // checker.addCoCo(new ExpressionStatementWellFormedness(new MontiArcDeriveType())); // TODO: integrate coco MontiCore bug is fixed: https://git.rwth-aachen.de/monticore/monticore/-/issues/3082
 
@@ -88,7 +86,6 @@ public class MontiArcCoCos {
     checker.addCoCo(new UnsupportedAutomatonElements.EntryActions());
     checker.addCoCo(new UnsupportedAutomatonElements.ExitActions());
     checker.addCoCo(new UnsupportedAutomatonElements.FinalStates());
-    checker.addCoCo(new UnsupportedAutomatonElements.WrongInitialStateDeclaration());
     checker.addCoCo(new UnsupportedAutomatonElements.AutomatonStereotypes());
 
     return checker;

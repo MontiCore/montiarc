@@ -9,12 +9,11 @@ component ReadOutgoingPort(boolean parameter) {
   boolean boolVariable = true;
 
   automaton {
-    state Begin;
-    state End;
-    initial Begin / {
+    initial {
       boolVariable = outPort < 5;
       outPort = 0;
-    };
+    } state Begin;
+    state End;
 
     Begin -> End / {
       boolVariable = outPort < 5;

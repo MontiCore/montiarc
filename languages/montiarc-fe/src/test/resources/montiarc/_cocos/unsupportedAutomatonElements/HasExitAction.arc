@@ -6,10 +6,8 @@ package unsupportedAutomatonElements;
  */
 component HasExitAction {
   automaton {
-    state Foo {
+    initial state Foo {
       exit / { }
     };
-
-    initial Foo / { /* empty initial output declaration */ };
   }
 }

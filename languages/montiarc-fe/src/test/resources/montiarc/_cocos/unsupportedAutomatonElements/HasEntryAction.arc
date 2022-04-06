@@ -6,10 +6,8 @@ package unsupportedAutomatonElements;
  */
 component HasEntryAction {
   automaton {
-    state Foo {
+    initial state Foo {
       entry / { }
     };
-
-    initial Foo / { /* empty initial output declaration */ };
   }
 }

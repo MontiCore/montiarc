@@ -4,37 +4,36 @@ package arcautomaton._cocos;
 import arcautomaton.AbstractTest;
 import arcautomaton.ArcAutomatonMill;
 import arcautomaton._ast.ASTArcStatechart;
-import arcautomaton._ast.ASTInitialOutputDeclaration;
-import arcbasis._ast.ASTComponentType;
 import arcbasis.util.ArcError;
-import de.monticore.scactions._ast.ASTSCABody;
+import de.monticore.scbasis._ast.ASTSCSAnte;
 import de.monticore.scbasis._ast.ASTSCState;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+
+import java.util.ArrayList;
 
 public class NoRedundantInitialOutputTest extends AbstractTest {
 
   @Test
   void shouldFind2UnambiguousInitialOutputs() {
     // Given
-    // creating two initialOutputDeclarations that refer to two different states which is allowed.
-    ASTComponentType comp = provideComponentTypeWithSymbol("Comp");
+    // creating two initial states with init-outputs which is allowed.
     ASTArcStatechart automaton = ArcAutomatonMill.arcStatechartBuilder().build();
     ASTSCState fooState = provideEmptyStateWithSymbol("Foo");
     ASTSCState barState = provideEmptyStateWithSymbol("Bar");
-    ASTInitialOutputDeclaration initialFooDec = ArcAutomatonMill.initialOutputDeclarationBuilder()
-      .setName("Foo")
-      .setSCABody(Mockito.mock(ASTSCABody.class))
+    fooState.getSCModifier().setInitial(true);
+    barState.getSCModifier().setInitial(true);
+
+    ASTSCSAnte initialFooDec = ArcAutomatonMill.anteActionBuilder()
+      .setMCBlockStatementsList(new ArrayList<>())
       .build();
-    ASTInitialOutputDeclaration initialBarDec = ArcAutomatonMill.initialOutputDeclarationBuilder()
-      .setName("Bar")
-      .setSCABody(Mockito.mock(ASTSCABody.class))
+    ASTSCSAnte initialBarDec = ArcAutomatonMill.anteActionBuilder()
+      .setMCBlockStatementsList(new ArrayList<>())
       .build();
 
+    fooState.setSCSAnte(initialFooDec);
+    barState.setSCSAnte(initialBarDec);
     automaton.addSCStatechartElement(fooState);
     automaton.addSCStatechartElement(barState);
-    automaton.addSCStatechartElement(initialFooDec);
-    automaton.addSCStatechartElement(initialBarDec);
 
     // When
     NoRedundantInitialOutput coco = new NoRedundantInitialOutput();
@@ -47,21 +46,23 @@ public class NoRedundantInitialOutputTest extends AbstractTest {
   @Test
   void shouldFindRedundantInitialOutputs() {
     // Given
-    ASTComponentType comp = provideComponentTypeWithSymbol("Comp");
     ASTArcStatechart automaton = ArcAutomatonMill.arcStatechartBuilder().build();
-    ASTSCState fooState = provideEmptyStateWithSymbol("Foo");
-    ASTInitialOutputDeclaration initialDec1 = ArcAutomatonMill.initialOutputDeclarationBuilder()
-      .setName("Foo")
-      .setSCABody(Mockito.mock(ASTSCABody.class))
+    ASTSCState fooState1 = provideEmptyStateWithSymbol("Foo");
+    ASTSCState fooState2 = provideEmptyStateWithSymbol("Foo");
+    fooState1.getSCModifier().setInitial(true);
+    fooState2.getSCModifier().setInitial(true);
+
+    ASTSCSAnte initialFooDec1 = ArcAutomatonMill.anteActionBuilder()
+      .setMCBlockStatementsList(new ArrayList<>())
       .build();
-    ASTInitialOutputDeclaration initialDec2 = ArcAutomatonMill.initialOutputDeclarationBuilder()
-      .setName("Foo")
-      .setSCABody(Mockito.mock(ASTSCABody.class))
+    ASTSCSAnte initialFooDec2 = ArcAutomatonMill.anteActionBuilder()
+      .setMCBlockStatementsList(new ArrayList<>())
       .build();
 
-    automaton.addSCStatechartElement(fooState);
-    automaton.addSCStatechartElement(initialDec1);
-    automaton.addSCStatechartElement(initialDec2);
+    fooState1.setSCSAnte(initialFooDec1);
+    fooState2.setSCSAnte(initialFooDec2);
+    automaton.addSCStatechartElement(fooState1);
+    automaton.addSCStatechartElement(fooState2);
 
     // When
     NoRedundantInitialOutput coco = new NoRedundantInitialOutput();

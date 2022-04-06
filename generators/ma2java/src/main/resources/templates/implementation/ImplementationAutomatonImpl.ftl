@@ -61,7 +61,7 @@
   <#assign resultVarName = identifier.getResultName()>
   <#assign automaton = compHelper.getAutomatonBehavior().get()>
   <#assign optInitialState = automaton.streamInitialStates().findFirst()>
-  <#assign optInitialOutputDecl = automaton.streamInitialOutput().findFirst()>
+  <#assign optInitPair = automaton.streamInitialOutput().findFirst()>
 
   @Override
   public ${compName}Result ${compTypeParams} getInitialValues() {
@@ -74,10 +74,12 @@
       ${portType} ${outPort.getName()} = null;
     </#list>
 
-    <#if optInitialOutputDecl.isPresent()>
-      <#assign initialReaction = automatonHelper.scABodyToTransitionAction(optInitialOutputDecl.get().getSCABody()).getMCBlockStatement()>
+    <#if optInitPair.isPresent() && automatonHelper.isAnteAction(optInitPair.get().getRight())>
+      <#assign initialActions = automatonHelper.asAnteAction(optInitPair.get().getRight()).getMCBlockStatementList()>
       // initial reaction
-      ${compHelper.printStatement(initialReaction)}
+      <#list initialActions as initAction>
+        ${compHelper.printStatement(initAction)}
+      </#list>
     </#if>
 
     // transfer locally recorded initial port values into the result

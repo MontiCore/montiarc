@@ -6,16 +6,11 @@ component StateDeclaredInitialTwice {
        in boolean unlock;
   port out boolean ringing;
 
-
-  // valid model, because although "initial" appears twice,
-  // it references the same state
   automaton {
     state A;
     state B;
-    initial state C;
+    initial {ringing = false;} state C;
     state D;
-
-    initial C / {ringing = false;};
 
     A -> B;
     B -> C;

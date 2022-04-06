@@ -27,7 +27,6 @@ public class UnsupportedAutomatonElementsTest extends AbstractCoCoTest {
     checker.addCoCo(new UnsupportedAutomatonElements.EntryActions());
     checker.addCoCo(new UnsupportedAutomatonElements.ExitActions());
     checker.addCoCo(new UnsupportedAutomatonElements.FinalStates());
-    checker.addCoCo(new UnsupportedAutomatonElements.WrongInitialStateDeclaration());
     checker.addCoCo(new UnsupportedAutomatonElements.AutomatonStereotypes());
   }
 
@@ -37,7 +36,6 @@ public class UnsupportedAutomatonElementsTest extends AbstractCoCoTest {
       arg("HasEntryAction.arc", ArcError.UNSUPPORTED_MODEL_ELEMENT),
       arg("HasExitAction.arc", ArcError.UNSUPPORTED_MODEL_ELEMENT),
       arg("HasFinalState.arc", ArcError.UNSUPPORTED_MODEL_ELEMENT),
-      arg("HasIllegalInitialState.arc", ArcError.UNSUPPORTED_MODEL_ELEMENT),
       arg("HasStereotypedAutomaton.arc", ArcError.UNSUPPORTED_MODEL_ELEMENT)
     );
   }

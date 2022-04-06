@@ -6,10 +6,9 @@ component RedundantOutputDeclaration {
   port in int number;
 
   automaton {
-    state Alpha;
+    initial { number = 0; } state Alpha;
+    initial { number = 1; } state Alpha;
     state Beta;
-    initial Alpha / { number = 0; };
-    initial Alpha / { number = 1; };
 
     Alpha -> Beta;
   }

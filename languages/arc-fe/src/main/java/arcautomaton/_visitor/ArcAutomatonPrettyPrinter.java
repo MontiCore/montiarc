@@ -2,7 +2,6 @@
 package arcautomaton._visitor;
 
 import arcautomaton._ast.ASTArcStatechart;
-import arcautomaton._ast.ASTInitialOutputDeclaration;
 import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.scbasis._ast.ASTSCStatechartElement;
@@ -46,18 +45,5 @@ public class ArcAutomatonPrettyPrinter implements ArcAutomatonHandler, ArcAutoma
     }
     getPrinter().unindent();
     getPrinter().println("}");
-  }
-
-  @Override
-  public void handle(@NotNull ASTInitialOutputDeclaration node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkNotNull(node.getName());
-    Preconditions.checkNotNull(node.getSCABody());
-    Preconditions.checkArgument(!node.getName().isEmpty());
-    getPrinter().print("initial ");
-    getPrinter().print(node.getName());
-    getPrinter().print(" / ");
-    node.getSCABody().accept(this.getTraverser());
-    getPrinter().print(";");
   }
 }

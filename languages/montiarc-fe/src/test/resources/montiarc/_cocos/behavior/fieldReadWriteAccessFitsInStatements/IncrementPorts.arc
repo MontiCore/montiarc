@@ -9,14 +9,13 @@ component IncrementPorts(boolean parameter) {
   int variable = 42;
 
   automaton {
-    state Begin;
-    state End;
-
-    initial Begin / {
+    initial {
       variable++;
       inPort++;
       outPort++;
-    };
+    } state Begin;
+
+    state End;
 
     Begin -> End / {
       variable++;

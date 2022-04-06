@@ -42,6 +42,7 @@ dependencies {
   testmodels("montiarc.languages:montiarc-fe:$version:$testmodels_classifier")
 
   //Other dependencies
+  implementation("org.apache.commons:commons-lang3:3.9")
   implementation("org.codehaus.janino:janino:$janino_version")
   implementation("org.codehaus.groovy:groovy:$groovy_version")
   implementation("com.google.googlejavaformat:google-java-format:$java_formatter_version")

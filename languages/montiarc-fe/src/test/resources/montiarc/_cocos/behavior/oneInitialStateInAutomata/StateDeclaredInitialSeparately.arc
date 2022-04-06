@@ -12,10 +12,8 @@ component StateDeclaredInitialSeparately {
   automaton {
     state A;
     state B;
-    state C;
+    initial {ringing = false;} state C;
     state D;
-
-    initial C / {ringing = false;};
 
     A -> B;
     B -> C;

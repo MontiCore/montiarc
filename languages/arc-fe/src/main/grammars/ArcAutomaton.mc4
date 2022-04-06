@@ -13,13 +13,6 @@ component grammar ArcAutomaton extends ArcBasis,
       SCStatechartElement*
     "}";
 
-  /**
-   * This element, when used, allows defining the initial output of an automaton.
-   * Referencing a state here will mark the corresponding state as initial.
-   */
-  InitialOutputDeclaration implements SCStatechartElement =
-    "initial" Name@SCState "/" SCABody ";";
-
   // allow using statechart's keywords on other places as well
   nokeyword "initial", "final", "state";
   nokeyword "entry", "exit";

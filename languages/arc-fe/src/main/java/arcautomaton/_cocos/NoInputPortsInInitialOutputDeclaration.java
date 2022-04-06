@@ -14,6 +14,7 @@ import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
+import de.monticore.scbasis._ast.ASTSCSAnte;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -59,9 +60,10 @@ public class NoInputPortsInInitialOutputDeclaration implements ArcBasisASTCompon
     HashSet<PortReference> portReferencesToLookFor = new HashSet<>(PortReference.ofComponentTypePorts(comp));
 
     for (ASTArcStatechart automaton : extractAutomatons(astComp)) {
-      automaton.streamInitialOutput().forEach(initOut -> {
+      automaton.streamInitialOutput().forEach(initPair -> {
+        ASTSCSAnte initBlock = initPair.getRight();
         exprRootFinder.reset();
-        initOut.accept(exprRootTraverser);
+        initBlock.accept(exprRootTraverser);
         Set<ASTExpression> rootExprs = exprRootFinder.getExpressionRoots();
 
         rootExprs.forEach(expr -> checkNoInputPortContained(expr, portReferencesToLookFor, comp));

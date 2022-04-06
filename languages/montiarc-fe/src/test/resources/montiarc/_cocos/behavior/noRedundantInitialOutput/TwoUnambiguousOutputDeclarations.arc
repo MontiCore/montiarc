@@ -6,10 +6,8 @@ component TwoUnambiguousOutputDeclarations {
   port in int number;
 
   automaton {
-    state Alpha;
-    state Beta;
-    initial Alpha / { number = 0; };
-    initial Beta / { number = 1; };
+    initial { number = 0; } state Alpha;
+    initial { number = 1; } state Beta;
 
     Alpha -> Beta;
   }

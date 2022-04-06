@@ -9,13 +9,12 @@ component WithImportedMethodAccess(L parameter) {
   port out int lMethodStatic;
 
   automaton {
-    state Begin;
-    state End;
-    initial Begin / {
+    initial {
       // The right part of the assignment is not a read of our port, but an method invocation on L.
       // Thus this is valid.
       lMethodStatic = lMethodStatic();
-    };
+    } state Begin;
+    state End;
 
     Begin -> End / {
       // The right part of the assignment is not a read of our port, but an method invocation on L.

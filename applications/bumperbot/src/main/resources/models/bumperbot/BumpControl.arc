@@ -16,16 +16,17 @@ component BumpControl {
     out String log;
 
   automaton {
-    state Idle;
+    initial {
+      right = MotorCmd.STOP;
+      left = MotorCmd.STOP;
+      log = "Idle";
+    } state Idle;
+
     state Driving;
     state Backing;
     state Turning;
 
-    initial Idle / {
-      right = MotorCmd.STOP;
-      left = MotorCmd.STOP;
-      log = "Idle";
-    };
+
 
     Idle -> Driving / {
       right = MotorCmd.FORWARD;

@@ -9,9 +9,8 @@ component StrangeAssignment(boolean parameter) {
   int variable = 42;
 
   automaton {
-    state Begin;
+    initial { outPort = 0; } state Begin;
     state End;
-    initial Begin / { outPort = 0; };
 
     Begin -> End [outPort = 5.7 == 5.7] / { outPort = 0; };
   }

@@ -120,7 +120,6 @@ public enum ArcError implements montiarc.util.Error {
   WRITE_TO_READONLY_VARIABLE("0xC1095", "Cannot write to readonly variable '%s' of component '%s'."),
   ASSIGN_TO_NOT_NAME("0xC1096", "Cannot %s %s."),
   REDUNDANT_INITIAL_DECLARATION("0xC1097", "The state '%s' has multiple initial outputs."),
-  INITIAL_STATE_REFERENCE_MISSING("0xC1098", "The state '%s' referenced here does not exist."),
   INPUT_PORT_IN_INITIAL_OUT_DECL("0xC1099", "Input port '%s' is referenced in the initial output declaration. This " +
     "is illegal as input port values are undefined at the point of component initialization.");
 

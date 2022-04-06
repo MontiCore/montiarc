@@ -2,14 +2,15 @@
 package montiarc.generator.helper;
 
 import arcautomaton._ast.ASTArcStatechart;
-import arcautomaton._ast.ASTInitialOutputDeclaration;
 import com.google.common.base.Preconditions;
 import de.monticore.scactions._ast.ASTSCABody;
 import de.monticore.scactions._ast.ASTSCEntryAction;
 import de.monticore.scactions._ast.ASTSCExitAction;
+import de.monticore.scbasis._ast.ASTSCSAnte;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
+import de.monticore.sctransitions4code._ast.ASTAnteAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
@@ -32,9 +33,9 @@ public class ArcAutomatonHelper {
     return automaton.streamStates().collect(Collectors.toList());
   }
 
-  public Optional<ASTInitialOutputDeclaration> getInitialOutputDecl() {
+  public Optional<ASTSCSAnte> getInitialOutputDecl() {
     Preconditions.checkNotNull(automaton);
-    return automaton.streamInitialOutput().findFirst();
+    return automaton.streamInitialOutput().findFirst().map(o -> o.getRight());
   }
 
   public List<ASTSCTransition> getTransitionsFrom(@NotNull ASTSCState srcState) {
@@ -82,6 +83,15 @@ public class ArcAutomatonHelper {
   public ASTTransitionAction scABodyToTransitionAction(@NotNull ASTSCABody action) {
     Preconditions.checkNotNull(action);
     return (ASTTransitionAction) action;
+  }
+
+  public boolean isAnteAction(@NotNull ASTSCSAnte ante) {
+    Preconditions.checkNotNull(ante);
+    return ante instanceof ASTAnteAction;
+  }
+
+  public ASTAnteAction asAnteAction(@NotNull ASTSCSAnte ante) {
+    return (ASTAnteAction) ante;
   }
 
   public boolean hasTransitionWithoutGuardFrom(@NotNull ASTSCState srcState) {

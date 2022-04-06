@@ -9,9 +9,8 @@ component ReadOutgoingPort(boolean parameter) {
   int variable = 42;
 
   automaton {
-    state Begin;
+    initial { outPort1 = 0; outPort2 = 0; } state Begin;
     state End;
-    initial Begin / { outPort1 = 0; outPort2 = 0; };
 
     Begin -> End [outPort1 < 5 + outPort2] / { outPort1 = 0; outPort2 = 0; };
   }

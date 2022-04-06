@@ -1,8 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcautomaton._ast;
 
+import de.monticore.scbasis._ast.ASTSCSAnte;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCTransition;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.stream.Stream;
 
@@ -13,17 +15,17 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
    */
   public Stream<ASTSCTransition> streamTransitions() {
     return streamSCStatechartElements()
-      .filter(e -> e instanceof ASTSCTransition)
-      .map(t -> (ASTSCTransition) t);
+      .filter(ASTSCTransition.class::isInstance)
+      .map(ASTSCTransition.class::cast);
   }
 
   /**
-   * @return all nodes that define init-actions of this statechart
+   * @return all initial states together with their init-action. Note that if one initial state is declared multiple
+   * times (probably by mistake) then all its declarations are contained in the stream, together with their
+   * corresponding init action.
    */
-  public Stream<ASTInitialOutputDeclaration> streamInitialOutput() {
-    return streamSCStatechartElements()
-      .filter(e -> e instanceof ASTInitialOutputDeclaration)
-      .map(o -> (ASTInitialOutputDeclaration) o);
+  public Stream<Pair<ASTSCState, ASTSCSAnte>> streamInitialOutput() {
+    return streamInitialStates().map(state -> Pair.of(state, state.getSCSAnte()));
   }
 
   /**
@@ -31,18 +33,15 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
    */
   public Stream<ASTSCState> streamStates() {
     return streamSCStatechartElements()
-      .filter(e -> e instanceof ASTSCState)
-      .map(s -> (ASTSCState) s);
+      .filter(ASTSCState.class::isInstance)
+      .map(ASTSCState.class::cast);
   }
 
   /**
-   * @return a stream containing all initial states of this statechart, regardless of how they are defined as initial
+   * @return a stream containing all initial states of this statechart. Note that if one initial state is declared
+   * multiple times (probably by mistake) then all its declarations are contained in the stream.
    */
   public Stream<ASTSCState> streamInitialStates() {
-    return Stream.concat(
-      streamStates().filter(s -> s.getSCModifier().isInitial()),
-      streamInitialOutput().filter(ASTInitialOutputDeclaration::isPresentNameDefinition)
-        .map(ASTInitialOutputDeclaration::getNameDefinition))
-      .distinct();
+    return streamStates().filter(s -> s.getSCModifier().isInitial());
   }
 }

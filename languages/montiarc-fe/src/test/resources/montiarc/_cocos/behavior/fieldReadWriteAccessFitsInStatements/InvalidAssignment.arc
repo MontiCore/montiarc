@@ -9,12 +9,11 @@ component InvalidAssignment(boolean parameter) {
   int variable = 42;
 
   automaton {
-    state Begin;
-    state End;
-    initial Begin / {
+    initial {
       inPort = 5.7;
       outPort = 0;
-    };
+    } state Begin;
+    state End;
 
     Begin -> End / {
       inPort = 5.7;

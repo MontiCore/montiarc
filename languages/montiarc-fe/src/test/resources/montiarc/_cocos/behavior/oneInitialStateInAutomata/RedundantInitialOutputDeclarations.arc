@@ -10,12 +10,10 @@ component RedundantInitialOutputDeclarations {
   // invalid, because B has multiple initial outputs
   automaton {
     state A;
-    state B;
+    initial {ringing = true;} state B;
+    initial {ringing = false;} state B;
     state C;
     state D;
-
-    initial B / {ringing = true;};
-    initial B / {ringing = false;};
 
     A -> B;
     B -> C;
