@@ -2,7 +2,7 @@
 package dsim.comp
 
 import dsim.log.log
-import dsim.modeautomata.ITransitionTrigger
+import dsim.modeautomata.IGuardInterface
 import dsim.modeautomata.ModeAutomaton
 import dsim.msg.Message
 import dsim.port.IDataSource
@@ -15,7 +15,7 @@ import dsim.sched.util.TickEvent
 import kotlinx.coroutines.flow.collect
 
 class DecomposedComponentWithPortReconfiguringSubcomponent(name: String) : ADecomposedComponent(name) {
-  private val trigger = object: ITransitionTrigger {
+  private val trigger = object: IGuardInterface {
     override val subcomponents: Set<ISubcomponentForTransition>
       get() = this@DecomposedComponentWithPortReconfiguringSubcomponent.subcomponents
     override val inputPorts: Set<IDataSource>
@@ -31,31 +31,31 @@ class DecomposedComponentWithPortReconfiguringSubcomponent(name: String) : ADeco
 
     component(PortReconfiguringSubcomponent("prsc"))
 
-    modeAutomaton.mode(initial = true, "default") {
+    modeAutomaton.addMode("default", initial = true) {
       disconnectAll()
       connect(getInputPort("input"), getSubcomponent("prsc").getInputPort("input"))
     }
 
-    modeAutomaton.mode("id") {
+    modeAutomaton.addMode("id") {
       log("this should happen")
       disconnectAll()
       connect(getInputPort("input"), getSubcomponent("prsc").getInputPort("input"))
       connect(getSubcomponent("prsc").getOutputPort("id out"), getOutputPort("output"))
     }
 
-    modeAutomaton.transition("id", "default") {
+    modeAutomaton.addTransition("id", "default") {
       lastEvent?.port == getSubcomponent("prsc").getOutputPort("log out") &&
           lastEvent?.msg == Message("removed id port")
     }
 
-    modeAutomaton.transition("default", "id") {
+    modeAutomaton.addTransition("default", "id") {
       lastEvent?.port == getSubcomponent("prsc").getOutputPort("log out") &&
           lastEvent?.msg?.payload == "added id port"
     }
   }
 
   override suspend fun behavior() {
-    reconfigure(modeAutomaton.update())
+    reconfigure(modeAutomaton.currentMode)
 
     dcUntimedSchedule(inputPorts, subcomponents).collect { event ->
       when(event) {

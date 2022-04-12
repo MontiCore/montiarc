@@ -12,7 +12,7 @@ import org.junit.Test
 class ModeAutomatonTest {
   @Test
   fun `mode automata select modes according to transitions`() {
-    val trigger = object : ITransitionTrigger {
+    val trigger = object : IGuardInterface {
       override val inputPorts: Set<IDataSource> = setOf(port<String>("input"))
       override val subcomponents: Set<ISubcomponentForTransition> = setOf()
       override val lastEvent = SingleMessageEvent(getInputPort("input"), Message("test message"))
@@ -21,13 +21,13 @@ class ModeAutomatonTest {
     val modeAutomaton = ModeAutomaton(trigger)
 
     // Initial mode
-    modeAutomaton.mode(initial = true, "mode A") {  }
+    modeAutomaton.addMode("mode A", initial = true) {  }
 
     // Next mode
-    modeAutomaton.mode("mode B") {  }
+    modeAutomaton.addMode("mode B") {  }
 
     // Transition to mode B if test message is received
-    modeAutomaton.transition("mode A", "mode B") { lastEvent.msg.payload == "test message" }
+    modeAutomaton.addTransition("mode A", "mode B") { lastEvent.msg.payload == "test message" }
 
     // Test Code------------------------------------------------------------
 

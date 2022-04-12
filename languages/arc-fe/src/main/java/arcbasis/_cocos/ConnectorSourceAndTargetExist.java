@@ -62,7 +62,6 @@ public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCo
     Preconditions.checkNotNull(port);
     Preconditions.checkNotNull(enclComp);
     Preconditions.checkNotNull(connector);
-    Preconditions.checkArgument(port.getEnclosingScope().equals(enclComp.getSpannedScope()));
     Preconditions.checkArgument(connector.getSource().equals(port)
       || connector.getTargetList().stream().anyMatch( tgt -> tgt.equals(port))
     );
@@ -130,7 +129,6 @@ public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCo
     Preconditions.checkNotNull(port);
     Preconditions.checkNotNull(connectorOfPort);
     Preconditions.checkNotNull(enclComp);
-    Preconditions.checkArgument(port.getEnclosingScope().equals(enclComp.getSpannedScope()));
     Preconditions.checkArgument(connectorOfPort.getSource().equals(port)
       || connectorOfPort.getTargetList().stream().anyMatch( tgt -> tgt.equals(port))
     );

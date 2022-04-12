@@ -137,6 +137,7 @@ task buildAll(type: Task) {
 	dependsOn(":libraries:majava-rte:build")
 	dependsOn(":generators:cd2pojo:build")
 	dependsOn(":generators:ma2java:build")
+	dependsOn(":generators:ma2ktln:build")
 	dependsOn(":applications:bumperbot:build")
 	dependsOn(":applications:factory:build")
 	dependsOn(":applications:factoryTask:build")
@@ -153,9 +154,11 @@ task cleanAll(type: Delete) {
 	dependsOn(":libraries:majava-rte:clean")
 	dependsOn(":generators:cd2pojo:clean")
 	dependsOn(":generators:ma2java:clean")
+	dependsOn(":generators:ma2ktln:clean")
 	dependsOn(":applications:bumperbot:clean")
 	dependsOn(":applications:factory:clean")
 	dependsOn(":applications:factoryTask:clean")
+	dependsOn(":applications:lightControl:clean")
 }
 
 repositories {
@@ -219,9 +222,11 @@ def jacocoProjectsToAggregate = [
     //project(":libraries:majava-rte"),
     project(":generators:cd2pojo"),
     project(":generators:ma2java"),
+    project(":generators:ma2ktln"),
     //project(":applications:bumperbot"),
     //project(":applications:factory"),
     //project(":applications:factoryTask"),
+    //project(":applications:lightControl"),
 ].toSet()
 
 jacocoProjectsToAggregate.each {

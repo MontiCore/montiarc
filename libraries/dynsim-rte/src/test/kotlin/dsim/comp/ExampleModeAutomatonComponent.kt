@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package dsim.comp
 
-import dsim.modeautomata.ITransitionTrigger
+import dsim.modeautomata.IGuardInterface
 import dsim.modeautomata.ModeAutomaton
 import dsim.port.util.port
 import dsim.sched.util.SingleMessageEvent
@@ -11,7 +11,7 @@ import dsim.sched.util.TickEvent
 import kotlinx.coroutines.flow.collect
 
 class ExampleModeAutomatonComponent(name: String) : ADecomposedComponent(name) {
-  private val transitionTrigger = object : ITransitionTrigger {
+  private val transitionTrigger = object : IGuardInterface {
     override val inputPorts get() = this@ExampleModeAutomatonComponent.inputPorts
     override val subcomponents get() = this@ExampleModeAutomatonComponent.subcomponents
 
@@ -26,24 +26,25 @@ class ExampleModeAutomatonComponent(name: String) : ADecomposedComponent(name) {
     addOutPort(port<String>("output1"))
     addOutPort(port<String>("output2"))
 
-    modeAutomaton.mode(initial = true, "mode A") {
+    modeAutomaton.addMode("mode A", initial = true) {
       disconnectAll()
       connect(getInputPort("input"), getOutputPort("output1"))
     }
-    modeAutomaton.mode("mode B") {
+    modeAutomaton.addMode("mode B") {
       disconnectAll()
       connect(getInputPort("input"), getOutputPort("output2"))
     }
 
-    modeAutomaton.transition("mode B", "mode A") {
+    modeAutomaton.addTransition("mode B", "mode A") {
       lastEvent?.port == getInputPort("switch") &&
           lastEvent?.msg?.payload == "switch to A"
     }
 
-    modeAutomaton.transition("mode A", "mode B") {
+    modeAutomaton.addTransition("mode A", "mode B") {
       lastEvent?.port == getInputPort("switch") &&
           lastEvent?.msg?.payload == "switch to B"
     }
+    reconfigure(modeAutomaton.currentMode)
   }
 
   /**

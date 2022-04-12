@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.flow
 fun untimedSchedule(inputs: Collection<IDataSource>, scs: Collection<ISubcomponent> = setOf()) = flow {
   while (true) {
 
-    val (p, m) = nextMessage(inputs + scs.flatMap { it.outputPorts })
+    val (p, m) = nextMessageOrDummy(inputs + scs.flatMap { it.outputPorts })
 
     when (m) {
       is Message -> {
@@ -41,7 +41,7 @@ fun timedSchedule(inputs: Collection<IDataSource>, scs: Collection<ISubcomponent
     }
     // otherwise, schedule next message
     else {
-      val (p, m) = nextMessage((inputsSnapshot).filter { it !in blocked })
+      val (p, m) = nextMessageOrDummy((inputsSnapshot).filter { it !in blocked })
 
       when (m) {
         is Message -> {
@@ -60,6 +60,8 @@ fun timedSchedule(inputs: Collection<IDataSource>, scs: Collection<ISubcomponent
 }
 
 fun syncSchedule(inputs: Collection<IDataSource>, scs: Collection<ISubcomponent> = setOf()) = flow {
+  println("Sync schedule of component with subcomponents${scs.map { r->r.name+", " }}")
+
   val blocked: MutableSet<IDataSource> = mutableSetOf()
 
   val bufferedSyncEvent: MutableMap<IDataSource, Message> = mutableMapOf()
@@ -78,7 +80,7 @@ fun syncSchedule(inputs: Collection<IDataSource>, scs: Collection<ISubcomponent>
     }
     // Otherwise, schedule next message
     else {
-      val (p, m) = nextMessage(inputsSnapshot.filter { it !in blocked })
+      val (p, m) = nextMessageOrNull(inputsSnapshot.filter { it !in blocked })?:continue
 
       when (m) {
         is Message -> {

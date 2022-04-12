@@ -6,10 +6,7 @@ import dsim.log.log
 import dsim.msg.Message
 import dsim.msg.Tick
 import dsim.port.IDataSource
-import dsim.sched.util.SingleMessageEvent
-import dsim.sched.util.SyncEvent
-import dsim.sched.util.TickEvent
-import dsim.sched.util.nextMessage
+import dsim.sched.util.*
 import kotlinx.coroutines.flow.flow
 
 /**
@@ -22,7 +19,7 @@ import kotlinx.coroutines.flow.flow
 fun untimedSchedule(inputs: Collection<IDataSource>, scs: Collection<ISubcomponent> = setOf()) = flow {
   while (true) {
 
-    val (p, m) = nextMessage(inputs + scs.flatMap { it.outputPorts })
+    val (p, m) = nextMessageOrDummy(inputs + scs.flatMap { it.outputPorts })
 
     when (m) {
       is Message -> {
@@ -48,7 +45,7 @@ fun timedSchedule(inputs: Collection<IDataSource>, scs: Collection<ISubcomponent
       emit(TickEvent())
     }
 
-    val (p, m) = nextMessage((inputs + scs.flatMap { it.outputPorts }).filter { it !in blocked })
+    val (p, m) = nextMessageOrDummy((inputs + scs.flatMap { it.outputPorts }).filter { it !in blocked })
 
     when (m) {
       is Message -> {
@@ -84,7 +81,7 @@ fun syncSchedule(inputs: Collection<IDataSource>, scs: Collection<ISubcomponent>
       emit(TickEvent())
     }
 
-    val (p, m) = nextMessage((inputs + scs.flatMap { it.outputPorts }).filter { it !in blocked })
+    val (p, m) = nextMessageOrNull((inputs + scs.flatMap { it.outputPorts }).filter { it !in blocked })?:continue
 
     when (m) {
       is Message -> {

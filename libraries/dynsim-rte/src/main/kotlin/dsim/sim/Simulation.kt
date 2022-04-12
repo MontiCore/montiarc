@@ -4,7 +4,9 @@ package dsim.sim
 import dsim.comp.ISimulatable
 import dsim.log.log
 import dsim.msg.IMessage
+import dsim.msg.Message
 import dsim.msg.Tick
+import dsim.sched.util.CONTROL_PORT
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
@@ -38,13 +40,38 @@ class Simulation(private val comp: ISimulatable, private val scope: CoroutineSco
     log("simulation stopped")
   }
 
-  override suspend fun tickInputs() = inputs.forEach { (_, port) -> port.send(Tick()) }
+  override suspend fun tickInputs() {
+    inputs[CONTROL_PORT]?.send(Message(Unit))
+    inputs.forEach { (_, port) -> port.send(Tick()) }
+  }
+
   override suspend fun tickAtOutputs(): Boolean {
     outputs.forEach { (_, port) ->
       if (port.receive() !is Tick) return false
     }
     return true
   }
+
+  enum class F{OO, A}
+  var f = F.OO
+
+  suspend fun fs(){
+    f =
+      when (f){
+      F.OO -> {
+        f
+      }
+        F.A -> {
+          if (true){
+            F.OO
+          } else{
+            f
+          }
+        }
+
+
+        }
+      }
 
   override fun toString(): String = "simulation of $comp"
 }

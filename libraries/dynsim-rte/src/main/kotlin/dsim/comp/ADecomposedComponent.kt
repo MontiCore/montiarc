@@ -7,24 +7,48 @@ import dsim.msg.IMessage
 import dsim.msg.Tick
 import dsim.port.IDataSink
 import dsim.port.IDataSource
+import dsim.port.IPort
 import dsim.port.util.Connector
-import dsim.port.util.connector
+import dsim.port.util.rangeTo
 import dsim.sched.util.ForwardEvent
-import dsim.sched.util.IEvent
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ClosedSendChannelException
+import java.util.*
+import java.util.function.Predicate
+import kotlin.collections.HashSet
 
 abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigurable {
 
-  override val subcomponents: MutableSet<ISubcomponent> = mutableSetOf()
+  /**
+   * Contains all current subcomponents of this component and their status.
+   * It is a list, because when searching components by name, the ones added most recently should be found.
+   * By default, cocos forbid duplicated names, but in reconfiguration actions cocos are less influential.
+   */
+  private val _subcomponents: MutableList<Entry<ISubcomponent>> = LinkedList() // linked list, because no random access needed, but frequent removing-operations
+  override val subcomponents = object : Set<ISubcomponent> { // return a reference, not a copy to the original collection
+    override val size = _subcomponents.size
+    override fun contains(element: ISubcomponent) = _subcomponents.map {e -> e.get()}.contains(element)
+    override fun containsAll(elements: Collection<ISubcomponent>) = _subcomponents.map {e -> e.get()}.containsAll(elements)
+    override fun isEmpty() = _subcomponents.isEmpty()
+    override fun iterator() = _subcomponents.map {e -> e.get()}.iterator()
+  }
 
-  private val _connectors: MutableSet<Connector> = mutableSetOf()
+  /**
+   * contains all connectors of this component.
+   * This should maybe be implemented by something else than a set,
+   * since remove-operations are frequent.
+   */
+  private val _connectors: MutableCollection<Entry<Connector>> = mutableSetOf()
 
-  //Helper attributes
-  private var _currentReconfiguration: IReconfiguration? = null
-  private val _deactivatedSCs: MutableSet<ISubcomponent> = mutableSetOf()
+  /**
+   * marks ports as deactivated
+   */
   private val _deactivatedPorts: MutableSet<IDataSink> = mutableSetOf()
-  private val _temporarySCs: MutableSet<ISubcomponent> = mutableSetOf()
+
+  /**
+   * marks ports as temporary
+   */
+  private val _temporaryPorts: MutableSet<IPort> = mutableSetOf()
   // private val newSCs: Channel<IComponent> = Channel()
 
   private var _scope: CoroutineScope? = null
@@ -33,6 +57,7 @@ abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigu
 
 
   init {
+
     log("component created")
   }
 
@@ -55,24 +80,27 @@ abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigu
    */
 
   final override fun getSubcomponent(name: String): ISubcomponent {
-    return subcomponents.find { it.name == name } ?: throw NoSuchSubcomponentException()
+    return _subcomponents.reversed().find { it.get().name == name }?.get() ?: throw NoSuchSubcomponentException()
   }
 
   /**
    * Forwards received message [msg] to all ports with a connector from [from] to them.
    */
   protected suspend fun forward(from: IDataSource, msg: IMessage) {
-    _connectors.filter { it.base == from }.forEach {
-      if (it.target !in _deactivatedPorts) {
+    _connectors.filter { it.activated }
+            .map { it.get() }
+            .filter { it.base == from }
+            .filterNot { it.target in _deactivatedPorts }
+            .forEach {
         try {
           if (msg !is Tick || it.target !in outputPorts) {
             it.target.pushMsg(msg)
           }
         } catch (e: ClosedSendChannelException) {
-          _connectors.remove(it)
+          disconnect(it)
+          // todo: why remove - not add?
           _deactivatedPorts.remove(it.target)
         }
-      }
     }
   }
 
@@ -80,34 +108,22 @@ abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigu
     forward(event.port, event.msg)
   }
 
-  protected suspend fun tickOutputs() {
-    outputPorts.forEach { it.pushMsg(Tick()) }
-  }
-
   /**
    * Makes the Component assume the Configuration described
    * by applying the change script to self.
    */
   protected fun reconfigure(config: IReconfiguration) {
-    // Don't reconfigure if configuration already present
-    if (_currentReconfiguration == config) return
-
-    removeTemporarySCs()
     val changeScript = config.changeScript
     this.changeScript()
-
-    _currentReconfiguration = config
   }
 
   /**
-   * Removes all subcomponents from _subcomponents which are marked as temporary
-   * by being in _temporarySCs.
+   * removes all sub-elements that are marked as temporary
    */
-  private fun removeTemporarySCs() {
-    _temporarySCs.forEach {
-      delete(it)
-    }
-    _temporarySCs.clear()
+  protected fun removeTemporaryElements(){
+    _connectors.removeIf { !it.isPermanent() }
+    _subcomponents.filter { !it.isPermanent() }.forEach{ delete(it.get()); }
+    _temporaryPorts.forEach { removeInPort(it); removeOutPort(it) }
   }
 
   // Initialization methods===================================================
@@ -117,7 +133,7 @@ abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigu
    */
   protected fun component(comp: ISubcomponent) {
     if (comp is IComponent) {
-      subcomponents.add(comp)
+      _subcomponents.add(Entry(comp, permanent = true))
     }
   }
 
@@ -130,12 +146,11 @@ abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigu
    * and is a true IComponent
    */
   final override fun activate(comp: ISubcomponent?) {
-    comp?.let {
-      if (it in _deactivatedSCs && it is IComponent) {
-        // Only allow adding true IComponents
-        _deactivatedSCs.remove(it)
-        subcomponents.add(it)
-        it.inputPorts.forEach { activatePort(it) }
+    // Only allow adding true IComponents
+    if (comp is IComponent) {
+      _subcomponents.find { e -> e.get() == comp}?.let { entry ->
+        entry.activated = true
+        comp.inputPorts.forEach { activatePort(it) }
       }
     }
   }
@@ -149,10 +164,9 @@ abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigu
    * and is a true IComponent
    */
   final override fun deactivate(comp: ISubcomponent?) {
-    comp?.let {
-      if (comp in subcomponents && comp is IComponent) {
-        subcomponents.remove(comp)
-        _deactivatedSCs.add(comp)
+    if (comp is IComponent) {
+      _subcomponents.find { e -> e.get() == comp}?.let { entry ->
+        entry.activated = false
         comp.inputPorts.forEach { deactivatePort(it) }
       }
     }
@@ -166,35 +180,18 @@ abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigu
    * Deactivates all currently active subcomponents.
    */
   final override fun deactivateAll() {
-    subcomponents.forEach { comp ->
-      subcomponents.remove(comp)
-      _deactivatedSCs.add(comp)
-      comp.inputPorts.forEach { deactivatePort(it) }
-    }
+    _subcomponents.filter { it.activated }.forEach { it.get().inputPorts.forEach { p -> deactivatePort(p) }}
+    _subcomponents.forEach { it.activated = false }
   }
 
   /**
    * Permanently adds given subcomponent to subcomponents.
    * Also activates it.
    */
-  final override fun create(comp: ISubcomponent) {
+  final override fun create(comp: ISubcomponent, permanent: Boolean) {
     if (comp is IComponent) {
-      subcomponents.add(comp)
+      _subcomponents.add(Entry(comp, permanent))
       // newSCs.send(comp)
-
-      if (_scope?.isActive == true) {
-        _scope?.launch {
-          comp()
-        }
-      }
-    }
-  }
-
-  final override fun temp(comp: ISubcomponent) {
-    if (comp is IComponent) {
-      subcomponents.add(comp)
-      // newSCs.send(comp)
-      _temporarySCs.add(comp)
 
       if (_scope?.isActive == true) {
         _scope?.launch {
@@ -210,17 +207,16 @@ abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigu
    */
   final override fun delete(comp: ISubcomponent) {
     if (comp is IComponent) {
-      subcomponents.remove(comp)
-      _deactivatedSCs.remove(comp)
+      _subcomponents.removeIf { it.get() == comp }
 
       // Remove all connectors to [comp]
       comp.inputPorts.forEach { port ->
-        _connectors.removeIf { it.target == port }
+        _connectors.removeIf { it.get().target == port }
       }
 
       // Remove all connectors from [comp]
       comp.outputPorts.forEach { port ->
-        _connectors.removeIf { it.base == port }
+        _connectors.removeIf { it.get().base == port }
       }
     }
 
@@ -231,8 +227,7 @@ abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigu
    * Deletes all subcomponents, active or not.
    */
   final override fun deleteAll() {
-    subcomponents.clear()
-    _deactivatedSCs.clear()
+    _subcomponents.clear()
 
     // TODO: Cancel coroutines
   }
@@ -242,9 +237,9 @@ abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigu
   /**
    * Add a connector from [base] to [target] if both exist
    */
-  final override fun connect(base: IDataSource?, target: IDataSink?) {
+  final override fun connect(base: IDataSource?, target: IDataSink?, permanent: Boolean) {
     if (target != null && base != null) {
-      connector(base, target).let { _connectors.add(it) }
+      connect(base..target, permanent)
     }
   }
 
@@ -253,22 +248,22 @@ abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigu
    */
   final override fun disconnect(base: IDataSource?, target: IDataSink?) {
     if (target != null && base != null) {
-      _connectors.removeIf { it.base == base && it.target == target }
+      _connectors.removeIf { it.get().base == base && it.get().target == target }
     }
   }
 
   /**
    * Add given connector to this component
    */
-  final override fun connect(conn: Connector) {
-    _connectors.add(conn)
+  final override fun connect(conn: Connector, permanent: Boolean) {
+    _connectors.add(Entry(conn, permanent))
   }
 
   /**
    * Remove given connector from this component
    */
   final override fun disconnect(conn: Connector) {
-    _connectors.remove(conn)
+    _connectors.removeIf{it.get() == conn}
   }
 
   /**
@@ -276,5 +271,49 @@ abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigu
    */
   final override fun disconnectAll() {
     _connectors.clear()
+  }
+
+  // Ports---------------------------------------------------------------
+  /**
+   * creates a port that is not permanent, which means it will be deleted at the next mode-change
+   */
+  fun addTemporaryPort(incoming:Boolean=true, port:IPort){
+    _temporaryPorts.add(port)
+    if (incoming) {
+      addInPort(port)
+    } else {
+      addOutPort(port)
+    }
+  }
+}
+
+/**
+ * allows for storing arc-elements together with some attributes that describe their state in the dynamic world
+ */
+data class Entry<E:Any>(private val element: E, private val permanent:Boolean, var activated: Boolean = true){
+  /**
+   * the entry
+   */
+  fun get():E{
+    return element
+  }
+
+  /**
+   * permanent elements are not removed until explicitly requested to.
+   * temporary elements are removed every mode-change
+   */
+  fun isPermanent():Boolean{
+    return permanent
+  }
+
+  override fun hashCode(): Int {
+    return get().hashCode()
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other is Entry<*>){
+      return get() == other.get()
+    }
+    return false
   }
 }

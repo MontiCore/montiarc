@@ -12,7 +12,7 @@ import dsim.sched.util.IEvent
  * Methods implementing this interface should not change the internal
  * state of the class, i.e. be side-effect-free.
  */
-interface ITransitionTrigger {
+interface IGuardInterface {
 
   /**
    * Gets own subcomponents as Subcomponents for Transition,
@@ -25,5 +25,8 @@ interface ITransitionTrigger {
   val inputPorts: Set<IDataSource>
   fun getInputPort(name: String) = inputPorts.find { it.name == name } ?: throw NoSuchPortException(name)
 
+  /**
+   * the most recent event that happened and can now be used in transition-guards
+   */
   val lastEvent: IEvent?
 }

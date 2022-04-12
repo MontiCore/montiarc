@@ -8,6 +8,7 @@ import arcautomaton._cocos.NoRedundantInitialOutput;
 import arcbasis._cocos.*;
 import arcbasis._cocos.NoBehaviorInComposedComponents;
 import arcbasis._cocos.OnlyOneBehavior;
+import basicmodeautomata._cocos.StaticCheckOfDynamicTypes;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
 import de.monticore.scbasis._cocos.UniqueStates;
@@ -53,8 +54,6 @@ public class MontiArcCoCos {
     checker.addCoCo(new PortNameCapitalisation());
     checker.addCoCo(new PortTypeExists(new CheckTypeExistence4MontiArc()));
     checker.addCoCo(new PortUniqueSender());
-    checker.addCoCo(new PortUsage());
-    checker.addCoCo(new SubComponentsConnected());
     checker.addCoCo(new UniqueIdentifierNames());
     
     // GenericArc CoCos
@@ -83,11 +82,16 @@ public class MontiArcCoCos {
     checker.addCoCo(new UnresolvableImport());
 
     // Block unsupported model elements
-    checker.addCoCo(new UnsupportedAutomatonElements.EntryActions());
-    checker.addCoCo(new UnsupportedAutomatonElements.ExitActions());
+//    checker.addCoCo(new UnsupportedAutomatonElements.EntryActions());
+//    checker.addCoCo(new UnsupportedAutomatonElements.ExitActions());
     checker.addCoCo(new UnsupportedAutomatonElements.FinalStates());
     checker.addCoCo(new UnsupportedAutomatonElements.AutomatonStereotypes());
 
+    // dynamic coco-checks
+    checker.addCoCo(new StaticCheckOfDynamicTypes(checker.getTraverser()::getArcBasisVisitorList,
+        new SubComponentsConnected(),
+        new PortUsage()
+    ));
     return checker;
   }
 }

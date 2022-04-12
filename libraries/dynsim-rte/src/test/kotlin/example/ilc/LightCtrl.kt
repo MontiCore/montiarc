@@ -3,7 +3,7 @@ package example.ilc
 
 import dsim.comp.ADecomposedComponent
 import dsim.comp.ISubcomponentForTransition
-import dsim.modeautomata.ITransitionTrigger
+import dsim.modeautomata.IGuardInterface
 import dsim.modeautomata.ModeAutomaton
 import dsim.port.IDataSource
 import dsim.port.Port
@@ -18,7 +18,7 @@ import example.ilc.signals.*
 class LightCtrl(name: String) : ADecomposedComponent(name) {
 
   // Mode Automaton
-  private val trigger = object : ITransitionTrigger {
+  private val trigger = object : IGuardInterface {
     override val subcomponents: Set<ISubcomponentForTransition>
       get() = this@LightCtrl.subcomponents
     override val inputPorts: Set<IDataSource>
@@ -35,7 +35,7 @@ class LightCtrl(name: String) : ADecomposedComponent(name) {
 
     create(Arbiter("arbiter"))
 
-    modeAut.mode(initial = true, "Default") {
+    modeAut.addMode("Default", initial = true) {
       // cleanup
       subcomponents.filter { it.name !in setOf("doorEval", "motorEval", "arbiter") }
           .forEach { delete(it) }
@@ -56,7 +56,7 @@ class LightCtrl(name: String) : ADecomposedComponent(name) {
       connect(getSubcomponent("arbiter").getOutputPort("lightCmd"), getOutputPort("cmd"))
     }
 
-    modeAut.mode("Comfort") {
+    modeAut.addMode("Comfort") {
       subcomponents.filter { it.name !in setOf("motorEval", "arbiter") }
           .forEach { delete(it) }
       inputPorts.filter { it.name !in setOf("motorStatus", "modeCmd") }
@@ -75,14 +75,14 @@ class LightCtrl(name: String) : ADecomposedComponent(name) {
       connect(getSubcomponent("arbiter").getOutputPort("lightCmd"), getOutputPort("cmd"))
     }
 
-    modeAut.transition("Default", "Comfort") {
+    modeAut.addTransition("Default", "Comfort") {
       lastEvent?.get(getInputPort("modeCmd"))?.payload == ModeCmd.COMFORT
     }
-    modeAut.transition("Comfort", "Default") {
+    modeAut.addTransition("Comfort", "Default") {
       lastEvent?.get(getInputPort("modeCmd"))?.payload == ModeCmd.DEFAULT
     }
 
-    reconfigure(modeAut.update())
+    reconfigure(modeAut.currentMode)
 
   }
 

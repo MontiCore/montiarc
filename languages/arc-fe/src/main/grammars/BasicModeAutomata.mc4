@@ -50,6 +50,6 @@ component grammar BasicModeAutomata extends ArcBasis,
   ReconfigurationEvent implements SCEvent = event:Name Arguments;
 
   // allow using statechart's keywords on other places as well
-  nokeyword "entry", "exit", "final", "mode";
+  // nokeyword "entry", "exit", "final", "mode";
 
 }

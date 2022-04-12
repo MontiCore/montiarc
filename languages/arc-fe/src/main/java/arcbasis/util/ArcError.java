@@ -121,7 +121,9 @@ public enum ArcError implements montiarc.util.Error {
   ASSIGN_TO_NOT_NAME("0xC1096", "Cannot %s %s."),
   REDUNDANT_INITIAL_DECLARATION("0xC1097", "The state '%s' has multiple initial outputs."),
   INPUT_PORT_IN_INITIAL_OUT_DECL("0xC1099", "Input port '%s' is referenced in the initial output declaration. This " +
-    "is illegal as input port values are undefined at the point of component initialization.");
+    "is illegal as input port values are undefined at the point of component initialization."),
+  PORT_NOT_WRITTEN_IN_TRANSITION("0xC1200", "There is a transition, which, when followed, leaves port '%s' without a value."),
+  PORT_NOT_WRITTEN_IN_STATE("0xC1201", "When staying in state '%s' (which might happen, because there is no unconditional transition leaving that state), port '%s' is left without a value");
 
   private final String errorCode;
   private final String errorMessage;

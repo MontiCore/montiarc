@@ -21,25 +21,20 @@ interface IReconfigurable : IInterfaceReconfigurable {
   fun deactivateAll()
 
   /**
-   * Allows instantiating a given Subcomponent for the duration of the
-   * configuration.
-   * Deleted after.
+   * adds and activates the given subcomponent
+   * @param comp component to add
+   * @param permanent temporary components are removed implicitly at certain times, permanent ones are not
    */
-  fun temp(comp: ISubcomponent)
-
-  /**
-   * Allows permanently creating and deleting Subcomponents.
-   */
-  fun create(comp: ISubcomponent)
+  fun create(comp: ISubcomponent, permanent:Boolean = true)
   fun delete(comp: ISubcomponent)
   fun deleteAll()
 
   // Changes to Connectors====================================================
 
   /** Establishes a connector if allowed */
-  fun connect(base: IDataSource?, target: IDataSink?)
+  fun connect(base: IDataSource?, target: IDataSink?, permanent:Boolean = true)
   fun disconnect(base: IDataSource?, target: IDataSink?)
-  fun connect(conn: Connector)
+  fun connect(conn: Connector, permanent:Boolean = true)
   fun disconnect(conn: Connector)
 
   fun disconnectAll()

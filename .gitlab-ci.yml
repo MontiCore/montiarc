@@ -24,6 +24,7 @@ Validate Gradle:
       - applications/bumperbot/target/
       - applications/factory/target/
       - applications/factoryTask/target/
+      - applications/lightControl/target/
       - generators/cd2pojo/target/
       - generators/ma2java/target/
       - languages/arc-fe/target/

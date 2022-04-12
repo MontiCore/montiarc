@@ -2,24 +2,29 @@
 package basicmodeautomata._symboltable;
 
 import arcbasis._ast.ASTComponentBody;
+import arcbasis._symboltable.ComponentTypeSymbol;
 import basicmodeautomata.BasicModeAutomataMill;
+import basicmodeautomata._ast.ASTInitialModeDeclarationTOP;
+import basicmodeautomata._ast.ASTModeAutomaton;
+import basicmodeautomata._ast.ASTModeDeclaration;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._symboltable.ISCBasisScope;
 import de.monticore.scbasis._symboltable.SCStateSymbolBuilder;
 import de.monticore.symboltable.modifiers.AccessModifier;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ModeSymbolBuilder extends SCStateSymbolBuilder {
 
-  protected List<ASTComponentBody> body;
+  protected List<ASTModeDeclaration> body;
 
   /**
    *
-   * @param body a full description of this modes body, not including its static parts
+   * @param body all declarations defining this mode
    * @return this
    */
-  public ModeSymbolBuilder setDynamicBodyList(List<ASTComponentBody> body){
+  public ModeSymbolBuilder setDeclarationList(List<ASTModeDeclaration> body){
     this.body = body;
     return (ModeSymbolBuilder) this.realBuilder;
   }
@@ -74,8 +79,8 @@ public class ModeSymbolBuilder extends SCStateSymbolBuilder {
     symbol.setPackageName(this.packageName);
     symbol.setAccessModifier(this.accessModifier);
     symbol.setEnclosingScope(this.enclosingScope);
-    symbol.setBody(BasicModeAutomataMill.getModeTool().mergeBodies(this.body));
-
+    symbol.setDeclarations(this.body);
+    symbol.setBody(BasicModeAutomataMill.getModeTool().mergeBodies(this.body.stream().map(ASTModeDeclaration::getBody).collect(Collectors.toList())));
     return symbol;
   }
 }

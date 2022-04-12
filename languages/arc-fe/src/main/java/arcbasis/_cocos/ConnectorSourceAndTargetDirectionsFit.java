@@ -30,49 +30,21 @@ public class ConnectorSourceAndTargetDirectionsFit implements ArcBasisASTCompone
     ComponentTypeSymbol enclComponent = node.getSymbol();
 
     for(ASTConnector conn : node.getConnectors()) {
-      Optional<PortSymbol> sourcePortSym = getPortSym(conn.getSource(), enclComponent);
-      if(sourcePortSym.isPresent()) {
-        checkDirectionFitsForSourcePort(conn.getSource(), sourcePortSym.get(), conn);
+      if(conn.getSource().isPresentPortSymbol()) {
+        checkDirectionFitsForSourcePort(conn.getSource(), conn.getSource().getPortSymbol(), conn);
       } else {
         // None of our business. The presence of symbols for ports in connectors is checked by another coco.
         logInfoThatCoCoIsNotChecked(conn.getSource());
       }
 
       for(ASTPortAccess astTarget : conn.getTargetList()) {
-        Optional<PortSymbol> targetPortSym = getPortSym(astTarget, enclComponent);
-        if(targetPortSym.isPresent()) {
-          checkDirectionFitsTargetPort(astTarget, targetPortSym.get(), conn);
+        if(astTarget.isPresentPortSymbol()) {
+          checkDirectionFitsTargetPort(astTarget, astTarget.getPortSymbol(), conn);
         } else {
           // None of our business. The presence of symbols for ports in connectors is checked by another coco.
           logInfoThatCoCoIsNotChecked(astTarget);
         }
       }
-    }
-  }
-
-  /**
-   * When we can find a port symbol that fits the given port access then we return it. When we can not find the port
-   * symbol or when we do not find the component instance of the port access or the type of that instance then we return
-   * an empty Optional.
-   */
-  protected static Optional<PortSymbol> getPortSym(@NotNull ASTPortAccess astPort,
-                                                   @NotNull ComponentTypeSymbol enclComp) {
-    Preconditions.checkNotNull(astPort);
-    Preconditions.checkNotNull(enclComp);
-    Preconditions.checkArgument(astPort.getEnclosingScope().equals(enclComp.getSpannedScope()));
-
-    if(astPort.isPresentComponent()) {
-      Optional<ComponentInstanceSymbol> portOwner = enclComp.getSubComponent(astPort.getComponent());
-      if(!portOwner.isPresent()) {
-        return Optional.empty();
-      }
-      Preconditions.checkState(portOwner.get().isPresentType(), "CoCo '%s' can only be run after symbol table " +
-          "completion, but we detected that the component type for a component instance has not been set yet.",
-        ConnectorSourceAndTargetDirectionsFit.class.getSimpleName());
-
-      return portOwner.get().getType().getTypeInfo().getPort(astPort.getPort());
-    } else {
-      return enclComp.getPort(astPort.getPort());
     }
   }
 

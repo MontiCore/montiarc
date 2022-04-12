@@ -18,8 +18,8 @@ interface ISimulation : ILoggable {
   val inputs: Map<String, SendChannel<IMessage>>
   val outputs: Map<String, ReceiveChannel<IMessage>>
 
-  fun input(name: String): SendChannel<IMessage> = inputs[name] ?: throw NoSuchPortException()
-  fun output(name: String): ReceiveChannel<IMessage> = outputs[name] ?: throw NoSuchPortException()
+  fun input(name: String): SendChannel<IMessage> = inputs[name] ?: throw NoSuchPortException(name)
+  fun output(name: String): ReceiveChannel<IMessage> = outputs[name] ?: throw NoSuchPortException(name)
 
   suspend fun tickInputs()
   suspend fun tickAtOutputs(): Boolean

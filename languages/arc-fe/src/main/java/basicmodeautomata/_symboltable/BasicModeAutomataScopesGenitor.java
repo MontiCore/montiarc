@@ -38,17 +38,17 @@ public class BasicModeAutomataScopesGenitor extends BasicModeAutomataScopesGenit
    * @return a stream with all modes of the component or an empty stream if the component is not dynamic
    */
   protected Stream<ModeSymbol> computeModes(ASTComponentType component) {
-    Map<String, List<ASTComponentBody>> map = new HashMap<>();
+    Map<String, List<ASTModeDeclaration>> map = new HashMap<>();
 
     BasicModeAutomataMill.getModeTool().streamDeclarations(Preconditions.checkNotNull(component)).forEach(declaration ->
         declaration.getNameList().forEach(name ->
-            map.computeIfAbsent(name, n -> new ArrayList<>()).add(declaration.getBody())
+            map.computeIfAbsent(name, n -> new ArrayList<>()).add(declaration)
         )
     );
 
     return map.keySet().stream().map(modeName -> {
       ModeSymbolBuilder builder = new ModeSymbolBuilder();
-      builder.setDynamicBodyList(map.get(modeName));
+      builder.setDeclarationList(map.get(modeName));
       builder.setName(modeName);
       builder.setPackageName(component.getSymbol().getFullName());
       return builder.build();

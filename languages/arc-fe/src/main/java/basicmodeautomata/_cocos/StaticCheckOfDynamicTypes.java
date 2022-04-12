@@ -13,7 +13,10 @@ import com.google.common.base.Preconditions;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Ensures that the component types that can exist in different modes, are checked with the some cocos.
@@ -24,27 +27,44 @@ public class StaticCheckOfDynamicTypes implements ArcBasisASTComponentTypeCoCo {
   protected final ComponentModeTool helper = BasicModeAutomataMill.getModeTool();
 
   /**
-   * Creates this coco which will call the given checker recursively on all dynamic versions found
-   * @param cocoChecker a call to the coco-checker that runs all of it's cocos on the given element.
-   *                    Example: <code>checker::checkAll</code>
+   * Applies the given cocos to the found dynamic component versions.
+   * @param cocos cocos to apply; Only {@link ArcBasisASTComponentTypeCoCo} are kept,
+   *              other given visitors are ignored.
+   *              The coco checker is allowed to contain this coco.
+   *              Example: <code>checker.getTraverser().getArcBasisVisitorList()</code>
+   *              This constructor copies the list internally, which means, items added to
+   *              the list after calling this constructor are ignored
+   * @param more additional cocos to add to the list
    */
-  public StaticCheckOfDynamicTypes(Consumer<ASTComponentType> cocoChecker) {
-    this.checkCoCos = cocoChecker;
+  public StaticCheckOfDynamicTypes(Collection<ArcBasisVisitor2> cocos, ArcBasisASTComponentTypeCoCo... more) {
+    checkCoCos = Stream.concat(
+        cocos.stream()
+          .filter(v -> v instanceof ArcBasisASTComponentTypeCoCo)
+          .map(v -> (ArcBasisASTComponentTypeCoCo) v),
+          Arrays.stream(more)
+        )
+        .<Consumer<ASTComponentType>>map(v -> v::check)
+        .reduce(Consumer::andThen)
+        .orElseThrow(() -> new IllegalArgumentException("There are no CoCos given."));
   }
 
   /**
    * Applies the given cocos to the found dynamic component versions.
-   * @param cocos all cocos to apply; Only {@link ArcBasisASTComponentTypeCoCo} are kept,
+   * @param cocos provider for cocos to apply; Only {@link ArcBasisASTComponentTypeCoCo} are kept,
    *              other given visitors are ignored.
    *              The coco checker is allowed to contain this coco.
-   *              Example: <code>checker.getTraverser().getArcBasisVisitorList()</code>
+   *              Example: <code>checker.getTraverser()::getArcBasisVisitorList</code>
+   *              This is a call-by-reference, which means that cocos added to this list
+   *              after calling this constructor are still honored
+   * @param more additional cocos to check
    */
-  public StaticCheckOfDynamicTypes(Collection<ArcBasisVisitor2> cocos) {
-    checkCoCos = cocos.stream()
-        .filter(v -> v instanceof ArcBasisASTComponentTypeCoCo)
-        .<Consumer<ASTComponentType>>map(v -> v::visit)
-        .reduce(Consumer::andThen)
-        .orElseThrow(() -> new IllegalArgumentException("There are no CoCos given."));
+  public StaticCheckOfDynamicTypes(Supplier<List<ArcBasisVisitor2>> cocos, ArcBasisASTComponentTypeCoCo... more) {
+    checkCoCos = (type) -> Stream.concat(
+        cocos.get().stream()
+            .filter(v -> v instanceof ArcBasisASTComponentTypeCoCo)
+            .map(v -> (ArcBasisASTComponentTypeCoCo) v),
+        Arrays.stream(more)
+    ).forEach(coco -> coco.check(type));
   }
 
   @Override

@@ -13,8 +13,12 @@ data class Connector(val base: IDataSource, val target: IDataSink)
  * Returns a connector from [base] to [target] if they are of the same type
  */
 fun connector(base: IDataSource, target: IDataSink): Connector {
-  if (!target.type.isAssignableFrom(base.type)) throw IncompatiblePortsException()
-  return Connector(base, target)
+  return base..target
+}
+
+operator fun IDataSource.rangeTo(target: IDataSink):Connector {
+  if (!target.type.isAssignableFrom(this.type)) throw IncompatiblePortsException()
+  return Connector(this, target)
 }
 
 class IncompatiblePortsException : Exception()

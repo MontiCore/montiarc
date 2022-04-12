@@ -26,7 +26,7 @@ public class UsualCoCosAlsoWorkInModesTest extends AbstractCoCoTest {
   @Override
   protected void registerCoCos(MontiArcCoCoChecker checker) {
     checker.addCoCo(new PortUniqueSender()); // use a simple coco for this test
-    checker.addCoCo(new StaticCheckOfDynamicTypes(checker.getTraverser().getArcBasisVisitorList()));
+    checker.addCoCo(new StaticCheckOfDynamicTypes(checker.getTraverser()::getArcBasisVisitorList));
   }
 
   public static Stream<Arguments> provideErroneousModels() {

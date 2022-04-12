@@ -69,7 +69,6 @@ public class ConnectorSourceAndTargetTypesFit implements ArcBasisASTComponentTyp
                                                                       @NotNull ComponentTypeSymbol enclComp) {
     Preconditions.checkNotNull(astPort);
     Preconditions.checkNotNull(enclComp);
-    Preconditions.checkArgument(astPort.getEnclosingScope().equals(enclComp.getSpannedScope()));
 
     if (astPort.isPresentComponent()) {
       Optional<ComponentInstanceSymbol> portOwner = enclComp.getSubComponent(astPort.getComponent());

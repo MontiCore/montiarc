@@ -2,8 +2,10 @@
 package dsim.comp
 
 import dsim.log.log
+import dsim.msg.Tick
 import dsim.port.*
 import kotlinx.coroutines.*
+import kotlin.coroutines.Continuation
 
 /**
  * Implementations of atomic Components should inherit from this
@@ -31,9 +33,11 @@ abstract class AComponent(final override val name: String, inPorts: Set<IPort> =
     log("launched simulation")
   }
 
-  // To be implemented
+  /**
+   * starts a scheduler that responds to and creates port messages
+   * depending on the selected timing, it may be necessary to provide initial values for outgoing ports
+   */
   protected abstract suspend fun behavior()
-
 
   override fun getInputPort(name: String): IPort {
     return this.inputPorts.find { it.name == name } ?: throw NoSuchPortException(name)
@@ -80,4 +84,8 @@ abstract class AComponent(final override val name: String, inPorts: Set<IPort> =
     port.close()
     log("removed port $port as output")
   }
+
+    protected suspend fun tickOutputs() {
+      outputPorts.forEach { it.pushMsg(Tick()) }
+    }
 }

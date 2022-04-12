@@ -178,8 +178,8 @@ public class DynmaicVersionOfAComponentSymbol extends ComponentTypeSymbol {
 
   @Override
   public IArcBasisScope getSpannedScope() {
-    Log.warn("The returned scope does not contain sub-elements introduced by modes.");
-    return original.getSpannedScope();
+    throw new ArithmeticException("There is no suitable way to return all sub-scopes of this symbol as a single one." +
+        " If you need one, please implement it");
   }
 
   @Override

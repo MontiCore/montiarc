@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package dsim.comp
 
-import dsim.modeautomata.ITransitionTrigger
+import dsim.modeautomata.IGuardInterface
 import dsim.modeautomata.ModeAutomaton
 import dsim.port.util.port
 import dsim.sched.util.SingleMessageEvent
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.collect
 
 class ExampleModeAutomatonComponentWithSubcomponent(name: String) : ADecomposedComponent(name) {
 
-  private val trigger = object : ITransitionTrigger {
+  private val trigger = object : IGuardInterface {
     override val inputPorts get() = this@ExampleModeAutomatonComponentWithSubcomponent.inputPorts
     override val subcomponents get() = this@ExampleModeAutomatonComponentWithSubcomponent.subcomponents
 
@@ -29,26 +29,27 @@ class ExampleModeAutomatonComponentWithSubcomponent(name: String) : ADecomposedC
 
     component(ExampleAtomicComponent("inverter"))
 
-    modeAutomaton.mode(initial = true, "invert") {
+    modeAutomaton.addMode("invert", initial = true) {
       disconnectAll()
 
       connect(getInputPort("input"), getSubcomponent("inverter").getInputPort("oof"))
       connect(getSubcomponent("inverter").getOutputPort("foo"), getOutputPort("output"))
     }
 
-    modeAutomaton.mode("pass") {
+    modeAutomaton.addMode("pass") {
       disconnectAll()
 
       connect(getInputPort("input"), getOutputPort("output"))
     }
 
-    modeAutomaton.transition("invert", "pass") {
+    modeAutomaton.addTransition("invert", "pass") {
       lastEvent?.port == getInputPort("com") && lastEvent?.msg?.payload == "pass"
     }
 
-    modeAutomaton.transition("pass", "invert") {
+    modeAutomaton.addTransition("pass", "invert") {
       lastEvent?.port == getInputPort("com") && lastEvent?.msg?.payload == "invert"
     }
+    reconfigure(modeAutomaton.currentMode)
   }
 
   override suspend fun behavior() {
