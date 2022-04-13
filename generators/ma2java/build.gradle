@@ -31,7 +31,6 @@ dependencies {
 
   //Internal dependencies
   implementation(project(":languages:arc-fe"))
-  implementation(project(":languages:behavior-fe"))
   implementation(project(":languages:montiarc-fe"))
   implementation(project(":libraries:majava-rte"))
   implementation(project(":util"))
