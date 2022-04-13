@@ -44,12 +44,12 @@ subprojects {
     afterSuite { desc, result ->
       if (!desc.parent) {
         println(
-          "Test outcome: ${result.resultType} (" +
-            "${result.testCount} tests, " +
-            "${result.successfulTestCount} successes, " +
-            "${result.failedTestCount} failures, " +
-            "${result.skippedTestCount} skipped" +
-          ")"
+            "Test outcome: ${result.resultType} (" +
+                "${result.testCount} tests, " +
+                "${result.successfulTestCount} successes, " +
+                "${result.failedTestCount} failures, " +
+                "${result.skippedTestCount} skipped" +
+                ")"
         )
       }
     }
@@ -128,36 +128,36 @@ subprojects {
 
 task buildAll(type: Task) {
   group("build")
-	description("Assembles and tests all subprojects.")
-	dependsOn(":util:build")
-	dependsOn(":languages:arc-fe:build")
-	dependsOn(":languages:montiarc-fe:build")
-	dependsOn(":libraries:lejos-rte:build")
-	dependsOn(":libraries:majava-rte:build")
-	dependsOn(":generators:cd2pojo:build")
-	dependsOn(":generators:ma2java:build")
-	dependsOn(":generators:ma2ktln:build")
-	dependsOn(":applications:bumperbot:build")
-	dependsOn(":applications:factory:build")
-	dependsOn(":applications:factoryTask:build")
+  description("Assembles and tests all subprojects.")
+  dependsOn(":util:build")
+  dependsOn(":languages:arc-fe:build")
+  dependsOn(":languages:montiarc-fe:build")
+  dependsOn(":libraries:lejos-rte:build")
+  dependsOn(":libraries:majava-rte:build")
+  dependsOn(":generators:cd2pojo:build")
+  dependsOn(":generators:ma2java:build")
+  dependsOn(":generators:ma2ktln:build")
+  dependsOn(":applications:bumperbot:build")
+  dependsOn(":applications:factory:build")
+  dependsOn(":applications:factoryTask:build")
   dependsOn(":applications:lightControl:build")
 }
 
 task cleanAll(type: Delete) {
   group("clean")
-	description("Deletes the build directory in all subprojects.")
-	dependsOn(":util:clean")
-	dependsOn(":languages:arc-fe:clean")
-	dependsOn(":languages:montiarc-fe:clean")
-	dependsOn(":libraries:lejos-rte:clean")
-	dependsOn(":libraries:majava-rte:clean")
-	dependsOn(":generators:cd2pojo:clean")
-	dependsOn(":generators:ma2java:clean")
-	dependsOn(":generators:ma2ktln:clean")
-	dependsOn(":applications:bumperbot:clean")
-	dependsOn(":applications:factory:clean")
-	dependsOn(":applications:factoryTask:clean")
-	dependsOn(":applications:lightControl:clean")
+  description("Deletes the build directory in all subprojects.")
+  dependsOn(":util:clean")
+  dependsOn(":languages:arc-fe:clean")
+  dependsOn(":languages:montiarc-fe:clean")
+  dependsOn(":libraries:lejos-rte:clean")
+  dependsOn(":libraries:majava-rte:clean")
+  dependsOn(":generators:cd2pojo:clean")
+  dependsOn(":generators:ma2java:clean")
+  dependsOn(":generators:ma2ktln:clean")
+  dependsOn(":applications:bumperbot:clean")
+  dependsOn(":applications:factory:clean")
+  dependsOn(":applications:factoryTask:clean")
+  dependsOn(":applications:lightControl:clean")
 }
 
 repositories {
@@ -235,9 +235,9 @@ jacocoProjectsToAggregate.each {
 
 // Task to aggregate code coverage from subprojects
 task aggregatedJacocoReport(type: JacocoReport) {
-  additionalClassDirs(classesPath.incoming.artifactView{lenient(true) }.files)
-  additionalSourceDirs(sourcesPath.incoming.artifactView{ lenient(true) }.files)
-  executionData(coverageDataPath.incoming.artifactView{ lenient(true) }.files.filter{ it.exists() })
+  additionalClassDirs(classesPath.incoming.artifactView { lenient(true) }.files)
+  additionalSourceDirs(sourcesPath.incoming.artifactView { lenient(true) }.files)
+  executionData(coverageDataPath.incoming.artifactView { lenient(true) }.files.filter { it.exists() })
 
   reports {
     xml.required = true
