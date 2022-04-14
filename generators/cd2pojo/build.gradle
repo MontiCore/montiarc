@@ -1,5 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 
+plugins {
+  id "com.github.johnrengelman.shadow" version "$shadow_version"
+}
+
 group = "montiarc.generators"
 
 test { useJUnitPlatform() }
@@ -15,6 +19,9 @@ dependencies {
   implementation("com.google.guava:guava:$guava_version")
   implementation("com.github.javaparser:javaparser-core:3.18.0")
   implementation("org.codehaus.groovy:groovy:$groovy_version")
+
+  implementation "org.slf4j:slf4j-simple:1.7.10"
+
   testImplementation("de.monticore:monticore-runtime:$mc_version") {
     capabilities {
       requireCapability("de.monticore:monticore-runtime-tests")
@@ -29,6 +36,18 @@ java {
   //withJavadocJar()
   withSourcesJar()
 }
+
+shadowJar {
+  manifest {
+    attributes "Main-Class": "de.monticore.cd2pojo.POJOGeneratorScript"
+  }
+  zip64 = true
+  archiveClassifier = "mc-tool"
+  archiveBaseName = "CD2POJO"
+  archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
+}
+
+jar.dependsOn(shadowJar)
 
 publishing {
   publications {

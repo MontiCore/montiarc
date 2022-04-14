@@ -8,14 +8,23 @@ ${tc.signature("comp", "helper", "isTOPClass")}
   package ${comp.getPackageName()};
 </#if>
 
+import de.montiarc.runtimes.log.Log;
+import de.montiarc.runtimes.DeployUtils;
+
 <#assign compName = comp.getName()>
-<#assign deployClassName> <#if isTOPClass> Deploy${compName}TOP <#else> Deploy${compName} </#if> </#assign>
+<#assign deployClassName> Deploy${compName}<#if isTOPClass>TOP</#if> </#assign>
 
 public class ${deployClassName} {
 
-  final static int CYCLE_TIME = 50; // in ms
-
   public static void main(String[] args) {
+    DeployUtils deployUtils = new DeployUtils();
+
+    if(!deployUtils.parseArgs(args)) {
+      return;
+    }
+
+    Log.initFileLog(deployUtils.getLogPath());
+
     final ${compName} cmp = new ${compName}();
 
     cmp.setUp();
@@ -23,11 +32,11 @@ public class ${deployClassName} {
 
     long time;
 
-    while (!Thread.interrupted()) {
+    for(int cycles = 0; cycles < deployUtils.getMaxCyclesCount(); cycles++) {
       time = System.currentTimeMillis();
       cmp.compute();
       cmp.update();
-      while((System.currentTimeMillis()-time) < CYCLE_TIME){
+      while((System.currentTimeMillis() - time) < deployUtils.getCycleTime()) {
         Thread.yield();
       }
     }

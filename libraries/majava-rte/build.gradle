@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-dependencies {
-  implementation("de.se_rwth.commons:se-commons-logging:$se_commons_version")
+plugins {
+  id "com.github.johnrengelman.shadow" version "$shadow_version"
 }
 
 group = 'montiarc.libraries'
@@ -10,6 +10,15 @@ java {
   //withJavadocJar()
   withSourcesJar()
 }
+
+shadowJar {
+  zip64 = true
+  archiveClassifier = "library"
+  archiveBaseName = "maJava-rte"
+  archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
+}
+
+jar.dependsOn(shadowJar)
 
 publishing {
   publications {
