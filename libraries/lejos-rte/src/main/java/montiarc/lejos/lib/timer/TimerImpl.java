@@ -28,7 +28,7 @@ public class TimerImpl implements IComputable<TimerInput, TimerResult> {
       isRunning = true;
     }
     else if (input.getCmd() == TimerCmd.DOUBLE) {
-      deadline = System.currentTimeMillis() + (delay << 1);
+      deadline = System.currentTimeMillis() + ((long) delay << 1);
       isRunning = true;
     }
     
