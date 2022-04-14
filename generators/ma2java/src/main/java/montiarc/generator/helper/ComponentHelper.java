@@ -144,9 +144,6 @@ public class ComponentHelper {
 
   /**
    * Prints the java expression of the given AST expression node.
-   *
-   * @param expr
-   * @return
    */
   public String printExpression(ASTExpression expr) {
     String res = this.getPrettyPrinter().prettyprint(expr);
@@ -420,10 +417,6 @@ public class ComponentHelper {
 
   /**
    * Checks whether the given typeName for the component comp is a generic parameter.
-   *
-   * @param comp
-   * @param typeName
-   * @return
    */
   private boolean isGenericTypeName(ASTComponentType comp, String typeName) {
     if (comp == null) {

@@ -80,9 +80,6 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
    * Gets called by Groovy Script. Generates compo
    * nent artifacts for each
    * component in {@code modelPath} to {@code targetFilepath}
-   * 
-   * @param modelPath
-   * @param targetFilepath
    */
   public static void generate(List<File> modelPath, File targetFilepath) {
     List<Path> fqnMP = modelPath.stream().map(File::getAbsolutePath).map(Paths::get).collect(Collectors.toList());

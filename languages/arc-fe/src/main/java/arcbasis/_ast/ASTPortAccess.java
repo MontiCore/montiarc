@@ -2,7 +2,7 @@
 package arcbasis._ast;
 
 /**
- * Represents a port access. Extends {@Link PortAccessTOP} with utility functionality for easy access.
+ * Represents a port-access. Extends {@link ASTPortAccessTOP} with utility functionality for easy access.
  */
 public class ASTPortAccess extends ASTPortAccessTOP {
 

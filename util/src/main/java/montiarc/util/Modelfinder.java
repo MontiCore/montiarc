@@ -14,10 +14,6 @@ import java.util.*;
 public class Modelfinder {
   /**
    * Finds all models with a certain file ending in the given model path
-   * 
-   * @param modelPath
-   * @param fileExtension
-   * @return List of all found models
    */
   public static List<String> getModelsInModelPath(File modelPath, String fileExtension) {
     List<String> models = new ArrayList<String>();

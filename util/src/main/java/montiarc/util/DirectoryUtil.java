@@ -10,10 +10,6 @@ public class DirectoryUtil {
   /**
    * Compares the two paths and returns the common path. The common path is the
    * basedir.
-   *
-   * @param modelPath
-   * @param targetPath
-   * @return
    */
   public static String getBasedirFromModelAndTargetPath(String modelPath, String targetPath) {
     String basedir = "";
