@@ -10,157 +10,154 @@ import sim.port.Port;
 import sim.sched.SchedulerFactory;
 
 /**
- * 
- * Is used for components with just one incoming port and two or more outgoing
- * ports.
- *
+ * Is used for components with just one incoming port and two or more outgoing ports.
  *
  * @param <Tin>
  */
-public abstract class ASingleIn<Tin> extends Port<Tin> implements ITestPort<Tin>, SimpleInPortInterface<Tin>, ISimComponent {
-    
-    /** Id assigned by the scheduler. */
-    private int id = -1;
+public abstract class ASingleIn<Tin> extends Port<Tin>
+  implements ITestPort<Tin>, SimpleInPortInterface<Tin>, ISimComponent {
 
-    /**
-     * @see sim.port.ITestPort#getStream()
-     */
-    @Override
-    public IStream<Tin> getStream() {
-        if (testPort != null && testPort instanceof ITestPort) {
-            return ((ITestPort<Tin>) testPort).getStream();            
-        }
-        else {
-            return null;
-        }
-    }
-    /**
-     * Used to store a test port, if we are in test mode.
-     */
-    private IPort<Tin> testPort;
-    
-    /** Handles ArcSimProblemReports. */
-    private ISimulationErrorHandler errorHandler;
-  
-    /** Name of this component. */
-    private String componentName;
+  /**
+   * Id assigned by the scheduler.
+   */
+  private int id = -1;
 
-    /**
-     * Default constructor.
-     */
-    public ASingleIn() {
-        super();
+  /**
+   * @see sim.port.ITestPort#getStream()
+   */
+  @Override
+  public IStream<Tin> getStream() {
+    if (testPort != null && testPort instanceof ITestPort) {
+      return ((ITestPort<Tin>) testPort).getStream();
+    } else {
+      return null;
     }
+  }
 
-    /**
-     * @return the errorHandler
-     */
-    @Override
-    public ISimulationErrorHandler getErrorHandler() {
-        return errorHandler;
-    }
-    
-    /* (non-Javadoc)
-     * @see sim.generic.ISimComponent#getName()
-     */
-    @Override
-    public String getComponentName() {
-        return this.componentName;
-    }
+  /**
+   * Used to store a test port, if we are in test mode.
+   */
+  private IPort<Tin> testPort;
 
-    /**
-     * @return the portIn
-     */
-    public IInPort<Tin> getPortIn() {
-        return this;
-    }
-    
+  /**
+   * Handles ArcSimProblemReports.
+   */
+  private ISimulationErrorHandler errorHandler;
 
-    /**
-     * @see sim.port.Port#accept(sim.generic.TickedMessage)
-     */
-    @Override
-    public void accept(TickedMessage<? extends Tin> message) {
-        super.accept(message);
-        if (testPort != null) {
-            testPort.accept(message);
-        }
-    }
+  /**
+   * Name of this component.
+   */
+  private String componentName;
 
-    /*
-     * (non-Javadoc)
-     * @see sim.generic.ISimComponent#handleMessage(sim.generic.IIncomingPort, sim.generic.Message)
-     */
-    @Override
-    @SuppressWarnings("unchecked") 
-    public void handleMessage(IInPort<?> port, Message<?> message) {
-        messageReceived((Tin) message.getData());
-    }
+  /**
+   * Default constructor.
+   */
+  public ASingleIn() {
+    super();
+  }
 
-    
-    /**
-     * @param errorHandler the errorHandler to set
-     */
-    protected void setErrorHandler(ISimulationErrorHandler errorHandler) {
-        this.errorHandler = errorHandler;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see sim.generic.ISimComponent#setName(java.lang.String)
-     */
-    @Override
-    public void setComponentName(String name) {
-        this.componentName = name;
-    }
-    
-    
-    /*
-     * (non-Javadoc)
-     * @see sim.generic.ISimComponent#setup(sim.IScheduler)
-     */
-    @Override
-    public void setup(IScheduler scheduler, sim.error.ISimulationErrorHandler errorHandler) {
-        IScheduler localSched = SchedulerFactory.createSingleInScheduler();
-        localSched.setupPort(this);
-        localSched.setPortFactory(scheduler.getPortFactory());
-        super.setup(this, localSched);
-        setErrorHandler(errorHandler);
-        
-        IInPort<Tin> tp = scheduler.createInPort();
-        if (!(tp.getClass().getName().equals(Port.class.getName()))) {
-            this.testPort = (IPort<Tin>) tp;
-        }
-    }
+  /**
+   * @return the errorHandler
+   */
+  @Override
+  public ISimulationErrorHandler getErrorHandler() {
+    return errorHandler;
+  }
 
-    /**
-     * @return the scheduler
-     */
-    protected IScheduler getScheduler() {
-        return super.getScheduler();
-    }
+  /**
+   * @see ISimComponent#getComponentName()
+   */
+  @Override
+  public String getComponentName() {
+    return this.componentName;
+  }
 
-    /**
-     * @param scheduler the scheduler to set
-     */
-    protected void setScheduler(IScheduler scheduler) {
-        // ignored
-    }
-    
-    /**
-     * @see sim.generic.ISimComponent#setSimulationId(int)
-     */
-    @Override
-    public final void setSimulationId(int id) {
-        this.id = id;
-    }
+  /**
+   * @return the portIn
+   */
+  public IInPort<Tin> getPortIn() {
+    return this;
+  }
 
-    /**
-     * @see sim.generic.ISimComponent#getSimulationId()
-     */
-    @Override
-    public final int getSimulationId() {
-        return this.id;
+  /**
+   * @see sim.port.Port#accept(sim.generic.TickedMessage)
+   */
+  @Override
+  public void accept(TickedMessage<? extends Tin> message) {
+    super.accept(message);
+    if (testPort != null) {
+      testPort.accept(message);
     }
-    
+  }
+
+  /**
+   * @see sim.generic.ISimComponent#handleMessage(IInPort, Message)
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  public void handleMessage(IInPort<?> port, Message<?> message) {
+    messageReceived((Tin) message.getData());
+  }
+
+  /**
+   * @param errorHandler the errorHandler to set
+   */
+  protected void setErrorHandler(ISimulationErrorHandler errorHandler) {
+    this.errorHandler = errorHandler;
+  }
+
+  /**
+   * @see ISimComponent#getComponentName()
+   */
+  @Override
+  public void setComponentName(String name) {
+    this.componentName = name;
+  }
+
+  /**
+   * @see sim.generic.ISimComponent#setup(IScheduler, ISimulationErrorHandler)
+   */
+  @Override
+  public void setup(IScheduler scheduler, sim.error.ISimulationErrorHandler errorHandler) {
+    IScheduler localSched = SchedulerFactory.createSingleInScheduler();
+    localSched.setupPort(this);
+    localSched.setPortFactory(scheduler.getPortFactory());
+    super.setup(this, localSched);
+    setErrorHandler(errorHandler);
+
+    IInPort<Tin> tp = scheduler.createInPort();
+    if (!(tp.getClass().getName().equals(Port.class.getName()))) {
+      this.testPort = (IPort<Tin>) tp;
+    }
+  }
+
+  /**
+   * @return the scheduler
+   */
+  protected IScheduler getScheduler() {
+    return super.getScheduler();
+  }
+
+  /**
+   * @param scheduler the scheduler to set
+   */
+  protected void setScheduler(IScheduler scheduler) {
+    // ignored
+  }
+
+  /**
+   * @see sim.generic.ISimComponent#setSimulationId(int)
+   */
+  @Override
+  public final void setSimulationId(int id) {
+    this.id = id;
+  }
+
+  /**
+   * @see sim.generic.ISimComponent#getSimulationId()
+   */
+  @Override
+  public final int getSimulationId() {
+    return this.id;
+  }
 }

@@ -1,13 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import sim.IScheduler;
 import sim.generic.ISimComponent;
 import sim.generic.Message;
 import sim.generic.TickedMessage;
+import sim.generic.Transitionpath;
+
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * 
@@ -31,10 +33,10 @@ public class ForwardPort<T> implements IForwardPort<T> {
    * 
    */
     public ForwardPort() {
-        innerPorts = new HashSet<IInSimPort<? super T>>();
+        innerPorts = new LinkedHashSet<>();
     }
     
-    /* (non-Javadoc)
+    /**
      * @see sim.generic.IInPort#acceptMessage(java.lang.Object)
      */
     @Override
@@ -43,7 +45,7 @@ public class ForwardPort<T> implements IForwardPort<T> {
     }
     
     /*
-     * (non-Javadoc)
+     *
      * @see sim.generic.IInPort#receiveMessage(sim.generic.TickedMessage)
      */
     @Override
@@ -52,9 +54,16 @@ public class ForwardPort<T> implements IForwardPort<T> {
             p.accept(message);
         }
     }
-    
+
+    @Override
+    public void symbolicAccept(Message<Transitionpath> message) {
+        for (IInPort<? super T> p : this.getInnerPorts()) {
+            p.symbolicAccept(message);
+        }
+    }
+
     /*
-     * (non-Javadoc)
+     *
      * @seesim.generic.IArchitectureComponentPort#addReceiver(sim.generic.
      * IInPort)
      */
@@ -66,7 +75,7 @@ public class ForwardPort<T> implements IForwardPort<T> {
     }
     
     
-    /* (non-Javadoc)
+    /**
      * @see sim.generic.IOutPort#addReceiver(sim.generic.IInPort)
      */
     @Override
@@ -78,7 +87,7 @@ public class ForwardPort<T> implements IForwardPort<T> {
     }
     
     /*
-     * (non-Javadoc)
+     *
      * @see sim.generic.IInPort#getComponent()
      */
     @Override
@@ -109,7 +118,7 @@ public class ForwardPort<T> implements IForwardPort<T> {
         return this.innerPorts;
     }
     
-    /* (non-Javadoc)
+    /**
      * @see sim.generic.IOutPort#getReceivers()
      */
     @Override
@@ -122,7 +131,7 @@ public class ForwardPort<T> implements IForwardPort<T> {
     }
     
     /*
-     * (non-Javadoc)
+     *
      * @see sim.generic.IInPort#hasTickReceived()
      */
     @Override
@@ -137,7 +146,7 @@ public class ForwardPort<T> implements IForwardPort<T> {
     }
 
     /*
-     * (non-Javadoc)
+     *
      * @see sim.generic.IInPort#hasUnprocessedMessages()
      */
     @Override
@@ -151,8 +160,8 @@ public class ForwardPort<T> implements IForwardPort<T> {
         }
     }
 
-    /* (non-Javadoc)
-     * @see sim.port.IInPort#isConnected()
+    /**
+     * @see IPort#isConnected()
      */
     @Override
     public boolean isConnected() {
@@ -165,8 +174,8 @@ public class ForwardPort<T> implements IForwardPort<T> {
         }
     }
 
-    /* (non-Javadoc)
-     * @see sim.port.IInPort#processBufferedMsgs()
+    /**
+     * @see IPort#processBufferedMsgs()
      */
     @Override
     public void processBufferedMsgs() {
@@ -176,7 +185,7 @@ public class ForwardPort<T> implements IForwardPort<T> {
     }
 
     /*
-     * (non-Javadoc)
+     *
      * @see
      * sim.generic.IArchitectureComponentPort#removeEncapsulatedPort(sim.generic
      * .IInPort)
@@ -186,7 +195,7 @@ public class ForwardPort<T> implements IForwardPort<T> {
         return this.getInnerPorts().remove(port);
     }
 
-    /* (non-Javadoc)
+    /**
      * @see sim.generic.IOutPort#sendMessage(sim.generic.TickedMessage)
      */
     @Override
@@ -195,7 +204,12 @@ public class ForwardPort<T> implements IForwardPort<T> {
         
     }
 
-    /* (non-Javadoc)
+    @Override
+    public void symbolicSend(Message<Transitionpath> message){
+        symbolicAccept(message);
+    }
+
+    /**
      * @see sim.generic.IOutPort#setComponent(sim.generic.ISimComponent)
      */
     @Override
@@ -203,8 +217,8 @@ public class ForwardPort<T> implements IForwardPort<T> {
         this.component = component;
     }
 
-    /* (non-Javadoc)
-     * @see sim.port.IInPort#setConnected()
+    /**
+     * @see IPort#setConnected()
      */
     @Override
     public void setConnected() {
@@ -214,7 +228,7 @@ public class ForwardPort<T> implements IForwardPort<T> {
     }
 
     /*
-     * (non-Javadoc)
+     *
      * @see sim.generic.IInPort#setup(sim.generic.ISimComponent,
      * sim.IScheduler)
      */
@@ -226,7 +240,7 @@ public class ForwardPort<T> implements IForwardPort<T> {
         }
     }
 
-    /* (non-Javadoc)
+    /**
      * @see sim.generic.IInPort#wakeUp()
      */
     @Override
