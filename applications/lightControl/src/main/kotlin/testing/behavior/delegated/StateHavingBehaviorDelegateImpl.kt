@@ -5,7 +5,7 @@ class StateHavingBehaviorDelegateImpl {
 
   fun compute(component: StateHavingBehaviorDelegate.Interface) {
     component.outputValue = state
-    state *= component.inputValue!!
+    state *= component.inputValue
   }
 
   fun initialize(component: StateHavingBehaviorDelegate.Interface) {
