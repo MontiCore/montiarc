@@ -67,6 +67,7 @@ abstract class AComponent(final override val name: String, inPorts: Set<IPort> =
     log("removed port $port as input")
   }
 
+  @Suppress("EXPERIMENTAL_API_USAGE")
   override fun addOutPort(port: IPort) {
     inputPorts.find { it.name == port.name }?.let {
       if (it.receiveChannel.isClosedForReceive) {
