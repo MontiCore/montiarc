@@ -12,7 +12,6 @@ package components.body;
  *                            (p.71, Lst. 3.51)
  * @implements [RRW14a] C2: The names of variables and ports start with
                               lowercase letters. (p. 31, Lst. 6.5)
- * TODO Add Test or already error in symboltable/parsing process?
  */
 component wrongCapitalization { // ERROR: Component names have to start with a capital letter
   

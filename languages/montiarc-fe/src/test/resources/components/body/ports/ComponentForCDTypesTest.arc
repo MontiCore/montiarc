@@ -5,7 +5,6 @@ import types.CDTestTypes.*;
 
 /*
  * Valid model.
- * TODO Add test
  */
 component ComponentForCDTypesTest {
 	port 

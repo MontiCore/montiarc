@@ -5,7 +5,6 @@ import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
 
 /**
  * Invalid model.
- * TODO Check Validity: Inheritance of subcomponents?
  */
 component SubB extends SuperArchitecturalComponent {
     

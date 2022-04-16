@@ -15,8 +15,6 @@ import components.body.subcomponents._subcomponents.package2.ValidComponentInPac
  * @implements [Hab16] R2: Each incoming port of a subcomponent is used at
  *                           most once as target of a connector.
  *                           (p. 62, Lst. 3.37)
- * TODO: Enable Test
- * TODO: Autoconnect is not working or the CoCO that is checking whether ports used in a connector exist
  */
 component UniquenessConnectors {
 

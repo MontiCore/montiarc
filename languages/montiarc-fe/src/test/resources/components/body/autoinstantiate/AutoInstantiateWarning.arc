@@ -1,11 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.autoinstantiate;
 
-/*
- *
- * TODO Check desired behaviour and complete annotation
- * TODO Add test
- */
 component AutoInstantiateWarning {
 
     component Inner1 {

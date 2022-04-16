@@ -5,7 +5,6 @@ import b.CompC;
 
 /*
  * Valid model.
- * TODO Add test (symboltable)
  */
 component Correct1 extends CompC{
     port

@@ -22,7 +22,6 @@ import components.body.subcomponents._subcomponents.package2
  * Formerly named "S1" in MontiArc3.
  *
  * @implements [Hab16] CV3: Duplicated imports should be avoided. (p.71, no listing)
- * TODO Add test for missing warnings as well as the missing CoCo(s)
  */
 component RedundantImports2 {
   

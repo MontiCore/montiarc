@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package components; // TODO: correct package
+package components;
 
 /*
  * Valid model.

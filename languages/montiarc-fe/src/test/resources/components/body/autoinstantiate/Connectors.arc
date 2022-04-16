@@ -6,7 +6,6 @@ import components.body.ports.Ports;
 
 /*
  * Invalid model. Missing connectors.
- * TODO Fix test
  */
 component Connectors {
 

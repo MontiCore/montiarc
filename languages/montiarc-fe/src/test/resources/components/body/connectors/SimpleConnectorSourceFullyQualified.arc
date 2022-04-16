@@ -3,7 +3,6 @@ package components.body.connectors;
 
 /**
  * Invalid model.
- TODO: See test ignore
  */
 component SimpleConnectorSourceFullyQualified {
   component A {
