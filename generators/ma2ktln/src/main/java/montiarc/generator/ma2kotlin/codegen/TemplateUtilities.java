@@ -9,7 +9,6 @@ import basicmodeautomata.BasicModeAutomataMill;
 import basicmodeautomata._ast.ASTModeAutomaton;
 import basicmodeautomata.util.ComponentModeTool;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.se_rwth.commons.logging.Log;
@@ -17,15 +16,12 @@ import montiarc._ast.ASTArcInstant;
 import montiarc._ast.ASTArcSync;
 import montiarc._ast.ASTArcUntimed;
 import montiarc._visitor.MontiArcTraverser;
-import montiarc.generator.ma2kotlin.behavior.StateWrapper;
-import montiarc.generator.ma2kotlin.behavior.TransitionWrapper;
 import montiarc.generator.ma2kotlin.prettyprint.MontiArcFullPrettyPrinter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 /**
  * contains some funtionality that cannot be recreated in freemarker-templates because of syntax or complexity
@@ -37,6 +33,10 @@ public class TemplateUtilities {
 
   public ComponentModeTool getModeTool(){
     return BasicModeAutomataMill.getModeTool();
+  }
+
+  public StatesTool getStateTool(){
+    return new StatesTool();
   }
 
   /**
@@ -64,10 +64,13 @@ public class TemplateUtilities {
   }
 
   /**
-   * @return mode-transitions of this component
+   * @return transitions of the mode automaton of this component, or an empty list
    */
-  public Stream<TransitionWrapper> streamTransitions(ComponentTypeSymbol component){
-    return getModeTool().streamAutomata(component.getAstNode()).flatMap(ASTModeAutomaton::streamTransitions).map(transformTransition());
+  public List<ASTSCTransition> getModeTransitions(ComponentTypeSymbol component){
+    return getModeTool()
+        .streamAutomata(component.getAstNode())
+        .flatMap(ASTModeAutomaton::streamTransitions)
+        .collect(Collectors.toList());
   }
 
   public String getTiming(ComponentTypeSymbol component) {
@@ -115,18 +118,11 @@ public class TemplateUtilities {
   /**
    * @return the behavior of this component, if it has any, in the form of compute-blocks
    */
-  public Stream<ASTArcCompute> getComputes(ComponentTypeSymbol component){
+  public List<ASTArcCompute> getComputes(ComponentTypeSymbol component){
     return component.getAstNode().getBody()
         .streamArcElements()
-        .filter(e -> e instanceof ASTArcCompute)
-        .map(e -> (ASTArcCompute) e);
-  }
-
-  public Function<ASTSCState, StateWrapper> transformState(){
-    return StateWrapper::new;
-  }
-
-  public Function<ASTSCTransition, TransitionWrapper> transformTransition(){
-    return TransitionWrapper::new;
+        .filter(ASTArcCompute.class::isInstance)
+        .map(ASTArcCompute.class::cast)
+        .collect(Collectors.toList());
   }
 }

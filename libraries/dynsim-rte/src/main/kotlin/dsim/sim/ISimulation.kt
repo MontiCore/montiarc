@@ -5,7 +5,6 @@ import dsim.comp.ISimulatable
 import dsim.comp.NoSuchPortException
 import dsim.log.ILoggable
 import dsim.msg.IMessage
-import dsim.msg.Message
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel

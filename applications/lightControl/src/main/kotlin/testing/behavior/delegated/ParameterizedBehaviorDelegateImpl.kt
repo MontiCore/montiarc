@@ -7,5 +7,7 @@ class ParameterizedBehaviorDelegateImpl(private val p: Int) {
     component.outputValue = component.inputValue!! + 2 * p
   }
 
-  fun initialize(component: ParameterizedBehaviorDelegate.Interface) = Unit
+  fun initialize(component: ParameterizedBehaviorDelegate.Interface) {
+    component.outputValue = 52
+  }
 }

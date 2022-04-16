@@ -3,9 +3,7 @@ package dsim.comp
 
 import dsim.port.Port
 import dsim.sched.decomposed.timedSchedule
-import dsim.sched.decomposed.untimedSchedule
 import dsim.sched.util.ForwardEvent
-import dsim.sched.util.SingleMessageEvent
 import dsim.sched.util.TickEvent
 import kotlinx.coroutines.flow.collect
 

@@ -7,29 +7,30 @@
 <#import "/templates/behavior/AtomicBehavior.ftl" as Atomic>
 <#-- Prints initializing of the decomposed structure -->
 <#-- @ftlvariable name="component" type="arcbasis._symboltable.ComponentTypeSymbol" -->
-<#-- @ftlvariable name="util" type="TemplateUtilities" -->
+<#-- @ftlvariable name="util" type="montiarc.generator.ma2kotlin.codegen.TemplateUtilities" -->
 <#-- @ftlvariable name="chart" type="arcautomaton._ast.ASTArcStatechart" -->
-<#-- @ftlvariable name="state" type="StateWrapper" -->
-<#-- @ftlvariable name="transit" type="TransitionWrapper" -->
 <#macro init>
-    <#if util.getStatechart(component).isPresent()>
-        <#list util.getStatechart(component).get().streamInitialStatements().toArray()>
+    <#if util.getStateTool().getStatechart(component).isPresent()>
+        <#list util.getStateTool().getStatechart(component).get().streamInitialStatements().toArray()>
     // initial behavior
             <#items as statement>
 ${util.printStatement(2, statement)}
             </#items>
+            <#if !util.getTiming(component)?starts_with("untimed")>
+    tickOutputs()
+            </#if>
 
         </#list>
-    <#elseif util.getComputes(component).count() == 0 && component.isAtomic()>
-    val componentInterface = Interface(this, null)
-    behaviorImplementation.initialize(componentInterface)
-    componentInterface.pushAll()
+    <#elseif !util.getComputes(component)?has_content && component.isAtomic()>
+    Interface(this, null).also{ behaviorImplementation.initialize(it) }.pushAll()
+        <#if !util.getTiming(component)?starts_with("untimed")>
+    tickOutputs()
+        </#if>
 
     </#if>
 </#macro>
 <#macro printBehavior>
   override suspend fun behavior() {
-    println("start schedule of component $name of type ${component.getName()}")
     <@init/>
     ${util.getTiming(component)}Schedule(inputPorts<#if component.isDecomposed()>, subcomponents</#if>).collect { event ->
     <#if component.isAtomic()>
@@ -41,9 +42,9 @@ ${util.printStatement(2, statement)}
   }
 </#macro>
 <#macro printRequiredAttributes>
-    <#if util.getStatechart(component).isPresent()>
+    <#if util.getStateTool().getStatechart(component).isPresent()>
         <@Stated.printRequiredAttributes/>
-    <#elseif util.getComputes(component).count() == 0 && component.isAtomic()>
+    <#elseif !util.getComputes(component)?has_content && component.isAtomic()>
 
   <@printBehaviorDelegation/>
     </#if>
@@ -74,10 +75,13 @@ ${util.printStatement(2, statement)}
     }
   <#list component.getAllIncomingPorts() as port>
       <@Comment.printOf node=port.getAstNode()/>
-      <#local valType = util.getTypes().printType(port.getType()) + "?">
+      <#local valType = util.getTypes().printType(port.getType())>
+      <#if !util.getTiming(component) ?starts_with("sync")>
+          <#local valType = valType + "?">
+    fun isPresent${port.getName()?cap_first}() = event?.isFor(component.getInputPort("${port.getName()}"))?:false
+      </#if>
     val ${port.getName()}: ${valType}
       get() = event?.get(component.getInputPort("${port.getName()}"))?.payload as ${valType}
-    fun isPresent${port.getName()?cap_first}() = event?.isFor(component.getInputPort("${port.getName()}"))?:false
   </#list>
   <#list component.getAllOutgoingPorts() as port>
       <@Comment.printOf node=port.getAstNode()/>

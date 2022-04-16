@@ -6,7 +6,6 @@ package dsim.port
 import dsim.log.log
 import dsim.msg.IMessage
 import dsim.msg.Message
-import dsim.msg.Tick
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 

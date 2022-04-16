@@ -2,10 +2,10 @@
 <#import "/templates/Comments.ftl" as Comment>
 <#-- Prints parameterlists -->
 <#-- @ftlvariable name="component" type="arcbasis._symboltable.ComponentTypeSymbol" -->
-<#-- @ftlvariable name="util" type="TemplateUtilities" -->
+<#-- @ftlvariable name="util" type="montiarc.generator.ma2kotlin.codegen.TemplateUtilities" -->
 <#macro ofClass>
     <@Comment.printOf node=component.getAstNode()/>
-class ${component.getName()} (instanceName: String<#rt>
+open class ${component.getName()} (instanceName: String<#rt>
     <#list component.getParameters() as parameter>
         , private var ${parameter.getName()}Field :${util.getTypes().printType(parameter.getType())}<#t>
         <#if parameter.getAstNode().isPresentDefault()>

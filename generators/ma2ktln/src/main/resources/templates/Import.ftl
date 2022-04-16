@@ -2,7 +2,7 @@
 <#import "/templates/Comments.ftl" as Comment>
 <#-- Prints import-statements -->
 <#-- @ftlvariable name="component" type="arcbasis._symboltable.ComponentTypeSymbol" -->
-<#-- @ftlvariable name="util" type="TemplateUtilities" -->
+<#-- @ftlvariable name="util" type="montiarc.generator.ma2kotlin.codegen.TemplateUtilities" -->
 <#macro printImports>
 <@printSimulatorImports/>
 <@printComponentImports/>

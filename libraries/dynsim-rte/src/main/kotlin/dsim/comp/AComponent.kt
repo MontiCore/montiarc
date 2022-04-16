@@ -3,9 +3,10 @@ package dsim.comp
 
 import dsim.log.log
 import dsim.msg.Tick
-import dsim.port.*
-import kotlinx.coroutines.*
-import kotlin.coroutines.Continuation
+import dsim.port.IDataSink
+import dsim.port.IDataSource
+import dsim.port.IPort
+import kotlinx.coroutines.coroutineScope
 
 /**
  * Implementations of atomic Components should inherit from this

@@ -5,10 +5,8 @@
 <#import "/templates/behavior/StatechartBehavior.ftl" as Chart>
 <#-- Prints initializing of the decomposed structure -->
 <#-- @ftlvariable name="component" type="arcbasis._symboltable.ComponentTypeSymbol" -->
-<#-- @ftlvariable name="util" type="TemplateUtilities" -->
+<#-- @ftlvariable name="util" type="montiarc.generator.ma2kotlin.codegen.TemplateUtilities" -->
 <#-- @ftlvariable name="chart" type="arcautomaton._ast.ASTArcStatechart" -->
-<#-- @ftlvariable name="state" type="StateWrapper" -->
-<#-- @ftlvariable name="transit" type="TransitionWrapper" -->
 <#macro printSchedule>
   <#if util.getTiming(component) == "untimed">
       <@printAtomicBehavior/>
@@ -29,7 +27,7 @@
     </#if>
 </#macro>
 <#macro printAlternative>
-    <#list util.getComputes(component).toArray() as compute>
+    <#list util.getComputes(component) as compute>
           // compute
         <@Comment.printOf node=compute/>
 ${util.printStatement(5, compute.getMCBlockStatement())}

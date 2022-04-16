@@ -4,8 +4,10 @@ package testing.behavior.delegated
 class KotlinBehaviorDelegateImpl {
 
   fun compute(component: KotlinBehaviorDelegate.Interface) {
-    component.outputValue = component.inputValue!! + 50
+    component.outputValue = component.inputValue + 50
   }
 
-  fun initialize(component: KotlinBehaviorDelegate.Interface) = Unit
+  fun initialize(component: KotlinBehaviorDelegate.Interface) {
+    component.outputValue = 33
+  }
 }

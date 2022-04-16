@@ -3,10 +3,8 @@
 <#import "/templates/Header.ftl" as Header>
 <#-- Prints initializing of the decomposed structure -->
 <#-- @ftlvariable name="component" type="arcbasis._symboltable.ComponentTypeSymbol" -->
-<#-- @ftlvariable name="util" type="TemplateUtilities" -->
+<#-- @ftlvariable name="util" type="montiarc.generator.ma2kotlin.codegen.TemplateUtilities" -->
 <#-- @ftlvariable name="chart" type="arcautomaton._ast.ASTArcStatechart" -->
-<#-- @ftlvariable name="state" type="StateWrapper" -->
-<#-- @ftlvariable name="transit" type="TransitionWrapper" -->
 <#macro printSchedule>
       when (event) {
         is TickEvent -> tickOutputs()

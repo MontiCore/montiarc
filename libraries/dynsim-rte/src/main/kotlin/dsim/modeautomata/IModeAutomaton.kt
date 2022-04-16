@@ -1,10 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package dsim.modeautomata
 
-import dsim.comp.IReconfigurable
 import dsim.conf.ChangeScript
 import dsim.conf.IReconfiguration
-import dsim.port.IDataSink
 import dsim.port.IDataSource
 
 interface IModeAutomaton<T : IGuardInterface> {

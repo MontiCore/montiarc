@@ -1,7 +1,7 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- Generates the component class for atomic and composed components. -->
 <#-- @ftlvariable name="component" type="arcbasis._symboltable.ComponentTypeSymbol" -->
-<#-- @ftlvariable name="util" type="TemplateUtilities" -->
+<#-- @ftlvariable name="util" type="montiarc.generator.ma2kotlin.codegen.TemplateUtilities" -->
 ${tc.signature("symbol", "utility")}
 <#import "/templates/util/Copyright.ftl" as Copyright>
 <#import "/templates/util/Imports.ftl" as Imports>

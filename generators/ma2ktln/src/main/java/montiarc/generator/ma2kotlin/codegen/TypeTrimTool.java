@@ -15,12 +15,12 @@ public class TypeTrimTool {
   /**
    * contains imports statements for simple java-classes that have a kotlin equivalent and are thus not necessary in kotlin
    */
-  public static Set<String> oddImports = Stream.of("Byte", "Short", "Integer", "Long", "Float", "Double", "Boolean", "Character", "String")
+  public static final Set<String> oddImports = Stream.of("Byte", "Short", "Integer", "Long", "Float", "Double", "Boolean", "Character", "String")
       .map(t -> "java.lang."+t).collect(Collectors.toSet());
   /**
    * maps javas primitive and boxed primitive types to an equivalent in kotlin
    */
-  public static Map<String, String> java2Kotlin = Stream.of(
+  public static final Map<String, String> java2Kotlin = Stream.of(
           "#byte",
           "#short",
           "#int",

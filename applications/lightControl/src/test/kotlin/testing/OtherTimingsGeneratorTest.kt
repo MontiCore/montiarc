@@ -26,6 +26,7 @@ class OtherTimingsGeneratorTest {
       input("b").let { it.send(Message(10)); it.send(Tick()) }
       input("b").let { it.send(Message(20)); it.send(Tick()) }
       input("b").let { it.send(Message(30)); it.send(Tick()) }
+      // the component may not compute an 'a' from a tick whose 'b' has not been processed yet
       Assert.assertEquals("[0]", 1, receiveFrom("c"))
       Assert.assertEquals("[1]", 11, receiveFrom("c"))
       Assert.assertEquals("[2]", 13, receiveFrom("c"))
@@ -47,7 +48,7 @@ class OtherTimingsGeneratorTest {
       input("b").let { it.send(Message(10)); it.send(Tick()) }
       input("b").let { it.send(Message(20)); it.send(Tick()) }
       input("b").let { it.send(Message(30)); it.send(Tick()) }
-      // output is different from above
+      // output is different from above. Here the component computes each input immediately
       Assert.assertEquals("[0]", 1, receiveFrom("c"))
       Assert.assertEquals("[1]", 3, receiveFrom("c"))
       Assert.assertEquals("[2]", 6, receiveFrom("c"))

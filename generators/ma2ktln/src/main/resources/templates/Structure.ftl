@@ -6,8 +6,7 @@
 <#import "/templates/Header.ftl" as Header>
 <#-- Prints initializing of the decomposed structure -->
 <#-- @ftlvariable name="component" type="arcbasis._symboltable.ComponentTypeSymbol" -->
-<#-- @ftlvariable name="util" type="TemplateUtilities" -->
-<#-- @ftlvariable name="transition" type="TransitionWrapper" -->
+<#-- @ftlvariable name="util" type="montiarc.generator.ma2kotlin.codegen.TemplateUtilities" -->
 <#macro attributes>
     <#list component.getFields()?filter(e -> !component.getParameter(e.getName()).isPresent())>
         // fields
@@ -52,7 +51,7 @@
             <@addMode mode=mode/>
         </#items>
     // transitions
-        <#list util.streamTransitions(component).toArray() as transition>
+        <#list util.getModeTransitions(component) as transition>
             <@addTransition transition=transition/>
         </#list>
 
@@ -62,7 +61,7 @@
 </#macro>
 <#macro addPort inout port>
     <@Comment.printOf node=port.getAstNode()/>
-    add${inout}Port(Port.make<${util.getTypes().printType(port.getType())}>("${port.getName()}"))
+    this.add${inout}Port(Port.make<${util.getTypes().printType(port.getType())}>("${port.getName()}"))
 </#macro>
 <#macro addStaticSubcomponent subcomponent>
     <@Comment.printOf node=subcomponent.getAstNode()/>
@@ -99,13 +98,13 @@ ${subcomponent.getType().getTypeInfo().getName()}("${subcomponent.getName()}"<#r
 
       // add the modes elements and connectors
         <#list mode.getSubComponents(util.getNull()) as subComponent>
-${"  "}<@addDynamicSubcomponent subcomponent = subComponent permanent="false"/>
+${"  "}<@addDynamicSubcomponent subcomponent = subComponent permanent="false"/><#rt>
         </#list>
         <#list mode.getPorts(util.getNull())?filter(p-> p.isIncoming()) as port>
-${"  "}<@addPort inout="Temporary" port=port/>
+${"  "}<@addPort inout="Temporary" port=port/><#rt>
         </#list>
-        <#list mode.getConnectors(component) as connector>
-${"  "}<@addConnector connector=connector postfix=", permanent = false"/>
+        <#list mode.getConnectors(util.getNull()) as connector>
+${"  "}<@addConnector connector=connector postfix=", permanent = false"/><#rt>
         </#list>
     }
 
@@ -129,14 +128,14 @@ ${"  "}<@addConnector connector=connector postfix=", permanent = false"/>
   private var ${field.getName()}Field :${util.getTypes().printType(field.getType())} = ${util.printExpression(node.getInitial())}
 </#macro>
 <#macro addTransition transition>
-    <@Comment.printOf node=transition.getNode()/>
+    <@Comment.printOf node=transition/>
     modeAutomaton.addTransition("${transition.getSourceName()}", "${transition.getTargetName()}"<#rt>
-    <#if transition.getReaction().isPresent()>
-        , reaction = {<#rt>
-        ${util.printStatement(3, transition.getReaction().get().getMCBlockStatement())}
+    <#if util.getStateTool().getReaction(transition).isPresent()>
+        , reaction = {<#lt>
+        ${util.printStatement(3, util.getStateTool().getReaction(transition).get())}
     }
     </#if>
-    <#list transition.getTriggers()>
+    <#list util.getStateTool().getTriggers(transition)>
         , trigger = setOf(<#t>
         <#items as port>
             <@Port.printAccess port=port/>
@@ -144,8 +143,8 @@ ${"  "}<@addConnector connector=connector postfix=", permanent = false"/>
         )<#t>
     </#list>
     <#lt>) {
-    <#if transition.getGuard().isPresent()>
-      ${util.printExpression(transition.getGuard().get())}
+    <#if util.getStateTool().getGuard(transition).isPresent()>
+      ${util.printExpression(util.getStateTool().getGuard(transition).get())}
     <#else>
       true
     </#if>

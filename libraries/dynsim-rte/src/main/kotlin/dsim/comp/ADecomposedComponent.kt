@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package dsim.comp
 
-import dsim.conf.*
+import dsim.conf.IReconfiguration
 import dsim.log.log
 import dsim.msg.IMessage
 import dsim.msg.Tick
@@ -11,11 +11,12 @@ import dsim.port.IPort
 import dsim.port.util.Connector
 import dsim.port.util.rangeTo
 import dsim.sched.util.ForwardEvent
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.ClosedSendChannelException
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import java.util.*
-import java.util.function.Predicate
-import kotlin.collections.HashSet
 
 abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigurable {
 

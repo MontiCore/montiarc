@@ -8,7 +8,9 @@ class StateHavingBehaviorDelegateImpl {
     state *= component.inputValue!!
   }
 
-  fun initialize(component: StateHavingBehaviorDelegate.Interface) {}
+  fun initialize(component: StateHavingBehaviorDelegate.Interface) {
+    component.outputValue = -3
+  }
 
   var state = 1
 }

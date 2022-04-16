@@ -12,6 +12,8 @@ class DelegatedBehaviorGeneratorTest {
   @Test
   fun `test behavior delegation to kotlin class`() {
     runSimulation(KotlinBehaviorDelegate("generated")) {
+      Assert.assertEquals("[i]", 33, output("outputValue").receive().payload)
+      tickAtOutputs()
       kotlinValues.forEach { (i, o) ->
         input("inputValue").send(Message(i))
         tickInputs()
@@ -24,6 +26,8 @@ class DelegatedBehaviorGeneratorTest {
   @Test
   fun `test behavior delegation to java class`() {
     runSimulation(JavaBehaviorDelegate("generated")) {
+      Assert.assertEquals("[i]", 20, output("outputValue").receive().payload)
+      tickAtOutputs()
       javaValues.forEach { (i, o) ->
         input("inputValue").send(Message(i))
         tickInputs()
@@ -36,6 +40,8 @@ class DelegatedBehaviorGeneratorTest {
   @Test
   fun `test behavior delegation to parameterized class`() {
     runSimulation(ParameterizedBehaviorDelegate("generated", 200)) {
+      Assert.assertEquals("[i]", 52, output("outputValue").receive().payload)
+      tickAtOutputs()
       parameterizedValues.forEach { (i, o) ->
         input("inputValue").send(Message(i))
         tickInputs()
@@ -48,6 +54,8 @@ class DelegatedBehaviorGeneratorTest {
   @Test
   fun `test behavior delegation to non-stateless class`() {
     runSimulation(StateHavingBehaviorDelegate("generated")) {
+      Assert.assertEquals("[i]", -3, output("outputValue").receive().payload)
+      tickAtOutputs()
       memoryValues.forEach { (i, o) ->
         input("inputValue").send(Message(i))
         tickInputs()

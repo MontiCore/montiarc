@@ -52,26 +52,5 @@ class Simulation(private val comp: ISimulatable, private val scope: CoroutineSco
     return true
   }
 
-  enum class F{OO, A}
-  var f = F.OO
-
-  suspend fun fs(){
-    f =
-      when (f){
-      F.OO -> {
-        f
-      }
-        F.A -> {
-          if (true){
-            F.OO
-          } else{
-            f
-          }
-        }
-
-
-        }
-      }
-
   override fun toString(): String = "simulation of $comp"
 }
