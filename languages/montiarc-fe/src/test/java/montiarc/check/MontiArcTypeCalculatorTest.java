@@ -13,6 +13,7 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
+import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
@@ -46,7 +47,8 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
   }
 
   protected static Stream<Arguments> expressionProviderWithMethodCalls() {
-    return Stream.of(Arguments.of("msg.getHeader()", "String"), Arguments.of("msg.setHeader(\"0x\")", "String"));
+    return Stream.of(Arguments.of("msg.getHeader()", "String"), Arguments.of("msg.setHeader(\"0x\")", "String"),
+        Arguments.of("Message.Message()", "Message"));
   }
 
   protected static Stream<Arguments> expressionProviderWithGenericMethodCalls() {
@@ -112,11 +114,19 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
       .setSpannedScope(setHeaderScope).build();
     setHeaderScope.setSpanningSymbol(setHeader);
     setHeader.setSpannedScope(setHeaderScope);
+    IOOSymbolsScope constructorScope = MontiArcMill.scope();
+    MethodSymbol constructor = MontiArcMill.methodSymbolBuilder().setName("Message")
+        .setReturnType(SymTypeExpressionFactory.createTypeExpression("Message", this.getScope()))
+        .setSpannedScope(constructorScope).setIsConstructor(true).setIsStatic(false).build();
+    constructorScope.setSpanningSymbol(constructor);
+    constructor.setSpannedScope(constructorScope);
     IOOSymbolsScope msgScope = MontiArcMill.scope();
     msgScope.addSubScope(getHeaderScope);
     msgScope.addSubScope(setHeaderScope);
+    msgScope.addSubScope(constructorScope);
     msgScope.add(getHeader);
     msgScope.add(setHeader);
+    msgScope.add(constructor);
     OOTypeSymbol msg = MontiArcMill.oOTypeSymbolBuilder().setName("Message").setSpannedScope(msgScope).build();
     SymbolService.link(this.getScope(), msg);
   }

@@ -17,6 +17,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
@@ -48,13 +49,15 @@ public class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    "CorrectFieldInitializations.arc",
-    "ParameterShadowing.arc"
+      "CorrectFieldInitializations.arc",
+      "FieldInitializationWithConstructor.arc",
+      "ParameterShadowing.arc"
   })
   public void shouldApproveValidTypeAssignments(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     //Given
+    this.getCLI().loadSymbols(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, getPackage(), "Datatypes.sym"));
     ASTMACompilationUnit ast = this.parseAndCreateAndCompleteSymbols(model);
 
     //When

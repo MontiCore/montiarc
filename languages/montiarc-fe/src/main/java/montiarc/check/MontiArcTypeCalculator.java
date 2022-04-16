@@ -73,7 +73,7 @@ public class MontiArcTypeCalculator extends AbstractArcTypeCalculator {
 
   protected void initDeriveSymTypeOfCommonExpressions(@NotNull CommonExpressionsTraverser traverser) {
     Preconditions.checkNotNull(traverser);
-    DeriveSymTypeOfCommonExpressions deriveSymTypeOfCommonExpressions = new DeriveSymTypeOfCommonExpressions();
+    ArcDeriveSymTypeOfCommonExpressions deriveSymTypeOfCommonExpressions = new ArcDeriveSymTypeOfCommonExpressions();
     deriveSymTypeOfCommonExpressions.setTypeCheckResult(this.getTypeCheckResult());
     traverser.add4CommonExpressions(deriveSymTypeOfCommonExpressions);
     traverser.setCommonExpressionsHandler(deriveSymTypeOfCommonExpressions);
