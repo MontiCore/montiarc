@@ -1,0 +1,90 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+group = "montiarc.generators"
+
+def hwcDir = "$projectDir/src/main/java"
+def genDir = "$buildDir/generated-sources"
+
+def generatorLogbackConfig = "$projectDir/logback.xml"
+def generatorLogbackOutDir = "$buildDir/logs"
+
+sourceSets {
+  main {
+    java.srcDirs += ["$genDir"]
+  }
+}
+
+configurations {
+  generateCD
+  generateMA
+}
+
+dependencies {
+  //MontiCore dependencies
+  implementation("de.se_rwth.commons:se-commons-logging:$se_commons_version")
+  implementation("de.se_rwth.commons:se-commons-utilities:$se_commons_version")
+
+  //Internal dependencies
+  generateCD(project(":generators:cd2pojo"))
+  generateMA(project(":generators:ma2java"))
+
+  implementation(project(":languages:montiarc-fe"))
+  implementation(project(":libraries:majava-rte"))
+
+  // Guava
+  implementation("com.google.guava:guava:$guava_version")
+
+  // Janino
+  implementation("org.codehaus.janino:janino:$janino_version")
+
+  //Other dependencies
+  testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
+  testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version")
+
+  // AssertJ
+  testImplementation("org.assertj:assertj-core:$assertj_version")
+
+  // loggers for generators
+  generateCD("ch.qos.logback:logback-core:$logback_version")
+  generateCD("ch.qos.logback:logback-classic:$logback_version")
+  generateMA("ch.qos.logback:logback-core:$logback_version")
+  generateMA("ch.qos.logback:logback-classic:$logback_version")
+}
+
+test {
+  useJUnitPlatform()
+}
+
+task generateCD(type: JavaExec) {
+  classpath = configurations.generateCD
+  mainClass = "de.monticore.cd2pojo.POJOGeneratorScript"
+
+  args("$projectDir/src/main/resources, $buildDir/$librarymodels_classifier", "$genDir", "$hwcDir")
+  outputs.dir(genDir)
+
+  // configuring logging during generation
+  systemProperties "logback.configurationFile": "$generatorLogbackConfig"
+  systemProperties "LOGBACK_TARGET_DIR" : "$generatorLogbackOutDir"
+  systemProperties "LOGBACK_TARGET_FILE_NAME" : "logback-cd2pojo"
+}
+
+task generateMontiArc(type: JavaExec) {
+  classpath = configurations.generateMA
+  mainClass = "montiarc.generator.MontiArcTool"
+
+  args("-mp", "$projectDir/src/main/resources", "$buildDir/$librarymodels_classifier",
+      "-path", "$genDir", "-o", "$genDir", "-hwc", "$hwcDir", "-c2mc")
+  outputs.dir(genDir)
+
+  // configuring logging during generation
+  systemProperties "logback.configurationFile": "$generatorLogbackConfig"
+  systemProperties "LOGBACK_TARGET_DIR" : "$generatorLogbackOutDir"
+  systemProperties "LOGBACK_TARGET_FILE_NAME" : "logback-ma2java"
+}
+
+
+generateCD.mustRunAfter(project.collect {it.project(":generators:cd2pojo").getTasks().withType(Test) })
+generateMontiArc.dependsOn(generateCD)
+generateMontiArc.mustRunAfter(project.collect {it.project(":generators:ma2java").getTasks().withType(Test) })
+compileJava.dependsOn(generateMontiArc)
