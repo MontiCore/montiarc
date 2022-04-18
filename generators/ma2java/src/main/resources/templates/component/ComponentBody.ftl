@@ -13,11 +13,11 @@
 
     <@Ports.printPortsWithGetterAndSetter comp=comp compHelper=compHelper/>
 
-  // component variables
-    <@Utils.printVariables comp=comp compHelper=compHelper/>
-
   // config parameters
     <@Utils.printConfigParameters comp=comp/>
+
+  // component variables
+    <@Utils.printVariables comp=comp compHelper=compHelper/>
 
     <#if comp.isDecomposed()>
       // subcomponents
@@ -83,10 +83,11 @@
       );
     </#if>
 
-    // config parameters
     <#list comp.getParameters() as param>
       this.${param.getName()} = ${param.getName()};
     </#list>
+
+    <@Utils.printVariablesConstructor comp=comp compHelper=compHelper/>
   }
 </#macro>
 

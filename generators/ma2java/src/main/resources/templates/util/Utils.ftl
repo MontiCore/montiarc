@@ -37,11 +37,15 @@
         <#assign visibility="protected">
         <#assign type=variable.getType().print()>
         <#assign name=variable.getName()>
+        ${visibility} ${type} ${name};
+    </#list>
+</#macro>
+
+<#macro printVariablesConstructor comp compHelper>
+    <#list compHelper.getComponentVariables(comp) as variable>
         <#if compHelper.hasInitializerExpression(variable)>
             <#assign initial=compHelper.printExpression(compHelper.getInitializerExpression(variable))>
-            ${visibility} ${type} ${name} = ${initial};
-        <#else>
-            ${visibility} ${type} ${name};
+            this.${variable.getName()} = ${initial};
         </#if>
     </#list>
 </#macro>

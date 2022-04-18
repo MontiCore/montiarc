@@ -8,11 +8,11 @@
   <#assign automaton = compHelper.getAutomatonBehavior().get()>
   <#assign automatonHelper = compHelper.automatonHelperFrom(automaton)>
 
-  // component variables
-  <@Utils.printVariables comp=comp compHelper=compHelper/>
-
   // component config parameters
   <@Utils.printConfigParameters comp=comp/>
+
+  // component variables
+  <@Utils.printVariables comp=comp compHelper=compHelper/>
 
   // current state
   <@Utils.printMember visibility="protected" type=compName+"State" name=identifier.getCurrentStateName()/>
@@ -38,10 +38,12 @@
     public ${compName}Impl
   </#if>
   ( <@Utils.printConfigurationParametersAsList comp=comp/> ) {
+
     <#list comp.getParameters() as param>
-      <#assign paramName=param.getName()>
-      this.${paramName} = ${paramName};
+      this.${param.getName()} = ${param.getName()};
     </#list>
+
+    <@Utils.printVariablesConstructor comp=comp compHelper=compHelper/>
   }
 </#macro>
 
