@@ -52,7 +52,7 @@ dependencies {
 
 task generateCD(type: JavaExec) {
   classpath = configurations.generateCD
-  mainClass = "de.monticore.cd2pojo.POJOGeneratorScript"
+  main = "de.monticore.cd2pojo.POJOGeneratorScript"
 
   args("$projectDir/src/main/resources", "$genDir", "$hwcDir")
   outputs.dir(genDir)
@@ -65,7 +65,7 @@ task generateCD(type: JavaExec) {
 
 task generateMontiArc(type: JavaExec) {
   classpath = configurations.generateMA
-  mainClass = "montiarc.generator.MontiArcTool"
+  main = "montiarc.generator.MontiArcTool"
 
   args("-mp", "$projectDir/src/main/resources", "-path", "$genDir", "-o", "$genDir", "-hwc", "$hwcDir", "-c2mc")
   outputs.dir(genDir)

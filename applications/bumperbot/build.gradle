@@ -59,7 +59,7 @@ task unpackLibrarymodels(type: Sync) {
 
 task generateCD(type: JavaExec) {
   classpath = configurations.generateCD
-  mainClass = "de.monticore.cd2pojo.POJOGeneratorScript"
+  main = "de.monticore.cd2pojo.POJOGeneratorScript"
 
   args("$projectDir/src/main/resources, $buildDir/$librarymodels_classifier", "$genDir", "$hwcDir", "-c2mc")
   outputs.dir(genDir)
@@ -72,7 +72,7 @@ task generateCD(type: JavaExec) {
 
 task generateMontiArc(type: JavaExec) {
   classpath = configurations.generateMA
-  mainClass = "montiarc.generator.MontiArcTool"
+  main = "montiarc.generator.MontiArcTool"
 
   boolean enableAttachDebugger = false
   if(enableAttachDebugger) {

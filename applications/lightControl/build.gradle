@@ -45,7 +45,7 @@ dependencies {
 
 task generateKotlin(type: JavaExec) {
     classpath = configurations.generateKT
-    mainClass = "montiarc.generator.ma2kotlin.ModeArcTool"
+    main = "montiarc.generator.ma2kotlin.ModeArcTool"
 
     args("-mp", "$projectDir/src/main/resources", /*"$buildDir/$librarymodels_classifier",*/
             "-path", "$genDir", /* "-o", "$genDir", "-hwc", "$hwcDir",*/ "-c2mc")
