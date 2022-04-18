@@ -13,7 +13,13 @@ test {
   finalizedBy jacocoTestReport
 }
 
-configurations { testmodels }
+configurations {
+  runtime {
+    exclude group: "de.monticore.lang", module: "cd4analysis"
+    exclude group: "org.codehaus.groovy", module: "groovy"
+  }
+  testmodels
+}
 
 configurations.all {
   resolutionStrategy {
@@ -24,9 +30,7 @@ configurations.all {
 dependencies {
   //MontiCore dependencies
   implementation("de.monticore:monticore-grammar:$mc_version")
-  implementation("de.monticore.lang:statecharts:$mc_version") {
-    exclude group: "de.monticore.lang", module:"cd4analysis"
-  }
+  implementation("de.monticore.lang:statecharts:$mc_version")
   implementation("de.se_rwth.commons:se-commons-groovy:$se_commons_version")
 
   //Internal dependencies

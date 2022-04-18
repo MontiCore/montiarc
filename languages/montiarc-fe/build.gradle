@@ -43,7 +43,13 @@ test {
   finalizedBy jacocoTestReport
 }
 
-configurations { grammar }
+configurations {
+  runtime {
+    exclude group: "de.monticore.lang", module: "cd4analysis"
+    exclude group: "org.codehaus.groovy", module: "groovy"
+  }
+  grammar
+}
 
 dependencies {
   //Grammar dependencies
