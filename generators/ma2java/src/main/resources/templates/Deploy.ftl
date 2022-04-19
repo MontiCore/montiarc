@@ -24,6 +24,7 @@ public class ${deployClassName} {
     }
 
     Log.initFileLog(deployUtils.getLogPath());
+    Log.setTraceEnabled(true);
 
     final ${compName} cmp = new ${compName}();
 
@@ -33,6 +34,7 @@ public class ${deployClassName} {
     long time;
 
     for(int cycles = 0; cycles < deployUtils.getMaxCyclesCount(); cycles++) {
+      Log.trace("::: Time t = " + cycles + " :::");
       time = System.currentTimeMillis();
       cmp.compute();
       cmp.update();

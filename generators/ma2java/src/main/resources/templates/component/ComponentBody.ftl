@@ -137,13 +137,14 @@
 
 <#macro printLogPortValuesMethod comp compHelper>
   public void logPortValues() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("Port values of ${comp.getFullName()} instance '").append(this.instanceName).append("': ");
+    if (this.instanceName == null || this.instanceName == "") return;
+    StringBuilder sb;
     <#list comp.getPorts() as port>
-      sb.append("[${compHelper.getRealPortTypeString(port)} ${port.getName()} = ")
-      .append(this.${port.getName()}.getCurrentValue())
-      .append("]<#if port?has_next>, </#if>");
+      sb = new StringBuilder();
+      sb.append("Value of port '").append(this.instanceName).append(".")
+        .append("${port.getName()} = ")
+        .append(this.${port.getName()}.getCurrentValue());
+      Log.trace(sb.toString());
     </#list>
-  Log.trace(sb.toString());
   }
 </#macro>

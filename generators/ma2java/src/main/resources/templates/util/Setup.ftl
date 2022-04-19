@@ -84,7 +84,7 @@
   public void ${methodName}() {
     <#list comp.getSubComponents() as subcomponent>
       this.${subcomponent.getName()} = new ${compHelper.getSubComponentTypeName(subcomponent)}(<#list compHelper.getParamValues(subcomponent) as param>${param}<#sep>, </#sep></#list>);
-      this.${subcomponent.getName()}.setInstanceName("${subcomponent.getName()}");
+      this.${subcomponent.getName()}.setInstanceName(this.getInstanceName() != null ? this.getInstanceName() + ".${subcomponent.getName()}" : "${subcomponent.getName()}");
       this.${subcomponent.getName()}.${methodName}();
     <#else>
       // This component is atomic, so there are no subcomponent variables to set up.
