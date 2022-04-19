@@ -1,10 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos.behavior;
 
-import arcautomaton._cocos.NoRedundantInitialOutput;
-import arcautomaton._cocos.OneInitialStateAtLeast;
 import arcautomaton._cocos.OneInitialStateAtMax;
 import arcbasis.util.ArcError;
+import de.monticore.scbasis._cocos.AtLeastOneInitialState;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.util.Error;
@@ -26,12 +25,11 @@ public class InitialStateInAutomata extends AbstractCoCoTest {
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
         Arguments.of("AllStatesInitial.arc", new Error[] {ArcError.MANY_INITIAL_STATES}),
-        Arguments.of("LacksInitialState.arc", new Error[] {ArcError.NO_INITIAL_STATE}),
+        // Arguments.of("LacksInitialState.arc", new Error[] { /* Error for missing initial state. */ }),  Comes from a statechart language, and thus it is hard to test here, and we already test it in OriginalStatechartCocos
         Arguments.of("TwoInitialStates.arc", new Error[] {ArcError.MANY_INITIAL_STATES}),
         Arguments.of("MultipleInitialOutputDeclarations.arc", new Error[] {ArcError.MANY_INITIAL_STATES}),
         Arguments.of("MultipleStatesDeclaredInitial.arc", new Error[] {ArcError.MANY_INITIAL_STATES}),
-        Arguments.of("RedundantInitialOutputDeclarations.arc",
-          new Error[] {ArcError.MANY_INITIAL_STATES, ArcError.REDUNDANT_INITIAL_DECLARATION})
+        Arguments.of("RedundantInitialOutputDeclarations.arc", new Error[] {ArcError.MANY_INITIAL_STATES})
     );
   }
 
@@ -53,9 +51,7 @@ public class InitialStateInAutomata extends AbstractCoCoTest {
 
   @Override
   protected void registerCoCos(MontiArcCoCoChecker checker) {
-    checker.addCoCo(new OneInitialStateAtLeast());
+    checker.addCoCo(new AtLeastOneInitialState());
     checker.addCoCo(new OneInitialStateAtMax());
-    checker.addCoCo(new NoRedundantInitialOutput());
   }
-
 }

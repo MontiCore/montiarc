@@ -1,17 +1,16 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcautomaton._cocos.FieldReadWriteAccessFitsInGuards;
-import arcautomaton._cocos.FieldReadWriteAccessFitsInStatements;
-import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
-import arcautomaton._cocos.NoRedundantInitialOutput;
+import arcautomaton._cocos.*;
 import arcbasis._cocos.*;
 import arcbasis._cocos.NoBehaviorInComposedComponents;
 import arcbasis._cocos.OnlyOneBehavior;
 import basicmodeautomata._cocos.StaticCheckOfDynamicTypes;
 import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.scbasis._cocos.AtLeastOneInitialState;
 import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
 import de.monticore.scbasis._cocos.UniqueStates;
+import de.monticore.sctransitions4code._cocos.AnteBlocksOnlyForInitialStates;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
@@ -67,13 +66,15 @@ public class MontiArcCoCos {
     checker.addCoCo(new UniqueStates());
     checker.addCoCo(new TransitionSourceTargetExists());
     checker.addCoCo(new TransitionPreconditionsAreBoolean(new MontiArcTypeCalculator()));
+    checker.addCoCo(new AtLeastOneInitialState());
+    checker.addCoCo(new AnteBlocksOnlyForInitialStates());
 
     // ArcAutomaton CoCos
     checker.addCoCo(new FieldReadWriteAccessFitsInGuards());
     checker.addCoCo(new FieldReadWriteAccessFitsInStatements());
-    checker.addCoCo(new NoRedundantInitialOutput());
     checker.addCoCo(new NoInputPortsInInitialOutputDeclaration());
-    // checker.addCoCo(new ExpressionStatementWellFormedness(new MontiArcDeriveType())); // TODO: integrate coco MontiCore bug is fixed: https://git.rwth-aachen.de/monticore/monticore/-/issues/3082
+    checker.addCoCo(new OneInitialStateAtMax());
+    // checker.addCoCo(new ExpressionStatementWellFormedness(new MontiArcTypeCalculator())); // TODO: integrate coco when MontiArc bug is fixed: we currently have no symbol table creation for grammar VarDeclarationStatements
 
     // MontiArc CoCos
     checker.addCoCo(new ComponentInheritanceRespectsGenericTypeBounds());

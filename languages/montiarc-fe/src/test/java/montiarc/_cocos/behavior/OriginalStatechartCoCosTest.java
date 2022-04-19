@@ -3,6 +3,7 @@ package montiarc._cocos.behavior;
 
 import com.google.common.base.Preconditions;
 import de.monticore.scbasis._cocos.*;
+import de.monticore.sctransitions4code._cocos.AnteBlocksOnlyForInitialStates;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
@@ -29,7 +30,7 @@ import java.util.stream.Stream;
  * Tests whether the original state-chart cocos of TriggeredStatecharts work in statecharts of MontiArc.
  * Those are:
  * {@link UniqueStates}, {@link TransitionSourceTargetExists},
- * {@link CapitalStateNames}
+ * {@link CapitalStateNames}, {@link AtLeastOneInitialState}, {@link TransitionPreconditionsAreBoolean}
  */
 class OriginalStatechartCoCosTest extends AbstractCoCoTest {
 
@@ -137,12 +138,57 @@ class OriginalStatechartCoCosTest extends AbstractCoCoTest {
     testModel(model, errors);
   }
 
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "atLeastOneInitialState/OneInitialState.arc",
+    "atLeastOneInitialState/TwoInitialStates.arc"
+  })
+  void shouldSucceedAtLeastOneInitialState(@NotNull String model) {
+    testModel(model);
+  }
+
+  @ParameterizedTest
+  @MethodSource("atLeastOneInitialStateModelAndExpectedErrorProvider")
+  void shouldFailAtLeastOneInitialState(@NotNull String model, @NotNull Error... errors) {
+    testModel(model, errors);
+  }
+
+  protected static Stream<Arguments> atLeastOneInitialStateModelAndExpectedErrorProvider() {
+    return Stream.of(
+      Arguments.of("atLeastOneInitialState/NoInitialState.arc",
+        new Error[]{ExternalErrors.MISSING_INITIAL_STATE})
+    );
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "anteBlocksOnlyForInitialStates/AnteBeforeInitialState.arc"
+  })
+  void shouldSucceedWithAnteBlockBeforeInitialState(@NotNull String model) {
+    testModel(model);
+  }
+
+  @ParameterizedTest
+  @MethodSource("anteBlockAndNormalStateModelAndExpectedErrorProvider")
+  void shouldFailWithAnteBlockBeforeNormalState(@NotNull String model, @NotNull Error... errors) {
+    testModel(model, errors);
+  }
+
+  protected static Stream<Arguments> anteBlockAndNormalStateModelAndExpectedErrorProvider() {
+    return Stream.of(
+      Arguments.of("anteBlocksOnlyForInitialStates/AnteBeforeNormalStates.arc",
+        new Error[]{ExternalErrors.ANTE_NOT_AT_INITIAL, ExternalErrors.ANTE_NOT_AT_INITIAL})
+    );
+  }
+
   @Override
   protected void registerCoCos(MontiArcCoCoChecker checker) {
     checker.addCoCo(new UniqueStates());
     checker.addCoCo(new TransitionSourceTargetExists());
     checker.addCoCo(new CapitalStateNames());
     checker.addCoCo(new TransitionPreconditionsAreBoolean(new MontiArcTypeCalculator()));
+    checker.addCoCo(new AtLeastOneInitialState());
+    checker.addCoCo(new AnteBlocksOnlyForInitialStates());
   }
 
   /**
@@ -156,7 +202,9 @@ class OriginalStatechartCoCosTest extends AbstractCoCoTest {
     PACKAGE_CORRESPONDS_TO_FOLDERS(PackageCorrespondsToFolders.ERROR_CODE),
     SC_FILE_EXTENSION(SCFileExtension.ERROR_CODE),
     SC_NAME_IS_ARTIFACT_NAME(SCNameIsArtifactName.ERROR_CODE),
-    PRECONDITION_IS_NOT_BOOLEAN(TransitionPreconditionsAreBoolean.ERROR_CODE);
+    PRECONDITION_IS_NOT_BOOLEAN(TransitionPreconditionsAreBoolean.ERROR_CODE),
+    MISSING_INITIAL_STATE(AtLeastOneInitialState.ERROR_CODE),
+    ANTE_NOT_AT_INITIAL(AnteBlocksOnlyForInitialStates.ERROR_CODE);
 
     ExternalErrors(String code){
       this.code = code;
