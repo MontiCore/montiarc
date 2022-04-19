@@ -42,7 +42,6 @@ grammar MontiArc extends
             de.monticore.types.MCSimpleGenericTypes,
             de.monticore.statements.MCCommonStatements,
             de.monticore.statements.MCVarDeclarationStatements,
-            ArcAutomaton,
             de.monticore.SCDoActions,
             ArcCompute,
             ArcCore,
