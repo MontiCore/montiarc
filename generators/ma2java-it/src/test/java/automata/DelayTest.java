@@ -46,17 +46,16 @@ public class DelayTest {
     // provide initial input
     delay.getPortI().setNextValue(input[0]);
     delay.getPortI().update();
-    delay.compute();
     delay.update();
 
     // When
     List<OnOff> actual = new ArrayList<>(output.length);
+    // no initial output
     OnOff initial = delay.getPortO().getCurrentValue();
-
     for (int i = 1; i < input.length; i++) {
       delay.getPortI().setNextValue(input[i]);
-      delay.getPortI().update();
       delay.compute();
+      delay.getPortI().update();
       delay.update();
 
       // add the current value after computation

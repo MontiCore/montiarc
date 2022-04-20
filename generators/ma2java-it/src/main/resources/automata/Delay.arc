@@ -5,8 +5,10 @@ import types.OnOff;
 
 /**
  * Atomic component with an input and output port. Its behavior is defined
- * through an automaton. The automaton delays messages received via its input
- * channel by one computation cycle.
+ * through an automaton. As outputs of automata are generally only available
+ * as input in the next computation cycle, this component effectively delays
+ * received inputs by one computation cycle (The implementation of MA2Java
+ * enforces strong causality).
  */
 component Delay {
 
@@ -18,20 +20,10 @@ component Delay {
    */
   automaton {
     // initial state to delay initial output
-    initial state Start;
-    // a state for each message kind
-    state On;
-    state Off;
+    initial state S;
 
-    // transition according to the input received
-    Start -> On [ i == OnOff.ON ];
-    Start -> Off [ i == OnOff.OFF ];
-
-    /* send message according to the current state,
-     transition according to the input received */
-    On -> On [ i == OnOff.ON ] / { o = OnOff.ON; };
-    On -> Off [ i == OnOff.OFF ] / { o = OnOff.ON; };
-    Off -> On [ i == OnOff.ON ] / { o = OnOff.OFF; };
-    Off -> Off [ i == OnOff.OFF ] / { o = OnOff.OFF; };
+    // emit received message
+    S -> S [ i == OnOff.ON ] / { o = OnOff.ON; };
+    S -> S [ i == OnOff.OFF ] / { o = OnOff.OFF; };
   }
 }
