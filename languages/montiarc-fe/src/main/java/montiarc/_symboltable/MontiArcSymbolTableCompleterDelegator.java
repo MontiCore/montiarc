@@ -4,11 +4,13 @@ package montiarc._symboltable;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisSymbolTableCompleter;
 import com.google.common.base.Preconditions;
+import de.monticore.statements.mcvardeclarationstatements._symboltable.MCVarDeclarationStatementsSTCompleteTypes;
 import genericarc.GenericArcMill;
 import genericarc._symboltable.GenericArcSymbolTableCompleter;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._visitor.MontiArcTraverser;
+import montiarc.check.MontiArcTypeCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._symboltable.VariableArcSymbolTableCompleter;
@@ -33,6 +35,7 @@ public class MontiArcSymbolTableCompleterDelegator {
     this.initArcBasis();
     this.initGenericArc();
     this.initVariableArc();
+    this.initVarDeclarationStatements();
   }
 
   protected void initArcBasis() {
@@ -52,6 +55,12 @@ public class MontiArcSymbolTableCompleterDelegator {
     this.getTraverser().add4ArcBasis(variableArcSymbolTableCompleter);
     this.getTraverser().add4VariableArc(variableArcSymbolTableCompleter);
     this.getTraverser().setVariableArcHandler(variableArcSymbolTableCompleter);
+  }
+
+  protected void initVarDeclarationStatements() {
+    MCVarDeclarationStatementsSTCompleteTypes completer =
+      new MCVarDeclarationStatementsSTCompleteTypes(new MontiArcTypeCalculator());
+    this.getTraverser().add4MCVarDeclarationStatements(completer);
   }
 
   public void createFromAST(@NotNull ASTMACompilationUnit rootNode) {

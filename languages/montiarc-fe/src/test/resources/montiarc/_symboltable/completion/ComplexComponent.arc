@@ -42,12 +42,12 @@ component ComplexComponent (int par1, String par2, Integer par3) {
     port in  boolean a, b,
          out boolean c;
     automaton {
-      initial state s1;
+      initial { System.out.println("enter s1"); boolean foo = false; c = foo; } state s1;
       state s2;
-      s1 -> s1 [ a || b == false ] / { System.out.println("enter s1"); c = false; };
-      s1 -> s2 [ a || b == true ] / { System.out.println("enter s2"); c = false; };
-      s2 -> s1 [ a || b == false ] / { System.out.println("enter s1"); c = true; };
-      s2 -> s2 [ a || b == true ] / { System.out.println("enter s2"); c = true; };
+      s1 -> s1 [ a || b == false ] / { System.out.println("enter s1"); boolean foo = false; c = foo; };
+      s1 -> s2 [ a || b == true ] / { System.out.println("enter s2"); boolean foo = false; c = foo; };
+      s2 -> s1 [ a || b == false ] / { System.out.println("enter s1"); boolean foo = false; c = foo; };
+      s2 -> s2 [ a || b == true ] / { System.out.println("enter s2"); boolean foo = false; c = foo; };
     }
   }
 

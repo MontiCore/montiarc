@@ -10,17 +10,35 @@ public class MontiArcScopesGenitorDelegator extends MontiArcScopesGenitorDelegat
 
   public MontiArcScopesGenitorDelegator() {
     super();
-    traverser.getArcBasisVisitorList().clear();
-    ArcBasisScopesGenitor arcBasisScopesGenitor = ArcBasisMill.scopesGenitor();
-    arcBasisScopesGenitor.setScopeStack(scopeStack);
-    traverser.add4ArcBasis(arcBasisScopesGenitor);
-    traverser.setArcBasisHandler(arcBasisScopesGenitor);
+    this.resetVisitorLists();
+    this.initArcBasisGenitor();
+    this.initVariableArcGenitor();
+  }
 
+  protected void resetVisitorLists() {
+    // Visitor lists are not reset indiviudally in the init|Lang|Gentior methods, as different genitors add themselves
+    // as visitors for different sublanguages. E.g., both the ArcBasisGenitor and VariableArcGenitor are added as
+    // visitors for ArcBasis.
+    // Handlers on the other side are reset in the corresponding methods. This is possible, as there can only be one
+    // handler and the genitors are not competing for it.
+    traverser.getArcBasisVisitorList().clear();
     traverser.getVariableArcVisitorList().clear();
-    VariableArcScopesGenitor variableArcScopesGenitor = VariableArcMill.scopesGenitor();
-    variableArcScopesGenitor.setScopeStack(scopeStack);
-    traverser.add4VariableArc(variableArcScopesGenitor);
-    traverser.add4ArcBasis(variableArcScopesGenitor);
-    traverser.setVariableArcHandler(variableArcScopesGenitor);
+  }
+
+  protected void initArcBasisGenitor() {
+    ArcBasisScopesGenitor genitor = ArcBasisMill.scopesGenitor();
+    genitor.setScopeStack(scopeStack);
+
+    traverser.setArcBasisHandler(genitor);
+    traverser.add4ArcBasis(genitor);
+  }
+
+  protected void initVariableArcGenitor() {
+    VariableArcScopesGenitor genitor = VariableArcMill.scopesGenitor();
+    genitor.setScopeStack(scopeStack);
+
+    traverser.setVariableArcHandler(genitor);
+    traverser.add4VariableArc(genitor);
+    traverser.add4ArcBasis(genitor);
   }
 }
