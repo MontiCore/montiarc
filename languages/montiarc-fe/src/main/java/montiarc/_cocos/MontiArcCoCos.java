@@ -32,7 +32,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new ComponentTypeNameCapitalization());
     checker.addCoCo(new ConfigurationParametersCorrectlyInherited());
     checker.addCoCo(new ConfigurationParameterAssignment(new MontiArcTypeCalculator()));
-    checker.addCoCo(new ConnectorSourceAndTargetComponentDiffer());
+    //checker.addCoCo(new ConnectorSourceAndTargetComponentDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetDirectionsFit());
     checker.addCoCo(new ConnectorSourceAndTargetExist());
