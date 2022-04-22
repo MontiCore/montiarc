@@ -76,18 +76,22 @@ public class SequentialCompositionTest {
    */
   protected static Stream<Arguments> inputAndExpectedOutputProvider() {
     return Stream.of(
+        // 1
         Arguments.of(
             new OnOff[]{OnOff.ON, OnOff.OFF},
             new OnOff[]{}
         ),
+        // 2
         Arguments.of(
             new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON},
             new OnOff[]{OnOff.OFF}
         ),
+        // 3
         Arguments.of(
             new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF},
             new OnOff[]{OnOff.OFF, OnOff.ON}
         ),
+        // 4
         Arguments.of(
             new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON},
             new OnOff[]{OnOff.OFF, OnOff.ON, OnOff.OFF}

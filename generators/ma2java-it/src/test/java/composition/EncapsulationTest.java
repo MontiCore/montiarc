@@ -77,13 +77,26 @@ public class EncapsulationTest {
    */
   protected static Stream<Arguments> inputAndExpectedOutputProvider() {
     return Stream.of(
-        Arguments.of(new OnOff[]{OnOff.ON}, new OnOff[]{}),
-        Arguments.of(new OnOff[]{OnOff.ON, OnOff.OFF},
-            new OnOff[]{OnOff.ON}),
-        Arguments.of(new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON},
-            new OnOff[]{OnOff.ON, OnOff.OFF}),
-        Arguments.of(new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF},
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON})
+        // 1
+        Arguments.of(
+            new OnOff[]{OnOff.ON},
+            new OnOff[]{}
+        ),
+        // 2
+        Arguments.of(
+            new OnOff[]{OnOff.ON, OnOff.OFF},
+            new OnOff[]{OnOff.ON}
+        ),
+        // 3
+        Arguments.of(
+            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON},
+            new OnOff[]{OnOff.ON, OnOff.OFF}
+        ),
+        // 4
+        Arguments.of(
+            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF},
+            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON}
+        )
     );
   }
 }
