@@ -35,8 +35,8 @@ public class SourceTest {
   public void shouldProduceExpectedOutput(int cycles,
                                           @NotNull OnOff[] expected) {
     Preconditions.checkNotNull(expected);
-    Preconditions.checkArgument(cycles > 0);
-    Preconditions.checkArgument(expected.length > 0);
+    Preconditions.checkArgument(cycles >= 1);
+    Preconditions.checkArgument(expected.length >= 1);
     Preconditions.checkArgument(expected.length == cycles);
 
     //Given

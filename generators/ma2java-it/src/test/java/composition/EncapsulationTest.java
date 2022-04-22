@@ -39,7 +39,7 @@ public class EncapsulationTest {
                                           @NotNull OnOff[] output) {
     Preconditions.checkNotNull(input);
     Preconditions.checkNotNull(output);
-    Preconditions.checkArgument(input.length > 0);
+    Preconditions.checkArgument(input.length >= 1);
     Preconditions.checkArgument(input.length == output.length + 1);
 
     //Given

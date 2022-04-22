@@ -37,7 +37,7 @@ public class SinkTest {
                                         @NotNull SinkState[] expected) {
     Preconditions.checkNotNull(input);
     Preconditions.checkNotNull(expected);
-    Preconditions.checkArgument(expected.length > 0);
+    Preconditions.checkArgument(expected.length >= 1);
     Preconditions.checkArgument(expected.length == input.length + 1);
 
     // Given

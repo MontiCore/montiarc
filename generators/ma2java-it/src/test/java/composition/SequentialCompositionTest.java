@@ -26,7 +26,8 @@ public class SequentialCompositionTest {
    *
    * @param input  the inputs given to the component under test in order
    * @param output the expected output messages in order, its
-   *               length should match the number of input messages
+   *               length should match the number of input messages (minus two
+   *    *               because of missing initial output)
    */
   @ParameterizedTest
   @MethodSource("inputAndExpectedOutputProvider")

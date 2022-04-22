@@ -36,7 +36,7 @@ public class NondeterminismTest {
                                         @NotNull NondeterminismState[] expected) {
     Preconditions.checkNotNull(expected);
     Preconditions.checkArgument(cycles >= 0);
-    Preconditions.checkArgument(expected.length > 0);
+    Preconditions.checkArgument(expected.length >= 1);
     Preconditions.checkArgument(expected.length == cycles + 1);
 
     // Given

@@ -167,9 +167,9 @@ public class InitialActionTest {
     Preconditions.checkNotNull(o2);
     Preconditions.checkNotNull(o3);
     Preconditions.checkArgument(cycles >= 0);
-    Preconditions.checkArgument(o1.length > 0);
-    Preconditions.checkArgument(o2.length > 0);
-    Preconditions.checkArgument(o3.length > 0);
+    Preconditions.checkArgument(o1.length >= 1);
+    Preconditions.checkArgument(o2.length >= 1);
+    Preconditions.checkArgument(o3.length >= 1);
     Preconditions.checkArgument(o1.length == cycles + 1);
     Preconditions.checkArgument(o2.length == cycles + 1);
     Preconditions.checkArgument(o3.length == cycles + 1);
