@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 /**
  * The system under test is the component {@code Delay}. The black-box tests
- * ensures that the system produces the expected outputs.
+ * ensure that the system produces the expected outputs.
  */
 public class DelayTest {
 
