@@ -6,10 +6,12 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
+import arcbasis._symboltable.SymbolService;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.se_rwth.commons.logging.Log;
@@ -28,11 +30,15 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractTest {
   private static final String BOOL_VAR_NAME = "aBool";
   private static final String DOUBLE_VAR_NAME = "aDouble";
 
+  private static final String FOO_TYPE_NAME = "FooType";
+  private static final String BAR_TYPE_NAME = "BarType";
+
   @Override
   @BeforeEach
   public void init() {
     super.init();
     this.addFieldsToScope();
+    this.addTypesToScope();
   }
 
   public void addFieldsToScope() {
@@ -43,9 +49,23 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractTest {
     FieldSymbol aDouble = ArcBasisMill.fieldSymbolBuilder().setName(DOUBLE_VAR_NAME)
       .setType(SymTypeExpressionFactory.createTypeConstant("double")).build();
 
-    ArcBasisMill.globalScope().add(anInt);
-    ArcBasisMill.globalScope().add(aBool);
-    ArcBasisMill.globalScope().add(aDouble);
+    SymbolService.link(ArcBasisMill.globalScope(), anInt);
+    SymbolService.link(ArcBasisMill.globalScope(), aBool);
+    SymbolService.link(ArcBasisMill.globalScope(), aDouble);
+  }
+
+  public void addTypesToScope() {
+    OOTypeSymbol fooType = ArcBasisMill.oOTypeSymbolBuilder()
+      .setName(FOO_TYPE_NAME)
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+    OOTypeSymbol barType = ArcBasisMill.oOTypeSymbolBuilder()
+      .setName(BAR_TYPE_NAME)
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+
+    SymbolService.link(ArcBasisMill.globalScope(), fooType);
+    SymbolService.link(ArcBasisMill.globalScope(), barType);
   }
 
   @Test
@@ -133,6 +153,27 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractTest {
 
     //Then
     this.checkOnlyExpectedErrorsPresent(ArcError.DEFAULT_PARAM_EXPRESSION_WRONG_TYPE);
+  }
+
+  @Test
+  public void shouldFindTypeReference() {
+    ASTArcParameter param = ArcBasisMill.arcParameterBuilder()
+      .setName("fooField")
+      .setMCType(createQualifiedType("int"))
+      .setDefault(doBuildNameExpressionInGlobalScope(FOO_TYPE_NAME))
+      .build();
+
+    ASTComponentType enclComp = encloseParamInCompType(param);
+    ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
+
+    ParameterDefaultValueTypesCorrect coco = new ParameterDefaultValueTypesCorrect();
+
+    //When
+    coco.check(param);
+
+    //Then
+    this.checkOnlyExpectedErrorsPresent(ArcError.PARAM_DEFAULT_VALUE_IS_TYPE_REF);
   }
 
   protected ASTComponentType encloseParamInCompType(@NotNull ASTArcParameter param) {

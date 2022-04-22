@@ -102,6 +102,28 @@ public class FieldInitExpressionTypesCorrectCalculatorTest extends ArcBasisTypeC
     this.checkOnlyExpectedErrorsPresent(ArcError.FIELD_INIT_EXPRESSION_WRONG_TYPE);
   }
 
+  @Test
+  void shouldFindTypeReference() {
+    ASTArcField field = ArcBasisMill.arcFieldBuilder()
+      .setName("foofield")
+      .setInitial(doBuildNameExpressionInScope("Person"))
+      .build();
+
+    ASTArcFieldDeclaration fieldDecl = ArcBasisMill.arcFieldDeclarationBuilder()
+      .setMCType(createQualifiedType("int"))
+      .addArcField(field)
+      .build();
+
+    ASTComponentType enclComp = encloseFieldInCompType(fieldDecl);
+    ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
+
+    FieldInitExpressionTypesCorrect coco = new FieldInitExpressionTypesCorrect();
+    coco.check(field);
+
+    this.checkOnlyExpectedErrorsPresent(ArcError.FIELD_INITIALIZATION_IS_TYPE_REF);
+  }
+
   protected ASTComponentType encloseFieldInCompType(@NotNull ASTArcFieldDeclaration field) {
     Preconditions.checkNotNull(field);
 

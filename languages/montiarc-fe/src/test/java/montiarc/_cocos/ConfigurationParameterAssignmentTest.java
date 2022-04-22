@@ -3,6 +3,7 @@
 package montiarc._cocos;
 
 import arcbasis._cocos.ConfigurationParameterAssignment;
+import arcbasis._symboltable.SymbolService;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
@@ -25,6 +26,7 @@ class ConfigurationParameterAssignmentTest extends AbstractCoCoTest {
   @BeforeEach
   public void prepareModels() {
     loadList();
+    loadPerson();
     loadComponentsToInstantiate();
   }
 
@@ -34,8 +36,15 @@ class ConfigurationParameterAssignmentTest extends AbstractCoCoTest {
       .setSpannedScope(MontiArcMill.scope())
       .build();
     listSym.addTypeVarSymbol(MontiArcMill.typeVarSymbolBuilder().setName("T").build());
-    MontiArcMill.globalScope().add(listSym);
-    MontiArcMill.globalScope().addSubScope(listSym.getSpannedScope());
+    SymbolService.link(MontiArcMill.globalScope(), listSym);
+  }
+
+  public void loadPerson() {
+    OOTypeSymbol personSym = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("Person")
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
+    SymbolService.link(MontiArcMill.globalScope(), personSym);
   }
 
   public void loadComponentsToInstantiate() {
@@ -77,7 +86,15 @@ class ConfigurationParameterAssignmentTest extends AbstractCoCoTest {
         ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH),
       arg("WrongGenericParameterBindings.arc",
         ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH,
-        ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH)
+        ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH),
+      arg("BindsTypeReference.arc",
+        ArcError.CONFIG_PARAM_BINDING_IS_TYPE_REF),
+      arg("TooFewParameterBindingsAndTypeRef.arc",
+        ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS,
+        ArcError.CONFIG_PARAM_BINDING_IS_TYPE_REF),
+      arg("IncompatibleAndBindsTypeRef.arc",
+        ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH,
+        ArcError.CONFIG_PARAM_BINDING_IS_TYPE_REF)
     );
   }
 

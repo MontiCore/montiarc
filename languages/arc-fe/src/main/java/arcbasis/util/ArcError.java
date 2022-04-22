@@ -118,6 +118,15 @@ public enum ArcError implements montiarc.util.Error {
   WRITE_TO_READONLY_VARIABLE("0xC1095", "Cannot write to readonly variable '%s' of component '%s'."),
   INPUT_PORT_IN_INITIAL_OUT_DECL("0xC1099", "Input port '%s' is referenced in the initial output declaration. This " +
     "is illegal as input port values are undefined at the point of component initialization."),
+  PARAM_DEFAULT_VALUE_IS_TYPE_REF("0xC1100", "The expression represents the type '%s'. Therefore it can not be used " +
+    "as the default value for the configuration parameter '%s', as default value expressions must evaluate to values " +
+    "(which type names do not do)."),
+  CONFIG_PARAM_BINDING_IS_TYPE_REF("0xC1101", "The expression represents the type '%s'. Therefore it can not be " +
+    "used to bind the configuration parameter '%s' at position '%s' of the subcomponent '%s %s', as configuration parameter bindings " +
+    "must evaluate to values (which type names do not do)."),
+  FIELD_INITIALIZATION_IS_TYPE_REF("0xC1102", "The expression represents the type '%s'. Therefore it can not be used " +
+    "as initialization value for field '%s', as initialization expressions must evaluate to values (which type names " +
+    "do not do)."),
   PORT_NOT_WRITTEN_IN_TRANSITION("0xC1200", "There is a transition, which, when followed, leaves port '%s' without a value."),
   PORT_NOT_WRITTEN_IN_STATE("0xC1201", "When staying in state '%s' (which might happen, because there is no unconditional transition leaving that state), port '%s' is left without a value");
 

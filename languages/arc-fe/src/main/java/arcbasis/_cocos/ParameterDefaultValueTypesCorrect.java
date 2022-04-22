@@ -61,18 +61,24 @@ public class ParameterDefaultValueTypesCorrect implements ArcBasisASTArcParamete
       ASTExpression defaultExpr = astParam.getDefault();
       TypeCheckResult expressionType = this.getTypeCalculator().deriveType(defaultExpr);
 
-      if (expressionType.isPresentCurrentResult() && !TypeCheck.compatible(paramType, expressionType.getCurrentResult())) {
-        Log.error(ArcError.DEFAULT_PARAM_EXPRESSION_WRONG_TYPE.format(
-          paramSym.getFullName(),
-          expressionType.getCurrentResult().print(),
-          paramType.print()),
-          astParam.get_SourcePositionStart());
-      }
       if(!expressionType.isPresentCurrentResult()) {
         Log.debug(String.format("Checking coco '%s' is skipped for parameter '%s', as the type of the its default " +
               "value expression could not be calculated. Position: '%s'.",
             this.getClass().getSimpleName(), astParam.getName(), astParam.get_SourcePositionStart()),
           "CoCos");
+
+      } else if (expressionType.isType()) {
+        Log.error(ArcError.PARAM_DEFAULT_VALUE_IS_TYPE_REF.format(
+            expressionType.getCurrentResult().print(),
+            paramSym.getName()),
+            astParam.get_SourcePositionStart(), astParam.get_SourcePositionEnd());
+
+      } else if (!TypeCheck.compatible(paramType, expressionType.getCurrentResult())) {
+        Log.error(ArcError.DEFAULT_PARAM_EXPRESSION_WRONG_TYPE.format(
+          paramSym.getName(),
+          expressionType.getCurrentResult().print(),
+          paramType.print()),
+          astParam.get_SourcePositionStart(), astParam.get_SourcePositionEnd());
       }
     }
   }

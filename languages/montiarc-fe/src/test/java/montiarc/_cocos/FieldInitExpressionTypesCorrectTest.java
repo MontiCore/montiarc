@@ -2,8 +2,10 @@
 package montiarc._cocos;
 
 import arcbasis._cocos.FieldInitExpressionTypesCorrect;
+import arcbasis._symboltable.SymbolService;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
@@ -20,7 +22,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-public class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
+class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
 
   @Override
   protected String getPackage() {
@@ -36,15 +38,38 @@ public class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
   @BeforeEach
   public void init() {
     super.init();
-    MontiArcMill.globalScope()
-      .add(MontiArcMill.typeSymbolBuilder().setName("String").setEnclosingScope(MontiArcMill.globalScope()).build());
+    this.provideTypes();
+  }
+
+  protected void provideTypes() {
+    TypeSymbol string = MontiArcMill.typeSymbolBuilder()
+      .setName("String")
+      .setEnclosingScope(MontiArcMill.globalScope())
+      .build();
+
+    TypeSymbol person = MontiArcMill.typeSymbolBuilder()
+      .setName("Person")
+      .setEnclosingScope(MontiArcMill.globalScope())
+      .build();
+
+    SymbolService.link(MontiArcMill.globalScope(), string);
+    SymbolService.link(MontiArcMill.globalScope(), person);
   }
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
       arg("IncorrectFieldInitializations.arc",
         ArcError.FIELD_INIT_EXPRESSION_WRONG_TYPE,
-        ArcError.FIELD_INIT_EXPRESSION_WRONG_TYPE));
+        ArcError.FIELD_INIT_EXPRESSION_WRONG_TYPE),
+      arg("IncompatibleAndTypeRef.arc",
+        ArcError.FIELD_INITIALIZATION_IS_TYPE_REF,
+        ArcError.FIELD_INIT_EXPRESSION_WRONG_TYPE,
+        ArcError.FIELD_INITIALIZATION_IS_TYPE_REF,
+        ArcError.FIELD_INIT_EXPRESSION_WRONG_TYPE),
+      arg("TypeRefAsFieldInitialization.arc",
+        ArcError.FIELD_INITIALIZATION_IS_TYPE_REF,
+        ArcError.FIELD_INITIALIZATION_IS_TYPE_REF)
+    );
   }
 
   @ParameterizedTest
@@ -53,7 +78,7 @@ public class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
       "FieldInitializationWithConstructor.arc",
       "ParameterShadowing.arc"
   })
-  public void shouldApproveValidTypeAssignments(@NotNull String model) {
+  void shouldApproveValidTypeAssignments(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     //Given
@@ -69,16 +94,7 @@ public class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
 
   @ParameterizedTest
   @MethodSource("modelAndExpectedErrorsProvider")
-  public void shouldFindInvalidTypeAssignments(@NotNull String model, @NotNull Error... errors) {
-    Preconditions.checkNotNull(model);
-
-    //Given
-    ASTMACompilationUnit ast = this.parseAndCreateAndCompleteSymbols(model);
-
-    //When
-    this.getChecker().checkAll(ast);
-
-    //Then
-    this.checkOnlyExpectedErrorsPresent(errors);
+  void shouldFindInvalidTypeAssignments(@NotNull String model, @NotNull Error... errors) {
+    testModel(model, errors);
   }
 }

@@ -173,7 +173,14 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
         ArcBasisMill.argumentsBuilder()
           .addExpression(doBuildNameExpressionInScope("aDouble"))
           .build(),
-        new ArcError[] {ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS, ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH})
+        new ArcError[] {ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS, ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH}),
+
+    Arguments.arguments("shouldFindTypeReference",
+      provideSimpleCompType(),
+      ArcBasisMill.argumentsBuilder()
+        .addExpression(doBuildNameExpressionInScope("Person"))
+        .build(),
+      new ArcError[]{ArcError.CONFIG_PARAM_BINDING_IS_TYPE_REF})
     );
   }
 

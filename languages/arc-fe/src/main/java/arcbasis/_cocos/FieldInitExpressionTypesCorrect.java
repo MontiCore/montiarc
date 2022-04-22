@@ -59,18 +59,22 @@ public class FieldInitExpressionTypesCorrect implements ArcBasisASTArcFieldCoCo 
     ASTExpression initExpr = astField.getInitial();
     TypeCheckResult expressionType = this.getTypeCalculator().deriveType(initExpr);
 
-    if (expressionType.isPresentCurrentResult() && !TypeCheck.compatible(fieldType, expressionType.getCurrentResult())) {
-      Log.error(ArcError.FIELD_INIT_EXPRESSION_WRONG_TYPE.format(
-          fieldSym.getFullName(),
-          expressionType.getCurrentResult().print(),
-          fieldType.print()),
-        astField.get_SourcePositionStart(), astField.get_SourcePositionEnd());
-    }
     if (!expressionType.isPresentCurrentResult()) {
       Log.debug(String.format("Checking coco '%s' is skipped for field '%s', as the type of the initialization " +
             "expression could not be calculated. Position: '%s'.",
           this.getClass().getSimpleName(), astField.getName(), astField.get_SourcePositionStart()),
         "CoCos");
+    } else if (expressionType.isType()) {
+      Log.error(ArcError.FIELD_INITIALIZATION_IS_TYPE_REF.format(
+          expressionType.getCurrentResult().print(),
+          fieldSym.getName()),
+        astField.get_SourcePositionStart(), astField.get_SourcePositionEnd());
+    } else if (!TypeCheck.compatible(fieldType, expressionType.getCurrentResult())) {
+      Log.error(ArcError.FIELD_INIT_EXPRESSION_WRONG_TYPE.format(
+          fieldSym.getName(),
+          expressionType.getCurrentResult().print(),
+          fieldType.print()),
+        astField.get_SourcePositionStart(), astField.get_SourcePositionEnd());
     }
   }
 }
