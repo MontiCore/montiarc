@@ -81,10 +81,6 @@ public class SequentialCompositionTest {
             new OnOff[]{}
         ),
         Arguments.of(
-            new OnOff[]{OnOff.ON, OnOff.OFF},
-            new OnOff[]{}
-        ),
-        Arguments.of(
             new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON},
             new OnOff[]{OnOff.OFF}
         ),
