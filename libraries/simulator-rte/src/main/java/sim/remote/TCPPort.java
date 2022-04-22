@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.remote;
 
-import sim.generic.TickedMessage;
+import sim.message.TickedMessage;
 import sim.port.Port;
 
 import java.util.LinkedList;
@@ -29,7 +29,7 @@ public class TCPPort<T> extends Port<T> implements IInTCPPort<T>, IOutTcpPort<T>
   }
 
   /**
-   * @see sim.port.Port#accept(sim.generic.TickedMessage)
+   * @see sim.port.Port#accept(TickedMessage)
    */
   @SuppressWarnings("unchecked")
   @Override

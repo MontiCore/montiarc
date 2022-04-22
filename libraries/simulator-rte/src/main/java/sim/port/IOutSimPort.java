@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.generic.ISimComponent;
+import sim.comp.ISimComponent;
 
 import java.util.Collection;
 

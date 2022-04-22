@@ -1,11 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.sched;
 
-import sim.IScheduler;
-import sim.generic.ISimComponent;
-import sim.generic.Message;
-import sim.generic.TickedMessage;
-import sim.generic.Transitionpath;
+import sim.comp.ISimComponent;
+import sim.message.Message;
+import sim.message.TickedMessage;
+import sim.Automaton.Transitionpath;
 import sim.port.DefaultPortFactory;
 import sim.port.IForwardPort;
 import sim.port.IInSimPort;
@@ -123,7 +122,7 @@ class SimSchedulerBitSet implements IScheduler {
   }
 
   /**
-   * @see sim.IScheduler#getPortFactory()
+   * @see IScheduler#getPortFactory()
    */
   @Override
   public IPortFactory getPortFactory() {
@@ -136,7 +135,7 @@ class SimSchedulerBitSet implements IScheduler {
   }
 
   /**
-   * @see sim.IScheduler#init()
+   * @see IScheduler#init()
    */
   @Override
   public void init() {

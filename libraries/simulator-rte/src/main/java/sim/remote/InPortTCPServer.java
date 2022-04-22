@@ -2,7 +2,7 @@
 package sim.remote;
 
 import org.slf4j.Logger;
-import sim.generic.TickedMessage;
+import sim.message.TickedMessage;
 import sim.port.IInSimPort;
 
 import java.io.IOException;

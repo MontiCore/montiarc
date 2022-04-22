@@ -2,6 +2,7 @@
 package sim.help;
 
 import org.junit.jupiter.api.Test;
+import sim.schedhelp.DescendingIntComparator;
 
 import java.util.Comparator;
 
@@ -15,7 +16,7 @@ public class DescendingIntComparatorTest {
   Comparator<Integer> testling = new DescendingIntComparator();
 
   /**
-   * Test method for {@link sim.help.DescendingIntComparator#compare(java.lang.Integer, java.lang.Integer)}.
+   * Test method for {@link DescendingIntComparator#compare(java.lang.Integer, java.lang.Integer)}.
    */
   @Test
   public void testCompare_a_st_b_asInt() {
@@ -24,7 +25,7 @@ public class DescendingIntComparatorTest {
   }
 
   /**
-   * Test method for {@link sim.help.DescendingIntComparator#compare(java.lang.Integer, java.lang.Integer)}.
+   * Test method for {@link DescendingIntComparator#compare(java.lang.Integer, java.lang.Integer)}.
    */
   @Test
   public void testCompare_a_st_b_asInteger() {
@@ -34,7 +35,7 @@ public class DescendingIntComparatorTest {
   }
 
   /**
-   * Test method for {@link sim.help.DescendingIntComparator#compare(java.lang.Integer, java.lang.Integer)}.
+   * Test method for {@link DescendingIntComparator#compare(java.lang.Integer, java.lang.Integer)}.
    */
   @Test
   public void testCompare_a_eq_b_asInt() {
@@ -42,7 +43,7 @@ public class DescendingIntComparatorTest {
   }
 
   /**
-   * Test method for {@link sim.help.DescendingIntComparator#compare(java.lang.Integer, java.lang.Integer)}.
+   * Test method for {@link DescendingIntComparator#compare(java.lang.Integer, java.lang.Integer)}.
    */
   @Test
   public void testCompare_a_eq_b_asInteger() {
@@ -50,7 +51,7 @@ public class DescendingIntComparatorTest {
   }
 
   /**
-   * Test method for {@link sim.help.DescendingIntComparator#compare(java.lang.Integer, java.lang.Integer)}.
+   * Test method for {@link DescendingIntComparator#compare(java.lang.Integer, java.lang.Integer)}.
    */
   @Test
   public void testCompare_a_gt_b_asInt() {
@@ -59,7 +60,7 @@ public class DescendingIntComparatorTest {
   }
 
   /**
-   * Test method for {@link sim.help.DescendingIntComparator#compare(java.lang.Integer, java.lang.Integer)}.
+   * Test method for {@link DescendingIntComparator#compare(java.lang.Integer, java.lang.Integer)}.
    */
   @Test
   public void testCompare_a_gt_b_asInteger() {

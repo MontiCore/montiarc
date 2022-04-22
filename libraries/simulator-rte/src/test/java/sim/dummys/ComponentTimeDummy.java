@@ -1,20 +1,28 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys;
 
-import sim.IScheduler;
+import sim.comp.ITimedComponent;
+import sim.sched.IScheduler;
+import sim.comp.AComponent;
+import sim.comp.IComponent;
+import sim.comp.ISimComponent;
 import sim.error.ISimulationErrorHandler;
-import sim.generic.AComponent;
-import sim.generic.IComponent;
-import sim.generic.ISimComponent;
-import sim.generic.ITimedComponent;
-import sim.generic.Message;
+import sim.message.Message;
+import sim.message.Tick;
+import sim.message.TickedMessage;
 import sim.port.IInPort;
+import sim.port.IInSimPort;
+import sim.port.TestPort;
 
 /**
  * Is used to directly control the test components time.
  */
 public class ComponentTimeDummy extends AComponent implements ISimComponent, ITimedComponent {
 
+
+  private IInSimPort<String> in;
+
+  private TestPort<String> out;
   /**
    * Simulation error handler.
    */
@@ -26,7 +34,7 @@ public class ComponentTimeDummy extends AComponent implements ISimComponent, ITi
   protected int time;
 
   /**
-   * @see sim.generic.IComponent#checkConstraints()
+   * @see IComponent#checkConstraints()
    */
   @Override
   public void checkConstraints() {
@@ -57,12 +65,12 @@ public class ComponentTimeDummy extends AComponent implements ISimComponent, ITi
 
   @Override
   public void handleMessage(IInPort<?> port, Message<?> message) {
-
+  out.send((TickedMessage<String>) message);
   }
 
   @Override
   public void handleTick() {
-
+  out.send(Tick.get());
   }
 
   /**
@@ -81,10 +89,22 @@ public class ComponentTimeDummy extends AComponent implements ISimComponent, ITi
   }
 
   /**
-   * @see sim.generic.IComponent#setup(IScheduler, ISimulationErrorHandler)
+   * @see IComponent#setup(IScheduler, ISimulationErrorHandler)
    */
   @Override
   public void setup(IScheduler scheduler, ISimulationErrorHandler errorHandler) {
+
     this.handler = errorHandler;
+    in = scheduler.createInPort();
+    in.setup(this, scheduler);
+    out = new TestPort<>();
+  }
+
+  public IInSimPort<String> getIn() {
+    return in;
+  }
+
+  public TestPort<String> getOut() {
+    return out;
   }
 }

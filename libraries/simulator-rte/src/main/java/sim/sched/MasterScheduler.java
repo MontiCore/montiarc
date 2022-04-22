@@ -1,8 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.sched;
 
-import sim.IScheduler;
-import sim.help.DescendingIntComparator;
+import sim.schedhelp.DescendingIntComparator;
 import sim.port.IForwardPort;
 import sim.port.IInPort;
 import sim.port.IInSimPort;

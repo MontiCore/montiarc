@@ -3,11 +3,14 @@ package sim.port;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import sim.dummys.ComponentPortTest;
+import sim.error.SimpleErrorHandler;
+import sim.message.Message;
+import sim.message.Tick;
+import sim.message.TickedMessage;
+import sim.sched.IScheduler;
 import sim.dummys.ComponentTimeDummy;
-import sim.generic.IStream;
-import sim.generic.Message;
-import sim.generic.Tick;
-import sim.generic.TickedMessage;
+import sim.message.IStream;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,15 +21,17 @@ import static org.junit.jupiter.api.Assertions.*;
  * Tests for incoming stream methods {@link IStream}.
  */
 public class IncomingStreamTest {
-  protected ComponentTimeDummy comp;
+  protected ComponentPortTest comp;
 
   protected SimplePort<String> testling;
 
   @BeforeEach
   public void setUp() {
-    comp = new ComponentTimeDummy();
+    comp = new ComponentPortTest();
     testling = new SimplePort<String>();
-    testling.setup(comp, new SimulationScheduler());
+    IScheduler s = new SimulationScheduler();
+    comp.setup(s, new SimpleErrorHandler());
+    testling.setup(comp, s);
   }
 
   @Test
@@ -50,6 +55,7 @@ public class IncomingStreamTest {
     assertEquals("TEST", ((Message<String>) history.get(1)).getData());
     assertTrue(history.get(2).isTick());
     assertTrue(history.get(3).isTick());
+
   }
 
   @Test

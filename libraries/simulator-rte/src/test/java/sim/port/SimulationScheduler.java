@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.IScheduler;
-import sim.generic.ISimComponent;
-import sim.generic.Message;
-import sim.generic.TickedMessage;
-import sim.generic.Transitionpath;
+import sim.sched.IScheduler;
+import sim.comp.ISimComponent;
+import sim.message.Message;
+import sim.message.TickedMessage;
+import sim.Automaton.Transitionpath;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,7 +37,7 @@ public class SimulationScheduler implements IScheduler {
   }
 
   /**
-   * @see sim.IScheduler#registerPort(IInSimPort, TickedMessage)
+   * @see IScheduler#registerPort(IInSimPort, TickedMessage)
    */
   @Override
   public boolean registerPort(IInSimPort<?> port, TickedMessage<?> lastMessage) {
@@ -120,7 +120,7 @@ public class SimulationScheduler implements IScheduler {
   }
 
   /**
-   * @see sim.IScheduler#init()
+   * @see IScheduler#init()
    */
   @Override
   public void init() {
@@ -129,7 +129,7 @@ public class SimulationScheduler implements IScheduler {
   }
 
   /**
-   * @see sim.IScheduler#setupPort(IInSimPort)
+   * @see IScheduler#setupPort(IInSimPort)
    */
   @Override
   public void setupPort(IInSimPort<?> port) {
@@ -171,7 +171,7 @@ public class SimulationScheduler implements IScheduler {
   }
 
   /**
-   * @see sim.IScheduler#getPortFactory()
+   * @see IScheduler#getPortFactory()
    */
   @Override
   public IPortFactory getPortFactory() {
@@ -179,7 +179,7 @@ public class SimulationScheduler implements IScheduler {
   }
 
   /**
-   * @see sim.IScheduler#setPortFactory(sim.port.IPortFactory)
+   * @see IScheduler#setPortFactory(sim.port.IPortFactory)
    */
   @Override
   public void setPortFactory(IPortFactory fact) {

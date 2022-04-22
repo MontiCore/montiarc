@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.IScheduler;
-import sim.generic.ISimComponent;
-import sim.generic.Message;
-import sim.generic.TickedMessage;
-import sim.generic.Transitionpath;
+import sim.sched.IScheduler;
+import sim.comp.ISimComponent;
+import sim.message.Message;
+import sim.message.TickedMessage;
+import sim.Automaton.Transitionpath;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.generic.Message;
-import sim.generic.TickedMessage;
+import sim.message.Message;
+import sim.message.TickedMessage;
 
 /**
  * A port that notifies its observers if data and tick messages are accepted.

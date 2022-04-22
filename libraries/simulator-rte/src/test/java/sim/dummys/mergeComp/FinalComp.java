@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys.mergeComp;
 
-import sim.IScheduler;
+import sim.sched.IScheduler;
 import sim.error.ISimulationErrorHandler;
-import sim.generic.ATimedComponent;
-import sim.generic.Message;
-import sim.generic.Tick;
+import sim.comp.ATimedComponent;
+import sim.message.Message;
+import sim.message.Tick;
 import sim.port.IInPort;
 import sim.port.IInSimPort;
 import sim.port.IOutSimPort;

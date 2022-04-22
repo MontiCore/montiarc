@@ -2,6 +2,7 @@
 package sim.generic;
 
 import org.junit.jupiter.api.Test;
+import sim.message.*;
 
 import java.util.Collection;
 import java.util.HashSet;

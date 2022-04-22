@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.generic.IStream;
-import sim.generic.Stream;
-import sim.generic.TickedMessage;
+import sim.message.IStream;
+import sim.message.Stream;
+import sim.message.TickedMessage;
 
 /**
  * Can be used in Tests as an outgoing port. Received messages are stored in the field stream.

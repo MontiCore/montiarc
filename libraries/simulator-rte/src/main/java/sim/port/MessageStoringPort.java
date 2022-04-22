@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.IScheduler;
-import sim.generic.ISimComponent;
-import sim.generic.Message;
-import sim.generic.TickedMessage;
-import sim.generic.Transitionpath;
+import sim.sched.IScheduler;
+import sim.comp.ISimComponent;
+import sim.message.Message;
+import sim.message.TickedMessage;
+import sim.Automaton.Transitionpath;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -47,7 +47,7 @@ public class MessageStoringPort<T> implements IPort<T> {
   }
 
   /**
-   * @see IPort#accept(sim.generic.TickedMessage)
+   * @see IPort#accept(TickedMessage)
    */
   @Override
   public void accept(TickedMessage<? extends T> message) {
@@ -134,7 +134,7 @@ public class MessageStoringPort<T> implements IPort<T> {
   }
 
   /**
-   * @see IPort#send(sim.generic.TickedMessage)
+   * @see IPort#send(TickedMessage)
    */
   @Override
   public void send(TickedMessage<T> message) {

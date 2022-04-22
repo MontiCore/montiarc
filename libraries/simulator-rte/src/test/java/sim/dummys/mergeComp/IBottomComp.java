@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys.mergeComp;
 
-import sim.generic.ITimedComponent;
+import sim.comp.ITimedComponent;
 import sim.port.IInSimPort;
 import sim.port.IOutSimPort;
 

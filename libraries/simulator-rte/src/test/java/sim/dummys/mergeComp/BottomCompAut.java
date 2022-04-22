@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys.mergeComp;
 
-import sim.IScheduler;
+import sim.sched.IScheduler;
 import sim.error.ISimulationErrorHandler;
-import sim.generic.State;
-import sim.generic.Transition;
+import sim.Automaton.State;
+import sim.Automaton.Transition;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,11 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.sched;
 
-import sim.IScheduler;
-import sim.generic.ISimComponent;
-import sim.generic.Message;
-import sim.generic.TickedMessage;
-import sim.generic.Transitionpath;
+import sim.comp.ISimComponent;
+import sim.message.Message;
+import sim.message.TickedMessage;
+import sim.Automaton.Transitionpath;
 import sim.port.DefaultPortFactory;
 import sim.port.IForwardPort;
 import sim.port.IInSimPort;
@@ -122,7 +121,7 @@ public class SimSchedulerBoolArray implements IScheduler {
   }
 
   /**
-   * @see sim.IScheduler#getPortFactory()
+   * @see IScheduler#getPortFactory()
    */
   @Override
   public IPortFactory getPortFactory() {
@@ -135,7 +134,7 @@ public class SimSchedulerBoolArray implements IScheduler {
   }
 
   /**
-   * @see sim.IScheduler#init()
+   * @see IScheduler#init()
    */
   @Override
   public void init() {
@@ -143,7 +142,7 @@ public class SimSchedulerBoolArray implements IScheduler {
   }
 
   /**
-   * @see sim.IScheduler#setupPort(IInSimPort)
+   * @see IScheduler#setupPort(IInSimPort)
    */
   @Override
   public void setupPort(IInSimPort<?> port) {
@@ -210,7 +209,7 @@ public class SimSchedulerBoolArray implements IScheduler {
   }
 
   /**
-   * @see sim.IScheduler#registerPort(IInSimPort, TickedMessage)
+   * @see IScheduler#registerPort(IInSimPort, TickedMessage)
    */
   @Override
   public boolean registerPort(IInSimPort<?> port, TickedMessage<?> msg) {
@@ -226,7 +225,7 @@ public class SimSchedulerBoolArray implements IScheduler {
   }
 
   /**
-   * @see sim.IScheduler#setPortFactory(IPortFactory)
+   * @see IScheduler#setPortFactory(IPortFactory)
    */
   @Override
   public void setPortFactory(IPortFactory fact) {

@@ -1,12 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys;
 
-import sim.IScheduler;
+import sim.sched.IScheduler;
+import sim.comp.IComponent;
 import sim.error.ISimulationErrorHandler;
-import sim.generic.AComponent;
-import sim.generic.ATimedComponent;
-import sim.generic.Message;
-import sim.generic.Tick;
+import sim.comp.AComponent;
+import sim.comp.ATimedComponent;
+import sim.message.Message;
+import sim.message.Tick;
 import sim.port.IInPort;
 import sim.port.IInSimPort;
 import sim.port.IOutPort;
@@ -38,7 +39,7 @@ public class ComponentDummy extends ATimedComponent implements ComponentDummyPor
   }
 
   /**
-   * @see sim.generic.IComponent#checkConstraints()
+   * @see IComponent#checkConstraints()
    */
   @Override
   public void checkConstraints() {
@@ -93,7 +94,7 @@ public class ComponentDummy extends ATimedComponent implements ComponentDummyPor
   }
 
   /**
-   * @see sim.generic.IComponent#setup(IScheduler, ISimulationErrorHandler)
+   * @see IComponent#setup(IScheduler, ISimulationErrorHandler)
    */
   @Override
   public void setup(IScheduler scheduler, ISimulationErrorHandler errorHandler) {

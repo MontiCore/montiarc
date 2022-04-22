@@ -2,6 +2,9 @@
 package sim.generic;
 
 import org.junit.jupiter.api.Test;
+import sim.message.Message;
+import sim.message.Tick;
+import sim.message.TickedMessage;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

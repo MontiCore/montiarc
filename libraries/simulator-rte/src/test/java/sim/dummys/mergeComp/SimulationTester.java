@@ -2,16 +2,19 @@
 package sim.dummys.mergeComp;
 
 import org.junit.jupiter.api.Test;
-import sim.IScheduler;
+import sim.sched.IScheduler;
 import sim.error.ISimulationErrorHandler;
 import sim.error.SimpleErrorHandler;
-import sim.generic.StreamPrinter;
-import sim.generic.Tick;
+import sim.message.StreamPrinter;
+import sim.message.Tick;
 import sim.port.TestPort;
 import sim.sched.SchedulerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Tests for Merge Component
+ */
 public class SimulationTester {
 
   @Test

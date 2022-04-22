@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.generic.Message;
-import sim.generic.TickedMessage;
-import sim.generic.Transitionpath;
+import sim.message.Message;
+import sim.message.TickedMessage;
+import sim.Automaton.Transitionpath;
 
 /**
  * An incoming port is used to receive messages of type T asynchronously.

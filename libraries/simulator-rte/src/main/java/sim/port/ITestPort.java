@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.generic.IStream;
+import sim.message.IStream;
 
 /**
  * Interface for a test port.

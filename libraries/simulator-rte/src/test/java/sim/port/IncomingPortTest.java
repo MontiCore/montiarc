@@ -3,11 +3,14 @@ package sim.port;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import sim.IScheduler;
+import sim.sched.IScheduler;
 import sim.dummys.ComponentTimeDummy;
-import sim.generic.IStream;
-import sim.generic.Message;
-import sim.generic.Tick;
+import sim.error.ISimulationErrorHandler;
+import sim.error.SimpleErrorHandler;
+import sim.message.IStream;
+import sim.message.Message;
+import sim.message.Tick;
+import sim.sched.SchedulerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,28 +25,20 @@ public class IncomingPortTest {
 
   protected IScheduler scheduler;
 
-  public IInPort<?> computedPort;
-
 
   @BeforeEach
   public void setUp() {
-    scheduler = new SimulationScheduler();
+    scheduler = SchedulerFactory.createDefaultScheduler();
     comp = new ComponentTimeDummy();
-//        comp = new ComponentTimeDummy(){
-//            @Override
-//            public void compute(IIncomingPort<?> port) {
-//                super.compute(port);
-//                computedPort = port;
-//            }
-//        };
-
+    ISimulationErrorHandler errorHandler = new SimpleErrorHandler();
+    comp.setup(scheduler, errorHandler);
     testling = new SimplePort<String>();
     testling.setup(comp, scheduler);
   }
 
   @Test
   public void testGetComponent() {
-    assertEquals(comp, testling.getComponent());
+    assertEquals(comp, comp.getIn().getComponent());
   }
 
   @Test
@@ -80,13 +75,10 @@ public class IncomingPortTest {
 
   @Test
   public void testReceiveMessage() {
-    IStream<String> s = testling.stream;
-    assertTrue(s.isEmpty());
-
     String expectedMessage = "Hallo";
-
-    testling.accept(Message.of(expectedMessage));
-    String actualMessage = ((Message<String>) s.getHistory().get(0)).getData();
+    Message<String> msg = Message.of(expectedMessage);
+    comp.getIn().accept(msg);
+    String actualMessage = comp.getOut().getStream().getLastMessage();
     assertEquals(expectedMessage, actualMessage);
   }
 

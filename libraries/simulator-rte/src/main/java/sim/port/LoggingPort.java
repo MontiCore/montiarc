@@ -3,9 +3,9 @@ package sim.port;
 
 import org.slf4j.Logger;
 
-import sim.generic.ITimedComponent;
-import sim.generic.Message;
-import sim.generic.TickedMessage;
+import sim.comp.ITimedComponent;
+import sim.message.Message;
+import sim.message.TickedMessage;
 
 /**
  * Port that logs incoming and outgoing messages.
@@ -46,7 +46,7 @@ public class LoggingPort<T> extends Port<T> {
   }
 
   /**
-   * @see sim.port.Port#send(sim.generic.TickedMessage)
+   * @see sim.port.Port#send(TickedMessage)
    */
   @Override
   public void send(TickedMessage<T> message) {
@@ -57,7 +57,7 @@ public class LoggingPort<T> extends Port<T> {
   }
 
   /**
-   * @see sim.port.Port#accept(sim.generic.TickedMessage)
+   * @see sim.port.Port#accept(TickedMessage)
    */
   @Override
   public void accept(TickedMessage<? extends T> message) {

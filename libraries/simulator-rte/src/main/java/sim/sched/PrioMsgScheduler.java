@@ -1,11 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.sched;
 
-import sim.IScheduler;
-import sim.generic.ISimComponent;
-import sim.generic.Message;
-import sim.generic.PrioMessage;
-import sim.help.PrioMsgComparator;
+import sim.comp.ISimComponent;
+import sim.message.Message;
+import sim.message.PrioMessage;
+import sim.schedhelp.PrioMsgComparator;
 import sim.port.IInSimPort;
 
 import java.util.Collections;

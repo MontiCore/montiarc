@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.remote;
 
-import sim.generic.Message;
-import sim.generic.Transitionpath;
+import sim.message.Message;
+import sim.Automaton.Transitionpath;
 import sim.port.ForwardPort;
 
 /**

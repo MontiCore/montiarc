@@ -3,8 +3,8 @@ package sim.port;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import sim.generic.Message;
-import sim.generic.Tick;
+import sim.message.Message;
+import sim.message.Tick;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -3,7 +3,7 @@ package sim.remote;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sim.generic.TickedMessage;
+import sim.message.TickedMessage;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;

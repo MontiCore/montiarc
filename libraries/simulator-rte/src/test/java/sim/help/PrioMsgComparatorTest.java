@@ -2,8 +2,9 @@
 package sim.help;
 
 import org.junit.jupiter.api.Test;
-import sim.generic.Message;
-import sim.generic.PrioMessage;
+import sim.message.Message;
+import sim.message.PrioMessage;
+import sim.schedhelp.PrioMsgComparator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,7 +17,7 @@ public class PrioMsgComparatorTest {
   protected PrioMsgComparator testling = new PrioMsgComparator();
 
   /**
-   * Test method for {@link sim.help.PrioMsgComparator#compare(sim.generic.Message, sim.generic.Message).
+   * Test method for {@link PrioMsgComparator#compare(Message, Message).
    */
   @Test
   public void testCompare_Prio_Message_Message() {
@@ -25,7 +26,7 @@ public class PrioMsgComparatorTest {
   }
 
   /**
-   * Test method for {@link sim.help.PrioMsgComparator#compare(sim.generic.Message, sim.generic.Message).
+   * Test method for {@link PrioMsgComparator#compare(Message, Message).
    */
   @Test
   public void testCompare_Prio_Message_PrioMessageDefault() {
@@ -34,7 +35,7 @@ public class PrioMsgComparatorTest {
   }
 
   /**
-   * Test method for {@link sim.help.PrioMsgComparator#compare(sim.generic.Message, sim.generic.Message).
+   * Test method for {@link PrioMsgComparator#compare(Message, Message).
    */
   @Test
   public void testCompare_Prio_Message_PrioMessage() {
@@ -47,7 +48,7 @@ public class PrioMsgComparatorTest {
   }
 
   /**
-   * Test method for {@link sim.help.PrioMsgComparator#compare(sim.generic.Message, sim.generic.Message).
+   * Test method for {@link PrioMsgComparator#compare(Message, Message).
    */
   @Test
   public void testCompare_Prio_PrioMessage_PrioMessage() {

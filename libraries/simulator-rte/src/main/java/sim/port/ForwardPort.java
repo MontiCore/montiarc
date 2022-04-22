@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.IScheduler;
-import sim.generic.ISimComponent;
-import sim.generic.Message;
-import sim.generic.TickedMessage;
-import sim.generic.Transitionpath;
+import sim.sched.IScheduler;
+import sim.comp.ISimComponent;
+import sim.message.Message;
+import sim.message.TickedMessage;
+import sim.Automaton.Transitionpath;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -46,7 +46,7 @@ public class ForwardPort<T> implements IForwardPort<T> {
     
     /*
      *
-     * @see sim.generic.IInPort#receiveMessage(sim.generic.TickedMessage)
+     * @see sim.generic.IInPort#receiveMessage(sim.message.TickedMessage)
      */
     @Override
     public void accept(TickedMessage<? extends T> message) {
@@ -196,7 +196,7 @@ public class ForwardPort<T> implements IForwardPort<T> {
     }
 
     /**
-     * @see sim.generic.IOutPort#sendMessage(sim.generic.TickedMessage)
+     * @see sim.generic.IOutPort#sendMessage(TickedMessage)
      */
     @Override
     public void send(TickedMessage<T> message) {
@@ -210,7 +210,7 @@ public class ForwardPort<T> implements IForwardPort<T> {
     }
 
     /**
-     * @see sim.generic.IOutPort#setComponent(sim.generic.ISimComponent)
+     * @see sim.generic.IOutPort#setComponent(ISimComponent)
      */
     @Override
     public void setComponent(ISimComponent component) {
@@ -229,8 +229,8 @@ public class ForwardPort<T> implements IForwardPort<T> {
 
     /*
      *
-     * @see sim.generic.IInPort#setup(sim.generic.ISimComponent,
-     * sim.IScheduler)
+     * @see sim.generic.IInPort#setup(sim.comp.ISimComponent,
+     * sim.sched.IScheduler)
      */
     @Override
     public void setup(ISimComponent component, IScheduler scheduler) {

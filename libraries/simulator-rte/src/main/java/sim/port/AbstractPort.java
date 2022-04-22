@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.IScheduler;
-import sim.generic.ISimComponent;
+import sim.sched.IScheduler;
+import sim.comp.ISimComponent;
 
 /**
  * Abstract port implementation.

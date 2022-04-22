@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys;
 
-import sim.generic.Message;
+import sim.message.Message;
 
 public interface ComponentDummyPortInterface {
 

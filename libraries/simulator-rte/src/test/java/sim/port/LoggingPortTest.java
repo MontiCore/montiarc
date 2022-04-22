@@ -3,9 +3,9 @@ package sim.port;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
-import sim.generic.ATimedComponent;
-import sim.generic.Message;
-import sim.generic.Tick;
+import sim.comp.ATimedComponent;
+import sim.message.Message;
+import sim.message.Tick;
 import sim.sched.SimSchedulerHashSet;
 
 import static org.mockito.Mockito.*;
