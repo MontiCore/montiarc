@@ -12,6 +12,7 @@ import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
 import de.monticore.scbasis._cocos.UniqueStates;
 import de.monticore.sctransitions4code._cocos.AnteBlocksOnlyForInitialStates;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
+import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
 import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
 import montiarc._cocos.util.CheckTypeExistence4MontiArc;
@@ -81,6 +82,9 @@ public class MontiArcCoCos {
     checker.addCoCo(new ComponentInstantiationRespectsGenericTypeBounds());
     checker.addCoCo(new RootComponentTypesNoInstanceName());
     checker.addCoCo(new UnresolvableImport());
+
+    // Basic MontiCore cocos
+    checker.addCoCo(new VarDeclarationInitializationHasCorrectType(new MontiArcTypeCalculator()));
 
     // Block unsupported model elements
 //    checker.addCoCo(new UnsupportedAutomatonElements.EntryActions());
