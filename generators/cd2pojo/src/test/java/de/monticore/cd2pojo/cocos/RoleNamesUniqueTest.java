@@ -3,6 +3,7 @@ package de.monticore.cd2pojo.cocos;
 
 import com.google.common.base.Preconditions;
 import de.monticore.cd2pojo.POJOGeneratorTool;
+import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cd4code._cocos.CD4CodeCoCoChecker;
 import de.monticore.cd4code._symboltable.ICD4CodeGlobalScope;
 import de.monticore.cd4code.cocos.CD4CodeCoCos;
@@ -10,7 +11,6 @@ import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -36,12 +36,18 @@ public class RoleNamesUniqueTest {
   }
 
   @BeforeEach
+  public void init() {
+    CD4CodeMill.globalScope().clear();
+    CD4CodeMill.reset();
+    CD4CodeMill.init();
+  }
+
+  @BeforeEach
   public void cleanUpLog() {
     Log.getFindings().clear();
     Log.enableFailQuick(false);
   }
-  
-  @Disabled //TODO enable once CD4A issue #5 is fixed
+
   @ParameterizedTest
   @MethodSource("modelWithAmbiguousRolesAndErrorCountProvider")
   public void shouldDetectAmbiguousRoles(@NotNull String fileName, int expectedErrorCount) {
