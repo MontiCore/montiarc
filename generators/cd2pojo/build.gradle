@@ -20,8 +20,6 @@ dependencies {
   implementation("com.github.javaparser:javaparser-core:3.18.0")
   implementation("org.codehaus.groovy:groovy:$groovy_version")
 
-  implementation "org.slf4j:slf4j-simple:1.7.10"
-
   testImplementation("de.monticore:monticore-runtime:$mc_version") {
     capabilities {
       requireCapability("de.monticore:monticore-runtime-tests")
