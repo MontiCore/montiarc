@@ -6,7 +6,7 @@ import arcbasis.util.ArcError;
 import de.monticore.scbasis._cocos.AtLeastOneInitialState;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc.util.Error;
+import arcbasis.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.util;
+package arcbasis.util;
 
 import java.util.regex.Pattern;
 

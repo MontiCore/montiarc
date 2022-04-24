@@ -5,8 +5,6 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.monticore.scbasis._ast.ASTSCModifier;
-import de.monticore.scbasis._ast.ASTSCSBody;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._symboltable.SCStateSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -14,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.util.regex.Pattern;
 
-public class AbstractTest extends montiarc.util.AbstractTest{
+public class AbstractTest extends arcbasis.util.AbstractTest {
   @BeforeEach
   public void init() {
     ArcAutomatonMill.globalScope().clear();

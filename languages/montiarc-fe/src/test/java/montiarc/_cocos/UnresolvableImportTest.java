@@ -13,7 +13,7 @@ import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import montiarc.MontiArcMill;
 import montiarc._symboltable.IMontiArcScope;
-import montiarc.util.Error;
+import arcbasis.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;

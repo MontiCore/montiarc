@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.util;
 
-public enum MA2JavaError implements montiarc.util.Error {
+import arcbasis.util.Error;
+
+public enum MA2JavaError implements Error {
 
   POST_GENERATION_FORMATTING_FAIL("0xC9000", " Could not format '%s' produced by template '%s' on '%s'. Reason: %s"),
   TEMPLATE_OUTPUT_EMPTY("0xC9001", "Template %s produced no content.");

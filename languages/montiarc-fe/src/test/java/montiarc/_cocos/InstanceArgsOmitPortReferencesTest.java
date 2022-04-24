@@ -5,7 +5,7 @@ import arcbasis._cocos.InstanceArgsOmitPortReferences;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
-import montiarc.util.Error;
+import arcbasis.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -14,7 +14,6 @@ dependencies {
   implementation("de.monticore:class2mc:$mc_version")
   implementation("de.monticore.lang:cd4analysis:$cd4a_version")
   implementation("de.se_rwth.commons:se-commons-groovy:$se_commons_version")
-  implementation(project(":util"))
   implementation("org.codehaus.janino:janino:$janino_version")
   implementation("com.google.guava:guava:$guava_version")
   implementation("com.github.javaparser:javaparser-core:3.18.0")

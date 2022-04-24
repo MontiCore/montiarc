@@ -83,9 +83,7 @@ dependencies {
 
   //Internal dependencies
   implementation(project(":languages:arc-fe"))
-  implementation(project(":util"))
   testImplementation(project(":languages:arc-fe").sourceSets.test.output)
-  testImplementation(project(":util").sourceSets.test.output)
 
   //Other dependencies
   implementation("de.se_rwth.commons:se-commons-logging:$se_commons_version")

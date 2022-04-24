@@ -12,7 +12,7 @@ import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.check.MontiArcTypeCalculator;
-import montiarc.util.Error;
+import arcbasis.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

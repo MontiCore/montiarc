@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.util;
+package arcbasis.util;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;

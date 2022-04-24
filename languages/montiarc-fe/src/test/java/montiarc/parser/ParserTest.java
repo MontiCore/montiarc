@@ -8,7 +8,7 @@ import montiarc._ast.ASTArcTiming;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
 import montiarc._visitor.MontiArcFullPrettyPrinter;
-import montiarc.util.Error;
+import arcbasis.util.Error;
 import montiarc.util.MontiArcError;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

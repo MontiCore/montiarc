@@ -11,7 +11,7 @@ import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.util.CheckTypeExistence4MontiArc;
 import montiarc._symboltable.IMontiArcScope;
-import montiarc.util.Error;
+import arcbasis.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

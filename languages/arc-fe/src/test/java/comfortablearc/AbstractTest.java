@@ -17,7 +17,7 @@ import org.mockito.Mockito;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-public abstract class AbstractTest extends montiarc.util.AbstractTest {
+public abstract class AbstractTest extends arcbasis.util.AbstractTest {
 
   protected static ASTComponentType createCompType(@NotNull String type) {
     Preconditions.checkNotNull(type);

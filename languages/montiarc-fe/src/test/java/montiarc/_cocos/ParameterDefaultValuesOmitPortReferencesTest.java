@@ -9,7 +9,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
-import montiarc.util.Error;
+import arcbasis.util.Error;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;

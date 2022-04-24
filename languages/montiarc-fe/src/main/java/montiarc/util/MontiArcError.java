@@ -1,10 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.util;
 
+import arcbasis.util.Error;
+
 /**
- * The enum of all MontiArc errors. Extends the mixing interface {@link montiarc.util.Error}
+ * The enum of all MontiArc errors. Extends the mixing interface {@link Error}
  */
-public enum MontiArcError implements montiarc.util.Error {
+public enum MontiArcError implements Error {
   COMPONENT_AND_FILE_NAME_DIFFER("0xC1000", "The component name '%s' does not correspond to the file name '%s'."),
   COMPONENT_AND_FILE_PACKAGE_DIFFER("0xC1001", "The package name '%s' does not correspond to the file path '%s'."),
   TOOL_PARSE_IOEXCEPTION("0xC1002", "Could not parse the file \" %s \"."),

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-public abstract class AbstractTest extends montiarc.util.AbstractTest {
+public abstract class AbstractTest extends arcbasis.util.AbstractTest {
 
   @BeforeEach
   public void init() {

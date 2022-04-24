@@ -129,7 +129,6 @@ subprojects {
 task buildAll(type: Task) {
   group("build")
   description("Assembles and tests all subprojects.")
-  dependsOn(":util:build")
   dependsOn(":languages:arc-fe:build")
   dependsOn(":languages:montiarc-fe:build")
   dependsOn(":libraries:lejos-rte:build")
@@ -146,7 +145,6 @@ task buildAll(type: Task) {
 task cleanAll(type: Delete) {
   group("clean")
   description("Deletes the build directory in all subprojects.")
-  dependsOn(":util:clean")
   dependsOn(":languages:arc-fe:clean")
   dependsOn(":languages:montiarc-fe:clean")
   dependsOn(":libraries:lejos-rte:clean")
@@ -213,7 +211,6 @@ def coverageDataPath = configurations.create("coverageDataPath") {
 }
 
 def jacocoProjectsToAggregate = [
-    project(":util"),
     project(":languages:arc-fe"),
     project(":languages:montiarc-fe"),
     //project(":libraries:lejos-rte"),

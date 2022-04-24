@@ -2,9 +2,9 @@
 package arcbasis.util;
 
 /**
- * The enum of all Arc errors. Extends the mixing interface {@link montiarc.util.Error}
+ * The enum of all Arc errors. Extends the mixing interface {@link Error}
  */
-public enum ArcError implements montiarc.util.Error {
+public enum ArcError implements Error {
   CIRCULAR_INHERITANCE("0xC1010", "Circular inheritance of component '%s' detected."),
   MISSING_TYPE_OF_INHERITED_COMPONENT("0xC1014", "Cannot resolve type of parent '%s' of "
     + "component '%s'."),

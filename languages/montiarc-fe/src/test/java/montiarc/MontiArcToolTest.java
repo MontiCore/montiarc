@@ -7,7 +7,7 @@ import de.se_rwth.commons.logging.LogStub;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc._symboltable.MontiArcArtifactScope;
-import montiarc.util.Error;
+import arcbasis.util.Error;
 import montiarc.util.MontiArcError;
 import org.apache.commons.cli.*;
 import org.codehaus.commons.nullanalysis.NotNull;

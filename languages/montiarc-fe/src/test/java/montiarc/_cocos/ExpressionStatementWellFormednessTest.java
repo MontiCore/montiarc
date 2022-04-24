@@ -3,6 +3,7 @@ package montiarc._cocos;
 
 import arcautomaton._cocos.ExpressionStatementWellFormedness;
 import arcbasis.util.ArcError;
+import arcbasis.util.Error;
 import com.google.common.base.Preconditions;
 import montiarc.check.MontiArcTypeCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -48,7 +49,7 @@ class ExpressionStatementWellFormednessTest extends AbstractCoCoTest {
 
   @ParameterizedTest
   @MethodSource("modelAndExpectedErrorProvider")
-  void shouldFindInvalidExpressions(@NotNull String model, @NotNull montiarc.util.Error... errors) {
+  void shouldFindInvalidExpressions(@NotNull String model, @NotNull Error... errors) {
     testModel(model, errors);
   }
 

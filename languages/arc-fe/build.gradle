@@ -67,10 +67,6 @@ dependencies {
   }
   testImplementation("de.monticore:monticore-runtime:$mc_version")
 
-  //Internal dependencies
-  implementation(project(":util"))
-  testImplementation(project(":util").sourceSets.test.output)
-
   //Other dependencies
   implementation("de.monticore.lang:statecharts:$mc_version")
   implementation("de.se_rwth.commons:se-commons-logging:$se_commons_version")

@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.util;
+package arcbasis.util;
 
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.se_rwth.commons.logging.Finding;

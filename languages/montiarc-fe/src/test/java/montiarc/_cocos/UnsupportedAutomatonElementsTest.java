@@ -4,7 +4,7 @@ package montiarc._cocos;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.Error;
+import arcbasis.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

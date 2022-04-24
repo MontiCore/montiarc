@@ -37,9 +37,7 @@ dependencies {
   implementation(project(":languages:arc-fe"))
   implementation(project(":languages:montiarc-fe"))
   implementation(project(":libraries:majava-rte"))
-  implementation(project(":util"))
   testImplementation(project(":generators:cd2pojo"))
-  testImplementation(project(":util").sourceSets.test.output)
 
   //Model dependencies
   testmodels("montiarc.languages:montiarc-fe:$version:$testmodels_classifier")

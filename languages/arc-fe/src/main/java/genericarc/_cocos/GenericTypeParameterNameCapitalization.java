@@ -4,7 +4,7 @@ package genericarc._cocos;
 import arcbasis.util.ArcError;
 import com.google.common.base.Preconditions;
 import genericarc._ast.ASTArcTypeParameter;
-import montiarc.util.NameCapitalizationHelper;
+import arcbasis.util.NameCapitalizationHelper;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
