@@ -35,9 +35,12 @@ java {
 }
 
 shadowJar {
+  minimize()
+
   manifest {
     attributes "Main-Class": "de.monticore.cd2pojo.POJOGeneratorScript"
   }
+
   zip64 = true
   archiveClassifier = "mc-tool"
   archiveBaseName = "CD2POJO"
@@ -47,13 +50,33 @@ shadowJar {
 jar.dependsOn(shadowJar)
 
 publishing {
+
   publications {
     mavenJava(MavenPublication) { from(components.java) }
   }
-  repositories.maven {
-    name = "$SE_Nexus_ID"
-    credentials.username(mavenUser)
-    credentials.password(mavenPassword)
-    url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
+
+  repositories {
+
+    maven {
+      name = "$SE_Nexus_ID"
+      credentials.username(mavenUser)
+      credentials.password(mavenPassword)
+      url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
+    }
+
+    def CI_JOB_TOKEN = System.getenv("CI_JOB_TOKEN")
+    if(CI_JOB_TOKEN != null) {
+      maven {
+        name = "MontiArcGitlab"
+        url = montiArcGitLabMaven
+        credentials(HttpHeaderCredentials) {
+          name = "Job-Token"
+          value = CI_JOB_TOKEN
+        }
+        authentication {
+          header(HttpHeaderAuthentication)
+        }
+      }
+    }
   }
 }
