@@ -1,4 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
+plugins {
+  id "java"
+}
 
 group = "montiarc.libraries"
 
@@ -79,17 +82,3 @@ task generateMontiArc(type: JavaExec) {
 generateMontiArc.dependsOn(generateCD)
 compileJava.dependsOn(generateMontiArc)
 librarymodelsJar.dependsOn(compileJava)
-
-publishing {
-  publications {
-    mavenJava(MavenPublication) {
-      from(components.java)
-    }
-  }
-  repositories.maven {
-    name = "$SE_Nexus_ID"
-    credentials.username(mavenUser)
-    credentials.password(mavenPassword)
-    url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
-  }
-}

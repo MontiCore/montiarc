@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
+  id "java"
   id "monticore"
   id "jacoco"
   id "com.github.johnrengelman.shadow" version "$shadow_version"
@@ -34,8 +35,7 @@ dependencies {
   implementation("de.se_rwth.commons:se-commons-groovy:$se_commons_version")
 
   //Internal dependencies
-  implementation(project(":languages:arc-fe"))
-  implementation(project(":languages:montiarc-fe"))
+  implementation(project(":language:montiarc"))
   implementation(project(":libraries:majava-rte"))
   testImplementation(project(":generators:cd2pojo"))
 
@@ -76,11 +76,9 @@ java {
 // all in one tool-jar
 shadowJar {
   minimize()
-
   manifest {
     attributes "Main-Class": "montiarc.generator.MontiArcTool"
   }
-
   zip64 = true
   archiveClassifier = "mc-tool"
   archiveBaseName = "MontiArc2Java"
@@ -88,37 +86,3 @@ shadowJar {
 }
 
 jar.dependsOn(shadowJar)
-compileJava.mustRunAfter(project.collect {it.project(":languages:montiarc-fe").getTasks().withType(Test) })
-
-
-publishing {
-
-  publications {
-    mavenJava(MavenPublication) { from(components.java) }
-  }
-
-  repositories {
-
-    maven {
-      name = "$SE_Nexus_ID"
-      credentials.username(mavenUser)
-      credentials.password(mavenPassword)
-      url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
-    }
-
-    def CI_JOB_TOKEN = System.getenv("CI_JOB_TOKEN")
-    if(CI_JOB_TOKEN != null) {
-      maven {
-        name = "MontiArcGitlab"
-        url = montiArcGitLabMaven
-        credentials(HttpHeaderCredentials) {
-          name = "Job-Token"
-          value = CI_JOB_TOKEN
-        }
-        authentication {
-          header(HttpHeaderAuthentication)
-        }
-      }
-    }
-  }
-}

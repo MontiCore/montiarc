@@ -1,5 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 
+plugins {
+  id "java"
+}
+
 group = "montiarc.generators"
 
 def hwcDir = "$projectDir/src/main/java"
@@ -28,7 +32,7 @@ dependencies {
   generateCD(project(":generators:cd2pojo"))
   generateMA(project(":generators:ma2java"))
 
-  implementation(project(":languages:montiarc-fe"))
+  implementation(project(":language:montiarc"))
   implementation(project(":libraries:majava-rte"))
 
   // Guava

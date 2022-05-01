@@ -81,7 +81,7 @@ main class and setting up the build process to generate an executable.
 
 ## Tool Documentation
 
-The [MontiArcTool](languages/montiarc-fe/src/main/java/montiarc/MontiArcTool.java) offers capabilities for processing MontiArc component models.
+The [MontiArcTool](language/montiarc-fe/src/main/java/montiarc/MontiArcTool.java) offers capabilities for processing MontiArc component models.
 It provides multiple options that can be used as follows:
 
 `java -jar MontiArc.jar [-h] -i <fileName> [-path <p>] [-pp [<file>]] [-s [<file>]]`

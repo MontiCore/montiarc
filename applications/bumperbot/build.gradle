@@ -1,5 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 
+
+apply(plugin: 'java')
+
 group = "montiarc.applications"
 
 def hwcDir = "$projectDir/src/main/java"
@@ -31,7 +34,7 @@ dependencies {
   librarymodels(project(":libraries:lejos-rte")) {
     capabilities { requireCapability("montiarc.libraries:lejos-rte-$librarymodels_classifier") }
   }
-  implementation(project(":languages:montiarc-fe"))
+  implementation(project(":language:montiarc"))
   implementation(project(":libraries:majava-rte"))
   implementation(project(":libraries:lejos-rte"))
 
@@ -94,17 +97,3 @@ generateCD.mustRunAfter(project.collect {it.project(":generators:cd2pojo").getTa
 generateMontiArc.dependsOn(generateCD)
 generateMontiArc.mustRunAfter(project.collect {it.project(":generators:ma2java").getTasks().withType(Test) })
 compileJava.dependsOn(generateMontiArc)
-
-publishing {
-  publications {
-    mavenJava(MavenPublication) {
-      from(components.java)
-    }
-  }
-  repositories.maven {
-    name = "$SE_Nexus_ID"
-    credentials.username(mavenUser)
-    credentials.password(mavenPassword)
-    url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
-  }
-}

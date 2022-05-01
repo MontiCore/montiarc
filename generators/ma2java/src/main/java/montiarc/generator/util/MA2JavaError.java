@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.util;
 
-import arcbasis.util.Error;
+import montiarc.util.Error;
 
 public enum MA2JavaError implements Error {
 

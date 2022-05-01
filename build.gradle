@@ -1,10 +1,7 @@
-import java.nio.file.Paths
-
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
   id 'monticore' version "$mc_version" apply false
-  id 'java'
   id 'jacoco'
 }
 
@@ -23,11 +20,7 @@ Developed at the Department of Software Engineering, RWTH Aachen University
 http://www.se-rwth.de/"""
 
 subprojects {
-  apply plugin: 'java'
-  apply plugin: 'jacoco'
-  apply plugin: 'maven-publish'
 
-  sourceCompatibility = '1.8'
 
   tasks.withType(JavaCompile) {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -55,67 +48,6 @@ subprojects {
     }
   }
 
-  /* ======================= Extra Configurations ========================== */
-  // The following three configurations share the source code files, compiled classes and jacoco report data of all
-  // subprojects so that we can aggregate the jacoco reports of the subprojects into a single aggregated one
-
-  // Share subproject's source folder with other projects for aggregated JaCoCo reports
-  configurations.create('transitiveSourcesElements') {
-    visible = false
-    canBeResolved = false
-    canBeConsumed = true
-    extendsFrom(configurations.implementation)
-    attributes {
-      attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
-      attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
-      attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'source-folders'))
-    }
-    sourceSets.main.java.srcDirs.forEach {
-      outgoing.artifact(it)
-    }
-  }
-
-  // Share subproject's compiled hwc classes with other projects for aggregated JaCoCo reports
-  configurations.create('transitiveHwcClassesElements') {
-    visible = false
-    canBeResolved = false
-    canBeConsumed = true
-    extendsFrom(configurations.implementation)
-    attributes {
-      attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
-      attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
-      attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'hwc-classes'))
-    }
-
-    // We only want to analyze code coverage based on our hwc source code, not the one generated from our grammars
-    def hwcPath = "$projectDir/src/main/java"
-    fileTree(hwcPath).each {
-      def packagePath = Paths.get(hwcPath).relativize(it.toPath())
-      def packagePathWithClassEnding = packagePath.toString().replace(".java", ".class")
-      def classLocation = Paths.get("$buildDir/classes/java/main").resolve(packagePathWithClassEnding)
-      outgoing.artifact classLocation.toFile()
-    }
-    outgoing.artifact file("$projectDir/target/classes/resources/main")
-  }
-
-
-  // Share subproject's jacoco coverage data to be aggregated for the whole project
-  configurations.create('coverageDataElements') {
-    visible = false
-    canBeResolved = false
-    canBeConsumed = true
-    extendsFrom(configurations.implementation)
-    attributes {
-      attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
-      attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
-      attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'jacoco-coverage-data'))
-    }
-    // This will cause the test task to run if the coverage data is requested by the aggregation task
-    outgoing.artifact(tasks.named("test").map { task ->
-      task.extensions.getByType(JacocoTaskExtension).destinationFile
-    })
-  }
-
   repositories {
     maven {
       credentials.username(mavenUser)
@@ -123,39 +55,8 @@ subprojects {
       url repo
     }
     mavenCentral()
+    gradlePluginPortal()
   }
-}
-
-task buildAll(type: Task) {
-  group("build")
-  description("Assembles and tests all subprojects.")
-  dependsOn(":languages:arc-fe:build")
-  dependsOn(":languages:montiarc-fe:build")
-  dependsOn(":libraries:lejos-rte:build")
-  dependsOn(":libraries:majava-rte:build")
-  dependsOn(":generators:cd2pojo:build")
-  dependsOn(":generators:ma2java:build")
-  dependsOn(":generators:ma2ktln:build")
-  dependsOn(":applications:bumperbot:build")
-  dependsOn(":applications:factory:build")
-  dependsOn(":applications:factoryTask:build")
-  dependsOn(":applications:lightControl:build")
-}
-
-task cleanAll(type: Delete) {
-  group("clean")
-  description("Deletes the build directory in all subprojects.")
-  dependsOn(":languages:arc-fe:clean")
-  dependsOn(":languages:montiarc-fe:clean")
-  dependsOn(":libraries:lejos-rte:clean")
-  dependsOn(":libraries:majava-rte:clean")
-  dependsOn(":generators:cd2pojo:clean")
-  dependsOn(":generators:ma2java:clean")
-  dependsOn(":generators:ma2ktln:clean")
-  dependsOn(":applications:bumperbot:clean")
-  dependsOn(":applications:factory:clean")
-  dependsOn(":applications:factoryTask:clean")
-  dependsOn(":applications:lightControl:clean")
 }
 
 repositories {
@@ -165,84 +66,5 @@ repositories {
     url repo
   }
   mavenCentral()
-}
-
-/* ======================= Extra Configurations ========================== */
-// The following three configurations collect the source code files, compiled classes and jacoco report data of all
-// subprojects so that we can aggregate the jacoco reports of the subprojects into a single aggregated one
-
-// A resolvable configuration to collect source code of subprojects
-def sourcesPath = configurations.create("sourcesPath") {
-  visible = false
-  canBeResolved = true
-  canBeConsumed = false
-  extendsFrom(configurations.implementation)
-  attributes {
-    attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
-    attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
-    attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'source-folders'))
-  }
-}
-
-// A resolvable configuration to collect compiled classes of subprojects
-def classesPath = configurations.create("classesPath") {
-  visible = false
-  canBeResolved = true
-  canBeConsumed = false
-  extendsFrom(configurations.implementation)
-  attributes {
-    attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
-    attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
-    attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'hwc-classes'))
-  }
-}
-
-// A resolvable configuration to collect JaCoCo coverage data of subprojects
-def coverageDataPath = configurations.create("coverageDataPath") {
-  visible = false
-  canBeResolved = true
-  canBeConsumed = false
-  extendsFrom(configurations.implementation)
-  attributes {
-    attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
-    attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
-    attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'jacoco-coverage-data'))
-  }
-}
-
-def jacocoProjectsToAggregate = [
-    project(":languages:arc-fe"),
-    project(":languages:montiarc-fe"),
-    //project(":libraries:lejos-rte"),
-    //project(":libraries:majava-rte"),
-    project(":generators:cd2pojo"),
-    project(":generators:ma2java"),
-    project(":generators:ma2ktln"),
-    //project(":applications:bumperbot"),
-    //project(":applications:factory"),
-    //project(":applications:factoryTask"),
-    //project(":applications:lightControl"),
-].toSet()
-
-jacocoProjectsToAggregate.each {
-  getRootProject().dependencies.add("sourcesPath", it)
-  getRootProject().dependencies.add("classesPath", it)
-  getRootProject().dependencies.add("coverageDataPath", it)
-}
-
-// Task to aggregate code coverage from subprojects
-task aggregatedJacocoReport(type: JacocoReport) {
-  additionalClassDirs(classesPath.incoming.artifactView { lenient(true) }.files)
-  additionalSourceDirs(sourcesPath.incoming.artifactView { lenient(true) }.files)
-  executionData(coverageDataPath.incoming.artifactView { lenient(true) }.files.filter { it.exists() })
-
-  reports {
-    xml.required = true
-    csv.required = true
-  }
-}
-
-// Make JaCoCo report aggregation part of the 'check' lifecycle phase
-tasks.named("check") {
-  dependsOn(aggregatedJacocoReport)
+  gradlePluginPortal()
 }

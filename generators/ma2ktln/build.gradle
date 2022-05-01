@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
+  id "java"
   id "monticore"
   id "jacoco"
   id "com.github.johnrengelman.shadow" version "$shadow_version"
@@ -33,8 +34,7 @@ dependencies {
   implementation(project(":generators:ma2java"))
 
   //Internal dependencies
-  implementation(project(":languages:arc-fe"))
-  implementation(project(":languages:montiarc-fe"))
+  implementation(project(":language:montiarc"))
   implementation(project(":libraries:majava-rte"))
   testImplementation(project(":generators:cd2pojo"))
 
@@ -83,17 +83,3 @@ shadowJar {
 }
 
 jar.dependsOn(shadowJar)
-compileJava.mustRunAfter(project.collect {it.project(":languages:montiarc-fe").getTasks().withType(Test) })
-
-
-publishing {
-  publications {
-    mavenJava(MavenPublication) { from(components.java) }
-  }
-  repositories.maven {
-    name = "$SE_Nexus_ID"
-    credentials.username(mavenUser)
-    credentials.password(mavenPassword)
-    url = version.endsWith('SNAPSHOT') ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
-  }
-}
