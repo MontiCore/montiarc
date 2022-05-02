@@ -225,7 +225,7 @@ everything is understood as class.
   - Type compatibility of connected ports
 
 ### PrettyPrinter
-- ['MontiArcFullPrettyPrinter`][MontiArcFullPrettyPrinter] contains the basic pretty printer for MontiArc
+- [`MontiArcFullPrettyPrinter`][MontiArcFullPrettyPrinter] contains the basic pretty printer for MontiArc
 
 [se-rwth]: http://www.se-rwth.de
 [mdse]:http://www.se-rwth.de/teams/mdse/
@@ -233,17 +233,17 @@ everything is understood as class.
 
 [Applications]: ./applications
 
-[ASTComponentInstantiation]: ./languages/arc-fe/src/main/java/arcbasis/_ast/ASTComponentInstantiation.java
-[ASTComponentType]: ./languages/arc-fe/src/main/java/arcbasis/_ast/ASTComponentType.java
-[ASTConnector]: ./languages/arc-fe/src/main/java/arcbasis/_ast/ASTConnector.java
-[ASTPortAccess]: ./languages/arc-fe/src/main/java/arcbasis/_ast/ASTPortAccess.java
-[ASTPortDeclaration]: ./languages/arc-fe/src/main/java/arcbasis/_ast/ASTPortDeclaration.java
+[ASTComponentInstantiation]: ./language/basis/main/java/arcbasis/_ast/ASTComponentInstantiation.java
+[ASTComponentType]: ./language/basis/main/java/arcbasis/_ast/ASTComponentType.java
+[ASTConnector]: ./language/basis/main/java/arcbasis/_ast/ASTConnector.java
+[ASTPortAccess]: ./language/basis/main/java/arcbasis/_ast/ASTPortAccess.java
+[ASTPortDeclaration]: ./language/basis/main/java/arcbasis/_ast/ASTPortDeclaration.java
 
-[MontiArcCoCos]: ./languages/montiarc-fe/src/main/java/montiarc/_cocos/MontiArcCoCos.java
-[MontiArcParser]: ./languages/montiarc-fe/src/main/java/montiarc/_parser/MontiArcParser.java
-[MontiArcFullPrettyPrinter]: ./languages/montiarc-fe/src/main/java/montiarc/_visitor/MontiArcFullPrettyPrinter.java
+[MontiArcCoCos]: ./language/montiarc/main/java/montiarc/_cocos/MontiArcCoCos.java
+[MontiArcParser]: ./language/montiarc/main/java/montiarc/_parser/MontiArcParser.java
+[MontiArcFullPrettyPrinter]: ./language/montiarc/main/java/montiarc/_visitor/MontiArcFullPrettyPrinter.java
 
-[MontiArcGrammar]: ./languages/montiarc-fe/src/main/grammars/MontiArc.mc4
+[MontiArcGrammar]: ./language/grammars/MontiArc.mc4
 
 ## Further Information
 
