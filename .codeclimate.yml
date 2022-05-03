@@ -6,7 +6,7 @@ plugins:
   sonar-java:
     enabled: true
     config:
-      sonar.java.source: "8"
+      sonar.java.source: "11"
       minimum_severity: minor
       tests_patterns:
         - "**/test/"

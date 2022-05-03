@@ -24,8 +24,8 @@ subprojects {
   apply plugin: 'maven-publish'
 
   tasks.withType(JavaCompile) {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
     options.encoding = 'UTF-8'
     options.fork = false
     options.deprecation = false

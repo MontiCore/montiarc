@@ -25,7 +25,7 @@ or via integration of handcrafted code. For composed components, the behavior em
 ### Prerequisites 
 - Git (for checking out the project)
 - Gradle (for building the project), explicitly version 6.8.3
-- Java 8 or 11 (other versions are not checked by the CI pipeline)
+- Java 11 (recommended) or higher 
 
 ### Installation
 

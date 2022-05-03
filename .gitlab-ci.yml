@@ -16,7 +16,7 @@ stages:
   - mirror
       
 Validate Gradle:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.8.2-jdk8
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.8.2-jdk11
   stage: build
   allow_failure: false
   artifacts:
@@ -45,18 +45,13 @@ Validate Gradle:
   script:
     - gradle test
 
-Unit Test JDK 8:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.8.2-jdk8
-  allow_failure: false
-  <<: *unit_test_definition
-
 Unit Test JDK 11:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.8.2-jdk11
   allow_failure: false
   <<: *unit_test_definition
 
 Deploy Nexus:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.8.2-jdk8
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.8.2-jdk11
   stage: post-test
   script:
     - gradle publish -PmavenPassword=$pass -PmavenUser=$user
@@ -80,7 +75,7 @@ checkMDLinks:
 # For more information, visit: https://git.rwth-aachen.de/monticore/auxiliary-development-tools/github-mirror-tools (Available internally only)
 Github Mirror:
   stage: mirror
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.8.2-jdk8
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:6.8.2-jdk11
   variables:
     # The repository is edited during this job. To make sure that no changes persist, we instruct GitLab to always
     # create a fresh clone of the repository instead of caching it and attempting to remove any changes.
