@@ -20,7 +20,8 @@ Developed at the Department of Software Engineering, RWTH Aachen University
 http://www.se-rwth.de/"""
 
 subprojects {
-
+  apply plugin: 'java'
+  apply plugin: 'maven-publish'
 
   tasks.withType(JavaCompile) {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -45,6 +46,20 @@ subprojects {
                 ")"
         )
       }
+    }
+  }
+
+  publishing {
+    publications {
+      mavenJava(MavenPublication) {
+        from(components.java)
+      }
+    }
+    repositories.maven {
+      name = "$SE_Nexus_ID"
+      credentials.username(mavenUser)
+      credentials.password(mavenPassword)
+      url = version.endsWith("SNAPSHOT") ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
     }
   }
 
