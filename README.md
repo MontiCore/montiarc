@@ -111,6 +111,8 @@ The [MA2JavaTool](generators/ma2java/main/java/montiarc/generator/MontiArcTool.j
 | `-o, --output <dir>`               | Sets the target path for the generated files (optional). |
 | `-hwc <dir>`                       | Sets the artifact path for handwritten code (optional).  |
 
+There is also a [Gradle plugin](tooling/plugin/Readme.md) for using the MA2JavaTool.
+
 ## Further Information
 
 * [Project root: MontiCore @github](https://github.com/MontiCore/monticore)

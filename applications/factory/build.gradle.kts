@@ -1,30 +1,36 @@
 /* (c) https://github.com/MontiCore/monticore */
 
+buildscript {
+  dependencies {
+    classpath("montiarc.tooling:plugin")
+  }
+}
+
 plugins {
   id("montiarc.build.java-library")
+  id("montiarc")
 }
 
 val hwcDir = "$projectDir/main/java"
 val genDir = "$buildDir/generated-sources"
+val genDirCd = "$genDir/cd"
+val genDirMa = "$genDir/montiarc"
 
 val generatorLogbackConfig = "$projectDir/logback.xml"
 val generatorLogbackOutDir = "$buildDir/logs"
 
 sourceSets["main"].java {
-  srcDir(genDir)
+  srcDir(genDirMa)
+  srcDir(genDirCd)
 }
 
 // Configurations
 val generateCD = configurations.create("generateCD")
-val generateMA = configurations.create("generateMA")
 
 dependencies {
   generateCD(project(":generators:cd2pojo"))
   generateCD("${libs.logbackCore}:${libs.logbackVersion}")
   generateCD("${libs.logbackClassic}:${libs.logbackVersion}")
-  generateMA(project(":generators:ma2java"))
-  generateMA("${libs.logbackCore}:${libs.logbackVersion}")
-  generateMA("${libs.logbackClassic}:${libs.logbackVersion}")
 
   api(project(":libraries:majava-rte"))
   api(project(":libraries:lejos-rte"))
@@ -39,9 +45,9 @@ val genCdTask = tasks.register<JavaExec>("generateCD") {
   classpath(generateCD)
   mainClass.set("de.monticore.cd2pojo.POJOGeneratorScript")
 
-  args("$projectDir/main/resources", genDir, hwcDir)
+  args("$projectDir/main/resources", genDirCd, hwcDir)
   args("-c2mc")
-  outputs.dir(genDir)
+  outputs.dir(genDirCd)
 
   // Configuring logging during generation
   systemProperties["logback.configurationFile"] = generatorLogbackConfig
@@ -49,31 +55,18 @@ val genCdTask = tasks.register<JavaExec>("generateCD") {
   systemProperties["LOGBACK_TARGET_FILE_NAME"] = "logback-cd2pojo"
 }
 
-val genMaTask = tasks.register<JavaExec>("generateMontiArc") {
-  classpath(generateMA)
-  mainClass.set("montiarc.generator.MontiArcTool")
+montiarc {
+  modelPath.from("$projectDir/main/resources")
+  symbolImportDir.from(genDirCd)
+  useClass2Mc.set(true)
+  hwcPath.from(hwcDir)
+  outputDir.set(genDirMa)
 
-  val enableAttachDebugger = false
-  if(enableAttachDebugger) {
-    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
-  }
-
-  args("-mp", "$projectDir/main/resources")
-  args("-path", genDir)
-  args("-o", genDir)
-  args("-hwc", hwcDir)
-  args("-c2mc")
-  outputs.dir(genDir)
-
-  // Configuring logging during generation
-  systemProperties["logback.configurationFile"] = generatorLogbackConfig
-  systemProperties["LOGBACK_TARGET_DIR"] = generatorLogbackOutDir
-  systemProperties["LOGBACK_TARGET_FILE_NAME"] = "logback-ma2java"
+  internalMontiArcTesting.set(true)
 }
 
 // Setting up task dependencies
-genMaTask { dependsOn(genCdTask) }
-tasks.compileJava { dependsOn(genMaTask) }
+tasks.compileMontiarc { dependsOn(genCdTask) }
+tasks.compileJava { dependsOn(tasks.compileMontiarc) }
 
 genCdTask { mustRunAfter(project(":generators:cd2pojo").tasks.withType(Test::class)) }
-genMaTask { mustRunAfter(project(":generators:ma2java").tasks.withType(Test::class)) }
