@@ -1,5 +1,5 @@
 # (c) https://github.com/MontiCore/monticore  
-# Build JAVA applications using Apache Maven (http://maven.apache.org)
+# Build JAVA applications using Gradle (https://gradle.org/)
 
 # Cache downloaded dependencies and plugins between builds.
 # To keep cache across branches add 'key: "$CI_JOB_NAME"'
