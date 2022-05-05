@@ -11,6 +11,7 @@ import de.monticore.types.mcbasictypes._visitor.MCBasicTypesTraverser;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -46,13 +47,16 @@ public class SynthesizeComponentFromMCBasicTypes implements MCBasicTypesHandler 
 
     String compTypeName = mcType.getMCQualifiedName().getQName();
     IArcBasisScope enclScope = ((IArcBasisScope) mcType.getEnclosingScope());
-    Optional<ComponentTypeSymbol> compType = enclScope.resolveComponentType(compTypeName);
+    List<ComponentTypeSymbol> compType = enclScope.resolveComponentTypeMany(compTypeName);
 
-    if (!compType.isPresent()) {
+    if (compType.isEmpty()) {
       Log.error(ArcError.SYMBOL_NOT_FOUND.format(compTypeName), mcType.get_SourcePositionStart());
       resultWrapper.setCurrentResultAbsent();
     } else {
-      resultWrapper.setCurrentResult(new TypeExprOfComponent(compType.get()));
+      if (compType.size() > 1) {
+        Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(compTypeName), mcType.get_SourcePositionStart());
+      }
+      resultWrapper.setCurrentResult(new TypeExprOfComponent(compType.get(0)));
     }
   }
 }

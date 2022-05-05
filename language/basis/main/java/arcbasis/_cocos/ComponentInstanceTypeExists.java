@@ -31,7 +31,7 @@ public class ComponentInstanceTypeExists implements ArcBasisASTComponentInstanti
 
     String typeName = node.getMCType().printType(typePrinter);
 
-    if(!node.getEnclosingScope().resolveComponentType(typeName).isPresent()) {
+    if(node.getEnclosingScope().resolveComponentTypeMany(typeName).isEmpty()) {
       String firstInstanceName = node.getComponentInstanceList().isEmpty() ?
         "?" : node.getComponentInstanceList().get(0).getName();
 

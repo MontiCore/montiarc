@@ -73,9 +73,10 @@ public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCo
         logMissingComponent(port, connector);
       } else {
         // now also check whether the subcomponent has a port with the given name
-        Preconditions.checkState(sub.get().isPresentType(), "CoCo '%s' can only be run after symbol table " +
-            "completion, but we detected that the component type for a component instance has not been set yet.",
-          ConnectorSourceAndTargetExist.class.getSimpleName());
+        if (!sub.get().isPresentType()) {
+          logMissingPort(port, connector, enclComp);
+          return;
+        }
 
         Optional<PortSymbol> portSym = sub.get().getType().getTypeInfo().getPort(port.getPort(), true);
         if(!portSym.isPresent()) {

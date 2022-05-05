@@ -135,20 +135,14 @@ public class MontiArcTool extends MontiArcToolTOP {
     Log.info("Create the symbol table", "MontiArcTool");
     Log.enableFailQuick(false);
     this.createSymbolTable(asts);
-    Log.enableFailQuick(true);
 
     Log.info("Perform initial context-condition checks", "MontiArcTool");
-    Log.enableFailQuick(false);
     this.runDefaultCoCos(asts);
-    Log.enableFailQuick(true);
 
     Log.info("Complete the symbol table", "MontiArcTool");
-    Log.enableFailQuick(false);
     this.completeSymbolTable(asts);
-    Log.enableFailQuick(true);
 
     Log.info("Perform remaining context-condition checks", "MontiArcTool");
-    Log.enableFailQuick(false);
     this.runAdditionalCoCos(asts);
     Log.enableFailQuick(true);
   }

@@ -63,6 +63,10 @@ public class PortSymbol extends PortSymbolTOP {
     return this.direction instanceof ASTPortDirectionOut;
   }
 
+  public boolean isTypePresent() {
+    return this.type != null;
+  }
+
   /**
    * @return the type for the type of this port.
    */

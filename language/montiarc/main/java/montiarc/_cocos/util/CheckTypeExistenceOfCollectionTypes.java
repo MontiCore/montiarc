@@ -58,9 +58,9 @@ public class CheckTypeExistenceOfCollectionTypes implements MCCollectionTypesVis
     Preconditions.checkArgument(resolveStartPoint.getEnclosingScope() instanceof IBasicSymbolsScope);
 
     IArcBasisScope enclScope = (IArcBasisScope) resolveStartPoint.getEnclosingScope();
-    Optional<TypeSymbol> typeSym = enclScope.resolveType(name);
+    Optional<TypeSymbol> typeSym = enclScope.resolveTypeMany(name).stream().findFirst();
 
-    if(!typeSym.isPresent()) {
+    if(typeSym.isEmpty()) {
       Log.error(ArcError.MISSING_TYPE.format(name, resolveStartPoint.get_SourcePositionStart()));
     }
   }

@@ -87,11 +87,12 @@ public interface IPortReferenceInExpressionExtractor {
       Collection<PortReference> allSubCompPorts = new HashSet<>();
 
       for (ComponentInstanceSymbol subComp : comp.getSubComponents()) {
-        Preconditions.checkState(subComp.getType() != null);
-        Preconditions.checkState(subComp.getType().getTypeInfo() != null);
-        subComp.getType().getTypeInfo().getAllPorts().stream()
-          .map(port -> new PortReference(subComp.getName(), port.getName()))
-          .forEach(allSubCompPorts::add);
+        if (subComp.isPresentType()){
+          Preconditions.checkState(subComp.getType().getTypeInfo() != null);
+          subComp.getType().getTypeInfo().getAllPorts().stream()
+            .map(port -> new PortReference(subComp.getName(), port.getName()))
+            .forEach(allSubCompPorts::add);
+        }
       }
       return allSubCompPorts;
     }

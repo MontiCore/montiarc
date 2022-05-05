@@ -14,6 +14,7 @@ import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -38,21 +39,15 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol(), "ASTComponent node '%s' has no symbol. "
       + "Did you forget to run the SymbolTableCreator before checking cocos?", node.getName());
-    if(node.getSymbol().isPresentParentComponent()) {
-      Preconditions.checkArgument(node.getSymbol().getParent().getTypeInfo().getParameters().stream().allMatch(
-        param -> node.getSymbol().getParent().getTypeExprOfParameter(param.getName()).isPresent()
-      ));
-    }
 
     ComponentTypeSymbol component = node.getSymbol();
     List<VariableSymbol> parameters = component.getParameters();
 
     if (component.isPresentParentComponent()) {
       CompTypeExpression parent = component.getParent();
-      List<SymTypeExpression> parentParameters = parent.getTypeInfo().getParameters().stream()
+      List<Optional<SymTypeExpression>> parentParameters = parent.getTypeInfo().getParameters().stream()
         .map(ISymbol::getName)
         .map(parent::getTypeExprOfParameter)
-        .map(paramType -> paramType.orElseThrow(IllegalStateException::new))
         .collect(Collectors.toList());
 
       if (parameters.size() < parentParameters.size()) {
@@ -63,13 +58,14 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
 
       // TypeCheck compatibility between own and parent's parameters
       for (int i = 0; i < Math.min(parentParameters.size(), parameters.size()); i++) {
-        SymTypeExpression superParameterType = parentParameters.get(i);
-        SymTypeExpression paramType = parameters.get(i).getType();
-        if (!TypeCheck.compatible(paramType, superParameterType)) {
+        Optional<SymTypeExpression> superParameterType = parentParameters.get(i);
+        Optional<SymTypeExpression> paramType = Optional.ofNullable(parameters.get(i).getType());
+        if (paramType.isEmpty() || superParameterType.isEmpty() || !TypeCheck.compatible(paramType.get(), superParameterType.get())) {
           Log.error(
             ArcError.INHERITED_CONFIG_PARAM_TYPE_MISMATCH.format(
-              parameters.get(i).getName(), i + 1, component.getFullName(), paramType.printFullName(),
-              superParameterType.printFullName(), parentParameters.get(i).getTypeInfo().getName(), i + 1),
+              parameters.get(i).getName(), i + 1, component.getFullName(), paramType.map(SymTypeExpression::printFullName).orElse("UNKNOWN"),
+              superParameterType.map(SymTypeExpression::printFullName).orElse("UNKNOWN"),
+              superParameterType.map(t -> t.getTypeInfo().getName()).orElse("UNKNOWN"), i + 1),
             node.getHead().getArcParameterList().get(i).get_SourcePositionStart(),
             node.getHead().getArcParameterList().get(i).get_SourcePositionEnd());
         }
@@ -80,7 +76,7 @@ public class ConfigurationParametersCorrectlyInherited implements ArcBasisASTCom
             Log.error(
               ArcError.INHERITED_CONFIG_PARAM_MISSES_DEFAULT_VALUE.format(
                 parameters.get(i).getName(), i + 1, component.getFullName(),
-                parentParameters.get(i).getTypeInfo().getName(), parent.printName(), i + 1),
+                  superParameterType.map(t -> t.getTypeInfo().getName()).orElse("UNKNOWN"), parent.printName(), i + 1),
               node.getHead().getArcParameterList().get(i).get_SourcePositionStart(),
               node.getHead().getArcParameterList().get(i).get_SourcePositionEnd());
           }

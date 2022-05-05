@@ -65,6 +65,7 @@ public class NoSubComponentReferenceCycles implements ArcBasisASTComponentTypeCo
     Preconditions.checkNotNull(trace.peekLast());
 
     Collection<ComponentTypeSymbol> instantiatedTypes = trace.peekLast().getSubComponents().stream()
+      .filter(ComponentInstanceSymbol::isPresentType)
       .map(ComponentInstanceSymbol::getType)
       .map(CompTypeExpression::getTypeInfo)
       .distinct()

@@ -8,11 +8,14 @@ import arcbasis._visitor.ArcBasisVisitor2;
 import arcbasis.check.*;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.ISymbol;
+import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
+import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import de.se_rwth.commons.logging.Log;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -143,10 +146,6 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
       if (parentTypeExpr.isPresent()) {
         ComponentTypeSymbol sym = (ComponentTypeSymbol) node.getEnclosingScope().getSpanningSymbol();
         sym.setParent(parentTypeExpr.get());
-      } else {
-        Log.error(String.format("Could not create a component type expression from '%s'",
-          node.getParent().printType(this.getTypePrinter())), node.get_SourcePositionStart()
-        );
       }
     }
   }
@@ -159,26 +158,22 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Optional<CompTypeExpression> compTypeExpr = this.getComponentSynthesizer().synthesizeFrom(node.getMCType());
     if (compTypeExpr.isPresent()) {
       this.setCurrentCompInstanceType(compTypeExpr.get());
-    } else {
-      Log.error(String.format("Could not create a component type expression from '%s'",
-        node.getMCType().printType(this.getTypePrinter())), node.get_SourcePositionStart()
-      );
     }
   }
 
   @Override
   public void endVisit(@NotNull ASTComponentInstantiation node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
     this.setCurrentCompInstanceType(null);
   }
 
   public void visit(@NotNull ASTComponentInstance node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkState(this.getCurrentCompInstanceType().isPresent());
 
-    node.getSymbol().setType(this.getCurrentCompInstanceType().get());
+    if (this.getCurrentCompInstanceType().isPresent()) {
+      node.getSymbol().setType(this.getCurrentCompInstanceType().get());
+    }
   }
 
   @Override
@@ -189,13 +184,17 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
         "Did you forget to run the scopes genitor prior to the completer?", node.getName(),
       node.get_SourcePositionStart());
 
-    TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(node.getMCType());
-    if (typeExpr.isPresentCurrentResult()) {
-      node.getSymbol().setType(typeExpr.getCurrentResult());
-    } else {
-      Log.error(String.format("Could not create a sym type expression from '%s'",
-        node.getMCType().printType(this.getTypePrinter())), node.get_SourcePositionStart()
-      );
+    try {
+      TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(node.getMCType());
+      if (typeExpr.isPresentCurrentResult()) {
+        node.getSymbol().setType(typeExpr.getCurrentResult());
+      }
+    } catch (ResolvedSeveralEntriesForSymbolException e) {
+      String name = "";
+      if (node.getMCType() instanceof ASTMCQualifiedType) {
+        name = ((ASTMCQualifiedType) node.getMCType()).getMCQualifiedName().getQName();
+      }
+      Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(name), node.getMCType().get_SourcePositionStart());
     }
   }
 
@@ -218,16 +217,21 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   public void visit(@NotNull ASTPort port) {
     Preconditions.checkNotNull(port);
     Preconditions.checkState(this.getCurrentPortType().isPresent());
-    Preconditions.checkState(port.isPresentSymbol(), "Missing symbol for port '%s' at %s. Did you forget to run the " +
-      "scopes genitor prior to the completer?", port.getName(), port.get_SourcePositionStart());
+    Preconditions.checkState(port.isPresentSymbol(),
+        "Missing symbol for port '%s' at %s. Did you forget to run the " + "scopes genitor prior to the completer?", port.getName(),
+        port.get_SourcePositionStart());
 
-    TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(this.getCurrentPortType().get());
-    if (typeExpr.isPresentCurrentResult()) {
-      port.getSymbol().setType(typeExpr.getCurrentResult());
-    } else {
-      Log.error(String.format("Could not create a sym type expression from '%s'",
-        this.getCurrentPortType().get().printType(this.getTypePrinter())), port.get_SourcePositionStart()
-      );
+    try {
+      TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(this.getCurrentPortType().get());
+      if (typeExpr.isPresentCurrentResult()) {
+        port.getSymbol().setType(typeExpr.getCurrentResult());
+      }
+    } catch (ResolvedSeveralEntriesForSymbolException e) {
+      String name = "";
+      if (this.getCurrentPortType().get() instanceof ASTMCQualifiedType) {
+        name = ((ASTMCQualifiedType) this.getCurrentPortType().get()).getMCQualifiedName().getQName();
+      }
+      Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(name), this.getCurrentPortType().get().get_SourcePositionStart());
     }
   }
 
@@ -253,13 +257,17 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkState(field.isPresentSymbol(), "Missing symbol for field '%s' at %s. Did you forget to run " +
       "the scopes genitor prior to the completer?", field.getName(), field.get_SourcePositionStart());
 
-    TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(this.getCurrentFieldType().get());
-    if (typeExpr.isPresentCurrentResult()) {
-      field.getSymbol().setType(typeExpr.getCurrentResult());
-    } else {
-      Log.error(String.format("Could not create a sym type expression from '%s'",
-        this.getCurrentFieldType().get().printType(this.getTypePrinter())), field.get_SourcePositionStart()
-      );
+    try {
+      TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(this.getCurrentFieldType().get());
+      if (typeExpr.isPresentCurrentResult()) {
+        field.getSymbol().setType(typeExpr.getCurrentResult());
+      }
+    } catch (ResolvedSeveralEntriesForSymbolException e) {
+      String name = "";
+      if (this.getCurrentFieldType().get() instanceof ASTMCQualifiedType) {
+        name = ((ASTMCQualifiedType) this.getCurrentFieldType().get()).getMCQualifiedName().getQName();
+      }
+      Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(name), this.getCurrentFieldType().get().get_SourcePositionStart());
     }
   }
 }

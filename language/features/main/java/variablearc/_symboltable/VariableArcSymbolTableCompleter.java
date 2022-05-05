@@ -28,9 +28,8 @@ public class VariableArcSymbolTableCompleter implements VariableArcVisitor2, Var
   @Override
   public void visit(@NotNull ComponentInstanceSymbol node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkNotNull(node.getType());
 
-    if (node.getType() instanceof TypeExprOfVariableComponent) {
+    if (node.isPresentType() && node.getType() instanceof TypeExprOfVariableComponent) {
       node.setType(((TypeExprOfVariableComponent) node.getType()).bindParameters(node.getArguments()));
     }
   }

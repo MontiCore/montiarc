@@ -20,6 +20,7 @@ import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -105,7 +106,11 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   protected void checkInstantiationArgsAreNotTooMany(@NotNull ASTComponentInstance instance) {
     Preconditions.checkNotNull(instance);
     Preconditions.checkArgument(instance.isPresentSymbol());
-    Preconditions.checkArgument(instance.getSymbol().isPresentType());
+    if (!instance.getSymbol().isPresentType()) {
+      Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.",
+          this.getClass().getSimpleName());
+      return;
+    }
     Preconditions.checkNotNull(instance.getSymbol().getType().getTypeInfo());
     assertConsistentArguments(instance);
 
@@ -132,7 +137,11 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   protected void checkInstantiationArgsBindAllMandatoryParams(@NotNull ASTComponentInstance instance) {
     Preconditions.checkNotNull(instance);
     Preconditions.checkState(instance.isPresentSymbol());
-    Preconditions.checkArgument(instance.getSymbol().isPresentType());
+    if (!instance.getSymbol().isPresentType()) {
+      Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.",
+          this.getClass().getSimpleName());
+      return;
+    }
     assertConsistentArguments(instance);
 
     List<ASTExpression> instantiationArgs = instance.getSymbol().getArguments();
@@ -159,7 +168,11 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   protected void checkInstantiationArgsHaveCorrectTypes(@NotNull ASTComponentInstance instance) {
     Preconditions.checkNotNull(instance);
     Preconditions.checkState(instance.isPresentSymbol());
-    Preconditions.checkArgument(instance.getSymbol().isPresentType());
+    if (!instance.getSymbol().isPresentType()) {
+      Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.",
+          this.getClass().getSimpleName());
+      return;
+    }
     Preconditions.checkNotNull(instance.getSymbol().getType().getTypeInfo());
     assertConsistentArguments(instance);
 
@@ -168,11 +181,10 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       .map(expr -> this.getTypeCalculator().deriveType(expr))
       .collect(Collectors.toList());
 
-    List<SymTypeExpression> paramSignatureOfCompType = toInstantiate.getTypeInfo()
+    List<Optional<SymTypeExpression>> paramSignatureOfCompType = toInstantiate.getTypeInfo()
       .getParameters().stream()
       .map(ISymbol::getName)
       .map(toInstantiate::getTypeExprOfParameter)
-      .map(paramType -> paramType.orElseThrow(IllegalStateException::new))
       .collect(Collectors.toList());
 
     for (int i = 0; i < Math.min(instantiationArgs.size(), paramSignatureOfCompType.size()); i++) {
@@ -191,13 +203,13 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
             toInstantiate.getTypeInfo().getName(), instance.getName()
           ), typeRefExpr.get_SourcePositionStart(), typeRefExpr.get_SourcePositionEnd());
 
-      } else if(!TypeCheck.compatible(paramSignatureOfCompType.get(i), instantiationArgs.get(i).getCurrentResult())) {
+      } else if(paramSignatureOfCompType.get(i).isEmpty() || !TypeCheck.compatible(paramSignatureOfCompType.get(i).get(), instantiationArgs.get(i).getCurrentResult())) {
         ASTExpression incompatibleArgument = instance.getArguments().getExpression(i);
         String correspondingParamName = toInstantiate.getTypeInfo().getParameters().get(i).getName();
 
         Log.error(ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH.format(
           i + 1, instance.getName(), instantiationArgs.get(i).getCurrentResult().print(),
-          paramSignatureOfCompType.get(i).print(), correspondingParamName,
+          paramSignatureOfCompType.get(i).map(SymTypeExpression::print).orElse("UNKNOWN"), correspondingParamName,
           toInstantiate.printName()
         ), incompatibleArgument.get_SourcePositionStart(), incompatibleArgument.get_SourcePositionEnd());
       }

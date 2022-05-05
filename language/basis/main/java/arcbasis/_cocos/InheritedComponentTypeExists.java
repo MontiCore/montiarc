@@ -32,8 +32,8 @@ public class InheritedComponentTypeExists implements ArcBasisASTComponentTypeCoC
     } else {
       type = node.getHead().getParent().printType(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
     }
-    Optional<ComponentTypeSymbol> parent = node.getEnclosingScope().resolveComponentType(type);
-    if (!parent.isPresent()) {
+    Optional<ComponentTypeSymbol> parent = node.getEnclosingScope().resolveComponentTypeMany(type).stream().findFirst();
+    if (parent.isEmpty()) {
       Log.error(ArcError.MISSING_TYPE_OF_INHERITED_COMPONENT.format(parent, node.getSymbol().getFullName()),
         node.get_SourcePositionStart());
     }

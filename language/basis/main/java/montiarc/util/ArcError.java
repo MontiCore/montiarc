@@ -11,6 +11,7 @@ public enum ArcError implements Error {
   MISSING_TYPE_OF_COMPONENT_INSTANCE("0xC1015", "Cannot resolve type '%s' of component "
     + "instance '%s'."),
   SYMBOL_NOT_FOUND("0xC1016", "Cannot find Symbol `%s`."),
+  SYMBOL_TOO_MANY_FOUND("0xC1017", "Found too many Symbols `%s`."),
   INCOMING_PORT_AS_TARGET("0xC1020", "Incoming port '%s' of component '%s' is target of a port "
     + "forward. Incoming ports may only be used as the source of a port forward."),
   OUTGOING_PORT_AS_SOURCE("0xC1021", "Outgoing port '%s' of component '%s' is source of a port "

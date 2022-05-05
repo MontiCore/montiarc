@@ -51,8 +51,12 @@ public class ParameterDefaultValueTypesCorrect implements ArcBasisASTArcParamete
     Preconditions.checkNotNull(astParam);
     Preconditions.checkArgument(astParam.isPresentSymbol(), "Could not perform coco check '%s'. Perhaps you missed " +
       "the symbol table creation.", this.getClass().getSimpleName());
-    Preconditions.checkNotNull(astParam.getSymbol().getType(), "Could not perform coco check '%s'. Perhaps you " +
-      "missed the symbol table creation.", this.getClass().getSimpleName());
+
+    if (astParam.getSymbol().getType() == null) {
+      Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.",
+          this.getClass().getSimpleName());
+      return;
+    }
 
     VariableSymbol paramSym = astParam.getSymbol();
     SymTypeExpression paramType = paramSym.getType();

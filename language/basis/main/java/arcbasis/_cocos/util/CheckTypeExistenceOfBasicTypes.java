@@ -32,10 +32,10 @@ public class CheckTypeExistenceOfBasicTypes implements MCBasicTypesVisitor2 {
 
     IArcBasisScope enclScope = (IArcBasisScope) type.getEnclosingScope();
     String typeName = type.printType(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
-    Optional<TypeSymbol> primitiveSym = enclScope.resolveType(typeName);
+    Optional<TypeSymbol> primitiveSym = enclScope.resolveTypeMany(typeName).stream().findFirst();
 
-    if(!primitiveSym.isPresent()) {
-      Log.error(ArcError.MISSING_TYPE.format(typeName, type.get_SourcePositionStart()));
+    if(primitiveSym.isEmpty()) {
+      Log.error(ArcError.MISSING_TYPE.format(typeName, type.get_SourcePositionStart()), type.get_SourcePositionStart(), type.get_SourcePositionEnd());
     }
   }
 
@@ -50,10 +50,10 @@ public class CheckTypeExistenceOfBasicTypes implements MCBasicTypesVisitor2 {
 
     IArcBasisScope enclScope = (IArcBasisScope) type.getEnclosingScope();
     String typeName = type.getMCQualifiedName().getQName();
-    Optional<TypeSymbol> typeSym = enclScope.resolveType(typeName);
+    Optional<TypeSymbol> typeSym = enclScope.resolveTypeMany(typeName).stream().findFirst();
 
-    if(!typeSym.isPresent()) {
-      Log.error(ArcError.MISSING_TYPE.format(typeName, type.get_SourcePositionStart()));
+    if(typeSym.isEmpty()) {
+      Log.error(ArcError.MISSING_TYPE.format(typeName, type.get_SourcePositionStart()), type.get_SourcePositionStart(), type.get_SourcePositionEnd());
     }
   }
 }

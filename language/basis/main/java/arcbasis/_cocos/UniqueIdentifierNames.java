@@ -43,7 +43,7 @@ public class UniqueIdentifierNames implements ArcBasisASTComponentTypeCoCo {
           astComp.getSymbol().getFullName(),
           name,
           positionsPrinted
-        ));
+        ), astComp.get_SourcePositionStart(), astComp.get_SourcePositionEnd());
       }
     }
   }

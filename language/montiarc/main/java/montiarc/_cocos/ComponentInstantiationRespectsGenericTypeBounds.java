@@ -32,10 +32,11 @@ public class ComponentInstantiationRespectsGenericTypeBounds implements ArcBasis
       "coco '%s'?", ASTComponentInstantiation.class.getSimpleName(), node.get_SourcePositionStart(),
       this.getClass().getSimpleName());
 
-    Preconditions.checkArgument(node.streamComponentInstances().allMatch(inst -> inst.getSymbol().isPresentType()),
-      "For some instances of '%s' at '%s' the component type is not set. Have you run the completer before checking " +
-      "coco '%s'?", ASTComponentInstantiation.class.getSimpleName(), node.get_SourcePositionStart(),
-      this.getClass().getSimpleName());
+    if (!node.streamComponentInstances().allMatch(inst -> inst.getSymbol().isPresentType())){
+      Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.",
+          this.getClass().getSimpleName());
+      return;
+    }
 
     Preconditions.checkArgument(node.streamComponentInstances().skip(1).allMatch(
       inst -> inst.getSymbol().getType().deepEquals(node.getComponentInstance(0).getSymbol().getType())),

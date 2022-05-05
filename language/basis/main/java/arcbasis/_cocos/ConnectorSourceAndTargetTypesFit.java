@@ -8,6 +8,7 @@ import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import arcbasis._visitor.ArcBasisFullPrettyPrinter;
+import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
@@ -45,13 +46,22 @@ public class ConnectorSourceAndTargetTypesFit implements ArcBasisASTComponentTyp
         Optional<SymTypeExpression> symTypeOfTarget = getTypeOfPortIfPresent(target, enclComponent);
         if (symTypeOfTarget.isPresent()) {
           // Perform type check
-          if (!TypeCheck.compatible(symTypeOfTarget.get(), symTypeOfSource.get())) {
+          try {
+            if (!TypeCheck.compatible(symTypeOfTarget.get(), symTypeOfSource.get())) {
+              Log.error(
+                ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH.format(
+                  symTypeOfSource.get().print(), symTypeOfTarget.get().print(),
+                  printConnector(conn),
+                  enclComponent.getFullName()),
+                conn.get_SourcePositionStart());
+            }
+          } catch (ResolvedSeveralEntriesForSymbolException e) {
             Log.error(
-              ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH.format(
-                symTypeOfSource.get().print(), symTypeOfTarget.get().print(),
-                printConnector(conn),
-                enclComponent.getFullName()),
-              conn.get_SourcePositionStart());
+                ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH.format(
+                    symTypeOfSource.get().print(), symTypeOfTarget.get().print(),
+                    printConnector(conn),
+                    enclComponent.getFullName()),
+                conn.get_SourcePositionStart());
           }
         } else {
           logInfoThatCoCoIsNotChecked4TargetPort(target);
@@ -72,17 +82,15 @@ public class ConnectorSourceAndTargetTypesFit implements ArcBasisASTComponentTyp
 
     if (astPort.isPresentComponent()) {
       Optional<ComponentInstanceSymbol> portOwner = enclComp.getSubComponent(astPort.getComponent());
-      if (!portOwner.isPresent()) {
+      if (portOwner.isEmpty() || !portOwner.get().isPresentType()) {
         return Optional.empty();
       }
-      Preconditions.checkState(portOwner.get().isPresentType(), "CoCo '%s' can only be run after symbol table " +
-          "completion, but we detected that the component type for a component instance has not been set yet.",
-        ConnectorSourceAndTargetTypesFit.class.getSimpleName());
 
       return portOwner.get().getType().getTypeExprOfPort(astPort.getPort());
-    } else {
+    } else if (enclComp.getPort(astPort.getPort()).map(PortSymbol::isTypePresent).orElse(false)) {
       return enclComp.getPort(astPort.getPort()).map(PortSymbol::getType);
     }
+    return Optional.empty();
   }
 
   /**
