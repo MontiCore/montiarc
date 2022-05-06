@@ -42,7 +42,7 @@ public class StatechartNameResolver {
    */
   public Optional<PortSymbol> resolvePort(@NotNull String name) {
     Preconditions.checkNotNull(name);
-    return scope.resolvePort(name);
+    return scope.resolvePortMany(name).stream().findFirst();
   }
 
   /**
@@ -50,6 +50,6 @@ public class StatechartNameResolver {
    */
   public Optional<VariableSymbol> resolveField(@NotNull String name) {
     Preconditions.checkNotNull(name);
-    return scope.resolveVariable(name);
+    return scope.resolveVariableMany(name).stream().findFirst();
   }
 }

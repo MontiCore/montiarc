@@ -36,7 +36,7 @@ public class ComponentInstanceTypeExists implements ArcBasisASTComponentInstanti
         "?" : node.getComponentInstanceList().get(0).getName();
 
       Log.error(ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE.format(
-        typeName, firstInstanceName, node.get_SourcePositionStart()));
+        typeName, firstInstanceName, node.get_SourcePositionStart()), node.get_SourcePositionStart(), node.get_SourcePositionEnd());
     }
   }
 }

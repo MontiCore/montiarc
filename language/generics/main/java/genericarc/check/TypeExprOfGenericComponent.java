@@ -42,7 +42,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
     // We know guava immutable maps are ordered by insertion time. As we rely on the fact that the ordering of the
     // type arguments is consistent with the ordering in the map, the following iteration ensures it:
     for (int i = 0; i < typeArguments.size(); i++) {
-      typeVarBindingBuilder.put(this.getTypeInfo().getTypeParameters().get(i), typeArguments.get(i));
+      if (typeArguments.get(i) != null) typeVarBindingBuilder.put(this.getTypeInfo().getTypeParameters().get(i), typeArguments.get(i));
     }
 
     this.typeVarBindings = typeVarBindingBuilder.build();
@@ -100,11 +100,12 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
     boolean portDefinedByUs = this.getTypeInfo().getPort(portName, false).isPresent();
 
     if (portDefinedByUs) {
-      SymTypeExpression unboundPortType = this.getTypeInfo()
+      Optional<SymTypeExpression> unboundPortType = this.getTypeInfo()
         .getPort(portName, false)
-        .map(PortSymbol::getType)
-        .orElseThrow(IllegalStateException::new);
-      return this.createBoundTypeExpression(unboundPortType);
+        .filter(PortSymbol::isTypePresent)
+        .map(PortSymbol::getType);
+      if (unboundPortType.isEmpty()) return Optional.empty();
+      return this.createBoundTypeExpression(unboundPortType.get());
     } else if (this.getTypeInfo().isPresentParentComponent()) {
       // We do not have this port. Now we look if our parent has such a port.
       return this.getParentTypeExpr().orElseThrow(IllegalStateException::new).getTypeExprOfPort(portName);
@@ -127,15 +128,16 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
 
   public Optional<SymTypeExpression> getBindingFor(@NotNull TypeVarSymbol typeVar) {
     Preconditions.checkNotNull(typeVar);
-    return Optional.of(this.getTypeVarBindings().get(typeVar));
+    return Optional.ofNullable(this.getTypeVarBindings().get(typeVar));
   }
 
   public Optional<SymTypeExpression> getBindingFor(@NotNull String typeVarName) {
     Preconditions.checkNotNull(typeVarName);
-    TypeVarSymbol searchedTypeVar = this.getTypeVarBindings().keySet().stream()
+    Optional<TypeVarSymbol> searchedTypeVar = this.getTypeVarBindings().keySet().stream()
       .filter(tvar -> tvar.getName().equals(typeVarName))
-      .findFirst().orElseThrow(IllegalStateException::new);
-    return Optional.of(this.getTypeVarBindings().get(searchedTypeVar));
+      .findFirst();
+    if (searchedTypeVar.isEmpty()) return Optional.empty();
+    return Optional.ofNullable(this.getTypeVarBindings().get(searchedTypeVar.get()));
   }
 
   public ImmutableList<SymTypeExpression> getBindingsAsList() {

@@ -6,7 +6,7 @@ package montiarc.util;
  */
 public enum ArcError implements Error {
   CIRCULAR_INHERITANCE("0xC1010", "Circular inheritance of component '%s' detected."),
-  MISSING_TYPE_OF_INHERITED_COMPONENT("0xC1014", "Cannot resolve type of parent '%s' of "
+  MISSING_TYPE_OF_INHERITED_COMPONENT("0xC1014", "Cannot resolve parent type '%s' of "
     + "component '%s'."),
   MISSING_TYPE_OF_COMPONENT_INSTANCE("0xC1015", "Cannot resolve type '%s' of component "
     + "instance '%s'."),

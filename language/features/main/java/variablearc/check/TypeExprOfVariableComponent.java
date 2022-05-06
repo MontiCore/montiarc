@@ -94,7 +94,7 @@ public class TypeExprOfVariableComponent extends TypeExprOfComponent {
     boolean portDefinedByUs = this.getTypeInfo().getPort(portName, false).isPresent();
 
     if (portDefinedByUs) {
-      return CompTypeExpressionTypeInfoBinding.getPorts(this, portName, false).stream().map(PortSymbol::getType).collect(Collectors.toList());
+      return CompTypeExpressionTypeInfoBinding.getPorts(this, portName, false).stream().filter(PortSymbol::isTypePresent).map(PortSymbol::getType).collect(Collectors.toList());
     }
     else if (this.getParentTypeExpr().isPresent()) {
       // We do not have this port. Now we look if our parent has such a port.

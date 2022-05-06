@@ -8,8 +8,10 @@ import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
+import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import de.se_rwth.commons.logging.Log;
@@ -19,6 +21,7 @@ import genericarc._visitor.GenericArcHandler;
 import genericarc._visitor.GenericArcTraverser;
 import genericarc._visitor.GenericArcVisitor2;
 import genericarc.check.GenericArcTypeCalculator;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Optional;
@@ -107,13 +110,17 @@ public class GenericArcSymbolTableCompleter implements GenericArcVisitor2, Gener
     TypeVarSymbol typeParamSym = typeParam.getSymbol();
 
     for (ASTMCType upperBound : typeParam.getUpperBoundList()) {
-      TypeCheckResult boundExpr = this.getTypeCalculator().synthesizeType(upperBound);
-      if (boundExpr.isPresentCurrentResult()) {
-        typeParamSym.addSuperTypes(boundExpr.getCurrentResult());
-      } else {
-        Log.error(String.format("Could not create a SymTypeExpression from '%s'",
-          upperBound.printType(this.getTypePrinter())), upperBound.get_SourcePositionStart()
-        );
+      try {
+        TypeCheckResult boundExpr = this.getTypeCalculator().synthesizeType(upperBound);
+        if (boundExpr.isPresentCurrentResult()) {
+          typeParamSym.addSuperTypes(boundExpr.getCurrentResult());
+        } else {
+          Log.error(String.format("Could not create a SymTypeExpression from '%s'",
+            upperBound.printType(this.getTypePrinter())), upperBound.get_SourcePositionStart()
+          );
+        }
+      }  catch (ResolvedSeveralEntriesForSymbolException e) {
+        Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(upperBound.printType(this.getTypePrinter())), upperBound.get_SourcePositionStart());
       }
     }
   }

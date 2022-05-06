@@ -5,6 +5,8 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.SynthCompTypeResult;
+import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
+import de.monticore.types.check.TypeCheckResult;
 import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
@@ -84,7 +86,13 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
       this.resultWrapper.setCurrentResultAbsent();
     } else {
       List<SymTypeExpression> typeArgExpressions = typeArgumentsToTypes(mcType.getMCTypeArgumentList()).stream()
-        .map(typeArg -> typeCalculator.synthesizeType(typeArg).getCurrentResult())
+        .map(typeArg -> {
+          TypeCheckResult typeResult = null;
+          try {
+            typeResult = typeCalculator.synthesizeType(typeArg);
+          }  catch (ResolvedSeveralEntriesForSymbolException ignored) { }
+          return typeResult != null && typeResult.isPresentCurrentResult() ? typeResult.getCurrentResult() : null;
+        })
         .collect(Collectors.toList());
       this.resultWrapper.setCurrentResult(new TypeExprOfGenericComponent(compSym.get(), typeArgExpressions));
     }
