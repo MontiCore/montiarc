@@ -21,18 +21,7 @@ Validate Gradle:
   allow_failure: false
   artifacts:
     paths:
-      - applications/bumperbot/target/
-      - applications/factory/target/
-      - applications/factoryTask/target/
-      - applications/lightControl/target/
-      - generators/cd2pojo/target/
-      - generators/ma2java/target/
-      - languages/arc-fe/target/
-      - languages/behavior-fe/target/
-      - languages/montiarc-fe/target/
-      - libraries/lejos-rte/target/
-      - libraries/majava-rte/target/
-      - libraries/simulator-rte/target/
+      - "**/target/**"
     expire_in: 1 week
   script:
     - gradle clean assemble
@@ -53,6 +42,8 @@ Unit Test JDK 11:
 Deploy Nexus:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
   stage: post-test
+  dependencies:
+    - Validate Gradle #download artifacts from build
   script:
     - gradle publish -PmavenPassword=$pass -PmavenUser=$user
   rules:

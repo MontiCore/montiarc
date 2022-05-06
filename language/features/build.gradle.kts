@@ -50,7 +50,7 @@ tasks.register<de.monticore.MCTask>("generateVariableArc") {
   grammar.set(file(project(":language").projectDir.toString() + "/grammars/VariableArc.mc4") )
   handcodedPath.add("$projectDir/main/java")
   modelPath.add(project(":language").projectDir.toString() + "/grammars")
-  outputDir.set(file("$buildDir/generated/main/"))
+  outputDir.set(file("$buildDir/sources/main/java/"))
 }
 sourceSets {
   main {

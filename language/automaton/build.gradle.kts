@@ -52,7 +52,7 @@ tasks.register<de.monticore.MCTask>("generateArcAutomaton") {
   grammar.set(file(project(":language").projectDir.toString() + "/grammars/ArcAutomaton.mc4") )
   handcodedPath.add("$projectDir/main/java")
   modelPath.add(project(":language").projectDir.toString() + "/grammars")
-  outputDir.set(file("$buildDir/generated/main/"))
+  outputDir.set(file("$buildDir/sources/main/java/"))
 }
 sourceSets {
   main {
