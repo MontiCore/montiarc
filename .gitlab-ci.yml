@@ -46,6 +46,7 @@ Deploy Nexus:
 checkMDLinks:
   stage: check
   image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3.5.4-jdk-8-alpine
+  allow_failure: true
   script:
     - "curl --location --header \"PRIVATE-TOKEN: $secibuildtoken\" \"https://git.rwth-aachen.de/api/v4/projects/monticore%2Fauxiliary-development-tools%2Fmdlinkchecker/jobs/artifacts/master/raw/target/libs/MDLinkCheckerCLI.jar?job=build\" --output MDLinkCheckerCLI.jar"
     - "url=https://git.rwth-aachen.de/monticore/montiarc/core/-/tree/develop"
