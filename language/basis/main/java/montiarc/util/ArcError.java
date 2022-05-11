@@ -129,7 +129,11 @@ public enum ArcError implements Error {
     "as initialization value for field '%s', as initialization expressions must evaluate to values (which type names " +
     "do not do)."),
   PORT_NOT_WRITTEN_IN_TRANSITION("0xC1200", "There is a transition, which, when followed, leaves port '%s' without a value."),
-  PORT_NOT_WRITTEN_IN_STATE("0xC1201", "When staying in state '%s' (which might happen, because there is no unconditional transition leaving that state), port '%s' is left without a value");
+  PORT_NOT_WRITTEN_IN_STATE("0xC1201", "When staying in state '%s' (which might happen, because there is no unconditional transition leaving that state), port '%s' is left without a value"),
+  TOO_FEW_TYPE_ARGUMENTS("0xC1202", "There are '%d' type arguments for component type '%s', " +
+      "but has '%d' mandatory type parameters that all must be bound."),
+  TOO_MANY_TYPE_ARGUMENTS("0xC1203", "There are '%d' type arguments for component type '%s', " +
+      "but it only has '%d' type parameters. Please do not provide more arguments than type parameters exist.");
 
   private final String errorCode;
   private final String errorMessage;

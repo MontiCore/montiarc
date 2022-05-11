@@ -169,6 +169,12 @@ public class ComponentInheritanceRespectsGenericTypeBoundsTest extends AbstractC
         ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
         ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
         ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND
+      ),
+      arg("TooFewTypeAssignments.arc",
+        ArcError.TOO_FEW_TYPE_ARGUMENTS
+      ),
+      arg("TooManyTypeAssignments.arc",
+        ArcError.TOO_MANY_TYPE_ARGUMENTS
       )
     );
   }

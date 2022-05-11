@@ -34,15 +34,16 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
                                     @NotNull List<SymTypeExpression> typeArguments) {
     super(compTypeSymbol);
     Preconditions.checkNotNull(typeArguments);
-    Preconditions.checkArgument(compTypeSymbol.getSpannedScope().getTypeVarSymbols().size() == typeArguments.size(),
-      "Component type '%s' has %s type parameters, but you supplied '%s' type arguments.",
-      compTypeSymbol.getName(), compTypeSymbol.getSpannedScope().getTypeVarSymbols().size(), typeArguments.size());
 
     ImmutableMap.Builder<TypeVarSymbol, SymTypeExpression> typeVarBindingBuilder = ImmutableMap.builder();
     // We know guava immutable maps are ordered by insertion time. As we rely on the fact that the ordering of the
     // type arguments is consistent with the ordering in the map, the following iteration ensures it:
     for (int i = 0; i < typeArguments.size(); i++) {
-      if (typeArguments.get(i) != null) typeVarBindingBuilder.put(this.getTypeInfo().getTypeParameters().get(i), typeArguments.get(i));
+      if (i < this.getTypeInfo().getTypeParameters().size()) // Deal with wrong number of parameters through cocos
+      {
+        if (typeArguments.get(i) != null)
+          typeVarBindingBuilder.put(this.getTypeInfo().getTypeParameters().get(i), typeArguments.get(i));
+      }
     }
 
     this.typeVarBindings = typeVarBindingBuilder.build();

@@ -157,6 +157,9 @@ public class ComponentInstantiationRespectsGenericTypeBoundsTest extends Abstrac
         ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
         ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
         ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND
+      ),
+      arg("WrongTypeAssignmentNumber.arc",
+        ArcError.TOO_FEW_TYPE_ARGUMENTS, ArcError.TOO_MANY_TYPE_ARGUMENTS
       )
     );
   }
