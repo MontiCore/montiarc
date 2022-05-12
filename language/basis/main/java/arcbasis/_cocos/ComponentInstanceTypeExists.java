@@ -2,6 +2,7 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentInstantiation;
+import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
 import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
@@ -29,7 +30,12 @@ public class ComponentInstanceTypeExists implements ArcBasisASTComponentInstanti
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getEnclosingScope());
 
-    String typeName = node.getMCType().printType(typePrinter);
+    String typeName;
+    if (node.getMCType() instanceof ASTMCGenericType) {
+      typeName = ((ASTMCGenericType) node.getMCType()).printWithoutTypeArguments();
+    } else {
+      typeName = node.getMCType().printType(typePrinter);
+    }
 
     if(node.getEnclosingScope().resolveComponentTypeMany(typeName).isEmpty()) {
       String firstInstanceName = node.getComponentInstanceList().isEmpty() ?
