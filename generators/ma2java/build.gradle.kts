@@ -1,34 +1,49 @@
 /* (c) https://github.com/MontiCore/monticore */
 
+val mc_version: String by project
+val se_commons_version: String by project
+val janino_version: String by project
+val groovy_version: String by project
+val cd4a_version: String by project
+val junit_jupiter_version: String by project
+val emf_version: String by project
+val java_parser_version: String by project
+val java_formatter_version: String by project
+val eclipse_compiler_version: String by project
+val mockito_version: String by project
+val testmodels_classifier: String by project
+
 plugins {
-  id "java"
-  id "monticore"
-  id "jacoco"
-  id "com.github.johnrengelman.shadow" version "$shadow_version"
+  java
+  jacoco
+  id("monticore")
+  id("com.github.johnrengelman.shadow")
 }
 
 group = "montiarc.generators"
 
-test {
+tasks.named<Test>("test") {
   useJUnitPlatform()
-  finalizedBy jacocoTestReport
+  finalizedBy(tasks.named("jacocoTestReport"))
 }
 
 configurations {
-  runtime {
-    exclude group: "de.monticore.lang", module: "cd4analysis"
-    exclude group: "org.codehaus.groovy", module: "groovy"
+  runtimeClasspath {
+    exclude("de.monticore.lang", "cd4analysis")
+    exclude("org.codehaus.groovy", "groovy")
   }
-  testmodels
+  create("testmodels")
 }
 
 configurations.all {
   resolutionStrategy {
-    force "de.monticore.lang:cd4analysis:$cd4a_version"
+    force("de.monticore.lang:cd4analysis:$cd4a_version")
   }
 }
 
 dependencies {
+  val testmodels = configurations["testmodels"]
+
   //MontiCore dependencies
   implementation("de.monticore:monticore-grammar:$mc_version")
   implementation("de.monticore.lang:statecharts:$mc_version")
@@ -59,13 +74,12 @@ dependencies {
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version")
 }
 
-task unpackTestmodels(type:Sync) {
-  dependsOn(configurations.testmodels)
+tasks.register<Sync>("unpackTestmodels") {
+  val testModelConfig = configurations.named("testmodels")
+  dependsOn(testModelConfig)
 
-  from {
-    configurations.testmodels.collect { zipTree(it) }
-  }
-  into "$buildDir/test-models"
+  from(testModelConfig.map { zipTree(it) } )
+  into("$buildDir/test-models")
 }
 
 java {
@@ -73,16 +87,16 @@ java {
   withSourcesJar()
 }
 
-// all in one tool-jar
-shadowJar {
+// All in one tool-jar
+tasks.shadowJar {
   minimize()
   manifest {
-    attributes "Main-Class": "montiarc.generator.MontiArcTool"
+    attributes["Main-Class"] = "montiarc.generator.MontiArcTool"
   }
-  zip64 = true
-  archiveClassifier = "mc-tool"
-  archiveBaseName = "MontiArc2Java"
-  archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
+  isZip64 = true
+  archiveClassifier.set("mc-tool")
+  archiveBaseName.set("MontiArc2Java")
+  archiveFileName.set("${archiveBaseName.get()}.${archiveExtension.get()}")
 }
 
-jar.dependsOn(shadowJar)
+tasks.jar { dependsOn(tasks.shadowJar) }

@@ -9,6 +9,9 @@ pluginManagement {
     }
     gradlePluginPortal()
   }
+  plugins {
+    id("com.github.johnrengelman.shadow").version(shadow_version)
+  }
 }
 
 rootProject.name = 'montiarc'

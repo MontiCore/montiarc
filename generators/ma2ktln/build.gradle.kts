@@ -1,47 +1,59 @@
 /* (c) https://github.com/MontiCore/monticore */
+val cd4a_version : String by project
+val mc_version : String by project
+val se_commons_version : String by project
+val testmodels_classifier : String by project
+val janino_version : String by project
+val groovy_version : String by project
+val java_formatter_version : String by project
+val java_parser_version : String by project
+val emf_version : String by project
+val eclipse_compiler_version : String by project
+val mockito_version : String by project
+val junit_jupiter_version : String by project
 
 plugins {
-  id "java"
-  id "monticore"
-  id "jacoco"
-  id "com.github.johnrengelman.shadow" version "$shadow_version"
+  java
+  jacoco
+  id("monticore")
+  id("com.github.johnrengelman.shadow")
 }
 
 group = "montiarc.generators"
 
-test {
+tasks.test {
   useJUnitPlatform()
-  finalizedBy jacocoTestReport
+  finalizedBy(tasks.jacocoTestReport)
 }
 
-configurations { testmodels }
+configurations { create("testmodels") }
 
 configurations.all {
   resolutionStrategy {
-    force "de.monticore.lang:cd4analysis:$cd4a_version"
+    force("de.monticore.lang:cd4analysis:$cd4a_version")
   }
 }
 
 dependencies {
-  //MontiCore dependencies
+  // MontiCore dependencies
   implementation("de.monticore:monticore-grammar:$mc_version")
   implementation("de.monticore.lang:statecharts:$mc_version") {
-    exclude group: "de.monticore.lang", module:"cd4analysis"
+    exclude("de.monticore.lang", "cd4analysis")
   }
   implementation("de.se_rwth.commons:se-commons-groovy:$se_commons_version")
 
   // dependency for the tool
   implementation(project(":generators:ma2java"))
 
-  //Internal dependencies
+  // Internal dependencies
   implementation(project(":language:montiarc"))
   implementation(project(":libraries:majava-rte"))
   testImplementation(project(":generators:cd2pojo"))
 
-  //Model dependencies
-  testmodels("montiarc.languages:montiarc-fe:$version:$testmodels_classifier")
+  // Model dependencies
+  configurations["testmodels"]("montiarc.languages:montiarc-fe:$version:$testmodels_classifier")
 
-  //Other dependencies
+  // Other dependencies
   implementation("org.codehaus.janino:janino:$janino_version")
   implementation("org.codehaus.groovy:groovy:$groovy_version")
   implementation("com.google.googlejavaformat:google-java-format:$java_formatter_version")
@@ -57,13 +69,11 @@ dependencies {
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version")
 }
 
-task unpackTestmodels(type:Sync) {
-  dependsOn(configurations.testmodels)
+tasks.register<Sync>("unpackTestmodels") {
+  dependsOn(configurations["testmodels"])
 
-  from {
-    configurations.testmodels.collect { zipTree(it) }
-  }
-  into "$buildDir/test-models"
+  from(configurations["testmodels"].map { zipTree(it) })
+  into("$buildDir/test-models")
 }
 
 java {
@@ -71,15 +81,15 @@ java {
   withSourcesJar()
 }
 
-// all in one cli-jar
-shadowJar {
+// All in one cli-jar
+tasks.shadowJar {
   manifest {
-    attributes "Main-Class": "montiarc.kotlin.generator.ModeArcTool"
+    attributes["Main-Class"] = "montiarc.kotlin.generator.ModeArcTool"
   }
-  zip64 = true
-  archiveClassifier = "cli"
-  archiveBaseName = "MontiArc2Kotlin"
-  archiveFileName = "${archiveBaseName.get()}CLI-${archiveVersion.get()}.${archiveExtension.get()}"
+  isZip64 = true
+  archiveClassifier.set("cli")
+  archiveBaseName.set("MontiArc2Kotlin")
+  archiveFileName.set("${archiveBaseName.get()}CLI-${archiveVersion.get()}.${archiveExtension.get()}")
 }
 
-jar.dependsOn(shadowJar)
+tasks.jar { dependsOn(tasks.shadowJar) }

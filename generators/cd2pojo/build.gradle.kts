@@ -1,13 +1,23 @@
 /* (c) https://github.com/MontiCore/monticore */
 
+val mc_version: String by project
+val se_commons_version: String by project
+val janino_version: String by project
+val guava_version: String by project
+val groovy_version: String by project
+val cd4a_version: String by project
+val junit_jupiter_version: String by project
+
 plugins {
-  id "java"
-  id "com.github.johnrengelman.shadow" version "$shadow_version"
+  java
+  id("com.github.johnrengelman.shadow") // Version is declared in settings.gradle
 }
 
 group = "montiarc.generators"
 
-test { useJUnitPlatform() }
+tasks.test {
+  useJUnitPlatform()
+}
 
 dependencies {
   implementation("de.monticore:monticore-runtime:$mc_version")
@@ -35,15 +45,15 @@ java {
   withSourcesJar()
 }
 
-shadowJar {
+tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
   minimize()
   manifest {
-    attributes "Main-Class": "de.monticore.cd2pojo.POJOGeneratorScript"
+    attributes["Main-Class"] = "de.monticore.cd2pojo.POJOGeneratorScript"
   }
-  zip64 = true
-  archiveClassifier = "mc-tool"
-  archiveBaseName = "CD2POJO"
-  archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
+  isZip64 = true
+  archiveClassifier.set("mc-tool")
+  archiveBaseName.set("CD2POJO")
+  archiveFileName.set( "${archiveBaseName.get()}.${archiveExtension.get()}" )
 }
 
-jar.dependsOn(shadowJar)
+tasks.jar { dependsOn(tasks.shadowJar) }
