@@ -14,8 +14,13 @@ Validate Gradle:
   allow_failure: false
   artifacts:
     paths:
-      - "**/build/**"
-      - "**/target/**"
+      - applications/**/target/
+      - build-logic/.gradle/
+      - build-logic/build/
+      - generators/**/target/
+      - language/target/
+      - libraries/**/target/
+      - .gradle/
     expire_in: 1 week
   script:
     - gradle clean assemble
