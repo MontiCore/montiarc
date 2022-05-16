@@ -9,6 +9,7 @@ val mockito_version: String by project
 
 plugins {
   java
+  id("montiarc.build.publishing")
 }
 
 group = "montiarc.libraries"

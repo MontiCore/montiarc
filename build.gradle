@@ -49,20 +49,6 @@ subprojects {
     }
   }
 
-  publishing {
-    publications {
-      mavenJava(MavenPublication) {
-        from(components.java)
-      }
-    }
-    repositories.maven {
-      name = "$SE_Nexus_ID"
-      credentials.username(mavenUser)
-      credentials.password(mavenPassword)
-      url = version.endsWith("SNAPSHOT") ? "$snapshotsRepoUrl" : "$releasesRepoUrl"
-    }
-  }
-
   repositories {
     maven {
       credentials.username(mavenUser)

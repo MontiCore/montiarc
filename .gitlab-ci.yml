@@ -14,6 +14,7 @@ Validate Gradle:
   allow_failure: false
   artifacts:
     paths:
+      - "**/build/**"
       - "**/target/**"
     expire_in: 1 week
   script:

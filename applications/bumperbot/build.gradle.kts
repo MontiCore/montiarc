@@ -8,6 +8,7 @@ val librarymodels_classifier: String by project
 
 plugins {
   java
+  id("montiarc.build.publishing")
 }
 
 group = "montiarc.applications"

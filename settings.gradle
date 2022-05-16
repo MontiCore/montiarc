@@ -8,6 +8,9 @@ pluginManagement {
       url repo
     }
     gradlePluginPortal()
+    maven {
+      url = uri("build-logic/build/repo")
+    }
   }
   plugins {
     id("com.github.johnrengelman.shadow").version(shadow_version)
@@ -15,6 +18,9 @@ pluginManagement {
 }
 
 rootProject.name = 'montiarc'
+
+includeBuild("build-logic")
+
 include(":language")
 include(":language:basis")
 include(":language:automaton")

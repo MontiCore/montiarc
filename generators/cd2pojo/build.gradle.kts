@@ -11,6 +11,7 @@ val junit_jupiter_version: String by project
 plugins {
   java
   id("com.github.johnrengelman.shadow") // Version is declared in settings.gradle
+  id("montiarc.build.publishing")
 }
 
 group = "montiarc.generators"

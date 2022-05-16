@@ -18,6 +18,7 @@ plugins {
   jacoco
   id("monticore")
   id("com.github.johnrengelman.shadow")
+  id("montiarc.build.publishing")
 }
 
 group = "montiarc.generators"
