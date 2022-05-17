@@ -4,6 +4,7 @@ plugins {
   id("java-library")
   id("monticore")
   id("montiarc.build.publishing")
+  id("montiarc.build.repositories")
 }
 
 val mc_version: String by project

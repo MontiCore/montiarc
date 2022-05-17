@@ -9,6 +9,7 @@ val assertj_version: String by project
 
 plugins {
   java
+  id("montiarc.build.repositories")
 }
 
 group = "montiarc.generators"

@@ -3,6 +3,7 @@
 plugins {
   id("java-library")
   id("montiarc.build.publishing")
+  id("montiarc.build.repositories")
 }
 
 val se_commons_version: String by project

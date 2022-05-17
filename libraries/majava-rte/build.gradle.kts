@@ -6,6 +6,7 @@ plugins {
   id("java")
   id("com.github.johnrengelman.shadow") version "6.0.0"
   id("montiarc.build.publishing")
+  id("montiarc.build.repositories")
 }
 
 val se_commons_version: String by project

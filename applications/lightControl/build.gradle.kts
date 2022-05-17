@@ -9,6 +9,7 @@ val kotlinx_version: String by project
 plugins {
     id("org.jetbrains.kotlin.jvm").version("1.6.0")
     id("montiarc.build.publishing")
+    id("montiarc.build.repositories")
 }
 
 group = "montiarc.applications"

@@ -12,6 +12,7 @@ plugins {
   java
   id("com.github.johnrengelman.shadow") // Version is declared in settings.gradle
   id("montiarc.build.publishing")
+  id("montiarc.build.repositories")
 }
 
 group = "montiarc.generators"

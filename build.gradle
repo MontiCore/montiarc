@@ -3,6 +3,7 @@
 plugins {
   id 'monticore' version "$mc_version" apply false
   id 'jacoco'
+  id("montiarc.build.repositories")
 }
 
 group = "montiarc"
@@ -47,24 +48,4 @@ subprojects {
       }
     }
   }
-
-  repositories {
-    maven {
-      credentials.username(mavenUser)
-      credentials.password(mavenPassword)
-      url repo
-    }
-    mavenCentral()
-    gradlePluginPortal()
-  }
-}
-
-repositories {
-  maven {
-    credentials.username(mavenUser)
-    credentials.password(mavenPassword)
-    url repo
-  }
-  mavenCentral()
-  gradlePluginPortal()
 }

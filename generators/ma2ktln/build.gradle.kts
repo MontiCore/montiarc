@@ -18,6 +18,7 @@ plugins {
   id("monticore")
   id("com.github.johnrengelman.shadow")
   id("montiarc.build.publishing")
+  id("montiarc.build.repositories")
 }
 
 group = "montiarc.generators"
