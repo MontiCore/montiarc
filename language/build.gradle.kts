@@ -1,9 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-plugins {
-  id("montiarc.build.publishing")
-}
-
 buildDir = project(":language").buildDir
 
 val grammars_classifier: String by project

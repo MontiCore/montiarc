@@ -8,8 +8,7 @@ val janino_version: String by project
 val assertj_version: String by project
 
 plugins {
-  java
-  id("montiarc.build.repositories")
+  id("montiarc.build.integration-test")
 }
 
 group = "montiarc.generators"

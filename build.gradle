@@ -19,33 +19,3 @@ Framework for Modeling and Simulation of Software Architectures
 
 Developed at the Department of Software Engineering, RWTH Aachen University
 http://www.se-rwth.de/"""
-
-subprojects {
-  apply plugin: 'java'
-
-  tasks.withType(JavaCompile) {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-    options.encoding = 'UTF-8'
-    options.fork = false
-    options.deprecation = false
-    options.warnings = false
-    options.headerOutputDirectory.convention(null)
-  }
-
-  // print summaries of test executions
-  tasks.withType(Test) {
-    afterSuite { desc, result ->
-      if (!desc.parent) {
-        println(
-            "Test outcome: ${result.resultType} (" +
-                "${result.testCount} tests, " +
-                "${result.successfulTestCount} successes, " +
-                "${result.failedTestCount} failures, " +
-                "${result.skippedTestCount} skipped" +
-                ")"
-        )
-      }
-    }
-  }
-}
