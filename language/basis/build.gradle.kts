@@ -1,9 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-  id("monticore")
-  id("java-library")
-  id("montiarc.build.java-library")
+  id("montiarc.build.language")
 }
 
 val mc_version: String by project
