@@ -15,7 +15,6 @@ val junit_jupiter_version : String by project
 plugins {
   java
   jacoco
-  id("monticore")
   id("com.github.johnrengelman.shadow")
   id("montiarc.build.java-library")
 }

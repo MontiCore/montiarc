@@ -1,11 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-plugins {
-  id 'monticore' version "$mc_version" apply false
-  id 'jacoco'
-  id("montiarc.build.repositories")
-}
-
 group = "montiarc"
 
 allprojects {

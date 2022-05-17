@@ -7,6 +7,12 @@ plugins {
 
 group = "montiarc.build"
 
+val repo: String = "https://nexus.se.rwth-aachen.de/content/groups/public/"
+
+dependencies {
+  implementation("monticore:monticore.gradle.plugin:7.3.0")
+}
+
 publishing {
   repositories {
     maven {
@@ -16,6 +22,9 @@ publishing {
 }
 
 repositories {
+  maven {
+    url = uri(repo)
+  }
   gradlePluginPortal()
 }
 
