@@ -1,14 +1,16 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys.mergeComp;
 
-import sim.sched.IScheduler;
-import sim.error.ISimulationErrorHandler;
 import sim.comp.ATimedComponent;
+import sim.error.ISimulationErrorHandler;
 import sim.message.Message;
 import sim.message.Tick;
+import sim.message.TickedMessage;
 import sim.port.IInPort;
 import sim.port.IInSimPort;
 import sim.port.IOutSimPort;
+import sim.sched.IScheduler;
+import sim.serialiser.BackTrackHandler;
 
 public abstract class BottomComp extends ATimedComponent implements IBottomComp {
 
@@ -22,12 +24,13 @@ public abstract class BottomComp extends ATimedComponent implements IBottomComp 
   }
 
   @Override
-  public void setup(IScheduler s, ISimulationErrorHandler eh) {
+  public void setup(IScheduler s, ISimulationErrorHandler eh, BackTrackHandler backTrackHandler) {
     setScheduler(s);
     setErrorHandler(eh);
     bIn = s.createInPort();
     bIn.setup(this, s);
-    bOut = s.createOutPort();
+    setBth(backTrackHandler);
+    setComponentName("Bottom");
   }
 
   public IInSimPort<Integer> getbIn() {
@@ -36,6 +39,16 @@ public abstract class BottomComp extends ATimedComponent implements IBottomComp 
 
   public IOutSimPort<Boolean> getbOut() {
     return bOut;
+  }
+
+  @Override
+  public void setbIn(IInSimPort<Integer> bIn) {
+    this.bIn = bIn;
+  }
+
+  @Override
+  public void setbOut(IOutSimPort<Boolean> bOut) {
+    this.bOut = bOut;
   }
 
   @Override
@@ -51,8 +64,8 @@ public abstract class BottomComp extends ATimedComponent implements IBottomComp 
     incLocalTime();
   }
 
-  public void sendbOut(Boolean message) {
-    bOut.send(Message.of(message));
+  public void sendbOut(TickedMessage message) {
+    bOut.send(message);
   }
 
   public abstract void treatbIn(Integer msg);

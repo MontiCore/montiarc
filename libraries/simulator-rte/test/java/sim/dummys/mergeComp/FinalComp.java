@@ -10,6 +10,7 @@ import sim.port.IInPort;
 import sim.port.IInSimPort;
 import sim.port.IOutSimPort;
 import sim.port.TestPort;
+import sim.serialiser.BackTrackHandler;
 
 public abstract class FinalComp extends ATimedComponent implements IFinalComp {
 
@@ -25,7 +26,7 @@ public abstract class FinalComp extends ATimedComponent implements IFinalComp {
   }
 
   @Override
-  public void setup(IScheduler s, ISimulationErrorHandler eh) {
+  public void setup(IScheduler s, ISimulationErrorHandler eh, BackTrackHandler backTrackHandler) {
     setScheduler(s);
     setErrorHandler(eh);
     mInBool = s.createInPort();
@@ -33,6 +34,8 @@ public abstract class FinalComp extends ATimedComponent implements IFinalComp {
     mInInt = s.createInPort();
     mInInt.setup(this, s);
     mOut = new TestPort<Integer>();
+    setBth(backTrackHandler);
+    setComponentName("Final");
   }
 
   public IInSimPort<Integer> getmInInt() {
@@ -45,6 +48,21 @@ public abstract class FinalComp extends ATimedComponent implements IFinalComp {
 
   public IOutSimPort<Integer> getmOut() {
     return mOut;
+  }
+
+  @Override
+  public void setmInInt(IInSimPort<Integer> mInInt) {
+    this.mInInt = mInInt;
+  }
+
+  @Override
+  public void setmInBool(IInSimPort<Boolean> mInBool) {
+    this.mInBool = mInBool;
+  }
+
+  @Override
+  public void setmOut(IOutSimPort<Integer> mOut) {
+    this.mOut = mOut;
   }
 
   @Override

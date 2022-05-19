@@ -3,6 +3,7 @@ package sim.comp;
 
 import sim.message.Message;
 import sim.port.IInPort;
+import sim.serialiser.BackTrackHandler;
 
 /**
  * Simulation specific methods of a component.
@@ -39,4 +40,8 @@ public interface ISimComponent extends IComponent {
    * @return the simulation id from this component.
    */
   int getSimulationId();
+
+  void setBth(BackTrackHandler bth);
+
+  BackTrackHandler getBth();
 }

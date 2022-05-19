@@ -1,25 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
-/**
- *
- */
 package sim.sched;
 
+import sim.automaton.TransitionPath;
 import sim.comp.ISimComponent;
 import sim.message.Message;
 import sim.message.TickedMessage;
-import sim.Automaton.Transitionpath;
-import sim.port.DefaultPortFactory;
-import sim.port.IForwardPort;
-import sim.port.IInSimPort;
-import sim.port.IOutSimPort;
-import sim.port.IPortFactory;
+import sim.port.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Default simulation scheduler.
@@ -146,10 +134,9 @@ public class SimSchedulerHashSet implements IScheduler {
   /**
    * @param comp component of the given port
    * @param port port to schedule
-   * @param msg msg to process
-   *
+   * @param msg  msg to process
    * @return true, if msg is handled by port's component immediately, else
-   *         false
+   * false
    */
   protected boolean processData(ISimComponent comp, IInSimPort<?> port, Message<?> msg) {
     boolean success = false;
@@ -166,7 +153,6 @@ public class SimSchedulerHashSet implements IScheduler {
   /**
    * @param comp component of the given port
    * @param port port to schedule
-   *
    * @return true if the msg is handled immediately, else false
    */
   protected boolean processTick(ISimComponent comp, IInSimPort<?> port) {
@@ -234,7 +220,7 @@ public class SimSchedulerHashSet implements IScheduler {
   }
 
   @Override
-  public void handleSymbolic(Message<Transitionpath> msg, IInSimPort<?> port) {
+  public void handleSymbolic(Message<TransitionPath> msg, IInSimPort<?> port) {
 
   }
 }

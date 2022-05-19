@@ -5,11 +5,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sim.dummys.ComponentPortTest;
 import sim.error.SimpleErrorHandler;
+import sim.message.IStream;
 import sim.message.Message;
 import sim.message.Tick;
 import sim.message.TickedMessage;
 import sim.sched.IScheduler;
-import sim.message.IStream;
+import sim.serialiser.BackTrackHandler;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class IncomingStreamTest {
     comp = new ComponentPortTest();
     testling = new SimplePort<String>();
     IScheduler s = new SimulationScheduler();
-    comp.setup(s, new SimpleErrorHandler());
+    comp.setup(s, new SimpleErrorHandler(), new BackTrackHandler("incstreamtest/"));
     testling.setup(comp, s);
   }
 
@@ -122,13 +123,13 @@ public class IncomingStreamTest {
     }
 
     assertEquals(testling.getIncomingStream().getUntimedHistory(),
-      testling.getIncomingStream().getLastNTimeIntervals(25));
+        testling.getIncomingStream().getLastNTimeIntervals(25));
     assertEquals(testling.getIncomingStream().getUntimedHistory(),
-      testling.getIncomingStream().getLastNTimeIntervals(26));
+        testling.getIncomingStream().getLastNTimeIntervals(26));
     assertEquals(testling.getIncomingStream().getUntimedHistory(),
-      testling.getIncomingStream().getLastNTimeIntervals(100));
+        testling.getIncomingStream().getLastNTimeIntervals(100));
     assertNotSame(testling.getIncomingStream().getUntimedHistory(),
-      testling.getIncomingStream().getLastNTimeIntervals(24));
+        testling.getIncomingStream().getLastNTimeIntervals(24));
     for (int i = 0; i < 26; i++) {
       List<String> slices = testling.getIncomingStream().getLastNTimeIntervals(i);
       assertEquals(i * 3, slices.size());

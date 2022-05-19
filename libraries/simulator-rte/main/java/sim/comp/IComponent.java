@@ -3,6 +3,7 @@ package sim.comp;
 
 import sim.sched.IScheduler;
 import sim.error.ISimulationErrorHandler;
+import sim.serialiser.BackTrackHandler;
 
 /**
  * The interface for a component in the simulation framework.
@@ -31,5 +32,5 @@ public interface IComponent {
    * @param scheduler    scheduler to set
    * @param errorHandler handles all occurred errors
    */
-  void setup(IScheduler scheduler, ISimulationErrorHandler errorHandler);
+  void setup(IScheduler scheduler, ISimulationErrorHandler errorHandler, BackTrackHandler backTrackHandler);
 }

@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
+import sim.automaton.TransitionPath;
 import sim.message.Message;
 import sim.message.TickedMessage;
-import sim.Automaton.Transitionpath;
 
 /**
  * An outgoing port is used to send messages to connected receivers.
@@ -24,5 +24,5 @@ public interface IOutPort<T> {
    *
    * @param message symbolic messageto accept
    */
-  void symbolicSend(Message<Transitionpath> message);
+  void symbolicSend(Message<TransitionPath> message);
 }

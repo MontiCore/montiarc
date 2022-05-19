@@ -1,13 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys.automatonComp;
 
-import sim.Automaton.Transitionpath;
-import sim.sched.IScheduler;
+import sim.automaton.TransitionPath;
 import sim.comp.ATimedComponent;
 import sim.error.ISimulationErrorHandler;
 import sim.message.Message;
 import sim.message.Tick;
 import sim.port.*;
+import sim.sched.IScheduler;
+import sim.serialiser.BackTrackHandler;
 
 public abstract class ComponentSymbolic extends ATimedComponent implements IComponentAutomaton {
 
@@ -32,7 +33,7 @@ public abstract class ComponentSymbolic extends ATimedComponent implements IComp
   }
 
   @Override
-  public void setup(IScheduler s, ISimulationErrorHandler eh) {
+  public void setup(IScheduler s, ISimulationErrorHandler eh, BackTrackHandler backTrackHandler) {
     in = new Port<Integer>();
     out = new TestPort<Integer>();
     ((IInSimPort<Integer>) in).setup(this, s);
@@ -48,7 +49,7 @@ public abstract class ComponentSymbolic extends ATimedComponent implements IComp
     out.send(m);
   }
 
-  public void InSymbolicProcessed(Message<Transitionpath> m) {
+  public void InSymbolicProcessed(Message<TransitionPath> m) {
     out.symbolicSend(m);
   }
 

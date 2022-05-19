@@ -1,15 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.sched;
 
+import sim.automaton.TransitionPath;
 import sim.comp.ISimComponent;
 import sim.message.Message;
 import sim.message.TickedMessage;
-import sim.Automaton.Transitionpath;
-import sim.port.DefaultPortFactory;
-import sim.port.IForwardPort;
-import sim.port.IInSimPort;
-import sim.port.IOutSimPort;
-import sim.port.IPortFactory;
+import sim.port.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -224,7 +220,7 @@ public class SimSchedulerHashSetNoMaps implements IScheduler {
   }
 
   @Override
-  public void handleSymbolic(Message<Transitionpath> msg, IInSimPort<?> port) {
+  public void handleSymbolic(Message<TransitionPath> msg, IInSimPort<?> port) {
 
   }
 }

@@ -3,14 +3,15 @@ package sim.port;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import sim.sched.IScheduler;
 import sim.dummys.ComponentTimeDummy;
 import sim.error.ISimulationErrorHandler;
 import sim.error.SimpleErrorHandler;
 import sim.message.IStream;
 import sim.message.Message;
 import sim.message.Tick;
+import sim.sched.IScheduler;
 import sim.sched.SchedulerFactory;
+import sim.serialiser.BackTrackHandler;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,13 +26,12 @@ public class IncomingPortTest {
 
   protected IScheduler scheduler;
 
-
   @BeforeEach
   public void setUp() {
     scheduler = SchedulerFactory.createDefaultScheduler();
     comp = new ComponentTimeDummy();
     ISimulationErrorHandler errorHandler = new SimpleErrorHandler();
-    comp.setup(scheduler, errorHandler);
+    comp.setup(scheduler, errorHandler, new BackTrackHandler("incporttest/"));
     testling = new SimplePort<String>();
     testling.setup(comp, scheduler);
   }
@@ -46,7 +46,6 @@ public class IncomingPortTest {
     IStream<String> s = testling.stream;
     assertTrue(testling.getIncomingStream().isEmpty());
     assertEquals(s, testling.getIncomingStream());
-
   }
 
   @Test

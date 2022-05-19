@@ -10,4 +10,8 @@ public interface IBottomComp extends ITimedComponent {
   IOutSimPort<Boolean> getbOut();
 
   IInSimPort<Integer> getbIn();
+
+  void setbIn(IInSimPort<Integer> bIn);
+
+  void setbOut(IOutSimPort<Boolean> bOut);
 }

@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys.automatonComp;
 
-import sim.Automaton.*;
+import sim.automaton.IAutomaton;
+import sim.automaton.State;
+import sim.automaton.Transition;
 import sim.message.Message;
 
 import java.util.*;
@@ -18,9 +20,9 @@ public class SymbolicAutomaton extends ComponentSymbolic implements IAutomaton {
 
   @Override
   public void setupAutomaton() {
-    one = new State();
-    two = new State();
-    three = new State();
+    one = new State("one");
+    two = new State("two");
+    three = new State("three");
     List<Transition> start = new ArrayList<>();
     start.add(Transition.of(one, one, null, this, null));
     history = new TreeMap<>();
@@ -50,32 +52,32 @@ public class SymbolicAutomaton extends ComponentSymbolic implements IAutomaton {
       if (current.equals(one)) {
         if (m > 0) {
           poss.add(2);
-          transitionstaken.add(Transition.of(one, two,"m>0", this, null));
+          transitionstaken.add(Transition.of(one, two, "m>0", this, null));
         }
         if (m > 1) {
           poss.add(3);
-          transitionstaken.add(Transition.of(one, three,"m>1", this, null));
+          transitionstaken.add(Transition.of(one, three, "m>1", this, null));
 
         }
       }
       if (current.equals(two)) {
         if (m > 0) {
           poss.add(1);
-          transitionstaken.add(Transition.of(two, one,"m>0", this, null));
+          transitionstaken.add(Transition.of(two, one, "m>0", this, null));
         }
         if (m <= 0) {
           poss.add(3);
-          transitionstaken.add(Transition.of(two, three,"m<=0", this, null));
+          transitionstaken.add(Transition.of(two, three, "m<=0", this, null));
         }
       }
       if (current.equals(three)) {
         if (m > 0) {
           poss.add(1);
-          transitionstaken.add(Transition.of(three, one,"m>0", this, null));
+          transitionstaken.add(Transition.of(three, one, "m>0", this, null));
         }
         if (m <= 9) {
           poss.add(2);
-          transitionstaken.add(Transition.of(three, two,"m>0", this, null));
+          transitionstaken.add(Transition.of(three, two, "m>0", this, null));
         }
       }
     }

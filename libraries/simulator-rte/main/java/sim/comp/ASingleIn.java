@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.comp;
 
-import sim.sched.IScheduler;
 import sim.error.ISimulationErrorHandler;
 import sim.message.IStream;
 import sim.message.Message;
@@ -10,7 +9,9 @@ import sim.port.IInPort;
 import sim.port.IPort;
 import sim.port.ITestPort;
 import sim.port.Port;
+import sim.sched.IScheduler;
 import sim.sched.SchedulerFactory;
+import sim.serialiser.BackTrackHandler;
 
 /**
  * Is used for components with just one incoming port and two or more outgoing ports.
@@ -18,12 +19,31 @@ import sim.sched.SchedulerFactory;
  * @param <Tin>
  */
 public abstract class ASingleIn<Tin> extends Port<Tin>
-  implements ITestPort<Tin>, SimpleInPortInterface<Tin>, ISimComponent {
+    implements ITestPort<Tin>, SimpleInPortInterface<Tin>, ISimComponent {
 
   /**
-   * Id assigned by the scheduler.
+   * ID assigned by the scheduler.
    */
   private int id = -1;
+  /**
+   * Used to store a test port, if we are in test mode.
+   */
+  private IPort<Tin> testPort;
+  /**
+   * Handles ArcSimProblemReports.
+   */
+  private ISimulationErrorHandler errorHandler;
+  /**
+   * Name of this component.
+   */
+  private String componentName;
+
+  /**
+   * Default constructor.
+   */
+  public ASingleIn() {
+    super();
+  }
 
   /**
    * @see sim.port.ITestPort#getStream()
@@ -35,28 +55,6 @@ public abstract class ASingleIn<Tin> extends Port<Tin>
     } else {
       return null;
     }
-  }
-
-  /**
-   * Used to store a test port, if we are in test mode.
-   */
-  private IPort<Tin> testPort;
-
-  /**
-   * Handles ArcSimProblemReports.
-   */
-  private ISimulationErrorHandler errorHandler;
-
-  /**
-   * Name of this component.
-   */
-  private String componentName;
-
-  /**
-   * Default constructor.
-   */
-  public ASingleIn() {
-    super();
   }
 
   /**
@@ -118,10 +116,10 @@ public abstract class ASingleIn<Tin> extends Port<Tin>
   }
 
   /**
-   * @see ISimComponent#setup(IScheduler, ISimulationErrorHandler)
+   * @see Port#setup(ISimComponent, IScheduler) 
    */
   @Override
-  public void setup(IScheduler scheduler, sim.error.ISimulationErrorHandler errorHandler) {
+  public void setup(IScheduler scheduler, sim.error.ISimulationErrorHandler errorHandler, BackTrackHandler backTrackHandler) {
     IScheduler localSched = SchedulerFactory.createSingleInScheduler();
     localSched.setupPort(this);
     localSched.setPortFactory(scheduler.getPortFactory());

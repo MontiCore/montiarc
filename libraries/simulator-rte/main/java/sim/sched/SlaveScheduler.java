@@ -4,7 +4,7 @@ package sim.sched;
 import sim.comp.ISimComponent;
 import sim.message.Message;
 import sim.message.TickedMessage;
-import sim.Automaton.Transitionpath;
+import sim.automaton.TransitionPath;
 import sim.port.IForwardPort;
 import sim.port.IInSimPort;
 import sim.port.IOutSimPort;
@@ -212,7 +212,7 @@ public class SlaveScheduler implements IScheduler {
   }
 
   @Override
-  public void handleSymbolic(Message<Transitionpath> msg, IInSimPort<?> port) {
+  public void handleSymbolic(Message<TransitionPath> msg, IInSimPort<?> port) {
 
   }
 }

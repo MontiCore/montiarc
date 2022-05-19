@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.sched.IScheduler;
+import sim.automaton.TransitionPath;
 import sim.comp.ISimComponent;
 import sim.message.Message;
 import sim.message.TickedMessage;
-import sim.Automaton.Transitionpath;
+import sim.sched.IScheduler;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -187,7 +187,7 @@ public class SimulationScheduler implements IScheduler {
   }
 
   @Override
-  public void handleSymbolic(Message<Transitionpath> msg, IInSimPort<?> port) {
+  public void handleSymbolic(Message<TransitionPath> msg, IInSimPort<?> port) {
 
   }
 }

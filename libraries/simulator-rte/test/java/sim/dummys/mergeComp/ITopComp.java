@@ -10,4 +10,8 @@ public interface ITopComp extends ITimedComponent {
   public IInSimPort<Integer> gettIn();
 
   public IOutSimPort<Integer> gettOut();
+
+  void settIn(IInSimPort<Integer> tIn);
+
+  void settOut(IOutSimPort<Integer> tOut);
 }

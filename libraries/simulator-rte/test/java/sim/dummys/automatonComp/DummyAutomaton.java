@@ -1,12 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys.automatonComp;
 
-import sim.Automaton.IAutomaton;
+import sim.automaton.IAutomaton;
+import sim.automaton.State;
 import sim.message.Message;
-import sim.Automaton.State;
-
-import java.util.List;
-import java.util.Map;
 
 public class DummyAutomaton extends ComponentAutomaton implements IAutomaton {
 
@@ -17,12 +14,11 @@ public class DummyAutomaton extends ComponentAutomaton implements IAutomaton {
 
   @Override
   public void setupAutomaton() {
-    one = new State();
-    two = new State();
-    three = new State();
+    one = new State("one");
+    two = new State("two");
+    three = new State("three");
     currentState = one;
   }
-
 
   @Override
   public void treatIn(Message<?> message) {

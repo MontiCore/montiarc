@@ -1,28 +1,29 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.Automaton.Transitionpath;
-import sim.sched.IScheduler;
+import sim.automaton.TransitionPath;
 import sim.comp.ISimComponent;
 import sim.message.IStream;
 import sim.message.Message;
 import sim.message.Stream;
 import sim.message.TickedMessage;
+import sim.sched.IScheduler;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 /**
- * A Port that acts as an incoming and outgoing port. It contains a stream of type {@link IStream} to save and buffer
- * messages that are transmitted by this port.
+ * A Port that acts as an incoming and outgoing port. It contains a stream of
+ * type {@link IStream} to save and buffer messages that are transmitted by
+ * this port.
  *
  * @param <T> data type of this port.
  */
 public class SimplePort<T> extends AbstractPort<T> implements IPort<T> {
 
   /**
-   * A set of additional receivers. It is used if one outgoing port contains more then one receiver.
+   * A set of additional receivers. It is used if one outgoing port contains more than one receiver.
    */
   protected List<IInPort<? super T>> receivers;
 
@@ -59,7 +60,7 @@ public class SimplePort<T> extends AbstractPort<T> implements IPort<T> {
   }
 
   @Override
-  public void symbolicAccept(Message<Transitionpath> message) {
+  public void symbolicAccept(Message<TransitionPath> message) {
 
   }
 
@@ -133,7 +134,7 @@ public class SimplePort<T> extends AbstractPort<T> implements IPort<T> {
   }
 
   @Override
-  public void symbolicSend(Message<Transitionpath> message) {
+  public void symbolicSend(Message<TransitionPath> message) {
 
   }
 

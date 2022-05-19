@@ -1,14 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
-package sim.Automaton;
+package sim.automaton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Transitionpath {
+public class TransitionPath {
 
   private List<Configuration> path;
 
-  public Transitionpath() {
+  public TransitionPath() {
     path = new ArrayList<>();
   }
 
@@ -20,6 +20,8 @@ public class Transitionpath {
     path.add(conf);
   }
 
-  public Configuration getLast() {return path.get(path.size() - 1);}
+  public Configuration getLast() {
+    return path.get(path.size() - 1);
+  }
 
 }

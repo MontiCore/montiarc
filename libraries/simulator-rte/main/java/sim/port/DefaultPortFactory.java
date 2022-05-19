@@ -1,11 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
+import java.io.Serializable;
 
 /**
  * Factory that produces {@link Port}s.
  */
-public class DefaultPortFactory implements IPortFactory {
+public class DefaultPortFactory implements IPortFactory, Serializable {
 
   /**
    * @see IPortFactory#createInPort()

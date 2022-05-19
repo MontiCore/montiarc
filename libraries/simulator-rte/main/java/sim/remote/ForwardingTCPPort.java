@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.remote;
 
+import sim.automaton.TransitionPath;
 import sim.message.Message;
-import sim.Automaton.Transitionpath;
 import sim.port.ForwardPort;
 
 /**
@@ -17,7 +17,7 @@ public class ForwardingTCPPort<T> extends ForwardPort<T> implements IInTCPPort<T
   }
 
   @Override
-  public void symbolicSend(Message<Transitionpath> message) {
+  public void symbolicSend(Message<TransitionPath> message) {
 
   }
 }

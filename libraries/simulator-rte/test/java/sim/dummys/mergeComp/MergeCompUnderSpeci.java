@@ -1,11 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys.mergeComp;
 
-import sim.sched.IScheduler;
-import sim.error.ISimulationErrorHandler;
 import sim.comp.ATimedComponent;
+import sim.error.ISimulationErrorHandler;
 import sim.message.Message;
-import sim.port.*;
+import sim.port.IForwardPort;
+import sim.port.IInPort;
+import sim.port.IOutPort;
+import sim.port.IPort;
+import sim.sched.IScheduler;
+import sim.serialiser.BackTrackHandler;
 
 public class MergeCompUnderSpeci extends ATimedComponent implements IMergeComp {
 
@@ -22,27 +26,27 @@ public class MergeCompUnderSpeci extends ATimedComponent implements IMergeComp {
   }
 
   @Override
-  public void setup(IScheduler scheduler, ISimulationErrorHandler errorHandler) {
+  public void setup(IScheduler scheduler, ISimulationErrorHandler errorHandler, BackTrackHandler backTrackHandler) {
     //setup own prots
     in = scheduler.createForwardPort();
     in.setup(this, scheduler);
 
     //create components
     bottom = new BottomCompAut();
-    bottom.setup(scheduler, errorHandler);
+    bottom.setup(scheduler, errorHandler, backTrackHandler);
 
     top = new TopCompAutUnderSpeci();
-    top.setup(scheduler, errorHandler);
+    top.setup(scheduler, errorHandler, backTrackHandler);
 
     merge = new FinalCompAut();
-    merge.setup(scheduler, errorHandler);
+    merge.setup(scheduler, errorHandler, backTrackHandler);
 
     //connectors
     in.add(bottom.getbIn());
     in.add(top.gettIn());
 
-    top.gettOut().addReceiver(merge.getmInInt());
-    bottom.getbOut().addReceiver(merge.getmInBool());
+    top.settOut((IPort) merge.getmInInt());
+    bottom.setbOut((IPort) merge.getmInBool());
   }
 
   public IOutPort<Integer> getout() {

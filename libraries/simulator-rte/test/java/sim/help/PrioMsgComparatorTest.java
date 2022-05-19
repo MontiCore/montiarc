@@ -53,13 +53,13 @@ public class PrioMsgComparatorTest {
   @Test
   public void testCompare_Prio_PrioMessage_PrioMessage() {
     assertTrue(testling.compare(new PrioMessage<String>("Hallo", PrioMessage.MAX_PRIORITY),
-      new PrioMessage<String>("Hallo", PrioMessage.MIN_PRIORITY)) < 0);
+        new PrioMessage<String>("Hallo", PrioMessage.MIN_PRIORITY)) < 0);
     assertTrue(testling.compare(new PrioMessage<String>("Hallo", PrioMessage.MIN_PRIORITY),
-      new PrioMessage<String>("Hallo", PrioMessage.MAX_PRIORITY)) > 0);
+        new PrioMessage<String>("Hallo", PrioMessage.MAX_PRIORITY)) > 0);
 
     assertTrue(testling.compare(new PrioMessage<String>("Hallo", PrioMessage.MAX_PRIORITY),
-      new PrioMessage<String>("Hallo", PrioMessage.MAX_PRIORITY)) == 0);
+        new PrioMessage<String>("Hallo", PrioMessage.MAX_PRIORITY)) == 0);
     assertTrue(testling.compare(new PrioMessage<String>("Hallo", PrioMessage.MIN_PRIORITY),
-      new PrioMessage<String>("Hallo", PrioMessage.MIN_PRIORITY)) == 0);
+        new PrioMessage<String>("Hallo", PrioMessage.MIN_PRIORITY)) == 0);
   }
 }

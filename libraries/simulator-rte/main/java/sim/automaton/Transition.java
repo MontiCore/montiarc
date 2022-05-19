@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package sim.Automaton;
+package sim.automaton;
 
 import sim.comp.IComponent;
 
@@ -18,7 +18,11 @@ public class Transition {
 
   private IComponent component;
 
-  public Transition(State beforeState, State targetState, String condition, IComponent component, List<?> output) {
+  public Transition(State beforeState,
+                    State targetState,
+                    String condition,
+                    IComponent component,
+                    List<?> output) {
     Optional<List<?>> o = Optional.ofNullable(output);
     this.beforeState = beforeState;
     this.targetState = targetState;
@@ -27,8 +31,11 @@ public class Transition {
     this.output = o.isPresent() ? o.get() : null;
   }
 
-  public static Transition of(State beforeState, State targetState, String condition, IComponent component,
-    List<?> output) {
+  public static Transition of(State beforeState,
+                              State targetState,
+                              String condition,
+                              IComponent component,
+                              List<?> output) {
     return new Transition(beforeState, targetState, condition, component, output);
   }
 

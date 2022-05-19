@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.sched.IScheduler;
+import sim.automaton.TransitionPath;
 import sim.comp.ISimComponent;
 import sim.message.Message;
 import sim.message.TickedMessage;
-import sim.Automaton.Transitionpath;
+import sim.sched.IScheduler;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -19,19 +19,17 @@ import java.util.Queue;
 public class MessageStoringPort<T> implements IPort<T> {
 
   /**
-   * Port number.
-   */
-  private int number = -1;
-
-  /**
    * Queues all received messages.
    */
   private final Queue<T> buffer;
-
   /**
    * Flags, if this port is connected.
    */
   protected boolean isConnected;
+  /**
+   * Port number.
+   */
+  private int number = -1;
 
   public MessageStoringPort() {
     buffer = new LinkedList<T>();
@@ -59,7 +57,7 @@ public class MessageStoringPort<T> implements IPort<T> {
   }
 
   @Override
-  public void symbolicAccept(Message<Transitionpath> message) {
+  public void symbolicAccept(Message<TransitionPath> message) {
 
   }
 
@@ -143,7 +141,7 @@ public class MessageStoringPort<T> implements IPort<T> {
   }
 
   @Override
-  public void symbolicSend(Message<Transitionpath> message) {
+  public void symbolicSend(Message<TransitionPath> message) {
 
   }
 

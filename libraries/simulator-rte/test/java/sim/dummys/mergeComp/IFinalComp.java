@@ -12,4 +12,10 @@ public interface IFinalComp extends ITimedComponent {
   public IInSimPort<Boolean> getmInBool();
 
   public IOutSimPort<Integer> getmOut();
+
+  void setmInInt(IInSimPort<Integer> mInInt);
+
+  void setmInBool(IInSimPort<Boolean> mInBool);
+
+  void setmOut(IOutSimPort<Integer> mOut);
 }

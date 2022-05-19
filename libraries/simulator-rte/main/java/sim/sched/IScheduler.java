@@ -1,16 +1,18 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.sched;
 
+import sim.automaton.TransitionPath;
 import sim.message.Message;
 import sim.message.TickedMessage;
-import sim.Automaton.Transitionpath;
 import sim.port.IInSimPort;
 import sim.port.IPortFactory;
+
+import java.io.Serializable;
 
 /**
  * Prescribes methods for the simulation scheduler.
  */
-public interface IScheduler extends IPortFactory {
+public interface IScheduler extends IPortFactory, Serializable {
 
   /**
    * Registers the given port 'port' by this scheduler and schedules the given message, if possible.
@@ -48,5 +50,5 @@ public interface IScheduler extends IPortFactory {
   /**
    * handles Symbolic messages
    */
-  void handleSymbolic(Message<Transitionpath> msg, IInSimPort<?> port);
+  void handleSymbolic(Message<TransitionPath> msg, IInSimPort<?> port);
 }

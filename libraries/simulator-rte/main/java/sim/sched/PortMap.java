@@ -3,12 +3,13 @@ package sim.sched;
 
 import sim.port.IInSimPort;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Handles the information, which ports of a component are tick-free and which are not.
  */
-class PortMap implements IPortMap {
+class PortMap implements IPortMap, Serializable {
 
   /**
    * Holds the information, if a port is tick-free (true) or not (false). Each port is represented by the position in

@@ -1,17 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.sched.IScheduler;
+import sim.automaton.TransitionPath;
 import sim.comp.ISimComponent;
 import sim.message.Message;
 import sim.message.TickedMessage;
-import sim.Automaton.Transitionpath;
+import sim.sched.IScheduler;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * A port that is to be used with a master/slave scheduler.
@@ -21,30 +17,25 @@ import java.util.Queue;
 public class MasterSlavePort<T> implements IPort<T> {
 
   /**
-   * Port number.
-   */
-  private int number = -1;
-
-  /**
    * To buffer messages.
    */
   private final Queue<TickedMessage<?>> bufferQueue;
-
-  /**
-   * The component owning this port.
-   */
-  private ISimComponent component;
-
-  /**
-   * Flags, if this port is connected.
-   */
-  private boolean isConnected;
-
   /**
    * A set of additional receivers. It is used if one outgoing port contains more then one receiver.
    */
   private final List<IInPort<? super T>> receivers;
-
+  /**
+   * Port number.
+   */
+  private int number = -1;
+  /**
+   * The component owning this port.
+   */
+  private ISimComponent component;
+  /**
+   * Flags, if this port is connected.
+   */
+  private boolean isConnected;
   /**
    * The scheduler of this port.
    */
@@ -82,7 +73,7 @@ public class MasterSlavePort<T> implements IPort<T> {
   }
 
   @Override
-  public void symbolicAccept(Message<Transitionpath> message) {
+  public void symbolicAccept(Message<TransitionPath> message) {
 
   }
 
@@ -166,7 +157,7 @@ public class MasterSlavePort<T> implements IPort<T> {
   }
 
   @Override
-  public void symbolicSend(Message<Transitionpath> message) {
+  public void symbolicSend(Message<TransitionPath> message) {
 
   }
 

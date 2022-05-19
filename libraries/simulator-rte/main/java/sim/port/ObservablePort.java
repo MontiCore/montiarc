@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.sched.IScheduler;
+import sim.automaton.TransitionPath;
 import sim.comp.ISimComponent;
 import sim.message.Message;
 import sim.message.TickedMessage;
-import sim.Automaton.Transitionpath;
+import sim.sched.IScheduler;
 
 import java.util.Collection;
 import java.util.Observable;
@@ -18,14 +18,13 @@ import java.util.Observable;
 public class ObservablePort<T> extends Observable implements IPort<T> {
 
   /**
-   * Port number.
-   */
-  private int number = -1;
-
-  /**
    * Flags, if this port is connected.
    */
   protected boolean isConnected;
+  /**
+   * Port number.
+   */
+  private int number = -1;
 
   /**
    * @see IPort#accept(java.lang.Object)
@@ -50,7 +49,7 @@ public class ObservablePort<T> extends Observable implements IPort<T> {
   }
 
   @Override
-  public void symbolicAccept(Message<Transitionpath> message) {
+  public void symbolicAccept(Message<TransitionPath> message) {
 
   }
 
@@ -120,7 +119,7 @@ public class ObservablePort<T> extends Observable implements IPort<T> {
   }
 
   @Override
-  public void symbolicSend(Message<Transitionpath> message) {
+  public void symbolicSend(Message<TransitionPath> message) {
 
   }
 

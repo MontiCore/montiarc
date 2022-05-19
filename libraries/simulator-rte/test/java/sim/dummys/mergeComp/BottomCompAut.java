@@ -1,32 +1,29 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys.mergeComp;
 
-import sim.sched.IScheduler;
+import sim.automaton.AutomataState;
+import sim.automaton.ComponentState;
 import sim.error.ISimulationErrorHandler;
-import sim.Automaton.State;
-import sim.Automaton.Transition;
+import sim.message.Message;
+import sim.message.TickedMessage;
+import sim.port.IPort;
+import sim.sched.IScheduler;
+import sim.serialiser.BackTrackHandler;
 
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.Map;
 
-public class BottomCompAut extends BottomComp {
+public class BottomCompAut extends BottomComp implements Serializable {
 
-  private State one;
+  private ComponentState currentState;
 
-  private SortedMap<Integer, List<Transition>> history;
+  public void setup(IScheduler s, ISimulationErrorHandler eh, BackTrackHandler backTrackHandler) {
+    currentState = new ComponentState(AutomataState.ONE, null, null, null, null);
 
-  private int tID;
-
-  public void setup(IScheduler s, ISimulationErrorHandler eh) {
-    one = new State();
-    history = new TreeMap<>();
-    List<Transition> start = new ArrayList<>();
-    start.add(Transition.of(one, one, null, this, null));
-    tID = 0;
-    history.put(tID, start);
-    super.setup(s, eh);
+    super.setup(s, eh, backTrackHandler);
   }
 
   @Override
@@ -36,35 +33,36 @@ public class BottomCompAut extends BottomComp {
 
   @Override
   public void treatbIn(Integer msg) {
-    tID++;
-    for (Boolean output : findPossIn(msg)) {
-      sendbOut(output);
-    }
+    currentState = saveState(this, findPossIn(msg));
+    Map<IPort, List<TickedMessage>> outmsgs = currentState.getOutMessages();
+    for (IPort outport : outmsgs.keySet())
+      for (TickedMessage outmsg : outmsgs.get(outport)) {
+        outport.send(outmsg);
+      }
   }
 
-  public List<Boolean> findPossIn(int m) {
-    List<Boolean> poss = new ArrayList<>();
-    List<Transition> transitionstaken = new ArrayList<>();
+  public List<ComponentState> findPossIn(int m) {
+    List<ComponentState> posscompstates = new LinkedList<>();
 
-    for (Transition t : history.get(history.lastKey())) {
-      State current = t.getTargetState();
-      if (current == one) {
-        if (m > 0) {
-          poss.add(true);
-          transitionstaken.add(Transition.of(current, one, "m>0", this, null));
-        }
-        if (m <= 0) {
-          poss.add(false);
 
-          transitionstaken.add(Transition.of(current, one, "m<=0", this, null));
-        }
+    if (currentState.getCurrentState() == AutomataState.ONE) {
+      if (m > 0) {
+        Map<IPort, List<TickedMessage>> outmsg = new HashMap<>();
+        outmsg.put((IPort) getbOut(), List.of(Message.of(true)));
+        posscompstates.add(new ComponentState(AutomataState.ONE, null, (IPort) getbIn(), Message.of(m), outmsg));
+      }
+      if (m <= 0) {
+        Map<IPort, List<TickedMessage>> outmsg = new HashMap<>();
+        outmsg.put((IPort) getbOut(), List.of(Message.of(false)));
+        posscompstates.add(new ComponentState(AutomataState.ONE, null, (IPort) getbIn(), Message.of(m), outmsg));
       }
     }
-    if (history.lastKey() < tID) {
-      history.put(tID, transitionstaken);
-    } else {
-      history.get(tID).addAll(transitionstaken);
+
+    if (posscompstates.isEmpty()) {
+      ComponentState noTransitiontaken = new ComponentState(currentState.getCurrentState(), currentState.getStateVariables(), (IPort) getbIn(), Message.of(m), null);
+      posscompstates.add(noTransitiontaken);
     }
-    return poss;
+
+    return posscompstates;
   }
 }

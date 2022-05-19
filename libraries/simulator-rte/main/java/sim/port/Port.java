@@ -1,42 +1,34 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
-import sim.sched.IScheduler;
+import sim.automaton.TransitionPath;
 import sim.comp.ISimComponent;
 import sim.message.Message;
 import sim.message.TickedMessage;
-import sim.Automaton.Transitionpath;
+import sim.sched.IScheduler;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Default port implementation.
  *
  * @param <T> data type of this port
  */
-public class Port<T> implements IPort<T> {
-
-  /**
-   * Port number.
-   */
-  private int number = -1;
+public class Port<T> implements IPort<T>, Serializable {
 
   /**
    * Used to buffer messages.
    */
   private final Queue<TickedMessage<?>> bufferQueue;
-
   /**
    * A set of additional receivers. It is used if one outgoing port contains more then one receiver.
    */
   private final Set<IInPort<? super T>> receivers;
-
+  /**
+   * Port number.
+   */
+  private int number = -1;
   /**
    * The component owning this port.
    */
@@ -76,7 +68,7 @@ public class Port<T> implements IPort<T> {
 
   @Override
   //todo send to scheduler
-  public void symbolicAccept(Message<Transitionpath> message) {
+  public void symbolicAccept(Message<TransitionPath> message) {
     scheduler.handleSymbolic(message, this);
   }
 
@@ -188,7 +180,7 @@ public class Port<T> implements IPort<T> {
     accept(message);
   }
 
-  public void symbolicSend(Message<Transitionpath> m) {
+  public void symbolicSend(Message<TransitionPath> m) {
     for (IInPort<? super T> receiver : receivers) {
       receiver.symbolicAccept(m);
     }
@@ -259,4 +251,5 @@ public class Port<T> implements IPort<T> {
   public final int getPortNumber() {
     return number;
   }
+
 }

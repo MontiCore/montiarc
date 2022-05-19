@@ -1,16 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.sched;
 
-import sim.error.NotImplementedYetException;
+import sim.automaton.TransitionPath;
 import sim.comp.ISimComponent;
+import sim.error.NotImplementedYetException;
 import sim.message.Message;
 import sim.message.TickedMessage;
-import sim.Automaton.Transitionpath;
-import sim.port.DefaultPortFactory;
-import sim.port.IForwardPort;
-import sim.port.IInSimPort;
-import sim.port.IOutSimPort;
-import sim.port.IPortFactory;
+import sim.port.*;
 
 /**
  * Scheduler optimized for components with one incoming port.
@@ -39,7 +35,7 @@ class SingleInScheduler implements IScheduler {
   @Override
   public <T> IInSimPort<T> createInPort() {
     throw new NotImplementedYetException("A Single in Scheduler is attended to be used for a SingleInComponent. " +
-      "As this component is its port itself, this method should never be called.");
+        "As this component is its port itself, this method should never be called.");
   }
 
   /**
@@ -56,7 +52,7 @@ class SingleInScheduler implements IScheduler {
   @Override
   public <T> IForwardPort<T> createForwardPort() {
     throw new NotImplementedYetException("A Single in Scheduler is attended to be used for a SingleInComponent. " +
-      "As this component is its port itself, this method should never be called.");
+        "As this component is its port itself, this method should never be called.");
   }
 
   /**
@@ -115,7 +111,7 @@ class SingleInScheduler implements IScheduler {
   }
 
   @Override
-  public void handleSymbolic(Message<Transitionpath> msg, IInSimPort<?> port) {
+  public void handleSymbolic(Message<TransitionPath> msg, IInSimPort<?> port) {
 
   }
 }

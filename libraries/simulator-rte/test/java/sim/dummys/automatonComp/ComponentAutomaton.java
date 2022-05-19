@@ -1,12 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys.automatonComp;
 
-import sim.sched.IScheduler;
-import sim.error.ISimulationErrorHandler;
 import sim.comp.ATimedComponent;
+import sim.error.ISimulationErrorHandler;
 import sim.message.Message;
 import sim.message.Tick;
 import sim.port.*;
+import sim.sched.IScheduler;
+import sim.serialiser.BackTrackHandler;
 
 public abstract class ComponentAutomaton extends ATimedComponent implements IComponentAutomaton {
 
@@ -31,7 +32,7 @@ public abstract class ComponentAutomaton extends ATimedComponent implements ICom
   }
 
   @Override
-  public void setup(IScheduler s, ISimulationErrorHandler eh) {
+  public void setup(IScheduler s, ISimulationErrorHandler eh, BackTrackHandler backTrackHandler) {
     in = new Port<Integer>();
     out = new TestPort<Integer>();
     ((IInSimPort<Integer>) in).setup(this, s);

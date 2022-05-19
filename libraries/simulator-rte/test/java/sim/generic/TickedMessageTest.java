@@ -11,16 +11,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Module test for Ticked Messages.
- * 
  */
 public class TickedMessageTest {
-    
-    @Test
-    public void testIsTick() {
-        TickedMessage<String> tick = Tick.get();
-        TickedMessage<String> message = Message.of("TEST");
-        assertTrue(tick.isTick());
-        assertFalse(message.isTick());
-    }
-    
+
+  @Test
+  public void testIsTick() {
+    TickedMessage<String> tick = Tick.get();
+    TickedMessage<String> message = Message.of("TEST");
+    assertTrue(tick.isTick());
+    assertFalse(message.isTick());
+  }
+
 }

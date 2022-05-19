@@ -1,36 +1,25 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys;
 
-import sim.sched.IScheduler;
-import sim.comp.IComponent;
-import sim.error.ISimulationErrorHandler;
 import sim.comp.AComponent;
 import sim.comp.ATimedComponent;
+import sim.comp.IComponent;
+import sim.error.ISimulationErrorHandler;
 import sim.message.Message;
 import sim.message.Tick;
-import sim.port.IInPort;
-import sim.port.IInSimPort;
-import sim.port.IOutPort;
-import sim.port.IPort;
-import sim.port.Port;
-import sim.port.TestPort;
+import sim.port.*;
+import sim.sched.IScheduler;
+import sim.serialiser.BackTrackHandler;
 
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- *
- */
 public class ComponentDummy extends ATimedComponent implements ComponentDummyPortInterface {
 
-  protected IInPort<String> p1In;
-
   public List<Message<String>> p1InReceivedMessages;
-
-  protected IInPort<String> p2In;
-
   public List<Message<String>> p2InReceivedMessages;
-
+  protected IInPort<String> p1In;
+  protected IInPort<String> p2In;
   protected IOutPort<String> pOut;
 
   public ComponentDummy() {
@@ -93,11 +82,8 @@ public class ComponentDummy extends ATimedComponent implements ComponentDummyPor
     incLocalTime();
   }
 
-  /**
-   * @see IComponent#setup(IScheduler, ISimulationErrorHandler)
-   */
   @Override
-  public void setup(IScheduler scheduler, ISimulationErrorHandler errorHandler) {
+  public void setup(IScheduler scheduler, ISimulationErrorHandler errorHandler, BackTrackHandler backTrackHandler) {
     p1In = new Port<String>();
     p2In = new Port<String>();
     pOut = new TestPort<String>();

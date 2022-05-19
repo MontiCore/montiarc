@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package sim.Automaton;
+package sim.automaton;
 
 import sim.comp.IComponent;
 

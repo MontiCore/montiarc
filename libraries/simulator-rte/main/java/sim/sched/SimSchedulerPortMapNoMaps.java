@@ -1,21 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.sched;
 
+import sim.automaton.TransitionPath;
 import sim.comp.ISimComponent;
 import sim.message.Message;
+import sim.message.Tick;
 import sim.message.TickedMessage;
-import sim.Automaton.Transitionpath;
-import sim.port.DefaultPortFactory;
-import sim.port.IForwardPort;
-import sim.port.IInSimPort;
-import sim.port.IOutSimPort;
-import sim.port.IPortFactory;
+import sim.port.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Default simulation scheduler for MontiArc simulations.
@@ -160,6 +153,7 @@ class SimSchedulerPortMapNoMaps implements IScheduler {
 
     if (tickless.isTickFree(port)) {
       success = true;
+      comp.getBth().savePortMsg((IPort) port, msg);
       comp.handleMessage(port, msg);
       comp.checkConstraints();
     }
@@ -182,6 +176,7 @@ class SimSchedulerPortMapNoMaps implements IScheduler {
     if (tickfree.allPortsBlocked()) {
       success = true;
       List<IInSimPort<?>> allPorts = comp2SimPorts.get(id);
+      comp.getBth().savePortMsg((IPort) port, Tick.get());
       comp.handleTick();
       // wake ports up
       for (IInSimPort<?> p : allPorts) {
@@ -231,8 +226,8 @@ class SimSchedulerPortMapNoMaps implements IScheduler {
 
   @Override
   //todo symbolic queue
-  public void handleSymbolic(Message<Transitionpath> msg, IInSimPort<?> port) {
-    Transitionpath tp = msg.getData();
+  public void handleSymbolic(Message<TransitionPath> msg, IInSimPort<?> port) {
+    TransitionPath tp = msg.getData();
 
     ISimComponent comp = port.getComponent();
 
@@ -244,6 +239,7 @@ class SimSchedulerPortMapNoMaps implements IScheduler {
       symbolicID = tp.getLast().getId();
     }
   }
+
 }
 
 

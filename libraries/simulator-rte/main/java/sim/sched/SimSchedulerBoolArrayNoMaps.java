@@ -1,21 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.sched;
 
+import sim.automaton.TransitionPath;
 import sim.comp.ISimComponent;
 import sim.message.Message;
 import sim.message.TickedMessage;
-import sim.Automaton.Transitionpath;
-import sim.port.DefaultPortFactory;
-import sim.port.IForwardPort;
-import sim.port.IInSimPort;
-import sim.port.IOutSimPort;
-import sim.port.IPortFactory;
+import sim.port.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Default simulation scheduler for MontiArc simulations.
@@ -127,7 +119,7 @@ public class SimSchedulerBoolArrayNoMaps implements IScheduler {
   }
 
   @Override
-  public void handleSymbolic(Message<Transitionpath> msg, IInSimPort<?> port) {
+  public void handleSymbolic(Message<TransitionPath> msg, IInSimPort<?> port) {
 
   }
 

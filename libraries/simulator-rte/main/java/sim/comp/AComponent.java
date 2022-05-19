@@ -1,8 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.comp;
 
-import sim.sched.IScheduler;
+import sim.automaton.ComponentState;
 import sim.error.ISimulationErrorHandler;
+import sim.sched.IScheduler;
+import sim.serialiser.BackTrackHandler;
+
+import java.util.List;
 
 /**
  * Represents an abstract component in the simulation
@@ -25,9 +29,18 @@ public abstract class AComponent implements ISimComponent {
   private IScheduler scheduler;
 
   /**
-   * Id assigned by the scheduler.
+   * ID assigned by the scheduler.
    */
   private int id = -1;
+
+  private BackTrackHandler bth;
+
+  /**
+   * Creates a new {@link AComponent}.
+   */
+  public AComponent() {
+    super();
+  }
 
   /**
    * @return the scheduler
@@ -41,13 +54,6 @@ public abstract class AComponent implements ISimComponent {
    */
   protected void setScheduler(IScheduler scheduler) {
     this.scheduler = scheduler;
-  }
-
-  /**
-   * Creates a new {@link AComponent}.
-   */
-  public AComponent() {
-    super();
   }
 
   /**
@@ -105,4 +111,24 @@ public abstract class AComponent implements ISimComponent {
   public final int getSimulationId() {
     return this.id;
   }
+
+  @Override
+  public BackTrackHandler getBth() {
+    return bth;
+  }
+
+  @Override
+  public void setBth(BackTrackHandler bth) {
+    this.bth = bth;
+  }
+
+  public ComponentState saveState(IComponent comp, List<ComponentState> cs) {
+    if (cs.size() <= 1) {
+      bth.saveComponentState(comp, cs.get(0));
+      return cs.get(0);
+    } else {
+      return bth.handleUnderspecified(comp, cs);
+    }
+  }
+
 }

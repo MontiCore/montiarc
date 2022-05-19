@@ -27,9 +27,6 @@ public final class Tick<T> extends TickedMessage<T> {
    *
    * @deprecated use {@link Tick#get()} instead. Will be set to private after 2.5.0 release.
    */
-  @Deprecated
-  public Tick() {
-  }
 
   @Override
   public boolean equals(Object o) {

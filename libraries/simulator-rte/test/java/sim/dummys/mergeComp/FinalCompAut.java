@@ -1,105 +1,88 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys.mergeComp;
 
-import sim.sched.IScheduler;
+import sim.automaton.AutomataState;
+import sim.automaton.ComponentState;
 import sim.error.ISimulationErrorHandler;
-import sim.Automaton.State;
-import sim.Automaton.Transition;
+import sim.message.Message;
+import sim.message.TickedMessage;
+import sim.port.IPort;
+import sim.sched.IScheduler;
+import sim.serialiser.BackTrackHandler;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.Map;
 
-public class FinalCompAut extends FinalComp {
+public class FinalCompAut extends FinalComp implements Serializable {
 
-  private State one;
-
-  private State two;
-
-  private SortedMap<Integer, List<Transition>> history;
-
-  private int tID;
-
+  private ComponentState currentState;
 
   @Override
-  public void setup(IScheduler s, ISimulationErrorHandler eh) {
-    one = new State();
-    two = new State();
-    history = new TreeMap<>();
-    List<Transition> start = new ArrayList<>();
-    start.add(Transition.of(one, one, null, this, null));
-    tID = 0;
-    history.put(tID, start);
-    super.setup(s, eh);
+  public void setup(IScheduler s, ISimulationErrorHandler eh, BackTrackHandler backTrackHandler) {
+    currentState = new ComponentState(AutomataState.ONE, null, null, null, null);
+    super.setup(s, eh, backTrackHandler);
   }
 
-  public List<Integer> findPossInInt(int m) {
-    List<Integer> poss = new ArrayList<>();
-    List<Transition> transitionstaken = new ArrayList<>();
+  public List<ComponentState> findPossInInt(int m) {
+    List<ComponentState> posscompstates = new LinkedList<>();
 
-    for (State t : findlastStates()) {
-      if (t.equals(one)) {
-        if (m >= 0) {
-          poss.add(1);
-          transitionstaken.add(Transition.of(t, one, "m>=0", this, poss));
-        }
-        if (m < 0) {
-          poss.add(2);
-          transitionstaken.add(Transition.of(t, one, "m<0", this, poss));
-        }
+    if (currentState.getCurrentState() == AutomataState.ONE) {
+      if (m >= 0) {
+        Map<IPort, List<TickedMessage>> outmsg = new HashMap<>();
+        outmsg.put((IPort) getmOut(), List.of(Message.of(1)));
+        posscompstates.add(new ComponentState(AutomataState.ONE, null, (IPort) getmInInt(), Message.of(m), outmsg));
       }
-      if (t.equals(two)) {
-        if (m > 0) {
-          poss.add(3);
-          transitionstaken.add(Transition.of(t, one, "m>0", this, poss));
-        }
-        if (m <= 0) {
-          poss.add(4);
-
-          transitionstaken.add(Transition.of(t, one, "m<=0", this, poss));
-        }
+      if (m < 0) {
+        Map<IPort, List<TickedMessage>> outmsg = new HashMap<>();
+        outmsg.put((IPort) getmOut(), List.of(Message.of(2)));
+        posscompstates.add(new ComponentState(AutomataState.ONE, null, (IPort) getmInInt(), Message.of(m), outmsg));
       }
     }
-    if (!transitionstaken.isEmpty()) {
-      tID++;
-      if (history.lastKey() < tID) {
-        history.put(tID, transitionstaken);
-      } else {
-        history.get(tID).addAll(transitionstaken);
+    if (currentState.getCurrentState() == AutomataState.TWO) {
+      if (m > 0) {
+        Map<IPort, List<TickedMessage>> outmsg = new HashMap<>();
+        outmsg.put((IPort) getmOut(), List.of(Message.of(3)));
+        posscompstates.add(new ComponentState(AutomataState.ONE, null, (IPort) getmInInt(), Message.of(m), outmsg));
+      }
+      if (m <= 0) {
+        Map<IPort, List<TickedMessage>> outmsg = new HashMap<>();
+        outmsg.put((IPort) getmOut(), List.of(Message.of(4)));
+        posscompstates.add(new ComponentState(AutomataState.ONE, null, (IPort) getmInInt(), Message.of(m), outmsg));
       }
     }
-    return poss;
+
+    if (posscompstates.isEmpty()) {
+      ComponentState noTransitiontaken = new ComponentState(currentState.getCurrentState(), currentState.getStateVariables(), (IPort) getmInInt(), Message.of(m), null);
+      posscompstates.add(noTransitiontaken);
+    }
+
+    return posscompstates;
   }
 
-  public List<Integer> findPossInBool(boolean m) {
-    List<Integer> poss = new ArrayList<>();
-    List<Transition> transitionstaken = new ArrayList<>();
+  public List<ComponentState> findPossInBool(boolean m) {
+    List<ComponentState> posscompstates = new LinkedList<>();
 
-    for (State t : findlastStates()) {
 
-      if (t == one) {
-        if (m == false) {
-          transitionstaken.add(Transition.of(t, two, "m==false", this, null));
-        }
-      }
-      if (t == two) {
-        if (m == true) {
-          transitionstaken.add(Transition.of(t, one, "m==true", this, null));
-        }
+    if (currentState.getCurrentState() == AutomataState.ONE) {
+      if (m == false) {
+        posscompstates.add(new ComponentState(AutomataState.TWO, null, (IPort) getmInBool(), Message.of(m), null));
       }
     }
-    if (!transitionstaken.isEmpty()) {
-      tID++;
-      if (history.lastKey() < tID) {
-        history.put(tID, transitionstaken);
-      } else {
-        history.get(tID).addAll(transitionstaken);
+    if (currentState.getCurrentState() == AutomataState.TWO) {
+      if (m == true) {
+        posscompstates.add(new ComponentState(AutomataState.ONE, null, (IPort) getmInBool(), Message.of(m), null));
       }
     }
-    return poss;
+
+    if (posscompstates.isEmpty()) {
+      ComponentState noTransitiontaken = new ComponentState(currentState.getCurrentState(), currentState.getStateVariables(), (IPort) getmInBool(), Message.of(m), null);
+      posscompstates.add(noTransitiontaken);
+    }
+
+    return posscompstates;
   }
 
   @Override
@@ -109,23 +92,24 @@ public class FinalCompAut extends FinalComp {
 
   @Override
   public void treatmInInt(Integer msg) {
-    for (Integer output : findPossInInt(msg)) {
-      sendmOut(output);
-    }
+    currentState = saveState(this, findPossInInt(msg));
+    Map<IPort, List<TickedMessage>> outmsgs = currentState.getOutMessages();
+    for (IPort outport : outmsgs.keySet())
+      for (TickedMessage outmsg : outmsgs.get(outport)) {
+        outport.send(outmsg);
+      }
   }
 
   @Override
   public void treatmInBool(Boolean msg) {
-    for (Integer output : findPossInBool(msg)) {
-      sendmOut(output);
+    currentState = saveState(this, findPossInBool(msg));
+    Map<IPort, List<TickedMessage>> outmsgs = currentState.getOutMessages();
+    if (outmsgs != null) {
+      for (IPort outport : outmsgs.keySet())
+        for (TickedMessage outmsg : outmsgs.get(outport)) {
+          outport.send(outmsg);
+        }
     }
   }
 
-  public Set<State> findlastStates() {
-    Set<State> output = new HashSet<>();
-    for (Transition t : history.get(tID)) {
-      output.add(t.getTargetState());
-    }
-    return output;
-  }
 }

@@ -1,8 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package sim.Automaton;
-
-import java.util.List;
-import java.util.Map;
+package sim.automaton;
 
 public interface IAutomaton {
 
