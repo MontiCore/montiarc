@@ -10,7 +10,7 @@ group = "montiarc.build"
 val repo: String = "https://nexus.se.rwth-aachen.de/content/groups/public/"
 
 dependencies {
-  implementation("monticore:monticore.gradle.plugin:7.3.0")
+  implementation("monticore:monticore.gradle.plugin:7.3.1")
 }
 
 publishing {
