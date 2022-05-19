@@ -2,27 +2,25 @@
 package montiarc.util;
 
 /**
- * The enum of all montiarc errors, which extends the mixing
+ * The enum of all montiarc mode automata errors, which extends the mixing
  * interface {@link Error}.
  * <p>
- * Assigned code range: 0xC1000 - 0xC1099
+ * Assigned code range: 0xC1350 - 0xC1399
  */
-public enum MontiArcError implements Error {
-  COMPONENT_AND_FILE_NAME_DIFFER("0xC1000", "The component name '%s' does not correspond to the file name '%s'."),
-  COMPONENT_AND_FILE_PACKAGE_DIFFER("0xC1001", "The package name '%s' does not correspond to the file path '%s'."),
-  TOOL_PARSE_IOEXCEPTION("0xC1002", "Could not parse the file \" %s \"."),
-  TOOL_FILE_WALK_IOEXCEPTION("0xC1003", "Could not access the directory \" %s \" or one of its subdirectories."),
-  CLI_INPUT_OPTION_MISSING("0xC1004", "Option '%s' is missing, but an input is required"),
-  CLI_INPUT_FILE_NOT_EXIST("0xC1069", "Input file '%s' does not exist\n"),
-  CLI_OPTION_AMBIGUOUS("0xC1006", "Option '%s' does not match any valid option"),
-  CLI_OPTION_UNRECOGNIZED("0xC1007", "Unrecognized option '%s'"),
-  CLI_OPTION_MISSING("0xC1008", "Options [%s] are missing, but are required"),
-  CLI_ARGUMENT_MISSING("0xC1009", "Option '%s' is missing an argument");
+public enum BasicModeAutomataError implements Error {
+  INSTANCE_NAME_NOT_UNIQUE_IN_MODE("0xC1350", "There are multiple subcomponents named '%s' in mode '%s'."),
+  COMPONENT_NAME_NOT_UNIQUE_IN_MODE("0xC1351", "There are multiple components named '%s' in mode '%s'."),
+  PORT_NAME_NOT_UNIQUE_IN_MODE("0xC1352", "There are multiple ports named '%s' in mode '%s'."),
+  HIERARCHICAL_MODE_ELEMENTS("0xC1353", "Hierarchical modes are not allowed."),
+  MULTIPLE_MODE_AUTOMATA("0xC1354", "Components may only have one mode-automaton at max."),
+  MODES_WITHOUT_AUTOMATON("0xC1355", "The component '%s' defines modes, but no mode-automaton."),
+  MODE_ELEMENTS_IN_ATOMIC_COMPONENTS("0xC1356", "Atomic components may not define modes and mode automata."),
+  INITIAL_MODE_DOES_NOT_EXIST("0xC1357", "The initial mode '%s' is not defined anywhere in the component '%s'.");
 
   private final String errorCode;
   private final String errorMessage;
 
-  MontiArcError(String errorCode, String errorMessage) {
+  BasicModeAutomataError(String errorCode, String errorMessage) {
     assert (errorCode != null);
     assert (errorMessage != null);
     assert (ERROR_CODE_PATTERN.matcher(errorCode).matches());

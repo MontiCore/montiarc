@@ -4,13 +4,13 @@ package arcautomaton._cocos;
 import arcautomaton.ArcAutomatonMill;
 import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._visitor.ExpressionRootFinder;
+import montiarc.util.ArcAutomataError;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import arcbasis._cocos.util.IPortReferenceInExpressionExtractor;
 import static arcbasis._cocos.util.IPortReferenceInExpressionExtractor.PortReference;
 import arcbasis._cocos.util.PortReferenceExtractor4ExpressionBasis;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
@@ -96,7 +96,7 @@ public class NoInputPortsInInitialOutputDeclaration implements ArcBasisASTCompon
 
       if(portOwner.getPort(portRef.toString(), true).isPresent()
         && portOwner.getPort(portRef.toString(), true).get().isIncoming()) {
-        Log.error(ArcError.INPUT_PORT_IN_INITIAL_OUT_DECL.format(portRef.toString()), portRefPosition);
+        Log.error(ArcAutomataError.INPUT_PORT_IN_INITIAL_OUT_DECL.format(portRef.toString()), portRefPosition);
       }
     }
   }

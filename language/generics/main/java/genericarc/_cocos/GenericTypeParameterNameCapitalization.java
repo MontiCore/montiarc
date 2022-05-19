@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package genericarc._cocos;
 
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import genericarc._ast.ASTArcTypeParameter;
+import montiarc.util.GenericArcError;
 import montiarc.util.NameCapitalizationHelper;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -19,7 +19,7 @@ public class GenericTypeParameterNameCapitalization implements GenericArcASTArcT
 
     Preconditions.checkNotNull(typeParameter);
     if (NameCapitalizationHelper.isNotUpperCase(typeParameter.getName())) {
-      NameCapitalizationHelper.warning(ArcError.TYPE_PARAMETER_UPPER_CASE_LETTER, typeParameter,
+      NameCapitalizationHelper.warning(GenericArcError.TYPE_PARAMETER_UPPER_CASE_LETTER, typeParameter,
         typeParameter.getName(), typeParameter.getEnclosingScope().getSpanningSymbol().getName());
     }
   }

@@ -4,10 +4,10 @@ package basicmodeautomata._cocos;
 import arcbasis._ast.*;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import basicmodeautomata.BasicModeAutomataMill;
+import montiarc.util.BasicModeAutomataError;
 import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
 import de.se_rwth.commons.logging.Log;
-import montiarc.util.ArcError;
 import basicmodeautomata._ast.ASTModeDeclaration;
 import basicmodeautomata._ast.ASTModeDeclarationBuilder;
 
@@ -57,9 +57,9 @@ public class UniqueNamesInModes implements ArcBasisASTComponentTypeCoCo {
     ASTComponentType a = new ASTComponentTypeBuilder().setBody(body1).setName("A").setHead(new ASTComponentHeadBuilder().build()).build();
     ASTComponentType b = new ASTComponentTypeBuilder().setBody(body2).setName("B").setHead(new ASTComponentHeadBuilder().build()).build();
 
-    compareLists(a.getSubComponents(), b.getSubComponents(), ASTComponentInstance::getName, ArcError.INSTANCE_NAME_NOT_UNIQUE_IN_MODE, mode);
-    compareLists(a.getInnerComponents(), b.getInnerComponents(), ASTComponentType::getName, ArcError.COMPONENT_NAME_NOT_UNIQUE_IN_MODE, mode);
-    compareLists(a.getPorts(), b.getPorts(), ASTPort::getName, ArcError.PORT_NAME_NOT_UNIQUE_IN_MODE, mode);
+    compareLists(a.getSubComponents(), b.getSubComponents(), ASTComponentInstance::getName, BasicModeAutomataError.INSTANCE_NAME_NOT_UNIQUE_IN_MODE, mode);
+    compareLists(a.getInnerComponents(), b.getInnerComponents(), ASTComponentType::getName, BasicModeAutomataError.COMPONENT_NAME_NOT_UNIQUE_IN_MODE, mode);
+    compareLists(a.getPorts(), b.getPorts(), ASTPort::getName, BasicModeAutomataError.PORT_NAME_NOT_UNIQUE_IN_MODE, mode);
   }
 
   /**
@@ -71,7 +71,7 @@ public class UniqueNamesInModes implements ArcBasisASTComponentTypeCoCo {
    * @param mode the mode in which the name exists twice
    * @param <T> ast-node of a symbol
    */
-  protected <T extends ASTNode> void compareLists(Collection<T> base, Collection<T> duplicates, Function<T, String> baptist, ArcError error, String mode){
+  protected <T extends ASTNode> void compareLists(Collection<T> base, Collection<T> duplicates, Function<T, String> baptist, BasicModeAutomataError error, String mode){
     Set<String> uniqueNames = base.stream().map(baptist).collect(Collectors.toSet());
     duplicates.stream().filter(x -> uniqueNames.contains(baptist.apply(x))).forEach(duplicate -> Log.error(
         error.format(baptist.apply(duplicate), mode),

@@ -9,6 +9,7 @@ import arcbasis._cocos.PortNameCapitalisation;
 import com.google.common.base.Preconditions;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
 import montiarc.util.ArcError;
+import montiarc.util.GenericArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -36,7 +37,7 @@ public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
       arg("allNamesIncorrectlyCapitalized.arc",
-        ArcError.COMPONENT_NAME_UPPER_CASE, ArcError.TYPE_PARAMETER_UPPER_CASE_LETTER, ArcError.PARAMETER_LOWER_CASE,
+        ArcError.COMPONENT_NAME_UPPER_CASE, GenericArcError.TYPE_PARAMETER_UPPER_CASE_LETTER, ArcError.PARAMETER_LOWER_CASE,
         ArcError.COMPONENT_NAME_UPPER_CASE, ArcError.INSTANCE_NAME_LOWER_CASE, ArcError.PORT_LOWER_CASE,
         ArcError.PORT_LOWER_CASE, ArcError.VARIABLE_LOWER_CASE),
       arg("componentNameLowerCase.arc", ArcError.COMPONENT_NAME_UPPER_CASE),
@@ -44,7 +45,7 @@ public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
       arg("InstanceNameUpperCase.arc", ArcError.INSTANCE_NAME_LOWER_CASE),
       arg("ParameterNameUpperCase.arc", ArcError.PARAMETER_LOWER_CASE),
       arg("PortNameUpperCase.arc", ArcError.PORT_LOWER_CASE, ArcError.PORT_LOWER_CASE),
-      arg("TypeParameterLowerCaseLetter.arc", ArcError.TYPE_PARAMETER_UPPER_CASE_LETTER),
+      arg("TypeParameterLowerCaseLetter.arc", GenericArcError.TYPE_PARAMETER_UPPER_CASE_LETTER),
       arg("VariableNameUpperCase.arc", ArcError.VARIABLE_LOWER_CASE)
     );
   }

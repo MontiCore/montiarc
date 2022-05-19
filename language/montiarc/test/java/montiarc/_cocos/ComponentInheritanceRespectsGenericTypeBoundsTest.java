@@ -1,12 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import montiarc.util.GenericArcError;
 import montiarc.MontiArcMill;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -153,28 +153,28 @@ public class ComponentInheritanceRespectsGenericTypeBoundsTest extends AbstractC
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
       arg("IncompatibleBounds.arc",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND
       ),
       arg("IncompatibleBoundsInGenericHead.arc",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND, ArcError.TYPE_ARG_IGNORES_UPPER_BOUND
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND
       ),
       arg("TooFewTypeAssignments.arc",
-        ArcError.TOO_FEW_TYPE_ARGUMENTS
+        GenericArcError.TOO_FEW_TYPE_ARGUMENTS
       ),
       arg("TooManyTypeAssignments.arc",
-        ArcError.TOO_MANY_TYPE_ARGUMENTS
+        GenericArcError.TOO_MANY_TYPE_ARGUMENTS
       )
     );
   }

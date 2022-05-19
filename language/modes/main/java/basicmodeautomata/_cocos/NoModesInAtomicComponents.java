@@ -3,8 +3,8 @@ package basicmodeautomata._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
-import montiarc.util.ArcError;
 import basicmodeautomata.BasicModeAutomataMill;
+import montiarc.util.BasicModeAutomataError;
 import basicmodeautomata.util.ComponentModeTool;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
@@ -22,7 +22,7 @@ public class NoModesInAtomicComponents implements ArcBasisASTComponentTypeCoCo {
           helper.streamDeclarations(component),
           helper.streamAutomata(component)
       ).forEach(x -> Log.error(
-          ArcError.MODE_ELEMENTS_IN_ATOMIC_COMPONENTS.format(),
+          BasicModeAutomataError.MODE_ELEMENTS_IN_ATOMIC_COMPONENTS.format(),
           x.get_SourcePositionStart()
       ));
     }

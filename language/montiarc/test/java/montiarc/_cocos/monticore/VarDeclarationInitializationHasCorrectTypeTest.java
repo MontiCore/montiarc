@@ -13,6 +13,7 @@ import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.check.MontiArcTypeCalculator;
 import montiarc.util.Error;
+import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -101,34 +102,9 @@ public class VarDeclarationInitializationHasCorrectTypeTest extends AbstractCoCo
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
       arg("InvalidMultiVarDeclaration.arc",
-        ExternalErrors.INCOMPATIBILITY, ExternalErrors.INCOMPATIBILITY),
+        MCError.INCOMPATIBILITY, MCError.INCOMPATIBILITY),
       arg("InvalidMultiVarDeclarationWithTypeReference.arc",
-        ExternalErrors.TYPE_REF_ASSIGNMENT_ERR, ExternalErrors.INCOMPATIBILITY)
+          MCError.TYPE_REF_ASSIGNMENT_ERR, MCError.INCOMPATIBILITY)
     );
-  }
-
-
-  /**
-   * wraps the error messages into enum values, so they can be used in combination with the existing test infrastructure
-   */
-  enum ExternalErrors implements Error {
-    INCOMPATIBILITY(VarDeclarationInitializationHasCorrectType.ERROR_CODE),
-    TYPE_REF_ASSIGNMENT_ERR(VarDeclarationInitializationHasCorrectType.TYPE_REF_ASSIGNMENT_ERROR_CODE);
-
-    ExternalErrors(String code){
-      this.code = code;
-    }
-
-    final String code;
-
-    @Override
-    public String getErrorCode() {
-      return code;
-    }
-
-    @Override
-    public String printErrorMessage() {
-      return "this method is not used for this test";
-    }
   }
 }

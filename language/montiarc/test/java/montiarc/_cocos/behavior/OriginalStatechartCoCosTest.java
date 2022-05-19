@@ -13,6 +13,7 @@ import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.check.MontiArcTypeCalculator;
 import montiarc.util.Error;
+import montiarc.util.StatechartError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,10 +62,10 @@ class OriginalStatechartCoCosTest extends AbstractCoCoTest {
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-      Arguments.of("LowercaseStateName.arc", new Error[] {ExternalErrors.CAPITAL_STATE_NAMES}),
-      Arguments.of("NoUniqueStates.arc", new Error[] {ExternalErrors.UNIQUE_STATES}),
-      Arguments.of("TransitionSourceMissing.arc", new Error[] {ExternalErrors.TRANSITION_SOURCE_EXISTS}),
-      Arguments.of("TransitionTargetMissing.arc", new Error[] {ExternalErrors.TRANSITION_TARGET_EXISTS})
+      Arguments.of("LowercaseStateName.arc", new Error[] {StatechartError.CAPITAL_STATE_NAMES}),
+      Arguments.of("NoUniqueStates.arc", new Error[] {StatechartError.UNIQUE_STATES}),
+      Arguments.of("TransitionSourceMissing.arc", new Error[] {StatechartError.TRANSITION_SOURCE_EXISTS}),
+      Arguments.of("TransitionTargetMissing.arc", new Error[] {StatechartError.TRANSITION_TARGET_EXISTS})
     );
   }
 
@@ -120,15 +121,15 @@ class OriginalStatechartCoCosTest extends AbstractCoCoTest {
   protected static Stream<Arguments> booleanPreconditionsModelAndExpectedErrorProvider() {
     return Stream.of(
       Arguments.of("transitionPreconditionsAreBoolean/InvalidBraceExpression.arc",
-        new Error[]{ExternalErrors.PRECONDITION_IS_NOT_BOOLEAN}),
+        new Error[]{StatechartError.PRECONDITION_IS_NOT_BOOLEAN}),
       Arguments.of("transitionPreconditionsAreBoolean/WrongLiteral.arc",
-        new Error[]{ExternalErrors.PRECONDITION_IS_NOT_BOOLEAN}),
+        new Error[]{StatechartError.PRECONDITION_IS_NOT_BOOLEAN}),
       Arguments.of("transitionPreconditionsAreBoolean/WrongParameter.arc",
-        new Error[]{ExternalErrors.PRECONDITION_IS_NOT_BOOLEAN}),
+        new Error[]{StatechartError.PRECONDITION_IS_NOT_BOOLEAN}),
       Arguments.of("transitionPreconditionsAreBoolean/WrongPort.arc",
-        new Error[]{ExternalErrors.PRECONDITION_IS_NOT_BOOLEAN}),
+        new Error[]{StatechartError.PRECONDITION_IS_NOT_BOOLEAN}),
       Arguments.of("transitionPreconditionsAreBoolean/WrongVariable.arc",
-        new Error[]{ExternalErrors.PRECONDITION_IS_NOT_BOOLEAN})
+        new Error[]{StatechartError.PRECONDITION_IS_NOT_BOOLEAN})
     );
   }
 
@@ -156,7 +157,7 @@ class OriginalStatechartCoCosTest extends AbstractCoCoTest {
   protected static Stream<Arguments> atLeastOneInitialStateModelAndExpectedErrorProvider() {
     return Stream.of(
       Arguments.of("atLeastOneInitialState/NoInitialState.arc",
-        new Error[]{ExternalErrors.MISSING_INITIAL_STATE})
+        new Error[]{StatechartError.MISSING_INITIAL_STATE})
     );
   }
 
@@ -177,7 +178,7 @@ class OriginalStatechartCoCosTest extends AbstractCoCoTest {
   protected static Stream<Arguments> anteBlockAndNormalStateModelAndExpectedErrorProvider() {
     return Stream.of(
       Arguments.of("anteBlocksOnlyForInitialStates/AnteBeforeNormalStates.arc",
-        new Error[]{ExternalErrors.ANTE_NOT_AT_INITIAL, ExternalErrors.ANTE_NOT_AT_INITIAL})
+        new Error[]{StatechartError.ANTE_NOT_AT_INITIAL, StatechartError.ANTE_NOT_AT_INITIAL})
     );
   }
 
@@ -189,37 +190,5 @@ class OriginalStatechartCoCosTest extends AbstractCoCoTest {
     checker.addCoCo(new TransitionPreconditionsAreBoolean(new MontiArcTypeCalculator()));
     checker.addCoCo(new AtLeastOneInitialState());
     checker.addCoCo(new AnteBlocksOnlyForInitialStates());
-  }
-
-  /**
-   * wraps the error messages into enum values, so they can be used in combination with the existing test infrastructure
-   */
-  enum ExternalErrors implements Error {
-    UNIQUE_STATES(UniqueStates.ERROR_CODE),
-    TRANSITION_SOURCE_EXISTS(TransitionSourceTargetExists.SOURCE_ERROR_CODE),
-    TRANSITION_TARGET_EXISTS(TransitionSourceTargetExists.TARGET_ERROR_CODE),
-    CAPITAL_STATE_NAMES(CapitalStateNames.ERROR_CODE),
-    PACKAGE_CORRESPONDS_TO_FOLDERS(PackageCorrespondsToFolders.ERROR_CODE),
-    SC_FILE_EXTENSION(SCFileExtension.ERROR_CODE),
-    SC_NAME_IS_ARTIFACT_NAME(SCNameIsArtifactName.ERROR_CODE),
-    PRECONDITION_IS_NOT_BOOLEAN(TransitionPreconditionsAreBoolean.ERROR_CODE),
-    MISSING_INITIAL_STATE(AtLeastOneInitialState.ERROR_CODE),
-    ANTE_NOT_AT_INITIAL(AnteBlocksOnlyForInitialStates.ERROR_CODE);
-
-    ExternalErrors(String code){
-      this.code = code;
-    }
-
-    final String code;
-
-    @Override
-    public String getErrorCode() {
-      return code;
-    }
-
-    @Override
-    public String printErrorMessage() {
-      return "this method is not used for this test";
-    }
   }
 }

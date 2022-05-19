@@ -2,7 +2,7 @@
 package montiarc._cocos;
 
 import arcautomaton._cocos.ExpressionStatementWellFormedness;
-import montiarc.util.ArcError;
+import montiarc.util.ArcAutomataError;
 import montiarc.util.Error;
 import com.google.common.base.Preconditions;
 import montiarc.check.MontiArcTypeCalculator;
@@ -43,7 +43,7 @@ class ExpressionStatementWellFormednessTest extends AbstractCoCoTest {
     return Stream.of(
       // arg("WithComputeBlockAndIncorrectExpressions.arc", ArcError.MALFORMED_EXPRESSION, ArcError.MALFORMED_EXPRESSION), // Not included as ArcCompute (currently) is not part of MontiArc
       arg("WithAutomatonAndIncorrectExpressions.arc",
-        ArcError.MALFORMED_EXPRESSION, ArcError.MALFORMED_EXPRESSION)
+          ArcAutomataError.MALFORMED_EXPRESSION, ArcAutomataError.MALFORMED_EXPRESSION)
     );
   }
 

@@ -3,9 +3,9 @@ package basicmodeautomata._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
-import montiarc.util.ArcError;
 import basicmodeautomata.BasicModeAutomataMill;
 import basicmodeautomata._ast.ASTModeAutomaton;
+import montiarc.util.BasicModeAutomataError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 
@@ -19,7 +19,7 @@ public class OneModeAutomatonAtMax implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(component);
     Optional<ASTModeAutomaton> excess = BasicModeAutomataMill.getModeTool().streamAutomata(component).skip(1).findFirst();
     if(excess.isPresent()){
-      Log.error(ArcError.MULTIPLE_MODE_AUTOMATA.format(), excess.get().get_SourcePositionStart());
+      Log.error(BasicModeAutomataError.MULTIPLE_MODE_AUTOMATA.format(), excess.get().get_SourcePositionStart());
     }
   }
 }

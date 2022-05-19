@@ -12,7 +12,7 @@ import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc.generator.util.Identifier;
-import montiarc.generator.util.MA2JavaError;
+import montiarc.util.MA2JavaError;
 import montiarc.generator.helper.ComponentHelper;
 import org.codehaus.commons.nullanalysis.NotNull;
 

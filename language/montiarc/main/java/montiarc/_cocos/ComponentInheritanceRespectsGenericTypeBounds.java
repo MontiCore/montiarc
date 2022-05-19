@@ -13,7 +13,7 @@ import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import genericarc.check.TypeExprOfGenericComponent;
-import montiarc.util.ArcError;
+import montiarc.util.GenericArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
@@ -58,7 +58,8 @@ public class ComponentInheritanceRespectsGenericTypeBounds implements ArcBasisAS
     List<TypeVarSymbol> parentSymTypeParameters = parentSym.getTypeParameters();
     List<SymTypeExpression> args = parentExpr.getBindingsAsList();
     if (parentSymTypeParameters.size() > args.size()) {
-      Log.error(ArcError.TOO_FEW_TYPE_ARGUMENTS.format(args.size(), parentExpr.printName(), parentSymTypeParameters.size()), node.get_SourcePositionStart(),
+      Log.error(
+          GenericArcError.TOO_FEW_TYPE_ARGUMENTS.format(args.size(), parentExpr.printName(), parentSymTypeParameters.size()), node.get_SourcePositionStart(),
           node.get_SourcePositionEnd());
     }
   }
@@ -78,7 +79,8 @@ public class ComponentInheritanceRespectsGenericTypeBounds implements ArcBasisAS
     List<ASTMCTypeArgument> args = ((ASTMCBasicGenericType) node.getHead().getParent()).getMCTypeArgumentList();
 
     if (parentSymTypeParameters.size() < args.size()) {
-      Log.error(ArcError.TOO_MANY_TYPE_ARGUMENTS.format(args.size(), parentSym.getName(), parentSymTypeParameters.size()), node.get_SourcePositionStart(),
+      Log.error(
+          GenericArcError.TOO_MANY_TYPE_ARGUMENTS.format(args.size(), parentSym.getName(), parentSymTypeParameters.size()), node.get_SourcePositionStart(),
           node.get_SourcePositionEnd());
     }
   }
@@ -92,7 +94,8 @@ public class ComponentInheritanceRespectsGenericTypeBounds implements ArcBasisAS
       if (typeVarBinding.isPresent()) {
         for (SymTypeExpression bound : typeVar.getSuperTypesList()) {
           if (!TypeCheck.compatible(bound, typeVarBinding.get())) {
-            Log.error(ArcError.TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print(), typeVar.getName(), parentSym.getName()),
+            Log.error(
+                GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print(), typeVar.getName(), parentSym.getName()),
                 parentPositionOrElseTypePosition(node));
           }
         }

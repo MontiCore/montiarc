@@ -13,7 +13,7 @@ import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.se_rwth.commons.logging.Log;
 import genericarc.check.TypeExprOfGenericComponent;
-import montiarc.util.ArcError;
+import montiarc.util.GenericArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
@@ -43,7 +43,8 @@ public class ComponentInstantiationRespectsGenericTypeBounds implements ArcBasis
       if (typeVarBinding.isPresent()) {
         for (SymTypeExpression bound : typeVar.getSuperTypesList()) {
           if (!TypeCheck.compatible(bound, typeVarBinding.get())) {
-            Log.error(ArcError.TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print(), typeVar.getName(), compTypeSymbol.getName()),
+            Log.error(
+                GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print(), typeVar.getName(), compTypeSymbol.getName()),
                 astInstantiation.get_SourcePositionStart());
           }
         }
@@ -98,7 +99,8 @@ public class ComponentInstantiationRespectsGenericTypeBounds implements ArcBasis
     List<TypeVarSymbol> parentSymTypeParameters = compTypeSymbol.getTypeParameters();
     List<SymTypeExpression> args = compTypeExpr.getBindingsAsList();
     if (parentSymTypeParameters.size() > args.size()) {
-      Log.error(ArcError.TOO_FEW_TYPE_ARGUMENTS.format(args.size(), compTypeExpr.printName(), parentSymTypeParameters.size()), node.get_SourcePositionStart(),
+      Log.error(
+          GenericArcError.TOO_FEW_TYPE_ARGUMENTS.format(args.size(), compTypeExpr.printName(), parentSymTypeParameters.size()), node.get_SourcePositionStart(),
           node.get_SourcePositionEnd());
     }
   }
@@ -117,7 +119,8 @@ public class ComponentInstantiationRespectsGenericTypeBounds implements ArcBasis
     List<ASTMCTypeArgument> args = ((ASTMCBasicGenericType) node.getMCType()).getMCTypeArgumentList();
 
     if (parentSymTypeParameters.size() < args.size()) {
-      Log.error(ArcError.TOO_MANY_TYPE_ARGUMENTS.format(args.size(), compTypeSymbol.getName(), parentSymTypeParameters.size()), node.get_SourcePositionStart(),
+      Log.error(
+          GenericArcError.TOO_MANY_TYPE_ARGUMENTS.format(args.size(), compTypeSymbol.getName(), parentSymTypeParameters.size()), node.get_SourcePositionStart(),
           node.get_SourcePositionEnd());
     }
   }

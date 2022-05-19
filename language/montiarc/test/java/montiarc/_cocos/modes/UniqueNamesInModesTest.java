@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
-import static montiarc.util.ArcError.*;
+import static montiarc.util.BasicModeAutomataError.*;
 
 public class UniqueNamesInModesTest extends AbstractCoCoTest {
   @Override

@@ -3,10 +3,10 @@ package basicmodeautomata._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
-import montiarc.util.ArcError;
 import basicmodeautomata.BasicModeAutomataMill;
 import basicmodeautomata._ast.ASTModeAutomaton;
 import basicmodeautomata._symboltable.ModeSymbol;
+import montiarc.util.BasicModeAutomataError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 
@@ -24,6 +24,6 @@ public class InitialModeExists implements ArcBasisASTComponentTypeCoCo {
         .streamAutomata(component)
         .map(ASTModeAutomaton::getInitialMode)
         .filter(d -> !symbolNames.contains(d.getMode()))
-        .forEach(d -> Log.error(ArcError.INITIAL_MODE_DOES_NOT_EXIST.format(d.getMode(), component.getName()), d.get_SourcePositionStart()));
+        .forEach(d -> Log.error(BasicModeAutomataError.INITIAL_MODE_DOES_NOT_EXIST.format(d.getMode(), component.getName()), d.get_SourcePositionStart()));
   }
 }

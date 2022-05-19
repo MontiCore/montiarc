@@ -2,27 +2,25 @@
 package montiarc.util;
 
 /**
- * The enum of all montiarc errors, which extends the mixing
+ * The enum of all montiarc automaton errors, which extends the mixing
  * interface {@link Error}.
  * <p>
- * Assigned code range: 0xC1000 - 0xC1099
+ * Assigned code range: 0xC1400 - 0xC1449
  */
-public enum MontiArcError implements Error {
-  COMPONENT_AND_FILE_NAME_DIFFER("0xC1000", "The component name '%s' does not correspond to the file name '%s'."),
-  COMPONENT_AND_FILE_PACKAGE_DIFFER("0xC1001", "The package name '%s' does not correspond to the file path '%s'."),
-  TOOL_PARSE_IOEXCEPTION("0xC1002", "Could not parse the file \" %s \"."),
-  TOOL_FILE_WALK_IOEXCEPTION("0xC1003", "Could not access the directory \" %s \" or one of its subdirectories."),
-  CLI_INPUT_OPTION_MISSING("0xC1004", "Option '%s' is missing, but an input is required"),
-  CLI_INPUT_FILE_NOT_EXIST("0xC1069", "Input file '%s' does not exist\n"),
-  CLI_OPTION_AMBIGUOUS("0xC1006", "Option '%s' does not match any valid option"),
-  CLI_OPTION_UNRECOGNIZED("0xC1007", "Unrecognized option '%s'"),
-  CLI_OPTION_MISSING("0xC1008", "Options [%s] are missing, but are required"),
-  CLI_ARGUMENT_MISSING("0xC1009", "Option '%s' is missing an argument");
+public enum ArcAutomataError implements Error {
+  MALFORMED_EXPRESSION("0xC1401", "The expression at '%s' is malformed and can not be evaluated."),
+  MANY_INITIAL_STATES("0xC1402",
+      "Automata may not have more than one initial state, but the one of %s has %d: %s and %s"),
+  INPUT_PORT_IN_INITIAL_OUT_DECL("0xC1403", "Input port '%s' is referenced in the initial output declaration. This " +
+      "is illegal as input port values are undefined at the point of component initialization."),
+  PORT_NOT_WRITTEN_IN_TRANSITION("0xC1404", "There is a transition, which, when followed, leaves port '%s' without a value."),
+  PORT_NOT_WRITTEN_IN_STATE("0xC1405", "When staying in state '%s' (which might happen, because there is no unconditional" +
+      "transition leaving that state), port '%s' is left without a value");
 
   private final String errorCode;
   private final String errorMessage;
 
-  MontiArcError(String errorCode, String errorMessage) {
+  ArcAutomataError(String errorCode, String errorMessage) {
     assert (errorCode != null);
     assert (errorMessage != null);
     assert (ERROR_CODE_PATTERN.matcher(errorCode).matches());

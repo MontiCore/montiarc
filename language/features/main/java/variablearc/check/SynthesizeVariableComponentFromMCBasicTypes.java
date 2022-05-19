@@ -12,7 +12,6 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.IVariableArcScope;
 
 import java.util.List;
-import java.util.Optional;
 
 public class SynthesizeVariableComponentFromMCBasicTypes extends SynthesizeComponentFromMCBasicTypes {
 

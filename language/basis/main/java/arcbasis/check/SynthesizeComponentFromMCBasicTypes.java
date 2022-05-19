@@ -12,7 +12,6 @@ import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * A visitor (a handler indeed) that creates {@link CompTypeExpression}s from {@link ASTMCQualifiedType}s, given that

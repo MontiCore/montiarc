@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
-import static montiarc.util.ArcError.*;
+import static montiarc.util.BasicModeAutomataError.*;
 
 /**
  * Test for all cocos listed in {@link #registerCoCos(MontiArcCoCoChecker)}

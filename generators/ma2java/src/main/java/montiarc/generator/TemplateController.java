@@ -8,7 +8,7 @@ import de.monticore.ast.ASTNode;
 import de.monticore.generating.templateengine.reporting.Reporting;
 import de.monticore.io.FileReaderWriter;
 import de.se_rwth.commons.logging.Log;
-import montiarc.generator.util.MA2JavaError;
+import montiarc.util.MA2JavaError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.nio.file.Path;

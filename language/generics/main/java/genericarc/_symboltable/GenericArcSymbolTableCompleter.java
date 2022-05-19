@@ -11,7 +11,6 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
-import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import de.se_rwth.commons.logging.Log;

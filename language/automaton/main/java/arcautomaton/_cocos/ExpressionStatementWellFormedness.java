@@ -3,8 +3,8 @@ package arcautomaton._cocos;
 
 import arcautomaton.ArcAutomatonMill;
 import arcautomaton._visitor.ExpressionRootFinder;
+import montiarc.util.ArcAutomataError;
 import arcbasis.check.IArcTypeCalculator;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
@@ -60,7 +60,7 @@ public class ExpressionStatementWellFormedness implements MCStatementsBasisASTMC
     TypeCheckResult result = this.getTypeCalculator().deriveType(expression);
 
     if (!result.isPresentCurrentResult()) {
-      Log.error(ArcError.MALFORMED_EXPRESSION.format(expression.get_SourcePositionStart()),
+      Log.error(ArcAutomataError.MALFORMED_EXPRESSION.format(expression.get_SourcePositionStart()),
         expression.get_SourcePositionStart(), expression.get_SourcePositionEnd()
       );
     }
