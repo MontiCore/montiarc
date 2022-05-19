@@ -21,6 +21,7 @@ rootProject.name = 'montiarc'
 
 includeBuild("build-logic")
 
+include(":base-platform")
 include(":language")
 include(":language:basis")
 include(":language:automaton")

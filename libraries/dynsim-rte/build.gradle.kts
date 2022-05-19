@@ -5,14 +5,11 @@ plugins {
   id("montiarc.build.java-library")
 }
 
-val kotlinx_version: String by project
-val kotlin_version: String by project
-
 dependencies {
-  // Kotlin dependencies
-  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_version")
-  testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
-  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+  implementation("${libs.kotlinCoroutines}:${libs.kotlinxVersion}")
+  implementation("${libs.kotlinStdlib}:${libs.kotlinVersion}")
+
+  testImplementation("${libs.kotlinJunit}:${libs.kotlinVersion}")
 }
 
 java {

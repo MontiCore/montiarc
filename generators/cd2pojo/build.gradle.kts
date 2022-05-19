@@ -1,15 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-val mc_version: String by project
-val se_commons_version: String by project
-val janino_version: String by project
-val guava_version: String by project
-val groovy_version: String by project
-val cd4a_version: String by project
-val junit_jupiter_version: String by project
-
 plugins {
-  java
   id("com.github.johnrengelman.shadow") // Version is declared in settings.gradle
   id("montiarc.build.java-library")
 }
@@ -21,24 +12,20 @@ tasks.test {
 }
 
 dependencies {
-  implementation("de.monticore:monticore-runtime:$mc_version")
-  implementation("de.monticore:monticore-grammar:$mc_version")
-  implementation("de.monticore:class2mc:$mc_version")
-  implementation("de.monticore.lang:cd4analysis:$cd4a_version")
-  implementation("de.se_rwth.commons:se-commons-groovy:$se_commons_version")
-  implementation("org.codehaus.janino:janino:$janino_version")
-  implementation("com.google.guava:guava:$guava_version")
-  implementation("com.github.javaparser:javaparser-core:3.18.0")
-  implementation("org.codehaus.groovy:groovy:$groovy_version")
+  api("${libs.monticoreCD4Analysis}:${libs.monticoreVersion}")
+  api("${libs.monticoreGrammar}:${libs.monticoreVersion}")
+  api("${libs.monticoreRuntime}:${libs.monticoreVersion}")
 
-  testImplementation("de.monticore:monticore-runtime:$mc_version") {
-    capabilities {
-      requireCapability("de.monticore:monticore-runtime-tests")
-    }
-  }
-  testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
-  testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version")
+  implementation("${libs.codehausJanino}:${libs.codehausVersion}")
+  implementation("${libs.codehausGroovy}:${libs.codehausVersion}")
+  implementation("${libs.guava}:${libs.guavaVersion}")
+  implementation("${libs.javaParser}:${libs.javaParserVersion}")
+  implementation("${libs.monticoreClass2MC}:${libs.monticoreVersion}")
+  implementation("${libs.seCommonsGroovy}:${libs.monticoreVersion}")
+
+  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
+  testImplementation("${libs.junitParams}:${libs.junitVersion}")
+  testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
 java {

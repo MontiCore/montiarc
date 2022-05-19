@@ -4,14 +4,6 @@ plugins {
   id("montiarc.build.language")
 }
 
-val mc_version: String by project
-val se_commons_version: String by project
-val guava_version: String by project
-val junit_jupiter_version: String by project
-val antlr_version: String by project
-val janino_version: String by project
-val mockito_version: String by project
-
 buildDir = file(project(":language").buildDir.toString() + "/${project.name}")
 
 configurations {
@@ -22,25 +14,22 @@ configurations {
 }
 
 dependencies {
-  //Grammar dependencies
-  grammar("de.monticore:monticore-grammar:$mc_version") {
-    capabilities {
-      requireCapability("de.monticore:monticore-grammar-grammars")
-    }
+  grammar("${libs.monticoreGrammar}:${libs.monticoreVersion}") {
+    capabilities { requireCapability(libs.mcGrammarsCapability) }
   }
 
-  //MontiCore dependencies
-  api("de.monticore:monticore-grammar:$mc_version")
+  api(platform(project(":base-platform")))
+  api(libs.monticoreGrammar)
+  api(libs.seCommonsLogging)
 
-  //Other dependencies
-  api("de.se_rwth.commons:se-commons-logging:$se_commons_version")
-  implementation("com.google.guava:guava:$guava_version")
-  implementation("org.apache.commons:commons-lang3:3.9")
-  implementation("org.codehaus.janino:janino:$janino_version")
-  testImplementation("org.mockito:mockito-core:$mockito_version")
-  testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
-  testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version")
+  implementation("${libs.apache}:${libs.apacheVersion}")
+  implementation("${libs.guava}:${libs.guavaVersion}")
+  implementation("${libs.codehausJanino}:${libs.codehausVersion}")
+
+  testImplementation("${libs.mockito}:${libs.mockitoVersion}")
+  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
+  testImplementation("${libs.junitParams}:${libs.junitVersion}")
+  testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
 tasks.register<de.monticore.MCTask>("generateArcBasis") {

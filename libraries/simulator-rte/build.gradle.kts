@@ -1,19 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-  id("java-library")
   id("montiarc.build.java-library")
 }
 
-val se_commons_version: String by project
-val mockito_version: String by project
-val junit_jupiter_version: String by project
-
 dependencies {
-  api("de.se_rwth.commons:se-commons-logging:$se_commons_version")
-  testImplementation("org.mockito:mockito-core:$mockito_version")
-  testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version")
+  implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
+
+  testImplementation("${libs.mockito}:${libs.mockitoVersion}")
+  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
+  testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
 sourceSets {

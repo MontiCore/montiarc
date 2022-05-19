@@ -1,12 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-val se_commons_version: String by project
-val junit_jupiter_version: String by project
-val logback_version: String by project
-val guava_version: String by project
-val janino_version: String by project
-val assertj_version: String by project
-
 plugins {
   id("montiarc.build.integration-test")
 }
@@ -25,45 +18,28 @@ sourceSets {
   }
 }
 
-configurations {
-  create("generateCD")
-  create("generateMA")
-}
+val generateCD = configurations.create("generateCD")
+val generateMA = configurations.create("generateMA")
 
 dependencies {
-  val generateCD = configurations["generateCD"]
-  val generateMA = configurations["generateMA"]
-
-  // MontiCore dependencies
-  implementation("de.se_rwth.commons:se-commons-logging:$se_commons_version")
-  implementation("de.se_rwth.commons:se-commons-utilities:$se_commons_version")
-
-  // Internal dependencies
   generateCD(project(":generators:cd2pojo"))
+  generateCD("${libs.logbackCore}:${libs.logbackVersion}")
+  generateCD("${libs.logbackClassic}:${libs.logbackVersion}")
   generateMA(project(":generators:ma2java"))
+  generateMA("${libs.logbackCore}:${libs.logbackVersion}")
+  generateMA("${libs.logbackClassic}:${libs.logbackVersion}")
 
   implementation(project(":language:montiarc"))
   implementation(project(":libraries:majava-rte"))
+  implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
+  implementation("${libs.seCommonsUtils}:${libs.monticoreVersion}")
+  implementation("${libs.guava}:${libs.guavaVersion}")
+  implementation("${libs.codehausJanino}:${libs.codehausVersion}")
 
-  // Guava
-  implementation("com.google.guava:guava:$guava_version")
-
-  // Janino
-  implementation("org.codehaus.janino:janino:$janino_version")
-
-  // Other dependencies
-  testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
-  testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version")
-
-  // AssertJ
-  testImplementation("org.assertj:assertj-core:$assertj_version")
-
-  // loggers for generators
-  generateCD("ch.qos.logback:logback-core:$logback_version")
-  generateCD("ch.qos.logback:logback-classic:$logback_version")
-  generateMA("ch.qos.logback:logback-core:$logback_version")
-  generateMA("ch.qos.logback:logback-classic:$logback_version")
+  testImplementation("${libs.assertj}:${libs.assertjVersion}")
+  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
+  testImplementation("${libs.junitParams}:${libs.junitVersion}")
+  testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
 tasks.test {

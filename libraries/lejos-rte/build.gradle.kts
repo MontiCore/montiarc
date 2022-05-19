@@ -1,14 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-val se_commons_version: String by project
-val lejos_version: String by project
-val junit_jupiter_version: String by project
-val logback_version: String by project
-val librarymodels_classifier: String by project
-val mockito_version: String by project
-
 plugins {
-  java
   id("montiarc.build.java-library")
 }
 
@@ -24,14 +16,14 @@ sourceSets {
   main {
     java.srcDirs(hwcDir, genDir)
   }
-  create("librarymodels") {
+  create("models") {
     resources.srcDir("$projectDir/src/main/resources")
   }
 }
 
 java {
-  registerFeature(librarymodels_classifier) {
-    usingSourceSet(sourceSets["librarymodels"])
+  registerFeature("models") {
+    usingSourceSet(sourceSets["models"])
   }
 }
 
@@ -40,25 +32,20 @@ val generateCD = configurations.create("generateCD")
 val generateMA = configurations.create("generateMA")
 
 dependencies {
-  // MontiCore dependencies
-  implementation("de.se_rwth.commons:se-commons-logging:$se_commons_version")
-
-  // Internal dependencies
   generateCD(project(":generators:cd2pojo"))
+  generateCD("${libs.logbackCore}:${libs.logbackVersion}")
+  generateCD("${libs.logbackClassic}:${libs.logbackVersion}")
   generateMA(project(":generators:ma2java"))
-  implementation(project(":libraries:majava-rte"))
+  generateMA("${libs.logbackCore}:${libs.logbackVersion}")
+  generateMA("${libs.logbackClassic}:${libs.logbackVersion}")
 
-  // Other dependencies
-  implementation("lejos.nxt:classes:$lejos_version")
-  testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
-  testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
-  testImplementation("org.mockito:mockito-core:$mockito_version")
+  api(project(":libraries:majava-rte"))
+  api("${libs.lejos}:${libs.lejosVersion}")
+  implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
 
-  // Loggers for generators
-  generateCD("ch.qos.logback:logback-core:$logback_version")
-  generateCD("ch.qos.logback:logback-classic:$logback_version")
-  generateMA("ch.qos.logback:logback-core:$logback_version")
-  generateMA("ch.qos.logback:logback-classic:$logback_version")
+  testImplementation("${libs.mockito}:${libs.mockitoVersion}")
+  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
+  testImplementation("${libs.junitParams}:${libs.junitVersion}")
 }
 
 val genCdTask = tasks.register<JavaExec>("generateCD") {
@@ -99,4 +86,4 @@ val genMaTask = tasks.register<JavaExec>("generateMontiArc") {
 
 genMaTask { dependsOn(genCdTask) }
 tasks.compileJava { dependsOn(genMaTask) }
-tasks.named("librarymodelsJar") { dependsOn(tasks.compileJava) }
+tasks.named("modelsJar") { dependsOn(tasks.compileJava) }

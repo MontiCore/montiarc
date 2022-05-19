@@ -4,52 +4,37 @@ plugins {
   id("montiarc.build.language")
 }
 
-val mc_version: String by project
-val se_commons_version: String by project
-val guava_version: String by project
-val junit_jupiter_version: String by project
-val antlr_version: String by project
-val janino_version: String by project
-val mockito_version: String by project
-val grammars_classifier: String by project
-val assertj_version: String by project
-
 buildDir = file(project(":language").buildDir.toString() + "/${project.name}")
 
 dependencies {
-  //Grammar dependencies
-  grammar("de.monticore:monticore-grammar:$mc_version") {
-    capabilities {
-      requireCapability("de.monticore:monticore-grammar-grammars")
-    }
+  grammar("${libs.monticoreGrammar}:${libs.monticoreVersion}") {
+    capabilities { requireCapability(libs.mcGrammarsCapability) }
   }
-  grammar("de.monticore.lang:statecharts:$mc_version") {
-    capabilities {
-      requireCapability("de.monticore.lang:statecharts-$grammars_classifier")
-    }
+  grammar("${libs.monticoreStatecharts}:${libs.monticoreVersion}") {
+    capabilities { requireCapability(libs.scGrammarsCapability) }
   }
 
-  //MontiCore dependencies
   api(project(":language:core"))
   api(project(":language:compute"))
   api(project(":language:features"))
   api(project(":language:generics"))
   api(project(":language:modes"))
 
-  //Other dependencies
-  implementation("de.monticore:class2mc:$mc_version")
-  implementation("com.google.guava:guava:$guava_version")
-  implementation("org.codehaus.janino:janino:$janino_version")
+  implementation(libs.monticoreClass2MC)
+  implementation("${libs.guava}:${libs.guavaVersion}")
+  implementation("${libs.codehausJanino}:${libs.codehausVersion}")
+
   testImplementation((project(":language:basis"))) {
     capabilities {
       requireCapability("montiarc.language:basis-tests")
     }
   }
-  testImplementation("org.assertj:assertj-core:$assertj_version")
-  testImplementation("org.mockito:mockito-core:$mockito_version")
-  testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
-  testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version")
+
+  testImplementation("${libs.assertj}:${libs.assertjVersion}")
+  testImplementation("${libs.mockito}:${libs.mockitoVersion}")
+  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
+  testImplementation("${libs.junitParams}:${libs.junitVersion}")
+  testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
 tasks.register<de.monticore.MCTask>("generateMontiArc") {

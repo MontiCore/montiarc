@@ -1,11 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-val se_commons_version: String by project
-val junit_jupiter_version: String by project
-val logback_version: String by project
-
 plugins {
-  java
   id("montiarc.build.java-library")
 }
 
@@ -26,26 +21,20 @@ val generateCD = configurations.create("generateCD")
 val generateMA = configurations.create("generateMA")
 
 dependencies {
-  // MontiCore dependencies
-  implementation("de.se_rwth.commons:se-commons-logging:$se_commons_version")
-  implementation("de.se_rwth.commons:se-commons-utilities:$se_commons_version")
-
-  // Internal dependencies
   generateCD(project(":generators:cd2pojo"))
+  generateCD("${libs.logbackCore}:${libs.logbackVersion}")
+  generateCD("${libs.logbackClassic}:${libs.logbackVersion}")
   generateMA(project(":generators:ma2java"))
-  implementation(project(":language:montiarc"))
-  implementation(project(":libraries:majava-rte"))
-  implementation(project(":libraries:lejos-rte"))
+  generateMA("${libs.logbackCore}:${libs.logbackVersion}")
+  generateMA("${libs.logbackClassic}:${libs.logbackVersion}")
 
-  // Other dependencies
-  testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version")
-  testImplementation("org.junit.jupiter:junit-jupiter-params:$junit_jupiter_version")
+  api(project(":libraries:majava-rte"))
+  api(project(":libraries:lejos-rte"))
+  implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
+  implementation("${libs.seCommonsUtils}:${libs.monticoreVersion}")
 
-  // Loggers for generators
-  generateCD("ch.qos.logback:logback-core:$logback_version")
-  generateCD("ch.qos.logback:logback-classic:$logback_version")
-  generateMA("ch.qos.logback:logback-core:$logback_version")
-  generateMA("ch.qos.logback:logback-classic:$logback_version")
+  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
+  testImplementation("${libs.junitParams}:${libs.junitVersion}")
 }
 
 val genCdTask = tasks.register<JavaExec>("generateCD") {

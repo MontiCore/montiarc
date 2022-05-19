@@ -1,4 +1,4 @@
-build
+build-logic/build
 target
 .project
 .settings
