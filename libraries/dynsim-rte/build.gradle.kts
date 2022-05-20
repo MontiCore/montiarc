@@ -6,9 +6,9 @@ plugins {
 }
 
 dependencies {
+  api(project(":language:mode-transitions"))
   implementation("${libs.kotlinCoroutines}:${libs.kotlinxVersion}")
   implementation("${libs.kotlinStdlib}:${libs.kotlinVersion}")
-
   testImplementation("${libs.kotlinJunit}:${libs.kotlinVersion}")
 }
 

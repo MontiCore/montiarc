@@ -132,8 +132,8 @@ ${"  "}<@addConnector connector=connector postfix=", permanent = false"/><#rt>
     modeAutomaton.addTransition("${transition.getSourceName()}", "${transition.getTargetName()}"<#rt>
     <#if util.getStateTool().getReaction(transition).isPresent()>
         , reaction = {<#lt>
-        ${util.printStatement(3, util.getStateTool().getReaction(transition).get())}
-    }
+        ${util.printStatement(3, util.getStateTool().getReaction(transition).get())}<#lt>
+    }<#rt>
     </#if>
     <#list util.getStateTool().getTriggers(transition)>
         , trigger = setOf(<#t>

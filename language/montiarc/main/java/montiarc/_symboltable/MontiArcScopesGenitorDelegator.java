@@ -3,6 +3,7 @@ package montiarc._symboltable;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisScopesGenitor;
+import openmodeautomata._symboltable.OpenModeAutomataScopesGenitor;
 import variablearc.VariableArcMill;
 import variablearc._symboltable.VariableArcScopesGenitor;
 
@@ -40,5 +41,12 @@ public class MontiArcScopesGenitorDelegator extends MontiArcScopesGenitorDelegat
     traverser.setVariableArcHandler(genitor);
     traverser.add4VariableArc(genitor);
     traverser.add4ArcBasis(genitor);
+  }
+
+  protected void initOpenModeAutomataGenitor() {
+    // the mill does not provide the genitor
+    OpenModeAutomataScopesGenitor genitor = new OpenModeAutomataScopesGenitor();
+    // the genitor does not need to be visited around
+    genitor.run();
   }
 }

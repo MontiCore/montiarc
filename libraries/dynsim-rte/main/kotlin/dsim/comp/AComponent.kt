@@ -11,8 +11,10 @@ import kotlinx.coroutines.coroutineScope
 /**
  * Implementations of atomic Components should inherit from this
  */
-abstract class AComponent(final override val name: String, inPorts: Set<IPort> = setOf(),
-                          outPorts: Set<IPort> = setOf(), ) : IComponent {
+abstract class AComponent(
+    final override val name: String, inPorts: Set<IPort> = setOf(),
+    outPorts: Set<IPort> = setOf(),
+) : IComponent {
 
   init {
     log("component created")
@@ -41,11 +43,13 @@ abstract class AComponent(final override val name: String, inPorts: Set<IPort> =
   protected abstract suspend fun behavior()
 
   override fun getInputPort(name: String): IPort {
-    return this.inputPorts.find { it.name == name } ?: throw NoSuchPortException(name)
+    return this.inputPorts.find { it.name == name }
+        ?: throw NoSuchPortException(name)
   }
 
   override fun getOutputPort(name: String): IPort {
-    return this.outputPorts.find { it.name == name } ?: throw NoSuchPortException(name)
+    return this.outputPorts.find { it.name == name }
+        ?: throw NoSuchPortException(name)
   }
 
   // Reconfiguration Operations===============================================
@@ -87,7 +91,7 @@ abstract class AComponent(final override val name: String, inPorts: Set<IPort> =
     log("removed port $port as output")
   }
 
-    protected suspend fun tickOutputs() {
-      outputPorts.forEach { it.pushMsg(Tick()) }
-    }
+  protected suspend fun tickOutputs() {
+    outputPorts.forEach { it.pushMsg(Tick()) }
+  }
 }

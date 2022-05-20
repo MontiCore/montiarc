@@ -39,7 +39,7 @@ abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigu
    * This should maybe be implemented by something else than a set,
    * since remove-operations are frequent.
    */
-  private val _connectors: MutableCollection<Entry<Connector>> = mutableSetOf()
+  protected val _connectors: MutableCollection<Entry<Connector>> = mutableSetOf()
 
   /**
    * marks ports as deactivated
@@ -184,6 +184,9 @@ abstract class ADecomposedComponent(name: String) : AComponent(name), IReconfigu
     _subcomponents.filter { it.activated }.forEach { it.get().inputPorts.forEach { p -> deactivatePort(p) }}
     _subcomponents.forEach { it.activated = false }
   }
+
+  public fun isActive(subcomponent : ISubcomponent)
+      = _subcomponents.find { it.get() == subcomponent }!!.activated
 
   /**
    * Permanently adds given subcomponent to subcomponents.

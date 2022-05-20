@@ -4,6 +4,7 @@ package montiarc.build
 abstract class Modules {
 
   val apacheVersion = "3.9"
+  val apacheBcelVersion = "6.0"
   val assertjVersion = "3.7.0"
   val codehausVersion = "3.0.7"
   val formatVersion = "1.7"
@@ -20,6 +21,7 @@ abstract class Modules {
   val monticoreVersion = "7.3.0"
 
   val apache = "org.apache.commons:commons-lang3"
+  val apacheBcel = "org.apache.bcel:bcel"
   val assertj = "org.assertj:assertj-core"
   val codehausGroovy = "org.codehaus.groovy:groovy"
   val codehausJanino = "org.codehaus.janino:janino"
