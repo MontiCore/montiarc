@@ -14,12 +14,12 @@ Validate Gradle:
   allow_failure: false
   artifacts:
     paths:
-      - applications/**/target/
+      - application/**/target/
       - build-logic/.gradle/
       - build-logic/build/
-      - generators/**/target/
+      - generator/**/target/
       - language/target/
-      - libraries/**/target/
+      - library/**/target/
       - .gradle/
     expire_in: 1 week
   script:

@@ -7,7 +7,7 @@ plugins {
     id("montiarc.build.repositories")
 }
 
-group = "montiarc.applications"
+group = "montiarc.application"
 
 val hwcDir = "$projectDir/src/main/java"
 val genDir = "$buildDir/generated-sources"
@@ -23,11 +23,11 @@ sourceSets["main"].java {
 val generateKT = configurations.create("generateKT")
 
 dependencies {
-    generateKT(project(":generators:ma2ktln"))
+    generateKT(project(":generator:ma2ktln"))
     generateKT("${libs.logbackCore}:${libs.logbackVersion}")
     generateKT("${libs.logbackClassic}:${libs.logbackVersion}")
 
-    api(project(":libraries:dynsim-rte"))
+    api(project(":library:dynsim-rte"))
     implementation("${libs.kotlinCoroutines}:${libs.kotlinxVersion}")
     implementation("${libs.kotlinStdlib}:${libs.kotlinVersion}")
     implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
@@ -57,4 +57,4 @@ val generateKotlin = tasks.register<JavaExec>("generateKotlin") {
 tasks.compileJava { dependsOn(generateKotlin) }
 tasks.compileKotlin { dependsOn(generateKotlin) }
 
-generateKotlin { mustRunAfter(project(":generators:ma2ktln").tasks.withType(Test::class)) }
+generateKotlin { mustRunAfter(project(":generator:ma2ktln").tasks.withType(Test::class)) }

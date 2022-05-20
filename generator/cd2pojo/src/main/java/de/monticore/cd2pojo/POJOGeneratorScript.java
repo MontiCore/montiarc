@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 /**
  * The script class that integrates with se-groovy-maven plugin to run the
- * pojo generator groovy script during an applications build process to execute
+ * pojo generator groovy script during an application's build process to execute
  * the pojo generator.
  */
 public class POJOGeneratorScript extends Script implements GroovyRunner {

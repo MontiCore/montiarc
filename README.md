@@ -63,7 +63,7 @@ for more information about the gradle build tool.
 # Building and Running Your First Application
 
 This section guides you through building and executing your first application.
-We will use the example under `applications/bumperbot`.
+We will use the example under `application/bumperbot`.
 It consists of only a few components but should showcase the build process.
 
 We support building an application via an IDE
@@ -101,7 +101,7 @@ Exemplary usage:
 
 ```
   java -jar MontiArc.jar -h
-  java -jar MontiArc.jar -mp applications/bumperbot/src/main/resources
+  java -jar MontiArc.jar -mp application/bumperbot/src/main/resources
 ``` 
 
 The [MA2JavaTool](generators/ma2java/src/main/java/montiarc/generator/MontiArcTool.java) extends the MontiArcTool with code generating capabilities. It provides the following options in addition to those defined above:

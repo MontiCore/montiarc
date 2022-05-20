@@ -4,7 +4,7 @@ plugins {
   id("montiarc.build.java-library")
 }
 
-group = "montiarc.applications"
+group = "montiarc.application"
 
 val hwcDir = "$projectDir/src/main/java"
 val genDir = "$buildDir/generated-sources"
@@ -13,47 +13,35 @@ val generatorLogbackConfig = "$projectDir/logback.xml"
 val generatorLogbackOutDir = "$buildDir/logs"
 
 sourceSets["main"].java {
-  srcDir(genDir)
+    srcDir(genDir)
 }
 
 // Configurations
 val generateCD = configurations.create("generateCD")
 val generateMA = configurations.create("generateMA")
-val models = configurations.create("models")
 
 dependencies {
-  generateCD(project(":generators:cd2pojo"))
+  generateCD(project(":generator:cd2pojo"))
   generateCD("${libs.logbackCore}:${libs.logbackVersion}")
   generateCD("${libs.logbackClassic}:${libs.logbackVersion}")
-  generateMA(project(":generators:ma2java"))
+  generateMA(project(":generator:ma2java"))
   generateMA("${libs.logbackCore}:${libs.logbackVersion}")
   generateMA("${libs.logbackClassic}:${libs.logbackVersion}")
 
-  api(project(":libraries:lejos-rte"))
+  api(project(":library:majava-rte"))
+  api(project(":library:lejos-rte"))
   implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
   implementation("${libs.seCommonsUtils}:${libs.monticoreVersion}")
 
   testImplementation("${libs.junitAPI}:${libs.junitVersion}")
   testImplementation("${libs.junitParams}:${libs.junitVersion}")
-
-  models(project(":libraries:lejos-rte")) {
-    capabilities { requireCapability(libs.lejosModels) }
-  }
-}
-
-val unpackLibModelsTask = tasks.register<Sync>("unpackmodels") {
-  dependsOn(models)
-
-  from( models.map { zipTree(it) } )
-  into("$buildDir/models")
-  exclude("META-INF/")
 }
 
 val genCdTask = tasks.register<JavaExec>("generateCD") {
   classpath(generateCD)
   mainClass.set("de.monticore.cd2pojo.POJOGeneratorScript")
 
-  args("$projectDir/src/main/resources, $buildDir/models", genDir, hwcDir)
+  args("$projectDir/src/main/resources", genDir, hwcDir)
   args("-c2mc")
   outputs.dir(genDir)
 
@@ -72,7 +60,7 @@ val genMaTask = tasks.register<JavaExec>("generateMontiArc") {
     jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
   }
 
-  args("-mp", "$projectDir/src/main/resources", "$buildDir/models")
+  args("-mp", "$projectDir/src/main/resources")
   args("-path", genDir)
   args("-o", genDir)
   args("-hwc", hwcDir)
@@ -86,9 +74,8 @@ val genMaTask = tasks.register<JavaExec>("generateMontiArc") {
 }
 
 // Setting up task dependencies
-genCdTask { dependsOn(unpackLibModelsTask) }
 genMaTask { dependsOn(genCdTask) }
 tasks.compileJava { dependsOn(genMaTask) }
 
-genCdTask { mustRunAfter(project(":generators:cd2pojo").tasks.withType(Test::class)) }
-genMaTask { mustRunAfter(project(":generators:ma2java").tasks.withType(Test::class)) }
+genCdTask { mustRunAfter(project(":generator:cd2pojo").tasks.withType(Test::class)) }
+genMaTask { mustRunAfter(project(":generator:ma2java").tasks.withType(Test::class)) }

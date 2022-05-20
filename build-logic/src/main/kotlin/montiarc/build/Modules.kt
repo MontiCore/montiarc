@@ -47,7 +47,7 @@ abstract class Modules {
   val seCommonsLogging = "de.se_rwth.commons:se-commons-logging"
   val seCommonsUtils = "de.se_rwth.commons:se-commons-utilities"
 
-  val lejosModels = "montiarc.libraries:lejos-rte-models"
+  val lejosModels = "montiarc.library:lejos-rte-models"
   val mcGrammarsCapability = "de.monticore:monticore-grammar-grammars"
   val scGrammarsCapability = "de.monticore.lang:statecharts-grammars"
 }

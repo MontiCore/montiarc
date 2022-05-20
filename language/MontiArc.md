@@ -231,7 +231,7 @@ everything is understood as class.
 [mdse]:http://www.se-rwth.de/teams/mdse/
 [MontiCore]:http://www.monticore.de/
 
-[Applications]: ./applications
+[Applications]: ./application
 
 [ASTComponentInstantiation]: ./language/basis/main/java/arcbasis/_ast/ASTComponentInstantiation.java
 [ASTComponentType]: ./language/basis/main/java/arcbasis/_ast/ASTComponentType.java

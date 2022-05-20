@@ -3,7 +3,7 @@ target
 .project
 .settings
 .classpath
-/applications/bumperbot/.gitignore
+/application/bumperbot/.gitignore
 
 \.idea/
 
