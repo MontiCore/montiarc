@@ -2,7 +2,7 @@
 
 plugins {
   id("montiarc.build.java-library")
-  id("com.github.johnrengelman.shadow")
+  id("montiarc.build.shadow")
 }
 
 tasks.named<Test>("test") {
@@ -41,5 +41,3 @@ tasks.shadowJar {
   archiveBaseName.set("MontiArc2Java")
   archiveFileName.set("${archiveBaseName.get()}.${archiveExtension.get()}")
 }
-
-tasks.jar { dependsOn(tasks.shadowJar) }

@@ -2,7 +2,7 @@
 
 plugins {
   id("montiarc.build.kotlin-library")
-  id("com.github.johnrengelman.shadow")
+  id("montiarc.build.shadow")
 }
 
 tasks.test {
@@ -36,5 +36,3 @@ tasks.shadowJar {
   archiveBaseName.set("MontiArc2Kotlin")
   archiveFileName.set("${archiveBaseName.get()}CLI-${archiveVersion.get()}.${archiveExtension.get()}")
 }
-
-tasks.jar { dependsOn(tasks.shadowJar) }

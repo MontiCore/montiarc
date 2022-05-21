@@ -10,6 +10,7 @@ group = "montiarc.build"
 val repo: String = "https://nexus.se.rwth-aachen.de/content/groups/public/"
 
 dependencies {
+  implementation("gradle.plugin.com.github.johnrengelman:shadow:7.1.2")
   implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
   implementation("monticore:monticore.gradle.plugin:7.3.1")
 }

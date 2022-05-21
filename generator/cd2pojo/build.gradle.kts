@@ -2,7 +2,7 @@
 
 plugins {
   id("montiarc.build.java-library")
-  id("com.github.johnrengelman.shadow")
+  id("montiarc.build.shadow")
 }
 
 tasks.test {
@@ -31,7 +31,7 @@ java {
   withSourcesJar()
 }
 
-tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+tasks.shadowJar {
   minimize()
   manifest {
     attributes["Main-Class"] = "de.monticore.cd2pojo.POJOGeneratorScript"
@@ -41,5 +41,3 @@ tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJ
   archiveBaseName.set("CD2POJO")
   archiveFileName.set( "${archiveBaseName.get()}.${archiveExtension.get()}" )
 }
-
-tasks.jar { dependsOn(tasks.shadowJar) }
