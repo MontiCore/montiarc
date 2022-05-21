@@ -3,6 +3,7 @@ package sim.dummys.mergeComp;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sim.error.ISimulationErrorHandler;
 import sim.error.SimpleErrorHandler;
@@ -23,11 +24,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class SimulationTester {
 
+  @BeforeEach
+  public void createDir() throws IOException {
+    new File("target/test-sources/").mkdir();
+  }
+
   @Test
   public void botfirst() {
     IScheduler scheduler = SchedulerFactory.createDefaultScheduler();
     ISimulationErrorHandler errorHandler = new SimpleErrorHandler();
-    BackTrackHandler backTrackHandler = new BackTrackHandler("serialser/");
+    BackTrackHandler backTrackHandler = new BackTrackHandler("target/test-sources/serialser/");
     MergeCompBotFirst mc = new MergeCompBotFirst();
 
     mc.setup(scheduler, errorHandler, backTrackHandler);
@@ -48,7 +54,7 @@ public class SimulationTester {
   public void topFirst() {
     IScheduler scheduler = SchedulerFactory.createDefaultScheduler();
     ISimulationErrorHandler errorHandler = new SimpleErrorHandler();
-    BackTrackHandler backTrackHandler = new BackTrackHandler("serialser/");
+    BackTrackHandler backTrackHandler = new BackTrackHandler("target/test-sources/serialser/");
     MergeCompTopFirst mc = new MergeCompTopFirst();
 
     mc.setup(scheduler, errorHandler, backTrackHandler);
@@ -69,7 +75,7 @@ public class SimulationTester {
   public void concreteInputUnderSpeci() {
     IScheduler scheduler = SchedulerFactory.createDefaultScheduler();
     ISimulationErrorHandler errorHandler = new SimpleErrorHandler();
-    BackTrackHandler backTrackHandler = new BackTrackHandler("serialser/");
+    BackTrackHandler backTrackHandler = new BackTrackHandler("target/test-sources/serialser/");
     MergeCompUnderSpeci mc = new MergeCompUnderSpeci();
 
     mc.setup(scheduler, errorHandler, backTrackHandler);
@@ -87,6 +93,6 @@ public class SimulationTester {
 
   @AfterEach
   public void cleanup() throws IOException {
-    FileUtils.cleanDirectory(new File("serialser"));
+    FileUtils.cleanDirectory(new File("target/test-sources/serialser/"));
   }
 }

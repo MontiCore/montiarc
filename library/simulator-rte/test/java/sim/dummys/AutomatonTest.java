@@ -47,7 +47,7 @@ public class AutomatonTest {
     Tick tick = Tick.get();
 
     DummyAutomaton da = new DummyAutomaton();
-    da.setup(scheduler, errorHandler, new BackTrackHandler("serialser/"));
+    da.setup(scheduler, errorHandler, new BackTrackHandler("target/test-sources/serialser/"));
     da.setupAutomaton();
 
     //first timeslot

@@ -35,10 +35,11 @@ public class BackTrackingHandlerTest {
 
   @BeforeEach
   public void setUp() {
+    new File("target/test-sources/").mkdir();
     comp = new ComponentPortTest();
     testling = new SimplePort<String>();
     IScheduler s = new SimulationScheduler();
-    bth = new BackTrackHandler("serialser/");
+    bth = new BackTrackHandler("target/test-sources/serialser/");
     comp.setup(s, new SimpleErrorHandler(), bth);
     testling.setup(comp, s);
   }
@@ -59,7 +60,7 @@ public class BackTrackingHandlerTest {
 
   @AfterEach
   public void cleanup() throws IOException {
-    FileUtils.cleanDirectory(new File("serialser"));
+    FileUtils.cleanDirectory(new File("target/test-sources/serialser/"));
   }
 
 }
