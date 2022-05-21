@@ -5,8 +5,6 @@ plugins {
   id("com.github.johnrengelman.shadow")
 }
 
-group = "montiarc.generators"
-
 tasks.test {
   useJUnitPlatform()
 }

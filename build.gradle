@@ -1,7 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-group = "montiarc"
-
 allprojects {
   version = "$version"
   buildDir = "$projectDir/target"

@@ -4,8 +4,6 @@ plugins {
   id("montiarc.build.java-library")
 }
 
-group = "montiarc.application"
-
 val hwcDir = "$projectDir/main/java"
 val genDir = "$buildDir/generated-sources"
 

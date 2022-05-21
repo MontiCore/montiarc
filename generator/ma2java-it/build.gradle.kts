@@ -4,8 +4,6 @@ plugins {
   id("montiarc.build.integration-test")
 }
 
-group = "montiarc.generators"
-
 val hwcDir = "$projectDir/main/java"
 val genDir = "$buildDir/generated-sources"
 
