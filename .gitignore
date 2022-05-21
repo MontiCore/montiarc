@@ -1,18 +1,16 @@
-build-logic/build
+build
+!build-logic/**/montiarc/build
 target
+
+.classpath
+.gradle
+.idea
 .project
 .settings
-.classpath
-/application/bumperbot/.gitignore
-
-\.idea/
-
-.gradle
 
 *.iml
 .DS_Store
-generated-test-sources
 
-gradlew.bat
-gradlew
 gradle
+gradlew
+gradlew.bat
