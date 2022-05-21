@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-  id("com.github.johnrengelman.shadow") // Version is declared in settings.gradle
   id("montiarc.build.java-library")
+  id("com.github.johnrengelman.shadow")
 }
 
 group = "montiarc.generators"

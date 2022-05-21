@@ -3,8 +3,8 @@
 val shadow_version: String by project
 
 plugins {
-  id("com.github.johnrengelman.shadow") version "6.0.0"
   id("montiarc.build.java-library")
+  id("com.github.johnrengelman.shadow")
 }
 
 dependencies {
