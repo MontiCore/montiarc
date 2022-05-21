@@ -34,7 +34,7 @@ public class SymTabBuildingTest {
     CD4CodeMill.init();
   }
   
-  protected static Path modelsPath = Paths.get("src/test/resources");
+  protected static Path modelsPath = Paths.get("test/resources");
   
   protected static Stream<Arguments> allTestModels() {
     return Stream.of(

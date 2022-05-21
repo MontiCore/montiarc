@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-  id("montiarc.build.language")
+  id("montiarc.build.java-library")
 }
 
 buildDir = file(project(":language").buildDir.toString() + "/${project.name}")

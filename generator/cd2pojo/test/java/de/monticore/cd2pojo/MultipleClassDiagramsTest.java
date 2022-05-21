@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 
 public class MultipleClassDiagramsTest {
 
-  protected static final String MODEL_PATH = "src/test/resources/models/multipleDiagrams/";
+  protected static final String MODEL_PATH = "test/resources/models/multipleDiagrams/";
 
   @BeforeAll
   public static void setupLog() {

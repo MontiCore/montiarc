@@ -509,7 +509,7 @@ public class MontiArcToolTest extends AbstractTest {
     Options options = tool.initOptions();
     Collection<ASTMACompilationUnit> innerComponents =
       tool.parse(".arc", Paths.get("test/resources/CLI/nestedComponent").toAbsolutePath());
-    String[] args = new String[]{"-pp", "src/file.arc", "-s", "test/resources/"};
+    String[] args = new String[]{"-pp", "test/resources/file.arc", "-s", "test/resources/"};
     CommandLineParser cliParser = new DefaultParser();
     CommandLine cli = cliParser.parse(options, args);
 

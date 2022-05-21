@@ -32,18 +32,15 @@ dependencies {
   testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
-tasks.register<de.monticore.MCTask>("generateArcBasis") {
-  grammar.set(file(project(":language").projectDir.toString() + "/grammars/ArcBasis.mc4") )
-  handcodedPath.add("$projectDir/main/java")
-  modelPath.add(project(":language").projectDir.toString() + "/grammars")
-  outputDir.set(file("$buildDir/sources/main/java/"))
-}
+
+tasks.getByName<de.monticore.MCTask>("grammar").grammar
+    .set(file(project(":language").projectDir.toString() + "/grammars/ArcBasis.mc4") )
 
 tasks.getByName<Test>("test").useJUnitPlatform()
 
 sourceSets {
   main {
-    java.setSrcDirs(setOf("$projectDir/main/java", tasks.getByName<de.monticore.MCTask>("generateArcBasis").outputDir))
+    java.setSrcDirs(setOf("$projectDir/main/java", tasks.getByName<de.monticore.MCTask>("grammar").outputDir))
     resources.setSrcDirs(setOf("$projectDir/main/resources"))
   }
   test {

@@ -17,13 +17,7 @@ java {
   withSourcesJar()
 }
 
-sourceSets {
-  main {
-    java.setSrcDirs(setOf("main/kotlin"))
-    resources.setSrcDirs(setOf("main/resources"))
-  }
-  test {
-    java.srcDirs(setOf("test/kotlin"))
-    resources.setSrcDirs(setOf("test/models"))
-  }
-}
+kotlin.sourceSets["main"].kotlin.srcDirs(setOf("main/kotlin"))
+kotlin.sourceSets["main"].resources.srcDirs(setOf("main/resources"))
+kotlin.sourceSets["test"].kotlin.srcDirs(setOf("test/kotlin"))
+kotlin.sourceSets["test"].resources.srcDirs(setOf("test/resources"))

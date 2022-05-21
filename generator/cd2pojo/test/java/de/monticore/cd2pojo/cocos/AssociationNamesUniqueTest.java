@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  */
 public class AssociationNamesUniqueTest {
 
-  protected static final String TEST_RESOURCE_PATH = "src/test/resources/cocos";
+  protected static final String TEST_RESOURCE_PATH = "test/resources/cocos";
 
   protected static Stream<Arguments> modelWithAmbiguousAssociationsAndErrorCountProvider() {
     return Stream.of(Arguments.of("AmbiguousAssociations.cd", 1));

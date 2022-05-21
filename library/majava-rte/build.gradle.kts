@@ -15,17 +15,6 @@ dependencies {
   testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
-sourceSets {
-  main {
-    java.setSrcDirs(setOf("main/java"))
-    resources.setSrcDirs(setOf("main/resources"))
-  }
-  test {
-    java.srcDirs(setOf("test/java"))
-    resources.setSrcDirs(setOf("test/resources"))
-  }
-}
-
 tasks {
   named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
     minimize()

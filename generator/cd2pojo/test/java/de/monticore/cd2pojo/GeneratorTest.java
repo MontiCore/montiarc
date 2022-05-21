@@ -27,8 +27,8 @@ public class GeneratorTest {
     CD4CodeMill.init();
   }
 
-  protected static final String TEST_RESOURCE_PATH = "src/test/resources";
-  protected static final String TEST_JAVA_PATH = "src/test/java";
+  protected static final String TEST_RESOURCE_PATH = "test/resources";
+  protected static final String TEST_JAVA_PATH = "test/java";
   protected static final String TEST_TARGET_PATH = "target/generated-test-sources";
 
   protected JavaParser parser;

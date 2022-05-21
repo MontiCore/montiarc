@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  */
 public class RoleNamesUniqueTest {
 
-  protected static final String TEST_RESOURCE_PATH = "src/test/resources/cocos";
+  protected static final String TEST_RESOURCE_PATH = "test/resources/cocos";
 
   protected static Stream<Arguments> modelWithAmbiguousRolesAndErrorCountProvider() {
     return Stream.of(

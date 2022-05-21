@@ -29,15 +29,12 @@ dependencies {
   testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
-tasks.register<de.monticore.MCTask>("generateComfortableArc") {
-  grammar.set(file(project(":language").projectDir.toString() + "/grammars/ComfortableArc.mc4") )
-  handcodedPath.add("$projectDir/main/java")
-  modelPath.add(project(":language").projectDir.toString() + "/grammars")
-  outputDir.set(file("$buildDir/sources/main/java/"))
-}
+tasks.getByName<de.monticore.MCTask>("grammar").grammar
+    .set(file(project(":language").projectDir.toString() + "/grammars/ComfortableArc.mc4") )
+
 sourceSets {
   main {
-    java.setSrcDirs(setOf("main/java", tasks.getByName<de.monticore.MCTask>("generateComfortableArc").outputDir))
+    java.setSrcDirs(setOf("main/java", tasks.getByName<de.monticore.MCTask>("grammar").outputDir))
     resources.setSrcDirs(setOf("main/resources"))
   }
   test {

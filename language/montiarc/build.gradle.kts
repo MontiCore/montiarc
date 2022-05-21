@@ -38,16 +38,12 @@ dependencies {
   testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
-tasks.register<de.monticore.MCTask>("generateMontiArc") {
-  grammar.set(file(project(":language").projectDir.toString() + "/grammars/MontiArc.mc4") )
-  handcodedPath.add("$projectDir/main/java")
-  modelPath.add(project(":language").projectDir.toString() + "/grammars")
-  outputDir.set(file("$buildDir/sources/main/java/"))
-}
+tasks.getByName<de.monticore.MCTask>("grammar").grammar
+    .set(file(project(":language").projectDir.toString() + "/grammars/MontiArc.mc4") )
 
 sourceSets {
   main {
-    java.setSrcDirs(setOf("main/java", tasks.getByName<de.monticore.MCTask>("generateMontiArc").outputDir))
+    java.setSrcDirs(setOf("main/java", tasks.getByName<de.monticore.MCTask>("grammar").outputDir))
     resources.setSrcDirs(setOf("main/resources"))
   }
   test {

@@ -15,10 +15,6 @@ val genDir = "$buildDir/generated-sources"
 val generatorLogbackConfig = "$projectDir/logback.xml"
 val generatorLogbackOutDir = "$buildDir/logs"
 
-sourceSets["main"].java {
-    srcDir("$genDir")
-}
-
 // Configuration(s)
 val generateKT = configurations.create("generateKT")
 
@@ -40,7 +36,7 @@ val generateKotlin = tasks.register<JavaExec>("generateKotlin") {
     classpath(generateKT)
     mainClass.set("montiarc.generator.ma2kotlin.ModeArcTool")
 
-    args("-mp", "$projectDir/src/main/resources", /*"$buildDir/$models_classifier",*/)
+    args("-mp", "$projectDir/main/resources", /*"$buildDir/$models_classifier",*/)
     args("-path", genDir)
     // args("-o", genDir)
     // args("-hwc", hwcDir)
@@ -58,3 +54,13 @@ tasks.compileJava { dependsOn(generateKotlin) }
 tasks.compileKotlin { dependsOn(generateKotlin) }
 
 generateKotlin { mustRunAfter(project(":generator:ma2ktln").tasks.withType(Test::class)) }
+
+java.sourceSets["main"].java.setSrcDirs(setOf("main/java"))
+java.sourceSets["main"].resources.setSrcDirs(setOf("main/resources"))
+java.sourceSets["test"].java.setSrcDirs(setOf("test/java"))
+java.sourceSets["test"].resources.setSrcDirs(setOf("test/resources"))
+kotlin.sourceSets["main"].kotlin.setSrcDirs(setOf("main/kotlin", "$genDir", "main/java"))
+kotlin.sourceSets["main"].resources.setSrcDirs(setOf("main/resources"))
+kotlin.sourceSets["test"].kotlin.setSrcDirs(setOf("test/kotlin"))
+kotlin.sourceSets["test"].resources.setSrcDirs(setOf("test/resources"))
+

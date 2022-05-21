@@ -6,7 +6,7 @@ plugins {
 
 group = "montiarc.application"
 
-val hwcDir = "$projectDir/src/main/java"
+val hwcDir = "$projectDir/main/java"
 val genDir = "$buildDir/generated-sources"
 
 val generatorLogbackConfig = "$projectDir/logback.xml"
@@ -53,7 +53,7 @@ val genCdTask = tasks.register<JavaExec>("generateCD") {
   classpath(generateCD)
   mainClass.set("de.monticore.cd2pojo.POJOGeneratorScript")
 
-  args("$projectDir/src/main/resources, $buildDir/models", genDir, hwcDir)
+  args("$projectDir/main/resources, $buildDir/models", genDir, hwcDir)
   args("-c2mc")
   outputs.dir(genDir)
 
@@ -72,7 +72,7 @@ val genMaTask = tasks.register<JavaExec>("generateMontiArc") {
     jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
   }
 
-  args("-mp", "$projectDir/src/main/resources", "$buildDir/models")
+  args("-mp", "$projectDir/main/resources", "$buildDir/models")
   args("-path", genDir)
   args("-o", genDir)
   args("-hwc", hwcDir)
