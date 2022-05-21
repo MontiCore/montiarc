@@ -1,10 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-    id("org.jetbrains.kotlin.jvm").version("1.6.0")
-    id("montiarc.build.modules")
-    id("montiarc.build.publishing")
-    id("montiarc.build.repositories")
+    id("montiarc.build.kotlin-library")
 }
 
 val hwcDir = "$projectDir/src/main/java"
@@ -53,12 +50,4 @@ tasks.compileKotlin { dependsOn(generateKotlin) }
 
 generateKotlin { mustRunAfter(project(":generator:ma2ktln").tasks.withType(Test::class)) }
 
-java.sourceSets["main"].java.setSrcDirs(setOf("main/java"))
-java.sourceSets["main"].resources.setSrcDirs(setOf("main/resources"))
-java.sourceSets["test"].java.setSrcDirs(setOf("test/java"))
-java.sourceSets["test"].resources.setSrcDirs(setOf("test/resources"))
-kotlin.sourceSets["main"].kotlin.setSrcDirs(setOf("main/kotlin", "$genDir", "main/java"))
-kotlin.sourceSets["main"].resources.setSrcDirs(setOf("main/resources"))
-kotlin.sourceSets["test"].kotlin.setSrcDirs(setOf("test/kotlin"))
-kotlin.sourceSets["test"].resources.setSrcDirs(setOf("test/resources"))
-
+kotlin.sourceSets["main"].kotlin.srcDir("$genDir")

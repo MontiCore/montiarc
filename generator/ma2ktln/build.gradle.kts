@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-  id("montiarc.build.java-library")
+  id("montiarc.build.kotlin-library")
   id("com.github.johnrengelman.shadow")
 }
 

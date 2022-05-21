@@ -1,8 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-  id("org.jetbrains.kotlin.jvm") version "1.6.0"
-  id("montiarc.build.java-library")
+  id("montiarc.build.kotlin-library")
 }
 
 dependencies {
@@ -16,8 +15,3 @@ java {
   //withJavadocJar()
   withSourcesJar()
 }
-
-kotlin.sourceSets["main"].kotlin.srcDirs(setOf("main/kotlin"))
-kotlin.sourceSets["main"].resources.srcDirs(setOf("main/resources"))
-kotlin.sourceSets["test"].kotlin.srcDirs(setOf("test/kotlin"))
-kotlin.sourceSets["test"].resources.srcDirs(setOf("test/resources"))
