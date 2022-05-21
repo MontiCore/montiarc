@@ -38,16 +38,7 @@ tasks.getByName<de.monticore.MCTask>("grammar").grammar
 
 tasks.getByName<Test>("test").useJUnitPlatform()
 
-sourceSets {
-  main {
-    java.setSrcDirs(setOf("$projectDir/main/java", tasks.getByName<de.monticore.MCTask>("grammar").outputDir))
-    resources.setSrcDirs(setOf("$projectDir/main/resources"))
-  }
-  test {
-    java.srcDirs(setOf("$projectDir/test/java"))
-    resources.setSrcDirs(setOf("$projectDir/test/resources"))
-  }
-}
+java.sourceSets["main"].java.srcDirs(tasks.getByName<de.monticore.MCTask>("grammar").outputDir)
 
 java.registerFeature("tests") {
   usingSourceSet(sourceSets.getByName("test"))

@@ -12,7 +12,7 @@ java {
   targetCompatibility = JavaVersion.VERSION_11
 }
 
-java.sourceSets["main"].java.srcDirs(setOf("main/java"))
-java.sourceSets["main"].resources.srcDirs(setOf("main/resources"))
-java.sourceSets["test"].java.srcDirs(setOf("test/java"))
-java.sourceSets["test"].resources.srcDirs(setOf("test/resources"))
+java.sourceSets["main"].java.setSrcDirs(setOf("main/java"))
+java.sourceSets["main"].resources.setSrcDirs(setOf("main/resources"))
+java.sourceSets["test"].java.setSrcDirs(setOf("test/java"))
+java.sourceSets["test"].resources.setSrcDirs(setOf("test/resources"))

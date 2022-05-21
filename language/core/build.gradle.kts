@@ -37,13 +37,4 @@ dependencies {
 tasks.getByName<de.monticore.MCTask>("grammar").grammar
     .set(file(project(":language").projectDir.toString() + "/grammars/ArcCore.mc4") )
 
-sourceSets {
-  main {
-    java.setSrcDirs(setOf("main/java", tasks.getByName<de.monticore.MCTask>("grammar").outputDir))
-    resources.setSrcDirs(setOf("main/resources"))
-  }
-  test {
-    java.srcDirs(setOf("test/java"))
-    resources.setSrcDirs(setOf("test/resources"))
-  }
-}
+java.sourceSets["main"].java.srcDirs(tasks.getByName<de.monticore.MCTask>("grammar").outputDir)

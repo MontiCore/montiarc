@@ -28,14 +28,3 @@ dependencies {
   testImplementation("${libs.junitParams}:${libs.junitVersion}")
   testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
-
-sourceSets {
-  main {
-    java.setSrcDirs(setOf("main/java"))
-    resources.setSrcDirs(setOf("main/resources"))
-  }
-  test {
-    java.srcDirs(setOf("test/java"))
-    resources.setSrcDirs(setOf("test/resources"))
-  }
-}
