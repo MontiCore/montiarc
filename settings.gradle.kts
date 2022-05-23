@@ -3,9 +3,7 @@
 pluginManagement {
   repositories {
     maven {
-      credentials.username(mavenUser)
-      credentials.password(mavenPassword)
-      url repo
+      url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
     }
     gradlePluginPortal()
     maven {
@@ -14,7 +12,7 @@ pluginManagement {
   }
 }
 
-rootProject.name = 'montiarc'
+rootProject.name = "montiarc"
 
 includeBuild("build-logic")
 

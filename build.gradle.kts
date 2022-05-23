@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 allprojects {
-  version = "$version"
-  buildDir = "$projectDir/target"
+  version = "7.3.1-SNAPSHOT"
+  buildDir = file("$projectDir/target")
 }
 
 description = """MontiArc Version $version
