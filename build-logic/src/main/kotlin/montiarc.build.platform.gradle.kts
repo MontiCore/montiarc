@@ -3,5 +3,6 @@
 plugins {
   id("java-platform")
   id("montiarc.build.modules")
+  id("montiarc.build.publish-platform")
   id("montiarc.build.repositories")
 }
