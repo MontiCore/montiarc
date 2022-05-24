@@ -8,7 +8,7 @@ stages:
   - post-test
   - mirror
       
-Validate Gradle:
+Build JDK11:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
   stage: build
   allow_failure: false
@@ -25,12 +25,12 @@ Validate Gradle:
   script:
     - gradle clean assemble
 
-Package Uber JDK 11:
+Package Uber JDK11:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
   stage: post-build
   dependencies:
-    - Validate Gradle #download artifacts from build
-  needs: ["Validate Gradle"]
+    - Build JDK11
+  needs: ["Build JDK11"]
   allow_failure: false
   script:
     - gradle shadowjar
@@ -38,12 +38,12 @@ Package Uber JDK 11:
 .unit_test_template: &unit_test_definition
   stage: test
   dependencies: 
-    - Validate Gradle #download artifacts from build
-  needs: ["Validate Gradle"]
+    - Build JDK11
+  needs: ["Build JDK11"]
   script:
     - gradle test
 
-Unit Test JDK 11:
+Unit Test JDK11:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
   allow_failure: false
   <<: *unit_test_definition
@@ -52,14 +52,14 @@ Deploy Nexus:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
   stage: post-test
   dependencies:
-    - Validate Gradle #download artifacts from build
+    - Build JDK11 #download artifacts from build
   script:
     - gradle publish -PmavenPassword=$pass -PmavenUser=$user
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"'
       when: on_success
 
-checkMDLinks:
+Check Links:
   stage: post-test
   image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3.5.4-jdk-8-alpine
   allow_failure: true
