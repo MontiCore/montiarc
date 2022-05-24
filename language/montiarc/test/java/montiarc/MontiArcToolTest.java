@@ -552,14 +552,14 @@ public class MontiArcToolTest extends AbstractTest {
     // Given
     MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
-    File file = new File(Paths.get("../target/test-sources/CLI/symboltable/WithInnerComponents.arcsym")
+    File file = new File(Paths.get(System.getProperty("buildDir") + "/test-sources/CLI/symboltable/WithInnerComponents.arcsym")
       .toAbsolutePath().toString());
     if (file.exists()) {
       Assertions.assertTrue(file.delete());
     }
     Collection<ASTMACompilationUnit> innerComponents =
       tool.parse(".arc", Paths.get("test/resources/CLI/nestedComponent").toAbsolutePath());
-    String[] args = new String[]{"-s", "../target/test-sources/CLI/symboltable/"};
+    String[] args = new String[]{"-s", System.getProperty("buildDir") + "/test-sources/CLI/symboltable/"};
     CommandLineParser cliParser = new DefaultParser();
     CommandLine cli = cliParser.parse(options, args);
     tool.createSymbolTable(innerComponents);
@@ -659,7 +659,7 @@ public class MontiArcToolTest extends AbstractTest {
     tool.completeSymbolTable(ast);
     IMontiArcArtifactScope scope = (MontiArcArtifactScope) ast.getSpannedScope();
     return Stream.of(
-      Arguments.of(null, "../target/test-sources/resources/CLI/symboltable", NullPointerException.class),
+      Arguments.of(null, System.getProperty("buildDir") + "/test-sources/resources/CLI/symboltable", NullPointerException.class),
       Arguments.of(scope, null, NullPointerException.class),
       Arguments.of(scope, "", IllegalArgumentException.class)
     );

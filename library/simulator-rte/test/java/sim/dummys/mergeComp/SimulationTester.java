@@ -26,14 +26,14 @@ public class SimulationTester {
 
   @BeforeEach
   public void createDir() throws IOException {
-    new File("target/test-sources/").mkdir();
+    new File(System.getProperty("buildDir") + "/test-sources/").mkdir();
   }
 
   @Test
   public void botfirst() {
     IScheduler scheduler = SchedulerFactory.createDefaultScheduler();
     ISimulationErrorHandler errorHandler = new SimpleErrorHandler();
-    BackTrackHandler backTrackHandler = new BackTrackHandler("target/test-sources/serialser/");
+    BackTrackHandler backTrackHandler = new BackTrackHandler(System.getProperty("buildDir") + "/test-sources/serialser/");
     MergeCompBotFirst mc = new MergeCompBotFirst();
 
     mc.setup(scheduler, errorHandler, backTrackHandler);
@@ -54,7 +54,7 @@ public class SimulationTester {
   public void topFirst() {
     IScheduler scheduler = SchedulerFactory.createDefaultScheduler();
     ISimulationErrorHandler errorHandler = new SimpleErrorHandler();
-    BackTrackHandler backTrackHandler = new BackTrackHandler("target/test-sources/serialser/");
+    BackTrackHandler backTrackHandler = new BackTrackHandler(System.getProperty("buildDir") + "/test-sources/serialser/");
     MergeCompTopFirst mc = new MergeCompTopFirst();
 
     mc.setup(scheduler, errorHandler, backTrackHandler);
@@ -75,7 +75,7 @@ public class SimulationTester {
   public void concreteInputUnderSpeci() {
     IScheduler scheduler = SchedulerFactory.createDefaultScheduler();
     ISimulationErrorHandler errorHandler = new SimpleErrorHandler();
-    BackTrackHandler backTrackHandler = new BackTrackHandler("target/test-sources/serialser/");
+    BackTrackHandler backTrackHandler = new BackTrackHandler(System.getProperty("buildDir") + "/test-sources/serialser/");
     MergeCompUnderSpeci mc = new MergeCompUnderSpeci();
 
     mc.setup(scheduler, errorHandler, backTrackHandler);
@@ -93,6 +93,6 @@ public class SimulationTester {
 
   @AfterEach
   public void cleanup() throws IOException {
-    FileUtils.cleanDirectory(new File("target/test-sources/serialser/"));
+    FileUtils.cleanDirectory(new File(System.getProperty("buildDir") + "/test-sources/serialser/"));
   }
 }

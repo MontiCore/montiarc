@@ -31,7 +31,7 @@ public class IncomingPortTest {
     scheduler = SchedulerFactory.createDefaultScheduler();
     comp = new ComponentTimeDummy();
     ISimulationErrorHandler errorHandler = new SimpleErrorHandler();
-    comp.setup(scheduler, errorHandler, new BackTrackHandler("target/test-sources/incporttest/"));
+    comp.setup(scheduler, errorHandler, new BackTrackHandler(System.getProperty("buildDir") + "/test-sources/incporttest/"));
     testling = new SimplePort<String>();
     testling.setup(comp, scheduler);
   }

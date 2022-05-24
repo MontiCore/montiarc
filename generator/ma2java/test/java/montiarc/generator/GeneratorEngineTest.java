@@ -29,9 +29,9 @@ import java.util.stream.Stream;
  */
 public class GeneratorEngineTest {
 
-  protected final static String TEST_TARGET_PATH = "target/generated-test-sources/generator-engine/";
+  protected final static String TEST_TARGET_PATH = System.getProperty("buildDir") + "/generated-test-sources/generator-engine/";
 
-  protected final static String TEST_TARGET_SHADOW = "target/generated-test-sources/generator-engine-shadow/";
+  protected final static String TEST_TARGET_SHADOW = System.getProperty("buildDir") + "/generated-test-sources/generator-engine-shadow/";
 
   protected final static String TEST_RESOURCE_PATH = "test/resources/generator-engine/";
 

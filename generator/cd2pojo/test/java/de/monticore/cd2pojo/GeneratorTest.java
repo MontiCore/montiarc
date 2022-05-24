@@ -29,7 +29,7 @@ public class GeneratorTest {
 
   protected static final String TEST_RESOURCE_PATH = "test/resources";
   protected static final String TEST_JAVA_PATH = "test/java";
-  protected static final String TEST_TARGET_PATH = "target/generated-test-sources";
+  protected static final String TEST_TARGET_PATH = System.getProperty("buildDir") + "/generated-test-sources";
 
   protected JavaParser parser;
 
