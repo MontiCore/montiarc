@@ -3,6 +3,7 @@
 
 stages:
   - build
+  - post-build
   - test
   - post-test
   - mirror
@@ -23,6 +24,16 @@ Validate Gradle:
     expire_in: 1 week
   script:
     - gradle clean assemble
+
+Package Uber JDK 11:
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
+  stage: post-build
+  dependencies:
+    - Validate Gradle #download artifacts from build
+  needs: ["Validate Gradle"]
+  allow_failure: false
+  script:
+    - gradle shadowjar
     
 .unit_test_template: &unit_test_definition
   stage: test
