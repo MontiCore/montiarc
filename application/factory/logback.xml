@@ -20,7 +20,7 @@ into the resource folder. -->
   </appender>
 
   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-    <file>${LOGBACK_TARGET_DIR:-target/logs/}/${LOGBACK_TARGET_FILE_NAME:-logback-out}-${bySecond}.txt</file>
+    <file>${LOGBACK_TARGET_DIR:-build/logs/}/${LOGBACK_TARGET_FILE_NAME:-logback-out}-${bySecond}.txt</file>
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
       <level>INFO</level>
     </filter>

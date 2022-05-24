@@ -51,7 +51,7 @@ models to some general-purpose language. Currently, available are the MontiArc t
 Java (MA2Java) and the CD to Java (CD2Pojo, Pojo for Plain Old Java) generators.
 
 The `application` folder contains some example applications. 
-Each of them should contain a `target/generated-sources` subdirectory after
+Each of them should contain a `build/generated-sources` subdirectory after
 building their respective project. 
 
 Please note that `gradle build` on the topmost folder builds the whole project. 

@@ -14,12 +14,12 @@ Build JDK11:
   allow_failure: false
   artifacts:
     paths:
-      - application/**/target/
+      - application/**/build/
       - build-logic/.gradle/
       - build-logic/build/
-      - generator/**/target/
-      - language/target/
-      - library/**/target/
+      - generator/**/build/
+      - language/build/
+      - library/**/build/
       - .gradle/
     expire_in: 1 week
   script:
