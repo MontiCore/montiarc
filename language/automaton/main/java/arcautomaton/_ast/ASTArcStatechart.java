@@ -1,9 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcautomaton._ast;
 
+import arcautomaton.ArcAutomatonMill;
+import arcautomaton._visitor.ArcAutomatonTraverser;
+import arcautomaton._visitor.SCTransitionsCollector;
 import de.monticore.scbasis._ast.ASTSCSAnte;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCTransition;
+import de.monticore.scbasis._symboltable.SCStateSymbol;
 import de.monticore.sctransitions4code._ast.ASTAnteAction;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import org.apache.commons.lang3.tuple.Pair;
@@ -17,9 +21,11 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
    * @return all transitions that occur in this statechart, probably in the order in which they are given
    */
   public Stream<ASTSCTransition> streamTransitions() {
-    return streamSCStatechartElements()
-      .filter(ASTSCTransition.class::isInstance)
-      .map(ASTSCTransition.class::cast);
+    final ArcAutomatonTraverser traverser = ArcAutomatonMill.traverser();
+    final SCTransitionsCollector collector = new SCTransitionsCollector();
+    traverser.add4SCBasis(collector);
+    this.accept(traverser);
+    return collector.getTransitions().stream();
   }
 
   /**
@@ -47,9 +53,7 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
    * @return all states that are contained in this statechart
    */
   public Stream<ASTSCState> streamStates() {
-    return streamSCStatechartElements()
-      .filter(ASTSCState.class::isInstance)
-      .map(ASTSCState.class::cast);
+    return getEnclosingScope().getLocalSCStateSymbols().stream().map(SCStateSymbol::getAstNode);
   }
 
   /**

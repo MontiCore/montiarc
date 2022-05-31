@@ -41,6 +41,14 @@
   return result + "]";
   }
 
+    public ${compName}Result merge(${compName}Result other) {
+    <#list comp.getAllOutgoingPorts() as port>
+        <#assign name = port.getName()>
+        if (other.get${name?cap_first}() != null) this.set${name?cap_first}(other.get${name?cap_first}());
+    </#list>
+        return this;
+    }
+
     <#list comp.getInnerComponents() as innerComp>
         <@InnerResult.printInnerResultClass innerComp=innerComp compHelper=compHelper isTOPClass=isTOPClass/>
     </#list>

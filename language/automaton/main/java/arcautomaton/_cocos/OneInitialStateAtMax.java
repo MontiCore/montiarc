@@ -20,7 +20,12 @@ public class OneInitialStateAtMax implements ArcAutomatonASTArcStatechartCoCo {
   @Override
   public void check(@NotNull ASTArcStatechart automaton) {
     Preconditions.checkNotNull(automaton);
-    List<ASTSCState> initialStates = automaton.streamInitialStates().collect(Collectors.toList());
+    // Look at top-level states only
+    List<ASTSCState> initialStates = automaton.streamSCStatechartElements()
+        .filter(ASTSCState.class::isInstance)
+        .map(ASTSCState.class::cast)
+        .filter(s -> s.getSCModifier().isInitial())
+        .collect(Collectors.toList());
     int count = initialStates.size();
     if (count > 1) {
       Log.error(ArcAutomataError.MANY_INITIAL_STATES.format(

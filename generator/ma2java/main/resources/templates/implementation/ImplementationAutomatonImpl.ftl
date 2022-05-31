@@ -98,6 +98,9 @@
 
 <#macro transitionFromMethodName state>transitionFromState${state.getName()}</#macro>
 
+<#macro transitionToMethodName state>transitionToState${state.getName()}</#macro>
+<#macro transitionToMethodNameFromTransition transition>transitionToState${transition.targetName}</#macro>
+
 <#macro entryMethodName state>state${state.getName()}EntryAction</#macro>
 
 <#macro entryMethodNameFromString stateName>state${stateName}EntryAction</#macro>
@@ -205,6 +208,7 @@
   <#assign inputClass>${comp.getName()}Input${compTypeParams}</#assign>
   <#assign inputParam = identifier.getInputName()>
   <#assign targetEntryActionVar = "targetStateEntryAction">
+  <#assign exitActionVar = "stateExitAction">
   protected ${resultClass} <@transitionFromMethodName state=state/>(${inputClass} ${inputParam}) {
 
   ${resultClass} ${identifier.getResultName()} = <@exitMethodName state=state/>(${inputParam});
@@ -216,6 +220,7 @@
     <@printLocalVariablesFromResult comp=comp compHelper=compHelper identifier=identifier/>
 
   java.util.function.BiFunction<${inputClass}, ${resultClass}, ${resultClass}> ${targetEntryActionVar};
+  java.util.function.BiFunction<${inputClass}, ${resultClass}, ${resultClass}> ${exitActionVar};
 
     <#list automatonHelper.getAllTransitionsWithGuardFrom(state) as guardedTransition>
       //transition with guard
@@ -227,19 +232,27 @@
       ( ${compHelper.printExpression(guardExpr)} )
       )
       {
+      // exit parent state(s)
+      ${exitActionVar} = (l__input, l__result) -> {
+        <#list automatonHelper.getLeavingParentStatesFromWith(state, guardedTransition) as leavingParentState>
+        l__result.merge(<@exitMethodName state=leavingParentState/>(l__input));
+        </#list>
+        return l__result;
+      };
+
       // reaction
         <#if guardedTransition.getSCTBody().isPresentTransitionAction()
         && guardedTransition.getSCTBody().getTransitionAction().isPresentMCBlockStatement()>
             ${compHelper.printStatement(guardedTransition.getSCTBody().getTransitionAction().getMCBlockStatement())}
         </#if>
 
-      //save entry action for target state
-      ${targetEntryActionVar} = (targetStateEntryActionInput, targetStateEntryActionOutput) -> {
-        return <@entryMethodNameFromString stateName=guardedTransition.targetName/>(targetStateEntryActionInput, targetStateEntryActionOutput);
+      // get entry action(s) for target state(s) and enter new state
+      ${targetEntryActionVar} = (l__input, l__result) -> {
+        <#list automatonHelper.getEnteringParentStatesFromWith(state, guardedTransition) as enteringParentState>
+          l__result.merge(<@entryMethodName state=enteringParentState/>(l__input, l__result));
+        </#list>
+        return <@transitionToMethodNameFromTransition transition=guardedTransition/>().apply(l__input, l__result);
       };
-
-      // enter new state
-      ${identifier.currentStateName} = ${comp.getName()}State.${guardedTransition.targetName};
       }
       else
     </#list>
@@ -248,22 +261,38 @@
       //first transition specified in the model without guard
         <#assign transition = automatonHelper.getFirstTransitionWithoutGuardFrom(state)>
       {
+      // exit parent state(s)
+        ${exitActionVar} = (l__input, l__result) -> {
+        <#list automatonHelper.getLeavingParentStatesFromWith(state, transition) as leavingParentState>
+          l__result.merge(<@exitMethodName state=leavingParentState/>(l__input));
+        </#list>
+        return l__result;
+      };
+
       // reaction
         <#if transition.getSCTBody().isPresentTransitionAction()
         && transition.getSCTBody().getTransitionAction().isPresentMCBlockStatement()>
             ${compHelper.printStatement(transition.getSCTBody().getTransitionAction().getMCBlockStatement())}
         </#if>
 
-      //save entry action for target state
-      ${targetEntryActionVar} = (targetStateEntryActionInput, targetStateEntryActionOutput) -> {
-        return <@entryMethodNameFromString stateName=transition.targetName/>(targetStateEntryActionInput, targetStateEntryActionOutput);
+      // get entry action(s) for target state(s) and enter new state
+      ${targetEntryActionVar} = (l__input, l__result) -> {
+        <#list automatonHelper.getEnteringParentStatesFromWith(state, transition) as enteringParentState>
+        l__result.merge(<@entryMethodName state=enteringParentState/>(l__input, l__result));
+        </#list>
+        return <@transitionToMethodNameFromTransition transition=transition/>().apply(l__input, l__result);
       };
-
-      // enter new state
-        ${identifier.currentStateName} = ${comp.getName()}State.${transition.targetName};
+      }
+    <#elseif automatonHelper.hasSuperState(state) && automatonHelper.isFinalState(state)>
+      // Transition from super state
+      {
+        ${exitActionVar} = (l__input, l__result) -> l__result;
+        ${targetEntryActionVar} = (targetStateEntryActionInput, targetStateEntryActionOutput) ->
+          targetStateEntryActionOutput.merge(<@transitionFromMethodName state=automatonHelper.getSuperState(state)/>(targetStateEntryActionInput));
       }
     <#else>
       {
+        ${exitActionVar} = (l__input, l__result) -> l__result;
         ${targetEntryActionVar} = (targetStateEntryActionInput, targetStateEntryActionOutput) -> new ${resultClass}();
       }
     </#if>
@@ -272,7 +301,38 @@
       ${identifier.getResultName()}.set${port.getName()?cap_first}(${port.getName()});
     </#list>
 
+    ${identifier.getResultName()} = ${identifier.getResultName()}.merge(${exitActionVar}.apply(${identifier.getInputName()}, ${identifier.getResultName()}));
+
     return ${targetEntryActionVar}.apply(${identifier.getInputName()}, ${identifier.getResultName()});
+  }
+</#macro>
+
+<#macro printTransitionToStateMethod comp compHelper automatonHelper identifier state>
+  <#assign compTypeParams><@Utils.printFormalTypeParameters comp=comp/></#assign>
+  <#assign resultClass>${comp.getName()}Result${compTypeParams}</#assign>
+  <#assign inputClass>${comp.getName()}Input${compTypeParams}</#assign>
+  <#assign inputParam = identifier.getInputName()>
+  <#assign targetEntryActionVar = "targetStateEntryAction">
+  protected java.util.function.BiFunction<${inputClass}, ${resultClass}, ${resultClass}> <@transitionToMethodName state=state/>() {
+    // enter new state
+    ${identifier.currentStateName} = ${comp.getName()}State.${state.getName()};
+    <#if automatonHelper.hasSubStates(state)>
+      // Enter sub state
+      java.util.function.BiFunction<${inputClass}, ${resultClass}, ${resultClass}> ${targetEntryActionVar} =
+        <@transitionToMethodName state=automatonHelper.getInitialSubStatesStream(state).findFirst().get()/>();
+      // Return combined entry action
+      return (targetStateEntryActionInput, targetStateEntryActionOutput) -> {
+        // First own
+        ${resultClass} res = <@entryMethodNameFromString stateName=state.getName()/>(targetStateEntryActionInput, targetStateEntryActionOutput);
+        // Then sub state with own result
+        return ${targetEntryActionVar}.apply(targetStateEntryActionInput, res);
+      };
+    <#else>
+      // Return entry action
+      return (targetStateEntryActionInput, targetStateEntryActionOutput) -> {
+        return <@entryMethodNameFromString stateName=state.getName()/>(targetStateEntryActionInput, targetStateEntryActionOutput);
+      };
+    </#if>
   }
 </#macro>
 
@@ -282,4 +342,6 @@
   <@printStateExitMethod comp=comp compHelper=compHelper automatonHelper=automatonHelper identifier=identifier state=state/>
 
   <@printTransitionFromStateMethod comp=comp compHelper=compHelper automatonHelper=automatonHelper identifier=identifier state=state/>
+
+  <@printTransitionToStateMethod comp=comp compHelper=compHelper automatonHelper=automatonHelper identifier=identifier state=state/>
 </#macro>
