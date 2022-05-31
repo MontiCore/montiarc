@@ -3,6 +3,7 @@ package dsim.modeautomata
 
 import dsim.conf.*
 import dsim.port.IDataSource
+import dsim.sched.util.IEvent
 
 class ModeAutomaton<T : IGuardInterface>(private val guardVariables: T) : IModeAutomaton<T> {
   private val _modes: MutableMap<String, IReconfiguration> = mutableMapOf()
@@ -29,7 +30,7 @@ class ModeAutomaton<T : IGuardInterface>(private val guardVariables: T) : IModeA
     }
   }
 
-  override fun addTransition(fromModeName: String?, targetModeName: String, trigger:Collection<IDataSource>, reaction: ChangeScript, condition: T.() -> Boolean) {
+  override fun addTransition(fromModeName: String?, targetModeName: String, trigger:Collection<IDataSource>, reaction: T.() -> ChangeScript, condition: T.() -> Boolean) {
     if (targetModeName !in _modes.keys) throw NoSuchModeException(targetModeName)
     _transitions += Transition(fromModeName, targetModeName, condition, reaction, trigger)
   }
@@ -41,7 +42,10 @@ class ModeAutomaton<T : IGuardInterface>(private val guardVariables: T) : IModeA
             .firstOrNull { t -> t.guard(guardVariables) }
             ?: return EmptyReconfiguration(_currentMode.name)
     _currentMode = _modes[toTake.target] ?: throw NoSuchModeException(toTake.target)
-    return _currentMode.also { toTake.reaction }
+    return FunctionalReconfiguration(_currentMode.name) {
+      this.(currentMode.changeScript)()
+      this.(toTake.reaction(guardVariables))()
+    }
   }
 }
 

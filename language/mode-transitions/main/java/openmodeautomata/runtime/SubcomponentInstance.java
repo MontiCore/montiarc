@@ -1,44 +1,30 @@
 /* (c) https://github.com/MontiCore/monticore */
 package openmodeautomata.runtime;
 
-import java.util.Collection;
+import basicmodeautomata._symboltable.IBasicModeAutomataScope;
 
-public interface SubcomponentInstance extends NamedArchitectureElement {
+import java.util.*;
 
+/**
+ * In mode transitions one may query and manipulate subcomponents using this interface and {@link ComponentType}.
+ * In those reactions, new subcomponents can also be created using constructors as described by {@link openmodeautomata._symboltable.OpenModeAutomataScopesGenitor#addConstructor(IBasicModeAutomataScope) constructor}
+ */
+public interface SubcomponentInstance {
   /**
    * @return all ports of this subcomponent
    */
-  Collection<PortElement> getPorts();
+  List<UndirectedPort> getPorts();
 
   /**
    * @return all incoming ports of this subcomponent
    */
-  Collection<PortElement> getInputPorts();
+  List<TargetPort> getInputPorts();
+  TargetPort getInputPort(String name);
 
   /**
    * @return all outgoing ports of this subcomponent
    */
-  Collection<PortElement> getOutputPorts();
-
-  /**
-   * deactivates this element (and all related connectors)
-   */
-  void deactivate();
-
-  /**
-   * reactivates this element
-   */
-  void activate();
-
-  /**
-   * @return false, if the element was explicitly deactivated
-   */
-  boolean isActive();
-
-  /**
-   * deletes this element (and all related connectors)
-   */
-  void delete();
-
+  List<SourcePort> getOutputPorts();
+  SourcePort getOutputPort(String name);
 
 }

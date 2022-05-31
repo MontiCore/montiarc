@@ -3,11 +3,16 @@ package dsim.port.util
 
 import dsim.port.IDataSink
 import dsim.port.IDataSource
+import openmodeautomata.runtime.SourcePort
+import openmodeautomata.runtime.TargetPort
 
 /**
  * Replacement for Pair collection type. More safe, easier to use.
  */
-data class Connector(val base: IDataSource, val target: IDataSink)
+data class Connector(val base: IDataSource, val target: IDataSink) : openmodeautomata.runtime.Connector {
+  override fun getSource(): SourcePort = base
+  override fun getTarget(): TargetPort = target
+}
 
 /**
  * Returns a connector from [base] to [target] if they are of the same type
@@ -22,7 +27,7 @@ operator fun IDataSource.rangeTo(target: IDataSink): Connector {
 }
 
 class IncompatiblePortsException(val source: IDataSource, val sink: IDataSink) : Exception() {
-  override val message: String?
+  override val message: String
     get() = "Cannot connect ${source.name} to ${sink.name}:\n" +
         "The latter one has the type ${sink.type.canonicalName},\n" +
         "which is not assignable from ${source.type.canonicalName}"

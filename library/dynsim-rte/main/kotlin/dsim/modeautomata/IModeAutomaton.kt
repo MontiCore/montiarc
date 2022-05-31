@@ -34,5 +34,5 @@ interface IModeAutomaton<T : IGuardInterface> {
    * @param trigger port, whose message-receipt triggers this transition
    * @param condition the guard of the transition
    */
-  fun addTransition(fromModeName: String? = null, targetModeName: String, trigger: Collection<IDataSource> = emptySet(), reaction: ChangeScript = {}, condition: T.() -> Boolean)
+  fun addTransition(fromModeName: String? = null, targetModeName: String, trigger: Collection<IDataSource> = emptySet(), reaction: T.() -> ChangeScript = {{}}, condition: T.() -> Boolean)
 }

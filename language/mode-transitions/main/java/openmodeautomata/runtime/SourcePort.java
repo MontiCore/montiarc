@@ -1,31 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package openmodeautomata.runtime;
 
-import java.util.Collection;
-
-public interface SourcePort extends PortElement {
-
-  /**
-   * @return the connectors of the component that start at this port, or an empty list
-   */
-  Collection<Connector> getConnectors();
-
-  @Override
-  default boolean isTarget() {
-    return false;
-  }
-
-  /**
-   * created connectors to all ports, while leaving possible already existing connectors untouched
-   *
-   * @param targets ports to add
-   */
-  void connectAll(Collection<TargetPort> targets);
-
-  /**
-   * @return true if the types of both ports match
-   */
-  default boolean fits(TargetPort port) {
-    return getType().equalsOrExtends(port.getType());
-  }
-}
+/**
+ * Input Ports of the enclosing component and outgoing ports of subcomponents
+ * may be connected as source-ports of connectors.
+ * This interface may not provide methods similar to {@link TargetPort},
+ * because that would not be implementable, as it might cause clashes in {@link dsim.port.IPort}.
+ */
+public interface SourcePort extends UndirectedPort {}

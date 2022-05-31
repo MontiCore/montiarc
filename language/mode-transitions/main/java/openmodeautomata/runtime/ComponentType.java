@@ -1,42 +1,49 @@
 /* (c) https://github.com/MontiCore/monticore */
 package openmodeautomata.runtime;
 
-import org.codehaus.commons.nullanalysis.NotNull;
-
-import java.util.Collection;
+import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * A symbol containing all methods which should be usable in mode automaton reactions
+ */
 public interface ComponentType {
-
   /**
    * @return incoming ports of the interface of this component.
    */
-  Collection<SourcePort> getInputPorts();
+  List<SourcePort> getInterfaceInputPorts();
+
+  /**
+   * filters {@link #getInterfaceInputPorts()} for the port with the specific name
+   * @return null, if the port does not exist
+   */
+  SourcePort getInputPort(String name);
 
   /**
    * @return outgoing ports of the interface of this component.
    */
-  Collection<TargetPort> getOutputPorts();
+  List<TargetPort> getInterfaceOutputPorts();
 
   /**
-   * @return all output ports of subcomponents + {@link #getInputPorts()}
+   * filters {@link #getInterfaceOutputPorts()} for the port with the specific name
+   * @return null, if the port does not exist
    */
-  Collection<SourcePort> getSourcePorts();
+  TargetPort getOutputPort(String name);
 
   /**
-   * @return all input ports of subcomponents + {@link #getOutputPorts()}
+   * @return all output ports of subcomponents + {@link #getInterfaceInputPorts()}
    */
-  Collection<TargetPort> getTargetPorts();
+  List<SourcePort> getSourcePorts();
+
+  /**
+   * @return all input ports of subcomponents + {@link #getInterfaceOutputPorts()}
+   */
+  List<TargetPort> getTargetPorts();
 
   /**
    * @return the ports of this component and the ports of this type's subcomponents
    */
-  Collection<PortElement> getAllPorts();
-
-  /**
-   * @return all entries of {@link #getAllPorts()} which are unconnected
-   */
-  Collection<PortElement> getUnconnectedPorts();
+  List<UndirectedPort> getAllPorts();
 
   /**
    * @return all subcomponent instances of this component type
@@ -44,12 +51,18 @@ public interface ComponentType {
   Collection<SubcomponentInstance> getSubcomponents();
 
   /**
-   * deactivates all subcomponents
+   * filters {@link #getSubcomponents()} for the element with the specific name
+   * @return null, if the instance does not exist
+   */
+  SubcomponentInstance getSubcomponent(String name);
+
+  /**
+   * deactivates all subcomponents (and their connectors)
    */
   void deactivateAll();
 
   /**
-   * removes all subcomponents
+   * removes all subcomponents (and their connectors)
    */
   void deleteAll();
 
@@ -59,30 +72,148 @@ public interface ComponentType {
   void disconnectAll();
 
   /**
-   * connects all unconnected ports that can be connected
-   *
-   * @param name if true, only ports with matching names will be connected, if false only the ports type matters
-   */
-  void autoconnect(boolean name);
-
-  /**
    * creates a connector between two ports
    *
    * @throws an exception, if the target port already is connected
    */
-  void connect(@NotNull SourcePort source, @NotNull TargetPort target);
+  void connectPorts(SourcePort source, TargetPort target);
 
   /**
    * creates a connector between two ports. If the target is already connected, nothing will happen.
    *
    * @return whether this connector could be created
    */
-  boolean connectIfPossible(@NotNull SourcePort source, @NotNull TargetPort target);
+  boolean connectIfPossible(SourcePort source, TargetPort target);
 
   /**
    * creates a connector between two ports. If the target is already connected, it will be disconnected at first.
    *
    * @return the source of the connector that was deleted, if there was one
    */
-  SourcePort connectAnyways(@NotNull SourcePort source, @NotNull TargetPort target);
+  SourcePort connectAnyways(SourcePort source, TargetPort target);
+
+  /**
+   * deactivates this element (and all related connectors)
+   */
+  void deactivate(SubcomponentInstance element);
+
+  /**
+   * reactivates this element
+   */
+  void activate(SubcomponentInstance element);
+
+  /**
+   * @return false, if the element was explicitly deactivated
+   */
+  boolean isActive(SubcomponentInstance element);
+
+  /**
+   * deletes this element (and all related connectors)
+   */
+  void delete(SubcomponentInstance element);
+
+  /**
+   * @return any connectors of the component, that are linked to this port.
+   * Never returns null, instead returns an empty list.
+   * TargetPorts will never return Collections with more than one Entry, SourcePorts, however, might do.
+   */
+  List<Connector> getConnectors(UndirectedPort port);
+
+  /**
+   * @return the subcomponent that owns this port, or <code>null</code>, if this port belongs to the type's interface
+   */
+  SubcomponentInstance getSubcomponent(UndirectedPort port);
+
+  /**
+   * @return true, if the component type has a connector which connects this port
+   */
+  default boolean isConnected(UndirectedPort port){
+    return !getConnectors(port).isEmpty();
+  }
+
+  /**
+   * @return direction of the port
+   * return isSource() == isInterface();
+   */
+  default boolean isIncoming(UndirectedPort port){
+    return isSource(port) == isInterface(port);
+  }
+
+  /**
+   * @return direction of the port
+   * return isTarget() == isInterface();
+   */
+  default boolean isOutgoing(UndirectedPort port){
+    return isTarget(port) == isInterface(port);
+  }
+
+  /**
+   * @return true if the port belongs to the component's interface, false if it belongs to a subcomponent
+   * return getSubcomponent() == null;
+   */
+  default boolean isInterface(UndirectedPort port){
+    return getSubcomponent(port) == null;
+  }
+
+  /**
+   * @return whether the port can be the source of a connector in this component
+   */
+  default boolean isSource(UndirectedPort port){
+    return !isTarget(port);
+  }
+
+  /**
+   * @return whether the port can be the target of a connector in this component
+   */
+  boolean isTarget(UndirectedPort port);
+
+  /**
+   * delete connectors of the component type, which are linked to this port
+   */
+  void deleteConnectors(UndirectedPort port);
+
+  /**
+   * @return the connector that ends in this port, if there is one in this component type
+   */
+  Connector getConnector(TargetPort port);
+
+  /**
+   * source component of the connector, null if it is this component
+   */
+  default SubcomponentInstance getSourceComponent(Connector connector){
+    return getSubcomponent(connector.getSource());
+  }
+
+  /**
+   * source component of the connector, null if it is this component
+   */
+  default SubcomponentInstance getTargetComponent(Connector connector){
+    return getSubcomponent(connector.getTarget());
+  }
+
+  /**
+   * disconnects the ports that have been connected by the given connector
+   */
+  void delete(Connector connector);
+
+  /**
+   * Disassembles both connectors and reconnects them in a new way.
+   * Switches the start of both connectors, while leaving their ends untouched.
+   * Example:
+   * a -> c;
+   * b -> d;
+   * will result in
+   * a -> d;
+   * b -> c;
+   */
+  default void cross(Connector first, Connector second){
+    SourcePort a = first.getSource();
+    SourcePort b = second.getSource();
+    TargetPort c = first.getTarget();
+    TargetPort d = second.getTarget();
+    delete(first);
+    delete(second);
+    connectPorts(a, d);
+    connectPorts(b, c);
+  }
 }

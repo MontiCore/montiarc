@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import openmodeautomata.runtime.ComponentType;
-import openmodeautomata.runtime.SubcomponentBuilder;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.util.ClassLoaderRepository;
 
@@ -28,13 +27,10 @@ public class RuntimeSymbolsFinder {
   protected void initList(){
     runtime.add(ComponentType.class);
     runtime.add(SubcomponentInstance.class);
-    runtime.add(SubcomponentBuilder.class);
-    runtime.add(PortElement.class);
+    runtime.add(UndirectedPort.class);
     runtime.add(SourcePort.class);
     runtime.add(TargetPort.class);
     runtime.add(Connector.class);
-    runtime.add(NamedArchitectureElement.class);
-    runtime.add(DataType.class);
   }
 
   /**

@@ -6,6 +6,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.generator.ma2kotlin.codegen.KotlinBuilder;
+import openmodeautomata._symboltable.OpenModeAutomataScopesGenitor;
 import org.apache.commons.cli.CommandLine;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -28,5 +29,13 @@ public class ModeArcTool extends MontiArcTool {
     super.runAdditionalTasks(asts, command);
     Log.info("Generate kotlin classes from component models", "ModeArcTool");
     new KotlinBuilder(command.getOptionValue("path")).writeComponentsCodes(asts);
+  }
+
+  @Override
+  public void completeSymbolTable(Collection<ASTMACompilationUnit> asts) {
+    super.completeSymbolTable(asts);
+    // the mill does not provide the completer
+    new OpenModeAutomataScopesGenitor().run();
+    // the completer does not need to be visited around
   }
 }

@@ -3,9 +3,11 @@ package openmodeautomata.addition;
 
 import de.monticore.class2mc.Class2MCResolver;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._symboltable.IMontiArcArtifactScope;
+import montiarc._symboltable.IMontiArcScope;
 import montiarc._symboltable.MontiArcSymbols2Json;
 import org.apache.commons.cli.*;
 
@@ -38,7 +40,8 @@ public class AdderTool {
       return;
     }
     if(cmd.hasOption("s")){
-      storeSymbols(createSymbolTable(cmd), cmd.getOptionValue("s")+cmd.getOptionValue("f"));
+      IMontiArcArtifactScope scope = createSymbolTable(cmd);
+      storeSymbols(scope, cmd.getOptionValue("s")+getPackagePath(scope)+cmd.getOptionValue("f"));
     }
   }
 
@@ -59,7 +62,7 @@ public class AdderTool {
 
   public void storeSymbols(montiarc._symboltable.IMontiArcArtifactScope scope, String path) {
     new MontiArcSymbols2Json().store(scope, path);
-    System.out.println("Stored symbols to "+path);
+    Log.info("Stored symbols to "+path, "DynSim-Reaction-RTE");
   }
 
   public Options initOptions() {
@@ -102,5 +105,13 @@ public class AdderTool {
     MontiArcMill.globalScope().addSubScope(scope);
     new RuntimeSymbolsFinder().createSymbols().forEach(scope::add);
     return scope;
+  }
+
+  protected String getPackagePath(IMontiArcScope scope){
+    String packageName = scope.getLocalOOTypeSymbols().stream()
+        .map(TypeSymbol::getPackageName)
+        .map(p -> p+"/")
+        .findFirst().orElse("");
+    return packageName.replaceAll("\\.", "/");
   }
 }

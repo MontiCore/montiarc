@@ -1,38 +1,23 @@
 /* (c) https://github.com/MontiCore/monticore */
 package openmodeautomata.runtime;
 
-import java.util.Collection;
-import java.util.Collections;
-
-public interface TargetPort extends PortElement {
-
-  /**
-   * @return the connector that ends in this port, if there is one in this component type
-   */
-  Connector getConnector();
-
-  @Override
-  default boolean isTarget() {
-    return true;
-  }
-
-  default Collection<Connector> getConnectors() {
-    Connector input = getConnector();
-    return input == null ? Collections.emptyList() : Collections.singleton(input);
-  }
+/**
+ * Output Ports of the enclosing component and incoming ports of subcomponents
+ * may be connected as target-ports of connectors.
+ * This interface furthermore provides methods for comparing types of ports.
+ */
+public interface TargetPort extends UndirectedPort {
 
   /**
-   * creates a new connector between this and the given port. If there already is a connection, it will be deleted
-   *
-   * @param port port to connect to
-   * @return the port that was previously connected to this port, if there was one
+   * @return true if the types of both ports match so that they can be connected.
+   * True, if this is assignable from the other one
    */
-  SourcePort rerouteFrom(SourcePort port);
+  boolean matchesType(SourcePort other);
 
   /**
-   * @return true if the types of both ports match
+   * @return if type of the messages sent through the port exactly equals the type of the other port.
+   * The ports' directions do not matter.
    */
-  default boolean fits(SourcePort port) {
-    return port.fits(this);
-  }
+  boolean equalsType(UndirectedPort other);
+
 }

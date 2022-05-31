@@ -73,3 +73,5 @@ java {
 genSymbolTable { dependsOn(tasks.compileJava) }
 
 genSymbolTable { mustRunAfter(project(":generator:cd2pojo").tasks.withType(Test::class)) }
+
+tasks.named("modelJar") { dependsOn(genSymbolTable) }
