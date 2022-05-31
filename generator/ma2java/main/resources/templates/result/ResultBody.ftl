@@ -41,7 +41,7 @@
   return result + "]";
   }
 
-    public ${compName}Result merge(${compName}Result other) {
+    public ${compName}Result<@Utils.printFormalTypeParameters comp=comp/> merge(${compName}Result<@Utils.printFormalTypeParameters comp=comp/> other) {
     <#list comp.getAllOutgoingPorts() as port>
         <#assign name = port.getName()>
         if (other.get${name?cap_first}() != null) this.set${name?cap_first}(other.get${name?cap_first}());

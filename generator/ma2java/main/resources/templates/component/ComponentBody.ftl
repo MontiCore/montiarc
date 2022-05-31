@@ -102,7 +102,7 @@
 
     try {
       // perform calculations
-      final <@Utils.componentResultClassFQN comp=comp/><@Utils.printFormalTypeParameters comp=comp/> ${identifier.getResultName()} = ${identifier.getBehaviorImplName()}.compute(input);
+      final <@Utils.componentResultClassFQN comp=comp/><@Utils.printFormalTypeParameters comp=comp/> ${identifier.getResultName()} = ${identifier.getBehaviorImplName()}.compute(${identifier.getInputName()});
 
       // set results to ports
       setResult(${identifier.getResultName()});

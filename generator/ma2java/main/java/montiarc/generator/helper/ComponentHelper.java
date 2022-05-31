@@ -83,6 +83,7 @@ public class ComponentHelper {
     SymTypeExpression portType = portSymbol.getType();
     return portType.isTypeConstant() ?
       ((SymTypeConstant) portType).getBoxedConstName() :
+      portType.isTypeVariable() ? portType.print() :
       portType.printFullName();
   }
 
