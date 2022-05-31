@@ -39,21 +39,9 @@ public interface ComponentType {
   Collection<PortElement> getUnconnectedPorts();
 
   /**
-   * filters a list for unconnected ports
-   *
-   * @param ports a list with ports
-   * @return the list, but without types
-   */
-  default <T extends PortElement> Collection<T> unconnected(@NotNull Collection<T> ports) {
-    return ports.stream().filter(t -> !t.isConnected()).collect(Collectors.toList());
-  }
-
-  /**
    * @return all subcomponent instances of this component type
    */
   Collection<SubcomponentInstance> getSubcomponents();
-
-  <T extends NamedArchitectureElement> T get(@NotNull String name, @NotNull Collection<T> list);
 
   /**
    * deactivates all subcomponents

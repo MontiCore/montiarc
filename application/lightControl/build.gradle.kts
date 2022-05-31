@@ -6,12 +6,14 @@ plugins {
 
 val hwcDir = "$projectDir/src/main/java"
 val genDir = "$buildDir/generated-sources"
+val impDir = "$buildDir/models"
 
 val generatorLogbackConfig = "$projectDir/logback.xml"
 val generatorLogbackOutDir = "$buildDir/logs"
 
 // Configuration(s)
 val generateKT = configurations.create("generateKT")
+val models = configurations.create("models")
 
 dependencies {
     generateKT(project(":generator:ma2ktln"))
@@ -25,13 +27,17 @@ dependencies {
     implementation("${libs.seCommonsUtils}:${libs.monticoreVersion}")
 
     testImplementation("${libs.kotlinJunit}:${libs.kotlinVersion}")
+
+    models(project(":library:dynsim-reaction-rte")) {
+        capabilities { requireCapability(libs.dynsimRteModel) }
+    }
 }
 
 val generateKotlin = tasks.register<JavaExec>("generateKotlin") {
     classpath(generateKT)
     mainClass.set("montiarc.generator.ma2kotlin.ModeArcTool")
 
-    args("-mp", "$projectDir/main/resources", /*"$buildDir/$models_classifier",*/)
+    args("-mp", "$projectDir/main/resources")
     args("-path", genDir)
     // args("-o", genDir)
     // args("-hwc", hwcDir)
@@ -44,10 +50,19 @@ val generateKotlin = tasks.register<JavaExec>("generateKotlin") {
     systemProperties["LOGBACK_TARGET_FILE_NAME"] = "logback-ma2ktln"
 }
 
+val unpackLibModelsTask = tasks.register<Sync>("unpackmodels") {
+    dependsOn(models)
+
+    from( models.map { zipTree(it) } )
+    into(genDir)
+    exclude("META-INF/")
+}
+
 // Setting up task dependencies
 tasks.compileJava { dependsOn(generateKotlin) }
 tasks.compileKotlin { dependsOn(generateKotlin) }
 
+generateKotlin {dependsOn(unpackLibModelsTask)}
 generateKotlin { mustRunAfter(project(":generator:ma2ktln").tasks.withType(Test::class)) }
 
-kotlin.sourceSets["main"].kotlin.srcDir("$genDir")
+kotlin.sourceSets["main"].kotlin.srcDir(genDir)

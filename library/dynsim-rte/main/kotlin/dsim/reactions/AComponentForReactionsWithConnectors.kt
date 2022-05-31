@@ -40,17 +40,6 @@ abstract class AComponentWithConnectors(name: String) : AComponentForReactionsWi
   override fun autoconnect(name: Boolean) {
     val match = { s: SourcePort, t: TargetPort -> (!name || t.name == s.name) && t.fits(s) }
     // connect any unconnected ports
-    unconnected(sourcePorts).forEach { source ->
-      unconnected(targetPorts)
-          .first { match(source, it) }
-          .let { connect(source, it) }
-    }
-    // connect remaining targets to any sources, regardless of the source's connection status
-    unconnected(targetPorts).forEach { target ->
-      sourcePorts
-          .first { match(it, target) }
-          .let { connect(it, target) }
-    }
   }
 
   /**

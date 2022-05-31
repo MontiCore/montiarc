@@ -13,7 +13,6 @@ abstract class AComponentForReactions(name: String) : AComponentWithConnectors(n
   override fun getAllPorts(): Collection<PortElement> = sourcePorts + targetPorts
   override fun getUnconnectedPorts(): Collection<PortElement> = allPorts.filterNot { it.isConnected }
   override fun getSubcomponents(): Collection<SubcomponentInstance> = subcomponents.map { SubcomponentInReaction(it) }
-  override fun <T : NamedArchitectureElement> get(name: String, list: Collection<T>): T? = list.first { it.name == name }
   override fun decorate(subcomponent: ISubcomponent) = SubcomponentInReaction(subcomponent)
 
   /**

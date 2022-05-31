@@ -48,6 +48,7 @@ abstract class Modules {
   val seCommonsUtils = "de.se_rwth.commons:se-commons-utilities"
 
   val lejosModels = "montiarc.library:lejos-rte-models"
+  val dynsimRteModel = "montiarc.library:dynsim-reaction-rte-model"
   val mcGrammarsCapability = "de.monticore:monticore-grammar-grammars"
   val scGrammarsCapability = "de.monticore.lang:statecharts-grammars"
 }
