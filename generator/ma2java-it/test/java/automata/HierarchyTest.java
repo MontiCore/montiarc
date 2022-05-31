@@ -28,7 +28,7 @@ public class HierarchyTest {
   @ParameterizedTest
   @MethodSource("inputAndExpectedOutputProvider")
   @DisplayName("Component with hierarchy should produce expected outputs")
-  public void shouldProduceExpectedOutput(@NotNull List<Integer> expectedCounter, @NotNull List<String> expectedPath) {
+  public void shouldProduceExpectedOutput(@NotNull List<Integer> expectedCounter, @NotNull String expectedPath) {
     Preconditions.checkNotNull(expectedCounter);
     Preconditions.checkNotNull(expectedPath);
 
@@ -48,11 +48,11 @@ public class HierarchyTest {
       // add the current value after computation
       actualCounter.add(hierarchy.getPortPCounter().getCurrentValue());
     }
-    List<String> actualPath = hierarchy.getPortPPath().getCurrentValue();
+    String actualPath = hierarchy.getPortPPath().getCurrentValue();
 
     // Then
-    // Assertions.assertIterableEquals(expectedPath, actualPath);
     Assertions.assertIterableEquals(expectedCounter, actualCounter);
+    Assertions.assertEquals(expectedPath, actualPath);
   }
 
   /**
@@ -61,10 +61,10 @@ public class HierarchyTest {
    */
   protected static Stream<Arguments> inputAndExpectedOutputProvider() {
     return Stream.of(
-        Arguments.of(List.of(1, 4, 7, 9, 13, 15, 19, 24), List.of(
-            "aIni", "aEn", "aEx", "aToB", "bEn", "bEx", "cEn", "c1En", "c1Ex", "c2En", "c2Ex", "cEx", "dEn",
-            "d2En", "d2Ex", "d1En", "d1Ex", "dEx", "eEn", "e1En", "e1Ex", "eEx", "fEn", "f1En", "f11En"
-        ))
+        Arguments.of(List.of(1,4,7,9,13,15,19,24),
+                "aIni" + "aEn" + "aEx" + "aToB" + "bEn" + "bEx" + "cEn" + "c1En" + "c1Ex" + "c2En" + "c2Ex" + "cEx" + "dEn" +
+                "d2En" + "d2Ex" + "d1En" + "d1Ex" + "dEx" + "eEn" + "e1En" + "e1Ex" + "eEx" + "fEn" + "f1En" + "f11En"
+        )
     );
   }
 }

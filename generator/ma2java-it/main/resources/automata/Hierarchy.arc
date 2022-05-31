@@ -9,70 +9,70 @@ import java.util.List;
  */
 component Hierarchy {
   port out int pCounter;
-  port out List<String> pPath;
+  port out String pPath;
   int counter = 0;
-  // List<String> path = ArrayList();
+  String path = "";
 
   automaton {
     initial {
-      // path.add("aIni");
+      path = path + "aIni";
       pCounter = counter;
       counter++;
     } state A {
       entry / {
-        // path.add("aEn");
+        path = path + "aEn";
         pCounter = counter;
         counter++;
       }
       exit / {
-        // path.add("aEx");
+        path = path + "aEx";
         pCounter = counter;
         counter++;
       }
     };
     state B {
       entry / {
-        // path.add("bEn");
+        path = path + "bEn";
         pCounter = counter;
         counter++;
       }
       exit / {
-        // path.add("bEx");
+        path = path + "bEx";
         pCounter = counter;
         counter++;
       }
     };
     state C {
       entry / {
-        // path.add("cEn");
+        path = path + "cEn";
         pCounter = counter;
         counter++;
       }
       exit / {
-        // path.add("cEx");
+        path = path + "cEx";
         pCounter = counter;
         counter++;
       }
       state C1 {
         entry / {
-          // path.add("c1En");
+          path = path + "c1En";
           pCounter = counter;
           counter++;
         }
         exit / {
-          // path.add("c1Ex");
+          path = path + "c1Ex";
           pCounter = counter;
           counter++;
         }
       };
       state C2 {
         entry / {
-          // path.add("c2En");
+          path = path + "c2En";
           pCounter = counter;
           counter++;
         }
         exit / {
-          // path.add("c2Ex");
+          path = path + "c2Ex";
           pCounter = counter;
           counter++;
         }
@@ -80,35 +80,35 @@ component Hierarchy {
     };
     state D {
       entry / {
-        // path.add("dEn");
+        path = path + "dEn";
         pCounter = counter;
         counter++;
       }
       exit / {
-        // path.add("dEx");
+        path = path + "dEx";
         pCounter = counter;
         counter++;
       }
       state D1 {
         entry / {
-          // path.add("d1En");
+          path = path + "d1En";
           pCounter = counter;
           counter++;
         }
         exit / {
-          // path.add("d1Ex");
+          path = path + "d1Ex";
           pCounter = counter;
           counter++;
         }
       };
       initial state D2 {
         entry / {
-          // path.add("d2En");
+          path = path + "d2En";
           pCounter = counter;
           counter++;
         }
         exit / {
-          // path.add("d2Ex");
+          path = path + "d2Ex";
           pCounter = counter;
           counter++;
         }
@@ -116,35 +116,35 @@ component Hierarchy {
     };
     state E {
       entry / {
-        // path.add("eEn");
+        path = path + "eEn";
         pCounter = counter;
         counter++;
       }
       exit / {
-        // path.add("eEx");
+        path = path + "eEx";
         pCounter = counter;
         counter++;
       }
       initial state E1 {
         entry / {
-          // path.add("e1En");
+          path = path + "e1En";
           pCounter = counter;
           counter++;
         }
         exit / {
-          // path.add("e1Ex");
+          path = path + "e1Ex";
           pCounter = counter;
           counter++;
         }
       };
       initial state E2 {
         entry / {
-          // path.add("e2En");
+          path = path + "e2En";
           pCounter = counter;
           counter++;
         }
         exit / {
-          // path.add("e2Ex");
+          path = path + "e2Ex";
           pCounter = counter;
           counter++;
         }
@@ -152,34 +152,35 @@ component Hierarchy {
     };
     state F {
       entry / {
-        // path.add("fEn");
+        path = path + "fEn";
         pCounter = counter;
         counter++;
       }
       exit / {
-        // path.add("fEx");
+        path = path + "fEx";
         pCounter = counter;
         counter++;
       }
       initial state F1 {
         entry / {
-          // path.add("f1En");
+          path = path + "f1En";
           pCounter = counter;
           counter++;
         }
         exit / {
-          // path.add("f1Ex");
+          path = path + "f1Ex";
           pCounter = counter;
           counter++;
         }
         initial state F11 {
           entry / {
-            // path.add("f11En");
+            path = path + "f11En";
             pCounter = counter;
             counter++;
+            pPath = path;
           }
           exit / {
-            // path.add("f11Ex");
+            path = path + "f11Ex";
             pCounter = counter;
             counter++;
           }
@@ -188,7 +189,7 @@ component Hierarchy {
     };
 
     A -> B / {
-      // path.add("aToB");
+      path = path + "aToB";
       pCounter = counter;
       counter++;
     };
@@ -197,8 +198,6 @@ component Hierarchy {
     C -> D;
     D2 -> D1;
     D1 -> E;
-    E -> F11 / {
-      // pPath = path;
-    };
+    E -> F11;
   }
 }
