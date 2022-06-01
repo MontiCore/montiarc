@@ -24,7 +24,13 @@ public class ExpressionSolverTest extends AbstractTest {
   protected MontiArcFullPrettyPrinter prettyPrinter;
 
   @BeforeEach
-  public void SetUpTypeExpr() {
+  @Override
+  public void init() {
+    super.init();
+    this.setUpTypeExpr();
+  }
+
+  protected void setUpTypeExpr() {
     IVariableArcScope scope = MontiArcMill.scope();
 
     ArcFeatureSymbol variableSymbol = MontiArcMill.arcFeatureSymbolBuilder().setName("a").build();
