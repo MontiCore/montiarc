@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package testing.structure.modes;
+package testing.modes;
 
 import testing.structure.*;
 

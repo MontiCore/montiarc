@@ -10,6 +10,7 @@ import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.statements.prettyprint.MCCommonStatementsPrettyPrinter;
 import de.monticore.statements.prettyprint.MCVarDeclarationStatementsPrettyPrinter;
 import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
+import de.monticore.types.prettyprint.MCSimpleGenericTypesPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
@@ -68,6 +69,14 @@ public class MontiArcFullPrettyPrinter extends montiarc._visitor.MontiArcFullPre
     MCBasicTypesPrettyPrinter prettyPrinter = new MCBasicTypesPrinter(printer);
     traverser.setMCBasicTypesHandler(prettyPrinter);
     traverser.add4MCBasicTypes(prettyPrinter);
+  }
+
+  @Override
+  protected void initMCSimpleGenericTypesPrettyPrinter(IndentPrinter printer) {
+    Preconditions.checkNotNull(printer);
+    MCSimpleGenericTypesPrettyPrinter prettyPrinter = new MCSimpleGenericTypesPrinter(printer);
+    traverser.setMCSimpleGenericTypesHandler(prettyPrinter);
+    traverser.add4MCSimpleGenericTypes(prettyPrinter);
   }
 
   @Override

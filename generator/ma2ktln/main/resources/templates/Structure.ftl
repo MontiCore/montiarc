@@ -112,9 +112,9 @@ ${"  "}<@addConnector connector=connector postfix=", permanent = false"/><#rt>
 <#macro addModeAutomaton>
   // properties for modes
   private val guard = object : IGuardInterface {
-    override val subcomponents: Set < ISubcomponentForTransition >
+    override val subcomponents
       get() = this@${component.getName()}.subcomponents
-    override val inputPorts: Set < IDataSource >
+    override val inputPorts
       get() = this@${component.getName()}.inputPorts
     val event: ${Events.getMessageType()}
       get() = lastEvent?: throw RuntimeException("There are ne events for ${component.getName()} $instanceName yet")
@@ -125,15 +125,15 @@ ${"  "}<@addConnector connector=connector postfix=", permanent = false"/><#rt>
 <#macro addField field>
     <#local node=field.getAstNode()>
     <@Comment.printOf node=node/>
-  private var ${field.getName()}Field :${util.getTypes().printType(field.getType())} = ${util.printExpression(node.getInitial())}
+  private var ${field.getName()}Field : ${util.getTypes().printType(field.getType())} = ${util.printExpression(node.getInitial())}
 </#macro>
 <#macro addTransition transition>
     <@Comment.printOf node=transition/>
     modeAutomaton.addTransition("${transition.getSourceName()}", "${transition.getTargetName()}"<#rt>
     <#if util.getStateTool().getReaction(transition).isPresent()>
-        , reaction = {<#lt>
+        , reaction = {{<#lt>
         ${util.printStatement(3, util.getStateTool().getReaction(transition).get())}<#lt>
-    }<#rt>
+    }}<#rt>
     </#if>
     <#list util.getStateTool().getTriggers(transition)>
         , trigger = setOf(<#t>
@@ -144,7 +144,7 @@ ${"  "}<@addConnector connector=connector postfix=", permanent = false"/><#rt>
     </#list>
     <#lt>) {
     <#if util.getStateTool().getGuard(transition).isPresent()>
-      ${util.printExpression(util.getStateTool().getGuard(transition).get())}
+      (${util.printExpression(util.getStateTool().getGuard(transition).get())})!!
     <#else>
       true
     </#if>

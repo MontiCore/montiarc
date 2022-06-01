@@ -5,7 +5,7 @@ import dsim.msg.Message
 import dsim.sim.runSimulation
 import org.junit.Assert
 import org.junit.Test
-import testing.structure.modes.*
+import testing.modes.*
 import kotlin.math.abs
 
 class ModesGeneratorTest {

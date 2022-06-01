@@ -89,14 +89,14 @@ public class OpenModeAutomataScopesGenitor {
    * @return a symbol containing all methods which should be usable in mode automaton reactions
    */
   public OOTypeSymbol getRuntimeEnvironment() {
-    return BasicModeAutomataMill.globalScope().resolveOOType(ComponentType.class.getSimpleName()).orElseThrow(createException());
+    return BasicModeAutomataMill.globalScope().resolveOOType(ComponentType.class.getCanonicalName()).orElseThrow(createException());
   }
 
   /**
    * @return a symbol describing the return type from instantiating a subcomponent
    */
   public OOTypeSymbol getSubcomponent() {
-    return BasicModeAutomataMill.globalScope().resolveOOType(SubcomponentInstance.class.getSimpleName()).orElseThrow(createException());
+    return BasicModeAutomataMill.globalScope().resolveOOType(SubcomponentInstance.class.getCanonicalName()).orElseThrow(createException());
   }
 
   /**
@@ -104,7 +104,7 @@ public class OpenModeAutomataScopesGenitor {
    */
   protected Supplier<RuntimeException> createException(){
     return () -> new RuntimeException("Cannot resolve reaction-runtime-interfaces. " +
-        "Did you include the respective .sym-file in the model-path?");
+        "Did you include a respective .sym-file in the model-path?");
   }
 
 }

@@ -8,15 +8,16 @@
 <@printComponentImports/>
 </#macro>
 <#macro printSimulatorImports>
-  <#list ["comp", "conf", "log", "modeautomata", "msg", "port", "port.util", "sched.util", "sim"] as entry>
+  <#list ["comp", "conf", "log", "modeautomata", "msg", "port", "reactions", "sched.util", "sim"] as entry>
 import dsim.${entry}.*
   </#list>
 import dsim.sched.<#if component.isAtomic()>atomic<#else>decomposed</#if>.*
+import openmodeautomata.runtime.*
 import kotlinx.coroutines.flow.collect
 </#macro>
 <#macro printComponentImports>
-  <#list getOuter(component).getAstNode().getEnclosingScope().getImportsList()?filter(p->util.getTypes().isImport(p))as entry>
-import ${entry.getStatement()}<#if entry.isStar()>.*</#if>
+  <#list getOuter(component).getAstNode().getEnclosingScope().getImportsList()as entry>
+<#t>${util.getTypes().printImport(entry)}
   </#list>
 </#macro>
 <#function getOuter symbol>

@@ -56,6 +56,7 @@ val genSymbolTable = tasks.register<JavaExec>("generateSymbolTable") {
   args("-s", modDir)
   args("-f", "ReactionRuntimeSymbols.sym")
   args("-c2mc")
+  args("-full")
   args("-p")
   outputs.dir(genDir)
 

@@ -44,9 +44,9 @@ public class AssignmentExpressionsPrinter extends AssignmentExpressionsPrettyPri
         helper.clearComments(standard.prettyprint(node.getLeft())),
         helper::printPort,
         null)) {
-      getPrinter().print(".pushMsg(Message(");
+      getPrinter().print(".pushMsg(Message((");
       node.getRight().accept(getTraverser());
-      getPrinter().print("))");
+      getPrinter().print(")!!))");
     } else {
       handleNotPort(node);
     }

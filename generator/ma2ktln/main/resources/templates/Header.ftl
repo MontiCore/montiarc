@@ -18,7 +18,7 @@ open class ${component.getName()} (instanceName: String<#rt>
     <#elseif component.isAtomic()>
       AComponent<#t>
     <#else>
-      ADecomposedComponent<#t>
+      AComponentForReactions<#t>
     </#if>
     <@listParentParameters/>
 </#macro>

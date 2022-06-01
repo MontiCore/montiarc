@@ -23,26 +23,27 @@ public class AdderTool {
     Options options = initOptions();
     CommandLine cmd = new DefaultParser().parse(options, args);
 
-    //help: when --help
-    if(cmd.hasOption("h")) {
+    if(cmd.hasOption("h") || !cmd.hasOption("f")) {
       printHelp(options);
-      //do not continue, when help is printed.
       return;
     }
     if(cmd.hasOption("p")){
       initializePrimitives();
     }
+    if(cmd.hasOption("full")){
+      upgradeDeSer();
+    }
     if(cmd.hasOption("c2mc")){
       initializeClass2MC();
-    }
-    if(!cmd.hasOption("f")){
-      printHelp(options);
-      return;
     }
     if(cmd.hasOption("s")){
       IMontiArcArtifactScope scope = createSymbolTable(cmd);
       storeSymbols(scope, cmd.getOptionValue("s")+getPackagePath(scope)+cmd.getOptionValue("f"));
     }
+  }
+
+  protected void upgradeDeSer() {
+    MontiArcMill.globalScope().putSymbolDeSer("de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol", new OOTypeSymbolDeSerWithFullNames());
   }
 
   public void init() {
@@ -84,6 +85,10 @@ public class AdderTool {
     options.addOption(Option.builder("p")
         .longOpt("primitives")
         .desc("Adds java's primitives types to the global scope")
+        .build());
+    options.addOption(Option.builder("full")
+        .longOpt("serializeFullNames")
+        .desc("Makes the DeSer serialize the full names of OOTypes, instead of just the simple one.")
         .build());
     options.addOption(Option.builder("f")
         .longOpt("filename")

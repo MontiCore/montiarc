@@ -130,9 +130,9 @@ public class CommonStatementsPrinter extends MCCommonStatementsPrettyPrinter {
       control.getForInit().accept(getTraverser());
       getPrinter().println();
       getPrinter().println("// for loop as while loop");
-      getPrinter().print("while (");
+      getPrinter().print("while ((");
       control.getCondition().accept(getTraverser());
-      getPrinter().println(") {");
+      getPrinter().println(")!!) {");
       getPrinter().indent();
       getPrinter().println("// for loop - content");
       a.getMCStatement().accept(getTraverser());
@@ -151,9 +151,9 @@ public class CommonStatementsPrinter extends MCCommonStatementsPrettyPrinter {
   @Override
   public void handle(ASTWhileStatement a) {
     CommentPrettyPrinter.printPreComments(a, getPrinter());
-    getPrinter().print("while (");
+    getPrinter().print("while ((");
     a.getCondition().accept(getTraverser());
-    getPrinter().println(") {");
+    getPrinter().println(")!!) {");
     getPrinter().indent();
     a.getMCStatement().accept(getTraverser());
     getPrinter().unindent();
@@ -168,18 +168,18 @@ public class CommonStatementsPrinter extends MCCommonStatementsPrettyPrinter {
     getPrinter().indent();
     a.getMCStatement().accept(getTraverser());
     getPrinter().unindent();
-    getPrinter().print("} while (");
+    getPrinter().print("} while ((");
     a.getCondition().accept(getTraverser());
-    getPrinter().println(")");
+    getPrinter().println(")!!)");
     CommentPrettyPrinter.printPostComments(a, getPrinter());
   }
 
   @Override
   public void handle(ASTIfStatement a) {
     CommentPrettyPrinter.printPreComments(a, getPrinter());
-    getPrinter().print("if (");
+    getPrinter().print("if ((");
     a.getCondition().accept(getTraverser());
-    getPrinter().println(") {");
+    getPrinter().println(")!!) {");
     getPrinter().indent();
     a.getThenStatement().accept(getTraverser());
     if (a.isPresentElseStatement()) {

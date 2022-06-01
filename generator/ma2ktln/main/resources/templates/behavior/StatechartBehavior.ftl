@@ -20,7 +20,7 @@
                 event.isFor(<@Ports.printAccess port=port/>) &&${" "}<#t>
             </#list>
             <#if tool.getGuard(transit).isPresent()>
-                ${util.printExpression(tool.getGuard(transit).get())}<#t>
+                (${util.printExpression(tool.getGuard(transit).get())})!!<#t>
             <#else>
                 true<#t>
             </#if>
