@@ -73,7 +73,7 @@ public interface IStream<T> extends List<TickedMessage<T>> {
   /**
    * @param n amount of time slices
    * @return all messages in the last n time slices
-   * @deprecated use {@link #getLastNTimeIntervals(int)} instead.
+   * @Deprecated use {@link #getLastNTimeIntervals(int)} instead.
    */
   List<T> getLastNTimeSlices(int n);
 
@@ -87,7 +87,7 @@ public interface IStream<T> extends List<TickedMessage<T>> {
 
   /**
    * @return all messages in the current time slice
-   * @deprecated use {@link #getLastTimeInterval()} instead.
+   * @Deprecated use {@link #getLastTimeInterval()} instead.
    */
   List<T> getLastTimeSlice();
 
@@ -99,7 +99,7 @@ public interface IStream<T> extends List<TickedMessage<T>> {
   /**
    * @param time TimeSlice
    * @return all messages in the given timeslice
-   * @deprecated use {@link #getTimeInterval(int)} instead.
+   * @Deprecated use {@link #getTimeInterval(int)} instead.
    */
   List<T> getTimeSlice(int time);
 
@@ -113,7 +113,7 @@ public interface IStream<T> extends List<TickedMessage<T>> {
    * @param begin first time slice
    * @param end   last time slice
    * @return all messages in the timeslices from begin to end (including begin and end)
-   * @deprecated use {@link #getTimeInterval(int, int)} instead.
+   * @Deprecated use {@link #getTimeInterval(int, int)} instead.
    */
   List<T> getTimeSlice(int begin, int end);
 
@@ -128,7 +128,7 @@ public interface IStream<T> extends List<TickedMessage<T>> {
    * @param message message to find
    * @return the time interval from the given message. If the message is not transmitted in this stream, the return
    * value will be -1.
-   * @deprecated {@link IStream#firstTimeIntervalOf(T)} instead
+   * @Deprecated {@link IStream#firstTimeIntervalOf(T)} instead
    */
   int getTimeUnit(T message);
 

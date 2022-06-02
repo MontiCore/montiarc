@@ -25,7 +25,7 @@ public final class Tick<T> extends TickedMessage<T> {
   /**
    * Creates a new Tick.
    *
-   * @deprecated use {@link Tick#get()} instead. Will be set to private after 2.5.0 release.
+   * @Deprecated use {@link Tick#get()} instead. Will be set to private after 2.5.0 release.
    */
 
   @Override

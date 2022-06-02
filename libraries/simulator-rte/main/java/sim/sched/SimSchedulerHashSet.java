@@ -35,7 +35,7 @@ public class SimSchedulerHashSet implements IScheduler {
   private IPortFactory portFactory;
 
   /**
-   * @deprecated Use {@link SchedulerFactory#createDefaultScheduler()} instead.
+   * @Deprecated Use {@link SchedulerFactory#createDefaultScheduler()} instead.
    */
   public SimSchedulerHashSet() {
     comp2tickfree = new HashMap<ISimComponent, Set<IInSimPort<?>>>();
