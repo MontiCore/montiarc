@@ -50,7 +50,7 @@ The `generators` folder contains code generators that translate MontiArc compone
 models to some general-purpose language. Currently, available are the MontiArc to 
 Java (MA2Java) and the CD to Java (CD2Pojo, Pojo for Plain Old Java) generators.
 
-The `application` folder contains some example applications. 
+The `applications` folder contains some example applications. 
 Each of them should contain a `build/generated-sources` subdirectory after
 building their respective project. 
 
@@ -81,7 +81,7 @@ main class and setting up the build process to generate an executable.
 
 ## Tool Documentation
 
-The [MontiArcTool](language/montiarc-fe/main/java/montiarc/MontiArcTool.java) offers capabilities for processing MontiArc component models.
+The [MontiArcTool](languages/montiarc/main/java/montiarc/MontiArcTool.java) offers capabilities for processing MontiArc component models.
 It provides multiple options that can be used as follows:
 
 `java -jar MontiArc.jar [-h] -i <fileName> [-path <p>] [-pp [<file>]] [-s [<file>]]`
