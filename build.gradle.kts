@@ -7,9 +7,9 @@ plugins {
 }
 
 dependencies {
-  jacocoAggregation(project(":generator:ma2java"))
-  jacocoAggregation(project(":language:basis"))
-  jacocoAggregation(project(":language:montiarc"))
+  jacocoAggregation(project(":generators:ma2java"))
+  jacocoAggregation(project(":languages:basis"))
+  jacocoAggregation(project(":languages:montiarc"))
 }
 
 reporting.reports.create("jacocoAggregatedTestReport", JacocoCoverageReport::class) {

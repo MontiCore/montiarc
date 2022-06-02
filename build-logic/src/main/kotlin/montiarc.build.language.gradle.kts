@@ -7,6 +7,6 @@ plugins {
 
 tasks.register<de.monticore.MCTask>("grammar") {
   handcodedPath.add("$projectDir/main/java")
-  modelPath.add(project(":language").projectDir.toString() + "/grammars")
+  modelPath.add(project(":languages").projectDir.toString() + "/grammars")
   outputDir.set(file("$buildDir/sources/main/java/"))
 }
