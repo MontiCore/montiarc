@@ -2,6 +2,7 @@
 
 plugins {
   `java-library`
+  id("montiarc.build.jacoco")
   id("montiarc.build.modules")
   id("montiarc.build.publish-java")
   id("montiarc.build.repositories")

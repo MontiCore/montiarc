@@ -41,12 +41,47 @@ Package Uber JDK11:
     - Build JDK11
   needs: ["Build JDK11"]
   script:
-    - gradle test
+    - gradle test jacocoAggregatedTestReport
+    - awk -F","
+      '{ instructions += $4 + $5; covered += $5 } END
+      { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }'
+      'build/reports/test-coverage/jacocoAggregated.csv'
+  coverage: '/\d+.\d+ \% covered/'
+  artifacts:
+    paths:
+      - generator/ma2java/build/reports/test-coverage/jacoco.xml
+      - language/build/basis/reports/test-coverage/jacoco.xml
+      - language/build/montiarc/reports/test-coverage/jacoco.xml
 
 Unit Test JDK11:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
   allow_failure: false
   <<: *unit_test_definition
+
+Test Coverage JDK11:
+  stage: post-test
+  image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.7
+  script:
+    - python /opt/cover2cover.py
+      generator/ma2java/build/reports/test-coverage/jacoco.xml
+      generator/ma2java/main/java/
+      > generator/ma2java/build/reports/test-coverage/cobertura.xml
+    - python /opt/cover2cover.py
+      language/build/basis/reports/test-coverage/jacoco.xml
+      language/basis/main/java/
+      > language/build/basis/reports/test-coverage/cobertura.xml
+    - python /opt/cover2cover.py
+      language/build/montiarc/reports/test-coverage/jacoco.xml
+      language/montiarc/main/java/
+      > language/build/montiarc/reports/test-coverage/cobertura.xml
+  dependencies:
+    - Unit Test JDK11
+  needs: ["Unit Test JDK11"]
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: "**/reports/test-coverage/cobertura.xml"
 
 Deploy Nexus:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
