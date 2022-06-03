@@ -16,7 +16,7 @@ public class NoModesWithoutAutomata implements ArcBasisASTComponentTypeCoCo {
     BasicModeAutomataMill.getModeTool()
         .streamDeclarations(component)
         .limit(1)
-        .filter(x -> ! BasicModeAutomataMill.getModeTool().streamAutomata(component).findAny().isPresent())
+        .filter(x -> BasicModeAutomataMill.getModeTool().streamAutomata(component).findAny().isEmpty())
         .forEach(x -> Log.error(BasicModeAutomataError.MODES_WITHOUT_AUTOMATON.format(component.getName()), x.get_SourcePositionStart()));
   }
 }

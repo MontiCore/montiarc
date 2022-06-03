@@ -33,7 +33,7 @@ public class CheckTypeExistenceOfSimpleGenericTypes implements MCSimpleGenericTy
     String typeName = Joiners.DOT.join(type.getNameList());
     Optional<TypeSymbol> typeSym = enclScope.resolveType(typeName);
 
-    if(!typeSym.isPresent()) {
+    if(typeSym.isEmpty()) {
       Log.error(ArcError.MISSING_TYPE.format(typeName, type.get_SourcePositionStart()));
     }
   }

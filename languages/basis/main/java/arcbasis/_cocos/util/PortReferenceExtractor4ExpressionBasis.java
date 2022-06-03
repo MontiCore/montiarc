@@ -65,7 +65,7 @@ public class PortReferenceExtractor4ExpressionBasis
     Preconditions.checkNotNull(expr);
 
     this.getPortReferencesToLookFor().stream()
-      .filter(pr -> !pr.getInstanceName().isPresent())
+      .filter(pr -> pr.getInstanceName().isEmpty())
       .filter(pr -> pr.getPortName().equals(expr.getName()))
       .forEach(pr -> foundPortReferences.put(pr, expr.get_SourcePositionStart()));
   }

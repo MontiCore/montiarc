@@ -69,7 +69,7 @@ public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCo
     if(port.isPresentComponent()) {
       // first check the existence of the subcomponent that owns the port
       Optional<ComponentInstanceSymbol> sub = enclComp.getSubComponent(port.getComponent());
-      if(!sub.isPresent()) {
+      if(sub.isEmpty()) {
         logMissingComponent(port, connector);
       } else {
         // now also check whether the subcomponent has a port with the given name
@@ -79,7 +79,7 @@ public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCo
         }
 
         Optional<PortSymbol> portSym = sub.get().getType().getTypeInfo().getPort(port.getPort(), true);
-        if(!portSym.isPresent()) {
+        if(portSym.isEmpty()) {
           logMissingPort(port, connector, enclComp);
         }
       }
@@ -87,7 +87,7 @@ public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCo
     // v checking the port existence for ports of the enclosing component type.
     } else {
       Optional<PortSymbol> portSym = enclComp.getPort(port.getPort(), true);
-      if(!portSym.isPresent()) {
+      if(portSym.isEmpty()) {
         logMissingPort(port, connector, enclComp);
       }
     }

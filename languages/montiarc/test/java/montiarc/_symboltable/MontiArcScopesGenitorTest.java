@@ -48,7 +48,7 @@ public class MontiArcScopesGenitorTest extends AbstractTest {
 
   @Test
   public void createFromASTShouldNotSetEnclosingScope() throws IOException {
-    Preconditions.checkState(!this.getGenitor().getCurrentScope().isPresent());
+    Preconditions.checkState(this.getGenitor().getCurrentScope().isEmpty());
     //Given
     Optional<ASTMACompilationUnit> ast = this.getParser().parse_String("component A { }");
     Preconditions.checkState(ast.isPresent());

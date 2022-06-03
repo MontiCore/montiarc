@@ -43,7 +43,7 @@ public class MontiArcDeSer extends MontiArcDeSerTOP {
 
   @Override
   public void deserializeAddons(IMontiArcScope scope, JsonObject scopeJson) {
-    if (!scopeJson.getArrayMemberOpt(JSON_ADDON_VARIATION_POINT).isPresent())
+    if (scopeJson.getArrayMemberOpt(JSON_ADDON_VARIATION_POINT).isEmpty())
       return;
 
     for (JsonElement variationPointsJson : scopeJson.getArrayMemberOpt(JSON_ADDON_VARIATION_POINT).get()) {

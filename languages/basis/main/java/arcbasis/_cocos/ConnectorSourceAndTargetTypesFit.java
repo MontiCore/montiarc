@@ -37,7 +37,7 @@ public class ConnectorSourceAndTargetTypesFit implements ArcBasisASTComponentTyp
 
     for (ASTConnector conn : node.getConnectors()) {
       Optional<SymTypeExpression> symTypeOfSource = getTypeOfPortIfPresent(conn.getSource(), enclComponent);
-      if (!symTypeOfSource.isPresent()) {
+      if (symTypeOfSource.isEmpty()) {
         logInfoThatCoCoIsNotChecked4Connection(conn);
         continue;
       }

@@ -81,7 +81,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
     String compName = String.join(".", mcType.getNameList());
     Optional<ComponentTypeSymbol> compSym = enclScope.resolveComponentType(compName);
 
-    if (!compSym.isPresent()) {
+    if (compSym.isEmpty()) {
       Log.error(ArcError.SYMBOL_NOT_FOUND.format(compName), mcType.get_SourcePositionStart());
       this.resultWrapper.setCurrentResultAbsent();
     } else {

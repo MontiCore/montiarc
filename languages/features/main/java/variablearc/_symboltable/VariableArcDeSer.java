@@ -42,7 +42,7 @@ public class VariableArcDeSer extends VariableArcDeSerTOP {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(scopeJson);
 
-    if (!scopeJson.getArrayMemberOpt(JsonAddonVariationPoint).isPresent())
+    if (scopeJson.getArrayMemberOpt(JsonAddonVariationPoint).isEmpty())
       return;
 
     for (JsonElement variationPointsJson : scopeJson.getArrayMemberOpt(JsonAddonVariationPoint).get()) {

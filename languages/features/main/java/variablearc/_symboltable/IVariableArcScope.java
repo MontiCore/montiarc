@@ -20,7 +20,7 @@ public interface IVariableArcScope extends IVariableArcScopeTOP {
    */
   default void add(@NotNull VariableArcVariationPoint variationPoint) {
     Preconditions.checkNotNull(variationPoint);
-    if (!variationPoint.dependsOn.isPresent())
+    if (variationPoint.dependsOn.isEmpty())
       this.getRootVariationPoints().add(variationPoint);
   }
 

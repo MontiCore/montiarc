@@ -194,7 +194,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     this.getCompleter().visit(ast);
 
     //Then
-    Assertions.assertFalse(this.getCompleter().getCurrentCompInstanceType().isPresent());
+    Assertions.assertTrue(this.getCompleter().getCurrentCompInstanceType().isEmpty());
   }
 
   @Test
@@ -536,7 +536,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     // Given
     ASTComponentInstantiation instantiation = provideComponentInstantiation();
     Optional<ComponentTypeSymbol> compTypeSym = ArcBasisMill.globalScope().resolveComponentType("Comp");
-    if(!compTypeSym.isPresent()) {
+    if(compTypeSym.isEmpty()) {
       throw new IllegalStateException("We expect the component type 'Comp' to be added to the global scope by the " +
         "provider of the ASTComponentInstantiation.");
     }
@@ -555,7 +555,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     // Given
     ASTComponentInstantiation instantiation = provideComponentInstantiation();
     Optional<ComponentTypeSymbol> compTypeSym = ArcBasisMill.globalScope().resolveComponentType("Comp");
-    if(!compTypeSym.isPresent()) {
+    if(compTypeSym.isEmpty()) {
       throw new IllegalStateException("We expect the component type 'Comp' to be added to the global scope by the " +
         "provider of the ASTComponentInstantiation.");
     }
@@ -600,7 +600,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     ASTComponentInstantiation astInstantiation = provideComponentInstantiation();
     Preconditions.checkState(astInstantiation.getComponentInstanceList().size() > 0);
     Optional<ComponentTypeSymbol> compTypeSym = ArcBasisMill.globalScope().resolveComponentType("Comp");
-    if(!compTypeSym.isPresent()) {
+    if(compTypeSym.isEmpty()) {
       throw new IllegalStateException("We expect the component type 'Comp' to be added to the global scope by the " +
         "provider of the ASTComponentInstantiation.");
     }

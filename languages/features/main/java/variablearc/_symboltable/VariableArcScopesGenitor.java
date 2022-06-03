@@ -36,7 +36,7 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
 
   protected void putOnStack(@Nullable VariableArcVariationPoint variationPoint) {
     Preconditions.checkState(this.getCurrentScope().isPresent());
-    if (!getCurrentVariationPoint().isPresent()) {
+    if (getCurrentVariationPoint().isEmpty()) {
       this.getCurrentScope().get().add(variationPoint);
     }
     this.getVariationPointStack().push(variationPoint);

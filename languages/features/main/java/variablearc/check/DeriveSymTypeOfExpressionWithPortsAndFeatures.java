@@ -19,11 +19,11 @@ public class DeriveSymTypeOfExpressionWithPortsAndFeatures extends DeriveSymType
   protected Optional<SymTypeExpression> calculateNameExpression(@NotNull ASTNameExpression expr) {
     Preconditions.checkNotNull(expr);
     Optional<SymTypeExpression> type = super.calculateNameExpression(expr);
-    if (!type.isPresent()) {
+    if (type.isEmpty()) {
       type = getEnclosingScope(expr).flatMap(s -> s.resolvePort(expr.getName())).map(PortSymbol::getType);
       type.ifPresent(port -> typeCheckResult.setField());
     }
-    if (!type.isPresent()) {
+    if (type.isEmpty()) {
       type = getEnclosingVariableScope(expr).flatMap(s -> s.resolveArcFeature(expr.getName())).map(feature -> SymTypeExpressionFactory.createTypeConstant("boolean"));
       type.ifPresent(feature -> typeCheckResult.setField());
     }
