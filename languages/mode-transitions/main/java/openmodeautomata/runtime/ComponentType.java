@@ -73,8 +73,6 @@ public interface ComponentType {
 
   /**
    * creates a connector between two ports
-   *
-   * @throws an exception, if the target port already is connected
    */
   void connectPorts(SourcePort source, TargetPort target);
 

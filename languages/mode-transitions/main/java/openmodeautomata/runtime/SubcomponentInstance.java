@@ -7,7 +7,6 @@ import java.util.*;
 
 /**
  * In mode transitions one may query and manipulate subcomponents using this interface and {@link ComponentType}.
- * In those reactions, new subcomponents can also be created using constructors as described by {@link openmodeautomata._symboltable.OpenModeAutomataScopesGenitor#addConstructor(IBasicModeAutomataScope) constructor}
  */
 public interface SubcomponentInstance {
   /**
