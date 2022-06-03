@@ -37,6 +37,6 @@ public class GenericComponentInstanceTest extends AbstractTest {
 
     //Then
     Assertions.assertTrue(genericType instanceof TypeExprOfGenericComponent);
-    Assertions.assertEquals("T", genericType.getTypeInfo().getTypeParameters().get(0));
+    Assertions.assertEquals("T", genericType.getTypeInfo().getTypeParameters().get(0).getName());
   }
 }
