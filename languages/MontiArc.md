@@ -231,19 +231,19 @@ everything is understood as class.
 [mdse]:http://www.se-rwth.de/teams/mdse/
 [MontiCore]:http://www.monticore.de/
 
-[Applications]: ./application
+[Applications]: ../applications
 
-[ASTComponentInstantiation]: ./language/basis/main/java/arcbasis/_ast/ASTComponentInstantiation.java
-[ASTComponentType]: ./language/basis/main/java/arcbasis/_ast/ASTComponentType.java
-[ASTConnector]: ./language/basis/main/java/arcbasis/_ast/ASTConnector.java
-[ASTPortAccess]: ./language/basis/main/java/arcbasis/_ast/ASTPortAccess.java
-[ASTPortDeclaration]: ./language/basis/main/java/arcbasis/_ast/ASTPortDeclaration.java
+[ASTComponentInstantiation]: ./basis/main/java/arcbasis/_ast/ASTComponentInstantiation.java
+[ASTComponentType]: ./basis/main/java/arcbasis/_ast/ASTComponentType.java
+[ASTConnector]: ./basis/main/java/arcbasis/_ast/ASTConnector.java
+[ASTPortAccess]: ./basis/main/java/arcbasis/_ast/ASTPortAccess.java
+[ASTPortDeclaration]: ./basis/main/java/arcbasis/_ast/ASTPortDeclaration.java
 
-[MontiArcCoCos]: ./language/montiarc/main/java/montiarc/_cocos/MontiArcCoCos.java
-[MontiArcParser]: ./language/montiarc/main/java/montiarc/_parser/MontiArcParser.java
-[MontiArcFullPrettyPrinter]: ./language/montiarc/main/java/montiarc/_visitor/MontiArcFullPrettyPrinter.java
+[MontiArcCoCos]: ./montiarc/main/java/montiarc/_cocos/MontiArcCoCos.java
+[MontiArcParser]: ./montiarc/main/java/montiarc/_parser/MontiArcParser.java
+[MontiArcFullPrettyPrinter]: ./montiarc/main/java/montiarc/_visitor/MontiArcFullPrettyPrinter.java
 
-[MontiArcGrammar]: ./language/grammars/MontiArc.mc4
+[MontiArcGrammar]: ./grammars/MontiArc.mc4
 
 ## Further Information
 
