@@ -194,7 +194,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     this.getCompleter().visit(ast);
 
     //Then
-    Assertions.assertTrue(!this.getCompleter().getCurrentCompInstanceType().isPresent());
+    Assertions.assertFalse(this.getCompleter().getCurrentCompInstanceType().isPresent());
   }
 
   @Test
