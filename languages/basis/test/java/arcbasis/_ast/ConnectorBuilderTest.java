@@ -25,7 +25,7 @@ public class ConnectorBuilderTest extends AbstractTest {
   public void setUpBuilder() {
     this.builder = new ASTConnectorBuilder();
     this.builder.setSource("a")
-        .setTargetList(new String[] { "b", "comp.b" });
+        .setTargetList("b", "comp.b");
   }
 
   @ParameterizedTest
