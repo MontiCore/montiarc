@@ -47,9 +47,10 @@ public class NamesInExpressionsVisitor implements AssignmentExpressionsVisitor2,
      */
     public boolean performsMutation() {
       switch (this) {
-        case OVERWRITE: return true;
+        case OVERWRITE:
+        case UPDATE:
+          return true;
         case DEFAULT_READ: return false;
-        case UPDATE: return true;
         default: throw new IllegalStateException();
       }
     }
@@ -59,9 +60,10 @@ public class NamesInExpressionsVisitor implements AssignmentExpressionsVisitor2,
      */
     public boolean includesRead() {
       switch (this) {
+        case DEFAULT_READ:
+        case UPDATE:
+          return true;
         case OVERWRITE: return false;
-        case DEFAULT_READ: return true;
-        case UPDATE: return true;
         default: throw new IllegalStateException();
       }
     }
