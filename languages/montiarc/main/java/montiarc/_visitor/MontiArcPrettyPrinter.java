@@ -43,7 +43,7 @@ public class MontiArcPrettyPrinter implements MontiArcHandler {
       node.getPackage().accept(this.getTraverser());
       this.getPrinter().println(";");
     }
-    node.getImportStatementList().stream().forEach(n->n.accept(this.getTraverser()));
+    node.getImportStatementList().forEach(n->n.accept(this.getTraverser()));
     node.getComponentType().accept(this.getTraverser());
   }
 

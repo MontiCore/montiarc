@@ -79,7 +79,7 @@ public class ComfortableArcPrettyPrinter implements ComfortableArcHandler {
       node.getArguments().accept(this.getTraverser());
     }
     this.getPrinter().print("[ ");
-    node.getConnectorList().stream().forEach((c)->c.accept(this.getTraverser()));
+    node.getConnectorList().forEach((c)->c.accept(this.getTraverser()));
     this.getPrinter().print("] ");
   }
   
