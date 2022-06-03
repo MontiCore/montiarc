@@ -17,6 +17,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -74,7 +75,7 @@ public class ComponentInheritanceRespectsGenericTypeBoundsTest extends AbstractC
 
     // setting the parent of LinkedList<U> to List<U>
     SymTypeExpression uExpr = SymTypeExpressionFactory.createTypeObject(uTypeVar);
-    SymTypeExpression listOfU = SymTypeExpressionFactory.createGenerics(listSym, Arrays.asList(uExpr));
+    SymTypeExpression listOfU = SymTypeExpressionFactory.createGenerics(listSym, List.of(uExpr));
     linkedListSym.addSuperTypes(listOfU);
   }
 
@@ -137,7 +138,7 @@ public class ComponentInheritanceRespectsGenericTypeBoundsTest extends AbstractC
     MontiArcMill.globalScope().addSubScope(glassStudentSym.getSpannedScope());
     glassStudentSym.addSuperTypes(studentExpr);
     glassStudentSym.addSuperTypes(SymTypeExpressionFactory
-      .createGenerics(comparableSym.get(), Arrays.asList(studentExpr))
+      .createGenerics(comparableSym.get(), List.of(studentExpr))
     );
   }
 
