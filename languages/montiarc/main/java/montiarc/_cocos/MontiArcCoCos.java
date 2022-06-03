@@ -117,8 +117,6 @@ public class MontiArcCoCos {
     checker.addCoCo(new VarDeclarationInitializationHasCorrectType(new MontiArcTypeCalculator()));
 
     // Block unsupported model elements
-//    checker.addCoCo(new UnsupportedAutomatonElements.EntryActions());
-//    checker.addCoCo(new UnsupportedAutomatonElements.ExitActions());
     checker.addCoCo(new UnsupportedAutomatonElements.FinalStates());
     checker.addCoCo(new UnsupportedAutomatonElements.AutomatonStereotypes());
 
