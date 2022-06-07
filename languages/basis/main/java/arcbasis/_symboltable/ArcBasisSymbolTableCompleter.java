@@ -117,13 +117,12 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   protected CompTypeExpression typeExprForDirectComponentInstantiation(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkArgument(node.getSymbol().getTypeParameters().isEmpty(),
-      "ArcBasis does not support generic components when instantiating component types within their" +
-        " type declaration. But component type '%s' has type parameters %s. Occurrence: %s",
-      node.getSymbol().getName(),
-      node.getSymbol().getTypeParameters().stream().map(ISymbol::getName).reduce("", (a, b) -> a + "'" + b + "' "),
-      node.get_SourcePositionStart());
-
+    if (!node.getSymbol().getTypeParameters().isEmpty()) {
+      Log.error(ArcError.GENERIC_COMPONENT_TYPE_INSTANTIATION.format(
+              node.getSymbol().getName(),
+              node.getSymbol().getTypeParameters().stream().map(ISymbol::getName).reduce("", (a, b) -> a + "'" + b + "' ")),
+              node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+    }
     return new TypeExprOfComponent(node.getSymbol());
   }
 

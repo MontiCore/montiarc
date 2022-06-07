@@ -113,7 +113,9 @@ public enum ArcError implements Error {
       "must evaluate to values (which type names do not do)."),
   FIELD_INITIALIZATION_IS_TYPE_REF("0xC1156", "The expression represents the type '%s'. Therefore it can not be used " +
       "as initialization value for field '%s', as initialization expressions must evaluate to values (which type names " +
-      "do not do).");
+      "do not do)."),
+  GENERIC_COMPONENT_TYPE_INSTANTIATION("0xC1157", "ArcBasis does not support generic components when " +
+          "instantiating component types within their type declaration. But component type '%s' has type parameters %s.");
 
   private final String errorCode;
   private final String errorMessage;
