@@ -115,7 +115,8 @@ public enum ArcError implements Error {
       "as initialization value for field '%s', as initialization expressions must evaluate to values (which type names " +
       "do not do)."),
   GENERIC_COMPONENT_TYPE_INSTANTIATION("0xC1157", "ArcBasis does not support generic components when " +
-          "instantiating component types within their type declaration. But component type '%s' has type parameters %s.");
+          "instantiating component types within their type declaration. But component type '%s' has type parameters %s."),
+  MISSING_ASSIGNMENT_OF_ARC_FIELD("0xC1158", "Missing initial assignment for field '%s' of type '%s'.");
 
   private final String errorCode;
   private final String errorMessage;

@@ -19,6 +19,7 @@ public class ComponentInstanceTypeExistsTest extends AbstractTest {
 
   @Test
   public void shouldNotFindType() {
+    // Given
     ASTMCQualifiedType type = createQualifiedType("A");
     ASTComponentInstantiation instantiation = arcbasis.ArcBasisMill.componentInstantiationBuilder()
       .setMCType(type).setComponentInstanceList("sub1", "sub2", "sub3").build();
@@ -29,8 +30,35 @@ public class ComponentInstanceTypeExistsTest extends AbstractTest {
       .build();
     ArcBasisScopesGenitorDelegator genitor = ArcBasisMill.scopesGenitorDelegator();
     genitor.createFromAST(enclType).setName("Scopy");
+
+    // When
     ComponentInstanceTypeExists coco = new ComponentInstanceTypeExists();
     coco.check(instantiation);
+
+    // Then
     this.checkOnlyExpectedErrorsPresent(new ArcError[] { ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE});
+  }
+
+  @Test
+  public void shouldFindMissingArcFieldAssignment() {
+    // Given
+    ASTMCQualifiedType type = createQualifiedType("A");
+    ASTComponentInstantiation instantiation = arcbasis.ArcBasisMill.componentInstantiationBuilder()
+            .setMCType(type).setComponentInstanceList("sub1", "sub2", "sub3").build();
+    ASTComponentType enclType = arcbasis.ArcBasisMill.componentTypeBuilder()
+            .setName("EnclType")
+            .setHead(Mockito.mock(ASTComponentHead.class))
+            .setBody(arcbasis.ArcBasisMill.componentBodyBuilder().addArcElement(instantiation).build())
+            .build();
+    ArcBasisScopesGenitorDelegator genitor = ArcBasisMill.scopesGenitorDelegator();
+    genitor.createFromAST(enclType).setName("Scopy");
+    enclType.getSpannedScope().add(ArcBasisMill.typeSymbolBuilder().setName("A").build());
+
+    // When
+    ComponentInstanceTypeExists coco = new ComponentInstanceTypeExists();
+    coco.check(instantiation);
+
+    // Then
+    this.checkOnlyExpectedErrorsPresent(new ArcError[] { ArcError.MISSING_ASSIGNMENT_OF_ARC_FIELD});
   }
 }
