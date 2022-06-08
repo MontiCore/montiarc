@@ -269,14 +269,15 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   @Override
   public void visit(@NotNull ASTComponentInstance node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkState(this.getCurrentEnclosingScope4Instances().isPresent());
 
     ComponentInstanceSymbol symbol = create_ComponentInstance(node).build();
     node.setSymbol(symbol);
-    node.setEnclosingScope(getCurrentEnclosingScope4Instances().get());
     symbol.setAstNode(node);
-    symbol.setEnclosingScope(getCurrentEnclosingScope4Instances().get());
-    getCurrentEnclosingScope4Instances().get().add(symbol);
+    if (this.getCurrentEnclosingScope4Instances().isPresent()) {
+      node.setEnclosingScope(getCurrentEnclosingScope4Instances().get());
+      symbol.setEnclosingScope(getCurrentEnclosingScope4Instances().get());
+      getCurrentEnclosingScope4Instances().get().add(symbol);
+    }
   }
 
   @Override

@@ -25,8 +25,13 @@ public class RootComponentTypesNoInstanceName implements MontiArcASTMACompilatio
     ASTComponentType rootComp = node.getComponentType();
 
     if (!rootComp.getComponentInstanceList().isEmpty()) {
+      String packageName = "UNKNOWN";
+      if (node.isPresentPackage()) {
+        packageName = node.getPackage().getQName();
+      }
+
       Log.error(ArcError.ROOT_COMPONENT_TYPES_MISS_INSTANCE_NAMES.format(
-        node.getPackage().getQName() + "." + rootComp.getName(), rootComp.getInstanceName(0)),
+  packageName + "." + rootComp.getName(), rootComp.getInstanceName(0)),
         node.get_SourcePositionStart());
     }
   }
