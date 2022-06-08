@@ -252,4 +252,20 @@ public class Port<T> implements IPort<T>, Serializable {
     return number;
   }
 
+  @Override
+  public void processMessageQueue() {
+
+  }
+
+  @Override
+  public Queue<TickedMessage<?>> getMessageQueue() {
+    return null;
+  }
+
+  @Override
+  public void setMessageQueue(Queue<TickedMessage<?>> messageQueue) {
+
+  }
+
+
 }

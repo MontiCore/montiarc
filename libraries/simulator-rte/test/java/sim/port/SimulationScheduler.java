@@ -7,10 +7,7 @@ import sim.message.Message;
 import sim.message.TickedMessage;
 import sim.sched.IScheduler;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Scheduler for {@link SimplePort}s.
@@ -188,6 +185,16 @@ public class SimulationScheduler implements IScheduler {
 
   @Override
   public void handleSymbolic(Message<TransitionPath> msg, IInSimPort<?> port) {
+
+  }
+
+  @Override
+  public Map<ISimComponent, List<IInSimPort<?>>> getComp2SimPorts() {
+    return null;
+  }
+
+  @Override
+  public void startScheduler(int time) {
 
   }
 }

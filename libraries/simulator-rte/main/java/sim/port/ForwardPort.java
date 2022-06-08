@@ -9,6 +9,7 @@ import sim.sched.IScheduler;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -213,6 +214,21 @@ public class ForwardPort<T> implements IForwardPort<T> {
   @Override
   public int getPortNumber() {
     return number;
+  }
+
+  @Override
+  public void processMessageQueue() {
+
+  }
+
+  @Override
+  public Queue<TickedMessage<?>> getMessageQueue() {
+    return null;
+  }
+
+  @Override
+  public void setMessageQueue(Queue<TickedMessage<?>> messageQueue) {
+
   }
 
 }

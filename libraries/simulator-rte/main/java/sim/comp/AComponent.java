@@ -120,15 +120,13 @@ public abstract class AComponent implements ISimComponent {
   @Override
   public void setBth(BackTrackHandler bth) {
     this.bth = bth;
+    bth.addComptoCompList(this);
   }
 
   public ComponentState saveState(IComponent comp, List<ComponentState> cs) {
-    if (cs.size() <= 1) {
-      bth.saveComponentState(comp, cs.get(0));
-      return cs.get(0);
-    } else {
-      return bth.handleUnderspecified(comp, cs);
-    }
+    return bth.checkInComp(comp, cs);
   }
+
+
 
 }

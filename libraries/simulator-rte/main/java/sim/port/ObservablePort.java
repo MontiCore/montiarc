@@ -9,6 +9,7 @@ import sim.sched.IScheduler;
 
 import java.util.Collection;
 import java.util.Observable;
+import java.util.Queue;
 
 /**
  * A port that notifies its observers if data messages are accepted.
@@ -170,5 +171,20 @@ public class ObservablePort<T> extends Observable implements IPort<T> {
   @Override
   public int getPortNumber() {
     return number;
+  }
+
+  @Override
+  public void processMessageQueue() {
+
+  }
+
+  @Override
+  public Queue<TickedMessage<?>> getMessageQueue() {
+    return null;
+  }
+
+  @Override
+  public void setMessageQueue(Queue<TickedMessage<?>> messageQueue) {
+
   }
 }

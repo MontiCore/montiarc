@@ -1,8 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.port;
 
+import sim.message.TickedMessage;
 import sim.sched.IScheduler;
 import sim.comp.ISimComponent;
+
+import java.util.Queue;
 
 /**
  * Simulation specific methods of an incoming port.
@@ -63,4 +66,11 @@ public interface IInSimPort<T> extends IInPort<T> {
    * @return the port number from this port
    */
   int getPortNumber();
+
+
+  void processMessageQueue();
+
+  Queue<TickedMessage<?>> getMessageQueue();
+
+  void setMessageQueue(Queue<TickedMessage<?>> messageQueue);
 }

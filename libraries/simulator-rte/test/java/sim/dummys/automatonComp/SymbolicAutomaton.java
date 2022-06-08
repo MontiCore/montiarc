@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys.automatonComp;
 
+import sim.automaton.ComponentState;
 import sim.automaton.IAutomaton;
 import sim.automaton.State;
 import sim.automaton.Transition;
@@ -98,5 +99,14 @@ public class SymbolicAutomaton extends ComponentSymbolic implements IAutomaton {
   }
 
 
+  @Override
+  public ComponentState getComponentState() {
+    return null;
+  }
+
+  @Override
+  public void setComponentState(ComponentState cs) {
+
+  }
 }
 

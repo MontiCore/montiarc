@@ -6,24 +6,30 @@ import sim.comp.ISimComponent;
 import sim.message.Message;
 import sim.message.TickedMessage;
 import sim.port.*;
+import sim.serialiser.BackTrackHandler;
 
 import java.util.*;
 
 /**
- * Default simulation scheduler for MontiArc simulations.
+ * Simulation scheduler with a default strategy that uses a {@link IPortMap} to
+ * check, if ports are tickfree.
  */
-class SimSchedulerBitSet implements IScheduler {
+class SimSchedulerPortMapRoundRobin implements IScheduler {
 
+  /**
+   * Maps each scheduled component to a list of scheduled ports.
+   */
   private final Map<ISimComponent, List<IInSimPort<?>>> comp2SimPorts;
 
   /**
-   * Set of tick-free ports (not received a tick yet) for every scheduled component.
+   * Maps each scheduled component to a {@link PortMap}.
    */
-  private final Map<ISimComponent, BitSet> comp2TickFree;
+  private final Map<ISimComponent, IPortMap> comp2tickfree;
 
   /**
-   * Flags true, if all components are initialized correctly. Is reset, if a new component is registered via {@link
-   * #setupPort(IInSimPort)}
+   * Flags true, if all components are initialized correctly. Is reset, if
+   * a new
+   * component is registered via {@link #setupPort(IInSimPort)}.
    */
   private boolean allInitialized;
 
@@ -32,23 +38,27 @@ class SimSchedulerBitSet implements IScheduler {
    */
   private IPortFactory portFactory;
 
-  protected SimSchedulerBitSet() {
-    comp2TickFree = new HashMap<ISimComponent, BitSet>();
-    comp2SimPorts = new HashMap<ISimComponent, List<IInSimPort<?>>>();
-    portFactory = new DefaultPortFactory();
+  private BackTrackHandler bth;
+
+  /**
+   *
+   */
+  protected SimSchedulerPortMapRoundRobin() {
+    comp2tickfree = new HashMap<>();
+    comp2SimPorts = new HashMap<>();
+    portFactory = new RoundRobinPortFactory();
     allInitialized = false;
     init();
   }
 
   /**
-   * Organizes {@link #comp2TickFree} for all registered components.
+   * Organizes {@link #comp2tickfree} for all registered components.
    */
   private void checkComponentInit() {
     if (!allInitialized) {
       for (ISimComponent comp : comp2SimPorts.keySet()) {
-        BitSet tickless = comp2TickFree.get(comp);
-        if (tickless == null) {
-          Set<IInSimPort<?>> unconnected = new HashSet<IInSimPort<?>>();
+        if (comp2tickfree.get(comp) == null) {
+          Set<IInSimPort<?>> unconnected = new HashSet<>();
 
           List<IInSimPort<?>> portOfComp = comp2SimPorts.get(comp);
 
@@ -60,14 +70,8 @@ class SimSchedulerBitSet implements IScheduler {
           if (unconnected.size() != portOfComp.size()) {
             portOfComp.removeAll(unconnected);
           }
-          int size = portOfComp.size();
-          tickless = new BitSet(size);
-          for (int i = 0; i < size; i++) {
-            portOfComp.get(i).setPortNumber(i);
-            tickless.set(i, true);
-          }
+          comp2tickfree.put(comp, new PortMap(portOfComp));
         }
-        comp2TickFree.put(comp, tickless);
       }
       allInitialized = true;
     }
@@ -100,20 +104,16 @@ class SimSchedulerBitSet implements IScheduler {
   /**
    * @return comp2SimPorts
    */
+  @Override
   public Map<ISimComponent, List<IInSimPort<?>>> getComp2SimPorts() {
     return this.comp2SimPorts;
-  }
-
-  @Override
-  public void startScheduler(int time) {
-
   }
 
   /**
    * @return comp2tickfree
    */
-  protected Map<ISimComponent, BitSet> getComp2TickFree() {
-    return this.comp2TickFree;
+  protected Map<ISimComponent, IPortMap> getComp2tickfree() {
+    return this.comp2tickfree;
   }
 
   /**
@@ -134,7 +134,7 @@ class SimSchedulerBitSet implements IScheduler {
    */
   @Override
   public void init() {
-    comp2TickFree.clear();
+    comp2tickfree.clear();
   }
 
   /**
@@ -143,30 +143,36 @@ class SimSchedulerBitSet implements IScheduler {
   @Override
   public void setupPort(IInSimPort<?> port) {
     ISimComponent component = port.getComponent();
-    if (!comp2SimPorts.containsKey(component)) {
+    if (!comp2tickfree.containsKey(component)) {
       component.setSimulationId(comp2SimPorts.size());
-      comp2SimPorts.put(component, new LinkedList<IInSimPort<?>>());
+      comp2tickfree.put(component, null);
+      comp2SimPorts.put(component, new LinkedList<>());
       // we added a component that has not been initialized yet
       allInitialized = false;
     }
     comp2SimPorts.get(component).add(port);
+    component.getBth().setScheduler(this);
+    bth = component.getBth();
   }
 
   /**
    * @param comp component of the given port
    * @param port port to schedule
-   * @param msg  msg to process
+   * @param msg msg to process
    * @return true, if msg is handled by port's component immediately, else false
    */
-  protected boolean processData(ISimComponent comp, IInSimPort<?> port, Message<?> msg) {
+  protected boolean processData(ISimComponent comp,
+                                IInSimPort<?> port,
+                                Message<?> msg) {
     boolean success = false;
-    BitSet tickless = comp2TickFree.get(comp);
+    IPortMap tickless = comp2tickfree.get(comp);
 
-    if (tickless.get(port.getPortNumber())) {
+    if (tickless.isTickFree(port)) {
       success = true;
       comp.handleMessage(port, msg);
       comp.checkConstraints();
     }
+
     return success;
   }
 
@@ -176,12 +182,11 @@ class SimSchedulerBitSet implements IScheduler {
    * @return true, if msg is handled by port's component immediately, else false
    */
   protected boolean processTick(ISimComponent comp, IInSimPort<?> port) {
-    BitSet tickfree = comp2TickFree.get(comp);
-
     boolean success = false;
-    tickfreeRemove(tickfree, port);
+    IPortMap tickfree = comp2tickfree.get(comp);
 
-    if (tickfree.isEmpty()) {
+    tickfree.setPortBlocked(port);
+    if (tickfree.allPortsBlocked()) {
       success = true;
       List<IInSimPort<?>> allPorts = comp2SimPorts.get(comp);
       comp.handleTick();
@@ -193,7 +198,7 @@ class SimSchedulerBitSet implements IScheduler {
       // reorganize tickfree ports
       for (IInSimPort<?> p : allPorts) {
         if (!p.hasTickReceived()) {
-          tickfree.set(p.getPortNumber());
+          tickfree.setPortTickfree(p);
         }
       }
       // trigger processing of buffered messages
@@ -201,6 +206,7 @@ class SimSchedulerBitSet implements IScheduler {
         p.processBufferedMsgs();
       }
     }
+
     return success;
   }
 
@@ -210,8 +216,9 @@ class SimSchedulerBitSet implements IScheduler {
   @Override
   public boolean registerPort(IInSimPort<?> port, TickedMessage<?> msg) {
     checkComponentInit();
-    boolean success = false;
+    boolean success;
     ISimComponent comp = port.getComponent();
+
     if (msg.isTick()) {
       success = processTick(comp, port);
     } else {
@@ -228,17 +235,22 @@ class SimSchedulerBitSet implements IScheduler {
     this.portFactory = fact;
   }
 
-  /**
-   * Checks, if the given port is tickfree now. If so, it is set to be blocked by a tick.
-   *
-   * @param tickfree tickfree storage
-   * @param port     port to check
-   * @return true, if the given port has not been blocked by a tick before.
-   */
-  protected void tickfreeRemove(BitSet tickfree, IInSimPort<?> port) {
-    int nr = port.getPortNumber();
-    if (tickfree.get(nr)) {
-      tickfree.clear(nr);
+  @Override
+  public void startScheduler(int time) {
+    roundRobinInputPorts(time);
+  }
+
+  public void roundRobinInputPorts(int time) {
+    while (time > 0) {
+      for (ISimComponent component : comp2SimPorts.keySet()) {
+        for (IInSimPort simPort : comp2SimPorts.get(component)) {
+          simPort.processMessageQueue();
+        }
+      }
+      bth.checkInSched();
+      time--;
+
     }
   }
+
 }

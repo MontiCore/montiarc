@@ -2,12 +2,15 @@
 package sim.sched;
 
 import sim.automaton.TransitionPath;
+import sim.comp.ISimComponent;
 import sim.message.Message;
 import sim.message.TickedMessage;
 import sim.port.IInSimPort;
 import sim.port.IPortFactory;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Prescribes methods for the simulation scheduler.
@@ -51,4 +54,8 @@ public interface IScheduler extends IPortFactory, Serializable {
    * handles Symbolic messages
    */
   void handleSymbolic(Message<TransitionPath> msg, IInSimPort<?> port);
+
+  Map<ISimComponent, List<IInSimPort<?>>> getComp2SimPorts();
+
+  void startScheduler(int time);
 }

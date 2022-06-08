@@ -8,6 +8,9 @@ import sim.message.Message;
 import sim.message.TickedMessage;
 import sim.port.*;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Scheduler optimized for components with one incoming port.
  */
@@ -112,6 +115,16 @@ class SingleInScheduler implements IScheduler {
 
   @Override
   public void handleSymbolic(Message<TransitionPath> msg, IInSimPort<?> port) {
+
+  }
+
+  @Override
+  public Map<ISimComponent, List<IInSimPort<?>>> getComp2SimPorts() {
+    return null;
+  }
+
+  @Override
+  public void startScheduler(int time) {
 
   }
 }

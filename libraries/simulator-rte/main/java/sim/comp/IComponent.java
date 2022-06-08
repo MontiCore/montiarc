@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.comp;
 
+import sim.automaton.ComponentState;
 import sim.sched.IScheduler;
 import sim.error.ISimulationErrorHandler;
 import sim.serialiser.BackTrackHandler;
@@ -33,4 +34,8 @@ public interface IComponent {
    * @param errorHandler handles all occurred errors
    */
   void setup(IScheduler scheduler, ISimulationErrorHandler errorHandler, BackTrackHandler backTrackHandler);
+
+  ComponentState getComponentState();
+
+  void setComponentState(ComponentState cs);
 }

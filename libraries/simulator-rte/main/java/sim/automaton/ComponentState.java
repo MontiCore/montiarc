@@ -10,6 +10,8 @@ import java.util.Map;
 
 public class ComponentState implements Serializable {
 
+  private String componentName;
+
   private AutomataState currentState;
 
   private List<Serializable> stateVariables;
@@ -23,17 +25,23 @@ public class ComponentState implements Serializable {
   private Map<IPort, List<TickedMessage>> outMessages;
   private Map<IPort, List<Long>> outMessagesID;
 
+  private String guard;
+
+  private Boolean messageNotSend= false;
+
 
   public ComponentState(AutomataState currentState,
                         List<Serializable> stateVariables,
                         IPort inputPort,
                         TickedMessage inMessage,
-                        Map<IPort, List<TickedMessage>> outMessages) {
+                        Map<IPort, List<TickedMessage>> outMessages, String componentName, String guard) {
     this.currentState = currentState;
     this.stateVariables = stateVariables;
     this.inputPort = inputPort;
     this.inMessage = inMessage;
     this.outMessages = outMessages;
+    this.componentName= componentName;
+    this.guard=guard;
   }
 
   public AutomataState getCurrentState() {
@@ -70,5 +78,21 @@ public class ComponentState implements Serializable {
 
   public void setOutMessagesID(Map<IPort, List<Long>> outMessagesID) {
     this.outMessagesID = outMessagesID;
+  }
+
+  public String getComponentName() {
+    return componentName;
+  }
+
+  public String getGuard() {
+    return guard;
+  }
+
+  public Boolean getMessageNotSend() {
+    return messageNotSend;
+  }
+
+  public void setMessageNotSend(Boolean messageNotSend) {
+    this.messageNotSend = messageNotSend;
   }
 }

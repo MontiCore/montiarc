@@ -31,9 +31,9 @@ public class SimulationTester {
 
   @Test
   public void botfirst() {
-    IScheduler scheduler = SchedulerFactory.createDefaultScheduler();
+    IScheduler scheduler = SchedulerFactory.createPortMapRoundRobinScheduler();
     ISimulationErrorHandler errorHandler = new SimpleErrorHandler();
-    BackTrackHandler backTrackHandler = new BackTrackHandler(System.getProperty("buildDir") + "/test-sources/serialser/");
+    BackTrackHandler backTrackHandler = new BackTrackHandler(System.getProperty("buildDir") + "/test-sources/serialser/", 5, 10);
     MergeCompBotFirst mc = new MergeCompBotFirst();
 
     mc.setup(scheduler, errorHandler, backTrackHandler);
@@ -45,6 +45,8 @@ public class SimulationTester {
       mc.getin().accept(Tick.get());
     }
 
+    scheduler.startScheduler(100);
+
     System.out.println(StreamPrinter.print(((TestPort) mc.getout()).getStream()));
 
     assertTrue(!((TestPort) mc.getout()).getStream().isEmpty());
@@ -52,9 +54,9 @@ public class SimulationTester {
 
   @Test
   public void topFirst() {
-    IScheduler scheduler = SchedulerFactory.createDefaultScheduler();
+    IScheduler scheduler = SchedulerFactory.createPortMapRoundRobinScheduler();
     ISimulationErrorHandler errorHandler = new SimpleErrorHandler();
-    BackTrackHandler backTrackHandler = new BackTrackHandler(System.getProperty("buildDir") + "/test-sources/serialser/");
+    BackTrackHandler backTrackHandler = new BackTrackHandler(System.getProperty("buildDir") + "/test-sources/serialser/", 5, 10);
     MergeCompTopFirst mc = new MergeCompTopFirst();
 
     mc.setup(scheduler, errorHandler, backTrackHandler);
@@ -66,6 +68,8 @@ public class SimulationTester {
       mc.getin().accept(Tick.get());
     }
 
+    scheduler.startScheduler(100);
+
     System.out.println(StreamPrinter.print(((TestPort) mc.getout()).getStream()));
 
     assertTrue(!((TestPort) mc.getout()).getStream().isEmpty());
@@ -73,18 +77,19 @@ public class SimulationTester {
 
   @Test
   public void concreteInputUnderSpeci() {
-    IScheduler scheduler = SchedulerFactory.createDefaultScheduler();
+    IScheduler scheduler = SchedulerFactory.createPortMapRoundRobinScheduler();
     ISimulationErrorHandler errorHandler = new SimpleErrorHandler();
-    BackTrackHandler backTrackHandler = new BackTrackHandler(System.getProperty("buildDir") + "/test-sources/serialser/");
+    BackTrackHandler backTrackHandler = new BackTrackHandler(System.getProperty("buildDir") + "/test-sources/serialser/", 5, 10);
     MergeCompUnderSpeci mc = new MergeCompUnderSpeci();
 
     mc.setup(scheduler, errorHandler, backTrackHandler);
 
     int input = 2;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 3; i++) {
       mc.getin().accept(input);
-      mc.getin().accept(Tick.get());
     }
+
+    scheduler.startScheduler(50);
 
     System.out.println(StreamPrinter.print(((TestPort) mc.getout()).getStream()));
 

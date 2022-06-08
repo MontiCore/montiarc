@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys.automatonComp;
 
+import sim.automaton.ComponentState;
 import sim.automaton.IAutomaton;
 import sim.automaton.State;
 import sim.message.Message;
@@ -53,4 +54,13 @@ public class DummyAutomaton extends ComponentAutomaton implements IAutomaton {
     InProcessed(Message.of(m));
   }
 
+  @Override
+  public ComponentState getComponentState() {
+    return null;
+  }
+
+  @Override
+  public void setComponentState(ComponentState cs) {
+
+  }
 }

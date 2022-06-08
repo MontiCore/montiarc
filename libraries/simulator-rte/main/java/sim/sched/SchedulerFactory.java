@@ -10,6 +10,8 @@ public class SchedulerFactory {
 
   private static SchedulerFactory theInstance = new SchedulerFactory();
 
+  public static IScheduler createPortMapRoundRobinScheduler(){ return theInstance.doCreatePortMapRoundRobin();}
+
   /**
    * @return a default {@link IScheduler} that uses a {@link BitSet} to remember tickless ports.
    */
@@ -106,4 +108,6 @@ public class SchedulerFactory {
   protected IScheduler doCreateSingleInScheduler() {
     return new SingleInScheduler();
   }
+
+  protected IScheduler doCreatePortMapRoundRobin() { return new SimSchedulerPortMapRoundRobin();}
 }

@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys;
 
+import sim.automaton.ComponentState;
 import sim.comp.AComponent;
 import sim.comp.ATimedComponent;
 import sim.comp.IComponent;
@@ -80,6 +81,16 @@ public class ComponentDummy extends ATimedComponent implements ComponentDummyPor
   public void handleTick() {
     pOut.send(Tick.<String>get());
     incLocalTime();
+  }
+
+  @Override
+  public ComponentState getComponentState() {
+    return null;
+  }
+
+  @Override
+  public void setComponentState(ComponentState cs) {
+
   }
 
   @Override

@@ -30,7 +30,7 @@ public class IncomingStreamTest {
     comp = new ComponentPortTest();
     testling = new SimplePort<String>();
     IScheduler s = new SimulationScheduler();
-    comp.setup(s, new SimpleErrorHandler(), new BackTrackHandler(System.getProperty("buildDir") + "/test-sources/incstream/"));
+    comp.setup(s, new SimpleErrorHandler(), new BackTrackHandler(System.getProperty("buildDir") + "/test-sources/incstream/",5 ,10));
     testling.setup(comp, s);
   }
 

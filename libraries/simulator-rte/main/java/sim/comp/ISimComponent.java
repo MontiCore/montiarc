@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.comp;
 
+import sim.automaton.ComponentState;
 import sim.message.Message;
 import sim.port.IInPort;
 import sim.serialiser.BackTrackHandler;
@@ -44,4 +45,5 @@ public interface ISimComponent extends IComponent {
   void setBth(BackTrackHandler bth);
 
   BackTrackHandler getBth();
+
 }

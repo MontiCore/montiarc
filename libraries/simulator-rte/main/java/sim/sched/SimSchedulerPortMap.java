@@ -99,8 +99,13 @@ class SimSchedulerPortMap implements IScheduler {
   /**
    * @return comp2SimPorts
    */
-  protected Map<ISimComponent, List<IInSimPort<?>>> getComp2SimPorts() {
+  public Map<ISimComponent, List<IInSimPort<?>>> getComp2SimPorts() {
     return this.comp2SimPorts;
+  }
+
+  @Override
+  public void startScheduler(int time) {
+
   }
 
   /**

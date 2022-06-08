@@ -7,10 +7,7 @@ import sim.message.Message;
 import sim.message.TickedMessage;
 import sim.port.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Default simulation scheduler w/o maps.
@@ -221,6 +218,16 @@ public class SimSchedulerHashSetNoMaps implements IScheduler {
 
   @Override
   public void handleSymbolic(Message<TransitionPath> msg, IInSimPort<?> port) {
+
+  }
+
+  @Override
+  public Map<ISimComponent, List<IInSimPort<?>>> getComp2SimPorts() {
+    return null;
+  }
+
+  @Override
+  public void startScheduler(int time) {
 
   }
 }

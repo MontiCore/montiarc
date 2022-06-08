@@ -29,13 +29,14 @@ public abstract class FinalComp extends ATimedComponent implements IFinalComp {
   public void setup(IScheduler s, ISimulationErrorHandler eh, BackTrackHandler backTrackHandler) {
     setScheduler(s);
     setErrorHandler(eh);
+    setBth(backTrackHandler);
+    setComponentName("Final");
     mInBool = s.createInPort();
     mInBool.setup(this, s);
     mInInt = s.createInPort();
     mInInt.setup(this, s);
     mOut = new TestPort<Integer>();
-    setBth(backTrackHandler);
-    setComponentName("Final");
+
   }
 
   public IInSimPort<Integer> getmInInt() {

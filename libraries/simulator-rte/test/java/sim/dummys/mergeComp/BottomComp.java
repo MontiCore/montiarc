@@ -27,10 +27,11 @@ public abstract class BottomComp extends ATimedComponent implements IBottomComp 
   public void setup(IScheduler s, ISimulationErrorHandler eh, BackTrackHandler backTrackHandler) {
     setScheduler(s);
     setErrorHandler(eh);
-    bIn = s.createInPort();
-    bIn.setup(this, s);
     setBth(backTrackHandler);
     setComponentName("Bottom");
+    bIn = s.createInPort();
+    bIn.setup(this, s);
+
   }
 
   public IInSimPort<Integer> getbIn() {

@@ -2,6 +2,7 @@
 package sim.dummys;
 
 
+import sim.automaton.ComponentState;
 import sim.comp.AComponent;
 import sim.comp.ISimComponent;
 import sim.comp.ITimedComponent;
@@ -59,6 +60,16 @@ public class ComponentPortTest extends AComponent implements ISimComponent, ITim
 
   @Override
   public void handleTick() {
+
+  }
+
+  @Override
+  public ComponentState getComponentState() {
+    return null;
+  }
+
+  @Override
+  public void setComponentState(ComponentState cs) {
 
   }
 

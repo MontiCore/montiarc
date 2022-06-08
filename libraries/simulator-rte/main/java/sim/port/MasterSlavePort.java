@@ -222,4 +222,19 @@ public class MasterSlavePort<T> implements IPort<T> {
   public int getPortNumber() {
     return number;
   }
+
+  @Override
+  public void processMessageQueue() {
+
+  }
+
+  @Override
+  public Queue<TickedMessage<?>> getMessageQueue() {
+    return null;
+  }
+
+  @Override
+  public void setMessageQueue(Queue<TickedMessage<?>> messageQueue) {
+
+  }
 }

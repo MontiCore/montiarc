@@ -12,6 +12,7 @@ import sim.sched.IScheduler;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * A Port that acts as an incoming and outgoing port. It contains a stream of
@@ -156,5 +157,20 @@ public class SimplePort<T> extends AbstractPort<T> implements IPort<T> {
   @Override
   public void wakeUp() {
     // not needed in a SimplePort
+  }
+
+  @Override
+  public void processMessageQueue() {
+
+  }
+
+  @Override
+  public Queue<TickedMessage<?>> getMessageQueue() {
+    return null;
+  }
+
+  @Override
+  public void setMessageQueue(Queue<TickedMessage<?>> messageQueue) {
+
   }
 }

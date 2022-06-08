@@ -215,4 +215,14 @@ public class SlaveScheduler implements IScheduler {
   public void handleSymbolic(Message<TransitionPath> msg, IInSimPort<?> port) {
 
   }
+
+  @Override
+  public Map<ISimComponent, List<IInSimPort<?>>> getComp2SimPorts() {
+    return null;
+  }
+
+  @Override
+  public void startScheduler(int time) {
+
+  }
 }

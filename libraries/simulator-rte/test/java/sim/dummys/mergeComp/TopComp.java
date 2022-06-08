@@ -26,10 +26,11 @@ public abstract class TopComp extends ATimedComponent implements ITopComp {
   public void setup(IScheduler s, ISimulationErrorHandler eh, BackTrackHandler backTrackHandler) {
     setScheduler(s);
     setErrorHandler(eh);
-    tIn = s.createInPort();
-    tIn.setup(this, s);
     setBth(backTrackHandler);
     setComponentName("Top");
+    tIn = s.createInPort();
+    tIn.setup(this, s);
+
   }
 
   public IInSimPort<Integer> gettIn() {

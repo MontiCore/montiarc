@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package sim.dummys.mergeComp;
 
+import sim.automaton.ComponentState;
 import sim.comp.ATimedComponent;
 import sim.error.ISimulationErrorHandler;
 import sim.message.Message;
@@ -27,14 +28,16 @@ public class MergeCompBotFirst extends ATimedComponent implements IMergeComp {
 
   @Override
   public void setup(IScheduler scheduler, ISimulationErrorHandler errorHandler, BackTrackHandler backTrackHandler) {
+
+    //setBth(backTrackHandler);
+    setErrorHandler(errorHandler);
+    setScheduler(scheduler);
+    setComponentName("Merge");
     //setup own prots
     in = scheduler.createForwardPort();
     in.setup(this, scheduler);
 
-    setBth(backTrackHandler);
-    setErrorHandler(errorHandler);
-    setScheduler(scheduler);
-    setComponentName("Merge");
+
 
     //create components
     bottom = new BottomCompAut();
@@ -75,6 +78,16 @@ public class MergeCompBotFirst extends ATimedComponent implements IMergeComp {
 
   @Override
   public void handleTick() {
+
+  }
+
+  @Override
+  public ComponentState getComponentState() {
+    return null;
+  }
+
+  @Override
+  public void setComponentState(ComponentState cs) {
 
   }
 }
