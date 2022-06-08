@@ -31,7 +31,7 @@ import java.util.Optional;
  */
 public class LocalVarDeclarationTest extends AbstractTest {
 
-  protected static final String TEST_MODEL_PATH = "montiarc/_symboltable/localvardeclarations/";
+  protected static final String TEST_MODEL_PATH = "symboltable/localvardeclarations/";
 
   @ParameterizedTest
   @ValueSource(strings = {"UsesLocalVarCorrectly.arc"})

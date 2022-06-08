@@ -1,4 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
+package fieldInitExpressionTypesCorrect;
 
 /**
  * Invalid model. For testing purposes, let the types 'String' and 'Person' be resolvable.

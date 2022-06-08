@@ -8,8 +8,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.nio.file.Paths;
 
 public class StatechartComponentParserTest extends AbstractTest {
-  private static final String VALID_MODELS = "montiarc/parser/statecharts/valid";
-  private static final String FALSE_MODELS = "montiarc/parser/statecharts/invalid";
+  private static final String VALID_MODELS = "parser/statecharts/valid";
+  private static final String FALSE_MODELS = "parser/statecharts/invalid";
 
   @ParameterizedTest
   @ValueSource(strings = {"A_EmptyStateChart.arc",

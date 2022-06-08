@@ -26,7 +26,7 @@ class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
 
   @Override
   protected String getPackage() {
-    return "expressionMatchesType/fields";
+    return "fieldInitExpressionTypesCorrect";
   }
 
   @Override

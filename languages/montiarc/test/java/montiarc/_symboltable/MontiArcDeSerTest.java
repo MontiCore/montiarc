@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 
 public class MontiArcDeSerTest extends AbstractTest {
 
-  protected static final String MODEL_PATH = "montiarc/_symboltable/deserialization/";
+  protected static final String MODEL_PATH = "symboltable/deserialization/";
 
   protected MontiArcSymbols2Json deSer = new MontiArcSymbols2Json();
 

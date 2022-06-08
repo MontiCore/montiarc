@@ -14,6 +14,6 @@ public class DynamicComponentsParserTest extends AbstractTest {
   @ParameterizedTest
   @ValueSource(strings = {"ShiftController.arc"})
   public void shouldParseValidComponent(String fileName) {
-    ParserTest.parse(Paths.get(RELATIVE_MODEL_PATH, "montiarc", "parser", fileName).toString(), false);
+    ParserTest.parse(Paths.get(RELATIVE_MODEL_PATH, "parser", fileName).toString(), false);
   }
 }

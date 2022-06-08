@@ -20,7 +20,7 @@ public class GenericComponentInstanceTest extends AbstractTest {
 
   protected String Test_PATH = "montiarc/_symboltable";
 
-  @Disabled(value = "Because we currently do not support generic component types.")
+  @Disabled(value = "Test resource not findable.") // TODO: remove test / find test resource / replace test / create test case
   @Test
   public void shouldReturnGenericType() {
     //Given

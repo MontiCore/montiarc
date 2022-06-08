@@ -1,9 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
-//package components.head.name;
 package parser;
 
 /*
- * Invalid Model. Component name is different to file name.
+ * Invalid Model. The component name is different from the file root.
  */
 component SomeName {
   // Empty body

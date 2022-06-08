@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 class ParameterDefaultValueTypesCorrectTest extends AbstractCoCoTest {
 
-  protected static String PACKAGE = "expressionMatchesType.parameters";
+  protected static String PACKAGE = "parameterDefaultValueTypesCorrect";
 
   @Override
   protected String getPackage() {

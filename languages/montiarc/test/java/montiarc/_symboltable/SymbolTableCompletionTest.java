@@ -60,7 +60,7 @@ import java.util.List;
  */
 public class SymbolTableCompletionTest extends AbstractTest {
 
-  protected static final String TEST_MODEL_PATH = "montiarc/_symboltable/completion/";
+  protected static final String TEST_MODEL_PATH = "symboltable/completion/";
 
   @ParameterizedTest
   @ValueSource(strings = {"ComplexComponent.arc"})

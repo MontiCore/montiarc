@@ -20,7 +20,7 @@ import java.util.Collection;
 
 public abstract class AbstractCoCoTest extends AbstractTest {
 
-  protected static final String MODEL_PATH = "montiarc/_cocos/";
+  protected static final String MODEL_PATH = "cocos/";
   protected MontiArcCoCoChecker checker;
   protected MontiArcTool cli;
 

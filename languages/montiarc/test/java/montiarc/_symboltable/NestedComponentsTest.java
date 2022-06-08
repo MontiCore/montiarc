@@ -6,6 +6,7 @@ import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Log;
 import montiarc.AbstractTest;
 import montiarc.MontiArcTool;
 import montiarc.MontiArcMill;
@@ -22,18 +23,21 @@ import java.util.Optional;
 
 public class NestedComponentsTest extends AbstractTest {
 
-  protected String Test_PATH = "symboltable/nestedComponents";
+  protected String Test_PATH = "symboltable/nestedComponents/";
 
   @Test
   public void shouldCreateNestedTypes () {
     // Given
-    MontiArcTool cli = new MontiArcTool();
-    Path path = Paths.get(RELATIVE_MODEL_PATH, Test_PATH);
-    cli.loadSymbols(MontiArcMill.globalScope().getFileExt(), path);
-    Collection<ASTMACompilationUnit> asts = cli.parse(".arc", path);
-    cli.runDefaultTasks(asts);
+    MontiArcTool tool = new MontiArcTool();
+    Path path = Paths.get(RELATIVE_MODEL_PATH, Test_PATH, "WithInnerComponents.arc");
+    ASTMACompilationUnit ast = tool.parse(path)
+      .orElseThrow(() -> new IllegalStateException(Log.getFindings().toString()));
+    tool.createSymbolTable(ast);
+    tool.runDefaultCoCos(ast);
+    tool.completeSymbolTable(ast);
 
-    ComponentTypeSymbol rootComp = MontiArcMill.globalScope().resolveComponentType("WithInnerComponents").get();
+    ComponentTypeSymbol rootComp = MontiArcMill.globalScope().resolveComponentType(
+      "nestedComponents.WithInnerComponents").get();
 
     // When
     List<ComponentTypeSymbol> innerTypes = rootComp.getInnerComponents();

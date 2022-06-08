@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ParserTest extends AbstractTest {
 
-  protected static final String PACKAGE = "montiarc/parser";
+  protected static final String PACKAGE = "parser";
 
   static public Optional<ASTMACompilationUnit> parse(String relativeFilePath,
       boolean expParserErrors) {

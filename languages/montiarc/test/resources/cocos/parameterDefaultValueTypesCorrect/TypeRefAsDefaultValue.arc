@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package expressionMatchesType.parameters;
+package parameterDefaultValueTypesCorrect;
 
 /**
  * Invalid model. For testing purposes, let the types 'String' and 'Person' be resolvable.

@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 
 public class TypeParameterGetterTest extends AbstractTest {
 
-  private static final Path PATH = Paths.get(RELATIVE_MODEL_PATH, "montiarc", "_symboltable", "generics");
+  private static final Path PATH = Paths.get(RELATIVE_MODEL_PATH, "symboltable", "generics");
 
   @BeforeEach
   public void setUp() {

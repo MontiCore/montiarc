@@ -1,10 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
-//package some.wrong.packagename;
-package parser;
+package some.wrong.packagename;
 
 /*
- * Invalid model. Has an invalid package declaration.
- * Formerly named "S4" in MontiArc3.
+ * Invalid model. The package declaration is different from the file location.
  */
 component PackageAndLocationDiffer {
 

@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.parser;
+package parser;
 
 /**
  * Valid Model.

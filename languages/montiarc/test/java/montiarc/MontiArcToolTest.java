@@ -34,6 +34,8 @@ import java.util.stream.Stream;
  */
 public class MontiArcToolTest extends AbstractTest {
 
+  protected final static String TEST_DIR = "clitool";
+
   @BeforeEach
   @Override
   public void init() {
@@ -220,14 +222,15 @@ public class MontiArcToolTest extends AbstractTest {
     // Given
     MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
-    String[] args = new String[]{"-mp", "test/resources/CLI/industryModels/industry"};
+    String subTestDIr = "industryModels/industry";
+    String modelPath = String.join("/", RELATIVE_MODEL_PATH, TEST_DIR, subTestDIr);
+    String[] args = new String[]{"-mp", modelPath};
     CommandLineParser cliParser = new DefaultParser();
     CommandLine cli = cliParser.parse(options, args);
 
     // When && Then
     Assertions.assertTrue(tool.createModelPath(cli).getEntries().stream()
-      .map(Path::toString).anyMatch(x -> x.equals(Paths.get("test/resources/" +
-        "CLI/industryModels/industry").toAbsolutePath().toString())));
+      .map(Path::toString).anyMatch(x -> x.equals(Paths.get(modelPath).toAbsolutePath().toString())));
   }
 
   /**
@@ -250,7 +253,9 @@ public class MontiArcToolTest extends AbstractTest {
   protected static Stream<Arguments> parseDirectoriesExpectedExceptionProvider() throws ParseException {
     MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
-    String[] args = new String[]{"-mp", "test/resources/CLI/industryModels/industry"};
+    String subTestDIr = "industryModels/industry";
+    String modelPath = String.join("/", RELATIVE_MODEL_PATH, TEST_DIR, subTestDIr);
+    String[] args = new String[]{"-mp", modelPath};
     CommandLineParser cliParser = new DefaultParser();
     CommandLine cli = cliParser.parse(options, args);
     return Stream.of(
@@ -268,7 +273,9 @@ public class MontiArcToolTest extends AbstractTest {
     // Given
     MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
-    String[] args = new String[]{"-mp", "test/resources/CLI/industryModels"};
+    String subTestDir = "industryModels";
+    String modelPath = String.join("/", RELATIVE_MODEL_PATH, TEST_DIR, subTestDir);
+    String[] args = new String[]{"-mp", modelPath};
     CommandLineParser cliParser = new DefaultParser();
     CommandLine cli = cliParser.parse(options, args);
     tool.parse(".arc", tool.createModelPath(cli).getEntries());
@@ -301,16 +308,18 @@ public class MontiArcToolTest extends AbstractTest {
   }
 
   protected static Stream<Arguments> parseDirectoryExpectedExceptionProvider() {
+
+    String industrySubDir = "industryModels/industry";
+    String industryModelPath = String.join("/", RELATIVE_MODEL_PATH, TEST_DIR, industrySubDir);
+    String piControllerPath = String.join("/", industryModelPath, "PIController.arc");
+
     return Stream.of(
-      Arguments.of(null, Paths.get("test/resources/CLI/" +
-        "industryModels/industry/").toAbsolutePath(), NullPointerException.class),
-      Arguments.of("", Paths.get("test/resources/CLI/" +
-        "industryModels/industry/").toAbsolutePath(), IllegalArgumentException.class),
+      Arguments.of(null, Paths.get(industryModelPath).toAbsolutePath(), NullPointerException.class),
+      Arguments.of("", Paths.get(industryModelPath).toAbsolutePath(), IllegalArgumentException.class),
       Arguments.of(".arc", null, NullPointerException.class),
       Arguments.of(".arc", Paths.get("invalid/model/path").toAbsolutePath(),
         IllegalArgumentException.class),
-      Arguments.of(".arc", Paths.get("test/resources/CLI/" +
-          "industryModels/industry/PIController.arc").toAbsolutePath(),
+      Arguments.of(".arc", Paths.get(piControllerPath).toAbsolutePath(),
         IllegalArgumentException.class)
     );
   }
@@ -322,10 +331,11 @@ public class MontiArcToolTest extends AbstractTest {
   public void shouldParseDirectory() {
     // Given
     MontiArcTool tool = new MontiArcTool();
+    String subTestDir = "industryModels/industry";
+    String modelPath = String.join("/", RELATIVE_MODEL_PATH + "/", TEST_DIR, subTestDir + "/");
 
     // When && Then
-    Assertions.assertTrue(tool.parse(".arc", Paths.get("test/resources/"
-        + "/CLI/industryModels/industry/").toAbsolutePath()).stream()
+    Assertions.assertTrue(tool.parse(".arc", Paths.get(modelPath).toAbsolutePath()).stream()
       .anyMatch(ast -> ast.getPackage().getQName().equals("industryModels.industry")));
   }
 
@@ -350,7 +360,8 @@ public class MontiArcToolTest extends AbstractTest {
       Arguments.of(null, NullPointerException.class),
       Arguments.of(Paths.get("invalid/model/path").toAbsolutePath(),
         IllegalArgumentException.class),
-      Arguments.of(Paths.get("test/resources/" + "/modelloader/industry").toAbsolutePath(),
+      // It is illegal to pass a directory, a file is expected:
+      Arguments.of(Paths.get(RELATIVE_MODEL_PATH + "/" + TEST_DIR).toAbsolutePath(),
         IllegalArgumentException.class)
     );
   }
@@ -362,10 +373,11 @@ public class MontiArcToolTest extends AbstractTest {
   public void shouldParseFile() {
     // Given
     MontiArcTool tool = new MontiArcTool();
+    String qualifiedModelName = "industryModels/industry/PIController.arc";
+    String modelLocation = String.join("/", RELATIVE_MODEL_PATH, TEST_DIR, qualifiedModelName);
 
     // When
-    Optional<ASTMACompilationUnit> ast2 = tool.parse(Paths.get("test/resources/" +
-      "/CLI/industryModels/industry/PIController.arc").toAbsolutePath());
+    Optional<ASTMACompilationUnit> ast2 = tool.parse(Paths.get(modelLocation).toAbsolutePath());
 
     // Then
     Assertions.assertTrue(ast2.isPresent());
@@ -405,8 +417,9 @@ public class MontiArcToolTest extends AbstractTest {
   public void shouldCreateSymbolTableCollection() {
     // Given
     MontiArcTool tool = new MontiArcTool();
-    Collection<ASTMACompilationUnit> asts = tool.parse(".arc", Paths.get("test/resources/" +
-      "/CLI/industryModels/"));
+    String subTestDir = "industryModels/";
+    String modelPath = String.join("/", RELATIVE_MODEL_PATH, TEST_DIR, subTestDir);
+    Collection<ASTMACompilationUnit> asts = tool.parse(".arc", Paths.get(modelPath));
     Preconditions.checkState(!asts.isEmpty());
 
     // When
@@ -427,8 +440,9 @@ public class MontiArcToolTest extends AbstractTest {
   public void shouldCreateSymbolTable() {
     // Given
     MontiArcTool tool = new MontiArcTool();
-    Optional<ASTMACompilationUnit> ast = tool.parse(Paths.get("test/resources/" +
-      "/CLI/industryModels/industry/PIController.arc"));
+    String qualifiedModelName = "industryModels/industry/PIController.arc";
+    String modelLocation = String.join("/", RELATIVE_MODEL_PATH, TEST_DIR, qualifiedModelName);
+    Optional<ASTMACompilationUnit> ast = tool.parse(Paths.get(modelLocation));
     Preconditions.checkState(ast.isPresent());
     
     // When
@@ -470,10 +484,12 @@ public class MontiArcToolTest extends AbstractTest {
   public void shouldCompleteSymbolTable() throws IOException {
     // Given
     MontiArcTool tool = new MontiArcTool();
-    ASTMACompilationUnit astA = MontiArcMill.parser().parse(Paths.get("test/resources/" +
-      "/CLI/symboltable/completer/A.arc").toAbsolutePath().toString()).orElseThrow(IllegalArgumentException::new);
-    ASTMACompilationUnit astB = MontiArcMill.parser().parse(Paths.get("test/resources/" +
-      "/CLI/symboltable/completer/B.arc").toAbsolutePath().toString()).orElseThrow(IllegalArgumentException::new);
+    String pakkage = "symboltable/completer";
+    String packagePath = String.join("/", RELATIVE_MODEL_PATH, TEST_DIR, pakkage);
+    ASTMACompilationUnit astA = MontiArcMill.parser().parse(
+      Paths.get(packagePath + "/" + "A.arc").toAbsolutePath().toString()).orElseThrow(IllegalArgumentException::new);
+    ASTMACompilationUnit astB = MontiArcMill.parser().parse(
+      Paths.get(packagePath + "/" + "B.arc").toAbsolutePath().toString()).orElseThrow(IllegalArgumentException::new);
     tool.createSymbolTable(astA);
     tool.createSymbolTable(astB);
 
@@ -507,9 +523,11 @@ public class MontiArcToolTest extends AbstractTest {
     // Given
     MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
+    String pakkage = "nestedComponent";
+    String packagePath = String.join("/", RELATIVE_MODEL_PATH, TEST_DIR, pakkage);
     Collection<ASTMACompilationUnit> innerComponents =
-      tool.parse(".arc", Paths.get("test/resources/CLI/nestedComponent").toAbsolutePath());
-    String[] args = new String[]{"-pp", "test/resources/file.arc", "-s", "test/resources/"};
+      tool.parse(".arc", Paths.get(packagePath).toAbsolutePath());
+    String[] args = new String[]{"-pp", RELATIVE_MODEL_PATH + "/" + "file.arc", "-s", RELATIVE_MODEL_PATH};
     CommandLineParser cliParser = new DefaultParser();
     CommandLine cli = cliParser.parse(options, args);
 
@@ -528,14 +546,15 @@ public class MontiArcToolTest extends AbstractTest {
     // Given
     MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
-    File file = new File(Paths.get("test/resources/CLI/prettyprint/WithInnerComponents.arc")
+    String modelBasePath = String.join("/", RELATIVE_MODEL_PATH, TEST_DIR);
+    File file = new File(Paths.get(modelBasePath + "/prettyprint/WithInnerComponents.arc")
       .toAbsolutePath().toString());
     if (file.exists()) {
       Assertions.assertTrue(file.delete());
     }
     Collection<ASTMACompilationUnit> innerComponents =
-      tool.parse(".arc", Paths.get("test/resources/CLI/nestedComponent").toAbsolutePath());
-    String[] args = new String[]{"-pp", "test/resources/CLI/prettyprint/"};
+      tool.parse(".arc", Paths.get(modelBasePath + "/" + "nestedComponent").toAbsolutePath());
+    String[] args = new String[]{"-pp", modelBasePath + "/" + "prettyprint/"};
     CommandLineParser cliParser = new DefaultParser();
     CommandLine cli = cliParser.parse(options, args);
 
@@ -552,14 +571,16 @@ public class MontiArcToolTest extends AbstractTest {
     // Given
     MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
-    File file = new File(Paths.get(System.getProperty("buildDir") + "/test-sources/CLI/symboltable/WithInnerComponents.arcsym")
+    String serializeDir = String.join("/", System.getProperty("buildDir"), "test-sources", TEST_DIR, "symboltable");
+    File file = new File(Paths.get(serializeDir + "/WithInnerComponents.arcsym")
       .toAbsolutePath().toString());
     if (file.exists()) {
       Assertions.assertTrue(file.delete());
     }
+    String parsePath = String.join("/", RELATIVE_MODEL_PATH, TEST_DIR, "nestedComponent");
     Collection<ASTMACompilationUnit> innerComponents =
-      tool.parse(".arc", Paths.get("test/resources/CLI/nestedComponent").toAbsolutePath());
-    String[] args = new String[]{"-s", System.getProperty("buildDir") + "/test-sources/CLI/symboltable/"};
+      tool.parse(".arc", Paths.get(parsePath).toAbsolutePath());
+    String[] args = new String[]{"-s", serializeDir};
     CommandLineParser cliParser = new DefaultParser();
     CommandLine cli = cliParser.parse(options, args);
     tool.createSymbolTable(innerComponents);
@@ -568,6 +589,9 @@ public class MontiArcToolTest extends AbstractTest {
     // When && Then
     Assertions.assertDoesNotThrow(() -> tool.runAdditionalTasks(innerComponents, cli));
     Assertions.assertTrue(file.exists());
+
+    // Clean-up
+    file.delete();
   }
 
   /**
@@ -589,11 +613,12 @@ public class MontiArcToolTest extends AbstractTest {
 
   protected static Stream<Arguments> storeSymbolsCollectionExpectedExceptionProvider() {
     MontiArcTool tool = new MontiArcTool();
+    String baseModelPath = String.join("/", RELATIVE_MODEL_PATH, TEST_DIR);
     Collection<ASTMACompilationUnit> innerComponents =
-      tool.parse(".arc", Paths.get("test/resources/CLI/nestedComponent").toAbsolutePath());
+      tool.parse(".arc", Paths.get(baseModelPath + "/nestedComponent").toAbsolutePath());
     return Stream.of(
       Arguments.of(null, innerComponents, NullPointerException.class),
-      Arguments.of("test/resources/CLI/symboltable/", null, NullPointerException.class),
+      Arguments.of(baseModelPath +"/symboltable/", null, NullPointerException.class),
       Arguments.of("", innerComponents, IllegalArgumentException.class)
     );
   }
@@ -618,13 +643,13 @@ public class MontiArcToolTest extends AbstractTest {
   protected static Stream<Arguments> storeSymbolsAstExpectedExceptionProvider() {
     MontiArcTool tool = new MontiArcTool();
 
-    ASTMACompilationUnit ast = tool.parse(Paths.get("test/resources/"
-      + "CLI/nestedComponent/WithInnerComponents.arc").toAbsolutePath())
-      .orElseThrow(IllegalStateException::new);
+    String baseTestDir = String.join("/", RELATIVE_MODEL_PATH, TEST_DIR);
+    ASTMACompilationUnit ast = tool.parse(
+      Paths.get(baseTestDir + "/nestedComponent/WithInnerComponents.arc").toAbsolutePath()).orElseThrow(IllegalStateException::new);
     ast.setSpannedScope(MontiArcMill.scope());
     return Stream.of(
       Arguments.of(null, ast, NullPointerException.class),
-      Arguments.of("test/resources/CLI/symboltable/", null, NullPointerException.class),
+      Arguments.of(baseTestDir + "/symboltable/", null, NullPointerException.class),
       Arguments.of("", ast, IllegalArgumentException.class)
     );
   }
@@ -650,8 +675,9 @@ public class MontiArcToolTest extends AbstractTest {
 
   protected static Stream<Arguments> storeSymbolsScopeExpectedExceptionProvider() {
     MontiArcTool tool = new MontiArcTool();
+    String baseTestDir = String.join("/", RELATIVE_MODEL_PATH, TEST_DIR);
     Optional<ASTMACompilationUnit> optAst = tool.parse(
-      Paths.get("test/resources/CLI/nestedComponent/WithInnerComponents.arc").toAbsolutePath()
+      Paths.get(baseTestDir + "/nestedComponent/WithInnerComponents.arc").toAbsolutePath()
     );
     Assertions.assertTrue(optAst.isPresent());
     ASTMACompilationUnit ast = optAst.get();

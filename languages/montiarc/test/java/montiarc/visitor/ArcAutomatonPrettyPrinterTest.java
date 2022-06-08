@@ -38,7 +38,7 @@ import java.util.Optional;
 
 public class ArcAutomatonPrettyPrinterTest extends AbstractTest {
 
-  private static final String MODELS = "montiarc/parser/statecharts/valid";
+  private static final String MODELS = "parser/statecharts/valid";
 
   @ParameterizedTest
   @ValueSource(strings = {
