@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._auxiliary;
 
-import de.monticore.types.mcsimplegenerictypes.MCSimpleGenericTypesMill;
+import arcbasis._visitor.IFullPrettyPrinter;
 import genericarc._symboltable.GenericArcSymbolTableCompleter;
 import montiarc.check.MontiArcSynthesizeComponent;
 import montiarc.check.MontiArcTypeCalculator;
@@ -9,9 +9,14 @@ import montiarc.check.MontiArcTypeCalculator;
 public class GenericArcMillForMontiArc extends GenericArcMillForMontiArcTOP {
 
   @Override
+  protected IFullPrettyPrinter _fullPrettyPrinter() {
+    return montiarc.MontiArcMill.fullPrettyPrinter();
+  }
+
+  @Override
   protected GenericArcSymbolTableCompleter _symbolTableCompleter() {
     return new GenericArcSymbolTableCompleter(
-      MCSimpleGenericTypesMill.mcSimpleGenericTypesPrettyPrinter(),
+      montiarc.MontiArcMill.fullPrettyPrinter(),
       new MontiArcSynthesizeComponent(),
       new MontiArcTypeCalculator()
     );

@@ -1,14 +1,19 @@
 /* (c) https://github.com/MontiCore/monticore */
 package genericarc;
 
+import arcbasis._visitor.ArcBasisFullPrettyPrinter;
+import arcbasis._visitor.IFullPrettyPrinter;
 import genericarc._symboltable.GenericArcSymbolTableCompleter;
 import genericarc._symboltable.GenericArcSymbolTableCompleterDelegator;
+import genericarc._visitor.GenericArcFullPrettyPrinter;
 
 public class GenericArcMill extends GenericArcMillTOP {
 
   protected static GenericArcMill millGenericArcSymbolTableCompleter ;
 
   protected static GenericArcMill millGenericArcSymbolTableCompleterDelegator;
+
+  protected static GenericArcMill millFullPrettyPrinter;
 
   public static GenericArcSymbolTableCompleter symbolTableCompleter ()  {
     if (millGenericArcSymbolTableCompleter == null) {
@@ -32,15 +37,28 @@ public class GenericArcMill extends GenericArcMillTOP {
     return new GenericArcSymbolTableCompleterDelegator();
   }
 
+  public static IFullPrettyPrinter fullPrettyPrinter() {
+    if (millFullPrettyPrinter == null) {
+      millFullPrettyPrinter = getMill();
+    }
+    return millFullPrettyPrinter._fullPrettyPrinter();
+  }
+
+  protected IFullPrettyPrinter _fullPrettyPrinter() {
+    return new GenericArcFullPrettyPrinter();
+  }
+
   public static void initMe(GenericArcMill a)  {
     GenericArcMillTOP.initMe(a);
     millGenericArcSymbolTableCompleter = a;
     millGenericArcSymbolTableCompleterDelegator = a;
+    millFullPrettyPrinter = a;
   }
 
   public static void reset() {
     GenericArcMillTOP.reset();
     millGenericArcSymbolTableCompleter = null;
     millGenericArcSymbolTableCompleterDelegator = null;
+    millFullPrettyPrinter = null;
   }
 }

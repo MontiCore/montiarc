@@ -51,6 +51,7 @@ public class ArcBasisFullPrettyPrinter implements IFullPrettyPrinter {
     return getPrinter().getContent();
   }
 
+  @Override
   public String prettyprint(@NotNull ASTMCBasicTypesNode a) {
     Preconditions.checkNotNull(a);
     getPrinter().clearBuffer();
@@ -58,6 +59,7 @@ public class ArcBasisFullPrettyPrinter implements IFullPrettyPrinter {
     return getPrinter().getContent();
   }
 
+  @Override
   public String prettyprint(@NotNull ASTExpressionsBasisNode a) {
     Preconditions.checkNotNull(a);
     getPrinter().clearBuffer();
@@ -74,13 +76,5 @@ public class ArcBasisFullPrettyPrinter implements IFullPrettyPrinter {
 
   public ArcBasisTraverser getTraverser() {
     return traverser;
-  }
-
-  @Override
-  public String prettyprint(@NotNull ASTExpression a) {
-    Preconditions.checkNotNull(a);
-    getPrinter().clearBuffer();
-    a.accept(getTraverser());
-    return getPrinter().getContent();
   }
 }

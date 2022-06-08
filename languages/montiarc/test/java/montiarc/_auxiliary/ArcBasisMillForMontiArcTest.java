@@ -2,15 +2,17 @@
 package montiarc._auxiliary;
 
 import arcbasis.ArcBasisMill;
+import arcbasis._visitor.ArcBasisFullPrettyPrinter;
+import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.ArcBasisSynthesizeComponent;
 import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
 import arccore.ArcCoreMill;
+import arccore._visitor.ArcCoreFullPrettyPrinter;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.ISynthesize;
-import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
-import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
 import montiarc.MontiArcMill;
+import montiarc._visitor.MontiArcFullPrettyPrinter;
 import montiarc.check.MontiArcSynthesizeComponent;
 import montiarc.check.MontiArcTypeCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -37,11 +39,11 @@ public class ArcBasisMillForMontiArcTest {
       MontiArcMill.init();
     };
     return Stream.of(
-      Arguments.of(setupArcBasis, MCBasicTypesFullPrettyPrinter.class,
+      Arguments.of(setupArcBasis, ArcBasisFullPrettyPrinter.class,
         ArcBasisSynthesizeComponent.class, ArcBasisTypeCalculator.class),
-      Arguments.of(setupArcCore, MCBasicTypesFullPrettyPrinter.class,
+      Arguments.of(setupArcCore, ArcBasisFullPrettyPrinter.class,
         ArcBasisSynthesizeComponent.class, ArcBasisTypeCalculator.class),
-      Arguments.of(setupMontiArc, MCSimpleGenericTypesFullPrettyPrinter.class,
+      Arguments.of(setupMontiArc, MontiArcFullPrettyPrinter.class,
         MontiArcSynthesizeComponent.class, MontiArcTypeCalculator.class)
     );
   }
@@ -49,9 +51,9 @@ public class ArcBasisMillForMontiArcTest {
   /**
    * Ensures that the symbol table completer is initialized with the expected type printer and component synthesizer
    * with respect to the initialized mill. That is, the mill should provide a symbol table completer that is initialized
-   * with a {@link MCBasicTypesFullPrettyPrinter}, a {@link ArcBasisSynthesizeComponent}, and a {@link
+   * with a {@link IFullPrettyPrinter}, a {@link ArcBasisSynthesizeComponent}, and a {@link
    * ArcBasisTypeCalculator} when using the  {@link ArcBasisMill}, respectively provide a symbol table completer that is
-   * initialized with a {@link MCSimpleGenericTypesFullPrettyPrinter}, a {@link ArcBasisSynthesizeComponent}, and a
+   * initialized with a {@link IFullPrettyPrinter}, a {@link ArcBasisSynthesizeComponent}, and a
    * {@link MontiArcTypeCalculator} when using the {@link MontiArcMill}.
    *
    * @param setup                      The setup to execute, e.g., initialize the respective mill.
@@ -62,7 +64,7 @@ public class ArcBasisMillForMontiArcTest {
   @ParameterizedTest
   @MethodSource("setupAndExpectedClassForSymTabCompleterProvider")
   public void shouldProvideCompleterAsExpected(@NotNull Runnable setup,
-                                               @NotNull Class<MCBasicTypesFullPrettyPrinter> expectedPrettyPrinter,
+                                               @NotNull Class<IFullPrettyPrinter> expectedPrettyPrinter,
                                                @NotNull Class<ISynthesizeComponent> expectedCompSynthesizer,
                                                @NotNull Class<ISynthesize> expectedSymTypeSynthesizer) {
     Preconditions.checkNotNull(setup);

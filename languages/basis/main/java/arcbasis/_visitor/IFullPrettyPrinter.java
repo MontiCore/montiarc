@@ -1,7 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._visitor;
 
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpressionsBasisNode;
+import de.monticore.types.mcbasictypes._ast.ASTMCBasicTypesNode;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
@@ -9,6 +10,8 @@ import org.codehaus.commons.nullanalysis.NotNull;
  */
 public interface IFullPrettyPrinter {
 
-  String prettyprint(@NotNull ASTExpression a);
+  String prettyprint(@NotNull ASTExpressionsBasisNode a);
+
+  String prettyprint(@NotNull ASTMCBasicTypesNode type);
 
 }

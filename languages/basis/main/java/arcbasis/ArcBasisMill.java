@@ -6,12 +6,16 @@ import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
 import arcbasis._symboltable.PortSymbolSurrogate;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
 import arcbasis._symboltable.ComponentInstanceSymbolSurrogate;
+import arcbasis._visitor.ArcBasisFullPrettyPrinter;
+import arcbasis._visitor.IFullPrettyPrinter;
 
 public class ArcBasisMill extends ArcBasisMillTOP {
 
   protected static ArcBasisMill millArcBasisSymbolTableCompleter ;
 
   protected static ArcBasisMill millArcBasisSymbolTableCompleterDelegator;
+
+  protected static ArcBasisMill millFullPrettyPrinter;
 
   public static ArcBasisSymbolTableCompleter symbolTableCompleter ()  {
     if (millArcBasisSymbolTableCompleter == null) {
@@ -35,15 +39,28 @@ public class ArcBasisMill extends ArcBasisMillTOP {
     return new ArcBasisSymbolTableCompleterDelegator();
   }
 
+  public static IFullPrettyPrinter fullPrettyPrinter() {
+    if (millFullPrettyPrinter == null) {
+      millFullPrettyPrinter = getMill();
+    }
+    return millFullPrettyPrinter._fullPrettyPrinter();
+  }
+
+  protected IFullPrettyPrinter _fullPrettyPrinter() {
+    return new ArcBasisFullPrettyPrinter();
+  }
+
   public static void initMe(ArcBasisMill a)  {
     ArcBasisMillTOP.initMe(a);
     millArcBasisSymbolTableCompleter = a;
     millArcBasisSymbolTableCompleterDelegator = a;
+    millFullPrettyPrinter = a;
   }
 
   public static void reset() {
     ArcBasisMillTOP.reset();
     millArcBasisSymbolTableCompleter = null;
     millArcBasisSymbolTableCompleterDelegator = null;
+    millFullPrettyPrinter = null;
   }
 }

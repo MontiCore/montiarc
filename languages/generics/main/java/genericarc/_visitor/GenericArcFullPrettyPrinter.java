@@ -3,6 +3,8 @@ package genericarc._visitor;
 
 import arcbasis._ast.ASTArcBasisNode;
 import arcbasis._visitor.ArcBasisPrettyPrinter;
+import arcbasis._visitor.IFullPrettyPrinter;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpressionsBasisNode;
 import de.monticore.expressions.prettyprint.ExpressionsBasisPrettyPrinter;
 import de.monticore.mcbasics._ast.ASTMCBasicsNode;
@@ -13,7 +15,7 @@ import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 import genericarc.GenericArcMill;
 import genericarc._ast.ASTGenericArcNode;
 
-public class GenericArcFullPrettyPrinter {
+public class GenericArcFullPrettyPrinter implements IFullPrettyPrinter {
 
   protected GenericArcTraverser traverser;
 
@@ -53,12 +55,14 @@ public class GenericArcFullPrettyPrinter {
     return getPrinter().getContent();
   }
 
+  @Override
   public String prettyprint(ASTMCBasicTypesNode a) {
     getPrinter().clearBuffer();
     a.accept(getTraverser());
     return getPrinter().getContent();
   }
 
+  @Override
   public String prettyprint(ASTExpressionsBasisNode a) {
     getPrinter().clearBuffer();
     a.accept(getTraverser());

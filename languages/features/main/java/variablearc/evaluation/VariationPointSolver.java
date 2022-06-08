@@ -41,7 +41,7 @@ public class VariationPointSolver {
     isIncomplete = true;
     while (nextVariationPoints.size() > 0) {
       VariableArcVariationPoint vp = nextVariationPoints.get(0);
-      Optional<Boolean> res = ExpressionSolver.solve(vp.getCondition(), typeExprOfVariableComponent, VariableArcMill.variableArcFullPrettyPrinter()::prettyprint);
+      Optional<Boolean> res = ExpressionSolver.solve(vp.getCondition(), typeExprOfVariableComponent, VariableArcMill.fullPrettyPrinter()::prettyprint);
       if (res.orElse(true)) {
         nextVariationPoints.addAll(vp.getChildVariationPoints());
         variationPointList.add(vp);

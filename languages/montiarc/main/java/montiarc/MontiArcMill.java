@@ -16,7 +16,6 @@ public class MontiArcMill extends MontiArcMillTOP {
   protected static MontiArcMill millMontiArcSymbolTableCompleterDelegator;
 
   protected static MontiArcMill millMontiArcFullPrettyPrinter;
-  protected static Supplier<IFullPrettyPrinter> supplierFullPrettyPrinter;
 
   public static MontiArcSymbolTableCompleter symbolTableCompleter ()  {
     if (millMontiArcSymbolTableCompleter == null) {
@@ -40,17 +39,14 @@ public class MontiArcMill extends MontiArcMillTOP {
     return new MontiArcSymbolTableCompleterDelegator();
   }
 
-  public static IFullPrettyPrinter variableArcFullPrettyPrinter() {
+  public static IFullPrettyPrinter fullPrettyPrinter() {
     if (millMontiArcFullPrettyPrinter == null) {
       millMontiArcFullPrettyPrinter = getMill();
     }
-    if (supplierFullPrettyPrinter == null){
-      supplierFullPrettyPrinter = millMontiArcFullPrettyPrinter::_montiArcFullPrettyPrinter;
-    }
-    return supplierFullPrettyPrinter.get();
+    return millMontiArcFullPrettyPrinter._fullPrettyPrinter();
   }
 
-  protected IFullPrettyPrinter _montiArcFullPrettyPrinter() {
+  protected IFullPrettyPrinter _fullPrettyPrinter() {
     return new MontiArcFullPrettyPrinter();
   }
 
@@ -59,8 +55,6 @@ public class MontiArcMill extends MontiArcMillTOP {
     millMontiArcSymbolTableCompleter = a;
     millMontiArcSymbolTableCompleterDelegator = a;
     millMontiArcFullPrettyPrinter = a;
-
-    VariableArcMill.setSupplierFullPrettyPrinter(a::_montiArcFullPrettyPrinter);
   }
 
   public static void reset() {

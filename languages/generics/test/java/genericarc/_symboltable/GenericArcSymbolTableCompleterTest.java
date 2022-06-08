@@ -5,6 +5,7 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.ArcBasisSynthesizeComponent;
 import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
@@ -12,10 +13,8 @@ import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import de.monticore.types.mcbasictypes.MCBasicTypesMill;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
-import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import genericarc.AbstractTest;
 import genericarc.GenericArcMill;
 import genericarc._ast.ASTArcTypeParameter;
@@ -41,12 +40,12 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
 
   protected GenericArcSymbolTableCompleter completer;
 
-  protected static Stream<MCBasicTypesFullPrettyPrinter> typesPrinterProvider() {
-    return Stream.of(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
+  protected static Stream<IFullPrettyPrinter> typesPrinterProvider() {
+    return Stream.of(GenericArcMill.fullPrettyPrinter());
   }
 
   public static Stream<Arguments> constructorWithNullArgumentProvider() {
-    MCBasicTypesFullPrettyPrinter printer = MCBasicTypesMill.mcBasicTypesPrettyPrinter();
+    IFullPrettyPrinter printer = GenericArcMill.fullPrettyPrinter();
     ISynthesizeComponent compSynth = new ArcBasisSynthesizeComponent();
     IArcTypeCalculator typeSynth = new GenericArcTypeCalculator();
 
@@ -96,12 +95,12 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link GenericArcSymbolTableCompleter#setTypePrinter(MCBasicTypesFullPrettyPrinter)}
+   * Method under test {@link GenericArcSymbolTableCompleter#setTypePrinter(IFullPrettyPrinter)}
    */
   @Test
   public void shouldSetTypePrinter() {
     // Given
-    MCBasicTypesFullPrettyPrinter typesPrinter = MCBasicTypesMill.mcBasicTypesPrettyPrinter();
+    IFullPrettyPrinter typesPrinter = GenericArcMill.fullPrettyPrinter();
 
     // When
     this.getCompleter().setTypePrinter(typesPrinter);
@@ -111,7 +110,7 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link GenericArcSymbolTableCompleter#setTypePrinter(MCBasicTypesFullPrettyPrinter)}
+   * Method under test {@link GenericArcSymbolTableCompleter#setTypePrinter(IFullPrettyPrinter)}
    */
   @Test
   public void setTypePrinterShouldThrowNullPointerException() {
@@ -185,13 +184,13 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link GenericArcSymbolTableCompleter#GenericArcSymbolTableCompleter(MCBasicTypesFullPrettyPrinter)}
+   * Method under test {@link GenericArcSymbolTableCompleter#GenericArcSymbolTableCompleter(IFullPrettyPrinter)}
    *
    * @param printer the first constructor parameter
    */
   @ParameterizedTest
   @MethodSource("typesPrinterProvider")
-  public void shouldConstructClass(@NotNull MCBasicTypesFullPrettyPrinter printer) {
+  public void shouldConstructClass(@NotNull IFullPrettyPrinter printer) {
     Preconditions.checkNotNull(printer);
 
     // When
@@ -204,7 +203,7 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link GenericArcSymbolTableCompleter#GenericArcSymbolTableCompleter(MCBasicTypesFullPrettyPrinter)}
+   * Method under test {@link GenericArcSymbolTableCompleter#GenericArcSymbolTableCompleter(IFullPrettyPrinter)}
    *
    * @param constructorCall The constructor call that should throw the null pointer exception
    */

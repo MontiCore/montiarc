@@ -7,6 +7,7 @@ import arcbasis._visitor.IFullPrettyPrinter;
 import com.google.common.base.Preconditions;
 import comfortablearc._visitor.ComfortableArcPrettyPrinter;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpressionsBasisNode;
 import de.monticore.expressions.prettyprint.AssignmentExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.CommonExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.ExpressionsBasisPrettyPrinter;
@@ -15,6 +16,7 @@ import de.monticore.prettyprint.*;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.statements.prettyprint.MCCommonStatementsPrettyPrinter;
 import de.monticore.statements.prettyprint.MCVarDeclarationStatementsPrettyPrinter;
+import de.monticore.types.mcbasictypes._ast.ASTMCBasicTypesNode;
 import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 import de.monticore.types.prettyprint.MCCollectionTypesPrettyPrinter;
 import de.monticore.types.prettyprint.MCSimpleGenericTypesPrettyPrinter;
@@ -221,7 +223,15 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
     return getPrinter().getContent();
   }
 
-  public String prettyprint(ASTExpression node) {
+  @Override
+  public String prettyprint(ASTExpressionsBasisNode node) {
+    getPrinter().clearBuffer();
+    node.accept(getTraverser());
+    return getPrinter().getContent();
+  }
+
+  @Override
+  public String prettyprint(ASTMCBasicTypesNode node) {
     getPrinter().clearBuffer();
     node.accept(getTraverser());
     return getPrinter().getContent();

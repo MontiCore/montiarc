@@ -14,8 +14,7 @@ public class VariableArcMill extends VariableArcMillTOP {
 
   protected static VariableArcMill millVariableArcSymbolTableCompleterDelegator;
 
-  protected static VariableArcMill millVariableArcFullPrettyPrinter;
-  protected static Supplier<IFullPrettyPrinter> supplierFullPrettyPrinter;
+  protected static VariableArcMill millFullPrettyPrinter;
 
   public static VariableArcSymbolTableCompleter symbolTableCompleter() {
     if (millVariableArcSymbolTableCompleter == null) {
@@ -31,34 +30,25 @@ public class VariableArcMill extends VariableArcMillTOP {
     return millVariableArcSymbolTableCompleterDelegator._symbolTableCompleterDelegator();
   }
 
-  public static IFullPrettyPrinter variableArcFullPrettyPrinter() {
-    if (millVariableArcFullPrettyPrinter == null) {
-      millVariableArcFullPrettyPrinter = getMill();
+  public static IFullPrettyPrinter fullPrettyPrinter() {
+    if (millFullPrettyPrinter == null) {
+      millFullPrettyPrinter = getMill();
     }
-    if (supplierFullPrettyPrinter == null) {
-      supplierFullPrettyPrinter = millVariableArcFullPrettyPrinter::_variableArcFullPrettyPrinter;
-    }
-    return supplierFullPrettyPrinter.get();
-  }
-
-  public static void setSupplierFullPrettyPrinter(Supplier<IFullPrettyPrinter> pp) {
-    supplierFullPrettyPrinter = pp;
+    return millFullPrettyPrinter._fullPrettyPrinter();
   }
 
   public static void initMe(VariableArcMill a) {
     VariableArcMillTOP.initMe(a);
     millVariableArcSymbolTableCompleter = a;
     millVariableArcSymbolTableCompleterDelegator = a;
-    millVariableArcFullPrettyPrinter = a;
-    supplierFullPrettyPrinter = a::_variableArcFullPrettyPrinter;
+    millFullPrettyPrinter = a;
   }
 
   public static void reset() {
     VariableArcMillTOP.reset();
     millVariableArcSymbolTableCompleter = null;
     millVariableArcSymbolTableCompleterDelegator = null;
-    millVariableArcFullPrettyPrinter = null;
-    supplierFullPrettyPrinter = null;
+    millFullPrettyPrinter = null;
   }
 
   protected VariableArcSymbolTableCompleter _symbolTableCompleter() {
@@ -69,7 +59,7 @@ public class VariableArcMill extends VariableArcMillTOP {
     return new VariableArcSymbolTableCompleterDelegator();
   }
 
-  protected IFullPrettyPrinter _variableArcFullPrettyPrinter() {
+  protected IFullPrettyPrinter _fullPrettyPrinter() {
     return new VariableArcFullPrettyPrinter();
   }
 }

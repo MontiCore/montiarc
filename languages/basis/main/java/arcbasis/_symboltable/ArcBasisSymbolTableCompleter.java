@@ -1,19 +1,19 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis._visitor.ArcBasisVisitor2;
+import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.*;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.TypeCheckResult;
-import de.monticore.types.mcbasictypes.MCBasicTypesMill;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
-import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -23,7 +23,7 @@ import java.util.Optional;
 
 public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisHandler {
 
-  protected MCBasicTypesFullPrettyPrinter typePrinter;
+  protected IFullPrettyPrinter typePrinter;
   protected CompTypeExpression currentCompInstanceType;
   protected ArcBasisTraverser traverser;
   protected IArcTypeCalculator typeCalculator;
@@ -32,14 +32,14 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   protected ASTMCType currentFieldType;
 
   public ArcBasisSymbolTableCompleter() {
-    this(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
+    this(ArcBasisMill.fullPrettyPrinter());
   }
 
-  public ArcBasisSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter) {
+  public ArcBasisSymbolTableCompleter(@NotNull IFullPrettyPrinter typePrinter) {
     this(typePrinter, new ArcBasisSynthesizeComponent(), new ArcBasisTypeCalculator());
   }
 
-  public ArcBasisSymbolTableCompleter(@NotNull MCBasicTypesFullPrettyPrinter typePrinter,
+  public ArcBasisSymbolTableCompleter(@NotNull IFullPrettyPrinter typePrinter,
                                       @NotNull ISynthesizeComponent componentSynthesizer,
                                       @NotNull IArcTypeCalculator typeCalculator) {
     this.typePrinter = Preconditions.checkNotNull(typePrinter);
@@ -47,11 +47,11 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
   }
 
-  public MCBasicTypesFullPrettyPrinter getTypePrinter() {
+  public IFullPrettyPrinter getTypePrinter() {
     return this.typePrinter;
   }
 
-  protected void setTypePrinter(@NotNull MCBasicTypesFullPrettyPrinter typesPrinter) {
+  protected void setTypePrinter(@NotNull IFullPrettyPrinter typesPrinter) {
     Preconditions.checkNotNull(typesPrinter);
     this.typePrinter = typesPrinter;
   }
