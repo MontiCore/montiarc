@@ -106,18 +106,18 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends AbstractTes
     synth4qual.handle(astQualComp);
 
     // Then
-    Assertions.assertTrue(result4normal.getCurrentResult().isPresent());
-    Assertions.assertTrue(result4qual.getCurrentResult().isPresent());
-    Assertions.assertTrue(result4normal.getCurrentResult().get() instanceof TypeExprOfGenericComponent);
-    Assertions.assertTrue(result4qual.getCurrentResult().get() instanceof TypeExprOfGenericComponent);
+    Assertions.assertTrue(result4normal.getResult().isPresent());
+    Assertions.assertTrue(result4qual.getResult().isPresent());
+    Assertions.assertTrue(result4normal.getResult().get() instanceof TypeExprOfGenericComponent);
+    Assertions.assertTrue(result4qual.getResult().get() instanceof TypeExprOfGenericComponent);
 
     TypeExprOfGenericComponent result4normalAsGeneric =
-      (TypeExprOfGenericComponent) result4normal.getCurrentResult().get();
+      (TypeExprOfGenericComponent) result4normal.getResult().get();
     TypeExprOfGenericComponent result4qualAsGeneric =
-      (TypeExprOfGenericComponent) result4qual.getCurrentResult().get();
+      (TypeExprOfGenericComponent) result4qual.getResult().get();
 
-    Assertions.assertEquals(compSym, result4normal.getCurrentResult().get().getTypeInfo());
-    Assertions.assertEquals(compSym, result4qual.getCurrentResult().get().getTypeInfo());
+    Assertions.assertEquals(compSym, result4normal.getResult().get().getTypeInfo());
+    Assertions.assertEquals(compSym, result4qual.getResult().get().getTypeInfo());
 
     Assertions.assertTrue(result4normalAsGeneric.getBindingFor("K").get() instanceof SymTypeOfObject);
     Assertions.assertTrue(result4normalAsGeneric.getBindingFor("V").get() instanceof SymTypeOfGenerics);
@@ -164,7 +164,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends AbstractTes
     synth.handle(astComp);
 
     // Then
-    Assertions.assertFalse(resultWrapper.getCurrentResult().isPresent());
+    Assertions.assertFalse(resultWrapper.getResult().isPresent());
   }
 
   @Test
@@ -197,7 +197,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends AbstractTes
     synth.handle(astComp);
 
     // Then
-    Assertions.assertFalse(resultWrapper.getCurrentResult().isPresent());
+    Assertions.assertFalse(resultWrapper.getResult().isPresent());
   }
 
   @Test
@@ -241,7 +241,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends AbstractTes
     synth.handle(astComp);
 
     // Then
-    Assertions.assertFalse(resultWrapper.getCurrentResult().isPresent());
+    Assertions.assertFalse(resultWrapper.getResult().isPresent());
   }
 
   /**

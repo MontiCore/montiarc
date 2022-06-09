@@ -136,14 +136,14 @@ class UnresolvableImportTest extends AbstractCoCoTest {
 
     presentType.addMethodSymbol(MontiArcMill.methodSymbolBuilder()
       .setName("instanceMethod")
-      .setReturnType(Mockito.mock(SymTypeExpression.class))
+      .setType(Mockito.mock(SymTypeExpression.class))
       .setIsStatic(false)
       .build()
     );
 
     presentType.addMethodSymbol(MontiArcMill.methodSymbolBuilder()
       .setName("staticMethod")
-      .setReturnType(Mockito.mock(SymTypeExpression.class))
+      .setType(Mockito.mock(SymTypeExpression.class))
       .setIsStatic(true)
       .build()
     );

@@ -31,13 +31,13 @@ public class SynthesizeVariableComponentFromMCBasicTypes extends SynthesizeCompo
 
     if (compType.isEmpty()) {
       Log.error(ArcError.SYMBOL_NOT_FOUND.format(compTypeName), mcType.get_SourcePositionStart());
-      resultWrapper.setCurrentResultAbsent();
+      resultWrapper.setResultAbsent();
     }
     else {
       if (compType.size() > 1) {
         Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(compTypeName), mcType.get_SourcePositionStart());
       }
-      resultWrapper.setCurrentResult(new TypeExprOfVariableComponent(compType.get(0)));
+      resultWrapper.setResult(new TypeExprOfVariableComponent(compType.get(0)));
     }
   }
 }

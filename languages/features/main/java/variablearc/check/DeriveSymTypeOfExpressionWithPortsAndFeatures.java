@@ -24,7 +24,7 @@ public class DeriveSymTypeOfExpressionWithPortsAndFeatures extends DeriveSymType
       type.ifPresent(port -> typeCheckResult.setField());
     }
     if (type.isEmpty()) {
-      type = getEnclosingVariableScope(expr).flatMap(s -> s.resolveArcFeature(expr.getName())).map(feature -> SymTypeExpressionFactory.createTypeConstant("boolean"));
+      type = getEnclosingVariableScope(expr).flatMap(s -> s.resolveArcFeature(expr.getName())).map(feature -> SymTypeExpressionFactory.createPrimitive("boolean"));
       type.ifPresent(feature -> typeCheckResult.setField());
     }
     return type;

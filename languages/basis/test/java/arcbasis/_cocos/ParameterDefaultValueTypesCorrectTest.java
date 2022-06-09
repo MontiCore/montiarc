@@ -43,11 +43,11 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractTest {
 
   public void addFieldsToScope() {
     FieldSymbol anInt = ArcBasisMill.fieldSymbolBuilder().setName(INT_VAR_NAME)
-      .setType(SymTypeExpressionFactory.createTypeConstant("int")).build();
+      .setType(SymTypeExpressionFactory.createPrimitive("int")).build();
     FieldSymbol aBool = ArcBasisMill.fieldSymbolBuilder().setName(BOOL_VAR_NAME)
-      .setType(SymTypeExpressionFactory.createTypeConstant("boolean")).build();
+      .setType(SymTypeExpressionFactory.createPrimitive("boolean")).build();
     FieldSymbol aDouble = ArcBasisMill.fieldSymbolBuilder().setName(DOUBLE_VAR_NAME)
-      .setType(SymTypeExpressionFactory.createTypeConstant("double")).build();
+      .setType(SymTypeExpressionFactory.createPrimitive("double")).build();
 
     SymbolService.link(ArcBasisMill.globalScope(), anInt);
     SymbolService.link(ArcBasisMill.globalScope(), aBool);

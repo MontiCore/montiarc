@@ -16,7 +16,7 @@ dependencies {
 
   api(project(":languages:core"))
 
-  implementation("${libs.apache}:${libs.apacheVersion}")
+  implementation("${libs.apache}:${libs.apacheCommonsVersion}")
   implementation("${libs.guava}:${libs.guavaVersion}")
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")
 

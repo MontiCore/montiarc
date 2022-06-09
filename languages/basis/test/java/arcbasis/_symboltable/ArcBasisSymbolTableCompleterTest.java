@@ -414,7 +414,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
 
     // Then
     Assertions.assertNotNull(symParam.getType());
-    Assertions.assertTrue(SymTypeExpressionFactory.createTypeConstant("byte").deepEquals(symParam.getType()));
+    Assertions.assertTrue(SymTypeExpressionFactory.createPrimitive("byte").deepEquals(symParam.getType()));
   }
 
   @Test
@@ -471,7 +471,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
 
     // Then
     Assertions.assertDoesNotThrow(symParam::getType);
-    Assertions.assertTrue(SymTypeExpressionFactory.createTypeConstant("byte").deepEquals(symParam.getType()));
+    Assertions.assertTrue(SymTypeExpressionFactory.createPrimitive("byte").deepEquals(symParam.getType()));
   }
 
   @Test
@@ -527,7 +527,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
 
     // Then
     Assertions.assertNotNull(symField.getType());
-    Assertions.assertTrue(SymTypeExpressionFactory.createTypeConstant("byte").deepEquals(symField.getType()));
+    Assertions.assertTrue(SymTypeExpressionFactory.createPrimitive("byte").deepEquals(symField.getType()));
   }
 
   @Test

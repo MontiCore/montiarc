@@ -341,9 +341,9 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
     // Then
     Assertions.assertEquals(0, typeParamSym.getSuperTypesList().size());
     Assertions.assertEquals(2, typeParamWithBoundSym.getSuperTypesList().size());
-    Assertions.assertTrue(SymTypeExpressionFactory.createTypeConstant("double").deepEquals(
+    Assertions.assertTrue(SymTypeExpressionFactory.createPrimitive("double").deepEquals(
       typeParamWithBoundSym.getSuperTypes(0)));
-    Assertions.assertTrue(SymTypeExpressionFactory.createTypeConstant("boolean").deepEquals(
+    Assertions.assertTrue(SymTypeExpressionFactory.createPrimitive("boolean").deepEquals(
       typeParamWithBoundSym.getSuperTypes(1)));
   }
 

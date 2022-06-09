@@ -13,7 +13,7 @@ dependencies {
   api(project(":languages:montiarc"))
   implementation(project(":libraries:majava-rte"))
   implementation("${libs.seCommonsGroovy}:${libs.monticoreVersion}")
-  implementation("${libs.apache}:${libs.apacheVersion}")
+  implementation("${libs.apache}:${libs.apacheCommonsVersion}")
   implementation("${libs.format}:${libs.formatVersion}")
   implementation("${libs.guava}:${libs.guavaVersion}")
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")

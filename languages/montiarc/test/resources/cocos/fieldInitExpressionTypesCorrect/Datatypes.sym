@@ -13,7 +13,7 @@
             "name":"Message",
             "isConstructor":true,
             "isPublic":true,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"Message"
             },
@@ -24,8 +24,8 @@
                   "kind":"de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
                   "name":"size",
                   "type":{
-                    "kind":"de.monticore.types.check.SymTypeConstant",
-                    "constName":"int"
+                    "kind":"de.monticore.types.check.SymTypePrimitive",
+                    "primitiveName":"int"
                   }
                 }
               ]

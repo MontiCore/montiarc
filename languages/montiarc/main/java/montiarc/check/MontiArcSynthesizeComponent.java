@@ -43,6 +43,6 @@ public class MontiArcSynthesizeComponent implements ISynthesizeComponent {
 
   @Override
   public Optional<CompTypeExpression>  getResult() {
-    return resultWrapper.getCurrentResult();
+    return resultWrapper.getResult();
   }
 }

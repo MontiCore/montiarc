@@ -188,7 +188,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       .collect(Collectors.toList());
 
     for (int i = 0; i < Math.min(instantiationArgs.size(), paramSignatureOfCompType.size()); i++) {
-      if (!instantiationArgs.get(i).isPresentCurrentResult()) {
+      if (!instantiationArgs.get(i).isPresentResult()) {
         Log.debug(String.format("Checking coco '%s' is skipped for instantiation argument No. '%d', as the type of " +
               "the argument expression could not be calculated. Position: '%s'.",
             this.getClass().getSimpleName(), i + 1, instance.getArguments().getExpression(i).get_SourcePositionStart()),
@@ -199,16 +199,16 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
         String correspondingParamName = toInstantiate.getTypeInfo().getParameters().get(i).getName();
 
         Log.error(ArcError.CONFIG_PARAM_BINDING_IS_TYPE_REF.format(
-            instantiationArgs.get(i).getCurrentResult().print(), correspondingParamName, i + 1,
+            instantiationArgs.get(i).getResult().print(), correspondingParamName, i + 1,
             toInstantiate.getTypeInfo().getName(), instance.getName()
           ), typeRefExpr.get_SourcePositionStart(), typeRefExpr.get_SourcePositionEnd());
 
-      } else if(paramSignatureOfCompType.get(i).isEmpty() || !TypeCheck.compatible(paramSignatureOfCompType.get(i).get(), instantiationArgs.get(i).getCurrentResult())) {
+      } else if(paramSignatureOfCompType.get(i).isEmpty() || !TypeCheck.compatible(paramSignatureOfCompType.get(i).get(), instantiationArgs.get(i).getResult())) {
         ASTExpression incompatibleArgument = instance.getArguments().getExpression(i);
         String correspondingParamName = toInstantiate.getTypeInfo().getParameters().get(i).getName();
 
         Log.error(ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH.format(
-          i + 1, instance.getName(), instantiationArgs.get(i).getCurrentResult().print(),
+          i + 1, instance.getName(), instantiationArgs.get(i).getResult().print(),
           paramSignatureOfCompType.get(i).map(SymTypeExpression::print).orElse("UNKNOWN"), correspondingParamName,
           toInstantiate.printName()
         ), incompatibleArgument.get_SourcePositionStart(), incompatibleArgument.get_SourcePositionEnd());

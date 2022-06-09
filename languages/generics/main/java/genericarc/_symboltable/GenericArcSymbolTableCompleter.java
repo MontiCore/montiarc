@@ -111,8 +111,8 @@ public class GenericArcSymbolTableCompleter implements GenericArcVisitor2, Gener
     for (ASTMCType upperBound : typeParam.getUpperBoundList()) {
       try {
         TypeCheckResult boundExpr = this.getTypeCalculator().synthesizeType(upperBound);
-        if (boundExpr.isPresentCurrentResult()) {
-          typeParamSym.addSuperTypes(boundExpr.getCurrentResult());
+        if (boundExpr.isPresentResult()) {
+          typeParamSym.addSuperTypes(boundExpr.getResult());
         } else {
           Log.error(String.format("Could not create a SymTypeExpression from '%s'",
             this.getTypePrinter().prettyprint(upperBound)), upperBound.get_SourcePositionStart()

@@ -194,7 +194,7 @@ public class TemplateHelper {
      */
     return (_this.getName().equals(other.getName()))
       && (_this.getParameterList().size() == other.getParameterList().size())
-      && (_this.getReturnType().deepEquals(other.getReturnType()))
+      && (_this.getType().deepEquals(other.getType()))
       && (!_this.getParameterList().stream().allMatch(
       thisParam -> other.getParameterList().stream().anyMatch(
         otherParam -> thisParam.getType().deepEquals(otherParam.getType()))));

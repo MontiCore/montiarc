@@ -200,7 +200,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
   }
 
   protected Optional<SymTypeExpression> createBoundTypeExpression(@NotNull SymTypeExpression unboundTypeExpr) {
-    if (unboundTypeExpr.isTypeConstant() || unboundTypeExpr.isObjectType() || unboundTypeExpr.isNullType()) {
+    if (unboundTypeExpr.isPrimitive() || unboundTypeExpr.isObjectType() || unboundTypeExpr.isNullType()) {
       return Optional.of(unboundTypeExpr);
     } else if (unboundTypeExpr.isTypeVariable()) {
       return this.getBindingFor(unboundTypeExpr.getTypeInfo().getName());

@@ -3,8 +3,9 @@ package montiarc.build
 
 abstract class Modules {
 
-  val apacheVersion = "3.9"
   val apacheBcelVersion = "6.0"
+  val apacheCommonsVersion = "3.9"
+  val apacheGroovyVersion = "4.0.2"
   val assertjVersion = "3.7.0"
   val codehausVersion = "3.0.7"
   val formatVersion = "1.7"
@@ -18,12 +19,12 @@ abstract class Modules {
   val lejosVersion = "0.9.1-beta"
   val logbackVersion = "1.2.6"
   val mockitoVersion = "3.2.0"
-  val monticoreVersion = "7.3.0"
+  val monticoreVersion = "7.4.0-SNAPSHOT"
 
   val apache = "org.apache.commons:commons-lang3"
   val apacheBcel = "org.apache.bcel:bcel"
+  val apacheGroovy = "org.apache.groovy:groovy"
   val assertj = "org.assertj:assertj-core"
-  val codehausGroovy = "org.codehaus.groovy:groovy"
   val codehausJanino = "org.codehaus.janino:janino"
   val format = "com.google.googlejavaformat:google-java-format"
   val guava = "com.google.guava:guava"

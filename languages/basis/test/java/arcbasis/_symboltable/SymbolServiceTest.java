@@ -39,13 +39,13 @@ class SymbolServiceTest extends AbstractTest {
       Arguments.of(ArcBasisMill.scope(), new FieldSymbol[]{}),
       Arguments.of(ArcBasisMill.scope(), new FieldSymbol[]{
         ArcBasisMill.fieldSymbolBuilder().setName("field1")
-          .setType(SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.BOOLEAN)).build(),
+          .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN)).build(),
       }),
       Arguments.of(ArcBasisMill.scope(), new FieldSymbol[]{
         ArcBasisMill.fieldSymbolBuilder().setName("field1")
-          .setType(SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.BOOLEAN)).build(),
+          .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN)).build(),
         ArcBasisMill.fieldSymbolBuilder().setName("field2")
-          .setType(SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.BOOLEAN)).build()
+          .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN)).build()
       })
     );
   }
@@ -53,7 +53,7 @@ class SymbolServiceTest extends AbstractTest {
   protected static Stream<Arguments> scopeAndFieldSymbolProvider() {
     return Stream.of(
       Arguments.of(ArcBasisMill.scope(), ArcBasisMill.fieldSymbolBuilder()
-        .setName("field").setType(SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.BOOLEAN)).build())
+        .setName("field").setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN)).build())
     );
   }
 
@@ -162,13 +162,13 @@ class SymbolServiceTest extends AbstractTest {
       Arguments.of(ArcBasisMill.scope(), new PortSymbol[]{}),
       Arguments.of(ArcBasisMill.scope(), new PortSymbol[]{
         ArcBasisMill.portSymbolBuilder().setName("port1").setIncoming(true)
-          .setType(SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.BOOLEAN)).build()
+          .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN)).build()
       }),
       Arguments.of(ArcBasisMill.scope(), new PortSymbol[]{
         ArcBasisMill.portSymbolBuilder().setName("port1").setIncoming(true)
-          .setType(SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.BOOLEAN)).build(),
+          .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN)).build(),
         ArcBasisMill.portSymbolBuilder().setName("port2").setIncoming(true)
-          .setType(SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.BOOLEAN)).build()
+          .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN)).build()
       })
     );
   }
@@ -176,7 +176,7 @@ class SymbolServiceTest extends AbstractTest {
   protected static Stream<Arguments> scopeAndPortSymbolProvider() {
     return Stream.of(
       Arguments.of(ArcBasisMill.scope(), ArcBasisMill.portSymbolBuilder().setName("port")
-        .setIncoming(true).setType(SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.BOOLEAN)).build())
+        .setIncoming(true).setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN)).build())
     );
   }
 

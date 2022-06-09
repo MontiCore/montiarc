@@ -14,7 +14,7 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.symboltable.ImportStatement;
-import de.monticore.types.check.SymTypeConstant;
+import de.monticore.types.check.SymTypePrimitive;
 import de.monticore.types.check.SymTypeExpression;
 import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericComponentHead;
@@ -81,8 +81,8 @@ public class ComponentHelper {
   public static String getRealPortTypeString(ComponentTypeSymbol componentSymbol,
                                              PortSymbol portSymbol) {
     SymTypeExpression portType = portSymbol.getType();
-    return portType.isTypeConstant() ?
-      ((SymTypeConstant) portType).getBoxedConstName() :
+    return portType.isPrimitive() ?
+      ((SymTypePrimitive) portType).getBoxedPrimitiveName() :
       portType.isTypeVariable() ? portType.print() :
       portType.printFullName();
   }

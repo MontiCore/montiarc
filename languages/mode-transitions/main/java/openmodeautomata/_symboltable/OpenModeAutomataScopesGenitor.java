@@ -72,7 +72,7 @@ public class OpenModeAutomataScopesGenitor {
         generic.setEnclosingScope(originalScope);
       });
       MethodSymbol method = BasicModeAutomataMill.methodSymbolBuilder()
-          .setReturnType(SymTypeExpressionFactory.createTypeObject(getSubcomponent()))
+          .setType(SymTypeExpressionFactory.createTypeObject(getSubcomponent()))
           .setName(component.getName())
           .setFullName(component.getFullName())
           .setAstNodeAbsent()

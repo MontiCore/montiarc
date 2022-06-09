@@ -101,7 +101,7 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
   public void setUpMessageType() {
     IOOSymbolsScope getHeaderScope = MontiArcMill.scope();
     FunctionSymbol getHeader = MontiArcMill.functionSymbolBuilder().setName("getHeader")
-      .setReturnType(SymTypeExpressionFactory.createTypeExpression("String", this.getScope()))
+      .setType(SymTypeExpressionFactory.createTypeExpression("String", this.getScope()))
       .setSpannedScope(getHeaderScope).build();
     getHeaderScope.setSpanningSymbol(getHeader);
     getHeader.setSpannedScope(getHeaderScope);
@@ -110,13 +110,13 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
       .setType(SymTypeExpressionFactory.createTypeExpression("String", setHeaderScope)).build();
     setHeaderScope.add(setHeaderPara);
     FunctionSymbol setHeader = MontiArcMill.functionSymbolBuilder().setName("setHeader")
-      .setReturnType(SymTypeExpressionFactory.createTypeExpression("String", this.getScope()))
+      .setType(SymTypeExpressionFactory.createTypeExpression("String", this.getScope()))
       .setSpannedScope(setHeaderScope).build();
     setHeaderScope.setSpanningSymbol(setHeader);
     setHeader.setSpannedScope(setHeaderScope);
     IOOSymbolsScope constructorScope = MontiArcMill.scope();
     MethodSymbol constructor = MontiArcMill.methodSymbolBuilder().setName("Message")
-        .setReturnType(SymTypeExpressionFactory.createTypeExpression("Message", this.getScope()))
+        .setType(SymTypeExpressionFactory.createTypeExpression("Message", this.getScope()))
         .setSpannedScope(constructorScope).setIsConstructor(true).setIsStatic(false).build();
     constructorScope.setSpanningSymbol(constructor);
     constructor.setSpannedScope(constructorScope);
@@ -137,7 +137,7 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
       SymTypeExpressionFactory.createTypeVariable("Student", this.getScope()),
       SymTypeExpressionFactory.createTypeVariable("Teacher", this.getScope()));
     FunctionSymbol build = MontiArcMill.functionSymbolBuilder().setName("build")
-      .setReturnType(SymTypeExpressionFactory.createGenerics("Trafo", this.getScope(), trafoArgs))
+      .setType(SymTypeExpressionFactory.createGenerics("Trafo", this.getScope(), trafoArgs))
       .setSpannedScope(buildScope).build();
     buildScope.setSpanningSymbol(build);
     build.setSpannedScope(buildScope);

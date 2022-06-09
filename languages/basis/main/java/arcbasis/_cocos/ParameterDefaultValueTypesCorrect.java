@@ -65,7 +65,7 @@ public class ParameterDefaultValueTypesCorrect implements ArcBasisASTArcParamete
       ASTExpression defaultExpr = astParam.getDefault();
       TypeCheckResult expressionType = this.getTypeCalculator().deriveType(defaultExpr);
 
-      if(!expressionType.isPresentCurrentResult()) {
+      if(!expressionType.isPresentResult()) {
         Log.debug(String.format("Checking coco '%s' is skipped for parameter '%s', as the type of the its default " +
               "value expression could not be calculated. Position: '%s'.",
             this.getClass().getSimpleName(), astParam.getName(), astParam.get_SourcePositionStart()),
@@ -73,14 +73,14 @@ public class ParameterDefaultValueTypesCorrect implements ArcBasisASTArcParamete
 
       } else if (expressionType.isType()) {
         Log.error(ArcError.PARAM_DEFAULT_VALUE_IS_TYPE_REF.format(
-            expressionType.getCurrentResult().print(),
+            expressionType.getResult().print(),
             paramSym.getName()),
             astParam.get_SourcePositionStart(), astParam.get_SourcePositionEnd());
 
-      } else if (!TypeCheck.compatible(paramType, expressionType.getCurrentResult())) {
+      } else if (!TypeCheck.compatible(paramType, expressionType.getResult())) {
         Log.error(ArcError.DEFAULT_PARAM_EXPRESSION_WRONG_TYPE.format(
           paramSym.getName(),
-          expressionType.getCurrentResult().print(),
+          expressionType.getResult().print(),
           paramType.print()),
           astParam.get_SourcePositionStart(), astParam.get_SourcePositionEnd());
       }

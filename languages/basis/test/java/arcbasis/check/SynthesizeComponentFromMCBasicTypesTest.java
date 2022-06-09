@@ -54,12 +54,12 @@ public class SynthesizeComponentFromMCBasicTypesTest extends AbstractTest {
     synth4qual.handle(astQualComp);
 
     // Then
-    Assertions.assertTrue(result4normal.getCurrentResult().isPresent());
-    Assertions.assertTrue(result4qual.getCurrentResult().isPresent());
-    Assertions.assertTrue(result4normal.getCurrentResult().get() instanceof TypeExprOfComponent);
-    Assertions.assertTrue(result4qual.getCurrentResult().get() instanceof TypeExprOfComponent);
-    Assertions.assertEquals(normalComp, result4normal.getCurrentResult().get().getTypeInfo());
-    Assertions.assertEquals(qualifiedComp, result4qual.getCurrentResult().get().getTypeInfo());
+    Assertions.assertTrue(result4normal.getResult().isPresent());
+    Assertions.assertTrue(result4qual.getResult().isPresent());
+    Assertions.assertTrue(result4normal.getResult().get() instanceof TypeExprOfComponent);
+    Assertions.assertTrue(result4qual.getResult().get() instanceof TypeExprOfComponent);
+    Assertions.assertEquals(normalComp, result4normal.getResult().get().getTypeInfo());
+    Assertions.assertEquals(qualifiedComp, result4qual.getResult().get().getTypeInfo());
   }
 
   @Test
@@ -80,8 +80,8 @@ public class SynthesizeComponentFromMCBasicTypesTest extends AbstractTest {
     synth4qual.handle(astQualComp);
 
     // Then
-    Assertions.assertFalse(result4normal.getCurrentResult().isPresent());
-    Assertions.assertFalse(result4qual.getCurrentResult().isPresent());
+    Assertions.assertFalse(result4normal.getResult().isPresent());
+    Assertions.assertFalse(result4qual.getResult().isPresent());
   }
 
   @Test
@@ -101,6 +101,6 @@ public class SynthesizeComponentFromMCBasicTypesTest extends AbstractTest {
     synth.handle(voidType);
 
     // Then
-    Assertions.assertFalse(resultWrapper.getCurrentResult().isPresent());
+    Assertions.assertFalse(resultWrapper.getResult().isPresent());
   }
 }

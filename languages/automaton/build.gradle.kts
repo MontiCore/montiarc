@@ -17,7 +17,7 @@ dependencies {
   api(project(":languages:basis"))
   api(libs.monticoreStatecharts)
 
-  implementation("${libs.apache}:${libs.apacheVersion}")
+  implementation("${libs.apache}:${libs.apacheCommonsVersion}")
   implementation("${libs.guava}:${libs.guavaVersion}")
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")
 

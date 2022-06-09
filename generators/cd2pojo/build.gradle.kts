@@ -14,8 +14,8 @@ dependencies {
   api("${libs.monticoreGrammar}:${libs.monticoreVersion}")
   api("${libs.monticoreRuntime}:${libs.monticoreVersion}")
 
+  implementation("${libs.apacheGroovy}:${libs.apacheGroovyVersion}")
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")
-  implementation("${libs.codehausGroovy}:${libs.codehausVersion}")
   implementation("${libs.guava}:${libs.guavaVersion}")
   implementation("${libs.javaParser}:${libs.javaParserVersion}")
   implementation("${libs.monticoreClass2MC}:${libs.monticoreVersion}")

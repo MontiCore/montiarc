@@ -83,7 +83,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
 
     if (compSym.isEmpty()) {
       Log.error(ArcError.SYMBOL_NOT_FOUND.format(compName), mcType.get_SourcePositionStart());
-      this.resultWrapper.setCurrentResultAbsent();
+      this.resultWrapper.setResultAbsent();
     } else {
       List<SymTypeExpression> typeArgExpressions = typeArgumentsToTypes(mcType.getMCTypeArgumentList()).stream()
         .map(typeArg -> {
@@ -91,10 +91,10 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
           try {
             typeResult = typeCalculator.synthesizeType(typeArg);
           }  catch (ResolvedSeveralEntriesForSymbolException ignored) { }
-          return typeResult != null && typeResult.isPresentCurrentResult() ? typeResult.getCurrentResult() : null;
+          return typeResult != null && typeResult.isPresentResult() ? typeResult.getResult() : null;
         })
         .collect(Collectors.toList());
-      this.resultWrapper.setCurrentResult(new TypeExprOfGenericComponent(compSym.get(), typeArgExpressions));
+      this.resultWrapper.setResult(new TypeExprOfGenericComponent(compSym.get(), typeArgExpressions));
     }
   }
 

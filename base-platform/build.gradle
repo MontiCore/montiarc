@@ -8,7 +8,6 @@ description = "Provides a platform of external dependencies to align their versi
 
 dependencies {
   constraints {
-    // api(libs.apache) { version { strictly(libs.apacheVersion) }}
     // api(libs.assertj) { version { strictly(libs.assertjVersion) }}
     // api(libs.guava) { version { strictly(libs.guavaVersion) }}
     // api(libs.codehausJanino) { version { strictly(libs.codehausVersion) }}

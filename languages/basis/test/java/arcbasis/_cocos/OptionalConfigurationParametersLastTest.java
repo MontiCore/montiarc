@@ -26,7 +26,7 @@ public class OptionalConfigurationParametersLastTest extends AbstractTest {
   protected void addIntFieldToGlobalScope() {
     FieldSymbol intField = ArcBasisMill.fieldSymbolBuilder()
       .setName(INT_FIELD_NAME)
-      .setType(SymTypeExpressionFactory.createTypeConstant("int"))
+      .setType(SymTypeExpressionFactory.createPrimitive("int"))
       .build();
 
     ArcBasisMill.globalScope().add(intField);

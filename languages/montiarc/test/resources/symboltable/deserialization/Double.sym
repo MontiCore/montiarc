@@ -57,7 +57,7 @@
             "name":"myConstr",
             "isConstructor":true,
             "isPublic":true,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"simple.A.A"
             },
@@ -80,8 +80,8 @@
             "name":"aInt",
             "isPrivate":true,
             "type":{
-              "kind":"de.monticore.types.check.SymTypeConstant",
-              "constName":"int"
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
             }
           }
         ]
@@ -99,8 +99,8 @@
             "name":"bInt",
             "isPrivate":true,
             "type":{
-              "kind":"de.monticore.types.check.SymTypeConstant",
-              "constName":"int"
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
             }
           }
         ]
@@ -118,7 +118,7 @@
             "name":"myMethod",
             "isMethod":true,
             "isPublic":true,
-            "returnType":"voidType",
+            "type":"voidType",
             "spannedScope":{
               "isShadowingScope":false,
               "symbols":[

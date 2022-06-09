@@ -30,11 +30,11 @@ public class FieldInitExpressionTypesCorrectCalculatorTest extends ArcBasisTypeC
     super.setUpFields();
 
     FieldSymbol anInt = ArcBasisMill.fieldSymbolBuilder().setName("anInt")
-      .setType(SymTypeExpressionFactory.createTypeConstant("int")).build();
+      .setType(SymTypeExpressionFactory.createPrimitive("int")).build();
     FieldSymbol aBool = ArcBasisMill.fieldSymbolBuilder().setName("aBool")
-      .setType(SymTypeExpressionFactory.createTypeConstant("boolean")).build();
+      .setType(SymTypeExpressionFactory.createPrimitive("boolean")).build();
     FieldSymbol aDouble = ArcBasisMill.fieldSymbolBuilder().setName("aDouble")
-      .setType(SymTypeExpressionFactory.createTypeConstant("double")).build();
+      .setType(SymTypeExpressionFactory.createPrimitive("double")).build();
 
     SymbolService.link(this.scope, anInt, aBool, aDouble);
   }

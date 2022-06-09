@@ -11,7 +11,7 @@ import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.types.check.SymTypeConstant;
+import de.monticore.types.check.SymTypePrimitive;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import genericarc.AbstractTest;
@@ -51,7 +51,7 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
 
     // Creating a typeExpr representing Parent<int> that is then set to be the parent of comp
     CompTypeExpression parentTypeExpr = new TypeExprOfGenericComponent(parent,
-      Lists.newArrayList(SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT)));
+      Lists.newArrayList(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT)));
     component.setParent(parentTypeExpr);
 
     TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(component);
@@ -63,7 +63,7 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
 
   public static Stream<Arguments> symTypeExprProvider() {
     return Stream.of(
-      Arguments.of(SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT)),
+      Arguments.of(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT)),
       Arguments.of(SymTypeExpressionFactory.createTypeObject(Mockito.mock(TypeSymbol.class))),
       Arguments.of(SymTypeExpressionFactory.createTypeVariable(Mockito.mock(TypeVarSymbol.class)))
     );
@@ -99,8 +99,8 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
   }
 
   public static Stream<Arguments> symTypeExpressionPairProvider() {
-    SymTypeExpression intSymType = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT);
-    SymTypeExpression boolSymType = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.BOOLEAN);
+    SymTypeExpression intSymType = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
+    SymTypeExpression boolSymType = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN);
     SymTypeExpression ooSymType1 = SymTypeExpressionFactory.createTypeObject(AbstractTest.createTypeSymbol("First"));
     SymTypeExpression ooSymType2 = SymTypeExpressionFactory.createTypeObject(AbstractTest.createTypeSymbol("Second"));
     SymTypeExpression symTypeVar1 = SymTypeExpressionFactory.createTypeVariable(
@@ -173,7 +173,7 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
       .build();
     compDefinition.getSpannedScope().add(port);
 
-    SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT);
+    SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
     TypeExprOfGenericComponent boundCompTypeExpr =
       new TypeExprOfGenericComponent(compDefinition, Lists.newArrayList(intTypeExpr));
 
@@ -182,7 +182,7 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
 
     // Then
     Assertions.assertTrue(portsType.isPresent());
-    Assertions.assertTrue(portsType.get() instanceof SymTypeConstant);
+    Assertions.assertTrue(portsType.get() instanceof SymTypePrimitive);
     Assertions.assertEquals(BasicSymbolsMill.INT, portsType.get().print());
   }
 
@@ -208,7 +208,7 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
     compDefinition.setParent(boundParentTypeExpr);
 
     // create CompTypeExpr representing Comp<int>
-    SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT);
+    SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
     TypeExprOfGenericComponent boundCompTypeExpr =
       new TypeExprOfGenericComponent(compDefinition, Lists.newArrayList(intTypeExpr));
 
@@ -217,7 +217,7 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
 
     // Then
     Assertions.assertTrue(portsType.isPresent());
-    Assertions.assertTrue(portsType.get() instanceof SymTypeConstant);
+    Assertions.assertTrue(portsType.get() instanceof SymTypePrimitive);
     Assertions.assertEquals(BasicSymbolsMill.INT, portsType.get().print());
   }
 
@@ -235,7 +235,7 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
     compDefinition.getSpannedScope().add(param);
     compDefinition.addParameter(param);
 
-    SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT);
+    SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
     TypeExprOfGenericComponent boundCompTypeExpr =
       new TypeExprOfGenericComponent(compDefinition, Lists.newArrayList(intTypeExpr));
 
@@ -244,7 +244,7 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
 
     // Then
     Assertions.assertTrue(paramTypeExpr.isPresent());
-    Assertions.assertTrue(paramTypeExpr.get() instanceof SymTypeConstant);
+    Assertions.assertTrue(paramTypeExpr.get() instanceof SymTypePrimitive);
     Assertions.assertEquals(BasicSymbolsMill.INT, paramTypeExpr.get().print());
   }
 
@@ -276,7 +276,7 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
     compDefinition.setParent(boundParentTypeExpr);
 
     // create CompTypeExpr representing Comp<int>
-    SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT);
+    SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
     TypeExprOfGenericComponent boundCompTypeExpr =
       new TypeExprOfGenericComponent(compDefinition, Lists.newArrayList(intTypeExpr));
 
@@ -285,7 +285,7 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
 
     // Then
     Assertions.assertTrue(paramTypeExpr.isPresent());
-    Assertions.assertTrue(paramTypeExpr.get() instanceof SymTypeConstant);
+    Assertions.assertTrue(paramTypeExpr.get() instanceof SymTypePrimitive);
     Assertions.assertEquals(BasicSymbolsMill.INT, paramTypeExpr.get().print());
   }
 
@@ -294,9 +294,9 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
     // Given
     ComponentTypeSymbol comp = createComponentWithTypeParams("Comp", "A", "B", "C");
 
-    SymTypeExpression floatTypeExpr = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.FLOAT);
-    SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT);
-    SymTypeExpression boolTypeExpr = SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.BOOLEAN);
+    SymTypeExpression floatTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.FLOAT);
+    SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
+    SymTypeExpression boolTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN);
     List<SymTypeExpression> typeExprList = Lists.newArrayList(floatTypeExpr, intTypeExpr, boolTypeExpr);
 
     // When

@@ -35,11 +35,11 @@ class FieldReadWriteAccessFitsInGuardsTest extends AbstractCoCoTest {
     // add fields lField, lFieldStatic, set the last one to be static
     FieldSymbol lField = MontiArcMill.fieldSymbolBuilder()
       .setName("lField")
-      .setType(SymTypeExpressionFactory.createTypeConstant("int"))
+      .setType(SymTypeExpressionFactory.createPrimitive("int"))
       .build();
     FieldSymbol lFieldStatic = MontiArcMill.fieldSymbolBuilder()
       .setName("lFieldStatic")
-      .setType(SymTypeExpressionFactory.createTypeConstant("int"))
+      .setType(SymTypeExpressionFactory.createPrimitive("int"))
       .setIsStatic(true)
       .build();
 
@@ -49,11 +49,11 @@ class FieldReadWriteAccessFitsInGuardsTest extends AbstractCoCoTest {
     // add methods lMethod, lMethodStatic, set the last one to be static
     MethodSymbol lMethod = MontiArcMill.methodSymbolBuilder()
       .setName("lMethod")
-      .setReturnType(SymTypeExpressionFactory.createTypeConstant("int"))
+      .setType(SymTypeExpressionFactory.createPrimitive("int"))
       .build();
     MethodSymbol lMethodStatic = MontiArcMill.methodSymbolBuilder()
       .setName("lMethodStatic")
-      .setReturnType(SymTypeExpressionFactory.createTypeConstant("int"))
+      .setType(SymTypeExpressionFactory.createPrimitive("int"))
       .setIsStatic(true)
       .build();
 

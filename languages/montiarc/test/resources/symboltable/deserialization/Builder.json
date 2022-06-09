@@ -26,8 +26,8 @@
             "isStatic":false,
             "isFinal":false,
             "type":{
-              "kind":"de.monticore.types.check.SymTypeConstant",
-              "constName":"int"
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
             },
             "isReadOnly":false
           },
@@ -40,8 +40,8 @@
             "isStatic":false,
             "isFinal":false,
             "type":{
-              "kind":"de.monticore.types.check.SymTypeConstant",
-              "constName":"int"
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
             },
             "isReadOnly":false
           },
@@ -54,8 +54,8 @@
             "isStatic":false,
             "isFinal":false,
             "type":{
-              "kind":"de.monticore.types.check.SymTypeConstant",
-              "constName":"int"
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
             },
             "isReadOnly":false
           }
@@ -88,7 +88,7 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.Builder.Builder"
             },
@@ -104,8 +104,8 @@
                   "isStatic":false,
                   "isFinal":false,
                   "type":{
-                    "kind":"de.monticore.types.check.SymTypeConstant",
-                    "constName":"int"
+                    "kind":"de.monticore.types.check.SymTypePrimitive",
+                    "primitiveName":"int"
                   },
                   "isReadOnly":false
                 }
@@ -123,9 +123,9 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
-              "kind":"de.monticore.types.check.SymTypeConstant",
-              "constName":"int"
+            "type":{
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
             },
             "spannedScope":{
               "isShadowingScope":false,
@@ -139,8 +139,8 @@
                   "isStatic":false,
                   "isFinal":false,
                   "type":{
-                    "kind":"de.monticore.types.check.SymTypeConstant",
-                    "constName":"int"
+                    "kind":"de.monticore.types.check.SymTypePrimitive",
+                    "primitiveName":"int"
                   },
                   "isReadOnly":false
                 }
@@ -158,7 +158,7 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":"void"
+            "type":"void"
           },
           {
             "kind":"de.monticore.cd4codebasis._symboltable.CDMethodSignatureSymbol",
@@ -171,7 +171,7 @@
             "isStatic":true,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.Builder.StorageObjectLinkedList"
             }
@@ -187,7 +187,7 @@
             "isStatic":true,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.Builder.Position"
             }
@@ -203,7 +203,7 @@
             "isStatic":true,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.Builder.Storage"
             }
@@ -237,7 +237,7 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.Storage.Storage"
             }
@@ -253,7 +253,7 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.Storage.Storage"
             },
@@ -269,8 +269,8 @@
                   "isStatic":false,
                   "isFinal":false,
                   "type":{
-                    "kind":"de.monticore.types.check.SymTypeConstant",
-                    "constName":"int"
+                    "kind":"de.monticore.types.check.SymTypePrimitive",
+                    "primitiveName":"int"
                   },
                   "isReadOnly":false
                 },
@@ -283,8 +283,8 @@
                   "isStatic":false,
                   "isFinal":false,
                   "type":{
-                    "kind":"de.monticore.types.check.SymTypeConstant",
-                    "constName":"int"
+                    "kind":"de.monticore.types.check.SymTypePrimitive",
+                    "primitiveName":"int"
                   },
                   "isReadOnly":false
                 },
@@ -297,8 +297,8 @@
                   "isStatic":false,
                   "isFinal":false,
                   "type":{
-                    "kind":"de.monticore.types.check.SymTypeConstant",
-                    "constName":"int"
+                    "kind":"de.monticore.types.check.SymTypePrimitive",
+                    "primitiveName":"int"
                   },
                   "isReadOnly":false
                 }
@@ -346,8 +346,8 @@
             "isStatic":false,
             "isFinal":false,
             "type":{
-              "kind":"de.monticore.types.check.SymTypeConstant",
-              "constName":"int"
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
             },
             "isReadOnly":false
           },
@@ -394,7 +394,7 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.StorageObjectLinkedList.StorageObjectLinkedList"
             }
@@ -410,7 +410,7 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.StorageObjectLinkedList.StorageObjectLinkedList"
             },
@@ -773,8 +773,8 @@
             "isStatic":false,
             "isFinal":false,
             "type":{
-              "kind":"de.monticore.types.check.SymTypeConstant",
-              "constName":"int"
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
             },
             "isReadOnly":false
           },
@@ -787,8 +787,8 @@
             "isStatic":false,
             "isFinal":false,
             "type":{
-              "kind":"de.monticore.types.check.SymTypeConstant",
-              "constName":"int"
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
             },
             "isReadOnly":false
           },
@@ -801,8 +801,8 @@
             "isStatic":false,
             "isFinal":false,
             "type":{
-              "kind":"de.monticore.types.check.SymTypeConstant",
-              "constName":"int"
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
             },
             "isReadOnly":false
           }
@@ -826,7 +826,7 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.Builder.Builder"
             },
@@ -842,8 +842,8 @@
                   "isStatic":false,
                   "isFinal":false,
                   "type":{
-                    "kind":"de.monticore.types.check.SymTypeConstant",
-                    "constName":"int"
+                    "kind":"de.monticore.types.check.SymTypePrimitive",
+                    "primitiveName":"int"
                   },
                   "isReadOnly":false
                 }
@@ -861,9 +861,9 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
-              "kind":"de.monticore.types.check.SymTypeConstant",
-              "constName":"int"
+            "type":{
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
             },
             "spannedScope":{
               "isShadowingScope":false,
@@ -877,8 +877,8 @@
                   "isStatic":false,
                   "isFinal":false,
                   "type":{
-                    "kind":"de.monticore.types.check.SymTypeConstant",
-                    "constName":"int"
+                    "kind":"de.monticore.types.check.SymTypePrimitive",
+                    "primitiveName":"int"
                   },
                   "isReadOnly":false
                 }
@@ -896,7 +896,7 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":"void"
+            "type":"void"
           },
           {
             "kind":"de.monticore.cd4codebasis._symboltable.CDMethodSignatureSymbol",
@@ -909,7 +909,7 @@
             "isStatic":true,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.Builder.StorageObjectLinkedList"
             }
@@ -925,7 +925,7 @@
             "isStatic":true,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.Builder.Position"
             }
@@ -941,7 +941,7 @@
             "isStatic":true,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.Builder.Storage"
             }
@@ -966,7 +966,7 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.Storage.Storage"
             }
@@ -982,7 +982,7 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.Storage.Storage"
             },
@@ -998,8 +998,8 @@
                   "isStatic":false,
                   "isFinal":false,
                   "type":{
-                    "kind":"de.monticore.types.check.SymTypeConstant",
-                    "constName":"int"
+                    "kind":"de.monticore.types.check.SymTypePrimitive",
+                    "primitiveName":"int"
                   },
                   "isReadOnly":false
                 },
@@ -1012,8 +1012,8 @@
                   "isStatic":false,
                   "isFinal":false,
                   "type":{
-                    "kind":"de.monticore.types.check.SymTypeConstant",
-                    "constName":"int"
+                    "kind":"de.monticore.types.check.SymTypePrimitive",
+                    "primitiveName":"int"
                   },
                   "isReadOnly":false
                 },
@@ -1026,8 +1026,8 @@
                   "isStatic":false,
                   "isFinal":false,
                   "type":{
-                    "kind":"de.monticore.types.check.SymTypeConstant",
-                    "constName":"int"
+                    "kind":"de.monticore.types.check.SymTypePrimitive",
+                    "primitiveName":"int"
                   },
                   "isReadOnly":false
                 }
@@ -1066,8 +1066,8 @@
             "isStatic":false,
             "isFinal":false,
             "type":{
-              "kind":"de.monticore.types.check.SymTypeConstant",
-              "constName":"int"
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
             },
             "isReadOnly":false
           },
@@ -1105,7 +1105,7 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.StorageObjectLinkedList.StorageObjectLinkedList"
             }
@@ -1121,7 +1121,7 @@
             "isStatic":false,
             "isFinal":false,
             "isElliptic":false,
-            "returnType":{
+            "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
               "objName":"factory.warehouse.StorageObjectLinkedList.StorageObjectLinkedList"
             },

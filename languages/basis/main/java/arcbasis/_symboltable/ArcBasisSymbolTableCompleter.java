@@ -185,8 +185,8 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
 
     try {
       TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(node.getMCType());
-      if (typeExpr.isPresentCurrentResult()) {
-        node.getSymbol().setType(typeExpr.getCurrentResult());
+      if (typeExpr.isPresentResult()) {
+        node.getSymbol().setType(typeExpr.getResult());
       }
     } catch (ResolvedSeveralEntriesForSymbolException e) {
       String name = "";
@@ -222,8 +222,8 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
 
     try {
       TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(this.getCurrentPortType().get());
-      if (typeExpr.isPresentCurrentResult()) {
-        port.getSymbol().setType(typeExpr.getCurrentResult());
+      if (typeExpr.isPresentResult()) {
+        port.getSymbol().setType(typeExpr.getResult());
       }
     } catch (ResolvedSeveralEntriesForSymbolException e) {
       String name = "";
@@ -258,8 +258,8 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
 
     try {
       TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(this.getCurrentFieldType().get());
-      if (typeExpr.isPresentCurrentResult()) {
-        field.getSymbol().setType(typeExpr.getCurrentResult());
+      if (typeExpr.isPresentResult()) {
+        field.getSymbol().setType(typeExpr.getResult());
       }
     } catch (ResolvedSeveralEntriesForSymbolException e) {
       String name = "";

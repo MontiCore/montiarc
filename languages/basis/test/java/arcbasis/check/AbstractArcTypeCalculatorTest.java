@@ -83,11 +83,11 @@ public abstract class AbstractArcTypeCalculatorTest extends AbstractTest {
 
   public void setUpFields() {
     FieldSymbol a = ArcBasisMill.fieldSymbolBuilder().setName("a")
-      .setType(SymTypeExpressionFactory.createTypeConstant("int")).build();
+      .setType(SymTypeExpressionFactory.createPrimitive("int")).build();
     FieldSymbol b = ArcBasisMill.fieldSymbolBuilder().setName("b")
-      .setType(SymTypeExpressionFactory.createTypeConstant("int")).build();
+      .setType(SymTypeExpressionFactory.createPrimitive("int")).build();
     FieldSymbol c = ArcBasisMill.fieldSymbolBuilder().setName("c")
-      .setType(SymTypeExpressionFactory.createTypeConstant("int")).build();
+      .setType(SymTypeExpressionFactory.createPrimitive("int")).build();
     FieldSymbol s = ArcBasisMill.fieldSymbolBuilder().setName("s")
       .setType(SymTypeExpressionFactory.createTypeObject("Student", this.getScope())).build();
     SymbolService.link(scope, a, b, c, s);
@@ -105,13 +105,13 @@ public abstract class AbstractArcTypeCalculatorTest extends AbstractTest {
     TypeCheckResult result = this.getTypeCalculator().deriveType(expression);
 
     //Then
-    Assertions.assertTrue(result.isPresentCurrentResult());
-    Assertions.assertEquals(isPrimitive, result.getCurrentResult().isTypeConstant());
-    Assertions.assertEquals(isGeneric, result.getCurrentResult().isGenericType());
-    Assertions.assertFalse(result.getCurrentResult().isTypeVariable());
-    Assertions.assertTrue(!(result.getCurrentResult().getTypeInfo() instanceof OOTypeSymbolSurrogate) ||
-      !(((OOTypeSymbolSurrogate) result.getCurrentResult().getTypeInfo()).lazyLoadDelegate() instanceof  OOTypeSymbolSurrogate));
-    Assertions.assertEquals(expectedType, result.getCurrentResult().print());
+    Assertions.assertTrue(result.isPresentResult());
+    Assertions.assertEquals(isPrimitive, result.getResult().isPrimitive());
+    Assertions.assertEquals(isGeneric, result.getResult().isGenericType());
+    Assertions.assertFalse(result.getResult().isTypeVariable());
+    Assertions.assertTrue(!(result.getResult().getTypeInfo() instanceof OOTypeSymbolSurrogate) ||
+      !(((OOTypeSymbolSurrogate) result.getResult().getTypeInfo()).lazyLoadDelegate() instanceof  OOTypeSymbolSurrogate));
+    Assertions.assertEquals(expectedType, result.getResult().print());
   }
 
   protected void doCalculateTypeFromNameExpression(@NotNull String expression, @NotNull String expectedType,
@@ -162,6 +162,6 @@ public abstract class AbstractArcTypeCalculatorTest extends AbstractTest {
     TypeCheckResult result = this.getTypeCalculator().deriveType(expr);
 
     //Then
-    Assertions.assertFalse(result.isPresentCurrentResult());
+    Assertions.assertFalse(result.isPresentResult());
   }
 }

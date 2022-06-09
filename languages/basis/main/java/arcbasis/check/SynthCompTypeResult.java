@@ -12,21 +12,21 @@ import java.util.Optional;
  */
 public class SynthCompTypeResult {
 
-  protected CompTypeExpression currentResult = null;
+  protected CompTypeExpression result = null;
 
   public void reset() {
-    this.setCurrentResultAbsent();
+    this.setResultAbsent();
   }
 
-  public void setCurrentResultAbsent() {
-    this.currentResult = null;
+  public void setResultAbsent() {
+    this.result = null;
   }
 
-  public void setCurrentResult(@NotNull CompTypeExpression result) {
-    this.currentResult = Preconditions.checkNotNull(result);
+  public void setResult(@NotNull CompTypeExpression result) {
+    this.result = Preconditions.checkNotNull(result);
   }
 
-  public Optional<CompTypeExpression> getCurrentResult() {
-    return Optional.ofNullable(currentResult);
+  public Optional<CompTypeExpression> getResult() {
+    return Optional.ofNullable(result);
   }
 }

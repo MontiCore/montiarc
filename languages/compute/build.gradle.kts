@@ -13,7 +13,7 @@ dependencies {
 
   api(project(":languages:basis"))
 
-  implementation("${libs.apache}:${libs.apacheVersion}")
+  implementation("${libs.apache}:${libs.apacheCommonsVersion}")
   implementation("${libs.guava}:${libs.guavaVersion}")
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")
 

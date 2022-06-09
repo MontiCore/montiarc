@@ -7,7 +7,7 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.types.check.SymTypeConstant;
+import de.monticore.types.check.SymTypePrimitive;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import org.junit.jupiter.api.Assertions;
@@ -73,7 +73,7 @@ public class TypeExprOfComponentTest extends AbstractTest {
     String portName = "port";
     PortSymbol port = ArcBasisMill.portSymbolBuilder()
       .setName(portName)
-      .setType(SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT))
+      .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT))
       .setIncoming(true)
       .build();
     comp.getSpannedScope().add(port);
@@ -85,7 +85,7 @@ public class TypeExprOfComponentTest extends AbstractTest {
 
     // Then
     Assertions.assertTrue(portsType.isPresent());
-    Assertions.assertTrue(portsType.get() instanceof SymTypeConstant);
+    Assertions.assertTrue(portsType.get() instanceof SymTypePrimitive);
     Assertions.assertEquals(BasicSymbolsMill.INT, portsType.get().print());
   }
 
@@ -99,7 +99,7 @@ public class TypeExprOfComponentTest extends AbstractTest {
     String portName = "port";
     PortSymbol port = ArcBasisMill.portSymbolBuilder()
       .setName(portName)
-      .setType(SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT))
+      .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT))
       .setIncoming(true)
       .build();
     parent.getSpannedScope().add(port);
@@ -117,7 +117,7 @@ public class TypeExprOfComponentTest extends AbstractTest {
 
     // Then
     Assertions.assertTrue(portsType.isPresent());
-    Assertions.assertTrue(portsType.get() instanceof SymTypeConstant);
+    Assertions.assertTrue(portsType.get() instanceof SymTypePrimitive);
     Assertions.assertEquals(BasicSymbolsMill.INT, portsType.get().print());
   }
 
@@ -131,7 +131,7 @@ public class TypeExprOfComponentTest extends AbstractTest {
     String paramName = "para";
     VariableSymbol param = ArcBasisMill.variableSymbolBuilder()
       .setName(paramName)
-      .setType(SymTypeExpressionFactory.createTypeConstant(BasicSymbolsMill.INT))
+      .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT))
       .build();
     component.getSpannedScope().add(param);
     component.addParameter(param);
@@ -143,7 +143,7 @@ public class TypeExprOfComponentTest extends AbstractTest {
 
     // Then
     Assertions.assertTrue(paramType.isPresent());
-    Assertions.assertTrue(paramType.get() instanceof SymTypeConstant);
+    Assertions.assertTrue(paramType.get() instanceof SymTypePrimitive);
     Assertions.assertEquals(BasicSymbolsMill.INT, paramType.get().print());
   }
 }

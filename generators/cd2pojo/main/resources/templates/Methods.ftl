@@ -29,39 +29,39 @@
 </#macro>
 
 <#macro printMethod methodSignature helper withThrowsDeclaration>
-    <#if !methodSignature.getReturnType()??>
+    <#if !methodSignature.getType()??>
       /* ERROR: The return type for method ${methodSignature.getName()} could not be determined. */
         <#return>
     </#if>
 <#-- methods will be generated with a body and will have a
 dummy return statement (either 'false', empty String, 0 or 'null') -->
     <#local methodHead>
-        ${getModifiers(methodSignature)} ${Util.getType(methodSignature.getReturnType())} ${methodSignature.getName()}(
+        ${getModifiers(methodSignature)} ${Util.getType(methodSignature.getType())} ${methodSignature.getName()}(
         <@printParams methodSignature=methodSignature/>)
         <#if withThrowsDeclaration><@printThrowsDeclaration methodSignature=methodSignature helper=helper/></#if>
     </#local>
-    <#if (methodSignature.getReturnType().print() == "void")>
+    <#if (methodSignature.getType().print() == "void")>
         <#local methodBody = "{ }">
     <#else>
-        <#if (methodSignature.getReturnType().print() == "boolean")
-        || (methodSignature.getReturnType().print() == "Boolean")>
+        <#if (methodSignature.getType().print() == "boolean")
+        || (methodSignature.getType().print() == "Boolean")>
             <#local methodBody = "{ return false; }">
-        <#elseif methodSignature.getReturnType().print() == "String">
+        <#elseif methodSignature.getType().print() == "String">
             <#local methodBody = "{ return \"\"; }">
-        <#elseif (methodSignature.getReturnType().print() == "byte")
-        || (methodSignature.getReturnType().print() == "Byte")
-        || (methodSignature.getReturnType().print() == "short")
-        || (methodSignature.getReturnType().print() == "Short")
-        || (methodSignature.getReturnType().print() == "int")
-        || (methodSignature.getReturnType().print() == "Integer")
-        || (methodSignature.getReturnType().print() == "long")
-        || (methodSignature.getReturnType().print() == "Long")
-        || (methodSignature.getReturnType().print() == "float")
-        || (methodSignature.getReturnType().print() == "Float")
-        || (methodSignature.getReturnType().print() == "double")
-        || (methodSignature.getReturnType().print() == "Double")
-        || (methodSignature.getReturnType().print() == "char")
-        || (methodSignature.getReturnType().print() == "Character")>
+        <#elseif (methodSignature.getType().print() == "byte")
+        || (methodSignature.getType().print() == "Byte")
+        || (methodSignature.getType().print() == "short")
+        || (methodSignature.getType().print() == "Short")
+        || (methodSignature.getType().print() == "int")
+        || (methodSignature.getType().print() == "Integer")
+        || (methodSignature.getType().print() == "long")
+        || (methodSignature.getType().print() == "Long")
+        || (methodSignature.getType().print() == "float")
+        || (methodSignature.getType().print() == "Float")
+        || (methodSignature.getType().print() == "double")
+        || (methodSignature.getType().print() == "Double")
+        || (methodSignature.getType().print() == "char")
+        || (methodSignature.getType().print() == "Character")>
             <#local methodBody = "{ return 0; }">
         <#else>
             <#local methodBody = "{ return null; }">
@@ -127,12 +127,12 @@ dummy return statement (either 'false', empty String, 0 or 'null') -->
 </#macro>
 
 <#macro printInterfaceMethod methodSignature helper>
-    <#if !methodSignature.getReturnType()??>
+    <#if !methodSignature.getType()??>
       /* ERROR: The return type for method ${methodSignature.getName()} could not be determined. */
         <#return>
     </#if>
 <#-- methods will be generated without a body -->
-    ${Util.getType(methodSignature.getReturnType())} ${methodSignature.getName()}(
+    ${Util.getType(methodSignature.getType())} ${methodSignature.getName()}(
     <@printParams methodSignature=methodSignature/>)
     <@printThrowsDeclaration methodSignature=methodSignature helper=helper/>;
 </#macro>
