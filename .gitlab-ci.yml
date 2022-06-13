@@ -94,17 +94,6 @@ Deploy Nexus:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"'
       when: on_success
 
-Check Links:
-  stage: post-test
-  image: registry.git.rwth-aachen.de/monticore/container-registry/maven:3.5.4-jdk-8-alpine
-  allow_failure: true
-  script:
-    - "curl --location --header \"PRIVATE-TOKEN: $secibuildtoken\" \"https://git.rwth-aachen.de/api/v4/projects/monticore%2Fauxiliary-development-tools%2Fmdlinkchecker/jobs/artifacts/master/raw/target/libs/MDLinkCheckerCLI.jar?job=build\" --output MDLinkCheckerCLI.jar"
-    - "url=https://git.rwth-aachen.de/monticore/montiarc/core/-/tree/develop"
-    - "linkCheckRes=$(java -jar MDLinkCheckerCLI.jar -url $url -t $secibuildtoken)"
-    - "echo \"$linkCheckRes\""
-    - "if [[ $linkCheckRes == *\"ERROR\"* ]]; then exit 1; fi"
-
 # Mirrors this repository to GitHub.
 #
 # The mirror will always be at either HEAD or HEAD+1 (depending on whether cleanup is necessary).
