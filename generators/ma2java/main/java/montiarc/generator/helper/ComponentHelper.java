@@ -22,8 +22,8 @@ import montiarc.MontiArcMill;
 import montiarc._ast.ASTMontiArcNode;
 import montiarc._symboltable.IMontiArcScope;
 import montiarc._symboltable.MontiArcArtifactScope;
-import montiarc._visitor.MontiArcFullPrettyPrinter;
 import montiarc._visitor.MontiArcTraverser;
+import montiarc.generator.MA2JavaFullPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.io.File;
@@ -39,9 +39,9 @@ public class ComponentHelper {
 
   public static String DEPLOY_STEREOTYPE = "deploy";
 
-  protected MontiArcFullPrettyPrinter prettyPrinter;
+  protected MA2JavaFullPrettyPrinter prettyPrinter;
 
-  protected MontiArcFullPrettyPrinter getPrettyPrinter() {
+  protected MA2JavaFullPrettyPrinter getPrettyPrinter() {
     return this.prettyPrinter;
   }
 
@@ -51,7 +51,7 @@ public class ComponentHelper {
 
   public ComponentHelper(ComponentTypeSymbol component) {
     this.component = component;
-    this.prettyPrinter = new MontiArcFullPrettyPrinter();
+    this.prettyPrinter = new MA2JavaFullPrettyPrinter();
     if ((component.isPresentAstNode())
       && (component.getAstNode() instanceof ASTComponentType)) {
       componentNode = (ASTComponentType) component.getAstNode();
