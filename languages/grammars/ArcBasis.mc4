@@ -30,6 +30,7 @@
  
 component grammar ArcBasis extends 
         de.monticore.MCBasics,
+        de.monticore.UMLStereotype,
         de.monticore.types.MCBasicTypes,
         de.monticore.expressions.ExpressionsBasis,
         de.monticore.symbols.OOSymbols              {
@@ -119,7 +120,7 @@ component grammar ArcBasis extends
    * @attribute ports A list of declared port identifiers.
    */
   PortDeclaration =
-    PortDirection MCType (Port || ",")+
+    Stereotype? PortDirection MCType (Port || ",")+
   ;
 
   /**

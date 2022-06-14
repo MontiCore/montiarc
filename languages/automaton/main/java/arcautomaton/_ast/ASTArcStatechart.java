@@ -4,6 +4,8 @@ package arcautomaton._ast;
 import arcautomaton.ArcAutomatonMill;
 import arcautomaton._visitor.ArcAutomatonTraverser;
 import arcautomaton._visitor.SCTransitionsCollector;
+import arcbasis.timing.Timing;
+import arcbasis.timing.TimingCollector;
 import de.monticore.scbasis._ast.ASTSCSAnte;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCTransition;
@@ -62,5 +64,12 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
    */
   public Stream<ASTSCState> streamInitialStates() {
     return streamStates().filter(s -> s.getSCModifier().isInitial());
+  }
+
+  /**
+   * @return the Timing of the Statechart
+   */
+  public Optional<Timing> getTiming() {
+    return TimingCollector.getTimings(this.getStereotype()).stream().findFirst();
   }
 }

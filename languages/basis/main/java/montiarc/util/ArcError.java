@@ -116,7 +116,8 @@ public enum ArcError implements Error {
       "do not do)."),
   GENERIC_COMPONENT_TYPE_INSTANTIATION("0xC1157", "ArcBasis does not support generic components when " +
           "instantiating component types within their type declaration. But component type '%s' has type parameters %s."),
-  MISSING_ASSIGNMENT_OF_ARC_FIELD("0xC1158", "Missing initial assignment for field '%s' of type '%s'.");
+  MISSING_ASSIGNMENT_OF_ARC_FIELD("0xC1158", "Missing initial assignment for field '%s' of type '%s'."),
+  TIMING_MULTIPLE("0xC1159", "%d timings were selected, but only one is supported.");
 
   private final String errorCode;
   private final String errorMessage;
