@@ -18,4 +18,6 @@ java.sourceSets["main"].resources.setSrcDirs(setOf("main/resources"))
 java.sourceSets["test"].java.setSrcDirs(setOf("test/java"))
 java.sourceSets["test"].resources.setSrcDirs(setOf("test/resources"))
 
-tasks.test.get().systemProperty("buildDir", "$buildDir")
+tasks.test {
+  systemProperty("buildDir", layout.buildDirectory.get().toString())
+}
