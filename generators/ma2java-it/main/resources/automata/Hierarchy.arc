@@ -20,59 +20,75 @@ component Hierarchy {
       counter++;
     } state A {
       entry / {
-        path = path + "aEn";
+        path = path + "->aEn";
         pCounter = counter;
         counter++;
       }
       exit / {
-        path = path + "aEx";
+        path = path + "->aEx";
         pCounter = counter;
         counter++;
       }
+      initial {
+          path = path + "->a1Ini";
+          pCounter = counter;
+          counter++;
+        } state A1 {
+          entry / {
+            path = path + "->a1En";
+            pCounter = counter;
+            counter++;
+          }
+          exit / {
+            path = path + "->a1Ex";
+            pCounter = counter;
+            counter++;
+          }
+      };
     };
     state B {
       entry / {
-        path = path + "bEn";
+        path = path + "->bEn";
         pCounter = counter;
         counter++;
       }
       exit / {
-        path = path + "bEx";
+        path = path + "->bEx";
         pCounter = counter;
         counter++;
       }
     };
     state C {
       entry / {
-        path = path + "cEn";
+        path = path + "->cEn";
         pCounter = counter;
         counter++;
       }
       exit / {
-        path = path + "cEx";
+        path = path + "->cEx";
         pCounter = counter;
         counter++;
       }
       state C1 {
         entry / {
-          path = path + "c1En";
+          path = path + "->c1En";
           pCounter = counter;
           counter++;
         }
         exit / {
-          path = path + "c1Ex";
+          path = path + "->c1Ex";
           pCounter = counter;
           counter++;
         }
       };
       state C2 {
         entry / {
-          path = path + "c2En";
+          path = path + "->c2En";
           pCounter = counter;
           counter++;
         }
         exit / {
-          path = path + "c2Ex";
+          path = path + "->c2Ex";
           pCounter = counter;
           counter++;
         }
@@ -80,35 +96,35 @@ component Hierarchy {
     };
     state D {
       entry / {
-        path = path + "dEn";
+        path = path + "->dEn";
         pCounter = counter;
         counter++;
       }
       exit / {
-        path = path + "dEx";
+        path = path + "->dEx";
         pCounter = counter;
         counter++;
       }
       state D1 {
         entry / {
-          path = path + "d1En";
+          path = path + "->d1En";
           pCounter = counter;
           counter++;
         }
         exit / {
-          path = path + "d1Ex";
+          path = path + "->d1Ex";
           pCounter = counter;
           counter++;
         }
       };
       initial state D2 {
         entry / {
-          path = path + "d2En";
+          path = path + "->d2En";
           pCounter = counter;
           counter++;
         }
         exit / {
-          path = path + "d2Ex";
+          path = path + "->d2Ex";
           pCounter = counter;
           counter++;
         }
@@ -116,35 +132,43 @@ component Hierarchy {
     };
     state E {
       entry / {
-        path = path + "eEn";
+        path = path + "->eEn";
         pCounter = counter;
         counter++;
       }
       exit / {
-        path = path + "eEx";
+        path = path + "->eEx";
         pCounter = counter;
         counter++;
       }
-      initial state E1 {
+      initial {
+        path = path + "->e1Ini";
+        pCounter = counter;
+        counter++;
+      } state E1 {
         entry / {
-          path = path + "e1En";
+          path = path + "->e1En";
           pCounter = counter;
           counter++;
         }
         exit / {
-          path = path + "e1Ex";
+          path = path + "->e1Ex";
           pCounter = counter;
           counter++;
         }
       };
-      initial state E2 {
+      initial { // This should not be called coming from E1
+        path = path + "->e2Ini";
+        pCounter = counter;
+        counter++;
+      } state E2 {
         entry / {
-          path = path + "e2En";
+          path = path + "->e2En";
           pCounter = counter;
           counter++;
         }
         exit / {
-          path = path + "e2Ex";
+          path = path + "->e2Ex";
           pCounter = counter;
           counter++;
         }
@@ -152,35 +176,39 @@ component Hierarchy {
     };
     state F {
       entry / {
-        path = path + "fEn";
+        path = path + "->fEn";
         pCounter = counter;
         counter++;
       }
       exit / {
-        path = path + "fEx";
+        path = path + "->fEx";
         pCounter = counter;
         counter++;
       }
       initial state F1 {
         entry / {
-          path = path + "f1En";
+          path = path + "->f1En";
           pCounter = counter;
           counter++;
         }
         exit / {
-          path = path + "f1Ex";
+          path = path + "->f1Ex";
           pCounter = counter;
           counter++;
         }
-        initial state F11 {
+        initial { // This should not be called coming from E
+          path = path + "->f11Ini";
+          pCounter = counter;
+          counter++;
+        } state F11 {
           entry / {
-            path = path + "f11En";
+            path = path + "->f11En";
             pCounter = counter;
             counter++;
             pPath = path;
           }
           exit / {
-            path = path + "f11Ex";
+            path = path + "->f11Ex";
             pCounter = counter;
             counter++;
           }
@@ -189,7 +217,7 @@ component Hierarchy {
     };
 
     A -> B / {
-      path = path + "aToB";
+      path = path + "->aToB";
       pCounter = counter;
       counter++;
     };
@@ -198,6 +226,7 @@ component Hierarchy {
     C -> D;
     D2 -> D1;
     D1 -> E;
+    E1 -> E2;
     E -> F11;
   }
 }

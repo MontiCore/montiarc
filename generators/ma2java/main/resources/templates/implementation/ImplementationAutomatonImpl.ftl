@@ -60,39 +60,15 @@
 <#macro printGetInitialValues comp compHelper automatonHelper identifier>
   <#assign compName=comp.getName()>
   <#assign compTypeParams> <@Utils.printFormalTypeParameters comp=comp/> </#assign>
+  <#assign resultClass>${comp.getName()}Result${compTypeParams}</#assign>
   <#assign resultVarName = identifier.getResultName()>
   <#assign automaton = compHelper.getAutomatonBehavior().get()>
   <#assign optInitialState = automaton.streamInitialStates().findFirst()>
-  <#assign optInitPair = automaton.streamInitialOutput().findFirst()>
 
   @Override
   public ${compName}Result ${compTypeParams} getInitialValues() {
-
-    // init initial result
-    final ${compName}Result ${compTypeParams} ${resultVarName} = new ${compName}Result ${compTypeParams} ();
-    // Create local fields that record initial values for output ports.
-    <#list comp.allOutgoingPorts as outPort>
-      <#assign portType = compHelper.getRealPortTypeString(comp, outPort)>
-      ${portType} ${outPort.getName()} = null;
-    </#list>
-
-    <#if optInitPair.isPresent() && automatonHelper.isAnteAction(optInitPair.get().getRight())>
-      <#assign initialActions = automatonHelper.asAnteAction(optInitPair.get().getRight()).getMCBlockStatementList()>
-      // initial reaction
-      <#list initialActions as initAction>
-        ${compHelper.printStatement(initAction)}
-      </#list>
-    </#if>
-
-    // transfer locally recorded initial port values into the result
-    <#list comp.allOutgoingPorts as outPort>
-      <#assign portSetterName = "set" + outPort.getName()?cap_first>
-      ${resultVarName}.${portSetterName}( ${outPort.getName()} );
-    </#list>
-
-    ${identifier.getCurrentStateName()} = ${compName}State.${optInitialState.get().getName()};
-
-    return <@entryMethodName state=optInitialState.get()/>(new <@Utils.componentInputClassFQN comp=comp/>(), ${resultVarName});
+    // Transition to initial state with initial action
+    return <@transitionToMethodName state=optInitialState.get()/>(true).apply(new <@Utils.componentInputClassFQN comp=comp/>(), new ${resultClass}());
   }
 </#macro>
 
@@ -108,6 +84,8 @@
 <#macro exitMethodName state>state${state.getName()}ExitAction</#macro>
 
 <#macro exitMethodNameFromString stateName>state${stateName}ExitAction</#macro>
+
+<#macro initMethodName state>state${state.getName()}InitAction</#macro>
 
 <#macro printCompute comp compHelper automatonHelper identifier>
 <#assign inputParamName = identifier.getInputName()>
@@ -202,6 +180,38 @@
   }
 </#macro>
 
+<#macro printStateInitMethod comp compHelper automatonHelper identifier state>
+  <#assign compTypeParams><@Utils.printFormalTypeParameters comp=comp/></#assign>
+  <#assign resultClass>${comp.getName()}Result${compTypeParams}</#assign>
+  <#assign resultParam = identifier.getResultName()>
+  <#assign inputClass>${comp.getName()}Input${compTypeParams}</#assign>
+  <#assign inputParam = identifier.getInputName()>
+  protected ${resultClass} <@initMethodName state=state/>(${inputClass} ${inputParam}, ${resultClass} ${resultParam}) {
+    <#if automatonHelper.hasInitAction(state)>
+      // working copies of inputs - required to easily use the entry action block statement
+      <@printLocalVariablesFromInput comp=comp compHelper=compHelper identifier=identifier/>
+
+      // working copies of current outputs - required to easily use the entry action block statement
+      <@printLocalVariablesFromResult comp=comp compHelper=compHelper identifier=identifier/>
+
+      // initial action from the model
+      <#assign initialActions = automatonHelper.getInitActionStatementList(state)>
+      <#list initialActions as initAction>
+        ${compHelper.printStatement(initAction)}
+      </#list>
+
+      ${resultClass} newResult = new ${resultClass}();
+      <#list comp.getAllOutgoingPorts() as port>
+        newResult.set${port.getName()?cap_first}(${port.getName()});
+      </#list>
+      return newResult;
+    <#else>
+      // state has no init action
+      return ${resultParam};
+    </#if>
+  }
+</#macro>
+
 <#macro printTransitionFromStateMethod comp compHelper automatonHelper identifier state>
   <#assign compTypeParams><@Utils.printFormalTypeParameters comp=comp/></#assign>
   <#assign resultClass>${comp.getName()}Result${compTypeParams}</#assign>
@@ -251,7 +261,7 @@
         <#list automatonHelper.getEnteringParentStatesFromWith(state, guardedTransition) as enteringParentState>
           l__result.merge(<@entryMethodName state=enteringParentState/>(l__input, l__result));
         </#list>
-        return <@transitionToMethodNameFromTransition transition=guardedTransition/>().apply(l__input, l__result);
+        return <@transitionToMethodNameFromTransition transition=guardedTransition/>(false).apply(l__input, l__result);
       };
       }
       else
@@ -280,7 +290,7 @@
         <#list automatonHelper.getEnteringParentStatesFromWith(state, transition) as enteringParentState>
         l__result.merge(<@entryMethodName state=enteringParentState/>(l__input, l__result));
         </#list>
-        return <@transitionToMethodNameFromTransition transition=transition/>().apply(l__input, l__result);
+        return <@transitionToMethodNameFromTransition transition=transition/>(false).apply(l__input, l__result);
       };
       }
     <#elseif automatonHelper.hasSuperState(state) && automatonHelper.isFinalState(state)>
@@ -313,24 +323,34 @@
   <#assign inputClass>${comp.getName()}Input${compTypeParams}</#assign>
   <#assign inputParam = identifier.getInputName()>
   <#assign targetEntryActionVar = "targetStateEntryAction">
-  protected java.util.function.BiFunction<${inputClass}, ${resultClass}, ${resultClass}> <@transitionToMethodName state=state/>() {
+  protected java.util.function.BiFunction<${inputClass}, ${resultClass}, ${resultClass}> <@transitionToMethodName state=state/>(boolean runInitial) {
     // enter new state
     ${identifier.currentStateName} = ${comp.getName()}State.${state.getName()};
     <#if automatonHelper.hasSubStates(state)>
       // Enter sub state
       java.util.function.BiFunction<${inputClass}, ${resultClass}, ${resultClass}> ${targetEntryActionVar} =
-        <@transitionToMethodName state=automatonHelper.getInitialSubStatesStream(state).findFirst().get()/>();
+        <@transitionToMethodName state=automatonHelper.getInitialSubStatesStream(state).findFirst().get()/>(true);
       // Return combined entry action
       return (targetStateEntryActionInput, targetStateEntryActionOutput) -> {
-        // First own
-        ${resultClass} res = <@entryMethodNameFromString stateName=state.getName()/>(targetStateEntryActionInput, targetStateEntryActionOutput);
+        // If asked for, run initial action
+        ${resultClass} res = targetStateEntryActionOutput;
+        if (runInitial) {
+          res = <@initMethodName state=state/>(targetStateEntryActionInput, res);
+        }
+        // First own entry action
+        res = <@entryMethodNameFromString stateName=state.getName()/>(targetStateEntryActionInput, res);
         // Then sub state with own result
         return ${targetEntryActionVar}.apply(targetStateEntryActionInput, res);
       };
     <#else>
       // Return entry action
       return (targetStateEntryActionInput, targetStateEntryActionOutput) -> {
-        return <@entryMethodNameFromString stateName=state.getName()/>(targetStateEntryActionInput, targetStateEntryActionOutput);
+        // If asked for, run initial action
+        ${resultClass} res = targetStateEntryActionOutput;
+        if (runInitial) {
+          res = <@initMethodName state=state/>(targetStateEntryActionInput, res);
+        }
+        return <@entryMethodNameFromString stateName=state.getName()/>(targetStateEntryActionInput, res);
       };
     </#if>
   }
@@ -340,6 +360,8 @@
   <@printStateEntryMethod comp=comp compHelper=compHelper automatonHelper=automatonHelper identifier=identifier state=state/>
 
   <@printStateExitMethod comp=comp compHelper=compHelper automatonHelper=automatonHelper identifier=identifier state=state/>
+
+  <@printStateInitMethod comp=comp compHelper=compHelper automatonHelper=automatonHelper identifier=identifier state=state/>
 
   <@printTransitionFromStateMethod comp=comp compHelper=compHelper automatonHelper=automatonHelper identifier=identifier state=state/>
 

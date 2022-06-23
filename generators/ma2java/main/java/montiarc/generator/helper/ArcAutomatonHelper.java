@@ -167,6 +167,19 @@ public class ArcAutomatonHelper {
     return scABodyToTransitionAction(exitAction.getSCABody()).getMCBlockStatement();
   }
 
+  public boolean hasInitAction(@NotNull ASTSCState state) {
+    Preconditions.checkNotNull(state);
+
+    return state.getSCModifier().isInitial() && isAnteAction(state.getSCSAnte());
+  }
+
+  public List<ASTMCBlockStatement> getInitActionStatementList(@NotNull ASTSCState state) {
+    Preconditions.checkNotNull(state);
+    Preconditions.checkArgument(hasInitAction(state));
+
+    return asAnteAction(state.getSCSAnte()).getMCBlockStatementList();
+  }
+
   public boolean hasSubStates(@NotNull ASTSCState state) {
     return state.getSCSBody() instanceof ASTSCHierarchyBody
             && ((ASTSCHierarchyBody) state.getSCSBody()).getSCStateElementList().stream().anyMatch(ASTSCState.class::isInstance);

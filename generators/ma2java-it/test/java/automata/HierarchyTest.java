@@ -41,7 +41,7 @@ public class HierarchyTest {
     List<Integer> actualCounter = new ArrayList<>(expectedCounter.size());
     // no initial output
     actualCounter.add(hierarchy.getPortPCounter().getCurrentValue());
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 8; i++) {
       hierarchy.compute();
       hierarchy.update();
 
@@ -61,9 +61,12 @@ public class HierarchyTest {
    */
   protected static Stream<Arguments> inputAndExpectedOutputProvider() {
     return Stream.of(
-        Arguments.of(List.of(1,4,7,9,13,15,19,24),
-                "aIni" + "aEn" + "aEx" + "aToB" + "bEn" + "bEx" + "cEn" + "c1En" + "c1Ex" + "c2En" + "c2Ex" + "cEx" + "dEn" +
-                "d2En" + "d2Ex" + "d1En" + "d1Ex" + "dEx" + "eEn" + "e1En" + "e1Ex" + "eEx" + "fEn" + "f1En" + "f11En"
+        Arguments.of(List.of(3,7,10,12,16,18,23,25,30),
+                "aIni" + "->aEn" + "->a1Ini" + "->a1En" + "->a1Ex" + "->aEx" + "->aToB" +
+                "->bEn" + "->bEx" + "->cEn" + "->c1En" + "->c1Ex" + "->c2En" + "->c2Ex" +
+                "->cEx" + "->dEn" + "->d2En" + "->d2Ex" + "->d1En" + "->d1Ex" + "->dEx" +
+                "->eEn" + "->e1Ini" + "->e1En" + "->e1Ex" + "->e2En" + "->e2Ex" + "->eEx" +
+                "->fEn" + "->f1En" + "->f11En"
         )
     );
   }
