@@ -32,7 +32,6 @@ java {
 }
 
 tasks.shadowJar {
-  minimize()
   manifest {
     attributes["Main-Class"] = "de.monticore.cd2pojo.POJOGeneratorScript"
   }
