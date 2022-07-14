@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
-import de.monticore.class2mc.Class2MCResolver;
+import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import montiarc.AbstractTest;
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 /**
- * Holds tests that check whether types adapted via the {@link de.monticore.class2mc.Class2MCResolver} can be resolved
+ * Holds tests that check whether types adapted via the {@link de.monticore.class2mc.OOClass2MCResolver} can be resolved
  */
 public class Class2MCResolvingTest extends AbstractTest {
 
@@ -30,7 +30,7 @@ public class Class2MCResolvingTest extends AbstractTest {
   public void shouldFindAdaptedTypes() {
     // Given
     IMontiArcScope scope = MontiArcMill.scope();
-    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new Class2MCResolver());
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addSubScope(scope);
     String type = "java.util.Date";
 
@@ -59,7 +59,7 @@ public class Class2MCResolvingTest extends AbstractTest {
   public void shouldFindAdaptedOOTypes() {
     // Given
     IMontiArcScope scope = MontiArcMill.scope();
-    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new Class2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addSubScope(scope);
     String type = "java.util.Date";
 
@@ -75,7 +75,7 @@ public class Class2MCResolvingTest extends AbstractTest {
   public void shouldFindTypeFromAdaptedOOTypes() {
     // Given
     IMontiArcScope scope = MontiArcMill.scope();
-    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new Class2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addSubScope(scope);
     String type = "java.util.Date";
 
@@ -90,8 +90,8 @@ public class Class2MCResolvingTest extends AbstractTest {
   public void shouldFindTypeWithBothAdapter() {
     // Given
     IMontiArcScope scope = MontiArcMill.scope();
-    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new Class2MCResolver());
-    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new Class2MCResolver());
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addSubScope(scope);
     String type = "java.util.Date";
 
@@ -106,8 +106,8 @@ public class Class2MCResolvingTest extends AbstractTest {
   public void shouldFindOOTypeWithBothAdapter() {
     // Given
     IMontiArcScope scope = MontiArcMill.scope();
-    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new Class2MCResolver());
-    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new Class2MCResolver());
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addSubScope(scope);
     String type = "java.util.Date";
 

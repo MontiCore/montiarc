@@ -3,7 +3,7 @@ package montiarc;
 
 import arcbasis._symboltable.SymbolService;
 import com.google.common.base.Preconditions;
-import de.monticore.class2mc.Class2MCResolver;
+import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.check.SymTypeExpressionFactory;
@@ -328,8 +328,8 @@ public class MontiArcTool extends MontiArcToolTOP {
   }
 
   public void initializeClass2MC() {
-    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new Class2MCResolver());
-    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new Class2MCResolver());
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
   }
 
   protected void initializeClass2MC(@NotNull CommandLine cl) {

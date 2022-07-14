@@ -2,7 +2,7 @@
 package montiarc;
 
 import com.google.common.base.Preconditions;
-import de.monticore.class2mc.Class2MCResolver;
+import de.monticore.class2mc.OOClass2MCResolver;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcArtifactScope;
@@ -765,9 +765,9 @@ public class MontiArcToolTest extends AbstractTest {
     MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
     Assertions.assertFalse(MontiArcMill.globalScope().getAdaptedTypeSymbolResolverList().
-      stream().anyMatch(symbolResolver -> symbolResolver instanceof Class2MCResolver));
+      stream().anyMatch(symbolResolver -> symbolResolver instanceof OOClass2MCResolver));
     Assertions.assertFalse(MontiArcMill.globalScope().getAdaptedOOTypeSymbolResolverList().
-      stream().anyMatch(symbolResolver -> symbolResolver instanceof Class2MCResolver));
+      stream().anyMatch(symbolResolver -> symbolResolver instanceof OOClass2MCResolver));
     String[] args = new String[]{"-c2mc"};
     CommandLineParser cliParser = new DefaultParser();
     CommandLine cli = cliParser.parse(options, args);
@@ -777,8 +777,8 @@ public class MontiArcToolTest extends AbstractTest {
 
     // Then
     Assertions.assertTrue(MontiArcMill.globalScope().getAdaptedTypeSymbolResolverList().
-      stream().anyMatch(symbolResolver -> symbolResolver instanceof Class2MCResolver));
+      stream().anyMatch(symbolResolver -> symbolResolver instanceof OOClass2MCResolver));
     Assertions.assertTrue(MontiArcMill.globalScope().getAdaptedOOTypeSymbolResolverList().
-      stream().anyMatch(symbolResolver -> symbolResolver instanceof Class2MCResolver));
+      stream().anyMatch(symbolResolver -> symbolResolver instanceof OOClass2MCResolver));
   }
 }

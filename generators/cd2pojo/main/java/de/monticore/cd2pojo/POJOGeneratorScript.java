@@ -2,7 +2,7 @@
 package de.monticore.cd2pojo;
 
 import de.monticore.cd4code.CD4CodeMill;
-import de.monticore.class2mc.Class2MCResolver;
+import de.monticore.class2mc.OOClass2MCResolver;
 import de.se_rwth.commons.configuration.Configuration;
 import de.se_rwth.commons.groovy.GroovyInterpreter;
 import de.se_rwth.commons.groovy.GroovyRunner;
@@ -92,8 +92,8 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
    * Adds support to resolve Java types, methods, and fields from .class files as MontiCore types, methods, and fields.
    */
   public static void initClass2MC() {
-    CD4CodeMill.globalScope().addAdaptedTypeSymbolResolver(new Class2MCResolver());
-    CD4CodeMill.globalScope().addAdaptedOOTypeSymbolResolver(new Class2MCResolver());
+    CD4CodeMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    CD4CodeMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
   }
 
   // #######################

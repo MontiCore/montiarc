@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package openmodeautomata.addition;
 
-import de.monticore.class2mc.Class2MCResolver;
+import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.se_rwth.commons.logging.Log;
@@ -100,8 +100,8 @@ public class AdderTool {
   }
 
   public void initializeClass2MC() {
-    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new Class2MCResolver());
-    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new Class2MCResolver());
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
   }
 
   public IMontiArcArtifactScope createSymbolTable(CommandLine cmd){

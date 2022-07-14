@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package openmodeautomata.addition;
 
-import de.monticore.class2mc.adapters.JClass2TypeSymbolAdapter;
+import de.monticore.class2mc.adapters.JClass2OOTypeSymbolAdapter;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import openmodeautomata.runtime.*;
 
@@ -46,6 +46,6 @@ public class RuntimeSymbolsFinder {
     } catch (ClassNotFoundException e) {
       throw new RuntimeException("Cannot find class for rte methods.", e);
     }
-    return new JClass2TypeSymbolAdapter(componentRTE);
+    return new JClass2OOTypeSymbolAdapter(componentRTE);
   }
 }
