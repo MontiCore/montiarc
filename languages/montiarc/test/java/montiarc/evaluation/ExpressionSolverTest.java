@@ -2,7 +2,9 @@
 package montiarc.evaluation;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
+import de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import montiarc.AbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcFullPrettyPrinter;
@@ -37,9 +39,9 @@ public class ExpressionSolverTest extends AbstractTest {
     scope.add(variableSymbol);
     ASTExpression variableAssignmentExpr = MontiArcMill.assignmentExpressionBuilder()
       .setLeft(MontiArcMill.nameExpressionBuilder().setName("a").build())
-      .setOperator(0)
+      .setOperator(ASTConstantsAssignmentExpressions.DEFAULT)
       .setRight(MontiArcMill.literalExpressionBuilder()
-        .setLiteral(MontiArcMill.booleanLiteralBuilder().setSource(3).build())
+        .setLiteral(MontiArcMill.booleanLiteralBuilder().setSource(ASTConstantsMCCommonLiterals.TRUE).build())
         .build())
       .build();
 
@@ -56,7 +58,7 @@ public class ExpressionSolverTest extends AbstractTest {
   @Test
   public void shouldSolveConstantExpression() {
     ASTExpression expression = MontiArcMill.literalExpressionBuilder()
-      .setLiteral(MontiArcMill.booleanLiteralBuilder().setSource(3).build())
+      .setLiteral(MontiArcMill.booleanLiteralBuilder().setSource(ASTConstantsMCCommonLiterals.TRUE).build())
       .build();
 
     Optional<Boolean> res = ExpressionSolver.solve(expression, this.typeExprOfVariableComponent,

@@ -12,6 +12,7 @@ import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -400,7 +401,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
   @Test
   public void shouldVisitArcParameter() {
     // Given
-    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build(); // Type: byte
+    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build();
     VariableSymbol symParam = ArcBasisMill.variableSymbolBuilder().setName("par").build();
     ASTArcParameter astParam = arcbasis.ArcBasisMill.arcParameterBuilder().setName("par")
       .setMCType(type).build();
@@ -453,7 +454,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
   @Test
   public void shouldVisitPort() {
     // Given
-    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build(); // Type: byte
+    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build();
     PortSymbol symParam = ArcBasisMill.portSymbolBuilder()
       .setName("po")
       .setDirection(Mockito.mock(ASTPortDirection.class))
@@ -510,7 +511,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
   @Test
   public void shouldVisitArcField() {
     // Given
-    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build(); // Type: byte
+    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build();
     VariableSymbol symField = ArcBasisMill.variableSymbolBuilder()
       .setName("po")
       .build();

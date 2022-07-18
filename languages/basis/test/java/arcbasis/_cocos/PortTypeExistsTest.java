@@ -9,6 +9,7 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis._symboltable.IArcBasisArtifactScope;
+import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.ImportStatement;
@@ -32,7 +33,8 @@ public class PortTypeExistsTest extends AbstractTest {
   @Test
   public void shouldFindPrimitiveType() {
     // Given
-    ASTMCPrimitiveType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(1).build();
+    ASTMCPrimitiveType type =
+      ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BOOLEAN).build();
     ASTComponentType comp = createCompWithPort("CompA", "p1", type, true);
     ASTPortDeclaration portDec = getFirstPortDeclaration(comp).get();
     ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();

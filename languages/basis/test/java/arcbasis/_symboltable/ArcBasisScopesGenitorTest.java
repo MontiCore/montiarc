@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 import de.monticore.expressions.expressionsbasis._ast.ASTArguments;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import org.junit.jupiter.api.Assertions;
@@ -125,7 +126,7 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
 
   @Test
   public void shouldCreateParameter() {
-    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build();
+    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build();
     ASTArcParameter ast = arcbasis.ArcBasisMill.arcParameterBuilder().setName("par")
       .setMCType(type).build();
     VariableSymbol symbol = this.getSymTab().create_ArcParameter(ast).build();
@@ -137,7 +138,7 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
   public void shouldVisitParameter() {
     // Given
     ASTArcParameter astParam = arcbasis.ArcBasisMill.arcParameterBuilder().setName("par")
-      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build()).build();
+      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build()).build();
     ComponentTypeSymbol enclosingComp = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Encl")
       .setSpannedScope(ArcBasisMill.scope())
@@ -162,7 +163,8 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
   @Test
   public void shouldVisitPortDeclaration() {
     ASTPortDeclaration ast = arcbasis.ArcBasisMill.portDeclarationBuilder()
-      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build()).setIncoming(true)
+      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build())
+      .setIncoming(true)
       .setPortList("p1", "p2", "p3").build();
     IArcBasisScope scope = ArcBasisMill.scope();
     this.getSymTab().putOnStack(scope);
@@ -174,7 +176,8 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
   @Test
   public void shouldEndVisitPortDeclaration() {
     ASTPortDeclaration ast = arcbasis.ArcBasisMill.portDeclarationBuilder()
-      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build()).setOutgoing(true)
+      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build())
+      .setOutgoing(true)
       .setPortList("p1", "p2", "p3").build();
     this.getSymTab().visit(ast);
     this.getSymTab().endVisit(ast);
@@ -257,7 +260,7 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
 
   @Test
   public void shouldVisitFieldDeclaration() {
-    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build();
+    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build();
     String[] names = new String[]{"var1", "var2", "var3"};
     ASTArcFieldDeclaration ast = arcbasis.ArcBasisMill.arcFieldDeclarationBuilder()
       .setMCType(type).setArcFieldList(names, this.mockValues(names.length)).build();
@@ -274,7 +277,7 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     String[] names = new String[]{"var1", "var2", "var3"};
     ASTArcFieldDeclaration ast = arcbasis.ArcBasisMill.arcFieldDeclarationBuilder()
       .setArcFieldList(names, this.mockValues(names.length))
-      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build())
+      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build())
       .build();
     this.getSymTab().visit(ast);
     this.getSymTab().endVisit(ast);
@@ -284,7 +287,7 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
   public void shouldCreateField() {
     ASTArcField ast = arcbasis.ArcBasisMill.arcFieldBuilder().setName("var")
       .setInitial(Mockito.mock(ASTExpression.class)).build();
-    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build();
+    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build();
     VariableSymbol symbol = this.getSymTab().create_ArcField(ast).build();
     Assertions.assertEquals(ast.getName(), symbol.getName());
   }
@@ -307,7 +310,8 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
       .setExpressionsList(Collections.singletonList(Mockito.mock(ASTExpression.class))).build();
     ASTComponentInstance instance = ArcBasisMill.componentInstanceBuilder().setName("comp").setArguments(args).build();
     ASTComponentInstantiation instances = ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build()).setComponentInstancesList(Collections.singletonList(instance)).build();
+      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build())
+      .setComponentInstancesList(Collections.singletonList(instance)).build();
     IArcBasisScope scope = ArcBasisMill.scope();
     this.getSymTab().putOnStack(scope);
     this.getSymTab().pushCurrentEnclosingScope4Instances(scope);

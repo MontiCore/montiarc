@@ -7,6 +7,7 @@ import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
+import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -53,11 +54,13 @@ public class SubComponentsConnectedTest extends AbstractTest {
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(ArcBasisMill.componentInterfaceBuilder()
           .addPortDeclaration(ArcBasisMill.portDeclarationBuilder()
-            .setIncoming(true).setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build())
+            .setIncoming(true)
+            .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build())
             .setPortList("i1", "i2")
             .build())
           .addPortDeclaration(ArcBasisMill.portDeclarationBuilder()
-            .setOutgoing(true).setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build())
+            .setOutgoing(true)
+            .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build())
             .setPortList("o1")
             .build())
           .build())
@@ -69,11 +72,13 @@ public class SubComponentsConnectedTest extends AbstractTest {
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(ArcBasisMill.componentInterfaceBuilder()
           .addPortDeclaration(ArcBasisMill.portDeclarationBuilder()
-            .setIncoming(true).setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build())
+            .setIncoming(true).
+            setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build())
             .setPortList("i1")
             .build())
           .addPortDeclaration(ArcBasisMill.portDeclarationBuilder()
-            .setOutgoing(true).setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build())
+            .setOutgoing(true)
+            .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build())
             .setPortList("o1")
             .build())
           .build())
@@ -91,11 +96,13 @@ public class SubComponentsConnectedTest extends AbstractTest {
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(ArcBasisMill.componentInterfaceBuilder()
           .addPortDeclaration(ArcBasisMill.portDeclarationBuilder()
-            .setIncoming(true).setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build())
+            .setIncoming(true)
+            .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build())
             .setPortList("i1")
             .build())
           .addPortDeclaration(ArcBasisMill.portDeclarationBuilder()
-            .setOutgoing(true).setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(2).build())
+            .setOutgoing(true)
+            .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build())
             .setPortList("o1", "o2")
             .build())
           .build())

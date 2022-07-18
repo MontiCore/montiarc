@@ -8,6 +8,7 @@ import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis._symboltable.IArcBasisArtifactScope;
+import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -32,7 +33,9 @@ public class FieldTypeExistsTest extends AbstractTest {
   @Test
   public void shouldFindPrimitiveType() {
     // Given
-    ASTMCPrimitiveType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(1).build();
+    ASTMCPrimitiveType type = ArcBasisMill.mCPrimitiveTypeBuilder()
+      .setPrimitive(ASTConstantsMCBasicTypes.BOOLEAN)
+      .build();
     ASTComponentType comp = createCompWithField("CompA", "p1", type);
     ASTArcFieldDeclaration fieldDec = getFirstFieldDeclaration(comp).get();
     ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
