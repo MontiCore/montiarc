@@ -2,8 +2,11 @@
 package montiarc._symboltable;
 
 import arcautomaton._visitor.ArcAutomatonInheritanceHandler;
+import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.SymbolService;
 import arcbasis._visitor.ArcBasisInheritanceHandler;
 import arcbasis._visitor.ArcBasisTraverser;
+import arcbasis.check.CompTypeExpression;
 import arccore._visitor.ArcCoreInheritanceHandler;
 import basicmodeautomata._visitor.BasicModeAutomataInheritanceHandler;
 import com.google.common.base.Preconditions;
@@ -23,6 +26,7 @@ import de.monticore.statements.mccommonstatements._visitor.MCCommonStatementsInh
 import de.monticore.statements.mcstatementsbasis._visitor.MCStatementsBasisInheritanceHandler;
 import de.monticore.statements.mcvardeclarationstatements._visitor.MCVarDeclarationStatementsInheritanceHandler;
 import de.monticore.symbols.basicsymbols._visitor.BasicSymbolsInheritanceHandler;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symbols.oosymbols._visitor.OOSymbolsInheritanceHandler;
 import de.monticore.symboltable.IScope;
 import de.monticore.symboltable.IScopeSpanningSymbol;
@@ -34,6 +38,7 @@ import de.monticore.umlstereotype._visitor.UMLStereotypeInheritanceHandler;
 import de.monticore.visitor.IVisitor;
 import de.se_rwth.commons.logging.Log;
 import genericarc._visitor.GenericArcInheritanceHandler;
+import genericarc.check.TypeExprOfGenericComponent;
 import montiarc.AbstractTest;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
@@ -43,13 +48,17 @@ import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import variablearc._visitor.VariableArcInheritanceHandler;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Integration test for the {@link MontiArcScopesGenitorDelegator} and the
@@ -61,6 +70,20 @@ import java.util.List;
 public class SymbolTableCompletionTest extends AbstractTest {
 
   protected static final String TEST_MODEL_PATH = "symboltable/completion/";
+
+  public static void createTypeInGlobalScope(String rawTypeName, String... typeVarNames) {
+    OOTypeSymbol typeSym = MontiArcMill.oOTypeSymbolBuilder()
+      .setName(rawTypeName)
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
+
+    Arrays.stream(typeVarNames)
+      .map(name -> MontiArcMill.typeVarSymbolBuilder().setName(name).build())
+      .forEach(typeSym::addTypeVarSymbol);
+
+    SymbolService.link(MontiArcMill.globalScope(), typeSym);
+    MontiArcMill.globalScope().addSubScope(typeSym.getSpannedScope());
+  }
 
   @ParameterizedTest
   @ValueSource(strings = {"ComplexComponent.arc"})
@@ -82,6 +105,63 @@ public class SymbolTableCompletionTest extends AbstractTest {
     // Then
     SymbolTableCompletionChecker.Result r = SymbolTableCompletionChecker.checkComplete(ast);
     Assertions.assertTrue(r.isComplete(), "The symbol-table is not complete, findings: " + r.getFindings().toString());
+  }
+
+  @Test
+  void checkCorrectGenericTypeParamBinding() {
+    createTypeInGlobalScope("Map", "K", "V");
+    createTypeInGlobalScope("String");
+    createTypeInGlobalScope("Integer");
+    createTypeInGlobalScope("Double");
+
+    checkSymbolTableCompletion("generics/TriGenericComponent.arc");
+    checkSymbolTableCompletion("generics/TriGenericInstantiation.arc");
+
+    Assertions.assertEquals(0, Log.getErrorCount());
+    CompTypeExpression completedGenericType = MontiArcMill.globalScope()
+      .resolveComponentType("completion.generics.TriGenericInstantiation").orElseThrow(couldNot("find comp type"))
+      .getSubComponent("comp").orElseThrow(couldNot("find component instance"))
+      .getType();
+
+    Assertions.assertTrue(completedGenericType instanceof TypeExprOfGenericComponent);
+    TypeExprOfGenericComponent type = (TypeExprOfGenericComponent) completedGenericType;
+    Assertions.assertEquals("Map<String,Integer>", type.getBindingFor("T").get().print());
+    Assertions.assertEquals("Double", type.getBindingFor("U").get().print());
+    Assertions.assertEquals("String", type.getBindingFor("V").get().print());
+  }
+
+  @Test
+  void checkPresenceOfNestedComponents() {
+    IMontiArcGlobalScope globScope = MontiArcMill.globalScope();
+    checkSymbolTableCompletion("WithInnerComponents.arc");
+    Optional<ComponentTypeSymbol> outerComp = globScope.resolveComponentType("completion.WithInnerComponents");
+    Assertions.assertTrue(outerComp.isPresent());
+
+    Assertions.assertAll(
+      () -> Assertions.assertTrue(outerComp.get().getInnerComponent("Inner1").isPresent(), "Inner1 missing"),
+      () -> Assertions.assertTrue(outerComp.get().getInnerComponent("Inner2").isPresent(), "Inner2 missing"),
+      () -> Assertions.assertTrue(outerComp.get().getInnerComponent("Nested").isPresent(), "Nested missing"),
+      () -> Assertions.assertTrue(outerComp.get().getSubComponent("inr1").isPresent(), "inr1 missing"),
+      () -> Assertions.assertTrue(outerComp.get().getSubComponent("inr2").isPresent(), "inr2 missing"),
+      () -> Assertions.assertTrue(outerComp.get().getSubComponent("inr22").isPresent(), "inr22 missing"),
+      () -> Assertions.assertTrue(outerComp.get().getSubComponent("nest1").isPresent(), "nest1 missing")
+    );
+
+    // Now knowing that component type Nested could be resolved, we can check his members, too:
+    ComponentTypeSymbol nestedComp = outerComp.get().getInnerComponent("Nested").get();
+    Assertions.assertAll(
+      () -> Assertions.assertTrue(nestedComp.getInnerComponent("NextNested1").isPresent(), "NextNested1 missing"),
+      () -> Assertions.assertTrue(nestedComp.getInnerComponent("NextNested2").isPresent(), "NextNested2 missing"),
+      () -> Assertions.assertTrue(nestedComp.getSubComponent("nn1").isPresent(), "nn1 missing"),
+      () -> Assertions.assertTrue(nestedComp.getSubComponent("nn2").isPresent(), "nn2 missing")
+    );
+
+    // Checking that for direct instantiation the correct type is set:
+    Assertions.assertEquals("Inner2", outerComp.get().getSubComponent("inr2").get().getType().printName());
+  }
+
+  private Supplier<RuntimeException> couldNot(String what){
+    return () -> new RuntimeException("Could not "+ what);
   }
 
   /**

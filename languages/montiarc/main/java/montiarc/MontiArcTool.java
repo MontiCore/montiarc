@@ -7,6 +7,7 @@ import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCos;
@@ -244,17 +245,18 @@ public class MontiArcTool extends MontiArcToolTOP {
   public void prettyPrint(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String file) {
     Preconditions.checkNotNull(asts);
     Preconditions.checkNotNull(file);
-    if (file.isEmpty()) {
-      asts.forEach(ast -> this.prettyPrint(ast, file));
-    } else {
-      asts.forEach(ast -> this.prettyPrint(ast, file + ast.getComponentType().getName() + ".arc"));
-    }
+    asts.forEach(ast -> this.prettyPrint(ast, file));
   }
 
   @Override
   public void prettyPrint(@NotNull ASTMACompilationUnit ast, @NotNull String file) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(file);
+    if (!file.isEmpty()) {
+      file = Paths.get(file,
+        Names.getPathFromQualifiedName(ast.getPackage().getQName()),
+        ast.getComponentType().getName() + ".arc").toString();
+    }
     MontiArcFullPrettyPrinter prettyPrinter = new MontiArcFullPrettyPrinter();
     this.print(prettyPrinter.prettyprint(ast), file);
   }

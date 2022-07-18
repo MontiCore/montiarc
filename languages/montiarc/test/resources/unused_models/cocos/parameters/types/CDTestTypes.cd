@@ -1,0 +1,32 @@
+/* (c) https://github.com/MontiCore/monticore */
+package types;
+
+classdiagram CDTestTypes {
+
+  class TypeWithFields {
+    Integer x;
+    Integer y = 1;
+    boolean testBool = true;
+    SubTypeOne t;
+
+    int privateVar = 0;
+  }
+  
+  class SuperType {}
+  
+  class SubTypeOne extends SuperType {
+    int myField;
+  }
+  
+  interface InterfaceTypeOne {}
+  interface InterfaceTypeTwo {}
+  interface InterfaceTypeThree extends InterfaceTypeTwo {}
+  
+  class SubTypeTwo extends SuperType implements InterfaceTypeOne, InterfaceTypeThree {}
+  
+  enum EnumType {
+        ON,
+        OFF,
+        INACTIVE;
+  }
+}
