@@ -3,14 +3,11 @@ package montiarc._symboltable;
 
 import arcautomaton._visitor.ArcAutomatonInheritanceHandler;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.SymbolService;
 import arcbasis._visitor.ArcBasisInheritanceHandler;
 import arcbasis._visitor.ArcBasisTraverser;
-import arcbasis.check.CompTypeExpression;
 import arccore._visitor.ArcCoreInheritanceHandler;
 import basicmodeautomata._visitor.BasicModeAutomataInheritanceHandler;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 import comfortablearc._visitor.ComfortableArcInheritanceHandler;
 import de.monticore.ast.ASTNode;
 import de.monticore.expressions.assignmentexpressions._visitor.AssignmentExpressionsInheritanceHandler;
@@ -21,12 +18,13 @@ import de.monticore.literals.mcliteralsbasis._visitor.MCLiteralsBasisInheritance
 import de.monticore.mcbasics._visitor.MCBasicsInheritanceHandler;
 import de.monticore.scactions._visitor.SCActionsInheritanceHandler;
 import de.monticore.scbasis._visitor.SCBasisInheritanceHandler;
+import de.monticore.scdoactions._visitor.SCDoActionsInheritanceHandler;
+import de.monticore.scstatehierarchy._visitor.SCStateHierarchyInheritanceHandler;
 import de.monticore.sctransitions4code._visitor.SCTransitions4CodeInheritanceHandler;
 import de.monticore.statements.mccommonstatements._visitor.MCCommonStatementsInheritanceHandler;
 import de.monticore.statements.mcstatementsbasis._visitor.MCStatementsBasisInheritanceHandler;
 import de.monticore.statements.mcvardeclarationstatements._visitor.MCVarDeclarationStatementsInheritanceHandler;
 import de.monticore.symbols.basicsymbols._visitor.BasicSymbolsInheritanceHandler;
-import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symbols.oosymbols._visitor.OOSymbolsInheritanceHandler;
 import de.monticore.symboltable.IScope;
 import de.monticore.symboltable.IScopeSpanningSymbol;
@@ -38,7 +36,6 @@ import de.monticore.umlstereotype._visitor.UMLStereotypeInheritanceHandler;
 import de.monticore.visitor.IVisitor;
 import de.se_rwth.commons.logging.Log;
 import genericarc._visitor.GenericArcInheritanceHandler;
-import genericarc.check.TypeExprOfGenericComponent;
 import montiarc.AbstractTest;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
@@ -55,10 +52,8 @@ import variablearc._visitor.VariableArcInheritanceHandler;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 /**
  * Integration test for the {@link MontiArcScopesGenitorDelegator} and the
@@ -67,26 +62,16 @@ import java.util.function.Supplier;
  * That is, checks that all symbols, symbols and ast nodes have an enclosing
  * scope, and that all spanning symbols and ast nodes have a spanned scope.
  */
-public class SymbolTableCompletionTest extends AbstractTest {
+public class MontiArcSymbolTableCompletionTest extends AbstractTest {
 
   protected static final String TEST_MODEL_PATH = "symboltable/completion/";
 
-  public static void createTypeInGlobalScope(String rawTypeName, String... typeVarNames) {
-    OOTypeSymbol typeSym = MontiArcMill.oOTypeSymbolBuilder()
-      .setName(rawTypeName)
-      .setSpannedScope(MontiArcMill.scope())
-      .build();
-
-    Arrays.stream(typeVarNames)
-      .map(name -> MontiArcMill.typeVarSymbolBuilder().setName(name).build())
-      .forEach(typeSym::addTypeVarSymbol);
-
-    SymbolService.link(MontiArcMill.globalScope(), typeSym);
-    MontiArcMill.globalScope().addSubScope(typeSym.getSpannedScope());
-  }
-
   @ParameterizedTest
-  @ValueSource(strings = {"ComplexComponent.arc"})
+  @ValueSource(strings = {
+    "ComplexComponent.arc",
+    "generics/TriGenericComponent.arc",
+    "generics/TriGenericInstantiation.arc"
+  })
   public void checkSymbolTableCompletion(@NotNull String model) {
     Preconditions.checkNotNull(model);
     Preconditions.checkState(Log.getFindings().isEmpty());
@@ -103,31 +88,8 @@ public class SymbolTableCompletionTest extends AbstractTest {
     tool.completeSymbolTable(ast);
 
     // Then
-    SymbolTableCompletionChecker.Result r = SymbolTableCompletionChecker.checkComplete(ast);
-    Assertions.assertTrue(r.isComplete(), "The symbol-table is not complete, findings: " + r.getFindings().toString());
-  }
-
-  @Test
-  void checkCorrectGenericTypeParamBinding() {
-    createTypeInGlobalScope("Map", "K", "V");
-    createTypeInGlobalScope("String");
-    createTypeInGlobalScope("Integer");
-    createTypeInGlobalScope("Double");
-
-    checkSymbolTableCompletion("generics/TriGenericComponent.arc");
-    checkSymbolTableCompletion("generics/TriGenericInstantiation.arc");
-
-    Assertions.assertEquals(0, Log.getErrorCount());
-    CompTypeExpression completedGenericType = MontiArcMill.globalScope()
-      .resolveComponentType("completion.generics.TriGenericInstantiation").orElseThrow(couldNot("find comp type"))
-      .getSubComponent("comp").orElseThrow(couldNot("find component instance"))
-      .getType();
-
-    Assertions.assertTrue(completedGenericType instanceof TypeExprOfGenericComponent);
-    TypeExprOfGenericComponent type = (TypeExprOfGenericComponent) completedGenericType;
-    Assertions.assertEquals("Map<String,Integer>", type.getBindingFor("T").get().print());
-    Assertions.assertEquals("Double", type.getBindingFor("U").get().print());
-    Assertions.assertEquals("String", type.getBindingFor("V").get().print());
+    List<String> findings = SymbolTableCompletionChecker.checkComplete(ast);
+    Assertions.assertTrue(findings.isEmpty(), "The symbol-table is not complete, findings: " + findings);
   }
 
   @Test
@@ -160,14 +122,12 @@ public class SymbolTableCompletionTest extends AbstractTest {
     Assertions.assertEquals("Inner2", outerComp.get().getSubComponent("inr2").get().getType().printName());
   }
 
-  private Supplier<RuntimeException> couldNot(String what){
-    return () -> new RuntimeException("Could not "+ what);
-  }
-
   /**
-   * The checker used to check the completion of the symbol table. Completion
-   * of the symbol table for any ast node can be checked via the {@link Result}
-   * provided by {@link #checkComplete(ASTNode)}.
+   * Checks the completeness of the symbol table by traversing ast nodes,
+   * scopes, and symbols. Completion of the symbol table for any ast node can
+   * be checked via the method {@link #checkComplete(ASTNode)}, which provides
+   * a list of findings that is empty of the symbol table has the expected
+   * scope structure.
    */
   public static class SymbolTableCompletionChecker {
 
@@ -187,17 +147,19 @@ public class SymbolTableCompletionTest extends AbstractTest {
 
       // MontiArc handler
       this.traverser.setArcBasisHandler(new ArcBasisInheritanceHandler());
+      this.traverser.setArcAutomatonHandler(new ArcAutomatonInheritanceHandler());
+      this.traverser.setComfortableArcHandler(new ComfortableArcInheritanceHandler());
       this.traverser.setArcCoreHandler(new ArcCoreInheritanceHandler());
       this.traverser.setGenericArcHandler(new GenericArcInheritanceHandler());
-      this.traverser.setComfortableArcHandler(new ComfortableArcInheritanceHandler());
       this.traverser.setVariableArcHandler(new VariableArcInheritanceHandler());
       this.traverser.setBasicModeAutomataHandler(new BasicModeAutomataInheritanceHandler());
       this.traverser.setMontiArcHandler(new MontiArcInheritanceHandler());
-      this.traverser.setArcAutomatonHandler(new ArcAutomatonInheritanceHandler());
 
       // Statechart handler
       this.traverser.setSCBasisHandler(new SCBasisInheritanceHandler());
       this.traverser.setSCActionsHandler(new SCActionsInheritanceHandler());
+      this.traverser.setSCDoActionsHandler(new SCDoActionsInheritanceHandler());
+      this.traverser.setSCStateHierarchyHandler(new SCStateHierarchyInheritanceHandler());
       this.traverser.setSCTransitions4CodeHandler(new SCTransitions4CodeInheritanceHandler());
 
       // MontiCore handler
@@ -233,10 +195,17 @@ public class SymbolTableCompletionTest extends AbstractTest {
       this.traverser.add4IVisitor(new Visitor(findings));
     }
 
-    public static Result checkComplete(@NotNull ASTNode node) {
+    /**
+     * Checks the completeness of the symbol-table by traversing the ast,
+     * scopes, and symbols using the provided ast node as root.
+     *
+     * @param node the root of the traversal
+     * @return a list of findings, empty if the symbol-table is complete
+     */
+    public static List<String> checkComplete(@NotNull ASTNode node) {
       SymbolTableCompletionChecker checker = new SymbolTableCompletionChecker();
       node.accept(checker.getTraverser());
-      return new Result(checker.getFindings());
+      return checker.getFindings();
     }
 
     protected List<String> getFindings() {
@@ -245,25 +214,6 @@ public class SymbolTableCompletionTest extends AbstractTest {
 
     protected ArcBasisTraverser getTraverser() {
       return this.traverser;
-    }
-
-    public static class Result {
-
-      protected ImmutableList<String> findings;
-
-      protected Result(@NotNull List<String> findings) {
-        Preconditions.checkNotNull(findings);
-        Preconditions.checkArgument(!findings.contains(null));
-        this.findings = ImmutableList.copyOf(findings);
-      }
-
-      public ImmutableList<String> getFindings() {
-        return this.findings;
-      }
-
-      public boolean isComplete() {
-        return this.getFindings().isEmpty();
-      }
     }
 
     public static class Visitor implements IVisitor {
@@ -313,7 +263,6 @@ public class SymbolTableCompletionTest extends AbstractTest {
         if (!symbol.isPresentAstNode()) {
           this.addFinding("The ast node of the symbol is missing.", "symbol", symbol);
         }
-
       }
 
       @Override
