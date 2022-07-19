@@ -13,7 +13,7 @@ abstract class Modules {
   val groovyVersion = "3.0.7"
   val guavaVersion = "30.1-jre"
   val javaParserVersion = "3.18.0"
-  val junitVersion = "5.7.0"
+  val junitVersion = "5.8.0"
   val kotlinVersion = "1.6.0"
   val kotlinxVersion = "1.6.0"
   val lejosVersion = "0.9.1-beta"
