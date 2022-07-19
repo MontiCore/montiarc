@@ -101,7 +101,7 @@ Deploy Nexus:
 # For more information, visit: https://git.rwth-aachen.de/monticore/auxiliary-development-tools/github-mirror-tools (Available internally only)
 Github Mirror:
   stage: mirror
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.5.0-jdk17
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
   variables:
     # The repository is edited during this job. To make sure that no changes persist, we instruct GitLab to always
     # create a fresh clone of the repository instead of caching it and attempting to remove any changes.
