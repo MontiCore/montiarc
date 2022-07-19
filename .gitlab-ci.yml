@@ -9,8 +9,8 @@ stages:
   - check
   - mirror
       
-Build JDK11:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
+Build jdk17:
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.5.0-jdk17
   stage: build
   allow_failure: false
   artifacts:
@@ -26,12 +26,12 @@ Build JDK11:
   script:
     - gradle clean assemble
 
-Package Uber JDK11:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
+Package Uber jdk17:
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.5.0-jdk17
   stage: post-build
   dependencies:
-    - Build JDK11
-  needs: ["Build JDK11"]
+    - Build jdk17
+  needs: ["Build jdk17"]
   allow_failure: false
   script:
     - gradle shadowjar
@@ -39,8 +39,8 @@ Package Uber JDK11:
 .unit_test_template: &unit_test_definition
   stage: test
   dependencies: 
-    - Build JDK11
-  needs: ["Build JDK11"]
+    - Build jdk17
+  needs: ["Build jdk17"]
   script:
     - gradle test jacocoAggregatedTestReport
     - awk -F","
@@ -54,12 +54,12 @@ Package Uber JDK11:
       - languages/build/basis/reports/test-coverage/jacoco.xml
       - languages/build/montiarc/reports/test-coverage/jacoco.xml
 
-Unit Test JDK11:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
+Unit Test jdk17:
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.5.0-jdk17
   allow_failure: false
   <<: *unit_test_definition
 
-Test Coverage JDK11:
+Test Coverage jdk17:
   stage: post-test
   image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.7
   script:
@@ -76,8 +76,8 @@ Test Coverage JDK11:
       languages/montiarc/main/java/
       > languages/build/montiarc/reports/test-coverage/cobertura.xml
   dependencies:
-    - Unit Test JDK11
-  needs: ["Unit Test JDK11"]
+    - Unit Test jdk17
+  needs: ["Unit Test jdk17"]
   artifacts:
     reports:
       coverage_report:
@@ -85,10 +85,10 @@ Test Coverage JDK11:
         path: "**/reports/test-coverage/cobertura.xml"
 
 Deploy Nexus:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.5.0-jdk17
   stage: post-test
   dependencies:
-    - Build JDK11 #download artifacts from build
+    - Build jdk17 #download artifacts from build
   script:
     - gradle publish -PmavenPassword=$pass -PmavenUser=$user
   rules:
@@ -101,7 +101,7 @@ Deploy Nexus:
 # For more information, visit: https://git.rwth-aachen.de/monticore/auxiliary-development-tools/github-mirror-tools (Available internally only)
 Github Mirror:
   stage: mirror
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.5.0-jdk17
   variables:
     # The repository is edited during this job. To make sure that no changes persist, we instruct GitLab to always
     # create a fresh clone of the repository instead of caching it and attempting to remove any changes.
