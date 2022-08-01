@@ -1,5 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 
+import montiarc.build.Language.Companion.configureMCTask
+
 plugins {
   id("montiarc.build.language")
 }
@@ -32,9 +34,7 @@ dependencies {
   testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
-
-tasks.getByName<de.monticore.MCTask>("grammar").grammar
-    .set(file(project(":languages").projectDir.toString() + "/grammars/ArcBasis.mc4") )
+configureMCTask("ArcBasis.mc4")
 
 tasks.getByName<Test>("test").useJUnitPlatform()
 

@@ -1,5 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 
+import montiarc.build.Language.Companion.configureMCTask
+
 plugins {
   id("montiarc.build.language")
 }
@@ -38,8 +40,7 @@ dependencies {
   testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
-tasks.getByName<de.monticore.MCTask>("grammar").grammar
-    .set(file(project(":languages").projectDir.toString() + "/grammars/MontiArc.mc4") )
+configureMCTask("MontiArc.mc4")
 
 java.sourceSets["main"].java.srcDirs(tasks.getByName<de.monticore.MCTask>("grammar").outputDir)
 

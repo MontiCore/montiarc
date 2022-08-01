@@ -7,8 +7,9 @@ plugins {
   id("montiarc.build.java-library")
 }
 
-tasks.register<de.monticore.MCTask>("grammar") {
+val grammarTask = tasks.register<de.monticore.MCTask>("grammar") {
   handcodedPath.add("$projectDir/main/java")
   modelPath.add(project(":languages").projectDir.toString() + "/grammars")
   outputDir.set(layout.buildDirectory.dir("sources/main/java/"))
 }
+tasks.findByName("compileJava")?.apply{ dependsOn(grammarTask) }
