@@ -13,10 +13,24 @@ java {
   targetCompatibility = JavaVersion.VERSION_17
 }
 
-java.sourceSets["main"].java.setSrcDirs(setOf("main/java"))
-java.sourceSets["main"].resources.setSrcDirs(setOf("main/resources"))
-java.sourceSets["test"].java.setSrcDirs(setOf("test/java"))
-java.sourceSets["test"].resources.setSrcDirs(setOf("test/resources"))
+sourceSets {
+  main {
+    java {
+      setSrcDirs(setOf(layout.projectDirectory.dir("main/java")))
+    }
+    resources {
+      setSrcDirs(setOf(layout.projectDirectory.dir("main/resources")))
+    }
+  }
+  test {
+    java {
+      setSrcDirs(setOf(layout.projectDirectory.dir("test/java")))
+    }
+    resources {
+      setSrcDirs(setOf(layout.projectDirectory.dir("test/resources")))
+    }
+  }
+}
 
 tasks.test {
   systemProperty("buildDir", layout.buildDirectory.get().toString())

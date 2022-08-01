@@ -34,8 +34,6 @@ configureMCTask("GenericArc.mc4")
 
 tasks.getByName<Test>("test").useJUnitPlatform()
 
-java.sourceSets["main"].java.srcDirs(tasks.getByName<de.monticore.MCTask>("grammar").outputDir)
-
 java.registerFeature("tests") {
   usingSourceSet(sourceSets.getByName("test"))
 }

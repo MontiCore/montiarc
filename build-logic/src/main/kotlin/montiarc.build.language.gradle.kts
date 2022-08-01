@@ -1,5 +1,3 @@
-import gradle.kotlin.dsl.accessors._e115dd7072ba4d98136045faa736bf3c.reporting
-
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
@@ -12,4 +10,7 @@ val grammarTask = tasks.register<de.monticore.MCTask>("grammar") {
   modelPath.add(project(":languages").projectDir.toString() + "/grammars")
   outputDir.set(layout.buildDirectory.dir("sources/main/java/"))
 }
-tasks.findByName("compileJava")?.apply{ dependsOn(grammarTask) }
+
+project.the<SourceSetContainer>()["main"].java {
+  srcDirs(grammarTask.get().getOutputDir())
+}

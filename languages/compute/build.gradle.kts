@@ -32,5 +32,3 @@ dependencies {
 }
 
 configureMCTask("ArcCompute.mc4")
-
-java.sourceSets["main"].java.srcDirs(tasks.getByName<de.monticore.MCTask>("grammar").outputDir)

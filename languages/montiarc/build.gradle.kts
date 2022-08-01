@@ -42,6 +42,4 @@ dependencies {
 
 configureMCTask("MontiArc.mc4")
 
-java.sourceSets["main"].java.srcDirs(tasks.getByName<de.monticore.MCTask>("grammar").outputDir)
-
 tasks.getByName<Test>("test").useJUnitPlatform()
