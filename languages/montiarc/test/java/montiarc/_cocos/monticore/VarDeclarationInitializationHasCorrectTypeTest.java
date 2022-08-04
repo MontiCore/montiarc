@@ -86,6 +86,8 @@ public class VarDeclarationInitializationHasCorrectTypeTest extends AbstractCoCo
 
     //Given
     ASTMACompilationUnit ast = this.parseAndCreateAndCompleteSymbols(model);
+    ast.getEnclosingScope().add(MontiArcMill.oOTypeSymbolBuilder().setSpannedScope(MontiArcMill.scope()).setName("String").build());
+
 
     //When
     this.getChecker().checkAll(ast);

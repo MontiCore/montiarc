@@ -7,7 +7,10 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisInheritanceHandler;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisVisitor2;
+import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsInheritanceHandler;
+import de.monticore.literals.mcliteralsbasis._ast.ASTLiteral;
 import de.monticore.literals.mcliteralsbasis._visitor.MCLiteralsBasisInheritanceHandler;
+import de.monticore.literals.mcliteralsbasis._visitor.MCLiteralsBasisVisitor2;
 import de.monticore.mcbasics._visitor.MCBasicsInheritanceHandler;
 import de.monticore.symbols.basicsymbols._visitor.BasicSymbolsInheritanceHandler;
 import de.monticore.symbols.oosymbols._visitor.OOSymbolsInheritanceHandler;
@@ -71,18 +74,20 @@ public class TransitiveScopeSetter {
     Preconditions.checkNotNull(scopeSetter);
     traverser.add4IVisitor(scopeSetter);
     traverser.add4ExpressionsBasis(scopeSetter);
+    traverser.add4MCLiteralsBasis(scopeSetter);
     traverser.setMCBasicsHandler(new MCBasicsInheritanceHandler());
     traverser.setMCBasicTypesHandler(new MCBasicTypesInheritanceHandler());
     traverser.setBasicSymbolsHandler(new BasicSymbolsInheritanceHandler());
     traverser.setOOSymbolsHandler(new OOSymbolsInheritanceHandler());
     traverser.setExpressionsBasisHandler(new ExpressionsBasisInheritanceHandler());
     traverser.setMCLiteralsBasisHandler(new MCLiteralsBasisInheritanceHandler());
+    traverser.setMCCommonLiteralsHandler(new MCCommonLiteralsInheritanceHandler());
   }
 
   /**
    * A visitor used when traversing the ast to set the enclosing scope of visited nodes.
    */
-  public static class ScopeSetter implements ExpressionsBasisVisitor2 {
+  public static class ScopeSetter implements ExpressionsBasisVisitor2, MCLiteralsBasisVisitor2 {
 
     protected Deque<? extends IArcBasisScope> scopeStack;
 
@@ -108,6 +113,15 @@ public class TransitiveScopeSetter {
      */
     @Override
     public void endVisit(@NotNull ASTExpression node) {
+      Preconditions.checkNotNull(node);
+      Preconditions.checkState(!this.getScopeStack().isEmpty());
+      if (node.getEnclosingScope() == null) {
+        node.setEnclosingScope(this.getScopeStack().getLast());
+      }
+    }
+
+    @Override
+    public void endVisit(@NotNull ASTLiteral node) {
       Preconditions.checkNotNull(node);
       Preconditions.checkState(!this.getScopeStack().isEmpty());
       if (node.getEnclosingScope() == null) {

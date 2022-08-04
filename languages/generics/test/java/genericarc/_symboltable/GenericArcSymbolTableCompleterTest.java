@@ -15,6 +15,7 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
+import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import genericarc.AbstractTest;
 import genericarc.GenericArcMill;
 import genericarc._ast.ASTArcTypeParameter;
@@ -322,10 +323,15 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
     astTypeParam.setSymbol(typeParamSym);
     typeParamSym.setAstNode(astTypeParam);
 
+    ASTMCType upperDouble = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.DOUBLE).build();
+    upperDouble.setEnclosingScope(ArcBasisMill.globalScope());
+    ASTMCType upperBool = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BOOLEAN).build();
+    upperBool.setEnclosingScope(ArcBasisMill.globalScope());
+
     ASTArcTypeParameter astTypeParamWithBounds = GenericArcMill.arcTypeParameterBuilder()
       .setName("U")
-      .addUpperBound(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.DOUBLE).build())
-      .addUpperBound(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BOOLEAN).build())
+      .addUpperBound(upperDouble)
+      .addUpperBound(upperBool)
       .build();
     TypeVarSymbol typeParamWithBoundSym = GenericArcMill.typeVarSymbolBuilder()
       .setName("U")

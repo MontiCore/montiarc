@@ -59,7 +59,7 @@ public class ExpressionStatementWellFormedness implements MCStatementsBasisASTMC
     Preconditions.checkNotNull(expression);
     TypeCheckResult result = this.getTypeCalculator().deriveType(expression);
 
-    if (!result.isPresentResult()) {
+    if (!result.isPresentResult() || result.getResult().isObscureType()) {
       Log.error(ArcAutomataError.MALFORMED_EXPRESSION.format(expression.get_SourcePositionStart()),
         expression.get_SourcePositionStart(), expression.get_SourcePositionEnd()
       );

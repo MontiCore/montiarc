@@ -65,6 +65,7 @@ public abstract class AbstractArcTypeCalculatorTest extends AbstractTest {
   }
 
   public void setUpTypes() {
+    OOTypeSymbol str = ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(ArcBasisMill.scope()).setName("String").build();
     OOTypeSymbol p =
       ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(ArcBasisMill.scope()).setName("Person").build();
     OOTypeSymbol r = ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(ArcBasisMill.scope()).setName("Role").build();
@@ -74,7 +75,7 @@ public abstract class AbstractArcTypeCalculatorTest extends AbstractTest {
       ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(ArcBasisMill.scope()).setName("Student").build();
     OOTypeSymbol f =
       ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(ArcBasisMill.scope()).setName("FirstGrader").build();
-    SymbolService.link(this.getScope(), p, r, t, s, f);
+    SymbolService.link(this.getScope(), p, r, t, s, f, str);
     t.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Role", this.getScope())));
     s.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Role", this.getScope())));
     f.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Student",

@@ -9,6 +9,7 @@ import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.symbols.basicsymbols._symboltable.BasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
@@ -402,6 +403,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
   public void shouldVisitArcParameter() {
     // Given
     ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build();
+    type.setEnclosingScope(ArcBasisMill.globalScope());
     VariableSymbol symParam = ArcBasisMill.variableSymbolBuilder().setName("par").build();
     ASTArcParameter astParam = arcbasis.ArcBasisMill.arcParameterBuilder().setName("par")
       .setMCType(type).build();
@@ -455,6 +457,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
   public void shouldVisitPort() {
     // Given
     ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build();
+    type.setEnclosingScope(ArcBasisMill.globalScope());
     PortSymbol symParam = ArcBasisMill.portSymbolBuilder()
       .setName("po")
       .setDirection(Mockito.mock(ASTPortDirection.class))
@@ -512,6 +515,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
   public void shouldVisitArcField() {
     // Given
     ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build();
+    type.setEnclosingScope(ArcBasisMill.globalScope());
     VariableSymbol symField = ArcBasisMill.variableSymbolBuilder()
       .setName("po")
       .build();
