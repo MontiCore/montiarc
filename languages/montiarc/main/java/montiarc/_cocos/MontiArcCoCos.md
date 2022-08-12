@@ -63,6 +63,15 @@ Legend:
 | ☐     | SubcomponentGenericTypesCorrectlyAssigned       |            |                           |                                                                          |
 | ☐     | AllGenericParametersOfSuperClassSet             |            |                           |                                                                          |
 
+# Timing CoCos
+
+| in MA | CoCo(s)                            | Language | Code    | Notes |
+| ----- | ---------------------------------- | -------- | ------- | ----- |
+| ☑     | ConnectorSourceAndTargetTimingsFit | ArcBasis | 0xC1161 |       |
+| ☑     | FeedbackLoopTiming                 | ArcBasis | 0xC1162 |       |
+| ☑     | OnlyOneTiming                      | ArcBasis | 0xC1159 |       |
+| ☑     | PortTimingFits                     | ArcBasis | 0xC1160 |       |
+
 # Mode Automata
 
 | in MA | CoCo(s)                   | Language          | Code                      | Notes |

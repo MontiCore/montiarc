@@ -57,8 +57,8 @@ public class TimingCollectorTest extends AbstractTest {
   @Test
   public void defaultAvailableTimings() {
     // Given
-    List<String> defaulltTimings = Arrays.asList(
-        "untimed", "instant", "delayed", "sync", "causaulsyn");
+    List<String> defaultTimings = Arrays.asList(
+        "untimed", "instant", "delayed", "sync", "causalsync");
 
     // When
     TimingCollector collector = new TimingCollector();
@@ -66,7 +66,7 @@ public class TimingCollectorTest extends AbstractTest {
         .stream().map(Timing::getName).collect(Collectors.toList());
 
     // Then
-    Assertions.assertIterableEquals(defaulltTimings, actual);
+    Assertions.assertIterableEquals(defaultTimings, actual);
   }
 
   @Test

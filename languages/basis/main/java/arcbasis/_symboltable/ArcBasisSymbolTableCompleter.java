@@ -8,6 +8,7 @@ import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis._visitor.ArcBasisVisitor2;
 import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.*;
+import arcbasis.timing.Timing;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
@@ -19,6 +20,7 @@ import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisHandler {
@@ -29,6 +31,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   protected IArcTypeCalculator typeCalculator;
   protected ISynthesizeComponent componentSynthesizer;
   protected ASTMCType currentPortType;
+  protected List<Timing> currentPortTimings;
   protected ASTMCType currentFieldType;
 
   public ArcBasisSymbolTableCompleter() {
@@ -96,6 +99,14 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     this.currentPortType = currentPortType;
   }
 
+  protected Optional<List<Timing>> getCurrentPortTimings() {
+    return Optional.ofNullable(this.currentPortTimings);
+  }
+
+  protected void setCurrentPortTimings(@Nullable List<Timing> currentPortTimings) {
+    this.currentPortTimings = currentPortTimings;
+  }
+
   protected Optional<ASTMCType> getCurrentFieldType() {
     return Optional.ofNullable(this.currentFieldType);
   }
@@ -131,6 +142,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
     this.setCurrentCompInstanceType(null);
+    ArcBasisDelayedPortPropagation.complete(node);
   }
 
   @Override
@@ -202,6 +214,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getMCType());
     this.setCurrentPortType(node.getMCType());
+    this.setCurrentPortTimings(node.getTimings());
   }
 
   @Override
@@ -210,6 +223,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkState(this.getCurrentPortType().isPresent());
     Preconditions.checkState(this.getCurrentPortType().get().equals(node.getMCType()));
     this.setCurrentPortType(null);
+    this.setCurrentPortTimings(null);
   }
 
   @Override
@@ -232,6 +246,8 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
       }
       Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(name), this.getCurrentPortType().get().get_SourcePositionStart());
     }
+    Timing timing = this.getCurrentPortTimings().flatMap(o -> o.stream().findFirst()).orElseGet(Timing::untimed);
+    port.getSymbol().setTiming(timing);
   }
 
   @Override

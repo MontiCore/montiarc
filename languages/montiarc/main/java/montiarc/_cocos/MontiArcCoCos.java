@@ -56,7 +56,13 @@ public class MontiArcCoCos {
     checker.addCoCo(new PortTypeExists(new CheckTypeExistence4MontiArc()));
     checker.addCoCo(new PortUniqueSender());
     checker.addCoCo(new UniqueIdentifierNames());
-    
+
+    // Timing CoCos
+    checker.addCoCo(new ConnectorSourceAndTargetTimingsFit());
+    checker.addCoCo(new FeedbackLoopTiming());
+    checker.addCoCo(new OnlyOneTiming());
+    checker.addCoCo(new PortTimingFits());
+
     // GenericArc CoCos
     checker.addCoCo(new GenericTypeParameterNameCapitalization());
 
@@ -83,7 +89,6 @@ public class MontiArcCoCos {
     checker.addCoCo(new ComponentInstantiationRespectsGenericTypeBounds());
     checker.addCoCo(new RootComponentTypesNoInstanceName());
     checker.addCoCo(new UnresolvableImport());
-    checker.addCoCo(new OnlyOneTiming());
 
     // Basic MontiCore cocos
     checker.addCoCo(new VarDeclarationInitializationHasCorrectType(new MontiArcTypeCalculator()));

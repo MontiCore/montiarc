@@ -7,6 +7,7 @@ import arcbasis._ast.*;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.TypeExprOfComponent;
+import arcbasis.timing.Timing;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.BasicSymbolsScope;
@@ -27,6 +28,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mockito;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -434,6 +436,9 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
 
     // Then
     Assertions.assertTrue(this.getCompleter().getCurrentPortType().isPresent());
+    Assertions.assertEquals(type, this.getCompleter().getCurrentPortType().get());
+    Assertions.assertTrue(this.getCompleter().getCurrentPortTimings().isPresent());
+    Assertions.assertEquals(0, this.getCompleter().getCurrentPortTimings().get().size());
   }
 
   @Test
@@ -451,6 +456,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
 
     // Then
     Assertions.assertFalse(this.getCompleter().getCurrentPortType().isPresent());
+    Assertions.assertFalse(this.getCompleter().getCurrentPortTimings().isPresent());
   }
 
   @Test
@@ -469,6 +475,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     symParam.setEnclosingScope(ArcBasisMill.globalScope());
 
     this.getCompleter().setCurrentPortType(type);
+    this.getCompleter().setCurrentPortTimings(List.of(Timing.untimed()));
 
     // When
     getCompleter().visit(astPort);
@@ -476,6 +483,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     // Then
     Assertions.assertDoesNotThrow(symParam::getType);
     Assertions.assertTrue(SymTypeExpressionFactory.createPrimitive("byte").deepEquals(symParam.getType()));
+    Assertions.assertEquals(Timing.untimed(), symParam.getTiming());
   }
 
   @Test

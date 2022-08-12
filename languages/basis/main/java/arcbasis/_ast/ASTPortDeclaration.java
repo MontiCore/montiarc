@@ -4,7 +4,8 @@ package arcbasis._ast;
 import arcbasis.timing.Timing;
 import arcbasis.timing.TimingCollector;
 
-import java.util.Optional;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Represents a port declaration. Extends {@link ASTPortDeclarationTOP} with utility functionality
@@ -25,9 +26,13 @@ public class ASTPortDeclaration extends ASTPortDeclarationTOP {
   }
 
   /**
-   * @return the Timing of the port or {@code Optional.empty()} if none is specified
+   * @return the specified Timings of the port
    */
-  public Optional<Timing> getTiming() {
-    return TimingCollector.getTimings(this.getStereotype()).stream().findFirst();
+  public List<Timing> getTimings() {
+    if (this.isPresentStereotype()) {
+      return TimingCollector.getTimings(this.getStereotype());
+    } else {
+      return Collections.emptyList();
+    }
   }
 }

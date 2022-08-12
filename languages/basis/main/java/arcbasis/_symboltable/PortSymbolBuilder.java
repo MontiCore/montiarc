@@ -4,14 +4,18 @@ package arcbasis._symboltable;
 import arcbasis._ast.ASTPortDirection;
 import arcbasis._ast.ASTPortDirectionIn;
 import arcbasis.ArcBasisMill;
+import arcbasis.timing.Timing;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
+
+import java.util.Optional;
 
 public class PortSymbolBuilder extends PortSymbolBuilderTOP {
 
   protected ASTPortDirection direction;
   protected SymTypeExpression type;
+  protected Timing timing;
 
   public PortSymbolBuilder() {
     super();
@@ -56,6 +60,18 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
     return this.realBuilder;
   }
 
+  public Timing getTiming() {
+    Preconditions.checkState(this.timing != null, "Type of Port '%s' has not been set. Did you " +
+        "forget to run the symbol table completer?", this.getName());
+    return this.timing;
+  }
+
+  public PortSymbolBuilder setTiming(@NotNull Timing timing) {
+    Preconditions.checkNotNull(timing);
+    this.timing = timing;
+    return this.realBuilder;
+  }
+
   @Override
   public PortSymbol build() {
     if (!isValid()) {
@@ -66,6 +82,7 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
     PortSymbol symbol = super.build();
     symbol.setDirection(this.getDirection());
     symbol.setType(this.getType());
+    symbol.setTiming(Optional.ofNullable(this.timing).orElseGet(Timing::untimed));
     return symbol;
   }
 
@@ -76,6 +93,7 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
     }
     PortSymbol symbol = super.build();
     symbol.setDirection(this.getDirection());
+    symbol.setTiming(Optional.ofNullable(this.timing).orElseGet(Timing::untimed));
     return symbol;
   }
 

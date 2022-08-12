@@ -5,6 +5,7 @@ package arcbasis._symboltable;
 import arcbasis._ast.ASTPortDirection;
 import arcbasis._ast.ASTPortDirectionIn;
 import arcbasis._ast.ASTPortDirectionOut;
+import arcbasis.timing.Timing;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.IScopeSpanningSymbol;
 import de.monticore.types.check.SymTypeExpression;
@@ -18,6 +19,8 @@ public class PortSymbol extends PortSymbolTOP {
 
   protected ASTPortDirection direction;
   protected SymTypeExpression type;
+  protected Timing timing;
+  protected boolean delayed;
 
   /**
    * @param name the name of this port.
@@ -30,11 +33,14 @@ public class PortSymbol extends PortSymbolTOP {
    * @param name      the name of this port.
    * @param direction the direction of this port.
    * @param type      the type of this port.
+   * @param timing    the timing of this port.
    */
-  protected PortSymbol(String name, ASTPortDirection direction, SymTypeExpression type) {
+  protected PortSymbol(String name, ASTPortDirection direction, SymTypeExpression type, Timing timing) {
     super(name);
     this.direction = direction;
     this.type = type;
+    this.timing = timing;
+    this.delayed = timing.equals(Timing.delayed()) || timing.equals(Timing.causalsync());
   }
 
   public ASTPortDirection getDirection() {
@@ -91,6 +97,38 @@ public class PortSymbol extends PortSymbolTOP {
   public TypeSymbol getTypeInfo() {
     return this.getType().getTypeInfo() instanceof TypeSymbolSurrogate ?
       ((TypeSymbolSurrogate) this.getType().getTypeInfo()).lazyLoadDelegate() : this.getType().getTypeInfo();
+  }
+
+  /**
+   * @return the timing of this port.
+   */
+  public Timing getTiming() {
+    Preconditions.checkState(this.timing != null, "Type of Port '%s' has not been set. Did you " +
+        "forget to run the symbol table completer?", this.getName());
+    return this.timing;
+  }
+
+  /**
+   * @param timing the timing of this port.
+   */
+  public void setTiming(@NotNull Timing timing) {
+    Preconditions.checkNotNull(timing);
+    this.timing = timing;
+    this.delayed = timing.equals(Timing.delayed()) || timing.equals(Timing.causalsync());
+  }
+
+  /**
+   * @return if this port is delayed (either by its timing or transitively through connections)
+   */
+  public boolean isDelayed() {
+    return this.delayed;
+  }
+
+  /**
+   * Sets this port to being delayed
+   */
+  public void setDelayed() {
+    this.delayed = true;
   }
 
   /**
