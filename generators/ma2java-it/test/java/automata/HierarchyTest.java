@@ -9,49 +9,44 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * The system under test is the component {@code Hierarchy}. The black-box
- * tests ensure that the system produces the expected outputs.
+ * The system under test is the component {@code Hierarchy}. The black-box tests
+ * ensure that the system produces the expected outputs.
  */
 public class HierarchyTest {
 
   /**
    * Black-box test: Ensures that the automaton produces the expected output.
    *
-   * @param expectedCounter the expected counter messages in order
-   * @param expectedPath    the expected path in order
+   * @param expectedPath the expected path in order
    */
   @ParameterizedTest
   @MethodSource("inputAndExpectedOutputProvider")
   @DisplayName("Component with hierarchy should produce expected outputs")
-  public void shouldProduceExpectedOutput(@NotNull List<Integer> expectedCounter, @NotNull String expectedPath) {
-    Preconditions.checkNotNull(expectedCounter);
+  public void shouldProduceExpectedOutput(int cycles,
+                                          @NotNull String expectedPath) {
     Preconditions.checkNotNull(expectedPath);
+    Preconditions.checkArgument(cycles >= 0);
 
-    //Given
-    Hierarchy hierarchy = new Hierarchy();
+    // Given
+    Hierarchy hierarchy = new   Hierarchy();
     hierarchy.setUp();
     hierarchy.init();
 
     // When
-    List<Integer> actualCounter = new ArrayList<>(expectedCounter.size());
-    // no initial output
-    actualCounter.add(hierarchy.getPortPCounter().getCurrentValue());
-    for (int i = 0; i < 8; i++) {
-      hierarchy.compute();
+    for (int i = 0; i < cycles; i++) {
+      // update
       hierarchy.update();
 
-      // add the current value after computation
-      actualCounter.add(hierarchy.getPortPCounter().getCurrentValue());
+      // compute
+      hierarchy.compute();
     }
-    String actualPath = hierarchy.getPortPPath().getCurrentValue();
+
+    String actualPath = hierarchy.getPortOPath().getCurrentValue();
 
     // Then
-    Assertions.assertIterableEquals(expectedCounter, actualCounter);
     Assertions.assertEquals(expectedPath, actualPath);
   }
 
@@ -60,14 +55,26 @@ public class HierarchyTest {
    * automaton should produce for the given input.
    */
   protected static Stream<Arguments> inputAndExpectedOutputProvider() {
-    return Stream.of(
-        Arguments.of(List.of(3,7,10,12,16,18,23,25,30),
-                "aIni" + "->aEn" + "->a1Ini" + "->a1En" + "->a1Ex" + "->aEx" + "->aToB" +
-                "->bEn" + "->bEx" + "->cEn" + "->c1En" + "->c1Ex" + "->c2En" + "->c2Ex" +
-                "->cEx" + "->dEn" + "->d2En" + "->d2Ex" + "->d1En" + "->d1Ex" + "->dEx" +
-                "->eEn" + "->e1Ini" + "->e1En" + "->e1Ex" + "->e2En" + "->e2Ex" + "->eEx" +
-                "->fEn" + "->f1En" + "->f11En"
-        )
+    String path0 = "aIni->aEn->a1Ini->a1En";
+    String path1 = path0 + "->a1Ex" + "->aEx" + "->aToB" + "->bEn";
+    String path2 = path1 + "->bEx" + "->bToC" + "->cEn" + "->c1En";
+    String path3 = path2 + "->c1Ex" + "->c1ToC2" + "->c2En";
+    String path4 = path3 + "->c2Ex" + "->cEx" + "->cToD" + "->dEn" + "->d2En";
+    String path5 = path4 + "->d2Ex" + "->d2ToD1" + "->d1En";
+    String path6 = path5 + "->d1Ex" + "->dEx" + "->d1ToE" + "->eEn" + "->e1Ini" + "->e1En";
+    String path7 = path6 + "->e1Ex" + "->e1ToE2" + "->e2En";
+    String path8 = path7 + "->e2Ex" + "->eEx" + "->eToF11" + "->fEn" + "->f1En" + "->f11En";
+    String path9 = path8 + "->f11Ex" + "->f1Ex" + "->fEx" + "->fToA" + "->aEn" + "->a1Ini" + "->a1En";
+    return Stream.of(Arguments.of(0, path0),
+                     Arguments.of(1, path1),
+                     Arguments.of(2, path2),
+                     Arguments.of(3, path3),
+                     Arguments.of(4, path4),
+                     Arguments.of(5, path5)
+                     //Arguments.of(6, path6),
+                     //Arguments.of(7, path7),
+                     //Arguments.of(8, path8),
+                     //Arguments.of(9, path9)
     );
   }
 }

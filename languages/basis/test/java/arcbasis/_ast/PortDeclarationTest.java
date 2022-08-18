@@ -35,11 +35,11 @@ public class PortDeclarationTest extends AbstractTest {
     // Given
     ASTPortDeclaration astPortDeclaration = ArcBasisMill.portDeclarationBuilder()
         .setMCType(Mockito.mock(ASTMCObjectType.class))
-        .setStereotype(ArcBasisMill.stereotypeBuilder().setValuesList(List.of(ArcBasisMill.stereoValueBuilder().setName(Timing.sync().getName()).setContent("").build())).build())
+        .setStereotype(ArcBasisMill.stereotypeBuilder().setValuesList(List.of(ArcBasisMill.stereoValueBuilder().setName(Timing.SYNC.getName()).setContent("").build())).build())
         .setPortDirection(ArcBasisMill.portDirectionInBuilder().build()).setPortList("i1").build();
 
     // Then
     Assertions.assertEquals(1, astPortDeclaration.getTimings().size());
-    Assertions.assertEquals(Timing.sync(), astPortDeclaration.getTimings().get(0));
+    Assertions.assertEquals(Timing.SYNC, astPortDeclaration.getTimings().get(0));
   }
 }

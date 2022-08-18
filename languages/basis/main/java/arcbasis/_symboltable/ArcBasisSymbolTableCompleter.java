@@ -142,7 +142,6 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
     this.setCurrentCompInstanceType(null);
-    ArcBasisDelayedPortPropagation.complete(node);
   }
 
   @Override
@@ -246,7 +245,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
       }
       Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(name), this.getCurrentPortType().get().get_SourcePositionStart());
     }
-    Timing timing = this.getCurrentPortTimings().flatMap(o -> o.stream().findFirst()).orElseGet(Timing::untimed);
+    Timing timing = this.getCurrentPortTimings().flatMap(o -> o.stream().findFirst()).orElse(Timing.UNTIMED);
     port.getSymbol().setTiming(timing);
   }
 

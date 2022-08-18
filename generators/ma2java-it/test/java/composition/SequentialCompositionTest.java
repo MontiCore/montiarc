@@ -2,6 +2,7 @@
 package composition;
 
 import com.google.common.base.Preconditions;
+import de.montiarc.runtimes.timesync.delegation.DelayedPort;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -41,14 +42,14 @@ public class SequentialCompositionTest {
 
     //Given
     SequentialComposition component = new SequentialComposition();
-    component.setUp();
+    component.setUp(new DelayedPort<>(), new DelayedPort<>());
     component.init();
 
     // provide initial input
-    component.getPortI().setNextValue(input[0]);
+    component.getPortI().setValue(input[0]);
     component.getPortI().update();
     component.update();
-    component.getPortI().setNextValue(input[1]);
+    component.getPortI().setValue(input[1]);
     component.compute();
     component.getPortI().update();
     component.update();
@@ -57,7 +58,7 @@ public class SequentialCompositionTest {
     List<OnOff> actual = new ArrayList<>(output.length);
     // no initial output
     for (int i = 2; i < input.length; i++) {
-      component.getPortI().setNextValue(input[i]);
+      component.getPortI().setValue(input[i]);
       component.compute();
       component.getPortI().update();
       component.update();

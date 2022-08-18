@@ -47,8 +47,11 @@ public class SourceTest {
     // When
     List<OnOff> actual = new ArrayList<>(cycles);
     for (int i = 0; i < cycles; i++) {
-      source.compute();
+      // update
       source.update();
+
+      // compute
+      source.compute();
 
       // add the current value after computation
       actual.add(source.getPortO().getCurrentValue());

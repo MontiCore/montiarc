@@ -3,6 +3,7 @@ package composition;
 
 
 import com.google.common.base.Preconditions;
+import de.montiarc.runtimes.timesync.delegation.DelayedPort;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -55,12 +56,12 @@ public class ParallelCompositionTest {
 
     //Given
     ParallelComposition component = new ParallelComposition();
-    component.setUp();
+    component.setUp(new DelayedPort<>(), new DelayedPort<>(), new DelayedPort<>(), new DelayedPort<>());
     component.init();
 
     // provide initial input
-    component.getPortI1().setNextValue(input1[0]);
-    component.getPortI2().setNextValue(input2[0]);
+    component.getPortI1().setValue(input1[0]);
+    component.getPortI2().setValue(input2[0]);
     component.getPortI1().update();
     component.getPortI2().update();
     component.update();
@@ -70,8 +71,8 @@ public class ParallelCompositionTest {
     List<OnOff> actual2 = new ArrayList<>(output2.length);
     // no initial output
     for (int i = 1; i < input1.length; i++) {
-      component.getPortI1().setNextValue(input1[i]);
-      component.getPortI2().setNextValue(input2[i]);
+      component.getPortI1().setValue(input1[i]);
+      component.getPortI2().setValue(input2[i]);
       component.compute();
       component.getPortI1().update();
       component.getPortI2().update();

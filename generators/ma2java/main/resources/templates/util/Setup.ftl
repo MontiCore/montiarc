@@ -32,7 +32,7 @@
 
     <#if comp.hasPorts()>
       public void ${methodName}() {
-        this.${methodName}(<#list comp.getPorts() as port>new Port<>()<#sep>, </#list>);
+        this.${methodName}(<#list comp.getPorts() as port>new <#if port.isDelayed()>Delayed<#else>Undelayed</#if>Port<>()<#sep>, </#list>);
       }
     </#if>
 </#macro>
@@ -67,8 +67,8 @@
     </#list>
     <#if !comp.isAtomic()>
       //subcomponent port and connectors setup
-      <#list compHelper.getVarsForHiddenChannelsMappedToTypeString(comp) as varName, type>
-        Port<${type}> ${varName} = new Port<>();
+      <#list compHelper.getVarsForHiddenChannelsMappedToFullPortType(comp) as varName, type>
+        ${type} ${varName} = new ${type}();
       </#list>
 
       <#list compHelper.transformMapMapToSortedListMap(compHelper.mapSubCompNameToPortVariableMap(comp)) as subCompName, paramsList>

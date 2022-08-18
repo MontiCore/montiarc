@@ -5,7 +5,6 @@ import arcbasis._ast.*;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
-import arcbasis.timing.Timing;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -66,16 +65,16 @@ public class FeedbackLoopTiming implements ArcBasisASTComponentTypeCoCo {
   protected Set<String> findNextComponent(ASTComponentType componentType, String component) {
     Preconditions.checkNotNull(componentType);
     return componentType.getConnectors().stream()
-        .filter(c -> isPortNotDelayed(getPortIfPresent(c.getSource(), componentType.getSymbol())))
+        .filter(c -> isPortNotStronglyCausal(getPortIfPresent(c.getSource(), componentType.getSymbol())))
         .filter(c -> getComponentNullSafe(c.getSource()).equals(component))
         .flatMap(c -> c.getTargetList().stream()
-            .filter(t -> isPortNotDelayed(getPortIfPresent(t, componentType.getSymbol())))
+            .filter(t -> isPortNotStronglyCausal(getPortIfPresent(t, componentType.getSymbol())))
             .map(FeedbackLoopTiming::getComponentNullSafe))
         .collect(Collectors.toSet());
   }
 
-  protected boolean isPortNotDelayed(Optional<PortSymbol> portSymbol) {
-    return portSymbol.isPresent() && !portSymbol.get().isDelayed();
+  protected boolean isPortNotStronglyCausal(Optional<PortSymbol> portSymbol) {
+    return portSymbol.isPresent() && !portSymbol.get().isStronglyCausal();
   }
 
   protected static Optional<PortSymbol> getPortIfPresent(@NotNull ASTPortAccess astPort,

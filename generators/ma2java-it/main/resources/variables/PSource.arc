@@ -9,15 +9,13 @@ import types.Direction;
  */
 component PSource(Direction p) {
 
-  port out Direction o;
+  port <<sync>> out Direction o;
 
   /**
    * The automaton emits the provided direction every computation cycle.
    */
   automaton {
-    initial {
-      o = p;
-    } state A;
+    initial state A;
 
     // emit p
     A -> A / { o = p; };

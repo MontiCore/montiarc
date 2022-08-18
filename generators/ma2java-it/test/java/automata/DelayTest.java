@@ -36,34 +36,33 @@ public class DelayTest {
     Preconditions.checkNotNull(input);
     Preconditions.checkNotNull(output);
     Preconditions.checkArgument(input.length >= 1);
-    Preconditions.checkArgument(input.length == output.length + 1);
+    Preconditions.checkArgument(input.length == output.length);
 
-    //Given
+    // Given
     Delay delay = new Delay();
     delay.setUp();
     delay.init();
 
-    // provide initial input
-    delay.getPortI().setNextValue(input[0]);
-    delay.getPortI().update();
-    delay.update();
-
     // When
     List<OnOff> actual = new ArrayList<>(output.length);
+
     // no initial output
-    OnOff initial = delay.getPortO().getCurrentValue();
-    for (int i = 1; i < input.length; i++) {
-      delay.getPortI().setNextValue(input[i]);
-      delay.compute();
+    for (OnOff onOff : input) {
+      // update
       delay.getPortI().update();
       delay.update();
 
-      // add the current value after computation
+      // compute
+      delay.getPortI().setValue(onOff);
+      delay.compute();
+
+      // get current output
       actual.add(delay.getPortO().getCurrentValue());
     }
 
     // Then
-    Assertions.assertThat(initial).isNull();
+    Assertions.assertThat(actual.size()).isEqualTo(output.length);
+    Assertions.assertThat(actual.get(0)).isNull();
     Assertions.assertThat(actual).containsExactly(output);
   }
 
@@ -73,13 +72,14 @@ public class DelayTest {
    */
   protected static Stream<Arguments> inputAndExpectedOutputProvider() {
     return Stream.of(
-        Arguments.of(new OnOff[]{ OnOff.ON }, new OnOff[]{}),
+        Arguments.of(new OnOff[]{ OnOff.ON },
+                     new OnOff[]{ null }),
         Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF },
-                     new OnOff[]{ OnOff.ON }),
+                     new OnOff[]{ null, OnOff.ON }),
         Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
-                     new OnOff[]{ OnOff.ON, OnOff.OFF }),
+                     new OnOff[]{ null, OnOff.ON, OnOff.OFF }),
         Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
-                     new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON })
+                     new OnOff[]{ null, OnOff.ON, OnOff.OFF, OnOff.ON })
     );
   }
 }

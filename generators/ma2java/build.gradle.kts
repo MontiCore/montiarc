@@ -32,7 +32,7 @@ java {
 
 // All in one tool-jar
 tasks.shadowJar {
-  minimize()
+  //minimize()
   manifest {
     attributes["Main-Class"] = "montiarc.generator.MontiArcTool"
   }

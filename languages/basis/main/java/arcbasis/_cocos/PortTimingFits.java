@@ -19,7 +19,7 @@ public class PortTimingFits implements ArcBasisASTPortCoCo {
         node.getName(), node.get_SourcePositionStart(), this.getClass().getSimpleName());
 
     PortSymbol symbol = node.getSymbol();
-    if (symbol.getTiming().equals(Timing.delayed()) && !symbol.isOutgoing()) {
+    if (symbol.getTiming().equals(Timing.DELAYED) && !symbol.isOutgoing()) {
       Log.error(ArcError.TIMING_DELAYED_WITH_INCOMING_PORT.format(node.getName()),
           node.get_SourcePositionStart(), node.get_SourcePositionEnd());
     }

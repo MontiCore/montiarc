@@ -24,17 +24,17 @@ public class PortTimingFitsTest extends AbstractTest {
         Arguments.of(
             ArcBasisMill.portSymbolBuilder()
                 .setName("i1")
-                .setTiming(Timing.sync())
+                .setTiming(Timing.SYNC)
                 .setIncoming(true)
                 .buildWithoutType(),
             new ArcError[]{}),
         Arguments.of(ArcBasisMill.portSymbolBuilder()
-            .setTiming(Timing.delayed())
+            .setTiming(Timing.DELAYED)
             .setName("o1")
             .setIncoming(false)
             .buildWithoutType(), new ArcError[]{}),
         Arguments.of(ArcBasisMill.portSymbolBuilder()
-            .setTiming(Timing.delayed())
+            .setTiming(Timing.DELAYED)
             .setName("i2")
             .setIncoming(true)
             .buildWithoutType(), new ArcError[]{ArcError.TIMING_DELAYED_WITH_INCOMING_PORT})

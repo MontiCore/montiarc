@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package generic;
 
+import de.montiarc.runtimes.timesync.delegation.DelayedPort;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,12 +20,12 @@ public class ForwarderTest {
 
     //Given
     Forwarder<Integer> forwarder = new Forwarder<>();
-    forwarder.setUp();
+    forwarder.setUp(new DelayedPort<>(), new DelayedPort<>());
     forwarder.init();
 
     // When
     Integer in = 5;
-    forwarder.getPortInput().setNextValue(in);
+    forwarder.getPortInput().setValue(in);
     forwarder.getPortInput().update();
     forwarder.compute();
     forwarder.update();

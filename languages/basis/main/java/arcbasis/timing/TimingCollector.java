@@ -21,12 +21,12 @@ public class TimingCollector implements UMLStereotypeVisitor2 {
   protected HashBiMap<String, Timing> availableTimings = HashBiMap.create();
 
   public TimingCollector() {
-    this("untimed", "instant", "delayed", "sync", "causalsync");
+    this(Timing.UNTIMED, Timing.INSTANT, Timing.DELAYED, Timing.SYNC, Timing.CAUSALSYNC);
   }
 
-  public TimingCollector(String... timings) {
-    for (String name : timings) {
-      availableTimings.put(name, new Timing(name));
+  public TimingCollector(Timing... timings) {
+    for (Timing timing : timings) {
+      availableTimings.put(timing.getName(), timing);
     }
     result = new ArrayList<>();
   }

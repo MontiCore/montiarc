@@ -2,6 +2,7 @@
 package composition;
 
 import com.google.common.base.Preconditions;
+import de.montiarc.runtimes.timesync.delegation.DelayedPort;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -44,11 +45,11 @@ public class EncapsulationTest {
 
     //Given
     Encapsulation encapsulation = new Encapsulation();
-    encapsulation.setUp();
+    encapsulation.setUp(new DelayedPort<>(), new DelayedPort<>());
     encapsulation.init();
 
     // provide initial input
-    encapsulation.getPortI().setNextValue(input[0]);
+    encapsulation.getPortI().setValue(input[0]);
     encapsulation.getPortI().update();
     encapsulation.update();
 
@@ -57,7 +58,7 @@ public class EncapsulationTest {
     // no initial output
     OnOff initial = encapsulation.getPortO().getCurrentValue();
     for (int i = 1; i < input.length; i++) {
-      encapsulation.getPortI().setNextValue(input[i]);
+      encapsulation.getPortI().setValue(input[i]);
       encapsulation.compute();
       encapsulation.getPortI().update();
       encapsulation.update();

@@ -568,7 +568,7 @@ public class ComponentHelper {
    * @param comp the component for whose hidden channels the map is created
    * @return a map of variable names and port types
    */
-  public static Map<String, String> getVarsForHiddenChannelsMappedToTypeString(@NotNull ComponentTypeSymbol comp) {
+  public static Map<String, String> getVarsForHiddenChannelsMappedToFullPortType(@NotNull ComponentTypeSymbol comp) {
     Map<String, String> res = new HashMap<>();
     comp.getAstNode().getConnectors().stream()
       .filter(
@@ -578,9 +578,14 @@ public class ComponentHelper {
       .forEach(
         conn -> res.put(
           varNameFromPortAccess(conn.getSource()),
-          getRealPortTypeString(comp, conn.getSource().getPortSymbol())));
+          getFullPortType(comp, conn.getSource().getPortSymbol())));
     
     return res;
+  }
+
+  public static String getFullPortType(@NotNull  ComponentTypeSymbol comp, @NotNull PortSymbol port) {
+    String portTiming = port.isDelayed()? "Delayed" : "Undelayed";
+    return "de.montiarc.runtimes.timesync.delegation." + portTiming + "Port<" + getRealPortTypeString(comp, port) + ">";
   }
   
   /**
@@ -616,7 +621,7 @@ public class ComponentHelper {
     for(ComponentInstanceSymbol sub : comp.getSubComponents()) {
       Map<String, String> innerMap = new HashMap<>();
       for(PortSymbol ps : sub.getType().getTypeInfo().getPorts()) {
-        innerMap.put(ps.getName(), "new Port<>()");
+        innerMap.put(ps.getName(), "new " + (ps.isDelayed()? "Delayed" : "Undelayed") + "Port<>()");
         // notice: if a port is not connected we do not want it to be null, but we also don't want it to return values.
         // One might suggest simply using Port.EMPTY, but as long as it is an unmodified single instance, it's unusable.
         // Sharing a normal Port instance for all unconnected ports leads to problems because data can still be transferred across it.

@@ -11,8 +11,8 @@ import types.OnOff;
  */
 component FeedbackLoop {
 
-  port in OnOff i;
-  port out OnOff o;
+  port <<sync>> in OnOff i;
+  port <<sync>> out OnOff o;
 
   /**
    * The component's topology of subcomponents features a feedback loop

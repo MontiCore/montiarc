@@ -53,6 +53,7 @@ Package Uber jdk17:
       - generators/ma2java/build/reports/test-coverage/jacoco.xml
       - languages/build/basis/reports/test-coverage/jacoco.xml
       - languages/build/montiarc/reports/test-coverage/jacoco.xml
+    when: always
 
 Unit Test jdk17:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.5.0-jdk17

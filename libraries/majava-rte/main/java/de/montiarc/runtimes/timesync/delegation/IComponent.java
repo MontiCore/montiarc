@@ -32,5 +32,12 @@ public interface IComponent {
    * before. Propagated to subcomponents.
    */
   public void update();
+
+  /**
+   * Check whether all input ports are synced, i.e., whether the computation can be triggered.
+   *
+   * @see Port#synced
+   */
+  public boolean allInputsSynced();
   
 }

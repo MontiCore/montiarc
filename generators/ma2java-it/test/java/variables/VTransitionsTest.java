@@ -2,6 +2,7 @@
 package variables;
 
 import com.google.common.base.Preconditions;
+import de.montiarc.runtimes.timesync.delegation.DelayedPort;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -54,23 +55,19 @@ public class VTransitionsTest {
     component.setUp();
     component.init();
 
-    // provide initial input
-    component.getPortI().setNextValue(input[0]);
-    component.getPortI().update();
-
     // When
     Direction[] actual1 = new Direction[output1.length];
     Direction[] actual2 = new Direction[output2.length];
 
-    // add the initial value
-    actual1[0] = component.getPortO1().getCurrentValue();
-    actual2[0] = component.getPortO2().getCurrentValue();
+    for (int i = 0; i < input.length; i++) {
 
-    for (int i = 1; i < input.length; i++) {
-      component.getPortI().setNextValue(input[i]);
-      component.compute();
+      // update
       component.getPortI().update();
       component.update();
+
+      // compute
+      component.getPortI().setValue(input[i]);
+      component.compute();
 
       // add the current value after computation
       actual1[i] = component.getPortO1().getCurrentValue();
@@ -92,25 +89,25 @@ public class VTransitionsTest {
         Arguments.of(
             new Direction[]{ Direction.FORWARDS },
             new Direction[]{ Direction.LEFT },
-            new Direction[]{ Direction.RIGHT }
+            new Direction[]{ Direction.FORWARDS }
         ),
         // 2
         Arguments.of(
             new Direction[]{ Direction.FORWARDS, Direction.FORWARDS,
                 Direction.FORWARDS },
-            new Direction[]{ Direction.LEFT, Direction.LEFT,
+            new Direction[]{ Direction.LEFT, Direction.FORWARDS,
                 Direction.FORWARDS },
-            new Direction[]{ Direction.RIGHT, Direction.FORWARDS,
+            new Direction[]{ Direction.FORWARDS, Direction.FORWARDS,
                 Direction.FORWARDS }
         ),
         // 3
         Arguments.of(
             new Direction[]{ Direction.FORWARDS, Direction.BACKWARDS,
                 Direction.LEFT, Direction.RIGHT, Direction.FORWARDS },
-            new Direction[]{ Direction.LEFT, Direction.LEFT,
-                Direction.RIGHT, Direction.LEFT, Direction.RIGHT },
-            new Direction[]{ Direction.RIGHT, Direction.FORWARDS,
-                Direction.BACKWARDS, Direction.LEFT, Direction.RIGHT }
+            new Direction[]{ Direction.LEFT, Direction.RIGHT,
+                Direction.LEFT, Direction.RIGHT, Direction.FORWARDS },
+            new Direction[]{ Direction.FORWARDS, Direction.BACKWARDS,
+                Direction.LEFT, Direction.RIGHT, Direction.FORWARDS }
         )
     );
   }
@@ -126,7 +123,7 @@ public class VTransitionsTest {
     VTransitions component = new VTransitions();
 
     // When
-    component.setUp();
+    component.setUp(new DelayedPort<>(), new DelayedPort<>(), new DelayedPort<>());
     component.init();
 
     // Then
@@ -147,14 +144,14 @@ public class VTransitionsTest {
   public void shouldUpdateVariablesAsExpected() {
     // Given
     VTransitions component = new VTransitions();
-    component.setUp();
+    component.setUp(new DelayedPort<>(), new DelayedPort<>(), new DelayedPort<>());
     component.init();
 
     // When
-    component.getPortI().setNextValue(Direction.FORWARDS);
+    component.getPortI().setValue(Direction.FORWARDS);
     component.getPortI().update();
     component.compute();
-    component.getPortI().setNextValue(Direction.BACKWARDS);
+    component.getPortI().setValue(Direction.BACKWARDS);
     component.getPortI().update();
     component.compute();
 

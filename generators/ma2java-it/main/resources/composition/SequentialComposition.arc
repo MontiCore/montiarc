@@ -11,8 +11,8 @@ import automata.Inverter;
  */
 component SequentialComposition {
 
-  port in OnOff i;
-  port out OnOff o;
+  port <<sync>> in OnOff i;
+  port <<sync>> out OnOff o;
 
   /**
    * The component's subcomponents are sequentially composed.

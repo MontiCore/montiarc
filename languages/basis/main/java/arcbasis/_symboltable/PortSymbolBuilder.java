@@ -82,7 +82,7 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
     PortSymbol symbol = super.build();
     symbol.setDirection(this.getDirection());
     symbol.setType(this.getType());
-    symbol.setTiming(Optional.ofNullable(this.timing).orElseGet(Timing::untimed));
+    symbol.setTiming(Optional.ofNullable(this.timing).orElse(Timing.UNTIMED));
     return symbol;
   }
 
@@ -93,7 +93,7 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
     }
     PortSymbol symbol = super.build();
     symbol.setDirection(this.getDirection());
-    symbol.setTiming(Optional.ofNullable(this.timing).orElseGet(Timing::untimed));
+    symbol.setTiming(Optional.ofNullable(this.timing).orElse(Timing.UNTIMED));
     return symbol;
   }
 

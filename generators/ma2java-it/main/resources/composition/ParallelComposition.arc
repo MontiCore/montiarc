@@ -11,8 +11,8 @@ import automata.Inverter;
  */
 component ParallelComposition {
 
-  port in OnOff i1, i2;
-  port out OnOff o1, o2;
+  port <<sync>> in OnOff i1, i2;
+  port <<sync>> out OnOff o1, o2;
 
   /**
    * The component's subcomponents are composed in parallel.

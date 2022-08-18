@@ -45,15 +45,15 @@ public class PTransitionsTest {
     Direction[] expected1 = new Direction[cycles];
     Direction[] expected2 = new Direction[cycles];
     for (int i = 0; i < cycles; i = i + 2) {
-      expected1[i] = p1;
-      expected2[i] = p2;
-    }
-    for (int i = 1; i < cycles; i = i + 2) {
       expected1[i] = p3;
       expected2[i] = p4;
     }
+    for (int i = 1; i < cycles; i = i + 2) {
+      expected1[i] = p1;
+      expected2[i] = p2;
+    }
 
-    //Given
+    // Given
     PTransitions component = new PTransitions(p1, p2, p3, p4);
     component.setUp();
     component.init();
@@ -62,13 +62,12 @@ public class PTransitionsTest {
     Direction[] actual1 = new Direction[cycles];
     Direction[] actual2 = new Direction[cycles];
 
-    // initial output
-    actual1[0] = component.getPortO1().getCurrentValue();
-    actual2[0] = component.getPortO2().getCurrentValue();
-
-    for (int i = 1; i < cycles; i++) {
-      component.compute();
+    for (int i = 0; i < cycles; i++) {
+      // update
       component.update();
+
+      // compute
+      component.compute();
 
       // add the current value after computation
       actual1[i] = component.getPortO1().getCurrentValue();

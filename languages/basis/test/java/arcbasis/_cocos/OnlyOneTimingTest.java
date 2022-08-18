@@ -16,8 +16,8 @@ public class OnlyOneTimingTest extends AbstractTest {
   public void testWithMultipleTimings() {
     // Given
     ASTStereotype stereotype = ArcBasisMill.stereotypeBuilder().setValuesList(List.of(
-        ArcBasisMill.stereoValueBuilder().setName(Timing.sync().getName()).setContent("").build(),
-        ArcBasisMill.stereoValueBuilder().setName(Timing.delayed().getName()).setContent("").build()
+        ArcBasisMill.stereoValueBuilder().setName(Timing.SYNC.getName()).setContent("").build(),
+        ArcBasisMill.stereoValueBuilder().setName(Timing.DELAYED.getName()).setContent("").build()
     )).build();
 
     // When

@@ -475,7 +475,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     symParam.setEnclosingScope(ArcBasisMill.globalScope());
 
     this.getCompleter().setCurrentPortType(type);
-    this.getCompleter().setCurrentPortTimings(List.of(Timing.untimed()));
+    this.getCompleter().setCurrentPortTimings(List.of(Timing.UNTIMED));
 
     // When
     getCompleter().visit(astPort);
@@ -483,7 +483,7 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     // Then
     Assertions.assertDoesNotThrow(symParam::getType);
     Assertions.assertTrue(SymTypeExpressionFactory.createPrimitive("byte").deepEquals(symParam.getType()));
-    Assertions.assertEquals(Timing.untimed(), symParam.getTiming());
+    Assertions.assertEquals(Timing.UNTIMED, symParam.getTiming());
   }
 
   @Test

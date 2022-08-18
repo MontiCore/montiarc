@@ -53,12 +53,12 @@ public class PSubcomponentsTest {
       expected3[i] = p2;
     }
     for (int i = 0; i < cycles; i = i + 2) {
-      expected4[i] = p2;
-      expected5[i] = p3;
-    }
-    for (int i = 1; i < cycles; i = i + 2) {
       expected4[i] = Direction.FORWARDS;
       expected5[i] = Direction.BACKWARDS;
+    }
+    for (int i = 1; i < cycles; i = i + 2) {
+      expected4[i] = p2;
+      expected5[i] = p3;
     }
 
     //Given
@@ -73,16 +73,12 @@ public class PSubcomponentsTest {
     Direction[] actual4 = new Direction[cycles];
     Direction[] actual5 = new Direction[cycles];
 
-    // initial output
-    actual1[0] = component.getPortO1().getCurrentValue();
-    actual2[0] = component.getPortO2().getCurrentValue();
-    actual3[0] = component.getPortO3().getCurrentValue();
-    actual4[0] = component.getPortO4().getCurrentValue();
-    actual5[0] = component.getPortO5().getCurrentValue();
-
-    for (int i = 1; i < cycles; i++) {
-      component.compute();
+    for (int i = 0; i < cycles; i++) {
+      // update
       component.update();
+
+      // compute
+      component.compute();
 
       // add the current value after computation
       actual1[i] = component.getPortO1().getCurrentValue();

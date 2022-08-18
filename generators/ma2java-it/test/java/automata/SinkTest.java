@@ -3,6 +3,7 @@ package automata;
 
 import automata.SinkImpl.SinkState;
 import com.google.common.base.Preconditions;
+import de.montiarc.runtimes.timesync.delegation.DelayedPort;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -42,7 +43,7 @@ public class SinkTest {
 
     // Given
     Sink sink = new Sink();
-    sink.setUp();
+    sink.setUp(new DelayedPort<>());
     sink.init();
 
     // When
@@ -51,7 +52,7 @@ public class SinkTest {
     // add the initial state
     actual.add(((SinkImpl) sink.behaviorImpl).currentState);
     for (OnOff value : input) {
-      sink.getPortI().setNextValue(value);
+      sink.getPortI().setValue(value);
       sink.getPortI().update();
       sink.compute();
 

@@ -9,7 +9,7 @@ import types.Direction;
  */
 component PSubcomponents(Direction p1, Direction p2, Direction p3) {
 
-  port out Direction o1, o2, o3, o4, o5;
+  port <<sync>> out Direction o1, o2, o3, o4, o5;
 
   PSource sub1(Direction.LEFT);
   PSource sub2(p1);

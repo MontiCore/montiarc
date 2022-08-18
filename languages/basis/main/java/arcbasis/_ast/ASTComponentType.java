@@ -131,7 +131,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * matching the provided {@code String} argument. The returned list is in no specific order and
    * empty if the component contains no connector with matching target.
    *
-   * @param target the qualified name of the target port
+   * @param target the port access name (i.e., instance name and port name)
    * @return a {@code List} of all connectors with matching target
    */
   public List<ASTConnector> getConnectorsMatchingTarget(String target) {

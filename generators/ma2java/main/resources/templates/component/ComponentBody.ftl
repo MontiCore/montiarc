@@ -23,7 +23,9 @@
       // subcomponents
       <@Subcomponents.printSubcomponentsWithGetter comp=comp compHelper=compHelper/>
 
-      <@printComputeComposed comp=comp/>
+      <@printGetAllSubcomponents comp=comp/>
+
+      <@printComputeComposed/>
     <#else>
       <@printComputeAtomic comp=comp identifier=identifier/>
 
@@ -37,15 +39,18 @@
 
         //set results to ports
         setResult(${identifier.getResultName()});
-        this.update();
       }
 
       protected void setResult(<@Utils.componentResultClassFQN comp=comp/><@Utils.printFormalTypeParameters comp=comp/> result) {
         <#list comp.getOutgoingPorts() as port>
-          this.getPort${port.getName()?cap_first}().setNextValue(result.get${port.getName()?cap_first}());
+          this.getPort${port.getName()?cap_first}().setValue(result.get${port.getName()?cap_first}());
+          this.getPort${port.getName()?cap_first}().setSynced(true);
+
         </#list>
       }
     </#if>
+
+    <@printInputsSynced comp=comp/>
 
     <@Setup.printSetupRegion comp=comp compHelper=compHelper/>
 
@@ -112,14 +117,32 @@
   }
 </#macro>
 
-<#macro printComputeComposed comp>
+<#macro printInputsSynced comp>
+    @Override
+    public boolean allInputsSynced() {
+      return <#list comp.getAllIncomingPorts() as inPort>this.getPort${inPort.getName()?cap_first}().isSynced()<#sep> && </#sep><#else>true</#list>;
+    }
+</#macro>
+
+<#macro printComputeComposed>
   @Override
   public void compute() {
     logPortValues();
-    // trigger computation in all subcomponent instances
-    <#list comp.getSubComponents() as subcomponent>
-      this.${subcomponent.getName()}.compute();
-    </#list>
+    java.util.List${r"<IComponent>"} notYetComputed = new java.util.ArrayList<>(getAllSubcomponents());
+    while(notYetComputed.size() > 0) {
+      java.util.Set${r"<IComponent>"} computedThisIteration = new java.util.HashSet<>();
+      for(IComponent subcomponent : notYetComputed) {
+        if(subcomponent.allInputsSynced()) {
+          subcomponent.compute();
+          computedThisIteration.add(subcomponent);
+        }
+      }
+      if(computedThisIteration.isEmpty()) {
+        throw new RuntimeException("Could not complete compute cycle due to not all ports being synced. Likely reasons: Forgot to call init() or cyclic connector loop.");
+      } else {
+        notYetComputed.removeAll(computedThisIteration);
+      }
+    }
   }
 </#macro>
 
@@ -146,5 +169,15 @@
         .append(this.${port.getName()}.getCurrentValue());
       Log.trace(sb.toString());
     </#list>
+  }
+</#macro>
+
+<#macro printGetAllSubcomponents comp>
+  protected java.util.List${r"<IComponent>"} getAllSubcomponents() {
+    return java.util.Arrays.asList(new IComponent[] {
+    <#list comp.getSubComponents() as subcomponent>
+      ${subcomponent.getName()}<#sep>, </#sep>
+    </#list>
+    });
   }
 </#macro>

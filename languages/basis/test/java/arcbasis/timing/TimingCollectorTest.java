@@ -76,7 +76,7 @@ public class TimingCollectorTest extends AbstractTest {
         "untimed", "instant");
 
     // When
-    TimingCollector collector = new TimingCollector("untimed", "instant");
+    TimingCollector collector = new TimingCollector(Timing.UNTIMED, Timing.INSTANT);
     List<String> actual = collector.getAvailableTimings()
         .stream().map(Timing::getName).collect(Collectors.toList());
 
