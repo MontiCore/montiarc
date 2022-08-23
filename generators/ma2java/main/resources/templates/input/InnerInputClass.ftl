@@ -19,7 +19,7 @@
 
   public static class ${className} <@Utils.printFormalTypeParameters comp=innerComp/>
     <#if innerComp.isPresentParentComponent()> extends <@Utils.componentInputSuperClassFQN comp=innerComp/>
-        <#if innerComp.getParent().getLoadedSymbol().hasTypeParameter()><<#list compHelper.getSuperCompActualTypeArguments() as scTypeParams>${scTypeParams}<#sep>, </#sep></#list>></#if>
+        <#if innerComp.getParent().getTypeInfo().hasTypeParameter()><<#list compHelper.getSuperCompActualTypeArguments() as scTypeParams>${scTypeParams}<#sep>, </#sep></#list>></#if>
     </#if>
   implements IInput
 </#macro>

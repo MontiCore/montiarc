@@ -10,8 +10,8 @@
 </#macro>
 
 <#macro printParentExtensionIfPresent childComp compHelper>
-  <#if comp.isPresentParentComponent()> extends <@Utils.componentSuperClassFQN comp=comp/>
-    <#if comp.getParent().getLoadedSymbol().hasTypeParameter()>
+  <#if childComp.isPresentParentComponent()> extends <@Utils.componentSuperClassFQN comp=childComp/>
+    <#if childComp.getParent().getTypeInfo().hasTypeParameter()>
       <<#list compHelper.getSuperCompActualTypeArguments() as scTypeParams>
         ${scTypeParams} <#sep>, </#sep>
       </#list>>

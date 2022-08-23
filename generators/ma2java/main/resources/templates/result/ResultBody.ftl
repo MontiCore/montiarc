@@ -17,7 +17,7 @@
     <#if comp.getAllOutgoingPorts()?? && (comp.getAllOutgoingPorts()?size > 0)>
       public ${compName}Result<#if isTOPClass>TOP</#if> (<#list comp.getAllOutgoingPorts() as port>${compHelper.getRealPortTypeString(port)} ${port.getName()}<#sep>, </#sep></#list>) {
         <#if comp.isPresentParentComponent()>
-          super(<#list comp.getParent().getLoadedSymbol().getAllOutgoingPorts() as port>${port.getName()}</#list>);
+          super(<#list comp.getParent().getTypeInfo().getAllOutgoingPorts() as port>${port.getName()}</#list>);
         </#if>
         <#list portsOut as port>
           this.${port.getName()} = ${port.getName()};

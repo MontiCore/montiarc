@@ -90,17 +90,17 @@
 
 <#-- macros for fully qualified names of superclasses of generated classes for a given ComponentTypeSymbol -->
 <#macro componentSuperClassFQN comp>
-    <@componentClassFQN comp=comp.getParentInfo()/>
+    <@componentClassFQN comp=comp.getParent().getTypeInfo()/>
 </#macro>
 
 <#macro componentInputSuperClassFQN comp>
-    <@componentInputClassFQN comp = comp.getParentInfo()/>
+    <@componentInputClassFQN comp = comp.getParent().getTypeInfo()/>
 </#macro>
 
 <#macro componentResultSuperClassFQN comp>
-    <@componentResultClassFQN comp=comp.getParentInfo()/>
+    <@componentResultClassFQN comp=comp.getParent().getTypeInfo()/>
 </#macro>
 
 <#macro componentImplSuperClassFQN comp>
-    <@componentImplClassFQN comp=comp.getParentInfo/>
+    <@componentImplClassFQN comp=comp.getParent().getTypeInfo()/>
 </#macro>

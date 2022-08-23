@@ -19,7 +19,7 @@
 
   public static class ${compName} <@Utils.printFormalTypeParameters comp=innerComp/>
     <#if innerComp.isPresentParentComponent()> extends <@Utils.componentSuperClassFQN comp=innerComp/>
-        <#if innerComp.getParent().getLoadedSymbol().hasTypeParameter()>
+        <#if innerComp.getParent().getTypeInfo().hasTypeParameter()>
             <<#list compHelper.getSuperCompActualTypeArguments() as scTypeParams>${scTypeParams}<#t><#sep>, </#sep></#list>>
         </#if>
     </#if>

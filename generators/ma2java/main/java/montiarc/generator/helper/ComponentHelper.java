@@ -455,9 +455,8 @@ public class ComponentHelper {
     return ((MontiArcArtifactScope) ast.getEnclosingScope()).getImportsList();
   }
 
-  protected static List<String> getInheritedParams(final ComponentTypeSymbol component) {
-    List<String> result = new ArrayList<String>();
-    List<VariableSymbol> configParameters = component.getParameters();
+  public static List<String> getInheritedParams(ComponentTypeSymbol component) {
+    List<String> result = new ArrayList<>();
     boolean _isPresentParentComponent = component.isPresentParentComponent();
     if (_isPresentParentComponent) {
       ComponentTypeSymbol superCompReference = component.getParent().getTypeInfo();
@@ -465,11 +464,11 @@ public class ComponentHelper {
         superCompReference = ((ComponentTypeSymbolSurrogate) superCompReference).lazyLoadDelegate();
       }
       List<VariableSymbol> superConfigParams = superCompReference.getParameters();
-      boolean _isEmpty = configParameters.isEmpty();
+      boolean _isEmpty = superConfigParams.isEmpty();
       boolean _not = (!_isEmpty);
       if (_not) {
-        for (int i = 0; (i < superConfigParams.size()); i++) {
-          result.add(configParameters.get(i).getName());
+        for (int i = 0; i < superConfigParams.size(); i++) {
+          result.add(superConfigParams.get(i).getName());
         }
       }
     }
