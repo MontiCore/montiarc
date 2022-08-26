@@ -7,6 +7,7 @@ import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.PortSymbol;
+import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
@@ -37,6 +38,10 @@ public class ASTPortAccessTest extends AbstractTest {
       .setPort("").setComponent(subcomponent).build();
     portAccess.setEnclosingScope(this.createTestScope());
 
+    ArcBasisTraverser traverser = ArcBasisMill.traverser();
+    traverser.add4ArcBasis(ArcBasisMill.symbolTableCompleter());
+    portAccess.accept(traverser);
+
     //When
     ComponentInstanceSymbol resolvedSubcomponent = portAccess.getComponentSymbol();
 
@@ -55,6 +60,10 @@ public class ASTPortAccessTest extends AbstractTest {
       .setPort("").setComponent(subcomponent).build();
     portAccess.setEnclosingScope(this.createTestScope());
 
+    ArcBasisTraverser traverser = ArcBasisMill.traverser();
+    traverser.add4ArcBasis(ArcBasisMill.symbolTableCompleter());
+    portAccess.accept(traverser);
+
     //When
     ComponentInstanceSymbol resolvedSubcomponent = portAccess.getComponentSymbol();
 
@@ -72,6 +81,10 @@ public class ASTPortAccessTest extends AbstractTest {
     ASTPortAccess portAccess = ArcBasisMill.portAccessBuilder()
       .setPort(port).setComponent(subcomponent).build();
     portAccess.setEnclosingScope(this.createTestScope());
+
+    ArcBasisTraverser traverser = ArcBasisMill.traverser();
+    traverser.add4ArcBasis(ArcBasisMill.symbolTableCompleter());
+    portAccess.accept(traverser);
 
     //When
     PortSymbol resolvedPort = portAccess.getPortSymbol();
@@ -102,6 +115,10 @@ public class ASTPortAccessTest extends AbstractTest {
       .setPort(port).setComponent(subcomponent).build();
     portAccess.setEnclosingScope(this.createTestScope());
 
+    ArcBasisTraverser traverser = ArcBasisMill.traverser();
+    traverser.add4ArcBasis(ArcBasisMill.symbolTableCompleter());
+    portAccess.accept(traverser);
+
     //When
     PortSymbol resolvedPort = portAccess.getPortSymbol();
 
@@ -110,7 +127,6 @@ public class ASTPortAccessTest extends AbstractTest {
     Assertions.assertNull(resolvedPort);
   }
 
-  @SuppressWarnings("unused")
   protected static Stream<Arguments> invalidPortAndSubcomponentProvider() {
     return Stream.of(
       Arguments.of("", ""),

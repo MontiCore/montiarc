@@ -1,6 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
+import arcbasis._symboltable.ComponentInstanceSymbol;
+import arcbasis._symboltable.PortSymbol;
+import com.google.common.base.Preconditions;
+import org.codehaus.commons.nullanalysis.NotNull;
+import org.codehaus.commons.nullanalysis.Nullable;
+
 /**
  * Represents a port-access. Extends {@link ASTPortAccessTOP} with utility functionality for easy access.
  */
@@ -33,11 +39,20 @@ public class ASTPortAccess extends ASTPortAccessTOP {
   }
 
   @Override
-  protected  void updateComponentSymbol () {
+  protected void updateComponentSymbol () {
     if (isPresentComponent()) {
       if (getEnclosingScope() != null && (componentSymbol == null || !getComponent().equals(componentSymbol.getName()))) {
         componentSymbol = getEnclosingScope().resolveComponentInstanceMany(getComponent()).stream().findFirst().orElse(null);
       }
     }
+  }
+
+  public void setComponentSymbol(@Nullable ComponentInstanceSymbol symbol) {
+    componentSymbol = symbol;
+  }
+
+  public void setPortSymbol(@NotNull PortSymbol symbol) {
+    Preconditions.checkNotNull(symbol);
+    portSymbol = symbol;
   }
 }

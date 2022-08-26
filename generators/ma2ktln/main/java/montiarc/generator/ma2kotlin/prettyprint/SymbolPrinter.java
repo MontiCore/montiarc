@@ -58,6 +58,7 @@ public class SymbolPrinter {
     if (arcScope.resolvePort(name).isPresent() && ports != null) {
       ASTPortAccess access = new ASTPortAccessBuilder().setQualifiedName(name).build();
       access.setEnclosingScope(scope);
+      access.setPortSymbol(arcScope.resolvePort(name).get());
       ports.accept(access);
       return true;
     }
