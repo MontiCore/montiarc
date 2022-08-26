@@ -70,11 +70,11 @@ public class HierarchyTest {
                      Arguments.of(2, path2),
                      Arguments.of(3, path3),
                      Arguments.of(4, path4),
-                     Arguments.of(5, path5)
-                     //Arguments.of(6, path6),
-                     //Arguments.of(7, path7),
-                     //Arguments.of(8, path8),
-                     //Arguments.of(9, path9)
+                     Arguments.of(5, path5),
+                     Arguments.of(6, path6),
+                     Arguments.of(7, path7),
+                     Arguments.of(8, path8),
+                     Arguments.of(9, path9)
     );
   }
 }

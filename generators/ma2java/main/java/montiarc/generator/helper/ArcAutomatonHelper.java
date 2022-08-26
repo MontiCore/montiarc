@@ -238,6 +238,10 @@ public class ArcAutomatonHelper {
     return getDifferingParents(from, to);
   }
 
+  public boolean hasLeavingParentStatesFromWith(@NotNull ASTSCState from, @NotNull ASTSCTransition transition){
+    return !getLeavingParentStatesFromWith(from, transition).isEmpty();
+  }
+
   public List<ASTSCState> getEnteringParentStatesFromWith(@NotNull ASTSCState from, @NotNull ASTSCTransition transition) {
     ASTSCState to = from.getEnclosingScope().resolveSCState(transition.getTargetName()).orElseThrow().getAstNode();
     List<ASTSCState> res = getDifferingParents(to, from);

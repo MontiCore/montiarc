@@ -218,7 +218,6 @@
   <#assign inputClass>${comp.getName()}Input${compTypeParams}</#assign>
   <#assign inputParam = identifier.getInputName()>
   <#assign targetEntryActionVar = "targetStateEntryAction">
-  <#assign exitActionVar = "stateExitAction">
   protected ${resultClass} <@transitionFromMethodName state=state/>(${inputClass} ${inputParam}) {
 
   ${resultClass} ${identifier.getResultName()} = <@exitMethodName state=state/>(${inputParam});
@@ -230,7 +229,6 @@
     <@printLocalVariablesFromResult comp=comp compHelper=compHelper identifier=identifier/>
 
   java.util.function.BiFunction<${inputClass}, ${resultClass}, ${resultClass}> ${targetEntryActionVar};
-  java.util.function.BiFunction<${inputClass}, ${resultClass}, ${resultClass}> ${exitActionVar};
 
     <#list automatonHelper.getAllTransitionsWithGuardFrom(state) as guardedTransition>
       //transition with guard
@@ -243,12 +241,16 @@
       )
       {
       // exit parent state(s)
-      ${exitActionVar} = (l__input, l__result) -> {
-        <#list automatonHelper.getLeavingParentStatesFromWith(state, guardedTransition) as leavingParentState>
-        l__result.merge(<@exitMethodName state=leavingParentState/>(l__input));
+      <#list automatonHelper.getLeavingParentStatesFromWith(state, guardedTransition) as leavingParentState>
+      result.merge(<@exitMethodName state=leavingParentState/>(${identifier.getInputName()}));
+      </#list>
+      <#if automatonHelper.hasLeavingParentStatesFromWith(state, guardedTransition)>
+      // print new working copies of current outputs
+        <#list comp.getAllOutgoingPorts() as port>
+          ${port.getName()} = ${resultParam}.get${port.getName()?cap_first}();
         </#list>
-        return l__result;
-      };
+      </#if>
+
 
       // reaction
         <#if guardedTransition.getSCTBody().isPresentTransitionAction()
@@ -272,12 +274,15 @@
         <#assign transition = automatonHelper.getFirstTransitionWithoutGuardFrom(state)>
       {
       // exit parent state(s)
-        ${exitActionVar} = (l__input, l__result) -> {
         <#list automatonHelper.getLeavingParentStatesFromWith(state, transition) as leavingParentState>
-          l__result.merge(<@exitMethodName state=leavingParentState/>(l__input));
+          result.merge(<@exitMethodName state=leavingParentState/>(${identifier.getInputName()}));
         </#list>
-        return l__result;
-      };
+        <#if automatonHelper.hasLeavingParentStatesFromWith(state, transition)>
+      // print new working copies of current outputs
+        <#list comp.getAllOutgoingPorts() as port>
+          ${port.getName()} = ${resultParam}.get${port.getName()?cap_first}();
+        </#list>
+        </#if>
 
       // reaction
         <#if transition.getSCTBody().isPresentTransitionAction()
@@ -296,13 +301,11 @@
     <#elseif automatonHelper.hasSuperState(state) && automatonHelper.isFinalState(state)>
       // Transition from super state
       {
-        ${exitActionVar} = (l__input, l__result) -> l__result;
         ${targetEntryActionVar} = (targetStateEntryActionInput, targetStateEntryActionOutput) ->
           targetStateEntryActionOutput.merge(<@transitionFromMethodName state=automatonHelper.getSuperState(state)/>(targetStateEntryActionInput));
       }
     <#else>
       {
-        ${exitActionVar} = (l__input, l__result) -> l__result;
         ${targetEntryActionVar} = (targetStateEntryActionInput, targetStateEntryActionOutput) -> new ${resultClass}();
       }
     </#if>
@@ -310,8 +313,6 @@
     <#list comp.getAllOutgoingPorts() as port>
       ${identifier.getResultName()}.set${port.getName()?cap_first}(${port.getName()});
     </#list>
-
-    ${identifier.getResultName()} = ${identifier.getResultName()}.merge(${exitActionVar}.apply(${identifier.getInputName()}, ${identifier.getResultName()}));
 
     return ${targetEntryActionVar}.apply(${identifier.getInputName()}, ${identifier.getResultName()});
   }
