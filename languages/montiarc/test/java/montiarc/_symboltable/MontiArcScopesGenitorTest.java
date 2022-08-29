@@ -36,7 +36,7 @@ public class MontiArcScopesGenitorTest extends AbstractTest {
     Preconditions.checkState(ast.isPresent());
     IMontiArcScope scope = MontiArcMill.scope();
     this.getGenitor().putOnStack(scope);
-    this.getGenitor().setTraverser(new MontiArcTraverser() {});
+    this.getGenitor().setTraverser(MontiArcMill.traverser());
 
     //When
     this.getGenitor().createFromAST(ast.get());
@@ -52,7 +52,7 @@ public class MontiArcScopesGenitorTest extends AbstractTest {
     //Given
     Optional<ASTMACompilationUnit> ast = this.getParser().parse_String("component A { }");
     Preconditions.checkState(ast.isPresent());
-    this.getGenitor().setTraverser(new MontiArcTraverser() {});
+    this.getGenitor().setTraverser(MontiArcMill.traverser());
 
     //When
     this.getGenitor().createFromAST(ast.get());

@@ -18,9 +18,7 @@ import montiarc._ast.ASTArcUntimed;
 import montiarc._visitor.MontiArcTraverser;
 import montiarc.generator.ma2kotlin.prettyprint.MontiArcFullPrettyPrinter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -76,6 +74,16 @@ public class TemplateUtilities {
   public String getTiming(ComponentTypeSymbol component) {
     List<String> foundTimings = new ArrayList<>(2);
     component.getAstNode().getBody().accept(new MontiArcTraverser() {
+      private Set<Object> traversedElements = new HashSet<Object>();
+
+      public void setTraversedElements (Set<Object> traversedElements) {
+        this.traversedElements = traversedElements;
+      }
+
+      public Set<Object> getTraversedElements() {
+        return this.traversedElements;
+      }
+
       @Override
       public void traverse(ASTComponentType node) {
         // do nothing, because we don't want to get confused by the timing of inner components
