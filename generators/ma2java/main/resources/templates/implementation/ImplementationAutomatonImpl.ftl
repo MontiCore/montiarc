@@ -233,13 +233,7 @@
     <#list automatonHelper.getAllTransitionsWithGuardFrom(state) as guardedTransition>
       //transition with guard
         <#assign guardExpr = guardedTransition.getSCTBody().getPre()>
-      if(
-        <#list compHelper.getNamesInExpression(guardExpr) as readField>
-            ${readField.name} != null &&
-        </#list>
-      ( ${compHelper.printExpression(guardExpr)} )
-      )
-      {
+      if(${compHelper.printExpression(guardExpr)}) {
       // exit parent state(s)
       <#list automatonHelper.getLeavingParentStatesFromWith(state, guardedTransition) as leavingParentState>
       result.merge(<@exitMethodName state=leavingParentState/>(${identifier.getInputName()}));
