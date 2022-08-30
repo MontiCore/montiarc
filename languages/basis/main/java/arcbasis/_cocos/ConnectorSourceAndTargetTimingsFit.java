@@ -76,11 +76,11 @@ public class ConnectorSourceAndTargetTimingsFit implements ArcBasisASTComponentT
   }
 
   protected static boolean timingMatches(Timing timing, Timing other) {
-    return switch (timing) {
-      case UNTIMED -> other.equals(Timing.UNTIMED);
-      case INSTANT, DELAYED -> other.equals(Timing.INSTANT) || other.equals(Timing.DELAYED);
-      case SYNC, CAUSALSYNC -> other.equals(Timing.SYNC) || other.equals(Timing.CAUSALSYNC);
-    };
+    switch (timing) {
+      case UNTIMED: return other.equals(Timing.UNTIMED);
+      case INSTANT: case DELAYED: return other.equals(Timing.INSTANT) || other.equals(Timing.DELAYED);
+      case SYNC: case CAUSALSYNC: default: return other.equals(Timing.SYNC) || other.equals(Timing.CAUSALSYNC);
+    }
   }
 
   @Override

@@ -27,7 +27,7 @@ public class FeedbackLoopTiming implements ArcBasisASTComponentTypeCoCo {
         node.getName(), node.get_SourcePositionStart(), this.getClass().getSimpleName());
 
     List<ASTConnector> connectors = node.getConnectors();
-    List<ASTPortAccess> sources = connectors.stream().map(ASTConnector::getSource).toList();
+    List<ASTPortAccess> sources = connectors.stream().map(ASTConnector::getSource).collect(Collectors.toUnmodifiableList());
 
     // keep the visited list throughout all circle detection to avoid detecting the same circle twice
     ArrayList<String> visited = new ArrayList<>();
