@@ -40,5 +40,5 @@ include(":generators:ma2ktln")
 include(":applications:bumperbot")
 include(":applications:factory")
 include(":applications:factoryTask")
-include(":applications:lightControl")
+// include(":applications:lightControl") TODO Re-add when expression well formedness checks work properly
 
