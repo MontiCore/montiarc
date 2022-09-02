@@ -2,7 +2,6 @@
 package comfortablearc.check;
 
 import arcbasis.check.AbstractArcTypeCalculator;
-import arcbasis.check.DeriveSymTypeOfExpressionWithPorts;
 import com.google.common.base.Preconditions;
 import comfortablearc.ComfortableArcMill;
 import comfortablearc._visitor.ComfortableArcTraverser;
@@ -48,7 +47,7 @@ public class ComfortableArcTypeCalculator extends AbstractArcTypeCalculator {
 
   protected void initDeriveSymTypeOfExpression(@NotNull ExpressionsBasisTraverser traverser) {
     Preconditions.checkNotNull(traverser);
-    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpressionWithPorts();
+    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpression();
     deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
     traverser.setExpressionsBasisHandler(deriveSymTypeOfExpression);
     traverser.add4ExpressionsBasis(deriveSymTypeOfExpression);

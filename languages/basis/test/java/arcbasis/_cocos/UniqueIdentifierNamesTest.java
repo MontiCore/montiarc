@@ -13,6 +13,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -74,10 +75,14 @@ public class UniqueIdentifierNamesTest extends AbstractTest {
       .collect(Collectors.toList());
 
     return permutePairs(arcEls).stream()
-      .map(pair -> Arguments.of(pair.getLeft(), pair.getRight(), ArcError.UNIQUE_IDENTIFIER_NAMES));
+      .map(pair -> Arguments.of(
+        Named.of(pair.getLeft().getClass().getSimpleName(), pair.getLeft()),
+        Named.of(pair.getRight().getClass().getSimpleName(), pair.getRight()),
+        ArcError.UNIQUE_IDENTIFIER_NAMES)
+      );
   }
 
-  @ParameterizedTest
+  @ParameterizedTest(name = "{index}: {0} x {1} ")
   @MethodSource("provideDuplicatedIdentifiers")
   public void shouldFindDuplicatedName (
     @NotNull ASTArcElement firstEl,

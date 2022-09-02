@@ -3,6 +3,9 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.IArcBasisScope;
+import arcbasis._symboltable.PortSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Multimap;
@@ -14,7 +17,10 @@ import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.BiPredicate;
 
 import static java.util.stream.Collectors.joining;
 
@@ -37,8 +43,11 @@ public class UniqueIdentifierNames implements ArcBasisASTComponentTypeCoCo {
     for(String name : allNameOccurrences.keySet()) {
       Collection<SourcePosition> currentNameOccurrences = allNameOccurrences.get(name);
 
-      if(currentNameOccurrences.size() > 1) {
-        String positionsPrinted = currentNameOccurrences.stream().map(pos -> pos.toString()).collect(joining(", "));
+      boolean allowedExceptionMatches = this.getAllowedExceptions(astComp.getSpannedScope()).stream()
+        .anyMatch(predicate -> predicate.test(name, currentNameOccurrences));
+
+      if(currentNameOccurrences.size() > 1 && !allowedExceptionMatches) {
+        String positionsPrinted = currentNameOccurrences.stream().map(SourcePosition::toString).collect(joining(", "));
         Log.error(ArcError.UNIQUE_IDENTIFIER_NAMES.format(
           astComp.getSymbol().getFullName(),
           name,
@@ -142,6 +151,20 @@ public class UniqueIdentifierNames implements ArcBasisASTComponentTypeCoCo {
       tParam -> nameOccurrences.put(tParam.getName(), optSourcePosOf(tParam).orElse(new SourcePosition(-1, -1)))
     );
     return nameOccurrences;
+  }
+
+
+  /**
+   * Defines exceptions when it is okay that there are multiple occurrences of the same name. To add your own
+   * exceptions, overwrite this method.
+   * @param scope The scope in which all the names were found. May be used to check whether there is an allowed
+   *              exception to the rule that there should not be name duplicates.
+   */
+  protected Collection<BiPredicate<String, Collection<SourcePosition>>> getAllowedExceptions(@NotNull IArcBasisScope scope) {
+    HashSet<BiPredicate<String, Collection<SourcePosition>>> allowedExceptions = new HashSet<>();
+    // This method currently does nothing but is a possible extension point to declare Exceptions.
+
+    return allowedExceptions;
   }
 
   /**

@@ -48,7 +48,7 @@ public class VariableArcTypeCalculator extends AbstractArcTypeCalculator {
 
   protected void initDeriveSymTypeOfExpression(@NotNull ExpressionsBasisTraverser traverser) {
     Preconditions.checkNotNull(traverser);
-    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpressionWithPortsAndFeatures();
+    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpressionWithFeatures();
     deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
     traverser.setExpressionsBasisHandler(deriveSymTypeOfExpression);
     traverser.add4ExpressionsBasis(deriveSymTypeOfExpression);

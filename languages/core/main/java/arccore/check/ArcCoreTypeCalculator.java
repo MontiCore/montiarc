@@ -2,7 +2,6 @@
 package arccore.check;
 
 import arcbasis.check.AbstractArcTypeCalculator;
-import arcbasis.check.DeriveSymTypeOfExpressionWithPorts;
 import arccore.ArcCoreMill;
 import arccore._visitor.ArcCoreTraverser;
 import com.google.common.base.Preconditions;
@@ -48,7 +47,7 @@ public class ArcCoreTypeCalculator extends AbstractArcTypeCalculator {
 
   protected void initDeriveSymTypeOfExpression(@NotNull ExpressionsBasisTraverser traverser) {
     Preconditions.checkNotNull(traverser);
-    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpressionWithPorts();
+    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpression();
     deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
     traverser.add4ExpressionsBasis(deriveSymTypeOfExpression);
     traverser.setExpressionsBasisHandler(deriveSymTypeOfExpression);

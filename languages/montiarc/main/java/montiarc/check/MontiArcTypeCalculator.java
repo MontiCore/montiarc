@@ -15,7 +15,7 @@ import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesTrav
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc.check.DeriveSymTypeOfExpressionWithPortsAndFeatures;
+import variablearc.check.DeriveSymTypeOfExpressionWithFeatures;
 
 /**
  * A visitor that calculates a {@link SymTypeExpression} (type) for expressions
@@ -58,7 +58,7 @@ public class MontiArcTypeCalculator extends AbstractArcTypeCalculator {
 
   protected void initDeriveSymTypeOfExpression(@NotNull ExpressionsBasisTraverser traverser) {
     Preconditions.checkNotNull(traverser);
-    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpressionWithPortsAndFeatures();
+    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpressionWithFeatures();
     deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
     traverser.add4ExpressionsBasis(deriveSymTypeOfExpression);
     traverser.setExpressionsBasisHandler(deriveSymTypeOfExpression);

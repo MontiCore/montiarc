@@ -2,7 +2,6 @@
 package genericarc.check;
 
 import arcbasis.check.AbstractArcTypeCalculator;
-import arcbasis.check.DeriveSymTypeOfExpressionWithPorts;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
 import de.monticore.literals.mcliteralsbasis._visitor.MCLiteralsBasisTraverser;
@@ -48,7 +47,7 @@ public class GenericArcTypeCalculator extends AbstractArcTypeCalculator {
 
   protected void initDeriveSymTypeOfExpression(@NotNull ExpressionsBasisTraverser traverser) {
     Preconditions.checkNotNull(traverser);
-    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpressionWithPorts();
+    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpression ();
     deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
     traverser.setExpressionsBasisHandler(deriveSymTypeOfExpression);
     traverser.add4ExpressionsBasis(deriveSymTypeOfExpression);

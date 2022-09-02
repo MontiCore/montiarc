@@ -216,12 +216,12 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkNotNull(node);
     Preconditions.checkState(getCurrentScope().isPresent());
     Preconditions.checkState(getCurrentPortDirection().isPresent());
-    PortSymbol symbol = this.create_Port(node).buildWithoutType();
-    node.setSymbol(symbol);
+
+    PortSymbol port = this.create_Port(node).buildWithoutType();
+    node.setSymbol(port);
+    port.setAstNode(node);
     node.setEnclosingScope(this.getCurrentScope().get());
-    symbol.setAstNode(node);
-    symbol.setEnclosingScope(this.getCurrentScope().get());
-    this.getCurrentScope().get().add(symbol);
+    SymbolService.link(this.getCurrentScope().get(), port);
   }
 
   @Override

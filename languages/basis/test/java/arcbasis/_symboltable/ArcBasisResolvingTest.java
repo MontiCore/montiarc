@@ -6,16 +6,19 @@ import arcbasis.ArcBasisMill;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
+import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import de.monticore.types.check.SymTypeExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -201,5 +204,152 @@ public class ArcBasisResolvingTest extends AbstractTest {
       "Resolved the wrong variable symbol from the outer scope.");
     Assertions.assertEquals(var2, inner.resolveVariable("var").get(),
       "Resolve the wrong variable symbol from the inner scope.");
+  }
+
+  @Test
+  public void shouldResolvePort2Variable1() {
+    // Given
+    IArcBasisScope scope = ArcBasisMill.scope();
+    PortSymbol port = ArcBasisMill.portSymbolBuilder()
+      .setName("port")
+      .setType(Mockito.mock(SymTypeExpression.class))
+      .setIncoming(true)
+      .build();
+    SymbolService.link(scope, port);
+
+    // When
+    List<VariableSymbol> variables = scope.resolveVariableMany("port");
+
+    // Then
+    Assertions.assertFalse(variables.isEmpty(),
+      "Failed to resolve the port to variable symbol adapter." );
+    Assertions.assertEquals(1, variables.size(),
+      "Failed to resolve only the single port to variable symbol adapter.");
+  }
+
+  @Test
+  public void shouldResolvePort2Variable2() {
+    // Given
+    IArcBasisScope scope = ArcBasisMill.scope();
+    PortSymbol port = ArcBasisMill.portSymbolBuilder()
+      .setName("port")
+      .setType(Mockito.mock(SymTypeExpression.class))
+      .setIncoming(true)
+      .build();
+    SymbolService.link(scope, port);
+
+    VariableSymbol variable = ArcBasisMill.variableSymbolBuilder()
+      .setName("variable")
+      .setType(Mockito.mock(SymTypeExpression.class))
+      .build();
+    SymbolService.link(scope, variable);
+
+    // When
+    List<VariableSymbol> variables = scope.resolveVariableMany("port");
+
+    // Then
+    Assertions.assertFalse(variables.isEmpty(),
+      "Failed to resolve the port to variable symbol adapter." );
+    Assertions.assertEquals(1, variables.size(),
+      "Failed to resolve only the single port to variable symbol adapter.");
+  }
+
+  @Test
+  @Disabled("see https://git.rwth-aachen.de/monticore/monticore/-/issues/3241")
+  public void shouldResolvePort2Variable3() {
+    // Given
+    IArcBasisScope scope = ArcBasisMill.scope();
+    PortSymbol port = ArcBasisMill.portSymbolBuilder()
+      .setName("port")
+      .setType(Mockito.mock(SymTypeExpression.class))
+      .setIncoming(true)
+      .build();
+    SymbolService.link(scope, port);
+
+    VariableSymbol variable = ArcBasisMill.variableSymbolBuilder()
+      .setName("port")
+      .setType(Mockito.mock(SymTypeExpression.class))
+      .build();
+    SymbolService.link(scope, variable);
+
+    // When
+    List<VariableSymbol> variables = scope.resolveVariableMany("port");
+
+    // Then
+    Assertions.assertEquals(2, variables.size(),
+      "Failed to resolve both the variable symbol and the port to variable symbol adapter.");
+  }
+
+  @Test
+  public void shouldResolvePort2Variable4() {
+    // Given
+    IArcBasisScope scope = ArcBasisMill.scope();
+    PortSymbol port = ArcBasisMill.portSymbolBuilder()
+      .setName("port")
+      .setType(Mockito.mock(SymTypeExpression.class))
+      .setIncoming(true)
+      .build();
+    SymbolService.link(scope, port);
+
+    // When
+    List<VariableSymbol> variables1 = scope.resolveVariableMany("port");
+    List<VariableSymbol> variables2 = scope.resolveVariableMany("port");
+
+    // Then
+    Assertions.assertAll(
+      () -> Assertions.assertFalse(variables1.isEmpty(),
+        "The first call failed to resolve the port to variable symbol adapter."),
+      () -> Assertions.assertFalse(variables2.isEmpty(),
+        "The second call failed to resolve the port to variable symbol adapter.")
+    );
+    Assertions.assertAll(
+      () -> Assertions.assertEquals(1, variables1.size(),
+        "The first call failed to resolve only the single port to variable symbol adapter."),
+      () -> Assertions.assertEquals(1, variables2.size(),
+        "The second call failed to resolve only the single port to variable symbol adapter.")
+    );
+  }
+
+  @Test
+  @Disabled("see https://git.rwth-aachen.de/monticore/monticore/-/issues/3241")
+  public void shouldResolvePort2Variable5() {
+    // Given
+    IArcBasisScope scope = ArcBasisMill.scope();
+    PortSymbol port = ArcBasisMill.portSymbolBuilder()
+      .setName("port")
+      .setType(Mockito.mock(SymTypeExpression.class))
+      .setIncoming(true)
+      .build();
+    SymbolService.link(scope, port);
+
+    VariableSymbol variable = ArcBasisMill.variableSymbolBuilder()
+      .setName("port")
+      .setType(Mockito.mock(SymTypeExpression.class))
+      .setAccessModifier(BasicAccessModifier.PRIVATE)
+      .build();
+    SymbolService.link(scope, variable);
+
+    // When
+    List<VariableSymbol> variables1 = scope.resolveVariableMany("port", BasicAccessModifier.ALL_INCLUSION);
+    List<VariableSymbol> variables2 = scope.resolveVariableMany("port", BasicAccessModifier.PUBLIC);
+    List<VariableSymbol> variables3 = scope.resolveVariableMany("port", BasicAccessModifier.ALL_INCLUSION);
+
+    // Then
+    Assertions.assertAll(
+      () -> Assertions.assertFalse(variables1.isEmpty(),
+        "The first call failed to resolve the variable symbols."),
+      () -> Assertions.assertFalse(variables2.isEmpty(),
+        "The second call failed to resolve the variable symbol."),
+      () -> Assertions.assertFalse(variables3.isEmpty(),
+        "The third call failed to resolve the variable symbols.")
+    );
+    Assertions.assertAll(
+      () -> Assertions.assertEquals(2, variables1.size(),
+        "The first call failed to resolve both the variable symbol and the port to variable symbol adapter."),
+      () -> Assertions.assertEquals(1, variables2.size(),
+        "The second call failed to resolve only the port to variable symbol adapter."),
+      () -> Assertions.assertEquals(2, variables3.size(),
+        "The third call failed to resolve both the variable symbol and the port to variable symbol adapter.")
+    );
   }
 }

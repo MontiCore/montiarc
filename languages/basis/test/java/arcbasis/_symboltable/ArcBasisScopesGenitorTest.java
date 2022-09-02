@@ -195,11 +195,16 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
 
   @Test
   public void shouldVisitPort() {
+    // Given
     ASTPort ast = arcbasis.ArcBasisMill.portBuilder().setName("p").build();
     IArcBasisScope scope = ArcBasisMill.scope();
     this.getSymTab().setCurrentPortDirection(arcbasis.ArcBasisMill.portDirectionInBuilder().build());
     this.getSymTab().putOnStack(scope);
+
+    // When
     this.getSymTab().visit(ast);
+
+    // Then
     Assertions.assertEquals(scope, ast.getEnclosingScope());
     Assertions.assertFalse(scope.getLocalPortSymbols().isEmpty());
     Assertions.assertEquals(1, scope.getLocalPortSymbols().size());

@@ -4,13 +4,18 @@ package arcbasis._symboltable;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symboltable.ISymbol;
+import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.se_rwth.commons.Names;
 import org.codehaus.commons.nullanalysis.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -101,5 +106,32 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
     Preconditions.checkNotNull(symbols);
     return symbols.containsKey(name) ? symbols.get(name).stream()
       .filter(s -> s.getName().equals(name)) : Stream.empty();
+  }
+
+  @Override
+  default List<VariableSymbol> resolveAdaptedVariableLocallyMany(boolean foundSymbols,
+                                                                 String name,
+                                                                 AccessModifier modifier,
+                                                                 Predicate<VariableSymbol> predicate) {
+
+    List<PortSymbol> ports = resolvePortLocallyMany(foundSymbols, name, AccessModifier.ALL_INCLUSION, x -> true);
+
+    List<VariableSymbol> adapters = new ArrayList<>(ports.size());
+
+    for (PortSymbol port : ports) {
+      // instantiate the adapter
+      VariableSymbol adapter = new Port2VariableAdapter(port);
+
+      // filter by modifier and predicate
+      if (modifier.includes(adapter.getAccessModifier()) && predicate.test(adapter)) {
+
+        // add the adapter to the result
+        adapters.add(adapter);
+
+        // add the adapter to the scope
+        this.add(adapter);
+      }
+    }
+    return adapters;
   }
 }
