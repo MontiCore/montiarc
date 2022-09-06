@@ -33,8 +33,9 @@
     <@innerComponentClassesImportsWithSuffix comp=comp compHelper=compHelper suffix="Impl"/>
   import de.montiarc.runtimes.timesync.delegation.IComponent;
   import de.montiarc.runtimes.timesync.delegation.Port;
-  import de.montiarc.runtimes.timesync.delegation.UndelayedPort;
   import de.montiarc.runtimes.timesync.delegation.DelayedPort;
+  import de.montiarc.runtimes.timesync.delegation.UndelayedPort;
+  import de.montiarc.runtimes.timesync.delegation.UnconnectedPort;
   import de.montiarc.runtimes.timesync.implementation.IComputable;
   import de.montiarc.runtimes.log.Log;
 </#macro>

@@ -608,7 +608,7 @@ public class ComponentHelper {
    * ports of that component to the variable they need to be set to.
    *
    * Expects variable names for ports of hidden channels
-   * as produced by getVarsForHiddenChannelsMappedToTypeString.
+   * as produced by getVarsForHiddenChannelsMappedToFullPortType.
    * Expects variable names for local ports to be exactly their name.
    * @param comp The component for whose subcomponents mappings should be created
    * @return the mapping specified above
@@ -617,15 +617,21 @@ public class ComponentHelper {
     Map<String, Map<String, String>> res = new HashMap<>();
     
     // initialize result map
-    for(ComponentInstanceSymbol sub : comp.getSubComponents()) {
+    for(ComponentInstanceSymbol subComponent : comp.getSubComponents()) {
       Map<String, String> innerMap = new HashMap<>();
-      for(PortSymbol ps : sub.getType().getTypeInfo().getPorts()) {
-        innerMap.put(ps.getName(), "new " + (ps.isDelayed()? "Delayed" : "Undelayed") + "Port<>()");
+      for(PortSymbol portOfSubcomponent : subComponent.getType().getTypeInfo().getPorts()) {
+        String portKind = "";
+        if(portOfSubcomponent.isIncoming()) {
+          portKind = "Unconnected";
+        } else {
+          portKind = (portOfSubcomponent.isDelayed()? "Delayed" : "Undelayed");
+        }
+        innerMap.put(portOfSubcomponent.getName(), "new " + portKind + "Port<>()");
         // notice: if a port is not connected we do not want it to be null, but we also don't want it to return values.
         // One might suggest simply using Port.EMPTY, but as long as it is an unmodified single instance, it's unusable.
         // Sharing a normal Port instance for all unconnected ports leads to problems because data can still be transferred across it.
       }
-      res.put(sub.getName(), innerMap);
+      res.put(subComponent.getName(), innerMap);
     }
     
     // iterate over all connectors in the component to fill the map
