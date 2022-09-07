@@ -208,7 +208,7 @@ public class POJOGeneratorTool {
     // The following lines ensure that errors in the models will terminate this GeneratorTool before starting the
     // generation process
     if(failBeforeGenerationIfModelErrors) {
-      Log.info("cd2java generation process is aborted because some class diagrams models contain errors.",
+      Log.info("The cd2java generation process will be aborted here if some class diagrams models contain errors.",
         "PojoGeneratorTool");
       boolean wasFailQuickEnabled = Log.isFailQuickEnabled();
       Log.enableFailQuick(true);

@@ -32,6 +32,7 @@ public class POJOGeneratorScript extends Script implements GroovyRunner {
   protected static boolean failBeforeGenerationIfModelErrors = true;
 
   public static void main(String[] args){
+    Log.init();
     Log.enableFailQuick(false);
     CD4CodeMill.globalScope().clear();
     CD4CodeMill.reset();
