@@ -95,7 +95,7 @@ class Port2VariableAdapterTest {
       .setIncoming(false)
       .setType(SymTypeExpressionFactory.createPrimitive("int"))
       .build();
-    SymbolService.link(scope, port1);
+    SymbolService.link(scope, port2);
 
     return Stream.of(port1, port2);
   }
