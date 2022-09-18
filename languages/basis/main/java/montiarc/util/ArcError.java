@@ -36,14 +36,6 @@ public enum ArcError implements Error {
       + "type '%s' is not connected."),
   INNER_WITH_TYPE_PARAMETER_REQUIRES_INSTANCE("0xC1114", "Inner component '%s' must have an "
       + "instance defining its formal type parameters."),
-  TOO_FEW_INHERITED_CONFIG_PARAMS("0xC1115", "You defined component type '%s' to have '%s' parameters, but you must " +
-      "provide at least '%s' parameters, matching the type signature of the parent component '%s'."),
-  INHERITED_CONFIG_PARAM_TYPE_MISMATCH("0xC1116", "Configuration parameter '%s' at position '%d' of component '%s' " +
-      "is of type '%s', but it is required to match the type '%s' of the inherited configuration parameter '%s' at " +
-      "position '%d'."),
-  INHERITED_CONFIG_PARAM_MISSES_DEFAULT_VALUE("0xC1117", "Configuration parameter '%s' at position %d of component " +
-      "'%s' has no default value. However, it should have a default value, as the configuration parameter '%s' of " +
-      "parent component '%s' at position '%d' has a default value, too."),
   OPTIONAL_CONFIG_PARAMS_LAST("0xC1118", "Configuration parameter '%s' at position '%d' of component '%s' should be " +
       "optional, as it is preceded by the optional configuration parameter '%s' at position '%s'. Mandatory parameters " +
       "(that do not specify default values) must be declared before all optional parameters (that specify default " +
@@ -121,7 +113,18 @@ public enum ArcError implements Error {
   TIMING_DELAYED_WITH_INCOMING_PORT("0xC1160", "Delayed timing was selected, but the port %s is not outgoing."),
   SOURCE_AND_TARGET_TIMING_MISMATCH("0xC1161", "Timing '%s' of source port and timing '%s' of target "
       + "port of connector '%s' of component '%s' are incompatible."),
-  FEEDBACK_LOOP_TIMING_NOT_DELAYED("0xC1162", "There is a feedback loop inside of component %s that is not delayed.");
+  FEEDBACK_LOOP_TIMING_NOT_DELAYED("0xC1162", "There is a feedback loop inside of component %s that is not delayed."),
+  TOO_FEW_PARENT_INSTANTIATION_ARGUMENTS("0xC1163", "There are '%d' instantiation arguments for component '%s', " +
+      "but component type '%s' has '%d' mandatory configuration parameters that all must be bound."),
+  TOO_MANY_PARENT_INSTANTIATION_ARGUMENTS("0xC1164", "There are '%d' instantiation arguments for component '%s', " +
+      "but its component type '%s' only has '%d' configuration parameters. Please do not provide more arguments than " +
+      "parameters exist."),
+  PARENT_INSTANTIATION_ARGUMENT_TYPE_MISMATCH("0xC1165", "The parent configuration argument at position '%d' of component " +
+      "'%s' is of type '%s' which is incompatible to type '%s' of the corresponding configuration parameter '%s' of " +
+      "component type '%s'."),
+  PARENT_CONFIG_PARAM_BINDING_IS_TYPE_REF("0xC1166", "The expression represents the type '%s'. Therefore it can not be " +
+      "used to bind the configuration parameter '%s' at position '%s' of the subcomponent '%s %s', as configuration parameter bindings " +
+      "must evaluate to values (which type names do not do).");
 
   private final String errorCode;
   private final String errorMessage;

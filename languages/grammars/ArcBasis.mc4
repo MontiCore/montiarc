@@ -72,13 +72,14 @@ component grammar ArcBasis extends
    * be used as prt types in the component, definitions of configuration parameters
    * that ma may be used to configure the component, and this component's parent.
    *
-   * @attribute arcParamers A list of parameters that define the configuration
+   * @attribute arcParameters A list of parameters that define the configuration.
    * options of the component.
    * @attribute parent The type of the parent component.
+   * @attribute parentParameters The list of parameters that define the parent.
    */
   ComponentHead =
     ( "(" (ArcParameter || ",")* ")" )?
-    ( "extends" parent:MCType)?
+    ( "extends" parent:MCType ( "(" parentConfiguration:(Expression || ",")* ")" )? )?
   ;
 
   /**

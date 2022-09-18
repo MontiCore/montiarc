@@ -74,7 +74,7 @@
   <#assign componentClassName>${comp.getName()}<#if isTOPClass>TOP</#if></#assign>
   public ${componentClassName}(<@Utils.printConfigurationParametersAsList comp=comp/>) {
     <#if comp.isPresentParentComponent()>
-      super(<#list compHelper.getInheritedParams(comp) as inhParam>${inhParam}<#sep>, </#sep></#list>);
+      super(<#list comp.getParentConfiguration() as parentConfiguration>${compHelper.printExpression(parentConfiguration)}<#sep>, </#sep></#list>);
     </#if>
 
     <#if comp.isAtomic()>

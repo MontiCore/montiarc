@@ -8,7 +8,7 @@ component InnerInheritance {
   component A(int i = 0) {
   }
 
-  component B(int i = 1) extends A {
+  component B(int i = 1) extends A(i) {
 
   }
 }

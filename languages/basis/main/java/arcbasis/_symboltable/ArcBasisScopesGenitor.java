@@ -98,6 +98,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   protected ComponentTypeSymbolBuilder create_ComponentType(@NotNull ASTComponentType ast) {
     ComponentTypeSymbolBuilder builder = ArcBasisMill.componentTypeSymbolBuilder();
     builder.setName(ast.getName());
+    builder.setParentConfiguration(ast.getHead().getParentConfigurationList());
     IArcBasisScope scope = this.createScope(true);
     builder.setSpannedScope(scope);
     return builder;

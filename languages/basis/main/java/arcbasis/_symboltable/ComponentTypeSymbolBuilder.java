@@ -3,6 +3,7 @@ package arcbasis._symboltable;
 
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -16,6 +17,7 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
   protected CompTypeExpression parentComponent;
   protected List<VariableSymbol> parameters;
   protected List<TypeVarSymbol> typeParameters;
+  protected List<ASTExpression> parentConfiguration;
 
   public ComponentTypeSymbolBuilder() {
     super();
@@ -74,6 +76,17 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
     return this.realBuilder;
   }
 
+  public List<ASTExpression> getParentConfiguration() {
+    return this.parentConfiguration;
+  }
+
+  public ComponentTypeSymbolBuilder setParentConfiguration(@NotNull List<ASTExpression> parentConfiguration) {
+    Preconditions.checkNotNull(parentConfiguration);
+    Preconditions.checkArgument(!parentConfiguration.contains(null));
+    this.parentConfiguration = parentConfiguration;
+    return this.realBuilder;
+  }
+
   @Override
   public ComponentTypeSymbol build() {
     if (!isValid()) {
@@ -88,6 +101,9 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
     }
     if (this.getTypeParameters() != null) {
       this.getTypeParameters().forEach(symbol.getSpannedScope()::add);
+    }
+    if (this.getParentConfiguration() != null) {
+      symbol.setParentConfigurationExpressions(this.getParentConfiguration());
     }
     symbol.setOuterComponent(this.getOuterComponent());
     symbol.setParent(this.getParentComponent());

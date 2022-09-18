@@ -455,26 +455,6 @@ public class ComponentHelper {
     return ((MontiArcArtifactScope) ast.getEnclosingScope()).getImportsList();
   }
 
-  public static List<String> getInheritedParams(ComponentTypeSymbol component) {
-    List<String> result = new ArrayList<>();
-    boolean _isPresentParentComponent = component.isPresentParentComponent();
-    if (_isPresentParentComponent) {
-      ComponentTypeSymbol superCompReference = component.getParent().getTypeInfo();
-      if (superCompReference instanceof ComponentTypeSymbolSurrogate) {
-        superCompReference = ((ComponentTypeSymbolSurrogate) superCompReference).lazyLoadDelegate();
-      }
-      List<VariableSymbol> superConfigParams = superCompReference.getParameters();
-      boolean _isEmpty = superConfigParams.isEmpty();
-      boolean _not = (!_isEmpty);
-      if (_not) {
-        for (int i = 0; i < superConfigParams.size(); i++) {
-          result.add(superConfigParams.get(i).getName());
-        }
-      }
-    }
-    return result;
-  }
-
   public static void appendAllInnerComponents(List<ComponentTypeSymbol> components) {
     List<ComponentTypeSymbol> innerComponents = getAllInnerComponents(components);
     components.addAll(innerComponents);

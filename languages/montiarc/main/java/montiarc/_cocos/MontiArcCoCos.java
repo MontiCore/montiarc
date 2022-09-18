@@ -7,7 +7,6 @@ import arcbasis._cocos.CircularInheritance;
 import arcbasis._cocos.ComponentInstanceTypeExists;
 import arcbasis._cocos.ComponentTypeNameCapitalization;
 import arcbasis._cocos.ConfigurationParameterAssignment;
-import arcbasis._cocos.ConfigurationParametersCorrectlyInherited;
 import arcbasis._cocos.ConnectorSourceAndTargetDiffer;
 import arcbasis._cocos.ConnectorSourceAndTargetDirectionsFit;
 import arcbasis._cocos.ConnectorSourceAndTargetExist;
@@ -59,7 +58,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new CircularInheritance());
     checker.addCoCo(new ComponentInstanceTypeExists(new MCSimpleGenericTypesFullPrettyPrinter(new IndentPrinter())));
     checker.addCoCo(new ComponentTypeNameCapitalization());
-    checker.addCoCo(new ConfigurationParametersCorrectlyInherited());
+    checker.addCoCo(new ConfigurationParameterParentAssignment());
     checker.addCoCo(new ConfigurationParameterAssignment(new MontiArcTypeCalculator()));
     //checker.addCoCo(new ConnectorSourceAndTargetComponentDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetDiffer());

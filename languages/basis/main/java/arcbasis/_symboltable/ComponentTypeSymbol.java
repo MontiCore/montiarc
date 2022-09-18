@@ -3,6 +3,7 @@ package arcbasis._symboltable;
 
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
@@ -20,6 +21,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   protected ComponentTypeSymbol outerComponent;
   protected CompTypeExpression parent;
   protected List<VariableSymbol> parameters;
+  protected List<ASTExpression> parentConfiguration;
 
   /**
    * @param name the name of this component type.
@@ -27,6 +29,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   protected ComponentTypeSymbol(String name) {
     super(name);
     this.parameters = new ArrayList<>();
+    this.parentConfiguration = new ArrayList<>();
   }
 
   @Override
@@ -119,6 +122,28 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    */
   public void setParent(@Nullable CompTypeExpression parent) {
     this.parent = parent;
+  }
+
+  /**
+   * @return a {@code List} of the configuration parameters of this component type.
+   */
+  public List<ASTExpression> getParentConfiguration() {
+    return this.parentConfiguration;
+  }
+
+  /**
+   * Adds the elements of a {@code Collection} of {@code VariableSymbol} of component configuration
+   * parameters to the configuration parameters of this component type. Throws an
+   * {@link IllegalArgumentException} if the given {@code Collection} is {@code null} or contains an
+   * element that is {@code null}.
+   *
+   * @param expressions the symbols to add.
+   * @see this#addParameter(VariableSymbol)
+   */
+  public void setParentConfigurationExpressions(@NotNull List<ASTExpression> expressions) {
+    Preconditions.checkNotNull(expressions);
+    Preconditions.checkArgument(!expressions.contains(null));
+    this.parentConfiguration = expressions;
   }
 
   /**
