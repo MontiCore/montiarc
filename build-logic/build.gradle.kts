@@ -13,6 +13,7 @@ dependencies {
   implementation("gradle.plugin.com.github.johnrengelman:shadow:7.1.2")
   implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
   implementation("monticore:monticore.gradle.plugin:7.4.0-SNAPSHOT")
+  implementation("de.monticore.language-server:de.monticore.language-server.gradle.plugin:7.4.0.0-SNAPSHOT")
 }
 
 publishing {

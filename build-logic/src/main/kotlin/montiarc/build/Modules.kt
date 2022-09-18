@@ -20,6 +20,7 @@ abstract class Modules {
   val logbackVersion = "1.2.6"
   val mockitoVersion = "3.2.0"
   val monticoreVersion = "7.4.0-SNAPSHOT"
+  val monticoreLSPVersion = "7.4.0.0-SNAPSHOT"
 
   val apache = "org.apache.commons:commons-lang3"
   val apacheBcel = "org.apache.bcel:bcel"
