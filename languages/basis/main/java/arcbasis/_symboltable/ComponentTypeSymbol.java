@@ -136,6 +136,8 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   /**
    * Adds the given configuration parameter to the configuration parameters of this component
    * type. Throws an {@link IllegalArgumentException} if the given symbol is {@code null}.
+   * Warning!!: The VariableSymbol, with which this method is called, must already be part of the spanned scope of this
+   * component!
    *
    * @param parameter the symbol to add.
    */
@@ -183,7 +185,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   public List<VariableSymbol> getFields() {
     return this.getSpannedScope().getLocalVariableSymbols().stream()
       .filter(f -> !(f instanceof Port2VariableAdapter))
-      .toList();
+      .collect(Collectors.toList());
   }
 
   /**
