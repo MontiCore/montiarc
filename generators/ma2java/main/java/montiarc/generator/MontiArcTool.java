@@ -5,6 +5,8 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc._cocos.MontiArcCoCos;
 import montiarc.generator.codegen.MontiArcGenerator;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -13,6 +15,8 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Optional;
+
+import static montiarc.cocos.IdentifiersAreNoJavaKeywords.*;
 
 public class MontiArcTool extends montiarc.MontiArcTool {
 
@@ -73,5 +77,22 @@ public class MontiArcTool extends montiarc.MontiArcTool {
     Preconditions.checkArgument(!target.isEmpty());
     MontiArcGenerator generator = new MontiArcGenerator(Paths.get(target), Paths.get(hwc));
     generator.generate(symbol);
+  }
+
+  @Override
+  public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(ast);
+    super.runAdditionalCoCos(ast);
+
+    MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
+    checker.addCoCo(new PortNamesAreNoJavaKeywords());
+    checker.addCoCo(new ParameterNamesAreNoJavaKeywords());
+    checker.addCoCo(new TypeParameterNamesAreNoJavaKeywords());
+    checker.addCoCo(new FieldNamesAreNoJavaKeywords());
+    checker.addCoCo(new AutomatonStateNamesAreNoJavaKeywords());
+    checker.addCoCo(new ComponentTypeNamesAreNoJavaKeywords());
+    checker.addCoCo(new ComponentInstanceNamesAreNoJavaKeywords());
+
+    checker.checkAll(ast);
   }
 }

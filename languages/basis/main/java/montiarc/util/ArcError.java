@@ -124,7 +124,9 @@ public enum ArcError implements Error {
       "component type '%s'."),
   PARENT_CONFIG_PARAM_BINDING_IS_TYPE_REF("0xC1166", "The expression represents the type '%s'. Therefore it can not be " +
       "used to bind the configuration parameter '%s' at position '%s' of the subcomponent '%s %s', as configuration parameter bindings " +
-      "must evaluate to values (which type names do not do).");
+      "must evaluate to values (which type names do not do)."),
+  RESERVED_KEYWORD_USED("0xC1167", "'%s' is a keyword reserved by '%s'. Thus it's usage as a identifier name is " +
+    "illegal");
 
   private final String errorCode;
   private final String errorMessage;
