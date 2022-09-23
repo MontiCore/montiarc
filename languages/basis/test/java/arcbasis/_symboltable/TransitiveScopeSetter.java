@@ -57,7 +57,7 @@ public class TransitiveScopeSetter {
 
   protected ITraverser traverser(@NotNull ScopeSetter scopeSetter) {
     Preconditions.checkNotNull(scopeSetter);
-    ArcBasisTraverser traverser = ArcBasisMill.traverser();
+    ArcBasisTraverser traverser = ArcBasisMill.inheritanceTraverser();
     this.init(traverser, scopeSetter);
     return traverser;
   }
