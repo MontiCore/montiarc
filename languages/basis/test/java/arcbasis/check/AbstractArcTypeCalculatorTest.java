@@ -163,6 +163,7 @@ public abstract class AbstractArcTypeCalculatorTest extends AbstractTest {
     TypeCheckResult result = this.getTypeCalculator().deriveType(expr);
 
     //Then
-    Assertions.assertFalse(result.isPresentResult());
+    Assertions.assertTrue(result.isPresentResult());
+    Assertions.assertTrue(result.getResult().isObscureType());
   }
 }

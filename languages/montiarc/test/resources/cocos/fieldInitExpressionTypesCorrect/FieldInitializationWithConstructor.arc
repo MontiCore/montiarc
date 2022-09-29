@@ -7,5 +7,5 @@ import Message;
  * Valid model.
  */
 component FieldInitializationWithConstructor {
-  Message message = Message(5);
+  Message message = Message.Message(5);
 }
