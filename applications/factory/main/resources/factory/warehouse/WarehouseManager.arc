@@ -9,6 +9,7 @@ import factory.warehouse.*;
 component WarehouseManager {
 
   Storage storage = Builder.buildStorage();
+  Storage secondaryStorage = Storage.Storage(1, 1, 2);  // Testing constructor invocation
   Position dropOffZone = Builder.buildPosition();
   Position pickUpZone = Builder.buildPosition();
 
