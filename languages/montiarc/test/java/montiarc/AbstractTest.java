@@ -4,6 +4,7 @@ package montiarc;
 import arcbasis.ArcBasisMill;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
+import montiarc.util.MCError;
 import montiarc.util.MontiArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,12 @@ public abstract class AbstractTest extends montiarc.util.AbstractTest {
   @Override
   protected Pattern supplyErrorCodePattern() {
     return MontiArcError.ERROR_CODE_PATTERN;
+  }
+
+  protected Pattern supplyErrorCodePatternInclMontiCoreErrors() {
+    String montiArcPattern = MontiArcError.ERROR_CODE_PATTERN.pattern();
+    String montiCorePattern = MCError.ERROR_CODE_PATTERN.pattern();
+    return Pattern.compile(montiArcPattern + "|" + montiCorePattern);
   }
 
   protected static ASTMCQualifiedName createQualifiedName(@NotNull String... parts) {
