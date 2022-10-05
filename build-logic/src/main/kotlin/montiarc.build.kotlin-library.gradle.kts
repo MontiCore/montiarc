@@ -5,8 +5,15 @@ plugins {
   id("montiarc.build.java-library")
 }
 
-kotlin.sourceSets["main"].kotlin.setSrcDirs(setOf("main/kotlin"))
-kotlin.sourceSets["main"].resources.setSrcDirs(setOf("main/resources"))
-kotlin.sourceSets["test"].kotlin.setSrcDirs(setOf("test/kotlin"))
-kotlin.sourceSets["test"].resources.setSrcDirs(setOf("test/resources"))
-kotlin.sourceSets["main"].kotlin.srcDir(java.sourceSets["main"].java.srcDirs)
+kotlin {
+  sourceSets {
+    main {
+      kotlin.setSrcDirs(setOf("main/kotlin"))
+      resources.setSrcDirs(setOf("main/resources"))
+    }
+    test {
+      kotlin.setSrcDirs(setOf("test/kotlin"))
+      resources.setSrcDirs(setOf("test/resources"))
+    }
+  }
+}
