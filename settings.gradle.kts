@@ -39,7 +39,5 @@ include(":generators:ma2java-it")
 include(":generators:ma2ktln")
 include(":applications:bumperbot")
 include(":applications:factory")
-include(":applications:factoryTask")
-// include(":applications:lightControl") TODO Re-add when expression well formedness checks work properly
 include(":tooling:language-server")
 includeBuild("tooling/plugin")
