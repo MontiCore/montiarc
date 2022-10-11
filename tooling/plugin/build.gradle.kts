@@ -2,7 +2,7 @@
 
 plugins {
   id("java-gradle-plugin")
-
+  id("montiarc.build.project-version")
   id("montiarc.build.kotlin-library")
 }
 
