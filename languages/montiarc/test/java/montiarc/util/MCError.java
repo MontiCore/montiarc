@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public enum MCError implements Error {
   INCOMPATIBILITY(VarDeclarationInitializationHasCorrectType.ERROR_CODE),
   TYPE_REF_ASSIGNMENT_ERR(VarDeclarationInitializationHasCorrectType.TYPE_REF_ASSIGNMENT_ERROR_CODE),
-  DIVIDE_EXPRESSION_ERR("0xA0212");
+  DIVIDE_EXPRESSION_ERR("0xA0168");
 
   public static final Pattern ERROR_CODE_PATTERN = Pattern.compile("0xA\\d{4}");
 
