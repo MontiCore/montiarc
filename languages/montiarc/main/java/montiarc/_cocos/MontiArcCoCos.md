@@ -92,8 +92,7 @@ Legend:
 | ☑     | UniqueStates                                                           | SCBasis            |                                                                                                                                                                                                                                  |
 | ☑     | TransitionSourceAndTargetExist                                         | SCBasis            |                                                                                                                                                                                                                                  |
 | ☑     | AtLeastOneInitialState                                                 | SCBasis            |                                                                                                                                                                                                                                  |
-| ☑     | OneInitialStateAtMax                                                   | ArcAutomaton       | This coco should be moved to a statechart language!                                                                                                                                                                              |
-| ☐     | ExpressionStatementWellFormedness                                      | ArcAutomaton       | Currently deactivated, as Lightcontrol won't build (due to a MontiArc bug)                                                                                                                                                       |
+| ☑     | OneInitialStateAtMax                                                   | ArcAutomaton       | This coco should be moved to a statechart language!                                                                                                                                                                              | |
 | ☑     | FieldReadWriteAccessFitsInGuards, FieldReadWriteAccessFitsInStatements | ArcAutomaton       | Not in SC-languages, as they don't know AssignmentExpressions. Not in AssignmentExpressions, as they don't know Symbols. Moreover we check ports referenced by `NameExpression`s, who are not known by the SC-languages, either. |
 | ☑     | NoInputPortsInInitialOutputDecl                                        | ArcAutomaton       |                                                                                                                                                                                                                                  |
 | ☑     | TransitionPreconditionsAreBoolean                                      | SCTransitions4Code |                                                                                                                                                                                                                                  |
@@ -103,3 +102,14 @@ Legend:
 | ☒     | SCFileExtension\[is.sc\]                                               | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                                                                                             |
 | ☒     | SCNameIsArtifactName                                                   | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                                                                                             |
 | ☒     | CapitalStateNames                                                      | SCBasis            | Warns if a state name starts with a lower case letter. At a discussion we found this to be unneccessary.                                                                                                                         |
+
+## Statement CoCos
+
+| in MA | CoCo(s)                                    | Language           | Notes |        
+| ----- | ------------------------------------------ | ------------------ | ------|
+| ☒     | ExpressionStatementIsValid                 | Statements         |       |   
+| ☒     | VarDeclarationInitializationHasCorrectType | Statements         |       |   
+| ☒     | ForConditionHasBooleanType                 | Statements         |       |   
+| ☒     | ForEachIsValid                             | Statements         |       |          
+| ☒     | IfConditionHasBooleanType                  | Statements         |       |          
+| ☒     | SwitchStatementValid                       | Statements         |       |                
