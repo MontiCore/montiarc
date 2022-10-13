@@ -31,6 +31,16 @@
               ]
             }
           },
+          {
+            "kind":"de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
+            "name":"getThis",
+            "isConstructor":false,
+            "isPublic":true,
+            "type":{
+              "kind":"de.monticore.types.check.SymTypeOfObject",
+              "objName":"Message"
+            },
+          },
         ]
       }
     }
