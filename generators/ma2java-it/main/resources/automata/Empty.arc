@@ -1,9 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata;
 
+import types.OnOff;
+
 /**
- * Component without ports or behavior.
+ * Empty atomic component, the component should not produce any output.
  */
 component Empty {
+  port <<sync>> in OnOff i;
+  port <<sync>> out OnOff o;
 
 }

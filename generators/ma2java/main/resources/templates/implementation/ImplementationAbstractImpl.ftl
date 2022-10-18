@@ -9,18 +9,14 @@
 <#macro printImplementationClassMethods comp compHelper identifier isTOPClass=false>
   <#assign compName=comp.getName()>
   <#assign className>${compName}Impl<#if isTOPClass>TOP</#if></#assign>
-  public ${className}(<@Utils.printConfigurationParametersAsList comp=comp/>) {
-    <#if !isTOPClass>
-      throw new java.lang.UnsupportedOperationException("Invoking constructor on abstract implementation <@Utils.componentClassFQN comp=comp/>Impl");
-    </#if>
-  }
+  public ${className}(<@Utils.printConfigurationParametersAsList comp=comp/>) {}
 
   public <@Utils.componentResultClassFQN comp=comp/><@Utils.printFormalTypeParameters comp=comp/> getInitialValues() {
-  throw new java.lang.UnsupportedOperationException("Invoking getInitialValues() on abstract implementation <@Utils.componentClassFQN comp=comp/>Impl");
+    return new <@Utils.componentResultClassFQN comp=comp/><@Utils.printFormalTypeParameters comp=comp/>();
   }
 
   public <@Utils.componentResultClassFQN comp=comp/><@Utils.printFormalTypeParameters comp=comp/> compute(<@Utils.componentInputClassFQN comp=comp/><@Utils.printFormalTypeParameters comp=comp/> ${identifier.getInputName()}) {
-  throw new java.lang.UnsupportedOperationException("Invoking compute() on abstract implementation <@Utils.componentClassFQN comp=comp/>Impl");
+    return new <@Utils.componentResultClassFQN comp=comp/><@Utils.printFormalTypeParameters comp=comp/>();
   }
 
 </#macro>
