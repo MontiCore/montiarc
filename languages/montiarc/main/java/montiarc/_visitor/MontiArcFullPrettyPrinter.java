@@ -149,7 +149,7 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
   protected void initCommonExpressionPrettyPrinter(@NotNull IndentPrinter printer) {
     Preconditions.checkNotNull(printer);
 
-    CommonExpressionsPrettyPrinter commonExpressionsPrettyPrinter = new CustomCommonExpressionsPrettyPrinter(printer);
+    CommonExpressionsPrettyPrinter commonExpressionsPrettyPrinter = new CommonExpressionsPrettyPrinter(printer);
     traverser.setCommonExpressionsHandler(commonExpressionsPrettyPrinter);
     traverser.add4CommonExpressions(commonExpressionsPrettyPrinter);
   }
