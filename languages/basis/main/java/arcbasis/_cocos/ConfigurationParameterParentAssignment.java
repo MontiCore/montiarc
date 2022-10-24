@@ -142,7 +142,7 @@ public class ConfigurationParameterParentAssignment implements ArcBasisASTCompon
         .getParameters().stream()
         .map(ISymbol::getName)
         .map(parent::getTypeExprOfParameter)
-        .toList();
+        .collect(Collectors.toList());
 
     for (int i = 0; i < Math.min(parentArgs.size(), parentSignature.size()); i++) {
       if (!parentArgs.get(i).isPresentResult()) {

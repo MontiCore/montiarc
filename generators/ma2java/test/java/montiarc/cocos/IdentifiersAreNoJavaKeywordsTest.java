@@ -60,7 +60,7 @@ class IdentifiersAreNoJavaKeywordsTest {
     String[] actualErrors = Log.getFindings()
       .stream()
       .filter(Finding::isError)
-      .map(f -> f.getMsg().split(/*:whitespace*/ ":\s")[0])
+      .map(f -> f.getMsg().split(/*:whitespace*/ ":\\s")[0])
       .toArray(String[]::new);
     String[] expectedErrorsAsList = Arrays.stream(expectedErrors)
       .map(Error::getErrorCode)

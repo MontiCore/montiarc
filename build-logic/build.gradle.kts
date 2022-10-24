@@ -32,8 +32,8 @@ repositories {
 }
 
 tasks.withType<JavaCompile> {
-  sourceCompatibility = JavaVersion.VERSION_17.toString()
-  targetCompatibility = JavaVersion.VERSION_17.toString()
+  sourceCompatibility = JavaVersion.VERSION_11.toString()
+  targetCompatibility = JavaVersion.VERSION_11.toString()
   options.encoding = "UTF-8"
   options.isFork = false
   options.isDeprecation = true
