@@ -2,7 +2,8 @@
 package variables;
 
 import com.google.common.base.Preconditions;
-import de.montiarc.runtimes.timesync.delegation.DelayedPort;
+import montiarc.rte.timesync.DelayedPort;
+import montiarc.rte.timesync.Port;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -53,7 +54,6 @@ public class VTransitionsTest {
     // Given
     VTransitions component = new VTransitions();
     component.setUp();
-    component.init();
 
     // When
     Direction[] actual1 = new Direction[output1.length];
@@ -62,16 +62,16 @@ public class VTransitionsTest {
     for (int i = 0; i < input.length; i++) {
 
       // update
-      component.getPortI().update();
+      ((Port<Direction>) component.getI()).update();
       component.update();
 
       // compute
-      component.getPortI().setValue(input[i]);
+      ((Port<Direction>) component.getI()).setValue(input[i]);
       component.compute();
 
       // add the current value after computation
-      actual1[i] = component.getPortO1().getCurrentValue();
-      actual2[i] = component.getPortO2().getCurrentValue();
+      actual1[i] = component.getO1().getValue();
+      actual2[i] = component.getO2().getValue();
     }
 
     // Then
@@ -85,30 +85,30 @@ public class VTransitionsTest {
    */
   protected static Stream<Arguments> inputAndExpectedOutputProvider() {
     return Stream.of(
-        // 1
-        Arguments.of(
-            new Direction[]{ Direction.FORWARDS },
-            new Direction[]{ Direction.LEFT },
-            new Direction[]{ Direction.FORWARDS }
-        ),
-        // 2
-        Arguments.of(
-            new Direction[]{ Direction.FORWARDS, Direction.FORWARDS,
-                Direction.FORWARDS },
-            new Direction[]{ Direction.LEFT, Direction.FORWARDS,
-                Direction.FORWARDS },
-            new Direction[]{ Direction.FORWARDS, Direction.FORWARDS,
-                Direction.FORWARDS }
-        ),
-        // 3
-        Arguments.of(
-            new Direction[]{ Direction.FORWARDS, Direction.BACKWARDS,
-                Direction.LEFT, Direction.RIGHT, Direction.FORWARDS },
-            new Direction[]{ Direction.LEFT, Direction.RIGHT,
-                Direction.LEFT, Direction.RIGHT, Direction.FORWARDS },
-            new Direction[]{ Direction.FORWARDS, Direction.BACKWARDS,
-                Direction.LEFT, Direction.RIGHT, Direction.FORWARDS }
-        )
+      // 1
+      Arguments.of(
+        new Direction[]{ Direction.FORWARDS },
+        new Direction[]{ Direction.LEFT },
+        new Direction[]{ Direction.FORWARDS }
+      ),
+      // 2
+      Arguments.of(
+        new Direction[]{ Direction.FORWARDS, Direction.FORWARDS,
+          Direction.FORWARDS },
+        new Direction[]{ Direction.LEFT, Direction.FORWARDS,
+          Direction.FORWARDS },
+        new Direction[]{ Direction.FORWARDS, Direction.FORWARDS,
+          Direction.FORWARDS }
+      ),
+      // 3
+      Arguments.of(
+        new Direction[]{ Direction.FORWARDS, Direction.BACKWARDS,
+          Direction.LEFT, Direction.RIGHT, Direction.FORWARDS },
+        new Direction[]{ Direction.LEFT, Direction.RIGHT,
+          Direction.LEFT, Direction.RIGHT, Direction.FORWARDS },
+        new Direction[]{ Direction.FORWARDS, Direction.BACKWARDS,
+          Direction.LEFT, Direction.RIGHT, Direction.FORWARDS }
+      )
     );
   }
 
@@ -128,10 +128,10 @@ public class VTransitionsTest {
 
     // Then
     assertAll(() -> {
-      Assertions.assertThat(((VTransitionsImpl)component.behaviorImpl).v1).isEqualTo(Direction.LEFT);
-      Assertions.assertThat(((VTransitionsImpl)component.behaviorImpl).v2).isEqualTo(Direction.RIGHT);
-      Assertions.assertThat(((VTransitionsImpl)component.behaviorImpl).v3).isEqualTo(Direction.LEFT);
-      Assertions.assertThat(((VTransitionsImpl)component.behaviorImpl).v4).isEqualTo(Direction.RIGHT);
+      Assertions.assertThat(component.v1).isEqualTo(Direction.LEFT);
+      Assertions.assertThat(component.v2).isEqualTo(Direction.RIGHT);
+      Assertions.assertThat(component.v3).isEqualTo(Direction.LEFT);
+      Assertions.assertThat(component.v4).isEqualTo(Direction.RIGHT);
     });
   }
 
@@ -148,19 +148,19 @@ public class VTransitionsTest {
     component.init();
 
     // When
-    component.getPortI().setValue(Direction.FORWARDS);
-    component.getPortI().update();
+    ((Port<Direction>) component.getI()).setValue(Direction.FORWARDS);
+    ((Port<Direction>) component.getI()).update();
     component.compute();
-    component.getPortI().setValue(Direction.BACKWARDS);
-    component.getPortI().update();
+    ((Port<Direction>) component.getI()).setValue(Direction.BACKWARDS);
+    ((Port<Direction>) component.getI()).update();
     component.compute();
 
     // Then
     assertAll(() -> {
-      Assertions.assertThat(((VTransitionsImpl)component.behaviorImpl).v1).isEqualTo(Direction.FORWARDS);
-      Assertions.assertThat(((VTransitionsImpl)component.behaviorImpl).v2).isEqualTo(Direction.BACKWARDS);
-      Assertions.assertThat(((VTransitionsImpl)component.behaviorImpl).v3).isEqualTo(Direction.LEFT);
-      Assertions.assertThat(((VTransitionsImpl)component.behaviorImpl).v4).isEqualTo(Direction.RIGHT);
+      Assertions.assertThat(component.v1).isEqualTo(Direction.FORWARDS);
+      Assertions.assertThat(component.v2).isEqualTo(Direction.BACKWARDS);
+      Assertions.assertThat(component.v3).isEqualTo(Direction.LEFT);
+      Assertions.assertThat(component.v4).isEqualTo(Direction.RIGHT);
     });
   }
 }

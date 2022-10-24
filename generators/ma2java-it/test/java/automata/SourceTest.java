@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata;
 
-import automata.SourceImpl.SourceState;
+import automata.Source.States;
 import com.google.common.base.Preconditions;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -54,7 +54,7 @@ public class SourceTest {
       source.compute();
 
       // add the current value after computation
-      actual.add(source.getPortO().getCurrentValue());
+      actual.add(source.getO().getValue());
     }
 
     // Then
@@ -67,10 +67,10 @@ public class SourceTest {
    */
   protected static Stream<Arguments> expOutputProvider() {
     return Stream.of(
-        Arguments.of(1, new OnOff[]{ OnOff.ON }),
-        Arguments.of(2, new OnOff[]{ OnOff.ON, OnOff.OFF }),
-        Arguments.of(3, new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON }),
-        Arguments.of(4, new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF })
+      Arguments.of(1, new OnOff[]{ OnOff.ON }),
+      Arguments.of(2, new OnOff[]{ OnOff.ON, OnOff.OFF }),
+      Arguments.of(3, new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON }),
+      Arguments.of(4, new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF })
     );
   }
 
@@ -86,8 +86,7 @@ public class SourceTest {
   @ParameterizedTest
   @MethodSource("expStatesProvider")
   @DisplayName("Source should visit expected states")
-  public void shouldVisitExpectedStates(int cycles,
-                                        @NotNull SourceState[] expected) {
+  public void shouldVisitExpected(int cycles, @NotNull States[] expected) {
     Preconditions.checkNotNull(expected);
     Preconditions.checkArgument(cycles >= 0);
     Preconditions.checkArgument(expected.length > 0);
@@ -96,19 +95,18 @@ public class SourceTest {
     // Given
     Source source = new Source();
     source.setUp();
-    source.init();
 
     // When
-    List<SourceState> actual = new ArrayList<>(cycles);
+    List<States> actual = new ArrayList<>(cycles);
 
     // add the initial state
-    actual.add(((SourceImpl) source.behaviorImpl).currentState);
+    actual.add(source.getCurrentState());
     for (int i = 0; i < cycles; i++) {
       source.compute();
       source.update();
 
       // add the current state after state transition
-      actual.add(((SourceImpl) source.behaviorImpl).currentState);
+      actual.add(source.getCurrentState());
     }
 
     // Then
@@ -121,14 +119,11 @@ public class SourceTest {
    */
   protected static Stream<Arguments> expStatesProvider() {
     return Stream.of(
-        Arguments.of(0, new SourceState[]{ SourceState.A }),
-        Arguments.of(1, new SourceState[]{ SourceState.A, SourceState.B }),
-        Arguments.of(2, new SourceState[]{ SourceState.A, SourceState.B,
-            SourceState.A }),
-        Arguments.of(3, new SourceState[]{ SourceState.A, SourceState.B,
-            SourceState.A, SourceState.B }),
-        Arguments.of(4, new SourceState[]{ SourceState.A, SourceState.B,
-            SourceState.A, SourceState.B, SourceState.A })
+      Arguments.of(0, new States[]{ States.A }),
+      Arguments.of(1, new States[]{ States.A, States.B }),
+      Arguments.of(2, new States[]{ States.A, States.B, States.A }),
+      Arguments.of(3, new States[]{ States.A, States.B, States.A, States.B }),
+      Arguments.of(4, new States[]{ States.A, States.B, States.A, States.B, States.A })
     );
   }
 }

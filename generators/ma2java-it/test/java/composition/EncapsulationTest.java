@@ -2,7 +2,8 @@
 package composition;
 
 import com.google.common.base.Preconditions;
-import de.montiarc.runtimes.timesync.delegation.DelayedPort;
+import montiarc.rte.timesync.DelayedPort;
+import montiarc.rte.timesync.Port;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -28,10 +29,10 @@ public class EncapsulationTest {
    * Black-box test: Ensures that the topology of subcomponents produces the
    * expected outputs.
    *
-   * @param input  the inputs given to the component under test in order
-   * @param output the expected output messages in order, its
-   *               length should match the number of input messages (minus one
-   *               because of missing initial output)
+   * @param input the inputs given to the component under test in order
+   * @param output the expected output messages in order, its length should
+   * match the number of input messages (minus one because of missing initial
+   * output)
    */
   @ParameterizedTest
   @MethodSource("inputAndExpectedOutputProvider")
@@ -46,25 +47,24 @@ public class EncapsulationTest {
     //Given
     Encapsulation encapsulation = new Encapsulation();
     encapsulation.setUp(new DelayedPort<>(), new DelayedPort<>());
-    encapsulation.init();
 
     // provide initial input
-    encapsulation.getPortI().setValue(input[0]);
-    encapsulation.getPortI().update();
+    ((Port<OnOff>) encapsulation.getI()).setValue(input[0]);
+    ((Port<OnOff>) encapsulation.getI()).update();
     encapsulation.update();
 
     // When
     List<OnOff> actual = new ArrayList<>(output.length);
     // no initial output
-    OnOff initial = encapsulation.getPortO().getCurrentValue();
+    OnOff initial = encapsulation.getO().getValue();
     for (int i = 1; i < input.length; i++) {
-      encapsulation.getPortI().setValue(input[i]);
+      ((Port<OnOff>) encapsulation.getI()).setValue(input[i]);
       encapsulation.compute();
-      encapsulation.getPortI().update();
+      ((Port<OnOff>) encapsulation.getI()).update();
       encapsulation.update();
 
       // add the current value after computation
-      actual.add(encapsulation.getPortO().getCurrentValue());
+      actual.add(encapsulation.getO().getValue());
     }
 
     // Then
@@ -78,26 +78,26 @@ public class EncapsulationTest {
    */
   protected static Stream<Arguments> inputAndExpectedOutputProvider() {
     return Stream.of(
-        // 1
-        Arguments.of(
-            new OnOff[]{OnOff.ON},
-            new OnOff[]{}
-        ),
-        // 2
-        Arguments.of(
-            new OnOff[]{OnOff.ON, OnOff.OFF},
-            new OnOff[]{OnOff.ON}
-        ),
-        // 3
-        Arguments.of(
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON},
-            new OnOff[]{OnOff.ON, OnOff.OFF}
-        ),
-        // 4
-        Arguments.of(
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF},
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON}
-        )
+      // 1
+      Arguments.of(
+        new OnOff[]{ OnOff.ON },
+        new OnOff[]{}
+      ),
+      // 2
+      Arguments.of(
+        new OnOff[]{ OnOff.ON, OnOff.OFF },
+        new OnOff[]{ OnOff.ON }
+      ),
+      // 3
+      Arguments.of(
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
+        new OnOff[]{ OnOff.ON, OnOff.OFF }
+      ),
+      // 4
+      Arguments.of(
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON }
+      )
     );
   }
 }

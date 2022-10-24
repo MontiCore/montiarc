@@ -3,7 +3,8 @@ package composition;
 
 
 import com.google.common.base.Preconditions;
-import de.montiarc.runtimes.timesync.delegation.DelayedPort;
+import montiarc.rte.timesync.DelayedPort;
+import montiarc.rte.timesync.Port;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -26,16 +27,16 @@ public class ParallelCompositionTest {
    * Black-box test: Ensures that the topology of subcomponents produces the
    * expected outputs.
    *
-   * @param input1  the inputs given to the first input port of the component
-   *                under test in order
-   * @param input2  the inputs given to the second input port of the component
-   *                under test in order
+   * @param input1 the inputs given to the first input port of the component
+   * under test in order
+   * @param input2 the inputs given to the second input port of the component
+   * under test in order
    * @param output1 the expected output messages on the first output port in
-   *                order, its length should match the number of input messages
-   *                (minus two because of missing initial output)
+   * order, its length should match the number of input messages (minus two
+   * because of missing initial output)
    * @param output2 the expected output messages on the second output port in
-   *                order, its length should match the number of input messages
-   *                (minus two because of missing initial output)
+   * order, its length should match the number of input messages (minus two
+   * because of missing initial output)
    */
   @ParameterizedTest
   @MethodSource("inputAndExpectedOutputProvider")
@@ -57,13 +58,12 @@ public class ParallelCompositionTest {
     //Given
     ParallelComposition component = new ParallelComposition();
     component.setUp(new DelayedPort<>(), new DelayedPort<>(), new DelayedPort<>(), new DelayedPort<>());
-    component.init();
 
     // provide initial input
-    component.getPortI1().setValue(input1[0]);
-    component.getPortI2().setValue(input2[0]);
-    component.getPortI1().update();
-    component.getPortI2().update();
+    ((Port<OnOff>) component.getI1()).setValue(input1[0]);
+    ((Port<OnOff>) component.getI2()).setValue(input2[0]);
+    ((Port<OnOff>) component.getI1()).update();
+    ((Port<OnOff>) component.getI2()).update();
     component.update();
 
     // When
@@ -71,16 +71,16 @@ public class ParallelCompositionTest {
     List<OnOff> actual2 = new ArrayList<>(output2.length);
     // no initial output
     for (int i = 1; i < input1.length; i++) {
-      component.getPortI1().setValue(input1[i]);
-      component.getPortI2().setValue(input2[i]);
+      ((Port<OnOff>) component.getI1()).setValue(input1[i]);
+      ((Port<OnOff>) component.getI2()).setValue(input2[i]);
       component.compute();
-      component.getPortI1().update();
-      component.getPortI2().update();
+      ((Port<OnOff>) component.getI1()).update();
+      ((Port<OnOff>) component.getI2()).update();
       component.update();
 
       // add the current value after computation
-      actual1.add(component.getPortO1().getCurrentValue());
-      actual2.add(component.getPortO2().getCurrentValue());
+      actual1.add(component.getO1().getValue());
+      actual2.add(component.getO2().getValue());
     }
 
     // Then
@@ -94,55 +94,55 @@ public class ParallelCompositionTest {
    */
   protected static Stream<Arguments> inputAndExpectedOutputProvider() {
     return Stream.of(
-        // 1
-        Arguments.of(
-            new OnOff[]{OnOff.ON},
-            new OnOff[]{OnOff.ON},
-            new OnOff[]{},
-            new OnOff[]{}
-        ),
-        // 2
-        Arguments.of(
-            new OnOff[]{OnOff.ON, OnOff.OFF},
-            new OnOff[]{OnOff.ON, OnOff.OFF},
-            new OnOff[]{OnOff.ON},
-            new OnOff[]{OnOff.OFF}
-        ),
-        // 3
-        Arguments.of(
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON},
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON},
-            new OnOff[]{OnOff.ON, OnOff.OFF},
-            new OnOff[]{OnOff.OFF, OnOff.ON}
-        ),
-        // 4
-        Arguments.of(
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF},
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF},
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON},
-            new OnOff[]{OnOff.OFF, OnOff.ON, OnOff.OFF}
-        ),
-        // 5
-        Arguments.of(
-            new OnOff[]{OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON},
-            new OnOff[]{OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON},
-            new OnOff[]{OnOff.OFF, OnOff.ON, OnOff.OFF},
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON}
-        ),
-        // 6
-        Arguments.of(
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF},
-            new OnOff[]{OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON},
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON},
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON}
-        ),
-        // 7
-        Arguments.of(
-            new OnOff[]{OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON},
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF},
-            new OnOff[]{OnOff.OFF, OnOff.ON, OnOff.OFF},
-            new OnOff[]{OnOff.OFF, OnOff.ON, OnOff.OFF}
-        )
+      // 1
+      Arguments.of(
+        new OnOff[]{ OnOff.ON },
+        new OnOff[]{ OnOff.ON },
+        new OnOff[]{},
+        new OnOff[]{}
+      ),
+      // 2
+      Arguments.of(
+        new OnOff[]{ OnOff.ON, OnOff.OFF },
+        new OnOff[]{ OnOff.ON, OnOff.OFF },
+        new OnOff[]{ OnOff.ON },
+        new OnOff[]{ OnOff.OFF }
+      ),
+      // 3
+      Arguments.of(
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
+        new OnOff[]{ OnOff.ON, OnOff.OFF },
+        new OnOff[]{ OnOff.OFF, OnOff.ON }
+      ),
+      // 4
+      Arguments.of(
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
+        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF }
+      ),
+      // 5
+      Arguments.of(
+        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON },
+        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON },
+        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF },
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON }
+      ),
+      // 6
+      Arguments.of(
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
+        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON },
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON }
+      ),
+      // 7
+      Arguments.of(
+        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON },
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
+        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF },
+        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF }
+      )
     );
   }
 }

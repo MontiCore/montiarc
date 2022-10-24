@@ -1,9 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata;
 
-import automata.SinkImpl.SinkState;
+import automata.Sink.States;
 import com.google.common.base.Preconditions;
-import de.montiarc.runtimes.timesync.delegation.DelayedPort;
+import montiarc.rte.timesync.DelayedPort;
+import montiarc.rte.timesync.Port;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -34,8 +35,8 @@ public class SinkTest {
   @ParameterizedTest
   @MethodSource("inputAndExpStatesProvider")
   @DisplayName("Sink should visit expected states")
-  public void shouldVisitExpectedStates(@NotNull OnOff[] input,
-                                        @NotNull SinkState[] expected) {
+  public void shouldVisitExpected(@NotNull OnOff[] input,
+                                  @NotNull States[] expected) {
     Preconditions.checkNotNull(input);
     Preconditions.checkNotNull(expected);
     Preconditions.checkArgument(expected.length >= 1);
@@ -44,20 +45,19 @@ public class SinkTest {
     // Given
     Sink sink = new Sink();
     sink.setUp(new DelayedPort<>());
-    sink.init();
 
     // When
-    List<SinkState> actual = new ArrayList<>(input.length);
+    List<States> actual = new ArrayList<>(input.length);
 
     // add the initial state
-    actual.add(((SinkImpl) sink.behaviorImpl).currentState);
+    actual.add(sink.getCurrentState());
     for (OnOff value : input) {
-      sink.getPortI().setValue(value);
-      sink.getPortI().update();
+      ((Port<OnOff>) sink.getI()).setValue(value);
+      ((Port<OnOff>) sink.getI()).update();
       sink.compute();
 
       // add the current state after state transition
-      actual.add(((SinkImpl) sink.behaviorImpl).currentState);
+      actual.add(sink.getCurrentState());
     }
 
     // Then
@@ -70,21 +70,22 @@ public class SinkTest {
    */
   protected static Stream<Arguments> inputAndExpStatesProvider() {
     return Stream.of(
-        // No input value, visit the initial state A
-        Arguments.of(new OnOff[]{},
-                     new SinkState[]{ SinkState.A }),
-        // i == ON, transition from A to B
-        Arguments.of(new OnOff[]{ OnOff.ON },
-                     new SinkState[]{ SinkState.A, SinkState.B }),
-        // i == OFF, underspecified, stay in A
-        Arguments.of(new OnOff[]{ OnOff.OFF },
-                     new SinkState[]{ SinkState.A, SinkState.A }),
-        // i == <ON, OFF>, transition from A to B to A
-        Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF },
-                     new SinkState[]{ SinkState.A, SinkState.B, SinkState.A }),
-        // i == <ON, ON>, underspecified, transition from A to B and stay in B
-        Arguments.of(new OnOff[]{ OnOff.ON, OnOff.ON },
-                     new SinkState[]{ SinkState.A, SinkState.B, SinkState.B })
+      // No input value, visit the initial state A
+      Arguments.of(new OnOff[]{}, new States[]{ States.A }),
+      // i == ON, transition from A to B
+      Arguments.of(new OnOff[]{ OnOff.ON }, new States[]{ States.A, States.B }),
+      // i == OFF, underspecified, stay in A
+      Arguments.of(new OnOff[]{ OnOff.OFF },
+        new States[]{ States.A, States.A }
+      ),
+      // i == <ON, OFF>, transition from A to B to A
+      Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF },
+        new States[]{ States.A, States.B, States.A }
+      ),
+      // i == <ON, ON>, underspecified, transition from A to B and stay in B
+      Arguments.of(new OnOff[]{ OnOff.ON, OnOff.ON },
+        new States[]{ States.A, States.B, States.B }
+      )
     );
   }
 }

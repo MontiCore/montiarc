@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
@@ -67,16 +66,8 @@ public class MontiArcTool extends montiarc.MontiArcTool {
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(ast.getComponentType().isPresentSymbol());
     Preconditions.checkArgument(!target.isEmpty());
-    this.generate(ast.getComponentType().getSymbol(), target, hwc);
-  }
-
-  public void generate(@NotNull ComponentTypeSymbol symbol, @NotNull String target, @NotNull String hwc) {
-    Preconditions.checkNotNull(symbol);
-    Preconditions.checkNotNull(target);
-    Preconditions.checkNotNull(hwc);
-    Preconditions.checkArgument(!target.isEmpty());
     MontiArcGenerator generator = new MontiArcGenerator(Paths.get(target), Paths.get(hwc));
-    generator.generate(symbol);
+    generator.generate(ast);
   }
 
   @Override

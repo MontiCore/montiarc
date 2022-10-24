@@ -19,68 +19,43 @@ import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ArcAutomatonHelper {
 
-  final ASTArcStatechart automaton;
-
-  public ArcAutomatonHelper(@NotNull ASTArcStatechart automaton) {
-    this.automaton = Preconditions.checkNotNull(automaton);
-  }
-
-  public List<ASTSCState> getAutomatonStates() {
+  public List<ASTSCState> getAutomatonStates(@NotNull ASTArcStatechart automaton) {
     Preconditions.checkNotNull(automaton);
     return automaton.streamStates().collect(Collectors.toList());
   }
 
-  public Optional<ASTSCSAnte> getInitialOutputDecl() {
+  public ASTSCTransition getFirstTransitionWithoutGuardFrom(@NotNull ASTArcStatechart automaton, @NotNull ASTSCState srcState) {
     Preconditions.checkNotNull(automaton);
-    return automaton.streamInitialOutput().findFirst().map(o -> o.getRight());
-  }
-
-  public List<ASTSCTransition> getTransitionsFrom(@NotNull ASTSCState srcState) {
     Preconditions.checkNotNull(srcState);
     Preconditions.checkArgument(automaton.streamStates().anyMatch(state -> state.equals(srcState)));
-
-    return automaton.streamTransitions()
-            .filter(tr -> tr.getSourceName().equals(srcState.getName()))
-            .collect(Collectors.toList());
-  }
-
-  public boolean existTransitionsFrom(@NotNull ASTSCState srcState) {
-    Preconditions.checkNotNull(srcState);
-    return automaton.streamStates().anyMatch(state -> state.equals(srcState));
-  }
-
-  public ASTSCTransition getFirstTransitionWithoutGuardFrom(@NotNull ASTSCState srcState) {
-    Preconditions.checkNotNull(srcState);
-    Preconditions.checkArgument(automaton.streamStates().anyMatch(state -> state.equals(srcState)));
-    Preconditions.checkArgument(hasTransitionWithoutGuardFrom(srcState));
+    Preconditions.checkArgument(hasTransitionWithoutGuardFrom(automaton, srcState));
 
     List<ASTSCTransition> transitions = automaton.streamTransitions().filter(tr ->
-                    tr.getSourceName().equals(srcState.getName()) &&
-                            !((ASTTransitionBody) tr.getSCTBody()).isPresentPre())
-            .collect(Collectors.toList());
+        tr.getSourceName().equals(srcState.getName()) &&
+          !((ASTTransitionBody) tr.getSCTBody()).isPresentPre())
+      .collect(Collectors.toList());
 
     return transitions.get(0);
   }
 
-  public List<ASTSCTransition> getAllTransitionsWithGuardFrom(@NotNull ASTSCState srcState) {
+  public List<ASTSCTransition> getAllTransitionsWithGuardFrom(@NotNull ASTArcStatechart automaton, @NotNull ASTSCState srcState) {
+    Preconditions.checkNotNull(automaton);
     Preconditions.checkNotNull(srcState);
     Preconditions.checkArgument(automaton.streamStates().anyMatch(state -> state.equals(srcState)));
-    Preconditions.checkArgument(
-            automaton.streamTransitions()
-                    .map(ASTSCTransition::getSCTBody)
-                    .allMatch(trB -> trB instanceof ASTTransitionBody)
-    );
 
-    return automaton.streamTransitions().filter(tr ->
-                    tr.getSourceName().equals(srcState.getName()) &&
-                            ((ASTTransitionBody) tr.getSCTBody()).isPresentPre())
-            .collect(Collectors.toList());
+    return automaton.streamTransitions()
+      .filter(tr -> tr.getSourceName().equals(srcState.getName()) && ((ASTTransitionBody) tr.getSCTBody()).isPresentPre())
+      .collect(Collectors.toList());
   }
 
   public ASTTransitionAction scABodyToTransitionAction(@NotNull ASTSCABody action) {
@@ -94,46 +69,34 @@ public class ArcAutomatonHelper {
   }
 
   public ASTAnteAction asAnteAction(@NotNull ASTSCSAnte ante) {
+    Preconditions.checkNotNull(ante);
     return (ASTAnteAction) ante;
   }
 
-  public boolean hasTransitionWithoutGuardFrom(@NotNull ASTSCState srcState) {
+  public boolean hasTransitionWithoutGuardFrom(@NotNull ASTArcStatechart automaton, @NotNull ASTSCState srcState) {
+    Preconditions.checkNotNull(automaton);
     Preconditions.checkNotNull(srcState);
     Preconditions.checkArgument(automaton.streamStates().anyMatch(state -> state.equals(srcState)));
     Preconditions.checkArgument(
-            automaton.streamTransitions()
-                    .map(ASTSCTransition::getSCTBody)
-                    .allMatch(trB -> trB instanceof ASTTransitionBody)
+      automaton.streamTransitions()
+        .map(ASTSCTransition::getSCTBody)
+        .allMatch(trB -> trB instanceof ASTTransitionBody)
     );
 
     return automaton.streamTransitions()
-            .filter(tr -> tr.getSourceName().equals(srcState.getName()))
-            .map(tr -> (ASTTransitionBody) tr.getSCTBody())
-            .anyMatch(tr -> !tr.isPresentPre());
-  }
-
-  public boolean hasTransitionWithGuardFrom(@NotNull ASTSCState srcState) {
-    Preconditions.checkNotNull(srcState);
-    Preconditions.checkArgument(automaton.streamStates().anyMatch(state -> state.equals(srcState)));
-    Preconditions.checkArgument(
-            automaton.streamTransitions()
-                    .map(ASTSCTransition::getSCTBody)
-                    .allMatch(trB -> trB instanceof ASTTransitionBody)
-    );
-
-    return automaton.streamTransitions()
-            .filter(tr -> tr.getSourceName().equals(srcState.getName()))
-            .map(tr -> (ASTTransitionBody) tr.getSCTBody())
-            .anyMatch(ASTTransitionBody::isPresentPre);
+      .filter(tr -> tr.getSourceName().equals(srcState.getName()))
+      .map(tr -> (ASTTransitionBody) tr.getSCTBody())
+      .anyMatch(tr -> !tr.isPresentPre());
   }
 
   public boolean hasEntryAction(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
 
-    if (!(state.getSCSBody() instanceof ASTSCHierarchyBody)) return false;
+    if (!(state.getSCSBody() instanceof ASTSCHierarchyBody))
+      return false;
     ASTSCHierarchyBody stateBody = (ASTSCHierarchyBody) state.getSCSBody();
     return stateBody.getSCStateElementList().stream()
-            .anyMatch(elem -> elem instanceof ASTSCEntryAction);
+      .anyMatch(elem -> elem instanceof ASTSCEntryAction);
   }
 
   public ASTMCBlockStatement getEntryActionBlockStatement(@NotNull ASTSCState state) {
@@ -142,18 +105,19 @@ public class ArcAutomatonHelper {
 
     ASTSCHierarchyBody stateBody = (ASTSCHierarchyBody) state.getSCSBody();
     ASTSCEntryAction entryAction = stateBody.getSCStateElementList().stream()
-            .filter(elem -> elem instanceof ASTSCEntryAction).map(elem -> (ASTSCEntryAction) elem)
-            .findFirst().get();
+      .filter(elem -> elem instanceof ASTSCEntryAction).map(elem -> (ASTSCEntryAction) elem)
+      .findFirst().get();
     return scABodyToTransitionAction(entryAction.getSCABody()).getMCBlockStatement();
   }
 
   public boolean hasExitAction(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
 
-    if (!(state.getSCSBody() instanceof ASTSCHierarchyBody)) return false;
+    if (!(state.getSCSBody() instanceof ASTSCHierarchyBody))
+      return false;
     ASTSCHierarchyBody stateBody = (ASTSCHierarchyBody) state.getSCSBody();
     return stateBody.getSCStateElementList().stream()
-            .anyMatch(elem -> elem instanceof ASTSCExitAction);
+      .anyMatch(elem -> elem instanceof ASTSCExitAction);
   }
 
   public ASTMCBlockStatement getExitActionBlockStatement(@NotNull ASTSCState state) {
@@ -162,34 +126,33 @@ public class ArcAutomatonHelper {
 
     ASTSCHierarchyBody stateBody = (ASTSCHierarchyBody) state.getSCSBody();
     ASTSCExitAction exitAction = stateBody.getSCStateElementList().stream()
-            .filter(elem -> elem instanceof ASTSCExitAction).map(elem -> (ASTSCExitAction) elem)
-            .findFirst().get();
+      .filter(elem -> elem instanceof ASTSCExitAction).map(elem -> (ASTSCExitAction) elem)
+      .findFirst().get();
     return scABodyToTransitionAction(exitAction.getSCABody()).getMCBlockStatement();
   }
 
   public boolean hasInitAction(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
-
     return state.getSCModifier().isInitial() && isAnteAction(state.getSCSAnte());
   }
 
   public List<ASTMCBlockStatement> getInitActionStatementList(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
     Preconditions.checkArgument(hasInitAction(state));
-
     return asAnteAction(state.getSCSAnte()).getMCBlockStatementList();
   }
 
   public boolean hasSubStates(@NotNull ASTSCState state) {
+    Preconditions.checkNotNull(state);
     return state.getSCSBody() instanceof ASTSCHierarchyBody
-            && ((ASTSCHierarchyBody) state.getSCSBody()).getSCStateElementList().stream().anyMatch(ASTSCState.class::isInstance);
+      && ((ASTSCHierarchyBody) state.getSCSBody()).getSCStateElementList().stream().anyMatch(ASTSCState.class::isInstance);
   }
 
   public Stream<ASTSCState> getSubStatesStream(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
     if (state.getSCSBody() instanceof ASTSCHierarchyBody) {
       return ((ASTSCHierarchyBody) state.getSCSBody()).getSCStateElementList().stream().filter(ASTSCState.class::isInstance)
-              .map(ASTSCState.class::cast);
+        .map(ASTSCState.class::cast);
     }
     return Stream.empty();
   }
@@ -203,11 +166,15 @@ public class ArcAutomatonHelper {
     return getSubStatesStream(state); // otherwise, all are initial
   }
 
-  public boolean hasSuperState(@NotNull ASTSCState state) {
-    return getSuperState(state) != null;
+  public boolean hasSuperState(@NotNull ASTArcStatechart automaton, @NotNull ASTSCState state) {
+    Preconditions.checkNotNull(automaton);
+    Preconditions.checkNotNull(state);
+    return getSuperState(automaton, state) != null;
   }
 
-  public ASTSCState getSuperState(@NotNull ASTSCState state) {
+  public ASTSCState getSuperState(@NotNull ASTArcStatechart automaton, @NotNull ASTSCState state) {
+    Preconditions.checkNotNull(automaton);
+    Preconditions.checkNotNull(state);
     final ArcAutomatonTraverser traverser = ArcAutomatonMill.traverser();
     final SCSuperStateResolver resolver = new SCSuperStateResolver(state);
     traverser.add4SCBasis(resolver);
@@ -215,15 +182,20 @@ public class ArcAutomatonHelper {
     return resolver.getResult();
   }
 
-  public boolean isFinalState(@NotNull ASTSCState state) {
-    if (state.getSCModifier().isFinal()) return true; // has final keyword
-    ASTSCState superState = getSuperState(state);
-    if (superState == null) return false;
+  public boolean isFinalState(@NotNull ASTArcStatechart automaton, @NotNull ASTSCState state) {
+    Preconditions.checkNotNull(automaton);
+    Preconditions.checkNotNull(state);
+    if (state.getSCModifier().isFinal())
+      return true; // has final keyword
+    ASTSCState superState = getSuperState(automaton, state);
+    if (superState == null)
+      return false;
     return getSubStatesStream(superState).noneMatch(s -> s.getSCModifier().isFinal()); // or is substate and none have
   }
 
   // This includes nested sub states
   public List<ASTSCState> getAllSubStatesStream(@NotNull ASTSCState state) {
+    Preconditions.checkNotNull(state);
     ArrayDeque<ASTSCState> next = getSubStatesStream(state).collect(Collectors.toCollection(ArrayDeque::new));
     List<ASTSCState> result = new ArrayList<>(next.size());
     while (!next.isEmpty()) {
@@ -233,31 +205,41 @@ public class ArcAutomatonHelper {
     return result;
   }
 
-  public List<ASTSCState> getLeavingParentStatesFromWith(@NotNull ASTSCState from, @NotNull ASTSCTransition transition) {
+  public List<ASTSCState> getLeavingParentStatesFromWith(@NotNull ASTArcStatechart automaton,
+                                                         @NotNull ASTSCState from,
+                                                         @NotNull ASTSCTransition transition) {
+    Preconditions.checkNotNull(automaton);
+    Preconditions.checkNotNull(from);
+    Preconditions.checkNotNull(transition);
     ASTSCState to = from.getEnclosingScope().resolveSCState(transition.getTargetName()).orElseThrow().getAstNode();
-    return getDifferingParents(from, to);
+    return getDifferingParents(automaton, from, to);
   }
 
-  public boolean hasLeavingParentStatesFromWith(@NotNull ASTSCState from, @NotNull ASTSCTransition transition){
-    return !getLeavingParentStatesFromWith(from, transition).isEmpty();
-  }
-
-  public List<ASTSCState> getEnteringParentStatesFromWith(@NotNull ASTSCState from, @NotNull ASTSCTransition transition) {
+  public List<ASTSCState> getEnteringParentStatesFromWith(@NotNull ASTArcStatechart automaton,
+                                                          @NotNull ASTSCState from,
+                                                          @NotNull ASTSCTransition transition) {
+    Preconditions.checkNotNull(automaton);
+    Preconditions.checkNotNull(from);
+    Preconditions.checkNotNull(transition);
     ASTSCState to = from.getEnclosingScope().resolveSCState(transition.getTargetName()).orElseThrow().getAstNode();
-    List<ASTSCState> res = getDifferingParents(to, from);
+    List<ASTSCState> res = getDifferingParents(automaton, to, from);
     Collections.reverse(res);
     return res;
   }
 
-  public List<ASTSCState> getDifferingParents(@NotNull ASTSCState start, @NotNull ASTSCState end) {
+  public List<ASTSCState> getDifferingParents(@NotNull ASTArcStatechart automaton,
+                                              @NotNull ASTSCState start,
+                                              @NotNull ASTSCState end) {
+    Preconditions.checkNotNull(automaton);
     Preconditions.checkNotNull(start);
     Preconditions.checkNotNull(end);
-    List<ASTSCState> parents =  new ArrayList<>();
+    List<ASTSCState> parents = new ArrayList<>();
     ASTSCState next = start;
-    while (!getAllSubStatesStream(next).contains(end)){
-      if(!next.equals(start)) parents.add(next);
-      if (hasSuperState(next)) {
-        next = getSuperState(next);
+    while (!getAllSubStatesStream(next).contains(end)) {
+      if (!next.equals(start))
+        parents.add(next);
+      if (hasSuperState(automaton, next)) {
+        next = getSuperState(automaton, next);
       } else {
         return parents;
       }

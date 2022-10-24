@@ -64,7 +64,6 @@ public class PSubcomponentsTest {
     //Given
     PSubcomponents component = new PSubcomponents(p1, p2, p3);
     component.setUp();
-    component.init();
 
     // When
     Direction[] actual1 = new Direction[cycles];
@@ -81,11 +80,11 @@ public class PSubcomponentsTest {
       component.compute();
 
       // add the current value after computation
-      actual1[i] = component.getPortO1().getCurrentValue();
-      actual2[i] = component.getPortO2().getCurrentValue();
-      actual3[i] = component.getPortO3().getCurrentValue();
-      actual4[i] = component.getPortO4().getCurrentValue();
-      actual5[i] = component.getPortO5().getCurrentValue();
+      actual1[i] = component.getO1().getValue();
+      actual2[i] = component.getO2().getValue();
+      actual3[i] = component.getO3().getValue();
+      actual4[i] = component.getO4().getValue();
+      actual5[i] = component.getO5().getValue();
     }
 
     // Then
@@ -104,18 +103,12 @@ public class PSubcomponentsTest {
    */
   protected static Stream<Arguments> argumentsProvider() {
     return Stream.of(
-        // 1
-        Arguments.of(
-            1, Direction.LEFT, Direction.LEFT, Direction.RIGHT
-        ),
-        // 2
-        Arguments.of(
-            10, Direction.LEFT, Direction.LEFT, Direction.RIGHT
-        ),
-        // 3
-        Arguments.of(
-            10, Direction.RIGHT, Direction.FORWARDS, Direction.BACKWARDS
-        )
+      // 1
+      Arguments.of(1, Direction.LEFT, Direction.LEFT, Direction.RIGHT),
+      // 2
+      Arguments.of(10, Direction.LEFT, Direction.LEFT, Direction.RIGHT),
+      // 3
+      Arguments.of(10, Direction.RIGHT, Direction.FORWARDS, Direction.BACKWARDS)
     );
   }
 }

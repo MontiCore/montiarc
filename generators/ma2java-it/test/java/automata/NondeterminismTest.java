@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata;
 
-import automata.NondeterminismImpl.NondeterminismState;
+import automata.Nondeterminism.States;
 import com.google.common.base.Preconditions;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -32,8 +32,7 @@ public class NondeterminismTest {
   @ParameterizedTest
   @MethodSource("expStatesProvider")
   @DisplayName("Source should visit expected states")
-  public void shouldVisitExpectedStates(int cycles,
-                                        @NotNull NondeterminismState[] expected) {
+  public void shouldVisitExpected(int cycles, @NotNull States[] expected) {
     Preconditions.checkNotNull(expected);
     Preconditions.checkArgument(cycles >= 0);
     Preconditions.checkArgument(expected.length >= 1);
@@ -42,19 +41,18 @@ public class NondeterminismTest {
     // Given
     Nondeterminism component = new Nondeterminism();
     component.setUp();
-    component.init();
 
     // When
-    List<NondeterminismState> actual = new ArrayList<>(cycles);
+    List<States> actual = new ArrayList<>(cycles);
 
     // add the initial state
-    actual.add(((NondeterminismImpl) component.behaviorImpl).currentState);
+    actual.add(component.getCurrentState());
     for (int i = 0; i < cycles; i++) {
       component.compute();
       component.update();
 
       // add the current state after state transition
-      actual.add(((NondeterminismImpl) component.behaviorImpl).currentState);
+      actual.add(component.getCurrentState());
     }
 
     // Then
@@ -67,26 +65,11 @@ public class NondeterminismTest {
    */
   protected static Stream<Arguments> expStatesProvider() {
     return Stream.of(
-        Arguments.of(0, new NondeterminismState[]{
-            NondeterminismState.A }),
-        Arguments.of(1, new NondeterminismState[]{
-            NondeterminismState.A,
-            NondeterminismState.B }),
-        Arguments.of(2, new NondeterminismState[]{
-            NondeterminismState.A,
-            NondeterminismState.B,
-            NondeterminismState.C }),
-        Arguments.of(3, new NondeterminismState[]{
-            NondeterminismState.A,
-            NondeterminismState.B,
-            NondeterminismState.C,
-            NondeterminismState.A }),
-        Arguments.of(4, new NondeterminismState[]{
-            NondeterminismState.A,
-            NondeterminismState.B,
-            NondeterminismState.C,
-            NondeterminismState.A,
-            NondeterminismState.B })
+      Arguments.of(0, new States[]{ States.A }),
+      Arguments.of(1, new States[]{ States.A, States.B }),
+      Arguments.of(2, new States[]{ States.A, States.B, States.C }),
+      Arguments.of(3, new States[]{ States.A, States.B, States.C, States.A }),
+      Arguments.of(4, new States[]{ States.A, States.B, States.C, States.A, States.B })
     );
   }
 }

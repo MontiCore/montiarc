@@ -56,7 +56,6 @@ public class PTransitionsTest {
     // Given
     PTransitions component = new PTransitions(p1, p2, p3, p4);
     component.setUp();
-    component.init();
 
     // When
     Direction[] actual1 = new Direction[cycles];
@@ -70,8 +69,8 @@ public class PTransitionsTest {
       component.compute();
 
       // add the current value after computation
-      actual1[i] = component.getPortO1().getCurrentValue();
-      actual2[i] = component.getPortO2().getCurrentValue();
+      actual1[i] = component.getO1().getValue();
+      actual2[i] = component.getO2().getValue();
     }
 
     // Then
@@ -85,21 +84,21 @@ public class PTransitionsTest {
    */
   protected static Stream<Arguments> argumentsProvider() {
     return Stream.of(
-        // 1
-        Arguments.of(
-            1, Direction.LEFT, Direction.FORWARDS,
-            Direction.RIGHT, Direction.BACKWARDS
-        ),
-        // 2
-        Arguments.of(
-            10, Direction.LEFT, Direction.FORWARDS,
-            Direction.RIGHT, Direction.BACKWARDS
-        ),
-        // 3
-        Arguments.of(
-            10, Direction.FORWARDS, Direction.FORWARDS,
-            Direction.BACKWARDS, Direction.BACKWARDS
-        )
+      // 1
+      Arguments.of(
+        1, Direction.LEFT, Direction.FORWARDS,
+        Direction.RIGHT, Direction.BACKWARDS
+      ),
+      // 2
+      Arguments.of(
+        10, Direction.LEFT, Direction.FORWARDS,
+        Direction.RIGHT, Direction.BACKWARDS
+      ),
+      // 3
+      Arguments.of(
+        10, Direction.FORWARDS, Direction.FORWARDS,
+        Direction.BACKWARDS, Direction.BACKWARDS
+      )
     );
   }
 }

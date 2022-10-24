@@ -30,8 +30,8 @@ public class BumperbotHW {
     }
   }
   
-  private static enum State {
-    Turning, Driving, Idle, Backing;
+  protected enum State {
+    Turning, Driving, Idle, Backing
   }
   
   private final static int SPEED = 30;

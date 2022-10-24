@@ -2,6 +2,7 @@
 package automata;
 
 import com.google.common.base.Preconditions;
+import montiarc.rte.timesync.Port;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -41,7 +42,6 @@ public class EmptyTest {
     // Given
     Empty empty = new Empty();
     empty.setUp();
-    empty.init();
 
     // When
     List<OnOff> actual = new ArrayList<>(output.length);
@@ -49,15 +49,15 @@ public class EmptyTest {
     // no initial output
     for (OnOff onOff : input) {
       // update
-      empty.getPortI().update();
+      ((Port<OnOff>) empty.getI()).update();
       empty.update();
 
       // compute
-      empty.getPortI().setValue(onOff);
+      ((Port<OnOff>) empty.getI()).setValue(onOff);
       empty.compute();
 
       // get current output
-      actual.add(empty.getPortO().getCurrentValue());
+      actual.add(empty.getO().getValue());
     }
 
     // Then
@@ -72,14 +72,14 @@ public class EmptyTest {
    */
   protected static Stream<Arguments> inputAndExpectedOutputProvider() {
     return Stream.of(
-        Arguments.of(new OnOff[]{ OnOff.ON },
-                     new OnOff[]{ null }),
-        Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF },
-                     new OnOff[]{ null, null }),
-        Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
-                     new OnOff[]{ null, null, null }),
-        Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
-                     new OnOff[]{ null, null, null, null })
+      Arguments.of(new OnOff[]{ OnOff.ON },
+        new OnOff[]{ null }),
+      Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF },
+        new OnOff[]{ null, null }),
+      Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
+        new OnOff[]{ null, null, null }),
+      Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
+        new OnOff[]{ null, null, null, null })
     );
   }
 }

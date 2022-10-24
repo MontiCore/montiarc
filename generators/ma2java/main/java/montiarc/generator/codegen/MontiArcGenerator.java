@@ -7,13 +7,15 @@ import com.google.googlejavaformat.java.Formatter;
 import com.google.googlejavaformat.java.FormatterException;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
+import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.io.FileReaderWriter;
 import de.monticore.io.paths.MCPath;
-import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMACompilationUnit;
+import montiarc.generator.helper.ArcAutomatonHelper;
+import montiarc.generator.helper.ComponentHelper;
 import montiarc.generator.util.Identifier;
 import montiarc.util.MA2JavaError;
-import montiarc.generator.helper.ComponentHelper;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.nio.file.Path;
@@ -24,26 +26,11 @@ import java.util.Optional;
 
 public class MontiArcGenerator {
 
-  protected static String FILE_EXTENSION = ".java";
-
   /**
    * This addendum, appended to a component name, makes the name of the java code that represents the component.
    */
   protected final static String COMPONENT_ADDENDUM = "";
-  /**
-   * This addendum, appended to a component name, makes the name of the java code that represents a component's result.
-   */
-  protected final static String RESULT_ADDENDUM = "Result";
-  /**
-   * This addendum, appended to a component name, makes the name of the java code that represents a component's input.
-   */
-  protected final static String INPUT_ADDENDUM = "Input";
-  /**
-   * This addendum, appended to a component name, makes the name of the java code that represents a component's
-   * implementation.
-   */
-  protected final static String IMPL_ADDENDUM = "Impl";
-
+  protected static String FILE_EXTENSION = ".java";
   protected GeneratorEngine engine;
   protected GeneratorSetup engineSetup;
   protected Formatter codeFormatter;
@@ -70,6 +57,11 @@ public class MontiArcGenerator {
     GeneratorSetup setup = new GeneratorSetup();
     setup.setOutputDirectory(targetDir.toFile());
     setup.setHandcodedPath(new MCPath(hwcPath));
+    GlobalExtensionManagement glex = new GlobalExtensionManagement();
+    glex.setGlobalValue("compHelper", new ComponentHelper());
+    glex.setGlobalValue("autHelper", new ArcAutomatonHelper());
+    glex.setGlobalValue("identifier", new Identifier());
+    setup.setGlex(glex);
     return setup;
   }
 
@@ -92,128 +84,33 @@ public class MontiArcGenerator {
     return this.codeFormatter;
   }
 
-  public void generate(@NotNull ComponentTypeSymbol comp) {
-    Preconditions.checkNotNull(comp);
-    this.generateComponentInput(comp);
-    this.generateComponentResult(comp);
-    this.generateComponentBaseClass(comp);
-    this.generateComponentImpl(comp);
-
-    if (comp.getAllPorts().isEmpty() && comp.getParameters().isEmpty() && comp.getTypeParameters().isEmpty()) {
-      this.generateComponentDeployment(comp);
-    }
-  }
-
-  /**
-   * Generates java code that represents the input of the component {@code comp}.
-   */
-  protected void generateComponentInput(@NotNull ComponentTypeSymbol comp) {
-    Preconditions.checkNotNull(comp);
-
-    final String templateName = "templates.input.InputClass.ftl";
-    final boolean existsHwc = existsHandWrittenCodeFor(comp, INPUT_ADDENDUM);
-    final String usedAddendum = existsHwc ? INPUT_ADDENDUM + "TOP" : INPUT_ADDENDUM;
-    final Path outPath = Paths.get(
-      this.getEngineSetup().getOutputDirectory().getAbsolutePath(),
-      getFileAsPath(comp, usedAddendum).toString()
-    );
-
-    String generatedCode = getEngine().generateNoA(
-      templateName, comp, new ComponentHelper(comp), existsHwc).toString();
-    Optional<String> formattedCode = Optional.empty();
-
-    try {
-      formattedCode = Optional.of(this.getCodeFormatter().formatSource(generatedCode));
-    } catch (FormatterException e) {
-      Log.warn(MA2JavaError.POST_GENERATION_FORMATTING_FAIL.format(
-        outPath, templateName, comp.getFullName(), e.getMessage()));
-    }
-
-    FileReaderWriter.storeInFile(outPath, formattedCode.orElse(generatedCode));
-  }
-
-  /**
-   * Generates java code that represents the result of the component {@code comp}.
-   */
-  protected void generateComponentResult(@NotNull ComponentTypeSymbol comp) {
-    Preconditions.checkNotNull(comp);
-
-    final String templateName = "templates.result.ResultClass.ftl";
-    final boolean existsHwc = existsHandWrittenCodeFor(comp, RESULT_ADDENDUM);
-    final String usedAddendum = existsHwc ? RESULT_ADDENDUM + "TOP" : RESULT_ADDENDUM;
-    final Path outPath = Paths.get(
-      this.getEngineSetup().getOutputDirectory().getAbsolutePath(),
-      getFileAsPath(comp, usedAddendum).toString()
-    );
-
-    String generatedCode = getEngine().generateNoA(
-      templateName, comp, new ComponentHelper(comp), existsHwc).toString();
-    Optional<String> formattedCode = Optional.empty();
-
-    try {
-      formattedCode = Optional.of(this.getCodeFormatter().formatSource(generatedCode));
-    } catch (FormatterException e) {
-      Log.warn(MA2JavaError.POST_GENERATION_FORMATTING_FAIL.format(
-        outPath, templateName, comp.getFullName(), e.getMessage()));
-    }
-
-    FileReaderWriter.storeInFile(outPath, formattedCode.orElse(generatedCode));
-  }
-
-  /**
-   * Generates the java base class for representing the component {@code comp}.
-   */
-  protected void generateComponentBaseClass(@NotNull ComponentTypeSymbol comp) {
-    Preconditions.checkNotNull(comp);
-
-    final String templateName = "templates.component.ComponentClass.ftl";
-    final boolean existsHwc = existsHandWrittenCodeFor(comp, COMPONENT_ADDENDUM);
+  public void generate(@NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(ast);
+    final String template = "ma2java.component.CompilationUnit.ftl";
+    final boolean existsHwc = existsHandWrittenCodeFor(ast.getComponentType().getSymbol(), COMPONENT_ADDENDUM);
     final String usedAddendum = existsHwc ? COMPONENT_ADDENDUM + "TOP" : COMPONENT_ADDENDUM;
     final Path outPath = Paths.get(
       this.getEngineSetup().getOutputDirectory().getAbsolutePath(),
-      getFileAsPath(comp, usedAddendum).toString()
+      getFileAsPath(ast.getComponentType().getSymbol(), usedAddendum).toString()
     );
 
-    String generatedCode = getEngine().generateNoA(
-      templateName, comp, new ComponentHelper(comp), new Identifier(comp), existsHwc).toString();
+    String code = getEngine().generateNoA(template, ast, existsHwc).toString();
     Optional<String> formattedCode = Optional.empty();
 
     try {
-      formattedCode = Optional.of(this.getCodeFormatter().formatSource(generatedCode));
+      formattedCode = Optional.of(this.getCodeFormatter().formatSource(code));
     } catch (FormatterException e) {
       Log.warn(MA2JavaError.POST_GENERATION_FORMATTING_FAIL.format(
-        outPath, templateName, comp.getFullName(), e.getMessage()));
+        outPath, template, ast.getComponentType().getSymbol().getFullName(), e.getMessage()));
     }
 
-    FileReaderWriter.storeInFile(outPath, formattedCode.orElse(generatedCode));
-  }
+    FileReaderWriter.storeInFile(outPath, formattedCode.orElse(code));
 
-  /**
-   * Generates the java class that represents the implementation part of the component {@code comp}.
-   */
-  protected void generateComponentImpl(@NotNull ComponentTypeSymbol comp) {
-    Preconditions.checkNotNull(comp);
-
-    final String templateName = "templates.implementation.ImplementationClass.ftl";
-    final boolean existsHwc = existsHandWrittenCodeFor(comp, IMPL_ADDENDUM);
-    final String usedAddendum = existsHwc ? IMPL_ADDENDUM + "TOP" : IMPL_ADDENDUM;
-    final Path outPath = Paths.get(
-      this.getEngineSetup().getOutputDirectory().getAbsolutePath(),
-      getFileAsPath(comp, usedAddendum).toString()
-    );
-
-    String generatedCode = getEngine().generateNoA(
-      templateName, comp, new ComponentHelper(comp), new Identifier(comp), existsHwc).toString();
-    Optional<String> formattedCode = Optional.empty();
-
-    try {
-      formattedCode = Optional.of(this.getCodeFormatter().formatSource(generatedCode));
-    } catch (FormatterException e) {
-      Log.warn(MA2JavaError.POST_GENERATION_FORMATTING_FAIL.format(
-        outPath, templateName, comp.getFullName(), e.getMessage()));
+    if (ast.getComponentType().getSymbol().getAllPorts().isEmpty()
+      && ast.getComponentType().getSymbol().getParameters().isEmpty()
+      && ast.getComponentType().getSymbol().getTypeParameters().isEmpty()) {
+      this.generateComponentDeployment(ast.getComponentType().getSymbol());
     }
-
-    FileReaderWriter.storeInFile(outPath, formattedCode.orElse(generatedCode));
   }
 
   /**
@@ -222,7 +119,7 @@ public class MontiArcGenerator {
   protected void generateComponentDeployment(@NotNull ComponentTypeSymbol comp) {
     Preconditions.checkNotNull(comp);
 
-    final String templateName = "templates.Deploy.ftl";
+    final String templateName = "ma2java.component.Deploy.ftl";
     final boolean existsHwc = existsHandWrittenCodeFor(comp, "Deploy", "");
     final String usedAddendum = existsHwc ? "TOP" : "";
     final Path outPath = Paths.get(
@@ -231,7 +128,7 @@ public class MontiArcGenerator {
     );
 
     String generatedCode = getEngine().generateNoA(
-      templateName, comp, new ComponentHelper(comp), existsHwc).toString();
+      templateName, comp, existsHwc).toString();
     Optional<String> formattedCode = Optional.empty();
 
     try {
@@ -244,14 +141,10 @@ public class MontiArcGenerator {
     FileReaderWriter.storeInFile(outPath, formattedCode.orElse(generatedCode));
   }
 
-  protected Path getPackageAsPath(@NotNull ComponentTypeSymbol comp) {
-    return Paths.get(Names.getPackageFromPath(comp.getPackageName()));
-  }
-
   protected Path getFileAsPath(@NotNull ComponentTypeSymbol comp, @NotNull String addendum) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(addendum);
-    return Paths.get(comp.getFullName().replaceAll("\\.", "/") + addendum + FILE_EXTENSION);
+    return this.getFileAsPath(comp, "", addendum);
   }
 
   protected Path getFileAsPath(

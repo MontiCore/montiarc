@@ -2,6 +2,7 @@
 package automata;
 
 import com.google.common.base.Preconditions;
+import montiarc.rte.timesync.Port;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -41,7 +42,6 @@ public class DelayTest {
     // Given
     Delay delay = new Delay();
     delay.setUp();
-    delay.init();
 
     // When
     List<OnOff> actual = new ArrayList<>(output.length);
@@ -49,15 +49,15 @@ public class DelayTest {
     // no initial output
     for (OnOff onOff : input) {
       // update
-      delay.getPortI().update();
+      ((Port<OnOff>) delay.getI()).update();
       delay.update();
 
       // compute
-      delay.getPortI().setValue(onOff);
+      ((Port<OnOff>) delay.getI()).setValue(onOff);
       delay.compute();
 
       // get current output
-      actual.add(delay.getPortO().getCurrentValue());
+      actual.add(delay.getO().getValue());
     }
 
     // Then
@@ -72,14 +72,14 @@ public class DelayTest {
    */
   protected static Stream<Arguments> inputAndExpectedOutputProvider() {
     return Stream.of(
-        Arguments.of(new OnOff[]{ OnOff.ON },
-                     new OnOff[]{ null }),
-        Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF },
-                     new OnOff[]{ null, OnOff.ON }),
-        Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
-                     new OnOff[]{ null, OnOff.ON, OnOff.OFF }),
-        Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
-                     new OnOff[]{ null, OnOff.ON, OnOff.OFF, OnOff.ON })
+      Arguments.of(new OnOff[]{ OnOff.ON },
+        new OnOff[]{ null }),
+      Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF },
+        new OnOff[]{ null, OnOff.ON }),
+      Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
+        new OnOff[]{ null, OnOff.ON, OnOff.OFF }),
+      Arguments.of(new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
+        new OnOff[]{ null, OnOff.ON, OnOff.OFF, OnOff.ON })
     );
   }
 }

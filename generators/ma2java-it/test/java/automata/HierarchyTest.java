@@ -20,20 +20,19 @@ public class HierarchyTest {
   /**
    * Black-box test: Ensures that the automaton produces the expected output.
    *
-   * @param expectedPath the expected path in order
+   * @param expected the expected output
    */
   @ParameterizedTest
   @MethodSource("inputAndExpectedOutputProvider")
   @DisplayName("Component with hierarchy should produce expected outputs")
   public void shouldProduceExpectedOutput(int cycles,
-                                          @NotNull String expectedPath) {
-    Preconditions.checkNotNull(expectedPath);
+                                          @NotNull String expected) {
+    Preconditions.checkNotNull(expected);
     Preconditions.checkArgument(cycles >= 0);
 
     // Given
-    Hierarchy hierarchy = new   Hierarchy();
+    Hierarchy hierarchy = new Hierarchy();
     hierarchy.setUp();
-    hierarchy.init();
 
     // When
     for (int i = 0; i < cycles; i++) {
@@ -44,10 +43,10 @@ public class HierarchyTest {
       hierarchy.compute();
     }
 
-    String actualPath = hierarchy.getPortOPath().getCurrentValue();
+    String actualPath = hierarchy.getOPath().getValue();
 
     // Then
-    Assertions.assertEquals(expectedPath, actualPath);
+    Assertions.assertEquals(expected, actualPath);
   }
 
   /**
@@ -66,15 +65,15 @@ public class HierarchyTest {
     String path8 = path7 + "->e2Ex" + "->eEx" + "->eToF11" + "->fEn" + "->f1En" + "->f11En";
     String path9 = path8 + "->f11Ex" + "->f1Ex" + "->fEx" + "->fToA" + "->aEn" + "->a1Ini" + "->a1En";
     return Stream.of(Arguments.of(0, path0),
-                     Arguments.of(1, path1),
-                     Arguments.of(2, path2),
-                     Arguments.of(3, path3),
-                     Arguments.of(4, path4),
-                     Arguments.of(5, path5),
-                     Arguments.of(6, path6),
-                     Arguments.of(7, path7),
-                     Arguments.of(8, path8),
-                     Arguments.of(9, path9)
+      Arguments.of(1, path1),
+      Arguments.of(2, path2),
+      Arguments.of(3, path3),
+      Arguments.of(4, path4),
+      Arguments.of(5, path5),
+      Arguments.of(6, path6),
+      Arguments.of(7, path7),
+      Arguments.of(8, path8),
+      Arguments.of(9, path9)
     );
   }
 }

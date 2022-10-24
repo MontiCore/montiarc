@@ -2,7 +2,8 @@
 package composition;
 
 import com.google.common.base.Preconditions;
-import de.montiarc.runtimes.timesync.delegation.DelayedPort;
+import montiarc.rte.timesync.DelayedPort;
+import montiarc.rte.timesync.Port;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -25,10 +26,10 @@ public class SequentialCompositionTest {
    * Black-box test: Ensures that the topology of subcomponents produces the
    * expected outputs.
    *
-   * @param input  the inputs given to the component under test in order
+   * @param input the inputs given to the component under test in order
    * @param output the expected output messages in order, its length should
-   *               match the number of input messages (minus two because of
-   *               missing initial output)
+   * match the number of input messages (minus two because of missing initial
+   * output)
    */
   @ParameterizedTest
   @MethodSource("inputAndExpectedOutputProvider")
@@ -43,28 +44,27 @@ public class SequentialCompositionTest {
     //Given
     SequentialComposition component = new SequentialComposition();
     component.setUp(new DelayedPort<>(), new DelayedPort<>());
-    component.init();
 
     // provide initial input
-    component.getPortI().setValue(input[0]);
-    component.getPortI().update();
+    ((Port<OnOff>) component.getI()).setValue(input[0]);
+    ((Port<OnOff>) component.getI()).update();
     component.update();
-    component.getPortI().setValue(input[1]);
+    ((Port<OnOff>) component.getI()).setValue(input[1]);
     component.compute();
-    component.getPortI().update();
+    ((Port<OnOff>) component.getI()).update();
     component.update();
 
     // When
     List<OnOff> actual = new ArrayList<>(output.length);
     // no initial output
     for (int i = 2; i < input.length; i++) {
-      component.getPortI().setValue(input[i]);
+      ((Port<OnOff>) component.getI()).setValue(input[i]);
       component.compute();
-      component.getPortI().update();
+      ((Port<OnOff>) component.getI()).update();
       component.update();
 
       // add the current value after computation
-      actual.add(component.getPortO().getCurrentValue());
+      actual.add(component.getO().getValue());
     }
 
     // Then
@@ -77,26 +77,26 @@ public class SequentialCompositionTest {
    */
   protected static Stream<Arguments> inputAndExpectedOutputProvider() {
     return Stream.of(
-        // 1
-        Arguments.of(
-            new OnOff[]{OnOff.ON, OnOff.OFF},
-            new OnOff[]{}
-        ),
-        // 2
-        Arguments.of(
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON},
-            new OnOff[]{OnOff.OFF}
-        ),
-        // 3
-        Arguments.of(
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF},
-            new OnOff[]{OnOff.OFF, OnOff.ON}
-        ),
-        // 4
-        Arguments.of(
-            new OnOff[]{OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON},
-            new OnOff[]{OnOff.OFF, OnOff.ON, OnOff.OFF}
-        )
+      // 1
+      Arguments.of(
+        new OnOff[]{ OnOff.ON, OnOff.OFF },
+        new OnOff[]{}
+      ),
+      // 2
+      Arguments.of(
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
+        new OnOff[]{ OnOff.OFF }
+      ),
+      // 3
+      Arguments.of(
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
+        new OnOff[]{ OnOff.OFF, OnOff.ON }
+      ),
+      // 4
+      Arguments.of(
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON },
+        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF }
+      )
     );
   }
 }

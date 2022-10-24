@@ -2,33 +2,45 @@
 package montiarc.generator.helper;
 
 import arcautomaton._ast.ASTArcStatechart;
-import arcautomaton._visitor.NamesInExpressionsVisitor;
-import arcbasis._ast.*;
-import arcbasis._symboltable.*;
+import arcbasis._ast.ASTArcField;
+import arcbasis._ast.ASTArcParameter;
+import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTConnector;
+import arcbasis._ast.ASTPortAccess;
+import arcbasis._ast.ASTPortAccessTOP;
+import arcbasis._symboltable.ComponentInstanceSymbol;
+import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
+import arcbasis._symboltable.PortSymbol;
+import arcbasis._symboltable.PortSymbolTOP;
 import arccompute._ast.ASTArcCompute;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.symboltable.ISymbol;
 import de.monticore.symboltable.ImportStatement;
-import de.monticore.types.check.SymTypePrimitive;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.SymTypePrimitive;
 import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericComponentHead;
-import montiarc.MontiArcMill;
 import montiarc._ast.ASTMontiArcNode;
-import montiarc._symboltable.IMontiArcScope;
 import montiarc._symboltable.MontiArcArtifactScope;
-import montiarc._visitor.MontiArcTraverser;
 import montiarc.generator.MA2JavaFullPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
@@ -38,62 +50,41 @@ import java.util.stream.Collectors;
 public class ComponentHelper {
 
   public static String DEPLOY_STEREOTYPE = "deploy";
-
+  private static HashMap<String, String> PRIMITIVE_TYPES = new HashMap<String, String>() {
+    {
+      put("int", "Integer");
+      put("double", "Double");
+      put("boolean", "Boolean");
+      put("byte", "Byte");
+      put("char", "Character");
+      put("long", "Long");
+      put("float", "Float");
+      put("short", "Short");
+    }
+  };
   protected MA2JavaFullPrettyPrinter prettyPrinter;
+
+  public ComponentHelper() {
+    this.prettyPrinter = new MA2JavaFullPrettyPrinter();
+  }
 
   protected MA2JavaFullPrettyPrinter getPrettyPrinter() {
     return this.prettyPrinter;
-  }
-
-  private final ComponentTypeSymbol component;
-
-  protected final ASTComponentType componentNode;
-
-  public ComponentHelper(ComponentTypeSymbol component) {
-    this.component = component;
-    this.prettyPrinter = new MA2JavaFullPrettyPrinter();
-    if ((component.isPresentAstNode())
-      && (component.getAstNode() instanceof ASTComponentType)) {
-      componentNode = (ASTComponentType) component.getAstNode();
-    } else {
-      componentNode = null;
-    }
-  }
-
-  /**
-   * Prints the type of the given port respecting inherited ports and the actual type values
-   *
-   * @param port Symbol of the port of which to determine the type
-   * @return The string representation of the type
-   */
-  public String getRealPortTypeString(PortSymbol port) {
-    return getRealPortTypeString(this.component, port);
   }
 
   /**
    * Determines the name of the type of the port represented by its symbol. This takes in to account whether the port is
    * inherited and possible required renamings due to generic type parameters and their actual arguments.
    *
-   * @param componentSymbol Symbol of the component which contains the port
-   * @param portSymbol      Symbol of the port for which the type name should be determined.
+   * @param portSymbol Symbol of the port for which the type name should be determined.
    * @return The String representation of the type of the port.
    */
-  public static String getRealPortTypeString(ComponentTypeSymbol componentSymbol,
-                                             PortSymbol portSymbol) {
+  public static String getRealPortTypeString(PortSymbol portSymbol) {
     SymTypeExpression portType = portSymbol.getType();
     return portType.isPrimitive() ?
       ((SymTypePrimitive) portType).getBoxedPrimitiveName() :
       portType.isTypeVariable() ? portType.print() :
-      portType.printFullName();
-  }
-
-  //TODO: Fix surrogates printing wrong qualified type (omit scope name)
-  public static String print(SymTypeExpression expr) {
-    if (expr.getTypeInfo() instanceof TypeSymbolSurrogate) {
-      return ((TypeSymbolSurrogate) expr.getTypeInfo()).lazyLoadDelegate().getFullName();
-    } else {
-      return expr.print();
-    }
+        portType.printFullName();
   }
 
   /**
@@ -143,6 +134,15 @@ public class ComponentHelper {
   }
   */
 
+  //TODO: Fix surrogates printing wrong qualified type (omit scope name)
+  public static String print(SymTypeExpression expr) {
+    if (expr.getTypeInfo() instanceof TypeSymbolSurrogate) {
+      return ((TypeSymbolSurrogate) expr.getTypeInfo()).lazyLoadDelegate().getFullName();
+    } else {
+      return expr.print();
+    }
+  }
+
   /**
    * Prints the java expression of the given AST expression node.
    */
@@ -157,19 +157,6 @@ public class ComponentHelper {
   public String printStatement(ASTMCBlockStatement statement) {
     return this.getPrettyPrinter().prettyprint(statement);
   }
-
-  private static HashMap<String, String> PRIMITIVE_TYPES = new HashMap<String, String>() {
-    {
-      put("int", "Integer");
-      put("double", "Double");
-      put("boolean", "Boolean");
-      put("byte", "Byte");
-      put("char", "Character");
-      put("long", "Long");
-      put("float", "Float");
-      put("short", "Short");
-    }
-  };
 
   /**
    * Boxes datatype if applicable.
@@ -197,19 +184,19 @@ public class ComponentHelper {
     }
     return autoBoxedTypeName;
   }
-  
+
   public static List<VariableSymbol> getComponentVariables(ComponentTypeSymbol comp) {
     Preconditions.checkNotNull(comp);
     List<VariableSymbol> vss = new ArrayList<>(comp.getFields());
     vss.removeAll(comp.getParameters());
     return vss;
   }
-  
+
   public static boolean hasInitializerExpression(VariableSymbol sym) {
     Preconditions.checkNotNull(sym);
     return sym.isPresentAstNode() && sym.getAstNode() instanceof ASTArcField;
   }
-  
+
   public static ASTExpression getInitializerExpression(VariableSymbol sym) {
     Preconditions.checkNotNull(sym);
     Preconditions.checkArgument(sym.isPresentAstNode());
@@ -297,154 +284,11 @@ public class ComponentHelper {
       return comp.getPackageName();
     }
   }
-  
-  public static String getSourcePortGetCallNoSemicolon(ASTConnector connector) {
-    ASTPortAccess src = connector.getSource();
-    StringBuilder sb = new StringBuilder("this.");
-    if(src.isPresentComponent()) {
-      sb.append(src.getComponent());
-      sb.append(".");
-    }
-    sb.append("getPort");
-    String uppercasePortName = Character.toUpperCase(src.getPort().charAt(0)) + src.getPort().substring(1);
-    sb.append(uppercasePortName);
-    sb.append("()");
-    return sb.toString();
-  }
-  
-  public static Collection<String> getConnectorSetupCalls(ASTConnector connector) {
-    String sourcePortGetCall = getSourcePortGetCallNoSemicolon(connector);
-    List<String> calls = new ArrayList<>();
-    for(ASTPortAccess target : connector.getTargetList()) {
-      StringBuilder sb = new StringBuilder("this.");
-      if(target.isPresentComponent()) {
-        sb.append(target.getComponent());
-        sb.append(".");
-      }
-      sb.append("setPort");
-      String uppercasePortName = Character.toUpperCase(target.getPort().charAt(0)) + target.getPort().substring(1);
-      sb.append(uppercasePortName);
-      sb.append("(");
-      sb.append(sourcePortGetCall);
-      sb.append(")");
-      sb.append(";");
-      calls.add(sb.toString());
-    }
-    return calls;
-  }
-  
-  public static List<ASTConnector> getOutgoingPortForwards(@NotNull ComponentTypeSymbol comp) {
-    Preconditions.checkNotNull(comp);
-    
-    List<ASTConnector> res = new ArrayList<>();
-    for(ASTConnector conn: comp.getAstNode().getConnectors()) {
-      if(conn.getTargetList().stream().anyMatch(portAccess -> !portAccess.isPresentComponent())) {
-        ASTConnector clone = conn.deepClone();
-        clone.setTargetList(clone.getTargetList().stream()
-          .filter(portAccess -> !portAccess.isPresentComponent()).collect(Collectors.toList()));
-        res.add(clone);
-      }
-    }
-    return res;
-  }
-  
-  public static List<ASTConnector> getIncomingPortForwards(@NotNull ComponentTypeSymbol comp) {
-    Preconditions.checkNotNull(comp);
-    
-    List<ASTConnector> res = new ArrayList<>();
-    for(ASTConnector conn: comp.getAstNode().getConnectors()) {
-      if(!conn.getSource().isPresentComponent()) {
-        res.add(conn);
-      }
-    }
-    return res;
-  }
-  
-  public static Map<String, List<ASTConnector>> getConnectorsSortedBySourceQName(@NotNull Collection<ASTConnector> connectors) {
-    Map<String, List<ASTConnector>> map = new HashMap<>();
-    for(ASTConnector conn : connectors) {
-      if(map.containsKey(conn.getSource().getQName())) {
-        map.get(conn.getSource().getQName()).add(conn);
-      } else {
-        map.put(conn.getSource().getQName(), new ArrayList<>());
-        map.get(conn.getSource().getQName()).add(conn);
-      }
-    }
-    return map;
-  }
-  
-  public static Map<String, List<ASTConnector>> getConnectorsSortedByTargetQName(@NotNull Collection<ASTConnector> connectors) {
-    Map<String, Set<ASTConnector>> map = new HashMap<>();
-    for(ASTConnector conn : connectors) {
-      for(ASTPortAccess port : conn.getTargetList()) {
-        if(map.containsKey(port.getQName())) {
-          map.get(port.getQName()).add(conn);
-        } else {
-          map.put(port.getQName(), new HashSet<>());
-          map.get(port.getQName()).add(conn);
-        }
-      }
-    }
-    Map<String, List<ASTConnector>> res = new HashMap<>();
-    for(String key : map.keySet()) {
-      res.put(key, new ArrayList<>(map.get(key)));
-    }
-    return res;
-  }
-  
-  public static List<PortSymbol> getAllPortSymbolsSorted(@NotNull ComponentTypeSymbol comp) {
-    return comp.getAllPorts().stream()
-      .sorted(Comparator.comparing(PortSymbolTOP::getName))
-      .collect(Collectors.toList());
-  }
-  
+
   public static List<PortSymbol> getLocalPortSymbolsSorted(@NotNull ComponentTypeSymbol comp) {
     return comp.getPorts().stream()
       .sorted(Comparator.comparing(PortSymbolTOP::getName))
       .collect(Collectors.toList());
-  }
-  
-  public static List<PortSymbol> getLocalIncomingPortSymbolsSorted(@NotNull ComponentTypeSymbol comp) {
-    return comp.getIncomingPorts().stream()
-      .sorted(Comparator.comparing(PortSymbolTOP::getName))
-      .collect(Collectors.toList());
-  }
-  
-  public static List<PortSymbol> getLocalOutgoingPortSymbolsSorted(@NotNull ComponentTypeSymbol comp) {
-    return comp.getOutgoingPorts().stream()
-      .sorted(Comparator.comparing(PortSymbolTOP::getName))
-      .collect(Collectors.toList());
-  }
-
-  /**
-   * Checks whether the given typeName for the component comp is a generic parameter.
-   */
-  private boolean isGenericTypeName(ASTComponentType comp, String typeName) {
-    if (comp == null) {
-      return false;
-    }
-    if (comp.getHead() instanceof ASTGenericComponentHead) {
-      List<ASTArcTypeParameter> parameterList =
-        ((ASTGenericComponentHead) comp.getHead()).getArcTypeParameterList();
-      for (ASTArcTypeParameter type : parameterList) {
-        if (type.getName().equals(typeName)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  public static List<String> getSuperCompActualTypeArguments(ComponentTypeSymbol component) {
-    //TODO implement (to be used in template for component heads instead of parameterless variant)
-    return null;
-  }
-
-  public static Boolean existsHWCClass(File hwcPath, String cmpLocation) {
-    File cmpPath = Paths.get(hwcPath.toString()
-      + File.separator + cmpLocation.replaceAll("\\.",
-      Matcher.quoteReplacement(File.separator)) + ".java").toFile();
-    return cmpPath.isFile();
   }
 
   public static List<ImportStatement> getImports(ComponentTypeSymbol symbol) {
@@ -455,17 +299,6 @@ public class ComponentHelper {
     return ((MontiArcArtifactScope) ast.getEnclosingScope()).getImportsList();
   }
 
-  public static void appendAllInnerComponents(List<ComponentTypeSymbol> components) {
-    List<ComponentTypeSymbol> innerComponents = getAllInnerComponents(components);
-    components.addAll(innerComponents);
-  }
-
-  public static List<ComponentTypeSymbol> getAllInnerComponents(List<ComponentTypeSymbol> components) {
-    List<ComponentTypeSymbol> innerComponents = new ArrayList<>();
-    components.forEach(c -> innerComponents.addAll(getAllInnerComponents(c)));
-    return innerComponents;
-  }
-
   public static List<ComponentTypeSymbol> getAllInnerComponents(ComponentTypeSymbol component) {
     List<ComponentTypeSymbol> subcomponents = new ArrayList<>(component.getInnerComponents());
     for (ComponentTypeSymbol innerComp : component.getInnerComponents()) {
@@ -474,76 +307,41 @@ public class ComponentHelper {
     return subcomponents;
   }
 
-  public boolean hasAutomatonBehavior() {
-    return getAutomatonBehavior().isPresent();
-  }
+  public Optional<ASTArcStatechart> getAutomatonBehavior(ASTComponentType component) {
+    Preconditions.checkNotNull(component);
 
-  public boolean hasComputeBehavior() {
-    return getComputeBehavior().isPresent();
-  }
-
-  public Optional<ASTArcStatechart> getAutomatonBehavior() {
-    Preconditions.checkState(component != null);
-    Preconditions.checkState(component.isPresentAstNode());
-
-    return this.component.getAstNode().getBody().getArcElementList().stream()
+    return component.getBody().getArcElementList().stream()
       .filter(el -> el instanceof ASTArcStatechart)
       .map(el -> (ASTArcStatechart) el)
       .findFirst();
   }
 
-  public Optional<ASTArcCompute> getComputeBehavior() {
-    Preconditions.checkState(component != null);
-    Preconditions.checkState(component.isPresentAstNode());
+  public Optional<ASTArcCompute> getComputeBehavior(ASTComponentType component) {
+    Preconditions.checkNotNull(component);
 
-    return this.component.getAstNode().getBody().getArcElementList().stream()
+    return component.getBody().getArcElementList().stream()
       .filter(el -> el instanceof ASTArcCompute)
       .map(el -> (ASTArcCompute) el)
       .findFirst();
   }
 
-  public static ArcAutomatonHelper automatonHelperFrom(@NotNull ASTArcStatechart stateChart) {
-    return new ArcAutomatonHelper(stateChart);
-  }
-
-  public Set<ASTNameExpression> getNamesInExpression(@NotNull ASTExpression expr) {
-    Preconditions.checkNotNull(expr);
-    Preconditions.checkNotNull(expr.getEnclosingScope());
-    Preconditions.checkArgument(expr.getEnclosingScope() instanceof IMontiArcScope);
-    NamesInExpressionsVisitor visitor = new NamesInExpressionsVisitor();
-    MontiArcTraverser traverser = MontiArcMill.traverser();
-    visitor.registerTo(traverser);
-    visitor.setTraverser(traverser);
-    expr.accept(traverser);
-
-    // check if the expression refers to a field or port and not a Type (e.g. an Enum: Days.MONDAY)
-    Collection<String> portsOfComp = this.component.getAllPorts().stream()
-      .map(ISymbol::getName)
-      .collect(Collectors.toSet());
-
-    return visitor.getFoundNames().keySet().stream()
-      .filter(astName ->
-        portsOfComp.contains(astName.getName())
-          || !((IMontiArcScope) expr.getEnclosingScope()).resolveVariableMany(astName.getName()).isEmpty()
-      )
-      .collect(Collectors.toSet());
-  }
-  
   /**
    * Derive a valid identifier from an ASTPortAccess based on the port's name.
    * Moved to own function because names must be derived the same way across multiple methods.
+   *
    * @param portAccess The PortAccess from which the name should be derived
    * @return A valid variable identifier
    */
   private static String varNameFromPortAccess(@NotNull ASTPortAccess portAccess) {
     return portAccess.getQName().replace('.', '_');
   }
-  
+
   /**
    * Get a map of variable names mapped to the types of their respective ports.
    * This is required by in our process of setting up connector representations:
    * We have to create a new Port instance for each hidden channel.
    * Connectors where at least one target is not a subcomponent are not considered hidden channels.
+   *
    * @param comp the component for whose hidden channels the map is created
    * @return a map of variable names and port types
    */
@@ -557,54 +355,56 @@ public class ComponentHelper {
       .forEach(
         conn -> res.put(
           varNameFromPortAccess(conn.getSource()),
-          getFullPortType(comp, conn.getSource().getPortSymbol())));
-    
+          getFullPortType(conn.getSource().getPortSymbol())));
+
     return res;
   }
 
-  public static String getFullPortType(@NotNull  ComponentTypeSymbol comp, @NotNull PortSymbol port) {
-    String portTiming = port.isDelayed()? "Delayed" : "Undelayed";
-    return "de.montiarc.runtimes.timesync.delegation." + portTiming + "Port<" + getRealPortTypeString(comp, port) + ">";
+  public static String getFullPortType(@NotNull PortSymbol port) {
+    String portTiming = port.isDelayed() ? "Delayed" : "Undelayed";
+    return "montiarc.rte.timesync." + portTiming + "Port<" + getRealPortTypeString(port) + ">";
   }
-  
+
   /**
    * Transforms a nested map to a Map of Lists.
    * Keys of the outer map are not changed.
    * Values of the inner map are transferred into a list sorted by their key.
    * Keys of the inner map are discarded thereafter.
+   *
    * @param map The nested map that should be transformed
    * @return The transformed map of lists
    */
   public static Map<String, List<String>> transformMapMapToSortedListMap(@NotNull Map<String, Map<String, String>> map) {
     Map<String, List<String>> res = new HashMap<>();
-    for(String key : map.keySet()) {
+    for (String key : map.keySet()) {
       res.put(key, map.get(key).keySet().stream().sorted().map(innerKey -> map.get(key).get(innerKey)).collect(Collectors.toList()));
     }
     return res;
   }
-  
+
   /**
    * Creates a mapping from subcomponent names to a map of
    * ports of that component to the variable they need to be set to.
-   *
+   * <p>
    * Expects variable names for ports of hidden channels
    * as produced by getVarsForHiddenChannelsMappedToFullPortType.
    * Expects variable names for local ports to be exactly their name.
+   *
    * @param comp The component for whose subcomponents mappings should be created
    * @return the mapping specified above
    */
   public static Map<String, Map<String, String>> mapSubCompNameToPortVariableMap(@NotNull ComponentTypeSymbol comp) {
     Map<String, Map<String, String>> res = new HashMap<>();
-    
+
     // initialize result map
-    for(ComponentInstanceSymbol subComponent : comp.getSubComponents()) {
+    for (ComponentInstanceSymbol subComponent : comp.getSubComponents()) {
       Map<String, String> innerMap = new HashMap<>();
-      for(PortSymbol portOfSubcomponent : subComponent.getType().getTypeInfo().getPorts()) {
+      for (PortSymbol portOfSubcomponent : subComponent.getType().getTypeInfo().getPorts()) {
         String portKind = "";
-        if(portOfSubcomponent.isIncoming()) {
+        if (portOfSubcomponent.isIncoming()) {
           portKind = "Unconnected";
         } else {
-          portKind = (portOfSubcomponent.isDelayed()? "Delayed" : "Undelayed");
+          portKind = (portOfSubcomponent.isDelayed() ? "Delayed" : "Undelayed");
         }
         innerMap.put(portOfSubcomponent.getName(), "new " + portKind + "Port<>()");
         // notice: if a port is not connected we do not want it to be null, but we also don't want it to return values.
@@ -613,31 +413,40 @@ public class ComponentHelper {
       }
       res.put(subComponent.getName(), innerMap);
     }
-    
+
     // iterate over all connectors in the component to fill the map
-    for(ASTConnector conn : comp.getAstNode().getConnectors()) {
+    for (ASTConnector conn : comp.getAstNode().getConnectors()) {
       String varName;
-      
+
       // determine which variable represents the current connector (based on the "type" of connector)
-      if(!conn.getSource().isPresentComponent()) { // incoming port forward
+      if (!conn.getSource().isPresentComponent()) { // incoming port forward
         varName = "this." + conn.getSourceName();
-      } else if(conn.getTargetList().stream().anyMatch(pa -> !pa.isPresentComponent())) { // outgoing port forward (at least partial)
+      } else if (conn.getTargetList().stream().anyMatch(pa -> !pa.isPresentComponent())) { // outgoing port forward (at least partial)
         varName = "this." + conn.getTargetList().stream().filter(pa -> !pa.isPresentComponent()).findAny().get().getPort();
       } else { // hidden channel
         varName = varNameFromPortAccess(conn.getSource());
       }
-      
+
       // Add variable name to map in all relevant places
-      if(conn.getSource().isPresentComponent()) {
+      if (conn.getSource().isPresentComponent()) {
         res.get(conn.getSource().getComponent()).put(conn.getSource().getPort(), varName);
       }
-      for(ASTPortAccess pa : conn.getTargetList()) {
-        if(pa.isPresentComponent()) {
+      for (ASTPortAccess pa : conn.getTargetList()) {
+        if (pa.isPresentComponent()) {
           res.get(pa.getComponent()).put(pa.getPort(), varName);
         }
       }
     }
-    
+
     return res;
+  }
+
+  public String boxPrimitive(SymTypeExpression symtype) {
+    Preconditions.checkArgument(symtype instanceof SymTypePrimitive);
+    return ((SymTypePrimitive) symtype).getBoxedPrimitiveName();
+  }
+
+  public List<Object> asList(Object... objects) {
+    return Arrays.asList(objects);
   }
 }
