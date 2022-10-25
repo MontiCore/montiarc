@@ -23,7 +23,7 @@ public enum ArcError implements Error {
       + "as a source of a port forward."),
   OUTGOING_PORT_NO_FORWARD("0xC1108", "Outgoing port '%s' of component '%s' is not connected "
       + "as a target of a port forward."),
-  PORT_MULTIPLE_SENDER("0xC1108", "Target port ''%s' of connector is already connected."),
+  PORT_MULTIPLE_SENDER("0xC1109", "Target port ''%s' of connector is already connected."),
   INCOMING_PORT_AS_SOURCE("0xC1110", "Incoming port '%s' of subcomponent '%s' of component type "
       + "'%s' is source of a connector. Incoming ports of subcomponents may only be used as the "
       + "target of a connector."),
