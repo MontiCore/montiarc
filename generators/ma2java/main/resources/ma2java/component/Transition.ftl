@@ -1,12 +1,12 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
-${tc.signature("currentState", "automaton", "output", "result")}
+${tc.signature("state", "automaton", "output", "result")}
 
 <#if ast.getSCTBody().isPresentPre()>
 if(${compHelper.printExpression(ast.getSCTBody().getPre())}) {
 </#if>
 // exit state(s)
-this.exit${currentState.getName()}();
-<#list autHelper.getLeavingParentStatesFromWith(automaton, currentState, ast) as state>
+this.exit(this.get${identifier.getCurrentStateName()?cap_first}(), States.${state.getName()});
+<#list autHelper.getLeavingParentStatesFromWith(automaton, state, ast) as state>
   exit${state.getName()}();
 </#list>
 // output
@@ -18,7 +18,7 @@ ${output}
 // result
 ${result}
 // entry state(s)
-<#list autHelper.getEnteringParentStatesFromWith(automaton, currentState, ast) as state>
+<#list autHelper.getEnteringParentStatesFromWith(automaton, state, ast) as state>
   entry${state.getName()}();
 </#list>
 this.transitionTo${ast.targetName}();

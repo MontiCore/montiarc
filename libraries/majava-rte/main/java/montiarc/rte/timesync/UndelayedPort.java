@@ -17,6 +17,9 @@ public class UndelayedPort<T> extends Port<T> {
    */
   @Override
   public void setValue(T value) {
+    if(this.value != null && this.value != value) {
+      montiarc.rte.log.Log.warn("Writing multiple times to port '" + this.getName() + "' in the same computation cycle.");
+    }
     this.value = value;
     this.synced = true;
   }

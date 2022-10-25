@@ -23,7 +23,7 @@ public class DelayedPort<T> extends Port<T> {
    */
   @Override
   public void setValue(T value) {
-    if(this.value != null && this.value != value) {
+    if(this.nextValue != null && this.nextValue != value) {
       montiarc.rte.log.Log.warn("Writing multiple times to port '" + this.getName() + "' in the same computation cycle.");
     }
     this.nextValue = value;

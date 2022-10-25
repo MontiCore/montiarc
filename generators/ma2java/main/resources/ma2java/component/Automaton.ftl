@@ -7,6 +7,8 @@ ${tc.signature("comp")}
 
 <@printStateEnum ast/>
 
+<@printExitStates ast/>
+
 <#list autHelper.getAutomatonStates(ast) as state>
 
   <@printTransitionFrom state comp ast/>
@@ -18,6 +20,7 @@ ${tc.signature("comp")}
   <@printExit state comp/>
 
   <@printInitState state comp/>
+
 </#list>
 
 <@printInit ast/>
@@ -25,8 +28,22 @@ ${tc.signature("comp")}
 <#macro printStateEnum automaton>
   protected enum States {
     <#list autHelper.getAutomatonStates(automaton) as state>
-      ${state.getName()} <#sep> , </#sep>
-    </#list>
+      ${state.getName()}(<#if autHelper.hasSuperState(automaton, state)>${autHelper.getSuperState(automaton, state).getName()}</#if>)<#sep> , </#sep>
+    </#list>;
+
+    protected final States superState;
+
+    protected java.util.Optional<States> getSuperState() {
+      return java.util.Optional.ofNullable(this.superState);
+    }
+
+    States() {
+      this.superState = null;
+    }
+
+    States(States superState) {
+      this.superState = superState;
+    }
   }
 </#macro>
 
@@ -83,10 +100,11 @@ ${tc.signature("comp")}
       compHelper.asList(state, automaton, output, result))
     }
   <#elseif autHelper.hasSuperState(automaton, state) && autHelper.isFinalState(automaton, state)>
-    // exit state
-    this.exit${state.getName()}();
+    // transition from super state
     transitionFrom${autHelper.getSuperState(automaton, state).getName()}();
   </#if>
+
+  <@printSynchronize comp/>
 }
 </#macro>
 
@@ -168,13 +186,19 @@ ${tc.signature("comp")}
 
 <#macro printLocalOutputVariables comp>
   <#list comp.getAllOutgoingPorts() as port>
-    ${compHelper.getRealPortTypeString(port)} ${port.getName()} = this.get${port.getName()?cap_first}().getValue();
+    ${compHelper.getRealPortTypeString(port)} ${port.getName()} = null;
   </#list>
 </#macro>
 
 <#macro printSetOutput comp>
   <#list comp.getAllOutgoingPorts() as port>
-    this.get${port.getName()?cap_first}().setValue(${port.getName()});
+    if (${port.getName()} != null) this.get${port.getName()?cap_first}().setValue(${port.getName()});
+  </#list>
+</#macro>
+
+<#macro printSynchronize comp>
+  <#list comp.getAllOutgoingPorts() as port>
+    this.get${port.getName()?cap_first}().setSynced(true);
   </#list>
 </#macro>
 
@@ -186,5 +210,20 @@ ${tc.signature("comp")}
     this.init${state.getName()}();
     // transition to the initial state
     this.transitionTo${state.getName()}();
+  }
+</#macro>
+
+<#macro printExitStates automaton>
+  protected void exit(States from, States to) {
+    switch (from) {
+      <#list autHelper.getAutomatonStates(automaton) as state>
+        case ${state.getName()} :
+          exit${state.getName()}();
+          break;
+      </#list>
+    }
+    if (from != to && from.getSuperState().isPresent()) {
+      exit(from.getSuperState().get(), to);
+    }
   }
 </#macro>
