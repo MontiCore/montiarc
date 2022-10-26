@@ -56,21 +56,22 @@ public class PTransitionsTest {
     // Given
     PTransitions component = new PTransitions(p1, p2, p3, p4);
     component.setUp();
+    component.init();
 
     // When
     Direction[] actual1 = new Direction[cycles];
     Direction[] actual2 = new Direction[cycles];
 
     for (int i = 0; i < cycles; i++) {
-      // update
-      component.update();
-
       // compute
       component.compute();
 
-      // add the current value after computation
+      // get output
       actual1[i] = component.getO1().getValue();
       actual2[i] = component.getO2().getValue();
+
+      // tick
+      component.tick();
     }
 
     // Then

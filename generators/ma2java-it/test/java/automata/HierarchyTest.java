@@ -33,17 +33,21 @@ public class HierarchyTest {
     // Given
     Hierarchy hierarchy = new Hierarchy();
     hierarchy.setUp();
+    hierarchy.init();
+
+    String actualPath = hierarchy.getOPath().getValue();
 
     // When
     for (int i = 0; i < cycles; i++) {
-      // update
-      hierarchy.update();
-
       // compute
       hierarchy.compute();
-    }
 
-    String actualPath = hierarchy.getOPath().getValue();
+      // get output
+      actualPath = hierarchy.getOPath().getValue();
+
+      // tick
+      hierarchy.tick();
+    }
 
     // Then
     Assertions.assertEquals(expected, actualPath);

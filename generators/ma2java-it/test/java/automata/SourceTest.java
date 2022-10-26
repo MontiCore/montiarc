@@ -47,8 +47,8 @@ public class SourceTest {
     // When
     List<OnOff> actual = new ArrayList<>(cycles);
     for (int i = 0; i < cycles; i++) {
-      // update
-      source.update();
+      // tick
+      source.tick();
 
       // compute
       source.compute();
@@ -89,24 +89,27 @@ public class SourceTest {
   public void shouldVisitExpected(int cycles, @NotNull States[] expected) {
     Preconditions.checkNotNull(expected);
     Preconditions.checkArgument(cycles >= 0);
-    Preconditions.checkArgument(expected.length > 0);
     Preconditions.checkArgument(expected.length == cycles + 1);
 
     // Given
     Source source = new Source();
     source.setUp();
+    source.init();
 
     // When
     List<States> actual = new ArrayList<>(cycles);
 
-    // add the initial state
+    // get the initial state
     actual.add(source.getCurrentState());
     for (int i = 0; i < cycles; i++) {
+      // compute
       source.compute();
-      source.update();
 
-      // add the current state after state transition
+      // get the current state
       actual.add(source.getCurrentState());
+
+      // tick
+      source.tick();
     }
 
     // Then

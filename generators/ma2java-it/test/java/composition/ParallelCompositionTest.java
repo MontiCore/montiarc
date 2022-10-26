@@ -3,8 +3,6 @@ package composition;
 
 
 import com.google.common.base.Preconditions;
-import montiarc.rte.timesync.DelayedPort;
-import montiarc.rte.timesync.Port;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -51,36 +49,32 @@ public class ParallelCompositionTest {
     Preconditions.checkNotNull(output2);
     Preconditions.checkArgument(input1.length >= 1);
     Preconditions.checkArgument(input2.length >= 1);
-    Preconditions.checkArgument(input1.length == output1.length + 1);
-    Preconditions.checkArgument(input2.length == output2.length + 1);
     Preconditions.checkArgument(input1.length == input2.length);
+    Preconditions.checkArgument(input1.length == output1.length);
+    Preconditions.checkArgument(input2.length == output2.length);
 
     //Given
     ParallelComposition component = new ParallelComposition();
-    component.setUp(new DelayedPort<>(), new DelayedPort<>(), new DelayedPort<>(), new DelayedPort<>());
-
-    // provide initial input
-    ((Port<OnOff>) component.getI1()).setValue(input1[0]);
-    ((Port<OnOff>) component.getI2()).setValue(input2[0]);
-    ((Port<OnOff>) component.getI1()).update();
-    ((Port<OnOff>) component.getI2()).update();
-    component.update();
+    component.setUp();
+    component.init();
 
     // When
     List<OnOff> actual1 = new ArrayList<>(output1.length);
     List<OnOff> actual2 = new ArrayList<>(output2.length);
-    // no initial output
-    for (int i = 1; i < input1.length; i++) {
-      ((Port<OnOff>) component.getI1()).setValue(input1[i]);
-      ((Port<OnOff>) component.getI2()).setValue(input2[i]);
+    for (int i = 0; i < input1.length; i++) {
+      // compute
+      component.getI1().update(input1[i]);
+      component.getI2().update(input2[i]);
       component.compute();
-      ((Port<OnOff>) component.getI1()).update();
-      ((Port<OnOff>) component.getI2()).update();
-      component.update();
 
-      // add the current value after computation
+      // get output
       actual1.add(component.getO1().getValue());
       actual2.add(component.getO2().getValue());
+
+      // tick
+      component.getI1().tick();
+      component.getI2().tick();
+      component.tick();
     }
 
     // Then
@@ -98,50 +92,50 @@ public class ParallelCompositionTest {
       Arguments.of(
         new OnOff[]{ OnOff.ON },
         new OnOff[]{ OnOff.ON },
-        new OnOff[]{},
-        new OnOff[]{}
+        new OnOff[]{ null },
+        new OnOff[]{ OnOff.OFF }
       ),
       // 2
       Arguments.of(
         new OnOff[]{ OnOff.ON, OnOff.OFF },
         new OnOff[]{ OnOff.ON, OnOff.OFF },
-        new OnOff[]{ OnOff.ON },
-        new OnOff[]{ OnOff.OFF }
+        new OnOff[]{ null, OnOff.ON },
+        new OnOff[]{ OnOff.OFF, OnOff.ON }
       ),
       // 3
       Arguments.of(
         new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
         new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
-        new OnOff[]{ OnOff.ON, OnOff.OFF },
-        new OnOff[]{ OnOff.OFF, OnOff.ON }
+        new OnOff[]{ null, OnOff.ON, OnOff.OFF },
+        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF }
       ),
       // 4
       Arguments.of(
         new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
         new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
-        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
-        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF }
+        new OnOff[]{ null, OnOff.ON, OnOff.OFF, OnOff.ON },
+        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON }
       ),
       // 5
       Arguments.of(
         new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON },
         new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON },
-        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF },
-        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON }
+        new OnOff[]{ null, OnOff.OFF, OnOff.ON, OnOff.OFF },
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF }
       ),
       // 6
       Arguments.of(
         new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
         new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON },
-        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
-        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON }
+        new OnOff[]{ null, OnOff.ON, OnOff.OFF, OnOff.ON },
+        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF }
       ),
       // 7
       Arguments.of(
         new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON },
         new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
-        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF },
-        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF }
+        new OnOff[]{ null, OnOff.OFF, OnOff.ON, OnOff.OFF },
+        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON }
       )
     );
   }

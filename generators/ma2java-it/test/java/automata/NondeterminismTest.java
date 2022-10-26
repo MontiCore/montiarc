@@ -41,18 +41,22 @@ public class NondeterminismTest {
     // Given
     Nondeterminism component = new Nondeterminism();
     component.setUp();
+    component.init();
 
     // When
     List<States> actual = new ArrayList<>(cycles);
 
-    // add the initial state
+    // get the initial state
     actual.add(component.getCurrentState());
     for (int i = 0; i < cycles; i++) {
+      // compute
       component.compute();
-      component.update();
 
-      // add the current state after state transition
+      // get the current state
       actual.add(component.getCurrentState());
+
+      // tick
+      component.tick();
     }
 
     // Then

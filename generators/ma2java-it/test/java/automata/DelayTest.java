@@ -2,7 +2,6 @@
 package automata;
 
 import com.google.common.base.Preconditions;
-import montiarc.rte.timesync.Port;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -42,22 +41,22 @@ public class DelayTest {
     // Given
     Delay delay = new Delay();
     delay.setUp();
+    delay.init();
 
     // When
     List<OnOff> actual = new ArrayList<>(output.length);
 
-    // no initial output
     for (OnOff onOff : input) {
-      // update
-      ((Port<OnOff>) delay.getI()).update();
-      delay.update();
-
       // compute
-      ((Port<OnOff>) delay.getI()).setValue(onOff);
+      delay.getI().update(onOff);
       delay.compute();
 
-      // get current output
+      // get output
       actual.add(delay.getO().getValue());
+
+      // tick
+      delay.getI().tick();
+      delay.tick();
     }
 
     // Then

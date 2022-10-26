@@ -9,14 +9,27 @@
   <@printCompute />
 </#if>
 
-<@printUpdate ast.getSymbol()/>
+<@printSetUp ast.getSymbol()/>
 
-<#macro printUpdate comp>
+<@printTick ast.getSymbol()/>
+
+<#macro printTick comp>
   @Override
-  public void update() {
+  public void tick() {
     // update outgoing ports
     <#list comp.getOutgoingPorts() as port>
-      <#lt> this.${port.getName()}.update();
+      <#lt> this.${port.getName()}.tick();
+    </#list>
+  }
+</#macro>
+
+<#macro printSetUp comp>
+  public void setUp() {
+    <#if comp.isPresentParentComponent()>
+      super.setUp();
+    </#if>
+    <#list comp.getPorts() as port>
+      this.${port.getName()} = new montiarc.rte.timesync.<#if port.isDelayed()>Delay<#elseif port.isOutgoing()>Out<#else>In</#if>Port<>(!this.getInstanceName().isBlank() ? this.getInstanceName() + "." + "${port.getName()}" : "${port.getName()}");
     </#list>
   }
 </#macro>

@@ -64,6 +64,7 @@ public class PSubcomponentsTest {
     //Given
     PSubcomponents component = new PSubcomponents(p1, p2, p3);
     component.setUp();
+    component.init();
 
     // When
     Direction[] actual1 = new Direction[cycles];
@@ -73,18 +74,18 @@ public class PSubcomponentsTest {
     Direction[] actual5 = new Direction[cycles];
 
     for (int i = 0; i < cycles; i++) {
-      // update
-      component.update();
-
       // compute
       component.compute();
 
-      // add the current value after computation
+      // get output
       actual1[i] = component.getO1().getValue();
       actual2[i] = component.getO2().getValue();
       actual3[i] = component.getO3().getValue();
       actual4[i] = component.getO4().getValue();
       actual5[i] = component.getO5().getValue();
+
+      // tick
+      component.tick();
     }
 
     // Then

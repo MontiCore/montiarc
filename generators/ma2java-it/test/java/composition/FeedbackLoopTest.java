@@ -3,8 +3,6 @@ package composition;
 
 
 import com.google.common.base.Preconditions;
-import montiarc.rte.timesync.DelayedPort;
-import montiarc.rte.timesync.Port;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -39,33 +37,27 @@ public class FeedbackLoopTest {
                                           @NotNull OnOff[] output) {
     Preconditions.checkNotNull(input);
     Preconditions.checkNotNull(output);
-    Preconditions.checkArgument(input.length >= 2);
-    Preconditions.checkArgument(input.length == output.length + 2);
+    Preconditions.checkArgument(input.length >= 1);
+    Preconditions.checkArgument(input.length == output.length);
 
     //Given
     FeedbackLoop component = new FeedbackLoop();
-    component.setUp(new DelayedPort<>(), new DelayedPort<>());
-
-    // provide initial input
-    ((Port<OnOff>) component.getI()).setValue(input[0]);
-    ((Port<OnOff>) component.getI()).update();
-    component.update();
-    ((Port<OnOff>) component.getI()).setValue(input[1]);
-    component.compute();
-    ((Port<OnOff>) component.getI()).update();
-    component.update();
+    component.setUp();
+    component.init();
 
     // When
     List<OnOff> actual = new ArrayList<>(output.length);
-    // no initial output
-    for (int i = 2; i < input.length; i++) {
-      ((Port<OnOff>) component.getI()).setValue(input[i]);
+    for (OnOff onOff : input) {
+      // compute
+      component.getI().update(onOff);
       component.compute();
-      ((Port<OnOff>) component.getI()).update();
-      component.update();
 
-      // add the current value after computation
+      // get output
       actual.add(component.getO().getValue());
+
+      // tick
+      component.getI().tick();
+      component.tick();
     }
 
     // Then
@@ -81,22 +73,22 @@ public class FeedbackLoopTest {
       // 1
       Arguments.of(
         new OnOff[]{ OnOff.ON, OnOff.OFF },
-        new OnOff[]{}
+        new OnOff[]{ null, OnOff.OFF}
       ),
       // 2
       Arguments.of(
         new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
-        new OnOff[]{ OnOff.OFF }
+        new OnOff[]{ null, OnOff.OFF, OnOff.ON }
       ),
       // 3
       Arguments.of(
         new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
-        new OnOff[]{ OnOff.OFF, OnOff.ON }
+        new OnOff[]{ null, OnOff.OFF, OnOff.ON, OnOff.OFF }
       ),
       // 4
       Arguments.of(
         new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON },
-        new OnOff[]{ OnOff.OFF, OnOff.ON, OnOff.OFF }
+        new OnOff[]{ null, OnOff.OFF, OnOff.ON, OnOff.OFF, OnOff.ON }
       )
     );
   }

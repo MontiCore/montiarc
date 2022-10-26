@@ -2,8 +2,6 @@
 package variables;
 
 import com.google.common.base.Preconditions;
-import montiarc.rte.timesync.DelayedPort;
-import montiarc.rte.timesync.Port;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -54,24 +52,24 @@ public class VTransitionsTest {
     // Given
     VTransitions component = new VTransitions();
     component.setUp();
+    component.init();
 
     // When
     Direction[] actual1 = new Direction[output1.length];
     Direction[] actual2 = new Direction[output2.length];
 
     for (int i = 0; i < input.length; i++) {
-
-      // update
-      ((Port<Direction>) component.getI()).update();
-      component.update();
-
       // compute
-      ((Port<Direction>) component.getI()).setValue(input[i]);
+      component.getI().update(input[i]);
       component.compute();
 
-      // add the current value after computation
+      // get output
       actual1[i] = component.getO1().getValue();
       actual2[i] = component.getO2().getValue();
+
+      // tick
+      component.getI().tick();
+      component.tick();
     }
 
     // Then
@@ -123,7 +121,7 @@ public class VTransitionsTest {
     VTransitions component = new VTransitions();
 
     // When
-    component.setUp(new DelayedPort<>(), new DelayedPort<>(), new DelayedPort<>());
+    component.setUp();
     component.init();
 
     // Then
@@ -144,16 +142,18 @@ public class VTransitionsTest {
   public void shouldUpdateVariablesAsExpected() {
     // Given
     VTransitions component = new VTransitions();
-    component.setUp(new DelayedPort<>(), new DelayedPort<>(), new DelayedPort<>());
+    component.setUp();
     component.init();
 
     // When
-    ((Port<Direction>) component.getI()).setValue(Direction.FORWARDS);
-    ((Port<Direction>) component.getI()).update();
+    component.getI().update(Direction.FORWARDS);
     component.compute();
-    ((Port<Direction>) component.getI()).setValue(Direction.BACKWARDS);
-    ((Port<Direction>) component.getI()).update();
+    component.getI().tick();
+    component.tick();
+    component.getI().update(Direction.BACKWARDS);
     component.compute();
+    component.getI().tick();
+    component.tick();
 
     // Then
     assertAll(() -> {

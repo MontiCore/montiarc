@@ -2,7 +2,6 @@
 package automata;
 
 import com.google.common.base.Preconditions;
-import montiarc.rte.timesync.Port;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -42,22 +41,22 @@ public class EmptyTest {
     // Given
     Empty empty = new Empty();
     empty.setUp();
+    empty.init();
 
     // When
     List<OnOff> actual = new ArrayList<>(output.length);
 
-    // no initial output
     for (OnOff onOff : input) {
-      // update
-      ((Port<OnOff>) empty.getI()).update();
-      empty.update();
-
       // compute
-      ((Port<OnOff>) empty.getI()).setValue(onOff);
+      empty.getI().update(onOff);
       empty.compute();
 
-      // get current output
+      // get output
       actual.add(empty.getO().getValue());
+
+      // tick
+      empty.getI().tick();
+      empty.tick();
     }
 
     // Then

@@ -1,9 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * The component's behavior is defined by an hierarchical automaton.
  */

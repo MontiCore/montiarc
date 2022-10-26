@@ -23,7 +23,7 @@ ${tc.signature("comp")}
 
 </#list>
 
-<@printInit ast/>
+<@printInit ast comp/>
 
 <#macro printStateEnum automaton>
   protected enum States {
@@ -31,9 +31,9 @@ ${tc.signature("comp")}
       ${state.getName()}(<#if autHelper.hasSuperState(automaton, state)>${autHelper.getSuperState(automaton, state).getName()}</#if>)<#sep> , </#sep>
     </#list>;
 
-    protected final States superState;
+    final States superState;
 
-    protected java.util.Optional<States> getSuperState() {
+    java.util.Optional<States> getSuperState() {
       return java.util.Optional.ofNullable(this.superState);
     }
 
@@ -62,8 +62,6 @@ ${tc.signature("comp")}
           break;
       </#list>
     }
-    // log port values
-    this.logPortValues();
 
     // log state @ post
     montiarc.rte.log.Log.trace(new StringBuilder()
@@ -198,11 +196,11 @@ ${tc.signature("comp")}
 
 <#macro printSynchronize comp>
   <#list comp.getAllOutgoingPorts() as port>
-    this.get${port.getName()?cap_first}().setSynced(true);
+    this.get${port.getName()?cap_first}().sync();
   </#list>
 </#macro>
 
-<#macro printInit automaton>
+<#macro printInit automaton comp>
   @Override
   public void init() {
     <#assign state = automaton.streamInitialStates().findFirst().get()>
@@ -210,6 +208,10 @@ ${tc.signature("comp")}
     this.init${state.getName()}();
     // transition to the initial state
     this.transitionTo${state.getName()}();
+    // provide initial value for delay ports
+    <#list comp.getPorts() as port>
+      <#if port.isDelayed()>this.${port.getName()}.tick()</#if>;
+    </#list>
   }
 </#macro>
 

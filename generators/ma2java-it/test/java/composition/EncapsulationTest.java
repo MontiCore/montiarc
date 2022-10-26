@@ -2,8 +2,6 @@
 package composition;
 
 import com.google.common.base.Preconditions;
-import montiarc.rte.timesync.DelayedPort;
-import montiarc.rte.timesync.Port;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -42,33 +40,29 @@ public class EncapsulationTest {
     Preconditions.checkNotNull(input);
     Preconditions.checkNotNull(output);
     Preconditions.checkArgument(input.length >= 1);
-    Preconditions.checkArgument(input.length == output.length + 1);
+    Preconditions.checkArgument(input.length == output.length);
 
     //Given
     Encapsulation encapsulation = new Encapsulation();
-    encapsulation.setUp(new DelayedPort<>(), new DelayedPort<>());
-
-    // provide initial input
-    ((Port<OnOff>) encapsulation.getI()).setValue(input[0]);
-    ((Port<OnOff>) encapsulation.getI()).update();
-    encapsulation.update();
+    encapsulation.setUp();
+    encapsulation.init();
 
     // When
     List<OnOff> actual = new ArrayList<>(output.length);
-    // no initial output
-    OnOff initial = encapsulation.getO().getValue();
-    for (int i = 1; i < input.length; i++) {
-      ((Port<OnOff>) encapsulation.getI()).setValue(input[i]);
+    for (int i = 0; i < input.length; i++) {
+      // compute
+      encapsulation.getI().update(input[i]);
       encapsulation.compute();
-      ((Port<OnOff>) encapsulation.getI()).update();
-      encapsulation.update();
 
-      // add the current value after computation
+      // get output
       actual.add(encapsulation.getO().getValue());
+
+      // tick
+      encapsulation.getI().tick();
+      encapsulation.tick();
     }
 
     // Then
-    Assertions.assertThat(initial).isNull();
     Assertions.assertThat(actual).containsExactly(output);
   }
 
@@ -81,22 +75,22 @@ public class EncapsulationTest {
       // 1
       Arguments.of(
         new OnOff[]{ OnOff.ON },
-        new OnOff[]{}
+        new OnOff[]{ null }
       ),
       // 2
       Arguments.of(
         new OnOff[]{ OnOff.ON, OnOff.OFF },
-        new OnOff[]{ OnOff.ON }
+        new OnOff[]{ null , OnOff.ON }
       ),
       // 3
       Arguments.of(
         new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON },
-        new OnOff[]{ OnOff.ON, OnOff.OFF }
+        new OnOff[]{ null , OnOff.ON, OnOff.OFF }
       ),
       // 4
       Arguments.of(
         new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON, OnOff.OFF },
-        new OnOff[]{ OnOff.ON, OnOff.OFF, OnOff.ON }
+        new OnOff[]{ null , OnOff.ON, OnOff.OFF, OnOff.ON }
       )
     );
   }

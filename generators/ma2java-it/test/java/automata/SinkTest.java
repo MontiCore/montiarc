@@ -3,7 +3,7 @@ package automata;
 
 import automata.Sink.States;
 import com.google.common.base.Preconditions;
-import montiarc.rte.timesync.DelayedPort;
+import montiarc.rte.timesync.DelayPort;
 import montiarc.rte.timesync.Port;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -44,20 +44,26 @@ public class SinkTest {
 
     // Given
     Sink sink = new Sink();
-    sink.setUp(new DelayedPort<>());
+    sink.setUp();
+    sink.init();
 
     // When
     List<States> actual = new ArrayList<>(input.length);
 
-    // add the initial state
+    // get the initial state
     actual.add(sink.getCurrentState());
     for (OnOff value : input) {
-      ((Port<OnOff>) sink.getI()).setValue(value);
-      ((Port<OnOff>) sink.getI()).update();
+
+      // compute
+      sink.getI().update(value);
       sink.compute();
 
-      // add the current state after state transition
+      // get the current state
       actual.add(sink.getCurrentState());
+
+      // tick
+      sink.tick();
+
     }
 
     // Then

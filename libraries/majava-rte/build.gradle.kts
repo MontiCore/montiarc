@@ -10,6 +10,8 @@ dependencies {
 
   testImplementation("${libs.mockito}:${libs.mockitoVersion}")
   testImplementation("${libs.junitAPI}:${libs.junitVersion}")
+  testImplementation("${libs.junitParams}:${libs.junitVersion}")
+  testImplementation("${libs.assertj}:${libs.assertjVersion}")
   testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 

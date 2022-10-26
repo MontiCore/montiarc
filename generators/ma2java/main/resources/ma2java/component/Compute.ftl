@@ -26,7 +26,7 @@ public void compute() {
 
 <#macro printLocalOutputVariables comp>
   <#list comp.getAllOutgoingPorts() as port>
-    ${compHelper.getRealPortTypeString(port)} ${port.getName()} = this.get${port.getName()?cap_first}().getValue();
+    ${compHelper.getRealPortTypeString(port)} ${port.getName()} = null;
   </#list>
 </#macro>
 
@@ -38,5 +38,10 @@ public void compute() {
 
 <#macro printInit>
   @Override
-  public void init() { }
+  public void init() {
+    // provide initial value for delay ports
+    <#list comp.getPorts() as port>
+      <#if port.isDelayed()>this.${port.getName()}.tick()</#if>;
+    </#list>
+  }
 </#macro>

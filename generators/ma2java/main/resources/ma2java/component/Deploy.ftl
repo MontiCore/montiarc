@@ -31,7 +31,7 @@ public class ${deployClassName} {
       montiarc.rte.log.Log.trace("::: Time t = " + cycles + " :::");
       time = System.currentTimeMillis();
       comp.compute();
-      comp.update();
+      comp.tick();
       while((System.currentTimeMillis() - time) < deployUtils.getCycleTime()) {
         Thread.yield();
       }

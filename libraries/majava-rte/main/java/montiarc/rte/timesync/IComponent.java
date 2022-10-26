@@ -8,36 +8,30 @@ package montiarc.rte.timesync;
 public interface IComponent {
   
   /**
-   * First method to be called. Creates members (e.g., ports). Propagated to
-   * subcomponents.
+   * Create members (subcomponents, ports, connectors).
    */
-  public void setUp();
+  void setUp();
   
   /**
-   * Second method to be called. Connects ports of subcomponents to another.
-   * Requires that these were created in the subcomponents before (see
-   * {@code setUp()}). Propagated to subcomponents.
+   * Produces the initial output. Requires that the ports were created in the
+   * subcomponents beforehand (see {@code setUp()}).
    */
-  public void init();
+  void init();
   
   /**
-   * Called for the component to compute its next values. Propagated to
-   * subcomponents.
+   * Called for the component to compute its next values.
    */
-  public void compute();
+  void compute();
   
   /**
-   * Causes the component to update its outgoing ports and variables with the
-   * newly computed values. Requires that {@code compute()} was performed
-   * before. Propagated to subcomponents.
+   * Switch to the next time slice, updating ports.
    */
-  public void update();
+  void tick();
 
   /**
-   * Check whether all input ports are synced, i.e., whether the computation can be triggered.
-   *
-   * @see Port#synced
+   * @return true if all incoming ports are synced.
+   * @see IInPort#isSynced()
    */
-  public boolean allInputsSynced();
+  boolean isSynced();
   
 }

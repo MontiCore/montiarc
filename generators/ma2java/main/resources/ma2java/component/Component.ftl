@@ -24,13 +24,9 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 
   <@printSynchronized ast.getSymbol()/>
 
-  ${tc.include("ma2java.component.ComponentSetUp.ftl", ast)}
-
   <#list ast.getInnerComponents() as innerComp>
     ${tc.includeArgs("ma2java.component.Component.ftl", innerComp, compHelper.asList(isTop))}
   </#list>
-
-  <@printLogPortValues ast.getSymbol()/>
 }
 
 <#macro printInstanceName>
@@ -59,7 +55,7 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 
 <#macro printSynchronized comp>
   @Override
-  public boolean allInputsSynced() {
+  public boolean isSynced() {
     return
     <#list comp.getAllIncomingPorts() as inPort>
       this.get${inPort.getName()?cap_first}().isSynced()<#sep> && </#sep>
@@ -92,17 +88,4 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
   <#list comp.getParameters() as param>
       ${param.getType().print()} ${param.getName()}<#t><#sep>, </#sep><#t>
   </#list>
-</#macro>
-
-<#macro printLogPortValues comp>
-  protected void logPortValues() {
-    StringBuilder sb;
-    <#list comp.getPorts() as port>
-      sb = new StringBuilder();
-      sb.append("Value of port '").append(this.getInstanceName()).append(".")
-        .append("${port.getName()}' = ")
-        .append(this.${port.getName()}.getValue());
-      montiarc.rte.log.Log.trace(sb.toString());
-    </#list>
-  }
 </#macro>

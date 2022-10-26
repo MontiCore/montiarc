@@ -73,7 +73,6 @@ public class MontiArcTool extends montiarc.MontiArcTool {
   @Override
   public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
-    super.runAdditionalCoCos(ast);
 
     MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
     checker.addCoCo(new PortNamesAreNoJavaKeywords());

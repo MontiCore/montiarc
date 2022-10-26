@@ -1,32 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.timesync;
 
-public abstract class Port<T> implements IPortIn<T>, IPortOut<T> {
+public abstract class Port<T> implements IPort<T> {
 
   protected T value;
 
-  protected Boolean synced = false;
+  protected String name;
 
-  protected String name = "";
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getName() {
+  protected String getName() {
     return this.name;
   }
-
-  public Port(T value) {
-    this.value = value;
-  }
-
-  public Port() {
-    this(null);
-  }
-
-  @Override
-  public abstract void setValue(T value);
 
   @Override
   public T getValue() {
@@ -34,12 +17,12 @@ public abstract class Port<T> implements IPortIn<T>, IPortOut<T> {
   }
 
   @Override
-  public void setSynced(Boolean synced) {
-    this.synced = synced;
+  public void tick() {
+    this.logValue();
+    this.value = null;
   }
 
-  @Override
-  public Boolean isSynced() {
-    return this.synced;
+  protected void logValue() {
+    montiarc.rte.log.Log.trace("Value of port '" + this.getName() + "' = " + this.getValue());
   }
 }

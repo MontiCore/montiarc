@@ -28,4 +28,4 @@ public void set${port.getName()?cap_first}(<@printClass port/><<@printType port/
 }
 </#macro>
 
-<#macro printClass port> montiarc.rte.timesync.<#if port.isIncoming()>IPortIn<#else>IPortOut</#if></#macro>
+<#macro printClass port> montiarc.rte.timesync.<#if port.isIncoming()>IInPort<#else>IOutPort</#if></#macro>

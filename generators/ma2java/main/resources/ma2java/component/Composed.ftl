@@ -7,9 +7,11 @@
 
 <@printCompute/>
 
+<@printSetUp ast.getSymbol()/>
+
 <@printInit ast.getSymbol()/>
 
-<@printUpdate ast.getSymbol()/>
+<@printTick ast.getSymbol()/>
 
 <#macro printSubcomponents comp>
   <#assign subComponents = comp.getSubComponents()>
@@ -40,7 +42,7 @@
     while(notYetComputed.size() > 0) {
       java.util.Set${r"<montiarc.rte.timesync.IComponent>"} computedThisIteration = new java.util.HashSet<>();
       for(montiarc.rte.timesync.IComponent subcomponent : notYetComputed) {
-        if(subcomponent.allInputsSynced()) {
+        if(subcomponent.isSynced()) {
           subcomponent.compute();
           computedThisIteration.add(subcomponent);
         }
@@ -51,8 +53,32 @@
         notYetComputed.removeAll(computedThisIteration);
       }
     }
-    // log port values
-    this.logPortValues();
+  }
+</#macro>
+
+<#macro printSetUp comp>
+  public void setUp() {
+    <#if comp.isPresentParentComponent()>
+      super.setUp();
+    </#if>
+    <#list comp.getSubComponents() as subcomponent>
+      this.${subcomponent.getName()} = new ${compHelper.getSubComponentTypeName(subcomponent)}(<#list compHelper.getParamValues(subcomponent) as param>${param}<#sep>, </#sep></#list>);
+      this.${subcomponent.getName()}.setInstanceName(!this.getInstanceName().isBlank() ? this.getInstanceName() + ".${subcomponent.getName()}" : "${subcomponent.getName()}");
+      this.${subcomponent.getName()}.setUp();
+    </#list>
+    <#list comp.getAstNode().getConnectors() as connector>
+      <#assign source = connector.getSource()>
+      <#list connector.getTargetList() as target>
+        <#if !source.isPresentComponent() && target.isPresentComponent()>
+          this.${source.getQName()} = ${target.getComponent()}.get${target.getPort()?cap_first}();
+        <#elseif source.isPresentComponent() && !target.isPresentComponent()>
+          this.${target.getQName()} = ${source.getComponent()}.get${source.getPort()?cap_first}();
+        <#elseif source.isPresentComponent() && target.isPresentComponent()>
+          ${source.getComponent()}.get${source.getPort()?cap_first}().connect(${target.getComponent()}.get${target.getPort()?cap_first}());
+        <#else>
+        </#if>
+      </#list>
+    </#list>
   }
 </#macro>
 
@@ -65,12 +91,12 @@
   }
 </#macro>
 
-<#macro printUpdate comp>
+<#macro printTick comp>
   @Override
-  public void update() {
+  public void tick() {
     // update subcomponents
     <#list comp.getSubComponents() as subcomponent>
-      <#lt>  this.${subcomponent.getName()}.update();
+      <#lt>this.${subcomponent.getName()}.tick();
     </#list>
   }
 </#macro>

@@ -17,7 +17,7 @@ component SequentialComposition {
   /**
    * The component's subcomponents are sequentially composed.
    */
-  Delay c1;
+  Inverter c1;
   Inverter c2;
 
   // Incoming channel
