@@ -18,11 +18,6 @@ public abstract class Port<T> implements IPort<T> {
 
   @Override
   public void tick() {
-    this.logValue();
     this.value = null;
-  }
-
-  protected void logValue() {
-    montiarc.rte.log.Log.trace("Value of port '" + this.getName() + "' = " + this.getValue());
   }
 }

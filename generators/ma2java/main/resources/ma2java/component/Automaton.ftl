@@ -3,7 +3,7 @@ ${tc.signature("comp")}
 
 <@printCurrentState/>
 
-<@printCompute ast/>
+<@printCompute ast comp/>
 
 <@printStateEnum ast/>
 
@@ -47,14 +47,24 @@ ${tc.signature("comp")}
   }
 </#macro>
 
-<#macro printCompute automaton>
+<#macro printCompute automaton comp>
   public void compute() {
     // log state @ pre
-    montiarc.rte.log.Log.trace(new StringBuilder()
-      .append("State of comp '").append(this.getInstanceName())
-      .append("' at pre = ")
-      .append(this.get${identifier.getCurrentStateName()?cap_first}())
-      .toString());
+    montiarc.rte.log.Log.trace(
+      "State of comp '"
+      + this.getInstanceName()
+      + "' at pre = "
+      + this.get${identifier.getCurrentStateName()?cap_first}()
+    );
+    // log input values
+    <#list comp.getIncomingPorts() as port>
+      montiarc.rte.log.Log.trace(
+        "Value of port '"
+        + (!this.getInstanceName().isBlank() ? this.getInstanceName() + "." + "${port.getName()}" : "${port.getName()}")
+        + "' = "
+        + this.get${port.getName()?cap_first}().getValue()
+      );
+    </#list>
     switch (${identifier.getCurrentStateName()}) {
       <#list autHelper.getAutomatonStates(automaton) as state>
         case ${state.getName()}:
@@ -62,13 +72,22 @@ ${tc.signature("comp")}
           break;
       </#list>
     }
-
+    // log output values
+    <#list comp.getOutgoingPorts() as port>
+      montiarc.rte.log.Log.trace(
+        "Value of port '"
+        + (!this.getInstanceName().isBlank() ? this.getInstanceName() + "." + "${port.getName()}" : "${port.getName()}")
+        + "' = "
+        + this.get${port.getName()?cap_first}().getValue()
+      );
+    </#list>
     // log state @ post
-    montiarc.rte.log.Log.trace(new StringBuilder()
-      .append("State of comp '").append(this.getInstanceName())
-      .append("' at post = ")
-      .append(this.get${identifier.getCurrentStateName()?cap_first}())
-      .toString());
+    montiarc.rte.log.Log.trace(
+      "State of comp '"
+      + this.getInstanceName()
+      + "' at post = "
+      + this.get${identifier.getCurrentStateName()?cap_first}()
+    );
   }
 </#macro>
 
@@ -209,8 +228,8 @@ ${tc.signature("comp")}
     // transition to the initial state
     this.transitionTo${state.getName()}();
     // provide initial value for delay ports
-    <#list comp.getPorts() as port>
-      <#if port.isDelayed()>this.${port.getName()}.tick()</#if>;
+    <#list comp.getOutgoingPorts() as port>
+      <#if port.isDelayed()>this.${port.getName()}.tick();</#if>
     </#list>
   }
 </#macro>

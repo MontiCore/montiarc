@@ -30,7 +30,8 @@ public class OutPort<T> extends Port<T> implements IOutPort<T> {
   @Override
   public void setValue(T value) {
     if (this.value != null && this.value != value) {
-      Log.warn("Writing multiple times to port '" + this.getName() + "' in the same time slice.");
+      Log.warn("Writing multiple times to port '" + this.getName() + "' in the same time slice. "
+        + "Overriding '" + this.value + "' with '" + value + "'." );
     }
     this.value = value;
     this.sync();
