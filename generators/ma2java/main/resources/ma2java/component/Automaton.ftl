@@ -65,6 +65,7 @@ ${tc.signature("comp")}
         + this.get${port.getName()?cap_first}().getValue()
       );
     </#list>
+    // transition from the current state
     switch (${identifier.getCurrentStateName()}) {
       <#list autHelper.getAutomatonStates(automaton) as state>
         case ${state.getName()}:
@@ -105,11 +106,16 @@ ${tc.signature("comp")}
   <@printLocalInputVariables comp/>
   <#assign output><@printLocalOutputVariables comp/></#assign>
   <#assign result><@printSetOutput comp/></#assign>
+  <#assign transitions = autHelper.getAllTransitionsWithGuardFrom(automaton, state)/>
 
-  <#list autHelper.getAllTransitionsWithGuardFrom(automaton, state) as transition>
+  <#list transitions>
+    <#items as transition>
     ${tc.includeArgs("ma2java.component.Transition.ftl", transition,
       compHelper.asList(state, automaton, output, result))
     }
+    <#sep> else </#sep>
+    </#items>
+    else {
   </#list>
   <#if autHelper.hasTransitionWithoutGuardFrom(automaton, state)>
     ${tc.includeArgs("ma2java.component.Transition.ftl",
@@ -120,6 +126,7 @@ ${tc.signature("comp")}
     // transition from super state
     transitionFrom${autHelper.getSuperState(automaton, state).getName()}();
   </#if>
+  <#if transitions?size != 0>}</#if>
 
   <@printSynchronize comp/>
 }

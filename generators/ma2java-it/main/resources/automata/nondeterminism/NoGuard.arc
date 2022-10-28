@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
-package automata;
+package automata.nondeterminism;
 
 /**
  * Atomic component without ports. Features an automaton with ambiguous state
  * transitions.
  */
-component Nondeterminism {
+component NoGuard {
 
   /**
    * Automaton with ambiguous transitions.

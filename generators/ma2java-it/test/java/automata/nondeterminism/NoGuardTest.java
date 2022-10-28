@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
-package automata;
+package automata.nondeterminism;
 
-import automata.Nondeterminism.States;
+import automata.nondeterminism.NoGuard.States;
 import com.google.common.base.Preconditions;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * The system under test is the component {@code Nondeterminism}. The white-box
+ * The system under test is the component {@code NoGuard}. The white-box
  * tests ensure that the automaton is in the expected state after computation.
  */
-public class NondeterminismTest {
+public class NoGuardTest {
 
   /**
    * White-box test: Given the number of computation cycles, ensures that the
@@ -39,7 +39,7 @@ public class NondeterminismTest {
     Preconditions.checkArgument(expected.length == cycles + 1);
 
     // Given
-    Nondeterminism component = new Nondeterminism();
+    NoGuard component = new NoGuard();
     component.setUp();
     component.init();
 
