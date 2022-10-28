@@ -25,7 +25,7 @@ public class FileLogger extends LogBehavior {
       writer = new PrintWriter(bufferedWriter);
       System.out.println("Beginning logging to file " + file);
       timestamp = DateTimeFormatter.ofPattern("'['yyyy/MM/dd HH:mm:ss']'");
-      comment("Beginning of file-based logging.");
+      comment("Beginning of file-based logging");
     } catch (Exception e) {
       Log.initConsoleLog();
       throw new LogException("File-based logger could not be initialized " +

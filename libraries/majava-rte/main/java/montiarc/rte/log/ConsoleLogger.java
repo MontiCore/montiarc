@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 public class ConsoleLogger extends LogBehavior {
 
   public ConsoleLogger() {
-    System.out.println("Beginning logging to console.");
+    System.out.println("Beginning logging to console");
     timestamp = DateTimeFormatter.ofPattern("'['HH:mm:ss']'");
   }
 

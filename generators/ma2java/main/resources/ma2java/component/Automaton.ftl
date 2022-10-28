@@ -49,19 +49,16 @@ ${tc.signature("comp")}
 
 <#macro printCompute automaton comp>
   public void compute() {
+    montiarc.rte.log.Log.comment("Computing component " + this.getInstanceName() + "");
     // log state @ pre
     montiarc.rte.log.Log.trace(
-      "State of comp '"
-      + this.getInstanceName()
-      + "' at pre = "
+      "State@pre = "
       + this.get${identifier.getCurrentStateName()?cap_first}()
     );
     // log input values
     <#list comp.getIncomingPorts() as port>
       montiarc.rte.log.Log.trace(
-        "Value of port '"
-        + (!this.getInstanceName().isBlank() ? this.getInstanceName() + "." + "${port.getName()}" : "${port.getName()}")
-        + "' = "
+        "Value of input port ${port.getName()} = "
         + this.get${port.getName()?cap_first}().getValue()
       );
     </#list>
@@ -76,17 +73,13 @@ ${tc.signature("comp")}
     // log output values
     <#list comp.getOutgoingPorts() as port>
       montiarc.rte.log.Log.trace(
-        "Value of port '"
-        + (!this.getInstanceName().isBlank() ? this.getInstanceName() + "." + "${port.getName()}" : "${port.getName()}")
-        + "' = "
+        "Value of output port ${port.getName()} = "
         + this.get${port.getName()?cap_first}().getValue()
       );
     </#list>
     // log state @ post
     montiarc.rte.log.Log.trace(
-      "State of comp '"
-      + this.getInstanceName()
-      + "' at post = "
+      "State@post = "
       + this.get${identifier.getCurrentStateName()?cap_first}()
     );
   }
