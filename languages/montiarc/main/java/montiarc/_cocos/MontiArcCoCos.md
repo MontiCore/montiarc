@@ -76,7 +76,7 @@ Legend:
 # Mode Automata
 
 | in MA | CoCo(s)                   | Language          | Code                      | Notes |
-| ----- | ------------------------- | ----------------- | ------------------------- | ----- |
+|-------|---------------------------|-------------------|---------------------------|-------|
 | ☑     | InitialModeExists         | BasicModeAutomata | 0xC1080                   |       |
 | ☑     | NoHierarchicalModes       | BasicModeAutomata | 0xC1076                   |       |
 | ☑     | NoModesInAtomicComponents | BasicModeAutomata | 0xC1079                   |       |
@@ -88,11 +88,11 @@ Legend:
 ## Automaton CoCos
 
 | in MA | CoCo(s)                                                                | Language           | Notes                                                                                                                                                                                                                            |
-| ----- | ---------------------------------------------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|-------|------------------------------------------------------------------------|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | ☑     | UniqueStates                                                           | SCBasis            |                                                                                                                                                                                                                                  |
 | ☑     | TransitionSourceAndTargetExist                                         | SCBasis            |                                                                                                                                                                                                                                  |
 | ☑     | AtLeastOneInitialState                                                 | SCBasis            |                                                                                                                                                                                                                                  |
-| ☑     | OneInitialStateAtMax                                                   | ArcAutomaton       | This coco should be moved to a statechart language!                                                                                                                                                                              | |
+| ☑     | MaxOneInitialState                                                     | SCBasis            | Checks that there is only one top-level state per automaton. (This coco does not check sub states.)                                                                                                                              |
 | ☑     | FieldReadWriteAccessFitsInGuards, FieldReadWriteAccessFitsInStatements | ArcAutomaton       | Not in SC-languages, as they don't know AssignmentExpressions. Not in AssignmentExpressions, as they don't know Symbols. Moreover we check ports referenced by `NameExpression`s, who are not known by the SC-languages, either. |
 | ☑     | NoInputPortsInInitialOutputDecl                                        | ArcAutomaton       |                                                                                                                                                                                                                                  |
 | ☑     | TransitionPreconditionsAreBoolean                                      | SCTransitions4Code |                                                                                                                                                                                                                                  |
@@ -105,11 +105,11 @@ Legend:
 
 ## Statement CoCos
 
-| in MA | CoCo(s)                                    | Language           | Notes |        
-| ----- | ------------------------------------------ | ------------------ | ------|
-| ☒     | ExpressionStatementIsValid                 | Statements         |       |   
-| ☒     | VarDeclarationInitializationHasCorrectType | Statements         |       |   
-| ☒     | ForConditionHasBooleanType                 | Statements         |       |   
-| ☒     | ForEachIsValid                             | Statements         |       |          
-| ☒     | IfConditionHasBooleanType                  | Statements         |       |          
-| ☒     | SwitchStatementValid                       | Statements         |       |                
+| in MA | CoCo(s)                                    | Language   | Notes |        
+|-------|--------------------------------------------|------------|-------|
+| ☒     | ExpressionStatementIsValid                 | Statements |       |   
+| ☒     | VarDeclarationInitializationHasCorrectType | Statements |       |   
+| ☒     | ForConditionHasBooleanType                 | Statements |       |   
+| ☒     | ForEachIsValid                             | Statements |       |          
+| ☒     | IfConditionHasBooleanType                  | Statements |       |          
+| ☒     | SwitchStatementValid                       | Statements |       |                

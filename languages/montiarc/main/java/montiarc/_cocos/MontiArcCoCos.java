@@ -4,7 +4,6 @@ package montiarc._cocos;
 import arcautomaton._cocos.FieldReadWriteAccessFitsInGuards;
 import arcautomaton._cocos.FieldReadWriteAccessFitsInStatements;
 import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
-import arcautomaton._cocos.OneInitialStateAtMax;
 import arcbasis._cocos.CircularInheritance;
 import arcbasis._cocos.ComponentInstanceTypeExists;
 import arcbasis._cocos.ComponentTypeNameCapitalization;
@@ -39,6 +38,7 @@ import arcbasis._cocos.PortUniqueSender;
 import arcbasis._cocos.UniqueIdentifierNames;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.scbasis._cocos.AtLeastOneInitialState;
+import de.monticore.scbasis._cocos.MaxOneInitialState;
 import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
 import de.monticore.scbasis._cocos.UniqueStates;
 import de.monticore.sctransitions4code._cocos.AnteBlocksOnlyForInitialStates;
@@ -119,7 +119,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new FieldReadWriteAccessFitsInGuards());
     checker.addCoCo(new FieldReadWriteAccessFitsInStatements());
     checker.addCoCo(new NoInputPortsInInitialOutputDeclaration());
-    checker.addCoCo(new OneInitialStateAtMax());
+    checker.addCoCo(new MaxOneInitialState());
 
     // MontiArc CoCos
     checker.addCoCo(new ComponentInheritanceRespectsGenericTypeBounds());

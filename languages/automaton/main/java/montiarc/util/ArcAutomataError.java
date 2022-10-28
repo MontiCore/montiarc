@@ -9,8 +9,6 @@ package montiarc.util;
  */
 public enum ArcAutomataError implements Error {
   MALFORMED_EXPRESSION("0xC1401", "The expression at '%s' is malformed and can not be evaluated."),
-  MANY_INITIAL_STATES("0xC1402",
-      "Automata may not have more than one initial state, but the one of %s has %d: %s and %s"),
   INPUT_PORT_IN_INITIAL_OUT_DECL("0xC1403", "Input port '%s' is referenced in the initial output declaration. This " +
       "is illegal as input port values are undefined at the point of component initialization."),
   PORT_NOT_WRITTEN_IN_TRANSITION("0xC1404", "There is a transition, which, when followed, leaves port '%s' without a value."),
