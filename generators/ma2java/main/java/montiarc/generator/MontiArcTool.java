@@ -29,7 +29,6 @@ public class MontiArcTool extends montiarc.MontiArcTool {
   @Override
   public Options addStandardOptions(@NotNull Options options) {
     Preconditions.checkNotNull(options);
-
     options.addOption(org.apache.commons.cli.Option.builder("o")
       .longOpt("output")
       .hasArgs()
@@ -48,8 +47,11 @@ public class MontiArcTool extends montiarc.MontiArcTool {
     Preconditions.checkNotNull(asts);
     Preconditions.checkNotNull(cl);
     super.runAdditionalTasks(asts, cl);
-    Log.info("Generate java classes from component models", "MontiArcTool");
-    this.generate(asts, cl.getOptionValue("output"), Optional.ofNullable(cl.getOptionValue("hwc")).orElse(""));
+
+    if(cl.hasOption("output")) {
+      Log.info("Generate java", "MontiArcTool");
+      this.generate(asts, cl.getOptionValue("output"), Optional.ofNullable(cl.getOptionValue("hwc")).orElse(""));
+    }
   }
 
   public void generate(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String target, @NotNull String hwc) {
