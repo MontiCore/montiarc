@@ -8,6 +8,7 @@ import montiarc._ast.ASTMACompilationUnit;
 import montiarc.generator.ma2kotlin.codegen.KotlinBuilder;
 import openmodeautomata._symboltable.OpenModeAutomataScopesGenitor;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Options;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Collection;
@@ -28,7 +29,7 @@ public class ModeArcTool extends MontiArcTool {
     Preconditions.checkNotNull(command);
     super.runAdditionalTasks(asts, command);
     Log.info("Generate kotlin classes from component models", "ModeArcTool");
-    new KotlinBuilder(command.getOptionValue("path")).writeComponentsCodes(asts);
+    new KotlinBuilder(command.getOptionValue("output")).writeComponentsCodes(asts);
   }
 
   @Override
@@ -37,5 +38,19 @@ public class ModeArcTool extends MontiArcTool {
     // the mill does not provide the completer
     new OpenModeAutomataScopesGenitor().run();
     // the completer does not need to be visited around
+  }
+
+  @Override
+  public Options addStandardOptions(@NotNull Options options) {
+    Preconditions.checkNotNull(options);
+
+    options.addOption(org.apache.commons.cli.Option.builder("o")
+      .longOpt("output")
+      .hasArgs()
+      .required()
+      .desc("Sets the target path for the generated files (mandatory).")
+      .build());
+
+    return super.addStandardOptions(options);
   }
 }
