@@ -3,6 +3,7 @@ package montiarc;
 
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
+import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc._ast.ASTMACompilationUnit;
@@ -30,7 +31,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -90,6 +93,35 @@ public class MontiArcToolTest extends AbstractTest {
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class, () -> tool.initGlobalScope((CommandLine) null));
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#createModelPath(CommandLine)}
+   */
+  @Test
+  public void createModelPathShouldHandleVariousFormats() throws Exception {
+    // Given
+    Path p1 = Path.of("some", "where");
+    Path p2 = Path.of("foo", "bar");
+    Path p3 = Path.of("another", "model", "path");
+    String[] stringArgs = new String[] {"--modelpath", p1 + File.pathSeparator + p2, p3.toString()};
+
+    MontiArcTool tool = new MontiArcTool();
+    Options options = new Options();
+    tool.addStandardOptions(options);
+    CommandLineParser parser = new DefaultParser();
+    CommandLine args = parser.parse(options, stringArgs);
+
+    // When
+    MCPath modelPath = tool.createModelPath(args);
+
+    // Then
+    List<Path> expectedPaths = List.of(p1.toAbsolutePath(), p2.toAbsolutePath(), p3.toAbsolutePath());
+    List<Path> returnedPaths = modelPath.getEntries().stream()
+      .map(Path::toAbsolutePath)
+      .collect(Collectors.toList());
+    Assertions.assertEquals(expectedPaths, returnedPaths);
+    this.checkOnlyExpectedErrorsPresent(/* none */);
   }
 
   /**

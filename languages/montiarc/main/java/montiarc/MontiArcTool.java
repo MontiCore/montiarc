@@ -18,6 +18,7 @@ import org.apache.commons.cli.*;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.codehaus.commons.nullanalysis.NotNull;
 
+import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -94,7 +96,18 @@ public class MontiArcTool extends MontiArcToolTOP {
 
   protected MCPath createModelPath(@NotNull CommandLine cl) {
     Preconditions.checkNotNull(cl);
-    return cl.hasOption("modelpath") ? new MCPath(cl.getOptionValues("modelpath")) : new MCPath();
+
+    if (cl.hasOption("modelpath")) {
+      // `new MCPath(String...)` fails if *one* of the Paths that we pass is composed of multiple paths with a path
+      // separator in between, e.g.: foo/bar:goo/rar on Linux. Therefore, we manually separate these paths first.
+      String[] paths = Arrays.stream(cl.getOptionValues("modelpath"))
+        .map(composedPath -> composedPath.split(Pattern.quote(File.pathSeparator)))
+        .flatMap(Arrays::stream)
+        .toArray(String[]::new);
+      return new MCPath(paths);
+    } else {
+      return new MCPath();
+    }
   }
 
   protected void loadSymbols() {
