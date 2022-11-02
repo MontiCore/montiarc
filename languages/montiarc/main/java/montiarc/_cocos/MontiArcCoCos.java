@@ -14,6 +14,7 @@ import arcbasis._cocos.ConnectorSourceAndTargetDirectionsFit;
 import arcbasis._cocos.ConnectorSourceAndTargetExist;
 import arcbasis._cocos.ConnectorSourceAndTargetTimingsFit;
 import arcbasis._cocos.ConnectorSourceAndTargetTypesFit;
+import arcbasis._cocos.InheritedPortsTypeCorrect;
 import arcbasis._cocos.FeedbackLoopTiming;
 import arcbasis._cocos.FieldInitExpressionTypesCorrect;
 import arcbasis._cocos.FieldInitExpressionsOmitPortReferences;
@@ -67,10 +68,8 @@ public class MontiArcCoCos {
     TypeCalculator mcTypeCheck = new TypeCalculator(maTypeCheck, maTypeCheck);
 
     // ArcBasis CoCos
-    checker.addCoCo(new CircularInheritance());
     checker.addCoCo(new ComponentInstanceTypeExists(new MCSimpleGenericTypesFullPrettyPrinter(new IndentPrinter())));
     checker.addCoCo(new ComponentTypeNameCapitalization());
-    checker.addCoCo(new ConfigurationParameterParentAssignment());
     checker.addCoCo(new ConfigurationParameterAssignment(maTypeCheck));
     //checker.addCoCo(new ConnectorSourceAndTargetComponentDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetDiffer());
@@ -81,7 +80,6 @@ public class MontiArcCoCos {
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new FieldInitExpressionsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new FieldTypeExists(new CheckTypeExistence4MontiArc()));
-    checker.addCoCo(new InheritedComponentTypeExists());
     checker.addCoCo(new InnerComponentNotExtendsDefiningComponent());
     checker.addCoCo(new InstanceArgsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new InstanceNameCapitalisation());
@@ -94,6 +92,12 @@ public class MontiArcCoCos {
     checker.addCoCo(new PortTypeExists(new CheckTypeExistence4MontiArc()));
     checker.addCoCo(new PortUniqueSender());
     checker.addCoCo(new UniqueIdentifierNames());
+
+    // Inheritance CoCos
+    checker.addCoCo(new CircularInheritance());
+    checker.addCoCo(new ConfigurationParameterParentAssignment(maTypeCheck));
+    checker.addCoCo(new InheritedPortsTypeCorrect());
+    checker.addCoCo(new InheritedComponentTypeExists());
 
     // Timing CoCos
     checker.addCoCo(new ConnectorSourceAndTargetTimingsFit());

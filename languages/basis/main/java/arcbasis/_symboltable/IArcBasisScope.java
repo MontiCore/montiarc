@@ -134,4 +134,50 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
     }
     return adapters;
   }
+
+  @Override
+  default List<PortSymbol> resolvePortMany(boolean foundSymbols,
+                                           String name,
+                                           AccessModifier modifier,
+                                           Predicate<PortSymbol> predicate) {
+
+    List<PortSymbol> symbols = IArcBasisScopeTOP.super.resolvePortMany(foundSymbols, name, modifier, predicate);
+    symbols.addAll(resolvePortOfParentMany(foundSymbols || symbols.size() > 0, name, modifier, predicate));
+    return symbols;
+  }
+
+  default List<PortSymbol> resolvePortOfParentMany(boolean foundSymbols, String name,
+                                                   AccessModifier modifier,
+                                                   Predicate<PortSymbol> predicate) {
+    if (!foundSymbols && this.isPresentSpanningSymbol()) {
+      Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(this.getSpanningSymbol());
+      if (component.isPresent() && component.get().isPresentParentComponent()) {
+        return component.get().getParent().getTypeInfo().getSpannedScope()
+          .resolvePortMany(false, name, modifier, predicate);
+      }
+    }
+    return new ArrayList<>();
+  }
+
+  @Override
+  default List<VariableSymbol> resolveVariableMany(boolean foundSymbols, String name,
+                                                   AccessModifier modifier,
+                                                   Predicate<VariableSymbol> predicate) {
+    List<VariableSymbol> symbols = IArcBasisScopeTOP.super.resolveVariableMany(foundSymbols, name, modifier, predicate);
+    symbols.addAll(resolveVariableOfParentMany(foundSymbols || symbols.size() > 0, name, modifier, predicate));
+    return symbols;
+  }
+
+  default List<VariableSymbol> resolveVariableOfParentMany(boolean foundSymbols, String name,
+                                                           AccessModifier modifier,
+                                                           Predicate<VariableSymbol> predicate) {
+    if (!foundSymbols && isPresentSpanningSymbol()) {
+      Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(this.getSpanningSymbol());
+      if (component.isPresent() && component.get().isPresentParentComponent()) {
+        return component.get().getParent().getTypeInfo().getSpannedScope()
+          .resolveVariableMany(false, name, modifier, predicate);
+      }
+    }
+    return new ArrayList<>();
+  }
 }

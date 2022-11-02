@@ -36,6 +36,11 @@ public enum ArcError implements Error {
       + "type '%s' is not connected."),
   INNER_WITH_TYPE_PARAMETER_REQUIRES_INSTANCE("0xC1114", "Inner component '%s' must have an "
       + "instance defining its formal type parameters."),
+  INHERITED_INCOMING_PORT_TYPE_MISMATCH("0xC1115", "Port '%s' is of type '%s' which cannot "
+      + "override type '%s' of the inherited port. Override only with supertypes."),
+  INHERITED_OUTGOING_PORT_TYPE_MISMATCH("0xC1116", "Port '%s' is of type '%s' which cannot "
+      + "override type '%s' of the inherited port. Override only with subtypes."),
+  INHERITED_PORT_DIRECTION_MISMATCH("0xC1117", "Port '%s' can not be %s, because it overrides an %s port."),
   OPTIONAL_CONFIG_PARAMS_LAST("0xC1118", "Configuration parameter '%s' at position '%d' of component '%s' should be " +
       "optional, as it is preceded by the optional configuration parameter '%s' at position '%s'. Mandatory parameters " +
       "(that do not specify default values) must be declared before all optional parameters (that specify default " +

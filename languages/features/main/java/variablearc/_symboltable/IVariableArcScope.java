@@ -1,14 +1,16 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._symboltable.PortSymbol;
+import arcbasis._symboltable.*;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.ISymbol;
+import de.monticore.symboltable.modifiers.AccessModifier;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public interface IVariableArcScope extends IVariableArcScopeTOP {
 
@@ -125,5 +127,27 @@ public interface IVariableArcScope extends IVariableArcScopeTOP {
     Preconditions.checkNotNull(name);
     Preconditions.checkNotNull(variationPoints);
     return getResolvedOrThrowException(resolvePortMany(name, variationPoints));
+  }
+
+   @Override
+  default List<ArcFeatureSymbol> resolveArcFeatureMany(boolean foundSymbols, String name,
+                                                       AccessModifier modifier,
+                                                       Predicate<ArcFeatureSymbol> predicate) {
+    List<ArcFeatureSymbol> symbols = IVariableArcScopeTOP.super.resolveArcFeatureMany(foundSymbols, name, modifier, predicate);
+    symbols.addAll(resolveArcFeatureOfParentMany(foundSymbols || symbols.size() > 0, name, modifier, predicate));
+    return symbols;
+  }
+
+  default List<ArcFeatureSymbol> resolveArcFeatureOfParentMany(boolean foundSymbols, String name,
+                                                              AccessModifier modifier,
+                                                              Predicate<ArcFeatureSymbol> predicate) {
+    if (!foundSymbols && this.isPresentSpanningSymbol()) {
+      Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(this.getSpanningSymbol());
+      if (component.isPresent() && component.get().isPresentParentComponent()) {
+        return ((IVariableArcScope) component.get().getParent().getTypeInfo().getSpannedScope())
+            .resolveArcFeatureMany(false, name, modifier, predicate);
+      }
+    }
+    return new ArrayList<>();
   }
 }
