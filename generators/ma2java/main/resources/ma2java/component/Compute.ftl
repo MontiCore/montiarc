@@ -16,6 +16,8 @@ public void compute() {
 
   // result
   <@printSetOutput comp/>
+
+  <@printSynchronize comp/>
 }
 
 <#macro printLocalInputVariables comp>
@@ -33,6 +35,12 @@ public void compute() {
 <#macro printSetOutput comp>
   <#list comp.getAllOutgoingPorts() as port>
     this.get${port.getName()?cap_first}().setValue(${port.getName()});
+  </#list>
+</#macro>
+
+<#macro printSynchronize comp>
+  <#list comp.getAllOutgoingPorts() as port>
+    this.get${port.getName()?cap_first}().sync();
   </#list>
 </#macro>
 
