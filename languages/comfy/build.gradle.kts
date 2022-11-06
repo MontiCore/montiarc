@@ -33,3 +33,8 @@ dependencies {
 
 configureMCTask("ComfortableArc.mc4")
 
+tasks.getByName<Test>("test").useJUnitPlatform()
+
+java.registerFeature("tests") {
+  usingSourceSet(sourceSets.getByName("test"))
+}

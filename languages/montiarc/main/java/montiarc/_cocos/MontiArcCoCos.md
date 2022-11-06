@@ -103,6 +103,12 @@ Legend:
 | ☒     | SCNameIsArtifactName                                                   | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                                                                                             |
 | ☒     | CapitalStateNames                                                      | SCBasis            | Warns if a state name starts with a lower case letter. At a discussion we found this to be unneccessary.                                                                                                                         |
 
+## ComfortableArc Cocos
+
+| in MA | CoCo(s)                       | Language       | Code    | Notes                                                                                                                                    |
+|-------|-------------------------------|----------------|---------|------------------------------------------------------------------------------------------------------------------------------------------|
+| ☑     | MaxOneAutoconnectPerComponent | ComfortableArc | 0xC1450 | There may only be one `autoconnect` declaration per component. It is also allowed to omit it in which case `autoconnect off` is implied. |
+
 ## Statement CoCos
 
 | in MA | CoCo(s)                                    | Language   | Notes |        
