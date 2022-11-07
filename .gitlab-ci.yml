@@ -21,6 +21,7 @@ Build jdk17:
       - generators/**/build/
       - languages/build/
       - libraries/**/build/
+      - tooling/language-server/build/generated-sources/MontiArc/plugins/montiarc-intellij-plugin/build/distributions/
       - .gradle/
     expire_in: 1 week
   script:
