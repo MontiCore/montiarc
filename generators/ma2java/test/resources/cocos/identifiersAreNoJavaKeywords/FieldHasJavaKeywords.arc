@@ -60,21 +60,4 @@ component FieldHasJavaKeywords {
   //int volatile = 0;       // Parse error
   //int while = 0;          // Parse error
 
-  int exports = 0;
-  int module = 0;
-  //int non-sealed = 0;     // Parse error
-  int open = 0;
-  int opens = 0;
-  int permits = 0;
-  int provides = 0;
-  int record = 0;
-
-  int requires = 0;
-  int sealed = 0;
-  int to = 0;
-  int transitive = 0;
-  int uses = 0;
-  int var = 0;
-  int with = 0;
-  int yield = 3;
 }

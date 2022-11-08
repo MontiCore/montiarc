@@ -26,12 +26,7 @@ public abstract class IdentifiersAreNoJavaKeywords {
     "char",       "final",      "interface",    "static",      "void",
     "class",      "finally",    "long",         "strictfp",    "volatile",
     "const",      "float",      "native",       "super",       "while",
-    "_",
-
-    "exports",      "opens",      "requires",     "uses",
-    "module",       "permits",    "sealed",       "var",
-    "non-sealed",   "provides",   "to",           "with",
-    "open",         "record",     "transitive",   "yield"
+    "_"
   );
 
   public static class PortNamesAreNoJavaKeywords extends PortNameIsNoReservedKeyword {

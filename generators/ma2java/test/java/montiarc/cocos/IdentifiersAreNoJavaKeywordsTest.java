@@ -28,13 +28,13 @@ class IdentifiersAreNoJavaKeywordsTest {
     return Stream.of(
       Arguments.of("WithoutJavaKeywords.arc", new Error[]{}),
       Arguments.of("WithAutomatonButNoJavaKeywords.arc", new Error[]{}),
-      Arguments.of("PortHasJavaKeywords.arc", repeat(ArcError.RESERVED_KEYWORD_USED, 32).toArray(Error[]::new)),
-      Arguments.of("ParameterHasJavaKeywords.arc", repeat(ArcError.RESERVED_KEYWORD_USED, 32).toArray(Error[]::new)),
-      Arguments.of("FieldHasJavaKeywords.arc", repeat(ArcError.RESERVED_KEYWORD_USED, 32).toArray(Error[]::new)),
-      Arguments.of("TypeParamHasJavaKeywords.arc", repeat(ArcError.RESERVED_KEYWORD_USED, 32).toArray(Error[]::new)),
-      Arguments.of("AutomatonHasJavaKeywords.arc", repeat(ArcError.RESERVED_KEYWORD_USED, 32).toArray(Error[]::new)),
-      Arguments.of("ComponentTypeHasJavaKeywords.arc", repeat(ArcError.RESERVED_KEYWORD_USED, 32).toArray(Error[]::new)),
-      Arguments.of("ComponentInstanceHasJavaKeywords.arc", repeat(ArcError.RESERVED_KEYWORD_USED, 32).toArray(Error[]::new))
+      Arguments.of("PortHasJavaKeywords.arc", repeat(ArcError.RESERVED_KEYWORD_USED, 17).toArray(Error[]::new)),
+      Arguments.of("ParameterHasJavaKeywords.arc", repeat(ArcError.RESERVED_KEYWORD_USED, 17).toArray(Error[]::new)),
+      Arguments.of("FieldHasJavaKeywords.arc", repeat(ArcError.RESERVED_KEYWORD_USED, 17).toArray(Error[]::new)),
+      Arguments.of("TypeParamHasJavaKeywords.arc", repeat(ArcError.RESERVED_KEYWORD_USED, 17).toArray(Error[]::new)),
+      Arguments.of("AutomatonHasJavaKeywords.arc", repeat(ArcError.RESERVED_KEYWORD_USED, 17).toArray(Error[]::new)),
+      Arguments.of("ComponentTypeHasJavaKeywords.arc", repeat(ArcError.RESERVED_KEYWORD_USED, 17).toArray(Error[]::new)),
+      Arguments.of("ComponentInstanceHasJavaKeywords.arc", repeat(ArcError.RESERVED_KEYWORD_USED, 17).toArray(Error[]::new))
     );
   }
 

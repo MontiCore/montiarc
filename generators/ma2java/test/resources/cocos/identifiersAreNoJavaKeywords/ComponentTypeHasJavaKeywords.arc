@@ -60,21 +60,4 @@ component ComponentTypeHasJavaKeywords {
   //component volatile {}       // Parse error
   //component while {}          // Parse error
 
-  component exports {}
-  component module {}
-  //component non-sealed {}     // Parse error
-  component open {}
-  component opens {}
-  component permits {}
-  component provides {}
-  component record {}
-
-  component requires inst1, inst2, inst3{}
-  component sealed {}
-  component to {}
-  component transitive {}
-  component uses {}
-  component var {}
-  component with {}
-  component yield {}
 }

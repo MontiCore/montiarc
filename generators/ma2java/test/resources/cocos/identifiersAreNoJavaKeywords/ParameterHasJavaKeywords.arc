@@ -55,26 +55,9 @@ component ParameterHasJavaKeywords (
     int throw,
     int throws,
     //int transient,      // Parse error
-    int try,
+    int try
     //int void,           // Parse error
     //int volatile,       // Parse error
     //int while,          // Parse error
 
-    int exports,
-    int module,
-    //int non-sealed,     // Parse error
-    int open,
-    int opens,
-    int permits,
-    int provides,
-    int record,
-
-    int requires,
-    int sealed,
-    int to,
-    int transitive,
-    int uses = 0,
-    int var = 1,
-    int with = 2,
-    int yield = 3
 ) { }

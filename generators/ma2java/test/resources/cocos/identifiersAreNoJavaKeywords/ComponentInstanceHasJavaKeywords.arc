@@ -62,19 +62,4 @@ component ComponentInstanceHasJavaKeywords {
   //Inner volatile;       // Parse error
   //Inner while;          // Parse error
 
-  Inner exports;
-  Inner module;
-  //Inner non-sealed;     // Parse error
-  Inner open;
-  Inner opens;
-  Inner permits;
-  Inner provides;
-  Inner record;
-
-  component Inner1 requires {}
-  component Inner2 sealed, to, transitive {}
-  Inner uses;
-  Inner var;
-  Inner with;
-  Inner yield;
 }

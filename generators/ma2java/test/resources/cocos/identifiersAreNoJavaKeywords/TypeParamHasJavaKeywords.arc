@@ -55,26 +55,9 @@ component TypeParamHasJavaKeywords <
   throw,
   throws,
   //transient,      // Parse error
-  try,
+  try
   //void,           // Parse error
   //volatile,       // Parse error
   //while,          // Parse error
 
-  exports,
-  module,
-  //non-sealed,     // Parse error
-  open,
-  opens,
-  permits,
-  provides,
-  record,
-
-  requires,
-  sealed,
-  to,
-  transitive,
-  uses,
-  var,
-  with,
-  yield
 > { }
