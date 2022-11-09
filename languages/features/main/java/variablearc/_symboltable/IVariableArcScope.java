@@ -150,4 +150,24 @@ public interface IVariableArcScope extends IVariableArcScopeTOP {
     }
     return new ArrayList<>();
   }
+
+  @Override
+  default List<ArcFeatureSymbol> continueArcFeatureWithEnclosingScope(boolean foundSymbols, String name,
+                                                                                    AccessModifier modifier,
+                                                                                    Predicate<ArcFeatureSymbol> predicate) {
+    if (checkIfContinueWithEnclosingScope(foundSymbols) && (getEnclosingScope() != null)) {
+      if (isPresentSpanningSymbol() && new InstanceVisitor().asComponent(this.getSpanningSymbol()).isPresent()) {
+        return getEnclosingScope().resolveArcFeatureManyEnclosing(foundSymbols, name, modifier, predicate);
+      } else {
+        return getEnclosingScope().resolveArcFeatureMany(foundSymbols, name, modifier, predicate);
+      }
+    }
+    return new ArrayList<>();
+  }
+
+  default List<ArcFeatureSymbol> resolveArcFeatureManyEnclosing(boolean foundSymbols, String name,
+                                                                              AccessModifier modifier,
+                                                                              Predicate<ArcFeatureSymbol> predicate) {
+    return continueArcFeatureWithEnclosingScope(foundSymbols, name, modifier, predicate);
+  }
 }

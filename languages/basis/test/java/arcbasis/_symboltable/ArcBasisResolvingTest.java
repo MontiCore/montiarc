@@ -4,6 +4,7 @@ package arcbasis._symboltable;
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTPortDirection;
+import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -421,5 +422,82 @@ public class ArcBasisResolvingTest extends AbstractTest {
     Assertions.assertEquals(port, resolvedPort.get());
     Assertions.assertTrue(resolvedVariable.isPresent());
     Assertions.assertEquals(variable, resolvedVariable.get());
+  }
+
+  @Test
+  public void shouldNotResolveInEnclosingScopeForComponents() {
+    // Given
+    IArcBasisScope enclosingScope = ArcBasisMill.scope();
+    IArcBasisScope scope = ArcBasisMill.scope();
+    enclosingScope.addSubScope(scope);
+
+    ComponentTypeSymbol parent =
+        ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(ArcBasisMill.scope()).build();
+    ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
+        .setParentComponent(new TypeExprOfComponent(parent)).build();
+
+    PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1").setDirection(Mockito.mock(ASTPortDirection.class))
+        .setType(Mockito.mock(SymTypeExpression.class)).build();
+    enclosingScope.add(port);
+
+    ComponentInstanceSymbol instance =
+        ArcBasisMill.componentInstanceSymbolBuilder().setName("ins1").setType(Mockito.mock(
+            CompTypeExpression.class)).build();
+    enclosingScope.add(instance);
+
+    VariableSymbol variable = ArcBasisMill.variableSymbolBuilder().setName("var1").setType(Mockito.mock(
+        SymTypeExpression.class)).build();
+    enclosingScope.add(variable);
+
+    // When
+    Optional<PortSymbol> resolvedPort = scope.resolvePort("p1");
+    Optional<ComponentInstanceSymbol> resolvedInstance = scope.resolveComponentInstance("ins1");
+    Optional<VariableSymbol> resolvedVariable = scope.resolveVariable("var1");
+
+    // Then
+    Assertions.assertTrue(resolvedPort.isEmpty());
+    Assertions.assertTrue(resolvedInstance.isEmpty());
+    Assertions.assertTrue(resolvedVariable.isEmpty());
+  }
+
+  @Test
+  public void shouldResolveInEnclosingScope() {
+    // Given
+    IArcBasisScope enclosingScope = ArcBasisMill.scope();
+    IArcBasisScope scope = ArcBasisMill.scope();
+    enclosingScope.addSubScope(scope);
+
+    PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1").setDirection(Mockito.mock(ASTPortDirection.class))
+        .setType(Mockito.mock(SymTypeExpression.class)).build();
+    enclosingScope.add(port);
+
+    ComponentInstanceSymbol instance =
+        ArcBasisMill.componentInstanceSymbolBuilder().setName("ins1").setType(Mockito.mock(
+            CompTypeExpression.class)).build();
+    enclosingScope.add(instance);
+
+    VariableSymbol variable = ArcBasisMill.variableSymbolBuilder().setName("var1").setType(Mockito.mock(
+        SymTypeExpression.class)).build();
+    enclosingScope.add(variable);
+
+    // When
+    Optional<PortSymbol> resolvedPort = scope.resolvePort("p1");
+    Optional<ComponentInstanceSymbol> resolvedInstance = scope.resolveComponentInstance("ins1");
+    Optional<VariableSymbol> resolvedVariable = scope.resolveVariable("var1");
+
+    // Then
+    Assertions.assertAll(
+        () -> Assertions.assertFalse(resolvedPort.isEmpty(),
+            "Failed to resolve the port symbol."),
+        () -> Assertions.assertFalse(resolvedInstance.isEmpty(),
+            "Failed to resolve the component instance symbol."),
+        () -> Assertions.assertFalse(resolvedVariable.isEmpty(),
+            "Failed to resolve the variable symbol.")
+    );
+    Assertions.assertAll(
+        () -> Assertions.assertEquals(port, resolvedPort.get()),
+        () -> Assertions.assertEquals(instance, resolvedInstance.get()),
+        () -> Assertions.assertEquals(variable, resolvedVariable.get())
+    );
   }
 }

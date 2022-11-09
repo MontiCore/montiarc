@@ -135,6 +135,13 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
     return adapters;
   }
 
+  /**
+   * Overrides the default behavior of resolving in enclosing scopes for component
+   * type symbol scopes. Component type symbols only resolve in the enclosing scope if
+   * it's an artifact scope.
+   *
+   * @return the resolved port symbols in the enclosing scope
+   */
   @Override
   default List<PortSymbol> resolvePortMany(boolean foundSymbols,
                                            String name,
@@ -179,5 +186,62 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
       }
     }
     return new ArrayList<>();
+  }
+
+  @Override
+  default List<PortSymbol> continuePortWithEnclosingScope(boolean foundSymbols, String name, AccessModifier modifier,
+                                                          Predicate<PortSymbol> predicate) {
+    if (checkIfContinueWithEnclosingScope(foundSymbols) && (getEnclosingScope() != null)) {
+      if (isPresentSpanningSymbol() && new InstanceVisitor().asComponent(this.getSpanningSymbol()).isPresent()) {
+        return getEnclosingScope().resolvePortManyEnclosing(foundSymbols, name, modifier, predicate);
+      } else {
+        return getEnclosingScope().resolvePortMany(foundSymbols, name, modifier, predicate);
+      }
+    }
+    return new ArrayList<>();
+  }
+
+  default List<PortSymbol> resolvePortManyEnclosing(boolean foundSymbols, String name, AccessModifier modifier,
+                                                    Predicate<PortSymbol> predicate) {
+    return continuePortWithEnclosingScope(foundSymbols, name, modifier, predicate);
+  }
+
+  @Override
+  default List<VariableSymbol> continueVariableWithEnclosingScope(boolean foundSymbols, String name,
+                                                                  AccessModifier modifier,
+                                                                  Predicate<VariableSymbol> predicate) {
+    if (checkIfContinueWithEnclosingScope(foundSymbols) && (getEnclosingScope() != null)) {
+      if (isPresentSpanningSymbol() && new InstanceVisitor().asComponent(this.getSpanningSymbol()).isPresent()) {
+        return getEnclosingScope().resolveVariableManyEnclosing(foundSymbols, name, modifier, predicate);
+      } else {
+        return getEnclosingScope().resolveVariableMany(foundSymbols, name, modifier, predicate);
+      }
+    }
+    return new ArrayList<>();
+  }
+
+  default List<VariableSymbol> resolveVariableManyEnclosing(boolean foundSymbols, String name, AccessModifier modifier,
+                                                            Predicate<VariableSymbol> predicate) {
+    return continueVariableWithEnclosingScope(foundSymbols, name, modifier, predicate);
+  }
+
+  @Override
+  default List<ComponentInstanceSymbol> continueComponentInstanceWithEnclosingScope(boolean foundSymbols, String name,
+                                                                                    AccessModifier modifier,
+                                                                                    Predicate<ComponentInstanceSymbol> predicate) {
+    if (checkIfContinueWithEnclosingScope(foundSymbols) && (getEnclosingScope() != null)) {
+      if (isPresentSpanningSymbol() && new InstanceVisitor().asComponent(this.getSpanningSymbol()).isPresent()) {
+        return getEnclosingScope().resolveComponentInstanceManyEnclosing(foundSymbols, name, modifier, predicate);
+      } else {
+        return getEnclosingScope().resolveComponentInstanceMany(foundSymbols, name, modifier, predicate);
+      }
+    }
+    return new ArrayList<>();
+  }
+
+  default List<ComponentInstanceSymbol> resolveComponentInstanceManyEnclosing(boolean foundSymbols, String name,
+                                                                              AccessModifier modifier,
+                                                                              Predicate<ComponentInstanceSymbol> predicate) {
+    return continueComponentInstanceWithEnclosingScope(foundSymbols, name, modifier, predicate);
   }
 }
