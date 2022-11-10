@@ -1,0 +1,22 @@
+/* (c) https://github.com/MontiCore/monticore */
+package elevator;
+
+classdiagram Commands {
+
+  public enum DoorCMD {
+    OPEN,
+    CLOSE;
+  }
+
+  public enum LiftCMD {
+    UP,
+    DOWN,
+    STOP;
+  }
+
+  public enum Direction {
+    NA,
+    UP,
+    DOWN;
+  }
+}
