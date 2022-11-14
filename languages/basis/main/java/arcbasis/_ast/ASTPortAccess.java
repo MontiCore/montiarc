@@ -20,33 +20,6 @@ public class ASTPortAccess extends ASTPortAccessTOP {
     }
   }
 
-  @Override
-  protected void updatePortSymbol() {
-    if (getEnclosingScope() != null && (portSymbol == null || !getPort().equals(portSymbol.getName()))) {
-      if (isPresentComponent()) {
-        if (this.getComponentSymbol() != null && this.getComponentSymbol().isPresentType()
-          && this.getComponentSymbol().getType().getTypeInfo() != null
-          && this.getComponentSymbol().getType().getTypeInfo().getEnclosingScope() != null) {
-          portSymbol = getComponentSymbol().getType().getTypeInfo().getSpannedScope().resolvePortMany(getPort())
-            .stream().findFirst().orElse(null);
-        } else {
-          portSymbol = null;
-        }
-      } else {
-        portSymbol = getEnclosingScope().resolvePortMany(getPort()).stream().findFirst().orElse(null);
-      }
-    }
-  }
-
-  @Override
-  protected void updateComponentSymbol () {
-    if (isPresentComponent()) {
-      if (getEnclosingScope() != null && (componentSymbol == null || !getComponent().equals(componentSymbol.getName()))) {
-        componentSymbol = getEnclosingScope().resolveComponentInstanceMany(getComponent()).stream().findFirst().orElse(null);
-      }
-    }
-  }
-
   public void setComponentSymbol(@Nullable ComponentInstanceSymbol symbol) {
     componentSymbol = symbol;
   }
@@ -54,5 +27,25 @@ public class ASTPortAccess extends ASTPortAccessTOP {
   public void setPortSymbol(@NotNull PortSymbol symbol) {
     Preconditions.checkNotNull(symbol);
     portSymbol = symbol;
+  }
+
+  @Override
+  public ComponentInstanceSymbol getComponentSymbol() {
+    return componentSymbol;
+  }
+
+  @Override
+  public PortSymbol getPortSymbol() {
+    return portSymbol;
+  }
+
+  @Override
+  public boolean isPresentComponentSymbol() {
+    return componentSymbol != null;
+  }
+
+  @Override
+  public boolean isPresentPortSymbol() {
+    return portSymbol != null;
   }
 }

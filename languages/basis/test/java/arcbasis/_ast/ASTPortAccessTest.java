@@ -68,7 +68,7 @@ public class ASTPortAccessTest extends AbstractTest {
     ComponentInstanceSymbol resolvedSubcomponent = portAccess.getComponentSymbol();
 
     //Then
-    Assertions.assertFalse(Log.getFindings().isEmpty());
+    Assertions.assertTrue(Log.getFindings().isEmpty());
     Assertions.assertNull(resolvedSubcomponent);
   }
 
@@ -123,7 +123,7 @@ public class ASTPortAccessTest extends AbstractTest {
     PortSymbol resolvedPort = portAccess.getPortSymbol();
 
     //Then
-    Assertions.assertFalse(Log.getFindings().isEmpty());
+    Assertions.assertTrue(Log.getFindings().isEmpty());
     Assertions.assertNull(resolvedPort);
   }
 
