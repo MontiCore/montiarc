@@ -49,7 +49,7 @@ public void compute() {
   public void init() {
     // provide initial value for delay ports
     <#list comp.getPorts() as port>
-      <#if port.isDelayed()>this.${port.getName()}.tick()</#if>;
+      <#if port.isDelayed()>this.${port.getName()}.tick();</#if>
     </#list>
   }
 </#macro>
