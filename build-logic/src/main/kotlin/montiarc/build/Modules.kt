@@ -44,6 +44,7 @@ abstract class Modules {
   val monticoreClass2MC = "de.monticore:class2mc"
   val monticoreGrammar = "de.monticore:monticore-grammar"
   val monticoreRuntime = "de.monticore:monticore-runtime"
+  val monticoreOCL = "de.monticore.lang:ocl"
   val monticoreStatecharts = "de.monticore.lang:statecharts"
   val seCommonsGroovy = "de.se_rwth.commons:se-commons-groovy"
   val seCommonsLogging = "de.se_rwth.commons:se-commons-logging"
@@ -52,5 +53,6 @@ abstract class Modules {
   val lejosModels = "montiarc.libraries:lejos-rte-models"
   val dynsimRteModel = "montiarc.libraries:dynsim-reaction-rte-model"
   val mcGrammarsCapability = "de.monticore:monticore-grammar-grammars"
+  val oclGrammarsCapability = "de.monticore.lang:ocl-grammars"
   val scGrammarsCapability = "de.monticore.lang:statecharts-grammars"
 }

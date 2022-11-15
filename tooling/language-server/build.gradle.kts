@@ -30,4 +30,5 @@ val autoconfigure = tasks.create<de.mclsg.task.AutoconfigureTask>("autoconfigure
 }
 tasks.getByName("generateMontiArcLanguageServer") { dependsOn(project(":languages").tasks.getByName("grammarJar")) }
 val t = tasks.getByName("packMontiArcLanguageServer")
+
 project(":languages"){ subprojects{ t.dependsOn (tasks.getByName("assemble")) }}

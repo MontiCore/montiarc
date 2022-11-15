@@ -19,6 +19,7 @@ dependencies {
     api(libs.monticoreClass2MC) { version { strictly(libs.monticoreVersion) }}
     api(libs.monticoreGrammar) { version { strictly(libs.monticoreVersion) }}
     api(libs.monticoreRuntime) { version { strictly(libs.monticoreVersion) }}
+    api(libs.monticoreOCL) { version { strictly(libs.monticoreVersion) }}
     api(libs.monticoreStatecharts) { version { strictly(libs.monticoreVersion) }}
     api(libs.seCommonsGroovy) { version { strictly(libs.monticoreVersion) }}
     api(libs.seCommonsLogging) { version { strictly(libs.monticoreVersion) }}
