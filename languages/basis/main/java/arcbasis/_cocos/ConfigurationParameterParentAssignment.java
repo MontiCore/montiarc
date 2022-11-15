@@ -78,6 +78,7 @@ public class ConfigurationParameterParentAssignment implements ArcBasisASTCompon
   protected void checkParentInstantiationArgsAreNotTooMany(@NotNull ComponentTypeSymbol comp, @NotNull CompTypeExpression parent) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(parent);
+    Preconditions.checkNotNull(parent.getTypeInfo());
 
     List<ASTExpression> parentArgs = comp.getParentConfiguration();
     List<VariableSymbol> paramsOfParentCompType = parent.getTypeInfo().getParameters();
@@ -102,6 +103,7 @@ public class ConfigurationParameterParentAssignment implements ArcBasisASTCompon
   protected void checkParentInstantiationArgsBindAllMandatoryParams(@NotNull ComponentTypeSymbol comp, @NotNull CompTypeExpression parent) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(parent);
+    Preconditions.checkNotNull(parent.getTypeInfo());
 
 
     List<ASTExpression> parentArgs = comp.getParentConfiguration();
@@ -133,6 +135,7 @@ public class ConfigurationParameterParentAssignment implements ArcBasisASTCompon
   protected void checkParentInstantiationArgsHaveCorrectTypes(@NotNull ComponentTypeSymbol comp, @NotNull CompTypeExpression parent) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(parent);
+    Preconditions.checkNotNull(parent.getTypeInfo());
 
     List<TypeCheckResult> parentArgs = comp.getParentConfiguration().stream()
         .map(expr -> this.getTypeCalculator().deriveType(expr))

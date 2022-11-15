@@ -12,6 +12,7 @@ import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -398,8 +399,14 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return a {@code List} of all ports of this component type.
    */
   public List<PortSymbol> getAllPorts() {
+    return this.getAllPorts(new HashSet<>());
+  }
+
+  protected List<PortSymbol> getAllPorts(@NotNull Collection<ComponentTypeSymbol> visited) {
+    Preconditions.checkNotNull(visited);
+
     List<PortSymbol> result = new ArrayList<>(getPorts());
-    if (this.isPresentParentComponent()) {
+    if (this.isPresentParentComponent() && !visited.contains(this.getParent().getTypeInfo())) {
       List<PortSymbol> inheritedPorts = new ArrayList<>();
       for (PortSymbol port : this.getParent().getTypeInfo().getAllPorts()) {
         if (result.stream().noneMatch(p -> p.getName().equals(port.getName()))) {
