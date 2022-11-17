@@ -32,7 +32,7 @@ class MontiarcPlugin : Plugin<Project> {
       if(extension.internalMontiArcTesting.get()) {
         project.project(internalGeneratorProjectRef)
       } else {
-        "${mavenGeneratorProjectRef}:${project.version}"
+        "${mavenGeneratorProjectRef}:${GENERATOR_VERSION}"
       }
     })
 
