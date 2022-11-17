@@ -242,7 +242,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
         node.getSymbol().setType(typeExpr.getResult());
       }
     } catch (ResolvedSeveralEntriesForSymbolException e) {
-      String name = "";
+      String name = node.getMCType().toString();
       if (node.getMCType() instanceof ASTMCQualifiedType) {
         name = ((ASTMCQualifiedType) node.getMCType()).getMCQualifiedName().getQName();
       }
@@ -281,7 +281,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
         port.getSymbol().setType(typeExpr.getResult());
       }
     } catch (ResolvedSeveralEntriesForSymbolException e) {
-      String name = "";
+      String name = this.getCurrentPortType().get().toString();
       if (this.getCurrentPortType().get() instanceof ASTMCQualifiedType) {
         name = ((ASTMCQualifiedType) this.getCurrentPortType().get()).getMCQualifiedName().getQName();
       }
@@ -319,7 +319,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
         field.getSymbol().setType(typeExpr.getResult());
       }
     } catch (ResolvedSeveralEntriesForSymbolException e) {
-      String name = "";
+      String name = this.getCurrentFieldType().get().toString();
       if (this.getCurrentFieldType().get() instanceof ASTMCQualifiedType) {
         name = ((ASTMCQualifiedType) this.getCurrentFieldType().get()).getMCQualifiedName().getQName();
       }

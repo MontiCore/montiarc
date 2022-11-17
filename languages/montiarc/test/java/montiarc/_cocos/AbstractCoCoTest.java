@@ -8,7 +8,6 @@ import montiarc.AbstractTest;
 import montiarc.MontiArcTool;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc.util.Error;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -89,6 +88,7 @@ public abstract class AbstractCoCoTest extends AbstractTest {
     Preconditions.checkNotNull(model);
     ASTMACompilationUnit ast = this.getCLI().parse(getPathToModel(model)).orElse(null);
     this.getCLI().createSymbolTable(ast);
+    this.getCLI().completeSymbolTable(ast);
     return ast;
   }
 

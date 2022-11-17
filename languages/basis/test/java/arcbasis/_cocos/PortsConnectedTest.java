@@ -15,12 +15,12 @@ import org.mockito.Mockito;
 
 import java.util.stream.Stream;
 
-class PortUsageTest extends AbstractTest {
+class PortsConnectedTest extends AbstractTest {
 
   @ParameterizedTest
   @MethodSource("componentAndErrorCodeProvider")
   void shouldDetectWronglyConnectedPorts(ASTComponentType ast, ArcError[] errors) {
-    PortUsage coco = new PortUsage();
+    PortsConnected coco = new PortsConnected();
     coco.check(ast);
     this.checkOnlyExpectedErrorsPresent(errors);
   }
@@ -36,7 +36,7 @@ class PortUsageTest extends AbstractTest {
             .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder()
               .setPrimitive(ASTConstantsMCBasicTypes.BYTE)
               .build())
-            .setPortList("i1", "i2", "i3")
+            .setPortList("i1", "i2", "i3", "i4")
             .build())
           .addPortDeclaration(ArcBasisMill.portDeclarationBuilder()
             .setOutgoing(true)
@@ -68,7 +68,7 @@ class PortUsageTest extends AbstractTest {
           .addPortDeclaration(ArcBasisMill.portDeclarationBuilder()
             .setOutgoing(true)
             .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build())
-            .setPortList("o1", "o2", "o3")
+            .setPortList("o1", "o2", "o3", "04")
             .build())
           .build())
         .addArcElement(ArcBasisMill.componentInstantiationBuilder()
@@ -79,7 +79,7 @@ class PortUsageTest extends AbstractTest {
         .build())
       .build();
     symTab.createFromAST(comp2);
-    return Stream.of(Arguments.of(comp1, new ArcError[] { ArcError.INCOMING_PORT_AS_TARGET }),
-      Arguments.of(comp2, new ArcError[] { ArcError.OUTGOING_PORT_AS_SOURCE}));
+    return Stream.of(Arguments.of(comp1, new ArcError[] { ArcError.INCOMING_PORT_NO_FORWARD }),
+      Arguments.of(comp2, new ArcError[] { ArcError.OUTGOING_PORT_NO_FORWARD }));
   }
 }

@@ -21,9 +21,9 @@ import java.util.HashMap;
 import java.util.stream.Stream;
 
 /**
- * Holds tests for the handwritten methods of {@link SubComponentsConnected}
+ * Holds tests for the handwritten methods of {@link SubPortsConnected}
  */
-public class SubComponentsConnectedTest extends AbstractTest {
+public class SubPortsConnectedTest extends AbstractTest {
 
   HashMap<String, ASTComponentType> components;
 
@@ -35,7 +35,7 @@ public class SubComponentsConnectedTest extends AbstractTest {
 
     //Given
     ASTComponentType ast = components.get(comp);
-    SubComponentsConnected coco = new SubComponentsConnected();
+    SubPortsConnected coco = new SubPortsConnected();
 
     //When
     coco.check(ast);
@@ -87,7 +87,7 @@ public class SubComponentsConnectedTest extends AbstractTest {
           .setComponentInstanceList("sub1")
           .build())
         .addArcElement(ArcBasisMill.connectorBuilder().setSource("i1").setTargetList("sub1.i1",
-          "sub1.i2", "sub1.o1").build())
+          "sub1.i2").build())
         .build())
       .build();
     genitor.createFromAST(comp2);
@@ -114,8 +114,6 @@ public class SubComponentsConnectedTest extends AbstractTest {
           ArcBasisMill.connectorBuilder().setSource("i1").setTargetList("sub1.i1").build())
         .addArcElement(
           ArcBasisMill.connectorBuilder().setSource("sub1.o1").setTargetList("o1").build())
-        .addArcElement(
-          ArcBasisMill.connectorBuilder().setSource("sub1.i2").setTargetList("o2").build())
         .build())
       .build();
     genitor.createFromAST(comp3);
@@ -131,8 +129,8 @@ public class SubComponentsConnectedTest extends AbstractTest {
 
   static Stream<Arguments> componentAndErrorCodeProvider() {
     ArcError[] errors1 = new ArcError[] {};
-    ArcError[] errors2 = new ArcError[] { ArcError.OUTGOING_PORT_AS_TARGET };
-    ArcError[] errors3 = new ArcError[] { ArcError.INCOMING_PORT_AS_SOURCE };
+    ArcError[] errors2 = new ArcError[] { ArcError.OUTGOING_PORT_NOT_CONNECTED };
+    ArcError[] errors3 = new ArcError[] { ArcError.INCOMING_PORT_NOT_CONNECTED };
     return Stream.of(Arguments.of("A", errors1), Arguments.of("B", errors2), Arguments.of("C", errors3));
   }
 }

@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * @implements [Hab16] R4: Unqualified subcomponent types either exist in the current package or are
  * imported using an import statement. (p. 64, Lst. 3.39)
  */
-public class SubComponentsConnected implements ArcBasisASTComponentTypeCoCo {
+public class SubPortsConnected implements ArcBasisASTComponentTypeCoCo {
 
   @Override
   public void check(@NotNull ASTComponentType node) {
@@ -40,6 +40,8 @@ public class SubComponentsConnected implements ArcBasisASTComponentTypeCoCo {
     final Collection<String> targets = this.getTargetNames(node);
     final Collection<String> sources = this.getSourceNames(node);
     for (ComponentInstanceSymbol subSymbol : compSymbol.getSubComponents()) {
+      if (!subSymbol.isPresentType()) continue;
+
       // --------- INCOMING PORTS ----------
       Collection<String> subInputPorts =
         this.getNames(subSymbol.getType().getTypeInfo().getAllIncomingPorts());
@@ -49,12 +51,8 @@ public class SubComponentsConnected implements ArcBasisASTComponentTypeCoCo {
       subInputPorts.removeAll(targets);
       for (String port : subInputPorts) {
         SourcePosition sourcePosition = this.getSourcePosition(compSymbol, node, port);
-        if (sources.contains(port)) {
-          Log.error(
-            ArcError.INCOMING_PORT_AS_SOURCE.format(port,
-              subSymbol.getFullName(), compSymbol.getFullName()), sourcePosition);
-        } else {
-          Log.error(
+        if (!sources.contains(port)) {
+          Log.warn(
             ArcError.INCOMING_PORT_NOT_CONNECTED.format(port,
               subSymbol.getFullName(), compSymbol.getFullName()), sourcePosition);
         }
@@ -68,12 +66,8 @@ public class SubComponentsConnected implements ArcBasisASTComponentTypeCoCo {
       subOutputPorts.removeAll(sources);
       for (String port : subOutputPorts) {
         SourcePosition sourcePosition = this.getSourcePosition(compSymbol, node, port);
-        if (targets.contains(port)) {
-          Log.error(
-            ArcError.OUTGOING_PORT_AS_TARGET.format(port,
-              subSymbol.getFullName(), compSymbol.getFullName()), sourcePosition);
-        } else {
-          Log.error(
+        if (!targets.contains(port)) {
+          Log.warn(
             ArcError.OUTGOING_PORT_NOT_CONNECTED.format(port,
               subSymbol.getFullName(), compSymbol.getFullName()), sourcePosition);
         }

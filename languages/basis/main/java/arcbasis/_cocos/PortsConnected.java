@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * @implements [Hab16] CV5: In decomposed components, all ports should be used in at least one
  * connector. (p.71 Lst. 3.52)
  */
-public class PortUsage implements ArcBasisASTComponentTypeCoCo {
+public class PortsConnected implements ArcBasisASTComponentTypeCoCo {
 
   @Override
   public void check(@NotNull ASTComponentType node) {
@@ -49,12 +49,7 @@ public class PortUsage implements ArcBasisASTComponentTypeCoCo {
     incomingPorts.removeAll(sources);
     for (String port : incomingPorts) {
       final SourcePosition sourcePosition = this.getSourcePosition(symbol, node, port);
-      if (targets.contains(port)) {
-        Log.error(
-          ArcError.INCOMING_PORT_AS_TARGET.format(port, symbol.getFullName()),
-          sourcePosition);
-      }
-      else {
+      if (!targets.contains(port)) {
         Log.warn(
           ArcError.INCOMING_PORT_NO_FORWARD.format(port, symbol.getFullName()),
           sourcePosition);
@@ -65,12 +60,7 @@ public class PortUsage implements ArcBasisASTComponentTypeCoCo {
     outgoingPorts.removeAll(targets);
     for (String port : outgoingPorts) {
       final SourcePosition sourcePosition = this.getSourcePosition(symbol, node, port);
-      if (sources.contains(port)) {
-        Log.error(
-          ArcError.OUTGOING_PORT_AS_SOURCE.format(port, symbol.getFullName()),
-          sourcePosition);
-      }
-      else {
+      if (!sources.contains(port)) {
         Log.warn(
           ArcError.OUTGOING_PORT_NO_FORWARD.format(port, symbol.getFullName()),
           sourcePosition);

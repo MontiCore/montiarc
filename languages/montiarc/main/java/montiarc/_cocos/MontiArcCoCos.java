@@ -37,6 +37,8 @@ import arcbasis._cocos.PortNameCapitalisation;
 import arcbasis._cocos.PortTimingFits;
 import arcbasis._cocos.PortTypeExists;
 import arcbasis._cocos.PortUniqueSender;
+import arcbasis._cocos.PortsConnected;
+import arcbasis._cocos.SubPortsConnected;
 import arcbasis._cocos.UniqueIdentifierNames;
 import comfortablearc._cocos.MaxOneAutoconnectPerComponent;
 import de.monticore.prettyprint.IndentPrinter;
@@ -94,6 +96,8 @@ public class MontiArcCoCos {
     checker.addCoCo(new PortNameCapitalisation());
     checker.addCoCo(new PortTypeExists(new CheckTypeExistence4MontiArc()));
     checker.addCoCo(new PortUniqueSender());
+    checker.addCoCo(new PortsConnected());
+    checker.addCoCo(new SubPortsConnected());
     checker.addCoCo(new UniqueIdentifierNames());
 
     // Inheritance CoCos

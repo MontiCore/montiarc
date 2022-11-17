@@ -15,21 +15,11 @@ public enum ArcError implements Error {
       + "instance '%s'."),
   SYMBOL_NOT_FOUND("0xC1103", "Cannot find Symbol `%s`."),
   SYMBOL_TOO_MANY_FOUND("0xC1104", "Found too many Symbols `%s`."),
-  INCOMING_PORT_AS_TARGET("0xC1105", "Incoming port '%s' of component '%s' is target of a port "
-      + "forward. Incoming ports may only be used as the source of a port forward."),
-  OUTGOING_PORT_AS_SOURCE("0xC1106", "Outgoing port '%s' of component '%s' is source of a port "
-      + "forward. Outgoing ports may only be used as the target of a port forward."),
   INCOMING_PORT_NO_FORWARD("0xC1107", "Incoming port '%s' of component '%s' is not connected "
       + "as a source of a port forward."),
   OUTGOING_PORT_NO_FORWARD("0xC1108", "Outgoing port '%s' of component '%s' is not connected "
       + "as a target of a port forward."),
   PORT_MULTIPLE_SENDER("0xC1109", "Target port ''%s' of connector is already connected."),
-  INCOMING_PORT_AS_SOURCE("0xC1110", "Incoming port '%s' of subcomponent '%s' of component type "
-      + "'%s' is source of a connector. Incoming ports of subcomponents may only be used as the "
-      + "target of a connector."),
-  OUTGOING_PORT_AS_TARGET("0xC1111", "Outgoing port '%s' of subcomponent '%s' of component type "
-      + "'%S' is target of a connector. Outgoing ports of subcomponents may only be used as the "
-      + "source of a connector."),
   INCOMING_PORT_NOT_CONNECTED("0xC1112", "Incoming port '%s' of subcomponent '%s' of component "
       + "type '%s' is not connected."),
   OUTGOING_PORT_NOT_CONNECTED("0xC1113", "Outgoing port '%s' of subcomponent '%s' of component "

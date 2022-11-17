@@ -4,12 +4,14 @@ package montiarc.cocos;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.generator.MontiArcTool;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -38,6 +40,12 @@ class IdentifiersAreNoJavaKeywordsTest {
     );
   }
 
+  @BeforeEach
+  public void init() {
+    MontiArcMill.globalScope().clear();
+    MontiArcMill.reset();
+  }
+
   @ParameterizedTest
   @MethodSource("modelsAndExpectedErrorsProvider")
   void testIdentifiersWithReservedKeywords(@NotNull String modelName, @NotNull Error... expectedErrors) {
@@ -52,6 +60,7 @@ class IdentifiersAreNoJavaKeywordsTest {
     Log.enableFailQuick(false);
     ASTMACompilationUnit asts = tool.parse(modelLocation.toString());
     tool.createSymbolTable(asts);
+    tool.completeSymbolTable(asts);
 
     // When
     tool.runAdditionalCoCos(asts);
