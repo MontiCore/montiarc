@@ -11,19 +11,22 @@ import genericarc._cocos.GenericTypeParameterNameCapitalization;
 import montiarc.util.ArcError;
 import montiarc.util.GenericArcError;
 import montiarc.util.Error;
+import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import variablearc._cocos.FeatureNameCapitalization;
 
 import java.util.stream.Stream;
 
 /**
- * Contains tests for
- * {@link arcbasis._cocos.ComponentTypeNameCapitalization}, {@link arcbasis._cocos.FieldNameCapitalization},
- * {@link arcbasis._cocos.InstanceNameCapitalisation}, {@link arcbasis._cocos.ParameterNameCapitalization},
- * {@link arcbasis._cocos.PortNameCapitalisation}, {@link genericarc._cocos.GenericTypeParameterNameCapitalization}
+ * Contains tests for {@link arcbasis._cocos.ComponentTypeNameCapitalization},
+ * {@link arcbasis._cocos.FieldNameCapitalization}, {@link
+ * arcbasis._cocos.InstanceNameCapitalisation}, {@link arcbasis._cocos.ParameterNameCapitalization},
+ * {@link arcbasis._cocos.PortNameCapitalisation}, {@link
+ * genericarc._cocos.GenericTypeParameterNameCapitalization}
  */
 public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
 
@@ -39,19 +42,20 @@ public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
       arg("allNamesIncorrectlyCapitalized.arc",
         ArcError.COMPONENT_NAME_UPPER_CASE, GenericArcError.TYPE_PARAMETER_UPPER_CASE_LETTER, ArcError.PARAMETER_LOWER_CASE,
         ArcError.COMPONENT_NAME_UPPER_CASE, ArcError.INSTANCE_NAME_LOWER_CASE, ArcError.PORT_LOWER_CASE,
-        ArcError.PORT_LOWER_CASE, ArcError.VARIABLE_LOWER_CASE),
+        ArcError.PORT_LOWER_CASE, ArcError.VARIABLE_LOWER_CASE, VariableArcError.FEATURE_LOWER_CASE),
       arg("componentNameLowerCase.arc", ArcError.COMPONENT_NAME_UPPER_CASE),
       arg("InnerComponentTypeLowerCase.arc", ArcError.COMPONENT_NAME_UPPER_CASE),
       arg("InstanceNameUpperCase.arc", ArcError.INSTANCE_NAME_LOWER_CASE),
       arg("ParameterNameUpperCase.arc", ArcError.PARAMETER_LOWER_CASE),
       arg("PortNameUpperCase.arc", ArcError.PORT_LOWER_CASE, ArcError.PORT_LOWER_CASE),
       arg("TypeParameterLowerCaseLetter.arc", GenericArcError.TYPE_PARAMETER_UPPER_CASE_LETTER),
-      arg("VariableNameUpperCase.arc", ArcError.VARIABLE_LOWER_CASE)
+      arg("VariableNameUpperCase.arc", ArcError.VARIABLE_LOWER_CASE),
+      arg("FeatureNameUpperCase.arc", VariableArcError.FEATURE_LOWER_CASE)
     );
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"AllNamesCorrectlyCapitalized.arc", "NothingToCapitalize.arc"})
+  @ValueSource(strings = { "AllNamesCorrectlyCapitalized.arc", "NothingToCapitalize.arc" })
   public void allNamesCorrectlyCapitalized(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
@@ -60,7 +64,8 @@ public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
 
   @ParameterizedTest
   @MethodSource("modelAndExpectedErrorsProvider")
-  public void shouldDetectIncorrectCapitalization(@NotNull String model, @NotNull Error... errors) {
+  public void shouldDetectIncorrectCapitalization(@NotNull String model,
+                                                  @NotNull Error... errors) {
     testModel(model, errors);
   }
 
@@ -73,5 +78,6 @@ public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
     checker.addCoCo(new InstanceNameCapitalisation());
     checker.addCoCo(new ParameterNameCapitalization());
     checker.addCoCo(new PortNameCapitalisation());
+    checker.addCoCo(new FeatureNameCapitalization());
   }
 }

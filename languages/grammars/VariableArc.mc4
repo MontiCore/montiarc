@@ -10,6 +10,8 @@
  */
 component grammar VariableArc extends ArcBasis {
 
+  start ArcElement;
+
   /**
    * ASTFeatureDeclaration declares one or more features by specifying their name.
    *

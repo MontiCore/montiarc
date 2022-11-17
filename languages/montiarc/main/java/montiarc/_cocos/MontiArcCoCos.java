@@ -4,6 +4,7 @@ package montiarc._cocos;
 import arcautomaton._cocos.FieldReadWriteAccessFitsInGuards;
 import arcautomaton._cocos.FieldReadWriteAccessFitsInStatements;
 import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
+import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import arcbasis._cocos.CircularInheritance;
 import arcbasis._cocos.ComponentInstanceTypeExists;
 import arcbasis._cocos.ComponentTypeNameCapitalization;
@@ -57,6 +58,7 @@ import genericarc._cocos.GenericTypeParameterNameCapitalization;
 import montiarc._cocos.util.CheckTypeExistence4MontiArc;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
 import montiarc.check.MontiArcTypeCalculator;
+import variablearc._cocos.*;
 
 /**
  * Bundle of CoCos for the MontiArc language.
@@ -108,6 +110,20 @@ public class MontiArcCoCos {
 
     // GenericArc CoCos
     checker.addCoCo(new GenericTypeParameterNameCapitalization());
+
+    // VariableArc
+    checker.addCoCo(new ConstraintEvaluation());
+    checker.addCoCo(new ConstraintsOmitPortReferences());
+    checker.addCoCo(new ConstraintIsBoolean(new MontiArcTypeCalculator()));
+    checker.addCoCo(new FeatureConfigurationParameterAssignment(new MontiArcTypeCalculator()));
+    checker.addCoCo(new FeatureConfigurationParametersLast());
+    checker.addCoCo(new FeatureNameCapitalization());
+    checker.addCoCo(new FeatureUsage());
+    checker.addCoCo(new IfStatementsOmitPortReferences());
+    checker.addCoCo(new IfStatementIsBoolean(new MontiArcTypeCalculator()));
+    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new VariableElementsUsage());
+    checker.addCoCo((VariableArcASTArcBlockCoCo) new VariableElementsUsage());
+    checker.addCoCo((VariableArcASTArcIfStatementCoCo) new VariableElementsUsage());
 
     // ArcBehaviorBasis CoCos
     checker.addCoCo(new NoBehaviorInComposedComponents());

@@ -48,10 +48,6 @@ public class TypeExprOfVariableComponent extends TypeExprOfComponent {
     List<ASTAssignmentExpression> namedParameterArguments = parameterArguments.stream().filter(astExpression -> astExpression instanceof ASTAssignmentExpression).map(astExpression -> (ASTAssignmentExpression) astExpression).collect(Collectors.toList());
     parameterArguments = parameterArguments.stream().filter(astExpression -> !(astExpression instanceof ASTAssignmentExpression)).collect(Collectors.toList());
 
-    Preconditions.checkArgument(((IVariableArcScope) compTypeSymbol.getSpannedScope()).getArcFeatureSymbols().size() >= namedParameterArguments.size(),
-        "Component type '%s' has %s features, but you supplied '%s' feature assignments.",
-        compTypeSymbol.getName(), ((IVariableArcScope) compTypeSymbol.getSpannedScope()).getArcFeatureSymbols().size(), namedParameterArguments.size());
-
     ImmutableMap.Builder<VariableSymbol, ASTExpression> parameterVarBindingBuilder = ImmutableMap.builder();
     // We know guava immutable maps are ordered by insertion time. As we rely on the fact that the ordering of the
     // arguments is consistent with the ordering in the map, the following iteration ensures it:

@@ -73,6 +73,24 @@ Legend:
 | ☑     | OnlyOneTiming                      | ArcBasis | 0xC1159 |       |
 | ☑     | PortTimingFits                     | ArcBasis | 0xC1160 |       |
 
+# VariableArc CoCos
+
+| in MA | CoCo(s)                                 | Language    | Code                               | Notes                                                      |
+| ----- | --------------------------------------- | ----------- | ---------------------------------- | ---------------------------------------------------------- |
+| ☑     | ConstraintEvaluation                    | VariableArc | 0xC1401                            |                                                            |
+| ☑     | ConstraintsOmitPortReferences           | VariableArc | 0xC1408                            |                                                            |
+| ☑     | ConstraintsSymbolsExists                | VariableArc | 0xC1414                            |                                                            |
+| ☑     | ConstraintTypesCorrect                  | VariableArc | 0xC1400                            |                                                            |
+| ☑     | FeatureConfigurationParameterAssignment | VariableArc | 0xC1408, 0xC1409, 0xC1410, 0xC1411 |                                                            |
+| ☑     | FeatureConfigurationParametersLast      | VariableArc | 0xC1406                            |                                                            |
+| ☑     | FeatureNameCapitalization               | VariableArc | 0xC1402                            |                                                            |
+| ☐     | FeaturesCorrectlyInherited              | VariableArc | 0xC1412                            | Unused VariableArcError. Decided against this CoCo for now |
+| ☑     | FeatureUsage                            | VariableArc | 0xC1403                            |                                                            |
+| ☑     | IfStatementsOmitPortReferences          | VariableArc | 0xC1407                            |                                                            |
+| ☑     | IfStatementsSymbolsExist                | VariableArc | 0xC1414                            |                                                            |
+| ☑     | IfStatementTypesCorrect                 | VariableArc | 0xC1404                            |                                                            |
+| ☑     | VariableElementsUsage                   | VariableArc | 0xC1405                            |                                                            |
+
 # Mode Automata
 
 | in MA | CoCo(s)                   | Language          | Code                      | Notes |

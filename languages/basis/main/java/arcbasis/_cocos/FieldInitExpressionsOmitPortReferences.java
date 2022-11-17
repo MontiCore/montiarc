@@ -54,20 +54,20 @@ public class FieldInitExpressionsOmitPortReferences implements ArcBasisASTCompon
 
 
     for (VariableSymbol field : fields) {
-      Preconditions.checkState(field.isPresentAstNode());
-      Preconditions.checkState(field.getAstNode() instanceof ASTArcField);
-      ASTArcField arcField = (ASTArcField) field.getAstNode();
+      if (field.isPresentAstNode() && field.getAstNode() instanceof ASTArcField) {
+        ASTArcField arcField = (ASTArcField) field.getAstNode();
 
-      HashMap<PortReference, SourcePosition> foundPortReferences = this.portRefExtractor.findPortReferences(
-        arcField.getInitial(), portReferencesToLookFor, ArcBasisMill.traverser()
-      );
+        HashMap<PortReference, SourcePosition> foundPortReferences = this.portRefExtractor.findPortReferences(
+          arcField.getInitial(), portReferencesToLookFor, ArcBasisMill.traverser()
+        );
 
-      for (PortReference illegalPortRef : foundPortReferences.keySet()) {
-        SourcePosition illegalPortRefPosition = foundPortReferences.get(illegalPortRef);
+        for (PortReference illegalPortRef : foundPortReferences.keySet()) {
+          SourcePosition illegalPortRefPosition = foundPortReferences.get(illegalPortRef);
 
-        Log.error(ArcError.PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL.format(
-          arcField.getName(), comp.getFullName(), illegalPortRef.toString()),
-          illegalPortRefPosition);
+          Log.error(ArcError.PORT_REFERENCE_IN_FIELD_INIT_EXPRESSION_ILLEGAL.format(
+              arcField.getName(), comp.getFullName(), illegalPortRef.toString()),
+            illegalPortRefPosition);
+        }
       }
     }
   }

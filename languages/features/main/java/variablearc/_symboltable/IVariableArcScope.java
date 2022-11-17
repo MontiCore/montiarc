@@ -3,6 +3,7 @@ package variablearc._symboltable;
 
 import arcbasis._symboltable.*;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -169,5 +170,32 @@ public interface IVariableArcScope extends IVariableArcScopeTOP {
                                                                               AccessModifier modifier,
                                                                               Predicate<ArcFeatureSymbol> predicate) {
     return continueArcFeatureWithEnclosingScope(foundSymbols, name, modifier, predicate);
+  }
+
+  @Override
+  default List<VariableSymbol> resolveAdaptedVariableLocallyMany(boolean foundSymbols,
+                                                                 String name,
+                                                                 AccessModifier modifier,
+                                                                 Predicate<VariableSymbol> predicate) {
+
+    List<VariableSymbol> adapters = IVariableArcScopeTOP.super.resolveAdaptedVariableLocallyMany(foundSymbols, name, modifier, predicate);
+
+    List<ArcFeatureSymbol> arcFeatures = resolveArcFeatureLocallyMany(foundSymbols, name, AccessModifier.ALL_INCLUSION, x -> true);
+
+    for (ArcFeatureSymbol feature : arcFeatures) {
+      // instantiate the adapter
+      VariableSymbol adapter = new ArcFeature2VariableAdapter(feature);
+
+      // filter by modifier and predicate
+      if (modifier.includes(adapter.getAccessModifier()) && predicate.test(adapter)) {
+
+        // add the adapter to the result
+        adapters.add(adapter);
+
+        // add the adapter to the scope
+        this.add(adapter);
+      }
+    }
+    return adapters;
   }
 }

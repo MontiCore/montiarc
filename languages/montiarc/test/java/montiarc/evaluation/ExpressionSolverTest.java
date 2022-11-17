@@ -35,13 +35,15 @@ public class ExpressionSolverTest extends AbstractTest {
   protected void setUpTypeExpr() {
     IVariableArcScope scope = MontiArcMill.scope();
 
-    ArcFeatureSymbol variableSymbol = MontiArcMill.arcFeatureSymbolBuilder().setName("a").build();
+    ArcFeatureSymbol variableSymbol = MontiArcMill.arcFeatureSymbolBuilder()
+      .setName("a").build();
     scope.add(variableSymbol);
     ASTExpression variableAssignmentExpr = MontiArcMill.assignmentExpressionBuilder()
       .setLeft(MontiArcMill.nameExpressionBuilder().setName("a").build())
       .setOperator(ASTConstantsAssignmentExpressions.DEFAULT)
       .setRight(MontiArcMill.literalExpressionBuilder()
-        .setLiteral(MontiArcMill.booleanLiteralBuilder().setSource(ASTConstantsMCCommonLiterals.TRUE).build())
+        .setLiteral(MontiArcMill.booleanLiteralBuilder()
+          .setSource(ASTConstantsMCCommonLiterals.TRUE).build())
         .build())
       .build();
 
@@ -58,7 +60,8 @@ public class ExpressionSolverTest extends AbstractTest {
   @Test
   public void shouldSolveConstantExpression() {
     ASTExpression expression = MontiArcMill.literalExpressionBuilder()
-      .setLiteral(MontiArcMill.booleanLiteralBuilder().setSource(ASTConstantsMCCommonLiterals.TRUE).build())
+      .setLiteral(MontiArcMill.booleanLiteralBuilder()
+        .setSource(ASTConstantsMCCommonLiterals.TRUE).build())
       .build();
 
     Optional<Boolean> res = ExpressionSolver.solve(expression, this.typeExprOfVariableComponent,
@@ -70,7 +73,8 @@ public class ExpressionSolverTest extends AbstractTest {
 
   @Test
   public void shouldSolveWithLocalVariable() {
-    ASTExpression expression = MontiArcMill.nameExpressionBuilder().setName("a").build();
+    ASTExpression expression = MontiArcMill.nameExpressionBuilder().setName("a")
+      .build();
 
     Optional<Boolean> res = ExpressionSolver.solve(expression, this.typeExprOfVariableComponent,
       this.prettyPrinter::prettyprint);

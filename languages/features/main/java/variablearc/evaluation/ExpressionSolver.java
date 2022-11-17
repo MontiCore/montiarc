@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation;
 
+import arcbasis.check.CompTypeExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import variablearc.VariableArcMill;
@@ -25,7 +26,7 @@ public abstract class ExpressionSolver {
    * @return a {@code Optional<Boolean>} which represent the value of the solved {@code expression} or {@code Optional.empty()} if
    * the expression cannot be solved by this solver.
    */
-  public static Optional<Boolean> solve(ASTExpression expression, TypeExprOfVariableComponent compTypeExpression, Function<ASTExpression, String> print) {
+  public static Optional<Boolean> solve(ASTExpression expression, TypeExprOfVariableComponent  compTypeExpression, Function<ASTExpression, String> print) {
     try {
       ScriptEngineManager mgr = new ScriptEngineManager();
       ScriptEngine engine = mgr.getEngineByName("JavaScript");

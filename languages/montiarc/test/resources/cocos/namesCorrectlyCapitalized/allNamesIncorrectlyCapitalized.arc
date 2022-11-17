@@ -11,4 +11,6 @@ component allNamesIncorrectlyCapitalized<t> (Integer UpperCaseParameter) {
   port out Integer UpperCaseOutgoingPort;
 
   Integer UpperCaseVariable = 42;
+
+  feature UpperCaseFeature;
 }
