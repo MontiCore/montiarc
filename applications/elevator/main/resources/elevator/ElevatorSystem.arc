@@ -12,7 +12,7 @@ component ElevatorSystem {
        <<sync>> out boolean light1, light2, light3, light4;
   port <<sync>> in boolean at1, at2, at3, at4,
        <<sync>> out boolean open, close, up, down,
-       <<sync>> in boolean isOpen, isClosed;
+       <<sync>> in boolean isOpen, isClosed, isObstacle;
 
   ControlStation control;
 
@@ -26,6 +26,11 @@ component ElevatorSystem {
   control.light3 -> light3;
   control.light4 -> light4;
 
+  control.req1 -> elevator.req1;
+  control.req2 -> elevator.req2;
+  control.req3 -> elevator.req3;
+  control.req4 -> elevator.req4;
+
   Elevator elevator;
 
   at1 -> elevator.at1;
@@ -38,7 +43,10 @@ component ElevatorSystem {
   elevator.up -> up;
   elevator.down -> down;
 
+  elevator.clear -> control.clear;
+
   isOpen -> elevator.isOpen;
   isClosed -> elevator.isClosed;
+  isObstacle -> elevator.isObstacle;
 
 }

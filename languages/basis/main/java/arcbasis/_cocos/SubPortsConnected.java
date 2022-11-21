@@ -50,11 +50,8 @@ public class SubPortsConnected implements ArcBasisASTComponentTypeCoCo {
         .collect(Collectors.toList());
       subInputPorts.removeAll(targets);
       for (String port : subInputPorts) {
-        SourcePosition sourcePosition = this.getSourcePosition(compSymbol, node, port);
         if (!sources.contains(port)) {
-          Log.warn(
-            ArcError.INCOMING_PORT_NOT_CONNECTED.format(port,
-              subSymbol.getFullName(), compSymbol.getFullName()), sourcePosition);
+          Log.error(ArcError.INCOMING_PORT_NOT_CONNECTED.format(port), subSymbol.getSourcePosition());
         }
       }
       // --------- OUTGOING PORTS ----------

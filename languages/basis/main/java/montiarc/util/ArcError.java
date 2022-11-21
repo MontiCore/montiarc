@@ -20,8 +20,7 @@ public enum ArcError implements Error {
   OUTGOING_PORT_NO_FORWARD("0xC1108", "Outgoing port '%s' of component '%s' is not connected "
       + "as a target of a port forward."),
   PORT_MULTIPLE_SENDER("0xC1109", "Target port ''%s' of connector is already connected."),
-  INCOMING_PORT_NOT_CONNECTED("0xC1112", "Incoming port '%s' of subcomponent '%s' of component "
-      + "type '%s' is not connected."),
+  INCOMING_PORT_NOT_CONNECTED("0xC1112", "Incoming port '%s' is not connected."),
   OUTGOING_PORT_NOT_CONNECTED("0xC1113", "Outgoing port '%s' of subcomponent '%s' of component "
       + "type '%s' is not connected."),
   INNER_WITH_TYPE_PARAMETER_REQUIRES_INSTANCE("0xC1114", "Inner component '%s' must have an "
