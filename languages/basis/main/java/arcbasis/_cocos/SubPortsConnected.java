@@ -62,11 +62,9 @@ public class SubPortsConnected implements ArcBasisASTComponentTypeCoCo {
         .collect(Collectors.toList());
       subOutputPorts.removeAll(sources);
       for (String port : subOutputPorts) {
-        SourcePosition sourcePosition = this.getSourcePosition(compSymbol, node, port);
         if (!targets.contains(port)) {
           Log.warn(
-            ArcError.OUTGOING_PORT_NOT_CONNECTED.format(port,
-              subSymbol.getFullName(), compSymbol.getFullName()), sourcePosition);
+            ArcError.OUTGOING_PORT_NOT_CONNECTED.format(port), subSymbol.getSourcePosition());
         }
       }
     }
@@ -84,11 +82,5 @@ public class SubPortsConnected implements ArcBasisASTComponentTypeCoCo {
   protected Collection<String> getTargetNames(ASTComponentType node) {
     return node.getConnectors().stream().map(ASTConnector::getTargetsNames)
       .flatMap(Collection::stream).collect(Collectors.toList());
-  }
-
-  protected SourcePosition getSourcePosition(ComponentTypeSymbol symbol,
-    ASTComponentType node, String port) {
-    return symbol.getPort(port.split("\\.")[1]).map(p -> p.getAstNode().get_SourcePositionStart())
-      .orElse(node.get_SourcePositionEnd());
   }
 }
