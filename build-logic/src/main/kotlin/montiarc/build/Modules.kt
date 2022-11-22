@@ -47,10 +47,12 @@ abstract class Modules {
   val seCommonsGroovy = "de.se_rwth.commons:se-commons-groovy"
   val seCommonsLogging = "de.se_rwth.commons:se-commons-logging"
   val seCommonsUtils = "de.se_rwth.commons:se-commons-utilities"
+  val cd4analysis = "de.monticore.lang:cd4analysis"
 
   val lejosModels = "montiarc.libraries:lejos-rte-models"
   val dynsimRteModel = "montiarc.libraries:dynsim-reaction-rte-model"
   val mcGrammarsCapability = "de.monticore:monticore-grammar-grammars"
+  val cd4aGrammarsCapability = "de.monticore.lang:cd4analysis-grammars"
   val oclGrammarsCapability = "de.monticore.lang:ocl-grammars"
   val scGrammarsCapability = "de.monticore.lang:statecharts-grammars"
 }
