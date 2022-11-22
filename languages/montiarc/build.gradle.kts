@@ -21,7 +21,6 @@ dependencies {
   api(project(":languages:features"))
   api(project(":languages:generics"))
   api(project(":languages:modes"))
-  api(project(":languages:mode-transitions"))
 
   implementation(libs.monticoreClass2MC)
   implementation("${libs.guava}:${libs.guavaVersion}")

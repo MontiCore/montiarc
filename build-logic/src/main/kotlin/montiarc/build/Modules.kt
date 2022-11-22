@@ -3,7 +3,6 @@ package montiarc.build
 
 abstract class Modules {
 
-  val apacheBcelVersion = "6.6.1"
   val apacheCommonsVersion = "3.12.0"
   val apacheGroovyVersion = "4.0.6"
   val assertjVersion = "3.23.1"
@@ -12,8 +11,6 @@ abstract class Modules {
   val guavaVersion = "31.1-jre"
   val javaParserVersion = "3.24.8"
   val junitVersion = "5.9.1"
-  val kotlinVersion = "1.6.0"
-  val kotlinxVersion = "1.6.0"
   val lejosVersion = "0.9.1-beta"
   val logbackVersion = "1.4.5"
   val mockitoVersion = "4.9.0"
@@ -21,7 +18,6 @@ abstract class Modules {
   val monticoreLSPVersion = "7.5.0-SNAPSHOT"
 
   val apache = "org.apache.commons:commons-lang3"
-  val apacheBcel = "org.apache.bcel:bcel"
   val apacheGroovy = "org.apache.groovy:groovy"
   val assertj = "org.assertj:assertj-core"
   val codehausJanino = "org.codehaus.janino:janino"
@@ -31,9 +27,6 @@ abstract class Modules {
   val junitAPI = "org.junit.jupiter:junit-jupiter-api"
   val junitEngine = "org.junit.jupiter:junit-jupiter-engine"
   val junitParams = "org.junit.jupiter:junit-jupiter-params"
-  val kotlinCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core"
-  val kotlinJunit = "org.jetbrains.kotlin:kotlin-test-junit"
-  val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
   val lejos = "lejos.nxt:classes"
   val logbackCore = "ch.qos.logback:logback-core"
   val logbackClassic = "ch.qos.logback:logback-classic"
@@ -50,7 +43,6 @@ abstract class Modules {
   val cd4analysis = "de.monticore.lang:cd4analysis"
 
   val lejosModels = "montiarc.libraries:lejos-rte-models"
-  val dynsimRteModel = "montiarc.libraries:dynsim-reaction-rte-model"
   val mcGrammarsCapability = "de.monticore:monticore-grammar-grammars"
   val cd4aGrammarsCapability = "de.monticore.lang:cd4analysis-grammars"
   val oclGrammarsCapability = "de.monticore.lang:ocl-grammars"
