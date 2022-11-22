@@ -13,11 +13,4 @@ component grammar ArcAutomaton extends ArcBasis,
       SCStatechartElement*
     "}";
 
-  // allow using statechart's keywords on other places as well
-  // nokeyword "initial", "final", "state";
-  // nokeyword "entry", "exit";
-
-  PortListEvent implements SCEvent = "<" trigger:(PortAccess || ",")* ">";
-
-  splittoken "(...)";
 }
