@@ -55,7 +55,7 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
    * @return all states that are contained in this statechart
    */
   public Stream<ASTSCState> streamStates() {
-    return getEnclosingScope().getLocalSCStateSymbols().stream().map(SCStateSymbol::getAstNode);
+    return getSpannedScope().getLocalSCStateSymbols().stream().map(SCStateSymbol::getAstNode);
   }
 
   /**
