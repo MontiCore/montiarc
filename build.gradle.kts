@@ -17,15 +17,18 @@ reporting.reports.create("jacocoAggregatedTestReport", JacocoCoverageReport::cla
   testType.set(TestSuiteType.UNIT_TEST)
 }
 
-tasks.getByName<JacocoReport>("jacocoAggregatedTestReport").reports.csv.required.set(true)
-tasks.getByName<JacocoReport>("jacocoAggregatedTestReport").reports.html.required.set(false)
-tasks.getByName<JacocoReport>("jacocoAggregatedTestReport").reports.xml.required.set(false)
-tasks.getByName<JacocoReport>("jacocoAggregatedTestReport").reports.csv.outputLocation.set(file("$buildDir/reports/test-coverage/jacocoAggregated.csv"))
-tasks.getByName<JacocoReport>("jacocoAggregatedTestReport").reports.html.outputLocation.set(file("$buildDir/reports/test-coverage/jacocoAggregated/html"))
-tasks.getByName<JacocoReport>("jacocoAggregatedTestReport").reports.xml.outputLocation.set(file("$buildDir/reports/test-coverage/jacocoAggregated.xml"))
+tasks.getByName<JacocoReport>("jacocoAggregatedTestReport").reports {
+  csv.required.set(true)
+  html.required.set(false)
+  xml.required.set(false)
+  csv.outputLocation.set(file("$buildDir/reports/test-coverage/jacocoAggregated.csv"))
+  html.outputLocation.set(file("$buildDir/reports/test-coverage/jacocoAggregated/html"))
+  xml.outputLocation.set(file("$buildDir/reports/test-coverage/jacocoAggregated.xml"))
+}
 
-tasks.check.get().dependsOn(tasks.named<JacocoReport>("jacocoAggregatedTestReport"))
-
+tasks.check {
+  dependsOn(tasks.named<JacocoReport>("jacocoAggregatedTestReport"))
+}
 
 // Adding the following task is necessary in order to publish the plugin.
 // It will not be published by running *gradle publish*, because it is only an *includedBuild*
