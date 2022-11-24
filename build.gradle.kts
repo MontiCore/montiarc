@@ -29,19 +29,3 @@ tasks.getByName<JacocoReport>("jacocoAggregatedTestReport").reports {
 tasks.check {
   dependsOn(tasks.named<JacocoReport>("jacocoAggregatedTestReport"))
 }
-
-// Adding the following task is necessary in order to publish the plugin.
-// It will not be published by running *gradle publish*, because it is only an *includedBuild*
-tasks.register("publishPluginToSE-nexus") {
-  description = "Publishes the MontiArc gradle plugin to the SE nexus maven repository."
-  group = "publishing"
-  dependsOn(gradle.includedBuild("plugin").task(":publishJavaPublicationToSE-nexusRepository"))
-}
-
-// Adding the following task is necessary in order to publish the plugin.
-// It will not be published by running *gradle publish*, because it is only an *includedBuild*
-tasks.register("publishPluginToMavenLocal") {
-  description = "Publishes the MontiArc gradle plugin to the local maven repository"
-  group = "publishing"
-  dependsOn(gradle.includedBuild("plugin").task(":publishJavaPublicationToMavenLocal"))
-}
