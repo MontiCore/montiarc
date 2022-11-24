@@ -1,21 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-component grammar SysCLBasis extends
-                    ArcBasis,
-                    de.monticore.MCBasics,
-                    de.monticore.types.MCBasicTypes,
-                    de.monticore.expressions.ExpressionsBasis,
-                    de.monticore.statements.MCCommonStatements {
+component grammar SysCLBasis extends ArcBasis {
 
-  symbol scope Specification = "spec" Name
-                              head:ComponentHead
-                              body:SysCLBody "end";
-
-  SysCLBody = interface:SysCLInterface* SysCLBlock?;
-
-  SysCLInterface implements ArcElement =
-    (PortDeclaration || ",")+ ";"
+  symbol scope Specification implements ArcElement =
+    key("spec") Name
+    head:ComponentHead
+    body:ComponentBody
   ;
 
-  SysCLBlock implements ArcBehaviorElement  = ExpressionStatement+;
 }

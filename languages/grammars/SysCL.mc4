@@ -2,9 +2,12 @@
 
 grammar SysCL extends
           SysCLBasis,
-          de.monticore.ocl.OCLExpressions,
+          ArcPrePost,
+          GenericArc,
+          de.monticore.expressions.AssignmentExpressions,
           de.monticore.expressions.CommonExpressions,
           de.monticore.expressions.StreamExpressions,
+          de.monticore.ocl.OCLExpressions,
           de.monticore.literals.MCCommonLiterals,
           de.monticore.types.MCSimpleGenericTypes {
 

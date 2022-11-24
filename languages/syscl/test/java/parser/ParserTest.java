@@ -23,6 +23,7 @@ public class ParserTest extends AbstractTest {
 
   @BeforeEach
   public void init() {
+    Log.init();
     Log.getFindings().clear();
     Log.enableFailQuick(false);
     SysCLMill.globalScope().clear();
@@ -34,11 +35,11 @@ public class ParserTest extends AbstractTest {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    "SpeedController.spec",
-    "pumping/ElectricPowerController.spec",
-    "pumping/ElectricToRotationalTrafo.spec",
-    "pumping/EnergyApplicator.spec",
-    "pumping/HydraulicPump.spec"
+    "lecture/Adder.spec",
+    "lecture/Delay.spec",
+    "lecture/Nor.spec",
+    "lecture/Storage.spec",
+    "lecture/SumUp.spec"
   })
   public void shouldParseWithoutError(String fileName) {
     SysCLParser parser = SysCLMill.parser();

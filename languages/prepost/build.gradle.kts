@@ -19,13 +19,8 @@ dependencies {
   grammar("${libs.monticoreGrammar}:${libs.monticoreVersion}") {
     capabilities { requireCapability(libs.mcGrammarsCapability) }
   }
-  grammar ("${libs.monticoreOCL}:${libs.monticoreVersion}") {
-    capabilities { requireCapability(libs.oclGrammarsCapability) }
-  }
 
-  api(project(":languages:generics"))
-  api(project(":languages:syscl-basis"))
-  api(project(":languages:prepost"))
+  api(project(":languages:basis"))
 
   testImplementation((project(":languages:basis"))) {
     capabilities {
@@ -36,15 +31,14 @@ dependencies {
   implementation("${libs.apache}:${libs.apacheCommonsVersion}")
   implementation("${libs.guava}:${libs.guavaVersion}")
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")
-  implementation("${libs.monticoreOCL}:${libs.monticoreVersion}")
 
-  testImplementation("${libs.assertj}:${libs.assertjVersion}")
+  testImplementation("${libs.mockito}:${libs.mockitoVersion}")
   testImplementation("${libs.junitAPI}:${libs.junitVersion}")
   testImplementation("${libs.junitParams}:${libs.junitVersion}")
   testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
-configureMCTask("SysCL.mc4")
+configureMCTask("ArcPrePost.mc4")
 
 tasks.getByName<Test>("test").useJUnitPlatform()
 

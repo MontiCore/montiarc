@@ -1,0 +1,14 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+component grammar ArcPrePost extends ArcBasis {
+
+  ArcPrePost implements ArcBehaviorElement =
+    HLINE
+    (key("in") Expression) ?
+    (key("pre") ":" Expression) ?
+    key("post") ":" Expression
+  ;
+
+  token HLINE =  ('\r' | '\n') (' ' | '\t')*  '-' '-' '-' ('-')+  (' ' | '\t')* ('\r' | '\n');
+
+}
