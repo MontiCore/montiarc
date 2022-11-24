@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-  `java`
-  `jacoco`
+  java
+  jacoco
 }
 
 tasks.jacocoTestReport {

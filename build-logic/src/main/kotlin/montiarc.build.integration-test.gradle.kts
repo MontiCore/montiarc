@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-  `java`
+  java
   id("montiarc.build.modules")
   id("montiarc.build.repositories")
 }
