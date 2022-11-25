@@ -16,9 +16,6 @@ val genDir = "$buildDir/generated-sources"
 val genDirCd = "$genDir/cd"
 val genDirMa = "$genDir/montiarc"
 
-val generatorLogbackConfig = "$projectDir/logback.xml"
-val generatorLogbackOutDir = "$buildDir/logs"
-
 sourceSets["main"].java {
   srcDir(genDirMa)
   srcDir(genDirCd)
@@ -29,8 +26,6 @@ val generateCD = configurations.create("generateCD")
 
 dependencies {
   generateCD(project(":generators:cd2pojo"))
-  generateCD("${libs.logbackCore}:${libs.logbackVersion}")
-  generateCD("${libs.logbackClassic}:${libs.logbackVersion}")
 
   api(project(":libraries:majava-rte"))
   implementation("${libs.guava}:${libs.guavaVersion}")
@@ -55,11 +50,6 @@ val genCdTask = tasks.register<JavaExec>("generateCD") {
   args("$projectDir/main/resources", genDirCd, hwcDir)
   args("-c2mc")
   outputs.dir(genDirCd)
-
-  // Configuring logging during generation
-  systemProperties["logback.configurationFile"] = generatorLogbackConfig
-  systemProperties["LOGBACK_TARGET_DIR"] = generatorLogbackOutDir
-  systemProperties["LOGBACK_TARGET_FILE_NAME"] = "logback-cd2pojo"
 }
 
 montiarc {

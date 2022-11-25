@@ -7,9 +7,6 @@ plugins {
 val hwcDir = "$projectDir/main/java"
 val genDir = "$buildDir/generated-sources"
 
-val generatorLogbackConfig = "$projectDir/logback.xml"
-val generatorLogbackOutDir = "$buildDir/logs"
-
 sourceSets {
   main {
     java.srcDir("$genDir")
@@ -21,11 +18,7 @@ val generateMA = configurations.create("generateMA")
 
 dependencies {
   generateCD(project(":generators:cd2pojo"))
-  generateCD("${libs.logbackCore}:${libs.logbackVersion}")
-  generateCD("${libs.logbackClassic}:${libs.logbackVersion}")
   generateMA(project(":generators:ma2java"))
-  generateMA("${libs.logbackCore}:${libs.logbackVersion}")
-  generateMA("${libs.logbackClassic}:${libs.logbackVersion}")
 
   implementation(project(":languages:montiarc"))
   implementation(project(":libraries:majava-rte"))
@@ -50,19 +43,11 @@ val genCdTask = tasks.register<JavaExec>("generateCD") {
 
   args("$projectDir/main/resources", genDir, hwcDir)
   outputs.dir(genDir)
-
-  // Configuring logging during generation
-  systemProperties["logback.configurationFile"] = generatorLogbackConfig
-  systemProperties["LOGBACK_TARGET_DIR"] = generatorLogbackOutDir
-  systemProperties["LOGBACK_TARGET_FILE_NAME"] = "logback-cd2pojo"
-
 }
-
 
 val genMaTask = tasks.register<JavaExec>("generateMontiArc") {
   classpath(configurations["generateMA"])
   mainClass.set("montiarc.generator.MontiArcTool")
-
 
   args("-mp", "$projectDir/main/resources")
   args("-path", genDir)
@@ -70,14 +55,7 @@ val genMaTask = tasks.register<JavaExec>("generateMontiArc") {
   args("-hwc", hwcDir)
   args("-c2mc")
   outputs.dir(genDir)
-
-
-  // Configuring logging during generation
-  systemProperties["logback.configurationFile"] = generatorLogbackConfig
-  systemProperties["LOGBACK_TARGET_DIR"] = generatorLogbackOutDir
-  systemProperties["LOGBACK_TARGET_FILE_NAME"] = "logback-ma2java"
 }
-
 
 genMaTask { dependsOn(genCdTask) }
 tasks.compileJava { dependsOn(genMaTask) }
