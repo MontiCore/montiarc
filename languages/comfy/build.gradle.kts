@@ -26,14 +26,9 @@ dependencies {
   }
 
   testImplementation("${libs.mockito}:${libs.mockitoVersion}")
-  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
-  testImplementation("${libs.junitParams}:${libs.junitVersion}")
-  testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
 configureMCTask("ComfortableArc.mc4")
-
-tasks.getByName<Test>("test").useJUnitPlatform()
 
 java.registerFeature("tests") {
   usingSourceSet(sourceSets.getByName("test"))

@@ -26,15 +26,6 @@ dependencies {
   implementation("${libs.seCommonsUtils}:${libs.monticoreVersion}")
   implementation("${libs.guava}:${libs.guavaVersion}")
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")
-
-  testImplementation("${libs.assertj}:${libs.assertjVersion}")
-  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
-  testImplementation("${libs.junitParams}:${libs.junitVersion}")
-  testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
-}
-
-tasks.test {
-  useJUnitPlatform()
 }
 
 val genCdTask = tasks.register<JavaExec>("generateCD") {

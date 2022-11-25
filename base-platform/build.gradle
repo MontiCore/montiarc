@@ -8,12 +8,8 @@ description = "Provides a platform of external dependencies to align their versi
 
 dependencies {
   constraints {
-    // api(libs.assertj) { version { strictly(libs.assertjVersion) }}
     // api(libs.guava) { version { strictly(libs.guavaVersion) }}
     // api(libs.codehausJanino) { version { strictly(libs.codehausVersion) }}
-    // api(libs.junitAPI) { version { strictly(libs.junitVersion) }}
-    // api(libs.junitEngine) { version { strictly(libs.junitVersion) }}
-    // api(libs.junitParams) { version { strictly(libs.junitVersion) }}
     // api(libs.mockito) { version { strictly(libs.mockitoVersion) }}
     api(libs.monticoreCD4Analysis) { version { strictly(libs.monticoreVersion) }}
     api(libs.monticoreClass2MC) { version { strictly(libs.monticoreVersion) }}

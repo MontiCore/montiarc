@@ -35,8 +35,6 @@ dependencies {
   implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
 
   testImplementation("${libs.mockito}:${libs.mockitoVersion}")
-  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
-  testImplementation("${libs.junitParams}:${libs.junitVersion}")
 }
 
 val genCdTask = tasks.register<JavaExec>("generateCD") {

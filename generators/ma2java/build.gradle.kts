@@ -5,10 +5,6 @@ plugins {
   id("montiarc.build.shadow")
 }
 
-tasks.named<Test>("test") {
-  useJUnitPlatform()
-}
-
 dependencies {
   api(project(":languages:montiarc"))
   implementation(project(":libraries:majava-rte"))
@@ -20,9 +16,6 @@ dependencies {
 
   testImplementation(project(":generators:cd2pojo"))
   testImplementation("${libs.mockito}:${libs.mockitoVersion}")
-  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
-  testImplementation("${libs.junitParams}:${libs.junitVersion}")
-  testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
 java {

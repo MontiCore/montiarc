@@ -33,14 +33,9 @@ dependencies {
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")
 
   testImplementation("${libs.mockito}:${libs.mockitoVersion}")
-  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
-  testImplementation("${libs.junitParams}:${libs.junitVersion}")
-  testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
 configureMCTask("SysCLBasis.mc4")
-
-tasks.getByName<Test>("test").useJUnitPlatform()
 
 java.registerFeature("tests") {
   usingSourceSet(sourceSets.getByName("test"))

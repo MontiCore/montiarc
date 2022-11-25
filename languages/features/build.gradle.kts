@@ -30,14 +30,9 @@ dependencies {
   }
 
   testImplementation("${libs.mockito}:${libs.mockitoVersion}")
-  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
-  testImplementation("${libs.junitParams}:${libs.junitVersion}")
-  testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
 configureMCTask("VariableArc.mc4")
-
-tasks.getByName<Test>("test").useJUnitPlatform()
 
 java.sourceSets["main"].java.srcDirs(tasks.getByName<de.monticore.MCTask>("grammar").outputDir)
 

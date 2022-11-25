@@ -32,13 +32,7 @@ dependencies {
     }
   }
 
-  testImplementation("${libs.assertj}:${libs.assertjVersion}")
   testImplementation("${libs.mockito}:${libs.mockitoVersion}")
-  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
-  testImplementation("${libs.junitParams}:${libs.junitVersion}")
-  testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
 configureMCTask("MontiArc.mc4")
-
-tasks.getByName<Test>("test").useJUnitPlatform()

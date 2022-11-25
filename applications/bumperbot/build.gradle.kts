@@ -24,9 +24,6 @@ dependencies {
   implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
   implementation("${libs.seCommonsUtils}:${libs.monticoreVersion}")
 
-  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
-  testImplementation("${libs.junitParams}:${libs.junitVersion}")
-
   models(project(":libraries:lejos-rte")) {
     capabilities { requireCapability(libs.lejosModels) }
   }

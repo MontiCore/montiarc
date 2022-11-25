@@ -9,10 +9,6 @@ dependencies {
   implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
 
   testImplementation("${libs.mockito}:${libs.mockitoVersion}")
-  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
-  testImplementation("${libs.junitParams}:${libs.junitVersion}")
-  testImplementation("${libs.assertj}:${libs.assertjVersion}")
-  testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
 tasks.shadowJar {
@@ -20,5 +16,3 @@ tasks.shadowJar {
   archiveBaseName.set("maJava-rte")
   isZip64 = true
 }
-
-tasks.getByName<Test>("test").useJUnitPlatform()

@@ -37,16 +37,9 @@ dependencies {
   implementation("${libs.guava}:${libs.guavaVersion}")
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")
   implementation("${libs.monticoreOCL}:${libs.monticoreVersion}")
-
-  testImplementation("${libs.assertj}:${libs.assertjVersion}")
-  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
-  testImplementation("${libs.junitParams}:${libs.junitVersion}")
-  testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
 configureMCTask("SysCL.mc4")
-
-tasks.getByName<Test>("test").useJUnitPlatform()
 
 java.registerFeature("tests") {
   usingSourceSet(sourceSets.getByName("test"))

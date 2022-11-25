@@ -5,10 +5,6 @@ plugins {
   id("montiarc.build.shadow")
 }
 
-tasks.test {
-  useJUnitPlatform()
-}
-
 dependencies {
   api("${libs.monticoreCD4Analysis}:${libs.monticoreVersion}")
   api("${libs.monticoreGrammar}:${libs.monticoreVersion}")
@@ -20,10 +16,6 @@ dependencies {
   implementation("${libs.javaParser}:${libs.javaParserVersion}")
   implementation("${libs.monticoreClass2MC}:${libs.monticoreVersion}")
   implementation("${libs.seCommonsGroovy}:${libs.monticoreVersion}")
-
-  testImplementation("${libs.junitAPI}:${libs.junitVersion}")
-  testImplementation("${libs.junitParams}:${libs.junitVersion}")
-  testRuntimeOnly("${libs.junitEngine}:${libs.junitVersion}")
 }
 
 java {
