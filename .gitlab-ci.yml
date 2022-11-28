@@ -50,6 +50,8 @@ Package Uber jdk17:
       'build/reports/test-coverage/jacocoAggregated.csv'
   coverage: '/\d+.\d+ \% covered/'
   artifacts:
+    reports:
+      junit: ./**/test-results/test/**/TEST-*.xml
     paths:
       - generators/ma2java/build/reports/test-coverage/jacoco.xml
       - languages/build/basis/reports/test-coverage/jacoco.xml
