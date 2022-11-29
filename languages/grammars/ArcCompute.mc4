@@ -1,7 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 component grammar ArcCompute extends ArcBasis,
-   de.monticore.statements.MCStatementsBasis {
+        de.monticore.statements.MCStatementsBasis {
+
+   /**
+    * ASTArcInit holds a initialization behavior block statement.
+    */
+   ArcInit implements ArcElement = key("init") MCBlockStatement;
 
   /**
    * ASTArcCompute holds a compute behavior block statement.

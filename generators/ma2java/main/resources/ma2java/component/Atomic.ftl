@@ -4,6 +4,11 @@
   ${tc.includeArgs("ma2java.component.Automaton.ftl", compHelper.getAutomatonBehavior(ast).get(), compHelper.asList(ast.getSymbol()))}
 <#elseif compHelper.getComputeBehavior(ast).isPresent()>
   ${tc.includeArgs("ma2java.component.Compute.ftl", compHelper.getComputeBehavior(ast).get(), compHelper.asList(ast.getSymbol()))}
+  <#if compHelper.getInitBehavior(ast).isPresent()>
+  ${tc.includeArgs("ma2java.component.Init.ftl", compHelper.getInitBehavior(ast).get(), compHelper.asList(ast.getSymbol()))}
+  <#else>
+    <@printInit />
+  </#if>
 <#else>
   <@printInit />
   <@printCompute />

@@ -1,8 +1,6 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 ${tc.signature("comp")}
 
-<@printInit/>
-
 @Override
 public void compute() {
   // inputs
@@ -42,14 +40,4 @@ public void compute() {
   <#list comp.getAllOutgoingPorts() as port>
     this.get${port.getName()?cap_first}().sync();
   </#list>
-</#macro>
-
-<#macro printInit>
-  @Override
-  public void init() {
-    // provide initial value for delay ports
-    <#list comp.getPorts() as port>
-      <#if port.isDelayed()>this.${port.getName()}.tick();</#if>
-    </#list>
-  }
 </#macro>

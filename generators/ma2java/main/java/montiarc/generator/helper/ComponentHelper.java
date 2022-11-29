@@ -10,6 +10,7 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
 import arcbasis._symboltable.PortSymbol;
 import arccompute._ast.ASTArcCompute;
+import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
@@ -184,6 +185,15 @@ public class ComponentHelper {
     return component.getBody().getArcElementList().stream()
       .filter(el -> el instanceof ASTArcCompute)
       .map(el -> (ASTArcCompute) el)
+      .findFirst();
+  }
+
+  public Optional<ASTArcInit> getInitBehavior(ASTComponentType component) {
+    Preconditions.checkNotNull(component);
+
+    return component.getBody().getArcElementList().stream()
+      .filter(el -> el instanceof ASTArcInit)
+      .map(el -> (ASTArcInit) el)
       .findFirst();
   }
 
