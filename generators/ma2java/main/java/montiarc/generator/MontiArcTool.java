@@ -11,9 +11,13 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.codehaus.commons.nullanalysis.NotNull;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static montiarc.cocos.IdentifiersAreNoJavaKeywords.*;
 
@@ -68,7 +72,7 @@ public class MontiArcTool extends montiarc.MontiArcTool {
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(ast.getComponentType().isPresentSymbol());
     Preconditions.checkArgument(!target.isEmpty());
-    MontiArcGenerator generator = new MontiArcGenerator(Paths.get(target), Paths.get(hwc));
+    MontiArcGenerator generator = new MontiArcGenerator(Paths.get(target), splitPathEntriesToList(hwc));
     generator.generate(ast);
   }
 
@@ -86,5 +90,14 @@ public class MontiArcTool extends montiarc.MontiArcTool {
     checker.addCoCo(new ComponentInstanceNamesAreNoJavaKeywords());
 
     checker.checkAll(ast);
+  }
+
+  /**
+   * {@link super#splitPathEntries(String)}, but returns a {@code List<Path>} instead.
+   */
+  private @NotNull List<Path> splitPathEntriesToList(@NotNull String composedPath) {
+    return Arrays.stream(splitPathEntries(composedPath))
+      .map(Path::of)
+      .collect(Collectors.toList());
   }
 }

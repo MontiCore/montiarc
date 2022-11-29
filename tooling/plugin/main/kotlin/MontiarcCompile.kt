@@ -3,10 +3,12 @@ package montiarc.tooling.plugin
 
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
 
+/**
+ * A task that generates Java code from Montiarc models.
+ */
 abstract class MontiarcCompile : JavaExec() {
   @get:InputFiles
   @get:SkipWhenEmpty
@@ -27,38 +29,18 @@ abstract class MontiarcCompile : JavaExec() {
   @get:OutputDirectory
   abstract val outputDir : DirectoryProperty
 
+  @Deprecated("You can now directly declare montiarc sources in the sourceSet { main { montiarc {...} } } block")
   @get:Input
+  @get:Optional
   abstract val sourceSetName: Property<String>
 
   init {
     description = "Generates .java code from MontiArc models."
 
-    classpath(project.configurations.getByName(MontiarcPlugin.configName))
-    mainClass.convention(MontiarcPlugin.maToolClass)
+    classpath(project.configurations.getByName(GENERATOR_DEPENDENCY_CONFIG_NAME))
+    mainClass.convention(MA_TOOL_CLASS)
 
-    useClass2Mc.convention(true)
-    outputDir.convention(project.layout.buildDirectory.dir("montiarc"))
-    sourceSetName.convention(SourceSet.MAIN_SOURCE_SET_NAME)
-
-    // In the following we will set default values that are based on the configured value of sourceSetName. As
-    // we want to use the name that the user specifies, only using the *default* value that we just set, we use
-    // a closure (curly braces around the value {}). The effect is, that the path expression only gets evaluated *after*
-    // the user has applied his configuration. Therefore, our default value depends on the *actual* value of
-    // sourceSetName. This mechanism is similar to gradle's lazy configuration strategy.
-    modelPath.from({"${project.projectDir}/src/${sourceSetName.get()}/montiarc"})
-    symbolImportDir.from({"${project.projectDir}/src/${sourceSetName.get()}/symbols"})
-    if (project.pluginManager.hasPlugin("java")) {
-      hwcPath.from({
-        project.extensions
-          .getByType(JavaPluginExtension::class.java)
-          .sourceSets.getByName(sourceSetName.get())
-          .allJava.sourceDirectories
-          .filter { dir -> !dir.absoluteFile.equals(outputDir.get().asFile.absoluteFile) }
-          // TODO: try using an exclude pattern for outputdir/**
-      })
-    } else {
-      hwcPath.from({"${project.projectDir}/src/${sourceSetName.get()}/java"})
-    }
+    useClass2Mc.convention(false)
   }
 
   @TaskAction
@@ -66,13 +48,31 @@ abstract class MontiarcCompile : JavaExec() {
 
     //printInfo()
 
-    args("-mp", this.modelPath.asPath)
-    args("-path", this.symbolImportDir.asPath)
+    // 1) For the model path and symbol import directories: filter out directories that do not exist
+    val cleanModelPath = project.files(
+      this.modelPath.files.filter { project.file(it).exists() }
+    )
+    val cleanSymbolImportDirs = project.files(
+      this.symbolImportDir.files.filter { project.file(it).exists() }
+    )
+
+    // 2) Build args for the montiarc generator
+    args("-mp", cleanModelPath.asPath)
     args("-o", this.outputDir.asFile.get().path)
     args("-hwc", this.hwcPath.asPath)
+
     if(useClass2Mc.get()) { args("-c2mc"); }
 
-    super.exec()
+    if (!cleanSymbolImportDirs.isEmpty) {
+      args("-path", cleanSymbolImportDirs.asPath)
+    }
+
+    // 3) Execute
+    if (cleanModelPath.isEmpty) {
+      logger.info("None of the given model path directories exists: ${this.modelPath.files}")
+    } else {
+      super.exec()
+    }
   }
 
   private fun printInfo() {

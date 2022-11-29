@@ -14,11 +14,12 @@ plugins {
 val hwcDir = "$projectDir/main/java"
 val genDir = "$buildDir/generated-sources"
 val genDirCd = "$genDir/cd"
-val genDirMa = "$genDir/montiarc"
 
-sourceSets["main"].java {
-  srcDir(genDirMa)
-  srcDir(genDirCd)
+sourceSets {
+  main {
+    java.srcDir(genDirCd)
+    montiarc.srcDir("$projectDir/main/resources")
+  }
 }
 
 // Configurations
@@ -44,17 +45,20 @@ val genCdTask = tasks.register<JavaExec>("generateCD") {
 }
 
 montiarc {
-  modelPath.from("$projectDir/main/resources")
+  internalMontiArcTesting.set(true)
+}
+
+tasks.compileMontiarc {
   symbolImportDir.from(genDirCd)
   useClass2Mc.set(true)
-  hwcPath.from(hwcDir)
-  outputDir.set(genDirMa)
 
-  internalMontiArcTesting.set(true)
+  val enableAttachDebugger = false
+  if(enableAttachDebugger) {
+    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
+  }
 }
 
 // Setting up task dependencies
 tasks.compileMontiarc { dependsOn(genCdTask) }
-tasks.compileJava { dependsOn(tasks.compileMontiarc) }
-
+tasks.compileMontiarc { mustRunAfter(project(":generators:ma2java").tasks.withType(Test::class)) }
 genCdTask { mustRunAfter(project(":generators:cd2pojo").tasks.withType(Test::class)) }

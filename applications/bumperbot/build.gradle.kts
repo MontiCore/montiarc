@@ -2,23 +2,25 @@
 
 plugins {
   id("montiarc.build.java-library")
+  id("montiarc")
 }
 
 val hwcDir = "$projectDir/main/java"
-val genDir = "$buildDir/generated-sources"
+val genDirCd = "$buildDir/generated-sources/cd"
 
-sourceSets["main"].java {
-  srcDir(genDir)
+sourceSets {
+  main {
+    java.srcDir(genDirCd)
+    montiarc.srcDirs("$projectDir/main/resources", "$buildDir/models")
+  }
 }
 
 // Configurations
 val generateCD = configurations.create("generateCD")
-val generateMA = configurations.create("generateMA")
 val models = configurations.create("models")
 
 dependencies {
   generateCD(project(":generators:cd2pojo"))
-  generateMA(project(":generators:ma2java"))
 
   api(project(":libraries:lejos-rte"))
   implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
@@ -41,32 +43,29 @@ val genCdTask = tasks.register<JavaExec>("generateCD") {
   classpath(generateCD)
   mainClass.set("de.monticore.cd2pojo.POJOGeneratorScript")
 
-  args("$projectDir/main/resources, $buildDir/models", genDir, hwcDir)
+  args("$projectDir/main/resources, $buildDir/models", genDirCd, hwcDir)
   args("-c2mc")
-  outputs.dir(genDir)
+  outputs.dir(genDirCd)
 }
 
-val genMaTask = tasks.register<JavaExec>("generateMontiArc") {
-  classpath(generateMA)
-  mainClass.set("montiarc.generator.MontiArcTool")
+montiarc {
+  internalMontiArcTesting.set(true)
+}
+
+tasks.compileMontiarc {
+  symbolImportDir.from(genDirCd)
+  useClass2Mc.set(true)
 
   val enableAttachDebugger = false
   if(enableAttachDebugger) {
     jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
   }
-
-  args("-mp", "$projectDir/main/resources", "$buildDir/models")
-  args("-path", genDir)
-  args("-o", genDir)
-  args("-hwc", hwcDir)
-  args("-c2mc")
-  outputs.dir(genDir)
 }
 
 // Setting up task dependencies
 genCdTask { dependsOn(unpackLibModelsTask) }
-genMaTask { dependsOn(genCdTask) }
-tasks.compileJava { dependsOn(genMaTask) }
+tasks.compileMontiarc { dependsOn(genCdTask) }
+tasks.compileJava { dependsOn(tasks.compileMontiarc) }
 
 genCdTask { mustRunAfter(project(":generators:cd2pojo").tasks.withType(Test::class)) }
-genMaTask { mustRunAfter(project(":generators:ma2java").tasks.withType(Test::class)) }
+tasks.compileMontiarc { mustRunAfter(project(":generators:ma2java").tasks.withType(Test::class)) }

@@ -2,23 +2,23 @@
 
 plugins {
   id("montiarc.build.integration-test")
+  id("montiarc")
 }
 
 val hwcDir = "$projectDir/main/java"
-val genDir = "$buildDir/generated-sources"
+val genDirCd = "$buildDir/generated-sources/cd"
 
 sourceSets {
   main {
-    java.srcDir("$genDir")
+    java.srcDir("$genDirCd")
+    montiarc.srcDir("$projectDir/main/resources")
   }
 }
 
 val generateCD = configurations.create("generateCD")
-val generateMA = configurations.create("generateMA")
 
 dependencies {
   generateCD(project(":generators:cd2pojo"))
-  generateMA(project(":generators:ma2java"))
 
   implementation(project(":languages:montiarc"))
   implementation(project(":libraries:majava-rte"))
@@ -32,24 +32,24 @@ val genCdTask = tasks.register<JavaExec>("generateCD") {
   classpath = configurations["generateCD"]
   mainClass.set("de.monticore.cd2pojo.POJOGeneratorScript")
 
-  args("$projectDir/main/resources", genDir, hwcDir)
-  outputs.dir(genDir)
+  args("$projectDir/main/resources", genDirCd, hwcDir)
+  outputs.dir(genDirCd)
 }
 
-val genMaTask = tasks.register<JavaExec>("generateMontiArc") {
-  classpath(configurations["generateMA"])
-  mainClass.set("montiarc.generator.MontiArcTool")
-
-  args("-mp", "$projectDir/main/resources")
-  args("-path", genDir)
-  args("-o", genDir)
-  args("-hwc", hwcDir)
-  args("-c2mc")
-  outputs.dir(genDir)
+montiarc {
+  internalMontiArcTesting.set(true)
 }
 
-genMaTask { dependsOn(genCdTask) }
-tasks.compileJava { dependsOn(genMaTask) }
+tasks.compileMontiarc {
+  symbolImportDir.from(genDirCd)
+  useClass2Mc.set(true)
 
+  val enableAttachDebugger = false
+  if(enableAttachDebugger) {
+    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
+  }
+}
+
+tasks.compileMontiarc { dependsOn(genCdTask) }
+tasks.compileMontiarc { mustRunAfter(project(":generators:ma2java").tasks.withType(Test::class)) }
 genCdTask { mustRunAfter(project(":generators:cd2pojo").tasks.withType(Test::class)) }
-genMaTask { mustRunAfter(project(":generators:ma2java").tasks.withType(Test::class)) }

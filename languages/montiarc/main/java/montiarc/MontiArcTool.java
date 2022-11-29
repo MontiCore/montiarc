@@ -100,11 +100,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     if (cl.hasOption("modelpath")) {
       // `new MCPath(String...)` fails if *one* of the Paths that we pass is composed of multiple paths with a path
       // separator in between, e.g.: foo/bar:goo/rar on Linux. Therefore, we manually separate these paths first.
-      String[] paths = Arrays.stream(cl.getOptionValues("modelpath"))
-        .map(composedPath -> composedPath.split(Pattern.quote(File.pathSeparator)))
-        .flatMap(Arrays::stream)
-        .toArray(String[]::new);
-      return new MCPath(paths);
+      return new MCPath(splitPathEntries(cl.getOptionValues("modelpath")));
     } else {
       return new MCPath();
     }
@@ -323,7 +319,12 @@ public class MontiArcTool extends MontiArcToolTOP {
 
   public void initGlobalScope(@NotNull String... entries) {
     Preconditions.checkNotNull(entries);
-    this.initGlobalScope(Arrays.stream(entries).map(Paths::get).collect(Collectors.toList()));
+
+    // `new MCPath(String...)` fails if *one* of the Paths that we pass is composed of multiple paths with a path
+    // separator in between, e.g.: foo/bar:goo/rar on Linux. Therefore, we manually separate these paths first.
+    String[] paths = splitPathEntries(entries);
+
+    this.initGlobalScope(Arrays.stream(paths).map(Paths::get).collect(Collectors.toList()));
   }
 
   public void initGlobalScope(@NotNull Path... entries) {
@@ -427,5 +428,27 @@ public class MontiArcTool extends MontiArcToolTOP {
       .build());
 
     return options;
+  }
+
+  /**
+   * Splits composedPath on their {@link File#pathSeparator}, e.g. {@code some/path:another/path} on Unix would return
+   * {@code {some/path, another/path}} and {@code some\path;other\path} on Windows would return
+   * {@code {some\path, other\path}}
+   */
+  protected final @NotNull String[] splitPathEntries(@NotNull String composedPath) {
+    Preconditions.checkNotNull(composedPath);
+
+    return composedPath.split(Pattern.quote(File.pathSeparator));
+  }
+
+  /**
+   * {@link this#splitPathEntries(String)} on every entry of <i>composedPath</i>.
+   */
+  protected final @NotNull String[] splitPathEntries(@NotNull String[] composedPaths) {
+    Preconditions.checkNotNull(composedPaths);
+    return Arrays.stream(composedPaths)
+      .map(this::splitPathEntries)
+      .flatMap(Arrays::stream)
+      .toArray(String[]::new);
   }
 }

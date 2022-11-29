@@ -42,7 +42,7 @@ public class MontiArcGenerator {
   }
 
   public MontiArcGenerator(@NotNull Path targetDir, @NotNull Path hwcPath) {
-    this(Preconditions.checkNotNull(targetDir), Preconditions.checkNotNull(Collections.singletonList(hwcPath)));
+    this(Preconditions.checkNotNull(targetDir), Collections.singletonList(Preconditions.checkNotNull(hwcPath)));
   }
 
   public MontiArcGenerator(@NotNull Path targetDir, @NotNull List<Path> hwcPath) {
