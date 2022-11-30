@@ -1,7 +1,0 @@
-/* (c) https://github.com/MontiCore/monticore */
-package montiarc.lejos.lib.timer;
-
-classdiagram Datatypes {
-  enum TimerCmd {SINGLE, DOUBLE; }
-  enum TimerSignal {ALERT, SLEEP; }
-}

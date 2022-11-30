@@ -1,0 +1,22 @@
+/* (c) https://github.com/MontiCore/monticore */
+package bumperbot;
+
+classdiagram Datatypes {
+
+  enum MotorCmd {
+    FORWARD,
+    BACKWARD,
+    STOP;
+  }
+
+  enum TimerCmd {
+    SINGLE,
+    DOUBLE;
+  }
+
+  enum TimerSignal {
+    ALERT,
+    SLEEP;
+  }
+
+}

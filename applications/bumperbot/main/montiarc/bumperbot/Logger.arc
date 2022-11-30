@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.lejos.lib.logger;
+package bumperbot;
 
 component Logger {
   port
-    in String message;
+    <<sync>> in String message;
 
 }
