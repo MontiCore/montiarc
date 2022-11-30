@@ -50,13 +50,13 @@ etc. )
 sourceSets {
   main {
     montiarc {
-      srcDir "where/your/montiarc/models/are"  // default value: $projectDir/SOURCE_SET_NAME/main/montiarc
+      srcDir "where/your/montiarc/models/are"  // default value: $projectDir/src/SOURCE_SET_NAME/montiarc
       destinationDirectory.fileValue(file("where/to/generate/the/code/to"))  // default value: $buildDir/montiarc/SOURCE_SET_NAME
     }
   }
 }
 
-task.compileMontiarc {  // compile task for other sourceSets: "compileSRC_SET_NAMEMontiarc"
+task.compileMontiarc {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Montiarc"
   symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/symbols")  // ← Default value
   useClass2Mc.set(true)  // Default value is false
 }
@@ -72,13 +72,13 @@ montiarc {
 sourceSets {
   main {
     montiarc {
-      srcDir("where/your/montiarc/models/are")  // default value: $projectDir/SOURCE_SET_NAME/main/montiarc
+      srcDir("where/your/montiarc/models/are")  // default value: $projectDir/src/SOURCE_SET_NAME/montiarc
       destinationDirectory.fileValue(file("where/to/generate/the/code/to"))  // default value: $buildDir/montiarc/SOURCE_SET_NAME
     }
   }
 }
 
-task.compileMontiarc {  // compile task for other sourceSets: "compileSRC_SET_NAMEMontiarc"
+task.compileMontiarc {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Montiarc"
   symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/symbols")  // ← Default value
   useClass2Mc.set(true)  // Default value is false
 }
