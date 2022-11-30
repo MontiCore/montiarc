@@ -11,12 +11,13 @@ val genDirCd = "$buildDir/generated-sources/cd"
 sourceSets {
   main {
     java.srcDirs(hwcDir, genDirCd)
-    montiarc.srcDir("$projectDir/main/resources")
+    montiarc.srcDir("$projectDir/main/montiarc")
   }
   create("models") {
-    resources.srcDirs(montiarc.sourceDirectories, "$projectDir/main/resources")
+    resources.srcDirs(main.get().montiarc.srcDirs, "$projectDir/main/resources")
   }
 }
+
 
 java {
   registerFeature("models") {

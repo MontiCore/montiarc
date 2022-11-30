@@ -7,11 +7,12 @@ plugins {
 
 val hwcDir = "$projectDir/main/java"
 val genDirCd = "$buildDir/generated-sources/cd"
+val unpackedModelsDir = "$buildDir/models"
 
 sourceSets {
   main {
     java.srcDir(genDirCd)
-    montiarc.srcDirs("$projectDir/main/resources", "$buildDir/models")
+    montiarc.srcDirs("$projectDir/main/montiarc", "$buildDir/models")
   }
 }
 
@@ -35,7 +36,7 @@ val unpackLibModelsTask = tasks.register<Sync>("unpackmodels") {
   dependsOn(models)
 
   from( models.map { zipTree(it) } )
-  into("$buildDir/models")
+  into(unpackedModelsDir)
   exclude("META-INF/")
 }
 
@@ -43,7 +44,7 @@ val genCdTask = tasks.register<JavaExec>("generateCD") {
   classpath(generateCD)
   mainClass.set("de.monticore.cd2pojo.POJOGeneratorScript")
 
-  args("$projectDir/main/resources, $buildDir/models", genDirCd, hwcDir)
+  args("$projectDir/main/resources, $unpackedModelsDir", genDirCd, hwcDir)
   args("-c2mc")
   outputs.dir(genDirCd)
 }
@@ -53,7 +54,7 @@ montiarc {
 }
 
 tasks.compileMontiarc {
-  symbolImportDir.from(genDirCd)
+  symbolImportDir.from(genDirCd, unpackedModelsDir)
   useClass2Mc.set(true)
 
   val enableAttachDebugger = false

@@ -11,7 +11,7 @@ val genDirCd = "$buildDir/generated-sources/cd"
 sourceSets {
   main {
     java.srcDir("$genDirCd")
-    montiarc.srcDir("$projectDir/main/resources")
+    montiarc.srcDir("$projectDir/main/montiarc")
   }
 }
 
