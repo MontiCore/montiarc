@@ -1,5 +1,6 @@
 {
-  "name":"Datatypes",
+  "name":"Message",
+  "package":"fieldInitExpressionTypesCorrect",
   "symbols":[
     {
       "kind":"de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
@@ -15,7 +16,7 @@
             "isPublic":true,
             "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
-              "objName":"Message"
+              "objName":"fieldInitExpressionTypesCorrect.Message"
             },
             "spannedScope":{
               "isShadowingScope":false,
@@ -38,7 +39,7 @@
             "isPublic":true,
             "type":{
               "kind":"de.monticore.types.check.SymTypeOfObject",
-              "objName":"Message"
+              "objName":"fieldInitExpressionTypesCorrect.Message"
             },
           },
         ]

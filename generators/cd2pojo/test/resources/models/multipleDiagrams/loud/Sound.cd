@@ -1,8 +1,0 @@
-/* (c) https://github.com/MontiCore/monticore */
-package loud;
-
-classdiagram Sound {
-  package loud {
-    enum SoundType {NOISE, SPEECH, AIR_CONDITION, EXPLOSION, MUSIC;}
-  }
-}

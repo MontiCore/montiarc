@@ -3,6 +3,7 @@ package montiarc._cocos;
 
 import arcbasis._cocos.FieldInitExpressionTypesCorrect;
 import arcbasis._symboltable.SymbolService;
+import de.monticore.io.paths.MCPath;
 import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
@@ -82,7 +83,7 @@ class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
     Preconditions.checkNotNull(model);
 
     //Given
-    this.getCLI().loadSymbols(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, getPackage(), "Datatypes.sym"));
+    MontiArcMill.globalScope().setSymbolPath(new MCPath(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH)));
     ASTMACompilationUnit ast = this.parseAndCreateAndCompleteSymbols(model);
 
     //When

@@ -10,7 +10,7 @@ val genDirCd = "$buildDir/generated-sources/cd"
 
 sourceSets {
   main {
-    java.srcDir("$genDirCd")
+    java.srcDir(genDirCd)
     montiarc.srcDir("$projectDir/main/montiarc")
   }
 }
@@ -30,9 +30,16 @@ dependencies {
 
 val genCdTask = tasks.register<JavaExec>("generateCD") {
   classpath = configurations["generateCD"]
-  mainClass.set("de.monticore.cd2pojo.POJOGeneratorScript")
+  mainClass.set("de.monticore.cd2pojo.CD2PojoTool")
 
-  args("$projectDir/main/resources", genDirCd, hwcDir)
+  args("-i", "$projectDir/main/resources")
+  args("-c")
+  args("-c2mc")
+  args("-gen")
+  args("-o", genDirCd)
+  args("-s", genDirCd)
+  args("-hwc", hwcDir)
+  inputs.dir("$projectDir/main/resources")
   outputs.dir(genDirCd)
 }
 

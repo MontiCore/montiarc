@@ -3,6 +3,7 @@ package montiarc._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
+import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.logging.Log;
 import montiarc.AbstractTest;
 import montiarc.MontiArcTool;
@@ -136,8 +137,8 @@ public abstract class AbstractCoCoTest extends AbstractTest {
   protected ASTComponentType parseAndLoadAllSymbols(@NotNull String model) {
     Preconditions.checkNotNull(model);
     Path path = Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, this.getPackage());
+    MontiArcMill.globalScope().setSymbolPath(new MCPath(path));
 
-    this.getCLI().loadSymbols(MontiArcMill.globalScope().getFileExt(), path);
     Collection<ASTMACompilationUnit> asts = this.getCLI().parse(".arc", path);
     this.getCLI().createSymbolTable(asts);
     this.getCLI().completeSymbolTable(asts);

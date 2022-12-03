@@ -14,12 +14,15 @@ import montiarc._cocos.MontiArcCoCos;
 import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc._visitor.MontiArcFullPrettyPrinter;
 import montiarc.util.MontiArcError;
-import org.apache.commons.cli.*;
-import org.apache.commons.io.filefilter.RegexFileFilter;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -89,7 +92,6 @@ public class MontiArcTool extends MontiArcToolTOP {
     Collection<ASTMACompilationUnit> asts = this.parse(".arc", this.createModelPath(cl).getEntries());
     Log.enableFailQuick(true);
 
-    this.loadSymbols();
     this.runDefaultTasks(asts);
     this.runAdditionalTasks(asts, cl);
   }
@@ -104,39 +106,6 @@ public class MontiArcTool extends MontiArcToolTOP {
     } else {
       return new MCPath();
     }
-  }
-
-  protected void loadSymbols() {
-    Log.info("Load symbols", "MontiArcTool");
-    this.loadSymbols(MontiArcMill.globalScope().getFileExt(), MontiArcMill.globalScope().getSymbolPath());
-  }
-
-  public void loadSymbols(@NotNull String fileNameRegEx, @NotNull MCPath path) {
-    Preconditions.checkNotNull(fileNameRegEx);
-    Preconditions.checkNotNull(path);
-    Preconditions.checkArgument(!fileNameRegEx.isEmpty());
-    path.getEntries().forEach(entry -> this.loadSymbols(fileNameRegEx, entry));
-  }
-
-  public void loadSymbols(@NotNull String fileNameRegEx, @NotNull Path directory) {
-    Preconditions.checkNotNull(fileNameRegEx);
-    Preconditions.checkNotNull(directory);
-    Preconditions.checkArgument(!fileNameRegEx.isEmpty());
-    Preconditions.checkArgument(directory.toFile().exists(), directory.toAbsolutePath() + " does not exist.");
-    FileFilter filter = new RegexFileFilter(fileNameRegEx);
-    try (Stream<Path> paths = Files.walk(directory)) {
-      paths.filter(file -> filter.accept(file.toFile())).forEach(this::loadSymbols);
-    } catch (IOException e) {
-      Log.error(String.format(MontiArcError.TOOL_FILE_WALK_IOEXCEPTION.toString(), directory), e);
-    }
-  }
-
-  public void loadSymbols(@NotNull Path file) {
-    Log.info("Load symbols from " + file, "MontiArcTool");
-    Preconditions.checkNotNull(file);
-    Preconditions.checkArgument(file.toFile().exists(), file.toAbsolutePath() + " does not exist.");
-    Preconditions.checkArgument(file.toFile().isFile(), file.toAbsolutePath() + " is not a file.");
-    MontiArcMill.globalScope().loadFile(file.toString());
   }
 
   public void runDefaultTasks(@NotNull Collection<ASTMACompilationUnit> asts) {

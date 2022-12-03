@@ -6,6 +6,7 @@ import arcbasis._cocos.NoSubComponentReferenceCycles;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
+import de.monticore.io.paths.MCPath;
 import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
@@ -83,7 +84,7 @@ public class NoSubComponentReferenceCyclesTest extends AbstractCoCoTest {
     Preconditions.checkNotNull(model);
     // parse and load symbols
     Path path = Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, this.getPackage());
-    this.getCLI().loadSymbols(MontiArcMill.globalScope().getFileExt(), path);
+    MontiArcMill.globalScope().setSymbolPath(new MCPath(path));
     Collection<ASTMACompilationUnit> asts = this.getCLI().parse(".arc", path);
     this.getCLI().createSymbolTable(asts);
     this.getCLI().completeSymbolTable(asts);

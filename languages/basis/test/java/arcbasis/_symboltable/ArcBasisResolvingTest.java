@@ -30,14 +30,27 @@ public class ArcBasisResolvingTest extends AbstractTest {
   protected IArcBasisScope scope;
 
   protected static Stream<Arguments> validScopeAndTypeAndResolutionNameProvider() {
-    return Stream.of(Arguments.of("", "A", "A"), Arguments.of("x", "A", "A"), Arguments.of("x", "A", "x.A"),
-      Arguments.of("x", "A", "B.x.A"), Arguments.of("", "x.A", "x.A"), Arguments.of("y", "x.A", "x.A"),
-      Arguments.of("y", "x.A", "y.x.A"), Arguments.of("y", "x.A", "B.y.x.A"));
+    return Stream.of(
+      Arguments.of("", "A", "A"),
+      Arguments.of("x", "A", "A"),
+      Arguments.of("x", "A", "x.A"),
+      Arguments.of("x", "A", "B.x.A")
+    );
   }
 
   protected static Stream<Arguments> invalidScopeAndTypeAndResolutionNameProvider() {
-    return Stream.of(Arguments.of("", "A", ""), Arguments.of("", "", "A"), Arguments.of("", "", "B"),
-      Arguments.of("", "A", "B"), Arguments.of("", "x.A", "A"), Arguments.of("x", "A", "B.A"));
+    return Stream.of(
+      Arguments.of("", "A", ""),
+      Arguments.of("", "", "A"),
+      Arguments.of("", "", "B"),
+      Arguments.of("", "A", "B"),
+      Arguments.of("", "x.A", "A"),
+      Arguments.of("x", "A", "B.A"),
+      Arguments.of("", "x.A", "x.A"),
+      Arguments.of("y", "x.A", "x.A"),
+      Arguments.of("y", "x.A", "y.x.A"),
+      Arguments.of("y", "x.A", "B.y.x.A")
+    );
   }
 
   protected IArcBasisScope getScope() {

@@ -3,6 +3,7 @@ package montiarc._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ParameterDefaultValuesOmitPortReferences;
+import de.monticore.io.paths.MCPath;
 import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
@@ -91,7 +92,7 @@ public class ParameterDefaultValuesOmitPortReferencesTest extends AbstractCoCoTe
   protected ASTComponentType parseAndLoadWithPackageSymbols(@NotNull String model) {
     Preconditions.checkNotNull(model);
     Path path = Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH, PACKAGE);
-    this.getCLI().loadSymbols(MontiArcMill.globalScope().getFileExt(), path);
+    MontiArcMill.globalScope().setSymbolPath(new MCPath(path));
     Collection<ASTMACompilationUnit> asts = this.getCLI().parse(".arc", path);
     this.getCLI().createSymbolTable(asts);
     this.getCLI().completeSymbolTable(asts);

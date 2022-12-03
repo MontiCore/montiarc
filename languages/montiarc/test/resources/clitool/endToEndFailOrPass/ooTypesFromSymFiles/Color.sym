@@ -1,5 +1,6 @@
 {
-  "name": "Colors",
+  "name": "Color",
+  "package": "ooTypesFromSymFiles",
   "kindHierarchy": [
   ],
   "symbols": [

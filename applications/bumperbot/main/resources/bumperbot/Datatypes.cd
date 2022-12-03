@@ -3,18 +3,18 @@ package bumperbot;
 
 classdiagram Datatypes {
 
-  enum MotorCmd {
+  public enum MotorCmd {
     FORWARD,
     BACKWARD,
     STOP;
   }
 
-  enum TimerCmd {
+  public enum TimerCmd {
     SINGLE,
     DOUBLE;
   }
 
-  enum TimerSignal {
+  public enum TimerSignal {
     ALERT,
     SLEEP;
   }

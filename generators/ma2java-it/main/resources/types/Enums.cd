@@ -3,11 +3,11 @@ package types;
 
 classdiagram Enums {
 
-  enum Direction {
+  public enum Direction {
     FORWARDS, BACKWARDS, LEFT, RIGHT;
   }
 
-  enum OnOff {
+  public enum OnOff {
     ON, OFF;
   }
 }

@@ -1,9 +1,0 @@
-/* (c) https://github.com/MontiCore/monticore */
-package dark;
-
-classdiagram Lamps {
-  package dark {
-    enum LightCmd {ON, OFF, ENERGY_SAVING;}
-    enum LightType {HALOGEN, LED, XENON, NEON, LIGHT_BULB, FLUORESCENCE, PHOSPHORIC, ENERGY_SAVING_LAMP;}
-  }
-}

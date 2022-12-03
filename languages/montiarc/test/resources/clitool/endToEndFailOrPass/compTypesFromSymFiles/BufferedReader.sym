@@ -1,5 +1,6 @@
 {
   "name": "BufferedReader",
+  "package": "compTypesFromSymFiles",
   "kindHierarchy": [
   ],
   "symbols": [

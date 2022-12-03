@@ -7,15 +7,11 @@ plugins {
 
 dependencies {
   api("${libs.monticoreCD4Analysis}:${libs.monticoreVersion}")
-  api("${libs.monticoreGrammar}:${libs.monticoreVersion}")
-  api("${libs.monticoreRuntime}:${libs.monticoreVersion}")
-
-  implementation("${libs.apacheGroovy}:${libs.apacheGroovyVersion}")
+  implementation("${libs.monticoreRuntime}:${libs.monticoreVersion}")
+  implementation("${libs.monticoreGrammar}:${libs.monticoreVersion}")
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")
   implementation("${libs.guava}:${libs.guavaVersion}")
-  implementation("${libs.javaParser}:${libs.javaParserVersion}")
   implementation("${libs.monticoreClass2MC}:${libs.monticoreVersion}")
-  implementation("${libs.seCommonsGroovy}:${libs.monticoreVersion}")
 }
 
 java {
@@ -25,7 +21,7 @@ java {
 
 tasks.shadowJar {
   manifest {
-    attributes["Main-Class"] = "de.monticore.cd2pojo.POJOGeneratorScript"
+    attributes["Main-Class"] = "de.monticore.cd2pojo.CD2PojoTool"
   }
   isZip64 = true
   archiveClassifier.set("mc-tool")

@@ -4,11 +4,14 @@ package montiarc;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.io.paths.MCPath;
+import de.monticore.symboltable.IGlobalScope;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcArtifactScope;
+import montiarc._symboltable.IMontiArcScope;
 import montiarc._symboltable.MontiArcArtifactScope;
+import montiarc._symboltable.MontiArcGlobalScope;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import montiarc.util.MontiArcError;
@@ -823,15 +826,13 @@ public class MontiArcToolTest extends AbstractTest {
     Preconditions.checkNotNull(packageName);
 
     // Given
-    String modelPath =
-      Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "endToEndFailOrPass",  packageName).toString();
+    String path = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "endToEndFailOrPass").toString();
+    String modelPath = Paths.get(path, packageName).toString();
     MontiArcTool tool = new MontiArcTool();
-    String[] args = new String[] {"--modelpath", modelPath, "-path", modelPath};
+    String[] args = new String[] {"--modelpath", modelPath, "-path", path};
 
     // When
     tool.run(args);
-
-    // Then
     this.checkOnlyExpectedErrorsPresent();
     Assertions.assertFalse(
       MontiArcMill.globalScope().getSubScopes().isEmpty(),
