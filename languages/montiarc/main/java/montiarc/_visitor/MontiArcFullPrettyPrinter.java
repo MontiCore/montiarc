@@ -9,6 +9,7 @@ import comfortablearc._visitor.ComfortableArcPrettyPrinter;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpressionsBasisNode;
 import de.monticore.expressions.prettyprint.AssignmentExpressionsPrettyPrinter;
+import de.monticore.expressions.prettyprint.BitExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.CommonExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.ExpressionsBasisPrettyPrinter;
 import de.monticore.literals.prettyprint.MCCommonLiteralsPrettyPrinter;
@@ -56,6 +57,7 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
     // Expression & Literal languages
     initExpressionsBasisPrettyPrinter(printer);
     initCommonExpressionPrettyPrinter(printer);
+    initBitExpressionsPrettyPrinter(printer);
     initAssignmentExpressionsPrettyPrinter(printer);
     initMCCommonLiteralsPrettyPrinter(printer);
 
@@ -152,6 +154,14 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
     CommonExpressionsPrettyPrinter commonExpressionsPrettyPrinter = new CommonExpressionsPrettyPrinter(printer);
     traverser.setCommonExpressionsHandler(commonExpressionsPrettyPrinter);
     traverser.add4CommonExpressions(commonExpressionsPrettyPrinter);
+  }
+
+  protected void initBitExpressionsPrettyPrinter(@NotNull IndentPrinter printer) {
+    Preconditions.checkNotNull(printer);
+
+    BitExpressionsPrettyPrinter bitExpressionsPrettyPrinter = new BitExpressionsPrettyPrinter(printer);
+    traverser.setBitExpressionsHandler(bitExpressionsPrettyPrinter);
+    traverser.add4BitExpressions(bitExpressionsPrettyPrinter);
   }
 
   protected void initAssignmentExpressionsPrettyPrinter(@NotNull IndentPrinter printer) {
