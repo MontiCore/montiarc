@@ -76,8 +76,10 @@ public class CD2PojoTool extends CDGeneratorTool {
 
       asts = transform(asts);
 
+      Log.enableFailQuick(false);
       Collection<ICD4CodeArtifactScope> scopes = this.createSymbolTable(asts);
       this.completeSymbolTable(asts);
+      Log.enableFailQuick(true);
 
       if (cmd.hasOption("c")) {
         Log.enableFailQuick(false);
