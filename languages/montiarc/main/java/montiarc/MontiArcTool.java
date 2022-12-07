@@ -3,6 +3,7 @@ package montiarc;
 
 import arcbasis._symboltable.SymbolService;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
@@ -91,6 +92,9 @@ public class MontiArcTool extends MontiArcToolTOP {
     Log.enableFailQuick(false);
     Collection<ASTMACompilationUnit> asts = this.parse(".arc", this.createModelPath(cl).getEntries());
     Log.enableFailQuick(true);
+    if (cl.hasOption("c2mc")) {
+      this.defaultImportTrafo(asts);
+    }
 
     this.runDefaultTasks(asts);
     this.runAdditionalTasks(asts, cl);
@@ -106,6 +110,21 @@ public class MontiArcTool extends MontiArcToolTOP {
     } else {
       return new MCPath();
     }
+  }
+
+  public void defaultImportTrafo(@NotNull Collection<ASTMACompilationUnit> asts) {
+    Preconditions.checkNotNull(asts);
+    asts.forEach(this::defaultImportTrafo);
+  }
+
+  public void defaultImportTrafo(@NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(ast);
+    ast.addImportStatement(MontiArcMill.mCImportStatementBuilder()
+      .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
+        .setPartsList(ImmutableList.of("java", "lang"))
+        .build())
+      .setStar(true)
+      .build());
   }
 
   public void runDefaultTasks(@NotNull Collection<ASTMACompilationUnit> asts) {
