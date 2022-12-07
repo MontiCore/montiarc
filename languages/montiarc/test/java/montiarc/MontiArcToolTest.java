@@ -4,6 +4,7 @@ package montiarc;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.io.paths.MCPath;
+import de.monticore.symboltable.ImportStatement;
 import de.monticore.symboltable.IGlobalScope;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.LogStub;
@@ -818,6 +819,24 @@ public class MontiArcToolTest extends AbstractTest {
       stream().anyMatch(symbolResolver -> symbolResolver instanceof OOClass2MCResolver));
   }
 
+  @Test
+  void shouldAddJavaLangImport() throws IOException {
+    // Given
+    ASTMACompilationUnit ast = MontiArcMill.parser()
+      .parse_StringMACompilationUnit("component A {}").orElseThrow();
+
+    MontiArcTool tool = new MontiArcTool();
+
+    // When
+    tool.defaultImportTrafo(ast);
+    tool.createSymbolTable(ast);
+
+    // Then
+    List<ImportStatement> imports = ((IMontiArcArtifactScope) ast.getSpannedScope()).getImportsList();
+    Assertions.assertTrue(imports.stream()
+        .anyMatch(i -> i.getStatement().equals("java.lang") && i.isStar()), "Import to java.lang.* should be present.");
+  }
+
   @ParameterizedTest
   @ValueSource(strings = {
     "compTypesFromSymFiles", "connectedSubComponents", "importFromSubPackage", "ooTypesFromSymFiles"
@@ -833,6 +852,8 @@ public class MontiArcToolTest extends AbstractTest {
 
     // When
     tool.run(args);
+
+    // Then
     this.checkOnlyExpectedErrorsPresent();
     Assertions.assertFalse(
       MontiArcMill.globalScope().getSubScopes().isEmpty(),
