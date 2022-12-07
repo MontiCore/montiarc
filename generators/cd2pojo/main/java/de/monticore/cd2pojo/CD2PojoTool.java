@@ -160,7 +160,8 @@ public class CD2PojoTool extends CDGeneratorTool {
     return asts.stream().map(this::createSymbolTable).collect(Collectors.toList());
   }
 
-  protected ICD4CodeArtifactScope createSymbolTable(ASTCDCompilationUnit ast) {
+  @Override
+  public ICD4CodeArtifactScope createSymbolTable(ASTCDCompilationUnit ast) {
     CD4CodeScopesGenitorDelegatorTOP genitor = CD4CodeMill.scopesGenitorDelegator();
     return genitor.createFromAST(ast);
   }
@@ -169,7 +170,8 @@ public class CD2PojoTool extends CDGeneratorTool {
     asts.forEach(this::completeSymbolTable);
   }
 
-  protected void completeSymbolTable(ASTCDCompilationUnit ast) {
+  @Override
+  public void completeSymbolTable(ASTCDCompilationUnit ast) {
     ast.accept(new CD4CodeSymbolTableCompleter(ast).getTraverser());
   }
 
@@ -217,7 +219,8 @@ public class CD2PojoTool extends CDGeneratorTool {
     }
   }
 
-  protected void init() {
+  @Override
+  public void init() {
     CD4CodeMill.init();
     BasicSymbolsMill.initializePrimitives();
     CD4CodeMill.globalScope().getSymbolDeSers().clear();
