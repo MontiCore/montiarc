@@ -278,6 +278,33 @@ public class SymbolTableTest extends AbstractTest {
           + "constraint (!((f3 && !f4) || (!f3 && f4)));\n"
           + "}"
       );
+    Optional<ASTMACompilationUnit> ast11 = MontiArcMill.parser()
+      .parse_StringMACompilationUnit("component ModeAutomata {\n" +
+          "  port in int i1;\n" +
+          "  port out int o1;\n" +
+          "  port in ModeCmd modeCmd;\n" +
+          "\n" +
+          "  mode Simple {\n" +
+          "    i1 -> o1;\n" +
+          "  }\n" +
+          "  mode Complex {\n" +
+          "    port in Data i2;\n" +
+          "\n" +
+          "    Foo foo;\n" +
+          "    Bar bar;\n" +
+          "\n" +
+          "    i2 -> foo.in;\n" +
+          "    foo.out -> bar.in;\n" +
+          "    bar.out -> o1;\n" +
+          "  }\n" +
+          "\n" +
+          "  mode automaton {\n" +
+          "    initial Default;\n" +
+          "    Default -> Complex [ modeCmd == COMPLEX ] / {o1 = 0;};\n" +
+          "    Complex -> Default [ modeCmd == DEFAULT ];\n" +
+          "  }\n" +
+          "}");
+    
     Assertions.assertTrue(ast1.isPresent());
     Assertions.assertTrue(ast2.isPresent());
     Assertions.assertTrue(ast3.isPresent());
@@ -288,6 +315,7 @@ public class SymbolTableTest extends AbstractTest {
     Assertions.assertTrue(ast8.isPresent());
     Assertions.assertTrue(ast9.isPresent());
     Assertions.assertTrue(ast10.isPresent());
+    Assertions.assertTrue(ast11.isPresent());
 
     return Stream.of(
       Arguments.of(Named.of(ast1.get().getComponentType().getName(), ast1.get())),
