@@ -90,14 +90,16 @@ public class MontiArcTool extends MontiArcToolTOP {
 
     Log.info("Parse the input models", "MontiArcTool");
     Log.enableFailQuick(false);
-    Collection<ASTMACompilationUnit> asts = this.parse(".arc", this.createModelPath(cl).getEntries());
+    Collection<ASTMACompilationUnit> libAsts = this.parse(".arc", this.createLibraryPath(cl).getEntries());
+    Collection<ASTMACompilationUnit> ourAsts = this.parse(".arc", this.createModelPath(cl).getEntries());
     Log.enableFailQuick(true);
     if (cl.hasOption("c2mc")) {
-      this.defaultImportTrafo(asts);
+      this.defaultImportTrafo(ourAsts);
     }
 
-    this.runDefaultTasks(asts);
-    this.runAdditionalTasks(asts, cl);
+    this.runDefaultTasks(libAsts);
+    this.runDefaultTasks(ourAsts);
+    this.runAdditionalTasks(ourAsts, cl);
   }
 
   protected MCPath createModelPath(@NotNull CommandLine cl) {
@@ -107,6 +109,18 @@ public class MontiArcTool extends MontiArcToolTOP {
       // `new MCPath(String...)` fails if *one* of the Paths that we pass is composed of multiple paths with a path
       // separator in between, e.g.: foo/bar:goo/rar on Linux. Therefore, we manually separate these paths first.
       return new MCPath(splitPathEntries(cl.getOptionValues("modelpath")));
+    } else {
+      return new MCPath();
+    }
+  }
+
+  protected MCPath createLibraryPath(@NotNull CommandLine cl) {
+    Preconditions.checkNotNull(cl);
+
+    if (cl.hasOption("library-models")) {
+      // `new MCPath(String...)` fails if *one* of the Paths that we pass is composed of multiple paths with a path
+      // separator in between, e.g.: foo/bar:goo/rar on Linux. Therefore, we manually separate these paths first.
+      return new MCPath(splitPathEntries(cl.getOptionValues("library-models")));
     } else {
       return new MCPath();
     }
@@ -400,6 +414,15 @@ public class MontiArcTool extends MontiArcToolTOP {
       .argName("dir")
       .hasArg()
       .desc("Serializes and prints the symbol table to stdout or the specified output directory (optional).")
+      .build());
+
+    // library models
+    options.addOption(org.apache.commons.cli.Option.builder("lib")
+      .longOpt("library-models")
+      .hasArgs()
+      .argName("dirList")
+      .desc("Models that can be referenced from any other model, but which do not get processed by further" +
+        "tasks like pretty printing, serialization to .sym files, etc. (Optional)")
       .build());
 
     // symbol paths

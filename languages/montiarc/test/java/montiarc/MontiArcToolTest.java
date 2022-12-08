@@ -5,14 +5,11 @@ import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symboltable.ImportStatement;
-import de.monticore.symboltable.IGlobalScope;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcArtifactScope;
-import montiarc._symboltable.IMontiArcScope;
 import montiarc._symboltable.MontiArcArtifactScope;
-import montiarc._symboltable.MontiArcGlobalScope;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import montiarc.util.MontiArcError;
@@ -889,6 +886,57 @@ public class MontiArcToolTest extends AbstractTest {
         new Error[] {ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE, ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE}),
       Arguments.of("missingPortType", new Error[] {ArcError.MISSING_TYPE})
     );
+  }
+
+  @Test
+  public void shouldIgnoreLibModelInPrettyPrinter() {
+    // Given
+    String modelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "referencingLibraryConsumer").toString();
+    String libraryPath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "referencedLibrary").toString();
+    String ppTargetDir = tempDir.toAbsolutePath().toString();
+    File expectedPpFile = Paths.get(ppTargetDir,
+      Names.getPathFromQualifiedName("pack2"), "ReferencingComponent.arc").toFile();
+    File illegalPpFile = Paths.get(ppTargetDir,
+      Names.getPathFromQualifiedName("pack"), "ReferencedComponent.arc").toFile();
+
+    MontiArcTool tool = new MontiArcTool();
+    String[] args = new String[] {"--modelpath", modelPath, "-lib", libraryPath, "-pp", ppTargetDir};
+
+    // When
+    tool.run(args);
+
+    // Then
+    // Tests may also fail du to the SE Logger exiting early (failQuick), when it encounters errors. These errors may
+    // be errors from MontiArc models  In this case it is possible, that the library models were not parsed and
+    // therefore are missing, leading to the errors.
+    Assertions.assertTrue(expectedPpFile.isFile());
+    Assertions.assertFalse(illegalPpFile.exists());
+  }
+
+  @Test
+  void shouldIgnoreLibModelInStoreSymbols() {
+    // Given
+    String modelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "referencingLibraryConsumer").toString();
+    String libraryPath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "referencedLibrary").toString();
+    File serializeFile = tempDir.resolve("pack2.ReferencingComponent.arcsym").toFile();
+    File illegalSerializeFile = tempDir.resolve("pack.ReferencedComponent.arcsym").toFile();
+
+    MontiArcTool tool = new MontiArcTool();
+    String[] args = new String[] {
+      "--modelpath", modelPath,
+      "-lib", libraryPath,
+      "-s", tempDir.toAbsolutePath().toString()
+    };
+
+    // When
+    tool.run(args);
+
+    // Then
+    // Tests may also fail du to the SE Logger exiting early (failQuick), when it encounters errors. These errors may
+    // be errors from MontiArc models  In this case it is possible, that the library models were not parsed and
+    // therefore are missing, leading to the errors.
+    Assertions.assertTrue(serializeFile.isFile());
+    Assertions.assertFalse(illegalSerializeFile.exists());
   }
 
 }
