@@ -9,11 +9,13 @@ abstract class Modules {
   val formatVersion = "1.7"
   val guavaVersion = "31.1-jre"
   val javaParserVersion = "3.24.8"
+  val javaSmtVersion = "3.12.0"
   val lejosVersion = "0.9.1-beta"
   val mockitoVersion = "4.9.0"
   val monticoreVersion = "7.5.0-SNAPSHOT"
   val monticoreLSPVersion = "7.5.0-SNAPSHOT"
 
+  val javaSmt = "org.sosy-lab:java-smt"
   val apache = "org.apache.commons:commons-lang3"
   val apacheGroovy = "org.apache.groovy:groovy"
   val codehausJanino = "org.codehaus.janino:janino"
@@ -32,6 +34,7 @@ abstract class Modules {
   val seCommonsLogging = "de.se_rwth.commons:se-commons-logging"
   val seCommonsUtils = "de.se_rwth.commons:se-commons-utilities"
   val cd4analysis = "de.monticore.lang:cd4analysis"
+  val fdLang = "de.monticore.lang:fd-lang"
 
   val lejosModels = "montiarc.libraries:lejos-rte-models"
   val mcGrammarsCapability = "de.monticore:monticore-grammar-grammars"
