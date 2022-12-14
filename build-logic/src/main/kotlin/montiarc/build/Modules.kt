@@ -14,6 +14,7 @@ abstract class Modules {
   val mockitoVersion = "4.9.0"
   val monticoreVersion = "7.5.0-SNAPSHOT"
   val monticoreLSPVersion = "7.5.0-SNAPSHOT"
+  val z3TurnkeyVersion = "4.11.2"
 
   val javaSmt = "org.sosy-lab:java-smt"
   val apache = "org.apache.commons:commons-lang3"
@@ -35,6 +36,7 @@ abstract class Modules {
   val seCommonsUtils = "de.se_rwth.commons:se-commons-utilities"
   val cd4analysis = "de.monticore.lang:cd4analysis"
   val fdLang = "de.monticore.lang:fd-lang"
+  val z3Turnkey = "tools.aqua:z3-turnkey"
 
   val lejosModels = "montiarc.libraries:lejos-rte-models"
   val mcGrammarsCapability = "de.monticore:monticore-grammar-grammars"

@@ -25,6 +25,7 @@ dependencies {
   implementation(libs.monticoreClass2MC)
   implementation("${libs.guava}:${libs.guavaVersion}")
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")
+  implementation("${libs.z3Turnkey}:${libs.z3TurnkeyVersion}")
 
   testImplementation((project(":languages:basis"))) {
     capabilities {

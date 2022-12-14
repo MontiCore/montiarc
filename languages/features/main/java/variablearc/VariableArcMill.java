@@ -2,11 +2,12 @@
 package variablearc;
 
 import arcbasis._visitor.IFullPrettyPrinter;
+import com.microsoft.z3.Context;
 import variablearc._symboltable.VariableArcSymbolTableCompleter;
 import variablearc._symboltable.VariableArcSymbolTableCompleterDelegator;
 import variablearc._visitor.VariableArcFullPrettyPrinter;
-
-import java.util.function.Supplier;
+import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
+import variablearc.evaluation.VariableArcDeriveSMTExpr;
 
 public class VariableArcMill extends VariableArcMillTOP {
 
@@ -15,6 +16,8 @@ public class VariableArcMill extends VariableArcMillTOP {
   protected static VariableArcMill millVariableArcSymbolTableCompleterDelegator;
 
   protected static VariableArcMill millFullPrettyPrinter;
+
+  protected static VariableArcMill millFullConverter;
 
   public static VariableArcSymbolTableCompleter symbolTableCompleter() {
     if (millVariableArcSymbolTableCompleter == null) {
@@ -37,11 +40,19 @@ public class VariableArcMill extends VariableArcMillTOP {
     return millFullPrettyPrinter._fullPrettyPrinter();
   }
 
+  public static IDeriveSMTExpr fullConverter(Context context) {
+    if (millFullConverter == null) {
+      millFullConverter = getMill();
+    }
+    return millFullConverter._fullConverter(context);
+  }
+
   public static void initMe(VariableArcMill a) {
     VariableArcMillTOP.initMe(a);
     millVariableArcSymbolTableCompleter = a;
     millVariableArcSymbolTableCompleterDelegator = a;
     millFullPrettyPrinter = a;
+    millFullConverter = a;
   }
 
   public static void reset() {
@@ -49,6 +60,7 @@ public class VariableArcMill extends VariableArcMillTOP {
     millVariableArcSymbolTableCompleter = null;
     millVariableArcSymbolTableCompleterDelegator = null;
     millFullPrettyPrinter = null;
+    millFullConverter = null;
   }
 
   protected VariableArcSymbolTableCompleter _symbolTableCompleter() {
@@ -61,5 +73,9 @@ public class VariableArcMill extends VariableArcMillTOP {
 
   protected IFullPrettyPrinter _fullPrettyPrinter() {
     return new VariableArcFullPrettyPrinter();
+  }
+
+  protected IDeriveSMTExpr _fullConverter(Context context) {
+    return new VariableArcDeriveSMTExpr(context);
   }
 }

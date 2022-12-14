@@ -76,8 +76,9 @@ Legend:
 # VariableArc CoCos
 
 | in MA | CoCo(s)                                 | Language    | Code                               | Notes                                                      |
-| ----- | --------------------------------------- | ----------- | ---------------------------------- | ---------------------------------------------------------- |
-| ☑     | ConstraintEvaluation                    | VariableArc | 0xC1401                            |                                                            |
+|-------|-----------------------------------------|-------------|------------------------------------|------------------------------------------------------------|
+| ☑     | ConstraintNotSatisfied                  | VariableArc | 0xC1401                            |                                                            |
+| ☑     | ConstraintNeverSatisfied                | VariableArc | 0xC1415                            |
 | ☑     | ConstraintsOmitPortReferences           | VariableArc | 0xC1408                            |                                                            |
 | ☑     | ConstraintsSymbolsExists                | VariableArc | 0xC1414                            |                                                            |
 | ☑     | ConstraintTypesCorrect                  | VariableArc | 0xC1400                            |                                                            |

@@ -3,98 +3,70 @@ package variablearc.evaluation;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import de.monticore.expressions.assignmentexpressions.AssignmentExpressionsMill;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import variablearc.AbstractTest;
 import variablearc.VariableArcMill;
+import variablearc._symboltable.ArcFeature2VariableAdapter;
+import variablearc._symboltable.ArcFeatureSymbol;
 import variablearc._symboltable.IVariableArcScope;
 import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc.check.TypeExprOfVariableComponent;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class VariationPointSolverTest extends AbstractTest {
 
-  protected static ComponentTypeSymbol createComponent(@NotNull String compName,
-                                                       @NotNull String... varNames) {
-    Preconditions.checkNotNull(compName);
-    Preconditions.checkNotNull(varNames);
 
-    List<VariableSymbol> vars = new ArrayList<>(varNames.length);
-    for (String varName : varNames) {
-      VariableSymbol var = VariableArcMill.variableSymbolBuilder()
-        .setName(varName).build();
-      vars.add(var);
-    }
-
-    return VariableArcMill.componentTypeSymbolBuilder().setName(compName)
-      .setSpannedScope(VariableArcMill.scope()).setParameters(vars).build();
-  }
-
-  protected static ComponentTypeSymbol createComponent(@NotNull String compName,
-                                                       @NotNull VariableArcVariationPoint variationPoint,
-                                                       @NotNull String... varNames) {
-    Preconditions.checkNotNull(compName);
-    Preconditions.checkNotNull(varNames);
-
-    List<VariableSymbol> vars = new ArrayList<>(varNames.length);
-    for (String varName : varNames) {
-      VariableSymbol var = VariableArcMill.variableSymbolBuilder()
-        .setName(varName).build();
-      vars.add(var);
-    }
-
-    IVariableArcScope scope = VariableArcMill.scope();
-
-    scope.add(variationPoint);
-
-    return VariableArcMill.componentTypeSymbolBuilder().setName(compName)
-      .setSpannedScope(scope).setParameters(vars).build();
+  protected static ASTNameExpression createNameExpression(@NotNull String name,
+                                                          @NotNull IVariableArcScope scope) {
+    Preconditions.checkNotNull(name);
+    Preconditions.checkNotNull(scope);
+    ASTNameExpression res = VariableArcMill.nameExpressionBuilder().setName(name).build();
+    res.setEnclosingScope(scope);
+    return res;
   }
 
   @Test
-  public void shouldIgnoreNamedVariableFromOtherScope() {
-    // --- Given ---
-    // Parent with parameter a
-    ComponentTypeSymbol parentComp = createComponent("Comp", "a");
-    TypeExprOfVariableComponent parentCompTypeExpr = new TypeExprOfVariableComponent(parentComp,
-      Collections.singletonList(VariableArcMill.nameExpressionBuilder()
-        .setName("false").build()));
+  public void shouldIgnoreNamedVariableFromOutsideScope() {
+    // Given
+    IVariableArcScope innerScope = VariableArcMill.scope();
+    IVariableArcScope outerScope = VariableArcMill.scope();
 
-    // Child with variation point
+    // variation point with condition f1
     VariableArcVariationPoint variationPoint =
-      new VariableArcVariationPoint(VariableArcMill.nameExpressionBuilder()
-        .setName("feat").build());
+      new VariableArcVariationPoint(createNameExpression("f1", innerScope));
+    innerScope.add(variationPoint);
 
-    ComponentTypeSymbol comp = createComponent("Comp", variationPoint, "a");
-    comp.setParent(parentCompTypeExpr);
-    ((IVariableArcScope) comp.getSpannedScope()).add(VariableArcMill.arcFeatureSymbolBuilder()
-      .setName("feat").build());
+    // component with feature f1 and feature f2
+    ComponentTypeSymbol compType = VariableArcMill.componentTypeSymbolBuilder()
+      .setName("comp1").setSpannedScope(innerScope).build();
+    ArcFeatureSymbol f1 = VariableArcMill.arcFeatureSymbolBuilder().setName("f1").build();
+    ArcFeatureSymbol f2 = VariableArcMill.arcFeatureSymbolBuilder().setName("f2").build();
+    innerScope.add(f1);
+    innerScope.add(new ArcFeature2VariableAdapter(f1));
+    innerScope.add(f2);
+    innerScope.add(new ArcFeature2VariableAdapter(f2));
 
-    ASTExpression aExpr = VariableArcMill.nameExpressionBuilder()
-      .setName("false").build(); // Workaround for not
-    // having literals in VariableArc (a=false)
-    ASTExpression featureAssignmentExpr = AssignmentExpressionsMill.assignmentExpressionBuilder()
-      .setLeft(VariableArcMill.nameExpressionBuilder().setName("feat").build())
-      .setOperator(0)
-      .setRight(VariableArcMill.nameExpressionBuilder().setName("a").build())
-      .build(); // (feat = a) where a references parentComp.a not comp.a
-    List<ASTExpression> exprList = Lists.newArrayList(aExpr, featureAssignmentExpr);
+    // as a subcomponent with f1=f2 (but f2 is a feature in the outer scope)
+    TypeExprOfVariableComponent compTypeExpr =
+      new TypeExprOfVariableComponent(compType, Collections.singletonList(
+        AssignmentExpressionsMill.assignmentExpressionBuilder()
+          .setLeft(createNameExpression("f1", outerScope))
+          .setRight(createNameExpression("f2", outerScope)).build())
+      );
 
-    TypeExprOfVariableComponent compTypeExpr = new TypeExprOfVariableComponent(comp, exprList);
+    VariationPointSolver solver = new VariationPointSolver(compTypeExpr);
 
     // When
-    List<VariableArcVariationPoint> returnedVariationPoints = compTypeExpr.getVariationPoints();
+    List<VariableArcVariationPoint> variationPoints = solver.getVariationPoints();
 
     // Then the variation point should be found
-    Assertions.assertEquals(1, returnedVariationPoints.size());
-    Assertions.assertEquals(variationPoint, returnedVariationPoints.get(0));
+    Assertions.assertEquals(1, variationPoints.size());
+    Assertions.assertEquals(variationPoint, variationPoints.get(0));
   }
 }

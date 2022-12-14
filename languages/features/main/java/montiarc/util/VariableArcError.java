@@ -9,7 +9,7 @@ package montiarc.util;
  */
 public enum VariableArcError implements Error {
   CONSTRAINT_EXPRESSION_WRONG_TYPE("0xC1400", "Incompatible types: '%s' cannot be converted to 'boolean'"),
-  CONSTRAINT_NOT_SATISFIED("0xC1401", "Constraint of subcomponent '%s' is not satisfied"),
+  CONSTRAINT_NOT_SATISFIED("0xC1401", "Constraints are not satisfied"),
   FEATURE_LOWER_CASE("0xC1402", "Feature names should start with a lower case letter"),
   FEATURE_UNUSED("0xC1403", "Feature '%s' is never used"),
   IF_STATEMENT_EXPRESSION_WRONG_TYPE("0xC1404", "Incompatible types: '%s' cannot be converted to 'boolean'"),
@@ -21,7 +21,8 @@ public enum VariableArcError implements Error {
   NAMED_ARGUMENT_FEATURE_NOT_EXIST("0xC1410", "Cannot resolve feature symbol '%s'"),
   NAMED_ARGUMENT_EXPRESSION_WRONG_TYPE("0xC1411", "Incompatible types: '%s' cannot be converted to 'boolean'"),
   PORT_REFERENCE_IN_IF_STATEMENT_ILLEGAL("0xC1413", "Messages are an element of the runtime, cannot read from port '%s' at design-time"),
-  PORT_REFERENCE_IN_CONSTRAINT_ILLEGAL("0xC1414", "Messages are an element of the runtime, cannot read from port '%s' at design-time");
+  PORT_REFERENCE_IN_CONSTRAINT_ILLEGAL("0xC1414", "Messages are an element of the runtime, cannot read from port '%s' at design-time"),
+  CONSTRAINT_NEVER_SATISFIED("0xC1415", "Constraints can never be satisfied");
 
   private final String errorCode;
   private final String errorMessage;

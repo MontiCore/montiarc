@@ -21,7 +21,7 @@ dependencies {
 
   implementation("${libs.guava}:${libs.guavaVersion}")
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")
-  implementation("org.openjdk.nashorn:nashorn-core:15.4")
+  implementation("${libs.z3Turnkey}:${libs.z3TurnkeyVersion}")
 
   testImplementation((project(":languages:basis"))) {
     capabilities {

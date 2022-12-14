@@ -280,12 +280,14 @@ public class TypeExprOfVariableComponentTest extends AbstractTest {
       .setType(Mockito.mock(SymTypeExpression.class)).setIncoming(false)
       .build();
 
-    VariableArcVariationPoint variationPoint = new VariableArcVariationPoint(VariableArcMill.nameExpressionBuilder()
-      .setName("feat").build());
+    ASTExpression variationPointCondition = VariableArcMill.nameExpressionBuilder()
+        .setName("feat").build();
+    VariableArcVariationPoint variationPoint = new VariableArcVariationPoint(variationPointCondition);
     variationPoint.add(port);
 
     ComponentTypeSymbol comp = createComponentWithVariationPointAndParams("Comp", variationPoint);
     comp.getSpannedScope().add(port);
+    variationPointCondition.setEnclosingScope(comp.getSpannedScope());
     ((IVariableArcScope) comp.getSpannedScope()).add(VariableArcMill.arcFeatureSymbolBuilder()
       .setName("feat").build());
 

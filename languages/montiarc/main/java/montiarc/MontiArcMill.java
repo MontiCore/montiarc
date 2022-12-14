@@ -2,12 +2,12 @@
 package montiarc;
 
 import arcbasis._visitor.IFullPrettyPrinter;
+import com.microsoft.z3.Context;
 import montiarc._symboltable.MontiArcSymbolTableCompleter;
 import montiarc._symboltable.MontiArcSymbolTableCompleterDelegator;
 import montiarc._visitor.MontiArcFullPrettyPrinter;
-import variablearc.VariableArcMill;
-
-import java.util.function.Supplier;
+import montiarc.evaluation.MontiArcDeriveSMTExpr;
+import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 
 public class MontiArcMill extends MontiArcMillTOP {
 
@@ -16,6 +16,8 @@ public class MontiArcMill extends MontiArcMillTOP {
   protected static MontiArcMill millMontiArcSymbolTableCompleterDelegator;
 
   protected static MontiArcMill millMontiArcFullPrettyPrinter;
+
+  protected static MontiArcMill millMontiArcFullConverter;
 
   public static MontiArcSymbolTableCompleter symbolTableCompleter ()  {
     if (millMontiArcSymbolTableCompleter == null) {
@@ -50,11 +52,23 @@ public class MontiArcMill extends MontiArcMillTOP {
     return new MontiArcFullPrettyPrinter();
   }
 
+  public static IDeriveSMTExpr fullConverter(Context context) {
+    if (millMontiArcFullPrettyPrinter == null) {
+      millMontiArcFullPrettyPrinter = getMill();
+    }
+    return millMontiArcFullPrettyPrinter._fullConverter(context);
+  }
+
+  protected IDeriveSMTExpr _fullConverter(Context context) {
+    return new MontiArcDeriveSMTExpr(context);
+  }
+
   public static void initMe(MontiArcMill a)  {
     MontiArcMillTOP.initMe(a);
     millMontiArcSymbolTableCompleter = a;
     millMontiArcSymbolTableCompleterDelegator = a;
     millMontiArcFullPrettyPrinter = a;
+    millMontiArcFullConverter = a;
   }
 
   public static void reset() {
@@ -62,5 +76,6 @@ public class MontiArcMill extends MontiArcMillTOP {
     millMontiArcSymbolTableCompleter = null;
     millMontiArcSymbolTableCompleterDelegator = null;
     millMontiArcFullPrettyPrinter = null;
+    millMontiArcFullConverter = null;
   }
 }

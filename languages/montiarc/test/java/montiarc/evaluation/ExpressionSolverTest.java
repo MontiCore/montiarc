@@ -64,8 +64,7 @@ public class ExpressionSolverTest extends AbstractTest {
         .setSource(ASTConstantsMCCommonLiterals.TRUE).build())
       .build();
 
-    Optional<Boolean> res = ExpressionSolver.solve(expression, this.typeExprOfVariableComponent,
-      this.prettyPrinter::prettyprint);
+    Optional<Boolean> res = ExpressionSolver.solve(expression, this.typeExprOfVariableComponent);
 
     Assertions.assertTrue(res.isPresent());
     Assertions.assertTrue(res.get());
@@ -75,9 +74,9 @@ public class ExpressionSolverTest extends AbstractTest {
   public void shouldSolveWithLocalVariable() {
     ASTExpression expression = MontiArcMill.nameExpressionBuilder().setName("a")
       .build();
+    expression.setEnclosingScope(this.typeExprOfVariableComponent.getTypeInfo().getSpannedScope());
 
-    Optional<Boolean> res = ExpressionSolver.solve(expression, this.typeExprOfVariableComponent,
-      this.prettyPrinter::prettyprint);
+    Optional<Boolean> res = ExpressionSolver.solve(expression, this.typeExprOfVariableComponent);
 
     Assertions.assertTrue(res.isPresent());
     Assertions.assertTrue(res.get());
