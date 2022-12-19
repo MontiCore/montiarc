@@ -151,7 +151,6 @@ public class MontiArcCoCos {
     checker.addCoCo(new ComponentInheritanceRespectsGenericTypeBounds());
     checker.addCoCo(new ComponentInstantiationRespectsGenericTypeBounds());
     checker.addCoCo(new RootComponentTypesNoInstanceName());
-    checker.addCoCo(new UnresolvableImport());
 
     // ComfortableArc Cocos
     checker.addCoCo(new MaxOneAutoconnectPerComponent());
