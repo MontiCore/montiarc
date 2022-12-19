@@ -116,8 +116,6 @@ public class MontiArcCoCos {
     checker.addCoCo(new GenericTypeParameterNameCapitalization());
 
     // VariableArc
-    checker.addCoCo(new ConstraintSatisfied4Comp());
-    checker.addCoCo(new ConstraintSatisfied4SubComp());
     checker.addCoCo(new ConstraintsOmitPortReferences());
     checker.addCoCo(new ConstraintIsBoolean(new MontiArcTypeCalculator()));
     checker.addCoCo(new FeatureConfigurationParameterAssignment(new MontiArcTypeCalculator()));

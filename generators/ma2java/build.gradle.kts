@@ -6,7 +6,9 @@ plugins {
 }
 
 dependencies {
-  api(project(":languages:montiarc"))
+  api(project(":languages:montiarc")) {
+    exclude("tools.aqua", "z3-turnkey")
+  }
   implementation(project(":libraries:majava-rte"))
   implementation("${libs.format}:${libs.formatVersion}")
   implementation("${libs.guava}:${libs.guavaVersion}")
