@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
 import de.monticore.types.check.IDerive;

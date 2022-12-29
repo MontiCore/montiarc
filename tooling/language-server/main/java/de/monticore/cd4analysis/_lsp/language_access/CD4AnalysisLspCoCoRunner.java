@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package de.monticore.cd4analysis._lsp.language_access;
 
 import de.mclsg.lsp.document_management.DocumentManager;
