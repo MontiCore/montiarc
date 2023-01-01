@@ -31,15 +31,16 @@ import java.util.Optional;
  * the subcomponents type. (p.65 Lst. 3.42)
  */
 public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCoCo {
+
   @Override
   public void check(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol(), "ASTComponent node '%s' at '%s' has no symbol. Thus can not " +
-      "check CoCo '%s'. Did you forget to run the scopes genitor and symbol table completer before checking the coco?",
+        "check CoCo '%s'. Did you forget to run the scopes genitor and symbol table completer before checking the coco?",
       node.getName(), node.get_SourcePositionStart(), this.getClass().getSimpleName());
     ComponentTypeSymbol component = node.getSymbol();
 
-    for(ASTConnector conn : node.getConnectors()) {
+    for (ASTConnector conn : node.getConnectors()) {
       checkPortPresence(conn.getSource(), component, conn);
       conn.forEachTarget(tgt -> checkPortPresence(tgt, component, conn));
 
@@ -51,9 +52,10 @@ public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCo
    * is checked that the subcomponent that the port access refers to exists and that the type of that subcomponent has
    * a port with a name equal to the one given by the port access. If we have a port without qualification we check
    * that the component type enclosing the port access has a corresponding port symbol (with equal name).
-   * @param port The port access for which to test whether there is a port symbol which the port access refers to.
-   * @param enclComp The component type symbol in whose enclosing scope the port is defined (the ast node of the
-   *                 component type symbol is an ancestor of the port access in the AST).
+   *
+   * @param port      The port access for which to test whether there is a port symbol which the port access refers to.
+   * @param enclComp  The component type symbol in whose enclosing scope the port is defined (the ast node of the
+   *                  component type symbol is an ancestor of the port access in the AST).
    * @param connector The connector of which the port access is part of.
    */
   protected static void checkPortPresence(@NotNull ASTPortAccess port,
@@ -63,31 +65,30 @@ public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCo
     Preconditions.checkNotNull(enclComp);
     Preconditions.checkNotNull(connector);
     Preconditions.checkArgument(connector.getSource().equals(port)
-      || connector.getTargetList().stream().anyMatch( tgt -> tgt.equals(port))
+      || connector.getTargetList().stream().anyMatch(tgt -> tgt.equals(port))
     );
 
-    if(port.isPresentComponent()) {
+    if (port.isPresentComponent()) {
       // first check the existence of the subcomponent that owns the port
       Optional<ComponentInstanceSymbol> sub = enclComp.getSubComponent(port.getComponent());
-      if(sub.isEmpty()) {
+      if (sub.isEmpty()) {
         logMissingComponent(port, connector);
       } else {
         // now also check whether the subcomponent has a port with the given name
-        if (!sub.get().isPresentType()) {
-          logMissingPort(port, connector, enclComp);
+        if (!sub.get().isPresentType()) { // ignore missing type as this is handled by other cocos
           return;
         }
 
         Optional<PortSymbol> portSym = sub.get().getType().getTypeInfo().getPort(port.getPort(), true);
-        if(portSym.isEmpty()) {
+        if (portSym.isEmpty()) {
           logMissingPort(port, connector, enclComp);
         }
       }
 
-    // v checking the port existence for ports of the enclosing component type.
+      // v checking the port existence for ports of the enclosing component type.
     } else {
       Optional<PortSymbol> portSym = enclComp.getPort(port.getPort(), true);
-      if(portSym.isEmpty()) {
+      if (portSym.isEmpty()) {
         logMissingPort(port, connector, enclComp);
       }
     }
@@ -95,6 +96,7 @@ public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCo
 
   /**
    * Prints an error message stating that the component instance that is the owner of the given port does not exist.
+   *
    * @param connectorOfPort The connector of which the port is part (we need this for printing the error message).
    *                        If the connector does not contain the given port an exception is raised.
    */
@@ -104,7 +106,7 @@ public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCo
     Preconditions.checkNotNull(connectorOfPort);
     Preconditions.checkArgument(port.isPresentComponent());
     Preconditions.checkArgument(connectorOfPort.getSource().equals(port)
-      || connectorOfPort.getTargetList().stream().anyMatch( tgt -> tgt.equals(port))
+      || connectorOfPort.getTargetList().stream().anyMatch(tgt -> tgt.equals(port))
     );
 
     boolean isSourcePort = port.equals(connectorOfPort.getSource());
@@ -118,11 +120,12 @@ public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCo
 
   /**
    * Prints an error message stating that the given port does not exist.
+   *
    * @param connectorOfPort The connector of which the port is part (we need this for printing the error message).
    *                        If the connector does not contain the given port an exception is raised.
-   * @param enclComp The component symbol of in whose scope the given port access lays (we need this for printing the
-   *                 error message). If the given port access does not lay in the component symbols scope an exception
-   *                 is raised.
+   * @param enclComp        The component symbol of in whose scope the given port access lays (we need this for printing the
+   *                        error message). If the given port access does not lay in the component symbols scope an exception
+   *                        is raised.
    */
   protected static void logMissingPort(@NotNull ASTPortAccess port,
                                        @NotNull ASTConnector connectorOfPort,
@@ -131,7 +134,7 @@ public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCo
     Preconditions.checkNotNull(connectorOfPort);
     Preconditions.checkNotNull(enclComp);
     Preconditions.checkArgument(connectorOfPort.getSource().equals(port)
-      || connectorOfPort.getTargetList().stream().anyMatch( tgt -> tgt.equals(port))
+      || connectorOfPort.getTargetList().stream().anyMatch(tgt -> tgt.equals(port))
     );
 
     boolean isSourcePort = port.equals(connectorOfPort.getSource());
@@ -146,7 +149,7 @@ public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCo
   /**
    * @return a nice string that can be used to enhance error messages
    */
-  private static String printConnector(ASTConnector connector){
+  private static String printConnector(ASTConnector connector) {
     return new ArcBasisFullPrettyPrinter().prettyprint(connector)
       .replaceAll("[;\n]", "");
   }
