@@ -404,11 +404,12 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
 
   protected List<PortSymbol> getAllPorts(@NotNull Collection<ComponentTypeSymbol> visited) {
     Preconditions.checkNotNull(visited);
+    visited.add(this);
 
     List<PortSymbol> result = new ArrayList<>(getPorts());
     if (this.isPresentParentComponent() && !visited.contains(this.getParent().getTypeInfo())) {
       List<PortSymbol> inheritedPorts = new ArrayList<>();
-      for (PortSymbol port : this.getParent().getTypeInfo().getAllPorts()) {
+      for (PortSymbol port : this.getParent().getTypeInfo().getAllPorts(visited)) {
         if (result.stream().noneMatch(p -> p.getName().equals(port.getName()))) {
           inheritedPorts.add(port);
         }

@@ -884,7 +884,8 @@ public class MontiArcToolTest extends AbstractTest {
     return Stream.of(
       Arguments.of("missingCompType",
         new Error[] {ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE, ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE}),
-      Arguments.of("missingPortType", new Error[] {ArcError.MISSING_TYPE})
+      Arguments.of("missingPortType", new Error[] {ArcError.MISSING_TYPE}),
+      Arguments.of("circularInheritance", new Error[] {ArcError.CIRCULAR_INHERITANCE})
     );
   }
 
