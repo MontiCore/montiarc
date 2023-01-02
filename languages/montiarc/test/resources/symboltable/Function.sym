@@ -1,0 +1,14 @@
+{
+  "name": "Function",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
+      "name": "Function",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "OOTypeWithFunctions",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOTypeWithFunctions",
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
+            "name": "g",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "symboltable.OOType"
+            }
+          },
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
+            "name": "h",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "symboltable.OOType"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

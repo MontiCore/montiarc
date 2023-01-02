@@ -1,0 +1,149 @@
+{
+  "name": "Field",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+      "name": "Field",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      }
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+      "name": "Field",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isReadOnly": false,
+      "isStatic": false,
+      "isFinal": false,
+      "isDerived": false,
+      "isPublic": false,
+      "isProtected": false,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+      "name": "Field",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isReadOnly": true,
+      "isStatic": true,
+      "isFinal": true,
+      "isDerived": true,
+      "isPublic": true,
+      "isProtected": true,
+      "isPrivate": true
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+      "name": "Field",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isReadOnly": false,
+      "isStatic": false,
+      "isFinal": false,
+      "isDerived": false,
+      "isPublic": true,
+      "isProtected": false,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+      "name": "Field",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isReadOnly": false,
+      "isStatic": false,
+      "isFinal": false,
+      "isDerived": false,
+      "isPublic": false,
+      "isProtected": true,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+      "name": "Field",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isReadOnly": false,
+      "isStatic": false,
+      "isFinal": false,
+      "isDerived": false,
+      "isPublic": false,
+      "isProtected": false,
+      "isPrivate": true
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+      "name": "Field",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isReadOnly": true,
+      "isStatic": false,
+      "isFinal": false,
+      "isDerived": false,
+      "isPublic": true,
+      "isProtected": false,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+      "name": "Field",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isReadOnly": false,
+      "isStatic": true,
+      "isFinal": false,
+      "isDerived": false,
+      "isPublic": true,
+      "isProtected": false,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+      "name": "Field",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isReadOnly": false,
+      "isStatic": false,
+      "isFinal": true,
+      "isDerived": false,
+      "isPublic": true,
+      "isProtected": false,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+      "name": "Field",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isReadOnly": false,
+      "isStatic": true,
+      "isFinal": true,
+      "isDerived": false,
+      "isPublic": true,
+      "isProtected": false,
+      "isPrivate": false
+    }
+  ]
+}

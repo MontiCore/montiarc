@@ -1,0 +1,119 @@
+{
+  "name": "Method",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
+      "name": "Method",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      }
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
+      "name": "Method",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isStatic": false,
+      "isFinal": false,
+      "isConstructor": false,
+      "isMethod": false,
+      "isPublic": false,
+      "isProtected": false,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
+      "name": "Method",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isStatic": true,
+      "isFinal": true,
+      "isMethod": true,
+      "isConstructor": true,
+      "isPublic": true,
+      "isProtected": true,
+      "isPrivate": true
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
+      "name": "Method",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isStatic": false,
+      "isFinal": false,
+      "isConstructor": false,
+      "isMethod": true,
+      "isPublic": true,
+      "isProtected": false,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
+      "name": "Method",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isStatic": true,
+      "isFinal": false,
+      "isConstructor": false,
+      "isMethod": true,
+      "isPublic": true,
+      "isProtected": false,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
+      "name": "Method",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isStatic": false,
+      "isFinal": true,
+      "isConstructor": false,
+      "isMethod": true,
+      "isPublic": true,
+      "isProtected": false,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
+      "name": "Method",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isStatic": true,
+      "isFinal": true,
+      "isConstructor": false,
+      "isMethod": true,
+      "isPublic": true,
+      "isProtected": false,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
+      "name": "Method",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isStatic": false,
+      "isFinal": false,
+      "isConstructor": true,
+      "isMethod": false,
+      "isPublic": true,
+      "isProtected": false,
+      "isPrivate": false
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "TypeWithVariable",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeSymbol",
+      "name": "TypeWithVariable",
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+            "name": "a",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "symboltable.Type"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

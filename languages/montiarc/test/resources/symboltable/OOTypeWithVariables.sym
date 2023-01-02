@@ -1,0 +1,30 @@
+{
+  "name": "OOTypeWithVariables",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOTypeWithVariables",
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+            "name": "b",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "symboltable.OOType"
+            }
+          },
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+            "name": "c",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "symboltable.OOType"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

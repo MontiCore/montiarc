@@ -1,19 +1,18 @@
 {
-  "name": "SomeOOType",
+  "name": "OOTypeWithField",
+  "package": "symboltable",
   "symbols": [
     {
       "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
-      "name": "SomeOOType",
-      "isClass": true,
+      "name": "OOTypeWithField",
       "spannedScope": {
-        "isShadowingScope": false,
         "symbols": [
           {
             "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
-            "name": "SomeField",
+            "name": "a",
             "type": {
-              "kind": "de.monticore.types.check.SymTypePrimitive",
-              "primitiveName": "int"
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "symboltable.OOType"
             }
           }
         ]

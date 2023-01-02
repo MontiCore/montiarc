@@ -1,0 +1,101 @@
+{
+  "name": "OOType",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOType"
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOType",
+      "isClass": false,
+      "isInterface": false,
+      "isEnum": false,
+      "isAbstract": false,
+      "isFinal": false,
+      "isStatic": false,
+      "isPublic": false,
+      "isProtected": false,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOType",
+      "isClass": true,
+      "isInterface": true,
+      "isEnum": true,
+      "isAbstract": true,
+      "isFinal": true,
+      "isStatic": true,
+      "isPublic": true,
+      "isProtected": true,
+      "isPrivate": true
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOType",
+      "isClass": true,
+      "isInterface": false,
+      "isEnum": false,
+      "isAbstract": false,
+      "isFinal": false,
+      "isStatic": false,
+      "isPublic": true,
+      "isProtected": false,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOType",
+      "isClass": true,
+      "isInterface": false,
+      "isEnum": false,
+      "isAbstract": true,
+      "isFinal": false,
+      "isStatic": false,
+      "isPublic": true,
+      "isProtected": false,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOType",
+      "isClass": true,
+      "isInterface": false,
+      "isEnum": false,
+      "isAbstract": false,
+      "isFinal": true,
+      "isStatic": false,
+      "isPublic": true,
+      "isProtected": false,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOType",
+      "isClass": false,
+      "isInterface": true,
+      "isEnum": false,
+      "isAbstract": false,
+      "isFinal": false,
+      "isStatic": false,
+      "isPublic": true,
+      "isProtected": false,
+      "isPrivate": false
+    },
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOType",
+      "isClass": false,
+      "isInterface": false,
+      "isEnum": true,
+      "isAbstract": false,
+      "isFinal": false,
+      "isStatic": false,
+      "isPublic": true,
+      "isProtected": false,
+      "isPrivate": false
+    }
+  ]
+}

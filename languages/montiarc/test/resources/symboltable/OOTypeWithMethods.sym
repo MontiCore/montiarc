@@ -1,0 +1,30 @@
+{
+  "name": "OOTypeWithMethods",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOTypeWithMethods",
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
+            "name": "g",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "symboltable.OOType"
+            }
+          },
+          {
+            "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
+            "name": "h",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "symboltable.OOType"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

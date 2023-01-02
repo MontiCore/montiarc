@@ -1,0 +1,35 @@
+{
+  "name": "MethodWithParameters",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
+      "name": "MethodWithParameters",
+      "isElliptic": false,
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+            "name": "p1",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "symboltable.Type"
+            }
+          },
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+            "name": "p2",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "symboltable.Type"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

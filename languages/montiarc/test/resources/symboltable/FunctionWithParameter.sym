@@ -1,0 +1,27 @@
+{
+  "name": "FunctionWithParameter",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
+      "name": "FunctionWithParameter",
+      "isElliptic": false,
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+            "name": "p",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "symboltable.Type"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

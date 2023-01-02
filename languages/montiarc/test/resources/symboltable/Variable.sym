@@ -1,0 +1,32 @@
+{
+  "name": "Variable",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+      "name": "Variable",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      }
+    },
+    {
+      "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+      "name": "Variable",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isReadOnly": false
+    },
+    {
+      "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+      "name": "Variable",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "symboltable.Type"
+      },
+      "isReadOnly": true
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "SCState",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.scbasis._symboltable.SCStateSymbol",
+      "name": "SCState"
+    }
+  ]
+}

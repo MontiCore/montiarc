@@ -1,0 +1,30 @@
+{
+  "name": "OOTypeWithFields",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOTypeWithFields",
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+            "name": "b",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "symboltable.OOType"
+            }
+          },
+          {
+            "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+            "name": "c",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "symboltable.OOType"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "OOTypeWithFunction",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOTypeWithFunction",
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
+            "name": "f",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "symboltable.OOType"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

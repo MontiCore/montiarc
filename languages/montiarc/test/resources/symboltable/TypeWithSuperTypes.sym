@@ -1,0 +1,20 @@
+{
+  "name": "TypeWithSuperTypes",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeSymbol",
+      "name": "TypeWithSuperTypes",
+      "superTypes": [
+        {
+          "kind": "de.monticore.types.check.SymTypeOfObject",
+          "objName": "symboltable.Type"
+        },
+        {
+          "kind": "de.monticore.types.check.SymTypeOfObject",
+          "objName": "symboltable.Type"
+        }
+      ]
+    }
+  ]
+}
