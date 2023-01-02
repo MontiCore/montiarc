@@ -2,6 +2,7 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentInstantiation;
+import arcbasis._symboltable.ComponentTypeSymbol;
 import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
 import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
@@ -9,6 +10,8 @@ import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
+
+import java.util.List;
 
 /**
  * Checks for each (AST) component instantiation whether its component type exists.
@@ -37,7 +40,8 @@ public class ComponentInstanceTypeExists implements ArcBasisASTComponentInstanti
       typeName = node.getMCType().printType(typePrinter);
     }
 
-    if(node.getEnclosingScope().resolveComponentTypeMany(typeName).isEmpty()) {
+    List<ComponentTypeSymbol> compType = node.getEnclosingScope().resolveComponentTypeMany(typeName);
+    if(compType.isEmpty()) {
       String firstInstanceName = node.getComponentInstanceList().isEmpty() ?
         "?" : node.getComponentInstanceList().get(0).getName();
 
@@ -48,6 +52,8 @@ public class ComponentInstanceTypeExists implements ArcBasisASTComponentInstanti
         Log.error(ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE.format(
                 typeName, firstInstanceName, node.get_SourcePositionStart()), node.get_SourcePositionStart(), node.get_SourcePositionEnd());
       }
+    } else if (compType.size() > 1){
+      Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(typeName), node.get_SourcePositionStart());
     }
   }
 }

@@ -13,7 +13,6 @@ public enum ArcError implements Error {
       + "component '%s'."),
   MISSING_TYPE_OF_COMPONENT_INSTANCE("0xC1102", "Cannot resolve type '%s' of component "
       + "instance '%s'."),
-  SYMBOL_NOT_FOUND("0xC1103", "Cannot find Symbol `%s`."),
   SYMBOL_TOO_MANY_FOUND("0xC1104", "Found too many Symbols `%s`."),
   INCOMING_PORT_NO_FORWARD("0xC1107", "Incoming port '%s' of component '%s' is not connected "
       + "as a source of a port forward."),

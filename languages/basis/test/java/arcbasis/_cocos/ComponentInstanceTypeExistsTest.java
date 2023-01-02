@@ -36,7 +36,7 @@ public class ComponentInstanceTypeExistsTest extends AbstractTest {
     coco.check(instantiation);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(new ArcError[] { ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE});
+    this.checkOnlyExpectedErrorsPresent(ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE);
   }
 
   @Test
@@ -44,12 +44,12 @@ public class ComponentInstanceTypeExistsTest extends AbstractTest {
     // Given
     ASTMCQualifiedType type = createQualifiedType("A");
     ASTComponentInstantiation instantiation = arcbasis.ArcBasisMill.componentInstantiationBuilder()
-            .setMCType(type).setComponentInstanceList("sub1", "sub2", "sub3").build();
+      .setMCType(type).setComponentInstanceList("sub1", "sub2", "sub3").build();
     ASTComponentType enclType = arcbasis.ArcBasisMill.componentTypeBuilder()
-            .setName("EnclType")
-            .setHead(Mockito.mock(ASTComponentHead.class))
-            .setBody(arcbasis.ArcBasisMill.componentBodyBuilder().addArcElement(instantiation).build())
-            .build();
+      .setName("EnclType")
+      .setHead(Mockito.mock(ASTComponentHead.class))
+      .setBody(arcbasis.ArcBasisMill.componentBodyBuilder().addArcElement(instantiation).build())
+      .build();
     ArcBasisScopesGenitorDelegator genitor = ArcBasisMill.scopesGenitorDelegator();
     genitor.createFromAST(enclType).setName("Scopy");
     enclType.getSpannedScope().add(ArcBasisMill.typeSymbolBuilder().setName("A").build());
@@ -59,6 +59,58 @@ public class ComponentInstanceTypeExistsTest extends AbstractTest {
     coco.check(instantiation);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(new ArcError[] { ArcError.MISSING_ASSIGNMENT_OF_ARC_FIELD});
+    this.checkOnlyExpectedErrorsPresent(ArcError.MISSING_ASSIGNMENT_OF_ARC_FIELD);
+  }
+
+  @Test
+  public void shouldFindTooManyTypes() {
+    // Given
+    ASTMCQualifiedType type = createQualifiedType("A");
+    ASTComponentInstantiation instantiation = arcbasis.ArcBasisMill.componentInstantiationBuilder()
+      .setMCType(type).setComponentInstanceList("sub1", "sub2", "sub3").build();
+    ASTComponentType enclType = arcbasis.ArcBasisMill.componentTypeBuilder()
+      .setName("EnclType")
+      .setHead(Mockito.mock(ASTComponentHead.class))
+      .setBody(arcbasis.ArcBasisMill.componentBodyBuilder().addArcElement(instantiation).build())
+      .build();
+    ArcBasisScopesGenitorDelegator genitor = ArcBasisMill.scopesGenitorDelegator();
+    genitor.createFromAST(enclType).setName("Scopy");
+
+    enclType.getSpannedScope().add(ArcBasisMill.componentTypeSymbolBuilder().setName("A")
+      .setSpannedScope(ArcBasisMill.scope()).build());
+    enclType.getSpannedScope().add(ArcBasisMill.componentTypeSymbolBuilder().setName("A")
+      .setSpannedScope(ArcBasisMill.scope()).build());
+
+    // When
+    ComponentInstanceTypeExists coco = new ComponentInstanceTypeExists();
+    coco.check(instantiation);
+
+    // Then
+    this.checkOnlyExpectedErrorsPresent(ArcError.SYMBOL_TOO_MANY_FOUND);
+  }
+
+  @Test
+  public void shouldFindType() {
+    // Given
+    ASTMCQualifiedType type = createQualifiedType("A");
+    ASTComponentInstantiation instantiation = arcbasis.ArcBasisMill.componentInstantiationBuilder()
+      .setMCType(type).setComponentInstanceList("sub1", "sub2", "sub3").build();
+    ASTComponentType enclType = arcbasis.ArcBasisMill.componentTypeBuilder()
+      .setName("EnclType")
+      .setHead(Mockito.mock(ASTComponentHead.class))
+      .setBody(arcbasis.ArcBasisMill.componentBodyBuilder().addArcElement(instantiation).build())
+      .build();
+    ArcBasisScopesGenitorDelegator genitor = ArcBasisMill.scopesGenitorDelegator();
+    genitor.createFromAST(enclType).setName("Scopy");
+
+    enclType.getSpannedScope().add(ArcBasisMill.componentTypeSymbolBuilder().setName("A")
+      .setSpannedScope(ArcBasisMill.scope()).build());
+
+    // When
+    ComponentInstanceTypeExists coco = new ComponentInstanceTypeExists();
+    coco.check(instantiation);
+
+    // Then
+    this.checkOnlyExpectedErrorsPresent();
   }
 }

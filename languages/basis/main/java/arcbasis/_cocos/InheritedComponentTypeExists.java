@@ -10,7 +10,7 @@ import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.Optional;
+import java.util.List;
 
 /**
  * Checks for each component type whether an inherited component type exists
@@ -32,9 +32,13 @@ public class InheritedComponentTypeExists implements ArcBasisASTComponentTypeCoC
     } else {
       type = node.getHead().getParent().printType(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
     }
-    Optional<ComponentTypeSymbol> parent = node.getEnclosingScope().resolveComponentTypeMany(type).stream().findFirst();
+
+    List<ComponentTypeSymbol> parent = node.getEnclosingScope().resolveComponentTypeMany(type);
     if (parent.isEmpty()) {
-      Log.error(ArcError.MISSING_TYPE_OF_INHERITED_COMPONENT.format(parent.map(ComponentTypeSymbol::toString).orElse("UNKNOWN"), node.getSymbol().getFullName()),
+      Log.error(ArcError.MISSING_TYPE_OF_INHERITED_COMPONENT.format(type, node.getSymbol().getFullName()),
+        node.get_SourcePositionStart());
+    } else if (parent.size() > 1) {
+      Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(type),
         node.get_SourcePositionStart());
     }
   }

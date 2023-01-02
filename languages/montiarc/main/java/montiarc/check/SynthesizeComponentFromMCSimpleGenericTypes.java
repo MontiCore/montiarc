@@ -7,7 +7,6 @@ import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.SynthCompTypeResult;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.TypeCheckResult;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
@@ -18,7 +17,6 @@ import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCCustomTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesHandler;
 import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesTraverser;
-import de.se_rwth.commons.logging.Log;
 import genericarc._symboltable.IGenericArcScope;
 import genericarc.check.TypeExprOfGenericComponent;
 import montiarc._symboltable.IMontiArcScope;
@@ -26,7 +24,6 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -79,10 +76,9 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
 
     IGenericArcScope enclScope = (IGenericArcScope) mcType.getEnclosingScope();
     String compName = String.join(".", mcType.getNameList());
-    Optional<ComponentTypeSymbol> compSym = enclScope.resolveComponentType(compName);
+    List<ComponentTypeSymbol> compSym = enclScope.resolveComponentTypeMany(compName);
 
     if (compSym.isEmpty()) {
-      Log.error(ArcError.SYMBOL_NOT_FOUND.format(compName), mcType.get_SourcePositionStart());
       this.resultWrapper.setResultAbsent();
     } else {
       List<SymTypeExpression> typeArgExpressions = typeArgumentsToTypes(mcType.getMCTypeArgumentList()).stream()
@@ -94,7 +90,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
           return typeResult != null && typeResult.isPresentResult() ? typeResult.getResult() : null;
         })
         .collect(Collectors.toList());
-      this.resultWrapper.setResult(new TypeExprOfGenericComponent(compSym.get(), typeArgExpressions));
+      this.resultWrapper.setResult(new TypeExprOfGenericComponent(compSym.get(0), typeArgExpressions));
     }
   }
 

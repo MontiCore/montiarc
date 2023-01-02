@@ -4,15 +4,17 @@ package variablearc.check;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.SynthCompTypeResult;
 import arcbasis.check.SynthesizeComponentFromMCBasicTypes;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
-import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.IVariableArcScope;
 
 import java.util.List;
 
+/**
+ * A visitor (a handler indeed) that creates {@link TypeExprOfVariableComponent}s from {@link ASTMCQualifiedType}s, given that
+ * there is a ComponentTypeSymbol which is resolvable through the name represented by the {@link ASTMCQualifiedType}.
+ */
 public class SynthesizeVariableComponentFromMCBasicTypes extends SynthesizeComponentFromMCBasicTypes {
 
   public SynthesizeVariableComponentFromMCBasicTypes(SynthCompTypeResult resultWrapper) {
@@ -30,13 +32,8 @@ public class SynthesizeVariableComponentFromMCBasicTypes extends SynthesizeCompo
     List<ComponentTypeSymbol> compType = enclScope.resolveComponentTypeMany(compTypeName);
 
     if (compType.isEmpty()) {
-      Log.error(ArcError.SYMBOL_NOT_FOUND.format(compTypeName), mcType.get_SourcePositionStart());
       resultWrapper.setResultAbsent();
-    }
-    else {
-      if (compType.size() > 1) {
-        Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(compTypeName), mcType.get_SourcePositionStart());
-      }
+    } else {
       resultWrapper.setResult(new TypeExprOfVariableComponent(compType.get(0)));
     }
   }
