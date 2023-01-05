@@ -31,7 +31,6 @@ const val GENERATOR_DEPENDENCY_CONFIG_NAME = "maGenerator"
 const val DSL_EXTENSION_NAME = "montiarc"
 const val MONTIARC_SOURCES_BASE_CLASSIFIER = "montiarcSources"
 const val MONTIARC_SOURCE_USAGE = "montiarc-compile"
-const val MONTIARC_MAVEN_SCOPE = "montiarc-compile"
 
 const val MA_TOOL_CLASS = "montiarc.generator.MontiArcTool"
 const val INTERNAL_GENERATOR_PROJECT_REF = ":generators:ma2java"
@@ -332,8 +331,8 @@ class MontiarcPlugin : Plugin<Project> {
       .getByType(DefaultArtifactPublicationSet::class.java)
       .addCandidate(jar)
 
-    (project.components.getByName("java") as AdhocComponentWithVariants)
-      .addVariantsFromConfiguration(outgoingConfig) { it.mapToMavenScope(MONTIARC_MAVEN_SCOPE) }
+    (project.components.getByName("java") as AdhocComponentWithVariants)  // .mapToOptional results in the jar
+      .addVariantsFromConfiguration(outgoingConfig) { it.mapToOptional() }  // being an optional dependency in Maven
 
     outgoingConfig.outgoing.artifacts.add(jar)
   }
@@ -366,7 +365,7 @@ class MontiarcPlugin : Plugin<Project> {
           "the future.)"
       copy.dependsOn(dependencyConfig)
 
-      copy.from(project.provider { dependencyConfig.files.map { project.zipTree(it) } })  // TODO: maybe copy from providr { configurations.incoming.artifacts.map{it.file} } -> unzip ... noo dosnt work i guess
+      copy.from(project.provider { dependencyConfig.files.map { project.zipTree(it) } })
       copy.into(getUnpackModelDependenciesDir(srcSet, project))
 
       copy.include("**/*.arc")
