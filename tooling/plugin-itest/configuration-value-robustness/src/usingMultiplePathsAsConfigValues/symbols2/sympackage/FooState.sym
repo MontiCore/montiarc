@@ -1,0 +1,41 @@
+{
+  "copyright": "(c) https://github.com/MontiCore/monticore",
+  "name": "FooState",
+  "package": "sympackage",
+  "symbols": [
+    {
+      "kind": "de.monticore.cdbasis._symboltable.CDTypeSymbol",
+      "name": "FooState",
+      "isEnum": true,
+      "isPublic": true,
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+            "name": "Food",
+            "isPublic": true,
+            "isStatic": true,
+            "isFinal": true,
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "sympackage.FooState"
+            },
+            "isReadOnly": true
+          },
+          {
+            "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+            "name": "Fool",
+            "isPublic": true,
+            "isStatic": true,
+            "isFinal": true,
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "sympackage.FooState"
+            },
+            "isReadOnly": true
+          }
+        ]
+      }
+    }
+  ]
+}

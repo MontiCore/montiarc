@@ -94,6 +94,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     Collection<ASTMACompilationUnit> ourAsts = this.parse(".arc", this.createModelPath(cl).getEntries());
     Log.enableFailQuick(true);
     if (cl.hasOption("c2mc")) {
+      this.defaultImportTrafo(libAsts);
       this.defaultImportTrafo(ourAsts);
     }
 

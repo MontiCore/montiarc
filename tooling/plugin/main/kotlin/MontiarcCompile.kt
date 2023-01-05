@@ -17,6 +17,7 @@ abstract class MontiarcCompile : JavaExec() {
 
   @get:InputFiles
   @get:IgnoreEmptyDirectories
+  @get:Optional
   abstract val symbolImportDir : ConfigurableFileCollection
 
   @get:Input
@@ -25,6 +26,11 @@ abstract class MontiarcCompile : JavaExec() {
   @get:InputFiles
   @get:IgnoreEmptyDirectories
   abstract val hwcPath : ConfigurableFileCollection
+
+  @get:InputFiles
+  @get:IgnoreEmptyDirectories
+  @get:Optional
+  abstract val libModels : ConfigurableFileCollection
 
   @get:OutputDirectory
   abstract val outputDir : DirectoryProperty
@@ -48,12 +54,16 @@ abstract class MontiarcCompile : JavaExec() {
 
     //printInfo()
 
-    // 1) For the model path and symbol import directories: filter out directories that do not exist
+    // 1) For directories: filter out entries that do not exist
     val cleanModelPath = project.files(
-      this.modelPath.files.filter { project.file(it).exists() }
+      this.modelPath.files.filter { it.exists() }
     )
     val cleanSymbolImportDirs = project.files(
-      this.symbolImportDir.files.filter { project.file(it).exists() }
+      this.symbolImportDir.files.filter { it.exists() }
+    )
+
+    val cleanLibModelsPath = project.files(
+      this.libModels.files.filter { it.exists() }
     )
 
     // 2) Build args for the montiarc generator
@@ -67,6 +77,10 @@ abstract class MontiarcCompile : JavaExec() {
       args("-path", cleanSymbolImportDirs.asPath)
     }
 
+    if(!cleanLibModelsPath.isEmpty) {
+      args("-lib", cleanLibModelsPath.asPath)
+    }
+
     // 3) Execute
     if (cleanModelPath.isEmpty) {
       logger.info("None of the given model path directories exists: ${this.modelPath.files}")
@@ -77,13 +91,27 @@ abstract class MontiarcCompile : JavaExec() {
 
   private fun printInfo() {
     println("Trying generation")
+
     println("Modelpath:")
     modelPath.forEach { println("  $it") }
+    println("Modelpath with existing entries:")
+    modelPath.filter { it.exists() }.forEach { println("  $it") }
+
     println("HWCpath:")
     hwcPath.forEach { println("  $it") }
+
     println("class2mc: " + useClass2Mc.get())
+
     println("Symbol import dir:")
     symbolImportDir.forEach { println("  $it") }
+    println("Symbol import dir with existing entries:")
+    symbolImportDir.filter { it.exists() }.forEach { println("  $it") }
+
+    println("Library directory:")
+    libModels.forEach { println("  $it")}
+    println("Library with existing entries:")
+    libModels.filter { it.exists() }.forEach { println("  $it") }
+
     println("OutDir: " + outputDir.get())
 
     println("MainClass:" + mainClass.get())

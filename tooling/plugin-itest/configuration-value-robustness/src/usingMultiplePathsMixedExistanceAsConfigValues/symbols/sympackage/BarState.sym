@@ -1,0 +1,41 @@
+{
+  "copyright": "(c) https://github.com/MontiCore/monticore",
+  "name": "BarState",
+  "package": "sympackage",
+  "symbols": [
+    {
+      "kind": "de.monticore.cdbasis._symboltable.CDTypeSymbol",
+      "name": "BarState",
+      "isEnum": true,
+      "isPublic": true,
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+            "name": "CocktailBar",
+            "isPublic": true,
+            "isStatic": true,
+            "isFinal": true,
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "sympackage.BarState"
+            },
+            "isReadOnly": true
+          },
+          {
+            "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+            "name": "IrishPub",
+            "isPublic": true,
+            "isStatic": true,
+            "isFinal": true,
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "sympackage.BarState"
+            },
+            "isReadOnly": true
+          }
+        ]
+      }
+    }
+  ]
+}
