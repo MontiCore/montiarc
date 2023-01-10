@@ -22,6 +22,9 @@
   @Override
   public void tick() {
     // update outgoing ports
+    <#if comp.isPresentParentComponent()>
+      super.tick();
+    </#if>
     <#list comp.getOutgoingPorts() as port>
       <#lt> this.${port.getName()}.tick();
     </#list>
