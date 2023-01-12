@@ -5,6 +5,7 @@ import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symbols.basicsymbols._symboltable.DiagramSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
@@ -22,7 +23,7 @@ import de.monticore.symboltable.serialization.json.JsonObject;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
-import variablearc._visitor.VariableArcFullPrettyPrinter;
+import variablearc._prettyprint.VariableArcFullPrettyPrinter;
 
 import java.util.Optional;
 
@@ -32,7 +33,7 @@ public class VariableArcDeSer extends VariableArcDeSerTOP {
 
   public VariableArcDeSer() {
     super();
-    VariableArcFullPrettyPrinter prettyPrinter = new VariableArcFullPrettyPrinter();
+    VariableArcFullPrettyPrinter prettyPrinter = new VariableArcFullPrettyPrinter(new IndentPrinter());
     variableArcVariationPointDeSer = new VariableArcVariationPointDeSer((s -> Optional.empty()),
       prettyPrinter::prettyprint, this::deserializeSymbol);
   }

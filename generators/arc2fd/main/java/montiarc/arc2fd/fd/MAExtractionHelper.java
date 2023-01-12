@@ -16,7 +16,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc._visitor.MontiArcFullPrettyPrinter;
+import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import montiarc.arc2fd.expressions.MAExpressionsBasisVisitor;
 import montiarc.arc2fd.smt.FDRelation;
 import org.codehaus.commons.nullanalysis.NotNull;

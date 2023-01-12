@@ -3,9 +3,10 @@ package variablearc;
 
 import arcbasis._visitor.IFullPrettyPrinter;
 import com.microsoft.z3.Context;
+import de.monticore.prettyprint.IndentPrinter;
 import variablearc._symboltable.VariableArcSymbolTableCompleter;
 import variablearc._symboltable.VariableArcSymbolTableCompleterDelegator;
-import variablearc._visitor.VariableArcFullPrettyPrinter;
+import variablearc._prettyprint.VariableArcFullPrettyPrinter;
 import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 import variablearc.evaluation.VariableArcDeriveSMTExpr;
 
@@ -72,7 +73,7 @@ public class VariableArcMill extends VariableArcMillTOP {
   }
 
   protected IFullPrettyPrinter _fullPrettyPrinter() {
-    return new VariableArcFullPrettyPrinter();
+    return new VariableArcFullPrettyPrinter(new IndentPrinter());
   }
 
   protected IDeriveSMTExpr _fullConverter(Context context) {

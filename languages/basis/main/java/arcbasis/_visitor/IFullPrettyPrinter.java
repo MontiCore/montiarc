@@ -10,8 +10,8 @@ import org.codehaus.commons.nullanalysis.NotNull;
  */
 public interface IFullPrettyPrinter {
 
-  String prettyprint(@NotNull ASTExpressionsBasisNode a);
+  String prettyprint(@NotNull ASTExpressionsBasisNode node);
 
-  String prettyprint(@NotNull ASTMCBasicTypesNode type);
+  String prettyprint(@NotNull ASTMCBasicTypesNode node);
 
 }

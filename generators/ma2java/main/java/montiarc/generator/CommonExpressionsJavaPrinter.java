@@ -15,15 +15,20 @@ import java.util.Optional;
 
 public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter {
 
-  public CommonExpressionsJavaPrinter(@NotNull IndentPrinter printer) {
+  protected boolean printComments;
+
+  public CommonExpressionsJavaPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     super(printer);
+    this.printComments = printComments;
   }
 
   @Override
   public void handle(@NotNull ASTCallExpression node) {
     Preconditions.checkNotNull(node);
+    if(this.isPrintComments()) {
+      CommentPrettyPrinter.printPreComments(node, getPrinter());
+    }
 
-    CommentPrettyPrinter.printPreComments(node, getPrinter());
     Optional<ISymbol> symbol = node.getDefiningSymbol();
     if (symbol.isPresent()
         && symbol.get() instanceof MethodSymbol
@@ -39,6 +44,12 @@ public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter
       node.getExpression().accept(getTraverser());
     }
     node.getArguments().accept(getTraverser());
-    CommentPrettyPrinter.printPostComments(node, getPrinter());
+    if(this.isPrintComments()) {
+      CommentPrettyPrinter.printPostComments(node, getPrinter());
+    }
+  }
+
+  public boolean isPrintComments() {
+    return this.printComments;
   }
 }

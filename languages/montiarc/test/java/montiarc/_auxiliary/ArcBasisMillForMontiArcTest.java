@@ -2,17 +2,16 @@
 package montiarc._auxiliary;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._visitor.ArcBasisFullPrettyPrinter;
+import arcbasis._prettyprint.ArcBasisFullPrettyPrinter;
 import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.ArcBasisSynthesizeComponent;
 import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
 import arccore.ArcCoreMill;
-import arccore._visitor.ArcCoreFullPrettyPrinter;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.ISynthesize;
 import montiarc.MontiArcMill;
-import montiarc._visitor.MontiArcFullPrettyPrinter;
+import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import montiarc.check.MontiArcSynthesizeComponent;
 import montiarc.check.MontiArcTypeCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;

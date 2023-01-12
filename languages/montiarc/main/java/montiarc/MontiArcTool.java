@@ -13,7 +13,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCos;
 import montiarc._symboltable.IMontiArcArtifactScope;
-import montiarc._visitor.MontiArcFullPrettyPrinter;
+import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import montiarc.util.MontiArcError;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;

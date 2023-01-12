@@ -8,7 +8,7 @@ import arcbasis._ast.ASTComponentTypeTOP;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc._visitor.MontiArcFullPrettyPrinter;
+import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

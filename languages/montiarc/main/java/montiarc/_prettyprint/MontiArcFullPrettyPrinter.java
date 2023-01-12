@@ -1,12 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc._visitor;
+package montiarc._prettyprint;
 
-import arcautomaton._visitor.ArcAutomatonPrettyPrinter;
-import arcbasis._visitor.ArcBasisPrettyPrinter;
+import arcautomaton._prettyprint.ArcAutomatonPrettyPrinter;
+import arcbasis._prettyprint.ArcBasisPrettyPrinter;
 import arcbasis._visitor.IFullPrettyPrinter;
 import com.google.common.base.Preconditions;
-import comfortablearc._visitor.ComfortableArcPrettyPrinter;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import comfortablearc._prettyprint.ComfortableArcPrettyPrinter;
+import de.monticore.ast.ASTNode;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpressionsBasisNode;
 import de.monticore.expressions.prettyprint.AssignmentExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.BitExpressionsPrettyPrinter;
@@ -14,18 +14,17 @@ import de.monticore.expressions.prettyprint.CommonExpressionsPrettyPrinter;
 import de.monticore.expressions.prettyprint.ExpressionsBasisPrettyPrinter;
 import de.monticore.literals.prettyprint.MCCommonLiteralsPrettyPrinter;
 import de.monticore.prettyprint.*;
-import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.statements.prettyprint.MCCommonStatementsPrettyPrinter;
 import de.monticore.statements.prettyprint.MCVarDeclarationStatementsPrettyPrinter;
 import de.monticore.types.mcbasictypes._ast.ASTMCBasicTypesNode;
 import de.monticore.types.prettyprint.MCBasicTypesPrettyPrinter;
 import de.monticore.types.prettyprint.MCCollectionTypesPrettyPrinter;
 import de.monticore.types.prettyprint.MCSimpleGenericTypesPrettyPrinter;
-import genericarc._visitor.GenericArcPrettyPrinter;
+import genericarc._prettyprint.GenericArcPrettyPrinter;
 import montiarc.MontiArcMill;
-import montiarc._ast.ASTMontiArcNode;
+import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._visitor.VariableArcPrettyPrinter;
+import variablearc._prettyprint.VariableArcPrettyPrinter;
 
 public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
 
@@ -37,85 +36,90 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
     this(new IndentPrinter());
   }
 
-  public MontiArcFullPrettyPrinter(IndentPrinter printer) {
-    this.printer = printer;
-    traverser = MontiArcMill.traverser();
-
-    // MontiArc languages
-    initMontiArcPrettyPrinter(printer);
-    initArcBasisPrettyPrinter(printer);
-    initComfortableArcPrettyPrinter(printer);
-    initGenericArcPrettyPrinter(printer);
-    initArcAutomatonPrettyPrinter(printer);
-    initVariableArcPrettyPrinter(printer);
-
-    // Type languages
-    initMCBasicTypesPrettyPrinter(printer);
-    initMCCollectionTypesPrettyPrinter(printer);
-    initMCSimpleGenericTypesPrettyPrinter(printer);
-
-    // Expression & Literal languages
-    initExpressionsBasisPrettyPrinter(printer);
-    initCommonExpressionPrettyPrinter(printer);
-    initBitExpressionsPrettyPrinter(printer);
-    initAssignmentExpressionsPrettyPrinter(printer);
-    initMCCommonLiteralsPrettyPrinter(printer);
-
-    // Statement languages
-    initMCCommonStatementsPrettyPrinter(printer);
-    initMCVarDeclarationStatementsPrettyPrinter(printer);
-
-    // Statechart languages
-    initSCBasisPrettyPrinter(printer);
-    initSCTransitions4CodePrettyPrinter(printer);
-    initSCActionsPrettyPrinter(printer);
-    initSCStateHierarchyPrettyPrinter(printer);
+  public MontiArcFullPrettyPrinter(@NotNull IndentPrinter printer) {
+    this(Preconditions.checkNotNull(printer), true);
   }
 
-  protected void initMontiArcPrettyPrinter(@NotNull IndentPrinter printer) {
+  public MontiArcFullPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
+    Preconditions.checkNotNull(printer);
+    this.printer = printer;
+    this.traverser = MontiArcMill.traverser();
+
+    // MontiArc languages
+    initMontiArcPrettyPrinter(printer, printComments);
+    initArcBasisPrettyPrinter(printer, printComments);
+    initComfortableArcPrettyPrinter(printer, printComments);
+    initGenericArcPrettyPrinter(printer, printComments);
+    initArcAutomatonPrettyPrinter(printer, printComments);
+    initVariableArcPrettyPrinter(printer, printComments);
+
+    // Type languages
+    initMCBasicTypesPrettyPrinter(printer, printComments);
+    initMCCollectionTypesPrettyPrinter(printer, printComments);
+    initMCSimpleGenericTypesPrettyPrinter(printer, printComments);
+
+    // Expression & Literal languages
+    initExpressionsBasisPrettyPrinter(printer, printComments);
+    initCommonExpressionPrettyPrinter(printer, printComments);
+    initBitExpressionsPrettyPrinter(printer, printComments);
+    initAssignmentExpressionsPrettyPrinter(printer, printComments);
+    initMCCommonLiteralsPrettyPrinter(printer, printComments);
+
+    // Statement languages
+    initMCCommonStatementsPrettyPrinter(printer, printComments);
+    initMCVarDeclarationStatementsPrettyPrinter(printer, printComments);
+
+    // Statechart languages
+    initSCBasisPrettyPrinter(printer, printComments);
+    initSCTransitions4CodePrettyPrinter(printer, printComments);
+    initSCActionsPrettyPrinter(printer, printComments);
+    initSCStateHierarchyPrettyPrinter(printer, printComments);
+  }
+
+  protected void initMontiArcPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
-    MontiArcPrettyPrinter montiArcPrettyPrinter = new MontiArcPrettyPrinter(printer);
+    MontiArcPrettyPrinter montiArcPrettyPrinter = new MontiArcPrettyPrinter(printer, printComments);
     traverser.setMontiArcHandler(montiArcPrettyPrinter);
   }
 
-  protected void initArcBasisPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initArcBasisPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
-    ArcBasisPrettyPrinter arcBasisPrettyPrinter = new ArcBasisPrettyPrinter(printer);
+    ArcBasisPrettyPrinter arcBasisPrettyPrinter = new ArcBasisPrettyPrinter(printer, printComments);
     traverser.setArcBasisHandler(arcBasisPrettyPrinter);
   }
 
-  protected void initComfortableArcPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initComfortableArcPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
-    ComfortableArcPrettyPrinter comfortableArcPrettyPrinter = new ComfortableArcPrettyPrinter(printer);
+    ComfortableArcPrettyPrinter comfortableArcPrettyPrinter = new ComfortableArcPrettyPrinter(printer, printComments);
     traverser.setComfortableArcHandler(comfortableArcPrettyPrinter);
   }
 
-  protected void initGenericArcPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initGenericArcPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
-    GenericArcPrettyPrinter genericArcPrettyPrinter = new GenericArcPrettyPrinter(printer);
+    GenericArcPrettyPrinter genericArcPrettyPrinter = new GenericArcPrettyPrinter(printer, printComments);
     traverser.setGenericArcHandler(genericArcPrettyPrinter);
   }
 
-  protected void initArcAutomatonPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initArcAutomatonPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
-    ArcAutomatonPrettyPrinter arcAutomatonPrettyPrinter = new ArcAutomatonPrettyPrinter(printer);
+    ArcAutomatonPrettyPrinter arcAutomatonPrettyPrinter = new ArcAutomatonPrettyPrinter(printer, printComments);
     traverser.setArcAutomatonHandler(arcAutomatonPrettyPrinter);
     traverser.add4ArcAutomaton(arcAutomatonPrettyPrinter);
   }
 
-  protected void initVariableArcPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initVariableArcPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
-    VariableArcPrettyPrinter variableArcPrettyPrinter = new VariableArcPrettyPrinter(printer);
+    VariableArcPrettyPrinter variableArcPrettyPrinter = new VariableArcPrettyPrinter(printer, printComments);
     traverser.setVariableArcHandler(variableArcPrettyPrinter);
   }
 
-  protected void initMCBasicTypesPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initMCBasicTypesPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
     MCBasicTypesPrettyPrinter mcBasicTypesPrettyPrinter = new MCBasicTypesPrettyPrinter(printer);
@@ -123,7 +127,7 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
     traverser.add4MCBasicTypes(mcBasicTypesPrettyPrinter);
   }
 
-  protected void initMCCollectionTypesPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initMCCollectionTypesPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
     MCCollectionTypesPrettyPrinter mcCollectionTypesPrettyPrinter = new MCCollectionTypesPrettyPrinter(printer);
@@ -131,7 +135,7 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
     traverser.add4MCCollectionTypes(mcCollectionTypesPrettyPrinter);
   }
 
-  protected void initMCSimpleGenericTypesPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initMCSimpleGenericTypesPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
     MCSimpleGenericTypesPrettyPrinter mcSimpleGenericTypesPrettyPrinter =
@@ -140,7 +144,7 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
     traverser.add4MCSimpleGenericTypes(mcSimpleGenericTypesPrettyPrinter);
   }
 
-  protected void initExpressionsBasisPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initExpressionsBasisPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
     ExpressionsBasisPrettyPrinter expressionsBasisPrettyPrinter = new ExpressionsBasisPrettyPrinter(printer);
@@ -148,7 +152,7 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
     traverser.add4ExpressionsBasis(expressionsBasisPrettyPrinter);
   }
 
-  protected void initCommonExpressionPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initCommonExpressionPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
     CommonExpressionsPrettyPrinter commonExpressionsPrettyPrinter = new CommonExpressionsPrettyPrinter(printer);
@@ -156,7 +160,7 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
     traverser.add4CommonExpressions(commonExpressionsPrettyPrinter);
   }
 
-  protected void initBitExpressionsPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initBitExpressionsPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
     BitExpressionsPrettyPrinter bitExpressionsPrettyPrinter = new BitExpressionsPrettyPrinter(printer);
@@ -164,7 +168,7 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
     traverser.add4BitExpressions(bitExpressionsPrettyPrinter);
   }
 
-  protected void initAssignmentExpressionsPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initAssignmentExpressionsPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
     AssignmentExpressionsPrettyPrinter assignmentExpressionsPrettyPrinter =
@@ -173,7 +177,7 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
     traverser.add4AssignmentExpressions(assignmentExpressionsPrettyPrinter);
   }
 
-  protected void initMCCommonLiteralsPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initMCCommonLiteralsPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
     MCCommonLiteralsPrettyPrinter commonLiteralsPrettyPrinter = new MCCommonLiteralsPrettyPrinter(printer);
@@ -181,7 +185,7 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
     traverser.add4MCCommonLiterals(commonLiteralsPrettyPrinter);
   }
 
-  protected void initMCCommonStatementsPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initMCCommonStatementsPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
     MCCommonStatementsPrettyPrinter mcCommonStatementsPrettyPrinter = new MCCommonStatementsPrettyPrinter(printer);
@@ -189,7 +193,7 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
     traverser.add4MCCommonStatements(mcCommonStatementsPrettyPrinter);
   }
 
-  protected void initMCVarDeclarationStatementsPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initMCVarDeclarationStatementsPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
     MCVarDeclarationStatementsPrettyPrinter mcVarDeclarationStatementsPrettyPrinter =
@@ -198,66 +202,66 @@ public class MontiArcFullPrettyPrinter implements IFullPrettyPrinter {
     traverser.add4MCVarDeclarationStatements(mcVarDeclarationStatementsPrettyPrinter);
   }
 
-  protected void initSCBasisPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initSCBasisPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
     SCBasisPrettyPrinter scBasisPrettyPrinter = new SCBasisPrettyPrinter(printer);
     traverser.setSCBasisHandler(scBasisPrettyPrinter);
   }
 
-  protected void initSCTransitions4CodePrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initSCTransitions4CodePrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
     SCTransitions4CodePrettyPrinter scTransitions4CodePrettyPrinter = new SCTransitions4CodePrettyPrinter(printer);
     traverser.setSCTransitions4CodeHandler(scTransitions4CodePrettyPrinter);
   }
 
-  protected void initSCStateHierarchyPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initSCStateHierarchyPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
     SCStateHierarchyPrettyPrinter scStateHierarchyPrettyPrinter = new SCStateHierarchyPrettyPrinter(printer);
     traverser.setSCStateHierarchyHandler(scStateHierarchyPrettyPrinter);
   }
 
-  protected void initSCActionsPrettyPrinter(@NotNull IndentPrinter printer) {
+  protected void initSCActionsPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     Preconditions.checkNotNull(printer);
 
     SCActionsPrettyPrinter scActionsPrettyPrinter = new SCActionsPrettyPrinter(printer);
     traverser.setSCActionsHandler(scActionsPrettyPrinter);
   }
 
-
-  public String prettyprint(ASTMontiArcNode a) {
-    getPrinter().clearBuffer();
-    a.accept(getTraverser());
-    return getPrinter().getContent();
+  @Override
+  public String prettyprint(ASTExpressionsBasisNode a) {
+    return prettyprint((ASTNode) a);
   }
 
   @Override
-  public String prettyprint(ASTExpressionsBasisNode node) {
+  public String prettyprint(ASTMCBasicTypesNode type) {
+    return prettyprint((ASTNode) type);
+  }
+
+  public String prettyprint(ASTNode node) {
+    Preconditions.checkNotNull(node);
     getPrinter().clearBuffer();
     node.accept(getTraverser());
     return getPrinter().getContent();
-  }
-
-  @Override
-  public String prettyprint(ASTMCBasicTypesNode node) {
-    getPrinter().clearBuffer();
-    node.accept(getTraverser());
-    return getPrinter().getContent();
-  }
-
-  public String prettyprint(ASTMCBlockStatement node) {
-    getPrinter().clearBuffer();
-    node.accept(getTraverser());
-    return getPrinter().getContent();
-  }
-
-  protected IndentPrinter getPrinter() {
-    return this.printer;
   }
 
   public MontiArcTraverser getTraverser() {
-    return traverser;
+    return this.traverser;
+  }
+
+  public void setTraverser(MontiArcTraverser traverser) {
+    Preconditions.checkNotNull(traverser);
+    this.traverser = traverser;
+  }
+
+  public IndentPrinter getPrinter() {
+    return printer;
+  }
+
+  public void setPrinter(@NotNull IndentPrinter printer) {
+    Preconditions.checkNotNull(printer);
+    this.printer = printer;
   }
 }

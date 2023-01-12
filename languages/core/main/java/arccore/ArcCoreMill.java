@@ -4,7 +4,8 @@ package arccore;
 import arcbasis._visitor.IFullPrettyPrinter;
 import arccore._symboltable.ArcCoreSymbolTableCompleter;
 import arccore._symboltable.ArcCoreSymbolTableCompleterDelegator;
-import arccore._visitor.ArcCoreFullPrettyPrinter;
+import arccore._prettyprint.ArcCoreFullPrettyPrinter;
+import de.monticore.prettyprint.IndentPrinter;
 
 public class ArcCoreMill extends ArcCoreMillTOP {
 
@@ -44,7 +45,7 @@ public class ArcCoreMill extends ArcCoreMillTOP {
   }
 
   protected IFullPrettyPrinter _fullPrettyPrinter() {
-    return new ArcCoreFullPrettyPrinter();
+    return new ArcCoreFullPrettyPrinter(new IndentPrinter());
   }
 
   public static void initMe(ArcCoreMill a)  {

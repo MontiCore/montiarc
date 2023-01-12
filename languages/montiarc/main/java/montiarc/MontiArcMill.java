@@ -5,7 +5,7 @@ import arcbasis._visitor.IFullPrettyPrinter;
 import com.microsoft.z3.Context;
 import montiarc._symboltable.MontiArcSymbolTableCompleter;
 import montiarc._symboltable.MontiArcSymbolTableCompleterDelegator;
-import montiarc._visitor.MontiArcFullPrettyPrinter;
+import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import montiarc.evaluation.MontiArcDeriveSMTExpr;
 import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 

@@ -7,7 +7,7 @@ import arcbasis._ast.ASTPortAccess;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
-import arcbasis._visitor.ArcBasisFullPrettyPrinter;
+import arcbasis._prettyprint.ArcBasisFullPrettyPrinter;
 import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;

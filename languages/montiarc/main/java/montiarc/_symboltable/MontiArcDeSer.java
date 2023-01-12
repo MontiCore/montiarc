@@ -22,7 +22,7 @@ import de.monticore.symboltable.serialization.json.JsonObject;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._parser.MontiArcParser;
-import montiarc._visitor.MontiArcFullPrettyPrinter;
+import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import variablearc._symboltable.ArcFeatureSymbol;
 import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc._symboltable.VariableArcVariationPointDeSer;
