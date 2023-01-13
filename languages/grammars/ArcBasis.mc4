@@ -127,11 +127,7 @@ component grammar ArcBasis extends
   /**
    * ASTPortDirection defines the direction of the port.
    */
-   interface PortDirection;
-
-   PortDirectionIn implements PortDirection = key("in");
-
-   PortDirectionOut implements PortDirection = key("out");
+   PortDirection = in:[key("in")] | out:[key("out")];
 
   /**
   * ASTPort defines the port identifier and functions as an extension point
@@ -141,6 +137,11 @@ component grammar ArcBasis extends
   * @attribute name The name of the port.
   */
   symbol Port = Name;
+
+  symbolrule Port =
+    incoming: boolean
+    outgoing: boolean
+  ;
 
   /**
   * ASTArcFieldDeclaration declares one or more component fields by

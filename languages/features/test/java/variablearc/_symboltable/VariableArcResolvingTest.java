@@ -2,12 +2,8 @@
 package variablearc._symboltable;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.ASTPortDirection;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.PortSymbol;
-import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -80,7 +76,6 @@ public class VariableArcResolvingTest extends AbstractTest {
 
     PortSymbol symbol =
       VariableArcMill.portSymbolBuilder().setName("Test")
-        .setDirection(Mockito.mock(ASTPortDirection.class))
         .setType(Mockito.mock(SymTypeExpression.class)).build();
     this.getScope().add(symbol);
     variationPoint.add(symbol);
@@ -98,7 +93,6 @@ public class VariableArcResolvingTest extends AbstractTest {
     this.getScope().add(parent);
 
     PortSymbol symbol = VariableArcMill.portSymbolBuilder().setName("Test")
-      .setDirection(Mockito.mock(ASTPortDirection.class))
       .setType(Mockito.mock(SymTypeExpression.class)).build();
     this.getScope().add(symbol);
     parent.add(symbol);
@@ -116,7 +110,6 @@ public class VariableArcResolvingTest extends AbstractTest {
 
     PortSymbol symbol =
       VariableArcMill.portSymbolBuilder().setName("Test")
-        .setDirection(Mockito.mock(ASTPortDirection.class))
         .setType(Mockito.mock(SymTypeExpression.class))
         .build();
     this.getScope().add(symbol); // Add Symbol only to scope

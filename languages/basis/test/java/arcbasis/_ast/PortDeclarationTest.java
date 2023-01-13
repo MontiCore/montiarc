@@ -20,12 +20,12 @@ public class PortDeclarationTest extends AbstractTest {
   public void shouldReturnExpectedDirection() {
     ASTPortDeclaration astPortDeclaration1 = ArcBasisMill.portDeclarationBuilder()
       .setMCType(Mockito.mock(ASTMCObjectType.class))
-      .setPortDirection(ArcBasisMill.portDirectionInBuilder().build()).setPortList("i1").build();
+      .setPortDirection(ArcBasisMill.portDirectionBuilder().setIn(true).build()).setPortList("i1").build();
     Assertions.assertTrue(astPortDeclaration1.isIncoming());
     Assertions.assertFalse(astPortDeclaration1.isOutgoing());
     ASTPortDeclaration astPortDeclaration2 = ArcBasisMill.portDeclarationBuilder()
       .setMCType(Mockito.mock(ASTMCObjectType.class))
-      .setPortDirection(ArcBasisMill.portDirectionOutBuilder().build()).setPortList("o1").build();
+      .setPortDirection(ArcBasisMill.portDirectionBuilder().setOut(true).build()).setPortList("o1").build();
     Assertions.assertFalse(astPortDeclaration2.isIncoming());
     Assertions.assertTrue(astPortDeclaration2.isOutgoing());
   }
@@ -36,7 +36,7 @@ public class PortDeclarationTest extends AbstractTest {
     ASTPortDeclaration astPortDeclaration = ArcBasisMill.portDeclarationBuilder()
         .setMCType(Mockito.mock(ASTMCObjectType.class))
         .setStereotype(ArcBasisMill.stereotypeBuilder().setValuesList(List.of(ArcBasisMill.stereoValueBuilder().setName(Timing.SYNC.getName()).setContent("").build())).build())
-        .setPortDirection(ArcBasisMill.portDirectionInBuilder().build()).setPortList("i1").build();
+        .setPortDirection(ArcBasisMill.portDirectionBuilder().setIn(true).build()).setPortList("i1").build();
 
     // Then
     Assertions.assertEquals(1, astPortDeclaration.getTimings().size());

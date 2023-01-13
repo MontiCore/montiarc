@@ -19,7 +19,7 @@ public class PortSymbolBuilderTest extends AbstractTest {
   public void shouldBeValid() {
     PortSymbolBuilder builder = new PortSymbolBuilder();
     builder.setName("in1").setType(mock(SymTypeExpression.class))
-      .setDirection(arcbasis.ArcBasisMill.portDirectionInBuilder().build());
+      .setIncoming(true).build();
     Assertions.assertTrue(builder.isValid());
   }
 
@@ -27,15 +27,10 @@ public class PortSymbolBuilderTest extends AbstractTest {
   public void shouldBeInvalid() {
     PortSymbolBuilder builderWithoutType = new PortSymbolBuilder();
     PortSymbolBuilder builderWithoutName = new PortSymbolBuilder();
-    PortSymbolBuilder builderWithoutDirection = new PortSymbolBuilder();
-    builderWithoutType.setName("out1")
-      .setDirection(arcbasis.ArcBasisMill.portDirectionOutBuilder().build());
-    builderWithoutName.setType(mock(SymTypeExpression.class))
-      .setDirection(arcbasis.ArcBasisMill.portDirectionInBuilder().build());
-    builderWithoutDirection.setName("in1").setType(mock(SymTypeExpression.class));
+    builderWithoutType.setName("out1").setOutgoing(true);
+    builderWithoutName.setType(mock(SymTypeExpression.class)).setIncoming(true);
     Assertions.assertFalse(builderWithoutType.isValid());
     Assertions.assertFalse(builderWithoutName.isValid());
-    Assertions.assertFalse(builderWithoutDirection.isValid());
   }
 
   @Test
@@ -43,7 +38,7 @@ public class PortSymbolBuilderTest extends AbstractTest {
     SymTypeExpression typeExpression = SymTypeExpressionFactory.createTypeExpression("int", ArcBasisMill.scope());
     PortSymbol symbol = ArcBasisMill.portSymbolBuilder()
       .setName("in2").setType(typeExpression)
-      .setDirection(arcbasis.ArcBasisMill.portDirectionInBuilder().build())
+      .setIncoming(true)
       .build();
     Assertions.assertEquals(symbol.getType(), typeExpression);
   }

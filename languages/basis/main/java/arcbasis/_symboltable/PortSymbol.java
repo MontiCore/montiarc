@@ -1,5 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-
 package arcbasis._symboltable;
 
 import arcbasis._ast.*;
@@ -15,7 +14,6 @@ import java.util.*;
 
 public class PortSymbol extends PortSymbolTOP {
 
-  protected ASTPortDirection direction;
   protected SymTypeExpression type;
   protected Timing timing;
   protected Boolean delayed = null;
@@ -30,41 +28,17 @@ public class PortSymbol extends PortSymbolTOP {
 
   /**
    * @param name      the name of this port.
-   * @param direction the direction of this port.
+   * @param incoming  whether the port is incoming.
+   * @param outgoing  whether the port is outgoing.
    * @param type      the type of this port.
    * @param timing    the timing of this port.
    */
-  protected PortSymbol(String name, ASTPortDirection direction, SymTypeExpression type, Timing timing) {
+  protected PortSymbol(String name, boolean incoming, boolean outgoing, SymTypeExpression type, Timing timing) {
     super(name);
-    this.direction = direction;
     this.type = type;
     this.timing = timing;
-  }
-
-  public ASTPortDirection getDirection() {
-    return this.direction;
-  }
-
-  /**
-   * @param direction the direction of this port.
-   */
-  public void setDirection(@NotNull ASTPortDirection direction) {
-    Preconditions.checkNotNull(direction);
-    this.direction = direction;
-  }
-
-  /**
-   * @return {@code true}, if this is an incoming port, else {@code false}.
-   */
-  public boolean isIncoming() {
-    return this.direction instanceof ASTPortDirectionIn;
-  }
-
-  /**
-   * @return {@code true}, if this is an outgoing port, else {@code false}.
-   */
-  public boolean isOutgoing() {
-    return this.direction instanceof ASTPortDirectionOut;
+    this.incoming = incoming;
+    this.outgoing = outgoing;
   }
 
   public boolean isTypePresent() {

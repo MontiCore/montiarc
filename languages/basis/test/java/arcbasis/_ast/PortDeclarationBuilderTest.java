@@ -28,7 +28,7 @@ public class PortDeclarationBuilderTest extends AbstractTest {
   public void setUpBuilder() {
     this.builder = new ASTPortDeclarationBuilder();
     this.builder.setMCType(Mockito.mock(ASTMCType.class))
-        .setPortDirection(ArcBasisMill.portDirectionInBuilder().build())
+        .setPortDirection(ArcBasisMill.portDirectionBuilder().setIn(true).build())
         .setPortList("a", "b", "c");
   }
 

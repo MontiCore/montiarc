@@ -186,11 +186,12 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
 
   @Test
   public void shouldCreatePort() {
-    this.getSymTab().setCurrentPortDirection(arcbasis.ArcBasisMill.portDirectionInBuilder().build());
+    this.getSymTab().setCurrentPortDirection(arcbasis.ArcBasisMill.portDirectionBuilder().setIn(true).build());
     ASTPort ast = arcbasis.ArcBasisMill.portBuilder().setName("p").build();
     PortSymbol symbol = this.getSymTab().create_Port(ast).buildWithoutType();
     Assertions.assertEquals(ast.getName(), symbol.getName());
-    Assertions.assertNotNull(symbol.getDirection());
+    Assertions.assertTrue(symbol.isIncoming());
+    Assertions.assertFalse(symbol.isOutgoing());
   }
 
   @Test
@@ -198,7 +199,7 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     // Given
     ASTPort ast = arcbasis.ArcBasisMill.portBuilder().setName("p").build();
     IArcBasisScope scope = ArcBasisMill.scope();
-    this.getSymTab().setCurrentPortDirection(arcbasis.ArcBasisMill.portDirectionInBuilder().build());
+    this.getSymTab().setCurrentPortDirection(arcbasis.ArcBasisMill.portDirectionBuilder().setIn(true).build());
     this.getSymTab().putOnStack(scope);
 
     // When

@@ -37,8 +37,9 @@ public class InstanceVisitorTest extends AbstractTest {
   @Test
   public void shouldGetPort() {
     // Given
-    ISymbol symbol = ArcBasisMill.portSymbolBuilder().setName("P").setType(Mockito.mock(SymTypeExpression.class))
-      .setDirection(ArcBasisMill.portDirectionInBuilder().build()).build();
+    ISymbol symbol = ArcBasisMill.portSymbolBuilder().setName("P")
+      .setType(Mockito.mock(SymTypeExpression.class))
+      .setIncoming(true).build();
 
     // When
     Optional<ComponentInstanceSymbol> instance = new InstanceVisitor().asSubcomponent(symbol);

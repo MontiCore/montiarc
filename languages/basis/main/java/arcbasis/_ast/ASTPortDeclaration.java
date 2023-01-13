@@ -18,11 +18,11 @@ public class ASTPortDeclaration extends ASTPortDeclarationTOP {
   }
 
   public boolean isIncoming() {
-    return this.getPortDirection() instanceof ASTPortDirectionIn;
+    return this.getPortDirection().isIn();
   }
 
   public boolean isOutgoing() {
-    return this.getPortDirection() instanceof ASTPortDirectionOut;
+    return this.getPortDirection().isOut();
   }
 
   /**

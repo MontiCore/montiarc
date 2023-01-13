@@ -18,6 +18,9 @@ public class ASTPortDeclarationBuilder extends ASTPortDeclarationBuilderTOP {
     super();
   }
 
+  boolean incoming;
+  boolean outgoing;
+
   /**
    * Sets the direction to be used in this builder to incoming if the {@code boolean} argument is
    * true and outgoing if it is false.
@@ -26,7 +29,7 @@ public class ASTPortDeclarationBuilder extends ASTPortDeclarationBuilderTOP {
    * @return this builder
    */
   public ASTPortDeclarationBuilder setIncoming(boolean incoming) {
-    this.doSetIncoming(incoming);
+    this.incoming = incoming;
     return this.realBuilder;
   }
 
@@ -38,17 +41,8 @@ public class ASTPortDeclarationBuilder extends ASTPortDeclarationBuilderTOP {
    * @return this builder
    */
   public ASTPortDeclarationBuilder setOutgoing(boolean outgoing) {
-    this.doSetIncoming(!outgoing);
+    this.outgoing = outgoing;
     return this.realBuilder;
-  }
-
-  protected void doSetIncoming(boolean incoming) {
-    if (incoming) {
-      this.setPortDirection(new ASTPortDirectionIn());
-    }
-    else {
-      this.setPortDirection(new ASTPortDirectionOut());
-    }
   }
 
   /**
@@ -161,5 +155,16 @@ public class ASTPortDeclarationBuilder extends ASTPortDeclarationBuilderTOP {
       portList.add(this.doCreatePort(port));
     }
     return portList;
+  }
+
+  @Override
+  public ASTPortDeclaration build() {
+    if (this.portDirection == null) {
+      this.portDirection = ArcBasisMill.portDirectionBuilder()
+        .setIn(this.incoming)
+        .setOut(this.outgoing)
+        .build();
+    }
+    return super.build();
   }
 }

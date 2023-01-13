@@ -3,7 +3,6 @@ package arcbasis._symboltable;
 
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.ASTPortDirection;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
@@ -380,7 +379,7 @@ public class ArcBasisResolvingTest extends AbstractTest {
     ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
         .setParentComponent(new TypeExprOfComponent(parent)).build();
 
-    PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1").setDirection(Mockito.mock(ASTPortDirection.class))
+    PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();
     parentScope.add(port);
 
@@ -410,11 +409,11 @@ public class ArcBasisResolvingTest extends AbstractTest {
     ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
         .setParentComponent(new TypeExprOfComponent(parent)).build();
 
-    PortSymbol parentPort = ArcBasisMill.portSymbolBuilder().setName("p1").setDirection(Mockito.mock(ASTPortDirection.class))
+    PortSymbol parentPort = ArcBasisMill.portSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();
     parentScope.add(parentPort);
 
-    PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1").setDirection(Mockito.mock(ASTPortDirection.class))
+    PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();
     scope.add(port);
 
@@ -449,7 +448,7 @@ public class ArcBasisResolvingTest extends AbstractTest {
     ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
         .setParentComponent(new TypeExprOfComponent(parent)).build();
 
-    PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1").setDirection(Mockito.mock(ASTPortDirection.class))
+    PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();
     enclosingScope.add(port);
 
@@ -480,7 +479,7 @@ public class ArcBasisResolvingTest extends AbstractTest {
     IArcBasisScope scope = ArcBasisMill.scope();
     enclosingScope.addSubScope(scope);
 
-    PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1").setDirection(Mockito.mock(ASTPortDirection.class))
+    PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();
     enclosingScope.add(port);
 

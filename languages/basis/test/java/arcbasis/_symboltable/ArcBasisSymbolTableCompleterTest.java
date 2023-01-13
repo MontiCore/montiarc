@@ -466,7 +466,6 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
     type.setEnclosingScope(ArcBasisMill.globalScope());
     PortSymbol symParam = ArcBasisMill.portSymbolBuilder()
       .setName("po")
-      .setDirection(Mockito.mock(ASTPortDirection.class))
       .buildWithoutType();
     ASTPort astPort = ArcBasisMill.portBuilder().setName("po").build();
     astPort.setSymbol(symParam);

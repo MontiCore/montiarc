@@ -208,7 +208,8 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkState(this.getCurrentScope().isPresent());
     PortSymbolBuilder builder = ArcBasisMill.portSymbolBuilder();
     builder.setName(ast.getName());
-    builder.setDirection(this.getCurrentPortDirection().get());
+    builder.setIncoming(this.getCurrentPortDirection().get().isIn());
+    builder.setOutgoing(this.getCurrentPortDirection().get().isOut());
     return builder;
   }
 

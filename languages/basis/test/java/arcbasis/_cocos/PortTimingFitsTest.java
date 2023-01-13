@@ -21,23 +21,23 @@ public class PortTimingFitsTest extends AbstractTest {
 
   protected static Stream<Arguments> portSymbolWithErrorProvider() {
     return Stream.of(
-        Arguments.of(
-            ArcBasisMill.portSymbolBuilder()
-                .setName("i1")
-                .setTiming(Timing.SYNC)
-                .setIncoming(true)
-                .buildWithoutType(),
-            new ArcError[]{}),
-        Arguments.of(ArcBasisMill.portSymbolBuilder()
-            .setTiming(Timing.DELAYED)
-            .setName("o1")
-            .setIncoming(false)
-            .buildWithoutType(), new ArcError[]{}),
-        Arguments.of(ArcBasisMill.portSymbolBuilder()
-            .setTiming(Timing.DELAYED)
-            .setName("i2")
-            .setIncoming(true)
-            .buildWithoutType(), new ArcError[]{ArcError.TIMING_DELAYED_WITH_INCOMING_PORT})
+      Arguments.of(
+        ArcBasisMill.portSymbolBuilder()
+          .setName("i1")
+          .setTiming(Timing.SYNC)
+          .setIncoming(true)
+          .buildWithoutType(),
+        new ArcError[]{}),
+      Arguments.of(ArcBasisMill.portSymbolBuilder()
+        .setTiming(Timing.DELAYED)
+        .setName("o1")
+        .setOutgoing(true)
+        .buildWithoutType(), new ArcError[]{}),
+      Arguments.of(ArcBasisMill.portSymbolBuilder()
+        .setTiming(Timing.DELAYED)
+        .setName("i2")
+        .setIncoming(true)
+        .buildWithoutType(), new ArcError[]{ArcError.TIMING_DELAYED_WITH_INCOMING_PORT})
     );
   }
 

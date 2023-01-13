@@ -6,7 +6,6 @@ import arcbasis._ast.ASTArcBasisNode;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._ast.ASTPortDirection;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
@@ -120,7 +119,6 @@ public class NodeCounterTest {
     PortSymbol p1 = ArcBasisMill.portSymbolBuilder()
       .setName("port1")
       .setType(Mockito.mock(SymTypeExpression.class))
-      .setDirection(Mockito.mock(ASTPortDirection.class))
       .build();
     ComponentInstanceSymbol c1 = ArcBasisMill.componentInstanceSymbolBuilder()
       .setName("comp1")
