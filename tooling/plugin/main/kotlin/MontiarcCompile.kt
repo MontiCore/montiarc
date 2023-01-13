@@ -69,7 +69,7 @@ abstract class MontiarcCompile : JavaExec() {
     // 2) Build args for the montiarc generator
     args("-mp", cleanModelPath.asPath)
     args("-o", this.outputDir.asFile.get().path)
-    args("-hwc", this.hwcPath.asPath)
+    if (!hwcPath.isEmpty) { args("-hwc", this.hwcPath.asPath); }
 
     if(useClass2Mc.get()) { args("-c2mc"); }
 
