@@ -24,7 +24,7 @@ import java.nio.file.Paths;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class MontiArcDeSerTest extends AbstractTest {
+public class MontiArcDeserializationTest extends AbstractTest {
 
   protected static final String PACKAGE = "symboltable";
 
