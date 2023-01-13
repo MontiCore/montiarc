@@ -222,7 +222,7 @@ ${tc.signature("comp")}
 <#macro printInit automaton comp>
   @Override
   public void init() {
-    <#assign state = automaton.streamInitialStates().findFirst().get()>
+    <#assign state = automaton.streamInitialOuterStates().findFirst().get()>
     // execute the initial action
     this.init${state.getName()}();
     // transition to the initial state

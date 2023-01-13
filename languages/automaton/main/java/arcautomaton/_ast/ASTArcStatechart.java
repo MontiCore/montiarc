@@ -67,6 +67,17 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
   }
 
   /**
+   * @return a stream containing all initial outer states of this statechart. Note that if one initial state is declared
+   * multiple times (probably by mistake) then all its declarations are contained in the stream.
+   */
+  public Stream<ASTSCState> streamInitialOuterStates() {
+    return getSCStatechartElementList().stream()
+      .filter(ASTSCState.class::isInstance)
+      .map(ASTSCState.class::cast)
+      .filter(s -> s.getSCModifier().isInitial());
+  }
+
+  /**
    * @return the Timing of the Statechart
    */
   public Optional<Timing> getTiming() {
