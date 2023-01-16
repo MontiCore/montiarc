@@ -3,7 +3,6 @@ package montiarc._cocos;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import com.google.common.base.Preconditions;
@@ -20,15 +19,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 import variablearc._ast.ASTArcConstraintDeclaration;
 import variablearc._cocos.ConstraintSatisfied4Comp;
-import variablearc._cocos.ConstraintSatisfied4SubComp;
-import variablearc.check.TypeExprOfVariableComponent;
 
 import java.util.Collections;
 import java.util.stream.Stream;
 
 public class ConstraintEvaluationTest extends AbstractCoCoTest {
 
-  protected ASTComponentInstance getInstanceWithConstraint(
+  protected ASTComponentType getComponentWithConstraint(
       ASTArcConstraintDeclaration constraint) {
     ASTComponentType componentType = MontiArcMill.componentTypeBuilder()
         .setName("comp1").setHead(Mockito.mock(ASTComponentHead.class))
@@ -39,13 +36,7 @@ public class ConstraintEvaluationTest extends AbstractCoCoTest {
 
     symTab.createFromAST(componentType);
 
-    ASTComponentInstance instance = MontiArcMill.componentInstanceBuilder()
-        .setName("inst1").setArgumentsAbsent().build();
-    instance.setSymbol(MontiArcMill.componentInstanceSymbolBuilder()
-        .setName("inst1")
-        .setType(new TypeExprOfVariableComponent(componentType.getSymbol()))
-        .build());
-    return instance;
+    return componentType;
   }
 
   @Test
@@ -60,12 +51,12 @@ public class ConstraintEvaluationTest extends AbstractCoCoTest {
                 .build())
         .build();
 
-    ASTComponentInstance instance = getInstanceWithConstraint(constraint);
+    ASTComponentType comp = getComponentWithConstraint(constraint);
 
-    ConstraintSatisfied4SubComp coco = new ConstraintSatisfied4SubComp();
+    ConstraintSatisfied4Comp coco = new ConstraintSatisfied4Comp();
 
     // When
-    coco.check(instance);
+    coco.check(comp);
 
     // Then
     this.checkOnlyExpectedErrorsPresent(VariableArcError.CONSTRAINT_NOT_SATISFIED);
@@ -83,12 +74,12 @@ public class ConstraintEvaluationTest extends AbstractCoCoTest {
                 .build())
         .build();
 
-    ASTComponentInstance instance = getInstanceWithConstraint(constraint);
+    ASTComponentType comp = getComponentWithConstraint(constraint);
 
-    ConstraintSatisfied4SubComp coco = new ConstraintSatisfied4SubComp();
+    ConstraintSatisfied4Comp coco = new ConstraintSatisfied4Comp();
 
     // When
-    coco.check(instance);
+    coco.check(comp);
 
     // Then
     this.checkOnlyExpectedErrorsPresent();
@@ -108,9 +99,11 @@ public class ConstraintEvaluationTest extends AbstractCoCoTest {
     return Stream.of(
         arg("AllConstraintsSatisfiable.arc"),
         arg("SatisfiedInstanceConstraints.arc"),
-        arg("NeverSatisfiedConstraints.arc", VariableArcError.CONSTRAINT_NEVER_SATISFIED),
-        arg("NeverSatisfiedConstraintsWithParameter.arc", VariableArcError.CONSTRAINT_NEVER_SATISFIED),
-        arg("NeverSatisfiedInstanceConstraints.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED)
+        arg("NeverSatisfiedConstraints.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED),
+        arg("NeverSatisfiedConstraintsWithParameter.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED),
+        arg("NeverSatisfiedInstanceConstraints.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED),
+        arg("NeverSatisfiedTransitiveInstanceConstraints.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED),
+        arg("NeverSatisfiedNestedInstanceConstraints.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED)
     );
   }
 
@@ -128,7 +121,6 @@ public class ConstraintEvaluationTest extends AbstractCoCoTest {
   @Override
   protected void registerCoCos(MontiArcCoCoChecker checker) {
     Preconditions.checkNotNull(checker);
-    checker.addCoCo(new ConstraintSatisfied4SubComp());
     checker.addCoCo(new ConstraintSatisfied4Comp());
   }
 

@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.evaluation;
 
+import arcbasis._ast.ASTComponentBody;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -11,6 +13,7 @@ import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import variablearc._symboltable.ArcFeatureSymbol;
 import variablearc._symboltable.IVariableArcScope;
 import variablearc.check.TypeExprOfVariableComponent;
@@ -47,8 +50,12 @@ public class ExpressionSolverTest extends AbstractTest {
         .build())
       .build();
 
+    ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
+    Mockito.when(astComponentType.getBody()).thenReturn(Mockito.mock(ASTComponentBody.class));
+
     ComponentTypeSymbol componentTypeSymbol = MontiArcMill.componentTypeSymbolBuilder()
       .setName("Test")
+      .setAstNode(astComponentType)
       .setSpannedScope(scope)
       .build();
     scope.setSpanningSymbol(componentTypeSymbol);
@@ -64,7 +71,9 @@ public class ExpressionSolverTest extends AbstractTest {
         .setSource(ASTConstantsMCCommonLiterals.TRUE).build())
       .build();
 
-    Optional<Boolean> res = ExpressionSolver.solve(expression, this.typeExprOfVariableComponent);
+    ExpressionSolver solver = new ExpressionSolver(this.typeExprOfVariableComponent);
+    Optional<Boolean> res = solver.solve(expression);
+    solver.close();
 
     Assertions.assertTrue(res.isPresent());
     Assertions.assertTrue(res.get());
@@ -76,7 +85,9 @@ public class ExpressionSolverTest extends AbstractTest {
       .build();
     expression.setEnclosingScope(this.typeExprOfVariableComponent.getTypeInfo().getSpannedScope());
 
-    Optional<Boolean> res = ExpressionSolver.solve(expression, this.typeExprOfVariableComponent);
+    ExpressionSolver solver = new ExpressionSolver(this.typeExprOfVariableComponent);
+    Optional<Boolean> res = solver.solve(expression);
+    solver.close();
 
     Assertions.assertTrue(res.isPresent());
     Assertions.assertTrue(res.get());

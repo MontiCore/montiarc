@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.check;
 
+import arcbasis._ast.ASTComponentBody;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import arcbasis.check.CompTypeExpression;
@@ -46,8 +48,11 @@ public class TypeExprOfVariableComponentTest extends AbstractTest {
       vars.add(var);
     }
 
+    ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
+    Mockito.when(astComponentType.getBody()).thenReturn(Mockito.mock(ASTComponentBody.class));
+
     return VariableArcMill.componentTypeSymbolBuilder().setName(compName)
-      .setSpannedScope(VariableArcMill.scope()).setParameters(vars).build();
+      .setSpannedScope(VariableArcMill.scope()).setAstNode(astComponentType).setParameters(vars).build();
   }
 
   protected static ComponentTypeSymbol createComponentWithVariationPointAndParams(
@@ -68,7 +73,11 @@ public class TypeExprOfVariableComponentTest extends AbstractTest {
 
     scope.add(variationPoint);
 
+    ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
+    Mockito.when(astComponentType.getBody()).thenReturn(Mockito.mock(ASTComponentBody.class));
+
     return VariableArcMill.componentTypeSymbolBuilder().setName(compName)
+      .setAstNode(astComponentType)
       .setSpannedScope(scope).setParameters(vars).build();
   }
 
@@ -83,7 +92,10 @@ public class TypeExprOfVariableComponentTest extends AbstractTest {
       scope.add(variationPoint);
     }
 
-    return VariableArcMill.componentTypeSymbolBuilder().setName(compName)
+    ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
+    Mockito.when(astComponentType.getBody()).thenReturn(Mockito.mock(ASTComponentBody.class));
+
+    return VariableArcMill.componentTypeSymbolBuilder().setAstNode(astComponentType).setName(compName)
       .setSpannedScope(scope).build();
   }
 

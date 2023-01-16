@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation;
 
+import arcbasis._ast.ASTComponentBody;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.assignmentexpressions.AssignmentExpressionsMill;
@@ -8,6 +10,7 @@ import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import variablearc.AbstractTest;
 import variablearc.VariableArcMill;
 import variablearc._symboltable.ArcFeature2VariableAdapter;
@@ -42,8 +45,12 @@ public class VariationPointSolverTest extends AbstractTest {
       new VariableArcVariationPoint(createNameExpression("f1", innerScope));
     innerScope.add(variationPoint);
 
+    ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
+    Mockito.when(astComponentType.getBody()).thenReturn(Mockito.mock(ASTComponentBody.class));
+
     // component with feature f1 and feature f2
     ComponentTypeSymbol compType = VariableArcMill.componentTypeSymbolBuilder()
+      .setAstNode(astComponentType)
       .setName("comp1").setSpannedScope(innerScope).build();
     ArcFeatureSymbol f1 = VariableArcMill.arcFeatureSymbolBuilder().setName("f1").build();
     ArcFeatureSymbol f2 = VariableArcMill.arcFeatureSymbolBuilder().setName("f2").build();

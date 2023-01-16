@@ -2,6 +2,8 @@
 package variablearc.check;
 
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTComponentBody;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import arcbasis.check.TypeExprOfComponent;
@@ -34,7 +36,10 @@ public class CompTypeExpressionTypeInfoBindingTest extends AbstractTest {
       scope.add(variationPoint);
     }
 
-    return VariableArcMill.componentTypeSymbolBuilder().setName(compName)
+    ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
+    Mockito.when(astComponentType.getBody()).thenReturn(Mockito.mock(ASTComponentBody.class));
+
+    return VariableArcMill.componentTypeSymbolBuilder().setName(compName).setAstNode(astComponentType)
       .setSpannedScope(scope).build();
   }
 

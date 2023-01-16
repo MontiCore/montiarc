@@ -9,12 +9,12 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 public class BitExpressions2SMT implements BitExpressionsHandler {
 
-  Expr2SMTResult result;
-  BitExpressionsTraverser traverser;
+  protected final IDeriveSMTExpr deriveSMTExpr;
+  protected BitExpressionsTraverser traverser;
 
-  public BitExpressions2SMT(@NotNull Expr2SMTResult result) {
-    Preconditions.checkNotNull(result);
-    this.result = result;
+  public BitExpressions2SMT(@NotNull IDeriveSMTExpr deriveSMTExpr) {
+    Preconditions.checkNotNull(deriveSMTExpr);
+    this.deriveSMTExpr = deriveSMTExpr;
   }
 
   @Override
@@ -29,7 +29,7 @@ public class BitExpressions2SMT implements BitExpressionsHandler {
   }
 
   protected Expr2SMTResult getResult() {
-    return this.result;
+    return this.deriveSMTExpr.getResult();
   }
 
   @Override

@@ -4,16 +4,13 @@ package variablearc._cocos;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import com.google.common.base.Preconditions;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._ast.ASTArcConstraintDeclaration;
 import variablearc.evaluation.ExpressionSolver;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ConstraintSatisfied4Comp implements ArcBasisASTComponentTypeCoCo {
 
@@ -22,16 +19,13 @@ public class ConstraintSatisfied4Comp implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    List<ASTExpression> constraints = node.getBody()
-      .getArcElementList().stream()
-      .filter(e -> e instanceof ASTArcConstraintDeclaration)
-      .map(e -> ((ASTArcConstraintDeclaration) e).getExpression())
-      .collect(Collectors.toList());
 
-    Optional<Boolean> eval = ExpressionSolver.solve(constraints, node.getSymbol());
+    ExpressionSolver solver = new ExpressionSolver(node.getSymbol());
+    Optional<Boolean> eval = solver.solve(Collections.emptyList());
+    solver.close();
     if (eval.isPresent()) {
       if (!eval.get()) {
-        Log.error(VariableArcError.CONSTRAINT_NEVER_SATISFIED.format(),
+        Log.error(VariableArcError.CONSTRAINT_NOT_SATISFIED.format(),
           node.get_SourcePositionStart(), node.get_SourcePositionEnd());
       }
     } else {

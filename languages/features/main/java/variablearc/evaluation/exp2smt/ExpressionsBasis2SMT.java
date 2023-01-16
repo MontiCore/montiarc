@@ -14,20 +14,12 @@ import java.util.Optional;
 
 public class ExpressionsBasis2SMT implements ExpressionsBasisHandler {
 
-  Expr2SMTResult result;
-  Context context;
-  IDeriveSMTSort expr2Sort;
-  ExpressionsBasisTraverser traverser;
+  protected final IDeriveSMTExpr deriveSMTExpr;
+  protected ExpressionsBasisTraverser traverser;
 
-  public ExpressionsBasis2SMT(@NotNull Expr2SMTResult result,
-                              @NotNull Context context,
-                              @NotNull IDeriveSMTSort expr2Sort) {
-    Preconditions.checkNotNull(result);
-    Preconditions.checkNotNull(context);
-    Preconditions.checkNotNull(expr2Sort);
-    this.result = result;
-    this.context = context;
-    this.expr2Sort = expr2Sort;
+  public ExpressionsBasis2SMT(@NotNull IDeriveSMTExpr deriveSMTExpr) {
+    Preconditions.checkNotNull(deriveSMTExpr);
+    this.deriveSMTExpr = deriveSMTExpr;
   }
 
   @Override
@@ -42,15 +34,19 @@ public class ExpressionsBasis2SMT implements ExpressionsBasisHandler {
   }
 
   protected Expr2SMTResult getResult() {
-    return this.result;
+    return this.deriveSMTExpr.getResult();
   }
 
   protected Context getContext() {
-    return this.context;
+    return this.deriveSMTExpr.getContext();
   }
 
   protected IDeriveSMTSort getExpr2Sort() {
-    return this.expr2Sort;
+    return this.deriveSMTExpr.getSortDerive();
+  }
+
+  protected String getPrefix() {
+    return this.deriveSMTExpr.getPrefix();
   }
 
   @Override
@@ -58,7 +54,7 @@ public class ExpressionsBasis2SMT implements ExpressionsBasisHandler {
     Preconditions.checkNotNull(node);
     Optional<Sort> sort = this.getExpr2Sort().toSort(this.getContext(), node);
     if (sort.isPresent()) {
-      this.getResult().setValue(this.getContext().mkConst(node.getName(), sort.get()));
+      this.getResult().setValue(this.getContext().mkConst(getPrefix() + "." + node.getName(), sort.get()));
     } else {
       this.getResult().clear();
     }

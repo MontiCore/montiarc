@@ -35,20 +35,12 @@ import java.util.Optional;
 
 public class CommonExpressions2SMT implements CommonExpressionsHandler {
 
-  Expr2SMTResult result;
-  Context context;
-  CommonExpressionsTraverser traverser;
-  IDeriveSMTSort expr2Sort;
+  protected final IDeriveSMTExpr deriveSMTExpr;
+  protected CommonExpressionsTraverser traverser;
 
-  public CommonExpressions2SMT(@NotNull Expr2SMTResult result,
-                               @NotNull Context context,
-                               @NotNull IDeriveSMTSort expr2Sort) {
-    Preconditions.checkNotNull(result);
-    Preconditions.checkNotNull(context);
-    Preconditions.checkNotNull(expr2Sort);
-    this.result = result;
-    this.context = context;
-    this.expr2Sort = expr2Sort;
+  public CommonExpressions2SMT(@NotNull IDeriveSMTExpr deriveSMTExpr) {
+    Preconditions.checkNotNull(deriveSMTExpr);
+    this.deriveSMTExpr = deriveSMTExpr;
   }
 
   @Override
@@ -63,15 +55,15 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
   }
 
   protected Expr2SMTResult getResult() {
-    return this.result;
+    return this.deriveSMTExpr.getResult();
   }
 
   protected Context getContext() {
-    return this.context;
+    return this.deriveSMTExpr.getContext();
   }
 
   protected IDeriveSMTSort getExpr2Sort() {
-    return this.expr2Sort;
+    return this.deriveSMTExpr.getSortDerive();
   }
 
   @Override

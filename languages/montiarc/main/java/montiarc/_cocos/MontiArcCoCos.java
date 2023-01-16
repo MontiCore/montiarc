@@ -116,12 +116,14 @@ public class MontiArcCoCos {
     checker.addCoCo(new GenericTypeParameterNameCapitalization());
 
     // VariableArc
+    checker.addCoCo(new ConstraintsOmitFieldReferences());
     checker.addCoCo(new ConstraintsOmitPortReferences());
     checker.addCoCo(new ConstraintIsBoolean(new MontiArcTypeCalculator()));
     checker.addCoCo(new FeatureConfigurationParameterAssignment(new MontiArcTypeCalculator()));
     checker.addCoCo(new FeatureConfigurationParametersLast());
     checker.addCoCo(new FeatureNameCapitalization());
     checker.addCoCo(new FeatureUsage());
+    checker.addCoCo(new IfStatementsOmitFieldReferences());
     checker.addCoCo(new IfStatementsOmitPortReferences());
     checker.addCoCo(new IfStatementIsBoolean(new MontiArcTypeCalculator()));
     checker.addCoCo((ArcBasisASTComponentTypeCoCo) new VariableElementsUsage());

@@ -20,16 +20,12 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 public class MCCommonLiterals2SMT implements MCCommonLiteralsHandler {
 
-  Expr2SMTResult result;
-  Context context;
-  MCCommonLiteralsTraverser traverser;
+  protected final IDeriveSMTExpr deriveSMTExpr;
+  protected MCCommonLiteralsTraverser traverser;
 
-  public MCCommonLiterals2SMT(@NotNull Expr2SMTResult result,
-                              @NotNull Context context) {
-    Preconditions.checkNotNull(result);
-    Preconditions.checkNotNull(context);
-    this.result = result;
-    this.context = context;
+  public MCCommonLiterals2SMT(@NotNull IDeriveSMTExpr deriveSMTExpr) {
+    Preconditions.checkNotNull(deriveSMTExpr);
+    this.deriveSMTExpr = deriveSMTExpr;
   }
 
   @Override
@@ -44,11 +40,11 @@ public class MCCommonLiterals2SMT implements MCCommonLiteralsHandler {
   }
 
   protected Expr2SMTResult getResult() {
-    return this.result;
+    return this.deriveSMTExpr.getResult();
   }
 
   protected Context getContext() {
-    return this.context;
+    return this.deriveSMTExpr.getContext();
   }
 
   @Override

@@ -22,7 +22,8 @@ public enum VariableArcError implements Error {
   NAMED_ARGUMENT_EXPRESSION_WRONG_TYPE("0xC1411", "Incompatible types: '%s' cannot be converted to 'boolean'"),
   PORT_REFERENCE_IN_IF_STATEMENT_ILLEGAL("0xC1413", "Messages are an element of the runtime, cannot read from port '%s' at design-time"),
   PORT_REFERENCE_IN_CONSTRAINT_ILLEGAL("0xC1414", "Messages are an element of the runtime, cannot read from port '%s' at design-time"),
-  CONSTRAINT_NEVER_SATISFIED("0xC1415", "Constraints can never be satisfied");
+  FIELD_REFERENCE_IN_IF_STATEMENT_ILLEGAL("0xC1415", "Variables are an element of the runtime, cannot use field '%s' at design-time"),
+  FIELD_REFERENCE_IN_CONSTRAINT_ILLEGAL("0xC1416", "Variables are an element of the runtime, cannot use field '%s' at design-time");
 
   private final String errorCode;
   private final String errorMessage;

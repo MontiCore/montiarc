@@ -11,66 +11,64 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.IntExpr;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.visitor.ITraverser;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
 import montiarc.check.MontiArcTypeCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc.evaluation.exp2smt.Expr2SMTResult;
-import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
-import variablearc.evaluation.exp2smt.BitExpressions2SMT;
-import variablearc.evaluation.exp2smt.CommonExpressions2SMT;
-import variablearc.evaluation.exp2smt.ExpressionsBasis2SMT;
-import variablearc.evaluation.exp2smt.MCCommonLiterals2SMT;
+import variablearc.evaluation.exp2smt.*;
 import variablearc.evaluation.VariableArcDeriveSMTSort;
 
 import java.util.Optional;
 
-public final class MontiArcDeriveSMTExpr implements IDeriveSMTExpr {
+public class MontiArcDeriveSMTExpr implements IDeriveSMTExpr {
 
-  private final MontiArcTraverser traverser;
-  private final Expr2SMTResult result;
+  protected final MontiArcTraverser traverser;
+  protected final Expr2SMTResult result;
+  protected final Context context;
+  protected final VariableArcDeriveSMTSort sortDerive;
+  protected String prefix;
 
   public MontiArcDeriveSMTExpr(@NotNull Context context) {
     Preconditions.checkNotNull(context);
+    this.context = context;
     this.result = new Expr2SMTResult();
+    this.sortDerive = new VariableArcDeriveSMTSort(new MontiArcTypeCalculator());
     this.traverser = MontiArcMill.traverser();
 
-    VariableArcDeriveSMTSort expr2Sort = new VariableArcDeriveSMTSort(new MontiArcTypeCalculator());
-    this.traverser.setExpressionsBasisHandler(new ExpressionsBasis2SMT(this.result, context, expr2Sort));
-    this.traverser.setMCCommonLiteralsHandler(new MCCommonLiterals2SMT(this.result, context));
-    this.traverser.setCommonExpressionsHandler(new CommonExpressions2SMT(this.result, context, expr2Sort));
-    this.traverser.setBitExpressionsHandler(new BitExpressions2SMT(this.result));
+    this.traverser.setExpressionsBasisHandler(new ExpressionsBasis2SMT(this));
+    this.traverser.setMCCommonLiteralsHandler(new MCCommonLiterals2SMT(this));
+    this.traverser.setCommonExpressionsHandler(new CommonExpressions2SMT(this));
+    this.traverser.setBitExpressionsHandler(new BitExpressions2SMT(this));
   }
 
   @Override
-  public Optional<Expr<?>> toExpr(@NotNull ASTExpression expr) {
-    Preconditions.checkNotNull(expr);
-    this.result.clear();
-    expr.accept(this.traverser);
-    return this.result.getValue();
+  public Context getContext() {
+    return this.context;
   }
 
   @Override
-  public Optional<IntExpr> toInt(@NotNull ASTExpression expr) {
-    Preconditions.checkNotNull(expr);
-    this.result.clear();
-    expr.accept(this.traverser);
-    return this.result.getValueAsInt();
+  public IDeriveSMTSort getSortDerive() {
+    return this.sortDerive;
   }
 
   @Override
-  public Optional<BoolExpr> toBool(@NotNull ASTExpression expr) {
-    Preconditions.checkNotNull(expr);
-    this.result.clear();
-    expr.accept(this.traverser);
-    return this.result.getValueAsBool();
+  public Expr2SMTResult getResult() {
+    return this.result;
   }
 
   @Override
-  public Optional<ArithExpr<?>> toArith(@NotNull ASTExpression expr) {
-    Preconditions.checkNotNull(expr);
-    this.result.clear();
-    expr.accept(this.traverser);
-    return this.result.getValueAsArith();
+  public ITraverser getTraverser() {
+    return this.traverser;
+  }
+
+  @Override
+  public String getPrefix() {
+    return prefix;
+  }
+
+  @Override
+  public void setPrefix(String prefix) {
+    this.prefix = prefix;
   }
 }
