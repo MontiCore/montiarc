@@ -15,6 +15,10 @@ public class ArcCoreFullPrettyPrinter extends ArcCoreFullPrettyPrinterTOP implem
     super(Preconditions.checkNotNull(printer));
   }
 
+  public ArcCoreFullPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
+    super(Preconditions.checkNotNull(printer), printComments);
+  }
+
   @Override
   public String prettyprint(@NotNull ASTExpressionsBasisNode node) {
     Preconditions.checkNotNull(node);

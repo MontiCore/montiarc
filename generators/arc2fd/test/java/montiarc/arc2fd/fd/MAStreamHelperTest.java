@@ -82,12 +82,12 @@ class MAStreamHelperTest {
   @Test
   void getConstraintExpressionsFromArcElements() {
     // Given
-    List<String> trueConstraints = List.of("a && b", "a || (b && c)");
-    List<String> falseConstraints = List.of("a && b", "(b && c)");
+    List<String> trueConstraints = List.of("a&&b", "a||(b&&c)");
+    List<String> falseConstraints = List.of("a&&b", "(b&&c)");
     List<String> constraints =
         MAStreamHelper.getConstraintExpressionsFromArcElements(
-                MAStreamHelper.getArcElements(ast.getComponentType())).stream()
-            .map(t -> new MontiArcFullPrettyPrinter().prettyprint(t)).collect(Collectors.toList());
+            MAStreamHelper.getArcElements(ast.getComponentType())).stream()
+          .map(t -> new MontiArcFullPrettyPrinter().prettyprint(t)).collect(Collectors.toList());
 
     // When && Then
     Assertions.assertEquals(trueConstraints, constraints);

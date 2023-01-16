@@ -12,7 +12,11 @@ import org.codehaus.commons.nullanalysis.NotNull;
 public class GenericArcFullPrettyPrinter extends GenericArcFullPrettyPrinterTOP implements IFullPrettyPrinter {
 
   public GenericArcFullPrettyPrinter(@NotNull IndentPrinter printer) {
-    super(printer);
+    super(Preconditions.checkNotNull(printer));
+  }
+
+  public GenericArcFullPrettyPrinter(@NotNull IndentPrinter printer, boolean printComments) {
+    super(Preconditions.checkNotNull(printer), printComments);
   }
 
   @Override
