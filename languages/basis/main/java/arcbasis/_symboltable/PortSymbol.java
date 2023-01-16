@@ -14,7 +14,6 @@ import java.util.*;
 
 public class PortSymbol extends PortSymbolTOP {
 
-  protected SymTypeExpression type;
   protected Timing timing;
   protected Boolean delayed = null;
   protected Boolean stronglyCausal = null;

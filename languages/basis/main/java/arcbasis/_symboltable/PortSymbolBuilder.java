@@ -4,13 +4,13 @@ package arcbasis._symboltable;
 import arcbasis.timing.Timing;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Optional;
 
 public class PortSymbolBuilder extends PortSymbolBuilderTOP {
 
-  protected SymTypeExpression type;
   protected Timing timing;
 
   public PortSymbolBuilder() {
@@ -51,16 +51,14 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
   public PortSymbol build() {
     Preconditions.checkState(this.isValid());
     PortSymbol symbol = super.build();
-    symbol.setType(this.getType());
     symbol.setTiming(Optional.ofNullable(this.timing).orElse(Timing.UNTIMED));
     return symbol;
   }
 
   public PortSymbol buildWithoutType() {
     Preconditions.checkState(this.isValidWithoutType());
-    PortSymbol symbol = super.build();
-    symbol.setTiming(Optional.ofNullable(this.timing).orElse(Timing.UNTIMED));
-    return symbol;
+    this.setType(SymTypeExpressionFactory.createObscureType());
+    return this.build();
   }
 
   @Override

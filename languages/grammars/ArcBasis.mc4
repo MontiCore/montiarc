@@ -139,6 +139,7 @@ component grammar ArcBasis extends
   symbol Port = Name;
 
   symbolrule Port =
+    type: de.monticore.types.check.SymTypeExpression
     incoming: boolean
     outgoing: boolean
   ;

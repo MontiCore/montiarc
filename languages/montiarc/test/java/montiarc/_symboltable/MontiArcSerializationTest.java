@@ -5,6 +5,7 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import de.monticore.symboltable.serialization.JsonParser;
 import de.monticore.symboltable.serialization.json.JsonObject;
+import de.monticore.types.check.SymTypePrimitive;
 import montiarc.AbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
@@ -66,6 +67,10 @@ public class MontiArcSerializationTest extends AbstractTest {
       .getMember("name").getAsJsonString().getValue()).isEqualTo("i");
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
       .getMember("incoming").getAsJsonBoolean().getValue()).isTrue();
+    assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("type").getAsJsonObject()
+      .getMember("kind").getAsJsonString().getValue()).isEqualTo(SymTypePrimitive.class.getCanonicalName());
+    assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("type").getAsJsonObject()
+      .getMember("primitiveName").getAsJsonString().getValue()).isEqualTo("int");
   }
 
   @Test
@@ -92,6 +97,10 @@ public class MontiArcSerializationTest extends AbstractTest {
       .getMember("name").getAsJsonString().getValue()).isEqualTo("o");
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
       .getMember("outgoing").getAsJsonBoolean().getValue()).isTrue();
+    assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("type").getAsJsonObject()
+      .getMember("kind").getAsJsonString().getValue()).isEqualTo(SymTypePrimitive.class.getCanonicalName());
+    assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("type").getAsJsonObject()
+      .getMember("primitiveName").getAsJsonString().getValue()).isEqualTo("int");
   }
 
   @Test
@@ -119,12 +128,20 @@ public class MontiArcSerializationTest extends AbstractTest {
       .getMember("name").getAsJsonString().getValue()).isEqualTo("i");
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
       .getMember("incoming").getAsJsonBoolean().getValue()).isTrue();
+    assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("type").getAsJsonObject()
+      .getMember("kind").getAsJsonString().getValue()).isEqualTo(SymTypePrimitive.class.getCanonicalName());
+    assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("type").getAsJsonObject()
+      .getMember("primitiveName").getAsJsonString().getValue()).isEqualTo("int");
     assertThat(json.getMember("symbols").getAsJsonArray().get(1).getAsJsonObject()
       .getMember("kind").getAsJsonString().getValue()).isEqualTo(PortSymbol.class.getCanonicalName());
     assertThat(json.getMember("symbols").getAsJsonArray().get(1).getAsJsonObject()
       .getMember("name").getAsJsonString().getValue()).isEqualTo("o");
     assertThat(json.getMember("symbols").getAsJsonArray().get(1).getAsJsonObject()
       .getMember("outgoing").getAsJsonBoolean().getValue()).isTrue();
+    assertThat(json.getMember("symbols").getAsJsonArray().get(1).getAsJsonObject().getMember("type").getAsJsonObject()
+      .getMember("kind").getAsJsonString().getValue()).isEqualTo(SymTypePrimitive.class.getCanonicalName());
+    assertThat(json.getMember("symbols").getAsJsonArray().get(1).getAsJsonObject().getMember("type").getAsJsonObject()
+      .getMember("primitiveName").getAsJsonString().getValue()).isEqualTo("int");
   }
 
 }
