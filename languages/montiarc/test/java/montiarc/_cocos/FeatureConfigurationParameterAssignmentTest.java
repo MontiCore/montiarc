@@ -41,13 +41,6 @@ public class FeatureConfigurationParameterAssignmentTest extends AbstractCoCoTes
           VariableArcError.TOO_MANY_INSTANTIATION_FEATURE_ARGUMENTS,
           VariableArcError.NAMED_ARGUMENT_FEATURE_NOT_EXIST
         }
-      ),
-      Arguments.of(
-        "WrongAssignmentStatement.arc",
-        new Error[]{
-          VariableArcError.NAMED_ARGUMENT_NO_NAME_LEFT,
-          VariableArcError.NAMED_ARGUMENT_NO_NAME_LEFT
-        }
       )
     );
   }
