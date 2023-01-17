@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.Collections;
 
 import static java.util.Map.entry;
 import static montiarc.arc2fd.expressions.MA2SMTFormulaConverter.SEPARATOR;
@@ -63,7 +64,7 @@ public class FDConfiguration {
    * Mapping between Operation Type and a nice, meaningful name (for comments)
    */
   public static final Map<Operation, String> MAP_TYPE_MAPPING =
-      Map.ofEntries(
+      Collections.unmodifiableMap(Map.ofEntries(
           entry(Operation.OPTIONALS, "Optionals"),
           entry(Operation.SIMPLE_OR, "Simple OR"),
           entry(Operation.XOR, "XOR"),
@@ -71,7 +72,7 @@ public class FDConfiguration {
               "AND (Remaining Conjunctions)"),
           entry(Operation.REQUIRES, "Requires"),
           entry(Operation.EXCLUDES, "Excludes")
-      );
+      ));
   /**
    * Should the Types be displayed after the generation?
    */
