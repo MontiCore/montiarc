@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation.exp2smt;
 
+import arcbasis._symboltable.ComponentInstanceSymbol;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.ArithExpr;
 import com.microsoft.z3.BoolExpr;
@@ -29,7 +30,9 @@ import de.monticore.expressions.commonexpressions._ast.ASTNotEqualsExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTPlusExpression;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsHandler;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsTraverser;
+import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
+import variablearc._symboltable.IVariableArcScope;
 
 import java.util.Optional;
 
@@ -75,10 +78,22 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
   @Override
   public void handle(@NotNull ASTFieldAccessExpression node) {
     Preconditions.checkNotNull(node);
-    Optional<Sort> derivedSort = this.getExpr2Sort().toSort(this.getContext(), node);
-    if (derivedSort.isPresent()) {
-      this.getResult().setValue(
-        this.getContext().mkConst(node.getName(), derivedSort.get()));
+
+    // Handle only features of subcomponent of form x.f
+    IVariableArcScope scope = (IVariableArcScope) node.getEnclosingScope();
+    if (node.getExpression() instanceof ASTNameExpression) {
+      String name = ((ASTNameExpression) node.getExpression()).getName();
+      Optional<ComponentInstanceSymbol> instanceSymbol =
+        scope.resolveComponentInstanceMany(name).stream().findFirst();
+      if (instanceSymbol.isPresent() &&
+        !((IVariableArcScope) instanceSymbol.get().getType().getTypeInfo().getSpannedScope()).resolveArcFeatureMany(
+          node.getName()).isEmpty()) {
+        String prefix = this.deriveSMTExpr.getPrefix().isEmpty() ? "" : this.deriveSMTExpr.getPrefix() + ".";
+        this.getResult().setValue(
+          this.getContext().mkBoolConst(prefix + name + "." + node.getName()));
+      } else {
+        getResult().clear();
+      }
     } else {
       this.getResult().clear();
     }
@@ -89,7 +104,8 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     Preconditions.checkNotNull(node);
     traverse(node);
     if (this.getResult().getValueAsArith().isPresent()) {
-      this.getResult().setValue(this.getContext().mkMul(this.getContext().mkInt(-1), this.getResult().getValueAsArith().get()));
+      this.getResult()
+        .setValue(this.getContext().mkMul(this.getContext().mkInt(-1), this.getResult().getValueAsArith().get()));
     } else {
       this.getResult().clear();
     }

@@ -3,7 +3,6 @@ package variablearc._symboltable;
 
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import de.monticore.expressions.assignmentexpressions.AssignmentExpressionsMill;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -19,9 +18,11 @@ import variablearc._visitor.VariableArcTraverser;
 import variablearc.check.TypeExprOfVariableComponent;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
+/**
+ * Tests for {@link VariableArcSymbolTableCompleter}
+ */
 public class VariableArcSymbolTableCompleterTest extends AbstractTest {
 
   protected VariableArcSymbolTableCompleter completer;
@@ -76,14 +77,14 @@ public class VariableArcSymbolTableCompleterTest extends AbstractTest {
   public void shouldVisitComponentInstanceSymbol() {
     // Given
     IVariableArcScope scope = VariableArcMill.scope();
-    VariableSymbol parameter = VariableArcMill.variableSymbolBuilder()
+    VariableSymbol parameter1 = VariableArcMill.variableSymbolBuilder()
       .setName("a").setEnclosingScope(scope).build();
-    scope.add(parameter);
-    ArcFeatureSymbol feature = VariableArcMill.arcFeatureSymbolBuilder()
-      .setName("b").build();
-    scope.add(feature);
+    scope.add(parameter1);
+    VariableSymbol parameter2 = VariableArcMill.variableSymbolBuilder()
+      .setName("b").setEnclosingScope(scope).build();
+    scope.add(parameter2);
     ComponentTypeSymbol component = VariableArcMill.componentTypeSymbolBuilder()
-      .setParameters(Collections.singletonList(parameter))
+      .setParameters(Arrays.asList(parameter1, parameter2)) // List.of produces an
       .setName("C")
       .setSpannedScope(scope)
       .build();
@@ -91,14 +92,7 @@ public class VariableArcSymbolTableCompleterTest extends AbstractTest {
 
     List<ASTExpression> bindings = Arrays.asList(Mockito.mock(ASTExpression.class), Mockito.mock(ASTExpression.class));
     ComponentInstanceSymbol symbol = VariableArcMill.componentInstanceSymbolBuilder()
-      .setArguments(Arrays.asList(
-        bindings.get(0),
-        AssignmentExpressionsMill.assignmentExpressionBuilder()
-          .setLeft(VariableArcMill.nameExpressionBuilder().setName("b").build())
-          .setOperator(0)
-          .setRight(bindings.get(1))
-          .build()
-      )).setType(typeExpr).setName("c1").build();
+      .setArguments(bindings).setType(typeExpr).setName("c1").build();
 
     // When
     getCompleter().visit(symbol);
@@ -108,6 +102,6 @@ public class VariableArcSymbolTableCompleterTest extends AbstractTest {
     Assertions.assertEquals(typeExpr.getTypeInfo(), symbol.getType()
       .getTypeInfo());
     Assertions.assertTrue(symbol.getType() instanceof TypeExprOfVariableComponent);
-    Assertions.assertIterableEquals(bindings, ((TypeExprOfVariableComponent) symbol.getType()).getAllBindingsAsList());
+    Assertions.assertIterableEquals(bindings, ((TypeExprOfVariableComponent) symbol.getType()).getBindingsAsList());
   }
 }

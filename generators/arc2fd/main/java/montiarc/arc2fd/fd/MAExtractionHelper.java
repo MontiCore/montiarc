@@ -434,18 +434,18 @@ public class MAExtractionHelper<T extends Formula> {
 
       // Get the Feature Bindings and replace add the bindings to our mapping
       // (so we can replace it properly)
-      if (c.getSymbol().getType() instanceof TypeExprOfVariableComponent) {
-        ImmutableMap<ArcFeatureSymbol, ASTExpression> newMapping =
-          ((TypeExprOfVariableComponent) c.getSymbol().getType()).getFeatureBindings();
-        newMapping.forEach((key, value) -> {
-          String stringValue = prettyPrinter.prettyprint(value);
-          if (MAExpressionsBasisVisitor.NumberToWord.isNumeric(stringValue)) {
-            stringValue =
-              MAExpressionsBasisVisitor.NumberToWord.convert(Integer.parseInt(stringValue));
-          }
-          variableRemapping.put(key.getName(), stringValue);
-        });
-      }
+//      if (c.getSymbol().getType() instanceof TypeExprOfVariableComponent) {
+//        ImmutableMap<ArcFeatureSymbol, ASTExpression> newMapping =
+//          ((TypeExprOfVariableComponent) c.getSymbol().getType()).getFeatureBindings();
+//        newMapping.forEach((key, value) -> {
+//          String stringValue = prettyPrinter.prettyprint(value);
+//          if (MAExpressionsBasisVisitor.NumberToWord.isNumeric(stringValue)) {
+//            stringValue =
+//              MAExpressionsBasisVisitor.NumberToWord.convert(Integer.parseInt(stringValue));
+//          }
+//          variableRemapping.put(key.getName(), stringValue);
+//        });
+//      }
 
       // Process inner component recursively
       StorageCache<T> res =

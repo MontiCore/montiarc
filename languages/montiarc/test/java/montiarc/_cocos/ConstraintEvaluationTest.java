@@ -93,6 +93,7 @@ public class ConstraintEvaluationTest extends AbstractCoCoTest {
   public void loadComponentsToInstantiate() {
     // loading helper models into the symboltable
     this.parseAndCreateAndCompleteSymbols("ComponentWithBooleanParameterAsConstraint.arc");
+    this.parseAndCreateAndCompleteSymbols("ComponentWithFeatureAsConstraint.arc");
   }
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
@@ -103,7 +104,8 @@ public class ConstraintEvaluationTest extends AbstractCoCoTest {
         arg("NeverSatisfiedConstraintsWithParameter.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED),
         arg("NeverSatisfiedInstanceConstraints.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED),
         arg("NeverSatisfiedTransitiveInstanceConstraints.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED),
-        arg("NeverSatisfiedNestedInstanceConstraints.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED)
+        arg("NeverSatisfiedNestedInstanceConstraints.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED),
+        arg("NeverSatisfiedInstanceFeatureConstraints.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED)
     );
   }
 

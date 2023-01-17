@@ -100,22 +100,6 @@ public class ComponentConverter {
           contextExpr.add(context.mkEq(nameExpression.get(), bindingSolverExpression.get()));
         }
       }
-      // Convert features
-      for (ArcFeatureSymbol feature : ((IVariableArcScope) compTypeExpression.getTypeInfo()
-          .getSpannedScope()).getLocalArcFeatureSymbols()) {
-        Optional<ASTExpression> bindingExpression = variableCompTypeExpression.getBindingFor(feature);
-        if (bindingExpression.isPresent()) {
-          Optional<Expr<?>> solverExpression = bindingExpression.flatMap(converter::toExpr);
-          if (solverExpression.isPresent() && solverExpression.get().isBool()) {
-            contextExpr.add(context.mkEq(context.mkBoolConst(prefix + "." + feature.getName()),
-                solverExpression.get()));
-          }
-        } else {
-          // default to false for unassigned features
-          contextExpr.add(context.mkEq(context.mkBoolConst(prefix + "." + feature.getName()),
-              context.mkBool(false)));
-        }
-      }
     }
     // convert constraints
     converter.setPrefix(prefix);

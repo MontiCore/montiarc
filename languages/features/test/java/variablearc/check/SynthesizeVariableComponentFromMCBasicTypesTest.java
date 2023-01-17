@@ -12,6 +12,9 @@ import org.junit.jupiter.api.Test;
 import variablearc.AbstractTest;
 import variablearc.VariableArcMill;
 
+/**
+ * Tests for {@link SynthesizeVariableComponentFromMCBasicTypes}
+ */
 public class SynthesizeVariableComponentFromMCBasicTypesTest extends AbstractTest {
 
   @Test
