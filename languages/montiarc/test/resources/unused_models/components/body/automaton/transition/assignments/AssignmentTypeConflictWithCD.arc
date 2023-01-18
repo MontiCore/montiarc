@@ -12,11 +12,11 @@ import types.CDTestTypes.*;
  */
 component AssignmentTypeConflictWithCD {
 
-    port 
+    port
         out int iOut;
 
     TypeWithFields tf;
-    
+
     automaton {
       state S;
       initial S / {tf = new TypeWithFields(), iOut = tf.t};

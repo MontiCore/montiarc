@@ -9,7 +9,7 @@ component UsingInexistingPort {
     in double distance,
     out String hulu;
 
-  compute IncreaseHulu {    
+  compute IncreaseHulu {
     counter++;
     hulu = counter;
   }

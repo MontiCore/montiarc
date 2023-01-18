@@ -12,7 +12,7 @@ component JavaPVariableIdentifiersUnique {
 
   port
     in String s;
-    
+
   Integer i;
 
   compute {

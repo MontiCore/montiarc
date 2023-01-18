@@ -11,8 +11,8 @@ component AutomatonHasNoInitialState {
 
   port
     in String x;
-    
-    
+
+
   automaton A {
     state B;
   }

@@ -8,10 +8,10 @@ package components.body.subcomponents;
  *  (p. 68, lst. 3.48)
  */
 component ReferenceCycle2 {
-    port 
+    port
         in Integer portIn;
-        
+
     component ReferenceCycle refCycle;
-    
+
     connect portIn -> refCycle.portIn;
 }

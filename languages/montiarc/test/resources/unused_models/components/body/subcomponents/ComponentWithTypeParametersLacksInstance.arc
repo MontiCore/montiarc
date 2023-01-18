@@ -7,11 +7,11 @@ package components.body.subcomponents;
  * Hence, they cannot yield generic type parameters.
  */
 component ComponentWithTypeParametersLacksInstance {
-  
-  port 
+
+  port
     in String pIn,
      out String pOut;
-       
+
   component Inner<T> {
     port in T tIn;
     port out T tOut;

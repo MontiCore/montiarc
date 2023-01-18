@@ -26,7 +26,7 @@ component AmbiguousImplicitAndExplicitSubcomponentNames {
       // ERROR: The component 'AmbiguousImplicitAndExplicitSubcomponentNames'
       //          already contains a reference named 'hasStringInputAndOutput'!
       // Warning: Implicit naming should be used for unique subcomponent types only
-  
+
   component components.body.subcomponents._subcomponents
               .HasPortWithImportedType someName;
       // ERROR: The component 'AmbiguousImplicitAndExplicitSubcomponentNames'
@@ -38,7 +38,7 @@ component AmbiguousImplicitAndExplicitSubcomponentNames {
       // ERROR: The component 'AmbiguousImplicitAndExplicitSubcomponentNames'
       //          already contains a reference named 'someName'!
       // Warning: Implicit naming should be used for unique subcomponent types only
-  
+
   component components.body.subcomponents._subcomponents
               .HasPortsOfHierarchicalCDTypes hasPortsOfHierarchicalCDTypes;
       // ERROR: The component already contains a reference named
@@ -48,8 +48,8 @@ component AmbiguousImplicitAndExplicitSubcomponentNames {
       // ERROR: The component 'AmbiguousImplicitAndExplicitSubcomponentNames' already
       //          contains a reference named 'hasPortsOfHierachicalCDTypes'!
       // Warning: Implicit naming should be used for unique subcomponent types only
-  
+
   component components.body.subcomponents._subcomponents
                 .HasGenericInputAndOutputPort<java.lang.String>;
-  
+
 }

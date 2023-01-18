@@ -17,4 +17,5 @@ component WithoutJavaKeywords<NoJavaKeyword0, NoJavaKeyword1> (int noo, int java
   component NoJavaKeyword noJavaKeyword10 {}
 
   NoJavaKeyword noJavaKeyword11, noJavaKeyword12;
+
 }

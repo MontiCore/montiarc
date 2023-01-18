@@ -2,7 +2,7 @@
 package components.body.subcomponents;
 
 /**
- * Valid model. 
+ * Valid model.
  */
 
 component SimpleReferencedComponent {

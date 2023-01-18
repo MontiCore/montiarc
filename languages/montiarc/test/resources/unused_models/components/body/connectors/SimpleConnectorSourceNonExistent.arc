@@ -10,10 +10,10 @@ package components.body.connectors;
 component SimpleConnectorSourceNonExistent {
   component A {
   }
-  
+
   component B {
     port in String bIn;
   }
-  
+
   component A myA [aOut -> b.bIn];
 }

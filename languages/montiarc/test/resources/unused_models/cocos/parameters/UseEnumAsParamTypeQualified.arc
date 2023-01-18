@@ -7,7 +7,7 @@ package components.head.parameters;
  * Valid model.
  */
 component UseEnumAsParamTypeQualified {
-    
+
     port in String sIn;
 
     component EnumAsTypeArg(types.MyEnum.First) sub;

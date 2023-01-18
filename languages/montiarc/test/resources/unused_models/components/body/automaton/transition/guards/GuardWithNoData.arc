@@ -5,14 +5,14 @@ package components.body.automaton.transition.guards;
  */
 component GuardWithNoData {
 
-	port
+  port
     in Integer input;
 
-	automaton GuardIsBooleanAutomaton {
-		state A,B;
-		initial A;
+  automaton GuardIsBooleanAutomaton {
+    state A,B;
+    initial A;
 
-		A -> B [input == -- ];
-		B -> A [true];
-	}
+    A -> B [input == -- ];
+    B -> A [true];
+  }
 }

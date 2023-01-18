@@ -9,6 +9,6 @@ package components.head.parameters;
  *  (p. 71, Lst. 3.51)
  */
 component ComponentWithLowerCaseGenType<K, t> {
-    
-    
+
+
 }

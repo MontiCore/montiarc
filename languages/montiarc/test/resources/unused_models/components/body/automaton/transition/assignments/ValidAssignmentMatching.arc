@@ -8,11 +8,11 @@ import types.Datatypes.MotorCommand;
  * to port motorCmd.
  */
 component ValidAssignmentMatching {
-  port 
+  port
     out MotorCommand;
-  
+
   automaton AmbiguousMatching {
-    state Idle; 
+    state Idle;
     initial Idle / {MotorCommand.FORWARD};
   }
 }

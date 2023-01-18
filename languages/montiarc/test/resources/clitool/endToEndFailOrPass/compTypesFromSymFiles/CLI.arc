@@ -4,4 +4,5 @@ package compTypesFromSymFiles;
 component CLI {
   BufferedReader reader;
   BufferedWriter writer;
+
 }

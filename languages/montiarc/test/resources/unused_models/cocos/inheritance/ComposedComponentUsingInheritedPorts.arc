@@ -2,7 +2,7 @@
 package components.head.inheritance;
 
 /**
- * Valid model. 
+ * Valid model.
  */
 component ComposedComponentUsingInheritedPorts {
   port in Integer inputIntegerA;

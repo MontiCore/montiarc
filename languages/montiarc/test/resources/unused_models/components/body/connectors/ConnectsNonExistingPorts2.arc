@@ -12,20 +12,20 @@ package components.body.connectors;
  *                          by the first part. (p.64 Lst. 3.41)
  */
 component ConnectsNonExistingPorts2 {
-  
+
   port
     in String portIn,
     out Boolean somePort,
     out String portOut;
-  
+
   component components.body.subcomponents._subcomponents.HasStringInputAndIntegerOutput p1;
   component components.body.subcomponents._subcomponents.HasStringInputAndIntegerOutput p2;
   component components.body.subcomponents._subcomponents.IntegerInputAndBooleanOutput p3;
-  
+
   // correct
   connect portIn -> p1.portIn, p2.portIn;
   connect p1.portOut -> p3.integer;
-  
+
   // port does not exist
   connect p1.notExists -> p3.inNotExists;
       //ERROR: The source port 'p1.notExists' does not exist!

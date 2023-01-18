@@ -10,7 +10,7 @@ package components.body.ports;
 *                           port type. (p.66, Lst. 3.43)
 */
 component PortCompatibilityWithGenerics3 {
-  port 
+  port
     in Integer myInt,
     out Object myObj;
 
@@ -22,10 +22,10 @@ component PortCompatibilityWithGenerics3 {
   component Buffer<Integer> bInt;
   component Buffer<Object> bObj;
   component Buffer<String> bStr;
-  
+
   connect myInt -> bInt.input;         // Int -> Int
   connect bInt.buffered -> bObj.input; // Int -> Obj ERROR: See #241, #243
   connect bObj.buffered -> bStr.input; // Obj -> Str
-                                       // invalid!    
+                                       // invalid!
   connect bStr.buffered -> myObj;      // Str -> Obj ERROR: See #241, #243
 }

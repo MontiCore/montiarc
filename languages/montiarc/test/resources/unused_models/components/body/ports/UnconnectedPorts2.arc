@@ -14,13 +14,13 @@ import components.body.subcomponents._subcomponents.HasGenericInputAndOutputPort
  * @implements [Hab16] CV6: All ports of subcomponents should be used in at least one connector. (p.72 Lst. 3.53)
  */
 component UnconnectedPorts2 {
-  
-  port 
+
+  port
     in String usedIn,
     in String unusedIn, // WARNING: Port unusedIn is not used in any connector
     out String usedOut,
     out String unusedOut; // WARNING: Port unusedOut is not used in any connector
-  
+
   component HasGenericInputAndOutputPort<String> p1, p2;
   // WARNING: The incoming port 'tIn' from the reference 'p2' is not connected.
   // WARNING: The outgoing port 'tOut' from the reference 'p1' is not connected.

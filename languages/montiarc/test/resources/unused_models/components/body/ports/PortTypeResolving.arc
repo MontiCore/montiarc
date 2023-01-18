@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package components.body.ports;
 
-import types.Datatypes.*; 
+import types.Datatypes.*;
 
 /**
- * Valid model. 
+ * Valid model.
  */
 component PortTypeResolving(String name, String typ = "BACK") {
     port

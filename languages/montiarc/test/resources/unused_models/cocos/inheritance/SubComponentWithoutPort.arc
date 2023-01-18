@@ -7,4 +7,4 @@ package components.head.inheritance;
 component SubComponentWithoutPort extends SuperComponentWithPort {
 
 
-} 
+}

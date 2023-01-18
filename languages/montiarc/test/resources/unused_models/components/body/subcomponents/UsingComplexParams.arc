@@ -4,10 +4,10 @@ package components.body.subcomponents;
 import java.util.*;
 
 /**
- * Valid model. 
+ * Valid model.
  */
 component UsingComplexParams {
-    component ComplexParams(new int[]{1, 2, 3}, 
-                            new HashMap<List<String>, 
+    component ComplexParams(new int[]{1, 2, 3},
+                            new HashMap<List<String>,
                             List<Integer>>()) cp;
 }

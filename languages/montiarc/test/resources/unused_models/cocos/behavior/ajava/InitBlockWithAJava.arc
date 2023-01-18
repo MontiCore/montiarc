@@ -6,12 +6,12 @@ package components.body.ajava;
  */
 component InitBlockWithAJava {
 
-	Integer integerVariable;
+  Integer integerVariable;
 
-	init {
-		integerVariable = 10;
-	}
+  init {
+    integerVariable = 10;
+  }
 
-	compute {
-	}
+  compute {
+  }
 }

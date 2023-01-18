@@ -6,4 +6,5 @@ package connectedSubComponents;
  */
 component OutComp {
   port out int outPort;
+
 }

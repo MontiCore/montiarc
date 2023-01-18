@@ -7,14 +7,14 @@ package components.body.ajava;
  */
 component ChangeIncomingPortInCompute {
 
-	port
-		in Integer incomingInt,
-		out Integer outgoingInt;
+  port
+    in Integer incomingInt,
+    out Integer outgoingInt;
 
-	compute {
-		incomingInt = 10;             // Error: incoming port was changed
-		outgoingInt = incomingInt;
-		incomingInt += 10;            // Error
-		outgoingInt += 10;
-	}
+  compute {
+    incomingInt = 10;             // Error: incoming port was changed
+    outgoingInt = incomingInt;
+    incomingInt += 10;            // Error
+    outgoingInt += 10;
+  }
 }

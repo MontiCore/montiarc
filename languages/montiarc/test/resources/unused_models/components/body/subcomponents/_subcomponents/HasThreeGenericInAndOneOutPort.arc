@@ -7,8 +7,8 @@ package components.body.subcomponents._subcomponents;
  * Formerly named "x.CG2Partner<T>" in MontiArc3.
  */
 component HasThreeGenericInAndOneOutPort<T> {
-  
-  port 
+
+  port
     in T tIn1,
     in T tIn2,
     in T tIn3,

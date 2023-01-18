@@ -1,5 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-
 package generic;
 
 component Forwarder<T> {

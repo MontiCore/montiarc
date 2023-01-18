@@ -24,16 +24,16 @@ import components.body.subcomponents._subcomponents.package2
  * @implements [Hab16] CV3: Duplicated imports should be avoided. (p.71, no listing)
  */
 component RedundantImports2 {
-  
-  port 
+
+  port
     in String,
     in Serializable,
     out DefinedJavaTypeSamePackage;
-    
+
   component SameComponentNameInDifferentPackage s11;
   component components.body.subcomponents._subcomponents
   .package2.SameComponentNameInDifferentPackage s12;
-  
+
   connect string -> s11.string;
   connect serializable -> s11.serializable;
   connect s12.pOut -> definedJavaTypeSamePackage;

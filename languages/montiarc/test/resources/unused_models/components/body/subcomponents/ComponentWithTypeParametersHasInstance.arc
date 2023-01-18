@@ -6,7 +6,7 @@ package components.body.subcomponents;
  */
 component ComponentWithTypeParametersHasInstance {
   autoconnect type;
-  
+
   port in String pIn,
        out Integer pOut;
 
@@ -16,5 +16,5 @@ component ComponentWithTypeParametersHasInstance {
   }
 
   component Inner<String>;
-  
+
 }

@@ -12,26 +12,26 @@ package components.body.ports;
  *                           port type. (p.66, Lst. 3.43)
  */
 component PortCompatibilityWithGenerics2<K, V> {
-    port 
+    port
         in K input,
         out K output,
         out K output2,
         out K output3;
-    
+
     component Inner<T> {
-        port 
+        port
             in T kInput,
-            out T kOutput; 
+            out T kOutput;
     }
-    
+
     component Inner<K> myInner1;
     connect input -> myInner1.kInput; // OK
     connect myInner1.kOutput -> output; // OK
-    
+
     component Inner<String> myInner2;
     connect input -> myInner2.kInput; // ERROR
     connect myInner2.kOutput -> output2; // ERROR
-    
+
     component Inner<V> myInner3;
     connect input -> myInner3.kInput; //ERROR
     connect myInner3.kOutput -> output3; //ERROR

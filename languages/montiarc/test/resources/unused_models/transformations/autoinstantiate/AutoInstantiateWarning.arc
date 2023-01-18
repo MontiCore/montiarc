@@ -16,7 +16,7 @@ component AutoInstantiateWarning {
     component InnerNot2(int x) {
         // Empty body
     }
-    
+
     component InnerNotAutomaticallyButManually(int x) {
         // Empty body
     }

@@ -19,7 +19,7 @@ component IncompatibleVariableAssignmentGenericTypesDiffer {
     out TimerCmd timer,
     out MotorCommand right,
     out MotorCommand left;
-    
+
   HashMap<String, Integer> stateChanges;
 
   automaton BumpControl {
@@ -27,8 +27,8 @@ component IncompatibleVariableAssignmentGenericTypesDiffer {
 
     initial Idle / {stateChanges = new HashMap<Integer, Integer>(), right = MotorCommand.STOP, left = MotorCommand.STOP};
 
-    Idle -> Driving  / {right = MotorCommand.FORWARD, left = MotorCommand.FORWARD, call stateChanges.put("Idle",1)}; 
-    Driving -> Backing [distance < 5] / {right = MotorCommand.BACKWARD, left = MotorCommand.BACKWARD, timer = TimerCmd.SINGLE, call stateChanges.put("Driving",1)}; 
+    Idle -> Driving  / {right = MotorCommand.FORWARD, left = MotorCommand.FORWARD, call stateChanges.put("Idle",1)};
+    Driving -> Backing [distance < 5] / {right = MotorCommand.BACKWARD, left = MotorCommand.BACKWARD, timer = TimerCmd.SINGLE, call stateChanges.put("Driving",1)};
     Backing -> Turning [signal == TimerSignal.ALERT] / {right = MotorCommand.BACKWARD, left = MotorCommand.FORWARD, timer = TimerCmd.DOUBLE};
     Turning -> Driving [signal == TimerSignal.ALERT] / {left = MotorCommand.FORWARD, right = MotorCommand.FORWARD};
 

@@ -10,5 +10,5 @@ component ArrayComp {
         in String[][] strIn2,
         out String[] strOut1,
         out String[][] strOut2;
-    
+
 }

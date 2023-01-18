@@ -6,9 +6,9 @@ package components.body.timing;
  * Formerly named 'B'
  */
 component DelayedComponentWithTwoPorts {
-    
+
     timing delayed;
-    
+
     port
         in String sIn,
         out String sOut;

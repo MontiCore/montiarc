@@ -10,12 +10,12 @@ component ComputeWithSwitchCaseStatement {
 
   compute {
     MotorCommand m = MotorCommand.FORWARD;
-    
+
     switch(m) {
       case FORWARD:
         break;
-      default: 
+      default:
         break;
-    }   
+    }
   }
 }

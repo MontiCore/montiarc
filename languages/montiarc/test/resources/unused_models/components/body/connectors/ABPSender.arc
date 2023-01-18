@@ -7,12 +7,12 @@ import types.CType;
  * Valid model.
  */
 component ABPSender {
-	autoconnect port;
-	
-	port 
-		in String message,
-		in Boolean ack,
-		out CType abpMessage;
+  autoconnect port;
+
+  port
+    in String message,
+    in Boolean ack,
+    out CType abpMessage;
 
   component ABPInnerSender sender {
     port

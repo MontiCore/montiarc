@@ -18,17 +18,17 @@ package components.body.connectors;
  */
 component ConnectorReferenceDoesNotExist {
 
-  port 
+  port
     in String str1,
     in String str2,
     out Integer int1,
     out Integer int2;
-  
+
   component components.body.subcomponents._subcomponents.HasStringInputAndIntegerOutput p;
-  
+
   connect str1 -> p.portIn;
   connect p.portOut -> int1;
-  
+
   connect str2 -> undefRef1.portIn;
     //ERROR: The reference 'undefRef1' does not exist!
   connect RefType.portOut -> int2;

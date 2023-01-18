@@ -2,7 +2,7 @@
 package components.body.automaton.states;
 
 /**
- * Invalid model. Cannot assign 'false' to Integer variable or 
+ * Invalid model. Cannot assign 'false' to Integer variable or
  * '255' to a Boolean port.
  *
  * @implements [Wor16] AT2: Types of valuations and assignments must match
@@ -10,16 +10,16 @@ package components.body.automaton.states;
  */
 component InvalidInitialAssignment {
 
-	port
-		in String e,
-		out Integer i,
-		out Boolean s;
+  port
+    in String e,
+    out Integer i,
+    out Boolean s;
 
-	Integer v;
+  Integer v;
 
-	automaton {
-		state A,B;
-		initial A /{v = false, s = 255 }; // 2 errors
-		A->B;
-	}
+  automaton {
+    state A,B;
+    initial A /{v = false, s = 255 }; // 2 errors
+    A->B;
+  }
 }

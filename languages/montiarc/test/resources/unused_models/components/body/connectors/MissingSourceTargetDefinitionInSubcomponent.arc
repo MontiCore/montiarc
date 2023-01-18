@@ -29,11 +29,11 @@ component MissingSourceTargetDefinitionInSubcomponent {
             out String sInnerOut;
     }
 
-    port 
+    port
         in String sIn,
         out String sOut,
         out String sOut2;
-        
+
     component HasStringInputAndOutput cc;
 
 

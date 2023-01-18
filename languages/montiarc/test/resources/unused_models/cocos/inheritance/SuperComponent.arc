@@ -2,9 +2,9 @@
 package components.head.inheritance;
 
 /**
- * Valid model. 
+ * Valid model.
  */
 component SuperComponent {
-  port 
+  port
     in String inputString;
 }

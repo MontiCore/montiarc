@@ -7,11 +7,11 @@ package components.head.parameters;
  * TODO Add test
  */
 component UseEnumAsTypeArgNotImported {
-    
+
     port in String sIn;
 
     component EnumAsTypeArg(MyEnum.First) sub;
       // Can not find MyEnum.First
-    
+
     connect sIn -> sub.sIn;
 }

@@ -6,4 +6,5 @@ package circularInheritance;
  */
 component CircularInheritance extends CircularInheritance {
   port in int pInInt;
+
 }

@@ -16,7 +16,7 @@ package components.body.ports;
  */
 component ImplicitAndExplicitPortNaming {
 
-  port 
+  port
     in String,
       // Warning: Implicit naming should be used for unique port types only
     out String,

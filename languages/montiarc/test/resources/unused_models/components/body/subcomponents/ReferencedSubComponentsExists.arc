@@ -5,7 +5,7 @@ package components.body.subcomponents;
  * Valid model.
  */
 component ReferencedSubComponentsExists {
-  port 
+  port
     in String s1,
     out String sout1;
 

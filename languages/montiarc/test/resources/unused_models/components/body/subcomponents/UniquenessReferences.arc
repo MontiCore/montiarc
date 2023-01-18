@@ -17,7 +17,7 @@ import components.body.subcomponents._subcomponents.AtomicComponent;
  * TODO CV7 CoCo and Test
  */
 component UniquenessReferences {
-    port 
+    port
         in String s1,
         out String sOut1,
         out String sOut2,
@@ -30,13 +30,13 @@ component UniquenessReferences {
        // Error: Has the same component name as the unnamed instance
 
     component ValidComponentInPackage2 anotherInB;
-    
+
     component ValidComponentInPackage2 validComponentInPackage2;
        // Error: Has the same component name as the unnamed instance
-    
+
     component ValidComponentInPackage1;
        // Warning: Implicit naming should be used for unique subcomponent types only
-    
+
     component ValidComponentInPackage1 anotherInA;
 
     component AtomicComponent atomic;

@@ -15,13 +15,13 @@ component ComponentWithInnerComponent {
     component AtomicComponent myReference;
 
     component InnerComponent {
-    
+
         port
             in String strIn,
             out String strOut;
 
         component AtomicComponent myReference;
-        
+
         component InnerInnerComponent {
             component SimpleReferencedComponent comp;
 
@@ -33,7 +33,7 @@ component ComponentWithInnerComponent {
             connect comp.output -> strOut;
         }
 
-        connect innerInnerComponent.strOut -> strOut; 
+        connect innerInnerComponent.strOut -> strOut;
         connect strIn -> innerInnerComponent.strIn;
     }
 

@@ -12,7 +12,7 @@ import java.util.List; // Import statement is redundant
  * @implements [Hab16] CV3: Duplicated imports should be avoided. (p.71, no listing)
  */
 component RedundantImports {
-    
-    port 
+
+    port
         in List lIn;
 }

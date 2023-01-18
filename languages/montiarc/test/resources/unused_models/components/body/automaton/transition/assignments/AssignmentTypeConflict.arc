@@ -9,7 +9,7 @@ package components.body.automaton.transition.assignments;
  */
 component AssignmentTypeConflict {
 
-    port 
+    port
         out Boolean b;
 
     automaton {

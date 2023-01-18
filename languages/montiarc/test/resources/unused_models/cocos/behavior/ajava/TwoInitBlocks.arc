@@ -6,14 +6,14 @@ package components.body.ajava;
  */
 component TwoInitBlocks {
 
-	Integer testVariable;
-	Integer testVariable2;
+  Integer testVariable;
+  Integer testVariable2;
 
-	init Block1 {
-		testVariable = 10;
-	}
+  init Block1 {
+    testVariable = 10;
+  }
 
-	init Block2 {
-		testVariable2 = 20;
-	}
+  init Block2 {
+    testVariable2 = 20;
+  }
 }

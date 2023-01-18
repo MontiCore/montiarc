@@ -11,14 +11,14 @@ package components.body.ports;
 component NonUniquePortNames {
   port
     in Integer i,
-    in String, 
+    in String,
     in Object object,
     out Integer i,
     out String,
     out Object;
-  
-  automaton {  
-  	state Start;
+
+  automaton {
+    state Start;
     initial Start;
 
     Start -> Start;

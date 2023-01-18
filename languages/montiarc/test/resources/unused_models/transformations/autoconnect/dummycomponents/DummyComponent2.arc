@@ -6,7 +6,7 @@ package components.body.autoconnect.dummycomponents;
  * Used as subcomponent in autoconnection test
  */
 component DummyComponent2 {
-    
+
   port
     in String strIn,
     in Integer intIn,

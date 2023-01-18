@@ -16,7 +16,7 @@ component WrongSubComponentArgument {
         in MotorCommand command;
 
   component Motor(30);  // Wrong parameter type expected String
-  
+
   connect speed -> motor.speed;
-  connect command -> motor.command;   
+  connect command -> motor.command;
 }

@@ -6,11 +6,11 @@ package components.body.ajava;
  */
 component InitBlockWithoutComputeBlock {
 
-	Integer integerVariable;
-	String stringVariable;
+  Integer integerVariable;
+  String stringVariable;
 
-	init {
-		integerVariable = 10;
-		stringVariable = "Test String";
-	}
+  init {
+    integerVariable = 10;
+    stringVariable = "Test String";
+  }
 }

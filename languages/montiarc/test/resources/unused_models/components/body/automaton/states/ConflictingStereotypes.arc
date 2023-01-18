@@ -9,11 +9,11 @@ package components.body.automaton.states;
  *  (p. 97. Lst. 5.8)
  */
 component ConflictingStereotypes {
-	automaton {
-		state A,<<Wrong>> B,C;
-		initial A;
-		state B, <<Wrong>> C;
-		A->B;
-		A->C;
-	}
+  automaton {
+    state A,<<Wrong>> B,C;
+    initial A;
+    state B, <<Wrong>> C;
+    A->B;
+    A->C;
+  }
 }

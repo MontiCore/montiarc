@@ -9,21 +9,21 @@ package components.body.connectors;
 * supertype of the source port type. (p. 66, lst. 3.43)
 */
 component ConnectorSourceAndTargetTypeNotMatch {
-  
-  port 
+
+  port
     in Integer myInt,
     out Object myObj;
-    
+
   component Buffer<Integer> bInt;
   component Buffer<Object> bObj;
   component Buffer<String> bStr;
-  
+
   connect myInt -> bInt.input;
   connect bInt.buffered -> bObj.input; // ERROR: #243
-  connect bObj.buffered -> bStr.input; //incompatible types 
+  connect bObj.buffered -> bStr.input; //incompatible types
                                        //Object and String
   connect bStr.buffered -> myObj; //ERROR: #243
-  
+
   component Buffer<T> {
     port
       in T input,

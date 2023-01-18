@@ -9,11 +9,11 @@ package components.head.parameters;
  *  precede the parameters with default values. (p.60 Lst. 4.14)
  */
 component DefaultParametersInIncorrectOrder (
-    int a, 
-    int x = 5, 
-    String y = "i am a your father", 
+    int a,
+    int x = 5,
+    String y = "i am a your father",
     Integer i = new Integer(1+2),
-    int normalParameter) 
+    int normalParameter)
 {
 // Empty body
 }

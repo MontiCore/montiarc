@@ -12,7 +12,7 @@ import types.TypesWithHierarchy.SuperType;
  */
 component HasPortsOfHierarchicalCDTypes {
 
-  port 
+  port
     in SubType subTypeIn,
     out SubType subTypeOut,
     in SuperType superTypeIn,

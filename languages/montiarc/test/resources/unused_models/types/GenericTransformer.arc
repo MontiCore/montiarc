@@ -2,7 +2,7 @@
 package types;
 
 /**
- * Valid model. 
+ * Valid model.
  */
 component GenericTransformer<T> {
   port in  T tIn,

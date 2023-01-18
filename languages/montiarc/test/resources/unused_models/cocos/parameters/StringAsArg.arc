@@ -5,6 +5,6 @@ package components.head.parameters;
  * Valid model.
  */
 component StringAsArg(String varName) {
-    port 
+    port
         in String sIn;
 }

@@ -9,12 +9,12 @@ package components.body.automaton.states;
  *  (p. 97. Lst. 5.8)
  */
 component StateDefinedMultipleTimes {
-	automaton StateDefinedMultipleTimesAutomaton {
-		state A, B, C;
-		initial A;
-		state B, C;
-		A->B;
-		A->C;
-	}
+  automaton StateDefinedMultipleTimesAutomaton {
+    state A, B, C;
+    initial A;
+    state B, C;
+    A->B;
+    A->C;
+  }
 
 }

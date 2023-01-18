@@ -8,11 +8,11 @@ package components.body.automaton;
 component AutomatonWithLowerCaseName {
   port
     in Integer a;
-    
+
   int c;
-  
+
   automaton lowerCaseName {
-  	state Start;
+    state Start;
     initial Start;
 
     Start -> Start [c < 2];

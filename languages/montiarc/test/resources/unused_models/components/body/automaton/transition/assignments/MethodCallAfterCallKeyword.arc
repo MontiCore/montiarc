@@ -6,17 +6,17 @@ package components.body.automaton.transition.assignments;
  */
 component MethodCallAfterCallKeyword {
 
-   port 
+   port
      in int a,
      out Integer b,
      out Integer c;
 
- 
+
     automaton UseOfUndeclaredField {
         state A;
         initial A;
-        
+
         A -> A /{c.toString(), b = a.toString()}; //wrong: there must be the call keyword before the method call
-    
+
     }
 }

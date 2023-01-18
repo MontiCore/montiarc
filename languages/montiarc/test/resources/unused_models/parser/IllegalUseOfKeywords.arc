@@ -6,17 +6,17 @@ package parser;
  * Formerly named "S2" in MontiArc3.
  */
 component IllegalUseOfKeywords {
-  
-  port 
+
+  port
     in connect; //ERROR
-  
+
   port in String out; //ERROR
-    
+
   component out; //ERROR
-  
+
   component components.body.subcomponents._subcomponents.HasStringInputAndOutput in;
     //ERROR
-  
+
   component components.body.subcomponents._subcomponents.HasStringInputAndOutput correct;
 
 }

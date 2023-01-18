@@ -8,21 +8,21 @@ component NamedInnerComponentCompletionAutoInstOff {
 
     autoinstantiate off;
 
-    port 
+    port
         in String sIn,
         out String sOut1;
-        
+
     component NamedInner na {
-        port 
+        port
             in String sIn,
             out String sOut1;
     }
-    
+
     component OtherNotNamedInnerComponent {
-        port 
+        port
             in String;
     }
-    
+
     connect sIn -> na.sIn;
     connect na.sOut1 -> sOut1;
 }

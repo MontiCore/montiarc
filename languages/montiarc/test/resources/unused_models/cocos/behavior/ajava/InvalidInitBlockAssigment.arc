@@ -6,12 +6,12 @@ package components.body.ajava;
  */
 component InvalidInitBlockAssigment {
 
-	Integer i;
+  Integer i;
 
-	init {
-		i = "String";
-	}
+  init {
+    i = "String";
+  }
 
-	compute {
-	}
+  compute {
+  }
 }

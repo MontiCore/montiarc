@@ -21,16 +21,16 @@ import components.body.subcomponents._subcomponents.package2.ValidComponentInPac
  *  supertype of the source port type. (p. 66, lst. 3.43)
  */
 component ExistingPortInConnector {
-    port 
+    port
         in String strIn,
         out String strOut1,
         out String strOut2;
-        
+
     component ValidComponentInPackage1 ccia [stringOutWrong -> strOut1];
-    
+
     component ValidComponentInPackage2 ccib;
-    
+
     connect strIn -> ccib.stringInWrong, ccia.stringIn;
-    
+
     connect ccib.stringOutWrong -> strOut2;
 }

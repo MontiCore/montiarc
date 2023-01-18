@@ -10,19 +10,19 @@ package components.body.automaton.transition.guards;
  */
 component GuardNotBoolean {
 
-	port
-		in Integer i1, //FULL type
-		in Test i3, //Self written JavaType
-		out Integer outInt;
+  port
+    in Integer i1, //FULL type
+    in Test i3, //Self written JavaType
+    out Integer outInt;
 
-	Integer i2; //QUALIFIED type
+  Integer i2; //QUALIFIED type
 
-	automaton GuardIsNotBooleanAutomaton {
-		state A,B;
-		initial A;
+  automaton GuardIsNotBooleanAutomaton {
+    state A,B;
+    initial A;
 
-		A -> B [(i1+i1)*2];
-		A -> B [i2];
-		A -> B [i3];
-	}
+    A -> B [(i1+i1)*2];
+    A -> B [i2];
+    A -> B [i3];
+  }
 }

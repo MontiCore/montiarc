@@ -13,21 +13,21 @@ import components.body.subcomponents._subcomponents.HasStringInputAndOutput;
  */
 component MissingSourceTargetDefinition {
 
-    port 
+    port
         in String sIn,
         out String sOut,
         out String sOut2;
 
     component HasStringInputAndOutput cc;
-    
+
     connect sIn -> ccWrong;  // No target port "ccWrong" in MissingSourceTargetDefinition
-    
+
     connect sInWrong -> cc.pIn; // No input port "sInWrong" in MissingSourceTargetDefinition
-    
+
     connect cc.pOut -> sOutWrong; // No target port "sOutWrong" in MisingSourceTargetDefinition
-    
+
     connect ccWrong -> sOut; // No souce port "ccWrong" in component MissingSourceTargetDefinition
-    
+
     // correct connectors
     connect sIn -> cc.pIn;
     connect cc.pOut -> sOut2;

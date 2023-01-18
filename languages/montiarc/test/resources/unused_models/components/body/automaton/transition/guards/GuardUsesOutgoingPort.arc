@@ -12,7 +12,7 @@ component GuardUsesOutgoingPort {
 
   int v;
 
-  port 
+  port
     in int i,
     out String s,
     out int o;

@@ -6,18 +6,18 @@ package components.body.variables;
  * @Implements [Wor16] AT3: The special literal value NoData is not used for variables.
  */
 component NoDataNotAssigned {
-	port
-	  in Integer input,
-	  out Integer output;
+  port
+    in Integer input,
+    out Integer output;
 
-	Integer buffer;
+  Integer buffer;
 
 
-	automaton NoDataNotAssigned{
-	  state S;
-	  initial S;
+  automaton NoDataNotAssigned{
+    state S;
+    initial S;
 
-	  S / {buffer = --}; //invalid, since buffer is variable.
-	  S / {output = --}; //valid, since output is a port.
-	}
+    S / {buffer = --}; //invalid, since buffer is variable.
+    S / {output = --}; //valid, since output is a port.
+  }
 }

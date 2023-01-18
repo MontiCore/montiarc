@@ -18,7 +18,7 @@ import components.body.subcomponents._subcomponents.package2.ValidComponentInPac
  */
 component UniquenessConnectors {
 
-    port 
+    port
         in String s1,
         out String s2,
         out String s3,
@@ -26,25 +26,25 @@ component UniquenessConnectors {
         out Integer intOut,
         out String strOut,
         in Integer intIn;
-    
+
     component ValidComponentInPackage2 correctB [stringOut -> s2, s3];
-    
+
     component ValidComponentInPackage1 correctA [stringOut -> s2];
       // ERROR: Only one incoming transition is allowed from a subcomponent
       // to the outgoing port s2.
-    
+
     component StringAndIntegerInputAndOutput tito;
-    
-    
-    connect s1 -> correctA.stringIn, 
+
+
+    connect s1 -> correctA.stringIn,
                   correctB.stringIn,
                   tito.stringIn; // Connects to tito.stringIn
-    
+
     connect s4 -> correctA.stringIn; // ERROR: Only one incoming transition is
                                      // allowed for an input port.
-    
+
     connect intIn -> tito.intIn; // Connects intInt to tito.intIn
-    
+
     connect tito.intOut -> intOut, // Connects tito.intOut to intOut
                     strOut; // Connects tito.stringOut to strOut
 }

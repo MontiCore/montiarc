@@ -8,16 +8,16 @@ import types.JavaNumberType;
  */
 component GuardIsBoolean {
 
-	port
+  port
     in JavaNumberType input,
-		out List<String> x;
+    out List<String> x;
 
   List<String> y;
-	automaton GuardIsBooleanAutomaton {
-		state A,B;
-		initial A;
+  automaton GuardIsBooleanAutomaton {
+    state A,B;
+    initial A;
 
-		A -> B [input.get()==0] / {y = new ArrayList<String>(), x = new ArrayList<String>()};
-		B -> A [true] / {call y.add("bu")};
-	}
+    A -> B [input.get()==0] / {y = new ArrayList<String>(), x = new ArrayList<String>()};
+    B -> A [true] / {call y.add("bu")};
+  }
 }

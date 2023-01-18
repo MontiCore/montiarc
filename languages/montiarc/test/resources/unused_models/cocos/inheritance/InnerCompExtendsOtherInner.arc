@@ -7,12 +7,12 @@ package components.head.inheritance;
 component InnerCompExtendsOtherInner {
     port
         in String;
-    
+
     component InnerComponent1 {
         port
             in Boolean b;
     }
-    
+
     component InnerComponent2 extends InnerComponent1 {
         port
             in Boolean inBool;

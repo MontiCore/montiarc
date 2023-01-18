@@ -6,7 +6,7 @@ package components;
  */
 <<author="Haber", test>>
 component Stereotypes {
-  
+
   <<test3>>
   port
     <<test5>> out String out1,

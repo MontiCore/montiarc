@@ -10,21 +10,21 @@ package components.body.automaton.transition.assignments;
  */
 component AmbiguousMatching {
 
-    port 
+    port
         in String i,
-        out int s,      
+        out int s,
         out int a;
 
     automaton AmbiguousMatching {
-    	state Idle;	
-    	
-    	// This is wrong, because we can't find a match in variables or 
-    	// outputs for a String type
-    	initial Idle / {"Wrong"};
-    	
-    	// Stimulus is right, because only i matches String. The reaction is
-    	// wrong because we have more than one match for an int type
-    	Idle [i=="Right"] / {5};
-    	
+      state Idle;
+
+      // This is wrong, because we can't find a match in variables or
+      // outputs for a String type
+      initial Idle / {"Wrong"};
+
+      // Stimulus is right, because only i matches String. The reaction is
+      // wrong because we have more than one match for an int type
+      Idle [i=="Right"] / {5};
+
     }
 }

@@ -20,14 +20,14 @@ import components.body.subcomponents._subcomponents.HasGenericInputAndOutputPort
 component PortsWithAmbiguousSenders {
   port
     in String in1,
-    in String in2, 
+    in String in2,
     out Integer out1;
-    
+
   component HasGenericInputAndOutputPort<String> p1;
   component HasGenericInputAndOutputPort<Integer> p2;
   component HasGenericInputAndOutputPort<Integer> p3;
   component HasGenericInputAndOutputPort<Integer> p4;
-  
+
   // correct
   connect in1 -> p1.tIn;
   connect p2.tOut -> out1;

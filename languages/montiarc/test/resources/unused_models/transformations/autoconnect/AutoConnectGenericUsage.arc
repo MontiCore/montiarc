@@ -7,14 +7,14 @@ import types.database.DBType;
  * Valid model.
  */
 component AutoConnectGenericUsage {
-    
+
     autoconnect type;
-    
-    port 
+
+    port
         in DBType strIn,
         out DBType strOut;
-    
+
     component AutoConnectGeneric<DBType> myGeneric;
-    
+
 
 }

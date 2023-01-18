@@ -12,6 +12,6 @@ package components.body.variables;
  *  among ports, variables, and configuration parameters. (p.54, Lst. 4.5)
  */
 component AmbiguousVariableNames {
-	Integer a;
-	Double a;
+  Integer a;
+  Double a;
 }

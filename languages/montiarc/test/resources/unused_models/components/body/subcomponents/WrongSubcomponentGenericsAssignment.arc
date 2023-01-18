@@ -14,16 +14,16 @@ import components.body.subcomponents._subcomponents.HasGenericInputAndOutputPort
  *  (p.66, Lst.3.44)
  */
 component WrongSubcomponentGenericsAssignment {
-  
+
   component HasGenericInputAndOutputPort pWrong1;
       // ERROR: Type parameter 'T' of HasGenericInputAndOutputPort is not assigned
-  
+
   component HasGenericInputAndOutputPort pWrong2;
       // ERROR: Type parameter 'T' of HasGenericInputAndOutputPort is not assigned
-  
+
   component HasGenericInputAndOutputPort<T> pWrong3;
       // ERROR: Can not resolve type parameter 'T'
-  
+
   component components.body.subcomponents._subcomponents
       .HasGenericInputAndOutputPort<java.lang.String> pCorrect;
 

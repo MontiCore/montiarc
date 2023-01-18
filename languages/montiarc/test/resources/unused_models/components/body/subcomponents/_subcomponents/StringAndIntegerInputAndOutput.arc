@@ -6,7 +6,7 @@ package components.body.subcomponents._subcomponents;
  * Original Name: TwoInTwoOut
  */
 component StringAndIntegerInputAndOutput {
-    
+
     port
         in String stringIn,
         in Integer intIn,

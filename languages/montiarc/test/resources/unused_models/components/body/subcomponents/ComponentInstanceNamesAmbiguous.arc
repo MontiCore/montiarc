@@ -8,11 +8,11 @@ package components.body.subcomponents;
  *  namespace have to be unique. (p. 59. Lst. 3.31)
  */
 component ComponentInstanceNamesAmbiguous {
- 
+
   component Inner inner{}
   component Inner inner;
-  
+
   component Inner2 i {}
   component Inner i;
-  
+
 }

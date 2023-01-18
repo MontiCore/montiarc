@@ -10,44 +10,44 @@ package components.body.subcomponents;
  * namespace have to be unique. (p. 59. Lst. 3.31)
  */
 component UniqueInnerCompDefinition {
-    
-    port 
+
+    port
         in String sIn,
         out String sOut;
-        
+
     component NotUniqueDef {
-        port 
+        port
             in String sIn,
             in Integer inInt,
             out String sOut;
     }
-    
+
     component NotUniqueDef {
-        port 
+        port
             in String sIn,
             out String sOut;
     }
-    
+
     component NotUniquDefWithInstance {
-        port 
+        port
             in String sIn,
             out String sOut;
     }
-    
+
     component NotUniquDefWithInstance instanceName {
-        port 
+        port
             in String sIn,
             out String sOut;
     }
-    
+
     component NotUniqueDefBothInstanceNames n1 {
-        port 
+        port
             in String sIn,
             out String sOut;
     }
-    
+
     component NotUniqueDefBothInstanceNames n2 {
-        port 
+        port
             in String sIn,
             out String sOut;
     }

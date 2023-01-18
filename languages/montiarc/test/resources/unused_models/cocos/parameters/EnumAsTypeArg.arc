@@ -5,8 +5,8 @@ import types.MyEnum;
 
 /**
 * Valid model.
-*/ 
+*/
 component EnumAsTypeArg(MyEnum varName) {
-    port 
+    port
         in String sIn;
 }

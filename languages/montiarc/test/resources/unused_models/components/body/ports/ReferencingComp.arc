@@ -11,15 +11,15 @@ import types.*;
  *  identical or a supertype of the source port type. (p. 66, lst. 3.43)
  */
 component ReferencingComp (int[] configIntArray, String[][] configStringArray){
-    
+
     port
         in int[] intArrayIn,
         in String[] stringArrayIn,
         in int intNoArrayIn,
         out short[] shortArrayOut;
-        
+
     component CompWithArrays(configIntArray, configStringArray) ref;
-    
+
     connect intArrayIn -> ref.intArrayIn;
     connect stringArrayIn -> ref.stringArrayIn;
       //=> port not compatible because of different array dimensions

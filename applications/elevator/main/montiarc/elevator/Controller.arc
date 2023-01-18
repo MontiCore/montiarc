@@ -160,7 +160,7 @@ component Controller {
       clear = 1;
     };
     // up but do not stop at 2
-    Floor1 -> Floor2 [direction == Direction.UP && isClosed && at1 
+    Floor1 -> Floor2 [direction == Direction.UP && isClosed && at1
                       && !req2 && !stopNext] / {
       current = 2;
       stopNext = false;

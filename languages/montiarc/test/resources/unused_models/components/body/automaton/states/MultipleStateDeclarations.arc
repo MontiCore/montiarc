@@ -6,15 +6,15 @@ package components.body.automaton.states;
  */
 component MultipleStateDeclarations {
 
-	port
-		in int i;
+  port
+    in int i;
 
-	automaton {
-		state A;
-		state B;
+  automaton {
+    state A;
+    state B;
 
-		initial A;
-		A -> B [i < 0];
-		B -> A [i > 0];
-	}
+    initial A;
+    A -> B [i < 0];
+    B -> A [i > 0];
+  }
 }

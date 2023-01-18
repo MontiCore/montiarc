@@ -15,21 +15,21 @@ component MultipleAutomata {
   int c;
 
   automaton InvalidAutomatonBehaviorImpl {
-  	state Start;
+    state Start;
     initial Start / {c = 5};
 
     Start -> Start [c < 2];
   }
-  
-  automaton DuplicatedAutomatonImpl {  
-  	state Beginn;
+
+  automaton DuplicatedAutomatonImpl {
+    state Beginn;
     initial Beginn;
 
     Beginn;
   }
 
   automaton AnotherAutomatonImpl {
-  	state Anfang;
+    state Anfang;
     initial Anfang;
 
     Anfang -> Anfang [a > 2];

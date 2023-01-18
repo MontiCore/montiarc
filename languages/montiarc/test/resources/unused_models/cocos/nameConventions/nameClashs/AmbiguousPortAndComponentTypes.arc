@@ -13,10 +13,10 @@ import components.AmbiguousNamedCD.AmbiguousClass;
  * @implements TODO No literature reference
  */
 component AmbiguousPortAndComponentTypes {
-  
+
   port in AmbiguousModel,
     out AmbiguousClass;
-  
+
   component AmbiguousModel; //Name clash
   component AmbiguousClass;
 }

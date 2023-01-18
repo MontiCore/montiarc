@@ -6,4 +6,5 @@ package connectedSubComponents;
  */
 component InComp (int test) {
   port in int inPort;
+
 }

@@ -10,6 +10,6 @@ component NameSpaceHidingSuper {
 
     port
         in String sIn;
-    
+
     component HasStringInputAndOutput foo;
 }

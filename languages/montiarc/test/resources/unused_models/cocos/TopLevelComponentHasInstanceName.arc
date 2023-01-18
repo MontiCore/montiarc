@@ -12,7 +12,7 @@ package components;
 component TopLevelComponentHasInstanceName instance {
 
   component Sender innerComponent{
-    
+
   }
 
 }

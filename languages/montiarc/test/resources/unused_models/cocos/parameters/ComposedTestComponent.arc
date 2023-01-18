@@ -3,7 +3,7 @@ package components.head.parameters;
 
 /**
  * Valid model.
- */ 
+ */
 component ComposedTestComponent {
 
   component ComponentWithDefaultParameters("1st") first;

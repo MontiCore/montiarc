@@ -2,10 +2,10 @@
 package components.head.inheritance;
 
 /**
- * Valid model. 
+ * Valid model.
  */
 component ExtendsSuperComponent extends SuperComponent {
-  port 
+  port
     in Integer inputInteger;
 
   port out String outString;

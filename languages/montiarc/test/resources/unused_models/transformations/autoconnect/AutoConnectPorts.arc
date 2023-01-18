@@ -3,63 +3,63 @@ package components.body.autoconnect;
 
 import components.body.autoconnect.dummycomponents.*;
 
-/** 
+/**
  * Invalid model. Various missing autoconnect partners.
  *
  * @implements [Hab16] CV5: In decomposed components, all ports should be used in at least one connector. (p.71 Lst. 3.52)
  * @implements [Hab16] CV6: All ports of subcomponents should be used in at least one connector. (p.72 Lst. 3.53)
  */
 component AutoConnectPorts {
-	autoconnect port;
-	
-	port 
-		in String strIn, // connected
-		in Integer intIn, // connected
-		out String strOut, // connected
-		out String strOut2, // not connected
-		out Integer intOut; // connected
+  autoconnect port;
 
-	/*
-		 in: strIn (String)
-		 out: data (String)
+  port
+    in String strIn, // connected
+    in Integer intIn, // connected
+    out String strOut, // connected
+    out String strOut2, // not connected
+    out Integer intOut; // connected
 
-		 data unconnected
-	*/
-	component DummyComponent1 a;
+  /*
+     in: strIn (String)
+     out: data (String)
 
-	/*
-		 in: strIn (String), intIn (Integer)
-		 out: myInt (Integer)
+     data unconnected
+  */
+  component DummyComponent1 a;
 
-		 strIn unconnected
-	*/
-	component DummyComponent2 b;
+  /*
+     in: strIn (String), intIn (Integer)
+     out: myInt (Integer)
 
-	/*
-		in: intIn (Integer)
-		out: bb (bool)
-	*/
-	component DummyComponent3 c;
+     strIn unconnected
+  */
+  component DummyComponent2 b;
 
-	/*
-		in: dataSthElse (String), myInt, bool
-		out: strOut, sthElse (String), intOut
+  /*
+    in: intIn (Integer)
+    out: bb (bool)
+  */
+  component DummyComponent3 c;
 
-		dataSthElse unconnected
-		sthElse unconnected
-	*/
-	component DummyComponent4 d;
+  /*
+    in: dataSthElse (String), myInt, bool
+    out: strOut, sthElse (String), intOut
 
-	connect strIn -> a.strIn;
-	connect c.bb -> d.bool;
-	connect d.intOut -> intOut;
-	
-	/** expected additional connectors:
-	intIn -> c.intIn;
-	intIn -> b.intIn
-	
-	d.strOut -> strOut;
-	b.myInt -> d.myInt;
-    	
-	*/
+    dataSthElse unconnected
+    sthElse unconnected
+  */
+  component DummyComponent4 d;
+
+  connect strIn -> a.strIn;
+  connect c.bb -> d.bool;
+  connect d.intOut -> intOut;
+
+  /** expected additional connectors:
+  intIn -> c.intIn;
+  intIn -> b.intIn
+
+  d.strOut -> strOut;
+  b.myInt -> d.myInt;
+
+  */
 }

@@ -11,16 +11,16 @@ package components.body.connectors;
  */
 component WrongConnectors2 {
 
-  port 
+  port
     in String strIn,
     out String strOut;
-  
+
   component components.body.subcomponents._subcomponents
                   .HasGenericInputAndOutputPort<java.lang.String> p;
-  
+
   connect p.tOut -> strOut;
   connect strIn -> p.tIn;
-  
+
   connect strIn -> p.tIn.wrong;
     //ERROR: The target 'p.tIn.wrong' is invalid!
     //       Define connector targets as follows: (referenceName.)incomingPortName!

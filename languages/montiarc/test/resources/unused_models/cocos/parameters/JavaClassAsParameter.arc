@@ -5,6 +5,6 @@ package components.head.parameters;
  * Valid model.
  */
 component JavaClassAsParameter(types.CType param1) {
-    port 
+    port
         in String sIn;
 }

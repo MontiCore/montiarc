@@ -1,5 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-
 component MAStreamHelperTest {
     // Features
     feature a, b, c, d, e;

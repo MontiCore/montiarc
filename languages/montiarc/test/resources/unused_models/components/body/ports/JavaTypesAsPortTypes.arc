@@ -11,11 +11,11 @@ import types.GenericType;
  * Valid model.
  */
 component JavaTypesAsPortTypes {
-	port 
-		in InterfaceType,
-		in MyEnum,
-		in ImplementsInterfaceType,
-		in GenericInterface<int>,
-		in GenericType<String>,
-		out String;
+  port
+    in InterfaceType,
+    in MyEnum,
+    in ImplementsInterfaceType,
+    in GenericInterface<int>,
+    in GenericType<String>,
+    out String;
 }

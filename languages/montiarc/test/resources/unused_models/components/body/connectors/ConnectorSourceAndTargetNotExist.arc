@@ -21,15 +21,15 @@ component ConnectorSourceAndTargetNotExist {
         in String strIn,
         out String strOut1,
         out String strOut2;
-        
+
     component ValidComponentInPackage1 ccia [stringOutWrong -> strOut1];
       // ERROR: Port ccia.stringOutWrong does not exist
-    
+
     component ValidComponentInPackage2 ccib;
-    
+
     connect strIn -> ccib.stringInWrong, ccia.stringIn;
     // ERROR: Connector target does not exist
-    
+
     connect ccib.stringOutWrong -> strOut2;
     // ERROR: Connector source does not exist
 }

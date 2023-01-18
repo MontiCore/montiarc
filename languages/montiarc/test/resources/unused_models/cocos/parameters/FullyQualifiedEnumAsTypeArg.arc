@@ -3,8 +3,8 @@ package components.head.parameters;
 
 /**
 * Valid model.
-*/ 
+*/
 component FullyQualifiedEnumAsTypeArg(types.MyEnum varName) {
-    port 
+    port
         in String sIn;
 }

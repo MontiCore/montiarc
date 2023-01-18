@@ -8,6 +8,6 @@ import components.head.parameters.CompWithInterfaceParam;
  * Valid model.
  */
 component CompThatUsesCompWithInterfaceParam {
-    
+
     component CompWithInterfaceParam<String>(new ImplementsGenericInterface());
 }

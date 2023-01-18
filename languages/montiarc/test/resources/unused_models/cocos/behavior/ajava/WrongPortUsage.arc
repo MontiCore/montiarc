@@ -6,13 +6,13 @@ import java.util.Collections;
  * Invalid model.Reading from outgoing ports and assigning to incoming ports.
  */
 component WrongPortUsage(Integer x) {
-  
+
   port
     in String input,
     in Integer i,
     out String output,
     out Integer j;
-  
+
   compute PrintInput {
     String buffer = output;   // Cannot read from outgoing ports
     Collections.emptyList();
@@ -26,6 +26,6 @@ component WrongPortUsage(Integer x) {
     x++;//error not allowed
     j++;//error not allowed
     --j;//error not allowed
-    
+
   }
 }

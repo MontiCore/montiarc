@@ -5,7 +5,7 @@ package uniqueIdentifierNames;
  * Invalid model because of redundant names.
  */
 component DuplicatedPortNames<VsTypeParam>(int VsConfigParam) {
-  
+
   port in int VsPort;
   port in int VsPort;
   port in int VsTypeParam;

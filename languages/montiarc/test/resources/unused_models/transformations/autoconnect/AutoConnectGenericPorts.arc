@@ -13,22 +13,22 @@ import types.GenericType;
  * as target of a connector. (p.63, lst. 3.37)
  */
 component AutoConnectGenericPorts {
-    
+
     autoconnect type;
-    
-    port 
+
+    port
         in GenericType<String> strIn,
         out GenericType<String> strOut;
-    
+
     component AutoConnectGeneric<GenericType<Integer>> myGenericInt;
     component AutoConnectGeneric<GenericType<String>> myGenericStr;
 
-    
+
     /* expected additional connectors
     strIn -> myGenericStr.inT;
     myGenericStr.outT -> strOut;
     */
-    
+
     /* forbidden additional connectors
     strIn -> myGenericInt.inT;
     myGenericInt.outT -> strOut;

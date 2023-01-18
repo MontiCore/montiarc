@@ -11,22 +11,22 @@ component ComplexComponent {
         in String input,
         out String output1,
         out String output2;
-        
-	component SimpleReferencedComponent src;
-	
-	component Sub1 b2;
-	
-	component Sub2<String> myC;
-	
-	component Sub3 c2;
-	
-	component components.body.subcomponents._subcomponents.Sub4 qFComponent1;
-	
-	component components.body.subcomponents._subcomponents.Sub5 qfc2;
 
-	component types.SuperComp(1, "test", 2.0);
+  component SimpleReferencedComponent src;
 
-	connect input -> src.input, myC.input;
-	connect myC.output -> output1;
-	connect src.output -> output2;
+  component Sub1 b2;
+
+  component Sub2<String> myC;
+
+  component Sub3 c2;
+
+  component components.body.subcomponents._subcomponents.Sub4 qFComponent1;
+
+  component components.body.subcomponents._subcomponents.Sub5 qfc2;
+
+  component types.SuperComp(1, "test", 2.0);
+
+  connect input -> src.input, myC.input;
+  connect myC.output -> output1;
+  connect src.output -> output2;
 }

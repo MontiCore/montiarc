@@ -1,5 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-
 component MultipleRoots {
 
   feature a;

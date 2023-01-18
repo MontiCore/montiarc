@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Valid model.
  */
 component SameComponentNameInDifferentPackage {
-  port 
+  port
     in String,
     in Serializable;
 }

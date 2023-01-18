@@ -33,7 +33,7 @@ spotless {
   }
   format("montiArc") {
     target("**/*.arc")
-    licenseHeader("/* (c) https://github.com/MontiCore/monticore */", "package ")
+    licenseHeader("/* (c) https://github.com/MontiCore/monticore */", "(package|import|component)")
     trimTrailingWhitespace()
     indentWithSpaces(2)
     endWithNewline()

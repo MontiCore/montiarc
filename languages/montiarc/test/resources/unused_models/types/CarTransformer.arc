@@ -4,7 +4,7 @@ package types;
 import types.Types.Car;
 
 /**
- * Valid model. 
+ * Valid model.
  */
 component CarTransformer {
   port in  Car tIn,

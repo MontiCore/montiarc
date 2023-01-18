@@ -8,7 +8,7 @@ import types.CType;
 * Valid model.
 */
 component ComponentWithArrayAsPortTypeParameter {
-    
+
     port
         in GenericType<byte[]> genIn,
         in GenericType<CType[]> getCTypeIn,

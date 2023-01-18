@@ -11,10 +11,10 @@ import components.body.subcomponents._subcomponents.HasGenericInput;
  * supertype of the source port type. (p. 66, lst. 3.43)
  */
 component GenericSourceTypeNotSubtypeOfTargetType<T> {
-	port in T inT;
+  port in T inT;
 
-	component HasGenericInput<String> sub;
+  component HasGenericInput<String> sub;
 
-	connect inT -> sub.inT;
-	  // ERROR: Source Type 'T' is not a subtype of target type 'String'
+  connect inT -> sub.inT;
+    // ERROR: Source Type 'T' is not a subtype of target type 'String'
 }

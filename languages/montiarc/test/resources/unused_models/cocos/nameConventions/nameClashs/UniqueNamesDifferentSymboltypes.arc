@@ -14,17 +14,17 @@ import components.body.subcomponents._subcomponents.package1.ValidComponentInPac
  */
 component UniqueNamesDifferentSymboltypes<myName>(int myName) {
   // Error: Ambiguous name
-    
+
     port
         in String myName, // Error: Ambiguous name
         out String sOut;
-    
+
     component ValidComponentInPackage1 myName; // Error: Ambiguous name
-    
+
     connect myName -> myName.stringIn;
       // Autocompleting is not possible due to the ambiguous names
     connect myName.stringOut -> sOut;
-    
+
     java inv myName: { // Error: Ambiguous name
         assert x==1;
     };

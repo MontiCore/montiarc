@@ -12,12 +12,12 @@ package components.body.ports;
  */
 component PortNameAmbiguous(int foo) {
     // Parameter name is not unique
-    
+
     port
       in String foo; // Port name is not unique
-    
+
     component Inner foo {
-    
+
     }
-    
+
 }
