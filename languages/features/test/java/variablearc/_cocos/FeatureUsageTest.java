@@ -1,7 +1,4 @@
-/*
- *  (c) https://github.com/MontiCore/monticore
- */
-
+/* (c) https://github.com/MontiCore/monticore */
 package variablearc._cocos;
 
 import arcbasis.ArcBasisMill;

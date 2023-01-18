@@ -1,7 +1,4 @@
-/*
- * (c) https://github.com/MontiCore/monticore
- */
-
+/* (c) https://github.com/MontiCore/monticore */
 package genericarc;
 
 public class AbstractTest extends arcbasis.AbstractTest {

@@ -1,6 +1,4 @@
-/*
- *  (c) https://github.com/MontiCore/monticore
- */
+/* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
 import arcbasis.AbstractTest;

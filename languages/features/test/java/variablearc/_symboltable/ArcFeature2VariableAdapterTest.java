@@ -1,7 +1,4 @@
-/*
-  (c) https://github.com/MontiCore/monticore
- */
-
+/* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
 import arcbasis._symboltable.SymbolService;

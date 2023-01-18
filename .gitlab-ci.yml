@@ -27,6 +27,16 @@ Build jdk17:
   script:
     - gradle clean assemble
 
+Verify Formatting jdk17:
+  stage: test
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.5.0-jdk17
+  dependencies:
+    - Build jdk17
+  needs: ["Build jdk17"]
+  allow_failure: false
+  script:
+    - gradle spotlessCheck
+
 Package Uber jdk17:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.5.0-jdk17
   stage: post-build

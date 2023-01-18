@@ -1,7 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-/*
- * 31.07.2009
- */
 package sim.error;
 
 import java.util.LinkedList;

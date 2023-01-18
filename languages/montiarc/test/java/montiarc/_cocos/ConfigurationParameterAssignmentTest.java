@@ -1,5 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-
 package montiarc._cocos;
 
 import arcbasis._cocos.ConfigurationParameterAssignment;

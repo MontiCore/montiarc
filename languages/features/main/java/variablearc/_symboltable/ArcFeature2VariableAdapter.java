@@ -1,5 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-
 package variablearc._symboltable;
 
 import com.google.common.base.Preconditions;
