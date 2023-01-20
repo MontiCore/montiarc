@@ -17,7 +17,7 @@ dependencies {
   }
 
   api(project(":languages:basis"))
-  api(libs.monticoreStatecharts) {
+  api("${libs.monticoreStatecharts}:${libs.monticoreVersion}") {
     exclude("org.apache.groovy", "groovy")
   }
 

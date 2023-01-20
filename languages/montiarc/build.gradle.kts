@@ -22,7 +22,7 @@ dependencies {
   api(project(":languages:generics"))
   api(project(":languages:modes"))
 
-  implementation(libs.monticoreClass2MC)
+  implementation("${libs.monticoreClass2MC}:${libs.monticoreVersion}")
   implementation("${libs.guava}:${libs.guavaVersion}")
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")
   implementation("${libs.z3Turnkey}:${libs.z3TurnkeyVersion}")

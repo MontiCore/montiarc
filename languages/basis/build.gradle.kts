@@ -20,9 +20,9 @@ dependencies {
     capabilities { requireCapability(libs.mcGrammarsCapability) }
   }
 
-  api(platform(project(":base-platform")))
-  api(libs.monticoreGrammar)
-  api(libs.seCommonsLogging)
+  // api(platform(project(":base-platform")))
+  api("${libs.monticoreGrammar}:${libs.monticoreVersion}")
+  api("${libs.seCommonsLogging}:${libs.monticoreVersion}")
 
   implementation("${libs.apache}:${libs.apacheCommonsVersion}")
   implementation("${libs.guava}:${libs.guavaVersion}")
