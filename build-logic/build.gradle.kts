@@ -13,7 +13,7 @@ dependencies {
   implementation("gradle.plugin.com.github.johnrengelman:shadow:7.1.2")
   implementation("com.diffplug.spotless:spotless-plugin-gradle:6.13.0")
   implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
-  implementation("monticore:monticore.gradle.plugin:7.5.0-SNAPSHOT")
+  implementation("monticore:monticore.gradle.plugin:7.4.1")
 }
 
 publishing {

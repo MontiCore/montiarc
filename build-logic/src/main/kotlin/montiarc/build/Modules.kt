@@ -12,7 +12,7 @@ abstract class Modules {
   val javaSmtVersion = "3.12.0"
   val lejosVersion = "0.9.1-beta"
   val mockitoVersion = "4.9.0"
-  val monticoreVersion = "7.5.0-SNAPSHOT"
+  val monticoreVersion = "7.4.1"
   val monticoreLSPVersion = "7.5.0-SNAPSHOT"
   val z3TurnkeyVersion = "4.11.2"
 
