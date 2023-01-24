@@ -1,17 +1,19 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.timing.Timing;
+import montiarc.Timing;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.util.Optional;
 
 public class PortSymbolBuilder extends PortSymbolBuilderTOP {
 
   protected Timing timing;
+  protected Boolean delayed;
 
   public PortSymbolBuilder() {
     super();
@@ -35,15 +37,13 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
     return this.realBuilder;
   }
 
-  public Timing getTiming() {
-    Preconditions.checkState(this.timing != null, "Type of Port '%s' has not been set. Did you " +
-        "forget to run the symbol table completer?", this.getName());
-    return this.timing;
+  public PortSymbolBuilder setTiming(@Nullable Timing timing) {
+    this.timing = timing;
+    return this.realBuilder;
   }
 
-  public PortSymbolBuilder setTiming(@NotNull Timing timing) {
-    Preconditions.checkNotNull(timing);
-    this.timing = timing;
+  public PortSymbolBuilder setDelayed(@Nullable Boolean delayed) {
+    this.delayed = delayed;
     return this.realBuilder;
   }
 
@@ -51,7 +51,8 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
   public PortSymbol build() {
     Preconditions.checkState(this.isValid());
     PortSymbol symbol = super.build();
-    symbol.setTiming(Optional.ofNullable(this.timing).orElse(Timing.UNTIMED));
+    symbol.setTiming(this.timing);
+    symbol.setDelayed(this.delayed);
     return symbol;
   }
 

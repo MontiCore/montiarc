@@ -1,21 +1,26 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis._ast.*;
-import arcbasis.timing.Timing;
+import arcbasis._ast.ASTConnector;
+import arcbasis._ast.ASTConnectorTOP;
+import arcbasis._ast.ASTPortAccess;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
 import de.monticore.symboltable.IScopeSpanningSymbol;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.symbols.basicsymbols._symboltable.*;
-import de.se_rwth.commons.logging.Log;
+import montiarc.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.codehaus.commons.nullanalysis.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class PortSymbol extends PortSymbolTOP {
 
   protected Timing timing;
-  protected Boolean delayed = null;
+  protected Boolean delayed;
   protected Boolean stronglyCausal = null;
 
   /**
@@ -73,123 +78,106 @@ public class PortSymbol extends PortSymbolTOP {
   /**
    * @return the timing of this port.
    */
-  public Timing getTiming() {
-    Preconditions.checkState(this.timing != null, "Type of Port '%s' has not been set. Did you " +
-        "forget to run the symbol table completer?", this.getName());
+  public @NotNull Timing getTiming() {
+    if (this.timing == null) {
+      this.timing = this.getHereditaryTiming().orElse(Timing.DEFAULT);
+    }
     return this.timing;
   }
 
   /**
    * @param timing the timing of this port.
    */
-  public void setTiming(@NotNull Timing timing) {
-    Preconditions.checkNotNull(timing);
+  public void setTiming(@Nullable Timing timing) {
     this.timing = timing;
   }
 
-  /**
-   * If this port is delayed. This property is loaded lazily on demand.
-   * <br><br>
-   * An outgoing port is delayed iff:
-   * <ol>
-   *   <li>its timing is either {@link Timing#DELAYED} or {@link Timing#CAUSALSYNC}, or</li>
-   *   <li>if it is the target of a port forward, where the source is delayed</li>
-   * </ol>
-   * Incoming ports are never delayed.
-   *
-   * @return if this port is delayed
-   *
-   * @see #computeDelay()
-   */
   public boolean isDelayed() {
     if (this.delayed == null) {
-      computeDelay();
+     this.delayed = this.isHereditaryDelayed();
     }
     return this.delayed;
   }
 
-  /**
-   * Used in lazy-loading the delay.
-   * <br>
-   * If the owning component is atomic, checks the ports explicitly specified timing.
-   * Else, checks whether the port is the target of a port forward from a delayed port.
-   */
-  protected void computeDelay() {
-    if (this.getComponent().isEmpty()) { // ill-structured symbol table
-      this.delayed = false;
-    } else if (this.getComponent().get().isAtomic()) { // atomic component
-      this.delayed = this.getTiming().equals(Timing.DELAYED) || this.getTiming().equals(Timing.CAUSALSYNC);
-    } else { // decomposed component
-      if (this.isIncoming()) {
-        this.delayed = false;
-        return;
-      }
-      Optional<ASTPortAccess> portForwardSource = this.getComponent().get().getAstNode()
+  public void setDelayed(@Nullable Boolean delayed) {
+    this.delayed = delayed;
+  }
+
+  protected Optional<Timing> getHereditaryTiming() {
+    Optional<ComponentTypeSymbol> component = this.getComponent();
+    if (component.isEmpty()) {
+      return Optional.empty();
+    } else if (component.get().isAtomic()) {
+      return component.get().getTiming();
+    } else if (this.isOutgoing()) {
+      Optional<ASTPortAccess> source = component.get().getAstNode()
         .getConnectorsMatchingTarget(this.getName())
-        .stream().findFirst().map(ASTConnectorTOP::getSource);
-      this.delayed = portForwardSource.map(source -> {
-        if (!source.isPresentPortSymbol()) {
-          Log.trace("Tried to compute delay for port " + this.getFullName() +
-            ", but source port " + source.getQName() + " has no port symbol.", "MontiArc");
-          return false;
-        } else {
-          return source.getPortSymbol().isDelayed();
-        }
-      }).orElse(false);
+        .stream().findFirst().map(ASTConnector::getSource);
+      return source.filter(ASTPortAccess::isPresentPortSymbol).map(p -> p.getPortSymbol().getTiming());
+    } else if (this.isIncoming()) {
+      Optional<ASTPortAccess> source = component.get().getAstNode()
+        .getConnectorsMatchingSource(this.getName())
+        .stream().findFirst().map(c -> c.getTarget(0));
+      return source.filter(ASTPortAccess::isPresentPortSymbol).map(p -> p.getPortSymbol().getTiming());
+    } else {
+      return Optional.empty();
     }
   }
 
-  /**
-   * If this port is strongly causal. This property is loaded lazily on demand.
-   * <br><br>
-   * An outgoing port of a decomposed component is strongly causal iff:
-   * <ol>
-   *   <li>it is delayed (see {@link #isDelayed()}, or</li>
-   *   <li>all paths from an incoming port of its owning component to it contain at least one strongly causal port</li>
-   * </ol>
-   * Whether an outgoing port on an atomic component is strongly causal depends purely on it being delayed.
-   * <br>
-   * Incoming ports are never strongly causal.
-   *
-   * @return if this port is strongly causal with regard to any input port on its owning component
-   *
-   * @see #computeStronglyCausal()
-   */
+  protected boolean isHereditaryDelayed() {
+    if (this.getComponent().isEmpty()) {
+      // ill-structured symbol table
+      return false;
+    } else if (this.getComponent().get().isAtomic()) {
+      // ports in atomic components are delayed explicitly
+      return false;
+    } else if (this.isOutgoing() && this.getComponent().get().isDecomposed()) {
+      // outgoing ports in composed components are delayed if their source is delayed
+      Optional<ASTPortAccess> source = this.getComponent().get().getAstNode()
+        .getConnectorsMatchingTarget(this.getName())
+        .stream().findFirst().map(ASTConnectorTOP::getSource);
+      return source.filter(ASTPortAccess::isPresentPortSymbol)
+        .map(p -> p.getPortSymbol().isDelayed()).orElse(false);
+    }
+    return false;
+  }
+
   public boolean isStronglyCausal() {
     if(this.stronglyCausal == null) {
-      if(this.getComponent().isPresent()) {
-        computeStronglyCausal();
+      if (this.isOutgoing() && this.isDelayed()) {
+        this.stronglyCausal = true;
       } else {
-        this.simpleDetermineStronglyCausal();
-        if(this.stronglyCausal == null) {
-          this.stronglyCausal = false;
-        }
+        this.stronglyCausal = this.isHereditaryStronglyCausal();
       }
     }
 
     return this.stronglyCausal;
   }
 
-  /**
-   * Used in lazy-loading the strongly causal property.
-   * <br>
-   * First performs simple checks (see {@link #simpleDetermineStronglyCausal()}).
-   * <br>
-   * If this does not yield a result, tries to find a path from this port to an incoming port
-   * of its owning component that has no delayed (and thus no other strongly causal) ports on it.
-   */
-  protected void computeStronglyCausal() {
-    this.simpleDetermineStronglyCausal();
-    if(this.getComponent().isEmpty() || this.stronglyCausal != null) {
-      return;
+  protected boolean isHereditaryStronglyCausal() {
+    if (this.getComponent().isEmpty()) {
+      // ill-structured symbol table
+      return false;
+    } else if (this.isOutgoing() && this.getComponent().get().isAtomic()) {
+      // outgoing ports of atomic components are strongly causal if their behavior specification is strongly causal
+      return this.getComponent().get().isStronglyCausal();
+    } else if (this.isOutgoing() && this.getComponent().get().isDecomposed()) {
+      // outgoing ports of composed components are strongly causal if their composed behavior is strongly causal
+      return this.isComposedStronglyCausal();
+    }
+    return false;
+  }
+
+  protected boolean isComposedStronglyCausal() {
+    if (this.getComponent().isEmpty() || !this.getComponent().get().isDecomposed() || !this.isOutgoing()) {
+      return false;
     }
 
     ComponentTypeSymbol owner = this.getComponent().get();
 
     List<List<ASTConnector>> paths = new ArrayList<>();
-    paths.add(new ArrayList<>(owner.getAstNode().getConnectorsMatchingTarget(this.getName())));
+    paths.add(new ArrayList<>(this.getComponent().get().getAstNode().getConnectorsMatchingTarget(this.getName())));
 
-    buildPaths:
     while(!paths.isEmpty()) {
       List<List<ASTConnector>> newPaths = new ArrayList<>();
       for (List<ASTConnector> path: paths) {
@@ -199,7 +187,7 @@ public class PortSymbol extends PortSymbolTOP {
 
         if(lastSource.isPresentPortSymbol() && lastSource.getPortSymbol().isStronglyCausal()) {
           // If any part of the path is strongly causal, this path is strongly causal, not compromising the current port's strong causality.
-          // not entering this if-block also implies  the instance to which this port belongs has incoming ports: if there were none, the port would be strongly causal
+          // not entering this if-block also implies the instance to which this port belongs has incoming ports: if there were none, the port would be strongly causal
           continue;
         }
 
@@ -212,55 +200,25 @@ public class PortSymbol extends PortSymbolTOP {
           //  This would mean that we have a path which is not strongly causal
           //  (whenever we encountered a strongly causal port/component, we did not follow the path further. Thus, the current path cannot contain strongly causal ports/components).
           // Therefore, we can assume we can set stronglyCausal = false here
-          this.stronglyCausal = false;
-          break buildPaths;
+          return false;
         }
         ComponentInstanceSymbol instance = lastSource.getComponentSymbol();
         if(!instance.isPresentType()) continue; //Incomplete symboltable. See above.
-        instance.getType().getTypeInfo().getAllIncomingPorts().forEach(incomingPortOfSubcomponent -> {
-          owner.getAstNode().getConnectorsMatchingTarget(instance.getName() + "." + incomingPortOfSubcomponent.getName()).forEach(connector -> {
-            List<ASTConnector> newPath = new ArrayList<>(path);
-            newPath.add(connector);
-            newPaths.add(newPath);
-          });
-        });
+        instance.getType().getTypeInfo().getAllIncomingPorts()
+          .forEach(incomingPortOfSubcomponent -> owner.getAstNode()
+            .getConnectorsMatchingTarget(instance.getName() + "." + incomingPortOfSubcomponent.getName())
+            .forEach(connector -> {
+          List<ASTConnector> newPath = new ArrayList<>(path);
+          newPath.add(connector);
+          newPaths.add(newPath);
+        }));
       }
       paths = newPaths;
     }
-
-    if(this.stronglyCausal == null) {
-      // if we reach this point and have not set a value,
-      // we could not find any path contradicting strong causality
-      this.stronglyCausal = true;
-    }
+    // if we reach then we did not find any path contradicting strong causality
+    return true;
   }
 
-  /**
-   * Performs simple checks to determine whether this port is strongly causal.
-   * <ol>
-   *   <li>If this port is delayed, it's strongly causal</li>
-   *   <li>If this port is incoming, it's not strongly causal</li>
-   *   <li>If this port has no owning component, it's not strongly causal (malformed symboltable)</li>
-   *   <li>If this ports owning component has no incoming ports, it's strongly causal</li>
-   *   <li>If this ports owning component is atomic, this port is strongly causal iff it is delayed</li>
-   * </ol>
-   */
-  protected void simpleDetermineStronglyCausal() {
-    if (this.isDelayed()) { // Delayed implies strongly causal
-      this.stronglyCausal = true;
-    } else if (this.isIncoming()) { // incoming ports are never strongly causal
-      this.stronglyCausal = false;
-    } else if (this.getComponent().isEmpty()) { // ill-structured symbol table
-      this.stronglyCausal = false;
-    } else {
-      ComponentTypeSymbol owner = this.getComponent().get();
-      if(owner.getAllIncomingPorts().isEmpty()) {
-        this.stronglyCausal = true;
-      } else if(owner.isAtomic()) {
-        this.stronglyCausal = this.isDelayed();
-      }
-    }
-  }
 
   /**
    * @return an {@code Optional} of the component type this port belongs to. The {@code Optional} is empty if the port

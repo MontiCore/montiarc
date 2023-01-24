@@ -9,7 +9,7 @@ component Door {
   port <<sync>> in boolean isObstacle;
   port <<sync>> out boolean open;
   port <<sync>> out boolean close;
-  port <<causalsync>> out boolean closed;
+  port <<sync, delayed>> out boolean closed;
 
   int timer = 5;
 

@@ -4,7 +4,7 @@ package montiarc.lang.logic;
 component Delay {
 
   port <<sync>> in boolean i;
-  port <<causalsync>> out boolean o;
+  port <<sync, delayed>> out boolean o;
 
   init {
     o = false;

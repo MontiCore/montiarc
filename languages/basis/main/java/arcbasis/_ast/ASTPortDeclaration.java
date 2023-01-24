@@ -1,17 +1,18 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
-import arcbasis.timing.Timing;
-import arcbasis.timing.TimingCollector;
+import de.monticore.umlstereotype._ast.ASTStereoValue;
+import montiarc.Timing;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents a port declaration. Extends {@link ASTPortDeclarationTOP} with utility functionality
  * for easy access.
  */
 public class ASTPortDeclaration extends ASTPortDeclarationTOP {
+
+  public static final String DELAY = "delayed";
 
   protected ASTPortDeclaration() {
     super();
@@ -25,14 +26,17 @@ public class ASTPortDeclaration extends ASTPortDeclarationTOP {
     return this.getPortDirection().isOut();
   }
 
-  /**
-   * @return the specified Timings of the port
-   */
-  public List<Timing> getTimings() {
+  public Optional<Timing> getTiming() {
     if (this.isPresentStereotype()) {
-      return TimingCollector.getTimings(this.getStereotype());
-    } else {
-      return Collections.emptyList();
+      for (ASTStereoValue v : this.getStereotype().getValuesList()) {
+        if (Timing.contains(v.getName())) return Timing.of(v.getName());
+      }
     }
+    return Optional.empty();
+  }
+
+  public boolean hasDelay() {
+    return this.isPresentStereotype() && this.getStereotype().streamValues()
+      .anyMatch(v -> v.getName().equals(ASTPortDeclaration.DELAY));
   }
 }

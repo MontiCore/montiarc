@@ -101,10 +101,9 @@ public enum ArcError implements Error {
   GENERIC_COMPONENT_TYPE_INSTANTIATION("0xC1157", "ArcBasis does not support generic components when " +
           "instantiating component types within their type declaration. But component type '%s' has type parameters %s."),
   MISSING_ASSIGNMENT_OF_ARC_FIELD("0xC1158", "Missing initial assignment for field '%s' of type '%s'."),
-  TIMING_MULTIPLE("0xC1159", "%d timings were selected, but only one is supported."),
-  TIMING_DELAYED_WITH_INCOMING_PORT("0xC1160", "Delayed timing was selected, but the port %s is not outgoing."),
-  SOURCE_AND_TARGET_TIMING_MISMATCH("0xC1161", "Timing '%s' of source port and timing '%s' of target "
-      + "port of connector '%s' of component '%s' are incompatible."),
+  TIMING_MULTIPLE("0xC1159", "Duplicate timing annotation."),
+  DELAY_OUT_PORT_ONLY("0xC1160", "No ."),
+  SOURCE_AND_TARGET_TIMING_MISMATCH("0xC1161", "Timing mismatch. Expected %s but provided %s."),
   FEEDBACK_LOOP_TIMING_NOT_DELAYED("0xC1162", "There is a feedback loop inside of component %s that is not delayed."),
   TOO_FEW_PARENT_INSTANTIATION_ARGUMENTS("0xC1163", "There are '%d' instantiation arguments for component '%s', " +
       "but component type '%s' has '%d' mandatory configuration parameters that all must be bound."),

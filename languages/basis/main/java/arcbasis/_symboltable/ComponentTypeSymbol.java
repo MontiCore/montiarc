@@ -7,6 +7,7 @@ import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
+import montiarc.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -23,6 +24,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   protected CompTypeExpression parent;
   protected List<VariableSymbol> parameters;
   protected List<ASTExpression> parentConfiguration;
+  protected Timing timing;
 
   /**
    * @param name the name of this component type.
@@ -491,5 +493,17 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
 
   public boolean isAtomic() {
     return this.getSubComponents().isEmpty();
+  }
+
+  public Optional<Timing> getTiming() {
+    return Optional.ofNullable(this.timing);
+  }
+
+  public void setTiming(@Nullable Timing timing) {
+    this.timing = timing;
+  }
+
+  public boolean isStronglyCausal() {
+    return false;
   }
 }

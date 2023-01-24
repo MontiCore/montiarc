@@ -9,7 +9,7 @@ import types.OnOff;
 component Delay {
 
   port <<sync>> in OnOff i;
-  port <<causalsync>> out OnOff o;
+  port <<sync, delayed>> out OnOff o;
 
   automaton {
     initial state S;

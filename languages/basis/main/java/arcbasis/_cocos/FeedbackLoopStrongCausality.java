@@ -14,17 +14,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Check whether feedback loops exists and are not delayed.
+ * Checks that for every cycle there is at least one component that is strongly causal modulo a port on this cycle.
  */
-public class FeedbackLoopTiming implements ArcBasisASTComponentTypeCoCo {
+public class FeedbackLoopStrongCausality implements ArcBasisASTComponentTypeCoCo {
 
   @Override
-  public void check(ASTComponentType node) {
+  public void check(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol(), "ASTComponent node '%s' at '%s' has no symbol. Thus can not " +
-            "check CoCo '%s'. Did you forget to run the scopes genitor and symbol table completer before checking the " +
-            "coco?",
-        node.getName(), node.get_SourcePositionStart(), this.getClass().getSimpleName());
+    Preconditions.checkArgument(node.isPresentSymbol());
 
     List<ASTConnector> connectors = node.getConnectors();
     List<ASTPortAccess> sources = connectors.stream().map(ASTConnector::getSource).collect(Collectors.toUnmodifiableList());
@@ -69,7 +66,7 @@ public class FeedbackLoopTiming implements ArcBasisASTComponentTypeCoCo {
         .filter(c -> getComponentNullSafe(c.getSource()).equals(component))
         .flatMap(c -> c.getTargetList().stream()
             .filter(t -> isPortNotStronglyCausal(getPortIfPresent(t, componentType.getSymbol())))
-            .map(FeedbackLoopTiming::getComponentNullSafe))
+            .map(FeedbackLoopStrongCausality::getComponentNullSafe))
         .collect(Collectors.toSet());
   }
 

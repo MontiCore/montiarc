@@ -17,11 +17,14 @@ import org.codehaus.commons.nullanalysis.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
 import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Holds the tests for {@link ASTPortAccess}.
@@ -196,5 +199,92 @@ public class ASTPortAccessTest extends AbstractTest {
     scope1.add(sub2);
     sub2.setEnclosingScope(scope1);
     return scope1;
+  }
+
+  @ParameterizedTest
+  @CsvSource(value = {
+    "c, p, c, p",
+    "c, p1, c, p2",
+    "null, p, null, p",
+    "null, p1, null, p2"
+  }, nullValues = {"null"})
+  public void shouldMatchComponent(@Nullable String c1, @NotNull String p1,
+                                   @Nullable String c2, @NotNull String p2) {
+    Preconditions.checkNotNull(p1);
+    Preconditions.checkNotNull(p2);
+
+    // Given
+    ASTPortAccess ref1 = ArcBasisMill.portAccessBuilder()
+      .setComponent(c1).setPort(p1).build();
+    ASTPortAccess ref2 = ArcBasisMill.portAccessBuilder()
+      .setComponent(c2).setPort(p2).build();
+
+    // When && Then
+    assertThat(ref1.matchesComponent(ref2)).isTrue();
+  }
+
+  @ParameterizedTest
+  @CsvSource(value = {
+    "c1, p, c2, p",
+    "null, p, c, p",
+    "c, p, null, p"
+  }, nullValues = {"null"})
+  public void shouldNotMatchComponent(@Nullable String c1, @NotNull String p1,
+                                      @Nullable String c2, @NotNull String p2) {
+    Preconditions.checkNotNull(p1);
+    Preconditions.checkNotNull(p2);
+
+    // Given
+    ASTPortAccess ref1 = ArcBasisMill.portAccessBuilder()
+      .setComponent(c1).setPort(p1).build();
+    ASTPortAccess ref2 = ArcBasisMill.portAccessBuilder()
+      .setComponent(c2).setPort(p2).build();
+
+    // When && Then
+    assertThat(ref1.matchesComponent(ref2)).isFalse();
+  }
+
+  @ParameterizedTest
+  @CsvSource(value = {
+    "c, p, c, p",
+    "null, p, null, p",
+  }, nullValues = {"null"})
+  public void shouldMatch(@Nullable String c1, @NotNull String p1,
+                          @Nullable String c2, @NotNull String p2) {
+    Preconditions.checkNotNull(p1);
+    Preconditions.checkNotNull(p2);
+
+    // Given
+    ASTPortAccess ref1 = ArcBasisMill.portAccessBuilder()
+      .setComponent(c1).setPort(p1).build();
+    ASTPortAccess ref2 = ArcBasisMill.portAccessBuilder()
+      .setComponent(c2).setPort(p2).build();
+
+    // When && Then
+    assertThat(ref1.matches(ref2)).isTrue();
+  }
+
+
+  @ParameterizedTest
+  @CsvSource(value = {
+    "c, p1, c, p2",
+    "c1, p, c2, p",
+    "c1, p1, c2, p2",
+    "null, p, c, p",
+    "c, p, null, p"
+  }, nullValues = {"null"})
+  public void shouldNotMatch(@Nullable String c1, @NotNull String p1,
+                             @Nullable String c2, @NotNull String p2) {
+    Preconditions.checkNotNull(p1);
+    Preconditions.checkNotNull(p2);
+
+    // Given
+    ASTPortAccess ref1 = ArcBasisMill.portAccessBuilder()
+      .setComponent(c1).setPort(p1).build();
+    ASTPortAccess ref2 = ArcBasisMill.portAccessBuilder()
+      .setComponent(c2).setPort(p2).build();
+
+    // When && Then
+    assertThat(ref1.matches(ref2)).isFalse();
   }
 }

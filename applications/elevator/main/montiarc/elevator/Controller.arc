@@ -8,7 +8,7 @@ component Controller {
        <<sync>> in boolean isClosed,
        <<sync>> out DoorCMD door,
        <<sync>> out LiftCMD lift,
-       <<causalsync>> out int clear;
+       <<sync, delayed>> out int clear;
 
   Direction direction = Direction.NA;
   int current = 0;

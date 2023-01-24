@@ -16,7 +16,7 @@ import arcbasis._cocos.ConnectorSourceAndTargetExist;
 import arcbasis._cocos.ConnectorSourceAndTargetTimingsFit;
 import arcbasis._cocos.ConnectorSourceAndTargetTypesFit;
 import arcbasis._cocos.InheritedPortsTypeCorrect;
-import arcbasis._cocos.FeedbackLoopTiming;
+import arcbasis._cocos.FeedbackLoopStrongCausality;
 import arcbasis._cocos.FieldInitExpressionTypesCorrect;
 import arcbasis._cocos.FieldInitExpressionsOmitPortReferences;
 import arcbasis._cocos.FieldNameCapitalization;
@@ -34,7 +34,7 @@ import arcbasis._cocos.ParameterDefaultValuesOmitPortReferences;
 import arcbasis._cocos.ParameterNameCapitalization;
 import arcbasis._cocos.ParameterTypeExists;
 import arcbasis._cocos.PortNameCapitalisation;
-import arcbasis._cocos.PortTimingFits;
+import arcbasis._cocos.DelayOutPortOnly;
 import arcbasis._cocos.PortTypeExists;
 import arcbasis._cocos.PortUniqueSender;
 import arcbasis._cocos.PortsConnected;
@@ -108,9 +108,9 @@ public class MontiArcCoCos {
 
     // Timing CoCos
     checker.addCoCo(new ConnectorSourceAndTargetTimingsFit());
-    checker.addCoCo(new FeedbackLoopTiming());
+    checker.addCoCo(new FeedbackLoopStrongCausality());
     checker.addCoCo(new OnlyOneTiming());
-    checker.addCoCo(new PortTimingFits());
+    checker.addCoCo(new DelayOutPortOnly());
 
     // GenericArc CoCos
     checker.addCoCo(new GenericTypeParameterNameCapitalization());

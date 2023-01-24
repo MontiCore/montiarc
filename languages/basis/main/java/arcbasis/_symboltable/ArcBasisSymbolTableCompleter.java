@@ -2,13 +2,26 @@
 package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.*;
+import arcbasis._ast.ASTArcField;
+import arcbasis._ast.ASTArcFieldDeclaration;
+import arcbasis._ast.ASTArcParameter;
+import arcbasis._ast.ASTComponentHead;
+import arcbasis._ast.ASTComponentInstance;
+import arcbasis._ast.ASTComponentInstantiation;
+import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTPort;
+import arcbasis._ast.ASTPortAccess;
+import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis._visitor.ArcBasisVisitor2;
 import arcbasis._visitor.IFullPrettyPrinter;
-import arcbasis.check.*;
-import arcbasis.timing.Timing;
+import arcbasis.check.ArcBasisSynthesizeComponent;
+import arcbasis.check.ArcBasisTypeCalculator;
+import arcbasis.check.CompTypeExpression;
+import arcbasis.check.IArcTypeCalculator;
+import arcbasis.check.ISynthesizeComponent;
+import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
@@ -16,6 +29,7 @@ import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.se_rwth.commons.logging.Log;
+import montiarc.Timing;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -31,7 +45,6 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   protected IArcTypeCalculator typeCalculator;
   protected ISynthesizeComponent componentSynthesizer;
   protected ASTMCType currentPortType;
-  protected List<Timing> currentPortTimings;
   protected ASTMCType currentFieldType;
 
   public ArcBasisSymbolTableCompleter() {
@@ -97,14 +110,6 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
 
   protected void setCurrentPortType(@Nullable ASTMCType currentPortType) {
     this.currentPortType = currentPortType;
-  }
-
-  protected Optional<List<Timing>> getCurrentPortTimings() {
-    return Optional.ofNullable(this.currentPortTimings);
-  }
-
-  protected void setCurrentPortTimings(@Nullable List<Timing> currentPortTimings) {
-    this.currentPortTimings = currentPortTimings;
   }
 
   protected Optional<ASTMCType> getCurrentFieldType() {
@@ -255,7 +260,37 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getMCType());
     this.setCurrentPortType(node.getMCType());
-    this.setCurrentPortTimings(node.getTimings());
+    List<ASTPort> ports = node.getPortList();
+    node.getTiming().ifPresent(t -> this.setTiming(ports, t));
+    if (node.hasDelay()) this.setHasDelay(ports);
+  }
+
+  protected void setTiming(@NotNull List<ASTPort> ports, @NotNull Timing timing) {
+    Preconditions.checkNotNull(ports);
+    Preconditions.checkNotNull(timing);
+    for (ASTPort port : ports) {
+      this.setTiming(port, timing);
+    }
+  }
+
+  protected void setTiming(@NotNull ASTPort port, @NotNull Timing timing) {
+    Preconditions.checkNotNull(port);
+    Preconditions.checkNotNull(timing);
+    Preconditions.checkArgument(port.isPresentSymbol());
+    port.getSymbol().setTiming(timing);
+  }
+
+  protected void setHasDelay(@NotNull List<ASTPort> ports) {
+    Preconditions.checkNotNull(ports);
+    for (ASTPort port : ports) {
+      this.setHasDelay(port);
+    }
+  }
+
+  protected void setHasDelay(@NotNull ASTPort port) {
+    Preconditions.checkNotNull(port);
+    Preconditions.checkArgument(port.isPresentSymbol());
+    port.getSymbol().setDelayed(true);
   }
 
   @Override
@@ -264,16 +299,13 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkState(this.getCurrentPortType().isPresent());
     Preconditions.checkState(this.getCurrentPortType().get().equals(node.getMCType()));
     this.setCurrentPortType(null);
-    this.setCurrentPortTimings(null);
   }
 
   @Override
   public void visit(@NotNull ASTPort port) {
     Preconditions.checkNotNull(port);
     Preconditions.checkState(this.getCurrentPortType().isPresent());
-    Preconditions.checkState(port.isPresentSymbol(),
-        "Missing symbol for port '%s' at %s. Did you forget to run the " + "scopes genitor prior to the completer?", port.getName(),
-        port.get_SourcePositionStart());
+    Preconditions.checkState(port.isPresentSymbol());
 
     try {
       TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(this.getCurrentPortType().get());
@@ -287,8 +319,6 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
       }
       Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(name), this.getCurrentPortType().get().get_SourcePositionStart());
     }
-    Timing timing = this.getCurrentPortTimings().flatMap(o -> o.stream().findFirst()).orElse(Timing.UNTIMED);
-    port.getSymbol().setTiming(timing);
   }
 
   @Override

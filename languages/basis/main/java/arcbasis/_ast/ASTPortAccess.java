@@ -48,4 +48,17 @@ public class ASTPortAccess extends ASTPortAccessTOP {
   public boolean isPresentPortSymbol() {
     return portSymbol != null;
   }
+
+  public boolean matches(@NotNull ASTPortAccess portRef) {
+    Preconditions.checkNotNull(portRef);
+    if (!this.matchesComponent(portRef)) return false;
+    else return this.getPort().equals(portRef.getPort());
+  }
+
+  public boolean matchesComponent(@NotNull ASTPortAccess portRef) {
+    Preconditions.checkNotNull(portRef);
+    return (!this.isPresentComponent() && !portRef.isPresentComponent())
+      || (this.isPresentComponent() && portRef.isPresentComponent()
+      && this.getComponent().equals(portRef.getComponent()));
+  }
 }
