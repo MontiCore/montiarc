@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis._ast.ASTArcBehaviorElement;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -24,7 +25,6 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   protected CompTypeExpression parent;
   protected List<VariableSymbol> parameters;
   protected List<ASTExpression> parentConfiguration;
-  protected Timing timing;
 
   /**
    * @param name the name of this component type.
@@ -495,15 +495,30 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
     return this.getSubComponents().isEmpty();
   }
 
-  public Optional<Timing> getTiming() {
-    return Optional.ofNullable(this.timing);
-  }
+  protected Timing timing;
 
-  public void setTiming(@Nullable Timing timing) {
-    this.timing = timing;
+  public Optional<Timing> getTiming() {
+    if (this.timing != null) {
+      return Optional.of(this.timing);
+    } else if (this.isAtomic() && this.getBehavior().isPresent()) {
+      this.timing = this.getBehavior().get().getTiming();
+      return Optional.of(this.timing);
+    } else {
+      return Optional.empty();
+    }
   }
 
   public boolean isStronglyCausal() {
     return false;
+  }
+
+  protected Optional<ASTArcBehaviorElement> getBehavior() {
+    if (this.isPresentAstNode()) {
+      return this.getAstNode().getBody().streamArcElements()
+        .filter(e -> e instanceof ASTArcBehaviorElement)
+        .map(c -> (ASTArcBehaviorElement) c).findFirst();
+    } else {
+      return Optional.empty();
+    }
   }
 }

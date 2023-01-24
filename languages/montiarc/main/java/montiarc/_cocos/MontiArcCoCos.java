@@ -163,8 +163,6 @@ public class MontiArcCoCos {
 
     // Block unsupported model elements
     checker.addCoCo(new UnsupportedAutomatonElements.FinalStates());
-    checker.addCoCo(new UnsupportedAutomatonElements.AutomatonStereotypes());
-
     return checker;
   }
 }

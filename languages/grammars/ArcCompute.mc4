@@ -11,6 +11,6 @@ component grammar ArcCompute extends ArcBasis,
   /**
    * ASTArcCompute holds a compute behavior block statement.
    */
-  ArcCompute implements ArcBehaviorElement = key("compute") MCBlockStatement;
+  ArcCompute implements ArcBehaviorElement = Stereotype? key("compute") MCBlockStatement;
 
 }

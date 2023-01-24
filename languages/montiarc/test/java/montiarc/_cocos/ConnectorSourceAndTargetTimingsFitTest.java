@@ -8,14 +8,11 @@ import montiarc.AbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
-import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,29 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * {@link ConnectorSourceAndTargetTimingsFit} is the class and context-condition under test.
  */
 public class ConnectorSourceAndTargetTimingsFitTest extends AbstractTest {
-
-  /**
-   * This method that facilitates stating arguments for parameterized tests. By using an elliptical parameter this
-   * method removes the need to explicitly create arrays.
-   *
-   * @param model  model to test
-   * @param errors all expected errors
-   */
-  protected static Arguments arg(@NotNull String model, @NotNull Error... errors) {
-    Preconditions.checkNotNull(model);
-    Preconditions.checkNotNull(errors);
-    return Arguments.of(model, errors);
-  }
-
-  protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
-    return Stream.of(
-        arg("SourceAndTargetTimingsFit.arc"),
-        arg("SourceAndTargetTimingsMismatch.arc",
-            ArcError.SOURCE_AND_TARGET_TIMING_MISMATCH, ArcError.SOURCE_AND_TARGET_TIMING_MISMATCH,
-            ArcError.SOURCE_AND_TARGET_TIMING_MISMATCH, ArcError.SOURCE_AND_TARGET_TIMING_MISMATCH
-        )
-    );
-  }
 
   @ParameterizedTest
   @ValueSource(strings = {
@@ -198,6 +172,58 @@ public class ConnectorSourceAndTargetTimingsFitTest extends AbstractTest {
       + "Sink sink;"
       + "source.o -> sink.i1;"
       + "source.o -> sink.i2;"
+      +"}",
+    // mismatched timing for a hidden connector (untimed -> sync)
+    // the automaton defines the timing for the incoming port
+    "component c17 {"
+      + "component Source {"
+      + "port <<untimed>> out int o;"
+      + "}"
+      + "component Sink {"
+      + "port in int i;"
+      + "<<sync>> automaton { }"
+      + "}"
+      + "Source source;"
+      + "Sink sink;"
+      + "source.o -> sink.i;"
+      +"}",
+    // mismatched timing for a hidden connector (sync -> untimed)
+    // the automaton defines the timing for the outgoing port
+    "component c18 {"
+      + "component Source {"
+      + "port <<sync>> out int o;"
+      + "}"
+      + "component Sink {"
+      + "port in int i;"
+      + "<<untimed>> automaton { }"
+      + "}"
+      + "Source source;"
+      + "Sink sink;"
+      + "source.o -> sink.i;"
+      +"}",
+    // mismatched timing for an input port forward (untimed -> sync)
+    // automaton override for incoming port
+    "component c19 {"
+      + "port <<untimed>> in int i;"
+      + "component Inner {"
+      + "port <<sync>> in int i;"
+      + "port out int o;"
+      + "<<untimed>> automaton { }"
+      + "}"
+      + "Inner inner;"
+      + "i -> inner.i;"
+      +"}",
+    // mismatched timing for an output port forward (sync -> untimed)
+    // automaton override for incoming port
+    "component c20 {"
+      + "port <<untimed>> out int o;"
+      + "component Inner {"
+      + "port in int i;"
+      + "port <<sync>> out int o;"
+      + "<<untimed>> automaton { }"
+      + "}"
+      + "Inner inner;"
+      + "inner.o -> o;"
       +"}",
   })
   public void shouldReportError(@NotNull String model) throws IOException {
@@ -353,7 +379,58 @@ public class ConnectorSourceAndTargetTimingsFitTest extends AbstractTest {
       + "i -> inner.i2;"
       + "inner.o -> o1;"
       + "inner.o -> o2;"
-      +"}"
+      +"}",
+    // all timing match (sync) - automaton
+    "component c11 {"
+      + "port <<sync>> in int i;"
+      + "port <<sync>> out int o1;"
+      + "port <<sync>> out int o2;"
+      + "component Inner {"
+      + "port in int i1;"
+      + "port in int i2;"
+      + "port out int o;"
+      + "<<sync>> automaton { }"
+      + "}"
+      + "Inner inner;"
+      + "i -> inner.i1;"
+      + "i -> inner.i2;"
+      + "inner.o -> o1;"
+      + "inner.o -> o2;"
+      +"}",
+    // all timing match - automaton override incoming port
+    "component c12 {"
+      + "port <<timed>> in int i;"
+      + "port <<sync>> out int o1;"
+      + "port <<sync>> out int o2;"
+      + "component Inner {"
+      + "port <<timed>> in int i1;"
+      + "port <<timed>> in int i2;"
+      + "port out int o;"
+      + "<<sync>> automaton { }"
+      + "}"
+      + "Inner inner;"
+      + "i -> inner.i1;"
+      + "i -> inner.i2;"
+      + "inner.o -> o1;"
+      + "inner.o -> o2;"
+      +"}",
+    // all timing match - automaton override incoming port
+    "component c13 {"
+      + "port <<sync>> in int i;"
+      + "port <<timed>> out int o1;"
+      + "port <<timed>> out int o2;"
+      + "component Inner {"
+      + "port in int i1;"
+      + "port in int i2;"
+      + "port <<timed>> out int o;"
+      + "<<sync>> automaton { }"
+      + "}"
+      + "Inner inner;"
+      + "i -> inner.i1;"
+      + "i -> inner.i2;"
+      + "inner.o -> o1;"
+      + "inner.o -> o2;"
+      +"}",
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);

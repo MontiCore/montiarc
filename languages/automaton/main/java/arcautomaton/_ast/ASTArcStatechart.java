@@ -10,9 +10,11 @@ import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.scbasis._symboltable.SCStateSymbol;
 import de.monticore.sctransitions4code._ast.ASTAnteAction;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
+import montiarc.Timing;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class ASTArcStatechart extends ASTArcStatechartTOP {
@@ -73,5 +75,24 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
       .filter(ASTSCState.class::isInstance)
       .map(ASTSCState.class::cast)
       .filter(s -> s.getSCModifier().isInitial());
+  }
+
+  protected Timing timing;
+
+  @Override
+  public Timing getTiming() {
+    if (this.timing != null) {
+      return this.timing;
+    } else if (this.isPresentStereotype()) {
+      this.timing = this.getStereotype().streamValues()
+        .map(v -> Timing.of(v.getName()))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .findFirst().orElse(Timing.DEFAULT);
+      return this.timing;
+    } else {
+      this.timing = Timing.DEFAULT;
+      return this.timing;
+    }
   }
 }
