@@ -37,7 +37,7 @@ public class FeedbackLoopStrongCausality implements ArcBasisASTComponentTypeCoCo
         for (String neighbourComponent : findNextComponent(node, current)) {
           if (!Objects.equals(neighbourComponent, "")) {
             if (Objects.equals(getComponentNullSafe(source), neighbourComponent)) {
-              Log.warn(ArcError.FEEDBACK_LOOP_TIMING_NOT_DELAYED.format(node.getName()),
+              Log.error(ArcError.FEEDBACK_LOOP_TIMING_NOT_DELAYED.format(node.getName()),
                   source.get_SourcePositionStart(), source.get_SourcePositionEnd());
             } else if (!visited.contains(neighbourComponent)) {
               next.add(neighbourComponent);
