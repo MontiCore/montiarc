@@ -5,6 +5,8 @@ import arcbasis._symboltable.ArcBasisSymbolTableCompleter;
 import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
 import arcbasis._prettyprint.ArcBasisFullPrettyPrinter;
 import arcbasis._visitor.IFullPrettyPrinter;
+import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
+import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 
 public class ArcBasisMill extends ArcBasisMillTOP {
 
@@ -13,6 +15,8 @@ public class ArcBasisMill extends ArcBasisMillTOP {
   protected static ArcBasisMill millArcBasisSymbolTableCompleterDelegator;
 
   protected static ArcBasisMill millFullPrettyPrinter;
+
+  protected static ArcBasisMill millCompTypeExprDeSer;
 
   public static ArcBasisSymbolTableCompleter symbolTableCompleter ()  {
     if (millArcBasisSymbolTableCompleter == null) {
@@ -47,11 +51,23 @@ public class ArcBasisMill extends ArcBasisMillTOP {
     return new ArcBasisFullPrettyPrinter();
   }
 
+  public static ComposedCompTypeExprDeSer millCompTypeExprDeSer() {
+    if (millCompTypeExprDeSer == null) {
+      millCompTypeExprDeSer = getMill();
+    }
+    return millCompTypeExprDeSer._millCompTypeExprDeSer();
+  }
+
+  protected ComposedCompTypeExprDeSer _millCompTypeExprDeSer() {
+    return new ArcBasisCompTypeExprDeSer();
+  }
+
   public static void initMe(ArcBasisMill a)  {
     ArcBasisMillTOP.initMe(a);
     millArcBasisSymbolTableCompleter = a;
     millArcBasisSymbolTableCompleterDelegator = a;
     millFullPrettyPrinter = a;
+    millCompTypeExprDeSer = a;
   }
 
   public static void reset() {
@@ -59,5 +75,6 @@ public class ArcBasisMill extends ArcBasisMillTOP {
     millArcBasisSymbolTableCompleter = null;
     millArcBasisSymbolTableCompleterDelegator = null;
     millFullPrettyPrinter = null;
+    millCompTypeExprDeSer = null;
   }
 }

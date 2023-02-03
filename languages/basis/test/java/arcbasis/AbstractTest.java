@@ -3,7 +3,9 @@ package arcbasis;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.IArcBasisArtifactScope;
 import arcbasis._symboltable.IArcBasisScope;
+import arcbasis._symboltable.SymbolService;
 import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
@@ -92,5 +94,22 @@ public abstract class AbstractTest extends montiarc.util.AbstractTest {
     sym.setAstNode(comp);
 
     return comp;
+  }
+
+  /**
+   * Wraps the given component type symbol into an artifact scope with the given package name.
+   * Note that this artifact scope is not yet registered to be part of the global scope!
+   */
+  protected static IArcBasisArtifactScope wrapInArtifactScope(@NotNull String packageName,
+                                                              @NotNull ComponentTypeSymbol compSymToWrap) {
+    Preconditions.checkNotNull(packageName);
+    Preconditions.checkNotNull(compSymToWrap);
+
+    IArcBasisArtifactScope scope = ArcBasisMill.artifactScope();
+    scope.setPackageName(packageName);
+
+    SymbolService.link(scope, compSymToWrap);
+
+    return scope;
   }
 }
