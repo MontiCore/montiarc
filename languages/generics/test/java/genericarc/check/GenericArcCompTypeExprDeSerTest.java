@@ -14,11 +14,9 @@ import genericarc.AbstractTest;
 import genericarc.GenericArcMill;
 import genericarc._symboltable.IGenericArcArtifactScope;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Map;
 
 import static genericarc.check.TypeExprOfGenericComponentDeSerTest.JSON_WITHOUT_PACKAGE;
 import static genericarc.check.TypeExprOfGenericComponentDeSerTest.JSON_WITH_PACKAGE;
@@ -77,7 +75,6 @@ class GenericArcCompTypeExprDeSerTest extends AbstractTest {
     Assertions.assertEquals(JSON_WITHOUT_PACKAGE, compAsJson);
   }
 
-  @Disabled("'Cause while constructing TypeExprOfGenericComps, missing TypeVarSymbols lead to missing TypeVarBindings.")
   @Test
   void testDeserializeWithPackageName() {
     // Given
@@ -93,21 +90,12 @@ class GenericArcCompTypeExprDeSerTest extends AbstractTest {
 
     // Then
     Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, deserializedExpr);
-
-    Map<String, SymTypeExpression> typeVarBindings = getTypeVarBindingsByName(
-      ((TypeExprOfGenericComponent) deserializedExpr).getTypeVarBindings()
-    );
-
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("foo.bar.MyComp", deserializedExpr.printFullName()),
-      () -> Assertions.assertEquals("int", typeVarBindings.get("A").printFullName()),
-      () -> Assertions.assertEquals("noo.boo.Student", typeVarBindings.get("B").printFullName()),
-      () -> Assertions.assertEquals("noo.boo.Student", typeVarBindings.get("Foo").printFullName()),
-      () -> Assertions.assertEquals("int", typeVarBindings.get("Bar").printFullName())
+    Assertions.assertEquals(
+      "foo.bar.MyComp<int,noo.boo.Student,noo.boo.Student,int>",
+      deserializedExpr.printFullName()
     );
   }
 
-  @Disabled("'Cause while constructing TypeExprOfGenericComps, missing TypeVarSymbols lead to missing TypeVarBindings.")
   @Test
   void testDeserializeWithoutPackageName() {
     // Given
@@ -123,17 +111,9 @@ class GenericArcCompTypeExprDeSerTest extends AbstractTest {
 
     // Then
     Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, deserializedExpr);
-
-    Map<String, SymTypeExpression> typeVarBindings = getTypeVarBindingsByName(
-      ((TypeExprOfGenericComponent) deserializedExpr).getTypeVarBindings()
-    );
-
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("MyComp", deserializedExpr.printFullName()),
-      () -> Assertions.assertEquals("int", typeVarBindings.get("A").printFullName()),
-      () -> Assertions.assertEquals("noo.boo.Student", typeVarBindings.get("B").printFullName()),
-      () -> Assertions.assertEquals("noo.boo.Student", typeVarBindings.get("Foo").printFullName()),
-      () -> Assertions.assertEquals("int", typeVarBindings.get("Bar").printFullName())
+    Assertions.assertEquals(
+      "MyComp<int,noo.boo.Student,noo.boo.Student,int>",
+      deserializedExpr.printFullName()
     );
   }
 }

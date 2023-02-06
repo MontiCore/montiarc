@@ -12,8 +12,10 @@ import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import arccore.ArcCoreMill;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.ISynthesize;
+import genericarc.check.GenericArcCompTypeExprDeSer;
 import montiarc.MontiArcMill;
 import montiarc._prettyprint.MontiArcFullPrettyPrinter;
+import montiarc.check.MontiArcCompTypeExprDeSer;
 import montiarc.check.MontiArcSynthesizeComponent;
 import montiarc.check.MontiArcTypeCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -79,8 +81,8 @@ class ArcBasisMillForMontiArcTest {
   protected static Stream<Arguments> setupAndExpectedClassForCompTypeExprDeSerProvider() {
     return Stream.of(
       Arguments.of(arcBasisMillSetup(), ArcBasisCompTypeExprDeSer.class),
-      Arguments.of(arcCoreMillSetup(), ArcBasisCompTypeExprDeSer.class),  // Will change later to include generics
-      Arguments.of(montiArcMillSetup(), ArcBasisCompTypeExprDeSer.class)  // Will change later to include generics
+      Arguments.of(arcCoreMillSetup(), GenericArcCompTypeExprDeSer.class),  // Will change later to include generics
+      Arguments.of(montiArcMillSetup(), MontiArcCompTypeExprDeSer.class)  // Will change later to include generics
     );
   }
 

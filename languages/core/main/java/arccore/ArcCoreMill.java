@@ -2,10 +2,12 @@
 package arccore;
 
 import arcbasis._visitor.IFullPrettyPrinter;
+import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import arccore._symboltable.ArcCoreSymbolTableCompleter;
 import arccore._symboltable.ArcCoreSymbolTableCompleterDelegator;
 import arccore._prettyprint.ArcCoreFullPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
+import genericarc.check.GenericArcCompTypeExprDeSer;
 
 public class ArcCoreMill extends ArcCoreMillTOP {
 
@@ -14,6 +16,8 @@ public class ArcCoreMill extends ArcCoreMillTOP {
   protected static ArcCoreMill millArcCoreSymbolTableCompleterDelegator;
 
   protected static ArcCoreMill millFullPrettyPrinter;
+
+  protected static ArcCoreMill millCompTypeExprDeSer;
   
   public static ArcCoreSymbolTableCompleter symbolTableCompleter ()  {
     if (millArcCoreSymbolTableCompleter == null) {
@@ -48,11 +52,23 @@ public class ArcCoreMill extends ArcCoreMillTOP {
     return new ArcCoreFullPrettyPrinter(new IndentPrinter());
   }
 
+  public static ComposedCompTypeExprDeSer millCompTypeExprDeSer() {
+    if (millCompTypeExprDeSer == null) {
+      millCompTypeExprDeSer = getMill();
+    }
+    return millCompTypeExprDeSer._millCompTypeExprDeSer();
+  }
+
+  protected ComposedCompTypeExprDeSer _millCompTypeExprDeSer() {
+    return new GenericArcCompTypeExprDeSer();
+  }
+
   public static void initMe(ArcCoreMill a)  {
     ArcCoreMillTOP.initMe(a);
     millArcCoreSymbolTableCompleter = a;
     millArcCoreSymbolTableCompleterDelegator = a;
     millFullPrettyPrinter = a;
+    millCompTypeExprDeSer = a;
   }
 
   public static void reset() {
@@ -60,5 +76,6 @@ public class ArcCoreMill extends ArcCoreMillTOP {
     millArcCoreSymbolTableCompleter = null;
     millArcCoreSymbolTableCompleterDelegator = null;
     millFullPrettyPrinter = null;
+    millCompTypeExprDeSer = null;
   }
 }

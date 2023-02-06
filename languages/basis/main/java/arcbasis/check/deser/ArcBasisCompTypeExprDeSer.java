@@ -24,8 +24,7 @@ public class ArcBasisCompTypeExprDeSer implements ComposedCompTypeExprDeSer {
     if (toSerialize instanceof TypeExprOfComponent) {
       return componentExprDeSer.serializeAsJson((TypeExprOfComponent) toSerialize);
     } else {
-      logMissingDeSer(toSerialize);
-      throw new IllegalStateException();
+      throw missingDeSerException(toSerialize);
     }
   }
 
@@ -36,8 +35,7 @@ public class ArcBasisCompTypeExprDeSer implements ComposedCompTypeExprDeSer {
     switch (JsonDeSers.getKind(serialized)) {
       case TypeExprOfComponentDeSer.SERIALIZED_KIND: return componentExprDeSer.deserialize(serialized);
       default:
-        logMissingDeSer(serialized);
-        throw new IllegalStateException();
+        throw missingDeSerException(serialized);
     }
   }
 }

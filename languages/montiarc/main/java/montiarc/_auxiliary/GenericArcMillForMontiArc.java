@@ -2,6 +2,7 @@
 package montiarc._auxiliary;
 
 import arcbasis._visitor.IFullPrettyPrinter;
+import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import genericarc._symboltable.GenericArcSymbolTableCompleter;
 import montiarc.check.MontiArcSynthesizeComponent;
 import montiarc.check.MontiArcTypeCalculator;
@@ -20,5 +21,10 @@ public class GenericArcMillForMontiArc extends GenericArcMillForMontiArcTOP {
       new MontiArcSynthesizeComponent(),
       new MontiArcTypeCalculator()
     );
+  }
+
+  @Override
+  protected ComposedCompTypeExprDeSer _millCompTypeExprDeSer() {
+    return montiarc.MontiArcMill.millCompTypeExprDeSer();
   }
 }

@@ -2,10 +2,17 @@
 package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTArcBehaviorElement;
+import arcbasis.check.CompTypeExpression;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.se_rwth.commons.logging.Log;
+import montiarc.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTOP {
@@ -27,11 +34,22 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
     return this.getDelegate().isPresent();
   }
 
+  @Override
   public ComponentTypeSymbol lazyLoadDelegate() {
     if (!isPresentDelegate()) {
       this.setDelegate(this.getEnclosingScope().resolveComponentType(this.getName()).orElse(tryGeneric().orElse(null)));
     }
-    return delegate.orElse(this);
+
+    if (isPresentDelegate()) {
+      return delegate.get();
+    } else {
+      // Copied error message from the original lazyLoadDelegate
+      Log.error("0xA1038 " + ComponentTypeSymbolSurrogate.class.getSimpleName() +
+        " Could not load full information of '" + name +
+        "' (Kind " + "arcbasis._symboltable.ComponentTypeSymbol" + ")."
+      );
+      return this;
+    }
   }
 
   protected Optional<ComponentTypeSymbol> tryGeneric() {
@@ -41,5 +59,120 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
       return Optional.ofNullable(resolvedSymbol);
     }
     return Optional.empty();
+  }
+
+  @Override
+  public void setSpannedScope(@NotNull IArcBasisScope spannedScope) {
+    if (checkLazyLoadDelegate()) {
+      this.lazyLoadDelegate().setSpannedScope(spannedScope);
+    } else {
+      super.setSpannedScope(spannedScope);  // Avoid infinite recursion with this case
+    }
+  }
+
+  @Override
+  public IArcBasisScope getSpannedScope () {
+    return checkLazyLoadDelegate() ?
+      this.lazyLoadDelegate().getSpannedScope() :
+      super.getSpannedScope();  // Avoid infinite recursion with this case
+  }
+
+  @Override
+  public boolean isInnerComponent() {
+    return checkLazyLoadDelegate() ?
+      this.lazyLoadDelegate().isInnerComponent() :
+      super.isInnerComponent();  // Avoid infinite recursion with this case
+  }
+
+  @Override
+  public Optional<ComponentTypeSymbol> getOuterComponent() {
+    return checkLazyLoadDelegate() ?
+      this.lazyLoadDelegate().getOuterComponent() :
+      super.getOuterComponent();  // Avoid infinite recursion with this case
+  }
+
+  @Override
+  public void setOuterComponent(@Nullable ComponentTypeSymbol outerComponent) {
+    if (checkLazyLoadDelegate()) {
+      this.lazyLoadDelegate().setOuterComponent(outerComponent);
+    } else {
+      super.setOuterComponent(outerComponent);  // Avoid infinite recursion with this case
+    }
+  }
+
+  @Override
+  public boolean isPresentParentComponent() {
+    return checkLazyLoadDelegate() ?
+      this.lazyLoadDelegate().isPresentParentComponent() :
+      super.isPresentParentComponent();  // Avoid infinite recursion with this case
+  }
+
+  @Override
+  public CompTypeExpression getParent() {
+    return checkLazyLoadDelegate() ?
+      this.lazyLoadDelegate().getParent() :
+      super.getParent();  // Avoid infinite recursion with this case
+  }
+
+  @Override
+  public void setParent(@Nullable CompTypeExpression parent) {
+    if (checkLazyLoadDelegate()) {
+      this.lazyLoadDelegate().setParent(parent);
+    } else {
+      super.setParent(parent);  // Avoid infinite recursion with this case
+    }
+  }
+
+  @Override
+  public List<ASTExpression> getParentConfiguration() {
+    return checkLazyLoadDelegate() ?
+      this.lazyLoadDelegate().getParentConfiguration() :
+      super.getParentConfiguration();  // Avoid infinite recursion with this case
+  }
+
+  @Override
+  public void setParentConfigurationExpressions(@NotNull List<ASTExpression> expressions) {
+    if (checkLazyLoadDelegate()) {
+      this.lazyLoadDelegate().setParentConfigurationExpressions(expressions);
+    } else {
+      super.setParentConfigurationExpressions(expressions);  // Avoid infinite recursion with this case
+    }
+  }
+
+  @Override
+  public List<VariableSymbol> getParameters() {
+    return checkLazyLoadDelegate() ?
+      this.lazyLoadDelegate().getParameters() :
+      super.getParameters();  // Avoid infinite recursion with this case
+  }
+
+  @Override
+  public void addParameter(@NotNull VariableSymbol parameter) {
+    if (checkLazyLoadDelegate()) {
+      this.lazyLoadDelegate().addParameter(parameter);
+    } else {
+      super.addParameter(parameter);  // Avoid infinite recursion with this case
+    }
+  }
+
+  @Override
+  public Optional<Timing> getTiming() {
+    return checkLazyLoadDelegate() ?
+      this.lazyLoadDelegate().getTiming() :
+      super.getTiming();  // Avoid infinite recursion with this case
+  }
+
+  @Override
+  public List<PortSymbol> getAllPorts() {
+    return checkLazyLoadDelegate() ?
+      this.lazyLoadDelegate().getAllPorts() :
+      super.getAllPorts();  // Avoid infinite recursion with this case
+  }
+
+  @Override
+  protected Optional<ASTArcBehaviorElement> getBehavior() {
+    return checkLazyLoadDelegate() ?
+      this.lazyLoadDelegate().getBehavior() :
+      super.getBehavior();  // Avoid infinite recursion with this case
   }
 }

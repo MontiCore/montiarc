@@ -12,11 +12,9 @@ import genericarc.AbstractTest;
 import genericarc.GenericArcMill;
 import genericarc._symboltable.IGenericArcArtifactScope;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Map;
 
 class TypeExprOfGenericComponentDeSerTest extends AbstractTest {
 
@@ -95,7 +93,6 @@ class TypeExprOfGenericComponentDeSerTest extends AbstractTest {
     Assertions.assertEquals(JSON_WITHOUT_PACKAGE, compAsJson);
   }
 
-  @Disabled("'Cause while constructing TypeExprOfGenericComps, missing TypeVarSymbols lead to missing TypeVarBindings.")
   @Test
   void testDeserializeWithPackageName() {
     // Given
@@ -107,24 +104,15 @@ class TypeExprOfGenericComponentDeSerTest extends AbstractTest {
     GenericArcMill.globalScope().addSubScope(studentScope);
 
     // When
-    // TODO: Problem is that the constructor of TypeExprOfGenericComponent only fills generic type arg bindings up to
-    //    the number of TypeVars the type has. Therefore, the type has to be deserialized first. Is this handled by
-    //    our desers? I hope so. But I guess resolving that type will trigger it's deserialization so that should be fine.
     TypeExprOfGenericComponent deserializedExpr = deser.deserialize(serialized);
 
     // Then
-    Map<String, SymTypeExpression> typeVarBindings = getTypeVarBindingsByName(deserializedExpr.getTypeVarBindings());
-
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("foo.bar.MyComp", deserializedExpr.printFullName()),
-      () -> Assertions.assertEquals("int", typeVarBindings.get("A").printFullName()),
-      () -> Assertions.assertEquals("noo.boo.Student", typeVarBindings.get("B").printFullName()),
-      () -> Assertions.assertEquals("noo.boo.Student", typeVarBindings.get("Foo").printFullName()),
-      () -> Assertions.assertEquals("int", typeVarBindings.get("Bar").printFullName())
+    Assertions.assertEquals(
+      "foo.bar.MyComp<int,noo.boo.Student,noo.boo.Student,int>",
+      deserializedExpr.printFullName()
     );
   }
 
-  @Disabled("'Cause while constructing TypeExprOfGenericComps, missing TypeVarSymbols lead to missing TypeVarBindings.")
   @Test
   void testDeserializeWithoutPackageName() {
     // Given
@@ -139,14 +127,9 @@ class TypeExprOfGenericComponentDeSerTest extends AbstractTest {
     TypeExprOfGenericComponent deserializedExpr = deser.deserialize(serialized);
 
     // Then
-    Map<String, SymTypeExpression> typeVarBindings = getTypeVarBindingsByName(deserializedExpr.getTypeVarBindings());
-
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("MyComp", deserializedExpr.printFullName()),
-      () -> Assertions.assertEquals("int", typeVarBindings.get("A").printFullName()),
-      () -> Assertions.assertEquals("noo.boo.Student", typeVarBindings.get("B").printFullName()),
-      () -> Assertions.assertEquals("noo.boo.Student", typeVarBindings.get("Foo").printFullName()),
-      () -> Assertions.assertEquals("int", typeVarBindings.get("Bar").printFullName())
+    Assertions.assertEquals(
+      "MyComp<int,noo.boo.Student,noo.boo.Student,int>",
+      deserializedExpr.printFullName()
     );
   }
 }

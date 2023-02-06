@@ -2,10 +2,12 @@
 package montiarc;
 
 import arcbasis._visitor.IFullPrettyPrinter;
+import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import com.microsoft.z3.Context;
 import montiarc._symboltable.MontiArcSymbolTableCompleter;
 import montiarc._symboltable.MontiArcSymbolTableCompleterDelegator;
 import montiarc._prettyprint.MontiArcFullPrettyPrinter;
+import montiarc.check.MontiArcCompTypeExprDeSer;
 import montiarc.evaluation.MontiArcDeriveSMTExpr;
 import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 
@@ -18,6 +20,8 @@ public class MontiArcMill extends MontiArcMillTOP {
   protected static MontiArcMill millMontiArcFullPrettyPrinter;
 
   protected static MontiArcMill millMontiArcFullConverter;
+
+  protected static MontiArcMill millCompTypeExprDeSer;
 
   public static MontiArcSymbolTableCompleter symbolTableCompleter ()  {
     if (millMontiArcSymbolTableCompleter == null) {
@@ -61,6 +65,17 @@ public class MontiArcMill extends MontiArcMillTOP {
 
   protected IDeriveSMTExpr _fullConverter(Context context) {
     return new MontiArcDeriveSMTExpr(context);
+  }
+
+  public static ComposedCompTypeExprDeSer millCompTypeExprDeSer() {
+    if (millCompTypeExprDeSer == null) {
+      millCompTypeExprDeSer = getMill();
+    }
+    return millCompTypeExprDeSer._millCompTypeExprDeSer();
+  }
+
+  protected ComposedCompTypeExprDeSer _millCompTypeExprDeSer() {
+    return new MontiArcCompTypeExprDeSer();
   }
 
   public static void initMe(MontiArcMill a)  {

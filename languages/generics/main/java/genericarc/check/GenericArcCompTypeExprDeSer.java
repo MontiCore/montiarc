@@ -33,8 +33,7 @@ public class GenericArcCompTypeExprDeSer implements ComposedCompTypeExprDeSer {
     } else if (toSerialize instanceof TypeExprOfGenericComponent) {
       return genericComponentExprDeSer.serializeAsJson((TypeExprOfGenericComponent) toSerialize);
     } else {
-      logMissingDeSer(toSerialize);
-      throw new IllegalStateException();
+      throw missingDeSerException(toSerialize);
     }
   }
 
@@ -46,8 +45,7 @@ public class GenericArcCompTypeExprDeSer implements ComposedCompTypeExprDeSer {
       case TypeExprOfComponentDeSer.SERIALIZED_KIND: return componentExprDeSer.deserialize(serialized);
       case TypeExprOfGenericComponentDeSer.SERIALIZED_KIND: return genericComponentExprDeSer.deserialize(serialized);
       default:
-        logMissingDeSer(serialized);
-        throw new IllegalStateException();
+        throw missingDeSerException(serialized);
     }
   }
 }

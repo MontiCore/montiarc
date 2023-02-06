@@ -70,21 +70,15 @@ public class AbstractTest extends arcbasis.AbstractTest {
     }
   }
 
+  /**
+   * Creates an OOTypeSymbol with the given name. Beware that the symbol is not part of any scope.
+   */
   protected static OOTypeSymbol createOOTypeSymbol(@NotNull String name) {
     Preconditions.checkNotNull(name);
 
     return GenericArcMill.oOTypeSymbolBuilder()
       .setName(name)
-      .setEnclosingScope(GenericArcMill.scope())
+      .setSpannedScope(GenericArcMill.scope())
       .build();
-  }
-
-  protected Map<String, SymTypeExpression> getTypeVarBindingsByName(
-    @NotNull Map<TypeVarSymbol, SymTypeExpression> bindings) {
-    Preconditions.checkNotNull(bindings);
-
-    return bindings.entrySet().stream()
-      .map(e -> Map.entry(e.getKey().getName(), e.getValue()))
-      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 }

@@ -3,6 +3,7 @@ package montiarc._auxiliary;
 
 import arcbasis._symboltable.ArcBasisSymbolTableCompleter;
 import arcbasis._visitor.IFullPrettyPrinter;
+import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import de.monticore.types.mcsimplegenerictypes.MCSimpleGenericTypesMill;
 import montiarc.check.MontiArcSynthesizeComponent;
 import montiarc.check.MontiArcTypeCalculator;
@@ -18,5 +19,10 @@ public class ArcBasisMillForMontiArc extends ArcBasisMillForMontiArcTOP {
   protected ArcBasisSymbolTableCompleter _symbolTableCompleter() {
     return new ArcBasisSymbolTableCompleter(montiarc.MontiArcMill.fullPrettyPrinter(),
       new MontiArcSynthesizeComponent(), new MontiArcTypeCalculator());
+  }
+
+  @Override
+  protected ComposedCompTypeExprDeSer _millCompTypeExprDeSer() {
+    return montiarc.MontiArcMill.millCompTypeExprDeSer();
   }
 }

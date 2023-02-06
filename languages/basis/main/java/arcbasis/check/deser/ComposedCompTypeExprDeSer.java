@@ -35,36 +35,39 @@ public interface ComposedCompTypeExprDeSer {
    */
   CompTypeExpression deserialize(@NotNull JsonObject serialized);
 
-  default void logMissingDeSer(@NotNull JsonObject unloadableElement) {
+  default IllegalStateException missingDeSerException(@NotNull JsonObject unloadableElement) {
     Preconditions.checkNotNull(unloadableElement);
 
     String typeExprKind = JsonDeSers.getKind(unloadableElement);
     String deSerAggregatorName = this.getClass().getName();
 
-    Log.error(String.format("No DeSer available for CompTypeExpressionKind '%s' in '%s'. Therefore, the " +
+    return new IllegalStateException(
+      String.format("No DeSer available for CompTypeExpressionKind '%s' in '%s'. Therefore, the " +
         "deserialization of '%s' is impossible.",
       typeExprKind, deSerAggregatorName, unloadableElement
     ));
   }
 
-  default void logMissingDeSer(@NotNull CompTypeExpression unsaveableElement) {
+  default IllegalStateException missingDeSerException(@NotNull CompTypeExpression unsaveableElement) {
     Preconditions.checkNotNull(unsaveableElement);
 
     String typeExpressionKind = unsaveableElement.getClass().getName();
     String deSerAggregatorName = this.getClass().getName();
 
-    Log.error(String.format("No DeSer available for CompTypeExpressionKind '%s' in '%s'. Therefore, the " +
+    return new IllegalStateException(
+      String.format("No DeSer available for CompTypeExpressionKind '%s' in '%s'. Therefore, the " +
         "serialization of '%s' is impossible.",
       typeExpressionKind, deSerAggregatorName, unsaveableElement.printName()
     ));
   }
 
-  default void logMissingDeSer(@NotNull String compTypeExpressionKind) {
+  default IllegalStateException missingDeSerException(@NotNull String compTypeExpressionKind) {
     Preconditions.checkNotNull(compTypeExpressionKind);
 
     String deSerAggregatorName = this.getClass().getName();
 
-    Log.error(String.format("No DeSer available for CompTypeExpressionKind '%s' in '%s'.",
+    return new IllegalStateException(
+      String.format("No DeSer available for CompTypeExpressionKind '%s' in '%s'.",
       compTypeExpressionKind, deSerAggregatorName
     ));
   }

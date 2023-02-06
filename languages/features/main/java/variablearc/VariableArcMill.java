@@ -2,6 +2,8 @@
 package variablearc;
 
 import arcbasis._visitor.IFullPrettyPrinter;
+import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
+import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import com.microsoft.z3.Context;
 import de.monticore.prettyprint.IndentPrinter;
 import variablearc._symboltable.VariableArcSymbolTableCompleter;
@@ -19,6 +21,8 @@ public class VariableArcMill extends VariableArcMillTOP {
   protected static VariableArcMill millFullPrettyPrinter;
 
   protected static VariableArcMill millFullConverter;
+
+  protected static VariableArcMill millCompTypeExprDeSer;
 
   public static VariableArcSymbolTableCompleter symbolTableCompleter() {
     if (millVariableArcSymbolTableCompleter == null) {
@@ -48,12 +52,20 @@ public class VariableArcMill extends VariableArcMillTOP {
     return millFullConverter._fullConverter(context);
   }
 
+  public static ComposedCompTypeExprDeSer millCompTypeExprDeSer() {
+    if (millCompTypeExprDeSer == null) {
+      millCompTypeExprDeSer = getMill();
+    }
+    return millCompTypeExprDeSer._millCompTypeExprDeSer();
+  }
+
   public static void initMe(VariableArcMill a) {
     VariableArcMillTOP.initMe(a);
     millVariableArcSymbolTableCompleter = a;
     millVariableArcSymbolTableCompleterDelegator = a;
     millFullPrettyPrinter = a;
     millFullConverter = a;
+    millCompTypeExprDeSer = a;
   }
 
   public static void reset() {
@@ -62,6 +74,7 @@ public class VariableArcMill extends VariableArcMillTOP {
     millVariableArcSymbolTableCompleterDelegator = null;
     millFullPrettyPrinter = null;
     millFullConverter = null;
+    millCompTypeExprDeSer = null;
   }
 
   protected VariableArcSymbolTableCompleter _symbolTableCompleter() {
@@ -78,5 +91,9 @@ public class VariableArcMill extends VariableArcMillTOP {
 
   protected IDeriveSMTExpr _fullConverter(Context context) {
     return new VariableArcDeriveSMTExpr(context);
+  }
+
+  protected ComposedCompTypeExprDeSer _millCompTypeExprDeSer() {
+    return new ArcBasisCompTypeExprDeSer();  // TODO: replace with VarArc...DeSer when implemented
   }
 }

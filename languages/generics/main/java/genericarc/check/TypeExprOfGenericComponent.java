@@ -24,29 +24,40 @@ import java.util.stream.Collectors;
  */
 public class TypeExprOfGenericComponent extends CompTypeExpression {
 
-  protected final ImmutableMap<TypeVarSymbol, SymTypeExpression> typeVarBindings;
+  protected final ImmutableList<SymTypeExpression> typeArguments;
 
-  public ImmutableMap<TypeVarSymbol, SymTypeExpression> getTypeVarBindings() {
-    return this.typeVarBindings;
-  }
+  // TypeVarBindingsAsMap is lazily calculated from typeArguments.
+  private Optional<ImmutableMap<TypeVarSymbol, SymTypeExpression>> typeVarBindingsAsMap = Optional.empty();
 
   public TypeExprOfGenericComponent(@NotNull ComponentTypeSymbol compTypeSymbol,
                                     @NotNull List<SymTypeExpression> typeArguments) {
     super(compTypeSymbol);
     Preconditions.checkNotNull(typeArguments);
 
+    this.typeArguments = ImmutableList.copyOf(typeArguments);
+  }
+
+  public ImmutableMap<TypeVarSymbol, SymTypeExpression> getTypeVarBindings() {
+    if (typeVarBindingsAsMap.isEmpty()) {
+      this.typeVarBindingsAsMap = Optional.of(calcTypeVarBindingsAsMap());
+    }
+
+    return this.typeVarBindingsAsMap.get();
+  }
+
+  private ImmutableMap<TypeVarSymbol, SymTypeExpression> calcTypeVarBindingsAsMap() {
     ImmutableMap.Builder<TypeVarSymbol, SymTypeExpression> typeVarBindingBuilder = ImmutableMap.builder();
-    // We know guava immutable maps are ordered by insertion time. As we rely on the fact that the ordering of the
-    // type arguments is consistent with the ordering in the map, the following iteration ensures it:
+
     for (int i = 0; i < typeArguments.size(); i++) {
-      if (i < this.getTypeInfo().getTypeParameters().size()) // Deal with wrong number of parameters through cocos
-      {
-        if (typeArguments.get(i) != null)
-          typeVarBindingBuilder.put(this.getTypeInfo().getTypeParameters().get(i), typeArguments.get(i));
+      // We deal with the wrong number of parameters through cocos
+      List<TypeVarSymbol> typeParams = this.getTypeInfo().getTypeParameters();
+      if (i < typeParams.size() && typeArguments.get(i) != null) {
+        TypeVarSymbol typeParam = this.getTypeInfo().getTypeParameters().get(i);
+        typeVarBindingBuilder.put(typeParam, typeArguments.get(i));
       }
     }
 
-    this.typeVarBindings = typeVarBindingBuilder.build();
+    return typeVarBindingBuilder.build();
   }
 
   @Override
@@ -75,15 +86,17 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
 
   @Override
   public Optional<CompTypeExpression> getParentTypeExpr() {
-    if (!this.getTypeInfo().isPresentParentComponent()) {
+
+    ComponentTypeSymbol rawType = this.getTypeInfo();
+    if (!rawType.isPresentParentComponent()) {
       return Optional.empty();
     }
 
-    CompTypeExpression unboundParentExpr = this.getTypeInfo().getParent();
+    CompTypeExpression unboundParentExpr = rawType.getParent();
     if (unboundParentExpr instanceof TypeExprOfComponent) {
       return Optional.of(unboundParentExpr);
     } else if (unboundParentExpr instanceof TypeExprOfGenericComponent) {
-      return Optional.of(((TypeExprOfGenericComponent) unboundParentExpr).bindTypeParameter(this.typeVarBindings));
+      return Optional.of(((TypeExprOfGenericComponent) unboundParentExpr).bindTypeParameter(this.getTypeVarBindings()));
     } else {
       throw new UnsupportedOperationException("Encountered a type expression for components that is not known." +
         String.format(" (We only know '%s' and '%s')",
@@ -142,8 +155,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
   }
 
   public ImmutableList<SymTypeExpression> getBindingsAsList() {
-    // We know guava immutable maps are ordered and thus .values represents the order of the type arguments
-    return this.getTypeVarBindings().values().asList();
+    return this.typeArguments;
   }
 
   /**
@@ -159,8 +171,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
     Preconditions.checkNotNull(newTypeVarBindings);
 
     List<SymTypeExpression> newBindings = new ArrayList<>();
-    // We know guava immutable maps are ordered and thus .values represents the order of the type arguments
-    for(SymTypeExpression typeArg : this.typeVarBindings.values()) {
+    for(SymTypeExpression typeArg : this.typeArguments) {
       SymTypeExpression newTypeArg;
       if(typeArg.isTypeVariable() && newTypeVarBindings.containsKey((typeArg.getTypeInfo()))) {
         newTypeArg = newTypeVarBindings.get(typeArg.getTypeInfo());
