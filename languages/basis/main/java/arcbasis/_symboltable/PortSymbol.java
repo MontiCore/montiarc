@@ -19,8 +19,6 @@ import java.util.Optional;
 
 public class PortSymbol extends PortSymbolTOP {
 
-  protected Timing timing;
-  protected Boolean delayed;
   protected Boolean stronglyCausal = null;
 
   /**
@@ -78,6 +76,7 @@ public class PortSymbol extends PortSymbolTOP {
   /**
    * @return the timing of this port.
    */
+  @Override
   public @NotNull Timing getTiming() {
     if (this.timing == null) {
       this.timing = this.getHereditaryTiming().orElse(Timing.DEFAULT);
@@ -88,8 +87,14 @@ public class PortSymbol extends PortSymbolTOP {
   /**
    * @param timing the timing of this port.
    */
+  @Override  // We override only add the @Nullable annotation
   public void setTiming(@Nullable Timing timing) {
     this.timing = timing;
+  }
+
+  @Override
+  public Boolean getDelayed() {
+    return this.isDelayed();
   }
 
   public boolean isDelayed() {
@@ -99,6 +104,7 @@ public class PortSymbol extends PortSymbolTOP {
     return this.delayed;
   }
 
+  @Override  // We override only add the @Nullable annotation
   public void setDelayed(@Nullable Boolean delayed) {
     this.delayed = delayed;
   }

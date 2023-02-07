@@ -142,6 +142,8 @@ component grammar ArcBasis extends
     type: de.monticore.types.check.SymTypeExpression
     incoming: boolean
     outgoing: boolean
+    timing: montiarc.Timing
+    delayed: Boolean
   ;
 
   /**
