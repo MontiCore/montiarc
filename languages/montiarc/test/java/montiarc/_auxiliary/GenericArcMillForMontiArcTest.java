@@ -101,7 +101,7 @@ class GenericArcMillForMontiArcTest {
     setup.run();
 
     // Then
-    Assertions.assertInstanceOf(expectedDeSer, GenericArcMill.millCompTypeExprDeSer());
+    Assertions.assertInstanceOf(expectedDeSer, GenericArcMill.compTypeExprDeSer());
   }
 
   /**

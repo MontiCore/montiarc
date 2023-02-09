@@ -377,7 +377,7 @@ public class ArcBasisResolvingTest extends AbstractTest {
     ComponentTypeSymbol parent =
         ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parentScope).build();
     ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
-        .setParentComponent(new TypeExprOfComponent(parent)).build();
+        .setParent(new TypeExprOfComponent(parent)).build();
 
     PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();
@@ -407,7 +407,7 @@ public class ArcBasisResolvingTest extends AbstractTest {
     ComponentTypeSymbol parent =
         ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parentScope).build();
     ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
-        .setParentComponent(new TypeExprOfComponent(parent)).build();
+        .setParent(new TypeExprOfComponent(parent)).build();
 
     PortSymbol parentPort = ArcBasisMill.portSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();
@@ -446,7 +446,7 @@ public class ArcBasisResolvingTest extends AbstractTest {
     ComponentTypeSymbol parent =
         ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(ArcBasisMill.scope()).build();
     ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
-        .setParentComponent(new TypeExprOfComponent(parent)).build();
+        .setParent(new TypeExprOfComponent(parent)).build();
 
     PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();

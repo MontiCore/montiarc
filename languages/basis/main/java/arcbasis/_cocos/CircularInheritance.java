@@ -23,12 +23,12 @@ public class CircularInheritance implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol(), "ASTComponent node '%s' has no symbol. "
       + "Did you forget to run the SymbolTableCreator before checking cocos?", node.getName());
-    if (!node.getSymbol().isPresentParentComponent()) {
+    if (!node.getSymbol().isPresentParent()) {
       return;
     }
     List<String> superComps = new ArrayList<>();
     ComponentTypeSymbol symbol = node.getSymbol();
-    while (symbol.isPresentParentComponent()) {
+    while (symbol.isPresentParent()) {
       superComps.add(symbol.getFullName());
       symbol = symbol.getParent().getTypeInfo();
       if (superComps.contains(symbol.getFullName())) {

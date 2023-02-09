@@ -7,7 +7,7 @@ import genericarc.check.GenericArcCompTypeExprDeSer;
 public class ArcBasisMillForArcCore extends ArcBasisMillForArcCoreTOP {
 
   @Override
-  protected ComposedCompTypeExprDeSer _millCompTypeExprDeSer() {
+  protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
     return new GenericArcCompTypeExprDeSer();
   }
 }

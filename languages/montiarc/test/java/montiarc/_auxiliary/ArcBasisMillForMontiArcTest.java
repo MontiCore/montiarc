@@ -103,7 +103,7 @@ class ArcBasisMillForMontiArcTest {
     setup.run();
 
     // Then
-    Assertions.assertInstanceOf(expectedDeSer, ArcBasisMill.millCompTypeExprDeSer());
+    Assertions.assertInstanceOf(expectedDeSer, ArcBasisMill.compTypeExprDeSer());
   }
 
   /**

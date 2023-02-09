@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
@@ -14,7 +13,6 @@ import java.util.List;
 public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
 
   protected ComponentTypeSymbol outerComponent;
-  protected CompTypeExpression parentComponent;
   protected List<VariableSymbol> parameters;
   protected List<TypeVarSymbol> typeParameters;
   protected List<ASTExpression> parentConfiguration;
@@ -42,15 +40,6 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
   public ComponentTypeSymbolBuilder setOuterComponent(@Nullable ComponentTypeSymbol outerComponent) {
     Preconditions.checkArgument(!(outerComponent instanceof ComponentTypeSymbolSurrogate));
     this.outerComponent = outerComponent;
-    return this.realBuilder;
-  }
-
-  public CompTypeExpression getParentComponent() {
-    return this.parentComponent;
-  }
-
-  public ComponentTypeSymbolBuilder setParentComponent(@Nullable CompTypeExpression parent) {
-    this.parentComponent = parent;
     return this.realBuilder;
   }
 
@@ -106,7 +95,11 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
       symbol.setParentConfigurationExpressions(this.getParentConfiguration());
     }
     symbol.setOuterComponent(this.getOuterComponent());
-    symbol.setParent(this.getParentComponent());
+    if (this.parent.isPresent()) {
+      symbol.setParent(this.parent.get());
+    } else {
+      symbol.setParentAbsent();
+    }
     return symbol;
   }
 

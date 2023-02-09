@@ -38,7 +38,7 @@ public class ComponentInheritanceRespectsGenericTypeBounds implements ArcBasisAS
         "Component type '%s' at %s has no symbol. Have you run the " + "genitor (and completer) before checking coco '%s'?", node.getName(),
         node.get_SourcePositionStart(), this.getClass().getSimpleName());
 
-    if (node.getSymbol().isPresentParentComponent() && node.getSymbol().getParent() instanceof TypeExprOfGenericComponent) {
+    if (node.getSymbol().isPresentParent() && node.getSymbol().getParent() instanceof TypeExprOfGenericComponent) {
       checkTypeArgsAreNotTooFew(node);
       checkTypeArgsAreNotTooMany(node);
       checkRespectsGenericTypeBounds(node);

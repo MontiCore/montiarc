@@ -88,7 +88,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
   public Optional<CompTypeExpression> getParentTypeExpr() {
 
     ComponentTypeSymbol rawType = this.getTypeInfo();
-    if (!rawType.isPresentParentComponent()) {
+    if (!rawType.isPresentParent()) {
       return Optional.empty();
     }
 
@@ -120,7 +120,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
         .map(PortSymbol::getType);
       if (unboundPortType.isEmpty()) return Optional.empty();
       return this.createBoundTypeExpression(unboundPortType.get());
-    } else if (this.getTypeInfo().isPresentParentComponent()) {
+    } else if (this.getTypeInfo().isPresentParent()) {
       // We do not have this port. Now we look if our parent has such a port.
       return this.getParentTypeExpr().orElseThrow(IllegalStateException::new).getTypeExprOfPort(portName);
     } else {

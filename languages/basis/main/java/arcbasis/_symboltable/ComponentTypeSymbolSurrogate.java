@@ -3,7 +3,6 @@ package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcBehaviorElement;
-import arcbasis.check.CompTypeExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -97,29 +96,6 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
       this.lazyLoadDelegate().setOuterComponent(outerComponent);
     } else {
       super.setOuterComponent(outerComponent);  // Avoid infinite recursion with this case
-    }
-  }
-
-  @Override
-  public boolean isPresentParentComponent() {
-    return checkLazyLoadDelegate() ?
-      this.lazyLoadDelegate().isPresentParentComponent() :
-      super.isPresentParentComponent();  // Avoid infinite recursion with this case
-  }
-
-  @Override
-  public CompTypeExpression getParent() {
-    return checkLazyLoadDelegate() ?
-      this.lazyLoadDelegate().getParent() :
-      super.getParent();  // Avoid infinite recursion with this case
-  }
-
-  @Override
-  public void setParent(@Nullable CompTypeExpression parent) {
-    if (checkLazyLoadDelegate()) {
-      this.lazyLoadDelegate().setParent(parent);
-    } else {
-      super.setParent(parent);  // Avoid infinite recursion with this case
     }
   }
 

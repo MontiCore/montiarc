@@ -49,15 +49,15 @@ public class ComponentTypeSymbolBuilderTest extends AbstractTest {
     ComponentTypeSymbol parentComp = ArcBasisMill.componentTypeSymbolBuilder()
       .setSpannedScope(Mockito.mock(IArcBasisScope.class)).setName("A").build();
     ComponentTypeSymbol childComp = ArcBasisMill.componentTypeSymbolBuilder().setName("B")
-      .setSpannedScope(ArcBasisMill.scope()).setParentComponent(new TypeExprOfComponent(parentComp)).build();
-    Assertions.assertTrue(childComp.isPresentParentComponent());
+      .setSpannedScope(ArcBasisMill.scope()).setParent(new TypeExprOfComponent(parentComp)).build();
+    Assertions.assertTrue(childComp.isPresentParent());
   }
 
   @Test
   public void shouldNotHaveParent() {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName("A")
       .setSpannedScope(ArcBasisMill.scope()).build();
-    Assertions.assertFalse(symbol.isPresentParentComponent());
+    Assertions.assertFalse(symbol.isPresentParent());
   }
 
   @Test

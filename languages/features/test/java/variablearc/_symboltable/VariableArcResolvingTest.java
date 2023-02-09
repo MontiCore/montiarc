@@ -145,7 +145,7 @@ public class VariableArcResolvingTest extends AbstractTest {
         .setSpannedScope(parentScope).build();
     ComponentTypeSymbol child = VariableArcMill.componentTypeSymbolBuilder()
       .setName("Child").setSpannedScope(scope)
-      .setParentComponent(new TypeExprOfComponent(parent)).build();
+      .setParent(new TypeExprOfComponent(parent)).build();
 
     ArcFeatureSymbol parentFeature = VariableArcMill.arcFeatureSymbolBuilder()
       .setName("f1").build();
@@ -175,7 +175,7 @@ public class VariableArcResolvingTest extends AbstractTest {
         .setSpannedScope(ArcBasisMill.scope()).build();
     ComponentTypeSymbol child = VariableArcMill.componentTypeSymbolBuilder()
       .setName("Child").setSpannedScope(scope)
-      .setParentComponent(new TypeExprOfComponent(parent)).build();
+      .setParent(new TypeExprOfComponent(parent)).build();
 
     ArcFeatureSymbol feature = VariableArcMill.arcFeatureSymbolBuilder()
       .setName("f1").build();

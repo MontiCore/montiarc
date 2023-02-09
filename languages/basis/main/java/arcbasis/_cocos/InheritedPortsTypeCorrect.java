@@ -21,7 +21,7 @@ public class InheritedPortsTypeCorrect implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    if (node.getSymbol().isPresentParentComponent()) {
+    if (node.getSymbol().isPresentParent()) {
       this.checkPorts(node.getSymbol());
     }
   }

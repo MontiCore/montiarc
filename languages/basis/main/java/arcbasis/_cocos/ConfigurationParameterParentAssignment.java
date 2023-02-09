@@ -58,7 +58,7 @@ public class ConfigurationParameterParentAssignment implements ArcBasisASTCompon
 
     ComponentTypeSymbol component = node.getSymbol();
 
-    if (component.isPresentParentComponent()) {
+    if (component.isPresentParent()) {
       CompTypeExpression parent = component.getParent();
 
       // Check CoCos

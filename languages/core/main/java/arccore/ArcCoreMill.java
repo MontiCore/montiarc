@@ -52,14 +52,14 @@ public class ArcCoreMill extends ArcCoreMillTOP {
     return new ArcCoreFullPrettyPrinter(new IndentPrinter());
   }
 
-  public static ComposedCompTypeExprDeSer millCompTypeExprDeSer() {
+  public static ComposedCompTypeExprDeSer compTypeExprDeSer() {
     if (millCompTypeExprDeSer == null) {
       millCompTypeExprDeSer = getMill();
     }
-    return millCompTypeExprDeSer._millCompTypeExprDeSer();
+    return millCompTypeExprDeSer._compTypeExprDeSer();
   }
 
-  protected ComposedCompTypeExprDeSer _millCompTypeExprDeSer() {
+  protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
     return new GenericArcCompTypeExprDeSer();
   }
 

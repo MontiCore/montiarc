@@ -147,7 +147,7 @@ class TypeExprOfComponentTest extends AbstractTest {
 
     ComponentTypeSymbol component = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
-      .setParentComponent(new TypeExprOfComponent(parent))
+      .setParent(new TypeExprOfComponent(parent))
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 

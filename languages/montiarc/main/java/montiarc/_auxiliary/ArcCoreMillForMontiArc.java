@@ -12,7 +12,7 @@ public class ArcCoreMillForMontiArc extends ArcCoreMillForMontiArcTOP {
   }
 
   @Override
-  protected ComposedCompTypeExprDeSer _millCompTypeExprDeSer() {
-    return montiarc.MontiArcMill.millCompTypeExprDeSer();
+  protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
+    return montiarc.MontiArcMill.compTypeExprDeSer();
   }
 }

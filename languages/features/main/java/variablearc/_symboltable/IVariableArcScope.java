@@ -144,7 +144,7 @@ public interface IVariableArcScope extends IVariableArcScopeTOP {
                                                               Predicate<ArcFeatureSymbol> predicate) {
     if (!foundSymbols && this.isPresentSpanningSymbol()) {
       Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(this.getSpanningSymbol());
-      if (component.isPresent() && component.get().isPresentParentComponent()) {
+      if (component.isPresent() && component.get().isPresentParent()) {
         return ((IVariableArcScope) component.get().getParent().getTypeInfo().getSpannedScope())
             .resolveArcFeatureMany(false, name, modifier, predicate);
       }

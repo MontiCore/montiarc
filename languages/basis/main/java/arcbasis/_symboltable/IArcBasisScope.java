@@ -1,23 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.LinkedListMultimap;
-import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
-import de.monticore.symboltable.ISymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
-import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
-import de.se_rwth.commons.Names;
-import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public interface IArcBasisScope extends IArcBasisScopeTOP {
 
@@ -71,7 +61,7 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
                                                    Predicate<PortSymbol> predicate) {
     if (!foundSymbols && this.isPresentSpanningSymbol()) {
       Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(this.getSpanningSymbol());
-      if (component.isPresent() && component.get().isPresentParentComponent()) {
+      if (component.isPresent() && component.get().isPresentParent()) {
         return component.get().getParent().getTypeInfo().getSpannedScope()
           .resolvePortMany(false, name, modifier, predicate);
       }
@@ -93,7 +83,7 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
                                                            Predicate<VariableSymbol> predicate) {
     if (!foundSymbols && isPresentSpanningSymbol()) {
       Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(this.getSpanningSymbol());
-      if (component.isPresent() && component.get().isPresentParentComponent()) {
+      if (component.isPresent() && component.get().isPresentParent()) {
         return component.get().getParent().getTypeInfo().getSpannedScope()
           .resolveVariableMany(false, name, modifier, predicate);
       }

@@ -84,8 +84,8 @@ public class DynmaicVersionOfAComponentSymbol extends ComponentTypeSymbol {
   }
 
   @Override
-  public boolean isPresentParentComponent() {
-    return original.isPresentParentComponent();
+  public boolean isPresentParent() {
+    return original.isPresentParent();
   }
 
   @Override

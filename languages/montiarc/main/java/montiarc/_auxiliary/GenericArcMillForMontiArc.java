@@ -24,7 +24,7 @@ public class GenericArcMillForMontiArc extends GenericArcMillForMontiArcTOP {
   }
 
   @Override
-  protected ComposedCompTypeExprDeSer _millCompTypeExprDeSer() {
-    return montiarc.MontiArcMill.millCompTypeExprDeSer();
+  protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
+    return montiarc.MontiArcMill.compTypeExprDeSer();
   }
 }

@@ -68,7 +68,7 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 <#macro printConstructor comp isTop>
   <#assign name>${comp.getName()}<#if isTop>TOP</#if></#assign>
   public ${name}(<@printParametersAsList comp/>) {
-    <#if comp.isPresentParentComponent()>
+    <#if comp.isPresentParent()>
       super(<#list comp.getParentConfiguration() as parentConfiguration>${compHelper.printExpression(parentConfiguration)}<#sep>, </#sep></#list>);
     </#if>
 

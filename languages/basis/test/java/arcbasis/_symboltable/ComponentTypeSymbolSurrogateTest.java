@@ -288,7 +288,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
 
   
   @Test
-  void isPresentParentComponentShouldSkipSurrogate() {
+  void isPresentParentShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -298,7 +298,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
     comp.setParent(new TypeExprOfComponent(parent));
 
     // When
-    boolean parentIsPresent = surrogate.isPresentParentComponent();
+    boolean parentIsPresent = surrogate.isPresentParent();
 
     // Then
     Assertions.assertTrue(parentIsPresent, "No parent present");

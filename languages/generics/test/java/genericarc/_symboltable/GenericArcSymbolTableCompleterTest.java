@@ -237,7 +237,7 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
 
     // Then
     Assertions.assertFalse(ast.isPresentParent());
-    Assertions.assertFalse(symbol.isPresentParentComponent());
+    Assertions.assertFalse(symbol.isPresentParent());
   }
 
   /**

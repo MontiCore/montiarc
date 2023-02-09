@@ -19,7 +19,7 @@ public class VariableArcMillForMontiArc extends VariableArcMillForMontiArcTOP {
   }
 
   @Override
-  protected ComposedCompTypeExprDeSer _millCompTypeExprDeSer() {
-    return montiarc.MontiArcMill.millCompTypeExprDeSer();
+  protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
+    return montiarc.MontiArcMill.compTypeExprDeSer();
   }
 }

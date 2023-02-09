@@ -67,6 +67,10 @@ component grammar ArcBasis extends
     body:ComponentBody
   ;
 
+  symbolrule ComponentType =
+    parent: arcbasis.check.CompTypeExpression?
+  ;
+
   /**
    * ASTComponentHead holds the definitions of generic type parameters that may
    * be used as prt types in the component, definitions of configuration parameters

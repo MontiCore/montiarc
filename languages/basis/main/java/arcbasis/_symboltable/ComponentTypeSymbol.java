@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
 
   protected ComponentTypeSymbol outerComponent;
-  protected CompTypeExpression parent;
   protected List<VariableSymbol> parameters;
   protected List<ASTExpression> parentConfiguration;
 
@@ -107,24 +106,12 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
     this.outerComponent = outerComponent;
   }
 
-  public boolean isPresentParentComponent() {
-    return this.parent != null;
-  }
-
-  /**
-   * @return this component's parent component.
-   * @throws IllegalStateException if this component has no parent.
-   */
-  public CompTypeExpression getParent() {
-    Preconditions.checkState(this.isPresentParentComponent());
-    return this.parent;
-  }
-
   /**
    * @param parent this component type's parent component type.
    */
+  @Override  // Only to set the @Nullable annotation
   public void setParent(@Nullable CompTypeExpression parent) {
-    this.parent = parent;
+    super.setParent(parent);
   }
 
   /**
@@ -409,7 +396,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
     visited.add(this);
 
     List<PortSymbol> result = new ArrayList<>(getPorts());
-    if (this.isPresentParentComponent() && !visited.contains(this.getParent().getTypeInfo())) {
+    if (this.isPresentParent() && !visited.contains(this.getParent().getTypeInfo())) {
       List<PortSymbol> inheritedPorts = new ArrayList<>();
       for (PortSymbol port : this.getParent().getTypeInfo().getAllPorts(visited)) {
         if (result.stream().noneMatch(p -> p.getName().equals(port.getName()))) {

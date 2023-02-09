@@ -52,11 +52,11 @@ public class VariableArcMill extends VariableArcMillTOP {
     return millFullConverter._fullConverter(context);
   }
 
-  public static ComposedCompTypeExprDeSer millCompTypeExprDeSer() {
+  public static ComposedCompTypeExprDeSer compTypeExprDeSer() {
     if (millCompTypeExprDeSer == null) {
       millCompTypeExprDeSer = getMill();
     }
-    return millCompTypeExprDeSer._millCompTypeExprDeSer();
+    return millCompTypeExprDeSer._compTypeExprDeSer();
   }
 
   public static void initMe(VariableArcMill a) {
@@ -93,7 +93,7 @@ public class VariableArcMill extends VariableArcMillTOP {
     return new VariableArcDeriveSMTExpr(context);
   }
 
-  protected ComposedCompTypeExprDeSer _millCompTypeExprDeSer() {
+  protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
     return new ArcBasisCompTypeExprDeSer();  // TODO: replace with VarArc...DeSer when implemented
   }
 }
