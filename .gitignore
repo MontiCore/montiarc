@@ -9,6 +9,7 @@ target
 .settings
 
 *.iml
+*.hprof
 .DS_Store
 
 gradle
