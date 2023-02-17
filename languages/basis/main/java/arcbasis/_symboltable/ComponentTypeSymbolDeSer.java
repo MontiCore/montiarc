@@ -22,6 +22,8 @@ import java.util.Optional;
 public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
 
   public static final String PARAMETERS = "parameters";
+
+  public static final String PORTS = "ports";
   public static final String TYPE_PARAMETERS = "typeParameters";
   public static final String PARENT = "parent";
 
@@ -62,6 +64,7 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
     // Instead, serialize type parameters and normal parameters separately.
     s2j.getTraverser().addTraversedElement(toSerialize.getSpannedScope());  // So the spanned scope is not visited
     serializeParameters(toSerialize, s2j);
+    serializePorts(toSerialize, s2j);
     serializeTypeParameters(toSerialize, s2j);
 
     serializeAddons(toSerialize, s2j);
@@ -73,6 +76,7 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
   @Override
   protected void deserializeAddons(ComponentTypeSymbol symbol, JsonObject symbolJson) {
     deserializeParameters(symbol, symbolJson);
+    deserializePorts(symbol, symbolJson);
     deserializeTypeParameters(symbol, symbolJson);
   }
 
@@ -97,19 +101,27 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
     printer.endArray();
   }
 
+  protected void serializePorts(@NotNull ComponentTypeSymbol portOwner, @NotNull ArcBasisSymbols2Json s2j) {
+    JsonPrinter printer = s2j.getJsonPrinter();
+
+    printer.beginArray(PORTS);
+    portOwner.getPorts().forEach(p -> p.accept(s2j.getTraverser()));
+    printer.endArray();
+  }
+
   /**
    * @param paramOwner the component which owns the parameter.
    * @param paramOwnerJson the component which owns the parameters, encoded as JSON.
    */
   protected void deserializeParameters(@NotNull ComponentTypeSymbol paramOwner, @NotNull JsonObject paramOwnerJson) {
-    final String varSerializeKind = "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol";
+    final String varSerializeKind = VariableSymbol.class.getCanonicalName();
 
     List<JsonElement> params = paramOwnerJson.getArrayMemberOpt(PARAMETERS).orElseGet(Collections::emptyList);
 
     for (JsonElement param : params) {
       String paramJsonKind = JsonDeSers.getKind(param.getAsJsonObject());
       if (paramJsonKind.equals(varSerializeKind)) {
-        ISymbolDeSer deSer = arcbasis.ArcBasisMill.globalScope().getSymbolDeSer(varSerializeKind);
+        ISymbolDeSer deSer = ArcBasisMill.globalScope().getSymbolDeSer(varSerializeKind);
         VariableSymbol paramSym = (VariableSymbol) deSer.deserialize(param.getAsJsonObject());
 
         paramOwner.getSpannedScope().add(paramSym);
@@ -123,6 +135,36 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
           paramOwner.getName(),
           paramJsonKind,
           varSerializeKind
+        ));
+      }
+    }
+  }
+
+  /**
+   * @param portOwner the component which owns the parameter.
+   * @param paramOwnerJson the component which owns the parameters, encoded as JSON.
+   */
+  protected void deserializePorts(@NotNull ComponentTypeSymbol portOwner, @NotNull JsonObject paramOwnerJson) {
+    final String portSerializeKind = PortSymbol.class.getCanonicalName();
+
+    List<JsonElement> ports = paramOwnerJson.getArrayMemberOpt(PORTS).orElseGet(Collections::emptyList);
+
+    for (JsonElement port : ports) {
+      String portJasonKind = JsonDeSers.getKind(port.getAsJsonObject());
+      if (portJasonKind.equals(portSerializeKind)) {
+        ISymbolDeSer deSer = ArcBasisMill.globalScope().getSymbolDeSer(portSerializeKind);
+        PortSymbol portSym = (PortSymbol) deSer.deserialize(port.getAsJsonObject());
+
+        portOwner.getSpannedScope().add(portSym);
+
+      } else {
+        Log.error(String.format(
+          "Could not deserialize port '%s' of component '%s', " +
+            "as it is of kind '%s'. However, we only know how to deserialize '%s'",
+          port.getAsJsonObject().getStringMember(JsonDeSers.NAME),
+          portOwner.getName(),
+          portJasonKind,
+          portSerializeKind
         ));
       }
     }

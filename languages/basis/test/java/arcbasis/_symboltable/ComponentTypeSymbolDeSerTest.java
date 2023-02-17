@@ -55,6 +55,25 @@ class ComponentTypeSymbolDeSerTest extends AbstractTest {
       "}]" +
       "}";
 
+  private static final String JSON_WITH_PORTS =
+    "{" +
+      "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
+      "\"name\":\"Comp\"," +
+      "\"ports\":[{" +
+      "\"kind\":\"arcbasis._symboltable.PortSymbol\"," +
+      "\"name\":\"inc\"," +
+      "\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}," +
+      "\"incoming\":true," +
+      "\"timing\":\"untimed\"" +
+      "},{" +
+      "\"kind\":\"arcbasis._symboltable.PortSymbol\"," +
+      "\"name\":\"outg\"," +
+      "\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}," +
+      "\"outgoing\":true," +
+      "\"timing\":\"untimed\"" +
+      "}]" +
+      "}";
+
 
   @Test
   void shouldSerializeParent() {
@@ -145,6 +164,34 @@ class ComponentTypeSymbolDeSerTest extends AbstractTest {
   }
 
   @Test
+  void shouldSerializePorts() {
+    // Given
+    ComponentTypeSymbol comp = createSimpleComp();
+    PortSymbol portIncoming = ArcBasisMill.portSymbolBuilder()
+      .setName("inc")
+      .setIncoming(true)
+      .setType(SymTypeExpressionFactory.createPrimitive("int"))
+      .build();
+    PortSymbol portOutgoing = ArcBasisMill.portSymbolBuilder()
+      .setName("outg")
+      .setOutgoing(true)
+      .setType(SymTypeExpressionFactory.createPrimitive("int"))
+      .build();
+
+    comp.getSpannedScope().add(portIncoming);
+    comp.getSpannedScope().add(portOutgoing);
+
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+    ArcBasisSymbols2Json arc2json = new ArcBasisSymbols2Json();
+
+    // When
+    String createdJson = deser.serialize(comp, arc2json);
+
+    // Then
+    Assertions.assertEquals(JSON_WITH_PORTS, createdJson);
+  }
+
+  @Test
   void shouldDeserializeParent() {
     // Given
     ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
@@ -198,6 +245,22 @@ class ComponentTypeSymbolDeSerTest extends AbstractTest {
     Assertions.assertAll(
       () -> Assertions.assertEquals("a", comp.getParameters().get(0).getName()),
       () -> Assertions.assertEquals("b", comp.getParameters().get(1).getName())
+    );
+  }
+
+  @Test
+  void shouldDeserializePorts() {
+    // Given
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+
+    // When
+    ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_PORTS);
+
+    // Then
+    Assertions.assertEquals(2, comp.getPorts().size());
+    Assertions.assertAll(
+      () -> Assertions.assertEquals("inc", comp.getPorts().get(0).getName()),
+      () -> Assertions.assertEquals("outg", comp.getPorts().get(1).getName())
     );
   }
 
