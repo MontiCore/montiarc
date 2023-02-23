@@ -294,8 +294,9 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkArgument(ast.getSpannedScope() instanceof IMontiArcArtifactScope);
     Preconditions.checkArgument(ast.getComponentType().isPresentSymbol());
     Preconditions.checkArgument(!path.isEmpty());
+
     this.storeSymbols((IMontiArcArtifactScope) ast.getSpannedScope(),
-      path + "/" + ast.getComponentType().getSymbol().getFullName() + ".arcsym");
+      path + "/" + Names.getPathFromPackage(ast.getComponentType().getSymbol().getFullName()) + ".arcsym");
   }
 
   @Override

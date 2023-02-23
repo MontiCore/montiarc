@@ -10,17 +10,14 @@ import org.gradle.api.attributes.Category
 import org.gradle.api.attributes.LibraryElements
 import org.gradle.api.attributes.Usage
 import org.gradle.api.component.AdhocComponentWithVariants
-import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.file.FileCollection
+import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.artifacts.dsl.LazyPublishArtifact
 import org.gradle.api.internal.lambdas.SerializableLambdas
 import org.gradle.api.internal.plugins.DefaultArtifactPublicationSet
 import org.gradle.api.internal.project.ProjectInternal
-import org.gradle.api.internal.tasks.DefaultTaskDependencyFactory
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.plugins.JavaPluginExtension
-import org.gradle.api.tasks.AbstractCopyTask
-import org.gradle.api.tasks.Sync
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
@@ -30,7 +27,8 @@ import org.gradle.jvm.tasks.Jar
 const val GENERATOR_DEPENDENCY_CONFIG_NAME = "maGenerator"
 const val DSL_EXTENSION_NAME = "montiarc"
 const val MONTIARC_SOURCES_BASE_CLASSIFIER = "montiarcSources"
-const val MONTIARC_SOURCE_USAGE = "montiarc-compile"
+const val MONTIARC_SYMBOLS_BASE_CLASSIFIER = "arcSymbols"
+const val MONTIARC_API_SYMBOL_USAGE = "montiarc-api"
 
 const val MA_TOOL_CLASS = "montiarc.generator.MontiArcTool"
 const val INTERNAL_GENERATOR_PROJECT_REF = ":generators:ma2java"
@@ -52,12 +50,11 @@ class MontiarcPlugin : Plugin<Project> {
     sourceSets.configureEach { sourceSet ->
       // Enabling the declaration of model dependencies and prepare their extraction
       val dependencyConfig = setUpMontiarcDependencyConfiguration(sourceSet, project)
-      val srcDependencyConfig = setUpMontiarcSourceDependencyConfiguration(sourceSet, dependencyConfig, project)
-      val unpackModelsTask = createUnpackDependencyModelsTask(sourceSet, srcDependencyConfig, project)
+      setUpMontiarcSymbolDependencyConfiguration(sourceSet, dependencyConfig, project)
 
       // Adding Montiarc to all source sets and creating a compile task from it
       addMontiarcToSourceSet(sourceSet, project)
-      createCompileMontiarcTask(sourceSet, unpackModelsTask, project, extension)
+      createCompileMontiarcTask(sourceSet, project, extension)
     }
 
     // Special treatments for the main and test source sets. They only exist, when the java plugin is applied
@@ -100,7 +97,7 @@ class MontiarcPlugin : Plugin<Project> {
 
   /**
    * Adds the entry "montiarc" to every source set where users can put montiarc models.
-   * Moreover, the [destinationDirectory][org.gradle.api.file.SourceDirectorySet.getDestinationDirectory] of the
+   * Moreover, the [destinationDirectory][SourceDirectorySet.getDestinationDirectory] of the
    * montiarc sources is added to the java sources of the same SourceSet
    */
   private fun addMontiarcToSourceSet(sourceSet: SourceSet, project: Project) {
@@ -108,11 +105,12 @@ class MontiarcPlugin : Plugin<Project> {
       MontiarcSourceDirectorySet::class.java, "montiarc",
       DefaultMontiarcSourceDirectorySet::class.java,
       project.objects.sourceDirectorySet("montiarc", "${sourceSet.name} montiarc source"),
-      DefaultTaskDependencyFactory.withNoAssociatedProject()
+      // DefaultTaskDependencyFactory.withNoAssociatedProject()  // Needed starting with Gradle v.8
     )
 
-    val genDir = project.layout.buildDirectory.dir("montiarc/${sourceSet.name}")
-    srcDirSet.destinationDirectory.convention(genDir)
+    // Setting default values for the SourceDirectorySet
+    val destinationDir = project.layout.buildDirectory.dir("montiarc/${sourceSet.name}")
+    srcDirSet.destinationDirectory.convention(destinationDir)
     srcDirSet.srcDir(project.file("src/${sourceSet.name}/montiarc"))
     srcDirSet.filter.include("**/*.arc")
 
@@ -123,11 +121,9 @@ class MontiarcPlugin : Plugin<Project> {
     val srcDirectorySetAsFileCollection = srcDirSet as FileCollection
     sourceSet.resources.exclude(SerializableLambdas.spec { el -> srcDirectorySetAsFileCollection.contains(el.file) })
     sourceSet.allSource.source(srcDirSet)
-    sourceSet.java.srcDir(srcDirSet.classesDirectory)
   }
 
   private fun createCompileMontiarcTask(sourceSet: SourceSet,
-                                        unpackModelsTask: TaskProvider<out AbstractCopyTask>,
                                         project: Project,
                                         extension: MAExtension): TaskProvider<MontiarcCompile> {
     val montiarcSrcDirSet = sourceSet.extensions.getByType(MontiarcSourceDirectorySet::class.java)
@@ -139,19 +135,21 @@ class MontiarcPlugin : Plugin<Project> {
 
       genTask.modelPath.setFrom(montiarcSrcDirSet.sourceDirectories)
       genTask.outputDir.set(montiarcSrcDirSet.destinationDirectory)
-      genTask.symbolImportDir.setFrom(project.file("${project.projectDir}/src/${sourceSet.name}/symbols"))
+      genTask.symbolImportDir.setFrom(
+        project.configurations.named(sourceSet.montiarcSymbolDependencyConfigurationName())
+      )
 
+      sourceSet.java.srcDir(genTask.javaOutputDir())
       genTask.hwcPath.setFrom(project.provider {
         sourceSet.allJava.sourceDirectories.files
-        .filter { !it.startsWith(montiarcSrcDirSet.classesDirectory.get().asFile)}
+        .filter { !it.startsWith(genTask.javaOutputDir().get().asFile)}
       })
-
-      genTask.libModels.setFrom(unpackModelsTask)
     }
 
+    // We can only specify one output directory in the .compiledBy(...) call. As the primary product of the generator
+    // is java code, we specify the java output directory (neglecting the symbol output directory)
     sourceSet.montiarc().get().compiledBy(generateTask, MontiarcCompile::outputDir)
     setTaskOrderAfterMaGenerator(generateTask, project, extension)
-    generateTask.configure { it.dependsOn(unpackModelsTask) }
     project.tasks.named(sourceSet.compileJavaTaskName).configure { it.dependsOn(generateTask) }
 
     return generateTask
@@ -180,8 +178,8 @@ class MontiarcPlugin : Plugin<Project> {
     config.isCanBeConsumed = false
     config.isCanBeResolved = false
     config.isVisible = false
-    config.description = "Declares dependencies on other montiarc projects. This will simultaneously add their java " +
-      "implementation to the implementation configuration and their models to to the montiarcSourceDependencies"
+    config.description = "Used to declare dependencies on other montiarc projects. This will simultaneously add their " +
+      "java implementation to the implementation configuration and their models to to the montiarcSymbolDependencies"
 
     project.configurations.named(sourceSet.implementationConfigurationName).configure {
       it.extendsFrom(config)
@@ -191,46 +189,48 @@ class MontiarcPlugin : Plugin<Project> {
   }
 
   /**
-   * Creates a configuration (_montiarcSourceDependencies_) for the given source set that contains model dependencies.
-   * Only use this configuration for processing, but not to declare dependencies! Do this using the _montiarc_
-   * configuration from which _montiarcSourceDependencies_ extends from to automatically adopt the dependencies.
+   * Creates a configuration (_montiarcSymbolDependencies_) for the given source set, containing model dependencies
+   * (.arcsym etc). Only use this configuration for processing, but not to declare dependencies! Do this using the
+   * _montiarc_ configuration from which _montiarcSymbolDependencies_ extends from to automatically adopt the
+   * dependencies.
    * @param generalDependencyConfiguration The _montiarc_ configuration that is used to _declare_ the dependencies.
    */
-  private fun setUpMontiarcSourceDependencyConfiguration(
+  private fun setUpMontiarcSymbolDependencyConfiguration(
     sourceSet: SourceSet,
     generalDependencyConfiguration: Configuration,
     project: Project): Configuration {
 
-    return project.configurations.create(sourceSet.montiarcSourceDependencyConfigurationName()) { config ->
+    return project.configurations.create(sourceSet.montiarcSymbolDependencyConfigurationName()) { config ->
       config.extendsFrom(generalDependencyConfiguration)
       config.isCanBeResolved = true
       config.isCanBeConsumed = false
       config.isVisible = false
-      config.description = "Contains montiarc _model_ dependencies. Only use this configuration for processing " +
-        "dependencies, but not for declaring them. For declaring them, use the _montiarc_ configuration instead."
+      config.description = "Contains montiarc _model_ dependencies (.arcsym, etc). Only use this configuration for " +
+        "processing dependencies, but not for declaring them. For declaring them, use the _montiarc_ configuration " +
+        "instead."
 
-      addMontiarcSourcesJarAttributesTo(config, project)
+      addMontiarcSymbolJarAttributesTo(config, project)
     }
   }
 
   /**
-   * Asserts that .arc model dependencies of the project appear as transitive dependencies in the publication.
-   * To this end, this method lets the `outgoingMontiarcSources` configuration of the given [SourceSet] extend from
-   * it's `MontiarcSourceDependencies` configuration.
-   * @param sourceSet the [SourceSet] whose montiarc models should be published and for which this method will
+   * Asserts that montiarc dependencies of the project appear as transitive dependencies in the publication.
+   * To this end, this method lets the `outgoingMontiarcSymbols` configuration of the given [SourceSet] extend from
+   * it's `montiarcSymbolDependencies` configuration.
+   * @param sourceSet the [SourceSet] whose montiarc symbols should be published and for which this method will
    *        add the transitive dependencies.
    */
-  private fun linkMontiarcDependenciesToOutgoingArcSourcesConfiguration(sourceSet: SourceSet, project: Project) {
+  private fun linkMontiarcDependenciesToOutgoingArcSymbolsConfiguration(sourceSet: SourceSet, project: Project) {
     val configs = project.configurations
-    val montiarcDependencyConfig = configs.getByName(sourceSet.montiarcSourceDependencyConfigurationName())
-    val outgoingArcSourcesConfiguration = configs.getByName(sourceSet.montiarcOutgoingSourcesConfigurationName())
+    val montiarcDependencyConfig = configs.getByName(sourceSet.montiarcSymbolDependencyConfigurationName())
+    val outgoingArcSymbolsConfiguration = configs.getByName(sourceSet.montiarcOutgoingSymbolsConfigurationName())
 
-    outgoingArcSourcesConfiguration.extendsFrom(montiarcDependencyConfig)
+    outgoingArcSymbolsConfiguration.extendsFrom(montiarcDependencyConfig)
   }
 
   /**
-   * Makes models of source set `main` available in `test` (that must exist, checked by whether the
-   * [org.gradle.api.plugins.JavaPlugin] is applied).
+   * Makes symbols of source set `main`'s compiled models available in `test` (these source sets must exist, checked by
+   * whether the [org.gradle.api.plugins.JavaPlugin] is applied).
    */
   private fun linkMainModelsToTestModels(project: Project) {
     if (!project.pluginManager.hasPlugin("java")) {
@@ -242,22 +242,24 @@ class MontiarcPlugin : Plugin<Project> {
     val mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
     val testSourceSet = sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
 
-    // 1) Make main's model dependencies also test's model dependencies
-    // We only have to link the dependencies to _montiarc_ models. Their _implementation_ dependencies are already
+    // 1) Make main's montiarc dependencies also test's montiarc dependencies
+    // We only have to link the dependencies to _montiarc_ models. Their _java implementation_ dependencies are already
     // linked, as testImplementation extends implementation
-    val mainModelConfig = project.configurations.getByName(mainSourceSet.montiarcSourceDependencyConfigurationName())
-    val testModelConfig = project.configurations.getByName(testSourceSet.montiarcSourceDependencyConfigurationName())
+    val mainModelConfig = project.configurations.getByName(mainSourceSet.montiarcSymbolDependencyConfigurationName())
+    val testModelConfig = project.configurations.getByName(testSourceSet.montiarcSymbolDependencyConfigurationName())
     testModelConfig.extendsFrom(mainModelConfig)
 
-    // 2) Puts main montiarc models on the lib model path of test
+
+    val mainCompile = project.tasks.named(mainSourceSet.getCompileMontiarcTaskName(), MontiarcCompile::class.java)
+    // 2) Puts main's symbols on the symbol path of test
     project.tasks.named(testSourceSet.getCompileMontiarcTaskName(), MontiarcCompile::class.java) {
-      it.libModels.from(mainSourceSet.montiarc().get().srcDirs)
+      it.symbolImportDir.from(mainCompile.get().symbolOutputDir())
     }
   }
 
   /**
-   * Sets up publishing of models of the main source set (that must exists, checked by whether the
-   * [org.gradle.api.plugins.JavaPlugin] is applied)
+   * Sets up publishing of the symbols of the compiled models of the main source set (that must exists, checked by
+   * whether the [org.gradle.api.plugins.JavaPlugin] is applied)
    */
   private fun addModelsPublicationForMain(project: Project) {
     if (!project.pluginManager.hasPlugin("java")) {
@@ -268,52 +270,58 @@ class MontiarcPlugin : Plugin<Project> {
     val sourceSets = project.extensions.getByType(JavaPluginExtension::class.java).sourceSets
     val mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
 
-    setUpPublicationFromModelsOfSourceSet(mainSourceSet, project)
+    setUpPublicationFromSymbolsOfSourceSet(mainSourceSet, project)
   }
 
   /**
-   * Sets up a publication for the models of the given source set. To this end, a jar task is created.
+   * Sets up a publication for the symbols of the compiled models of the given source set. To this end, a jar task is
+   * created.
    */
-  private fun setUpPublicationFromModelsOfSourceSet(sourceSet: SourceSet, project: Project) {
-    val arcSourcesConfig = createOutgoingArcSourcesConfiguration(sourceSet, project)
-    val arcSourcesJarTask = createArcSourcesJarTask(sourceSet, project)
-    val arcSourcesJar = jarTaskToArtifact(arcSourcesJarTask, project)
+  private fun setUpPublicationFromSymbolsOfSourceSet(sourceSet: SourceSet, project: Project) {
 
-    setUpPublicationOfArcSources(arcSourcesJar, arcSourcesConfig, project)
-    linkMontiarcDependenciesToOutgoingArcSourcesConfiguration(sourceSet, project)
+    val arcSymbolsConfig = createOutgoingArcSymbolsConfiguration(sourceSet, project)
+    val arcSymbolsJarTask = createArcSymbolsJarTask(sourceSet, project)
+    val arcSymbolsJar = jarTaskToPublishArtifact(arcSymbolsJarTask, project)
+
+    setUpPublicationOf(arcSymbolsJar, arcSymbolsConfig, project)
+    linkMontiarcDependenciesToOutgoingArcSymbolsConfiguration(sourceSet, project)
   }
 
   /**
-   * Creates a consumable configuration that contains the montiarc models of the given source set.
+   * Creates a consumable configuration that contains the symbols of the compiled models of the given source set.
    */
-  private fun createOutgoingArcSourcesConfiguration(sourceSet: SourceSet, project: Project): Configuration {
-    return project.configurations.create(sourceSet.montiarcOutgoingSourcesConfigurationName()) { config ->
+  private fun createOutgoingArcSymbolsConfiguration(sourceSet: SourceSet, project: Project): Configuration {
+    return project.configurations.create(sourceSet.montiarcOutgoingSymbolsConfigurationName()) { config ->
       config.isCanBeConsumed = true
       config.isCanBeResolved = false
-      config.description = "Source models of source set ${sourceSet.name}"
+      config.description = "Symbols of the compiled models of source set ${sourceSet.name}"
 
-      addMontiarcSourcesJarAttributesTo(config, project)
+      addMontiarcSymbolJarAttributesTo(config, project)
     }
   }
 
   /**
-   * Creates a jar task that packages the montiarc models of the source set into a jar.
+   * Creates a jar task that packages the symbols produced by compiling the models of the source set into a jar.
    */
-  private fun createArcSourcesJarTask(sourceSet: SourceSet, project: Project): TaskProvider<Jar> {
-    val arcSourcesJarTask = project.tasks.register(sourceSet.getMontiarcSourcesJarTaskName(), Jar::class.java) { jar ->
-      jar.from(sourceSet.montiarc().get().sourceDirectories)
-      jar.archiveClassifier.set(sourceSet.getSourcesJarClassifierName())
+  private fun createArcSymbolsJarTask(sourceSet: SourceSet,
+                                      project: Project): TaskProvider<Jar> {
+
+    val compileTask = project.tasks.named(sourceSet.getCompileMontiarcTaskName(), MontiarcCompile::class.java)
+
+    val arcSymbolsJarTask = project.tasks.register(sourceSet.getMontiarcSymbolsJarTaskName(), Jar::class.java) { jar ->
+      jar.from(compileTask.get().symbolOutputDir())
+      jar.archiveClassifier.set(sourceSet.getSymbolsJarClassifierName())
     }
 
-    project.tasks.named(BasePlugin.ASSEMBLE_TASK_NAME).configure { it.dependsOn(arcSourcesJarTask) }
+    project.tasks.named(BasePlugin.ASSEMBLE_TASK_NAME).configure { it.dependsOn(arcSymbolsJarTask) }
 
-    return arcSourcesJarTask
+    return arcSymbolsJarTask
   }
 
   /**
    * Gets the [LazyPublishArtifact] representation of the jar tasks output.
    */
-  private fun jarTaskToArtifact(task: TaskProvider<Jar>, project: Project): LazyPublishArtifact {
+  private fun jarTaskToPublishArtifact(task: TaskProvider<Jar>, project: Project): LazyPublishArtifact {
     return LazyPublishArtifact(task, project.version.toString(), (project as ProjectInternal).fileResolver)
   }
 
@@ -322,7 +330,7 @@ class MontiarcPlugin : Plugin<Project> {
    * artifact of the given configuration, and adding the configuration to the java [SoftwareComponent].
    * Note that the _java_ component must exist (checked by whether the [org.gradle.api.plugins.JavaPlugin] is applied
    */
-  private fun setUpPublicationOfArcSources(jar: PublishArtifact, outgoingConfig: Configuration, project: Project) {
+  private fun setUpPublicationOf(jar: PublishArtifact, outgoingConfig: Configuration, project: Project) {
     if (!project.pluginManager.hasPlugin("java")) {
       project.logger.error("Internal error: Tried to create a publication, but the JavaPlugin is not applied!")
     }
@@ -338,46 +346,18 @@ class MontiarcPlugin : Plugin<Project> {
   }
 
   /**
-   * Adds the gradle module attributes to the configuration that mark it as a jar that contains .arc models.
+   * Adds the gradle module attributes to the configuration that mark it as a jar that contains .arcsym models.
    */
-  private fun addMontiarcSourcesJarAttributesTo(config: Configuration, project: Project) {
+  private fun addMontiarcSymbolJarAttributesTo(config: Configuration, project: Project) {
     config.attributes {
       it.attribute(Category.CATEGORY_ATTRIBUTE, project.objects.named(Category::class.java, Category.LIBRARY))
-      it.attribute(Usage.USAGE_ATTRIBUTE, project.objects.named(Usage::class.java, MONTIARC_SOURCE_USAGE))
+      it.attribute(Usage.USAGE_ATTRIBUTE, project.objects.named(Usage::class.java, MONTIARC_API_SYMBOL_USAGE))
       it.attribute(Bundling.BUNDLING_ATTRIBUTE, project.objects.named(Bundling::class.java, Bundling.EXTERNAL))
       it.attribute(
         LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE,
         project.objects.named(LibraryElements::class.java, LibraryElements.JAR)
       )
     }
-  }
-
-  /**
-   * Creates a task that extracts the contents of the jars from the given dependency configuration. We use this to
-   * extract .sym files from jars containing our model dependencies.
-   */
-  private fun createUnpackDependencyModelsTask(srcSet: SourceSet,
-                                               dependencyConfig: Configuration,
-                                               project: Project): TaskProvider<Sync> {
-    return project.tasks.register(srcSet.getUnpackMontiarcDependenciesTaskName(), Sync::class.java) { copy ->
-      copy.description = "Extracts model dependency .sym files from jars so that they can be used for the " +
-          "${srcSet.name} source set. (And currently, we also extract .arc files, but this will be removed in " +
-          "the future.)"
-      copy.dependsOn(dependencyConfig)
-
-      copy.from(project.provider { dependencyConfig.files.map { project.zipTree(it) } })
-      copy.into(getUnpackModelDependenciesDir(srcSet, project))
-
-      copy.include("**/*.arc")
-      copy.include("**/*.sym")
-      copy.includeEmptyDirs = false
-
-      copy.duplicatesStrategy = DuplicatesStrategy.FAIL
-    }
-  }
-
-  private fun getUnpackModelDependenciesDir(srcSet: SourceSet, project: Project): String {
-    return "${project.buildDir}/unpacked-montiarc-dependencies/${srcSet.name}"
   }
 }
 

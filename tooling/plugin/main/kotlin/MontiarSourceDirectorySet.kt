@@ -3,7 +3,6 @@ package montiarc.tooling.plugin
 
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
-import org.gradle.api.internal.tasks.TaskDependencyFactory
 import org.gradle.api.tasks.SourceSet
 import java.util.Optional
 import javax.inject.Inject
@@ -15,7 +14,7 @@ interface MontiarcSourceDirectorySet : SourceDirectorySet
 
 abstract class DefaultMontiarcSourceDirectorySet @Inject constructor(
   sourceDirectorySet: SourceDirectorySet,
-  taskDependencyFactory: TaskDependencyFactory  // Needed starting with gradle v.8?
+  // taskDependencyFactory: TaskDependencyFactory  // Needed starting with gradle v.8 */
 ) : DefaultSourceDirectorySet(sourceDirectorySet), MontiarcSourceDirectorySet
 
 fun SourceSet.montiarcDependencyConfigurationName(): String {
@@ -26,19 +25,19 @@ fun SourceSet.montiarcDependencyConfigurationName(): String {
   }
 }
 
-fun SourceSet.montiarcSourceDependencyConfigurationName(): String {
+fun SourceSet.montiarcSymbolDependencyConfigurationName(): String {
   return if (SourceSet.isMain(this)) {
-    "montiarcSourceDependencies"
+    "montiarcSymbolDependencies"
   } else {
-    "${this.name}MontiarcSourceDependencies"
+    "${this.name}MontiarcSymbolDependencies"
   }
 }
 
-fun SourceSet.montiarcOutgoingSourcesConfigurationName(): String {
+fun SourceSet.montiarcOutgoingSymbolsConfigurationName(): String {
   return if (SourceSet.isMain(this)) {
-    "montiarcSourcesElements"
+    "montiarcSymbolElements"
   } else {
-    "${this.name}MontiarcSourcesElements"
+    "${this.name}MontiarcSymbolElements"
   }
 }
 
@@ -46,12 +45,8 @@ fun SourceSet.getCompileMontiarcTaskName(): String {
   return getCompileTaskName("montiarc")
 }
 
-fun SourceSet.getUnpackMontiarcDependenciesTaskName(): String {
-  return getTaskName("unpack", "MontiarcDependencies")
-}
-
-fun SourceSet.getMontiarcSourcesJarTaskName(): String {
-  return getTaskName(null, "montiarcSourcesJar")
+fun SourceSet.getMontiarcSymbolsJarTaskName(): String {
+  return getTaskName(null, "montiarcSymbolsJar")
 }
 
 fun SourceSet.getSourcesJarClassifierName(): String {
@@ -59,6 +54,14 @@ fun SourceSet.getSourcesJarClassifierName(): String {
     MONTIARC_SOURCES_BASE_CLASSIFIER
   } else {
     "${this.name}-$MONTIARC_SOURCES_BASE_CLASSIFIER"
+  }
+}
+
+fun SourceSet.getSymbolsJarClassifierName(): String {
+  return if (SourceSet.isMain(this)) {
+    MONTIARC_SYMBOLS_BASE_CLASSIFIER
+  } else {
+    "${this.name}-$MONTIARC_SYMBOLS_BASE_CLASSIFIER"
   }
 }
 

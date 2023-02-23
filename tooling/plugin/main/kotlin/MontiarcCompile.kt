@@ -2,8 +2,11 @@
 package montiarc.tooling.plugin
 
 import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.*
 
 /**
@@ -49,37 +52,41 @@ abstract class MontiarcCompile : JavaExec() {
     useClass2Mc.convention(false)
   }
 
+  fun javaOutputDir(): Provider<Directory> {
+    return this.outputDir.dir("java")
+  }
+
+  fun symbolOutputDir(): Provider<Directory> {
+    return this.outputDir.dir("symbols")
+  }
+
   @TaskAction
   override fun exec() {
 
-    //printInfo()
+    // printInfo()
 
     // 1) For directories: filter out entries that do not exist
-    val cleanModelPath = project.files(
-      this.modelPath.files.filter { it.exists() }
-    )
-    val cleanSymbolImportDirs = project.files(
-      this.symbolImportDir.files.filter { it.exists() }
-    )
-
-    val cleanLibModelsPath = project.files(
-      this.libModels.files.filter { it.exists() }
-    )
+    val cleanModelPath = getExistingEntriesInProjectFrom(this.modelPath)
+    val cleanSymbolImportDirs = getExistingEntriesInProjectFrom(this.symbolImportDir)
+    val cleanLibModelsPath = getExistingEntriesInProjectFrom(this.libModels)
+    val cleanHwcPath = getExistingEntriesInProjectFrom(this.hwcPath)
 
     // 2) Build args for the montiarc generator
-    args("-mp", cleanModelPath.asPath)
-    args("-o", this.outputDir.asFile.get().path)
-    if (!hwcPath.isEmpty) { args("-hwc", this.hwcPath.asPath); }
+    args("--modelpath", cleanModelPath.asPath)
+    args("--output", this.javaOutputDir().get().asFile.path)
+    args("--symboltable", this.symbolOutputDir().get().asFile.path)
 
-    if(useClass2Mc.get()) { args("-c2mc"); }
+    if(useClass2Mc.get()) { args("--class2mc"); }
 
+    if (!cleanHwcPath.isEmpty) { args("--handwritten-code", cleanHwcPath.asPath); }
     if (!cleanSymbolImportDirs.isEmpty) {
       args("-path", cleanSymbolImportDirs.asPath)
     }
-
     if(!cleanLibModelsPath.isEmpty) {
-      args("-lib", cleanLibModelsPath.asPath)
+      args("--library-models", cleanLibModelsPath.asPath)
     }
+
+
 
     // 3) Execute
     if (cleanModelPath.isEmpty) {
@@ -87,6 +94,12 @@ abstract class MontiarcCompile : JavaExec() {
     } else {
       super.exec()
     }
+  }
+
+  private fun getExistingEntriesInProjectFrom(fileCollection: FileCollection): FileCollection {
+    return project.files(
+      fileCollection.files.filter { it.exists() }
+    )
   }
 
   private fun printInfo() {

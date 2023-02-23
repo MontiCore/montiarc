@@ -910,8 +910,8 @@ public class MontiArcToolTest extends AbstractTest {
     // Tests may also fail du to the SE Logger exiting early (failQuick), when it encounters errors. These errors may
     // be errors from MontiArc models  In this case it is possible, that the library models were not parsed and
     // therefore are missing, leading to the errors.
-    Assertions.assertTrue(expectedPpFile.isFile());
-    Assertions.assertFalse(illegalPpFile.exists());
+    Assertions.assertTrue(expectedPpFile.isFile(), "Model from model path should be pretty printed");
+    Assertions.assertFalse(illegalPpFile.exists(), "Model from library path should not be serialized");
   }
 
   @Test
@@ -919,8 +919,8 @@ public class MontiArcToolTest extends AbstractTest {
     // Given
     String modelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "referencingLibraryConsumer").toString();
     String libraryPath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "referencedLibrary").toString();
-    File serializeFile = tempDir.resolve("pack2.ReferencingComponent.arcsym").toFile();
-    File illegalSerializeFile = tempDir.resolve("pack.ReferencedComponent.arcsym").toFile();
+    File serializeFile = tempDir.resolve("pack2").resolve("ReferencingComponent.arcsym").toFile();
+    File illegalSerializeFile = tempDir.resolve("pack").resolve("packReferencedComponent.arcsym").toFile();
 
     MontiArcTool tool = new MontiArcTool();
     String[] args = new String[] {
@@ -936,8 +936,8 @@ public class MontiArcToolTest extends AbstractTest {
     // Tests may also fail du to the SE Logger exiting early (failQuick), when it encounters errors. These errors may
     // be errors from MontiArc models  In this case it is possible, that the library models were not parsed and
     // therefore are missing, leading to the errors.
-    Assertions.assertTrue(serializeFile.isFile());
-    Assertions.assertFalse(illegalSerializeFile.exists());
+    Assertions.assertTrue(serializeFile.isFile(), "Model from model path should be serialized");
+    Assertions.assertFalse(illegalSerializeFile.exists(), "Model from library path should not be serialized");
   }
 
 }

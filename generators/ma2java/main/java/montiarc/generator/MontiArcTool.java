@@ -39,6 +39,7 @@ public class MontiArcTool extends montiarc.MontiArcTool {
       .desc("Sets the target path for the generated files (optional).")
       .build());
     options.addOption(org.apache.commons.cli.Option.builder("hwc")
+      .longOpt("handwritten-code")
       .hasArgs()
       .desc("Sets the artifact path for handwritten code (optional).")
       .build());

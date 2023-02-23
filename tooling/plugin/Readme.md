@@ -103,20 +103,21 @@ montiarc {
   internalMontiArcTesting.set(true)
 }
 ```
+Note that the generated java code will be generated to `$destinationDirectory/java`.
 
 ### Configuration options in detail:
 Each [MontiarcCompile](./main/kotlin/MontiarcCompile.kt) task has the following configuration options that can be set.
-Some configuration options only have default values, if they were created for a source set. 
+Some configuration options only have default values, if the task is created for a source set. 
 
-| Option          | Default value                                                                        | Description                                                                                                                                                                                                                                                                                                                         |
-|-----------------|--------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| modelPath       | `$projectDir/src/SOURCE_SET_NAME/montiarc`                                           | Where to find the MontiArc models for which Java code should be generated. You can specify multiple locations with multiple _from_ statements.                                                                                                                                                                                      |
-| hwcPath         | All java code from the same source set (main, or test, etc.)                         | Where to find the handwritten code extensions for the generated MontiArc code.                                                                                                                                                                                                                                                      |
-| symbolImportDir | `$projectDir/src/SOURCE_SET_NAME/symbols`                                            | If you want to use `.sym` files, then you can use this configuration parameter to inform the generator where to find them. You can specify multiple locations with multiple _from_ statements.                                                                                                                                      |
-| useClass2Mc     | `false`                                                                              | If you want to use java types (or other JVM types) in your MontiArc models, then you set this configuration parameter to `true`. By this, all JVM types that are on the class path of the generator (which is the configuration `maGenerator`) will be accessible from MontiArc models. *Note*: this will be changed in the future. | <!-- TODO: Check if we need to put these types into the generateMA configuration -->
-| outputDir       | `$buildDir/montiarc/SOURCE_SET_NAME`                                                 | Where the generated files should be placed.                                                                                                                                                                                                                                                                                         |
-| libModels       | Defaults to somewhere in the build directory where model dependencies are extracted. | Where to find models which should be parsed and read into the symbol table, but for which no generation should take place.                                                                                                                                                                                                          |
-| sourceSetName   | _deprecated_ (None)                                                                  |                                                                                                                                                                                                                                                                                                                                     |
+| Option          | Default value                                                | Description                                                                                                                                                                                                                                                                                                                         |
+|-----------------|--------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| modelPath       | `$projectDir/src/SOURCE_SET_NAME/montiarc`                   | Where to find the MontiArc models for which Java code should be generated. You can specify multiple locations with multiple `modelPath.from(...)` statements.                                                                                                                                                                       |
+| hwcPath         | All java code from the same source set (main, or test, etc.) | Where to find the handwritten code extensions for the generated MontiArc code.                                                                                                                                                                                                                                                      |
+| symbolImportDir | The `montiarcSymbolDependencies` configuration               | If you want to use `.sym` files, then you can use this configuration parameter to inform the generator where to find them. You can specify multiple locations with multiple `symbolImportDir.from(...)` statements.                                                                                                                 |
+| useClass2Mc     | `false`                                                      | If you want to use java types (or other JVM types) in your MontiArc models, then you set this configuration parameter to `true`. By this, all JVM types that are on the class path of the generator (which is the configuration `maGenerator`) will be accessible from MontiArc models. *Note*: this will be changed in the future. | <!-- TODO: Check if we need to put these types into the generateMA configuration -->
+| outputDir       | `$buildDir/montiarc/SOURCE_SET_NAME`                         | Where the generated files should be placed. Generated Java code ist placed in the `java` subfolder, exported symbol files are put in the `symbols` subfolder.                                                                                                                                                                       |
+| libModels       | None                                                         | Where to find models which should be parsed and read into the symbol table, but for which no generation should take place. Consider exporting these models as .arcsym files and putting them on the symbolImportDir instead.                                                                                                        |
+| sourceSetName   | _deprecated_ (None)                                          |                                                                                                                                                                                                                                                                                                                                     |
 
 Moreover, there are the following options configurable in the `montiarc` block:
 
@@ -140,17 +141,15 @@ Moreover, there are the following options configurable in the `montiarc` block:
       the symbol of the `compileMontiarc` task and their java implementations will automatically be added to the
       `implementation` configuration for compilation and runtime. To this end, `implementation` extends the `montiarc`
       implementation, as does:
-    * `montiarcSourceDependencies` for the main source set and `sourceSetNameMontiarcSourceDependencies` for others:\
-      Only contains the montiarc models of the dependencies. Do not use this configuration to _declare_ the dependencies
-      (use `montiarc` for this purpose instead), but use this configuration, when you want to access the montiarc models
-      of the dependencies. (This configuration is derived from the `montiarc` configuration, only considering the
-      montiarc models.)
-    * `montiarcSourcesElements` for the main source set and `sourceSetNameMontiarcSourcesElements` for others:\
-      Contains the jar of the montiarc models that is added to the default publication set. By default, this
-      configuration is only added for the main source set
-  * Adds an `unpackSourceSetNameMontiarcModelDependencies` task that extracts the model dependencies from their jars so
-    that they can be used by [MontiarcCompile](./main/kotlin/MontiarcCompile.kt).
-  * Models declared in the main source set are available in the test source set, too.
+    * `montiarcSymbolDependencies` for the main source set and `sourceSetNameMontiarcSymbolDependencies` for others:\
+      Only contains the montiarc models of the dependencies (represented by .arcsym files). Do not use 
+      this configuration to _declare_ the dependencies (use `montiarc` for this purpose instead), but use this
+      configuration, when you want to access the montiarc models of the dependencies. (This configuration is derived
+      from the `montiarc` configuration, only considering the montiarc models.)
+    * `montiarcSymbolElements` for the main source set and `sourceSetNameMontiarcSymbolElements` for others:\
+      Contains the jar of the montiarc models (represented by .arcsym files) that is added to the default publication
+      set. By default, this configuration is only added for the main source set.
+  * Models declared in the main source set are available in the test source sets, too.
 
 ---
 ### Fixing problems:
@@ -160,8 +159,8 @@ Moreover, there are the following options configurable in the `montiarc` block:
     handwritten extensions. To fix this, you should set the *hwcPath* manually. This will overwrite the default value,
     including the entry with the outputDir.
 * There is no _main_ or _test_ source set\
-    These source sets only exist if the _java_ plugin is applied. If only the _java-base_ plugin is applied, there are
-    then there are no _main_ or _tests_ source sets.
+    These source sets only exist if the _java_ plugin is applied. If only the _java-base_ plugin is applied, then there
+  are no _main_ or _tests_ source sets.
 * If not transitively included, you have to add a dependency to `montiarc.libraries:majava-rte` for compiling and
   running your code generated by MontiArc.
 * If your dependencies use class2mc, then you have to activate it for your own project, too.

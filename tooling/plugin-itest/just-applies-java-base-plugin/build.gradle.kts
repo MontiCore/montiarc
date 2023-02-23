@@ -26,28 +26,37 @@ dependencies {
   fooImplConfig(project(":libraries:majava-rte"))
 }
 
-val checkGenerationTask = tasks.register("checkCorrectGeneration") {
+val checkGenerationTask = tasks.register("checkCorrectGeneration", CheckFilesArePresent::class.java) {
   dependsOn(tasks.named("compileFooMontiarc"))
   group = "verification"
 
-  val expectedFooLocation = file("$buildDir/montiarc/foo/foopackage/Foo.java")
-  val expectedBarLocation = file("$buildDir/montiarc/foo/barpackage/BarTOP.java")
+  val expectedGenDir = "$buildDir/montiarc/foo"
+  val expectedJavaGenDir = "$expectedGenDir/java"
+  val expectedSymbolGenDir = "$expectedGenDir/symbols"
 
-  doLast {
-    var failMessage = ""
+  mandatoryFiles.from(
+    "$expectedJavaGenDir/foopackage/Foo.java",
+    "$expectedJavaGenDir/barpackage/BarTOP.java",
+    "$expectedSymbolGenDir/foopackage/Foo.arcsym",
+    "$expectedSymbolGenDir/barpackage/Bar.arcsym"
+  )
+}
+tasks.check.configure { dependsOn(checkGenerationTask) }
 
-    if (!expectedFooLocation.exists()) {
-      failMessage += "Missing generation of 'Foo' at ${expectedFooLocation.path}"
-    }
 
-    if (!expectedBarLocation.exists()) {
-      failMessage += if (failMessage.isEmpty()) {""} else {"\n"}  // Maybe insert line break
-      failMessage += "Missing generation of 'BarTOP' at ${expectedBarLocation.path}"
-    }
 
-    if(!failMessage.isEmpty()) {
-      throw VerificationException(failMessage)
+abstract class CheckFilesArePresent : DefaultTask() {
+
+  @get:InputFiles
+  abstract val mandatoryFiles: ConfigurableFileCollection
+
+  @TaskAction
+  fun execute() {
+    val absentFiles = mandatoryFiles.files.filter { !it.exists() }
+    if (absentFiles.isNotEmpty()) {
+      val errorMsg = absentFiles.joinToString(separator = "\n") { "Missing expected file: ${it.path}" }
+
+      throw VerificationException(errorMsg)
     }
   }
 }
-tasks.named("check").configure { dependsOn(checkGenerationTask) }

@@ -35,6 +35,7 @@ val alteredConfigValuesSrcSet = sourceSets.create("alteringAndUsingConfigValues"
   montiarc.setSrcDirs(listOf("$projectDir/src/${this.name}/alteredMontiarc"))
   montiarc.destinationDirectory.set(layout.buildDirectory.dir("montiarc-for-altered-destination"))
 }
+
 val alteredConfigValuesImplConfig = configurations.getByName(alteredConfigValuesSrcSet.implementationConfigurationName)
 tasks.named<MontiarcCompile>(alteredConfigValuesSrcSet.getCompileMontiarcTaskName()) {
   val srcSet = alteredConfigValuesSrcSet
@@ -43,14 +44,20 @@ tasks.named<MontiarcCompile>(alteredConfigValuesSrcSet.getCompileMontiarcTaskNam
   useClass2Mc.set(true)
   libModels.setFrom("$projectDir/src/${srcSet.name}/alteredLibModels")
 }
+
 val alteredConfigCheck = tasks.register("checkAlteringConfigValues", CheckFilesArePresent::class.java) {
   dependsOn(tasks.named(alteredConfigValuesSrcSet.getCompileMontiarcTaskName()))
   group = "verification"
 
   val expectedGenDir = "$buildDir/montiarc-for-altered-destination"
+  val expectedJavaGenDir = "$expectedGenDir/java"
+  val expectedSymbolGenDir = "$expectedGenDir/symbols"
+
   mandatoryFiles.from(
-    "$expectedGenDir/mainpackage/HwcComponentTOP.java",
-    "$expectedGenDir/mainpackage/UsingLibModelsAndImportedSymbols.java"
+    "$expectedJavaGenDir/mainpackage/HwcComponentTOP.java",
+    "$expectedJavaGenDir/mainpackage/UsingLibModelsAndImportedSymbols.java",
+    "$expectedSymbolGenDir/mainpackage/HwcComponent.arcsym",
+    "$expectedSymbolGenDir/mainpackage/UsingLibModelsAndImportedSymbols.arcsym",
   )
 }
 tasks.check.configure { dependsOn(alteredConfigCheck) }
@@ -64,6 +71,7 @@ val multiplePathsSrcSet = sourceSets.create("usingMultiplePathsAsConfigValues") 
     "$projectDir/src/${this.name}/montiarc2",
   ))
 }
+
 val multiplePathsImplConfig = configurations.getByName(multiplePathsSrcSet.implementationConfigurationName)
 tasks.named<MontiarcCompile>(multiplePathsSrcSet.getCompileMontiarcTaskName()) {
   val srcSet = multiplePathsSrcSet
@@ -80,17 +88,26 @@ tasks.named<MontiarcCompile>(multiplePathsSrcSet.getCompileMontiarcTaskName()) {
     "$projectDir/src/${srcSet.name}/libModels2",
   )
 }
+
 val multiplePathsCheck = tasks.register("checkMultiplePaths", CheckFilesArePresent::class.java) {
   dependsOn(tasks.named(multiplePathsSrcSet.getCompileMontiarcTaskName()))
   group = "verification"
 
   val expectedGenDir = "$buildDir/montiarc/${multiplePathsSrcSet.name}"
+  val expectedJavaGenDir = "$expectedGenDir/java"
+  val expectedSymbolGenDir = "$expectedGenDir/symbols"
+
   mandatoryFiles.from(
-    "$expectedGenDir/mainpackage/HwcComponentTOP.java",
-    "$expectedGenDir/mainpackage/HwcComponent2TOP.java",
-    "$expectedGenDir/mainpackage/UsingComponentFromOtherModelPath.java",
-    "$expectedGenDir/mainpackage/UsingLibModelsAndImportedSymbols.java",
-    "$expectedGenDir/mainpackage/ComponentFromModelPath2.java"
+    "$expectedJavaGenDir/mainpackage/HwcComponentTOP.java",
+    "$expectedJavaGenDir/mainpackage/HwcComponent2TOP.java",
+    "$expectedJavaGenDir/mainpackage/UsingComponentFromOtherModelPath.java",
+    "$expectedJavaGenDir/mainpackage/UsingLibModelsAndImportedSymbols.java",
+    "$expectedJavaGenDir/mainpackage/ComponentFromModelPath2.java",
+    "$expectedSymbolGenDir/mainpackage/HwcComponent.arcsym",
+    "$expectedSymbolGenDir/mainpackage/HwcComponent2.arcsym",
+    "$expectedSymbolGenDir/mainpackage/UsingComponentFromOtherModelPath.arcsym",
+    "$expectedSymbolGenDir/mainpackage/UsingLibModelsAndImportedSymbols.arcsym",
+    "$expectedSymbolGenDir/mainpackage/ComponentFromModelPath2.arcsym"
   )
 }
 tasks.check.configure { dependsOn(multiplePathsCheck) }
@@ -104,6 +121,7 @@ val mixedPathsExistanceSrcSet = sourceSets.create("usingMultiplePathsMixedExista
     "$projectDir/src/${this.name}/montiarcNotExisting",
   ))
 }
+
 val mixedPathsImplConfig = configurations.getByName(mixedPathsExistanceSrcSet.implementationConfigurationName)
 tasks.named<MontiarcCompile>(mixedPathsExistanceSrcSet.getCompileMontiarcTaskName()) {
   val srcSet = mixedPathsExistanceSrcSet
@@ -120,14 +138,20 @@ tasks.named<MontiarcCompile>(mixedPathsExistanceSrcSet.getCompileMontiarcTaskNam
     "$projectDir/src/${srcSet.name}/libModelsNotExisting",
   )
 }
+
 val mixedPathExistenceCheck = tasks.register("checkMultipleMixedPathExistence", CheckFilesArePresent::class.java) {
   dependsOn(tasks.named(mixedPathsExistanceSrcSet.getCompileMontiarcTaskName()))
   group = "verification"
 
   val expectedGenDir = "$buildDir/montiarc/${mixedPathsExistanceSrcSet.name}"
+  val expectedJavaGenDir = "$expectedGenDir/java"
+  val expectedSymbolGenDir = "$expectedGenDir/symbols"
+
   mandatoryFiles.from(
-    "$expectedGenDir/mainpackage/HwcComponentTOP.java",
-    "$expectedGenDir/mainpackage/UsingLibModelsAndImportedSymbols.java"
+    "$expectedJavaGenDir/mainpackage/HwcComponentTOP.java",
+    "$expectedJavaGenDir/mainpackage/UsingLibModelsAndImportedSymbols.java",
+    "$expectedSymbolGenDir/mainpackage/HwcComponent.arcsym",
+    "$expectedSymbolGenDir/mainpackage/UsingLibModelsAndImportedSymbols.arcsym"
   )
 }
 tasks.check.configure { dependsOn(mixedPathExistenceCheck) }
@@ -143,12 +167,19 @@ tasks.named<MontiarcCompile>(removingSrcSet.getCompileMontiarcTaskName()) {
   symbolImportDir.setFrom()
   libModels.setFrom()
 }
+
 val removingDefaultValuesCheck = tasks.register("checkRemovingDefaultValues", CheckFilesArePresent::class.java) {
   dependsOn(tasks.named(removingSrcSet.getCompileMontiarcTaskName()))
   group = "verification"
 
   val expectedGenDir = "$buildDir/montiarc/${removingSrcSet.name}"
-  mandatoryFiles.from("$expectedGenDir/mainpackage/NoHwcComponent.java")
+  val expectedJavaGenDir = "$expectedGenDir/java"
+  val expectedSymbolGenDir = "$expectedGenDir/symbols"
+
+  mandatoryFiles.from(
+    "$expectedJavaGenDir/mainpackage/NoHwcComponent.java",
+    "$expectedSymbolGenDir/mainpackage/NoHwcComponent.arcsym"
+  )
 }
 tasks.check.configure { dependsOn(removingDefaultValuesCheck) }
 
@@ -164,12 +195,19 @@ tasks.named<MontiarcCompile>(unusedConfigValuesSrcSet.getCompileMontiarcTaskName
   symbolImportDir.setFrom(file("$projectDir/src/${srcSet.name}/unusedSymbols"))
   libModels.setFrom(file("$projectDir/src/${srcSet.name}/unusedLibModels"))
 }
+
 val unusedConfigValuesCheck = tasks.register("checkUnusedConfigValues", CheckFilesArePresent::class.java) {
   dependsOn(tasks.named(unusedConfigValuesSrcSet.getCompileMontiarcTaskName()))
   group = "verification"
 
   val expectedGenDir = "$buildDir/montiarc/${unusedConfigValuesSrcSet.name}"
-  mandatoryFiles.from("$expectedGenDir/mainpackage/NoHwcComponent.java")
+  val expectedJavaGenDir = "$expectedGenDir/java"
+  val expectedSymbolGenDir = "$expectedGenDir/symbols"
+
+  mandatoryFiles.from(
+    "$expectedJavaGenDir/mainpackage/NoHwcComponent.java",
+    "$expectedSymbolGenDir/mainpackage/NoHwcComponent.arcsym"
+  )
 }
 tasks.check.configure { dependsOn(unusedConfigValuesCheck) }
 
@@ -197,9 +235,7 @@ abstract class CheckFilesArePresent : DefaultTask() {
   fun execute() {
     val absentFiles = mandatoryFiles.files.filter { !it.exists() }
     if (absentFiles.isNotEmpty()) {
-      val errorMsg = absentFiles
-        .map {"Missing expected file: ${it.path}"}
-        .joinToString(separator = "\n")
+      val errorMsg = absentFiles.joinToString(separator = "\n") { "Missing expected file: ${it.path}" }
 
       throw VerificationException(errorMsg)
     }
