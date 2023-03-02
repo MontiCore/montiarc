@@ -117,7 +117,15 @@ public enum ArcError implements Error {
       "used to bind the configuration parameter '%s' at position '%s' of the subcomponent '%s %s', as configuration parameter bindings " +
       "must evaluate to values (which type names do not do)."),
   RESERVED_KEYWORD_USED("0xC1167", "'%s' is a keyword reserved by '%s'. Thus it's usage as a identifier name is " +
-    "illegal");
+    "illegal"),
+  INSTANTIATION_ARGUMENT_INVALID_ASSIGNMENT("0xC1168", "Instantiation argument of component instance '%s', " +
+    "consists of invalid assignments. Keyword binding of parameters allows for only one assignment expression with the '=' operator."),
+  ASSIGNMENT_KEYWORD_NOT_A_PARAMETER("0xC1169", "Keyword assignment of component '%s' does not refer to a parameter " +
+    "of its component type."),
+  POSITIONAL_ASSIGNMENT_AFTER_KEYWORD_ASSIGNMENT("0xC1170", "Positional assignments of component '%s' must be referred to " +
+          "before keyword based assignments"),
+  MULTIPLE_VALUES_FOR_ARGUMENT("0xC1171", "component '%s' got multiple values for argument '%s'.");
+
 
   private final String errorCode;
   private final String errorMessage;

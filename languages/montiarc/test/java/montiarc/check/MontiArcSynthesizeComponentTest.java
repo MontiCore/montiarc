@@ -23,7 +23,7 @@ import montiarc._symboltable.IMontiArcScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import variablearc.check.TypeExprOfVariableComponent;
+import variablearc._symboltable.IVariableArcScope;
 
 import java.util.Arrays;
 import java.util.List;
@@ -54,7 +54,7 @@ public class MontiArcSynthesizeComponentTest extends AbstractTest {
 
     // Then
     Assertions.assertTrue(result.isPresent());
-    Assertions.assertTrue(result.get() instanceof TypeExprOfVariableComponent);
+    Assertions.assertTrue(result.get().getTypeInfo().getSpannedScope() instanceof IVariableArcScope);
     Assertions.assertEquals(compSym, result.get().getTypeInfo());
   }
 

@@ -1,9 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
+import arcbasis._ast.ASTArcArgument;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import arcbasis.check.TypeExprOfComponent;
+import com.google.common.collect.ImmutableList;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.codehaus.commons.nullanalysis.Nullable;
 import org.junit.jupiter.api.Assertions;
@@ -15,7 +17,6 @@ import org.mockito.Mockito;
 import variablearc.AbstractTest;
 import variablearc.VariableArcMill;
 import variablearc._visitor.VariableArcTraverser;
-import variablearc.check.TypeExprOfVariableComponent;
 
 import java.util.Arrays;
 import java.util.List;
@@ -88,20 +89,21 @@ public class VariableArcSymbolTableCompleterTest extends AbstractTest {
       .setName("C")
       .setSpannedScope(scope)
       .build();
-    TypeExprOfVariableComponent typeExpr = new TypeExprOfVariableComponent(component);
+    TypeExprOfComponent typeExpr = new TypeExprOfComponent(component);
 
-    List<ASTExpression> bindings = Arrays.asList(Mockito.mock(ASTExpression.class), Mockito.mock(ASTExpression.class));
+    List<ASTArcArgument> bindings = Arrays.asList(Mockito.mock(ASTArcArgument.class), Mockito.mock(ASTArcArgument.class));
     ComponentInstanceSymbol symbol = VariableArcMill.componentInstanceSymbolBuilder()
-      .setArguments(bindings).setType(typeExpr).setName("c1").build();
+      .setArcArguments(bindings).setType(typeExpr).setName("c1").build();
 
+    ImmutableList<ASTArcArgument> bindingsBeforeCompletion = symbol.getBindingsAsList();
     // When
     getCompleter().visit(symbol);
 
     // Then
-    Assertions.assertNotEquals(typeExpr, symbol.getType());
+   Assertions.assertNotEquals(symbol.getBindingsAsList(),bindingsBeforeCompletion);
     Assertions.assertEquals(typeExpr.getTypeInfo(), symbol.getType()
       .getTypeInfo());
-    Assertions.assertTrue(symbol.getType() instanceof TypeExprOfVariableComponent);
-    Assertions.assertIterableEquals(bindings, ((TypeExprOfVariableComponent) symbol.getType()).getBindingsAsList());
+    Assertions.assertTrue(symbol.getType().getTypeInfo().getSpannedScope() instanceof IVariableArcScope);
+    Assertions.assertIterableEquals(bindings, (symbol.getBindingsAsList()));
   }
 }

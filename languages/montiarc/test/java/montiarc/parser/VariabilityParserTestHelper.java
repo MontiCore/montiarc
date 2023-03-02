@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.parser;
 
-import de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnitBuilder;
@@ -79,16 +78,17 @@ public class VariabilityParserTestHelper {
                   ).build()
                 ).build()
               ).setComponentInstancesList(
-                Collections.singletonList(MontiArcMill.componentInstanceBuilder().setName("a1").setArguments(
-                  MontiArcMill.argumentsBuilder().setExpressionsList(
-                    Collections.singletonList(
-                      MontiArcMill.assignmentExpressionBuilder().setOperator(ASTConstantsAssignmentExpressions.EQUALS)
-                        .setLeft(MontiArcMill.nameExpressionBuilder().setName("c").build())
-                        .setRight(MontiArcMill.literalExpressionBuilder()
-                          .setLiteral(MontiArcMill.booleanLiteralBuilder()
-                            .setSource(ASTConstantsMCCommonLiterals.TRUE)
-                            .build())
-                          .build()).build())).build()).build())
+                Collections.singletonList(MontiArcMill.componentInstanceBuilder().setName("a1").setArcArguments(
+                  MontiArcMill.arcArgumentsBuilder().setArcArgumentsList(
+                    Collections.singletonList(MontiArcMill.arcArgumentBuilder().setName("c").setExpression(
+                      MontiArcMill.literalExpressionBuilder().setLiteral(
+                        MontiArcMill.booleanLiteralBuilder()
+                        .setSource(ASTConstantsMCCommonLiterals.TRUE)
+                        .build()
+                      ).build()
+                    ).build())
+                  ).build()
+                ).build())
               ).build(),
               MontiArcMill.arcConstraintDeclarationBuilder().setExpression(
                 MontiArcMill.booleanOrOpExpressionBuilder().setLeft(
@@ -127,7 +127,7 @@ public class VariabilityParserTestHelper {
               ).build()
             )
           ).build())
-          .build()
+        .build()
       );
   }
 }

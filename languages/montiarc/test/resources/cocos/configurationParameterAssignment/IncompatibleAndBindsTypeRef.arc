@@ -6,4 +6,5 @@ import subcomponentDefinitions.*;
  */
 component IncompatibleAndBindsTypeRef {
   Complex c1(2 + 3, Person);
+  Complex c2(b=Person, a=2 + 3);
 }

@@ -56,7 +56,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
   @MethodSource("provideArgsAndExpectedErrors")
   void shouldCheckParameterBindings(@NotNull String testName,
                                     @NotNull ASTComponentType toInstantiate,
-                                    @NotNull ASTArguments instantiationArgs,
+                                    @NotNull ASTArcArguments instantiationArgs,
                                     @NotNull ArcError... expectedErrors) {
     Preconditions.checkNotNull(testName);
     Preconditions.checkNotNull(toInstantiate);
@@ -84,101 +84,161 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
     return Stream.of(
       Arguments.arguments("shouldFindTooFewParameterBindings",
         provideSimpleCompType(),
-        ArcBasisMill.argumentsBuilder().build(),
+        ArcBasisMill.arcArgumentsBuilder().build(),
         new ArcError[] {ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS}),
 
       Arguments.arguments("shouldFindTooManyParameterBindings",
         provideSimpleCompType(),
-        ArcBasisMill.argumentsBuilder()
-          .addExpression(doBuildNameExpressionInScope("anInt"))
-          .addExpression(doBuildNameExpressionInScope("aBool"))
-          .build(),
+        ArcBasisMill.arcArgumentsBuilder()
+          .addArcArgument(ArcBasisMill.arcArgumentBuilder().setExpression(
+              doBuildNameExpressionInScope("anInt")
+            ).build()
+          ).addArcArgument(
+            ArcBasisMill.arcArgumentBuilder().setExpression(
+              doBuildNameExpressionInScope("aBool")
+            ).build()
+          ).build(),
         new ArcError[] {ArcError.TOO_MANY_INSTANTIATION_ARGUMENTS}),
 
       Arguments.arguments("shouldFindCorrectNumberOfParameterBindings",
         provideSimpleCompType(),
-        ArcBasisMill.argumentsBuilder()
-          .addExpression(doBuildNameExpressionInScope("anInt"))
-          .build(),
+        ArcBasisMill.arcArgumentsBuilder()
+          .addArcArgument(
+            ArcBasisMill.arcArgumentBuilder().setExpression(
+              doBuildNameExpressionInScope("anInt")
+            ).build()
+          ).build(),
         new ArcError[]{}),
 
       Arguments.arguments("shouldFindTooFewParameterBindingsWithDefaultParameters",
         provideAdvancedCompType(),
-        ArcBasisMill.argumentsBuilder().build(),
+        ArcBasisMill.arcArgumentsBuilder().build(),
         new ArcError[] {ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS}),
 
       Arguments.arguments("shouldFindTooManyParameterBindingsWithDefaultParameters",
         provideAdvancedCompType(),
-        ArcBasisMill.argumentsBuilder()
-          .addExpression(doBuildNameExpressionInScope("anInt"))
-          .addExpression(doBuildNameExpressionInScope("aBool"))
-          .addExpression(doBuildNameExpressionInScope("aDouble"))
-          .addExpression(doBuildNameExpressionInScope("anInt"))
-          .build(),
+        ArcBasisMill.arcArgumentsBuilder().addArcArgument(
+            ArcBasisMill.arcArgumentBuilder().setExpression(
+              doBuildNameExpressionInScope("anInt")
+            ).build()
+          ).addArcArgument(
+            ArcBasisMill.arcArgumentBuilder().setExpression(
+              doBuildNameExpressionInScope("aBool")
+            ).build()
+          ).addArcArgument(
+            ArcBasisMill.arcArgumentBuilder().setExpression(
+              doBuildNameExpressionInScope("aDouble")
+            ).build()
+          ).addArcArgument(
+            ArcBasisMill.arcArgumentBuilder().setExpression(
+              doBuildNameExpressionInScope("anInt")
+            ).build()
+          ).build(),
         new ArcError[] {ArcError.TOO_MANY_INSTANTIATION_ARGUMENTS}),
 
       Arguments.arguments("shouldFindWrongDefaultParameterOverwriteSequence",
         provideAdvancedCompType(),
-        ArcBasisMill.argumentsBuilder()
-          .addExpression(doBuildNameExpressionInScope("anInt"))
-          .addExpression(doBuildNameExpressionInScope("aDouble"))
-          .build(),
+        ArcBasisMill.arcArgumentsBuilder().addArcArgument(
+            ArcBasisMill.arcArgumentBuilder().setExpression(
+              doBuildNameExpressionInScope("anInt")
+            ).build()
+          ).addArcArgument(
+            ArcBasisMill.arcArgumentBuilder().setExpression(
+              doBuildNameExpressionInScope("aDouble")
+            ).build()
+          ).build(),
         new ArcError[] {ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH}),
 
       Arguments.arguments("shouldFindCorrectNumberOfParameterBindingsWithDefaultParameters",
-        provideAdvancedCompType(), ArcBasisMill.argumentsBuilder()
-          .addExpression(doBuildNameExpressionInScope("anInt"))
+        provideAdvancedCompType(), ArcBasisMill.arcArgumentsBuilder().addArcArgument(
+            ArcBasisMill.arcArgumentBuilder().setExpression(
+              doBuildNameExpressionInScope("anInt")
+            ).build()
+          )
           .build(),
         new ArcError[]{}),
 
       Arguments.arguments("shouldFindCorrectNumberOfParameterBindingsAllDefaultsOverwritten",
         provideAdvancedCompType(),
-        ArcBasisMill.argumentsBuilder()
-          .addExpression(doBuildNameExpressionInScope("anInt"))
-          .addExpression(doBuildNameExpressionInScope("aBool"))
-          .addExpression(doBuildNameExpressionInScope("aDouble"))
-          .build(),
+        ArcBasisMill.arcArgumentsBuilder().addArcArgument(
+          ArcBasisMill.arcArgumentBuilder().setExpression(
+            doBuildNameExpressionInScope("anInt")
+          ).build()
+        ).addArcArgument(
+          ArcBasisMill.arcArgumentBuilder().setExpression(
+            doBuildNameExpressionInScope("aBool")
+          ).build()
+        ).addArcArgument(
+          ArcBasisMill.arcArgumentBuilder().setExpression(
+            doBuildNameExpressionInScope("aDouble")
+          ).build()
+        ).build(),
         new ArcError[]{}),
 
       Arguments.arguments("shouldFindCorrectNumberOfParameterBindingsSomeDefaultsOverwritten",
         provideAdvancedCompType(),
-        ArcBasisMill.argumentsBuilder()
-          .addExpression(doBuildNameExpressionInScope("anInt"))
-          .addExpression(doBuildNameExpressionInScope("aBool"))
-          .build(),
+        ArcBasisMill.arcArgumentsBuilder().addArcArgument(
+          ArcBasisMill.arcArgumentBuilder().setExpression(
+            doBuildNameExpressionInScope("anInt")
+          ).build()
+        ).addArcArgument(
+          ArcBasisMill.arcArgumentBuilder().setExpression(
+            doBuildNameExpressionInScope("aBool")
+          ).build()
+        ).build(),
         new ArcError[]{}),
 
       Arguments.arguments("shouldFindWrongTypes",
         provideAdvancedCompType(),
-        ArcBasisMill.argumentsBuilder()
-          .addExpression(doBuildNameExpressionInScope("aDouble"))
-          .addExpression(doBuildNameExpressionInScope("aBool"))
-          .build(),
+        ArcBasisMill.arcArgumentsBuilder().addArcArgument(
+          ArcBasisMill.arcArgumentBuilder().setExpression(
+            doBuildNameExpressionInScope("aDouble")
+          ).build()
+        ).addArcArgument(
+          ArcBasisMill.arcArgumentBuilder().setExpression(
+            doBuildNameExpressionInScope("aBool")
+          ).build()
+        ).build(),
         new ArcError[] {ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH}),
 
       Arguments.arguments("wrongTypeAndTooManyArguments",
         provideAdvancedCompType(),
-        ArcBasisMill.argumentsBuilder()
-          .addExpression(doBuildNameExpressionInScope("aDouble"))
-          .addExpression(doBuildNameExpressionInScope("anInt"))
-          .addExpression(doBuildNameExpressionInScope("aBool"))
-          .addExpression(doBuildNameExpressionInScope("aBool"))
-          .build(),
+        ArcBasisMill.arcArgumentsBuilder().addArcArgument(
+          ArcBasisMill.arcArgumentBuilder().setExpression(
+            doBuildNameExpressionInScope("aDouble")
+          ).build()
+        ).addArcArgument(
+          ArcBasisMill.arcArgumentBuilder().setExpression(
+            doBuildNameExpressionInScope("anInt")
+          ).build()
+        ).addArcArgument(
+          ArcBasisMill.arcArgumentBuilder().setExpression(
+            doBuildNameExpressionInScope("aBool")
+          ).build()
+        ).addArcArgument(
+          ArcBasisMill.arcArgumentBuilder().setExpression(
+            doBuildNameExpressionInScope("aBool")
+          ).build()
+        ).build(),
         new ArcError[] {ArcError.TOO_MANY_INSTANTIATION_ARGUMENTS, ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH,
           ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH, ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH}),
 
       Arguments.arguments("wrongTypeAndTooFewArguments",
         provideAdvancedCompTypeWithOneDefaultValue(),
-        ArcBasisMill.argumentsBuilder()
-          .addExpression(doBuildNameExpressionInScope("aDouble"))
-          .build(),
+        ArcBasisMill.arcArgumentsBuilder().addArcArgument(
+          ArcBasisMill.arcArgumentBuilder().setExpression(
+            doBuildNameExpressionInScope("aDouble")
+          ).build()
+        ).build(),
         new ArcError[] {ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS, ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH}),
 
     Arguments.arguments("shouldFindTypeReference",
       provideSimpleCompType(),
-      ArcBasisMill.argumentsBuilder()
-        .addExpression(doBuildNameExpressionInScope("Person"))
-        .build(),
+      ArcBasisMill.arcArgumentsBuilder().addArcArgument(
+        ArcBasisMill.arcArgumentBuilder().setExpression(
+          doBuildNameExpressionInScope("Person")
+        ).build()
+      ).build(),
       new ArcError[]{ArcError.CONFIG_PARAM_BINDING_IS_TYPE_REF})
     );
   }
@@ -253,7 +313,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
    */
   protected static ASTComponentInstantiation provideInstantiation(@NotNull ASTComponentType componentType,
                                                            @NotNull String name,
-                                                           @NotNull ASTArguments arguments) {
+                                                           @NotNull ASTArcArguments arguments) {
     Preconditions.checkNotNull(componentType);
     Preconditions.checkNotNull(name);
     Preconditions.checkNotNull(arguments);
@@ -263,7 +323,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
       .addComponentInstance(
         ArcBasisMill.componentInstanceBuilder()
           .setName(name)
-          .setArguments(arguments)
+          .setArcArguments(arguments)
           .build())
       .build();
   }

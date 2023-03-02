@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation;
 
+import arcbasis._symboltable.ComponentInstanceSymbol;
 import variablearc._symboltable.IVariableArcScope;
 import variablearc._symboltable.VariableArcVariationPoint;
-import variablearc.check.TypeExprOfVariableComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +14,11 @@ import java.util.Optional;
  */
 public class VariationPointSolver {
 
-  private final TypeExprOfVariableComponent typeExprOfVariableComponent;
+  private final ComponentInstanceSymbol componentInstanceSymbol;
   private List<VariableArcVariationPoint> variationPointList;
 
-  public VariationPointSolver(TypeExprOfVariableComponent typeExprOfVariableComponent) {
-    this.typeExprOfVariableComponent = typeExprOfVariableComponent;
+  public VariationPointSolver(ComponentInstanceSymbol typeExprOfVariableComponent) {
+    this.componentInstanceSymbol = typeExprOfVariableComponent;
   }
 
   public List<VariableArcVariationPoint> getVariationPoints() {
@@ -32,11 +32,11 @@ public class VariationPointSolver {
     variationPointList = new ArrayList<>();
     List<VariableArcVariationPoint> nextVariationPoints =
       new ArrayList<>(
-        ((IVariableArcScope) typeExprOfVariableComponent.getTypeInfo().getSpannedScope()).getRootVariationPoints());
+        ((IVariableArcScope) componentInstanceSymbol.getType().getTypeInfo().getSpannedScope()).getRootVariationPoints());
 
     if (nextVariationPoints.isEmpty()) return;
 
-    ExpressionSolver solver = new ExpressionSolver(typeExprOfVariableComponent);
+    ExpressionSolver solver = new ExpressionSolver(componentInstanceSymbol);
     while (nextVariationPoints.size() > 0) {
       VariableArcVariationPoint vp = nextVariationPoints.get(0);
       Optional<Boolean> res = solver.solve(vp.getCondition());

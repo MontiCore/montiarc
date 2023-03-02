@@ -2,6 +2,7 @@
 package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.util.IPortReferenceInExpressionExtractor;
 import static arcbasis._cocos.util.IPortReferenceInExpressionExtractor.PortReference;
@@ -50,9 +51,9 @@ public class InstanceArgsOmitPortReferences implements ArcBasisASTComponentTypeC
     portReferencesToLookFor.addAll(IPortReferenceInExpressionExtractor.PortReference.ofSubComponentPorts(comp));
 
     for (ComponentInstanceSymbol subComp : comp.getSubComponents()) {
-      for(ASTExpression arg : subComp.getArguments()) {
+      for(ASTArcArgument arg : subComp.getArcArguments()) {
         HashMap<PortReference, SourcePosition> foundPortReferences =
-          this.portRefExtractor.findPortReferences(arg, portReferencesToLookFor, ArcBasisMill.traverser());
+          this.portRefExtractor.findPortReferences(arg.getExpression(), portReferencesToLookFor, ArcBasisMill.traverser());
 
         for(PortReference portRef : foundPortReferences.keySet()) {
           SourcePosition portRefLoc = foundPortReferences.get(portRef);

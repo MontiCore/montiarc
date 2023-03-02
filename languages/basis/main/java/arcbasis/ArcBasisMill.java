@@ -10,7 +10,7 @@ import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 
 public class ArcBasisMill extends ArcBasisMillTOP {
 
-  protected static ArcBasisMill millArcBasisSymbolTableCompleter ;
+  protected static ArcBasisMill millArcBasisSymbolTableCompleter;
 
   protected static ArcBasisMill millArcBasisSymbolTableCompleterDelegator;
 

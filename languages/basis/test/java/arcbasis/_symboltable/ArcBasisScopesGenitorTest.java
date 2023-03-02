@@ -233,27 +233,29 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     ASTComponentInstance ast = arcbasis.ArcBasisMill.componentInstanceBuilder().setName("sub").build();
     ComponentInstanceSymbol symbol = this.getSymTab().create_ComponentInstance(ast).build();
     Assertions.assertEquals(ast.getName(), symbol.getName());
-    Assertions.assertNotNull(symbol.getArguments());
+    Assertions.assertNotNull(symbol.getArcArguments());
     Assertions.assertThrows(IllegalStateException.class, symbol::getType);
   }
 
   @Test
   public void shouldInitializeComponentInstance() {
     ASTComponentInstance ast = arcbasis.ArcBasisMill.componentInstanceBuilder().setName("sub")
-      .setArguments(arcbasis.ArcBasisMill.argumentsBuilder()
-        .setExpressionsList(Arrays.asList(this.mockValues(3))).build()).build();
+      .setArcArguments(arcbasis.ArcBasisMill.arcArgumentsBuilder().setArcArgumentsList(
+        Arrays.asList(this.argumentMockValues(3))).build()
+      ).build();
     IArcBasisScope scope = ArcBasisMill.scope();
     this.getSymTab().pushCurrentEnclosingScope4Instances(scope);
     this.getSymTab().visit(ast);
     this.getSymTab().endVisit(ast);
-    Assertions.assertEquals(3, ast.getSymbol().getArguments().size());
+    Assertions.assertEquals(3, ast.getSymbol().getArcArguments().size());
   }
 
   @Test
   public void shouldVisitComponentInstance() {
     ASTComponentInstance ast = arcbasis.ArcBasisMill.componentInstanceBuilder().setName("sub")
-      .setArguments(arcbasis.ArcBasisMill.argumentsBuilder()
-        .setExpressionsList(Arrays.asList(this.mockValues(3))).build()).build();
+      .setArcArguments(arcbasis.ArcBasisMill.arcArgumentsBuilder().setArcArgumentsList(
+        Arrays.asList(this.argumentMockValues(3))).build()
+      ).build();
     IArcBasisScope scope = ArcBasisMill.scope();
     this.getSymTab().pushCurrentEnclosingScope4Instances(scope);
     this.getSymTab().handle(ast);
@@ -261,7 +263,7 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     Assertions.assertFalse(scope.getLocalComponentInstanceSymbols().isEmpty());
     Assertions.assertEquals(1, scope.getLocalComponentInstanceSymbols().size());
     Assertions.assertEquals(3, scope.getComponentInstanceSymbols().get("sub").get(0)
-      .getArguments().size());
+      .getArcArguments().size());
   }
 
   @Test
@@ -312,9 +314,9 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
 
   @Test
   public void shouldAddArgumentsOnlyOnce() {
-    ASTArguments args = ArcBasisMill.argumentsBuilder()
-      .setExpressionsList(Collections.singletonList(Mockito.mock(ASTExpression.class))).build();
-    ASTComponentInstance instance = ArcBasisMill.componentInstanceBuilder().setName("comp").setArguments(args).build();
+    ASTArcArguments args = ArcBasisMill.arcArgumentsBuilder()
+      .setArcArgumentsList(Collections.singletonList(Mockito.mock(ASTArcArgument.class))).build();
+    ASTComponentInstance instance = ArcBasisMill.componentInstanceBuilder().setName("comp").setArcArguments(args).build();
     ASTComponentInstantiation instances = ArcBasisMill.componentInstantiationBuilder()
       .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build())
       .setComponentInstancesList(Collections.singletonList(instance)).build();
@@ -324,7 +326,7 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     this.getSymTab().handle(instances);
     Assertions.assertEquals(1, instances.getComponentInstanceList().size());
     Assertions.assertFalse(scope.getComponentInstanceSymbols().get("comp").isEmpty());
-    Assertions.assertEquals(1, scope.getComponentInstanceSymbols().get("comp").get(0).getArguments().size());
+    Assertions.assertEquals(1, scope.getComponentInstanceSymbols().get("comp").get(0).getArcArguments().size());
   }
 
   @Test
@@ -360,6 +362,15 @@ public class ArcBasisScopesGenitorTest extends AbstractTest {
     Assertions.assertEquals(lowStackScope, this.getSymTab().getCurrentEnclosingScope4Instances().get());
 
 
+  }
+
+  protected ASTArcArgument[] argumentMockValues(int length) {
+    ASTArcArgument[] values = new ASTArcArgument[length];
+    for (int i = 0; i < length; i++) {
+      values[i] = Mockito.mock(ASTArcArgument.class);
+      values[i].setExpression(Mockito.mock(ASTExpression.class));
+    }
+    return values;
   }
 
   protected ASTExpression[] mockValues(int length) {

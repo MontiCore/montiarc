@@ -2,6 +2,7 @@
 package montiarc.generator.helper;
 
 import arcautomaton._ast.ASTArcStatechart;
+import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentType;
@@ -12,18 +13,20 @@ import arcbasis._symboltable.PortSymbol;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypePrimitive;
-import montiarc._ast.ASTMontiArcNode;
 import montiarc.generator.MA2JavaFullPrettyPrinter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -101,35 +104,38 @@ public class ComponentHelper {
    * @return The parameters.
    */
   public Collection<String> getParamValues(ComponentInstanceSymbol param) {
-    List<ASTExpression> configArguments = param.getArguments();
+    ImmutableMap<VariableSymbol, ASTArcArgument> configArguments = param.getParameterBindings();
 
     List<String> outputParameters = new ArrayList<>();
-    for (ASTExpression configArgument : configArguments) {
-      final String prettyprint = this.getPrettyPrinter().prettyprint(configArgument);
-      outputParameters.add(prettyprint);
-    }
 
-    // Append the default parameter values for as many as there are left
-    final List<VariableSymbol> configParameters = param.getType().getTypeInfo().getParameters();
-
-    // Calculate the number of missing parameters
-    int numberOfMissingParameters = configParameters.size() - configArguments.size();
-
-    if (numberOfMissingParameters > 0) {
-      // Get the AST node of the component and the list of parameters in the AST
+    //can only print default parameters if ASTNode exists.
+    if(param.getType().getTypeInfo().isPresentAstNode()){
       final ASTComponentType astNode = param.getType().getTypeInfo().getAstNode();
+
       final List<ASTArcParameter> parameters = astNode.getHead().getArcParameterList();
 
-      // Retrieve the parameters from the node and add them to the list
-      for (int counter = 0; counter < numberOfMissingParameters; counter++) {
-        // Fill up from the last parameter
-        final ASTArcParameter astParameter = parameters.get(parameters.size() - 1 - counter);
-        final String prettyprint = this.getPrettyPrinter()
-          .prettyprint((ASTMontiArcNode) astParameter.getDefault());
-        outputParameters.add(outputParameters.size() - counter, prettyprint);
+      Map<String, ASTExpression> defaultValues = new HashMap<>();
+      for (ASTArcParameter parameter : parameters){
+        if(parameter.isPresentDefault()) {
+          defaultValues.put(parameter.getName(), parameter.getDefault());
+        }
+      }
+      for (VariableSymbol v : param.getType().getTypeInfo().getParameters()){
+        if (configArguments.containsKey(v)){
+          final String prettyprint = this.getPrettyPrinter().prettyprint(configArguments.get(v).getExpression());
+          outputParameters.add(prettyprint);
+        }else{
+          final String prettyprint = this.getPrettyPrinter().prettyprint(defaultValues.get(v.getName()));
+          outputParameters.add(prettyprint);
+        }
+      }
+    }else{
+      for (VariableSymbol v : param.getType().getTypeInfo().getParameters()) {
+        Preconditions.checkNotNull(configArguments.get(v));
+        final String prettyprint = this.getPrettyPrinter().prettyprint(configArguments.get(v).getExpression());
+        outputParameters.add(prettyprint);
       }
     }
-
     return outputParameters;
   }
 

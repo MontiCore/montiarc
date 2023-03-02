@@ -8,8 +8,8 @@
  * architecture descriptions in form of component models. The grammar contains
  * definitions for components, ports, and connectors.
  *
- * This grammar is part of the MontiArc langauge definition,
- * which are organized according to this extension hierachy:
+ * This grammar is part of the MontiArc language definition,
+ * which are organized according to this extension hierarchy:
  * * ArcBasis.mc4
  * * -- ComfortableArc.mc4
  * * -- GenericArc.mc4
@@ -187,7 +187,11 @@ component grammar ArcBasis extends
    * @attribute name The name of the component instance.
    * @attribute arguments A list of configuration arguments.
    */
-  symbol ComponentInstance = Name Arguments?;
+  symbol ComponentInstance = Name ArcArguments?;
+
+  ArcArguments = "(" ( ArcArgument || ",")* ")";
+
+  ArcArgument = (Name "=")? Expression;
 
   /**
    * ASTConnector connects one source port with one or more target ports.

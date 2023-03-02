@@ -1,13 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation;
 
+import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.*;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
-import variablearc.check.TypeExprOfVariableComponent;
 import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 
 import java.util.*;
@@ -24,15 +24,16 @@ public class ExpressionSolver {
   }
 
   /**
-   * @param compTypeExpression the context of the expressions.
+   * @param componentInstanceSymbol the instance symbol that holds the expressions.
    */
-  public ExpressionSolver(@NotNull TypeExprOfVariableComponent compTypeExpression) {
-    Preconditions.checkNotNull(compTypeExpression);
+
+  public ExpressionSolver(@NotNull ComponentInstanceSymbol componentInstanceSymbol) {
+    Preconditions.checkNotNull(componentInstanceSymbol);
 
     this.context = new Context();
     ComponentConverter componentConverter = new ComponentConverter(context);
-    this.defaultExpr = componentConverter.convert(compTypeExpression).toArray(BoolExpr[]::new);
-    this.defaultPrefix = compTypeExpression.printName();
+    this.defaultExpr = componentConverter.convert(componentInstanceSymbol).toArray(BoolExpr[]::new);
+    this.defaultPrefix = componentInstanceSymbol.getType().printName();
   }
 
   /**

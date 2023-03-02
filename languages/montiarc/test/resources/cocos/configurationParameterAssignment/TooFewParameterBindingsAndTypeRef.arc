@@ -6,4 +6,5 @@ import subcomponentDefinitions.*;
  */
 component TooFewParameterBindingsAndTypeRef {
   ComplexWithTwoMandatoryParams complex(Person);
+  ComplexWithTwoMandatoryParams complex2(b=Person);
 }

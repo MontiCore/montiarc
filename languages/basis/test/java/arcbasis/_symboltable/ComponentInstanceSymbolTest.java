@@ -3,6 +3,7 @@ package arcbasis._symboltable;
 
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTArcArgument;
 import arcbasis.check.CompTypeExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import org.junit.jupiter.api.Assertions;
@@ -21,8 +22,8 @@ public class ComponentInstanceSymbolTest extends AbstractTest {
   public void shouldAddArguments() {
     ComponentInstanceSymbol symbol = ArcBasisMill.componentInstanceSymbolBuilder()
       .setName("a").setType(mock(CompTypeExpression.class)).build();
-    Assertions.assertEquals(symbol.getArguments().size(), 0);
-    symbol.addArguments(Arrays.asList(mock(ASTExpression.class), mock(ASTExpression.class)));
-    Assertions.assertEquals(symbol.getArguments().size(), 2);
+    Assertions.assertEquals(symbol .getArcArguments().size(), 0);
+    symbol.addArcArguments(Arrays.asList(mock(ASTArcArgument.class), mock(ASTArcArgument.class)));
+    Assertions.assertEquals(symbol.getArcArguments().size(), 2);
   }
 }

@@ -9,4 +9,5 @@ component WrongTypeParameterBindings {
   Complex complex1(12);
   Complex complex2(true, 2.3);
   Complex complex3(true, 2.3, 4);
+  Complex complex4(c=true, b=4, a=2.3);
 }

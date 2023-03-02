@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import variablearc.AbstractTest;
 import variablearc.VariableArcMill;
+import variablearc._symboltable.IVariableArcScope;
 
 /**
  * Tests for {@link SynthesizeVariableComponentFromMCBasicTypes}
@@ -58,9 +59,9 @@ public class SynthesizeVariableComponentFromMCBasicTypesTest extends AbstractTes
     Assertions.assertTrue(result4normal.getResult().isPresent());
     Assertions.assertTrue(result4qual.getResult().isPresent());
     Assertions.assertTrue(result4normal.getResult()
-      .get() instanceof TypeExprOfVariableComponent);
+      .get().getTypeInfo().getSpannedScope() instanceof IVariableArcScope);
     Assertions.assertTrue(result4qual.getResult()
-      .get() instanceof TypeExprOfVariableComponent);
+      .get().getTypeInfo().getSpannedScope() instanceof IVariableArcScope);
     Assertions.assertEquals(normalComp, result4normal.getResult().get()
       .getTypeInfo());
     Assertions.assertEquals(qualifiedComp, result4qual.getResult().get()

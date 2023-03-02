@@ -8,7 +8,6 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._visitor.VariableArcHandler;
 import variablearc._visitor.VariableArcTraverser;
 import variablearc._visitor.VariableArcVisitor2;
-import variablearc.check.TypeExprOfVariableComponent;
 
 public class VariableArcSymbolTableCompleter implements VariableArcVisitor2, VariableArcHandler, ArcBasisVisitor2 {
 
@@ -29,8 +28,8 @@ public class VariableArcSymbolTableCompleter implements VariableArcVisitor2, Var
   public void visit(@NotNull ComponentInstanceSymbol node) {
     Preconditions.checkNotNull(node);
 
-    if (node.isPresentType() && node.getType() instanceof TypeExprOfVariableComponent) {
-      node.setType(((TypeExprOfVariableComponent) node.getType()).bindParameters(node.getArguments()));
+    if (node.isPresentType()) {
+      node.bindParameters();
     }
   }
 }

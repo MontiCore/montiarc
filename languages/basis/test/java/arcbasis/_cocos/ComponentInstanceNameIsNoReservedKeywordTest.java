@@ -16,7 +16,7 @@ class ComponentInstanceNameIsNoReservedKeywordTest extends AbstractTest {
     // Given
     ASTComponentInstance instance = ArcBasisMill.componentInstanceBuilder()
       .setName("keyword")
-      .setArgumentsAbsent()
+      .setArcArgumentsAbsent()
       .build();
     ComponentInstanceNameIsNoReservedKeyword coco =
       new ComponentInstanceNameIsNoReservedKeyword("testLang", Collections.singleton("keyword"));
@@ -34,7 +34,7 @@ class ComponentInstanceNameIsNoReservedKeywordTest extends AbstractTest {
     // Given
     ASTComponentInstance instance = ArcBasisMill.componentInstanceBuilder()
       .setName("noKeyword")
-      .setArgumentsAbsent()
+      .setArcArgumentsAbsent()
       .build();
     ComponentInstanceNameIsNoReservedKeyword coco =
       new ComponentInstanceNameIsNoReservedKeyword("testLang", Collections.singleton("keyword"));

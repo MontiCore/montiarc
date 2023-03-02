@@ -6,4 +6,5 @@ import subcomponentDefinitions.*;
  */
 component BindsTypeReference {
   Complex c1(Person);
+  Complex c2(a=Person);
 }

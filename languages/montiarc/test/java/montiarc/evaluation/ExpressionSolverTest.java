@@ -1,9 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.evaluation;
 
+import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
+import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis.check.CompTypeExpression;
+import arcbasis.check.TypeExprOfComponent;
 import de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
@@ -16,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import variablearc._symboltable.ArcFeatureSymbol;
 import variablearc._symboltable.IVariableArcScope;
-import variablearc.check.TypeExprOfVariableComponent;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.Collections;
@@ -24,7 +27,7 @@ import java.util.Optional;
 
 public class ExpressionSolverTest extends AbstractTest {
 
-  protected TypeExprOfVariableComponent typeExprOfVariableComponent;
+  protected ComponentInstanceSymbol componentInstanceSymbol;
 
   protected MontiArcFullPrettyPrinter prettyPrinter;
 
@@ -59,9 +62,17 @@ public class ExpressionSolverTest extends AbstractTest {
       .setSpannedScope(scope)
       .build();
     scope.setSpanningSymbol(componentTypeSymbol);
+
+    CompTypeExpression expr = new TypeExprOfComponent(componentTypeSymbol);
+
+    ComponentInstanceSymbol instance = MontiArcMill.componentInstanceSymbolBuilder().setName("test")
+      .setArcArguments(
+        Collections.singletonList(
+          ArcBasisMill.arcArgumentBuilder().setExpression(variableAssignmentExpr).build()
+        )
+      ).setType(expr).build();
     prettyPrinter = new MontiArcFullPrettyPrinter();
-    typeExprOfVariableComponent = new TypeExprOfVariableComponent(componentTypeSymbol,
-      Collections.singletonList(variableAssignmentExpr));
+    componentInstanceSymbol = instance;
   }
 
   @Test
@@ -71,7 +82,7 @@ public class ExpressionSolverTest extends AbstractTest {
         .setSource(ASTConstantsMCCommonLiterals.TRUE).build())
       .build();
 
-    ExpressionSolver solver = new ExpressionSolver(this.typeExprOfVariableComponent);
+    ExpressionSolver solver = new ExpressionSolver(this.componentInstanceSymbol);
     Optional<Boolean> res = solver.solve(expression);
     solver.close();
 
@@ -83,9 +94,9 @@ public class ExpressionSolverTest extends AbstractTest {
   public void shouldSolveWithLocalVariable() {
     ASTExpression expression = MontiArcMill.nameExpressionBuilder().setName("a")
       .build();
-    expression.setEnclosingScope(this.typeExprOfVariableComponent.getTypeInfo().getSpannedScope());
+    expression.setEnclosingScope(this.componentInstanceSymbol.getType().getTypeInfo().getSpannedScope());
 
-    ExpressionSolver solver = new ExpressionSolver(this.typeExprOfVariableComponent);
+    ExpressionSolver solver = new ExpressionSolver(this.componentInstanceSymbol);
     Optional<Boolean> res = solver.solve(expression);
     solver.close();
 

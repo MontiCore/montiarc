@@ -286,8 +286,8 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   public void endVisit(ASTComponentInstance ast){
     Preconditions.checkNotNull(ast);
     Preconditions.checkState(ast.isPresentSymbol());
-    if (ast.isPresentArguments()) {
-      ast.getSymbol().addArguments(ast.getArguments().getExpressionList());
+    if (ast.isPresentArcArguments()) {
+      ast.getSymbol().addArcArguments(ast.getArcArguments().getArcArgumentList());
     }
   }
 }

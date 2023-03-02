@@ -5,6 +5,7 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
+import arcbasis.check.TypeExprOfComponent;
 import com.microsoft.z3.*;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
@@ -15,7 +16,7 @@ import org.mockito.Mockito;
 import variablearc.AbstractTest;
 import variablearc.VariableArcMill;
 import variablearc._symboltable.IVariableArcScope;
-import variablearc.check.TypeExprOfVariableComponent;
+import variablearc._symboltable.VariableArcSymbolTableCompleter;
 
 import java.util.Collections;
 import java.util.List;
@@ -42,7 +43,7 @@ public class ComponentConverterTest extends AbstractTest {
   }
 
   protected static ComponentInstanceSymbol createInstance(String name, ComponentTypeSymbol component) {
-    CompTypeExpression typeExpression = new TypeExprOfVariableComponent(component);
+    CompTypeExpression typeExpression = new TypeExprOfComponent(component);
     return VariableArcMill.componentInstanceSymbolBuilder().setName(name).setType(typeExpression).build();
   }
 
@@ -136,6 +137,11 @@ public class ComponentConverterTest extends AbstractTest {
       createInstance("comp1", createComponentTypeSymbolWithVariableConstraint("a", Collections.emptyList()))
     ));
     Stack<String> stack = new Stack<>();
+
+    VariableArcSymbolTableCompleter completer = new VariableArcSymbolTableCompleter();
+    for (ComponentInstanceSymbol componentInstanceSymbol : component.getSubComponents()) {
+      completer.visit(componentInstanceSymbol);
+    }
 
     // When
     List<BoolExpr> exprs = converter.convert(component, stack);

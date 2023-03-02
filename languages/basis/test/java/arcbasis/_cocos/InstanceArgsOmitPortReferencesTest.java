@@ -65,10 +65,16 @@ public class InstanceArgsOmitPortReferencesTest extends AbstractTest {
     ComponentInstanceSymbol inst = ArcBasisMill.componentInstanceSymbolBuilder()
       .setName("inst")
       .setType(new TypeExprOfComponent(subCompType.getSymbol()))
-      .setArguments(Lists.newArrayList(
-        ArcBasisMill.nameExpressionBuilder().setName("noPort").build(),
-        ArcBasisMill.nameExpressionBuilder().setName("inPort").build(),
-        ArcBasisMill.nameExpressionBuilder().setName("outPort").build()
+      .setArcArguments(Lists.newArrayList(
+        ArcBasisMill.arcArgumentBuilder().setExpression(
+          ArcBasisMill.nameExpressionBuilder().setName("noPort").build()
+        ).build(),
+        ArcBasisMill.arcArgumentBuilder().setExpression(
+          ArcBasisMill.nameExpressionBuilder().setName("inPort").build()
+        ).build(),
+        ArcBasisMill.arcArgumentBuilder().setExpression(
+          ArcBasisMill.nameExpressionBuilder().setName("outPort").build()
+        ).build()
       )).build();
     SymbolService.link(comp.getSpannedScope(), inst);
 
@@ -103,10 +109,16 @@ public class InstanceArgsOmitPortReferencesTest extends AbstractTest {
     ComponentInstanceSymbol inst = ArcBasisMill.componentInstanceSymbolBuilder()
       .setName("inst")
       .setType(new TypeExprOfComponent(subCompType.getSymbol()))
-      .setArguments(Lists.newArrayList(
-        ArcBasisMill.nameExpressionBuilder().setName("noPort").build(),
-        ArcBasisMill.nameExpressionBuilder().setName("nononoPort").build(),
-        ArcBasisMill.literalExpressionBuilder().setLiteral(Mockito.mock(ASTStringLiteral.class)).build()
+      .setArcArguments(Lists.newArrayList(
+        ArcBasisMill.arcArgumentBuilder().setExpression(
+          ArcBasisMill.nameExpressionBuilder().setName("noPort").build()
+        ).build(),
+        ArcBasisMill.arcArgumentBuilder().setExpression(
+          ArcBasisMill.nameExpressionBuilder().setName("nononoPort").build()
+        ).build(),
+        ArcBasisMill.arcArgumentBuilder().setExpression(
+          ArcBasisMill.literalExpressionBuilder().setLiteral(Mockito.mock(ASTStringLiteral.class)).build()
+        ).build()
       )).build();
     SymbolService.link(comp.getSpannedScope(), inst);
 

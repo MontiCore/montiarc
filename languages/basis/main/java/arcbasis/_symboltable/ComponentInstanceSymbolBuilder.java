@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis._ast.ASTArcArgument;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -12,7 +13,7 @@ import java.util.List;
 public class ComponentInstanceSymbolBuilder extends ComponentInstanceSymbolBuilderTOP {
 
   protected CompTypeExpression type;
-  protected List<ASTExpression> arguments;
+  protected List<ASTArcArgument> arguments;
   protected List<SymTypeExpression> typeParameters;
 
   public ComponentInstanceSymbolBuilder() {
@@ -34,11 +35,11 @@ public class ComponentInstanceSymbolBuilder extends ComponentInstanceSymbolBuild
     return this.realBuilder;
   }
 
-  public List<ASTExpression> getArguments() {
+  public List<ASTArcArgument> getArcArguments() {
     return this.arguments;
   }
 
-  public ComponentInstanceSymbolBuilder setArguments(@NotNull List<ASTExpression> arguments) {
+  public ComponentInstanceSymbolBuilder setArcArguments(@NotNull List<ASTArcArgument> arguments) {
     Preconditions.checkNotNull(arguments);
     Preconditions.checkArgument(!arguments.contains(null));
     this.arguments = arguments;
@@ -51,8 +52,8 @@ public class ComponentInstanceSymbolBuilder extends ComponentInstanceSymbolBuild
       Preconditions.checkState(this.getName() != null);
     }
     ComponentInstanceSymbol symbol = super.build();
-    if (this.getArguments() != null) {
-      symbol.addArguments(this.getArguments());
+    if (this.getArcArguments() != null) {
+      symbol.addArcArguments(this.getArcArguments());
     }
     symbol.setType(this.getType());
     return symbol;

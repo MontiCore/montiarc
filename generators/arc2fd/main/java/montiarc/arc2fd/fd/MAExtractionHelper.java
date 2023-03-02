@@ -5,7 +5,6 @@ import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import de.monticore.expressions.commonexpressions.CommonExpressionsMill;
 import de.monticore.expressions.commonexpressions._ast.ASTBooleanAndOpExpressionBuilder;
 import de.monticore.expressions.commonexpressions._ast.ASTConditionalExpressionBuilder;
@@ -17,7 +16,6 @@ import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._prettyprint.MontiArcFullPrettyPrinter;
-import montiarc.arc2fd.expressions.MAExpressionsBasisVisitor;
 import montiarc.arc2fd.smt.FDRelation;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.sosy_lab.common.configuration.InvalidConfigurationException;
@@ -27,8 +25,6 @@ import org.sosy_lab.java_smt.api.FormulaManager;
 import variablearc._ast.ASTArcBlock;
 import variablearc._ast.ASTArcFeature;
 import variablearc._ast.ASTArcIfStatement;
-import variablearc._symboltable.ArcFeatureSymbol;
-import variablearc.check.TypeExprOfVariableComponent;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -434,7 +430,7 @@ public class MAExtractionHelper<T extends Formula> {
 
       // Get the Feature Bindings and replace add the bindings to our mapping
       // (so we can replace it properly)
-//      if (c.getSymbol().getType() instanceof TypeExprOfVariableComponent) {
+//      if (c.getSymbol().getType().getTypeInfo().getSpannedScope() instanceof IVariableArcScope){
 //        ImmutableMap<ArcFeatureSymbol, ASTExpression> newMapping =
 //          ((TypeExprOfVariableComponent) c.getSymbol().getType()).getFeatureBindings();
 //        newMapping.forEach((key, value) -> {

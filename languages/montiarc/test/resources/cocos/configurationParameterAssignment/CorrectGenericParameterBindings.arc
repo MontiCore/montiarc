@@ -8,5 +8,5 @@ component CorrectGenericParameterBindings {
   // A field we will use:
   List<int> intList = null;
 
-  Generic<int> correctInstance(4, intList);
+  Generic<int> correctInstance(4, aList=intList);
 }
