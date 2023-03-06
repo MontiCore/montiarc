@@ -32,8 +32,8 @@ public enum ArcError implements Error {
       "optional, as it is preceded by the optional configuration parameter '%s' at position '%s'. Mandatory parameters " +
       "(that do not specify default values) must be declared before all optional parameters (that specify default " +
       "values). Therefore provide a default value!"),
-  SOURCE_AND_TARGET_SAME_COMPONENT("0xC1119", "Source and target of a connector of component "
-      + "'%s' refer to the same subcomponent."),
+  SOURCE_AND_TARGET_SAME_COMPONENT("0xC1119", "Source and target of the connector "
+      + "refer to the same subcomponent."),
   SOURCE_PORT_NOT_EXISTS("0xC1120", "Source port '%s' of connector '%s' of component '%s' does not "
       + "exist."),
   TARGET_PORT_NOT_EXISTS("0xC1121", "Target port '%s' of connector '%s' of component '%s' does not "

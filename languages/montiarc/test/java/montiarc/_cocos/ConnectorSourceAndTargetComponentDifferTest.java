@@ -13,6 +13,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
+/**
+ * Tests for {@link ConnectorSourceAndTargetComponentDiffer}
+ */
 public class ConnectorSourceAndTargetComponentDifferTest extends AbstractCoCoTest {
 
   protected static final String PACKAGE = "connectorSourceAndTargetComponentDiffer";
