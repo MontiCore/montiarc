@@ -30,7 +30,7 @@ public class InheritedPortsTypeCorrect implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(component);
 
     // check all ports
-    for (PortSymbol port : component.getAllPorts()) {
+    for (PortSymbol port : component.getPorts()) {
       this.checkPort(port, component.getParent());
     }
   }
@@ -58,7 +58,7 @@ public class InheritedPortsTypeCorrect implements ArcBasisASTComponentTypeCoCo {
       }
 
       // check direction fits
-      Optional<PortSymbol> inheritedPort = parent.getTypeInfo().getPort(port.getName());
+      Optional<PortSymbol> inheritedPort = parent.getTypeInfo().getPort(port.getName(), true);
       if (inheritedPort.isPresent() && inheritedPort.get().isIncoming() != port.isIncoming()) {
         Log.error(ArcError.INHERITED_PORT_DIRECTION_MISMATCH.format(port.getName(),
           port.isIncoming() ? "incoming" : "outgoing", inheritedPort.get().isIncoming() ? "incoming" : "outgoing"));

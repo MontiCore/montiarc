@@ -95,6 +95,7 @@ public class InheritedPortsTypeCorrectTest extends AbstractCoCoTest {
       arg("NoPortOverriding.arc"),
       arg("CorrectPortOverriding.arc"),
       arg("CorrectGenericPortOverriding.arc"),
+      arg("CorrectNestedPortOverriding.arc"),
       arg("IncorrectPortOverriding.arc",
         ArcError.INHERITED_INCOMING_PORT_TYPE_MISMATCH,
         ArcError.INHERITED_INCOMING_PORT_TYPE_MISMATCH,
@@ -108,6 +109,17 @@ public class InheritedPortsTypeCorrectTest extends AbstractCoCoTest {
       ),
       arg("IncorrectGenericPortOverriding.arc",
         ArcError.INHERITED_INCOMING_PORT_TYPE_MISMATCH,
+        ArcError.INHERITED_OUTGOING_PORT_TYPE_MISMATCH
+      ),
+      arg("IncorrectNestedPortOverriding.arc",
+        ArcError.INHERITED_INCOMING_PORT_TYPE_MISMATCH,
+        ArcError.INHERITED_INCOMING_PORT_TYPE_MISMATCH,
+        ArcError.INHERITED_INCOMING_PORT_TYPE_MISMATCH,
+        ArcError.INHERITED_INCOMING_PORT_TYPE_MISMATCH,
+        ArcError.INHERITED_OUTGOING_PORT_TYPE_MISMATCH,
+        ArcError.INHERITED_INCOMING_PORT_TYPE_MISMATCH,
+        ArcError.INHERITED_PORT_DIRECTION_MISMATCH,
+        ArcError.INHERITED_OUTGOING_PORT_TYPE_MISMATCH,
         ArcError.INHERITED_OUTGOING_PORT_TYPE_MISMATCH
       )
     );
