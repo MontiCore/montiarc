@@ -31,9 +31,6 @@ val autoconfigure = tasks.create<de.mclsg.task.AutoconfigureTask>("autoconfigure
     member("MontiArc", "arc", true)
     member("de.monticore.CD4Analysis", "cd", true)
   }
-  including(
-      de.mclsg.TaskTypes.INTELLIJ_PLUGIN
-  )
   autoconfigureLspTasks()
 }
 tasks.getByName("generateMontiArcWithCD4ALanguageServer") { dependsOn(project(":languages").tasks.getByName("grammarJar")) }
