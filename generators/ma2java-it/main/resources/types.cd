@@ -1,7 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package types;
-
-classdiagram Enums {
+classdiagram Types {
 
   public enum Direction {
     FORWARDS, BACKWARDS, LEFT, RIGHT;

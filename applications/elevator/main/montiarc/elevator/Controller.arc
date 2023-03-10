@@ -1,6 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package elevator;
 
+import elevator.Commands.DoorCMD;
+import elevator.Commands.LiftCMD;
+import elevator.Commands.Direction;
+
 component Controller {
 
   port <<sync>> in boolean req1, req2, req3, req4,

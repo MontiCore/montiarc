@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package composition;
 
-import types.OnOff;
+import Types.OnOff;
 import automata.Delay;
 
 /**

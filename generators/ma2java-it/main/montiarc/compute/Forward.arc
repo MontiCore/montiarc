@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package compute;
 
-import types.OnOff;
+import Types.OnOff;
 
 /**
  * The component forwards its inputs without delay.

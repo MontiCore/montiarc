@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package composition;
 
-import types.OnOff;
+import Types.OnOff;
 
 /**
  * Composed component with an input and output port. Its behavior is defined

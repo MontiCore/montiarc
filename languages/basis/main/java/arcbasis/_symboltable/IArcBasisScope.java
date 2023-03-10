@@ -22,17 +22,22 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
     List<VariableSymbol> adapters = new ArrayList<>(ports.size());
 
     for (PortSymbol port : ports) {
-      // instantiate the adapter
-      VariableSymbol adapter = new Port2VariableAdapter(port);
 
-      // filter by modifier and predicate
-      if (modifier.includes(adapter.getAccessModifier()) && predicate.test(adapter)) {
+      if (getLocalVariableSymbols().stream().filter(v -> v instanceof Port2VariableAdapter)
+        .noneMatch(v -> ((Port2VariableAdapter) v).getAdaptee().equals(port))) {
 
-        // add the adapter to the result
-        adapters.add(adapter);
+        // instantiate the adapter
+        VariableSymbol adapter = new Port2VariableAdapter(port);
 
-        // add the adapter to the scope
-        this.add(adapter);
+        // filter by modifier and predicate
+        if (modifier.includes(adapter.getAccessModifier()) && predicate.test(adapter)) {
+
+          // add the adapter to the result
+          adapters.add(adapter);
+
+          // add the adapter to the scope
+          this.add(adapter);
+        }
       }
     }
     return adapters;

@@ -183,17 +183,21 @@ public interface IVariableArcScope extends IVariableArcScopeTOP {
     List<ArcFeatureSymbol> arcFeatures = resolveArcFeatureLocallyMany(foundSymbols, name, AccessModifier.ALL_INCLUSION, x -> true);
 
     for (ArcFeatureSymbol feature : arcFeatures) {
-      // instantiate the adapter
-      VariableSymbol adapter = new ArcFeature2VariableAdapter(feature);
 
-      // filter by modifier and predicate
-      if (modifier.includes(adapter.getAccessModifier()) && predicate.test(adapter)) {
+      if (getLocalVariableSymbols().stream().filter(v -> v instanceof ArcFeature2VariableAdapter)
+        .noneMatch(v -> ((ArcFeature2VariableAdapter) v).getAdaptee().equals(feature))) {
+        // instantiate the adapter
+        VariableSymbol adapter = new ArcFeature2VariableAdapter(feature);
 
-        // add the adapter to the result
-        adapters.add(adapter);
+        // filter by modifier and predicate
+        if (modifier.includes(adapter.getAccessModifier()) && predicate.test(adapter)) {
 
-        // add the adapter to the scope
-        this.add(adapter);
+          // add the adapter to the result
+          adapters.add(adapter);
+
+          // add the adapter to the scope
+          this.add(adapter);
+        }
       }
     }
     return adapters;

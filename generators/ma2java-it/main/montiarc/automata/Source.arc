@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata;
 
-import types.OnOff;
+import Types.OnOff;
 
 /**
  * Atomic component with a single output port. Its behavior is defined through

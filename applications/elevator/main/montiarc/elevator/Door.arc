@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package elevator;
 
+import elevator.Commands.DoorCMD;
+
 component Door {
 
   port <<sync>> in DoorCMD cmd;

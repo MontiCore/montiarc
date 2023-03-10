@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variables;
 
-import types.Direction;
+import Types.Direction;
 
 /**
  * Atomic component with a single output port and parameter. Its behavior is

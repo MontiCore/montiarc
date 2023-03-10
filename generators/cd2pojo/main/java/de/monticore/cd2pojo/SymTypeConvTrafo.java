@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cd4code._symboltable.ICD4CodeArtifactScope;
 import de.monticore.cd4code._visitor.CD4CodeTraverser;
+import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
 import de.monticore.cdbasis._visitor.CDBasisHandler;
 import de.monticore.cdbasis._visitor.CDBasisTraverser;
@@ -17,7 +18,6 @@ import java.util.Collection;
 public class SymTypeConvTrafo implements CDBasisVisitor2, CDBasisHandler {
 
   protected CD4CodeTraverser traverser;
-
 
   @Override
   public CD4CodeTraverser getTraverser() {
@@ -52,9 +52,13 @@ public class SymTypeConvTrafo implements CDBasisVisitor2, CDBasisHandler {
   }
 
   @Override
-  public void visit(@NotNull CDTypeSymbol node) {
+  public void endVisit(@NotNull CDTypeSymbol node) {
     Preconditions.checkNotNull(node);
-    String pkn = node.getEnclosingScope().getRealPackageName();
+    String pkn = ((ASTCDCompilationUnit) node
+      .getEnclosingScope().getAstNode())
+      .getCDDefinition()
+      .getDefaultPackage()
+      .getName();
     ICD4CodeArtifactScope as = CD4CodeMill.artifactScope();
     CD4CodeMill.globalScope().addSubScope(as);
     as.setEnclosingScope(CD4CodeMill.globalScope());
@@ -62,7 +66,7 @@ public class SymTypeConvTrafo implements CDBasisVisitor2, CDBasisHandler {
     node.getSpannedScope().setEnclosingScope(as);
     node.setEnclosingScope(as);
     as.add(node);
-    as.setName(pkn + "." + node.getName());
+    as.setPackageName(pkn);
     node.setPackageName(pkn);
     this.getScopes().add(as);
   }

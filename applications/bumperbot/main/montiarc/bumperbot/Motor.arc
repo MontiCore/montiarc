@@ -3,7 +3,7 @@ package bumperbot;
 
 component Motor {
   port
-    <<sync>> in MotorCmd cmd,
+    <<sync>> in bumperbot.Datatypes.MotorCmd cmd,
     <<sync>> in Integer speed;
 
 }

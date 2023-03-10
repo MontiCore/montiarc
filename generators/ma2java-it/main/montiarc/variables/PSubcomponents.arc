@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variables;
 
-import types.Direction;
+import Types.Direction;
 
 /**
  * Composed component with an multiple output ports and multiple parameters.

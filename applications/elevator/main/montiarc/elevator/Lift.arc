@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package elevator;
 
+import elevator.Commands.LiftCMD;
+
 component Lift {
 
   port <<sync>> in LiftCMD cmd;

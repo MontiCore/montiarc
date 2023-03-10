@@ -23,8 +23,8 @@ public class CD2PojoDeSer extends CD4CodeDeSer {
     if (toSerialize.isPresentName()) {
       printer.member(de.monticore.symboltable.serialization.JsonDeSers.NAME, Names.getSimpleName(toSerialize.getName()));
     }
-    if (!Names.getQualifier(toSerialize.getName()).isEmpty()) {
-      printer.member(de.monticore.symboltable.serialization.JsonDeSers.PACKAGE, Names.getQualifier(toSerialize.getName()));
+    if (!toSerialize.getPackageName().isBlank()) {
+      printer.member(de.monticore.symboltable.serialization.JsonDeSers.PACKAGE, toSerialize.getPackageName());
     }
     return printer.toString();
   }

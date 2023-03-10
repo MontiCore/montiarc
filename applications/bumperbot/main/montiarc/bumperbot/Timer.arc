@@ -3,7 +3,7 @@ package bumperbot;
 
 component Timer(Integer delay) {
   port
-    <<sync>> in TimerCmd cmd,
-    <<sync, delayed>> out TimerSignal signal;
+    <<sync>> in bumperbot.Datatypes.TimerCmd cmd,
+    <<sync, delayed>> out bumperbot.Datatypes.TimerSignal signal;
 
 }

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata;
 
-import types.OnOff;
+import Types.OnOff;
 
 /**
  * The component delays its received input by one clock cycle.

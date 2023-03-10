@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package bumperbot;
 
+import bumperbot.Datatypes.*;
+
 component BumpControl {
   port
     <<sync>> in Integer distance,

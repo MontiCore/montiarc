@@ -2,6 +2,8 @@
 package elevator;
 
 import com.google.common.base.Preconditions;
+import elevator.Commands.DoorCMD;
+import elevator.Commands.LiftCMD;
 import elevator.Controller.States;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;

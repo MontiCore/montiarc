@@ -9,10 +9,13 @@ import de.monticore.cd.codegen.TopDecorator;
 import de.monticore.cd2pojo.cocos.CD2PojoCoCosDelegator;
 import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cd4code._cocos.CD4CodeCoCoChecker;
-import de.monticore.cd4code._symboltable.CD4CodeScopesGenitorDelegatorTOP;
+import de.monticore.cd4code._symboltable.CD4CodeScopesGenitorDelegator;
 import de.monticore.cd4code._symboltable.CD4CodeSymbolTableCompleter;
 import de.monticore.cd4code._symboltable.ICD4CodeArtifactScope;
+import de.monticore.cd4code._visitor.CD4CodeTraverser;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
+import de.monticore.cdbasis._symboltable.CDPackageSymbolDeSer;
+import de.monticore.cdbasis.trafo.CDBasisDefaultPackageTrafo;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.generating.templateengine.TemplateController;
@@ -51,7 +54,7 @@ public class CD2PojoTool extends CDGeneratorTool {
   @Override
   public void run(String[] args) {
 
-    Log.init();
+    this.init();
 
     Options options = initOptions();
 
@@ -63,8 +66,6 @@ public class CD2PojoTool extends CDGeneratorTool {
         printHelp(options);
         return;
       }
-
-      this.init();
 
       if (cmd.hasOption("c2mc")) {
         initializeClass2MC();
@@ -91,6 +92,11 @@ public class CD2PojoTool extends CDGeneratorTool {
         GlobalExtensionManagement glex = new GlobalExtensionManagement();
         glex.setGlobalValue("cdPrinter", new CdUtilsPrinter());
         GeneratorSetup setup = new GeneratorSetup();
+
+        // setup default package when generating
+        CD4CodeTraverser t = CD4CodeMill.traverser();
+        t.add4CDBasis(new CDBasisDefaultPackageTrafo());
+        asts.forEach(ast -> ast.accept(t));
 
         if (cmd.hasOption("tp")) {
           setup.setAdditionalTemplatePaths(
@@ -162,8 +168,12 @@ public class CD2PojoTool extends CDGeneratorTool {
 
   @Override
   public ICD4CodeArtifactScope createSymbolTable(ASTCDCompilationUnit ast) {
-    CD4CodeScopesGenitorDelegatorTOP genitor = CD4CodeMill.scopesGenitorDelegator();
-    return genitor.createFromAST(ast);
+    CD4CodeScopesGenitorDelegator genitor = CD4CodeMill.scopesGenitorDelegator();
+    ICD4CodeArtifactScope scope = genitor.createFromAST(ast);
+    if (ast.isPresentMCPackageDeclaration()) {
+      scope.setPackageName(ast.getMCPackageDeclaration().getMCQualifiedName().getQName());
+    }
+    return scope;
   }
 
   protected void completeSymbolTable(Collection<ASTCDCompilationUnit> asts) {
@@ -225,11 +235,10 @@ public class CD2PojoTool extends CDGeneratorTool {
     BasicSymbolsMill.initializePrimitives();
     CD4CodeMill.globalScope().getSymbolDeSers().clear();
     CD4CodeMill.globalScope().setDeSer(new CD2PojoDeSer());
-
     CD4CodeMill.globalScope().getSymbolDeSers().put("de.monticore.cd4codebasis._symboltable.CDMethodSignatureSymbol", new de.monticore.cd4codebasis._symboltable.CDMethodSignatureSymbolDeSer());
     CD4CodeMill.globalScope().getSymbolDeSers().put("de.monticore.cdassociation._symboltable.CDAssociationSymbol", new de.monticore.cdassociation._symboltable.CDAssociationSymbolDeSer());
     CD4CodeMill.globalScope().getSymbolDeSers().put("de.monticore.cdassociation._symboltable.CDRoleSymbol", new de.monticore.cdassociation._symboltable.CDRoleSymbolDeSer());
-    CD4CodeMill.globalScope().getSymbolDeSers().put("de.monticore.cdbasis._symboltable.CDPackageSymbol", new CD2PojoPackageSymbolDeSer());
+    CD4CodeMill.globalScope().getSymbolDeSers().put("de.monticore.cdbasis._symboltable.CDPackageSymbol", new CDPackageSymbolDeSer());
     CD4CodeMill.globalScope().getSymbolDeSers().put("de.monticore.cdbasis._symboltable.CDTypeSymbol", new CD2PojoTypeSymbolDeSer());
     CD4CodeMill.globalScope().getSymbolDeSers().put("de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol", new de.monticore.symbols.oosymbols._symboltable.OOTypeSymbolDeSer());
     CD4CodeMill.globalScope().getSymbolDeSers().put("de.monticore.symbols.oosymbols._symboltable.FieldSymbol", new de.monticore.symbols.oosymbols._symboltable.FieldSymbolDeSer());

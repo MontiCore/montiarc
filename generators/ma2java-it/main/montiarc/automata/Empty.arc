@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata;
 
-import types.OnOff;
+import Types.OnOff;
 
 /**
  * Empty atomic component, the component should not produce any output.
