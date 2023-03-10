@@ -36,7 +36,6 @@ val alteredConfigValuesSrcSet = sourceSets.create("alteringAndUsingConfigValues"
   montiarc.destinationDirectory.set(layout.buildDirectory.dir("montiarc-for-altered-destination"))
 }
 
-val alteredConfigValuesImplConfig = configurations.getByName(alteredConfigValuesSrcSet.implementationConfigurationName)
 tasks.named<MontiarcCompile>(alteredConfigValuesSrcSet.getCompileMontiarcTaskName()) {
   val srcSet = alteredConfigValuesSrcSet
   hwcPath.setFrom("$projectDir/src/${srcSet.name}/alteredJavaHwc")
@@ -72,7 +71,6 @@ val multiplePathsSrcSet = sourceSets.create("usingMultiplePathsAsConfigValues") 
   ))
 }
 
-val multiplePathsImplConfig = configurations.getByName(multiplePathsSrcSet.implementationConfigurationName)
 tasks.named<MontiarcCompile>(multiplePathsSrcSet.getCompileMontiarcTaskName()) {
   val srcSet = multiplePathsSrcSet
   hwcPath.setFrom(
@@ -122,7 +120,6 @@ val mixedPathsExistanceSrcSet = sourceSets.create("usingMultiplePathsMixedExista
   ))
 }
 
-val mixedPathsImplConfig = configurations.getByName(mixedPathsExistanceSrcSet.implementationConfigurationName)
 tasks.named<MontiarcCompile>(mixedPathsExistanceSrcSet.getCompileMontiarcTaskName()) {
   val srcSet = mixedPathsExistanceSrcSet
   hwcPath.setFrom(
@@ -161,7 +158,6 @@ tasks.check.configure { dependsOn(mixedPathExistenceCheck) }
 // Testing correct behavior if we fully remove configuration values where possible
 // For this source set, we do not remove the model path directory, as it would lead to "NO_SOURCE", disabling testing
 val removingSrcSet = sourceSets.create("removingDefaultValues")
-val removingImplConfig = configurations.getByName(removingSrcSet.implementationConfigurationName)
 tasks.named<MontiarcCompile>(removingSrcSet.getCompileMontiarcTaskName()) {
   hwcPath.setFrom()
   symbolImportDir.setFrom()
@@ -188,7 +184,6 @@ tasks.check.configure { dependsOn(removingDefaultValuesCheck) }
 // Testing correct behavior if we change configuration values to unused or absent paths where possible
 // For this source set, declaring only an unused model path directory would lead to "NO_SOURCE", disabling testing
 val unusedConfigValuesSrcSet = sourceSets.create("declaringUnusedConfigValues")
-val unusedConfigValuesImplConfig = configurations.getByName(unusedConfigValuesSrcSet.implementationConfigurationName)
 tasks.named<MontiarcCompile>(unusedConfigValuesSrcSet.getCompileMontiarcTaskName()) {
   val srcSet = unusedConfigValuesSrcSet
   hwcPath.setFrom(file("$projectDir/src/${srcSet.name}/unusedJava"))
@@ -213,13 +208,6 @@ tasks.check.configure { dependsOn(unusedConfigValuesCheck) }
 
 
 
-dependencies {
-  alteredConfigValuesImplConfig(project(":libraries:majava-rte"))
-  multiplePathsImplConfig(project(":libraries:majava-rte"))
-  mixedPathsImplConfig(project(":libraries:majava-rte"))
-  removingImplConfig(project(":libraries:majava-rte"))
-  unusedConfigValuesImplConfig(project(":libraries:majava-rte"))
-}
 
 
 tasks.getByName<Test>("test") {

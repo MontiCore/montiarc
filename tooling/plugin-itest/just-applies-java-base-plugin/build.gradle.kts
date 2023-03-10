@@ -22,10 +22,6 @@ montiarc {
   internalMontiArcTesting.set(true)
 }
 
-dependencies {
-  fooImplConfig(project(":libraries:majava-rte"))
-}
-
 val checkGenerationTask = tasks.register("checkCorrectGeneration", CheckFilesArePresent::class.java) {
   dependsOn(tasks.named("compileFooMontiarc"))
   group = "verification"

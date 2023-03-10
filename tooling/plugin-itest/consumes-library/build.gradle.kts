@@ -22,7 +22,6 @@ montiarc {
 
 dependencies {
   montiarc(project(":tooling:plugin-itest:produces-library"))
-  implementation(project(":libraries:majava-rte"))
 }
 
 tasks.getByName<Test>("test") {

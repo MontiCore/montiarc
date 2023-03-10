@@ -31,13 +31,18 @@ const val MONTIARC_SYMBOLS_BASE_CLASSIFIER = "arcSymbols"
 const val MONTIARC_API_SYMBOL_USAGE = "montiarc-api"
 
 const val MA_TOOL_CLASS = "montiarc.generator.MontiArcTool"
+
 const val INTERNAL_GENERATOR_PROJECT_REF = ":generators:ma2java"
 const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:ma2java"
+
+const val INTERNAL_RTE_PROJECT_REF = ":libraries:majava-rte"
+const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:majava-rte"
 
 /**
  * Adds a sourceset entry for Montiarc models and tasks that generate java code from Montiarc models.
  * @see MontiarcCompile
  */
+@Suppress("unused")
 class MontiarcPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
@@ -52,9 +57,11 @@ class MontiarcPlugin : Plugin<Project> {
       val dependencyConfig = setUpMontiarcDependencyConfiguration(sourceSet, project)
       setUpMontiarcSymbolDependencyConfiguration(sourceSet, dependencyConfig, project)
 
-      // Adding Montiarc to all source sets and creating a compile task from it
+      // Adding Montiarc to all source sets and creating compile tasks from them
       addMontiarcToSourceSet(sourceSet, project)
       createCompileMontiarcTask(sourceSet, project, extension)
+
+      addRuntimeEnvironmentDependencyFor(sourceSet, project, extension)
     }
 
     // Special treatments for the main and test source sets. They only exist, when the java plugin is applied
@@ -91,6 +98,32 @@ class MontiarcPlugin : Plugin<Project> {
         project.project(INTERNAL_GENERATOR_PROJECT_REF)
       } else {
         "${MAVEN_GENERATOR_PROJECT_REF}:${GENERATOR_VERSION}"
+      }
+    })
+  }
+
+  private fun addRuntimeEnvironmentDependencyFor(sourceSet: SourceSet,
+                                                 project: Project,
+                                                 extension: MAExtension) = with(project) {
+
+    // If the project is a library and gets consumed, the consumer must transitively consume the runtime environment,
+    // too. Therefore, we want to put the dependency on the api configuration. However, the api configuration only
+    // exists for the main source set. Moreover, we also want to support users of the normal java plugin that does not
+    // have api configurations. It only has implementation configurations which we then alternatively use.
+    val dependencyConfig = if (pluginManager.hasPlugin("java-library") && SourceSet.isMain(sourceSet)) {
+      sourceSet.apiConfigurationName
+    } else {
+      sourceSet.implementationConfigurationName
+    }
+
+    // Depending on what the user wishes, majava-rte may be drawn from maven (default), or it may be an internal project
+    // dependency. This only makes sense for us, the MontiArc developers, because this way we can directly test the
+    // freshly compiled version of majava-rte.
+    dependencies.addProvider(dependencyConfig, project.provider {
+      if (extension.internalMontiArcTesting.get()) {
+        project.project(INTERNAL_RTE_PROJECT_REF)
+      } else {
+        "${MAVEN_RTE_PROJECT_REF}:${GENERATOR_VERSION}"
       }
     })
   }

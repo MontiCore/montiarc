@@ -23,7 +23,6 @@ sourceSets {
 val generateCD = configurations.create("generateCD")
 
 dependencies {
-  api(project(":libraries:majava-rte"))
   implementation("${libs.guava}:${libs.guavaVersion}")
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")
   implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")

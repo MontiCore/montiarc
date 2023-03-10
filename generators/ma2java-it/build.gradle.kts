@@ -25,7 +25,6 @@ val cd4a: Configuration = configurations.create("cd4a")
 dependencies {
   cd4a(project(":generators:cd2pojo"))
 
-  implementation(project(":libraries:majava-rte"))
   implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
   implementation("${libs.seCommonsUtils}:${libs.monticoreVersion}")
   implementation("${libs.guava}:${libs.guavaVersion}")

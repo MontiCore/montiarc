@@ -20,10 +20,6 @@ montiarc {
   internalMontiArcTesting.set(true)
 }
 
-dependencies {
-  implementation(project(":libraries:majava-rte"))
-}
-
 tasks.getByName<Test>("test") {
   this.enabled = false
 }

@@ -49,7 +49,6 @@ dependencies {
 
   implementation(sourceSets["base"].output)
   implementation(project(":languages:montiarc"))
-  implementation(project(":libraries:majava-rte"))
   implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
   implementation("${libs.seCommonsUtils}:${libs.monticoreVersion}")
   implementation("${libs.guava}:${libs.guavaVersion}")
