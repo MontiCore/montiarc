@@ -1,0 +1,12 @@
+/* (c) https://github.com/MontiCore/monticore */
+package c.d;
+
+import a.b.JavaLib;
+import a.b.JavaMill;
+
+classdiagram CDLib {
+  class A {
+    JavaLib lib = JavaMill.lib();
+    JavaLib lib2 = JavaMill.lib(-1, 0, 1);
+  }
+}

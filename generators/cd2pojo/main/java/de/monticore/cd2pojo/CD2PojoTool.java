@@ -6,6 +6,7 @@ import de.monticore.CDGeneratorTool;
 import de.monticore.cd.codegen.CDGenerator;
 import de.monticore.cd.codegen.CdUtilsPrinter;
 import de.monticore.cd.codegen.TopDecorator;
+import de.monticore.cd.methodtemplates.CD4C;
 import de.monticore.cd2pojo.cocos.CD2PojoCoCosDelegator;
 import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cd4code._cocos.CD4CodeCoCoChecker;
@@ -77,6 +78,11 @@ public class CD2PojoTool extends CDGeneratorTool {
 
       asts = transform(asts);
 
+      if (cmd.hasOption("path")) {
+        String[] paths = splitPathEntries(cmd.getOptionValue("path"));
+        CD4CodeMill.globalScope().setSymbolPath(new MCPath(paths));
+      }
+
       Log.enableFailQuick(false);
       Collection<ICD4CodeArtifactScope> scopes = this.createSymbolTable(asts);
       this.completeSymbolTable(asts);
@@ -120,6 +126,9 @@ public class CD2PojoTool extends CDGeneratorTool {
         TemplateController tc = setup.getNewTemplateController(configTemplate);
         TemplateHookPoint hpp = new TemplateHookPoint(configTemplate);
         List<Object> configTemplateArgs = Arrays.asList(glex, generator);
+
+        asts.forEach(ast -> mapCD4CImports(CD4C.getInstance(), ast));
+
         asts.forEach(ast -> hpp.processValue(tc, ast, configTemplateArgs));
       }
 
