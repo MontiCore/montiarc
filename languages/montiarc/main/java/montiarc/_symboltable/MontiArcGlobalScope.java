@@ -19,10 +19,4 @@ public class MontiArcGlobalScope extends MontiArcGlobalScopeTOP {
     this.putSymbolDeSer("de.monticore.cd4codebasis._symboltable.CDMethodSignatureSymbol", new MethodSymbolDeSer());
     this.putSymbolDeSer("de.monticore.cdassociation._symboltable.CDRoleSymbol", new FieldSymbolDeSer());
   }
-
-  @Override
-  public void clear() {
-    this.getRootVariationPoints().clear();
-    super.clear();
-  }
 }

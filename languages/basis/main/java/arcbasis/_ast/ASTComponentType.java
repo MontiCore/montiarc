@@ -16,6 +16,11 @@ public class ASTComponentType extends ASTComponentTypeTOP {
     super();
   }
 
+  protected List<ASTArcElement> getArcElementList() {
+    return this.getBody()
+      .getArcElementList();
+  }
+
   /**
    * Returns a list of all port declarations contained in the body of this component in no specific
    * order. The list is empty if this component contains no port declarations.
@@ -23,8 +28,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * @return a {@code List} of all port declarations of this component
    */
   public List<ASTPortDeclaration> getPortDeclarations() {
-    return this.getBody()
-      .getArcElementList()
+    return getArcElementList()
       .stream()
       .filter(element -> element instanceof ASTComponentInterface)
       .map(compInterface -> ((ASTComponentInterface) compInterface).getPortDeclarationList())
@@ -63,8 +67,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * @return a {@code List} of all field declarations of this component
    */
   public List<ASTArcFieldDeclaration> getFieldDeclarations() {
-    return this.getBody()
-      .getArcElementList()
+    return getArcElementList()
       .stream()
       .filter(element -> element instanceof ASTArcFieldDeclaration)
       .map(fieldDec -> (ASTArcFieldDeclaration) fieldDec)
@@ -104,8 +107,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * @return a {@code List} of all connectors contained in the topology of this component.
    */
   public List<ASTConnector> getConnectors() {
-    return this.getBody()
-      .getArcElementList()
+    return getArcElementList()
       .stream()
       .filter(element -> element instanceof ASTConnector)
       .map(connector -> (ASTConnector) connector)
@@ -149,8 +151,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * component.
    */
   public List<ASTComponentInstantiation> getSubComponentInstantiations() {
-    return this.getBody()
-      .getArcElementList()
+    return getArcElementList()
       .stream()
       .filter(element -> element instanceof ASTComponentInstantiation)
       .map(subComponent -> (ASTComponentInstantiation) subComponent)
@@ -199,8 +200,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * component.
    */
   public List<ASTComponentType> getInnerComponents() {
-    return this.getBody()
-      .getArcElementList()
+    return getArcElementList()
       .stream()
       .filter(element -> element instanceof ASTComponentType)
       .map(innerComponent -> (ASTComponentType) innerComponent)

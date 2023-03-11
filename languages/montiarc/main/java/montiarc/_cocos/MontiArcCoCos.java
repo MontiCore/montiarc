@@ -127,6 +127,7 @@ public class MontiArcCoCos {
     checker.addCoCo((ArcBasisASTComponentTypeCoCo) new VariableElementsUsage());
     checker.addCoCo((VariableArcASTArcBlockCoCo) new VariableElementsUsage());
     checker.addCoCo((VariableArcASTArcIfStatementCoCo) new VariableElementsUsage());
+    checker.addCoCo(new VariantCoCos());
 
     // ArcBehaviorBasis CoCos
     checker.addCoCo(new NoBehaviorInComposedComponents());

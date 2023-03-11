@@ -13,7 +13,6 @@ public class AbstractTest extends arcbasis.AbstractTest {
   @BeforeEach
   @Override
   public void init() {
-    VariableArcMill.globalScope().getRootVariationPoints().clear();
     VariableArcMill.globalScope().clear();
     VariableArcMill.reset();
     VariableArcMill.init();

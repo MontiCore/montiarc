@@ -238,7 +238,9 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    */
   public Optional<PortSymbol> getPort(@NotNull String name) {
     Preconditions.checkNotNull(name);
-    return this.getSpannedScope().resolvePortLocally(name);
+    return this.getSpannedScope().resolvePortLocallyMany(
+      false, name, de.monticore.symboltable.modifiers.AccessModifier.ALL_INCLUSION, x -> true
+    ).stream().findFirst();
   }
 
   /**

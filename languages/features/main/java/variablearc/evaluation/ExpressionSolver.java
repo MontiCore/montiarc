@@ -11,7 +11,11 @@ import variablearc.VariableArcMill;
 import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 
 import java.util.*;
+import java.util.stream.Stream;
 
+/**
+ * Used for solving expressions in a component.
+ */
 public class ExpressionSolver {
 
   protected Boolean lastResult;
@@ -19,14 +23,9 @@ public class ExpressionSolver {
   protected BoolExpr[] defaultExpr;
   protected String defaultPrefix;
 
-  public Optional<Boolean> getLastResult() {
-    return Optional.ofNullable(lastResult);
-  }
-
   /**
    * @param componentInstanceSymbol the instance symbol that holds the expressions.
    */
-
   public ExpressionSolver(@NotNull ComponentInstanceSymbol componentInstanceSymbol) {
     Preconditions.checkNotNull(componentInstanceSymbol);
 
@@ -49,31 +48,30 @@ public class ExpressionSolver {
   }
 
   /**
-   * Solves an {@code ASTExpression} by converting it to SMT and solving it with Z3.
-   *
-   * @param expression the boolean expression that is solved.
-   * @return a {@code Optional<Boolean>} telling us if {@code expression} is solvable or {@code Optional.empty()} if
-   * the expression cannot be solved or converted by this solver.
-   */
-  public Optional<Boolean> solve(@NotNull ASTExpression expression) {
-    Preconditions.checkNotNull(expression);
-    return solve(Collections.singletonList(expression));
-  }
-
-  /**
    * Solves a {@code List<ASTExpression>} by converting all to SMT and solving the conjunction with Z3.
+   * The component's constraints this solver was initialized with are always added.
    *
-   * @param expressions the list of boolean expression that is solved.
+   * @param expressions the list of boolean expression that are solved.
    * @return a {@code Optional<Boolean>} telling us if {@code expressions} are solvable or {@code Optional.empty()} if
    * at least one expression cannot be solved or converted by this solver.
    */
-  public Optional<Boolean> solve(@NotNull List<ASTExpression> expressions) {
+  public Optional<Boolean> solve(@NotNull ExpressionSet expressions) {
     Preconditions.checkNotNull(expressions);
 
     IDeriveSMTExpr converter = VariableArcMill.fullConverter(context);
-    converter.setPrefix(defaultPrefix);
-    BoolExpr[] smtExpr = expressions.stream()
-      .map(converter::toBool)
+    BoolExpr[] smtExpr = Stream.concat(
+        expressions.getExpressions().stream()
+          .map(expression -> convert(expression, converter)),
+        expressions.getNegatedConjunctions().stream()
+          .map(l -> l
+            .stream()
+            .map(expression -> convert(expression, converter))
+            .reduce((a, b) -> (a.isPresent() && b.isPresent()) ?
+              Optional.of(context.mkAnd(a.get(), b.get())) : Optional.empty())
+            .orElse(Optional.empty())
+            .map(context::mkNot)
+          )
+      )
       .filter(Optional::isPresent)
       .map(Optional::get)
       .toArray(BoolExpr[]::new);
@@ -101,6 +99,13 @@ public class ExpressionSolver {
 
 
     return Optional.ofNullable(lastResult);
+  }
+
+  public Optional<BoolExpr> convert(Expression expression, IDeriveSMTExpr converter) {
+    converter.setPrefix(expression.getPrefix().orElse(defaultPrefix));
+    if (expression.isNegated())
+      return converter.toBool(expression.getAstExpression()).map(context::mkNot);
+    return converter.toBool(expression.getAstExpression());
   }
 
   /**

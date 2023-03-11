@@ -87,8 +87,8 @@ public class ConnectorSourceAndTargetTypesFit implements ArcBasisASTComponentTyp
       }
 
       return portOwner.get().getType().getTypeExprOfPort(astPort.getPort());
-    } else if (enclComp.getPort(astPort.getPort()).map(PortSymbol::isTypePresent).orElse(false)) {
-      return enclComp.getPort(astPort.getPort()).map(PortSymbol::getType);
+    } else if (enclComp.getPort(astPort.getPort(), true).map(PortSymbol::isTypePresent).orElse(false)) {
+      return enclComp.getPort(astPort.getPort(), true).map(PortSymbol::getType);
     }
     return Optional.empty();
   }

@@ -8,6 +8,7 @@ import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.json.JsonElement;
 import de.monticore.symboltable.serialization.json.JsonObject;
 import variablearc._visitor.VariableArcTraverser;
+import variablearc.evaluation.Expression;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -19,6 +20,7 @@ public class VariableArcVariationPointDeSer {
   protected static final String JSON_CHILD_VARIATION_POINTS = "childVariationPoints";
   protected static final String JSON_SYMBOLS = "symbols";
   protected static final String JSON_CONDITION = "condition";
+  protected static final String JSON_CONDITION_NEGATED = "negated";
 
   protected final FunctionThrowingIOException<String, Optional<ASTExpression>> parse;
   protected final Function<ASTExpression, String> print;
@@ -41,7 +43,8 @@ public class VariableArcVariationPointDeSer {
     p.beginObject();
     p.member(JsonDeSers.KIND, getSerializedKind());
 
-    p.member(JSON_CONDITION, this.print.apply(toSerialize.getCondition()));
+    p.member(JSON_CONDITION, this.print.apply(toSerialize.getCondition().getAstExpression()));
+    p.member(JSON_CONDITION_NEGATED, toSerialize.getCondition().isNegated());
 
     p.beginArray(JSON_SYMBOLS);
     for (ISymbol symbol : toSerialize.symbols) {
@@ -65,10 +68,12 @@ public class VariableArcVariationPointDeSer {
                                                Optional<VariableArcVariationPoint> dependsOn) {
     VariableArcVariationPoint variationPoint = new VariableArcVariationPoint(null, dependsOn);
 
-    if (variationPointJson.getStringMemberOpt(JSON_CONDITION).isPresent()) {
+    if (variationPointJson.getStringMemberOpt(JSON_CONDITION).isPresent() &&
+      variationPointJson.getBooleanMemberOpt(JSON_CONDITION_NEGATED).isPresent()) {
       try {
-        variationPoint.condition =
-          this.parse.apply(variationPointJson.getStringMemberOpt(JSON_CONDITION).get()).orElse(null);
+        variationPoint.condition = new Expression(
+          this.parse.apply(variationPointJson.getStringMemberOpt(JSON_CONDITION).get()).orElse(null),
+          variationPointJson.getBooleanMemberOpt(JSON_CONDITION_NEGATED).get());
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -93,7 +98,7 @@ public class VariableArcVariationPointDeSer {
     /* keep it up to date with all possible common symbols IN VARIATION POINTS */
     if (symbol instanceof arcbasis._symboltable.ICommonArcBasisSymbol) {
       ((arcbasis._symboltable.ICommonArcBasisSymbol) symbol).accept(traverser);
-    }  else if (symbol instanceof de.monticore.scbasis._symboltable.SCStateSymbol) {
+    } else if (symbol instanceof de.monticore.scbasis._symboltable.SCStateSymbol) {
       traverser.handle(symbol);
     } else if (symbol instanceof de.monticore.symbols.basicsymbols._symboltable.ICommonBasicSymbolsSymbol) {
       ((de.monticore.symbols.basicsymbols._symboltable.ICommonBasicSymbolsSymbol) symbol).accept(traverser);
@@ -106,6 +111,7 @@ public class VariableArcVariationPointDeSer {
 
   @FunctionalInterface
   public interface FunctionThrowingIOException<T, R> {
+
     R apply(T t) throws IOException;
   }
 }

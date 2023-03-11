@@ -19,6 +19,13 @@ import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Converts a component's constraints into solvable SAT formulas.
+ * This can be used to evaluate other expressions (e.g. if-statement conditions)
+ * in the context of this component.
+ * <p>
+ * During conversion subcomponents' constraints are converted by assigning them a prefix.
+ */
 public class ComponentConverter {
 
   final Context context;
@@ -42,18 +49,20 @@ public class ComponentConverter {
 
     // convert constraints
     ArrayList<BoolExpr> contextExpr = componentTypeSymbol.getAstNode().getBody()
-        .getArcElementList().stream()
-        .filter(e -> e instanceof ASTArcConstraintDeclaration)
-        .map(e -> converter.toBool(((ASTArcConstraintDeclaration) e).getExpression()))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .collect(Collectors.toCollection(ArrayList::new));
+      .getArcElementList().stream()
+      .filter(e -> e instanceof ASTArcConstraintDeclaration)
+      .map(e -> converter.toBool(((ASTArcConstraintDeclaration) e).getExpression()))
+      .filter(Optional::isPresent)
+      .map(Optional::get)
+      .collect(Collectors.toCollection(ArrayList::new));
 
     // convert subcomponents
     for (ComponentInstanceSymbol instanceSymbol : componentTypeSymbol.getSubComponents()) {
-      prefixes.add(instanceSymbol.getName());
-      contextExpr.addAll(convert(instanceSymbol, prefixes));
-      prefixes.pop();
+      if (instanceSymbol.isPresentType()) {
+        prefixes.add(instanceSymbol.getName());
+        contextExpr.addAll(convert(instanceSymbol, prefixes));
+        prefixes.pop();
+      }
     }
 
     return contextExpr;
@@ -75,16 +84,18 @@ public class ComponentConverter {
     ArrayList<BoolExpr> contextExpr = new ArrayList<>();
     final String prefix = listToString(prefixes);
 
-    if(componentInstanceSymbol.isPresentType() &&
+    if (componentInstanceSymbol.isPresentType() &&
       componentInstanceSymbol.getType().getTypeInfo().getSpannedScope() instanceof IVariableArcScope) {
       // Convert features & parameters
       String parentPrefix = prefixes.size() > 1 ? listToString(prefixes.subList(0, prefixes.size() - 1)) : "";
       converter.setPrefix(parentPrefix);
 
       // Convert parameters
-      for (VariableSymbol variable : componentInstanceSymbol.getType().getTypeInfo().getSpannedScope().getLocalVariableSymbols()) {
+      for (VariableSymbol variable : componentInstanceSymbol.getType().getTypeInfo().getSpannedScope()
+        .getLocalVariableSymbols()) {
         Optional<ASTArcArgument> bindingExpression = componentInstanceSymbol.getBindingFor(variable);
-        Optional<Expr<?>> bindingSolverExpression = bindingExpression.map(ASTArcArgument::getExpression).flatMap(converter::toExpr);
+        Optional<Expr<?>> bindingSolverExpression =
+          bindingExpression.map(ASTArcArgument::getExpression).flatMap(converter::toExpr);
 
         Optional<Expr<?>> nameExpression =
           (new VariableArcDeriveSMTSort(new VariableArcTypeCalculator())).toSort(context, variable.getType())
@@ -97,15 +108,17 @@ public class ComponentConverter {
     }
     // convert constraints
     converter.setPrefix(prefix);
-    contextExpr.addAll(
-      componentInstanceSymbol.getType().getTypeInfo().getAstNode().getBody()
-            .getArcElementList().stream()
-            .filter(e -> e instanceof ASTArcConstraintDeclaration)
-            .map(e -> converter.toBool(((ASTArcConstraintDeclaration) e).getExpression()))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .collect(Collectors.toList())
-    );
+    if (componentInstanceSymbol.getType().getTypeInfo().isPresentAstNode()) {
+      contextExpr.addAll(
+        componentInstanceSymbol.getType().getTypeInfo().getAstNode().getBody()
+          .getArcElementList().stream()
+          .filter(e -> e instanceof ASTArcConstraintDeclaration)
+          .map(e -> converter.toBool(((ASTArcConstraintDeclaration) e).getExpression()))
+          .filter(Optional::isPresent)
+          .map(Optional::get)
+          .collect(Collectors.toList())
+      );
+    }
     // convert subcomponents
     for (ComponentInstanceSymbol instanceSymbol : componentInstanceSymbol.getType().getTypeInfo().getSubComponents()) {
       prefixes.add(instanceSymbol.getName());

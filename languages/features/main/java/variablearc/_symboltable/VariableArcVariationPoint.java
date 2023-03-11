@@ -1,10 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
+import arcbasis._ast.ASTArcElement;
+import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symboltable.ISymbol;
+import org.codehaus.commons.nullanalysis.NotNull;
+import variablearc.evaluation.Expression;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,22 +19,28 @@ import java.util.Optional;
  */
 public class VariableArcVariationPoint {
 
-  protected ASTExpression condition;
+  protected Expression condition;
 
   protected Optional<VariableArcVariationPoint> dependsOn;
-
-  protected List<ISymbol> symbols;
-
   protected List<VariableArcVariationPoint> childVariationPoints;
 
-  public VariableArcVariationPoint(ASTExpression condition) {
+  protected List<ISymbol> symbols;
+  protected List<ASTArcElement> elements;
+
+
+  public VariableArcVariationPoint(@NotNull Expression condition) {
     this(condition, Optional.empty());
   }
 
-  public VariableArcVariationPoint(ASTExpression condition, Optional<VariableArcVariationPoint> dependsOn) {
+  public VariableArcVariationPoint(@NotNull Expression condition,
+                                   @NotNull Optional<VariableArcVariationPoint> dependsOn) {
+    Preconditions.checkNotNull(condition);
+    Preconditions.checkNotNull(dependsOn);
+
     this.condition = condition;
     this.dependsOn = dependsOn;
     this.symbols = new ArrayList<>();
+    this.elements = new ArrayList<>();
     this.childVariationPoints = new ArrayList<>();
     dependsOn.ifPresent(variationPoint -> variationPoint.addChild(this));
   }
@@ -42,44 +53,52 @@ public class VariableArcVariationPoint {
     return childVariationPoints;
   }
 
-  public ASTExpression getCondition() {
+  public Expression getCondition() {
     return condition;
   }
 
-  public boolean containsSymbol(ISymbol symbol) {
+  public List<Expression> getAllConditions() {
+    if (dependsOn.isEmpty()) {
+      return new ArrayList<>(Collections.singletonList(condition));
+    } else {
+      List<Expression> parent = dependsOn.get().getAllConditions();
+      parent.add(condition);
+      return parent;
+    }
+  }
+
+  public List<ASTArcElement> getElements() {
+    return elements;
+  }
+
+  public boolean containsSymbol(@NotNull ISymbol symbol) {
+    Preconditions.checkNotNull(symbol);
     return symbols.contains(symbol);
   }
 
-  public void addChild(VariableArcVariationPoint variationPoint) {
+  public boolean containsElement(@NotNull ASTArcElement element) {
+    Preconditions.checkNotNull(element);
+    return elements.contains(element);
+  }
+
+  /**
+   * Adds a child variation point
+   * @param variationPoint a variation point that depends on this
+   */
+  public void addChild(@NotNull VariableArcVariationPoint variationPoint) {
+    Preconditions.checkNotNull(variationPoint);
+    Preconditions.checkArgument(variationPoint.getDependsOn().isPresent());
+    Preconditions.checkArgument(variationPoint.getDependsOn().get().equals(this));
     this.childVariationPoints.add(variationPoint);
   }
 
-  public void add(ISymbol symbol) {
+  public void add(@NotNull ISymbol symbol) {
+    Preconditions.checkNotNull(symbol);
     this.symbols.add(symbol);
   }
 
-  public boolean deepEquals(Object o) {
-    VariableArcVariationPoint variationPoint;
-    if ((o instanceof VariableArcVariationPoint)) {
-      variationPoint = (VariableArcVariationPoint) o;
-    } else {
-      return false;
-    }
-
-    if (this.condition != variationPoint.condition && (this.condition == null
-      || !this.condition.deepEquals(variationPoint.condition)))
-      return false;
-    if (!this.symbols.equals(variationPoint.symbols))
-      return false;
-    if (this.getChildVariationPoints().size() != variationPoint.getChildVariationPoints().size())
-      return false;
-    for (int i = 0; i < this.getChildVariationPoints().size(); i++) {
-      int finalI = i;
-      if (variationPoint.getChildVariationPoints().stream().noneMatch((e)
-        -> this.getChildVariationPoints().get(finalI).deepEquals(e)))
-        return false;
-    }
-
-    return true;
+  public void add(@NotNull ASTArcElement element) {
+    Preconditions.checkNotNull(element);
+    this.elements.add(element);
   }
 }

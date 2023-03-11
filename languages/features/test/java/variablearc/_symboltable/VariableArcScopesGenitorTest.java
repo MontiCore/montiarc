@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +31,7 @@ public class VariableArcScopesGenitorTest extends AbstractTest {
 
   @Test
   public void shouldVisitIfStatement() {
+    // Given
     ASTArcIfStatement ast = VariableArcMill.arcIfStatementBuilder()
       .setCondition(Mockito.mock(ASTExpression.class))
       .setThenStatement(VariableArcMill.arcBlockBuilder().build())
@@ -39,27 +39,44 @@ public class VariableArcScopesGenitorTest extends AbstractTest {
       .build();
     IVariableArcScope scope = VariableArcMill.scope();
     this.getSymTab().putOnStack(scope);
+    this.getSymTab().putOnStack(
+      (VariableComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
+        .setName("A")
+        .setSpannedScope(scope)
+        .build());
+
+    // When
     this.getSymTab().visit(ast);
+
+    // Then
     Assertions.assertEquals(scope, ast.getEnclosingScope());
   }
 
   @Test
   public void shouldTraverseIfStatement() {
-    Preconditions.checkArgument(this.getSymTab().getCurrentScope().isPresent());
-    IVariableArcScope scope = this.getSymTab().getCurrentScope().get();
+    // Given
+    VariableComponentTypeSymbol typeSymbol = (VariableComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
+      .setName("A")
+      .setSpannedScope(this.getSymTab().createScope(false))
+      .build();
+    this.getSymTab().putOnStack(typeSymbol);
     int size = this.getSymTab().getVariationPointStack().size();
-    int variationPointSize = scope.getRootVariationPoints().size();
+    int variationPointSize = typeSymbol.getAllVariationPoints().size();
     ASTArcIfStatement ast = VariableArcMill.arcIfStatementBuilder()
       .setCondition(Mockito.mock(ASTExpression.class))
       .setThenStatement(VariableArcMill.arcBlockBuilder().build())
       .setElseStatement(VariableArcMill.arcBlockBuilder().build())
       .build();
+
+    // When
     this.getSymTab().traverse(ast);
-    Assertions.assertEquals(scope, this.getSymTab().getCurrentScope()
+
+    // Then
+    Assertions.assertEquals(typeSymbol, this.getSymTab().getCurrentComponent()
       .orElse(null));
     Assertions.assertEquals(size, this.getSymTab().getVariationPointStack()
       .size());
-    Assertions.assertEquals(variationPointSize + 2, scope.getRootVariationPoints()
+    Assertions.assertEquals(variationPointSize + 2, typeSymbol.getAllVariationPoints()
       .size());
   }
 

@@ -27,16 +27,16 @@ public class ConnectorSourceAndTargetDirectionsFit implements ArcBasisASTCompone
     ComponentTypeSymbol enclComponent = node.getSymbol();
 
     for(ASTConnector conn : node.getConnectors()) {
-      if(conn.getSource().isPresentPortSymbol()) {
-        checkDirectionFitsForSourcePort(conn.getSource(), conn.getSource().getPortSymbol(), conn);
+      if(conn.getSource().isPresentPortSymbol(enclComponent)) {
+        checkDirectionFitsForSourcePort(conn.getSource(), conn.getSource().getPortSymbol(enclComponent), conn);
       } else {
         // None of our business. The presence of symbols for ports in connectors is checked by another coco.
         logInfoThatCoCoIsNotChecked(conn.getSource());
       }
 
       for(ASTPortAccess astTarget : conn.getTargetList()) {
-        if(astTarget.isPresentPortSymbol()) {
-          checkDirectionFitsTargetPort(astTarget, astTarget.getPortSymbol(), conn);
+        if(astTarget.isPresentPortSymbol(enclComponent)) {
+          checkDirectionFitsTargetPort(astTarget, astTarget.getPortSymbol(enclComponent), conn);
         } else {
           // None of our business. The presence of symbols for ports in connectors is checked by another coco.
           logInfoThatCoCoIsNotChecked(astTarget);

@@ -2,10 +2,14 @@
 package arcbasis._ast;
 
 import arcbasis._symboltable.ComponentInstanceSymbol;
+import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
+
+import java.util.Optional;
 
 /**
  * Represents a port-access. Extends {@link ASTPortAccessTOP} with utility functionality for easy access.
@@ -34,9 +38,38 @@ public class ASTPortAccess extends ASTPortAccessTOP {
     return componentSymbol;
   }
 
+  public ComponentTypeSymbol getComponentSymbol(ComponentTypeSymbol enclosingComponent) {
+    if (!isPresentComponent()) return null;
+    Optional<ComponentInstanceSymbol> instance = enclosingComponent.getSubComponent(getComponent());
+    if (instance.isEmpty() || !instance.get().isPresentType() || instance.get().getType().getTypeInfo() == null) {
+      return null;
+    }
+
+    return enclosingComponent.getSubComponent(getComponent()).get().getType().getTypeInfo();
+  }
+
+  public boolean isPresentComponentSymbol(ComponentTypeSymbol enclosingComponent) {
+    return getComponentSymbol(enclosingComponent) != null;
+  }
+
   @Override
   public PortSymbol getPortSymbol() {
     return portSymbol;
+  }
+
+  public PortSymbol getPortSymbol(ComponentTypeSymbol enclosingComponent) {
+    if (isPresentComponent()) {
+      if (isPresentComponentSymbol(enclosingComponent)) {
+        return getComponentSymbol(enclosingComponent).getPort(getPort(), true).orElse(null);
+      }
+    } else {
+      return enclosingComponent.getPort(getPort(), true).orElse(null);
+    }
+    return null;
+  }
+
+  public boolean isPresentPortSymbol(ComponentTypeSymbol enclosingComponent) {
+    return getPortSymbol(enclosingComponent) != null;
   }
 
   @Override

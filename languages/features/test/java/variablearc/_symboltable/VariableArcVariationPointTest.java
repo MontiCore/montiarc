@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import variablearc.AbstractTest;
+import variablearc.evaluation.Expression;
 
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ public class VariableArcVariationPointTest extends AbstractTest {
 
   @BeforeEach
   public void SetUpVariationPoint() {
-    this.variationPoint = new VariableArcVariationPoint(Mockito.mock(ASTExpression.class));
+    this.variationPoint = new VariableArcVariationPoint(new Expression(Mockito.mock(ASTExpression.class)));
   }
 
   /**
@@ -29,7 +30,7 @@ public class VariableArcVariationPointTest extends AbstractTest {
 
   @Test
   public void shouldAddChild() {
-    VariableArcVariationPoint child = new VariableArcVariationPoint(Mockito.mock(ASTExpression.class), Optional.of(this.getVariationPoint()));
+    VariableArcVariationPoint child = new VariableArcVariationPoint(new Expression(Mockito.mock(ASTExpression.class)), Optional.of(this.getVariationPoint()));
 
     Assertions.assertEquals(child.dependsOn.get(), this.getVariationPoint());
     Assertions.assertEquals(1, this.getVariationPoint()

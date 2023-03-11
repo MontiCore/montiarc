@@ -1,51 +1,127 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation;
 
-import arcbasis._symboltable.ComponentInstanceSymbol;
-import variablearc._symboltable.IVariableArcScope;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import org.codehaus.commons.nullanalysis.NotNull;
+import org.codehaus.commons.nullanalysis.Nullable;
+import variablearc.VariableArcMill;
 import variablearc._symboltable.VariableArcVariationPoint;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import com.google.common.collect.Sets;
+import variablearc._symboltable.VariableComponentTypeSymbol;
 
 /**
- * A class for filtering out {@code VariableArcVariationPoint}s with constant {@code false} conditions.
+ * A class for determining all possible combinations of variation points.
+ * Collects all if-statement conditions and passes them to the expression solver.
  */
 public class VariationPointSolver {
 
-  private final ComponentInstanceSymbol componentInstanceSymbol;
-  private List<VariableArcVariationPoint> variationPointList;
+  protected static final boolean INCLUDE_INCONVERTIBLE_VARIATIONS = true;
+  protected final VariableComponentTypeSymbol origin;
+  protected final ExpressionSolver expressionSolver;
 
-  public VariationPointSolver(ComponentInstanceSymbol typeExprOfVariableComponent) {
-    this.componentInstanceSymbol = typeExprOfVariableComponent;
+  public VariationPointSolver(@NotNull VariableComponentTypeSymbol origin) {
+    Preconditions.checkNotNull(origin);
+
+    this.origin = origin;
+    this.expressionSolver = new ExpressionSolver(origin);
   }
 
-  public List<VariableArcVariationPoint> getVariationPoints() {
-    if (this.variationPointList == null) {
-      solve();
-    }
-    return this.variationPointList;
+  /**
+   * Get all variation point combinations for the origin component
+   *
+   * @return Set of immutable sets of variation points
+   */
+  public Set<Set<VariableArcVariationPoint>> getCombinations() {
+
+    Set<Set<VariableArcVariationPoint>> res =
+      new HashSet<>(Sets.powerSet(ImmutableSet.copyOf(origin.getAllVariationPoints())));
+    res.removeIf(
+      includedVPs -> !expressionSolver.solve(getConditionsForVariationPoints(origin, includedVPs,
+          expressionSolver.defaultPrefix))
+        .orElse(INCLUDE_INCONVERTIBLE_VARIATIONS));
+    return res;
   }
 
-  public void solve() {
-    variationPointList = new ArrayList<>();
-    List<VariableArcVariationPoint> nextVariationPoints =
-      new ArrayList<>(
-        ((IVariableArcScope) componentInstanceSymbol.getType().getTypeInfo().getSpannedScope()).getRootVariationPoints());
+  /**
+   * Get all variation point combinations for a subcomponent.
+   * The {@param type} has to be a subcomponent of the origin component.
+   *
+   * @param type                The type of the subcomponent.
+   * @param prefix              the "path" to the subcomponent (i.e. child1.comp).
+   * @param originConfiguration provided configuration for the origin component.
+   * @return Set of immutable sets of variation points.
+   */
+  public Set<Set<VariableArcVariationPoint>> getCombinations(@NotNull VariableComponentTypeSymbol type,
+                                                             @NotNull String prefix,
+                                                             @NotNull Set<VariableArcVariationPoint> originConfiguration) {
+    Preconditions.checkNotNull(type);
+    Preconditions.checkNotNull(prefix);
+    Preconditions.checkNotNull(originConfiguration);
 
-    if (nextVariationPoints.isEmpty()) return;
+    Set<Set<VariableArcVariationPoint>> res =
+      new HashSet<>(Sets.powerSet(ImmutableSet.copyOf(type.getAllVariationPoints())));
+    res.removeIf(
+      includedVPs -> {
 
-    ExpressionSolver solver = new ExpressionSolver(componentInstanceSymbol);
-    while (nextVariationPoints.size() > 0) {
-      VariableArcVariationPoint vp = nextVariationPoints.get(0);
-      Optional<Boolean> res = solver.solve(vp.getCondition());
-      if (res.orElse(true)) {
-        nextVariationPoints.addAll(vp.getChildVariationPoints());
-        variationPointList.add(vp);
-      }
-      nextVariationPoints.remove(0);
-    }
-    solver.close();
+        ExpressionSet expressions = getConditionsForVariationPoints(type, includedVPs, prefix);
+        expressions.add(getConditionsForVariationPoints(origin, originConfiguration, null));
+
+        return !expressionSolver.solve(expressions).orElse(INCLUDE_INCONVERTIBLE_VARIATIONS);
+      });
+    return res;
+  }
+
+  /**
+   * Get all AST Expressions that have to hold for a specific variant.
+   * This includes the included variation point conditions as well as the negated excluded variations points.
+   *
+   * @param type        The type of the component
+   * @param includedVPs The selected variationPoints
+   * @return The expression set that has to hold for only includedVP to be active
+   */
+  public ExpressionSet getConditionsForVariationPoints(@NotNull VariableComponentTypeSymbol type,
+                                                       @NotNull Collection<VariableArcVariationPoint> includedVPs,
+                                                       @Nullable String prefix) {
+    Preconditions.checkNotNull(type);
+    Preconditions.checkNotNull(includedVPs);
+
+    Set<VariableArcVariationPoint> excludedVPs = new HashSet<>(type.getAllVariationPoints());
+    excludedVPs.removeAll(includedVPs);
+    return new ExpressionSet(getConditionsCombined(includedVPs, prefix), getConditions(excludedVPs, prefix));
+  }
+
+
+  protected List<Expression> getConditionsCombined(@NotNull Collection<VariableArcVariationPoint> variationPoints,
+                                                   @Nullable String prefix) {
+    return variationPoints
+      .stream()
+      .flatMap(vp -> vp.getAllConditions().stream()).map(e -> e.copyWithPrefix(prefix))
+      .collect(Collectors.toList());
+  }
+
+  protected List<List<Expression>> getConditions(@NotNull Collection<VariableArcVariationPoint> variationPoints,
+                                                 @Nullable String prefix) {
+    return variationPoints
+      .stream()
+      .map(vp ->
+        vp.getAllConditions()
+          .stream()
+          .map(e -> e.copyWithPrefix(prefix))
+          .collect(Collectors.toList())
+      )
+      .collect(Collectors.toList());
+  }
+
+  /**
+   * Disposes of the solver
+   */
+  public void close() {
+    expressionSolver.close();
   }
 }

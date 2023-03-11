@@ -7,6 +7,7 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
+import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.Collections;
@@ -21,7 +22,7 @@ public class ConstraintSatisfied4Comp implements ArcBasisASTComponentTypeCoCo {
 
 
     ExpressionSolver solver = new ExpressionSolver(node.getSymbol());
-    Optional<Boolean> eval = solver.solve(Collections.emptyList());
+    Optional<Boolean> eval = solver.solve(new ExpressionSet(Collections.emptyList()));
     solver.close();
     if (eval.isPresent()) {
       if (!eval.get()) {
