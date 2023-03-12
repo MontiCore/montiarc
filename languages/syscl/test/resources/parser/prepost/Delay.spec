@@ -9,6 +9,6 @@ spec Delay<T> {
 
   ------------------------
 
-  post: buffer = x  &&  z = buffer@pre
+  post: buffer = x  &&  z = buffer@pre;
 
 }

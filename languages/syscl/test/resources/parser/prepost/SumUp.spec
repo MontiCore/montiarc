@@ -10,7 +10,7 @@ spec SumUp {
 
   ------------------------
 
-  pre:  true
-  post: s = x+s@pre && y = s@pre
+  pre:  true;
+  post: s = x+s@pre && y = s@pre;
 
 }

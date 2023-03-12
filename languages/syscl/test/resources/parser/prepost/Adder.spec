@@ -8,7 +8,7 @@ spec Adder {
 
   ------------------------
 
-  pre:  true
-  post: z = x + y
+  pre:  true;
+  post: z = x + y;
 
 }
