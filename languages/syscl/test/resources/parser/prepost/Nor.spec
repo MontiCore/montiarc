@@ -1,4 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
+package prepost;
+
 spec Nor {
 
   port in boolean x, y;

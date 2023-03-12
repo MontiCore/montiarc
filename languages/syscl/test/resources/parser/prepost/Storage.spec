@@ -1,4 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
+package prepost;
+
 spec Storage {
 
   port in Screw din,

@@ -19,14 +19,8 @@ dependencies {
   grammar("${libs.monticoreGrammar}:${libs.monticoreVersion}") {
     capabilities { requireCapability(libs.mcGrammarsCapability) }
   }
-  grammar ("${libs.monticoreOCL}:${libs.monticoreVersion}") {
-    capabilities { requireCapability(libs.oclGrammarsCapability) }
-  }
 
-  api(project(":languages:generics"))
-  api(project(":languages:syscl-basis"))
-  api(project(":languages:ag"))
-  api(project(":languages:prepost"))
+  api(project(":languages:basis"))
 
   testImplementation((project(":languages:basis"))) {
     capabilities {
@@ -37,10 +31,11 @@ dependencies {
   implementation("${libs.apache}:${libs.apacheCommonsVersion}")
   implementation("${libs.guava}:${libs.guavaVersion}")
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")
-  implementation("${libs.monticoreOCL}:${libs.monticoreVersion}")
+
+  testImplementation("${libs.mockito}:${libs.mockitoVersion}")
 }
 
-configureMCTask("SysCL.mc4")
+configureMCTask("ArcAGs.mc4")
 
 java.registerFeature("tests") {
   usingSourceSet(sourceSets.getByName("test"))

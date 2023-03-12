@@ -35,11 +35,15 @@ public class ParserTest extends AbstractTest {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    "lecture/Adder.spec",
-    "lecture/Delay.spec",
-    "lecture/Nor.spec",
-    "lecture/Storage.spec",
-    "lecture/SumUp.spec"
+    "prepost/Adder.spec",
+    "prepost/Delay.spec",
+    "prepost/Nor.spec",
+    "prepost/Storage.spec",
+    "prepost/SumUp.spec",
+    "ag/Add.spec",
+    "ag/AcSum.spec",
+    "ag/FragileDelay.spec",
+    "ag/SynchAdd.spec"
   })
   public void shouldParseWithoutError(String fileName) {
     SysCLParser parser = SysCLMill.parser();

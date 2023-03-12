@@ -1,4 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
+package prepost;
+
 spec Delay<T> {
 
   port in T x;

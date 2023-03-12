@@ -2,6 +2,7 @@
 
 grammar SysCL extends
           SysCLBasis,
+          ArcAGs,
           ArcPrePost,
           GenericArc,
           de.monticore.expressions.AssignmentExpressions,

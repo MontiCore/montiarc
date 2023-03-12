@@ -1,0 +1,10 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+component grammar ArcAGs extends ArcBasis {
+
+  ArcAG implements ArcBehaviorElement =
+    (key("assume") ":" Expression ";") ?
+    key("guarantee") ":" Expression ";"
+  ;
+
+}

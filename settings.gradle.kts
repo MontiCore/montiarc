@@ -18,6 +18,7 @@ includeBuild("build-logic")
 
 include(":base-platform")
 include(":languages")
+include(":languages:ag")
 include(":languages:basis")
 include(":languages:automaton")
 include(":languages:comfy")

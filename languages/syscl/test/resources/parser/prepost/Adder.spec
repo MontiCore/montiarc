@@ -1,14 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
-spec SumUp {
+package prepost;
 
-  port in int x;
-  port out int y;
+spec Adder {
 
-  int s = 0;
+  port in int x, in int y;
+  port out int z;
 
   ------------------------
 
   pre:  true
-  post: s = x+s@pre && y = s@pre
+  post: z = x + y
 
 }
