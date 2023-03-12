@@ -43,6 +43,7 @@ public class ParserTest extends AbstractTest {
     "ag/Add.spec",
     "ag/AcSum.spec",
     "ag/FragileDelay.spec",
+    "ag/PropPaxExch.spec",
     "ag/SynchAdd.spec"
   })
   public void shouldParseWithoutError(String fileName) {

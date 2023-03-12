@@ -9,6 +9,7 @@ grammar SysCL extends
           de.monticore.expressions.CommonExpressions,
           de.monticore.expressions.StreamExpressions,
           de.monticore.ocl.OCLExpressions,
+          de.monticore.ocl.SetExpressions,
           de.monticore.literals.MCCommonLiterals,
           de.monticore.types.MCSimpleGenericTypes {
 
