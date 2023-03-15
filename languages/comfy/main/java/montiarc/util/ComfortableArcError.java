@@ -9,7 +9,8 @@ package montiarc.util;
  */
 public enum ComfortableArcError implements Error {
 
-  MULTIPLE_AUTOCONNECTS("0xC1450", "There are %s autoconnect declarations in this component. Only 1 is allowed");
+  MULTIPLE_AUTOCONNECTS("0xC1450", "There are %s autoconnect declarations in this component. Only 1 is allowed"),
+  AUTOCONNECT_IN_ATOMIC_COMPONENT("0xC1451", "This autoconnect declaration is in an atomic component which is illegal");
 
   private final String errorCode;
   private final String errorMessage;

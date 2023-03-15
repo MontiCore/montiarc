@@ -37,7 +37,7 @@ class MaxOneAutoconnectPerComponentTest extends AbstractCoCoTest {
 
   @ParameterizedTest
   @MethodSource("modelAndExpectedErrorsProvider")
-  void shouldViolateTypeParameterBounds(@NotNull String model, @NotNull Error... errors) {
+  void shouldViolateMultipleAutoconnectDeclarations(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
     testModel(model, errors);

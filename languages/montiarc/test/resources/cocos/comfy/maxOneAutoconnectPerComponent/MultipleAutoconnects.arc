@@ -2,7 +2,7 @@
 package comfy.maxOneAutoconnectPerComponent;
 
 /**
-  * Valid model.
+  * Invalid model.
   */
 component MultipleAutoconnects {
   autoconnect off;

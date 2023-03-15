@@ -41,6 +41,7 @@ import arcbasis._cocos.PortsConnected;
 import arcbasis._cocos.SubPortsConnected;
 import arcbasis._cocos.UniqueIdentifierNames;
 import comfortablearc._cocos.MaxOneAutoconnectPerComponent;
+import comfortablearc._cocos.AtomicNoAutoConnect;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.scbasis._cocos.AtLeastOneInitialState;
 import de.monticore.scbasis._cocos.MaxOneInitialState;
@@ -154,6 +155,7 @@ public class MontiArcCoCos {
 
     // ComfortableArc Cocos
     checker.addCoCo(new MaxOneAutoconnectPerComponent());
+    checker.addCoCo(new AtomicNoAutoConnect());
 
     // Basic MontiCore cocos
     checker.addCoCo(new ExpressionStatementIsValid(mcTypeCheck));
