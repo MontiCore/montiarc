@@ -94,7 +94,7 @@ public class CD2PojoTool extends CDGeneratorTool {
         Log.enableFailQuick(true);
       }
 
-      if (cmd.hasOption("gen")) {
+      if (cmd.hasOption("o")) {
         GlobalExtensionManagement glex = new GlobalExtensionManagement();
         glex.setGlobalValue("cdPrinter", new CdUtilsPrinter());
         GeneratorSetup setup = new GeneratorSetup();
@@ -127,7 +127,7 @@ public class CD2PojoTool extends CDGeneratorTool {
         TemplateHookPoint hpp = new TemplateHookPoint(configTemplate);
         List<Object> configTemplateArgs = Arrays.asList(glex, generator);
 
-        asts.forEach(ast -> mapCD4CImports(CD4C.getInstance(), ast));
+        asts.forEach(ast -> mapCD4CImports(ast));
 
         asts.forEach(ast -> hpp.processValue(tc, ast, configTemplateArgs));
       }
@@ -199,12 +199,13 @@ public class CD2PojoTool extends CDGeneratorTool {
   }
 
   @Override
-  protected void runCoCos(ASTCDCompilationUnit ast) {
+  public void runCoCos(ASTCDCompilationUnit ast) {
     CD4CodeCoCoChecker checker = new CD2PojoCoCosDelegator().getCheckerForAllCoCos();
     checker.checkAll(ast);
   }
 
-  protected MCPath createModelPath(@NotNull CommandLine cl) {
+  @Override
+  public MCPath createModelPath(@NotNull CommandLine cl) {
     Preconditions.checkNotNull(cl);
 
     if (cl.hasOption("i")) {
@@ -212,19 +213,6 @@ public class CD2PojoTool extends CDGeneratorTool {
     } else {
       return new MCPath();
     }
-  }
-
-  protected final @NotNull String[] splitPathEntries(@NotNull String composedPath) {
-    Preconditions.checkNotNull(composedPath);
-    return composedPath.split(Pattern.quote(File.pathSeparator));
-  }
-
-  protected final @NotNull String[] splitPathEntries(@NotNull String[] composedPaths) {
-    Preconditions.checkNotNull(composedPaths);
-    return Arrays.stream(composedPaths)
-      .map(this::splitPathEntries)
-      .flatMap(Arrays::stream)
-      .toArray(String[]::new);
   }
 
   protected void storeSymTab(Collection<ICD4CodeArtifactScope> scopes, String path) {

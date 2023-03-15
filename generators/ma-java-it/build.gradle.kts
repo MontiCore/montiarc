@@ -62,7 +62,6 @@ val compileCD4A = tasks.register<JavaExec>("compileCD4A") {
   args("-i", cdModelDir)
   args("-c")
   args("-c2mc")
-  args("-gen")
   args("-path", compileBaseJava.outputs.files.asPath)
   args("-o", cdGenJavaDir)
   args("-s", cdGenSymDir)
