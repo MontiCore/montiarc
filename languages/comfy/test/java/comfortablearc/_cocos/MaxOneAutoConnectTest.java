@@ -18,13 +18,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-class MaxOneAutoconnectPerComponentTest extends AbstractTest {
+class MaxOneAutoConnectTest extends AbstractTest {
 
   @Test
   void shouldAllowNoAutoconnect() {
     // Given
     ASTComponentBody body = ComfortableArcMill.componentBodyBuilder().build();
-    MaxOneAutoconnectPerComponent coco = new MaxOneAutoconnectPerComponent();
+    MaxOneAutoConnect coco = new MaxOneAutoConnect();
 
     // When
     coco.check(body);
@@ -38,7 +38,7 @@ class MaxOneAutoconnectPerComponentTest extends AbstractTest {
   void shouldAllowOneAutoconnect(String mode) {
     // Given
     ASTComponentBody body = buildCompBodyWithAutoconnects(mode);
-    MaxOneAutoconnectPerComponent coco = new MaxOneAutoconnectPerComponent();
+    MaxOneAutoConnect coco = new MaxOneAutoConnect();
 
     // When
     coco.check(body);
@@ -52,7 +52,7 @@ class MaxOneAutoconnectPerComponentTest extends AbstractTest {
   void shouldNotAllowMultipleAutoconnects(String[] modes, Error[] expectedErrors) {
     // Given
     ASTComponentBody body = buildCompBodyWithAutoconnects(modes);
-    MaxOneAutoconnectPerComponent coco = new MaxOneAutoconnectPerComponent();
+    MaxOneAutoConnect coco = new MaxOneAutoConnect();
 
     // When
     coco.check(body);

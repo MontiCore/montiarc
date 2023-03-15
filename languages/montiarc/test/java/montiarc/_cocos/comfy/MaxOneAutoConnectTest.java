@@ -2,7 +2,7 @@
 package montiarc._cocos.comfy;
 
 import com.google.common.base.Preconditions;
-import comfortablearc._cocos.MaxOneAutoconnectPerComponent;
+import comfortablearc._cocos.MaxOneAutoConnect;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.util.ComfortableArcError;
@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
-class MaxOneAutoconnectPerComponentTest extends AbstractCoCoTest {
+class MaxOneAutoConnectTest extends AbstractCoCoTest {
 
   protected static final String PACKAGE = "comfy/maxOneAutoconnectPerComponent";
 
@@ -26,7 +26,7 @@ class MaxOneAutoconnectPerComponentTest extends AbstractCoCoTest {
 
   @Override
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
-    Preconditions.checkNotNull(checker).addCoCo(new MaxOneAutoconnectPerComponent());
+    Preconditions.checkNotNull(checker).addCoCo(new MaxOneAutoConnect());
   }
 
   @ParameterizedTest

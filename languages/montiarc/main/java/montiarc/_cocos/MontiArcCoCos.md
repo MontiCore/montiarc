@@ -124,10 +124,10 @@ Legend:
 
 ## ComfortableArc Cocos
 
-| in MA | CoCo(s)                       | Language       | Code    | Notes                                                                                                                                    |
-|-------|-------------------------------|----------------|---------|------------------------------------------------------------------------------------------------------------------------------------------|
-| ☑     | MaxOneAutoconnectPerComponent | ComfortableArc | 0xC1450 | There may only be one `autoconnect` declaration per component. It is also allowed to omit it in which case `autoconnect off` is implied. |
-| ☑     | AtomicNoAutoConnect           | ComfortableArc | 0xC1451 | There should be no `autoconnect` declarations in atomic components, as atomic components have no subcomponents.                          |
+| in MA | CoCo(s)             | Language       | Code    | Notes                                                                                                                                    |
+|-------|---------------------|----------------|---------|------------------------------------------------------------------------------------------------------------------------------------------|
+| ☑     | MaxOneAutoConnect   | ComfortableArc | 0xC1450 | There may only be one `autoconnect` declaration per component. It is also allowed to omit it in which case `autoconnect off` is implied. |
+| ☑     | AtomicNoAutoConnect | ComfortableArc | 0xC1451 | There should be no `autoconnect` declarations in atomic components, as atomic components have no subcomponents.                          |
 
 ## Statement CoCos
 

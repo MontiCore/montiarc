@@ -14,25 +14,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Checks that no there is one or none {@link ASTArcAutoConnect} in each component body.
+ * Checks that there is no more than one {@link ASTArcAutoConnect} in each component body.
  */
-public class MaxOneAutoconnectPerComponent implements ArcBasisASTComponentBodyCoCo {
+public class MaxOneAutoConnect implements ArcBasisASTComponentBodyCoCo {
 
   @Override
   public void check(@NotNull ASTComponentBody node) {
     Preconditions.checkNotNull(node);
 
-    List<ASTArcElement> autoConnectDeclarations = node.streamArcElements()
+    List<ASTArcElement> acs = node.streamArcElements()
       .filter(ASTArcAutoConnect.class::isInstance)
       .collect(Collectors.toList());
 
-    int numOfDeclarations = autoConnectDeclarations.size();
-    if(numOfDeclarations > 1) {
-      ASTArcElement secondDecl = autoConnectDeclarations.get(1);
+    if(acs.size() > 1) {
       Log.error(
-        ComfortableArcError.MULTIPLE_AUTOCONNECTS.format(numOfDeclarations),
-        secondDecl.get_SourcePositionStart(),
-        secondDecl.get_SourcePositionEnd()
+        ComfortableArcError.MULTIPLE_AUTOCONNECTS.format(acs.size()),
+        acs.get(1).get_SourcePositionStart(),
+        acs.get(1).get_SourcePositionEnd()
       );
     }
   }
