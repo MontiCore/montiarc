@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
-import static montiarc.util.ArcError.*;
+import static montiarc.util.ArcError.PORT_MULTIPLE_SENDER;
 
 public class UsualCoCosAlsoWorkInModesTest extends AbstractCoCoTest {
   @Override

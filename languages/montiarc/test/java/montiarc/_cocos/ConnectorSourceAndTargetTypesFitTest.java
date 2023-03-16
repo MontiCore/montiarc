@@ -2,11 +2,11 @@
 package montiarc._cocos;
 
 import arcbasis._cocos.ConnectorSourceAndTargetTypesFit;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import montiarc.MontiArcMill;
+import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;

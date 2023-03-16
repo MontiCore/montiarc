@@ -13,7 +13,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
-import static montiarc.util.BasicModeAutomataError.*;
+import static montiarc.util.BasicModeAutomataError.COMPONENT_NAME_NOT_UNIQUE_IN_MODE;
+import static montiarc.util.BasicModeAutomataError.INSTANCE_NAME_NOT_UNIQUE_IN_MODE;
+import static montiarc.util.BasicModeAutomataError.PORT_NAME_NOT_UNIQUE_IN_MODE;
 
 public class UniqueNamesInModesTest extends AbstractCoCoTest {
   @Override

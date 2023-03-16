@@ -3,7 +3,6 @@ package arcbasis._ast;
 
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;

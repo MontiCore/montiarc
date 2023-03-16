@@ -3,7 +3,6 @@ package variablearc._symboltable;
 
 import arcbasis._ast.ASTArcElement;
 import com.google.common.base.Preconditions;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symboltable.ISymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.evaluation.Expression;

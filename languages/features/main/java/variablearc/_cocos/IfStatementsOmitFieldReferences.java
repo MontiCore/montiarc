@@ -3,9 +3,7 @@ package variablearc._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
-import variablearc._cocos.util.IFieldReferenceInExpressionExtractor;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import variablearc._cocos.util.IFieldReferenceInExpressionExtractor.FieldReference;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
@@ -13,6 +11,8 @@ import montiarc.util.VariableArcError;
 import variablearc.VariableArcMill;
 import variablearc._cocos.util.ComponentIfStatementHandler;
 import variablearc._cocos.util.FieldReferenceExtractor4ExpressionBasis;
+import variablearc._cocos.util.IFieldReferenceInExpressionExtractor;
+import variablearc._cocos.util.IFieldReferenceInExpressionExtractor.FieldReference;
 
 import java.util.HashMap;
 import java.util.HashSet;

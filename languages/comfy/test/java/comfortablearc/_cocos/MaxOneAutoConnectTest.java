@@ -7,7 +7,6 @@ import comfortablearc.AbstractTest;
 import comfortablearc.ComfortableArcMill;
 import comfortablearc._ast.ASTArcAutoConnect;
 import montiarc.util.ComfortableArcError;
-import static montiarc.util.ComfortableArcError.MULTIPLE_AUTOCONNECTS;
 import montiarc.util.Error;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,6 +16,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
+
+import static montiarc.util.ComfortableArcError.MULTIPLE_AUTOCONNECTS;
 
 class MaxOneAutoConnectTest extends AbstractTest {
 

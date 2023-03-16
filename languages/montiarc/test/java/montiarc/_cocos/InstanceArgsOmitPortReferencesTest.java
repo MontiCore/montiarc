@@ -2,9 +2,9 @@
 package montiarc._cocos;
 
 import arcbasis._cocos.InstanceArgsOmitPortReferences;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
+import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;

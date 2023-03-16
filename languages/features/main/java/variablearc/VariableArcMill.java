@@ -6,11 +6,11 @@ import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
 import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import com.microsoft.z3.Context;
 import de.monticore.prettyprint.IndentPrinter;
+import variablearc._prettyprint.VariableArcFullPrettyPrinter;
 import variablearc._symboltable.VariableArcSymbolTableCompleter;
 import variablearc._symboltable.VariableArcSymbolTableCompleterDelegator;
-import variablearc._prettyprint.VariableArcFullPrettyPrinter;
-import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 import variablearc.evaluation.VariableArcDeriveSMTExpr;
+import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 
 public class VariableArcMill extends VariableArcMillTOP {
 

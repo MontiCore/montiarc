@@ -6,9 +6,9 @@ import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import basicmodeautomata.BasicModeAutomataMill;
 import basicmodeautomata._ast.ASTModeAutomaton;
 import basicmodeautomata._symboltable.ModeSymbol;
-import montiarc.util.BasicModeAutomataError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
+import montiarc.util.BasicModeAutomataError;
 
 import java.util.Set;
 import java.util.stream.Collectors;

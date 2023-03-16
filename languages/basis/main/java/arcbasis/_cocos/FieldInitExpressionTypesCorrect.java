@@ -4,7 +4,6 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTArcField;
 import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.IArcTypeCalculator;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -12,6 +11,7 @@ import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.TypeCheck;
 import de.monticore.types.check.TypeCheckResult;
 import de.se_rwth.commons.logging.Log;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**

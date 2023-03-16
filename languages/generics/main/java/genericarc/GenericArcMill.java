@@ -4,9 +4,9 @@ package genericarc;
 import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import de.monticore.prettyprint.IndentPrinter;
+import genericarc._prettyprint.GenericArcFullPrettyPrinter;
 import genericarc._symboltable.GenericArcSymbolTableCompleter;
 import genericarc._symboltable.GenericArcSymbolTableCompleterDelegator;
-import genericarc._prettyprint.GenericArcFullPrettyPrinter;
 import genericarc.check.GenericArcCompTypeExprDeSer;
 
 public class GenericArcMill extends GenericArcMillTOP {

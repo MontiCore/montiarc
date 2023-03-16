@@ -4,9 +4,9 @@ package basicmodeautomata._cocos;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import basicmodeautomata.BasicModeAutomataMill;
-import montiarc.util.BasicModeAutomataError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
+import montiarc.util.BasicModeAutomataError;
 
 public class NoModesWithoutAutomata implements ArcBasisASTComponentTypeCoCo {
 

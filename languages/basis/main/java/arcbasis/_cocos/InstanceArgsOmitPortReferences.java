@@ -5,19 +5,19 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.util.IPortReferenceInExpressionExtractor;
-import static arcbasis._cocos.util.IPortReferenceInExpressionExtractor.PortReference;
 import arcbasis._cocos.util.PortReferenceExtractor4ExpressionBasis;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.HashMap;
 import java.util.HashSet;
+
+import static arcbasis._cocos.util.IPortReferenceInExpressionExtractor.PortReference;
 
 /**
  * Arguments for component instantiations may not reference ports. As a convention, we require that component

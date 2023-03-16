@@ -2,11 +2,15 @@
 package montiarc.cocos;
 
 import arcautomaton._cocos.StateNameIsNoReservedKeyword;
-import arcbasis._cocos.*;
+import arcbasis._cocos.ComponentInstanceNameIsNoReservedKeyword;
+import arcbasis._cocos.ComponentTypeNameIsNoReservedKeyword;
+import arcbasis._cocos.FieldNameIsNoReservedKeyword;
+import arcbasis._cocos.ParameterNameIsNoReservedKeyword;
+import arcbasis._cocos.PortNameIsNoReservedKeyword;
 import genericarc._cocos.TypeParamNameIsNoReservedKeyword;
 
-import java.util.Set;
 import java.util.Collections;
+import java.util.Set;
 
 public abstract class IdentifiersAreNoJavaKeywords {
 

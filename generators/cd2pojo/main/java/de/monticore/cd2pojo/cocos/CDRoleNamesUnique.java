@@ -2,7 +2,11 @@
 package de.monticore.cd2pojo.cocos;
 
 import com.google.common.base.Preconditions;
-import de.monticore.cdassociation._ast.*;
+import de.monticore.cdassociation._ast.ASTCDAssociation;
+import de.monticore.cdassociation._ast.ASTCDBiDir;
+import de.monticore.cdassociation._ast.ASTCDLeftToRightDir;
+import de.monticore.cdassociation._ast.ASTCDRightToLeftDir;
+import de.monticore.cdassociation._ast.ASTCDUnspecifiedDir;
 import de.monticore.cdbasis._ast.ASTCDDefinition;
 import de.monticore.cdbasis._cocos.CDBasisASTCDDefinitionCoCo;
 import de.se_rwth.commons.logging.Log;

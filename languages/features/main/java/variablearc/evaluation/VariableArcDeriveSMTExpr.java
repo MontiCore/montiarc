@@ -2,20 +2,17 @@
 package variablearc.evaluation;
 
 import com.google.common.base.Preconditions;
-import com.microsoft.z3.ArithExpr;
-import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
-import com.microsoft.z3.Expr;
-import com.microsoft.z3.IntExpr;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.visitor.ITraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._visitor.VariableArcTraverser;
 import variablearc.check.VariableArcTypeCalculator;
-import variablearc.evaluation.exp2smt.*;
-
-import java.util.Optional;
+import variablearc.evaluation.exp2smt.Expr2SMTResult;
+import variablearc.evaluation.exp2smt.ExpressionsBasis2SMT;
+import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
+import variablearc.evaluation.exp2smt.IDeriveSMTSort;
+import variablearc.evaluation.exp2smt.MCCommonLiterals2SMT;
 
 public class VariableArcDeriveSMTExpr implements IDeriveSMTExpr {
 

@@ -7,7 +7,6 @@ import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 

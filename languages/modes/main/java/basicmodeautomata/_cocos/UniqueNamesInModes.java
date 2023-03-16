@@ -1,15 +1,20 @@
 /* (c) https://github.com/MontiCore/monticore */
 package basicmodeautomata._cocos;
 
-import arcbasis._ast.*;
+import arcbasis._ast.ASTComponentBody;
+import arcbasis._ast.ASTComponentHeadBuilder;
+import arcbasis._ast.ASTComponentInstance;
+import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTComponentTypeBuilder;
+import arcbasis._ast.ASTPort;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import basicmodeautomata.BasicModeAutomataMill;
-import montiarc.util.BasicModeAutomataError;
+import basicmodeautomata._ast.ASTModeDeclaration;
+import basicmodeautomata._ast.ASTModeDeclarationBuilder;
 import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
 import de.se_rwth.commons.logging.Log;
-import basicmodeautomata._ast.ASTModeDeclaration;
-import basicmodeautomata._ast.ASTModeDeclarationBuilder;
+import montiarc.util.BasicModeAutomataError;
 
 import java.util.Collection;
 import java.util.List;

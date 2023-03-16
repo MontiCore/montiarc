@@ -3,8 +3,8 @@ package montiarc.check;
 
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.ISynthesizeComponent;
-import arcbasis.check.SynthesizeComponentFromMCBasicTypes;
 import arcbasis.check.SynthCompTypeResult;
+import arcbasis.check.SynthesizeComponentFromMCBasicTypes;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
 import variablearc.check.SynthesizeVariableComponentFromMCBasicTypes;

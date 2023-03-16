@@ -1,13 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata.nondeterminism;
 
+import automata.nondeterminism.Transition.States;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import automata.nondeterminism.Transition.States;
 
 import java.util.stream.Stream;
 

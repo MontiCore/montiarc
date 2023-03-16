@@ -4,13 +4,13 @@ package arcautomaton._cocos.util;
 import arcautomaton._visitor.NamesInExpressionsVisitor;
 import arcautomaton._visitor.StatechartNameResolver;
 import arcbasis._symboltable.PortSymbol;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.visitor.ITraverser;
 import de.se_rwth.commons.logging.Log;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Optional;

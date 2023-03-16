@@ -2,7 +2,6 @@
 package montiarc._cocos;
 
 import arcbasis._cocos.FieldTypeExists;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
@@ -11,6 +10,7 @@ import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.util.CheckTypeExistence4MontiArc;
 import montiarc._symboltable.IMontiArcScope;
+import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;

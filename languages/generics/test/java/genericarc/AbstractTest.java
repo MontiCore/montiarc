@@ -6,13 +6,9 @@ import arcbasis._symboltable.SymbolService;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
-import de.monticore.types.check.SymTypeExpression;
 import genericarc._symboltable.IGenericArcArtifactScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
-
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class AbstractTest extends arcbasis.AbstractTest {
 

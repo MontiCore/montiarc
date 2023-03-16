@@ -1,5 +1,3 @@
-import montiarc.tooling.plugin.getCompileMontiarcTaskName
-
 /* (c) https://github.com/MontiCore/monticore */
 buildscript {
   dependencies {

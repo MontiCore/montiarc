@@ -2,18 +2,23 @@
 package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.*;
+import arcbasis._ast.ASTArcArguments;
+import arcbasis._ast.ASTArcParameter;
+import arcbasis._ast.ASTComponentBody;
+import arcbasis._ast.ASTComponentHead;
+import arcbasis._ast.ASTComponentInstantiation;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
 import arcbasis._symboltable.SymbolService;
 import arcbasis._symboltable.TransitiveScopeSetter;
 import arcbasis.check.ArcBasisTypeCalculatorTest;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
-import de.monticore.expressions.expressionsbasis._ast.*;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
-import de.monticore.types.check.*;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

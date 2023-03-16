@@ -8,7 +8,11 @@ import de.monticore.symboltable.ISymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.evaluation.VariationPointSolver;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**

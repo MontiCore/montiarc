@@ -3,9 +3,9 @@ package arccore;
 
 import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.deser.ComposedCompTypeExprDeSer;
+import arccore._prettyprint.ArcCoreFullPrettyPrinter;
 import arccore._symboltable.ArcCoreSymbolTableCompleter;
 import arccore._symboltable.ArcCoreSymbolTableCompleterDelegator;
-import arccore._prettyprint.ArcCoreFullPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import genericarc.check.GenericArcCompTypeExprDeSer;
 

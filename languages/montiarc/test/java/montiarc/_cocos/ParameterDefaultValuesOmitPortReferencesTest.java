@@ -3,13 +3,13 @@ package montiarc._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ParameterDefaultValuesOmitPortReferences;
-import de.monticore.io.paths.MCPath;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
+import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
+import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.commons.nullanalysis.NotNull;

@@ -1,7 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.util;
 
-import de.monticore.scbasis._cocos.*;
+import de.monticore.scbasis._cocos.AtLeastOneInitialState;
+import de.monticore.scbasis._cocos.CapitalStateNames;
+import de.monticore.scbasis._cocos.PackageCorrespondsToFolders;
+import de.monticore.scbasis._cocos.SCFileExtension;
+import de.monticore.scbasis._cocos.SCNameIsArtifactName;
+import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
+import de.monticore.scbasis._cocos.UniqueStates;
 import de.monticore.sctransitions4code._cocos.AnteBlocksOnlyForInitialStates;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 

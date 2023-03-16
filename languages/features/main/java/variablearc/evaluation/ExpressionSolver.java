@@ -4,13 +4,15 @@ package variablearc.evaluation;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
-import com.microsoft.z3.*;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.Solver;
+import com.microsoft.z3.Status;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 
-import java.util.*;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**

@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;

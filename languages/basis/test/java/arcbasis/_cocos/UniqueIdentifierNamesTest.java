@@ -3,12 +3,22 @@ package arcbasis._cocos;
 
 import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.*;
+import arcbasis._ast.ASTArcElement;
+import arcbasis._ast.ASTArcField;
+import arcbasis._ast.ASTArcFieldDeclaration;
+import arcbasis._ast.ASTArcParameter;
+import arcbasis._ast.ASTComponentBody;
+import arcbasis._ast.ASTComponentHead;
+import arcbasis._ast.ASTComponentInstantiation;
+import arcbasis._ast.ASTComponentInterface;
+import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTPortDeclaration;
+import arcbasis._ast.ASTPortDirection;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.se_rwth.commons.logging.Log;
+import montiarc.util.ArcError;
 import org.apache.commons.lang3.tuple.Pair;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -20,7 +30,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

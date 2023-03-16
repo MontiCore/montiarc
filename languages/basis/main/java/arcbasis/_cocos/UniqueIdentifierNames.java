@@ -4,9 +4,6 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis._symboltable.PortSymbol;
-import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
@@ -14,11 +11,11 @@ import de.monticore.ast.ASTNode;
 import de.monticore.symboltable.ISymbol;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 

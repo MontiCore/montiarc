@@ -1,13 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._ast.*;
-import arcbasis._symboltable.ComponentInstanceSymbol;
-import arcbasis._visitor.ArcBasisVisitor2;
+import arcbasis._ast.ASTComponentInstance;
+import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTConnector;
+import arcbasis._ast.ASTPort;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
-import variablearc.VariableArcMill;
 import variablearc._ast.ASTArcIfStatement;
 import variablearc.evaluation.Expression;
 

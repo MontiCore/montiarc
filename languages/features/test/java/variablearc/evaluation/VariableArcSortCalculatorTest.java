@@ -1,7 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation;
 
-import com.microsoft.z3.*;
+import com.microsoft.z3.BoolSort;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.FPSort;
+import com.microsoft.z3.IntSort;
+import com.microsoft.z3.Sort;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import org.junit.jupiter.api.Assertions;

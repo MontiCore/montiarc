@@ -1,7 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos.modes;
 
-import basicmodeautomata._cocos.*;
+import basicmodeautomata._cocos.InitialModeExists;
+import basicmodeautomata._cocos.NoHierarchicalModes;
+import basicmodeautomata._cocos.NoModesInAtomicComponents;
+import basicmodeautomata._cocos.NoModesWithoutAutomata;
+import basicmodeautomata._cocos.OneModeAutomatonAtMax;
 import com.google.common.base.Preconditions;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -13,7 +17,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
-import static montiarc.util.BasicModeAutomataError.*;
+
+import static montiarc.util.BasicModeAutomataError.HIERARCHICAL_MODE_ELEMENTS;
+import static montiarc.util.BasicModeAutomataError.INITIAL_MODE_DOES_NOT_EXIST;
+import static montiarc.util.BasicModeAutomataError.MODES_WITHOUT_AUTOMATON;
+import static montiarc.util.BasicModeAutomataError.MODE_ELEMENTS_IN_ATOMIC_COMPONENTS;
+import static montiarc.util.BasicModeAutomataError.MULTIPLE_MODE_AUTOMATA;
 
 /**
  * Test for all cocos listed in {@link #registerCoCos(MontiArcCoCoChecker)}

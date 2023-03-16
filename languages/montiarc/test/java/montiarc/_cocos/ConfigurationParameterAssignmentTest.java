@@ -3,11 +3,11 @@ package montiarc._cocos;
 
 import arcbasis._cocos.ConfigurationParameterAssignment;
 import arcbasis._symboltable.SymbolService;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import montiarc.MontiArcMill;
 import montiarc.check.MontiArcTypeCalculator;
+import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+
 import java.util.stream.Stream;
 
 class ConfigurationParameterAssignmentTest extends AbstractCoCoTest {

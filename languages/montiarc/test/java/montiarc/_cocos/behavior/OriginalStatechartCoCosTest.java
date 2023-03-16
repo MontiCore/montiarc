@@ -2,7 +2,10 @@
 package montiarc._cocos.behavior;
 
 import com.google.common.base.Preconditions;
-import de.monticore.scbasis._cocos.*;
+import de.monticore.scbasis._cocos.AtLeastOneInitialState;
+import de.monticore.scbasis._cocos.CapitalStateNames;
+import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
+import de.monticore.scbasis._cocos.UniqueStates;
 import de.monticore.sctransitions4code._cocos.AnteBlocksOnlyForInitialStates;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 import de.se_rwth.commons.logging.Finding;

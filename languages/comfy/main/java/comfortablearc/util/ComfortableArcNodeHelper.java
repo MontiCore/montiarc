@@ -5,12 +5,17 @@ import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
-import comfortablearc._ast.*;
+import comfortablearc._ast.ASTArcACMode;
+import comfortablearc._ast.ASTArcAIMode;
+import comfortablearc._ast.ASTArcAutoConnect;
+import comfortablearc._ast.ASTArcAutoInstantiate;
+import comfortablearc._ast.ASTFullyConnectedComponentInstantiation;
+import comfortablearc._ast.ASTPortComplete;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 /**
  * Provides utility functions for handling nodes of ComfortableArc.

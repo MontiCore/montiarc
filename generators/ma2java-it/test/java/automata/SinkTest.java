@@ -1,17 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata;
 
+import Types.OnOff;
 import automata.Sink.States;
 import com.google.common.base.Preconditions;
-import montiarc.rte.timesync.DelayPort;
-import montiarc.rte.timesync.Port;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import Types.OnOff;
 
 import java.util.ArrayList;
 import java.util.List;

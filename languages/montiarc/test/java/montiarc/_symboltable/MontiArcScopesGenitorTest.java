@@ -6,7 +6,6 @@ import montiarc.AbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
-import montiarc._visitor.MontiArcTraverser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

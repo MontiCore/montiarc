@@ -1,7 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._prettyprint;
 
-import arcbasis._ast.*;
+import arcbasis._ast.ASTArcBasisNode;
+import arcbasis._ast.ASTComponentHead;
+import arcbasis._ast.ASTComponentInstantiation;
+import arcbasis._ast.ASTPortDeclaration;
 import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;

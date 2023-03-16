@@ -2,8 +2,8 @@
 package montiarc._cocos;
 
 import arcbasis._cocos.UniqueIdentifierNames;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
+import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;

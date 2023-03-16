@@ -3,11 +3,11 @@ package montiarc._cocos;
 
 import arcbasis._cocos.ParameterDefaultValueTypesCorrect;
 import arcbasis._symboltable.SymbolService;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import montiarc.MontiArcMill;
 import montiarc.check.MontiArcTypeCalculator;
+import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;

@@ -2,7 +2,11 @@
 package basicmodeautomata._symboltable;
 
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.*;
+import arcbasis._symboltable.ComponentInstanceSymbol;
+import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.IArcBasisScope;
+import arcbasis._symboltable.IArcBasisScopeTOP;
+import arcbasis._symboltable.PortSymbol;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis.check.CompTypeExpression;
 import basicmodeautomata.BasicModeAutomataMill;

@@ -6,7 +6,11 @@ import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
 import de.monticore.literals.mcliteralsbasis._visitor.MCLiteralsBasisTraverser;
-import de.monticore.types.check.*;
+import de.monticore.types.check.DeriveSymTypeOfExpression;
+import de.monticore.types.check.DeriveSymTypeOfLiterals;
+import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.SynthesizeSymTypeFromMCBasicTypes;
+import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.mcbasictypes._visitor.MCBasicTypesTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 

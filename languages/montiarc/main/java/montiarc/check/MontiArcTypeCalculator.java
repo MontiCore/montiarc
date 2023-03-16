@@ -8,7 +8,15 @@ import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsTrav
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
 import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsTraverser;
 import de.monticore.literals.mcliteralsbasis._visitor.MCLiteralsBasisTraverser;
-import de.monticore.types.check.*;
+import de.monticore.types.check.DeriveSymTypeOfAssignmentExpressions;
+import de.monticore.types.check.DeriveSymTypeOfExpression;
+import de.monticore.types.check.DeriveSymTypeOfLiterals;
+import de.monticore.types.check.DeriveSymTypeOfMCCommonLiterals;
+import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.SynthesizeSymTypeFromMCBasicTypes;
+import de.monticore.types.check.SynthesizeSymTypeFromMCCollectionTypes;
+import de.monticore.types.check.SynthesizeSymTypeFromMCSimpleGenericTypes;
+import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.mcbasictypes._visitor.MCBasicTypesTraverser;
 import de.monticore.types.mccollectiontypes._visitor.MCCollectionTypesTraverser;
 import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesTraverser;

@@ -2,7 +2,16 @@
 package variablearc._cocos;
 
 import arcbasis._ast.ASTComponentType;
-import arcbasis._cocos.*;
+import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
+import arcbasis._cocos.ConnectorSourceAndTargetDirectionsFit;
+import arcbasis._cocos.ConnectorSourceAndTargetExist;
+import arcbasis._cocos.ConnectorSourceAndTargetTimingsFit;
+import arcbasis._cocos.ConnectorSourceAndTargetTypesFit;
+import arcbasis._cocos.InheritedPortsTypeCorrect;
+import arcbasis._cocos.PortUniqueSender;
+import arcbasis._cocos.PortsConnected;
+import arcbasis._cocos.SubPortsConnected;
+import arcbasis._cocos.UniqueIdentifierNames;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.VariableComponentTypeSymbol;

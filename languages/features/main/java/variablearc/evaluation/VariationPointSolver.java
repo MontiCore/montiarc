@@ -3,17 +3,17 @@ package variablearc.evaluation;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import com.google.common.collect.Sets;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
-import variablearc.VariableArcMill;
 import variablearc._symboltable.VariableArcVariationPoint;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import com.google.common.collect.Sets;
 import variablearc._symboltable.VariableComponentTypeSymbol;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A class for determining all possible combinations of variation points.

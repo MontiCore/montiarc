@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._cocos;
 
-import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;

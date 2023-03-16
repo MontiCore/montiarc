@@ -1,12 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.visitor;
 
+import arcautomaton._visitor.NamesInExpressionsVisitor;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import montiarc.AbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._parser.MontiArcParser;
 import montiarc._visitor.MontiArcTraverser;
-import arcautomaton._visitor.NamesInExpressionsVisitor;
 import org.assertj.core.util.Preconditions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,11 +14,16 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static arcautomaton._visitor.NamesInExpressionsVisitor.*;
+import static arcautomaton._visitor.NamesInExpressionsVisitor.VarAccessKind;
 
 public class NamesInExpressionsVisitorTest extends AbstractTest {
 

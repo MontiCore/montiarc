@@ -3,10 +3,10 @@ package montiarc._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.FieldInitExpressionsOmitPortReferences;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
+import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;

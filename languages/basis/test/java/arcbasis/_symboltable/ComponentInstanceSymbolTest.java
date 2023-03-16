@@ -5,7 +5,6 @@ import arcbasis.AbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis.check.CompTypeExpression;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

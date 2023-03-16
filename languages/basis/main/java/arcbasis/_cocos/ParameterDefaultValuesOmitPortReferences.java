@@ -8,11 +8,11 @@ import arcbasis._cocos.util.IPortReferenceInExpressionExtractor;
 import arcbasis._cocos.util.IPortReferenceInExpressionExtractor.PortReference;
 import arcbasis._cocos.util.PortReferenceExtractor4ExpressionBasis;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.HashMap;

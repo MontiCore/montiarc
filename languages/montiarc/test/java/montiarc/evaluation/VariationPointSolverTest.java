@@ -21,11 +21,17 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
-import variablearc._symboltable.*;
+import variablearc._symboltable.IVariableArcScope;
+import variablearc._symboltable.VariableArcVariationPoint;
+import variablearc._symboltable.VariableComponentTypeSymbol;
 import variablearc.evaluation.Expression;
 import variablearc.evaluation.VariationPointSolver;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**

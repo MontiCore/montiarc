@@ -2,7 +2,17 @@
 package montiarc.arc2fd.expressions;
 
 import com.google.common.base.Preconditions;
-import de.monticore.literals.mccommonliterals._ast.*;
+import de.monticore.literals.mccommonliterals._ast.ASTBasicDoubleLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTBasicFloatLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTBasicLongLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTBooleanLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTCharLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTNatLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTSignedBasicDoubleLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTSignedBasicFloatLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTSignedBasicLongLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTSignedNatLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
 import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsHandler;
 import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsTraverser;
 import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsVisitor2;

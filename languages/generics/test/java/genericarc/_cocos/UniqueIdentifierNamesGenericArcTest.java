@@ -2,13 +2,20 @@
 package genericarc._cocos;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.*;
+import arcbasis._ast.ASTArcElement;
+import arcbasis._ast.ASTArcFieldDeclaration;
+import arcbasis._ast.ASTArcParameter;
+import arcbasis._ast.ASTComponentBody;
+import arcbasis._ast.ASTComponentHead;
+import arcbasis._ast.ASTComponentInstantiation;
+import arcbasis._ast.ASTComponentInterface;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.UniqueIdentifierNamesTest;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.se_rwth.commons.logging.Log;
 import genericarc.GenericArcMill;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

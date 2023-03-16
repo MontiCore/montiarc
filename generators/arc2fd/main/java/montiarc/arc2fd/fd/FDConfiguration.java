@@ -8,16 +8,22 @@ import montiarc.arc2fd.expressions.BooleanOperation;
 import montiarc.arc2fd.expressions.NumericOperation;
 import org.codehaus.commons.nullanalysis.NotNull;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.Collections;
 
 import static java.util.Map.entry;
 import static montiarc.arc2fd.expressions.MA2SMTFormulaConverter.SEPARATOR;
-import static montiarc.arc2fd.fd.Separator.*;
+import static montiarc.arc2fd.fd.Separator.AND_SEPARATOR;
+import static montiarc.arc2fd.fd.Separator.ASSIGNMENT_SEPARATOR;
+import static montiarc.arc2fd.fd.Separator.EXCLUDES_SEPARATOR;
+import static montiarc.arc2fd.fd.Separator.OPTIONALS_SEPARATOR;
+import static montiarc.arc2fd.fd.Separator.REQUIRES_SEPARATOR;
+import static montiarc.arc2fd.fd.Separator.SIMPLE_OR_SEPARATOR;
+import static montiarc.arc2fd.fd.Separator.XOR_SEPARATOR;
 
 /**
  * Enum containing all possible Operation Types

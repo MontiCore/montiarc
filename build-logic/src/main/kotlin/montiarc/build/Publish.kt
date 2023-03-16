@@ -2,7 +2,7 @@
 package montiarc.build
 
 import org.gradle.api.Project
-import org.gradle.api.publish.maven.*
+import org.gradle.api.publish.maven.MavenPublication
 
 class Publish {
   companion object {

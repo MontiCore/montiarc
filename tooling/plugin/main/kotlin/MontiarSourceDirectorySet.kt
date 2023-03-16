@@ -4,7 +4,7 @@ package montiarc.tooling.plugin
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
 import org.gradle.api.tasks.SourceSet
-import java.util.Optional
+import java.util.*
 import javax.inject.Inject
 
 /**

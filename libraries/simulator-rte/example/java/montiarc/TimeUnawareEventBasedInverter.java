@@ -2,8 +2,8 @@
 package montiarc;
 
 import montiarc.rte.components.IUntimedComponent;
-import montiarc.rte.port.TimeUnawareOutPort;
 import montiarc.rte.port.TimeUnawareInPort;
+import montiarc.rte.port.TimeUnawareOutPort;
 
 import java.util.List;
 

@@ -2,7 +2,18 @@
 package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.*;
+import arcbasis._ast.ASTArcElement;
+import arcbasis._ast.ASTArcField;
+import arcbasis._ast.ASTArcFieldDeclaration;
+import arcbasis._ast.ASTArcParameter;
+import arcbasis._ast.ASTComponentBody;
+import arcbasis._ast.ASTComponentHead;
+import arcbasis._ast.ASTComponentInstance;
+import arcbasis._ast.ASTComponentInstantiation;
+import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTPort;
+import arcbasis._ast.ASTPortDeclaration;
+import arcbasis._ast.ASTPortDirection;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolBuilder;

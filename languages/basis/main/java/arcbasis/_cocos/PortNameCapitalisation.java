@@ -2,8 +2,8 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTPort;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
+import montiarc.util.ArcError;
 import montiarc.util.NameCapitalizationHelper;
 import org.codehaus.commons.nullanalysis.NotNull;
 

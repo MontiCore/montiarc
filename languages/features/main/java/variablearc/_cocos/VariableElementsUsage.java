@@ -1,7 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._cocos;
 
-import arcbasis._ast.*;
+import arcbasis._ast.ASTArcElement;
+import arcbasis._ast.ASTComponentInstantiation;
+import arcbasis._ast.ASTComponentInterface;
+import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTConnector;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;

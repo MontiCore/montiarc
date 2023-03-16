@@ -3,8 +3,8 @@ package montiarc._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.InnerComponentNotExtendsDefiningComponent;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

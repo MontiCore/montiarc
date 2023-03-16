@@ -4,7 +4,11 @@ package basicmodeautomata._symboltable;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
-import arcbasis._symboltable.*;
+import arcbasis._symboltable.ComponentInstanceSymbol;
+import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.IArcBasisScope;
+import arcbasis._symboltable.IArcBasisScopeTOP;
+import arcbasis._symboltable.PortSymbol;
 import basicmodeautomata.BasicModeAutomataMill;
 import basicmodeautomata._ast.ASTInitialModeDeclarationTOP;
 import basicmodeautomata._ast.ASTModeAutomaton;
@@ -12,7 +16,10 @@ import basicmodeautomata._ast.ASTModeDeclaration;
 import com.google.common.base.Preconditions;
 import de.monticore.scbasis._symboltable.SCStateSymbol;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

@@ -1,6 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
-import montiarc.tooling.plugin.getCompileMontiarcTaskName
 import montiarc.tooling.plugin.MontiarcCompile
+import montiarc.tooling.plugin.getCompileMontiarcTaskName
 
 /**
  * This build is mostly a test specification. It defines configurations for different compileMontiarc tasks

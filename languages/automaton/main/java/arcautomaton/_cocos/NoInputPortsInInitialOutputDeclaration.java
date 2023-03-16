@@ -4,11 +4,9 @@ package arcautomaton._cocos;
 import arcautomaton.ArcAutomatonMill;
 import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._visitor.ExpressionRootFinder;
-import montiarc.util.ArcAutomataError;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import arcbasis._cocos.util.IPortReferenceInExpressionExtractor;
-import static arcbasis._cocos.util.IPortReferenceInExpressionExtractor.PortReference;
 import arcbasis._cocos.util.PortReferenceExtractor4ExpressionBasis;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
@@ -17,6 +15,7 @@ import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraver
 import de.monticore.scbasis._ast.ASTSCSAnte;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
+import montiarc.util.ArcAutomataError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Collection;
@@ -24,6 +23,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static arcbasis._cocos.util.IPortReferenceInExpressionExtractor.PortReference;
 
 /**
  * Checks that initial output declarations do not reference input ports. We can not access input ports in the initial

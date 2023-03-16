@@ -4,7 +4,6 @@ package arcbasis._symboltable;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.types.check.SymTypeExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 

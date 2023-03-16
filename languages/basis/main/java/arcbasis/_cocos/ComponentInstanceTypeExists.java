@@ -3,12 +3,12 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
 import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import de.se_rwth.commons.logging.Log;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;

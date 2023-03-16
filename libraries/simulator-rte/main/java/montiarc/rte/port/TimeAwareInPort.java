@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
-import montiarc.rte.port.messages.PassAllMessageFilter;
 import montiarc.rte.port.messages.Message;
+import montiarc.rte.port.messages.PassAllMessageFilter;
 
 import java.util.Objects;
 

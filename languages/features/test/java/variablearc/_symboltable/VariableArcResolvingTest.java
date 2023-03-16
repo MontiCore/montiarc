@@ -3,20 +3,14 @@ package variablearc._symboltable;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.PortSymbol;
 import arcbasis.check.TypeExprOfComponent;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.symboltable.ISymbol;
-import de.monticore.types.check.SymTypeExpression;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import variablearc.AbstractTest;
 import variablearc.VariableArcMill;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 

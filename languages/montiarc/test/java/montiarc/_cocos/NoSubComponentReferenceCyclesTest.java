@@ -6,12 +6,12 @@ import arcbasis._cocos.NoSubComponentReferenceCycles;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
-import de.monticore.io.paths.MCPath;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
+import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -23,7 +23,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class NoSubComponentReferenceCyclesTest extends AbstractCoCoTest {

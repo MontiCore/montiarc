@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package basicmodeautomata._symboltable;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
 import basicmodeautomata.BasicModeAutomataMill;
 import basicmodeautomata._ast.ASTModeDeclaration;
 import de.monticore.scbasis._ast.ASTSCState;

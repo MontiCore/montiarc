@@ -6,8 +6,8 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
-import montiarc.util.ArcError;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
+import montiarc.util.ArcError;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

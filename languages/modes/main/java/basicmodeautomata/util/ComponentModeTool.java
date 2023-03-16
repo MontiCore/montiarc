@@ -10,7 +10,8 @@ import basicmodeautomata._symboltable.ModeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.scbasis._symboltable.ISCBasisScope;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**

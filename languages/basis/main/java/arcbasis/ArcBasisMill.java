@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis;
 
+import arcbasis._prettyprint.ArcBasisFullPrettyPrinter;
 import arcbasis._symboltable.ArcBasisSymbolTableCompleter;
 import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
-import arcbasis._prettyprint.ArcBasisFullPrettyPrinter;
 import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
 import arcbasis.check.deser.ComposedCompTypeExprDeSer;

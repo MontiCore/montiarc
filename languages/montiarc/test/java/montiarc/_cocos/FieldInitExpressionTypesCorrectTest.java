@@ -3,14 +3,14 @@ package montiarc._cocos;
 
 import arcbasis._cocos.FieldInitExpressionTypesCorrect;
 import arcbasis._symboltable.SymbolService;
-import de.monticore.io.paths.MCPath;
-import montiarc.util.ArcError;
 import com.google.common.base.Preconditions;
+import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.check.MontiArcTypeCalculator;
+import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;

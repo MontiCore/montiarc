@@ -16,7 +16,10 @@ import variablearc._symboltable.IVariableArcScope;
 import variablearc.check.VariableArcTypeCalculator;
 import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
