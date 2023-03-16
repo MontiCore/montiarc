@@ -4,7 +4,6 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
-import de.monticore.types.mcbasictypes.MCBasicTypesMill;
 import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -30,7 +29,7 @@ public class InheritedComponentTypeExists implements ArcBasisASTComponentTypeCoC
     if (node.getHead().getParent() instanceof ASTMCGenericType) {
       type = ((ASTMCGenericType) node.getHead().getParent()).printWithoutTypeArguments();
     } else {
-      type = node.getHead().getParent().printType(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
+      type = node.getHead().getParent().printType();
     }
 
     List<ComponentTypeSymbol> parent = node.getEnclosingScope().resolveComponentTypeMany(type);

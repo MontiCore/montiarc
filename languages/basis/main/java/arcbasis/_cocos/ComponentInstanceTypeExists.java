@@ -4,9 +4,7 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
-import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.mccollectiontypes._ast.ASTMCGenericType;
-import de.monticore.types.prettyprint.MCBasicTypesFullPrettyPrinter;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -18,16 +16,6 @@ import java.util.List;
  */
 public class ComponentInstanceTypeExists implements ArcBasisASTComponentInstantiationCoCo {
 
-  protected MCBasicTypesFullPrettyPrinter typePrinter;
-
-  public ComponentInstanceTypeExists() {
-    this(new MCBasicTypesFullPrettyPrinter(new IndentPrinter()));
-  }
-
-  public ComponentInstanceTypeExists(@NotNull MCBasicTypesFullPrettyPrinter typePrinter) {
-    this.typePrinter = Preconditions.checkNotNull(typePrinter);
-  }
-
   @Override
   public void check(@NotNull ASTComponentInstantiation node) {
     Preconditions.checkNotNull(node);
@@ -37,7 +25,7 @@ public class ComponentInstanceTypeExists implements ArcBasisASTComponentInstanti
     if (node.getMCType() instanceof ASTMCGenericType) {
       typeName = ((ASTMCGenericType) node.getMCType()).printWithoutTypeArguments();
     } else {
-      typeName = node.getMCType().printType(typePrinter);
+      typeName = node.getMCType().printType();
     }
 
     List<ComponentTypeSymbol> compType = node.getEnclosingScope().resolveComponentTypeMany(typeName);

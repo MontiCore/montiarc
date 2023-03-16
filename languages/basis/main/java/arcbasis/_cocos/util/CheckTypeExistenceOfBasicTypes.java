@@ -5,7 +5,6 @@ import arcbasis._symboltable.IArcBasisScope;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
-import de.monticore.types.mcbasictypes.MCBasicTypesMill;
 import de.monticore.types.mcbasictypes._ast.ASTMCPrimitiveType;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
@@ -26,12 +25,11 @@ public class CheckTypeExistenceOfBasicTypes implements MCBasicTypesVisitor2 {
     Preconditions.checkNotNull(type);
     Preconditions.checkNotNull(type.getEnclosingScope(), "ASTMCType node '%s' at '%s' has no enclosing scope. "
         + "Did you forget to run the scopes genitor before checking cocos?",
-      type.printType(MCBasicTypesMill.mcBasicTypesPrettyPrinter()),
-      type.get_SourcePositionStart());
+      type.printType(), type.get_SourcePositionStart());
     Preconditions.checkArgument(type.getEnclosingScope() instanceof IBasicSymbolsScope);
 
     IArcBasisScope enclScope = (IArcBasisScope) type.getEnclosingScope();
-    String typeName = type.printType(MCBasicTypesMill.mcBasicTypesPrettyPrinter());
+    String typeName = type.printType();
     Optional<TypeSymbol> primitiveSym = enclScope.resolveTypeMany(typeName).stream().findFirst();
 
     if(primitiveSym.isEmpty()) {
@@ -44,8 +42,7 @@ public class CheckTypeExistenceOfBasicTypes implements MCBasicTypesVisitor2 {
     Preconditions.checkNotNull(type);
     Preconditions.checkNotNull(type.getEnclosingScope(), "ASTMCType node '%s' at '%s' has no enclosing scope. "
         + "Did you forget to run the scopes genitor before checking cocos?",
-      type.printType(MCBasicTypesMill.mcBasicTypesPrettyPrinter()),
-      type.get_SourcePositionStart());
+      type.printType(), type.get_SourcePositionStart());
     Preconditions.checkArgument(type.getEnclosingScope() instanceof IBasicSymbolsScope);
 
     IArcBasisScope enclScope = (IArcBasisScope) type.getEnclosingScope();

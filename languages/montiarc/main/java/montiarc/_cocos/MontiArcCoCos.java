@@ -42,7 +42,6 @@ import arcbasis._cocos.SubPortsConnected;
 import arcbasis._cocos.UniqueIdentifierNames;
 import comfortablearc._cocos.AtomicNoAutoConnect;
 import comfortablearc._cocos.MaxOneAutoConnect;
-import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.scbasis._cocos.AtLeastOneInitialState;
 import de.monticore.scbasis._cocos.MaxOneInitialState;
 import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
@@ -56,7 +55,6 @@ import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanTyp
 import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
 import de.monticore.types.check.TypeCalculator;
-import de.monticore.types.prettyprint.MCSimpleGenericTypesFullPrettyPrinter;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
 import montiarc._cocos.util.CheckTypeExistence4MontiArc;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
@@ -85,7 +83,7 @@ public class MontiArcCoCos {
     TypeCalculator mcTypeCheck = new TypeCalculator(maTypeCheck, maTypeCheck);
 
     // ArcBasis CoCos
-    checker.addCoCo(new ComponentInstanceTypeExists(new MCSimpleGenericTypesFullPrettyPrinter(new IndentPrinter())));
+    checker.addCoCo(new ComponentInstanceTypeExists());
     checker.addCoCo(new ComponentTypeNameCapitalization());
     checker.addCoCo(new ConfigurationParameterAssignment(maTypeCheck));
     //checker.addCoCo(new ConnectorSourceAndTargetComponentDiffer());
