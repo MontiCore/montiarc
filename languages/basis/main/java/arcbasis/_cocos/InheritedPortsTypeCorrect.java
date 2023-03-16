@@ -6,8 +6,8 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
+import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheck;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -15,6 +15,12 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import java.util.Optional;
 
 public class InheritedPortsTypeCorrect implements ArcBasisASTComponentTypeCoCo {
+
+  protected final ITypeRelations tr;
+
+  public InheritedPortsTypeCorrect(@NotNull ITypeRelations tr) {
+    this.tr = Preconditions.checkNotNull(tr);
+  }
 
   @Override
   public void check(@NotNull ASTComponentType node) {
@@ -46,12 +52,12 @@ public class InheritedPortsTypeCorrect implements ArcBasisASTComponentTypeCoCo {
     if (inheritedPortType.isPresent()) {
       // then check if their types fit
       if (port.isIncoming()) {
-        if (!TypeCheck.compatible(port.getType(), inheritedPortType.get())) {
+        if (!tr.compatible(port.getType(), inheritedPortType.get())) {
           Log.error(ArcError.INHERITED_INCOMING_PORT_TYPE_MISMATCH.format(port.getName(), port.getType().print(),
             inheritedPortType.get().print(), parent.getTypeInfo().getName()));
         }
       } else {
-        if (!TypeCheck.compatible(inheritedPortType.get(), port.getType())) {
+        if (!tr.compatible(inheritedPortType.get(), port.getType())) {
           Log.error(ArcError.INHERITED_OUTGOING_PORT_TYPE_MISMATCH.format(port.getName(), port.getType().print(),
             inheritedPortType.get().print(), parent.getTypeInfo().getName()));
         }

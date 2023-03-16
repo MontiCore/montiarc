@@ -5,6 +5,7 @@ import arcbasis._cocos.ConfigurationParameterParentAssignment;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types.check.TypeRelations;
 import montiarc.MontiArcMill;
 import montiarc.check.MontiArcTypeCalculator;
 import montiarc.util.ArcError;
@@ -175,6 +176,6 @@ public class ConfigurationParameterParentAssignmentTest extends AbstractCoCoTest
   @Override
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
     Preconditions.checkNotNull(checker);
-    checker.addCoCo(new ConfigurationParameterParentAssignment(new MontiArcTypeCalculator()));
+    checker.addCoCo(new ConfigurationParameterParentAssignment(new MontiArcTypeCalculator(), new TypeRelations()));
   }
 }

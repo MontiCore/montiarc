@@ -1,14 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._cocos.ArcBasisASTComponentInstantiationCoCo;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheck;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.se_rwth.commons.logging.Log;
@@ -24,7 +25,13 @@ import java.util.Optional;
  * instantiations that type arguments passed for bounded type parameters are subtypes of these bounds.
  */
 public class ComponentInstantiationRespectsGenericTypeBounds implements ArcBasisASTComponentInstantiationCoCo {
-  /**
+
+  protected final ITypeRelations tr;
+
+  public ComponentInstantiationRespectsGenericTypeBounds(@NotNull ITypeRelations tr) {
+    this.tr = Preconditions.checkNotNull(tr);
+  }
+                                                         /**
    * Checks that type arguments for bounded type parameters are subtypes of the parameter bounds. Else logs an error.
    *
    * @param compTypeExpr     The instantiating component type expression that contains the type arguments that should be
@@ -32,7 +39,7 @@ public class ComponentInstantiationRespectsGenericTypeBounds implements ArcBasis
    * @param astInstantiation The AST node of the component instantiation for which the type arguments should be checked.
    *                         We need the AST node is needed for printing the error message.
    */
-  protected static void checkTypeBoundSatisfaction(@NotNull TypeExprOfGenericComponent compTypeExpr, @NotNull ASTComponentInstantiation astInstantiation) {
+  protected void checkTypeBoundSatisfaction(@NotNull TypeExprOfGenericComponent compTypeExpr, @NotNull ASTComponentInstantiation astInstantiation) {
     Preconditions.checkNotNull(compTypeExpr);
     Preconditions.checkNotNull(astInstantiation);
 
@@ -42,7 +49,7 @@ public class ComponentInstantiationRespectsGenericTypeBounds implements ArcBasis
       Optional<SymTypeExpression> typeVarBinding = compTypeExpr.getBindingFor(typeVar);
       if (typeVarBinding.isPresent()) {
         for (SymTypeExpression bound : typeVar.getSuperTypesList()) {
-          if (!TypeCheck.compatible(bound, typeVarBinding.get())) {
+          if (!this.tr.compatible(bound, typeVarBinding.get())) {
             Log.error(
                 GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print(), typeVar.getName(), compTypeSymbol.getName()),
                 astInstantiation.get_SourcePositionStart());
@@ -64,7 +71,7 @@ public class ComponentInstantiationRespectsGenericTypeBounds implements ArcBasis
     Preconditions.checkArgument(!node.getComponentInstanceList().isEmpty(), "'%s' at '%s' misses instances.", ASTComponentInstantiation.class.getSimpleName(),
         node.get_SourcePositionStart());
 
-    Preconditions.checkArgument(node.streamComponentInstances().allMatch(inst -> inst.isPresentSymbol()),
+    Preconditions.checkArgument(node.streamComponentInstances().allMatch(ASTComponentInstance::isPresentSymbol),
         "Some instances of '%s' at '%s' have no symbol. Have you run the genitor (and completer) before checking " + "coco '%s'?",
         ASTComponentInstantiation.class.getSimpleName(), node.get_SourcePositionStart(), this.getClass().getSimpleName());
 
@@ -81,7 +88,7 @@ public class ComponentInstantiationRespectsGenericTypeBounds implements ArcBasis
     CompTypeExpression compTypeExpr = node.getComponentInstance(0).getSymbol().getType();
     if (compTypeExpr instanceof TypeExprOfGenericComponent) {
       checkTypeArgsAreNotTooFew((TypeExprOfGenericComponent) compTypeExpr, node);
-      ;
+
       checkTypeArgsAreNotTooMany((TypeExprOfGenericComponent) compTypeExpr, node);
       checkTypeBoundSatisfaction((TypeExprOfGenericComponent) compTypeExpr, node);
     }

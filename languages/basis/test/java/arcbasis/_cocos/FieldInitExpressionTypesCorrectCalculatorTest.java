@@ -7,11 +7,13 @@ import arcbasis._ast.ASTArcFieldDeclaration;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.SymbolService;
+import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.ArcBasisTypeCalculatorTest;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types.check.TypeRelations;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -55,7 +57,7 @@ public class FieldInitExpressionTypesCorrectCalculatorTest extends ArcBasisTypeC
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
-    FieldInitExpressionTypesCorrect coco = new FieldInitExpressionTypesCorrect();
+    FieldInitExpressionTypesCorrect coco = new FieldInitExpressionTypesCorrect(new ArcBasisTypeCalculator(), new TypeRelations());
     coco.check(field);
 
     Assertions.assertEquals(0, Log.getErrorCount());
@@ -77,7 +79,7 @@ public class FieldInitExpressionTypesCorrectCalculatorTest extends ArcBasisTypeC
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
-    FieldInitExpressionTypesCorrect coco = new FieldInitExpressionTypesCorrect();
+    FieldInitExpressionTypesCorrect coco = new FieldInitExpressionTypesCorrect(new ArcBasisTypeCalculator(), new TypeRelations());
     coco.check(field);
 
     Assertions.assertEquals(0, Log.getErrorCount());
@@ -99,7 +101,7 @@ public class FieldInitExpressionTypesCorrectCalculatorTest extends ArcBasisTypeC
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
-    FieldInitExpressionTypesCorrect coco = new FieldInitExpressionTypesCorrect();
+    FieldInitExpressionTypesCorrect coco = new FieldInitExpressionTypesCorrect(new ArcBasisTypeCalculator(), new TypeRelations());
     coco.check(field);
 
     this.checkOnlyExpectedErrorsPresent(ArcError.FIELD_INIT_EXPRESSION_WRONG_TYPE);
@@ -121,7 +123,7 @@ public class FieldInitExpressionTypesCorrectCalculatorTest extends ArcBasisTypeC
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
-    FieldInitExpressionTypesCorrect coco = new FieldInitExpressionTypesCorrect();
+    FieldInitExpressionTypesCorrect coco = new FieldInitExpressionTypesCorrect(new ArcBasisTypeCalculator(), new TypeRelations());
     coco.check(field);
 
     this.checkOnlyExpectedErrorsPresent(ArcError.FIELD_INITIALIZATION_IS_TYPE_REF);
@@ -139,7 +141,7 @@ public class FieldInitExpressionTypesCorrectCalculatorTest extends ArcBasisTypeC
 
   protected ASTExpression doBuildNameExpressionInScope(@NotNull String expression) {
     Preconditions.checkNotNull(expression);
-    ASTExpression result = this.doBuildNameExpression(expression);
+    ASTExpression result = doBuildNameExpression(expression);
     this.getScopeSetter().setScope(result, this.getScope());
     return result;
   }

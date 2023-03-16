@@ -7,11 +7,13 @@ import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.SymbolService;
+import arcbasis.check.ArcBasisTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types.check.TypeRelations;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -80,7 +82,7 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractTest {
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
-    ParameterDefaultValueTypesCorrect coco = new ParameterDefaultValueTypesCorrect();
+    ParameterDefaultValueTypesCorrect coco = new ParameterDefaultValueTypesCorrect(new ArcBasisTypeCalculator(), new TypeRelations());
 
     //When
     coco.check(param);
@@ -102,7 +104,7 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractTest {
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
-    ParameterDefaultValueTypesCorrect coco = new ParameterDefaultValueTypesCorrect();
+    ParameterDefaultValueTypesCorrect coco = new ParameterDefaultValueTypesCorrect(new ArcBasisTypeCalculator(), new TypeRelations());
 
     //When
     coco.check(param);
@@ -124,7 +126,7 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractTest {
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
-    ParameterDefaultValueTypesCorrect coco = new ParameterDefaultValueTypesCorrect();
+    ParameterDefaultValueTypesCorrect coco = new ParameterDefaultValueTypesCorrect(new ArcBasisTypeCalculator(), new TypeRelations());
 
     //When
     coco.check(param);
@@ -146,7 +148,7 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractTest {
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
-    ParameterDefaultValueTypesCorrect coco = new ParameterDefaultValueTypesCorrect();
+    ParameterDefaultValueTypesCorrect coco = new ParameterDefaultValueTypesCorrect(new ArcBasisTypeCalculator(), new TypeRelations());
 
     //When
     coco.check(param);
@@ -167,7 +169,7 @@ public class ParameterDefaultValueTypesCorrectTest extends AbstractTest {
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
 
-    ParameterDefaultValueTypesCorrect coco = new ParameterDefaultValueTypesCorrect();
+    ParameterDefaultValueTypesCorrect coco = new ParameterDefaultValueTypesCorrect(new ArcBasisTypeCalculator(), new TypeRelations());
 
     //When
     coco.check(param);

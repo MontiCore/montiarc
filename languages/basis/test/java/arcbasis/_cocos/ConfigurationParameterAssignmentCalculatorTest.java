@@ -12,11 +12,13 @@ import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
 import arcbasis._symboltable.SymbolService;
 import arcbasis._symboltable.TransitiveScopeSetter;
+import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.ArcBasisTypeCalculatorTest;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types.check.TypeRelations;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -78,7 +80,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
     this.completer.createFromAST(enclComp);
 
     // When
-    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
+    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment(new ArcBasisTypeCalculator(), new TypeRelations());
     coco.check(compInst.getComponentInstance(0));
 
     // Then

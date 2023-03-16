@@ -6,8 +6,8 @@ import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheck;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.se_rwth.commons.SourcePosition;
@@ -25,6 +25,12 @@ import java.util.Optional;
  * of these bounds.
  */
 public class ComponentInheritanceRespectsGenericTypeBounds implements ArcBasisASTComponentTypeCoCo {
+
+  protected final ITypeRelations tr;
+
+  public ComponentInheritanceRespectsGenericTypeBounds(@NotNull ITypeRelations tr) {
+    this.tr = Preconditions.checkNotNull(tr);
+  }
 
   private static SourcePosition parentPositionOrElseTypePosition(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
@@ -93,7 +99,7 @@ public class ComponentInheritanceRespectsGenericTypeBounds implements ArcBasisAS
       Optional<SymTypeExpression> typeVarBinding = parentExpr.getBindingFor(typeVar);
       if (typeVarBinding.isPresent()) {
         for (SymTypeExpression bound : typeVar.getSuperTypesList()) {
-          if (!TypeCheck.compatible(bound, typeVarBinding.get())) {
+          if (!tr.compatible(bound, typeVarBinding.get())) {
             Log.error(
                 GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print(), typeVar.getName(), parentSym.getName()),
                 parentPositionOrElseTypePosition(node));

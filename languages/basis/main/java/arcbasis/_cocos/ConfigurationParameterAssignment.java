@@ -4,16 +4,14 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentInstance;
-import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ISymbol;
-import de.monticore.types.check.IDerive;
+import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheck;
 import de.monticore.types.check.TypeCheckResult;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
@@ -40,30 +38,16 @@ import java.util.stream.IntStream;
  * * [typecheck]: The configuration parameters must be assignable from the
  * specified value bindings.
  * <p>
- * This coco must be checked AFTER symbol table creation! This coco can be reused by grammars that extend ArcBasis and
- * introduce new expressions by calling a constructor with a configured {@link TypeCheck} or an {@link IDerive} to use.
  */
 public class ConfigurationParameterAssignment implements ArcBasisASTComponentInstanceCoCo {
 
-  /**
-   * Used to extract the type to which instantiation arguments evaluate to.
-   */
-  protected final IArcTypeCalculator typeCalculator;
+  protected final IArcTypeCalculator tc;
 
-  /**
-   * Creates this coco with an {@link ArcBasisTypeCalculator}.
-   *
-   * @see #ConfigurationParameterAssignment(IArcTypeCalculator)
-   */
-  public ConfigurationParameterAssignment() {
-    this(new ArcBasisTypeCalculator());
-  }
+  protected final ITypeRelations tr;
 
-  /**
-   * Creates this coco with a custom {@link IArcTypeCalculator} to extract the types to which instantiation arguments evaluate to.
-   */
-  public ConfigurationParameterAssignment(@NotNull IArcTypeCalculator typeCalculator) {
-    this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
+  public ConfigurationParameterAssignment(@NotNull IArcTypeCalculator tc, @NotNull ITypeRelations tr) {
+    this.tc = Preconditions.checkNotNull(tc);
+    this.tr = Preconditions.checkNotNull(tr);
   }
 
   /**
@@ -86,10 +70,6 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       }
 
     }
-  }
-
-  protected IArcTypeCalculator getTypeCalculator() {
-    return this.typeCalculator;
   }
 
   @Override
@@ -222,7 +202,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
 
     List<TypeCheckResult> instArgs = instantiationArgs.stream()
       .map(ASTArcArgument::getExpression)
-      .map(expr -> this.getTypeCalculator().deriveType(expr))
+      .map(this.tc::deriveType)
       .collect(Collectors.toList());
 
     CompTypeExpression toInstantiate = instance.getSymbol().getType();
@@ -254,7 +234,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
           Log.error(ArcError.MULTIPLE_VALUES_FOR_ARGUMENT.format(instance.getName(), argumentKey),
             instantiationArgs.get(i).get_SourcePositionStart(), instantiationArgs.get(i).get_SourcePositionEnd());
         }
-        if (paramSignatureOfCompType.get(paramIndex).isEmpty() || !TypeCheck.compatible(paramSignatureOfCompType.get(paramIndex).get(), instArgs.get(i).getResult())) {
+        if (paramSignatureOfCompType.get(paramIndex).isEmpty() || !tr.compatible(paramSignatureOfCompType.get(paramIndex).get(), instArgs.get(i).getResult())) {
           ASTExpression incompatibleArgument = instance.getArcArguments().getArcArgument(i).getExpression();
 
           Log.error(ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH.format(
@@ -264,7 +244,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
           ), incompatibleArgument.get_SourcePositionStart(), incompatibleArgument.get_SourcePositionEnd());
         }
       } else {
-        if (paramSignatureOfCompType.get(i).isEmpty() || !TypeCheck.compatible(paramSignatureOfCompType.get(i).get(), instArgs.get(i).getResult())) {
+        if (paramSignatureOfCompType.get(i).isEmpty() || !tr.compatible(paramSignatureOfCompType.get(i).get(), instArgs.get(i).getResult())) {
           ASTExpression incompatibleArgument = instance.getArcArguments().getArcArgument(i).getExpression();
 
           Log.error(ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH.format(

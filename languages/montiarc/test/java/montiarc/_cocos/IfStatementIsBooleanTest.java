@@ -3,6 +3,7 @@ package montiarc._cocos;
 
 import arcbasis._ast.ASTArcElement;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
+import de.monticore.types.check.TypeRelations;
 import montiarc.AbstractTest;
 import montiarc.MontiArcMill;
 import montiarc.check.MontiArcTypeCalculator;
@@ -51,7 +52,7 @@ public class IfStatementIsBooleanTest extends AbstractTest {
   public void testIfStatementType(ASTArcIfStatement constraint,
                                   Error[] errorList) {
     // Given
-    IfStatementIsBoolean coco = new IfStatementIsBoolean(new MontiArcTypeCalculator());
+    IfStatementIsBoolean coco = new IfStatementIsBoolean(new MontiArcTypeCalculator(), new TypeRelations());
 
     // When
     coco.check(constraint);

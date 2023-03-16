@@ -2,13 +2,12 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcField;
-import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheck;
 import de.monticore.types.check.TypeCheckResult;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -22,27 +21,13 @@ public class FieldInitExpressionTypesCorrect implements ArcBasisASTArcFieldCoCo 
   /**
    * Used to extract the type to which initialization expressions of fields evaluate.
    */
-  protected final IArcTypeCalculator typeCalculator;
+  protected final IArcTypeCalculator tc;
 
-  /**
-   * Initializes the used {@link IArcTypeCalculator} to be a {@link ArcBasisTypeCalculator}.
-   *
-   * @see #FieldInitExpressionTypesCorrect(IArcTypeCalculator)
-   */
-  public FieldInitExpressionTypesCorrect() {
-    this(new ArcBasisTypeCalculator());
-  }
+  protected final ITypeRelations tr;
 
-  /**
-   * Creates this coco with a custom {@link IArcTypeCalculator} used to extract the type to which initialization expressions of
-   * fields evaluate.
-   */
-  public FieldInitExpressionTypesCorrect(@NotNull IArcTypeCalculator typeCalculator) {
-    this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
-  }
-
-  protected IArcTypeCalculator getTypeCalculator() {
-    return this.typeCalculator;
+  public FieldInitExpressionTypesCorrect(@NotNull IArcTypeCalculator tc, @NotNull ITypeRelations tr) {
+    this.tc = Preconditions.checkNotNull(tc);
+    this.tr = Preconditions.checkNotNull(tr);
   }
 
   @Override
@@ -61,7 +46,7 @@ public class FieldInitExpressionTypesCorrect implements ArcBasisASTArcFieldCoCo 
     SymTypeExpression fieldType = fieldSym.getType();
 
     ASTExpression initExpr = astField.getInitial();
-    TypeCheckResult expressionType = this.getTypeCalculator().deriveType(initExpr);
+    TypeCheckResult expressionType = this.tc.deriveType(initExpr);
 
     if (!expressionType.isPresentResult()) {
       Log.debug(String.format("Checking coco '%s' is skipped for field '%s', as the type of the initialization " +
@@ -73,7 +58,7 @@ public class FieldInitExpressionTypesCorrect implements ArcBasisASTArcFieldCoCo 
           expressionType.getResult().print(),
           fieldSym.getName()),
         astField.get_SourcePositionStart(), astField.get_SourcePositionEnd());
-    } else if (!TypeCheck.compatible(fieldType, expressionType.getResult())) {
+    } else if (!tr.compatible(fieldType, expressionType.getResult())) {
       Log.error(ArcError.FIELD_INIT_EXPRESSION_WRONG_TYPE.format(
           fieldSym.getName(),
           expressionType.getResult().print(),

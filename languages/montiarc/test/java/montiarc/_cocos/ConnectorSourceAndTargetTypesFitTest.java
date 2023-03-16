@@ -5,6 +5,7 @@ import arcbasis._cocos.ConnectorSourceAndTargetTypesFit;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types.check.TypeRelations;
 import montiarc.MontiArcMill;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
@@ -70,7 +71,7 @@ public class ConnectorSourceAndTargetTypesFitTest extends AbstractCoCoTest {
 
   @Override
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
-    Preconditions.checkNotNull(checker).addCoCo(new ConnectorSourceAndTargetTypesFit());
+    Preconditions.checkNotNull(checker).addCoCo(new ConnectorSourceAndTargetTypesFit(new TypeRelations()));
   }
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {

@@ -4,15 +4,14 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ISymbol;
+import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheck;
 import de.monticore.types.check.TypeCheckResult;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
@@ -25,29 +24,13 @@ import java.util.stream.Collectors;
 
 public class ConfigurationParameterParentAssignment implements ArcBasisASTComponentTypeCoCo {
 
-  /**
-   * Used to extract the type to which instantiation arguments evaluate to.
-   */
-  protected final IArcTypeCalculator typeCalculator;
+  protected final IArcTypeCalculator tc;
 
-  /**
-   * Creates this coco with an {@link ArcBasisTypeCalculator}.
-   *
-   * @see #ConfigurationParameterParentAssignment(IArcTypeCalculator)
-   */
-  public ConfigurationParameterParentAssignment() {
-    this(new ArcBasisTypeCalculator());
-  }
+  protected final ITypeRelations tr;
 
-  /**
-   * Creates this coco with a custom {@link IArcTypeCalculator} to extract the types to which instantiation arguments evaluate to.
-   */
-  public ConfigurationParameterParentAssignment(@NotNull IArcTypeCalculator typeCalculator) {
-    this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
-  }
-
-  protected IArcTypeCalculator getTypeCalculator() {
-    return this.typeCalculator;
+  public ConfigurationParameterParentAssignment(@NotNull IArcTypeCalculator tc, @NotNull ITypeRelations tr) {
+    this.tc = Preconditions.checkNotNull(tc);
+    this.tr = Preconditions.checkNotNull(tr);
   }
 
   @Override
@@ -138,7 +121,7 @@ public class ConfigurationParameterParentAssignment implements ArcBasisASTCompon
     Preconditions.checkNotNull(parent.getTypeInfo());
 
     List<TypeCheckResult> parentArgs = comp.getParentConfiguration().stream()
-        .map(expr -> this.getTypeCalculator().deriveType(expr))
+        .map(this.tc::deriveType)
         .collect(Collectors.toList());
 
     List<Optional<SymTypeExpression>> parentSignature = parent.getTypeInfo()
@@ -165,7 +148,7 @@ public class ConfigurationParameterParentAssignment implements ArcBasisASTCompon
         ), typeRefExpr.get_SourcePositionStart(), typeRefExpr.get_SourcePositionEnd());
 
       } else if (parentSignature.get(i).isEmpty() ||
-          !TypeCheck.compatible(parentSignature.get(i).get(), parentArgs.get(i).getResult())) {
+          !tr.compatible(parentSignature.get(i).get(), parentArgs.get(i).getResult())) {
         ASTExpression incompatibleArgument = comp.getParentConfiguration().get(i);
         String correspondingParamName = parent.getTypeInfo().getParameters().get(i).getName();
 

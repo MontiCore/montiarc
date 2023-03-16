@@ -13,6 +13,7 @@ import arcbasis._cocos.PortsConnected;
 import arcbasis._cocos.SubPortsConnected;
 import arcbasis._cocos.UniqueIdentifierNames;
 import com.google.common.base.Preconditions;
+import de.monticore.types.check.TypeRelations;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.VariableComponentTypeSymbol;
 import variablearc._symboltable.VariantComponentTypeSymbol;
@@ -24,9 +25,9 @@ public class VariantCoCos implements ArcBasisASTComponentTypeCoCo {
   List<ArcBasisASTComponentTypeCoCo> cocos = List.of(
     new ConnectorSourceAndTargetDirectionsFit(),
     new ConnectorSourceAndTargetExist(),
-    new ConnectorSourceAndTargetTypesFit(),
+    new ConnectorSourceAndTargetTypesFit(new TypeRelations()),
     new ConnectorSourceAndTargetTimingsFit(),
-    new InheritedPortsTypeCorrect(),
+    new InheritedPortsTypeCorrect(new TypeRelations()),
     new PortsConnected(),
     new PortUniqueSender(),
     new SubPortsConnected(),

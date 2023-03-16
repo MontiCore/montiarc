@@ -55,6 +55,7 @@ import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanTyp
 import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
 import de.monticore.types.check.TypeCalculator;
+import de.monticore.types.check.TypeRelations;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
 import montiarc._cocos.util.CheckTypeExistence4MontiArc;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
@@ -79,19 +80,20 @@ public class MontiArcCoCos {
 
   public static MontiArcCoCoChecker createChecker() {
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    MontiArcTypeCalculator maTypeCheck = new MontiArcTypeCalculator();
-    TypeCalculator mcTypeCheck = new TypeCalculator(maTypeCheck, maTypeCheck);
+    MontiArcTypeCalculator tc = new MontiArcTypeCalculator();
+    TypeRelations tr = new TypeRelations();
+    TypeCalculator mcTypeCheck = new TypeCalculator(tc, tc, tr);
 
     // ArcBasis CoCos
     checker.addCoCo(new ComponentInstanceTypeExists());
     checker.addCoCo(new ComponentTypeNameCapitalization());
-    checker.addCoCo(new ConfigurationParameterAssignment(maTypeCheck));
+    checker.addCoCo(new ConfigurationParameterAssignment(tc, tr));
     //checker.addCoCo(new ConnectorSourceAndTargetComponentDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetDiffer());
     checker.addCoCo(new ConnectorSourceAndTargetDirectionsFit());
     checker.addCoCo(new ConnectorSourceAndTargetExist());
-    checker.addCoCo(new ConnectorSourceAndTargetTypesFit());
-    checker.addCoCo(new FieldInitExpressionTypesCorrect(maTypeCheck));
+    checker.addCoCo(new ConnectorSourceAndTargetTypesFit(tr));
+    checker.addCoCo(new FieldInitExpressionTypesCorrect(tc, tr));
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new FieldInitExpressionsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new FieldTypeExists(new CheckTypeExistence4MontiArc()));
@@ -100,7 +102,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new InstanceNameCapitalisation());
     checker.addCoCo(new NoSubComponentReferenceCycles());
     checker.addCoCo(new ParameterDefaultValuesOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
-    checker.addCoCo(new ParameterDefaultValueTypesCorrect(maTypeCheck));
+    checker.addCoCo(new ParameterDefaultValueTypesCorrect(tc, tr));
     checker.addCoCo(new ParameterNameCapitalization());
     checker.addCoCo(new ParameterTypeExists(new CheckTypeExistence4MontiArc()));
     checker.addCoCo(new PortNameCapitalisation());
@@ -112,8 +114,8 @@ public class MontiArcCoCos {
 
     // Inheritance CoCos
     checker.addCoCo(new CircularInheritance());
-    checker.addCoCo(new ConfigurationParameterParentAssignment(maTypeCheck));
-    checker.addCoCo(new InheritedPortsTypeCorrect());
+    checker.addCoCo(new ConfigurationParameterParentAssignment(tc, tr));
+    checker.addCoCo(new InheritedPortsTypeCorrect(tr));
     checker.addCoCo(new InheritedComponentTypeExists());
 
     // Timing CoCos
@@ -128,12 +130,12 @@ public class MontiArcCoCos {
     // VariableArc
     checker.addCoCo(new ConstraintsOmitFieldReferences());
     checker.addCoCo(new ConstraintsOmitPortReferences());
-    checker.addCoCo(new ConstraintIsBoolean(new MontiArcTypeCalculator()));
+    checker.addCoCo(new ConstraintIsBoolean(tc, tr));
     checker.addCoCo(new FeatureNameCapitalization());
     checker.addCoCo(new FeatureUsage());
     checker.addCoCo(new IfStatementsOmitFieldReferences());
     checker.addCoCo(new IfStatementsOmitPortReferences());
-    checker.addCoCo(new IfStatementIsBoolean(new MontiArcTypeCalculator()));
+    checker.addCoCo(new IfStatementIsBoolean(tc, tr));
     checker.addCoCo((ArcBasisASTComponentTypeCoCo) new VariableElementsUsage());
     checker.addCoCo((VariableArcASTArcBlockCoCo) new VariableElementsUsage());
     checker.addCoCo((VariableArcASTArcIfStatementCoCo) new VariableElementsUsage());
@@ -146,7 +148,7 @@ public class MontiArcCoCos {
     // SCBasis, SCActions, and SCTransitions4Code CoCos
     checker.addCoCo(new UniqueStates());
     checker.addCoCo(new TransitionSourceTargetExists());
-    checker.addCoCo(new TransitionPreconditionsAreBoolean(maTypeCheck));
+    checker.addCoCo(new TransitionPreconditionsAreBoolean(tc));
     checker.addCoCo(new AtLeastOneInitialState());
     checker.addCoCo(new AnteBlocksOnlyForInitialStates());
 
@@ -157,8 +159,8 @@ public class MontiArcCoCos {
     checker.addCoCo(new MaxOneInitialState());
 
     // MontiArc CoCos
-    checker.addCoCo(new ComponentInheritanceRespectsGenericTypeBounds());
-    checker.addCoCo(new ComponentInstantiationRespectsGenericTypeBounds());
+    checker.addCoCo(new ComponentInheritanceRespectsGenericTypeBounds(tr));
+    checker.addCoCo(new ComponentInstantiationRespectsGenericTypeBounds(tr));
     checker.addCoCo(new RootComponentTypesNoInstanceName());
     checker.addCoCo(new ConfigurationParameterOnlyKeywordAssignments());
 
@@ -168,7 +170,7 @@ public class MontiArcCoCos {
 
     // Basic MontiCore cocos
     checker.addCoCo(new ExpressionStatementIsValid(mcTypeCheck));
-    checker.addCoCo(new VarDeclarationInitializationHasCorrectType(maTypeCheck));
+    checker.addCoCo(new VarDeclarationInitializationHasCorrectType(tc));
     checker.addCoCo(new ForConditionHasBooleanType(mcTypeCheck));
     checker.addCoCo(new ForEachIsValid(mcTypeCheck));
     checker.addCoCo(new IfConditionHasBooleanType(mcTypeCheck));

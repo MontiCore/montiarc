@@ -6,6 +6,7 @@ import arcbasis._symboltable.SymbolService;
 import com.google.common.base.Preconditions;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
+import de.monticore.types.check.TypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
@@ -32,7 +33,7 @@ class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
 
   @Override
   protected void registerCoCos(MontiArcCoCoChecker checker) {
-    checker.addCoCo(new FieldInitExpressionTypesCorrect(new MontiArcTypeCalculator()));
+    checker.addCoCo(new FieldInitExpressionTypesCorrect(new MontiArcTypeCalculator(), new TypeRelations()));
   }
 
   @Override

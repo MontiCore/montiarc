@@ -10,8 +10,8 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
+import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheck;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -25,6 +25,12 @@ import java.util.Optional;
  * the target port is identical or a supertype of the source port type. (p. 66, lst. 3.43)
  */
 public class ConnectorSourceAndTargetTypesFit implements ArcBasisASTComponentTypeCoCo {
+
+  protected final ITypeRelations tr;
+
+  public ConnectorSourceAndTargetTypesFit(@NotNull ITypeRelations tr) {
+    this.tr = Preconditions.checkNotNull(tr);
+  }
 
   @Override
   public void check(@NotNull ASTComponentType node) {
@@ -47,7 +53,7 @@ public class ConnectorSourceAndTargetTypesFit implements ArcBasisASTComponentTyp
         if (symTypeOfTarget.isPresent()) {
           // Perform type check
           try {
-            if (!TypeCheck.compatible(symTypeOfTarget.get(), symTypeOfSource.get())) {
+            if (!tr.compatible(symTypeOfTarget.get(), symTypeOfSource.get())) {
               Log.error(
                 ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH.format(
                   symTypeOfSource.get().print(), symTypeOfTarget.get().print(),

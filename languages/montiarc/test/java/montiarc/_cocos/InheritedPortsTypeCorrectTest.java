@@ -5,6 +5,7 @@ import arcbasis._cocos.InheritedPortsTypeCorrect;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types.check.TypeRelations;
 import montiarc.MontiArcMill;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
@@ -87,6 +88,7 @@ public class InheritedPortsTypeCorrectTest extends AbstractCoCoTest {
   protected static Arguments arg(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
+
     return Arguments.of(model, errors);
   }
 
@@ -132,7 +134,7 @@ public class InheritedPortsTypeCorrectTest extends AbstractCoCoTest {
 
   @Override
   protected void registerCoCos(MontiArcCoCoChecker checker) {
-    checker.addCoCo(new InheritedPortsTypeCorrect());
+    checker.addCoCo(new InheritedPortsTypeCorrect(new TypeRelations()));
   }
 
   @ParameterizedTest

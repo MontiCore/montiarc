@@ -6,6 +6,7 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types.check.TypeRelations;
 import montiarc.MontiArcMill;
 import montiarc.util.Error;
 import montiarc.util.GenericArcError;
@@ -31,7 +32,7 @@ public class ComponentInheritanceRespectsGenericTypeBoundsTest extends AbstractC
 
   @Override
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
-    Preconditions.checkNotNull(checker).addCoCo(new ComponentInheritanceRespectsGenericTypeBounds());
+    Preconditions.checkNotNull(checker).addCoCo(new ComponentInheritanceRespectsGenericTypeBounds(new TypeRelations()));
   }
 
   @BeforeEach

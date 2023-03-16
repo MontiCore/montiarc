@@ -34,7 +34,7 @@ import static de.monticore.types.check.SymTypeExpressionFactory.createPrimitive;
 /**
  * This class provides tests for validating the correctness of type checking of
  * primitives in expressions.
- *
+ * <p>
  * The class under test is {@link MontiArcTypeCalculator}.
  */
 public class  TypeCheckPrimitivesTest extends AbstractTest {
@@ -1065,7 +1065,7 @@ public class  TypeCheckPrimitivesTest extends AbstractTest {
     Preconditions.checkNotNull(expr);
     Preconditions.checkArgument(!expr.isBlank());
 
-    MontiArcTypeCalculator typeCheck = new MontiArcTypeCalculator();
+    MontiArcTypeCalculator tc = new MontiArcTypeCalculator();
     TransitiveScopeSetter scopeSetter = new TransitiveScopeSetter();
 
     // Given
@@ -1075,7 +1075,7 @@ public class  TypeCheckPrimitivesTest extends AbstractTest {
     scopeSetter.setScope(ast, this.scope);
 
     // When
-    typeCheck.deriveType(ast).getResult();
+    tc.deriveType(ast).getResult();
 
     // Then
     Assertions.assertThat(Log.getFindings())
@@ -2074,7 +2074,7 @@ public class  TypeCheckPrimitivesTest extends AbstractTest {
     Preconditions.checkArgument(!expr.isBlank());
     Preconditions.checkArgument(!error.isBlank());
 
-    MontiArcTypeCalculator typeCheck = new MontiArcTypeCalculator();
+    MontiArcTypeCalculator tc = new MontiArcTypeCalculator();
     TransitiveScopeSetter scopeSetter = new TransitiveScopeSetter();
 
     // Given
@@ -2084,7 +2084,7 @@ public class  TypeCheckPrimitivesTest extends AbstractTest {
     scopeSetter.setScope(ast, this.scope);
 
     // When
-    typeCheck.deriveType(ast).getResult();
+    tc.deriveType(ast).getResult();
 
     // Then
     Assertions.assertThat(Log.getFindings())
