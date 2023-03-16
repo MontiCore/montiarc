@@ -3,7 +3,6 @@
 plugins {
   id("montiarc.build.java-library")
   id("montiarc.build.shadow")
-  id("montiarc.build.java") // TODO remove this later?, only here because I want to add some Unit tests quickly
 }
 
 sourceSets.create("example") {
