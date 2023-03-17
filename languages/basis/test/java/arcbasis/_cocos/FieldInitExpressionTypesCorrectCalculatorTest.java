@@ -108,7 +108,7 @@ public class FieldInitExpressionTypesCorrectCalculatorTest extends ArcBasisTypeC
   }
 
   @Test
-  void shouldFindTypeReference() {
+  public void shouldFindTypeReference() {
     ASTArcField field = ArcBasisMill.arcFieldBuilder()
       .setName("foofield")
       .setInitial(doBuildNameExpressionInScope("Person"))

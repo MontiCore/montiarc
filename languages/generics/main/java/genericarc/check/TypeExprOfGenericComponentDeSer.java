@@ -18,7 +18,7 @@ import java.util.List;
 import static arcbasis.check.deser.TypeExprOfComponentDeSer.COMP_TYPE_NAME;
 
 public class TypeExprOfGenericComponentDeSer implements CompTypeExpressionDeSer<TypeExprOfGenericComponent> {
-  // Attention: The following string may need adaption in case of changed package location / renaming
+
   public static final String SERIALIZED_KIND = "genericarc.check.TypeExprOfGenericComponent";
   public static final String TYPE_VAR_BINDINGS = "typeVarBindings";
 

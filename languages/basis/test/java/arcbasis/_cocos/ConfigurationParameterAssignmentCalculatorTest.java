@@ -61,7 +61,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
 
   @ParameterizedTest(name = "{index}: {0}")
   @MethodSource("provideArgsAndExpectedErrors")
-  void shouldCheckParameterBindings(@NotNull String testName,
+  public void shouldCheckParameterBindings(@NotNull String testName,
                                     @NotNull ASTComponentType toInstantiate,
                                     @NotNull ASTArcArguments instantiationArgs,
                                     @NotNull ArcError... expectedErrors) {

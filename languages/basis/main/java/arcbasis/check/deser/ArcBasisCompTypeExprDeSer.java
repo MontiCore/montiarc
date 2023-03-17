@@ -32,10 +32,9 @@ public class ArcBasisCompTypeExprDeSer implements ComposedCompTypeExprDeSer {
   public CompTypeExpression deserialize(@NotNull JsonObject serialized) {
     Preconditions.checkNotNull(serialized);
 
-    switch (JsonDeSers.getKind(serialized)) {
-      case TypeExprOfComponentDeSer.SERIALIZED_KIND: return componentExprDeSer.deserialize(serialized);
-      default:
-        throw missingDeSerException(serialized);
+    if (JsonDeSers.getKind(serialized).equals(TypeExprOfComponentDeSer.SERIALIZED_KIND)) {
+      return componentExprDeSer.deserialize(serialized);
     }
+    throw missingDeSerException(serialized);
   }
 }

@@ -70,11 +70,11 @@ public class UniqueIdentifierNames implements ArcBasisASTComponentTypeCoCo {
 
     // merge above
     Multimap<String, SourcePosition> allNameOccurrences = MultimapBuilder.hashKeys().arrayListValues().build();
-    innerCompNameOccurrences.forEach((name, occurrence) -> allNameOccurrences.put(name, occurrence));
-    subCompNameOccurrences.forEach((name, occurrence) -> allNameOccurrences.put(name, occurrence));
-    portNameOccurrences.forEach((name, occurrence) -> allNameOccurrences.put(name, occurrence));
-    fieldNameOccurrences.forEach((name, occurrence) -> allNameOccurrences.put(name, occurrence));
-    typeParamNameOccurrences.forEach((name, occurrence) -> allNameOccurrences.put(name, occurrence));
+    innerCompNameOccurrences.forEach(allNameOccurrences::put);
+    subCompNameOccurrences.forEach(allNameOccurrences::put);
+    portNameOccurrences.forEach(allNameOccurrences::put);
+    fieldNameOccurrences.forEach(allNameOccurrences::put);
+    typeParamNameOccurrences.forEach(allNameOccurrences::put);
 
     return allNameOccurrences;
   }

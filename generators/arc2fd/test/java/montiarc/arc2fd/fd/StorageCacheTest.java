@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sosy_lab.common.ShutdownManager;
+import org.sosy_lab.common.configuration.Configuration;
 import org.sosy_lab.common.configuration.InvalidConfigurationException;
 import org.sosy_lab.common.log.BasicLogManager;
 import org.sosy_lab.java_smt.SolverContextFactory;
@@ -21,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-class StorageCacheTest extends AbstractTest {
+public class StorageCacheTest extends AbstractTest {
   StorageCache<BooleanFormula> storageCache;
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
@@ -33,16 +34,16 @@ class StorageCacheTest extends AbstractTest {
   @BeforeEach
   public void setUp() throws InvalidConfigurationException {
     SolverContext context = SolverContextFactory.createSolverContext(
-            org.sosy_lab.common.configuration.Configuration.defaultConfiguration(),
-            BasicLogManager.create(org.sosy_lab.common.configuration.Configuration.defaultConfiguration()),
-            ShutdownManager.create().getNotifier(),
-            SolverContextFactory.Solvers.SMTINTERPOL
+      Configuration.defaultConfiguration(),
+      BasicLogManager.create(Configuration.defaultConfiguration()),
+      ShutdownManager.create().getNotifier(),
+      SolverContextFactory.Solvers.SMTINTERPOL
     );
 
     this.fmgr = context.getFormulaManager();
     this.bmgr = this.fmgr.getBooleanFormulaManager();
     this.storageCache =
-            new StorageCache<>(new FDConstructionStorage<>(this.fmgr));
+      new StorageCache<>(new FDConstructionStorage<>(this.fmgr));
 
     this.a = bmgr.makeVariable("a");
     this.b = bmgr.makeVariable("b");
@@ -58,20 +59,20 @@ class StorageCacheTest extends AbstractTest {
    * Method under test {@link StorageCache#getStorage()}
    */
   @Test
-  void emptyStorage() {
+  public void emptyStorage() {
     // Given
     StorageCache<BooleanFormula> emptyStorageCache = new StorageCache<>();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class,
-            () -> emptyStorageCache.getStorage().getRemainingConjunctions());
+      () -> emptyStorageCache.getStorage().getRemainingConjunctions());
   }
 
   /**
    * Method under test {@link StorageCache#addRelation(Formula, Formula)}
    */
   @Test
-  void addRelation() {
+  public void addRelation() {
     // Given
     Map<BooleanFormula, Set<BooleanFormula>> trueHashMap = new HashMap<>();
     trueHashMap.put(a, Set.of(b));
@@ -83,7 +84,7 @@ class StorageCacheTest extends AbstractTest {
 
     // Then
     Assertions.assertEquals(trueHashMap,
-            this.storageCache.getStorage().getRemainingConjunctions().getRelationsHashMap());
+      this.storageCache.getStorage().getRemainingConjunctions().getRelationsHashMap());
   }
 
   /**
@@ -91,18 +92,18 @@ class StorageCacheTest extends AbstractTest {
    * {@link StorageCache#mergeWithStorage(FDConstructionStorage)}
    */
   @Test
-  void mergeWithStorage() {
+  public void mergeWithStorage() {
     // Given
     this.storageCache.addRelation(a, b);
     this.storageCache.addRelation(b, c);
 
     FDConstructionStorage<BooleanFormula> constructionStorage =
-            new FDConstructionStorage<>(fmgr);
+      new FDConstructionStorage<>(fmgr);
     constructionStorage.setRemainingConjunctions(new FDRelation<>(c));
     StorageCache<BooleanFormula> storageCacheCopy = this.storageCache;
     StorageCache<BooleanFormula> emptyStorage = new StorageCache<>();
     StorageCache<BooleanFormula> secondStorageCache =
-            new StorageCache<>(constructionStorage);
+      new StorageCache<>(constructionStorage);
     secondStorageCache.addRelation(c, b);
 
     Map<BooleanFormula, Set<BooleanFormula>> trueHashMap = new HashMap<>();
@@ -119,19 +120,19 @@ class StorageCacheTest extends AbstractTest {
     // Merge non-empty storage with an empty one
     storageCacheCopy.mergeWithStorage(emptyStorage);
     Assertions.assertEquals(this.storageCache.getStorage(),
-            storageCacheCopy.getStorage());
+      storageCacheCopy.getStorage());
 
     // When && Then
     // Merge empty storage with a non-empty one
     emptyStorage.mergeWithStorage(storageCacheCopy);
     Assertions.assertEquals(storageCacheCopy.getStorage(),
-            emptyStorage.getStorage());
+      emptyStorage.getStorage());
 
 
     // When && Then
     // Merge two normal storages...
     storageCacheCopy.mergeWithStorage(secondStorageCache);
     Assertions.assertEquals(trueHashMap,
-            storageCacheCopy.getStorage().getRemainingConjunctions().getRelationsHashMap());
+      storageCacheCopy.getStorage().getRemainingConjunctions().getRelationsHashMap());
   }
 }

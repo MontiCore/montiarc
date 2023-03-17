@@ -11,6 +11,7 @@ import java.nio.file.Paths;
  * Tests the grammar of MontiArc's Dynamic-Reconfiguration-Language-Components
  */
 public class DynamicComponentsParserTest extends AbstractTest {
+
   @ParameterizedTest
   @ValueSource(strings = {"ShiftController.arc"})
   public void shouldParseValidComponent(String fileName) {

@@ -61,11 +61,12 @@ public class VariableArcVariationPointDeSer {
   }
 
   public VariableArcVariationPoint deserialize(JsonObject variationPointJson, IVariableArcScope scope) {
-    return deserialize(variationPointJson, scope, Optional.empty());
+    return deserialize(variationPointJson, scope, null);
   }
 
-  public VariableArcVariationPoint deserialize(JsonObject variationPointJson, IVariableArcScope scope,
-                                               Optional<VariableArcVariationPoint> dependsOn) {
+  public VariableArcVariationPoint deserialize(JsonObject variationPointJson,
+                                               IVariableArcScope scope,
+                                               VariableArcVariationPoint dependsOn) {
     VariableArcVariationPoint variationPoint = new VariableArcVariationPoint(null, dependsOn);
 
     if (variationPointJson.getStringMemberOpt(JSON_CONDITION).isPresent() &&
@@ -87,7 +88,7 @@ public class VariableArcVariationPointDeSer {
 
     if (variationPointJson.getArrayMemberOpt(JSON_CHILD_VARIATION_POINTS).isPresent()) {
       for (JsonElement e : variationPointJson.getArrayMemberOpt(JSON_CHILD_VARIATION_POINTS).get()) {
-        deserialize(e.getAsJsonObject(), scope, Optional.of(variationPoint));
+        deserialize(e.getAsJsonObject(), scope, variationPoint);
       }
     }
 

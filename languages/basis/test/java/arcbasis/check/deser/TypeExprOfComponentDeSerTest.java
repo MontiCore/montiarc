@@ -12,10 +12,10 @@ import de.monticore.symboltable.serialization.json.JsonObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class TypeExprOfComponentDeSerTest extends AbstractTest {
+public class TypeExprOfComponentDeSerTest extends AbstractTest {
 
   @Test
-  void testSerializeAsJsonWithPackage() {
+  public void testSerializeAsJsonWithPackage() {
     // Given
     ComponentTypeSymbol myComp = createComponentTypeWithSymbol("MyComp").getSymbol();
     IArcBasisArtifactScope scope = wrapInArtifactScope("foo.bar", myComp);
@@ -37,7 +37,7 @@ class TypeExprOfComponentDeSerTest extends AbstractTest {
   }
 
   @Test
-  void testSerializeAsJsonWithoutPackage() {
+  public void testSerializeAsJsonWithoutPackage() {
     // Given
     ComponentTypeSymbol myComp = createComponentTypeWithSymbol("MyComp").getSymbol();
     SymbolService.link(ArcBasisMill.globalScope(), myComp);
@@ -58,7 +58,7 @@ class TypeExprOfComponentDeSerTest extends AbstractTest {
   }
 
   @Test
-  void testDeserializeWithPackageName() {
+  public void testDeserializeWithPackageName() {
     // Given
     TypeExprOfComponentDeSer deser = new TypeExprOfComponentDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(
@@ -76,7 +76,7 @@ class TypeExprOfComponentDeSerTest extends AbstractTest {
   }
 
   @Test
-  void testDeserializeWithoutPackageName() {
+  public void testDeserializeWithoutPackageName() {
     // Given
     TypeExprOfComponentDeSer deser = new TypeExprOfComponentDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(

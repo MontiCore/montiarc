@@ -8,7 +8,6 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-
 /**
  * Checks that source and target ports of connectors to not belong to the same component.
  */

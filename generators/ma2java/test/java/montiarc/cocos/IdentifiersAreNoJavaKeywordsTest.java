@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-class IdentifiersAreNoJavaKeywordsTest {
+public class IdentifiersAreNoJavaKeywordsTest {
 
   protected static final String MODEL_PATH = "test/resources/cocos/identifiersAreNoJavaKeywords";
 
@@ -48,7 +48,7 @@ class IdentifiersAreNoJavaKeywordsTest {
 
   @ParameterizedTest
   @MethodSource("modelsAndExpectedErrorsProvider")
-  void testIdentifiersWithReservedKeywords(@NotNull String modelName, @NotNull Error... expectedErrors) {
+  public void testIdentifiersWithReservedKeywords(@NotNull String modelName, @NotNull Error... expectedErrors) {
     Preconditions.checkNotNull(modelName);
     Preconditions.checkNotNull(expectedErrors);
 

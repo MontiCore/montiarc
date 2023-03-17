@@ -36,7 +36,7 @@ import java.util.stream.Stream;
  * {@link UniqueStates}, {@link TransitionSourceTargetExists},
  * {@link CapitalStateNames}, {@link AtLeastOneInitialState}, {@link TransitionPreconditionsAreBoolean}
  */
-class OriginalStatechartCoCosTest extends AbstractCoCoTest {
+public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
 
   @Override
   protected String getPackage() {

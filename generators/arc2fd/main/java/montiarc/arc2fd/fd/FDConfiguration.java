@@ -8,7 +8,6 @@ import montiarc.arc2fd.expressions.BooleanOperation;
 import montiarc.arc2fd.expressions.NumericOperation;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -70,19 +69,21 @@ public class FDConfiguration {
    * Mapping between Operation Type and a nice, meaningful name (for comments)
    */
   public static final Map<Operation, String> MAP_TYPE_MAPPING =
-      Collections.unmodifiableMap(Map.ofEntries(
-          entry(Operation.OPTIONALS, "Optionals"),
-          entry(Operation.SIMPLE_OR, "Simple OR"),
-          entry(Operation.XOR, "XOR"),
-          entry(Operation.REMAINING_CONJUNCTIONS,
-              "AND (Remaining Conjunctions)"),
-          entry(Operation.REQUIRES, "Requires"),
-          entry(Operation.EXCLUDES, "Excludes")
-      ));
+    Map.ofEntries(
+      entry(Operation.OPTIONALS, "Optionals"),
+      entry(Operation.SIMPLE_OR, "Simple OR"),
+      entry(Operation.XOR, "XOR"),
+      entry(Operation.REMAINING_CONJUNCTIONS,
+        "AND (Remaining Conjunctions)"),
+      entry(Operation.REQUIRES, "Requires"),
+      entry(Operation.EXCLUDES, "Excludes")
+    );
+
   /**
    * Should the Types be displayed after the generation?
    */
   public static final boolean DISPLAY_TYPES = true;
+
   /**
    * Sometimes it can happen that we must negate one literal (i.e., if the
    * only constraint is !a).

@@ -4,10 +4,10 @@ package endconsumerpackage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class TransitiveConsumerTest {
+public class TransitiveConsumerTest {
 
   @Test
-  void checkComponentIsUsable() {
+  public void checkComponentIsUsable() {
     // Given
     TransitiveConsumer comp = new TransitiveConsumer();
     comp.setUp();

@@ -325,8 +325,8 @@ public class NodeCounter {
       this.val = Preconditions.checkNotNull(val);
     }
 
-    public int inc() {
-      return ++this.val;
+    public void inc() {
+      ++this.val;
     }
 
     public Wrapper(@NotNull Integer val) {

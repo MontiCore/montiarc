@@ -194,16 +194,15 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
     SymbolService.link(ArcBasisMill.globalScope(), symbolWithDefinitions);
     symbolVersionForTypeExpr.setEnclosingScope(ArcBasisMill.globalScope());
 
-    ComponentTypeSymbol compDefinition = symbolWithDefinitions;
-    TypeVarSymbol typeVar = compDefinition.getTypeParameters().get(0);
+    TypeVarSymbol typeVar = symbolWithDefinitions.getTypeParameters().get(0);
 
-    String portName = "porr";
+    String portName = "port";
     PortSymbol port = GenericArcMill.portSymbolBuilder()
       .setName(portName)
       .setType(SymTypeExpressionFactory.createTypeVariable(typeVar))
       .setIncoming(true)
       .build();
-    compDefinition.getSpannedScope().add(port);
+    symbolWithDefinitions.getSpannedScope().add(port);
 
     SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
     TypeExprOfGenericComponent boundCompTypeExpr =
@@ -269,16 +268,15 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
     SymbolService.link(ArcBasisMill.globalScope(), symbolWithDefinitions);
     symbolVersionForTypeExpr.setEnclosingScope(ArcBasisMill.globalScope());
 
-    ComponentTypeSymbol compDefinition = symbolWithDefinitions;
-    TypeVarSymbol typeVar = compDefinition.getTypeParameters().get(0);
+    TypeVarSymbol typeVar = symbolWithDefinitions.getTypeParameters().get(0);
 
     String paramName = "parr";
     VariableSymbol param = GenericArcMill.variableSymbolBuilder()
       .setName(paramName)
       .setType(SymTypeExpressionFactory.createTypeVariable(typeVar))
       .build();
-    compDefinition.getSpannedScope().add(param);
-    compDefinition.addParameter(param);
+    symbolWithDefinitions.getSpannedScope().add(param);
+    symbolWithDefinitions.addParameter(param);
 
     SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
     TypeExprOfGenericComponent boundCompTypeExpr =
@@ -373,11 +371,10 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
     TypeExprOfGenericComponent compTypeExpr = new TypeExprOfGenericComponent(compSurrogate, typeExprList);
 
     // Then
-    List<SymTypeExpression> returnedBindings = compTypeExpr.getBindingsAsList();
     Assertions.assertAll(
-      () -> Assertions.assertEquals(floatTypeExpr, compTypeExpr.getBindingFor("A").get()),
-      () -> Assertions.assertEquals(intTypeExpr, compTypeExpr.getBindingFor("B").get()),
-      () -> Assertions.assertEquals(boolTypeExpr, compTypeExpr.getBindingFor("C").get()),
+      () -> Assertions.assertEquals(floatTypeExpr, compTypeExpr.getBindingFor("A").orElseThrow()),
+      () -> Assertions.assertEquals(intTypeExpr, compTypeExpr.getBindingFor("B").orElseThrow()),
+      () -> Assertions.assertEquals(boolTypeExpr, compTypeExpr.getBindingFor("C").orElseThrow()),
       () -> Assertions.assertEquals(3, compTypeExpr.getTypeVarBindings().size())
     );
 
@@ -399,13 +396,11 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
       typeVars.add(typeVar);
     }
 
-    ComponentTypeSymbol symbol = GenericArcMill.componentTypeSymbolBuilder()
+    return GenericArcMill.componentTypeSymbolBuilder()
       .setName(compName)
       .setSpannedScope(GenericArcMill.scope())
       .setTypeParameters(typeVars)
       .build();
-
-    return symbol;
   }
 
   /**
@@ -414,11 +409,9 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
   protected static ComponentTypeSymbol createSurrogateInGlobalScopeFor(@NotNull ComponentTypeSymbol original) {
     Preconditions.checkNotNull(original);
 
-    ComponentTypeSymbol surrogate = GenericArcMill
+    return GenericArcMill
       .componentTypeSymbolSurrogateBuilder()
       .setName(original.getFullName())
       .build();
-
-    return surrogate;
   }
 }

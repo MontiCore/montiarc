@@ -11,7 +11,7 @@ import org.mockito.Mockito;
 
 import java.util.Collections;
 
-class ParameterNameIsNoReservedKeywordTest extends AbstractTest {
+public class ParameterNameIsNoReservedKeywordTest extends AbstractTest {
 
   @Test
   void checkPortNameMatchesKeyword() {

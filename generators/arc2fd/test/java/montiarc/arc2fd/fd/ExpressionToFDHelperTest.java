@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-class ExpressionToFDHelperTest extends AbstractTest {
+public class ExpressionToFDHelperTest extends AbstractTest {
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
   ExpressionToFDHelper<BooleanFormula> expressionToFDHelper;
@@ -36,7 +36,7 @@ class ExpressionToFDHelperTest extends AbstractTest {
    * {@link ExpressionToFDHelper#convertASTExpressionToFD(ASTExpression, Formula, Map)}
    */
   @Test
-  void testAST2FDConversion() throws InterruptedException {
+  public void testAST2FDConversion() throws InterruptedException {
     // Given
     ASTExpression a_exp =
         MontiArcMill.nameExpressionBuilder().setName("a").build();
@@ -89,7 +89,7 @@ class ExpressionToFDHelperTest extends AbstractTest {
    * Method under test {@link ExpressionToFDHelper#isUnsat(BooleanFormula)} )}}}
    */
   @Test
-  void isUnsat() {
+  public void isUnsat() {
     // Given
     BooleanFormula a = bmgr.makeVariable("a");
     BooleanFormula b = bmgr.makeVariable("b");

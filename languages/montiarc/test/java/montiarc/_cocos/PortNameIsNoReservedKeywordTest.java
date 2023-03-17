@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Stream;
 
-class PortNameIsNoReservedKeywordTest extends AbstractCoCoTest {
+public class PortNameIsNoReservedKeywordTest extends AbstractCoCoTest {
 
   protected static String PACKAGE = "portNameIsNoReservedKeyword";
 

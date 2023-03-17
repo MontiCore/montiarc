@@ -25,11 +25,11 @@ public class Expr2SMTResultTest extends AbstractTest {
 
     // Then
     Assertions.assertAll(() -> {
-          Assertions.assertTrue(result.getValue().isEmpty());
-          Assertions.assertTrue(result.getValueAsArith().isEmpty());
-          Assertions.assertTrue(result.getValueAsInt().isEmpty());
-          Assertions.assertTrue(result.getValueAsBool().isEmpty());
-        }
+        Assertions.assertTrue(result.getValue().isEmpty());
+        Assertions.assertTrue(result.getValueAsArith().isEmpty());
+        Assertions.assertTrue(result.getValueAsInt().isEmpty());
+        Assertions.assertTrue(result.getValueAsBool().isEmpty());
+      }
     );
   }
 
@@ -44,12 +44,12 @@ public class Expr2SMTResultTest extends AbstractTest {
 
     // Then
     Assertions.assertAll(() -> {
-          Assertions.assertTrue(result.getValue().isPresent());
-          Assertions.assertEquals(result.getValue().get(), expr);
-          Assertions.assertTrue(result.getValueAsArith().isEmpty());
-          Assertions.assertTrue(result.getValueAsInt().isEmpty());
-          Assertions.assertTrue(result.getValueAsBool().isEmpty());
-        }
+        Assertions.assertTrue(result.getValue().isPresent());
+        Assertions.assertEquals(result.getValue().get(), expr);
+        Assertions.assertTrue(result.getValueAsArith().isEmpty());
+        Assertions.assertTrue(result.getValueAsInt().isEmpty());
+        Assertions.assertTrue(result.getValueAsBool().isEmpty());
+      }
     );
   }
 
@@ -64,13 +64,13 @@ public class Expr2SMTResultTest extends AbstractTest {
 
     // Then
     Assertions.assertAll(() -> {
-          Assertions.assertTrue(result.getValue().isPresent());
-          Assertions.assertEquals(result.getValue().get(), expr);
-          Assertions.assertTrue(result.getValueAsBool().isPresent());
-          Assertions.assertEquals(result.getValueAsBool().get(), expr);
-          Assertions.assertTrue(result.getValueAsArith().isEmpty());
-          Assertions.assertTrue(result.getValueAsInt().isEmpty());
-        }
+        Assertions.assertTrue(result.getValue().isPresent());
+        Assertions.assertEquals(result.getValue().get(), expr);
+        Assertions.assertTrue(result.getValueAsBool().isPresent());
+        Assertions.assertEquals(result.getValueAsBool().get(), expr);
+        Assertions.assertTrue(result.getValueAsArith().isEmpty());
+        Assertions.assertTrue(result.getValueAsInt().isEmpty());
+      }
     );
   }
 
@@ -85,13 +85,13 @@ public class Expr2SMTResultTest extends AbstractTest {
 
     // Then
     Assertions.assertAll(() -> {
-          Assertions.assertTrue(result.getValue().isPresent());
-          Assertions.assertEquals(result.getValue().get(), expr);
-          Assertions.assertTrue(result.getValueAsArith().isPresent());
-          Assertions.assertEquals(result.getValueAsArith().get(), expr);
-          Assertions.assertTrue(result.getValueAsBool().isEmpty());
-          Assertions.assertTrue(result.getValueAsInt().isEmpty());
-        }
+        Assertions.assertTrue(result.getValue().isPresent());
+        Assertions.assertEquals(result.getValue().get(), expr);
+        Assertions.assertTrue(result.getValueAsArith().isPresent());
+        Assertions.assertEquals(result.getValueAsArith().get(), expr);
+        Assertions.assertTrue(result.getValueAsBool().isEmpty());
+        Assertions.assertTrue(result.getValueAsInt().isEmpty());
+      }
     );
   }
 
@@ -106,14 +106,14 @@ public class Expr2SMTResultTest extends AbstractTest {
 
     // Then
     Assertions.assertAll(() -> {
-          Assertions.assertTrue(result.getValue().isPresent());
-          Assertions.assertEquals(result.getValue().get(), expr);
-          Assertions.assertTrue(result.getValueAsArith().isPresent());
-          Assertions.assertEquals(result.getValueAsArith().get(), expr);
-          Assertions.assertTrue(result.getValueAsInt().isPresent());
-          Assertions.assertEquals(result.getValueAsInt().get(), expr);
-          Assertions.assertTrue(result.getValueAsBool().isEmpty());
-        }
+        Assertions.assertTrue(result.getValue().isPresent());
+        Assertions.assertEquals(result.getValue().get(), expr);
+        Assertions.assertTrue(result.getValueAsArith().isPresent());
+        Assertions.assertEquals(result.getValueAsArith().get(), expr);
+        Assertions.assertTrue(result.getValueAsInt().isPresent());
+        Assertions.assertEquals(result.getValueAsInt().get(), expr);
+        Assertions.assertTrue(result.getValueAsBool().isEmpty());
+      }
     );
   }
 

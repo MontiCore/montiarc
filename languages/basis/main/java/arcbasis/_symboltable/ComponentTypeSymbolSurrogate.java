@@ -29,18 +29,14 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
     this.delegate = Optional.ofNullable(delegate);
   }
 
-  protected boolean isPresentDelegate() {
-    return this.getDelegate().isPresent();
-  }
-
   @Override
   public ComponentTypeSymbol lazyLoadDelegate() {
-    if (!isPresentDelegate()) {
+    if (this.getDelegate().isEmpty()) {
       this.setDelegate(this.getEnclosingScope().resolveComponentType(this.getName()).orElse(tryGeneric().orElse(null)));
     }
 
-    if (isPresentDelegate()) {
-      return delegate.get();
+    if (this.getDelegate().isPresent()) {
+      return this.getDelegate().get();
     } else {
       // Copied error message from the original lazyLoadDelegate
       Log.error("0xA1038 " + ComponentTypeSymbolSurrogate.class.getSimpleName() +

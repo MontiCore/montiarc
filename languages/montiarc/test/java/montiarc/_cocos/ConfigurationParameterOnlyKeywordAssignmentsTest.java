@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
-class ConfigurationParameterOnlyKeywordAssignmentsTest extends AbstractCoCoTest {
+public class ConfigurationParameterOnlyKeywordAssignmentsTest extends AbstractCoCoTest {
 
   protected static final String PACKAGE = "configurationParameterAssignment";
 

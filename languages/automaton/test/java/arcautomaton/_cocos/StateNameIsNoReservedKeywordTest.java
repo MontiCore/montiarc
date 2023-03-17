@@ -13,10 +13,10 @@ import org.mockito.Mockito;
 
 import java.util.Collections;
 
-class StateNameIsNoReservedKeywordTest extends AbstractTest {
+public class StateNameIsNoReservedKeywordTest extends AbstractTest {
 
   @Test
-  void checkPortNameMatchesKeyword() {
+  public void checkPortNameMatchesKeyword() {
     // Given
     ASTSCState state = ArcAutomatonMill.sCStateBuilder()
       .setName("keyword")
@@ -36,7 +36,7 @@ class StateNameIsNoReservedKeywordTest extends AbstractTest {
   }
 
   @Test
-  void checkPortNameIsNoKeyword() {
+  public void checkPortNameIsNoKeyword() {
     // Given
     ASTSCState state = ArcAutomatonMill.sCStateBuilder()
       .setName("noKeyword")

@@ -24,7 +24,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
+public class FieldInitExpressionTypesCorrectTest extends AbstractCoCoTest {
 
   @Override
   protected String getPackage() {

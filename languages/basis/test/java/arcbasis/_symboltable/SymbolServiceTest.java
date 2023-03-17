@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 /**
  * Holds test for {@link SymbolService}.
  */
-class SymbolServiceTest extends AbstractTest {
+public class SymbolServiceTest extends AbstractTest {
 
   @BeforeAll
   public static void initClass() {

@@ -27,7 +27,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-class ArcBasisMillForMontiArcTest {
+public class ArcBasisMillForMontiArcTest {
 
   protected static Stream<Arguments> setupAndExpectedClassForSymTabCompleterProvider() {
     return Stream.of(

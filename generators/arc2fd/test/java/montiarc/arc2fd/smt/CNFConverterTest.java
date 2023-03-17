@@ -15,7 +15,7 @@ import org.sosy_lab.java_smt.api.BooleanFormulaManager;
 import org.sosy_lab.java_smt.api.FormulaManager;
 import org.sosy_lab.java_smt.api.SolverContext;
 
-class CNFConverterTest extends AbstractTest {
+public class CNFConverterTest extends AbstractTest {
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
   CNFConverter cnfConverter;
@@ -53,7 +53,7 @@ class CNFConverterTest extends AbstractTest {
    * Method under test {@link CNFConverter#convertToCNF(BooleanFormula)}
    */
   @Test
-  void convertNullToCNF() {
+  public void convertNullToCNF() {
     this.cnfConverter.convertToCNF(null);
     this.checkExpectedErrorsPresent(new Error[]{SMTProcessingError.CNF_CONVERSION_NO_FORMULA_FOUND});
   }
@@ -62,7 +62,7 @@ class CNFConverterTest extends AbstractTest {
    * Method under test {@link CNFConverter#convertToCNF(BooleanFormula)}
    */
   @Test
-  void convertSimpleFormulasToCNF() {
+  public void convertSimpleFormulasToCNF() {
     BooleanFormula cnf;
     cnf = this.cnfConverter.convertToCNF(a);
     Assertions.assertEquals(a, cnf);
@@ -82,7 +82,7 @@ class CNFConverterTest extends AbstractTest {
    * Method under test {@link CNFConverter#convertToCNF(BooleanFormula)}
    */
   @Test
-  void convertComplexFormulaToCNF() {
+  public void convertComplexFormulaToCNF() {
     // Given
     BooleanFormula expectedCNF = bmgr.and(bmgr.or(b, c), a,
             bmgr.or(bmgr.not(a), bmgr.not(b)));

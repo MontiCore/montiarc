@@ -26,7 +26,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-class GenericArcMillForMontiArcTest {
+public class GenericArcMillForMontiArcTest {
 
   protected static Stream<Arguments> setupAndExpectedClassForSymTabCompleterProvider() {
     return Stream.of(

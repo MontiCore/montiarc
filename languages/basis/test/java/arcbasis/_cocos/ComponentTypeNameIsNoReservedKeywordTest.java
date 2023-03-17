@@ -12,10 +12,10 @@ import org.mockito.Mockito;
 
 import java.util.Collections;
 
-class ComponentTypeNameIsNoReservedKeywordTest extends AbstractTest {
+public class ComponentTypeNameIsNoReservedKeywordTest extends AbstractTest {
 
   @Test
-  void checkPortNameMatchesKeyword() {
+  public void checkPortNameMatchesKeyword() {
     // Given
     ASTComponentType cType = ArcBasisMill.componentTypeBuilder()
       .setName("keyword")
@@ -34,7 +34,7 @@ class ComponentTypeNameIsNoReservedKeywordTest extends AbstractTest {
   }
 
   @Test
-  void checkPortNameIsNoKeyword() {
+  public void checkPortNameIsNoKeyword() {
     // Given
     ASTComponentType cType = ArcBasisMill.componentTypeBuilder()
       .setName("noKeyword")

@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Collections;
-import java.util.Optional;
 
 /**
  * Holds tests for the handwritten methods of {@link FieldTypeExists}.
@@ -36,8 +35,8 @@ public class FieldTypeExistsTest extends AbstractTest {
     ASTMCPrimitiveType type = ArcBasisMill.mCPrimitiveTypeBuilder()
       .setPrimitive(ASTConstantsMCBasicTypes.BOOLEAN)
       .build();
-    ASTComponentType comp = createCompWithField("CompA", "p1", type);
-    ASTArcFieldDeclaration fieldDec = getFirstFieldDeclaration(comp).get();
+    ASTComponentType comp = createCompWithField("CompA", "a", type);
+    ASTArcFieldDeclaration fieldDec = comp.getFieldDeclarations().get(0);
     ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     symTab.createFromAST(comp);
 
@@ -46,16 +45,16 @@ public class FieldTypeExistsTest extends AbstractTest {
     coco.check(fieldDec);
 
     // Then
-    Assertions.assertEquals(0, Log.getErrorCount());
+    Assertions.assertEquals(0, Log.getErrorCount(), Log.getFindings().toString());
   }
 
   @Test
   public void shouldFindUnqualifiedType() {
     // Given
-    createTypeSymbolInGlobalScope("MyType");
-    ASTMCQualifiedType type = createQualifiedType("MyType");
-    ASTComponentType compWithField = createCompWithField("CompA", "p1", type);
-    ASTArcFieldDeclaration fieldDecl = getFirstFieldDeclaration(compWithField).get();
+    createTypeSymbolInGlobalScope("UQT");
+    ASTMCQualifiedType type = createQualifiedType("UQT");
+    ASTComponentType compWithField = createCompWithField("CompA", "b", type);
+    ASTArcFieldDeclaration fieldDecl = compWithField.getFieldDeclarations().get(0);
 
     ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     symTab.createFromAST(compWithField);
@@ -65,7 +64,7 @@ public class FieldTypeExistsTest extends AbstractTest {
     coco.check(fieldDecl);
 
     // Then
-    Assertions.assertEquals(0, Log.getErrorCount());
+    Assertions.assertEquals(0, Log.getErrorCount(), Log.getFindings().toString());
   }
 
   @Test
@@ -73,8 +72,8 @@ public class FieldTypeExistsTest extends AbstractTest {
     // Given
     createTypeSymbolInScope("MyType", "package.name");
     ASTMCQualifiedType type = createQualifiedType("MyType");
-    ASTComponentType comp = createCompWithField("CompA", "p1", type);
-    ASTArcFieldDeclaration fieldDec = getFirstFieldDeclaration(comp).get();
+    ASTComponentType comp = createCompWithField("NoUQT", "c", type);
+    ASTArcFieldDeclaration fieldDec = comp.getFieldDeclarations().get(0);
     ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     symTab.createFromAST(comp);
 
@@ -91,8 +90,8 @@ public class FieldTypeExistsTest extends AbstractTest {
     // Given
     createTypeSymbolInScope("MyType", "foopackage");
     ASTMCQualifiedType type = createQualifiedType("foopackage.MyType");
-    ASTComponentType comp = createCompWithField("CompA", "p1", type);
-    ASTArcFieldDeclaration fieldDec = getFirstFieldDeclaration(comp).get();
+    ASTComponentType comp = createCompWithField("QT", "d", type);
+    ASTArcFieldDeclaration fieldDec = comp.getFieldDeclarations().get(0);
     ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     symTab.createFromAST(comp);
 
@@ -101,7 +100,7 @@ public class FieldTypeExistsTest extends AbstractTest {
     coco.check(fieldDec);
 
     // Then
-    Assertions.assertEquals(0, Log.getErrorCount());
+    Assertions.assertEquals(0, Log.getErrorCount(), Log.getFindings().toString());
   }
 
   @Test
@@ -109,8 +108,8 @@ public class FieldTypeExistsTest extends AbstractTest {
     // Given
     createTypeSymbolInScope("MyType", "foopack");
     ASTMCQualifiedType type = createQualifiedType("MyType");
-    ASTComponentType comp = createCompWithField("CompA", "p1", type);
-    ASTArcFieldDeclaration fieldDec = getFirstFieldDeclaration(comp).get();
+    ASTComponentType comp = createCompWithField("TbI", "e", type);
+    ASTArcFieldDeclaration fieldDec = comp.getFieldDeclarations().get(0);
     IArcBasisArtifactScope scopeWithImports = ArcBasisMill.artifactScope();
     scopeWithImports.setImportsList(Collections.singletonList(new ImportStatement("foopack", true)));
     scopeWithImports.setName("ju");
@@ -125,15 +124,15 @@ public class FieldTypeExistsTest extends AbstractTest {
     coco.check(fieldDec);
 
     // Then
-    Assertions.assertEquals(0, Log.getErrorCount());
+    Assertions.assertEquals(0, Log.getErrorCount(), Log.getFindings().toString());
   }
 
   @Test
   public void shouldNotFindQualifiedType() {
     // Given
     ASTMCQualifiedType type = createQualifiedType("unknown.Type");
-    ASTComponentType comp = createCompWithField("CompA", "p1", type);
-    ASTArcFieldDeclaration fieldDec = getFirstFieldDeclaration(comp).get();
+    ASTComponentType comp = createCompWithField("NoQT", "f", type);
+    ASTArcFieldDeclaration fieldDec = (ASTArcFieldDeclaration) comp.getBody().getArcElementList().get(0);
     ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     symTab.createFromAST(comp);
 
@@ -146,7 +145,7 @@ public class FieldTypeExistsTest extends AbstractTest {
   }
 
   protected static ASTComponentType createCompWithField(@NotNull String compName, @NotNull String fieldName,
-                                                       @NotNull ASTMCType fieldType) {
+                                                        @NotNull ASTMCType fieldType) {
     Preconditions.checkNotNull(compName);
     Preconditions.checkNotNull(fieldName);
     Preconditions.checkNotNull(fieldType);
@@ -156,23 +155,12 @@ public class FieldTypeExistsTest extends AbstractTest {
       .addArcField(fieldName, Mockito.mock(ASTExpression.class))
       .build();
 
-    ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
+    return ArcBasisMill.componentTypeBuilder()
       .setName(compName)
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(fieldDecl)
         .build())
       .build();
-
-    return comp;
-  }
-
-  protected static Optional<ASTArcFieldDeclaration> getFirstFieldDeclaration(@NotNull ASTComponentType comp) {
-    Preconditions.checkNotNull(comp);
-
-    return comp.getBody().getArcElementList().stream()
-      .filter(arcE -> arcE instanceof ASTArcFieldDeclaration)
-      .map(arcE -> (ASTArcFieldDeclaration) arcE)
-      .findFirst();
   }
 }

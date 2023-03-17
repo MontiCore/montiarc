@@ -18,7 +18,7 @@ import org.sosy_lab.java_smt.api.SolverContext;
 import java.util.HashMap;
 import java.util.Set;
 
-class FDConstructionStorageTest {
+public class FDConstructionStorageTest {
 
   FormulaManager fmgr;
 
@@ -70,7 +70,7 @@ class FDConstructionStorageTest {
    * {@link FDConstructionStorage#mergeWithStorage(FDConstructionStorage)}
    */
   @Test
-  void mergeWithStorage() {
+  public void mergeWithStorage() {
     // Given
     FDConstructionStorage<BooleanFormula> copy = storage1;
     copy.mergeWithStorage(storage2);
@@ -85,7 +85,7 @@ class FDConstructionStorageTest {
    * {@link FDConstructionStorage#extractDataFromVisitor(SMT2FDVisitor)}
    */
   @Test
-  void extractDataFromVisitor() {
+  public void extractDataFromVisitor() {
     // Given
     FDConstructionStorage<BooleanFormula> copy = storage1;
     copy.extractDataFromVisitor(this.smt2FDVisitor);

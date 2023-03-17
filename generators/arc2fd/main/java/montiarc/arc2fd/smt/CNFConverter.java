@@ -231,7 +231,7 @@ public class CNFConverter implements BooleanFormulaVisitor<List<BooleanFormula>>
    * DRAWBACK: Combinatorial Explosion!
    *
    * @param formulas List of formulas to convert
-   * @return Set of Formulas in CNF (which in the end form the final
+   * @return List of Formulas in CNF (which in the end form the final
    * conjunction)
    */
   @Override

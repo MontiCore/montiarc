@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
-class TypeParamNameIsNoReservedKeywordTest extends AbstractTest {
+public class TypeParamNameIsNoReservedKeywordTest extends AbstractTest {
 
   @Test
   void checkPortNameMatchesKeyword() {

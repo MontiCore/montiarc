@@ -40,19 +40,19 @@ public class DeployUtils {
   protected static void showHelp() {
     String firstLine = "Usage options:";
     String whitespace = repeat(" ", firstLine.length());
-    System.out.println(new StringBuilder(firstLine).append("\n")
-      .append(whitespace).append("<jar>\n")
-      .append(whitespace).append("<jar> <MAX_CYCLES_COUNT>\n")
-      .append(whitespace).append("<jar> <MAX_CYCLES_COUNT> <CYCLE_TIME>\n")
-      .append(whitespace).append("<jar> <MAX_CYCLES_COUNT> <CYCLE_TIME> <LOG_PATH>\n")
-      .append("\n")
-      .append("MAX_CYCLES_COUNT and CYCLE_TIME are positive integers, LOG_PATH is the path to a file or directory.\n")
-      .append("CYCLE_TIME is given in milliseconds.\n")
-      .append("\n")
-      .append("Defaults:\n")
-      .append(whitespace).append("MAX_CYCLES_COUNT = ").append(DEFAULT_MAX_CYCLES_COUNT).append("\n")
-      .append(whitespace).append("CYCLE_TIME = ").append(DEFAULT_CYCLE_TIME).append("\n")
-      .append(whitespace).append("LOG_PATH = ").append(DEFAULT_LOG_PATH));
+    System.out.println(firstLine + "\n" +
+      whitespace + "<jar>\n" +
+      whitespace + "<jar> <MAX_CYCLES_COUNT>\n" +
+      whitespace + "<jar> <MAX_CYCLES_COUNT> <CYCLE_TIME>\n" +
+      whitespace + "<jar> <MAX_CYCLES_COUNT> <CYCLE_TIME> <LOG_PATH>\n" +
+      "\n" +
+      "MAX_CYCLES_COUNT and CYCLE_TIME are positive integers, LOG_PATH is the path to a file or directory.\n" +
+      "CYCLE_TIME is given in milliseconds.\n" +
+      "\n" +
+      "Defaults:\n" +
+      whitespace + "MAX_CYCLES_COUNT = " + DEFAULT_MAX_CYCLES_COUNT + "\n" +
+      whitespace + "CYCLE_TIME = " + DEFAULT_CYCLE_TIME + "\n" +
+      whitespace + "LOG_PATH = " + DEFAULT_LOG_PATH);
   }
   
   private static String repeat(String s, int count) {

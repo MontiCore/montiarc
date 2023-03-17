@@ -4,7 +4,7 @@ package montiarc.arc2fd.fd;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class FDConfigurationTest {
+public class FDConfigurationTest {
   FDConfiguration config = new FDConfiguration();
 
   /**
@@ -12,7 +12,7 @@ class FDConfigurationTest {
    * {@link FDConfiguration#mapTypeToDisplayedName(Operation)} ()}
    */
   @Test
-  void mapTypeToDisplayedName() {
+  public void mapTypeToDisplayedName() {
     Assertions.assertThrows(NullPointerException.class,
         () -> config.mapTypeToDisplayedName(null));
     Assertions.assertEquals(FDConfiguration.MAP_TYPE_MAPPING.get(Operation.OPTIONALS),
@@ -23,7 +23,7 @@ class FDConfigurationTest {
    * Method under test {@link FDConfiguration#getOptionalsEnum()} ()}
    */
   @Test
-  void getOptionalsEnum() {
+  public void getOptionalsEnum() {
     Assertions.assertEquals(Operation.OPTIONALS,
         config.getOptionalsEnum());
     Assertions.assertNotEquals(Operation.SIMPLE_OR,
@@ -34,7 +34,7 @@ class FDConfigurationTest {
    * Method under test {@link FDConfiguration#getSimpleOrEnum()} ()}
    */
   @Test
-  void getSimpleOrEnum() {
+  public void getSimpleOrEnum() {
     Assertions.assertEquals(Operation.SIMPLE_OR,
         config.getSimpleOrEnum());
     Assertions.assertNotEquals(Operation.OPTIONALS,
@@ -45,7 +45,7 @@ class FDConfigurationTest {
    * Method under test {@link FDConfiguration#getXOREnum()} ()}
    */
   @Test
-  void getXOREnum() {
+  public void getXOREnum() {
     Assertions.assertEquals(Operation.XOR, config.getXOREnum());
     Assertions.assertNotEquals(Operation.OPTIONALS,
         config.getXOREnum());
@@ -56,7 +56,7 @@ class FDConfigurationTest {
    * ()}
    */
   @Test
-  void getRemainingConjunctionsEnum() {
+  public void getRemainingConjunctionsEnum() {
     Assertions.assertEquals(Operation.REMAINING_CONJUNCTIONS,
         config.getRemainingConjunctionsEnum());
     Assertions.assertNotEquals(Operation.OPTIONALS,
@@ -67,7 +67,7 @@ class FDConfigurationTest {
    * Method under test {@link FDConfiguration#getRequiresEnum()} ()}
    */
   @Test
-  void getRequiresEnum() {
+  public void getRequiresEnum() {
     Assertions.assertEquals(Operation.REQUIRES,
         config.getRequiresEnum());
     Assertions.assertNotEquals(Operation.OPTIONALS,
@@ -78,7 +78,7 @@ class FDConfigurationTest {
    * Method under test {@link FDConfiguration#getExcludesEnum()} ()}
    */
   @Test
-  void getExcludesEnum() {
+  public void getExcludesEnum() {
     Assertions.assertEquals(Operation.EXCLUDES,
         config.getExcludesEnum());
     Assertions.assertNotEquals(Operation.OPTIONALS,

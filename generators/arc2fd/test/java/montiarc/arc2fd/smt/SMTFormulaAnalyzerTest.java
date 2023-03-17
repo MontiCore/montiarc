@@ -16,7 +16,7 @@ import org.sosy_lab.java_smt.api.SolverContext;
 import java.util.HashSet;
 import java.util.Set;
 
-class SMTFormulaAnalyzerTest {
+public class SMTFormulaAnalyzerTest {
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
   SMTFormulaAnalyzer analyzer;
@@ -58,7 +58,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#analyze(BooleanFormula)}
    */
   @Test
-  void analyze() {
+  public void analyze() {
     // When
     analyzer.analyze(orFormula);
 
@@ -77,7 +77,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#isAtomic()}
    */
   @Test
-  void isAtomic() {
+  public void isAtomic() {
     // When && Then (positive test)
     analyzer.analyze(a);
     Assertions.assertTrue(analyzer.isAtomic());
@@ -91,7 +91,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#hasDisjunctionsOnly()} ()}
    */
   @Test
-  void hasDisjunctionsOnly() {
+  public void hasDisjunctionsOnly() {
     // When && Then (positive test)
     analyzer.analyze(orFormula);
     Assertions.assertTrue(analyzer.hasDisjunctionsOnly());
@@ -105,7 +105,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#hasConjunctionsOnly()} ()}
    */
   @Test
-  void hasConjunctionsOnly() {
+  public void hasConjunctionsOnly() {
     // When && Then (positive test)
     analyzer.analyze(andFormula);
     Assertions.assertTrue(analyzer.hasConjunctionsOnly());
@@ -119,7 +119,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#hasConjunctions()}
    */
   @Test
-  void hasConjunctions() {
+  public void hasConjunctions() {
     // When && Then (positive test)
     analyzer.analyze(andFormula);
     Assertions.assertTrue(analyzer.hasConjunctions());
@@ -133,7 +133,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#hasDisjunctions()}
    */
   @Test
-  void hasDisjunctions() {
+  public void hasDisjunctions() {
     // When && Then (positive test)
     analyzer.analyze(orFormula);
     Assertions.assertTrue(analyzer.hasDisjunctions());
@@ -147,7 +147,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#isNNF()}
    */
   @Test
-  void isNNF() {
+  public void isNNF() {
     // When && Then (positive test)
     analyzer.analyze(nnfFormula);
     Assertions.assertTrue(analyzer.isNNF());
@@ -161,7 +161,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#isCNF()}
    */
   @Test
-  void isCNF() {
+  public void isCNF() {
     // When && Then (positive test)
     analyzer.analyze(cnfFormula);
     Assertions.assertTrue(analyzer.isCNF());
@@ -175,7 +175,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#numberOfNegatedAtoms()}
    */
   @Test
-  void numberOfNegatedAtoms() {
+  public void numberOfNegatedAtoms() {
     // When && Then (positive test)
     analyzer.analyze(nnfFormula);
     Assertions.assertEquals(2, analyzer.numberOfNegatedAtoms());
@@ -189,7 +189,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#numberOfPositiveAtoms()} ()}
    */
   @Test
-  void numberOfPositiveAtoms() {
+  public void numberOfPositiveAtoms() {
     // When && Then (positive test)
     analyzer.analyze(cnfFormula);
     Assertions.assertEquals(3, analyzer.numberOfPositiveAtoms());
@@ -203,7 +203,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#numberOfNegatedFormulas()} ()}
    */
   @Test
-  void numberOfNegatedFormulas() {
+  public void numberOfNegatedFormulas() {
     // When && Then (positive test)
     analyzer.analyze(noNnfFormula);
     Assertions.assertEquals(1, analyzer.numberOfNegatedFormulas());
@@ -217,7 +217,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#numberOfPositiveFormulas()}
    */
   @Test
-  void numberOfPositiveFormulas() {
+  public void numberOfPositiveFormulas() {
     // When && Then (positive test)
     analyzer.analyze(cnfFormula);
     Assertions.assertEquals(2, analyzer.numberOfPositiveFormulas());
@@ -231,7 +231,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#getAllAtoms()} ()}
    */
   @Test
-  void getAllAtoms() {
+  public void getAllAtoms() {
     // When && Then (positive test)
     analyzer.analyze(cnfFormula);
     Assertions.assertEquals(Set.of(a, b, c), analyzer.getAllAtoms());
@@ -249,7 +249,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#getNegatedAtoms()}
    */
   @Test
-  void getNegatedAtoms() {
+  public void getNegatedAtoms() {
     // When && Then (positive test)
     analyzer.analyze(nnfFormula);
     Assertions.assertEquals(Set.of(a, c), analyzer.getNegatedAtoms());
@@ -263,7 +263,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#getPositiveAtoms()}
    */
   @Test
-  void getPositiveAtoms() {
+  public void getPositiveAtoms() {
     // When && Then (positive test)
     analyzer.analyze(cnfFormula);
     Assertions.assertEquals(Set.of(a, b, c), analyzer.getPositiveAtoms());
@@ -277,7 +277,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#isFormulaOptionalAtom()}
    */
   @Test
-  void isFormulaOptionalAtom() {
+  public void isFormulaOptionalAtom() {
     // When && Then (positive test)
     analyzer.analyze(optionalFormula);
     Assertions.assertTrue(analyzer.isFormulaOptionalAtom().isPresent());
@@ -292,7 +292,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#hasPositiveAtomsOnly()}
    */
   @Test
-  void hasPositiveAtomsOnly() {
+  public void hasPositiveAtomsOnly() {
     // When && Then (positive test)
     analyzer.analyze(cnfFormula);
     Assertions.assertTrue(analyzer.hasPositiveAtomsOnly());
@@ -306,7 +306,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#hasNegatedAtomsOnly()}
    */
   @Test
-  void hasNegatedAtomsOnly() {
+  public void hasNegatedAtomsOnly() {
     // When && Then (positive test)
     analyzer.analyze(negatedAtomsOnlyFormula);
     Assertions.assertTrue(analyzer.hasNegatedAtomsOnly());
@@ -320,7 +320,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#getAllFormulas()}
    */
   @Test
-  void getAllFormulas() {
+  public void getAllFormulas() {
     // When && Then (positive test)
     analyzer.analyze(cnfFormula);
     Assertions.assertEquals(Set.of(bmgr.or(b, c), bmgr.or(a, b)),
@@ -340,7 +340,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#getAllNegatedFormulas()}
    */
   @Test
-  void getAllNegatedFormulas() {
+  public void getAllNegatedFormulas() {
     // When && Then (positive test)
     analyzer.analyze(noNnfFormula);
     Assertions.assertEquals(Set.of(bmgr.or(a, b)),
@@ -355,7 +355,7 @@ class SMTFormulaAnalyzerTest {
    * Method under test {@link SMTFormulaAnalyzer#getAllPositiveFormulas()}
    */
   @Test
-  void getAllPositiveFormulas() {
+  public void getAllPositiveFormulas() {
     // When && Then (positive test)
     analyzer.analyze(orFormula);
     Assertions.assertEquals(Set.of(bmgr.or(a, b, c)),

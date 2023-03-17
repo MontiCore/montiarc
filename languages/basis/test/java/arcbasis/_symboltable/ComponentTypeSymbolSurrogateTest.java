@@ -20,16 +20,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-class ComponentTypeSymbolSurrogateTest extends AbstractTest {
+public class ComponentTypeSymbolSurrogateTest extends AbstractTest {
 
   
   @Test
-  void setSpannedScopeShouldSkipSurrogate() {
+  public void setSpannedScopeShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -45,7 +45,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
   }
 
   @Test
-  void getSpannedScopeShouldSkipSurrogate() {
+  public void getSpannedScopeShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -59,7 +59,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
   }
 
   @Test
-  void getInnerComponentsShouldSkipSurrogate() {
+  public void getInnerComponentsShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -75,7 +75,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
   }
 
   @Test
-  void getInnerComponentShouldSkipSurrogate() {
+  public void getInnerComponentShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -92,7 +92,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
   }
 
   @Test
-  void getInnerComponentsWithAccessModifierShouldSkipSurrogate() {
+  public void getInnerComponentsWithAccessModifierShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -108,7 +108,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
   }
 
   @Test
-  void getPortsShouldSkipSurrogate() {
+  public void getPortsShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -124,7 +124,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
   }
 
   @Test
-  void getPortByNameShouldSkipSurrogate() {
+  public void getPortByNameShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -141,7 +141,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
   }
 
   @Test
-  void getInheritedPortByNameShouldSkipSurrogate() {
+  public void getInheritedPortByNameShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -164,7 +164,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
   }
 
   @Test
-  void getIncomingPortsShouldSkipSurrogate() {
+  public void getIncomingPortsShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -180,7 +180,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
   }
 
   @Test
-  void getIncomingPortsByAccessModifierShouldSkipSurrogate() {
+  public void getIncomingPortsByAccessModifierShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -196,7 +196,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
   }
 
   @Test
-  void getIncomingPortByNameShouldSkipSurrogate() {
+  public void getIncomingPortByNameShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -213,7 +213,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
   }
 
   @Test
-  void getInheritedIncomingPortByNameShouldSkipSurrogate() {
+  public void getInheritedIncomingPortByNameShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -233,7 +233,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
   }
 
   @Test
-  void isInnerComponentShouldSkipSurrogate() {
+  public void isInnerComponentShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -251,7 +251,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
 
   
   @Test
-  void getOuterComponentShouldSkipSurrogate() {
+  public void getOuterComponentShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -349,7 +349,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    List<ASTExpression> parentConfig = Arrays.asList(Mockito.mock(ASTExpression.class));
+    List<ASTExpression> parentConfig = Collections.singletonList(Mockito.mock(ASTExpression.class));
     comp.setParentConfigurationExpressions(parentConfig);
 
     // When
@@ -367,7 +367,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    List<ASTExpression> parentConfig = Arrays.asList(Mockito.mock(ASTExpression.class));
+    List<ASTExpression> parentConfig = Collections.singletonList(Mockito.mock(ASTExpression.class));
 
     // When
     surrogate.setParentConfigurationExpressions(parentConfig);
@@ -447,7 +447,7 @@ class ComponentTypeSymbolSurrogateTest extends AbstractTest {
 
     // When
     surrogate.getSpannedScope().add(param);
-    surrogate.addParameters(Arrays.asList(param));
+    surrogate.addParameters(Collections.singletonList(param));
 
     // Then
     Assertions.assertArrayEquals(new VariableSymbol[] {param}, comp.getParameters().toArray());

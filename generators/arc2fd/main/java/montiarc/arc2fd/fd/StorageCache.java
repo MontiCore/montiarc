@@ -42,17 +42,6 @@ public class StorageCache<H extends Formula> {
   }
 
   /**
-   * Creates a new StorageCache from the given ASTExpression and Storage
-   *
-   * @param expression ASTExpression to add
-   * @param storage    Storage to add
-   */
-  StorageCache(ASTExpression expression, FDConstructionStorage<H> storage) {
-    this.totalExpression = expression;
-    this.storage = storage;
-  }
-
-  /**
    * Adds a new Relation from the Root (String)
    *
    * @param from Left Side of the Relation
@@ -121,16 +110,5 @@ public class StorageCache<H extends Formula> {
    */
   protected FDConstructionStorage<H> getStorage() {
     return storage;
-  }
-
-  /**
-   * Sets the Construction Storage to the given storage
-   *
-   * @param storage Storage which should be written into the current storage
-   *                instance
-   */
-  protected void setStorage(@NotNull FDConstructionStorage<H> storage) {
-    Preconditions.checkNotNull(storage);
-    this.storage = storage;
   }
 }

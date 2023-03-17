@@ -78,14 +78,6 @@ public class MontiArcMill extends MontiArcMillTOP {
     return new MontiArcCompTypeExprDeSer();
   }
 
-  public static void initMe(MontiArcMill a)  {
-    MontiArcMillTOP.initMe(a);
-    millMontiArcSymbolTableCompleter = a;
-    millMontiArcSymbolTableCompleterDelegator = a;
-    millMontiArcFullPrettyPrinter = a;
-    millMontiArcFullConverter = a;
-  }
-
   public static void reset() {
     MontiArcMillTOP.reset();
     millMontiArcSymbolTableCompleter = null;

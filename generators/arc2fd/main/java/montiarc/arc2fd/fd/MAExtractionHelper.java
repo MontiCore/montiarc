@@ -15,7 +15,6 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import montiarc.arc2fd.smt.FDRelation;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.sosy_lab.common.configuration.InvalidConfigurationException;
@@ -51,13 +50,6 @@ public class MAExtractionHelper<T extends Formula> {
     MontiArcMill.literalExpressionBuilder()
       .setLiteral(MontiArcMill.booleanLiteralBuilder()
         .setSource(ASTConstantsMCCommonLiterals.TRUE).build()).build();
-
-  /**
-   * Stores the PrettyPrinter to convert ASTExpressions into string
-   * representations
-   */
-  private final MontiArcFullPrettyPrinter prettyPrinter =
-    new MontiArcFullPrettyPrinter();
 
   /**
    * Formula Manager (Java-SMT)

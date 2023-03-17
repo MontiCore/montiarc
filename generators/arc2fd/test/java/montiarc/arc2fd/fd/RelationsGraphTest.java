@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
-class RelationsGraphTest {
+public class RelationsGraphTest {
   RelationsGraph<String> rg = new RelationsGraph<>();
 
   @BeforeEach
@@ -20,7 +20,7 @@ class RelationsGraphTest {
    * Method under test {@link RelationsGraph#getUnusedNodes(Object)}
    */
   @Test
-  void getUnusedNodes() {
+  public void getUnusedNodes() {
     // Given
     String startingNode = "a";
     Set<String> trueUnusedNodes = Set.of("f", "g");
@@ -37,7 +37,7 @@ class RelationsGraphTest {
    * Method under test {@link RelationsGraph#addEdge(Object, Object)}}
    */
   @Test
-  void addEdge() {
+  public void addEdge() {
     // Given
     Map<String, LinkedList<String>> trueAdj = new HashMap<>();
     trueAdj.put("a", new LinkedList<>(Set.of("b")));
@@ -54,7 +54,7 @@ class RelationsGraphTest {
    * Method under test {@link RelationsGraph#addEdges(Object, Set)}}
    */
   @Test
-  void addEdges() {
+  public void addEdges() {
     // Given
     Map<String, LinkedList<String>> trueAdj = new HashMap<>();
     trueAdj.put("a", new LinkedList<>(Set.of("b", "c", "d")));
@@ -73,7 +73,7 @@ class RelationsGraphTest {
    * Method under test {@link RelationsGraph#BFS(Object)}}
    */
   @Test
-  void BFS() {
+  public void BFS() {
     // Given
     String startingNodeA = "a";
     createGraph(startingNodeA);

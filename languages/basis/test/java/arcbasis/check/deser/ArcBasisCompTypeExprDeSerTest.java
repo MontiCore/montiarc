@@ -13,9 +13,9 @@ import de.monticore.symboltable.serialization.json.JsonObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class ArcBasisCompTypeExprDeSerTest extends AbstractTest {
+public class ArcBasisCompTypeExprDeSerTest extends AbstractTest {
   @Test
-  void testSerializeAsJsonWithPackage() {
+  public void testSerializeAsJsonWithPackage() {
     // Given
     ComponentTypeSymbol myComp = createComponentTypeWithSymbol("MyComp").getSymbol();
     IArcBasisArtifactScope scope = wrapInArtifactScope("foo.bar", myComp);
@@ -37,7 +37,7 @@ class ArcBasisCompTypeExprDeSerTest extends AbstractTest {
   }
 
   @Test
-  void testSerializeAsJsonWithoutPackage() {
+  public void testSerializeAsJsonWithoutPackage() {
     // Given
     ComponentTypeSymbol myComp = createComponentTypeWithSymbol("MyComp").getSymbol();
     SymbolService.link(ArcBasisMill.globalScope(), myComp);
@@ -58,7 +58,7 @@ class ArcBasisCompTypeExprDeSerTest extends AbstractTest {
   }
 
   @Test
-  void testDeserializeWithPackageName() {
+  public void testDeserializeWithPackageName() {
     // Given
     ComposedCompTypeExprDeSer deser = new ArcBasisCompTypeExprDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(
@@ -77,7 +77,7 @@ class ArcBasisCompTypeExprDeSerTest extends AbstractTest {
   }
 
   @Test
-  void testDeserializeWithoutPackageName() {
+  public void testDeserializeWithoutPackageName() {
     // Given
     ComposedCompTypeExprDeSer deser = new ArcBasisCompTypeExprDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(

@@ -83,8 +83,8 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
       ComponentTypeSymbol dummyWithCycle = provideDummyWithCycle_unlinked();
       ComponentTypeSymbol modelWithCycle = provideModelWithCycle_unlinked();
 
-      dummyWithCycle.getSubComponent("sub").get().setType(new TypeExprOfComponent(modelWithCycle));
-      modelWithCycle.getSubComponent("dummy").get().setType(new TypeExprOfComponent(dummyWithCycle));
+      dummyWithCycle.getSubComponent("sub").orElseThrow().setType(new TypeExprOfComponent(modelWithCycle));
+      modelWithCycle.getSubComponent("dummy").orElseThrow().setType(new TypeExprOfComponent(dummyWithCycle));
       return dummyWithCycle;
     }
   }
@@ -127,14 +127,14 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
       ComponentTypeSymbol dummyWithNestedCycle = provideDummyWithNestedCycle_unlinked();
       ComponentTypeSymbol modelWithNestedCycle = provideModelWithNestedCycle_unlinked();
 
-      dummyWithNestedCycle.getInnerComponent("Sub1").get()
-        .getInnerComponent("Sub2").get()
-        .getInnerComponent("Sub3").get()
-        .getSubComponent("withCyc").get().setType(new TypeExprOfComponent(modelWithNestedCycle));
-      modelWithNestedCycle.getInnerComponent("Sub1").get()
-        .getInnerComponent("Sub2").get()
-        .getInnerComponent("Sub3").get()
-        .getSubComponent("withCyc").get().setType(new TypeExprOfComponent(dummyWithNestedCycle));
+      dummyWithNestedCycle.getInnerComponent("Sub1").orElseThrow()
+        .getInnerComponent("Sub2").orElseThrow()
+        .getInnerComponent("Sub3").orElseThrow()
+        .getSubComponent("withCyc").orElseThrow().setType(new TypeExprOfComponent(modelWithNestedCycle));
+      modelWithNestedCycle.getInnerComponent("Sub1").orElseThrow()
+        .getInnerComponent("Sub2").orElseThrow()
+        .getInnerComponent("Sub3").orElseThrow()
+        .getSubComponent("withCyc").orElseThrow().setType(new TypeExprOfComponent(dummyWithNestedCycle));
 
       return dummyWithNestedCycle;
     }
@@ -230,9 +230,9 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
       ComponentTypeSymbol longCycleComp2 = provideModelLongCycle2_unlinked();
       ComponentTypeSymbol longCycleComp3 = provideModelLongCycle3_unlinked();
 
-      longCycleComp1.getSubComponent("lc2").get().setType(new TypeExprOfComponent(longCycleComp2));
-      longCycleComp2.getSubComponent("lc3").get().setType(new TypeExprOfComponent(longCycleComp3));
-      longCycleComp3.getSubComponent("lc1").get().setType(new TypeExprOfComponent(longCycleComp1));
+      longCycleComp1.getSubComponent("lc2").orElseThrow().setType(new TypeExprOfComponent(longCycleComp2));
+      longCycleComp2.getSubComponent("lc3").orElseThrow().setType(new TypeExprOfComponent(longCycleComp3));
+      longCycleComp3.getSubComponent("lc1").orElseThrow().setType(new TypeExprOfComponent(longCycleComp1));
 
       return longCycleComp1;
     }
@@ -285,9 +285,9 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
       ComponentTypeSymbol longCycleComp2 = provideModelLongCycle2_unlinked();
       ComponentTypeSymbol longCycleComp3 = provideModelLongCycle3_unlinked();
 
-      longCycleComp1.getSubComponent("lc2").get().setType(new TypeExprOfComponent(longCycleComp2));
-      longCycleComp2.getSubComponent("lc3").get().setType(new TypeExprOfComponent(longCycleComp3));
-      longCycleComp3.getSubComponent("lc1").get().setType(new TypeExprOfComponent(longCycleComp1));
+      longCycleComp1.getSubComponent("lc2").orElseThrow().setType(new TypeExprOfComponent(longCycleComp2));
+      longCycleComp2.getSubComponent("lc3").orElseThrow().setType(new TypeExprOfComponent(longCycleComp3));
+      longCycleComp3.getSubComponent("lc1").orElseThrow().setType(new TypeExprOfComponent(longCycleComp1));
 
       return longCycleComp2;
     }
@@ -340,9 +340,9 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
       ComponentTypeSymbol longCycleComp2 = provideModelLongCycle2_unlinked();
       ComponentTypeSymbol longCycleComp3 = provideModelLongCycle3_unlinked();
 
-      longCycleComp1.getSubComponent("lc2").get().setType(new TypeExprOfComponent(longCycleComp2));
-      longCycleComp2.getSubComponent("lc3").get().setType(new TypeExprOfComponent(longCycleComp3));
-      longCycleComp3.getSubComponent("lc1").get().setType(new TypeExprOfComponent(longCycleComp1));
+      longCycleComp1.getSubComponent("lc2").orElseThrow().setType(new TypeExprOfComponent(longCycleComp2));
+      longCycleComp2.getSubComponent("lc3").orElseThrow().setType(new TypeExprOfComponent(longCycleComp3));
+      longCycleComp3.getSubComponent("lc1").orElseThrow().setType(new TypeExprOfComponent(longCycleComp1));
 
       return longCycleComp3;
     }
@@ -487,8 +487,8 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
       ComponentTypeSymbol modelWithCycle = provideModelWithCycle_unlinked();
       ComponentTypeSymbol dummyWithCycle = provideDummyWithCycle_unlinked();
 
-      modelWithCycle.getSubComponent("dummy").get().setType(new TypeExprOfComponent(dummyWithCycle));
-      dummyWithCycle.getSubComponent("sub").get().setType(new TypeExprOfComponent(modelWithCycle));
+      modelWithCycle.getSubComponent("dummy").orElseThrow().setType(new TypeExprOfComponent(dummyWithCycle));
+      dummyWithCycle.getSubComponent("sub").orElseThrow().setType(new TypeExprOfComponent(modelWithCycle));
       return modelWithCycle;
     }
   }
@@ -540,14 +540,14 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
       ComponentTypeSymbol modelWithNestedCycle = provideModelWithNestedCycle_unlinked();
       ComponentTypeSymbol dummyWithNestedCycle = provideDummyWithNestedCycle_unlinked();
 
-      modelWithNestedCycle.getInnerComponent("Sub1").get()
-        .getInnerComponent("Sub2").get()
-        .getInnerComponent("Sub3").get()
-        .getSubComponent("withCyc").get().setType(new TypeExprOfComponent(dummyWithNestedCycle));
-      dummyWithNestedCycle.getInnerComponent("Sub1").get()
-        .getInnerComponent("Sub2").get()
-        .getInnerComponent("Sub3").get()
-        .getSubComponent("withCyc").get().setType(new TypeExprOfComponent(modelWithNestedCycle));
+      modelWithNestedCycle.getInnerComponent("Sub1").orElseThrow()
+        .getInnerComponent("Sub2").orElseThrow()
+        .getInnerComponent("Sub3").orElseThrow()
+        .getSubComponent("withCyc").orElseThrow().setType(new TypeExprOfComponent(dummyWithNestedCycle));
+      dummyWithNestedCycle.getInnerComponent("Sub1").orElseThrow()
+        .getInnerComponent("Sub2").orElseThrow()
+        .getInnerComponent("Sub3").orElseThrow()
+        .getSubComponent("withCyc").orElseThrow().setType(new TypeExprOfComponent(modelWithNestedCycle));
 
       return modelWithNestedCycle;
     }
@@ -732,7 +732,6 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
   public void shouldNotFindCycle() {
     // Given
     ComponentTypeSymbol compSym = provideModelWithoutCycle();
-    ComponentTypeSymbol dummyHelper = provideDummyWithoutCycle();
 
     Preconditions.checkState(compSym.isPresentAstNode());
     ASTComponentType comp = compSym.getAstNode();

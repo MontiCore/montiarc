@@ -125,7 +125,7 @@ public class CD2PojoTool extends CDGeneratorTool {
         TemplateHookPoint hpp = new TemplateHookPoint(configTemplate);
         List<Object> configTemplateArgs = Arrays.asList(glex, generator);
 
-        asts.forEach(ast -> mapCD4CImports(ast));
+        asts.forEach(this::mapCD4CImports);
 
         asts.forEach(ast -> hpp.processValue(tc, ast, configTemplateArgs));
       }

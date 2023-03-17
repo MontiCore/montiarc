@@ -39,11 +39,9 @@ public class VariableElementsUsage implements VariableArcASTArcIfStatementCoCo, 
 
     node.getArcElementList().stream().filter(
         e -> !(e instanceof ASTArcIfStatement || e instanceof ASTComponentInstantiation || e instanceof ASTComponentInterface || e instanceof ASTConnector))
-      .forEach(astElement -> {
-        Log.error(VariableArcError.ILLEGAL_USE.format(astElement.getClass()
-            .getSimpleName(), node.getEnclosingScope().getName(), "ArcBlock"),
-          astElement.get_SourcePositionStart(), astElement.get_SourcePositionEnd());
-      });
+      .forEach(astElement -> Log.error(VariableArcError.ILLEGAL_USE.format(astElement.getClass()
+          .getSimpleName(), node.getEnclosingScope().getName(), "ArcBlock"),
+        astElement.get_SourcePositionStart(), astElement.get_SourcePositionEnd()));
   }
 
   @Override

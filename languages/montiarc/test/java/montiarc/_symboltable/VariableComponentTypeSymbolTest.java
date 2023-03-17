@@ -28,7 +28,6 @@ import variablearc.evaluation.Expression;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -131,8 +130,7 @@ public class VariableComponentTypeSymbolTest extends AbstractTest {
     VariableArcVariationPoint vpA2 = new VariableArcVariationPoint(new Expression(aExpression));
 
     VariableArcVariationPoint vpFalseParent = new VariableArcVariationPoint(new Expression(falseExpression));
-    VariableArcVariationPoint vpTrueChild =
-      new VariableArcVariationPoint(new Expression(trueExpression), Optional.of(vpFalseParent));
+    VariableArcVariationPoint vpTrueChild = new VariableArcVariationPoint(new Expression(trueExpression), vpFalseParent);
 
     VariableArcVariationPoint vpPIntGreater0 = new VariableArcVariationPoint(new Expression(
       MontiArcMill.greaterThanExpressionBuilder().setLeft(pIntExpression).setOperator(">")

@@ -7,11 +7,16 @@ import de.monticore.cd4analysis.cocos.CD4AnalysisCoCosDelegator;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 
 public class CD4AnalysisLspCoCoRunner extends CD4AnalysisLspCoCoRunnerTOP{
-    private CD4AnalysisCoCoChecker checker;
+
+    private final CD4AnalysisCoCoChecker checker;
 
     public CD4AnalysisLspCoCoRunner(DocumentManager documentManager) {
+        this(documentManager, new CD4AnalysisCoCoChecker());
+    }
+
+    public CD4AnalysisLspCoCoRunner(DocumentManager documentManager, CD4AnalysisCoCoChecker checker) {
         super(documentManager);
-        checker = new CD4AnalysisCoCosDelegator().getCheckerForAllCoCos();
+        this.checker = checker;
     }
 
     @Override

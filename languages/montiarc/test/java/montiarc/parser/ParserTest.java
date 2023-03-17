@@ -91,7 +91,7 @@ public class ParserTest extends AbstractTest {
   @ParameterizedTest
   @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc", "VariabilitySyntax.arc"})
   public void shouldPrintWithoutError(String fileName) {
-    ASTMACompilationUnit unit = parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false).orElse(null);
+    ASTMACompilationUnit unit = parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false).orElseThrow();
     String s = new MontiArcFullPrettyPrinter().prettyprint(unit);
     ASTMACompilationUnit similarUnit = parse_String(s,false).orElse(null);
     if(!unit.deepEquals(similarUnit)){

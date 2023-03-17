@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-class PortSymbolDeSerTest extends AbstractTest {
+public class PortSymbolDeSerTest extends AbstractTest {
 
   @ParameterizedTest
   @EnumSource(Timing.class)
-  void shouldSerializeTimingCorrectly(@NotNull Timing timing) {
+  public void shouldSerializeTimingCorrectly(@NotNull Timing timing) {
     // Given
     String expectedJson = String.format("{\"timing\":\"%s\"}", timing.getName());
     PortSymbolDeSerForTests deser = new PortSymbolDeSerForTests();
@@ -35,7 +35,7 @@ class PortSymbolDeSerTest extends AbstractTest {
 
   @ParameterizedTest
   @EnumSource(Timing.class)
-  void shouldDeserializeTimingCorrectly(@NotNull Timing timing) {
+  public void shouldDeserializeTimingCorrectly(@NotNull Timing timing) {
     // Given
     String json = String.format("{\"timing\":\"%s\"}", timing.getName());
     JsonObject timingObject = JsonParser.parseJsonObject(json);
@@ -49,7 +49,7 @@ class PortSymbolDeSerTest extends AbstractTest {
   }
 
   /**
-   * Provides access to the serialize and deserialize Timing methods
+   * Provides access to the methods for serializing and deserializing timing
    */
   private static class PortSymbolDeSerForTests extends PortSymbolDeSer {
     @Override

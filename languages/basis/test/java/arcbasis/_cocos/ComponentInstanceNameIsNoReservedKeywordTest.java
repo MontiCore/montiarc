@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
-class ComponentInstanceNameIsNoReservedKeywordTest extends AbstractTest {
+public class ComponentInstanceNameIsNoReservedKeywordTest extends AbstractTest {
 
   @Test
-  void checkPortNameMatchesKeyword() {
+  public void checkPortNameMatchesKeyword() {
     // Given
     ASTComponentInstance instance = ArcBasisMill.componentInstanceBuilder()
       .setName("keyword")
@@ -30,7 +30,7 @@ class ComponentInstanceNameIsNoReservedKeywordTest extends AbstractTest {
   }
 
   @Test
-  void checkPortNameIsNoKeyword() {
+  public void checkPortNameIsNoKeyword() {
     // Given
     ASTComponentInstance instance = ArcBasisMill.componentInstanceBuilder()
       .setName("noKeyword")

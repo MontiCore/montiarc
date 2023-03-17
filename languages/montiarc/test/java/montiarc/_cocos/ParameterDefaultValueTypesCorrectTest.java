@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
-class ParameterDefaultValueTypesCorrectTest extends AbstractCoCoTest {
+public class ParameterDefaultValueTypesCorrectTest extends AbstractCoCoTest {
 
   protected static String PACKAGE = "parameterDefaultValueTypesCorrect";
 

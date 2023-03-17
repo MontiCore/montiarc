@@ -49,9 +49,9 @@ public class EncapsulationTest {
 
     // When
     List<OnOff> actual = new ArrayList<>(output.length);
-    for (int i = 0; i < input.length; i++) {
+    for (OnOff onOff : input) {
       // compute
-      encapsulation.getI().update(input[i]);
+      encapsulation.getI().update(onOff);
       encapsulation.compute();
 
       // get output

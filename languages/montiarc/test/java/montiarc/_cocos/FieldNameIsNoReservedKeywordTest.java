@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Stream;
 
-class FieldNameIsNoReservedKeywordTest extends AbstractCoCoTest {
+public class FieldNameIsNoReservedKeywordTest extends AbstractCoCoTest {
 
   protected static String PACKAGE = "fieldNameIsNoReservedKeyword";
 

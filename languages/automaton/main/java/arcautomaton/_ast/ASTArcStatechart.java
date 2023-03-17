@@ -8,12 +8,9 @@ import de.monticore.scbasis._ast.ASTSCSAnte;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.scbasis._symboltable.SCStateSymbol;
-import de.monticore.sctransitions4code._ast.ASTAnteAction;
-import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import montiarc.Timing;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -37,18 +34,6 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
    */
   public Stream<Pair<ASTSCState, ASTSCSAnte>> streamInitialOutput() {
     return streamInitialStates().map(state -> Pair.of(state, state.getSCSAnte()));
-  }
-
-  /**
-   * @return the behavior of this component, if it has a statechart
-   */
-  public Stream<ASTMCBlockStatement> streamInitialStatements(){
-    return streamInitialOutput()
-        .map(Pair::getRight)
-        .filter(ASTAnteAction.class::isInstance)
-        .map(ASTAnteAction.class::cast)
-        .map(ASTAnteAction::getMCBlockStatementList)
-        .flatMap(Collection::stream);
   }
 
   /**

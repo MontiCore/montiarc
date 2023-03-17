@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class FDGeneratorTest extends AbstractTest {
+public class FDGeneratorTest extends AbstractTest {
 
   protected static final String FD_FILE_EXTENSION = ".fd";
   protected static final String TEST_RESOURCE_PATH = "test/resources/";

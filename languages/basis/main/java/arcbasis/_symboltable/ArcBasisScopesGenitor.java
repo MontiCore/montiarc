@@ -45,8 +45,8 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     return Optional.ofNullable(this.getComponentStack().peek());
   }
 
-  protected Optional<ComponentTypeSymbol> removeCurrentComponent() {
-    return Optional.ofNullable(this.getComponentStack().pop());
+  protected void removeCurrentComponent() {
+    this.getComponentStack().pop();
   }
 
   protected void putOnStack(@Nullable ComponentTypeSymbol symbol) {
@@ -68,14 +68,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   protected Optional<IArcBasisScope> getCurrentEnclosingScope4Instances() {
     try {
       return Optional.ofNullable(this.getEnclosingScope4InstancesStack().peek());
-    } catch (EmptyStackException e) {
-      return Optional.empty();
-    }
-  }
-
-  protected Optional<IArcBasisScope> removeCurrentEnclosingScope4Instances() {
-    try {
-      return Optional.ofNullable(this.getEnclosingScope4InstancesStack().pop());
     } catch (EmptyStackException e) {
       return Optional.empty();
     }
@@ -174,7 +166,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   public void endVisit(@NotNull ASTComponentBody node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentEnclosingScope4Instances().isPresent());
-    this.removeCurrentEnclosingScope4Instances();
+    this.getEnclosingScope4InstancesStack().pop();
   }
 
   protected VariableSymbolBuilder create_ArcParameter(@NotNull ASTArcParameter ast) {

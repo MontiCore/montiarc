@@ -6,7 +6,6 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Supplier;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -30,8 +29,8 @@ import variablearc.evaluation.VariationPointSolver;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -183,7 +182,7 @@ public class VariationPointSolverTest extends AbstractTest {
 
     VariableArcVariationPoint vpFalseParent = new VariableArcVariationPoint(new Expression(falseExpression));
     VariableArcVariationPoint vpTrueChild =
-      new VariableArcVariationPoint(new Expression(trueExpression), Optional.of(vpFalseParent));
+      new VariableArcVariationPoint(new Expression(trueExpression), vpFalseParent);
 
     VariableArcVariationPoint vpPIntGreater0 = new VariableArcVariationPoint(new Expression(
       MontiArcMill.greaterThanExpressionBuilder().setLeft(pIntExpression).setOperator(">")

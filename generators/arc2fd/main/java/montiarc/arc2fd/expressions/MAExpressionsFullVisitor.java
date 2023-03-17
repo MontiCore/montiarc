@@ -31,7 +31,7 @@ public class MAExpressionsFullVisitor {
    *                                       of invalid configurations
    */
   public MAExpressionsFullVisitor() throws InvalidConfigurationException {
-    this(new MA2SMTFormulaConverter(), new HashMap<>());
+    this(new MA2SMTFormulaConverter());
   }
 
   /**

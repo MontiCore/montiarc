@@ -4,10 +4,10 @@ package foopackage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class FooCompTest {
+public class FooCompTest {
 
   @Test
-  void shouldIncreaseInput() {
+  public void shouldIncreaseInput() {
     // Given
     FooTest comp = new FooTest();
     comp.setUp();

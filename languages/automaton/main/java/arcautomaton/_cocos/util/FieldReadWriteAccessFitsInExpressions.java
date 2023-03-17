@@ -42,7 +42,7 @@ public class FieldReadWriteAccessFitsInExpressions {
 
     visitor.reset();
     expression.accept(traverser);
-    visitor.getFoundNames().forEach((nameExpr, access) -> checkVariableAccess(nameExpr, access));
+    visitor.getFoundNames().forEach(FieldReadWriteAccessFitsInExpressions::checkVariableAccess);
   }
 
   /**

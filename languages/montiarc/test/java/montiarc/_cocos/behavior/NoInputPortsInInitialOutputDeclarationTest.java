@@ -16,7 +16,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
-class NoInputPortsInInitialOutputDeclarationTest extends AbstractCoCoTest {
+public class NoInputPortsInInitialOutputDeclarationTest extends AbstractCoCoTest {
 
   protected final static String PACKAGE = "behavior/noInputPortsInInitialOutputDeclaration";
 

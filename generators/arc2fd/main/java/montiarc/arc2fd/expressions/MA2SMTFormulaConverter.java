@@ -8,6 +8,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.arc2fd.smt.NumericPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.sosy_lab.common.ShutdownManager;
+import org.sosy_lab.common.configuration.Configuration;
 import org.sosy_lab.common.configuration.InvalidConfigurationException;
 import org.sosy_lab.common.log.BasicLogManager;
 import org.sosy_lab.java_smt.SolverContextFactory;
@@ -26,12 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-
 // Wrapper for Operations so that we don't have to do that much Method
 // Overloading
 interface IOPERATION {
 }
-
 
 /**
  * Converter which Allows us to Convert a MontiArc Expression into a Java-SMT
@@ -48,22 +47,27 @@ public class MA2SMTFormulaConverter {
    * characters.
    */
   public static final String PREFIX = "$";
+
   /**
    * Java-SMT SolverContext
    */
   private final SolverContext context;
+
   /**
    * Java-SMT Formula Manager
    */
   private final FormulaManager fmgr;
+
   /**
    * Java-SMT Boolean Formula Manager (to build Boolean Formulas)
    */
   private final BooleanFormulaManager bmgr;
+
   /**
    * Java-SMT Boolean Integer Manager (to build Integer Formulas)
    */
   private final IntegerFormulaManager imgr;
+
   /**
    * Keep track of all formulas
    * Sort of Stack where new Formulas get added to, and old ones get removed
@@ -72,16 +76,19 @@ public class MA2SMTFormulaConverter {
    * [a, b, c] + "AND" could yield [a, and(b, c)]
    */
   protected List<Formula> formulaStack = new ArrayList<>();
+
   /**
    * Stores the final, resulting formula after conversion completed
    */
   protected BooleanFormula formula;
-  MACommonExpressionsVisitor.TYPE formulaType =
-    MACommonExpressionsVisitor.TYPE.VARIABLE;
+
+  MACommonExpressionsVisitor.TYPE formulaType = MACommonExpressionsVisitor.TYPE.VARIABLE;
+
   /**
    * Store MontiArc Expression Visitor to traverse through the Expression
    */
   private MAExpressionsFullVisitor montiArcExpVisitor;
+
   /**
    * Java-SMT Prover (to check whether constructed formula is SAT or UNSAT)
    */
@@ -95,7 +102,7 @@ public class MA2SMTFormulaConverter {
    *                                       Solver-Configuration is wrong
    */
   public MA2SMTFormulaConverter() throws InvalidConfigurationException {
-    this(org.sosy_lab.common.configuration.Configuration.defaultConfiguration(), SolverContextFactory.Solvers.SMTINTERPOL);
+    this(SolverContextFactory.Solvers.SMTINTERPOL);
   }
 
   /**
@@ -106,7 +113,7 @@ public class MA2SMTFormulaConverter {
    *                                       Solver-Configuration is wrong
    */
   public MA2SMTFormulaConverter(@NotNull SolverContextFactory.Solvers solver) throws InvalidConfigurationException {
-    this(org.sosy_lab.common.configuration.Configuration.defaultConfiguration(), solver);
+    this(Configuration.defaultConfiguration(), solver);
   }
 
   /**
@@ -117,7 +124,7 @@ public class MA2SMTFormulaConverter {
    * @throws InvalidConfigurationException Throws an Exception if the
    *                                       Solver-Configuration is wrong
    */
-  public MA2SMTFormulaConverter(@NotNull org.sosy_lab.common.configuration.Configuration config,
+  public MA2SMTFormulaConverter(@NotNull Configuration config,
                                 @NotNull SolverContextFactory.Solvers solver) throws InvalidConfigurationException {
     this(SolverContextFactory.createSolverContext(
       config,
@@ -126,7 +133,6 @@ public class MA2SMTFormulaConverter {
       solver
     ));
   }
-
 
   /**
    * Construct FormulaConverter given SolverContext
@@ -517,7 +523,6 @@ public class MA2SMTFormulaConverter {
         .format(op, formulaStack, formulasToString(leftFormula,
           rightFormula)));
   }
-
 
   /**
    * Applies the given Operation to the last three Formula

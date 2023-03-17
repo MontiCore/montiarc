@@ -356,13 +356,12 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
   @Test
   public void visitShouldThrowException() {
     // Given
-    ASTArcTypeParameter param1 = null;
-    ASTArcTypeParameter param2 = GenericArcMill.arcTypeParameterBuilder().setName("A").build();
+    ASTArcTypeParameter param = GenericArcMill.arcTypeParameterBuilder().setName("A").build();
 
     // When & Then
     Assertions.assertAll(
-      () -> Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().visit(param1)),
-      () -> Assertions.assertThrows(IllegalArgumentException.class, () -> this.getCompleter().visit(param2))
+      () -> Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().visit((ASTArcTypeParameter) null)),
+      () -> Assertions.assertThrows(IllegalArgumentException.class, () -> this.getCompleter().visit(param))
     );
   }
 }

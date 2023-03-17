@@ -10,8 +10,6 @@ import org.mockito.Mockito;
 import variablearc.AbstractTest;
 import variablearc.evaluation.Expression;
 
-import java.util.Optional;
-
 public class VariableArcVariationPointTest extends AbstractTest {
 
   protected VariableArcVariationPoint variationPoint;
@@ -30,9 +28,9 @@ public class VariableArcVariationPointTest extends AbstractTest {
 
   @Test
   public void shouldAddChild() {
-    VariableArcVariationPoint child = new VariableArcVariationPoint(new Expression(Mockito.mock(ASTExpression.class)), Optional.of(this.getVariationPoint()));
+    VariableArcVariationPoint child = new VariableArcVariationPoint(new Expression(Mockito.mock(ASTExpression.class)), this.getVariationPoint());
 
-    Assertions.assertEquals(child.dependsOn.get(), this.getVariationPoint());
+    Assertions.assertEquals(child.getDependsOn().orElseThrow(), this.getVariationPoint());
     Assertions.assertEquals(1, this.getVariationPoint()
       .getChildVariationPoints().size());
     Assertions.assertTrue(this.getVariationPoint().getChildVariationPoints()

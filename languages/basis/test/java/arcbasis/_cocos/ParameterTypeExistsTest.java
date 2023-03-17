@@ -22,7 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Collections;
-import java.util.Optional;
 
 /**
  * Holds tests for the handwritten methods of {@link ParameterTypeExists}.
@@ -36,7 +35,7 @@ public class ParameterTypeExistsTest extends AbstractTest {
       .setPrimitive(ASTConstantsMCBasicTypes.BOOLEAN)
       .build();
     ASTComponentType comp = createCompWithParam("CompA", "p1", type);
-    ASTArcParameter paramDec = getFirstParamDeclaration(comp).get();
+    ASTArcParameter paramDec = comp.getHead().getArcParameter(0);
     ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     symTab.createFromAST(comp);
 
@@ -54,7 +53,7 @@ public class ParameterTypeExistsTest extends AbstractTest {
     createTypeSymbolInGlobalScope("MyType");
     ASTMCQualifiedType type = createQualifiedType("MyType");
     ASTComponentType comp = createCompWithParam("CompA", "p1", type);
-    ASTArcParameter param = getFirstParamDeclaration(comp).get();
+    ASTArcParameter param = comp.getHead().getArcParameter(0);
 
     ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     symTab.createFromAST(comp);
@@ -73,7 +72,7 @@ public class ParameterTypeExistsTest extends AbstractTest {
     createTypeSymbolInScope("MyType", "package.name");
     ASTMCQualifiedType type = createQualifiedType("MyType");
     ASTComponentType comp = createCompWithParam("CompA", "p1", type);
-    ASTArcParameter paramDec = getFirstParamDeclaration(comp).get();
+    ASTArcParameter paramDec = comp.getHead().getArcParameter(0);
     ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     symTab.createFromAST(comp);
 
@@ -91,7 +90,7 @@ public class ParameterTypeExistsTest extends AbstractTest {
     createTypeSymbolInScope("MyType", "foopackage");
     ASTMCQualifiedType type = createQualifiedType("foopackage.MyType");
     ASTComponentType comp = createCompWithParam("CompA", "p1", type);
-    ASTArcParameter paramDec = getFirstParamDeclaration(comp).get();
+    ASTArcParameter paramDec = comp.getHead().getArcParameter(0);
     ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     symTab.createFromAST(comp);
 
@@ -109,7 +108,7 @@ public class ParameterTypeExistsTest extends AbstractTest {
     createTypeSymbolInScope("MyType", "foopack");
     ASTMCQualifiedType type = createQualifiedType("MyType");
     ASTComponentType comp = createCompWithParam("CompA", "p1", type);
-    ASTArcParameter paramDec = getFirstParamDeclaration(comp).get();
+    ASTArcParameter paramDec = comp.getHead().getArcParameter(0);
     IArcBasisArtifactScope scopeWithImports = ArcBasisMill.artifactScope();
     scopeWithImports.setImportsList(Collections.singletonList(new ImportStatement("foopack", true)));
     scopeWithImports.setName("ju");
@@ -132,7 +131,7 @@ public class ParameterTypeExistsTest extends AbstractTest {
     // Given
     ASTMCQualifiedType type = createQualifiedType("unknown.Type");
     ASTComponentType comp = createCompWithParam("CompA", "p1", type);
-    ASTArcParameter paramDec = getFirstParamDeclaration(comp).get();
+    ASTArcParameter paramDec = comp.getHead().getArcParameter(0);
     ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
     symTab.createFromAST(comp);
 
@@ -155,20 +154,10 @@ public class ParameterTypeExistsTest extends AbstractTest {
       .setName(paramName)
       .build();
 
-    ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
+    return ArcBasisMill.componentTypeBuilder()
       .setName(compName)
       .setHead(ArcBasisMill.componentHeadBuilder().addArcParameter(param).build())
       .setBody(Mockito.mock(ASTComponentBody.class))
       .build();
-
-    return comp;
-  }
-
-  protected static Optional<ASTArcParameter> getFirstParamDeclaration(@NotNull ASTComponentType comp) {
-    Preconditions.checkNotNull(comp);
-
-    return comp.getHead().isEmptyArcParameters() ?
-      Optional.empty()
-      : Optional.of(comp.getHead().getArcParameter(0));
   }
 }

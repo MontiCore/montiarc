@@ -61,8 +61,8 @@ public class GeneratorEngineTest {
   @MethodSource("targetAndExpectedFileProvider")
   public void shouldGenerateFile(@NotNull String target, @NotNull String expected) throws FormatterException {
     Preconditions.checkNotNull(target);
+    Preconditions.checkNotNull(expected);
     Preconditions.checkArgument(!target.isEmpty());
-    Preconditions.checkArgument(!Paths.get(expected).toFile().exists());
 
     // Given
     GeneratorEngine engine = new GeneratorEngine(this.getSetup());
@@ -81,8 +81,8 @@ public class GeneratorEngineTest {
   @MethodSource("targetAndExpectedFileProvider")
   public void shouldGenerateFileNoA(@NotNull String target, @NotNull String expected) throws FormatterException {
     Preconditions.checkNotNull(target);
+    Preconditions.checkNotNull(expected);
     Preconditions.checkArgument(!target.isEmpty());
-    Preconditions.checkArgument(!Paths.get(expected).toFile().exists());
 
     // Given
     GeneratorEngine engine = new GeneratorEngine(this.getSetup());

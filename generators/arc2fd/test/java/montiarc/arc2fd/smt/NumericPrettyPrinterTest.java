@@ -22,7 +22,7 @@ import java.util.Set;
 import static montiarc.arc2fd.expressions.MA2SMTFormulaConverter.PREFIX;
 import static montiarc.arc2fd.expressions.MA2SMTFormulaConverter.SEPARATOR;
 
-class NumericPrettyPrinterTest {
+public class NumericPrettyPrinterTest {
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
   IntegerFormulaManager imgr;
@@ -60,7 +60,7 @@ class NumericPrettyPrinterTest {
    * Method under test {@link Disjunction2String#convertAllToStrings(Set)}
    */
   @Test
-  void prettyPrint() {
+  public void prettyPrint() {
     String expectedString;
 
     expectedString = "a";

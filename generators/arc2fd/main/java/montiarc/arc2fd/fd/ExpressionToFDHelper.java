@@ -11,6 +11,7 @@ import montiarc.arc2fd.smt.SMT2FDVisitor;
 import montiarc.arc2fd.smt.SMTFormulaAnalyzer;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.sosy_lab.common.ShutdownManager;
+import org.sosy_lab.common.configuration.Configuration;
 import org.sosy_lab.common.configuration.InvalidConfigurationException;
 import org.sosy_lab.common.log.BasicLogManager;
 import org.sosy_lab.java_smt.SolverContextFactory;
@@ -75,14 +76,14 @@ public class ExpressionToFDHelper<T extends Formula> {
   protected IntegerFormulaManager imgr;
 
   public ExpressionToFDHelper() throws InvalidConfigurationException {
-    this(org.sosy_lab.common.configuration.Configuration.defaultConfiguration(), SolverContextFactory.Solvers.SMTINTERPOL);
+    this(SolverContextFactory.Solvers.SMTINTERPOL);
   }
 
   public ExpressionToFDHelper(@NotNull SolverContextFactory.Solvers solver) throws InvalidConfigurationException {
-    this(org.sosy_lab.common.configuration.Configuration.defaultConfiguration(), solver);
+    this(Configuration.defaultConfiguration(), solver);
   }
 
-  public ExpressionToFDHelper(@NotNull org.sosy_lab.common.configuration.Configuration config, @NotNull SolverContextFactory.Solvers solver) throws InvalidConfigurationException {
+  public ExpressionToFDHelper(@NotNull Configuration config, @NotNull SolverContextFactory.Solvers solver) throws InvalidConfigurationException {
     this(SolverContextFactory.createSolverContext(config,
       BasicLogManager.create(config),
       ShutdownManager.create().getNotifier(),

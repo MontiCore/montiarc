@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class MA2SMTFormulaConverterTest {
+public class MA2SMTFormulaConverterTest {
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
 
@@ -59,7 +59,7 @@ class MA2SMTFormulaConverterTest {
    * {@link MA2SMTFormulaConverter#convert(ASTExpression, Map)}
    */
   @Test
-  void convert() {
+  public void convert() {
     // When
     Map<String, String> variableRemapping = new HashMap<>();
     BooleanFormula f1 = ma2smtConverter.convert(a_and_b, variableRemapping);
@@ -78,7 +78,7 @@ class MA2SMTFormulaConverterTest {
    * Method under test {@link MA2SMTFormulaConverter#isUnsat(BooleanFormula)}
    */
   @Test
-  void isUnsat() throws SolverException, InterruptedException {
+  public void isUnsat() throws SolverException, InterruptedException {
     // When && Then
     // orFormula => sat!
     Assertions.assertFalse(ma2smtConverter.isUnsat(this.orFormula));
@@ -92,7 +92,7 @@ class MA2SMTFormulaConverterTest {
    * Method under test {@link MA2SMTFormulaConverter#buildFormula()}
    */
   @Test
-  void buildFormula() {
+  public void buildFormula() {
     // Given
     ma2smtConverter.formulaStack = List.of(orFormula);
 
@@ -107,7 +107,7 @@ class MA2SMTFormulaConverterTest {
    * Method under test {@link MA2SMTFormulaConverter#and()}
    */
   @Test
-  void and() {
+  public void and() {
     // Given
     ma2smtConverter.addVariable("a");
     ma2smtConverter.addVariable("b");
@@ -124,7 +124,7 @@ class MA2SMTFormulaConverterTest {
    * Method under test {@link MA2SMTFormulaConverter#or()}
    */
   @Test
-  void or() {
+  public void or() {
     // Given
     ma2smtConverter.addVariable("a");
     ma2smtConverter.addVariable("b");
@@ -141,7 +141,7 @@ class MA2SMTFormulaConverterTest {
    * Method under test {@link MA2SMTFormulaConverter#not()}
    */
   @Test
-  void not() {
+  public void not() {
     // Given
     ma2smtConverter.addVariable("a");
 
@@ -156,7 +156,7 @@ class MA2SMTFormulaConverterTest {
    * Method under test {@link MA2SMTFormulaConverter#ifThenElse()} ()}
    */
   @Test
-  void ite() {
+  public void ite() {
     // Given
     ma2smtConverter.addVariable("a");
     ma2smtConverter.addVariable("b");

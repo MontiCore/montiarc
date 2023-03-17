@@ -42,13 +42,13 @@ public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
   }
 
   private void ensureAdapterPresent(IMontiArcGlobalScope gs) {
-    if(!gs.containsAdaptedTypeSymbolResolver(cd4AnalysisResolver)) {
+    if (!gs.containsAdaptedTypeSymbolResolver(cd4AnalysisResolver)) {
       gs.addAdaptedTypeSymbolResolver(cd4AnalysisResolver);
     }
-    if(!gs.containsAdaptedTypeSymbolResolver(ooClass2MCResolver)){
+    if (!gs.containsAdaptedTypeSymbolResolver(ooClass2MCResolver)) {
       gs.addAdaptedTypeSymbolResolver(ooClass2MCResolver);
     }
-    if(!gs.containsAdaptedOOTypeSymbolResolver(ooClass2MCResolver)){
+    if (!gs.containsAdaptedOOTypeSymbolResolver(ooClass2MCResolver)) {
       gs.addAdaptedOOTypeSymbolResolver(ooClass2MCResolver);
     }
   }

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-class MAStreamHelperTest {
+public class MAStreamHelperTest {
   protected static final String TEST_RESOURCE_PATH = "test/resources";
 
   ASTMACompilationUnit ast;
@@ -62,7 +62,7 @@ class MAStreamHelperTest {
    * {@link MAStreamHelper#getArcFeatureDeclarationsFromElements(List)}
    */
   @Test
-  void getArcFeatureDeclarationsFromElements() {
+  public void getArcFeatureDeclarationsFromElements() {
     // Given
     List<String> trueFeatures = List.of("a", "b", "c", "d", "e");
     List<String> falseFeatures = List.of("a", "b", "z");
@@ -80,7 +80,7 @@ class MAStreamHelperTest {
    * {@link MAStreamHelper#getConstraintExpressionsFromArcElements(List)}
    */
   @Test
-  void getConstraintExpressionsFromArcElements() {
+  public void getConstraintExpressionsFromArcElements() {
     // Given
     List<String> trueConstraints = List.of("a&&b", "a||(b&&c)");
     List<String> falseConstraints = List.of("a&&b", "(b&&c)");
@@ -99,7 +99,7 @@ class MAStreamHelperTest {
    * {@link MAStreamHelper#getIfStatementsFromArcElements(List)}
    */
   @Test
-  void getIfStatementsFromArcElements() {
+  public void getIfStatementsFromArcElements() {
     // Given
     int numberOfIfStatements = 2;
     List<ASTArcIfStatement> ifStatements =
@@ -115,7 +115,7 @@ class MAStreamHelperTest {
    * {@link MAStreamHelper#getInnerComponentsFromArcElements(List)}
    */
   @Test
-  void getInnerComponentsFromArcElements() {
+  public void getInnerComponentsFromArcElements() {
     // Given
     List<String> trueComponents = List.of("innerComp1", "innerComp2");
     List<String> falseComponents = List.of("innerComp3");
@@ -134,7 +134,7 @@ class MAStreamHelperTest {
    * {@link MAStreamHelper#getComponentInstancesFromArcElements(List)}
    */
   @Test
-  void getComponentInstancesFromArcElements() {
+  public void getComponentInstancesFromArcElements() {
     // Given
     List<String> trueCompInst = List.of("subCompTest");
     List<String> falseCompInst = List.of("subComp");
@@ -152,7 +152,7 @@ class MAStreamHelperTest {
    * Method under test {@link MAStreamHelper#getArcElements(ASTComponentType)}
    */
   @Test
-  void getArcElements() {
+  public void getArcElements() {
     // Given
     int numberOfElements = 8;
     List<ASTArcElement> arcElements =

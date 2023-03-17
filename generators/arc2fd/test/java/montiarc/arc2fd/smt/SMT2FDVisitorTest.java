@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-class SMT2FDVisitorTest extends AbstractTest {
+public class SMT2FDVisitorTest extends AbstractTest {
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
 
@@ -72,7 +72,7 @@ class SMT2FDVisitorTest extends AbstractTest {
    * {@link SMT2FDVisitor#process(BooleanFormula, BooleanFormula)}
    */
   @Test
-  void process() {
+  public void process() {
     // Output error if formula is null
     smt2fdVisitor.process(null, null);
     this.checkExpectedErrorsPresent(new Error[]{SMTProcessingError.SMT2FD_PROCESSING_NO_FORMULA});
@@ -95,7 +95,7 @@ class SMT2FDVisitorTest extends AbstractTest {
    * Method under test {@link SMT2FDVisitor#getAllRemainingConjunctions()}
    */
   @Test
-  void testAllRemainingConjunctions() {
+  public void testAllRemainingConjunctions() {
     // EASY CASE
     // Given
     BooleanFormula trivialCase = bmgr.and(a, b);
@@ -130,7 +130,7 @@ class SMT2FDVisitorTest extends AbstractTest {
    * Method under test {@link SMT2FDVisitor#getSimpleOrs()}
    */
   @Test
-  void testSimpleOrs() {
+  public void testSimpleOrs() {
     // EASY CASE
     // Given
     BooleanFormula trivialCase = bmgr.or(a, b);
@@ -165,7 +165,7 @@ class SMT2FDVisitorTest extends AbstractTest {
    * Method under test {@link SMT2FDVisitor#getXors()}
    */
   @Test
-  void testXors() {
+  public void testXors() {
     // EASY CASE
     // Given
     BooleanFormula trivialCase = bmgr.and(bmgr.or(a, b), bmgr.or(bmgr.not(a),
@@ -201,7 +201,7 @@ class SMT2FDVisitorTest extends AbstractTest {
    * Method under test {@link SMT2FDVisitor#getOptionals()}
    */
   @Test
-  void testOptionals() {
+  public void testOptionals() {
     // EASY CASE
     // Given
     BooleanFormula trivialCase = bmgr.or(bmgr.not(a), a);
@@ -236,7 +236,7 @@ class SMT2FDVisitorTest extends AbstractTest {
    * Method under test {@link SMT2FDVisitor#getRequires()}
    */
   @Test
-  void testRequires() {
+  public void testRequires() {
     // EASY CASE
     // Given
     BooleanFormula trivialCase = bmgr.or(bmgr.not(a), b);
@@ -271,7 +271,7 @@ class SMT2FDVisitorTest extends AbstractTest {
    * Method under test {@link SMT2FDVisitor#getExcludes()}
    */
   @Test
-  void testExcludes() {
+  public void testExcludes() {
     // EASY CASE
     // Given
     BooleanFormula trivialCase = bmgr.or(bmgr.not(a), bmgr.not(b));

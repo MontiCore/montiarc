@@ -15,11 +15,11 @@ import org.mockito.Mockito;
 
 import java.util.stream.Stream;
 
-class PortsConnectedTest extends AbstractTest {
+public class PortsConnectedTest extends AbstractTest {
 
   @ParameterizedTest
   @MethodSource("componentAndErrorCodeProvider")
-  void shouldDetectWronglyConnectedPorts(ASTComponentType ast, ArcError[] errors) {
+  public void shouldDetectWronglyConnectedPorts(ASTComponentType ast, ArcError[] errors) {
     PortsConnected coco = new PortsConnected();
     coco.check(ast);
     this.checkOnlyExpectedErrorsPresent(errors);

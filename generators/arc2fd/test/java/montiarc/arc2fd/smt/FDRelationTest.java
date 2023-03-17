@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-class FDRelationTest {
+public class FDRelationTest {
   String root = "root";
   String a = "a", b = "b", c = "c";
   FDRelation<String> relation = new FDRelation<>(root);
@@ -17,7 +17,7 @@ class FDRelationTest {
    * Method under test {@link FDRelation#getRelationsHashMap()}
    */
   @Test
-  void getRelationsHashMap() {
+  public void getRelationsHashMap() {
     // Given
     relation.addRelation(a, b);
     relation.addRootRelation(c);
@@ -35,7 +35,7 @@ class FDRelationTest {
    * Method under test {@link FDRelation#getRelationByKey(Object)}
    */
   @Test
-  void getRelationByKey() {
+  public void getRelationByKey() {
     // Given
     relation.addRelation(a, b);
     relation.addRootRelation(b);
@@ -52,7 +52,7 @@ class FDRelationTest {
    * Method under test {@link FDRelation#addRelations(Object, Set)}
    */
   @Test
-  void addRelations() {
+  public void addRelations() {
     // Given
     relation.addRelations(a, Set.of(b));
     relation.addRelations(root, Set.of(b, c));
@@ -75,7 +75,7 @@ class FDRelationTest {
    * Method under test {@link FDRelation#addRootRelations(Set)}}
    */
   @Test
-  void addRootRelations() {
+  public void addRootRelations() {
     // Given
     Set<String> expectedSet = Set.of(a, b, c);
     relation.addRootRelations(expectedSet);
@@ -93,7 +93,7 @@ class FDRelationTest {
    * Method under test {@link FDRelation#addRelation(Object, Object)}
    */
   @Test
-  void addRelation() {
+  public void addRelation() {
     // Given
     relation.addRelation(a, b);
     relation.addRelation(root, c);
@@ -116,7 +116,7 @@ class FDRelationTest {
    * Method under test {@link FDRelation#getDeepCopy()}
    */
   @Test
-  void getDeepCopy() {
+  public void getDeepCopy() {
     // Given
     relation.addRelation(a, b);
     relation.addRelation(root, c);

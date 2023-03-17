@@ -18,7 +18,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-class InitialStateNumberInAutomataTest extends AbstractCoCoTest {
+public class InitialStateNumberInAutomataTest extends AbstractCoCoTest {
 
   @Override
   protected Pattern supplyErrorCodePattern() {

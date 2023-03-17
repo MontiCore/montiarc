@@ -23,7 +23,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-class TypeExprOfComponentTest extends AbstractTest {
+public class TypeExprOfComponentTest extends AbstractTest {
 
   protected static Stream<Arguments> compAndOptionallySurrogateProvider() {
     Named<ComponentTypeSymbol> original = Named.of(
@@ -49,7 +49,7 @@ class TypeExprOfComponentTest extends AbstractTest {
    */
   @ParameterizedTest
   @MethodSource("compAndOptionallySurrogateProvider")
-  void getParentShouldReturnExpected(@NotNull ComponentTypeSymbol symbolWithDefinitions,
+  public void getParentShouldReturnExpected(@NotNull ComponentTypeSymbol symbolWithDefinitions,
                                             @NotNull ComponentTypeSymbol symbolVersionForTypeExpr) {
     Preconditions.checkNotNull(symbolWithDefinitions);
     Preconditions.checkNotNull(symbolVersionForTypeExpr);
@@ -79,7 +79,7 @@ class TypeExprOfComponentTest extends AbstractTest {
    * Method under test {@link TypeExprOfComponent#getParentTypeExpr()}
    */
   @Test
-  void getParentShouldReturnOptionalEmpty() {
+  public void getParentShouldReturnOptionalEmpty() {
     // Given
     ComponentTypeSymbol component = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
@@ -101,7 +101,7 @@ class TypeExprOfComponentTest extends AbstractTest {
    */
   @ParameterizedTest
   @MethodSource("compAndOptionallySurrogateProvider")
-  void shouldGetTypeExprOfPort(@NotNull ComponentTypeSymbol symbolWithDefinitions,
+  public void shouldGetTypeExprOfPort(@NotNull ComponentTypeSymbol symbolWithDefinitions,
                                       @NotNull ComponentTypeSymbol symbolVersionForTypeExpr) {
     Preconditions.checkNotNull(symbolWithDefinitions);
     Preconditions.checkNotNull(symbolVersionForTypeExpr);
@@ -110,14 +110,13 @@ class TypeExprOfComponentTest extends AbstractTest {
     SymbolService.link(ArcBasisMill.globalScope(), symbolWithDefinitions);
     symbolVersionForTypeExpr.setEnclosingScope(ArcBasisMill.globalScope());
 
-    ComponentTypeSymbol comp = symbolWithDefinitions;
     String portName = "port";
     PortSymbol port = ArcBasisMill.portSymbolBuilder()
       .setName(portName)
       .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT))
       .setIncoming(true)
       .build();
-    comp.getSpannedScope().add(port);
+    symbolWithDefinitions.getSpannedScope().add(port);
 
     TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(symbolVersionForTypeExpr);
 
@@ -131,7 +130,7 @@ class TypeExprOfComponentTest extends AbstractTest {
   }
 
   @Test
-  void shouldGetTypeExprOfInheritedPort() {
+  public void shouldGetTypeExprOfInheritedPort() {
     // Given
     ComponentTypeSymbol parent = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Parent")
@@ -169,7 +168,7 @@ class TypeExprOfComponentTest extends AbstractTest {
    */
   @ParameterizedTest
   @MethodSource("compAndOptionallySurrogateProvider")
-  void shouldGetTypeExprOfParameter(@NotNull ComponentTypeSymbol symbolWithDefinitions,
+  public void shouldGetTypeExprOfParameter(@NotNull ComponentTypeSymbol symbolWithDefinitions,
                                            @NotNull ComponentTypeSymbol symbolVersionForTypeExpr) {
     Preconditions.checkNotNull(symbolWithDefinitions);
     Preconditions.checkNotNull(symbolVersionForTypeExpr);
@@ -178,14 +177,13 @@ class TypeExprOfComponentTest extends AbstractTest {
     SymbolService.link(ArcBasisMill.globalScope(), symbolWithDefinitions);
     symbolVersionForTypeExpr.setEnclosingScope(ArcBasisMill.globalScope());
 
-    ComponentTypeSymbol component = symbolWithDefinitions;
     String paramName = "para";
     VariableSymbol param = ArcBasisMill.variableSymbolBuilder()
       .setName(paramName)
       .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT))
       .build();
-    component.getSpannedScope().add(param);
-    component.addParameter(param);
+    symbolWithDefinitions.getSpannedScope().add(param);
+    symbolWithDefinitions.addParameter(param);
 
     TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(symbolVersionForTypeExpr);
 
@@ -201,8 +199,7 @@ class TypeExprOfComponentTest extends AbstractTest {
   /**
    * Beware that the created symbol is not enclosed by any scope yet.
    */
-  protected static ComponentTypeSymbol createComponent(
-    @NotNull String compName) {
+  protected static ComponentTypeSymbol createComponent(@NotNull String compName) {
     Preconditions.checkNotNull(compName);
 
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder()
@@ -219,11 +216,9 @@ class TypeExprOfComponentTest extends AbstractTest {
   protected static ComponentTypeSymbol createSurrogateFor(@NotNull ComponentTypeSymbol original) {
     Preconditions.checkNotNull(original);
 
-    ComponentTypeSymbol surrogate = ArcBasisMill
+    return ArcBasisMill
       .componentTypeSymbolSurrogateBuilder()
       .setName(original.getFullName())
       .build();
-
-    return surrogate;
   }
 }

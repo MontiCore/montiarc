@@ -322,14 +322,9 @@ public class MACommonExpressionsVisitor implements CommonExpressionsVisitor2,
    * @return The determined {@link TYPE} of the formula.
    */
   public TYPE getFormulaType(ASTExpression... expressions) {
-//        boolean isAtomic = Stream.of(expressions).allMatch(f -> f
-//        instanceof ASTLiteralExpression);
-    boolean isComplex =
-      Stream.of(expressions).anyMatch(f -> f instanceof ASTCommonExpressionsNode);
-    boolean isVariable =
-      Stream.of(expressions).anyMatch(f -> f instanceof ASTNameExpression);
-    return (isComplex) ? TYPE.COMPLEX : ((isVariable) ? TYPE.VARIABLE :
-      TYPE.ATOMIC);
+    boolean isComplex = Stream.of(expressions).anyMatch(f -> f instanceof ASTCommonExpressionsNode);
+    boolean isVariable = Stream.of(expressions).anyMatch(f -> f instanceof ASTNameExpression);
+    return (isComplex) ? TYPE.COMPLEX : ((isVariable) ? TYPE.VARIABLE : TYPE.ATOMIC);
   }
 
   @Override

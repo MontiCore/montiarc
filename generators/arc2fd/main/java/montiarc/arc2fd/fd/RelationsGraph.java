@@ -142,7 +142,7 @@ public class RelationsGraph<G> {
 
     // Determine which keys are left, where left means that they aren't part
     // of the BFS and thus
-    // aren't connected to our root node. Thus we can remove them at a later
+    // aren't connected to our root node. Thus, we can remove them at a later
     // point in time...
     Set<G> visitedKeys = new HashSet<>();
     adj.forEach((key, values) -> {
@@ -160,14 +160,5 @@ public class RelationsGraph<G> {
    */
   public Map<G, LinkedList<G>> getAdj() {
     return adj;
-  }
-
-  /**
-   * Get all Nodes in the Graph
-   *
-   * @return List of all Nodes
-   */
-  public Set<G> getAllNodes() {
-    return allNodes;
   }
 }

@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 import static montiarc.rte.port.messages.Message.tick;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-class DelayedOutPortTest {
+public class DelayedOutPortTest {
   
   DelayedOutPort<String> portUnderTest;
   TimeAwareInPort<String> recipient;

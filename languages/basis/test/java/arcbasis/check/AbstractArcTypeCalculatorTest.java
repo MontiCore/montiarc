@@ -133,7 +133,7 @@ public abstract class AbstractArcTypeCalculatorTest extends AbstractTest {
    */
   @ParameterizedTest
   @MethodSource("expressionProviderForPrimitiveFields")
-  void shouldCalculatePrimitiveType(@NotNull String expression, @NotNull String expectedType) {
+  public void shouldCalculatePrimitiveType(@NotNull String expression, @NotNull String expectedType) {
     Preconditions.checkNotNull(expression);
     Preconditions.checkNotNull(expectedType);
     doCalculateTypeFromNameExpression(expression, expectedType, true, false);

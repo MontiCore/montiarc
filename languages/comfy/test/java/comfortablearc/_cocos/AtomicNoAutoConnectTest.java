@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public class AtomicNoAutoConnectTest extends AbstractTest {
 
   @Test
-  void shouldAllowNoAutoconnectInAtomicComponent() {
+  void shouldAllowNoAutoConnectInAtomicComponent() {
     // Given
     ASTComponentBody body = ComfortableArcMill.componentBodyBuilder().build();
     AtomicNoAutoConnect coco = new AtomicNoAutoConnect();
@@ -33,7 +33,7 @@ public class AtomicNoAutoConnectTest extends AbstractTest {
   }
 
   @Test
-  void shouldAllowNoAutoconnectInComposition() {
+  void shouldAllowNoAutoConnectInComposition() {
     // Given
     ASTComponentBody body = ComfortableArcMill
       .componentBodyBuilder()
@@ -50,7 +50,7 @@ public class AtomicNoAutoConnectTest extends AbstractTest {
 
   @ParameterizedTest
   @MethodSource("provideDifferentAutoConnectVariations")
-  void shouldAllowAutoconnectInComposition(Supplier<ASTArcAutoConnect> autoconnectSupplier) {
+  void shouldAllowAutoConnectInComposition(Supplier<ASTArcAutoConnect> autoconnectSupplier) {
     // Given
     ASTComponentBody body = ComfortableArcMill
       .componentBodyBuilder()
@@ -68,7 +68,7 @@ public class AtomicNoAutoConnectTest extends AbstractTest {
 
   @ParameterizedTest
   @MethodSource("provideDifferentAutoConnectVariations")
-  void shouldViolateAutoconnectInAtomicComponent(Supplier<ASTArcAutoConnect> autoconnectSupplier) {
+  void shouldViolateAutoConnectInAtomicComponent(Supplier<ASTArcAutoConnect> autoconnectSupplier) {
     // Given
     ASTComponentBody body = ComfortableArcMill
       .componentBodyBuilder()
@@ -90,13 +90,13 @@ public class AtomicNoAutoConnectTest extends AbstractTest {
     Supplier<ASTArcACMode> acPort = () -> ComfortableArcMill.arcACPortBuilder().build();
 
     return Stream.of(
-      Arguments.of(buildAutoconnectDeclaration(acOff)),
-      Arguments.of(buildAutoconnectDeclaration(acType)),
-      Arguments.of(buildAutoconnectDeclaration(acPort))
+      Arguments.of(buildAutoConnectDeclaration(acOff)),
+      Arguments.of(buildAutoConnectDeclaration(acType)),
+      Arguments.of(buildAutoConnectDeclaration(acPort))
     );
   }
 
-  private static Supplier<ASTArcAutoConnect> buildAutoconnectDeclaration(Supplier<ASTArcACMode> modeSupplier) {
+  private static Supplier<ASTArcAutoConnect> buildAutoConnectDeclaration(Supplier<ASTArcACMode> modeSupplier) {
     return () ->
       ComfortableArcMill
         .arcAutoConnectBuilder()

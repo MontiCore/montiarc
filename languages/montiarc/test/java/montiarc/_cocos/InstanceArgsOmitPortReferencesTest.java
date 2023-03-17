@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
-class InstanceArgsOmitPortReferencesTest extends AbstractCoCoTest {
+public class InstanceArgsOmitPortReferencesTest extends AbstractCoCoTest {
 
   protected final static String PACKAGE = "instanceArgsOmitPortReferences";
 

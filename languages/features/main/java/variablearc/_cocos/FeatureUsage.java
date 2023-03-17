@@ -60,9 +60,9 @@ public class FeatureUsage implements ArcBasisASTComponentTypeCoCo {
     ComponentIfStatementHandler handler = new ComponentIfStatementHandler(node, (ifStatement) -> {
       Preconditions.checkNotNull(ifStatement);
       VariableArcTraverser traverser = VariableArcMill.traverser();
-      traverser.add4ExpressionsBasis(new GenericASTNameExpressionVisitor((astNameExpression -> {
-        names.add(astNameExpression.getName());
-      })));
+      traverser.add4ExpressionsBasis(new GenericASTNameExpressionVisitor((
+        astNameExpression -> names.add(astNameExpression.getName())))
+      );
       ifStatement.getCondition().accept(traverser);
     });
     node.accept(handler.getTraverser());
@@ -72,9 +72,9 @@ public class FeatureUsage implements ArcBasisASTComponentTypeCoCo {
   protected Collection<String> getNamesInConstraints(@NotNull ASTComponentType node) {
     List<String> names = new ArrayList<>();
     VariableArcTraverser traverser = VariableArcMill.traverser();
-    traverser.add4ExpressionsBasis(new GenericASTNameExpressionVisitor((astNameExpression -> {
-      names.add(astNameExpression.getName());
-    })));
+    traverser.add4ExpressionsBasis(new GenericASTNameExpressionVisitor((
+      astNameExpression -> names.add(astNameExpression.getName())))
+    );
     node.getBody().getArcElementList().stream()
       .filter(e -> e instanceof ASTArcConstraintDeclaration)
       .map(e -> ((ASTArcConstraintDeclaration) e).getExpression())

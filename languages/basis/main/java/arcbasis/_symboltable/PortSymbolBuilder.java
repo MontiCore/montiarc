@@ -27,8 +27,7 @@ public class PortSymbolBuilder extends PortSymbolBuilderTOP {
   @Override
   public PortSymbol build() {
     Preconditions.checkState(this.isValid());
-    PortSymbol symbol = super.build();
-    return symbol;
+    return super.build();
   }
 
   public PortSymbol buildWithoutType() {

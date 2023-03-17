@@ -32,7 +32,8 @@ public class CD4AnalysisScopeManager extends CD4AnalysisScopeManagerTOP {
   }
 
   @Override
-  public CD4AnalysisArtifactScopeWithFindings createArtifactScope(ASTCDCompilationUnit ast, ICD4AnalysisArtifactScope oldArtifactScope) {
+  public CD4AnalysisArtifactScopeWithFindings createArtifactScope(ASTCDCompilationUnit ast,
+                                                                  ICD4AnalysisArtifactScope oldArtifactScope) {
     CD4AnalysisArtifactScopeWithFindings res = super.createArtifactScope(ast, oldArtifactScope);
     ast.accept(new CD4AnalysisSymbolTableCompleter(ast).getTraverser());
 

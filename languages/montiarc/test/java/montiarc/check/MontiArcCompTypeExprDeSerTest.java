@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-class MontiArcCompTypeExprDeSerTest extends AbstractTest {
+public class MontiArcCompTypeExprDeSerTest extends AbstractTest {
 
   public static final String GENERIC_COMP_JSON =
     "{" +

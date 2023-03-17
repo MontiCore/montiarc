@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 import static montiarc.util.ComfortableArcError.MULTIPLE_AUTOCONNECTS;
 
-class MaxOneAutoConnectTest extends AbstractTest {
+public class MaxOneAutoConnectTest extends AbstractTest {
 
   @Test
   void shouldAllowNoAutoconnect() {
@@ -90,7 +90,7 @@ class MaxOneAutoConnectTest extends AbstractTest {
     ASTComponentBodyBuilder bodyBuilder = ComfortableArcMill.componentBodyBuilder();
 
     Arrays.stream(modes)
-      .map(mode -> buildAutoconnectMode(mode))
+      .map(MaxOneAutoConnectTest::buildAutoconnectMode)
       .forEach(bodyBuilder::addArcElement);
 
     return bodyBuilder.build();

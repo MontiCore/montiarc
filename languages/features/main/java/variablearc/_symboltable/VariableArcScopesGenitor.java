@@ -31,8 +31,8 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
     return Optional.empty();
   }
 
-  protected Optional<VariableComponentTypeSymbol> removeCurrentComponent() {
-    return Optional.ofNullable(this.getComponentStack().pop());
+  protected void removeCurrentComponent() {
+    this.getComponentStack().pop();
   }
 
   protected void putOnStack(@Nullable VariableComponentTypeSymbol symbol) {
@@ -50,11 +50,10 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
     return Optional.empty();
   }
 
-  protected Optional<VariableArcVariationPoint> removeCurrentVariationPoint() {
+  protected void removeCurrentVariationPoint() {
     if (!this.getVariationPointStack().isEmpty()) {
-      return Optional.ofNullable(this.getVariationPointStack().pop());
+      this.getVariationPointStack().pop();
     }
-    return Optional.empty();
   }
 
   protected void putOnStack(@Nullable VariableArcVariationPoint variationPoint) {
@@ -69,14 +68,14 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
   public void traverse(@NotNull ASTArcIfStatement node) {
     node.getCondition().accept(this.getTraverser());
 
-    putOnStack(new VariableArcVariationPoint(new Expression(node.getCondition()), this.getCurrentVariationPoint()));
+    putOnStack(new VariableArcVariationPoint(new Expression(node.getCondition()), this.getCurrentVariationPoint().orElse(null)));
     node.getThenStatement().accept(this.getTraverser());
     removeCurrentVariationPoint();
 
     if (node.isPresentElseStatement()) {
       putOnStack(new VariableArcVariationPoint(
         new Expression(node.getCondition(), true),
-        this.getCurrentVariationPoint())
+        this.getCurrentVariationPoint().orElse(null))
       );
       node.getElseStatement().accept(this.getTraverser());
       removeCurrentVariationPoint();

@@ -21,7 +21,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
-class FieldReadWriteAccessFitsInStatementsTest extends AbstractCoCoTest {
+public class FieldReadWriteAccessFitsInStatementsTest extends AbstractCoCoTest {
 
   @BeforeEach
   public void loadLType() {

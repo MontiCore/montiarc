@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sosy_lab.common.ShutdownManager;
+import org.sosy_lab.common.configuration.Configuration;
 import org.sosy_lab.common.configuration.InvalidConfigurationException;
 import org.sosy_lab.common.log.BasicLogManager;
 import org.sosy_lab.java_smt.SolverContextFactory;
@@ -18,7 +19,7 @@ import org.sosy_lab.java_smt.api.SolverContext;
 import java.util.Set;
 
 // extends AbstractTest
-class Disjunction2StringTest extends AbstractTest {
+public class Disjunction2StringTest extends AbstractTest {
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
 
@@ -33,7 +34,7 @@ class Disjunction2StringTest extends AbstractTest {
   @BeforeEach
   public void setUp() throws InvalidConfigurationException {
     SolverContext context = SolverContextFactory.createSolverContext(
-        org.sosy_lab.common.configuration.Configuration.defaultConfiguration(),
+        Configuration.defaultConfiguration(),
         BasicLogManager.create(org.sosy_lab.common.configuration.Configuration.defaultConfiguration()),
         ShutdownManager.create().getNotifier(),
         SolverContextFactory.Solvers.SMTINTERPOL
@@ -56,7 +57,7 @@ class Disjunction2StringTest extends AbstractTest {
    * Method under test {@link Disjunction2String#convertAllToStrings(Set)}
    */
   @Test
-  void convertAllToString() {
+  public void convertAllToString() {
     // Given
     Set<BooleanFormula> formulasToPass = Set.of(a, b, c, orFormula);
     Set<BooleanFormula> formulasToFail = Set.of(andFormula, noCNFFormula); //
@@ -91,7 +92,7 @@ class Disjunction2StringTest extends AbstractTest {
    * {@link Disjunction2String#convertFormulaToString(BooleanFormula)}
    */
   @Test
-  void convertFormulaToString() {
+  public void convertFormulaToString() {
     // When
     Set<String> constructedStrings = this.d2s.convertFormulaToString(orFormula);
 
@@ -127,7 +128,7 @@ class Disjunction2StringTest extends AbstractTest {
    * Method under test {@link Disjunction2String#visit(BooleanFormula)}
    */
   @Test
-  void visitValidFormula() {
+  public void visitValidFormula() {
     // When && Then
     Assertions.assertDoesNotThrow(() -> this.d2s.visit(orFormula));
 

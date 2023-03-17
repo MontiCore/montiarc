@@ -30,8 +30,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
 
   protected final ImmutableList<SymTypeExpression> typeArguments;
 
-  // TypeVarBindingsAsMap is lazily calculated from typeArguments.
-  private Optional<ImmutableMap<TypeVarSymbol, SymTypeExpression>> typeVarBindingsAsMap = Optional.empty();
+  private ImmutableMap<TypeVarSymbol, SymTypeExpression> typeVarBindingsAsMap;
 
   public TypeExprOfGenericComponent(@NotNull ComponentTypeSymbol compTypeSymbol,
                                     @NotNull List<SymTypeExpression> typeArguments) {
@@ -42,11 +41,11 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
   }
 
   public ImmutableMap<TypeVarSymbol, SymTypeExpression> getTypeVarBindings() {
-    if (typeVarBindingsAsMap.isEmpty()) {
-      this.typeVarBindingsAsMap = Optional.of(calcTypeVarBindingsAsMap());
+    if (typeVarBindingsAsMap == null) {
+      this.typeVarBindingsAsMap = calcTypeVarBindingsAsMap();
     }
 
-    return this.typeVarBindingsAsMap.get();
+    return this.typeVarBindingsAsMap;
   }
 
   private ImmutableMap<TypeVarSymbol, SymTypeExpression> calcTypeVarBindingsAsMap() {
@@ -154,8 +153,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
     Optional<TypeVarSymbol> searchedTypeVar = this.getTypeVarBindings().keySet().stream()
       .filter(tvar -> tvar.getName().equals(typeVarName))
       .findFirst();
-    if (searchedTypeVar.isEmpty()) return Optional.empty();
-    return Optional.ofNullable(this.getTypeVarBindings().get(searchedTypeVar.get()));
+    return searchedTypeVar.map(typeVarSymbol -> this.getTypeVarBindings().get(typeVarSymbol));
   }
 
   public ImmutableList<SymTypeExpression> getBindingsAsList() {
@@ -177,8 +175,8 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
     List<SymTypeExpression> newBindings = new ArrayList<>();
     for(SymTypeExpression typeArg : this.typeArguments) {
       SymTypeExpression newTypeArg;
-      if(typeArg.isTypeVariable() && newTypeVarBindings.containsKey((typeArg.getTypeInfo()))) {
-        newTypeArg = newTypeVarBindings.get(typeArg.getTypeInfo());
+      if(typeArg.isTypeVariable() && newTypeVarBindings.containsKey(((TypeVarSymbol) typeArg.getTypeInfo()))) {
+        newTypeArg = newTypeVarBindings.get((TypeVarSymbol) typeArg.getTypeInfo());
       } else {
         newTypeArg = typeArg.deepClone();
         newTypeArg.replaceTypeVariables(newTypeVarBindings);

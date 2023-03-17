@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-class TypeExprOfGenericComponentDeSerTest extends AbstractTest {
+public class TypeExprOfGenericComponentDeSerTest extends AbstractTest {
 
   public static final String JSON_WITH_PACKAGE =
     "{" +

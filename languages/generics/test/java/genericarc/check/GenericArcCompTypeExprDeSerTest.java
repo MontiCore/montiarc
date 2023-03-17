@@ -21,7 +21,7 @@ import java.util.List;
 import static genericarc.check.TypeExprOfGenericComponentDeSerTest.JSON_WITHOUT_PACKAGE;
 import static genericarc.check.TypeExprOfGenericComponentDeSerTest.JSON_WITH_PACKAGE;
 
-class GenericArcCompTypeExprDeSerTest extends AbstractTest {
+public class GenericArcCompTypeExprDeSerTest extends AbstractTest {
 
   @Test
   void testSerializeAsJsonWithPackage() {

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-class ComponentTypeSymbolDeSerTest extends AbstractTest {
+public class ComponentTypeSymbolDeSerTest extends AbstractTest {
 
   private static final String SIMPLE_JSON =
     "{" +

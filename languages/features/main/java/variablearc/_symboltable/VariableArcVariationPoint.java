@@ -5,6 +5,7 @@ import arcbasis._ast.ASTArcElement;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.ISymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc.evaluation.Expression;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class VariableArcVariationPoint {
 
   protected Expression condition;
 
-  protected Optional<VariableArcVariationPoint> dependsOn;
+  protected VariableArcVariationPoint dependsOn;
   protected List<VariableArcVariationPoint> childVariationPoints;
 
   protected List<ISymbol> symbols;
@@ -28,24 +29,25 @@ public class VariableArcVariationPoint {
 
 
   public VariableArcVariationPoint(@NotNull Expression condition) {
-    this(condition, Optional.empty());
+    this(condition, null);
   }
 
   public VariableArcVariationPoint(@NotNull Expression condition,
-                                   @NotNull Optional<VariableArcVariationPoint> dependsOn) {
+                                   @Nullable VariableArcVariationPoint dependsOn) {
     Preconditions.checkNotNull(condition);
-    Preconditions.checkNotNull(dependsOn);
 
     this.condition = condition;
     this.dependsOn = dependsOn;
     this.symbols = new ArrayList<>();
     this.elements = new ArrayList<>();
     this.childVariationPoints = new ArrayList<>();
-    dependsOn.ifPresent(variationPoint -> variationPoint.addChild(this));
+    if (dependsOn != null) {
+      dependsOn.addChild(this);
+    }
   }
 
   public Optional<VariableArcVariationPoint> getDependsOn() {
-    return dependsOn;
+    return Optional.ofNullable(this.dependsOn);
   }
 
   public List<VariableArcVariationPoint> getChildVariationPoints() {
@@ -57,10 +59,10 @@ public class VariableArcVariationPoint {
   }
 
   public List<Expression> getAllConditions() {
-    if (dependsOn.isEmpty()) {
+    if (this.getDependsOn().isEmpty()) {
       return new ArrayList<>(Collections.singletonList(condition));
     } else {
-      List<Expression> parent = dependsOn.get().getAllConditions();
+      List<Expression> parent = this.getDependsOn().get().getAllConditions();
       parent.add(condition);
       return parent;
     }
