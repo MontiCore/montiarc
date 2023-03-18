@@ -1,10 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package genericarc;
 
-import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.deser.ComposedCompTypeExprDeSer;
-import de.monticore.prettyprint.IndentPrinter;
-import genericarc._prettyprint.GenericArcFullPrettyPrinter;
 import genericarc._symboltable.GenericArcSymbolTableCompleter;
 import genericarc._symboltable.GenericArcSymbolTableCompleterDelegator;
 import genericarc.check.GenericArcCompTypeExprDeSer;
@@ -41,13 +38,6 @@ public class GenericArcMill extends GenericArcMillTOP {
     return new GenericArcSymbolTableCompleterDelegator();
   }
 
-  public static IFullPrettyPrinter fullPrettyPrinter() {
-    if (millFullPrettyPrinter == null) {
-      millFullPrettyPrinter = getMill();
-    }
-    return millFullPrettyPrinter._fullPrettyPrinter();
-  }
-
   public static ComposedCompTypeExprDeSer compTypeExprDeSer() {
     if (millCompTypeExprDeSer == null) {
       millCompTypeExprDeSer = getMill();
@@ -57,10 +47,6 @@ public class GenericArcMill extends GenericArcMillTOP {
 
   protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
     return new GenericArcCompTypeExprDeSer();
-  }
-
-  protected IFullPrettyPrinter _fullPrettyPrinter() {
-    return new GenericArcFullPrettyPrinter(new IndentPrinter());
   }
 
   public static void initMe(GenericArcMill a)  {

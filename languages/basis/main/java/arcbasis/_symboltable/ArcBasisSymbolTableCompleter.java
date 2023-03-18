@@ -15,7 +15,6 @@ import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis._visitor.ArcBasisVisitor2;
-import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.ArcBasisSynthesizeComponent;
 import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.CompTypeExpression;
@@ -39,7 +38,6 @@ import java.util.Optional;
 
 public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisHandler {
 
-  protected IFullPrettyPrinter typePrinter;
   protected CompTypeExpression currentCompInstanceType;
   protected ArcBasisTraverser traverser;
   protected IArcTypeCalculator typeCalculator;
@@ -48,28 +46,13 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   protected ASTMCType currentFieldType;
 
   public ArcBasisSymbolTableCompleter() {
-    this(ArcBasisMill.fullPrettyPrinter());
+    this(new ArcBasisSynthesizeComponent(), new ArcBasisTypeCalculator());
   }
 
-  public ArcBasisSymbolTableCompleter(@NotNull IFullPrettyPrinter typePrinter) {
-    this(typePrinter, new ArcBasisSynthesizeComponent(), new ArcBasisTypeCalculator());
-  }
-
-  public ArcBasisSymbolTableCompleter(@NotNull IFullPrettyPrinter typePrinter,
-                                      @NotNull ISynthesizeComponent componentSynthesizer,
+  public ArcBasisSymbolTableCompleter(@NotNull ISynthesizeComponent componentSynthesizer,
                                       @NotNull IArcTypeCalculator typeCalculator) {
-    this.typePrinter = Preconditions.checkNotNull(typePrinter);
     this.componentSynthesizer = Preconditions.checkNotNull(componentSynthesizer);
     this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
-  }
-
-  public IFullPrettyPrinter getTypePrinter() {
-    return this.typePrinter;
-  }
-
-  protected void setTypePrinter(@NotNull IFullPrettyPrinter typesPrinter) {
-    Preconditions.checkNotNull(typesPrinter);
-    this.typePrinter = typesPrinter;
   }
 
   protected Optional<CompTypeExpression> getCurrentCompInstanceType() {

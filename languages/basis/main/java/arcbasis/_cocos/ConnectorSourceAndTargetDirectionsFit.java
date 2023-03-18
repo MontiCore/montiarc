@@ -4,7 +4,6 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._prettyprint.ArcBasisFullPrettyPrinter;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
@@ -65,8 +64,7 @@ public class ConnectorSourceAndTargetDirectionsFit implements ArcBasisASTCompone
     if((astPort.isPresentComponent() && portSym.isIncoming())
       || (!astPort.isPresentComponent() && portSym.isOutgoing())) {
       Log.error(ArcError.PORT_DIRECTION_MISMATCH.format(
-          astPort.getQName(), "source", printConnector(connectorOfPortAccess),
-          astPort.isPresentComponent() ? "the port of a subcomponent" : "a forwarding port"
+          astPort.getQName(), "source", astPort.isPresentComponent() ? "the port of a subcomponent" : "a forwarding port"
         ),
         astPort.get_SourcePositionStart()
       );
@@ -93,20 +91,11 @@ public class ConnectorSourceAndTargetDirectionsFit implements ArcBasisASTCompone
     if((astPort.isPresentComponent() && portSym.isOutgoing())
       || (!astPort.isPresentComponent() && portSym.isIncoming())) {
       Log.error(ArcError.PORT_DIRECTION_MISMATCH.format(
-          astPort.getQName(), "target", printConnector(connectorOfPortAccess),
-          astPort.isPresentComponent() ? "the port of a subcomponent" : "a forwarding port"
+          astPort.getQName(), astPort.isPresentComponent() ? "the port of a subcomponent" : "a forwarding port"
         ),
         astPort.get_SourcePositionStart()
       );
     }
-  }
-
-  /**
-   * @return a nice string that can be used to enhance error messages
-   */
-  private static String printConnector(ASTConnector connector){
-    return new ArcBasisFullPrettyPrinter().prettyprint(connector)
-      .replaceAll("[;\n]", "");
   }
 
   protected static void logInfoThatCoCoIsNotChecked(@NotNull ASTPortAccess portAccess) {

@@ -7,7 +7,6 @@ import montiarc.MontiArcMill;
 import montiarc._ast.ASTArcTiming;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
-import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import montiarc.util.Error;
 import montiarc.util.MontiArcError;
 import org.junit.jupiter.api.Assertions;
@@ -92,7 +91,7 @@ public class ParserTest extends AbstractTest {
   @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc", "VariabilitySyntax.arc"})
   public void shouldPrintWithoutError(String fileName) {
     ASTMACompilationUnit unit = parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false).orElseThrow();
-    String s = new MontiArcFullPrettyPrinter().prettyprint(unit);
+    String s = MontiArcMill.prettyPrint(unit, true);
     ASTMACompilationUnit similarUnit = parse_String(s,false).orElse(null);
     if(!unit.deepEquals(similarUnit)){
       Log.error("PrettyPrinted ASTMACompilationUnit has changed");

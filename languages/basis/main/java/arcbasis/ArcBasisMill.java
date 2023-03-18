@@ -1,10 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis;
 
-import arcbasis._prettyprint.ArcBasisFullPrettyPrinter;
 import arcbasis._symboltable.ArcBasisSymbolTableCompleter;
 import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
-import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
 import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 
@@ -38,17 +36,6 @@ public class ArcBasisMill extends ArcBasisMillTOP {
 
   protected ArcBasisSymbolTableCompleterDelegator _symbolTableCompleterDelegator() {
     return new ArcBasisSymbolTableCompleterDelegator();
-  }
-
-  public static IFullPrettyPrinter fullPrettyPrinter() {
-    if (millFullPrettyPrinter == null) {
-      millFullPrettyPrinter = getMill();
-    }
-    return millFullPrettyPrinter._fullPrettyPrinter();
-  }
-
-  protected IFullPrettyPrinter _fullPrettyPrinter() {
-    return new ArcBasisFullPrettyPrinter();
   }
 
   public static ComposedCompTypeExprDeSer compTypeExprDeSer() {

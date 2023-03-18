@@ -2,7 +2,6 @@
 package genericarc._symboltable;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.ArcBasisSynthesizeComponent;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.IArcTypeCalculator;
@@ -28,22 +27,15 @@ import java.util.Optional;
 public class GenericArcSymbolTableCompleter implements GenericArcVisitor2, GenericArcHandler {
 
   protected GenericArcTraverser traverser;
-  protected IFullPrettyPrinter typePrinter;
   protected ISynthesizeComponent componentSynthesizer;
   protected IArcTypeCalculator typeCalculator;
 
   public GenericArcSymbolTableCompleter() {
-    this(GenericArcMill.fullPrettyPrinter());
+    this(new ArcBasisSynthesizeComponent(), new GenericArcTypeCalculator());
   }
 
-  public GenericArcSymbolTableCompleter(@NotNull IFullPrettyPrinter typePrinter) {
-    this(typePrinter, new ArcBasisSynthesizeComponent(), new GenericArcTypeCalculator());
-  }
-
-  public GenericArcSymbolTableCompleter(@NotNull IFullPrettyPrinter typePrinter,
-                                        @NotNull ISynthesizeComponent componentSynthesizer,
+  public GenericArcSymbolTableCompleter(@NotNull ISynthesizeComponent componentSynthesizer,
                                         @NotNull IArcTypeCalculator typeCalculator) {
-    this.typePrinter = Preconditions.checkNotNull(typePrinter);
     this.componentSynthesizer = Preconditions.checkNotNull(componentSynthesizer);
     this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
   }
@@ -57,15 +49,6 @@ public class GenericArcSymbolTableCompleter implements GenericArcVisitor2, Gener
   public void setTraverser(@NotNull GenericArcTraverser traverser) {
     Preconditions.checkNotNull(traverser);
     this.traverser = traverser;
-  }
-
-  public IFullPrettyPrinter getTypePrinter() {
-    return this.typePrinter;
-  }
-
-  protected void setTypePrinter(@NotNull IFullPrettyPrinter typesPrinter) {
-    Preconditions.checkNotNull(typesPrinter);
-    this.typePrinter = typesPrinter;
   }
 
   public ISynthesizeComponent getComponentSynthesizer() {
@@ -95,7 +78,7 @@ public class GenericArcSymbolTableCompleter implements GenericArcVisitor2, Gener
         sym.setParent(parentTypeExpr.get());
       } else {
         Log.error(String.format("Could not create a component type expression from '%s'",
-          this.getTypePrinter().prettyprint(node.getParent())), node.get_SourcePositionStart()
+          GenericArcMill.prettyPrint(node.getParent(), false)), node.get_SourcePositionStart()
         );
       }
     }
@@ -115,11 +98,11 @@ public class GenericArcSymbolTableCompleter implements GenericArcVisitor2, Gener
           typeParamSym.addSuperTypes(boundExpr.getResult());
         } else {
           Log.error(String.format("Could not create a SymTypeExpression from '%s'",
-            this.getTypePrinter().prettyprint(upperBound)), upperBound.get_SourcePositionStart()
+            GenericArcMill.prettyPrint(upperBound, false)), upperBound.get_SourcePositionStart()
           );
         }
       }  catch (ResolvedSeveralEntriesForSymbolException e) {
-        Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(this.getTypePrinter().prettyprint(upperBound)), upperBound.get_SourcePositionStart());
+        Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(GenericArcMill.prettyPrint(upperBound, false)), upperBound.get_SourcePositionStart());
       }
     }
   }

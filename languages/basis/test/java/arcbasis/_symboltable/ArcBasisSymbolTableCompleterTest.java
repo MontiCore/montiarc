@@ -14,7 +14,6 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTPort;
 import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._visitor.ArcBasisTraverser;
-import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -62,30 +61,6 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
   }
 
   /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#setTypePrinter(IFullPrettyPrinter)}
-   */
-  @Test
-  public void shouldSetTypePrinter() {
-    // Given
-    IFullPrettyPrinter typesPrinter = ArcBasisMill.fullPrettyPrinter();
-
-    // When
-    this.getCompleter().setTypePrinter(typesPrinter);
-
-    // Then
-    Assertions.assertEquals(typesPrinter, this.getCompleter().getTypePrinter());
-  }
-
-  /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#setTypePrinter(IFullPrettyPrinter)}
-   */
-  @Test
-  public void setTypePrinterShouldThrowNullPointerException() {
-    // When && Then
-    Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().setTypePrinter(null));
-  }
-
-  /**
    * Method under test {@link ArcBasisSymbolTableCompleter#setTraverser(ArcBasisTraverser)}
    */
   @Test
@@ -110,51 +85,6 @@ public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
   public void setTraverserShouldThrowNullPointerException(@Nullable ArcBasisTraverser traverser) {
     // When && Then
     Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().setTraverser(traverser));
-  }
-
-  /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#ArcBasisSymbolTableCompleter()}
-   */
-  @Test
-  public void shouldConstructClass() {
-    // When
-    ArcBasisSymbolTableCompleter completer = new ArcBasisSymbolTableCompleter();
-
-    //Then
-    Assertions.assertNotNull(completer.getTypePrinter());
-  }
-
-  /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#ArcBasisSymbolTableCompleter(IFullPrettyPrinter)}
-   *
-   * @param printer the first constructor parameter
-   */
-  @ParameterizedTest
-  @MethodSource("typesPrinterProvider")
-  public void shouldConstructClass(@NotNull IFullPrettyPrinter printer) {
-    Preconditions.checkNotNull(printer);
-
-    // When
-    ArcBasisSymbolTableCompleter completer = new ArcBasisSymbolTableCompleter(printer);
-
-    // Then
-    Assertions.assertEquals(printer, completer.getTypePrinter());
-  }
-
-  protected static Stream<IFullPrettyPrinter> typesPrinterProvider() {
-    return Stream.of(ArcBasisMill.fullPrettyPrinter());
-  }
-
-  /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#ArcBasisSymbolTableCompleter(IFullPrettyPrinter)}
-   *
-   * @param printer the first constructor parameter (null)
-   */
-  @ParameterizedTest
-  @NullSource
-  public void constructorShouldThrowNullPointerException(@Nullable IFullPrettyPrinter printer) {
-    // When && Then
-    Assertions.assertThrows(NullPointerException.class, () -> new ArcBasisSymbolTableCompleter(printer));
   }
 
   /**

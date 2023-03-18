@@ -5,9 +5,7 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.ArcBasisSynthesizeComponent;
-import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
@@ -21,13 +19,11 @@ import genericarc.GenericArcMill;
 import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericComponentHead;
 import genericarc._visitor.GenericArcTraverser;
-import genericarc.check.GenericArcTypeCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -40,23 +36,6 @@ import java.util.stream.Stream;
 public class GenericArcSymbolTableCompleterTest extends AbstractTest {
 
   protected GenericArcSymbolTableCompleter completer;
-
-  protected static Stream<IFullPrettyPrinter> typesPrinterProvider() {
-    return Stream.of(GenericArcMill.fullPrettyPrinter());
-  }
-
-  public static Stream<Arguments> constructorWithNullArgumentProvider() {
-    IFullPrettyPrinter printer = GenericArcMill.fullPrettyPrinter();
-    ISynthesizeComponent compSynth = new ArcBasisSynthesizeComponent();
-    IArcTypeCalculator typeSynth = new GenericArcTypeCalculator();
-
-    return Stream.of(
-      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(null)),
-      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(null, compSynth, typeSynth)),
-      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(printer, null, typeSynth)),
-      Arguments.of((Executable) () -> new GenericArcSymbolTableCompleter(printer, compSynth, null))
-    );
-  }
 
   protected static Stream<Arguments> visitComponentHeadExpectedExceptionProvider() {
     ASTGenericComponentHead ast1 = GenericArcMill.genericComponentHeadBuilder().build();
@@ -93,30 +72,6 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
   public void init() {
     super.init();
     this.setUpCompleter();
-  }
-
-  /**
-   * Method under test {@link GenericArcSymbolTableCompleter#setTypePrinter(IFullPrettyPrinter)}
-   */
-  @Test
-  public void shouldSetTypePrinter() {
-    // Given
-    IFullPrettyPrinter typesPrinter = GenericArcMill.fullPrettyPrinter();
-
-    // When
-    this.getCompleter().setTypePrinter(typesPrinter);
-
-    // Then
-    Assertions.assertEquals(typesPrinter, this.getCompleter().getTypePrinter());
-  }
-
-  /**
-   * Method under test {@link GenericArcSymbolTableCompleter#setTypePrinter(IFullPrettyPrinter)}
-   */
-  @Test
-  public void setTypePrinterShouldThrowNullPointerException() {
-    // When && Then
-    Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().setTypePrinter(null));
   }
 
   /**
@@ -179,40 +134,8 @@ public class GenericArcSymbolTableCompleterTest extends AbstractTest {
     GenericArcSymbolTableCompleter completer = new GenericArcSymbolTableCompleter();
 
     //Then
-    Assertions.assertNotNull(completer.getTypePrinter());
     Assertions.assertNotNull(completer.getComponentSynthesizer());
     Assertions.assertNotNull(completer.getTypeCalculator());
-  }
-
-  /**
-   * Method under test {@link GenericArcSymbolTableCompleter#GenericArcSymbolTableCompleter(IFullPrettyPrinter)}
-   *
-   * @param printer the first constructor parameter
-   */
-  @ParameterizedTest
-  @MethodSource("typesPrinterProvider")
-  public void shouldConstructClass(@NotNull IFullPrettyPrinter printer) {
-    Preconditions.checkNotNull(printer);
-
-    // When
-    GenericArcSymbolTableCompleter completer = new GenericArcSymbolTableCompleter(printer);
-
-    // Then
-    Assertions.assertEquals(printer, completer.getTypePrinter());
-    Assertions.assertNotNull(completer.getComponentSynthesizer());
-    Assertions.assertNotNull(completer.getTypeCalculator());
-  }
-
-  /**
-   * Method under test {@link GenericArcSymbolTableCompleter#GenericArcSymbolTableCompleter(IFullPrettyPrinter)}
-   *
-   * @param constructorCall The constructor call that should throw the null pointer exception
-   */
-  @ParameterizedTest
-  @MethodSource("constructorWithNullArgumentProvider")
-  public void constructorShouldThrowNullPointerException(@NotNull Executable constructorCall) {
-    // When && Then
-    Assertions.assertThrows(NullPointerException.class, constructorCall);
   }
 
   /**

@@ -1,10 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc;
 
-import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import com.microsoft.z3.Context;
-import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import montiarc._symboltable.MontiArcSymbolTableCompleter;
 import montiarc._symboltable.MontiArcSymbolTableCompleterDelegator;
 import montiarc.check.MontiArcCompTypeExprDeSer;
@@ -43,17 +41,6 @@ public class MontiArcMill extends MontiArcMillTOP {
 
   protected MontiArcSymbolTableCompleterDelegator _symbolTableCompleterDelegator() {
     return new MontiArcSymbolTableCompleterDelegator();
-  }
-
-  public static IFullPrettyPrinter fullPrettyPrinter() {
-    if (millMontiArcFullPrettyPrinter == null) {
-      millMontiArcFullPrettyPrinter = getMill();
-    }
-    return millMontiArcFullPrettyPrinter._fullPrettyPrinter();
-  }
-
-  protected IFullPrettyPrinter _fullPrettyPrinter() {
-    return new MontiArcFullPrettyPrinter();
   }
 
   public static IDeriveSMTExpr fullConverter(Context context) {

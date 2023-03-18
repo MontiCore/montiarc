@@ -1,12 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc;
 
-import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
 import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import com.microsoft.z3.Context;
-import de.monticore.prettyprint.IndentPrinter;
-import variablearc._prettyprint.VariableArcFullPrettyPrinter;
 import variablearc._symboltable.VariableArcSymbolTableCompleter;
 import variablearc._symboltable.VariableArcSymbolTableCompleterDelegator;
 import variablearc.evaluation.VariableArcDeriveSMTExpr;
@@ -36,13 +33,6 @@ public class VariableArcMill extends VariableArcMillTOP {
       millVariableArcSymbolTableCompleterDelegator = getMill();
     }
     return millVariableArcSymbolTableCompleterDelegator._symbolTableCompleterDelegator();
-  }
-
-  public static IFullPrettyPrinter fullPrettyPrinter() {
-    if (millFullPrettyPrinter == null) {
-      millFullPrettyPrinter = getMill();
-    }
-    return millFullPrettyPrinter._fullPrettyPrinter();
   }
 
   public static IDeriveSMTExpr fullConverter(Context context) {
@@ -83,10 +73,6 @@ public class VariableArcMill extends VariableArcMillTOP {
 
   protected VariableArcSymbolTableCompleterDelegator _symbolTableCompleterDelegator() {
     return new VariableArcSymbolTableCompleterDelegator();
-  }
-
-  protected IFullPrettyPrinter _fullPrettyPrinter() {
-    return new VariableArcFullPrettyPrinter(new IndentPrinter());
   }
 
   protected IDeriveSMTExpr _fullConverter(Context context) {

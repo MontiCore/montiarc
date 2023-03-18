@@ -8,7 +8,6 @@ import arcbasis._ast.ASTComponentTypeTOP;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -87,7 +86,7 @@ public class MAStreamHelperTest {
     List<String> constraints =
         MAStreamHelper.getConstraintExpressionsFromArcElements(
             MAStreamHelper.getArcElements(ast.getComponentType())).stream()
-          .map(t -> new MontiArcFullPrettyPrinter().prettyprint(t)).collect(Collectors.toList());
+          .map(t -> MontiArcMill.prettyPrint(t, true)).collect(Collectors.toList());
 
     // When && Then
     Assertions.assertEquals(trueConstraints, constraints);

@@ -4,7 +4,6 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._prettyprint.ArcBasisFullPrettyPrinter;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
@@ -110,11 +109,9 @@ public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCo
     );
 
     boolean isSourcePort = port.equals(connectorOfPort.getSource());
-    Log.error(String.format(isSourcePort ?
-          ArcError.SOURCE_PORT_COMPONENT_MISSING.toString()
-          : ArcError.TARGET_PORT_COMPONENT_MISSING.toString(),
-        port.getComponent(), printConnector(connectorOfPort)),
-      port.get_SourcePositionStart()
+    Log.error(String.format(
+      isSourcePort ? ArcError.SOURCE_PORT_COMPONENT_MISSING.toString() : ArcError.TARGET_PORT_COMPONENT_MISSING.toString(),
+        port.getComponent()), port.get_SourcePositionStart()
     );
   }
 
@@ -138,19 +135,9 @@ public class ConnectorSourceAndTargetExist implements ArcBasisASTComponentTypeCo
     );
 
     boolean isSourcePort = port.equals(connectorOfPort.getSource());
-    Log.error(String.format((isSourcePort ?
-          ArcError.SOURCE_PORT_NOT_EXISTS
-          : ArcError.TARGET_PORT_NOT_EXISTS).toString(),
-        port.getQName(), printConnector(connectorOfPort), enclComp.getFullName()),
-      port.get_SourcePositionStart()
+    Log.error(String.format((
+      isSourcePort ? ArcError.SOURCE_PORT_NOT_EXISTS : ArcError.TARGET_PORT_NOT_EXISTS).toString(),
+        port.getQName(), enclComp.getFullName()), port.get_SourcePositionStart()
     );
-  }
-
-  /**
-   * @return a nice string that can be used to enhance error messages
-   */
-  private static String printConnector(ASTConnector connector) {
-    return new ArcBasisFullPrettyPrinter().prettyprint(connector)
-      .replaceAll("[;\n]", "");
   }
 }

@@ -12,7 +12,6 @@ import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCos;
-import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc.util.MontiArcError;
 import org.apache.commons.cli.CommandLine;
@@ -269,8 +268,7 @@ public class MontiArcTool extends MontiArcToolTOP {
         Names.getPathFromQualifiedName(ast.getPackage().getQName()),
         ast.getComponentType().getName() + ".arc").toString();
     }
-    MontiArcFullPrettyPrinter prettyPrinter = new MontiArcFullPrettyPrinter();
-    this.print(prettyPrinter.prettyprint(ast), file);
+    this.print(MontiArcMill.prettyPrint(ast, true), file);
   }
 
   @Override

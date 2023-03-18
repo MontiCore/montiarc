@@ -34,12 +34,12 @@ public enum ArcError implements Error {
       "values). Therefore provide a default value!"),
   SOURCE_AND_TARGET_SAME_COMPONENT("0xC1119", "Source and target of the connector "
       + "refer to the same subcomponent."),
-  SOURCE_PORT_NOT_EXISTS("0xC1120", "Source port '%s' of connector '%s' of component '%s' does not "
+  SOURCE_PORT_NOT_EXISTS("0xC1120", "Source port '%s' of component '%s' does not "
       + "exist."),
-  TARGET_PORT_NOT_EXISTS("0xC1121", "Target port '%s' of connector '%s' of component '%s' does not "
+  TARGET_PORT_NOT_EXISTS("0xC1121", "Target port '%s' of component '%s' does not "
       + "exist."),
   SOURCE_AND_TARGET_TYPE_MISMATCH("0xC1122", "Type '%s' of source port and type '%s' of target "
-      + "port of connector '%s' of component '%s' are incompatible."),
+      + "port of component '%s' are incompatible."),
   INNER_COMPONENT_EXTENDS_OUTER("0xC1123", "Inner component type '%s' extends the " +
       "component type %s which is also its outer component type."),
   VARIABLE_LOWER_CASE("0xC1124", "The name of the variable '%s' of component '%s' should start "
@@ -48,7 +48,7 @@ public enum ArcError implements Error {
       + "lower case letter."),
   PARAMETER_LOWER_CASE("0xC1126", "The name of the parameter '%s' of component '%s' should start"
       + " with a lower case letter."),
-  PORT_DIRECTION_MISMATCH("0xC1127", "Port '%s' can not be a %s of the connector '%s', because it is %s." + ""),
+  PORT_DIRECTION_MISMATCH("0xC1127", "Port '%s' can not be a target of the connector, because it is %s." + ""),
   CONNECTOR_SOURCE_AND_TARGET_ARE_IDENTICAL("0xC1045", "The target port '%s' is identical to the"
       + " source port '%s'"),
   COMPONENT_NAME_UPPER_CASE("0xC1128", "Component names must be in upper-case."
@@ -68,8 +68,8 @@ public enum ArcError implements Error {
   PORT_REFERENCE_IN_PARAMETER_DEFAULT_VALUE_ILLEGAL("0xC1139", "Default values of parameter '%s' in component type " +
       "'%s' illegally relies on port '%s'."),
   MISSING_TYPE("0xC1140", "Cannot resolve type '%s'."),
-  SOURCE_PORT_COMPONENT_MISSING("0xC1141", "Component instance '%s' missing for source of connector '%s'."),
-  TARGET_PORT_COMPONENT_MISSING("0xC1142", "Component instance '%s' missing for target of connector '%s'."),
+  SOURCE_PORT_COMPONENT_MISSING("0xC1141", "Component instance '%s' missing for source of connector."),
+  TARGET_PORT_COMPONENT_MISSING("0xC1142", "Component instance '%s' missing for target of connector."),
   UNSUPPORTED_MODEL_ELEMENT("0xC1143", "%s"),
   PORT_REFERENCE_IN_INSTANTIATION_ARG_ILLEGAL("0xC1144", "An argument for the instantiation '%s' illegally relies " +
       "on the port '%s'"),

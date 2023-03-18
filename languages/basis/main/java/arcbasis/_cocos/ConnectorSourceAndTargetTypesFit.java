@@ -57,7 +57,6 @@ public class ConnectorSourceAndTargetTypesFit implements ArcBasisASTComponentTyp
               Log.error(
                 ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH.format(
                   symTypeOfSource.get().print(), symTypeOfTarget.get().print(),
-                  printConnector(conn),
                   enclComponent.getFullName()),
                 conn.get_SourcePositionStart());
             }
@@ -65,7 +64,6 @@ public class ConnectorSourceAndTargetTypesFit implements ArcBasisASTComponentTyp
             Log.error(
                 ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH.format(
                     symTypeOfSource.get().print(), symTypeOfTarget.get().print(),
-                    printConnector(conn),
                     enclComponent.getFullName()),
                 conn.get_SourcePositionStart());
           }
@@ -99,19 +97,11 @@ public class ConnectorSourceAndTargetTypesFit implements ArcBasisASTComponentTyp
     return Optional.empty();
   }
 
-  /**
-   * @return a nice string that can be used to enhance error messages
-   */
-  private static String printConnector(ASTConnector connector) {
-    return new ArcBasisFullPrettyPrinter().prettyprint(connector)
-      .replaceAll("[;\n]", "");
-  }
-
   protected static void logInfoThatCoCoIsNotChecked4Connection(@NotNull ASTConnector connector) {
     Preconditions.checkNotNull(connector);
-    Log.debug(String.format("Will not check CoCo on connector '%s' at '%s' as its source port does not " +
+    Log.debug(String.format("Will not check CoCo on connector at '%s' as its source port does not " +
           "seem to be resolvable to a port symbol or the type of the port does not seem to be set.",
-        printConnector(connector), connector.get_SourcePositionStart()),
+        connector.get_SourcePositionStart()),
       ConnectorSourceAndTargetDirectionsFit.class.getSimpleName()
     );
   }

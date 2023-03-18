@@ -25,7 +25,6 @@ import montiarc.AbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
-import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -54,12 +53,11 @@ public class ArcAutomatonPrettyPrinterTest extends AbstractTest {
 
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    MontiArcFullPrettyPrinter prettyPrinterDelegator = new MontiArcFullPrettyPrinter();
     Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS, file).toString());
     Preconditions.checkState(origAST.isPresent());
 
     // When
-    String prettyOut = prettyPrinterDelegator.prettyprint(origAST.get());
+    String prettyOut = MontiArcMill.prettyPrint(origAST.get(), true);
 
     // Then
     Optional<ASTMACompilationUnit> prettyAST = parser.parse_String(prettyOut);
@@ -71,13 +69,12 @@ public class ArcAutomatonPrettyPrinterTest extends AbstractTest {
   public void printEmptyStateChart() throws IOException {
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    MontiArcFullPrettyPrinter prettyPrinterDelegator = new MontiArcFullPrettyPrinter();
     Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS,
       "A_EmptyStateChart.arc").toString());
     Preconditions.checkState(origAST.isPresent());
 
     // When
-    String prettyOut = prettyPrinterDelegator.prettyprint(origAST.get());
+    String prettyOut = MontiArcMill.prettyPrint(origAST.get(), true);
 
     // Then
     Optional<ASTMACompilationUnit> prettyAST = parser.parse_String(prettyOut);
@@ -91,13 +88,12 @@ public class ArcAutomatonPrettyPrinterTest extends AbstractTest {
   public void printJustSomeStates() throws IOException {
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    MontiArcFullPrettyPrinter prettyPrinterDelegator = new MontiArcFullPrettyPrinter();
     Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS,
       "B_JustSomeStates.arc").toString());
     Preconditions.checkState(origAST.isPresent());
 
     // When
-    String prettyOut = prettyPrinterDelegator.prettyprint(origAST.get());
+    String prettyOut = MontiArcMill.prettyPrint(origAST.get(), true);
 
     // Then
     Optional<ASTMACompilationUnit> prettyAST = parser.parse_String(prettyOut);
@@ -129,13 +125,12 @@ public class ArcAutomatonPrettyPrinterTest extends AbstractTest {
   public void printStatesAndTransitions() throws IOException {
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    MontiArcFullPrettyPrinter prettyPrinterDelegator = new MontiArcFullPrettyPrinter();
     Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS,
       "C_StatesAndTransitions.arc").toString());
     Preconditions.checkState(origAST.isPresent());
 
     // When
-    String prettyOut = prettyPrinterDelegator.prettyprint(origAST.get());
+    String prettyOut = MontiArcMill.prettyPrint(origAST.get(), true);
 
     // Then
     Optional<ASTMACompilationUnit> prettyAST = parser.parse_String(prettyOut);
@@ -183,13 +178,12 @@ public class ArcAutomatonPrettyPrinterTest extends AbstractTest {
   public void printGuardedTransitions() throws IOException {
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    MontiArcFullPrettyPrinter prettyPrinterDelegator = new MontiArcFullPrettyPrinter();
     Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS,
       "D_GuardedTransitions.arc").toString());
     Preconditions.checkState(origAST.isPresent());
 
     // When
-    String prettyOut = prettyPrinterDelegator.prettyprint(origAST.get());
+    String prettyOut = MontiArcMill.prettyPrint(origAST.get(), true);
 
     // Then
     Optional<ASTMACompilationUnit> prettyAST = parser.parse_String(prettyOut);
@@ -243,13 +237,12 @@ public class ArcAutomatonPrettyPrinterTest extends AbstractTest {
   public void printTransitionsWithReactions() throws IOException {
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    MontiArcFullPrettyPrinter prettyPrinterDelegator = new MontiArcFullPrettyPrinter();
     Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS,
       "E_TransitionsWithReactions.arc").toString());
     Preconditions.checkState(origAST.isPresent());
 
     // When
-    String prettyOut = prettyPrinterDelegator.prettyprint(origAST.get());
+    String prettyOut = MontiArcMill.prettyPrint(origAST.get(), true);
 
     // Then
     Optional<ASTMACompilationUnit> prettyAST = parser.parse_String(prettyOut);
@@ -341,13 +334,12 @@ public class ArcAutomatonPrettyPrinterTest extends AbstractTest {
   public void printStateWithBody() throws IOException {
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    MontiArcFullPrettyPrinter prettyPrinterDelegator = new MontiArcFullPrettyPrinter();
     Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS,
       "F_StateWithBody.arc").toString());
     Preconditions.checkState(origAST.isPresent());
 
     // When
-    String prettyOut = prettyPrinterDelegator.prettyprint(origAST.get());
+    String prettyOut = MontiArcMill.prettyPrint(origAST.get(), true);
 
     // Then
     Optional<ASTMACompilationUnit> prettyAST = parser.parse_String(prettyOut);
@@ -381,12 +373,11 @@ public class ArcAutomatonPrettyPrinterTest extends AbstractTest {
   public void printActions() throws IOException {
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    MontiArcFullPrettyPrinter prettyPrinterDelegator = new MontiArcFullPrettyPrinter();
     Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS, "G_Actions.arc").toString());
     Preconditions.checkState(origAST.isPresent());
 
     // When
-    String prettyOut = prettyPrinterDelegator.prettyprint(origAST.get());
+    String prettyOut = MontiArcMill.prettyPrint(origAST.get(), true);
 
     // Then
     Optional<ASTMACompilationUnit> prettyAST = parser.parse_String(prettyOut);

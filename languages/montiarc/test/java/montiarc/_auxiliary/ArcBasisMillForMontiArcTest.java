@@ -2,8 +2,6 @@
 package montiarc._auxiliary;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._prettyprint.ArcBasisFullPrettyPrinter;
-import arcbasis._visitor.IFullPrettyPrinter;
 import arcbasis.check.ArcBasisSynthesizeComponent;
 import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
@@ -14,7 +12,6 @@ import com.google.common.base.Preconditions;
 import de.monticore.types.check.ISynthesize;
 import genericarc.check.GenericArcCompTypeExprDeSer;
 import montiarc.MontiArcMill;
-import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import montiarc.check.MontiArcCompTypeExprDeSer;
 import montiarc.check.MontiArcSynthesizeComponent;
 import montiarc.check.MontiArcTypeCalculator;
@@ -31,36 +28,30 @@ public class ArcBasisMillForMontiArcTest {
 
   protected static Stream<Arguments> setupAndExpectedClassForSymTabCompleterProvider() {
     return Stream.of(
-      Arguments.of(arcBasisMillSetup(), ArcBasisFullPrettyPrinter.class,
-        ArcBasisSynthesizeComponent.class, ArcBasisTypeCalculator.class),
-      Arguments.of(arcCoreMillSetup(), ArcBasisFullPrettyPrinter.class,
-        ArcBasisSynthesizeComponent.class, ArcBasisTypeCalculator.class),
-      Arguments.of(montiArcMillSetup(), MontiArcFullPrettyPrinter.class,
-        MontiArcSynthesizeComponent.class, MontiArcTypeCalculator.class)
+      Arguments.of(arcBasisMillSetup(), ArcBasisSynthesizeComponent.class, ArcBasisTypeCalculator.class),
+      Arguments.of(arcCoreMillSetup(), ArcBasisSynthesizeComponent.class, ArcBasisTypeCalculator.class),
+      Arguments.of(montiArcMillSetup(), MontiArcSynthesizeComponent.class, MontiArcTypeCalculator.class)
     );
   }
 
   /**
    * Ensures that the symbol table completer is initialized with the expected type printer and component synthesizer
    * with respect to the initialized mill. That is, the mill should provide a symbol table completer that is initialized
-   * with a {@link IFullPrettyPrinter}, a {@link ArcBasisSynthesizeComponent}, and a {@link
+   * with a {@link ArcBasisSynthesizeComponent}, and a {@link
    * ArcBasisTypeCalculator} when using the  {@link ArcBasisMill}, respectively provide a symbol table completer that is
-   * initialized with a {@link IFullPrettyPrinter}, a {@link ArcBasisSynthesizeComponent}, and a
-   * {@link MontiArcTypeCalculator} when using the {@link MontiArcMill}.
+   * initialized with a {@link ArcBasisSynthesizeComponent}, and a {@link MontiArcTypeCalculator} when using the
+   * {@link MontiArcMill}.
    *
    * @param setup                      The setup to execute, e.g., initialize the respective mill.
-   * @param expectedPrettyPrinter      The expected class of the type printer of the symbol table completer.
    * @param expectedCompSynthesizer    The expected class of the component synthesizer of the symbol-table completer.
    * @param expectedSymTypeSynthesizer The expected class of the sym type synthesizer of the symbol-table completer.
    */
   @ParameterizedTest
   @MethodSource("setupAndExpectedClassForSymTabCompleterProvider")
   void shouldProvideCompleterAsExpected(@NotNull Runnable setup,
-                                               @NotNull Class<IFullPrettyPrinter> expectedPrettyPrinter,
                                                @NotNull Class<ISynthesizeComponent> expectedCompSynthesizer,
                                                @NotNull Class<ISynthesize> expectedSymTypeSynthesizer) {
     Preconditions.checkNotNull(setup);
-    Preconditions.checkNotNull(expectedPrettyPrinter);
     Preconditions.checkNotNull(expectedCompSynthesizer);
     Preconditions.checkNotNull(expectedSymTypeSynthesizer);
 
@@ -69,8 +60,6 @@ public class ArcBasisMillForMontiArcTest {
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertEquals(expectedPrettyPrinter,
-        ArcBasisMill.symbolTableCompleter().getTypePrinter().getClass()),
       () -> Assertions.assertEquals(expectedCompSynthesizer,
         ArcBasisMill.symbolTableCompleter().getComponentSynthesizer().getClass()),
       () -> Assertions.assertEquals(expectedSymTypeSynthesizer,
