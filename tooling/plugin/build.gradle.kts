@@ -23,15 +23,21 @@ gradlePlugin {
 
 val genDir4GeneratorVersionInjection = "${project.buildDir}/generatedKotlin"
 
-kotlin {
-  sourceSets {
-    main {
-      kotlin.setSrcDirs(setOf("main/kotlin", genDir4GeneratorVersionInjection))
-      resources.setSrcDirs(setOf("main/resources"))
+sourceSets {
+  main {
+    java {
+      setSrcDirs(setOf("main/kotlin", genDir4GeneratorVersionInjection))
     }
-    test {
-      kotlin.setSrcDirs(setOf("test/kotlin"))
-      resources.setSrcDirs(setOf("test/resources"))
+    resources {
+      setSrcDirs(setOf("main/resources"))
+    }
+  }
+  test {
+    java {
+      setSrcDirs(setOf("test/kotlin"))
+    }
+    resources {
+      setSrcDirs(setOf("test/resources"))
     }
   }
 }
