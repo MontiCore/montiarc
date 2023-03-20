@@ -27,9 +27,7 @@ public class FieldTypeExists implements ArcBasisASTArcFieldDeclarationCoCo {
   public void check(@NotNull ASTArcFieldDeclaration node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(!node.getArcFieldList().isEmpty());
-    Preconditions.checkNotNull(node.getEnclosingScope(), "ASTArcFieldDeclaration node '%s' at '%s' has no enclosing " +
-        "scope. Did you forget to run the scopes genitor before checking cocos?", node.getArcField(0).getName(),
-      node.get_SourcePositionStart());
+    Preconditions.checkNotNull(node.getEnclosingScope());
 
     existenceChecker.checkExistenceOf(node.getMCType());
   }

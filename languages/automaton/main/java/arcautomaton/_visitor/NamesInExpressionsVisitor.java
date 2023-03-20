@@ -153,7 +153,7 @@ public class NamesInExpressionsVisitor implements AssignmentExpressionsVisitor2,
   @Override
   public void traverse(@NotNull ASTAssignmentExpression node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkState(getTraverser() != null, "Traverser not set yet");
+    Preconditions.checkState(getTraverser() != null);
     current = node.getOperator() == ASTConstantsAssignmentExpressions.EQUALS?
                                 VarAccessKind.OVERWRITE:
                                 VarAccessKind.UPDATE;

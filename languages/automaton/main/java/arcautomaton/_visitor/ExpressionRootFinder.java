@@ -38,8 +38,7 @@ public class ExpressionRootFinder implements ExpressionsBasisVisitor2 {
   @Override
   public void endVisit(@NotNull ASTExpression node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkState(expressionTrace.peek().equals(node), "ExpressionRootFinder seems to be misconfigured. " +
-      "Contact a MontiArc language engineer if you run into this error.");
+    Preconditions.checkState(expressionTrace.peek().equals(node));
 
     expressionTrace.pop();
   }

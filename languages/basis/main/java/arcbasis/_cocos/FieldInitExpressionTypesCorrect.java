@@ -33,8 +33,7 @@ public class FieldInitExpressionTypesCorrect implements ArcBasisASTArcFieldCoCo 
   @Override
   public void check(@NotNull ASTArcField astField) {
     Preconditions.checkNotNull(astField);
-    Preconditions.checkArgument(astField.isPresentSymbol(), "Could not perform coco check '%s'. Perhaps you missed the " +
-      "symbol table creation.", this.getClass().getSimpleName());
+    Preconditions.checkArgument(astField.isPresentSymbol());
 
     if (astField.getSymbol().getType() == null) {
       Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.",

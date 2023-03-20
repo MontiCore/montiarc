@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * Asserts that the optional configuration parameters of a component type always succeed the mandatory ones. This is
  * necessary to ensure a consistent signature for the instantiation of the component type.
- *
+ * <p>
  * Implements [Wor16] MR4. Citation:
  * "Component types may define default values for each configuration parameter [...]. However, if any configuration
  * parameter defines a default value, all following parameters must define a default value as well. Otherwise, assigning
@@ -25,11 +25,11 @@ import java.util.stream.Collectors;
  * even non-deterministic."
  */
 public class OptionalConfigurationParametersLast implements ArcBasisASTComponentTypeCoCo {
+
   @Override
   public void check(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol(), "ASTComponent node '%s' has no symbol. "
-      + "Did you forget to run the SymbolTableCreator before checking cocos?", node.getName());
+    Preconditions.checkArgument(node.isPresentSymbol());
 
     ComponentTypeSymbol comp = node.getSymbol();
     List<ASTArcParameter> parameters = parameterASTsOf(comp);
@@ -75,14 +75,10 @@ public class OptionalConfigurationParametersLast implements ArcBasisASTComponent
 
     List<VariableSymbol> paramSyms = comp.getParameters();
 
-    paramSyms.forEach(p -> Preconditions.checkArgument(p.isPresentAstNode(),
-      "Parameter '%s' of component type '%s' has no AST node attached. Thus can not check CoCo '%s'.",
-      p.getName(), comp.getFullName(), OptionalConfigurationParametersLast.class.getSimpleName())
+    paramSyms.forEach(p -> Preconditions.checkArgument(p.isPresentAstNode())
     );
 
-    paramSyms.forEach( p -> Preconditions.checkArgument(p.getAstNode() instanceof ASTArcParameter,
-      "The AST node attached to parameter '%s' of component type '%s' is not an '%s'. Thus can not check " +
-        "coco '%s'.", p.getName(), comp.getFullName(),OptionalConfigurationParametersLast.class.getSimpleName())
+    paramSyms.forEach( p -> Preconditions.checkArgument(p.getAstNode() instanceof ASTArcParameter)
     );
 
     return paramSyms.stream()

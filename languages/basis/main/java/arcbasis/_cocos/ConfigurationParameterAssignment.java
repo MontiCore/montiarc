@@ -75,8 +75,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   @Override
   public void check(@NotNull ASTComponentInstance astInst) {
     Preconditions.checkNotNull(astInst);
-    Preconditions.checkArgument(astInst.isPresentSymbol(), "Could not perform coco check '%s'. Perhaps you missed the " +
-      "symbol table creation.", this.getClass().getSimpleName());
+    Preconditions.checkArgument(astInst.isPresentSymbol());
 
     // Check CoCos
     checkInstantiationArgsAreNotTooMany(astInst);

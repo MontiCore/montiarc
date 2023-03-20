@@ -27,9 +27,7 @@ public class PortTypeExists implements ArcBasisASTPortDeclarationCoCo {
   public void check(@NotNull ASTPortDeclaration node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(!node.getPortList().isEmpty());
-    Preconditions.checkNotNull(node.getEnclosingScope(), "ASTPortDeclaration node '%s' at '%s' has no enclosing scope. "
-      + "Did you forget to run the scopes genitor before checking cocos?", node.getPort(0).getName(),
-      node.get_SourcePositionStart());
+    Preconditions.checkNotNull(node.getEnclosingScope());
 
     existenceChecker.checkExistenceOf(node.getMCType());
   }

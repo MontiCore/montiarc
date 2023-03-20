@@ -18,7 +18,8 @@ public class InitialModeExists implements ArcBasisASTComponentTypeCoCo {
   @Override
   public void check(ASTComponentType component) {
     Preconditions.checkNotNull(component);
-    Preconditions.checkArgument(component.isPresentSymbol(), "Create Symbol-Table first");
+    Preconditions.checkArgument(component.isPresentSymbol());
+
     Set<String> symbolNames = BasicModeAutomataMill.getModeTool().streamModes(component).map(ModeSymbol::getName).collect(Collectors.toSet());
     BasicModeAutomataMill.getModeTool()
         .streamAutomata(component)

@@ -116,6 +116,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   protected CompTypeExpression typeExprForDirectComponentInstantiation(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
+
     if (!node.getSymbol().getTypeParameters().isEmpty()) {
       Log.error(ArcError.GENERIC_COMPONENT_TYPE_INSTANTIATION.format(
               node.getSymbol().getName(),
@@ -220,9 +221,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   public void visit(@NotNull ASTArcParameter node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getMCType());
-    Preconditions.checkState(node.isPresentSymbol(), "Missing symbol for configuration parameter '%s' at %s. " +
-        "Did you forget to run the scopes genitor prior to the completer?", node.getName(),
-      node.get_SourcePositionStart());
+    Preconditions.checkState(node.isPresentSymbol());
 
     try {
       TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(node.getMCType());
@@ -323,8 +322,7 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   public void visit(@NotNull ASTArcField field) {
     Preconditions.checkNotNull(field);
     Preconditions.checkState(this.getCurrentFieldType().isPresent());
-    Preconditions.checkState(field.isPresentSymbol(), "Missing symbol for field '%s' at %s. Did you forget to run " +
-      "the scopes genitor prior to the completer?", field.getName(), field.get_SourcePositionStart());
+    Preconditions.checkState(field.isPresentSymbol());
 
     try {
       TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(this.getCurrentFieldType().get());

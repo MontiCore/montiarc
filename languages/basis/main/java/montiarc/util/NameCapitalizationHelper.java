@@ -21,7 +21,7 @@ public class NameCapitalizationHelper {
    * @throws IllegalArgumentException if the provided string is null or empty
    */
   public static boolean isNotUpperCase(@NotNull String string) {
-    Preconditions.checkArgument(!Strings.isNullOrEmpty(string), "Name is empty");
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(string));
     return !Character.isUpperCase(string.charAt(0));
   }
 
@@ -30,7 +30,7 @@ public class NameCapitalizationHelper {
    * @throws IllegalArgumentException if the provided string is null or empty
    */
   public static boolean isNotLowerCase(@NotNull String name) {
-    Preconditions.checkArgument(!Strings.isNullOrEmpty(name), "Name is empty");
+    Preconditions.checkArgument(!Strings.isNullOrEmpty(name));
     return !Character.isLowerCase(name.charAt(0));
   }
 

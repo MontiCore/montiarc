@@ -70,7 +70,8 @@ public class StaticCheckOfDynamicTypes implements ArcBasisASTComponentTypeCoCo {
   @Override
   public void check(ASTComponentType node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol(), "Create Symbol-Table first");
+    Preconditions.checkArgument(node.isPresentSymbol());
+
     // avoid recursion
     if(isDynamicVersion(node)){
       return;

@@ -28,8 +28,7 @@ public class NoSubComponentReferenceCycles implements ArcBasisASTComponentTypeCo
   @Override
   public void check(@NotNull ASTComponentType astComp) {
     Preconditions.checkNotNull(astComp);
-    Preconditions.checkArgument(astComp.isPresentSymbol(), "ASTComponent '%s' has no symbol. "
-      + "Did you forget to run the SymbolTableCreator before checking cocos?", astComp.getName());
+    Preconditions.checkArgument(astComp.isPresentSymbol());
 
     ComponentTypeSymbol comp = astComp.getSymbol();
 

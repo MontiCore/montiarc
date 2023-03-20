@@ -151,8 +151,8 @@ public class CD2PojoTool extends CDGeneratorTool {
     Preconditions.checkNotNull(fileExt);
     Preconditions.checkNotNull(directory);
     Preconditions.checkArgument(!fileExt.isEmpty());
-    Preconditions.checkArgument(directory.toFile().exists(), "Directory does not exist: " + directory);
-    Preconditions.checkArgument(directory.toFile().isDirectory(), "Directory is file: " + directory);
+    Preconditions.checkArgument(directory.toFile().exists());
+    Preconditions.checkArgument(directory.toFile().isDirectory());
     try (Stream<Path> paths = Files.walk(directory)) {
       return paths.filter(Files::isRegularFile)
         .filter(file -> file.getFileName().toString().endsWith(fileExt)).map(Path::toString)

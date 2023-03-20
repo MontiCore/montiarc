@@ -232,7 +232,7 @@ public class ConnectorSourceAndTargetTimingsFitTest extends AbstractTest {
     // Given
     ASTMACompilationUnit ast = MontiArcMill.parser()
       .parse_StringMACompilationUnit(model).orElse(null);
-    Preconditions.checkNotNull(ast, Log.getFindings());
+    Preconditions.checkNotNull(ast);
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
 

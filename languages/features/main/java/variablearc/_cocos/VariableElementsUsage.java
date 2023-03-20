@@ -34,8 +34,7 @@ public class VariableElementsUsage implements VariableArcASTArcIfStatementCoCo, 
   @Override
   public void check(ASTArcBlock node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkNotNull(node.getEnclosingScope(), "Could not perform coco check '%s'. Perhaps you missed the " + "symbol table creation.",
-      this.getClass().getSimpleName());
+    Preconditions.checkNotNull(node.getEnclosingScope());
 
     node.getArcElementList().stream().filter(
         e -> !(e instanceof ASTArcIfStatement || e instanceof ASTComponentInstantiation || e instanceof ASTComponentInterface || e instanceof ASTConnector))
@@ -47,8 +46,7 @@ public class VariableElementsUsage implements VariableArcASTArcIfStatementCoCo, 
   @Override
   public void check(ASTArcIfStatement node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkNotNull(node.getEnclosingScope(), "Could not perform coco check '%s'. Perhaps you missed the " + "symbol table creation.",
-      this.getClass().getSimpleName());
+    Preconditions.checkNotNull(node.getEnclosingScope());
 
     ASTArcElement astElement = node.getThenStatement();
     if (!(astElement instanceof ASTArcIfStatement || astElement instanceof ASTComponentInstantiation || astElement instanceof ASTComponentInterface

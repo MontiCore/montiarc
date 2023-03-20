@@ -33,8 +33,7 @@ public class ParameterDefaultValueTypesCorrect implements ArcBasisASTArcParamete
   @Override
   public void check(@NotNull ASTArcParameter astParam) {
     Preconditions.checkNotNull(astParam);
-    Preconditions.checkArgument(astParam.isPresentSymbol(), "Could not perform coco check '%s'. Perhaps you missed " +
-      "the symbol table creation.", this.getClass().getSimpleName());
+    Preconditions.checkArgument(astParam.isPresentSymbol());
 
     if (astParam.getSymbol().getType() == null) {
       Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.",

@@ -23,9 +23,7 @@ public class CheckTypeExistenceOfBasicTypes implements MCBasicTypesVisitor2 {
   @Override
   public void visit(@NotNull ASTMCPrimitiveType type) {
     Preconditions.checkNotNull(type);
-    Preconditions.checkNotNull(type.getEnclosingScope(), "ASTMCType node '%s' at '%s' has no enclosing scope. "
-        + "Did you forget to run the scopes genitor before checking cocos?",
-      type.printType(), type.get_SourcePositionStart());
+    Preconditions.checkNotNull(type.getEnclosingScope());
     Preconditions.checkArgument(type.getEnclosingScope() instanceof IBasicSymbolsScope);
 
     IArcBasisScope enclScope = (IArcBasisScope) type.getEnclosingScope();
@@ -40,9 +38,7 @@ public class CheckTypeExistenceOfBasicTypes implements MCBasicTypesVisitor2 {
   @Override
   public void visit(@NotNull ASTMCQualifiedType type) {
     Preconditions.checkNotNull(type);
-    Preconditions.checkNotNull(type.getEnclosingScope(), "ASTMCType node '%s' at '%s' has no enclosing scope. "
-        + "Did you forget to run the scopes genitor before checking cocos?",
-      type.printType(), type.get_SourcePositionStart());
+    Preconditions.checkNotNull(type.getEnclosingScope());
     Preconditions.checkArgument(type.getEnclosingScope() instanceof IBasicSymbolsScope);
 
     IArcBasisScope enclScope = (IArcBasisScope) type.getEnclosingScope();

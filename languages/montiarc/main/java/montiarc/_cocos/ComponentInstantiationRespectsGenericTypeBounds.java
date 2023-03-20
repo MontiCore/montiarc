@@ -68,12 +68,9 @@ public class ComponentInstantiationRespectsGenericTypeBounds implements ArcBasis
   @Override
   public void check(@NotNull ASTComponentInstantiation node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(!node.getComponentInstanceList().isEmpty(), "'%s' at '%s' misses instances.", ASTComponentInstantiation.class.getSimpleName(),
-        node.get_SourcePositionStart());
+    Preconditions.checkArgument(!node.getComponentInstanceList().isEmpty());
 
-    Preconditions.checkArgument(node.streamComponentInstances().allMatch(ASTComponentInstance::isPresentSymbol),
-        "Some instances of '%s' at '%s' have no symbol. Have you run the genitor (and completer) before checking " + "coco '%s'?",
-        ASTComponentInstantiation.class.getSimpleName(), node.get_SourcePositionStart(), this.getClass().getSimpleName());
+    Preconditions.checkArgument(node.streamComponentInstances().allMatch(ASTComponentInstance::isPresentSymbol));
 
     if (!node.streamComponentInstances().allMatch(inst -> inst.getSymbol().isPresentType())) {
       Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.", this.getClass().getSimpleName());

@@ -20,7 +20,6 @@ public class ConstraintSatisfied4Comp implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-
     ExpressionSolver solver = new ExpressionSolver(node.getSymbol());
     Optional<Boolean> eval = solver.solve(new ExpressionSet(Collections.emptyList()));
     solver.close();

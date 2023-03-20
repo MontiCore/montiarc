@@ -40,9 +40,7 @@ public class ComponentInheritanceRespectsGenericTypeBounds implements ArcBasisAS
   @Override
   public void check(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol(),
-        "Component type '%s' at %s has no symbol. Have you run the " + "genitor (and completer) before checking coco '%s'?", node.getName(),
-        node.get_SourcePositionStart(), this.getClass().getSimpleName());
+    Preconditions.checkArgument(node.isPresentSymbol());
 
     if (node.getSymbol().isPresentParent() && node.getSymbol().getParent() instanceof TypeExprOfGenericComponent) {
       checkTypeArgsAreNotTooFew(node);

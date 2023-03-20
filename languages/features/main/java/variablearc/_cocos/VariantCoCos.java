@@ -37,9 +37,8 @@ public class VariantCoCos implements ArcBasisASTComponentTypeCoCo {
   @Override
   public void check(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol(), "ASTComponent node '%s' at '%s' has no symbol. Thus can not " +
-        "check CoCo '%s'. Did you forget to run the scopes genitor and symbol table completer before checking the coco?",
-      node.getName(), node.get_SourcePositionStart(), this.getClass().getSimpleName());
+    Preconditions.checkArgument(node.isPresentSymbol());
+
     if (!(node.getSymbol() instanceof VariableComponentTypeSymbol)) return;
     VariableComponentTypeSymbol component = (VariableComponentTypeSymbol) node.getSymbol();
 

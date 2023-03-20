@@ -51,8 +51,7 @@ public class PortSymbol extends PortSymbolTOP {
    * @return the type for the type of this port.
    */
   public SymTypeExpression getType() {
-    Preconditions.checkState(this.type != null, "Type of Port '%s' has not been set. Did you " +
-      "forget to run the symbol table completer?", this.getName());
+    Preconditions.checkState(this.type != null);
     return this.type;
   }
 

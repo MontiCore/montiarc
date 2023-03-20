@@ -22,8 +22,7 @@ public class BasicModeAutomataScopesGenitor extends BasicModeAutomataScopesGenit
     if(automaton.getEnclosingScope().getAstNode() instanceof ASTModeDeclaration){
       return;  // this is handled by a coco, which produces a nicer error-message
     }
-    Preconditions.checkArgument(automaton.getEnclosingScope().getAstNode() instanceof ASTComponentType,
-        "Cannot handle automata that are not owned by component-types");
+    Preconditions.checkArgument(automaton.getEnclosingScope().getAstNode() instanceof ASTComponentType);
     ASTComponentType component = (ASTComponentType) automaton.getEnclosingScope().getAstNode();
     Preconditions.checkArgument(component.isPresentSymbol());
 

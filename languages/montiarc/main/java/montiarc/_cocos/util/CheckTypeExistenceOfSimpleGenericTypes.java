@@ -24,9 +24,7 @@ public class CheckTypeExistenceOfSimpleGenericTypes implements MCSimpleGenericTy
   @Override
   public void visit(@NotNull ASTMCBasicGenericType type) {
     Preconditions.checkNotNull(type);
-    Preconditions.checkNotNull(type.getEnclosingScope(), "ASTMCType node '%s' at '%s' has no enclosing scope. "
-        + "Did you forget to run the scopes genitor before checking cocos?",
-      Joiners.DOT.join(type.getNameList()), type.get_SourcePositionStart());
+    Preconditions.checkNotNull(type.getEnclosingScope());
     Preconditions.checkArgument(type.getEnclosingScope() instanceof IBasicSymbolsScope);
 
     IArcBasisScope enclScope = (IArcBasisScope) type.getEnclosingScope();

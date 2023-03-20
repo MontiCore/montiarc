@@ -112,8 +112,7 @@ public class ComponentInstantiationRespectsGenericTypeBoundsTest extends Abstrac
    */
   public void loadPersonAndSubtypes() {
     Optional<OOTypeSymbol> comparableSym = MontiArcMill.globalScope().resolveOOType("Comparable");
-    Preconditions.checkState(comparableSym.isPresent(), "Type Comparable<V> is not resolvable in test " +
-      "set-up. You may have executed the set-up in the wrong order.");
+    Preconditions.checkState(comparableSym.isPresent());
 
     OOTypeSymbol personSym = MontiArcMill.oOTypeSymbolBuilder()
       .setName("Person")

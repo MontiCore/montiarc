@@ -30,8 +30,8 @@ public class FeatureUsage implements ArcBasisASTComponentTypeCoCo {
   @Override
   public void check(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol(),
-      "ASTComponentType node '%s' has no symbol. " + "Did you forget to run the SymbolTableCreator before checking cocos?", node.getName());
+    Preconditions.checkArgument(node.isPresentSymbol());
+
     ComponentTypeSymbol symbol = node.getSymbol();
 
     // CoCo does not apply to atomic components

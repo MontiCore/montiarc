@@ -55,9 +55,7 @@ public class CheckTypeExistenceOfCollectionTypes implements MCCollectionTypesVis
   protected void checkCollectionTypeOfName(@NotNull String name, @NotNull ASTNode resolveStartPoint) {
     Preconditions.checkNotNull(name);
     Preconditions.checkNotNull(resolveStartPoint);
-    Preconditions.checkNotNull(resolveStartPoint.getEnclosingScope(), "ASTMCType '%s' at '%s' has no enclosing scope. "
-        + "Did you forget to run the scopes genitor before checking cocos?", name,
-      resolveStartPoint.get_SourcePositionStart());
+    Preconditions.checkNotNull(resolveStartPoint.getEnclosingScope());
     Preconditions.checkArgument(resolveStartPoint.getEnclosingScope() instanceof IBasicSymbolsScope);
 
     IArcBasisScope enclScope = (IArcBasisScope) resolveStartPoint.getEnclosingScope();

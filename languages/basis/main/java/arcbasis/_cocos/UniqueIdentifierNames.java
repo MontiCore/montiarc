@@ -32,8 +32,7 @@ public class UniqueIdentifierNames implements ArcBasisASTComponentTypeCoCo {
   @Override
   public void check(@NotNull ASTComponentType astComp) {
     Preconditions.checkNotNull(astComp);
-    Preconditions.checkArgument(astComp.isPresentSymbol(), "ASTComponent node '%s' has no symbol. "
-      + "Did you forget to run the SymbolTableCreator before checking cocos?", astComp.getName());
+    Preconditions.checkArgument(astComp.isPresentSymbol());
 
     ComponentTypeSymbol component = astComp.getSymbol();
     Multimap<String, SourcePosition> allNameOccurrences = getAllNameOccurrences(component);

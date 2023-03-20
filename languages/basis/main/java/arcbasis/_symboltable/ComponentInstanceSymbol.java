@@ -34,8 +34,7 @@ public class ComponentInstanceSymbol extends ComponentInstanceSymbolTOP {
    * @return the type of this component
    */
   public CompTypeExpression getType() {
-    Preconditions.checkState(this.type != null,
-      "Type of component instance '%s' has not been set yet.", this.getFullName());
+    Preconditions.checkState(this.type != null);
     return this.type;
   }
 

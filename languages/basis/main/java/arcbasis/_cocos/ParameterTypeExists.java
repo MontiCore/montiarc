@@ -26,9 +26,7 @@ public class ParameterTypeExists implements ArcBasisASTArcParameterCoCo {
   @Override
   public void check(@NotNull ASTArcParameter node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkNotNull(node.getEnclosingScope(), "ASTArcParameter node '%s' at '%s' has no enclosing scope. "
-        + "Did you forget to run the scopes genitor before checking cocos?", node.getName(),
-      node.get_SourcePositionStart());
+    Preconditions.checkNotNull(node.getEnclosingScope());
 
     existenceChecker.checkExistenceOf(node.getMCType());
   }

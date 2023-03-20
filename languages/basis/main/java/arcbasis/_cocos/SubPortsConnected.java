@@ -33,8 +33,8 @@ public class SubPortsConnected implements ArcBasisASTComponentTypeCoCo {
   @Override
   public void check(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol(), "ASTComponent node '%s' has no symbol. "
-      + "Did you forget to run the SymbolTableCreator before checking cocos?", node.getName());
+    Preconditions.checkArgument(node.isPresentSymbol());
+
     final ComponentTypeSymbol compSymbol = node.getSymbol();
     final Collection<String> targets = this.getTargetNames(node);
     final Collection<String> sources = this.getSourceNames(node);
