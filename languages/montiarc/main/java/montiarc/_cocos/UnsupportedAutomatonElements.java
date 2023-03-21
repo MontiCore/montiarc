@@ -18,30 +18,6 @@ import org.codehaus.commons.nullanalysis.NotNull;
  */
 public interface UnsupportedAutomatonElements {
 
-  /** Entry actions for states in automatas are currently not supported by MontiArc. */
-  class EntryActions implements SCActionsASTSCEntryActionCoCo {
-
-    @Override
-    public void check(@NotNull ASTSCEntryAction node) {
-      Preconditions.checkNotNull(node);
-      Log.error(ArcError.UNSUPPORTED_MODEL_ELEMENT.format("Using entry actions for states in automatas is currently " +
-        "not supported by MontiArc."), node.get_SourcePositionStart(), node.get_SourcePositionEnd()
-      );
-    }
-  }
-
-  /** Exit actions for states in automatas are currently not supported by MontiArc. */
-  class ExitActions implements SCActionsASTSCExitActionCoCo {
-
-    @Override
-    public void check(@NotNull ASTSCExitAction node) {
-      Preconditions.checkNotNull(node);
-      Log.error(ArcError.UNSUPPORTED_MODEL_ELEMENT.format("Using exit actions for states in automatas is currently " +
-        "not supported by MontiArc."), node.get_SourcePositionStart(), node.get_SourcePositionEnd()
-      );
-    }
-  }
-
   /** Using final states in automatas is not supported by MontiArc. */
   class FinalStates implements SCBasisASTSCStateCoCo {
 
@@ -49,8 +25,8 @@ public interface UnsupportedAutomatonElements {
     public void check(@NotNull ASTSCState node) {
       Preconditions.checkNotNull(node);
       if(node.getSCModifier().isFinal()) {
-        Log.error(ArcError.UNSUPPORTED_MODEL_ELEMENT.format("Using final states in automatas is not supported by " +
-          "MontiArc."), node.get_SourcePositionStart(), node.get_SourcePositionEnd()
+        Log.warn(ArcError.UNSUPPORTED_MODEL_ELEMENT.format("final states"),
+          node.get_SourcePositionStart(), node.get_SourcePositionEnd()
         );
       }
     }

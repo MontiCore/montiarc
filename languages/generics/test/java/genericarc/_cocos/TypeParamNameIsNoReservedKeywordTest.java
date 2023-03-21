@@ -17,7 +17,7 @@ public class TypeParamNameIsNoReservedKeywordTest extends AbstractTest {
     ASTArcTypeParameter typeParam = GenericArcMill.arcTypeParameterBuilder().setName("keyword").build();
     TypeParamNameIsNoReservedKeyword coco =
       new TypeParamNameIsNoReservedKeyword("testLang", Collections.singleton("keyword"));
-    ArcError expectedError = ArcError.RESERVED_KEYWORD_USED;
+    ArcError expectedError = ArcError.RESTRICTED_IDENTIFIER;
 
     // When
     coco.check(typeParam);

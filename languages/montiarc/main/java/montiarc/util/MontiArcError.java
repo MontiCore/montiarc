@@ -17,7 +17,8 @@ public enum MontiArcError implements Error {
   CLI_OPTION_AMBIGUOUS("0xC1006", "Option '%s' does not match any valid option"),
   CLI_OPTION_UNRECOGNIZED("0xC1007", "Unrecognized option '%s'"),
   CLI_OPTION_MISSING("0xC1008", "Options [%s] are missing, but are required"),
-  CLI_ARGUMENT_MISSING("0xC1009", "Option '%s' is missing an argument");
+  CLI_ARGUMENT_MISSING("0xC1009", "Option '%s' is missing an argument"),
+  ROOT_NO_INSTANCE("0xC1010", "Cannot instantiate component without context");
 
   private final String errorCode;
   private final String errorMessage;

@@ -40,9 +40,9 @@ public class OptionalConfigurationParametersLast implements ArcBasisASTComponent
     for(int i = 0; i < parameters.size(); i++) {
       ASTArcParameter param = parameters.get(i);
       if(isMandatory(param) && alreadySawOptionalParameter) {
-        Log.error(ArcError.OPTIONAL_CONFIG_PARAMS_LAST.format(param.getName(), i + 1, comp.getFullName(),
-          parameters.get(firstOptionalParamPosition.get()).getName(), 1 + firstOptionalParamPosition.get()),
-          param.get_SourcePositionStart(), param.get_SourcePositionEnd());
+        Log.error(ArcError.OPTIONAL_PARAMS_LAST.format(parameters.get(firstOptionalParamPosition.get()).getName(), param.getName()),
+          param.get_SourcePositionStart(), param.get_SourcePositionEnd()
+        );
       } else if(isOptional(param)) {
         alreadySawOptionalParameter = true;
         firstOptionalParamPosition = Optional.of(i);

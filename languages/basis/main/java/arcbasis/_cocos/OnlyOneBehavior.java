@@ -19,7 +19,7 @@ public class OnlyOneBehavior implements ArcBasisASTComponentTypeCoCo {
     if(streamBehaviors(type).count() >= 2L) {
       streamBehaviors(type).forEach(
         behavior -> Log.error(
-          ArcError.MULTIPLE_BEHAVIOR.format(type.getName()),
+          ArcError.MULTIPLE_BEHAVIOR.toString(),
           behavior.get_SourcePositionStart(), behavior.get_SourcePositionEnd())
       );
     }

@@ -129,8 +129,8 @@ public class SubPortsConnectedTest extends AbstractTest {
 
   static Stream<Arguments> componentAndErrorCodeProvider() {
     ArcError[] errors1 = new ArcError[] {};
-    ArcError[] errors2 = new ArcError[] { ArcError.OUTGOING_PORT_NOT_CONNECTED };
-    ArcError[] errors3 = new ArcError[] { ArcError.INCOMING_PORT_NOT_CONNECTED };
+    ArcError[] errors2 = new ArcError[] { ArcError.OUT_PORT_NOT_CONNECTED};
+    ArcError[] errors3 = new ArcError[] { ArcError.IN_PORT_NOT_CONNECTED};
     return Stream.of(Arguments.of("A", errors1), Arguments.of("B", errors2), Arguments.of("C", errors3));
   }
 }

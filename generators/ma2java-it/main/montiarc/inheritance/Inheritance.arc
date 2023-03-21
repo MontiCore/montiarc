@@ -4,6 +4,6 @@ package inheritance;
 /**
  * Component that extends another component
  */
-component Inheritance(int a, int b = 10, int c) extends Parent(a, b) {
+component Inheritance(int a, int b, int c = 10) extends Parent(a, b) {
 
 }

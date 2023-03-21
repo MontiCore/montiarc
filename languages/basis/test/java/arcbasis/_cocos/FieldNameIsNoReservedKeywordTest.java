@@ -18,9 +18,9 @@ public class FieldNameIsNoReservedKeywordTest extends AbstractTest {
       .setName("keyword")
       .setArcArgumentsAbsent()
       .build();
-    ComponentInstanceNameIsNoReservedKeyword coco =
-      new ComponentInstanceNameIsNoReservedKeyword("testLang", Collections.singleton("keyword"));
-    ArcError expectedError = ArcError.RESERVED_KEYWORD_USED;
+    SubcomponentNoReservedKeyword coco =
+      new SubcomponentNoReservedKeyword("testLang", Collections.singleton("keyword"));
+    ArcError expectedError = ArcError.RESTRICTED_IDENTIFIER;
 
     // When
     coco.check(instance);
@@ -36,8 +36,8 @@ public class FieldNameIsNoReservedKeywordTest extends AbstractTest {
       .setName("noKeyword")
       .setArcArgumentsAbsent()
       .build();
-    ComponentInstanceNameIsNoReservedKeyword coco =
-      new ComponentInstanceNameIsNoReservedKeyword("testLang", Collections.singleton("keyword"));
+    SubcomponentNoReservedKeyword coco =
+      new SubcomponentNoReservedKeyword("testLang", Collections.singleton("keyword"));
 
     // When
     coco.check(instance);

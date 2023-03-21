@@ -55,10 +55,10 @@ public class PortsConnectedTest extends AbstractCoCoTest {
 
     protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
         return Stream.of(
-                arg("IncomingPortNotConnected.arc", ArcError.INCOMING_PORT_NO_FORWARD),
-                arg("OutgoingPortNotConnected.arc", ArcError.OUTGOING_PORT_NO_FORWARD),
+                arg("IncomingPortNotConnected.arc", ArcError.IN_PORT_UNUSED),
+                arg("OutgoingPortNotConnected.arc", ArcError.OUT_PORT_UNUSED),
                 arg("MissingPortConnections.arc",
-                        ArcError.INCOMING_PORT_NO_FORWARD, ArcError.OUTGOING_PORT_NO_FORWARD)
+                        ArcError.IN_PORT_UNUSED, ArcError.OUT_PORT_UNUSED)
         );
     }
 

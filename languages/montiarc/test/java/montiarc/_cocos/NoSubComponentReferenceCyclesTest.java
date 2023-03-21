@@ -2,7 +2,7 @@
 package montiarc._cocos;
 
 import arcbasis._ast.ASTComponentType;
-import arcbasis._cocos.NoSubComponentReferenceCycles;
+import arcbasis._cocos.NoSubcomponentReferenceCycle;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
@@ -41,16 +41,16 @@ public class NoSubComponentReferenceCyclesTest extends AbstractCoCoTest {
   @Override
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
     Preconditions.checkNotNull(checker);
-    checker.addCoCo(new NoSubComponentReferenceCycles());
+    checker.addCoCo(new NoSubcomponentReferenceCycle());
   }
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-      arg("LongCycle1.arc", ArcError.NO_SUBCOMPONENT_CYCLE, ArcError.NO_SUBCOMPONENT_CYCLE, ArcError.NO_SUBCOMPONENT_CYCLE),
-      arg("WithDirectSelfReference.arc", ArcError.NO_SUBCOMPONENT_CYCLE),
-      arg("WithNestedSubCompRefCycle.arc", ArcError.NO_SUBCOMPONENT_CYCLE, ArcError.NO_SUBCOMPONENT_CYCLE),
-      arg("WithNestedSubCompRefCycle2.arc", ArcError.NO_SUBCOMPONENT_CYCLE, ArcError.NO_SUBCOMPONENT_CYCLE, ArcError.NO_SUBCOMPONENT_CYCLE),
-      arg("WithSubCompRefCycle.arc", ArcError.NO_SUBCOMPONENT_CYCLE, ArcError.NO_SUBCOMPONENT_CYCLE)
+      arg("LongCycle1.arc", ArcError.SUBCOMPONENT_REFERENCE_CYCLE, ArcError.SUBCOMPONENT_REFERENCE_CYCLE, ArcError.SUBCOMPONENT_REFERENCE_CYCLE),
+      arg("WithDirectSelfReference.arc", ArcError.SUBCOMPONENT_REFERENCE_CYCLE),
+      arg("WithNestedSubCompRefCycle.arc", ArcError.SUBCOMPONENT_REFERENCE_CYCLE, ArcError.SUBCOMPONENT_REFERENCE_CYCLE),
+      arg("WithNestedSubCompRefCycle2.arc", ArcError.SUBCOMPONENT_REFERENCE_CYCLE, ArcError.SUBCOMPONENT_REFERENCE_CYCLE, ArcError.SUBCOMPONENT_REFERENCE_CYCLE),
+      arg("WithSubCompRefCycle.arc", ArcError.SUBCOMPONENT_REFERENCE_CYCLE, ArcError.SUBCOMPONENT_REFERENCE_CYCLE)
     );
   }
 

@@ -26,7 +26,7 @@ public class StateNameIsNoReservedKeywordTest extends AbstractTest {
       .build();
     StateNameIsNoReservedKeyword coco =
       new StateNameIsNoReservedKeyword("testLang", Collections.singleton("keyword"));
-    ArcError expectedError = ArcError.RESERVED_KEYWORD_USED;
+    ArcError expectedError = ArcError.RESTRICTED_IDENTIFIER;
 
     // When
     coco.check(state);

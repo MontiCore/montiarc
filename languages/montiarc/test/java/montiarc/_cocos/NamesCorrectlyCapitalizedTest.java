@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcbasis._cocos.ComponentTypeNameCapitalization;
+import arcbasis._cocos.ComponentNameCapitalization;
 import arcbasis._cocos.FieldNameCapitalization;
-import arcbasis._cocos.InstanceNameCapitalisation;
+import arcbasis._cocos.SubcomponentNameCapitalization;
 import arcbasis._cocos.ParameterNameCapitalization;
-import arcbasis._cocos.PortNameCapitalisation;
+import arcbasis._cocos.PortNameCapitalization;
 import com.google.common.base.Preconditions;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
 import montiarc.util.ArcError;
@@ -22,10 +22,10 @@ import variablearc._cocos.FeatureNameCapitalization;
 import java.util.stream.Stream;
 
 /**
- * Contains tests for {@link arcbasis._cocos.ComponentTypeNameCapitalization},
+ * Contains tests for {@link ComponentNameCapitalization},
  * {@link arcbasis._cocos.FieldNameCapitalization}, {@link
- * arcbasis._cocos.InstanceNameCapitalisation}, {@link arcbasis._cocos.ParameterNameCapitalization},
- * {@link arcbasis._cocos.PortNameCapitalisation}, {@link
+ * SubcomponentNameCapitalization}, {@link arcbasis._cocos.ParameterNameCapitalization},
+ * {@link PortNameCapitalization}, {@link
  * genericarc._cocos.GenericTypeParameterNameCapitalization}
  */
 public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
@@ -40,16 +40,16 @@ public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
       arg("allNamesIncorrectlyCapitalized.arc",
-        ArcError.COMPONENT_NAME_UPPER_CASE, GenericArcError.TYPE_PARAMETER_UPPER_CASE_LETTER, ArcError.PARAMETER_LOWER_CASE,
-        ArcError.COMPONENT_NAME_UPPER_CASE, ArcError.INSTANCE_NAME_LOWER_CASE, ArcError.PORT_LOWER_CASE,
-        ArcError.PORT_LOWER_CASE, ArcError.VARIABLE_LOWER_CASE, VariableArcError.FEATURE_LOWER_CASE),
-      arg("componentNameLowerCase.arc", ArcError.COMPONENT_NAME_UPPER_CASE),
-      arg("InnerComponentTypeLowerCase.arc", ArcError.COMPONENT_NAME_UPPER_CASE),
-      arg("InstanceNameUpperCase.arc", ArcError.INSTANCE_NAME_LOWER_CASE),
-      arg("ParameterNameUpperCase.arc", ArcError.PARAMETER_LOWER_CASE),
-      arg("PortNameUpperCase.arc", ArcError.PORT_LOWER_CASE, ArcError.PORT_LOWER_CASE),
+        ArcError.COMPONENT_LOWER_CASE, GenericArcError.TYPE_PARAMETER_UPPER_CASE_LETTER, ArcError.PARAMETER_UPPER_CASE,
+        ArcError.COMPONENT_LOWER_CASE, ArcError.SUBCOMPONENT_UPPER_CASE, ArcError.PORT_UPPER_CASE,
+        ArcError.PORT_UPPER_CASE, ArcError.FIELD_UPPER_CASE, VariableArcError.FEATURE_LOWER_CASE),
+      arg("componentNameLowerCase.arc", ArcError.COMPONENT_LOWER_CASE),
+      arg("InnerComponentTypeLowerCase.arc", ArcError.COMPONENT_LOWER_CASE),
+      arg("InstanceNameUpperCase.arc", ArcError.SUBCOMPONENT_UPPER_CASE),
+      arg("ParameterNameUpperCase.arc", ArcError.PARAMETER_UPPER_CASE),
+      arg("PortNameUpperCase.arc", ArcError.PORT_UPPER_CASE, ArcError.PORT_UPPER_CASE),
       arg("TypeParameterLowerCaseLetter.arc", GenericArcError.TYPE_PARAMETER_UPPER_CASE_LETTER),
-      arg("VariableNameUpperCase.arc", ArcError.VARIABLE_LOWER_CASE),
+      arg("VariableNameUpperCase.arc", ArcError.FIELD_UPPER_CASE),
       arg("FeatureNameUpperCase.arc", VariableArcError.FEATURE_LOWER_CASE)
     );
   }
@@ -72,12 +72,12 @@ public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
   @Override
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
     Preconditions.checkNotNull(checker);
-    checker.addCoCo(new ComponentTypeNameCapitalization());
+    checker.addCoCo(new ComponentNameCapitalization());
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new GenericTypeParameterNameCapitalization());
-    checker.addCoCo(new InstanceNameCapitalisation());
+    checker.addCoCo(new SubcomponentNameCapitalization());
     checker.addCoCo(new ParameterNameCapitalization());
-    checker.addCoCo(new PortNameCapitalisation());
+    checker.addCoCo(new PortNameCapitalization());
     checker.addCoCo(new FeatureNameCapitalization());
   }
 }

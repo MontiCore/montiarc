@@ -102,7 +102,7 @@ public class GenericArcSymbolTableCompleter implements GenericArcVisitor2, Gener
           );
         }
       }  catch (ResolvedSeveralEntriesForSymbolException e) {
-        Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(GenericArcMill.prettyPrint(upperBound, false)), upperBound.get_SourcePositionStart());
+        Log.error(ArcError.AMBIGUOUS_REFERENCE.format(GenericArcMill.prettyPrint(upperBound, false)), upperBound.get_SourcePositionStart());
       }
     }
   }

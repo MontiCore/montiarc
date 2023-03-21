@@ -44,8 +44,8 @@ public class TypeParamNameIsNoReservedKeywordTest extends AbstractCoCoTest {
     return Stream.of(
       arg("TypeParamNamesAreLegal.arc"),
       arg("TypeParamNamesAreKeywords.arc",  // Expect 4 violations
-        ArcError.RESERVED_KEYWORD_USED, ArcError.RESERVED_KEYWORD_USED, ArcError.RESERVED_KEYWORD_USED,
-        ArcError.RESERVED_KEYWORD_USED)
+        ArcError.RESTRICTED_IDENTIFIER, ArcError.RESTRICTED_IDENTIFIER, ArcError.RESTRICTED_IDENTIFIER,
+        ArcError.RESTRICTED_IDENTIFIER)
     );
   }
 

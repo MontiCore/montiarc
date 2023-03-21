@@ -2,11 +2,11 @@
 package montiarc.cocos;
 
 import arcautomaton._cocos.StateNameIsNoReservedKeyword;
-import arcbasis._cocos.ComponentInstanceNameIsNoReservedKeyword;
-import arcbasis._cocos.ComponentTypeNameIsNoReservedKeyword;
+import arcbasis._cocos.SubcomponentNoReservedKeyword;
+import arcbasis._cocos.ComponentNoReservedKeyword;
 import arcbasis._cocos.FieldNameIsNoReservedKeyword;
-import arcbasis._cocos.ParameterNameIsNoReservedKeyword;
-import arcbasis._cocos.PortNameIsNoReservedKeyword;
+import arcbasis._cocos.ParameterNoReservedKeyword;
+import arcbasis._cocos.PortNoReservedKeyword;
 import genericarc._cocos.TypeParamNameIsNoReservedKeyword;
 
 import java.util.Set;
@@ -33,13 +33,13 @@ public abstract class IdentifiersAreNoJavaKeywords {
     "_"
   );
 
-  public static class PortNamesAreNoJavaKeywords extends PortNameIsNoReservedKeyword {
-    public PortNamesAreNoJavaKeywords() {
+  public static class PortNoNamesAreNoJavaKeywords extends PortNoReservedKeyword {
+    public PortNoNamesAreNoJavaKeywords() {
       super("Java", JAVA_KEYWORDS);
     }
   }
 
-  public static class ParameterNamesAreNoJavaKeywords extends ParameterNameIsNoReservedKeyword {
+  public static class ParameterNamesAreNoJavaKeywords extends ParameterNoReservedKeyword {
     public ParameterNamesAreNoJavaKeywords() {
       super("Java", JAVA_KEYWORDS);
     }
@@ -63,13 +63,13 @@ public abstract class IdentifiersAreNoJavaKeywords {
     }
   }
 
-  public static class ComponentTypeNamesAreNoJavaKeywords extends ComponentTypeNameIsNoReservedKeyword {
+  public static class ComponentTypeNamesAreNoJavaKeywords extends ComponentNoReservedKeyword {
     public ComponentTypeNamesAreNoJavaKeywords() {
       super("Java", JAVA_KEYWORDS);
     }
   }
 
-  public static class ComponentInstanceNamesAreNoJavaKeywords extends ComponentInstanceNameIsNoReservedKeyword {
+  public static class ComponentInstanceNamesAreNoJavaKeywords extends SubcomponentNoReservedKeyword {
     public ComponentInstanceNamesAreNoJavaKeywords() {
       super("Java", JAVA_KEYWORDS);
     }

@@ -167,7 +167,7 @@ public class OnlyOneTimingTest extends AbstractTest {
     coco.check(st);
 
     // Then
-    checkOnlyExpectedErrorsPresent(ArcError.TIMING_MULTIPLE);
+    checkOnlyExpectedErrorsPresent(ArcError.MULTIPLE_TIMING_ANNOTATIONS);
   }
 
   public static Stream<Arguments> provideTwoTimingStereoValues() {
@@ -209,7 +209,7 @@ public class OnlyOneTimingTest extends AbstractTest {
     coco.check(st);
 
     // Then
-    checkOnlyExpectedErrorsPresent(ArcError.TIMING_MULTIPLE);
+    checkOnlyExpectedErrorsPresent(ArcError.MULTIPLE_TIMING_ANNOTATIONS);
   }
 
   public static Stream<Arguments> provideThreeTimingStereoValues() {

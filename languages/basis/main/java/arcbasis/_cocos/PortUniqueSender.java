@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @implements [Hab16] R1: Each outgoing port of a component type definition is
+ * Implements [Hab16] R1: Each outgoing port of a component type definition is
  * used at most once as target of a connector. (p. 63, Lst. 3.36)
- * @implements [Hab16] R2: Each incoming port of a subcomponent is used at most
+ * Implements [Hab16] R2: Each incoming port of a subcomponent is used at most
  * once as target of a connector. (p. 62, Lst. 3.37)
  */
 public class PortUniqueSender implements ArcBasisASTComponentTypeCoCo {
@@ -27,7 +27,7 @@ public class PortUniqueSender implements ArcBasisASTComponentTypeCoCo {
       for (String target : connector.getTargetsNames()) {
         if (targets.contains(target)) {
           Log.error(ArcError.PORT_MULTIPLE_SENDER.format(target),
-            connector.get_SourcePositionStart());
+            connector.get_SourcePositionStart(), connector.get_SourcePositionEnd());
         } else {
           targets.add(target);
         }

@@ -27,9 +27,8 @@ public class OnlyOneTiming implements UMLStereotypeASTStereotypeCoCo {
       .collect(Collectors.toUnmodifiableList());
 
     if (timings.size() > 1) {
-      Log.error(ArcError.TIMING_MULTIPLE.toString(),
-        timings.get(1).get_SourcePositionStart(),
-        timings.get(1).get_SourcePositionEnd()
+      Log.error(ArcError.MULTIPLE_TIMING_ANNOTATIONS.toString(),
+        timings.get(1).get_SourcePositionStart(), timings.get(1).get_SourcePositionEnd()
       );
     }
   }

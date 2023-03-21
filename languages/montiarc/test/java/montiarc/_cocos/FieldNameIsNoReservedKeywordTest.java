@@ -43,7 +43,7 @@ public class FieldNameIsNoReservedKeywordTest extends AbstractCoCoTest {
   protected static Stream<Arguments> modelAndExpectedErrorProvider() {
     return Stream.of(
       arg("FieldNamesAreLegal.arc"),
-      arg("FieldNamesAreKeywords.arc", ArcError.RESERVED_KEYWORD_USED, ArcError.RESERVED_KEYWORD_USED)
+      arg("FieldNamesAreKeywords.arc", ArcError.RESTRICTED_IDENTIFIER, ArcError.RESTRICTED_IDENTIFIER)
     );
   }
 

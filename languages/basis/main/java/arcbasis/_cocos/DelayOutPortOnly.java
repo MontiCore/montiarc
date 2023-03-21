@@ -18,9 +18,8 @@ public class DelayOutPortOnly implements ArcBasisASTPortCoCo {
     Preconditions.checkArgument(node.isPresentSymbol());
 
     if (node.getSymbol().isDelayed() && !node.getSymbol().isOutgoing()) {
-      Log.error(ArcError.DELAY_OUT_PORT_ONLY.toString(),
-        node.get_SourcePositionStart(),
-        node.get_SourcePositionEnd()
+      Log.error(ArcError.IN_PORT_DELAYED.format(node.getName()),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd()
       );
     }
   }

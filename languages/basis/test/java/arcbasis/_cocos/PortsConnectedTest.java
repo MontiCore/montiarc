@@ -79,7 +79,7 @@ public class PortsConnectedTest extends AbstractTest {
         .build())
       .build();
     symTab.createFromAST(comp2);
-    return Stream.of(Arguments.of(comp1, new ArcError[] { ArcError.INCOMING_PORT_NO_FORWARD }),
-      Arguments.of(comp2, new ArcError[] { ArcError.OUTGOING_PORT_NO_FORWARD }));
+    return Stream.of(Arguments.of(comp1, new ArcError[] { ArcError.IN_PORT_UNUSED}),
+      Arguments.of(comp2, new ArcError[] { ArcError.OUT_PORT_UNUSED}));
   }
 }

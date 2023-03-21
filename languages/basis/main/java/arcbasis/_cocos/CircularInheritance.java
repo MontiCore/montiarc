@@ -4,37 +4,60 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symboltable.ISymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
- * Checks whether there is a circular inheritance in the inheritance tree of this component type.
- *
- * @implements [Hab16] R11: Inheritance cycles of component types are forbidden. (p. 67, lst. 3.46)
+ * This context-condition checks that no component extends itself either
+ * directly or transitively.
+ * <p>
+ * Implements [Hab16] R11: Inheritance cycles of component types are forbidden.
+ * (p. 67, lst. 3.46)
  */
 public class CircularInheritance implements ArcBasisASTComponentTypeCoCo {
 
+  /**
+   * Checks that the component does not extend itself.
+   * @param node the component that is to be checked
+   */
   @Override
   public void check(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    if (!node.getSymbol().isPresentParent()) {
-      return;
-    }
-    List<String> superComps = new ArrayList<>();
-    ComponentTypeSymbol symbol = node.getSymbol();
-    while (symbol.isPresentParent()) {
-      superComps.add(symbol.getFullName());
-      symbol = symbol.getParent().getTypeInfo();
-      if (superComps.contains(symbol.getFullName())) {
-        Log.error(ArcError.CIRCULAR_INHERITANCE.format(symbol.getFullName()), symbol.getSourcePosition());
-        return;
-      }
+    this.check(node, node.getSymbol(), new HashSet<>());
+  }
+
+  /**
+   * Recursively check that the root component does not transitively extend
+   * itself starting with the parent of the next component symbol.
+   * Terminates the search if the parent has already been visited, i.e,
+   * if there is a component inheritance cycle and only logs an error if
+   * the parent is the root of the search.
+   * @param root the root component of the search
+   * @param next the next component whose parent is to be checked
+   * @param visited the (component) symbols already checked
+   */
+  protected void check(@NotNull ASTComponentType root,
+                       @NotNull ComponentTypeSymbol next,
+                       @NotNull Collection<ISymbol> visited) {
+    Preconditions.checkNotNull(root);
+    Preconditions.checkNotNull(next);
+    Preconditions.checkNotNull(visited);
+    if (next.isPresentParent() && next.getParent().getTypeInfo().equals(root.getSymbol())) {
+      // log error if the parent is the root of the search
+      Log.error(ArcError.CIRCULAR_INHERITANCE.format(root.getName()),
+        root.getHead().get_SourcePositionStart(), root.getHead().get_SourcePositionEnd()
+      );
+    } else if (next.isPresentParent() && !visited.contains(next.getParent().getTypeInfo())) {
+      // continue if the parent has not been visited yet
+      visited.add(next.getParent().getTypeInfo());
+      this.check(root, next.getParent().getTypeInfo(), visited);
     }
   }
 }

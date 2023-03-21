@@ -7,6 +7,8 @@ import com.google.common.base.Preconditions;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._visitor.MCBasicTypesHandler;
 import de.monticore.types.mcbasictypes._visitor.MCBasicTypesTraverser;
+import de.se_rwth.commons.logging.Log;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
@@ -39,19 +41,26 @@ public class SynthesizeComponentFromMCBasicTypes implements MCBasicTypesHandler 
   }
 
   @Override
-  public void handle(@NotNull ASTMCQualifiedType mcType) {
-    Preconditions.checkNotNull(mcType);
-    Preconditions.checkNotNull(mcType.getEnclosingScope());
-    Preconditions.checkArgument(mcType.getEnclosingScope() instanceof IArcBasisScope);
+  public void handle(@NotNull ASTMCQualifiedType node) {
+    Preconditions.checkNotNull(node);
+    Preconditions.checkNotNull(node.getEnclosingScope());
+    Preconditions.checkArgument(node.getEnclosingScope() instanceof IArcBasisScope);
 
-    String compTypeName = mcType.getMCQualifiedName().getQName();
-    IArcBasisScope enclScope = ((IArcBasisScope) mcType.getEnclosingScope());
-    List<ComponentTypeSymbol> compType = enclScope.resolveComponentTypeMany(compTypeName);
+    IArcBasisScope enclScope = ((IArcBasisScope) node.getEnclosingScope());
+    List<ComponentTypeSymbol> comp = enclScope.resolveComponentTypeMany(node.getMCQualifiedName().getQName());
 
-    if (compType.isEmpty()) {
+    if (comp.isEmpty()) {
+      Log.error(ArcError.MISSING_COMPONENT.format(node.getMCQualifiedName().getQName()),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd()
+      );
       resultWrapper.setResultAbsent();
+    } else if (comp.size() > 1) {
+      Log.error(ArcError.AMBIGUOUS_REFERENCE.format(comp.get(0).getFullName(), comp.get(1).getFullName()),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd()
+      );
+      resultWrapper.setResult(new TypeExprOfComponent(comp.get(0)));
     } else {
-      resultWrapper.setResult(new TypeExprOfComponent(compType.get(0)));
+      resultWrapper.setResult(new TypeExprOfComponent(comp.get(0)));
     }
   }
 }

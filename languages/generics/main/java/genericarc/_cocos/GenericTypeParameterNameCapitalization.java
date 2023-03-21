@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package genericarc._cocos;
 
+import arcbasis._cocos.ComponentNameCapitalization;
 import com.google.common.base.Preconditions;
 import genericarc._ast.ASTArcTypeParameter;
 import montiarc.util.GenericArcError;
@@ -10,7 +11,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 /**
  * {@code implements} [Hab16] CV2: Types start with an upper-case letter. (p. 71, lst. 3.51)
  *
- * @see arcbasis._cocos.ComponentTypeNameCapitalization
+ * @see ComponentNameCapitalization
  */
 public class GenericTypeParameterNameCapitalization implements GenericArcASTArcTypeParameterCoCo {
 

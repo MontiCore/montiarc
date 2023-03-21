@@ -44,21 +44,21 @@ public class VariantCoCosTest extends AbstractCoCoTest {
       arg("ValidWithComposedVariants.arc"),
       arg("ValidWithVariantsAndComposedVariants.arc"),
       arg("InvalidConnectorSourceAndTarget.arc",
-        ArcError.TARGET_PORT_NOT_EXISTS,
-        ArcError.TARGET_PORT_NOT_EXISTS,
-        ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH,
-        ArcError.SOURCE_AND_TARGET_TYPE_MISMATCH,
-        ArcError.PORT_DIRECTION_MISMATCH,
-        ArcError.PORT_DIRECTION_MISMATCH
+        ArcError.MISSING_PORT,
+        ArcError.MISSING_PORT,
+        ArcError.CONNECTOR_TYPE_MISMATCH,
+        ArcError.CONNECTOR_TYPE_MISMATCH,
+        ArcError.TARGET_DIRECTION_MISMATCH,
+        ArcError.TARGET_DIRECTION_MISMATCH
       ),
       arg("InvalidConnectorSourceAndTargetTimings.arc",
-        ArcError.SOURCE_AND_TARGET_TIMING_MISMATCH,
-        ArcError.SOURCE_AND_TARGET_TIMING_MISMATCH,
-        ArcError.SOURCE_AND_TARGET_TIMING_MISMATCH,
-        ArcError.SOURCE_AND_TARGET_TIMING_MISMATCH
+        ArcError.CONNECTOR_TIMING_MISMATCH,
+        ArcError.CONNECTOR_TIMING_MISMATCH,
+        ArcError.CONNECTOR_TIMING_MISMATCH,
+        ArcError.CONNECTOR_TIMING_MISMATCH
       ),
       arg("InvalidUniqueIdentifiersNames.arc",
-        ArcError.INCOMING_PORT_NO_FORWARD,
+        ArcError.IN_PORT_UNUSED,
         ArcError.UNIQUE_IDENTIFIER_NAMES,
         ArcError.UNIQUE_IDENTIFIER_NAMES,
         ArcError.UNIQUE_IDENTIFIER_NAMES,
@@ -72,22 +72,22 @@ public class VariantCoCosTest extends AbstractCoCoTest {
 //        ArcError.FEEDBACK_LOOP_TIMING_NOT_DELAYED
 //      ),
       arg("InvalidPortsConnected.arc",
-        ArcError.INCOMING_PORT_NOT_CONNECTED,
-        ArcError.INCOMING_PORT_NOT_CONNECTED,
-        ArcError.INCOMING_PORT_NOT_CONNECTED,
-        ArcError.INCOMING_PORT_NOT_CONNECTED,
-        ArcError.INCOMING_PORT_NOT_CONNECTED,
-        ArcError.OUTGOING_PORT_NOT_CONNECTED
+        ArcError.IN_PORT_NOT_CONNECTED,
+        ArcError.IN_PORT_NOT_CONNECTED,
+        ArcError.IN_PORT_NOT_CONNECTED,
+        ArcError.IN_PORT_NOT_CONNECTED,
+        ArcError.IN_PORT_NOT_CONNECTED,
+        ArcError.OUT_PORT_NOT_CONNECTED
       ),
       arg("InvalidPortsUniqueSender.arc",
         ArcError.PORT_MULTIPLE_SENDER
       ),
       arg("InvalidSubPortsConnected.arc",
-        ArcError.INCOMING_PORT_NOT_CONNECTED,
-        ArcError.INCOMING_PORT_NOT_CONNECTED,
-        ArcError.INCOMING_PORT_NOT_CONNECTED,
-        ArcError.OUTGOING_PORT_NOT_CONNECTED,
-        ArcError.OUTGOING_PORT_NOT_CONNECTED
+        ArcError.IN_PORT_NOT_CONNECTED,
+        ArcError.IN_PORT_NOT_CONNECTED,
+        ArcError.IN_PORT_NOT_CONNECTED,
+        ArcError.OUT_PORT_NOT_CONNECTED,
+        ArcError.OUT_PORT_NOT_CONNECTED
       ),
 //      arg("InvalidInheritedPortsTypeCorrect.arc",
 //        ArcError.INHERITED_INCOMING_PORT_TYPE_MISMATCH,
@@ -96,8 +96,8 @@ public class VariantCoCosTest extends AbstractCoCoTest {
 //        ArcError.INHERITED_PORT_DIRECTION_MISMATCH
 //      ),
       arg("InvalidUnderspecification.arc",
-        ArcError.PORT_DIRECTION_MISMATCH,
-        ArcError.PORT_DIRECTION_MISMATCH
+        ArcError.SOURCE_DIRECTION_MISMATCH,
+        ArcError.TARGET_DIRECTION_MISMATCH
       )
     );
   }

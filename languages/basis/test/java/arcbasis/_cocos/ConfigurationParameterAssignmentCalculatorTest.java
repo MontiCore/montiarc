@@ -92,7 +92,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
       Arguments.arguments("shouldFindTooFewParameterBindings",
         provideSimpleCompType(),
         ArcBasisMill.arcArgumentsBuilder().build(),
-        new ArcError[] {ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS}),
+        new ArcError[] {ArcError.TOO_FEW_ARGUMENTS}),
 
       Arguments.arguments("shouldFindTooManyParameterBindings",
         provideSimpleCompType(),
@@ -105,7 +105,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
               doBuildNameExpressionInScope("aBool")
             ).build()
           ).build(),
-        new ArcError[] {ArcError.TOO_MANY_INSTANTIATION_ARGUMENTS}),
+        new ArcError[] {ArcError.TOO_MANY_ARGUMENTS}),
 
       Arguments.arguments("shouldFindCorrectNumberOfParameterBindings",
         provideSimpleCompType(),
@@ -120,7 +120,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
       Arguments.arguments("shouldFindTooFewParameterBindingsWithDefaultParameters",
         provideAdvancedCompType(),
         ArcBasisMill.arcArgumentsBuilder().build(),
-        new ArcError[] {ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS}),
+        new ArcError[] {ArcError.TOO_FEW_ARGUMENTS}),
 
       Arguments.arguments("shouldFindTooManyParameterBindingsWithDefaultParameters",
         provideAdvancedCompType(),
@@ -141,7 +141,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
               doBuildNameExpressionInScope("anInt")
             ).build()
           ).build(),
-        new ArcError[] {ArcError.TOO_MANY_INSTANTIATION_ARGUMENTS}),
+        new ArcError[] {ArcError.TOO_MANY_ARGUMENTS}),
 
       Arguments.arguments("shouldFindWrongDefaultParameterOverwriteSequence",
         provideAdvancedCompType(),
@@ -154,7 +154,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
               doBuildNameExpressionInScope("aDouble")
             ).build()
           ).build(),
-        new ArcError[] {ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH}),
+        new ArcError[] {ArcError.COMP_ARG_TYPE_MISMATCH}),
 
       Arguments.arguments("shouldFindCorrectNumberOfParameterBindingsWithDefaultParameters",
         provideAdvancedCompType(), ArcBasisMill.arcArgumentsBuilder().addArcArgument(
@@ -206,7 +206,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
             doBuildNameExpressionInScope("aBool")
           ).build()
         ).build(),
-        new ArcError[] {ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH}),
+        new ArcError[] {ArcError.COMP_ARG_TYPE_MISMATCH}),
 
       Arguments.arguments("wrongTypeAndTooManyArguments",
         provideAdvancedCompType(),
@@ -227,8 +227,8 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
             doBuildNameExpressionInScope("aBool")
           ).build()
         ).build(),
-        new ArcError[] {ArcError.TOO_MANY_INSTANTIATION_ARGUMENTS, ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH,
-          ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH, ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH}),
+        new ArcError[] {ArcError.TOO_MANY_ARGUMENTS, ArcError.COMP_ARG_TYPE_MISMATCH,
+          ArcError.COMP_ARG_TYPE_MISMATCH, ArcError.COMP_ARG_TYPE_MISMATCH}),
 
       Arguments.arguments("wrongTypeAndTooFewArguments",
         provideAdvancedCompTypeWithOneDefaultValue(),
@@ -237,7 +237,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
             doBuildNameExpressionInScope("aDouble")
           ).build()
         ).build(),
-        new ArcError[] {ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS, ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH}),
+        new ArcError[] {ArcError.TOO_FEW_ARGUMENTS, ArcError.COMP_ARG_TYPE_MISMATCH}),
 
     Arguments.arguments("shouldFindTypeReference",
       provideSimpleCompType(),
@@ -246,7 +246,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
           doBuildNameExpressionInScope("Person")
         ).build()
       ).build(),
-      new ArcError[]{ArcError.CONFIG_PARAM_BINDING_IS_TYPE_REF})
+      new ArcError[]{ArcError.TYPE_REF_NO_EXPRESSION})
     );
   }
 

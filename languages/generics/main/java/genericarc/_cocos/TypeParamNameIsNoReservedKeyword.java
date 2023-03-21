@@ -26,7 +26,7 @@ public class TypeParamNameIsNoReservedKeyword implements GenericArcASTArcTypePar
 
     if(reservedKeywords.stream().anyMatch(keyword -> keyword.equals(typeParamName))) {
       Log.error(
-        ArcError.RESERVED_KEYWORD_USED.format(typeParamName, languageName),
+        ArcError.RESTRICTED_IDENTIFIER.format(typeParamName),
         node.get_SourcePositionStart(), node.get_SourcePositionEnd()
       );
     }

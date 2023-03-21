@@ -7,7 +7,6 @@ import arcbasis.check.SynthCompTypeResult;
 import arcbasis.check.SynthesizeComponentFromMCBasicTypes;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
-import variablearc.check.SynthesizeVariableComponentFromMCBasicTypes;
 
 import java.util.Optional;
 
@@ -28,7 +27,7 @@ public class MontiArcSynthesizeComponent implements ISynthesizeComponent {
     this.traverser = MontiArcMill.traverser();
     this.resultWrapper = new SynthCompTypeResult();
 
-    SynthesizeComponentFromMCBasicTypes synthFromBasicTypes = new SynthesizeVariableComponentFromMCBasicTypes(resultWrapper);
+    SynthesizeComponentFromMCBasicTypes synthFromBasicTypes = new SynthesizeComponentFromMCBasicTypes(resultWrapper);
     SynthesizeComponentFromMCSimpleGenericTypes synthFromSimpleGenerics =
       new SynthesizeComponentFromMCSimpleGenericTypes(resultWrapper);
 

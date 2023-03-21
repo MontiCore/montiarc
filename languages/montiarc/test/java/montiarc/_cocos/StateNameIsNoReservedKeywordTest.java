@@ -43,7 +43,7 @@ public class StateNameIsNoReservedKeywordTest extends AbstractCoCoTest {
   protected static Stream<Arguments> modelAndExpectedErrorProvider() {
     return Stream.of(
       arg("StateNamesAreLegal.arc"),
-      arg("StateNamesAreKeywords.arc", ArcError.RESERVED_KEYWORD_USED, ArcError.RESERVED_KEYWORD_USED)
+      arg("StateNamesAreKeywords.arc", ArcError.RESTRICTED_IDENTIFIER, ArcError.RESTRICTED_IDENTIFIER)
     );
   }
 

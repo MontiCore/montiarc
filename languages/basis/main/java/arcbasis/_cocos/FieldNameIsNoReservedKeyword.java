@@ -26,7 +26,7 @@ public class FieldNameIsNoReservedKeyword implements ArcBasisASTArcFieldCoCo {
 
     if(reservedKeywords.stream().anyMatch(keyword -> keyword.equals(fieldName))) {
       Log.error(
-        ArcError.RESERVED_KEYWORD_USED.format(fieldName, languageName),
+        ArcError.RESTRICTED_IDENTIFIER.format(fieldName),
         node.get_SourcePositionStart(), node.get_SourcePositionEnd()
       );
     }

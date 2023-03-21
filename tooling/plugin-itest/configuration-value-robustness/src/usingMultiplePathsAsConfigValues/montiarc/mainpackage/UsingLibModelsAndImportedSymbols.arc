@@ -6,7 +6,6 @@ import libpackage.*;
 
 component UsingLibModelsAndImportedSymbols {
   port <<sync>> in BarState inPort;
-  port <<sync>> out FooState outPort;
 
   LibComponent subcomponent;
   LibComponent2 subcomponent2;

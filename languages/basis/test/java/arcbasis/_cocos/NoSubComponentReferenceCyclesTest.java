@@ -23,7 +23,7 @@ import org.mockito.Mockito;
 import java.util.stream.Stream;
 
 /**
- * Holds tests for the handwritten methods of {@link NoSubComponentReferenceCycles}.
+ * Holds tests for the handwritten methods of {@link NoSubcomponentReferenceCycle}.
  */
 public class NoSubComponentReferenceCyclesTest extends AbstractTest {
 
@@ -737,7 +737,7 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
     ASTComponentType comp = compSym.getAstNode();
 
     // When
-    NoSubComponentReferenceCycles coco = new NoSubComponentReferenceCycles();
+    NoSubcomponentReferenceCycle coco = new NoSubcomponentReferenceCycle();
     coco.check(comp);
 
     // Then
@@ -747,14 +747,14 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
   protected static Stream<Arguments> invalidModelsAndErrorProvider() {
     return Stream.of(
       Arguments.arguments(provideModelWithCycle(), new ComponentTypeSymbol[]{provideDummyWithCycle()},
-        new ArcError[]{ArcError.NO_SUBCOMPONENT_CYCLE}),
+        new ArcError[]{ArcError.SUBCOMPONENT_REFERENCE_CYCLE}),
       Arguments.arguments(provideModelWithDirectSelfReference(), new ComponentTypeSymbol[]{},
-        new ArcError[]{ArcError.NO_SUBCOMPONENT_CYCLE}),
+        new ArcError[]{ArcError.SUBCOMPONENT_REFERENCE_CYCLE}),
       Arguments.arguments(provideModelLongCycle1(),
         new ComponentTypeSymbol[]{provideModelLongCycle2(), provideModelLongCycle3()},
-        new ArcError[]{ArcError.NO_SUBCOMPONENT_CYCLE}),
+        new ArcError[]{ArcError.SUBCOMPONENT_REFERENCE_CYCLE}),
       Arguments.arguments(provideModelWithNestedCycle(), new ComponentTypeSymbol[]{provideDummyWithNestedCycle()},
-        new ArcError[]{ArcError.NO_SUBCOMPONENT_CYCLE}),
+        new ArcError[]{ArcError.SUBCOMPONENT_REFERENCE_CYCLE}),
       Arguments.arguments(provideModelWithSelfNestedCycle(), new ComponentTypeSymbol[]{},
         new ArcError[0])
 
@@ -776,7 +776,7 @@ public class NoSubComponentReferenceCyclesTest extends AbstractTest {
     ASTComponentType astComp = compToTest.getAstNode();
 
     // When
-    NoSubComponentReferenceCycles coco = new NoSubComponentReferenceCycles();
+    NoSubcomponentReferenceCycle coco = new NoSubcomponentReferenceCycle();
     coco.check(astComp);
 
     // Then

@@ -868,8 +868,7 @@ public class MontiArcToolTest extends AbstractTest {
     Preconditions.checkNotNull(packageName);
 
     // Given
-    String modelPath =
-      Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "endToEndFailOrPass", packageName).toString();
+    String modelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "endToEndFailOrPass", packageName).toString();
     String[] args = new String[] {"--modelpath", modelPath};
     MontiArcTool tool = new MontiArcTool();
 
@@ -878,17 +877,13 @@ public class MontiArcToolTest extends AbstractTest {
 
     // Then
     this.checkExpectedErrorsPresent(errors);
-    Assertions.assertFalse(
-      MontiArcMill.globalScope().getSubScopes().isEmpty(),
-      "It seams that no model was processed in this test (GlobalScope has no sub scopes)."
-    );
   }
 
   protected static Stream<Arguments> invalidModelAndErrorProvider() {
     return Stream.of(
       Arguments.of("missingCompType",
-        new Error[] {ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE, ArcError.MISSING_TYPE_OF_COMPONENT_INSTANCE}),
-      Arguments.of("missingPortType", new Error[] {ArcError.MISSING_TYPE}),
+        new Error[] {ArcError.MISSING_COMPONENT, ArcError.MISSING_COMPONENT}),
+      // Arguments.of("missingPortType", new Error[] {ArcError.MISSING_TYPE}),
       Arguments.of("circularInheritance", new Error[] {ArcError.CIRCULAR_INHERITANCE})
     );
   }

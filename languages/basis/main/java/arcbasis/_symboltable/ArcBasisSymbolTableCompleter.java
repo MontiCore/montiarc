@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcFieldDeclaration;
 import arcbasis._ast.ASTArcParameter;
@@ -22,18 +21,11 @@ import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
-import de.monticore.symboltable.ISymbol;
-import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
-import de.monticore.types.check.TypeCheckResult;
-import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
-import de.monticore.types.mcbasictypes._ast.ASTMCType;
-import de.se_rwth.commons.logging.Log;
+import de.monticore.types.check.SymTypeExpression;
 import montiarc.Timing;
-import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
-import java.util.List;
 import java.util.Optional;
 
 public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisHandler {
@@ -42,8 +34,6 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   protected ArcBasisTraverser traverser;
   protected IArcTypeCalculator typeCalculator;
   protected ISynthesizeComponent componentSynthesizer;
-  protected ASTMCType currentPortType;
-  protected ASTMCType currentFieldType;
 
   public ArcBasisSymbolTableCompleter() {
     this(new ArcBasisSynthesizeComponent(), new ArcBasisTypeCalculator());
@@ -87,43 +77,14 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     this.componentSynthesizer = componentSynthesizer;
   }
 
-  protected Optional<ASTMCType> getCurrentPortType() {
-    return Optional.ofNullable(this.currentPortType);
-  }
-
-  protected void setCurrentPortType(@Nullable ASTMCType currentPortType) {
-    this.currentPortType = currentPortType;
-  }
-
-  protected Optional<ASTMCType> getCurrentFieldType() {
-    return Optional.ofNullable(this.currentFieldType);
-  }
-
-  protected void setCurrentFieldType(@Nullable ASTMCType currentFieldType) {
-    this.currentFieldType = currentFieldType;
-  }
-
   @Override
   public void visit(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
     if (!node.getComponentInstanceList().isEmpty()) {
-      this.setCurrentCompInstanceType(typeExprForDirectComponentInstantiation(node));
+      this.setCurrentCompInstanceType(new TypeExprOfComponent(node.getSymbol()));
     }
-  }
-
-  protected CompTypeExpression typeExprForDirectComponentInstantiation(@NotNull ASTComponentType node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol());
-
-    if (!node.getSymbol().getTypeParameters().isEmpty()) {
-      Log.error(ArcError.GENERIC_COMPONENT_TYPE_INSTANTIATION.format(
-              node.getSymbol().getName(),
-              node.getSymbol().getTypeParameters().stream().map(ISymbol::getName).reduce("", (a, b) -> a + "'" + b + "' ")),
-              node.get_SourcePositionStart(), node.get_SourcePositionEnd());
-    }
-    return new TypeExprOfComponent(node.getSymbol());
   }
 
   @Override
@@ -141,10 +102,11 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkArgument(node.getEnclosingScope().getSpanningSymbol() instanceof ComponentTypeSymbol);
 
     if (node.isPresentParent()) {
-      Optional<CompTypeExpression> parentTypeExpr = this.getComponentSynthesizer().synthesizeFrom(node.getParent());
-      if (parentTypeExpr.isPresent()) {
-        ComponentTypeSymbol sym = (ComponentTypeSymbol) node.getEnclosingScope().getSpanningSymbol();
-        sym.setParent(parentTypeExpr.get());
+      Optional<CompTypeExpression> parent = this.getComponentSynthesizer().synthesizeFrom(node.getParent());
+      if (parent.isPresent()) {
+        node.getParent().setDefiningSymbol(parent.get().getTypeInfo());
+        ComponentTypeSymbol comp = (ComponentTypeSymbol) node.getEnclosingScope().getSpanningSymbol();
+        comp.setParent(parent.get());
       }
     }
   }
@@ -152,11 +114,11 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   @Override
   public void visit(@NotNull ASTComponentInstantiation node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkNotNull(node.getEnclosingScope());
 
-    Optional<CompTypeExpression> compTypeExpr = this.getComponentSynthesizer().synthesizeFrom(node.getMCType());
-    if (compTypeExpr.isPresent()) {
-      this.setCurrentCompInstanceType(compTypeExpr.get());
+    Optional<CompTypeExpression> comp = this.getComponentSynthesizer().synthesizeFrom(node.getMCType());
+    if (comp.isPresent()) {
+      node.getMCType().setDefiningSymbol(comp.get().getTypeInfo());
+      this.setCurrentCompInstanceType(comp.get());
     }
   }
 
@@ -223,83 +185,20 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
     Preconditions.checkNotNull(node.getMCType());
     Preconditions.checkState(node.isPresentSymbol());
 
-    try {
-      TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(node.getMCType());
-      if (typeExpr.isPresentResult()) {
-        node.getSymbol().setType(typeExpr.getResult());
-      }
-    } catch (ResolvedSeveralEntriesForSymbolException e) {
-      String name = node.getMCType().toString();
-      if (node.getMCType() instanceof ASTMCQualifiedType) {
-        name = ((ASTMCQualifiedType) node.getMCType()).getMCQualifiedName().getQName();
-      }
-      Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(name), node.getMCType().get_SourcePositionStart());
-    }
+    node.getSymbol().setType(this.getTypeCalculator().synthesizeType(node.getMCType()).getResult());
   }
 
   @Override
   public void visit(@NotNull ASTPortDeclaration node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getMCType());
-    this.setCurrentPortType(node.getMCType());
-    List<ASTPort> ports = node.getPortList();
-    node.getTiming().ifPresent(t -> this.setTiming(ports, t));
-    if (node.hasDelay()) this.setHasDelay(ports);
-  }
+    SymTypeExpression type = this.getTypeCalculator().synthesizeType(node.getMCType()).getResult();
+    Timing timing = node.getTiming().orElse(null);
 
-  protected void setTiming(@NotNull List<ASTPort> ports, @NotNull Timing timing) {
-    Preconditions.checkNotNull(ports);
-    Preconditions.checkNotNull(timing);
-    for (ASTPort port : ports) {
-      this.setTiming(port, timing);
-    }
-  }
-
-  protected void setTiming(@NotNull ASTPort port, @NotNull Timing timing) {
-    Preconditions.checkNotNull(port);
-    Preconditions.checkNotNull(timing);
-    Preconditions.checkArgument(port.isPresentSymbol());
-    port.getSymbol().setTiming(timing);
-  }
-
-  protected void setHasDelay(@NotNull List<ASTPort> ports) {
-    Preconditions.checkNotNull(ports);
-    for (ASTPort port : ports) {
-      this.setHasDelay(port);
-    }
-  }
-
-  protected void setHasDelay(@NotNull ASTPort port) {
-    Preconditions.checkNotNull(port);
-    Preconditions.checkArgument(port.isPresentSymbol());
-    port.getSymbol().setDelayed(true);
-  }
-
-  @Override
-  public void endVisit(@NotNull ASTPortDeclaration node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkState(this.getCurrentPortType().isPresent());
-    Preconditions.checkState(this.getCurrentPortType().get().equals(node.getMCType()));
-    this.setCurrentPortType(null);
-  }
-
-  @Override
-  public void visit(@NotNull ASTPort port) {
-    Preconditions.checkNotNull(port);
-    Preconditions.checkState(this.getCurrentPortType().isPresent());
-    Preconditions.checkState(port.isPresentSymbol());
-
-    try {
-      TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(this.getCurrentPortType().get());
-      if (typeExpr.isPresentResult()) {
-        port.getSymbol().setType(typeExpr.getResult());
-      }
-    } catch (ResolvedSeveralEntriesForSymbolException e) {
-      String name = this.getCurrentPortType().get().toString();
-      if (this.getCurrentPortType().get() instanceof ASTMCQualifiedType) {
-        name = ((ASTMCQualifiedType) this.getCurrentPortType().get()).getMCQualifiedName().getQName();
-      }
-      Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(name), this.getCurrentPortType().get().get_SourcePositionStart());
+    for (ASTPort port : node.getPortList()) {
+      port.getSymbol().setType(type);
+      port.getSymbol().setTiming(timing);
+      if (node.hasDelay()) port.getSymbol().setDelayed(true);
     }
   }
 
@@ -307,34 +206,10 @@ public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisH
   public void visit(@NotNull ASTArcFieldDeclaration node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getMCType());
-    this.setCurrentFieldType(node.getMCType());
-  }
+    SymTypeExpression type = this.getTypeCalculator().synthesizeType(node.getMCType()).getResult();
 
-  @Override
-  public void endVisit(@NotNull ASTArcFieldDeclaration node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkState(this.getCurrentFieldType().isPresent());
-    Preconditions.checkState(this.getCurrentFieldType().get().equals(node.getMCType()));
-    this.setCurrentFieldType(null);
-  }
-
-  @Override
-  public void visit(@NotNull ASTArcField field) {
-    Preconditions.checkNotNull(field);
-    Preconditions.checkState(this.getCurrentFieldType().isPresent());
-    Preconditions.checkState(field.isPresentSymbol());
-
-    try {
-      TypeCheckResult typeExpr = this.getTypeCalculator().synthesizeType(this.getCurrentFieldType().get());
-      if (typeExpr.isPresentResult()) {
-        field.getSymbol().setType(typeExpr.getResult());
-      }
-    } catch (ResolvedSeveralEntriesForSymbolException e) {
-      String name = this.getCurrentFieldType().get().toString();
-      if (this.getCurrentFieldType().get() instanceof ASTMCQualifiedType) {
-        name = ((ASTMCQualifiedType) this.getCurrentFieldType().get()).getMCQualifiedName().getQName();
-      }
-      Log.error(ArcError.SYMBOL_TOO_MANY_FOUND.format(name), this.getCurrentFieldType().get().get_SourcePositionStart());
+    for (ASTArcField field : node.getArcFieldList()) {
+      field.getSymbol().setType(type);
     }
   }
 }

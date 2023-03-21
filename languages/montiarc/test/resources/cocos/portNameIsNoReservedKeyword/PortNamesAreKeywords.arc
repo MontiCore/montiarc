@@ -15,8 +15,9 @@ component PortNamesAreKeywords (int paramDummy1, float paramDummy2) {
   port out int keyword0, keyword1;
 
   // Other dummies
-  int fieldDummy1, fieldDummy2;
-  float fieldDummy3;
+  int fieldDummy1 = 0;
+  int fieldDummy2 = 0;
+  float fieldDummy3 = 0;
 
   component CompDummy compDummy1 {}
   CompDummy compDummy2;

@@ -24,16 +24,12 @@ public class UnsupportedAutomatonElementsTest extends AbstractCoCoTest {
   @Override
   protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
     Preconditions.checkNotNull(checker);
-    checker.addCoCo(new UnsupportedAutomatonElements.EntryActions());
-    checker.addCoCo(new UnsupportedAutomatonElements.ExitActions());
     checker.addCoCo(new UnsupportedAutomatonElements.FinalStates());
   }
 
 
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
-      arg("HasEntryAction.arc", ArcError.UNSUPPORTED_MODEL_ELEMENT),
-      arg("HasExitAction.arc", ArcError.UNSUPPORTED_MODEL_ELEMENT),
       arg("HasFinalState.arc", ArcError.UNSUPPORTED_MODEL_ELEMENT)
     );
   }

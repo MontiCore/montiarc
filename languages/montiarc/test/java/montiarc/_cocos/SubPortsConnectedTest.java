@@ -56,12 +56,12 @@ public class SubPortsConnectedTest extends AbstractCoCoTest {
   protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
     return Stream.of(
             arg("SubIncomingPortNotConnected.arc",
-                    ArcError.INCOMING_PORT_NOT_CONNECTED, ArcError.INCOMING_PORT_NOT_CONNECTED),
+                    ArcError.IN_PORT_NOT_CONNECTED, ArcError.IN_PORT_NOT_CONNECTED),
             arg("SubOutgoingPortNotConnected.arc",
-                    ArcError.OUTGOING_PORT_NOT_CONNECTED, ArcError.OUTGOING_PORT_NOT_CONNECTED),
+                    ArcError.OUT_PORT_NOT_CONNECTED, ArcError.OUT_PORT_NOT_CONNECTED),
             arg("MissingSubPortConnections.arc",
-                    ArcError.OUTGOING_PORT_NOT_CONNECTED, ArcError.OUTGOING_PORT_NOT_CONNECTED,
-                    ArcError.INCOMING_PORT_NOT_CONNECTED, ArcError.INCOMING_PORT_NOT_CONNECTED)
+                    ArcError.OUT_PORT_NOT_CONNECTED, ArcError.OUT_PORT_NOT_CONNECTED,
+                    ArcError.IN_PORT_NOT_CONNECTED, ArcError.IN_PORT_NOT_CONNECTED)
     );
   }
 

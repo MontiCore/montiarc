@@ -67,6 +67,6 @@ public class DelayOutPortOnlyTest extends AbstractTest {
     coco.check(port);
 
     // Then
-    checkOnlyExpectedErrorsPresent(ArcError.DELAY_OUT_PORT_ONLY);
+    checkOnlyExpectedErrorsPresent(ArcError.IN_PORT_DELAYED);
   }
 }

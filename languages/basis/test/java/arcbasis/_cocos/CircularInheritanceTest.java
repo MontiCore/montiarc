@@ -14,56 +14,130 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.Collections;
-
 /**
  * Holds tests for the handwritten methods of {@link CircularInheritance}.
  */
 public class CircularInheritanceTest extends AbstractTest {
 
+  /**
+   * If a component directly extends itself, then the context-condition should
+   * report an error.
+   */
   @Test
-  public void shouldFindCircularInheritance() {
-    ASTComponentType parent = arcbasis.ArcBasisMill.componentTypeBuilder().setName("A")
+  public void shouldFindDirectCircularInheritance() {
+    // Given
+    ASTComponentType ast = ArcBasisMill.componentTypeBuilder().setName("A")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setParent(createQualifiedType("A")).build())
+      .setHead(ArcBasisMill.componentHeadBuilder().setParent(createQualifiedType("A")).build())
       .build();
-    ASTComponentType child = arcbasis.ArcBasisMill.componentTypeBuilder().setName("B")
-      .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setParent(createQualifiedType("A")).build())
-      .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setParent(
-        arcbasis.ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(
-          arcbasis.ArcBasisMill.mCQualifiedNameBuilder().setPartsList(Collections.singletonList(
-            "A")).build())
-          .build())
-        .build())
-      .build();
-    ArcBasisScopesGenitorDelegator genitor = ArcBasisMill.scopesGenitorDelegator();
-    genitor.createFromAST(parent);
-    genitor.createFromAST(child);
-    ArcBasisSymbolTableCompleterDelegator completer = ArcBasisMill.symbolTableCompleterDelegator();
-    completer.createFromAST(parent);
-    completer.createFromAST(child);
+
+    ArcBasisMill.scopesGenitorDelegator().createFromAST(ast);
+    ArcBasisMill.symbolTableCompleterDelegator().createFromAST(ast);
+
     CircularInheritance coco = new CircularInheritance();
-    coco.check(child);
+
+    // When
+    coco.check(ast);
+
+    // Then
     this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CIRCULAR_INHERITANCE});
   }
 
+  /**
+   * If a component transitively extends itself, then the context-condition
+   * should report an error.
+   */
+  @Test
+  public void shouldFindTransitiveCircularInheritance() {
+    // Given
+    ASTComponentType a = ArcBasisMill.componentTypeBuilder().setName("A")
+      .setBody(Mockito.mock(ASTComponentBody.class))
+      .setHead(ArcBasisMill.componentHeadBuilder().setParent(createQualifiedType("B")).build())
+      .build();
+    ASTComponentType b = ArcBasisMill.componentTypeBuilder().setName("B")
+      .setBody(Mockito.mock(ASTComponentBody.class))
+      .setHead(ArcBasisMill.componentHeadBuilder().setParent(createQualifiedType("A")).build())
+      .build();
+
+    ArcBasisScopesGenitorDelegator stg = ArcBasisMill.scopesGenitorDelegator();
+    stg.createFromAST(a);
+    stg.createFromAST(b);
+    ArcBasisSymbolTableCompleterDelegator stc = ArcBasisMill.symbolTableCompleterDelegator();
+    stc.createFromAST(a);
+    stc.createFromAST(b);
+
+    CircularInheritance coco = new CircularInheritance();
+
+    // When
+    coco.check(a);
+
+    // Then
+    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CIRCULAR_INHERITANCE});
+  }
+
+  /**
+   * If a component does not circularly extend itself, then the
+   * context-condition should not report an error, even if one of the
+   * component's parents extends itself.
+   */
+  @Test
+  public void shouldNotReportCircularInheritance() {
+    // Given
+    ASTComponentType parent = ArcBasisMill.componentTypeBuilder().setName("A")
+      .setBody(Mockito.mock(ASTComponentBody.class))
+      .setHead(ArcBasisMill.componentHeadBuilder().setParent(createQualifiedType("A")).build())
+      .build();
+    ASTComponentType child = ArcBasisMill.componentTypeBuilder().setName("B")
+      .setBody(Mockito.mock(ASTComponentBody.class))
+      .setHead(ArcBasisMill.componentHeadBuilder().setParent(createQualifiedType("A")).build())
+      .build();
+
+    ArcBasisScopesGenitorDelegator stg = ArcBasisMill.scopesGenitorDelegator();
+    stg.createFromAST(parent);
+    stg.createFromAST(child);
+    ArcBasisSymbolTableCompleterDelegator stc = ArcBasisMill.symbolTableCompleterDelegator();
+    stc.createFromAST(parent);
+    stc.createFromAST(child);
+
+    CircularInheritance coco = new CircularInheritance();
+
+    // When
+    coco.check(parent);
+
+    // Then
+    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CIRCULAR_INHERITANCE});
+  }
+
+  /**
+   * If there is no circular inheritance, then the context-condition should
+   * not report an error.
+   */
   @Test
   public void shouldNotFindCircularInheritance() {
-    ASTComponentType parent = arcbasis.ArcBasisMill.componentTypeBuilder().setName("A")
+    // Given
+    ASTComponentType parent = ArcBasisMill.componentTypeBuilder().setName("A")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(Mockito.mock(ASTComponentHead.class))
       .build();
-    ASTComponentType child = arcbasis.ArcBasisMill.componentTypeBuilder().setName("B")
+    ASTComponentType child = ArcBasisMill.componentTypeBuilder().setName("B")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(arcbasis.ArcBasisMill.componentHeadBuilder().setParent(createQualifiedType("A")).build())
+      .setHead(ArcBasisMill.componentHeadBuilder().setParent(createQualifiedType("A")).build())
       .build();
-    ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
-    symTab.createFromAST(parent);
-    symTab.createFromAST(child);
+
+    ArcBasisScopesGenitorDelegator stg = ArcBasisMill.scopesGenitorDelegator();
+    stg.createFromAST(parent);
+    stg.createFromAST(child);
+    ArcBasisSymbolTableCompleterDelegator stc = ArcBasisMill.symbolTableCompleterDelegator();
+    stc.createFromAST(parent);
+    stc.createFromAST(child);
+
     CircularInheritance coco = new CircularInheritance();
+
+    // When
     coco.check(parent);
     coco.check(child);
-    Assertions.assertEquals(0, Log.getErrorCount());
+
+    // Then
+    Assertions.assertEquals(0, Log.getErrorCount(), Log.getFindings().toString());
   }
 }

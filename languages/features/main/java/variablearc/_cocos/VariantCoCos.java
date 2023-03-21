@@ -3,15 +3,15 @@ package variablearc._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
-import arcbasis._cocos.ConnectorSourceAndTargetDirectionsFit;
-import arcbasis._cocos.ConnectorSourceAndTargetExist;
-import arcbasis._cocos.ConnectorSourceAndTargetTimingsFit;
-import arcbasis._cocos.ConnectorSourceAndTargetTypesFit;
-import arcbasis._cocos.InheritedPortsTypeCorrect;
+import arcbasis._cocos.ConnectorDirectionsFit;
+import arcbasis._cocos.ConnectorPortsExist;
+import arcbasis._cocos.ConnectorTimingsFit;
+import arcbasis._cocos.ConnectorTypesFit;
+import arcbasis._cocos.PortHeritageTypeFits;
 import arcbasis._cocos.PortUniqueSender;
 import arcbasis._cocos.PortsConnected;
 import arcbasis._cocos.SubPortsConnected;
-import arcbasis._cocos.UniqueIdentifierNames;
+import arcbasis._cocos.UniqueIdentifier;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.TypeRelations;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -23,15 +23,15 @@ import java.util.List;
 public class VariantCoCos implements ArcBasisASTComponentTypeCoCo {
 
   List<ArcBasisASTComponentTypeCoCo> cocos = List.of(
-    new ConnectorSourceAndTargetDirectionsFit(),
-    new ConnectorSourceAndTargetExist(),
-    new ConnectorSourceAndTargetTypesFit(new TypeRelations()),
-    new ConnectorSourceAndTargetTimingsFit(),
-    new InheritedPortsTypeCorrect(new TypeRelations()),
+    new ConnectorDirectionsFit(),
+    new ConnectorPortsExist(),
+    new ConnectorTypesFit(new TypeRelations()),
+    new ConnectorTimingsFit(),
+    new PortHeritageTypeFits(new TypeRelations()),
     new PortsConnected(),
     new PortUniqueSender(),
     new SubPortsConnected(),
-    new UniqueIdentifierNames()
+    new UniqueIdentifier()
   );
 
   @Override

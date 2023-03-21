@@ -24,7 +24,7 @@ import static montiarc.cocos.IdentifiersAreNoJavaKeywords.ComponentInstanceNames
 import static montiarc.cocos.IdentifiersAreNoJavaKeywords.ComponentTypeNamesAreNoJavaKeywords;
 import static montiarc.cocos.IdentifiersAreNoJavaKeywords.FieldNamesAreNoJavaKeywords;
 import static montiarc.cocos.IdentifiersAreNoJavaKeywords.ParameterNamesAreNoJavaKeywords;
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.PortNamesAreNoJavaKeywords;
+import static montiarc.cocos.IdentifiersAreNoJavaKeywords.PortNoNamesAreNoJavaKeywords;
 import static montiarc.cocos.IdentifiersAreNoJavaKeywords.TypeParameterNamesAreNoJavaKeywords;
 
 public class MontiArcTool extends montiarc.MontiArcTool {
@@ -88,7 +88,7 @@ public class MontiArcTool extends montiarc.MontiArcTool {
     Preconditions.checkNotNull(ast);
 
     MontiArcCoCoChecker checker = MontiArcCoCos.createChecker();
-    checker.addCoCo(new PortNamesAreNoJavaKeywords());
+    checker.addCoCo(new PortNoNamesAreNoJavaKeywords());
     checker.addCoCo(new ParameterNamesAreNoJavaKeywords());
     checker.addCoCo(new TypeParameterNamesAreNoJavaKeywords());
     checker.addCoCo(new FieldNamesAreNoJavaKeywords());

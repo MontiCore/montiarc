@@ -27,7 +27,7 @@ public class StateNameIsNoReservedKeyword implements SCBasisASTSCStateCoCo {
 
     if(reservedKeywords.stream().anyMatch(keyword -> keyword.equals(stateName))) {
       Log.error(
-        ArcError.RESERVED_KEYWORD_USED.format(stateName, languageName),
+        ArcError.RESTRICTED_IDENTIFIER.format(stateName),
         node.get_SourcePositionStart(), node.get_SourcePositionEnd()
       );
     }

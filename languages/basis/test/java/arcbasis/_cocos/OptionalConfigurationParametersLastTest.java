@@ -184,7 +184,7 @@ public class OptionalConfigurationParametersLastTest extends AbstractTest {
 
     // Then
     this.checkOnlyExpectedErrorsPresent(
-      ArcError.OPTIONAL_CONFIG_PARAMS_LAST
+      ArcError.OPTIONAL_PARAMS_LAST
     );
   }
 
@@ -220,7 +220,7 @@ public class OptionalConfigurationParametersLastTest extends AbstractTest {
 
     // Then
     this.checkOnlyExpectedErrorsPresent(
-      ArcError.OPTIONAL_CONFIG_PARAMS_LAST
+      ArcError.OPTIONAL_PARAMS_LAST
     );
   }
 
@@ -261,7 +261,7 @@ public class OptionalConfigurationParametersLastTest extends AbstractTest {
 
     // Then
     this.checkOnlyExpectedErrorsPresent(
-      ArcError.OPTIONAL_CONFIG_PARAMS_LAST, ArcError.OPTIONAL_CONFIG_PARAMS_LAST
+      ArcError.OPTIONAL_PARAMS_LAST, ArcError.OPTIONAL_PARAMS_LAST
     );
   }
 }

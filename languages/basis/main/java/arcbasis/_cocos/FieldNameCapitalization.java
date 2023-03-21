@@ -17,7 +17,7 @@ public class FieldNameCapitalization implements ArcBasisASTArcFieldCoCo {
   public void check(@NotNull ASTArcField field) {
     Preconditions.checkNotNull(field);
     if(NameCapitalizationHelper.isNotLowerCase(field.getName())) {
-      NameCapitalizationHelper.warning(ArcError.VARIABLE_LOWER_CASE, field, field.getName(),
+      NameCapitalizationHelper.warning(ArcError.FIELD_UPPER_CASE, field, field.getName(),
         field.getEnclosingScope().getSpanningSymbol().getName());
     }
   }

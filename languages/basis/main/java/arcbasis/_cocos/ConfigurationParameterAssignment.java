@@ -13,7 +13,6 @@ import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.TypeCheckResult;
-import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -111,9 +110,9 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       ASTArcArgument firstIllegalArg = instantiationArgs.get(paramsOfCompType.size());
       ASTArcArgument lastIllegalArg = instantiationArgs.get(instantiationArgs.size() - 1);
 
-      Log.error(ArcError.TOO_MANY_INSTANTIATION_ARGUMENTS.format(
-        instantiationArgs.size(), instance.getName(), toInstantiate.printName(), paramsOfCompType.size()
-      ), firstIllegalArg.get_SourcePositionStart(), lastIllegalArg.get_SourcePositionEnd());
+      Log.error(ArcError.TOO_MANY_ARGUMENTS.format(paramsOfCompType.size(), instantiationArgs.size()),
+        firstIllegalArg.get_SourcePositionStart(), lastIllegalArg.get_SourcePositionEnd()
+      );
     }
   }
 
@@ -163,13 +162,9 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     }
 
     if (mandatoryParamsAmount + defaultAssignedByKey > instantiationArgs.size()) {
-      SourcePosition lastArgumentPos = !instantiationArgs.isEmpty() ?
-        instantiationArgs.get(instantiationArgs.size() - 1).get_SourcePositionEnd() :
-        instance.get_SourcePositionEnd();
-
-      Log.error(ArcError.TOO_FEW_INSTANTIATION_ARGUMENTS.format(
-        instantiationArgs.size(), instance.getName(), toInstantiate.printName(), mandatoryParamsAmount
-      ), lastArgumentPos);
+      Log.error(ArcError.TOO_FEW_ARGUMENTS.format(mandatoryParamsAmount, instantiationArgs.size()),
+        instance.get_SourcePositionStart(), instance.get_SourcePositionEnd()
+      );
     }
   }
 
@@ -213,7 +208,6 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       .collect(Collectors.toList());
 
     for (int i = 0; i < Math.min(instArgs.size(), paramSignatureOfCompType.size()); i++) {
-      String correspondingParamName = toInstantiate.getTypeInfo().getParameters().get(i).getName();
       if (!instArgs.get(i).isPresentResult()) {
         Log.info(String.format("Checking coco '%s' is skipped for instantiation argument No. '%d', as the type of " +
               "the argument expression could not be calculated. Position: '%s'.",
@@ -222,35 +216,32 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       } else if (instArgs.get(i).isType()) {
         ASTExpression typeRefExpr = instance.getArcArguments().getArcArgument(i).getExpression();
 
-        Log.error(ArcError.CONFIG_PARAM_BINDING_IS_TYPE_REF.format(
-          instArgs.get(i).getResult().print(), correspondingParamName, i + 1,
-          toInstantiate.getTypeInfo().getName(), instance.getName()
-        ), typeRefExpr.get_SourcePositionStart(), typeRefExpr.get_SourcePositionEnd());
+        Log.error(ArcError.TYPE_REF_NO_EXPRESSION.toString(),
+          typeRefExpr.get_SourcePositionStart(), typeRefExpr.get_SourcePositionEnd()
+        );
       } else if (instantiationArgs.get(i).isPresentName()) {
         String argumentKey = instantiationArgs.get(i).getName();
         int paramIndex = paramIndices.get(argumentKey);
         if (paramIndex<posArgsAmount){
-          Log.error(ArcError.MULTIPLE_VALUES_FOR_ARGUMENT.format(instance.getName(), argumentKey),
-            instantiationArgs.get(i).get_SourcePositionStart(), instantiationArgs.get(i).get_SourcePositionEnd());
+          Log.error(ArcError.MULTIPLE_COMP_ARG_VALUES.format(argumentKey),
+            instantiationArgs.get(i).get_SourcePositionStart(), instantiationArgs.get(i).get_SourcePositionEnd()
+          );
         }
         if (paramSignatureOfCompType.get(paramIndex).isEmpty() || !tr.compatible(paramSignatureOfCompType.get(paramIndex).get(), instArgs.get(i).getResult())) {
           ASTExpression incompatibleArgument = instance.getArcArguments().getArcArgument(i).getExpression();
 
-          Log.error(ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH.format(
-            i + 1, instance.getName(), instArgs.get(i).getResult().print(),
-            paramSignatureOfCompType.get(i).map(SymTypeExpression::print).orElse("UNKNOWN"), correspondingParamName,
-            toInstantiate.printName()
-          ), incompatibleArgument.get_SourcePositionStart(), incompatibleArgument.get_SourcePositionEnd());
+          Log.error(ArcError.COMP_ARG_TYPE_MISMATCH.format(instArgs.get(i).getResult().print(),
+            paramSignatureOfCompType.get(i).map(SymTypeExpression::print).orElse("UNKNOWN")),
+            incompatibleArgument.get_SourcePositionStart(), incompatibleArgument.get_SourcePositionEnd()
+          );
         }
       } else {
         if (paramSignatureOfCompType.get(i).isEmpty() || !tr.compatible(paramSignatureOfCompType.get(i).get(), instArgs.get(i).getResult())) {
           ASTExpression incompatibleArgument = instance.getArcArguments().getArcArgument(i).getExpression();
 
-          Log.error(ArcError.INSTANTIATION_ARGUMENT_TYPE_MISMATCH.format(
-            i + 1, instance.getName(), instArgs.get(i).getResult().print(),
-            paramSignatureOfCompType.get(i).map(SymTypeExpression::print).orElse("UNKNOWN"), correspondingParamName,
-            toInstantiate.printName()
-          ), incompatibleArgument.get_SourcePositionStart(), incompatibleArgument.get_SourcePositionEnd());
+          Log.error(ArcError.COMP_ARG_TYPE_MISMATCH.format(instArgs.get(i).getResult().print(),
+            paramSignatureOfCompType.get(i).map(SymTypeExpression::print).orElse("UNKNOWN")),
+            incompatibleArgument.get_SourcePositionStart(), incompatibleArgument.get_SourcePositionEnd());
         }
       }
     }
@@ -274,7 +265,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
         keywordAssignmentPresent=true;
       }else{
         if(keywordAssignmentPresent) {
-          Log.error(ArcError.POSITIONAL_ASSIGNMENT_AFTER_KEYWORD_ASSIGNMENT.format(
+          Log.error(ArcError.POSITIONAL_ASSIGNMENT_AFTER_KEY.format(
                           instance.getName()), argument.get_SourcePositionStart(),
                   argument.get_SourcePositionEnd());
           rightArgumentOrder=false;
@@ -292,22 +283,23 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   protected boolean checkKeywordsMustBeParameters(@NotNull ASTComponentInstance instance){
     Preconditions.checkNotNull(instance);
     Preconditions.checkArgument(instance.isPresentSymbol());
-    boolean keysAreParams = true;
     if (!instance.getSymbol().isPresentType()) {
       Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.",
               this.getClass().getSimpleName());
-      return keysAreParams;
+      return true;
     }
 
     List<ASTArcArgument> keywordArgs =  instance.getSymbol().getArcArguments().stream()
       .filter(ASTArcArgument::isPresentName)
       .collect(Collectors.toList());
 
+    boolean keysAreParams = true;
+
     for (ASTArcArgument argument : keywordArgs){
       String paramName = argument.getName();
       if (instance.getSymbol().getType().getTypeInfo().getParameters().stream()
         .noneMatch(typeParam -> typeParam.getName().equals(paramName))){
-        Log.error(ArcError.ASSIGNMENT_KEYWORD_NOT_A_PARAMETER.format(
+        Log.error(ArcError.COMP_ARG_KEY_INVALID.format(
           instance.getName()), argument.get_SourcePositionStart(),
           argument.get_SourcePositionEnd()
         );
