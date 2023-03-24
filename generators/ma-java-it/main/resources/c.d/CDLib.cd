@@ -6,7 +6,7 @@ import a.b.JavaMill;
 
 classdiagram CDLib {
   class A {
-    // JavaLib lib = JavaMill.lib();
-    // JavaLib lib2 = JavaMill.lib(-1, 0, 1);
+    JavaLib lib = JavaMill.lib();
+    JavaLib lib2 = JavaMill.lib(-1, 0, 1);
   }
 }
