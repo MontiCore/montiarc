@@ -1,0 +1,88 @@
+/* (c) https://github.com/MontiCore/monticore */
+package de.umlp;
+
+import java.util.Date;
+
+/**
+ * A class diagram of a web store.
+ * Source: https://www.uml-diagrams.org/
+ **/
+classdiagram webstore {
+
+  public class User {
+    String pw;
+    int id;
+    UserState state;
+  }
+
+  public enum UserState {
+    NEW,
+    ACTIVE,
+    BLOCKED,
+    BANNED;
+  }
+
+  public class Customer {
+    int id;
+    String email;
+    String address;
+    String phone;
+  }
+
+  association [1] Customer -> User [0..1];
+
+  public class Account {
+    int id;
+    String billingAddress;
+    boolean isClosed;
+    Date opened;
+    Date closed;
+  }
+
+  association [1] Customer -> Account [1];
+
+  public class ShoppingCart {
+    Date created;
+  }
+
+  association [1] User -> (cart) ShoppingCart [0..1];
+  association [1] ShoppingCart -> Item [*] {ordered};
+
+  public class Item {
+    int quantity;
+    int price;
+  }
+
+  public class Product {
+    int id;
+    String name;
+  }
+
+  association [1] Item -> Product [1];
+
+  public class Order {
+    int id;
+    Date ordered;
+    Date shopped;
+    String shoppingAddress;
+    OrderStatus status;
+  }
+
+  public enum OrderStatus {
+    NEW,
+    HOLD,
+    SHIPPED,
+    DELIVERED,
+    CLOSED;
+  }
+
+  public class Payment {
+    int id;
+    Date paid;
+    int total;
+    String details;
+  }
+
+  association [1] Account -> Payment [*];
+  association [1] Order -> Payment [*] {ordered};
+}

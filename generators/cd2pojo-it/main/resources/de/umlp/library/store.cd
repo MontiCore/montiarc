@@ -1,0 +1,16 @@
+/* (c) https://github.com/MontiCore/monticore */
+package de.umlp.library;
+
+import de.umlp.library.cms.Book;
+import de.umlp.webstore.Product;
+
+/**
+ * A class diagram of a library web store
+ **/
+classdiagram store {
+
+  public class BookItem extends Product {
+    Book adaptee;
+  }
+
+}

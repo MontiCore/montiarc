@@ -1,0 +1,55 @@
+/* (c) https://github.com/MontiCore/monticore */
+package de.umlp.library;
+
+import java.util.Date;
+
+/**
+ * A class diagram of a library management system
+ * Source: https://www.uml-diagrams.org/
+ **/
+classdiagram cms {
+
+  public abstract class ABook {
+    String isbn;
+    String title;
+    String summary;
+    Date publication;
+    int pages;
+  }
+
+  public class Book extends ABook {
+    String barcode;
+  }
+
+  public class Author {
+    String name;
+    String biography;
+  }
+
+  association [1..*] Author -> (wrote) Book [1..*];
+
+
+  public class Account {
+    int id;
+    Date opened;
+  }
+
+  association [1] Account -> (borrowed) Book [*];
+  association [1] Account -> (reserved) Book [*];
+
+  public class Library {
+    String name;
+  }
+
+  association [1] Library -> (accounts) Account [*];
+  association [1] Library -> Book [*];
+
+  public enum AccountState {
+    ACTIVE,
+    FROZEN,
+    CLOSED;
+  }
+
+  association [*] Account -> (state) AccountState [1];
+
+}
