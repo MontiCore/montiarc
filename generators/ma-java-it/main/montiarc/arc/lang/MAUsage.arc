@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
-package c.d;
+package arc.lang;
 
-import a.b.JavaLib;
+import arc.lang.java.JavaLib;
 
-component MAConsumer {
+component MAUsage {
 
   JavaLib lib = JavaLib.JavaLib();
   JavaLib lib2 = JavaLib.JavaLib(-1, 0, 1);

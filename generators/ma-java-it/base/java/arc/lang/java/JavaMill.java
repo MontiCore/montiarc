@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package a.b;
+package arc.lang.java;
 
 public class JavaMill {
 

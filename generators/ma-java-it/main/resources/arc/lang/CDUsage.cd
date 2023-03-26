@@ -1,10 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
-package c.d;
+package arc.lang;
 
-import a.b.JavaLib;
-import a.b.JavaMill;
+import arc.lang.java.JavaLib;
+import arc.lang.java.JavaMill;
 
-classdiagram CDLib {
+classdiagram CDUsage {
+
   class A {
     JavaLib lib = JavaMill.lib();
     JavaLib lib2 = JavaMill.lib(-1, 0, 1);
