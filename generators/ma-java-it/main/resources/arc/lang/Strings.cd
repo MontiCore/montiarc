@@ -1,0 +1,16 @@
+/* (c) https://github.com/MontiCore/monticore */
+package arc.lang;
+
+classdiagram Strings {
+
+  public class SF {
+    public String s;
+    public SF(String s);
+  }
+
+  public class SFs {
+    public String v1;
+    public String v2;
+    public SFs(String s1, String s2);
+  }
+}
