@@ -8,12 +8,12 @@ import com.microsoft.z3.IntExpr;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import variablearc.AbstractTest;
+import variablearc.VariableArcAbstractTest;
 
 /**
  * Tests for {@link Expr2SMTResult}
  */
-public class Expr2SMTResultTest extends AbstractTest {
+public class Expr2SMTResultTest extends VariableArcAbstractTest {
 
   @Test
   public void shouldNotGetValue() {

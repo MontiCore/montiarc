@@ -3,7 +3,7 @@ package montiarc._cocos;
 
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import de.monticore.types.check.TypeRelations;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc.check.MontiArcTypeCalculator;
 import montiarc.util.Error;
@@ -16,7 +16,7 @@ import variablearc._cocos.ConstraintIsBoolean;
 
 import java.util.stream.Stream;
 
-public class ConstraintIsBooleanTest extends AbstractTest {
+public class ConstraintIsBooleanTest extends MontiArcAbstractTest {
 
   protected static Stream<Arguments> provideConstraintAndError() {
     return Stream.of(

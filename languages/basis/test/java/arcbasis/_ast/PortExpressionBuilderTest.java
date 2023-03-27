@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 /**
  * Holds the tests for the handwritten methods of {@link ASTPortAccessBuilder}.
  */
-public class PortExpressionBuilderTest extends AbstractTest {
+public class PortExpressionBuilderTest extends ArcBasisAbstractTest {
 
   protected ASTPortAccessBuilder builder = new ASTPortAccessBuilder();
 

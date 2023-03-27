@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 
 import java.util.Collections;
 
-public class ComponentNoReservedKeywordTest extends AbstractTest {
+public class ComponentNoReservedKeywordTest extends ArcBasisAbstractTest {
 
   @Test
   public void checkPortNameMatchesKeyword() {

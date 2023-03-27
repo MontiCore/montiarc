@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.arc2fd.smt;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import montiarc.util.Error;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class SMT2FDVisitorTest extends AbstractTest {
+public class SMT2FDVisitorTest extends ArcBasisAbstractTest {
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
 

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
@@ -15,7 +15,7 @@ import org.mockito.Mockito;
 
 import java.util.stream.Stream;
 
-public class PortsConnectedTest extends AbstractTest {
+public class PortsConnectedTest extends ArcBasisAbstractTest {
 
   @ParameterizedTest
   @MethodSource("componentAndErrorCodeProvider")

@@ -2,7 +2,7 @@
 package arcautomaton._cocos;
 
 import arcautomaton.ArcAutomatonMill;
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import de.monticore.scbasis._ast.ASTSCModifier;
 import de.monticore.scbasis._ast.ASTSCSAnte;
 import de.monticore.scbasis._ast.ASTSCSBody;
@@ -13,7 +13,7 @@ import org.mockito.Mockito;
 
 import java.util.Collections;
 
-public class StateNameIsNoReservedKeywordTest extends AbstractTest {
+public class StateNameIsNoReservedKeywordTest extends ArcBasisAbstractTest {
 
   @Test
   public void checkPortNameMatchesKeyword() {

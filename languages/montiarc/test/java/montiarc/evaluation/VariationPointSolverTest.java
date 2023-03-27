@@ -10,7 +10,7 @@ import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc.evaluation.util.ASTExpressionSetEnclosingScope;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  * Tests for {@link VariationPointSolver}
  * Focuses on giving back the correct combinations of variations points
  */
-public class VariationPointSolverTest extends AbstractTest {
+public class VariationPointSolverTest extends MontiArcAbstractTest {
 
   protected static final String originComponentTypeName = "C";
   protected static final String childComponentName = "child";

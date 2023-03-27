@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 /**
  * Holds test for the handwritten methods of {@link ASTComponentType}.
  */
-public class ComponentTest extends AbstractTest {
+public class ComponentTest extends ArcBasisAbstractTest {
 
   @ParameterizedTest
   @MethodSource("sourceAndTargetsProvider")

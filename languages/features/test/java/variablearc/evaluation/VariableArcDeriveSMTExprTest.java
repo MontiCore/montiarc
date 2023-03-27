@@ -7,14 +7,14 @@ import com.microsoft.z3.IntSort;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import variablearc.AbstractTest;
+import variablearc.VariableArcAbstractTest;
 
 import static org.mockito.Mockito.when;
 
 /**
  * Tests for {@link VariableArcDeriveSMTExpr}
  */
-public class VariableArcDeriveSMTExprTest extends AbstractTest {
+public class VariableArcDeriveSMTExprTest extends VariableArcAbstractTest {
 
   protected static Context createContext() {
     Context context = Mockito.mock(Context.class);

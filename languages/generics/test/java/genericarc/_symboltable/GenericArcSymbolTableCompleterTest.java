@@ -14,7 +14,7 @@ import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
-import genericarc.AbstractTest;
+import genericarc.GenericArcAbstractTest;
 import genericarc.GenericArcMill;
 import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericComponentHead;
@@ -33,7 +33,7 @@ import org.mockito.Mockito;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public class GenericArcSymbolTableCompleterTest extends AbstractTest {
+public class GenericArcSymbolTableCompleterTest extends GenericArcAbstractTest {
 
   protected GenericArcSymbolTableCompleter completer;
 

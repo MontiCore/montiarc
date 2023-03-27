@@ -7,7 +7,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import variablearc.AbstractTest;
+import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
 
 import java.util.stream.Stream;
@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 /**
  * Tests for {@link ArcFeature2VariableAdapter}
  */
-public class ArcFeature2VariableAdapterTest extends AbstractTest {
+public class ArcFeature2VariableAdapterTest extends VariableArcAbstractTest {
 
   @ParameterizedTest
   @MethodSource("featureSymbolProvider")

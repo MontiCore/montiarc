@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
@@ -18,7 +18,7 @@ import org.mockito.Mockito;
 /**
  * Tests {@link OptionalConfigurationParametersLast}
  */
-public class OptionalConfigurationParametersLastTest extends AbstractTest {
+public class OptionalConfigurationParametersLastTest extends ArcBasisAbstractTest {
 
   protected static final String INT_FIELD_NAME = "anInt";
 

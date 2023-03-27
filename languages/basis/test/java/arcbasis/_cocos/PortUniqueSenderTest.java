@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 /**
  * Holds tests for the handwritten methods of {@link PortUniqueSender}.
  */
-public class PortUniqueSenderTest extends AbstractTest {
+public class PortUniqueSenderTest extends ArcBasisAbstractTest {
 
   @ParameterizedTest
   @MethodSource("componentAndErrorCodeProvider")

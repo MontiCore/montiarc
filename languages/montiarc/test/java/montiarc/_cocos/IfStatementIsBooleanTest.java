@@ -4,7 +4,7 @@ package montiarc._cocos;
 import arcbasis._ast.ASTArcElement;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import de.monticore.types.check.TypeRelations;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc.check.MontiArcTypeCalculator;
 import montiarc.util.Error;
@@ -18,7 +18,7 @@ import variablearc._cocos.IfStatementIsBoolean;
 
 import java.util.stream.Stream;
 
-public class IfStatementIsBooleanTest extends AbstractTest {
+public class IfStatementIsBooleanTest extends MontiArcAbstractTest {
 
   protected static Stream<Arguments> provideIfStatementAndError() {
     return Stream.of(

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.SymbolService;
@@ -31,7 +31,7 @@ import java.util.stream.Stream;
  * Override {@link this#getTypeCalculator()} with method that returns the type
  * calculator under test.
  */
-public abstract class AbstractArcTypeCalculatorTest extends AbstractTest {
+public abstract class AbstractArcTypeCalculatorTest extends ArcBasisAbstractTest {
 
   protected IArcTypeCalculator typeCalculator;
   protected IArcBasisScope scope;

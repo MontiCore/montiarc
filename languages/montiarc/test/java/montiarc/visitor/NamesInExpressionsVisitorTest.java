@@ -3,7 +3,7 @@ package montiarc.visitor;
 
 import arcautomaton._visitor.NamesInExpressionsVisitor;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._parser.MontiArcParser;
 import montiarc._visitor.MontiArcTraverser;
@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 import static arcautomaton._visitor.NamesInExpressionsVisitor.VarAccessKind;
 
-public class NamesInExpressionsVisitorTest extends AbstractTest {
+public class NamesInExpressionsVisitorTest extends MontiArcAbstractTest {
 
   @ParameterizedTest
   @MethodSource("expressionAndVariableNamesProvider")

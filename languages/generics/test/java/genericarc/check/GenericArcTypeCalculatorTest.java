@@ -5,7 +5,7 @@ import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.check.AbstractArcTypeCalculatorTest;
 import arcbasis.check.IArcTypeCalculator;
 import de.monticore.types.check.TypeCheckResult;
-import genericarc.AbstractTest;
+import genericarc.GenericArcAbstractTest;
 import genericarc.GenericArcMill;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -22,7 +22,7 @@ public class GenericArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest 
     GenericArcMill.globalScope().clear();
     GenericArcMill.reset();
     GenericArcMill.init();
-    AbstractTest.addBasicTypes2Scope();
+    GenericArcAbstractTest.addBasicTypes2Scope();
     this.setUp();
   }
 

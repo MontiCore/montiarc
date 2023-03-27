@@ -7,7 +7,7 @@ import arcbasis._cocos.ParameterDefaultValueOmitsPortRef;
 import com.google.common.base.Preconditions;
 import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.logging.Log;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-public class StaticContextTest extends AbstractTest {
+public class StaticContextTest extends MontiArcAbstractTest {
 
   protected static final String TEST_MODEL_PATH = "cocos/static_context";
 

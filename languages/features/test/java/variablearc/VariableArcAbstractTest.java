@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc;
 
+import arcbasis.ArcBasisAbstractTest;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.util.Arrays;
 
-public class AbstractTest extends arcbasis.AbstractTest {
+public class VariableArcAbstractTest extends ArcBasisAbstractTest {
 
   @BeforeEach
   @Override
@@ -16,7 +17,7 @@ public class AbstractTest extends arcbasis.AbstractTest {
     VariableArcMill.globalScope().clear();
     VariableArcMill.reset();
     VariableArcMill.init();
-    AbstractTest.addBasicTypes2Scope();
+    VariableArcAbstractTest.addBasicTypes2Scope();
   }
 
   protected static ASTMCQualifiedName createQualifiedName(@NotNull String... parts) {

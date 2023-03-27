@@ -1,13 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.parser;
 
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.nio.file.Paths;
 
-public class StatechartComponentParserTest extends AbstractTest {
+public class StatechartComponentParserTest extends MontiArcAbstractTest {
   private static final String VALID_MODELS = "parser/statecharts/valid";
   private static final String FALSE_MODELS = "parser/statecharts/invalid";
 

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Holds the tests for {@link ASTPortAccess}.
  */
-public class ASTPortAccessTest extends AbstractTest {
+public class ASTPortAccessTest extends ArcBasisAbstractTest {
 
   @ParameterizedTest
   @ValueSource(strings = {"sub1", "sub2"})

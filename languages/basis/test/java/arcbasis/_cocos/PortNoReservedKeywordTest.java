@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTPort;
 import montiarc.util.ArcError;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
-public class PortNoReservedKeywordTest extends AbstractTest {
+public class PortNoReservedKeywordTest extends ArcBasisAbstractTest {
 
   @Test
   void checkPortNameMatchesKeyword() {

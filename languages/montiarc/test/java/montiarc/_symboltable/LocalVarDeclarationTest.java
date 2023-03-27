@@ -7,7 +7,7 @@ import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisVisitor2;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.se_rwth.commons.logging.Log;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
@@ -29,7 +29,7 @@ import java.util.Optional;
  * Tests whether symbols are created for variables declared by
  * {@link de.monticore.statements.mcvardeclarationstatements._ast.ASTLocalVariableDeclaration}
  */
-public class LocalVarDeclarationTest extends AbstractTest {
+public class LocalVarDeclarationTest extends MontiArcAbstractTest {
 
   protected static final String TEST_MODEL_PATH = "symboltable/localvardeclarations/";
 

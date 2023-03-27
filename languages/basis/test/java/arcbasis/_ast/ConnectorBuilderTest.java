@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 /**
  * Holds the tests for the handwritten methods of {@link ASTConnectorBuilder}.
  */
-public class ConnectorBuilderTest extends AbstractTest {
+public class ConnectorBuilderTest extends ArcBasisAbstractTest {
 
   protected ASTConnectorBuilder builder;
 

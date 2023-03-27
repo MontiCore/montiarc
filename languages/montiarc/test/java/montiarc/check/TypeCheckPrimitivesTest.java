@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.se_rwth.commons.logging.Log;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -37,7 +37,7 @@ import static de.monticore.types.check.SymTypeExpressionFactory.createPrimitive;
  * <p>
  * The class under test is {@link MontiArcTypeCalculator}.
  */
-public class  TypeCheckPrimitivesTest extends AbstractTest {
+public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
 
   /**
    * The enclosing scope of the symbols of the test setup

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcFieldDeclaration;
 import arcbasis._ast.ASTArcParameter;
@@ -43,7 +43,7 @@ import java.util.stream.Stream;
 /**
  * Holds tests for {@link ArcBasisSymbolTableCompleter}.
  */
-public class ArcBasisSymbolTableCompleterTest extends AbstractTest {
+public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
 
   protected ArcBasisSymbolTableCompleter completer;
 

@@ -4,7 +4,7 @@ package montiarc._symboltable;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.PortSymbol;
 import de.se_rwth.commons.logging.Log;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-public class DelayAndStronglyCausalPropagationTest extends AbstractTest {
+public class DelayAndStronglyCausalPropagationTest extends MontiArcAbstractTest {
 
   protected static final String TEST_MODEL_PATH = "symboltable/completion/";
 

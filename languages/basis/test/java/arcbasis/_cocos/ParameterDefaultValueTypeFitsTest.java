@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentBody;
@@ -26,7 +26,7 @@ import org.mockito.Mockito;
 /**
  * Tests {@link ParameterDefaultValueTypeFits}
  */
-public class ParameterDefaultValueTypeFitsTest extends AbstractTest {
+public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
 
   private static final String INT_VAR_NAME = "anInt";
   private static final String BOOL_VAR_NAME = "aBool";

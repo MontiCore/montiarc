@@ -10,7 +10,7 @@ import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.se_rwth.commons.Names;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
@@ -24,7 +24,7 @@ import java.nio.file.Paths;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class MontiArcDeserializationTest extends AbstractTest {
+public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
   protected static final String PACKAGE = "symboltable";
 

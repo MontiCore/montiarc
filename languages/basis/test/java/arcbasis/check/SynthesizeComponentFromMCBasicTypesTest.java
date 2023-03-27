@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
@@ -11,7 +11,7 @@ import de.monticore.types.mcbasictypes._ast.ASTMCVoidType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class SynthesizeComponentFromMCBasicTypesTest extends AbstractTest {
+public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisAbstractTest {
 
   @Test
   public void shouldHandleMCQualifiedType() {

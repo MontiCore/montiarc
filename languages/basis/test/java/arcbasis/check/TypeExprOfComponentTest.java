@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
@@ -23,7 +23,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class TypeExprOfComponentTest extends AbstractTest {
+public class TypeExprOfComponentTest extends ArcBasisAbstractTest {
 
   protected static Stream<Arguments> compAndOptionallySurrogateProvider() {
     Named<ComponentTypeSymbol> original = Named.of(

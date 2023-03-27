@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 /**
  * Holds tests for the handwritten methods of {@link NoSubcomponentReferenceCycle}.
  */
-public class NoSubComponentReferenceCyclesTest extends AbstractTest {
+public class NoSubComponentReferenceCyclesTest extends ArcBasisAbstractTest {
 
   protected final static String DUMMY_WITHOUT_CYCLE_NAME = "DummyWithoutCycle";
   protected final static String DUMMY_WITH_CYCLE_NAME = "DummyWithCycle";

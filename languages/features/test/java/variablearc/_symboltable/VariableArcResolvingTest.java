@@ -8,13 +8,13 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import variablearc.AbstractTest;
+import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
 
 import java.util.List;
 import java.util.Optional;
 
-public class VariableArcResolvingTest extends AbstractTest {
+public class VariableArcResolvingTest extends VariableArcAbstractTest {
 
   protected IVariableArcScope scope;
 

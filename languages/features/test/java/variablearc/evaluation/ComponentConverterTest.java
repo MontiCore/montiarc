@@ -16,7 +16,7 @@ import de.monticore.types.check.SymTypeExpressionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import variablearc.AbstractTest;
+import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
 import variablearc._symboltable.IVariableArcScope;
 import variablearc._symboltable.VariableArcSymbolTableCompleter;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 /**
  * Tests for {@link ComponentConverter}
  */
-public class ComponentConverterTest extends AbstractTest {
+public class ComponentConverterTest extends VariableArcAbstractTest {
 
   protected static Context createContext() {
     Context context = Mockito.mock(Context.class);

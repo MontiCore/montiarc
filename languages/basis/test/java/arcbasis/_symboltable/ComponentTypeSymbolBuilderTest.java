@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
@@ -23,7 +23,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 /**
  * Holds tests for the handwritten methods of {@link ComponentTypeSymbolBuilder}.
  */
-public class ComponentTypeSymbolBuilderTest extends AbstractTest {
+public class ComponentTypeSymbolBuilderTest extends ArcBasisAbstractTest {
 
   @Test
   public void shouldBeValid() {

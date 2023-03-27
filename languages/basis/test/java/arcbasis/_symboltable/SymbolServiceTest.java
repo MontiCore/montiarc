@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 /**
  * Holds test for {@link SymbolService}.
  */
-public class SymbolServiceTest extends AbstractTest {
+public class SymbolServiceTest extends ArcBasisAbstractTest {
 
   @BeforeAll
   public static void initClass() {

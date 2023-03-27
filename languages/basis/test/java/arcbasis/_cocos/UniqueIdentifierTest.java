@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTArcField;
@@ -38,7 +38,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class UniqueIdentifierTest extends AbstractTest {
+public class UniqueIdentifierTest extends ArcBasisAbstractTest {
 
   protected static UniqueIdentifier coco;
 

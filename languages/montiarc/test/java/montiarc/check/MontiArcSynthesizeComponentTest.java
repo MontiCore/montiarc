@@ -17,7 +17,7 @@ import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericTypeBuilder;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCCustomTypeArgument;
 import genericarc.check.TypeExprOfGenericComponent;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._symboltable.IMontiArcScope;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class MontiArcSynthesizeComponentTest extends AbstractTest {
+public class MontiArcSynthesizeComponentTest extends MontiArcAbstractTest {
 
   @Test
   public void shouldSynthesizeFromMCQualifiedType() {

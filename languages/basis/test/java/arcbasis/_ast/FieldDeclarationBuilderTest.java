@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import org.junit.jupiter.api.Assertions;
@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 /**
  * Holds the tests for the handwritten methods of {@link ASTArcFieldDeclarationBuilder}.
  */
-public class FieldDeclarationBuilderTest extends AbstractTest {
+public class FieldDeclarationBuilderTest extends ArcBasisAbstractTest {
 
   protected ASTArcFieldDeclarationBuilder builder;
 

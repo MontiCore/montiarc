@@ -4,7 +4,7 @@ package arcautomaton._ast;
 import arcautomaton.ArcAutomatonMill;
 import arcautomaton._symboltable.ArcAutomatonScopesGenitor;
 import arcautomaton._symboltable.TestScopesGenitorDelegator;
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import montiarc.Timing;
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * {@link ArcAutomatonScopesGenitor} is the class under test.
  */
-public class ASTArcStatechartTest extends AbstractTest {
+public class ASTArcStatechartTest extends ArcBasisAbstractTest {
 
   @Override
   @BeforeEach

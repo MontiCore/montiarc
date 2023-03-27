@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mockito;
-import variablearc.AbstractTest;
+import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
 import variablearc._visitor.VariableArcTraverser;
 
@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Tests for {@link VariableArcSymbolTableCompleter}
  */
-public class VariableArcSymbolTableCompleterTest extends AbstractTest {
+public class VariableArcSymbolTableCompleterTest extends VariableArcAbstractTest {
 
   protected VariableArcSymbolTableCompleter completer;
 

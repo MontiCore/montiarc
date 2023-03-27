@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcBehaviorElement;
 import arcbasis._ast.ASTComponentHead;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class ComponentTypeSymbolSurrogateTest extends AbstractTest {
+public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
 
   
   @Test

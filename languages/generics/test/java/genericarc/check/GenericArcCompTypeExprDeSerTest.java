@@ -10,7 +10,7 @@ import de.monticore.symboltable.serialization.JsonParser;
 import de.monticore.symboltable.serialization.json.JsonObject;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import genericarc.AbstractTest;
+import genericarc.GenericArcAbstractTest;
 import genericarc.GenericArcMill;
 import genericarc._symboltable.IGenericArcArtifactScope;
 import org.junit.jupiter.api.Assertions;
@@ -21,7 +21,7 @@ import java.util.List;
 import static genericarc.check.TypeExprOfGenericComponentDeSerTest.JSON_WITHOUT_PACKAGE;
 import static genericarc.check.TypeExprOfGenericComponentDeSerTest.JSON_WITH_PACKAGE;
 
-public class GenericArcCompTypeExprDeSerTest extends AbstractTest {
+public class GenericArcCompTypeExprDeSerTest extends GenericArcAbstractTest {
 
   @Test
   void testSerializeAsJsonWithPackage() {

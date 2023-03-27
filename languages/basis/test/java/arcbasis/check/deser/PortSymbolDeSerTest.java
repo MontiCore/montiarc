@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check.deser;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis._symboltable.ArcBasisSymbols2Json;
 import arcbasis._symboltable.PortSymbolDeSer;
 import de.monticore.symboltable.serialization.JsonParser;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-public class PortSymbolDeSerTest extends AbstractTest {
+public class PortSymbolDeSerTest extends ArcBasisAbstractTest {
 
   @ParameterizedTest
   @EnumSource(Timing.class)

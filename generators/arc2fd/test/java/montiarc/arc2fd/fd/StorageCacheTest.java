@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.arc2fd.fd;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import montiarc.arc2fd.smt.FDRelation;
 import montiarc.util.Error;
 import org.junit.jupiter.api.Assertions;
@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class StorageCacheTest extends AbstractTest {
+public class StorageCacheTest extends ArcBasisAbstractTest {
   StorageCache<BooleanFormula> storageCache;
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;

@@ -4,7 +4,7 @@ package montiarc._cocos;
 import arcbasis._cocos.FeedbackStrongCausality;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * {@link FeedbackStrongCausality} is the class and context-condition under test.
  */
-public class FeedbackStrongCausalityTest extends AbstractTest {
+public class FeedbackStrongCausalityTest extends MontiArcAbstractTest {
 
   @ParameterizedTest
   @ValueSource(strings = {

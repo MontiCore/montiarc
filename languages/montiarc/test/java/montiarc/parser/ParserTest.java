@@ -2,7 +2,7 @@
 package montiarc.parser;
 
 import de.se_rwth.commons.logging.Log;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTArcTiming;
 import montiarc._ast.ASTMACompilationUnit;
@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ParserTest extends AbstractTest {
+public class ParserTest extends MontiArcAbstractTest {
 
   protected static final String PACKAGE = "parser";
 

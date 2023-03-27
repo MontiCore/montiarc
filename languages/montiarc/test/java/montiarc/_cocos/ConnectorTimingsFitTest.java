@@ -4,7 +4,7 @@ package montiarc._cocos;
 import arcbasis._cocos.ConnectorTimingsFit;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * {@link ConnectorTimingsFit} is the class and context-condition under test.
  */
-public class ConnectorTimingsFitTest extends AbstractTest {
+public class ConnectorTimingsFitTest extends MontiArcAbstractTest {
 
   @ParameterizedTest
   @ValueSource(strings = {

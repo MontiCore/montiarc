@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * {@link OnlyOneTiming} is the class and context-condition under test.
  */
-public class OnlyOneTimingTest extends AbstractTest {
+public class OnlyOneTimingTest extends ArcBasisAbstractTest {
 
   /**
    * If the port has no stereo values,

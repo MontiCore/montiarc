@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.arc2fd.fd;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import montiarc.MontiArcMill;
 import montiarc.util.Error;
@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-public class ExpressionToFDHelperTest extends AbstractTest {
+public class ExpressionToFDHelperTest extends ArcBasisAbstractTest {
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
   ExpressionToFDHelper<BooleanFormula> expressionToFDHelper;

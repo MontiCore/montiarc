@@ -12,7 +12,7 @@ import de.monticore.symboltable.serialization.json.JsonObject;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import genericarc.check.TypeExprOfGenericComponent;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._symboltable.IMontiArcArtifactScope;
 import org.junit.jupiter.api.Assertions;
@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-public class MontiArcCompTypeExprDeSerTest extends AbstractTest {
+public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
 
   public static final String GENERIC_COMP_JSON =
     "{" +

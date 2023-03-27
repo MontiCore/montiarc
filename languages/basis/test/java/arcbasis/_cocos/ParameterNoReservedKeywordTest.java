@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcParameter;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
@@ -11,7 +11,7 @@ import org.mockito.Mockito;
 
 import java.util.Collections;
 
-public class ParameterNoReservedKeywordTest extends AbstractTest {
+public class ParameterNoReservedKeywordTest extends ArcBasisAbstractTest {
 
   @Test
   void checkPortNameMatchesKeyword() {

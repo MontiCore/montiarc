@@ -44,7 +44,7 @@ import java.util.stream.Stream;
 /**
  * Holds tests for {@link MontiArcTool}.
  */
-public class MontiArcToolTest extends AbstractTest {
+public class MontiArcToolTest extends MontiArcAbstractTest {
 
   protected final static String TEST_DIR = "clitool";
 

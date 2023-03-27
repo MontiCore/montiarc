@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcBehaviorElement;
 import arcbasis._ast.ASTComponentHead;
@@ -16,7 +16,7 @@ import org.mockito.Mockito;
 
 import java.util.stream.Stream;
 
-public class OnlyOneBehaviorTest extends AbstractTest {
+public class OnlyOneBehaviorTest extends ArcBasisAbstractTest {
 
   protected static Stream<Arguments> numberOfBehaviorsWithErrorProvider() {
     return Stream.of(

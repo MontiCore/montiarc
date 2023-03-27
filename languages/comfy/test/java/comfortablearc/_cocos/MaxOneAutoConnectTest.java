@@ -3,7 +3,7 @@ package comfortablearc._cocos;
 
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentBodyBuilder;
-import comfortablearc.AbstractTest;
+import comfortablearc.ComfortableArcAbstractTest;
 import comfortablearc.ComfortableArcMill;
 import comfortablearc._ast.ASTArcAutoConnect;
 import montiarc.util.ComfortableArcError;
@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 import static montiarc.util.ComfortableArcError.MULTIPLE_AUTOCONNECTS;
 
-public class MaxOneAutoConnectTest extends AbstractTest {
+public class MaxOneAutoConnectTest extends ComfortableArcAbstractTest {
 
   @Test
   void shouldAllowNoAutoconnect() {

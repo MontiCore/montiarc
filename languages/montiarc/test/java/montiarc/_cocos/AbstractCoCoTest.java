@@ -5,7 +5,7 @@ import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.logging.Log;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
@@ -19,7 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 
-public abstract class AbstractCoCoTest extends AbstractTest {
+public abstract class AbstractCoCoTest extends MontiArcAbstractTest {
 
   protected static final String MODEL_PATH = "cocos/";
   protected MontiArcCoCoChecker checker;

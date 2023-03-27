@@ -2,7 +2,7 @@
 package montiarc._symboltable;
 
 import com.google.common.base.Preconditions;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * Holds test for {@link MontiArcScopesGenitor}.
  */
-public class MontiArcScopesGenitorTest extends AbstractTest {
+public class MontiArcScopesGenitorTest extends MontiArcAbstractTest {
 
   protected final MontiArcParser parser = new MontiArcParser();
   protected final MontiArcScopesGenitor genitor = new MontiArcScopesGenitor();

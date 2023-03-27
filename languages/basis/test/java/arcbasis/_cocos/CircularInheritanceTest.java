@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
@@ -17,7 +17,7 @@ import org.mockito.Mockito;
 /**
  * Holds tests for the handwritten methods of {@link CircularInheritance}.
  */
-public class CircularInheritanceTest extends AbstractTest {
+public class CircularInheritanceTest extends ArcBasisAbstractTest {
 
   /**
    * If a component directly extends itself, then the context-condition should

@@ -1,35 +1,44 @@
 /* (c) https://github.com/MontiCore/monticore */
-package arcbasis;
+package montiarc;
 
+import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.IArcBasisArtifactScope;
-import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.SymbolService;
 import com.google.common.base.Preconditions;
-import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
-import montiarc.util.ArcError;
+import montiarc._symboltable.IMontiArcArtifactScope;
+import montiarc.util.AbstractTest;
+import montiarc.util.MCError;
+import montiarc.util.MontiArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-public abstract class AbstractTest extends montiarc.util.AbstractTest {
+public abstract class MontiArcAbstractTest extends AbstractTest {
 
   @BeforeEach
   public void init() {
-    ArcBasisMill.globalScope().clear();
-    ArcBasisMill.reset();
-    ArcBasisMill.init();
+    MontiArcMill.globalScope().clear();
+    MontiArcMill.reset();
+    MontiArcMill.init();
     addBasicTypes2Scope();
   }
 
   @Override
   protected Pattern supplyErrorCodePattern() {
-    return ArcError.ERROR_CODE_PATTERN;
+    return MontiArcError.ERROR_CODE_PATTERN;
+  }
+
+  protected Pattern supplyErrorCodePatternInclMontiCoreErrors() {
+    String montiArcPattern = MontiArcError.ERROR_CODE_PATTERN.pattern();
+    String montiCorePattern = MCError.ERROR_CODE_PATTERN.pattern();
+    return Pattern.compile(montiArcPattern + "|" + montiCorePattern);
   }
 
   protected static ASTMCQualifiedName createQualifiedName(@NotNull String... parts) {
@@ -40,35 +49,6 @@ public abstract class AbstractTest extends montiarc.util.AbstractTest {
   protected static ASTMCQualifiedType createQualifiedType(@NotNull String... parts) {
     assert parts != null && !Arrays.asList(parts).contains(null);
     return ArcBasisMill.mCQualifiedTypeBuilder().setMCQualifiedName(createQualifiedName(parts)).build();
-  }
-
-  protected static TypeSymbol createTypeSymbol(@NotNull String name) {
-    Preconditions.checkNotNull(name);
-    return ArcBasisMill.typeSymbolBuilder()
-      .setName(name)
-      .setSpannedScope(ArcBasisMill.scope())
-      .build();
-  }
-
-  protected static void createTypeSymbolInScope(@NotNull String typeName, @NotNull String scopeName) {
-    Preconditions.checkNotNull(typeName);
-    Preconditions.checkNotNull(scopeName);
-
-    IArcBasisScope scope = ArcBasisMill.scope();
-    scope.setName(scopeName);
-
-    TypeSymbol type = createTypeSymbol(typeName);
-    scope.add(type);
-    scope.addSubScope(type.getSpannedScope());
-    ArcBasisMill.globalScope().addSubScope(scope);
-  }
-
-  protected static void createTypeSymbolInGlobalScope(@NotNull String typeName) {
-    Preconditions.checkNotNull(typeName);
-
-    TypeSymbol type = createTypeSymbol(typeName);
-    ArcBasisMill.globalScope().add(type);
-    ArcBasisMill.globalScope().addSubScope(type.getSpannedScope());
   }
 
   /**
@@ -100,16 +80,56 @@ public abstract class AbstractTest extends montiarc.util.AbstractTest {
    * Wraps the given component type symbol into an artifact scope with the given package name.
    * Note that this artifact scope is not yet registered to be part of the global scope!
    */
-  protected static IArcBasisArtifactScope wrapInArtifactScope(@NotNull String packageName,
+  protected static IMontiArcArtifactScope wrapInArtifactScope(@NotNull String packageName,
                                                               @NotNull ComponentTypeSymbol compSymToWrap) {
     Preconditions.checkNotNull(packageName);
     Preconditions.checkNotNull(compSymToWrap);
 
-    IArcBasisArtifactScope scope = ArcBasisMill.artifactScope();
+    IMontiArcArtifactScope scope = MontiArcMill.artifactScope();
     scope.setPackageName(packageName);
 
     SymbolService.link(scope, compSymToWrap);
 
     return scope;
+  }
+
+  /**
+   * Wraps the given OOType into an artifact scope with the given package name.
+   * Note that this artifact scope is not yet registered to be part of the global scope!
+   */
+  protected static IMontiArcArtifactScope wrapInArtifactScope(@NotNull String packageName,
+                                                              @NotNull OOTypeSymbol typeToWrap) {
+    Preconditions.checkNotNull(packageName);
+    Preconditions.checkNotNull(typeToWrap);
+
+    IMontiArcArtifactScope scope = MontiArcMill.artifactScope();
+    scope.setPackageName(packageName);
+
+    SymbolService.link(scope, typeToWrap);
+
+    return scope;
+  }
+
+  protected void addTypeParamsToComp(@NotNull ComponentTypeSymbol comp, @NotNull String... typeParamNames) {
+    for (String typeParamName : typeParamNames) {
+      TypeVarSymbol typeParam = MontiArcMill
+        .typeVarSymbolBuilder()
+        .setName(typeParamName)
+        .build();
+
+      comp.getSpannedScope().add(typeParam);
+    }
+  }
+
+  /**
+   * Creates an OOTypeSymbol with the given name. Beware that the symbol is not part of any scope.
+   */
+  protected static OOTypeSymbol createOOTypeSymbol(@NotNull String name) {
+    Preconditions.checkNotNull(name);
+
+    return MontiArcMill.oOTypeSymbolBuilder()
+      .setName(name)
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
   }
 }

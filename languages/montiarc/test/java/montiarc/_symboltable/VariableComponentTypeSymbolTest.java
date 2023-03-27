@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc.evaluation.util.ASTExpressionSetEnclosingScope;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -35,7 +35,7 @@ import java.util.stream.Stream;
  * Tests for {@link VariableComponentTypeSymbol}
  * Focuses on giving back the correct number of Variants (including subcomponent expansion)
  */
-public class VariableComponentTypeSymbolTest extends AbstractTest {
+public class VariableComponentTypeSymbolTest extends MontiArcAbstractTest {
 
   protected static VariableComponentTypeSymbol createComponentWithVariationPoints(
     List<VariableArcVariationPoint> variationPoints) {

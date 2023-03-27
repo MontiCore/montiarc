@@ -21,7 +21,7 @@ import de.monticore.sctransitions4code._ast.ASTTransitionAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mccommonstatements._ast.ASTExpressionStatement;
 import de.monticore.statements.mccommonstatements._ast.ASTMCJavaBlock;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
@@ -35,7 +35,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-public class ArcAutomatonPrettyPrinterTest extends AbstractTest {
+public class ArcAutomatonPrettyPrinterTest extends MontiArcAbstractTest {
 
   private static final String MODELS = "parser/statecharts/valid";
 

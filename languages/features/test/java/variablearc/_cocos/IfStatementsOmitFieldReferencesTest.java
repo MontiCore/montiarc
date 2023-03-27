@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import variablearc.AbstractTest;
+import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
 import variablearc._ast.ASTArcIfStatement;
 
@@ -26,7 +26,7 @@ import java.util.Collections;
 /**
  * Tests for {@link IfStatementsOmitFieldReferences}
  */
-public class IfStatementsOmitFieldReferencesTest extends AbstractTest {
+public class IfStatementsOmitFieldReferencesTest extends VariableArcAbstractTest {
 
   protected IfStatementsOmitFieldReferences coco;
 

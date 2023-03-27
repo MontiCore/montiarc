@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.parser;
 
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 /**
  * Tests the grammar of MontiArc's Dynamic-Reconfiguration-Language-Components
  */
-public class DynamicComponentsParserTest extends AbstractTest {
+public class DynamicComponentsParserTest extends MontiArcAbstractTest {
 
   @ParameterizedTest
   @ValueSource(strings = {"ShiftController.arc"})

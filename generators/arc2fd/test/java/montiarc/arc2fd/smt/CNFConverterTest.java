@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.arc2fd.smt;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import montiarc.util.Error;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +15,7 @@ import org.sosy_lab.java_smt.api.BooleanFormulaManager;
 import org.sosy_lab.java_smt.api.FormulaManager;
 import org.sosy_lab.java_smt.api.SolverContext;
 
-public class CNFConverterTest extends AbstractTest {
+public class CNFConverterTest extends ArcBasisAbstractTest {
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
   CNFConverter cnfConverter;

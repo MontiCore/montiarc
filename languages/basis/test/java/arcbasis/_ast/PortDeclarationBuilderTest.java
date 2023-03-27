@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import org.junit.jupiter.api.Assertions;
@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 /**
  * Holds the tests for the handwritten methods of {@link ASTPortDeclarationBuilder}.
  */
-public class PortDeclarationBuilderTest extends AbstractTest {
+public class PortDeclarationBuilderTest extends ArcBasisAbstractTest {
 
   protected ASTPortDeclarationBuilder builder;
 

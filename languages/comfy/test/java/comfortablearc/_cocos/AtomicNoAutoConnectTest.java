@@ -3,7 +3,7 @@ package comfortablearc._cocos;
 
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentInstantiation;
-import comfortablearc.AbstractTest;
+import comfortablearc.ComfortableArcAbstractTest;
 import comfortablearc.ComfortableArcMill;
 import comfortablearc._ast.ASTArcACMode;
 import comfortablearc._ast.ASTArcAutoConnect;
@@ -17,7 +17,7 @@ import org.mockito.Mockito;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class AtomicNoAutoConnectTest extends AbstractTest {
+public class AtomicNoAutoConnectTest extends ComfortableArcAbstractTest {
 
   @Test
   void shouldAllowNoAutoConnectInAtomicComponent() {

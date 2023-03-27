@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check.deser;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisArtifactScope;
@@ -12,7 +12,7 @@ import de.monticore.symboltable.serialization.json.JsonObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class TypeExprOfComponentDeSerTest extends AbstractTest {
+public class TypeExprOfComponentDeSerTest extends ArcBasisAbstractTest {
 
   @Test
   public void testSerializeAsJsonWithPackage() {

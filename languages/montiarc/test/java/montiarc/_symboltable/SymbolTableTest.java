@@ -3,7 +3,7 @@ package montiarc._symboltable;
 
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import montiarc.AbstractTest;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  * That is, checks that all scopes, symbols and ast nodes have an enclosing
  * scope, and that all spanning symbols and ast nodes have a spanned scope.
  */
-public class SymbolTableTest extends AbstractTest {
+public class SymbolTableTest extends MontiArcAbstractTest {
 
   @BeforeAll
   public static void setUp() {

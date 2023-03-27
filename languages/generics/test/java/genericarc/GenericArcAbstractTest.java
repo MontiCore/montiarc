@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package genericarc;
 
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.SymbolService;
 import com.google.common.base.Preconditions;
@@ -10,7 +11,7 @@ import genericarc._symboltable.IGenericArcArtifactScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 
-public class AbstractTest extends arcbasis.AbstractTest {
+public class GenericArcAbstractTest extends ArcBasisAbstractTest {
 
   @BeforeEach
   @Override
@@ -18,7 +19,7 @@ public class AbstractTest extends arcbasis.AbstractTest {
     GenericArcMill.globalScope().clear();
     GenericArcMill.reset();
     GenericArcMill.init();
-    AbstractTest.addBasicTypes2Scope();
+    GenericArcAbstractTest.addBasicTypes2Scope();
   }
 
   /**

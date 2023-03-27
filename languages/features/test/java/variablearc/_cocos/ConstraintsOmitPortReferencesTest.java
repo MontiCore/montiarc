@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import variablearc.AbstractTest;
+import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
 import variablearc._ast.ASTArcConstraintDeclaration;
 
@@ -27,7 +27,7 @@ import java.util.Collections;
 /**
  * Tests for {@link ConstraintsOmitPortReferences}
  */
-public class ConstraintsOmitPortReferencesTest extends AbstractTest {
+public class ConstraintsOmitPortReferencesTest extends VariableArcAbstractTest {
 
   protected final static String INDEPENDENT_COMPONENT_NAME = "IndependentComp";
   protected final static String INDEPENDENT_COMPONENT_IN_PORT_NAME = "someIndependentInPort";

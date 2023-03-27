@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import variablearc.AbstractTest;
+import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
 import variablearc._ast.ASTArcConstraintDeclaration;
 
@@ -25,7 +25,7 @@ import java.util.Collections;
 /**
  * Tests for {@link ConstraintsOmitFieldReferences}
  */
-public class ConstraintsOmitFieldReferencesTest extends AbstractTest {
+public class ConstraintsOmitFieldReferencesTest extends VariableArcAbstractTest {
 
   protected ConstraintsOmitFieldReferences coco;
 

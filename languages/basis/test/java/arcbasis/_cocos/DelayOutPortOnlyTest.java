@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.AbstractTest;
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTPort;
 import de.monticore.types.check.SymTypeExpression;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * {@link DelayOutPortOnly} is the class and context-condition under test.
  */
-public class DelayOutPortOnlyTest extends AbstractTest {
+public class DelayOutPortOnlyTest extends ArcBasisAbstractTest {
 
   @ParameterizedTest
   @CsvSource(value = {

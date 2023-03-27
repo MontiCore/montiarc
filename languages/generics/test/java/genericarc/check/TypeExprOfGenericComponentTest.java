@@ -17,7 +17,7 @@ import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.check.SymTypePrimitive;
 import de.monticore.types.check.SymTypeVariable;
-import genericarc.AbstractTest;
+import genericarc.GenericArcAbstractTest;
 import genericarc.GenericArcMill;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class TypeExprOfGenericComponentTest extends AbstractTest {
+public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
 
   @BeforeEach
   @Override
@@ -95,7 +95,7 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
     SymTypeVariable typeVar = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(0));
     child.setParent(new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeVar)));
 
-    SymTypeExpression typeArg = SymTypeExpressionFactory.createTypeObject(AbstractTest.createTypeSymbol("First"));
+    SymTypeExpression typeArg = SymTypeExpressionFactory.createTypeObject(GenericArcAbstractTest.createTypeSymbol("First"));
     CompTypeExpression bChild = new TypeExprOfGenericComponent(child, Lists.newArrayList(typeArg));
 
     // When
@@ -118,8 +118,8 @@ public class TypeExprOfGenericComponentTest extends AbstractTest {
     SymTypeVariable typeVar2 = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(1));
     child.setParent(new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeVar1, typeVar2)));
 
-    SymTypeExpression typeArg1 = SymTypeExpressionFactory.createTypeObject(AbstractTest.createTypeSymbol("First"));
-    SymTypeExpression typeArg2 = SymTypeExpressionFactory.createTypeObject(AbstractTest.createTypeSymbol("Second"));
+    SymTypeExpression typeArg1 = SymTypeExpressionFactory.createTypeObject(GenericArcAbstractTest.createTypeSymbol("First"));
+    SymTypeExpression typeArg2 = SymTypeExpressionFactory.createTypeObject(GenericArcAbstractTest.createTypeSymbol("Second"));
     CompTypeExpression bChild = new TypeExprOfGenericComponent(child, Lists.newArrayList(typeArg1, typeArg2));
 
     // When
