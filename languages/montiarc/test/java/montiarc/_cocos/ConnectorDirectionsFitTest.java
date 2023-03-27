@@ -3,6 +3,7 @@ package montiarc._cocos;
 
 import arcbasis._cocos.ConnectorDirectionsFit;
 import com.google.common.base.Preconditions;
+import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import montiarc.MontiArcMill;
 import montiarc.util.ArcError;
@@ -24,7 +25,8 @@ public class ConnectorDirectionsFitTest extends AbstractCoCoTest {
   @BeforeEach
   public void init() {
     super.init();
-    this.getCLI().initializeBasicOOTypes();
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
     this.loadList();
   }
 

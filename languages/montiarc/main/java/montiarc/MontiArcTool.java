@@ -357,26 +357,6 @@ public class MontiArcTool extends MontiArcToolTOP {
     }
   }
 
-  @Deprecated
-  public void initializeBasicOOTypes() {
-    SymbolService.link(MontiArcMill.globalScope(), MontiArcMill.oOTypeSymbolBuilder()
-      .setName("Object")
-      .setEnclosingScope(MontiArcMill.artifactScope())
-      .setSpannedScope(MontiArcMill.scope()).build());
-    SymbolService.link(MontiArcMill.globalScope(), MontiArcMill.oOTypeSymbolBuilder()
-      .setName("String")
-      .setEnclosingScope(MontiArcMill.artifactScope())
-      .setSpannedScope(MontiArcMill.scope())
-      .addSuperTypes(SymTypeExpressionFactory.createTypeObject("Object", MontiArcMill.globalScope()))
-      .build());
-    SymbolService.link(MontiArcMill.globalScope(), MontiArcMill.oOTypeSymbolBuilder()
-      .setName("Integer")
-      .setEnclosingScope(MontiArcMill.artifactScope())
-      .setSpannedScope(MontiArcMill.scope())
-      .addSuperTypes(SymTypeExpressionFactory.createTypeObject("Object", MontiArcMill.globalScope()))
-      .build());
-  }
-
   @Override
   public Options addStandardOptions(@NotNull Options options) {
     Preconditions.checkNotNull(options);

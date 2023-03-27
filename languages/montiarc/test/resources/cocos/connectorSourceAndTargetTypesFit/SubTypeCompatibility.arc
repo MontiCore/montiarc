@@ -2,7 +2,7 @@
 package connectorSourceAndTargetTypesFit;
 
 /*
- * Valid model. (Given that Student is a subtype of Person and both are resolvable)
+ * Valid model.
  */
 component SubTypeCompatibility {
   port in Student sIn;

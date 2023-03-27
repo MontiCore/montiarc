@@ -1,8 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package connectorSourceAndTargetTypesFit.subcomponentDefinitions;
 
+import java.util.List;
+
 /**
- * Valid model. (Given that List<T> is resolvable)
+ * Valid model.
  */
 component Generic<A> {
   port in A aIn;

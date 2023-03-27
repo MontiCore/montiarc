@@ -1,6 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package connectorSourceAndTargetTypesFit;
 
+import java.lang.Integer;
+import java.lang.String;
+
 /*
  * Invalid model.
  */

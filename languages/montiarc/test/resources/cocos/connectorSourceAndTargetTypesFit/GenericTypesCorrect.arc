@@ -2,9 +2,10 @@
 package connectorSourceAndTargetTypesFit;
 
 import connectorSourceAndTargetTypesFit.subcomponentDefinitions.*;
+import java.util.List;
 
 /*
- * Valid model. (Given that List<T> is resolvable)
+ * Valid model.
  */
 component GenericTypesCorrect<B> {
   port in int intIn;

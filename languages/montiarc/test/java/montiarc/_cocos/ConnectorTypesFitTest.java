@@ -3,6 +3,7 @@ package montiarc._cocos;
 
 import arcbasis._cocos.ConnectorTypesFit;
 import com.google.common.base.Preconditions;
+import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.check.TypeRelations;
@@ -26,20 +27,10 @@ public class ConnectorTypesFitTest extends AbstractCoCoTest {
   @BeforeEach
   public void init() {
     super.init();
-    this.getCLI().initializeBasicOOTypes();
-    this.loadList();
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
     this.loadPersonAndStudent();
     this.loadComponentsToInstantiate();
-  }
-
-  public void loadList() {
-    OOTypeSymbol listSym = MontiArcMill.oOTypeSymbolBuilder()
-      .setName("List")
-      .setSpannedScope(MontiArcMill.scope())
-      .build();
-    listSym.addTypeVarSymbol(MontiArcMill.typeVarSymbolBuilder().setName("T").build());
-    MontiArcMill.globalScope().add(listSym);
-    MontiArcMill.globalScope().addSubScope(listSym.getSpannedScope());
   }
 
   public void loadPersonAndStudent() {
