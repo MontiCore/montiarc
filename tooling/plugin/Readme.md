@@ -64,7 +64,6 @@ dependencies {
 
 task.compileMontiarc {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Montiarc"
   symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/symbols")  // ← Default value
-  libModels.from("${projectDir}/somewhere/in/your/project")  // default value irrelevant
   useClass2Mc.set(true)  // Default value is false
 }
 
@@ -93,7 +92,6 @@ dependencies {
 
 task.compileMontiarc {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Montiarc"
   symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/symbols")  // ← Default value
-  libModels.from("${projectDir}/somewhere/in/your/project")  // default value irrelevant
   useClass2Mc.set(true)  // Default value is false
 }
 
@@ -116,7 +114,6 @@ Some configuration options only have default values, if the task is created for 
 | symbolImportDir | The `montiarcSymbolDependencies` configuration               | If you want to use `.sym` files, then you can use this configuration parameter to inform the generator where to find them. You can specify multiple locations with multiple `symbolImportDir.from(...)` statements.                                                                                                                 |
 | useClass2Mc     | `false`                                                      | If you want to use java types (or other JVM types) in your MontiArc models, then you set this configuration parameter to `true`. By this, all JVM types that are on the class path of the generator (which is the configuration `maGenerator`) will be accessible from MontiArc models. *Note*: this will be changed in the future. | <!-- TODO: Check if we need to put these types into the generateMA configuration -->
 | outputDir       | `$buildDir/montiarc/SOURCE_SET_NAME`                         | Where the generated files should be placed. Generated Java code ist placed in the `java` subfolder, exported symbol files are put in the `symbols` subfolder.                                                                                                                                                                       |
-| libModels       | None                                                         | Where to find models which should be parsed and read into the symbol table, but for which no generation should take place. Consider exporting these models as .arcsym files and putting them on the symbolImportDir instead.                                                                                                        |
 | sourceSetName   | _deprecated_ (None)                                          |                                                                                                                                                                                                                                                                                                                                     |
 
 Moreover, there are the following options configurable in the `montiarc` block:

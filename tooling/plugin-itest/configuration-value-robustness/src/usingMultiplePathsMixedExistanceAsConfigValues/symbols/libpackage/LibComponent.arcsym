@@ -1,0 +1,11 @@
+{
+  "generated-using": "www.MontiCore.de technology",
+  "name": "LibComponent",
+  "package": "libpackage",
+  "symbols": [
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "LibComponent"
+    }
+  ]
+}

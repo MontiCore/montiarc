@@ -30,11 +30,6 @@ abstract class MontiarcCompile : JavaExec() {
   @get:IgnoreEmptyDirectories
   abstract val hwcPath : ConfigurableFileCollection
 
-  @get:InputFiles
-  @get:IgnoreEmptyDirectories
-  @get:Optional
-  abstract val libModels : ConfigurableFileCollection
-
   @get:OutputDirectory
   abstract val outputDir : DirectoryProperty
 
@@ -68,7 +63,6 @@ abstract class MontiarcCompile : JavaExec() {
     // 1) For directories: filter out entries that do not exist
     val cleanModelPath = getExistingEntriesInProjectFrom(this.modelPath)
     val cleanSymbolImportDirs = getExistingEntriesInProjectFrom(this.symbolImportDir)
-    val cleanLibModelsPath = getExistingEntriesInProjectFrom(this.libModels)
     val cleanHwcPath = getExistingEntriesInProjectFrom(this.hwcPath)
 
     // 2) Build args for the montiarc generator
@@ -82,11 +76,6 @@ abstract class MontiarcCompile : JavaExec() {
     if (!cleanSymbolImportDirs.isEmpty) {
       args("-path", cleanSymbolImportDirs.asPath)
     }
-    if(!cleanLibModelsPath.isEmpty) {
-      args("--library-models", cleanLibModelsPath.asPath)
-    }
-
-
 
     // 3) Execute
     if (cleanModelPath.isEmpty) {
@@ -119,11 +108,6 @@ abstract class MontiarcCompile : JavaExec() {
     symbolImportDir.forEach { println("  $it") }
     println("Symbol import dir with existing entries:")
     symbolImportDir.filter { it.exists() }.forEach { println("  $it") }
-
-    println("Library directory:")
-    libModels.forEach { println("  $it")}
-    println("Library with existing entries:")
-    libModels.filter { it.exists() }.forEach { println("  $it") }
 
     println("OutDir: " + outputDir.get())
 

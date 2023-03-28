@@ -41,7 +41,6 @@ tasks.named<MontiarcCompile>(alteredConfigValuesSrcSet.getCompileMontiarcTaskNam
   hwcPath.setFrom("$projectDir/src/${srcSet.name}/alteredJavaHwc")
   symbolImportDir.setFrom("$projectDir/src/${srcSet.name}/alteredSymbolsDir")
   useClass2Mc.set(true)
-  libModels.setFrom("$projectDir/src/${srcSet.name}/alteredLibModels")
 }
 
 val alteredConfigCheck = tasks.register("checkAlteringConfigValues", CheckFilesArePresent::class.java) {
@@ -54,9 +53,9 @@ val alteredConfigCheck = tasks.register("checkAlteringConfigValues", CheckFilesA
 
   mandatoryFiles.from(
     "$expectedJavaGenDir/mainpackage/HwcComponentTOP.java",
-    "$expectedJavaGenDir/mainpackage/UsingLibModelsAndImportedSymbols.java",
+    "$expectedJavaGenDir/mainpackage/UsingImportedSymbols.java",
     "$expectedSymbolGenDir/mainpackage/HwcComponent.arcsym",
-    "$expectedSymbolGenDir/mainpackage/UsingLibModelsAndImportedSymbols.arcsym",
+    "$expectedSymbolGenDir/mainpackage/UsingImportedSymbols.arcsym",
   )
 }
 tasks.check.configure { dependsOn(alteredConfigCheck) }
@@ -81,10 +80,6 @@ tasks.named<MontiarcCompile>(multiplePathsSrcSet.getCompileMontiarcTaskName()) {
     "$projectDir/src/${srcSet.name}/symbols",
     "$projectDir/src/${srcSet.name}/symbols2",
   )
-  libModels.from(
-    "$projectDir/src/${srcSet.name}/libModels",
-    "$projectDir/src/${srcSet.name}/libModels2",
-  )
 }
 
 val multiplePathsCheck = tasks.register("checkMultiplePaths", CheckFilesArePresent::class.java) {
@@ -99,12 +94,12 @@ val multiplePathsCheck = tasks.register("checkMultiplePaths", CheckFilesArePrese
     "$expectedJavaGenDir/mainpackage/HwcComponentTOP.java",
     "$expectedJavaGenDir/mainpackage/HwcComponent2TOP.java",
     "$expectedJavaGenDir/mainpackage/UsingComponentFromOtherModelPath.java",
-    "$expectedJavaGenDir/mainpackage/UsingLibModelsAndImportedSymbols.java",
+    "$expectedJavaGenDir/mainpackage/UsingImportedSymbols.java",
     "$expectedJavaGenDir/mainpackage/ComponentFromModelPath2.java",
     "$expectedSymbolGenDir/mainpackage/HwcComponent.arcsym",
     "$expectedSymbolGenDir/mainpackage/HwcComponent2.arcsym",
     "$expectedSymbolGenDir/mainpackage/UsingComponentFromOtherModelPath.arcsym",
-    "$expectedSymbolGenDir/mainpackage/UsingLibModelsAndImportedSymbols.arcsym",
+    "$expectedSymbolGenDir/mainpackage/UsingImportedSymbols.arcsym",
     "$expectedSymbolGenDir/mainpackage/ComponentFromModelPath2.arcsym"
   )
 }
@@ -130,10 +125,6 @@ tasks.named<MontiarcCompile>(mixedPathsExistanceSrcSet.getCompileMontiarcTaskNam
     "$projectDir/src/${srcSet.name}/symbols",
     "$projectDir/src/${srcSet.name}/symbolsNotExisting",
   )
-  libModels.setFrom(
-    "$projectDir/src/${srcSet.name}/libModels",
-    "$projectDir/src/${srcSet.name}/libModelsNotExisting",
-  )
 }
 
 val mixedPathExistenceCheck = tasks.register("checkMultipleMixedPathExistence", CheckFilesArePresent::class.java) {
@@ -146,9 +137,9 @@ val mixedPathExistenceCheck = tasks.register("checkMultipleMixedPathExistence", 
 
   mandatoryFiles.from(
     "$expectedJavaGenDir/mainpackage/HwcComponentTOP.java",
-    "$expectedJavaGenDir/mainpackage/UsingLibModelsAndImportedSymbols.java",
+    "$expectedJavaGenDir/mainpackage/UsingImportedSymbols.java",
     "$expectedSymbolGenDir/mainpackage/HwcComponent.arcsym",
-    "$expectedSymbolGenDir/mainpackage/UsingLibModelsAndImportedSymbols.arcsym"
+    "$expectedSymbolGenDir/mainpackage/UsingImportedSymbols.arcsym"
   )
 }
 tasks.check.configure { dependsOn(mixedPathExistenceCheck) }
@@ -161,7 +152,6 @@ val removingSrcSet = sourceSets.create("removingDefaultValues")
 tasks.named<MontiarcCompile>(removingSrcSet.getCompileMontiarcTaskName()) {
   hwcPath.setFrom()
   symbolImportDir.setFrom()
-  libModels.setFrom()
 }
 
 val removingDefaultValuesCheck = tasks.register("checkRemovingDefaultValues", CheckFilesArePresent::class.java) {
@@ -188,7 +178,6 @@ tasks.named<MontiarcCompile>(unusedConfigValuesSrcSet.getCompileMontiarcTaskName
   val srcSet = unusedConfigValuesSrcSet
   hwcPath.setFrom(file("$projectDir/src/${srcSet.name}/unusedJava"))
   symbolImportDir.setFrom(file("$projectDir/src/${srcSet.name}/unusedSymbols"))
-  libModels.setFrom(file("$projectDir/src/${srcSet.name}/unusedLibModels"))
 }
 
 val unusedConfigValuesCheck = tasks.register("checkUnusedConfigValues", CheckFilesArePresent::class.java) {
@@ -205,10 +194,6 @@ val unusedConfigValuesCheck = tasks.register("checkUnusedConfigValues", CheckFil
   )
 }
 tasks.check.configure { dependsOn(unusedConfigValuesCheck) }
-
-
-
-
 
 tasks.getByName<Test>("test") {
   this.enabled = false

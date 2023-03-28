@@ -4,7 +4,7 @@ package mainpackage;
 import sympackage.*;
 import libpackage.*;
 
-component UsingLibModelsAndImportedSymbols {
+component UsingImportedSymbols {
   port <<sync>> in int inPort;
 
   LibComponent subcomponent;
