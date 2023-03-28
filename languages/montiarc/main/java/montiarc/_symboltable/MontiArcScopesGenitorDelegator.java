@@ -3,8 +3,14 @@ package montiarc._symboltable;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisScopesGenitor;
+import com.google.common.base.Preconditions;
+import montiarc._ast.ASTMACompilationUnit;
+import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._symboltable.VariableArcScopesGenitor;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class MontiArcScopesGenitorDelegator extends MontiArcScopesGenitorDelegatorTOP {
 
@@ -14,6 +20,15 @@ public class MontiArcScopesGenitorDelegator extends MontiArcScopesGenitorDelegat
     traverser.getVariableArcVisitorList().clear();
     this.initArcBasisGenitor();
     this.initVariableArcGenitor();
+  }
+
+  public Collection<IMontiArcArtifactScope> createFromAST(@NotNull Collection<ASTMACompilationUnit> rootNodes) {
+    Preconditions.checkNotNull(rootNodes);
+    Collection<IMontiArcArtifactScope> scopes = new ArrayList<>(rootNodes.size());
+    for (ASTMACompilationUnit rootNode : rootNodes) {
+      scopes.add(this.createFromAST(rootNode));
+    }
+    return scopes;
   }
 
   protected void initArcBasisGenitor() {

@@ -15,6 +15,8 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._symboltable.VariableArcSymbolTableCompleter;
 
+import java.util.Collection;
+
 public class MontiArcSymbolTableCompleterDelegator {
 
   protected IMontiArcGlobalScope globalScope;
@@ -66,5 +68,12 @@ public class MontiArcSymbolTableCompleterDelegator {
   public void createFromAST(@NotNull ASTMACompilationUnit rootNode) {
     Preconditions.checkNotNull(rootNode);
     rootNode.accept(traverser);
+  }
+
+  public void createFromAST(@NotNull Collection<ASTMACompilationUnit> rootNodes) {
+    Preconditions.checkNotNull(rootNodes);
+    for (ASTMACompilationUnit rootNode : rootNodes) {
+      this.createFromAST(rootNode);
+    }
   }
 }

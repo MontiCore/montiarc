@@ -207,26 +207,26 @@ public class MontiArcTool extends MontiArcToolTOP {
     return Optional.empty();
   }
 
-  public Collection<IMontiArcArtifactScope> createSymbolTable(@NotNull Collection<ASTMACompilationUnit> asts) {
-    Preconditions.checkNotNull(asts);
-    return asts.stream().map(this::createSymbolTable).collect(Collectors.toList());
-  }
-
   @Override
-  public IMontiArcArtifactScope createSymbolTable(@NotNull ASTMACompilationUnit model) {
-    Preconditions.checkNotNull(model);
-    return MontiArcMill.scopesGenitorDelegator().createFromAST(model);
+  public IMontiArcArtifactScope createSymbolTable(@NotNull ASTMACompilationUnit node) {
+    Preconditions.checkNotNull(node);
+    return MontiArcMill.scopesGenitorDelegator().createFromAST(node);
   }
 
-  public void completeSymbolTable(@NotNull Collection<ASTMACompilationUnit> asts) {
-    Preconditions.checkNotNull(asts);
-    asts.forEach(this::completeSymbolTable);
+  public Collection<IMontiArcArtifactScope> createSymbolTable(@NotNull Collection<ASTMACompilationUnit> nodes) {
+    Preconditions.checkNotNull(nodes);
+    return MontiArcMill.scopesGenitorDelegator().createFromAST(nodes);
   }
 
   @Override
   public void completeSymbolTable(@NotNull ASTMACompilationUnit node) {
     Preconditions.checkNotNull(node);
     MontiArcMill.symbolTableCompleterDelegator().createFromAST(node);
+  }
+
+  public void completeSymbolTable(@NotNull Collection<ASTMACompilationUnit> nodes) {
+    Preconditions.checkNotNull(nodes);
+    MontiArcMill.symbolTableCompleterDelegator().createFromAST(nodes);
   }
 
   public void runDefaultCoCos(@NotNull Collection<ASTMACompilationUnit> asts) {
