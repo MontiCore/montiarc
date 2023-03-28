@@ -23,8 +23,8 @@ public class ConnectorPortsExistTest extends AbstractCoCoTest {
 
   @Override
   @BeforeEach
-  public void init() {
-    super.init();
+  public void setUp() {
+    super.setUp();
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
     this.loadList();

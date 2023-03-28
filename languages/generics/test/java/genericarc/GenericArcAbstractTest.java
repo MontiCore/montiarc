@@ -15,7 +15,7 @@ public class GenericArcAbstractTest extends ArcBasisAbstractTest {
 
   @BeforeEach
   @Override
-  public void init() {
+  public void setUp() {
     GenericArcMill.globalScope().clear();
     GenericArcMill.reset();
     GenericArcMill.init();

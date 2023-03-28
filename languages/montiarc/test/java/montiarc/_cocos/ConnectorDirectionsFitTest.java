@@ -23,21 +23,10 @@ public class ConnectorDirectionsFitTest extends AbstractCoCoTest {
 
   @Override
   @BeforeEach
-  public void init() {
-    super.init();
+  public void setUp() {
+    super.setUp();
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
-    this.loadList();
-  }
-
-  public void loadList() {
-    OOTypeSymbol listSym = MontiArcMill.oOTypeSymbolBuilder()
-      .setName("List")
-      .setSpannedScope(MontiArcMill.scope())
-      .build();
-    listSym.addTypeVarSymbol(MontiArcMill.typeVarSymbolBuilder().setName("T").build());
-    MontiArcMill.globalScope().add(listSym);
-    MontiArcMill.globalScope().addSubScope(listSym.getSpannedScope());
   }
 
   @Override

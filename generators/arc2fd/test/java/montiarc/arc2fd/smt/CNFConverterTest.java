@@ -24,7 +24,7 @@ public class CNFConverterTest extends ArcBasisAbstractTest {
   BooleanFormula orFormula, andFormula, noCNFFormula, complexFormulaNoCNF;
 
   @BeforeEach
-  public void setUp() throws InvalidConfigurationException {
+  public void setUpContext() throws InvalidConfigurationException {
     SolverContext context = SolverContextFactory.createSolverContext(
             org.sosy_lab.common.configuration.Configuration.defaultConfiguration(),
             BasicLogManager.create(org.sosy_lab.common.configuration.Configuration.defaultConfiguration()),

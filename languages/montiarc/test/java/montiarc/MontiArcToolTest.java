@@ -53,7 +53,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
 
   @BeforeEach
   @Override
-  public void init() {
+  public void setUp() {
     MontiArcMill.globalScope().clear();
     MontiArcMill.reset();
     MontiArcMill.init();

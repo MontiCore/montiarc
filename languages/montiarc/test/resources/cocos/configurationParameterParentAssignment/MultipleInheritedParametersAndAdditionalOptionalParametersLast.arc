@@ -2,6 +2,7 @@
 package configurationParameterParentAssignment;
 
 import configurationParameterParentAssignment.superComponents.*;
+import java.lang.String;
 
 /**
  * Valid model.

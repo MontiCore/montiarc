@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package configurationParameterParentAssignment;
 
+import java.lang.String;
+
 /**
  * Partly valid model. Ordering is invalid but not under testing.
  */

@@ -1,8 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package connectorSourceAndTargetExist;
 
+import java.lang.String;
+import java.util.List;
+
 /*
- * Valid model. (Given that List<T> is resolvable)
+ * Valid model.
  */
 component AllSourcesAndTargetsExistAndFit {
   port in String sIn;

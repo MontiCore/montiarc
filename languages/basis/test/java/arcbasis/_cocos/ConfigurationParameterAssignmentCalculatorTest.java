@@ -39,8 +39,8 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
   protected final static TransitiveScopeSetter scopeSetter = new TransitiveScopeSetter();
 
   @Override
-  public void setUp() {
-    super.setUp();
+  public void setUpScope() {
+    super.setUpScope();
     this.scopeGenitor = ArcBasisMill.scopesGenitorDelegator();
     this.completer = ArcBasisMill.symbolTableCompleterDelegator();
   }

@@ -57,8 +57,8 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
 
   @BeforeEach
   @Override
-  public void init() {
-    super.init();
+  public void setUp() {
+    super.setUp();
     this.setUpCompleter();
   }
 

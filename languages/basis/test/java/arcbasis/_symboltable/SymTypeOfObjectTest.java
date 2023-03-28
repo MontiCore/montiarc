@@ -1,140 +1,208 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
-import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.check.SymTypeOfObject;
-import de.se_rwth.commons.logging.Log;
-import de.se_rwth.commons.logging.LogStub;
-import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Stream;
+
+import static de.monticore.types.check.SymTypeExpressionFactory.createTypeObject;
 
 /**
  * Holds tests for {@link SymTypeOfObject}.
  */
-public class SymTypeOfObjectTest {
+public class SymTypeOfObjectTest extends ArcBasisAbstractTest {
 
-  @BeforeAll
-  public static void init() {
-    ArcBasisMill.globalScope().clear();
-    ArcBasisMill.reset();
-    ArcBasisMill.init();
-    LogStub.init();
-    Log.enableFailQuick(false);
-    setUp();
+  @BeforeEach
+  @Override
+  public void setUp() {
+    super.setUp();
+    this.setUpTypes();
   }
 
-  public static void setUp() {
-    // Create scope a.b.c
-    IArcBasisArtifactScope scope = ArcBasisMill.artifactScope();
-    scope.setEnclosingScope(ArcBasisMill.globalScope());
-    scope.setImportsList(new ArrayList<>());
-    scope.setPackageName("a.b.c");
-    scope.setName("");
+  public void setUpTypes() {
+    // create scope a.b.c
+    IArcBasisArtifactScope as = ArcBasisMill.artifactScope();
+    ArcBasisMill.globalScope().addSubScope(as);
+    as.setEnclosingScope(ArcBasisMill.globalScope());
+    as.setPackageName("a.b.c");
 
-    // Create type symbol a.b.c.X
+    // create type symbol a.b.c.X
     TypeSymbol symbol = ArcBasisMill.typeSymbolBuilder().setName("X")
-      .setEnclosingScope(scope).setSpannedScope(ArcBasisMill.scope()).build();
-    scope.add(symbol);
+      .setEnclosingScope(as).setSpannedScope(ArcBasisMill.scope()).build();
+    as.add(symbol);
   }
 
   /**
-   * Method under test {@link SymTypeOfObject#print()}.
+   * The method under test is {@link SymTypeOfObject#print()}.
    */
-  @ParameterizedTest
-  @MethodSource("symTypeExprAndExpectedNameProvider")
-  public void shouldPrintName(@NotNull SymTypeExpression symType, @NotNull String expected) {
-    Preconditions.checkNotNull(symType);
-    Preconditions.checkNotNull(expected);
-    Preconditions.checkArgument(!expected.isEmpty());
+  @Test
+  public void shouldPrintName1() {
+    // Given
+    SymTypeExpression type = createTypeObject(ArcBasisMill.globalScope().resolveType("a.b.c.X").orElseThrow());
 
-    // When
-    String actual = symType.print();
-
-    // Then
-    Assertions.assertEquals(expected, actual);
-  }
-
-  protected static Stream<Arguments> symTypeExprAndExpectedNameProvider() {
-    List<SymTypeExpression> symTypes = createSymTypeExpressions();
-
-    return Stream.of(
-      Arguments.of(symTypes.get(0), "X"),
-      Arguments.of(symTypes.get(1), "X"),
-      Arguments.of(symTypes.get(2), "a.b.c.X"),
-      Arguments.of(symTypes.get(3), "Y"),
-      Arguments.of(symTypes.get(4), "a.b.c.Y")
-    );
+    // When && Then
+    Assertions.assertThat(type.print()).isEqualTo("X");
   }
 
   /**
-   * Method under test {@link SymTypeOfObject#printFullName()}.
+   * The method under test is {@link SymTypeOfObject#print()}.
    */
-  @ParameterizedTest
-  @MethodSource("symTypeExprAndExpectedFullNameProvider")
-  public void shouldPrintFullName(@NotNull SymTypeExpression symType, @NotNull String expected) {
-    Preconditions.checkNotNull(symType);
-    Preconditions.checkNotNull(expected);
-    Preconditions.checkArgument(!expected.isEmpty());
+  @Test
+  public void shouldPrintName2() {
+    // Given
+    IArcBasisArtifactScope as = ArcBasisMill.artifactScope();
+    ArcBasisMill.globalScope().addSubScope(as);
+    as.setEnclosingScope(ArcBasisMill.globalScope());
+    as.setPackageName("d.e.f");
+    as.setName("Y");
+    as.setImportsList(Collections.singletonList(new ImportStatement("a.b.c.X", false)));
 
-    // When
-    String actual = symType.printFullName();
+    SymTypeExpression type = createTypeObject("X", as);
 
-    // Then
-    Assertions.assertEquals(expected, actual);
+    // When && Then
+    Assertions.assertThat(type.print()).isEqualTo("X");
   }
 
-  protected static Stream<Arguments> symTypeExprAndExpectedFullNameProvider() {
-    List<SymTypeExpression> symTypes = createSymTypeExpressions();
+  /**
+   * The method under test is {@link SymTypeOfObject#print()}.
+   */
+  @Test
+  public void shouldPrintName3() {
+    // Given
+    IArcBasisArtifactScope as = ArcBasisMill.artifactScope();
+    as.setEnclosingScope(ArcBasisMill.globalScope());
+    as.setPackageName("d.e.f");
+    as.setName("Z");
 
-    return Stream.of(
-      Arguments.of(symTypes.get(0), "a.b.c.X"),
-      Arguments.of(symTypes.get(1), "a.b.c.X"),
-      Arguments.of(symTypes.get(2), "a.b.c.X"),
-      Arguments.of(symTypes.get(3), "Y"),
-      Arguments.of(symTypes.get(4), "a.b.c.Y")
-    );
+    SymTypeExpression type = createTypeObject("a.b.c.X", as);
+
+    // When && Then
+    Assertions.assertThat(type.print()).isEqualTo("a.b.c.X");
   }
 
-  protected static List<SymTypeExpression> createSymTypeExpressions() {
-    Preconditions.checkState(ArcBasisMill.globalScope().resolveType("a.b.c.X").isPresent());
-    // Sym type where the type symbol was already resolved beforehand
-    SymTypeExpression x = SymTypeExpressionFactory.createTypeObject(ArcBasisMill.globalScope()
-      .resolveType("a.b.c.X").get());
+  /**
+   * The method under test is {@link SymTypeOfObject#print()}.
+   */
+  @Test
+  public void shouldPrintName4() {
+    // Given
+    IArcBasisArtifactScope as = ArcBasisMill.artifactScope();
+    ArcBasisMill.globalScope().addSubScope(as);
+    as.setEnclosingScope(ArcBasisMill.globalScope());
+    as.setPackageName("d.e.f");
+    as.setName("Y");
+    SymTypeExpression type = createTypeObject("W", as);
 
-    // Sym type where the type symbol is resolved via an import statement
-    IArcBasisArtifactScope scope = ArcBasisMill.artifactScope();
-    scope.setEnclosingScope(ArcBasisMill.globalScope());
-    scope.setPackageName("somePackage");
-    scope.setName("");
-    scope.setImportsList(Collections.singletonList(new ImportStatement("a.b.c.X", false)));
-    SymTypeExpression x2 = SymTypeExpressionFactory.createTypeObject("X", scope);
+    // When && Then
+    Assertions.assertThat(type.print()).isEqualTo("W");
+  }
 
-    // Sym type that states the type symbol's fully qualified name
-    IArcBasisArtifactScope scope2 = ArcBasisMill.artifactScope();
-    scope2.setEnclosingScope(ArcBasisMill.globalScope());
-    scope2.setPackageName("anotherPackage");
-    scope2.setName("");
-    SymTypeExpression x3 = SymTypeExpressionFactory.createTypeObject("a.b.c.X", scope2);
+  /**
+   * The method under test is {@link SymTypeOfObject#print()}.
+   */
+  @Test
+  public void shouldPrintName5() {
+    // Given
+    IArcBasisArtifactScope as = ArcBasisMill.artifactScope();
+    ArcBasisMill.globalScope().addSubScope(as);
+    as.setEnclosingScope(ArcBasisMill.globalScope());
+    as.setPackageName("d.e.f");
+    as.setName("Y");
+    SymTypeExpression type = createTypeObject("a.b.c.W", as);
 
-    // Sym type where the type symbol cannot be resolved
-    SymTypeExpression y = SymTypeExpressionFactory.createTypeObject("Y", scope2);
-    SymTypeExpression y2 = SymTypeExpressionFactory.createTypeObject("a.b.c.Y", scope2);
+    // When && Then
+    Assertions.assertThat(type.print()).isEqualTo("a.b.c.W");
+  }
 
-    return Arrays.asList(x, x2, x3, y, y2);
+  /**
+   * The method under test is {@link SymTypeOfObject#printFullName()}.
+   */
+  @Test
+  public void shouldPrintFullName1() {
+    // Given
+    SymTypeExpression type = createTypeObject(ArcBasisMill.globalScope().resolveType("a.b.c.X").orElseThrow());
+
+    // When && Then
+    Assertions.assertThat(type.printFullName()).isEqualTo("a.b.c.X");
+  }
+
+  /**
+   * The method under test is {@link SymTypeOfObject#printFullName()}.
+   */
+  @Test
+  public void shouldPrintFullName2() {
+    // Given
+    IArcBasisArtifactScope as = ArcBasisMill.artifactScope();
+    ArcBasisMill.globalScope().addSubScope(as);
+    as.setEnclosingScope(ArcBasisMill.globalScope());
+    as.setPackageName("d.e.f");
+    as.setName("Y");
+    as.setImportsList(Collections.singletonList(new ImportStatement("a.b.c.X", false)));
+
+    SymTypeExpression type = createTypeObject("X", as);
+
+    // When && Then
+    Assertions.assertThat(type.printFullName()).isEqualTo("a.b.c.X");
+  }
+
+  /**
+   * The method under test is {@link SymTypeOfObject#printFullName()}.
+   */
+  @Test
+  public void shouldPrintFullName3() {
+    // Given
+    IArcBasisArtifactScope as = ArcBasisMill.artifactScope();
+    ArcBasisMill.globalScope().addSubScope(as);
+    as.setEnclosingScope(ArcBasisMill.globalScope());
+    as.setPackageName("d.e.f");
+    as.setName("Y");
+    as.setImportsList(Collections.singletonList(new ImportStatement("a.b.c.X", false)));
+
+    SymTypeExpression type = createTypeObject("a.b.c.X", as);
+
+    // When && Then
+    Assertions.assertThat(type.printFullName()).isEqualTo("a.b.c.X");
+  }
+
+  /**
+   * The method under test is {@link SymTypeOfObject#printFullName()}.
+   */
+  @Test
+  public void shouldPrintFullName4() {
+    // Given
+    IArcBasisArtifactScope as = ArcBasisMill.artifactScope();
+    ArcBasisMill.globalScope().addSubScope(as);
+    as.setEnclosingScope(ArcBasisMill.globalScope());
+    as.setPackageName("d.e.f");
+    as.setName("Y");
+    SymTypeExpression type = createTypeObject("W", as);
+
+    // When && Then
+    Assertions.assertThat(type.printFullName()).isEqualTo("W");
+  }
+
+  /**
+   * The method under test is {@link SymTypeOfObject#printFullName()}.
+   */
+  @Test
+  public void shouldPrintFullName5() {
+    // Given
+    IArcBasisArtifactScope as = ArcBasisMill.artifactScope();
+    ArcBasisMill.globalScope().addSubScope(as);
+    as.setEnclosingScope(ArcBasisMill.globalScope());
+    as.setPackageName("d.e.f");
+    as.setName("Y");
+    SymTypeExpression type = createTypeObject("a.b.c.W", as);
+
+    // When && Then
+    Assertions.assertThat(type.printFullName()).isEqualTo("a.b.c.W");
   }
 }

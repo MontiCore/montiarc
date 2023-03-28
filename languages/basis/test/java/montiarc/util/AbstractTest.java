@@ -4,8 +4,9 @@ package montiarc.util;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
+import de.se_rwth.commons.logging.LogStub;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -20,30 +21,16 @@ import java.util.stream.Collectors;
 public abstract class AbstractTest {
 
   protected static final String RELATIVE_MODEL_PATH = "test/resources";
-  private Pattern errorCodePattern;
 
   public static void addBasicTypes2Scope() {
     BasicSymbolsMill.initializePrimitives();
   }
 
-  @BeforeEach
-  public void cleanUpLog() {
-    Log.getFindings().clear();
+  @BeforeAll
+  public static void init() {
+    LogStub.init();
+    Log.clearFindings();
     Log.enableFailQuick(false);
-    errorCodePattern = supplyErrorCodePattern();
-    assert errorCodePattern != null;
-  }
-
-  /**
-   * @return pattern used to find error-codes in raw console output
-   */
-  protected abstract Pattern supplyErrorCodePattern();
-
-  /**
-   * @return a buffered pattern, which was {@link #supplyErrorCodePattern() created} previously
-   */
-  protected Pattern getErrorCodePattern() {
-    return errorCodePattern;
   }
 
   /**
@@ -107,7 +94,7 @@ public abstract class AbstractTest {
     Assertions.assertEquals(
         collectErrorCodes(expErrors),
         collectErrorCodes(Log.getFindings()),
-        "Expected errors do not match the found ones"+(location==null?'.':" in \n"+location.toString()));
+        "Expected errors do not match the found ones"+(location==null?'.':" in \n"+location));
   }
 
   /**
@@ -141,7 +128,7 @@ public abstract class AbstractTest {
    */
   protected List<String> collectErrorCodes(String msg) {
     List<String> errorCodes = new ArrayList<>();
-    Matcher matcher = getErrorCodePattern().matcher(msg);
+    Matcher matcher = Pattern.compile("0x[0-9a-fA-F]{5}").matcher(msg);
     while (matcher.find()) {
       errorCodes.add(matcher.group());
     }

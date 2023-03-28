@@ -7,6 +7,7 @@ import arcautomaton._symboltable.TestScopesGenitorDelegator;
 import arcbasis.ArcBasisAbstractTest;
 import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Log;
 import montiarc.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,8 @@ public class ASTArcStatechartTest extends ArcBasisAbstractTest {
 
   @Override
   @BeforeEach
-  public void init() {
+  public void setUp() {
+    Log.clearFindings();
     ArcAutomatonMill.globalScope().clear();
     ArcAutomatonMill.reset();
     ArcAutomatonMill.init();

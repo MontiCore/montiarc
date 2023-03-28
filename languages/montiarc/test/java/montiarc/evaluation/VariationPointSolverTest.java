@@ -122,7 +122,7 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
   }
 
   @Test
-  public void setup() {
+  public void shouldCreateOrigin() {
     // Given
     ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
     Mockito.when(astComponentType.getBody())

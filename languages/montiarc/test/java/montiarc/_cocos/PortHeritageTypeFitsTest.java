@@ -24,8 +24,8 @@ public class PortHeritageTypeFitsTest extends AbstractCoCoTest {
 
   @Override
   @BeforeEach
-  public void init() {
-    super.init();
+  public void setUp() {
+    super.setUp();
     loadOOTypes();
     loadUtilityComponents();
   }

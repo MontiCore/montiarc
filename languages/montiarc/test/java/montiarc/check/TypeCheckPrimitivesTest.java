@@ -19,7 +19,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 import static de.monticore.symbols.basicsymbols.BasicSymbolsMill.BOOLEAN;
 import static de.monticore.symbols.basicsymbols.BasicSymbolsMill.BYTE;
@@ -51,14 +50,9 @@ public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
 
   @BeforeEach
   @Override
-  public void init() {
-    super.init();
+  public void setUp() {
+    super.setUp();
     this.initSymbols();
-  }
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return super.supplyErrorCodePatternInclMontiCoreErrors();
   }
 
   protected void initSymbols() {

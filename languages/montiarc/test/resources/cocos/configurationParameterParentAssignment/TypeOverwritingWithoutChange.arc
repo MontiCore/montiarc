@@ -2,6 +2,8 @@
 package configurationParameterParentAssignment;
 
 import configurationParameterParentAssignment.superComponents.*;
+import java.lang.String;
+import java.util.List;
 
 /**
  * Valid model. (Let all given types be resolvable and Student be a sub type of Person)

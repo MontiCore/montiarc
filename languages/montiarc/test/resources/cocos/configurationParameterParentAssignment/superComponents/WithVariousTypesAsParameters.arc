@@ -1,8 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package configurationParameterParentAssignment.superComponents;
 
+import java.lang.String;
+import java.util.List;
+
 /**
- * Valid model. (Let all given types be resolvable).
+ * Valid model.
  */
 component WithVariousTypesAsParameters<T, U, V> (
   String str,

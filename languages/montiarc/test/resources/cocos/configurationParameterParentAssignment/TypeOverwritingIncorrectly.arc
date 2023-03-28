@@ -2,9 +2,10 @@
 package configurationParameterParentAssignment;
 
 import configurationParameterParentAssignment.superComponents.*;
+import java.util.List;
 
 /**
- * Invalid model. (Let the given types be resolvable).
+ * Invalid model.
  */
 component TypeOverwritingIncorrectly<A> (
   Person strOverwritten,  // should be type 'String'

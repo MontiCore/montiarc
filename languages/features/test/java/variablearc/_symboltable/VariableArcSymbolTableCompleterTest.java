@@ -38,8 +38,8 @@ public class VariableArcSymbolTableCompleterTest extends VariableArcAbstractTest
 
   @BeforeEach
   @Override
-  public void init() {
-    super.init();
+  public void setUp() {
+    super.setUp();
     this.setUpCompleter();
   }
 

@@ -56,7 +56,7 @@ public abstract class AbstractArcTypeCalculatorTest extends ArcBasisAbstractTest
     return this.scopeSetter;
   }
 
-  protected void setUp() {
+  protected void setUpScope() {
     this.scope = ArcBasisMill.artifactScope();
     this.scope.setName("");
     this.setUpTypes();

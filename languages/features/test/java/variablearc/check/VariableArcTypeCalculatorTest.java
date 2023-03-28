@@ -17,12 +17,12 @@ public class VariableArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest
 
   @Override
   @BeforeEach
-  public void init() {
+  public void setUp() {
     VariableArcMill.globalScope().clear();
     VariableArcMill.reset();
     VariableArcMill.init();
     addBasicTypes2Scope();
-    this.setUp();
+    this.setUpScope();
   }
 
   @Override

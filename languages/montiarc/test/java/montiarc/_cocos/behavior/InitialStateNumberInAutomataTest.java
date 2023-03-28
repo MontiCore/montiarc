@@ -6,8 +6,6 @@ import de.monticore.scbasis._cocos.MaxOneInitialState;
 import montiarc._cocos.AbstractCoCoTest;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.util.Error;
-import montiarc.util.MCError;
-import montiarc.util.MontiArcError;
 import montiarc.util.SCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,18 +13,9 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class InitialStateNumberInAutomataTest extends AbstractCoCoTest {
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    String montiArcError = MontiArcError.ERROR_CODE_PATTERN.pattern();
-    String mcError = MCError.ERROR_CODE_PATTERN.pattern();
-    String scError = SCError.ERROR_CODE_PATTERN.pattern();
-    return Pattern.compile(montiArcError + "|" + mcError + "|" + scError);
-  }
 
   @Override
   protected String getPackage() {

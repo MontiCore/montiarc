@@ -2,9 +2,11 @@
 package configurationParameterParentAssignment;
 
 import configurationParameterParentAssignment.superComponents.*;
+import java.lang.String;
+import java.util.List;
 
 /**
- * Valid model. (Let all the given types be resolvable and Student be a sub type of Person).
+ * Valid model.
  */
 component TypeOverwritingCorrectly<A> (
   String str,

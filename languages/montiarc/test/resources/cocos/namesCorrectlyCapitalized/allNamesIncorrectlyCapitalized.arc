@@ -1,6 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package namesCorrectlyCapitalized;
 
+import java.lang.Integer;
+import java.lang.String;
+
 component allNamesIncorrectlyCapitalized<t> (Integer UpperCaseParameter) {
 
   component lowerCaseInnerComponent { }

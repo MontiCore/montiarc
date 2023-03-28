@@ -1,8 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 import subcomponentDefinitions.*;
 
+import java.util.List;
+
 /**
- * Valid model. (List must be in scope and we allow null)
+ * Valid model.
  */
 component CorrectGenericParameterBindings {
   // A field we will use:

@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package optionalConfigurationParametersLast;
 
+import java.lang.String;
+
 /**
  * Valid model.
  */

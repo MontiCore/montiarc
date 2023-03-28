@@ -10,35 +10,23 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
+import de.se_rwth.commons.logging.Log;
 import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc.util.AbstractTest;
-import montiarc.util.MCError;
-import montiarc.util.MontiArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.Arrays;
-import java.util.regex.Pattern;
 
 public abstract class MontiArcAbstractTest extends AbstractTest {
 
   @BeforeEach
-  public void init() {
+  public void setUp() {
+    Log.clearFindings();
     MontiArcMill.globalScope().clear();
     MontiArcMill.reset();
     MontiArcMill.init();
     addBasicTypes2Scope();
-  }
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return MontiArcError.ERROR_CODE_PATTERN;
-  }
-
-  protected Pattern supplyErrorCodePatternInclMontiCoreErrors() {
-    String montiArcPattern = MontiArcError.ERROR_CODE_PATTERN.pattern();
-    String montiCorePattern = MCError.ERROR_CODE_PATTERN.pattern();
-    return Pattern.compile(montiArcPattern + "|" + montiCorePattern);
   }
 
   protected static ASTMCQualifiedName createQualifiedName(@NotNull String... parts) {

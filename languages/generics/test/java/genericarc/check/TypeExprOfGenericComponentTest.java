@@ -37,7 +37,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
 
   @BeforeEach
   @Override
-  public void init() {
+  public void setUp() {
     GenericArcMill.globalScope().clear();
     GenericArcMill.init();
     BasicSymbolsMill.initializePrimitives();

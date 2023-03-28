@@ -44,6 +44,7 @@ public class UniqueIdentifierTest extends ArcBasisAbstractTest {
 
   @BeforeEach
   public void setUp() {
+    super.setUp();
     setCoco();
   }
 

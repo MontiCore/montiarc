@@ -3,6 +3,7 @@ package montiarc._cocos;
 
 import arcbasis._cocos.ParameterHeritage;
 import com.google.common.base.Preconditions;
+import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.check.TypeRelations;
@@ -26,40 +27,17 @@ public class ParameterHeritageTest extends AbstractCoCoTest {
 
   protected static final String PACKAGE = "configurationParameterParentAssignment";
 
-  @Override
   @BeforeEach
-  public void init() {
-    super.init();
-    loadOOTypes();
-    loadUtilityComponents();
+  @Override
+  public void setUp() {
+    super.setUp();
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
+    loadTypes();
+    loadComponents();
   }
 
-  public void loadOOTypes() {
-    loadString();
-    loadList();
-    loadPersonAndStudent();
-  }
-
-  public void loadString() {
-    OOTypeSymbol listSym = MontiArcMill.oOTypeSymbolBuilder()
-      .setName("String")
-      .setSpannedScope(MontiArcMill.scope())
-      .build();
-    MontiArcMill.globalScope().add(listSym);
-    MontiArcMill.globalScope().addSubScope(listSym.getSpannedScope());
-  }
-
-  public void loadList() {
-    OOTypeSymbol listSym = MontiArcMill.oOTypeSymbolBuilder()
-      .setName("List")
-      .setSpannedScope(MontiArcMill.scope())
-      .build();
-    listSym.addTypeVarSymbol(MontiArcMill.typeVarSymbolBuilder().setName("T").build());
-    MontiArcMill.globalScope().add(listSym);
-    MontiArcMill.globalScope().addSubScope(listSym.getSpannedScope());
-  }
-
-  public void loadPersonAndStudent() {
+  public void loadTypes() {
     OOTypeSymbol personSym = MontiArcMill.oOTypeSymbolBuilder()
       .setName("Person")
       .setSpannedScope(MontiArcMill.scope())
@@ -76,7 +54,7 @@ public class ParameterHeritageTest extends AbstractCoCoTest {
     MontiArcMill.globalScope().addSubScope(studentSym.getSpannedScope());
   }
 
-  public void loadUtilityComponents() {
+  public void loadComponents() {
     // loading super components into the symboltable
     this.parseAndCreateAndCompleteSymbols("superComponents/NoParameters.arc");
     this.parseAndCreateAndCompleteSymbols("superComponents/OneMandatoryString.arc");

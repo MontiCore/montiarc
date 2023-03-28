@@ -26,7 +26,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Collections;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,15 +43,9 @@ public class OriginalStatechartCoCosTest extends AbstractCoCoTest {
   }
 
   @Override
-  protected Pattern supplyErrorCodePattern() {
-    return Pattern.compile("0xCC\\d{3}");
-  }
-
-
-  @Override
   @BeforeEach
-  public void init() {
-    super.init();
+  public void setUp() {
+    super.setUp();
     addStringToGlobalScope();
   }
 

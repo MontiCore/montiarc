@@ -37,8 +37,8 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
 
   @Override
   @BeforeEach
-  public void init() {
-    super.init();
+  public void setUp() {
+    super.setUp();
     this.addFieldsToScope();
     this.addTypesToScope();
   }

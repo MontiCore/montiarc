@@ -25,7 +25,7 @@ public class ExpressionToFDHelperTest extends ArcBasisAbstractTest {
   ExpressionToFDHelper<BooleanFormula> expressionToFDHelper;
 
   @BeforeEach
-  public void setUp() throws InvalidConfigurationException {
+  public void setUpContext() throws InvalidConfigurationException {
     this.expressionToFDHelper = new ExpressionToFDHelper<>();
     this.fmgr = expressionToFDHelper.fmgr;
     this.bmgr = expressionToFDHelper.bmgr;

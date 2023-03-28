@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package portUniqueSender;
 
+import java.lang.Integer;
+
 /**
  * Valid model.
  */

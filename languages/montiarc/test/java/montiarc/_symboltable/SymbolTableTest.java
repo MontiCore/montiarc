@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 public class SymbolTableTest extends MontiArcAbstractTest {
 
   @BeforeAll
-  public static void setUp() {
+  public static void init() {
     Log.enableFailQuick(false);
   }
 

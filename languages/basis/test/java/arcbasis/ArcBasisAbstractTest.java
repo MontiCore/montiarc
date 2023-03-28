@@ -10,27 +10,22 @@ import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
+import de.se_rwth.commons.logging.Log;
 import montiarc.util.AbstractTest;
-import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.Arrays;
-import java.util.regex.Pattern;
 
 public abstract class ArcBasisAbstractTest extends AbstractTest {
 
   @BeforeEach
-  public void init() {
+  public void setUp() {
+    Log.clearFindings();
     ArcBasisMill.globalScope().clear();
     ArcBasisMill.reset();
     ArcBasisMill.init();
     addBasicTypes2Scope();
-  }
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return ArcError.ERROR_CODE_PATTERN;
   }
 
   protected static ASTMCQualifiedName createQualifiedName(@NotNull String... parts) {

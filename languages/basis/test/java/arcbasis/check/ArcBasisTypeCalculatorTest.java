@@ -4,6 +4,7 @@ package arcbasis.check;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
 import de.monticore.types.check.TypeCheckResult;
+import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.BeforeEach;
 
 /**
@@ -15,12 +16,13 @@ public class ArcBasisTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
 
   @Override
   @BeforeEach
-  public void init() {
+  public void setUp() {
+    Log.clearFindings();
     ArcBasisMill.globalScope().clear();
     ArcBasisMill.reset();
     ArcBasisMill.init();
     addBasicTypes2Scope();
-    this.setUp();
+    this.setUpScope();
   }
 
   @Override

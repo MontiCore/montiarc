@@ -33,7 +33,7 @@ public class ExpressionRootFinderTest {
   private static final MontiArcParser PARSER = new MontiArcParser();
 
   @BeforeAll
-  public static void init(){
+  public static void setUp(){
     MontiArcMill.init();
   }
 

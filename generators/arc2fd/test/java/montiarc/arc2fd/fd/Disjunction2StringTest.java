@@ -32,7 +32,7 @@ public class Disjunction2StringTest extends ArcBasisAbstractTest {
 
 
   @BeforeEach
-  public void setUp() throws InvalidConfigurationException {
+  public void setUpContext() throws InvalidConfigurationException {
     SolverContext context = SolverContextFactory.createSolverContext(
         Configuration.defaultConfiguration(),
         BasicLogManager.create(org.sosy_lab.common.configuration.Configuration.defaultConfiguration()),

@@ -61,17 +61,17 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
 
   @Override
   @BeforeEach
-  public void init() {
+  public void setUp() {
     MontiArcMill.globalScope().clear();
     MontiArcMill.reset();
     MontiArcMill.init();
     addBasicTypes2Scope();
-    this.setUp();
+    this.setUpScope();
   }
 
   @Override
-  protected void setUp() {
-    super.setUp();
+  protected void setUpScope() {
+    super.setUpScope();
     this.setUpMessageType();
     this.setUpMsgFields();
     this.setUpGenericTypes();

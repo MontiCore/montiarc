@@ -23,8 +23,8 @@ public class PortsConnectedTest extends AbstractCoCoTest {
 
     @Override
     @BeforeEach
-    public void init() {
-        super.init();
+    public void setUp() {
+        super.setUp();
     }
 
     @Override

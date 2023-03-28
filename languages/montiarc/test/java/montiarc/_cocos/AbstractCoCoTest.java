@@ -44,8 +44,8 @@ public abstract class AbstractCoCoTest extends MontiArcAbstractTest {
 
   @Override
   @BeforeEach
-  public void init() {
-    super.init();
+  public void setUp() {
+    super.setUp();
     setUpCLI();
     setUpChecker();
   }
@@ -73,7 +73,7 @@ public abstract class AbstractCoCoTest extends MontiArcAbstractTest {
    */
   protected ASTMACompilationUnit parseAndCreateAndCompleteSymbols(@NotNull String model) {
     Preconditions.checkNotNull(model);
-    ASTMACompilationUnit ast = this.getCLI().parse(getPathToModel(model)).orElse(null);
+    ASTMACompilationUnit ast = this.getCLI().parse(getPathToModel(model)).orElseThrow();
     this.getCLI().createSymbolTable(ast);
     this.getCLI().completeSymbolTable(ast);
     return ast;

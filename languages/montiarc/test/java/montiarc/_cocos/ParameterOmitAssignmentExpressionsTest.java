@@ -2,6 +2,8 @@
 package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
+import de.monticore.class2mc.OOClass2MCResolver;
+import montiarc.MontiArcMill;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -18,11 +20,15 @@ public class ParameterOmitAssignmentExpressionsTest extends AbstractCoCoTest {
   protected static final String PACKAGE = "configurationParameterAssignment";
 
   @BeforeEach
-  public void prepareModels() {
-    loadComponentsToInstantiate();
+  @Override
+  public void setUp() {
+    super.setUp();
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
+    this.loadComponents();
   }
 
-  public void loadComponentsToInstantiate() {
+  public void loadComponents() {
     // loading helper models into the symboltable
     this.parseAndCreateAndCompleteSymbols("subcomponentDefinitions/Simple.arc");
     this.parseAndCreateAndCompleteSymbols("subcomponentDefinitions/Complex.arc");

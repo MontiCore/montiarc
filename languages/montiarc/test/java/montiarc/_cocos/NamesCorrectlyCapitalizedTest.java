@@ -7,12 +7,15 @@ import arcbasis._cocos.SubcomponentNameCapitalization;
 import arcbasis._cocos.ParameterNameCapitalization;
 import arcbasis._cocos.PortNameCapitalization;
 import com.google.common.base.Preconditions;
+import de.monticore.class2mc.OOClass2MCResolver;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
+import montiarc.MontiArcMill;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import montiarc.util.GenericArcError;
 import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -31,6 +34,14 @@ import java.util.stream.Stream;
 public class NamesCorrectlyCapitalizedTest extends AbstractCoCoTest {
 
   protected static final String PACKAGE = "namesCorrectlyCapitalized";
+
+  @BeforeEach
+  @Override
+  public void setUp() {
+    super.setUp();
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
+  }
 
   @Override
   protected String getPackage() {

@@ -16,12 +16,6 @@ import java.util.stream.Stream;
 
 public class PortNoReservedKeywordTest extends AbstractCoCoTest {
 
-  @Override
-  @BeforeEach
-  public void init() {
-    super.init();
-  }
-
   protected static String PACKAGE = "portNameIsNoReservedKeyword";
 
   /**

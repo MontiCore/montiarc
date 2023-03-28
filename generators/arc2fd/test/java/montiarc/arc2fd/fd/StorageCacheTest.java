@@ -32,7 +32,7 @@ public class StorageCacheTest extends ArcBasisAbstractTest {
   BooleanFormula andFormula;
 
   @BeforeEach
-  public void setUp() throws InvalidConfigurationException {
+  public void setUpContext() throws InvalidConfigurationException {
     SolverContext context = SolverContextFactory.createSolverContext(
       Configuration.defaultConfiguration(),
       BasicLogManager.create(Configuration.defaultConfiguration()),

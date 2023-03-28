@@ -30,7 +30,7 @@ public class SMT2FDVisitorTest extends ArcBasisAbstractTest {
 
 
   @BeforeEach
-  public void setUp() throws InvalidConfigurationException {
+  public void setUpContext() throws InvalidConfigurationException {
     SolverContext context = SolverContextFactory.createSolverContext(
         org.sosy_lab.common.configuration.Configuration.defaultConfiguration(),
         BasicLogManager.create(org.sosy_lab.common.configuration.Configuration.defaultConfiguration()),
@@ -76,12 +76,9 @@ public class SMT2FDVisitorTest extends ArcBasisAbstractTest {
     // Output error if formula is null
     smt2fdVisitor.process(null, null);
     this.checkExpectedErrorsPresent(new Error[]{SMTProcessingError.SMT2FD_PROCESSING_NO_FORMULA});
-    this.cleanUpLog();
-
     // Error if the root is null
     smt2fdVisitor.process(a, null);
     this.checkExpectedErrorsPresent(new Error[]{SMTProcessingError.ROOT_IS_NULL});
-    this.cleanUpLog();
 
     // Error if formula is not in CNF
     BooleanFormula noCNFFormula = bmgr.or(bmgr.or(a, c), bmgr.and(a,

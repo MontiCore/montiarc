@@ -2,6 +2,7 @@
 package configurationParameterParentAssignment;
 
 import configurationParameterParentAssignment.superComponents.*;
+import java.lang.String;
 
 /**
  * Invalid model.
@@ -11,6 +12,5 @@ component DirectBindingParentParametersIncorrectly extends ThreeMandatoryAndThre
   true, // wrong type
   2,    // wrong type
   "sOpt1",
-  3,    // wrong type
-  OneOptionalString  // type reference #TODO No error logged
+  3    // wrong type
 ) { }

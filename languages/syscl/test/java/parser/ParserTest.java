@@ -3,7 +3,6 @@ package parser;
 
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.AbstractTest;
-import montiarc.util.ArcError;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -14,7 +13,6 @@ import syscl._parser.SysCLParser;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -22,10 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 public class ParserTest extends AbstractTest {
 
   @BeforeEach
-  public void init() {
-    Log.init();
-    Log.getFindings().clear();
-    Log.enableFailQuick(false);
+  public void setUp() {
+    Log.clearFindings();
     SysCLMill.globalScope().clear();
     SysCLMill.reset();
     SysCLMill.init();
@@ -59,10 +55,5 @@ public class ParserTest extends AbstractTest {
       () -> assertThat(parser.hasErrors()).isFalse(),
       () -> assertThat(Log.getFindings()).isEmpty()
     );
-  }
-
-  @Override
-  protected Pattern supplyErrorCodePattern() {
-    return ArcError.ERROR_CODE_PATTERN;
   }
 }

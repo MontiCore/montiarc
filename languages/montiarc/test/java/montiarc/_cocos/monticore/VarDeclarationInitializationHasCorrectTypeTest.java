@@ -47,8 +47,8 @@ public class VarDeclarationInitializationHasCorrectTypeTest extends AbstractCoCo
 
   @Override
   @BeforeEach
-  public void init() {
-    super.init();
+  public void setUp() {
+    super.setUp();
     initHelperTypes();
   }
 

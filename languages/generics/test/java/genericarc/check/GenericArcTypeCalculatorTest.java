@@ -18,12 +18,12 @@ public class GenericArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest 
 
   @Override
   @BeforeEach
-  public void init() {
+  public void setUp() {
     GenericArcMill.globalScope().clear();
     GenericArcMill.reset();
     GenericArcMill.init();
     GenericArcAbstractTest.addBasicTypes2Scope();
-    this.setUp();
+    this.setUpScope();
   }
 
   @Override

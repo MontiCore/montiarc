@@ -20,7 +20,7 @@ public class Class2MCResolvingTest extends MontiArcAbstractTest {
 
   @BeforeEach
   @Override
-  public void init() {
+  public void setUp() {
     MontiArcMill.globalScope().clear();
     MontiArcMill.init();
   }

@@ -9,9 +9,9 @@ public class MontiArcResolvingTest extends ArcBasisResolvingTest {
 
   @BeforeEach
   @Override
-  public void init() {
+  public void setUp() {
     MontiArcMill.globalScope().clear();
     MontiArcMill.init();
-    super.setUp();
+    super.setUpType();
   }
 }

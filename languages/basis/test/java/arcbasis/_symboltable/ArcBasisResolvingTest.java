@@ -58,13 +58,12 @@ public class ArcBasisResolvingTest extends ArcBasisAbstractTest {
 
   @BeforeEach
   @Override
-  public void init() {
-    ArcBasisMill.globalScope().clear();
-    ArcBasisMill.init();
-    this.setUp();
+  public void setUp() {
+    super.setUp();
+    this.setUpType();
   }
 
-  protected void setUp() {
+  protected void setUpType() {
     this.scope = ArcBasisMill.scope();
     IArcBasisArtifactScope aScope = ArcBasisMill.artifactScope();
     aScope.setName("B");

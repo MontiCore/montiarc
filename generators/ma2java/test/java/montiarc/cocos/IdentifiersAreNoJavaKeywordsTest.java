@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 public class IdentifiersAreNoJavaKeywordsTest {
 
   @BeforeEach
-  public void init() {
+  public void setUp() {
     LogStub.init();
     MontiArcMill.reset();
     MontiArcMill.init();
