@@ -5,12 +5,17 @@ import de.monticore.cd4analysis.CD4AnalysisMill;
 import de.monticore.cd4analysis.resolver.CD4AnalysisResolver;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.io.paths.MCPath;
+import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc._symboltable.IMontiArcGlobalScope;
 import montiarc._symboltable.MontiArcGlobalScope;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
   private final CD4AnalysisResolver cd4AnalysisResolver = new CD4AnalysisResolver(CD4AnalysisMill.globalScope());
@@ -51,5 +56,28 @@ public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
     if (!gs.containsAdaptedOOTypeSymbolResolver(ooClass2MCResolver)) {
       gs.addAdaptedOOTypeSymbolResolver(ooClass2MCResolver);
     }
+  }
+
+  @Override
+  public Map<ASTMACompilationUnit, MontiArcArtifactScopeWithFindings> createAllArtifactScopes(Collection<ASTMACompilationUnit> astNodes) {
+    // Run completeSymbolTable after symbol table scaffolding for all components exist
+    var res = new HashMap<ASTMACompilationUnit, MontiArcArtifactScopeWithFindings>();
+    syncAccessGlobalScope(gs -> {
+      for (ASTMACompilationUnit node : astNodes) {
+        Log.clearFindings();
+        var as = tool.createSymbolTable(node);
+        res.put(node, new MontiArcArtifactScopeWithFindings(node, as, Log.getFindings()));
+      }
+
+      for (ASTMACompilationUnit node : astNodes) {
+        Log.clearFindings();
+        tool.completeSymbolTable(node);
+        if(res.containsKey(node)){
+          res.get(node).findings.addAll(Log.getFindings());
+        }
+      }
+    });
+
+    return res;
   }
 }
