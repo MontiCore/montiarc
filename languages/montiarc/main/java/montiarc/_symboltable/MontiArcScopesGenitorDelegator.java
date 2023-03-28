@@ -10,19 +10,10 @@ public class MontiArcScopesGenitorDelegator extends MontiArcScopesGenitorDelegat
 
   public MontiArcScopesGenitorDelegator() {
     super();
-    this.resetVisitorLists();
-    this.initArcBasisGenitor();
-    this.initVariableArcGenitor();
-  }
-
-  protected void resetVisitorLists() {
-    // Visitor lists are not reset indiviudally in the init|Lang|Gentior methods, as different genitors add themselves
-    // as visitors for different sublanguages. E.g., both the ArcBasisGenitor and VariableArcGenitor are added as
-    // visitors for ArcBasis.
-    // Handlers on the other side are reset in the corresponding methods. This is possible, as there can only be one
-    // handler and the genitors are not competing for it.
     traverser.getArcBasisVisitorList().clear();
     traverser.getVariableArcVisitorList().clear();
+    this.initArcBasisGenitor();
+    this.initVariableArcGenitor();
   }
 
   protected void initArcBasisGenitor() {
