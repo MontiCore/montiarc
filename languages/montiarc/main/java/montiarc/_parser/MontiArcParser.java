@@ -9,11 +9,11 @@ import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.MontiArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.regex.Matcher;
 
 /**
  * Extends the {@link MontiArcParserTOP} with checks which check whether the name of the parsed
@@ -34,50 +34,52 @@ public class MontiArcParser extends MontiArcParserTOP {
    * differ. Error {@code COMPONENT_AND_FILE_PACKAGE_DIFFER} is raised if component package and file
    * package differ.
    *
-   * @param relativeFilePath the {@code String} contained the relative path of the file to be parsed
+   * @param file the {@code String} contained the relative path of the file to be parsed
    * @return an {@code Optional} of an abstract syntax tree representing the parsed file
    * @throws IOException if an I/O exception of some sort occurs
    */
   @Override
-  public Optional<ASTMACompilationUnit> parseMACompilationUnit(@NotNull String relativeFilePath)
-    throws IOException {
-    Preconditions.checkNotNull(relativeFilePath);
-    Optional<ASTMACompilationUnit> optAst = super.parseMACompilationUnit(relativeFilePath);
-    if (optAst.isPresent()) {
-      String fileRoot = Files.getNameWithoutExtension(relativeFilePath);
-      String modelName = optAst.get().getComponentType().getName();
-      String packageOfFile = Names.getPathFromFilename(relativeFilePath);
-      String packageOfModel = Names.constructQualifiedName(optAst.get().isPresentPackage() ?
-        optAst.get().getPackage().getPartsList() : new ArrayList<>());
-      if (!modelName.equals(fileRoot)) {
-        Log.error(String.format(MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER.toString(),
-            modelName, fileRoot),
-          optAst.get().isPresentPackage() ? optAst.get().getPackage().get_SourcePositionStart()
-            : optAst.get().get_SourcePositionStart());
+  public Optional<ASTMACompilationUnit> parseMACompilationUnit(@NotNull String file) throws IOException {
+    Preconditions.checkNotNull(file);
+    Optional<ASTMACompilationUnit> ast = super.parseMACompilationUnit(file);
+    if (ast.isPresent()) {
+      String fRoot = Files.getNameWithoutExtension(file);
+      String mName = ast.get().getComponentType().getName();
+      String fPkg = Names.getPathFromFilename(file);
+      String mPkg = Names.constructQualifiedName(ast.get().isPresentPackage() ?
+        ast.get().getPackage().getPartsList() : new ArrayList<>());
+      if (!mName.equals(fRoot)) {
+        Log.error(String.format(MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER.toString(), mName, fRoot),
+          ast.get().getComponentType().get_SourcePositionStart()
+        );
         setError(true);
       }
-      if (!Names.getPackageFromPath(packageOfFile).endsWith(packageOfModel)) {
-        Log.error(String.format(MontiArcError.COMPONENT_AND_FILE_PACKAGE_DIFFER.toString(),
-            packageOfModel, packageOfFile),
-          optAst.get().isPresentPackage() ? optAst.get().getPackage().get_SourcePositionStart()
-            : optAst.get().get_SourcePositionStart());
+      if (!Names.getPackageFromPath(fPkg).endsWith(mPkg)) {
+        Log.error(String.format(MontiArcError.COMPONENT_AND_FILE_PACKAGE_DIFFER.toString(), mPkg, fPkg),
+          ast.get().isPresentPackage() ?
+            ast.get().getPackage().get_SourcePositionStart() :
+            ast.get().getComponentType().get_SourcePositionStart()
+        );
         setError(true);
       }
     }
     if (hasErrors()) {
       return Optional.empty();
     }
-    return optAst;
+    return ast;
   }
 
-  /**
-   * @see MontiArcParser#parseMACompilationUnit(String)
-   */
   @Override
-  public Optional<ASTMACompilationUnit> parse(@NotNull String relativeFilePath) throws IOException {
-    Preconditions.checkNotNull(relativeFilePath);
-    String nonUriPath = relativeFilePath.replaceAll("/", Matcher.quoteReplacement(File.separator));
-    return parseMACompilationUnit(nonUriPath);
+  public Optional<ASTMACompilationUnit> parse(@NotNull String file) throws IOException {
+    Preconditions.checkNotNull(file);
+    return this.parse(Paths.get(file));
   }
 
+  public Optional<ASTMACompilationUnit> parse(@NotNull Path file) throws IOException {
+    Preconditions.checkNotNull(file);
+    Preconditions.checkArgument(file.toFile().exists());
+    Preconditions.checkArgument(file.toFile().isFile());
+
+    return parseMACompilationUnit(file.toString());
+  }
 }

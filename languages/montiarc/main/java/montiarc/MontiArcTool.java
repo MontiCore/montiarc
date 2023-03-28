@@ -1,13 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc;
 
-import arcbasis._symboltable.SymbolService;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
-import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
@@ -202,7 +200,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkArgument(file.toFile().exists());
     Preconditions.checkArgument(file.toFile().isFile());
     try {
-      return MontiArcMill.parser().parse(file.toString());
+      return MontiArcMill.parser().parse(file);
     } catch (IOException e) {
       Log.error(String.format(MontiArcError.TOOL_PARSE_IOEXCEPTION.toString(), file), e);
     }
