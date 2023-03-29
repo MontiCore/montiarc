@@ -472,8 +472,8 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     // Then
     Assertions.assertEquals(asts.size(), scopes.size());
     for (ASTMACompilationUnit ast: asts) {
-      Assertions.assertNotNull(ast.getSpannedScope());
-      Assertions.assertTrue(scopes.contains((IMontiArcArtifactScope) ast.getSpannedScope()));
+      Assertions.assertNotNull(ast.getEnclosingScope());
+      Assertions.assertTrue(scopes.contains((IMontiArcArtifactScope) ast.getEnclosingScope()));
     }
   }
 
@@ -493,7 +493,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     IMontiArcArtifactScope scope = tool.createSymbolTable(ast.get());
     
     // Then
-    Assertions.assertEquals(scope, ast.get().getSpannedScope());
+    Assertions.assertEquals(scope, ast.get().getEnclosingScope());
   }
 
   /**
@@ -542,9 +542,9 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     tool.completeSymbolTable(astB);
 
     // Then
-    Assertions.assertTrue(astB.getSpannedScope().getSubScopes().get(0)
+    Assertions.assertTrue(astB.getEnclosingScope().getSubScopes().get(0)
       .resolveComponentInstanceLocally("a").isPresent());
-    Assertions.assertNotNull(astB.getSpannedScope().getSubScopes().get(0)
+    Assertions.assertNotNull(astB.getEnclosingScope().getSubScopes().get(0)
       .resolveComponentInstanceLocally("a").get().getType());
   }
 
@@ -648,7 +648,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = optAst.get();
     tool.createSymbolTable(ast);
     tool.completeSymbolTable(ast);
-    IMontiArcArtifactScope scope = (MontiArcArtifactScope) ast.getSpannedScope();
+    IMontiArcArtifactScope scope = (MontiArcArtifactScope) ast.getEnclosingScope();
     return Stream.of(
       Arguments.of(null, System.getProperty("buildDir") + "/test-sources/resources/CLI/symboltable", NullPointerException.class),
       Arguments.of(scope, null, NullPointerException.class),
@@ -760,7 +760,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     tool.createSymbolTable(ast);
 
     // Then
-    List<ImportStatement> imports = ((IMontiArcArtifactScope) ast.getSpannedScope()).getImportsList();
+    List<ImportStatement> imports = ((IMontiArcArtifactScope) ast.getEnclosingScope()).getImportsList();
     Assertions.assertTrue(imports.stream()
         .anyMatch(i -> i.getStatement().equals("java.lang") && i.isStar()), "Import to java.lang.* should be present.");
   }

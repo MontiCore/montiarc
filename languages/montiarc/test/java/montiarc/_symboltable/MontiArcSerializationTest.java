@@ -29,13 +29,13 @@ public class MontiArcSerializationTest extends MontiArcAbstractTest {
     MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
 
     // When
-    final String s = new MontiArcSymbols2Json().serialize((IMontiArcArtifactScope) ast.getSpannedScope());
+    final String s = new MontiArcSymbols2Json().serialize((IMontiArcArtifactScope) ast.getEnclosingScope());
 
     // Then
     final JsonObject json = JsonParser.parseJsonObject(s);
-    assertThat(json.getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getSpannedScope().getName());
+    assertThat(json.getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getEnclosingScope().getName());
     assertThat(json.getMember("package").getAsJsonString().getValue())
-      .isEqualTo(((IMontiArcArtifactScope) ast.getSpannedScope()).getPackageName());
+      .isEqualTo(((IMontiArcArtifactScope) ast.getEnclosingScope()).getPackageName());
     assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1);
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
       .getMember("kind").getAsJsonString().getValue()).isEqualTo(ComponentTypeSymbol.class.getCanonicalName());

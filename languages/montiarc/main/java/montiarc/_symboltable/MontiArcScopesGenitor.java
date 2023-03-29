@@ -14,31 +14,19 @@ import java.util.List;
 public class MontiArcScopesGenitor extends MontiArcScopesGenitorTOP {
 
   @Override
-  public IMontiArcArtifactScope createFromAST(@NotNull ASTMACompilationUnit rootNode) {
-    Preconditions.checkNotNull(rootNode);
+  public IMontiArcArtifactScope createFromAST(@NotNull ASTMACompilationUnit root) {
+    Preconditions.checkNotNull(root);
     List<ImportStatement> imports = new ArrayList<>();
-    for (ASTMCImportStatement importStatement : rootNode.getImportStatementList()) {
+    for (ASTMCImportStatement importStatement : root.getImportStatementList()) {
       imports.add(new ImportStatement(importStatement.getQName(), importStatement.isStar()));
     }
-    IMontiArcArtifactScope artifactScope = MontiArcMill.artifactScope();
-    artifactScope.setPackageName(rootNode.isPresentPackage() ? rootNode.getPackage().getQName() : "");
-    artifactScope.setImportsList(imports);
-    if (this.getCurrentScope().isPresent()) rootNode.setEnclosingScope(this.getCurrentScope().get());
-    putOnStack(artifactScope);
-    rootNode.setSpannedScope(artifactScope);
-    artifactScope.setAstNode(rootNode);
-    rootNode.accept(getTraverser());
-    return artifactScope;
-  }
-
-  @Override
-  public void visit(ASTMACompilationUnit node) {
-  }
-
-  @Override
-  public void endVisit(@NotNull ASTMACompilationUnit node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkState(this.getCurrentScope().isPresent());
-    super.endVisit(node);
+    IMontiArcArtifactScope as = MontiArcMill.artifactScope();
+    as.setPackageName(root.isPresentPackage() ? root.getPackage().getQName() : "");
+    as.setImportsList(imports);
+    as.setAstNode(root);
+    this.putOnStack(as);
+    root.accept(getTraverser());
+    this.removeCurrentScope();
+    return as;
   }
 }

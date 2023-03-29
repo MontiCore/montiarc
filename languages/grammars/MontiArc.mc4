@@ -54,7 +54,7 @@ grammar MontiArc extends
    * @attribute importStatement List of imported elements
    * @attribute component Outermost component defined in this compilation unit.
    */
-  scope MACompilationUnit =
+  MACompilationUnit =
     ("package" package:MCQualifiedName ";")?
     importStatement:MCImportStatement*
     ComponentType
