@@ -11,11 +11,13 @@ import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc.util.AbstractTest;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public abstract class MontiArcAbstractTest extends AbstractTest {
@@ -119,5 +121,16 @@ public abstract class MontiArcAbstractTest extends AbstractTest {
       .setName(name)
       .setSpannedScope(MontiArcMill.scope())
       .build();
+  }
+
+  protected static void compile(@NotNull String model) {
+    Preconditions.checkNotNull(model);
+    try {
+      ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+      MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+      MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

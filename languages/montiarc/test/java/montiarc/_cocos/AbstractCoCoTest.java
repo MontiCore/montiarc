@@ -25,19 +25,6 @@ public abstract class AbstractCoCoTest extends MontiArcAbstractTest {
   protected MontiArcCoCoChecker checker;
   protected MontiArcTool cli;
 
-  /**
-   * This method that facilitates stating arguments for parameterized tests. By using an elliptical parameter this
-   * method removes the need to explicitly create arrays.
-   *
-   * @param model  model to test
-   * @param errors all expected errors
-   */
-  protected static Arguments arg(@NotNull String model, @NotNull Error... errors) {
-    Preconditions.checkNotNull(model);
-    Preconditions.checkNotNull(errors);
-    return Arguments.of(model, errors);
-  }
-
   protected MontiArcTool getCLI() {
     return this.cli;
   }

@@ -1,12 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.util;
 
+import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
+import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -121,6 +124,19 @@ public abstract class AbstractTest {
       .flatMap(Collection::stream)
       .sorted(String::compareTo)
       .collect(Collectors.toList());
+  }
+
+  /**
+   * This method that facilitates stating arguments for parameterized tests. By using an elliptical parameter this
+   * method removes the need to explicitly create arrays.
+   *
+   * @param model  model to test
+   * @param errors all expected errors
+   */
+  protected static Arguments arg(@NotNull String model, @NotNull Error... errors) {
+    Preconditions.checkNotNull(model);
+    Preconditions.checkNotNull(errors);
+    return Arguments.of(model, errors);
   }
 
   /**
