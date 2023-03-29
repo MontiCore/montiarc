@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc._cocos;
+package genericarc._cocos;
 
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
@@ -24,11 +24,11 @@ import java.util.Optional;
  * A generic component may have type parameters that have upper bounds. In this case this coco checks for component
  * instantiations that type arguments passed for bounded type parameters are subtypes of these bounds.
  */
-public class ComponentInstantiationRespectsGenericTypeBounds implements ArcBasisASTComponentInstantiationCoCo {
+public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationCoCo {
 
   protected final ITypeRelations tr;
 
-  public ComponentInstantiationRespectsGenericTypeBounds(@NotNull ITypeRelations tr) {
+  public SubcomponentTypeBound(@NotNull ITypeRelations tr) {
     this.tr = Preconditions.checkNotNull(tr);
   }
                                                          /**
@@ -58,7 +58,7 @@ public class ComponentInstantiationRespectsGenericTypeBounds implements ArcBasis
       } else {
         Log.debug(String.format("Not checking coco '%s' on type parameter '%s' of component type '%s' for component " +
                 "instantiation at '%s' because the binding for that type parameter is not set.",
-            ComponentInstantiationRespectsGenericTypeBounds.class.getSimpleName(), typeVar.getName(), compTypeSymbol.getName(),
+            SubcomponentTypeBound.class.getSimpleName(), typeVar.getName(), compTypeSymbol.getName(),
             astInstantiation.get_SourcePositionStart()), "CoCos");
         return;
       }
