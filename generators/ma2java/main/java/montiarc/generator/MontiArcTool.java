@@ -54,10 +54,10 @@ public class MontiArcTool extends montiarc.MontiArcTool {
   }
 
   @Override
-  public void runAdditionalTasks(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull CommandLine cl) {
+  public void runTasks(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull CommandLine cl) {
     Preconditions.checkNotNull(asts);
     Preconditions.checkNotNull(cl);
-    super.runAdditionalTasks(asts, cl);
+    super.runTasks(asts, cl);
 
     if(cl.hasOption("output")) {
       Log.info("Generate java", "MontiArcTool");

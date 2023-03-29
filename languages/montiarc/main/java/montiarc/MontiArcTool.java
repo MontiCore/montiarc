@@ -87,14 +87,14 @@ public class MontiArcTool extends MontiArcToolTOP {
 
     Log.info("Parse the input models", "MontiArcTool");
     Log.enableFailQuick(false);
-    Collection<ASTMACompilationUnit> ourAsts = this.parse(".arc", this.createModelPath(cl).getEntries());
+    Collection<ASTMACompilationUnit> asts = this.parse(".arc", this.createModelPath(cl).getEntries());
     Log.enableFailQuick(true);
+
     if (cl.hasOption("c2mc")) {
-      this.defaultImportTrafo(ourAsts);
+      this.defaultImportTrafo(asts);
     }
 
-    this.runDefaultTasks(ourAsts);
-    this.runAdditionalTasks(ourAsts, cl);
+    this.runTasks(asts, cl);
   }
 
   protected MCPath createModelPath(@NotNull CommandLine cl) {
@@ -124,12 +124,13 @@ public class MontiArcTool extends MontiArcToolTOP {
       .build());
   }
 
-  public void runDefaultTasks(@NotNull Collection<ASTMACompilationUnit> asts) {
+  public void runTasks(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull CommandLine cl) {
     Preconditions.checkNotNull(asts);
+    Preconditions.checkNotNull(cl);
 
     Log.info("Create the symbol table", "MontiArcTool");
     Log.enableFailQuick(false);
-    this.createSymbolTable(asts);
+    Collection<IMontiArcArtifactScope> scopes = this.createSymbolTable(asts);
 
     Log.info("Perform initial context-condition checks", "MontiArcTool");
     this.runDefaultCoCos(asts);
@@ -140,20 +141,22 @@ public class MontiArcTool extends MontiArcToolTOP {
     Log.info("Perform remaining context-condition checks", "MontiArcTool");
     this.runAdditionalCoCos(asts);
     Log.enableFailQuick(true);
-  }
-
-  public void runAdditionalTasks(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull CommandLine cl) {
-    Preconditions.checkNotNull(asts);
-    Preconditions.checkNotNull(cl);
 
     if (cl.hasOption("pp")) {
       Log.info("Pretty print models", "MontiArcTool");
       this.prettyPrint(asts, Optional.ofNullable(cl.getOptionValue("pp")).orElse(""));
     }
 
+    this.runAdditionalTasks(scopes, cl);
+  }
+
+  public void runAdditionalTasks(@NotNull Collection<IMontiArcArtifactScope> scopes, @NotNull CommandLine cl) {
+    Preconditions.checkNotNull(scopes);
+    Preconditions.checkNotNull(cl);
+
     if (cl.hasOption("symboltable")) {
       Log.info("Print symbol table", "MontiArcTool");
-      this.storeSymbols(asts, cl.getOptionValue("symboltable"));
+      this.storeSymbols(scopes, cl.getOptionValue("symboltable"));
     }
   }
 
@@ -261,23 +264,11 @@ public class MontiArcTool extends MontiArcToolTOP {
     super.print(content, path);
   }
 
-  public void storeSymbols(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String path) {
-    Preconditions.checkNotNull(asts);
+  public void storeSymbols(@NotNull Collection<IMontiArcArtifactScope> scopes, @NotNull String path) {
+    Preconditions.checkNotNull(scopes);
     Preconditions.checkNotNull(path);
     Preconditions.checkArgument(!path.isEmpty());
-    asts.forEach(ast -> this.storeSymbols(ast, path));
-  }
-
-  public void storeSymbols(@NotNull ASTMACompilationUnit ast, @NotNull String path) {
-    Preconditions.checkNotNull(ast);
-    Preconditions.checkNotNull(path);
-    Preconditions.checkNotNull(ast.getSpannedScope());
-    Preconditions.checkArgument(ast.getSpannedScope() instanceof IMontiArcArtifactScope);
-    Preconditions.checkArgument(ast.getComponentType().isPresentSymbol());
-    Preconditions.checkArgument(!path.isEmpty());
-
-    this.storeSymbols((IMontiArcArtifactScope) ast.getSpannedScope(),
-      path + "/" + Names.getPathFromPackage(ast.getComponentType().getSymbol().getFullName()) + ".arcsym");
+    scopes.forEach(scope -> this.storeSymbols(scope, path));
   }
 
   @Override
@@ -285,7 +276,8 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(path);
     Preconditions.checkArgument(!path.isEmpty());
-    super.storeSymbols(scope, path);
+
+    super.storeSymbols(scope, path + "/" + Names.getPathFromPackage(scope.getFullName()) + ".arcsym");
   }
 
   protected void initGlobalScope(@NotNull CommandLine cl) {

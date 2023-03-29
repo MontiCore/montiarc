@@ -549,22 +549,10 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcTool#runDefaultTasks(Collection)}
+   * Method under test {@link MontiArcTool#runTasks(Collection, CommandLine)}
    */
   @Test
-  public void runDefaultTasksShouldThrowNullPointerException() {
-    // Given
-    MontiArcTool tool = new MontiArcTool();
-
-    // When && Then
-    Assertions.assertThrows(NullPointerException.class, () -> tool.runDefaultTasks(null));
-  }
-
-  /**
-   * Method under test {@link MontiArcTool#runAdditionalTasks(Collection, CommandLine)}
-   */
-  @Test
-  public void runAdditionalTasksShouldThrowException() throws ParseException {
+  public void runTasksShouldThrowException() throws ParseException {
     // Given
     MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
@@ -578,16 +566,16 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class,
-      () -> tool.runAdditionalTasks(null, cli));
+      () -> tool.runTasks(null, cli));
     Assertions.assertThrows(NullPointerException.class,
-      () -> tool.runAdditionalTasks(asts, null));
+      () -> tool.runTasks(asts, null));
   }
 
   /**
-   * Method under test {@link MontiArcTool#runAdditionalTasks(Collection, CommandLine)}
+   * Method under test {@link MontiArcTool#runTasks(Collection, CommandLine)}
    */
   @Test
-  public void runAdditionalTasksShouldPrettyPrintFile() throws ParseException {
+  public void runTasksShouldPrettyPrintFile() throws ParseException {
     // Given
     Path modelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "validFileStructureMock");
     String ppTargetDir = tempDir.toAbsolutePath().toString();
@@ -602,16 +590,16 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     CommandLine cli = cliParser.parse(options, args);
 
     // When && Then
-    Assertions.assertDoesNotThrow(() -> tool.runAdditionalTasks(innerComponents, cli));
+    Assertions.assertDoesNotThrow(() -> tool.runTasks(innerComponents, cli));
     Assertions.assertTrue(expectedPpFile1.toFile().isFile());
     Assertions.assertTrue(expectedPpFile2.toFile().isFile());
   }
 
   /**
-   * Method under test {@link MontiArcTool#runAdditionalTasks(Collection, CommandLine)}
+   * Method under test {@link MontiArcTool#runTasks(Collection, CommandLine)}
    */
   @Test
-  public void runAdditionalTasksShouldOutputSymbolTable() throws ParseException {
+  public void runTasksShouldOutputSymbolTable() throws ParseException {
     // Given
     String parsePath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "storeSymbols").toAbsolutePath().toString();
     File serializeFile = tempDir.resolve("WithInnerComponents.arcsym").toFile();
@@ -627,69 +615,8 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     tool.completeSymbolTable(innerComponents);
 
     // When && Then
-    Assertions.assertDoesNotThrow(() -> tool.runAdditionalTasks(innerComponents, cli));
+    Assertions.assertDoesNotThrow(() -> tool.runTasks(innerComponents, cli));
     Assertions.assertTrue(serializeFile.exists());
-  }
-
-  /**
-   * Method under test {@link MontiArcTool#storeSymbols(Collection, String)}
-   */
-  @ParameterizedTest
-  @MethodSource("storeSymbolsCollectionExpectedExceptionProvider")
-  public void storeSymbolsCollectionShouldThrowException(@Nullable String path,
-                                                         @Nullable Collection<ASTMACompilationUnit> asts,
-                                                         @NotNull Class<Exception> expected) {
-    Preconditions.checkNotNull(expected);
-
-    // Given
-    MontiArcTool tool = new MontiArcTool();
-
-    // When && Then
-    Assertions.assertThrows(expected, () -> tool.storeSymbols(asts, path));
-  }
-
-  protected static Stream<Arguments> storeSymbolsCollectionExpectedExceptionProvider() {
-    MontiArcTool tool = new MontiArcTool();
-    Path baseModelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR);
-    Collection<ASTMACompilationUnit> innerComponents =
-      tool.parse(".arc", baseModelPath.resolve("storeSymbols").toAbsolutePath());
-    return Stream.of(
-      Arguments.of(null, innerComponents, NullPointerException.class),
-      Arguments.of(baseModelPath +"/symboltable/", null, NullPointerException.class),
-      Arguments.of("", innerComponents, IllegalArgumentException.class)
-    );
-  }
-
-  /**
-   * Method under test {@link MontiArcTool#storeSymbols(ASTMACompilationUnit, String)}
-   */
-  @ParameterizedTest
-  @MethodSource("storeSymbolsAstExpectedExceptionProvider")
-  public void storeSymbolsAstShouldThrowException(@Nullable String path,
-                                                  @Nullable ASTMACompilationUnit ast,
-                                                  @NotNull Class<Exception> expected) {
-    Preconditions.checkNotNull(expected);
-
-    // Given
-    MontiArcTool tool = new MontiArcTool();
-
-    // When && Then
-    Assertions.assertThrows(expected, () -> tool.storeSymbols(ast, path));
-  }
-
-  protected static Stream<Arguments> storeSymbolsAstExpectedExceptionProvider() {
-    MontiArcTool tool = new MontiArcTool();
-
-    Path baseTestDir = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR);
-    ASTMACompilationUnit ast = tool.parse(
-      baseTestDir.resolve("storeSymbols").resolve("WithInnerComponents.arc").toAbsolutePath())
-      .orElseThrow(IllegalStateException::new);
-    ast.setSpannedScope(MontiArcMill.scope());
-    return Stream.of(
-      Arguments.of(null, ast, NullPointerException.class),
-      Arguments.of(baseTestDir + "/symboltable/", null, NullPointerException.class),
-      Arguments.of("", ast, IllegalArgumentException.class)
-    );
   }
 
   /**
