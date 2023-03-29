@@ -2,174 +2,149 @@
 package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
-import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
-import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
-import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.class2mc.OOClass2MCResolver;
+import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.check.TypeRelations;
+import de.se_rwth.commons.logging.Log;
+import de.se_rwth.commons.logging.LogStub;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
 import montiarc.util.GenericArcError;
+import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.List;
-import java.util.Optional;
+import java.io.IOException;
 import java.util.stream.Stream;
 
-public class ComponentInstantiationRespectsGenericTypeBoundsTest extends AbstractCoCoTest {
+public class ComponentInstantiationRespectsGenericTypeBoundsTest extends MontiArcAbstractTest {
 
-  protected static final String PACKAGE = "componentInstantiationRespectsGenericTypeBounds";
-
-  @Override
-  protected String getPackage() {
-    return PACKAGE;
+  @BeforeAll
+  public static void init() {
+    LogStub.init();
+    Log.enableFailQuick(false);
+    MontiArcMill.reset();
+    MontiArcMill.init();
+    BasicSymbolsMill.initializePrimitives();
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
+    setUpComponents();
   }
 
   @Override
-  protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
-    Preconditions.checkNotNull(checker);
+  public void setUp() { }
+
+  @AfterEach
+  public void tearDown() {
+    Log.clearFindings();
+  }
+
+  protected static void setUpComponents() {
+    compile("package a.b; component A { }");
+    compile("package a.b; component B<T> { }");
+    compile("package a.b; component C<T, U> { }");
+    compile("package a.b; component D<T extends int> { }");
+    compile("package a.b; component E<T extends java.lang.Comparable<java.lang.Integer>> { }");
+    compile("package a.b; component F<T extends java.lang.Comparable<java.lang.String>, " +
+                                   "U extends java.lang.Comparable<java.lang.Integer>> { }");
+    compile("package a.b; component G<T, U extends java.lang.Comparable<T>> { }");
+    compile("package a.b; component H<U extends java.lang.Comparable<T>, T> { }");
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "component Comp1 { a.b.A sub; }",
+    "component Comp2 { a.b.B<java.lang.Integer> sub; }",
+    "component Comp3 { a.b.B<java.lang.String> sub; }",
+    "component Comp4 { a.b.C<java.lang.Integer, java.lang.Integer> sub; }",
+    "component Comp5 { a.b.D<int> sub; }",
+    "component Comp6 { a.b.E<java.lang.Integer> sub; }",
+    "component Comp7 { a.b.F<java.lang.String, java.lang.Integer> sub; }",
+    //"component Comp8 { a.b.G<java.lang.Integer, java.lang.Integer> sub; }",
+    //"component Comp9 { a.b.H<java.lang.Integer, java.lang.Integer> sub; }"
+  })
+  public void shouldNotReportError(@NotNull String model) throws IOException {
+    Preconditions.checkNotNull(model);
+
+    // Given
+    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
+
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new ComponentInstantiationRespectsGenericTypeBounds(new TypeRelations()));
-  }
 
-  @BeforeEach
-  public void prepareModels() {
-    loadFish();
-    loadComparable();
-    loadListAndLinkedList();
-    loadPersonAndSubtypes();
+    // When
+    checker.checkAll(ast);
 
-    loadComponentsToInstantiate();
-  }
-
-  public void loadComponentsToInstantiate() {
-    // loading helper models into the symboltable
-    this.parseAndCreateAndCompleteSymbols("GenericComp.arc");
-    this.parseAndCreateAndCompleteSymbols("CompWithoutTypeArgs.arc");
-  }
-
-  /**
-   * Creates the following types and adds them to the global scope: {@code List<T>} and {@code LinkedList<U> extends
-   * List<U>}
-   */
-  public void loadListAndLinkedList() {
-    OOTypeSymbol listSym = MontiArcMill.oOTypeSymbolBuilder()
-      .setName("List")
-      .setSpannedScope(MontiArcMill.scope())
-      .build();
-    listSym.addTypeVarSymbol(MontiArcMill.typeVarSymbolBuilder().setName("T").build());
-    MontiArcMill.globalScope().add(listSym);
-    MontiArcMill.globalScope().addSubScope(listSym.getSpannedScope());
-
-    TypeVarSymbol uTypeVar = MontiArcMill.typeVarSymbolBuilder().setName("U").build();
-    OOTypeSymbol linkedListSym = MontiArcMill.oOTypeSymbolBuilder()
-      .setName("LinkedList")
-      .setSpannedScope(MontiArcMill.scope())
-      .build();
-    linkedListSym.addTypeVarSymbol(uTypeVar);
-    MontiArcMill.globalScope().add(linkedListSym);
-    MontiArcMill.globalScope().addSubScope(linkedListSym.getSpannedScope());
-
-    // setting the parent of LinkedList<U> to List<U>
-    SymTypeExpression uExpr = SymTypeExpressionFactory.createTypeObject(uTypeVar);
-    SymTypeExpression listOfU = SymTypeExpressionFactory.createGenerics(listSym, List.of(uExpr));
-    linkedListSym.addSuperTypes(listOfU);
-  }
-
-  /**
-   * Creates the type "Fish" and adds it to the global scope.
-   */
-  public void loadFish() {
-    OOTypeSymbol fishSym = MontiArcMill.oOTypeSymbolBuilder()
-      .setName("Fish")
-      .setSpannedScope(MontiArcMill.scope())
-      .build();
-    MontiArcMill.globalScope().add(fishSym);
-    MontiArcMill.globalScope().addSubScope(fishSym.getSpannedScope());
-  }
-
-  /**
-   * Creates the type {@code Comparable<V>} and adds it to the global scope.
-   */
-  public void loadComparable() {
-    OOTypeSymbol comparableSym = MontiArcMill.oOTypeSymbolBuilder()
-      .setName("Comparable")
-      .setSpannedScope(MontiArcMill.scope())
-      .build();
-    comparableSym.addTypeVarSymbol(MontiArcMill.typeVarSymbolBuilder().setName("V").build());
-    MontiArcMill.globalScope().add(comparableSym);
-    MontiArcMill.globalScope().addSubScope(comparableSym.getSpannedScope());
-  }
-
-  /**
-   * Creates the following types and adds them to the global scope: {@code Person}, {@code Student extends Person}, and
-   * {@code GlassStudent extends Student & Comparable<Student>}. Note that the type {@code Comparable<V>} must be
-   * resolvable before this method is called.
-   */
-  public void loadPersonAndSubtypes() {
-    Optional<OOTypeSymbol> comparableSym = MontiArcMill.globalScope().resolveOOType("Comparable");
-    Preconditions.checkState(comparableSym.isPresent());
-
-    OOTypeSymbol personSym = MontiArcMill.oOTypeSymbolBuilder()
-      .setName("Person")
-      .setSpannedScope(MontiArcMill.scope())
-      .build();
-    MontiArcMill.globalScope().add(personSym);
-    MontiArcMill.globalScope().addSubScope(personSym.getSpannedScope());
-
-    OOTypeSymbol studentSym = MontiArcMill.oOTypeSymbolBuilder()
-      .setName("Student")
-      .setSpannedScope(MontiArcMill.scope())
-      .build();
-    MontiArcMill.globalScope().add(studentSym);
-    MontiArcMill.globalScope().addSubScope(studentSym.getSpannedScope());
-    studentSym.addSuperTypes(SymTypeExpressionFactory.createTypeObject(personSym));
-    SymTypeExpression studentExpr = SymTypeExpressionFactory.createTypeObject(studentSym);
-
-    OOTypeSymbol glassStudentSym = MontiArcMill.oOTypeSymbolBuilder()
-      .setName("GlassStudent")
-      .setSpannedScope(MontiArcMill.scope())
-      .build();
-    MontiArcMill.globalScope().add(glassStudentSym);
-    MontiArcMill.globalScope().addSubScope(glassStudentSym.getSpannedScope());
-    glassStudentSym.addSuperTypes(studentExpr);
-    glassStudentSym.addSuperTypes(SymTypeExpressionFactory
-      .createGenerics(comparableSym.get(), List.of(studentExpr))
-    );
+    // Then
+    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"CompatibleBounds.arc"})
-  public void shouldCorrectlyBindTypeParams(@NotNull String model) {
-    testModel(model);
-  }
-
-  protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
-    return Stream.of(
-      arg("IncompatibleBounds.arc",
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND, GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND
-      ),
-      arg("WrongTypeAssignmentNumber.arc",
-        GenericArcError.TOO_FEW_TYPE_ARGUMENTS, GenericArcError.TOO_MANY_TYPE_ARGUMENTS
-      )
-    );
-  }
-
-  @ParameterizedTest
-  @MethodSource("modelAndExpectedErrorsProvider")
-  public void shouldViolateTypeParameterBounds(@NotNull String model, @NotNull Error... errors) {
+  @MethodSource("invalidModels")
+  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
-    testModel(model, errors);
+
+    // Given
+    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
+
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ComponentInstantiationRespectsGenericTypeBounds(new TypeRelations()));
+
+    // When
+    checker.checkAll(ast);
+
+    // Then
+    Assertions.assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
+    Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
+      .containsExactlyElementsOf(this.collectErrorCodes(errors));
+  }
+
+  protected static Stream<Arguments> invalidModels() {
+    return Stream.of(
+      arg("component Comp1 { a.b.D<boolean> sub; }",
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+      arg("component Comp2 { a.b.E<java.lang.String> sub; }",
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+      arg("component Comp3 { a.b.F<java.lang.Integer, java.lang.String> sub; }",
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+      arg("component Comp4 { a.b.F<java.lang.Integer, java.lang.String> sub; }",
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+      arg("component Comp5 { a.b.G<java.lang.Integer, java.lang.String> sub; }",
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+      arg("component Comp6 { a.b.H<java.lang.Integer, java.lang.String> sub; }",
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+      arg("component Comp7<T extends java.lang.String> { a.b.E<T> sub; }",
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+      arg("component Comp8 { a.b.C<java.lang.Integer> sub; }",
+        GenericArcError.TOO_FEW_TYPE_ARGUMENTS),
+      arg("component Comp8 { a.b.F<java.lang.Integer> sub; }",
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        GenericArcError.TOO_FEW_TYPE_ARGUMENTS),
+      arg("component Comp9 { a.b.F<java.lang.String> sub; }",
+        GenericArcError.TOO_FEW_TYPE_ARGUMENTS),
+      arg("component Comp10 { a.b.A<java.lang.Integer> sub; }",
+        GenericArcError.TOO_MANY_TYPE_ARGUMENTS),
+      arg("component Comp11 { a.b.B<java.lang.Integer, java.lang.Integer> sub; }",
+        GenericArcError.TOO_MANY_TYPE_ARGUMENTS),
+      arg("component Comp12 { a.b.E<java.lang.String, java.lang.Integer> sub; }",
+        GenericArcError.TOO_MANY_TYPE_ARGUMENTS,
+        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+      arg("component Comp13 { a.b.E<java.lang.Integer, java.lang.Integer> sub; }",
+        GenericArcError.TOO_MANY_TYPE_ARGUMENTS)
+    );
   }
 }
