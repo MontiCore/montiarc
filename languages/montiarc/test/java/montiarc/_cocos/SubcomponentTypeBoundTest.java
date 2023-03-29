@@ -70,6 +70,13 @@ public class SubcomponentTypeBoundTest extends MontiArcAbstractTest {
     "component Comp7 { a.b.F<java.lang.String, java.lang.Integer> sub; }",
     //"component Comp8 { a.b.G<java.lang.Integer, java.lang.Integer> sub; }",
     //"component Comp9 { a.b.H<java.lang.Integer, java.lang.Integer> sub; }"
+    "component Comp10<T> { a.b.A sub; }",
+    "component Comp11<T> { a.b.B<T> sub; }",
+    "component Comp12<T> { a.b.C<T, T> sub; }",
+    "component comp13<T, U> { a.b.C<T, U> sub; }",
+    "component comp14<T extends java.lang.Integer> { a.b.E<T> sub; }",
+    "component Comp17 { a.b.B sub; }",
+    "component Comp18 { a.b.C sub; }"
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
