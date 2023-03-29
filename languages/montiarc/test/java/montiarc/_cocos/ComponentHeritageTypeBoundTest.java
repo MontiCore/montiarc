@@ -7,6 +7,7 @@ import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.check.TypeRelations;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
+import genericarc._cocos.ComponentHeritageTypeBound;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
@@ -24,7 +25,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-public class ComponentInheritanceRespectsGenericTypeBoundsTest extends MontiArcAbstractTest {
+public class ComponentHeritageTypeBoundTest extends MontiArcAbstractTest {
 
   @BeforeAll
   public static void init() {
@@ -88,7 +89,7 @@ public class ComponentInheritanceRespectsGenericTypeBoundsTest extends MontiArcA
     MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ComponentInheritanceRespectsGenericTypeBounds(new TypeRelations()));
+    checker.addCoCo(new ComponentHeritageTypeBound(new TypeRelations()));
 
     // When
     checker.checkAll(ast);
@@ -109,7 +110,7 @@ public class ComponentInheritanceRespectsGenericTypeBoundsTest extends MontiArcA
     MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ComponentInheritanceRespectsGenericTypeBounds(new TypeRelations()));
+    checker.addCoCo(new ComponentHeritageTypeBound(new TypeRelations()));
 
     // When
     checker.checkAll(ast);

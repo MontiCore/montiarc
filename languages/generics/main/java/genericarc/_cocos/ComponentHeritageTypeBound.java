@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc._cocos;
+package genericarc._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
@@ -24,11 +24,11 @@ import java.util.Optional;
  * inheritance declarations that type arguments passed for bounded type parameters of the parent component are subtypes
  * of these bounds.
  */
-public class ComponentInheritanceRespectsGenericTypeBounds implements ArcBasisASTComponentTypeCoCo {
+public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo {
 
   protected final ITypeRelations tr;
 
-  public ComponentInheritanceRespectsGenericTypeBounds(@NotNull ITypeRelations tr) {
+  public ComponentHeritageTypeBound(@NotNull ITypeRelations tr) {
     this.tr = Preconditions.checkNotNull(tr);
   }
 
