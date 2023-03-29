@@ -132,11 +132,11 @@ public class MontiArcTool extends MontiArcToolTOP {
     Log.enableFailQuick(false);
     Collection<IMontiArcArtifactScope> scopes = this.createSymbolTable(asts);
 
-    Log.info("Perform initial context-condition checks", "MontiArcTool");
-    this.runDefaultCoCos(asts);
-
     Log.info("Complete the symbol table", "MontiArcTool");
     this.completeSymbolTable(asts);
+
+    Log.info("Perform initial context-condition checks", "MontiArcTool");
+    this.runDefaultCoCos(asts);
 
     Log.info("Perform remaining context-condition checks", "MontiArcTool");
     this.runAdditionalCoCos(asts);
@@ -225,7 +225,7 @@ public class MontiArcTool extends MontiArcToolTOP {
   @Override
   public void runDefaultCoCos(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
-    //TODO: Separate cocos and run cocos that can be executed before the symbol table completer here
+    MontiArcCoCos.createChecker().checkAll(ast);
   }
 
   public void runAdditionalCoCos(@NotNull Collection<ASTMACompilationUnit> asts) {
@@ -236,7 +236,6 @@ public class MontiArcTool extends MontiArcToolTOP {
   @Override
   public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
-    MontiArcCoCos.createChecker().checkAll(ast);
   }
 
   public void prettyPrint(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String file) {

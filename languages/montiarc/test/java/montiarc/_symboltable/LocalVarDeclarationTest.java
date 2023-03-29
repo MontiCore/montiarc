@@ -47,8 +47,8 @@ public class LocalVarDeclarationTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = tool.parse(Paths.get(RELATIVE_MODEL_PATH, TEST_MODEL_PATH, model))
       .orElseThrow(() -> new IllegalStateException(Log.getFindings().toString()));
     tool.createSymbolTable(ast);
-    tool.runDefaultCoCos(ast);
     tool.completeSymbolTable(ast);
+    tool.runDefaultCoCos(ast);
 
     // Then
     // Check that all NameExpressions representing local variables resolve to a variable symbol
@@ -78,8 +78,8 @@ public class LocalVarDeclarationTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = tool.parse(Paths.get(RELATIVE_MODEL_PATH, TEST_MODEL_PATH, model))
       .orElseThrow(() -> new IllegalStateException(Log.getFindings().toString()));
     tool.createSymbolTable(ast);
-    tool.runDefaultCoCos(ast);
     tool.completeSymbolTable(ast);
+    tool.runDefaultCoCos(ast);
 
     // Then
     // Check that all NameExpressions representing local variables resolve to a variable symbol
