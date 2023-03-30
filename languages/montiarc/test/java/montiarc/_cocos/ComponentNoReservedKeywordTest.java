@@ -2,57 +2,102 @@
 package montiarc._cocos;
 
 import arcbasis._cocos.ComponentNoReservedKeyword;
+import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcAbstractTest;
+import montiarc.MontiArcMill;
+import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
+import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
-public class ComponentNoReservedKeywordTest extends AbstractCoCoTest {
+/**
+ * The class under test is {@link ComponentNoReservedKeyword}.
+ */
+public class ComponentNoReservedKeywordTest extends MontiArcAbstractTest {
 
-  protected static String PACKAGE = "componentTypeNameIsNoReservedKeyword";
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "package key; component Comp1 { }",
+    "component Comp2 { component I { } I key; }",
+    "component Comp3(int key) {  }",
+    "component Comp4<key> { }",
+    "component Comp5 { int key = 1; }",
+    "component Comp6 { port in int key; }",
+    "component Comp7 { automaton { state key; } }"
+  })
+  public void shouldNotReportError(@NotNull String model) throws IOException {
+    Preconditions.checkNotNull(model);
 
-  /**
-   * Returns a collection of the keywords that are used in this test and that should not be used for identifier names.
-   */
-  protected static Collection<String> provideKeywords() {
-    Collection<String> keywords = new HashSet<>(22);
-    for(int i = 0; i < 11; i++) {
-      keywords.add("Reserved" + i);
-      keywords.add("Keyword" + i);
-    }
+    // Given
+    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
 
-    keywords.add("TypeNamesAreKeywords");
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ComponentNoReservedKeyword("lang", Arrays.asList("key", "word")));
 
-    return keywords;
-  }
+    // When
+    checker.checkAll(ast);
 
-  @Override
-  protected String getPackage() {
-    return PACKAGE;
-  }
-
-  @Override
-  protected void registerCoCos(MontiArcCoCoChecker checker) {
-    checker.addCoCo(new ComponentNoReservedKeyword("testLang", provideKeywords()));
-  }
-
-  protected static Stream<Arguments> modelAndExpectedErrorProvider() {
-    return Stream.of(
-      arg("TypeNamesAreLegal.arc"),
-      arg("TypeNamesAreKeywords.arc",  // Expect 3 violations
-        ArcError.RESTRICTED_IDENTIFIER, ArcError.RESTRICTED_IDENTIFIER, ArcError.RESTRICTED_IDENTIFIER)
-    );
+    // Then
+    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
   }
 
   @ParameterizedTest
-  @MethodSource("modelAndExpectedErrorProvider")
-  void testPortNamesAreExpectedKeywords(@NotNull String modelName, @NotNull Error... expectedErrors) {
-    this.testModel(modelName, expectedErrors);
+  @MethodSource("invalidModels")
+  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+    Preconditions.checkNotNull(model);
+    Preconditions.checkNotNull(errors);
+
+    // Given
+    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
+
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ComponentNoReservedKeyword("lang", Arrays.asList("key", "word")));
+
+    // When
+    checker.checkAll(ast);
+
+    // Then
+    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(errors.length);
+    Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
+      .containsExactlyElementsOf(this.collectErrorCodes(errors));
+  }
+
+  protected static Stream<Arguments> invalidModels() {
+    return Stream.of(
+      arg("component key { }",
+        ArcError.RESTRICTED_IDENTIFIER),
+      arg("component word { }",
+        ArcError.RESTRICTED_IDENTIFIER),
+      arg("component key { component Inner { } }",
+        ArcError.RESTRICTED_IDENTIFIER),
+      arg("component key { component key { } }",
+        ArcError.RESTRICTED_IDENTIFIER,
+        ArcError.RESTRICTED_IDENTIFIER),
+      arg("component word { component word { } }",
+        ArcError.RESTRICTED_IDENTIFIER,
+        ArcError.RESTRICTED_IDENTIFIER),
+      arg("component key { component key { } component key { } }",
+        ArcError.RESTRICTED_IDENTIFIER,
+        ArcError.RESTRICTED_IDENTIFIER,
+        ArcError.RESTRICTED_IDENTIFIER),
+      arg("component key { component key { component key { } } }",
+        ArcError.RESTRICTED_IDENTIFIER,
+        ArcError.RESTRICTED_IDENTIFIER,
+        ArcError.RESTRICTED_IDENTIFIER)
+    );
   }
 }

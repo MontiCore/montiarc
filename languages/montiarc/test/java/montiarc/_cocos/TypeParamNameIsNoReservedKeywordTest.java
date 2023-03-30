@@ -1,57 +1,93 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Log;
 import genericarc._cocos.TypeParamNameIsNoReservedKeyword;
+import montiarc.MontiArcAbstractTest;
+import montiarc.MontiArcMill;
+import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
+import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
-public class TypeParamNameIsNoReservedKeywordTest extends AbstractCoCoTest {
+/**
+ * The class under test is {@link TypeParamNameIsNoReservedKeyword}.
+ */
+public class TypeParamNameIsNoReservedKeywordTest extends MontiArcAbstractTest {
 
-  protected static String PACKAGE = "typeParamNameIsNoReservedKeyword";
+    @ParameterizedTest
+    @ValueSource(strings = {
+      "package key; component Comp1 { }",
+      "component Comp2 { component I { } I key; }",
+      "component Comp3(int key) {  }",
+      "component Comp4<T> { }",
+      "component Comp5 { int key = 1; }",
+      "component Comp6 { port in int key; }",
+      "component Comp7 { automaton { state key; } }",
+      "component Comp8 { component key { } }",
+    })
+    public void shouldNotReportError(@NotNull String model) throws IOException {
+      Preconditions.checkNotNull(model);
 
-  /**
-   * Returns a collection of the keywords that are used in this test and that should not be used for identifier names.
-   */
-  protected static Collection<String> provideKeywords() {
-    Collection<String> keywords = new HashSet<>(22);
-    for(int i = 0; i < 11; i++) {
-      keywords.add("Reserved" + i);
-      keywords.add("Keyword" + i);
+      // Given
+      ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+      MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+      MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
+
+      MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+      checker.addCoCo(new TypeParamNameIsNoReservedKeyword("lang", Arrays.asList("key", "word")));
+
+      // When
+      checker.checkAll(ast);
+
+      // Then
+      Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
     }
 
-    return keywords;
-  }
+    @ParameterizedTest
+    @MethodSource("invalidModels")
+    public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+      Preconditions.checkNotNull(model);
+      Preconditions.checkNotNull(errors);
 
-  @Override
-  protected String getPackage() {
-    return PACKAGE;
-  }
+      // Given
+      ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+      MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+      MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
 
-  @Override
-  protected void registerCoCos(MontiArcCoCoChecker checker) {
-    checker.addCoCo(new TypeParamNameIsNoReservedKeyword("testLang", provideKeywords()));
-  }
+      MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+      checker.addCoCo(new TypeParamNameIsNoReservedKeyword("lang", Arrays.asList("key", "word")));
 
-  protected static Stream<Arguments> modelAndExpectedErrorProvider() {
-    return Stream.of(
-      arg("TypeParamNamesAreLegal.arc"),
-      arg("TypeParamNamesAreKeywords.arc",  // Expect 4 violations
-        ArcError.RESTRICTED_IDENTIFIER, ArcError.RESTRICTED_IDENTIFIER, ArcError.RESTRICTED_IDENTIFIER,
-        ArcError.RESTRICTED_IDENTIFIER)
-    );
-  }
+      // When
+      checker.checkAll(ast);
 
-  @ParameterizedTest
-  @MethodSource("modelAndExpectedErrorProvider")
-  void testPortNamesAreExpectedKeywords(@NotNull String modelName, @NotNull Error... expectedErrors) {
-    this.testModel(modelName, expectedErrors);
+      // Then
+      Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(errors.length);
+      Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
+        .containsExactlyElementsOf(this.collectErrorCodes(errors));
+    }
+
+    protected static Stream<Arguments> invalidModels() {
+      return Stream.of(
+        arg("component Comp1<key> { }",
+          ArcError.RESTRICTED_IDENTIFIER),
+        arg("component Comp2<word> { }",
+          ArcError.RESTRICTED_IDENTIFIER),
+        arg("component Comp3<T, key> { }",
+          ArcError.RESTRICTED_IDENTIFIER),
+        arg("component Comp4<key, key> { }",
+          ArcError.RESTRICTED_IDENTIFIER,
+          ArcError.RESTRICTED_IDENTIFIER)
+      );
+    }
   }
-}
