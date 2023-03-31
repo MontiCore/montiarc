@@ -31,16 +31,13 @@ public class ParameterOmitAssignmentExpressions implements ArcBasisASTComponentI
   @Override
   public void check(@NotNull ASTComponentInstance instance) {
     Preconditions.checkNotNull(instance);
-    Preconditions.checkArgument(instance.isPresentSymbol());
-    if (!instance.getSymbol().isPresentType()) {
-      Log.debug("Type of'" + instance.getSymbol().getName() + "' missing, scip check.", this.getClass().getSimpleName());
+
+    if (!instance.isPresentArcArguments()) {
       return;
     }
 
-    assertConsistentArguments(instance);
-
-    List<ASTExpression> instantiationArgs = instance.getSymbol()
-      .getArcArguments().stream()
+    List<ASTExpression> instantiationArgs = instance
+      .getArcArguments().getArcArgumentList().stream()
       .map(ASTArcArgument::getExpression)
       .collect(Collectors.toList());
 
@@ -56,27 +53,6 @@ public class ParameterOmitAssignmentExpressions implements ArcBasisASTComponentI
         );
       }
       visitor.reset();
-    }
-  }
-
-  /**
-   * If astInst is linked to a symbol then this method checks that the arguments of
-   * {@code astInst.getSymbol().getArguments()} are equal to {@code astInst.getArguments().getExpressionList(}
-   */
-  protected static void assertConsistentArguments(@NotNull ASTComponentInstance astInst) {
-    Preconditions.checkNotNull(astInst);
-    if (astInst.isPresentSymbol()) {
-
-      Preconditions.checkArgument(
-        astInst.getSymbol().getArcArguments().isEmpty()
-          == (!astInst.isPresentArcArguments() || astInst.getArcArguments().getArcArgumentList().isEmpty())
-      );
-
-      if (!astInst.getSymbol().getArcArguments().isEmpty()) {
-        Preconditions.checkArgument(astInst.getSymbol().getArcArguments().size()
-          == astInst.getArcArguments().getArcArgumentList().size()
-        );
-      }
     }
   }
 }

@@ -72,7 +72,15 @@ import variablearc._cocos.VariantCoCos;
  */
 public class MontiArcCoCos {
 
-  public static MontiArcCoCoChecker createChecker() {
+  public static MontiArcCoCoChecker afterParser() {
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+
+    checker.addCoCo(new ParameterOmitAssignmentExpressions());
+
+    return checker;
+  }
+
+  public static MontiArcCoCoChecker afterSymTab() {
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     MontiArcTypeCalculator tc = new MontiArcTypeCalculator();
     TypeRelations tr = new TypeRelations();
@@ -142,7 +150,6 @@ public class MontiArcCoCos {
     checker.addCoCo(new ComponentHeritageTypeBound(tr));
     checker.addCoCo(new SubcomponentTypeBound(tr));
     checker.addCoCo(new RootNoInstance());
-    checker.addCoCo(new ParameterOmitAssignmentExpressions());
 
     // ComfortableArc Cocos
     checker.addCoCo(new MaxOneAutoConnect());

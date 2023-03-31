@@ -88,6 +88,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     Log.info("Parse the input models", "MontiArcTool");
     Log.enableFailQuick(false);
     Collection<ASTMACompilationUnit> asts = this.parse(".arc", this.createModelPath(cl).getEntries());
+    this.runAfterParserCoCos(asts);
     Log.enableFailQuick(true);
 
     if (cl.hasOption("c2mc")) {
@@ -217,6 +218,16 @@ public class MontiArcTool extends MontiArcToolTOP {
     MontiArcMill.symbolTableCompleterDelegator().createFromAST(nodes);
   }
 
+  public void runAfterParserCoCos(@NotNull Collection<ASTMACompilationUnit> asts) {
+    Preconditions.checkNotNull(asts);
+    asts.forEach(this::runAfterParserCoCos);
+  }
+
+  public void runAfterParserCoCos(@NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(ast);
+    MontiArcCoCos.afterParser().checkAll(ast);
+  }
+
   public void runDefaultCoCos(@NotNull Collection<ASTMACompilationUnit> asts) {
     Preconditions.checkNotNull(asts);
     asts.forEach(this::runDefaultCoCos);
@@ -225,7 +236,7 @@ public class MontiArcTool extends MontiArcToolTOP {
   @Override
   public void runDefaultCoCos(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
-    MontiArcCoCos.createChecker().checkAll(ast);
+    MontiArcCoCos.afterSymTab().checkAll(ast);
   }
 
   public void runAdditionalCoCos(@NotNull Collection<ASTMACompilationUnit> asts) {

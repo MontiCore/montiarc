@@ -18,6 +18,6 @@ public class MontiArcLspCoCoRunner extends MontiArcLspCoCoRunnerTOP {
 
   @Override
   public void runAllCoCos(ASTMACompilationUnit ast) {
-    MontiArcCoCos.createChecker().checkAll(ast);
+    MontiArcCoCos.afterSymTab().checkAll(ast);
   }
 }
