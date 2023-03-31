@@ -3,70 +3,74 @@ package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcAbstractTest;
+import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
 import montiarc.util.MontiArcError;
+import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.Optional;
+import java.io.IOException;
 import java.util.stream.Stream;
 
-public class RootNoInstanceTest extends AbstractCoCoTest {
+/**
+ * The class under test is {@link RootNoInstance}.
+ */
+public class RootNoInstanceTest extends MontiArcAbstractTest {
 
-  protected static final String PACKAGE = "rootComponentTypesNoInstanceName";
+  @Test
+  public void shouldNotReportError() throws IOException {
+    // Given
+    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit("component A { }").orElseThrow();
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
 
-  @Override
-  protected String getPackage() {
-    return PACKAGE;
-  }
-
-  @Override
-  protected void registerCoCos(@NotNull MontiArcCoCoChecker checker) {
-    Preconditions.checkNotNull(checker);
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new RootNoInstance());
-  }
 
-  protected static Stream<Arguments> provideModelsAndErrors() {
-    return Stream.of(
-      arg("RootWithInstanceName.arc", MontiArcError.ROOT_NO_INSTANCE)
-    );
+    // When
+    checker.checkAll(ast);
+
+    // Then
+    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
   }
 
   @ParameterizedTest
-  @MethodSource("provideModelsAndErrors")
-  public void shouldFindRootCompWithInstanceName(@NotNull String model, @NotNull Error... errors) {
+  @MethodSource("invalidModels")
+  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
-    //Given
-    Optional<ASTMACompilationUnit> ast = this.getCLI().parse(getPathToModel(model));
-    Preconditions.checkState(ast.isPresent());
+    // Given
+    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
 
-    //When
-    this.getChecker().checkAll(ast.get());
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new RootNoInstance());
 
-    //Then
-    this.checkOnlyExpectedErrorsPresent(errors);
+    // When
+    checker.checkAll(ast);
+
+    // Then
+    Assertions.assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
+    Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
+      .containsExactlyElementsOf(this.collectErrorCodes(errors));
   }
 
-  @ParameterizedTest
-  @ValueSource(strings = {"RootWithoutInstanceName.arc"})
-  public void shouldFindNoErrors(@NotNull String model) {
-    Preconditions.checkNotNull(model);
-
-    //Given
-    Optional<ASTMACompilationUnit> ast = this.getCLI().parse(getPathToModel(model));
-    Preconditions.checkState(ast.isPresent());
-
-    //When
-    this.getChecker().checkAll(ast.get());
-
-    //Then
-    Assertions.assertEquals(0, Log.getFindingsCount());
+  protected static Stream<Arguments> invalidModels() {
+    return Stream.of(
+      arg("component A a { }",
+        MontiArcError.ROOT_NO_INSTANCE),
+      arg("component A a1, a2 { }",
+        MontiArcError.ROOT_NO_INSTANCE),
+      arg("component A a1, a2, a3 { }",
+        MontiArcError.ROOT_NO_INSTANCE)
+    );
   }
 }
