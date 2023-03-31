@@ -59,14 +59,14 @@ public class ConnectorTypesFit implements ArcBasisASTComponentTypeCoCo {
           if (!tr.compatible(symTypeOfTarget.get(), symTypeOfSource.get())) {
             Log.error(
               ArcError.CONNECTOR_TYPE_MISMATCH.format(
-                symTypeOfSource.get().print(), symTypeOfTarget.get().print(),
+                symTypeOfTarget.get().print(), symTypeOfSource.get().print(),
                 enclComponent.getFullName()),
               conn.get_SourcePositionStart());
           }
         } catch (ResolvedSeveralEntriesForSymbolException e) {
           Log.error(
             ArcError.CONNECTOR_TYPE_MISMATCH.format(
-              symTypeOfSource.get().print(), symTypeOfTarget.get().print(),
+              symTypeOfTarget.get().print(), symTypeOfSource.get().print(),
               enclComponent.getFullName()),
             conn.get_SourcePositionStart());
         }
