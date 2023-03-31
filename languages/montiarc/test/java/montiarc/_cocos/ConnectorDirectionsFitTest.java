@@ -197,12 +197,12 @@ public class ConnectorDirectionsFitTest extends MontiArcAbstractTest {
         ArcError.TARGET_DIRECTION_MISMATCH,
         ArcError.TARGET_DIRECTION_MISMATCH),
       arg("component Comp9 { " +
-        "port in int i1, i2; " +
-        "a.b.B b1, b2; " +
-        "i1 -> b1.i; " +
-        "i2 -> b2.i; " +
-        "b1.o -> b2.o; " +
-        "}",
+          "port in int i1, i2; " +
+          "a.b.B b1, b2; " +
+          "i1 -> b1.i; " +
+          "i2 -> b2.i; " +
+          "b1.o -> b2.o; " +
+          "}",
         ArcError.TARGET_DIRECTION_MISMATCH),
       arg("component Comp10 { " +
           "port out int o1, o2; " +
@@ -223,13 +223,13 @@ public class ConnectorDirectionsFitTest extends MontiArcAbstractTest {
         ArcError.SOURCE_DIRECTION_MISMATCH,
         ArcError.TARGET_DIRECTION_MISMATCH),
       arg("component Comp12 { " +
-        "port in int i; " +
-        "port out int o; " +
-        "a.b.B b1, b2; " +
-        "o -> b1.o; " +
-        "b1.i -> b2.o; " +
-        "b1.i -> i; " +
-        "}",
+          "port in int i; " +
+          "port out int o; " +
+          "a.b.B b1, b2; " +
+          "o -> b1.o; " +
+          "b1.i -> b2.o; " +
+          "b1.i -> i; " +
+          "}",
         ArcError.SOURCE_DIRECTION_MISMATCH,
         ArcError.TARGET_DIRECTION_MISMATCH,
         ArcError.SOURCE_DIRECTION_MISMATCH,
@@ -237,16 +237,16 @@ public class ConnectorDirectionsFitTest extends MontiArcAbstractTest {
         ArcError.SOURCE_DIRECTION_MISMATCH,
         ArcError.TARGET_DIRECTION_MISMATCH),
       arg("component Comp13 { " +
-        "port in int i; " +
-        "port out int o; " +
-        "component Inner {" +
-        "port in int i; " +
-        "port out int o; " +
-        "} " +
-        "Inner sub; " +
-        "i -> sub.o; " +
-        "o -> sub.i; " +
-        "}",
+          "port in int i; " +
+          "port out int o; " +
+          "component Inner {" +
+          "port in int i; " +
+          "port out int o; " +
+          "} " +
+          "Inner sub; " +
+          "i -> sub.o; " +
+          "o -> sub.i; " +
+          "}",
         ArcError.SOURCE_DIRECTION_MISMATCH,
         ArcError.TARGET_DIRECTION_MISMATCH)
     );

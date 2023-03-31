@@ -44,7 +44,8 @@ public class ConfigurationParameterAssignmentTest extends MontiArcAbstractTest {
   }
 
   @Override
-  public void setUp() { }
+  public void setUp() {
+  }
 
   @AfterEach
   public void tearDown() {

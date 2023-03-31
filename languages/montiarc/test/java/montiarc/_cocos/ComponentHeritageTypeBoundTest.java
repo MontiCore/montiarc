@@ -40,7 +40,8 @@ public class ComponentHeritageTypeBoundTest extends MontiArcAbstractTest {
   }
 
   @Override
-  public void setUp() { }
+  public void setUp() {
+  }
 
   @AfterEach
   public void tearDown() {
@@ -54,7 +55,7 @@ public class ComponentHeritageTypeBoundTest extends MontiArcAbstractTest {
     compile("package a.b; component D<T extends int> { }");
     compile("package a.b; component E<T extends java.lang.Comparable<java.lang.Integer>> { }");
     compile("package a.b; component F<T extends java.lang.Comparable<java.lang.String>, " +
-      "U extends java.lang.Comparable<java.lang.Integer>> { }");
+                                   "U extends java.lang.Comparable<java.lang.Integer>> { }");
     compile("package a.b; component G<T, U extends java.lang.Comparable<T>> { }");
     compile("package a.b; component H<U extends java.lang.Comparable<T>, T> { }");
   }

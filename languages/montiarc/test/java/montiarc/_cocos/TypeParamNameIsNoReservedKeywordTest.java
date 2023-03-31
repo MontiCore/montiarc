@@ -25,69 +25,69 @@ import java.util.stream.Stream;
  */
 public class TypeParamNameIsNoReservedKeywordTest extends MontiArcAbstractTest {
 
-    @ParameterizedTest
-    @ValueSource(strings = {
-      "package key; component Comp1 { }",
-      "component Comp2 { component I { } I key; }",
-      "component Comp3(int key) {  }",
-      "component Comp4<T> { }",
-      "component Comp5 { int key = 1; }",
-      "component Comp6 { port in int key; }",
-      "component Comp7 { automaton { state key; } }",
-      "component Comp8 { component key { } }",
-    })
-    public void shouldNotReportError(@NotNull String model) throws IOException {
-      Preconditions.checkNotNull(model);
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "package key; component Comp1 { }",
+    "component Comp2 { component I { } I key; }",
+    "component Comp3(int key) {  }",
+    "component Comp4<T> { }",
+    "component Comp5 { int key = 1; }",
+    "component Comp6 { port in int key; }",
+    "component Comp7 { automaton { state key; } }",
+    "component Comp8 { component key { } }",
+  })
+  public void shouldNotReportError(@NotNull String model) throws IOException {
+    Preconditions.checkNotNull(model);
 
-      // Given
-      ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
-      MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
-      MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
+    // Given
+    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
 
-      MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-      checker.addCoCo(new TypeParamNameIsNoReservedKeyword("lang", Arrays.asList("key", "word")));
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new TypeParamNameIsNoReservedKeyword("lang", Arrays.asList("key", "word")));
 
-      // When
-      checker.checkAll(ast);
+    // When
+    checker.checkAll(ast);
 
-      // Then
-      Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
-    }
-
-    @ParameterizedTest
-    @MethodSource("invalidModels")
-    public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
-      Preconditions.checkNotNull(model);
-      Preconditions.checkNotNull(errors);
-
-      // Given
-      ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
-      MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
-      MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
-
-      MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-      checker.addCoCo(new TypeParamNameIsNoReservedKeyword("lang", Arrays.asList("key", "word")));
-
-      // When
-      checker.checkAll(ast);
-
-      // Then
-      Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(errors.length);
-      Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
-        .containsExactlyElementsOf(this.collectErrorCodes(errors));
-    }
-
-    protected static Stream<Arguments> invalidModels() {
-      return Stream.of(
-        arg("component Comp1<key> { }",
-          ArcError.RESTRICTED_IDENTIFIER),
-        arg("component Comp2<word> { }",
-          ArcError.RESTRICTED_IDENTIFIER),
-        arg("component Comp3<T, key> { }",
-          ArcError.RESTRICTED_IDENTIFIER),
-        arg("component Comp4<key, key> { }",
-          ArcError.RESTRICTED_IDENTIFIER,
-          ArcError.RESTRICTED_IDENTIFIER)
-      );
-    }
+    // Then
+    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
   }
+
+  @ParameterizedTest
+  @MethodSource("invalidModels")
+  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+    Preconditions.checkNotNull(model);
+    Preconditions.checkNotNull(errors);
+
+    // Given
+    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
+
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new TypeParamNameIsNoReservedKeyword("lang", Arrays.asList("key", "word")));
+
+    // When
+    checker.checkAll(ast);
+
+    // Then
+    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(errors.length);
+    Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
+      .containsExactlyElementsOf(this.collectErrorCodes(errors));
+  }
+
+  protected static Stream<Arguments> invalidModels() {
+    return Stream.of(
+      arg("component Comp1<key> { }",
+        ArcError.RESTRICTED_IDENTIFIER),
+      arg("component Comp2<word> { }",
+        ArcError.RESTRICTED_IDENTIFIER),
+      arg("component Comp3<T, key> { }",
+        ArcError.RESTRICTED_IDENTIFIER),
+      arg("component Comp4<key, key> { }",
+        ArcError.RESTRICTED_IDENTIFIER,
+        ArcError.RESTRICTED_IDENTIFIER)
+    );
+  }
+}
