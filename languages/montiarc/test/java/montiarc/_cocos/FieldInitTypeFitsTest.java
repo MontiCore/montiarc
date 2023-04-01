@@ -2,101 +2,164 @@
 package montiarc._cocos;
 
 import arcbasis._cocos.FieldInitTypeFits;
-import arcbasis._symboltable.SymbolService;
 import com.google.common.base.Preconditions;
-import de.monticore.io.paths.MCPath;
-import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.types.check.TypeRelations;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.check.MontiArcTypeCalculator;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
+import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.nio.file.Paths;
+import java.io.IOException;
 import java.util.stream.Stream;
 
-public class FieldInitTypeFitsTest extends AbstractCoCoTest {
-
-  @Override
-  protected String getPackage() {
-    return "fieldInitExpressionTypesCorrect";
-  }
-
-  @Override
-  protected void registerCoCos(MontiArcCoCoChecker checker) {
-    checker.addCoCo(new FieldInitTypeFits(new MontiArcTypeCalculator(), new TypeRelations()));
-  }
-
-  @Override
-  @BeforeEach
-  public void setUp() {
-    super.setUp();
-    this.provideTypes();
-  }
-
-  protected void provideTypes() {
-    TypeSymbol string = MontiArcMill.typeSymbolBuilder()
-      .setName("String")
-      .setEnclosingScope(MontiArcMill.globalScope())
-      .build();
-
-    TypeSymbol person = MontiArcMill.typeSymbolBuilder()
-      .setName("Person")
-      .setEnclosingScope(MontiArcMill.globalScope())
-      .build();
-
-    SymbolService.link(MontiArcMill.globalScope(), string);
-    SymbolService.link(MontiArcMill.globalScope(), person);
-  }
-
-  protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
-    return Stream.of(
-      arg("IncorrectFieldInitializations.arc",
-        ArcError.FIELD_INIT_TYPE_MISMATCH,
-        ArcError.FIELD_INIT_TYPE_MISMATCH),
-      arg("IncompatibleAndTypeRef.arc",
-        ArcError.FIELD_INIT_TYPE_REF,
-        ArcError.FIELD_INIT_TYPE_MISMATCH,
-        ArcError.FIELD_INIT_TYPE_REF,
-        ArcError.FIELD_INIT_TYPE_MISMATCH),
-      arg("TypeRefAsFieldInitialization.arc",
-        ArcError.FIELD_INIT_TYPE_REF,
-        ArcError.FIELD_INIT_TYPE_REF)
-    );
-  }
+/**
+ * The class under test is {@link FieldInitTypeFits}.
+ */
+public class FieldInitTypeFitsTest extends MontiArcAbstractTest {
 
   @ParameterizedTest
   @ValueSource(strings = {
-      "CorrectFieldInitializations.arc",
-      "FieldInitializationWithConstructor.arc",
-      "ParameterShadowing.arc"
+    // field init primitive
+    "component Comp1 { " +
+      "boolean var1 = true; " +
+      "int var2 = 0; " +
+      "long var3 = 0L; " +
+      "}",
+    // field to parameter assignment
+    "component Comp2(boolean p1, int p2) { " +
+      "boolean var1 = p1; " +
+      "int var2 = p2; " +
+      "}",
+    // field init primitive (inner)
+    "component Comp3 { " +
+      "component Inner { " +
+      "boolean var1 = true; " +
+      "int var2 = 0; " +
+      "long var3 = 0L; " +
+      "} " +
+      "}",
+    // field to parameter assignment (inner)
+    "component Comp4 { " +
+      "component Inner(boolean p1, int p2) { " +
+      "boolean var1 = p1; " +
+      "int var2 = p2; " +
+      "} " +
+      "}",
+    // variable (parameter) shadowing
+    "component Comp5(boolean p) { " +
+      "boolean var = p; " +
+      "component Inner(int p) { " +
+      "int var = p; " +
+      "} " +
+      "}"
   })
-  void shouldApproveValidTypeAssignments(@NotNull String model) {
+  public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
 
-    //Given
-    MontiArcMill.globalScope().setSymbolPath(new MCPath(Paths.get(RELATIVE_MODEL_PATH, MODEL_PATH)));
-    ASTMACompilationUnit ast = this.parseAndCreateAndCompleteSymbols(model);
+    // Given
+    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
 
-    //When
-    this.getChecker().checkAll(ast);
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new FieldInitTypeFits(new MontiArcTypeCalculator(), new TypeRelations()));
 
-    //Then
-    Assertions.assertEquals(0, Log.getFindingsCount());
+    // When
+    checker.checkAll(ast);
+
+    // Then
+    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
   }
 
   @ParameterizedTest
-  @MethodSource("modelAndExpectedErrorsProvider")
-  void shouldFindInvalidTypeAssignments(@NotNull String model, @NotNull Error... errors) {
-    testModel(model, errors);
+  @MethodSource("invalidModels")
+  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+    Preconditions.checkNotNull(model);
+    Preconditions.checkNotNull(errors);
+
+    // Given
+    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
+
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new FieldInitTypeFits(new MontiArcTypeCalculator(), new TypeRelations()));
+
+    // When
+    checker.checkAll(ast);
+
+    // Then
+    Assertions.assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
+    Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
+      .containsExactlyElementsOf(this.collectErrorCodes(errors));
+  }
+
+  protected static Stream<Arguments> invalidModels() {
+    return Stream.of(
+      // field init primitive type mismatch
+      arg("component Comp1 { " +
+          "boolean var = 1; " +
+          "}",
+        ArcError.FIELD_INIT_TYPE_MISMATCH),
+      // field two primitives type mismatch
+      arg("component Comp2 { " +
+          "boolean var1 = 2; " +
+          "int var2 = false; " +
+          "}",
+        ArcError.FIELD_INIT_TYPE_MISMATCH,
+        ArcError.FIELD_INIT_TYPE_MISMATCH),
+      // field to parameter assignment type mismatch
+      arg("component Comp3(int p) { " +
+          "boolean var = p; " +
+          "}",
+        ArcError.FIELD_INIT_TYPE_MISMATCH),
+      // two fields to parameter assignments type mismatch
+      arg("component Comp4(boolean p1, int p2) { " +
+          "boolean var1 = p2; " +
+          "int var2 = p1; " +
+          "}",
+        ArcError.FIELD_INIT_TYPE_MISMATCH,
+        ArcError.FIELD_INIT_TYPE_MISMATCH),
+      // field init primitive (inner) type mismatch
+      arg("component Comp5 { " +
+          "component Inner { " +
+          "boolean var = 1; " +
+          "} " +
+          "}",
+        ArcError.FIELD_INIT_TYPE_MISMATCH),
+      // field to parameter assignment (inner) type mismatch
+      arg("component Comp5 { " +
+          "component Inner(int p) { " +
+          "boolean var = p; " +
+          "} " +
+          "}",
+        ArcError.FIELD_INIT_TYPE_MISMATCH),
+      // variable (parameter) shadowing type mismatch
+      arg("component Comp6(boolean p) { " +
+          "boolean var = p; " +
+          "component Inner(boolean p) { " +
+          "int var = p; " +
+          "} " +
+          "}",
+        ArcError.FIELD_INIT_TYPE_MISMATCH),
+      // variable (parameter) shadowing type mismatch
+      arg("component Comp7(int p) { " +
+          "boolean var = p; " +
+          "component Inner(boolean p) { " +
+          "int var = p; " +
+          "} " +
+          "}",
+        ArcError.FIELD_INIT_TYPE_MISMATCH,
+        ArcError.FIELD_INIT_TYPE_MISMATCH)
+    );
   }
 }
