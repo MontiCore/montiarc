@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
 import arcbasis._cocos.ComponentArgumentsOmitPortRef;
 import arcbasis._cocos.FieldInitOmitPortReferences;
 import arcbasis._cocos.ParameterDefaultValueOmitsPortRef;
@@ -10,7 +11,9 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc.util.ArcAutomataError;
 import montiarc.util.ArcError;
+import montiarc.util.Error;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,7 +32,7 @@ public class StaticContextTest extends MontiArcAbstractTest {
   @ParameterizedTest
   @MethodSource("invalid_models")
   public void shouldReportPortRef(@NotNull String file,
-                                  @NotNull ArcError error) throws IOException {
+                                  @NotNull Error error) throws IOException {
     Preconditions.checkNotNull(file);
     Preconditions.checkNotNull(error);
     Preconditions.checkArgument(!file.isBlank());
@@ -47,6 +50,7 @@ public class StaticContextTest extends MontiArcAbstractTest {
     checker.addCoCo(new ComponentArgumentsOmitPortRef());
     checker.addCoCo(new ParameterDefaultValueOmitsPortRef());
     checker.addCoCo(new FieldInitOmitPortReferences());
+    checker.addCoCo(new NoInputPortsInInitialOutputDeclaration());
 
     // When
     checker.checkAll(ast);
@@ -67,7 +71,8 @@ public class StaticContextTest extends MontiArcAbstractTest {
       Arguments.of("InvDParaPort.arc", ArcError.PORT_REF_DEFAULT_VALUE),
       Arguments.of("InvDParaPortSuper.arc", ArcError.PORT_REF_DEFAULT_VALUE),
       Arguments.of("InvFInitPort.arc", ArcError.PORT_REF_FIELD_INIT),
-      Arguments.of("InvExprPort.arc", ArcError.PORT_REF_FIELD_INIT)
+      Arguments.of("InvExprPort.arc", ArcError.PORT_REF_FIELD_INIT),
+      Arguments.of("InvStateInitPort.arc", ArcAutomataError.INPUT_PORT_IN_INITIAL_OUT_DECL)
     );
   }
 
@@ -76,9 +81,10 @@ public class StaticContextTest extends MontiArcAbstractTest {
     "VNoPortRef.arc",
     "VDPara.arc",
     "VDPara2.arc",
-    // "VExprPort.arc",
-    // "VFInit.arc",
-    "VFInit2.arc"
+    //"VExprPort.arc",
+    //"VFInit.arc",
+    "VFInit2.arc",
+    //"VStateInitPort.arc"
   })
   public void shouldNotReport(@NotNull String file) throws IOException {
 
@@ -95,6 +101,7 @@ public class StaticContextTest extends MontiArcAbstractTest {
     checker.addCoCo(new ComponentArgumentsOmitPortRef());
     checker.addCoCo(new ParameterDefaultValueOmitsPortRef());
     checker.addCoCo(new FieldInitOmitPortReferences());
+    checker.addCoCo(new NoInputPortsInInitialOutputDeclaration());
 
     // When
     checker.checkAll(ast);
