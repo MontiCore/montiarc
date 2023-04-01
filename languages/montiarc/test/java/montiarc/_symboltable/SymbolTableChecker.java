@@ -5,7 +5,6 @@ import arcautomaton._visitor.ArcAutomatonInheritanceHandler;
 import arcbasis._visitor.ArcBasisInheritanceHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import arccore._visitor.ArcCoreInheritanceHandler;
-import basicmodeautomata._visitor.BasicModeAutomataInheritanceHandler;
 import com.google.common.base.Preconditions;
 import comfortablearc._visitor.ComfortableArcInheritanceHandler;
 import de.monticore.ast.ASTNode;
@@ -30,6 +29,7 @@ import de.monticore.types.mccollectiontypes._visitor.MCCollectionTypesInheritanc
 import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesInheritanceHandler;
 import de.monticore.umlstereotype._visitor.UMLStereotypeInheritanceHandler;
 import genericarc._visitor.GenericArcInheritanceHandler;
+import modes._visitor.ModesInheritanceHandler;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcInheritanceHandler;
 import montiarc._visitor.MontiArcTraverser;
@@ -69,7 +69,7 @@ public class SymbolTableChecker {
     this.traverser.setArcCoreHandler(new ArcCoreInheritanceHandler());
     this.traverser.setGenericArcHandler(new GenericArcInheritanceHandler());
     this.traverser.setVariableArcHandler(new VariableArcInheritanceHandler());
-    this.traverser.setBasicModeAutomataHandler(new BasicModeAutomataInheritanceHandler());
+    this.traverser.setModesHandler(new ModesInheritanceHandler());
     this.traverser.setMontiArcHandler(new MontiArcInheritanceHandler());
 
     // Statechart handler

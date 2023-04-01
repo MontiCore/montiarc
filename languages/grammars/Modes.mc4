@@ -1,0 +1,23 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+/**
+ * This grammar defines the basic structural elements of mode automata
+ * combining statecharts and architectural descriptions. This grammar contains
+ * definitions for modes and mode automata.
+ *
+ * This grammar is part of the MontiArc language definition.
+ *
+ */
+component grammar Modes extends ArcBasis, de.monticore.SCBasis {
+
+  /**
+   * A mode automaton has a set of modes and transitions.
+   */
+  scope ModeAutomaton implements ArcElement, Statechart =
+    Stereotype? "mode" "automaton" "{"
+      SCStatechartElement*
+    "}";
+
+  symbol scope ArcMode implements ArcElement, SCStatechartElement =
+      SCModifier "mode" Name body:ComponentBody;
+}

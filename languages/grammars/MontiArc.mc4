@@ -46,7 +46,7 @@ grammar MontiArc extends
             de.monticore.SCDoActions,
             ArcCompute,
             ArcCore,
-            BasicModeAutomata,
+            Modes,
             VariableArc                                 {
 
   /** ASTMACompilationUnit represents the entire content of a MontiArc model

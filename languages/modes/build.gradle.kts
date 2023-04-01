@@ -31,4 +31,4 @@ dependencies {
   testImplementation("${libs.mockito}:${libs.mockitoVersion}")
 }
 
-configureMCTask("BasicModeAutomata.mc4")
+configureMCTask("Modes.mc4")

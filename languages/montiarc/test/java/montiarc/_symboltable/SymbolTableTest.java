@@ -117,9 +117,9 @@ public class SymbolTableTest extends MontiArcAbstractTest {
           + "initial { o = 1; } state s2;\n"
           + "state s3;\n"
           + "s1 -> s1 [ true ];\n"
-          + "s1 -> s2 i();\n"
+          + "s1 -> s2 i;\n"
           + "s1 -> s3 / { o = 3; };\n"
-          + "s2 -> s2 [ true ] i() / { o = 2; };\n"
+          + "s2 -> s2 [ true ] i / { o = 2; };\n"
           + "s2 -> s3;\n"
           + "state s4 {\n"
           + "state s5;\n"
@@ -279,31 +279,20 @@ public class SymbolTableTest extends MontiArcAbstractTest {
           + "}"
       );
     Optional<ASTMACompilationUnit> ast11 = MontiArcMill.parser()
-      .parse_StringMACompilationUnit("component ModeAutomata {\n" +
-          "  port in int i1;\n" +
-          "  port out int o1;\n" +
-          "  port in ModeCmd modeCmd;\n" +
-          "\n" +
-          "  mode Simple {\n" +
-          "    i1 -> o1;\n" +
-          "  }\n" +
-          "  mode Complex {\n" +
-          "    port in Data i2;\n" +
-          "\n" +
-          "    Foo foo;\n" +
-          "    Bar bar;\n" +
-          "\n" +
-          "    i2 -> foo.in;\n" +
-          "    foo.out -> bar.in;\n" +
-          "    bar.out -> o1;\n" +
-          "  }\n" +
-          "\n" +
-          "  mode automaton {\n" +
-          "    initial Default;\n" +
-          "    Default -> Complex [ modeCmd == COMPLEX ] / {o1 = 0;};\n" +
-          "    Complex -> Default [ modeCmd == DEFAULT ];\n" +
-          "  }\n" +
-          "}");
+      .parse_StringMACompilationUnit(
+        "component ModeAutomaton {\n"
+          + "port in int i;\n"
+          + "port out int o;\n"
+          + "mode automaton {\n"
+          + "initial mode m1 { }\n"
+          + "mode m2 { }\n"
+          + "mode m3 { }\n"
+          + "m1 -> m2;\n"
+          + "m2 -> m3;\n"
+          + "m3 -> m1;\n"
+          + "}\n"
+          + "}"
+      );
     
     Assertions.assertTrue(ast1.isPresent());
     Assertions.assertTrue(ast2.isPresent());

@@ -7,7 +7,7 @@ package montiarc.util;
  * <p>
  * Assigned code range: 0xC1350 - 0xC1399
  */
-public enum BasicModeAutomataError implements Error {
+public enum ModesError implements Error {
   INSTANCE_NAME_NOT_UNIQUE_IN_MODE("0xC1350", "There are multiple subcomponents named '%s' in mode '%s'."),
   COMPONENT_NAME_NOT_UNIQUE_IN_MODE("0xC1351", "There are multiple components named '%s' in mode '%s'."),
   PORT_NAME_NOT_UNIQUE_IN_MODE("0xC1352", "There are multiple ports named '%s' in mode '%s'."),
@@ -20,7 +20,7 @@ public enum BasicModeAutomataError implements Error {
   private final String errorCode;
   private final String errorMessage;
 
-  BasicModeAutomataError(String errorCode, String errorMessage) {
+  ModesError(String errorCode, String errorMessage) {
     assert (errorCode != null);
     assert (errorMessage != null);
     assert (ERROR_CODE_PATTERN.matcher(errorCode).matches());

@@ -87,13 +87,6 @@ Legend:
 
 | in MA | CoCo(s)                   | Language          | Code                      | Notes |
 |-------|---------------------------|-------------------|---------------------------|-------|
-| ☑     | InitialModeExists         | BasicModeAutomata | 0xC1080                   |       |
-| ☑     | NoHierarchicalModes       | BasicModeAutomata | 0xC1076                   |       |
-| ☑     | NoModesInAtomicComponents | BasicModeAutomata | 0xC1079                   |       |
-| ☑     | NoModesWithoutAutomata    | BasicModeAutomata | 0xC1078                   |       |
-| ☑     | OneModeAutomatonAtMax     | BasicModeAutomata | 0xC1077                   |       |
-| ☑     | StaticCheckOfDynamicTypes | BasicModeAutomata | 0xC1072                   |       |
-| ☑     | UniqueNamesInModes        | BasicModeAutomata | 0xC1073, 0xC1074, 0xC1075 |       |
 
 ## Automaton CoCos
 
