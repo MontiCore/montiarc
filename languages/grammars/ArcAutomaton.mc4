@@ -13,4 +13,5 @@ component grammar ArcAutomaton extends ArcBasis,
       SCStatechartElement*
     "}";
 
+  MsgEvent implements SCEvent = name:Name;
 }
