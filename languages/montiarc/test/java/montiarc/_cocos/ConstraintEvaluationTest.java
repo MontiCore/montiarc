@@ -1,135 +1,153 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcbasis.ArcBasisMill;
-import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import com.google.common.base.Preconditions;
-import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
+import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
 import montiarc.util.VariableArcError;
+import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mockito;
-import variablearc._ast.ASTArcConstraintDeclaration;
+import org.junit.jupiter.params.provider.ValueSource;
 import variablearc._cocos.ConstraintSatisfied4Comp;
 
-import java.util.Collections;
+import java.io.IOException;
 import java.util.stream.Stream;
 
-public class ConstraintEvaluationTest extends AbstractCoCoTest {
+/**
+ * The class under test is {@link ConstraintSatisfied4Comp}.
+ */
+public class ConstraintEvaluationTest extends MontiArcAbstractTest {
 
-  protected ASTComponentType getComponentWithConstraint(
-      ASTArcConstraintDeclaration constraint) {
-    ASTComponentType componentType = MontiArcMill.componentTypeBuilder()
-        .setName("comp1").setHead(Mockito.mock(ASTComponentHead.class))
-        .setBody(MontiArcMill.componentBodyBuilder()
-            .setArcElementsList(Collections.singletonList(constraint)).build())
-        .build();
-    ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
-
-    symTab.createFromAST(componentType);
-
-    return componentType;
-  }
-
-  @Test
-  public void constraintFalse() {
-    // Given
-    ASTArcConstraintDeclaration constraint = MontiArcMill.arcConstraintDeclarationBuilder()
-        .setExpression(
-            MontiArcMill
-                .literalExpressionBuilder()
-                .setLiteral(MontiArcMill.booleanLiteralBuilder()
-                    .setSource(ASTConstantsMCCommonLiterals.FALSE).build())
-                .build())
-        .build();
-
-    ASTComponentType comp = getComponentWithConstraint(constraint);
-
-    ConstraintSatisfied4Comp coco = new ConstraintSatisfied4Comp();
-
-    // When
-    coco.check(comp);
-
-    // Then
-    this.checkOnlyExpectedErrorsPresent(VariableArcError.CONSTRAINT_NOT_SATISFIED);
-  }
-
-  @Test
-  public void constraintTrue() {
-    // Given
-    ASTArcConstraintDeclaration constraint = MontiArcMill.arcConstraintDeclarationBuilder()
-        .setExpression(
-            MontiArcMill
-                .literalExpressionBuilder()
-                .setLiteral(MontiArcMill.booleanLiteralBuilder()
-                    .setSource(ASTConstantsMCCommonLiterals.TRUE).build())
-                .build())
-        .build();
-
-    ASTComponentType comp = getComponentWithConstraint(constraint);
-
-    ConstraintSatisfied4Comp coco = new ConstraintSatisfied4Comp();
-
-    // When
-    coco.check(comp);
-
-    // Then
-    this.checkOnlyExpectedErrorsPresent();
-  }
-
-  @BeforeEach
-  public void prepareModels() {
-    loadComponentsToInstantiate();
-  }
-
-  public void loadComponentsToInstantiate() {
-    // loading helper models into the symboltable
-    this.parseAndCreateAndCompleteSymbols("ComponentWithBooleanParameterAsConstraint.arc");
-    this.parseAndCreateAndCompleteSymbols("ComponentWithFeatureAsConstraint.arc");
-  }
-
-  protected static Stream<Arguments> modelAndExpectedErrorsProvider() {
-    return Stream.of(
-        arg("AllConstraintsSatisfiable.arc"),
-        arg("SatisfiedInstanceConstraints.arc"),
-        arg("NeverSatisfiedConstraints.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED),
-        arg("NeverSatisfiedConstraintsWithParameter.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED),
-        arg("NeverSatisfiedInstanceConstraints.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED),
-        arg("NeverSatisfiedTransitiveInstanceConstraints.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED),
-        arg("NeverSatisfiedNestedInstanceConstraints.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED),
-        arg("NeverSatisfiedInstanceFeatureConstraints.arc", VariableArcError.CONSTRAINT_NOT_SATISFIED)
-    );
-  }
-
-  protected static Arguments arg(@NotNull String model, @NotNull Error... errors) {
+  @ParameterizedTest
+  @ValueSource(strings = {
+    // no constraint
+    "component Comp1 { }",
+    // tautology constraint
+    "component Comp2 { constraint(true); }",
+    // feature constraint satisfiable
+    "component Comp3 { feature f; constraint(f); } ",
+    // parameter constraint satisfiable
+    "component Comp4(boolean p) { constraint(p); } ",
+    // feature constraint of instance satisfied
+    "component Comp5 { " +
+      "component Inner { " +
+      "feature f; " +
+      "constraint(f); " +
+      "} " +
+      "Inner sub; " +
+      "constraint(sub.f); " +
+      "}",
+    // parameter constraint of instance satisfied
+    "component Comp6 { " +
+      "component Inner(boolean p) { " +
+      "constraint(p); " +
+      "} " +
+      "Inner sub(true); " +
+      "}",
+    // parameter constraint of instance depth 2 satisfied
+    "component Comp7 { " +
+      "component Inner1(boolean p) { " +
+      "component Inner2(boolean p) { " +
+      "constraint(p); " +
+      "} " +
+      "Inner2 sub(p); " +
+      "} " +
+      "Inner1 sub(true); " +
+      "}"
+  })
+  public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
-    Preconditions.checkNotNull(errors);
-    return Arguments.of(model, errors);
-  }
 
-  @Override
-  protected String getPackage() {
-    return "constraintEvaluation";
-  }
+    // Given
+    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
 
-  @Override
-  protected void registerCoCos(MontiArcCoCoChecker checker) {
-    Preconditions.checkNotNull(checker);
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new ConstraintSatisfied4Comp());
+
+    // When
+    checker.checkAll(ast);
+
+    // Then
+    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
   }
 
   @ParameterizedTest
-  @MethodSource("modelAndExpectedErrorsProvider")
-  public void testInvalidModelHasErrors(@NotNull String model, @NotNull Error... errors) {
+  @MethodSource("invalidModels")
+  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
     Preconditions.checkNotNull(model);
-    testModel(model, errors);
+    Preconditions.checkNotNull(errors);
+
+    // Given
+    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
+
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ConstraintSatisfied4Comp());
+
+    // When
+    checker.checkAll(ast);
+
+    // Then
+    Assertions.assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
+    Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
+      .containsExactlyElementsOf(this.collectErrorCodes(errors));
+  }
+
+  protected static Stream<Arguments> invalidModels() {
+    return Stream.of(
+      // unsatisfiable constraint
+      arg("component Comp1 { constraint(false); }",
+        VariableArcError.CONSTRAINT_NOT_SATISFIED),
+      // feature constraint unsatisfiable
+      arg("component Comp2 { feature f; constraint(f && !f); } ",
+        VariableArcError.CONSTRAINT_NOT_SATISFIED),
+      // parameter constraint unsatisfiable
+      arg("component Comp3(boolean p) { constraint(p && !p); } ",
+        VariableArcError.CONSTRAINT_NOT_SATISFIED),
+      // feature constraint of instance unsatisfied
+      arg("component Comp4 { " +
+        "component Inner { " +
+        "feature f; " +
+        "constraint(f); " +
+        "} " +
+        "Inner sub; " +
+        "constraint(!sub.f); " +
+        "}",
+      VariableArcError.CONSTRAINT_NOT_SATISFIED),
+      // parameter constraint of instance unsatisfied
+      arg("component Comp5 { " +
+        "component Inner(boolean p) { " +
+        "constraint(p); " +
+        "} " +
+        "Inner sub(false); " +
+        "}",
+        VariableArcError.CONSTRAINT_NOT_SATISFIED),
+      // parameter constraint of instance unsatisfied
+      arg("component Comp6 { " +
+          "component Inner1(boolean p) { " +
+          "component Inner2(boolean p) { " +
+          "constraint(p); " +
+          "} " +
+          "Inner2 sub(p); " +
+          "} " +
+          "Inner1 sub(false); " +
+          "}",
+        VariableArcError.CONSTRAINT_NOT_SATISFIED),
+      // two unsatisfiable constraints
+      arg("component Comp7 { constraint(false); constraint (false); }",
+        VariableArcError.CONSTRAINT_NOT_SATISFIED),
+      // tautology and unsatisfiable constraint
+      arg("component Comp8 { constraint(true); constraint (false); }",
+        VariableArcError.CONSTRAINT_NOT_SATISFIED)
+    );
   }
 }
