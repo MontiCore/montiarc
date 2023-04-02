@@ -39,7 +39,7 @@ public class UniqueStatesTest extends MontiArcAbstractTest {
       "} " +
       "}",
     // multiple unique states
-    "component Comp3 { " +
+    "component Comp4 { " +
       "automaton { " +
       "initial state s1; " +
       "state s2; " +
@@ -47,7 +47,7 @@ public class UniqueStatesTest extends MontiArcAbstractTest {
       "} " +
       "}",
     // inner with same states
-    "component Comp4 { " +
+    "component Comp5 { " +
       "automaton { " +
       "initial state s; " +
       "} " +
