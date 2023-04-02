@@ -3,6 +3,7 @@ package montiarc.util;
 
 import de.monticore.scbasis._cocos.AtLeastOneInitialState;
 import de.monticore.scbasis._cocos.MaxOneInitialState;
+import de.monticore.scbasis._cocos.UniqueStates;
 
 import java.util.regex.Pattern;
 
@@ -12,7 +13,8 @@ import java.util.regex.Pattern;
  */
 public enum SCError implements Error {
   MORE_THAN_ONE_INITIAL_STATE(MaxOneInitialState.ERROR_CODE),
-  NO_INITIAL_STATE(AtLeastOneInitialState.ERROR_CODE);
+  NO_INITIAL_STATE(AtLeastOneInitialState.ERROR_CODE),
+  DUPLICATE_STATE(UniqueStates.ERROR_CODE);
 
   public static final Pattern ERROR_CODE_PATTERN = Pattern.compile("0xCC\\d{3}");
 
