@@ -56,6 +56,7 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCalculatorTest 
     ASTComponentType enclComp = encloseFieldInCompType(fieldDecl);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTablePass3Delegator().createFromAST(enclComp);
 
     FieldInitTypeFits coco = new FieldInitTypeFits(new ArcBasisTypeCalculator(), new TypeRelations());
     coco.check(field);
@@ -78,6 +79,7 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCalculatorTest 
     ASTComponentType enclComp = encloseFieldInCompType(fieldDecl);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTablePass3Delegator().createFromAST(enclComp);
 
     FieldInitTypeFits coco = new FieldInitTypeFits(new ArcBasisTypeCalculator(), new TypeRelations());
     coco.check(field);
@@ -100,6 +102,7 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCalculatorTest 
     ASTComponentType enclComp = encloseFieldInCompType(fieldDecl);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTablePass3Delegator().createFromAST(enclComp);
 
     FieldInitTypeFits coco = new FieldInitTypeFits(new ArcBasisTypeCalculator(), new TypeRelations());
     coco.check(field);
@@ -122,6 +125,7 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCalculatorTest 
     ASTComponentType enclComp = encloseFieldInCompType(fieldDecl);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTablePass3Delegator().createFromAST(enclComp);
 
     FieldInitTypeFits coco = new FieldInitTypeFits(new ArcBasisTypeCalculator(), new TypeRelations());
     coco.check(field);

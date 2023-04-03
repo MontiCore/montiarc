@@ -130,6 +130,7 @@ public abstract class MontiArcAbstractTest extends AbstractTest {
         .orElseThrow(() -> new IllegalStateException(Log.getFindings().toString()));
       MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
       MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
+      MontiArcMill.symbolTablePass3Delegator().createFromAST(ast);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

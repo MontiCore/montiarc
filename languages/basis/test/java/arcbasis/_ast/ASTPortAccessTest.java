@@ -45,6 +45,10 @@ public class ASTPortAccessTest extends ArcBasisAbstractTest {
     traverser.add4ArcBasis(ArcBasisMill.symbolTableCompleter());
     portAccess.accept(traverser);
 
+    traverser = ArcBasisMill.traverser();
+    traverser.add4ArcBasis(ArcBasisMill.symbolTablePass3());
+    portAccess.accept(traverser);
+
     //When
     ComponentInstanceSymbol resolvedSubcomponent = portAccess.getComponentSymbol();
 
@@ -67,6 +71,10 @@ public class ASTPortAccessTest extends ArcBasisAbstractTest {
     traverser.add4ArcBasis(ArcBasisMill.symbolTableCompleter());
     portAccess.accept(traverser);
 
+    traverser = ArcBasisMill.traverser();
+    traverser.add4ArcBasis(ArcBasisMill.symbolTablePass3());
+    portAccess.accept(traverser);
+
     //When
     ComponentInstanceSymbol resolvedSubcomponent = portAccess.getComponentSymbol();
 
@@ -87,6 +95,10 @@ public class ASTPortAccessTest extends ArcBasisAbstractTest {
 
     ArcBasisTraverser traverser = ArcBasisMill.traverser();
     traverser.add4ArcBasis(ArcBasisMill.symbolTableCompleter());
+    portAccess.accept(traverser);
+
+    traverser = ArcBasisMill.traverser();
+    traverser.add4ArcBasis(ArcBasisMill.symbolTablePass3());
     portAccess.accept(traverser);
 
     //When
@@ -120,6 +132,10 @@ public class ASTPortAccessTest extends ArcBasisAbstractTest {
 
     ArcBasisTraverser traverser = ArcBasisMill.traverser();
     traverser.add4ArcBasis(ArcBasisMill.symbolTableCompleter());
+    portAccess.accept(traverser);
+
+    traverser = ArcBasisMill.traverser();
+    traverser.add4ArcBasis(ArcBasisMill.symbolTablePass3());
     portAccess.accept(traverser);
 
     //When

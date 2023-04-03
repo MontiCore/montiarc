@@ -7,6 +7,7 @@ import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
+import arcbasis._symboltable.ArcBasisSymbolTablePass3Delegator;
 import com.google.common.base.Preconditions;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import montiarc.util.ArcError;
@@ -48,6 +49,7 @@ public class SubPortsConnectedTest extends ArcBasisAbstractTest {
   public void setUpTest() {
     ArcBasisScopesGenitorDelegator genitor = ArcBasisMill.scopesGenitorDelegator();
     ArcBasisSymbolTableCompleterDelegator completer = ArcBasisMill.symbolTableCompleterDelegator();
+    ArcBasisSymbolTablePass3Delegator pass3 = ArcBasisMill.symbolTablePass3Delegator();
 
     ASTComponentType comp1 = ArcBasisMill.componentTypeBuilder().setName("A")
       .setHead(Mockito.mock(ASTComponentHead.class))
@@ -120,6 +122,10 @@ public class SubPortsConnectedTest extends ArcBasisAbstractTest {
     completer.createFromAST(comp1);
     completer.createFromAST(comp2);
     completer.createFromAST(comp3);
+
+    pass3.createFromAST(comp1);
+    pass3.createFromAST(comp2);
+    pass3.createFromAST(comp3);
 
     components = new HashMap<>();
     components.put(comp1.getName(), comp1);

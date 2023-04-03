@@ -70,6 +70,7 @@ public class IdentifiersAreNoJavaKeywordsTest {
     ASTMACompilationUnit ast = MontiArcMill.parser().parse(modelLocation.toString()).orElseThrow();
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
+    MontiArcMill.symbolTablePass3Delegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new IdentifiersAreNoJavaKeywords.AutomatonStateNamesAreNoJavaKeywords());

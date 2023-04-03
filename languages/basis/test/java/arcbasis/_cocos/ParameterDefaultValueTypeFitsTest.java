@@ -81,6 +81,7 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
     ASTComponentType enclComp = encloseParamInCompType(param);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTablePass3Delegator().createFromAST(enclComp);
 
     ParameterDefaultValueTypeFits coco = new ParameterDefaultValueTypeFits(new ArcBasisTypeCalculator(), new TypeRelations());
 
@@ -103,6 +104,7 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
     ASTComponentType enclComp = encloseParamInCompType(param);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTablePass3Delegator().createFromAST(enclComp);
 
     ParameterDefaultValueTypeFits coco = new ParameterDefaultValueTypeFits(new ArcBasisTypeCalculator(), new TypeRelations());
 
@@ -125,6 +127,7 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
     ASTComponentType enclComp = encloseParamInCompType(param);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTablePass3Delegator().createFromAST(enclComp);
 
     ParameterDefaultValueTypeFits coco = new ParameterDefaultValueTypeFits(new ArcBasisTypeCalculator(), new TypeRelations());
 
@@ -147,6 +150,7 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
     ASTComponentType enclComp = encloseParamInCompType(param);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTablePass3Delegator().createFromAST(enclComp);
 
     ParameterDefaultValueTypeFits coco = new ParameterDefaultValueTypeFits(new ArcBasisTypeCalculator(), new TypeRelations());
 
@@ -168,6 +172,7 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
     ASTComponentType enclComp = encloseParamInCompType(param);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(enclComp);
+    ArcBasisMill.symbolTablePass3Delegator().createFromAST(enclComp);
 
     ParameterDefaultValueTypeFits coco = new ParameterDefaultValueTypeFits(new ArcBasisTypeCalculator(), new TypeRelations());
 

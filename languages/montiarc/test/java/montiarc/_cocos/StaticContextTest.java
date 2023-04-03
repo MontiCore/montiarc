@@ -45,6 +45,8 @@ public class StaticContextTest extends MontiArcAbstractTest {
     MontiArcMill.globalScope().setSymbolPath(new MCPath(Paths.get(RELATIVE_MODEL_PATH, TEST_MODEL_PATH)));
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
+    MontiArcMill.symbolTablePass3Delegator().createFromAST(ast);
+
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new ComponentArgumentsOmitPortRef());
@@ -96,6 +98,7 @@ public class StaticContextTest extends MontiArcAbstractTest {
     MontiArcMill.globalScope().setSymbolPath(new MCPath(Paths.get(RELATIVE_MODEL_PATH, TEST_MODEL_PATH)));
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
+    MontiArcMill.symbolTablePass3Delegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new ComponentArgumentsOmitPortRef());

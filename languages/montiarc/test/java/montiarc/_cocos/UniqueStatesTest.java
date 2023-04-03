@@ -65,6 +65,7 @@ public class UniqueStatesTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
+    MontiArcMill.symbolTablePass3Delegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new UniqueStates());
@@ -86,6 +87,7 @@ public class UniqueStatesTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
+    MontiArcMill.symbolTablePass3Delegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new UniqueStates());

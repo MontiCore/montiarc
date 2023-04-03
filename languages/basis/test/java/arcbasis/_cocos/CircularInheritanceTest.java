@@ -8,6 +8,7 @@ import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
+import arcbasis._symboltable.ArcBasisSymbolTablePass3Delegator;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.junit.jupiter.api.Assertions;
@@ -33,6 +34,7 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
 
     ArcBasisMill.scopesGenitorDelegator().createFromAST(ast);
     ArcBasisMill.symbolTableCompleterDelegator().createFromAST(ast);
+    ArcBasisMill.symbolTablePass3Delegator().createFromAST(ast);
 
     CircularInheritance coco = new CircularInheritance();
 
@@ -65,6 +67,9 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
     ArcBasisSymbolTableCompleterDelegator stc = ArcBasisMill.symbolTableCompleterDelegator();
     stc.createFromAST(a);
     stc.createFromAST(b);
+    ArcBasisSymbolTablePass3Delegator st3 = ArcBasisMill.symbolTablePass3Delegator();
+    st3.createFromAST(a);
+    st3.createFromAST(b);
 
     CircularInheritance coco = new CircularInheritance();
 
@@ -98,6 +103,9 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
     ArcBasisSymbolTableCompleterDelegator stc = ArcBasisMill.symbolTableCompleterDelegator();
     stc.createFromAST(parent);
     stc.createFromAST(child);
+    ArcBasisSymbolTablePass3Delegator st3 = ArcBasisMill.symbolTablePass3Delegator();
+    st3.createFromAST(parent);
+    st3.createFromAST(child);
 
     CircularInheritance coco = new CircularInheritance();
 
@@ -130,6 +138,9 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
     ArcBasisSymbolTableCompleterDelegator stc = ArcBasisMill.symbolTableCompleterDelegator();
     stc.createFromAST(parent);
     stc.createFromAST(child);
+    ArcBasisSymbolTablePass3Delegator st3 = ArcBasisMill.symbolTablePass3Delegator();
+    st3.createFromAST(parent);
+    st3.createFromAST(child);
 
     CircularInheritance coco = new CircularInheritance();
 

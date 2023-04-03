@@ -8,10 +8,7 @@ import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
-import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
-import arcbasis._symboltable.SymbolService;
-import arcbasis._symboltable.TransitiveScopeSetter;
+import arcbasis._symboltable.*;
 import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.ArcBasisTypeCalculatorTest;
 import com.google.common.base.Preconditions;
@@ -36,6 +33,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
 
   protected ArcBasisScopesGenitorDelegator scopeGenitor;
   protected ArcBasisSymbolTableCompleterDelegator completer;
+  protected ArcBasisSymbolTablePass3Delegator pass3;
   protected final static TransitiveScopeSetter scopeSetter = new TransitiveScopeSetter();
 
   @Override
@@ -43,6 +41,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
     super.setUpScope();
     this.scopeGenitor = ArcBasisMill.scopesGenitorDelegator();
     this.completer = ArcBasisMill.symbolTableCompleterDelegator();
+    this.pass3 = ArcBasisMill.symbolTablePass3Delegator();
   }
 
   @Override
@@ -73,11 +72,13 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
     // Given
     this.scopeGenitor.createFromAST(toInstantiate);
     this.completer.createFromAST(toInstantiate);
+    this.pass3.createFromAST(toInstantiate);
 
     ASTComponentInstantiation compInst = provideInstantiation(toInstantiate, "foo", instantiationArgs);
     ASTComponentType enclComp = encloseInstInCompType(compInst);
     this.scopeGenitor.createFromAST(enclComp);
     this.completer.createFromAST(enclComp);
+    this.pass3.createFromAST(toInstantiate);
 
     // When
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment(new ArcBasisTypeCalculator(), new TypeRelations());
