@@ -3,6 +3,7 @@ package montiarc.util;
 
 import de.monticore.scbasis._cocos.AtLeastOneInitialState;
 import de.monticore.scbasis._cocos.MaxOneInitialState;
+import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
 import de.monticore.scbasis._cocos.UniqueStates;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 
@@ -16,7 +17,9 @@ public enum SCError implements Error {
   MORE_THAN_ONE_INITIAL_STATE(MaxOneInitialState.ERROR_CODE),
   NO_INITIAL_STATE(AtLeastOneInitialState.ERROR_CODE),
   DUPLICATE_STATE(UniqueStates.ERROR_CODE),
-  PRECONDITION_NOT_BOOLEAN(TransitionPreconditionsAreBoolean.ERROR_CODE);
+  PRECONDITION_NOT_BOOLEAN(TransitionPreconditionsAreBoolean.ERROR_CODE),
+  MISSING_SOURCE_STATE(TransitionSourceTargetExists.SOURCE_ERROR_CODE),
+  MISSING_TARGET_STATE(TransitionSourceTargetExists.TARGET_ERROR_CODE);
 
   public static final Pattern ERROR_CODE_PATTERN = Pattern.compile("0xCC\\d{3}");
 
