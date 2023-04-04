@@ -25,7 +25,7 @@ or via integration of handcrafted code. For composed components, the behavior em
 ### Prerequisites 
 - Git (for checking out the project)
 - Gradle 7.5.0 (for building the project)
-- Java 17 (for building and executing the project)
+- Java 11 (for building and executing the project)
 
 ### Installation
 
