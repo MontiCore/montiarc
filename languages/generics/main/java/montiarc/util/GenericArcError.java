@@ -8,7 +8,7 @@ package montiarc.util;
  * Assigned code range: 0xC1200 - 0xC1249
  */
 public enum GenericArcError implements Error {
-  TYPE_PARAMETER_UPPER_CASE_LETTER("0xC1201", "The generic type parameter '%s' of component '%s'"
+  TYPE_PARAMETER_UPPER_CASE("0xC1201", "The generic type parameter '%s' of component '%s'"
       + " should start with an upper case letter."),
   TYPE_ARG_IGNORES_UPPER_BOUND("0xC1202", "Type argument '%s' does not respect upper bound '%s' for type parameter " +
       "'%s' of component type component type"),

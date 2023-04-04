@@ -20,7 +20,7 @@ public class GenericTypeParameterNameCapitalization implements GenericArcASTArcT
 
     Preconditions.checkNotNull(typeParameter);
     if (NameCapitalizationHelper.isNotUpperCase(typeParameter.getName())) {
-      NameCapitalizationHelper.warning(GenericArcError.TYPE_PARAMETER_UPPER_CASE_LETTER, typeParameter,
+      NameCapitalizationHelper.warning(GenericArcError.TYPE_PARAMETER_UPPER_CASE, typeParameter,
         typeParameter.getName(), typeParameter.getEnclosingScope().getSpanningSymbol().getName());
     }
   }

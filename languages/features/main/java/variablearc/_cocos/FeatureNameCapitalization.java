@@ -16,7 +16,7 @@ public class FeatureNameCapitalization implements VariableArcASTArcFeatureCoCo {
   public void check(@NotNull ASTArcFeature feature) {
     Preconditions.checkNotNull(feature);
     if (NameCapitalizationHelper.isNotLowerCase(feature.getName())) {
-      NameCapitalizationHelper.warning(VariableArcError.FEATURE_LOWER_CASE, feature);
+      NameCapitalizationHelper.warning(VariableArcError.FEATURE_UPPER_CASE, feature);
     }
   }
 }

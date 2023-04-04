@@ -190,12 +190,12 @@ public class NamesCapitalizationTest extends MontiArcAbstractTest {
         ArcError.SUBCOMPONENT_UPPER_CASE),
       // lowercase type-parameter
       arg("component Comp7<t> { }",
-        GenericArcError.TYPE_PARAMETER_UPPER_CASE_LETTER),
+        GenericArcError.TYPE_PARAMETER_UPPER_CASE),
       // uppercase feature
       arg("component Comp8 { " +
           "feature F; " +
           "}",
-        VariableArcError.FEATURE_LOWER_CASE),
+        VariableArcError.FEATURE_UPPER_CASE),
       // one of each wrongly capitalized
       arg("component Comp9<t> (int P) { " +
           "port in int I; " +
@@ -204,13 +204,13 @@ public class NamesCapitalizationTest extends MontiArcAbstractTest {
           "inner Sub; " +
           "feature F; " +
           "} ",
-        GenericArcError.TYPE_PARAMETER_UPPER_CASE_LETTER,
+        GenericArcError.TYPE_PARAMETER_UPPER_CASE,
         ArcError.PARAMETER_UPPER_CASE,
         ArcError.PORT_UPPER_CASE,
         ArcError.FIELD_UPPER_CASE,
         ArcError.COMPONENT_LOWER_CASE,
         ArcError.SUBCOMPONENT_UPPER_CASE,
-        VariableArcError.FEATURE_LOWER_CASE),
+        VariableArcError.FEATURE_UPPER_CASE),
       // uppercase parameter (inner component)
       arg("component Comp10 { " +
           "component Inner(int P) { } " +
@@ -249,14 +249,14 @@ public class NamesCapitalizationTest extends MontiArcAbstractTest {
       arg("component Comp15 { " +
           "component Inner<t> { } " +
           "}",
-        GenericArcError.TYPE_PARAMETER_UPPER_CASE_LETTER),
+        GenericArcError.TYPE_PARAMETER_UPPER_CASE),
       // uppercase feature (inner component)
       arg("component Comp16 { " +
           "component Inner { " +
           "feature F; " +
           "} " +
           "}",
-        VariableArcError.FEATURE_LOWER_CASE)
+        VariableArcError.FEATURE_UPPER_CASE)
     );
   }
 }

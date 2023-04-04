@@ -10,7 +10,7 @@ package montiarc.util;
 public enum VariableArcError implements Error {
   CONSTRAINT_EXPRESSION_WRONG_TYPE("0xC1400", "Incompatible types: '%s' cannot be converted to 'boolean'"),
   CONSTRAINT_NOT_SATISFIED("0xC1401", "Constraints are not satisfied"),
-  FEATURE_LOWER_CASE("0xC1402", "Feature names should start with a lower case letter"),
+  FEATURE_UPPER_CASE("0xC1402", "Feature names should start with a lower case letter"),
   FEATURE_UNUSED("0xC1403", "Feature '%s' is never used"),
   IF_STATEMENT_EXPRESSION_WRONG_TYPE("0xC1404", "Incompatible types: '%s' cannot be converted to 'boolean'"),
   ILLEGAL_USE("0xC1405", "The element '%s' of component '%s' cannot be used in the context of '%s'"),
