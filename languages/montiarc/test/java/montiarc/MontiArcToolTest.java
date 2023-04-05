@@ -13,6 +13,7 @@ import montiarc._symboltable.MontiArcArtifactScope;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import montiarc.util.MontiArcError;
+import montiarc.util.VariableArcError;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -811,7 +812,8 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
       Arguments.of("missingCompType",
         new Error[]{ArcError.MISSING_COMPONENT, ArcError.MISSING_COMPONENT}),
       // Arguments.of("missingPortType", new Error[] {ArcError.MISSING_TYPE}),
-      Arguments.of("circularInheritance", new Error[]{ArcError.CIRCULAR_INHERITANCE})
+      Arguments.of("circularInheritance", new Error[]{ArcError.CIRCULAR_INHERITANCE}),
+      Arguments.of("missingVariable", new Error[]{VariableArcError.CONSTRAINT_EXPRESSION_WRONG_TYPE})
     );
   }
 }

@@ -4,6 +4,7 @@ package variablearc._symboltable;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
+import com.microsoft.z3.Z3Exception;
 import de.monticore.symboltable.ISymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.evaluation.VariationPointSolver;
@@ -36,12 +37,16 @@ public class VariableComponentTypeSymbol extends ComponentTypeSymbol {
    */
   public List<VariantComponentTypeSymbol> getVariants() {
     if (variants == null) {
-      calculateVariants();
+      try {
+        calculateVariants();
+      } catch (Z3Exception ignored) {
+        variants = Collections.emptyList();
+      }
     }
     return variants;
   }
 
-  protected void calculateVariants() {
+  protected void calculateVariants() throws Z3Exception {
     variants = new ArrayList<>();
     VariationPointSolver vpSolver = new VariationPointSolver(this);
 
