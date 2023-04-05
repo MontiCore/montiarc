@@ -1,15 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc._cocos;
+package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTComponentInstance;
-import arcbasis._cocos.ArcBasisASTComponentInstanceCoCo;
 import arcbasis._visitor.ConfigurationArgumentAssignmentVisitor;
 import com.google.common.base.Preconditions;
+import de.monticore.expressions.assignmentexpressions.AssignmentExpressionsMill;
+import de.monticore.expressions.assignmentexpressions._visitor.AssignmentExpressionsTraverser;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcMill;
-import montiarc._visitor.MontiArcTraverser;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -36,16 +35,16 @@ public class ParameterOmitAssignmentExpressions implements ArcBasisASTComponentI
       return;
     }
 
-    List<ASTExpression> instantiationArgs = instance
+    List<ASTExpression> args = instance
       .getArcArguments().getArcArgumentList().stream()
       .map(ASTArcArgument::getExpression)
       .collect(Collectors.toList());
 
     ConfigurationArgumentAssignmentVisitor visitor = new ConfigurationArgumentAssignmentVisitor();
-    MontiArcTraverser traverser = MontiArcMill.traverser();
+    AssignmentExpressionsTraverser traverser = AssignmentExpressionsMill.traverser();
     traverser.add4AssignmentExpressions(visitor);
 
-    for (ASTExpression arg : instantiationArgs) {
+    for (ASTExpression arg : args) {
       arg.accept(traverser);
       if (visitor.hasAssignment()) {
         Log.error(ArcError.COMP_ARG_MULTI_ASSIGNMENT.toString(),

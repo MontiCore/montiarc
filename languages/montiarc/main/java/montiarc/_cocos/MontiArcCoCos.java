@@ -17,6 +17,7 @@ import arcbasis._cocos.FeedbackStrongCausality;
 import arcbasis._cocos.FieldInitTypeFits;
 import arcbasis._cocos.FieldInitOmitPortReferences;
 import arcbasis._cocos.FieldNameCapitalization;
+import arcbasis._cocos.ParameterOmitAssignmentExpressions;
 import arcbasis._cocos.PortHeritageTypeFits;
 import arcbasis._cocos.ComponentArgumentsOmitPortRef;
 import arcbasis._cocos.SubcomponentNameCapitalization;
