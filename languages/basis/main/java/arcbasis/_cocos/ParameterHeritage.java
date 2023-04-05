@@ -70,7 +70,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
       ASTExpression lastIllegalArg = parentArgs.get(parentArgs.size() - 1);
 
       Log.error(ArcError.TOO_MANY_ARGUMENTS_HERITAGE.format(
-          parentArgs.size(), comp.getName(), parent.printName(), paramsOfParentCompType.size()
+          paramsOfParentCompType.size(), parentArgs.size()
       ), firstIllegalArg.get_SourcePositionStart(), lastIllegalArg.get_SourcePositionEnd());
     }
   }
@@ -103,7 +103,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
           comp.getAstNode().get_SourcePositionEnd();
 
       Log.error(ArcError.TOO_FEW_ARGUMENTS_HERITAGE.format(
-          parentArgs.size(), comp.getName(), parent.printName(), mandatoryParamsAmount
+        mandatoryParamsAmount, parentArgs.size()
       ), lastArgumentPos);
     }
   }
@@ -148,8 +148,9 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
           !tr.compatible(parentSignature.get(i).get(), parentArgs.get(i).getResult())) {
         ASTExpression incompatibleArgument = comp.getParentConfiguration().get(i);
 
-        Log.error(ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH.format(parentArgs.get(i).getResult().print(),
-            parentSignature.get(i).map(SymTypeExpression::print).orElse("UNKNOWN")),
+        Log.error(ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH.format(
+          parentSignature.get(i).map(SymTypeExpression::print).orElse("UNKNOWN"),
+            parentArgs.get(i).getResult().print()),
           incompatibleArgument.get_SourcePositionStart(), incompatibleArgument.get_SourcePositionEnd()
         );
       }
