@@ -223,7 +223,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
         String argumentKey = instantiationArgs.get(i).getName();
         int paramIndex = paramIndices.get(argumentKey);
         if (paramIndex<posArgsAmount){
-          Log.error(ArcError.MULTIPLE_COMP_ARG_VALUES.format(argumentKey),
+          Log.error(ArcError.COMP_ARG_MULTIPLE_VALUES.format(argumentKey),
             instantiationArgs.get(i).get_SourcePositionStart(), instantiationArgs.get(i).get_SourcePositionEnd()
           );
         }
@@ -265,7 +265,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
         keywordAssignmentPresent=true;
       }else{
         if(keywordAssignmentPresent) {
-          Log.error(ArcError.POSITIONAL_ASSIGNMENT_AFTER_KEY.format(
+          Log.error(ArcError.COMP_ARG_VALUE_AFTER_KEY.format(
                           instance.getName()), argument.get_SourcePositionStart(),
                   argument.get_SourcePositionEnd());
           rightArgumentOrder=false;

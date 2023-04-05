@@ -53,18 +53,18 @@ public class PortHeritageTypeFits implements ArcBasisASTComponentTypeCoCo {
       // then check if their types fit
       if (port.isIncoming()) {
         if (!tr.compatible(inheritedPortType.get(), port.getType())) {
-          Log.error(ArcError.IN_PORT_HERITAGE_TYPE_MISMATCH.toString(), port.getSourcePosition());
+          Log.error(ArcError.HERITAGE_IN_PORT_TYPE_MISMATCH.toString(), port.getSourcePosition());
         }
       } else {
         if (!tr.compatible(port.getType(), inheritedPortType.get())) {
-          Log.error(ArcError.OUT_PORT_HERITAGE_TYPE_MISMATCH.toString(), port.getSourcePosition());
+          Log.error(ArcError.HERITAGE_OUT_PORT_TYPE_MISMATCH.toString(), port.getSourcePosition());
         }
       }
 
       // check direction fits
       Optional<PortSymbol> inheritedPort = parent.getTypeInfo().getPort(port.getName(), true);
       if (inheritedPort.isPresent() && inheritedPort.get().isIncoming() != port.isIncoming()) {
-        Log.error(ArcError.PORT_HERITAGE_DIRECTION_MISMATCH.toString(), port.getSourcePosition());
+        Log.error(ArcError.HERITAGE_PORT_DIRECTION_MISMATCH.toString(), port.getSourcePosition());
       }
     }
   }

@@ -221,22 +221,22 @@ public class ParameterHeritageTest extends MontiArcAbstractTest {
     return Stream.of(
       // one argument too many, no super parameter
       arg("component Comp1 extends a.b.A(1) { }",
-        ArcError.TOO_MANY_ARGUMENTS_HERITAGE),
+        ArcError.HERITAGE_TOO_MANY_ARGUMENTS),
       // missing single mandatory argument
       arg("component Comp2 extends a.b.B { }",
-        ArcError.TOO_FEW_ARGUMENTS_HERITAGE),
+        ArcError.HERITAGE_TOO_FEW_ARGUMENTS),
       // one mandatory argument type mismatch
       arg("component Comp3 extends a.b.B(true) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument type mismatch (key assign)
       //arg("component Comp4 extends a.b.B(p = true) { }",
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
       // one argument too many (one mandatory parameter)
       arg("component Comp5 extends a.b.B(1, 2) { }",
-        ArcError.TOO_MANY_ARGUMENTS_HERITAGE),
+        ArcError.HERITAGE_TOO_MANY_ARGUMENTS),
       // one argument too many (one mandatory parameter, key assign first)
       arg("component Comp6 extends a.b.B(p = 1, 2) { }",
-        ArcError.TOO_MANY_ARGUMENTS_HERITAGE),
+        ArcError.HERITAGE_TOO_MANY_ARGUMENTS),
       // one argument too many (one mandatory parameter, key assign second)
       //arg("component Comp7 extends a.b.B(1, p = 2) { }",
       //  ArcError.HERITAGE_ARG_ASSIGNED_TWICE),
@@ -245,8 +245,8 @@ public class ParameterHeritageTest extends MontiArcAbstractTest {
       //  ArcError.HERITAGE_KEY_ARG_REPEATED),
       // one mandatory argument type mismatch and one argument too many (one mandatory parameter)
       arg("component Comp9 extends a.b.B(true, 2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH,
-        ArcError.TOO_MANY_ARGUMENTS_HERITAGE),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH,
+        ArcError.HERITAGE_TOO_MANY_ARGUMENTS),
       // one mandatory argument type mismatch and one argument too many (one mandatory parameter, key assign first)
       //arg("component Comp10 extends a.b.B(p = true, 2) { }",
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH,
@@ -259,16 +259,16 @@ public class ParameterHeritageTest extends MontiArcAbstractTest {
       //  ArcError.HERITAGE_KEY_ARG_REPEATED),
       // one optional argument type mismatch
       arg("component Comp13 extends a.b.C(true) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one optional argument type mismatch (key assign)
       //arg("component Comp14 extends a.b.C(p = true) { }",
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
       // one argument too many (one optional parameter)
       arg("component Comp15 extends a.b.C(1, 2) { }",
-        ArcError.TOO_MANY_ARGUMENTS_HERITAGE),
+        ArcError.HERITAGE_TOO_MANY_ARGUMENTS),
       // one argument too many (one optional parameter, key assign first)
       arg("component Comp16 extends a.b.C(p = 1, 2) { }",
-        ArcError.TOO_MANY_ARGUMENTS_HERITAGE),
+        ArcError.HERITAGE_TOO_MANY_ARGUMENTS),
       // one argument too many (one optional parameter, key assign second)
       //arg("component Comp17 extends a.b.C(1, p = 2) { }",
       //  ArcError.HERITAGE_ARG_ASSIGNED_TWICE),
@@ -277,8 +277,8 @@ public class ParameterHeritageTest extends MontiArcAbstractTest {
       //  ArcError.HERITAGE_KEY_ARG_REPEATED),
       // one optional argument type mismatch and one argument too many
       arg("component Comp19 extends a.b.C(true, 2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH,
-        ArcError.TOO_MANY_ARGUMENTS_HERITAGE),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH,
+        ArcError.HERITAGE_TOO_MANY_ARGUMENTS),
       // one optional argument type mismatch and one argument too many (one optional parameter, key assign first)
       //arg("component Comp20 extends a.b.C(p = true, 2) { }",
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH,
@@ -291,13 +291,13 @@ public class ParameterHeritageTest extends MontiArcAbstractTest {
       //  ArcError.HERITAGE_KEY_ARG_REPEATED),
       // two arguments too many (one optional parameter)
       arg("component Comp23 extends a.b.C(1, 2, 3) { }",
-        ArcError.TOO_MANY_ARGUMENTS_HERITAGE),
+        ArcError.HERITAGE_TOO_MANY_ARGUMENTS),
       // missing one mandatory argument (one mandatory and one optional parameter)
       arg("component Comp24 extends a.b.D { }",
-        ArcError.TOO_FEW_ARGUMENTS_HERITAGE),
+        ArcError.HERITAGE_TOO_FEW_ARGUMENTS),
       // one mandatory argument type mismatch (one mandatory and one optional parameter)
       arg("component Comp25 extends a.b.D(true) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument type mismatch (one mandatory and one optional parameter, key assign first)
       //arg("component Comp26 extends a.b.D(p1 = true) { }",
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
@@ -311,20 +311,20 @@ public class ParameterHeritageTest extends MontiArcAbstractTest {
       //  ArcError.TOO_FEW_ARGUMENTS_HERITAGE),
       // one mandatory argument type mismatch
       arg("component Comp29 extends a.b.D(true, false) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument and one optional argument type mismatch
       arg("component Comp30 extends a.b.D(1, 2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory and one optional argument type mismatch
       arg("component Comp31 extends a.b.D(true, 2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH,
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH,
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument type mismatch and one optional argument (key assign first)
       //arg("component Comp32 extends a.b.D(p1 = true, false) { }",
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
       // one mandatory argument type mismatch and one optional argument (key assign second)
       arg("component Comp33 extends a.b.D(true, p2 = false) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument type mismatch and one optional argument (key assign both)
       //arg("component Comp34 extends a.b.D(p1 = true, p2 = false) { }",
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
@@ -357,26 +357,26 @@ public class ParameterHeritageTest extends MontiArcAbstractTest {
       //  ArcError.HERITAGE_ARG_ASSIGNED_TWICE),
       // one optional argument type mismatch (two optional parameters)
       arg("component Comp44 extends a.b.E(true) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one optional argument type mismatch (two optional parameters, key assign first)
       //arg("component Comp45 extends a.b.E(p1 = true) { }",
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
       // one optional argument type mismatch and one optional argument
       arg("component Comp46 extends a.b.E(true, false) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one optional argument and one optional argument type mismatch
       arg("component Comp47 extends a.b.E(1, 2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // two optional argument type mismatch
       arg("component Comp48 extends a.b.E(true, 2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH,
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH,
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one optional argument type mismatch and one optional argument (key assign first)
       //arg("component Comp49 extends a.b.E(p1 = true, false) { }",
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
       // one optional argument type mismatch and one optional argument (key assign second)
       arg("component Comp50 extends a.b.E(true, p2 = false) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one optional argument type mismatch and one optional argument (key assign both)
       //arg("component Comp51 extends a.b.E(p1 = true, p2 = false) { }",
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
@@ -406,20 +406,20 @@ public class ParameterHeritageTest extends MontiArcAbstractTest {
       //  ArcError.HERITAGE_KEY_ARG_REPEATED),
       // missing two mandatory arguments (two mandatory parameters)
       arg("component Comp60 extends a.b.F { }",
-        ArcError.TOO_FEW_ARGUMENTS_HERITAGE),
+        ArcError.HERITAGE_TOO_FEW_ARGUMENTS),
       // missing one mandatory argument (two mandatory parameters)
       arg("component Comp61 extends a.b.F(1) { }",
-        ArcError.TOO_FEW_ARGUMENTS_HERITAGE),
+        ArcError.HERITAGE_TOO_FEW_ARGUMENTS),
       // missing one mandatory argument (two mandatory parameters, key assign first)
       arg("component Comp62 extends a.b.F(p1 = 1) { }",
-        ArcError.TOO_FEW_ARGUMENTS_HERITAGE),
+        ArcError.HERITAGE_TOO_FEW_ARGUMENTS),
       // missing one mandatory argument (two mandatory parameters, key assign second)
       //arg("component Comp63 extends a.b.F(p2 = true) { }",
       //  ArcError.TOO_FEW_ARGUMENTS_HERITAGE),
       // one mandatory argument type mismatch (two mandatory parameters)
       arg("component Comp64 extends a.b.F(true) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH,
-        ArcError.TOO_FEW_ARGUMENTS_HERITAGE),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH,
+        ArcError.HERITAGE_TOO_FEW_ARGUMENTS),
       // one mandatory argument type mismatch (two mandatory parameters, key assign first)
       //arg("component Comp65 extends a.b.F(p1 = true) { }",
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH,
@@ -430,20 +430,20 @@ public class ParameterHeritageTest extends MontiArcAbstractTest {
       //  ArcError.TOO_FEW_ARGUMENTS_HERITAGE),
       // one mandatory argument type mismatch and one mandatory argument
       arg("component Comp67 extends a.b.F(true, false) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument and one mandatory argument type mismatch
       arg("component Comp68 extends a.b.F(1, 2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // two mandatory argument type mismatch
       arg("component Comp69 extends a.b.F(true, 2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH,
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH,
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument type mismatch and one mandatory argument (key assign first)
       //arg("component Comp70 extends a.b.F(p1 = true, false) { }",
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
       // one mandatory argument type mismatch and one mandatory argument (key assign second)
       arg("component Comp71 extends a.b.F(true, p2 = false) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument type mismatch and one mandatory argument (key assign both)
       //arg("component Comp72 extends a.b.F(p1 = true, p2 = false) { }",
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
@@ -473,25 +473,25 @@ public class ParameterHeritageTest extends MontiArcAbstractTest {
       //  ArcError.HERITAGE_KEY_ARG_REPEATED),
       // one mandatory argument generic type mismatch
       arg("component Comp81 extends a.b.G<int>(true) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument generic type mismatch (pass parameter)
       arg("component Comp82(boolean q) extends a.b.G<int>(q) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument generic type mismatch (pass generic parameter)
       arg("component Comp83<S>(S q) extends a.b.G<int>(q) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument generic type mismatch (pass parameter, same name)
       arg("component Comp84(boolean p) extends a.b.G<int>(p) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument generic type mismatch (pass generic parameter, same name)
       arg("component Comp85<S>(S p) extends a.b.G<int>(p) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument generic type mismatch (pass generic parameter, same type name)
       arg("component Comp86<T>(T q) extends a.b.G<int>(q) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument generic type mismatch (pass generic parameter, same name, same type name)
       arg("component Comp87<T>(T p) extends a.b.G<int>(p) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument generic type mismatch (pass parameter, key assign)
       //arg("component Comp88(boolean q) extends a.b.G<int>(p = q) { }",
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
@@ -500,46 +500,46 @@ public class ParameterHeritageTest extends MontiArcAbstractTest {
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
       // one mandatory argument generic type mismatch (pass parameter, same name, key assign)
       arg("component Comp90(boolean p) extends a.b.G<int>(p = p) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument generic type mismatch (pass generic parameter, same name, key assign)
       arg("component Comp91<S>(S p) extends a.b.G<int>(p = p) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // one mandatory argument generic type mismatch (pass generic parameter, same type name, key assign)
       //arg("component Comp92<T>(T q) extends a.b.G<int>(q = p) { }",
       //  ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
       // one mandatory argument generic type mismatch (pass generic parameter, same name, same type name, key assign)
       arg("component Comp93<T>(T p) extends a.b.G<int>(p = p) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // first of two mandatory arguments generic type mismatch
       arg("component Comp94 extends a.b.H<int, boolean>(true, false) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // second of two mandatory arguments generic type mismatch
       arg("component Comp95 extends a.b.H<int, boolean>(1 ,2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // two mandatory arguments generic type mismatch
       arg("component Comp96 extends a.b.H<int, boolean>(true ,2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH,
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH,
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // first of two mandatory arguments generic type mismatch (pass parameter)
       arg("component Comp97(boolean q1, boolean q2) extends a.b.H<int, boolean>(q1, q2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // second of two mandatory arguments generic type mismatch (pass parameter)
       arg("component Comp98(int q1, int q2) extends a.b.H<int, boolean>(q1, q2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // two mandatory arguments generic type mismatch (pass parameter)
       arg("component Comp99(boolean q1, int q2) extends a.b.H<int, boolean>(q1, q2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH,
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH,
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // first of two mandatory arguments generic type mismatch (pass generic parameter)
       arg("component Comp100<S, T>(S q1, T q2) extends a.b.H<T, T>(q1, q2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // second of two mandatory arguments generic type mismatch (pass generic parameter)
       arg("component Comp101<S, T>(S q1, T q2) extends a.b.H<S, S>(q1, q2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // two mandatory arguments generic type mismatch (pass generic parameter)
       arg("component Comp102<S, T>(S q1, T q2) extends a.b.H<T, S>(q1, q2) { }",
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH,
-        ArcError.COMP_ARG_HERITAGE_TYPE_MISMATCH)
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH,
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH)
     );
   }
 }

@@ -3,7 +3,6 @@ package montiarc._cocos;
 
 import arcbasis._cocos.PortHeritageTypeFits;
 import com.google.common.base.Preconditions;
-import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.check.TypeRelations;
 import de.se_rwth.commons.logging.Log;
@@ -151,32 +150,32 @@ public class PortHeritageTypeFitsTest extends MontiArcAbstractTest {
           "port in double i; " +
           "port out int o; " +
           "}",
-        ArcError.IN_PORT_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_IN_PORT_TYPE_MISMATCH),
       // heritage with overriding super ports (outgoing subtype)
       arg("component Comp2 extends a.b.B { " +
           "port in int i; " +
           "port out byte o; " +
           "}",
-        ArcError.OUT_PORT_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_OUT_PORT_TYPE_MISMATCH),
       // heritage with incoming and outgoing port type mismatch
       arg("component Comp3 extends a.b.B { " +
           "port in double i; " +
           "port out byte o; " +
           "}",
-        ArcError.IN_PORT_HERITAGE_TYPE_MISMATCH,
-        ArcError.OUT_PORT_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_IN_PORT_TYPE_MISMATCH,
+        ArcError.HERITAGE_OUT_PORT_TYPE_MISMATCH),
       // heritage with overriding generic typed ports (incoming supertype)
       arg("component Comp4 extends a.b.C<int> { " +
           "port in double i; " +
           "port out int o; " +
           "}",
-        ArcError.IN_PORT_HERITAGE_TYPE_MISMATCH),
+        ArcError.HERITAGE_IN_PORT_TYPE_MISMATCH),
       // heritage with overriding super ports (outgoing subtype)
       arg("component Comp5 extends a.b.C<int> { " +
           "port in int i; " +
           "port out byte o; " +
           "}",
-        ArcError.OUT_PORT_HERITAGE_TYPE_MISMATCH)
+        ArcError.HERITAGE_OUT_PORT_TYPE_MISMATCH)
     );
   }
 }

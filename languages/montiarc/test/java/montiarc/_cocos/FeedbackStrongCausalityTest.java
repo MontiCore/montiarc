@@ -83,8 +83,8 @@ public class FeedbackStrongCausalityTest extends MontiArcAbstractTest {
 
     // Then
     this.checkOnlyExpectedErrorsPresent(
-      ArcError.FEEDBACK_LOOP_CAUSALITY,
-      ArcError.FEEDBACK_LOOP_CAUSALITY
+      ArcError.FEEDBACK_CAUSALITY,
+      ArcError.FEEDBACK_CAUSALITY
     );
   }
 
