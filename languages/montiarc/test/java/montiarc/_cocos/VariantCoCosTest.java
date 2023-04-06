@@ -61,6 +61,8 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     compile("package a.b; component J { feature ff; if (ff) { port <<sync>> out int o; } else { port <<timed>> out int o; } }");
     compile("package a.b; component K { port in int i; port out int o1, <<delayed>> out int o2; } ");
     compile("package a.b; component L { port in int i; feature ff; if (ff) { port out int o; } else { port <<delayed>> out int o; } }");
+    compile("package a.b; component M { feature ff; if (ff) { port in int i; } }");
+    compile("package a.b; component N { feature ff; if (ff) { port out int o; } }");
   }
 
   @ParameterizedTest
@@ -408,18 +410,40 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "if (false) { " +
       "port in int i; " +
       "} " +
-      "a.b.A a; " +
-      "a.b.B b; " +
-      "b.o -> a.i; " +
+      "a.b.A sub1; " +
+      "a.b.B sub2; " +
+      "sub2.o -> sub1.i; " +
       "}",
     // out port unused, component with variable configuration, excluded variation point
     "component Comp40 { " +
       "if (false) { " +
       "port out int o; " +
       "} " +
-      "a.b.A a; " +
-      "a.b.B b; " +
-      "b.o -> a.i; " +
+      "a.b.A sub1; " +
+      "a.b.B sub2; " +
+      "sub2.o -> sub1.i; " +
+      "}",
+    // in port not connected, component with variable configuration, excluded variation point
+    "component Comp41 { " +
+      "if (false) { " +
+      "a.b.A sub; " +
+      "} " +
+      "}",
+    // out port not connected, component with variable configuration, excluded variation point
+    "component Comp42 { " +
+      "if (false) { " +
+      "a.b.B sub; " +
+      "} " +
+      "}",
+    // in port not connected, subcomponent with variable configuration (deselected feature)
+    "component Comp43 { " +
+      "a.b.M sub; " +
+      "constraint (!sub.ff); " +
+      "}",
+    // out port not connected, subcomponent with variable configuration (deselected feature)
+    "component Comp44 { " +
+      "a.b.N sub; " +
+      "constraint (!sub.ff); " +
       "}"
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
@@ -901,59 +925,160 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       // in port unused
       arg("component Comp44 { " +
           "port in int i; " +
-          "a.b.A a; " +
-          "a.b.B b; " +
-          "b.o -> a.i; " +
+          "a.b.A sub1; " +
+          "a.b.B sub2; " +
+          "sub2.o -> sub1.i; " +
           "}",
         ArcError.IN_PORT_UNUSED),
       // out port unused
       arg("component Comp45 { " +
           "port out int o; " +
-          "a.b.A a; " +
-          "a.b.B b; " +
-          "b.o -> a.i; " +
+          "a.b.A sub1; " +
+          "a.b.B sub2; " +
+          "sub2.o -> sub1.i; " +
           "}",
         ArcError.OUT_PORT_UNUSED),
-      // in port unused, component with variable configuration, included variation point
+      // ports unused
       arg("component Comp46 { " +
+          "port in int i; " +
+          "port out int o; " +
+          "a.b.A sub1; " +
+          "a.b.B sub2; " +
+          "sub2.o -> sub1.i; " +
+          "}",
+        ArcError.IN_PORT_UNUSED,
+        ArcError.OUT_PORT_UNUSED),
+      // in port unused, component with variable configuration, included variation point
+      arg("component Comp47 { " +
           "if (true) { " +
           "port in int i; " +
           "} " +
-          "a.b.A a; " +
-          "a.b.B b; " +
-          "b.o -> a.i; " +
+          "a.b.A sub1; " +
+          "a.b.B sub2; " +
+          "sub2.o -> sub1.i; " +
           "}",
         ArcError.IN_PORT_UNUSED),
       // out port unused, component with variable configuration, included variation point
-      arg("component Comp47 { " +
+      arg("component Comp48 { " +
           "if (true) { " +
           "port out int o; " +
           "} " +
-          "a.b.A a; " +
-          "a.b.B b; " +
-          "b.o -> a.i; " +
+          "a.b.A sub1; " +
+          "a.b.B sub2; " +
+          "sub2.o -> sub1.i; " +
           "}",
-        ArcError.OUT_PORT_UNUSED)
+        ArcError.OUT_PORT_UNUSED),
       // in port unused, component with variable configuration
-      /*arg("component Comp48 { " +
+      arg("component Comp49 { " +
           "feature f; " +
           "port in int i; " +
           "if (f) { " +
           "a.b.A sub; " +
           "i -> sub.i; " +
           "} " +
+          "a.b.A sub1; " +
+          "a.b.B sub2; " +
+          "sub2.o -> sub1.i; " +
           "}",
         ArcError.IN_PORT_UNUSED),
       // out port unused, component with variable configuration
-      arg("component Comp49 { " +
+      arg("component Comp50 { " +
           "feature f; " +
           "port out int o; " +
           "if (f) { " +
           "a.b.B sub; " +
           "sub.o -> o; " +
           "} " +
+          "a.b.A sub1; " +
+          "a.b.B sub2; " +
+          "sub2.o -> sub1.i; " +
           "}",
-        ArcError.OUT_PORT_UNUSED)*/
+        ArcError.OUT_PORT_UNUSED),
+      // in port not connected
+      arg("component Comp51 { " +
+          "a.b.A sub; " +
+          "}",
+        ArcError.IN_PORT_NOT_CONNECTED),
+      // out port not connected
+      arg("component Comp52 { " +
+          "a.b.B sub; " +
+          "}",
+        ArcError.OUT_PORT_NOT_CONNECTED),
+      // ports not connected
+      arg("component Comp53 { " +
+          "a.b.C sub; " +
+          "}",
+        ArcError.IN_PORT_NOT_CONNECTED,
+        ArcError.IN_PORT_NOT_CONNECTED,
+        ArcError.OUT_PORT_NOT_CONNECTED),
+      // in port not connected, component with variable configuration, included variation point
+      arg("component Comp54 { " +
+          "if (true) { " +
+          "a.b.A sub; " +
+          "} " +
+          "}",
+        ArcError.IN_PORT_NOT_CONNECTED),
+      // out port not connected, component with variable configuration, included variation point
+      arg("component Comp55 { " +
+          "if (true) { " +
+          "a.b.B sub; " +
+          "} " +
+          "}",
+        ArcError.OUT_PORT_NOT_CONNECTED),
+      // in port not connected, component with variable configuration
+      arg("component Comp56 { " +
+          "feature f; " +
+          "a.b.A sub; " +
+          "if (f) { " +
+          "port in int i; " +
+          "i -> sub.i; " +
+          "} " +
+          "}",
+        ArcError.IN_PORT_NOT_CONNECTED),
+      // out port not connected, component with variable configuration
+      arg("component Comp57 { " +
+          "feature f; " +
+          "a.b.B sub; " +
+          "if (f) { " +
+          "port out int o; " +
+          "sub.o -> o; " +
+          "} " +
+          "}",
+        ArcError.OUT_PORT_NOT_CONNECTED),
+      // in port unused, in port not connected, component with variable configuration
+      arg("component Comp58 { " +
+          "feature f; " +
+          "a.b.A sub; " +
+          "port in int i; " +
+          "if (f) { " +
+          "i -> sub.i; " +
+          "} " +
+          "}",
+        ArcError.IN_PORT_UNUSED,
+        ArcError.IN_PORT_NOT_CONNECTED),
+      // out port unused, out port not connected, component with variable configuration
+      arg("component Comp59 { " +
+          "feature f; " +
+          "a.b.B sub; " +
+          "port out int o; " +
+          "if (f) { " +
+          "sub.o -> o; " +
+          "} " +
+          "}",
+        ArcError.OUT_PORT_UNUSED,
+        ArcError.OUT_PORT_NOT_CONNECTED),
+      // in port not connected, subcomponent with variable configuration (selected feature)
+      arg("component Comp60 { " +
+          "a.b.M sub; " +
+          "constraint (sub.ff); " +
+          "}",
+        ArcError.IN_PORT_NOT_CONNECTED),
+      // out port not connected, subcomponent with variable configuration (selected feature)
+      arg("component Comp61 { " +
+          "a.b.N sub; " +
+          "constraint (sub.ff); " +
+          "}",
+        ArcError.OUT_PORT_NOT_CONNECTED)
     );
   }
 }
