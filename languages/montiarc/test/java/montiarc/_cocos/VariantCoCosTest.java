@@ -49,9 +49,9 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
   }
 
   protected static void setUpComponents() {
-    compile("package a.b; component A { }");
-    compile("package a.b; component B { port in int i; }");
-    compile("package a.b; component C { port out int o; }");
+    compile("package a.b; component A { port in int i; }");
+    compile("package a.b; component B { port out int o; }");
+    compile("package a.b; component C { port in int i; port out int o; }");
     compile("package a.b; component D { feature ff; if (ff) { port in int io; } else { port out int io; } }");
     compile("package a.b; component E { port in boolean i; }");
     compile("package a.b; component F { port out boolean o; }");
@@ -68,19 +68,19 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     // in port forward
     "component Comp2 { " +
       "port in int i; " +
-      "a.b.B sub; " +
+      "a.b.A sub; " +
       "i -> sub.i; " +
       "}",
     // out port forward
     "component Comp3 { " +
       "port out int o; " +
-      "a.b.C sub; " +
+      "a.b.B sub; " +
       "sub.o -> o; " +
       "}",
     // hidden channel
     "component Comp4 { " +
-      "a.b.B sub1; " +
-      "a.b.C sub2; " +
+      "a.b.A sub1; " +
+      "a.b.B sub2; " +
       "sub2.o -> sub1.i; " +
       "}",
     // in port forward, single variation point
@@ -88,7 +88,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "port in int i; " +
       "feature f; " +
       "if (f) { " +
-      "a.b.B sub; " +
+      "a.b.A sub; " +
       "i -> sub.i; " +
       "} " +
       "}",
@@ -97,7 +97,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "port out int o; " +
       "feature f; " +
       "if (f) { " +
-      "a.b.C sub; " +
+      "a.b.B sub; " +
       "sub.o -> o; " +
       "} " +
       "}",
@@ -105,8 +105,8 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     "component Comp7 { " +
       "feature f; " +
       "if (f) { " +
-      "a.b.B sub1; " +
-      "a.b.C sub2; " +
+      "a.b.A sub1; " +
+      "a.b.B sub2; " +
       "sub2.o -> sub1.i; " +
       "} " +
       "}",
@@ -114,7 +114,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     "component Comp8 { " +
       "if (false) { " +
       "port out int o; " +
-      "a.b.B sub; " +
+      "a.b.A sub; " +
       "o -> sub.i; " +
       "} " +
       "}",
@@ -122,7 +122,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     "component Comp9 { " +
       "if (false) { " +
       "port in int i; " +
-      "a.b.C sub; " +
+      "a.b.B sub; " +
       "i -> sub.o; " +
       "} " +
       "}",
@@ -130,7 +130,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     "component Comp10 { " +
       "if (false) { " +
       "port out int o; " +
-      "a.b.B sub; " +
+      "a.b.A sub; " +
       "sub.i -> o; " +
       "} " +
       "}",
@@ -138,21 +138,21 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     "component Comp11 { " +
       "if (false) { " +
       "port in int i; " +
-      "a.b.C sub; " +
+      "a.b.B sub; " +
       "sub.o -> i; " +
       "} " +
       "}",
     // hidden channel, source direction mismatch, excluded variation point
     "component Comp12 { " +
       "if (false) { " +
-      "a.b.B sub1, sub2; " +
+      "a.b.A sub1, sub2; " +
       "sub2.i -> sub1.i; " +
       "} " +
       "}",
     // hidden channel, target direction mismatch, excluded variation point
     "component Comp13 { " +
       "if (false) { " +
-      "a.b.C sub1, sub2; " +
+      "a.b.B sub1, sub2; " +
       "sub2.o -> sub1.o; " +
       "} " +
       "}",
@@ -162,7 +162,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "constraint(!f);" +
       "if (f) { " +
       "port out int o; " +
-      "a.b.B sub; " +
+      "a.b.A sub; " +
       "o -> sub.i; " +
       "} " +
       "}",
@@ -172,7 +172,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "constraint(!f);" +
       "if (f) { " +
       "port in int i; " +
-      "a.b.C sub; " +
+      "a.b.B sub; " +
       "i -> sub.o; " +
       "} " +
       "}",
@@ -182,7 +182,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "constraint(!f);" +
       "if (f) { " +
       "port out int o; " +
-      "a.b.B sub; " +
+      "a.b.A sub; " +
       "sub.i -> o; " +
       "} " +
       "}",
@@ -192,7 +192,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "constraint(!f);" +
       "if (f) { " +
       "port in int i; " +
-      "a.b.C sub; " +
+      "a.b.B sub; " +
       "sub.o -> i; " +
       "} " +
       "}",
@@ -201,7 +201,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "feature f;" +
       "constraint(!f);" +
       "if (f) { " +
-      "a.b.B sub1, sub2; " +
+      "a.b.A sub1, sub2; " +
       "sub2.i -> sub1.i; " +
       "} " +
       "}",
@@ -210,7 +210,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "feature f;" +
       "constraint(!f);" +
       "if (f) { " +
-      "a.b.C sub1, sub2; " +
+      "a.b.B sub1, sub2; " +
       "sub2.o -> sub1.o; " +
       "} " +
       "}",
@@ -269,9 +269,9 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     "component Comp26 { " +
       "if (false) { " +
       "a.b.E sub1; " +
-      "a.b.C sub2; " +
+      "a.b.B sub2; " +
       "sub2.o -> sub1.i; " +
-      "a.b.B sub3; " +
+      "a.b.A sub3; " +
       "a.b.F sub4; " +
       "sub4.o -> sub3.i; " +
       "} " +
@@ -416,40 +416,40 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       // in port forward, source direction mismatch
       arg("component Comp1 { " +
           "port out int o; " +
-          "a.b.B sub; " +
+          "a.b.A sub; " +
           "o -> sub.i; " +
           "}",
         ArcError.SOURCE_DIRECTION_MISMATCH),
       // in port forward, target direction mismatch
       arg("component Comp2 { " +
           "port in int i; " +
-          "a.b.C sub; " +
+          "a.b.B sub; " +
           "i -> sub.o; " +
           "}",
         ArcError.TARGET_DIRECTION_MISMATCH),
       // out port forward, source direction mismatch
       arg("component Comp3 { " +
           "port out int o; " +
-          "a.b.B sub; " +
+          "a.b.A sub; " +
           "sub.i -> o; " +
           "}",
         ArcError.SOURCE_DIRECTION_MISMATCH),
       // out port forward, target direction mismatch
       arg("component Comp4 { " +
           "port in int i; " +
-          "a.b.C sub; " +
+          "a.b.B sub; " +
           "sub.o -> i; " +
           "}",
         ArcError.TARGET_DIRECTION_MISMATCH),
       // hidden channel, source direction mismatch
       arg("component Comp5 { " +
-          "a.b.B sub1, sub2; " +
+          "a.b.A sub1, sub2; " +
           "sub2.i -> sub1.i; " +
           "}",
         ArcError.SOURCE_DIRECTION_MISMATCH),
       // hidden channel, target direction mismatch
       arg("component Comp6 { " +
-          "a.b.C sub1, sub2; " +
+          "a.b.B sub1, sub2; " +
           "sub2.o -> sub1.o; " +
           "}",
         ArcError.TARGET_DIRECTION_MISMATCH),
@@ -458,7 +458,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "port out int o; " +
           "feature f; " +
           "if (f) { " +
-          "a.b.B sub; " +
+          "a.b.A sub; " +
           "o -> sub.i; " +
           "} " +
           "}",
@@ -468,7 +468,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "port in int i; " +
           "feature f; " +
           "if (f) { " +
-          "a.b.C sub; " +
+          "a.b.B sub; " +
           "i -> sub.o; " +
           "} " +
           "}",
@@ -478,7 +478,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "port out int o; " +
           "feature f; " +
           "if (f) { " +
-          "a.b.B sub; " +
+          "a.b.A sub; " +
           "sub.i -> o; " +
           "} " +
           "}",
@@ -488,7 +488,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "port in int i; " +
           "feature f; " +
           "if (f) { " +
-          "a.b.C sub; " +
+          "a.b.B sub; " +
           "sub.o -> i; " +
           "} " +
           "}",
@@ -497,7 +497,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       arg("component Comp11 { " +
           "feature f; " +
           "if (f) { " +
-          "a.b.B sub1, sub2; " +
+          "a.b.A sub1, sub2; " +
           "sub2.i -> sub1.i; " +
           "} " +
           "}",
@@ -506,7 +506,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       arg("component Comp12 { " +
           "feature f; " +
           "if (f) { " +
-          "a.b.C sub1, sub2; " +
+          "a.b.B sub1, sub2; " +
           "sub2.o -> sub1.o; " +
           "} " +
           "}",
@@ -515,7 +515,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       arg("component Comp13 { " +
           "if (true) { " +
           "port out int o; " +
-          "a.b.B sub; " +
+          "a.b.A sub; " +
           "o -> sub.i; " +
           "} " +
           "}",
@@ -524,7 +524,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       arg("component Comp14 { " +
           "if (true) { " +
           "port in int i; " +
-          "a.b.C sub; " +
+          "a.b.B sub; " +
           "i -> sub.o; " +
           "} " +
           "}",
@@ -533,7 +533,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       arg("component Comp15 { " +
           "if (true) { " +
           "port out int o; " +
-          "a.b.B sub; " +
+          "a.b.A sub; " +
           "sub.i -> o; " +
           "} " +
           "}",
@@ -542,7 +542,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       arg("component Comp16 { " +
           "if (true) { " +
           "port in int i; " +
-          "a.b.C sub; " +
+          "a.b.B sub; " +
           "sub.o -> i; " +
           "} " +
           "}",
@@ -550,7 +550,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       // hidden channel, source direction mismatch, included variation point
       arg("component Comp17 { " +
           "if (true) { " +
-          "a.b.B sub1, sub2; " +
+          "a.b.A sub1, sub2; " +
           "sub2.i -> sub1.i; " +
           "} " +
           "}",
@@ -558,7 +558,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       // hidden channel, target direction mismatch, included variation point
       arg("component Comp18 { " +
           "if (true) { " +
-          "a.b.C sub1, sub2; " +
+          "a.b.B sub1, sub2; " +
           "sub2.o -> sub1.o; " +
           "} " +
           "}",
@@ -569,7 +569,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "constraint(f);" +
           "if (f) { " +
           "port out int o; " +
-          "a.b.B sub; " +
+          "a.b.A sub; " +
           "o -> sub.i; " +
           "} " +
           "}",
@@ -580,7 +580,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "constraint(f);" +
           "if (f) { " +
           "port in int i; " +
-          "a.b.C sub; " +
+          "a.b.B sub; " +
           "i -> sub.o; " +
           "} " +
           "}",
@@ -591,7 +591,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "constraint(f);" +
           "if (f) { " +
           "port out int o; " +
-          "a.b.B sub; " +
+          "a.b.A sub; " +
           "sub.i -> o; " +
           "} " +
           "}",
@@ -602,7 +602,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "constraint(f);" +
           "if (f) { " +
           "port in int i; " +
-          "a.b.C sub; " +
+          "a.b.B sub; " +
           "sub.o -> i; " +
           "} " +
           "}",
@@ -612,7 +612,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "feature f;" +
           "constraint(f);" +
           "if (f) { " +
-          "a.b.B sub1, sub2; " +
+          "a.b.A sub1, sub2; " +
           "sub2.i -> sub1.i; " +
           "} " +
           "}",
@@ -622,7 +622,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "feature f;" +
           "constraint(f);" +
           "if (f) { " +
-          "a.b.C sub1, sub2; " +
+          "a.b.B sub1, sub2; " +
           "sub2.o -> sub1.o; " +
           "} " +
           "}",
@@ -690,9 +690,9 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       arg("component Comp32 { " +
           "if (true) { " +
           "a.b.E sub1; " +
-          "a.b.C sub2; " +
+          "a.b.B sub2; " +
           "sub2.o -> sub1.i; " +
-          "a.b.B sub3; " +
+          "a.b.A sub3; " +
           "a.b.F sub4; " +
           "sub4.o -> sub3.i; " +
           "} " +
@@ -768,7 +768,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "}",
         ArcError.CONNECTOR_TIMING_MISMATCH),
       // in port forward, timing mismatch, component and subcomponent with variable interface timing
-      arg("component Comp34 { " +
+      arg("component Comp39 { " +
           "feature f; " +
           "if (f) { " +
           "port <<sync>> in int i; " +
@@ -782,7 +782,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
         ArcError.CONNECTOR_TIMING_MISMATCH,
         ArcError.CONNECTOR_TIMING_MISMATCH),
       // out port forward, timing mismatch, component and subcomponent with variable interface timing
-      arg("component Comp35 { " +
+      arg("component Comp40 { " +
           "feature f; " +
           "if (f) { " +
           "port <<sync>> out int o; " +
