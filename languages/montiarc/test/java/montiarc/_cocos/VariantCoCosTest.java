@@ -52,7 +52,13 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     compile("package a.b; component A { }");
     compile("package a.b; component B { port in int i; }");
     compile("package a.b; component C { port out int o; }");
-    compile("package a.b; component D { feature ff; if (ff) { port in int io; } if (!ff) { port out int io; } }");
+    compile("package a.b; component D { feature ff; if (ff) { port in int io; } else { port out int io; } }");
+    compile("package a.b; component E { port in boolean i; }");
+    compile("package a.b; component F { port out boolean o; }");
+    compile("package a.b; component G { feature ff; if (ff) { port in boolean i, out boolean o; } else { port in int i, out int o; } }");
+    compile("package a.b; component H { feature ff; if (ff) { port in int io; } else { port out boolean io; } }");
+    compile("package a.b; component I { feature ff; if (ff) { port <<sync>> in int i; } else { port <<timed>> in int i; } }");
+    compile("package a.b; component J { feature ff; if (ff) { port <<sync>> out int o; } else { port <<timed>> out int o; } }");
   }
 
   @ParameterizedTest
@@ -104,24 +110,8 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "sub2.o -> sub1.i; " +
       "} " +
       "}",
-    // out port forward, source direction mismatch, excluded variation point
-    "component Comp8 { " +
-      "if (false) { " +
-      "port out int o; " +
-      "a.b.B sub; " +
-      "sub.i -> o; " +
-      "} " +
-      "}",
-    // out port forward, target direction mismatch, excluded variation point
-    "component Comp9 { " +
-      "if (false) { " +
-      "port in int i; " +
-      "a.b.C sub; " +
-      "sub.o -> i; " +
-      "} " +
-      "}",
     // in port forward, source direction mismatch, excluded variation point
-    "component Comp10 { " +
+    "component Comp8 { " +
       "if (false) { " +
       "port out int o; " +
       "a.b.B sub; " +
@@ -129,11 +119,27 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "} " +
       "}",
     // in port forward, target direction mismatch, excluded variation point
-    "component Comp11 { " +
+    "component Comp9 { " +
       "if (false) { " +
       "port in int i; " +
       "a.b.C sub; " +
       "i -> sub.o; " +
+      "} " +
+      "}",
+    // out port forward, source direction mismatch, excluded variation point
+    "component Comp10 { " +
+      "if (false) { " +
+      "port out int o; " +
+      "a.b.B sub; " +
+      "sub.i -> o; " +
+      "} " +
+      "}",
+    // out port forward, target direction mismatch, excluded variation point
+    "component Comp11 { " +
+      "if (false) { " +
+      "port in int i; " +
+      "a.b.C sub; " +
+      "sub.o -> i; " +
       "} " +
       "}",
     // hidden channel, source direction mismatch, excluded variation point
@@ -150,28 +156,8 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "sub2.o -> sub1.o; " +
       "} " +
       "}",
-    // out port forward, source direction mismatch, constrained feature
-    "component Comp14 { " +
-      "feature f;" +
-      "constraint(!f);" +
-      "if (f) { " +
-      "port out int o; " +
-      "a.b.B sub; " +
-      "sub.i -> o; " +
-      "} " +
-      "}",
-    // out port forward, target direction mismatch, constrained feature
-    "component Comp15 { " +
-      "feature f;" +
-      "constraint(!f);" +
-      "if (f) { " +
-      "port in int i; " +
-      "a.b.C sub; " +
-      "sub.o -> i; " +
-      "} " +
-      "}",
     // in port forward, source direction mismatch, constrained feature
-    "component Comp16 { " +
+    "component Comp14 { " +
       "feature f;" +
       "constraint(!f);" +
       "if (f) { " +
@@ -181,13 +167,33 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "} " +
       "}",
     // in port forward, target direction mismatch, constrained feature
-    "component Comp17 { " +
+    "component Comp15 { " +
       "feature f;" +
       "constraint(!f);" +
       "if (f) { " +
       "port in int i; " +
       "a.b.C sub; " +
       "i -> sub.o; " +
+      "} " +
+      "}",
+    // out port forward, source direction mismatch, constrained feature
+    "component Comp16 { " +
+      "feature f;" +
+      "constraint(!f);" +
+      "if (f) { " +
+      "port out int o; " +
+      "a.b.B sub; " +
+      "sub.i -> o; " +
+      "} " +
+      "}",
+    // out port forward, target direction mismatch, constrained feature
+    "component Comp17 { " +
+      "feature f;" +
+      "constraint(!f);" +
+      "if (f) { " +
+      "port in int i; " +
+      "a.b.C sub; " +
+      "sub.o -> i; " +
       "} " +
       "}",
     // hidden channel, source direction mismatch, constrained feature
@@ -208,26 +214,152 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "sub2.o -> sub1.o; " +
       "} " +
       "}",
-    // in port forward, subcomponent with variable interface
+    // in port forward, subcomponent with variable interface direction
     "component Comp20 { " +
       "port in int i; " +
       "a.b.D sub; " +
       "i -> sub.io; " +
       "constraint (sub.ff); " +
       "}",
-    // out port forward, subcomponent with variable interface
+    // out port forward, subcomponent with variable interface direction
     "component Comp21 { " +
       "port out int o; " +
       "a.b.D sub; " +
       "sub.io -> o; " +
       "constraint (!sub.ff); " +
       "}",
-    // hidden channel, subcomponent with variable interface
+    // hidden channel, subcomponent with variable interface direction
     "component Comp22 { " +
       "a.b.D sub1; " +
       "a.b.D sub2; " +
       "sub2.io -> sub1.io; " +
       "constraint (sub1.ff && !sub2.ff); " +
+      "}",
+    // port forward, component & subcomponent with variable interface direction
+    "component Comp23 { " +
+      "feature f; " +
+      "if (f) { " +
+      "port in int io; " +
+      "io -> sub.io; " +
+      "} " +
+      "if (!f) { " +
+      "port out int io; " +
+      "sub.io -> io; " +
+      "} " +
+      "a.b.D sub; " +
+      "constraint (sub.ff == f); " +
+      "}",
+    // in port forward, connector type mismatch, excluded variation point
+    "component Comp24 { " +
+      "if (false) { " +
+      "port in int i; " +
+      "a.b.E sub; " +
+      "i -> sub.i; " +
+      "} " +
+      "}",
+    // out port forward, connector type mismatch, excluded variation point
+    "component Comp25 { " +
+      "if (false) { " +
+      "port out int o; " +
+      "a.b.F sub; " +
+      "sub.o -> o; " +
+      "} " +
+      "}",
+    // hidden channel, connector type mismatch, excluded variation point
+    "component Comp26 { " +
+      "if (false) { " +
+      "a.b.E sub1; " +
+      "a.b.C sub2; " +
+      "sub2.o -> sub1.i; " +
+      "a.b.B sub3; " +
+      "a.b.F sub4; " +
+      "sub4.o -> sub3.i; " +
+      "} " +
+      "}",
+    // port forward, subcomponent with variable interface types (deselect feature)
+    "component Comp27 { " +
+      "port in int i; " +
+      "port out int o; " +
+      "a.b.G sub; " +
+      "i -> sub.i; " +
+      "sub.o -> o; " +
+      "constraint (!sub.ff); " +
+      "}",
+    // port forward, subcomponent with variable interface types (select feature)
+    "component Comp28 { " +
+      "port in boolean i; " +
+      "port out boolean o; " +
+      "a.b.G sub; " +
+      "i -> sub.i; " +
+      "sub.o -> o; " +
+      "constraint (sub.ff); " +
+      "}",
+    // port forward, component and subcomponent with variable interface types
+    "component Comp29 { " +
+      "feature f; " +
+      "if (f) { " +
+      "port in boolean i; " +
+      "port out boolean o; " +
+      "} else { " +
+      "port in int i; " +
+      "port out int o; " +
+      "} " +
+      "a.b.G sub; " +
+      "i -> sub.i; " +
+      "sub.o -> o; " +
+      "constraint (sub.ff == f); " +
+      "}",
+    // in port forward, subcomponent with variable interface timing (deselect feature)
+    "component Comp30 { " +
+      "port <<timed>> in int i; " +
+      "a.b.I sub; " +
+      "i -> sub.i; " +
+      "constraint (!sub.ff); " +
+      "}",
+    // in port forward, subcomponent with variable interface timing (select feature)
+    "component Comp31 { " +
+      "port <<sync>> in int i; " +
+      "a.b.I sub; " +
+      "i -> sub.i; " +
+      "constraint (sub.ff); " +
+      "}",
+    // out port forward, subcomponent with variable interface timing (deselect feature)
+    "component Comp32 { " +
+      "port <<timed>> out int o; " +
+      "a.b.J sub; " +
+      "sub.o -> o; " +
+      "constraint (!sub.ff); " +
+      "}",
+    // out port forward, subcomponent with variable interface timing (select feature)
+    "component Comp33 { " +
+      "port <<sync>> out int o; " +
+      "a.b.J sub; " +
+      "sub.o -> o; " +
+      "constraint (sub.ff); " +
+      "}",
+    // in port forward, component and subcomponent with variable interface timing
+    "component Comp34 { " +
+      "feature f; " +
+      "if (f) { " +
+      "port <<sync>> in int i; " +
+      "} else {" +
+      "port <<timed>> in int i; " +
+      "}" +
+      "a.b.I sub; " +
+      "i -> sub.i; " +
+      "constraint (sub.ff == f); " +
+      "}",
+    // out port forward, component and subcomponent with variable interface timing
+    "component Comp35 { " +
+      "feature f; " +
+      "if (f) { " +
+      "port <<sync>> out int o; " +
+      "} else {" +
+      "port <<timed>> out int o; " +
+      "}" +
+      "a.b.J sub; " +
+      "sub.o -> o; " +
+      "constraint (sub.ff == f); " +
       "}",
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
@@ -281,32 +413,32 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      // out port forward, source direction mismatch
-      arg("component Comp1 { " +
-          "port out int o; " +
-          "a.b.B sub; " +
-          "sub.i -> o; " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
-      // out port forward, target direction mismatch
-      arg("component Comp2 { " +
-          "port in int i; " +
-          "a.b.C sub; " +
-          "sub.o -> i; " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
       // in port forward, source direction mismatch
-      arg("component Comp3 { " +
+      arg("component Comp1 { " +
           "port out int o; " +
           "a.b.B sub; " +
           "o -> sub.i; " +
           "}",
         ArcError.SOURCE_DIRECTION_MISMATCH),
       // in port forward, target direction mismatch
-      arg("component Comp4 { " +
+      arg("component Comp2 { " +
           "port in int i; " +
           "a.b.C sub; " +
           "i -> sub.o; " +
+          "}",
+        ArcError.TARGET_DIRECTION_MISMATCH),
+      // out port forward, source direction mismatch
+      arg("component Comp3 { " +
+          "port out int o; " +
+          "a.b.B sub; " +
+          "sub.i -> o; " +
+          "}",
+        ArcError.SOURCE_DIRECTION_MISMATCH),
+      // out port forward, target direction mismatch
+      arg("component Comp4 { " +
+          "port in int i; " +
+          "a.b.C sub; " +
+          "sub.o -> i; " +
           "}",
         ArcError.TARGET_DIRECTION_MISMATCH),
       // hidden channel, source direction mismatch
@@ -321,28 +453,8 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "sub2.o -> sub1.o; " +
           "}",
         ArcError.TARGET_DIRECTION_MISMATCH),
-      // out port forward, source direction mismatch, single variation point
-      arg("component Comp7 { " +
-          "port out int o; " +
-          "feature f; " +
-          "if (f) { " +
-          "a.b.B sub; " +
-          "sub.i -> o; " +
-          "} " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
-      // out port forward, target direction mismatch, single variation point
-      arg("component Comp8 { " +
-          "port in int i; " +
-          "feature f; " +
-          "if (f) { " +
-          "a.b.C sub; " +
-          "sub.o -> i; " +
-          "} " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
       // in port forward, source direction mismatch, single variation point
-      arg("component Comp9 { " +
+      arg("component Comp7 { " +
           "port out int o; " +
           "feature f; " +
           "if (f) { " +
@@ -352,12 +464,32 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "}",
         ArcError.SOURCE_DIRECTION_MISMATCH),
       // in port forward, target direction mismatch, single variation point
-      arg("component Comp10 { " +
+      arg("component Comp8 { " +
           "port in int i; " +
           "feature f; " +
           "if (f) { " +
           "a.b.C sub; " +
           "i -> sub.o; " +
+          "} " +
+          "}",
+        ArcError.TARGET_DIRECTION_MISMATCH),
+      // out port forward, source direction mismatch, single variation point
+      arg("component Comp9 { " +
+          "port out int o; " +
+          "feature f; " +
+          "if (f) { " +
+          "a.b.B sub; " +
+          "sub.i -> o; " +
+          "} " +
+          "}",
+        ArcError.SOURCE_DIRECTION_MISMATCH),
+      // out port forward, target direction mismatch, single variation point
+      arg("component Comp10 { " +
+          "port in int i; " +
+          "feature f; " +
+          "if (f) { " +
+          "a.b.C sub; " +
+          "sub.o -> i; " +
           "} " +
           "}",
         ArcError.TARGET_DIRECTION_MISMATCH),
@@ -379,26 +511,8 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "} " +
           "}",
         ArcError.TARGET_DIRECTION_MISMATCH),
-      // out port forward, source direction mismatch, included variation point
-      arg("component Comp13 { " +
-          "if (true) { " +
-          "port out int o; " +
-          "a.b.B sub; " +
-          "sub.i -> o; " +
-          "} " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
-      // out port forward, target direction mismatch, included variation point
-      arg("component Comp14 { " +
-          "if (true) { " +
-          "port in int i; " +
-          "a.b.C sub; " +
-          "sub.o -> i; " +
-          "} " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
       // in port forward, source direction mismatch, included variation point
-      arg("component Comp15 { " +
+      arg("component Comp13 { " +
           "if (true) { " +
           "port out int o; " +
           "a.b.B sub; " +
@@ -407,11 +521,29 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "}",
         ArcError.SOURCE_DIRECTION_MISMATCH),
       // in port forward, target direction mismatch, included variation point
-      arg("component Comp16 { " +
+      arg("component Comp14 { " +
           "if (true) { " +
           "port in int i; " +
           "a.b.C sub; " +
           "i -> sub.o; " +
+          "} " +
+          "}",
+        ArcError.TARGET_DIRECTION_MISMATCH),
+      // out port forward, source direction mismatch, included variation point
+      arg("component Comp15 { " +
+          "if (true) { " +
+          "port out int o; " +
+          "a.b.B sub; " +
+          "sub.i -> o; " +
+          "} " +
+          "}",
+        ArcError.SOURCE_DIRECTION_MISMATCH),
+      // out port forward, target direction mismatch, included variation point
+      arg("component Comp16 { " +
+          "if (true) { " +
+          "port in int i; " +
+          "a.b.C sub; " +
+          "sub.o -> i; " +
           "} " +
           "}",
         ArcError.TARGET_DIRECTION_MISMATCH),
@@ -431,30 +563,8 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "} " +
           "}",
         ArcError.TARGET_DIRECTION_MISMATCH),
-      // out port forward, source direction mismatch, unconstrained feature
-      arg("component Comp19 { " +
-          "feature f;" +
-          "constraint(f);" +
-          "if (f) { " +
-          "port out int o; " +
-          "a.b.B sub; " +
-          "sub.i -> o; " +
-          "} " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
-      // out port forward, target direction mismatch, unconstrained feature
-      arg("component Comp20 { " +
-          "feature f;" +
-          "constraint(f);" +
-          "if (f) { " +
-          "port in int i; " +
-          "a.b.C sub; " +
-          "sub.o -> i; " +
-          "} " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
       // in port forward, source direction mismatch, unconstrained feature
-      arg("component Comp21 { " +
+      arg("component Comp19 { " +
           "feature f;" +
           "constraint(f);" +
           "if (f) { " +
@@ -465,13 +575,35 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "}",
         ArcError.SOURCE_DIRECTION_MISMATCH),
       // in port forward, target direction mismatch, unconstrained feature
-      arg("component Comp22 { " +
+      arg("component Comp20 { " +
           "feature f;" +
           "constraint(f);" +
           "if (f) { " +
           "port in int i; " +
           "a.b.C sub; " +
           "i -> sub.o; " +
+          "} " +
+          "}",
+        ArcError.TARGET_DIRECTION_MISMATCH),
+      // out port forward, source direction mismatch, unconstrained feature
+      arg("component Comp21 { " +
+          "feature f;" +
+          "constraint(f);" +
+          "if (f) { " +
+          "port out int o; " +
+          "a.b.B sub; " +
+          "sub.i -> o; " +
+          "} " +
+          "}",
+        ArcError.SOURCE_DIRECTION_MISMATCH),
+      // out port forward, target direction mismatch, unconstrained feature
+      arg("component Comp22 { " +
+          "feature f;" +
+          "constraint(f);" +
+          "if (f) { " +
+          "port in int i; " +
+          "a.b.C sub; " +
+          "sub.o -> i; " +
           "} " +
           "}",
         ArcError.TARGET_DIRECTION_MISMATCH),
@@ -494,7 +626,175 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "sub2.o -> sub1.o; " +
           "} " +
           "}",
-        ArcError.TARGET_DIRECTION_MISMATCH)
+        ArcError.TARGET_DIRECTION_MISMATCH),
+      // in port forward, target direction mismatch, subcomponent with variable interface direction
+      arg("component Comp25 { " +
+          "port in int i; " +
+          "a.b.D sub; " +
+          "i -> sub.io; " +
+          "constraint (!sub.ff); " +
+          "}",
+        ArcError.TARGET_DIRECTION_MISMATCH),
+      // out port forward, source direction mismatch, subcomponent with variable interface direction
+      arg("component Comp26 { " +
+          "port out int o; " +
+          "a.b.D sub; " +
+          "sub.io -> o; " +
+          "constraint (sub.ff); " +
+          "}",
+        ArcError.SOURCE_DIRECTION_MISMATCH),
+      // hidden channel, source direction mismatch, subcomponent with variable interface direction
+      arg("component Comp27 { " +
+          "a.b.D sub1; " +
+          "a.b.D sub2; " +
+          "sub2.io -> sub1.io; " +
+          "constraint (sub1.ff && sub2.ff); " +
+          "}",
+        ArcError.SOURCE_DIRECTION_MISMATCH),
+      // hidden channel, target direction mismatch, subcomponent with variable interface direction
+      arg("component Comp28 { " +
+          "a.b.D sub1; " +
+          "a.b.D sub2; " +
+          "sub2.io -> sub1.io; " +
+          "constraint (!sub1.ff && !sub2.ff); " +
+          "}",
+        ArcError.TARGET_DIRECTION_MISMATCH),
+      // hidden channel, source and target direction mismatch, subcomponent with variable interface direction
+      arg("component Comp29 { " +
+          "a.b.D sub1; " +
+          "a.b.D sub2; " +
+          "sub2.io -> sub1.io; " +
+          "constraint (!sub1.ff && sub2.ff); " +
+          "}",
+        ArcError.SOURCE_DIRECTION_MISMATCH,
+        ArcError.TARGET_DIRECTION_MISMATCH),
+      // in port forward, connector type mismatch, included variation point
+      arg("component Comp30 { " +
+          "if (true) { " +
+          "port in int i; " +
+          "a.b.E sub; " +
+          "i -> sub.i; " +
+          "} " +
+          "}",
+        ArcError.CONNECTOR_TYPE_MISMATCH),
+      // out port forward, connector type mismatch, included variation point
+      arg("component Comp31 { " +
+          "if (true) { " +
+          "port out int o; " +
+          "a.b.F sub; " +
+          "sub.o -> o; " +
+          "} " +
+          "}",
+        ArcError.CONNECTOR_TYPE_MISMATCH),
+      // hidden channel, connector type mismatch, included variation point
+      arg("component Comp32 { " +
+          "if (true) { " +
+          "a.b.E sub1; " +
+          "a.b.C sub2; " +
+          "sub2.o -> sub1.i; " +
+          "a.b.B sub3; " +
+          "a.b.F sub4; " +
+          "sub4.o -> sub3.i; " +
+          "} " +
+          "}",
+        ArcError.CONNECTOR_TYPE_MISMATCH,
+        ArcError.CONNECTOR_TYPE_MISMATCH),
+      // port forward, connector type mismatch, component and subcomponent with variable interface types
+      arg("component Comp33 { " +
+          "feature f; " +
+          "if (f) { " +
+          "port in boolean i; " +
+          "port out boolean o; " +
+          "} else { " +
+          "port in int i; " +
+          "port out int o; " +
+          "} " +
+          "a.b.G sub; " +
+          "i -> sub.i; " +
+          "sub.o -> o; " +
+          "constraint (sub.ff == !f); " +
+          "}",
+        ArcError.CONNECTOR_TYPE_MISMATCH,
+        ArcError.CONNECTOR_TYPE_MISMATCH,
+        ArcError.CONNECTOR_TYPE_MISMATCH,
+        ArcError.CONNECTOR_TYPE_MISMATCH),
+      // port forward, connector direction and type mismatch, component and subcomponent with variable interface types
+      arg("component Comp34 { " +
+          "feature f; " +
+          "a.b.H sub; " +
+          "if (f) { " +
+          "port out boolean o; " +
+          "sub.io -> o; " +
+          "} else { " +
+          "port in int i; " +
+          "i -> sub.io; " +
+          "} " +
+          "constraint (sub.ff == f); " +
+          "}",
+        ArcError.SOURCE_DIRECTION_MISMATCH,
+        ArcError.CONNECTOR_TYPE_MISMATCH,
+        ArcError.TARGET_DIRECTION_MISMATCH,
+        ArcError.CONNECTOR_TYPE_MISMATCH),
+      // in port forward, timing mismatch, subcomponent with variable interface timing (deselect feature)
+      arg("component Comp35 { " +
+          "port <<sync>> in int i; " +
+          "a.b.I sub; " +
+          "i -> sub.i; " +
+          "constraint (!sub.ff); " +
+          "}",
+        ArcError.CONNECTOR_TIMING_MISMATCH),
+      // in port forward, timing mismatch, subcomponent with variable interface timing (select feature)
+      arg("component Comp36 { " +
+          "port <<timed>> in int i; " +
+          "a.b.I sub; " +
+          "i -> sub.i; " +
+          "constraint (sub.ff); " +
+          "}",
+        ArcError.CONNECTOR_TIMING_MISMATCH),
+      // out port forward, timing mismatch, subcomponent with variable interface timing (deselect feature)
+      arg("component Comp37 { " +
+          "port <<sync>> out int o; " +
+          "a.b.J sub; " +
+          "sub.o -> o; " +
+          "constraint (!sub.ff); " +
+          "}",
+        ArcError.CONNECTOR_TIMING_MISMATCH),
+      // out port forward, timing mismatch, subcomponent with variable interface timing (select feature)
+      arg("component Comp38 { " +
+          "port <<timed>> out int o; " +
+          "a.b.J sub; " +
+          "sub.o -> o; " +
+          "constraint (sub.ff); " +
+          "}",
+        ArcError.CONNECTOR_TIMING_MISMATCH),
+      // in port forward, timing mismatch, component and subcomponent with variable interface timing
+      arg("component Comp34 { " +
+          "feature f; " +
+          "if (f) { " +
+          "port <<sync>> in int i; " +
+          "} else {" +
+          "port <<timed>> in int i; " +
+          "}" +
+          "a.b.I sub; " +
+          "i -> sub.i; " +
+          "constraint (sub.ff == !f); " +
+          "}",
+        ArcError.CONNECTOR_TIMING_MISMATCH,
+        ArcError.CONNECTOR_TIMING_MISMATCH),
+      // out port forward, timing mismatch, component and subcomponent with variable interface timing
+      arg("component Comp35 { " +
+          "feature f; " +
+          "if (f) { " +
+          "port <<sync>> out int o; " +
+          "} else {" +
+          "port <<timed>> out int o; " +
+          "}" +
+          "a.b.J sub; " +
+          "sub.o -> o; " +
+          "constraint (sub.ff == !f); " +
+          "}",
+        ArcError.CONNECTOR_TIMING_MISMATCH,
+        ArcError.CONNECTOR_TIMING_MISMATCH)
     );
   }
 }
