@@ -7,6 +7,7 @@ import arcbasis._cocos.ConnectorDirectionsFit;
 import arcbasis._cocos.ConnectorPortsExist;
 import arcbasis._cocos.ConnectorTimingsFit;
 import arcbasis._cocos.ConnectorTypesFit;
+import arcbasis._cocos.FeedbackStrongCausality;
 import arcbasis._cocos.PortHeritageTypeFits;
 import arcbasis._cocos.PortUniqueSender;
 import arcbasis._cocos.PortsConnected;

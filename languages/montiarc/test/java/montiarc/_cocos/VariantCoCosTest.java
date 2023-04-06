@@ -51,7 +51,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
   protected static void setUpComponents() {
     compile("package a.b; component A { port in int i; }");
     compile("package a.b; component B { port out int o; }");
-    compile("package a.b; component C { port in int i; port out int o; }");
+    compile("package a.b; component C { port in int i1, i2; port out int o; }");
     compile("package a.b; component D { feature ff; if (ff) { port in int io; } else { port out int io; } }");
     compile("package a.b; component E { port in boolean i; }");
     compile("package a.b; component F { port out boolean o; }");
@@ -59,6 +59,8 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     compile("package a.b; component H { feature ff; if (ff) { port in int io; } else { port out boolean io; } }");
     compile("package a.b; component I { feature ff; if (ff) { port <<sync>> in int i; } else { port <<timed>> in int i; } }");
     compile("package a.b; component J { feature ff; if (ff) { port <<sync>> out int o; } else { port <<timed>> out int o; } }");
+    compile("package a.b; component K { port in int i; port out int o1, <<delayed>> out int o2; } ");
+    compile("package a.b; component L { port in int i; feature ff; if (ff) { port out int o; } else { port <<delayed>> out int o; } }");
   }
 
   @ParameterizedTest
@@ -361,6 +363,46 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "sub.o -> o; " +
       "constraint (sub.ff == f); " +
       "}",
+    // feedback loop
+    "component Comp36 { " +
+      "port in int i; " +
+      "port out int o; " +
+      "a.b.C sub1; " +
+      "a.b.K sub2; " +
+      "i -> sub1.i1; " +
+      "sub1.o -> sub2.i; " +
+      "sub2.o1 -> o; " +
+      "sub2.o2 -> sub1.i2; " +
+      "}",
+    // feedback loop, subcomponent with variable interface delay (deselect feature)
+    "component Comp37 { " +
+      "port in int i; " +
+      "port out int o; " +
+      "a.b.C sub1; " +
+      "a.b.L sub2; " +
+      "i -> sub1.i1; " +
+      "sub1.o -> sub2.i; " +
+      "sub2.o -> o; " +
+      "sub2.o -> sub1.i2; " +
+      "constraint (!sub2.ff); " +
+      "}",
+    // feedback loop, component with variable configuration and subcomponent with variable interface delay
+    "component Comp38 { " +
+      "port in int i; " +
+      "port out int o; " +
+      "feature f; " +
+      "a.b.C sub1; " +
+      "a.b.L sub2; " +
+      "i -> sub1.i1; " +
+      "sub1.o -> sub2.i; " +
+      "sub2.o -> o; " +
+      "if (!f) { " +
+      "sub2.o -> sub1.i2; " +
+      "} else { " +
+      "i -> sub1.i2; " +
+      "}" +
+      "constraint (sub2.ff = f); " +
+      "}"
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -795,6 +837,49 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "}",
         ArcError.CONNECTOR_TIMING_MISMATCH,
         ArcError.CONNECTOR_TIMING_MISMATCH)
-    );
+      // feedback loop, weakly-causal feedback
+      /*arg("component Comp41 { " +
+          "port in int i; " +
+          "port out int o; " +
+          "a.b.C sub1; " +
+          "a.b.K sub2; " +
+          "i -> sub1.i1; " +
+          "sub1.o -> sub2.i; " +
+          "sub2.o1 -> sub1.i2; " +
+          "sub2.o2 -> o; " +
+          "}",
+        ArcError.FEEDBACK_CAUSALITY),
+      // feedback loop, weakly-causal feedback, subcomponent with variable interface delay (select feature)
+      arg("component Comp42 { " +
+          "port in int i; " +
+          "port out int o; " +
+          "a.b.C sub1; " +
+          "a.b.L sub2; " +
+          "i -> sub1.i1; " +
+          "sub1.o -> sub2.i; " +
+          "sub2.o -> o; " +
+          "sub2.o -> sub1.i2; " +
+          "constraint (sub2.ff); " +
+          "}",
+        ArcError.FEEDBACK_CAUSALITY),
+      // feedback loop, weakly-causal feedback, component with variable configuration and subcomponent with variable interface delay
+      arg("component Comp43 { " +
+          "port in int i; " +
+          "port out int o; " +
+          "feature f; " +
+          "a.b.C sub1; " +
+          "a.b.L sub2; " +
+          "i -> sub1.i1; " +
+          "sub1.o -> sub2.i; " +
+          "sub2.o -> o; " +
+          "if (f) { " +
+          "sub2.o -> sub1.i2; " +
+          "} else { " +
+          "i -> sub1.i2; " +
+          "}" +
+          "constraint (sub2.ff = f); " +
+          "}",
+        ArcError.FEEDBACK_CAUSALITY)*/
+      );
   }
 }
