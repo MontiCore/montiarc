@@ -15,24 +15,14 @@ import arcbasis._cocos.UniqueIdentifier;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.TypeRelations;
 import org.codehaus.commons.nullanalysis.NotNull;
+import variablearc.VariableArcMill;
+import variablearc._cocos.util.SingleASTVariantComponentTypeHandler;
+import variablearc._cocos.util.IgnoreASTArcIfStatementHandler;
 import variablearc._symboltable.VariableComponentTypeSymbol;
 import variablearc._symboltable.VariantComponentTypeSymbol;
-
-import java.util.List;
+import variablearc._visitor.VariableArcTraverser;
 
 public class VariantCoCos implements ArcBasisASTComponentTypeCoCo {
-
-  List<ArcBasisASTComponentTypeCoCo> cocos = List.of(
-    new ConnectorDirectionsFit(),
-    new ConnectorPortsExist(),
-    new ConnectorTypesFit(new TypeRelations()),
-    new ConnectorTimingsFit(),
-    new PortHeritageTypeFits(new TypeRelations()),
-    new PortsConnected(),
-    new PortUniqueSender(),
-    new SubPortsConnected(),
-    new UniqueIdentifier()
-  );
 
   @Override
   public void check(@NotNull ASTComponentType node) {
@@ -43,9 +33,27 @@ public class VariantCoCos implements ArcBasisASTComponentTypeCoCo {
     VariableComponentTypeSymbol component = (VariableComponentTypeSymbol) node.getSymbol();
 
     for (VariantComponentTypeSymbol variant : component.getVariants()) {
-      for (ArcBasisASTComponentTypeCoCo coco : cocos) {
-        coco.check(variant.getAstNode());
-      }
+      VariableArcTraverser traverser = getTraverser();
+      variant.getAstNode().accept(traverser);
     }
+  }
+
+  protected VariableArcTraverser getTraverser() {
+    VariableArcTraverser traverser = VariableArcMill.traverser();
+    traverser.setArcBasisHandler(new SingleASTVariantComponentTypeHandler());
+    traverser.setVariableArcHandler(new IgnoreASTArcIfStatementHandler());
+
+    // Add CoCos
+    traverser.add4ArcBasis(new ConnectorDirectionsFit());
+    traverser.add4ArcBasis(new ConnectorPortsExist());
+    traverser.add4ArcBasis(new ConnectorTypesFit(new TypeRelations()));
+    traverser.add4ArcBasis(new ConnectorTimingsFit());
+    traverser.add4ArcBasis(new PortHeritageTypeFits(new TypeRelations()));
+    traverser.add4ArcBasis(new PortsConnected());
+    traverser.add4ArcBasis(new PortUniqueSender());
+    traverser.add4ArcBasis(new SubPortsConnected());
+    traverser.add4ArcBasis(new UniqueIdentifier());
+
+    return traverser;
   }
 }

@@ -37,38 +37,9 @@ public class ASTPortAccess extends ASTPortAccessTOP {
     return componentSymbol;
   }
 
-  public ComponentTypeSymbol getComponentSymbol(ComponentTypeSymbol enclosingComponent) {
-    if (!isPresentComponent()) return null;
-    Optional<ComponentInstanceSymbol> instance = enclosingComponent.getSubComponent(getComponent());
-    if (instance.isEmpty() || !instance.get().isPresentType() || instance.get().getType().getTypeInfo() == null) {
-      return null;
-    }
-
-    return enclosingComponent.getSubComponent(getComponent()).get().getType().getTypeInfo();
-  }
-
-  public boolean isPresentComponentSymbol(ComponentTypeSymbol enclosingComponent) {
-    return getComponentSymbol(enclosingComponent) != null;
-  }
-
   @Override
   public PortSymbol getPortSymbol() {
     return portSymbol;
-  }
-
-  public PortSymbol getPortSymbol(ComponentTypeSymbol enclosingComponent) {
-    if (isPresentComponent()) {
-      if (isPresentComponentSymbol(enclosingComponent)) {
-        return getComponentSymbol(enclosingComponent).getPort(getPort(), true).orElse(null);
-      }
-    } else {
-      return enclosingComponent.getPort(getPort(), true).orElse(null);
-    }
-    return null;
-  }
-
-  public boolean isPresentPortSymbol(ComponentTypeSymbol enclosingComponent) {
-    return getPortSymbol(enclosingComponent) != null;
   }
 
   @Override

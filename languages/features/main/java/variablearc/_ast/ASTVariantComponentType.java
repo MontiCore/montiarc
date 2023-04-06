@@ -7,6 +7,8 @@ import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
+import variablearc.VariableArcMill;
+import variablearc._ast.util.ASTVariantBuilder;
 import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc._symboltable.VariantComponentTypeSymbol;
 
@@ -33,10 +35,11 @@ public class ASTVariantComponentType extends ASTComponentType {
 
   @Override
   protected List<ASTArcElement> getArcElementList() {
-    List<ASTArcElement> elementList = new ArrayList<>(super.getArcElementList());
+    List<ASTArcElement> elementList = new ArrayList<>(parent.getBody().getArcElementList());
     elementList.addAll(
       includedVariationPoints.stream().flatMap(vp -> vp.getElements().stream()).collect(Collectors.toList()));
-    return elementList;
+    ASTVariantBuilder duplicator = new ASTVariantBuilder(variantComponentTypeSymbol);
+    return elementList.stream().map(duplicator::duplicate).collect(Collectors.toList());
   }
 
   @Override
@@ -51,7 +54,7 @@ public class ASTVariantComponentType extends ASTComponentType {
 
   @Override
   public ASTComponentBody getBody() {
-    return parent.getBody();
+    return VariableArcMill.componentBodyBuilder().setArcElementsList(getArcElementList()).build();
   }
 
   @Override
