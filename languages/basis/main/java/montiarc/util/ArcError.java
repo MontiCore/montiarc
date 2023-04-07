@@ -47,7 +47,7 @@ public enum ArcError implements Error {
   FIELD_INIT_TYPE_MISMATCH("0xC1137", "Type mismatch, expected '%s' but provided '%s'"),
   PORT_REF_DEFAULT_VALUE("0xC1138", "Port cannot be referenced in static context"),
   PARAM_DEFAULT_TYPE_MISMATCH("0xC1139", "Type mismatch, expected '%s' but provided '%s'"),
-  TYPE_REF_DEFAULT_VALUE("0xC1140", "Expected an expression"),
+  TYPE_REF_DEFAULT_VALUE("0xC1140", "Expected an expression, but found a type name"),
   COMP_ARG_PORT_REF("0xC1141", "Port cannot be referenced in static context"),
   COMP_ARG_MULTI_ASSIGNMENT("0xC1142", "Invalid syntax, no assignment in default value"),
   COMPONENT_LOWER_CASE("0xC1143", "Convention violation, components should be upper case"),
