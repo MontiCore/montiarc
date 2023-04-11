@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.se_rwth.commons.logging.Log;
@@ -19,9 +18,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import variablearc._cocos.VariableArcASTArcBlockCoCo;
-import variablearc._cocos.VariableArcASTArcIfStatementCoCo;
-import variablearc._cocos.VariableElementsUsage;
 import variablearc._cocos.VariantCoCos;
 
 import java.io.IOException;
@@ -457,9 +453,6 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new VariantCoCos());
-    checker.addCoCo((VariableArcASTArcIfStatementCoCo) new VariableElementsUsage());
-    checker.addCoCo((VariableArcASTArcBlockCoCo) new VariableElementsUsage());
-    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new VariableElementsUsage());
 
     // When
     checker.checkAll(ast);
@@ -482,9 +475,6 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new VariantCoCos());
-    checker.addCoCo((VariableArcASTArcIfStatementCoCo) new VariableElementsUsage());
-    checker.addCoCo((VariableArcASTArcBlockCoCo) new VariableElementsUsage());
-    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new VariableElementsUsage());
 
     // When
     checker.checkAll(ast);

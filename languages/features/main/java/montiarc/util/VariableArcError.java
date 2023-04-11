@@ -13,7 +13,6 @@ public enum VariableArcError implements Error {
   FEATURE_UPPER_CASE("0xC1402", "Feature names should start with a lower case letter"),
   FEATURE_UNUSED("0xC1403", "Feature '%s' is never used"),
   IF_STATEMENT_EXPRESSION_WRONG_TYPE("0xC1404", "Incompatible types: '%s' cannot be converted to 'boolean'"),
-  ILLEGAL_USE("0xC1405", "The element '%s' of component '%s' cannot be used in the context of '%s'"),
   NAMED_ARGUMENTS_LAST("0xC1407", "Ordered arguments must be declared before named parameters, " +
     "but parameter at position '%d' is preceded by the named argument at position '%d'"),
   TOO_MANY_INSTANTIATION_FEATURE_ARGUMENTS("0xC1408", "Provided '%d' feature arguments but expected no more than '%d'"),

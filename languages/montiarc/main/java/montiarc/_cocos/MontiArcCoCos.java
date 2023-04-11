@@ -2,35 +2,34 @@
 package montiarc._cocos;
 
 import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
-import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import arcbasis._cocos.CircularInheritance;
+import arcbasis._cocos.ComponentArgumentsOmitPortRef;
 import arcbasis._cocos.ComponentNameCapitalization;
 import arcbasis._cocos.ConfigurationParameterAssignment;
-import arcbasis._cocos.OptionalConfigurationParametersLast;
-import arcbasis._cocos.ParameterHeritage;
 import arcbasis._cocos.ConnectorDirectionsFit;
 import arcbasis._cocos.ConnectorPortsExist;
 import arcbasis._cocos.ConnectorTimingsFit;
 import arcbasis._cocos.ConnectorTypesFit;
 import arcbasis._cocos.DelayOutPortOnly;
 import arcbasis._cocos.FeedbackStrongCausality;
-import arcbasis._cocos.FieldInitTypeFits;
 import arcbasis._cocos.FieldInitOmitPortReferences;
+import arcbasis._cocos.FieldInitTypeFits;
 import arcbasis._cocos.FieldNameCapitalization;
-import arcbasis._cocos.ParameterOmitAssignmentExpressions;
-import arcbasis._cocos.PortHeritageTypeFits;
-import arcbasis._cocos.ComponentArgumentsOmitPortRef;
-import arcbasis._cocos.SubcomponentNameCapitalization;
 import arcbasis._cocos.NoSubcomponentReferenceCycle;
 import arcbasis._cocos.OnlyOneBehavior;
 import arcbasis._cocos.OnlyOneTiming;
-import arcbasis._cocos.ParameterDefaultValueTypeFits;
+import arcbasis._cocos.OptionalConfigurationParametersLast;
 import arcbasis._cocos.ParameterDefaultValueOmitsPortRef;
+import arcbasis._cocos.ParameterDefaultValueTypeFits;
+import arcbasis._cocos.ParameterHeritage;
 import arcbasis._cocos.ParameterNameCapitalization;
+import arcbasis._cocos.ParameterOmitAssignmentExpressions;
+import arcbasis._cocos.PortHeritageTypeFits;
 import arcbasis._cocos.PortNameCapitalization;
 import arcbasis._cocos.PortUniqueSender;
 import arcbasis._cocos.PortsConnected;
 import arcbasis._cocos.SubPortsConnected;
+import arcbasis._cocos.SubcomponentNameCapitalization;
 import arcbasis._cocos.UniqueIdentifier;
 import comfortablearc._cocos.AtomicNoAutoConnect;
 import comfortablearc._cocos.MaxOneAutoConnect;
@@ -49,8 +48,8 @@ import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationI
 import de.monticore.types.check.TypeCalculator;
 import de.monticore.types.check.TypeRelations;
 import genericarc._cocos.ComponentHeritageTypeBound;
-import genericarc._cocos.SubcomponentTypeBound;
 import genericarc._cocos.GenericTypeParameterNameCapitalization;
+import genericarc._cocos.SubcomponentTypeBound;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
 import montiarc.check.MontiArcTypeCalculator;
 import variablearc._cocos.ConstraintIsBoolean;
@@ -61,9 +60,6 @@ import variablearc._cocos.FeatureUsage;
 import variablearc._cocos.IfStatementIsBoolean;
 import variablearc._cocos.IfStatementsOmitFieldReferences;
 import variablearc._cocos.IfStatementsOmitPortReferences;
-import variablearc._cocos.VariableArcASTArcBlockCoCo;
-import variablearc._cocos.VariableArcASTArcIfStatementCoCo;
-import variablearc._cocos.VariableElementsUsage;
 import variablearc._cocos.VariantCoCos;
 
 /**
@@ -127,9 +123,6 @@ public class MontiArcCoCos {
     checker.addCoCo(new IfStatementsOmitFieldReferences());
     checker.addCoCo(new IfStatementsOmitPortReferences());
     checker.addCoCo(new IfStatementIsBoolean(tc, tr));
-    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new VariableElementsUsage());
-    checker.addCoCo((VariableArcASTArcBlockCoCo) new VariableElementsUsage());
-    checker.addCoCo((VariableArcASTArcIfStatementCoCo) new VariableElementsUsage());
     checker.addCoCo(new VariantCoCos());
 
     // SCBasis, SCActions, and SCTransitions4Code CoCos
