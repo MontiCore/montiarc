@@ -8,20 +8,13 @@ package montiarc.util;
  * Assigned code range: 0xC1200 - 0xC1249
  */
 public enum GenericArcError implements Error {
-  TYPE_PARAMETER_UPPER_CASE("0xC1201", "The generic type parameter '%s' of component '%s'"
-      + " should start with an upper case letter."),
-  TYPE_ARG_IGNORES_UPPER_BOUND("0xC1202", "Type argument '%s' does not respect upper bound '%s' for type parameter " +
-      "'%s' of component type component type"),
-  TOO_FEW_TYPE_ARGUMENTS("0xC1203", "There are '%d' type arguments for component type '%s', " +
-      "but has '%d' mandatory type parameters that all must be bound."),
-  TOO_MANY_TYPE_ARGUMENTS("0xC1204", "There are '%d' type arguments for component type '%s', " +
-      "but it only has '%d' type parameters. Please do not provide more arguments than type parameters exist."),
-  HERITAGE_TYPE_ARG_IGNORES_UPPER_BOUND("0xC1205", "Type argument '%s' does not respect upper bound '%s' for type parameter " +
-    "'%s' of component type component type"),
-  HERITAGE_TOO_FEW_TYPE_ARGUMENTS("0xC1206", "There are '%d' type arguments for component type '%s', " +
-    "but has '%d' mandatory type parameters that all must be bound."),
-  HERITAGE_TOO_MANY_TYPE_ARGUMENTS("0xC1207", "There are '%d' type arguments for component type '%s', " +
-    "but it only has '%d' type parameters. Please do not provide more arguments than type parameters exist.");
+  TYPE_PARAMETER_UPPER_CASE("0xC1201", "Type parameters should start with an uppercase letter"),
+  TYPE_ARG_IGNORES_UPPER_BOUND("0xC1202", "Type parameter '%s' does not respect its upper bound, should extend '%s'"),
+  TOO_FEW_TYPE_ARGUMENTS("0xC1203", "Too few type arguments, expected `%s` but provided `%s`"),
+  TOO_MANY_TYPE_ARGUMENTS("0xC1204", "Too many type arguments, expected `%s` but provided `%s`"),
+  HERITAGE_TYPE_ARG_IGNORES_UPPER_BOUND("0xC1205", "Type parameter '%s' does not respect its upper bound, should extend '%s'"),
+  HERITAGE_TOO_FEW_TYPE_ARGUMENTS("0xC1206", "Too few type arguments, expected `%s` but provided `%s`"),
+  HERITAGE_TOO_MANY_TYPE_ARGUMENTS("0xC1207", "Too many type arguments, expected `%s` but provided `%s`");
 
   private final String errorCode;
   private final String errorMessage;

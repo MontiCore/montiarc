@@ -63,8 +63,9 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
     List<SymTypeExpression> args = parentExpr.getBindingsAsList();
     if (parentSymTypeParameters.size() > args.size()) {
       Log.error(
-          GenericArcError.HERITAGE_TOO_FEW_TYPE_ARGUMENTS.format(args.size(), parentExpr.printName(), parentSymTypeParameters.size()), node.get_SourcePositionStart(),
-          node.get_SourcePositionEnd());
+        GenericArcError.HERITAGE_TOO_FEW_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd()
+      );
     }
   }
 
@@ -84,8 +85,9 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
 
     if (parentSymTypeParameters.size() < args.size()) {
       Log.error(
-          GenericArcError.HERITAGE_TOO_MANY_TYPE_ARGUMENTS.format(args.size(), parentSym.getName(), parentSymTypeParameters.size()), node.get_SourcePositionStart(),
-          node.get_SourcePositionEnd());
+        GenericArcError.HERITAGE_TOO_MANY_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd()
+      );
     }
   }
 
@@ -99,8 +101,8 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
         for (SymTypeExpression bound : typeVar.getSuperTypesList()) {
           if (!tr.compatible(bound, typeVarBinding.get())) {
             Log.error(
-                GenericArcError.HERITAGE_TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print(), typeVar.getName(), parentSym.getName()),
-                parentPositionOrElseTypePosition(node));
+              GenericArcError.HERITAGE_TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print()),
+              parentPositionOrElseTypePosition(node));
           }
         }
       } else {

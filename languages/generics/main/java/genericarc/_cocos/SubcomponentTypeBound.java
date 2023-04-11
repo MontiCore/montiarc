@@ -51,8 +51,9 @@ public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationC
         for (SymTypeExpression bound : typeVar.getSuperTypesList()) {
           if (!this.tr.compatible(bound, typeVarBinding.get())) {
             Log.error(
-                GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print(), typeVar.getName(), compTypeSymbol.getName()),
-                astInstantiation.get_SourcePositionStart());
+                GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print()),
+                astInstantiation.get_SourcePositionStart(), astInstantiation.get_SourcePositionEnd()
+            );
           }
         }
       } else {
@@ -104,8 +105,9 @@ public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationC
     List<SymTypeExpression> args = compTypeExpr.getBindingsAsList();
     if (parentSymTypeParameters.size() > args.size()) {
       Log.error(
-          GenericArcError.TOO_FEW_TYPE_ARGUMENTS.format(args.size(), compTypeExpr.printName(), parentSymTypeParameters.size()), node.get_SourcePositionStart(),
-          node.get_SourcePositionEnd());
+        GenericArcError.TOO_FEW_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd()
+      );
     }
   }
 
@@ -124,8 +126,9 @@ public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationC
 
     if (parentSymTypeParameters.size() < args.size()) {
       Log.error(
-          GenericArcError.TOO_MANY_TYPE_ARGUMENTS.format(args.size(), compTypeSymbol.getName(), parentSymTypeParameters.size()), node.get_SourcePositionStart(),
-          node.get_SourcePositionEnd());
+        GenericArcError.TOO_MANY_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd()
+      );
     }
   }
 }

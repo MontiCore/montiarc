@@ -2,9 +2,9 @@
 package genericarc._cocos;
 
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Log;
 import genericarc._ast.ASTArcTypeParameter;
 import montiarc.util.GenericArcError;
-import montiarc.util.NameCapitalizationHelper;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
@@ -16,9 +16,10 @@ public class TypeParameterCapitalization implements GenericArcASTArcTypeParamete
   public void check(@NotNull ASTArcTypeParameter p) {
     Preconditions.checkNotNull(p);
 
-    if (NameCapitalizationHelper.isNotUpperCase(p.getName())) {
-      NameCapitalizationHelper.warning(GenericArcError.TYPE_PARAMETER_UPPER_CASE, p,
-        p.getName(), p.getEnclosingScope().getSpanningSymbol().getName());
+    if (p.getName().length() > 0 && !Character.isUpperCase(p.getName().codePointAt(0))) {
+      Log.warn(GenericArcError.TYPE_PARAMETER_UPPER_CASE.toString(),
+        p.get_SourcePositionStart(), p.get_SourcePositionEnd()
+      );
     }
   }
 }
