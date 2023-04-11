@@ -41,18 +41,18 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
- * Holds tests for {@link ArcBasisSymbolTableCompleter}.
+ * Holds tests for {@link ArcBasisScopesGenitorP2}.
  */
-public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
+public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
 
-  protected ArcBasisSymbolTableCompleter completer;
+  protected ArcBasisScopesGenitorP2 scopeGenP2;
 
-  protected ArcBasisSymbolTableCompleter getCompleter() {
-    return this.completer;
+  protected ArcBasisScopesGenitorP2 getScopeGenP2() {
+    return this.scopeGenP2;
   }
 
   protected void setUpCompleter() {
-    this.completer = ArcBasisMill.symbolTableCompleter();
+    this.scopeGenP2 = ArcBasisMill.scopesGenitorP2();
   }
 
   @BeforeEach
@@ -63,7 +63,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#setTraverser(ArcBasisTraverser)}
+   * Method under test {@link ArcBasisScopesGenitorP2#setTraverser(ArcBasisTraverser)}
    */
   @Test
   public void shouldSetTraverser() {
@@ -71,14 +71,14 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     ArcBasisTraverser traverser = ArcBasisMill.traverser();
 
     // When
-    this.getCompleter().setTraverser(traverser);
+    this.getScopeGenP2().setTraverser(traverser);
 
     // Then
-    Assertions.assertEquals(traverser, this.getCompleter().getTraverser());
+    Assertions.assertEquals(traverser, this.getScopeGenP2().getTraverser());
   }
 
   /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#setTraverser(ArcBasisTraverser)}
+   * Method under test {@link ArcBasisScopesGenitorP2#setTraverser(ArcBasisTraverser)}
    *
    * @param traverser the traverser to set (null)
    */
@@ -86,11 +86,11 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
   @NullSource
   public void setTraverserShouldThrowNullPointerException(@Nullable ArcBasisTraverser traverser) {
     // When && Then
-    Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().setTraverser(traverser));
+    Assertions.assertThrows(NullPointerException.class, () -> this.getScopeGenP2().setTraverser(traverser));
   }
 
   /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#visit(ASTComponentType)}
+   * Method under test {@link ArcBasisScopesGenitorP2#visit(ASTComponentType)}
    *
    * @param ast      the ast to visit
    * @param expected the expected exception
@@ -102,7 +102,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     Preconditions.checkNotNull(expected);
 
     // When && Then
-    Assertions.assertThrows(expected, () -> this.getCompleter().visit(ast));
+    Assertions.assertThrows(expected, () -> this.getScopeGenP2().visit(ast));
   }
 
   protected static Stream<Arguments> visitComponentTypeExpectedExceptionProvider() {
@@ -118,7 +118,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#visit(ASTComponentType)}
+   * Method under test {@link ArcBasisScopesGenitorP2#visit(ASTComponentType)}
    */
   @Test
   public void shouldVisitComponentType() {
@@ -132,10 +132,10 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     ast.setSymbol(symbol);
 
     // When
-    this.getCompleter().visit(ast);
+    this.getScopeGenP2().visit(ast);
 
     //Then
-    Assertions.assertTrue(this.getCompleter().getCurrentCompInstanceType().isEmpty());
+    Assertions.assertTrue(this.getScopeGenP2().getCurrentCompInstanceType().isEmpty());
   }
 
   @Test
@@ -151,16 +151,16 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     ast.setSymbol(symbol);
 
     // When
-    this.getCompleter().visit(ast);
+    this.getScopeGenP2().visit(ast);
 
     //Then
-    Assertions.assertTrue(this.getCompleter().getCurrentCompInstanceType().isPresent());
-    Assertions.assertTrue(this.getCompleter().getCurrentCompInstanceType().get() instanceof TypeExprOfComponent);
-    Assertions.assertEquals(symbol, this.getCompleter().getCurrentCompInstanceType().get().getTypeInfo());
+    Assertions.assertTrue(this.getScopeGenP2().getCurrentCompInstanceType().isPresent());
+    Assertions.assertTrue(this.getScopeGenP2().getCurrentCompInstanceType().get() instanceof TypeExprOfComponent);
+    Assertions.assertEquals(symbol, this.getScopeGenP2().getCurrentCompInstanceType().get().getTypeInfo());
   }
 
   /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#endVisit(ASTComponentType)}
+   * Method under test {@link ArcBasisScopesGenitorP2#endVisit(ASTComponentType)}
    *
    * @param ast      the ast to visit
    * @param setup    the setup to execute beforehand
@@ -169,16 +169,16 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
   @ParameterizedTest
   @MethodSource("endVisitComponentTypeExpectedExceptionProvider")
   public void endVisitShouldTrowException(@Nullable ASTComponentType ast,
-                                          @NotNull Consumer<ArcBasisSymbolTableCompleter> setup,
+                                          @NotNull Consumer<ArcBasisScopesGenitorP2> setup,
                                           @NotNull Class<Exception> expected) {
     Preconditions.checkNotNull(setup);
     Preconditions.checkNotNull(expected);
 
     // Given
-    setup.accept(this.getCompleter());
+    setup.accept(this.getScopeGenP2());
 
     // When && Then
-    Assertions.assertThrows(expected, () -> this.getCompleter().endVisit(ast));
+    Assertions.assertThrows(expected, () -> this.getScopeGenP2().endVisit(ast));
   }
 
   public static Stream<Arguments> endVisitComponentTypeExpectedExceptionProvider() {
@@ -188,7 +188,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
       .build();
     ast1.setSymbolAbsent();
 
-    Consumer<ArcBasisSymbolTableCompleter> consumer1 = completer -> {
+    Consumer<ArcBasisScopesGenitorP2> consumer1 = scopesGen -> {
     };
 
     return Stream.of(
@@ -198,7 +198,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#endVisit(ASTComponentType)}
+   * Method under test {@link ArcBasisScopesGenitorP2#endVisit(ASTComponentType)}
    */
   @Test
   public void shouldEndVisitComponentType() {
@@ -214,20 +214,20 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
       .build());
     ast.getSymbol().setAstNode(ast);
 
-    this.getCompleter().setCurrentCompInstanceType(new TypeExprOfComponent(ast.getSymbol()));
+    this.getScopeGenP2().setCurrentCompInstanceType(new TypeExprOfComponent(ast.getSymbol()));
 
     // When
-    this.getCompleter().endVisit(ast);
+    this.getScopeGenP2().endVisit(ast);
 
     // Then
-    Assertions.assertFalse(this.getCompleter().getCurrentCompInstanceType().isPresent());
+    Assertions.assertFalse(this.getScopeGenP2().getCurrentCompInstanceType().isPresent());
   }
 
   /**
    * If the component has no parent declaration, visiting the component head
    * should not change the state of the ast node or the state of the symbol.
    * <p>
-   * Method under test {@link ArcBasisSymbolTableCompleter#visit(ASTComponentHead)}
+   * Method under test {@link ArcBasisScopesGenitorP2#visit(ASTComponentHead)}
    */
   @Test
   public void testVisitComponentHead1() {
@@ -242,7 +242,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     ast.setParentAbsent();
 
     // When
-    this.getCompleter().visit(ast);
+    this.getScopeGenP2().visit(ast);
 
     // Then
     Assertions.assertAll(
@@ -256,7 +256,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
    * resolvable, visiting the component head should link the component
    * symbol and the ast node with the symbol representing the parent.
    * <p>
-   * Method under test {@link ArcBasisSymbolTableCompleter#visit(ASTComponentHead)}
+   * Method under test {@link ArcBasisScopesGenitorP2#visit(ASTComponentHead)}
    */
   @Test
   public void testVisitComponentHead2() {
@@ -297,7 +297,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     ((ASTMCQualifiedType) head.getParent()).getMCQualifiedName().setEnclosingScope(child.getSpannedScope());
 
     // When
-    getCompleter().visit(head);
+    getScopeGenP2().visit(head);
 
     // Then
     Assertions.assertAll(
@@ -315,7 +315,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
    * resolvable, visiting the component head should report a missing
    * component symbol.
    * <p>
-   * Method under test {@link ArcBasisSymbolTableCompleter#visit(ASTComponentHead)}
+   * Method under test {@link ArcBasisScopesGenitorP2#visit(ASTComponentHead)}
    */
   @Test
   public void testVisitComponentHead3() {
@@ -348,7 +348,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     ((ASTMCQualifiedType) head.getParent()).getMCQualifiedName().setEnclosingScope(child.getSpannedScope());
 
     // When
-    getCompleter().visit(head);
+    getScopeGenP2().visit(head);
 
     // Then
     Assertions.assertAll(
@@ -364,7 +364,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
    * referenced, visiting the component head should report an ambiguous symbol
    * reference.
    * <p>
-   * Method under test {@link ArcBasisSymbolTableCompleter#visit(ASTComponentHead)}
+   * Method under test {@link ArcBasisScopesGenitorP2#visit(ASTComponentHead)}
    */
   @Test
   public void testVisitComponentHead4() {
@@ -411,7 +411,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     ((ASTMCQualifiedType) head.getParent()).getMCQualifiedName().setEnclosingScope(child.getSpannedScope());
 
     // When
-    getCompleter().visit(head);
+    getScopeGenP2().visit(head);
 
     // Then
     Assertions.assertAll(
@@ -420,7 +420,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#visit(ASTComponentHead)}
+   * Method under test {@link ArcBasisScopesGenitorP2#visit(ASTComponentHead)}
    *
    * @param ast      the ast to visit
    * @param setup    the setup to execute beforehand
@@ -429,16 +429,16 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
   @ParameterizedTest
   @MethodSource("visitComponentHeadExpectedExceptionProvider")
   public void testVisitComponentHead5(@Nullable ASTComponentHead ast,
-                                      @NotNull Consumer<ArcBasisSymbolTableCompleter> setup,
+                                      @NotNull Consumer<ArcBasisScopesGenitorP2> setup,
                                       @NotNull Class<Exception> expected) {
     Preconditions.checkNotNull(setup);
     Preconditions.checkNotNull(expected);
 
     // Given
-    setup.accept(this.getCompleter());
+    setup.accept(this.getScopeGenP2());
 
     // When && Then
-    Assertions.assertThrows(expected, () -> this.getCompleter().visit(ast));
+    Assertions.assertThrows(expected, () -> this.getScopeGenP2().visit(ast));
   }
 
   protected static Stream<Arguments> visitComponentHeadExpectedExceptionProvider() {
@@ -453,7 +453,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     spannedBySymbol.setSpanningSymbol(typeSym);
     ast3.setEnclosingScope(spannedBySymbol);
 
-    Consumer<ArcBasisSymbolTableCompleter> consumer1 = completer -> {
+    Consumer<ArcBasisScopesGenitorP2> consumer1 = scopesGenP2 -> {
     };
 
     return Stream.of(
@@ -478,7 +478,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     symParam.setEnclosingScope(ArcBasisMill.globalScope());
 
     // When
-    getCompleter().visit(astParam);
+    getScopeGenP2().visit(astParam);
 
     // Then
     Assertions.assertNotNull(symParam.getType());
@@ -486,10 +486,10 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * If the symbol-table completer visits a port declaration with a single
+   * If the scopes genitor p2 visits a port declaration with a single
    * port and resolvable type, then it should update the port's symbol
    * with its type, direction, timing, and delay.
-   * The method under test is {@link ArcBasisSymbolTableCompleter#visit(ASTPortDeclaration).
+   * The method under test is {@link ArcBasisScopesGenitorP2#visit(ASTPortDeclaration).
    */
   @ParameterizedTest
   @CsvSource(value = {
@@ -545,7 +545,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     ast.accept(ArcBasisMill.scopesGenitorDelegator().traverser);
 
     // When
-    this.getCompleter().visit(ast);
+    this.getScopeGenP2().visit(ast);
 
     // Then
     Assertions.assertAll(
@@ -558,10 +558,10 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * If the symbol-table completer visits a port declaration with multiple
+   * If the scopes genitor p2 visits a port declaration with multiple
    * ports and resolvable type, then it should update the ports' symbols
    * with their type, direction, timing, and delay.
-   * The method under test is {@link ArcBasisSymbolTableCompleter#visit(ASTPortDeclaration).
+   * The method under test is {@link ArcBasisScopesGenitorP2#visit(ASTPortDeclaration).
    */
   @ParameterizedTest
   @CsvSource(value = {
@@ -618,7 +618,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     ast.accept(ArcBasisMill.scopesGenitorDelegator().traverser);
 
     // When
-    this.getCompleter().visit(ast);
+    this.getScopeGenP2().visit(ast);
 
     // Then
     Assertions.assertAll(
@@ -635,11 +635,11 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * If the symbol-table completer visits a port declaration with a single
+   * If the scopes genitor p2 visits a port declaration with a single
    * port but non-resolvable type, then it should update the ports' symbols
    * with their direction, timing, and delay and log an error for the
    * missing type.
-   * The method under test is {@link ArcBasisSymbolTableCompleter#visit(ASTPortDeclaration).
+   * The method under test is {@link ArcBasisScopesGenitorP2#visit(ASTPortDeclaration).
    */
   @ParameterizedTest
   @CsvSource(value = {
@@ -687,7 +687,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     ast.accept(ArcBasisMill.scopesGenitorDelegator().traverser);
 
     // When
-    this.getCompleter().visit(ast);
+    this.getScopeGenP2().visit(ast);
 
     // Then
     Assertions.assertAll(
@@ -700,10 +700,10 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * If the symbol-table completer visits a field declaration with a single
+   * If the scopes genitor p2 visits a field declaration with a single
    * field and resolvable type, then it should update the field's symbol
    * with its type.
-   * The method under test is {@link ArcBasisSymbolTableCompleter#visit(ASTArcFieldDeclaration).
+   * The method under test is {@link ArcBasisScopesGenitorP2#visit(ASTArcFieldDeclaration).
    */
   @Test
   public void testVisitArcFieldDeclaration1() {
@@ -733,7 +733,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     ast.accept(ArcBasisMill.scopesGenitorDelegator().traverser);
 
     // When
-    this.getCompleter().visit(ast);
+    this.getScopeGenP2().visit(ast);
 
     // Then
     Assertions.assertAll(
@@ -743,10 +743,10 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * If the symbol-table completer visits a field declaration with multiple
+   * If the scopes genitor p2 visits a field declaration with multiple
    * fields and resolvable type, then it should update the fields' symbols
    * with its type.
-   * The method under test is {@link ArcBasisSymbolTableCompleter#visit(ASTArcFieldDeclaration).
+   * The method under test is {@link ArcBasisScopesGenitorP2#visit(ASTArcFieldDeclaration).
    */
   @Test
   public void testVisitArcFieldDeclaration2() {
@@ -780,7 +780,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     ast.accept(ArcBasisMill.scopesGenitorDelegator().traverser);
 
     // When
-    this.getCompleter().visit(ast);
+    this.getScopeGenP2().visit(ast);
 
     // Then
     Assertions.assertAll(
@@ -791,10 +791,10 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * If the symbol-table completer visits a field declaration with a single
+   * If the scopes genitor p2 visits a field declaration with a single
    * field and resolvable type, then it should update the field's symbol
    * with its type.
-   * The method under test is {@link ArcBasisSymbolTableCompleter#visit(ASTArcFieldDeclaration).
+   * The method under test is {@link ArcBasisScopesGenitorP2#visit(ASTArcFieldDeclaration).
    */
   @Test
   public void testVisitArcFieldDeclaration3() {
@@ -816,7 +816,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     ast.accept(ArcBasisMill.scopesGenitorDelegator().traverser);
 
     // When
-    this.getCompleter().visit(ast);
+    this.getScopeGenP2().visit(ast);
 
     // Then
     Assertions.assertAll(
@@ -826,7 +826,7 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * Method under test {@link ArcBasisSymbolTableCompleter#visit(ASTComponentInstantiation)
+   * Method under test {@link ArcBasisScopesGenitorP2#visit(ASTComponentInstantiation)
    */
   @Test
   public void shouldVisitComponentInstantiation() {
@@ -835,11 +835,11 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = ArcBasisMill.globalScope().resolveComponentType("Comp").orElseThrow();
 
     // When
-    getCompleter().visit(ast);
+    getScopeGenP2().visit(ast);
 
     // Then
-    Assertions.assertTrue(getCompleter().getCurrentCompInstanceType().isPresent());
-    Assertions.assertEquals(comp, getCompleter().getCurrentCompInstanceType().get().getTypeInfo());
+    Assertions.assertTrue(getScopeGenP2().getCurrentCompInstanceType().isPresent());
+    Assertions.assertEquals(comp, getScopeGenP2().getCurrentCompInstanceType().get().getTypeInfo());
     Assertions.assertTrue(ast.getMCType().getDefiningSymbol().isPresent());
     Assertions.assertEquals(ast.getMCType().getDefiningSymbol().get(), comp);
   }
@@ -853,13 +853,13 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
       throw new IllegalStateException("We expect the component type 'Comp' to be added to the global scope by the " +
         "provider of the ASTComponentInstantiation.");
     }
-    getCompleter().setCurrentCompInstanceType(new TypeExprOfComponent(compTypeSym.get()));
+    getScopeGenP2().setCurrentCompInstanceType(new TypeExprOfComponent(compTypeSym.get()));
 
     // When
-    getCompleter().endVisit(instantiation);
+    getScopeGenP2().endVisit(instantiation);
 
     // Then
-    Assertions.assertFalse(getCompleter().getCurrentCompInstanceType().isPresent());
+    Assertions.assertFalse(getScopeGenP2().getCurrentCompInstanceType().isPresent());
   }
 
   @Test
@@ -877,10 +877,10 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
       .setName("CompType")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
-    getCompleter().setCurrentCompInstanceType(new TypeExprOfComponent(compType));
+    getScopeGenP2().setCurrentCompInstanceType(new TypeExprOfComponent(compType));
 
     // When
-    getCompleter().visit(astInstance);
+    getScopeGenP2().visit(astInstance);
 
     // Then
     Assertions.assertDoesNotThrow(astInstance.getSymbol()::getType);
@@ -898,13 +898,12 @@ public class ArcBasisSymbolTableCompleterTest extends ArcBasisAbstractTest {
       throw new IllegalStateException("We expect the component type 'Comp' to be added to the global scope by the " +
         "provider of the ASTComponentInstantiation.");
     }
-    // Attach a traverser to the completer, so that he can perfrom the whole handling process
     ArcBasisTraverser traverser = ArcBasisMill.traverser();
-    traverser.setArcBasisHandler(getCompleter());
-    traverser.add4ArcBasis(getCompleter());
+    traverser.setArcBasisHandler(getScopeGenP2());
+    traverser.add4ArcBasis(getScopeGenP2());
 
     // When
-    getCompleter().handle(astInstantiation);
+    getScopeGenP2().handle(astInstantiation);
 
     // Then
     for (ASTComponentInstance astInst : astInstantiation.getComponentInstanceList()) {

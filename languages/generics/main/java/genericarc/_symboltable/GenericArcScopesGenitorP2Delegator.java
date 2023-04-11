@@ -3,13 +3,13 @@ package genericarc._symboltable;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcElement;
-import arcbasis._symboltable.ArcBasisSymbolTableCompleter;
+import arcbasis._symboltable.ArcBasisScopesGenitorP2;
 import com.google.common.base.Preconditions;
 import genericarc.GenericArcMill;
 import genericarc._visitor.GenericArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-public class GenericArcSymbolTableCompleterDelegator {
+public class GenericArcScopesGenitorP2Delegator {
 
   protected IGenericArcGlobalScope globalScope;
 
@@ -19,7 +19,7 @@ public class GenericArcSymbolTableCompleterDelegator {
     return this.traverser;
   }
 
-  public GenericArcSymbolTableCompleterDelegator() {
+  public GenericArcScopesGenitorP2Delegator() {
     this.globalScope = GenericArcMill.globalScope();
     this.traverser = GenericArcMill.traverser();
     this.init();
@@ -31,15 +31,15 @@ public class GenericArcSymbolTableCompleterDelegator {
   }
 
   protected void initArcBasis() {
-    ArcBasisSymbolTableCompleter arcBasisSymbolTableCompleter = ArcBasisMill.symbolTableCompleter();
-    this.getTraverser().add4ArcBasis(arcBasisSymbolTableCompleter);
-    this.getTraverser().setArcBasisHandler(arcBasisSymbolTableCompleter);
+    ArcBasisScopesGenitorP2 arcBasisScopesGenitorP2 = ArcBasisMill.scopesGenitorP2();
+    this.getTraverser().add4ArcBasis(arcBasisScopesGenitorP2);
+    this.getTraverser().setArcBasisHandler(arcBasisScopesGenitorP2);
   }
 
   protected void initGenericArc() {
-    GenericArcSymbolTableCompleter genericArcSymbolTableCompleter = GenericArcMill.symbolTableCompleter();
-    this.getTraverser().add4GenericArc(genericArcSymbolTableCompleter);
-    this.getTraverser().setGenericArcHandler(genericArcSymbolTableCompleter);
+    GenericArcScopesGenitorP2 genericArcScopesGenitorP2 = GenericArcMill.scopesGenitorP2();
+    this.getTraverser().add4GenericArc(genericArcScopesGenitorP2);
+    this.getTraverser().setGenericArcHandler(genericArcScopesGenitorP2);
   }
 
   public void createFromAST(@NotNull ASTArcElement rootNode) {

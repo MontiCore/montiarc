@@ -1,46 +1,46 @@
 /* (c) https://github.com/MontiCore/monticore */
 package comfortablearc;
 
-import comfortablearc._symboltable.ComfortableArcSymbolTableCompleter;
-import comfortablearc._symboltable.ComfortableArcSymbolTableCompleterDelegator;
+import comfortablearc._symboltable.ComfortableArcScopesGenitorP2;
+import comfortablearc._symboltable.ComfortableArcScopesGenitorP2Delegator;
 
 public class ComfortableArcMill extends ComfortableArcMillTOP {
 
-  protected static ComfortableArcMill millComfortableArcSymbolTableCompleter ;
+  protected static ComfortableArcMill millComfortableArcScopesGenitorP2;
 
-  protected static ComfortableArcMill millComfortableArcSymbolTableCompleterDelegator;
+  protected static ComfortableArcMill millComfortableArcScopesGenitorP2Delegator;
 
-  public static ComfortableArcSymbolTableCompleter symbolTableCompleter ()  {
-    if (millComfortableArcSymbolTableCompleter == null) {
-      millComfortableArcSymbolTableCompleter = getMill();
+  public static ComfortableArcScopesGenitorP2 scopesGenitorP2() {
+    if (millComfortableArcScopesGenitorP2 == null) {
+      millComfortableArcScopesGenitorP2 = getMill();
     }
-    return millComfortableArcSymbolTableCompleter._symbolTableCompleter();
+    return millComfortableArcScopesGenitorP2._scopesGenitorP2();
   }
 
-  protected ComfortableArcSymbolTableCompleter _symbolTableCompleter() {
-    return new ComfortableArcSymbolTableCompleter();
+  protected ComfortableArcScopesGenitorP2 _scopesGenitorP2() {
+    return new ComfortableArcScopesGenitorP2();
   }
 
-  public static ComfortableArcSymbolTableCompleterDelegator symbolTableCompleterDelegator ()  {
-    if (millComfortableArcSymbolTableCompleterDelegator == null) {
-      millComfortableArcSymbolTableCompleterDelegator = getMill();
+  public static ComfortableArcScopesGenitorP2Delegator scopesGenitorP2Delegator() {
+    if (millComfortableArcScopesGenitorP2Delegator == null) {
+      millComfortableArcScopesGenitorP2Delegator = getMill();
     }
-    return millComfortableArcSymbolTableCompleterDelegator._symbolTableCompleterDelegator();
+    return millComfortableArcScopesGenitorP2Delegator._scopesGenitorP2Delegator();
   }
 
-  protected ComfortableArcSymbolTableCompleterDelegator _symbolTableCompleterDelegator() {
-    return new ComfortableArcSymbolTableCompleterDelegator();
+  protected ComfortableArcScopesGenitorP2Delegator _scopesGenitorP2Delegator() {
+    return new ComfortableArcScopesGenitorP2Delegator();
   }
 
-  public static void initMe(ComfortableArcMill a)  {
+  public static void initMe(ComfortableArcMill a) {
     ComfortableArcMillTOP.initMe(a);
-    millComfortableArcSymbolTableCompleter = a;
-    millComfortableArcSymbolTableCompleterDelegator = a;
+    millComfortableArcScopesGenitorP2 = a;
+    millComfortableArcScopesGenitorP2Delegator = a;
   }
 
   public static void reset() {
     ComfortableArcMillTOP.reset();
-    millComfortableArcSymbolTableCompleter = null;
-    millComfortableArcSymbolTableCompleterDelegator = null;
+    millComfortableArcScopesGenitorP2 = null;
+    millComfortableArcScopesGenitorP2Delegator = null;
   }
 }

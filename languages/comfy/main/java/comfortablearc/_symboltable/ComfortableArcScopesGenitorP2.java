@@ -7,7 +7,7 @@ import comfortablearc._visitor.ComfortableArcTraverser;
 import comfortablearc._visitor.ComfortableArcVisitor2;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-public class ComfortableArcSymbolTableCompleter implements ComfortableArcVisitor2, ComfortableArcHandler {
+public class ComfortableArcScopesGenitorP2 implements ComfortableArcVisitor2, ComfortableArcHandler {
 
   protected ComfortableArcTraverser traverser ;
 

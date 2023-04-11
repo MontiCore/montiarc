@@ -4,16 +4,16 @@ package variablearc;
 import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
 import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import com.microsoft.z3.Context;
-import variablearc._symboltable.VariableArcSymbolTableCompleter;
-import variablearc._symboltable.VariableArcSymbolTableCompleterDelegator;
+import variablearc._symboltable.VariableArcScopesGenitorP2;
+import variablearc._symboltable.VariableArcScopesGenitorP2Delegator;
 import variablearc.evaluation.VariableArcDeriveSMTExpr;
 import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 
 public class VariableArcMill extends VariableArcMillTOP {
 
-  protected static VariableArcMill millVariableArcSymbolTableCompleter;
+  protected static VariableArcMill millVariableArcScopesGenitorP2;
 
-  protected static VariableArcMill millVariableArcSymbolTableCompleterDelegator;
+  protected static VariableArcMill millVariableArcScopesGenitorP2Delegator;
 
   protected static VariableArcMill millFullPrettyPrinter;
 
@@ -21,18 +21,18 @@ public class VariableArcMill extends VariableArcMillTOP {
 
   protected static VariableArcMill millCompTypeExprDeSer;
 
-  public static VariableArcSymbolTableCompleter symbolTableCompleter() {
-    if (millVariableArcSymbolTableCompleter == null) {
-      millVariableArcSymbolTableCompleter = getMill();
+  public static VariableArcScopesGenitorP2 scopesGenitorP2() {
+    if (millVariableArcScopesGenitorP2 == null) {
+      millVariableArcScopesGenitorP2 = getMill();
     }
-    return millVariableArcSymbolTableCompleter._symbolTableCompleter();
+    return millVariableArcScopesGenitorP2._scopesGenitorP2();
   }
 
-  public static VariableArcSymbolTableCompleterDelegator symbolTableCompleterDelegator() {
-    if (millVariableArcSymbolTableCompleterDelegator == null) {
-      millVariableArcSymbolTableCompleterDelegator = getMill();
+  public static VariableArcScopesGenitorP2Delegator scopesGenitorP2Delegator() {
+    if (millVariableArcScopesGenitorP2Delegator == null) {
+      millVariableArcScopesGenitorP2Delegator = getMill();
     }
-    return millVariableArcSymbolTableCompleterDelegator._symbolTableCompleterDelegator();
+    return millVariableArcScopesGenitorP2Delegator._scopesGenitorP2Delegator();
   }
 
   public static IDeriveSMTExpr fullConverter(Context context) {
@@ -51,8 +51,8 @@ public class VariableArcMill extends VariableArcMillTOP {
 
   public static void initMe(VariableArcMill a) {
     VariableArcMillTOP.initMe(a);
-    millVariableArcSymbolTableCompleter = a;
-    millVariableArcSymbolTableCompleterDelegator = a;
+    millVariableArcScopesGenitorP2 = a;
+    millVariableArcScopesGenitorP2Delegator = a;
     millFullPrettyPrinter = a;
     millFullConverter = a;
     millCompTypeExprDeSer = a;
@@ -60,19 +60,19 @@ public class VariableArcMill extends VariableArcMillTOP {
 
   public static void reset() {
     VariableArcMillTOP.reset();
-    millVariableArcSymbolTableCompleter = null;
-    millVariableArcSymbolTableCompleterDelegator = null;
+    millVariableArcScopesGenitorP2 = null;
+    millVariableArcScopesGenitorP2Delegator = null;
     millFullPrettyPrinter = null;
     millFullConverter = null;
     millCompTypeExprDeSer = null;
   }
 
-  protected VariableArcSymbolTableCompleter _symbolTableCompleter() {
-    return new VariableArcSymbolTableCompleter();
+  protected VariableArcScopesGenitorP2 _scopesGenitorP2() {
+    return new VariableArcScopesGenitorP2();
   }
 
-  protected VariableArcSymbolTableCompleterDelegator _symbolTableCompleterDelegator() {
-    return new VariableArcSymbolTableCompleterDelegator();
+  protected VariableArcScopesGenitorP2Delegator _scopesGenitorP2Delegator() {
+    return new VariableArcScopesGenitorP2Delegator();
   }
 
   protected IDeriveSMTExpr _fullConverter(Context context) {

@@ -41,10 +41,9 @@ take a while. Subsequent builds should be faster.
 Once the project is built, you can look at the generated source code. 
 The `languages` folder contains the language components of MontiArc, more 
 specifically, their frontend implementation. That is parsers to create abstract
-syntax trees (ASTs) from textual models, genitors, and symbol table completers
-to construct and complete the symbol table, context condition checks to check
-well-formedness, transformations, visitors, and a command line tool that puts 
-everything together.
+syntax trees (ASTs) from textual models, infrastructure to create the symbol 
+table, context condition checks, transformations, visitors, and a command line 
+tool that puts everything together.
 
 The `generators` folder contains code generators that translate MontiArc component 
 models to some general-purpose language. Currently, available are the MontiArc to 

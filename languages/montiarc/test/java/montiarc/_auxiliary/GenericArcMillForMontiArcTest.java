@@ -34,14 +34,14 @@ public class GenericArcMillForMontiArcTest {
   }
 
   /**
-   * Ensures that the symbol table completer is initialized with the expected type printer and component synthesizer
-   * with respect to the initialized mill. That is, the mill should provide a symbol table completer that is initialized
-   * with a {@link ArcBasisSynthesizeComponent} when using the {@link GenericArcMill}, respectively provide a symbol
-   * table completer that is initialized with a {@link MontiArcSynthesizeComponent} when using the {@link MontiArcMill}.
+   * Ensures that the scopes genitor p2 is initialized with the expected type printer and component synthesizer
+   * with respect to the initialized mill. That is, the mill should provide a scopes genitor p2 that is initialized
+   * with a {@link ArcBasisSynthesizeComponent} when using the {@link GenericArcMill}, respectively provide a scopes 
+   * genitor p2 that is initialized with a {@link MontiArcSynthesizeComponent} when using the {@link MontiArcMill}.
    *
    * @param setup                   The setup to execute, e.g., initialize the respective mill.
-   * @param expectedCompSynthesizer The expected class of the component synthesizer of the symbol-table completer.
-   * @param expectedTypeSynthesizer The expected class of the type synthesizer of the symbol-table completer.
+   * @param expectedCompSynthesizer The expected class of the component synthesizer of the scopes genitor p2.
+   * @param expectedTypeSynthesizer The expected class of the type synthesizer of the scopes genitor p2.
    */
   @ParameterizedTest
   @MethodSource("setupAndExpectedClassForSymTabCompleterProvider")
@@ -58,9 +58,9 @@ public class GenericArcMillForMontiArcTest {
     // Then
     Assertions.assertAll(
       () -> Assertions.assertEquals(expectedCompSynthesizer,
-        GenericArcMill.symbolTableCompleter().getComponentSynthesizer().getClass()),
+        GenericArcMill.scopesGenitorP2().getComponentSynthesizer().getClass()),
       () -> Assertions.assertEquals(expectedTypeSynthesizer,
-        GenericArcMill.symbolTableCompleter().getTypeCalculator().getClass())
+        GenericArcMill.scopesGenitorP2().getTypeCalculator().getClass())
     );
   }
 

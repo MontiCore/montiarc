@@ -33,9 +33,9 @@ import org.mockito.Mockito;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public class GenericArcSymbolTableCompleterTest extends GenericArcAbstractTest {
+public class GenericArcScopesGenitorP2Test extends GenericArcAbstractTest {
 
-  protected GenericArcSymbolTableCompleter completer;
+  protected GenericArcScopesGenitorP2 scopesGenP2;
 
   protected static Stream<Arguments> visitComponentHeadExpectedExceptionProvider() {
     ASTGenericComponentHead ast1 = GenericArcMill.genericComponentHeadBuilder().build();
@@ -49,7 +49,7 @@ public class GenericArcSymbolTableCompleterTest extends GenericArcAbstractTest {
     spannedBySymbol.setSpanningSymbol(typeSym);
     ast3.setEnclosingScope(spannedBySymbol);
 
-    Consumer<GenericArcSymbolTableCompleter> consumer1 = completer -> {};
+    Consumer<GenericArcScopesGenitorP2> consumer1 = scopesGenP2 -> {};
 
     return Stream.of(
       Arguments.of(null, consumer1, NullPointerException.class),
@@ -59,12 +59,12 @@ public class GenericArcSymbolTableCompleterTest extends GenericArcAbstractTest {
     );
   }
 
-  protected GenericArcSymbolTableCompleter getCompleter() {
-    return this.completer;
+  protected GenericArcScopesGenitorP2 getScopesGenP2() {
+    return this.scopesGenP2;
   }
 
   protected void setUpCompleter() {
-    this.completer = GenericArcMill.symbolTableCompleter();
+    this.scopesGenP2 = GenericArcMill.scopesGenitorP2();
   }
 
   @BeforeEach
@@ -75,7 +75,7 @@ public class GenericArcSymbolTableCompleterTest extends GenericArcAbstractTest {
   }
 
   /**
-   * Method under test {@link GenericArcSymbolTableCompleter#setComponentSynthesizer(ISynthesizeComponent)}
+   * Method under test {@link GenericArcScopesGenitorP2#setComponentSynthesizer(ISynthesizeComponent)}
    */
   @Test
   public void shouldSetComponentSynthesizer() {
@@ -83,23 +83,23 @@ public class GenericArcSymbolTableCompleterTest extends GenericArcAbstractTest {
     ISynthesizeComponent typeSynth = new ArcBasisSynthesizeComponent();
 
     // When
-    this.getCompleter().setComponentSynthesizer(typeSynth);
+    this.getScopesGenP2().setComponentSynthesizer(typeSynth);
 
     // Then
-    Assertions.assertEquals(typeSynth, this.getCompleter().getComponentSynthesizer());
+    Assertions.assertEquals(typeSynth, this.getScopesGenP2().getComponentSynthesizer());
   }
 
   /**
-   * Method under test {@link GenericArcSymbolTableCompleter#setComponentSynthesizer(ISynthesizeComponent)}
+   * Method under test {@link GenericArcScopesGenitorP2#setComponentSynthesizer(ISynthesizeComponent)}
    */
   @Test
   public void setComponentSynthesizerShouldThrowNullPointerException() {
     // When && Then
-    Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().setComponentSynthesizer(null));
+    Assertions.assertThrows(NullPointerException.class, () -> this.getScopesGenP2().setComponentSynthesizer(null));
   }
 
   /**
-   * Method under test {@link GenericArcSymbolTableCompleter#setTraverser(GenericArcTraverser)}
+   * Method under test {@link GenericArcScopesGenitorP2#setTraverser(GenericArcTraverser)}
    */
   @Test
   public void shouldSetTraverser() {
@@ -107,14 +107,14 @@ public class GenericArcSymbolTableCompleterTest extends GenericArcAbstractTest {
     GenericArcTraverser traverser = GenericArcMill.traverser();
 
     // When
-    this.getCompleter().setTraverser(traverser);
+    this.getScopesGenP2().setTraverser(traverser);
 
     // Then
-    Assertions.assertEquals(traverser, this.getCompleter().getTraverser());
+    Assertions.assertEquals(traverser, this.getScopesGenP2().getTraverser());
   }
 
   /**
-   * Method under test {@link GenericArcSymbolTableCompleter#setTraverser(GenericArcTraverser)}
+   * Method under test {@link GenericArcScopesGenitorP2#setTraverser(GenericArcTraverser)}
    *
    * @param traverser the traverser to set (null)
    */
@@ -122,24 +122,24 @@ public class GenericArcSymbolTableCompleterTest extends GenericArcAbstractTest {
   @NullSource
   public void setTraverserShouldThrowNullPointerException(@Nullable GenericArcTraverser traverser) {
     // When && Then
-    Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().setTraverser(traverser));
+    Assertions.assertThrows(NullPointerException.class, () -> this.getScopesGenP2().setTraverser(traverser));
   }
 
   /**
-   * Method under test {@link GenericArcSymbolTableCompleter#GenericArcSymbolTableCompleter()}
+   * Method under test {@link GenericArcScopesGenitorP2#GenericArcScopesGenitorP2()}
    */
   @Test
   public void shouldConstructClass() {
     // When
-    GenericArcSymbolTableCompleter completer = new GenericArcSymbolTableCompleter();
+    GenericArcScopesGenitorP2 scopesGenP2 = new GenericArcScopesGenitorP2();
 
     //Then
-    Assertions.assertNotNull(completer.getComponentSynthesizer());
-    Assertions.assertNotNull(completer.getTypeCalculator());
+    Assertions.assertNotNull(scopesGenP2.getComponentSynthesizer());
+    Assertions.assertNotNull(scopesGenP2.getTypeCalculator());
   }
 
   /**
-   * Method under test {@link GenericArcSymbolTableCompleter#visit(ASTGenericComponentHead)}
+   * Method under test {@link GenericArcScopesGenitorP2#visit(ASTGenericComponentHead)}
    * <p>
    * If the component has no parent then the symbol should not be modified.
    */
@@ -156,7 +156,7 @@ public class GenericArcSymbolTableCompleterTest extends GenericArcAbstractTest {
     ast.setParentAbsent();
 
     // When
-    this.getCompleter().visit(ast);
+    this.getScopesGenP2().visit(ast);
 
     // Then
     Assertions.assertFalse(ast.isPresentParent());
@@ -164,7 +164,7 @@ public class GenericArcSymbolTableCompleterTest extends GenericArcAbstractTest {
   }
 
   /**
-   * Method under test {@link GenericArcSymbolTableCompleter#visit(ASTGenericComponentHead)}
+   * Method under test {@link GenericArcScopesGenitorP2#visit(ASTGenericComponentHead)}
    */
   @Test
   public void shouldVisitComponentHead() {
@@ -205,14 +205,14 @@ public class GenericArcSymbolTableCompleterTest extends GenericArcAbstractTest {
     ((ASTMCQualifiedType) childCompHead.getParent()).getMCQualifiedName().setEnclosingScope(symChildComp.getSpannedScope());
 
     // When
-    getCompleter().visit(childCompHead);
+    getScopesGenP2().visit(childCompHead);
 
     // Then
     Assertions.assertEquals(parentComp, symChildComp.getParent().getTypeInfo());
   }
 
   /**
-   * Method under test {@link GenericArcSymbolTableCompleter#visit(ASTGenericComponentHead)}
+   * Method under test {@link GenericArcScopesGenitorP2#visit(ASTGenericComponentHead)}
    *
    * @param ast      the ast to visit
    * @param setup    the setup to execute beforehand
@@ -221,16 +221,16 @@ public class GenericArcSymbolTableCompleterTest extends GenericArcAbstractTest {
   @ParameterizedTest
   @MethodSource("visitComponentHeadExpectedExceptionProvider")
   public void visitShouldTrowException(@Nullable ASTGenericComponentHead ast,
-                                       @NotNull Consumer<GenericArcSymbolTableCompleter> setup,
+                                       @NotNull Consumer<GenericArcScopesGenitorP2> setup,
                                        @NotNull Class<Exception> expected) {
     Preconditions.checkNotNull(setup);
     Preconditions.checkNotNull(expected);
 
     // Given
-    setup.accept(this.getCompleter());
+    setup.accept(this.getScopesGenP2());
 
     // When && Then
-    Assertions.assertThrows(expected, () -> this.getCompleter().visit(ast));
+    Assertions.assertThrows(expected, () -> this.getScopesGenP2().visit(ast));
   }
 
   @Test
@@ -264,8 +264,8 @@ public class GenericArcSymbolTableCompleterTest extends GenericArcAbstractTest {
     typeParamWithBoundSym.setAstNode(astTypeParamWithBounds);
 
     // When
-    this.getCompleter().visit(astTypeParam);
-    this.getCompleter().visit(astTypeParamWithBounds);
+    this.getScopesGenP2().visit(astTypeParam);
+    this.getScopesGenP2().visit(astTypeParamWithBounds);
 
     // Then
     Assertions.assertEquals(0, typeParamSym.getSuperTypesList().size());
@@ -283,8 +283,8 @@ public class GenericArcSymbolTableCompleterTest extends GenericArcAbstractTest {
 
     // When & Then
     Assertions.assertAll(
-      () -> Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter().visit((ASTArcTypeParameter) null)),
-      () -> Assertions.assertThrows(IllegalArgumentException.class, () -> this.getCompleter().visit(param))
+      () -> Assertions.assertThrows(NullPointerException.class, () -> this.getScopesGenP2().visit((ASTArcTypeParameter) null)),
+      () -> Assertions.assertThrows(IllegalArgumentException.class, () -> this.getScopesGenP2().visit(param))
     );
   }
 }

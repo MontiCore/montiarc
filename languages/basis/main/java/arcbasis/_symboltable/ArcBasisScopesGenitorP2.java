@@ -9,7 +9,6 @@ import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTPort;
-import arcbasis._ast.ASTPortAccess;
 import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
@@ -28,19 +27,19 @@ import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.util.Optional;
 
-public class ArcBasisSymbolTableCompleter implements ArcBasisVisitor2, ArcBasisHandler {
+public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, ArcBasisHandler {
 
   protected CompTypeExpression currentCompInstanceType;
   protected ArcBasisTraverser traverser;
   protected IArcTypeCalculator typeCalculator;
   protected ISynthesizeComponent componentSynthesizer;
 
-  public ArcBasisSymbolTableCompleter() {
+  public ArcBasisScopesGenitorP2() {
     this(new ArcBasisSynthesizeComponent(), new ArcBasisTypeCalculator());
   }
 
-  public ArcBasisSymbolTableCompleter(@NotNull ISynthesizeComponent componentSynthesizer,
-                                      @NotNull IArcTypeCalculator typeCalculator) {
+  public ArcBasisScopesGenitorP2(@NotNull ISynthesizeComponent componentSynthesizer,
+                                 @NotNull IArcTypeCalculator typeCalculator) {
     this.componentSynthesizer = Preconditions.checkNotNull(componentSynthesizer);
     this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
   }

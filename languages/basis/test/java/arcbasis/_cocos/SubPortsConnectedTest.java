@@ -6,8 +6,8 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
-import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
-import arcbasis._symboltable.ArcBasisSymbolTablePass3Delegator;
+import arcbasis._symboltable.ArcBasisScopesGenitorP2Delegator;
+import arcbasis._symboltable.ArcBasisScopesGenitorP3Delegator;
 import com.google.common.base.Preconditions;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import montiarc.util.ArcError;
@@ -47,9 +47,9 @@ public class SubPortsConnectedTest extends ArcBasisAbstractTest {
 
   @BeforeEach
   public void setUpTest() {
-    ArcBasisScopesGenitorDelegator genitor = ArcBasisMill.scopesGenitorDelegator();
-    ArcBasisSymbolTableCompleterDelegator completer = ArcBasisMill.symbolTableCompleterDelegator();
-    ArcBasisSymbolTablePass3Delegator pass3 = ArcBasisMill.symbolTablePass3Delegator();
+    ArcBasisScopesGenitorDelegator scopesGen = ArcBasisMill.scopesGenitorDelegator();
+    ArcBasisScopesGenitorP2Delegator scopesGenP2 = ArcBasisMill.scopesGenitorP2Delegator();
+    ArcBasisScopesGenitorP3Delegator scopesGenP3 = ArcBasisMill.scopesGenitorP3Delegator();
 
     ASTComponentType comp1 = ArcBasisMill.componentTypeBuilder().setName("A")
       .setHead(Mockito.mock(ASTComponentHead.class))
@@ -68,7 +68,7 @@ public class SubPortsConnectedTest extends ArcBasisAbstractTest {
           .build())
         .build())
       .build();
-    genitor.createFromAST(comp1);
+    scopesGen.createFromAST(comp1);
     ASTComponentType comp2 = ArcBasisMill.componentTypeBuilder().setName("B")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
@@ -92,7 +92,7 @@ public class SubPortsConnectedTest extends ArcBasisAbstractTest {
           "sub1.i2").build())
         .build())
       .build();
-    genitor.createFromAST(comp2);
+    scopesGen.createFromAST(comp2);
     ASTComponentType comp3 = ArcBasisMill.componentTypeBuilder().setName("C")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
@@ -118,14 +118,14 @@ public class SubPortsConnectedTest extends ArcBasisAbstractTest {
           ArcBasisMill.connectorBuilder().setSource("sub1.o1").setTargetList("o1").build())
         .build())
       .build();
-    genitor.createFromAST(comp3);
-    completer.createFromAST(comp1);
-    completer.createFromAST(comp2);
-    completer.createFromAST(comp3);
+    scopesGen.createFromAST(comp3);
+    scopesGenP2.createFromAST(comp1);
+    scopesGenP2.createFromAST(comp2);
+    scopesGenP2.createFromAST(comp3);
 
-    pass3.createFromAST(comp1);
-    pass3.createFromAST(comp2);
-    pass3.createFromAST(comp3);
+    scopesGenP3.createFromAST(comp1);
+    scopesGenP3.createFromAST(comp2);
+    scopesGenP3.createFromAST(comp3);
 
     components = new HashMap<>();
     components.put(comp1.getName(), comp1);

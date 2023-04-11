@@ -1,69 +1,69 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis;
 
-import arcbasis._symboltable.ArcBasisSymbolTableCompleter;
-import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
-import arcbasis._symboltable.ArcBasisSymbolTablePass3;
-import arcbasis._symboltable.ArcBasisSymbolTablePass3Delegator;
+import arcbasis._symboltable.ArcBasisScopesGenitorP2;
+import arcbasis._symboltable.ArcBasisScopesGenitorP2Delegator;
+import arcbasis._symboltable.ArcBasisScopesGenitorP3;
+import arcbasis._symboltable.ArcBasisScopesGenitorP3Delegator;
 import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
 import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 
 public class ArcBasisMill extends ArcBasisMillTOP {
 
-  protected static ArcBasisMill millArcBasisSymbolTableCompleter;
+  protected static ArcBasisMill millArcBasisScopesGenitorP2;
 
-  protected static ArcBasisMill millArcBasisSymbolTableCompleterDelegator;
+  protected static ArcBasisMill millArcBasisScopesGenitorP2Delegator;
 
-  protected static ArcBasisMill millArcBasisSymbolTablePass3;
+  protected static ArcBasisMill millArcBasisScopesGenitorP3;
 
-  protected static ArcBasisMill millArcBasisSymbolTablePass3Delegator;
+  protected static ArcBasisMill millArcBasisScopesGenitorP3Delegator;
 
   protected static ArcBasisMill millFullPrettyPrinter;
 
   protected static ArcBasisMill millCompTypeExprDeSer;
 
-  public static ArcBasisSymbolTableCompleter symbolTableCompleter ()  {
-    if (millArcBasisSymbolTableCompleter == null) {
-      millArcBasisSymbolTableCompleter = getMill();
+  public static ArcBasisScopesGenitorP2 scopesGenitorP2() {
+    if (millArcBasisScopesGenitorP2 == null) {
+      millArcBasisScopesGenitorP2 = getMill();
     }
-    return millArcBasisSymbolTableCompleter._symbolTableCompleter();
+    return millArcBasisScopesGenitorP2._scopesGenitorP2();
   }
 
-  protected ArcBasisSymbolTableCompleter _symbolTableCompleter() {
-    return new ArcBasisSymbolTableCompleter();
+  protected ArcBasisScopesGenitorP2 _scopesGenitorP2() {
+    return new ArcBasisScopesGenitorP2();
   }
 
-  public static ArcBasisSymbolTableCompleterDelegator symbolTableCompleterDelegator ()  {
-    if (millArcBasisSymbolTableCompleterDelegator == null) {
-      millArcBasisSymbolTableCompleterDelegator = getMill();
+  public static ArcBasisScopesGenitorP2Delegator scopesGenitorP2Delegator() {
+    if (millArcBasisScopesGenitorP2Delegator == null) {
+      millArcBasisScopesGenitorP2Delegator = getMill();
     }
-    return millArcBasisSymbolTableCompleterDelegator._symbolTableCompleterDelegator();
+    return millArcBasisScopesGenitorP2Delegator._scopesGenitorP2Delegator();
   }
 
-  protected ArcBasisSymbolTableCompleterDelegator _symbolTableCompleterDelegator() {
-    return new ArcBasisSymbolTableCompleterDelegator();
+  protected ArcBasisScopesGenitorP2Delegator _scopesGenitorP2Delegator() {
+    return new ArcBasisScopesGenitorP2Delegator();
   }
 
-  public static ArcBasisSymbolTablePass3 symbolTablePass3()  {
-    if (millArcBasisSymbolTablePass3 == null) {
-      millArcBasisSymbolTablePass3 = getMill();
+  public static ArcBasisScopesGenitorP3 scopesGenitorP3() {
+    if (millArcBasisScopesGenitorP3 == null) {
+      millArcBasisScopesGenitorP3 = getMill();
     }
-    return millArcBasisSymbolTablePass3._symbolTablePass3();
+    return millArcBasisScopesGenitorP3._scopesGenitorP3();
   }
 
-  protected ArcBasisSymbolTablePass3 _symbolTablePass3() {
-    return new ArcBasisSymbolTablePass3();
+  protected ArcBasisScopesGenitorP3 _scopesGenitorP3() {
+    return new ArcBasisScopesGenitorP3();
   }
 
-  public static ArcBasisSymbolTablePass3Delegator symbolTablePass3Delegator()  {
-    if (millArcBasisSymbolTablePass3Delegator == null) {
-      millArcBasisSymbolTablePass3Delegator = getMill();
+  public static ArcBasisScopesGenitorP3Delegator scopesGenitorP3Delegator() {
+    if (millArcBasisScopesGenitorP3Delegator == null) {
+      millArcBasisScopesGenitorP3Delegator = getMill();
     }
-    return millArcBasisSymbolTablePass3Delegator._symbolTablePass3Delegator();
+    return millArcBasisScopesGenitorP3Delegator._scopesGenitorP3Delegator();
   }
 
-  protected ArcBasisSymbolTablePass3Delegator _symbolTablePass3Delegator() {
-    return new ArcBasisSymbolTablePass3Delegator();
+  protected ArcBasisScopesGenitorP3Delegator _scopesGenitorP3Delegator() {
+    return new ArcBasisScopesGenitorP3Delegator();
   }
 
   public static ComposedCompTypeExprDeSer compTypeExprDeSer() {
@@ -77,20 +77,20 @@ public class ArcBasisMill extends ArcBasisMillTOP {
     return new ArcBasisCompTypeExprDeSer();
   }
 
-  public static void initMe(ArcBasisMill a)  {
+  public static void initMe(ArcBasisMill a) {
     ArcBasisMillTOP.initMe(a);
-    millArcBasisSymbolTableCompleter = a;
-    millArcBasisSymbolTableCompleterDelegator = a;
-    millArcBasisSymbolTablePass3 = a;
+    millArcBasisScopesGenitorP2 = a;
+    millArcBasisScopesGenitorP2Delegator = a;
+    millArcBasisScopesGenitorP3 = a;
     millFullPrettyPrinter = a;
     millCompTypeExprDeSer = a;
   }
 
   public static void reset() {
     ArcBasisMillTOP.reset();
-    millArcBasisSymbolTableCompleter = null;
-    millArcBasisSymbolTableCompleterDelegator = null;
-    millArcBasisSymbolTablePass3 = null;
+    millArcBasisScopesGenitorP2 = null;
+    millArcBasisScopesGenitorP2Delegator = null;
+    millArcBasisScopesGenitorP3 = null;
     millFullPrettyPrinter = null;
     millCompTypeExprDeSer = null;
   }

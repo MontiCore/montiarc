@@ -210,14 +210,14 @@ public class MontiArcTool extends MontiArcToolTOP {
   @Override
   public void completeSymbolTable(@NotNull ASTMACompilationUnit node) {
     Preconditions.checkNotNull(node);
-    MontiArcMill.symbolTableCompleterDelegator().createFromAST(node);
-    MontiArcMill.symbolTablePass3Delegator().createFromAST(node);
+    MontiArcMill.scopesGenitorP2Delegator().createFromAST(node);
+    MontiArcMill.scopesGenitorP3Delegator().createFromAST(node);
   }
 
   public void completeSymbolTable(@NotNull Collection<ASTMACompilationUnit> nodes) {
     Preconditions.checkNotNull(nodes);
-    MontiArcMill.symbolTableCompleterDelegator().createFromAST(nodes);
-    MontiArcMill.symbolTablePass3Delegator().createFromAST(nodes);
+    MontiArcMill.scopesGenitorP2Delegator().createFromAST(nodes);
+    MontiArcMill.scopesGenitorP3Delegator().createFromAST(nodes);
   }
 
   public void runAfterParserCoCos(@NotNull Collection<ASTMACompilationUnit> asts) {

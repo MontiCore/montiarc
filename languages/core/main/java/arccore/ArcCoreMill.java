@@ -2,41 +2,40 @@
 package arccore;
 
 import arcbasis.check.deser.ComposedCompTypeExprDeSer;
-import arccore._symboltable.ArcCoreSymbolTableCompleter;
-import arccore._symboltable.ArcCoreSymbolTableCompleterDelegator;
-import de.monticore.prettyprint.IndentPrinter;
+import arccore._symboltable.ArcCoreScopesGenitorP2;
+import arccore._symboltable.ArcCoreScopesGenitorP2Delegator;
 import genericarc.check.GenericArcCompTypeExprDeSer;
 
 public class ArcCoreMill extends ArcCoreMillTOP {
 
-  protected static ArcCoreMill millArcCoreSymbolTableCompleter ;
+  protected static ArcCoreMill millArcCoreScopesGenitorP2;
 
-  protected static ArcCoreMill millArcCoreSymbolTableCompleterDelegator;
+  protected static ArcCoreMill millArcCoreScopesGenitorP2Delegator;
 
   protected static ArcCoreMill millFullPrettyPrinter;
 
   protected static ArcCoreMill millCompTypeExprDeSer;
-  
-  public static ArcCoreSymbolTableCompleter symbolTableCompleter ()  {
-    if (millArcCoreSymbolTableCompleter == null) {
-      millArcCoreSymbolTableCompleter = getMill();
+
+  public static ArcCoreScopesGenitorP2 scopesGenitorP2() {
+    if (millArcCoreScopesGenitorP2 == null) {
+      millArcCoreScopesGenitorP2 = getMill();
     }
-    return millArcCoreSymbolTableCompleter._symbolTableCompleter();
+    return millArcCoreScopesGenitorP2._scopesGenitorP2();
   }
 
-  protected ArcCoreSymbolTableCompleter _symbolTableCompleter() {
-    return new ArcCoreSymbolTableCompleter();
+  protected ArcCoreScopesGenitorP2 _scopesGenitorP2() {
+    return new ArcCoreScopesGenitorP2();
   }
 
-  public static ArcCoreSymbolTableCompleterDelegator symbolTableCompleterDelegator ()  {
-    if (millArcCoreSymbolTableCompleterDelegator == null) {
-      millArcCoreSymbolTableCompleterDelegator = getMill();
+  public static ArcCoreScopesGenitorP2Delegator scopesGenitorP2Delegator() {
+    if (millArcCoreScopesGenitorP2Delegator == null) {
+      millArcCoreScopesGenitorP2Delegator = getMill();
     }
-    return millArcCoreSymbolTableCompleterDelegator._symbolTableCompleterDelegator();
+    return millArcCoreScopesGenitorP2Delegator._scopesGenitorP2Delegator();
   }
 
-  protected ArcCoreSymbolTableCompleterDelegator _symbolTableCompleterDelegator() {
-    return new ArcCoreSymbolTableCompleterDelegator();
+  protected ArcCoreScopesGenitorP2Delegator _scopesGenitorP2Delegator() {
+    return new ArcCoreScopesGenitorP2Delegator();
   }
 
   public static ComposedCompTypeExprDeSer compTypeExprDeSer() {
@@ -50,18 +49,18 @@ public class ArcCoreMill extends ArcCoreMillTOP {
     return new GenericArcCompTypeExprDeSer();
   }
 
-  public static void initMe(ArcCoreMill a)  {
+  public static void initMe(ArcCoreMill a) {
     ArcCoreMillTOP.initMe(a);
-    millArcCoreSymbolTableCompleter = a;
-    millArcCoreSymbolTableCompleterDelegator = a;
+    millArcCoreScopesGenitorP2 = a;
+    millArcCoreScopesGenitorP2Delegator = a;
     millFullPrettyPrinter = a;
     millCompTypeExprDeSer = a;
   }
 
   public static void reset() {
     ArcCoreMillTOP.reset();
-    millArcCoreSymbolTableCompleter = null;
-    millArcCoreSymbolTableCompleterDelegator = null;
+    millArcCoreScopesGenitorP2 = null;
+    millArcCoreScopesGenitorP2Delegator = null;
     millFullPrettyPrinter = null;
     millCompTypeExprDeSer = null;
   }

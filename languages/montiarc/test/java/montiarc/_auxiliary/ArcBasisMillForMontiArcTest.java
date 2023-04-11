@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 public class ArcBasisMillForMontiArcTest {
 
-  protected static Stream<Arguments> setupAndExpectedClassForSymTabCompleterProvider() {
+  protected static Stream<Arguments> setupAndExpectedClassForScopesGenitorP2Provider() {
     return Stream.of(
       Arguments.of(arcBasisMillSetup(), ArcBasisSynthesizeComponent.class, ArcBasisTypeCalculator.class),
       Arguments.of(arcCoreMillSetup(), ArcBasisSynthesizeComponent.class, ArcBasisTypeCalculator.class),
@@ -35,19 +35,19 @@ public class ArcBasisMillForMontiArcTest {
   }
 
   /**
-   * Ensures that the symbol table completer is initialized with the expected type printer and component synthesizer
-   * with respect to the initialized mill. That is, the mill should provide a symbol table completer that is initialized
+   * Ensures that the scopes genitor p2 is initialized with the expected type printer and component synthesizer
+   * with respect to the initialized mill. That is, the mill should provide a scopes genitor p2 that is initialized
    * with a {@link ArcBasisSynthesizeComponent}, and a {@link
-   * ArcBasisTypeCalculator} when using the  {@link ArcBasisMill}, respectively provide a symbol table completer that is
+   * ArcBasisTypeCalculator} when using the  {@link ArcBasisMill}, respectively provide a scopes genitor p2 that is
    * initialized with a {@link ArcBasisSynthesizeComponent}, and a {@link MontiArcTypeCalculator} when using the
    * {@link MontiArcMill}.
    *
    * @param setup                      The setup to execute, e.g., initialize the respective mill.
-   * @param expectedCompSynthesizer    The expected class of the component synthesizer of the symbol-table completer.
-   * @param expectedSymTypeSynthesizer The expected class of the sym type synthesizer of the symbol-table completer.
+   * @param expectedCompSynthesizer    The expected class of the component synthesizer of the scopes genitor p2.
+   * @param expectedSymTypeSynthesizer The expected class of the sym type synthesizer of the scopes genitor p2.
    */
   @ParameterizedTest
-  @MethodSource("setupAndExpectedClassForSymTabCompleterProvider")
+  @MethodSource("setupAndExpectedClassForScopesGenitorP2Provider")
   void shouldProvideCompleterAsExpected(@NotNull Runnable setup,
                                                @NotNull Class<ISynthesizeComponent> expectedCompSynthesizer,
                                                @NotNull Class<ISynthesize> expectedSymTypeSynthesizer) {
@@ -61,9 +61,9 @@ public class ArcBasisMillForMontiArcTest {
     // Then
     Assertions.assertAll(
       () -> Assertions.assertEquals(expectedCompSynthesizer,
-        ArcBasisMill.symbolTableCompleter().getComponentSynthesizer().getClass()),
+        ArcBasisMill.scopesGenitorP2().getComponentSynthesizer().getClass()),
       () -> Assertions.assertEquals(expectedSymTypeSynthesizer,
-        ArcBasisMill.symbolTableCompleter().getTypeCalculator().getClass())
+        ArcBasisMill.scopesGenitorP2().getTypeCalculator().getClass())
     );
   }
 

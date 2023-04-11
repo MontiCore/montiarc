@@ -9,7 +9,7 @@ import variablearc._visitor.VariableArcHandler;
 import variablearc._visitor.VariableArcTraverser;
 import variablearc._visitor.VariableArcVisitor2;
 
-public class VariableArcSymbolTableCompleter implements VariableArcVisitor2, VariableArcHandler, ArcBasisVisitor2 {
+public class VariableArcScopesGenitorP2 implements VariableArcVisitor2, VariableArcHandler, ArcBasisVisitor2 {
 
   protected VariableArcTraverser traverser;
 

@@ -3,13 +3,13 @@ package comfortablearc._symboltable;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcElement;
-import arcbasis._symboltable.ArcBasisSymbolTableCompleter;
+import arcbasis._symboltable.ArcBasisScopesGenitorP2;
 import com.google.common.base.Preconditions;
 import comfortablearc.ComfortableArcMill;
 import comfortablearc._visitor.ComfortableArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-public class ComfortableArcSymbolTableCompleterDelegator {
+public class ComfortableArcScopesGenitorP2Delegator {
 
   protected IComfortableArcGlobalScope globalScope;
 
@@ -19,7 +19,7 @@ public class ComfortableArcSymbolTableCompleterDelegator {
     return this.traverser;
   }
 
-  public ComfortableArcSymbolTableCompleterDelegator() {
+  public ComfortableArcScopesGenitorP2Delegator() {
     this.globalScope = ComfortableArcMill.globalScope();
     this.traverser = ComfortableArcMill.traverser();
     this.init();
@@ -30,9 +30,9 @@ public class ComfortableArcSymbolTableCompleterDelegator {
   }
 
   protected void initArcBasis() {
-    ArcBasisSymbolTableCompleter arcBasisSymbolTableCompleter = ArcBasisMill.symbolTableCompleter();
-    this.getTraverser().add4ArcBasis(arcBasisSymbolTableCompleter);
-    this.getTraverser().setArcBasisHandler(arcBasisSymbolTableCompleter);
+    ArcBasisScopesGenitorP2 arcBasisScopesGenitorP2 = ArcBasisMill.scopesGenitorP2();
+    this.getTraverser().add4ArcBasis(arcBasisScopesGenitorP2);
+    this.getTraverser().setArcBasisHandler(arcBasisScopesGenitorP2);
   }
 
   public void createFromAST(@NotNull ASTArcElement rootNode) {

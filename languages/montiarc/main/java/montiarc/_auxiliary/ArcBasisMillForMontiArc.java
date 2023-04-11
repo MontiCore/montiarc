@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._auxiliary;
 
-import arcbasis._symboltable.ArcBasisSymbolTableCompleter;
+import arcbasis._symboltable.ArcBasisScopesGenitorP2;
 import arcbasis._symboltable.ComponentTypeSymbolBuilder;
 import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import montiarc.check.MontiArcSynthesizeComponent;
@@ -11,8 +11,8 @@ import variablearc._symboltable.VariableArcComponentTypeSymbolBuilder;
 public class ArcBasisMillForMontiArc extends ArcBasisMillForMontiArcTOP {
 
   @Override
-  protected ArcBasisSymbolTableCompleter _symbolTableCompleter() {
-    return new ArcBasisSymbolTableCompleter(new MontiArcSynthesizeComponent(), new MontiArcTypeCalculator());
+  protected ArcBasisScopesGenitorP2 _scopesGenitorP2() {
+    return new ArcBasisScopesGenitorP2(new MontiArcSynthesizeComponent(), new MontiArcTypeCalculator());
   }
 
   @Override

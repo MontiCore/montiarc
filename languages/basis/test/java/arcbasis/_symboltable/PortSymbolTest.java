@@ -41,9 +41,9 @@ public class PortSymbolTest extends ArcBasisAbstractTest {
 
   @Test
   public void shouldReturnResolvedType() {
-    ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
-    ArcBasisSymbolTableCompleterDelegator completer = ArcBasisMill.symbolTableCompleterDelegator();
-    ArcBasisSymbolTablePass3Delegator pass3 = ArcBasisMill.symbolTablePass3Delegator();
+    ArcBasisScopesGenitorDelegator scopesGen = ArcBasisMill.scopesGenitorDelegator();
+    ArcBasisScopesGenitorP2Delegator scopesGenP2 = ArcBasisMill.scopesGenitorP2Delegator();
+    ArcBasisScopesGenitorP3Delegator scopesGenP3 = ArcBasisMill.scopesGenitorP3Delegator();
 
     ASTPortDeclaration ports = ArcBasisMill.portDeclarationBuilder()
       .setPortList("p")
@@ -62,9 +62,9 @@ public class PortSymbolTest extends ArcBasisAbstractTest {
       .build();
 
     ArcBasisMill.globalScope().add(ArcBasisMill.typeSymbolBuilder().setName("Integer").build());
-    symTab.createFromAST(ast);
-    completer.createFromAST(ast);
-    pass3.createFromAST(ast);
+    scopesGen.createFromAST(ast);
+    scopesGenP2.createFromAST(ast);
+    scopesGenP3.createFromAST(ast);
 
     Assertions.assertFalse(ast.getSpannedScope().getPortSymbols().get("p").get(0).getTypeInfo() instanceof TypeSymbolSurrogate);
   }

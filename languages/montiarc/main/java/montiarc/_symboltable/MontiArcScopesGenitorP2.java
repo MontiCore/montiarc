@@ -7,7 +7,7 @@ import montiarc._visitor.MontiArcTraverser;
 import montiarc._visitor.MontiArcVisitor2;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-public class MontiArcSymbolTableCompleter implements MontiArcVisitor2, MontiArcHandler {
+public class MontiArcScopesGenitorP2 implements MontiArcVisitor2, MontiArcHandler {
 
   protected MontiArcTraverser traverser ;
 

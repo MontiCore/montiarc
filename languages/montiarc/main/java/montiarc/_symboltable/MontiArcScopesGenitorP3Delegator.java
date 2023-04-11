@@ -2,7 +2,6 @@
 package montiarc._symboltable;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._symboltable.ArcBasisSymbolTablePass3;
 import arcbasis._symboltable.IArcBasisGlobalScope;
 import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
@@ -11,7 +10,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Collection;
 
-public class MontiArcSymbolTablePass3Delegator {
+public class MontiArcScopesGenitorP3Delegator {
 
   protected IArcBasisGlobalScope globalScope;
 
@@ -21,7 +20,7 @@ public class MontiArcSymbolTablePass3Delegator {
     return this.traverser;
   }
 
-  public MontiArcSymbolTablePass3Delegator() {
+  public MontiArcScopesGenitorP3Delegator() {
     this.globalScope = ArcBasisMill.globalScope();
     this.traverser = ArcBasisMill.traverser();
     this.init();
@@ -32,8 +31,7 @@ public class MontiArcSymbolTablePass3Delegator {
   }
 
   protected void initArcBasis() {
-    ArcBasisSymbolTablePass3 arcBasisSymbolTableCompleter = ArcBasisMill.symbolTablePass3();
-    this.getTraverser().add4ArcBasis(arcBasisSymbolTableCompleter);
+    this.getTraverser().add4ArcBasis(ArcBasisMill.scopesGenitorP3());
   }
 
   public void createFromAST(@NotNull ASTMACompilationUnit rootNode) {

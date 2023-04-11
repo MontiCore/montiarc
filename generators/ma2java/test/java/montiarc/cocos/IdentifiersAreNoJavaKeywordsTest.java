@@ -69,8 +69,8 @@ public class IdentifiersAreNoJavaKeywordsTest {
     Path modelLocation = Path.of(MODEL_PATH, modelName);
     ASTMACompilationUnit ast = MontiArcMill.parser().parse(modelLocation.toString()).orElseThrow();
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
-    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
-    MontiArcMill.symbolTablePass3Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new IdentifiersAreNoJavaKeywords.AutomatonStateNamesAreNoJavaKeywords());

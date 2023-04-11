@@ -42,11 +42,11 @@ public class ASTPortAccessTest extends ArcBasisAbstractTest {
     portAccess.setEnclosingScope(this.createTestScope());
 
     ArcBasisTraverser traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.symbolTableCompleter());
+    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP2());
     portAccess.accept(traverser);
 
     traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.symbolTablePass3());
+    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP3());
     portAccess.accept(traverser);
 
     //When
@@ -68,11 +68,11 @@ public class ASTPortAccessTest extends ArcBasisAbstractTest {
     portAccess.setEnclosingScope(this.createTestScope());
 
     ArcBasisTraverser traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.symbolTableCompleter());
+    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP2());
     portAccess.accept(traverser);
 
     traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.symbolTablePass3());
+    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP3());
     portAccess.accept(traverser);
 
     //When
@@ -94,11 +94,11 @@ public class ASTPortAccessTest extends ArcBasisAbstractTest {
     portAccess.setEnclosingScope(this.createTestScope());
 
     ArcBasisTraverser traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.symbolTableCompleter());
+    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP2());
     portAccess.accept(traverser);
 
     traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.symbolTablePass3());
+    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP3());
     portAccess.accept(traverser);
 
     //When
@@ -131,11 +131,11 @@ public class ASTPortAccessTest extends ArcBasisAbstractTest {
     portAccess.setEnclosingScope(this.createTestScope());
 
     ArcBasisTraverser traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.symbolTableCompleter());
+    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP2());
     portAccess.accept(traverser);
 
     traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.symbolTablePass3());
+    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP3());
     portAccess.accept(traverser);
 
     //When

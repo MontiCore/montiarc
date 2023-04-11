@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 
 /**
  * Integration test for the {@link MontiArcScopesGenitorDelegator} and the
- * {@link MontiArcSymbolTableCompleterDelegator} that checks that the symbol
+ * {@link MontiArcScopesGenitorP2Delegator} that checks that the symbol
  * table is constructed fully and correctly with respect to basic properties.
  * That is, checks that all scopes, symbols and ast nodes have an enclosing
  * scope, and that all spanning symbols and ast nodes have a spanned scope.

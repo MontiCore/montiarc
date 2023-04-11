@@ -3,19 +3,19 @@ package variablearc._symboltable;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcElement;
-import arcbasis._symboltable.ArcBasisSymbolTableCompleter;
+import arcbasis._symboltable.ArcBasisScopesGenitorP2;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._visitor.VariableArcTraverser;
 
-public class VariableArcSymbolTableCompleterDelegator {
+public class VariableArcScopesGenitorP2Delegator {
 
   protected IVariableArcGlobalScope globalScope;
 
   protected VariableArcTraverser traverser;
 
-  public VariableArcSymbolTableCompleterDelegator() {
+  public VariableArcScopesGenitorP2Delegator() {
     this.globalScope = VariableArcMill.globalScope();
     this.traverser = VariableArcMill.traverser();
     this.init();
@@ -31,16 +31,16 @@ public class VariableArcSymbolTableCompleterDelegator {
   }
 
   protected void initArcBasis() {
-    ArcBasisSymbolTableCompleter arcBasisSymbolTableCompleter = ArcBasisMill.symbolTableCompleter();
-    this.getTraverser().add4ArcBasis(arcBasisSymbolTableCompleter);
-    this.getTraverser().setArcBasisHandler(arcBasisSymbolTableCompleter);
+    ArcBasisScopesGenitorP2 arcBasisScopesGenitorP2 = ArcBasisMill.scopesGenitorP2();
+    this.getTraverser().add4ArcBasis(arcBasisScopesGenitorP2);
+    this.getTraverser().setArcBasisHandler(arcBasisScopesGenitorP2);
   }
 
   protected void initVariableArc() {
-    VariableArcSymbolTableCompleter variableArcSymbolTableCompleter = VariableArcMill.symbolTableCompleter();
-    this.getTraverser().add4ArcBasis(variableArcSymbolTableCompleter);
-    this.getTraverser().add4VariableArc(variableArcSymbolTableCompleter);
-    this.getTraverser().setVariableArcHandler(variableArcSymbolTableCompleter);
+    VariableArcScopesGenitorP2 variableArcScopesGenitorP2 = VariableArcMill.scopesGenitorP2();
+    this.getTraverser().add4ArcBasis(variableArcScopesGenitorP2);
+    this.getTraverser().add4VariableArc(variableArcScopesGenitorP2);
+    this.getTraverser().setVariableArcHandler(variableArcScopesGenitorP2);
   }
 
   public void createFromAST(@NotNull ASTArcElement rootNode) {

@@ -141,7 +141,7 @@ public class ArcBasisScopesGenitorTest extends ArcBasisAbstractTest {
       .setMCType(type).build();
     VariableSymbol symbol = this.getSymTab().create_ArcParameter(ast).build();
     Assertions.assertEquals(ast.getName(), symbol.getName());
-    Assertions.assertNull(symbol.getType()); // We set the symbol in the completer
+    Assertions.assertNull(symbol.getType());
   }
 
   @Test

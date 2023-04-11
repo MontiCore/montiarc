@@ -6,12 +6,8 @@ import arcbasis._visitor.ArcBasisVisitor2;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-public class ArcBasisSymbolTablePass3 implements ArcBasisVisitor2 {
+public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
 
-  /**
-   * Depends on ComponentInstanceSymbol type which is set by the completer
-   * @param node the port access to complete
-   */
   @Override
   public void visit(@NotNull ASTPortAccess node) {
     Preconditions.checkNotNull(node);

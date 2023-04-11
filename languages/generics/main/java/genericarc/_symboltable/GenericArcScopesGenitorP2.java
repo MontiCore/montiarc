@@ -24,18 +24,18 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Optional;
 
-public class GenericArcSymbolTableCompleter implements GenericArcVisitor2, GenericArcHandler {
+public class GenericArcScopesGenitorP2 implements GenericArcVisitor2, GenericArcHandler {
 
   protected GenericArcTraverser traverser;
   protected ISynthesizeComponent componentSynthesizer;
   protected IArcTypeCalculator typeCalculator;
 
-  public GenericArcSymbolTableCompleter() {
+  public GenericArcScopesGenitorP2() {
     this(new ArcBasisSynthesizeComponent(), new GenericArcTypeCalculator());
   }
 
-  public GenericArcSymbolTableCompleter(@NotNull ISynthesizeComponent componentSynthesizer,
-                                        @NotNull IArcTypeCalculator typeCalculator) {
+  public GenericArcScopesGenitorP2(@NotNull ISynthesizeComponent componentSynthesizer,
+                                   @NotNull IArcTypeCalculator typeCalculator) {
     this.componentSynthesizer = Preconditions.checkNotNull(componentSynthesizer);
     this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
   }

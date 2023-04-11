@@ -7,7 +7,7 @@ import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-public class ArcBasisSymbolTablePass3Delegator {
+public class ArcBasisScopesGenitorP2Delegator {
 
   protected IArcBasisGlobalScope globalScope;
 
@@ -17,7 +17,7 @@ public class ArcBasisSymbolTablePass3Delegator {
     return this.traverser;
   }
 
-  public ArcBasisSymbolTablePass3Delegator() {
+  public ArcBasisScopesGenitorP2Delegator() {
     this.globalScope = ArcBasisMill.globalScope();
     this.traverser = ArcBasisMill.traverser();
     this.init();
@@ -28,8 +28,9 @@ public class ArcBasisSymbolTablePass3Delegator {
   }
 
   protected void initArcBasis() {
-    ArcBasisSymbolTablePass3 arcBasisSymbolTableCompleter = ArcBasisMill.symbolTablePass3();
-    this.getTraverser().add4ArcBasis(arcBasisSymbolTableCompleter);
+    ArcBasisScopesGenitorP2 arcBasisScopesGenitorP2 = ArcBasisMill.scopesGenitorP2();
+    this.getTraverser().add4ArcBasis(arcBasisScopesGenitorP2);
+    this.getTraverser().setArcBasisHandler(arcBasisScopesGenitorP2);
   }
 
   public void createFromAST(@NotNull ASTArcElement rootNode) {

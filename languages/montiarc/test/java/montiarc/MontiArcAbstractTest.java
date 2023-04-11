@@ -129,8 +129,8 @@ public abstract class MontiArcAbstractTest extends AbstractTest {
       ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model)
         .orElseThrow(() -> new IllegalStateException(Log.getFindings().toString()));
       MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
-      MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
-      MontiArcMill.symbolTablePass3Delegator().createFromAST(ast);
+      MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
+      MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

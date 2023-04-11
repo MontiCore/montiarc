@@ -7,8 +7,8 @@ import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
-import arcbasis._symboltable.ArcBasisSymbolTableCompleterDelegator;
-import arcbasis._symboltable.ArcBasisSymbolTablePass3Delegator;
+import arcbasis._symboltable.ArcBasisScopesGenitorP2Delegator;
+import arcbasis._symboltable.ArcBasisScopesGenitorP3Delegator;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.junit.jupiter.api.Assertions;
@@ -33,8 +33,8 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
       .build();
 
     ArcBasisMill.scopesGenitorDelegator().createFromAST(ast);
-    ArcBasisMill.symbolTableCompleterDelegator().createFromAST(ast);
-    ArcBasisMill.symbolTablePass3Delegator().createFromAST(ast);
+    ArcBasisMill.scopesGenitorP2Delegator().createFromAST(ast);
+    ArcBasisMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     CircularInheritance coco = new CircularInheritance();
 
@@ -64,10 +64,10 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
     ArcBasisScopesGenitorDelegator stg = ArcBasisMill.scopesGenitorDelegator();
     stg.createFromAST(a);
     stg.createFromAST(b);
-    ArcBasisSymbolTableCompleterDelegator stc = ArcBasisMill.symbolTableCompleterDelegator();
+    ArcBasisScopesGenitorP2Delegator stc = ArcBasisMill.scopesGenitorP2Delegator();
     stc.createFromAST(a);
     stc.createFromAST(b);
-    ArcBasisSymbolTablePass3Delegator st3 = ArcBasisMill.symbolTablePass3Delegator();
+    ArcBasisScopesGenitorP3Delegator st3 = ArcBasisMill.scopesGenitorP3Delegator();
     st3.createFromAST(a);
     st3.createFromAST(b);
 
@@ -100,10 +100,10 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
     ArcBasisScopesGenitorDelegator stg = ArcBasisMill.scopesGenitorDelegator();
     stg.createFromAST(parent);
     stg.createFromAST(child);
-    ArcBasisSymbolTableCompleterDelegator stc = ArcBasisMill.symbolTableCompleterDelegator();
+    ArcBasisScopesGenitorP2Delegator stc = ArcBasisMill.scopesGenitorP2Delegator();
     stc.createFromAST(parent);
     stc.createFromAST(child);
-    ArcBasisSymbolTablePass3Delegator st3 = ArcBasisMill.symbolTablePass3Delegator();
+    ArcBasisScopesGenitorP3Delegator st3 = ArcBasisMill.scopesGenitorP3Delegator();
     st3.createFromAST(parent);
     st3.createFromAST(child);
 
@@ -135,10 +135,10 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
     ArcBasisScopesGenitorDelegator stg = ArcBasisMill.scopesGenitorDelegator();
     stg.createFromAST(parent);
     stg.createFromAST(child);
-    ArcBasisSymbolTableCompleterDelegator stc = ArcBasisMill.symbolTableCompleterDelegator();
+    ArcBasisScopesGenitorP2Delegator stc = ArcBasisMill.scopesGenitorP2Delegator();
     stc.createFromAST(parent);
     stc.createFromAST(child);
-    ArcBasisSymbolTablePass3Delegator st3 = ArcBasisMill.symbolTablePass3Delegator();
+    ArcBasisScopesGenitorP3Delegator st3 = ArcBasisMill.scopesGenitorP3Delegator();
     st3.createFromAST(parent);
     st3.createFromAST(child);
 

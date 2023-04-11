@@ -2,15 +2,15 @@
 package montiarc._auxiliary;
 
 import arcbasis.check.deser.ComposedCompTypeExprDeSer;
-import genericarc._symboltable.GenericArcSymbolTableCompleter;
+import genericarc._symboltable.GenericArcScopesGenitorP2;
 import montiarc.check.MontiArcSynthesizeComponent;
 import montiarc.check.MontiArcTypeCalculator;
 
 public class GenericArcMillForMontiArc extends GenericArcMillForMontiArcTOP {
 
   @Override
-  protected GenericArcSymbolTableCompleter _symbolTableCompleter() {
-    return new GenericArcSymbolTableCompleter(new MontiArcSynthesizeComponent(), new MontiArcTypeCalculator());
+  protected GenericArcScopesGenitorP2 _scopesGenitorP2() {
+    return new GenericArcScopesGenitorP2(new MontiArcSynthesizeComponent(), new MontiArcTypeCalculator());
   }
 
   @Override

@@ -28,8 +28,8 @@ public class RootNoInstanceTest extends MontiArcAbstractTest {
     // Given
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit("component A { }").orElseThrow();
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
-    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
-    MontiArcMill.symbolTablePass3Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new RootNoInstance());
@@ -50,8 +50,8 @@ public class RootNoInstanceTest extends MontiArcAbstractTest {
     // Given
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
-    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
-    MontiArcMill.symbolTablePass3Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new RootNoInstance());

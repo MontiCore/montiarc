@@ -31,17 +31,17 @@ import java.util.stream.Stream;
  */
 public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCalculatorTest {
 
-  protected ArcBasisScopesGenitorDelegator scopeGenitor;
-  protected ArcBasisSymbolTableCompleterDelegator completer;
-  protected ArcBasisSymbolTablePass3Delegator pass3;
+  protected ArcBasisScopesGenitorDelegator scopeGen;
+  protected ArcBasisScopesGenitorP2Delegator scopeGenP2;
+  protected ArcBasisScopesGenitorP3Delegator scopeGenP3;
   protected final static TransitiveScopeSetter scopeSetter = new TransitiveScopeSetter();
 
   @Override
   public void setUpScope() {
     super.setUpScope();
-    this.scopeGenitor = ArcBasisMill.scopesGenitorDelegator();
-    this.completer = ArcBasisMill.symbolTableCompleterDelegator();
-    this.pass3 = ArcBasisMill.symbolTablePass3Delegator();
+    this.scopeGen = ArcBasisMill.scopesGenitorDelegator();
+    this.scopeGenP2 = ArcBasisMill.scopesGenitorP2Delegator();
+    this.scopeGenP3 = ArcBasisMill.scopesGenitorP3Delegator();
   }
 
   @Override
@@ -70,15 +70,15 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
     Preconditions.checkNotNull(expectedErrors);
 
     // Given
-    this.scopeGenitor.createFromAST(toInstantiate);
-    this.completer.createFromAST(toInstantiate);
-    this.pass3.createFromAST(toInstantiate);
+    this.scopeGen.createFromAST(toInstantiate);
+    this.scopeGenP2.createFromAST(toInstantiate);
+    this.scopeGenP3.createFromAST(toInstantiate);
 
     ASTComponentInstantiation compInst = provideInstantiation(toInstantiate, "foo", instantiationArgs);
     ASTComponentType enclComp = encloseInstInCompType(compInst);
-    this.scopeGenitor.createFromAST(enclComp);
-    this.completer.createFromAST(enclComp);
-    this.pass3.createFromAST(toInstantiate);
+    this.scopeGen.createFromAST(enclComp);
+    this.scopeGenP2.createFromAST(enclComp);
+    this.scopeGenP3.createFromAST(toInstantiate);
 
     // When
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment(new ArcBasisTypeCalculator(), new TypeRelations());

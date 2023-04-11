@@ -7,9 +7,9 @@ import arccore._visitor.ArcCoreVisitor2;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-public class ArcCoreSymbolTableCompleter implements ArcCoreVisitor2, ArcCoreHandler {
+public class ArcCoreScopesGenitorP2 implements ArcCoreVisitor2, ArcCoreHandler {
 
-  protected ArcCoreTraverser traverser ;
+  protected ArcCoreTraverser traverser;
 
   @Override
   public void setTraverser(@NotNull ArcCoreTraverser traverser) {

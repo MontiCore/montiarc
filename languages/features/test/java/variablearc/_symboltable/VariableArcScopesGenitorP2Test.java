@@ -22,18 +22,18 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Tests for {@link VariableArcSymbolTableCompleter}
+ * Tests for {@link VariableArcScopesGenitorP2}
  */
-public class VariableArcSymbolTableCompleterTest extends VariableArcAbstractTest {
+public class VariableArcScopesGenitorP2Test extends VariableArcAbstractTest {
 
-  protected VariableArcSymbolTableCompleter completer;
+  protected VariableArcScopesGenitorP2 scopesGenP2;
 
-  protected VariableArcSymbolTableCompleter getCompleter() {
-    return this.completer;
+  protected VariableArcScopesGenitorP2 getScopesGenP2() {
+    return this.scopesGenP2;
   }
 
   protected void setUpCompleter() {
-    this.completer = VariableArcMill.symbolTableCompleter();
+    this.scopesGenP2 = VariableArcMill.scopesGenitorP2();
   }
 
   @BeforeEach
@@ -44,7 +44,7 @@ public class VariableArcSymbolTableCompleterTest extends VariableArcAbstractTest
   }
 
   /**
-   * Method under test {@link VariableArcSymbolTableCompleter#setTraverser(VariableArcTraverser)}
+   * Method under test {@link VariableArcScopesGenitorP2#setTraverser(VariableArcTraverser)}
    */
   @Test
   public void shouldSetTraverser() {
@@ -52,14 +52,14 @@ public class VariableArcSymbolTableCompleterTest extends VariableArcAbstractTest
     VariableArcTraverser traverser = VariableArcMill.traverser();
 
     // When
-    this.getCompleter().setTraverser(traverser);
+    this.getScopesGenP2().setTraverser(traverser);
 
     // Then
-    Assertions.assertEquals(traverser, this.getCompleter().getTraverser());
+    Assertions.assertEquals(traverser, this.getScopesGenP2().getTraverser());
   }
 
   /**
-   * Method under test {@link VariableArcSymbolTableCompleter#setTraverser(VariableArcTraverser)}
+   * Method under test {@link VariableArcScopesGenitorP2#setTraverser(VariableArcTraverser)}
    *
    * @param traverser the traverser to set (null)
    */
@@ -67,12 +67,12 @@ public class VariableArcSymbolTableCompleterTest extends VariableArcAbstractTest
   @NullSource
   public void setTraverserShouldThrowNullPointerException(@Nullable VariableArcTraverser traverser) {
     // When && Then
-    Assertions.assertThrows(NullPointerException.class, () -> this.getCompleter()
+    Assertions.assertThrows(NullPointerException.class, () -> this.getScopesGenP2()
       .setTraverser(traverser));
   }
 
   /**
-   * Method under test {@link VariableArcSymbolTableCompleter#visit(ComponentInstanceSymbol)}
+   * Method under test {@link VariableArcScopesGenitorP2#visit(ComponentInstanceSymbol)}
    */
   @Test
   public void shouldVisitComponentInstanceSymbol() {
@@ -97,7 +97,7 @@ public class VariableArcSymbolTableCompleterTest extends VariableArcAbstractTest
 
     ImmutableList<ASTArcArgument> bindingsBeforeCompletion = symbol.getBindingsAsList();
     // When
-    getCompleter().visit(symbol);
+    getScopesGenP2().visit(symbol);
 
     // Then
    Assertions.assertNotEquals(symbol.getBindingsAsList(),bindingsBeforeCompletion);

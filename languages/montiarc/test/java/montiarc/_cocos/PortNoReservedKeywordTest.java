@@ -42,8 +42,8 @@ public class PortNoReservedKeywordTest extends MontiArcAbstractTest {
     // Given
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
-    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
-    MontiArcMill.symbolTablePass3Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new PortNoReservedKeyword("lang", Arrays.asList("key", "word")));
@@ -64,8 +64,8 @@ public class PortNoReservedKeywordTest extends MontiArcAbstractTest {
     // Given
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
-    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
-    MontiArcMill.symbolTablePass3Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new PortNoReservedKeyword("lang", Arrays.asList("key", "word")));

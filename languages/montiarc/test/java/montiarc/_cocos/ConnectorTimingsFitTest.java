@@ -214,8 +214,8 @@ public class ConnectorTimingsFitTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = MontiArcMill.parser()
       .parse_StringMACompilationUnit(model).orElseThrow();
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
-    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
-    MontiArcMill.symbolTablePass3Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new ConnectorTimingsFit());
@@ -440,8 +440,8 @@ public class ConnectorTimingsFitTest extends MontiArcAbstractTest {
       .parse_StringMACompilationUnit(model).orElse(null);
     Preconditions.checkNotNull(ast);
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
-    MontiArcMill.symbolTableCompleterDelegator().createFromAST(ast);
-    MontiArcMill.symbolTablePass3Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new ConnectorTimingsFit());

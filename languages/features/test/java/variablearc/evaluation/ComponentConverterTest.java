@@ -19,7 +19,7 @@ import org.mockito.Mockito;
 import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
 import variablearc._symboltable.IVariableArcScope;
-import variablearc._symboltable.VariableArcSymbolTableCompleter;
+import variablearc._symboltable.VariableArcScopesGenitorP2;
 
 import java.util.Collections;
 import java.util.List;
@@ -141,9 +141,9 @@ public class ComponentConverterTest extends VariableArcAbstractTest {
     ));
     Stack<String> stack = new Stack<>();
 
-    VariableArcSymbolTableCompleter completer = new VariableArcSymbolTableCompleter();
+    VariableArcScopesGenitorP2 scopesGenP2 = new VariableArcScopesGenitorP2();
     for (ComponentInstanceSymbol componentInstanceSymbol : component.getSubComponents()) {
-      completer.visit(componentInstanceSymbol);
+      scopesGenP2.visit(componentInstanceSymbol);
     }
 
     // When

@@ -2,40 +2,40 @@
 package genericarc;
 
 import arcbasis.check.deser.ComposedCompTypeExprDeSer;
-import genericarc._symboltable.GenericArcSymbolTableCompleter;
-import genericarc._symboltable.GenericArcSymbolTableCompleterDelegator;
+import genericarc._symboltable.GenericArcScopesGenitorP2;
+import genericarc._symboltable.GenericArcScopesGenitorP2Delegator;
 import genericarc.check.GenericArcCompTypeExprDeSer;
 
 public class GenericArcMill extends GenericArcMillTOP {
 
-  protected static GenericArcMill millGenericArcSymbolTableCompleter ;
+  protected static GenericArcMill millGenericArcScopesGenitorP2;
 
-  protected static GenericArcMill millGenericArcSymbolTableCompleterDelegator;
+  protected static GenericArcMill millGenericArcScopesGenitorP2Delegator;
 
   protected static GenericArcMill millFullPrettyPrinter;
 
   protected static GenericArcMill millCompTypeExprDeSer;
 
-  public static GenericArcSymbolTableCompleter symbolTableCompleter ()  {
-    if (millGenericArcSymbolTableCompleter == null) {
-      millGenericArcSymbolTableCompleter = GenericArcMillTOP.getMill();
+  public static GenericArcScopesGenitorP2 scopesGenitorP2() {
+    if (millGenericArcScopesGenitorP2 == null) {
+      millGenericArcScopesGenitorP2 = GenericArcMillTOP.getMill();
     }
-    return millGenericArcSymbolTableCompleter._symbolTableCompleter();
+    return millGenericArcScopesGenitorP2._scopesGenitorP2();
   }
 
-  protected GenericArcSymbolTableCompleter _symbolTableCompleter() {
-    return new GenericArcSymbolTableCompleter();
+  protected GenericArcScopesGenitorP2 _scopesGenitorP2() {
+    return new GenericArcScopesGenitorP2();
   }
 
-  public static GenericArcSymbolTableCompleterDelegator symbolTableCompleterDelegator ()  {
-    if (millGenericArcSymbolTableCompleterDelegator == null) {
-      millGenericArcSymbolTableCompleterDelegator = GenericArcMillTOP.getMill();
+  public static GenericArcScopesGenitorP2Delegator scopesGenitorP2Delegator() {
+    if (millGenericArcScopesGenitorP2Delegator == null) {
+      millGenericArcScopesGenitorP2Delegator = GenericArcMillTOP.getMill();
     }
-    return millGenericArcSymbolTableCompleterDelegator._symbolTableCompleterDelegator();
+    return millGenericArcScopesGenitorP2Delegator._scopesGenitorP2Delegator();
   }
 
-  protected GenericArcSymbolTableCompleterDelegator _symbolTableCompleterDelegator() {
-    return new GenericArcSymbolTableCompleterDelegator();
+  protected GenericArcScopesGenitorP2Delegator _scopesGenitorP2Delegator() {
+    return new GenericArcScopesGenitorP2Delegator();
   }
 
   public static ComposedCompTypeExprDeSer compTypeExprDeSer() {
@@ -49,18 +49,18 @@ public class GenericArcMill extends GenericArcMillTOP {
     return new GenericArcCompTypeExprDeSer();
   }
 
-  public static void initMe(GenericArcMill a)  {
+  public static void initMe(GenericArcMill a) {
     GenericArcMillTOP.initMe(a);
-    millGenericArcSymbolTableCompleter = a;
-    millGenericArcSymbolTableCompleterDelegator = a;
+    millGenericArcScopesGenitorP2 = a;
+    millGenericArcScopesGenitorP2Delegator = a;
     millFullPrettyPrinter = a;
     millCompTypeExprDeSer = a;
   }
 
   public static void reset() {
     GenericArcMillTOP.reset();
-    millGenericArcSymbolTableCompleter = null;
-    millGenericArcSymbolTableCompleterDelegator = null;
+    millGenericArcScopesGenitorP2 = null;
+    millGenericArcScopesGenitorP2Delegator = null;
     millFullPrettyPrinter = null;
     millCompTypeExprDeSer = null;
   }

@@ -3,15 +3,15 @@ package arccore._symboltable;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcElement;
-import arcbasis._symboltable.ArcBasisSymbolTableCompleter;
+import arcbasis._symboltable.ArcBasisScopesGenitorP2;
 import arccore.ArcCoreMill;
 import arccore._visitor.ArcCoreTraverser;
 import com.google.common.base.Preconditions;
 import genericarc.GenericArcMill;
-import genericarc._symboltable.GenericArcSymbolTableCompleter;
+import genericarc._symboltable.GenericArcScopesGenitorP2;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-public class ArcCoreSymbolTableCompleterDelegator {
+public class ArcCoreScopesGenitorP2Delegator {
 
   protected IArcCoreGlobalScope globalScope;
 
@@ -21,7 +21,7 @@ public class ArcCoreSymbolTableCompleterDelegator {
     return this.traverser;
   }
 
-  public ArcCoreSymbolTableCompleterDelegator() {
+  public ArcCoreScopesGenitorP2Delegator() {
     this.globalScope = ArcCoreMill.globalScope();
     this.traverser = ArcCoreMill.traverser();
     this.init();
@@ -33,15 +33,15 @@ public class ArcCoreSymbolTableCompleterDelegator {
   }
 
   protected void initArcBasis() {
-    ArcBasisSymbolTableCompleter arcBasisSymbolTableCompleter = ArcBasisMill.symbolTableCompleter();
-    this.getTraverser().add4ArcBasis(arcBasisSymbolTableCompleter);
-    this.getTraverser().setArcBasisHandler(arcBasisSymbolTableCompleter);
+    ArcBasisScopesGenitorP2 arcBasisScopesGenitorP2 = ArcBasisMill.scopesGenitorP2();
+    this.getTraverser().add4ArcBasis(arcBasisScopesGenitorP2);
+    this.getTraverser().setArcBasisHandler(arcBasisScopesGenitorP2);
   }
 
   protected void initGenericArc() {
-    GenericArcSymbolTableCompleter genericArcSymbolTableCompleter = GenericArcMill.symbolTableCompleter();
-    this.getTraverser().add4GenericArc(genericArcSymbolTableCompleter);
-    this.getTraverser().setGenericArcHandler(genericArcSymbolTableCompleter);
+    GenericArcScopesGenitorP2 genericArcScopesGenitorP2 = GenericArcMill.scopesGenitorP2();
+    this.getTraverser().add4GenericArc(genericArcScopesGenitorP2);
+    this.getTraverser().setGenericArcHandler(genericArcScopesGenitorP2);
   }
 
   public void createFromAST(@NotNull ASTArcElement rootNode) {
