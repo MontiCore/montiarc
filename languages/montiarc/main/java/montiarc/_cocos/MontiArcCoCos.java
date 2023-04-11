@@ -48,7 +48,7 @@ import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationI
 import de.monticore.types.check.TypeCalculator;
 import de.monticore.types.check.TypeRelations;
 import genericarc._cocos.ComponentHeritageTypeBound;
-import genericarc._cocos.GenericTypeParameterNameCapitalization;
+import genericarc._cocos.TypeParameterCapitalization;
 import genericarc._cocos.SubcomponentTypeBound;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
 import montiarc.check.MontiArcTypeCalculator;
@@ -112,7 +112,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new UniqueIdentifier());
 
     // GenericArc CoCos
-    checker.addCoCo(new GenericTypeParameterNameCapitalization());
+    checker.addCoCo(new TypeParameterCapitalization());
 
     // VariableArc
     checker.addCoCo(new ConstraintsOmitFieldReferences());

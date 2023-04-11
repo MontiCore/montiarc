@@ -55,7 +55,7 @@ Legend:
 
 | in MA | CoCo(s)                                     | Language   | Code                      | Notes                                                                    |
 |-------|---------------------------------------------|------------|---------------------------|--------------------------------------------------------------------------|
-| ☑     | GenericTypeParameterNameCapitalization      | GenericArc | 0xC1042                   |                                                                          |
+| ☑     | TypeParameterCapitalization                 | GenericArc | 0xC1042                   |                                                                          |
 | ☑     | ComponentHeritageTypeBound                  | GenericArc | 0xC1072, 0xC1202, 0xC1203 |                                                                          |
 | ☑     | SubcomponentTypeBound                       | GenericArc | 0xC1072, 0xC1202, 0xC1203 |                                                                          |
 | ☐     | INNER_WITH_TYPE_PARAMETER_REQUIRES_INSTANCE |            | 0xC1029                   | Unused ArcError                                                          |

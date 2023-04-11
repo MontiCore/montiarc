@@ -8,7 +8,7 @@ import arcbasis._cocos.PortNameCapitalization;
 import arcbasis._cocos.SubcomponentNameCapitalization;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import genericarc._cocos.GenericTypeParameterNameCapitalization;
+import genericarc._cocos.TypeParameterCapitalization;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
@@ -120,7 +120,7 @@ public class NamesCapitalizationTest extends MontiArcAbstractTest {
     checker.addCoCo(new ParameterNameCapitalization());
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new PortNameCapitalization());
-    checker.addCoCo(new GenericTypeParameterNameCapitalization());
+    checker.addCoCo(new TypeParameterCapitalization());
     checker.addCoCo(new FeatureNameCapitalization());
 
     // When
@@ -147,7 +147,7 @@ public class NamesCapitalizationTest extends MontiArcAbstractTest {
     checker.addCoCo(new ParameterNameCapitalization());
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new PortNameCapitalization());
-    checker.addCoCo(new GenericTypeParameterNameCapitalization());
+    checker.addCoCo(new TypeParameterCapitalization());
     checker.addCoCo(new FeatureNameCapitalization());
 
     // When
