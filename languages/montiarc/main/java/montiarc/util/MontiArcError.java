@@ -13,10 +13,10 @@ public enum MontiArcError implements Error {
   TOOL_PARSE_IOEXCEPTION("0xC1002", "Could not parse the file \" %s \"."),
   TOOL_FILE_WALK_IOEXCEPTION("0xC1003", "Could not access the directory \" %s \" or one of its subdirectories."),
   CLI_INPUT_OPTION_MISSING("0xC1004", "Option '%s' is missing, but an input is required"),
-  CLI_INPUT_FILE_NOT_EXIST("0xC1069", "Input file '%s' does not exist\n"),
+  CLI_INPUT_FILE_NOT_EXIST("0xC1005", "Input file '%s' does not exist\n"),
   CLI_OPTION_AMBIGUOUS("0xC1006", "Option '%s' does not match any valid option"),
   CLI_OPTION_UNRECOGNIZED("0xC1007", "Unrecognized option '%s'"),
-  CLI_OPTION_MISSING("0xC1008", "Options [%s] are missing, but are required"),
+  CLI_OPTION_MISSING("0xC1008", "Mandatory options [%s] are missing"),
   CLI_ARGUMENT_MISSING("0xC1009", "Option '%s' is missing an argument"),
   ROOT_NO_INSTANCE("0xC1010", "Cannot instantiate component without context");
 
