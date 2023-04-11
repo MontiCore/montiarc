@@ -2,12 +2,12 @@
 package montiarc.visitor;
 
 import arcautomaton._visitor.NamesInExpressionsVisitor;
+import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._parser.MontiArcParser;
 import montiarc._visitor.MontiArcTraverser;
-import org.assertj.core.util.Preconditions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
