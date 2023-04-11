@@ -15,7 +15,13 @@ public enum GenericArcError implements Error {
   TOO_FEW_TYPE_ARGUMENTS("0xC1203", "There are '%d' type arguments for component type '%s', " +
       "but has '%d' mandatory type parameters that all must be bound."),
   TOO_MANY_TYPE_ARGUMENTS("0xC1204", "There are '%d' type arguments for component type '%s', " +
-      "but it only has '%d' type parameters. Please do not provide more arguments than type parameters exist.");
+      "but it only has '%d' type parameters. Please do not provide more arguments than type parameters exist."),
+  HERITAGE_TYPE_ARG_IGNORES_UPPER_BOUND("0xC1205", "Type argument '%s' does not respect upper bound '%s' for type parameter " +
+    "'%s' of component type component type"),
+  HERITAGE_TOO_FEW_TYPE_ARGUMENTS("0xC1206", "There are '%d' type arguments for component type '%s', " +
+    "but has '%d' mandatory type parameters that all must be bound."),
+  HERITAGE_TOO_MANY_TYPE_ARGUMENTS("0xC1207", "There are '%d' type arguments for component type '%s', " +
+    "but it only has '%d' type parameters. Please do not provide more arguments than type parameters exist.");
 
   private final String errorCode;
   private final String errorMessage;

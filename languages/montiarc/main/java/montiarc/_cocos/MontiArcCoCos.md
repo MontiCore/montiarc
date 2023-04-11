@@ -53,15 +53,11 @@ Legend:
 
 ## GenericArc CoCos
 
-| in MA | CoCo(s)                                     | Language   | Code                      | Notes                                                                    |
-|-------|---------------------------------------------|------------|---------------------------|--------------------------------------------------------------------------|
-| ☑     | TypeParameterCapitalization                 | GenericArc | 0xC1042                   |                                                                          |
-| ☑     | ComponentHeritageTypeBound                  | GenericArc | 0xC1072, 0xC1202, 0xC1203 |                                                                          |
-| ☑     | SubcomponentTypeBound                       | GenericArc | 0xC1072, 0xC1202, 0xC1203 |                                                                          |
-| ☐     | INNER_WITH_TYPE_PARAMETER_REQUIRES_INSTANCE |            | 0xC1029                   | Unused ArcError                                                          |
-| ☐     | ArraysOfGenericTypes                        |            |                           | Original document specified: Resultat von Java-Limitierungen, siehe #224 |
-| ☐     | SubcomponentGenericTypesCorrectlyAssigned   |            |                           |                                                                          |
-| ☐     | AllGenericParametersOfSuperClassSet         |            |                           |                                                                          |
+| in MA | CoCo(s)                         | Language   | Code                      | Notes                                                                    |
+|-------|---------------------------------|------------|---------------------------|--------------------------------------------------------------------------|
+| ☑     | TypeParameterCapitalization     | GenericArc | 0xC1201                   |                                                                          |
+| ☑     | SubcomponentTypeBound           | GenericArc | 0xC1202, 0xC1203, 0xC1204 |                                                                          |
+| ☑     | ComponentHeritageTypeBound      | GenericArc | 0xC1205, 0xC1206, 0xC1207 |                                                                          |
 
 # VariableArc CoCos
 
