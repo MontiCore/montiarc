@@ -18,17 +18,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
-import variablearc._ast.ASTArcIfStatement;
+import variablearc._ast.ASTArcVarIf;
 
 import java.util.Arrays;
 import java.util.Collections;
 
 /**
- * Tests for {@link IfStatementsOmitFieldReferences}
+ * Tests for {@link VarIfOmitFieldReferences}
  */
-public class IfStatementsOmitFieldReferencesTest extends VariableArcAbstractTest {
+public class VarIfOmitFieldReferencesTest extends VariableArcAbstractTest {
 
-  protected IfStatementsOmitFieldReferences coco;
+  protected VarIfOmitFieldReferences coco;
 
   protected static ASTExpression nameExpression(@NotNull String name) {
     Preconditions.checkNotNull(name);
@@ -37,7 +37,7 @@ public class IfStatementsOmitFieldReferencesTest extends VariableArcAbstractTest
 
   @BeforeEach
   protected void setCoCo() {
-    coco = new IfStatementsOmitFieldReferences();
+    coco = new VarIfOmitFieldReferences();
   }
 
   /**
@@ -83,14 +83,14 @@ public class IfStatementsOmitFieldReferencesTest extends VariableArcAbstractTest
 
     ComponentTypeSymbol comp = provideComponentWithField("WithoutFieldRef", compFieldName);
 
-    ASTArcIfStatement ifStatement = VariableArcMill.arcIfStatementBuilder()
+    ASTArcVarIf varif = VariableArcMill.arcVarIfBuilder()
       .setCondition(nameExpression("someCondition"))
-      .setThenStatement(Mockito.mock(ASTArcElement.class)).build();
+      .setThen(Mockito.mock(ASTArcElement.class)).build();
 
     ASTComponentType compAst = VariableArcMill.componentTypeBuilder()
       .setName("WithoutFieldRef").setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(VariableArcMill.componentBodyBuilder()
-        .setArcElementsList(Collections.singletonList(ifStatement)).build())
+        .setArcElementsList(Collections.singletonList(varif)).build())
       .build();
     compAst.setSymbol(comp);
     comp.setAstNode(compAst);
@@ -106,21 +106,21 @@ public class IfStatementsOmitFieldReferencesTest extends VariableArcAbstractTest
   protected ComponentTypeSymbol provideCompWithOwnFieldRef() {
     final String compFieldName = "someField";
 
-    ASTArcIfStatement firstIfStatement =
-      VariableArcMill.arcIfStatementBuilder()
+    ASTArcVarIf varif1 =
+      VariableArcMill.arcVarIfBuilder()
         .setCondition(nameExpression(compFieldName))
-        .setThenStatement(Mockito.mock(ASTArcElement.class)).build();
+        .setThen(Mockito.mock(ASTArcElement.class)).build();
 
-    ASTArcIfStatement secondIfStatement = VariableArcMill.arcIfStatementBuilder()
+    ASTArcVarIf varif2 = VariableArcMill.arcVarIfBuilder()
       .setCondition(nameExpression(compFieldName))
-      .setThenStatement(Mockito.mock(ASTArcElement.class)).build();
+      .setThen(Mockito.mock(ASTArcElement.class)).build();
 
     ComponentTypeSymbol comp = provideComponentWithField("WithOwnFieldRef", compFieldName);
 
     ASTComponentType compAst = VariableArcMill.componentTypeBuilder()
       .setName("WithOwnFieldRef").setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(VariableArcMill.componentBodyBuilder()
-        .setArcElementsList(Arrays.asList(firstIfStatement, secondIfStatement))
+        .setArcElementsList(Arrays.asList(varif1, varif2))
         .build()).build();
     compAst.setSymbol(comp);
     comp.setAstNode(compAst);

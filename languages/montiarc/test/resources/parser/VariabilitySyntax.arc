@@ -7,11 +7,11 @@ package parser;
 component VariabilitySyntax {
   feature a, b;
 
-  if (a) {
+  varif (a) {
     port in String i;
   }
 
-  if (b) port in String i;
+  varif (b) port in String i;
   else {}
 
   component A {

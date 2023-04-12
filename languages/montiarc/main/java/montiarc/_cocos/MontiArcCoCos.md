@@ -73,10 +73,10 @@ Legend:
 | ☑     | FeatureNameCapitalization               | VariableArc | 0xC1402                            |                                                            |
 | ☐     | FeaturesCorrectlyInherited              | VariableArc | 0xC1412                            | Unused VariableArcError. Decided against this CoCo for now |
 | ☑     | FeatureUsage                            | VariableArc | 0xC1403                            |                                                            |
-| ☑     | IfStatementsOmitPortReferences          | VariableArc | 0xC1407                            |                                                            |
-| ☑     | IfStatementsOmitFieldReferences         | VariableArc | 0xC1416                            |                                                            |
-| ☑     | IfStatementsSymbolsExist                | VariableArc | 0xC1414                            |                                                            |
-| ☑     | IfStatementTypesCorrect                 | VariableArc | 0xC1404                            |                                                            |
+| ☑     | VarIfOmitPortReferences                 | VariableArc | 0xC1407                            |                                                            |
+| ☑     | VarIfOmitFieldReferences                | VariableArc | 0xC1416                            |                                                            |
+| ☑     | VarIfSymbolsExist                       | VariableArc | 0xC1414                            |                                                            |
+| ☑     | VarIfTypesCorrect                       | VariableArc | 0xC1404                            |                                                            |
 | ☑     | VariableElementsUsage                   | VariableArc | 0xC1405                            |                                                            |
 
 # Mode Automata

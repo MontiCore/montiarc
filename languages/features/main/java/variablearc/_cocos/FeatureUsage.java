@@ -11,7 +11,7 @@ import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._ast.ASTArcConstraintDeclaration;
-import variablearc._cocos.util.ComponentIfStatementHandler;
+import variablearc._cocos.util.ComponentVarIfHandler;
 import variablearc._cocos.util.GenericASTNameExpressionVisitor;
 import variablearc._symboltable.ArcFeatureSymbol;
 import variablearc._symboltable.IVariableArcScope;
@@ -39,12 +39,12 @@ public class FeatureUsage implements ArcBasisASTComponentTypeCoCo {
       return;
     }
 
-    Collection<String> ifStatements = getNamesInIfConditions(node);
+    Collection<String> varifs = getNamesInIfConditions(node);
     Collection<String> constraints = getNamesInConstraints(node);
     Collection<String> features = getNamesOfFeatures(node);
     for (String feature : features) {
       final SourcePosition sourcePosition = this.getSourcePosition(symbol, node, feature);
-      if (!(ifStatements.contains(feature) || constraints.contains(feature))) {
+      if (!(varifs.contains(feature) || constraints.contains(feature))) {
         Log.warn(VariableArcError.FEATURE_UNUSED.format(feature), sourcePosition);
       }
     }
@@ -57,13 +57,13 @@ public class FeatureUsage implements ArcBasisASTComponentTypeCoCo {
 
   protected Collection<String> getNamesInIfConditions(@NotNull ASTComponentType node) {
     List<String> names = new ArrayList<>();
-    ComponentIfStatementHandler handler = new ComponentIfStatementHandler(node, (ifStatement) -> {
-      Preconditions.checkNotNull(ifStatement);
+    ComponentVarIfHandler handler = new ComponentVarIfHandler(node, (varif) -> {
+      Preconditions.checkNotNull(varif);
       VariableArcTraverser traverser = VariableArcMill.traverser();
       traverser.add4ExpressionsBasis(new GenericASTNameExpressionVisitor((
         astNameExpression -> names.add(astNameExpression.getName())))
       );
-      ifStatement.getCondition().accept(traverser);
+      varif.getCondition().accept(traverser);
     });
     node.accept(handler.getTraverser());
     return names;

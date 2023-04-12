@@ -9,39 +9,39 @@ import de.monticore.types.check.TypeCheckResult;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._ast.ASTArcIfStatement;
+import variablearc._ast.ASTArcVarIf;
 
 /**
  * If-statement's conditions should be of type boolean
  */
-public class IfStatementIsBoolean implements VariableArcASTArcIfStatementCoCo {
+public class VarIfIsBoolean implements VariableArcASTArcVarIfCoCo {
 
   protected final IArcTypeCalculator tc;
 
   protected final ITypeRelations tr;
 
-  public IfStatementIsBoolean(@NotNull IArcTypeCalculator tc, @NotNull ITypeRelations tr) {
+  public VarIfIsBoolean(@NotNull IArcTypeCalculator tc, @NotNull ITypeRelations tr) {
     this.tc = Preconditions.checkNotNull(tc);
     this.tr = Preconditions.checkNotNull(tr);
   }
 
   @Override
-  public void check(@NotNull ASTArcIfStatement astIfStatement) {
-    Preconditions.checkNotNull(astIfStatement);
+  public void check(@NotNull ASTArcVarIf varif) {
+    Preconditions.checkNotNull(varif);
 
-    ASTExpression expr = astIfStatement.getCondition();
+    ASTExpression expr = varif.getCondition();
     TypeCheckResult typeCheckResult = tc.deriveType(expr);
 
     if (typeCheckResult.isPresentResult() && !tr.isBoolean(typeCheckResult.getResult())) {
       Log.error(VariableArcError.IF_STATEMENT_EXPRESSION_WRONG_TYPE.format(typeCheckResult.getResult()
-          .print()), astIfStatement.get_SourcePositionStart(),
-        astIfStatement.get_SourcePositionEnd());
+          .print()), varif.get_SourcePositionStart(),
+        varif.get_SourcePositionEnd());
     }
     if (!typeCheckResult.isPresentResult()) {
       Log.debug(String.format(
         "Checking coco '%s' is skipped for the if-statement condition, as the type of the initialization " + "expression could not be calculated. "
           + "Position: '%s'.", this.getClass()
-          .getSimpleName(), astIfStatement.get_SourcePositionStart()), "CoCos");
+          .getSimpleName(), varif.get_SourcePositionStart()), "CoCos");
     }
   }
 }

@@ -9,7 +9,7 @@ import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
 import variablearc.VariableArcMill;
-import variablearc._cocos.util.ComponentIfStatementHandler;
+import variablearc._cocos.util.ComponentVarIfHandler;
 import variablearc._cocos.util.FieldReferenceExtractor4ExpressionBasis;
 import variablearc._cocos.util.IFieldReferenceInExpressionExtractor;
 import variablearc._cocos.util.IFieldReferenceInExpressionExtractor.FieldReference;
@@ -21,11 +21,11 @@ import java.util.HashSet;
  * As a convention, we require that instantiations are performed prior to any
  * communication taking place. Thus, if-statements may not reference any ArcField.
  */
-public class IfStatementsOmitFieldReferences implements ArcBasisASTComponentTypeCoCo {
+public class VarIfOmitFieldReferences implements ArcBasisASTComponentTypeCoCo {
 
   protected final IFieldReferenceInExpressionExtractor fieldRefExtractor;
 
-  public IfStatementsOmitFieldReferences() {
+  public VarIfOmitFieldReferences() {
     this.fieldRefExtractor = new FieldReferenceExtractor4ExpressionBasis();
   }
 
@@ -38,10 +38,10 @@ public class IfStatementsOmitFieldReferences implements ArcBasisASTComponentType
 
     HashSet<FieldReference> portReferencesToLookFor = new HashSet<>(FieldReference.ofComponentTypeFields(comp));
 
-    ComponentIfStatementHandler handler = new ComponentIfStatementHandler(astComp, (ifStatement) -> {
-      Preconditions.checkNotNull(ifStatement);
+    ComponentVarIfHandler handler = new ComponentVarIfHandler(astComp, (varif) -> {
+      Preconditions.checkNotNull(varif);
       HashMap<FieldReference, SourcePosition> foundPortReferences =
-        this.fieldRefExtractor.findFieldReferences(ifStatement.getCondition(), portReferencesToLookFor,
+        this.fieldRefExtractor.findFieldReferences(varif.getCondition(), portReferencesToLookFor,
           VariableArcMill.traverser());
 
       for (FieldReference illegalFieldRef : foundPortReferences.keySet()) {

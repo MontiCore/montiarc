@@ -6,7 +6,7 @@ component EngineV2 {
 
   // If we have an electric car, we also want to have a battery manufacturer
   // If it is not electric, we must choose between diesel or petrol
-  if (electric) {
+  varif (electric) {
     feature batteryManufacturer;
     constraint (batteryManufacturer);
   } else {

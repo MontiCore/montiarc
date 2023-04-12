@@ -11,7 +11,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTArcConstraintDeclaration;
 import variablearc._ast.ASTArcFeature;
 import variablearc._ast.ASTArcFeatureDeclaration;
-import variablearc._ast.ASTArcIfStatement;
+import variablearc._ast.ASTArcVarIf;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,16 +56,16 @@ public class MAStreamHelper {
   }
 
   /**
-   * Gets a List of all ASTArcIfStatement from a List of ASTArcElements
+   * Gets a List of all ASTArcVarIf from a List of ASTArcElements
    *
    * @param elements List of Elements to search through
    * @return List of all If-Else-Statements found in the given list of elements
    */
-  public static List<ASTArcIfStatement> getIfStatementsFromArcElements(@NotNull List<ASTArcElement> elements) {
+  public static List<ASTArcVarIf> getVarIfsFromArcElements(@NotNull List<ASTArcElement> elements) {
     Preconditions.checkNotNull(elements);
     return elements.stream()
-      .filter(element -> element instanceof ASTArcIfStatement)
-      .map(featureDec -> (ASTArcIfStatement) featureDec)
+      .filter(element -> element instanceof ASTArcVarIf)
+      .map(featureDec -> (ASTArcVarIf) featureDec)
       .collect(Collectors.toList());
   }
 

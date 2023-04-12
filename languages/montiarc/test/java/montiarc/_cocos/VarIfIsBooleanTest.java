@@ -13,34 +13,34 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
-import variablearc._ast.ASTArcIfStatement;
-import variablearc._cocos.IfStatementIsBoolean;
+import variablearc._ast.ASTArcVarIf;
+import variablearc._cocos.VarIfIsBoolean;
 
 import java.util.stream.Stream;
 
-public class IfStatementIsBooleanTest extends MontiArcAbstractTest {
+public class VarIfIsBooleanTest extends MontiArcAbstractTest {
 
-  protected static Stream<Arguments> provideIfStatementAndError() {
+  protected static Stream<Arguments> provideVarIfAndError() {
     return Stream.of(
-      Arguments.of(MontiArcMill.arcIfStatementBuilder().setCondition(
+      Arguments.of(MontiArcMill.arcVarIfBuilder().setCondition(
             MontiArcMill
               .literalExpressionBuilder()
               .setLiteral(MontiArcMill.booleanLiteralBuilder()
                 .setSource(ASTConstantsMCCommonLiterals.FALSE).build())
               .build())
-          .setThenStatement(Mockito.mock(ASTArcElement.class))
-          .setElseStatementAbsent()
+          .setThen(Mockito.mock(ASTArcElement.class))
+          .setOtherwiseAbsent()
           .build(),
         new Error[]{}
       ),
-      Arguments.of(MontiArcMill.arcIfStatementBuilder().setCondition(
+      Arguments.of(MontiArcMill.arcVarIfBuilder().setCondition(
             MontiArcMill
               .literalExpressionBuilder()
               .setLiteral(MontiArcMill.basicLongLiteralBuilder().setDigits("5")
                 .build())
               .build())
-          .setThenStatement(Mockito.mock(ASTArcElement.class))
-          .setElseStatementAbsent()
+          .setThen(Mockito.mock(ASTArcElement.class))
+          .setOtherwiseAbsent()
           .build(),
         new Error[]{ VariableArcError.IF_STATEMENT_EXPRESSION_WRONG_TYPE }
       )
@@ -48,11 +48,11 @@ public class IfStatementIsBooleanTest extends MontiArcAbstractTest {
   }
 
   @ParameterizedTest
-  @MethodSource("provideIfStatementAndError")
-  public void testIfStatementType(ASTArcIfStatement constraint,
-                                  Error[] errorList) {
+  @MethodSource("provideVarIfAndError")
+  public void testVarIfType(ASTArcVarIf constraint,
+                            Error[] errorList) {
     // Given
-    IfStatementIsBoolean coco = new IfStatementIsBoolean(new MontiArcTypeCalculator(), new TypeRelations());
+    VarIfIsBoolean coco = new VarIfIsBoolean(new MontiArcTypeCalculator(), new TypeRelations());
 
     // When
     coco.check(constraint);

@@ -21,7 +21,7 @@ component NestingTest {
 
   SubComp comp1(sa=0, sb=1);
 
-  if (3 < 2) {
+  varif (3 < 2) {
     feature b, e, f, g;
     constraint (a == b);
   } else {
@@ -31,7 +31,7 @@ component NestingTest {
     constraint ((a != b));
   }
 
-  if( 5 > 3) {
+  varif ( 5 > 3) {
     feature JAA;
   }
 

@@ -8,13 +8,13 @@ component MAStreamHelperTest {
     constraint (a || (b && c));
 
     // If-Else Statements
-    if (a) {
+    varif (a) {
         feature x;
     } else {
         feature y;
     }
 
-    if (b) {}
+    varif (b) {}
 
     // Test Inner Component
     component innerComp1 { }

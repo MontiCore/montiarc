@@ -7,7 +7,7 @@ component SubComp {
   //constraint (!sa || !sb || sc);
 
 
-  if (3 < 2) {
+  varif (3 < 2) {
     feature ASDF;
   } else {
     feature EFGG;

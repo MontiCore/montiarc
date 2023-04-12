@@ -31,12 +31,12 @@ public class FeatureUsageTest extends VariableArcAbstractTest {
                   VariableArcMill.arcFeatureBuilder().setName("f1").build()
                 ))
                 .build(),
-              VariableArcMill.arcIfStatementBuilder().setCondition(
+              VariableArcMill.arcVarIfBuilder().setCondition(
                   VariableArcMill.nameExpressionBuilder()
                     .setName("f1")
                     .build())
-                .setThenStatement(Mockito.mock(ASTArcElement.class))
-                .setElseStatementAbsent()
+                .setThen(Mockito.mock(ASTArcElement.class))
+                .setOtherwiseAbsent()
                 .build()
             ))
             .build())

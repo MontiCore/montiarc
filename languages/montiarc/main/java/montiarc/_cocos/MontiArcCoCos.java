@@ -57,9 +57,9 @@ import variablearc._cocos.ConstraintsOmitFieldReferences;
 import variablearc._cocos.ConstraintsOmitPortReferences;
 import variablearc._cocos.FeatureNameCapitalization;
 import variablearc._cocos.FeatureUsage;
-import variablearc._cocos.IfStatementIsBoolean;
-import variablearc._cocos.IfStatementsOmitFieldReferences;
-import variablearc._cocos.IfStatementsOmitPortReferences;
+import variablearc._cocos.VarIfIsBoolean;
+import variablearc._cocos.VarIfOmitFieldReferences;
+import variablearc._cocos.VarIfOmitPortReferences;
 import variablearc._cocos.VariantCoCos;
 
 /**
@@ -120,9 +120,9 @@ public class MontiArcCoCos {
     checker.addCoCo(new ConstraintIsBoolean(tc, tr));
     checker.addCoCo(new FeatureNameCapitalization());
     checker.addCoCo(new FeatureUsage());
-    checker.addCoCo(new IfStatementsOmitFieldReferences());
-    checker.addCoCo(new IfStatementsOmitPortReferences());
-    checker.addCoCo(new IfStatementIsBoolean(tc, tr));
+    checker.addCoCo(new VarIfOmitFieldReferences());
+    checker.addCoCo(new VarIfOmitPortReferences());
+    checker.addCoCo(new VarIfIsBoolean(tc, tr));
     checker.addCoCo(new VariantCoCos());
 
     // SCBasis, SCActions, and SCTransitions4Code CoCos

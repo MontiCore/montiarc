@@ -23,7 +23,7 @@ import org.sosy_lab.java_smt.api.Formula;
 import org.sosy_lab.java_smt.api.FormulaManager;
 import variablearc._ast.ASTArcBlock;
 import variablearc._ast.ASTArcFeature;
-import variablearc._ast.ASTArcIfStatement;
+import variablearc._ast.ASTArcVarIf;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -232,8 +232,8 @@ public class MAExtractionHelper<T extends Formula> {
       MAStreamHelper.getArcFeatureDeclarationsFromElements(elements);
     List<ASTExpression> constraints =
       MAStreamHelper.getConstraintExpressionsFromArcElements(elements);
-    List<ASTArcIfStatement> ifStatements =
-      MAStreamHelper.getIfStatementsFromArcElements(elements);
+    List<ASTArcVarIf> varif =
+      MAStreamHelper.getVarIfsFromArcElements(elements);
     List<ASTComponentType> innerComponents =
       MAStreamHelper.getInnerComponentsFromArcElements(elements);
     List<ASTComponentInstance> componentInstances =
@@ -250,8 +250,8 @@ public class MAExtractionHelper<T extends Formula> {
 
     // Step 4: Process If-Statements (new function here!) and add the found
     // expressions to the list to merge
-    if (ifStatements.size() > 0) {
-      handleIfStatements(ifStatements, root, storageCache);
+    if (varif.size() > 0) {
+      handleVarIfs(varif, root, storageCache);
       combinedExpression = mergeExpressions(List.of(combinedExpression,
         storageCache.getTotalExpression()));
     }
@@ -467,20 +467,20 @@ public class MAExtractionHelper<T extends Formula> {
    * Process a List of If-Statements by extracting the relations and adding
    * it to the storage
    *
-   * @param ifStatements List of (inner) Components to analyze
+   * @param varifs List of (inner) Components to analyze
    * @param root         Root Element / Origin where the elements come from
    * @param storageCache Previously created storage, where the new relations
    *                     should be added to
    */
-  private void handleIfStatements(@NotNull List<ASTArcIfStatement> ifStatements,
-                                  @NotNull T root,
-                                  @NotNull StorageCache<T> storageCache) {
-    Preconditions.checkNotNull(ifStatements);
+  private void handleVarIfs(@NotNull List<ASTArcVarIf> varifs,
+                            @NotNull T root,
+                            @NotNull StorageCache<T> storageCache) {
+    Preconditions.checkNotNull(varifs);
     Preconditions.checkNotNull(root);
     Preconditions.checkNotNull(storageCache);
 
     // Process the If-Statements
-    StorageCache<T> res = processIfStatements(ifStatements, root);
+    StorageCache<T> res = processVarIfs(varifs, root);
 
     // Test if all constraints are still satisfiable
     totalASTExpressions.add(res.getTotalExpression());
@@ -502,14 +502,14 @@ public class MAExtractionHelper<T extends Formula> {
    * StorageCache which stores all of our
    * results we found during traversal.
    *
-   * @param ifStatements List of ASTArcIfStatements to process
+   * @param varifs List of ASTArcVarIfs to process
    * @param root         Origin from where the If-Else-Statements come from
    * @return StorageCache constructed during traversal.
    */
   @SuppressWarnings("unchecked")
-  private StorageCache<T> processIfStatements(@NotNull List<ASTArcIfStatement> ifStatements,
-                                              @NotNull T root) {
-    Preconditions.checkNotNull(ifStatements);
+  private StorageCache<T> processVarIfs(@NotNull List<ASTArcVarIf> varifs,
+                                        @NotNull T root) {
+    Preconditions.checkNotNull(varifs);
     Preconditions.checkNotNull(root);
 
     // Init relevant variables (a list of expressions, the MontiArc
@@ -521,9 +521,9 @@ public class MAExtractionHelper<T extends Formula> {
     int ifCounter = 0;
 
     // Loop over all Statements
-    for (ASTArcIfStatement ifStatement : ifStatements) {
+    for (ASTArcVarIf varif : varifs) {
       // Reset the "Settings"
-      condExpBuilder.setCondition(ifStatement.getCondition());
+      condExpBuilder.setCondition(varif.getCondition());
       condExpBuilder.setTrueExpression(ALWAYS_TRUE_EXPRESSION);
       condExpBuilder.setFalseExpression(ALWAYS_TRUE_EXPRESSION);
       Set<String> featureListBackup = featureList;
@@ -531,11 +531,11 @@ public class MAExtractionHelper<T extends Formula> {
       Set<String> elseFeatureList = new HashSet<>();
 
       // Process If-Statement
-      if (ifStatement.getThenStatement() instanceof ASTArcBlock) {
+      if (varif.getThen() instanceof ASTArcBlock) {
         T newRootName =
-          (T) bmgr.makeVariable(root + "_If" + ((ifStatements.size() > 1) ? ifCounter : ""));
+          (T) bmgr.makeVariable(root + "_If" + ((varifs.size() > 1) ? ifCounter : ""));
         List<ASTArcElement> elements =
-          ((ASTArcBlock) ifStatement.getThenStatement()).getArcElementList();
+          ((ASTArcBlock) varif.getThen()).getArcElementList();
         featureList = new HashSet<>();
         processIfElseBlock(tmpStorageCache, elements, newRootName);
         ifFeatureList = featureList;
@@ -544,11 +544,11 @@ public class MAExtractionHelper<T extends Formula> {
       }
 
       // Process Else-Statement (is existent)
-      if (ifStatement.isPresentElseStatement() && ifStatement.getElseStatement() instanceof ASTArcBlock) {
+      if (varif.isPresentOtherwise() && varif.getThen() instanceof ASTArcBlock) {
         T newRootName =
-          (T) bmgr.makeVariable(root + "_Else" + ((ifStatements.size() > 1) ? ifCounter : ""));
+          (T) bmgr.makeVariable(root + "_Else" + ((varifs.size() > 1) ? ifCounter : ""));
         List<ASTArcElement> elements =
-          ((ASTArcBlock) ifStatement.getElseStatement()).getArcElementList();
+          ((ASTArcBlock) varif.getThen()).getArcElementList();
         featureList = new HashSet<>();
         processIfElseBlock(tmpStorageCache, elements, newRootName);
         elseFeatureList = featureList;

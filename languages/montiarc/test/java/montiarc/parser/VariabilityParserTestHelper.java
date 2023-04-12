@@ -22,9 +22,9 @@ public class VariabilityParserTestHelper {
                 MontiArcMill.arcFeatureBuilder().setName("a").build(),
                 MontiArcMill.arcFeatureBuilder().setName("b").build())
               ).build(),
-              MontiArcMill.arcIfStatementBuilder()
+              MontiArcMill.arcVarIfBuilder()
                 .setCondition(MontiArcMill.nameExpressionBuilder().setName("a").build())
-                .setThenStatement(MontiArcMill.arcBlockBuilder()
+                .setThen(MontiArcMill.arcBlockBuilder()
                   .setArcElementsList(Collections.singletonList(
                     MontiArcMill.componentInterfaceBuilder().setPortDeclarationsList(
                       Collections.singletonList(
@@ -42,11 +42,11 @@ public class VariabilityParserTestHelper {
                           .build()
                       )).build()))
                   .build())
-                .setElseStatementAbsent()
+                .setOtherwiseAbsent()
                 .build(),
-              MontiArcMill.arcIfStatementBuilder().setCondition(
+              MontiArcMill.arcVarIfBuilder().setCondition(
                   MontiArcMill.nameExpressionBuilder().setName("b").build()
-                ).setThenStatement(
+                ).setThen(
                   MontiArcMill.componentInterfaceBuilder().setPortDeclarationsList(
                     Collections.singletonList(
                       MontiArcMill.portDeclarationBuilder()
@@ -60,7 +60,7 @@ public class VariabilityParserTestHelper {
                           .build())
                         .build()
                     )).build()
-                ).setElseStatement(
+                ).setOtherwise(
                   MontiArcMill.arcBlockBuilder()
                     .setArcElementsList(Collections.emptyList())
                     .build())

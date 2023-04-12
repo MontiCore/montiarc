@@ -8,7 +8,7 @@ import arcbasis._ast.ASTPort;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
-import variablearc._ast.ASTArcIfStatement;
+import variablearc._ast.ASTArcVarIf;
 import variablearc.evaluation.Expression;
 
 import java.util.Optional;
@@ -65,19 +65,19 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
   }
 
   @Override
-  public void traverse(@NotNull ASTArcIfStatement node) {
+  public void traverse(@NotNull ASTArcVarIf node) {
     node.getCondition().accept(this.getTraverser());
 
     putOnStack(new VariableArcVariationPoint(new Expression(node.getCondition()), this.getCurrentVariationPoint().orElse(null)));
-    node.getThenStatement().accept(this.getTraverser());
+    node.getThen().accept(this.getTraverser());
     removeCurrentVariationPoint();
 
-    if (node.isPresentElseStatement()) {
+    if (node.isPresentOtherwise()) {
       putOnStack(new VariableArcVariationPoint(
         new Expression(node.getCondition(), true),
         this.getCurrentVariationPoint().orElse(null))
       );
-      node.getElseStatement().accept(this.getTraverser());
+      node.getOtherwise().accept(this.getTraverser());
       removeCurrentVariationPoint();
     }
   }

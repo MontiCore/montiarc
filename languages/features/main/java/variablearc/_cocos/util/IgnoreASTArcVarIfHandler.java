@@ -1,14 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._cocos.util;
 
-import variablearc._ast.ASTArcIfStatement;
+import variablearc._ast.ASTArcVarIf;
 import variablearc._visitor.VariableArcHandler;
 import variablearc._visitor.VariableArcTraverser;
 
 /**
- * Ignores all {@link ASTArcIfStatement}s and their subtree
+ * Ignores all {@link ASTArcVarIf}s and their subtree
  */
-public class IgnoreASTArcIfStatementHandler implements VariableArcHandler {
+public class IgnoreASTArcVarIfHandler implements VariableArcHandler {
 
   protected VariableArcTraverser traverser;
 
@@ -23,6 +23,6 @@ public class IgnoreASTArcIfStatementHandler implements VariableArcHandler {
   }
 
   @Override
-  public void handle(ASTArcIfStatement node) {
+  public void handle(ASTArcVarIf node) {
   }
 }

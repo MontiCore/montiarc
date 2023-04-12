@@ -29,17 +29,13 @@ component grammar VariableArc extends ArcBasis {
   symbol ArcFeature = Name;
 
   /**
-   * ArcIfStatement defines the variable elements of a component and the condition
-   * for their inclusion. IfStatements of MC are not reused to keep component elements
-   * and statements syntactically separated.
-   *
-   * @attribute condition The condition for which elements are added to the component.
-   * @attribute thenStatement Elements added to the component if the condition evaluates to true.
-   * @attribute elseStatement Elements added to the component if the condition evaluates to false.
+   * Defines the variable elements of a component and the condition for their
+   * inclusion. The condition is a boolean expression over configurable
+   * component variables, that is, parameters and features.
    */
-  ArcIfStatement implements ArcElement =
-    "if" "(" condition:Expression ")" thenStatement:ArcElement
-    ("else" elseStatement:ArcElement)?
+  ArcVarIf implements ArcElement =
+    "varif" "(" condition:Expression ")" then:ArcElement
+    ("else" otherwise:ArcElement)?
   ;
 
   /**

@@ -18,7 +18,7 @@ import de.monticore.types.check.TypeRelations;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._cocos.util.SingleASTVariantComponentTypeHandler;
-import variablearc._cocos.util.IgnoreASTArcIfStatementHandler;
+import variablearc._cocos.util.IgnoreASTArcVarIfHandler;
 import variablearc._symboltable.VariableComponentTypeSymbol;
 import variablearc._symboltable.VariantComponentTypeSymbol;
 import variablearc._visitor.VariableArcTraverser;
@@ -42,7 +42,7 @@ public class VariantCoCos implements ArcBasisASTComponentTypeCoCo {
   protected VariableArcTraverser getTraverser() {
     VariableArcTraverser traverser = VariableArcMill.traverser();
     traverser.setArcBasisHandler(new SingleASTVariantComponentTypeHandler());
-    traverser.setVariableArcHandler(new IgnoreASTArcIfStatementHandler());
+    traverser.setVariableArcHandler(new IgnoreASTArcVarIfHandler());
 
     // Add CoCos
     traverser.add4ArcBasis(new ConnectorDirectionsFit());

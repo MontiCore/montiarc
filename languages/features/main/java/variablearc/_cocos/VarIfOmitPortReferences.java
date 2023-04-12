@@ -12,7 +12,7 @@ import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
 import variablearc.VariableArcMill;
-import variablearc._cocos.util.ComponentIfStatementHandler;
+import variablearc._cocos.util.ComponentVarIfHandler;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,11 +21,11 @@ import java.util.HashSet;
  * As a convention, we require that instantiations are performed prior to any
  * communication taking place. Thus, if-statements may not reference any port.
  */
-public class IfStatementsOmitPortReferences implements ArcBasisASTComponentTypeCoCo {
+public class VarIfOmitPortReferences implements ArcBasisASTComponentTypeCoCo {
 
   protected final IPortReferenceInExpressionExtractor portRefExtractor;
 
-  public IfStatementsOmitPortReferences() {
+  public VarIfOmitPortReferences() {
     this.portRefExtractor = new PortReferenceExtractor4ExpressionBasis();
   }
 
@@ -40,10 +40,10 @@ public class IfStatementsOmitPortReferences implements ArcBasisASTComponentTypeC
     portReferencesToLookFor.addAll(PortReference.ofComponentTypePorts(comp));
     portReferencesToLookFor.addAll(PortReference.ofSubComponentPorts(comp));
 
-    ComponentIfStatementHandler handler = new ComponentIfStatementHandler(astComp, (ifStatement) -> {
-      Preconditions.checkNotNull(ifStatement);
+    ComponentVarIfHandler handler = new ComponentVarIfHandler(astComp, (varif) -> {
+      Preconditions.checkNotNull(varif);
       HashMap<PortReference, SourcePosition> foundPortReferences =
-        this.portRefExtractor.findPortReferences(ifStatement.getCondition(), portReferencesToLookFor, VariableArcMill.traverser());
+        this.portRefExtractor.findPortReferences(varif.getCondition(), portReferencesToLookFor, VariableArcMill.traverser());
 
       for (PortReference illegalPortRef : foundPortReferences.keySet()) {
         SourcePosition illegalPortRefPosition = foundPortReferences.get(illegalPortRef);

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import variablearc._ast.ASTArcFeature;
-import variablearc._ast.ASTArcIfStatement;
+import variablearc._ast.ASTArcVarIf;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -95,18 +95,17 @@ public class MAStreamHelperTest {
 
   /**
    * Method under test
-   * {@link MAStreamHelper#getIfStatementsFromArcElements(List)}
+   * {@link MAStreamHelper#getVarIfsFromArcElements(List)}
    */
   @Test
-  public void getIfStatementsFromArcElements() {
+  public void getVarIfsFromArcElements() {
     // Given
-    int numberOfIfStatements = 2;
-    List<ASTArcIfStatement> ifStatements =
-        new ArrayList<>(MAStreamHelper.getIfStatementsFromArcElements(
+    List<ASTArcVarIf> varIfs =
+        new ArrayList<>(MAStreamHelper.getVarIfsFromArcElements(
             MAStreamHelper.getArcElements(ast.getComponentType())));
 
     // When && Then
-    Assertions.assertEquals(numberOfIfStatements, ifStatements.size());
+    Assertions.assertEquals(2, varIfs.size());
   }
 
   /**

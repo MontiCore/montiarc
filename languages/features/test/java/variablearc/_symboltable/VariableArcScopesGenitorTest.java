@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
-import variablearc._ast.ASTArcIfStatement;
+import variablearc._ast.ASTArcVarIf;
 
 /**
  * Holds tests for the handwritten methods of {@link VariableArcScopesGenitor}.
@@ -30,12 +30,12 @@ public class VariableArcScopesGenitorTest extends VariableArcAbstractTest {
   }
 
   @Test
-  public void shouldVisitIfStatement() {
+  public void shouldVisitVarIf() {
     // Given
-    ASTArcIfStatement ast = VariableArcMill.arcIfStatementBuilder()
+    ASTArcVarIf ast = VariableArcMill.arcVarIfBuilder()
       .setCondition(Mockito.mock(ASTExpression.class))
-      .setThenStatement(VariableArcMill.arcBlockBuilder().build())
-      .setElseStatement(VariableArcMill.arcBlockBuilder().build())
+      .setThen(VariableArcMill.arcBlockBuilder().build())
+      .setOtherwise(VariableArcMill.arcBlockBuilder().build())
       .build();
     IVariableArcScope scope = VariableArcMill.scope();
     this.getSymTab().putOnStack(scope);
@@ -53,7 +53,7 @@ public class VariableArcScopesGenitorTest extends VariableArcAbstractTest {
   }
 
   @Test
-  public void shouldTraverseIfStatement() {
+  public void shouldTraverseVarIf() {
     // Given
     VariableComponentTypeSymbol typeSymbol = (VariableComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
       .setName("A")
@@ -62,10 +62,10 @@ public class VariableArcScopesGenitorTest extends VariableArcAbstractTest {
     this.getSymTab().putOnStack(typeSymbol);
     int size = this.getSymTab().getVariationPointStack().size();
     int variationPointSize = typeSymbol.getAllVariationPoints().size();
-    ASTArcIfStatement ast = VariableArcMill.arcIfStatementBuilder()
+    ASTArcVarIf ast = VariableArcMill.arcVarIfBuilder()
       .setCondition(Mockito.mock(ASTExpression.class))
-      .setThenStatement(VariableArcMill.arcBlockBuilder().build())
-      .setElseStatement(VariableArcMill.arcBlockBuilder().build())
+      .setThen(VariableArcMill.arcBlockBuilder().build())
+      .setOtherwise(VariableArcMill.arcBlockBuilder().build())
       .build();
 
     // When

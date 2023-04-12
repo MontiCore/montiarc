@@ -13,11 +13,11 @@ component DuplicateLocalVariables {
   compute {
     int j = 1;
 
-    if(true) {
+    varif (true) {
       int k = 1;
     }
 
-    if(true) {
+    varif (true) {
       int i = 1; // Error: variable i already exists
     }
 
