@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcbasis._cocos.ParameterOmitAssignmentExpressions;
+import arcbasis._cocos.CompArgNoAssignmentExpr;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
@@ -25,9 +25,9 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 /**
- * The class under test is {@link ParameterOmitAssignmentExpressions}.
+ * The class under test is {@link CompArgNoAssignmentExpr}.
  */
-public class ParameterOmitAssignmentExpressionsTest extends MontiArcAbstractTest {
+public class CompArgNoAssignmentExprTest extends MontiArcAbstractTest {
 
   @BeforeAll
   public static void init() {
@@ -74,7 +74,7 @@ public class ParameterOmitAssignmentExpressionsTest extends MontiArcAbstractTest
     MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ParameterOmitAssignmentExpressions());
+    checker.addCoCo(new CompArgNoAssignmentExpr());
 
     // When
     checker.checkAll(ast);
@@ -96,7 +96,7 @@ public class ParameterOmitAssignmentExpressionsTest extends MontiArcAbstractTest
     MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ParameterOmitAssignmentExpressions());
+    checker.addCoCo(new CompArgNoAssignmentExpr());
 
     // When
     checker.checkAll(ast);
@@ -110,42 +110,42 @@ public class ParameterOmitAssignmentExpressionsTest extends MontiArcAbstractTest
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
       arg("component Comp1 { a.b.B b(p = p = 1); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp2 { a.b.B b(p = p += 1); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp3 { a.b.B b(p = p -= 1); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp4 { a.b.B b(p = p *= 1); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp5 { a.b.B b(p = p /= 1); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp6 { a.b.B b(p = p /= 1); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp7 { a.b.B b(p = p &= 1); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp8 { a.b.B b(p = p |= 1); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp9 { a.b.B b(p = p ^= 1); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp10 { a.b.B b(p = p >>= 1); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp11 { a.b.B b(p = p <<= 1); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp12 { a.b.B b(p = p %= 1); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp13 { a.b.C c(p1 = 1, p2 = p2 = 2); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp14 { a.b.C c(p1 = p1 = 1, p2 = 2); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp15 { a.b.C c(p1 = p1 = 1, p2 = p2 = 2); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT,
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT,
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp16 { a.b.C c(p1 = p1 = 1, p2 = p2 = 2); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT,
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT),
+        ArcError.INVALID_CONTEXT_ASSIGNMENT,
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp17 { a.b.C c(p1 = p2 = 1, p1 = p2 = 2); }",
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT,
-        ArcError.COMP_ARG_MULTI_ASSIGNMENT)
+        ArcError.INVALID_CONTEXT_ASSIGNMENT,
+        ArcError.INVALID_CONTEXT_ASSIGNMENT)
     );
   }
 }

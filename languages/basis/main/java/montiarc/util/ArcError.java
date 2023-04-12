@@ -49,7 +49,6 @@ public enum ArcError implements Error {
   PARAM_DEFAULT_TYPE_MISMATCH("0xC1139", "Type mismatch, expected '%s' but provided '%s'"),
   TYPE_REF_DEFAULT_VALUE("0xC1140", "Expected an expression, but found a type name"),
   COMP_ARG_PORT_REF("0xC1141", "Port cannot be referenced in static context"),
-  COMP_ARG_MULTI_ASSIGNMENT("0xC1142", "Invalid syntax, no assignment in default value"),
   COMPONENT_LOWER_CASE("0xC1143", "Convention violation, components should be upper case"),
   SUBCOMPONENT_UPPER_CASE("0xC1144", "Convention violation, subcomponents should be lower case"),
   PORT_UPPER_CASE("0xC1145", "Convention violation, ports should be lower case"),
@@ -61,7 +60,8 @@ public enum ArcError implements Error {
 
   READ_FROM_OUTGOING_PORT("0xC1151", "Cannot read from the outgoing port '%s' of component '%s'."),
   WRITE_TO_INCOMING_PORT("0xC1152", "Cannot write to the incoming port '%s' of component '%s'."),
-  WRITE_TO_READONLY_VARIABLE("0xC1153", "Cannot write to readonly variable '%s' of component '%s'.");
+  WRITE_TO_READONLY_VARIABLE("0xC1153", "Cannot write to readonly variable '%s' of component '%s'."),
+  INVALID_CONTEXT_ASSIGNMENT("0xC1154", "Invalid syntax, no assignments in this context");
 
   private final String errorCode;
   private final String errorMessage;

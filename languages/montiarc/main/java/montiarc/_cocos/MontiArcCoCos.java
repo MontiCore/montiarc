@@ -23,7 +23,7 @@ import arcbasis._cocos.ParameterDefaultValueOmitsPortRef;
 import arcbasis._cocos.ParameterDefaultValueTypeFits;
 import arcbasis._cocos.ParameterHeritage;
 import arcbasis._cocos.ParameterNameCapitalization;
-import arcbasis._cocos.ParameterOmitAssignmentExpressions;
+import arcbasis._cocos.CompArgNoAssignmentExpr;
 import arcbasis._cocos.PortHeritageTypeFits;
 import arcbasis._cocos.PortNameCapitalization;
 import arcbasis._cocos.PortUniqueSender;
@@ -70,7 +70,7 @@ public class MontiArcCoCos {
   public static MontiArcCoCoChecker afterParser() {
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
 
-    checker.addCoCo(new ParameterOmitAssignmentExpressions());
+    checker.addCoCo(new CompArgNoAssignmentExpr());
 
     return checker;
   }

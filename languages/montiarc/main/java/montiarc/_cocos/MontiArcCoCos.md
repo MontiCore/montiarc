@@ -34,7 +34,6 @@ Legend:
 | ☑     | ParameterDefaultValueOmitsPortRef   | ArcBasis | 0xC1138                                                       |
 | ☑     | ParameterDefaultValueTypeFits       | ArcBasis | 0xC1139, 0xC1140                                              |
 | ☑     | ComponentArgumentsOmitPortRef       | ArcBasis | 0xC1141                                                       |
-| ☑     | ParameterOmitAssignmentExpressions  | ArcBasis | 0xC1142                                                       |
 | ☑     | ComponentNameCapitalization         | ArcBasis | 0xC1143                                                       |
 | ☑     | SubcomponentNameCapitalization      | ArcBasis | 0xC1144                                                       |
 | ☑     | PortNameCapitalization              | ArcBasis | 0xC1145                                                       |
@@ -42,6 +41,7 @@ Legend:
 | ☑     | ParameterNameCapitalization         | ArcBasis | 0xC1147                                                       |
 | ☑     | UniqueIdentifierNames               | ArcBasis | 0xC1148                                                       |
 | ☒     | RestrictedIdentifier                | ArcBasis | 0xC1149                                                       |
+| ☑     | CompArgNoAssignmentExpr             | ArcBasis | 0xC1154                                                       |
 | ☐     | ImportsAreUnique                    |          |                                                               |
 | ☐     | ImportsAreUsed                      |          |                                                               | 
 
