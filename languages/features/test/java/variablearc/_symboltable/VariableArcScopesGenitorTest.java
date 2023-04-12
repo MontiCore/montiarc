@@ -34,8 +34,8 @@ public class VariableArcScopesGenitorTest extends VariableArcAbstractTest {
     // Given
     ASTArcVarIf ast = VariableArcMill.arcVarIfBuilder()
       .setCondition(Mockito.mock(ASTExpression.class))
-      .setThen(VariableArcMill.arcBlockBuilder().build())
-      .setOtherwise(VariableArcMill.arcBlockBuilder().build())
+      .setThen(VariableArcMill.componentBodyBuilder().build())
+      .setOtherwise(VariableArcMill.componentBodyBuilder().build())
       .build();
     IVariableArcScope scope = VariableArcMill.scope();
     this.getSymTab().putOnStack(scope);
@@ -64,8 +64,8 @@ public class VariableArcScopesGenitorTest extends VariableArcAbstractTest {
     int variationPointSize = typeSymbol.getAllVariationPoints().size();
     ASTArcVarIf ast = VariableArcMill.arcVarIfBuilder()
       .setCondition(Mockito.mock(ASTExpression.class))
-      .setThen(VariableArcMill.arcBlockBuilder().build())
-      .setOtherwise(VariableArcMill.arcBlockBuilder().build())
+      .setThen(VariableArcMill.componentBodyBuilder().build())
+      .setOtherwise(VariableArcMill.componentBodyBuilder().build())
       .build();
 
     // When

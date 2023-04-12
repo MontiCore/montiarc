@@ -24,7 +24,7 @@ public class VariabilityParserTestHelper {
               ).build(),
               MontiArcMill.arcVarIfBuilder()
                 .setCondition(MontiArcMill.nameExpressionBuilder().setName("a").build())
-                .setThen(MontiArcMill.arcBlockBuilder()
+                .setThen(MontiArcMill.componentBodyBuilder()
                   .setArcElementsList(Collections.singletonList(
                     MontiArcMill.componentInterfaceBuilder().setPortDeclarationsList(
                       Collections.singletonList(
@@ -61,7 +61,7 @@ public class VariabilityParserTestHelper {
                         .build()
                     )).build()
                 ).setOtherwise(
-                  MontiArcMill.arcBlockBuilder()
+                  MontiArcMill.componentBodyBuilder()
                     .setArcElementsList(Collections.emptyList())
                     .build())
                 .build(),

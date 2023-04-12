@@ -39,13 +39,6 @@ component grammar VariableArc extends ArcBasis {
   ;
 
   /**
-   * ASTArcBlock holds multiple elements in a separate block.
-   *
-   * @attribute arcElements A list of architectural elements.
-   */
-  ArcBlock implements ArcElement = "{" ArcElement* "}" ;
-
-  /**
    * ASTArcConstraintDeclaration defines rules for valid component instances.
    *
    * @attribute expression The constraint, which must be a valid boolean expression.

@@ -2,6 +2,7 @@
 package montiarc.arc2fd.fd;
 
 import arcbasis._ast.ASTArcElement;
+import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
@@ -21,7 +22,6 @@ import org.sosy_lab.common.configuration.InvalidConfigurationException;
 import org.sosy_lab.java_smt.api.BooleanFormulaManager;
 import org.sosy_lab.java_smt.api.Formula;
 import org.sosy_lab.java_smt.api.FormulaManager;
-import variablearc._ast.ASTArcBlock;
 import variablearc._ast.ASTArcFeature;
 import variablearc._ast.ASTArcVarIf;
 
@@ -531,11 +531,11 @@ public class MAExtractionHelper<T extends Formula> {
       Set<String> elseFeatureList = new HashSet<>();
 
       // Process If-Statement
-      if (varif.getThen() instanceof ASTArcBlock) {
+      if (varif.getThen() instanceof ASTComponentBody) {
         T newRootName =
           (T) bmgr.makeVariable(root + "_If" + ((varifs.size() > 1) ? ifCounter : ""));
         List<ASTArcElement> elements =
-          ((ASTArcBlock) varif.getThen()).getArcElementList();
+          ((ASTComponentBody) varif.getThen()).getArcElementList();
         featureList = new HashSet<>();
         processIfElseBlock(tmpStorageCache, elements, newRootName);
         ifFeatureList = featureList;
@@ -544,11 +544,11 @@ public class MAExtractionHelper<T extends Formula> {
       }
 
       // Process Else-Statement (is existent)
-      if (varif.isPresentOtherwise() && varif.getThen() instanceof ASTArcBlock) {
+      if (varif.isPresentOtherwise() && varif.getThen() instanceof ASTComponentBody) {
         T newRootName =
           (T) bmgr.makeVariable(root + "_Else" + ((varifs.size() > 1) ? ifCounter : ""));
         List<ASTArcElement> elements =
-          ((ASTArcBlock) varif.getThen()).getArcElementList();
+          ((ASTComponentBody) varif.getThen()).getArcElementList();
         featureList = new HashSet<>();
         processIfElseBlock(tmpStorageCache, elements, newRootName);
         elseFeatureList = featureList;

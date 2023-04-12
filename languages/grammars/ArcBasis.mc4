@@ -104,7 +104,7 @@ component grammar ArcBasis extends
    *
    * @attribute arcElements A list of architectural elements.
    */
-  ComponentBody = "{" ArcElement* "}" ;
+  ComponentBody implements ArcElement = "{" ArcElement* "}" ;
 
   /**
    * ASTComponentInterface defines the interface of the component in terms of
