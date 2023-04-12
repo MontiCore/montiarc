@@ -79,6 +79,7 @@ Legend:
 | ☑     | VarIfSymbolsExist                       | VariableArc | 0xC1414                                     |                                                            |
 | ☑     | VarIfTypesCorrect                       | VariableArc | 0xC1404                                     |                                                            |
 | ☑     | VariableElementsUsage                   | VariableArc | 0xC1405                                     |                                                            |
+| ☑     | VarIfNoAssignmentExpr                   | VariableArc | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158 |                                                            |
 
 # Mode Automata
 
