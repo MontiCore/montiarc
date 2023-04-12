@@ -61,7 +61,11 @@ public enum ArcError implements Error {
   READ_FROM_OUTGOING_PORT("0xC1151", "Cannot read from the outgoing port '%s' of component '%s'."),
   WRITE_TO_INCOMING_PORT("0xC1152", "Cannot write to the incoming port '%s' of component '%s'."),
   WRITE_TO_READONLY_VARIABLE("0xC1153", "Cannot write to readonly variable '%s' of component '%s'."),
-  INVALID_CONTEXT_ASSIGNMENT("0xC1154", "Invalid syntax, no assignments in this context");
+  INVALID_CONTEXT_ASSIGNMENT("0xC1154", "Invalid syntax, no assignments in this context"),
+  INVALID_CONTEXT_INC_PREFIX("0xC1155", "Invalid syntax, no increment in this context"),
+  INVALID_CONTEXT_DEC_PREFIX("0xC1156", "Invalid syntax, no decrement in this context"),
+  INVALID_CONTEXT_INC_SUFFIX("0xC1157", "Invalid syntax, no increment in this context"),
+  INVALID_CONTEXT_DEC_SUFFIX("0xC1158", "Invalid syntax, no decrement in this context");
 
   private final String errorCode;
   private final String errorMessage;

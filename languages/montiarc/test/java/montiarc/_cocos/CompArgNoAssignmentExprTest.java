@@ -24,9 +24,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-/**
- * The class under test is {@link CompArgNoAssignmentExpr}.
- */
 public class CompArgNoAssignmentExprTest extends MontiArcAbstractTest {
 
   @BeforeAll
@@ -145,7 +142,23 @@ public class CompArgNoAssignmentExprTest extends MontiArcAbstractTest {
         ArcError.INVALID_CONTEXT_ASSIGNMENT),
       arg("component Comp17 { a.b.C c(p1 = p2 = 1, p1 = p2 = 2); }",
         ArcError.INVALID_CONTEXT_ASSIGNMENT,
-        ArcError.INVALID_CONTEXT_ASSIGNMENT)
+        ArcError.INVALID_CONTEXT_ASSIGNMENT),
+      arg("component Comp18 { a.b.B b(++p); }",
+        ArcError.INVALID_CONTEXT_INC_PREFIX),
+      arg("component Comp19 { a.b.B b(--p); }",
+        ArcError.INVALID_CONTEXT_DEC_PREFIX),
+      arg("component Comp20 { a.b.B b(p++); }",
+        ArcError.INVALID_CONTEXT_INC_SUFFIX),
+      arg("component Comp21 { a.b.B b(p--); }",
+        ArcError.INVALID_CONTEXT_DEC_SUFFIX),
+      arg("component Comp22 { a.b.B b(p = ++p); }",
+        ArcError.INVALID_CONTEXT_INC_PREFIX),
+      arg("component Comp23 { a.b.B b(p = --p); }",
+        ArcError.INVALID_CONTEXT_DEC_PREFIX),
+      arg("component Comp24 { a.b.B b(p = p++); }",
+        ArcError.INVALID_CONTEXT_INC_SUFFIX),
+      arg("component Comp25 { a.b.B b(p = p--); }",
+        ArcError.INVALID_CONTEXT_DEC_SUFFIX)
     );
   }
 }

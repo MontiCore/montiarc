@@ -41,7 +41,7 @@ Legend:
 | ☑     | ParameterNameCapitalization         | ArcBasis | 0xC1147                                                       |
 | ☑     | UniqueIdentifierNames               | ArcBasis | 0xC1148                                                       |
 | ☒     | RestrictedIdentifier                | ArcBasis | 0xC1149                                                       |
-| ☑     | CompArgNoAssignmentExpr             | ArcBasis | 0xC1154                                                       |
+| ☑     | CompArgNoAssignmentExpr             | ArcBasis | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158                   |
 | ☐     | ImportsAreUnique                    |          |                                                               |
 | ☐     | ImportsAreUsed                      |          |                                                               | 
 

@@ -22,5 +22,35 @@ public class OmitAssignmentExprVisitor implements AssignmentExpressionsVisitor2 
       node.get_SourcePositionStart(), node.get_SourcePositionEnd()
     );
   }
+  @Override
+  public void visit(@NotNull ASTIncPrefixExpression node) {
+    Preconditions.checkNotNull(node);
+    Log.error(ArcError.INVALID_CONTEXT_INC_PREFIX.toString(),
+      node.get_SourcePositionStart(), node.get_SourcePositionEnd()
+    );
+  }
 
+  @Override
+  public void visit(@NotNull ASTDecPrefixExpression node) {
+    Preconditions.checkNotNull(node);
+    Log.error(ArcError.INVALID_CONTEXT_DEC_PREFIX.toString(),
+      node.get_SourcePositionStart(), node.get_SourcePositionEnd()
+    );
+  }
+
+  @Override
+  public void visit(@NotNull ASTIncSuffixExpression node) {
+    Preconditions.checkNotNull(node);
+    Log.error(ArcError.INVALID_CONTEXT_INC_SUFFIX.toString(),
+      node.get_SourcePositionStart(), node.get_SourcePositionEnd()
+    );
+  }
+
+  @Override
+  public void visit(@NotNull ASTDecSuffixExpression node) {
+    Preconditions.checkNotNull(node);
+    Log.error(ArcError.INVALID_CONTEXT_DEC_SUFFIX.toString(),
+      node.get_SourcePositionStart(), node.get_SourcePositionEnd()
+    );
+  }
 }
