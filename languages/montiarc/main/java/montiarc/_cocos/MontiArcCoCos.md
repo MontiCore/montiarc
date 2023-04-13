@@ -21,7 +21,7 @@ Legend:
 | ☑     | ConnectorDirectionsFit              | ArcBasis | 0xC1111, 0xC1112                                              |
 | ☑     | ConnectorTimingsFit                 | ArcBasis | 0xC1113                                                       |
 | ☑     | OnlyOneTiming                       | ArcBasis | 0xC1114                                                       |
-| ☑     | OnlyOneBehavior                     | ArcBasis | 0xC1115                                                       |
+| ☑     | AtomicMaxOneBehavior                | ArcBasis | 0xC1115                                                       |
 | ☑     | DelayOutPortOnly                    | ArcBasis | 0xC1116                                                       |
 | ☑     | FeedbackStrongCausality             | ArcBasis | 0xC1117                                                       |
 | ☑     | ConfigurationParameterAssignment    | ArcBasis | 0xC1119, 0xC1120, 0xC1121, 0xC1122, 0xC1123, 0xC1124, 0xC1125 |

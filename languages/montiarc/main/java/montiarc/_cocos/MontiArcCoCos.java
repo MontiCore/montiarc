@@ -16,7 +16,7 @@ import arcbasis._cocos.FieldInitOmitPortReferences;
 import arcbasis._cocos.FieldInitTypeFits;
 import arcbasis._cocos.FieldNameCapitalization;
 import arcbasis._cocos.NoSubcomponentReferenceCycle;
-import arcbasis._cocos.OnlyOneBehavior;
+import arcbasis._cocos.AtomicMaxOneBehavior;
 import arcbasis._cocos.OnlyOneTiming;
 import arcbasis._cocos.OptionalConfigurationParametersLast;
 import arcbasis._cocos.ParameterDefaultValueOmitsPortRef;
@@ -92,7 +92,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new ConnectorTimingsFit());
     checker.addCoCo(new OnlyOneTiming());
     checker.addCoCo(new DelayOutPortOnly());
-    checker.addCoCo(new OnlyOneBehavior());
+    checker.addCoCo(new AtomicMaxOneBehavior());
     checker.addCoCo(new FeedbackStrongCausality());
     checker.addCoCo(new ConfigurationParameterAssignment(tc, tr));
     checker.addCoCo(new OptionalConfigurationParametersLast());

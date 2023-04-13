@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcbasis._cocos.OnlyOneBehavior;
+import arcbasis._cocos.AtomicMaxOneBehavior;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
@@ -20,9 +20,9 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 /**
- * The class under test is {@link OnlyOneBehavior}.
+ * The class under test is {@link AtomicMaxOneBehavior}.
  */
-public class OnlyOneBehaviorTest extends MontiArcAbstractTest {
+public class AtomicMaxOneBehaviorTest extends MontiArcAbstractTest {
 
   @ParameterizedTest
   @ValueSource(strings = {
@@ -50,6 +50,12 @@ public class OnlyOneBehaviorTest extends MontiArcAbstractTest {
     // atomic with ajava
     "component Comp5 { " +
       "compute { } " +
+      "}",
+    // composed with behavior and automaton
+    "component Comp6 { " +
+      "component Inner1 i1 { } " +
+      "compute { } " +
+      "automaton { } " +
       "}"
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
@@ -62,7 +68,7 @@ public class OnlyOneBehaviorTest extends MontiArcAbstractTest {
     MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new OnlyOneBehavior());
+    checker.addCoCo(new AtomicMaxOneBehavior());
 
     // When
     checker.checkAll(ast);
@@ -84,7 +90,7 @@ public class OnlyOneBehaviorTest extends MontiArcAbstractTest {
     MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new OnlyOneBehavior());
+    checker.addCoCo(new AtomicMaxOneBehavior());
 
     // When
     checker.checkAll(ast);
@@ -102,21 +108,18 @@ public class OnlyOneBehaviorTest extends MontiArcAbstractTest {
           "automaton { } " +
           "automaton { } " +
           "}",
-        ArcError.MULTIPLE_BEHAVIOR,
         ArcError.MULTIPLE_BEHAVIOR),
       // atomic two ajava blocks
       arg("component Comp2 { " +
           "compute { } " +
           "compute { } " +
           "}",
-        ArcError.MULTIPLE_BEHAVIOR,
         ArcError.MULTIPLE_BEHAVIOR),
       // atomic with automaton and ajava
       arg("component Comp3 { " +
           "automaton { } " +
           "compute { } " +
           "}",
-        ArcError.MULTIPLE_BEHAVIOR,
         ArcError.MULTIPLE_BEHAVIOR),
       // inner with two automata
       arg("component Comp4 { " +
@@ -125,7 +128,6 @@ public class OnlyOneBehaviorTest extends MontiArcAbstractTest {
           "automaton { } " +
           "} " +
           "}",
-        ArcError.MULTIPLE_BEHAVIOR,
         ArcError.MULTIPLE_BEHAVIOR)
     );
   }

@@ -2,17 +2,7 @@
 package variablearc._cocos;
 
 import arcbasis._ast.ASTComponentType;
-import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
-import arcbasis._cocos.ConnectorDirectionsFit;
-import arcbasis._cocos.ConnectorPortsExist;
-import arcbasis._cocos.ConnectorTimingsFit;
-import arcbasis._cocos.ConnectorTypesFit;
-import arcbasis._cocos.FeedbackStrongCausality;
-import arcbasis._cocos.PortHeritageTypeFits;
-import arcbasis._cocos.PortUniqueSender;
-import arcbasis._cocos.PortsConnected;
-import arcbasis._cocos.SubPortsConnected;
-import arcbasis._cocos.UniqueIdentifier;
+import arcbasis._cocos.*;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.TypeRelations;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -45,6 +35,7 @@ public class VariantCoCos implements ArcBasisASTComponentTypeCoCo {
     traverser.setVariableArcHandler(new IgnoreASTArcVarIfHandler());
 
     // Add CoCos
+    traverser.add4ArcBasis(new AtomicMaxOneBehavior());
     traverser.add4ArcBasis(new ConnectorDirectionsFit());
     traverser.add4ArcBasis(new ConnectorPortsExist());
     traverser.add4ArcBasis(new ConnectorTypesFit(new TypeRelations()));

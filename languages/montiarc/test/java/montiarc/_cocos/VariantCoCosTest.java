@@ -1068,7 +1068,18 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "a.b.N sub; " +
           "constraint (sub.ff); " +
           "}",
-        ArcError.OUT_PORT_NOT_CONNECTED)
+        ArcError.OUT_PORT_NOT_CONNECTED),
+      // Multiple behaviors if feature is selected
+      arg("component Comp62 { " +
+          "feature f; " +
+          "varif (!f) { " +
+          "a.b.N sub; " +
+          "} " +
+          "constraint (!sub.ff); " +
+          "compute { } " +
+          "compute { } " +
+          "}",
+        ArcError.MULTIPLE_BEHAVIOR)
     );
   }
 }
