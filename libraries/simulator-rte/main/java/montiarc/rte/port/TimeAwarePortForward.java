@@ -11,14 +11,14 @@ import montiarc.rte.port.messages.Message;
  * multiple subcomponents, the connection can no longer be represented by
  * sharing the port instance, thus this structure is required.
  *
- * @param <DataType> the type that is sent via this forward
+ * @param <T> the type that is sent via this forward
  */
-public class TimeAwarePortForward<DataType> extends TimeAwareOutPort<DataType> implements IInPort<DataType> {
-  
+public class TimeAwarePortForward<T> extends TimeAwareOutPort<T> implements IInPort<T> {
+
   public TimeAwarePortForward(String qualifiedName) {
     super(qualifiedName);
   }
-  
+
   /**
    * Receive a message on this port, which is instantly forwarded.
    * This method should only be called by the {@link IOutPort}
@@ -27,7 +27,7 @@ public class TimeAwarePortForward<DataType> extends TimeAwareOutPort<DataType> i
    * @param message the message sent by the connected outgoing port
    */
   @Override
-  public void receiveMessage(Message<DataType> message) {
-    this.sendMessage(message);
+  public void receive(Message<T> message) {
+    this.send(message);
   }
 }

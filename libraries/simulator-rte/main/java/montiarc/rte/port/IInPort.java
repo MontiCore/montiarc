@@ -3,14 +3,12 @@ package montiarc.rte.port;
 
 import montiarc.rte.port.messages.Message;
 
-public interface IInPort<DataType> {
-  
+public interface IInPort<T> {
+
   /**
    * Receive a message on this port.
-   * This method should only be called by the {@link IOutPort}
-   * to which this incoming port is connected.
    *
-   * @param message the message sent by the connected outgoing port
+   * @param message the received message
    */
-  void receiveMessage(Message<DataType> message);
+  void receive(Message<T> message);
 }

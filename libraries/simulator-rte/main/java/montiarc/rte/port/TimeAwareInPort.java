@@ -9,15 +9,14 @@ import java.util.Objects;
 /**
  * An incoming port of a MontiArc component that can receive ticks.
  *
- * @param <DataType> the type that can be received via this port
+ * @param <T> the type that can be received via this port
  */
-public abstract class TimeAwareInPort<DataType> extends AbstractInPort<DataType>
-    implements PassAllMessageFilter<DataType> {
-  
+public abstract class TimeAwareInPort<T> extends AbstractInPort<T> implements PassAllMessageFilter<T> {
+
   public TimeAwareInPort(String qualifiedName) {
     super(qualifiedName);
   }
-  
+
   /**
    * Whether this port is currently blocked by a tick, i.e., it is not tickfree (see Haber Diss p.96).
    *
@@ -26,12 +25,12 @@ public abstract class TimeAwareInPort<DataType> extends AbstractInPort<DataType>
   public boolean isTickBlocked() {
     return Objects.equals(this.peekBuffer(), Message.tick);
   }
-  
+
   /**
    * Remove the next buffered message if it is a {@link Message#tick tick}
    */
   public void dropBlockingTick() {
-    if(this.isTickBlocked()) {
+    if (this.isTickBlocked()) {
       this.pollBuffer();
     }
   }

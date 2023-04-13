@@ -3,26 +3,24 @@ package montiarc.rte.port;
 
 import montiarc.rte.port.messages.Message;
 
-public interface IOutPort<DataType> {
-  
+public interface IOutPort<T> {
+
   /**
-   * Connect the given incoming port to this outgoing port.
+   * Connects to the given port, registering it as a recipient.
    *
-   * @param recipient the port that should be connected to this port
-   *
-   * @return true iff the given port is connected to this port when this method finishes
+   * @param recipient the port to connect to
+   * @return true iff the ports connect successfully
    */
-  boolean connectTo(IInPort<DataType> recipient);
-  
+  boolean connect(IInPort<T> recipient);
+
   /**
-   * Disconnect the given incoming port from this outgoing port.
+   * Disconnects from the given port, removing it as a recipient.
    *
-   * @param recipient the port that should be disconnected from this port
-   *
-   * @return true iff the given port is not connected to this port when this method finishes
+   * @param recipient the port to disconnect from
+   * @return true if the ports disconnect successfully or if the ports where not connected in the first place
    */
-  boolean disconnect(IInPort<DataType> recipient);
-  
+  boolean disconnect(IInPort<T> recipient);
+
   /**
    * Send out the given data as a message to all registered recipients.
    * <br>
@@ -30,8 +28,8 @@ public interface IOutPort<DataType> {
    *
    * @param data the data to send
    */
-  void sendMessage(DataType data);
-  
+  void send(T data);
+
   /**
    * Send out the given message to all registered recipients.
    * <br>
@@ -39,10 +37,11 @@ public interface IOutPort<DataType> {
    *
    * @param message the message to send
    */
-  void sendMessage(Message<DataType> message);
-  
+  void send(Message<T> message);
+
   /**
    * Try to send a tick via this port.
    */
   void sendTick();
+
 }

@@ -15,16 +15,16 @@ import java.util.Queue;
  * <br>
  * Incoming messages are stored in a FIFO buffer
  *
- * @param <DataType> the type that can be received via this port
+ * @param <T> the type that can be received via this port
  */
-public abstract class AbstractInPort<DataType> extends AbstractBasePort<DataType> implements IInPort<DataType> {
-  
-  protected Queue<Message<DataType>> buffer = new ArrayDeque<>();
-  
+public abstract class AbstractInPort<T> extends AbstractBasePort<T> implements IInPort<T> {
+
+  protected Queue<Message<T>> buffer = new ArrayDeque<>();
+
   protected AbstractInPort(String qualifiedName) {
     super(qualifiedName);
   }
-  
+
   /**
    * Receive a message on this port.
    * This method should only be called by the {@link AbstractOutPort}
@@ -33,37 +33,37 @@ public abstract class AbstractInPort<DataType> extends AbstractBasePort<DataType
    * @param message the message sent by the connected outgoing port
    */
   @Override
-  public void receiveMessage(Message<DataType> message) {
-    if(messageIsValidOnPort(message)) {
+  public void receive(Message<T> message) {
+    if (messageIsValidOnPort(message)) {
       buffer.add(message);
       handleBuffer();
     }
   }
-  
+
   /**
    * This method should call the owning component's behavior associated with messages on this port.
    * It is intended to be implemented for each port instance individually.
    */
   protected abstract void handleBuffer();
-  
+
   /**
    * Peek the next message in the buffer.
    *
    * @return the next message in the buffer
    */
-  public Message<DataType> peekBuffer() {
+  public Message<T> peekBuffer() {
     return buffer.peek();
   }
-  
+
   /**
    * Retrieve and remove the next message in the buffer.
    *
    * @return the next message in the buffer
    */
-  public Message<DataType> pollBuffer() {
+  public Message<T> pollBuffer() {
     return buffer.poll();
   }
-  
+
   /**
    * Check whether the buffer is empty.
    *
