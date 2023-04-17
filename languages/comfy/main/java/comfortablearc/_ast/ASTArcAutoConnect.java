@@ -1,12 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package comfortablearc._ast;
 
+import arcbasis._ast.ASTConnector;
+import arcbasis._ast.ASTPortAccess;
 import com.google.common.base.Preconditions;
+import comfortablearc.ComfortableArcMill;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-/**
- * Represents an auto connect statement.
- */
 public class ASTArcAutoConnect extends ASTArcAutoConnectTOP {
 
   @Override
@@ -15,15 +15,36 @@ public class ASTArcAutoConnect extends ASTArcAutoConnectTOP {
     super.setArcACMode(mode);
   }
 
-  public boolean isACOff() {
-    return this.getArcACMode() instanceof ASTArcACOff;
-  }
+  /**
+   * Creates a connector from a copy of {@code source} to a copy of {@code target}.
+   *
+   * @param source The source to copy for the newly created connector
+   * @param target The target to copy for the newly created connector
+   */
+  public ASTConnector connectPorts(@NotNull ASTPortAccess source,
+                                   @NotNull ASTPortAccess target) {
+    Preconditions.checkNotNull(source);
+    Preconditions.checkNotNull(target);
 
-  public boolean isACPortActive() {
-    return this.getArcACMode() instanceof ASTArcACPort;
-  }
+    ASTPortAccess newSource = source.deepClone();
+    newSource.setEnclosingScope(this.getEnclosingScope());
+    newSource.set_SourcePositionStart(this.get_SourcePositionStart());
+    newSource.set_SourcePositionEnd(this.get_SourcePositionEnd());
 
-  public boolean isACTypeActive() {
-    return this.getArcACMode() instanceof ASTArcACType;
+    ASTPortAccess newTarget = target.deepClone();
+    newTarget.setEnclosingScope(this.getEnclosingScope());
+    newTarget.set_SourcePositionStart(this.get_SourcePositionStart());
+    newTarget.set_SourcePositionEnd(this.get_SourcePositionEnd());
+
+    ASTConnector connector = ComfortableArcMill.connectorBuilder()
+      .setSource(newSource)
+      .addTarget(newTarget)
+      .set_SourcePositionStart(this.get_SourcePositionStart())
+      .set_SourcePositionEnd(this.get_SourcePositionEnd())
+      .build();
+
+    connector.setEnclosingScope(this.getEnclosingScope());
+
+    return connector;
   }
 }

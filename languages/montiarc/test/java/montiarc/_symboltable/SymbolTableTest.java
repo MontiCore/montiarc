@@ -46,7 +46,9 @@ public class SymbolTableTest extends MontiArcAbstractTest {
 
     // When
     tool.createSymbolTable(ast);
-    tool.completeSymbolTable(ast);
+    tool.runSymbolTablePhase2(ast);
+    tool.runSymbolTablePhase3(ast);
+    tool.runAfterSymbolTablePhase3Trafos(ast);
 
     // Then
     List<String> findings = SymbolTableChecker.checkComplete(ast);

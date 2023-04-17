@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._lsp.language_access;
 
+import arcbasis._symboltable.ArcBasisScopesGenitorP3;
 import de.monticore.cd4analysis.CD4AnalysisMill;
 import de.monticore.cd4analysis.resolver.CD4AnalysisResolver;
 import de.monticore.class2mc.OOClass2MCResolver;
@@ -38,12 +39,22 @@ public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
     });
   }
 
+  /**
+   * Since the structure of the MontiArc symbol table is complex and the creation has 3 phases, it has to be rebuild completely for every changed artifact.
+   * In particular, the {@link ArcBasisScopesGenitorP3} will set port symbols of connectors of the current artifact based on components in other artifacts.
+   * Rebuilding the artifact of the referenced component necessitates the rebuild of the artifact of the referencing component/connector.
+   * If the performance of the full rebuild becomes a problem, a partial rebuild based on dependency analysis could be implemented.
+   * To keep the complexity low, it will not be implemented for now.
+   */
+  @Override
+  public boolean supportsIterativeScopeAppending() {
+    return false;
+  }
+
   @Override
   public MontiArcArtifactScopeWithFindings createArtifactScope(ASTMACompilationUnit ast, IMontiArcArtifactScope oldArtifactScope) {
-    MontiArcArtifactScopeWithFindings artifactScope = super.createArtifactScope(ast, oldArtifactScope);
-    System.out.println("Complete symbol table!");
-    tool.completeSymbolTable(ast);
-    return artifactScope;
+    // see JavaDoc of supportsIterativeScopeAppending
+    throw new IllegalStateException("Currently not supported for the complex symbol table of MontiArc");
   }
 
   private void ensureAdapterPresent(IMontiArcGlobalScope gs) {
@@ -71,8 +82,10 @@ public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
 
       for (ASTMACompilationUnit node : astNodes) {
         Log.clearFindings();
-        tool.completeSymbolTable(node);
-        if(res.containsKey(node)){
+        tool.runSymbolTablePhase2(node);
+        tool.runSymbolTablePhase3(node);
+        tool.runAfterSymbolTablePhase3Trafos(node);
+        if (res.containsKey(node)) {
           res.get(node).findings.addAll(Log.getFindings());
         }
       }

@@ -40,7 +40,9 @@ public class MAStreamHelperTest {
     Collection<ASTMACompilationUnit> asts = tool.parse(".arc",
         Paths.get(TEST_RESOURCE_PATH, "StreamHelper").toAbsolutePath());
     tool.createSymbolTable(asts);
-    tool.completeSymbolTable(asts);
+    tool.runSymbolTablePhase2(asts);
+    tool.runSymbolTablePhase3(asts);
+    tool.runAfterSymbolTablePhase3Trafos(asts);
 
     // And now get the .arc-File we're finally interested in
     Optional<ASTMACompilationUnit> optAst =

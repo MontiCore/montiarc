@@ -127,10 +127,7 @@ public class PortUniqueSenderTest extends MontiArcAbstractTest {
     Preconditions.checkNotNull(model);
 
     // Given
-    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
-    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
-    MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
-    MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
+    ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new PortUniqueSender());
@@ -149,10 +146,7 @@ public class PortUniqueSenderTest extends MontiArcAbstractTest {
     Preconditions.checkNotNull(errors);
 
     // Given
-    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
-    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
-    MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
-    MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
+    ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new PortUniqueSender());

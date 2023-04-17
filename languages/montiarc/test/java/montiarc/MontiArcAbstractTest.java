@@ -13,6 +13,7 @@ import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcArtifactScope;
+import montiarc.trafo.MontiArcTrafos;
 import montiarc.util.AbstractTest;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -123,7 +124,7 @@ public abstract class MontiArcAbstractTest extends AbstractTest {
       .build();
   }
 
-  protected static void compile(@NotNull String model) {
+  protected static ASTMACompilationUnit compile(@NotNull String model) {
     Preconditions.checkNotNull(model);
     try {
       ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model)
@@ -131,6 +132,8 @@ public abstract class MontiArcAbstractTest extends AbstractTest {
       MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
       MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
       MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
+      MontiArcTrafos.afterSymTab().applyAll(ast);
+      return ast;
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

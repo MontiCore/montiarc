@@ -150,7 +150,9 @@ public class MAExtractionHelper<T extends Formula> {
     }
 
     tool.createSymbolTable(asts);
-    tool.completeSymbolTable(asts);
+    tool.runSymbolTablePhase2(asts);
+    tool.runSymbolTablePhase3(asts);
+    tool.runAfterSymbolTablePhase3Trafos(asts);
 
     // Now we can go through each AST and process it individually
     if (asts.isEmpty()) {

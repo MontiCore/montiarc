@@ -11,6 +11,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCos;
 import montiarc._symboltable.IMontiArcArtifactScope;
+import montiarc.trafo.MontiArcTrafos;
 import montiarc.util.MontiArcError;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -129,12 +130,18 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkNotNull(asts);
     Preconditions.checkNotNull(cl);
 
-    Log.info("Create the symbol table", "MontiArcTool");
+    Log.info("Run symbol-table creation phase 1", "MontiArcTool");
     Log.enableFailQuick(false);
     Collection<IMontiArcArtifactScope> scopes = this.createSymbolTable(asts);
 
-    Log.info("Complete the symbol table", "MontiArcTool");
-    this.completeSymbolTable(asts);
+    Log.info("Run symbol-table creation phase 2", "MontiArcTool");
+    this.runSymbolTablePhase2(asts);
+
+    Log.info("Run symbol-table creation phase 3", "MontiArcTool");
+    this.runSymbolTablePhase3(asts);
+
+    Log.info("Run post symbol-table creation transformations", "MontiArcTool");
+    this.runAfterSymbolTablePhase3Trafos(asts);
 
     Log.info("Perform initial context-condition checks", "MontiArcTool");
     this.runDefaultCoCos(asts);
@@ -207,17 +214,34 @@ public class MontiArcTool extends MontiArcToolTOP {
     return MontiArcMill.scopesGenitorDelegator().createFromAST(nodes);
   }
 
-  @Override
-  public void completeSymbolTable(@NotNull ASTMACompilationUnit node) {
+  public void runSymbolTablePhase2(@NotNull ASTMACompilationUnit node) {
     Preconditions.checkNotNull(node);
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(node);
+  }
+
+  public void runSymbolTablePhase2(@NotNull Collection<ASTMACompilationUnit> nodes) {
+    Preconditions.checkNotNull(nodes);
+    MontiArcMill.scopesGenitorP2Delegator().createFromAST(nodes);
+  }
+
+  public void runSymbolTablePhase3(@NotNull ASTMACompilationUnit node) {
+    Preconditions.checkNotNull(node);
     MontiArcMill.scopesGenitorP3Delegator().createFromAST(node);
   }
 
-  public void completeSymbolTable(@NotNull Collection<ASTMACompilationUnit> nodes) {
+  public void runSymbolTablePhase3(@NotNull Collection<ASTMACompilationUnit> nodes) {
     Preconditions.checkNotNull(nodes);
-    MontiArcMill.scopesGenitorP2Delegator().createFromAST(nodes);
     MontiArcMill.scopesGenitorP3Delegator().createFromAST(nodes);
+  }
+
+  public void runAfterSymbolTablePhase3Trafos(@NotNull Collection<ASTMACompilationUnit> asts) {
+    Preconditions.checkNotNull(asts);
+    asts.forEach(this::runAfterSymbolTablePhase3Trafos);
+  }
+
+  public void runAfterSymbolTablePhase3Trafos(@NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(ast);
+    MontiArcTrafos.afterSymTab().applyAll(ast);
   }
 
   public void runAfterParserCoCos(@NotNull Collection<ASTMACompilationUnit> asts) {

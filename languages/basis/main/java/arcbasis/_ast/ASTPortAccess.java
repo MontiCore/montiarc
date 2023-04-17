@@ -1,14 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
+import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ComponentInstanceSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
-
-import java.util.Optional;
 
 /**
  * Represents a port-access. Extends {@link ASTPortAccessTOP} with utility functionality for easy access.
@@ -63,5 +61,25 @@ public class ASTPortAccess extends ASTPortAccessTOP {
     return (!this.isPresentComponent() && !portRef.isPresentComponent())
       || (this.isPresentComponent() && portRef.isPresentComponent()
       && this.getComponent().equals(portRef.getComponent()));
+  }
+
+  public static ASTPortAccess of(@NotNull PortSymbol port) {
+    Preconditions.checkNotNull(port);
+    ASTPortAccess p = ArcBasisMill.portAccessBuilder()
+      .setPort(port.getName())
+      .build();
+    p.setPortSymbol(port);
+    return p;
+  }
+
+  public static ASTPortAccess of(@NotNull ComponentInstanceSymbol subComp, @NotNull PortSymbol port) {
+    Preconditions.checkNotNull(port);
+    ASTPortAccess p = ArcBasisMill.portAccessBuilder()
+      .setComponent(subComp.getName())
+      .setPort(port.getName())
+      .build();
+    p.setComponentSymbol(subComp);
+    p.setPortSymbol(port);
+    return p;
   }
 }

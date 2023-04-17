@@ -1,6 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc;
 
+import arcbasis._ast.ASTConnector;
+import arcbasis._ast.ASTPortAccess;
+import arcbasis._symboltable.ComponentInstanceSymbol;
+import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.io.paths.MCPath;
@@ -498,38 +503,89 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
   }
 
   /**
-   * Method under test {@link MontiArcTool#completeSymbolTable(Collection)}
+   * Method under test {@link MontiArcTool#runSymbolTablePhase2(Collection)}
    */
   @Test
-  public void completeSymbolTableCollectionShouldThrowException() {
+  void runSymbolTablePhase2CollectionShouldThrowException() {
     // Given
     MontiArcTool tool = new MontiArcTool();
 
     // When && Then
-    Assertions.assertThrows(NullPointerException.class, 
-      () -> tool.completeSymbolTable((Collection<ASTMACompilationUnit>) null));
+    Assertions.assertThrows(NullPointerException.class,
+      () -> tool.runSymbolTablePhase2((Collection<ASTMACompilationUnit>) null));
   }
 
   /**
-   * Method under test {@link MontiArcTool#completeSymbolTable(ASTMACompilationUnit)}
+   * Method under test {@link MontiArcTool#runSymbolTablePhase2(ASTMACompilationUnit)}
    */
   @Test
-  public void completeSymbolTableShouldThrowException() {
+  void runSymbolTablePhase2ShouldThrowException() {
     // Given
     MontiArcTool tool = new MontiArcTool();
 
     // When && Then
-    Assertions.assertThrows(NullPointerException.class, () -> tool.completeSymbolTable((ASTMACompilationUnit) null));
+    Assertions.assertThrows(NullPointerException.class, () -> tool.runSymbolTablePhase2((ASTMACompilationUnit) null));
   }
 
   /**
-   * Method under test {@link MontiArcTool#completeSymbolTable(ASTMACompilationUnit)}
+   * Method under test {@link MontiArcTool#runSymbolTablePhase3(Collection)}
    */
   @Test
-  public void shouldCompleteSymbolTable() throws IOException {
+  void runSymbolTablePhase3CollectionShouldThrowException() {
     // Given
     MontiArcTool tool = new MontiArcTool();
-    String pakkage = "symboltable/completer";
+
+    // When && Then
+    Assertions.assertThrows(NullPointerException.class,
+      () -> tool.runSymbolTablePhase3((Collection<ASTMACompilationUnit>) null));
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#runSymbolTablePhase3(ASTMACompilationUnit)}
+   */
+  @Test
+  void runSymbolTablePhase3ShouldThrowException() {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+
+    // When && Then
+    Assertions.assertThrows(NullPointerException.class, () -> tool.runSymbolTablePhase3((ASTMACompilationUnit) null));
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#runAfterSymbolTablePhase3Trafos(Collection)}
+   */
+  @Test
+  void runAfterSymbolTablePhase3TrafosCollectionShouldThrowException() {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+
+    // When && Then
+    Assertions.assertThrows(NullPointerException.class,
+      () -> tool.runAfterSymbolTablePhase3Trafos((Collection<ASTMACompilationUnit>) null));
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#runAfterSymbolTablePhase3Trafos(ASTMACompilationUnit)}
+   */
+  @Test
+  void runAfterSymbolTablePhase3TrafosShouldThrowException() {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+
+    // When && Then
+    Assertions.assertThrows(NullPointerException.class,
+      () -> tool.runAfterSymbolTablePhase3Trafos((ASTMACompilationUnit) null));
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#runSymbolTablePhase2(ASTMACompilationUnit)}
+   */
+  @Test
+  public void shouldRunSymbolTablePhase2() throws IOException {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+    String pakkage = "symboltable/pass2";
     Path packagePath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, pakkage);
 
     ASTMACompilationUnit astA = MontiArcMill.parser().parse(
@@ -540,13 +596,102 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     tool.createSymbolTable(astB);
 
     // When
-    tool.completeSymbolTable(astB);
+    tool.runSymbolTablePhase2(astB);
 
     // Then
     Assertions.assertTrue(astB.getEnclosingScope().getSubScopes().get(0)
       .resolveComponentInstanceLocally("a").isPresent());
     Assertions.assertNotNull(astB.getEnclosingScope().getSubScopes().get(0)
       .resolveComponentInstanceLocally("a").get().getType());
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#runSymbolTablePhase3(ASTMACompilationUnit)}
+   */
+  @Test
+  void shouldRunSymbolTablePhase3() throws IOException {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+    String pakkage = "symboltable/pass3";
+    Path packagePath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, pakkage);
+
+    ASTMACompilationUnit astA = MontiArcMill.parser().parse(
+      packagePath.resolve("A.arc").toAbsolutePath().toString()).orElseThrow();
+    ASTMACompilationUnit astB = MontiArcMill.parser().parse(
+      packagePath.resolve("B.arc").toAbsolutePath().toString()).orElseThrow();
+    tool.createSymbolTable(astA);
+    tool.createSymbolTable(astB);
+    tool.runSymbolTablePhase2(astA);
+    tool.runSymbolTablePhase2(astB);
+
+    // When
+    tool.runSymbolTablePhase3(astB);
+
+    // Then
+    ComponentTypeSymbol aCompType = astA.getComponentType().getSymbol();
+    ComponentTypeSymbol bCompType = astB.getComponentType().getSymbol();
+    PortSymbol aInPort = aCompType.getPort("inPortA").orElseThrow();
+    PortSymbol bInPort = bCompType.getPort("inPortB").orElseThrow();
+    ComponentInstanceSymbol aInstance = bCompType.getSubComponent("a").orElseThrow();
+
+    ASTConnector connector = astB.getComponentType().getBody().streamArcElements()
+      .filter(ASTConnector.class::isInstance)
+      .map(ASTConnector.class::cast)
+      .findFirst().orElseThrow();
+    ASTPortAccess bAccess = connector.getSource();
+    ASTPortAccess aAccess = connector.getTarget(0);
+
+    Assertions.assertAll(
+      () -> Assertions.assertTrue(bAccess.isPresentPortSymbol(), "Port of b should be present."),
+      () -> Assertions.assertTrue(aAccess.isPresentPortSymbol(), "Port of a should be present."),
+      () -> Assertions.assertTrue(aAccess.isPresentComponentSymbol(), "Comp of a should be present."),
+      () -> Assertions.assertFalse(bAccess.isPresentComponentSymbol(), "Comp of b should not be present.")
+    );
+
+    Assertions.assertAll(
+      () -> Assertions.assertSame(bInPort, bAccess.getPortSymbol(), "B Port mismatch"),
+      () -> Assertions.assertSame(aInPort, aAccess.getPortSymbol(), "A Port mismatch"),
+      () -> Assertions.assertSame(aInstance, aAccess.getComponentSymbol(), "B component mismatch")
+    );
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#runAfterSymbolTablePhase3Trafos(ASTMACompilationUnit)}
+   */
+  @Test
+  void shouldRunAfterSymbolLinkingTransformations() throws IOException {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+    tool.initializeBasicTypes();
+    String pakkage = "transformations/afterSymbolLinkingTrafos";
+    Path packagePath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, pakkage);
+
+    ASTMACompilationUnit astA = MontiArcMill.parser().parse(
+      packagePath.resolve("A.arc").toAbsolutePath().toString()).orElseThrow();
+    ASTMACompilationUnit astB = MontiArcMill.parser().parse(
+      packagePath.resolve("B.arc").toAbsolutePath().toString()).orElseThrow();
+    tool.createSymbolTable(astA);
+    tool.createSymbolTable(astB);
+    tool.runSymbolTablePhase2(astA);
+    tool.runSymbolTablePhase2(astB);
+    tool.runSymbolTablePhase3(astA);
+    tool.runSymbolTablePhase3(astB);
+
+    long connectorCountBeforeTrafo = astB.getComponentType().getBody().streamArcElements()
+      .filter(ASTConnector.class::isInstance)
+      .map(ASTConnector.class::cast)
+      .count();
+
+    // When
+    tool.runAfterSymbolTablePhase3Trafos(astB);
+
+    // Then
+    long connectorCountAfterTrafo = astB.getComponentType().getBody().streamArcElements()
+      .filter(ASTConnector.class::isInstance)
+      .map(ASTConnector.class::cast)
+      .count();
+
+    Assertions.assertTrue(connectorCountAfterTrafo > connectorCountBeforeTrafo, "Expected new connectors");
   }
 
   /**
@@ -613,7 +758,9 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     CommandLine cli = cliParser.parse(options, args);
 
     tool.createSymbolTable(innerComponents);
-    tool.completeSymbolTable(innerComponents);
+    tool.runSymbolTablePhase2(innerComponents);
+    tool.runSymbolTablePhase3(innerComponents);
+    tool.runAfterSymbolTablePhase3Trafos(innerComponents);
 
     // When && Then
     Assertions.assertDoesNotThrow(() -> tool.runTasks(innerComponents, cli));
@@ -648,7 +795,9 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     Assertions.assertTrue(optAst.isPresent());
     ASTMACompilationUnit ast = optAst.get();
     tool.createSymbolTable(ast);
-    tool.completeSymbolTable(ast);
+    tool.runSymbolTablePhase2(ast);
+    tool.runSymbolTablePhase3(ast);
+    tool.runAfterSymbolTablePhase3Trafos(ast);
     IMontiArcArtifactScope scope = (MontiArcArtifactScope) ast.getEnclosingScope();
     return Stream.of(
       Arguments.of(null, System.getProperty("buildDir") + "/test-sources/resources/CLI/symboltable", NullPointerException.class),
