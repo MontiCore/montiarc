@@ -7,6 +7,7 @@ import arcbasis._symboltable.SymbolService;
 import arcbasis.check.AbstractArcTypeCalculatorTest;
 import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
+import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
@@ -15,6 +16,7 @@ import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbolSurrogate;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.check.TypeCheckResult;
@@ -22,6 +24,7 @@ import montiarc.MontiArcMill;
 import montiarc._auxiliary.OOSymbolsMillForMontiArc;
 import montiarc._parser.MontiArcParser;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -32,11 +35,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-/**
- * Holds test for methods of {@link MontiArcTypeCalculator}.
- *
- * @see AbstractArcTypeCalculatorTest for basic tests methods.
- */
 public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
 
   protected MontiArcParser parser;
@@ -48,7 +46,7 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
 
   protected static Stream<Arguments> expressionProviderWithMethodCalls() {
     return Stream.of(Arguments.of("msg.getHeader()", "String"), Arguments.of("msg.setHeader(\"0x\")", "String"),
-        Arguments.of("Message.Message()", "Message"));
+      Arguments.of("Message.Message()", "Message"));
   }
 
   protected static Stream<Arguments> expressionProviderWithGenericMethodCalls() {
@@ -57,6 +55,133 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
 
   protected static Stream<Arguments> expressionProviderWithAssignments() {
     return Stream.of(Arguments.of("5 + 4", "int"), Arguments.of("a + 6", "int"), Arguments.of("a + b", "int"));
+  }
+
+  protected static Stream<Arguments> expressionWithOneIllegalSubExpression() {
+    return Stream.of(
+      // Assignment expressions
+      Arguments.of("invalid++"),
+      Arguments.of("invalid--"),
+      Arguments.of("++invalid"),
+      Arguments.of("--invalid"),
+      Arguments.of("invalid = intField"),
+      Arguments.of("intField = invalid"),
+      Arguments.of("invalid += intField"),
+      Arguments.of("intField += invalid"),
+      Arguments.of("invalid -= intField"),
+      Arguments.of("intField -= invalid"),
+      Arguments.of("invalid *= intField"),
+      Arguments.of("intField *= invalid"),
+      Arguments.of("invalid /= intField"),
+      Arguments.of("intField /= invalid"),
+      Arguments.of("invalid &= intField"),
+      Arguments.of("intField &= invalid"),
+      Arguments.of("invalid |= intField"),
+      Arguments.of("intField |= invalid"),
+      Arguments.of("invalid ^= intField"),
+      Arguments.of("intField ^= invalid"),
+      Arguments.of("invalid >>= intField"),
+      Arguments.of("intField >>= invalid"),
+      Arguments.of("invalid >>>= intField"),
+      Arguments.of("intField >>>= invalid"),
+      Arguments.of("invalid <<= intField"),
+      Arguments.of("intField <<= invalid"),
+      Arguments.of("invalid %= intField"),
+      Arguments.of("intField %= invalid"),
+      Arguments.of("invalid += \"\""),
+      Arguments.of("\"\" += invalid"),
+
+      // Common expressions
+      Arguments.of("invalid().foo"),
+      //Arguments.of("invalid.foo"),
+      //Arguments.of("(\"\" / 2).foo()"),
+      Arguments.of("invalid.foo()"),
+      Arguments.of("TypeWithMethods.staticMethod(1, invalid2)"),
+      Arguments.of("TypeWithMethods.staticMethod(invalid1, 2)"),
+      Arguments.of("TypeWithMethods.staticMethodVarargs(1, invalid2)"),
+      Arguments.of("TypeWithMethods.staticMethodVarargs(invalid1, 2)"),
+      Arguments.of("instanceWithMethods.instanceMethod(1, invalid2)"),
+      Arguments.of("instanceWithMethods.instanceMethod(invalid1, 2)"),
+      Arguments.of("instanceWithMethods.instanceMethodVarargs(1, invalid2)"),
+      Arguments.of("instanceWithMethods.instanceMethodVarargs(invalid1, 2)"),
+      Arguments.of("+invalid"),
+      Arguments.of("-invalid"),
+      Arguments.of("~invalid"),
+      Arguments.of("!invalid"),
+      Arguments.of("invalid * 12"),
+      Arguments.of("12 * invalid"),
+      Arguments.of("invalid / 12"),
+      Arguments.of("12 / invalid"),
+      Arguments.of("invalid % 12"),
+      Arguments.of("12 % invalid"),
+      Arguments.of("invalid + 12"),
+      Arguments.of("12 + invalid"),
+      Arguments.of("invalid - 12"),
+      Arguments.of("12 - invalid"),
+      Arguments.of("invalid <= 12"),
+      Arguments.of("12 <= invalid"),
+      Arguments.of("invalid >= 12"),
+      Arguments.of("12 >= invalid"),
+      Arguments.of("invalid < 12"),
+      Arguments.of("12 < invalid"),
+      Arguments.of("invalid > 12"),
+      Arguments.of("12 > invalid"),
+      Arguments.of("invalid == 12"),
+      Arguments.of("12 == invalid"),
+      Arguments.of("invalid != 12"),
+      Arguments.of("12 != invalid"),
+      Arguments.of("invalid && 12"),
+      Arguments.of("12 && invalid"),
+      Arguments.of("invalid || 12"),
+      Arguments.of("12 || invalid"),
+      Arguments.of("invalid + \"\""),
+      Arguments.of("\"\" + invalid"),
+      Arguments.of("true ? invalid2 : 3"),
+      //Arguments.of("true ? 2 : invalid3"),
+      Arguments.of("(invalid)")
+    );
+  }
+
+  protected static Stream<Arguments> expressionWithIllegalSubExpressions() {
+    return Stream.of(
+      // Assignment expressions
+      Arguments.of("invalid1 = invalid2"),
+      Arguments.of("invalid1 += invalid2"),
+      Arguments.of("invalid1 -= invalid2"),
+      Arguments.of("invalid1 *= invalid2"),
+      Arguments.of("invalid1 /= invalid2"),
+      Arguments.of("invalid1 &= invalid2"),
+      Arguments.of("invalid1 |= invalid2"),
+      Arguments.of("invalid1 ^= invalid2"),
+      Arguments.of("invalid1 >>= invalid2"),
+      Arguments.of("invalid1 >>>= invalid2"),
+      Arguments.of("invalid1 <<= invalid2"),
+      Arguments.of("invalid1 %= invalid2"),
+
+      // Common expressions
+      //Arguments.of("(\"\" / 2).invalidM(invalid1, invalid2)"),
+      Arguments.of("invalid1 * invalid2"),
+      Arguments.of("invalid1 / invalid2"),
+      Arguments.of("invalid1 % invalid2"),
+      Arguments.of("invalid1 + invalid2"),
+      Arguments.of("invalid1 - invalid2"),
+      Arguments.of("invalid1 <= invalid2"),
+      Arguments.of("invalid1 >= invalid2"),
+      Arguments.of("invalid1 < invalid2"),
+      Arguments.of("invalid1 > invalid2"),
+      Arguments.of("invalid1 == invalid2"),
+      Arguments.of("invalid1 != invalid2"),
+      Arguments.of("invalid1 && invalid2"),
+      Arguments.of("invalid1 || invalid2"),
+      Arguments.of("invalid ? invalid2 : invalid3")
+    );
+  }
+
+  protected static Stream<Arguments> expressionOnlyWithIllegalSubExpressionsAndQualifiedNameProvider() {
+    return Stream.of(
+      Arguments.of("invalidM(invalid1, invalid2)", new String[]{"invalidM"}),
+      Arguments.of("invalidCallee.invalidM(invalid1, invalid2)", new String[]{"invalidCallee"})
+    );
   }
 
   @Override
@@ -78,6 +203,8 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
     this.setUpGenericFields();
     this.setUpTrafoBuilderType();
     this.setUpTrafoBuilderFields();
+    this.setUpPrimitiveFields();
+    this.setUpTypeAndInstanceWithMethods();
   }
 
   public void setUpGenericTypes() {
@@ -116,8 +243,8 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
     setHeader.setSpannedScope(setHeaderScope);
     IOOSymbolsScope constructorScope = MontiArcMill.scope();
     MethodSymbol constructor = MontiArcMill.methodSymbolBuilder().setName("Message")
-        .setType(SymTypeExpressionFactory.createTypeExpression("Message", this.getScope()))
-        .setSpannedScope(constructorScope).setIsConstructor(true).setIsStatic(false).build();
+      .setType(SymTypeExpressionFactory.createTypeExpression("Message", this.getScope()))
+      .setSpannedScope(constructorScope).setIsConstructor(true).setIsStatic(false).build();
     constructorScope.setSpanningSymbol(constructor);
     constructor.setSpannedScope(constructorScope);
     IOOSymbolsScope msgScope = MontiArcMill.scope();
@@ -179,6 +306,65 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
     SymbolService.link(this.getScope(), builder);
   }
 
+  public void setUpPrimitiveFields() {
+    FieldSymbol builder = ArcBasisMill.fieldSymbolBuilder().setName("intField")
+      .setType(SymTypeExpressionFactory.createPrimitive("int")).build();
+    SymbolService.link(this.getScope(), builder);
+    FieldSymbol builder2 = ArcBasisMill.fieldSymbolBuilder().setName("boolField")
+      .setType(SymTypeExpressionFactory.createPrimitive("boolean")).build();
+    SymbolService.link(this.getScope(), builder2);
+  }
+
+  public void setUpTypeAndInstanceWithMethods() {
+    OOTypeSymbol type = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("TypeWithMethods")
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
+    SymbolService.link(this.getScope(), type);
+
+    FieldSymbol intParam = MontiArcMill.fieldSymbolBuilder()
+      .setName("param")
+      .setType(SymTypeExpressionFactory.createPrimitive("int"))
+      .build();
+
+    MethodSymbol instanceMethod =
+      createMethod("instanceMethod", false, false, intParam.deepClone(), intParam.deepClone());
+    MethodSymbol instanceMethodVarargs = createMethod("instanceMethodVarargs", false, true, intParam.deepClone());
+    MethodSymbol staticMethod = createMethod("staticMethod", true, false, intParam.deepClone(), intParam.deepClone());
+    MethodSymbol staticMethodVarargs = createMethod("staticMethodVarargs", true, true, intParam.deepClone());
+
+    type.addMethodSymbol(staticMethod);
+    type.addMethodSymbol(staticMethodVarargs);
+    type.addMethodSymbol(instanceMethod);
+    type.addMethodSymbol(instanceMethodVarargs);
+
+    // Create instance of this type
+    FieldSymbol instanceWithMethods = MontiArcMill.fieldSymbolBuilder()
+      .setName("instanceWithMethods")
+      .setType(SymTypeExpressionFactory.createTypeExpression(type))
+      .build();
+    SymbolService.link(this.getScope(), instanceWithMethods);
+  }
+
+  protected MethodSymbol createMethod(@NotNull String name,
+                                      boolean isStatic,
+                                      boolean isElliptic,
+                                      @NotNull FieldSymbol... params) {
+    Preconditions.checkNotNull(name);
+    Preconditions.checkNotNull(params);
+
+    MethodSymbol method = MontiArcMill.methodSymbolBuilder()
+      .setName(name)
+      .setIsStatic(isStatic)
+      .setIsElliptic(isElliptic)
+      .setType(SymTypeExpressionFactory.createPrimitive("int"))
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
+    Arrays.stream(params).forEach(p -> SymbolService.link(method.getSpannedScope(), p));
+
+    return method;
+  }
+
   @ParameterizedTest
   @MethodSource("expressionProviderForGenericFields")
   public void shouldCalculateGenericType(@NotNull String expression, @NotNull String expectedType) {
@@ -189,10 +375,26 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
 
   @ParameterizedTest
   @MethodSource("expressionProviderWithMethodCalls")
-  public void shouldCalculateObjectTypeFromMethodCalls(@NotNull String expression, @NotNull String expectedType) throws IOException {
+  public void shouldCalculateObjectTypeFromMethodCalls(@NotNull String expression,
+                                                       @NotNull String expectedType) throws IOException {
     Preconditions.checkNotNull(expression);
     Preconditions.checkNotNull(expectedType);
-    doCalculateTypeFromExpression(expression, expectedType, false, false);
+
+    //Given
+    ASTExpression ast = MontiArcMill.parser().parse_StringExpression(expression).orElseThrow();
+    this.getScopeSetter().setScope(ast, this.getScope());
+
+    //When
+    TypeCheckResult result = this.getTypeCalculator().deriveType(ast);
+
+    //Then
+    Assertions.assertTrue(result.isPresentResult());
+    Assertions.assertFalse(result.getResult().isPrimitive());
+    Assertions.assertFalse(result.getResult().isGenericType());
+    Assertions.assertFalse(result.getResult().isTypeVariable());
+    Assertions.assertTrue(!(result.getResult().getTypeInfo() instanceof OOTypeSymbolSurrogate) ||
+      !(((OOTypeSymbolSurrogate) result.getResult().getTypeInfo()).lazyLoadDelegate() instanceof OOTypeSymbolSurrogate));
+    Assertions.assertEquals(expectedType, result.getResult().print());
   }
 
   @ParameterizedTest
@@ -201,27 +403,115 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
                                                               @NotNull String expectedType) throws IOException {
     Preconditions.checkNotNull(expression);
     Preconditions.checkNotNull(expectedType);
-    doCalculateTypeFromExpression(expression, expectedType, false, true);
+
+    //Given
+    ASTExpression ast = MontiArcMill.parser().parse_StringExpression(expression).orElseThrow();
+    this.getScopeSetter().setScope(ast, this.getScope());
+
+    //When
+    TypeCheckResult result = this.getTypeCalculator().deriveType(ast);
+
+    //Then
+    Assertions.assertTrue(result.isPresentResult());
+    Assertions.assertFalse(result.getResult().isPrimitive());
+    Assertions.assertTrue(result.getResult().isGenericType());
+    Assertions.assertFalse(result.getResult().isTypeVariable());
+    Assertions.assertTrue(!(result.getResult().getTypeInfo() instanceof OOTypeSymbolSurrogate) ||
+      !(((OOTypeSymbolSurrogate) result.getResult().getTypeInfo()).lazyLoadDelegate() instanceof OOTypeSymbolSurrogate));
+    Assertions.assertEquals(expectedType, result.getResult().print());
   }
 
   @ParameterizedTest
   @MethodSource("expressionProviderWithAssignments")
-  public void shouldCalculatePrimitiveTypeFromAssignment(@NotNull String expression, @NotNull String expectedType) throws IOException {
+  public void shouldCalculatePrimitiveTypeFromAssignment(@NotNull String expression,
+                                                         @NotNull String expectedType) throws IOException {
     Preconditions.checkNotNull(expression);
     Preconditions.checkNotNull(expectedType);
-    doCalculateTypeFromExpression(expression, expectedType, true, false);
+
+    //Given
+    ASTExpression ast = MontiArcMill.parser().parse_StringExpression(expression).orElseThrow();
+    this.getScopeSetter().setScope(ast, this.getScope());
+
+    //When
+    TypeCheckResult result = this.getTypeCalculator().deriveType(ast);
+
+    //Then
+    Assertions.assertTrue(result.isPresentResult());
+    Assertions.assertTrue(result.getResult().isPrimitive());
+    Assertions.assertFalse(result.getResult().isGenericType());
+    Assertions.assertFalse(result.getResult().isTypeVariable());
+    Assertions.assertTrue(!(result.getResult().getTypeInfo() instanceof OOTypeSymbolSurrogate) ||
+      !(((OOTypeSymbolSurrogate) result.getResult().getTypeInfo()).lazyLoadDelegate() instanceof OOTypeSymbolSurrogate));
+    Assertions.assertEquals(expectedType, result.getResult().print());
   }
 
-  protected void doCalculateTypeFromExpression(@NotNull String expression, @NotNull String expectedType,
-                                               boolean isPrimitive, boolean isGeneric) throws IOException {
+  /**
+   * Tests that only one error is logged, if a more complex expression contains one illegal subexpression. I.e., if a
+   * subexpression leads to a non-calculable composed expression, the composed expression should not log another error
+   * which would be redundant information.
+   */
+  @ParameterizedTest(name = "{0}")
+  @MethodSource("expressionWithOneIllegalSubExpression")
+  public void shouldOnlyLogOneErrorForIllegalSubExpressions(@NotNull String expression) throws IOException {
     Preconditions.checkNotNull(expression);
-    Preconditions.checkNotNull(expectedType);
-    doShouldCalculateType(doParseExpression(expression), expectedType, isPrimitive, isGeneric);
+
+    // Given
+    ASTExpression expr = MontiArcMill.parser().parse_StringExpression(expression).orElseThrow();
+    this.getScopeSetter().setScope(expr, this.getScope());
+
+    // When
+    TypeCheckResult result = new MontiArcTypeCalculator().deriveType(expr);
+
+    // Then
+    Assertions.assertNotNull(result);
+    Assertions.assertTrue(result.isPresentResult());
+    Assertions.assertTrue(result.getResult().isObscureType(), "Unexpected type: " + result.getResult().print());
   }
 
-  protected ASTExpression doParseExpression(@NotNull String expression) throws IOException {
+  @ParameterizedTest(name = "{0}")
+  @MethodSource("expressionWithIllegalSubExpressions")
+  public void shouldEagerlyEvaluateSubExpressions(@NotNull String expression) throws IOException {
     Preconditions.checkNotNull(expression);
-    return this.getParser().parse_StringExpression(expression).orElse(null);
+
+    // Given
+    ASTExpression ast = MontiArcMill.parser().parse_StringExpression(expression).orElseThrow();
+    this.getScopeSetter().setScope(ast, this.getScope());
+
+    // When
+    TypeCheckResult result = new MontiArcTypeCalculator().deriveType(ast);
+
+    // Then
+    Assertions.assertNotNull(result);
+    Assertions.assertFalse(result.isPresentResult() && !result.getResult().isObscureType(),
+      "Unexpected type " + result.getResult().print()
+    );
+  }
+
+  /**
+   * Tests that in the case of a composed subexpression with invalid subexpressions every subexpression is type-checked.
+   * However, there is one exception: if a {@link de.monticore.expressions.expressionsbasis._ast.ASTNameExpression} or
+   * {@link ASTFieldAccessExpression} represent the qualification of a method name or field, then the qualified name
+   * parts will not be traversed by the type check. Therefore, they are unsuitable for being tested by
+   * {@link #shouldEagerlyEvaluateSubExpressions(String)} that internally checks that all sub expressions have been
+   * traversed.
+   */
+  @ParameterizedTest(name = "{0}")
+  @MethodSource("expressionOnlyWithIllegalSubExpressionsAndQualifiedNameProvider")
+  public void shouldEagerlyEvaluateSubExpressionsExceptQualifiedNames(@NotNull String expression) throws IOException {
+    Preconditions.checkNotNull(expression);
+
+    // Given
+    ASTExpression ast = MontiArcMill.parser().parse_StringExpression(expression).orElseThrow();
+    this.getScopeSetter().setScope(ast, this.getScope());
+
+    // When
+    TypeCheckResult result = new MontiArcTypeCalculator().deriveType(ast);
+
+    // Then
+    Assertions.assertNotNull(result);
+    Assertions.assertFalse(result.isPresentResult() && !result.getResult().isObscureType(),
+      "Unexpected type " + result.getResult().print()
+    );
   }
 
   @Override
@@ -238,12 +528,5 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
       this.scope = MontiArcMill.scope();
     }
     return this.scope;
-  }
-
-  protected MontiArcParser getParser() {
-    if (this.parser == null) {
-      this.parser = MontiArcMill.parser();
-    }
-    return parser;
   }
 }
