@@ -1,6 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
+import arcbasis._symboltable.ComponentInstanceSymbol;
+import arcbasis._symboltable.PortSymbol;
+import com.google.common.base.Preconditions;
+import org.codehaus.commons.nullanalysis.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -122,7 +127,8 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * @param source the qualified name of the source port
    * @return a {@code List} of all connectors with matching source
    */
-  public List<ASTConnector> getConnectorsMatchingSource(String source) {
+  public List<ASTConnector> getConnectorsMatchingSource(@NotNull String source) {
+    Preconditions.checkNotNull(source);
     return this.getConnectors().stream()
       .filter(connector -> connector.getSource().getQName().equals(source))
       .collect(Collectors.toList());
@@ -136,18 +142,112 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * @param target the port access name (i.e., instance name and port name)
    * @return a {@code List} of all connectors with matching target
    */
-  public List<ASTConnector> getConnectorsMatchingTarget(String target) {
+  public List<ASTConnector> getConnectorsMatchingTarget(@NotNull String target) {
+    Preconditions.checkNotNull(target);
     return this.getConnectors().stream()
-      .filter(astConnector -> astConnector.getTargetList().stream()
-        .anyMatch(astPortReference -> astPortReference.getQName().equals(target)))
+      .filter(connector -> connector.getTargetList().stream()
+        .anyMatch(t -> t.getQName().equals(target)))
       .collect(Collectors.toList());
   }
 
   /**
-   * Returns a list of all sub-component instantiations contained in the body of this component in
+   * Returns a list of all connectors contained in the topology of this component and with source
+   * matching the provided port. The returned list is in no specific order and empty if the
+   * component contains no connector with matching source.
+   *
+   * @param source the source port
+   * @return a {@code List} of all connectors with matching source
+   */
+  public List<ASTConnector> getConnectorsMatchingSource(@NotNull PortSymbol source) {
+    Preconditions.checkNotNull(source);
+    return this.getConnectors().stream()
+      .filter(connector -> connector.getSource().isPresentPortSymbol()
+        && connector.getSource().getPortSymbol().equals(source))
+      .collect(Collectors.toList());
+  }
+
+  /**
+   * Returns a list of all connectors contained in the topology of this component and with target
+   * matching the provided port. The returned list is in no specific order and empty if the
+   * component contains no connector with matching target.
+   *
+   * @param target the target port
+   * @return a {@code List} of all connectors with matching target
+   */
+  public List<ASTConnector> getConnectorsMatchingTarget(@NotNull PortSymbol target) {
+    Preconditions.checkNotNull(target);
+    return this.getConnectors().stream()
+      .filter(connector -> connector.getTargetList().stream()
+        .anyMatch(t -> t.isPresentPortSymbol()
+          && t.getPortSymbol().equals(target)))
+      .collect(Collectors.toList());
+  }
+
+  /**
+   * Returns a list of all connectors contained in the topology of this component and with source
+   * matching the provided subcomponent. The returned list is in no specific order and empty if the
+   * component contains no connector with matching source.
+   *
+   * @param source the source subcomponent
+   * @return a {@code List} of all connectors with matching source
+   */
+  public List<ASTConnector> getConnectorsMatchingSource(@NotNull ComponentInstanceSymbol source) {
+    Preconditions.checkNotNull(source);
+    return this.getConnectors().stream()
+      .filter(connector -> connector.getSource().isPresentComponent()
+        && connector.getSource().isPresentComponentSymbol()
+        && connector.getSource().getComponentSymbol().equals(source))
+      .collect(Collectors.toList());
+  }
+
+  /**
+   * Returns a list of all connectors contained in the topology of this component and with target
+   * matching the provided subcomponent. The returned list is in no specific order and empty if the
+   * component contains no connector with matching target.
+   *
+   * @param target the target subcomponent
+   * @return a {@code List} of all connectors with matching target
+   */
+  public List<ASTConnector> getConnectorsMatchingTarget(@NotNull ComponentInstanceSymbol target) {
+    Preconditions.checkNotNull(target);
+    return this.getConnectors().stream()
+      .filter(connector -> connector.getTargetList().stream()
+        .anyMatch(t -> t.isPresentComponent()
+          && t.isPresentComponentSymbol()
+          && t.getComponentSymbol().equals(target)))
+      .collect(Collectors.toList());
+  }
+
+  /**
+   * Returns a list of all in port forwards. The returned list is in no
+   * specific order and empty if the component contains no in port forwards.
+   *
+   * @return a {@code List} of all in port forwards
+   */
+  public List<ASTConnector> getInPortForwards() {
+    return this.getConnectors().stream()
+      .filter(connector -> !connector.getSource().isPresentComponent())
+      .collect(Collectors.toList());
+  }
+
+  /**
+   * Returns a list of all out port forwards. The returned list is in no
+   * specific order and empty if the component contains no out port forwards.
+   *
+   * @return a {@code List} of all out port forwards
+   */
+  public List<ASTConnector> getOutPortForwards() {
+    return this.getConnectors().stream()
+      .filter(connector -> connector.getTargetList().stream()
+        .anyMatch(t -> !t.isPresentComponent()))
+      .collect(Collectors.toList());
+  }
+
+  /**
+   * Returns a list of all subcomponent instantiations contained in the body of this component in
    * no specific order. The list is empty if the component contains no sub-components instantiations.
    *
-   * @return a {@code List} of all sub-component instantiations contained in the body of this
+   * @return a {@code List} of all subcomponent instantiations contained in the body of this
    * component.
    */
   public List<ASTComponentInstantiation> getSubComponentInstantiations() {

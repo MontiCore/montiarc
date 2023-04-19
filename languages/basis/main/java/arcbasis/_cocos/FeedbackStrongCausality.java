@@ -5,20 +5,12 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
 import arcbasis._symboltable.ComponentInstanceSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Stack;
 
 /**
  * Checks that for every cycle there is at least one component that is strongly causal modulo a port on this cycle.
@@ -30,72 +22,56 @@ public class FeedbackStrongCausality implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    List<ASTConnector> connectors = node.getConnectors();
-    List<ASTPortAccess> sources = connectors.stream().map(ASTConnector::getSource).collect(Collectors.toUnmodifiableList());
+    for (ComponentInstanceSymbol root : node.getSpannedScope().getLocalComponentInstanceSymbols()) {
+      this.check(node, root, new Stack<>());
+    }
+  }
 
-    // keep the visited list throughout all circle detection to avoid detecting the same circle twice
-    ArrayList<String> visited = new ArrayList<>();
-    for (ASTPortAccess source : sources) {
-      ArrayDeque<String> next = new ArrayDeque<>();
-      next.add(getComponentNullSafe(source));
+  protected void check(@NotNull ASTComponentType graph,
+                       @NotNull ComponentInstanceSymbol next,
+                       @NotNull Stack<ComponentInstanceSymbol> path) {
+    Preconditions.checkNotNull(graph);
+    Preconditions.checkNotNull(next);
+    Preconditions.checkNotNull(path);
 
-      while (!next.isEmpty()) {
-        String current = next.pop();
-        for (String neighbourComponent : findNextComponent(node, current)) {
-          if (!Objects.equals(neighbourComponent, "")) {
-            if (Objects.equals(getComponentNullSafe(source), neighbourComponent)) {
-              Log.error(ArcError.FEEDBACK_CAUSALITY.toString(),
-                  source.get_SourcePositionStart(), source.get_SourcePositionEnd());
-            } else if (!visited.contains(neighbourComponent)) {
-              next.add(neighbourComponent);
-            }
-          }
-        }
-        visited.add(current);
+    path.push(next);
+    for (ASTConnector connector : graph.getConnectorsMatchingSource(next)) {
+      this.check(graph, connector, path);
+    }
+    path.pop();
+  }
+
+  protected void check(@NotNull ASTComponentType graph,
+                       @NotNull ASTConnector next,
+                       @NotNull Stack<ComponentInstanceSymbol> path) {
+    Preconditions.checkNotNull(graph);
+    Preconditions.checkNotNull(next);
+    Preconditions.checkNotNull(path);
+
+    if (next.getSource().isPresentPortSymbol() && !next.getSource().getPortSymbol().isStronglyCausal()) {
+      for (ASTPortAccess target : next.getTargetList()) {
+        this.check(graph, target, path);
       }
     }
   }
 
-  protected static String getComponentNullSafe(ASTPortAccess access) {
-    Preconditions.checkNotNull(access);
-    return access.isPresentComponent() ? access.getComponent() : "";
-  }
+  protected void check(@NotNull ASTComponentType graph,
+                       @NotNull ASTPortAccess next,
+                       @NotNull Stack<ComponentInstanceSymbol> path) {
+    Preconditions.checkNotNull(graph);
+    Preconditions.checkNotNull(next);
+    Preconditions.checkNotNull(path);
 
-  /**
-   * Looks at all connectors of {@code componentType} and finds
-   * next component starting from {@code component}.
-   * Connectors with {@code ignoreTiming} are ignored.
-   */
-  protected Set<String> findNextComponent(ASTComponentType componentType, String component) {
-    Preconditions.checkNotNull(componentType);
-    return componentType.getConnectors().stream()
-        .filter(c -> isPortNotStronglyCausal(getPortIfPresent(c.getSource(), componentType.getSymbol())))
-        .filter(c -> getComponentNullSafe(c.getSource()).equals(component))
-        .flatMap(c -> c.getTargetList().stream()
-            .filter(t -> isPortNotStronglyCausal(getPortIfPresent(t, componentType.getSymbol())))
-            .map(FeedbackStrongCausality::getComponentNullSafe))
-        .collect(Collectors.toSet());
-  }
-
-  protected boolean isPortNotStronglyCausal(Optional<PortSymbol> portSymbol) {
-    return portSymbol.isPresent() && !portSymbol.get().isStronglyCausal();
-  }
-
-  protected static Optional<PortSymbol> getPortIfPresent(@NotNull ASTPortAccess astPort,
-                                                             @NotNull ComponentTypeSymbol enclComp) {
-    Preconditions.checkNotNull(astPort);
-    Preconditions.checkNotNull(enclComp);
-
-    if (astPort.isPresentComponent()) {
-      Optional<ComponentInstanceSymbol> portOwner = enclComp.getSubComponent(astPort.getComponent());
-      if (portOwner.isEmpty() || !portOwner.get().isPresentType()) {
-        return Optional.empty();
-      }
-
-      return portOwner.get().getType().getTypeInfo().getPort(astPort.getPort());
-    } else if (enclComp.getPort(astPort.getPort()).map(PortSymbol::isTypePresent).orElse(false)) {
-      return enclComp.getPort(astPort.getPort());
+    if (!next.isPresentComponent() || !next.isPresentComponentSymbol()) {
+      return;
     }
-    return Optional.empty();
+
+    if (path.contains(next.getComponentSymbol())) {
+      Log.error(ArcError.FEEDBACK_CAUSALITY.toString(),
+        next.get_SourcePositionStart(), next.get_SourcePositionEnd()
+      );
+    } else {
+      this.check(graph, next.getComponentSymbol(), path);
+    }
   }
 }
