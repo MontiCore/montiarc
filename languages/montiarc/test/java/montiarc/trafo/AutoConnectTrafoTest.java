@@ -5,14 +5,12 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._cocos.PortUniqueSender;
 import com.google.common.base.Preconditions;
-import comfortablearc.trafo.AutoConnectTrafo;
 import de.monticore.types.check.TypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc._visitor.MontiArcTraverser;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.assertj.core.api.Assertions;
@@ -200,13 +198,10 @@ public class AutoConnectTrafoTest extends MontiArcAbstractTest {
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
     List<ASTConnector> before = connectorsWithin(ast.getComponentType());
 
-    AutoConnectTrafo trafo = new AutoConnectTrafo(new TypeRelations());
-    MontiArcTraverser traverser = MontiArcMill.traverser();
-    traverser.add4ArcBasis(trafo);
-    traverser.add4ComfortableArc(trafo);
+    MAAutoConnectTrafo trafo = new MAAutoConnectTrafo(new TypeRelations());
 
     // When
-    ast.accept(traverser);
+    trafo.apply(ast);
 
     List<ASTConnector> after = connectorsWithin(ast.getComponentType());
 
@@ -255,16 +250,13 @@ public class AutoConnectTrafoTest extends MontiArcAbstractTest {
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
 
-    AutoConnectTrafo trafo = new AutoConnectTrafo(new TypeRelations());
-    MontiArcTraverser traverser = MontiArcMill.traverser();
-    traverser.add4ArcBasis(trafo);
-    traverser.add4ComfortableArc(trafo);
+    MAAutoConnectTrafo trafo = new MAAutoConnectTrafo(new TypeRelations());
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new PortUniqueSender());
 
     // When
-    ast.accept(traverser);
+    trafo.apply(ast);
     checker.checkAll(ast);
 
     Assertions.assertThat(this.collectErrorCodes(Log.getFindings()))
@@ -291,13 +283,10 @@ public class AutoConnectTrafoTest extends MontiArcAbstractTest {
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
 
-    AutoConnectTrafo trafo = new AutoConnectTrafo(new TypeRelations());
-    MontiArcTraverser traverser = MontiArcMill.traverser();
-    traverser.add4ArcBasis(trafo);
-    traverser.add4ComfortableArc(trafo);
+    MAAutoConnectTrafo trafo = new MAAutoConnectTrafo(new TypeRelations());
 
     // When
-    ast.accept(traverser);
+    trafo.apply(ast);
 
     // Then
     Assertions.assertThat(connectorsWithin(ast.getComponentType()))
