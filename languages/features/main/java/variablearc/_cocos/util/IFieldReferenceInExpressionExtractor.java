@@ -7,6 +7,7 @@ import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.visitor.ITraverser;
 import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
+import variablearc._symboltable.ArcFeature2VariableAdapter;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -61,6 +62,7 @@ public interface IFieldReferenceInExpressionExtractor {
 
       return comp.getFields().stream()
         .filter(e -> !comp.getParameters().contains(e))
+        .filter(e -> !(e instanceof ArcFeature2VariableAdapter))
         .map(field -> new FieldReference(field.getName()))
         .collect(Collectors.toSet());
     }
