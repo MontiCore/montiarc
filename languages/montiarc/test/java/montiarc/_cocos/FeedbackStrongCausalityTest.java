@@ -237,7 +237,6 @@ public class FeedbackStrongCausalityTest extends MontiArcAbstractTest {
           "  sub1.o -> sub2.i; " +
           "  sub2.o -> sub1.i; " +
           "}",
-        ArcError.FEEDBACK_CAUSALITY,
         ArcError.FEEDBACK_CAUSALITY),
       // non strongly causal feedback loop & port forward
       arg("component Comp4 { " +
@@ -250,7 +249,6 @@ public class FeedbackStrongCausalityTest extends MontiArcAbstractTest {
           "  sub2.o -> sub1.i2; " +
           "  sub2.o -> o; " +
           "}",
-        ArcError.FEEDBACK_CAUSALITY,
         ArcError.FEEDBACK_CAUSALITY),
       // direct non strongly causal feedback loop & nested subcomponent
       arg("component Comp5 { " +
@@ -274,12 +272,8 @@ public class FeedbackStrongCausalityTest extends MontiArcAbstractTest {
           "  sub1.o -> sub2.i; " +
           "  sub1.o -> sub3.i; " +
           "  sub2.o -> sub1.i1; " +
-          "  sub3.o -> sub2.i2; " +
+          "  sub3.o -> sub1.i2; " +
           "}",
-        ArcError.FEEDBACK_CAUSALITY,
-        ArcError.FEEDBACK_CAUSALITY,
-        ArcError.FEEDBACK_CAUSALITY,
-        ArcError.FEEDBACK_CAUSALITY,
         ArcError.FEEDBACK_CAUSALITY,
         ArcError.FEEDBACK_CAUSALITY),
       // multiple non strongly causal feedback loops & port forward
@@ -295,11 +289,9 @@ public class FeedbackStrongCausalityTest extends MontiArcAbstractTest {
           "  sub2.o -> o; " +
           "}",
         ArcError.FEEDBACK_CAUSALITY,
-        ArcError.FEEDBACK_CAUSALITY,
-        ArcError.FEEDBACK_CAUSALITY,
         ArcError.FEEDBACK_CAUSALITY),
       // multiple non strongly causal feedback loops & port forward (connector with multiple targets)
-      arg("component Comp8 { " +
+      arg("component Comp9 { " +
           "  port in int i; " +
           "  port out int o; " +
           "  a.b.G sub1; " +
@@ -308,8 +300,6 @@ public class FeedbackStrongCausalityTest extends MontiArcAbstractTest {
           "  sub1.o -> sub2.i1, sub2.i2; " +
           "  sub2.o -> sub1.i2, o; " +
           "}",
-        ArcError.FEEDBACK_CAUSALITY,
-        ArcError.FEEDBACK_CAUSALITY,
         ArcError.FEEDBACK_CAUSALITY,
         ArcError.FEEDBACK_CAUSALITY)
     );

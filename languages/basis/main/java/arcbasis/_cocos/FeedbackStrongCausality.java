@@ -10,6 +10,8 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -22,45 +24,55 @@ public class FeedbackStrongCausality implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    for (ComponentInstanceSymbol root : node.getSpannedScope().getLocalComponentInstanceSymbols()) {
-      this.check(node, root, new Stack<>());
+    Set<ComponentInstanceSymbol> visited = new HashSet<>();
+
+    for (ComponentInstanceSymbol vertex : node.getSpannedScope().getLocalComponentInstanceSymbols()) {
+      if (!visited.contains(vertex)) {
+        this.check(node, vertex, new Stack<>(), visited);
+      }
     }
   }
 
   protected void check(@NotNull ASTComponentType graph,
                        @NotNull ComponentInstanceSymbol next,
-                       @NotNull Stack<ComponentInstanceSymbol> path) {
+                       @NotNull Stack<ComponentInstanceSymbol> path,
+                       @NotNull Set<ComponentInstanceSymbol> visited) {
     Preconditions.checkNotNull(graph);
     Preconditions.checkNotNull(next);
     Preconditions.checkNotNull(path);
+    Preconditions.checkNotNull(visited);
 
     path.push(next);
     for (ASTConnector connector : graph.getConnectorsMatchingSource(next)) {
-      this.check(graph, connector, path);
+      this.check(graph, connector, path, visited);
     }
-    path.pop();
+    visited.add(path.pop());
   }
 
   protected void check(@NotNull ASTComponentType graph,
                        @NotNull ASTConnector next,
-                       @NotNull Stack<ComponentInstanceSymbol> path) {
+                       @NotNull Stack<ComponentInstanceSymbol> path,
+                       @NotNull Set<ComponentInstanceSymbol> visited) {
     Preconditions.checkNotNull(graph);
     Preconditions.checkNotNull(next);
     Preconditions.checkNotNull(path);
+    Preconditions.checkNotNull(visited);
 
     if (next.getSource().isPresentPortSymbol() && !next.getSource().getPortSymbol().isStronglyCausal()) {
       for (ASTPortAccess target : next.getTargetList()) {
-        this.check(graph, target, path);
+        this.check(graph, target, path, visited);
       }
     }
   }
 
   protected void check(@NotNull ASTComponentType graph,
                        @NotNull ASTPortAccess next,
-                       @NotNull Stack<ComponentInstanceSymbol> path) {
+                       @NotNull Stack<ComponentInstanceSymbol> path,
+                       @NotNull Set<ComponentInstanceSymbol> visited) {
     Preconditions.checkNotNull(graph);
     Preconditions.checkNotNull(next);
     Preconditions.checkNotNull(path);
+    Preconditions.checkNotNull(visited);
 
     if (!next.isPresentComponent() || !next.isPresentComponentSymbol()) {
       return;
@@ -71,7 +83,7 @@ public class FeedbackStrongCausality implements ArcBasisASTComponentTypeCoCo {
         next.get_SourcePositionStart(), next.get_SourcePositionEnd()
       );
     } else {
-      this.check(graph, next.getComponentSymbol(), path);
+      this.check(graph, next.getComponentSymbol(), path, visited);
     }
   }
 }
