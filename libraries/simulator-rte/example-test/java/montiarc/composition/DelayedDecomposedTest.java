@@ -14,9 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static montiarc.rte.port.messages.Message.tick;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 public class DelayedDecomposedTest {
 
   TimeAwareOutPort<Integer> input;
@@ -82,17 +79,17 @@ public class DelayedDecomposedTest {
 
   public static Stream<Arguments> valueSourceCorrectCountValues() {
     return Stream.of(
-      arguments(
+      Arguments.of(
         List.of(),
         List.of(0),
         List.of(0)
       ),
-      arguments(
+      Arguments.of(
         List.of(1, 2, 3, 4, 5),
         List.of(0, 1, 2, 3, 4, 5),
         List.of(0, 0, 0, 0, 0, 0)
       ),
-      arguments(
+      Arguments.of(
         List.of(-1, 1, -2, 2, -3, 3),
         List.of(0, 0, 1, 1, 2, 2, 3),
         List.of(0, 1, 1, 2, 2, 3, 3)
@@ -107,7 +104,7 @@ public class DelayedDecomposedTest {
                                  List<List<Message<Integer>>> lt0Outputs) {
     for (int i = 0; i < inputs.size(); i++) {
       Message<Integer> message = inputs.get(i);
-      if (message.equals(tick)) {
+      if (message.equals(Message.tick)) {
         input.sendTick();
       } else {
         input.send(message);
@@ -122,54 +119,54 @@ public class DelayedDecomposedTest {
 
   public static Stream<Arguments> valueSourceCorrectOutputs() {
     return Stream.of(
-      arguments(
+      Arguments.of(
         List.of(),
         List.of(),
         List.of()
       ),
-      arguments(
-        List.of(tick),
+      Arguments.of(
+        List.of(Message.tick),
         List.of(
-          List.of(tick)
+          List.of(Message.tick)
         ),
         List.of(
-          List.of(tick)
+          List.of(Message.tick)
         )
       ),
-      arguments(
+      Arguments.of(
         List.of(
-          message(100), tick
+          message(100), Message.tick
         ),
         List.of(
-          List.of(), List.of(tick, message(1))
+          List.of(), List.of(Message.tick, message(1))
         ),
         List.of(
-          List.of(), List.of(tick)
+          List.of(), List.of(Message.tick)
         )
       ),
-      arguments(
+      Arguments.of(
         List.of(
-          message(100), message(-100), tick
+          message(100), message(-100), Message.tick
         ),
         List.of(
-          List.of(), List.of(), List.of(tick, message(1))
+          List.of(), List.of(), List.of(Message.tick, message(1))
         ),
         List.of(
-          List.of(), List.of(), List.of(tick, message(1))
+          List.of(), List.of(), List.of(Message.tick, message(1))
         )
       ),
-      arguments(
+      Arguments.of(
         List.of(
-          message(100), message(-100), tick,
-          message(200), message(-200), message(300), tick
+          message(100), message(-100), Message.tick,
+          message(200), message(-200), message(300), Message.tick
         ),
         List.of(
-          List.of(), List.of(), List.of(tick, message(1)),
-          List.of(), List.of(), List.of(), List.of(tick, message(2), message(3))
+          List.of(), List.of(), List.of(Message.tick, message(1)),
+          List.of(), List.of(), List.of(), List.of(Message.tick, message(2), message(3))
         ),
         List.of(
-          List.of(), List.of(), List.of(tick, message(1)),
-          List.of(), List.of(), List.of(), List.of(tick, message(2))
+          List.of(), List.of(), List.of(Message.tick, message(1)),
+          List.of(), List.of(), List.of(), List.of(Message.tick, message(2))
         )
       )
     );

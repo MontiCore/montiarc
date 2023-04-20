@@ -13,9 +13,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static montiarc.rte.port.messages.Message.tick;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 class InverterTest {
 
   TimeAwareOutPort<Boolean> input;
@@ -23,7 +20,7 @@ class InverterTest {
   Message<Boolean> lastOutMessage;
   TimeAwareInPort<Boolean> outRecipient;
 
-  final static Message NO_MSG = new Message(null);
+  final static Message<Boolean> NO_MSG = new Message<>(null);
 
   @BeforeEach
   public void beforeEach() {
@@ -64,17 +61,17 @@ class InverterTest {
       input.sendTick();
 
       // check results of step 2: both outputs propagated the tick
-      Assertions.assertSame(tick, lastOutMessage);
+      Assertions.assertSame(Message.tick, lastOutMessage);
     }
   }
 
   public static Stream<Arguments> valueSourceCorrectOutputs() {
     return Stream.of(
-      arguments(
+      Arguments.of(
         List.of(),
         List.of()
       ),
-      arguments(
+      Arguments.of(
         List.of(true, true, false, false, true),
         List.of(message(false), message(false), message(true), message(true), message(false))
       )

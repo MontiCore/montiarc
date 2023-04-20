@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static montiarc.rte.port.messages.Message.tick;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 public class DelayedOutPortTest {
 
   DelayedOutPort<String> portUnderTest;
@@ -44,7 +41,7 @@ public class DelayedOutPortTest {
     for (int i = 0; i < inputs.size(); i++) {
       // When
       Message<String> message = inputs.get(i);
-      if (message.equals(tick)) {
+      if (message.equals(Message.tick)) {
         portUnderTest.sendTick();
       } else {
         portUnderTest.send(message);
@@ -58,43 +55,43 @@ public class DelayedOutPortTest {
 
   public static Stream<Arguments> valueSourceDelayedPort() {
     return Stream.of(
-      arguments(
+      Arguments.of(
         1,
         List.of(),
         List.of()
       ),
-      arguments(
+      Arguments.of(
         1,
         List.of(
-          message("A"), tick,
-          message("B"), message("C"), tick,
-          message("D"), tick,
-          tick,
-          tick
+          message("A"), Message.tick,
+          message("B"), message("C"), Message.tick,
+          message("D"), Message.tick,
+          Message.tick,
+          Message.tick
         ),
         List.of(
-          List.of(), List.of(tick, message("A")),
-          List.of(), List.of(), List.of(tick, message("B"), message("C")),
-          List.of(), List.of(tick, message("D")),
-          List.of(tick),
-          List.of(tick)
+          List.of(), List.of(Message.tick, message("A")),
+          List.of(), List.of(), List.of(Message.tick, message("B"), message("C")),
+          List.of(), List.of(Message.tick, message("D")),
+          List.of(Message.tick),
+          List.of(Message.tick)
         )
       ),
-      arguments(
+      Arguments.of(
         2,
         List.of(
-          message("A"), tick,
-          message("B"), tick,
-          message("C"), message("D"), tick,
-          tick,
-          tick
+          message("A"), Message.tick,
+          message("B"), Message.tick,
+          message("C"), message("D"), Message.tick,
+          Message.tick,
+          Message.tick
         ),
         List.of(
-          List.of(), List.of(tick),
-          List.of(), List.of(tick, message("A")),
-          List.of(), List.of(), List.of(tick, message("B")),
-          List.of(tick, message("C"), message("D")),
-          List.of(tick)
+          List.of(), List.of(Message.tick),
+          List.of(), List.of(Message.tick, message("A")),
+          List.of(), List.of(), List.of(Message.tick, message("B")),
+          List.of(Message.tick, message("C"), message("D")),
+          List.of(Message.tick)
         )
       )
     );

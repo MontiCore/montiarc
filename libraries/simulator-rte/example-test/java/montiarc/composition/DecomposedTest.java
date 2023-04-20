@@ -13,9 +13,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static montiarc.rte.port.messages.Message.tick;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 public class DecomposedTest {
 
   TimeAwareOutPort<Integer> input;
@@ -25,7 +22,7 @@ public class DecomposedTest {
   TimeAwareInPort<Integer> gtEq0Recipient;
   TimeAwareInPort<Integer> lt0Recipient;
 
-  final static Message NO_MSG = new Message(null);
+  final static Message<Integer> NO_MSG = new Message<>(null);
 
   @BeforeEach
   public void beforeEach() {
@@ -78,17 +75,17 @@ public class DecomposedTest {
 
   public static Stream<Arguments> valueSourceCorrectCountValues() {
     return Stream.of(
-      arguments(
+      Arguments.of(
         List.of(),
         List.of(),
         List.of()
       ),
-      arguments(
+      Arguments.of(
         List.of(1, 2, 3, 4, 5),
         List.of(1, 2, 3, 4, 5),
         List.of(0, 0, 0, 0, 0)
       ),
-      arguments(
+      Arguments.of(
         List.of(-1, 1, -2, 2, -3, 3),
         List.of(0, 1, 1, 2, 2, 3),
         List.of(1, 1, 2, 2, 3, 3)
@@ -117,24 +114,24 @@ public class DecomposedTest {
       input.sendTick();
 
       // check results of step 2: both outputs propagated the tick
-      Assertions.assertSame(tick, lastGtEq0Message);
-      Assertions.assertSame(tick, lastLt0Message);
+      Assertions.assertSame(Message.tick, lastGtEq0Message);
+      Assertions.assertSame(Message.tick, lastLt0Message);
     }
   }
 
   public static Stream<Arguments> valueSourceCorrectOutputs() {
     return Stream.of(
-      arguments(
+      Arguments.of(
         List.of(),
         List.of(),
         List.of()
       ),
-      arguments(
+      Arguments.of(
         List.of(1, 2, 3, 4, 5),
         List.of(message(1), message(2), message(3), message(4), message(5)),
         List.of(NO_MSG, NO_MSG, NO_MSG, NO_MSG, NO_MSG)
       ),
-      arguments(
+      Arguments.of(
         List.of(-1, 1, -2, 2, -3, 3),
         List.of(NO_MSG, message(1), NO_MSG, message(2), NO_MSG, message(3)),
         List.of(message(1), NO_MSG, message(2), NO_MSG, message(3), NO_MSG)
