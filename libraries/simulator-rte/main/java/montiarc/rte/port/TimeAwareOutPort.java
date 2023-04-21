@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
-import montiarc.rte.port.messages.PassAllMessageFilter;
+import montiarc.rte.msg.PassAllMessageFilter;
 
 /**
  * An outgoing port of a MontiArc component that can send ticks.

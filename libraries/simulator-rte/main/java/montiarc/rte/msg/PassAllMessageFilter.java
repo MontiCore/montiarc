@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.rte.port.messages;
+package montiarc.rte.msg;
 
 /**
  * Implementation of a {@link MessageFilteringStrategy} which permits all messages.
  *
- * @param <T> the type of message the filter applies to
+ * @param <T> the message's data type the filter applies to
  */
 public interface PassAllMessageFilter<T> extends MessageFilteringStrategy<T> {
 

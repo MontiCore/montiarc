@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
-import montiarc.rte.port.messages.Message;
+import montiarc.rte.msg.Message;
 
 public interface IOutPort<T> {
 

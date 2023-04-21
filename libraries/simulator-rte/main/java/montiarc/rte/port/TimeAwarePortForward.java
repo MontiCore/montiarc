@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
-import montiarc.rte.port.messages.Message;
+import montiarc.rte.msg.Message;
 
 /**
  * This class represents a port-forwarding connector in a MontiArc model (time-aware variant).

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
-import montiarc.rte.port.messages.IgnoreTicksMessageFilter;
+import montiarc.rte.msg.IgnoreTicksMessageFilter;
 
 /**
  * An incoming port of a MontiArc component that cannot receive ticks.

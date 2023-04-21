@@ -76,7 +76,7 @@ public class DelayedSorter implements ITimedComponent {
       return; // if the above method returned true, ticks on incoming ports were dropped and this method has already been called again, so we can exit here
     }
 
-    Integer iIn = this.iIn.pollBuffer().getValue();
+    Integer iIn = this.iIn.pollBuffer().getData();
 
     if (iIn >= 0) {
       Integer gtEq0 = null;

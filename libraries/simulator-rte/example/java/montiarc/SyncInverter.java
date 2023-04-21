@@ -86,8 +86,8 @@ public class SyncInverter implements ITimedComponent {
     }
 
     // shadow incoming port variables in order to use code directly from the model
-    Boolean bIn = this.bIn.isTickBlocked() ? null : this.bIn.pollBuffer().getValue(); // theoretically, the port should never be tick-blocked here
-    Integer iIn = this.iIn.isTickBlocked() ? null : this.iIn.pollBuffer().getValue(); // theoretically, the port should never be tick-blocked here
+    Boolean bIn = this.bIn.isTickBlocked() ? null : this.bIn.pollBuffer().getData(); // theoretically, the port should never be tick-blocked here
+    Integer iIn = this.iIn.isTickBlocked() ? null : this.iIn.pollBuffer().getData(); // theoretically, the port should never be tick-blocked here
 
     // shadow outgoing port variables in order to use code directly from the model (we want to shadow only the ports on which data is actually written)
     Boolean bOut = null;

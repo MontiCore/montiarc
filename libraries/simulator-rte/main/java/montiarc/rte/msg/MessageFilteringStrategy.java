@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.rte.port.messages;
+package montiarc.rte.msg;
 
 /**
  * This interface defines a method used to filter messages sent via ports.
  *
- * @param <T> the type of message the filter applies to
+ * @param <T> the message's data type the filter applies to
  */
 public interface MessageFilteringStrategy<T> {
 

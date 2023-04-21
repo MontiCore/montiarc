@@ -1,9 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.automata;
 
+import montiarc.rte.msg.Tick;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
-import montiarc.rte.port.messages.Message;
+import montiarc.rte.msg.Message;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -61,7 +62,7 @@ class InverterTest {
       input.sendTick();
 
       // check results of step 2: both outputs propagated the tick
-      Assertions.assertSame(Message.tick, lastOutMessage);
+      Assertions.assertSame(Tick.get(), lastOutMessage);
     }
   }
 

@@ -83,7 +83,7 @@ public class ScheduledInner implements ITimedComponent {
     //set uo runnable to be passed to the scheduler
     Runnable computationRunnable = () -> {
       //Shadowing variables setup
-      Boolean trigger = this.trigger.pollBuffer().getValue();
+      Boolean trigger = this.trigger.pollBuffer().getData();
 
       //compute block, NOT taken directly from the model - output port assignments are transformed to send data directly
       trace.append(instanceName + "1");

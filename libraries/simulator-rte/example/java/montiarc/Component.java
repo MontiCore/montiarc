@@ -5,7 +5,7 @@ import montiarc.rte.component.ITimedComponent;
 import montiarc.rte.port.AbstractInPort;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
-import montiarc.rte.port.messages.Message;
+import montiarc.rte.msg.Message;
 
 import java.util.List;
 

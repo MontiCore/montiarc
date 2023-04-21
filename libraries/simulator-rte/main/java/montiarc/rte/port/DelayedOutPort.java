@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
-import montiarc.rte.port.messages.Message;
+import montiarc.rte.msg.Message;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class DelayedOutPort<T> extends TimeAwareOutPort<T> {
 
   @Override
   public void send(Message<T> message) {
-    buffer.getLast().add(message.getValue());
+    buffer.getLast().add(message.getData());
   }
 
   @Override

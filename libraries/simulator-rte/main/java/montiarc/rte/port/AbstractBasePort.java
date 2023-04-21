@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
-import montiarc.rte.port.messages.MessageFilteringStrategy;
+import montiarc.rte.msg.MessageFilteringStrategy;
 
 /**
  * Abstract base class for all port types.

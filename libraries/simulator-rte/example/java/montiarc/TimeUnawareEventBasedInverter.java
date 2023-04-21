@@ -56,7 +56,7 @@ public class TimeUnawareEventBasedInverter implements IUntimedComponent {
     if (this.bIn.isBufferEmpty()) { // sanity check, also required to set up shadowed variables correctly. If port is set up / used correctly, the buffer should never be empty at this point, making this check theoretically obsolete
       return;
     }
-    Boolean bIn = this.bIn.pollBuffer().getValue(); // shadow port variable in order to use code directly from the model
+    Boolean bIn = this.bIn.pollBuffer().getData(); // shadow port variable in order to use code directly from the model
 
     if (bIn != null) { // code/condition taken directly from respective guard statement
 
@@ -75,7 +75,7 @@ public class TimeUnawareEventBasedInverter implements IUntimedComponent {
     if (this.iIn.isBufferEmpty()) { // sanity check, also required to set up shadowed variables correctly. If port is set up / used correctly, the buffer should never be empty at this point, making this check theoretically obsolete
       return;
     }
-    Integer iIn = this.iIn.pollBuffer().getValue(); // shadow port variable in order to use code directly from the model
+    Integer iIn = this.iIn.pollBuffer().getData(); // shadow port variable in order to use code directly from the model
 
     if (iIn != null) { // code/condition taken directly from respective guard statement
 

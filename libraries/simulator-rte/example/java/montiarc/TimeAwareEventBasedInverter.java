@@ -89,7 +89,7 @@ public class TimeAwareEventBasedInverter implements ITimedComponent {
       return; // if the above method returned true, ticks on incoming ports were dropped and this method has already been called again, so we can exit here
     }
 
-    Boolean bIn = this.bIn.pollBuffer().getValue(); // shadow port variable in order to use code directly from the model
+    Boolean bIn = this.bIn.pollBuffer().getData(); // shadow port variable in order to use code directly from the model
 
     if (bIn != null) { // code/condition taken directly from respective guard statement
 
@@ -113,7 +113,7 @@ public class TimeAwareEventBasedInverter implements ITimedComponent {
       return; // if the above method returned true, ticks on incoming ports were dropped and this method has already been called again, so we can exit here
     }
 
-    Integer iIn = this.iIn.pollBuffer().getValue(); // shadow port variable in order to use code directly from the model
+    Integer iIn = this.iIn.pollBuffer().getData(); // shadow port variable in order to use code directly from the model
 
     if (iIn != null) { // code/condition taken directly from respective guard statement
 

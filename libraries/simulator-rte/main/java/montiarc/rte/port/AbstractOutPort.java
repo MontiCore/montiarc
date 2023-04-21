@@ -1,7 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
-import montiarc.rte.port.messages.Message;
+import montiarc.rte.msg.Message;
+import montiarc.rte.msg.Tick;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,6 +132,6 @@ public abstract class AbstractOutPort<T> extends AbstractBasePort<T> implements 
    * Uses {@link #doSendMessage(Message)} so that it sends a tick regardless of overrides.
    */
   protected void doTick() {
-    doSendMessage(Message.tick);
+    doSendMessage(Tick.get());
   }
 }

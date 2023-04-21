@@ -1,9 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.composition;
 
+import montiarc.rte.msg.Tick;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
-import montiarc.rte.port.messages.Message;
+import montiarc.rte.msg.Message;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -104,7 +105,7 @@ public class DelayedDecomposedTest {
                                  List<List<Message<Integer>>> lt0Outputs) {
     for (int i = 0; i < inputs.size(); i++) {
       Message<Integer> message = inputs.get(i);
-      if (message.equals(Message.tick)) {
+      if (message.equals(Tick.get())) {
         input.sendTick();
       } else {
         input.send(message);
@@ -125,48 +126,48 @@ public class DelayedDecomposedTest {
         List.of()
       ),
       Arguments.of(
-        List.of(Message.tick),
+        List.of(Tick.get()),
         List.of(
-          List.of(Message.tick)
+          List.of(Tick.get())
         ),
         List.of(
-          List.of(Message.tick)
+          List.of(Tick.get())
         )
       ),
       Arguments.of(
         List.of(
-          message(100), Message.tick
+          message(100), Tick.get()
         ),
         List.of(
-          List.of(), List.of(Message.tick, message(1))
+          List.of(), List.of(Tick.get(), message(1))
         ),
         List.of(
-          List.of(), List.of(Message.tick)
+          List.of(), List.of(Tick.get())
         )
       ),
       Arguments.of(
         List.of(
-          message(100), message(-100), Message.tick
+          message(100), message(-100), Tick.get()
         ),
         List.of(
-          List.of(), List.of(), List.of(Message.tick, message(1))
+          List.of(), List.of(), List.of(Tick.get(), message(1))
         ),
         List.of(
-          List.of(), List.of(), List.of(Message.tick, message(1))
+          List.of(), List.of(), List.of(Tick.get(), message(1))
         )
       ),
       Arguments.of(
         List.of(
-          message(100), message(-100), Message.tick,
-          message(200), message(-200), message(300), Message.tick
+          message(100), message(-100), Tick.get(),
+          message(200), message(-200), message(300), Tick.get()
         ),
         List.of(
-          List.of(), List.of(), List.of(Message.tick, message(1)),
-          List.of(), List.of(), List.of(), List.of(Message.tick, message(2), message(3))
+          List.of(), List.of(), List.of(Tick.get(), message(1)),
+          List.of(), List.of(), List.of(), List.of(Tick.get(), message(2), message(3))
         ),
         List.of(
-          List.of(), List.of(), List.of(Message.tick, message(1)),
-          List.of(), List.of(), List.of(), List.of(Message.tick, message(2))
+          List.of(), List.of(), List.of(Tick.get(), message(1)),
+          List.of(), List.of(), List.of(), List.of(Tick.get(), message(2))
         )
       )
     );

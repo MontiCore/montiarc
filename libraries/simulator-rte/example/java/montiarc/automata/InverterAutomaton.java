@@ -19,7 +19,7 @@ class InverterAutomaton extends Automaton {
       new InverterTransition(
         InverterState.S, // source state
         InverterState.S, // target state
-        () -> owner.i.peekBuffer().getValue() == true, // guard
+        () -> owner.i.peekBuffer().getData() == true, // guard
         () -> owner.o.send(false), // transition action
         List.of(owner.i) // list of all used ports (to drop inputs)
       )
@@ -28,7 +28,7 @@ class InverterAutomaton extends Automaton {
       new InverterTransition(
         InverterState.S, // source state
         InverterState.S, // target state
-        () -> owner.i.peekBuffer().getValue() == false, // guard
+        () -> owner.i.peekBuffer().getData() == false, // guard
         () -> owner.o.send(true), // transition action
         List.of(owner.i) // list of all used ports (to drop inputs)
       )
