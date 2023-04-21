@@ -12,9 +12,7 @@ public class ArcCoreMill extends ArcCoreMillTOP {
 
   protected static ArcCoreMill millArcCoreScopesGenitorP2Delegator;
 
-  protected static ArcCoreMill millFullPrettyPrinter;
-
-  protected static ArcCoreMill millCompTypeExprDeSer;
+  protected static ArcCoreMill millArcCoreCompTypeExprDeSer;
 
   public static ArcCoreScopesGenitorP2 scopesGenitorP2() {
     if (millArcCoreScopesGenitorP2 == null) {
@@ -39,10 +37,10 @@ public class ArcCoreMill extends ArcCoreMillTOP {
   }
 
   public static ComposedCompTypeExprDeSer compTypeExprDeSer() {
-    if (millCompTypeExprDeSer == null) {
-      millCompTypeExprDeSer = getMill();
+    if (millArcCoreCompTypeExprDeSer == null) {
+      millArcCoreCompTypeExprDeSer = getMill();
     }
-    return millCompTypeExprDeSer._compTypeExprDeSer();
+    return millArcCoreCompTypeExprDeSer._compTypeExprDeSer();
   }
 
   protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
@@ -53,15 +51,13 @@ public class ArcCoreMill extends ArcCoreMillTOP {
     ArcCoreMillTOP.initMe(a);
     millArcCoreScopesGenitorP2 = a;
     millArcCoreScopesGenitorP2Delegator = a;
-    millFullPrettyPrinter = a;
-    millCompTypeExprDeSer = a;
+    millArcCoreCompTypeExprDeSer = a;
   }
 
   public static void reset() {
     ArcCoreMillTOP.reset();
     millArcCoreScopesGenitorP2 = null;
     millArcCoreScopesGenitorP2Delegator = null;
-    millFullPrettyPrinter = null;
-    millCompTypeExprDeSer = null;
+    millArcCoreCompTypeExprDeSer = null;
   }
 }

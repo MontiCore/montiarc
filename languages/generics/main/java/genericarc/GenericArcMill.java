@@ -12,9 +12,7 @@ public class GenericArcMill extends GenericArcMillTOP {
 
   protected static GenericArcMill millGenericArcScopesGenitorP2Delegator;
 
-  protected static GenericArcMill millFullPrettyPrinter;
-
-  protected static GenericArcMill millCompTypeExprDeSer;
+  protected static GenericArcMill millGenericArcCompTypeExprDeSer;
 
   public static GenericArcScopesGenitorP2 scopesGenitorP2() {
     if (millGenericArcScopesGenitorP2 == null) {
@@ -39,10 +37,10 @@ public class GenericArcMill extends GenericArcMillTOP {
   }
 
   public static ComposedCompTypeExprDeSer compTypeExprDeSer() {
-    if (millCompTypeExprDeSer == null) {
-      millCompTypeExprDeSer = getMill();
+    if (millGenericArcCompTypeExprDeSer == null) {
+      millGenericArcCompTypeExprDeSer = getMill();
     }
-    return millCompTypeExprDeSer._compTypeExprDeSer();
+    return millGenericArcCompTypeExprDeSer._compTypeExprDeSer();
   }
 
   protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
@@ -53,15 +51,13 @@ public class GenericArcMill extends GenericArcMillTOP {
     GenericArcMillTOP.initMe(a);
     millGenericArcScopesGenitorP2 = a;
     millGenericArcScopesGenitorP2Delegator = a;
-    millFullPrettyPrinter = a;
-    millCompTypeExprDeSer = a;
+    millGenericArcCompTypeExprDeSer = a;
   }
 
   public static void reset() {
     GenericArcMillTOP.reset();
     millGenericArcScopesGenitorP2 = null;
     millGenericArcScopesGenitorP2Delegator = null;
-    millFullPrettyPrinter = null;
-    millCompTypeExprDeSer = null;
+    millGenericArcCompTypeExprDeSer = null;
   }
 }

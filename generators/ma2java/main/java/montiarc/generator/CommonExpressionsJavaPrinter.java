@@ -4,7 +4,7 @@ package montiarc.generator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.commonexpressions._ast.ASTCallExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
-import de.monticore.expressions.prettyprint.CommonExpressionsPrettyPrinter;
+import de.monticore.expressions.commonexpressions._prettyprint.CommonExpressionsPrettyPrinter;
 import de.monticore.prettyprint.CommentPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
@@ -15,11 +15,8 @@ import java.util.Optional;
 
 public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter {
 
-  protected boolean printComments;
-
   public CommonExpressionsJavaPrinter(@NotNull IndentPrinter printer, boolean printComments) {
-    super(printer);
-    this.printComments = printComments;
+    super(printer, printComments);
   }
 
   @Override
@@ -47,9 +44,5 @@ public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter
     if(this.isPrintComments()) {
       CommentPrettyPrinter.printPostComments(node, getPrinter());
     }
-  }
-
-  public boolean isPrintComments() {
-    return this.printComments;
   }
 }

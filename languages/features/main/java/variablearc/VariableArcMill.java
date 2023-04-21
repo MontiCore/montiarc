@@ -15,11 +15,9 @@ public class VariableArcMill extends VariableArcMillTOP {
 
   protected static VariableArcMill millVariableArcScopesGenitorP2Delegator;
 
-  protected static VariableArcMill millFullPrettyPrinter;
+  protected static VariableArcMill millVariableArcFullConverter;
 
-  protected static VariableArcMill millFullConverter;
-
-  protected static VariableArcMill millCompTypeExprDeSer;
+  protected static VariableArcMill millVariableArcCompTypeExprDeSer;
 
   public static VariableArcScopesGenitorP2 scopesGenitorP2() {
     if (millVariableArcScopesGenitorP2 == null) {
@@ -36,35 +34,33 @@ public class VariableArcMill extends VariableArcMillTOP {
   }
 
   public static IDeriveSMTExpr fullConverter(Context context) {
-    if (millFullConverter == null) {
-      millFullConverter = getMill();
+    if (millVariableArcFullConverter == null) {
+      millVariableArcFullConverter = getMill();
     }
-    return millFullConverter._fullConverter(context);
+    return millVariableArcFullConverter._fullConverter(context);
   }
 
   public static ComposedCompTypeExprDeSer compTypeExprDeSer() {
-    if (millCompTypeExprDeSer == null) {
-      millCompTypeExprDeSer = getMill();
+    if (millVariableArcCompTypeExprDeSer == null) {
+      millVariableArcCompTypeExprDeSer = getMill();
     }
-    return millCompTypeExprDeSer._compTypeExprDeSer();
+    return millVariableArcCompTypeExprDeSer._compTypeExprDeSer();
   }
 
   public static void initMe(VariableArcMill a) {
     VariableArcMillTOP.initMe(a);
     millVariableArcScopesGenitorP2 = a;
     millVariableArcScopesGenitorP2Delegator = a;
-    millFullPrettyPrinter = a;
-    millFullConverter = a;
-    millCompTypeExprDeSer = a;
+    millVariableArcFullConverter = a;
+    millVariableArcCompTypeExprDeSer = a;
   }
 
   public static void reset() {
     VariableArcMillTOP.reset();
     millVariableArcScopesGenitorP2 = null;
     millVariableArcScopesGenitorP2Delegator = null;
-    millFullPrettyPrinter = null;
-    millFullConverter = null;
-    millCompTypeExprDeSer = null;
+    millVariableArcFullConverter = null;
+    millVariableArcCompTypeExprDeSer = null;
   }
 
   protected VariableArcScopesGenitorP2 _scopesGenitorP2() {

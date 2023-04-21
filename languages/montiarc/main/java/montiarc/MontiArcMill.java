@@ -18,11 +18,9 @@ public class MontiArcMill extends MontiArcMillTOP {
 
   protected static MontiArcMill millMontiArcScopesGenitorP3Delegator;
 
-  protected static MontiArcMill millMontiArcFullPrettyPrinter;
-
   protected static MontiArcMill millMontiArcFullConverter;
 
-  protected static MontiArcMill millCompTypeExprDeSer;
+  protected static MontiArcMill millMontiArcCompTypeExprDeSer;
 
   public static MontiArcScopesGenitorP2 scopesGenitorP2() {
     if (millMontiArcScopesGenitorP2 == null) {
@@ -58,10 +56,10 @@ public class MontiArcMill extends MontiArcMillTOP {
   }
 
   public static IDeriveSMTExpr fullConverter(Context context) {
-    if (millMontiArcFullPrettyPrinter == null) {
-      millMontiArcFullPrettyPrinter = getMill();
+    if (millMontiArcFullConverter == null) {
+      millMontiArcFullConverter = getMill();
     }
-    return millMontiArcFullPrettyPrinter._fullConverter(context);
+    return millMontiArcFullConverter._fullConverter(context);
   }
 
   protected IDeriveSMTExpr _fullConverter(Context context) {
@@ -69,21 +67,29 @@ public class MontiArcMill extends MontiArcMillTOP {
   }
 
   public static ComposedCompTypeExprDeSer compTypeExprDeSer() {
-    if (millCompTypeExprDeSer == null) {
-      millCompTypeExprDeSer = getMill();
+    if (millMontiArcCompTypeExprDeSer == null) {
+      millMontiArcCompTypeExprDeSer = getMill();
     }
-    return millCompTypeExprDeSer._compTypeExprDeSer();
+    return millMontiArcCompTypeExprDeSer._compTypeExprDeSer();
   }
 
   protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
     return new MontiArcCompTypeExprDeSer();
   }
 
+  public static void initMe(MontiArcMill a) {
+    MontiArcMillTOP.initMe(a);
+    millMontiArcScopesGenitorP2 = a;
+    millMontiArcScopesGenitorP2Delegator = a;
+    millMontiArcScopesGenitorP3Delegator = a;
+    millMontiArcFullConverter = a;
+  }
+
   public static void reset() {
     MontiArcMillTOP.reset();
     millMontiArcScopesGenitorP2 = null;
     millMontiArcScopesGenitorP2Delegator = null;
-    millMontiArcFullPrettyPrinter = null;
+    millMontiArcScopesGenitorP3Delegator = null;
     millMontiArcFullConverter = null;
   }
 }

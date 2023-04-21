@@ -18,9 +18,7 @@ public class ArcBasisMill extends ArcBasisMillTOP {
 
   protected static ArcBasisMill millArcBasisScopesGenitorP3Delegator;
 
-  protected static ArcBasisMill millFullPrettyPrinter;
-
-  protected static ArcBasisMill millCompTypeExprDeSer;
+  protected static ArcBasisMill millArcBasisCompTypeExprDeSer;
 
   public static ArcBasisScopesGenitorP2 scopesGenitorP2() {
     if (millArcBasisScopesGenitorP2 == null) {
@@ -67,10 +65,10 @@ public class ArcBasisMill extends ArcBasisMillTOP {
   }
 
   public static ComposedCompTypeExprDeSer compTypeExprDeSer() {
-    if (millCompTypeExprDeSer == null) {
-      millCompTypeExprDeSer = getMill();
+    if (millArcBasisCompTypeExprDeSer == null) {
+      millArcBasisCompTypeExprDeSer = getMill();
     }
-    return millCompTypeExprDeSer._compTypeExprDeSer();
+    return millArcBasisCompTypeExprDeSer._compTypeExprDeSer();
   }
 
   protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
@@ -82,8 +80,8 @@ public class ArcBasisMill extends ArcBasisMillTOP {
     millArcBasisScopesGenitorP2 = a;
     millArcBasisScopesGenitorP2Delegator = a;
     millArcBasisScopesGenitorP3 = a;
-    millFullPrettyPrinter = a;
-    millCompTypeExprDeSer = a;
+    millArcBasisScopesGenitorP3Delegator = a;
+    millArcBasisCompTypeExprDeSer = a;
   }
 
   public static void reset() {
@@ -91,7 +89,7 @@ public class ArcBasisMill extends ArcBasisMillTOP {
     millArcBasisScopesGenitorP2 = null;
     millArcBasisScopesGenitorP2Delegator = null;
     millArcBasisScopesGenitorP3 = null;
-    millFullPrettyPrinter = null;
-    millCompTypeExprDeSer = null;
+    millArcBasisScopesGenitorP3Delegator = null;
+    millArcBasisCompTypeExprDeSer = null;
   }
 }
